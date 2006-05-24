@@ -111,7 +111,10 @@ class GameOptionsPEW : public PG_PropertyEditor {
          if ( widgetName == "DropDownSelectorProperty" )
             return "DropDown";
          else
-            return PG_PropertyEditor::GetStyleName( widgetName );
+            if ( widgetName == "BoolProperty" )
+               return "CheckButton";
+            else
+               return PG_PropertyEditor::GetStyleName( widgetName );
       };
 };
 

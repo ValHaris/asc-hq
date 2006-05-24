@@ -61,6 +61,7 @@
 
 #include "iconrepository.h"
 #include "graphics/drawing.h"
+#include "widgets/textrenderer.h"
 
 #include "messaginghub.h"
 
@@ -482,7 +483,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          newWidget = lb;
       }
       if ( type == MultiLineText ) {
-
+         /*
          PG_MultiLineEdit* lb = new PG_MultiLineEdit ( parent, r, style );
 
          lb->SetEditable(false);
@@ -490,8 +491,14 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             lb->SetBorderSize(0);
             widgetParams.assign ( lb );
          }
-         parsePanelASCTXT( pc, lb, widgetParams );
-         newWidget = lb;
+         */
+
+         TextRenderer* tr = new TextRenderer( parent, r, style );
+         if ( !hasStyle ) 
+            widgetParams.assign ( tr );
+         
+         parsePanelASCTXT( pc, tr, widgetParams );
+         newWidget = tr;
       }
 
       if ( type == BarGraph ) {
@@ -690,6 +697,11 @@ void ASCGUI_Window::setLabelText ( const ASCString& widgetName, const ASCString&
          PG_MultiLineEdit* l = dynamic_cast<PG_MultiLineEdit*>( parent->FindChild( widgetName, true ) );
          if ( l )
             l->SetText( text );
+         else {
+            TextRenderer* l = dynamic_cast<TextRenderer*>( parent->FindChild( widgetName, true ) );
+            if ( l )
+               l->SetText( text );
+         }
       }
    }
 }

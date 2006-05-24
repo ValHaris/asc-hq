@@ -20,10 +20,11 @@
 class TextRenderer : public PG_ScrollWidget {
 
       struct RenderingAttribute {
-         RenderingAttribute() : spaceAfter(0), baseline(0),linebreak(0), firstLineIndent(-1), furtherLineIndent(-1) {};
+         RenderingAttribute() : spaceAfter(0), baseline(0),vspace(0), linebreak(false),firstLineIndent(-1), furtherLineIndent(-1) {};
          int spaceAfter;
          int baseline;
-         int linebreak;
+         int vspace;
+         bool linebreak;
          int firstLineIndent;
          int furtherLineIndent;
       };
@@ -84,6 +85,8 @@ class TextRenderer : public PG_ScrollWidget {
 
 
 class ViewFormattedText : public ASC_PG_Dialog {
+   protected:
+      bool eventKeyDown(const SDL_KeyboardEvent* key);
    public:
       ViewFormattedText( const ASCString& title, const ASCString& text, const PG_Rect& pos );
 };

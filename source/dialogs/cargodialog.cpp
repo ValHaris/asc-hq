@@ -1281,7 +1281,8 @@ class ResearchWindow : public SubWindow {
          cargoDialog->setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
 
          Resources cost = returnResourcenUseForResearch( container() );
-         cargoDialog->setLabelText( "CostLocal", cost.energy, widget );
+         for ( int r = 0; r < 3; ++r)
+            cargoDialog->setLabelText( "CostLocal" + ASCString::toString(r), cost.resource(r), widget );
 
          Resources globalCost;
          for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
@@ -1290,8 +1291,14 @@ class ResearchWindow : public SubWindow {
          for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
             globalCost += returnResourcenUseForResearch( *i );
          
-         cargoDialog->setLabelText( "CostGlobal", globalCost.energy, widget );
-         cargoDialog->setLabelText( "AvailGlobal", player.research.currentTechAvailableIn(), widget );
+         for ( int r = 0; r < 3; ++r)
+            cargoDialog->setLabelText( "CostGlobal" + ASCString::toString(r), globalCost.resource(r), widget );
+
+         int availIn = player.research.currentTechAvailableIn();
+         if ( availIn >= 0 )
+            cargoDialog->setLabelText( "AvailGlobal", availIn, widget );
+         else
+            cargoDialog->setLabelText( "AvailGlobal", "-", widget );
          
          if ( player.research.activetechnology )
             cargoDialog->setLabelText( "CurrentTech", player.research.activetechnology->name, widget );

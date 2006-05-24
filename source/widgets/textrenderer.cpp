@@ -63,7 +63,7 @@ int TextRenderer :: arrangeLine( int y, const Widgets& line, int lineHeight, int
 
 int TextRenderer :: AreaWidth()
 {
-   return max( int(GetListWidth()), Width() - 15 );
+   return max( int(GetListWidth()), Width() - 18 );
 }
 
 void TextRenderer :: layout()
@@ -74,17 +74,18 @@ void TextRenderer :: layout()
    int lineHeight = 0;
    Widgets currentLine;
 
-   int breakNow = 0;
+   bool breakNow = false;
 
    int firstLineIndent = 0;
    int furtherLineIndent = 0;
    int indentation = 0;
+   int vspace = 0;
 
    for ( Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
       if ( (x + (*i)->Width() >= AreaWidth() && x > 0) || breakNow ) {
          maxx = max( arrangeLine( y, currentLine, lineHeight, indentation ), maxx);
          
-         y += lineHeight + breakNow;
+         y += lineHeight + vspace;
 
          if ( breakNow )
             indentation = firstLineIndent;
@@ -95,7 +96,8 @@ void TextRenderer :: layout()
          
          lineHeight = 0;
          currentLine.clear();
-         breakNow = 0;
+         breakNow = false;
+         vspace = 0;
       }
 
       currentLine.push_back ( *i );
@@ -108,7 +110,10 @@ void TextRenderer :: layout()
       if ( at != attributes.end()) {
          x += at->second.spaceAfter;
          if ( at->second.linebreak )
-            breakNow = at->second.linebreak;
+            breakNow = true;
+         
+         if ( at->second.vspace )
+            vspace  = at->second.vspace;
 
          if ( at->second.firstLineIndent >= 0 )
             firstLineIndent = at->second.firstLineIndent;
@@ -140,8 +145,14 @@ void TextRenderer :: addSpace( int space )
 
 void TextRenderer :: addLinebreak( int pixel, int lines )
 {
-   if ( lastWidget )
-      attributes[lastWidget].linebreak += pixel + 1 + (lines-1) * (textAttributes.fontsize+3);
+   if ( lastWidget ) {
+      if ( attributes[lastWidget].linebreak ) {
+         attributes[lastWidget].vspace += pixel + lines * (textAttributes.fontsize+3);
+      } else {
+         attributes[lastWidget].linebreak = true;
+         attributes[lastWidget].vspace += pixel + (lines-1) * (textAttributes.fontsize+3);
+      }
+   }
 }
 
 void TextRenderer :: addIndentation( int firstLine, int furtherLines )
@@ -217,6 +228,10 @@ ASCString::const_iterator TextRenderer :: token ( const ASCString& text, ASCStri
 
 void TextRenderer :: parse( const ASCString& text )
 {
+
+   textAttributes.fontsize = GetFontSize();
+   textAttributes.textcolor = GetFontColor();
+   
    ASCString::const_iterator pos = text.begin();
 
    // skip spaces at beginning to text
@@ -266,7 +281,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       return w;
    }
 
-   static boost::regex color( "#fontcolor=((0x)?[a-fA-F\\d]+)#");
+   static boost::regex color( "#fontcolor=((0x[a-fA-F\\d]+)|\\d+)#");
    if( boost::regex_match( token, what, color)) {
       ASCString s;
       s.assign( what[1].first, what[1].second );
@@ -276,19 +291,19 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
 
    static boost::regex defcolor( "#fontcolor=default#");
    if( boost::regex_match( token, what, defcolor)) {
-      textAttributes.textcolor = -1;
+      textAttributes.textcolor = GetFontColor();
       return NULL;
    }
 
-   static boost::regex legacycolor( "#color(\\d{3})#");
+   static boost::regex legacycolor( "#color(\\d+)#");
    if( boost::regex_match( token, what, legacycolor)) {
       ASCString s;
       s.assign( what[1].first, what[1].second );
       int index = strtol(s.c_str(), NULL, 0 );
       if ( index > 0 )
-         textAttributes.textcolor = (pal[index][0] << 16) + (pal[index][1] << 8) + pal[index][2];
+         textAttributes.textcolor = (pal[index][0] << 18) + (pal[index][1] << 10) + (pal[index][2] << 2);
       else
-         textAttributes.textcolor = -1;
+         textAttributes.textcolor = GetFontColor();
       return NULL;
    }
 
@@ -343,8 +358,23 @@ void TextRenderer::SetText( const string& text )
 }
 
 
-ViewFormattedText :: ViewFormattedText( const ASCString& title, const ASCString& text, const PG_Rect& pos ) : ASC_PG_Dialog( NULL, pos, title )
+ViewFormattedText :: ViewFormattedText( const ASCString& title, const ASCString& text, const PG_Rect& pos) : ASC_PG_Dialog( NULL, pos, title )
 {
    TextRenderer* pr = new TextRenderer( this, PG_Rect( 10, 40, Width() - 20, Height()-50));
    pr->SetText( text);
 };
+
+bool ViewFormattedText :: eventKeyDown(const SDL_KeyboardEvent* key)
+{
+   switch ( key->keysym.sym ) {
+      case SDLK_ESCAPE:
+      case SDLK_RETURN:
+      case SDLK_SPACE:
+         QuitModal();
+         return true;
+      default:
+         return false;
+   }
+   return false;
+}
+

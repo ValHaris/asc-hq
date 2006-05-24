@@ -731,7 +731,7 @@ int Research :: currentTechAvailableIn() const
       else
          return ( activetechnology->researchpoints - progress + rpt - 1) / rpt;
    } else
-      return 0;
+      return -1;
 }
 
 

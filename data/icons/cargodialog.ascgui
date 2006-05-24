@@ -580,11 +580,13 @@ panel {
 
          PowerSlider {
             type = slider
-            x = 277
-            y = 65
-            x2 = 500
+            style = slider
+            x = 25
+            y = 128
+            x2 = 296
             height  = 15
             Orientation = horizontal
+
          } PowerSlider
  
 
@@ -992,92 +994,150 @@ panel {
          y = 0
          x2 = -1
          y2 = -1
-         ChildWidgets = CurrentTech ResPerTurnLabel ResPerTurnLocal ResPerTurnGlobal   CostLabel CostLocal CostGlobal   AvailLabel AvailGlobal GraphArea
+         ChildWidgets = CurrentTech ResPerTurnLabel ResPerTurnLabelGlobal ResPerTurnLocal ResPerTurnGlobal   CostLabelLocal CostLabelGlobal AvailLabel AvailGlobal GraphArea CostLocal0 CostGlobal0 CostLocal1 CostGlobal1 CostLocal2 CostGlobal2
 
          CurrentTech {
             type = TextOutput
             x = 48
-            y = 35
-            x2 = 195
-            y2 = 49
+            y = 30
+            x2 = 311
+            y2 = 45
          } CurrentTech
-
-
-         ResPerTurnLabel {
-            type = StaticText
-            text = Research / Turn
-            x = 48
-            y = 60
-            x2 = 163
-            height = 15
-         } ResPerTurnLabel
-
-         ResPerTurnLocal {
-            type = TextOutput
-            x = 148
-            y = 64
-            x2 = 191
-            height = 13
-         } ResPerTurnLocal
-         ResPerTurnGlobal {
-            type = TextOutput
-            x = 209
-            y = 64
-            x2 = 154
-            height = 13
-         } ResPerTurnGlobal
-
-
-         CostLabel {
-            type = StaticText
-            text = Cost
-            x = 10
-            y = 92
-            x2 = 119
-            height = 13
-         } CostLabel
-
-         CostLocal {
-            type = TextOutput
-            x = 148
-            y = 92
-            x2 = 191
-            height = 13
-         } CostLocal
-         CostGlobal {
-            type = TextOutput
-            text = Cost
-            x = 209
-            y = 92
-            x2 = 254
-            height = 13
-         } CostGlobal
-
 
          AvailLabel {
             type = StaticText
-            text = Available in
-            x = 10
-            y = 118
-            x2 = 119
-            height = 13
+            text = Turns till completion
+            x = 48
+            y = 47
+            x2 = 268
+            y2 = 62
          } AvailLabel
 
          AvailGlobal {
             type = TextOutput
             text = Cost
-            x = 209
-            y = 118
-            x2 = 254
-            height = 13
+            x = 272
+            y = 47
+            x2 = 311
+            y2 = 62
+            TextAlign = Right
          } AvailGlobal
+
+
+         ResPerTurnLabel {
+            type = StaticText
+            text = Research - this lab
+            x = 48
+            y = 73
+            x2 = 268
+            height = 15
+         } ResPerTurnLabel
+
+         ResPerTurnLocal {
+            type = TextOutput
+            x = 272
+            y = 73
+            x2 = 311
+            height = 15
+            TextAlign = Right
+         } ResPerTurnLocal
+
+         ResPerTurnLabelGlobal {
+            type = StaticText
+            text = Research - all labs
+            x = 48
+            y = 90
+            x2 = 268
+            height = 15
+         } ResPerTurnLabelGlobal
+         ResPerTurnGlobal {
+            type = TextOutput
+            x = 272
+            y = 90
+            x2 = 311
+            height = 15
+            TextAlign = Right
+         } ResPerTurnGlobal
+
+
+         CostLabelLocal {
+            type = StaticText
+            text = Cost - this lab
+            x = 48
+            y = 126
+            x2 = 181
+            height = 15
+         } CostLabelLocal
+         CostLabelGlobal {
+            type = StaticText
+            text = Cost - all labs
+            x = 48
+            y = 143
+            x2 = 181
+            height = 15
+         } CostLabelGlobal
+
+         CostLocal0 {
+            type = TextOutput
+            x = 185
+            y = 126
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostLocal0
+         CostGlobal0 {
+            type = TextOutput
+            text = Cost
+            x = 185
+            y = 143
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostGlobal0
+
+         CostLocal1 {
+            type = TextOutput
+            x = 228
+            y = 126
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostLocal1
+         CostGlobal1 {
+            type = TextOutput
+            text = Cost
+            x = 228
+            y = 143
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostGlobal1
+
+         CostLocal2 {
+            type = TextOutput
+            x = 270
+            y = 126
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostLocal2
+         CostGlobal2 {
+            type = TextOutput
+            text = Cost
+            x = 270
+            y = 143
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostGlobal2
+
 
          GraphArea {
             type = dummy
-            x = 274
+            x = 334
             y = 38
-            x2 = 477
-            y2 = 144
+            x2 = 502
+            y2 = 143
             UserHandler = ResearchGraph
          } GraphArea
 

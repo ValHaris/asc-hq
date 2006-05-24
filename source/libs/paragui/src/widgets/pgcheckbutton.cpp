@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-05-24 21:22:31 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgcheckbutton.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -32,7 +32,7 @@
 PG_CheckButton::PG_CheckButton(PG_Widget* parent, const PG_Rect& r, const std::string& text, int id, const std::string& style)
 		: PG_RadioButton(parent, r, text, NULL, id) {
 	LoadThemeStyle(style);
-	my_widgetButton->LoadThemeStyle(style, "CheckKnob");
+   my_widgetButton->LoadThemeStyle(style, "CheckButton");
 
 	SetUnpressed();
 }

@@ -25,7 +25,7 @@
           <color    name="backgroundcolor" value="0x00447156"/>
           <gradient name="gradient" color0="0x00447156" color1="0x00447156" color2="0x00447156" color3="0x00447156"/>
           <color name="textcolor" value="0x00fffe8c"/>
-          <color name="texthighlightcolor" value="0x00ffe08c"/>
+          <color name="texthighlightcolor" value="0x00ffd658"/>
           <property name="blend" value="0"/>
       </object>
     </widget>    
@@ -40,6 +40,15 @@
       </object>
     </widget>    
     
+    <widget>
+      <type value="Label"/>
+       <object>
+          <!-- The default for all widgets that have no own section -->
+          <name value="Label"/>
+          <color name="textcolor" value="0x00fffe8c"/>
+          <font name="default" value="asc/font.ttf" size="14"/>
+      </object>
+    </widget>    
    
     <widget>
       <type value="MenuBar"/>
@@ -51,7 +60,9 @@
       <object>
          <name value="Button"/>
           <!-- The buttons on the menu bar ( File / Game / etc... )  -->
-         <color name="textcolor" value="0x0089bfa4"/>
+         <!-- color name="textcolor" value="0x0089bfa4"/ -->
+         <color name="textcolor" value="0x00fffe8c"/>
+
          <gradient name="gradient0"
                   color0="0x00FFFFFF"
                   color1="0x00FFFFFF"
@@ -81,15 +92,20 @@
          <filename name="iconup" value="none"/>
          <filename name="icondown" value="none"/>
          <property name="shift" value="0"/>
+          <color name="textcolor" value="0x00fffe8c"/>
+          <color name="texthighlightcolor" value="0x00ffd658"/>
          </object>
     </widget>    
     
     <widget>
        <type value="PopupMenu"/>
        <object>
-          <!-- The area in which the pull down menu items arer lieing ( load / save / etc... )  -->
+          <!-- The area in which the pull down menu items are listed ( load / save / etc... )  -->
           <name value="ThemeWidget"/>
-          <color name="textcolor" value="0x00fffd36"/>
+          <!-- color name="textcolor" value="0x00fffd36"/ -->
+          <color name="textcolor" value="0x00fffe8c"/>
+
+          
           <property name="backmode" value="TILE"/>
           <property name="transparency" value="90"/>
           <gradient name="gradient" color0="0x759f8a" color1="0x759f8a" color2="0x759f8a" color3="0x759f8a"/>
@@ -110,6 +126,8 @@
           <name value="MenuItem"/>
           <gradient name="gradientSelected" color0="0x759f8a" color1="0x759f8a" color2="0x759f8a" color3="0x759f8a"/>
           <property name="blendSelected" value="100"/>
+          <color name="Normal" value="0x00fffe8c"/>
+          <color name="Selected" value="0x00fffe8c"/>
        </object>
     </widget>    
 
@@ -139,6 +157,8 @@
         <property name="transparency2" value="0"/>
         <filename name="iconup" value="none"/>
         <filename name="icondown" value="none"/>
+        <color name="textcolor" value="0x00fffe8c"/>
+        <color name="texthighlightcolor" value="0x00ffd658"/>
 
         <color name="bordercolor0" value="0x0087e0aa"/>
         <color name="bordercolor1" value="0x002e4d3a"/>
@@ -170,6 +190,131 @@
     <widget>
     <type value="Scrollbar"/>
     <object>
+        <name value="Scrollbar"/>
+        <filename name="background" value="none"/>
+        <property name="backmode" value="TILE"/>
+        <gradient color0="0x00B0B1B6" color1="0x0083838D" color2="0x007B7B83" color3="0x00585765"/>
+        <property name="blend" value="0"/>
+        <property name="bordersize" value="0"/>
+    </object>
+    <object>
+        <name value="ScrollbarV"/>
+        <property name="width" value="15"/>
+        <filename name="background" value="asc/vscroll_back.png"/>
+        <property name="backmode" value="TILE"/>
+        <property name="transparency" value="128"/>
+    </object>
+    <object>
+        <name value="ScrollbarH"/>
+        <property name="height" value="15"/>
+        <filename name="background" value="asc/hscroll_back.png"/>
+        <property name="backmode" value="TILE"/>
+        <property name="transparency" value="128"/>
+    </object>
+    <object>
+        <name value="ScrollbarLeft"/>
+        <filename name="background0" value="asc/left_up.bmp" colorkey="0x000000FF"/>
+        <filename name="background1" value="asc/left_down.bmp" colorkey="0x000000FF"/>
+        <filename name="background2" value="asc/left_high.bmp" colorkey="0x000000FF"/>
+        <property name="backmode0" value="STRETCH"/>
+        <property name="backmode1" value="STRETCH"/>
+        <property name="backmode2" value="STRETCH"/>
+        <property name="blend0" value="0"/>
+        <property name="blend1" value="0"/>
+        <property name="blend2" value="0"/>
+        <property name="bordersize0" value="1"/>
+        <property name="bordersize1" value="1"/>
+        <property name="bordersize2" value="1"/>
+        <property name="transparency0" value="60"/>
+        <property name="transparency1" value="60"/>
+        <property name="transparency2" value="60"/>
+    </object>
+    <object>
+        <name value="ScrollbarRight"/>
+        <filename name="background0" value="asc/right_up.bmp" colorkey="0x000000FF"/>
+        <filename name="background1" value="asc/right_down.bmp" colorkey="0x000000FF"/>
+        <filename name="background2" value="asc/right_high.bmp" colorkey="0x000000FF"/>
+        <property name="backmode0" value="STRETCH"/>
+        <property name="backmode1" value="STRETCH"/>
+        <property name="backmode2" value="STRETCH"/>
+        <property name="blend0" value="0"/>
+        <property name="blend1" value="0"/>
+        <property name="blend2" value="0"/>
+        <property name="bordersize0" value="0"/>
+        <property name="bordersize1" value="0"/>
+        <property name="bordersize2" value="0"/>
+        <property name="transparency0" value="60"/>
+        <property name="transparency1" value="60"/>
+        <property name="transparency2" value="60"/>
+    </object>
+    <object>
+        <name value="ScrollbarUp"/>
+        <filename name="background0" value="asc/up_up.bmp" />
+        <filename name="background1" value="asc/up_down.bmp" />
+        <filename name="background2" value="asc/up_high.bmp" />
+        <property name="backmode0" value="STRETCH"/>
+        <property name="backmode1" value="STRETCH"/>
+        <property name="backmode2" value="STRETCH"/>
+        <property name="blend0" value="0"/>
+        <property name="blend1" value="0"/>
+        <property name="blend2" value="0"/>
+        <property name="bordersize0" value="0"/>
+        <property name="bordersize1" value="0"/>
+        <property name="bordersize2" value="0"/>
+        <property name="transparency0" value="60"/>
+        <property name="transparency1" value="60"/>
+        <property name="transparency2" value="60"/>
+    </object>
+    <object>
+        <name value="ScrollbarDown"/>
+        <filename name="background0" value="asc/down_up.bmp" />
+        <filename name="background1" value="asc/down_down.bmp" />
+        <filename name="background2" value="asc/down_high.bmp" />
+        <property name="backmode0" value="STRETCH"/>
+        <property name="backmode1" value="STRETCH"/>
+        <property name="backmode2" value="STRETCH"/>
+        <property name="blend0" value="0"/>
+        <property name="blend1" value="0"/>
+        <property name="blend2" value="0"/>
+        <property name="bordersize0" value="0"/>
+        <property name="bordersize1" value="0"/>
+        <property name="bordersize2" value="0"/>
+        <property name="transparency0" value="60"/>
+        <property name="transparency1" value="60"/>
+        <property name="transparency2" value="60"/>
+    </object>
+    <object>
+        <name value="ScrollbarDrag"/>
+        <filename name="background0" value="none"/>
+        <filename name="background1" value="none"/>
+        <filename name="background2" value="none"/>
+        <property name="backmode0" value="TILE"/>
+        <property name="backmode1" value="TILE"/>
+        <property name="backmode2" value="TILE"/>
+        <gradient name="gradient0" color0="0x0056a06f" color1="0x0056a06f" color2="0x0056a06f" color3="0x0056a06f"/>
+        <gradient name="gradient1" color0="0x0066b37f" color1="0x0066b37f" color2="0x0066b37f" color3="0x0066b37f"/>
+        <gradient name="gradient2" color0="0x0066b37f" color1="0x0066b37f" color2="0x0066b37f" color3="0x0066b37f"/>
+        <property name="blend0" value="255"/>
+        <property name="blend1" value="255"/>
+        <property name="blend2" value="255"/>
+        <property name="bordersize0" value="1"/>
+        <property name="bordersize1" value="1"/>
+        <property name="bordersize2" value="1"/>
+        <property name="transparency0" value="10"/>
+        <property name="transparency1" value="20"/>
+        <property name="transparency2" value="20"/>
+        <filename name="iconup" value="asc/drag.png" colorkey="0x000000FF"/>
+        <filename name="icondown" value="asc/drag.png" colorkey="0x000000FF"/>
+    </object>
+    </widget>
+
+    <widget>
+    <type value="DLGScrollbar"/>
+     <object>
+        <name value="ThemeWidget"/>
+          <color name="textcolor" value="0x00e1fbd1"/>
+    </object>
+     <object>
         <name value="Scrollbar"/>
         <filename name="background" value="none"/>
         <property name="backmode" value="TILE"/>
@@ -227,9 +372,9 @@
     </object>
     <object>
         <name value="ScrollbarUp"/>
-        <filename name="background0" value="asc/up_up.bmp" colorkey="0x000000FF"/>
-        <filename name="background1" value="asc/up_down.bmp" colorkey="0x000000FF"/>
-        <filename name="background2" value="asc/up_high.bmp" colorkey="0x000000FF"/>
+        <filename name="background0" value="asc/dlg_up_up.bmp" colorkey="0x000000FF"/>
+        <filename name="background1" value="asc/dlg_up_down.bmp" colorkey="0x000000FF"/>
+        <filename name="background2" value="asc/dlg_up_high.bmp" colorkey="0x000000FF"/>
         <property name="backmode0" value="STRETCH"/>
         <property name="backmode1" value="STRETCH"/>
         <property name="backmode2" value="STRETCH"/>
@@ -245,9 +390,9 @@
     </object>
     <object>
         <name value="ScrollbarDown"/>
-        <filename name="background0" value="asc/down_up.bmp" colorkey="0x000000FF"/>
-        <filename name="background1" value="asc/down_down.bmp" colorkey="0x000000FF"/>
-        <filename name="background2" value="asc/down_high.bmp" colorkey="0x000000FF"/>
+        <filename name="background0" value="asc/dlg_down_up.bmp" colorkey="0x000000FF"/>
+        <filename name="background1" value="asc/dlg_down_down.bmp" colorkey="0x000000FF"/>
+        <filename name="background2" value="asc/dlg_down_high.bmp" colorkey="0x000000FF"/>
         <property name="backmode0" value="STRETCH"/>
         <property name="backmode1" value="STRETCH"/>
         <property name="backmode2" value="STRETCH"/>
@@ -286,6 +431,7 @@
     </object>
     </widget>
 
+
     <widget>
     <type value="RadioButton"/>
     <object>
@@ -322,10 +468,10 @@
     <widget>
     <type value="CheckButton"/>
     <object>
-        <name value="CheckWidget"/>
+        <name value="CheckButton"/>
         <property name="shift" value="0"/>
-        <filename name="iconup" value="asc/check_off.bmp" colorkey="0x000000FF"/>
-        <filename name="icondown" value="asc/check_on.bmp" colorkey="0x000000FF"/>
+        <filename name="iconup" value="asc/check_off.png" colorkey="0x000000FF"/>
+        <filename name="icondown" value="asc/check_on.png" colorkey="0x000000FF"/>
     </object>
     </widget>
 
@@ -334,7 +480,7 @@
     <object>
         <name value="Background"/>
         <property name="height" value="18"/>
-        <filename name="background" value="asc/pb_back.bmp"/>
+        <filename name="background" value="asc/hscroll_back.bmp"/>
         <property name="backmode" value="TILE"/>
         <property name="blend" value="0"/>
         <property name="bordersize" value="1"/>
@@ -453,9 +599,9 @@
           <filename name="background" value="asc/dialog_background2.png"/>
           <color name="textcolor" value="0x00e30000"/>
           <property name="backmode" value="TILE"/>
-          <gradient name="gradient" color0="0x00447156" color1="0x00447156" color2="0x00447156" color3="0x00447156"/>
-          <property name="blend" value="0"/>
-          <property name="transparency" value="80"/>
+          <gradient name="gradient" color0="0x00e57100" color1="0x00e57100" color2="0x00e57100" color3="0x00e57100"/>
+          <property name="blend" value="128"/>
+          <property name="transparency" value="30"/>
       </object>
     </widget>
     

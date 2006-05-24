@@ -81,7 +81,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
 
    for ( int i = 0; i < cmovemalitypenum; i++ ) {
       if ( fld->vehicle && fld->vehicle->typ->movemalustyp == i )
-         text +=  "#fontcolor=0x00ff#";
+         text +=  "#fontcolor=0xffd658#";
       text += cmovemalitypes[i] + ASCString(": ") + ASCString::toString( fld->getmovemalus(i) );
       
       if ( fld->vehicle && fld->vehicle->typ->movemalustyp == i )

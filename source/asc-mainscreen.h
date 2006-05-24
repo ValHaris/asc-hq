@@ -38,6 +38,8 @@ class UnitWeaponRangeLayer;
 class UnitMovementRangeLayer;
 class GameMap;
 class MapCoordinate;
+class WindInfoPanel;
+class MapInfoPanel;
       
 class ASC_MainScreenWidget : public MainScreenWidget {
       bool standardActions;
@@ -60,6 +62,9 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       NewGuiHost* guiHost;
       Menu* menu;
       DashboardPanel* unitInfoPanel;
+      WindInfoPanel* windInfoPanel;
+      MapInfoPanel* mapInfoPanel;
+      
       UnitWeaponRangeLayer* weaponRangeLayer;
       UnitMovementRangeLayer* movementRangeLayer;
                

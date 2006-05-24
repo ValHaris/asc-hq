@@ -250,6 +250,7 @@ panel {
          x = 75
          y = 245
          widgetnum = 9
+         Fontsize = 14
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -264,7 +265,6 @@ panel {
            text = armor:
            x = 10
            y = 26
-           Fontsize = 14
            height = 16
          } widget1
          widget2 {
@@ -299,6 +299,7 @@ panel {
          } widget5
          widget6 {
            type = textoutput
+           TextAlign = RIGHT
            name = unitpad_unitweight
            x = 130
            y = 42
@@ -307,6 +308,7 @@ panel {
          } widget6
          widget7 {
            type = textoutput
+           TextAlign = RIGHT
            name = unitpad_unitview
            x = 130
            y = 58
@@ -315,6 +317,7 @@ panel {
          } widget7
          widget8 {
            type = textoutput
+           TextAlign = RIGHT
            name = unitpad_unitjamming
            x = 130
            y = 74
@@ -328,10 +331,10 @@ panel {
          Filename = padproductioncostscreenwindow.png
          x = 75
          y = 360
+         Fontsize = 14
          widgetnum = 5
          widget0 {
            TextAlign = LEFT
-           Fontsize = 16
            type = StaticText
            text = production cost
            x = 10
@@ -364,6 +367,7 @@ panel {
          } widget3
          widget4 {
            type = textoutput
+           TextAlign = RIGHT
            name = unitpad_unitcostmaterial
            x = 130
            y = 42
@@ -378,9 +382,9 @@ panel {
          x = 75
          y = 445
          widgetnum = 7
+         Fontsize = 14
          widget0 {
            TextAlign = LEFT
-           Fontsize = 16
            type = StaticText
            text = tank size
            x = 10
@@ -412,6 +416,7 @@ panel {
            width = 60
          } widget3
          widget4 {
+           TextAlign = RIGHT
            type = textoutput
            name = unitpad_unittankmaterial
            x = 130
@@ -455,8 +460,9 @@ panel {
          } widget0
          widget1 {
            type = multilinetext
+           style = DLGScrollbar
            name = unitpad_unitabilities
-           localtransparency = 255
+           ; localtransparency = 255
            FontSize = 12
            x = 10
            y = 26
@@ -561,6 +567,7 @@ panel {
          x = 75
          y = 235
          widgetnum = 6
+         Fontsize = 14
          widget0 {
            TextAlign = LEFT
            Fontsize = 16
@@ -575,7 +582,6 @@ panel {
            text = fuel consumption:
            x = 10
            y = 60
-           Fontsize = 14
            height = 16
            widgetnum = 1
            widget0 {
@@ -730,6 +736,7 @@ panel {
            type = ScrollArea
            name = unitpad_terrainaccessarea
            localtransparency = 255
+           style = DLGScrollbar
            x = 10
            y = 25
            width = 180
@@ -1039,6 +1046,8 @@ panel {
            type = ScrollArea
            name = unitpad_weaponchoosearea
            localtransparency = 255
+           style = DLGScrollbar
+
            x = 5
            y = 30
            width = 200
@@ -1771,6 +1780,7 @@ widget5 {
         widget5 {
           type = ScrollArea
           name = unitpad_loadablescroll
+          style = DLGScrollbar
           x = 8
           y = 151
           width = 173
@@ -2437,7 +2447,8 @@ widget5 {
          widget1 {
            type = multilinetext
            name = unitpad_description_text
-           transparency = 255
+           ; transparency = 255
+           style = DLGScrollbar
            x = 10
            y = 25
            FontSize = 12

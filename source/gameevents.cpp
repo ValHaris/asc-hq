@@ -1230,7 +1230,11 @@ void NextMap::writeData ( tnstream& stream )
 
 void NextMap::execute( MapDisplayInterface* md )
 {
-   savegame( "map-" + gamemap->preferredFileNames.mapname[0] );
+   ASCString name = gamemap->preferredFileNames.mapname[0];
+   if ( name.find('.') != ASCString::npos )
+      name.erase( name.find('.') );
+   
+   savegame( "map-" + name + "-completed" + (savegameextension + 1) );
    throw  LoadNextMap(mapID);
 }
 

@@ -791,7 +791,7 @@ void execuseraction2 ( tuseractions action )
          if ( fieldvisiblenow  ( getSelectedField() )) {
             Vehicle* eht = getSelectedField()->vehicle;
             if ( eht && actmap->player[actmap->actplayer].diplomacy.getState( eht->getOwner()) >= PEACE_SV )
-               displaymessage(" weight of unit: \n basic: %d\n+cargo:%d\n= %d",1 ,eht->typ->weight, eht->cargoWeight(), eht->weight() );
+               infoMessage(" weight of unit: \n basic: " + ASCString::toString(eht->typ->weight) + "\n+cargo: " + ASCString::toString(eht->cargoWeight()) + "\n= " + ASCString::toString( eht->weight() ));
          }
          break;
       case ua_GameStatus:

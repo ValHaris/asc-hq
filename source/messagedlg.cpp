@@ -25,6 +25,7 @@
 #include "dialog.h"
 #include "dlg_box.h"
 #include "spfst.h"
+#include "widgets/textrenderer.h"
 
 class tnewmessage : public tmessagedlg  {
             protected:
@@ -647,6 +648,8 @@ class IngameMessageViewer : public ASC_PG_Dialog {
             r = PG_Rect ( 10, 40, Width() - 20, Height() - 90 );
             
          new Emboss( this, r, true );
+
+#ifdef RICHEDIT
          PG_RichEdit* re = new PG_RichEdit( this, PG_Rect(r.x + 2, r.y+2, r.w-4, r.h-4));
 
          ASCString text  = msg.text;
@@ -655,7 +658,10 @@ class IngameMessageViewer : public ASC_PG_Dialog {
 
          re->SetText( text );
          re->SetTransparency(255);
-
+#else
+         TextRenderer* tr = new TextRenderer( this, PG_Rect(r.x + 2, r.y+2, r.w-4, r.h-4));
+         tr->SetText( msg.text );
+#endif
          
          PG_Button* b = new PG_Button( this, PG_Rect( Width() - 110, Height() - 40, 100, 30), buttonText );
          b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::QuitModal) );

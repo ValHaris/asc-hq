@@ -287,11 +287,13 @@ void  checkforvictory ( )
                   to |= 1 << j;
 
 
-            char txt[1000];
-            const char* sp = getmessage( 10010 ); // Message "player has been terminated"
-
-            sprintf ( txt, sp, actmap->player[i].getName().c_str() );
-            new Message ( txt, actmap, to  );
+            if ( !actmap->campaign.avail ) {
+               char txt[1000];
+               const char* sp = getmessage( 10010 ); // Message "player has been terminated"
+   
+               sprintf ( txt, sp, actmap->player[i].getName().c_str() );
+               new Message ( txt, actmap, to  );
+            } 
 
             actmap->player[i].existanceAtBeginOfTurn = false;
 

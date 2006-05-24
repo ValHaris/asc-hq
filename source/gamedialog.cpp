@@ -58,7 +58,7 @@ GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize )
 
 
     p = ScreenToClient(optionsButton->x, optionsButton->y);
-    exitButton  = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "End Game", 90);
+    exitButton  = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Quit Game", 90);
     exitButton->sigClick.connect( SigC::slot( *this, &GameDialog::exitGame));
 
     if ( actmap ) {
@@ -633,7 +633,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
 
        numberoffiles++;
 
-    /* fileName = ff.getnextname(NULL, NULL, &location );
+     fileName = ff.getnextname(NULL, NULL, &location );
     }
     fileList->EnableScrollBar(true, PG_ScrollBar::VERTICAL);
     */

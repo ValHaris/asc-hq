@@ -22,9 +22,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-05-24 21:22:31 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/draw/surface.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -362,6 +362,10 @@ void PG_Draw::DrawThemedSurface(SDL_Surface* surface, const PG_Rect& r, PG_Gradi
 
 	SDL_GetClipRect(surface, &oldclip);
 
+   // prevent any aliasing if the sizes match
+   if ( bkmode == STRETCH && r.w==background->w && r.h == background->h )
+      bkmode = TILE;
+   
 	switch(bkmode) {
 
 			//

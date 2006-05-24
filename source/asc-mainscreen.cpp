@@ -428,7 +428,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
 
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
-   : MainScreenWidget( application ), standardActions(true), guiHost(NULL), menu(NULL), unitInfoPanel(NULL)
+   : MainScreenWidget( application ), standardActions(true), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL)
 {
 
    setup( true );
@@ -517,16 +517,25 @@ void ASC_MainScreenWidget::spawnPanel ( const ASCString& panelName )
 void ASC_MainScreenWidget::spawnPanel ( Panels panel )
 {
    if ( panel == WindInfo ) {
-      WindInfoPanel* wi = new WindInfoPanel( this, PG_Rect(Width()-170, 480, 170, 114));
-      wi->Show();
+      if ( !windInfoPanel || !CGameOptions::Instance()->cacheASCGUI ) {
+         delete windInfoPanel;
+         windInfoPanel = new WindInfoPanel( this, PG_Rect(Width()-170, 480, 170, 114));
+      }
+      windInfoPanel->Show();
    }
    if ( panel == UnitInfo ) {
-      unitInfoPanel = new UnitInfoPanel( this, PG_Rect(Width()-170, 160, 170, 320));
+      if ( !unitInfoPanel || !CGameOptions::Instance()->cacheASCGUI ) {
+         delete unitInfoPanel;
+         unitInfoPanel = new UnitInfoPanel( this, PG_Rect(Width()-170, 160, 170, 320));
+      }
       unitInfoPanel->Show();
    }
    if ( panel == ButtonPanel ) {
-      guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-170, Height()-200, 170, 200));
-      guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
+      if ( !guiHost || !CGameOptions::Instance()->cacheASCGUI ) {
+         delete guiHost;
+         guiHost = new NewGuiHost( this, mapDisplay, PG_Rect(Width()-170, Height()-200, 170, 200));
+         guiHost->pushIconHandler( &GuiFunctions::primaryGuiIcons );
+      }
       guiHost->Show();
    }
    
@@ -534,8 +543,11 @@ void ASC_MainScreenWidget::spawnPanel ( Panels panel )
       spawnOverviewMapPanel();
    
    if ( panel == MapControl ) {
-      MapInfoPanel* mcp = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
-      mcp->Show();
+      if ( !mapInfoPanel || !CGameOptions::Instance()->cacheASCGUI ) {
+         delete mapInfoPanel;
+         mapInfoPanel = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
+      }
+      mapInfoPanel->Show();
    }
 }
 
@@ -640,7 +652,14 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_KP_MINUS: execUserAction_ev( ua_decrease_zoom );
                return true;
                
-         case SDLK_F10:
+               case SDLK_F10: {
+                  
+                  PG_ScrollBar* sb = new PG_ScrollBar( NULL, PG_Rect( 20, 50, 15, 400), PG_ScrollBar::VERTICAL, -1, "DLGScrollbar" );
+                  sb->SetPageSize(10);
+                  sb->SetRange(0, 100);
+                  sb->Show();
+                  
+               }
             // testText();
             break;
                
