@@ -336,6 +336,17 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       addIndentation( -1, strtol(s.c_str(), NULL, 0 ) );
       return NULL;
    }
+
+   static boost::regex indent( "#indent=(\\d+),(\\d+)#");
+   if( boost::regex_match( token, what, firstindent)) {
+      ASCString s1;
+      s1.assign( what[1].first, what[1].second );
+      ASCString s2;
+      s2.assign( what[2].first, what[2].second );
+      addIndentation( strtol(s1.c_str(), NULL, 0 ), strtol(s2.c_str(), NULL, 0 ) );
+      return NULL;
+   }
+
    return parsingError ( "unknown token: " + token );
 }
 

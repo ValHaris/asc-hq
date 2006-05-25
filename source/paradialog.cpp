@@ -21,17 +21,13 @@
 #include <SDL_image.h>
 #include <signal.h>
 
-#include <boost/regex.hpp>
-
 #include <paragui.h>
 #include <pgapplication.h>
 #include <pgmessagebox.h>
 #include <pgdropdown.h>
 #include "pgbutton.h"
-#include "pgwidgetlist.h"
 #include "pglabel.h"
 #include "pgwindow.h"
-#include "pgmaskedit.h"
 #include "pgscrollbar.h"
 #include "pgprogressbar.h"
 #include "pgradiobutton.h"
@@ -39,10 +35,7 @@
 #include "pgcheckbutton.h"
 #include "pgslider.h"
 #include "pglistbox.h"
-#include "pgcolumnitem.h"
 #include "pgpopupmenu.h"
-#include "pgspinnerbox.h"
-#include "pglog.h"
 #include "pgmenubar.h"
 #include "pgimage.h"
 #include "pgmessagebox.h"
@@ -64,10 +57,6 @@
 #include "spfst.h"
 #include "strtmesg.h"
 
-
-#include "resourceplacement.h"
-
-#include "iconrepository.h"
 #include "graphics/drawing.h"
 
 #include "messaginghub.h"

@@ -581,10 +581,10 @@ panel {
          PowerSlider {
             type = slider
             style = slider
-            x = 25
-            y = 128
-            x2 = 296
-            height  = 15
+            x = 27
+            y = 127
+            x2 = 295
+            y2  = 141
             Orientation = horizontal
 
          } PowerSlider
