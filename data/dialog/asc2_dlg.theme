@@ -618,7 +618,7 @@
       
     <object>
         <name value="LineEdit"/>
-        <color name="textcolor" value="0x00fffd36"/>
+        <color name="textcolor" value="0x00fffe8c"/>
         <property name="bordersize" value="1"/>
         <property name ="simplebackground" value="0"/>
         <color    name="backgroundcolor" value="0x00508565"/>
@@ -630,7 +630,7 @@
     </object>
     <object>
         <name value="Label"/>
-        <color name="textcolor" value="0x00fffd36"/>
+        <color name="textcolor" value="0x00fffe8c"/>
         <property name="bordersize" value="2"/>
         <property name ="simplebackground" value="1"/>
         <color    name="backgroundcolor" value="0x00508565"/>

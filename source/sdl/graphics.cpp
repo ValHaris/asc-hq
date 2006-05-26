@@ -53,9 +53,7 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   agmp->resolutionx = screen->w;
   agmp->resolutiony = screen->h;
   agmp->windowstatus = 100;
-  agmp->scanlinelength = screen->w;
   agmp->scanlinenumber = screen->h;
-  agmp->bytesperscanline = screen->w * 1;
   agmp->byteperpix = 1 ;
   agmp->bitperpix = 8;
   agmp->directscreenaccess = 0;
@@ -67,6 +65,7 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
      dummyScreenPaletteSetup = false;
   }
   agmp->linearaddress = (PointerSizedInt) agmp->surface->pixels();
+  agmp->scanlinelength = agmp->bytesperscanline = agmp->surface->pitch();
      
 
   *hgmp = *agmp;

@@ -120,19 +120,16 @@ void Menu::addbutton( const char* name, int id )
 void Menu::setup()
 {
    addfield ( "Glo~b~al" );
-   addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
-   addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
-   currentMenu->addSeparator();
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~S~ound options", ua_soundDialog );
+   currentMenu->addSeparator();
+   addbutton ( "~M~ain menu\tESC", ua_mainmenu );
    currentMenu->addSeparator();
    addbutton ( "E~x~it\tctrl-x", ua_exitgame );
 
 
    addfield ("~G~ame");
-//   addbutton ( "New ~C~ampaign", ua_newcampaign);
-//   addbutton ( "~N~ew single Level\tctrl-n", ua_startnewsinglelevel );
-   addbutton ( "New Game", ua_newGame );
+   addbutton ( "~N~ew Game", ua_newGame );
    currentMenu->addSeparator();
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
@@ -193,6 +190,9 @@ void Menu::setup()
    addbutton ( "select graphic set", ua_selectgraphicset );
 
    addfield ( "~V~iew" );
+   addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
+   addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
+   currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );

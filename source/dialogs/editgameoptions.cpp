@@ -46,6 +46,7 @@ class GetVideoModes {
       SDL_Rect **modes;
       VList list;
 
+      vector <pair<int,int> > listedmodes;
      
    public:
       GetVideoModes() {
@@ -77,6 +78,9 @@ class GetVideoModes {
             return;
          }
 
+         list.push_back( "graphic mode not listed");
+         listedmodes.push_back( make_pair( 0, 0));
+         
          /* Check if our resolution is restricted */
          if(modes == (SDL_Rect **)-1){
             warning("All resolutions available.\n");
@@ -84,9 +88,14 @@ class GetVideoModes {
          }
          else{
             for(i=0;modes[i];++i) {
+
+               if ( find ( listedmodes.begin(), listedmodes.end(), make_pair( int(modes[i]->w), int(modes[i]->h ))) != listedmodes.end() )
+                  continue;
+               
                ASCString s;
                s.format( "%d*%d", modes[i]->w, modes[i]->h );
                list.push_back ( s );
+               listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
             }
          }
          return;
@@ -95,12 +104,20 @@ class GetVideoModes {
       VList& getList() { return list; };
 
       int getx( int index ) {
-         return modes[index]->w;
+         return listedmodes.at(index).first;
       };
       
       int gety( int index ) {
-         return modes[index]->h;
+         return listedmodes.at(index).second;
       };
+
+      int findmodenum( int x, int y ) {
+         for ( int j = 0; j < listedmodes.size(); ++j )
+            if ( listedmodes[j].first == x && listedmodes[j].second == y )
+               return j;
+         return 0;
+      }
+      
 };
 
 
@@ -128,10 +145,44 @@ class EditGameOptions : public ASC_PG_Dialog {
       GetVideoModes vmodes;
       
       int videoMode;
+      bool ascmain;
       
       bool ok()
       {
          if ( propertyEditor->Apply() ) {
+
+            int x = vmodes.getx( videoMode );
+            int y = vmodes.gety( videoMode );
+
+            bool warn = false;
+            bool fullscreen;
+            
+            
+            if ( ascmain ) {
+               if ( (x != CGameOptions::Instance()->xresolution || y != CGameOptions::Instance()->yresolution) && x && y  ) {
+                  warn = true;
+                  CGameOptions::Instance()->xresolution = x;
+                  CGameOptions::Instance()->yresolution = y;
+               }
+
+               fullscreen = !CGameOptions::Instance()->forceWindowedMode;
+                  
+            } else {
+               if ( (x != CGameOptions::Instance()->mapeditor_xresolution || y != CGameOptions::Instance()->mapeditor_yresolution) && x && y ) {
+                  warn = true;
+                  CGameOptions::Instance()->mapeditor_xresolution = x;
+                  CGameOptions::Instance()->mapeditor_yresolution = y;
+               }
+               fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
+            }
+
+            if ( warn )
+               infoMessage( "The new resolution will be used after you restart ASC");
+
+            if ( getPGApplication().isFullscreen() != fullscreen ) 
+               getPGApplication().toogleFullscreen();
+            
+            
             CGameOptions::Instance()->setChanged();
             quitModalLoop(0);
 
@@ -141,10 +192,16 @@ class EditGameOptions : public ASC_PG_Dialog {
       }
 
    public:
-      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 500 ), "Edit Map Parameters"), videoMode(0)
+      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 500 ), "Edit Map Parameters"), videoMode(0), ascmain( mainApp )
       {
          CGameOptions* o = CGameOptions::Instance();
+
          
+         if ( mainApp ) 
+            videoMode = vmodes.findmodenum( CGameOptions::Instance()->xresolution, CGameOptions::Instance()->yresolution );
+         else
+            videoMode = vmodes.findmodenum( CGameOptions::Instance()->mapeditor_xresolution, CGameOptions::Instance()->mapeditor_yresolution );
+            
          propertyEditor = new GameOptionsPEW( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Direct Movement", &o->fastmove );

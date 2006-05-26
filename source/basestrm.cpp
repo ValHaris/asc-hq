@@ -816,6 +816,36 @@ tncontainerstream  :: ~tncontainerstream  ()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class ContainerCollector : public ContainerIndexer {
+   public:
+      struct FileIndex {
+         char* name;
+         pncontainerstream container;
+         int directoryLevel;
+      };
+   protected:
+
+      dynamic_array<FileIndex> index[256];    // not very efficient, but who cares :-)
+
+      dynamic_array<pncontainerstream> container;
+      int containernum;
+      struct {
+         int alpha;
+         int index;
+      } namesearch;       // next entry to return
+   public:
+      ContainerCollector ( void );
+      void init ( const char* wildcard );
+      void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
+           // pncontainerstream getfile ( const char* filename );
+      FileIndex* getfile ( const char* filename );
+      FileIndex* getfirstname ( void );
+      FileIndex* getnextname ( void );
+      ASCString listContainer();
+      virtual ~ContainerCollector();
+};
+
+
 ContainerCollector containercollector;
 
 char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename )
@@ -991,6 +1021,12 @@ void locateFile ( const ASCString& filename, FileLocation* loc )
 
 
 
+ASCString listContainer()
+{
+   return containercollector.listContainer();
+}
+
+
 ContainerCollector :: ContainerCollector ( void )
 {
   containernum = 0;
@@ -1076,6 +1112,17 @@ ContainerCollector::FileIndex* ContainerCollector :: getnextname ( void )
    } /* endwhile */
    return &index[namesearch.alpha][namesearch.index++];
 }
+
+ASCString ContainerCollector :: listContainer()
+{
+   ASCString s;
+   for ( int i = 0; i < containernum; i++ )
+      s += container[i]->getLocation() + "\n";
+
+   return s;
+   
+}
+
 
 
 ContainerCollector :: ~ContainerCollector()

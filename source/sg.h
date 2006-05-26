@@ -53,6 +53,8 @@ extern void hookGuiToMap( GameMap* map );
 
 extern bool loadGame();
 extern bool continueAndStartMultiplayerGame();
+extern void changePassword();
+
 
 #endif
 

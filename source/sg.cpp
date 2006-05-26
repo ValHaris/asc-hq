@@ -142,6 +142,7 @@
 #include "dialogs/nextcampaignmap.h"
 #include "dialogs/terraininfo.h"
 #include "stdio-errorhandler.h"
+#include "widgets/textrenderer.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -416,7 +417,7 @@ void benchgame ( int mode )
 void showSearchPath()
 {
 
-      ASCString s;
+   ASCString s = "#fontsize=17#ASC search path#fontsize=13#\n";
       for ( int i = 0; i < getSearchPathNum(); ++i )
          s += getSearchPath ( i ) + "\n"; 
 
@@ -428,19 +429,43 @@ void showSearchPath()
      char buffer[_MAX_PATH];
 
      if( _getcwd( buffer, _MAX_PATH ) ) {
-         s += "\nCurrent working directory: \n";
+        s += "\n#fontsize=17#Current working directory#fontsize=13#\n";
          s += buffer;
      }
 #endif
 
+     s += "\n\n#fontsize=17#Mounted archive files#fontsize=13#\n";
+     s += listContainer();
 
 
-      tviewanytext vat ;
-      vat.init ( "Search Path", s.c_str(), 20, -1 , 450, 480 );
-      vat.run();
-      vat.done();
+     ViewFormattedText vft("ASC directories", s, PG_Rect( -1, -1, 400, 400 ));
+     vft.Show();
+     vft.RunModal();
 }
 
+
+
+void changePassword( GameMap* gamemap )
+{
+   int humanCounter = 0;
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
+      if ( gamemap->player[i].exist() && gamemap->player[i].stat == Player::human )
+         humanCounter++;
+
+   if ( humanCounter < 2 ) {
+      infoMessage ("Passwords are only used for multiplayer games");
+      return;
+   }
+
+   bool success;
+   do {
+      Password oldpwd = gamemap->player[gamemap->actplayer].passwordcrc;
+      gamemap->player[gamemap->actplayer].passwordcrc.reset();
+      success = enterpassword ( gamemap->player[gamemap->actplayer].passwordcrc, true, true );
+      if ( !success )
+         gamemap->player[gamemap->actplayer].passwordcrc = oldpwd;
+   } while ( gamemap->player[gamemap->actplayer].passwordcrc.empty() && success && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
+}
 
 
 // user actions using the old event system
@@ -535,19 +560,6 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-      case ua_changepassword:
-         {
-            bool success;
-            do {
-               Password oldpwd = actmap->player[actmap->actplayer].passwordcrc;
-               actmap->player[actmap->actplayer].passwordcrc.reset();
-               success = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, true, true );
-               if ( !success )
-                  actmap->player[actmap->actplayer].passwordcrc = oldpwd;
-            } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && success && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
-         }
-         break;
-
       case ua_bi3preferences:
          bi3preferences();
          break;
@@ -560,7 +572,7 @@ void execuseraction ( tuseractions action )
          if ( actmap && actmap->getgameparameter( cgp_disableUnitTransfer ) == 0 )
             giveunitaway ( actmap->getField( actmap->getCursor() ));
          else
-            displaymessage("Sorry, this function has been disabled when starting the map!", 1 );
+            infoMessage("Sorry, this function has been disabled when starting the map!");
          break;
 
       case ua_newmessage:
@@ -763,8 +775,6 @@ void execuseraction ( tuseractions action )
             }
          }
          break;
-      case ua_showsearchdirs: showSearchPath();
-         break;
 
       default:;
       };
@@ -905,7 +915,11 @@ void execuseraction2 ( tuseractions action )
          mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
          repaintMap();
          break;
-         
+      case ua_showsearchdirs: showSearchPath();
+         break;
+      case ua_changepassword:
+         changePassword( actmap );
+         break;
       default:
          break;
    }
@@ -917,9 +931,10 @@ void execuseraction2 ( tuseractions action )
 
 void execUserAction_ev( tuseractions action )
 {
-   getPGApplication().enableLegacyEventHandling ( true );
+   // getPGApplication().enableLegacyEventHandling ( true );
    execuseraction( action );
-   getPGApplication().enableLegacyEventHandling ( false );
+   // getPGApplication().enableLegacyEventHandling ( false );
+   
    execuseraction2( action );
 }
 

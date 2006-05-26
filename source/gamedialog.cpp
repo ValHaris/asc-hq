@@ -63,7 +63,7 @@ GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize )
 
     if ( actmap ) {
       p = ScreenToClient(exitButton->x, exitButton->y);
-      continueButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + 2 * GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Continue Game", 90);
+      continueButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + 2 * GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Return to Game", 90);
       continueButton->sigClick.connect( SigC::slot( *this, &GameDialog::closeWindow ));
     }
 

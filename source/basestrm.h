@@ -470,35 +470,9 @@ class tncontainerstream : public tn_file_buf_stream {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ContainerCollector : public ContainerIndexer {
-         public:
-           struct FileIndex {
-              char* name;
-              pncontainerstream container;
-              int directoryLevel;
-           };
-         protected:
-
-           dynamic_array<FileIndex> index[256];    // not very efficient, but who cares :-)
-
-           dynamic_array<pncontainerstream> container;
-           int containernum;
-           struct {
-              int alpha;
-              int index;
-           } namesearch;       // next entry to return
-         public:
-           ContainerCollector ( void );
-           void init ( const char* wildcard );
-           void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
-           // pncontainerstream getfile ( const char* filename );
-           FileIndex* getfile ( const char* filename );
-           FileIndex* getfirstname ( void );
-           FileIndex* getnextname ( void );
-           virtual ~ContainerCollector();
-        };
 
 
+extern ASCString listContainer();
 
 
 
