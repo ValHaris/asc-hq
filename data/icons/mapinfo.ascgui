@@ -1,5 +1,5 @@
 panel {
-   height = 130
+   height = 105
    WidgetNum = 1
    
    Widget0 {
@@ -21,7 +21,7 @@ panel {
          x2 = 0
          height = 15
          text = Show Pipelines
-         ToolTipHelp = Ctrl 1
+         ToolTipHelp = hotkey: 9
       } Widget0
       
       Widget1 {
@@ -50,7 +50,7 @@ panel {
          name = weaprange
          type = button
          x = 0
-         y = 45
+         y = 46
          x2 = 0
          height = 15
          text = show weapon range
@@ -61,7 +61,7 @@ panel {
          name = moverange
          type = button
          x = 0
-         y = 60
+         y = 62
          x2 = 0
          height = 15
          text = show movement range
@@ -69,14 +69,32 @@ panel {
       } Widget4
    
       Widget5 {
-         name = zoomscroller
-         type = slider
-         Orientation = horizontal
+         type = dummy
+         widgetnum = 2
          x = 0
-         y = 75
-         x2 = 0
-         height = 20
-      } Widget5
+         y = 78
+         ToolTipHelp = Hotkeys: Keypad + - 
+   
+         Widget0 {
+            name = zoomscroller
+            type = slider
+            Orientation = horizontal
+            x = 30
+            y = 0
+            x2 = 0
+            height = 15
+            style = slider
+         } Widget0
+      
+         Widget1 {
+           type = statictext
+           text = Zoom
+           x = 0
+           y = 0
+           width = 28
+           height = 15 
+         } Widget1
+       } widget5
    
    } Widget0
       

@@ -637,8 +637,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_9:
-               mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
-               repaintMap();
+               execUserAction_ev ( ua_viewPipeNet );
                return true;
 
             case SDLK_0: execUserAction_ev( ua_writescreentopcx );

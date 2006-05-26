@@ -245,7 +245,7 @@ Surface& Cancel::getImage( const MapCoordinate& po, ContainerBase* subject, int 
 
 ASCString Cancel::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   return "cancel";
+   return "~c~ancel";
 };
 
 
@@ -262,7 +262,7 @@ Surface& Movement::getImage( const MapCoordinate& pos, ContainerBase* subject, i
 
 ASCString Movement::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   return "move unit";
+   return "move unit (~space~)";
 };
 
 
@@ -378,7 +378,7 @@ class Ascend : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "ascend";
+         return "a~s~cend";
       };
 };
 
@@ -478,7 +478,7 @@ class Descend : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "descend";
+         return "~d~escend";
       };
 };
 
@@ -587,7 +587,7 @@ class EndTurn : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "end turn";
+         return "~e~nd turn";
       };
 };
 
@@ -632,7 +632,7 @@ class Attack : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "attack";
+         return "~a~ttack";
       };
 };
 
@@ -715,7 +715,7 @@ class PowerOn : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "enable power generation";
+         return "enable ~p~ower generation";
       };
 };
 
@@ -756,7 +756,7 @@ class PowerOff : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "disable power generation";
+         return "disable ~p~ower generation";
       };
 };
 
@@ -773,7 +773,7 @@ class UnitInfo : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "unit info";
+         return "unit ~i~nfo";
       };
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
@@ -927,12 +927,12 @@ class OpenContainer : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
-         return ( key->keysym.unicode == 'l' );
+         return ( key->keysym.unicode == 'o' );
       };
       
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "open transport / building";
+         return "~o~pen transport / building";
       };
 };
 
@@ -978,7 +978,7 @@ class EnableReactionfire : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "enable reaction fire";
+         return "enable reaction fire (~x~)";
       };
 };
 
@@ -1016,7 +1016,7 @@ class DisableReactionfire : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "disable reaction fire";
+         return "disable reaction fire (~x~)";
       };
 };
 
@@ -1133,7 +1133,7 @@ class RepairUnit : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "repair a unit";
+         return "~r~epair a unit";
       };
 };
 
@@ -1212,7 +1212,7 @@ class RefuelUnit : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "refuel a unit";
+         return "re~f~uel a unit";
       };
 };
 
@@ -1230,7 +1230,7 @@ class RefuelUnitDialog : public GuiFunction
       };
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
-         return ( key->keysym.unicode == 'F' );
+         return ( key->keysym.unicode == 'f' && (modifier & KMOD_SHIFT)  );
       };
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1249,7 +1249,7 @@ class RefuelUnitDialog : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "refuel a unit";
+         return "re~F~uel dialog ";
       };
 };
 
@@ -1320,7 +1320,7 @@ class PutMine : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "put / remove mines";
+         return "put / remove ~m~ines";
       };
 };
 
@@ -1616,7 +1616,7 @@ Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* s
 ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == 0 )
-      return "cancel";
+      return "cancel (~ESC~)";
 
    ObjectType* objtype = objectTypeRepository.getObject_byID( abs(num) );
    if ( !objtype )
@@ -1772,11 +1772,11 @@ class BuildObject : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "Object construction";
+         return "object ~c~onstruction";
       };
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
-         return ( key->keysym.unicode == 'r' );
+         return ( key->keysym.unicode == 'c' );
       };
 };
 
@@ -1893,7 +1893,7 @@ Surface& VehicleBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* 
 ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
    if ( id == 0 )
-      return "cancel";
+      return "cancel (~ESC~)";
 
    Vehicletype* vehtype = vehicleTypeRepository.getObject_byID( id );
    if ( !vehtype )

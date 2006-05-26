@@ -901,6 +901,10 @@ void execuseraction2 ( tuseractions action )
       case ua_researchinfo:
          researchinfo ();
          break;
+      case ua_viewPipeNet:
+         mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
+         repaintMap();
+         break;
          
       default:
          break;
