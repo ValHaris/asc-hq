@@ -76,7 +76,7 @@ class ASCGUI_Window : public  PG_Window {
 
       virtual WidgetParameters getDefaultWidgetParams() = 0;
 
-      typedef Loki::SmartPtr<TextPropertyGroup, Loki::RefCounted> TextPropertyGroupPointer;
+      typedef Loki::SmartPtr<TextPropertyGroup, Loki::RefLinked> TextPropertyGroupPointer;
       TextPropertyGroupPointer textPropertyGroup;
    public:
       void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );

@@ -1236,8 +1236,8 @@ void GameMap::beginTurn()
    if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
       sigPlayerTurnBegins( player[actplayer] );
       
-      if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
-         sigPlayerUserInteractionEnds( player[actplayer] );
+//      if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
+//         sigPlayerUserInteractionEnds( player[actplayer] );
 
    }
 }

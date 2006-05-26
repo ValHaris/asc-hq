@@ -98,8 +98,12 @@ Vehicle :: ~Vehicle (  )
       if ( fld->vehicle ==  this ) {
          for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
             ObjectType* obj = getMap()->getobjecttype_byid( *i );
-            if ( obj )
+            if ( obj ) {
                getMap()->getField(getPosition()) -> addobject ( obj );
+               Object* o = getMap()->getField(getPosition())->checkforobject(obj);
+               if ( o )
+                  o->setdir( direction );
+            }
          }
       }
    }

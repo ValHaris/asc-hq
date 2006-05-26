@@ -817,7 +817,7 @@ bool ASCGUI_Window::setup()
 
       panelName.toLower();
 
-      typedef map<ASCString, Loki::SmartPtr<TextPropertyGroup, Loki::RefCounted> > GuiCache;
+      typedef map<ASCString, TextPropertyGroupPointer> GuiCache;
       static GuiCache guiCache;
 
       if ( !CGameOptions::Instance()->cacheASCGUI || guiCache.find(panelName) == guiCache.end() ) {

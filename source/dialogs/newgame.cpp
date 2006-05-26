@@ -497,7 +497,7 @@ bool StartMultiplayerGame::checkPlayerStat()
       if ( humanNum <= 1 )
          for ( int i = 0; i < newMap->getPlayerCount(); ++i )
             if ( newMap->player[i].exist() )
-               if ( newMap->player[i].stat == Player::computer ) {
+               if ( newMap->player[i].stat == Player::computer || newMap->player[i].stat == Player::off ) {
                   newMap->player[i].stat = Player::human;
                   ++humanNum;
                }

@@ -213,7 +213,7 @@ void MainScreenWidget::buildBackgroundImage( bool messageLine )
          dataLoaderTicker();
          backgroundImage.Blit( msgend, SPoint( mx1 + msglength - msgend.w(), my1) );
    
-         this->messageLine = new PG_Label ( this, PG_Rect( mx1 + 20, my1 + 9, msglength - 30, msgend.h() - 18) );
+         this->messageLine = new PG_Label ( this, PG_Rect( mx1 + 20, my1 + 9, msglength - 30, msgend.h() - 18), "", "ThemeWidget" );
          this->messageLine->SetFontSize(11);
          dataLoaderTicker();
       }

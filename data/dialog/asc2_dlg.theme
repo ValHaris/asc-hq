@@ -47,6 +47,7 @@
           <name value="Label"/>
           <color name="textcolor" value="0x00fffe8c"/>
           <font name="default" value="asc/font.ttf" size="14"/>
+          <color name="texthighlightcolor" value="0x00ffd658"/>
       </object>
     </widget>    
    
@@ -544,7 +545,7 @@
         <property name="height" value="20"/>
         <filename name="background" value="asc/top_grey.bmp"/>
         <property name="backmode" value="TILE"/>
-        <property name="blend" value="0"/>
+        <property name="blend" value="128"/>
         <property name="bordersize" value="0"/>
     </object>
     <object>
@@ -567,7 +568,7 @@
         <property name="height" value="20"/>
         <filename name="background" value="asc/top_grey.bmp"/>
         <property name="backmode" value="TILE"/>
-        <property name="blend" value="0"/>
+        <property name="blend" value="128"/>
         <property name="bordersize" value="0"/>
     </object>
     <object>
