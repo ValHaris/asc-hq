@@ -22,9 +22,6 @@
 /* Define to 1 if you have the `itoa' function. */
 #undef HAVE_ITOA
 
-/* Define to 1 if you have the `boost_regex' library (-lboost_regex). */
-#undef HAVE_LIBBOOST_REGEX
-
 /* Define to 1 if you have the `jpeg' library (-ljpeg). */
 #undef HAVE_LIBJPEG
 

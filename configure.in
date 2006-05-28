@@ -182,11 +182,19 @@ AC_SUBST(SDL_TTF_LDADD)
 #AC_MSG_RESULT("yes")
 
 
-AC_CHECK_LIB( boost_regex, main,, AC_MSG_ERROR([[
+AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
+
+if test x$BOOSTERR = xyes ; then
+  AC_CHECK_LIB( boost_regex_gcc, main, BOOST_LIBS="-lboost_regex_gcc", AC_MSG_ERROR([[
 ASC requires the Boost library. If you have a distribution supplied
 Boost package installed, perhaps the Boost-devel package is missing.
 If your distribution does not include the Boost library, you can get it
-from http://www.boost.org/ ]]))
+from http://www.boost.org/ ]])
+)
+fi
+
+
+AC_SUBST(BOOST_LIBS)
 
 
 # Check for libsigc++
@@ -344,9 +352,6 @@ dnl PARAGUI_LIBS="-lparagui $SIGC_LIBS $SDL_LIBS $LIBEXPAT $FREETYPE_LIBS $EXTRA
 
 AC_SUBST(FREETYPE_LIBS)
 
-
-BOOST_LIBS="-lboost_regex"
-AC_SUBST(BOOST_LIBS)
 
 dnl ***********************************
 

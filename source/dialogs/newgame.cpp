@@ -575,8 +575,8 @@ bool StartMultiplayerGame::start()
    newMap = NULL;
    QuitModal();
    Hide();
-   next_turn();
    computeview( actmap );
+   next_turn();
    displaymap();
    updateFieldInfo();
    moveparams.movestatus = 0;
