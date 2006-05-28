@@ -1381,7 +1381,7 @@ class MatterAndMiningBaseWindow : public SubWindow {
 
             for ( int r = 0; r < 3; ++r )
                if ( container()->maxplus.resource(r) ) {
-                  slider->SetPosition( 100 * container()->plus.energy / container()->maxplus.energy );
+                  slider->SetPosition( 100 * container()->plus.resource(r) / container()->maxplus.resource(r) );
                   break;
                }
          }

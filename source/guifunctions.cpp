@@ -927,12 +927,12 @@ class OpenContainer : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
       {
-         return ( key->keysym.unicode == 'o' );
+         return ( key->keysym.unicode == 'l' );
       };
       
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "~o~pen transport / building";
+         return "view ~l~oaded units";
       };
 };
 
