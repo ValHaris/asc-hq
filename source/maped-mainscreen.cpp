@@ -145,7 +145,7 @@ void Menu::setup()
    
    
   addfield ("~T~ools");
-   addbutton ( "~V~iew map\tV",            act_viewmap );
+   // addbutton ( "~V~iew map\tV",            act_viewmap );
    // addbutton ( "~S~how palette",             act_showpalette );
    addbutton ( "~R~ebuild display\tctrl+R",   act_repaintdisplay );
    currentMenu->addSeparator();

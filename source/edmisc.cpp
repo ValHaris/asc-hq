@@ -2988,6 +2988,8 @@ void MapSwitcher :: toggle ( )
 
    actmap = maps[active].map;
    mapsaved = !maps[active].changed;
+
+   viewChanged();
 }
 
 string MapSwitcher :: getName ()

@@ -185,7 +185,7 @@ AC_SUBST(SDL_TTF_LDADD)
 AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
 
 if test x$BOOSTERR = xyes ; then
-  AC_CHECK_LIB( boost_regex_gcc, main, BOOST_LIBS="-lboost_regex_gcc", AC_MSG_ERROR([[
+  AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc", AC_MSG_ERROR([[
 ASC requires the Boost library. If you have a distribution supplied
 Boost package installed, perhaps the Boost-devel package is missing.
 If your distribution does not include the Boost library, you can get it

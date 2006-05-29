@@ -134,7 +134,7 @@ void Menu::setup()
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
    currentMenu->addSeparator();
-   addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
+   // addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
    addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change Passw~o~rd", ua_changepassword );
    addbutton ( "supervise network game", ua_networksupervisor );

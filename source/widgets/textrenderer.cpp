@@ -27,6 +27,7 @@
 #include "../graphics/surface.h"
 #include "../iconrepository.h"
 #include "../palette.h"
+#include "../dialogs/fileselector.h"
 
 void TextRenderer :: TextAttributes :: assign ( PG_Widget* w )
 {
@@ -366,13 +367,30 @@ void TextRenderer::SetText( const string& text )
 {
    parse(text);
    layout();
+   my_text = text;
 }
+
+bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)
+{
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+   if ( (mod & KMOD_CTRL) &&( key->keysym.sym == SDLK_s )) {
+      ASCString name = selectFile( "*.txt", false );
+      if ( !name.empty() ) {
+         tn_file_buf_stream s( name, tnstream::writing );
+         s.writeString( my_text, true );
+      }
+      
+      return true;
+   }
+   return false;
+}
+
 
 
 ViewFormattedText :: ViewFormattedText( const ASCString& title, const ASCString& text, const PG_Rect& pos) : ASC_PG_Dialog( NULL, pos, title )
 {
    TextRenderer* pr = new TextRenderer( this, PG_Rect( 10, 40, Width() - 20, Height()-50));
-   pr->SetText( text);
+   pr->SetText( text );
 };
 
 bool ViewFormattedText :: eventKeyDown(const SDL_KeyboardEvent* key)

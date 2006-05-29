@@ -47,6 +47,8 @@ class TextRenderer : public PG_ScrollWidget {
       Widgets widgets;
       PG_Widget* lastWidget;
 
+      ASCString my_text;
+      
    protected:
    
 
@@ -77,6 +79,7 @@ class TextRenderer : public PG_ScrollWidget {
       
       virtual PG_Widget* render( const ASCString& token );
       virtual PG_Widget* eval_command( const ASCString& token );
+      bool eventKeyDown(const SDL_KeyboardEvent* key);
       
    public:
       TextRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="ScrollWidget");
