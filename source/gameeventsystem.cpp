@@ -43,12 +43,6 @@ void         checktimedevents ( MapDisplayInterface* md )
    if ( actmap->eventTimes.empty() )
       return;
                               
-   static bool isRunning = false;
-   if ( isRunning )
-      return;
-
-   VariableLocker l( isRunning );
-         
    GameTime t = actmap->eventTimes.back();
    if ( actmap->time.abstime >= t.abstime ) {
       checkevents( md );
@@ -69,6 +63,13 @@ void eventReady()
 
 void         checkevents( MapDisplayInterface* md )
 {
+   // this is not for synchronizing between threads, but in the same threat inside the call stack 
+   static bool isRunning = false;
+   if ( isRunning )
+      return;
+
+   VariableLocker l( isRunning );
+   
    actmap->player[actmap->actplayer].queuedEvents++;
    while ( actmap->player[actmap->actplayer].queuedEvents ) {
 
@@ -291,13 +292,13 @@ void Event::execute( MapDisplayInterface* md )
          status = Timed;
       }
       if ( status == Timed && gamemap.time.abstime >= triggerTime.abstime ) {
+         if ( action )
+            action->execute( md );
+         
          if ( reArmNum > 0 )
             status = Untriggered;
          else
             status = Executed;
-
-         if ( action )
-            action->execute( md );
 
          if ( gamemap.getgameparameter(cgp_debugEvents) )
             infoMessage( "Event " + description + " executed");

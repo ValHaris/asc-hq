@@ -241,7 +241,7 @@ GuiIconHandler::~GuiIconHandler()
 NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
 NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
-         : DashboardPanel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1), smallButtonHolder(NULL)
+         : DashboardPanel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1)
 {
    this->mapDisplay = mapDisplay;
    mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
@@ -255,6 +255,8 @@ NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_
    PG_Application::GetApp()->sigKeyUp.connect( SigC::slot( *this, &NewGuiHost::eventKeyUp ));
    SetTransparency(255);
 }
+
+PG_Widget* NewGuiHost :: smallButtonHolder = NULL;
 
 
 void NewGuiHost::evalCursor()
@@ -339,8 +341,7 @@ class SmallButtonHolder : public SpecialInputWidget {
       bool eventMouseMotion (const SDL_MouseMotionEvent *motion) { return true; };
       bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) { return true; };
       bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { return true; };
-};      
-
+};
 
 
 bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio )
@@ -423,6 +424,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
       if ( count ) {
          if ( !smallButtonHolder ) 
             smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect::null );
+         
 
          smallButtonHolder->MoveWidget( PG_Rect( pos.x, pos.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ), false );
 
@@ -597,6 +599,5 @@ NewGuiHost::~NewGuiHost()
    if ( handler )
       handler->registerHost( NULL );
 
-   delete smallButtonHolder;
 }
 

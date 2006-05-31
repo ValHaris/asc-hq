@@ -355,9 +355,9 @@ void GameMap :: read ( tnstream& stream )
          if ( i < 8 ) // no alliances for neutral 'player'
             for ( int j = 0; j< 8; ++j ) {
                if ( alliances[i][j] == 0 ) 
-                  player[i].diplomacy.setState( j, PEACE ); 
+                  player[i].diplomacy.setState( j, PEACE, false ); 
                else
-                  player[i].diplomacy.setState( j, WAR ); 
+                  player[i].diplomacy.setState( j, WAR, false ); 
             }
       }
       
@@ -531,7 +531,7 @@ void GameMap :: read ( tnstream& stream )
          for ( int j =0; j < 8; j++ ) {
             int sv = stream.readChar();
             if ( sv )
-               player[i].diplomacy.setState( j, PEACE_SV );
+               player[i].diplomacy.setState( j, PEACE_SV, false );
          }      
                
       stream.readInt();

@@ -1,3 +1,4 @@
+
 /***************************************************************************
                           itemrepository.cpp   -  description
                              -------------------
@@ -412,7 +413,7 @@ void  loadalltextfiles ( )
 
 
 
-vector<ItemFiltrationSystem::ItemFilter*> ItemFiltrationSystem::itemFilters;
+deallocating_vector<ItemFiltrationSystem::ItemFilter*> ItemFiltrationSystem::itemFilters;
 
 
 ItemFiltrationSystem::ItemFilter::ItemFilter( const ASCString& _name, const IntRangeArray& unitsetIDs, bool _active )

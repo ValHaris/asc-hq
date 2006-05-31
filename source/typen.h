@@ -24,6 +24,7 @@
 #include <time.h>
 #include <list>
 #include <bitset>
+#include <map>
 #include <SDL_types.h>
 
 #include "global.h"
@@ -302,6 +303,15 @@ class deallocating_vector : public vector<T> {
          for ( typename vector<T>::iterator i = vector<T>::begin(); i != vector<T>::end(); ++i )
             delete *i;
       };      
+};
+
+template< typename T, typename U>
+class deallocating_map : public std::map<T,U> {
+   public:
+      ~deallocating_map() {
+         for ( typename std::map<T,U>::iterator i = std::map<T,U>::begin(); i != std::map<T,U>::end(); ++i )
+            delete i->second;
+      };
 };
 
 

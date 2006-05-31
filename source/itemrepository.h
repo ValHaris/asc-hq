@@ -157,7 +157,7 @@ class ItemFiltrationSystem {
                  void write ( tnstream& stream ) ;
                  bool isContained ( ItemFiltrationSystem::Category cat, int id );
          };
-         static vector<ItemFilter*> itemFilters;
+         static deallocating_vector<ItemFilter*> itemFilters;
 
          class DataLoader : public TextFileDataLoader {
             public:

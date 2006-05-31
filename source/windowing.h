@@ -33,6 +33,7 @@
 
 class ASCGUI_Window : public  PG_Window {
       ASCString panelName;
+      void destruct();
    protected:
       bool setup();
 
@@ -76,8 +77,10 @@ class ASCGUI_Window : public  PG_Window {
 
       virtual WidgetParameters getDefaultWidgetParams() = 0;
 
-      typedef Loki::SmartPtr<TextPropertyGroup, Loki::RefLinked> TextPropertyGroupPointer;
-      TextPropertyGroupPointer textPropertyGroup;
+      typedef deallocating_map<ASCString, TextPropertyGroup*> GuiCache;
+      static GuiCache guiCache;
+      
+      TextPropertyGroup* textPropertyGroup;
    public:
       void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );
       void setLabelText ( const ASCString& widgetName, int i, PG_Widget* parent = NULL );

@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.23 2006-05-01 15:32:56 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.24 2006-05-31 20:01:01 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -160,7 +160,7 @@ class NewGuiHost : public DashboardPanel {
         SmallGuiButton* getSmallButton( int i );
         
         
-        PG_Widget* smallButtonHolder;
+        static PG_Widget* smallButtonHolder;
 
 
         bool eventKeyDown(const SDL_KeyboardEvent* key);

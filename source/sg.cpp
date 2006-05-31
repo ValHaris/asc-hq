@@ -1128,6 +1128,8 @@ int gamethread ( void* data )
       }
       catch ( LoadNextMap lnm ) {
          if ( actmap->campaign.avail ) {
+            delete actmap;
+            actmap = NULL;
             startnextcampaignmap( lnm.id );
          } else {
            viewtext2(904);
