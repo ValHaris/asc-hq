@@ -601,11 +601,15 @@ void execuseraction ( tuseractions action )
 
       case ua_viewaboutmessage:
          {
-            help(30);
-            tviewanytext vat;
-            ASCString s = getstartupmessage();
+            ASCString s = "#fontsize=22#Advanced Strategic Command#fontsize=14#\n";
+            s += getVersionAndCompilation();
 
+            s += "#fontsize=18#Credits#fontsize=14#\n";
+
+            s += readtextmessage( 30 );
+                              
 #ifdef _SDL_
+            s += "#fontsize=18#SDL versions#fontsize=14#\n";
             char buf[1000];
             SDL_version compiled;
             SDL_VERSION(&compiled);
@@ -616,9 +620,9 @@ void execuseraction ( tuseractions action )
             s += buf;
 #endif
 
-            vat.init ( "about", s.c_str() );
-            vat.run();
-            vat.done();
+            ViewFormattedText vft( "About", s, PG_Rect(-1,-1,450,550));
+            vft.Show();
+            vft.RunModal();
          }
          break;
 
@@ -805,7 +809,7 @@ void execuseraction2 ( tuseractions action )
          }
          break;
       case ua_GameStatus:
-         displaymessage ( "Current game time is:\n turn %d , move %d ", 3, actmap->time.turn(), actmap->time.move() );
+         infoMessage ( "Current game time is:\n turn " + ASCString::toString( actmap->time.turn() ) + " , move " + ASCString::toString( actmap->time.move() ));
          break;
       case ua_soundDialog:
           soundSettings( NULL );

@@ -20,7 +20,7 @@
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.990.0.5";
+const char* asc_release="ASC1.990.0.6";
 
 #include <stdio.h>
 #include "strtmesg.h"
@@ -59,11 +59,17 @@ const char* getFullVersionString (  )
   return asc_release;
 }
 
+ASCString getVersionAndCompilation()
+{
+   char startupmessagebuffer[1000];
+   sprintf( startupmessagebuffer, "Version: %s\nCompiled %s      %s\n", asc_release, __DATE__, __TIME__);
+   return ASCString(startupmessagebuffer);
+}
+
 ASCString getstartupmessage (  )
 {
-    char startupmessagebuffer[1000];
-    sprintf( startupmessagebuffer, "\nAdvanced Strategic Command : %s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
-    return ASCString(startupmessagebuffer);
+   ASCString s = "\nAdvanced Strategic Command\n" + getVersionAndCompilation();
+   return s;
 }
 
 ASCString getaboutmessage (  )

@@ -692,21 +692,32 @@ panel {
 
          ChildWidgets = Input Output PowerSlider GraphArea
 
+         GraphArea {
+            type = dummy
+            x = 318
+            y = 36
+            x2 = 507
+            y2 = 155
+            UserHandler = MiningGraph
+         } GraphArea
+
+
          PowerSlider {
             type = slider
-            x = 260
-            y = 40
-            width = 15
-            y2  = 156
-            Orientation = vertical
+            style = slider
+            x = 27
+            y = 141
+            x2 = 295
+            y2  = 141
+            Orientation = horizontal
          } PowerSlider
  
 
          Input {
             type = dummy
-            x = 21
-            y = 62
-            x2 = 251
+            x = 27
+            y = 56
+            x2 = 295
             height = 15
             ChildWidgets = Label energyIn materialIn fuelIn
             Label {
@@ -714,36 +725,39 @@ panel {
                text = Consumption
                x = 0
                y = 0
-               width = 79
+               width = 110
                y2 = -1
             } Label
             energyIn {
               type = TextOutput 
-              x = 86
+              x = 115
               y = 0
-              width = 45
+              width = 50
               y2 = -1
+              TextAlign = Right
             } energyIn 
             materialIn {
               type = TextOutput 
-              x = 135
+              x = 167
               y = 0
-              width = 45
+              width = 50
               y2 = -1
+              TextAlign = Right
             } materialIn
             fuelIn {
               type = TextOutput 
-              x = 184
+              x = 219
               y = 0
-              width = 45
+              width = 50
               y2 = -1
+              TextAlign = Right
             } fuelIn 
          } Input
          Output {
             type = dummy
-            x = 21
-            y = 82
-            x2 = 251
+            x = 27
+            y = 74
+            x2 = 295
             height = 15
             ChildWidgets = Label energyOut materialOut fuelOut
             Label {
@@ -756,7 +770,7 @@ panel {
             } Label
             energyOut {
               type = TextOutput 
-              x = 86
+              x = 115
               y = 0
               width = 45
               y2 = -1
@@ -764,7 +778,7 @@ panel {
             } energyOut 
             materialOut {
               type = TextOutput 
-              x = 135
+              x = 167
               y = 0
               width = 45
               y2 = -1
@@ -772,7 +786,7 @@ panel {
             } materialOut
             fuelOut {
               type = TextOutput 
-              x = 184
+              x = 219
               y = 0
               width = 45
               y2 = -1
@@ -780,15 +794,7 @@ panel {
             } fuelOut 
          } Output
 
-         GraphArea {
-            type = dummy
-            x = 290
-            y = 40
-            x2 = 509
-            y2 = 157
-            UserHandler = MiningGraph
-         } GraphArea
-         
+        
       } mining
       
       netcontrol {

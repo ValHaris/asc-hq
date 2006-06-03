@@ -135,7 +135,7 @@ void showUnitCargoSummary( ContainerBase* cb )
 
 void showUnitSummary( GameMap* actmap )
 {
-   UnitSummaryWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( actmap ));
+   UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "unit summary", new VehicleCounterFactory( actmap ));
    isw.Show();
    isw.RunModal();
 }

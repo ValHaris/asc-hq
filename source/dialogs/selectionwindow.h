@@ -33,6 +33,7 @@
 
 #include "../libs/loki/Functor.h"
 
+#include "../paradialog.h"
 #include "../global.h"
 #include "../ascstring.h"
 
@@ -129,7 +130,7 @@ class ItemSelectorWidget : public PG_Widget {
 };
 
 
-class ItemSelectorWindow: public PG_Window {
+class ItemSelectorWindow: public ASC_PG_Dialog {
       ItemSelectorWidget* itemSelector;
       virtual void itemSelected( const SelectionWidget* );
    protected:

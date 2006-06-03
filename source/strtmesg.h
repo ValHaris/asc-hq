@@ -1,6 +1,9 @@
-//     $Id: strtmesg.h,v 1.6 2003-08-28 18:08:28 mbickel Exp $
+//     $Id: strtmesg.h,v 1.6.2.1 2006-06-03 20:42:23 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2003/08/28 18:08:28  mbickel
+//      Added version information to Play Time dialog
+//
 //     Revision 1.5  2002/10/12 17:28:04  mbickel
 //      Fixed "enemy unit loaded" bug.
 //      Changed map format
@@ -53,11 +56,16 @@
 
 #include "ascstring.h"
 
-ASCString getstartupmessage (  );
-ASCString getaboutmessage (  );
 
-ASCString kgetstartupmessage (  );
-ASCString kgetaboutmessage (  );
+//! Version: 1.2.3 ; compiled : ...
+extern ASCString getVersionAndCompilation();
+
+
+extern ASCString getstartupmessage (  );
+extern ASCString getaboutmessage (  );
+
+extern ASCString kgetstartupmessage (  );
+extern ASCString kgetaboutmessage (  );
 
 extern const char* getVersionString (  );
 extern const char* getFullVersionString (  );

@@ -407,6 +407,7 @@ int WindowCounter::windowNum = 0;
 int ASC_PG_Dialog::RunModal()
 {
    WindowCounter wc;
+   
    return PG_Window::RunModal();
 }
 
@@ -414,6 +415,14 @@ int ASC_PG_Dialog::RunModal()
 PG_Rect ASC_PG_Dialog::centerWindow( const PG_Rect& rect )
 {
    PG_Rect r = rect;
+
+   if ( r.w >  PG_Application::GetScreenWidth() )
+      r.w = PG_Application::GetScreenWidth();
+         
+   if ( r.h >  PG_Application::GetScreenHeight() )
+      r.h = PG_Application::GetScreenHeight();
+
+   
    if ( r.x < 0 )
       r.x = (PG_Application::GetScreenWidth() - r.w) / 2;
 

@@ -134,8 +134,8 @@ void Menu::setup()
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
    currentMenu->addSeparator();
-   // addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
-   addbutton ( "setup Net~w~ork", ua_setupnetwork );
+   addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
+   // addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change Passw~o~rd", ua_changepassword );
    addbutton ( "supervise network game", ua_networksupervisor );
    currentMenu->addSeparator();
@@ -157,7 +157,7 @@ void Menu::setup()
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
    addbutton ( "~C~argo Summary", ua_cargosummary );
-   addbutton ( "Unito Summary", ua_unitsummary );
+   addbutton ( "Unit Summary", ua_unitsummary );
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);

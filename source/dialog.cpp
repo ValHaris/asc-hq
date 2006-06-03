@@ -54,6 +54,7 @@
 #include "cannedmessages.h"
 
 #include "dialogs/messagedialog.h"
+#include "widgets/textrenderer.h"
 
 #ifndef karteneditor
  #include "gamedlg.h"
@@ -2186,8 +2187,7 @@ void viewUnitSetinfo ( void )
    tfield* fld = actmap->getField( actmap->getCursor() );
    if ( fld && fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
-         s += "#aeinzug0##eeinzug0#\n"
-              "#font02#Unit Information:#font01##aeinzug20##eeinzug20##crtp10#" ;
+         s += "#fontsize=18#Unit Information:#fontsize=14##aeinzug20##eeinzug20##crtp20#" ;
 
          const Vehicletype* typ = fld->vehicle->typ;
 /*
@@ -2202,19 +2202,12 @@ void viewUnitSetinfo ( void )
          else
             s += typ->description;
 
-         s += "\nUnit owner: ";
-         s += strrr ( fld->vehicle->color / 8 );
-         s += " - ";
-         s += actmap->getPlayer(fld->vehicle).getName();
+         s += "\nUnit owner: " + ASCString::toString( fld->vehicle->getOwner() ) + " - " + actmap->getPlayer(fld->vehicle).getName();
 
-         char t3[1000];
-         sprintf(t3, "\nUnit ID: %d \n", typ->id );
-         s += t3;
+         s += "\nUnit ID: " + ASCString::toString( typ->id );
 
-         if ( !typ->location.empty() ) {
-            sprintf(t3, "file name: %s\n\n", typ->location.c_str() );
-            s += t3;
-         }
+         if ( !typ->location.empty() ) 
+            s += typ->location;
 
          if ( unitSets.size() > 0 )
             for ( unsigned int i = 0; i < unitSets.size(); i++ )
@@ -2239,13 +2232,9 @@ void viewUnitSetinfo ( void )
    } else
       s += "\nNo unit selected";
 
-   while ( s.find ( "@" ) != std::string::npos )
-      s.replace ( s.find ( "@" ), 1, "(at)"); // the default font has not @ character
-
-   tviewanytext vat;
-   vat.init ( "Unit information", s.c_str() );
-   vat.run();
-   vat.done();
+   ViewFormattedText vft( "Unit information", s, PG_Rect( -1, -1, 400, 350) );
+   vft.Show();
+   vft.RunModal();
 }
 
 

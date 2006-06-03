@@ -1465,7 +1465,7 @@ class MiningWindow : public MatterAndMiningBaseWindow {
          return container->baseType->hasFunction( ContainerBaseType::MiningStation );
       };
       
-      bool invertSlider() { return true; };
+      bool invertSlider() { return false; };
       
    public:
      
@@ -1680,8 +1680,11 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
       graph->sigChange.connect( SigC::slot( *researchWindow, &SubWindow::update ));
    }
    
-   if ( label == "MiningGraph" ) 
-      new MiningGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
+   if ( label == "MiningGraph" ) {
+      MiningGraph* mg = new MiningGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
+      new PG_ToolTipHelp( mg, "Horizontal: distance from building ; vertical: amount of resources(M/F)");
+
+   }
    
    if ( label == "DamageBar" ) {
       int color;

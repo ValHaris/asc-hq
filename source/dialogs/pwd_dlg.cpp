@@ -136,6 +136,8 @@
                int RunModal()
                {
                   line1->EditBegin();
+                  if ( line2 )
+                     line2->EditBegin();
                   return ASC_PG_Dialog::RunModal();
                }
            };

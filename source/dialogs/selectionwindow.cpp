@@ -301,7 +301,7 @@ ItemSelectorWidget::~ItemSelectorWidget()
 
 
 ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory )
-   : PG_Window( parent,r, title) 
+   : ASC_PG_Dialog( parent,r, title)
 {
    SetTransparency( 0 );
    

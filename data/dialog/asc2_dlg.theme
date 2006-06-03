@@ -741,6 +741,8 @@
             <property name ="bordersize" value="1"/>
             <property name ="simplebackground" value="1"/>
             <color    name="backgroundcolor" value="0x00508565"/>
+        <color name="bordercolor1" value="0x0087e0aa"/>
+        <color name="bordercolor0" value="0x002e4d3a"/>
         </object>
     </widget>
 

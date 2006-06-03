@@ -940,13 +940,21 @@ LayoutablePanel :: LayoutablePanel ( PG_Widget *parent, const PG_Rect &r, const 
 }
 
 
-PG_Rect LayoutablePanel::PositionCalculator( const PG_Rect& r, const ASCString& panelName )
+PG_Rect LayoutablePanel::PositionCalculator( const PG_Rect& rect, const ASCString& panelName )
 {
    CGameOptions::PanelDataContainer::iterator option = CGameOptions::Instance()->panelData.find( panelName );
    if ( option != CGameOptions::Instance()->panelData.end() ) {
-      return PG_Rect( option->second.x, option->second.y, DashBoardWidth, r.Height() );
+      PG_Rect r ( option->second.x, option->second.y, DashBoardWidth, rect.Height() );
+      
+      if ( r.x + r.w >  PG_Application::GetScreenWidth() )
+         r.x = PG_Application::GetScreenWidth() - r.w;
+         
+      if ( r.y + r.h >  PG_Application::GetScreenHeight() )
+         r.y = PG_Application::GetScreenHeight() - r.y;
+      
+      return r;
    } else
-      return PG_Rect( r.x, r.y, DashBoardWidth, r.Height() );
+      return PG_Rect( rect.x, rect.y, DashBoardWidth, rect.Height() );
 }
 
 void LayoutablePanel::eventMoveWidget (int x, int y)

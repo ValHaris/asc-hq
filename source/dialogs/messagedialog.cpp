@@ -157,7 +157,7 @@ PG_Rect calcMessageBoxSize( const ASCString& message )
       if ( message[i] == '\n' )
          counter++;
 
-   return PG_Rect( 100, 100, 500, 150 + counter * 20 );
+   return PG_Rect( -1, -1, 500, 150 + counter * 20 );
 }
 
 
