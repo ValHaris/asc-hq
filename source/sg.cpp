@@ -26,7 +26,7 @@
 
    \section A short walk through the source
  
-   THE central class of ASC is #tmap in gamemap.h . 
+   THE central class of ASC is GameMap in gamemap.h . 
    It is the anchor where nearly all elements of ASC are chained to. The global 
    variable #actmap is a pointer to the active map. There can be a maximum of
    8 #Player on a map, plus neutral units (which are handled like a 9th #Player).
