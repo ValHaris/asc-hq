@@ -364,8 +364,8 @@ panel {
            BackgroundColor = 0xff00
            x = 5 
            y = 5
-           width = 10
-           height = 60
+           width = 12
+           height = 61
            Direction = buttom2top
          } DamageBar
          FuelBar {
@@ -373,8 +373,8 @@ panel {
            BackgroundColor = 0xff
            x = 61 
            y = 5
-           width = 10
-           height = 60
+           width = 12
+           height = 61
            Direction = buttom2top
          } FuelBar
       } UnitSlot
@@ -1000,7 +1000,17 @@ panel {
          y = 0
          x2 = -1
          y2 = -1
-         ChildWidgets = CurrentTech ResPerTurnLabel ResPerTurnLabelGlobal ResPerTurnLocal ResPerTurnGlobal   CostLabelLocal CostLabelGlobal AvailLabel AvailGlobal GraphArea CostLocal0 CostGlobal0 CostLocal1 CostGlobal1 CostLocal2 CostGlobal2
+         ChildWidgets = CurrentTech ResPerTurnLabel ResPerTurnLabelGlobal ResPerTurnLocal ResPerTurnGlobal   CostLabelLocal CostLabelGlobal AvailLabel AvailGlobal GraphArea CostLocal0 CostGlobal0 CostLocal1 CostGlobal1 CostLocal2 CostGlobal2 Description
+
+         Description {
+            type = StaticText
+            text = Research Lab
+            x = 10
+            y = 9
+            x2 = 285
+            y2 = 21
+         } Description
+
 
          CurrentTech {
             type = TextOutput
@@ -1166,14 +1176,24 @@ panel {
             x2 = -1
             y2 = -1
 
-            ChildWidgets = LineLabels ColumnLabels Data
+            ChildWidgets = LineLabels ColumnLabels Data Description
+
+            Description {
+               type = StaticText
+               text = Resource Network Info
+               x = 10
+               y = 9
+               x2 = 285
+               y2 = 21
+            } Description
+
              ; Local1 Local2 Local3 Net1 Net2 Net3 Global1 Global2 Global3
             LineLabels {
                type = dummy
-               x = 8
-               y = 88
-               x2 = 67
-               y2 = 157
+               x = 14
+               y = 77
+               x2 = 70
+               y2 = 162
                ChildWidgets = avail capacity plus usage
                avail {
                   type = StaticText
@@ -1181,40 +1201,40 @@ panel {
                   x = 0
                   y = 0
                   x2 = -1 
-                  height = 12
+                  height = 15
                } avail
                capacity {
                   type = StaticText
                   text = Capacity
                   x = 0
-                  y = 19
+                  y = 23
                   x2 = -1 
-                  height = 12
+                  height = 15
                } capacity
                plus {
                   type = StaticText
                   text = Plus
                   x = 0
-                  y = 38
+                  y = 46
                   x2 = -1 
-                  height = 12
+                  height = 15
                } plus
                usage {
                   type = StaticText
                   text = Usage
                   x = 0
-                  y = 57
+                  y = 69
                   x2 = -1 
-                  height = 12
+                  height = 15
                } usage
             } LineLabels
 
             ColumnLabels {
                type = dummy
                x = 116
-               y = 41
+               y = 29
                x2 = 480
-               y2 = 52
+               y2 = 47
                TextAlign = Center
                ChildWidgets = local net global
                local {
@@ -1249,9 +1269,9 @@ panel {
                type = dummy
                TextAlign = Right
                x = 72
-               y = 86
+               y = 75
                x2 = 515
-               y2 = 162
+               y2 = 165
                UserHandler = ResourceTable
             } Data
          } Background

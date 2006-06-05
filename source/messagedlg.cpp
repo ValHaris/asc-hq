@@ -640,7 +640,7 @@ class IngameMessageViewer : public ASC_PG_Dialog {
 
             new PG_Label( this, PG_Rect( f.x, f.y, 50, f.h ), "From:");
             Emboss* emb = new Emboss( this, PG_Rect( f.x + 50, f.y, f.w - 50, f.h ), true );
-            new PG_Label( emb, PG_Rect( emb->x +2, emb->y + 2, emb->w - 4, emb->h - 4), msg.getFromText( actmap ) );
+            new PG_Label( emb, PG_Rect( 2, 2, emb->w - 4, emb->h - 4), msg.getFromText( actmap ) );
    
             
             r = PG_Rect ( 10, 75, Width() - 20, Height() - 125 );

@@ -390,19 +390,17 @@ void         startnextcampaignmap( int id)
 }
 
 
-void benchgame ( int mode )
+void benchgame ( bool withViewCalc )
 {
    int t2;
    int t = ticker;
    int n = 0;
    do {
-      if ( mode <= 1 ) {
-         if ( mode == 1 )
-            computeview( actmap );
-         displaymap();
-      } else
-         copy2screen();
+      if ( withViewCalc ) 
+         computeview( actmap );
 
+      repaintMap();
+            
       n++;
       t2 = ticker;
    } while ( t + 1000 > t2 ); /* enddo */
@@ -543,12 +541,11 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_benchgamewov:
-         benchMapDisplay();
-         // benchgame( 0 );
+         benchgame( false );
          break;
 
       case ua_benchgamewv :
-         benchgame( 1 );
+         benchgame( true );
          break;
 
       case ua_writescreentopcx:
@@ -634,9 +631,9 @@ void execuseraction ( tuseractions action )
             releasetimeslice();
 
          if ( CGameOptions::Instance()->units_gray_after_move )
-            displaymessage("units that can not move will now be displayed gray", 3);
+            infoMessage ("units that can not move will now be displayed gray");
          else
-            displaymessage("units that can not move and cannot shoot will now be displayed gray", 3);
+            infoMessage ("units that can not move and cannot shoot will now be displayed gray");
          break;
 
       case ua_computerturn:
@@ -795,6 +792,21 @@ bool continueAndStartMultiplayerGame()
 }
 
 
+void showCargoSummary( tfield* fld )
+{
+   if ( !fld->vehicle ) {
+      infoMessage( "Please select a unit");
+      return;
+   }
+
+   if ( actmap->getCurrentPlayer().diplomacy.isAllied( fld->vehicle  ))
+      showUnitCargoSummary( fld->vehicle );
+   else
+      infoMessage( "The unit is not yours");
+   
+}
+
+
 
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
@@ -880,11 +892,8 @@ void execuseraction2 ( tuseractions action )
          if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
             getPGApplication().Quit();
          break;
-      case ua_cargosummary: {
-            tfield* fld = getSelectedField();
-            if ( fld && fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) 
-               showUnitCargoSummary( fld->vehicle );
-         }
+      case ua_cargosummary: 
+         showCargoSummary( getSelectedField() );
          break;
       case ua_unitsummary: showUnitSummary( actmap );
          break;

@@ -192,7 +192,7 @@ class EditGameOptions : public ASC_PG_Dialog {
       }
 
    public:
-      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 500 ), "Edit Map Parameters"), videoMode(0), ascmain( mainApp )
+      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Map Parameters"), videoMode(0), ascmain( mainApp )
       {
          CGameOptions* o = CGameOptions::Instance();
 
@@ -236,7 +236,8 @@ class EditGameOptions : public ASC_PG_Dialog {
          if ( mainApp )
             new PG_PropertyField_String<ASCString>( propertyEditor , "Startup Map", &o->startupMap );
 
-         new PG_PropertyField_Checkbox<bool>( propertyEditor, "Cache GUI Definition (*.ascgui)", &o->cacheASCGUI );
+         new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: Cache GUI Definition (*.ascgui)", &o->cacheASCGUI );
+         new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: View own replay", &o->debugReplay );
 
         
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );

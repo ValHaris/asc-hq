@@ -31,12 +31,26 @@
  #include "networkinterface.h"
  
 
+class Player;
+
+
+//! convenience-class which automatically determines the Player of units, buildings and other game objects
+class PlayerID {
+      int num;
+   public:
+      PlayerID( int num ) { this->num = num; };
+      PlayerID( const ContainerBase* c ) : num( c->getOwner() ) {};
+      PlayerID( const ContainerBase& c ) : num( c.getOwner() ) {};
+      PlayerID( const Player& p );
+      PlayerID( const PlayerID& p ) : num( p.getID() ) {};
+      int getID() const { return num; };
+};
+
 
 const int diplomaticStateNum = 5;
 enum DiplomaticStates { WAR, TRUCE, PEACE, PEACE_SV, ALLIANCE };
 extern const char* diplomaticStateNames[diplomaticStateNum+1];
 
-class Player;
 
 class DiplomaticStateVector : public SigC::Object {
 
@@ -60,9 +74,9 @@ class DiplomaticStateVector : public SigC::Object {
       void propose ( int towardsPlayer, DiplomaticStates s );
       void sneakAttack( int towardsPlayer );
       
-      bool isHostile( int towardsPlayer ) { return getState( towardsPlayer ) == WAR; };
-      bool sharesView( int receivingPlayer ) { return getState( receivingPlayer ) >= PEACE_SV; };
-      bool isAllied( int towardsPlayer ) { return getState( towardsPlayer ) >= ALLIANCE; };
+      bool isHostile( PlayerID towardsPlayer ) { return getState( towardsPlayer.getID() ) == WAR; };
+      bool sharesView( PlayerID receivingPlayer ) { return getState( receivingPlayer.getID() ) >= PEACE_SV; };
+      bool isAllied( PlayerID towardsPlayer ) { return getState( towardsPlayer.getID() ) >= ALLIANCE; };
 
       void turnBegins();
       
@@ -186,19 +200,6 @@ class Player : public SigC::Object {
       void sendQueuedMessages();
                  
 };
-
-
-//! convenience-class which automatically determines the Player of units, buildings and other game objects
-class PlayerID {
-      int num;
-   public:
-      PlayerID( int num ) { this->num = num; };
-      PlayerID( const ContainerBase* c ) : num( c->getOwner() ) {};
-      PlayerID( const ContainerBase& c ) : num( c.getOwner() ) {};
-      PlayerID( const Player& p ) : num( p.getPosition() ) {};
-      PlayerID( const PlayerID& p ) : num( p.getID() ) {};
-      int getID() const { return num; };
-};      
 
 
 

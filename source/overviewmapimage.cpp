@@ -23,7 +23,7 @@ SPoint OverviewMapImage::map2surface( const MapCoordinate& pos )
 MapCoordinate OverviewMapImage::surface2map( const SPoint& pos )
 {
    int lx = pos.x % 6;
-   int ly = pos.y % 2;
+   int ly = pos.y % 4;
    switch ( ly ) {
       case 0: {
                  if ( lx == 1 || lx == 2 )
@@ -40,9 +40,9 @@ MapCoordinate OverviewMapImage::surface2map( const SPoint& pos )
                     return MapCoordinate( pos.x / 6, pos.y / 2 );
                  if ( lx >= 4 )
                     if ( ly == 1 )
-                       return MapCoordinate( pos.x / 6 - 1, pos.y / 2 - 1 );
+                       return MapCoordinate( pos.x / 6, pos.y / 2 - 1 );
                     else
-                       return MapCoordinate( pos.x / 6 - 1, pos.y / 2 + 1 );
+                       return MapCoordinate( pos.x / 6, pos.y / 2 + 1 );
               };
       case 3: {
                  if ( lx == 1 || lx == 2 )

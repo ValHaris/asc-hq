@@ -501,6 +501,9 @@ class CargoDialog : public Panel
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams );
 
       ContainerBase* getContainer() { return container; };
+
+      GameMap* getMap() { if ( container ) return container->getMap(); else return NULL; };
+      
       ContainerControls& getControls() { return containerControls; };
 
       ~CargoDialog()
@@ -787,6 +790,9 @@ class SolarPowerWindow : public SubWindow {
    public:
       bool available( CargoDialog* cd )
       {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
          return cd->getContainer()->baseType->hasFunction( ContainerBaseType::SolarPowerPlant  );
       };
       
@@ -818,6 +824,9 @@ class WindPowerWindow : public SubWindow {
    public:
       bool available( CargoDialog* cd )
       {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
          return cd->getContainer()->baseType->hasFunction( ContainerBaseType::WindPowerPlant  );
       };
       
@@ -857,6 +866,9 @@ class NetControlWindow : public SubWindow {
    public:
       bool available( CargoDialog* cd )
       {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
          return dynamic_cast<Building*>(cd->getContainer()) != NULL;
       };
       
@@ -963,6 +975,9 @@ class DamageControlWindow : public SubWindow {
       
       bool available( CargoDialog* cd )
       {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
          Building* bld = dynamic_cast<Building*>(cd->getContainer() );
          if ( bld && bld->damage > 0 )
             return true;
@@ -1018,6 +1033,9 @@ class ResourceInfoWindow : public SubWindow {
    public:
       bool available( CargoDialog* cd )
       {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
          return dynamic_cast<Building*>( cd->getContainer() ) != NULL;
       };
       
@@ -1265,6 +1283,9 @@ class ResearchWindow : public SubWindow {
    public:
       bool available( CargoDialog* cd )
       {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
          return cd->getContainer()->baseType->hasFunction( ContainerBaseType::Research  );
       };
       
@@ -1317,54 +1338,57 @@ class MatterAndMiningBaseWindow : public SubWindow {
       virtual bool invertSlider() { return false; };
    private:
    
-   bool scrollTrack( long pos )
-   {
-      if ( invertSlider() )
-         pos = 100 - pos;
-      setnewpower( pos );
-      update();
-      return true;
-   };
-
-   void setnewpower ( ContainerBase* c, int power )
-   {
-      if ( hasFunction( c ) ) {
-         for ( int r = 0; r < 3; r++ )
-            c->plus.resource(r) = c->maxplus.resource(r) * power/100;
-      
-         logtoreplayinfo( rpl_setResourceProcessingAmount, c->getPosition().x, c->getPosition().y, c->plus.energy, c->plus.material, c->plus.fuel );
-      }
-   }
-      
-   void setnewpower ( int pwr )
-   {
-      if ( pwr < 0 )
-         pwr = 0;
-
-      if ( pwr > 100 )
-         pwr = 100;
-         
-      bool allbuildings = false;
-         
-      Player& player = container()->getMap()->player[ container()->getOwner() ];
-         
-      if ( allbuildings ) {
-         for ( Player::BuildingList::iterator bi = player.buildingList.begin(); bi != player.buildingList.end(); bi++ )
-            setnewpower( *bi, pwr );
-         for ( Player::VehicleList::iterator bi = player.vehicleList.begin(); bi != player.vehicleList.end(); bi++ )
-            setnewpower( *bi, pwr );
-      } else {
-         setnewpower( container(), pwr );
-      }
-   }
-
-   virtual bool hasFunction( const ContainerBase* container ) = 0;
+      bool scrollTrack( long pos )
+      {
+         if ( invertSlider() )
+            pos = 100 - pos;
+         setnewpower( pos );
+         update();
+         return true;
+      };
    
-   bool available( CargoDialog* cd )
-   {
-      return hasFunction( cd->getContainer() );
-   };
+      void setnewpower ( ContainerBase* c, int power )
+      {
+         if ( hasFunction( c ) ) {
+            for ( int r = 0; r < 3; r++ )
+               c->plus.resource(r) = c->maxplus.resource(r) * power/100;
+         
+            logtoreplayinfo( rpl_setResourceProcessingAmount, c->getPosition().x, c->getPosition().y, c->plus.energy, c->plus.material, c->plus.fuel );
+         }
+      }
+         
+      void setnewpower ( int pwr )
+      {
+         if ( pwr < 0 )
+            pwr = 0;
    
+         if ( pwr > 100 )
+            pwr = 100;
+            
+         bool allbuildings = false;
+            
+         Player& player = container()->getMap()->player[ container()->getOwner() ];
+            
+         if ( allbuildings ) {
+            for ( Player::BuildingList::iterator bi = player.buildingList.begin(); bi != player.buildingList.end(); bi++ )
+               setnewpower( *bi, pwr );
+            for ( Player::VehicleList::iterator bi = player.vehicleList.begin(); bi != player.vehicleList.end(); bi++ )
+               setnewpower( *bi, pwr );
+         } else {
+            setnewpower( container(), pwr );
+         }
+      }
+   
+      virtual bool hasFunction( const ContainerBase* container ) = 0;
+      
+      bool available( CargoDialog* cd )
+      {
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+            return false;
+         
+         return hasFunction( cd->getContainer() );
+      };
+      
       
    public:
       MatterAndMiningBaseWindow () : slider(NULL), first(true) {};

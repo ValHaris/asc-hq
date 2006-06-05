@@ -152,7 +152,6 @@ void Menu::setup()
    addbutton ( "unit ~S~et information\t6", ua_UnitSetInfo );
    addbutton ( "~T~errain\t7", ua_viewterraininfo );
    addbutton ( "~U~nit weight\t8", ua_unitweightinfo );
-   addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
    currentMenu->addSeparator();
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
@@ -192,6 +191,7 @@ void Menu::setup()
    addfield ( "~V~iew" );
    addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
    addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
+   addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
    currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );

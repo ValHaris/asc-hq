@@ -29,6 +29,10 @@
 #include "gamemap.h"
 #include "cannedmessages.h"
 
+
+PlayerID::PlayerID( const Player& p ) : num( p.getPosition() ) {};
+
+
 SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
 
 
