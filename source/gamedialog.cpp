@@ -11,6 +11,9 @@
 //
 #include <sstream>
 #include <pgimage.h>
+#include <pglistboxitem.h>
+#include <pgpopupmenu.h>
+
 
 #include "gamedialog.h"
 #include "gamedlg.h"

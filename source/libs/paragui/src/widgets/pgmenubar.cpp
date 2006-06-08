@@ -53,11 +53,14 @@ void PG_MenuBar::Add(const std::string& text, PG_PopupMenu* menu, Uint16 indent,
 	last->button->sigClick.connect(slot(*this, &PG_MenuBar::handle_button), (PG_Pointer)last);
 	last->button->sigMouseLeave.connect(slot(*this, &PG_MenuBar::leaveButton), (PG_Pointer)last );
 	last->button->sigMouseEnter.connect(slot(*this, &PG_MenuBar::enterButton), (PG_Pointer)last );
+   last->button->activateHotkey( getHotkeyModifier() );
 
 	last->popupmenu = menu;
 
 	ItemList.push_back(last);
+
 }
+
 
 bool PG_MenuBar::leaveButton( PG_Pointer last ) {
 	MenuBarItem* item = static_cast<MenuBarItem*>(last);

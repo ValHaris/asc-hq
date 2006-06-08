@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-05-14 19:02:32 $
+   Update Date:      $Date: 2006-06-08 20:39:31 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.4 $
+   CVS/RCS Revision: $Revision: 1.1.2.5 $
    Status:           $State: Exp $
  */
 
@@ -51,7 +51,7 @@ public:
 	PG_WidgetDataInternal() : modalstatus(0), inDestruct(false), inMouseLeave(false), font(NULL), dirtyUpdate(false), id(-1),
 			transparency(0), quitModalLoop(false), visible(false), hidden(false), firstredraw(true),
 			childList(NULL), haveTooltip(false), fadeSteps(10), mouseInside(false), userdata(NULL),
-	userdatasize(0), widthText(TXT_HEIGHT_UNDEF), heightText(TXT_HEIGHT_UNDEF), widgetParent(NULL) {
+         userdatasize(0), widthText(TXT_HEIGHT_UNDEF), heightText(TXT_HEIGHT_UNDEF), widgetParent(NULL), hotkeyModifier(-1), hotkey(0) {
 		updateOverlappingSiblings = PG_Application::GetUpdateOverlappingSiblings();
 	};
 
@@ -81,6 +81,8 @@ public:
 	bool havesurface;
 	std::string name;
 	bool updateOverlappingSiblings;
+   int hotkeyModifier;
+   PG_Char hotkey;
 
 };
 
@@ -1937,3 +1939,51 @@ int PG_Widget::GetBorderSize() {
 	return my_bordersize;
 }
 
+void PG_Widget::activateHotkey( int keymodifier )
+{
+   _mid->hotkeyModifier = keymodifier;
+
+   // I don't like the way keypresses are NOT propagated to child in non-modal operation mode,
+   // but changing that would be a major change to Paraguis event handling
+   // So as a workaround we just register at the global signal 
+   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &PG_Widget::eventKeyDown ));
+}
+
+int PG_Widget::getHotkeyModifier()
+{
+   return _mid->hotkeyModifier ;
+}
+
+
+bool PG_Widget::checkForHotkey( const SDL_KeyboardEvent* key )
+{
+   if ( _mid->hotkeyModifier < 0 )
+      return false;
+
+   if ( key->type != SDL_KEYDOWN )
+      return false;
+
+   if( (key->keysym.mod & _mid->hotkeyModifier) || (key->keysym.mod == _mid->hotkeyModifier) )
+      if( key->keysym.unicode == _mid->hotkey )
+         return true;
+
+   return false;
+}
+
+
+bool PG_Widget::extractHotkey( const std::string& s )
+{
+   if ( !PG_Application::GetHighlightingTag() )
+      return false;
+   
+   bool found = false;
+   for ( int i = 0; i < s.length(); ++i ) {
+      if ( found ) {
+         _mid->hotkey = tolower(s[i]);
+         return true;
+      }
+      if ( s[i] == PG_Application::GetHighlightingTag() )
+         found = true;
+   }
+   return false;
+}

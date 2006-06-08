@@ -407,8 +407,8 @@ void benchgame ( bool withViewCalc )
    double d = 100 * n;
    d /= (t2-t);
    char buf[100];
-   sprintf ( buf, "%3.1f", d );
-   displaymessage2 ( " %s fps ", buf );
+   sprintf ( buf, "%3.1f fps", d );
+   infoMessage ( buf );
 }
 
 
@@ -1179,7 +1179,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+//   setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

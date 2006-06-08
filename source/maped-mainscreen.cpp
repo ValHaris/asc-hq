@@ -24,6 +24,7 @@
 #include "paradialog.h"
 #include "pgtooltiphelp.h"
 #include "pgpopupmenu.h"
+#include "pgmenubar.h"
 
 #include "basegfx.h"
 #include "misc.h"
@@ -185,6 +186,7 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
       currentMenu(NULL)
 {
    setup();
+   activateHotkey( KMOD_ALT );
    
 }  
 

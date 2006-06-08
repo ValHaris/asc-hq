@@ -22,6 +22,9 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 
+#include <pgpopupmenu.h>
+#include <pgmenubar.h>
+
 #include "paradialog.h"
 
 #include "basegfx.h"
@@ -83,7 +86,7 @@ bool Menu::execAction  (PG_PopupMenu::MenuItem* menuItem )
 }
 
 
-
+#define HIGHLIGHT
 
 void Menu::addfield( const char* name )
 {
@@ -223,9 +226,9 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
     : PG_MenuBar( parent, rect, "MenuBar"),
       currentMenu(NULL)
 {
+   activateHotkey( KMOD_ALT );
    setup();
-   
-}  
+}
 
 
 

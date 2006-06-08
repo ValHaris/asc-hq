@@ -11,6 +11,7 @@
 //
 
 #include <iostream>
+#include <pglistboxitem.h>
 
 #include "weatherdialog.h"
 #include "weatherarea.h"

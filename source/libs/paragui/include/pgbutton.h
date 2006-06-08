@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-11 11:31:01 $
+    Update Date:      $Date: 2006-06-08 20:39:31 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgbutton.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -341,7 +341,9 @@ class SignalButtonClick : public PG_Signal1<PG_Button*, datatype> {}
 	*/
 	void SetBehaviour( int behaviour );
 
+   void SetText(const std::string& text);
 
+   
 	SignalButtonClick<> sigClick;
 
 	static SignalButtonClick<> sigGlobalClick;
@@ -369,6 +371,9 @@ protected:
 	/**  */
 	bool eventMouseButtonDown(const SDL_MouseButtonEvent* button);
 
+   /**  */
+   bool eventKeyDown (const SDL_KeyboardEvent *key);
+   
 private:
 
 	PG_Button(const PG_Button&);

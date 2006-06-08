@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include <pgprogressbar.h>
 #include "../paradialog.h"
 #include "cargowidget.h"
 

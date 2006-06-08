@@ -31,28 +31,17 @@
 #include <pgmessagebox.h>
 #include <pgdropdown.h>
 #include <pgcolor.h>
-#include <pgrichedit.h>
-#include <pgtimerobject.h>
 
 #include "pgbutton.h"
 #include "pgwidgetlist.h"
 #include "pglabel.h"
 #include "pgwindow.h"
-#include "pgmaskedit.h"
 #include "pgscrollbar.h"
-#include "pgprogressbar.h"
 #include "pgradiobutton.h"
 #include "pgthemewidget.h"
 #include "pgcheckbutton.h"
 #include "pgslider.h"
 #include "pglistbox.h"
-#include "pgcolumnitem.h"
-#include "pgpopupmenu.h"
-#include "pgspinnerbox.h"
-#include "pglog.h"
-#include "pgmenubar.h"
-#include "pgrichedit.h"
-#include "pgdropdown.h"
 
 #include "sdl/graphics.h"
 #include "ascstring.h"

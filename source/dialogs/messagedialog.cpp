@@ -19,25 +19,17 @@
 */
 
 
+#include <pgrichedit.h>
+
 #include "../global.h"
+
+
 
 #include "messagedialog.h"
 
-int extractHotkey( const ASCString& s )
-{
-   bool found = false;
-   for ( int i = 0; i < s.length(); ++i ) {
-      if ( found )
-         return s[i];
-      if ( s[i] == '~' )
-         found = true;
-   }
-   return 0;
-}
-
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style), hotkey1(0), hotkey2(0)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style), my_btnok(NULL), my_btncancel(NULL)
 {
 
 
@@ -47,7 +39,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
    my_btnok = new PG_Button(this, btn1, btn1text);
    my_btnok->SetID(1);
    my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
-   hotkey1 = extractHotkey( btn1text );
+   my_btnok->activateHotkey( 0 );
 
    PG_Rect btn2 = btn1;
    btn2.x = r.Width() / 2 + 10;
@@ -55,13 +47,13 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
    my_btncancel = new PG_Button(this, btn2, btn2text);
    my_btncancel->SetID(2);
    my_btncancel->sigClick.connect(slot(*this, &MessageDialog::handleButton));
-   hotkey2 = extractHotkey( btn2text );
+   my_btncancel->activateHotkey( 0 );
 
    Init(windowtext, textalign, style);
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), hotkey1(0), hotkey2(0), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btnok(NULL), my_btncancel(NULL)
 {
 
    int buttonWidth = min( 120, r.Width() - 20 );
@@ -70,13 +62,13 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
    my_btnok = new PG_Button(this, btn1, btn1text);
    my_btnok->SetID(1);
    my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+   my_btnok->activateHotkey( 0 );
 
-   hotkey1 = extractHotkey( btn1text );
    Init(windowtext, textalign, style);
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), hotkey1(0), hotkey2(0), my_btnok(NULL), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btnok(NULL), my_btncancel(NULL)
 {
 
    Init(windowtext, textalign, style);
@@ -94,16 +86,6 @@ bool MessageDialog::eventKeyDown (const SDL_KeyboardEvent *key)
    }
    if (  key->keysym.sym == SDLK_SPACE ) {
       quitModalLoop(12);
-      return true;
-   }
-
-   if (  key->keysym.unicode == hotkey1 && hotkey1 ) {
-      quitModalLoop(1);
-      return true;
-   }
-
-   if (  key->keysym.unicode == hotkey2 && hotkey2 ) {
-      quitModalLoop(2);
       return true;
    }
 

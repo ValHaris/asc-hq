@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-05-14 19:02:32 $
+    Update Date:      $Date: 2006-06-08 20:39:31 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -1258,7 +1258,7 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 		return true;
 	}
 
-	// send to all receivers
+	// send to all receivers ( = all top level widgdets )
 	bool processed = false;
 	PG_Widget* list = PG_Widget::GetWidgetList()->first();
 	//vector<PG_MessageObject*>::iterator list = objectList.begin();

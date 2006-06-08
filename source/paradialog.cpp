@@ -44,6 +44,7 @@
 #include "pgsdleventsupplier.h"
 #include "pgmultilineedit.h"
 #include "pgtooltiphelp.h"
+#include "pglog.h"
 
 #include "widgets/multilistbox.h"
 #include "widgets/textrenderer.h"

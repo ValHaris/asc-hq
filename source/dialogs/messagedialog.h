@@ -24,8 +24,9 @@
 
 #include "../paradialog.h"
 
+class PG_RichEdit;
+
 class  MessageDialog : public ASC_PG_Dialog {
-   int hotkey1, hotkey2;
    public:
    /**
       Creates a PopUp with 2 Buttons

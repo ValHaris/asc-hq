@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-11 11:31:01 $
+    Update Date:      $Date: 2006-06-08 20:39:31 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgbutton.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -664,3 +664,20 @@ void PG_Button::SetSizeByText(int Width, int Height, const std::string& Text) {
 void PG_Button::SetIconIndent(Uint16 indent) {
 	_mid->iconindent = indent;
 }
+
+void PG_Button::SetText(const std::string& text)
+{
+   extractHotkey( text );
+   PG_Widget::SetText( text );
+}
+
+
+bool   PG_Button::eventKeyDown (const SDL_KeyboardEvent *key)
+{
+   if ( checkForHotkey( key )) {
+      sigClick( this );
+      return true;
+   }
+   return false;
+}
+

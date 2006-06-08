@@ -21,6 +21,7 @@
 
 #include <sstream>
 #include <pgimage.h>
+#include <pglistboxbaseitem.h>
 
 #include "../iconrepository.h"
 #include "../gamemap.h"

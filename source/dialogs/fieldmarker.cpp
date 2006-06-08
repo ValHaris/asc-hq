@@ -18,6 +18,7 @@
      Boston, MA  02111-1307  USA
 */
 
+#include <pglistboxitem.h>
 #include "../gamemap.h"
 #include "fieldmarker.h"
 #include "../mapdisplay.h"
