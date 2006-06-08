@@ -958,7 +958,8 @@ bool mainloopidle(  )
 {
    if ( actmap ) {
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
-         checkevents( &getDefaultMapDisplay() );
+         if ( !checkevents( &getDefaultMapDisplay() ))
+            return false;
 
       checktimedevents( &getDefaultMapDisplay() );
 

@@ -44,7 +44,7 @@ enum  EventConnections { cconnection_destroy = 1,
                          cconnection_areaentered_specificunit = 32 };
 
 
-extern void  checkevents( MapDisplayInterface* md );
+extern bool  checkevents( MapDisplayInterface* md );
 
 extern void  checktimedevents( MapDisplayInterface* md );
 

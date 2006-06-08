@@ -61,12 +61,12 @@ void eventReady()
 
 
 
-void         checkevents( MapDisplayInterface* md )
+bool checkevents( MapDisplayInterface* md )
 {
    // this is not for synchronizing between threads, but in the same threat inside the call stack 
    static bool isRunning = false;
    if ( isRunning )
-      return;
+      return false;
 
    VariableLocker l( isRunning );
    
@@ -79,6 +79,7 @@ void         checkevents( MapDisplayInterface* md )
          (*ev)->check( md );
 
    }
+   return true;
 }
 
 
