@@ -185,9 +185,8 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
     : PG_MenuBar( parent, rect, "MenuBar"),
       currentMenu(NULL)
 {
-   setup();
    activateHotkey( KMOD_ALT );
-   
+   setup();
 }  
 
 namespace ContextMenu {

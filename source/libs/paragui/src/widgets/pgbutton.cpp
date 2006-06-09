@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-08 20:39:31 $
+    Update Date:      $Date: 2006-06-09 19:52:40 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgbutton.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -667,7 +667,7 @@ void PG_Button::SetIconIndent(Uint16 indent) {
 
 void PG_Button::SetText(const std::string& text)
 {
-   extractHotkey( text );
+   extractAndStoreHotkey( text );
    PG_Widget::SetText( text );
 }
 

@@ -821,7 +821,7 @@ void execaction_pg(int code)
 void         execaction_ev(int code)
 {
    execaction_pg(code);
-   getPGApplication().enableLegacyEventHandling ( true );
+   // getPGApplication().enableLegacyEventHandling ( true );
    execaction(code);
-   getPGApplication().enableLegacyEventHandling ( false );
+   // getPGApplication().enableLegacyEventHandling ( false );
 }

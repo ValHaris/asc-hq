@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-06-08 20:39:31 $
+   Update Date:      $Date: 2006-06-09 19:52:40 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.5 $
+   CVS/RCS Revision: $Revision: 1.1.2.6 $
    Status:           $State: Exp $
  */
 
@@ -1970,20 +1970,30 @@ bool PG_Widget::checkForHotkey( const SDL_KeyboardEvent* key )
    return false;
 }
 
-
-bool PG_Widget::extractHotkey( const std::string& s )
+PG_Char PG_Widget::extractHotkey( const std::string& s )
 {
    if ( !PG_Application::GetHighlightingTag() )
-      return false;
+      return 0;
    
    bool found = false;
    for ( int i = 0; i < s.length(); ++i ) {
-      if ( found ) {
-         _mid->hotkey = tolower(s[i]);
-         return true;
-      }
+      if ( found ) 
+         return tolower(s[i]);
+      
       if ( s[i] == PG_Application::GetHighlightingTag() )
          found = true;
    }
-   return false;
+   return 0;
+}
+
+
+bool PG_Widget::extractAndStoreHotkey( const std::string& s )
+{
+   PG_Char c = extractHotkey( s );
+   if ( !c )
+      return false;
+   else {
+      _mid->hotkey = c;
+      return true;
+   }
 }

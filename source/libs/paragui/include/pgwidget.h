@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-08 20:39:31 $
+    Update Date:      $Date: 2006-06-09 19:52:40 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgwidget.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -904,7 +904,8 @@ protected:
 
    static bool RenderText(SDL_Surface *Surface, const PG_Rect& ClipRect, int BaseLineX, int BaseLineY, const PG_String& Text, PG_Font* ParamIn);
 
-   bool extractHotkey( const std::string& s );
+   PG_Char extractHotkey( const std::string& s );
+   bool extractAndStoreHotkey( const std::string& s );
    bool checkForHotkey( const SDL_KeyboardEvent* key );
 
    

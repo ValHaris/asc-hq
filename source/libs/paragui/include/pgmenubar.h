@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-08 20:39:31 $
+    Update Date:      $Date: 2006-06-09 19:52:40 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgmenubar.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -91,6 +91,9 @@ protected:
 	bool enterButton ( PG_Pointer last );
 private:
 
+
+   bool deactivateItem();
+   
 	/**
 		Callback handler for MSG_BUTTONCLICK messages
 	*/

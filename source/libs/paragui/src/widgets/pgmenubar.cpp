@@ -59,6 +59,14 @@ void PG_MenuBar::Add(const std::string& text, PG_PopupMenu* menu, Uint16 indent,
 
 	ItemList.push_back(last);
 
+   menu->sigSelectMenuItem.connect( SigC::slot( *this, &PG_MenuBar::deactivateItem ));
+}
+
+bool PG_MenuBar::deactivateItem()
+{
+   my_active->Hide();
+   my_active = NULL;
+   return true;
 }
 
 

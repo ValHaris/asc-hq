@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-05-12 19:08:47 $
+   Update Date:      $Date: 2006-06-09 19:52:40 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgpopupmenu.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.3 $
+   CVS/RCS Revision: $Revision: 1.1.2.4 $
    Status:           $State: Exp $
  */
 
@@ -735,7 +735,24 @@ bool PG_PopupMenu::eventKeyDown(const SDL_KeyboardEvent *key) {
 	SDL_KeyboardEvent key_copy = *key; // copy key structure
 	PG_Application::TranslateNumpadKeys(&key_copy);
 	// from now, we use key_copy which was copied or translated from key
+   
 
+   if ( key->keysym.unicode )
+   for ( MII i = items.begin(); i != items.end(); ++i ) {
+      if ( *i )
+         if ( extractHotkey( (*i)->getCaption()) == key->keysym.unicode ) {
+            Hide();
+            if ( !(*i)->isDisabled()) {
+                  // call item's callback
+               (*i)->sigSelectMenuItem(selected);
+                  // call general callback (PG_PopupMenu)
+               sigSelectMenuItem((*i));
+               return true;
+            }
+         }
+   }
+   
+   
 	switch (key_copy.keysym.sym) {
 		case SDLK_ESCAPE:
 			Hide();
