@@ -111,7 +111,7 @@ class  Building : public ContainerBase {
     void removeview ( void );
 
     //! returns the armor of the building. \see BuildingType::_armor
-    int  getArmor( void );
+    int  getArmor( ) const;
 
     //! returns the field the buildings entry is standing on
     tfield* getEntryField ( ) const;

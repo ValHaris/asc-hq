@@ -36,7 +36,9 @@
 #include "itemrepository.h"
 #include "clipboard.h"
 #include "resourceplacementdialog.h"
-#include "weatherdialog.h"
+#ifdef WEATHERGENERATOR
+# include "weatherdialog.h"
+#endif
 #include "maped-mainscreen.h"
 #include "attack.h"
 #include "mapimageexport.h"
@@ -703,8 +705,10 @@ void execaction( int code)
 void execaction_pg(int code) 
 {
    switch(code) {
+#ifdef WEATHERGENERATOR
       case act_setactnewweather: weatherConfigurationDialog();
          break;
+#endif
     case act_selbodentyp : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
                               execaction ( act_setactivefieldvals );
                            execaction( act_switchmaps);

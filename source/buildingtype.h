@@ -131,7 +131,7 @@ extern const char*  cbuildingfunctions[];
            return 11;
         };
 
-        
+
         //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
 

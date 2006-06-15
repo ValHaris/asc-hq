@@ -33,8 +33,9 @@ const int ResourcePlacementDialog::leftIndent = xsize/50;;
 
 ResourcePlacementDialog::ResourcePlacementDialog( ) :
     ASC_PG_Dialog(NULL, PG_Rect( 100,100, xsize, ysize ), "Place Resources", SHOW_CLOSE ),
-    fuelRoughness(1), materialRoughness(1), maxFuelOffSet(100), maxMaterialOffSet(100), d(0),
-fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL), materialOffsetWidget(NULL) {
+    fuelRoughness(1), materialRoughness(1), maxFuelOffSet(100), maxMaterialOffSet(100), 
+    fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL), materialOffsetWidget(NULL), d(0)
+{
   int xFuelWidgetPos = leftIndent;
   int yFuelWidgetPos = ysize/10;
   int hFuelWidget = GetTextHeight() + 10;
@@ -88,7 +89,7 @@ fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL)
   fuelOffSetValue->SetValidKeys("1234567890");
   fuelOffSetValue->SetEditable(false);
 
-  int yFuelOffSetSliderPos = yFuelOffSetLabelPos + hFuelWidget * 1.5;
+  int yFuelOffSetSliderPos = int(yFuelOffSetLabelPos + hFuelWidget * 1.5);
   fuelOffSetSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yFuelOffSetSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   fuelOffSetSlider->SetRange(ResourcePlacement::MINFUELVALUE, ResourcePlacement::MAXFUELVALUE);
   fuelOffSetSlider->SetPosition(atoi(fuelOffSetValue->GetText()));
@@ -106,7 +107,7 @@ fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL)
   materialOffSetValue->SetValidKeys("1234567890");
   materialOffSetValue->SetEditable(false);
 
-  int yMaterialOffSetSliderPos = yMaterialOffSetLabelPos + hFuelWidget * 1.5;
+  int yMaterialOffSetSliderPos = int(yMaterialOffSetLabelPos + hFuelWidget * 1.5);
   materialOffSetSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yMaterialOffSetSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   materialOffSetSlider->SetRange(ResourcePlacement::MINMATERIALVALUE, ResourcePlacement::MAXMATERIALVALUE);
   materialOffSetSlider->SetPosition(atoi(materialOffSetValue->GetText()));
@@ -123,7 +124,7 @@ fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL)
   fuelFreeRatioValue->SetValidKeys("1234567890");
   fuelFreeRatioValue->SetEditable(false);
   
-  int yFuelFreeRatioSliderPos = yFuelFreeRatioLabelPos + hFuelWidget * 1.5;
+  int yFuelFreeRatioSliderPos = int(yFuelFreeRatioLabelPos + hFuelWidget * 1.5);
   fuelFreeRatioSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yFuelFreeRatioSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   fuelFreeRatioSlider->SetRange(0, 100);
   fuelFreeRatioSlider->SetPosition(atoi(fuelFreeRatioValue->GetText()));
@@ -140,7 +141,7 @@ fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL)
   materialFreeRatioValue->SetValidKeys("1234567890");
   materialFreeRatioValue->SetEditable(false);
   
-  int yMaterialFreeRatioSliderPos = yMaterialFreeRatioLabelPos + hFuelWidget * 1.5;
+  int yMaterialFreeRatioSliderPos = int(yMaterialFreeRatioLabelPos + hFuelWidget * 1.5);
   materialFreeRatioSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yMaterialFreeRatioSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   materialFreeRatioSlider->SetRange(0, 100);
   materialFreeRatioSlider->SetPosition(atoi(materialFreeRatioValue->GetText()));
@@ -159,7 +160,7 @@ fuelRoughnessWidget(NULL), materialRoughnessWidget(NULL), fuelOffsetWidget(NULL)
 bool ResourcePlacementDialog::buttonEvent( PG_Button* button ) {
   if((atof(fuelRoughnessWidget->GetText())<=0) || (atof(fuelRoughnessWidget->GetText())>=4) ||
       (atof(materialRoughnessWidget->GetText())<=0) || (atof(materialRoughnessWidget->GetText())>=4)) {
-    d = new PG_MessageBox(this, PG_Rect(0,0, Width()/2, Height()* 0.75), "Error Report", "Condition 0.0 < roughness < 4.0 not met", PG_Rect(Width()/4 - 25, Height()*0.75 - 30, 50, 30), "OK");    
+     d = new PG_MessageBox(this, PG_Rect(0,0, Width()/2, int(Height()* 0.75)), "Error Report", "Condition 0.0 < roughness < 4.0 not met", PG_Rect(Width()/4 - 25, int(Height()*0.75) - 30, 50, 30), "OK");
     d->Show();
   
     return true;

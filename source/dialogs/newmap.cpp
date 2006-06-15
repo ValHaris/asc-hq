@@ -25,6 +25,7 @@
 #include <pgpropertyfield_string.h>
 #include <pgpropertyfield_checkbox.h>
 #include <pgpropertyfield_button.h>
+#include <pgpropertyfield_intdropdown.h>
 
 #include "newmap.h"
 #include "editmapparam.h"
@@ -67,12 +68,7 @@ class NewMap: public ASC_PG_Dialog {
          if ( !properties->Apply() )
             return false;
 
-         TerrainType::Weather* w = terrainTypeRepository.getObject_byID( terrainid)->weather[0];
-         if ( !w ) {
-            warning( "please chose a terrain!" );
-            return false;
-         }
-         
+        
          if ( ysize & 1 ) {
             warning( "Height must be an even number!" );
             return false;
@@ -80,6 +76,12 @@ class NewMap: public ASC_PG_Dialog {
          
 
          if ( create ) {
+            TerrainType::Weather* w = terrainTypeRepository.getObject_byID( terrainid)->weather[0];
+            if ( !w ) {
+               warning( "please chose a terrain!" );
+               return false;
+            }
+            
             gamemap->allocateFields( xsize, ysize, w );
 
             if ( random)
@@ -120,7 +122,7 @@ class NewMap: public ASC_PG_Dialog {
          ysize = 20;
          random = false;
          
-         properties = new PG_PropertyEditor( this, PG_Rect( 20 , ypos, Width()-140, Height() - ypos - 20  ));
+         properties = new ASC_PropertyEditor( this, PG_Rect( 20 , ypos, Width()-20, Height() - ypos - 60  ));
          new PG_PropertyField_String<ASCString>( properties, "Title", &gamemap->maptitle );
          if ( create ) {
             new PG_PropertyField_Integer<int>( properties, "Width", &xsize );
@@ -134,9 +136,18 @@ class NewMap: public ASC_PG_Dialog {
          (new PG_PropertyField_String<ASCString>( properties, "Password", &gamemap->codeWord ))->SetPassHidden('*');
          terrainButton = (new PG_PropertyField_Button( properties, "Terrain", "", 50 ))->GetButton();
          terrainButton->sigClick.connect( SigC::slot( *this, &NewMap::selectTerrain ));
+
+         (new PG_PropertyField_Integer<int>( properties, "Wind Speed", &gamemap->weather.windSpeed ))->SetRange(0,255);
+
+         static const char* directionNames[7] = { "South", "SouthWest", "NorthWest", "North", "NorthEast", "SouthEast", NULL };
+         
+         new PG_PropertyField_IntDropDown<int>( properties, "Wind Direction", &gamemap->weather.windDirection, directionNames );
+         
          updateButton();
          
          ypos += 200;
+
+         StandardButtonDirection ( ASC_PG_Dialog::Horizontal );
 
          AddStandardButton ( "Cancel" )->sigClick.connect( SigC::slot( *this, &NewMap::cancel ));
          AddStandardButton ( "OK" )->sigClick.connect( SigC::slot( *this, &NewMap::ok ));

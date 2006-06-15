@@ -108,7 +108,7 @@ void OverviewMapHolder::updateField( const MapCoordinate& pos )
       }
       OverviewMapImage::fill ( overviewMapImage, imgpos, invisible );
    } else {
-      if ( fld->building && fieldvisiblenow( fld, map.playerView) )
+      if ( fld->building && fieldvisiblenow( fld, map.playerView, &map) )
          OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
       else {
 
@@ -240,7 +240,9 @@ GameMap :: GameMap ( void )
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
 
-   weatherSystem  = new WeatherSystem(this, 1, 0.03);   
+#ifdef WEATHERGENERATOR
+   weatherSystem  = new WeatherSystem(this, 1, 0.03);
+#endif
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
@@ -256,7 +258,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 16;
+const int tmapversion = 17;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -298,10 +300,10 @@ void GameMap :: read ( tnstream& stream )
    bool loadCampaign = stream.readInt();
    actplayer = stream.readChar();
    time.abstime = stream.readInt();   
-   if(version < 9){
+   if(version < 9 || version >= 17){
      stream.readChar();
-     WeatherSystem::legacyWindSpeed = stream.readChar();
-     WeatherSystem::legacyWindDirection = stream.readChar();
+     weather.windSpeed = stream.readChar();
+     weather.windDirection = stream.readChar();
    }
 
    if ( version >= 11 ) 
@@ -652,6 +654,10 @@ void GameMap :: write ( tnstream& stream )
    stream.writeChar( actplayer );
    stream.writeInt( time.abstime );
    
+   stream.writeChar(0);
+   stream.writeChar( weather.windSpeed );
+   stream.writeChar( weather.windDirection );
+   
    stream.writeInt( 0x12345678 );
    
    for  ( i= 0; i < 4; i++ )
@@ -725,6 +731,7 @@ void GameMap :: write ( tnstream& stream )
 
    for ( i = 0; i < 8; i++ )
        stream.writeInt( getgameparameter(GameParameter(i)) );
+
 
    stream.writeInt( 0x12345678 );
 
@@ -1264,7 +1271,7 @@ void GameMap::endTurn()
       // Bei Aenderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
-         if ( getmaxwindspeedforunit ( actvehicle ) < weatherSystem->getCurrentWindSpeed()*maxwindspeed ){
+         if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
             ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
             new Message ( ident, this, 1<<(*v)->getOwner());
             toRemove.push_back ( *v );
@@ -1275,10 +1282,9 @@ void GameMap::endTurn()
             if ( actvehicle->height <= chhochfliegend ) {
                int mo = actvehicle->typ->movement[log2(actvehicle->height)];
                if ( mo )
-                  j -= ( actvehicle->getMovement() * 64 / mo)
-                       * (weatherSystem->getCurrentWindSpeed() * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                  j -= ( actvehicle->getMovement() * 64 / mo)  * (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
                else
-                  j -= (weatherSystem->getCurrentWindSpeed() * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
+                  j -= (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
             }
            //          movement * 64        windspeed * maxwindspeed         fuelConsumption
            // j -=   ----------------- *  ----------------------------- *   -----------
@@ -1479,7 +1485,9 @@ GameMap :: ~GameMap ()
    }   
       
 
+#ifdef WEATHERGENERATOR
    delete weatherSystem;
+#endif
 
    if ( field ) {
       delete[] field;

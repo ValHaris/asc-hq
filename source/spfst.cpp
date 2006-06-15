@@ -494,7 +494,8 @@ int getheightdelta ( int height1, int height2 )
    return hd;
 }
 
-bool fieldvisiblenow( const tfield* pe, int player )
+
+bool fieldvisiblenow( const tfield* pe, int player, GameMap* actmap )
 {
   if ( player < 0 ) {
      #ifdef karteneditor
@@ -504,6 +505,9 @@ bool fieldvisiblenow( const tfield* pe, int player )
      #endif
   }
 
+  if ( !actmap )
+     return false;
+  
   if ( pe ) { 
       int c = (pe->visible >> ( player * 2)) & 3;
       #ifdef karteneditor

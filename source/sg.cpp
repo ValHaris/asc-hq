@@ -118,7 +118,11 @@
 #include "iconrepository.h"
 #include "dashboard.h"
 #include "gamedialog.h"
-#include "weathercast.h"
+
+#ifdef WEATHERGENERATOR
+# include "weathercast.h"
+#endif
+
 #include "asc-mainscreen.h"
 #include "dialogs/unitinfodialog.h"
 #include "messaginghub.h"
@@ -851,8 +855,10 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_vehicleinfo: unitInfoDialog();
          break;
+#ifdef WEATHERGENERATOR
       case ua_weathercast: weathercast();
          break;
+#endif
       case ua_newGame: 
          startMultiplayerGame();
          hookGuiToMap(actmap);

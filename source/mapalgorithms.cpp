@@ -442,7 +442,7 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
       
       int lastDir = 0;
       
-      float abswindspeed = float( vehicle->getMap()->weatherSystem->getCurrentWindSpeed()) * maxwindspeed / 255;
+      float abswindspeed = float( vehicle->getMap()->weather.windSpeed) * maxwindspeed / 255;
       
       for ( float direc = 0; direc < 360; direc++) {
          static const float pi = 3.14159265;
@@ -462,9 +462,9 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
             
       
       for ( int i = 0; i <= 3; i++ ) {
-         wm[(i+vehicle->getMap()->weatherSystem->getCurrentWindDirection())%6] = wmn[i];
+         wm[(i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
          if ( i > 0 )
-            wm[(6-i+vehicle->getMap()->weatherSystem->getCurrentWindDirection())%6] = wmn[i];
+            wm[(6-i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
       }
    }
 }

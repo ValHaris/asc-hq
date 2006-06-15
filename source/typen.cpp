@@ -48,6 +48,26 @@ const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "heavy aircraft",        "light ship",             "heavy ship",  "helicopter",
                                                  "hoovercraft"  };
 
+const char* moveMaliTypeIcons[cmovemalitypenum] = { "pad_symbol_default.png",
+                                 "pad_symbol_lighttracked.png",
+                                 "pad_symbol_mediumtracked.png",
+                                 "pad_symbol_heavytracked.png",
+                                 "pad_symbol_lightwheeled.png",
+                                 "pad_symbol_mediumwheeled.png",
+                                 "pad_symbol_heavywheeled.png",
+                                 "pad_symbol_trooper.png",
+                                 "pad_symbol_rail.png",
+                                 "pad_symbol_mediumair.png",
+                                 "pad_symbol_mediumship.png",
+                                 "pad_symbol_turret.png",
+                                 "pad_symbol_lightair.png",
+                                 "pad_symbol_heavyair.png",
+                                 "pad_symbol_lightship.png",
+                                 "pad_symbol_heavyship.png",
+                                 "pad_symbol_helicopter.png",
+                                 "pad_symbol_hoovercraft.png" };
+
+                                                 
 const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store material",           "store fuel",
                                             "move out all energy",           "move out all material",           "move out all fuel",
                                             "stop storing energy", "stop storing material", "stop storing fuel",

@@ -60,7 +60,7 @@ InfoPage::~InfoPage() {}
 ;
 
 
-InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):filePath(fp), fileName(fn), cbt(baseType), index(in), generator(gen), pageTitle(title), fullFileName(filePath + fileName + index + HTML) {
+InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):fileName(fn), filePath(fp), index(in), pageTitle(title), cbt(baseType), generator(gen), fullFileName(filePath + fileName + index + HTML) {
   buildingInfStream = openOFileStream(fullFileName);
 
 }
@@ -151,6 +151,7 @@ void InfoPage::startTable(int border, TableWidth interpretWAs, int width, TableW
     case ABSOLUTE: *buildingInfStream << "px\""; break;
     case RELATIVE: *buildingInfStream << "%%\"";
       break;
+      default: break;
     }
   }
   *buildingInfStream <<  "border=\"" << border << "\" ";

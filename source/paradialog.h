@@ -43,6 +43,8 @@
 #include "pgslider.h"
 #include "pglistbox.h"
 
+#include "pgpropertyeditor.h"
+
 #include "sdl/graphics.h"
 #include "ascstring.h"
 #include "textfile_evaluation.h"
@@ -122,9 +124,26 @@ class ASC_PG_Dialog : public PG_Window {
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
        PG_Button* AddStandardButton( const ASCString& name );
+       enum StandardButtonDirectonType { Vertical, Horizontal };
+       void StandardButtonDirection ( StandardButtonDirectonType dir );
        int RunModal();
+   private:
+      StandardButtonDirectonType standardButtonDir;
 };
 
+class ASC_PropertyEditor : public PG_PropertyEditor {
+   public:
+      ASC_PropertyEditor(  PG_Widget *parent, const PG_Rect &r, const std::string &style="PropertyEditor", int labelWidthPercentage = 50 ) : PG_PropertyEditor( parent, r, style, labelWidthPercentage ) {};
+      std::string GetStyleName( const std::string& widgetName ) {
+         if ( widgetName == "DropDownSelectorProperty" )
+            return "DropDown";
+         else
+            if ( widgetName == "BoolProperty" )
+               return "CheckButton";
+         else
+            return PG_PropertyEditor::GetStyleName( widgetName );
+      };
+};
 
 
 

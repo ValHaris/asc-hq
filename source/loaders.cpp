@@ -825,32 +825,6 @@ tspfldloaders::~tspfldloaders ( void )
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int          tmaploaders::savemap( const ASCString& name )
 { 
    #ifdef logging
@@ -876,7 +850,9 @@ int          tmaploaders::savemap( const ASCString& name )
    }
 
    writefields ();
+#ifdef WEATHERGENERATOR
    spfld->weatherSystem->write(filestream);
+#endif
    stream->writeInt ( actmapversion );
 
    spfld = NULL;
@@ -885,6 +861,11 @@ int          tmaploaders::savemap( const ASCString& name )
 } 
 
 
+
+void weatherSystemRequired()
+{
+   throw ASCmsgException( "This file can not be loaded, since it contains data of the discontinued weather generator");
+}
 
 
 GameMap* tmaploaders::_loadmap( const ASCString& name )
@@ -922,15 +903,10 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
 
    displayLogMessage ( 8, "fields, ");
    readfields ();
-   if(version >= 0xfe50){  
-     if(spfld->weatherSystem != NULL ) {
-        delete spfld->weatherSystem;
-     }
-     spfld->weatherSystem = new WeatherSystem(spfld);
-     spfld->weatherSystem->read(filestream);
-   }else{
-     spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
-   }
+
+   
+   if(version == 0xfe50)
+      weatherSystemRequired();
 
    version = stream->readInt();
    if (version > actmapversion || version < minmapversion ) 
@@ -1005,8 +981,6 @@ void   tsavegameloaders::savegame( pnstream strm, GameMap* gamemap, bool writeRe
 
    writefields ( );
    
-   spfld->weatherSystem->write(*stream);
-
    writedissections();
 
    if ( writeReplays && spfld->replayinfo ) {
@@ -1092,15 +1066,8 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
 
    readfields ( );
    
-   if(version >= 0xff60){  
-     if(spfld->weatherSystem != NULL) {
-        delete spfld->weatherSystem;
-     }
-     spfld->weatherSystem = new WeatherSystem(spfld);
-     spfld->weatherSystem->read(*stream);
-   }else{
-      spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
-   }
+   if(version == 0xff60)
+      weatherSystemRequired();
    
    readdissections();
 
@@ -1155,8 +1122,6 @@ int          tnetworkloaders::savenwgame( pnstream strm )
    stream->writeInt ( actnetworkversion );
 
    writemap ();
-
-   actmap->weatherSystem->write(*stream);
 
    writemessages();
 
@@ -1213,15 +1178,8 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 
    
    //NEW SaveData Weather  
-   if(version >= 0x0030){
-     if(spfld->weatherSystem != NULL) {
-        delete spfld->weatherSystem;
-     }
-     spfld->weatherSystem = new WeatherSystem(spfld);
-     spfld->weatherSystem->read(*stream);
-   }else{
-      spfld->weatherSystem->setGlobalWind(WeatherSystem::legacyWindSpeed, static_cast<Direction>(WeatherSystem::legacyWindDirection));   
-   }
+   if(version == 0x0030)
+      weatherSystemRequired();
    
    /*if(version > 0xfe28){  //Vielleicht minus 1     
      actmap->weatherSystem->read(*stream);
@@ -1466,6 +1424,10 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
+      return NULL;
+   } /* endcatch */
+   catch ( ASCmsgException msg ) {
+      displaymessage( "error loading file\n" + msg.getMessage() , 1 );
       return NULL;
    } /* endcatch */
    catch ( ASCexception ) {

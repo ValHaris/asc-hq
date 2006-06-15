@@ -184,6 +184,7 @@ extern const char*  cvehiclefunctions[];
 
         int armor;
 
+        
         //! the levels of height which this unit can enter
         int          height;
 

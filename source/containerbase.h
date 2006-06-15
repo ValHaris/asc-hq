@@ -77,6 +77,8 @@ class ContainerBase {
       void clearCargo();
 
       SigC::Signal0<void> cargoChanged;
+
+      virtual int  getArmor() const = 0;
       
       void addToCargo( Vehicle* veh );
       

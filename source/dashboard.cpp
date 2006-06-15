@@ -113,9 +113,9 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
 
    if ( name == "windarrow" ) {
-      if ( actmap && actmap->weatherSystem->getCurrentWindSpeed() > 0 ) {
+      if ( actmap && actmap->weather.windSpeed > 0 ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectRotation> blitter;
-         blitter.setAngle( (WeatherSystem::WindDirNum - actmap->weatherSystem->getCurrentWindDirection()) * (360 /WeatherSystem::WindDirNum));
+         blitter.setAngle( (6 - actmap->weather.windDirection) * (360 /6));
          blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(dst.x, dst.y) );
       }
       return;
@@ -216,9 +216,9 @@ void DashboardPanel::eval()
 
    PG_Application::SetBulkMode(true);
 
-   setBargraphValue( "winddisplay", float(actmap->weatherSystem->getCurrentWindSpeed()) / 255  );
+   setBargraphValue( "winddisplay", float(actmap->weather.windSpeed ) / 255  );
 
-   setLabelText( "windspeed", actmap->weatherSystem->getCurrentWindSpeed() );
+   setLabelText( "windspeed", actmap->weather.windSpeed );
 
    if ( mc.valid() && fieldvisiblenow( fld, actmap->playerView )) {
       setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
@@ -235,7 +235,7 @@ void DashboardPanel::eval()
       else
          unitspeed = maxint;
 
-       int windspeed = actmap->weatherSystem->getCurrentWindSpeed()*maxwindspeed ;
+       int windspeed = actmap->weather.windSpeed*maxwindspeed ;
        if ( unitspeed < 255*256 ) {
           if ( windspeed > unitspeed*9/10 )
              setBarGraphColor( "winddisplay", 0xff0000  );

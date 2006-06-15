@@ -392,7 +392,7 @@ ASC_PG_App :: ~ASC_PG_App()
 
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
-   :PG_Window ( parent, centerWindow(r), windowtext, flags, style, heightTitlebar ),stdButtonNum(0), caller(0)
+   :PG_Window ( parent, centerWindow(r), windowtext, flags, style, heightTitlebar ),stdButtonNum(0), caller(0), standardButtonDir( Vertical )
 {
 
    // it looks nice if you can see the map behind the dialog, but seeing other dialogs stacked above each other is just confusing, so we reduce transparency
@@ -432,10 +432,18 @@ PG_Rect ASC_PG_Dialog::centerWindow( const PG_Rect& rect )
    return r;
 }
 
+void ASC_PG_Dialog::StandardButtonDirection ( StandardButtonDirectonType dir )
+{
+   standardButtonDir = dir;
+}
+
 PG_Button* ASC_PG_Dialog::AddStandardButton( const ASCString& name )
 {
    ++stdButtonNum;
-   return new PG_Button( this, PG_Rect( Width() - 110, Height() - stdButtonNum * 40, 100, 30 ), name );
+   if ( standardButtonDir == Vertical )
+      return new PG_Button( this, PG_Rect( Width() - 110, Height() - stdButtonNum * 40, 100, 30 ), name );
+   else
+      return new PG_Button( this, PG_Rect( Width() - 110 * stdButtonNum, Height() -40 , 100, 30 ), name );
 }
 
 

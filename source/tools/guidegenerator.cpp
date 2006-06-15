@@ -131,7 +131,7 @@ void InfoPageUtil::updateFile(ASCString fileName, ASCString exportPath) {
 #endif
   ASCString exportTarget = exportPath + destilledFileName ;
   ASCString tmpTarget = InfoPageUtil::getTmpPath() + destilledFileName;
-  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);
+  InfoPageUtil::diffMove(tmpTarget, exportTarget);
 }
 //*************************************************************************************************************
 ImageConverter::ImageConverter() {}
@@ -200,7 +200,7 @@ ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
 //**************************************************************************************************************
 
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString menuCss, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), menuCSSFile(menuCss), setID(id), mainCSSFile(maCSSFile), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) 
+GuideGenerator::GuideGenerator(ASCString fp, ASCString menuCss, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), menuCSSFile(menuCss), mainCSSFile(maCSSFile), createImg(imgCreate), setID(id), imageWidth(imageSize), createUpload(upload), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath)
 {
    if ( relMenuPath.length() > 0  ){
      if(relMenuPath.find_last_of("/")!=relMenuPath.size()-1){

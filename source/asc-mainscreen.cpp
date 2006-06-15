@@ -697,6 +697,14 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                } 
             return true;
 
+         case SDLK_F10:
+            if ( mod & KMOD_SHIFT ) {
+               Building* b = actmap->getField( actmap->getCursor() )->building;
+               if ( b )
+                  b->damage += 10;
+            }
+            return true;
+            
 
             case SDLK_x:
                execUserAction_ev ( ua_exitgame );

@@ -20,8 +20,10 @@ const int ResourcePlacement::MAXMATERIALVALUE = 255;
 const int ResourcePlacement::MINFUELVALUE = 0;
 const int ResourcePlacement::MINMATERIALVALUE = 0;
 
-ResourcePlacement::ResourcePlacement(GameMap& m,double fr, double mr, unsigned short maxFOffset, unsigned short maxMOffset, int addFreeFieldsPercFuel, int addFreeFieldsPercMaterial): map(m), fuelRoughness(fr), materialRoughness(fr), maxFuelOffset(maxFOffset), maxMaterialOffset(maxMOffset), stepCount(0),
-additionalResourceFreeFieldsPercentageFuel(addFreeFieldsPercFuel), additionalResourceFreeFieldsPercentageMaterial(addFreeFieldsPercMaterial) {
+ResourcePlacement::ResourcePlacement(GameMap& m,double fr, double mr, unsigned short maxFOffset, unsigned short maxMOffset, int addFreeFieldsPercFuel, int addFreeFieldsPercMaterial):
+      map(m), fuelRoughness(fr), materialRoughness(fr), maxFuelOffset(maxFOffset), maxMaterialOffset(maxMOffset), 
+      additionalResourceFreeFieldsPercentageFuel(addFreeFieldsPercFuel), additionalResourceFreeFieldsPercentageMaterial(addFreeFieldsPercMaterial), stepCount(0)
+{
   double depth = 0.0;
   srand(static_cast<unsigned>(time(0)));
   if(map.xsize > map.ysize) {
@@ -67,7 +69,7 @@ void ResourcePlacement::runDS() {
   tfield* a = map.getField(0,0);
   tfield* b = map.getField( map.xsize -1, 0 );
   tfield* c = map.getField(map.xsize -1, map.ysize -1);
-  tfield* e = map.getField((map.xsize -1)/2, (map.ysize -1)/2);  //First diamond point
+  // tfield* e = map.getField((map.xsize -1)/2, (map.ysize -1)/2);  //First diamond point
   tfield* d = map.getField(0, map.ysize -1 );
   if(placeFuel) {   
     a->temp3 = createRandomValue(MAXFUELVALUE * (1 + additionalResourceFreeFieldsPercentageFuel/100 ));    

@@ -2,9 +2,13 @@
     \brief Interface for the random map generator
 */
 
-//     $Id: edgen.h,v 1.8.2.1 2006-03-01 21:00:50 mbickel Exp $
+//     $Id: edgen.h,v 1.8.2.2 2006-06-15 14:15:57 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8.2.1  2006/03/01 21:00:50  mbickel
+//      Clean up of source
+//      Fixed to construction icons
+//
 //     Revision 1.8  2004/07/12 18:15:05  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -97,7 +101,7 @@ struct tmemoryblock {
    char bordername[maxtilevals][20];
    char generated;
    int startblocksize;
-   char tilevalcount,acttile;
+   int tilevalcount,acttile;
    };
 
 typedef tmemoryblock *pmemoryblock;

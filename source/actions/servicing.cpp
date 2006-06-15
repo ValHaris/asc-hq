@@ -52,7 +52,12 @@ ResourceWatch::ResourceWatch( ContainerBase* container )
 {
    this->container = container;
    orgAmount = available = container->getResource( Resources( maxint, maxint, maxint), true );
-   storagelimit = container->putResource( Resources( maxint, maxint, maxint), true ) + available;
+   storagelimit = container->putResource( Resources( maxint, maxint, maxint), true );
+   for ( int r = 0; r < 3; ++r )
+      if ( maxint - available.resource(r) > storagelimit.resource(r))
+         storagelimit.resource(r) += available.resource(r);
+      else
+         storagelimit.resource(r) = maxint;
 };
 
 ContainerBase* ResourceWatch::getContainer()
@@ -575,7 +580,7 @@ void ServiceChecker :: check( ContainerBase* dest )
             }
 
          } else {
-            bool active = source->getStorageCapacity().resource(r) || dest->getStorageCapacity().resource(r) ;
+            bool active = source->getStorageCapacity().resource(r) && dest->getStorageCapacity().resource(r) ;
             resource( dest, r, active );
          }
       }

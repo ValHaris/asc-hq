@@ -22,10 +22,10 @@ vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cp
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
+gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
+messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp
 

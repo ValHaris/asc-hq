@@ -1459,6 +1459,10 @@ void showPlayerTime()
 
 void displaywindspeed( void )
 {
+#ifdef WEATHERGENERATOR
    displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weatherSystem->getCurrentWindSpeed(), strrrd8d ( actmap->weatherSystem->getCurrentWindSpeed() * maxwindspeed / 256 ));
+#else
+   displaymessage2("wind speed is %d which equals %s fields / turn", actmap->weather.windSpeed, strrrd8d ( actmap->weather.windDirection * maxwindspeed / 256 ));
+#endif
 }
 

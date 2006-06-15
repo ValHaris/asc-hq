@@ -2,104 +2,6 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20.2.5 2006-03-01 21:00:50 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.20.2.4  2006/02/11 21:46:17  mbickel
-//      Move cleanup
-//
-//     Revision 1.20.2.3  2006/02/11 20:48:41  mbickel
-//      Some cleanup
-//
-//     Revision 1.20.2.2  2005/12/22 17:41:30  mbickel
-//      Fixed graphic problems
-//
-//     Revision 1.20.2.1  2005/06/12 11:05:15  mbickel
-//      Further improved mapeditor conversion to paragui
-//
-//     Revision 1.20  2004/07/12 18:15:05  mbickel
-//      Lots of tweaks and fixed for more portability and compilation with mingw
-//
-//     Revision 1.19  2004/05/12 20:05:52  mbickel
-//      Restructured file loading routines for upcoming data cache
-//
-//     Revision 1.18  2002/04/21 21:27:00  mbickel
-//      Mapeditor: Fixed crash in "Put Resources"
-//      Updating the small map after AI
-//      Fixed infinite loop "quit game" after sending signal
-//
-//     Revision 1.17  2002/04/17 22:41:34  mbickel
-//      Updated build system to warn about missing music
-//      Updated build system to insert version information automatically
-//      edgen.cpp compiles with gcc 3.0.4 again
-//
-//     Revision 1.16  2002/04/05 09:25:09  mbickel
-//      Project files now for Borland C++ Builder 6
-//      Fixed: netcontrol not working
-//      Fixed: replay errors when constructing turrets
-//      Submarine require no fuel for sufacing
-//      Field info dialog extended
-//      Fixed several buffer overruns
-//
-//     Revision 1.15  2001/12/14 10:20:05  mbickel
-//      Cleanup and enhancements to configure.in
-//      Removed last remains of octagonal version from source files
-//
-//     Revision 1.14  2001/10/31 18:34:31  mbickel
-//      Some adjustments and fixes for gcc 3.0.2
-//
-//     Revision 1.13  2001/10/11 10:22:49  mbickel
-//      Some cleanup and fixes for Visual C++
-//
-//     Revision 1.12  2001/08/09 10:28:22  mbickel
-//      Fixed AI problems
-//      Mapeditor can edit a units AI parameter
-//
-//     Revision 1.11  2001/07/28 11:19:10  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.10  2001/07/27 21:13:34  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.9  2001/02/01 22:48:37  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.8  2001/01/28 14:04:13  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.7  2000/12/23 13:19:45  mbickel
-//      Made ASC compileable with Borland C++ Builder
-//
-//     Revision 1.6  2000/08/12 12:52:45  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.5  2000/05/23 20:40:44  mbickel
-//      Removed boolean type
-//
-//     Revision 1.4  2000/05/10 19:55:48  mbickel
-//      Fixed empty loops when waiting for mouse events
-//
-//     Revision 1.3  2000/05/05 21:15:02  mbickel
-//      Added Makefiles for mount/demount and mapeditor
-//      mapeditor can now be compiled for linux, but is not running yet
-//
-//     Revision 1.2  1999/11/16 03:41:31  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -317,8 +219,8 @@ void tmapgenerator::montlayer(int layer)
             }
             else j++;
          } while ( ( found == false ) && (j < mblocks[layer]->tilevalcount ) ); /* enddo */
-         if ( (j == mblocks[layer]->tilevalcount ) && ( mblocks[layer]->color[mblocks[layer]->tilevalcount] != ctransparent ) )
-               constructionlayer[i] =  mblocks[layer]->color[mblocks[layer]->tilevalcount];
+         if ( (j == mblocks[layer]->tilevalcount ) && ( mblocks[layer]->color[int(mblocks[layer]->tilevalcount)] != ctransparent ) )
+            constructionlayer[i] =  mblocks[layer]->color[int(mblocks[layer]->tilevalcount)];
       } /* endfor */
    } else {
       for (i=0;i<plasma.blockcount;i++ ) {
@@ -333,7 +235,8 @@ void tmapgenerator::montlayer(int layer)
                   }
                   else j++;
                } while ( ( found == false ) && (j < mblocks[layer]->tilevalcount ) ); /* enddo */
-               if (j == mblocks[layer]->tilevalcount ) constructionlayer[i] =  mblocks[layer]->color[mblocks[layer]->tilevalcount];
+               if (j == mblocks[layer]->tilevalcount )
+                  constructionlayer[i] =  mblocks[layer]->color[int(mblocks[layer]->tilevalcount)];
             }
          } /* endfor */
       } /* endfor */

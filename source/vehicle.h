@@ -91,7 +91,7 @@ class BuildingType;
     //! if events are triggered by this unit (if it is lost for example), this will set connection != 0
     int          connection;
 
-    int          armor;
+    int          getArmor() const;
 
     /** a unique identification of the unit that is used everywhere in ASC
        (and not only the network protocols where is was first used, hence the name)

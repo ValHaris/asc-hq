@@ -393,7 +393,7 @@ extern const char*  resourceNames[3];
 
 
 extern const char*  cmovemalitypes[cmovemalitypenum];
-
+extern const char*  moveMaliTypeIcons[cmovemalitypenum];
 
 const int experienceDecreaseDamageBoundaryNum = 4;
 extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum];

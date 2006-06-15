@@ -34,7 +34,9 @@
  #include "messages.h"
  #include "research.h"
  #include "password.h"
- #include "weatherarea.h"
+#ifdef WEATHERGENERATOR
+ # include "weatherarea.h"
+#endif
  #include "objects.h"
  #include "mapfield.h"
  #include "networkinterface.h"
@@ -51,8 +53,10 @@
       unsigned int getRandomValue (int lowerLimit, int upperLimit);
  };
  
- 
+  
+#ifdef WEATHERGENERATOR
 class WeatherSystem;
+#endif
 
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 32;
@@ -187,16 +191,15 @@ class GameMap {
       //! the time in the game, mesured in a turns and moves
       GameTime    time;
 
-      /*struct Weather {
-         Weather():fog(0),windSpeed(0),windDirection(0){};
-         //! the idea of fog is to reduce the visibility, but this is currently not used
-         int fog;
-
+      struct Weather {
+         Weather():windSpeed(0),windDirection(0){};
          int windSpeed;
          int windDirection;
-      } weather;*/
+      } weather;
 
+#ifdef WEATHERGENERATOR
       WeatherSystem* weatherSystem;
+#endif
       /** how are Resources handled on this map
              0= "ASC mode": complex system with mineral resources etc
              1= "BI mode": simpler system like in Battle Isle

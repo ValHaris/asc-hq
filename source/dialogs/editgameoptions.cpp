@@ -121,19 +121,6 @@ class GetVideoModes {
 };
 
 
-class GameOptionsPEW : public PG_PropertyEditor {
-   public:
-      GameOptionsPEW(  PG_Widget *parent, const PG_Rect &r, const std::string &style="PropertyEditor", int labelWidthPercentage = 50 ) : PG_PropertyEditor( parent, r, style, labelWidthPercentage ) {};
-      std::string GetStyleName( const std::string& widgetName ) {
-         if ( widgetName == "DropDownSelectorProperty" )
-            return "DropDown";
-         else
-            if ( widgetName == "BoolProperty" )
-               return "CheckButton";
-            else
-               return PG_PropertyEditor::GetStyleName( widgetName );
-      };
-};
 
 
 const char* mouseButtonNames[] = { "None", "Left", "Center", "Right", "4", "5", NULL };
@@ -202,7 +189,7 @@ class EditGameOptions : public ASC_PG_Dialog {
          else
             videoMode = vmodes.findmodenum( CGameOptions::Instance()->mapeditor_xresolution, CGameOptions::Instance()->mapeditor_yresolution );
             
-         propertyEditor = new GameOptionsPEW( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
+         propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Direct Movement", &o->fastmove );
          new PG_PropertyField_Integer<int>( propertyEditor , "Movement Speed (1/100 sec)", &o->movespeed );

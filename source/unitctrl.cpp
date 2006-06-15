@@ -227,11 +227,18 @@ void printTimer( int i )
 int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrupt )
 {
    WindMovement* wind;
+
+#ifdef WEATHERGENERATOR
    if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weatherSystem->getCurrentWindSpeed() ) {
       wind = new WindMovement ( vehicle );
    } else
       wind = NULL;
-
+#else
+   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
+      wind = new WindMovement ( vehicle );
+   } else
+      wind = NULL;
+#endif
 
    tfield* oldfield = getfield( vehicle->xpos, vehicle->ypos );
 

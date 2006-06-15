@@ -365,7 +365,7 @@ Resources WindPowerplant :: getPlus()
 {
    Resources p;
    for ( int r = 0; r < 3; r++ )
-      p.resource(r) =  bld->maxplus.resource(r) * bld->getMap()->weatherSystem->getCurrentWindSpeed() / 255;
+      p.resource(r) =  bld->maxplus.resource(r) * bld->getMap()->weather.windSpeed / 255;
    return p;
 }
 

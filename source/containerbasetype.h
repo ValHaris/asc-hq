@@ -166,6 +166,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
      void read ( tnstream& stream ) ;
      void write ( tnstream& stream ) const ;
 
+     
 
         //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
      int          efficiencyfuel;

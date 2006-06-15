@@ -267,7 +267,7 @@ namespace CargoGuiFunctions {
 }; // namespace CargoGuiFunctions
 
 
-class DamageControlWindow;
+class BuildingControlWindow;
 class CargoInfoWindow;
 
 class CargoDialog : public Panel
@@ -292,7 +292,7 @@ class CargoDialog : public Panel
       CargoWidget* cargoWidget;
       SubWindow* researchWindow;
       SubWindow* matterWindow;
-      DamageControlWindow* damageControlWindow;
+      BuildingControlWindow* buildingControlWindow;
 
       CargoInfoWindow* ciw;
       
@@ -842,8 +842,13 @@ class WindPowerWindow : public SubWindow {
          WindPowerplant windPowerPlant ( container() );
          Resources plus = windPowerPlant.getPlus();
          cargoDialog->setLabelText( "CurrentPower", plus.energy, widget );
+         
+#ifdef WEATHERGENERATOR
          if ( container()->getMap()->weatherSystem )
-         cargoDialog->setLabelText( "Weather", container()->getMap()->weatherSystem->getCurrentWindSpeed(), widget );
+            cargoDialog->setLabelText( "Weather", container()->getMap()->weatherSystem->getCurrentWindSpeed(), widget );
+#else
+         cargoDialog->setLabelText( "Weather", container()->getMap()->weather.windSpeed, widget );
+#endif
       }
 };
 
@@ -931,18 +936,56 @@ class CargoInfoWindow : public SubWindow {
          cargoDialog->setLabelText( "CargoUsage", s, widget );
 
          
-         if ( cargoDialog->getMarkedUnit() )
+         class MoveMalusType {
+            public:
+               enum {  deflt,
+                  light_tracked_vehicle,
+                  medium_tracked_vehicle,
+                  heavy_tracked_vehicle,
+                  light_wheeled_vehicle,
+                  medium_wheeled_vehicle,
+                  heavy_wheeled_vehicle,
+                  trooper,
+                  rail_vehicle,
+                  medium_aircraft,
+                  medium_ship,
+                  structure,
+                  light_aircraft,
+                  heavy_aircraft,
+                  light_ship,
+                  heavy_ship,
+                  helicopter,
+                  hoovercraft };
+         };
+
+         
+         if ( cargoDialog->getMarkedUnit() ) {
             cargoDialog->setLabelText( "CurrentCargo", cargoDialog->getMarkedUnit()->weight(), widget );
-         else
+            cargoDialog->setImage( "TypeImage", moveMaliTypeIcons[cargoDialog->getMarkedUnit()->typ->movemalustyp], widget );
+         } else {
             cargoDialog->setLabelText( "CurrentCargo", "-" , widget );
+            cargoDialog->setImage( "TypeImage", NULL, widget );
+         }
             
          if ( container()->baseType->maxLoadableWeight > 0 )
             cargoDialog->setBargraphValue ( "LoadingMeter2", float( container()->cargoWeight()) / container()->baseType->maxLoadableWeight, widget );
+
+         if ( container()->baseType->maxLoadableWeight >= 1000000 ) {
+            cargoDialog->setLabelText ( "FreeWeight", "unlimited", widget );
+            cargoDialog->setLabelText ( "MaxWeight",  "unlimited", widget );
+         } else {
+            cargoDialog->setLabelText ( "FreeWeight", container()->baseType->maxLoadableWeight - container()->cargoWeight(), widget );
+            cargoDialog->setLabelText ( "MaxWeight",  container()->baseType->maxLoadableWeight, widget );
+         }
+         
+         cargoDialog->setLabelText ( "FreeSlots", container()->baseType->maxLoadableUnits - container()->getCargo().size(), widget );
+         cargoDialog->setLabelText ( "MaxSlots",  container()->baseType->maxLoadableUnits , widget );
+         
       }
 };
 
 
-class DamageControlWindow : public SubWindow {
+class BuildingControlWindow : public SubWindow {
    public:
       SigC::Signal0<void> damageChanged;
 
@@ -954,7 +997,7 @@ class DamageControlWindow : public SubWindow {
          if ( widget ) {
             PG_Button* b = dynamic_cast<PG_Button*>( widget->FindChild( "RepairButton", true ) );
             if ( b )
-               b->sigClick.connect( SigC::slot( *this, &DamageControlWindow::repair ));
+               b->sigClick.connect( SigC::slot( *this, &BuildingControlWindow::repair ));
          }
       }
 
@@ -978,11 +1021,7 @@ class DamageControlWindow : public SubWindow {
          if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
             return false;
          
-         Building* bld = dynamic_cast<Building*>(cd->getContainer() );
-         if ( bld && bld->damage > 0 )
-            return true;
-         else
-            return false;
+         return dynamic_cast<Building*>(cd->getContainer() );
       };
       
       ASCString getASCTXTname()
@@ -994,9 +1033,15 @@ class DamageControlWindow : public SubWindow {
       {
          Resources res;
          container()->getMaxRepair ( container(), 0, res  );
+
+         cargoDialog->setLabelText( "RepairCostLabel", "Cost for repairing " + ASCString::toString( container()->repairableDamage() ) + "%", widget );
+         
          cargoDialog->setLabelText( "EnergyCost", res.energy, widget );
          cargoDialog->setLabelText( "MaterialCost", res.material, widget );
          cargoDialog->setLabelText( "FuelCost", res.fuel, widget );
+         cargoDialog->setLabelText( "Jamming", container()->baseType->jamming , widget );
+         cargoDialog->setLabelText( "View", container()->baseType->view, widget );
+         cargoDialog->setLabelText( "Armor", container()->getArmor(), widget );
       }
 };
 
@@ -1508,13 +1553,11 @@ class MiningWindow : public MatterAndMiningBaseWindow {
 
 class DamageBarWidget : public PG_ThemeWidget {
    private:
-      DI_Color color;
       ContainerBase* container;
    public:
-      DamageBarWidget (PG_Widget *parent, const PG_Rect &rect, DI_Color color, ContainerBase* container ) : PG_ThemeWidget( parent, rect, false )
+      DamageBarWidget (PG_Widget *parent, const PG_Rect &rect, ContainerBase* container ) : PG_ThemeWidget( parent, rect, false )
       {
          this->container = container;
-         this->color = color;
       };
 
 
@@ -1525,6 +1568,8 @@ class DamageBarWidget : public PG_ThemeWidget {
       
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
       {
+         DI_Color color( container->damage * 255 / 100, (100-container->damage) * 255/100, 0  );
+         
          PG_Rect r = dst;
          r.w = (100 - container->damage ) * dst.w / 100;
 
@@ -1589,8 +1634,8 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    subwindows.push_back( new ResourceInfoWindow );
    // subwindows.push_back( new NetControlWindow );
 
-   damageControlWindow = new DamageControlWindow;
-   subwindows.push_back( damageControlWindow );
+   buildingControlWindow = new BuildingControlWindow;
+   subwindows.push_back( buildingControlWindow );
    
    researchWindow = new ResearchWindow;
    subwindows.push_back( researchWindow );
@@ -1711,10 +1756,8 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
    }
    
    if ( label == "DamageBar" ) {
-      int color;
-      pc.addInteger("Color", color );
-      DamageBarWidget* dbw = new DamageBarWidget( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), color, container );
-      damageControlWindow->damageChanged.connect( SigC::slot( *dbw, &DamageBarWidget::repaint ));
+      DamageBarWidget* dbw = new DamageBarWidget( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
+      buildingControlWindow->damageChanged.connect( SigC::slot( *dbw, &DamageBarWidget::repaint ));
    }
 
    if ( label == "ScrollArea" ) {

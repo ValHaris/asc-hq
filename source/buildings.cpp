@@ -295,7 +295,7 @@ MapCoordinate3D Building::getPosition3D() const
    return p3;
 }
 
-int Building :: getArmor ( void )
+int Building :: getArmor ( ) const
 {
    return typ->_armor * gamemap->getgameparameter( cgp_buildingarmor ) / 100;
 }

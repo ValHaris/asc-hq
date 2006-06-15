@@ -172,14 +172,12 @@ void Vehicle :: init ( void )
          if (typ->height & chschwimmend )
             height = chschwimmend;
 
-      armor = typ->armor;
       for ( int m = 0; m < typ->weapons.count ; m++)
          weapstrength[m] = typ->weapons.weapon[m].maxstrength;
 
       setMovement ( typ->movement[log2(height)], 0 );
    } else {
       height = 0;
-      armor = 0;
 
       setMovement ( 0, 0 );
    }
@@ -306,7 +304,6 @@ void Vehicle::transform ( const Vehicletype* type )
       ammo[m] = typ->weapons.weapon[m].count;
       weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
-   armor = typ->armor;
 }
 
 void Vehicle :: postRepair ( int oldDamage )
@@ -1098,7 +1095,6 @@ void Vehicle :: fillMagically( void )
       ammo[m] = typ->weapons.weapon[m].count;
       weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
-   armor = typ->armor;
 }
 
 
@@ -1179,9 +1175,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
        bm |= cem_direction;
 
 
-    if ( armor != typ->armor )
-       bm |= cem_armor;
-
     if ( networkid )
        bm |= cem_networkid;
 
@@ -1254,9 +1247,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( bm & cem_energy )
          stream.writeInt ( tank.energy );
-
-    if ( bm & cem_armor )
-         stream.writeWord ( armor );
 
     if ( bm & cem_networkid )
          stream.writeInt ( networkid );
@@ -1429,9 +1419,7 @@ void   Vehicle::readData ( tnstream& stream )
        stream.readChar(); // was: class
 
     if ( bm & cem_armor )
-       armor = stream.readWord();
-    else
-       armor = typ->armor;
+       stream.readWord(); // was: armor
 
     if ( bm & cem_networkid )
        networkid = stream.readInt();
@@ -1501,7 +1489,6 @@ void   Vehicle::readData ( tnstream& stream )
           throw ASCmsgException ( "Vehicle::read() - inconsistent data stream" );
     }
 
-    armor = typ->armor;
     for ( int m = 0; m < typ->weapons.count ; m++)
        if ( typ->weapons.weapon[m].getScalarWeaponType() >= 0 )
           weapstrength[m] = typ->weapons.weapon[m].maxstrength;
@@ -1609,6 +1596,12 @@ int Vehicle::maxAmmo( int type ) const
 }
 
 
+int Vehicle::getArmor() const
+{
+   return typ->armor;
+}
+
+
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
   #ifdef sgmain
@@ -1677,4 +1670,5 @@ const SingleWeapon* Vehicle::getWeapon( unsigned weaponNum )
   else
      return NULL;
 }
+
 

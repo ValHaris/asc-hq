@@ -76,13 +76,12 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
 	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
 	statisticdialog.$(OBJEXT) clipboard.$(OBJEXT) \
-	geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
-	guidimension.$(OBJEXT) guiiconhandler.$(OBJEXT) \
-	guifunctions.$(OBJEXT) iconrepository.$(OBJEXT) \
-	gamedialog.$(OBJEXT) infopopup.$(OBJEXT) \
-	overviewmapimage.$(OBJEXT) asc-mainscreen.$(OBJEXT) \
-	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT) \
-	weathercast.$(OBJEXT) messaginghub.$(OBJEXT) \
+	geometry.$(OBJEXT) guidimension.$(OBJEXT) \
+	guiiconhandler.$(OBJEXT) guifunctions.$(OBJEXT) \
+	iconrepository.$(OBJEXT) gamedialog.$(OBJEXT) \
+	infopopup.$(OBJEXT) overviewmapimage.$(OBJEXT) \
+	asc-mainscreen.$(OBJEXT) mapfield.$(OBJEXT) \
+	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
 	explosivemines.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
 	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
 	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
@@ -269,10 +268,10 @@ vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cp
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp weatherarea.cpp \
+gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-weathercast.cpp messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
+messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp
 
@@ -442,8 +441,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherarea.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weathercast.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 
 .cpp.o:

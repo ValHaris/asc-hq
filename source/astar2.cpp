@@ -469,7 +469,7 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
       fieldAccess[i] = 0;
    }
 
-   if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weatherSystem->getCurrentWindSpeed() ) {
+   if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
       wind = new WindMovement ( veh );
    } else
       wind = NULL;

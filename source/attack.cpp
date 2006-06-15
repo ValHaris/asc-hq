@@ -269,7 +269,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    av.strength = int( attackingunit->weapstrength[_weapon]
                       * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height )
                       * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[attackedunit->typ->movemalustyp] / 100 );
-   av.armor  = attackingunit->armor;
+   av.armor  = attackingunit->getArmor();
    av.damage     = attackingunit->damage;
    av.experience  = attackingunit->experience;
    av.hemming    = 1;
@@ -338,7 +338,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    }
 
 
-   dv.armor = attackedunit->armor;
+   dv.armor = attackedunit->getArmor();
    dv.damage    = attackedunit->damage;
    dv.experience = attackedunit->experience;
    if ( dist <= maxmalq && attackingunit->height < chtieffliegend )
@@ -436,7 +436,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
                        * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
                        * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
 
-   av.armor = attackingunit->armor;
+   av.armor = attackingunit->getArmor();
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
    av.hemming    = 1;
@@ -566,7 +566,7 @@ void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &at
    av.weapontype = cwminen;
 
    dv.strength = 0;
-   dv.armor = attackedunit->armor;
+   dv.armor = attackedunit->getArmor();
    dv.damage    = attackedunit->damage;
    dv.experience = attackedunit->experience;
    dv.defensebonus = 0;
@@ -661,7 +661,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
                        * weapDist.getWeapStrength(weap, dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
                        * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
 
-   av.armor = attackingunit->armor;
+   av.armor = attackingunit->getArmor();
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
    av.weapnum    = _weapon;

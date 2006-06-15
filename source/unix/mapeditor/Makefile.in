@@ -78,8 +78,7 @@ am_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
 	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
 	resourceplacement.$(OBJEXT) resourceplacementdialog.$(OBJEXT) \
-	geometry.$(OBJEXT) weatherarea.$(OBJEXT) \
-	guidimension.$(OBJEXT) weatherdialog.$(OBJEXT) \
+	geometry.$(OBJEXT) guidimension.$(OBJEXT) \
 	iconrepository.$(OBJEXT) overviewmapimage.$(OBJEXT) \
 	mapfield.$(OBJEXT) objects.$(OBJEXT) \
 	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
@@ -267,7 +266,7 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp weatherarea.cpp guidimension.cpp weatherdialog.cpp \
+geometry.cpp guidimension.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
@@ -427,8 +426,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherarea.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weatherdialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 
 .cpp.o:
