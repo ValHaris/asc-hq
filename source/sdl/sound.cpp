@@ -84,6 +84,9 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
 			(audio_format&0xFF),
 			(audio_channels > 1) ? "stereo" : "mono");
       Mix_HookMusicFinished ( trackFinished );
+
+      Mix_ChannelFinished( channelFinishedCallback );
+
    }
 }
 
@@ -247,43 +250,86 @@ Mix_Chunk* SoundSystem::loadWave ( const ASCString& name )
    return chunk;
 }
 
+void SoundSystem::channelFinishedCallback( int channelnum )
+{
+   if ( getInstance()->channel[channelnum] ) 
+      getInstance()->channel[channelnum]->finishedSignal( channelnum );
+}
 
 
-Sound::Sound( const ASCString& filename, int _fadeIn ) : name ( filename ), wave(NULL), fadeIn ( _fadeIn ) 
+
+
+Sound::Sound( const ASCString& filename, int _fadeIn ) : name ( filename ), mainwave(NULL), startwave(NULL), fadeIn ( _fadeIn ), waitingForMainWave(false)
 {
    if ( !SoundSystem::instance )
       fatalError ( "Sound::Sound failed, because there is no SoundSystem initialized");
 
-   wave = SoundSystem::instance->loadWave( filename );
+   mainwave = SoundSystem::instance->loadWave( filename );
+}
+
+Sound::Sound( const ASCString& startSoundFilename, const ASCString& continuousSoundFilename, int _fadeIn ) : name ( startSoundFilename ), mainwave(NULL), startwave(NULL), fadeIn ( _fadeIn ), waitingForMainWave(false) 
+{
+   if ( !SoundSystem::instance )
+      fatalError ( "Sound::Sound failed, because there is no SoundSystem initialized");
+
+   startwave = SoundSystem::instance->loadWave( startSoundFilename );
+   mainwave = SoundSystem::instance->loadWave( continuousSoundFilename );
 }
 
 
-void Sound::play(void)
+int Sound::startPlaying( bool loop )
 {
-   if( SoundSystem::instance->areEffectsMuted() || !wave)
-      return;
-
    int channel;
+
+   int loopcontrol;
+   if ( loop ) 
+      loopcontrol = -1;
+   else
+      loopcontrol = 0;
+
+   Mix_Chunk* wave  = startwave;
+   if ( !wave ) 
+      wave = mainwave;
+   else
+      loopcontrol = 0;
+
    if ( fadeIn )
-      channel = Mix_FadeInChannel ( -1, wave, 0, fadeIn );
+      channel = Mix_FadeInChannel ( -1, wave, loopcontrol, fadeIn );
    else {
-      channel = Mix_PlayChannel ( -1, wave, 0 );
+      channel = Mix_PlayChannel ( -1, wave, loopcontrol );
       Mix_Volume ( channel, SoundSystem::instance->getEffectVolume() );
    }
+   if ( startwave ) {
+      waitingForMainWave = true;
+   }
+
+   return channel;
+}
+
+void Sound::finishedSignal( int channelnum )
+{
+   if ( waitingForMainWave ) {
+      Mix_PlayChannel ( channelnum, mainwave, -1 );
+      Mix_Volume ( channelnum, SoundSystem::instance->getEffectVolume() );
+      waitingForMainWave = false;
+   }
+}
+
+void Sound::play(void)
+{
+   if( SoundSystem::instance->areEffectsMuted() || !mainwave)
+      return;
+
+   int channel = startPlaying( false );
    SoundSystem::instance->channel[ channel ] = this;
 }
 
 void Sound::playLoop()
 {
-   if( SoundSystem::instance->areEffectsMuted() || !wave)
+   if( SoundSystem::instance->areEffectsMuted() || !mainwave)
       return;
 
-   int channel;
-   if ( fadeIn )
-      channel = Mix_FadeInChannel ( -1, wave, -1, fadeIn );
-   else
-      channel = Mix_PlayChannel ( -1, wave, -1 );
-
+   int channel = startPlaying( true );
    SoundSystem::instance->channel[ channel ] = this;
 }
 
@@ -297,10 +343,18 @@ void Sound::stop()
 
 void Sound::playWait(void)
 {
-   if( SoundSystem::instance->areEffectsMuted() || !wave)
+   if( SoundSystem::instance->areEffectsMuted() || !mainwave)
       return;
 
-   int channel = Mix_PlayChannel ( -1, wave, 0 );
+   if ( startwave ) {
+      int channel = Mix_PlayChannel ( -1, startwave, 0 );
+      SoundSystem::instance->channel[ channel ] = this;
+      do {
+         SDL_Delay(WAIT_SLEEP_MSEC);
+      } while( SoundSystem::instance->channel[ channel ] == this  && Mix_Playing(channel)  );
+   }
+
+   int channel = Mix_PlayChannel ( -1, mainwave, 0 );
    SoundSystem::instance->channel[ channel ] = this;
 
    do {
@@ -321,8 +375,11 @@ Sound::~Sound(void)
 {
    stop();
 
-   if ( wave )
-      Mix_FreeChunk ( wave );
+   if ( mainwave )
+      Mix_FreeChunk ( mainwave );
+
+   if ( startwave )
+      Mix_FreeChunk ( startwave );
 }
 
 

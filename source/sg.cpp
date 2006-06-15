@@ -623,17 +623,23 @@ void execuseraction ( tuseractions action )
          }
          break;
 
-      case ua_toggleunitshading:
-         CGameOptions::Instance()->units_gray_after_move = !CGameOptions::Instance()->units_gray_after_move;
-         CGameOptions::Instance()->setChanged();
-         displaymap();
-         while ( mouseparams.taste )
-            releasetimeslice();
+      case ua_toggleunitshading: 
+         {
+            CGameOptions::Instance()->units_gray_after_move = !CGameOptions::Instance()->units_gray_after_move;
+            CGameOptions::Instance()->setChanged();
+            displaymap();
+            while ( mouseparams.taste )
+               releasetimeslice();
 
-         if ( CGameOptions::Instance()->units_gray_after_move )
-            infoMessage ("units that can not move will now be displayed gray");
-         else
-            infoMessage ("units that can not move and cannot shoot will now be displayed gray");
+            ASCString condition;
+            if ( CGameOptions::Instance()->units_gray_after_move )
+               condition = "- thay can't move";
+            else
+               condition = "- thay can't move AND\n- thay can't shoot";
+
+            infoMessage ("units that now displayed shaded when:\n" + condition);
+         }
+
          break;
 
       case ua_computerturn:

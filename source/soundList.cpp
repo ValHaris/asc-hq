@@ -74,7 +74,7 @@ void SoundList::init( )
    instance->initialize ( );
 }
 
-void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype, int fadeIn )
+void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype )
 {
    vector<ASCString> labels;
    vector<ASCString> files;
@@ -85,7 +85,7 @@ void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundLis
 
    SoundAssignment s;
    if ( files.size() && !files[0].empty() )
-      s.defaultSound = getSound( files[0], fadeIn );
+      s.defaultSound = getSound( files[0] );
    else
       s.defaultSound = NULL;
 
@@ -93,7 +93,7 @@ void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundLis
    s.subType = subtype;
 
    for( int i = 0; i < labels.size() && i < files.size() ; i++ )
-      s.snd[ copytoLower(labels[i]) ] = getSound( files[i], fadeIn );
+      s.snd[ copytoLower(labels[i]) ] = getSound( files[i] );
 
    soundAssignments.push_back ( s );
 }
@@ -154,13 +154,23 @@ void SoundList::initialize(  )
 
 }
 
-Sound* SoundList::getSound( const ASCString& filename, int fadeIn )
+Sound* SoundList::getSound( const ASCString& filename )
 {
    displayLogMessage ( 5, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
 
    if ( soundFiles.find ( filename ) == soundFiles.end() ) {
      displayLogMessage ( 5, " Sound has not been loaded ...\n" );
-     Sound* s = new Sound ( filename, fadeIn );
+
+     Sound* s;
+     if( filename.find(':') != ASCString::npos ) {
+        ASCString primary = filename.substr( 0, filename.find(':'));
+        ASCString secondary = filename.substr( filename.find(':')+1 );
+        displayLogMessage ( 8, " this is a multipart sound\n" );
+        s = new Sound( primary, secondary );
+     } else {
+        s = new Sound ( filename );
+     }
+
      soundFiles[filename] = s;
      if ( s != NULL )
         displayLogMessage ( 5, " loading sound completed\n" );
@@ -179,7 +189,7 @@ Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
       return NULL;
 
    if ( label.find ( "." ) != ASCString::npos ) {
-      return getSound ( label, 0 );
+      return getSound ( label );
    } else {
       
       ASCString newlabel = copytoLower(label);

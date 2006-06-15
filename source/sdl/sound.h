@@ -15,7 +15,6 @@
 #include "../ascstring.h"
 #include "../music.h"
 
-
 class Sound {
    public:
      /** Create a Sound from the .wav file specified by filename.
@@ -25,6 +24,7 @@ class Sound {
       *  \param fadeIn is a time in milliseconds
       */
      Sound( const ASCString& filename, int fadeIn = 0 );
+     Sound( const ASCString& startSoundFilename, const ASCString& continuousSoundFilename, int fadeIn = 0 );
 
      void play(void);
      void playWait(void);
@@ -34,21 +34,30 @@ class Sound {
 
      void fadeOut ( int ms );
 
+     friend class SoundSystem;
+
      ~Sound(void);
    private:
      /** A name for this sound - mostly for debugging purposes */
      const ASCString name;
 
+     //! returns the channel
+     int startPlaying( bool loop ); 
+
+     void finishedSignal( int channelnum );
+
      //! the actual wave data
-     Mix_Chunk *wave;
+     Mix_Chunk *mainwave;
+     Mix_Chunk *startwave;
 
      int fadeIn;
+     bool waitingForMainWave;
 };
 
 
 class SoundSystem {
       bool effectsMuted;
-      int off;
+      bool off;
       bool sdl_initialized;
       bool mix_initialized;
       int musicVolume;
@@ -64,6 +73,8 @@ class SoundSystem {
       static void trackFinished( void );
 
       void nextTrack ( void );
+
+      static void channelFinishedCallback( int channelnum );
 
       enum MusicState { uninitialized, init_ready, init_paused, playing, paused } musicState;
    protected:

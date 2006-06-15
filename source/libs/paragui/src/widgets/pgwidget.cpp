@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-06-09 19:52:40 $
+   Update Date:      $Date: 2006-06-15 08:43:28 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.6 $
+   CVS/RCS Revision: $Revision: 1.1.2.7 $
    Status:           $State: Exp $
  */
 
@@ -1963,7 +1963,9 @@ bool PG_Widget::checkForHotkey( const SDL_KeyboardEvent* key )
    if ( key->type != SDL_KEYDOWN )
       return false;
 
-   if( (key->keysym.mod & _mid->hotkeyModifier) || (key->keysym.mod == _mid->hotkeyModifier) )
+   int mod = key->keysym.mod & ~( KMOD_NUM | KMOD_CAPS );
+
+   if( (mod & _mid->hotkeyModifier) || (mod == _mid->hotkeyModifier) )
       if( key->keysym.unicode == _mid->hotkey )
          return true;
 

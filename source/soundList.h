@@ -50,7 +50,7 @@ private:
      typedef map<ASCString,Sound*> SoundFiles;
      SoundFiles  soundFiles;
 
-     Sound* getSound( const ASCString& filename, int fadeIn );
+     Sound* getSound( const ASCString& filename );
 
       struct SoundAssignment {
            SoundList::Sample sample;
@@ -59,7 +59,7 @@ private:
            map<ASCString,Sound*> snd;
       };
      vector<SoundAssignment> soundAssignments;
-     void readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype = 0, int fadeIn = 0 );
+     void readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype = 0 );
 };
 
 #endif
