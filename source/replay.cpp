@@ -1917,6 +1917,11 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    orgmap = actmap;
    actmap = loadreplay ( orgmap->replayinfo->map[player]  );
+   if ( !actmap ) {
+      displaymessage("error loading replay", 1 );
+      actmap = orgmap;
+      return 0;
+   }
 
    transfer_all_outstanding_tribute();   
 

@@ -1141,6 +1141,10 @@ int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
      if ( inputbufread >= inputbufused ) {
         inputbufused = stream->readcmpdata ( inputbuf, inputbufsize, 0 );
 
+        if ( !inputbufused && excpt )
+           throw tcompressionerror ( "Decompressor :: out of data", 0 );
+
+
         for ( int i = 0; i < inputbufused; i++ )
            inputbuf[i] ^= bzip_xor_byte;
 
