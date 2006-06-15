@@ -83,7 +83,11 @@ class SubWinButton : public PG_Button
          SetBackground( HIGHLITED, IconRepository::getIcon("cargo-buttonhighlighted.png").getBaseSurface() );
          SetBackground( UNPRESSED, IconRepository::getIcon("cargo-buttonunpressed.png").getBaseSurface() );
          SetBorderSize(0,0,0);
-         SetIcon( IconRepository::getIcon(ASCString("cargo-") + subWindow->getASCTXTname() + ".png" ).getBaseSurface() );
+         ASCString filename = ASCString("cargo-") + subWindow->getASCTXTname();
+         SetIcon( IconRepository::getIcon( filename + ".png" ).getBaseSurface(), 
+                  IconRepository::getIcon( filename + "-pressed.png" ).getBaseSurface(),
+                  IconRepository::getIcon( filename + ".png" ).getBaseSurface() );
+         SetToggle( true );
       };
 };
 
@@ -289,6 +293,8 @@ class CargoDialog : public Panel
       typedef deallocating_vector<SubWindow*> Subwindows;
       Subwindows subwindows;
 
+      vector<SubWinButton*> subWinButtons;
+
       CargoWidget* cargoWidget;
       SubWindow* researchWindow;
       SubWindow* matterWindow;
@@ -377,6 +383,10 @@ class CargoDialog : public Panel
          for ( int i = 0; i < activesubwindows.size(); ++i )
             if ( activesubwindows[i]->getASCTXTname() == pane )
                show( activesubwindows[i]->getASCTXTname() );
+
+         for ( int i = 0; i< subWinButtons.size(); ++i )
+            subWinButtons[i]->SetPressed( activesubwindows[i]->getASCTXTname() == pane );
+
          PG_Application::SetBulkMode(false);
          Update();
       };
@@ -1586,8 +1596,11 @@ class DamageBarWidget : public PG_ThemeWidget {
             Surface s = Surface::Wrap( PG_Application::GetScreen() );
             ColorMerger_Set<4> cm ( c );
             drawLine<4> ( s, cm, SPoint(dst.x, dst.y + h), SPoint( dst.x + w2, dst.y + h));
+            drawLine<4> ( s, cm, SPoint(dst.x, dst.y + h+1), SPoint( dst.x + w2, dst.y + h+1));
+            drawLine<4> ( s, cm, SPoint(dst.x, dst.y + dst.h - h-1), SPoint( dst.x + w2, dst.y + dst.h - h-1));
             drawLine<4> ( s, cm, SPoint(dst.x, dst.y + dst.h - h), SPoint( dst.x + w2, dst.y + dst.h - h));
             drawLine<4> ( s, cm, SPoint( dst.x + w2, dst.y), SPoint( dst.x + w2, dst.y + dst.h));
+            drawLine<4> ( s, cm, SPoint( dst.x-1 + w2, dst.y), SPoint( dst.x-1 + w2, dst.y + dst.h));
          }
       
 /*         Uint32 c = color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
@@ -1723,6 +1736,7 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
             x = 0;
             y += SubWinButton::buttonheight;
          }
+         subWinButtons.push_back( button );
       }
    }
 

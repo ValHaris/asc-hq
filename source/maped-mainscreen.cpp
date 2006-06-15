@@ -717,7 +717,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( mod & KMOD_ALT ) {
       switch ( key->keysym.sym ) {
             case SDLK_RETURN:
-               getPGApplication().toogleFullscreen();
+               getPGApplication().toggleFullscreen();
                return true;
 
             default:;

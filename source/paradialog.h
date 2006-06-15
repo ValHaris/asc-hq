@@ -87,7 +87,7 @@ class StartupScreen: public SigC::Object {
        void Quit ();
 
        bool isFullscreen() { return fullScreen; };
-       bool toogleFullscreen();
+       bool toggleFullscreen();
 
        void setIcon( const ASCString& filename );
        

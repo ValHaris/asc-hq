@@ -433,12 +433,6 @@
 				RelativePath="..\..\..\viewcalculation.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\weatherarea.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\weathercast.cpp">
-			</File>
-			<File
 				RelativePath="..\..\win32-errormsg.cpp">
 			</File>
 			<Filter

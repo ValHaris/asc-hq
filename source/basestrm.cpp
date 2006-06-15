@@ -692,7 +692,7 @@ SDL_RWops *SDL_RWFromStream( pnstream stream )
 
 
 tncontainerstream :: tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int dirLevel )
-        : tn_file_buf_stream ( containerfilename, reading )
+        : tn_file_buf_stream ( containerfilename, reading ), index(NULL)
 {
    num = 0;
    char magic[4];

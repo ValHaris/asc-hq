@@ -486,10 +486,10 @@ panel {
          InfoText {
             type = StaticText
             text = Building Status
-            x = 10
-            y = 10
-            height = 20
-            width = 100
+            x = 20
+            y = 6
+            x2 = 241
+            y2 = 20
          } InfoText   
 
          RepairButton {
@@ -513,7 +513,7 @@ panel {
             type = TextOutput
             textalign = right
             x = 354
-            y = 54
+            y = 55
             width = 50
             height = 16
          } EnergyCost
@@ -521,7 +521,7 @@ panel {
             type = TextOutput
             textalign = right
             x = 406
-            y = 54
+            y = 55
             width = 50
             height = 16
          } MaterialCost
@@ -529,9 +529,9 @@ panel {
             type = TextOutput
             textalign = right
             x = 458
-            y = 54
+            y = 55
             width = 50
-            height = 18
+            height = 16
          } FuelCost
 
          BuildingInfo {
@@ -545,7 +545,7 @@ panel {
             ViewLabel {
                type = staticText
                text = View
-               x = 0
+               x = 2
                y = 0
                width = 137
                height = 15
@@ -553,7 +553,7 @@ panel {
             JammingLabel {
                type = staticText
                text = Jamming
-               x = 0
+               x = 2
                y = 18
                width = 137
                height = 15
@@ -561,7 +561,7 @@ panel {
             ArmorLabel {
                type = staticText
                text = Armor
-               x = 0
+               x = 2
                y = 36
                width = 137
                height = 15

@@ -1471,7 +1471,7 @@ bool validatemapfile ( const ASCString& filename )
 
    } /* endtry */
 
-   catch ( ASCexception ) {
+   catch ( ... ) {
        return false;
    } /* endcatch */
 

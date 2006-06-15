@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-06-15 08:43:28 $
+   Update Date:      $Date: 2006-06-15 19:55:43 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.7 $
+   CVS/RCS Revision: $Revision: 1.1.2.8 $
    Status:           $State: Exp $
  */
 
@@ -1957,6 +1957,9 @@ int PG_Widget::getHotkeyModifier()
 
 bool PG_Widget::checkForHotkey( const SDL_KeyboardEvent* key )
 {
+   if ( !_mid->hotkey )
+      return false;
+
    if ( _mid->hotkeyModifier < 0 )
       return false;
 

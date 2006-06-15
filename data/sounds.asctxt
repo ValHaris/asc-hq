@@ -2,8 +2,10 @@ sounds {
    shoot.cruisemissile.files = weapon00.wav
    shoot.mine.files = weapon01.wav
    shoot.bomb.files = weapon02.wav
+   shoot.largemissile.files = weapon03.wav
    shoot.airmissile.files = weapon03.wav
    shoot.groundmissile.files = raketenari.wav
+   shoot.smallmissile.files = raketenari.wav
    shoot.torpedo.files = weapon05.wav
    shoot.machinegun.files = weapon06.wav
    shoot.cannon.files = weapon07.wav 

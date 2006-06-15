@@ -595,7 +595,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 void BuildingType::convertOldFunctions( int abilities, const ASCString& location  )
 {
    features.reset();
-   if ( abilities & 1 ) errorMessage ( location + ": The HQ function for buildings is not supported any more");
+   if ( abilities & 1 ) warning ( location + ": The HQ function for buildings is not supported any more");
    if ( abilities & 2 ) features.set( TrainingCenter );
    if ( abilities & (1 << 3) ) features.set( InternalVehicleProduction );
    if ( abilities & (1 << 4) ) features.set( AmmoProduction );

@@ -167,7 +167,7 @@ class EditGameOptions : public ASC_PG_Dialog {
                infoMessage( "The new resolution will be used after you restart ASC");
 
             if ( getPGApplication().isFullscreen() != fullscreen ) 
-               getPGApplication().toogleFullscreen();
+               getPGApplication().toggleFullscreen();
             
             
             CGameOptions::Instance()->setChanged();

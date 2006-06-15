@@ -199,7 +199,7 @@ void ASC_PG_App::eventIdle()
 
 
 
-bool ASC_PG_App::toogleFullscreen()
+bool ASC_PG_App::toggleFullscreen()
 {
    if ( !GetScreen() )
       return false;
@@ -220,12 +220,12 @@ bool ASC_PG_App::toogleFullscreen()
    } else
       fullScreen = !fullScreen;
 
-      SetScreen(screen);
-      PG_Widget::UpdateScreen();
+   SetScreen(screen);
+   PG_Widget::UpdateScreen();
 
-      SDL_ShowCursor(1);
+   SDL_ShowCursor(1);
 
-      return true;
+   return true;
 }
 
 
