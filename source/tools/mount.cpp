@@ -269,7 +269,7 @@ void testcompress ( char* name, int size )
       
    char newname[1000];
    char* orgname = name;
-   if ( patimat ( "*.pcx", name ) ) {
+   if ( patimat ( "*.pcx", name, true ) ) {
 
       FILE* infile = fopen ( name, filereadmode );
 
@@ -427,20 +427,45 @@ int main(int argc, char *argv[] )
    pos += fwrite ( containermagic, 1, 4, out );
    pos += writeInt( out, i );
 
+
+   char orgWorkingDir[10000];
+   if ( !getcwd( orgWorkingDir, 10000 ))
+      fatalError( "could not obtain working directory");
+
+
    for ( int df = cl.next_param(); df < argc-1; df++ ) {
       int compress = 1;
 
-      DIR *dirp;
-      struct ASC_direct *direntp;
 
-      dirp = opendir( "." );
+      char buf[10000];
+      strncpy( buf, argv[df], 10000 );
+
+      char* filename = buf;
+      char* dirname = ".";
+
+      while ( strchr( buf, foreignPathDelimitter ))
+         *strchr( buf, foreignPathDelimitter ) = pathdelimitter;
+
+      if ( strchr( filename , pathdelimitter )) {
+         char* c = filename + strlen( filename );
+         while ( *c != pathdelimitter ) 
+            c -= 1;
+         
+         dirname = buf;
+         filename = c+1;
+         *c = 0;
+      }
+
+      
+
+      DIR * dirp = opendir( dirname );
       if( dirp != NULL ) {
          for(;;) {
-            direntp = readdir( dirp );
+            struct ASC_direct *direntp = readdir( dirp );
             if ( direntp == NULL )
                break;
 
-            if ( patimat ( argv[df] , direntp->d_name ) &&
+            if ( patimat ( filename , direntp->d_name, true ) &&
                   strcmp ( direntp->d_name, "." ) != 0 &&
                   strcmp ( direntp->d_name, ".." ) != 0 ) {
                int    fnd = 0;
@@ -453,6 +478,9 @@ int main(int argc, char *argv[] )
                }
 
                if ( !fnd ) {
+                  if ( chdir(dirname)  != 0 )
+                     fatalError( "could not change directory (1)");
+
                   if ( verbose )
                      printf( direntp->d_name );
                   if ( compress )
@@ -462,6 +490,8 @@ int main(int argc, char *argv[] )
                         printf ( " is not compressed, " );
                      copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
                   }
+                  if ( chdir(orgWorkingDir)  != 0 )
+                     fatalError( "could not change directory (2)");
                }
             }
          }
@@ -478,8 +508,12 @@ int main(int argc, char *argv[] )
       writeInt( out, nindex[i].name ? 1 : 0 );
       writeInt( out, nindex[i].start );
       writeInt( out, nindex[i].end );
-      if ( nindex[i].name )
+
+      if ( nindex[i].name ) {
+         for ( int j = 0; j < strlen ( nindex[i].name ); ++j )
+            nindex[i].name[j] = tolower( nindex[i].name[j] );
          fwrite ( nindex[i].name, 1, strlen ( nindex[i].name ) + 1, out );
+      }
 
    } /* endfor */
 

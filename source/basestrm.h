@@ -560,7 +560,7 @@ extern int compressrle ( const void* p, void* q);
     only understands dos/windows style wildcards: * and ?
 */
 // extern bool patimat (const char *pat, const char *str);
-extern bool patimat (const ASCString& pat, const ASCString& str);
+extern bool patimat (const ASCString& pat, const ASCString& str, bool forceCaseInsensitivity = false) ;
 
 extern int checkforvaliddirectory ( char* dir );
 

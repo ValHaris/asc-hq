@@ -1752,31 +1752,36 @@ int    compressrle ( const void* p, void* q)
 
 
 
-bool patimat (const char *pat, const char *str)
+bool patimat (const char *pat, const char *str, bool forceCaseInsensitivity )
 {
-      switch (*pat)
-      {
+   switch (*pat)
+   {
       case '\0':
-            return !*str;
+         return !*str;
 
       case '*' :
-            return patimat(pat+1, str) || *str && patimat(pat, str+1);
+         return patimat(pat+1, str, forceCaseInsensitivity) || *str && patimat(pat, str+1, forceCaseInsensitivity);
 
       case '?' :
-            return *str && patimat(pat+1, str+1);
+         return *str && patimat(pat+1, str+1, forceCaseInsensitivity);
 
       default  :
-#if CASE_SENSITIVE_FILE_NAMES == 0 
-            return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1);
+         if ( forceCaseInsensitivity ||
+#if CASE_SENSITIVE_FILE_NAMES == 0
+              true
 #else
-            return (*pat == *str) && patimat(pat+1, str+1);
+              false
 #endif
-      }
+            )
+            return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1, forceCaseInsensitivity);
+         else
+            return (*pat == *str) && patimat(pat+1, str+1, forceCaseInsensitivity );
+   }
 }
 
-bool patimat (const ASCString& pat, const ASCString& str)
+bool patimat (const ASCString& pat, const ASCString& str, bool forceCaseInsensitivity)
 {
-   return patimat( pat.c_str(), str.c_str() );
+   return patimat( pat.c_str(), str.c_str(), forceCaseInsensitivity );
 }
 
 
