@@ -559,7 +559,7 @@ extern int compressrle ( const void* p, void* q);
 /** checks whether the regular expression pat matches the string str . This functions
     only understands dos/windows style wildcards: * and ?
 */
-extern bool patimat (const char *pat, const char *str);
+// extern bool patimat (const char *pat, const char *str);
 extern bool patimat (const ASCString& pat, const ASCString& str);
 
 extern int checkforvaliddirectory ( char* dir );
