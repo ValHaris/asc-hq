@@ -421,6 +421,12 @@ int main(int argc, char *argv[] )
    pos += fwrite ( containermagic, 1, 4, out );
    pos += writeInt( out, i );
 
+
+   char orgWorkingDir[10000];
+   if ( !getcwd( orgWorkingDir, 10000 ))
+      fatalError( "could not obtain working directory");
+
+
    for ( int df = cl.next_param(); df < argc-1; df++ ) {
       int compress = 1;
 
@@ -444,6 +450,8 @@ int main(int argc, char *argv[] )
          *c = 0;
       }
 
+      
+
       DIR * dirp = opendir( dirname );
       if( dirp != NULL ) {
          for(;;) {
@@ -464,7 +472,9 @@ int main(int argc, char *argv[] )
                }
 
                if ( !fnd ) {
-                  chdir(dirname);
+                  if ( chdir(dirname)  != 0 )
+                     fatalError( "could not change directory (1)");
+
                   if ( verbose )
                      printf( direntp->d_name );
                   if ( compress )
@@ -474,6 +484,8 @@ int main(int argc, char *argv[] )
                         printf ( " is not compressed, " );
                      copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
                   }
+                  if ( chdir(orgWorkingDir)  != 0 )
+                     fatalError( "could not change directory (2)");
                }
             }
          }
