@@ -126,9 +126,6 @@
 				RelativePath="..\..\buildingtype.cpp">
 			</File>
 			<File
-				RelativePath="..\..\CLoadable.cpp">
-			</File>
-			<File
 				RelativePath="..\..\containerbasetype.cpp">
 			</File>
 			<File
@@ -156,9 +153,6 @@
 				RelativePath="..\..\misc.cpp">
 			</File>
 			<File
-				RelativePath="..\..\Named.cpp">
-			</File>
-			<File
 				RelativePath="..\..\win32\msvc\ndir.c">
 			</File>
 			<File
@@ -169,12 +163,6 @@
 			</File>
 			<File
 				RelativePath="..\..\palette.cpp">
-			</File>
-			<File
-				RelativePath="..\..\Property.cpp">
-			</File>
-			<File
-				RelativePath="..\..\PropertyGroup.cpp">
 			</File>
 			<File
 				RelativePath="..\..\research.cpp">

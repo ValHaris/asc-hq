@@ -1198,7 +1198,6 @@ int main(int argc, char *argv[] )
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
-
    // we should think about replacing clparser with libpopt
    Cmdline* cl = NULL;
    try {

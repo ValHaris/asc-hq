@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-06-16 11:50:14 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgpropertyfield_checkbox.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -79,7 +79,7 @@ public:
 		checkbox = new PG_CheckButton( propertyEditor, r, PG_NULLSTR, -1, propertyEditor->GetStyleName("BoolProperty") );
 		checkbox->sigClick.connect( SigC::slot(*this, &PG_PropertyField_Checkbox::click));
 
-		if ( b ^ switchInverted )
+		if ( bool(b) ^ switchInverted )
 			checkbox->SetPressed();
 		else
 			checkbox->SetUnpressed();
@@ -97,7 +97,7 @@ public:
 	};
 	void Reload() {
 		if ( myProperty )
-			if ( *myProperty ^ switchInverted )
+			if ( bool(*myProperty) ^ switchInverted )
 				checkbox->SetPressed();
 			else
 				checkbox->SetUnpressed();
