@@ -1283,7 +1283,8 @@ int main(int argc, char *argv[] )
 
 
    app.setIcon( "program-icon.png" );
-   app.InitScreen( xr, yr, 32, flags);
+   if ( !app.InitScreen( xr, yr, 32, flags))
+      fatalError( "Could not initialize video mode");
   
 #ifdef WIN32
    delete win32ErrorDialogGenerator;

@@ -236,7 +236,12 @@ class EditGameOptions : public ASC_PG_Dialog {
 
 void editGameOptions ( bool mainApp  )
 {
-   EditGameOptions ego ( NULL, mainApp );
-   ego.Show();
-   ego.RunModal();
+   try {
+      EditGameOptions ego ( NULL, mainApp );
+      ego.Show();
+      ego.RunModal();
+   }
+   catch ( ... ) {
+      errorMessage( "An exception was caught" );
+   }
 }
