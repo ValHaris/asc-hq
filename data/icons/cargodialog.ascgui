@@ -606,7 +606,7 @@ panel {
          
          Filename = cargo-cargoinfo-subwin.png
 
-         ChildWidgets = InfoText LoadingMeter2 MeterLabel Label3 CurrentCargo FreeLabel MaxLabel WeightLabel SlotLabel FreeWeight MaxWeight FreeSlots MaxSlots TypeLabel TypeImage
+         ChildWidgets = InfoText LoadingMeter2 MeterLabel Label3 CurrentCargo FreeLabel MaxLabel WeightLabel SlotLabel FreeWeight MaxWeight FreeSlots MaxSlots TypeLabel TypeImage MaxUnitSizeLabel MaxUnitSize UnitTypeLabel UnitTypeList
          InfoText {
             type = StaticText
             text = Cargo Info
@@ -792,6 +792,42 @@ panel {
             height = 15
          } CargoUsage
 
+         MaxUnitSizeLabel {
+            x = 405
+            y = 131
+            x2 = 476
+            y2 = 140
+            type = StaticText
+            Text = Max unit weight
+         } MaxUnitSizeLabel
+         
+         MaxUnitSize {
+            x = 405
+            y = 144
+            x2 = 476
+            y2 = 156
+            type = TextOutput
+            textalign = right
+         } MaxUnitSize
+
+         UnitTypeLabel {
+            x = 405
+            y = 30
+            x2 = 476
+            y2 = 40
+            type = statictext
+            text = Loadable types
+         } UnitTypeLabel
+         
+         UnitTypeList {
+            type = scrollarea
+            userhandler = UnitTypeList
+            x = 405
+            y = 43
+            x2 = 476
+            y2 = 118
+         } UnitTypeList
+         
          
       } cargoinfo
       

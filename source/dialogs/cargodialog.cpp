@@ -64,6 +64,7 @@ class SubWindow: public SigC::Object
    public:
       virtual bool available( CargoDialog* cd ) = 0;
       virtual ASCString getASCTXTname() = 0;
+      virtual ASCString getFullName() = 0;
       virtual void registerSubwindow( CargoDialog* cd );
       virtual void registerChilds( CargoDialog* cd );
       virtual void update() = 0;
@@ -88,6 +89,7 @@ class SubWinButton : public PG_Button
                   IconRepository::getIcon( filename + "-pressed.png" ).getBaseSurface(),
                   IconRepository::getIcon( filename + ".png" ).getBaseSurface() );
          SetToggle( true );
+         new PG_ToolTipHelp ( this, subWindow->getFullName() );
       };
 };
 
@@ -810,6 +812,11 @@ class SolarPowerWindow : public SubWindow {
       {
          return "solarpower";
       };
+
+      ASCString getFullName()
+      {
+         return "Solar Power Generation";
+      };
       
       void update()
       {
@@ -844,7 +851,13 @@ class WindPowerWindow : public SubWindow {
       {
          return "windpower";
       };
-      
+
+      ASCString getFullName()
+      {
+         return "Wind Power Generation";
+      };
+
+
       void update()
       {
          cargoDialog->setLabelText( "MaxPower", container()->maxplus.energy, widget );
@@ -892,6 +905,12 @@ class NetControlWindow : public SubWindow {
          return "netcontrol";
       };
       
+      ASCString getFullName()
+      {
+         return "Resource Network Control";
+      };
+
+
       void registerChilds( CargoDialog* cd )
       {
          SubWindow::registerChilds( cd );
@@ -932,6 +951,11 @@ class CargoInfoWindow : public SubWindow {
          return "cargoinfo";
       };
       
+      ASCString getFullName()
+      {
+         return "Cargo Info";
+      };
+
 
       void registerChilds( CargoDialog* cd )
       {
@@ -990,6 +1014,7 @@ class CargoInfoWindow : public SubWindow {
          
          cargoDialog->setLabelText ( "FreeSlots", container()->baseType->maxLoadableUnits - container()->getCargo().size(), widget );
          cargoDialog->setLabelText ( "MaxSlots",  container()->baseType->maxLoadableUnits , widget );
+         cargoDialog->setLabelText ( "MaxUnitSize",  container()->baseType->maxLoadableUnitSize, widget );
          
       }
 };
@@ -1039,6 +1064,12 @@ class BuildingControlWindow : public SubWindow {
          return "damagecontrol";
       };
       
+      ASCString getFullName()
+      {
+         return "Building Control";
+      };
+
+
       void update()
       {
          Resources res;
@@ -1099,6 +1130,12 @@ class ResourceInfoWindow : public SubWindow {
          return "resourceinfo";
       };
       
+      ASCString getFullName()
+      {
+         return "Resource Network Information";
+      };
+
+
       void update()
       {
          int value[3][3][4];
@@ -1349,6 +1386,12 @@ class ResearchWindow : public SubWindow {
          return "research";
       };
       
+      ASCString getFullName()
+      {
+         return "Research Lab";
+      };
+
+
       void update()
       {
          Player& player = container()->getMap()->player[ container()->getOwner() ];
@@ -1492,7 +1535,12 @@ class MatterConversionWindow : public MatterAndMiningBaseWindow {
       {
          return "conventionalpower";
       };
-      
+
+      ASCString getFullName()
+      {
+         return "Power Generation";
+      };
+
 };
 
 
@@ -1553,6 +1601,12 @@ class MiningWindow : public MatterAndMiningBaseWindow {
          return "mining";
       };
       
+      ASCString getFullName()
+      {
+         return "Mining Facility";
+      };
+
+
       void update()
       {
          MatterAndMiningBaseWindow::update();
@@ -1823,6 +1877,17 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
          cargoWidget->unitClicked.connect ( SigC::slot( *this, &CargoDialog::onUnitClick ));
 
          container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
+      }
+   }
+   if ( label == "UnitTypeList" ) {
+      int y = 0;
+      parent->SetTransparency(255);
+      for ( int i = 0; i < cmovemalitypenum; ++i ) {
+         if ( container->baseType->vehicleCategoriesStorable & (1<<i)) {
+            PG_Image* img = new PG_Image( parent, PG_Point(0, y),IconRepository::getIcon(moveMaliTypeIcons[i] ).getBaseSurface(), false);
+            new PG_ToolTipHelp( img, cmovemalitypes[i] );
+            y += img->Height();
+         }
       }
 
    }
