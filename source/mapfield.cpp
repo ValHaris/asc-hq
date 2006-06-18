@@ -28,7 +28,6 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "spfst.h"
-#include "overviewmapimage.h"
 
 
 

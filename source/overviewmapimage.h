@@ -46,5 +46,4 @@ class OverviewMapImage {
          static void lighten( Surface& s, const SPoint& pos, float value );
 };
 
-
 #endif

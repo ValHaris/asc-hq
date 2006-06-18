@@ -21,12 +21,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;../../libs/libsigc++&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER"
+				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER;_SDL_"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DisableLanguageExtensions="FALSE"
 				DefaultCharIsUnsigned="TRUE"
+				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
@@ -35,10 +35,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib jpeglib.lib SDLmain.lib sigc++.lib"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib jpeglib.lib SDLmain.lib sigc-1.2.debug.lib"
 				OutputFile="$(OutDir)/bin/weaponguide.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/Debug&quot;;../../Debug/lib;../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;../../libs/libsigc++/sigc++/Debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/Debug&quot;;../../Debug/lib;../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"/>
 			<Tool
@@ -78,12 +78,13 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;../../libs/libsigc++&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER"
+				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER;_SDL_"
 				StringPooling="FALSE"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				DefaultCharIsUnsigned="TRUE"
+				RuntimeTypeInfo="TRUE"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
@@ -92,10 +93,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib jpeglib.lib SDLmain.lib sigc++.lib"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib jpeglib.lib SDLmain.lib sigc-1.2.lib"
 				OutputFile="$(OutDir)/bin/weaponguide.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/Release&quot;;../../Release/lib;../../libs/SDLmm/SDLmm/Release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;../../libs/libsigc++/sigc++/Release&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/Release&quot;;../../Release/lib;../../libs/SDLmm/SDLmm/Release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"
 				OptimizeReferences="2"
@@ -130,6 +131,12 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath="..\..\graphics\blitter.cpp">
+			</File>
+			<File
+				RelativePath="..\..\graphics\drawing.cpp">
+			</File>
+			<File
 				RelativePath="..\groupfile.cpp">
 			</File>
 			<File
@@ -142,10 +149,22 @@
 				RelativePath="..\..\itemrepository.cpp">
 			</File>
 			<File
+				RelativePath="..\..\messaginghub.cpp">
+			</File>
+			<File
+				RelativePath="..\..\overviewmapimage.cpp">
+			</File>
+			<File
 				RelativePath="..\..\password.cpp">
 			</File>
 			<File
 				RelativePath="..\..\stack.cpp">
+			</File>
+			<File
+				RelativePath="..\..\stdio-errorhandler.cpp">
+			</File>
+			<File
+				RelativePath="..\..\graphics\surface.cpp">
 			</File>
 			<File
 				RelativePath="..\weaponguide.cpp">

@@ -602,8 +602,8 @@ extern const char* pathdelimitterstring;
 extern int filesize( char *name);
 
 extern void addSearchPath ( const ASCString& path );
-extern void appendbackslash ( char* string );
-extern void appendbackslash ( ASCString& string );
+extern void appendbackslash ( char* String );
+extern void appendbackslash ( ASCString& String );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
 extern ASCString constructFileName( int directoryLevel, const ASCString& path, ASCString filename );
 extern int directoryExist ( const char* path );
