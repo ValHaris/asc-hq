@@ -27,7 +27,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 94;
+const int execactionscount = 95;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -124,7 +124,8 @@ enum tuseractions {
      act_playerStrengthSummary,
      act_increase_zoom,
      act_decrease_zoom,
-     act_editpreferences
+     act_editpreferences,
+     act_clearresources
  };
 
 class SelectionHolder : public SigC::Object {
@@ -148,7 +149,7 @@ class SelectionHolder : public SigC::Object {
      void pickup ( tfield* fld );
      
      SigC::Signal1<void,const MapComponent*> selectionChanged;
-   
+     void clear() { currentItem = NULL; }; 
 };
  
 extern SelectionHolder selection;

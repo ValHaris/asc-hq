@@ -37,6 +37,7 @@
 #include "../spfst.h"
 #include "../windowing.h"
 #include "../controls.h"
+#include "../sg.h"
 
 class GameParameterEditorWidget;
 
@@ -236,6 +237,7 @@ bool StartMultiplayerGame::Apply()
       case FilenameSelection: {
             if ( !filename.empty() )
                if ( exist( filename )) {
+                  delete newMap;
                   newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
                   if ( newMap ) {
                      if ( mode != NewCampagin && mode != ContinueCampaign )
@@ -576,6 +578,8 @@ bool StartMultiplayerGame::start()
    QuitModal();
    Hide();
    computeview( actmap );
+   hookGuiToMap(actmap);
+  
    next_turn();
    displaymap();
    updateFieldInfo();

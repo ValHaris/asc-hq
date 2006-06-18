@@ -122,16 +122,18 @@ void Menu::setup()
    addbutton ( "~P~aste \tctrl+V",         act_pasteFromClipboard );
    currentMenu->addSeparator();
    addbutton ( "Resi~z~e map\tR",             act_resizemap );
-   addbutton ( "set global uniform ~w~eather‹¨«trl-W", act_setactweatherglobal );
-   addbutton ( "configure weather generator", act_setactnewweather );
+   addbutton ( "set global uniform ~w~eather\tctrl-W", act_setactweatherglobal );
+   // addbutton ( "configure weather generator", act_setactnewweather );
    addbutton ( "~C~reate regional ressources", act_createresources );
-   addbutton ( "~C~reate global ressources\tctrl+F", act_createresources2 );
+   addbutton ( "Create global ressources\tctrl+F", act_createresources2 );
+   addbutton ( "Clear all mineral resources", act_clearresources );
+   currentMenu->addSeparator();
    addbutton ( "~S~et turn number",        act_setTurnNumber );
    currentMenu->addSeparator();
    addbutton ( "~S~etup Players",     act_setupplayers );
    addbutton ( "Setup ~A~lliances",     act_setupalliances );
    addbutton ( "~E~dit technologies",          act_editResearch );
-   addbutton ( "edit ~R~search points",          act_editResearchPoints );
+   addbutton ( "edit ~R~esearch points",          act_editResearchPoints );
    addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
    addbutton ( "reset player data...",   act_resetPlayerData );
 
@@ -382,6 +384,11 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    int xpos = Width() - 150;
    int w = 140;
    int ypos = 180;
+
+   PG_Button* buttonC = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Clear Selection" );
+   buttonC->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::clearSelection ));
+   ypos += 25;
+
    
    PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
    button->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectVehicle ));
@@ -763,11 +770,19 @@ void showSelectionWindow( PG_Widget* parent, PG_WindowPointer &selectionWindow, 
 }
 
 
+bool Maped_MainScreenWidget :: clearSelection()
+{
+   selection.clear();
+   return true;
+}
+
+
 bool Maped_MainScreenWidget :: selectVehicle()
 {
    showSelectionWindow( this, vehicleSelector, vehicleTypeRepository );
    return true;
 }
+
 
 bool Maped_MainScreenWidget :: selectBuilding()
 {

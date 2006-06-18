@@ -470,6 +470,7 @@ Research :: Research ( )
    ___loadActiveTech = 0;
    ___oldVersionLoader = false;
    techsAvail = true;
+   multiplier = 1;
 }
 
 
@@ -719,13 +720,13 @@ int Research :: getResearchPerTurn() const
    for ( Player::VehicleList::const_iterator i = map->player[player].vehicleList.begin(); i != map->player[player].vehicleList.end(); i++ )
       rppt += (*i)->researchpoints;
    
-   return rppt;
+   return rppt * multiplier;
 }
 
 int Research :: currentTechAvailableIn() const
 {
    if ( activetechnology ) {
-      int rpt = getResearchPerTurn();
+      int rpt = getResearchPerTurn() * multiplier;
       if ( !rpt )
          return 0;
       else

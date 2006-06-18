@@ -628,7 +628,7 @@ class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFac
          ContainerControls cc( plant );
          int res = cc.buildProductionLine( type );
          if ( res < 0 )
-            errorMessage( getmessage ( res ));
+            errorMessage( getmessage ( -res ));
       }
       
       Resources getCost( const Vehicletype* type )
@@ -1396,7 +1396,7 @@ class ResearchWindow : public SubWindow {
       {
          Player& player = container()->getMap()->player[ container()->getOwner() ];
                
-         cargoDialog->setLabelText( "ResPerTurnLocal", container()->researchpoints, widget );
+         cargoDialog->setLabelText( "ResPerTurnLocal", container()->researchpoints *  player.research.getMultiplier(), widget );
          cargoDialog->setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
 
          Resources cost = returnResourcenUseForResearch( container() );

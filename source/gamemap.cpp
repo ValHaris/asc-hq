@@ -1834,8 +1834,11 @@ void GameMap :: startGame ( )
       bi_resource[n].energy = 0;
       bi_resource[n].material = 0;
       bi_resource[n].fuel = 0;
+      player[n].research.setMultiplier( getgameparameter(cgp_researchOutputMultiplier) );
    }
 
+   
+   
    #ifndef karteneditor
    actplayer = -1;
    #else
@@ -2205,6 +2208,7 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ExperienceEffectDivisorDefense",     1,                    1,   10,                 false,  false,   "experience effect divisor for defense"},  //       cgp_experienceDivisorDefense
       {  "DebugGameEvents",                    0,                    0,   2,                  true,   false,   "debug game events"},  //       cgp_debugEvents
       {  "ObjectGrowthRate",                   0,                    0,   maxint,             true,   false,   "Object growth rate (percentage)" },  //       cgp_objectGrowthMultiplier
-      {  "ObjectsGrowOnOtherObjects",          0,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  }  //       cgp_objectGrowOnOtherObjects
-      };   
+      {  "ObjectsGrowOnOtherObjects",          0,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  },  //       cgp_objectGrowOnOtherObjects
+      {  "ResearchOutputMultiplier",           1,                    1,   maxint,             false,   false,   "Multiplies the research output of all labs"  }  //       cgp_researchOutputMultiplier
+};
 

@@ -24,6 +24,56 @@
 #include "basestreaminterface.h"
 // #include "graphics/ascttfont.h"
 
+/**
+@brief A Vector2D is a line (without a defined start point) in a 2 dimensional space and is deccribed by its
+       x- and y component
+@author Kevin Hirschmann
+
+ */
+class Vector2D{
+   private:
+      int xComponent;
+      int yComponent;
+
+   public:
+ /**
+      @brief Default constructor
+  */
+      Vector2D();
+ /**
+      @brief Constructor for creating a new vector
+      @param x The xComponent
+      @param y The yComponent
+  */
+      Vector2D(int x, int y);
+ /**
+      @brief Destructor
+  */
+      ~Vector2D();
+ /**
+      @brief Retrieves the xComponent of the Vector
+      @return the xComponent
+  */
+      int getXComponent() const;
+ /**
+      @brief Retrieves the yComponent of the Vector
+      @return the yComponent
+  */
+      int getYComponent() const;
+ /**
+      @brief Calculates the length of the vector (Pythagoras)
+      @return The length of the Vector
+  */
+      double getLength() const;
+ /**
+      @brief Checks if the vector is the zero-vector
+      @return true if x- and yComponent == 0; flase otherwise
+  */
+      bool isZeroVector() const;
+};
+
+
+
 class IllegalValueException: public ASCmsgException{
 public:
 IllegalValueException(const ASCString& msg);

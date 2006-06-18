@@ -131,6 +131,9 @@ class TechAdapterDependency {
 
      int ___loadActiveTech;
      bool ___oldVersionLoader;
+
+     int multiplier;
+     
    #ifdef karteneditor
    public:
    #endif   
@@ -182,6 +185,9 @@ class TechAdapterDependency {
 
      int getResearchPerTurn() const;
      int currentTechAvailableIn() const;
+
+     void setMultiplier( int m ) { multiplier = m; };
+     int getMultiplier() { return multiplier; };
      
      Research ( );
      ~Research ();

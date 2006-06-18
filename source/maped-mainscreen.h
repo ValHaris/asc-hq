@@ -84,6 +84,7 @@ class Maped_MainScreenWidget : public MainScreenWidget {
 public:
     Maped_MainScreenWidget( PG_Application& application );
 
+    bool clearSelection();
     bool selectVehicle();
     bool selectBuilding();
     bool selectObject();

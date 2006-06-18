@@ -117,9 +117,9 @@ void tputresources :: testfield ( const MapCoordinate& mc )
 
    tfield* fld = gamemap->getField ( mc );
    if ( resourcetype == 1 )
-      fld->material = m;
+      fld->material = min( 255, fld->material + m);
    else
-      fld->fuel = m;
+      fld->fuel = min( 255, fld->fuel + m );
 }
 
 void tputresourcesdlg :: init ( void )
@@ -3335,10 +3335,16 @@ void editResearch()
                         techIds.push_back ( t->id );
                      }
                }
-               // sort (techs.begin(), techs.end() );
-               pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
-               if ( r.first == 0 && r.second >= 0 )
-                  devTech.push_back ( techIds[r.second] );
+
+               if ( techIds.empty() ) {
+                  infoMessage("No technologies found. Please review Item Filters");
+               } else {
+                  // sort (techs.begin(), techs.end() );
+                  pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
+                  if ( r.first == 0 && r.second >= 0 ) {
+                     devTech.push_back ( techIds[r.second] );
+                  }
+               }
             } else
             if ( res.first == 1 && res.second >= 0 ) {
                vector<int>::iterator p = find ( devTech.begin(), devTech.end(), techIds[techs[res.second]]);

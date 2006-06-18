@@ -148,7 +148,8 @@
         "View Player Strength",
         "Increase Zoom",
         "Decrease Zoom",
-        "Edit Preferences" };
+        "Edit Preferences",
+        "Clear Mineral Resources"};
 
 
 
@@ -286,27 +287,6 @@ ASCString getbipath ( void )
 }
 
 
-void showPipeNet()
-{
-   static bool isShown = false;
-
-   if ( isShown ) {
-      actmap->cleartemps();
-      displaymap();
-      isShown = false;
-   } else {
-      TerrainBits tb = getTerrainBitType(cbpipeline);
-      for ( int x = 0; x < actmap->xsize; ++x )
-         for ( int y = 0; y < actmap->ysize; ++y ) {
-             tfield* fld = actmap->getField ( x, y );
-             if ( (fld->bdt & tb).any() )
-                fld->a.temp = 1;
-         }
-      displaymap();
-   }
-   isShown = true;
-}
-
 double unitStrengthValue( Vehicle* veh )
 {
    double s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
@@ -424,7 +404,11 @@ void execaction( int code)
                            prd.init();
                            prd.run();
                            prd.done();
-                           displaymap();
+                           if ( mainScreenWidget )
+                              mainScreenWidget->activateMapLayer( "resources", true);
+                        
+                           repaintMap();
+
                          }
        break;
        /*
@@ -685,7 +669,8 @@ void execaction( int code)
       break;
    case act_setTurnNumber:  actmap->time.set ( getid("Turn",actmap->time.turn(),0,maxint), 0 );
       break;
-   case act_showPipeNet: showPipeNet();
+   case act_showPipeNet:    mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
+      repaintMap();
       break;
    case act_editResearch:  editResearch();
       break;
@@ -819,6 +804,15 @@ void execaction_pg(int code)
          break;
       case act_newmap :   newmap();
          break;
+      case act_clearresources: {
+         for ( int y = 0; y < actmap->ysize; ++y)
+            for ( int x = 0; x < actmap->xsize; ++x ) {
+               actmap->getField(x,y)->fuel = 0;
+               actmap->getField(x,y)->material = 0;
+            }
+            repaintMap();
+      }
+         
    };
 }
 

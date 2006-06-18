@@ -715,7 +715,7 @@ void doresearch ( GameMap* actmap, int player )
          vre.push_back(re);
       } else
          if ( bld->researchpoints > 0 )
-            actmap->player[player].research.progress += bld->researchpoints;
+            actmap->player[player].research.progress += bld->researchpoints *  actmap->player[player].research.getMultiplier();
    }
    sort( vre.begin(), vre.end());
 
@@ -760,7 +760,7 @@ void doresearch ( GameMap* actmap, int player )
       if ( got < r )
          fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
 
-      actmap->player[player].research.progress += res;
+      actmap->player[player].research.progress += res * actmap->player[player].research.getMultiplier();
    }
 }
 

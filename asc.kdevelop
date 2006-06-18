@@ -44,6 +44,11 @@
       <autocompile>true</autocompile>
       <envvars/>
     </run>
+    <configurations>
+      <default>
+        <envvars/>
+      </default>
+    </configurations>
   </kdevautoproject>
   <kdevfileview>
     <groups>

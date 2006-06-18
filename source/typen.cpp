@@ -209,6 +209,11 @@ ASCString Resources::toString()
 }
 
 
+void MapCoordinate::move(int width, int height) {
+   x +=width;
+   y +=height;
+}
+
 
 vector<IntRange> String2IntRangeVector( const ASCString& t )
 {
@@ -248,34 +253,3 @@ void IntRange::write ( tnstream& stream ) const
 ////////////////////////////////////////////////////////////////////
 
 
-void MapCoordinate::move(const Vector2D& v){
-  x +=v.getXComponent();
-  y +=v.getYComponent();
-}
-
-void MapCoordinate::move(int width, int height) {
-  x +=width;
-  y +=height;
-}
-
-//***************************************************************************************************************************************
-Vector2D::Vector2D():xComponent(0), yComponent(0) {}
-
-Vector2D::Vector2D(int x, int y):xComponent(x), yComponent(y) {}
-
-Vector2D::~Vector2D() {}
-
-int Vector2D::getXComponent() const {
-  return xComponent;
-}
-
-int Vector2D::getYComponent() const {
-  return yComponent;
-}
-double Vector2D::getLength() const{
-  return std::sqrt(std::pow(double(xComponent), 2) + std::pow(double(yComponent),2));
-}
-
-bool Vector2D::isZeroVector() const {
-  return ((xComponent == 0) && (yComponent == 0));
-}

@@ -744,12 +744,8 @@ void execuseraction ( tuseractions action )
             s += "\n\n";
 
             s+= "Research Points Plus \n";
-            int p = 0;
-            for ( Player::BuildingList::iterator i = actmap->player[actmap->actplayer].buildingList.begin(); i != actmap->player[actmap->actplayer].buildingList.end(); ++i )
-               p += (*i)->researchpoints;
 
-
-            s += strrr ( p );
+            s += strrr ( actmap->player[actmap->actplayer].research.getResearchPerTurn() );
 
             s += "\n\n";
 
@@ -861,7 +857,6 @@ void execuseraction2 ( tuseractions action )
 #endif
       case ua_newGame: 
          startMultiplayerGame();
-         hookGuiToMap(actmap);
          break;
       case ua_continuenetworkgame:
          continueAndStartMultiplayerGame();
