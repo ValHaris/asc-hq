@@ -104,7 +104,7 @@ class ResourceGraphLayer : public MapLayer {
 void ResourceGraphLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
 #ifndef karteneditor
-   if ( fieldInfo.playerView >= visible_ago) {
+   if ( fieldInfo.visibility >= visible_ago) {
       if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) ){
          paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[fieldInfo.playerView], Resources::materialColor );
          paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[fieldInfo.playerView], Resources::fuelColor );
