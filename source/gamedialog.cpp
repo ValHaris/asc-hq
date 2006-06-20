@@ -111,7 +111,7 @@ bool GameDialog::showOptions(PG_Button* button) {
 
 bool GameDialog::saveGame(PG_Button* button) {
     Hide();
-    SaveGameDialog::saveGameDialog(this);
+    ::saveGame(true);
     Show();
     return true;
 }
@@ -699,7 +699,7 @@ SaveGameDialog::SaveGameDialog(PG_MessageObject* c):SaveGameBaseDialog("Save Gam
 SaveGameDialog::~SaveGameDialog() {
 }
 bool SaveGameDialog::ok(PG_Button* button) {
-    savegame(fileNameValue->GetText().c_str());
+    savegame( fileNameValue->GetText().c_str());
     quitModalLoop(1);
     return true;
 }

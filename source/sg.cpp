@@ -791,6 +791,7 @@ bool continueAndStartMultiplayerGame()
 {
    if ( continuenetworkgame()) {
       hookGuiToMap(actmap);
+      actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
       displaymap();
       return true;
    } else

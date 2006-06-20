@@ -269,7 +269,6 @@ bool continuenetworkgame ()
    computeview( actmap );
    actmap->beginTurn();
    actmap->playerView  = actmap->actplayer;
-   actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
    return true;
 }
 

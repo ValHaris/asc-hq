@@ -387,6 +387,9 @@ int ContainerControls :: buildProductionLine ( const Vehicletype* veh  )
 
    container->getResource( buildProductionLineResourcesNeeded(veh), 0 );
    container->unitProduction.push_back(  const_cast<Vehicletype*>(veh) );
+
+   logtoreplayinfo ( rpl_buildProdLine, container->getIdentification(), veh->id );
+
    return 0;
 }
 
