@@ -2031,8 +2031,8 @@ namespace CargoGuiFunctions {
       if ( v ) {
          ContainerControls cc( parent.getContainer() );
          cc.produceUnit( v, refillAmmo, refillResources );
-         parent.cargoChanged();
       }
+      parent.cargoChanged(); // we need to update the resources because new production lines may have been build
    }
 
 

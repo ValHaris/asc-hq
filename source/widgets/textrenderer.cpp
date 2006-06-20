@@ -339,12 +339,24 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
    }
 
    static boost::regex indent( "#indent=(\\d+),(\\d+)#");
-   if( boost::regex_match( token, what, firstindent)) {
+   if( boost::regex_match( token, what, indent)) {
       ASCString s1;
       s1.assign( what[1].first, what[1].second );
       ASCString s2;
       s2.assign( what[2].first, what[2].second );
       addIndentation( strtol(s1.c_str(), NULL, 0 ), strtol(s2.c_str(), NULL, 0 ) );
+      return NULL;
+   }
+
+   static boost::regex legacyfont1( "#font0*1#");
+   if( boost::regex_match( token, what, legacyfont1)) {
+      textAttributes.fontsize = 12;
+      return NULL;
+   }
+
+   static boost::regex legacyfont2( "#font0*2#");
+   if( boost::regex_match( token, what, legacyfont2)) {
+      textAttributes.fontsize = 18;
       return NULL;
    }
 

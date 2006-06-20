@@ -92,7 +92,7 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
          nwl.savenwgame( &gamefile );
       }
 
-      int nextPlayer = findNextPlayer( map );
+      int nextPlayer = map->actplayer;
       
       ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
       if ( !map->player[nextPlayer].email.empty() )
