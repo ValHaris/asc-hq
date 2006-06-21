@@ -21,7 +21,7 @@
 #ifndef editPlayerDataH
 #define editPlayerDataH
 
-#include "gamemap.h"
+class GameMap;
 
 extern void editPlayerData( GameMap* gamemap );
 

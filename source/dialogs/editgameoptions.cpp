@@ -73,13 +73,14 @@ class GetVideoModes {
          /* Get available fullscreen/hardware modes */
          modes=SDL_ListModes(&format, SDL_FULLSCREEN);
 
+
+         list.push_back( "graphic mode not listed");
+         listedmodes.push_back( make_pair( 0, 0));
+         
          /* Check is there are any modes available */
          if(modes == (SDL_Rect **)0){
             return;
          }
-
-         list.push_back( "graphic mode not listed");
-         listedmodes.push_back( make_pair( 0, 0));
          
          /* Check if our resolution is restricted */
          if(modes == (SDL_Rect **)-1){
