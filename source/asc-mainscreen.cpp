@@ -146,6 +146,10 @@ void Menu::setup()
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
    addbutton ( "~T~ransfer resources", ua_settribute);
    addbutton ( "~C~ancel Research", ua_cancelResearch );
+   currentMenu->addSeparator();
+   addbutton ( "~E~dit Player Data", ua_editPlayerData);
+
+
 
    addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );

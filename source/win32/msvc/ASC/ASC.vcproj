@@ -520,6 +520,9 @@
 					RelativePath="..\..\..\dialogs\editgameoptions.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\editplayerdata.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\emailsetup.cpp">
 				</File>
 				<File

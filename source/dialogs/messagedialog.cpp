@@ -29,7 +29,7 @@
 
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, const std::string& btn2text, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style), my_btnok(NULL), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL)
 {
 
 
@@ -53,7 +53,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btnok(NULL), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL)
 {
 
    int buttonWidth = min( 120, r.Width() - 20 );
@@ -68,7 +68,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), my_btnok(NULL), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL)
 {
 
    Init(windowtext, textalign, style);
@@ -76,6 +76,9 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 
 bool MessageDialog::eventKeyDown (const SDL_KeyboardEvent *key)
 {
+   if ( !defaultKeysActive )
+      return false;
+
    if (  key->keysym.sym == SDLK_ESCAPE ) {
       quitModalLoop(10);
       return true;
@@ -90,6 +93,11 @@ bool MessageDialog::eventKeyDown (const SDL_KeyboardEvent *key)
    }
 
    return false;
+}
+
+void MessageDialog::EnableDefaultKeys( bool enable )
+{
+   defaultKeysActive = enable;
 }
 
 
@@ -175,6 +183,7 @@ int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const A
    MessageDialog msg( NULL, size,"", "", leftButton, rightButton, PG_Label::CENTER, "Window" );
    msg.getTextBox()->SetFontSize( msg.getTextBox()->GetFontSize() + 3 );
    msg.getTextBox()->SetText(title);
+   msg.EnableDefaultKeys( false );
       
    msg.Show();
    // PG_Widget::UpdateScreen();

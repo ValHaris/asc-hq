@@ -67,6 +67,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
                throw NoMapLoaded();
             } else {
                bool stat;
+               actmap->playerView = actmap->actplayer;  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
                do {
                   stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
                   if ( !stat )

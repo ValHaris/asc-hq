@@ -585,7 +585,7 @@ void tresearchinfo::init ( void )
       if ( rp )
          showtext2 ( strrr ( 100 * prog / rp ),          textxpos, y1 + 230 );
       if ( rppt )
-         showtext2 ( strrr ( ( rp - prog + rppt-1 ) / rppt ), textxpos, y1 + 290 );
+         showtext2 ( strrr ( actmap->player[actmap->actplayer].research.currentTechAvailableIn() ), textxpos, y1 + 290 );
 
    }
    showtext2 ( strrr ( rppt ),                   textxpos, y1 + 260 );

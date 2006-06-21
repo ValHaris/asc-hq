@@ -145,6 +145,7 @@
 #include "dialogs/editgameoptions.h"
 #include "dialogs/nextcampaignmap.h"
 #include "dialogs/terraininfo.h"
+#include "dialogs/editplayerdata.h"
 #include "stdio-errorhandler.h"
 #include "widgets/textrenderer.h"
 
@@ -258,6 +259,9 @@ bool loadGame()
 
 void saveGame( bool as )
 {
+   if ( !actmap )
+      return;
+
    ASCString s1;
 
    int nameavail = 0;
@@ -940,6 +944,9 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_changepassword:
          changePassword( actmap );
+         break;
+      case ua_editPlayerData:
+         editPlayerData( actmap );
          break;
       default:
          break;

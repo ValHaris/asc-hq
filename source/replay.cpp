@@ -1766,8 +1766,8 @@ int  trunreplay :: run ( int player, int viewingplayer )
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
          */
-       } else
-          releasetimeslice();
+       }  else
+          PG_Application::GetApp()->sigAppIdle( PG_Application::GetApp() );
 
        if (nextaction == rpl_finished  || status != 2) {
           if ( nextaction == rpl_finished && !resourcesCompared ) {

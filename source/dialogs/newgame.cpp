@@ -147,8 +147,9 @@ class StartMultiplayerGame: public ConfigurableWindow {
          if(key->keysym.sym == SDLK_ESCAPE) {
             if ( page <= 2 )
                QuitModal();
+            return true;
          }
-         return true;
+         return false;
       }
       
    public:

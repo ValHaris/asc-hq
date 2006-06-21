@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-05-21 18:05:44 $
+    Update Date:      $Date: 2006-06-21 18:57:43 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglineedit.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -186,6 +186,7 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 	if(!my_isCursorVisible) {
 		return false;
 	}
+   
 
 	SDL_KeyboardEvent key_copy = *key; // copy key structure
 	PG_Application::TranslateNumpadKeys(&key_copy);
@@ -196,7 +197,7 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 	// bindings as well?
 	//  /grendel, Nov 06
 	//
-	if(key_copy.keysym.mod & KMOD_CTRL) {
+	if( (key_copy.keysym.mod & KMOD_CTRL) && !(key_copy.keysym.mod & (KMOD_ALT | KMOD_SHIFT | KMOD_META  ) ) ) {
 		// Handle std emacs bindings
 		switch(key_copy.keysym.sym) {
 			case SDLK_a: // Beginning of Line

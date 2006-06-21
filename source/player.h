@@ -135,6 +135,8 @@ class Player : public SigC::Object {
       //! the status of the player
       enum PlayerStatus { human, computer, off, supervisor, suspended } stat;
       
+      bool isHuman() { return stat == human || stat == supervisor || stat == suspended; };
+
       static const char* playerStatusNames[];
 
       //! returns the name of the player 

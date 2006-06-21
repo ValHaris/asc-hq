@@ -27,6 +27,7 @@
 class PG_RichEdit;
 
 class  MessageDialog : public ASC_PG_Dialog {
+      bool defaultKeysActive;
    public:
    /**
       Creates a PopUp with 2 Buttons
@@ -72,6 +73,8 @@ class  MessageDialog : public ASC_PG_Dialog {
       void LoadThemeStyle(const std::string& widgettype);
 
       PG_RichEdit* getTextBox() { return my_textbox; };
+
+      void EnableDefaultKeys( bool enable );
 
    protected:
 

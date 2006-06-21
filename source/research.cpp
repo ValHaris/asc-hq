@@ -485,7 +485,7 @@ void Research :: read ( tnstream& stream )
 const int researchableWeaponImprovements = 8;
 
 
-const int researchVersion = -3;
+const int researchVersion = -4;
 
 void Research :: read_struct ( tnstream& stream, bool merge )
 {
@@ -536,6 +536,9 @@ void Research :: read_struct ( tnstream& stream, bool merge )
             readClassContainer( predefinedTechAdapter, stream );
          }
       }
+      if ( version <= -4 ) {
+         multiplier = stream.readInt();
+      }
    }
 }
 
@@ -549,6 +552,7 @@ void Research :: write ( tnstream& stream ) {
 
    stream.writeInt ( techsAvail );
    writeClassContainer( predefinedTechAdapter, stream );
+   stream.writeInt( multiplier );
 }
 
 
