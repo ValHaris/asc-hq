@@ -508,16 +508,17 @@ bool ServiceChecker::serviceWeaponFits( ContainerBase* dest )
 {
    const SingleWeapon* serviceWeapon = getServiceWeapon();
    if ( serviceWeapon )
-      if ( (ignoreChecks & ignoreHeight) || serviceWeapon->sourceheight && source->getHeight() )
-         if ( (ignoreChecks & ignoreHeight) || serviceWeapon->targ && dest->getHeight() ) {
-      int dist = beeline( source->getPosition(), dest->getPosition() );
-      if ( (ignoreChecks & ignoreDistance) || serviceWeapon->mindistance <= dist && serviceWeapon->maxdistance >= dist )
-         if ( serviceWeapon->targetingAccuracy[dest->baseType->getMoveMalusType()] > 0  )
-            return true;
+      if ( (ignoreChecks & ignoreHeight) || (serviceWeapon->sourceheight & source->getHeight()) )
+         if ( (ignoreChecks & ignoreHeight) || (serviceWeapon->targ & dest->getHeight() )) {
+            int dist = beeline( source->getPosition(), dest->getPosition() );
+            if ( (ignoreChecks & ignoreDistance) || (serviceWeapon->mindistance <= dist && serviceWeapon->maxdistance >= dist) )
+               if ( serviceWeapon->targetingAccuracy[dest->baseType->getMoveMalusType()] > 0  )
+                  if ( (ignoreChecks & ignoreHeight) || (serviceWeapon->efficiency[6+getheightdelta(source,dest)] > 0  ))
+                     return true;
 
          }
 
-         return false;
+   return false;
 }
 
 ServiceChecker :: ServiceChecker( ContainerBase* src, int skipChecks ) : source(src), ignoreChecks( skipChecks )

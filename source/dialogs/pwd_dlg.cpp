@@ -84,6 +84,14 @@
 
                bool success;
                
+               bool line1completed()
+               {
+                  if ( firstTime && line2 )
+                     line2->EditBegin();
+                  else
+                     ok();
+                  return true;
+               }
                
             protected:
                bool firstTime;
@@ -95,7 +103,7 @@
                {
                   line1 = new PG_LineEdit( this, PG_Rect( border, 40, Width() - 2 * border, 20));
                   line1->SetPassHidden('*');
-                  line1->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::ok ));
+                  line1->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::line1completed ));
 
                   if ( firstTime ) {
                      line2 = new PG_LineEdit( this, PG_Rect( border, 70, Width() - 2 * border, 20));
@@ -136,8 +144,6 @@
                int RunModal()
                {
                   line1->EditBegin();
-                  if ( line2 )
-                     line2->EditBegin();
                   return ASC_PG_Dialog::RunModal();
                }
            };

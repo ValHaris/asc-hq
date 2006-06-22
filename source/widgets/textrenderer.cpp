@@ -83,7 +83,7 @@ void TextRenderer :: layout()
    int vspace = 0;
 
    for ( Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
-      if ( (x + (*i)->Width() >= AreaWidth() && x > 0) || breakNow ) {
+      if ( (x + (*i)->Width() >= AreaWidth()-1 && x > 0) || breakNow ) {
          maxx = max( arrangeLine( y, currentLine, lineHeight, indentation ), maxx);
          
          y += lineHeight + vspace;
@@ -348,7 +348,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       return NULL;
    }
 
-   static boost::regex legacyfont1( "#font0*1#");
+   static boost::regex legacyfont1( "#font0*[1|0]#");
    if( boost::regex_match( token, what, legacyfont1)) {
       textAttributes.fontsize = 12;
       return NULL;
@@ -356,7 +356,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
 
    static boost::regex legacyfont2( "#font0*2#");
    if( boost::regex_match( token, what, legacyfont2)) {
-      textAttributes.fontsize = 18;
+      textAttributes.fontsize = 20;
       return NULL;
    }
 

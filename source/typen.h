@@ -461,8 +461,8 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 #define cnet_stopfueloutput     0x800
 
 
-#define resource_fuel_factor 100         // die im boden liegenden Bodenschtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
-#define resource_material_factor 100     // "
+#define resource_fuel_factor 30         // die im boden liegenden Bodenschtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
+#define resource_material_factor 30     // "
 
 #define destruct_building_material_get 2 // beim Abreissen erhlt man 1/2 des eingesetzten Materials zur?ck
 #define destruct_building_fuel_usage 10  // beim Abreissen wird 10 * fuelconsumption Fuel fuelconsumptiont

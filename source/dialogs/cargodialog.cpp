@@ -41,6 +41,8 @@
 #include "../containerbase-functions.h"
 #include "../resourcenet.h"
 
+#include "../containerbase-functions.h"
+
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
 #include "unitinfodialog.h"
@@ -1487,6 +1489,7 @@ class MatterAndMiningBaseWindow : public SubWindow {
          return hasFunction( cd->getContainer() );
       };
       
+      virtual Resources getOutput() = 0;
       
    public:
       MatterAndMiningBaseWindow () : slider(NULL), first(true) {};
@@ -1495,6 +1498,7 @@ class MatterAndMiningBaseWindow : public SubWindow {
       {
          if ( widget )
             slider = dynamic_cast<PG_Slider*>( widget->FindChild( "PowerSlider", true ));
+
          if ( first && slider ) {
             first = false;
             slider->SetRange( 0, 100 );
@@ -1510,7 +1514,7 @@ class MatterAndMiningBaseWindow : public SubWindow {
 
          for ( int r = 0; r < 3; ++r ) {
             ASCString s = Resources::name(r);
-            int amount = container()->plus.resource(r);
+            int amount = getOutput().resource(r);
             if ( container()->maxplus.resource(r) < 0 ) {
                s += "In";
                amount  = -amount;
@@ -1529,6 +1533,12 @@ class MatterConversionWindow : public MatterAndMiningBaseWindow {
       {
          return container->baseType->hasFunction( ContainerBaseType::MatterConverter );
       };
+
+      Resources getOutput()
+      {
+         return container()->plus;
+      }
+
    public:
       
       ASCString getASCTXTname()
@@ -1563,7 +1573,8 @@ class MiningGraph : public GraphWidget {
          };
          return 0;
       };
-      
+
+
    public:
       MiningGraph( PG_Widget *parent, const PG_Rect& rect, ContainerBase* container ) : GraphWidget( parent, rect ), cont( container )
       {
@@ -1594,6 +1605,23 @@ class MiningWindow : public MatterAndMiningBaseWindow {
       
       bool invertSlider() { return false; };
       
+      Resources getOutput()
+      {
+         Resources r;
+         MiningStation miningStation ( container(), true );
+
+         for ( int i = 0; i <3; ++i ) {
+            Resources plus = miningStation.getPlus();
+            if ( plus.resource(i) > 0 )
+               r.resource(i) = plus.resource(i);
+
+            Resources usage = miningStation.getUsage();
+            if ( usage.resource(i) > 0 )
+               r.resource(i) = -usage.resource(i);
+         }
+         return r;
+
+      }
    public:
      
       ASCString getASCTXTname()

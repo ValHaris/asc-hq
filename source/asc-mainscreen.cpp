@@ -132,7 +132,7 @@ void Menu::setup()
 
 
    addfield ("~G~ame");
-   addbutton ( "~N~ew Game", ua_newGame );
+   addbutton ( "~N~ew Game\tctrl-n", ua_newGame );
    currentMenu->addSeparator();
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
