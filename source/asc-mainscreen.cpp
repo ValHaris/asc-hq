@@ -346,7 +346,12 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
       if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
          int counter = 0;
          VehicleMovement vm ( NULL, NULL );
+
+
+         int orgMovement = veh->getMovement(false);
+         veh->setMovement( veh->maxMovement(), 0 );
          if ( vm.available ( veh )) {
+
             vm.execute ( veh, -1, -1, 0, -1, -1 );
             if ( vm.reachableFields.getFieldNum()) {
                for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
@@ -361,7 +366,9 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
                   }
    
             }
+
          }
+         veh->setMovement( orgMovement, 0 );
       
          if ( counter )
             fields[veh->getPosition()] |= 2;

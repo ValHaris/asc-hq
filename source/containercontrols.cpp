@@ -184,7 +184,8 @@ int  ContainerControls :: ammoProducable ( int weaptype, int num )
 
       int perc = 100;
       for ( int r = 0; r < 3; ++r )
-         perc = min ( 100 * avail.resource(r) / needed.resource(r), perc);
+         if ( needed.resource(r) > 0 )
+          perc = min ( 100 * avail.resource(r) / needed.resource(r), perc);
 
       if ( perc < 0 )
          perc = 0;

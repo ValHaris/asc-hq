@@ -32,7 +32,9 @@
     using namespace std;
   #endif
   #define HAVE_STRICMP 
-  #define HAVE_ITOA
+  #ifndef HAVE_ITOA
+  # define HAVE_ITOA
+  #endif
   #define HAVE_DIRENT_H 
   #define HAVE_LIMITS
 //  #define SIZE_T_not_identical_to_INT 1

@@ -119,7 +119,7 @@ class ASC_PG_Dialog : public PG_Window {
    protected:
       PG_MessageObject* caller;
       virtual bool closeWindow();
-      void quitModalLoop(int value ); 
+      bool quitModalLoop(int value ); 
       virtual bool eventKeyDown(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
@@ -225,5 +225,6 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
 
 extern pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
 
+extern bool MultiLineEditor( const ASCString& title, ASCString& textToEdit );
 
 #endif

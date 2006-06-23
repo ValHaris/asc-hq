@@ -77,7 +77,8 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       SigC::Signal0<void> reloadAllItems;
 
       void restart();
-
+   
+      void setAvailableResource( const Resources& plantResources ) { this->plantResources = plantResources; };
       
       virtual Resources getCost( const Vehicletype* type ) = 0;
       

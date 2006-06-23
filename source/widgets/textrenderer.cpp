@@ -16,12 +16,12 @@
  ***************************************************************************/
 
 
-#include "../global.h"
-
 
 #include <pglabel.h>
 #include <pgimage.h>
 #include <boost/regex.hpp>
+
+#include "../global.h"
 
 #include "textrenderer.h"
 #include "../graphics/surface.h"
@@ -43,11 +43,16 @@ void TextRenderer :: TextAttributes :: assign ( PG_Widget* w )
       w->SetFontColor ( theme->GetFontColor() );
 }
 
-TextRenderer :: TextRenderer (PG_Widget *parent, const PG_Rect &r, const std::string &style) : PG_ScrollWidget( parent, r, style ), lastWidget(NULL)
+TextRenderer :: TextRenderer (PG_Widget *parent, const PG_Rect &r ) : PG_ScrollWidget( parent, r, "ScrollWidget" ), lastWidget(NULL)
 {
    SetTransparency(255);
 };
 
+TextRenderer :: TextRenderer (PG_Widget *parent, const PG_Rect &r, const std::string& text, const std::string &style) : PG_ScrollWidget( parent, r, style ), lastWidget(NULL)
+{
+   SetTransparency(255);
+   SetText( text );
+};
 
 
 int TextRenderer :: arrangeLine( int y, const Widgets& line, int lineHeight, int indent )

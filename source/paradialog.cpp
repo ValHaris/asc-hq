@@ -457,10 +457,11 @@ bool ASC_PG_Dialog::eventKeyDown(const SDL_KeyboardEvent *key){
 
 
 
-void ASC_PG_Dialog::quitModalLoop(int value )
+bool ASC_PG_Dialog::quitModalLoop(int value )
 {
    SetModalStatus( value );
    PG_Window::QuitModal();
+   return true;
 }
 
 
@@ -610,5 +611,33 @@ pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>
    nsc.Show();
    nsc.RunModal();
    return make_pair(nsc.getButton(), nsc.getItem() );
+}
+
+
+
+class MultiLineEditorDialog  : public ASC_PG_Dialog {
+      PG_MultiLineEdit* editor;
+
+   public:
+      MultiLineEditorDialog( const ASCString& title, const ASCString& textToEdit ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 400 ), title), editor(NULL) 
+      {
+         editor = new PG_MultiLineEdit( this, PG_Rect( 10, 40, Width() - 20, Height() - 80 ) );
+         editor->SetText( textToEdit );
+         AddStandardButton( "OK" )->sigClick.connect( SigC::bind( SigC::slot( *this, &MultiLineEditorDialog::quitModalLoop ), 1 ));
+      }
+
+      ASCString GetEditedText() { return editor->GetText(); };
+};
+
+bool MultiLineEditor( const ASCString& title, ASCString& textToEdit )
+{
+   MultiLineEditorDialog mle ( title, textToEdit );
+   mle.Show();
+   if ( mle.RunModal() ) {
+      textToEdit = mle.GetEditedText();
+      return true;
+   } else
+      return false;
+
 }
 

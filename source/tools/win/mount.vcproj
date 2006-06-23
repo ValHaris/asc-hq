@@ -37,7 +37,7 @@
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib sigc-1.2.debug.lib"
 				OutputFile="$(OutDir)/bin/mount.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(OutDir)/lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(OutDir)/lib&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mount.pdb"/>
 			<Tool
@@ -94,7 +94,7 @@
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib sigc-1.2.lib"
 				OutputFile="$(OutDir)/bin/mount.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(SDL)/lib&quot;;&quot;$(OutDir)/lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(OutDir)/lib&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mount.pdb"
 				OptimizeReferences="2"

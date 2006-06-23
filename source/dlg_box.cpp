@@ -40,6 +40,7 @@
 #include "stack.h"
 #include "dlg_box.h"
 #include "paradialog.h"
+#include "widgets/textrenderer.h"
 
 
 #ifdef _WIN32_
@@ -3349,7 +3350,7 @@ void         tviewtextquery::buttonpressed( int id)
 } 
 
 
-int         viewtextquery( int          id,
+int         legacy_viewtextquery( int          id,
                            char *       title,
                            char *       s1,
                            char *       s2)
@@ -3362,6 +3363,40 @@ int         viewtextquery( int          id,
    result = vtq.action - 11;
    vtq.done(); 
    return result;
+} 
+
+
+class ViewTextQuery : public ASC_PG_Dialog {
+
+   public:
+      ViewTextQuery( int id, const ASCString& title, const ASCString& button1, const ASCString& button2 ) : ASC_PG_Dialog( NULL, PG_Rect(-1, -1, 450, 500 ), title )
+      {
+         PG_Rect r;
+         if ( button2.length() ) {
+            r = PG_Rect( 10, Height() - 40, Width()/2-15, 30 );
+            (new PG_Button( this, PG_Rect( Width()/2+5, Height() - 40, Width()/2-15, 30 ), button2 ))->sigClick.connect( SigC::bind( SigC::slot( *this, &ViewTextQuery::quitModalLoop ), 1));
+         } else
+            r = PG_Rect( 10, Height() - 40, Width() - 20, 30 );
+
+        (new PG_Button( this, r, button1 ))->sigClick.connect( SigC::bind( SigC::slot( *this, &ViewTextQuery::quitModalLoop ), 0));
+
+        new TextRenderer( this, PG_Rect( 10, 30, Width()-20, Height() - 70 ), readtextmessage( id ));
+      }
+};
+
+
+int         viewtextquery( int          id,
+                           char *       title,
+                           char *       s1,
+                           char *       s2)
+{ 
+   if ( legacyEventSystemActive() ) 
+      return legacy_viewtextquery( id, title, s1, s2 );
+   else {
+      ViewTextQuery vtq( id, title, s1, s2 );
+      vtq.Show();
+      return vtq.RunModal();
+   }
 } 
 
 

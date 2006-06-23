@@ -16,8 +16,6 @@
  ***************************************************************************/
 
 
-#include "global.h"
-
 #include <SDL_image.h>
 #include <signal.h>
 
@@ -50,6 +48,9 @@
 #include "pgsdleventsupplier.h"
 #include "pgmultilineedit.h"
 #include "pgtooltiphelp.h"
+
+
+#include "global.h"
 
 #include "windowing.h"
 

@@ -1395,10 +1395,11 @@ void DisplayImmediateMessage::writeData( tnstream& stream )
 
 void DisplayImmediateMessage::setup()
 {
-   MultilineEdit mle ( message, "Message" );
-   mle.init();
-   mle.run();
-   mle.done();
+   while ( message.find ( "#CRT#" ) != ASCString::npos )
+      message.replace ( message.find ( "#CRT#" ), 5, "\n" );
+   while ( message.find ( "#crt#" ) != ASCString::npos )
+      message.replace ( message.find ( "#crt#" ), 5, "\n" );
+   MultiLineEditor( "Message", message );
 }
 
 

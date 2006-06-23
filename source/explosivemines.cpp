@@ -39,15 +39,17 @@
 
 bool Mine :: attacksunit ( const Vehicle* veh )
 {
+   #ifndef converter
    if  (!( ( veh->typ->hasFunction( ContainerBaseType::ImmuneToMines  ) ) ||
               ( veh->height > chfahrend ) ||
-              ( actmap->getPlayer(player).diplomacy.getState(veh->getOwner()) >= PEACE ) ||
+              ( veh->getMap()->getPlayer(player).diplomacy.getState(veh->getOwner()) >= PEACE ) ||
               ( (veh->typ->movemalustyp ==  cmm_trooper) && (type != cmantipersonnelmine)) || 
               ( veh->height <= chgetaucht && type != cmmooredmine ) || 
               ( veh->height == chschwimmend && type != cmfloatmine ) ||
               ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )
             ))
          return true;
+#endif
      return false;
 }
 

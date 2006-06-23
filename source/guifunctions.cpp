@@ -2090,7 +2090,7 @@ bool BuildingConstruction::available( const MapCoordinate& pos, ContainerBase* s
 void BuildingConstruction::execute( const MapCoordinate& pos, ContainerBase* subject, int id  )
 {
    bool close = false;
-   if ( id < 0 )
+   if ( id <= 0 )
       close  = true;
 
    BuildingType* bld = buildingTypeRepository.getObject_byID( bldid );
@@ -2239,7 +2239,7 @@ Surface generate_gui_build_icon ( BuildingType* bld )
 
 Surface& BuildingConstruction::getImage( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
-   if ( id < 0 )
+   if ( id <= 0 )
       return IconRepository::getIcon("cancel.png");
 
    BuildingType* bld = buildingTypeRepository.getObject_byID( id );
@@ -2260,7 +2260,7 @@ Surface& BuildingConstruction::getImage( const MapCoordinate& pos, ContainerBase
 
 ASCString BuildingConstruction::getName( const MapCoordinate& pos, ContainerBase* subject, int id )
 {
-   if ( id < 0 )
+   if ( id <= 0 )
       return "cancel";
 
    BuildingType* bld = buildingTypeRepository.getObject_byID( id );

@@ -679,6 +679,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       
       void reLoadAndUpdate()
       {
+         factory->setAvailableResource(my_plant->getResource(Resources(maxint,maxint,maxint)));
          isw->reLoad( true );
       }
       

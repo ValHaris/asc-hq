@@ -113,7 +113,7 @@ VehicleTypeCountWidget::VehicleTypeCountWidget( PG_Widget* parent, const PG_Poin
 VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, int player ) : actplayer(player), original_items( types )
 {
    restart();
-   this->plantResources = plantResources;
+   setAvailableResource( plantResources );
 };
 
 

@@ -82,8 +82,9 @@ class TextRenderer : public PG_ScrollWidget {
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       
    public:
-      TextRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="ScrollWidget");
-      void SetText( const string& text );
+      TextRenderer (PG_Widget *parent, const PG_Rect &r, const std::string& text, const std::string &style="ScrollWidget");
+      TextRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null );
+      void SetText( const std::string& text );
 };
 
 

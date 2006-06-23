@@ -33,6 +33,11 @@
 #include <vector>
 #include <queue>
 
+#ifdef _SDL_
+ #include <SDL.h>
+#endif
+
+
 #include "global.h"
 #include "basestreaminterface.h"
 #include "lzw.h"
@@ -48,6 +53,21 @@
   #include "libs/bzlib/bzlib.h"
  }
 #endif
+
+#ifdef _SDL_
+ extern SDL_RWops *SDL_RWFromStream( pnstream stream );
+
+class RWOPS_Handler {
+      SDL_RWops *rwo;
+   public:
+      RWOPS_Handler( SDL_RWops *rw ) : rwo (rw) {};
+      SDL_RWops* Get() { return rwo; };
+      void Close() { if ( rwo ) { SDL_RWclose(rwo); rwo = NULL; } };
+      ~RWOPS_Handler() { Close(); };
+};
+
+#endif
+
 
 
 const int maxFileStringSize = 10000;    // is used for some character arrays
@@ -618,20 +638,6 @@ extern ASCString getSearchPath ( int i );
 //! converts path delimitters from foreign operating systems to the ones used by the current operating system. On Linux, this function converts backslashes to slashes, on Windows vice versa
 extern void convertPathDelimitters ( ASCString& path );
 
-#ifdef _SDL_
- #include <SDL.h>
- extern SDL_RWops *SDL_RWFromStream( pnstream stream );
-
-class RWOPS_Handler {
-      SDL_RWops *rwo;
-   public:
-      RWOPS_Handler( SDL_RWops *rw ) : rwo (rw) {};
-      SDL_RWops* Get() { return rwo; };
-      void Close() { if ( rwo ) { SDL_RWclose(rwo); rwo = NULL; } };
-      ~RWOPS_Handler() { Close(); };
-};
-
-#endif
 
 
 

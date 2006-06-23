@@ -137,10 +137,16 @@
 				RelativePath="..\..\graphics\drawing.cpp">
 			</File>
 			<File
+				RelativePath="..\..\explosivemines.cpp">
+			</File>
+			<File
 				RelativePath="..\groupfile.cpp">
 			</File>
 			<File
 				RelativePath="..\guidegenerator.cpp">
+			</File>
+			<File
+				RelativePath="..\..\iconrepository.cpp">
 			</File>
 			<File
 				RelativePath="..\infopage.cpp">
@@ -150,6 +156,9 @@
 			</File>
 			<File
 				RelativePath="..\..\messaginghub.cpp">
+			</File>
+			<File
+				RelativePath="..\..\objects.cpp">
 			</File>
 			<File
 				RelativePath="..\..\overviewmapimage.cpp">
