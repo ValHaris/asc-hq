@@ -43,4 +43,15 @@ extern SDL_Surface* getScreen();
 
 extern Surface& getActiveSurface();
 
+class MouseHider {
+      int x;
+      int y;
+      bool locked;
+   public:
+      MouseHider();
+      void unlock();
+      ~MouseHider();
+};
+
+
 #endif

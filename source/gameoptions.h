@@ -184,7 +184,9 @@ class CGameOptions
       void updatePanelData( const ASCString& name, PanelData data );
       
       ASCString BI3directory;
-      
+
+      ASCString graphicsDriver;
+
       ASCString startupMap;
       ASCString defaultPassword;
       ASCString defaultSuperVisorPassword;

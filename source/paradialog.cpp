@@ -197,7 +197,9 @@ void ASC_PG_App::eventIdle()
    PG_Application::eventIdle();
 }
 
-
+#ifdef WIN32
+#include "sdl/graphicsqueue.h"
+#endif
 
 bool ASC_PG_App::toggleFullscreen()
 {
@@ -207,9 +209,9 @@ bool ASC_PG_App::toggleFullscreen()
    int w = GetScreen()->w;
    int h = GetScreen()->h;
 
-   SDL_ShowCursor(0);
+   queueOperation( new MouseVisibility( false ), true );
 
-   int flags = 0;
+   int flags = SDL_SWSURFACE;
    if ( !fullScreen )
       flags |= SDL_FULLSCREEN;
 
@@ -223,7 +225,7 @@ bool ASC_PG_App::toggleFullscreen()
    SetScreen(screen);
    PG_Widget::UpdateScreen();
 
-   SDL_ShowCursor(1);
+   queueOperation( new MouseVisibility( true ), true );
 
    return true;
 }
@@ -302,8 +304,7 @@ static void SDL_center_window(SDL_Surface *screen)
                      DefaultScreen(info.info.x11.display));
          x = (w - screen->w)/2;
          y = (h - screen->h)/2;
-         XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x,
-y);
+         XMoveWindow(info.info.x11.display, info.info.x11.wmwindow, x, y);
          info.info.x11.unlock_func();
       }
 		

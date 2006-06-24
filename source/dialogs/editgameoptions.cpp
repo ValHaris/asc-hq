@@ -24,6 +24,7 @@
 #include <pgpropertyeditor.h>
 #include <pgpropertyfield_integer.h>
 #include <pgpropertyfield_intdropdown.h>
+#include <pgpropertyfield_dropdown.h>
 #include <pgpropertyfield_checkbox.h>
 #include <pgpropertyfield_string.h>
 
@@ -206,6 +207,11 @@ class EditGameOptions : public ASC_PG_Dialog {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "MapEd running Fullscreen", &o->mapeditWindowedMode, true );
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Modal Selection Window", &o->maped_modalSelectionWindow );
          }
+
+#ifdef WIN32
+         static const char* graphicDrivers[] = { "default", "windib", "directx", NULL };
+         new PG_PropertyField_DropDown<ASCString>( propertyEditor , "Graphics backend", &o->graphicsDriver, graphicDrivers );
+#endif
 
 
             

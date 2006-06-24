@@ -29,13 +29,14 @@
 #include "../global.h"
 // #include "keysymbols.h"
 #include "../errors.h"
-
+#include "graphicsqueue.h"
 
 volatile tmousesettings mouseparams;
 
 SDL_mutex* keyboardmutex = NULL;
 SDL_mutex* eventHandlingMutex = NULL;
 SDL_mutex* eventQueueMutex = NULL;
+SDL_mutex* graphicsQueueMutex = NULL;
 
 queue<tkey>   keybuffer_sym;
 queue<Uint32> keybuffer_prnt;
@@ -43,6 +44,10 @@ queue<SDL_Event> eventQueue;
 bool _queueEvents = true;
 bool _fillLegacyEventStructures = false;
 
+bool eventThreadRunning = false;
+
+
+std::list<GraphicsQueueOperation*> graphicsQueue;
 
 int exitprogram = 0;
 
@@ -55,18 +60,6 @@ int exitprogram = 0;
 
 
 bool redrawScreen = false;
-
-int mouse_in_off_area ( void )
-{
-   if ( mouseparams.off.x1 == -1     ||   mouseparams.off.y1 == -1 )
-      return 0;
-   else
-      return ( mouseparams.x1+mouseparams.xsize >= mouseparams.off.x1  &&
-               mouseparams.y1+mouseparams.ysize >= mouseparams.off.y1   &&
-               mouseparams.x1 <= mouseparams.off.x2  &&
-               mouseparams.y1 <= mouseparams.off.y2 ) ;
-}
-
 
 
 
@@ -247,12 +240,6 @@ tkey char2key(int c )
       return ct_invvalue;
 }
 
-/*
-char *get_key(tkey keynr)
-{
-   return "not yet implemented";
-}
-*/
 
 int  releasetimeslice( void )
 {
@@ -417,13 +404,98 @@ int processEvents ( )
 #define FirstThreadEvents 1
 #endif
 
+bool syncGraphics = true;
+
+void queueOperation( GraphicsQueueOperation* gqo, bool wait )
+{
+   if ( !eventThreadRunning ) {
+      gqo->execute();
+      delete gqo;
+      return;
+   }
+
+   SDL_mutexP( graphicsQueueMutex );
+   graphicsQueue.push_back( gqo );
+   SDL_mutexV( graphicsQueueMutex );
+
+   if ( syncGraphics || wait ) {
+      bool finished = false;
+      do {
+         SDL_Delay(10);
+         SDL_mutexP( graphicsQueueMutex );
+         finished = graphicsQueue.empty();
+         SDL_mutexV( graphicsQueueMutex );
+      } while (!finished);
+   }
+}
+
+
+void UpdateRectOp::execute()
+{ 
+   SDL_ShowCursor( 0 );
+   SDL_UpdateRect( screen, x,y,w,h); 
+   SDL_ShowCursor( 1 );
+};
+
+
+UpdateRectsOp::UpdateRectsOp( SDL_Surface *screen, int numrects, SDL_Rect *rects) 
+{
+   this->numrects = numrects;
+   this->rects = new SDL_Rect[numrects];
+   for ( int i = 0; i< numrects; ++i )
+      this->rects[i] = rects[i];
+   this->screen = screen;
+};
+
+UpdateRectsOp::~UpdateRectsOp()
+{
+   delete[] rects;
+}
+
+void UpdateRectsOp::execute() 
+{ 
+   SDL_ShowCursor( 0 );
+   SDL_UpdateRects( screen, numrects, rects); 
+   SDL_ShowCursor( 1 );
+}
+
+
+bool processGraphicsQueue()
+{
+#ifdef FirstThreadEvents
+   GraphicsQueueOperation* gqo = NULL;
+   SDL_mutexP( graphicsQueueMutex );
+   if ( !graphicsQueue.empty() ) {
+      gqo = graphicsQueue.front();
+      graphicsQueue.pop_front();
+   }
+   SDL_mutexV( graphicsQueueMutex );
+   if ( gqo ) {
+      gqo->execute();
+      delete gqo;
+      return true;
+   } else
+      return false;
+   
+#endif
+}
+
 int eventthread ( void* nothing )
 {
+#ifdef FirstThreadEvents
+   eventThreadRunning = true;
+#endif
    while ( !closeEventThread ) {
       if ( !processEvents() )
          SDL_Delay(10);
+      processGraphicsQueue();
       ticker = SDL_GetTicks() / 10;
    }
+#ifdef FirstThreadEvents
+   eventThreadRunning = false;
+   while ( processGraphicsQueue() ) 
+      SDL_Delay(10);
+#endif
    return closeEventThread;
 }
 
@@ -481,6 +553,11 @@ int initializeEventHandling ( int (*gamethread)(void *) , void *data )
       exit(1);
    }
 
+   graphicsQueueMutex = SDL_CreateMutex();
+   if ( !graphicsQueueMutex ) {
+      printf("creating graphicsQueueMutex failed\n" );
+      exit(1);
+   }
 
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );

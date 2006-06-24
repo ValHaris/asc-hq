@@ -93,6 +93,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    
    pc.addInteger("XResolution", xresolution, xresolution);
    pc.addInteger("YResolution", yresolution, yresolution);
+   pc.addString("GraphicsDriver", graphicsDriver, graphicsDriver );
 
    pc.addInteger("MapEditor_XResolution", mapeditor_xresolution, mapeditor_xresolution);
    pc.addInteger("MapEditor_YResolution", mapeditor_yresolution, mapeditor_yresolution);
@@ -145,6 +146,8 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addBool("DebugReplay", debugReplay, debugReplay );
 
    pc.addString("BI3.path", BI3directory, BI3directory );
+
+   
    /*
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
    add(new IntProperty("BI3.interpolate.units"			,	&_pOptions->bi3.interpolate.units));
@@ -269,6 +272,9 @@ void CGameOptions::setDefaults ( void )
 
    mapeditor_xresolution = 1024;
    mapeditor_yresolution = 740;
+
+   graphicsDriver = "default";
+
    automaticTraining = true;
 
    setChanged();

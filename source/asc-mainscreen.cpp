@@ -219,6 +219,7 @@ void Menu::setup()
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
    addbutton ( "Show ASC search ~P~ath", ua_showsearchdirs );
+   addbutton ( "SDL settings", ua_SDLinfo );
    currentMenu->addSeparator();
    addbutton ( "~K~eys", ua_help );
 

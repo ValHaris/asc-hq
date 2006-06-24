@@ -1776,6 +1776,8 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
              actmap->endTurn();
              int nextplayer = findNextPlayer( actmap );
+             if ( nextplayer < actmap->actplayer )
+                actmap->endRound();
              
              resourcesCompared = true;
              ASCString resourceComparisonResult;

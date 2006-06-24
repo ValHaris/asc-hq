@@ -113,9 +113,8 @@ int copy2screen( void )
 
 int copy2screen( int x1, int y1, int x2, int y2 )
 {
-  #ifdef _WIN32_  
-   SDL_ShowCursor(0);
-  #endif 
+   MouseHider mouseHider;
+
    if ( !dummyScreenPaletteSetup ) {
       hgmp->surface->assignDefaultPalette();
       dummyScreenPaletteSetup = true;
@@ -142,13 +141,30 @@ int copy2screen( int x1, int y1, int x2, int y2 )
          else
             SDL_UpdateRect ( screen , x1, y2, x2-x1+1, y1-y2+1 );
 
-
-  #ifdef _WIN32_  
-   SDL_ShowCursor(1);
-  #endif 
-          
    return 0;
 }
 
+MouseHider::MouseHider() : locked(true)
+{
+  #ifdef _WIN32_  
+   SDL_GetMouseState(&x, &y);
+   SDL_ShowCursor(0);
+  #endif 
+}
 
+void MouseHider::unlock()
+{
+  #ifdef _WIN32_  
+   SDL_WarpMouse(x, y);
+   SDL_ShowCursor(1);
+   // SDL_WarpMouse(x, y);
+   locked = false;
+  #endif 
 
+}
+
+MouseHider::~MouseHider()
+{
+   if ( locked )
+      unlock();
+}

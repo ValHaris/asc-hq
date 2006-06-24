@@ -473,6 +473,81 @@ void changePassword( GameMap* gamemap )
    } while ( gamemap->player[gamemap->actplayer].passwordcrc.empty() && success && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
 }
 
+void showSDLInfo()
+{
+#ifdef _SDL_
+   ASCString s;
+   s += "#fontsize=18#SDL versions#fontsize=14#\n";
+   char buf[1000];
+   SDL_version compiled;
+   SDL_VERSION(&compiled);
+   sprintf(buf, "\nCompiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
+   s += buf;
+
+   sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
+   s += buf;
+
+   s += "SDL video driver: ";
+   s += SDL_VideoDriverName( buf, 1000 );
+   s += "\n";
+
+
+   const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
+   s += "VideoInfo: \n";
+
+   s += "Hardware surfaces available: ";
+   s += videoInfo->hw_available ? "yes" : "no";
+
+   s += "\nWindow manager available: ";
+   s += videoInfo->wm_available ? "yes" : "no";
+
+   s += "\nhardware to hardware blits accelerated: ";
+   s += videoInfo->blit_hw ? "yes" : "no";
+
+   s += "\nhardware to hardware colorkey blits accelerated: ";
+   s += videoInfo->blit_hw_CC ? "yes" : "no";
+
+   s += "\nhardware to hardware alpha blits accelerated: ";
+   s += videoInfo->blit_hw_A ? "yes" : "no";
+
+   s += "\nsoftware to hardware blits accelerated: ";
+   s += videoInfo->blit_sw ? "yes" : "no";
+
+   s += "\nsoftware to hardware colorkey blits accelerated: ";
+   s += videoInfo->blit_sw_CC ? "yes" : "no";
+
+   s += "\nsoftware to hardware alpha blits accelerated: ";
+   s += videoInfo->blit_sw_A ? "yes" : "no";
+
+   s += "\ncolor fills accelerated: ";
+   s += videoInfo->blit_fill ? "yes" : "no";
+
+   s += "\nVideo memory: ";
+   s += ASCString::toString( int(videoInfo->video_mem ));
+
+   ViewFormattedText vft( "SDL Settings", s, PG_Rect(-1,-1,450,550));
+   vft.Show();
+   vft.RunModal();
+
+#endif
+
+}
+
+void helpAbout()
+{
+   ASCString s = "#fontsize=22#Advanced Strategic Command#fontsize=14#\n";
+   s += getVersionAndCompilation();
+
+   s += "#fontsize=18#Credits#fontsize=14#\n";
+
+   s += readtextmessage( 30 );
+                     
+   ViewFormattedText vft( "About", s, PG_Rect(-1,-1,450,550));
+   vft.Show();
+   vft.RunModal();
+
+}
+
 
 // user actions using the old event system
 void execuseraction ( tuseractions action )
@@ -605,30 +680,11 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_viewaboutmessage:
-         {
-            ASCString s = "#fontsize=22#Advanced Strategic Command#fontsize=14#\n";
-            s += getVersionAndCompilation();
+         helpAbout();
+         break;
 
-            s += "#fontsize=18#Credits#fontsize=14#\n";
-
-            s += readtextmessage( 30 );
-                              
-#ifdef _SDL_
-            s += "#fontsize=18#SDL versions#fontsize=14#\n";
-            char buf[1000];
-            SDL_version compiled;
-            SDL_VERSION(&compiled);
-            sprintf(buf, "\nCompiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
-            s += buf;
-
-            sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
-            s += buf;
-#endif
-
-            ViewFormattedText vft( "About", s, PG_Rect(-1,-1,450,550));
-            vft.Show();
-            vft.RunModal();
-         }
+      case ua_SDLinfo:
+         showSDLInfo();
          break;
 
       case ua_toggleunitshading: 
@@ -1083,9 +1139,11 @@ int gamethread ( void* data )
    int resoly = agmp->resolutiony;
    virtualscreenbuf.init();
 
+
    {
       StartupScreen sus( "title.jpg", dataLoaderTicker );
-   
+
+
       try {
          loaddata( resolx, resoly, gtp->filename.c_str() );
       }
@@ -1199,6 +1257,8 @@ int main(int argc, char *argv[] )
 {
    // setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
+   putenv("SDL_VIDEO_CENTERED=1") ;
+
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
    // we should think about replacing clparser with libpopt
@@ -1263,7 +1323,12 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 768 )
       yr = cl->y();
 
-   
+   if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
+      ASCString s = "SDL_VIDEODRIVER=" + CGameOptions::Instance()->graphicsDriver;
+      putenv( s.c_str()) ;
+   }
+
+
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
 
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
@@ -1279,7 +1344,6 @@ int main(int argc, char *argv[] )
 
    cursorMoved.connect( updateFieldInfo );
 
-//   int flags = SDL_HWSURFACE; 
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
@@ -1302,6 +1366,7 @@ int main(int argc, char *argv[] )
    if ( cl->next_param() < argc )
       for ( int i = cl->next_param(); i < argc; i++ )
          gtp.filename = argv[i];
+
 
    int returncode = 0;
    try {
