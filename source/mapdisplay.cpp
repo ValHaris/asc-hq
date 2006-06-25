@@ -1288,6 +1288,9 @@ MapCoordinate& MapDisplayPG::Cursor::pos()
 
 void MapDisplayPG::scrollMap( int dir )
 {
+   if ( !actmap )
+      return;
+
    MapCoordinate oldOffset = offset;
 
    const int stepWidth = 2;

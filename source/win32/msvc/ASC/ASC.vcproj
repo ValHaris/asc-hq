@@ -511,6 +511,9 @@
 					RelativePath="..\..\..\dialogs\attackpanel.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\buildingtypeselector.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\cargodialog.cpp">
 				</File>
 				<File

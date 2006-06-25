@@ -896,6 +896,9 @@ void UnitMainPage::buildContent() {
   } else {
     addTREntry("Resists wind force", vt.maxwindspeedonwater);
   }
+  if( vt.hasFunction( DetectsMineralResources ) ) {
+    addTREntry("Mineral resource detection range", vt.digrange );
+  }
 
   endTable();
   addHeadline("Production", 3);
