@@ -45,7 +45,7 @@
 #include "mapdisplayinterface.h"
 
 #ifdef sgmain
-# include "gamedlg.h"
+// # include "gamedlg.h"
 # include "viewcalculation.h"
 # include "resourcenet.h"
 # include "unitctrl.h"

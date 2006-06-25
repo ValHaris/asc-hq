@@ -190,7 +190,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
       //
    
-      void checkViewPosition();
+      void checkViewPosition( MapCoordinate& pos );
       
       void fillSurface( int playerView );
 
@@ -211,6 +211,10 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
       MapCoordinate upperLeftCorner();
       MapCoordinate lowerRightCorner();
+      
+      bool fieldCompletelyInViewX( const MapCoordinate& pos );
+      bool fieldCompletelyInViewY( const MapCoordinate& pos );
+      bool fieldCompletelyInView( const MapCoordinate& pos );
       
    private:
       SPoint upperLeftSourceBlitCorner;

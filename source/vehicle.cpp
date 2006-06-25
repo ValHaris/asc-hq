@@ -865,7 +865,7 @@ bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
 }
 
 
-bool Vehicle :: buildingconstructable ( BuildingType* building )
+bool Vehicle :: buildingconstructable ( BuildingType* building, bool checkResources )
 {
    if ( !building )
       return 0;
@@ -892,7 +892,7 @@ bool Vehicle :: buildingconstructable ( BuildingType* building )
       return 0;
 
 
-   if ( building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel ) {
+   if ( (building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel) || !checkResources ) {
       if ( typ->hasFunction( ContainerBaseType::ConstructBuildings) )
          for ( int i = 0; i < typ->buildingsBuildable.size(); i++ )
             if ( typ->buildingsBuildable[i].from <= building->id &&

@@ -37,7 +37,7 @@ VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Poin
    lbl2->SetFontSize( lbl2->GetFontSize() -2 );
 
 
-   PG_Button* b = new PG_Button( this, PG_Rect( col1 + 3 * sw + 10, 0, 2*lineheight, 2*lineheight ));
+   PG_Button* b = new PG_Button( this, PG_Rect( col1 + 3 * sw + 10, Height()/2-lineheight, 2*lineheight, 2*lineheight ));
    b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
    b->sigClick.connect( SigC::slot( *this, &VehicleTypeBaseWidget::info ));
    

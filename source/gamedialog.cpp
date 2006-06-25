@@ -16,7 +16,7 @@
 
 
 #include "gamedialog.h"
-#include "gamedlg.h"
+// #include "gamedlg.h"
 #include "guidimension.h"
 #include "sdl/sound.h"
 #include "misc.h"

@@ -1347,6 +1347,9 @@ void GameMap::endTurn()
       
    processJournal();   
 
+   if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
+      sigPlayerTurnHasEnded( player[actplayer] );
+   
 }
 
 

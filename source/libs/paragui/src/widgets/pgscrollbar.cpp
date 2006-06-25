@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-06-25 17:39:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollbar.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -481,6 +481,12 @@ int PG_ScrollBar::ScrollButton::GetPosFromPoint(PG_Point p) {
 void PG_ScrollBar::SetLineSize(int ls) {
 	my_linesize = ls;
 }
+
+int  PG_ScrollBar::GetLineSize()
+{
+   return my_linesize;
+}
+
 
 void PG_ScrollBar::SetPageSize(int ps) {
 	my_pagesize = ps;

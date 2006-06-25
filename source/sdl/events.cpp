@@ -495,6 +495,8 @@ bool processGraphicsQueue()
       SDL_mutexV( graphicsQueueMutex );
       return false;   
    }
+#else
+   return false;
 #endif
 }
 

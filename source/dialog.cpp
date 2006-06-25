@@ -57,7 +57,7 @@
 #include "widgets/textrenderer.h"
 
 #ifndef karteneditor
- #include "gamedlg.h"
+// #include "gamedlg.h"
 #endif
 
 

@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-06-25 17:39:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollwidget.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -215,6 +215,29 @@ void PG_ScrollWidget::eventSizeWidget(Uint16 w, Uint16 h) {
 	CalcScrollbarVisibility();
 	CheckScrollBars();
 }
+
+bool PG_ScrollWidget::eventMouseButtonDown(const SDL_MouseButtonEvent* button)
+{
+   if ( my_objVerticalScrollbar->IsVisible() ) {
+      if ( button->button == 4 ) {
+         
+         int y = GetScrollPosY();
+         if ( y < my_objVerticalScrollbar->GetLineSize() )
+            y = 0;
+         else
+            y -= my_objVerticalScrollbar->GetLineSize();
+         
+         ScrollTo( GetScrollPosX(), y );
+         return true;
+      }
+      if ( button->button == 5 ) {
+         ScrollTo( GetScrollPosX(), GetScrollPosY() + my_objVerticalScrollbar->GetLineSize() );
+         return true;
+      }
+   }
+   return false;   
+}
+
 
 bool PG_ScrollWidget::handleScrollPos(PG_ScrollBar* widget, long data) {
 	if(widget == my_objVerticalScrollbar) {

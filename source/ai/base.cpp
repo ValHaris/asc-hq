@@ -21,6 +21,8 @@
 
 #include "../turncontrol.h"
 
+#include "../widgets/textrenderer.h"
+
 AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
    strictChecks = false;
@@ -362,10 +364,10 @@ void AI :: showFieldInformation ( int x, int y )
    }
 
    strcat ( text, s.c_str() );
-   tviewanytext vat;
-   vat.init ( "AI information", text );
-   vat.run();
-   vat.done();
+
+   ViewFormattedText vft( "AI information", text, PG_Rect( 500, 550 ) );
+   vft.Show();
+   vft.RunModal();
 }
 
 

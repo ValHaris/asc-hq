@@ -2,7 +2,7 @@
 #define graphicsqueueH
 
 #include <list>
-#include <sdl.h>
+#include <SDL.h>
 
  #include "../libs/loki/Functor.h"
 

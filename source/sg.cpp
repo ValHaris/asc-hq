@@ -223,7 +223,7 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
       
-      map->sigPlayerUserInteractionEnds.connect( SigC::slot( viewOwnReplay));
+      map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
 
       
       map->guiHooked();
@@ -1324,8 +1324,11 @@ int main(int argc, char *argv[] )
       yr = cl->y();
 
    if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
-      ASCString s = "SDL_VIDEODRIVER=" + CGameOptions::Instance()->graphicsDriver;
-      putenv( s.c_str()) ;
+      static char buf[100];
+      strcpy(buf, "SDL_VIDEODRIVER=" );
+      strncpy( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
+      buf[99] = 0;
+      putenv( buf );
    }
 
 

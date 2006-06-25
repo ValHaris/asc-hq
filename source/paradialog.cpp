@@ -197,9 +197,7 @@ void ASC_PG_App::eventIdle()
    PG_Application::eventIdle();
 }
 
-#ifdef WIN32
 #include "sdl/graphicsqueue.h"
-#endif
 
 void ASC_PG_App::SetNewScreenSurface( SDL_Surface* surface )
 {

@@ -246,7 +246,7 @@ class BuildingType;
     /** checks whether the unit can construct a building of the given type.
     This method does not check if there is enough space around the unit to place
     the building */
-    bool buildingconstructable ( BuildingType* bld );
+    bool buildingconstructable ( BuildingType* bld, bool checkResources = true );
     //@}
     
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)

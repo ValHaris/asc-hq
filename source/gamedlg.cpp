@@ -710,9 +710,9 @@ void choosetechlevel ( void )
 
 
 
-void writeGameParametersToString ( std::string& s)
+ASCString writeGameParametersToString ( GameMap* actmap )
 {
-   s = "The game has been set up with the following game parameters:\n";
+   ASCString s = "The game has been set up with the following game parameters:\n";
    s += "(black line: parameter has default value)\n\n";
    for ( int i = 0; i< gameparameternum; i++ ) {
    
@@ -729,12 +729,12 @@ void writeGameParametersToString ( std::string& s)
          s+= "#color0#";
       s += "\n";
    }
+   return s;
 }
 
-void sendGameParameterAsMail ( void )
+void sendGameParameterAsMail ( GameMap* actmap )
 {
-   ASCString s;
-   writeGameParametersToString ( s );
+   ASCString s = writeGameParametersToString ( actmap );
 
    if ( actmap->getgameparameter( cgp_superVisorCanSaveMap) ) {
       s = "#color4#Warning ! This game has been started with the option enabled that allows the Supervisor to save the map. This will allow him to spy on everything. \n"
@@ -748,19 +748,13 @@ void sendGameParameterAsMail ( void )
 
 void showGameParameters ( void )
 {
-/*
-   string s;
-   writeGameParametersToString ( s );
-
-   tviewanytext vat;
-   vat.init ( "Game Parameter", s.c_str(), 50, 50, 550, 400 );
-   vat.run();
-   vat.done();
-
-   */
+   ViewFormattedText vft( "Game Parameters", writeGameParametersToString(actmap), PG_Rect( 500, 550 ) );
+   vft.Show();
+   vft.RunModal();
 }
 
 
+#if 0
 
 class tmultiplayersettings : public tdialogbox {
               protected:
@@ -946,16 +940,7 @@ tmultiplayersettings :: ~tmultiplayersettings ( )
 }
 
 
-
-void multiplayersettings ( void )
-{
-   tmultiplayersettings mps;
-   mps.init();
-   mps.run();
-   mps.done();
-   sendGameParameterAsMail();
-}
-
+#endif
 
 class tgiveunitawaydlg : public tdialogbox {
              int markedplayer;

@@ -38,6 +38,7 @@
 #include "../windowing.h"
 #include "../controls.h"
 #include "../sg.h"
+#include "../gamedlg.h"
 
 class GameParameterEditorWidget;
 
@@ -586,6 +587,11 @@ bool StartMultiplayerGame::start()
    updateFieldInfo();
    moveparams.movestatus = 0;
    success = true;
+
+   if ( mode == PBP || mode == PBEM ) 
+      sendGameParameterAsMail ( actmap );
+
+   
    return true;
 }
 

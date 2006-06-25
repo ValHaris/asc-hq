@@ -47,7 +47,7 @@
 #include "../stack.h"
 #include "../controls.h"
 #include "../dialog.h"
-#include "../gamedlg.h"
+// #include "../gamedlg.h"
 #include "../attack.h"
 #include "../gameoptions.h"
 #include "../astar2.h"

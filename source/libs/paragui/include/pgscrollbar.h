@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-06-25 17:39:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgscrollbar.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -135,10 +135,12 @@ class SignalScrollTrack : public PG_Signal2<PG_ScrollBar*, datatype> {}
 
 	/** Linesize is the scroll distance that is scrolled if one of the arrow buttons is pressed  */
 	void SetLineSize(int ls);
+   int  GetLineSize();
 
 	/**  */
 	void SetPageSize(int ps);
 
+   
 	SignalScrollPos<long> sigScrollPos;
 	SignalScrollTrack<long> sigScrollTrack;
 

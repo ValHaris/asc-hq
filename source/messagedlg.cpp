@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 
-#include "gamedlg.h"
+// #include "gamedlg.h"
 #include "messagedlg.h"
 #include "gamemap.h"
 #include "paradialog.h"

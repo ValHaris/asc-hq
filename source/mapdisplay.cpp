@@ -535,7 +535,7 @@ void MapDisplayPG::setNewZoom( int zoom )
 
 void MapDisplayPG::fillSurface( int playerView )
 {
-   checkViewPosition();
+   checkViewPosition( offset );
    if ( !lock )
       paintTerrain( *surface, actmap, playerView, field.viewPort, offset );
    else
@@ -544,13 +544,13 @@ void MapDisplayPG::fillSurface( int playerView )
 }
 
 
-void MapDisplayPG::checkViewPosition()
+void MapDisplayPG::checkViewPosition( MapCoordinate& offset )
 {
    if ( offset.x + field.numx >= actmap->xsize +1 )
       offset.x = max(0,actmap->xsize - field.numx +1 );
 
-   if ( offset.y + field.numy >= actmap->ysize +2)
-      offset.y = max(0,actmap->ysize - field.numy +2);
+   if ( offset.y + field.numy >= actmap->ysize +4)
+      offset.y = max(0,actmap->ysize - field.numy +4);
 
    if ( offset.y & 1 )
       offset.y -= 1;
@@ -803,24 +803,12 @@ bool MapDisplayPG::centerOnField( const MapCoordinate& mc )
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;
       
-   int newx = mc.x - field.numx / 2;
-   int newy = mc.y - field.numy / 2;
+   MapCoordinate newpos ( mc.x - field.numx / 2,  mc.y - field.numy / 2 );
 
-   if ( newx < 0 )
-      newx = 0;
-   if ( newy < 0 )
-      newy = 0;
-   if ( newx > actmap->xsize - field.numx +1 )
-      newx = actmap->xsize - field.numx + 1;
-   if ( newy > actmap->ysize - field.numy +2 )
-      newy = actmap->ysize - field.numy +2;
+   checkViewPosition( newpos );
 
-   if ( newy & 1 )
-      newy--;
-
-   if ( newx != offset.x  || newy != offset.y ) {
-      offset.x = newx;
-      offset.y = newy;
+   if ( newpos != offset  ) {
+      offset = newpos;
       dirty = Map;
       Redraw();
       viewChanged();
@@ -912,10 +900,36 @@ bool MapDisplayPG::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 }
 
 
+bool MapDisplayPG::fieldCompletelyInViewX( const MapCoordinate& pos )
+{
+   SPoint internal = mapGlobalPos2internalPos( pos);
+   SPoint s = widget2screen( internal2widget( internal ));
+   SPoint s2 = widget2screen( internal2widget( internal + SPoint(fieldsizex,fieldsizey) ));
+   return s.x >= my_xpos && s2.x < my_xpos + my_width;
+}
+
+bool MapDisplayPG::fieldCompletelyInViewY( const MapCoordinate& pos )
+{
+   SPoint internal = mapGlobalPos2internalPos( pos);
+   SPoint s = widget2screen( internal2widget( internal ));
+   SPoint s2 = widget2screen( internal2widget( internal + SPoint(fieldsizex,fieldsizey) ));
+   return s.y >= my_ypos && s2.y < my_ypos + my_height;
+}
+
+bool MapDisplayPG::fieldCompletelyInView( const MapCoordinate& pos )
+{
+   // for performance-reasons we don't call the above two methods
+   SPoint internal = mapGlobalPos2internalPos( pos);
+   SPoint s = widget2screen( internal2widget( internal ));
+   SPoint s2 = widget2screen( internal2widget( internal + SPoint(fieldsizex,fieldsizey) ));
+   return (s.y >= my_ypos && s2.y < my_ypos + my_height) && (s.x >= my_xpos && s2.x < my_xpos + my_width);
+
+}
+
 
 bool MapDisplayPG::fieldInView(const MapCoordinate& mc )
 {
-   if ( mc.x < offset.x || mc.y < offset.y || mc.x >= offset.x + field.numx || mc.y >= offset.y +  field.numy )
+   if ( mc.x < offset.x || mc.y < offset.y || mc.x >= offset.x + field.numx || mc.y >= offset.y +  field.numy || !fieldCompletelyInView(mc) )
       return false;
    else
       return true;
@@ -1291,7 +1305,7 @@ void MapDisplayPG::scrollMap( int dir )
    if ( dir >= 5 && dir <= 7)
       offset.x -= stepWidth;
    
-   checkViewPosition();
+   checkViewPosition( offset );
 
    if ( offset != oldOffset ) {
       dirty = Map;
@@ -1378,16 +1392,16 @@ void MapDisplayPG::moveCursor( int dir, int step )
       if ( pos.y < offset.y )
          offset.y = min( 0, pos.y & ~1);
 
-      if ( pos.x > offset.x + field.numx - 2)
+      if ( pos.x > offset.x + field.numx - 2  || !fieldCompletelyInViewX( pos ))
          offset.x = pos.x - field.numx + 6;
 
-      if ( pos.y > offset.y + field.numy - 2 )
-         offset.y = (pos.y - field.numy + 6) & ~1;
+      if ( pos.y > offset.y + field.numy - 2 || !fieldCompletelyInViewY( pos ))
+         offset.y = (pos.y - field.numy + 8) & ~1;
 
       if ( offset != oldOffset )
          dirty = Map;
 
-      checkViewPosition();
+      checkViewPosition( offset );
       
       cursorMoved();
       if ( offset != oldOffset ) {

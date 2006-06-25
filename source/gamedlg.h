@@ -26,7 +26,7 @@
    A lot of dialog boxes that are only used by both ASC.
 */
 
-
+class GameMap;
 
 extern void  choosetechnology(void);
 extern void  settributepayments ( void );
@@ -38,8 +38,6 @@ extern void choosetechlevel ( void );
 
 class tfield;
 
-extern void multiplayersettings ( void );
-
 extern void giveunitaway ( tfield* fld );
 
 extern void showGameParameters ( void );
@@ -47,6 +45,8 @@ extern void showGameParameters ( void );
 extern void showPlayerTime();
 extern void displaywindspeed();
 
+
+extern void sendGameParameterAsMail ( GameMap* actmap );
 
 #endif  // ifndef gamedlg_h
 

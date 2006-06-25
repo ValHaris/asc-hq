@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-06-25 17:39:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgscrollwidget.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -137,6 +137,8 @@ protected:
 	/**  */
 	void eventSizeWidget(Uint16 w, Uint16 h);
 
+   bool eventMouseButtonDown(const SDL_MouseButtonEvent* button);
+   
 	/**  */
 	bool handleScrollPos(PG_ScrollBar* widget, long data);
 

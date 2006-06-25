@@ -385,6 +385,7 @@ class GameMap {
       SigC::Signal1<void,Player&> sigPlayerUserInteractionBegins;
       SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
       SigC::Signal1<void,Player&> sigPlayerTurnEnds;
+      SigC::Signal1<void,Player&> sigPlayerTurnHasEnded;
 
       static SigC::Signal1<void,GameMap&> sigMapDeletion;
       

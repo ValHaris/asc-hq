@@ -44,6 +44,7 @@
 #include "asc-mainscreen.h"
 #include "loaders.h"
 #include "turncontrol.h"
+#include "widgets/textrenderer.h"
 
 trunreplay runreplay;
 
@@ -1774,6 +1775,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
              displaymessage2("running final comparison" );
 
+             int replayedplayer  = actmap->actplayer; 
              actmap->endTurn();
              int nextplayer = findNextPlayer( actmap );
              if ( nextplayer < actmap->actplayer )
@@ -1784,17 +1786,16 @@ int  trunreplay :: run ( int player, int viewingplayer )
              GameMap* comparisonMap = NULL;
              GameMap* nextPlayerMap = NULL;
 
-             if ( nextplayer == orgmap->actplayer )
+             if ( replayedplayer == orgmap->actplayer )
                 comparisonMap = orgmap;
              else
                 comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[nextplayer]  );
 
              if ( comparisonMap ) {
                 if ( comparisonMap->compareResources( actmap, player, &resourceComparisonResult)) {
-                   tviewanytext vat;
-                   vat.init ( "warning", resourceComparisonResult.c_str() );
-                   vat.run();
-                   vat.done();
+                   ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( 500, 550 ) );
+                   vft.Show();
+                   vft.RunModal();
                 }
              } else
                 error("Replay: no map to compare to!");

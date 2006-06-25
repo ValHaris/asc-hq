@@ -38,7 +38,7 @@
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
 #include "spfst.h"
-#include "gamedlg.h"
+// #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
 #include "dialogs/ammotransferdialog.h"
 #include "mapdisplay.h"
@@ -46,6 +46,7 @@
 #include "loaders.h"
 #include "itemrepository.h"
 #include "turncontrol.h"
+#include "dialogs/buildingtypeselector.h"
 
 
 namespace GuiFunctions
@@ -2030,6 +2031,7 @@ class BuildingConstruction : public GuiIconHandler, public GuiFunction {
       bool init( Vehicle* vehicle );
       bool setup();
       void eval( const MapCoordinate& mc, ContainerBase* subject );
+      bool setBuilding( const MapCoordinate& pos, ContainerBase* subject, int id );
 
 };
 
@@ -2087,6 +2089,28 @@ bool BuildingConstruction::available( const MapCoordinate& pos, ContainerBase* s
    return false;
 }
 
+bool BuildingConstruction::setBuilding( const MapCoordinate& pos, ContainerBase* subject, int id )
+{
+   entryPos.clear();
+   bldid = id;
+   actmap->cleartemps(7);
+
+   int num = 0;
+   for ( int i = 0; i< 6; ++i)
+      search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
+
+   if ( num ) {
+      moveparams.movestatus = 111;
+      repaintMap();
+      eval( pos, subject );
+      return true;
+   } else {
+      dispmessage2( 301, "" );
+      return false;
+   }
+
+}
+
 void BuildingConstruction::execute( const MapCoordinate& pos, ContainerBase* subject, int id  )
 {
    bool close = false;
@@ -2097,19 +2121,7 @@ void BuildingConstruction::execute( const MapCoordinate& pos, ContainerBase* sub
 
 
    if (moveparams.movestatus == 110 && !close ) {
-      entryPos.clear();
-      bldid = id;
-      actmap->cleartemps(7);
-
-      int num = 0;
-      for ( int i = 0; i< 6; ++i)
-         search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
-
-      if ( num ) {
-         moveparams.movestatus = 111;
-         repaintMap();
-         eval( pos, subject );
-      } else
+      if ( !setBuilding( pos, subject, id ))
          close = true;
    } else
 
@@ -2394,6 +2406,17 @@ bool ConstructBuilding::available( const MapCoordinate& pos, ContainerBase* subj
    return false;
 }
 
+
+class BuildingConstructionSelection : public BuildingTypeSelectionItemFactory {
+   private:
+      const BuildingType* selectedType;
+   protected:
+      void BuildingTypeSelected( const BuildingType* type ) { selectedType = type;  };
+   public:
+      BuildingConstructionSelection ( Resources plantResources, const Container& types, int player ) : BuildingTypeSelectionItemFactory(plantResources, types, player ), selectedType(NULL) {};
+      const BuildingType* getSelectedType() { return selectedType; };
+};
+
 void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
@@ -2404,24 +2427,36 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subje
             return;
          }
 
-         int num = 0;
+         BuildingTypeSelectionItemFactory::Container buildings;
+         
          for ( int i = 0; i < buildingTypeRepository.getNum(); i++)
-            if ( fld->vehicle->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ) ))
-               num++;
+            if ( fld->vehicle->buildingconstructable ( buildingTypeRepository.getObject_byPos( i ), false ))
+               buildings.push_back ( buildingTypeRepository.getObject_byPos(i) );
 
-         if ( num == 0 ) {
+         if ( buildings.empty() ) {
             dispmessage2( 303, NULL );
             return;
          }
 
-
-         if ( buildingConstruction.init( fld->vehicle )) {
-            moveparams.movestatus = 110;
+         BuildingConstructionSelection* bcs = new BuildingConstructionSelection ( fld->vehicle->getResource( Resources(maxint, maxint, maxint), true ), buildings, fld->vehicle->getOwner() );
+         ItemSelectorWindow isw ( NULL, PG_Rect( -1, -1, 550, 650), "Select Building", bcs);
+         isw.Show();
+         isw.RunModal();
+         isw.Hide();
+         
+         
+         if ( buildingConstruction.init( fld->vehicle ) && bcs->getSelectedType() ) {
+            moveparams.movestatus = 111;
             NewGuiHost::pushIconHandler( &buildingConstruction );
             buildingConstruction.setup();
-            repaintMap();
+            if ( !buildingConstruction.setBuilding( pos, subject, bcs->getSelectedType()->id )) {
+               NewGuiHost::popIconHandler();
+               moveparams.movestatus = 0;
+            }
+               
             updateFieldInfo();
          }
+         
       }
    }
 }
