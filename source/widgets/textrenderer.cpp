@@ -163,13 +163,15 @@ void TextRenderer :: addLinebreak( int pixel, int lines )
 
 void TextRenderer :: addIndentation( int firstLine, int furtherLines )
 {
-   if ( lastWidget ) {
-      if ( firstLine >= 0 )
-         attributes[lastWidget].firstLineIndent = firstLine;
+   if ( !lastWidget ) 
+      addWidget( new PG_Widget( this, PG_Rect(0,0,0,1)));
+   
+   if ( firstLine >= 0 )
+      attributes[lastWidget].firstLineIndent = firstLine;
 
-      if ( furtherLines >= 0 )
-         attributes[lastWidget].furtherLineIndent = furtherLines;
-   }
+   if ( furtherLines >= 0 )
+      attributes[lastWidget].furtherLineIndent = furtherLines;
+
 }
 
 
@@ -234,14 +236,13 @@ ASCString::const_iterator TextRenderer :: token ( const ASCString& text, ASCStri
 
 void TextRenderer :: parse( const ASCString& text )
 {
-
    textAttributes.fontsize = GetFontSize();
    textAttributes.textcolor = GetFontColor();
    
    ASCString::const_iterator pos = text.begin();
 
    // skip spaces at beginning to text
-   while ( pos == text.end() && isSpace(*pos) )
+   while ( pos != text.end() && isSpace(*pos) )
       ++pos;
 
    if ( pos == text.end() )
@@ -343,7 +344,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       return NULL;
    }
 
-   static boost::regex indent( "#indent=(\\d+),(\\d+)#");
+   static boost::regex indent( "#indent=(\\d+)\\,(\\d+)#");
    if( boost::regex_match( token, what, indent)) {
       ASCString s1;
       s1.assign( what[1].first, what[1].second );

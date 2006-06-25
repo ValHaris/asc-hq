@@ -32,7 +32,6 @@
 
 #include "typen.h"
 #include "misc.h"
-#include "basegfx.h"
 #include "newfont.h"
 #include "buildingtype.h"
 #include "vehicletype.h"

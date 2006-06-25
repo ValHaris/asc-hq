@@ -256,7 +256,8 @@ class UnitInfoDialog : public Panel {
          };
 
          void activate( const ASCString& pane ) {
-            PG_Application::SetBulkMode();
+            BulkGraphicUpdates bgu ( this );
+
             for ( int i = 0; i < paneNum; ++i )
                 if ( ASCString( paneName[i]) != pane )
                    hide( paneName[i] );
@@ -264,8 +265,6 @@ class UnitInfoDialog : public Panel {
             for ( int i = 0; i < paneNum; ++i )
                 if ( ASCString( paneName[i]) == pane )
                    show( paneName[i] );
-            PG_Application::SetBulkMode(false);
-            Update();
          };
 
          void click( const ASCString& name ) {
@@ -337,7 +336,7 @@ class UnitInfoDialog : public Panel {
                   setLabelText( "unitpad_unittankmaterial", vt->getStorageCapacity(0).material );
 
 
-                  ASCString abilities;
+                  ASCString abilities = "#indent=0,15#";
                   for ( int i = 0; i < ContainerBaseType::functionNum; ++i )
                      if ( vt->hasFunction(ContainerBaseType::ContainerFunctions(i)))
                         abilities += ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(i)) + ASCString("\n");

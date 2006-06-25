@@ -4,6 +4,8 @@
 #include <list>
 #include <sdl.h>
 
+ #include "../libs/loki/Functor.h"
+
 class GraphicsQueueOperation {
    public:
       virtual void execute() = 0;
@@ -42,7 +44,28 @@ class GraphicsQueueOperation {
          MouseVisibility( bool  visi )  : visible( visi ) { };
           void execute() { SDL_ShowCursor(visible); };
       };
-      
+
+
+
+   class InitScreenOp : public GraphicsQueueOperation {
+         int x,y,depth,flags;
+      public:
+         typedef Loki::Functor<void, TYPELIST_1(SDL_Surface*) > ScreenRegistrationFunctor;
+      private:
+         ScreenRegistrationFunctor srf;
+      public:
+
+         InitScreenOp( int x, int y, int depth, int flags, ScreenRegistrationFunctor screenRegistrationFunctor ) 
+         {
+            this->x = x;
+            this->y = y;
+            this->depth = depth;
+            this->flags = flags;
+            srf = screenRegistrationFunctor;
+         };
+         void execute();
+      };
+
  extern void queueOperation( GraphicsQueueOperation* gqo, bool wait = false );
 
 #endif

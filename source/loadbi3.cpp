@@ -28,7 +28,7 @@
 
 #include "loadbi3.h"
 #include "newfont.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"

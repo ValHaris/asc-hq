@@ -27,7 +27,6 @@
 
 #include "paradialog.h"
 
-#include "basegfx.h"
 #include "misc.h"
 #include "iconrepository.h"
 #include "dashboard.h"

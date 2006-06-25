@@ -34,7 +34,7 @@
 
 #include "basestrm.h"
 #include "misc.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "typen.h"
 #include "spfst.h"
 #include "events.h"
@@ -428,7 +428,7 @@ int  getmaxwindspeedforunit ( const Vehicle* eht )
 }
 
 
-
+/*
 
 
 void tdrawline8 :: start ( int x1, int y1, int x2, int y2 )
@@ -443,7 +443,7 @@ void tdrawline8 :: putpix ( int x, int y )
        if ( (x & 1) == (y & 1) )
           putpix8( x/2, y );
 }
-
+*/
 
 void EllipseOnScreen :: paint ( void )
 {

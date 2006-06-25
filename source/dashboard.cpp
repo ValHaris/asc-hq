@@ -214,7 +214,7 @@ void DashboardPanel::eval()
 
    Vehicle* veh = fld? fld->vehicle : NULL;
 
-   PG_Application::SetBulkMode(true);
+   BulkGraphicUpdates bgu( this );
 
    setBargraphValue( "winddisplay", float(actmap->weather.windSpeed ) / 255  );
 
@@ -271,8 +271,8 @@ void DashboardPanel::eval()
       }
    }
 
-   PG_Application::SetBulkMode(false);
-   Redraw(true);
+   // PG_Application::SetBulkMode(false);
+   // Redraw(true);
 }
 void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
 {

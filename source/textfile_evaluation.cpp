@@ -24,7 +24,7 @@
 #include "stringtokenizer.h"
 #ifdef ParserLoadImages
  #include <SDL_image.h>
- #include "basegfx.h"
+ // #include "basegfx.h"
  #include "typen.h"
  #include "graphics/blitter.h"
 #endif

@@ -29,7 +29,7 @@
 #include <cstring>
 
 #include "basestrm.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "misc.h"
 #include "loadpcx.h"
 

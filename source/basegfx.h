@@ -72,6 +72,7 @@ struct  tgraphmodeparameters {
             char          memorymodel;             //!< unused
             int           directscreenaccess;      //!< if 0 no call to an update function (which copies the buffer to the screen) is performed
             Surface*      surface;
+            tgraphmodeparameters() : surface(NULL) {};
     };
 
 

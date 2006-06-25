@@ -460,6 +460,19 @@ void UpdateRectsOp::execute()
 }
 
 
+void InitScreenOp::execute() 
+{ 
+   SDL_ShowCursor( 0 );
+   SDL_Surface* screen = SDL_SetVideoMode(x, y, depth, flags);
+   if (screen == NULL) 
+      screen = SDL_SetVideoMode(x, y, depth, flags & ~SDL_FULLSCREEN );
+
+   srf( screen );
+   initASCGraphicSubsystem( screen );
+   SDL_ShowCursor( 1 );
+};
+
+
 bool processGraphicsQueue()
 {
 #ifdef FirstThreadEvents
@@ -467,16 +480,21 @@ bool processGraphicsQueue()
    SDL_mutexP( graphicsQueueMutex );
    if ( !graphicsQueue.empty() ) {
       gqo = graphicsQueue.front();
-      graphicsQueue.pop_front();
+      SDL_mutexV( graphicsQueueMutex );
+      if ( gqo ) {
+         gqo->execute();
+
+         SDL_mutexP( graphicsQueueMutex );
+         graphicsQueue.pop_front();
+         SDL_mutexV( graphicsQueueMutex );
+         delete gqo;
+         return true;
+      } else
+         return false;
+   } else {
+      SDL_mutexV( graphicsQueueMutex );
+      return false;   
    }
-   SDL_mutexV( graphicsQueueMutex );
-   if ( gqo ) {
-      gqo->execute();
-      delete gqo;
-      return true;
-   } else
-      return false;
-   
 #endif
 }
 

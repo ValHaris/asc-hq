@@ -70,7 +70,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
         OnlyMoveToAndFromTransports };
 
      
-     static const int functionNum = 41;
+     static const int functionNum = 40;
 
      bool hasFunction( ContainerFunctions function ) const;
      bool hasAnyFunction( std::bitset<64> functions ) const;

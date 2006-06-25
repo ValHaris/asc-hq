@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-24 19:34:20 $
+    Update Date:      $Date: 2006-06-25 17:01:00 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.5 $
+    CVS/RCS Revision: $Revision: 1.1.2.6 $
     Status:           $State: Exp $
 */
 
@@ -458,19 +458,22 @@ void PG_Application::UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *re
 
 
 /**  */
-SDL_Surface* PG_Application::SetScreen(SDL_Surface* surf) {
+SDL_Surface* PG_Application::SetScreen(SDL_Surface* surf, bool initialize ) {
 	if (!surf)
 		return PG_Application::screen;
 
 	PG_Application::screen = surf;
 
+   if ( initialize ) {
+
 	//glMode = (surf->flags & SDL_OPENGLBLIT);
 
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-	SDL_EnableUNICODE(true);
+      SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+      SDL_EnableUNICODE(true);
 
-	PG_Widget::UpdateRect(PG_Rect(0,0,screen->w,screen->h));
-	UpdateRect(screen, 0,0,screen->w,screen->h);
+      PG_Widget::UpdateRect(PG_Rect(0,0,screen->w,screen->h));
+      UpdateRect(screen, 0,0,screen->w,screen->h);
+   }
 
 	return PG_Application::screen;
 }

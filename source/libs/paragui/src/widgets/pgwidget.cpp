@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-06-15 19:55:43 $
+   Update Date:      $Date: 2006-06-25 17:01:00 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.1.2.8 $
+   CVS/RCS Revision: $Revision: 1.1.2.9 $
    Status:           $State: Exp $
  */
 
@@ -1112,9 +1112,8 @@ void PG_Widget::UpdateRect(const PG_Rect& r) {
 }
 
 void PG_Widget::UpdateScreen() {
-	UpdateRect(
-	    PG_Rect(0, 0, PG_Application::GetScreenWidth(), PG_Application::GetScreenHeight())
-	);
+	UpdateRect( PG_Rect(0, 0, PG_Application::GetScreenWidth(), PG_Application::GetScreenHeight()) );
+   PG_Application::UpdateRect( PG_Application::GetScreen(), 0, 0, 0, 0 );
 }
 
 bool PG_Widget::IsInFrontOf(PG_Widget* widget) {

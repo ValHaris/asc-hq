@@ -56,7 +56,6 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "icebreaker",
                "cannot be refuelled in air",
                "makes tracks",
-               "drill for mineral resources manually",
                "search for mineral resources automatically",
                "no reactionfire",
                "auto repair",

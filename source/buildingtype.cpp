@@ -26,7 +26,6 @@
 #include "graphicset.h"
 #include "gameoptions.h"
 #include "textfiletags.h"
-#include "basegfx.h"
 #include "stringtokenizer.h"
 #include "textfile_evaluation.h"
 #include "graphics/surface.h"

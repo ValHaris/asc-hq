@@ -84,7 +84,7 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "ai/ai.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "misc.h"
 #include "newfont.h"
 #include "events.h"

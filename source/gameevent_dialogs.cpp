@@ -29,7 +29,7 @@
 #include "vehicletype.h"
 #include "newfont.h"
 #include "typen.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "dlg_box.h"
 #include "newfont.h"
 #include "vehicletype.h"

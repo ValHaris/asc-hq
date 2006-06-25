@@ -18,7 +18,6 @@
 #include <algorithm>
 
 #include "objecttype.h"
-#include "basegfx.h"
 #include "graphicset.h"
 #include "textfileparser.h"
 #include "textfiletags.h"

@@ -31,7 +31,7 @@
 #include "vehicletype.h"
 #include "newfont.h"
 #include "typen.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 
 #include "gameevent_dialogs.h"
 #include "spfst.h"

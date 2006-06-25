@@ -25,7 +25,7 @@
 #include "basestrm.h"
 #include "misc.h"
 #include "graphicset.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "errors.h"
 #include "typen.h"
 #include "sgstream.h"

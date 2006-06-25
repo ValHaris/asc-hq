@@ -25,7 +25,6 @@
 #include "paradialog.h"
 
 #include "mainscreenwidget.h"
-#include "basegfx.h"
 #include "misc.h"
 #include "iconrepository.h"
 #include "graphics/blitter.h"

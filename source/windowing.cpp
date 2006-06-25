@@ -494,7 +494,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          }
          */
 
-         TextRenderer* tr = new TextRenderer( parent, r, style );
+         TextRenderer* tr = new TextRenderer( parent, r, "", style );
          if ( !hasStyle ) 
             widgetParams.assign ( tr );
          

@@ -31,13 +31,6 @@
 SDL_Surface *screen = NULL;
 int fullscreen = 1;
 
-int isfullscreen ( void )
-{
-   if ( !screen )
-      return 0;
-   else
-      return screen->flags & SDL_FULLSCREEN;
-}
 
 void setWindowCaption ( const char* s )
 {
@@ -47,7 +40,7 @@ void setWindowCaption ( const char* s )
 
 bool dummyScreenPaletteSetup = false;
 
-void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
+void initASCGraphicSubsystem ( SDL_Surface* _screen )
 {
   screen = _screen;
   agmp->resolutionx = screen->w;
@@ -57,6 +50,7 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   agmp->byteperpix = 1 ;
   agmp->bitperpix = 8;
   agmp->directscreenaccess = 0;
+  delete agmp->surface;
   if ( _screen->format->BitsPerPixel == 8 ) {
      agmp->surface = new Surface ( _screen );
      dummyScreenPaletteSetup = true;
@@ -71,17 +65,20 @@ void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
   *hgmp = *agmp;
 }
 
+
+
 void shutdownASCGraphicSubsystem()
 {
    if ( agmp && agmp->surface )
       delete agmp->surface;
 }
 
-
+/*
 SDL_Surface* getScreen()
 {
    return screen;
 }
+*/
 
 Surface& getActiveSurface()
 {

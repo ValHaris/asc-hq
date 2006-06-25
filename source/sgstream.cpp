@@ -275,15 +275,20 @@ int readgameoptions ( const ASCString& filename )
 
 bool writegameoptions ( ASCString configFileName )
 {
-   if ( configFileName.empty() )
-      configFileName = ::configFileName;
+   try {
+      if ( configFileName.empty() )
+         configFileName = ::configFileName;
 
-   if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
-      char buf[10000];
-      if ( makeDirectory ( extractPath ( buf, configFileName.c_str() ))) {
-         CGameOptions::Instance()->save( configFileName );
-         return true;
+      if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
+         char buf[10000];
+         if ( makeDirectory ( extractPath ( buf, configFileName.c_str() ))) {
+            CGameOptions::Instance()->save( configFileName );
+            return true;
+         }
       }
+   }
+   catch ( ... ) {
+      // warning("Could not save game options");
    }
    return false;
 }

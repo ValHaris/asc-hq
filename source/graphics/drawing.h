@@ -30,7 +30,7 @@
 
 #include "../misc.h"
  #include "../palette.h"
- #include "../basegfx.h"
+ // #include "../basegfx.h"
 
 template<int BytePerPixel, class ColorMergerUL, class ColorMergerLR>
 void rectangle( const Surface& surface, const SPoint& pos, int w, int h, const ColorMergerUL& ul, const ColorMergerLR& lr )

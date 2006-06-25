@@ -279,8 +279,10 @@ void NewGuiHost::evalCursor()
 
 void NewGuiHost::eval( const MapCoordinate& pos, ContainerBase* subject )
 {
-   if ( handler )
+   if ( handler ) {
+      BulkGraphicUpdates bgu(this);
       handler->eval( pos, subject );
+   }
 }
 
 
@@ -411,8 +413,9 @@ bool   NewGuiHost::ProcessEvent (const SDL_Event *event, bool bModal)
 bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool cursorChanged )
 {
    clearSmallIcons();
-   PG_Application::SetBulkMode(true);
-   
+
+   BulkGraphicUpdates bgu;
+  
    SmallGuiButton* firstSmallButton = NULL;
    
    int count = 0;
@@ -442,7 +445,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
       }
    }
 
-   PG_Application::SetBulkMode(false);
+   bgu.release();
    if ( smallButtonHolder && count ) {
       smallButtonHolder->BringToFront();
       smallButtonHolder->Show();

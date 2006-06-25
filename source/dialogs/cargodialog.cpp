@@ -379,7 +379,7 @@ class CargoDialog : public Panel
 
       void activate( const ASCString& pane )
       {
-         PG_Application::SetBulkMode();
+         BulkGraphicUpdates bgu( this );
          for ( int i = 0; i < activesubwindows.size(); ++i )
             if ( activesubwindows[i]->getASCTXTname() != pane )
                hide( activesubwindows[i]->getASCTXTname() );
@@ -390,9 +390,6 @@ class CargoDialog : public Panel
 
          for ( int i = 0; i< subWinButtons.size(); ++i )
             subWinButtons[i]->SetPressed( activesubwindows[i]->getASCTXTname() == pane );
-
-         PG_Application::SetBulkMode(false);
-         Update();
       };
 
 

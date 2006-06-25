@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "terraintype.h"
 #include "gameoptions.h"
 #include "graphicset.h"
@@ -110,12 +110,6 @@ TerrainType::TerrainType()
 
 }
 
-/*
-void      TerrainType::Weather::paint ( SPoint pos )
-{
-   paint( getActiveSurface(), pos );
-}
-*/
 
 void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
 {

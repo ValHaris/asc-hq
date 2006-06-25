@@ -95,6 +95,8 @@ class StartupScreen: public SigC::Object {
        bool enableLegacyEventHandling( bool use );
 
        ~ASC_PG_App();
+
+       void SetNewScreenSurface( SDL_Surface* surface );
        
        // SigC::Signal0<void> sigQuit;
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
@@ -226,5 +228,15 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
 extern pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
 
 extern bool MultiLineEditor( const ASCString& title, ASCString& textToEdit );
+
+class BulkGraphicUpdates {
+      PG_Widget* parent;
+      bool bulk;
+      bool active;
+   public:
+      BulkGraphicUpdates( PG_Widget* parent = NULL );
+      void release();
+      ~BulkGraphicUpdates();
+};
 
 #endif

@@ -25,7 +25,6 @@
  
 #include "typen.h"
 #include "vehicle.h"
-#include "basegfx.h"
 
 
 #include "paradialog.h"

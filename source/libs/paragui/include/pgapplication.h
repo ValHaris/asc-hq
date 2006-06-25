@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-05-14 19:02:32 $
+    Update Date:      $Date: 2006-06-25 17:01:00 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -169,7 +169,7 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	@param	screen	pointer to a surface
 	@return		pointer the new screen surface
 	*/
-	SDL_Surface* SetScreen(SDL_Surface* screen);
+	SDL_Surface* SetScreen(SDL_Surface* screen, bool initialize = true);
 
 	/**
 	Get the current screen surface

@@ -31,7 +31,6 @@
 #include "vehicletype.h"
 #include "attack.h"
 #include "newfont.h"
-#include "basegfx.h"
 #include "spfst.h"
 #include "dlg_box.h"
 #include "sgstream.h"

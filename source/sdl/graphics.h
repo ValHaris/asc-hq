@@ -28,7 +28,7 @@
 
 //*********** Initialization ************
 
-extern void initASCGraphicSubsystem ( SDL_Surface* screen, SDLmm::Surface* icon );
+extern void initASCGraphicSubsystem ( SDL_Surface* screen );
 extern void shutdownASCGraphicSubsystem();
 
 //*********** Misc ************
@@ -37,9 +37,7 @@ extern void shutdownASCGraphicSubsystem();
 extern int copy2screen( void );
 extern int copy2screen( int x1, int y1, int x2, int y2 );
 
-extern int isfullscreen ( void );
-
-extern SDL_Surface* getScreen();
+// extern SDL_Surface* getScreen();
 
 extern Surface& getActiveSurface();
 
