@@ -896,7 +896,7 @@ void UnitMainPage::buildContent() {
   } else {
     addTREntry("Resists wind force", vt.maxwindspeedonwater);
   }
-  if( vt.hasFunction( DetectsMineralResources ) ) {
+  if( vt.hasFunction( ContainerBaseType::DetectsMineralResources ) ) {
     addTREntry("Mineral resource detection range", vt.digrange );
   }
 
