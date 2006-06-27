@@ -1394,9 +1394,11 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  Vehicle* eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
-                                    if ( pos < 16 )
+                                    if ( pos < 16 ) {
+                                       if ( old >= 0 && old != eht->ammo[pos] )
+                                          error("severe replay inconsistency:\nthe ammo of unit not matching. \nrecorded: %d , expected: %d !", old, eht->ammo[pos] );
                                        eht->ammo[pos] = amnt;
-                                     else {
+                                    } else {
                                         int res = pos - 1000;
                                         int avl = eht->getTank().resource(res);
                                         if ( avl != old && old >= 0 )
@@ -1416,9 +1418,16 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  ContainerBase* cb = actmap->getContainer ( id );
                                  if ( cb ) {
-                                    int d = cb->getResource(delta, type-1000, false);
-                                    if ( d != delta )
-                                       error("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", delta, d);
+                                    int got;
+                                    if ( type >= 1000 ) {
+                                       got = cb->getResource(delta, type-1000, false);
+                                    } else {
+                                       ContainerControls cc( cb );
+                                       got = cc.getammunition( type, delta, true, true );
+                                    }
+                                    if ( got != delta )
+                                       error("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", delta, got);
+                                       
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for refuel3 command !");
                               }
@@ -1793,7 +1802,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
              if ( comparisonMap ) {
                 if ( comparisonMap->compareResources( actmap, player, &resourceComparisonResult)) {
-                   ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( 500, 550 ) );
+                   ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( -1, -1, 500, 550 ) );
                    vft.Show();
                    vft.RunModal();
                 }

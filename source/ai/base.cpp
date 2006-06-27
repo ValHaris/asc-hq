@@ -365,7 +365,7 @@ void AI :: showFieldInformation ( int x, int y )
 
    strcat ( text, s.c_str() );
 
-   ViewFormattedText vft( "AI information", text, PG_Rect( 500, 550 ) );
+   ViewFormattedText vft( "AI information", text, PG_Rect( -1, -1, 500, 550 ) );
    vft.Show();
    vft.RunModal();
 }

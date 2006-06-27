@@ -916,11 +916,13 @@ void AI::production()
                          int lack = bc.unitProductionPrerequisites( pr.vt );
                          if  ( !lack && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
                              Vehicle* veh = bc.produceUnit( pr.vt, true, true );
-                             calculateThreat ( veh );
-                             container ( pr.bld );
-                             // currentUnitDistribution.group[i] += inc;
-                             produced = true;
-                             break;  // exit produceable llop
+                             if ( veh ) {
+                                 calculateThreat ( veh );
+                                 container ( pr.bld );
+                                 // currentUnitDistribution.group[i] += inc;
+                                 produced = true;
+                                 break;  // exit produceable loop
+                             }
                          } else {
 
                             // the ai will save for move expensive units

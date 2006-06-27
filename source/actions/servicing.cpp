@@ -26,7 +26,7 @@
 #include "../unitctrl.h"
 #include "../containercontrols.h"
 #include "../gameoptions.h"
-
+#include "../replay.h"
 
 
 
@@ -246,6 +246,9 @@ class ResourceTransferrable : public Transferrable {
             if ( got != amount )
                warning( ASCString("did not succeed in transfering resource ") + Resources::name( resourceType ) );
             to->putResource( got, resourceType, false );
+
+            logtoreplayinfo( rpl_refuel3, from->getIdentification(), 1000+resourceType, got );
+            logtoreplayinfo( rpl_refuel3, to->getIdentification(), 1000+resourceType, -got );
          }
       }
          
@@ -422,6 +425,10 @@ class AmmoTransferrable : public Transferrable {
             if ( got != amount )
                warning( "did not succeed in transfering ammo" );
             to->putAmmo( ammoType, got, false );
+
+            logtoreplayinfo( rpl_refuel3, from->getIdentification(), ammoType, got );
+            logtoreplayinfo( rpl_refuel3, to->getIdentification(), ammoType, -got );
+            
          }
       }
       

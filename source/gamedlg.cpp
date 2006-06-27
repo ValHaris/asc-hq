@@ -748,7 +748,7 @@ void sendGameParameterAsMail ( GameMap* actmap )
 
 void showGameParameters ( void )
 {
-   ViewFormattedText vft( "Game Parameters", writeGameParametersToString(actmap), PG_Rect( 500, 550 ) );
+   ViewFormattedText vft( "Game Parameters", writeGameParametersToString(actmap), PG_Rect( -1, -1, 500, 550 ) );
    vft.Show();
    vft.RunModal();
 }

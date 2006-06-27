@@ -696,9 +696,9 @@ AI::AiResult AI :: executeServices ( )
         // the unit may have been shot down
         if ( getMap()->getUnit ( nwid )) {
            if ( veh->getPosition3D() == veh->aiparam[ getPlayerNum() ]->dest ) {
-              VehicleService vc ( mapDisplay, NULL );
               tfield* fld = getfield ( veh->xpos, veh->ypos );
               if ( fld->building ) {
+                 VehicleService vc ( mapDisplay, NULL );
                  MapCoordinate mc = fld->building->getEntry();
                  vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );
 
