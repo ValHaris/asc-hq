@@ -22,9 +22,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-06-27 19:50:49 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/draw/drawline.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -164,6 +164,8 @@ void PG_Draw::DrawLine(SDL_Surface* surface, Uint32 x0, Uint32 y0, Uint32 x1, Ui
 	if (!width || !surface)
 		return;
 
+   SDL_LockSurface(surface);
+
 	pixelflag=0;
 
 	/* swap y0 with y1 if y0 is greater than y1 */
@@ -199,5 +201,7 @@ void PG_Draw::DrawLine(SDL_Surface* surface, Uint32 x0, Uint32 y0, Uint32 x1, Ui
 			octant1(surface, x0, y0, deltax, deltay, -1, color, width, pixelflag);
 		} /* end of if-else */
 	} /* end of if - else */
+
+   SDL_UnlockSurface(surface);
 
 } /* end of the function */

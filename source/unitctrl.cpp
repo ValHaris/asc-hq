@@ -1422,7 +1422,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
          ContainerBaseType::ExternalMaterialTransfer,
          ContainerBaseType::ExternalFuelTransfer };
       for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
-         if ( bld->typ->hasFunction( resourceVehicleFunctions[r]) && targetUnit->getStorageCapacity().resource(r) ) {
+         if ( (bld->typ->hasFunction( resourceVehicleFunctions[r]) || dist == 0) && targetUnit->getStorageCapacity().resource(r) ) {
             VehicleService::Target::Service s;
             s.type = VehicleService::srv_resource;
             s.sourcePos = r;

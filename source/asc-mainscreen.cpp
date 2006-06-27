@@ -708,7 +708,16 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                } 
             return true;
 
-         case SDLK_F10:
+            case SDLK_F10: {
+               SDL_Surface* s = PG_Application::GetScreen();
+               SDL_LockSurface( s );
+               int* i = (int*) (s->pixels);
+               for ( int x = 0; x < 100; ++x )
+                  i[x * s->pitch/4 + x] = 0xffffff;
+               SDL_UnlockSurface( s );
+               SDL_UpdateRect(s,0,0,0,0);
+                           }
+
             return true;
             
 

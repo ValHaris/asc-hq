@@ -32,9 +32,12 @@
  #include "../palette.h"
  // #include "../basegfx.h"
 
+
+
 template<int BytePerPixel, class ColorMergerUL, class ColorMergerLR>
-void rectangle( const Surface& surface, const SPoint& pos, int w, int h, const ColorMergerUL& ul, const ColorMergerLR& lr )
+void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMergerUL& ul, const ColorMergerLR& lr )
 {
+   SurfaceLock lock( surface );
    typedef typename PixelSize2Type<BytePerPixel>::PixelType TargetPixelType;
 
    TargetPixelType* pix = (TargetPixelType*)( surface.pixels() );
@@ -60,10 +63,12 @@ void rectangle( const Surface& surface, const SPoint& pos, int w, int h, const C
 }
 
 template<int BytePerPixel, class ColorMerger>
-void paintFilledRectangle( const Surface& surface, const SPoint& pos, int w, int h, const ColorMerger& ul )
+void paintFilledRectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMerger& ul )
 {
    if ( w <= 0 || h <= 0 )
       return;
+
+   SurfaceLock lock( surface );
 
    typedef typename PixelSize2Type<BytePerPixel>::PixelType TargetPixelType;
    ul.init( surface );
