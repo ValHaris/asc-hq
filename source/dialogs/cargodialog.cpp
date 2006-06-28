@@ -996,9 +996,10 @@ class CargoInfoWindow : public SubWindow {
          if ( cargoDialog->getMarkedUnit() ) {
             cargoDialog->setLabelText( "CurrentCargo", cargoDialog->getMarkedUnit()->weight(), widget );
             cargoDialog->setImage( "TypeImage", moveMaliTypeIcons[cargoDialog->getMarkedUnit()->typ->movemalustyp], widget );
+            cargoDialog->show( "TypeImage" );
          } else {
             cargoDialog->setLabelText( "CurrentCargo", "-" , widget );
-            cargoDialog->setImage( "TypeImage", NULL, widget );
+            cargoDialog->hide( "TypeImage" );
          }
             
          if ( container()->baseType->maxLoadableWeight > 0 )

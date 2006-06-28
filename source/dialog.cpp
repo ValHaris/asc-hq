@@ -2865,7 +2865,8 @@ void tmessagedlg :: setup ( void )
          if ( actmap->actplayer != i ) {
             int x = 20 + ( num % 2 ) * 200;
             int y = ty2 + 10 + ( num / 2 ) * 20;
-            addbutton ( actmap->player[i].getName().c_str(), x, y, x+ 180, y+15, 3, 0, num+3, true );
+            // this is a leak! As this dialog will be scrapped before the ASC2 release,  I don't care :->
+            addbutton ( strdup( actmap->player[i].getName().c_str()), x, y, x+ 180, y+15, 3, 0, num+3, true );
             addeingabe ( num+3, &to[i], 0, dblue );
             num++;
          }
