@@ -301,9 +301,19 @@ void networksupervisor ()
    if ( !newMap.get() )
       return;
 
-   if( newMap->supervisorpasswordcrc.empty() ) {
-      errorMessage ("no supervisor setup in this game!" );
-      return;
+   Password pwd = newMap->supervisorpasswordcrc;
+
+   if( pwd.empty() ) {
+      for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+         if ( newMap->getPlayer(i).stat == Player::supervisor ) {
+            pwd = newMap->getPlayer(i).passwordcrc;
+            break;
+         }
+
+      if ( pwd.empty() ) {
+         errorMessage ("no supervisor setup in this game!" );
+         return;
+      }
    }
 
    smw.close();
