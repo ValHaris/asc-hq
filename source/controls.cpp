@@ -61,6 +61,8 @@
 #include "network.h"
 #include "mapdisplay.h"
 
+#include "dialogs/choosetech.h"
+
 tmoveparams moveparams;
 
 
@@ -619,12 +621,12 @@ void researchCheck( Player& player )
 {
    Research& research = player.research;
    if (research.activetechnology == NULL && research.progress ) 
-      choosetechnology();
+      chooseTechnology( player );
       
    if ( research.activetechnology )
       if( find ( research.developedTechnologies.begin(), research.developedTechnologies.end(), research.activetechnology->id ) != research.developedTechnologies.end()) {
          research.progress = 0;
-         choosetechnology();
+         chooseTechnology( player );
       }
       
    while ( research.activetechnology  &&  (research.progress >= research.activetechnology->researchpoints)) {
@@ -641,7 +643,7 @@ void researchCheck( Player& player )
 
       pfzt.evalbuffer ();
 
-      choosetechnology();
+      chooseTechnology( player );
 
       research.progress = mx;
    }

@@ -107,7 +107,7 @@ void         tchoosetechnology::init(void)
    showtext2("choose technology to research :", x1 + 10, y1 + starty + 10); */
 }
 
-bool techComp ( const Technology* t1, const Technology* t2 )
+bool technologyComp ( const Technology* t1, const Technology* t2 )
 {
    return t1->techlevel < t2->techlevel;
 }
@@ -120,14 +120,14 @@ void         tchoosetechnology::check(void)
    for (int i = 0; i < technologyRepository.getNum(); i++) {
       const Technology* tech = technologyRepository.getObject_byPos( i );
       if ( tech ) {
-         Research::AvailabilityStatus a = resrch->techAvailable ( tech );
-         if ( a == Research::available ) {
+         ResearchAvailabilityStatus a = resrch->techAvailable ( tech );
+         if ( a == Available ) {
             techs.push_back ( tech );
             technum++;
          }
       }
    }
-   sort ( techs.begin(), techs.end(), techComp );
+   sort ( techs.begin(), techs.end(), technologyComp );
 }
 
 

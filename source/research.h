@@ -27,6 +27,8 @@
  #include <cstring>
  #include <map>
 
+ #include "libs/loki/Functor.h"
+
  #include "basestreaminterface.h"
  #include "basictypes.h"
  #include "typen.h"
@@ -39,16 +41,31 @@ class Vehicle;
 class Vehicletype;
 class GameMap;
 
+enum ResearchAvailabilityStatus { Researched, Available, UnavailableNow, NeverAvailable };
+
+
 class TechDependency: public LoadableItemType {
      typedef vector<IntRange> RequiredTechnologies;
+     //! if one of these technologies has been researched, this tech will be never be researchable. This allows exclusive technology branches
      RequiredTechnologies blockingTechnologies;
      
      RequiredTechnologies requiredTechnologies;
      bool         requireAllListedTechnologies;
-     //! if one of these technologies has been researched, this tech will be never be researchable. This allows exclusive technology branches
+     
+     static bool eventually_available_single( const Research& res, list<const Technology*>* dependencies, list<int>& stack, int id );
    public:
      TechDependency(){ requireAllListedTechnologies = true; };
+
      bool available( const Research& research ) const;
+     typedef Loki::Functor<bool, TYPELIST_1(int) > CheckTechAvailabilityFunctor;
+     ResearchAvailabilityStatus available( CheckTechAvailabilityFunctor checkTechAvailability ) const;
+
+     /** this will recursively scan through the tech tree to check if this item will be available sometime.
+     \param dependencies if not NULL, the technologies which have to be developed prior to this one will be added here
+     */
+     bool eventually_available( const Research& res, list<const Technology*>* dependencies ) const;
+     bool eventually_available( const Research& res, list<const Technology*>* dependencies, list<int>& stack ) const;
+     
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
      void runTextIO ( PropertyContainer& pc);
@@ -115,6 +132,9 @@ class TechAdapterDependency {
      //! if this Technology has been researched, it will not be possible to research the technologies given here. Only available for root technologies!
      BlockingOtherTechnologies blockingOtherTechnologies;
 
+     bool eventually_available( const Research& res, list<const Technology*>* dependencies ) const;
+     bool eventually_available( const Research& res, list<const Technology*>* dependencies, list<int>& stack ) const;
+     
 
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
@@ -151,8 +171,6 @@ class TechAdapterDependency {
 
      bool techResearched ( int id ) const;
 
-     enum AvailabilityStatus { researched, available, unavailable };
-
      int  progress;
      const Technology* activetechnology;
 
@@ -176,7 +194,9 @@ class TechAdapterDependency {
 
      void addanytechnology ( const Technology* tech );
 
-     AvailabilityStatus techAvailable ( const Technology* tech );
+     ResearchAvailabilityStatus techAvailable ( const Technology* tech ) const;
+
+     bool isBlocked( const Technology* tech ) const;
 
      /** is used by the chooseTechnology dialog: the first time no techs are available this variable is still true,
          so the dialog shows "now techs avail". THen it sets techAvail to false, preventing the same message at the

@@ -60,35 +60,73 @@ void TechDependency::runTextIO ( PropertyContainer& pc )
 
 bool TechDependency::available( const Research& research ) const
 {
-   for ( vector<IntRange>::const_iterator j = blockingTechnologies.begin(); j != blockingTechnologies.end(); ++j )
+   return available( CheckTechAvailabilityFunctor( &research, &Research::techResearched )) == Available;
+}
+
+ResearchAvailabilityStatus TechDependency::available( CheckTechAvailabilityFunctor checkTechAvailability ) const
+{
+   for ( RequiredTechnologies::const_iterator j = blockingTechnologies.begin(); j != blockingTechnologies.end(); ++j )
        for ( int k = j->from; k <= j->to; ++k )
-          if ( research.techResearched ( k ))
-             return false;
+         if ( checkTechAvailability ( k ))
+             return NeverAvailable;
 
 
    if ( requiredTechnologies.size() ) {
-      for ( RequiredTechnologies::const_iterator j = blockingTechnologies.begin(); j != blockingTechnologies.end(); ++j )
-         for ( int k = j->from; k <= j->to; ++k )
-            if ( research.techResearched( k ))
-               return false;
-
       if ( requireAllListedTechnologies ) {
          for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
             for ( int k = j->from; k <= j->to; ++k )
-               if ( !research.techResearched( k ))
-                  return false;
-          return true;
+               if ( !checkTechAvailability( k ))
+                  return UnavailableNow;
+         return Available;
       } else {
          for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
             for ( int k = j->from; k <= j->to; ++k )
-                if ( research.techResearched ( k ))
-                  return true;
-         return false;
+               if ( checkTechAvailability ( k ))
+                  return Available;
+         return UnavailableNow;
       }
-   }
-
-   return true;
+   } else
+      return Available;
 }
+
+
+bool TechDependency::eventually_available_single( const Research& res, list<const Technology*>* dependencies, list<int>& stack, int id )
+{
+   Technology* tech = technologyRepository.getObject_byID( id );
+   if ( !tech )
+      return false;
+
+
+   
+   return tech->eventually_available( res, dependencies, stack );
+}
+
+bool TechDependency::eventually_available( const Research& res, list<const Technology*>* dependencies, list<int>& stack ) const
+{
+   if ( requireAllListedTechnologies ) {
+      for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+         for ( int k = j->from; k <= j->to; ++k ) 
+            if ( !eventually_available_single( res, dependencies, stack, k ))
+               return false;
+         
+         return true;
+   } else {
+      for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
+         for ( int k = j->from; k <= j->to; ++k ) 
+            if ( eventually_available_single( res, dependencies, stack, k )) 
+               return true;
+            
+      return false;
+   }
+   return false;
+}
+
+bool TechDependency::eventually_available( const Research& res, list<const Technology*>* dependencies ) const
+{
+   list<int> stack;
+   return eventually_available( res, dependencies, stack );
+}
+
 
 
 int TechDependency::findInheritanceLevel( int id, vector<int>& stack, const ASCString& sourceTechName ) const
@@ -462,6 +500,41 @@ void Technology::runTextIO ( PropertyContainer& pc )
    pc.addInteger( "RelatedUnitID", relatedUnitID, 0 );
 }
 
+bool Technology::eventually_available( const Research& res, list<const Technology*>* dependencies ) const
+{
+   if ( res.techResearched( id ))
+      return false;
+   
+   list<int> stack;
+   return eventually_available( res, dependencies, stack );
+}
+
+bool Technology::eventually_available( const Research& res, list<const Technology*>* dependencies, list<int>& stack ) const
+{
+   if ( res.techResearched( id ))
+      return true;
+   
+   if ( res.isBlocked( this ))
+      return false;
+
+   if ( find( stack.begin(), stack.end(), id ) != stack.end() )
+      return false;
+            
+   stack.push_back( id );
+   bool result = techDependency.eventually_available( res, dependencies, stack );
+   stack.pop_back();
+
+   if ( result ) {
+      if ( dependencies )
+         if ( find( dependencies->begin(), dependencies->end(), this) == dependencies->end() )
+            dependencies->push_back( this );
+      return true;
+   } else
+      return  false;
+      
+}
+
+
 
 Research :: Research ( )
 {
@@ -623,31 +696,34 @@ ASCString Research::listTriggeredTechAdapter() const
 
 
 
-Research::AvailabilityStatus Research::techAvailable ( const Technology* tech )
+bool Research::isBlocked( const Technology* tech ) const
+{
+   for ( int i = 0; i < developedTechnologies.size(); ++i ) {
+      Technology* t = technologyRepository.getObject_byID( developedTechnologies[i] );
+      if ( t && !t->techDependency.available ( *this ) ) {
+            // this is a root technology
+         for ( Technology::BlockingOtherTechnologies::iterator j = t->blockingOtherTechnologies.begin(); j != t->blockingOtherTechnologies.end(); ++j)
+            if ( j->from <= tech->id && tech->id <= j->to )
+               return true;
+      }
+   }
+   return false;
+
+}
+
+
+ResearchAvailabilityStatus Research::techAvailable ( const Technology* tech ) const
 {
    if ( techResearched( tech->id ))
-      return researched;
+      return Researched;
+
+   if ( isBlocked( tech ))
+      return NeverAvailable;
 
    if ( tech->techDependency.available( *this ) ) {
-      for ( int i = 0; i < developedTechnologies.size(); ++i ) {
-         Technology* t = technologyRepository.getObject_byID( developedTechnologies[i] );
-         if ( t && !t->techDependency.available ( *this ) ) {
-            // this is a root technology
-            for ( Technology::BlockingOtherTechnologies::iterator j = t->blockingOtherTechnologies.begin(); j != t->blockingOtherTechnologies.end(); ++j)
-                if ( j->from <= tech->id && tech->id <= j->to )
-                    return unavailable;
-         }
-      }
-
-      return available;
+      return Available;
    } else
-      return unavailable;
-
-/*
-    if ( tech->requireevent)
-       if ( ! actmap->eventpassed(tech->id, cenewtechnologyresearchable) )
-          fail = true;
-*/
+      return UnavailableNow;
 }
 
 
@@ -776,7 +852,6 @@ Resources returnResourcenUseForResearch ( const ContainerBase* bld )
 {
    return returnResourcenUseForResearch ( bld, bld->researchpoints );
 }
-
 
 
 #if 0
