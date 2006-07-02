@@ -37,7 +37,7 @@
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/demount.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(OutDir)/lib&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/demount.pdb"/>
 			<Tool
@@ -92,7 +92,7 @@
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
 				OutputFile="$(OutDir)/bin/demount.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(OutDir)/lib&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/demount.pdb"/>
 			<Tool

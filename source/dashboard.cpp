@@ -1235,8 +1235,8 @@ void         tdashboard::checkformouse ( int func )
    if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) ) {
        pfield fld = getactfield();
        if ( fieldvisiblenow ( fld ) ) {
-          if ( fld->vehicle )
-             displaymessage2("damage is %d", fld->vehicle->damage );
+          if ( vehicle )
+             displaymessage2("damage is %d", vehicle->damage );
           else
           if ( fld->building )
              displaymessage2("damage is %d", fld->building->damage );
