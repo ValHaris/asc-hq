@@ -536,7 +536,7 @@ bool Technology::eventually_available( const Research& res, list<const Technolog
 
 
 
-Research :: Research ( )
+Research :: Research ( )  : goal(NULL)
 {
    progress = 0;
    activetechnology = 0;
@@ -558,7 +558,7 @@ void Research :: read ( tnstream& stream )
 const int researchableWeaponImprovements = 8;
 
 
-const int researchVersion = -4;
+const int researchVersion = -5;
 
 void Research :: read_struct ( tnstream& stream, bool merge )
 {
@@ -612,6 +612,15 @@ void Research :: read_struct ( tnstream& stream, bool merge )
       if ( version <= -4 ) {
          multiplier = stream.readInt();
       }
+
+      if ( version <= -5 ) {
+         int g = stream.readInt();
+         if ( g > 0 )
+            goal = technologyRepository.getObject_byID( g );
+         else
+            goal = NULL;
+      } else
+         goal = NULL;
    }
 }
 
@@ -626,6 +635,11 @@ void Research :: write ( tnstream& stream ) {
    stream.writeInt ( techsAvail );
    writeClassContainer( predefinedTechAdapter, stream );
    stream.writeInt( multiplier );
+   if ( goal )
+      stream.writeInt( goal->id );
+   else
+      stream.writeInt( 0 );
+            
 }
 
 
@@ -806,7 +820,7 @@ int Research :: getResearchPerTurn() const
 int Research :: currentTechAvailableIn() const
 {
    if ( activetechnology ) {
-      int rpt = getResearchPerTurn() * multiplier;
+      int rpt = getResearchPerTurn();
       if ( !rpt )
          return 0;
       else

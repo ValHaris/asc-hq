@@ -172,7 +172,11 @@ class TechAdapterDependency {
      bool techResearched ( int id ) const;
 
      int  progress;
+     //! the technology that is currently being researched
      const Technology* activetechnology;
+
+     //! the technology that is defined as long-term goal
+     const Technology* goal;
 
      bool vehicletypeavailable ( const Vehicletype* fztyp );
 

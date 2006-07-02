@@ -26,6 +26,9 @@
 
 #include "../paradialog.h"
 #include "../itemrepository.h"
+#include "../iconrepository.h"
+#include "../vehicletype.h"
+#include "unitinfodialog.h"
 
 #include "selectionwindow.h"
 
@@ -37,6 +40,7 @@ class TechWidget: public SelectionWidget  {
       Surface& getClippingSurface() { return clippingSurface; };
       int actplayer;
       static const int widgetHeight = 60;
+      bool info();
    public:
       TechWidget( PG_Widget* parent, const PG_Point& pos, int width, const Technology* technology, int player = 0 );
       ASCString getName() const;
@@ -47,13 +51,31 @@ class TechWidget: public SelectionWidget  {
 
 TechWidget :: TechWidget( PG_Widget* parent, const PG_Point& pos, int width, const Technology* technology, int player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, widgetHeight )), tech( technology ), actplayer(player)
 {
+
+   int lineheight = 20;
+   
    int xoffs = 20;
    if ( tech->relatedUnitID > 0 )
       xoffs += 40;
    new PG_Label( this, PG_Rect( xoffs, 10, 150, 25 ), tech->name );
    new PG_Label( this, PG_Rect( xoffs, 30, 150, 25 ), ASCString::toString( tech->researchpoints) + " RP" );
+
+   if ( tech->relatedUnitID > 0 ) {
+      PG_Button* b = new PG_Button( this, PG_Rect( 150, Height()/2-lineheight, 2*lineheight, 2*lineheight ));
+      b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
+      b->sigClick.connect( SigC::slot( *this, &TechWidget::info ));
+   }
+   
    SetTransparency( 255 );
 };
+
+bool TechWidget::info()
+{
+   const Vehicletype* vt = vehicleTypeRepository.getObject_byID( tech->relatedUnitID );
+   if ( vt )
+      unitInfoDialog( vt );
+   return true;
+}
 
 
 
@@ -176,6 +198,7 @@ class ChooseTech : public ASC_PG_Dialog
    Player& player;
 
    PG_Label* pointsLabel;
+   const Technology* goal;
 
    bool changeTechView( bool all )
    {
@@ -194,6 +217,8 @@ class ChooseTech : public ASC_PG_Dialog
          return;
       }
 
+      assert( techs.begin() != techs.end() );
+
       int points = 0;
       for ( list<const Technology*>::iterator i = techs.begin(); i != techs.end(); ++i ) {
          s += (*i)->name + "\n";
@@ -202,11 +227,32 @@ class ChooseTech : public ASC_PG_Dialog
       techList->SetText( s );
 
       pointsLabel->SetText( ASCString::toString(points) + " Points" );
+
+      goal = player.research.goal = tech;
+      player.research.activetechnology = *techs.begin();
    };
+
+   protected:
+      bool handleButtonClick(PG_Button* button) 
+      {
+         if ( goal )
+            return ASC_PG_Dialog::handleButtonClick( button );
+         else
+            return false;
+      };
+
+      bool ok()
+      {
+         if ( goal ) {
+            QuitModal();
+            return true;
+         } else
+            return false;
+      }
 
    
    public:
-      ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 800, 600), "Choose Technology" ) , factory(NULL), player( my_player )
+      ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 800, 600), "Choose Technology" ) , factory(NULL), player( my_player ), goal(NULL)
       {
          factory = new TechnologySelectionItemFactory( player );
          factory->techSelected.connect( SigC::slot( *this, &ChooseTech::techSelected ));
@@ -216,6 +262,8 @@ class ChooseTech : public ASC_PG_Dialog
          techList = new PG_MultiLineEdit( this, PG_Rect ( 400, 40, 250, 200 ));
          techList->SetEditable(false);
          pointsLabel = new PG_Label( this, PG_Rect( 400, 250, 250, 25 ));
+
+         AddStandardButton("~O~K")->sigClick.connect( SigC::slot( *this, &ChooseTech::ok ));
       };
 };
 
