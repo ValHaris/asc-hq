@@ -134,7 +134,7 @@ class  Building : public ContainerBase {
     };
 
     Work* spawnWorkClasses( bool justQuery );
-    const pbuildingtype typ;
+     BuildingType* typ;
 
     pvehicletype      production[32];
 
