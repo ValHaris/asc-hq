@@ -7,6 +7,9 @@
  *                                                                         *
  ***************************************************************************/
 
+
+#include <boost/regex.hpp>
+
 #include <cstring>
 #include <stdlib.h>
 
@@ -15,7 +18,6 @@
 #include <SDL_mixer.h>
 #include <SDL_sound.h>
 
-#include <boost/regex.hpp>
 
 #include "../global.h"
 

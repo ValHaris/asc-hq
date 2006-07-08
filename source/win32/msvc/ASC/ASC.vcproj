@@ -39,7 +39,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib expat.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib expat.lib sdl_sound_d.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC2-debug.exe"
 				LinkIncremental="2"
@@ -96,7 +96,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib expat.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib expat.lib sdl_sound.lib"
 				OutputFile="$(OutDir)/bin/ASC2.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;../../../libs/paragui/VisualC/Release;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;"
@@ -576,6 +576,13 @@
 				</File>
 				<File
 					RelativePath="..\..\..\widgets\textrenderer.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="sdl"
+				Filter="">
+				<File
+					RelativePath="..\..\..\sdl\sound.cpp">
 				</File>
 			</Filter>
 		</Filter>

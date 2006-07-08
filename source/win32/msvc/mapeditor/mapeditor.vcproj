@@ -350,12 +350,6 @@
 				RelativePath="..\..\..\simplestream.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\sdl\sound.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\soundList.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\spfst.cpp">
 			</File>
 			<File

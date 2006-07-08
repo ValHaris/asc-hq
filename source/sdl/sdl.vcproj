@@ -131,9 +131,6 @@
 			<File
 				RelativePath=".\graphics.cpp">
 			</File>
-			<File
-				RelativePath=".\sound.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
