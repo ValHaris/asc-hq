@@ -368,11 +368,11 @@ void  checkunitsforremoval ( void )
                    erase = true;
                    reason = "was swallowed by the ground";
                 }
-           //  if ( eht )
-/*                if ( getmaxwindspeedforunit( eht ) < actmap->weather.windSpeed*maxwindspeed ) {
+             if ( eht )
+                if ( getmaxwindspeedforunit( eht ) < actmap->weather.windSpeed*maxwindspeed ) {
                    reason = "was blown away by the wind";
                    erase = true;
-                }*/
+                }
           }
           if ( erase ) {
              ASCString ident = "The unit " + (*i)->getName() + " at position ("+strrr((*i)->getPosition().x)+"/";

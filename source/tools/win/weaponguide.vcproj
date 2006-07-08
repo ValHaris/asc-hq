@@ -178,6 +178,13 @@
 			<File
 				RelativePath="..\weaponguide.cpp">
 			</File>
+			<Filter
+				Name="Loki"
+				Filter="">
+				<File
+					RelativePath="..\..\libs\loki\SmallObj.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

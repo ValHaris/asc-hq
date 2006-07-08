@@ -313,9 +313,6 @@
 				RelativePath="..\..\..\newfont.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\dialogs\newgame.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\objects.cpp">
 			</File>
 			<File
@@ -520,6 +517,9 @@
 					RelativePath="..\..\..\dialogs\cargowidget.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\choosetech.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\editgameoptions.cpp">
 				</File>
 				<File
@@ -533,6 +533,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\messagedialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\newgame.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\nextcampaignmap.cpp">

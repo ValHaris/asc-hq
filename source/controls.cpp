@@ -661,9 +661,10 @@ void researchCheck( Player& player )
 
       pfzt.evalbuffer ();
 
+      research.progress = mx;
+
       setupNextTech( player );
 
-      research.progress = mx;
    }
 }
 

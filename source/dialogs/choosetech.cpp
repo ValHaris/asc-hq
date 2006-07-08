@@ -57,11 +57,14 @@ TechWidget :: TechWidget( PG_Widget* parent, const PG_Point& pos, int width, con
    int xoffs = 20;
    if ( tech->relatedUnitID > 0 )
       xoffs += 40;
-   new PG_Label( this, PG_Rect( xoffs, 10, 150, 25 ), tech->name );
-   new PG_Label( this, PG_Rect( xoffs, 30, 150, 25 ), ASCString::toString( tech->researchpoints) + " RP" );
+
+   int www = width - xoffs - 20 - 2 * lineheight;
+
+   new PG_Label( this, PG_Rect( xoffs, 10, www, 25 ), tech->name );
+   new PG_Label( this, PG_Rect( xoffs, 30, www, 25 ), ASCString::toString( tech->researchpoints) + " RP" );
 
    if ( tech->relatedUnitID > 0 ) {
-      PG_Button* b = new PG_Button( this, PG_Rect( 150, Height()/2-lineheight, 2*lineheight, 2*lineheight ));
+      PG_Button* b = new PG_Button( this, PG_Rect( width - 2 * lineheight - 10, Height()/2-lineheight, 2*lineheight, 2*lineheight ));
       b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
       b->sigClick.connect( SigC::slot( *this, &TechWidget::info ));
    }
@@ -198,6 +201,7 @@ class ChooseTech : public ASC_PG_Dialog
    Player& player;
 
    PG_Label* pointsLabel;
+   PG_Label* availLabel;
    const Technology* goal;
 
    bool changeTechView( bool all )
@@ -226,7 +230,7 @@ class ChooseTech : public ASC_PG_Dialog
       }
       techList->SetText( s );
 
-      pointsLabel->SetText( ASCString::toString(points) + " Points" );
+      pointsLabel->SetText( ASCString("Sum: ") + ASCString::toString(points) + " Points" );
 
       goal = player.research.goal = tech;
       player.research.activetechnology = *techs.begin();
@@ -252,16 +256,18 @@ class ChooseTech : public ASC_PG_Dialog
 
    
    public:
-      ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 800, 600), "Choose Technology" ) , factory(NULL), player( my_player ), goal(NULL)
+      ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 770, 600), "Choose Technology" ) , factory(NULL), player( my_player ), goal(NULL)
       {
          factory = new TechnologySelectionItemFactory( player );
          factory->techSelected.connect( SigC::slot( *this, &ChooseTech::techSelected ));
-         itemSelector = new ItemSelectorWidget( this, PG_Rect( 10, 40, 300, Height() - 80 ), factory );
+         itemSelector = new ItemSelectorWidget( this, PG_Rect( 10, 40, 400, Height() - 80 ), factory );
 
          (new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show All Technologies"))->sigClick.connect( SigC::slot( *this, &ChooseTech::changeTechView));
-         techList = new PG_MultiLineEdit( this, PG_Rect ( 400, 40, 250, 200 ));
+         techList = new PG_MultiLineEdit( this, PG_Rect ( 450, 40, 300, 200 ));
          techList->SetEditable(false);
-         pointsLabel = new PG_Label( this, PG_Rect( 400, 250, 250, 25 ));
+         pointsLabel = new PG_Label( this, PG_Rect( 450, 250, 300, 25 ));
+         availLabel = new PG_Label( this, PG_Rect( 450, 280, 300, 25 ), "Accumulated research points: " + ASCString::toString( player.research.progress) );
+
 
          AddStandardButton("~O~K")->sigClick.connect( SigC::slot( *this, &ChooseTech::ok ));
       };

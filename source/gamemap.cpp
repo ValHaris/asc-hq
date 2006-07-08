@@ -1441,7 +1441,8 @@ void GameMap::objectGrowth()
       }
 
    for ( NewObjects::iterator i = newObjects.begin(); i != newObjects.end(); ++i )
-      i->first->addobject ( getobjecttype_byid( i->second ));
+      if ( !i->first->checkforobject( getobjecttype_byid( i->second )))
+         i->first->addobject ( getobjecttype_byid( i->second ));
 }
 
 SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
@@ -2182,7 +2183,7 @@ GameMap :: ReplayInfo :: ~ReplayInfo ( )
 GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "LifetimeTrack",                      1,                    1,   maxint,             true,   false,   "lifetime of tracks"},//       cgp_fahrspur                        
       {  "LifetimeBrokenIce",                  2,                    1,   maxint,             true,   false,   "freezing time of icebreaker fairway"},   //       cgp_eis,                            
-      {  "MoveFromInaccessibleFields",         0,                    0,   1,                  true,   false,   "move vehicles from unaccessible fields"},   //       cgp_movefrominvalidfields,          
+      {  "MoveFromInaccessibleFields",         1,                    0,   1,                  true,   false,    "move vehicles from unaccessible fields"},   //       cgp_movefrominvalidfields,          
       {  "BuildingConstructionFactorMaterial", 100,                  0,   maxint,             true,   false,   "building construction material factor (percent)"},   //       cgp_building_material_factor,
       {  "BuildingConstructionFactorEnergy",   100,                  0,   maxint,             true,   false,   "building construction fuel factor (percent)"},   //       cgp_building_fuel_factor,
       {  "ForbidBuildingConstruction",         0,                    0,   1,                  true,   false,   "forbid construction of buildings"},   //       cgp_forbid_building_construction,
