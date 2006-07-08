@@ -1176,10 +1176,13 @@ void         tverlademunition::run(void)
       return;
    }
 
-   y1 = 150 - 13*target->service.size();
-   ysize = 480 - 2 * y1; 
+   y1 = 20;
+   ysize = 180 + abstand*target->service.size();
+/*   y1 = max( 150 - 13*target->service.size(), 0 );
+   ysize = 480 - 2 * ; 
+   */
 
-   int i;
+   int i = target->service.size();
 
    addbutton("~l~oad",10,ysize - 40,xsize - 10,ysize - 10,0,1,1,true);
    addkey(1,ct_enter);

@@ -108,7 +108,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
      //! the maximum size of a unit that may enter the building
      int maxLoadableUnitSize;
 
-     //! the maximum size of a unit that may enter the building
+     //! the maximum total weight of all loaded units
      int maxLoadableWeight;
 
      //! bitmapped: vehicle categories that can be stored the container

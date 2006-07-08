@@ -139,7 +139,8 @@ void SoundSystem :: nextTrack( void )
 
    if ( internalData->currentPlaylist ) {
       ASCString filename = internalData->currentPlaylist->getNextTrack();
-     if ( !filename.empty() ) {
+      
+      if ( !filename.empty() ) {
         musicState = playing;
         internalData->musicBuf = Mix_LoadMUS( filename.c_str() );
 
@@ -151,7 +152,8 @@ void SoundSystem :: nextTrack( void )
            displayLogMessage ( 4, "Playing music on channel %d \n", chan );
         }
      }
-  }
+  } else
+     displayLogMessage ( 1, "No play list available \n" );
 }
 
 void SoundSystem :: playMusic ( MusicPlayList* playlist )

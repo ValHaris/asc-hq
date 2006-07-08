@@ -621,7 +621,7 @@ void Vehicle::ReactionFire::checkData ( )
 
 void Vehicle::ReactionFire::resetShotCount()
 {
-   assert( unit->typ->weapons.count <= weaponShots.size() );
+   assertOrThrow( unit->typ->weapons.count <= weaponShots.size() );
    for ( int i = 0; i < unit->typ->weapons.count; ++i ) 
       weaponShots[i] = unit->typ->weapons.weapon[i].reactionFireShots;
 }
@@ -652,9 +652,9 @@ int Vehicle::ReactionFire::enable ( void )
          return -213;
 
       if ( unit->typ->wait ) {
-         if ( unit->hasMoved())
-            status = init1a;
-         else
+         // if ( unit->hasMoved())
+         //    status = init1a;
+         // else
             status = init2;
       } else {
          status = init2;

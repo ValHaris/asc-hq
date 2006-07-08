@@ -72,7 +72,6 @@ int GraphicSetManager_Base :: setActive ( int id )
    if ( activeSet && id == activeSet->id )
       return id;
 
-      
    for ( GraphicSets::iterator i = graphicSets.begin(); i != graphicSets.end(); ++i )
       if ( (*i)->id == id ) {
          activeSet = *i;
@@ -80,7 +79,7 @@ int GraphicSetManager_Base :: setActive ( int id )
       }
 
    if ( graphicSets.size() < 1 )
-      fatalError( "no graphic sets (*.gfx) found!" );
+      fatalError( "no graphic sets (*.gfx) found! Check that asc.gfx is in your search path" );
    activeSet = *graphicSets.begin();   
    return 0;
 }

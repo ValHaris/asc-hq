@@ -48,6 +48,7 @@
 #include "dialogs/fieldmarker.h"
 #include "dialogs/newmap.h"
 
+#include "unitset.h"
 #include "maped-mainscreen.h"
 
    bool       mapsaved;
@@ -3033,6 +3034,7 @@ void transformMap ( )
    vector<int> terraintranslation;
    vector<int> objecttranslation;
    vector<int> terrainobjtranslation;
+   vector<int> buildingtranslation;
    try {
       tnfilestream s ( filename, tnstream::reading );
 
@@ -3044,6 +3046,7 @@ void transformMap ( )
       pc.addIntegerArray ( "TerrainTranslation", terraintranslation );
       pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
       pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
+      pc.addIntegerArray ( "BuildingTranslation", buildingtranslation );
 
       delete tpg;
    }
@@ -3068,6 +3071,11 @@ void transformMap ( )
 
    if ( objecttranslation.size() % 2 ) {
       displaymessage ( "Map Translation : objecttranslation - Invalid number of entries ", 1);
+      return;
+   }
+
+   if ( buildingtranslation.size() % 2 ) {
+      displaymessage ( "Map Translation : buildingtranslation - Invalid number of entries ", 1);
       return;
    }
 
@@ -3096,7 +3104,7 @@ void transformMap ( )
 
 
           for ( int j = 0; j < fld->objects.size(); ++j ) 
-             for ( int i = 0; i < objecttranslation.size(); i++ )
+             for ( int i = 0; i < objecttranslation.size() / 2; i++ )
                 if ( fld->objects[j].typ->id == objecttranslation[i*2] ) {
                    ObjectType* ot = objectTypeRepository.getObject_byID ( objecttranslation[i*2+1] );
                    if ( ot ) {
@@ -3107,6 +3115,36 @@ void transformMap ( )
                       break;
                    }
                 }
+          for ( int b = 0; b < buildingtranslation.size()/2; ++b )
+             if ( (fld->bdt & getTerrainBitType(cbbuildingentry)).any() && fld->building && fld->building->typ->id == buildingtranslation[b*2] ) {
+               BuildingType* newtype = buildingTypeRepository.getObject_byID ( buildingtranslation[b*2+1] );
+               if ( newtype ) {
+                  Building* bld  = fld->building;
+                  const BuildingType* orgtype = fld->building->typ;
+                  MapCoordinate orgpos = bld->getEntry();
+                  MapCoordinate pos = orgpos;
+                  bld->unchainbuildingfromfield();
+                  bld->typ = newtype;
+                  int iteration = 0;
+                  enum { trying, success, failed } state = trying;
+                  do {
+                     if ( !bld->chainbuildingtofield( pos )) {
+                        pos = getNeighbouringFieldCoordinate( orgpos, iteration );
+                     } else
+                        state = success;
+
+                     ++iteration;
+
+                     if ( iteration > 6 && state != success ) {
+                        state = failed;
+                        bld->typ = orgtype;
+                        bld->chainbuildingtofield( orgpos );
+                     }
+                  } while ( state == trying );
+
+               }
+             }
+
    }
    calculateallobjects();
    displaymap();

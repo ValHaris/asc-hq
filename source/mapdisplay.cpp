@@ -43,7 +43,7 @@
 
 
 #ifndef karteneditor
-#include "dialogs/attackpanel.h"
+ #include "dialogs/attackpanel.h"
 #endif
 
 #define debugmapdisplay
@@ -1239,7 +1239,10 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
    movement.targetBlitPos = widget2screen ( SPoint( 0, 0));
    SPoint a = widget2screen( internal2widget( SPoint( movement.blitViewPortInternal.x, movement.blitViewPortInternal.y )));
    SPoint b = widget2screen( internal2widget( SPoint( movement.blitViewPortInternal.x + movement.blitViewPortInternal.w, movement.blitViewPortInternal.y + movement.blitViewPortInternal.h )));
+
+   
    movement.blitViewPortScreen = PG_Rect( a.x, a.y, b.x - a.x + 1, b.y - a.y + 1 );
+   movement.blitViewPortScreen = movement.blitViewPortScreen.IntersectRect( PG_Rect( 0, 0, PG_Application::GetScreenWidth(), PG_Application::GetScreenHeight() ));
 
    movement.toShadow  = ContainerBase::calcShadowDist( to.getNumericalHeight() );
    movement.fromShadow  = ContainerBase::calcShadowDist( from.getNumericalHeight() );

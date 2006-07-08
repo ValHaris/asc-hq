@@ -565,10 +565,17 @@ void   tspfldloaders::writefields ( void )
 }
 
 
+
+
+
 void tspfldloaders::readfields ( void )
 {
    int cnt2 = 0;
    int cnt1 = spfld->xsize * spfld->ysize;
+
+   assertOrThrow( cnt1 > 0 );
+   assertOrThrow( spfld->xsize > 0 );
+   assertOrThrow( spfld->ysize > 0 );
 
    spfld->allocateFields ( spfld->xsize , spfld->ysize );
    
@@ -691,6 +698,9 @@ void tspfldloaders::readfields ( void )
                if ( player < 0 || player > 7 )
                   player = 0;
 
+               assertOrThrow( strength >= 0 );
+               assertOrThrow( type > 0 && type <= 4 );
+
                Mine m ( type, strength, player, spfld );
                if ( objectversion == 1 ) {
                   int endtime = minetime;
@@ -715,6 +725,7 @@ void tspfldloaders::readfields ( void )
                Object o;
                stream->readInt(); // was: type
                o.damage = stream->readInt();
+               assertOrThrow( o.damage >= 0 );
                o.dir = stream->readInt();
                if ( objectversion >= 2 )
                   o.lifetimer = stream->readInt();
@@ -1317,6 +1328,11 @@ void  loadgame( const ASCString& name )
    } /* endcatch */
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
+      if ( !actmap || actmap->xsize <= 0)
+         throw NoMapLoaded();
+   } /* endcatch */
+   catch ( ASCmsgException msg ) {
+      displaymessage ("error loading game. Message is:\n" + msg.getMessage() ,1 );
       if ( !actmap || actmap->xsize <= 0)
          throw NoMapLoaded();
    } /* endcatch */

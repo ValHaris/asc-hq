@@ -39,16 +39,12 @@
 
 #include "global.h"
 #include "typen.h"
-#include "buildingtype.h"
-#include "vehicletype.h"
 #include "basegfx.h"
 #include "misc.h"
 #include "sgstream.h"
-#include "stack.h"
 #include "basestrm.h"
 #include "palette.h"
 #include "gameoptions.h"
-#include "graphicset.h"
 
 #ifdef _WIN32_
  #include <windows.h>
@@ -61,28 +57,6 @@ int dataVersion = 0;
 
 const int object_version = 1;
 const int technology_version = 1;
-
-Surface leergui;
-
-
-Surface generate_gui_build_icon ( Vehicletype* tnk )
-{
-   Surface s = leergui.Duplicate();
-   s.Blit(tnk->getImage(), SPoint((s.w() - tnk->getImage().w())/2, (s.h() - tnk->getImage().h())/2));
-   return s;
-}
-
-
-
-void loadguipictures( void )
-{
-   if ( !leergui.valid() ) {
-      tnfilestream stream ( "leergui.raw", tnstream::reading );
-      leergui.read( stream );
-   }
-}
-
-
 
 
 
@@ -425,187 +399,4 @@ void checkDataVersion( )
    checkFileVersion( "trrobj.version", "trrobj.con", 13 );
    checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
 }
-
-//===================================================================================
-
-
-
-bool SingleUnitSet :: isMember ( int id, Type type )
-{
-   if ( type == unit ) {
-      for ( int i = 0; i < unitIds.size(); i++ )
-        if ( id >= unitIds[i].from && id <= unitIds[i].to )
-           return true;
-   }
-   if ( type == building ) {
-      for ( int i = 0; i < buildingIds.size(); i++ )
-        if ( id >= buildingIds[i].from && id <= buildingIds[i].to )
-           return true;
-   }
-   return false;
-}
-
-
-std::vector<IntRange> SingleUnitSet::parseIDs ( const char* s )
-{
-   char buf[10000];
-
-   std::vector<IntRange> res;
-
-   if ( s && s[0] ) {
-
-      strcpy ( buf, s);
-
-      char* piclist = strtok ( buf, ";\r\n" );
-
-      char* pic = strtok ( piclist, "," );
-      while ( pic ) {
-         int from, to;
-         if ( strchr ( pic, '-' )) {
-            char* a = strchr ( pic, '-' );
-            *a = 0;
-            from = atoi ( pic );
-            to = atoi ( ++a );
-         } else
-            from = to = atoi ( pic );
-
-         IntRange ir;
-         ir.from = from;
-         ir.to = to;
-         res.push_back ( ir );
-
-         pic = strtok ( NULL, "," );
-      }
-   }
-   return res;
-}
-
-void SingleUnitSet::TranslationTable::parseString ( const char* s )
-{
-   if ( s && s[0] && strchr ( s, ';' )) {
-      char buf[10000];
-      if ( s[0] == '#' )
-         strcpy ( buf, s+1 );
-      else
-         strcpy ( buf, s );
-
-      char* tname = strtok ( buf, ";\n\r");
-      if ( tname )
-         name = tname;
-
-      char* xl = strtok ( NULL, ";\n\r" );
-      while ( xl ) {
-         if ( strchr ( xl, ',' )) {
-            char* a = strchr ( xl, ',' );
-            *a = 0;
-            IntRange ir;
-            ir.from = atoi ( xl );
-            ir.to = atoi ( ++a );
-
-            translation.push_back ( ir );
-
-         }
-         xl = strtok ( NULL, ";\n\r" );
-      }
-
-   }
-}
-
-
-void SingleUnitSet::read ( pnstream stream )
-{
-   if ( !stream )
-      return;
-   const char separator = '=';
-   ASCString s;
-   int data = stream->readTextString ( s );
-   if ( s == "#V2#" ) {
-      while ( data ) {
-         ASCString s2;
-         data = stream->readTextString ( s2 );
-
-         size_t seppos = s2.find_first_of ( separator );
-         if ( seppos >= 0 ) {
-            ASCString b = s2.substr(0, seppos);
-            ASCString e = s2.substr( seppos+1 );
-            if ( b == "NAME" )
-               name = e;
-
-            if ( b == "ACTIVE" )
-               active = atoi ( e.c_str() );
-
-
-            if ( b == "TRANSFORMATION" ) {
-               TranslationTable* tt = new TranslationTable;
-               tt->parseString ( e.c_str() );
-               transtab.push_back ( tt );
-            }
-
-            if ( b == "MAINTAINER" )
-               maintainer = e;
-
-            if ( b == "INFORMATION" )
-               information = e;
-
-            if ( b == "FILTERBUILDINGS" )
-               filterBuildings = atoi ( e.c_str() );
-
-            if ( b == "IDENTIFICATION" )
-               ID = atoi ( e.c_str() );
-
-
-            if ( b == "ID" )
-               unitIds = parseIDs ( e.c_str() );
-
-            if ( b == "BUILDINGID" )
-               buildingIds = parseIDs ( e.c_str() );
-
-         }
-      }
-   } else {
-      size_t seppos = s.find_first_of ( ';' );
-      if ( seppos >= 0 ) {
-         ASCString b = s.substr(0, seppos);
-         ASCString e = s.substr( seppos+1 );
-         name = b;
-         parseIDs ( e.c_str() );
-
-         while ( data ) {
-            ASCString s2;
-            data = stream->readTextString ( s2 );
-            if ( s2.length() ) {
-               TranslationTable* tt = new TranslationTable;
-               tt->parseString ( s2.c_str() );
-               transtab.push_back ( tt );
-            }
-         }
-      }
-   }
-}
-
-
-void loadUnitSets ( void )
-{
-   displayLogMessage ( 4, "loading unit set definition files\n" );
-   tfindfile ff ( "*.set" );
-   string n = ff.getnextname();
-   while ( !n.empty() ) {
-      displayLogMessage ( 5, " loading unit set definition file %s ... ",n.c_str() );
-      tnfilestream stream ( n.c_str(), tnstream::reading );
-
-      SingleUnitSet* set = new SingleUnitSet;
-      set->read ( &stream );
-      unitSets.push_back ( set );
-
-//      ItemFiltrationSystem::ItemFilter* itf = new ItemFiltrationSystem::ItemFilter ( set->name, set->ids, !set->active );
-//      ItemFiltrationSystem::itemFilters.push_back ( itf );
-
-      n = ff.getnextname();
-      displayLogMessage ( 5, "done\n" );
-   } /* endwhile */
-}
-
-UnitSets unitSets;
-
-
 

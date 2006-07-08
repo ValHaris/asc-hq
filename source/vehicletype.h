@@ -221,9 +221,6 @@ extern const char*  cvehiclefunctions[];
         //! the image index from the GraphicSet , or -1 if no graphics from graphic sets are used.
         int           bipicture;
 
-        //! the gui icon for selecting this unit by construction vehicles
-        Surface       buildicon;
-
         //! the ids of buildings this unit can construct
         vector<IntRange> buildingsBuildable;
 

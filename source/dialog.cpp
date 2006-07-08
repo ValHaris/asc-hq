@@ -55,10 +55,8 @@
 
 #include "dialogs/messagedialog.h"
 #include "widgets/textrenderer.h"
+#include "unitset.h"
 
-#ifndef karteneditor
-// #include "gamedlg.h"
-#endif
 
 
 #define markedlettercolor red

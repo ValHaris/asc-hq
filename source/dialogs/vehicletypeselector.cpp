@@ -22,6 +22,7 @@
 #include "../vehicletype.h"
 #include "../iconrepository.h"
 #include "../spfst.h"
+#include "../unitset.h"
 
 VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype ), actplayer(player)
 {

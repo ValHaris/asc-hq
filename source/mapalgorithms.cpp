@@ -473,6 +473,7 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
 
 int WindMovement::getDist ( int dir )
 {
+   assert( dir >= 0 && dir <= 5 );
    return wm[dir];
 }
 

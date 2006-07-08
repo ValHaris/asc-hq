@@ -33,6 +33,7 @@
 #include "../loadpcx.h"
 #include "../terraintype.h"
 #include "../sgstream.h"
+#include "../unitset.h"
 
 #include "guidegenerator.h"
 #include "infopage.h"

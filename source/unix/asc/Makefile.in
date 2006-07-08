@@ -87,7 +87,7 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
 	mapimageexport.$(OBJEXT) containercontrols.$(OBJEXT) \
 	containerbase-functions.$(OBJEXT) windowing.$(OBJEXT) \
-	turncontrol.$(OBJEXT)
+	turncontrol.$(OBJEXT) unitset.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -272,7 +272,7 @@ guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedial
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
-containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp
+containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -437,6 +437,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/turncontrol.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitctrl.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@

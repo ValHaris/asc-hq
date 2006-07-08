@@ -77,7 +77,6 @@
 #include <algorithm>
 #include <memory>
 #include <SDL_image.h>
-#include <SDL_mixer.h>
 
 #include "paradialog.h"
 
@@ -118,6 +117,7 @@
 #include "iconrepository.h"
 #include "dashboard.h"
 #include "gamedialog.h"
+#include "unitset.h"
 
 #ifdef WEATHERGENERATOR
 # include "weathercast.h"
@@ -1350,7 +1350,6 @@ int main(int argc, char *argv[] )
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
-
 
    app.setIcon( "program-icon.png" );
    if ( !app.InitScreen( xr, yr, 32, flags))

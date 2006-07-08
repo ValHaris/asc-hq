@@ -92,8 +92,6 @@ void loaddata( void )
 {
    loadcursor();
 
-   loadguipictures();
-
    loadalltextfiles();
 
    loadallobjecttypes();

@@ -26,23 +26,15 @@
 #include <cstring>
 #include <utility>
 #include <map>
-#include <SDL_image.h>
 
 
 #include "vehicletype.h"
 #include "buildingtype.h"
 
-#include "basestrm.h"
-#include "misc.h"
-// #include "basegfx.h"
 #include "typen.h"
 #include "spfst.h"
-#include "events.h"
-#include "loaders.h"
 #include "attack.h"
-#include "itemrepository.h"
 
-#include "dialog.h"
 #include "mapalgorithms.h"
 #include "vehicle.h"
 #include "buildings.h"
@@ -177,7 +169,7 @@ int         fieldAccessible( const tfield*        field,
            if ( terrainaccessible ( field, vehicle, uheight ) )
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
-              else
+               else 
                  if ((field->vehicle->height != vehicle->height) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
                     return 1;
       }
@@ -217,7 +209,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
                          int          ignoreunits )
 { 
    if ( color & 7 )
-      displaymessage("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2); 
+      fatalError("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
@@ -248,7 +240,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
                            BuildingType* buildingtyp)
 { 
    if ( color & 7 )
-      displaymessage("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
+      fatalError("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
@@ -444,7 +436,7 @@ void tdrawline8 :: putpix ( int x, int y )
           putpix8( x/2, y );
 }
 */
-
+/*
 void EllipseOnScreen :: paint ( void )
 {
    if ( active )
@@ -473,6 +465,7 @@ void EllipseOnScreen :: write ( tnstream& stream )
    stream.writeInt( active );
 }
 
+*/
 
 int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 )
 {
@@ -560,25 +553,6 @@ VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap
       return visible_not;
 }
 
-
-
-int getUnitSetID( const Vehicletype* veh )
-{
-   for ( UnitSets::iterator i = unitSets.begin(); i != unitSets.end(); ++i)
-      if ( (*i)->isMember( veh->id, SingleUnitSet::unit) )
-         return (*i)->ID;
-         
-   return -1;
-}
-
-int getUnitSetID( const BuildingType* bld )
-{
-   for ( UnitSets::iterator i = unitSets.begin(); i != unitSets.end(); ++i)
-      if ( (*i)->isMember( bld->id, SingleUnitSet::building) )
-         return (*i)->ID;
-         
-   return -1;
-}
 
 
 void         calculateobject( int       x,

@@ -137,7 +137,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 24;
+const int vehicle_version = 25;
 
 
 
@@ -504,13 +504,9 @@ void Vehicletype :: read ( tnstream& stream )
    if ( version >= 12 )
       techDependency.read( stream );
 
-   if ( version >= 13 )
-      buildicon.read( stream );
-   else {
-#ifndef converter
-      buildicon = generate_gui_build_icon ( this );
-#endif
-
+   if ( version >= 13 && version <= 24 ) {
+      Surface s;
+      s.read( stream );
    }
 
    if ( version >= 14 && version < 18)
@@ -690,8 +686,6 @@ void Vehicletype:: write ( tnstream& stream ) const
       heightChangeMethod[i].write( stream );
 
    techDependency.write( stream );
-
-   buildicon.write(stream);
 
    stream.writeFloat ( cargoMovementDivisor );
 
@@ -1009,11 +1003,6 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    for ( int w = 0; w < weapons.count; ++w )
       if ( weapons.weapon[w].canRefuel() )
          setFunction( ExternalAmmoTransfer );
-   
-#ifndef converter
-
-   buildicon = generate_gui_build_icon ( this );
-#endif
 }
 
 BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& location )

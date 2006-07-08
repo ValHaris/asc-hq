@@ -321,9 +321,6 @@ class GameMap {
         ASCString savegame[8];
       } preferredFileNames;
 
-      //! for tutorial missions it is possible to highlight elements of the interface with an ellipse using the event system.
-      EllipseOnScreen* ellipse;
-
       //! the ID of the graphic set
       int           graphicset;
       int           gameparameter_num;
@@ -407,7 +404,7 @@ class GameMap {
       //! resizes the map. Positive numbers enlarge the map in that direction
       int  resize( int top, int bottom, int left, int right );
 
-      bool compareResources( GameMap* replaymap, int player, ASCString* log = NULL );
+      // bool compareResources( GameMap* replaymap, int player, ASCString* log = NULL );
 
       void calculateAllObjects ( void );
 

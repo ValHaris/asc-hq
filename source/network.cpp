@@ -214,6 +214,12 @@ void networksupervisor ( void )
       actmap = NULL;
       return;
    } /* endcatch */
+   catch ( ASCmsgException msg ) {
+      displaymessage ("error loading game. Message is:\n" + msg.getMessage() ,1 );
+      delete actmap;
+      actmap = NULL;
+      return;
+   } /* endcatch */
    catch ( ASCexception ) {
       displaymessage ("error loading game",1 );
       delete actmap;

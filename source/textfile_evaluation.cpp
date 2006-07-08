@@ -1181,15 +1181,17 @@ vector<void*> loadImage ( const ASCString& file, int num )
    else
       xsize = 1100;
 
+   ASCString lowerFile = copytoLower( file );
+   
    int pcxwidth;
    int pcxheight;
-   int depth = pcxGetColorDepth ( file, &pcxwidth, &pcxheight );
+   int depth = pcxGetColorDepth ( lowerFile, &pcxwidth, &pcxheight );
    if ( depth > 8 ) {
       tvirtualdisplay vdp ( xsize, (num/10+1)*100, TCalpha, 32 );
       if ( num == 1 )
-         loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
+         loadpcxxy ( lowerFile, 0, 0, 0, &imgwidth, &imgheight );
       else
-         loadpcxxy ( file, 0, 0, 0 );
+         loadpcxxy ( lowerFile, 0, 0, 0 );
 
       for ( int i = 0; i < num; i++ ) {
           int x1 = (i % 10) * 100;
@@ -1207,9 +1209,9 @@ vector<void*> loadImage ( const ASCString& file, int num )
       tvirtualdisplay vdp ( max(xsize, pcxwidth), max( (num/10+1)*100, pcxheight), 255, 8 );
 
       if ( num == 1 )
-         loadpcxxy ( file, 0, 0, 0, &imgwidth, &imgheight );
+         loadpcxxy ( lowerFile, 0, 0, 0, &imgwidth, &imgheight );
       else
-         loadpcxxy ( file, 0, 0, 0 );
+         loadpcxxy ( lowerFile, 0, 0, 0 );
 
       for ( int i = 0; i < num; i++ ) {
           int x1 = (i % 10) * 100;
@@ -1277,8 +1279,10 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
 {
    void* img;
 
+   ASCString lstring = copytoLower( entry.value );
+   
    try {
-      StringTokenizer st ( entry.value, fileNameDelimitter );
+      StringTokenizer st ( lstring, fileNameDelimitter );
       FileName fn = st.getNextToken();
       fn.toLower();
       if ( fn.suffix() == "png" ) {
@@ -1307,7 +1311,7 @@ void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
          }
    }
    catch ( ASCexception ){
-      propertyContainer->error( "error accessing file " + entry.value );
+      propertyContainer->error( "error accessing file " + lstring );
       return NULL;
    }
    return img;

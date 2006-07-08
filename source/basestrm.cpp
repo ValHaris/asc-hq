@@ -1255,6 +1255,10 @@ int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
      if ( inputbufread >= inputbufused ) {
         inputbufused = stream->readcmpdata ( inputbuf, inputbufsize, 0 );
 
+        if ( !inputbufused && excpt )
+           throw tcompressionerror ( "Decompressor :: out of data", 0 );
+
+
         for ( int i = 0; i < inputbufused; i++ )
            inputbuf[i] ^= bzip_xor_byte;
 
@@ -1772,11 +1776,11 @@ bool patimat (const char *pat, const char *str, bool forceCaseInsensitivity )
 #else
               false
 #endif
-            )
+           )
             return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1, forceCaseInsensitivity);
          else
             return (*pat == *str) && patimat(pat+1, str+1, forceCaseInsensitivity );
-   }
+      }
 }
 
 bool patimat (const ASCString& pat, const ASCString& str, bool forceCaseInsensitivity)

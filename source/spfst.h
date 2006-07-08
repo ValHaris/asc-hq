@@ -32,7 +32,6 @@
   
   #include "newfont.h"
   #include "typen.h"
-  #include "events.h"
   #include "gamemap.h"
 
    struct Schriften {
@@ -183,15 +182,6 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
   extern VisibilityStates fieldVisibility  ( const tfield* pe, int player, GameMap* gamemap );
 
 
-
-/*
-class tdrawline8 : public tdrawline {
-         public:
-           void start ( int x1, int y1, int x2, int y2 );
-           virtual void putpix ( int x, int y );
-           virtual void putpix8 ( int x, int y ) = 0;
-       };
-*/
 extern SigC::Signal0<void> repaintMap;
 extern SigC::Signal0<void> repaintDisplay;
 extern SigC::Signal0<void> updateFieldInfo;
@@ -203,9 +193,6 @@ extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 extern SigC::Signal0<bool> idleEvent;
 
 extern void displaymap();
-
-extern int getUnitSetID( const Vehicletype* veh );
-extern int getUnitSetID( const BuildingType* bld );
 
 
 #endif

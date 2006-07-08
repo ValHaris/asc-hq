@@ -30,17 +30,8 @@
 #include "buildingtype.h"
 #include "vehicletype.h"
 #include "attack.h"
-#include "newfont.h"
 #include "spfst.h"
-#include "dlg_box.h"
-#include "sgstream.h"
-#include "events.h"
-#include "loaders.h"
-#include "gameoptions.h"
-#include "viewcalculation.h"
-#include "graphics/drawing.h"
 
-#include "mapalgorithms.h"
 
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
@@ -77,7 +68,7 @@ float AttackFormula :: getHemmingFactor ( int relDir )
       relDir += sidenum;
 
    if ( relDir == 5 )
-      displaymessage("float AttackFormula :: getHemmingFactor - invalid direction", 1 );
+      warning("float AttackFormula :: getHemmingFactor - invalid direction" );
       
    return hemming[relDir]*maxHemmingFactor/maxHemmingSum;
 }
@@ -164,7 +155,7 @@ void tfight :: calc ( void )
       int w = int(dv.damage + absstrength / absdefense * 1000 / damagefactor );
 
       if (dv.damage > w ) 
-         displaymessage("fatal error at attack: \ndecrease of damage d!",1);
+         warning("fatal error at attack: \ndecrease of damage d!");
 
       if (dv.damage == w )
          w = dv.damage+1;
@@ -200,7 +191,7 @@ void tfight :: calc ( void )
       int w = int(av.damage + absstrength / absdefense * 1000 / damagefactor );
 
       if (av.damage > w ) 
-         displaymessage("fatal error at attack: \ndecrease of damage a!",1);
+         warning("fatal error at attack: \ndecrease of damage a!");
 
       if (w > 100) 
          av.damage = 100; 
@@ -515,10 +506,10 @@ tmineattacksunit :: tmineattacksunit ( tfield* mineposition, int minenum, Vehicl
 void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
 {
    if ( mineposition->mines.empty() )
-      displaymessage(" tmineattacksunit :: setup \n no mine to attack !\n",2 );
+      errorMessage(" tmineattacksunit :: setup \n no mine to attack !\n" );
 
    if ( attackedunit->height >= chtieffliegend )
-      displaymessage(" tmineattacksunit :: setup \n mine attacks flying unit!\n",2 );
+      errorMessage(" tmineattacksunit :: setup \n mine attacks flying unit!\n" );
 
 
    _mineposition = mineposition;
@@ -1023,7 +1014,7 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
 
    if ( reldiff == -1) {
       if ( dist < weap->mindistance || dist > weap->maxdistance ) {
-         displaymessage("tweapdist::getweapstrength: invalid range: \n min = %d ; max = %d ; req = %d ",1, weap->mindistance, weap->maxdistance, dist);
+         warning("tweapdist::getweapstrength: invalid range: \n min = " + ASCString::toString(weap->mindistance ) + " ; max = " + ASCString::toString( weap->maxdistance ) + " ; req = " + ASCString::toString( dist));
          return 0;
       }
 

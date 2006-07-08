@@ -27,7 +27,7 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp guidimension.cpp \
+geometry.cpp guidimension.cpp unitset.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp

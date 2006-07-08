@@ -33,7 +33,7 @@
 #include "spfst.h"
 #include "itemrepository.h"
 #include "mapdisplay.h"
-
+#include "events.h"
 
 
 

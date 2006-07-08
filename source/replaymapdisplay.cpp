@@ -11,7 +11,7 @@
 #include "replaymapdisplay.h"
 #include "spfst.h"
 #include "viewcalculation.h"
-
+#include "events.h"
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {

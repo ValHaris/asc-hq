@@ -661,3 +661,155 @@ void GetResourceUsage :: checkbuilding ( Building* b )
       got += b->getResourceUsage().resource( resourcetype );
 }
 
+
+
+bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, ASCString* log )
+{
+   ASCString s;
+   bool diff  = false;
+   for ( int r = 0; r < 3; ++r ) {
+      if ( currentMap->isResourceGlobal( r )) {
+         if ( currentMap->bi_resource[player].resource(r) != replaymap->bi_resource[player].resource(r) ) {
+            diff = true;
+            if ( log ) {
+               s.format ( "Global resource mismatch: %d %s available after replay, but %d available in actual map\n", replaymap-> bi_resource[player].resource(r), resourceNames[r], currentMap->bi_resource[player].resource(r) );
+               *log += s;
+            }
+         }
+      } else {
+         GetConnectedBuildings::BuildingContainer cb;
+         for ( Player::BuildingList::iterator b = currentMap->player[player].buildingList.begin(); b != currentMap->player[player].buildingList.end(); ++b ) {
+            Building* b1 = *b;
+            ContainerBase* b2 = replaymap->getContainer( b1->getIdentification() );
+            if ( !b1 || !b2 ) {
+               if ( log ) {
+                  s.format ( "Building missing! \n");
+                  *log += s;
+               }
+            } else {
+               if ( find ( cb.begin(), cb.end(), b1 ) == cb.end()) {
+                  int ab1 = b1->getResource( maxint, r, true);
+                  int ab2 = b2->getResource( maxint, r, true);
+                  if ( ab1 != ab2 ) {
+                     diff = true;
+                     if ( log ) {
+                        s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
+                        *log += s;
+                     }
+                  }
+                  cb.push_back ( b1 );
+                  GetConnectedBuildings::BuildingContainer cbl;
+                  GetConnectedBuildings gcb ( cbl, b1->getMap(), r );
+                  gcb.start ( b1->getPosition().x, b1->getPosition().y );
+                  cb.insert ( cb.end(), cbl.begin(), cbl.end() );
+               }
+            }
+         }
+      }
+      for ( Player::VehicleList::iterator v = currentMap->player[player].vehicleList.begin(); v != currentMap->player[player].vehicleList.end(); ++v ) {
+         Vehicle* v1 = *v;
+         Vehicle* v2 = replaymap->getUnit( v1->networkid );
+         if ( !v1 || !v2 ) {
+            if ( log ) {
+               s.format ( "Vehicle missing! \n");
+               *log += s;
+            }
+         } else {
+            int av1 = v1->getResource( maxint, r, true );
+            int av2 = v2->getResource( maxint, r, true );
+            if ( av1 != av2 ) {
+               diff = true;
+               if ( log ) {
+                  s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
+                  *log += s;
+               }
+            }
+         }
+      }
+
+   }
+   if ( currentMap->player[player].vehicleList.size() != replaymap->player[player].vehicleList.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "The number of units differ. Replay: %d ; actual map: %d", replaymap->player[player].vehicleList.size(), currentMap->player[player].vehicleList.size());
+         *log += s;
+      }
+   }
+   if ( currentMap->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "The number of buildings differ. Replay: %d ; actual map: %d", replaymap->player[player].buildingList.size(), currentMap->player[player].buildingList.size());
+         *log += s;
+      }
+   }
+
+   if ( currentMap->player[player].research.progress != replaymap->player[player].research.progress ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "Research points mismatch! Replay: %d ; actual map: %d", replaymap->player[player].research.progress, currentMap->player[player].research.progress);
+         *log += s;
+      }
+   }
+
+   sort ( currentMap->player[player].research.developedTechnologies.begin(), currentMap->player[player].research.developedTechnologies.end() );
+   sort ( replaymap->player[player].research.developedTechnologies.begin(), replaymap->player[player].research.developedTechnologies.end() );
+   if ( replaymap->player[player].research.developedTechnologies.size() != currentMap->player[player].research.developedTechnologies.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "Number of developed technologies differ !\n" );
+         *log += s;
+      }
+   } else {
+      for ( int i = 0; i < replaymap->player[player].research.developedTechnologies.size(); ++i )
+         if ( replaymap->player[player].research.developedTechnologies[i] != currentMap->player[player].research.developedTechnologies[i] ) {
+         diff = true;
+         if ( log ) {
+            s.format ( "Different technologies developed !\n" );
+            *log += s;
+         }
+         }
+   }
+
+   for ( Player::BuildingList::iterator b = currentMap->player[player].buildingList.begin(); b != currentMap->player[player].buildingList.end(); ++b ) {
+      Building* b1 = *b;
+      Building* b2 = dynamic_cast<Building*>(replaymap->getContainer( b1->getIdentification() ));
+      if ( !b1 || !b2 ) {
+         if ( log ) {
+            s.format ( "Building missing! \n");
+            *log += s;
+         }
+      } else {
+         bool mismatch = false;
+         for ( int i = 0; i < b1->unitProduction.size(); ++i )
+            if ( b1->unitProduction[i] ) {
+            bool found = false;
+            for ( int j = 0; j < b2->unitProduction.size(); ++j)
+               if ( b2->unitProduction[j] == b1->unitProduction[i] )
+                  found = true;
+            if ( !found)
+               mismatch = true;
+            }
+
+            for ( int j = 0; j < b2->unitProduction.size(); ++j )
+               if ( b2->unitProduction[j] ) {
+               bool found = false;
+               for ( int i = 0; i < b1->unitProduction.size(); ++i)
+                  if ( b1->unitProduction[i] == b2->unitProduction[j] )
+                     found = true;
+               if ( !found)
+                  mismatch = true;
+               }
+
+               if ( mismatch ) {
+                  diff = true;
+                  if ( log ) {
+                     s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
+                     *log += s;
+                  }
+               }
+      }
+   }
+
+   return diff;
+}
+

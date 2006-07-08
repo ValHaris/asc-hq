@@ -39,6 +39,7 @@
 #include "../strtmesg.h"
 #include "../basegfx.h"
 #include "../loadpcx.h"
+#include "../unitset.h"
 
 #include "infopage.h"
 #include "guidegenerator.h"

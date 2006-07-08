@@ -22,6 +22,8 @@
 #include "../buildingtype.h"
 #include "../iconrepository.h"
 #include "../spfst.h"
+#include "../unitset.h"
+
 
 
 const int buildingHeight = 5 * fielddisty + fieldsizey;

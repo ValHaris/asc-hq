@@ -216,7 +216,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
       }
-      if ( action == rpl_move2 || action == rpl_move3 || action == rpl_move4 ) {
+      if ( action == rpl_move2 || action == rpl_move3 || action == rpl_move4 || action==rpl_move5) {
          int x1 =  va_arg ( paramlist, int );
          int y1 =  va_arg ( paramlist, int );
          int x2 =  va_arg ( paramlist, int );
@@ -225,22 +225,30 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int height = va_arg ( paramlist, int );
 
          stream->writeChar ( action );
-         if ( action == rpl_move2 ) {
-            int size = 6;
-            stream->writeInt ( size );
-         } else {
-            int size = 7;
-            stream->writeInt ( size );
-         }
+         if ( action == rpl_move5 ) {
+            int size = 8;
+            stream->writeInt( size );
+         } else 
+            if ( action == rpl_move2 ) {
+               int size = 6;
+               stream->writeInt ( size );
+            } else {
+               int size = 7;
+               stream->writeInt ( size );
+            }
          stream->writeInt ( x1 );
          stream->writeInt ( y1 );
          stream->writeInt ( x2 );
          stream->writeInt ( y2 );
          stream->writeInt ( nwid );
          stream->writeInt ( height );
-         if ( action == rpl_move3 || action == rpl_move4 ) {
+         if ( action == rpl_move3 || action == rpl_move4 || action==rpl_move5) {
             int nointerrupt = va_arg ( paramlist, int );
             stream->writeInt ( nointerrupt );
+            if ( action==rpl_move5 ) {
+               int destDamage = va_arg( paramlist, int );
+               stream->writeInt( destDamage );
+            }
          }
       }
 
@@ -677,6 +685,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( m );
          stream->writeInt ( f );
       }
+      if ( action == rpl_netcontrol ) {
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         int cat = va_arg ( paramlist, int );
+         int stat = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( cat );
+         stream->writeInt ( stat );
+      }
 
       va_end ( paramlist );
    }
@@ -803,6 +824,7 @@ void trunreplay :: execnextreplaymove ( void )
                            error("severe replay inconsistency:\nno vehicle for move1 command !");
                      }
          break;
+      case rpl_move5:
       case rpl_move4:
       case rpl_move3:
       case rpl_move2: {
@@ -814,10 +836,16 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         int height = stream->readInt();
                         int noInterrupt;
-                        if ( nextaction == rpl_move3 || nextaction == rpl_move4 )
+                        if ( nextaction == rpl_move3 || nextaction == rpl_move4 || nextaction == rpl_move5 )
                            noInterrupt = stream->readInt();
                         else
                            noInterrupt = -1;
+
+                        int destDamage;
+                        if ( nextaction == rpl_move5 )
+                           destDamage = stream->readInt();
+                        else
+                           destDamage = -1;
 
                         readnextaction();
 
@@ -833,6 +861,18 @@ void trunreplay :: execnextreplaymove ( void )
 
                            if ( vm.getStatus() != 1000 )
                               eht = NULL;
+
+                           if ( destDamage >= 0 ) {
+                              int realDamage;
+                              Vehicle* veh = actmap->getUnit( nwid );
+                              if ( veh )
+                                 realDamage = veh->damage;
+                              else
+                                 realDamage = 100;
+
+                              if ( destDamage != realDamage )
+                                 error( "severe replay inconsistency:\ndamage after movement differs: recorded=%d, actual=%d", destDamage, realDamage );
+                           }
                         }
 
                         if ( !eht )
@@ -1665,6 +1705,27 @@ void trunreplay :: execnextreplaymove ( void )
                     error ("Building not found on for rpl_setResourceProcessingAmount ");
          }
          break;
+         case rpl_netcontrol: {
+                 stream->readInt();
+                 int x = stream->readInt();
+                 int y = stream->readInt();
+                 int cat = stream->readInt();
+                 int stat = stream->readInt();
+                 readnextaction();
+
+                 Building* bld = actmap->getField(x,y)->building;
+                 if ( bld ) {
+                    // not supported
+                    /*
+                    cbuildingcontrols bc;
+                    bc.init( bld );
+                    bc.netcontrol.setnetmode( cat, stat );
+                    bld->execnetcontrol();
+                    */
+                 } else
+                    error ("Building not found on for rpl_setResourceProcessingAmount ");
+         }
+         break;
 
       default:{
                  int size = stream->readInt();
@@ -1731,6 +1792,11 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    orgmap = actmap;
    actmap = loadreplay ( orgmap->replayinfo->map[player]  );
+   if ( !actmap ) {
+      displaymessage("error loading replay", 1 );
+      actmap = orgmap;
+      return 0;
+   }
 
    actmap->playerView = viewingplayer;
 
@@ -1801,7 +1867,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
                 comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[nextplayer]  );
 
              if ( comparisonMap ) {
-                if ( comparisonMap->compareResources( actmap, player, &resourceComparisonResult)) {
+                if ( compareMapResources( comparisonMap, actmap, player, &resourceComparisonResult)) {
                    ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( -1, -1, 500, 550 ) );
                    vft.Show();
                    vft.RunModal();

@@ -172,5 +172,7 @@ extern void transfer_all_outstanding_tribute( Player& player );
 
 extern SigC::Signal0<void> tributeTransferred;
 
+extern bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, ASCString* log );
+
 
 #endif

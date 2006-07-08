@@ -36,6 +36,7 @@
 #include "paradialog.h"
 
 #include "dialogs/vehicletypeselector.h"
+#include "unitset.h"
 
 SigC::Signal0<void> filtersChangedSignal;
 

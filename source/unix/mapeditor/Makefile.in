@@ -78,7 +78,7 @@ am_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
 	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
 	resourceplacement.$(OBJEXT) resourceplacementdialog.$(OBJEXT) \
-	geometry.$(OBJEXT) guidimension.$(OBJEXT) \
+	geometry.$(OBJEXT) guidimension.$(OBJEXT) unitset.$(OBJEXT) \
 	iconrepository.$(OBJEXT) overviewmapimage.$(OBJEXT) \
 	mapfield.$(OBJEXT) objects.$(OBJEXT) \
 	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
@@ -265,7 +265,7 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp guidimension.cpp \
+geometry.cpp guidimension.cpp unitset.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
@@ -422,6 +422,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfileparser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@

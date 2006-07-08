@@ -72,9 +72,10 @@ enum trpl_actions { rpl_attack,
                     rpl_removebuilding2,
                     rpl_setResourceProcessingAmount,
                     rpl_removebuilding3,
+                    rpl_netcontrol,
+                    rpl_move5,
                     rpl_alliancechange2,
-                    rpl_moveUnitUp
-};
+                    rpl_moveUnitUp };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

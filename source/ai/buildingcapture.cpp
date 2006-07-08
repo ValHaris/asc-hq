@@ -162,9 +162,9 @@ bool AI :: checkReConquer ( Building* bld, Vehicle* veh )
          return false;
       else
          return true;
-   } else
-      return false;
-
+   }
+   
+   return false;
 }
 
 

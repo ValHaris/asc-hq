@@ -1281,6 +1281,8 @@ void DisplayEllipse::writeData ( tnstream& stream )
 
 void DisplayEllipse::execute( MapDisplayInterface* md )
 {
+   warning("Ellipses are not supported any more!");
+   /*
    if ( !gamemap->ellipse )
       gamemap->ellipse = new EllipseOnScreen;
 
@@ -1307,7 +1309,7 @@ void DisplayEllipse::execute( MapDisplayInterface* md )
    if ( md )
       md->updateDashboard();
 
-
+   */
 }
 
 void DisplayEllipse::setup()
@@ -1323,11 +1325,13 @@ void DisplayEllipse::setup()
 
 void RemoveEllipse::execute( MapDisplayInterface* md )
 {
+   /*
    if ( gamemap->ellipse ) {
       gamemap->ellipse->active = 0;
       if ( md )
          md->repaintDisplay();
    }
+   */
 }
 
 

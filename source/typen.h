@@ -49,7 +49,7 @@ const int gamemapPixelSize = 4;
 const int playerNum = 9;
 
 
-
+#if 0
 //! A Ellipse that is used for highlighting elements of the screen during the tutorial
 class  EllipseOnScreen {
    public:
@@ -62,7 +62,7 @@ class  EllipseOnScreen {
       void read( tnstream& stream );
       void write ( tnstream& stream );
    };
-
+#endif
 
 //! The number of different weapon types
 const int waffenanzahl = 8;

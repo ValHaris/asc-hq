@@ -28,21 +28,14 @@
 #include "typen.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
-#include "spfst.h"
-#include "dlg_box.h"
+#include "gamemap.h"
 #include "dialog.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
-#include "graphics/blitter.h"
+// #include "graphics/blitter.h"
 #include "overviewmapimage.h"
-#include "iconrepository.h"
 #include "gameeventsystem.h"
-
-#ifdef sgmain
- #include "gameoptions.h"
- #include "resourcenet.h"
-#endif
-
+#include "spfst.h"
 
 
 RandomGenerator::RandomGenerator(int seedValue){
@@ -101,12 +94,7 @@ void OverviewMapHolder::updateField( const MapCoordinate& pos )
    tfield* fld = map.getField( pos );
    VisibilityStates visi = fieldVisibility( fld, map.playerView, &map );
    if ( visi == visible_not ) {
-      static SDLmm::Color invisible = 0;
-      if ( !invisible ) {
-         Surface& hex = IconRepository::getIcon("hexinvis.raw");
-         invisible = overviewMapImage.GetPixelFormat().MapRGB ( hex.GetPixelFormat().GetRGB( hex.GetPixel ( hex.w() / 2, hex.h() / 2 )));
-      }
-      OverviewMapImage::fill ( overviewMapImage, imgpos, invisible );
+      OverviewMapImage::fill ( overviewMapImage, imgpos, 0xff545454 );
    } else {
       if ( fld->building && fieldvisiblenow( fld, map.playerView, &map) )
          OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
@@ -234,7 +222,6 @@ GameMap :: GameMap ( void )
    replayinfo = NULL;
    playerView = 0;
    lastjournalchange.abstime = 0;
-   ellipse = 0;
    graphicset = 0;
    gameparameter_num = 0;
    game_parameter = NULL;
@@ -454,7 +441,6 @@ void GameMap :: read ( tnstream& stream )
    int preferredfilenames = stream.readInt();
 
    bool __loadEllipse = stream.readInt();
-   ellipse = NULL;
    graphicset = stream.readInt();
    gameparameter_num = stream.readInt();
 
@@ -570,10 +556,11 @@ void GameMap :: read ( tnstream& stream )
     }
 
     if ( __loadEllipse ) {
-       ellipse = new EllipseOnScreen;
-       ellipse->read( stream );
-    } else
-       ellipse = NULL;
+       for ( int i = 0; i < 5; ++i )
+          stream.readInt();
+       stream.readFloat();
+       stream.readInt();
+    }
 
     int orggpnum = gameparameter_num;
     gameparameter_num = 0;
@@ -717,7 +704,7 @@ void GameMap :: write ( tnstream& stream )
       bi_resource[i].write ( stream );
 
    stream.writeInt( 1 );
-   stream.writeInt( ellipse != NULL );
+   stream.writeInt( 0 ); // was: ellipse
    stream.writeInt( graphicset );
    stream.writeInt( gameparameter_num );
 
@@ -779,9 +766,6 @@ void GameMap :: write ( tnstream& stream )
        stream.writeString ( preferredFileNames.savegame[k] );
     }
 
-
-    if ( ellipse )
-       ellipse->write( stream );
 
     for ( int ii = 0 ; ii < gameparameter_num; ii++ )
        stream.writeInt ( game_parameter[ii] );
@@ -1067,167 +1051,13 @@ ContainerBase* GameMap::getContainer ( int nwid )
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      return getfield(x,y)->building;
+      tfield* fld = getfield(x,y);
+      if ( !fld )
+         return NULL;
+
+      return fld->building;
    }
 }
-
-bool GameMap :: compareResources( GameMap* replaymap, int player, ASCString* log )
-{
-  #ifdef sgmain   
-   ASCString s;
-   bool diff  = false;
-   for ( int r = 0; r < 3; ++r ) {
-      if ( isResourceGlobal( r )) {
-         if ( bi_resource[player].resource(r) != replaymap-> bi_resource[player].resource(r) ) {
-            diff = true;
-            if ( log ) {
-               s.format ( "Global resource mismatch: %d %s available after replay, but %d available in actual map\n", replaymap-> bi_resource[player].resource(r), resourceNames[r], bi_resource[player].resource(r) );
-               *log += s;
-            }
-         }
-      } else {
-         GetConnectedBuildings::BuildingContainer cb;
-         for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
-            Building* b1 = *b;
-            ContainerBase* b2 = replaymap->getContainer( b1->getIdentification() );
-            if ( !b1 || !b2 ) {
-               if ( log ) {
-                  s.format ( "Building missing! \n");
-                  *log += s;
-               }
-            } else {
-               if ( find ( cb.begin(), cb.end(), b1 ) == cb.end()) {
-                  int ab1 = b1->getResource( maxint, r, true);
-                  int ab2 = b2->getResource( maxint, r, true);
-                  if ( ab1 != ab2 ) {
-                     diff = true;
-                     if ( log ) {
-                        s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
-                        *log += s;
-                     }
-                  }
-                  cb.push_back ( b1 );
-                  GetConnectedBuildings::BuildingContainer cbl;
-                  GetConnectedBuildings gcb ( cbl, b1->getMap(), r );
-                  gcb.start ( b1->getPosition().x, b1->getPosition().y );
-                  cb.insert ( cb.end(), cbl.begin(), cbl.end() );
-               }
-            }
-         }
-      }
-      for ( Player::VehicleList::iterator v = this->player[player].vehicleList.begin(); v != this->player[player].vehicleList.end(); ++v ) {
-         Vehicle* v1 = *v;
-         Vehicle* v2 = replaymap->getUnit( v1->networkid );
-         if ( !v1 || !v2 ) {
-            if ( log ) {
-               s.format ( "Vehicle missing! \n");
-               *log += s;
-            }
-         } else {
-            int av1 = v1->getResource( maxint, r, true );
-            int av2 = v2->getResource( maxint, r, true );
-            if ( av1 != av2 ) {
-               diff = true;
-               if ( log ) {
-                  s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
-                  *log += s;
-               }
-            }
-         }
-      }
-
-   }
-   if ( this->player[player].vehicleList.size() != replaymap->player[player].vehicleList.size() ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "The number of units differ. Replay: %d ; actual map: %d", replaymap->player[player].vehicleList.size(), this->player[player].vehicleList.size());
-         *log += s;
-      }
-   }
-   if ( this->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "The number of buildings differ. Replay: %d ; actual map: %d", replaymap->player[player].buildingList.size(), this->player[player].buildingList.size());
-         *log += s;
-      }
-   }
-
-   if ( this->player[player].research.progress != replaymap->player[player].research.progress ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "Research points mismatch! Replay: %d ; actual map: %d", replaymap->player[player].research.progress, this->player[player].research.progress);
-         *log += s;
-      }
-   }
-
-   sort ( this->player[player].research.developedTechnologies.begin(), this->player[player].research.developedTechnologies.end() );
-   sort ( replaymap->player[player].research.developedTechnologies.begin(), replaymap->player[player].research.developedTechnologies.end() );
-   if ( replaymap->player[player].research.developedTechnologies.size() != this->player[player].research.developedTechnologies.size() ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "Number of developed technologies differ !\n" );
-         *log += s;
-      }
-   } else {
-      for ( int i = 0; i < replaymap->player[player].research.developedTechnologies.size(); ++i )
-         if ( replaymap->player[player].research.developedTechnologies[i] != this->player[player].research.developedTechnologies[i] ) {
-            diff = true;
-            if ( log ) {
-               s.format ( "Different technologies developed !\n" );
-               *log += s;
-            }
-         }
-   }
-
-   for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
-      Building* b1 = *b;
-      Building* b2 = dynamic_cast<Building*>(replaymap->getContainer( b1->getIdentification() ));
-      if ( !b1 || !b2 ) {
-         if ( log ) {
-            s.format ( "Building missing! \n");
-            *log += s;
-         }
-      } else {
-         bool mismatch = false;
-         for ( int i = 0; i < b1->unitProduction.size(); ++i )
-            if ( b1->unitProduction[i] ) {
-               bool found = false;
-               for ( int j = 0; j < b2->unitProduction.size(); ++j)
-                  if ( b2->unitProduction[j] == b1->unitProduction[i] )
-                     found = true;
-               if ( !found)
-                  mismatch = true;
-            }
-
-         for ( int j = 0; j < b2->unitProduction.size(); ++j )
-            if ( b2->unitProduction[j] ) {
-               bool found = false;
-               for ( int i = 0; i < b1->unitProduction.size(); ++i)
-                  if ( b1->unitProduction[i] == b2->unitProduction[j] )
-                     found = true;
-               if ( !found)
-                  mismatch = true;
-            }
-
-         if ( mismatch ) {
-            diff = true;
-            if ( log ) {
-               s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
-               *log += s;
-            }
-         }
-      }
-   }
-
-   return diff;
-   #else
-   return false;
-   #endif
-}
-
-
-
-
 
 
 
@@ -1886,40 +1716,6 @@ void GameMap::operator= ( const GameMap& map )
 {
   throw ASCmsgException ( "GameMap::operator= undefined");
 }
-
-/*
-GameMap::Shareview :: Shareview ( const GameMap::Shareview* org )
-{
-   memcpy ( mode, org->mode, sizeof ( mode ));
-   recalculateview = org->recalculateview;
-}
-
-GameMap::Shareview :: Shareview ( void )
-{
-   recalculateview = 0;
-   for ( int i = 0; i < 8; i++ )
-      for ( int j = 0; j< 8; j++ )
-         mode[i][j] = false;
-}
-
-
-void GameMap::Shareview :: read ( tnstream& stream )
-{
-   for ( int i = 0; i < 8; i++ )
-      for ( int j =0; j < 8; j++ )
-         mode[i][j] = stream.readChar();
-   recalculateview = stream.readInt();
-}
-
-void GameMap::Shareview :: write( tnstream& stream )
-{
-   for ( int i = 0; i < 8; i++ )
-      for ( int j =0; j < 8; j++ )
-         stream.writeChar( mode[i][j] );
-   stream.writeInt( recalculateview );
-}
-*/
-
 
 
 void AiThreat :: write ( tnstream& stream )

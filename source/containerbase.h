@@ -49,7 +49,6 @@ class ContainerBase {
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
 
-      
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
    public:
@@ -70,6 +69,7 @@ class ContainerBase {
       typedef vector<Vehicle*> Cargo;
    protected:  
       Cargo cargo;
+      const ContainerBase* findUnit ( const Vehicle* veh ) const;
    public:
       const Cargo& getCargo() const { return cargo; };
 

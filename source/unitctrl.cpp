@@ -550,13 +550,24 @@ int BaseVehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int h
           return status;
        }
 
-       logtoreplayinfo ( rpl_move4, int(vehicle->xpos), int(vehicle->ypos), x, y, vehicle->networkid, path.rbegin()->getNumericalHeight(), noInterrupt );
+       int nwid = vehicle->networkid;
+       int xp = vehicle->xpos;
+       int yp = vehicle->ypos;
 
        if ( mapDisplay )
           mapDisplay->startAction();
        int stat = moveunitxy( path, noInterrupt );
        if ( mapDisplay )
           mapDisplay->stopAction();
+
+
+       int destDamage;
+       if ( actmap->getUnit( nwid ))
+          destDamage = vehicle->damage;
+       else
+          destDamage = 100;
+
+       logtoreplayinfo ( rpl_move5, xp, yp, x, y, nwid, path.rbegin()->getNumericalHeight(), noInterrupt, destDamage );
 
        if ( stat < 0 )
           status = stat;

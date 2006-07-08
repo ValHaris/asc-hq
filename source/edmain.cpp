@@ -42,6 +42,7 @@
 #include "maped-mainscreen.h"
 #include "cannedmessages.h"
 #include "stdio-errorhandler.h"
+#include "unitset.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -63,10 +64,6 @@ pfont load_font(char* name)
 void loaddata( void ) 
 {
    loadmessages();
-
-   dataLoaderTicker();
-
-   loadguipictures();
 
    dataLoaderTicker();
 
@@ -186,6 +183,8 @@ int main(int argc, char *argv[] )
    
    StdIoErrorHandler stdIoErrorHandler;
    
+   putenv("SDL_VIDEO_CENTERED=1") ;
+
    Cmdline* cl = NULL;
    auto_ptr<Cmdline> apcl ( cl );
    try {
@@ -256,9 +255,9 @@ int main(int argc, char *argv[] )
 #endif
       
    #ifdef pbpeditor
-   setWindowCaption ( "Advanced Strategic Command : PBP Editor ");
+   setWindowCaption ( "PBP Editor - Advanced Strategic Command");
    #else
-   setWindowCaption ( "Advanced Strategic Command : Map Editor ");
+   setWindowCaption ( "Map Editor - Advanced Strategic Command");
    #endif
 
    virtualscreenbuf.init();
