@@ -176,6 +176,9 @@
 				RelativePath="..\..\graphics\surface.cpp">
 			</File>
 			<File
+				RelativePath="..\..\unitset.cpp">
+			</File>
+			<File
 				RelativePath="..\weaponguide.cpp">
 			</File>
 			<Filter

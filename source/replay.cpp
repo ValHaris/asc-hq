@@ -54,18 +54,18 @@ int startreplaylate = 0;
 void runSpecificReplay( int player, int viewingplayer )
 {
     if ( actmap->replayinfo->map[player] && actmap->replayinfo->guidata[player] ) {
-
-       // npush ( lockdisplaymap );
-       // lockdisplaymap = 0;
-
-       int t;
-
-       do {
-          t = runreplay.run ( player, viewingplayer );
-       } while ( t ); /* enddo */
-
-       // npop ( lockdisplaymap );
-
+       try {
+         int t;
+         do {
+            t = runreplay.run ( player, viewingplayer );
+         } while ( t ); /* enddo */
+       }
+       catch ( ... ) {
+          errorMessage("An unrecognized error occured during the replay");
+          delete actmap;
+          actmap = NULL;
+          throw NoMapLoaded();
+       }
     }
 }
 
@@ -1524,11 +1524,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
 
                                  Vehicle* eht = actmap->getUnit ( x, y, nwid );
-
-                                 ContainerBase* from = eht->getCarrier();
-                                 ContainerControls cc ( from );
-                                 if ( !cc.moveUnitUp( eht ))
-                                    error("severe replay inconsistency in MoveUnitUp !");
+                                 if ( eht ) {
+                                    ContainerBase* from = eht->getCarrier();
+                                    ContainerControls cc ( from );
+                                    if ( !cc.moveUnitUp( eht ))
+                                       error("severe replay inconsistency in MoveUnitUp !");
+                                 } else
+                                    error("Unit not found for MoveUnitUp !");
                                  
                               }
                               break;

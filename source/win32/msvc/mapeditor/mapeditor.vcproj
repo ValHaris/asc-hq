@@ -380,6 +380,9 @@
 				RelativePath="..\..\..\typen.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\unitset.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\vehicle.cpp">
 			</File>
 			<File
