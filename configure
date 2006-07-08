@@ -20678,6 +20678,92 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking for Sound_Init in -lSDL_sound" >&5
+echo $ECHO_N "checking for Sound_Init in -lSDL_sound... $ECHO_C" >&6
+if test "${ac_cv_lib_SDL_sound_Sound_Init+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lSDL_sound  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char Sound_Init ();
+int
+main ()
+{
+Sound_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_SDL_sound_Sound_Init=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_SDL_sound_Sound_Init=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_SDL_sound_Sound_Init" >&5
+echo "${ECHO_T}$ac_cv_lib_SDL_sound_Sound_Init" >&6
+if test $ac_cv_lib_SDL_sound_Sound_Init = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSDL_SOUND 1
+_ACEOF
+
+  LIBS="-lSDL_sound $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error:
+ASC requires the SDL_sound library. If you have a distribution supplied
+SDL_sound package installed, perhaps the SDL_sound-devel package is missing.
+If your distribution does not include the SDL_sound library, you can get it
+from http://www.icculus.org/SDL_sound/ " >&5
+echo "$as_me: error:
+ASC requires the SDL_sound library. If you have a distribution supplied
+SDL_sound package installed, perhaps the SDL_sound-devel package is missing.
+If your distribution does not include the SDL_sound library, you can get it
+from http://www.icculus.org/SDL_sound/ " >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
 #AC_MSG_CHECKING("SDL_mixer.h")
 #AC_TRY_COMPILE( [#include <SDL_mixer.h>],[return 0;],
 #	      AC_MSG_ERROR( [[

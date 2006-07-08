@@ -11,9 +11,11 @@
 #ifndef sound_h_included
 #define sound_h_included
 
-#include <SDL_mixer.h>
 #include "../ascstring.h"
 #include "../music.h"
+
+
+class Sound_InternalData;
 
 class Sound {
    public:
@@ -26,6 +28,7 @@ class Sound {
      Sound( const ASCString& filename, int fadeIn = 0 );
      Sound( const ASCString& startSoundFilename, const ASCString& continuousSoundFilename, int fadeIn = 0 );
 
+
      void play(void);
      void playWait(void);
 
@@ -33,6 +36,8 @@ class Sound {
      void stop();
 
      void fadeOut ( int ms );
+
+     bool load();
 
      friend class SoundSystem;
 
@@ -46,14 +51,14 @@ class Sound {
 
      void finishedSignal( int channelnum );
 
-     //! the actual wave data
-     Mix_Chunk *mainwave;
-     Mix_Chunk *startwave;
-
+     Sound_InternalData* internalData;
+     
      int fadeIn;
      bool waitingForMainWave;
 };
 
+
+class SoundSystem_InternalData;
 
 class SoundSystem {
       bool effectsMuted;
@@ -64,10 +69,9 @@ class SoundSystem {
       int effectVolume;
 
       static SoundSystem* instance;
-      Mix_Music *musicBuf;
-      MusicPlayList* currentPlaylist;
 
-      Sound* channel[MIX_CHANNELS];
+      SoundSystem_InternalData* internalData;
+      
 
       //! callback for SDL_mixer
       static void trackFinished( void );
@@ -80,7 +84,6 @@ class SoundSystem {
    protected:
 
       //! loads a sound from the wave file called name to an Mix_buffer.
-      Mix_Chunk* loadWave ( const ASCString& name );
       friend class Sound;
 
    public:

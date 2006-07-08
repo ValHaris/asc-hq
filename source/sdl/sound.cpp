@@ -13,6 +13,9 @@
 
 #include <SDL.h>
 #include <SDL_mixer.h>
+#include <SDL_sound.h>
+
+#include <boost/regex.hpp>
 
 #include "../global.h"
 
@@ -29,23 +32,31 @@ const int WAIT_SLEEP_MSEC = 50;
 
 
 
+class SoundSystem_InternalData {
+   public:
+      Mix_Music *musicBuf;
+      MusicPlayList* currentPlaylist;
+
+      Sound* channel[MIX_CHANNELS];
+
+      SoundSystem_InternalData() : musicBuf(NULL), currentPlaylist(NULL) {
+         for ( int i = 0; i < MIX_CHANNELS; ++i )
+            channel[i] = NULL;
+
+      };
+};
 
 SoundSystem* SoundSystem::instance = NULL;
 
 SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    : sdl_initialized(false), mix_initialized( false )
 {
+   internalData = new SoundSystem_InternalData;
+   
    musicState = uninitialized;
-   currentPlaylist = NULL;
-   musicBuf = NULL;
-
 
    this->effectsMuted = muteEffects;
    this->off = _off;
-
-   for ( int i = 0; i < MIX_CHANNELS; i++ )
-       channel[i] = NULL;
-
 
    if ( instance )
       fatalError ( "Only one instance of SoundSystem possible !");
@@ -60,8 +71,11 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
       off = true;
       sdl_initialized = false;
       return;
-   } else
-      sdl_initialized = true;
+   }
+
+   Sound_Init();
+   
+   sdl_initialized = true;
 
    int audio_rate = MIX_DEFAULT_FREQUENCY;
    Uint16 audio_format = MIX_DEFAULT_FORMAT;
@@ -80,9 +94,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
          musicState = init_ready;
 
       Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
-      displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s\n", audio_rate,
-			(audio_format&0xFF),
-			(audio_channels > 1) ? "stereo" : "mono");
+      displayLogMessage ( 5, "Opened audio at %d Hz %d bit %s\n", audio_rate, (audio_format&0xFF), (audio_channels > 1) ? "stereo" : "mono");
       Mix_HookMusicFinished ( trackFinished );
 
       Mix_ChannelFinished( channelFinishedCallback );
@@ -118,22 +130,22 @@ void SoundSystem :: nextTrack( void )
    if ( off || musicState==paused || musicState==init_paused)
       return;
 
-  if ( musicBuf ) {
-     Mix_FreeMusic( musicBuf );
-     musicBuf = NULL;
-  }
+   if ( internalData->musicBuf ) {
+      Mix_FreeMusic( internalData->musicBuf );
+      internalData->musicBuf = NULL;
+   }
 
-  if ( currentPlaylist ) {
-     ASCString filename = currentPlaylist->getNextTrack();
+   if ( internalData->currentPlaylist ) {
+      ASCString filename = internalData->currentPlaylist->getNextTrack();
      if ( !filename.empty() ) {
         musicState = playing;
-        musicBuf = Mix_LoadMUS( filename.c_str() );
+        internalData->musicBuf = Mix_LoadMUS( filename.c_str() );
 
-        if ( !musicBuf ) {
+        if ( !internalData->musicBuf ) {
            displayLogMessage ( 1, "Could not load music file " + filename + " ; SDL reports error " + SDL_GetError() + "\n" );
            SDL_ClearError();
         } else {
-           int chan = Mix_PlayMusic ( musicBuf, 1 );
+           int chan = Mix_PlayMusic ( internalData->musicBuf, 1 );
            displayLogMessage ( 4, "Playing music on channel %d \n", chan );
         }
      }
@@ -142,9 +154,8 @@ void SoundSystem :: nextTrack( void )
 
 void SoundSystem :: playMusic ( MusicPlayList* playlist )
 {
-  currentPlaylist = playlist;
-
-  nextTrack();
+   internalData->currentPlaylist = playlist;
+   nextTrack();
 }
 
 
@@ -211,9 +222,9 @@ SoundSystem::~SoundSystem()
    if ( !off ) {
       Mix_HaltMusic();
 
-      if ( musicBuf ) {
-         Mix_FreeMusic( musicBuf );
-         musicBuf = NULL;
+      if ( internalData->musicBuf ) {
+         Mix_FreeMusic( internalData->musicBuf );
+         internalData-> musicBuf = NULL;
       }
    }
 
@@ -223,58 +234,108 @@ SoundSystem::~SoundSystem()
    if( sdl_initialized )
       SDL_CloseAudio();
 
+   delete internalData;
 
    instance = NULL;
 }
 
 
 
-Mix_Chunk* SoundSystem::loadWave ( const ASCString& name )
+void SoundSystem::channelFinishedCallback( int channelnum )
 {
-   if ( off )
-      return NULL;
+   if ( getInstance()->internalData->channel[channelnum] )
+      getInstance()->internalData->channel[channelnum]->finishedSignal( channelnum );
+}
 
-   if ( !exist ( name.c_str() )) {
+
+
+pair<Sound_Sample*, Mix_Chunk*> loadWave ( const ASCString& name )
+{
+   Mix_Chunk* chunk  = NULL;
+   Sound_Sample* sample  = NULL;
+   
+   if ( !exist ( name )) {
       errorMessage ( " can't open sound file: " + name );
-      return NULL;
+      return make_pair(sample,chunk);
    }
 
    tnfilestream stream ( name, tnstream::reading );
 
-   Mix_Chunk* chunk = Mix_LoadWAV_RW( SDL_RWFromStream ( &stream ), 1);
-   if ( chunk )
+   ASCString ext;
+   boost::smatch what;
+   static boost::regex extension( ".*\\.([^\\.]+)");
+   if( boost::regex_match( name, what, extension))
+      ext.assign( what[1].first, what[1].second );
+
+
+   int frequency;
+   Uint16 format;
+   int channels;
+   Mix_QuerySpec(&frequency, &format, &channels);
+   Sound_AudioInfo ai;
+   ai.format = format;
+   ai.channels = channels;
+   ai.rate = frequency;
+   
+   sample = Sound_NewSample ( SDL_RWFromStream ( &stream ), ext.c_str(), &ai, 1<<16);
+   if ( sample )
       displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded successfully\n");
-   else
+   else {
       displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded failed\n");
+      return make_pair(sample,chunk);
+   }
 
-   return chunk;
+   Uint32 size = Sound_DecodeAll ( sample );
+
+   chunk = new Mix_Chunk;
+   chunk->allocated = size;
+   chunk->abuf = (Uint8*) sample->buffer;
+   chunk->alen = size;
+   chunk->volume = MIX_MAX_VOLUME;
+   
+   return make_pair(sample,chunk);
 }
 
-void SoundSystem::channelFinishedCallback( int channelnum )
+
+class Sound_InternalData {
+   public:
+     //! the actual wave data
+      Mix_Chunk *mainwave;
+      Mix_Chunk *startwave;
+      Sound_Sample *mainsample;
+      Sound_Sample *startsample;
+      Sound_InternalData() : mainwave(NULL), startwave(NULL), mainsample(NULL), startsample(NULL) {};
+};
+
+Sound::Sound( const ASCString& filename, int _fadeIn ) : name ( filename ), fadeIn ( _fadeIn ), waitingForMainWave(false)
 {
-   if ( getInstance()->channel[channelnum] ) 
-      getInstance()->channel[channelnum]->finishedSignal( channelnum );
-}
-
-
-
-
-Sound::Sound( const ASCString& filename, int _fadeIn ) : name ( filename ), mainwave(NULL), startwave(NULL), fadeIn ( _fadeIn ), waitingForMainWave(false)
-{
+   internalData = new Sound_InternalData;
+   
    if ( !SoundSystem::instance )
       fatalError ( "Sound::Sound failed, because there is no SoundSystem initialized");
 
-   mainwave = SoundSystem::instance->loadWave( filename );
+   pair<Sound_Sample*, Mix_Chunk*> res = loadWave( filename );
+   internalData->mainsample = res.first;
+   internalData->mainwave = res.second;
 }
 
-Sound::Sound( const ASCString& startSoundFilename, const ASCString& continuousSoundFilename, int _fadeIn ) : name ( startSoundFilename ), mainwave(NULL), startwave(NULL), fadeIn ( _fadeIn ), waitingForMainWave(false) 
+Sound::Sound( const ASCString& startSoundFilename, const ASCString& continuousSoundFilename, int _fadeIn ) : name ( startSoundFilename ), fadeIn ( _fadeIn ), waitingForMainWave(false)
 {
+   internalData = new Sound_InternalData;
+   
    if ( !SoundSystem::instance )
       fatalError ( "Sound::Sound failed, because there is no SoundSystem initialized");
 
-   startwave = SoundSystem::instance->loadWave( startSoundFilename );
-   mainwave = SoundSystem::instance->loadWave( continuousSoundFilename );
+   pair<Sound_Sample*, Mix_Chunk*> res = loadWave( startSoundFilename );
+   internalData->startsample = res.first;
+   internalData->startwave = res.second;
+   
+   res = loadWave( continuousSoundFilename );
+   internalData->mainsample = res.first;
+   internalData->mainwave = res.second;
 }
+
+
 
 
 int Sound::startPlaying( bool loop )
@@ -287,9 +348,9 @@ int Sound::startPlaying( bool loop )
    else
       loopcontrol = 0;
 
-   Mix_Chunk* wave  = startwave;
+   Mix_Chunk* wave  = internalData->startwave;
    if ( !wave ) 
-      wave = mainwave;
+      wave = internalData->mainwave;
    else
       loopcontrol = 0;
 
@@ -299,7 +360,7 @@ int Sound::startPlaying( bool loop )
       channel = Mix_PlayChannel ( -1, wave, loopcontrol );
       Mix_Volume ( channel, SoundSystem::instance->getEffectVolume() );
    }
-   if ( startwave ) {
+   if ( internalData->startwave ) {
       waitingForMainWave = true;
    }
 
@@ -309,7 +370,7 @@ int Sound::startPlaying( bool loop )
 void Sound::finishedSignal( int channelnum )
 {
    if ( waitingForMainWave ) {
-      Mix_PlayChannel ( channelnum, mainwave, -1 );
+      Mix_PlayChannel ( channelnum, internalData->mainwave, -1 );
       Mix_Volume ( channelnum, SoundSystem::instance->getEffectVolume() );
       waitingForMainWave = false;
    }
@@ -317,55 +378,55 @@ void Sound::finishedSignal( int channelnum )
 
 void Sound::play(void)
 {
-   if( SoundSystem::instance->areEffectsMuted() || !mainwave)
+   if( SoundSystem::instance->areEffectsMuted() || !internalData->mainwave)
       return;
 
    int channel = startPlaying( false );
-   SoundSystem::instance->channel[ channel ] = this;
+   SoundSystem::instance->internalData->channel[ channel ] = this;
 }
 
 void Sound::playLoop()
 {
-   if( SoundSystem::instance->areEffectsMuted() || !mainwave)
+   if( SoundSystem::instance->areEffectsMuted() || !internalData->mainwave)
       return;
 
    int channel = startPlaying( true );
-   SoundSystem::instance->channel[ channel ] = this;
+   SoundSystem::instance->internalData->channel[ channel ] = this;
 }
 
 void Sound::stop()
 {
    for ( int i = 0; i < MIX_CHANNELS; i++ )
-      if ( SoundSystem::instance->channel[ i ] == this  && Mix_Playing(i)  )
+      if ( SoundSystem::instance->internalData->channel[ i ] == this  && Mix_Playing(i)  )
           Mix_HaltChannel( i );
 }
 
 
 void Sound::playWait(void)
 {
-   if( SoundSystem::instance->areEffectsMuted() || !mainwave)
+   if( SoundSystem::instance->areEffectsMuted() || !internalData->mainwave)
       return;
 
-   if ( startwave ) {
-      int channel = Mix_PlayChannel ( -1, startwave, 0 );
-      SoundSystem::instance->channel[ channel ] = this;
+   if ( internalData->startwave ) {
+      int channel = Mix_PlayChannel ( -1, internalData->startwave, 0 );
+      SoundSystem::instance->internalData->channel[ channel ] = this;
       do {
          SDL_Delay(WAIT_SLEEP_MSEC);
-      } while( SoundSystem::instance->channel[ channel ] == this  && Mix_Playing(channel)  );
+      } while( SoundSystem::instance->internalData->channel[ channel ] == this  && Mix_Playing(channel)  );
    }
 
-   int channel = Mix_PlayChannel ( -1, mainwave, 0 );
-   SoundSystem::instance->channel[ channel ] = this;
+   int channel = Mix_PlayChannel ( -1, internalData->mainwave, 0 );
+   SoundSystem::instance->internalData->channel[ channel ] = this;
 
    do {
       SDL_Delay(WAIT_SLEEP_MSEC);
-   } while( SoundSystem::instance->channel[ channel ] == this  && Mix_Playing(channel)  );
+   } while( SoundSystem::instance->internalData->channel[ channel ] == this  && Mix_Playing(channel)  );
 }
 
 void Sound :: fadeOut ( int ms )
 {
    for ( int i = 0; i < MIX_CHANNELS; i++ )
-      if ( SoundSystem::instance->channel[ i ] == this  && Mix_Playing(i)  )
+      if ( SoundSystem::instance->internalData->channel[ i ] == this  && Mix_Playing(i)  )
           Mix_FadeOutChannel( i, ms );
 }
 
@@ -375,11 +436,19 @@ Sound::~Sound(void)
 {
    stop();
 
-   if ( mainwave )
-      Mix_FreeChunk ( mainwave );
+   if ( internalData->mainwave )
+      delete internalData->mainwave ;
 
-   if ( startwave )
-      Mix_FreeChunk ( startwave );
+   if ( internalData->startwave )
+      delete internalData->startwave;
+
+   if ( internalData->mainsample )
+      Sound_FreeSample ( internalData->mainsample );
+
+   if ( internalData->startsample )
+      Sound_FreeSample ( internalData->startsample );
+
+   delete internalData;
 }
 
 
