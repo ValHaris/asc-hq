@@ -2444,8 +2444,7 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subje
          isw.RunModal();
          isw.Hide();
          
-         
-         if ( buildingConstruction.init( fld->vehicle ) && bcs->getSelectedType() ) {
+         if ( buildingConstruction.init( fld->vehicle ) && bcs->getSelectedType() && fld->vehicle->buildingconstructable( bcs->getSelectedType() )) {
             moveparams.movestatus = 111;
             NewGuiHost::pushIconHandler( &buildingConstruction );
             buildingConstruction.setup();

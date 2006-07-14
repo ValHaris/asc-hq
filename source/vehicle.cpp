@@ -865,7 +865,7 @@ bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
 }
 
 
-bool Vehicle :: buildingconstructable ( BuildingType* building, bool checkResources )
+bool Vehicle :: buildingconstructable ( const BuildingType* building, bool checkResources )
 {
    if ( !building )
       return 0;
