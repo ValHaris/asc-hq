@@ -281,11 +281,18 @@ pair<Sound_Sample*, Mix_Chunk*> loadWave ( const ASCString& name )
    ai.channels = channels;
    ai.rate = frequency;
    
-   sample = Sound_NewSample ( SDL_RWFromStream ( &stream ), ext.c_str(), &ai, 1<<16);
-   if ( sample )
-      displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded successfully\n");
-   else {
-      displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded failed\n");
+   try {
+      sample = Sound_NewSample ( SDL_RWFromStream ( &stream ), ext.c_str(), &ai, 1<<16);
+      if ( sample )
+         displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded successfully\n");
+      else {
+         displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded failed\n");
+         return make_pair(sample,chunk);
+      }
+   }
+   catch ( tfileerror err ) {
+      warning(" Error loading sound file " + name );
+      sample = NULL;
       return make_pair(sample,chunk);
    }
 

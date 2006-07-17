@@ -1163,10 +1163,15 @@ int gamethread ( void* data )
          displayLogMessage(0, "caught thread exiting exception, shutting down");
          return -1;
       }
+
+#ifndef _WIN32_
+      // Windows/MSVC will catch access violations with this, which we don't to, because it makes our dump files useless.
       catch ( ... ) {
          fatalError ( "caught undefined exception" );
       }
-      
+#endif
+
+
       displayLogMessage ( 5, "loaddata completed successfully.\n" );
       dataLoaderTicker();
       

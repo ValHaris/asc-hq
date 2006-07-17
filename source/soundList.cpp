@@ -71,7 +71,10 @@ void SoundList::init( )
       fatalError("SoundList::init() - Soundlist already initialized");
 
    instance = new SoundList;
+   displayLogMessage ( 4, "  SoundList::init() : starting initialize ..." );
    instance->initialize ( );
+   displayLogMessage ( 4, "  completed\n" );
+
 }
 
 void SoundList::readLine( PropertyContainer& pc, const ASCString& name, SoundList::Sample sample, int subtype )
@@ -113,6 +116,8 @@ void SoundList::initialize(  )
 
    pc.openBracket("shoot");
    dataLoaderTicker();
+    readLine( pc, "MACHINEGUN", SoundList::shooting, 6 );
+   dataLoaderTicker();
     readLine( pc, "CRUISEMISSILE", SoundList::shooting, 0 );
    dataLoaderTicker();
     readLine( pc, "MINE", SoundList::shooting, 1 );
@@ -124,8 +129,6 @@ void SoundList::initialize(  )
     readLine( pc, "SMALLMISSILE", SoundList::shooting, 4 );
    dataLoaderTicker();
     readLine( pc, "TORPEDO", SoundList::shooting, 5 );
-   dataLoaderTicker();
-    readLine( pc, "MACHINEGUN", SoundList::shooting, 6 );
    dataLoaderTicker();
     readLine( pc, "CANNON", SoundList::shooting, 7 );
    dataLoaderTicker();
