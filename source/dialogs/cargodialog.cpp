@@ -2545,10 +2545,10 @@ bool RecycleUnit :: available( const MapCoordinate& pos, ContainerBase* subject,
       return false;
       
    Player& player = veh->getMap()->player[veh->getOwner()];
-   if ( veh->typ->maxLoadableUnits && player.diplomacy.isAllied( veh->getMap()->actplayer)  )
+   if ( player.diplomacy.isAllied( veh->getMap()->actplayer)  )
       return true;
-      
-   return false;
+   else
+      return false;
 };
 
 void RecycleUnit :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
