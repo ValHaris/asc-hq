@@ -43,6 +43,8 @@ class MainScreenWidget : public PG_Widget {
     void buildBackgroundImage( bool messageLine );
         
     OverviewMapPanel* overviewMapPanel;
+
+    friend class StandardActionLocker;
     
 public:
     MainScreenWidget( PG_Application& application );
@@ -59,10 +61,24 @@ public:
       return overviewMapPanel;
     };
 
-    virtual void enableStandardAction( bool enable = true) {};
+    class StandardActionLocker {
+         MainScreenWidget* widget;
+         bool locked;
+         void operator=( StandardActionLocker& locker ) {};
+       public:
+          StandardActionLocker( MainScreenWidget* mainScreenWidget );
+          StandardActionLocker( const StandardActionLocker& locker );
+          void lock();
+          void unlock();
+          ~StandardActionLocker();
+    };
+
+    
     
 protected:
-    MapDisplayPG* mapDisplay;
+   virtual void lockStandardActions( int dir ) {};
+   
+   MapDisplayPG* mapDisplay;
     // Menu* menu;
     PG_Label* messageLine;
 

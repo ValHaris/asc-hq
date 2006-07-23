@@ -487,45 +487,60 @@ int getheightdelta ( int height1, int height2 )
    return hd;
 }
 
-
-bool fieldvisiblenow( const tfield* pe, int player, GameMap* actmap )
+bool fieldvisiblenow( const tfield* pe, int player, Vehicle* veh, GameMap* actmap )
 {
-  if ( player < 0 ) {
-     #ifdef karteneditor
+   if ( player < 0 ) {
+#ifdef karteneditor
      return true;
-     #else
+#else
      return false;
-     #endif
-  }
+#endif
+   }
 
-  if ( !actmap )
-     return false;
+   if ( !actmap )
+      return false;
   
-  if ( pe ) { 
+   if ( pe ) {
       int c = (pe->visible >> ( player * 2)) & 3;
-      #ifdef karteneditor
+#ifdef karteneditor
          c = visible_all;
-      #endif
+#endif
 
       if ( c < actmap->getInitialMapVisibility( player ) )
          c = actmap->getInitialMapVisibility( player );
 
-      if (c > visible_ago) { 
-         if ( pe->vehicle ) { 
-            if ((c == visible_all) || (pe->vehicle->color / 8 == player ) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend)))
-               return true; 
-         } 
-         else 
-            if (pe->building != NULL) { 
-               if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8)) 
-                  return true; 
-            } 
+      if (c > visible_ago) {
+         if ( !veh )
+            veh = pe->vehicle;
+         
+         if ( veh ) {
+            if ((c == visible_all) || (veh->color / 8 == player ) || ((veh->height >= chschwimmend) && (veh->height <= chhochfliegend)))
+               return true;
+         }
+         else
+            if (pe->building != NULL) {
+            if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8))
+               return true;
+            }
             else
-               return true; 
-      } 
+               return true;
+      }
    }
-   return false; 
-} 
+   return false;
+}
+
+
+bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player  )
+{
+   return fieldvisiblenow( pe, player, veh, veh->getMap());
+}
+
+bool fieldvisiblenow( const tfield* pe, int player, GameMap* actmap )
+{
+   return fieldvisiblenow( pe, player, NULL, actmap );
+
+}
+
 
 
 

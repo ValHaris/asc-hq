@@ -442,7 +442,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
 
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
-   : MainScreenWidget( application ), standardActions(true), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL)
+   : MainScreenWidget( application ), standardActionsLocked(0), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL)
 {
 
    setup( true );
@@ -476,15 +476,16 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
       
 }
 
-void ASC_MainScreenWidget :: enableStandardAction( bool enable )
+
+void ASC_MainScreenWidget :: lockStandardActions( int dir )
 {
+   standardActionsLocked += dir;
+   
    if ( menu )
-      if ( enable )
+      if ( standardActionsLocked <= 0 )
          menu->Show();
       else
          menu->Hide();
-
-      standardActions = enable;
 }
 
 
@@ -581,7 +582,7 @@ void ASC_MainScreenWidget::showWeaponRange( GameMap* gamemap, const MapCoordinat
 bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 // bool Menu::eventKeyDown(const SDL_KeyboardEvent* key)
 {
-   if ( !standardActions )
+   if ( standardActionsLocked > 0  )
       return false;
    
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);

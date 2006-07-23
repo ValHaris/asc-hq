@@ -37,6 +37,45 @@
 
 
 
+MainScreenWidget::StandardActionLocker::StandardActionLocker( MainScreenWidget* mainScreenWidget ) : widget( mainScreenWidget ), locked(false)
+{
+   lock();
+};
+
+MainScreenWidget::StandardActionLocker::StandardActionLocker( const StandardActionLocker& locker ) : widget(NULL), locked(false)
+{
+   widget  = locker.widget;
+   lock();
+}
+
+
+
+void MainScreenWidget::StandardActionLocker::lock()
+{
+   if ( !widget )
+      return;
+
+   widget->lockStandardActions(1);
+   locked = true;
+};
+
+void MainScreenWidget::StandardActionLocker::unlock()
+{
+   if ( !widget )
+      return;
+
+   if ( locked ) {
+      widget->lockStandardActions(-1);
+      locked = false;
+   }
+};
+
+MainScreenWidget::StandardActionLocker::~StandardActionLocker()
+{
+   unlock();
+};
+
+
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
               app ( application ) , lastMessageTime(0), lastMouseScrollTime(0), overviewMapPanel(NULL), messageLine(NULL)
@@ -73,6 +112,7 @@ void MainScreenWidget::setup( bool messageLine )
    MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &MainScreenWidget::displayMessage ));
    MessagingHub::Instance().messageWindowFactory.connect( SigC::slot( *this, &MainScreenWidget::createStatusWindow ));
 }
+
 
 
 void MainScreenWidget :: activateMapLayer( const ASCString& name, bool active )

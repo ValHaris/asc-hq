@@ -51,6 +51,36 @@ trunreplay runreplay;
 int startreplaylate = 0;
 
 
+class ReplayGuiIconHandleHandler {
+   static GuiIconHandler* replayIconHandler;
+   bool active;
+   public:
+      ReplayGuiIconHandleHandler()
+      {
+         if ( !replayIconHandler ) {
+            replayIconHandler = new GuiIconHandler();
+            registerReplayGuiFunctions( *replayIconHandler );
+         }
+         
+         if ( NewGuiHost::getIconHandler() != replayIconHandler ) {
+            active = true;
+            NewGuiHost::pushIconHandler( replayIconHandler );
+         } else
+            active = false;
+      };
+
+      ~ReplayGuiIconHandleHandler()
+      {
+         if ( active )
+            NewGuiHost::popIconHandler();
+      };
+};
+GuiIconHandler* ReplayGuiIconHandleHandler::replayIconHandler = NULL;
+
+
+
+
+
 void runSpecificReplay( int player, int viewingplayer )
 {
     if ( actmap->replayinfo->map[player] && actmap->replayinfo->guidata[player] ) {
@@ -101,6 +131,10 @@ void checkforreplay ( void )
 
    if ( actmap->replayinfo  &&  rpnum  &&  actmap->player[ actmap->actplayer ].stat == Player::human )
       if (choice_dlg("run replay of last turn ?","~y~es","~n~o") == 1) {
+      
+         MainScreenWidget::StandardActionLocker locker( mainScreenWidget );
+         ReplayGuiIconHandleHandler guiIconHandler;
+         
          int s = actmap->actplayer + 1;
          if ( s >= 8 )
             s = 0;
@@ -1801,6 +1835,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
    }
 
    actmap->playerView = viewingplayer;
+   actmap->getCursor() = orgmap->getCursor();
 
    tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
    stream = &guidatastream;
@@ -1812,13 +1847,8 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
 //   orgmap.replayinfo->actmemstream = stream;
 
-   static GuiIconHandler* replayIconHandler = NULL;
-   if ( !replayIconHandler ) {
-      replayIconHandler = new GuiIconHandler();
-      registerReplayGuiFunctions( *replayIconHandler );
-   }
 
-   NewGuiHost::pushIconHandler( replayIconHandler );
+   ReplayGuiIconHandleHandler guiIconHandler;
 
    if ( stream->dataavail () )
       status = 1;
@@ -1830,8 +1860,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
    updateFieldInfo();
 
-   if ( mainScreenWidget )
-      mainScreenWidget->enableStandardAction( false );
+   MainScreenWidget::StandardActionLocker locker( mainScreenWidget );
    
 //   cursor.show();
 
@@ -1844,8 +1873,10 @@ int  trunreplay :: run ( int player, int viewingplayer )
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
          */
-       }  else
+       }  else {
           PG_Application::GetApp()->sigAppIdle( PG_Application::GetApp() );
+          releasetimeslice();
+       }
 
        if (nextaction == rpl_finished  || status != 2) {
           if ( nextaction == rpl_finished && !resourcesCompared ) {
@@ -1888,11 +1919,6 @@ int  trunreplay :: run ( int player, int viewingplayer )
    delete actmap;
    actmap = orgmap;
 
-   NewGuiHost::popIconHandler();
-
-   if ( mainScreenWidget )
-      mainScreenWidget->enableStandardAction( true );
-   
    int st = status;
    status = 0;
 

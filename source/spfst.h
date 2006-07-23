@@ -171,7 +171,10 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
     \param pe the field to be evaluated
     \param player the player who is 'looking'
   */
+//! {@ 
   extern bool fieldvisiblenow( const tfield* pe, int player = actmap->actplayer, GameMap* map = actmap );
+  extern bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player = actmap->actplayer  );
+//! }@
 
   /*!
     evaluates the visibility of a field

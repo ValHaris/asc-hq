@@ -148,6 +148,11 @@ bool OverviewMapHolder::init()
    return initialized;
 }   
 
+void OverviewMapHolder::resetSize()
+{
+   initialized = false;
+}
+
 
 const Surface& OverviewMapHolder::getOverviewMap( bool complete )
 {
@@ -1426,6 +1431,7 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
   if ( bottom & 1 || top & 1 )
      return 3;
 
+
   int ox1, oy1, ox2, oy2;
 
   if ( top < 0 ) {
@@ -1537,7 +1543,9 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
      ypos = ysize - idisplaymap.getscreenysize() ;
    */
 
-  return 0;
+   overviewMapHolder.resetSize();
+
+   return 0;
 }
 
 pterraintype GameMap :: getterraintype_byid ( int id )

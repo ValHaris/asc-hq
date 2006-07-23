@@ -65,7 +65,19 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
    if ( actmap->playerView < 0 )
       return 0;
 
-   if ( fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), actmap->playerView)) {
+
+   bool visibility;
+   visibility = fieldvisiblenow ( getfield ( start.x, start.y ), vehicle, actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), vehicle, actmap->playerView);
+   /*
+   if ( vehicle->height >= chschwimmend && vehicle->height <= chhochfliegend ) {
+      visibility = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), actmap->playerView);
+   } else {
+      // visibility = (fieldVisibility ( getfield ( start.x, start.y ), actmap->playerView) >= visible_all) && (fieldVisibility ( getfield ( dest.x, dest.y ), actmap->playerView) >= visible_now);
+      visibility = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), actmap->playerView);
+   }
+   */
+   
+   if ( visibility ) {
       if ( checkMapPosition  ( start.x, start.y ))
          displayMap();
 

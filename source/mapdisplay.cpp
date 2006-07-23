@@ -1622,8 +1622,8 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    tfield* fld2 = actmap->getField ( dest );
    int view2 = fieldVisibility ( fld2, actmap->playerView );
 
-   if (  (view1 >= visible_now  &&  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
-      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) && ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
+   if (  (view1 >= visible_now  ||  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
+      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) || ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {
          soundStart( 1 );
          mapDisplayWidget->displayUnitMovement( actmap, vehicle, newstart, newdest );
       }

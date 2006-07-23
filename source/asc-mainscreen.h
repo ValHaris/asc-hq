@@ -42,7 +42,7 @@ class WindInfoPanel;
 class MapInfoPanel;
       
 class ASC_MainScreenWidget : public MainScreenWidget {
-      bool standardActions;
+      int standardActionsLocked;
    public:
       ASC_MainScreenWidget( PG_Application& application );
       enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
@@ -55,9 +55,6 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       void showMovementRange( GameMap* gamemap, const MapCoordinate& pos );
       void showWeaponRange( GameMap* gamemap, const MapCoordinate& pos );
       
-      virtual void enableStandardAction( bool enable = true);
-
-    
    protected:
       NewGuiHost* guiHost;
       Menu* menu;
@@ -70,6 +67,8 @@ class ASC_MainScreenWidget : public MainScreenWidget {
                
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       ASCString getBackgroundImageFilename() { return "gamebackground.png"; };
+
+      void lockStandardActions( int dir );
       
       ~ASC_MainScreenWidget() { };
 };

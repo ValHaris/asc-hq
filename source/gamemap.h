@@ -145,6 +145,8 @@ class OverviewMapHolder : public SigC::Object {
       
       static SigC::Signal0<void> generationComplete;
       
+      void resetSize();
+            
       void startUpdate();
       void clear();
 };

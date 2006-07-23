@@ -361,10 +361,13 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          if ( multiThreadedViewCalculation ) {
             bvc->waitForCompletion();
          } else {
+            Vehicle* temp = dest->vehicle;
+            dest->vehicle = vehicle;
             if ( actmap->playerView >= 0 )
                evaluateviewcalculation ( actmap, 1 << actmap->playerView );
             else
                evaluateviewcalculation ( actmap, 0);
+            dest->vehicle = temp;
          }
          printTimer(6);
 
@@ -372,7 +375,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          if ( vehicle ) {
 
-            if ( mapDisplay && fieldvisiblenow ( dest, actmap->playerView ) ) {
+            if ( mapDisplay && fieldvisiblenow ( dest, vehicle, actmap->playerView ) ) {
                // here comes an ugly hack to get the shadow of starting / descending aircraft right
 
                int oldheight = vehicle->height;

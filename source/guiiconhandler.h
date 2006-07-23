@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.24 2006-05-31 20:01:01 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.25 2006-07-23 18:30:13 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -173,8 +173,11 @@ class NewGuiHost : public DashboardPanel {
         
      public:
         NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r ) ;
+        
         static void pushIconHandler( GuiIconHandler* iconHandler );
+        static GuiIconHandler* getIconHandler(  );
         static void popIconHandler();
+        
         void eval( const MapCoordinate& pos, ContainerBase* subject );
 
         bool showSmallIcons( PG_Widget* parent, const SPoint& pos, bool cursorChanged );

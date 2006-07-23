@@ -177,7 +177,7 @@ int VehicleItem::place( const MapCoordinate& mc ) const
    for ( int i = 0; i < 9; ++i ) {
       if ( fld->vehicle->typ->height & (1 << i )) {
          fld->vehicle->height = 1 << i;
-         if ( terrainaccessible( fld, fld->vehicle ) == 2  || actmap->getgameparameter( cgp_movefrominvalidfields) )
+         if ( terrainaccessible( fld, fld->vehicle ) == 2 ) //  || actmap->getgameparameter( cgp_movefrominvalidfields)
             break;
       }
       if ( i == 8 ) { // no height found

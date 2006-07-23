@@ -299,6 +299,15 @@ void NewGuiHost::pushIconHandler( GuiIconHandler* iconHandler )
    updateFieldInfo();
 }
 
+GuiIconHandler* NewGuiHost::getIconHandler(  )
+{
+   if ( theGuiHost )
+      return theGuiHost->handler;
+   else
+      return NULL;
+}
+
+
 void NewGuiHost::popIconHandler( )
 {
    if ( !theGuiHost )
