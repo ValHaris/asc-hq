@@ -137,14 +137,14 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
          
    ypos = 0;
    if ( handler.ammoProductionPossible() ) {
-      PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 20, 20 ), "allow ammo production" );
+      PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 30, 20 ), "allow ammo production" );
       production->SetPressed(  );
       production->sigClick.connect( SigC::slot( handler, &TransferHandler::allowAmmoProduction ));
       ypos += 30;
    }
    
    for ( TransferHandler::Transfers::iterator i = handler.getTransfers().begin(); i != handler.getTransfers().end(); ++i ) {
-      new TransferWidget( area, PG_Rect( 0, ypos, area->w - 20, 50 ), *i, handler );
+      new TransferWidget( area, PG_Rect( 0, ypos, area->w - 30, 50 ), *i, handler );
       ypos += singleTransferHeight;
    }
 

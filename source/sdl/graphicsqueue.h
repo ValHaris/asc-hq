@@ -66,6 +66,6 @@ class GraphicsQueueOperation {
          void execute();
       };
 
- extern void queueOperation( GraphicsQueueOperation* gqo, bool wait = false );
+ extern void queueOperation( GraphicsQueueOperation* gqo, bool wait = false, bool forceAsync = false );
 
 #endif

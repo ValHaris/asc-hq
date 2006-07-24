@@ -731,7 +731,8 @@ TransferHandler::Transfers& TransferHandler::getTransfers()
 void TransferHandler::fillDest()
 {
    for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
-      (*i)->fill( dest );
+      if ( (*i)->isExchangable())
+         (*i)->fill( dest );
 }
 
 void TransferHandler::emptyDest()

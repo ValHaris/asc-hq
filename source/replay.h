@@ -106,7 +106,7 @@ class trunreplay {
             trunreplay ( void );
             int status;
             void firstinit ( void );
-            int  run ( int player, int viewingplayer );
+            int  run ( int player, int viewingplayer, bool performEndTurnOperations );
    };
 
 class LockReplayRecording {
@@ -128,7 +128,7 @@ extern void checkforreplay ( void );
 extern void initReplayLogging( Player& player );
 
 //! runs the replay for the given player
-extern void runSpecificReplay( int player, int viewingplayer );
+extern void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperations = true );
 
 //! runs the replay of the current player. This is used primarily for debugging the replay system
 extern void viewOwnReplay( Player& player );

@@ -81,13 +81,13 @@ GuiIconHandler* ReplayGuiIconHandleHandler::replayIconHandler = NULL;
 
 
 
-void runSpecificReplay( int player, int viewingplayer )
+void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperations )
 {
     if ( actmap->replayinfo->map[player] && actmap->replayinfo->guidata[player] ) {
        try {
          int t;
          do {
-            t = runreplay.run ( player, viewingplayer );
+            t = runreplay.run ( player, viewingplayer, performEndTurnOperations );
          } while ( t ); /* enddo */
        }
        catch ( ... ) {
@@ -104,7 +104,7 @@ void viewOwnReplay( Player& player )
    if ( CGameOptions::Instance()->debugReplay && player.getParentMap()->replayinfo )
       if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
          // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
-         runSpecificReplay ( player.getPosition(), player.getPosition() );
+         runSpecificReplay ( player.getPosition(), player.getPosition(), false );
       }
 }
 
@@ -1815,7 +1815,7 @@ preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
 }
 
 
-int  trunreplay :: run ( int player, int viewingplayer )
+int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOperations )
 {
    if ( status < 0 )
       firstinit ( );
@@ -1886,7 +1886,7 @@ int  trunreplay :: run ( int player, int viewingplayer )
              int replayedplayer  = actmap->actplayer; 
              actmap->endTurn();
              int nextplayer = findNextPlayer( actmap );
-             if ( nextplayer < actmap->actplayer )
+             if ( nextplayer < actmap->actplayer && performEndTurnOperations )
                 actmap->endRound();
              
              resourcesCompared = true;

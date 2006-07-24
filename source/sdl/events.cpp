@@ -377,7 +377,19 @@ int processEvents ( )
          case SDL_QUIT:
             exitprogram = 1;
             break;
+#ifdef _WIN32_
+         case SDL_ACTIVEEVENT: 
+            redrawScreen = true;
+            break;
+#endif
         } 
+      } else {
+#ifdef _WIN32_
+         if ( event.type  == SDL_ACTIVEEVENT ) {
+            queueOperation( new UpdateRectOp( SDL_GetVideoSurface(), 0,0,0,0), false, true );
+         }
+#endif
+
       }
       result = 1;
       if ( _queueEvents ) {
@@ -386,12 +398,6 @@ int processEvents ( )
          SDL_mutexV( eventQueueMutex );
       }
 
-#ifdef _WIN32_
-      if ( event.type  == SDL_ACTIVEEVENT ) {
-         redrawScreen = true;
-         // printf("Event encountered\n");
-      }
-#endif
 
    } else
       result = 0;
@@ -406,7 +412,7 @@ int processEvents ( )
 
 bool syncGraphics = true;
 
-void queueOperation( GraphicsQueueOperation* gqo, bool wait )
+void queueOperation( GraphicsQueueOperation* gqo, bool wait, bool forceAsync )
 {
    if ( !eventThreadRunning ) {
       gqo->execute();
@@ -417,6 +423,9 @@ void queueOperation( GraphicsQueueOperation* gqo, bool wait )
    SDL_mutexP( graphicsQueueMutex );
    graphicsQueue.push_back( gqo );
    SDL_mutexV( graphicsQueueMutex );
+
+   if ( forceAsync )
+      return;
 
    if ( syncGraphics || wait ) {
       bool finished = false;

@@ -2241,7 +2241,7 @@ namespace CargoGuiFunctions {
    
    ASCString MoveUnitUp::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      return "move unit to upper transport";
+      return "move unit to outer transport";
    };
 
 

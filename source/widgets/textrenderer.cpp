@@ -88,7 +88,7 @@ void TextRenderer :: layout()
    int vspace = 0;
 
    for ( Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i ) {
-      if ( (x + (*i)->Width() >= AreaWidth()-1 && x > 0) || breakNow ) {
+      if ( (x + (*i)->Width() >= AreaWidth()-2 && x > 0) || breakNow ) {
          maxx = max( arrangeLine( y, currentLine, lineHeight, indentation ), maxx);
          
          y += lineHeight + vspace;
