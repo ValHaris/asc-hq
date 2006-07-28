@@ -883,6 +883,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if( image.w() < fieldsizex || image.h() < fieldsizey )
       image.strech( fieldsizex, fieldsizey );
 
+   image.assignDefaultPalette();
+
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
    pc.addBool ( "WaitFortack", wait );
    pc.openBracket( "Tank" );

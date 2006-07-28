@@ -1675,6 +1675,9 @@ void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerB
 void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
 {
    tfield* fld =  actmap->getField(pos);
+   if ( !fld )
+      return;
+
    if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
       return;
 

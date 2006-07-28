@@ -106,10 +106,16 @@ int findNextPlayer( const GameMap* actmap )
 {
    int p = actmap->actplayer;
    bool found = false;
+   int loop = 0;
    do {
       ++p;
-      if ( p >= actmap->getPlayerCount()) 
+      if ( p >= actmap->getPlayerCount())  {
          p = 0;
+         ++loop;
+         if ( loop >= 3 )
+            throw ShutDownMap();
+      }
+
       
       if ( actmap->player[p].exist() )
          if ( actmap->player[p].stat != Player::off )
