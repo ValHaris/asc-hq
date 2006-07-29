@@ -1099,6 +1099,14 @@ void GameMap::endTurn()
    
    sigPlayerTurnEnds( player[actplayer] );
 
+   for ( int i = 0; i < 9; ++i )
+     for ( Player::BuildingList::iterator v = player[i].buildingList.begin(); v != player[i].buildingList.end(); ++v ) {
+         if ( i == actplayer )
+            (*v)->endOwnTurn();
+         (*v)->endAnyTurn();
+     }
+
+
    Player::VehicleList toRemove;
    for ( Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
       Vehicle* actvehicle = *v;
@@ -1170,13 +1178,7 @@ void GameMap::endTurn()
      for ( Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
          (*v)->endAnyTurn();
 
-  for ( int i = 0; i < 9; ++i )
-     for ( Player::BuildingList::iterator v = player[i].buildingList.begin(); v != player[i].buildingList.end(); ++v ) {
-         if ( i == actplayer )
-            (*v)->endOwnTurn();
-         (*v)->endAnyTurn();
-     }
-  
+ 
    if ( replayinfo )
       replayinfo->closeLogging();
       

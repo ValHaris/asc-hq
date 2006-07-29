@@ -537,6 +537,27 @@ void TemporaryContainerStorage :: restore (  )
 
 void ContainerBase::endOwnTurn( void )
 {
+#ifndef karteneditor
+   if ( baseType->hasFunction( ContainerBaseType::TrainingCenter  ) ) {
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) {
+            /*
+            bool ammoFull = true;
+            for ( int w = 0; w < (*i)->typ->weapons.count; ++w )
+               if ( (*i)->ammo[w] < (*i)->typ->weapons.weapon[w].count )
+                  ammoFull = false;
+
+            if ( ammoFull ) {
+            */
+               ContainerControls cc ( this );
+               if ( cc.unitTrainingAvailable( *i )) {
+                  cc.trainUnit( *i );
+                  cc.refillAmmo ( *i );
+               }
+            // }
+         }
+   }
+#endif
 }
 
 void ContainerBase::endAnyTurn( void )
@@ -545,25 +566,6 @@ void ContainerBase::endAnyTurn( void )
 
 void ContainerBase::endRound ( void )
 {
-#ifndef karteneditor
-   if ( baseType->hasFunction( ContainerBaseType::TrainingCenter  ) ) {
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) {
-            bool ammoFull = true;
-            for ( int w = 0; w < (*i)->typ->weapons.count; ++w )
-               if ( (*i)->ammo[w] < (*i)->typ->weapons.weapon[w].count )
-                  ammoFull = false;
-
-            if ( ammoFull ) {
-               ContainerControls cc ( this );
-               if ( cc.unitTrainingAvailable( *i )) {
-                  cc.trainUnit( *i );
-                  cc.refillResources( *i );
-               }
-            }
-         }
-   }
-#endif
 }
 
 
