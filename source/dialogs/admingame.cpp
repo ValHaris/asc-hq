@@ -229,8 +229,23 @@ class AdminGameWindow : public ASC_PG_Dialog {
 
          playerSetup = new PlayerSetupWidget( gamemap, PlayerSetupWidget::AllEditable, scrollwidget, PG_Rect(gap, 360, Width() - 3*gap, PlayerSetupWidget::guessHeight(gamemap) ) );
          
+         (new PG_Button( scrollwidget, PG_Rect( gap, 360 + PlayerSetupWidget::guessHeight(gamemap) + gap, Width() - 3* gap, 30), "OK" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::ok));
+
          updateTurn();
       }
+
+
+      bool ok()
+      {
+         apply();
+         if ( playerSetup->Apply() ) {
+            successfullyClosed = true;
+            QuitModal();
+            return true;
+         } else
+            return false;
+      }
+
 
       bool GetStatus()
       {

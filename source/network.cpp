@@ -89,7 +89,7 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
       {
          tnfilestream gamefile ( fname, tnstream::writing );
          tnetworkloaders nwl;
-         nwl.savenwgame( &gamefile );
+         nwl.savenwgame( &gamefile, map );
       }
 
       int nextPlayer = map->actplayer;
@@ -338,8 +338,13 @@ void networksupervisor ()
 
    TurnSkipper ts ( &skipTurn );
    
-   if ( adminGame( newMap.get(), &ts  ) )
+   if ( adminGame( newMap.get(), &ts  ) ) {
+      if ( !newMap->network ) {
+         errorMessage("no network set up for game");
+         return;
+      }
       newMap->network->send( newMap.get(), -1, -1 );
+   }
 
 }
 

@@ -136,7 +136,7 @@ class  tgameloaders : public tspfldloaders {
 class tnetworkloaders : public tgameloaders {
         public:
            GameMap*           loadnwgame ( pnstream strm );
-           int             savenwgame ( pnstream strm );
+           int             savenwgame ( pnstream strm, const GameMap* gamemap );
 };
 
 class tsavegameloaders : public tgameloaders {

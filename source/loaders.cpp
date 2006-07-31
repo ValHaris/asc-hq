@@ -1120,9 +1120,9 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
 
 
 
-int          tnetworkloaders::savenwgame( pnstream strm )
+int          tnetworkloaders::savenwgame( pnstream strm, const GameMap* gamemap )
 { 
-   spfld = actmap;
+   spfld = const_cast<GameMap*>(gamemap); // yes, this is bad, but spfld can't be made constant because it is also used for loading
    
    stream = strm;
 

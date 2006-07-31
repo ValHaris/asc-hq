@@ -458,6 +458,11 @@ void         tplayerchange::buttonpressed(int         id)
 
 
               } /* endfor */
+
+              Research r = actmap->player[sel1].research;
+              actmap->player[sel1].research = actmap->player[sel2].research;
+              actmap->player[sel2].research = r;
+
               anzeige();
            }
         }
