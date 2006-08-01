@@ -46,28 +46,10 @@ void PlayListLoader::write ( tnstream& stream )
 
 void MusicPlayList :: runTextIO ( PropertyContainer& pc )
 {
-   TrackList files;
    pc.addString( "Name", name );
-   pc.addStringArray( "Tracks", files );
+   pc.addStringArray( "Tracks", fileGroups );
 
    displayLogMessage ( 4, "Reading play list: " );
-
-   for ( TrackList::iterator i = files.begin(); i != files.end(); i++ ) {
-      tfindfile ff ( *i );
-      int loc;
-      bool incontainer;
-      ASCString location,name;
-      name = ff.getnextname ( &loc, &incontainer, &location );
-      while ( !name.empty()) {
-         if ( !incontainer ) {
-            ASCString filename = location + pathdelimitterstring + name;
-            displayLogMessage ( 4, filename + ", "  );
-            fileNameList.push_back ( filename );
-         }
-         name = ff.getnextname ( &loc, &incontainer, &location );
-      };
-   }
-   displayLogMessage ( 4, "Finished \n" );
 
    reset();
 }
@@ -80,7 +62,7 @@ void MusicPlayList :: read ( tnstream& stream )
    name = stream.readString();
    filename = stream.readString();
    location = stream.readString();
-   readClassContainer( fileNameList, stream );
+   readClassContainer( fileGroups, stream );
    reset();
 }
 
@@ -90,7 +72,7 @@ void MusicPlayList :: write ( tnstream& stream ) const
    stream.writeString ( name );
    stream.writeString ( filename );
    stream.writeString ( location );
-   writeClassContainer( fileNameList, stream );
+   writeClassContainer( fileGroups, stream );
 }
 
 
@@ -109,9 +91,54 @@ const ASCString& MusicPlayList :: getNextTrack()
 
 void MusicPlayList :: reset ( )
 {
-    iter = fileNameList.begin();
+   fileNameList.clear();
+
+   for ( TrackList::iterator i = fileGroups.begin(); i != fileGroups.end(); i++ ) {
+      tfindfile ff ( *i );
+      int loc;
+      bool incontainer;
+      ASCString location,name;
+      name = ff.getnextname ( &loc, &incontainer, &location );
+      while ( !name.empty()) {
+         if ( !incontainer ) {
+            ASCString filename = location + pathdelimitterstring + name;
+            displayLogMessage ( 4, filename + ", "  );
+            fileNameList.push_back ( filename );
+         }
+         name = ff.getnextname ( &loc, &incontainer, &location );
+      };
+   }
+   displayLogMessage ( 4, "Finished \n" );
+
+   iter = fileNameList.begin();
 }
 
+
+ASCString MusicPlayList::getDiagnosticText()
+{
+   ASCString text;
+
+   text += "Play List location:\n";
+   text += location + "\n\n";
+   
+   text += "File Patterns:\n";
+   if ( fileGroups.empty() )
+      text += "-none-\n";
+   else
+      for ( TrackList::iterator i = fileGroups.begin(); i != fileGroups.end(); i++ ) 
+         text += *i + "\n";
+   text += "\n";
+
+   text += "Found Files:\n";
+   if ( fileNameList.empty() )
+      text += "-none-\n";
+   else
+      for ( TrackList::iterator i = fileNameList.begin(); i != fileNameList.end(); i++ ) 
+         text += *i + "\n";
+   text += "\n";
+
+   return text;
+}
 
 void startMusic ()
 {

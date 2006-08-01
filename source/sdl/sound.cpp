@@ -41,6 +41,8 @@ class SoundSystem_InternalData {
 
       Sound* channel[MIX_CHANNELS];
 
+      ASCString lastMusicMessage;
+
       SoundSystem_InternalData() : musicBuf(NULL), currentPlaylist(NULL) {
          for ( int i = 0; i < MIX_CHANNELS; ++i )
             channel[i] = NULL;
@@ -127,6 +129,37 @@ void SoundSystem :: trackFinished( void )
    getInstance()->nextTrack();
 }
 
+ASCString SoundSystem :: getDiagnosticText()
+{
+
+   static ASCString boolean[2] = {"false", "true"};
+
+   ASCString text = "Sound System Status: "; 
+
+   if( off )
+      text += "off\n";
+   else
+      text += "on\n";
+
+   text += "Effects Muted: " + boolean[effectsMuted] + "\n";
+   text += "SDL Initialized: " + boolean[sdl_initialized] + "\n";
+   text += "Mixer Initialized: " + boolean[mix_initialized] + "\n";
+   text += "Music Volume: " + ASCString::toString( musicVolume ) + "\n";
+   text += "Effects Volume: " + ASCString::toString( effectVolume ) + "\n";
+
+   text += "\n";
+   text += "Last message from mixer was:\n";
+   text += internalData->lastMusicMessage + "\n\n";
+
+   if ( internalData->currentPlaylist ) 
+      text += internalData->currentPlaylist->getDiagnosticText();
+   else
+      text += "No play list active!";
+
+   return text;
+}
+
+
 void SoundSystem :: nextTrack( void )
 {
    if ( off || musicState==paused || musicState==init_paused)
@@ -145,7 +178,8 @@ void SoundSystem :: nextTrack( void )
         internalData->musicBuf = Mix_LoadMUS( filename.c_str() );
 
         if ( !internalData->musicBuf ) {
-           displayLogMessage ( 1, "Could not load music file " + filename + " ; SDL reports error " + SDL_GetError() + "\n" );
+           internalData->lastMusicMessage = "Could not load music file " + filename + " ; SDL reports error " + SDL_GetError();
+           displayLogMessage ( 1, internalData->lastMusicMessage + "\n" );
            SDL_ClearError();
         } else {
            int chan = Mix_PlayMusic ( internalData->musicBuf, 1 );

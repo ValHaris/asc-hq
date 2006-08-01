@@ -19,7 +19,13 @@
 class MusicPlayList {
        ASCString name;
        typedef vector<ASCString> TrackList;
+
+       //! carries the resolved filenames
        TrackList fileNameList;
+
+       //! may contain wildcards like *.ogg referencing several files
+       TrackList fileGroups;
+
        TrackList::iterator iter;
    public:
       const ASCString& getName ( ) { return name; };
@@ -38,6 +44,7 @@ class MusicPlayList {
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;
 
+      ASCString getDiagnosticText();
 };
 
 class PlayListLoader : public TextFileDataLoader {

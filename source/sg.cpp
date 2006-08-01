@@ -231,6 +231,32 @@ void hookGuiToMap( GameMap* map )
 }
 
 
+bool loadGame( const ASCString& filename )
+{
+   GameMap* m = mapLoadingExceptionChecker( filename, MapLoadingFunction( tsavegameloaders::loadGameFromFile ));
+   if ( !m )
+      return false;
+
+   delete actmap;
+   actmap = m;
+   actmap->levelfinished = false;
+
+   if ( actmap->replayinfo ) {
+      if ( actmap->replayinfo->actmemstream )
+         displaymessage2( "actmemstream already open at begin of turn ",2 );
+
+      if ( actmap->replayinfo->guidata[actmap->actplayer] )
+         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
+      else {
+         actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
+         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
+      }
+   }
+   
+   computeview( actmap );
+   hookGuiToMap ( actmap );
+}
+
 
 bool loadGame()
 {
@@ -238,12 +264,8 @@ bool loadGame()
 
    if ( !s1.empty() ) {
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
-      loadgame( s1 );
-      if ( !actmap || actmap->xsize == 0 || actmap->ysize == 0 )
-         throw  NoMapLoaded();
 
-      computeview( actmap );
-      hookGuiToMap ( actmap );
+      loadGame( s1 );
       
       updateFieldInfo();
       positionCursor( actmap->getCurrentPlayer() );
@@ -318,7 +340,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
                fatalError ( "The savegame %s is invalid. Aborting.", gameToLoad );
 
             try {
-               loadgame( gameToLoad );
+               loadGame( gameToLoad );
                computeview( actmap );
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal savegame. ", gameToLoad );

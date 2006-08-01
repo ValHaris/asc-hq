@@ -1015,31 +1015,11 @@ void         tsavegameloaders::savegame( const ASCString& name)
 
 
 
-int   tsavegameloaders::loadgame( const ASCString& filename )
+GameMap* tsavegameloaders::loadGameFromFile( const ASCString& filename )
 {
    tnfilestream filestream ( filename, tnstream::reading );
-
-   GameMap* spfld = loadgame ( &filestream );
-
-   delete actmap;
-   actmap = spfld;
-   actmap->levelfinished = false;
-
-   if ( actmap->replayinfo ) {
-      if ( actmap->replayinfo->actmemstream )
-         displaymessage2( "actmemstream already open at begin of turn ",2 );
-
-      if ( actmap->replayinfo->guidata[actmap->actplayer] )
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
-      else {
-         actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
-      }
-   }
-   
-   mapLoaded( actmap );
-
-   return 0;
+   tsavegameloaders gl;
+   return gl.loadgame( &filestream );
 }
 
 GameMap*          tsavegameloaders::loadgame( pnstream strm )
@@ -1105,6 +1085,8 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
    seteventtriggers( spfld );
 
    calculateallobjects( spfld );
+
+   mapLoaded( spfld );
 
    GameMap* s = spfld;
    spfld = NULL;  // to avoid that is is deleted by the destructor of tsavegameloaders
@@ -1307,45 +1289,6 @@ void  savegame( const ASCString& name )
 }
 
 
-void  loadgame( const ASCString& name )
-{
-   try {
-      tsavegameloaders gl;
-      gl.loadgame ( name );
-   }
-   catch ( InvalidID err ) {
-      displaymessage( err.getMessage().c_str(), 1 );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tinvalidversion err ) {
-      if ( err.expected < err.found )
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
-      else
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( tfileerror err) {
-      displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( ASCmsgException msg ) {
-      displaymessage ("error loading game. Message is:\n" + msg.getMessage() ,1 );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-   catch ( ASCexception ) {
-      displaymessage( "error loading game", 1 );
-      if ( !actmap || actmap->xsize <= 0)
-         throw NoMapLoaded();
-   } /* endcatch */
-
-}
-
-
-
 void  savereplay( GameMap* gamemap, int num )
 {
    try {
@@ -1399,10 +1342,7 @@ GameMap*  loadreplay( pmemorystreambuf streambuf )
       replaymap = NULL;
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      if ( err.expected < err.found )
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
-      else
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
+      displaymessage( err.getMessage().c_str(), 1 );
       replaymap = NULL;
    } /* endcatch */
    catch ( tfileerror err) {
@@ -1431,10 +1371,7 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
       return NULL;
    } /* endcatch */
    catch ( tinvalidversion err ) {
-      if ( err.expected < err.found )
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 1, err.getFileName().c_str(), err.expected, err.found );
-      else
-         displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nThis is a bug, please report it!", 1, err.getFileName().c_str(), err.expected, err.found );
+      displaymessage( err.getMessage().c_str(), 1 );
       return NULL;
    } /* endcatch */
    catch ( tfileerror err) {

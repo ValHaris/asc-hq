@@ -22,6 +22,7 @@
 #include "../paradialog.h"
 #include "../gameoptions.h"
 #include "../soundList.h"
+#include "../widgets/textrenderer.h"
 
 class SoundSettings : public ASC_PG_Dialog
 {
@@ -34,8 +35,9 @@ class SoundSettings : public ASC_PG_Dialog
 
       bool radioButtonEvent( PG_RadioButton* button, bool state);
       bool buttonEvent( PG_Button* button );
-      bool eventScrollTrack(PG_Slider* slider, long data);
-      
+      bool eventScrollTrack(PG_ScrollBar* slider, long data);
+
+      bool diag();
 };
 
 
@@ -56,6 +58,8 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
    PG_Slider* mus = new PG_Slider(this, PG_Rect(180, 80, 200, 20), PG_Slider::HORIZONTAL, 21);
    mus->SetRange(0,100);
    mus->SetPosition(sSettings.musicVolume);
+   mus->sigScrollTrack.connect( SigC::slot( *this, &SoundSettings::eventScrollTrack ));
+
    if ( sSettings.muteMusic )
       musb->SetUnpressed();
    else
@@ -68,6 +72,7 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
    PG_Slider* snd = new PG_Slider(this, PG_Rect(180, 180, 200, 20), PG_Slider::HORIZONTAL, 31);
    snd->SetRange(0,100);
    snd->SetPosition(sSettings.soundVolume);
+   snd->sigScrollTrack.connect( SigC::slot( *this, &SoundSettings::eventScrollTrack ));
    if ( sSettings.muteEffects )
       sndb->SetUnpressed();
    else
@@ -82,6 +87,10 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
 
    sigClose.connect( SigC::slot( *this, &SoundSettings::closeWindow ));
    
+
+   PG_Button* b3 = new PG_Button(this, PG_Rect( Width() -100, 25, 90, 20 ), "Diagnostics" );
+   b3->sigClick.connect( SigC::slot( *this, &SoundSettings::diag));
+
    // caller = c;
    // SetInputFocus();
 }
@@ -110,7 +119,7 @@ bool SoundSettings::radioButtonEvent( PG_RadioButton* button, bool state)
 }
 
 
-bool SoundSettings::eventScrollTrack(PG_Slider* slider, long data)
+bool SoundSettings::eventScrollTrack(PG_ScrollBar* slider, long data)
 {
    if(slider->GetID() == 21) {
       CGameOptions::Instance()->sound.musicVolume = data;
@@ -128,6 +137,15 @@ bool SoundSettings::eventScrollTrack(PG_Slider* slider, long data)
    return false;
 }
 
+
+bool SoundSettings::diag()
+{
+   ASCString text = SoundSystem::getInstance()->getDiagnosticText();
+   ViewFormattedText vft( "Sound Diagnostics", text, PG_Rect( -1, -1, 500, 500 ));
+   vft.Show();
+   vft.RunModal();
+   return true;
+}
 
 
 bool SoundSettings::buttonEvent( PG_Button* button )

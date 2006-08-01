@@ -281,7 +281,7 @@ private:
   bool ok(PG_Button* button);  
 };
 
-
+#if 0
 
 class LoadGameDialog: public SaveGameBaseDialog{
 public:  
@@ -294,7 +294,7 @@ private:
     
   bool ok(PG_Button* button);  
 };
-
+#endif
 
 
 #endif

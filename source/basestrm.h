@@ -116,6 +116,7 @@ class tinvalidversion : public tfileerror {
      tinvalidversion ( const ASCString& fileName, int ex, int fnd );
      const int expected;
      const int found;
+     ASCString getMessage() const;
 };
 
 

@@ -126,6 +126,8 @@ class SoundSystem {
 
       static SoundSystem* getInstance() { return instance; };
 
+      ASCString SoundSystem :: getDiagnosticText();
+
       ~SoundSystem();
 };
 

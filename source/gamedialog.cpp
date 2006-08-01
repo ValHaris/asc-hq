@@ -711,7 +711,7 @@ void SaveGameDialog::saveGameDialog(PG_MessageObject* c) {
 }
 
 //*************************************************************************************************************************
-
+#if 0
 LoadGameDialog::LoadGameDialog(PG_MessageObject* c):SaveGameBaseDialog("Load Game", c) {
 }
 
@@ -720,7 +720,7 @@ LoadGameDialog::~LoadGameDialog() {
 bool LoadGameDialog::ok(PG_Button* button) {
     vector<PG_ListBoxBaseItem*> selectedFileList;
     PG_ListBoxItem* fileName = dynamic_cast<PG_ListBoxItem*>(selectedFileList.front());
-    loadgame(fileName->GetText().c_str());
+    // loadgame(fileName->GetText().c_str());
     quitModalLoop(1);
     return true;
 }
@@ -755,5 +755,6 @@ void LoadGameDialog::loadGameDialog(PG_MessageObject* caller) {
     isw.RunModal();
 }
 
+#endif
 
 
