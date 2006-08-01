@@ -109,6 +109,7 @@ int mapeditorMainThread ( void* _mapname )
       loaddata();
 
       if ( mapname && mapname[0] ) {
+         /*
          if( patimat ( savegameextension, mapname )) {
             if( validatesavfile( mapname ) == 0 )
                fatalError ( "The savegame %s is invalid. Aborting.", mapname );
@@ -118,7 +119,7 @@ int mapeditorMainThread ( void* _mapname )
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal savegame. ", mapname );
             }
-         } else
+      } else*/
             if( patimat ( mapextension, mapname )) 
                actmap = mapLoadingExceptionChecker( mapname, MapLoadingFunction( tmaploaders::loadmap )); 
             else
