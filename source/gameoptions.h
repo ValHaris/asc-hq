@@ -172,6 +172,8 @@ class CGameOptions
 
       bool cacheASCGUI;
 
+      bool replayMovieMode;
+
       struct PanelData {
          int x;
          int y;
@@ -181,6 +183,7 @@ class CGameOptions
       typedef map<ASCString, PanelData> PanelDataContainer;
       PanelDataContainer panelData;
 
+      bool getPanelData( const ASCString& name, PanelData& data );
       void updatePanelData( const ASCString& name, PanelData data );
       
       ASCString BI3directory;
@@ -196,6 +199,7 @@ class CGameOptions
       static const int maxSearchPathNum;
       int searchPathNum;
       ASCString searchPath[30];
+
    private:
       bool _changed;
 };

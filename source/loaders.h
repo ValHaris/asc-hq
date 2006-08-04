@@ -47,7 +47,7 @@ extern const char* tournamentextension;
 
 
 //! saves the map located in #actmap to the map file name
-extern void  savemap( const char *       name );
+extern void  savemap( const char *       name, GameMap* gamemap );
 
 //! saves the game located in #actmap to the savegame file name
 extern void  savegame( const ASCString& name );
@@ -117,7 +117,7 @@ class  tmaploaders : public tspfldloaders {
            static GameMap* loadmap ( const ASCString& name );
            
            
-           int             savemap ( const ASCString& name );
+           int             savemap ( const ASCString& name, GameMap* gamemap );
            tmaploaders (void ) {};
 };
 

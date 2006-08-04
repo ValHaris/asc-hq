@@ -398,7 +398,7 @@ class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::
       const Vehicletype* selectedItem;
    protected:
       ContainerBase::Production::const_iterator it;
-      ContainerBase::Production production;
+      ContainerBase::Production& production;
    public:
       AvailableProductionItemFactory(  ContainerBase* container_, ContainerBase::Production& prod )  : container( container_ ), selectedItem(NULL), production( prod )
       {

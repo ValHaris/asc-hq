@@ -351,7 +351,7 @@ void AI :: calculateFieldInformation ( void )
    for ( int y = 0; y < activemap->ysize; y++ ) {
       checkKeys();
       for ( int x = 0; x < activemap->xsize; x++ ) {
-         tfield* fld = getfield ( x, y );
+         tfield* fld = activemap->getField ( x, y );
          if ( config.wholeMapVisible || fieldvisiblenow ( fld, getPlayerNum() ) )
             if ( fld->vehicle && getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() )) {
                WeaponThreatRange wr ( this );
@@ -543,7 +543,7 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ ) {
          absFieldThreat += ai->getFieldThreat ( x, y );
-         tfield* fld = getfield ( x, y );
+         tfield* fld = ai->activemap->getField ( x, y );
          if ( fld->vehicle && ai->getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() ) ) {
             if ( !fld->vehicle->aiparam[ ai->getPlayerNum() ] )
                ai->calculateThreat ( fld->vehicle );
@@ -565,7 +565,7 @@ int AI :: Section :: numberOfAccessibleFields ( const Vehicle* veh )
    int num = 0;
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ )
-         if ( fieldAccessible ( getfield ( x, y ), veh ) == 2)
+         if ( fieldAccessible ( ai->activemap->getField ( x, y ), veh ) == 2)
             num++;
 
    return num;

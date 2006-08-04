@@ -455,7 +455,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                checkWind = false;
             } else {
                // not flying
-               tfield* fld = getfield( dest.x, dest.y );
+               tfield* fld = vehicle->getMap()->getField( dest.x, dest.y );
                if ( fld->building )
                   movecost = maxmalq;
                else
@@ -466,7 +466,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    } else
       if ( dest.getNumericalHeight() >= 0 ) {
         // moving out of container
-        int mm = getfield( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
+        int mm = vehicle->getMap()->getField( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
         if ( mm > 0 )
             movecost = mm;
         else {
@@ -478,7 +478,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                   movecost = submarineMovement;
                   checkWind = false;
                } else {
-                  movecost = getfield( dest.x, dest.y )->getmovemalus( vehicle );
+                  movecost = vehicle->getMap()->getField( dest.x, dest.y )->getmovemalus( vehicle );
                }
             }
         }
@@ -496,7 +496,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
          int x = dest.x;
          int y = dest.y;
          getnextfield( x,  y, c );
-         tfield* fld = getfield ( x, y );
+         tfield* fld = vehicle->getMap()->getField ( x, y );
          if ( fld ) {
            int d = (c - direc);
 
@@ -506,7 +506,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            if (d < 0)
               d += sidenum;
 
-           tfield* fld = getfield(x,y);
+           tfield* fld = vehicle->getMap()->getField(x,y);
            if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
               if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isHostile( fld->vehicle->getOwner() ) )
                  if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))

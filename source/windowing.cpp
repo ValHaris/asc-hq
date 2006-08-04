@@ -943,9 +943,10 @@ LayoutablePanel :: LayoutablePanel ( PG_Widget *parent, const PG_Rect &r, const 
 
 PG_Rect LayoutablePanel::PositionCalculator( const PG_Rect& rect, const ASCString& panelName )
 {
-   CGameOptions::PanelDataContainer::iterator option = CGameOptions::Instance()->panelData.find( panelName );
-   if ( option != CGameOptions::Instance()->panelData.end() ) {
-      PG_Rect r ( option->second.x, option->second.y, DashBoardWidth, rect.Height() );
+   CGameOptions::PanelData pd;
+   if ( CGameOptions::Instance()->getPanelData(panelName, pd) ) {
+      pd.x = PG_Application::GetScreenWidth() - pd.x;
+      PG_Rect r ( pd.x, pd.y, DashBoardWidth, rect.Height() );
       
       if ( r.x + r.w >  PG_Application::GetScreenWidth() )
          r.x = PG_Application::GetScreenWidth() - r.w;
@@ -962,7 +963,7 @@ void LayoutablePanel::eventMoveWidget (int x, int y)
 {
    Panel::eventMoveWidget(x,y);
    CGameOptions::PanelData pos;
-   pos.x = x;
+   pos.x = PG_Application::GetScreenWidth() - x;
    pos.y = y;
    pos.visible = true;
 
@@ -974,7 +975,7 @@ void LayoutablePanel::eventHide()
    Panel::eventHide();
    
    CGameOptions::PanelData pos;
-   pos.x = my_xpos;
+   pos.x = PG_Application::GetScreenWidth() - my_xpos;
    pos.y = my_ypos;
    pos.visible = false;
 
@@ -986,7 +987,7 @@ void LayoutablePanel::eventShow()
    Panel::eventShow();
    
    CGameOptions::PanelData pos;
-   pos.x = my_xpos;
+   pos.x = PG_Application::GetScreenWidth() - my_xpos;
    pos.y = my_ypos;
    pos.visible = true;
 

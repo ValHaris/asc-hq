@@ -52,6 +52,7 @@ ObjectType :: ObjectType ( void )
    imageUsesAlpha = false;
    growthRate = 0;
    lifetime = -1;
+   growthDuration = -1;
 }
 
 const int ObjectType::namingMethodNum = 3;
@@ -770,7 +771,7 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 
 
 
-const int object_version = 16;
+const int object_version = 17;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -889,6 +890,9 @@ void ObjectType :: read ( tnstream& stream )
 
       if ( version >= 16 )
          namingMethod = NamingMethod( stream.readInt() );
+
+      if ( version >= 17 )
+         growthDuration = stream.readInt();
       
    } else
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
@@ -975,6 +979,7 @@ void ObjectType :: write ( tnstream& stream ) const
        }
 
     stream.writeInt( namingMethod );
+    stream.writeInt( growthDuration );
 }
 
 
@@ -1071,7 +1076,9 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addTagInteger ( "NamingMethod", namingMethod, namingMethodNum, namingMethodNames, int(0) );
 
    pc.addDFloat( "GrowthRate", growthRate, 0 );
+   pc.addInteger( "MaxChildSpawnNumber", growthDuration, -1 );
    pc.addInteger( "LifeTime", lifetime, -1 );
+
 
    pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );
 

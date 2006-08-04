@@ -1252,12 +1252,14 @@ int GameMap::random( int max )
 void GameMap::objectGrowth()
 {
    typedef vector< pair<tfield*,int> > NewObjects;
+   map<tfield*,int> remainingGrowthTime;
+
    NewObjects newObjects;
    for ( int y = 0; y < ysize; ++y )
       for ( int x = 0; x < xsize; ++x ) {
           tfield* fld = getField( x, y );
           for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i)
-             if ( i->typ->growthRate > 0 )
+             if ( i->typ->growthRate > 0 && i->remainingGrowthTime != 0 )
                 for ( int d = 0; d < 6; ++d ) {
                    tfield* fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
                    if ( fld2 && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) 
@@ -1270,16 +1272,24 @@ void GameMap::objectGrowth()
                            int p = static_cast<int>(std::ceil ( double(1) / d));
                            if ( p > 1 )
                               if ( random ( p ) == 1 )
-                                 if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 )
+                                 if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 ) {
                                     newObjects.push_back( make_pair( fld2, i->typ->id ));
+                                    i->remainingGrowthTime -= 1;
+                                    remainingGrowthTime[fld2] = i->remainingGrowthTime;
+                                 }
                         }
                    }
                 }
       }
 
    for ( NewObjects::iterator i = newObjects.begin(); i != newObjects.end(); ++i )
-      if ( !i->first->checkforobject( getobjecttype_byid( i->second )))
-         i->first->addobject ( getobjecttype_byid( i->second ));
+      if ( !i->first->checkforobject( getobjecttype_byid( i->second ))) {
+         if ( i->first->addobject ( getobjecttype_byid( i->second ))) {
+            Object* o = i->first->checkforobject( getobjecttype_byid( i->second ));
+            assert(o);
+            o->remainingGrowthTime = remainingGrowthTime[i->first];
+         }
+      }
 }
 
 SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
@@ -2018,7 +2028,7 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ExperienceEffectDivisorDefense",     1,                    1,   10,                 false,  false,   "experience effect divisor for defense"},  //       cgp_experienceDivisorDefense
       {  "DebugGameEvents",                    0,                    0,   2,                  true,   false,   "debug game events"},  //       cgp_debugEvents
       {  "ObjectGrowthRate",                   0,                    0,   maxint,             true,   false,   "Object growth rate (percentage)" },  //       cgp_objectGrowthMultiplier
-      {  "ObjectsGrowOnOtherObjects",          0,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  },  //       cgp_objectGrowOnOtherObjects
+      {  "ObjectsGrowOnOtherObjects",          1,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  },  //       cgp_objectGrowOnOtherObjects
       {  "ResearchOutputMultiplier",           1,                    1,   maxint,             false,   false,   "Multiplies the research output of all labs"  }  //       cgp_researchOutputMultiplier
 };
 

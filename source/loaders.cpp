@@ -413,7 +413,7 @@ void        tspfldloaders::readLegacyNetwork ( void )
 /*     fielder schreiben / lesen                              */
 /**************************************************************/
 
-const int objectstreamversion = 2;
+const int objectstreamversion = 3;
 
 void   tspfldloaders::writefields ( void )
 {
@@ -546,6 +546,7 @@ void   tspfldloaders::writefields ( void )
             for ( int i = 0; i < 4; i++ )
                stream->writeInt ( 0 );  // dummy
             stream->writeInt ( o->typ->id );
+            stream->writeInt( o->remainingGrowthTime );
          }
       }
 
@@ -741,8 +742,12 @@ void tspfldloaders::readfields ( void )
                if ( !o.typ )
                   throw InvalidID ( "object", id );
 
+               if ( objectversion >= 3 )
+                  o.remainingGrowthTime = stream->readInt();
+
                if ( objectversion == 1 )
                   o.lifetimer = o.typ->lifetime;
+
 
                fld2->objects.push_back ( o );
             }
@@ -835,7 +840,7 @@ tspfldloaders::~tspfldloaders ( void )
 
 
 
-int          tmaploaders::savemap( const ASCString& name )
+int          tmaploaders::savemap( const ASCString& name, GameMap* gamemap )
 { 
    #ifdef logging
    logtofile ( "loaders / tmaploaders::savemap / started " );
@@ -845,7 +850,7 @@ int          tmaploaders::savemap( const ASCString& name )
 
    stream = &filestream;
 
-   spfld = actmap;
+   spfld = gamemap;
 
 
    /********************************************************************************/
@@ -1252,7 +1257,7 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 
 
 
-void  savemap( const char * name )
+void  savemap( const char * name, GameMap* gamemap )
 {
 
    #ifdef logging
@@ -1261,7 +1266,7 @@ void  savemap( const char * name )
 
    try {
      tmaploaders gl;
-     gl.savemap ( name );
+     gl.savemap ( name, gamemap );
    } /* endtry */
 
    catch ( tfileerror err ) {

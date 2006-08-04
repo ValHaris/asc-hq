@@ -185,6 +185,7 @@ class BuildingType;
 
     //@}
     
+    //! returns the bitmapped level of height. Only one bit will be set, of course
     int getHeight() const { return height; };
     
 

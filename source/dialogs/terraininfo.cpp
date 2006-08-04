@@ -162,6 +162,31 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
       text += "Owner: " + gamemap->player[fld->building->getOwner()].getName() + "\n";
    }
 
+
+   if ( !fld->objects.empty() ) {
+      text += "#aeinzug0##eeinzug0#\n#fontsize=14#Object Details:#aeinzug30##eeinzug20#";
+      for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) {
+         const TerrainAccess* ta = &i->typ->getFieldModification( fld->getweather() ).terrainaccess;
+         text += "#aeinzug30##eeinzug20##fontsize=12#\n";
+         text += i->typ->name + "#aeinzug50##eeinzug40##fontsize=10#\n";
+
+         text += "the object can be placed onto the following fields:\n" ;
+         appendTerrainBits ( text, &ta->terrain );
+
+         text += "\nthese bits must be set:\n" ;
+         appendTerrainBits ( text, &ta->terrainreq );
+
+         text += "\nthese bits must NOT be set:\n" ;
+         appendTerrainBits ( text, &ta->terrainnot );
+
+         text += "\nthe object ist killed by:\n";
+         appendTerrainBits ( text, &ta->terrainkill );
+
+         text += "\nremaining lifetime:";
+         text += ASCString::toString( i->lifetimer ) + "\n";
+      }
+   }
+
    ViewFormattedText vft( "Field Information", text, PG_Rect( -1, -1, 420, 600 ));
    vft.Show();
    vft.RunModal();

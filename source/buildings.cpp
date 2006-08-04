@@ -160,7 +160,10 @@ const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& loc
 
 void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const
 {
-   paintField( getPicture( pos ), s, imgpos, 0, false );
+   if ( getHeight() <= chfahrend )
+      paintField( getPicture( pos ), s, imgpos, 0, false, 0 );
+   else
+      paintField( getPicture( pos ), s, imgpos, 0, false );
 }
 
 

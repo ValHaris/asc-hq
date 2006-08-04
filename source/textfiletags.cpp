@@ -238,7 +238,8 @@ const char*  buildingFunctionTags[24]  =
         "NetToSelf",
         "NetToBorder",
         "SpecialBiForest",
-        "AutoBorder" };
+        "AutoBorder",
+        "KeepOrientation" };
 
   const char* productionCostCalculationMethod[productionCostCalculationMethodNum] 
     = { "manual", "auto", "add" };

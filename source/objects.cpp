@@ -79,6 +79,7 @@ Object :: Object ( )
    typ = NULL;
    dir = 0;
    damage = 0;
+   remainingGrowthTime = -1;
 }
 
 Object :: Object ( const ObjectType* o )
@@ -87,6 +88,7 @@ Object :: Object ( const ObjectType* o )
    typ = o;
    dir = 0;
    damage = 0;
+   remainingGrowthTime = o->growthDuration;
 }
 
 

@@ -203,6 +203,7 @@ class ContainerBase {
       
       virtual int getIdentification() = 0;
 
+      //! returns the bitmapped level of height. Only one bit will be set, of course
       virtual int getHeight() const = 0;
 
       virtual ASCString getName ( ) const = 0;

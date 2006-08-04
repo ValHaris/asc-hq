@@ -87,7 +87,8 @@ void CGameOptions::save( const ASCString& filename )
    runTextIO( pc );
 }   
    
-   
+  
+
 void CGameOptions::runTextIO ( PropertyContainer& pc )
 {
    
@@ -277,6 +278,8 @@ void CGameOptions::setDefaults ( void )
 
    automaticTraining = true;
 
+   replayMovieMode = false;
+
    setChanged();
 }
 
@@ -386,5 +389,14 @@ void CGameOptions :: updatePanelData( const ASCString& name, PanelData data )
 {
    panelData[name] = data;
    setChanged();
+}
+
+bool CGameOptions :: getPanelData( const ASCString& name, PanelData& data )
+{
+   if ( panelData.find( name ) != panelData.end() ) {
+      data = panelData[name];
+      return true;
+   } else
+      return false;
 }
 

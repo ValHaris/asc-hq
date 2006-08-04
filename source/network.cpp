@@ -294,7 +294,6 @@ namespace {
 }
 
 
-
 void networksupervisor ()
 {
    ASCString filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
@@ -323,7 +322,7 @@ void networksupervisor ()
    }
 
    smw.close();
-   
+  
 
    try {
       bool ok = enterpassword ( newMap->supervisorpasswordcrc );

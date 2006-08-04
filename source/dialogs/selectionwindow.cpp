@@ -283,7 +283,8 @@ void ItemSelectorWidget::reLoad( bool show )
    if ( orgx >= 0 && orgy >= 0 )
       scrollWidget->ScrollTo ( orgx, orgy );
    
-   if ( show )
+   if ( show ) 
+      // scrollWidget->Update();
       scrollWidget->Show();
 }
 

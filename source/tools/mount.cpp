@@ -55,8 +55,10 @@
 #define Sentinel    0xF0   /* the sentinel flag */
 #define BUFFER_SIZE 30000
 
-#define WriteCode(a,b,c) \
-            fprintf( outfile, "%c%c%c", a, b, c )
+#define WriteCode(a,b,c) fprintf( outfile, "%c%c%c", a, b, c )
+
+
+const char temp
 
 
 void fatalError ( const ASCString& s )

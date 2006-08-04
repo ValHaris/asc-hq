@@ -221,7 +221,10 @@ void next_turn ( int playerView )
    actmap->playerView = -1;
    actmap->overviewMapHolder.clear();
    
-   authenticateUser( actmap, 0, false );
+   if ( !authenticateUser( actmap, 0, false )) {
+      delete actmap;
+      throw NoMapLoaded();
+   }
    
    actmap->beginTurn();
    actmap->playerView  = actmap->actplayer;

@@ -46,6 +46,7 @@ class Object : public AgeableItem {
        const ObjectType* typ;
        int damage;
        int dir;
+       int remainingGrowthTime;
        
        Object ();
        Object ( const ObjectType* o );

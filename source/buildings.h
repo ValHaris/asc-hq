@@ -162,6 +162,7 @@ class  Building : public ContainerBase {
     int maxAmmo( int type ) const { return maxint; };
 
 
+    //! returns the bitmapped level of height. Only one bit will be set, of course
     int getHeight() const { return typ->buildingheight; };
     
     

@@ -108,6 +108,8 @@ protected:
     
     ASCString getBackgroundImageFilename() { return "mapeditor-background.png"; };
     
+    bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);
+
     ~Maped_MainScreenWidget() { };
    private:
       bool runContextAction  (PG_PopupMenu::MenuItem* menuItem );

@@ -255,6 +255,7 @@ bool loadGame( const ASCString& filename )
    
    computeview( actmap );
    hookGuiToMap ( actmap );
+   return true;
 }
 
 

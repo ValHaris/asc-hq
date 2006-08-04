@@ -746,6 +746,10 @@ trunreplay :: trunreplay ( void )
 
 void trunreplay::error( const char* message, ... )
 {
+
+   if ( CGameOptions::Instance()->replayMovieMode )
+      return;
+
    // return;
    va_list paramlist;
    va_start ( paramlist, message );
@@ -893,8 +897,18 @@ void trunreplay :: execnextreplaymove ( void )
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            vm.execute ( NULL, x2, y2, 3, height, noInterrupt );
 
-                           if ( vm.getStatus() != 1000 )
+                           if ( vm.getStatus() != 1000 ) {
                               eht = NULL;
+                              if ( CGameOptions::Instance()->replayMovieMode ) {
+                                 eht->removeview();
+                                 eht->setnewposition(x2,y2);
+                                 if ( height >= 0 )
+                                    eht->height = 1 << height;
+                                 eht->getMap()->getField(x2,y2)->vehicle = eht;
+                                 eht->addview();
+                              }
+
+                           }
 
                            if ( destDamage >= 0 ) {
                               int realDamage;
@@ -1850,9 +1864,12 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
 
    ReplayGuiIconHandleHandler guiIconHandler;
 
-   if ( stream->dataavail () )
-      status = 1;
-   else
+   if ( stream->dataavail () ) {
+      if ( CGameOptions::Instance()->replayMovieMode ) 
+         status = 2;
+      else
+         status = 1;
+   } else
       status = 11;
 
    computeview( actmap );
@@ -1879,36 +1896,42 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
        }
 
        if (nextaction == rpl_finished  || status != 2) {
-          if ( nextaction == rpl_finished && !resourcesCompared ) {
+          if ( CGameOptions::Instance()->replayMovieMode ) 
+             status = 100;
+          else {
+            if ( nextaction == rpl_finished && !resourcesCompared ) {
 
-             displaymessage2("running final comparison" );
+               displaymessage2("running final comparison" );
 
-             int replayedplayer  = actmap->actplayer; 
-             actmap->endTurn();
-             int nextplayer = findNextPlayer( actmap );
-             if ( nextplayer < actmap->actplayer && performEndTurnOperations )
-                actmap->endRound();
-             
-             resourcesCompared = true;
-             ASCString resourceComparisonResult;
-             GameMap* comparisonMap = NULL;
-             GameMap* nextPlayerMap = NULL;
+               int replayedplayer  = actmap->actplayer; 
+               actmap->endTurn();
+               int nextplayer = findNextPlayer( actmap );
+               if ( nextplayer < actmap->actplayer && performEndTurnOperations )
+                  actmap->endRound();
+                
+               resourcesCompared = true;
+               ASCString resourceComparisonResult;
+               GameMap* comparisonMap = NULL;
+               GameMap* nextPlayerMap = NULL;
 
-             if ( replayedplayer == orgmap->actplayer )
-                comparisonMap = orgmap;
-             else
-                comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[nextplayer]  );
+               if ( replayedplayer == orgmap->actplayer )
+                  comparisonMap = orgmap;
+               else
+                  comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[nextplayer]  );
 
-             if ( comparisonMap ) {
-                if ( compareMapResources( comparisonMap, actmap, player, &resourceComparisonResult)) {
-                   ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( -1, -1, 500, 550 ) );
-                   vft.Show();
-                   vft.RunModal();
-                }
-             } else
-                error("Replay: no map to compare to!");
+               if ( !CGameOptions::Instance()->replayMovieMode ) {
+                  if ( comparisonMap ) {
+                     if ( compareMapResources( comparisonMap, actmap, player, &resourceComparisonResult)) {
+                        ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( -1, -1, 500, 550 ) );
+                        vft.Show();
+                        vft.RunModal();
+                     }
+                  } else
+                     error("Replay: no map to compare to!");
+               }
 
-             delete nextPlayerMap;
+               delete nextPlayerMap;
+            }
           }
        }
 

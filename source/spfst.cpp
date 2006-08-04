@@ -576,6 +576,9 @@ void         calculateobject( int       x,
                               const ObjectType* obj,
                               GameMap* actmap )
 {
+   if ( obj->netBehaviour & ObjectType::KeepOrientation ) 
+      return;
+   
    if ( obj->netBehaviour & ObjectType::SpecialForest ) {
       // ForestCalculation::calculateforest( actmap, obj );
       return;

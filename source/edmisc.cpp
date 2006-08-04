@@ -647,7 +647,7 @@ void         k_savemap(char saveas)
    if ( !filename.empty() ) {
       mapsaved = true;
       actmap->preferredFileNames.mapname[0] = filename;
-      savemap( filename.c_str() );
+      savemap( filename.c_str(), actmap );
       displaymap();
    }
 }
@@ -891,7 +891,7 @@ class PolygonEditor : public SelectFromMap {
 
 void editpolygon(Poly_gon& poly)
 {
-   savemap ( "_backup_polygoneditor.map" );
+   savemap ( "_backup_polygoneditor.map", actmap );
 
    PolygonEditor::CoordinateList list;
    

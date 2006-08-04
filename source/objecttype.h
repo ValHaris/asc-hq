@@ -128,8 +128,8 @@
      int getID() const { return id; };    
      
 
-     static const int netBehaviourNum = 6;
-     enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20 };
+     static const int netBehaviourNum = 7;
+     enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20, KeepOrientation = 0x40 };
 
      //! specifies how the object is going to connect to other things
      int netBehaviour;
@@ -178,6 +178,10 @@
 
      //! the object is removed when it is lifetime turns old. -1 disables removal
      int lifetime;
+
+     /** the time after which any growth stops. This parameter is passed to all child-objects spawned through growth and should 
+         therefor be bigger than lifetime. Use -1 for unlimited */
+     int growthDuration;
 
    private:
      //! the loading functions call this method to setup the objects images

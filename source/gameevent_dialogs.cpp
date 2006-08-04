@@ -638,11 +638,12 @@ void  tshownewtanks :: buttonpressed ( int id )
 
 int selectunit ( int unitnetworkid )
 {
-  Vehicle* v = actmap->getUnit ( unitnetworkid );
-
-
   SelectUnitFromMap::CoordinateList list;
-  list.push_back ( v->getPosition() );
+
+  Vehicle* v = actmap->getUnit ( unitnetworkid );
+  if ( v )
+      list.push_back ( v->getPosition() );
+
   SelectUnitFromMap sufm ( list, actmap );
   sufm.Show();
   sufm.RunModal();

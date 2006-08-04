@@ -458,6 +458,12 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    addContextAction( new ContextMenu::DeleteAllObjects );
 }
 
+
+bool Maped_MainScreenWidget::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
+{
+   return false;
+}
+
 void Maped_MainScreenWidget::setupStatusBar()
 {
    int x = mapDisplay->my_xpos;
@@ -514,11 +520,15 @@ bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoin
          if ( (*i)->available( field ))
             ++counter;
 
+      if ( contextMenu ) {
+         delete contextMenu;
+         contextMenu = NULL;
+         return true;
+      }
+
       if ( !counter )
          return false;
 
-      if ( contextMenu )
-         delete contextMenu;
       
       contextMenu = new PG_PopupMenu( this, pos.x, pos.y );
 
@@ -536,6 +546,7 @@ bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoin
       if ( contextMenu ) {
          delete contextMenu;
          contextMenu = NULL;
+         return true;
       }
    }
    return false;

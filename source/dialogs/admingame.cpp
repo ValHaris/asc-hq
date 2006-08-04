@@ -26,7 +26,9 @@
 #include "../paradialog.h"
 #include "../gamemap.h"
 #include "../spfst.h"
+#include "../loaders.h"
 #include "playersetup.h"
+#include "fileselector.h"
 
 #include "../widgets/multilistbox.h"
 
@@ -171,6 +173,25 @@ class AdminGameWindow : public ASC_PG_Dialog {
          
          resetTribute( player );
       }
+
+      bool saveAsMap()
+      {
+         apply();
+         if ( playerSetup->Apply() ) {
+            gamemap->network = NULL;
+
+            ASCString name = selectFile( mapextension, false);
+            if ( !name.empty() ) {
+               StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + name );
+               savemap( name.c_str(), gamemap );
+            }
+
+            QuitModal();
+            return true;
+         } else
+            return false;
+         return true;
+      }
       
       
    public:
@@ -184,7 +205,8 @@ class AdminGameWindow : public ASC_PG_Dialog {
          const int selectorHeight = 250;
          const int selectorWidth = 200;
          const int gap = 20;
-         playerlistbox = (new MultiListBox( scrollwidget, PG_Rect( gap, gap, selectorWidth, selectorHeight )))->getListBox();
+         int ypos  = gap;
+         playerlistbox = (new MultiListBox( scrollwidget, PG_Rect( gap, ypos, selectorWidth, selectorHeight )))->getListBox();
 
          int lastPlayer = 0;
          for ( int i = 0; i < actmap->getPlayerCount(); ++i )
@@ -209,27 +231,37 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "delete production", PlayerActionFunctor( this, &AdminGameWindow::deleteProduction));
          new ActionItem( actionlistbox, 20, "delete resources + ammo", PlayerActionFunctor( this, &AdminGameWindow::deleteResources));
 
-         (new PG_Button( scrollwidget, PG_Rect( 3*gap+2*selectorWidth, gap, 50, selectorHeight ), "Apply" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::apply ));
+         (new PG_Button( scrollwidget, PG_Rect( 3*gap+2*selectorWidth, ypos, 50, selectorHeight ), "Apply" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::apply ));
          
+         ypos += 270;
          
-         new PG_Label( scrollwidget, PG_Rect( 20, 300, 100, 20 ), "Turn:" );
-         turn = new PG_LineEdit( scrollwidget, PG_Rect( 130, 300, 50, 20));
+         new PG_Label( scrollwidget, PG_Rect( 20, ypos, 100, 20 ), "Turn:" );
+         turn = new PG_LineEdit( scrollwidget, PG_Rect( 130, ypos, 50, 20));
          turn->SetEditable( true );
-                        
-         new PG_Label( scrollwidget, PG_Rect( 20, 330, 100, 20 ), "Player:" );
-         currentPlayer = new PG_LineEdit( scrollwidget, PG_Rect( 130, 330, 50, 20));
-         currentPlayer->SetEditable( false );
 
-
-         
          if ( turnSkipper ) {
-             PG_Button* b = new PG_Button ( scrollwidget, PG_Rect( 200, 300, 100, 50 ), "skip player" );
+             PG_Button* b = new PG_Button ( scrollwidget, PG_Rect( 200, ypos, 100, 50 ), "skip player" );
              b->sigClick.connect( SigC::slot( *this, &AdminGameWindow::skipPlayer ));
          }
 
-         playerSetup = new PlayerSetupWidget( gamemap, PlayerSetupWidget::AllEditable, scrollwidget, PG_Rect(gap, 360, Width() - 3*gap, PlayerSetupWidget::guessHeight(gamemap) ) );
+         ypos += 30;
+         new PG_Label( scrollwidget, PG_Rect( 20, ypos, 100, 20 ), "Player:" );
+         currentPlayer = new PG_LineEdit( scrollwidget, PG_Rect( 130, ypos, 50, 20));
+         currentPlayer->SetEditable( false );
+
+
+         ypos += 30;         
+         playerSetup = new PlayerSetupWidget( gamemap, PlayerSetupWidget::AllEditable, scrollwidget, PG_Rect(gap, ypos, Width() - 3*gap, PlayerSetupWidget::guessHeight(gamemap) ) );
          
-         (new PG_Button( scrollwidget, PG_Rect( gap, 360 + PlayerSetupWidget::guessHeight(gamemap) + gap, Width() - 3* gap, 30), "OK" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::ok));
+
+         ypos += PlayerSetupWidget::guessHeight(gamemap) + gap;
+
+         if ( actmap->getgameparameter(cgp_superVisorCanSaveMap)) {
+            (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "Save as Map" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::saveAsMap));
+            ypos += 40;
+         }
+
+         (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "OK" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::ok));
 
          updateTurn();
       }
