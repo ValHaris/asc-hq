@@ -5,7 +5,7 @@ BuildingType {
    Infotext = [ Radarstöhranlage ]
    Armor = 290
    View = 50
-   Jamming = 55
+   Jamming = 61
    ConstructionStages = 1
    Weather = dry few_snow much_snow snow_and_ice
    Fields = A1 

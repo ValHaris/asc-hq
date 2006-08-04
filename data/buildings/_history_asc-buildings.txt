@@ -4,6 +4,16 @@ Spezifikationen: GAMER
 BUILDINGS HISTORY
 
 _________________
+v12.02 15.07.2006
+- "default" Einheiten (PRD, Kornuta, Sonarboje), jetzt in Airport baubar.
+- große Fabrik baut keine default und leichten Einheiten mehr, dafür aber "Turrets"
+
+_________________
+v12.00
+-HQ funktion entfernt
+-Town 5 FP + 300EMF/RUnde + 2000EMF Speicher
+
+_________________
 v11.00
 -kl.Habrik kann keine hoovercrafts mehr laden
 -Eingang Trainingscenter auf 200 Erhöht, Gesamtzuladung von 1000 auf 500 verringert.

@@ -17,23 +17,23 @@ BuildingType {
 ;   } rubble
    Entry = A1
    Functions = matter_converter Ammo_Production
-   MaxResearch = 2
-   NominalResearch = 2
+   MaxResearch = 5
+   NominalResearch = 5
    MaxResourceProduction { 
-      Energy = 200
-      Material = 200
-      fuel = 200
+      Energy = 300
+      Material = 300
+      fuel = 300
    } MaxResourceProduction
    defaultProduction {
-      energy = 200
-      material = 200
-      fuel = 200
+      energy = 300
+      material = 300
+      fuel = 300
    } defaultProduction
    StorageCapacity { 
       ASCmode { 
-         Energy = 1000
-         Material = 1000
-         fuel = 1000
+         Energy = 2000
+         Material = 2000
+         fuel = 2000
       } ASCmode
    } StorageCapacity
 } BuildingType

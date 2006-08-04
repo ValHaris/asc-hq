@@ -23,7 +23,7 @@ BuildingType {
       MaxLoadableMass = 10000
       CategoriesNOT = 
    } Transportation
-   Functions = HeadQuarters ammo_production matter_converter
+   Functions = ammo_production matter_converter
    ConstructionCost { 
       Energy = 0
       Material = 35000

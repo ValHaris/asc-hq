@@ -24,9 +24,9 @@ BuildingType {
    Entry = B3
    Transportation { 
       MaxLoadableUnits = 12
-      MaxLoadableUnitSize = 10000
+      MaxLoadableUnitSize = 5000
       MaxLoadableMass = 100000
-      CategoriesNOT = helicopter light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object
+      CategoriesNOT = default light_wheeled_vehicle light_tracked_vehicle helicopter light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship
    } Transportation
    Functions = Vehicle_Production Ammo_Production Repair_Facility recycling
    MaxResearch = 0

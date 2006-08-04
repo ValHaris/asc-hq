@@ -3,7 +3,7 @@ BuildingType {
    ID = 7
    Infotext = [Radar Gebaeude]
    Armor = 400
-   View = 120
+   View = 125
    parent = 499
    ConstructionStages = 1
    Weather = dry few_snow much_snow snow_and_ice
