@@ -743,10 +743,9 @@ void Vehicle :: setnewposition ( int x , int y )
 {
    xpos = x;
    ypos = y;
-   if ( typ->maxLoadableUnits > 0)
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) 
-           (*i)->setnewposition ( x , y );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setnewposition ( x , y );
 }
 
 void Vehicle :: setnewposition ( const MapCoordinate& mc )

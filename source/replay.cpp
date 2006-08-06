@@ -90,7 +90,8 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
             t = runreplay.run ( player, viewingplayer, performEndTurnOperations );
          } while ( t ); /* enddo */
        }
-       catch ( ... ) {
+
+       catch ( GameMap ) {
           errorMessage("An unrecognized error occured during the replay");
           delete actmap;
           actmap = NULL;
@@ -898,15 +899,31 @@ void trunreplay :: execnextreplaymove ( void )
                            vm.execute ( NULL, x2, y2, 3, height, noInterrupt );
 
                            if ( vm.getStatus() != 1000 ) {
-                              eht = NULL;
                               if ( CGameOptions::Instance()->replayMovieMode ) {
-                                 eht->removeview();
+
+                                 tfield* fld = eht->getMap()->getField(x1,y1);
+                                 if ( fld->vehicle == eht ) {
+                                    fld->vehicle = NULL;
+                                 } else {
+                                    if ( fld->getContainer() )
+                                       fld->getContainer()->removeUnitFromCargo( eht, true );
+                                 }
+
+                                 if ( eht->isViewing() )
+                                    eht->removeview();
+
                                  eht->setnewposition(x2,y2);
                                  if ( height >= 0 )
                                     eht->height = 1 << height;
-                                 eht->getMap()->getField(x2,y2)->vehicle = eht;
-                                 eht->addview();
+
+                                 tfield* fld2 = eht->getMap()->getField(x2,y2);
+                                 if ( !fld2->getContainer() ) {
+                                    fld2->vehicle = eht;
+                                    eht->addview();
+                                 } else
+                                    fld2->getContainer()->addToCargo( eht );
                               }
+                              eht = NULL;
 
                            }
 

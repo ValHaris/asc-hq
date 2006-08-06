@@ -157,7 +157,6 @@ bool enterpassword ( Password& pwd, bool firstTime, bool cancelAllowed, bool def
    if ( !pwd.empty() && !def.empty() && pwd==def && !firstTime )
       return true;
 
-
    PasswordDialog pwod ( pwd, firstTime, cancelAllowed, defaultAllowed );
    pwod.Show();
    pwod.RunModal();
