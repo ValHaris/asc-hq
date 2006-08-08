@@ -474,6 +474,16 @@ class WeaponInfoLine: public PG_Image {
             wip->showWeapon();
       };
 
+	   bool eventMouseMotion(const SDL_MouseMotionEvent* motion)
+      {
+         if ( displayed != this ) {
+            wip->showWeapon( weapon);
+            displayed = this;
+            return true;
+         } else
+            return false;
+      };
+
 };
 
 WeaponInfoLine* WeaponInfoLine::displayed = NULL;

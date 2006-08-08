@@ -94,6 +94,8 @@ void runai( GameMap* actmap, int playerView )
    MapDisplayPG::CursorHiding cusorHiding;
    actmap->playerView = playerView;
 
+   computeview( actmap );
+
    if ( !actmap->player[ actmap->actplayer ].ai )
       actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
