@@ -63,6 +63,8 @@ public:
       Surface(const SDLmm::Surface& other);
       Surface() : SDLmm::Surface(NULL), pixelDataPointer(NULL) {};
 
+      Surface Duplicate() const;
+
       static Surface createSurface( int width, int height, SDLmm::Color color = 255 );
       static Surface createSurface( int width, int height, int depth, SDLmm::Color color = 0xff0000ff );
       

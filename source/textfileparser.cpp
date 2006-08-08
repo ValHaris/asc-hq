@@ -195,8 +195,10 @@ void TextPropertyGroup :: resolveAllAlias( )
          (*i)->op = Entry::alias_all_resolved;
 
       if ( !resolvedCounter && !unresolved.empty() )
-         for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ )
-            error (  "could not resolve the reference for " + typeName + " :: " + (*i)->propertyName + " with operand " + (*i)->value );
+         for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ ) {
+            error (  "could not resolve the reference for " + typeName + " :: " + (*i)->propertyName + " with operand " + (*i)->value + "\nSee STDOUT for a dump of current item" );
+            print();
+         }
          
       loop++;
    } while ( !unresolved.empty() );

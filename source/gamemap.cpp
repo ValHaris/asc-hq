@@ -67,7 +67,7 @@ unsigned int RandomGenerator::getRandomValue (int lowerLimit, int upperLimit){
 
 
 
-OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initialized(false), completed(false), x(0),y(0)
+OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initialized(false), secondMapReady(false), completed(false), x(0),y(0)
 {
    idleEvent.connect( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
 }
@@ -134,16 +134,26 @@ void OverviewMapHolder::drawNextField( bool signalOnCompletion )
       completed = true;
       if ( signalOnCompletion )
          generationComplete();
+
+      completedMapImage = overviewMapImage.Duplicate();
+      secondMapReady = true;
    }
+}
+
+Surface OverviewMapHolder::createNewSurface()
+{
+   Surface s;
+   if ( map.xsize > 0 && map.ysize > 0 ) {
+      s =  Surface::createSurface( (map.xsize+1) * 6, 4 + map.ysize * 2 , 32, 0 );
+   }
+   return s;
 }
 
 bool OverviewMapHolder::init()
 {
    if ( !initialized ) {
-      if ( map.xsize > 0 && map.ysize > 0 ) {
-         overviewMapImage = Surface::createSurface( (map.xsize+1) * 6, 4 + map.ysize * 2 , 32, 0 );
-         initialized = true;
-      }
+      overviewMapImage = createNewSurface();
+      initialized = true;
    }
    return initialized;
 }   
@@ -161,7 +171,11 @@ const Surface& OverviewMapHolder::getOverviewMap( bool complete )
    if ( complete )
       while ( !completed )
          drawNextField( false );
-   return overviewMapImage;
+
+   if(  secondMapReady )
+      return completedMapImage;
+   else
+      return overviewMapImage;
 }
 
 void OverviewMapHolder::startUpdate()

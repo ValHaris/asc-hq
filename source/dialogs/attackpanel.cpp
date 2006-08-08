@@ -345,7 +345,13 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
       at->setLabelText( "attacker_unitstatus", int( 100.0 * (avd + (avd2-avd) * p )) );
       at->setLabelText( "defender_unitstatus", int( 100.0 * (dvd + (dvd2-dvd) * p )) );
       at->Update();
+
+      releasetimeslice();
    }
+
+   at->setBarGraphValue( "attacker_unitstatusbar", avd2 );
+   at->setBarGraphValue( "defender_unitstatusbar", dvd2 );
+   at->Update();
 
    bsp.playEnd();
    

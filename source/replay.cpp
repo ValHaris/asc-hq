@@ -91,7 +91,7 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
          } while ( t ); /* enddo */
        }
 
-       catch ( GameMap ) {
+       catch ( ... ) {
           errorMessage("An unrecognized error occured during the replay");
           delete actmap;
           actmap = NULL;
@@ -1889,6 +1889,9 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    } else
       status = 11;
 
+   // force completion of overview map rendering
+   actmap->overviewMapHolder.getOverviewMap( );
+
    computeview( actmap );
    displaymap ();
 
@@ -1912,8 +1915,8 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
           releasetimeslice();
        }
 
-       if (nextaction == rpl_finished  || status != 2) {
-          if ( CGameOptions::Instance()->replayMovieMode ) 
+       if (nextaction == rpl_finished  || status != 2 ) {
+          if ( CGameOptions::Instance()->replayMovieMode && status != 1 ) 
              status = 100;
           else {
             if ( nextaction == rpl_finished && !resourcesCompared ) {
@@ -1952,7 +1955,8 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
           }
        }
 
-       getPGApplication().processEvent();
+       for ( int i = 0; i < 5; ++i )
+          getPGApplication().processEvent();
 
    } while ( status > 0  &&  status < 100 ) ;
 

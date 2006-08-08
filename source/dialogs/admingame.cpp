@@ -68,8 +68,12 @@ class AdminGameWindow : public ASC_PG_Dialog {
 
       bool skipPlayer()
       {
-         if ( turnSkipper )
+         if ( turnSkipper ) {
+            GameMap* temp = actmap;
+            actmap = gamemap;
             (*turnSkipper)(gamemap);
+            actmap = temp;
+         }
 
          updateTurn();
          return true;
@@ -144,6 +148,20 @@ class AdminGameWindow : public ASC_PG_Dialog {
       {
          while ( gamemap->player[player].vehicleList.begin() != gamemap->player[player].vehicleList.end() )
             delete *gamemap->player[player].vehicleList.begin();
+
+      }
+
+      void deleteMines( int player )
+      {
+         for ( int y = 0; y < gamemap->ysize; ++y )
+            for ( int x = 0; x < gamemap->xsize; ++x ) {
+               tfield* fld = gamemap->getField(x,y);
+               for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); )
+                  if ( i->player == player )
+                     i = fld->mines.erase( i );
+                  else
+                     ++i;
+            }
 
       }
 
@@ -230,6 +248,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "delete buildings", PlayerActionFunctor( this, &AdminGameWindow::deleteBuildings));
          new ActionItem( actionlistbox, 20, "delete production", PlayerActionFunctor( this, &AdminGameWindow::deleteProduction));
          new ActionItem( actionlistbox, 20, "delete resources + ammo", PlayerActionFunctor( this, &AdminGameWindow::deleteResources));
+         new ActionItem( actionlistbox, 20, "delete mines", PlayerActionFunctor( this, &AdminGameWindow::deleteMines));
 
          (new PG_Button( scrollwidget, PG_Rect( 3*gap+2*selectorWidth, ypos, 50, selectorHeight ), "Apply" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::apply ));
          
@@ -256,12 +275,14 @@ class AdminGameWindow : public ASC_PG_Dialog {
 
          ypos += PlayerSetupWidget::guessHeight(gamemap) + gap;
 
+
+         (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "OK" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::ok));
+         ypos += 40;
+
          if ( actmap->getgameparameter(cgp_superVisorCanSaveMap)) {
             (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "Save as Map" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::saveAsMap));
             ypos += 40;
          }
-
-         (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "OK" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::ok));
 
          updateTurn();
       }

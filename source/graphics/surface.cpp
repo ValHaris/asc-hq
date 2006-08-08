@@ -81,6 +81,16 @@ void Surface::SetScreen( SDL_Surface* screen )
      default32bit = new SDLmm::PixelFormat ( screen->format );
 }
 
+
+Surface Surface::Duplicate() const 
+{
+   Surface new_surface(CreateSurface(*this));
+
+   megaBlitter<ColorTransform_None, ColorMerger_PlainOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All>(*this, new_surface, SPoint(0,0), nullParam, nullParam, nullParam, nullParam); 
+
+   new_surface.Blit(*this); 
+   return new_surface;
+}
  
  
  void writeDefaultPixelFormat ( SDLmm::PixelFormat pf, tnstream& stream )

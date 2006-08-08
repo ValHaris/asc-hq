@@ -18,10 +18,9 @@
 #include "ai_common.h"
 
 #include "../replaymapdisplay.h"
-
 #include "../turncontrol.h"
-
 #include "../widgets/textrenderer.h"
+#include "../mapdisplay.h"
 
 AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
@@ -134,19 +133,54 @@ void    AI :: setup (void)
 
 void AI::checkKeys ( void )
 {
-   if ( keypress() ) {
-      tkey k = r_key();
-      if ( k == ct_esc ) {
-         mapDisplay = NULL;
-         // tlockdispspfld a;
-         // repaintDisplay();
-      }
-   }
+   for ( int i = 0; i < 5; ++i )
+      getPGApplication().processEvent();
 }
+
+void AI::removeDisplay()
+{
+   mapDisplay = NULL;
+}
+
+
+typedef Loki::Functor<void> CloseScreenCallback;
+
+
+class AI_KeyboardWatcher : public SigC::Object {
+      CloseScreenCallback callback;
+      MapDisplayPG::LockDisplay* lock;
+
+      bool keyPressed( const SDL_KeyboardEvent* key )
+      {
+         if ( key->keysym.sym == SDLK_ESCAPE  ) {
+            callback();
+
+            if ( !lock )
+               lock = new MapDisplayPG::LockDisplay;
+
+            return true;
+         } else
+            return false;
+      }
+
+   public:
+      AI_KeyboardWatcher( CloseScreenCallback callback ) : lock(NULL) 
+      {
+         this->callback = callback;
+         PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+      };
+
+      ~AI_KeyboardWatcher() 
+      {
+         delete lock;
+      }
+};
 
 
 void AI:: run ( bool benchMark )
 {
+   AI_KeyboardWatcher kw ( CloseScreenCallback( this, &AI::removeDisplay )); 
+
    this->benchMark = benchMark;
 
    if ( getMap()->playerView >= 0 && !benchMark)

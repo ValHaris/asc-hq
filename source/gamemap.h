@@ -121,10 +121,13 @@ class LoadNextMap {
 class OverviewMapHolder : public SigC::Object {
       GameMap& map;
       Surface overviewMapImage;
+      Surface completedMapImage;
       bool initialized;
+      bool secondMapReady;
       bool completed;
       int x;
       int y;
+      Surface createNewSurface();
       
    protected:   
       bool idleHandler( );

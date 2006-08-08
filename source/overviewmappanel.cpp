@@ -46,6 +46,27 @@ OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisp
 }
 
 
+template<int pixelsize>
+class ColorMerger_Invert
+{
+      typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+      SDLmm::Color col;
+   public:
+
+      void assign ( PixelType src, PixelType* dest ) const
+      {
+         *dest = (col & 0xff000000) + (0xffffff - (*dest & 0xffffff));
+         // *dest = col;
+      };
+
+     
+      ColorMerger_Invert( SDLmm::Color color )
+      {
+         col = color;
+      };
+};
+
+
 void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
 {
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
@@ -74,7 +95,7 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
       if ( lr.y >= src.Height() )
          lr.y = src.Height() -1;
 
-      rectangle<4>(screen, SPoint(dst.x + ul.x, dst.y + ul.y), lr.x-ul.x, lr.y-ul.y, ColorMerger_Set<4>(0xff), ColorMerger_Set<4>(0xff) );
+      rectangle<4>(screen, SPoint(dst.x + ul.x, dst.y + ul.y), lr.x-ul.x, lr.y-ul.y, ColorMerger_Invert<4>(0xff), ColorMerger_Invert<4>(0xff) );
    }
 }
 

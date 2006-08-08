@@ -464,6 +464,7 @@
             friend class Sections;
 
             void checkKeys ( void );
+            void removeDisplay();
 
             void diplomacy ();
 

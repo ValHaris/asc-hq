@@ -35,7 +35,7 @@ int PlayerSetupWidget::guessHeight( GameMap* gamemap )
       if ( gamemap->player[i].exist() )
          ++counter;
    
-   return yoffset + counter * spacing + 30;
+   return yoffset + counter * spacing + 5;
 }
 
 PlayerSetupWidget::PlayerSetupWidget( GameMap* gamemap, Mode mode, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
