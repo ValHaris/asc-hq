@@ -505,7 +505,7 @@ ContainerBase :: ~ContainerBase ( )
       if ( *i )
          delete *i;
 
-   if ( !gamemap->__mapDestruction ) {
+   if ( gamemap->state != GameMap::Destruction ) {
       destroyed();
       anyContainerDestroyed( this );
    }

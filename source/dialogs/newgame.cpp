@@ -485,11 +485,29 @@ bool StartMultiplayerGame::checkPlayerStat()
                   humanFound = true;   
                   break;
                }   
-               
-      if ( !humanFound ) {
-         MessagingHub::Instance().error("Map has no players!");
+
+      bool aiFound = false;
+      for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+         if ( newMap->player[i].exist() )
+            if ( newMap->player[i].stat == Player::computer )
+               aiFound = true;   
+                  
+      if ( !aiFound )            
+         for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+            if ( newMap->player[i].exist() )
+               if ( newMap->player[i].stat == Player::off ) {
+                  newMap->player[i].stat = Player::computer;
+                  aiFound = true;   
+                  break;
+               }   
+
+
+       /*
+      if ( !aiFound ) {
+         MessagingHub::Instance().error("Map has no opponents!");
          return false;
       }   
+      */
    }
 
    if ( mode == PBEM || mode == Hotseat ) {

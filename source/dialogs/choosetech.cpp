@@ -247,7 +247,7 @@ class ChooseTech : public ASC_PG_Dialog
 
       bool ok()
       {
-         if ( goal ) {
+         if ( goal || !itemSelector->getItemNum() ) {
             QuitModal();
             return true;
          } else

@@ -39,6 +39,46 @@
 
 
 
+class ExperienceOverview : public PG_Widget {
+      static const int columns = 4;
+   protected:
+      bool 	eventMouseButtonUp (const SDL_MouseButtonEvent *button)
+      {
+         QuitModal();
+         return true;
+      };
+
+      static PG_Rect getSize( const PG_Point& pos )
+      {
+         const Surface& s = IconRepository::getIcon("experience0.png");
+         return PG_Rect( pos.x, pos.y, columns * s.w(), (maxunitexperience + columns-1)/columns * s.h() );
+      }
+      
+   public:
+      ExperienceOverview( const PG_Point& pos, int exp = -1 ) : PG_Widget( NULL, getSize(pos), true )
+      {
+         // PG_Application::GetApp()->sigMouseButtonUp.connect( SigC::slot( *this, &ExperienceOverview::QuitModal ));
+      }
+
+
+      int RunModal()
+      {
+         SetCapture();
+         return PG_Widget::RunModal();
+      }
+
+      void 	eventDraw (SDL_Surface *surface, const PG_Rect &rect) 
+      {
+         const Surface& s = IconRepository::getIcon("experience0.png");
+         int width = s.w();
+         int height = s.h();
+
+         Surface s2 = Surface::Wrap( surface );
+         for ( int i = 0; i <= maxunitexperience; ++i ) 
+            s2.Blit( IconRepository::getIcon("experience" + ASCString::toString(i) + ".png"), SPoint( i % columns * width , i/columns*height) );
+      }
+};
+
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
    :LayoutablePanel ( parent, r, panelName_, loadTheme ), veh(NULL), bld(NULL)
 {
@@ -63,7 +103,24 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
       l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
       l->sigEditUpdate.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
    }
+
+   PG_Widget* w = parent->FindChild( "unitexp", true );
+   if ( w )
+      w->sigMouseButtonDown.connect( SigC::slot( *this, &DashboardPanel::viewExperienceOverview ));
 };
+
+bool DashboardPanel::viewExperienceOverview()
+{
+   PG_Widget* w = GetParent()->FindChild( "unitexp", true );
+   if ( w ) {
+      ExperienceOverview eo(PG_Point( w->my_xpos, w->my_ypos ));
+      eo.Show();
+      eo.RunModal();
+      return true;
+   } else
+      return false;
+}
+
 
 void DashboardPanel::containerDeleted( ContainerBase* c )
 {
@@ -548,6 +605,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
 
 void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
 {
+   PG_Application::SetBulkMode(true);
    int effic[13];
    for ( int k = 0; k < 13; k++ )
       if ( weap )
@@ -620,6 +678,9 @@ void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
       show( "weapon_symbol2" );
    } else
       hide( "weapon_symbol2" );
+
+   PG_Application::SetBulkMode(false);
+   Update();
 }
 
 bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)

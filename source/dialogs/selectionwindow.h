@@ -123,6 +123,7 @@ class ItemSelectorWidget : public PG_Widget {
       SigC::Signal0<bool> sigQuitModal;
       
       void constrainNames( bool constrain );
+      int getItemNum() const { return widgets.size(); };
             
       void reLoad( bool show = false );
       void resetNamesearch();

@@ -29,6 +29,7 @@
 #include "../loaders.h"
 #include "playersetup.h"
 #include "fileselector.h"
+#include "pwd_dlg.h"
 
 #include "../widgets/multilistbox.h"
 
@@ -133,7 +134,13 @@ class AdminGameWindow : public ASC_PG_Dialog {
       {
          gamemap->player[player].passwordcrc.reset();
       }
-      
+
+      void newPassword( int player )
+      {
+         enterpassword( gamemap->player[player].passwordcrc, true, true, false);
+      }
+
+
       void resetDiplomacy( int player )
       {
          for ( int j = 0; j< gamemap->getPlayerCount(); ++j ) {
@@ -244,6 +251,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "reset tribute", PlayerActionFunctor( this, &AdminGameWindow::resetTribute));
          new ActionItem( actionlistbox, 20, "reset diplomacy (->truce)", PlayerActionFunctor( this, &AdminGameWindow::resetDiplomacy));
          new ActionItem( actionlistbox, 20, "reset password", PlayerActionFunctor( this, &AdminGameWindow::resetPassword));
+         new ActionItem( actionlistbox, 20, "enter new password", PlayerActionFunctor( this, &AdminGameWindow::newPassword));
          new ActionItem( actionlistbox, 20, "delete units", PlayerActionFunctor( this, &AdminGameWindow::deleteUnits));
          new ActionItem( actionlistbox, 20, "delete buildings", PlayerActionFunctor( this, &AdminGameWindow::deleteBuildings));
          new ActionItem( actionlistbox, 20, "delete production", PlayerActionFunctor( this, &AdminGameWindow::deleteProduction));

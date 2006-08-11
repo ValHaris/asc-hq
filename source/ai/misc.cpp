@@ -367,6 +367,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
 
       checkKeys();
 
+      Vehicle* veh = *i;
 
       int preferredHeight = getBestHeight ( *i );
 
@@ -381,7 +382,8 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
          if ( va.available ( *i )) {
             TargetVector tv;
 
-            AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );
+            // AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );  ?? Why was maxMovement used here ??
+            AStar3D ast ( getMap(), *i, false, (*i)->getMovement() );
             ast.findAllAccessibleFields ();
 
             getAttacks ( ast, *i, tv, 0 );

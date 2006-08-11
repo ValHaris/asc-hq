@@ -151,6 +151,9 @@ Surface OverviewMapHolder::createNewSurface()
 
 bool OverviewMapHolder::init()
 {
+   if ( map.ysize <= 0 || map.xsize <= 0 )
+      return false;
+
    if ( !initialized ) {
       overviewMapImage = createNewSurface();
       initialized = true;
@@ -209,7 +212,8 @@ GameMap :: GameMap ( void )
 
    eventID = 0;
 
-   __mapDestruction = false;
+   state = Normal;
+
    int i;
 
    xsize = 0;
@@ -1311,7 +1315,7 @@ SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
 GameMap :: ~GameMap ()
 {
    sigMapDeletion( *this );
-   __mapDestruction = true;
+   state = Destruction;
 
    if ( field )
 

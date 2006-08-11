@@ -191,6 +191,9 @@ void SoundList::initialize(  )
 
 Sound* SoundList::getSound( const ASCString& filename )
 {
+   if ( SoundSystem::getInstance()->isOff() )
+      return NULL;
+
    displayLogMessage ( 5, " SoundList::getSound(1) : trying to acquire handle for sound %s \n", filename.c_str() );
 
    if ( soundFiles.find ( filename ) == soundFiles.end() ) {

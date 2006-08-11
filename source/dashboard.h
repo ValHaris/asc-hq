@@ -51,7 +51,9 @@ class DashboardPanel : public LayoutablePanel {
       void reset(GameMap& map);
 
       bool containerRenamed( PG_LineEdit* lineEdit );
-      
+
+      bool viewExperienceOverview();
+
    public:
       void eval();
       void showUnitData( Vehicle* veh, Building* bld, bool redraw = false );

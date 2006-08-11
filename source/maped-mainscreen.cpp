@@ -479,6 +479,7 @@ void Maped_MainScreenWidget::setupStatusBar()
    coordinateDisplay->SetFontSize(11);
    
    updateFieldInfo.connect( SigC::slot( *this, &Maped_MainScreenWidget::updateStatusBar ));
+   cursorMoved.connect( SigC::slot( *this, &Maped_MainScreenWidget::updateStatusBar ));
 }
 
 void Maped_MainScreenWidget::updateStatusBar()
@@ -700,6 +701,9 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_r: execaction_ev(act_repaintdisplay);
                         return true;
    
+         case SDLK_s : execaction_ev(act_savemap);
+                        return true;
+
          case SDLK_u: execaction_ev(act_unitinfo);
                         return true;
    

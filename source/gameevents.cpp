@@ -894,6 +894,9 @@ void ChangeGameParameter::setup()
 
 void DisplayMessage::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    viewtextmessage ( messageNum , gamemap->actplayer );
 }
 
@@ -1230,6 +1233,9 @@ void NextMap::writeData ( tnstream& stream )
 
 void NextMap::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    ASCString name = gamemap->preferredFileNames.mapname[0];
    if ( name.find('.') != ASCString::npos )
       name.erase( name.find('.') );
@@ -1248,6 +1254,9 @@ void NextMap::setup()
 
 void LoseMap::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    if ( !gamemap->continueplaying ) {
       displaymessage ( "You have been defeated !", 3 );
       delete gamemap;
@@ -1377,6 +1386,9 @@ void ChangeBuildingOwner :: execute( MapDisplayInterface* md )
 
 void DisplayImmediateMessage::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    if ( !message.empty() ) {
       new Message ( message, gamemap, 1 << gamemap->actplayer, 0 );
       #ifdef sgmain
@@ -1475,12 +1487,12 @@ void ChangeDiplomaticStatus :: setup ()
 void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 {
    if ( proposal == Peace )
-      actmap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, PEACE );
+      gamemap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, PEACE );
    else
       if ( proposal == War )
-         actmap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, WAR );
+         gamemap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, WAR );
       else {
-         actmap->getPlayer(proposingPlayer).diplomacy.setState( targetPlayer, WAR );
+         gamemap->getPlayer(proposingPlayer).diplomacy.setState( targetPlayer, WAR );
       }
 }
 

@@ -771,7 +771,7 @@ panel {
               x = 0
               y = 0
               type = Statictext
-              text = loading capacity
+              text = used loading capacity
             } label
          } MeterLabel
 

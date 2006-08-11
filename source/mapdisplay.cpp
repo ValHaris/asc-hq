@@ -74,7 +74,7 @@ class ContainerInfoLayer : public MapLayer {
 
 void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
-   if ( fieldInfo.playerView >= visible_ago) {
+   if ( fieldInfo.visibility >= visible_ago) {
       if ( fieldInfo.fld->vehicle || (fieldInfo.fld->building && fieldInfo.fld->bdt.test(cbbuildingentry) )) {
          ContainerBase* c = fieldInfo.fld->getContainer();
          if ( c->getOwner() == fieldInfo.playerView && hasCargo(c) ) 

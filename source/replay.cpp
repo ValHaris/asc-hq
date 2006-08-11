@@ -1864,6 +1864,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
       actmap = orgmap;
       return 0;
    }
+   actmap->state = GameMap::Replay;
 
    actmap->playerView = viewingplayer;
    actmap->getCursor() = orgmap->getCursor();

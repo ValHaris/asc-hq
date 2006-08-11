@@ -91,7 +91,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int netw
 Vehicle :: ~Vehicle (  )
 {
    #ifndef karteneditor
-   if ( !typ->wreckageObject.empty() && gamemap && !gamemap->__mapDestruction && !cleanRemove) {
+   if ( !typ->wreckageObject.empty() && gamemap && gamemap->state != GameMap::Destruction && !cleanRemove) {
       tfield* fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
          for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
@@ -114,7 +114,7 @@ Vehicle :: ~Vehicle (  )
       
 
    
-   if ( viewOnMap && gamemap && !gamemap->__mapDestruction ) {
+   if ( viewOnMap && gamemap && gamemap->state != GameMap::Destruction ) {
       removeview();
       viewOnMap = false;
    }

@@ -21,6 +21,7 @@
 #include "../turncontrol.h"
 #include "../widgets/textrenderer.h"
 #include "../mapdisplay.h"
+#include "../asc-mainscreen.h"
 
 AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
@@ -149,6 +150,8 @@ typedef Loki::Functor<void> CloseScreenCallback;
 class AI_KeyboardWatcher : public SigC::Object {
       CloseScreenCallback callback;
       MapDisplayPG::LockDisplay* lock;
+      PG_Widget* w;
+      MainScreenWidget::StandardActionLocker menuLocker;
 
       bool keyPressed( const SDL_KeyboardEvent* key )
       {
@@ -164,14 +167,17 @@ class AI_KeyboardWatcher : public SigC::Object {
       }
 
    public:
-      AI_KeyboardWatcher( CloseScreenCallback callback ) : lock(NULL) 
+      AI_KeyboardWatcher( CloseScreenCallback callback ) : lock(NULL), menuLocker( mainScreenWidget )
       {
+         w = new PG_Widget(NULL);
+         w->SetCapture();
          this->callback = callback;
-         PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
       };
 
       ~AI_KeyboardWatcher() 
       {
+         delete w;
          delete lock;
       }
 };

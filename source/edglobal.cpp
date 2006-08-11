@@ -770,8 +770,12 @@ void execaction_pg(int code)
        case act_createresources2 : resourcePlacementDialog();
          displaymap();
        break;
-       case act_changeproduction :   if ( getactfield() && getactfield()->getContainer() )
-             editProduction( getactfield()->getContainer() );
+       case act_changeproduction :   if ( getactfield() && getactfield()->getContainer() ) {
+                                       if ( getactfield()->getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction  ))
+                                          editProduction( getactfield()->getContainer() );
+                                       else
+                                          warning("this unit/building has no production capabilities");
+                                     }
        break;
        case act_selectgraphicset: selectgraphicset();
                               // showallchoices();

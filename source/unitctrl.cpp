@@ -411,7 +411,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             if ( dest->mineattacks ( vehicle )) {
                tmineattacksunit battle ( dest, -1, vehicle );
 
-               if ( mapDisplay && fieldvisiblenow ( dest, actmap->playerView) || dest->mineowner() == actmap->playerView )
+               if ( mapDisplay && (fieldvisiblenow ( dest, actmap->playerView) || dest->mineowner() == actmap->playerView ))
                   mapDisplay->showBattle( battle );
                else
                   battle.calc();

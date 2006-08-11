@@ -262,7 +262,7 @@ int  Building :: unchainbuildingfromfield ( void )
                fld->bdt &= t;
 
                #ifdef sgmain
-                if ( !gamemap->__mapDestruction )
+               if ( gamemap->state != GameMap::Destruction )
                    if ( typ->destruction_objects[i][j] )
                       fld->addobject ( actmap->getobjecttype_byid ( typ->destruction_objects[i][j] ), -1, true );
                #endif
@@ -534,13 +534,15 @@ void Building :: readData ( tnstream& stream, int version )
     for ( i = 0; i< 3; i++ )
        actstorage.resource(i) = min(stream.readInt(), getStorageCapacity().resource(i) );
 
-    // printf("building at %d / %d has %d / %d / %d EMF \n", getEntry().x, getEntry().y, actstorage.energy, actstorage.material, actstorage.fuel );
-
     for ( i = 0; i < waffenanzahl; i++)
        ammo[i] = stream.readWord();
 
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
+
+    if ( researchpoints < typ->maxresearchpoints  &&  !(typ->hasFunction(ContainerBaseType::Research)))
+       researchpoints = typ->maxresearchpoints;
+
 
     visible = stream.readChar();
     damage = stream.readChar();
