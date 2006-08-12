@@ -673,6 +673,14 @@ void Research :: read_techs ( tnstream& stream, bool merge )
    }
 }
 
+void Research::clear()
+{
+   progress = 0;
+   activetechnology = NULL;
+   developedTechnologies.clear();
+   predefinedTechAdapter.clear();
+   triggeredTechAdapter.clear();
+}
 
 bool Research::techResearched ( int id ) const
 {

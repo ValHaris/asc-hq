@@ -32,6 +32,10 @@ class EditPlayerData : public ASC_PG_Dialog
       ASCString name;
       Player& myPlayer;
       bool ok();
+
+      PG_DropDown* playerMode; 
+      map<int,Player::PlayerStatus> modes;
+
    public:
       EditPlayerData( Player& player );
       GameMap* getMap();
@@ -41,9 +45,27 @@ class EditPlayerData : public ASC_PG_Dialog
 EditPlayerData :: EditPlayerData(Player& player  ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 200), "Edit Player Data" ), editor(NULL), myPlayer( player )
 {
    name = player.getName();
-   editor = new ASC_PropertyEditor( this, PG_Rect( 10, 40, Width()-20, Height() - 50));
+   editor = new ASC_PropertyEditor( this, PG_Rect( 10, 40, Width()-20, 70));
    new PG_PropertyField_String<ASCString>( editor , "Name", &name );
    new PG_PropertyField_String<ASCString>( editor , "Email Address", &player.email );
+
+
+   playerMode = new PG_DropDown( this, PG_Rect( 10, 110, Width() - 30, 25 ));
+   playerMode->AddItem( Player :: playerStatusNames[player.stat] );
+   modes[0] = player.stat;
+
+   int counter = 1;
+   int pos = 0;
+   while ( Player :: playerStatusNames[pos] ) {
+      if( pos != Player::supervisor && pos != player.stat ) {
+         playerMode->AddItem( Player :: playerStatusNames[pos] );
+         modes[counter++] = Player::PlayerStatus(pos);
+      }
+      ++pos;
+   }
+            
+   playerMode->SelectItem(0);
+
 
    StandardButtonDirection( Horizontal );
    AddStandardButton( "OK")->sigClick.connect( SigC::slot( *this, &EditPlayerData::ok ));
@@ -53,6 +75,7 @@ bool EditPlayerData  :: ok()
 {
    if ( editor->Apply() ) {
       myPlayer.setName( name );
+      myPlayer.stat = modes[playerMode->GetSelectedItemIndex()];
       QuitModal();
    }
    return true;

@@ -214,6 +214,7 @@ class TechAdapterDependency {
      int getMultiplier() { return multiplier; };
      
      Research ( );
+     void clear();
      ~Research ();
  };
 

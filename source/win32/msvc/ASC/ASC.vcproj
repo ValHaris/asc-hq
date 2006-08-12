@@ -340,9 +340,6 @@
 				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\dialogs\playersetup.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\prehistoricevents.cpp">
 			</File>
 			<File
@@ -542,6 +539,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\nextcampaignmap.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\playersetup.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">

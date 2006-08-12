@@ -114,10 +114,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       }
       void resetResearch( int player )
       {
-         gamemap->player[player].research.progress = 0;
-         gamemap->player[player].research.activetechnology = NULL;
-         gamemap->player[player].research.developedTechnologies.clear();
-
+         gamemap->player[player].research.clear();
       }
       
       void resetTribute( int player )
