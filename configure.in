@@ -329,6 +329,20 @@ AC_COMPILE_IFELSE( [
 
 if test "x$size_t_type" = x ; then
   AC_MSG_RESULT("no")
+
+  AC_MSG_CHECKING("size_t conversion")
+  AC_COMPILE_IFELSE( [
+    #include <string>
+    void foo( int i ) {};
+    void foo( unsigned int i ) {};
+    void foo( bool b ) {};
+    int main() {
+       size_t t = 7;
+       foo(t);
+       return 0;
+    }  
+   ], AC_MSG_RESULT("yes"),AC_MSG_ERROR("Failed to compile size_t distinction check. Please contact bugs@asc-hq.org ")  )
+
 else
   CXXFLAGS="$CXXFLAGS -DSIZE_T_not_identical_to_INT"
   AC_MSG_RESULT("yes")

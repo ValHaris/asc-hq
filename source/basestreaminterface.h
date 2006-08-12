@@ -123,7 +123,7 @@
            void writeInt  ( bool b );
 
            #ifdef SIZE_T_not_identical_to_INT
-           //! Writes a size_t as a 32 bit signed Integer. If the value is larger, an error is aborted.
+           //! Writes a size_t as a 32 bit signed Integer. If the value is larger, an error is issued.
            void writeInt  ( size_t i );
            #endif
 
