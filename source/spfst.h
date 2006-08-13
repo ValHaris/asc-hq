@@ -179,8 +179,10 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
     \param pe the field to be evaluated
     \param player the player who is 'looking'
    */
+//! {@ 
   extern VisibilityStates fieldVisibility  ( const tfield* pe, int player = actmap->actplayer );
   extern VisibilityStates fieldVisibility  ( const tfield* pe, int player, GameMap* gamemap );
+//! }@
 
 
 extern SigC::Signal0<void> repaintMap;

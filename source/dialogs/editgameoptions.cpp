@@ -222,6 +222,7 @@ class EditGameOptions : public ASC_PG_Dialog {
 
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Field Select", &o->mouse.fieldmarkbutton, mouseButtonNames );
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Center View", &o->mouse.centerbutton, mouseButtonNames );
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Drag'N'Drop", &o->mouse.dragndropbutton, mouseButtonNames );
 
 
          if ( !mainApp )

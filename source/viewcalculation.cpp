@@ -226,30 +226,24 @@ void         clearvisibility( GameMap* gamemap, int  reset )
 
 }
 
-int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial )
-{
-   if ( gamemap->player[player].stat == Player::supervisor ) {
-      fld->setVisibility( visible_all, player);
-      return 0;
-   }
-   
-   int originalVisibility;
-   if ( initial == 2 ) {
-      fld->setVisibility(visible_all, player);
-      return 0;
-   } else {
-      originalVisibility = (fld->visible >> (player * 2)) & 3;
-      if ( originalVisibility >= visible_ago || initial == 1)
-           fld->setVisibility(visible_ago, player);
-   }
 
-   if ( add == -1 ) {
-      add = 0;
-      for ( int i = 0; i < 8; i++ )
-         if ( i != player )
-            if ( gamemap->player[i].diplomacy.sharesView( player) )
-               add |= 1 << i;
-   }
+VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial, int additionalEnemyJamming )
+{
+   if ( gamemap->player[player].stat == Player::supervisor ) 
+      return visible_all;
+   
+   if ( initial == 2 ) 
+      return visible_all;
+   
+   
+   VisibilityStates view = visible_not;
+   
+   if ( ((fld->visible >> (player * 2)) & 3) >= visible_ago || initial == 1)
+      view = visible_ago;
+
+   if ( add == -1 ) 
+      add = getPlayersWithSharedViewMask( player, gamemap );
+   
    add |= 1 << player;
 
    int sight = 0;
@@ -268,23 +262,38 @@ int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int ad
       } else
          jamming += fld->view[i].jamming;
    }
-   if ( sight > jamming   ||  direct  ) {
+   if ( sight > (jamming + additionalEnemyJamming )   ||  direct  ) {
       if ( fld->building && (fld->building->connection & cconnection_seen))
          buildingSeen();
 
       if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 ) && false ) ||
-          ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
-          ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
-          ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
-          ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
-             fld->setVisibility( visible_all, player);
-             return originalVisibility != visible_all;
+            ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
+            ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
+            ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
+            ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
+         return visible_all;
       } else {
-             fld->setVisibility( visible_now, player);
-             return originalVisibility != visible_now;
+         return visible_now;
       }
+   } else
+      return view;
+}
+
+int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial )
+{
+   int originalVisibility;
+   if ( initial == 2 ) {
+      fld->setVisibility(visible_all, player);
+      return 0;
+   } else {
+      originalVisibility = (fld->visible >> (player * 2)) & 3;
+      if ( originalVisibility >= visible_ago || initial == 1)
+         fld->setVisibility(visible_ago, player);
    }
-   return 0;
+
+   VisibilityStates view = calcvisibilityfield( gamemap, fld, player, add, initial, 0 );
+   fld->setVisibility( view, player );
+   return view != originalVisibility; 
 }
 
 
@@ -294,12 +303,8 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask )
    int fieldsChanged = 0;
    for ( int player = 0; player < 8; player++ )
       if ( gamemap->player[player].exist() ) {
-         int add = 0;
-         for ( int i = 0; i < 8; i++ )
-            if ( gamemap->player[i].exist() && i != player )
-               if ( gamemap->player[i].diplomacy.sharesView( player) )
-                  add |= 1 << i;
-
+         int add = getPlayersWithSharedViewMask( player, gamemap );
+      
          int nm = gamemap->xsize * gamemap->ysize;
          if ( player_fieldcount_mask & (1 << player ))
             for ( int i = 0; i < nm; i++ )
@@ -379,4 +384,35 @@ int computeview( GameMap* gamemap, int player_fieldcount_mask )
 }
 
 
+int getPlayersWithSharedViewMask( int player, GameMap* gamemap )
+{
+   int add = 0;
+   for ( int i = 0; i < 8; i++ )
+      if ( gamemap->player[i].exist() && i != player )
+         if ( gamemap->player[i].diplomacy.sharesView( player) )
+            add |= 1 << i;
+   
+   return add;
+}
+      
+#if 0
+VisibilityStates fieldVisibility( tfield* pe, int player, GameMap* gamemap, int additionalEnemyJamming )
+{
+   evaluatevisibilityfield( gamemap, pe, player, getPlayersWithSharedViewMask(player,gamemap), gamemap->getgameparameter ( cgp_initialMapVisibility ), additionalEnemyJamming );
+#ifdef karteneditor
+   player = 0;
+#endif
+  if ( pe && player >= 0 ) {
+   VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
+#ifdef karteneditor
+         c = visible_all;
+#endif
 
+      if ( c < gamemap->getInitialMapVisibility( player ) )
+         c = gamemap->getInitialMapVisibility( player );
+
+      return c;
+  } else
+     return visible_not;
+}
+#endif

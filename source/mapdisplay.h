@@ -30,25 +30,6 @@
 #include "paradialog.h"
 #include "mapdisplayinterface.h"
 
-
-class MapDisplay : public MapDisplayInterface {
-           dynamic_array<int> cursorstat;
-           int cursorstatnum;
-         public:
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
-           void displayMap ( void );
-           void displayMap ( Vehicle* additionalVehicle ) {};
-           void displayPosition ( int x, int y );
-           void resetMovement ( void );
-           void startAction ( void );
-           void stopAction ( void );
-           void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
-           void removeActionCursor ( void ) {};
-           void updateDashboard ();
-           void repaintDisplay ();
-};
-
-
 class MapLayer;
 
 class MapRenderer {
@@ -334,6 +315,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
             MapDisplayPG* mapDisplay; 
             Cursor( MapDisplayPG* md ) : invisible(0), mapDisplay(md) {};
             friend class MapDisplayPG;
+            friend class PG_MapDisplay;
             MapCoordinate& pos();
           public:
             void goTo( const MapCoordinate& position );

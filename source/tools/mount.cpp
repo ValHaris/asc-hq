@@ -58,8 +58,6 @@
 #define WriteCode(a,b,c) fprintf( outfile, "%c%c%c", a, b, c )
 
 
-// const char temp
-
 
 void fatalError ( const ASCString& s )
 {

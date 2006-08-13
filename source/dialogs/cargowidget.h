@@ -38,6 +38,7 @@ class HighLightingManager
       SigC::Signal2<void,int, SPoint> clickOnMarkedUnit;
 };
 
+class CargoWidget;
 
 class StoringPosition : public PG_Widget
 {
@@ -46,27 +47,40 @@ class StoringPosition : public PG_Widget
       const ContainerBase::Cargo& storage;
       int num;
       bool regular;
+      CargoWidget* cargoWidget;
 
       PG_Point unitPosition;
+      PG_Point dragPointStart;
+      PG_Point mouseCursorOffset;
             
       static int spWidth;
       static int spHeight;
 
       static PG_Rect CalcSize( const PG_Point& pos  );
       
+      enum DragState { Off, Pressed, Dragging } dragState;
+      
+      
    protected:
       void markChanged(int old, int mark);
-      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);
 
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
       
       void setBargraphValue( const ASCString& widgetName, float fraction);
+      bool eventMouseButtonDown(const SDL_MouseButtonEvent* button);
+      bool eventMouseButtonUp(const SDL_MouseButtonEvent* button);
+      bool eventMouseMotion (const SDL_MouseMotionEvent *motion);
+   public:
+      enum DragTarget { NoDragging, TargetAvail, TargetNotAvail } ;
+   protected:
+      DragTarget dragTarget;
       
    public:
-
-      static vector<StoringPosition*> setup( PG_Widget* parent, ContainerBase* container, HighLightingManager& highLightingManager, int& unitColumnCount );
+      void setDragTarget( DragTarget dragTarget ) { this->dragTarget = dragTarget; };
       
-      StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition  );
+      static vector<StoringPosition*> setup( PG_Widget* parent, ContainerBase* container, HighLightingManager& highLightingManager, int& unitColumnCount );
+      Vehicle* getUnit();
+      StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, CargoWidget* cargoWidget = NULL  );
 };
 
 
@@ -74,9 +88,12 @@ class CargoWidget : public PG_ScrollWidget {
       ContainerBase* container;
       bool dragNdrop;
       int unitColumnCount;
+      Vehicle* draggedUnit;
       void moveSelection( int delta );
       
-      vector<StoringPosition*> storingPositionVector;
+      typedef vector<StoringPosition*> StoringPositionVector;
+      StoringPositionVector storingPositionVector;
+      
       void checkStoringPosition( int oldpos, int newpos );
       HighLightingManager unitHighLight;
 
@@ -89,8 +106,22 @@ class CargoWidget : public PG_ScrollWidget {
       SigC::Signal1<void,Vehicle*> unitMarked;
       SigC::Signal2<void,Vehicle*,SPoint> unitClicked;
       void redrawAll();
+      
+      void startDrag( Vehicle* v );
+      void releaseDrag( Vehicle* v = NULL );
+      void releaseDrag( int x, int y );
+      
+      //! First param: dragged unit, Second Param: target unit
+      SigC::Signal2<void, Vehicle*, Vehicle*> sigDragDone;
+      
+      //! First param: dragged unit, Second Param: target unit
+      SigC::Signal2<bool, Vehicle*, Vehicle*> sigDragAvail;
+      
+      SigC::Signal0<void> sigDragInProcess;
+      SigC::Signal0<void> sigDragAborted;
 
       void enableDragNDrop( bool enable ) { dragNdrop = enable; };
+      bool dragNdropEnabled() const { return dragNdrop; }; 
       void registerStoringPositions( vector<StoringPosition*> sp, int colcount );
       HighLightingManager& getHighLightingManager() { return unitHighLight; };
 };

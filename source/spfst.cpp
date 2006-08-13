@@ -555,19 +555,19 @@ VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap
    player = 0;
 #endif
   if ( pe && player >= 0 ) {
-      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
-      #ifdef karteneditor
+   VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
+#ifdef karteneditor
          c = visible_all;
-      #endif
+#endif
 
       if ( c < gamemap->getInitialMapVisibility( player ) )
          c = gamemap->getInitialMapVisibility( player );
 
       return c;
-   } else
-      return visible_not;
+  } else
+     return visible_not;
 }
-
+      
 
 
 void         calculateobject( int       x,

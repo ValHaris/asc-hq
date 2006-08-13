@@ -1,7 +1,7 @@
 #! /bin/sh
 
 # libtoolT - Provide generalized library-building support services.
-# Generated automatically by  (GNU asc 1.99.90.19)
+# Generated automatically by  (GNU asc 1.99.90.29)
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001
@@ -82,13 +82,13 @@ AR="ar"
 AR_FLAGS="cru"
 
 # A C compiler.
-LTCC="gcc"
+LTCC="gcc-4.0"
 
 # LTCC compiler flags.
 LTCFLAGS="-O0 -g -Wall"
 
 # A language-specific compiler.
-CC="gcc"
+CC="gcc-4.0"
 
 # Is the compiler the GNU C compiler?
 with_gcc=yes
@@ -328,7 +328,7 @@ link_all_deplibs=no
 sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../ /lib/x86_64-linux-gnu/4.0.4/ /lib/ /usr/lib/x86_64-linux-gnu/4.0.4/ /usr/lib/"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/X11R6/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/X11R6/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu "
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""
@@ -7261,13 +7261,13 @@ AR="ar"
 AR_FLAGS="cru"
 
 # A C compiler.
-LTCC="gcc"
+LTCC="gcc-4.0"
 
 # LTCC compiler flags.
 LTCFLAGS="-O0 -g -Wall"
 
 # A language-specific compiler.
-CC="g++"
+CC="g++-4.0"
 
 # Is the compiler the GNU C compiler?
 with_gcc=yes
@@ -7504,7 +7504,7 @@ link_all_deplibs=no
 sys_lib_search_path_spec=" /usr/lib/gcc/x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../../x86_64-linux-gnu/lib/x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../../x86_64-linux-gnu/lib/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../x86_64-linux-gnu/4.0.4/ /usr/lib/gcc/x86_64-linux-gnu/4.0.4/../../../ /lib/x86_64-linux-gnu/4.0.4/ /lib/ /usr/lib/x86_64-linux-gnu/4.0.4/ /usr/lib/"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/X11R6/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /usr/X11R6/lib /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu "
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""

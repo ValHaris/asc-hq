@@ -61,8 +61,8 @@
   */
   extern int computeview( GameMap* gamemap, int player_fieldcount_mask = 0 );
 
-  /** evaluates the view on a given field.
-      The view is NOT calculated. This must be done prior to calling this function !
+  /** evaluates the view on a given field and saves it for that field. Calls #calcvisibilityfield for the calculation
+      Radar and jamming values must have already been applied to the field! 
       \param gamemap the map that contains field
       \param fld    the field to evaluate
       \param player the player that the view is calculated for
@@ -72,7 +72,7 @@
   extern int evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial );
 
   /** evaluates the view on the whole map.
-      The view is NOT calculated. This must be done prior to calling this function !
+      Radar and jamming values must have already been applied to the field! 
       \param gamemap the map that the view is calculated of
       \param player_fieldcount_mask determines, which players should be counted when the view has changed
       \returns the number of fields which have a changed visibility status
@@ -80,7 +80,7 @@
   extern int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask = 0 );
 
   /** evaluates the view on a part of the map.
-      The view is NOT calculated. This must be done prior to calling this function !
+      Radar and jamming values must have already been applied to the field! 
       \param gamemap the map that the view is calculated of
       \param pos  the central position around which the view is calculated
       \param distance the radius of the circle around pos in which the view is evaluated. The view is calculated in AT LEAST this circle, in reality it is a rectangle containing this circle.
@@ -89,6 +89,21 @@
   */
   extern int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0 );
 
+  /** calculates the view on a given field.
+      Radar and jamming values must have already been applied to the field! 
+      \param gamemap the map that contains field
+      \param fld    the field to evaluate
+      \param player the player that the view is calculated for
+      \param add    a bitmapped variable containing the players that share their view with player
+      \param initial the initial visibility of the map when starting the game.
+      \param additionalEnemyJamming if > 0 run an WhatIf analysis and don't save the result
+   */
+  extern VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial, int additionalEnemyJamming );
+
+  
+  // extern VisibilityStates fieldVisibility  ( tfield* pe, int player, GameMap* gamemap, int additionalEnemyJamming );
+  extern int getPlayersWithSharedViewMask( int player, GameMap* gamemap );
+  
   extern SigC::Signal0<void> buildingSeen;
 
 #endif

@@ -560,11 +560,13 @@ bool Vehicle :: canMove ( void ) const
    return false;
 }
 
-void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
+bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
 {
    if ( start == dest )
-      return;
+      return false;
       
+   bool result = false;
+   
    if ((typ->hasFunction( ContainerBaseType::MakesTracks) || typ->hasFunction( ContainerBaseType::IceBreaker)) && (height == chfahrend || height == chschwimmend))  {
      int dir = getdirection( start, dest );
 
@@ -572,30 +574,38 @@ void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
      tfield* destField = gamemap->getField(dest);
      if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
         if ( fahrspurobject )
-           if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() )
+           if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() ) {
               startField->addobject ( fahrspurobject, 1 << dir );
+              result = true;
+           }
 
      if ( typ->hasFunction( ContainerBaseType::IceBreaker ))
         if ( eisbrecherobject )
               if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || startField->checkforobject ( eisbrecherobject ) ) {
                  startField->addobject ( eisbrecherobject, 1 << dir );
-              }
+                 result = true;
+                   }
 
      dir = (dir + sidenum/2) % sidenum;
 
      if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
           if ( fahrspurobject )
-           if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() )
+           if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() ) {
               destField->addobject ( fahrspurobject, 1 << dir );
+              result = true;
+           }
 
      if ( typ->hasFunction( ContainerBaseType::IceBreaker ))
           if ( eisbrecherobject )
               if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
                    || destField->checkforobject ( eisbrecherobject ) ) {
                  destField->addobject ( eisbrecherobject, 1 << dir );
+                 result = true;
               }
    }
+   
+   return result;
 }
 
 
@@ -779,7 +789,7 @@ int Vehicle :: getstrongestweapon( int aheight, int distance)
 void Vehicle::convert ( int col )
 {
   if ( col > 8)
-     fatalError("convertvehicle: \n color muá im bereich 0..8 sein ",2);
+     fatalError("convertvehicle: \n color muï¿½im bereich 0..8 sein ",2);
 
    int oldcol = getOwner();
 

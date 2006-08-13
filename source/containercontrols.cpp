@@ -471,38 +471,44 @@ bool ContainerControls :: moveUnitUp( Vehicle* veh )
 }
 
 
-bool ContainerControls::moveUnitDownAvail( const ContainerBase* outerContainer, const Vehicle* movingUnit )
+bool ContainerControls::moveUnitDownAvail( const Vehicle* movingUnit )
 {
-   return moveUnitDownTargets( outerContainer, movingUnit ).size() > 0;
+   return moveUnitDownTargets( movingUnit ).size() > 0;
 }
 
-vector<Vehicle*> ContainerControls::moveUnitDownTargets( const ContainerBase* outerContainer, const Vehicle* movingUnit )
+bool ContainerControls::moveUnitDownAvail( const Vehicle* movingUnit, const Vehicle* newTransport )
+{
+   return newTransport->vehicleFit( movingUnit );  
+}
+
+
+vector<Vehicle*> ContainerControls::moveUnitDownTargets( const Vehicle* movingUnit )
 {
    vector<Vehicle*> targets;
    
-   if ( !outerContainer )
+   if ( !container )
       return targets;
    
-   for ( ContainerBase::Cargo::const_iterator i = outerContainer->getCargo().begin(); i != outerContainer->getCargo().end(); ++i )
+   for ( ContainerBase::Cargo::const_iterator i = container->getCargo().begin(); i != container->getCargo().end(); ++i )
       if ( *i != movingUnit && *i )
-         if ((*i)->vehicleFit ( movingUnit ))
+         if ( moveUnitDownAvail ( movingUnit, *i ))
             targets.push_back( *i );
 
    return targets;
 }
 
 
-bool ContainerControls::moveUnitDown( ContainerBase* outerContainer, Vehicle* veh, Vehicle* newTransport )
+bool ContainerControls::moveUnitDown( Vehicle* veh, Vehicle* newTransport )
 {
-   if ( !outerContainer || !veh || !newTransport )
+   if ( !container || !veh || !newTransport )
       return false;
 
    if ( !newTransport->vehicleFit( veh ))
       return false;
 
-   outerContainer->removeUnitFromCargo( veh );
+   container->removeUnitFromCargo( veh );
    newTransport->addToCargo( veh );
    
-   logtoreplayinfo ( rpl_moveUnitUpDown, outerContainer->getPosition().x, outerContainer->getPosition().y, 0, newTransport->networkid, veh->networkid );
+   logtoreplayinfo ( rpl_moveUnitUpDown, container->getPosition().x, container->getPosition().y, 0, newTransport->networkid, veh->networkid );
    return true;
 }

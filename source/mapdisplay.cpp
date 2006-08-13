@@ -1586,7 +1586,9 @@ class PG_MapDisplay : public MapDisplayInterface {
            void stopAction ( void );
            void cursor_goto ( const MapCoordinate& pos );
            void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
-           void removeActionCursor ( void ) {};
+           void removeActionCursor ( void ) {
+              mapDisplayWidget->cursor.invisible = 1;
+           };
            void updateDashboard ();
            void repaintDisplay ();
            void setTempView( bool view ) { tempsvisible = view; };
@@ -1620,10 +1622,10 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    }
    
    tfield* fld1 = actmap->getField ( start );
-   int view1 = fieldVisibility ( fld1, actmap->playerView );
+   int view1 = fieldVisibility ( fld1, actmap->playerView, actmap );
 
    tfield* fld2 = actmap->getField ( dest );
-   int view2 = fieldVisibility ( fld2, actmap->playerView );
+   int view2 = fieldVisibility ( fld2, actmap->playerView, actmap );
 
    if (  (view1 >= visible_now  ||  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ))
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) || ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView )) {

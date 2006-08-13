@@ -129,6 +129,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    // add(new IntProperty("Mouse.LargeGuiIconButton"			,&_pOptions->mouse.largeguibutton));
    // add(new IntProperty("Mouse.SmallGuiIconUnderMouse"		,&_pOptions->mouse.smalliconundermouse ));
    pc.addNamedInteger("MapCenterButton", mouse.centerbutton, mouseButtonNum, mouseButtons, mouse.centerbutton );
+   pc.addNamedInteger("DragNdrop", mouse.dragndropbutton, mouseButtonNum, mouseButtons, mouse.dragndropbutton );
    // add(new IntProperty("Mouse.UnitWeaponInfoButton"		,&_pOptions->mouse.unitweaponinfo));
    // add(new IntProperty("Mouse.SingleClickAction"	   	,&_pOptions->mouse.singleClickAction));
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
@@ -232,8 +233,9 @@ void CGameOptions::setDefaults ( void )
    mouse.fieldmarkbutton=1;
    // mouse.smallguibutton=1;
    // mouse.largeguibutton=0;
-   //mouse.smalliconundermouse=2;  // 0: nie=0;  1: immer=0; 2: nur wenn vehicle, geb„ude, oder temp unter MAUS
+   //mouse.smalliconundermouse=2;  // 0: nie=0;  1: immer=0; 2: nur wenn vehicle, gebude, oder temp unter MAUS
    mouse.centerbutton=2;    // Maustaste zum zentrieren des fielder, ?ber dem sich die Maus befindet=0;
+   mouse.dragndropbutton = 3;
 
    replayspeed=0;
    debugReplay = 0;

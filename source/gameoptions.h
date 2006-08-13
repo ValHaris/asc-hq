@@ -134,6 +134,9 @@ class CGameOptions
 
          //! the button to center the map around the selected field
          int centerbutton;
+         
+         //! used in the container dialog
+         int dragndropbutton;
 
          //! the button to display the vehicle information
          // int unitweaponinfo;

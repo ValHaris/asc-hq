@@ -167,8 +167,10 @@ class BuildingType;
     //! changes a units height and adjusts the movement so that the percentage of used movepoints remains constant
     void setNewHeight( int bitmappedheight );
 
-    //! add the objects like tracks or broken ice
-    void spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
+    /** add the objects like tracks or broken ice
+        \returns true if any objects were created
+    */
+    bool spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
 
     //! @name Resource related functions
     //@{

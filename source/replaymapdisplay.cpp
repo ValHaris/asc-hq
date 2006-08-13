@@ -65,9 +65,19 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
    if ( actmap->playerView < 0 )
       return 0;
 
+   
+   bool view1 = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView );
+   
+   int view2;
+   tfield* fld2 = actmap->getField ( dest );
+   
+   if ( actmap->player[actmap->playerView].diplomacy.sharesView( vehicle->getOwner() )) 
+      view2 = fieldVisibility ( fld2, actmap->playerView, actmap );
+   else {
+      // This is a workaround to estimate if the target field will be visible or not once the units is there 
+      view2 = calcvisibilityfield ( actmap, fld2, actmap->playerView, -1, actmap->getgameparameter ( cgp_initialMapVisibility ), vehicle->typ->jamming );
+   }
 
-   bool visibility;
-   visibility = fieldvisiblenow ( getfield ( start.x, start.y ), vehicle, actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), vehicle, actmap->playerView);
    /*
    if ( vehicle->height >= chschwimmend && vehicle->height <= chhochfliegend ) {
       visibility = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), actmap->playerView);
@@ -77,7 +87,7 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
    }
    */
    
-   if ( visibility ) {
+   if ( view1 || (view2 >= visible_now ) ) {
       if ( checkMapPosition  ( start.x, start.y ))
          displayMap();
 
@@ -102,7 +112,8 @@ void ReplayMapDisplay :: displayPosition ( int x, int y )
 
 void ReplayMapDisplay :: removeActionCursor ( void )
 {
-//   cursor.hide();
+   mapDisplay->removeActionCursor();
+ 
 }
 
 void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )

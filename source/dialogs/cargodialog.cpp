@@ -426,6 +426,39 @@ class CargoDialog : public Panel
             setBargraphValue ( "LoadingMeter", float( container->cargoWeight()) / container->baseType->maxLoadableWeight );
       }
       
+      void dragUnitToInnerContainer( Vehicle* draggedUnit, Vehicle* targetUnit )
+      {
+         if ( !draggedUnit )
+            return;
+         
+         if ( targetUnit ) {
+            containerControls.moveUnitDown( draggedUnit, targetUnit );
+         } else {
+            if ( container->getCarrier() )
+               containerControls.moveUnitUp( draggedUnit );
+            else {
+                 
+            }
+         }
+         cargoChanged();
+      }
+      
+      bool dragUnitToInnerContainerAvail( Vehicle* draggedUnit, Vehicle* targetUnit )
+      {
+         return containerControls.moveUnitDownAvail( draggedUnit, targetUnit );
+      }
+      
+      void dragInProcess()
+      {
+         if ( mainScreenWidget && mainScreenWidget->getGuiHost() ) 
+            mainScreenWidget->getGuiHost()->clearSmallIcons();
+      }
+      
+      void dragAborted()
+      {
+         // to redraw everything
+         cargoChanged();
+      }
       
       
    public:
@@ -1859,7 +1892,12 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
       PG_Widget* unitScrollArea = parent;
       if ( unitScrollArea ) {
          cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), container, false );
-
+         cargoWidget->enableDragNDrop( true );
+         cargoWidget->sigDragDone.connect( SigC::slot( *this, &CargoDialog::dragUnitToInnerContainer )); 
+         cargoWidget->sigDragAvail.connect( SigC::slot( *this, &CargoDialog::dragUnitToInnerContainerAvail ));
+         cargoWidget->sigDragInProcess.connect( SigC::slot( *this, &CargoDialog::dragInProcess )); 
+         cargoWidget->sigDragAborted.connect( SigC::slot( *this, &CargoDialog::dragAborted )); 
+         
          vector<StoringPosition*> storingPositionVector;
          
          int x = 0;
@@ -1877,7 +1915,7 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
             pc.addInteger( "unitposx", unitposx );
             pc.addInteger( "unitposy", unitposy );
             
-            StoringPosition* sp = new StoringPosition( cargoWidget, PG_Point( x, y), PG_Point(unitposx, unitposy), cargoWidget->getHighLightingManager(), container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size() );
+            StoringPosition* sp = new StoringPosition( cargoWidget, PG_Point( x, y), PG_Point(unitposx, unitposy), cargoWidget->getHighLightingManager(), container->getCargo(), i, container->baseType->maxLoadableUnits >= container->getCargo().size(), cargoWidget );
             storingPositionVector.push_back( sp );
             x += sp->Width();
             if ( x + sp->Width() >= parent->Width() - 20 ) {
@@ -2338,7 +2376,7 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return false;
       
-      return parent.getControls().moveUnitDownAvail( parent.getContainer(), veh );
+      return parent.getControls().moveUnitDownAvail( veh );
    }
 
 
@@ -2430,11 +2468,11 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return;
 
-      vector<Vehicle*> targets = parent.getControls().moveUnitDownTargets( parent.getContainer(), veh );
+      vector<Vehicle*> targets = parent.getControls().moveUnitDownTargets( veh );
 
       Vehicle* target = selectVehicle( targets );
       if ( target )
-         parent.getControls().moveUnitDown ( parent.getContainer(), veh, target );
+         parent.getControls().moveUnitDown (  veh, target );
       
       parent.cargoChanged();
    }

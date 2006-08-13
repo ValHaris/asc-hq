@@ -96,7 +96,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    }
 }
 
-bool multiThreadedViewCalculation = true;
+bool multiThreadedViewCalculation = false;
 
 
 
@@ -105,6 +105,7 @@ class BackgroundViewCalculator {
       SDL_Thread *viewThreat;
       SDL_sem* sem;
       bool endThreat;
+      int changedFields;
 
       enum Status { waiting, dataavail, running, finished } status;
       
@@ -118,7 +119,7 @@ class BackgroundViewCalculator {
          Data() : gamemap(NULL), view(-1) {};
       };
       
-      BackgroundViewCalculator() : endThreat(false)
+      BackgroundViewCalculator() : endThreat(false), changedFields(0)
       {
          status = waiting;
          sem = SDL_CreateSemaphore( 1 );
@@ -150,10 +151,11 @@ class BackgroundViewCalculator {
          return result;
       }
 
-      void setCalculationCompletion()
+      void setCalculationCompletion( int changedFields )
       {
          SDL_SemWait( sem );
          status = finished;
+         this->changedFields = changedFields;
          SDL_SemPost(sem );
       }
 
@@ -169,10 +171,11 @@ class BackgroundViewCalculator {
          return result;
       }
 
-      void waitForCompletion()
+      int waitForCompletion()
       {
          while ( !isCalculationCompleted() )
             SDL_Delay(10);
+         return changedFields;
       }
 
       bool haltThreat()
@@ -198,8 +201,8 @@ class BackgroundViewCalculator {
          do {
             SDL_Delay(10);
             if ( bvc->dataAvail( data )) {
-               evaluateviewcalculation ( data.gamemap, data.view );
-               bvc->setCalculationCompletion();
+               int changedFields = evaluateviewcalculation ( data.gamemap, data.view );
+               bvc->setCalculationCompletion( changedFields );
             }
          } while ( !bvc->haltThreat() && !exitprogram );
          return 0;
@@ -270,6 +273,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
    int networkID = vehicle->networkid;
 
    bool viewInputChanged= false;
+   bool mapDisplayUpToDate = true;
+   bool finalRedrawNecessary = false;
 
    bool inhibitAttack = false;
    while ( pos != stop  && vehicle && cancelmovement!=1 ) {
@@ -342,13 +347,16 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
               mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
+              finalRedrawNecessary = true;
          }
          pathStep++;
 
          printTimer(4);
 
          if ( vehicle ) {
-            vehicle->spawnMoveObjects( from, to );
+            if ( vehicle->spawnMoveObjects( from, to ) )
+               mapDisplayUpToDate = false;
+            
             int dir = getdirection( from, to );
             if ( dir >= 0 && dir <= 5 )
                vehicle->direction = dir;
@@ -359,14 +367,21 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          
          printTimer(5);
          if ( multiThreadedViewCalculation ) {
-            bvc->waitForCompletion();
+            if ( bvc->waitForCompletion())
+               mapDisplayUpToDate = false;
+               
          } else {
             Vehicle* temp = dest->vehicle;
+            
             dest->vehicle = vehicle;
-            if ( actmap->playerView >= 0 )
-               evaluateviewcalculation ( actmap, 1 << actmap->playerView );
-            else
-               evaluateviewcalculation ( actmap, 0);
+            int fieldsWidthChangedVisibility; 
+            if ( actmap->playerView >= 0 ) 
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
+            else 
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 0);
+            
+            if ( fieldsWidthChangedVisibility )
+               mapDisplayUpToDate = false;
             dest->vehicle = temp;
          }
          printTimer(6);
@@ -382,7 +397,11 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                if ( next->getRealHeight() > pos->getRealHeight() && pathStep < pathStepNum )
                   vehicle->height = 1 << pos->getRealHeight();
                
-               mapDisplay->displayMap( vehicle );
+               if ( !mapDisplayUpToDate ) {
+                  mapDisplay->displayMap( vehicle );
+                  mapDisplayUpToDate = true;
+                  finalRedrawNecessary = false;
+               }
 
                vehicle->height = oldheight;
             }
@@ -394,12 +413,17 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             }
             if ( !vehicle && mapDisplay ) {
                mapDisplay->displayMap();
+               mapDisplayUpToDate = true;
+               finalRedrawNecessary = false;
+               
                viewInputChanged = true;
             }
          } else
             if ( mapDisplay ) {
                mapDisplay->displayMap();
-            }
+               mapDisplayUpToDate = true;
+               finalRedrawNecessary = false;
+             }
 
          printTimer(7);
             
@@ -497,6 +521,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
            }
+           mapDisplayUpToDate = false;
+
          }
 
          if ( rf->checkfield ( *pos, vehicle, mapDisplay )) {
@@ -512,11 +538,16 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
       else
          fieldschanged = evaluateviewcalculation ( actmap, 0 );
+      
+      if ( fieldschanged )
+         mapDisplayUpToDate = false;
+         
    }
 
    if ( mapDisplay ) {
       mapDisplay->resetMovement();
       // if ( fieldschanged > 0 )
+      if (finalRedrawNecessary || !mapDisplayUpToDate)
          mapDisplay->displayMap();
       // else
       //   mapDisplay->displayPosition ( pos->x, pos->y );
