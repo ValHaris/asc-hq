@@ -179,7 +179,7 @@ Surface StoringPosition::clippingSurface;
 
 
 
-CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup ) : PG_ScrollWidget( parent, pos ), unitColumnCount(0)
+CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup ) : PG_ScrollWidget( parent, pos ), dragNdrop(true), unitColumnCount(0)
 {
    this->container = container;
    SetTransparency( 255 );

@@ -72,6 +72,7 @@ class StoringPosition : public PG_Widget
 
 class CargoWidget : public PG_ScrollWidget {
       ContainerBase* container;
+      bool dragNdrop;
       int unitColumnCount;
       void moveSelection( int delta );
       
@@ -89,6 +90,7 @@ class CargoWidget : public PG_ScrollWidget {
       SigC::Signal2<void,Vehicle*,SPoint> unitClicked;
       void redrawAll();
 
+      void enableDragNDrop( bool enable ) { dragNdrop = enable; };
       void registerStoringPositions( vector<StoringPosition*> sp, int colcount );
       HighLightingManager& getHighLightingManager() { return unitHighLight; };
 };
