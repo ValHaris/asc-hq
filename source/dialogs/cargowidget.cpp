@@ -226,10 +226,7 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
       return false;
 }
 
-inline int square( int x ) 
-{
-   return x*x;
-}
+#define square(x) (x*x)
 
 bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
 {
