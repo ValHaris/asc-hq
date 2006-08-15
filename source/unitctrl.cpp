@@ -264,7 +264,13 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       cn->removeUnitFromCargo( vehicle );      
    }
 
-   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel ), false );
+   int soundHeight = -1;
+   if ( pos->getRealHeight() >= 0 )
+      soundHeight = pos->getRealHeight();
+   else
+      soundHeight = stop->getRealHeight();
+
+   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel, soundHeight ), false );
 
    int cancelmovement = 0;
 

@@ -41,7 +41,7 @@ public:
 
     static void init( );
     Sound* playSound ( Sample snd, int subType = 0, bool looping = false, const ASCString& label = "" );
-    Sound* getSound ( Sample snd, int subType = 0, const ASCString& label = "");
+    Sound* getSound ( Sample snd, int subType = 0, const ASCString& label = "", int height = -1);
 
    ~SoundList();
 private:

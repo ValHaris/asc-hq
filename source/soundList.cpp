@@ -35,6 +35,7 @@
 #include "basestrm.h"
 #include "sgstream.h"
 #include "stringtokenizer.h"
+#include "textfiletags.h"
 
 SoundList* SoundList::instance = NULL;
 
@@ -221,7 +222,7 @@ Sound* SoundList::getSound( const ASCString& filename )
 }
 
 
-Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
+Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label, int height )
 {
    if ( SoundSystem::getInstance()->isOff() )
       return NULL;
@@ -229,10 +230,16 @@ Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
    if ( label.find ( "." ) != ASCString::npos ) {
       return getSound ( label );
    } else {
-      
       ASCString newlabel = copytoLower(label);
+
       for ( vector<SoundAssignment>::iterator i = soundAssignments.begin(); i != soundAssignments.end(); i++ )
-         if ( snd == i->sample && subType == i->subType )
+         if ( snd == i->sample && subType == i->subType ) {
+            if ( height >= 0 && height <= 7 )
+               if ( i->snd.find( heightTags[height] ) != i->snd.end() ) {
+	               displayLogMessage ( 10, ASCString(" SoundList::getSound(2) : heightlabel ") + heightTags[height] + " found, returning matching sound \n" );
+                  return i->snd[heightTags[height]];
+               }
+
             if ( newlabel.empty() || i->snd.find( newlabel ) == i->snd.end() ) {
             	displayLogMessage ( 10, " SoundList::getSound(2) : label " + label + " not found, returning default sound \n" );
                if ( !i->defaultSound )
@@ -242,6 +249,7 @@ Sound* SoundList::getSound( Sample snd, int subType, const ASCString& label )
 	            displayLogMessage ( 10, " SoundList::getSound(2) : label " + label + " found, returning matching sound \n" );
                return i->snd[newlabel];
             }
+         }
    }
 
 	displayLogMessage ( 10, " SoundList::getSound(2) : sound not found, returning NULL \n" );

@@ -104,10 +104,10 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
    ASCString background = "hexfield-bld-"; 
    if ( dragTarget == NoDragging ) {
       background += regular ? "1" : "2";
-   } else {
-      background += dragTarget==TargetAvail ? "1" : "2";
       if (  num == highlight.getMark() )
          background += "h";
+   } else {
+      background += dragTarget==TargetAvail ? "1" : "2";
    }
    background += ".png";
 
@@ -208,8 +208,8 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
       int x,y;
       PG_Application::GetEventSupplier()->GetMouseState(x, y);
       
-      x += mouseCursorOffset.x;
-      y += mouseCursorOffset.y;
+      // x += mouseCursorOffset.x;
+      // y += mouseCursorOffset.y;
       
       StoringPosition* s = dynamic_cast<StoringPosition*>( FindWidgetFromPos (x, y));
       if ( s )
@@ -226,7 +226,7 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
       return false;
 }
 
-#define square(x) (x*x)
+#define square(x) ((x)*(x))
 
 bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
 {
@@ -245,6 +245,7 @@ bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
                mouseCursorOffset = PG_Point( fieldsizex/2, fieldsizey/2);
             }
             surf.Fill( 0 );
+            IconRepository::getIcon("mouse.png").Blit( surf );
             getUnit()->typ->paint( surf, SPoint(0,0), getUnit()->getOwner() );
             PG_Application::SetCursor( const_cast<SDL_Surface*>( surf.getBaseSurface() ));
             PG_Application::ShowCursor( PG_Application::SOFTWARE );

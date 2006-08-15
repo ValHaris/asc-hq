@@ -352,8 +352,20 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
       setLabelText( "unitmaterialstatus", veh->getTank().material );
       setBargraphValue( "unitenergy", veh->getStorageCapacity().energy ? float( veh->getTank().energy) / veh->getStorageCapacity().energy : 0  );
       setLabelText( "unitenergystatus", veh->getTank().energy );
-      setLabelText( "movepoints", veh->getMovement() );
-   
+
+      ASCString moveString = ASCString::toString( veh->getMovement() / 10 );
+      if ( veh->getMovement() % 10 )
+         moveString += "." + ASCString::toString(veh->getMovement()%10);
+
+      setLabelText( "movepoints", moveString );
+
+      if ( veh->typ->fuelConsumption )
+         setLabelText( "fuelrange", veh->getTank().fuel / veh->typ->fuelConsumption );
+      else
+         setLabelText( "fuelrange", "-" );
+
+      setLabelText( "armor", veh->typ->armor );
+
       int &pos = weaponsDisplayed;
       for ( int i = 0; i < veh->typ->weapons.count; ++i) {
          if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
