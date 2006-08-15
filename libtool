@@ -94,7 +94,7 @@ CC="gcc-4.0"
 with_gcc=yes
 
 # An ERE matcher.
-EGREP="grep -E"
+EGREP="/bin/grep -E"
 
 # The linker used to build libraries.
 LD="/usr/local/bin/ld -m elf_x86_64"
@@ -7273,7 +7273,7 @@ CC="g++-4.0"
 with_gcc=yes
 
 # An ERE matcher.
-EGREP="grep -E"
+EGREP="/bin/grep -E"
 
 # The linker used to build libraries.
 LD="/usr/local/bin/ld -m elf_x86_64"

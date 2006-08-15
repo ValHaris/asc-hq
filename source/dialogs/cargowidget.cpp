@@ -245,7 +245,10 @@ bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
                mouseCursorOffset = PG_Point( fieldsizex/2, fieldsizey/2);
             }
             surf.Fill( 0 );
-            IconRepository::getIcon("mouse.png").Blit( surf );
+            
+            MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
+            blitter.blit( IconRepository::getIcon("mouse.png"), surf, SPoint(0,0));
+            
             getUnit()->typ->paint( surf, SPoint(0,0), getUnit()->getOwner() );
             PG_Application::SetCursor( const_cast<SDL_Surface*>( surf.getBaseSurface() ));
             PG_Application::ShowCursor( PG_Application::SOFTWARE );

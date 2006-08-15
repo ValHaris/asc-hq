@@ -49,8 +49,13 @@ public:
 	}
 
 	inline bool operator!=(const DI_Color& c) const {
-		return ((r != c.r) || (g != c.g) || (b != c.b));
+      return !operator==(c);// ((r != c.r) || (g != c.g) || (b != c.b));
 	}
+   
+   inline bool operator==(const DI_Color& c) const {
+      return ((r == c.r) && (g == c.g) && (b == c.b));
+   }
+   
 };
 
 

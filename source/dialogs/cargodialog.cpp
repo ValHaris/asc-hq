@@ -106,7 +106,8 @@ namespace CargoGuiFunctions {
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
          {
             GuiFunctions::Movement::execute( pos, subject, num );
-            parent.QuitModal();
+            if ( !pendingVehicleActions.move )
+               parent.QuitModal();
          }
    };
 

@@ -7,7 +7,7 @@ libpgwidgets_la_SOURCES = pgbutton.cpp 	pgcheckbutton.cpp 	pgcolumnitem.cpp \
 		pgspinnerbox.cpp 	pgthemewidget.cpp 	pgwidget.cpp 	pgwidgetdnd.cpp 	pgwidgetlist.cpp \
 		pgscrollwidget.cpp 	pgwindow.cpp 	pgrichedit.cpp 	pgscrollarea.cpp 	pgmenubar.cpp \
 		pgmultilineedit.cpp 	propstrings_priv.h 	propstrings_priv.cpp 	pgtooltiphelp.cpp \
-		pgpropertyeditor.cpp 
+		pgpropertyeditor.cpp pgcolorselector.cpp
 
 libpgwidgets_la_LIBADD = \
 	$(SIGC_LIBS)

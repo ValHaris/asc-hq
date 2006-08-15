@@ -196,9 +196,11 @@ class Player : public SigC::Object {
       ASCString email;
                   
       DI_Color getColor();
+      void setColor( const DI_Color& color ); 
 
    private:   
       ASCString       name;
+      DI_Color        color;
       void sendQueuedMessages();
                  
 };

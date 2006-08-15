@@ -1618,7 +1618,7 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    
    if ( newstart.getNumericalHeight() > newdest.getNumericalHeight() ) {
       if ( fieldnum > 0  )
-         newdest.setNumericalHeight( newstart.getNumericalHeight() );
+         newstart.setNumericalHeight( newdest.getNumericalHeight() );
    }
    
    tfield* fld1 = actmap->getField ( start );

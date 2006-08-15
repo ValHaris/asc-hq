@@ -24,6 +24,8 @@
 #include <pgpropertyfield_string.h>
 #include "../gamemap.h"
 
+#include <pgcolorselector.h>
+
 
 
 class EditPlayerData : public ASC_PG_Dialog
@@ -35,6 +37,8 @@ class EditPlayerData : public ASC_PG_Dialog
 
       PG_DropDown* playerMode; 
       map<int,Player::PlayerStatus> modes;
+      
+      PG_ColorSelector* colorSelector;
 
    public:
       EditPlayerData( Player& player );
@@ -42,7 +46,7 @@ class EditPlayerData : public ASC_PG_Dialog
       bool search( int id );
 };
 
-EditPlayerData :: EditPlayerData(Player& player  ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 200), "Edit Player Data" ), editor(NULL), myPlayer( player )
+EditPlayerData :: EditPlayerData(Player& player  ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 400), "Edit Player Data" ), editor(NULL), myPlayer( player ), colorSelector(NULL)
 {
    name = player.getName();
    editor = new ASC_PropertyEditor( this, PG_Rect( 10, 40, Width()-20, 70));
@@ -66,6 +70,8 @@ EditPlayerData :: EditPlayerData(Player& player  ) : ASC_PG_Dialog( NULL, PG_Rec
             
    playerMode->SelectItem(0);
 
+//   colorSelector = new PG_ColorSelector( this, PG_Rect( 10, 140, Width() - 30, 150 ));
+//   colorSelector->SetColor( player.getColor() );
 
    StandardButtonDirection( Horizontal );
    AddStandardButton( "OK")->sigClick.connect( SigC::slot( *this, &EditPlayerData::ok ));
@@ -76,6 +82,7 @@ bool EditPlayerData  :: ok()
    if ( editor->Apply() ) {
       myPlayer.setName( name );
       myPlayer.stat = modes[playerMode->GetSelectedItemIndex()];
+      // myPlayer.setColor( colorSelector->
       QuitModal();
    }
    return true;
