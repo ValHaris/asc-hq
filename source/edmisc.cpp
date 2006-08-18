@@ -1607,6 +1607,9 @@ void         tunit::init(  )
       npop ( unit->height );
    }
 
+   if ( unit->typ->hasFunction( ContainerBaseType::NoReactionfire  ))
+      unit->reactionfire.disable();
+
    addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->hasFunction( ContainerBaseType::NoReactionfire  )) == 0 );
    reactionfire = unit->reactionfire.getStatus();
    addeingabe(22, &reactionfire, 0, lightgray);

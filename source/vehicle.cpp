@@ -185,7 +185,12 @@ void Vehicle :: init ( void )
    ypos = -1;
    connection = 0;
    networkid = -1;
-   reactionfire.status = ReactionFire::off;
+
+   if ( typ && typ->hasFunction(ContainerBaseType::MoveWithReactionFire))
+      reactionfire.status = ReactionFire::ready;
+   else
+      reactionfire.status = ReactionFire::off;
+
    reactionfire.enemiesAttackable = 0;
 
    generatoractive = 0;
@@ -815,7 +820,8 @@ Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
       Vehicle* v = new Vehicle( tnk, gamemap, color/8 );
       v->xpos = x;
       v->ypos = y;
-
+      v->addview();
+   
       for ( int j = 0; j < 8; j++ ) {
          int a = int(height) << j;
          int b = int(height) >> j;
