@@ -163,8 +163,6 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
        pc.closeBracket();
     }
     pc.addInteger ( "MaxLoadableUnits", maxLoadableUnits, 0 );
-    if ( maxLoadableUnits > 18 )
-       maxLoadableUnits = 18;
 
     pc.addInteger ( "MaxLoadableUnitSize", maxLoadableUnitSize, maxint );
     pc.addInteger ( "MaxLoadableMass", maxLoadableWeight, maxint );
