@@ -358,9 +358,6 @@
 				RelativePath="..\..\..\resourcenet.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\dialogs\selectionwindow.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\actions\servicing.cpp">
 			</File>
 			<File
@@ -545,6 +542,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\selectionwindow.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\terraininfo.cpp">

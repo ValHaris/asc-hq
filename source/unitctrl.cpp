@@ -522,7 +522,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                viewInputChanged = true;
             }
             cn->addToCargo( vehicle );
-            if (cn->getOwner() != vehicle->getOwner() && fld->building ) {
+            if (cn->getOwner() != vehicle->getOwner() && fld->building && actmap->getPlayer(fld->building).diplomacy.isHostile( vehicle) ) {
                fld->building->convert( vehicle->color / 8 );
                if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );

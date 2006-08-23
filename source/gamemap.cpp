@@ -230,7 +230,7 @@ GameMap :: GameMap ( void )
       if ( i == 0 )
          player[i].stat = Player::human;
       else
-         player[i].stat = Player::off;
+         player[i].stat = Player::computer;
       
       player[i].research.chainToMap ( this, i );
    }

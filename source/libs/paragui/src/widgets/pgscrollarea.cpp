@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-02-15 21:30:16 $
+    Update Date:      $Date: 2006-08-23 20:35:46 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollarea.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.1 $
+    CVS/RCS Revision: $Revision: 1.1.2.2 $
     Status:           $State: Exp $
 */
 
@@ -41,12 +41,22 @@ void PG_ScrollArea::ScrollTo(Uint16 x, Uint16 y) {
 	if (my_area.x == x && my_area.y == y)
 		return;
 
-	if(y > my_area.h - my_height && my_area.h > my_height) {
-		y = my_area.h - my_height;
+	if(y > my_area.h - my_height ) {  
+      if ( my_area.h > my_height ) {
+		   y = my_area.h - my_height;
+         if ( y < 0 )
+            y = 0;
+      } else
+         y = 0;
 	}
 
-	if(x > my_area.w - my_width && my_area.w > my_width) {
-		x = my_area.w - my_width;
+	if(x > my_area.w - my_width ) {  
+      if ( my_area.w > my_width ) {
+		   x = my_area.w - my_width;
+         if ( x < 0 )
+            x = 0;
+      } else
+         x = 0;
 	}
 
 	Sint32 dx = my_area.x - x;
