@@ -133,7 +133,7 @@ class OverviewMapHolder : public SigC::Object {
       bool idleHandler( );
       bool init();
       void drawNextField( bool signalOnCompletion = true );
-      void updateField( const MapCoordinate& pos );
+      bool updateField( const MapCoordinate& pos );
       
    public:
       OverviewMapHolder( GameMap& gamemap );

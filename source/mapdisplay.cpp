@@ -1741,7 +1741,6 @@ MapDisplayPG::LockDisplay::~LockDisplay()
          if ( !theMapDisplay->lock  ) {
             theMapDisplay->dirty = Map;
             theMapDisplay->Update();
-   
          }
       }
       if ( !theMapDisplay->lock )

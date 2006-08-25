@@ -109,7 +109,7 @@ void OverviewMapPanel::lockPanel()
 void OverviewMapPanel::unlockPanel()
 {
    locked = false;
-   Update();
+   Redraw();
 }
 
       

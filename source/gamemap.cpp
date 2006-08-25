@@ -84,10 +84,10 @@ bool OverviewMapHolder :: idleHandler( )
 }
 
 
-void OverviewMapHolder::updateField( const MapCoordinate& pos )
+bool OverviewMapHolder::updateField( const MapCoordinate& pos )
 {
    if ( map.playerView < 0 )
-      return;
+      return false;
    
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
@@ -115,6 +115,7 @@ void OverviewMapHolder::updateField( const MapCoordinate& pos )
       }
 
    }
+   return true;
 }
 
 void OverviewMapHolder::drawNextField( bool signalOnCompletion )
@@ -127,7 +128,9 @@ void OverviewMapHolder::drawNextField( bool signalOnCompletion )
       ++y;
    }   
    if ( y < map.ysize ) {
-      updateField( MapCoordinate(x,y));
+      if ( !updateField( MapCoordinate(x,y)))
+         return;
+      
       ++x;
    }
    if ( y == map.ysize ) {
