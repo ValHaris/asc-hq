@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-25 17:39:12 $
+    Update Date:      $Date: 2006-08-25 19:01:05 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollwidget.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -34,6 +34,7 @@
 PG_ScrollWidget::PG_ScrollWidget(PG_Widget* parent, const PG_Rect& r, const std::string& style) : PG_ThemeWidget(parent, r, style),
 		my_objVerticalScrollbar(NULL),
 		my_objHorizontalScrollbar(NULL) ,
+		my_scrollLineSize(-1),
 my_scrollarea(NULL) {
 	my_enableVerticalScrollbar = true;
 	my_enableHorizontalScrollbar = true;
@@ -280,6 +281,18 @@ void PG_ScrollWidget::AddChild(PG_Widget* w) {
 	my_scrollarea->AddChild(w);
 }
 
+void PG_ScrollWidget::SetLineSize( int linesize )
+{
+   my_scrollLineSize = linesize;
+}
+
+int PG_ScrollWidget::GetLineSize()
+{
+   return my_scrollLineSize;
+}
+
+
+
 void PG_ScrollWidget::CheckScrollBars() {
 	int ls = 0, i;
 	PG_ScrollBar *scrollBars[] = { my_objVerticalScrollbar, my_objHorizontalScrollbar };
@@ -287,16 +300,21 @@ void PG_ScrollWidget::CheckScrollBars() {
 	Uint16 sizes[] = { my_scrollarea->Height(), my_scrollarea->Width() };
 	Uint16 pos[] = { my_scrollarea->GetScrollPosY(), my_scrollarea->GetScrollPosX() };
 	for (i = 0; i < 2; i++) {
-		if(GetWidgetCount() != 0) {
-			ls = listsizes[i] / GetWidgetCount();
-
-			if(ls == 0) {
-				ls = 1;
-			}
-			scrollBars[i]->SetLineSize(ls);
-		} else {
-			scrollBars[i]->SetLineSize(10);
-		}
+	   if ( my_scrollLineSize > 0 )
+	      scrollBars[i]->SetLineSize(my_scrollLineSize);
+	   else {
+   		if(GetWidgetCount() != 0) {
+   			ls = listsizes[i] / GetWidgetCount();
+   
+   			if(ls == 0) {
+   				ls = 1;
+   			}
+   			scrollBars[i]->SetLineSize(ls);
+   		} else {
+   			scrollBars[i]->SetLineSize(10);
+   		}
+   	}
+   	
 		scrollBars[i]->SetRange(0, listsizes[i] -  sizes[i] );
 		scrollBars[i]->SetPageSize(sizes[i]);
 		scrollBars[i]->SetPosition(pos[i]);
@@ -368,7 +386,7 @@ PG_Widget* PG_ScrollWidget::GetFirstInList() {
 	return my_scrollarea->GetFirstInList();
 }
 
-void PG_ScrollWidget::ScrollTo(Uint16 x, Uint16 y) {
+void PG_ScrollWidget::ScrollTo( int x, int y) {
 	my_scrollarea->ScrollTo(x, y);
 	RecalcPositions(!my_objVerticalScrollbar->IsNull(), !my_objHorizontalScrollbar->IsNull());
 	CheckScrollBars();

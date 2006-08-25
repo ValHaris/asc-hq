@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-25 17:39:12 $
+    Update Date:      $Date: 2006-08-25 19:01:05 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgscrollwidget.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -79,7 +79,7 @@ public:
 	@param x X-Position
 	@param y Y-Position
 	*/
-	void ScrollTo(Uint16 x, Uint16 y);
+	void ScrollTo( int x, int y);
 
 	/**
 	Scroll to a widget
@@ -101,6 +101,10 @@ public:
 	virtual void RemoveAll();
 
 	void AddChild(PG_Widget* child);
+
+	/** Linesize is the scroll distance that is scrolled if one of the arrow buttons is pressed  */
+   void SetLineSize( int linesize );
+   int GetLineSize();
 
 	/**
 	Shift widgets on removal.
@@ -158,6 +162,7 @@ protected:
 
 	bool my_enableVerticalScrollbar;
 	bool my_enableHorizontalScrollbar;
+	int my_scrollLineSize;
 
 	void CheckScrollBars();
 

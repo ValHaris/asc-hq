@@ -580,7 +580,7 @@ int  Building :: putResource ( int      need,    int resourcetype, bool queryonl
       int placed;
       {
          PutResource putresource ( getMap(), scope );
-         placed = putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+         placed = putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, getMap()->actplayer, scope );
       }
       // if ( !queryonly && placed > 0 )
       //   resourceChanged();
@@ -597,7 +597,7 @@ int  Building :: getResource ( int      need,    int resourcetype, bool queryonl
       int got;
       {
          GetResource gr ( getMap(), scope );
-         got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, color/8, scope );
+         got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, getMap()->actplayer, scope );
       }
       // if ( !queryonly && got > 0 )
       //   resourceChanged();
@@ -612,7 +612,7 @@ int  Building :: getResource ( int      need,    int resourcetype ) const
    int got;
    {
       GetResource gr ( getMap(), scope );
-      got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, true, color/8, scope );
+      got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, true, getMap()->actplayer, scope );
    }
    return got;
 }

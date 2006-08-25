@@ -185,7 +185,7 @@ void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
             changeToState( towardsPlayer, i->second );
          } else {
             // he proposes less or equal peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
-            changeToState( towardsPlayer, s, s < i->second );
+            changeToState( towardsPlayer, s, true );  // s < i->second would only send mail if the proposal differs
             targ.queuedStateChanges.erase( i );
          }
       } else {

@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-08-23 20:35:46 $
+    Update Date:      $Date: 2006-08-25 19:01:05 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollarea.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -37,7 +37,14 @@ my_shiftx(false), my_shifty(false), my_AddResizeParent(false), my_RemoveResizePa
 
 PG_ScrollArea::~PG_ScrollArea() {}
 
-void PG_ScrollArea::ScrollTo(Uint16 x, Uint16 y) {
+void PG_ScrollArea::ScrollTo( int x, int y) {
+   if ( x < 0 )
+      x = 0;
+
+   if ( y < 0 )
+      y = 0;
+
+
 	if (my_area.x == x && my_area.y == y)
 		return;
 

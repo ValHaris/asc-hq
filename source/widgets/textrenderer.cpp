@@ -46,6 +46,7 @@ void TextRenderer :: TextAttributes :: assign ( PG_Widget* w )
 TextRenderer :: TextRenderer (PG_Widget *parent, const PG_Rect &r ) : PG_ScrollWidget( parent, r, "ScrollWidget" ), lastWidget(NULL)
 {
    SetTransparency(255);
+   SetLineSize( scrollsize );
 };
 
 TextRenderer :: TextRenderer (PG_Widget *parent, const PG_Rect &r, const std::string& text, const std::string &style) : PG_ScrollWidget( parent, r, style ), lastWidget(NULL)
@@ -400,6 +401,29 @@ bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)
       
       return true;
    }
+
+   int keyStateNum;
+   Uint8* keyStates = SDL_GetKeyState ( &keyStateNum );
+
+   if ( (key->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( key->keysym.sym == SDLK_KP8  && keyStates[SDLK_KP8] )) {
+      ScrollTo( GetScrollPosX (), GetScrollPosY () - scrollsize );
+      return true;
+   }
+   if ( (key->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (key->keysym.sym == SDLK_KP2  && keyStates[SDLK_KP2] )) {
+      ScrollTo( GetScrollPosX (), GetScrollPosY () + scrollsize );
+      return true;
+   }
+
+   if ( key->keysym.sym == SDLK_PAGEUP  && keyStates[SDLK_PAGEUP] ) {
+      ScrollTo( GetScrollPosX (), GetScrollPosY() - (Height() - 10) );
+      return true;
+   }
+   if ( key->keysym.sym == SDLK_PAGEDOWN  && keyStates[SDLK_PAGEDOWN] ) {
+      ScrollTo( GetScrollPosX (), GetScrollPosY () + (Height() - 10) );
+      return true;
+   }
+
+
    return false;
 }
 

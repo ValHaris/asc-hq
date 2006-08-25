@@ -48,6 +48,8 @@ class TextRenderer : public PG_ScrollWidget {
       PG_Widget* lastWidget;
 
       ASCString my_text;
+
+      static const int scrollsize = 40;
       
    protected:
    

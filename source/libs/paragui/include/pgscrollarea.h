@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2006-02-15 21:30:16 $
+   Update Date:      $Date: 2006-08-25 19:01:05 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgscrollarea.h,v $
-   CVS/RCS Revision: $Revision: 1.1.2.1 $
+   CVS/RCS Revision: $Revision: 1.1.2.2 $
    Status:           $State: Exp $
 */
 
@@ -77,7 +77,7 @@ class SignalAreaChangedWidth : public PG_Signal2<PG_ScrollArea*, Uint16> {}
 	@param x X-Position
 	@param y Y-Position
 	*/
-	void ScrollTo(Uint16 x, Uint16 y);
+	void ScrollTo(int x, int y);
 
 	/**
 	Scroll to a widget

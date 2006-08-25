@@ -82,8 +82,8 @@ class  Building : public ContainerBase {
 
     int  putResource ( int amount,    int resourcetype, bool queryonly, int scope = 1 );
     int  getResource ( int amount,    int resourcetype, bool queryonly, int scope = 1 );
-    int getResource ( int amount, int resourcetype ) const;
-    Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
+    int  getResource ( int amount,    int resourcetype ) const;
+    Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope); };
     Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
 
 
