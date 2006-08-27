@@ -517,7 +517,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
       }
 
     /*******************************/
-    /*    Wind calculation        ÿ */
+    /*    Wind calculation         */
     /*******************************/
    if ( wm && checkWind && direc >= 0 && direc < 5 )
       if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
@@ -572,15 +572,15 @@ void Building :: execnetcontrol ( void )
                                  */
 
 
-int  Building :: putResource ( int      need,    int resourcetype, bool queryonly, int scope  )
+int  Building :: putResource ( int      need,    int resourcetype, bool queryonly, int scope, int player  )
 {
    if ( need < 0 )
-      return -getResource( -need, resourcetype, queryonly, scope );
+      return -getResource( -need, resourcetype, queryonly, scope, player );
    else {
       int placed;
       {
          PutResource putresource ( getMap(), scope );
-         placed = putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, getMap()->actplayer, scope );
+         placed = putresource.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, player >= 0 ? player : getMap()->actplayer, scope );
       }
       // if ( !queryonly && placed > 0 )
       //   resourceChanged();
@@ -589,15 +589,15 @@ int  Building :: putResource ( int      need,    int resourcetype, bool queryonl
 }
 
 
-int  Building :: getResource ( int      need,    int resourcetype, bool queryonly, int scope )
+int  Building :: getResource ( int      need,    int resourcetype, bool queryonly, int scope, int player )
 {
    if ( need < 0 )
-      return -putResource( -need, resourcetype, queryonly, scope );
+      return -putResource( -need, resourcetype, queryonly, scope, player );
    else {
       int got;
       {
          GetResource gr ( getMap(), scope );
-         got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, getMap()->actplayer, scope );
+         got = gr.getresource ( entryPosition.x, entryPosition.y, resourcetype, need, queryonly, player >= 0 ? player : getMap()->actplayer, scope );
       }
       // if ( !queryonly && got > 0 )
       //   resourceChanged();

@@ -42,20 +42,20 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
 SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
 
 
-Resources ContainerBase :: putResource ( const Resources& res, bool queryonly, int scope  )
+Resources ContainerBase :: putResource ( const Resources& res, bool queryonly, int scope, int player)
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
-      result.resource(i) = putResource ( res.resource(i), i , queryonly, scope );
+      result.resource(i) = putResource ( res.resource(i), i , queryonly, scope, player );
    return result;
 }
 
 
-Resources ContainerBase :: getResource ( const Resources& res, bool queryonly, int scope  )
+Resources ContainerBase :: getResource ( const Resources& res, bool queryonly, int scope, int player)
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
-      result.resource(i) = getResource ( res.resource(i), i , queryonly, scope );
+      result.resource(i) = getResource ( res.resource(i), i , queryonly, scope, player );
    return result;
 }
 

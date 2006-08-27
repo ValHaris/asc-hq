@@ -97,7 +97,7 @@ int Building::getIdentification()
 void Building :: convert ( int player )
 {
    if (player > 8)
-      fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
+      fatalError("convertbuilding: \n color muï¿½im bereich 0..8 sein ");
 
    #ifdef sgmain
    if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
@@ -170,8 +170,8 @@ void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::Local
 
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
-int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
-int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
+int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
+int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
 int Building :: getResource ( int amount, int resourcetype ) const { return 0; };
 #endif
 
@@ -698,7 +698,6 @@ void Building :: getresourceusage ( Resources* usage )
 
 void doresearch ( GameMap* actmap, int player )
 {
-
    typedef vector<ResearchEfficiency> VRE;
    VRE vre;
 
@@ -727,7 +726,7 @@ void doresearch ( GameMap* actmap, int player )
    for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
       Building* bld = i->bld;
       Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
-      Resources got = bld->getResource ( r, 1 );
+      Resources got = bld->getResource ( r, true, -1, player );
 
       int res = bld->researchpoints;
       if ( got < r ) {
@@ -760,7 +759,7 @@ void doresearch ( GameMap* actmap, int player )
 
       }
 
-      got = bld->getResource ( r, 0 );
+      got = bld->getResource ( r, false, -1, player );
 
       if ( got < r )
          fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
