@@ -179,7 +179,7 @@ class UnitInfoDialog : public Panel {
                Update();
                currentWeapon = weaponNum;
                if ( weaponGraph )
-                  weaponGraph->Update();
+                  weaponGraph->GetParent()->Update();
             }
             return true;
          };
@@ -223,15 +223,24 @@ class UnitInfoDialog : public Panel {
                      for ( int i = 0; i < vt->weapons.count; ++i ) {
                         int mind = (vt->weapons.weapon[i].mindistance+maxmalq-1) / maxmalq;
                         int maxd = vt->weapons.weapon[i].maxdistance / maxmalq;
-                        int linewidth = currentWeapon == i ? 2 : 1 ;
+                        int linewidth;
+                        int linecolor;
+                        if ( currentWeapon == i ) {
+                           linewidth = 2;
+                           linecolor = 0xff7777;
+                        } else {
+                           linewidth = 1;
+                           linecolor = 0xffffff;
+                        }
+
                         if ( mind == maxd ) {
                            SPoint p = getWeaponGraphCoords( maxdist/maxmalq, maxstrength, mind, vt->weapons.weapon[i].maxstrength );
-                           PG_Draw::DrawLine( PG_Application::GetScreen(), p.x , p.y - 2, p.x , p.y + 2, 0xffffff, linewidth );
-                           PG_Draw::DrawLine( PG_Application::GetScreen(), p.x - 2, p.y , p.x + 2, p.y , 0xffffff, linewidth );
+                           PG_Draw::DrawLine( PG_Application::GetScreen(), p.x , p.y - 2, p.x , p.y + 2, linecolor, linewidth );
+                           PG_Draw::DrawLine( PG_Application::GetScreen(), p.x - 2, p.y , p.x + 2, p.y , linecolor, linewidth );
                         } else {
                            SPoint p = getWeaponGraphCoords( maxdist/maxmalq, maxstrength, mind, vt->weapons.weapon[i].maxstrength );
                            SPoint p2 = getWeaponGraphCoords( maxdist/maxmalq, maxstrength, maxd, vt->weapons.weapon[i].minstrength );
-                           PG_Draw::DrawLine( PG_Application::GetScreen(), p.x , p.y , p2.x, p2.y , 0xffffff, linewidth );
+                           PG_Draw::DrawLine( PG_Application::GetScreen(), p.x , p.y , p2.x, p2.y , linecolor, linewidth );
                         }
                      }
                }

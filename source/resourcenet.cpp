@@ -733,6 +733,24 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
       if ( log ) {
          s.format ( "The number of units differ. Replay: %d ; actual map: %d", replaymap->player[player].vehicleList.size(), currentMap->player[player].vehicleList.size());
          *log += s;
+
+         GameMap* more;
+         GameMap* less;
+         if ( currentMap->player[player].vehicleList.size() > replaymap->player[player].vehicleList.size() ) {
+            more = currentMap;
+            less = replaymap;
+         } else {
+            more = replaymap;
+            less = currentMap;
+         }
+
+         for ( Player::VehicleList::iterator i = more->player[player].vehicleList.begin(); i != more->player[player].vehicleList.end(); ++i )
+            if ( !less->getUnit( (*i)->networkid )) {
+               s.format( "Type: %s at %d/%d\n", (*i)->getName().c_str(), (*i)->getPosition().x, (*i)->getPosition().y );
+               *log += s;
+            }
+
+
       }
    }
    if ( currentMap->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {

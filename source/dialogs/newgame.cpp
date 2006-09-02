@@ -45,6 +45,7 @@ class GameParameterEditorWidget;
 
 class StartMultiplayerGame: public ConfigurableWindow {
    private:
+      bool startButton;
       bool success;
       GameMap* newMap;
       
@@ -85,7 +86,10 @@ class StartMultiplayerGame: public ConfigurableWindow {
       void fileNameSelected( const ASCString& filename )
       {
          this->filename = filename;
-         nextPage();
+         if ( startButton ) 
+            start();
+         else
+            nextPage();
       };   
 
       void fileNameMarked( const ASCString& filename )
@@ -120,6 +124,8 @@ class StartMultiplayerGame: public ConfigurableWindow {
       
       void showButtons( bool start, bool quickstart, bool next )
       {
+         startButton = start;
+
          assert ( start != next );
          assert ( !(start && quickstart) );
          
@@ -175,7 +181,7 @@ const char* StartMultiplayerGame::buttonLabels[7] = {
 };
 
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), success(false), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(true), supervisorEnabled(false),
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), startButton(false), success(false), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(true), supervisorEnabled(false),
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
    allianceSetup(NULL), allianceSetupParent(NULL),
    playerSetup(NULL), playerSetupParent(NULL),
@@ -244,7 +250,11 @@ bool StartMultiplayerGame::Apply()
                   if ( newMap ) {
                      if ( mode != NewCampagin && mode != ContinueCampaign )
                         newMap->campaign.avail = false;
-                     
+                     else
+                        replay = false;
+
+
+
                      if ( checkPlayerStat() )
                         return true;
                      else {
@@ -334,7 +344,7 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
                }
                ++i;
             }   
-            if ( mode == 1 )
+            if ( mode == ContinueCampaign )
                page = PasswordSearch;
             else
                page = FilenameSelection;
@@ -342,7 +352,7 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
          break;
          
       case FilenameSelection: 
-            if ( Apply() )
+            if ( Apply() ) 
                page = PlayerSetup;
             break;
       case PlayerSetup: 
@@ -422,7 +432,10 @@ void StartMultiplayerGame::showPage()
    
    switch ( page ) {
       case FilenameSelection: 
-         showButtons(false,true,true);
+         if ( mode == NewCampagin || mode == ContinueCampaign )
+            showButtons(true,false,false);
+         else
+            showButtons(false,true,true);
          break;
          
       case MapParameterEditor: 

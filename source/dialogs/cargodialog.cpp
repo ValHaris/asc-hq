@@ -342,15 +342,15 @@ class CargoDialog : public Panel
          return false;
       };
 
-      void onUnitClick ( Vehicle* veh,SPoint pos )
+      void onUnitClick ( Vehicle* veh,SPoint pos, bool first )
       {
          if ( veh )
-            if ( mainScreenWidget&& mainScreenWidget->getGuiHost() ) 
-               mainScreenWidget->getGuiHost()->showSmallIcons( this, SPoint( pos.x + 2, pos.y + 2  ), false );
+            if ( mainScreenWidget&& mainScreenWidget->getGuiHost() && !first ) 
+               mainScreenWidget->getGuiHost()->showSmallIcons( this, SPoint( pos.x - smallGuiIconSizeX/2, pos.y - smallGuiIconSizeY/2  ), false );
             
       };
 
-      void clearSmallIcons( Vehicle* veh )
+      void clearSmallIcons( )
       {
          if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
             mainScreenWidget->getGuiHost()->clearSmallIcons();
@@ -675,6 +675,7 @@ class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
 class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       const Vehicletype* selected;
+      const Vehicletype* finallySelected;
       ItemSelectorWidget* isw;
       VehicleProduction_SelectionItemFactory* factory;
       ContainerBase* my_plant;
@@ -688,6 +689,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       bool produce()
       {
          if ( selected ) {
+            finallySelected = selected;
             quitModalLoop(0);
             return true;
          } else
@@ -715,7 +717,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       }
       
    public:
-      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<const Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), isw(NULL), factory(NULL), my_plant( plant )
+      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<const Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), finallySelected(NULL), isw(NULL), factory(NULL), my_plant( plant )
       {
          factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), items );
          factory->sigVehicleTypeSelected.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
@@ -786,7 +788,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       }
       
 
-      const Vehicletype* getVehicletype() { return selected; };
+      const Vehicletype* getVehicletype() { return finallySelected; };
 };
 
 
@@ -1934,11 +1936,12 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
          }
 
          cargoWidget->registerStoringPositions( storingPositionVector, unitColumnCount );
+         cargoWidget->sigScrollTrack.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
 
          cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
          cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
          if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
-            cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
+            cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *this, &CargoDialog::clearSmallIcons )));
 
          cargoWidget->unitClicked.connect ( SigC::slot( *this, &CargoDialog::onUnitClick ));
 

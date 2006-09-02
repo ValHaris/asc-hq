@@ -91,7 +91,11 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
          } while ( t ); /* enddo */
        }
 
+#ifndef _DEBUG
        catch ( ... ) {
+#else
+       catch ( GameMap ) {  // will never be thrown, but we need catch statement for the try block
+#endif
           errorMessage("An unrecognized error occured during the replay");
           delete actmap;
           actmap = NULL;

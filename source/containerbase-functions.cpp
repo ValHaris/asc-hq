@@ -142,7 +142,7 @@ bool MatterConverter :: run()
 
       for ( int r = 0; r < 3; r++ )
          if ( bld->plus.resource(r) > 0 ) {
-            int p = bld->putResource ( bld->plus.resource(r), r, 1 );
+            int p = bld->putResource ( bld->plus.resource(r), r, true, 1, bld->getOwner() );
 
             if ( perc > 100 * p / bld->plus.resource(r) )
                perc = 100 * p / bld->plus.resource(r) ;
@@ -157,7 +157,7 @@ bool MatterConverter :: run()
          toGet.resource(r) = 0;
 
 
-   Resources avail = bld->getResource ( toGet, 1 );
+   Resources avail = bld->getResource ( toGet, true, 1, bld->getOwner() );
 
    for ( int r = 0; r < 3; r++ ) {
       if ( bld->plus.resource(r) < 0 ) {
@@ -172,13 +172,13 @@ bool MatterConverter :: run()
 
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) > 0 ) {
-         bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
+         bld->putResource( bld->plus.resource(r) * perc  / 100, r , false, 1, bld->getOwner() );
          if ( bld->plus.resource(r) * perc / 100  > 0)
             didSomething = true;
 
       } else {
          if ( bld->plus.resource(r) < 0 )
-            bld->getResource( -bld->plus.resource(r) * perc  / 100, r , 0);
+            bld->getResource( -bld->plus.resource(r) * perc  / 100, r , false, 1, bld->getOwner());
       }
 
    percentage -= perc;
@@ -222,7 +222,7 @@ ResourceSink :: ResourceSink( ContainerBase* _bld ) : bld ( _bld )
 
 bool ResourceSink :: run()
 {
-   Resources got  = bld->getResource( toGet, 0 );
+   Resources got  = bld->getResource( toGet, false, 1, bld->getOwner() );
    toGet -= got;
    for ( int r = 0; r < 3; r++ )
       if ( got.resource(r) > 0 )
@@ -346,7 +346,7 @@ bool RegenerativePowerPlant :: finished()
 
 bool RegenerativePowerPlant :: run()
 {
-   Resources tp = bld->putResource( toProduce , 0 );
+   Resources tp = bld->putResource( toProduce , false, 1, bld->getOwner() );
    bool didSomething = false;
    for  ( int r = 0; r < 3; r++ )
       if ( tp.resource(r) ) {
@@ -437,7 +437,7 @@ bool MiningStation :: run()
       consumed[r] = 0;
 
    if ( !justQuery ) {
-      spaceAvail = bld->putResource( toExtract_thisTurn, 1 );
+      spaceAvail = bld->putResource( toExtract_thisTurn, true, 1, bld->getOwner() );
       for ( int r = 0; r <3; ++r )
          if ( spaceAvail.resource(r) < 0 ) {
             warning( ASCString("map corruption detected; building space availability is negative! ") + resourceNames[r] );
@@ -452,7 +452,7 @@ bool MiningStation :: run()
          toConsume.resource(r) = -bld->plus.resource(r);
 
    if ( !justQuery ) {
-      powerAvail = bld->getResource( toConsume, 1 );
+      powerAvail = bld->getResource( toConsume, true, 1, bld->getOwner() );
       for ( int r = 0; r <3; ++r )
          if ( powerAvail.resource(r) < 0 ) {
             warning( ASCString("map corruption detected; available power for mining station is negative! ") + resourceNames[r] );
@@ -467,8 +467,8 @@ bool MiningStation :: run()
 
    if ( !justQuery) {
       for ( int r = 0; r < 3; ++r )
-         bld->getResource( int(consumed[r]), r, 0 );
-      bld->putResource(actuallyExtracted, 0 );
+         bld->getResource( int(consumed[r]), r, false, 1, bld->getOwner() );
+      bld->putResource(actuallyExtracted, false, 1, bld->getOwner() );
    }
 
    for ( int r = 0; r < 3; r++ )

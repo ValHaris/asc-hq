@@ -35,7 +35,8 @@ class HighLightingManager
       SigC::Signal2<void,int,int> markChanged;
       void setNew(int pos );
       SigC::Signal0<void> redrawAll;
-      SigC::Signal2<void,int, SPoint> clickOnMarkedUnit;
+      //! the bool param is set to true if this is the first click on a unit 
+      SigC::Signal3<void,int, SPoint, bool> clickOnMarkedUnit;
 };
 
 class CargoWidget;
@@ -97,14 +98,18 @@ class CargoWidget : public PG_ScrollWidget {
       void checkStoringPosition( int oldpos, int newpos );
       HighLightingManager unitHighLight;
 
-      void click( int num, SPoint mousePos );
+      void click( int num, SPoint mousePos, bool first );
+   protected:
+      bool 	handleScrollTrack (PG_ScrollBar *widget, long data);
       
    public:
       CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup );
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       Vehicle* getMarkedUnit();
       SigC::Signal1<void,Vehicle*> unitMarked;
-      SigC::Signal2<void,Vehicle*,SPoint> unitClicked;
+
+      //! the bool param is set to true if this is the first click on a unit 
+      SigC::Signal3<void,Vehicle*,SPoint,bool> unitClicked;
       void redrawAll();
       
       void startDrag( Vehicle* v );
@@ -119,6 +124,8 @@ class CargoWidget : public PG_ScrollWidget {
       
       SigC::Signal0<void> sigDragInProcess;
       SigC::Signal0<void> sigDragAborted;
+
+      SigC::Signal0<void> sigScrollTrack;
 
       void enableDragNDrop( bool enable ) { dragNdrop = enable; };
       bool dragNdropEnabled() const { return dragNdrop; }; 

@@ -386,13 +386,16 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
          setLabelText( "unitname", bld->name );
          setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
          setLabelText( "unitstatus", 100-bld->damage );
+         setLabelText( "armor", bld->getArmor() );
       } else {
+         setLabelText( "armor", "" );
          setLabelText( "unittypename", "" );
          setLabelText( "unitname", "" );
          setBargraphValue( "unitdamage", 0  );
          setLabelText( "unitstatus", "" );
       }
    
+      setLabelText( "fuelrange", "-" );
       setBargraphValue( "unitfuel", 0  );
       setLabelText( "unitfuelstatus", "" );
       setBargraphValue( "unitmaterial",  0  );
@@ -460,8 +463,10 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
                veh = fld->vehicle;
             }
             if ( vt || veh ) {
-               WeaponInfoPanel* wip = new WeaponInfoPanel( PG_Application::GetWidgetById( ASC_PG_App::mainScreenID ), veh, vt );
+               // parent? PG_Application::GetWidgetById( ASC_PG_App::mainScreenID )
+               WeaponInfoPanel* wip = new WeaponInfoPanel( NULL, veh, vt );
                wip->Show();
+               wip->BringToFront();
                if ( modalWeaponInfo ) {
                   wip->SetCapture();
                   wip->RunModal();

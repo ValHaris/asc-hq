@@ -151,11 +151,10 @@ bool StoringPosition::eventMouseButtonDown(const SDL_MouseButtonEvent* button)
    
    if ( button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) { 
   
-      // int oldPos = highlight.getMark();
+      int oldPos = highlight.getMark();
       highlight.setNew( num );
    
-      // if ( num != oldPos ) 
-      highlight.clickOnMarkedUnit( num, SPoint(button->x, button->y));
+      highlight.clickOnMarkedUnit( num, SPoint(button->x, button->y), num != oldPos );
    }
    
    
@@ -307,6 +306,12 @@ CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase
 
    if ( setup ) 
       registerStoringPositions( StoringPosition::setup( this, container, unitHighLight, unitColumnCount ), unitColumnCount );
+
+   if ( my_objVerticalScrollbar )
+      my_objVerticalScrollbar->sigScrollTrack.connect ( SigC::slot( *this, &CargoWidget::handleScrollTrack ));
+
+   if ( my_objHorizontalScrollbar )
+      my_objHorizontalScrollbar->sigScrollTrack.connect ( SigC::slot( *this, &CargoWidget::handleScrollTrack ));
 };
 
 void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, int colCount )
@@ -317,11 +322,18 @@ void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, int col
    unitHighLight.clickOnMarkedUnit.connect( SigC::slot( *this, &CargoWidget::click ));
 }
 
+bool 	CargoWidget::handleScrollTrack (PG_ScrollBar *widget, long data)
+{
+   sigScrollTrack();
+   return true;
+}
 
-void CargoWidget::click( int num, SPoint mousePos )
+
+
+void CargoWidget::click( int num, SPoint mousePos, bool first )
 {
    if ( container->getCargo().size() > num )
-      unitClicked( container->getCargo()[num], mousePos );
+      unitClicked( container->getCargo()[num], mousePos, first );
 }
 
 

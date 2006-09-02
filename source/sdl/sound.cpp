@@ -183,6 +183,7 @@ void SoundSystem :: nextTrack( void )
            SDL_ClearError();
         } else {
            int chan = Mix_PlayMusic ( internalData->musicBuf, 1 );
+           Mix_VolumeMusic ( musicVolume );
            displayLogMessage ( 4, "Playing music on channel %d \n", chan );
         }
      }
