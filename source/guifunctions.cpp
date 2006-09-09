@@ -1022,6 +1022,47 @@ class DisableReactionfire : public GuiFunction
 };
 
 
+class JumpDrive : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         Vehicle* eht = actmap->getField(pos)->vehicle;
+         if ( eht )
+            if ( eht->color == actmap->actplayer * 8)
+               if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
+                  if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+                     // for ( int i = 0; i < eht->typ->weapons.count; ++i )
+                        // if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
+                           return true;
+
+         return false;
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      {
+         return ( key->keysym.unicode == 'j' );
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         actmap->getField(pos)->vehicle->reactionfire.disable();
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("jumpdrive.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "activate jump drive (~j~)";
+      };
+};
+
+
+
 /*
 class ExternalLoading : public GuiFunction
 {
