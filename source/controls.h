@@ -47,6 +47,7 @@
                                                                              115: removebuilding
                                                                              120: construct vehicle
                                                                              130: external loading
+                                                                             140: jumpdrive
                                                                    */
 
                         int           movesx, movesy, moveerr; 

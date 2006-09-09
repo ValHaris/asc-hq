@@ -280,6 +280,16 @@ int Vehicle :: getResource ( int amount, int resourcetype ) const
 }
 
 
+Resources Vehicle::getResource ( const Resources& res ) const
+{
+   Resources got;
+   for ( int r = 0; r < 3; ++r )
+      got.resource(r) = getResource( res.resource(r), r);
+        
+   return got;
+}
+
+
 Resources Vehicle::getTank() const
 {
    return tank;

@@ -48,7 +48,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libactions_la_DEPENDENCIES =
-am_libactions_la_OBJECTS = servicing.lo
+am_libactions_la_OBJECTS = servicing.lo jumpdrive.lo
 libactions_la_OBJECTS = $(am_libactions_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -202,7 +202,7 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS) -Dmaindialogs
 noinst_LTLIBRARIES = libactions.la
-libactions_la_SOURCES = servicing.cpp
+libactions_la_SOURCES = servicing.cpp jumpdrive.cpp
 libactions_la_LIBADD = @SDL_LIBS@
 all: all-am
 
@@ -255,6 +255,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
 
 .cpp.o:

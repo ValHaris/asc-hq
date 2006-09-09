@@ -137,7 +137,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 25;
+const int vehicle_version = 26;
 
 
 
@@ -541,6 +541,12 @@ void Vehicletype :: read ( tnstream& stream )
       if ( weapons.weapon[w].canRefuel() )
          setFunction( ExternalAmmoTransfer );
    
+   if ( version >= 26 ) {
+      jumpDrive.height = stream.readInt();
+      jumpDrive.targetterrain.read( stream );
+      jumpDrive.consumption.read( stream );
+      jumpDrive.maxDistance = stream.readInt();
+   }
 }
 
 
@@ -705,6 +711,10 @@ void Vehicletype:: write ( tnstream& stream ) const
    maxplus.write ( stream );
    defaultProduction.write( stream );
    
+   stream.writeInt( jumpDrive.height );
+   jumpDrive.targetterrain.write( stream );
+   jumpDrive.consumption.write( stream );
+   stream.writeInt( jumpDrive.maxDistance );
 }
 
 
@@ -1005,6 +1015,21 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    for ( int w = 0; w < weapons.count; ++w )
       if ( weapons.weapon[w].canRefuel() )
          setFunction( ExternalAmmoTransfer );
+   
+   
+   pc.openBracket ( "JumpDrive" );
+   pc.addTagInteger( "Height", jumpDrive.height, choehenstufennum, heightTags, 0 );
+   pc.openBracket ( "consumption" );
+   jumpDrive.consumption.runTextIO ( pc, Resources(0,0,0) );
+   pc.closeBracket();
+   if ( jumpDrive.height )
+      jumpDrive.targetterrain.runTextIO ( pc );
+   pc.addInteger( "MaxDistance", jumpDrive.maxDistance, maxint );
+   pc.closeBracket();
+   
+   if ( jumpDrive.height && view )
+      pc.error( "only units without radar may have a jump drive." ); 
+   
 }
 
 BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& location )
@@ -1175,7 +1200,7 @@ void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
                           Preiskalkulation  -  description
                              -------------------
     begin                : So Aug 15 2004
-    copyright            : (C) 2001 by Martin Bickel & Steffen Fr÷hlich
+    copyright            : (C) 2001 by Martin Bickel & Steffen Frï¿½lich
     email                : bickel@asc-hq.org
  
  vehicletype {
@@ -1193,7 +1218,7 @@ Part III -typecost
 part IV  -weaponcost
 Part V   -specialcost
 Part VI  -addierung
-Part VII -Abschlõge
+Part VII -Abschlï¿½e
  
  ***************************************************************************/
 
@@ -1243,34 +1268,34 @@ Resources Vehicletype :: calcProductionsCost()
                   typecostm += armor*6;
                }
 
-   // Zuschlag f³r Eisbrecher
+   // Zuschlag fr Eisbrecher
    if ( hasFunction( IceBreaker ) ) {
       typecoste += armor *2;
       typecostm += armor *2;
    }
-   // Zuschlag f³r U-Boote / Druckh³lle
+   // Zuschlag fr U-Boote / Druckhlle
    if ( height & chgetaucht ) {
       typecoste += armor*2;
       typecostm += armor*2;
    }
-   // Zuschlag f³r orbitalfõhige Einheiten / Druckh³lle
+   // Zuschlag fr orbitalfï¿½ige Einheiten / Druckhlle
    if ( height & chsatellit ) {
       typecoste += armor*3;
       typecostm += armor*2;
    }
-   // Zuschlag f³r hochfliegende Einheiten / Extra starke Triebwerke
+   // Zuschlag fr hochfliegende Einheiten / Extra starke Triebwerke
    if ( height & chhochfliegend ) {
       typecoste += armor*2;
       typecostm += armor*2;
    }
-   // Zuschlag f³r Transportkapazitõt
+   // Zuschlag fr Transportkapazitï¿½
    if ( entranceSystems.size() > 0 ) {
       typecoste += maxLoadableUnits*100;
       typecostm += maxLoadableUnits*100;
 
       bool carrierCharge = false;
 
-      // Zuschlag f³r Flugzeugtrõger / Start- und Landeeinrichtungen
+      // Zuschlag fr Flugzeugtrï¿½er / Start- und Landeeinrichtungen
       for ( int T=0; T < entranceSystems.size(); ++T )
          if ( entranceSystems[T].container_height < chtieffliegend
                && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))
@@ -1288,23 +1313,23 @@ Resources Vehicletype :: calcProductionsCost()
          movecostsize = movement[M];
       }
    }
-   // Zuschlag f³r Triebwerke
+   // Zuschlag fr Triebwerke
    if (movecostsize > 70 ) {
       typecoste += (movecostsize-70)*15;
       typecostm += (movecostsize-70)*5;
    }
 
-   // Zuschlag f³r Flugzeugtriebwerke
+   // Zuschlag fr Flugzeugtriebwerke
    if (movecostsize > 120 ) {
       typecoste += (movecostsize-120)*10;
       typecostm += (movecostsize-120)*10;
    }
-   // Zuschlag f³r Hochleistungsflugzeugtriebwerke
+   // Zuschlag fr Hochleistungsflugzeugtriebwerke
    if (movecostsize > 170 ) {
       typecoste += (movecostsize-170)*12;
       typecostm += (movecostsize-170)*12;
    }
-   // Zuschlag f³r Spezialflugzeugtriebwerke
+   // Zuschlag fr Spezialflugzeugtriebwerke
    if (movecostsize > 200 ) {
       typecoste += (movecostsize-200)*14;
       typecostm += (movecostsize-200)*14;
@@ -1386,10 +1411,10 @@ Resources Vehicletype :: calcProductionsCost()
 
    if ( jamming > 0 && hasFunction( JamsOnlyOwnField ) ) {
       if (jamming < 31 ) {
-         typecoste += jamming*20;  //  f³r Trooper oder eigenschaftsbedingt (klein, schnell)
+         typecoste += jamming*20;  //  fr Trooper oder eigenschaftsbedingt (klein, schnell)
          typecostm += jamming*10;
       } else {
-         typecoste += jamming*50;  //  f³r alle h÷herwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
+         typecoste += jamming*50;  //  fr alle hï¿½erwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
          typecostm += jamming*30;
       }
    } else {
@@ -1480,7 +1505,7 @@ Resources Vehicletype :: calcProductionsCost()
    res.energy += typecoste + weaponcoste + specialcoste;
    res.material += typecostm + weaponcostm + specialcostm;
 
-   // Part VII Abschlõge
+   // Part VII Abschlï¿½e
    // keine Luftbetankung
    if ( hasFunction( NoInairRefuelling )) {
       res.energy -= typecoste/6;

@@ -48,6 +48,8 @@
 #include "turncontrol.h"
 #include "dialogs/buildingtypeselector.h"
 
+#include "actions/jumpdrive.h"
+
 
 namespace GuiFunctions
 {
@@ -1022,19 +1024,30 @@ class DisableReactionfire : public GuiFunction
 };
 
 
-class JumpDrive : public GuiFunction
+class JumpDriveIcon : public GuiFunction, public SigC::Object
 {
+   void fieldMarker( GameMap* gamemap, const MapCoordinate& pos )
+   {
+      gamemap->getField(pos)->a.temp = 1;
+   };
+   
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         Vehicle* eht = actmap->getField(pos)->vehicle;
-         if ( eht )
-            if ( eht->color == actmap->actplayer * 8)
-               if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
-                  if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-                     // for ( int i = 0; i < eht->typ->weapons.count; ++i )
-                        // if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
-                           return true;
+         JumpDrive jd;
+         if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing) {
+         
+            Vehicle* eht = actmap->getField(pos)->vehicle;
+            if ( eht )
+               if ( eht->getOwner() == actmap->actplayer )
+                  return jd.available(eht);
+         } else {
+            if ( moveparams.movestatus == 140 ) {
+               if ( jd.available(moveparams.vehicletomove) )
+                  if ( jd.fieldReachable( moveparams.vehicletomove, pos ))
+                     return true;  
+            }
+         }
 
          return false;
       };
@@ -1046,8 +1059,28 @@ class JumpDrive : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         actmap->getField(pos)->vehicle->reactionfire.disable();
-         updateFieldInfo();
+         if ( moveparams.movestatus == 0 ) {
+            Vehicle* eht = actmap->getField(pos)->vehicle;
+            if ( !eht )
+               return;
+            
+            JumpDrive jd;
+            jd.fieldAvailable.connect (SigC::slot( *this, &JumpDriveIcon::fieldMarker ));
+            if ( jd.getFields( eht )) {
+               repaintMap();
+               moveparams.movestatus = 140;
+               moveparams.vehicletomove = eht;
+            }
+         } else 
+            if ( moveparams.movestatus == 140 ) {
+               JumpDrive jd;
+               jd.jump ( moveparams.vehicletomove, pos );
+               actmap->cleartemps(7);
+               repaintMap();
+               mapChanged( actmap );
+               moveparams.movestatus = 0;
+               moveparams.vehicletomove = NULL;
+            }
       }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2759,6 +2792,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
 {
    handler.registerUserFunction( new GuiFunctions::Movement() );
    handler.registerUserFunction( new GuiFunctions::Attack() );
+   handler.registerUserFunction( new GuiFunctions::JumpDriveIcon() );
    handler.registerUserFunction( new GuiFunctions::PowerOn() );
    handler.registerUserFunction( new GuiFunctions::PowerOff() );
    handler.registerUserFunction( new GuiFunctions::UnitInfo() );

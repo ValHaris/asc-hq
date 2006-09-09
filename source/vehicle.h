@@ -178,6 +178,7 @@ class BuildingType;
     int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1, int player = -1 );
     int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1, int player = -1 );
     int getResource ( int amount, int resourcetype ) const;
+    Resources getResource ( const Resources& res ) const;
 
     Resources putResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 ) { return ContainerBase::putResource ( res, queryonly, scope, player ); };
     Resources getResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 ) { return ContainerBase::getResource ( res, queryonly, scope, player ); };

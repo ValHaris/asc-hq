@@ -294,6 +294,16 @@ extern const char*  cvehiclefunctions[];
            return movemalustyp;
         }
 
+        struct JumpDrive {
+           JumpDrive() : height(0), maxDistance(maxint) {};
+           //! bitmapped: on these levels of height the jump drive can be activated
+           int height; 
+           Resources consumption;
+           TerrainAccess targetterrain;
+           int maxDistance;
+        } jumpDrive;
+           
+        
         
         void  paint ( Surface& s, SPoint pos, int player, int direction = 0 ) const;
         const Surface&  getImage () const { return image;};

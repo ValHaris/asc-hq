@@ -45,6 +45,7 @@
 #include "loaders.h"
 #include "turncontrol.h"
 #include "widgets/textrenderer.h"
+#include "actions/jumpdrive.h"
 
 trunreplay runreplay;
 
@@ -736,6 +737,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( y );
          stream->writeInt ( cat );
          stream->writeInt ( stat );
+      }
+      if ( action == rpl_jump ) {
+         int nwid = va_arg ( paramlist, int );
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 3;
+         stream->writeInt ( size );
+         stream->writeInt ( nwid );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
       }
 
       va_end ( paramlist );
@@ -1795,6 +1807,29 @@ void trunreplay :: execnextreplaymove ( void )
                     */
                  } else
                     error ("Building not found on for rpl_setResourceProcessingAmount ");
+         }
+         break;
+         case rpl_jump: {
+            stream->readInt();
+            int nwid = stream->readInt();
+            int x = stream->readInt();
+            int y = stream->readInt();
+            readnextaction();
+
+            Vehicle* veh = actmap->getUnit(nwid);
+            if ( veh ) {
+               JumpDrive jd;
+               if ( jd.available( veh )) {
+                  displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
+                  if ( !jd.jump(veh, MapCoordinate(x,y) ))
+                     error("Unit cannot jump to this position");
+                  
+               } else
+                  error("Unit cannot jump");
+            } else
+               error ("Unit not found for Jump ");
+            
+            
          }
          break;
 
