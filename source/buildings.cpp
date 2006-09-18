@@ -726,7 +726,7 @@ void doresearch ( GameMap* actmap, int player )
    for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
       Building* bld = i->bld;
       Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
-      Resources got = bld->getResource ( r, true, -1, player );
+      Resources got = bld->getResource ( r, true, 1, player );
 
       int res = bld->researchpoints;
       if ( got < r ) {
@@ -759,7 +759,7 @@ void doresearch ( GameMap* actmap, int player )
 
       }
 
-      got = bld->getResource ( r, false, -1, player );
+      got = bld->getResource ( r, false, 1, player );
 
       if ( got < r )
          fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );

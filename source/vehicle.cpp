@@ -1586,6 +1586,9 @@ ASCString  Vehicle::getName() const
 
 int Vehicle::getAmmo( int type, int num, bool queryOnly ) 
 {
+   if ( num < 0 )
+      return -putAmmo( type, -num, queryOnly );
+
    int got = 0;
    int weap = 0;
    while ( weap < typ->weapons.count && got < num ) {
@@ -1604,6 +1607,9 @@ int Vehicle::getAmmo( int type, int num, bool queryOnly )
 
 int Vehicle::putAmmo( int type, int num, bool queryOnly )
 {
+   if ( num < 0 )
+      return -getAmmo( type, -num, queryOnly );
+
    int put = 0;
    int weap = 0;
    while ( weap < typ->weapons.count && put < num ) {

@@ -253,6 +253,9 @@
 				RelativePath="..\..\..\itemrepository.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\actions\jumpdrive.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\legacynetworkloaders.cpp">
 			</File>
 			<File

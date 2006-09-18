@@ -119,7 +119,7 @@ int findNextPlayer( const GameMap* actmap )
       }
 
       
-      if ( actmap->player[p].exist() )
+      if ( actmap->player[p].exist() ) 
          if ( actmap->player[p].stat != Player::off )
             found = true;
       
@@ -128,11 +128,29 @@ int findNextPlayer( const GameMap* actmap )
 }
 
 
+//! deactivates the replays of non-active or deleted players
+void clearReplays( GameMap* actmap )
+{
+   if ( actmap->replayinfo )
+      for ( int i = 0; i < actmap->getPlayerCount(); ++i )
+         if ( !actmap->player[i].exist() )
+            if ( actmap->replayinfo->map[i] && actmap->replayinfo->guidata[i] ) {
+               delete actmap->replayinfo->map[i];
+               actmap->replayinfo->map[i] = NULL;
+
+               delete actmap->replayinfo->guidata[i];
+               actmap->replayinfo->guidata[i] = NULL;
+            }
+}
+
+
 void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int lastTurn  )
 {
    int loop = 0;
    bool closeLoop = false;
-        
+
+   clearReplays( actmap );
+
    do {
 
       

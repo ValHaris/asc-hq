@@ -316,7 +316,7 @@ GetResource :: GetResource ( GameMap* gamemap, int scope )
 void GetResource :: checkvehicle ( Vehicle* v )
 {
    if ( v->color/8 == player && resourcetype == 0 )
-      got += v->getResource( need-got, Resources::Energy, queryonly );
+      got += v->getResource( need-got, Resources::Energy, queryonly, 1, player );
 }
 
 
@@ -688,8 +688,8 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                }
             } else {
                if ( find ( cb.begin(), cb.end(), b1 ) == cb.end()) {
-                  int ab1 = b1->getResource( maxint, r, true, -1, player );
-                  int ab2 = b2->getResource( maxint, r, true, -1, player);
+                  int ab1 = b1->getResource( maxint, r, true, 1, player );
+                  int ab2 = b2->getResource( maxint, r, true, 1, player);
                   if ( ab1 != ab2 ) {
                      diff = true;
                      if ( log ) {
@@ -715,8 +715,8 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                *log += s;
             }
          } else {
-            int av1 = v1->getResource( maxint, r, true, -1, player );
-            int av2 = v2->getResource( maxint, r, true, -1, player );
+            int av1 = v1->getResource( maxint, r, true, 1, player );
+            int av2 = v2->getResource( maxint, r, true, 1, player );
             if ( av1 != av2 ) {
                diff = true;
                if ( log ) {
