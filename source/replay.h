@@ -76,7 +76,8 @@ enum trpl_actions { rpl_attack,
                     rpl_move5,
                     rpl_alliancechange2,
                     rpl_moveUnitUp,
-                    rpl_jump };
+                    rpl_jump,
+                    rpl_repairBuilding };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

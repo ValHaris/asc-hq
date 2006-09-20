@@ -175,10 +175,17 @@ class AI_KeyboardWatcher : public SigC::Object {
          w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
       };
 
-      ~AI_KeyboardWatcher() 
+      void release()
       {
          delete w;
+         w = NULL;
          delete lock;
+         lock = NULL;
+      }
+
+      ~AI_KeyboardWatcher() 
+      {
+         release();
       }
 };
 

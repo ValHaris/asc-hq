@@ -636,7 +636,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( matremain );
          stream->writeInt ( fuelremain );
       }
-      if ( action == rpl_repairUnit2 ) {
+      if ( action == rpl_repairUnit2 || action == rpl_repairBuilding ) {
          int x = va_arg ( paramlist, int );
          int y = va_arg ( paramlist, int );
          int destnwid = va_arg ( paramlist, int );
@@ -1650,6 +1650,22 @@ void trunreplay :: execnextreplaymove ( void )
                                     bld->repairItem ( dest, amount );
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for repair-unit command !");
+                              }
+         break;
+      case rpl_repairBuilding : {
+                                 stream->readInt();  // size
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 int destnwid = stream->readInt();
+                                 int amount = stream->readInt();
+
+                                 readnextaction();
+
+                                 ContainerBase* bld = getfield(x,y)->getContainer();
+                                 if ( bld ) {
+                                    bld->repairItem ( bld, amount );
+                                 } else
+                                    error("severe replay inconsistency:\nno building for repair-building command !");
                               }
          break;
       case rpl_produceAmmo : {

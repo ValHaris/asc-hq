@@ -1075,6 +1075,7 @@ class BuildingControlWindow : public SubWindow {
 
       bool repair()
       {
+         logtoreplayinfo( rpl_repairBuilding, container()->getPosition().x, container()->getPosition().y, container()->getIdentification(), 0 );
          container()->repairItem(container(), 0 );
          cargoDialog->updateResourceDisplay();
          
