@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.25 2006-07-23 18:30:13 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.26 2006-09-21 19:04:01 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -140,6 +140,7 @@ class GuiIconHandler {
 };
 
 class MapDisplayPG;
+class MainScreenWidget;
 
 class NewGuiHost : public DashboardPanel {
         GuiIconHandler* handler;
@@ -148,6 +149,9 @@ class NewGuiHost : public DashboardPanel {
         MapDisplayPG* mapDisplay;
         bool enterKeyPressed;
         int keyPressedButton;
+        
+        void lockOptionsChanged( int options );
+        
      protected:
         bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio );
 
@@ -172,7 +176,7 @@ class NewGuiHost : public DashboardPanel {
         void evalCursor();
         
      public:
-        NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r ) ;
+        NewGuiHost (MainScreenWidget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r ) ;
         
         static void pushIconHandler( GuiIconHandler* iconHandler );
         static GuiIconHandler* getIconHandler(  );

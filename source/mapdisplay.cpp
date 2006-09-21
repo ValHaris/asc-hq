@@ -40,7 +40,7 @@
 #include "graphics/drawing.h"
 #include "loadpcx.h"
 #include "iconrepository.h"
-
+#include "mainscreenwidget.h"
 
 #ifndef karteneditor
  #include "dialogs/attackpanel.h"
@@ -429,7 +429,7 @@ void benchMapDisplay()
 MapDisplayPG* MapDisplayPG::theMapDisplay = NULL;
 MapDisplayPG* theGlobalMapDisplay = NULL;
 
-MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
+MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
       zoom(-1),
       surface(NULL),
@@ -474,7 +474,20 @@ MapDisplayPG::MapDisplayPG ( PG_Widget *parent, const PG_Rect r )
    addMapLayer( new ResourceGraphLayer(), "resources" );
    addMapLayer( new ContainerInfoLayer(), "container" );
    addMapLayer( new PipeLayer()         , "pipes" );
+   
+   parent->lockOptionsChanged.connect( SigC::slot( *this, &MapDisplayPG::lockOptionsChanged ));
 }
+
+
+
+void MapDisplayPG::lockOptionsChanged( int options )
+{
+   if ( options & MainScreenWidget::LockOptions::MapControl )  
+      EnableReceiver(false);
+   else  
+      EnableReceiver(true);
+}
+
 
 
 MapDisplayPG::~MapDisplayPG ()

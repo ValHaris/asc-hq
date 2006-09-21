@@ -46,6 +46,9 @@ class MainScreenWidget : public PG_Widget {
 
     friend class StandardActionLocker;
     
+protected:
+    int lockOptions;
+    
 public:
     MainScreenWidget( PG_Application& application );
 
@@ -65,18 +68,25 @@ public:
          MainScreenWidget* widget;
          bool locked;
          void operator=( StandardActionLocker& locker ) {};
+         int options;
        public:
-          StandardActionLocker( MainScreenWidget* mainScreenWidget );
+          StandardActionLocker( MainScreenWidget* mainScreenWidget, int options );
           StandardActionLocker( const StandardActionLocker& locker );
           void lock();
           void unlock();
           ~StandardActionLocker();
     };
+    
+    struct LockOptions {
+      enum Options{ Menu = 1, MapActions = 2, MapControl = 4 };
+    }; 
+    
 
+    SigC::Signal1<void,int> lockOptionsChanged;
     
     
 protected:
-   virtual void lockStandardActions( int dir ) {};
+   virtual void lockStandardActions( int dir, int options = 0 ) {};
    
    MapDisplayPG* mapDisplay;
     // Menu* menu;

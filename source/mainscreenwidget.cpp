@@ -37,14 +37,16 @@
 
 
 
-MainScreenWidget::StandardActionLocker::StandardActionLocker( MainScreenWidget* mainScreenWidget ) : widget( mainScreenWidget ), locked(false)
+MainScreenWidget::StandardActionLocker::StandardActionLocker( MainScreenWidget* mainScreenWidget, int options ) : widget( mainScreenWidget ), locked(false)
 {
+   this->options = options;
    lock();
 };
 
 MainScreenWidget::StandardActionLocker::StandardActionLocker( const StandardActionLocker& locker ) : widget(NULL), locked(false)
 {
    widget  = locker.widget;
+   options = locker.options;
    lock();
 }
 
@@ -55,7 +57,7 @@ void MainScreenWidget::StandardActionLocker::lock()
    if ( !widget )
       return;
 
-   widget->lockStandardActions(1);
+   widget->lockStandardActions(1, options );
    locked = true;
 };
 
@@ -78,7 +80,7 @@ MainScreenWidget::StandardActionLocker::~StandardActionLocker()
 
 MainScreenWidget::MainScreenWidget( PG_Application& application )
               : PG_Widget(NULL, PG_Rect ( 0, 0, app.GetScreen()->w, app.GetScreen()->h ), false),
-              app ( application ) , lastMessageTime(0), lastMouseScrollTime(0), overviewMapPanel(NULL), messageLine(NULL)
+              app ( application ) , lastMessageTime(0), lastMouseScrollTime(0), overviewMapPanel(NULL), lockOptions(0), messageLine(NULL)
 {
 }
 

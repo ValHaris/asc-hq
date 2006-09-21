@@ -477,9 +477,20 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
 }
 
 
-void ASC_MainScreenWidget :: lockStandardActions( int dir )
+void ASC_MainScreenWidget :: lockStandardActions( int dir, int options )
 {
    standardActionsLocked += dir;
+   
+   if( dir > 0 ) { 
+      lockOptionStack.push_back( lockOptions );
+      lockOptions = options;
+      lockOptionsChanged( options );
+   }
+   if ( dir < 0 ) {
+      lockOptions = lockOptionStack.back();
+      lockOptionStack.pop_back();
+      lockOptionsChanged( lockOptions );
+   }
    
    if ( menu )
       if ( standardActionsLocked <= 0 )

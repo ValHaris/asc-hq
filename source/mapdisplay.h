@@ -118,7 +118,7 @@ class MapLayer {
 
 
 
-
+class MainScreenWidget;
 
 
 
@@ -156,7 +156,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
       enum Dirty { Nothing, Curs, Map } dirty;
       
-      Vehicle* additionalUnit; 
+      Vehicle* additionalUnit;
+       
+      void lockOptionsChanged( int options );
       
    protected:
    
@@ -266,7 +268,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
    
 
-      MapDisplayPG ( PG_Widget *parent, const PG_Rect r );
+      MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r );
 
       void displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
 

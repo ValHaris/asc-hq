@@ -240,7 +240,7 @@ GuiIconHandler::~GuiIconHandler()
 
 NewGuiHost* NewGuiHost::theGuiHost = NULL;
 
-NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
+NewGuiHost :: NewGuiHost (MainScreenWidget *parent, MapDisplayPG* mapDisplay, const PG_Rect &r )
          : DashboardPanel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1)
 {
    this->mapDisplay = mapDisplay;
@@ -254,7 +254,21 @@ NewGuiHost :: NewGuiHost (PG_Widget *parent, MapDisplayPG* mapDisplay, const PG_
    PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &NewGuiHost::eventKeyDown ));
    PG_Application::GetApp()->sigKeyUp.connect( SigC::slot( *this, &NewGuiHost::eventKeyUp ));
    SetTransparency(255);
+   
+   parent->lockOptionsChanged.connect( SigC::slot( *this, &NewGuiHost::lockOptionsChanged ));
+
 }
+
+void NewGuiHost::lockOptionsChanged( int options )
+{
+   if ( options & MainScreenWidget::LockOptions::MapActions )  
+      // EnableReceiver(false, true);
+      Hide();
+   else  
+      // EnableReceiver(true, true);
+      Show();
+}
+
 
 PG_Widget* NewGuiHost :: smallButtonHolder = NULL;
 

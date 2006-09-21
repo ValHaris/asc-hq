@@ -166,13 +166,16 @@ class AI_KeyboardWatcher : public SigC::Object {
             return false;
       }
 
-   public:
-      AI_KeyboardWatcher( CloseScreenCallback callback ) : lock(NULL), menuLocker( mainScreenWidget )
+   public:   
+      AI_KeyboardWatcher( CloseScreenCallback callback ) : lock(NULL), w(NULL), menuLocker( mainScreenWidget, MainScreenWidget::LockOptions::Menu + MainScreenWidget::LockOptions::MapActions + MainScreenWidget::LockOptions::MapControl)
       {
-         w = new PG_Widget(NULL);
-         w->SetCapture();
+         
+         // w = new PG_Widget(NULL);
+         // w->SetCapture();
          this->callback = callback;
-         w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         // w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         
       };
 
       void release()
@@ -188,6 +191,7 @@ class AI_KeyboardWatcher : public SigC::Object {
          release();
       }
 };
+
 
 
 void AI:: run ( bool benchMark )

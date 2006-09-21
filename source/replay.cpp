@@ -138,7 +138,7 @@ void checkforreplay ( void )
    if ( actmap->replayinfo  &&  rpnum  &&  actmap->player[ actmap->actplayer ].stat == Player::human )
       if (choice_dlg("run replay of last turn ?","~y~es","~n~o") == 1) {
       
-         MainScreenWidget::StandardActionLocker locker( mainScreenWidget );
+         MainScreenWidget::StandardActionLocker locker( mainScreenWidget, MainScreenWidget::LockOptions::Menu );
          ReplayGuiIconHandleHandler guiIconHandler;
          
          int s = actmap->actplayer + 1;
@@ -1953,7 +1953,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
 
    updateFieldInfo();
 
-   MainScreenWidget::StandardActionLocker locker( mainScreenWidget );
+   MainScreenWidget::StandardActionLocker locker( mainScreenWidget, MainScreenWidget::LockOptions::Menu );
    
 //   cursor.show();
 

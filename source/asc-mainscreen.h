@@ -68,7 +68,9 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       ASCString getBackgroundImageFilename() { return "gamebackground.png"; };
 
-      void lockStandardActions( int dir );
+      void lockStandardActions( int dir, int options);
+      
+      list<int> lockOptionStack;
       
       ~ASC_MainScreenWidget() { };
 };
