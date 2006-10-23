@@ -39,6 +39,38 @@ class CoordinateItem : public PG_ListBoxItem {
       MapCoordinate getPos() const { return p; };
 };
 
+
+SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne, bool readOnly ) : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - 150, PG_Application::GetScreenHeight() - 300, 150, 300 ), "Select Fields" ), listbox(NULL), actmap( map ), coordinateList (list)
+{
+   this->justOne = justOne;
+   this->readOnly = readOnly;
+
+   
+   listbox = new PG_ListBox( this, PG_Rect( 10, 30, 130, readOnly ? 210 : 180 ));
+   listbox->sigSelectItem.connect( SigC::slot( *this, &SelectFromMap::listItemClicked ));
+
+   if ( !readOnly ) {
+      PG_Button* m = new PG_Button ( this, PG_Rect( 10, 230, 130, 20 ), "mark (~space~)");
+      m->sigClick.connect( SigC::slot( *this, &SelectFromMap::mark ));
+   }
+
+
+   PG_Button* b = new PG_Button ( this, PG_Rect( 10, 270, 130, 20 ), "~O~K");
+   b->sigClick.connect( SigC::slot( *this, &SelectFromMap::closeDialog ));
+
+   omp = getMainScreenWidget()->getOverviewMapPanel();
+   md  = getMainScreenWidget()->getMapDisplay();
+   md->mouseButtonOnField.connect( SigC::slot( *this, &SelectFromMap::markField2 ));
+   oldprio = md->setSignalPriority( 2 );
+   
+
+   showFieldMarking( coordinateList );
+   if ( !list.empty() )
+      md->cursor.goTo( *list.begin() );
+
+   updateList();
+};
+
    
 bool SelectFromMap::ProcessEvent ( const SDL_Event *   event,bool   bModal   )
 {
@@ -52,7 +84,7 @@ bool SelectFromMap::ProcessEvent ( const SDL_Event *   event,bool   bModal   )
 }
 
 bool SelectFromMap::accept( const MapCoordinate& pos ) {
-   return actmap->getField( pos ) != NULL;
+   return !readOnly && actmap->getField( pos ) != NULL;
 };
 
 void SelectFromMap::showFieldMarking( const CoordinateList& coordinateList )
@@ -137,33 +169,6 @@ bool SelectFromMap::listItemClicked( PG_ListBoxBaseItem* item )
    return true;
 }
 
-
-SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne ) : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - 150, PG_Application::GetScreenHeight() - 300, 150, 300 ), "Select Fields" ), listbox(NULL), actmap( map ), coordinateList (list)
-{
-   this->justOne = justOne;
-
-   listbox = new PG_ListBox( this, PG_Rect( 10, 30, 130, 180 ));
-   listbox->sigSelectItem.connect( SigC::slot( *this, &SelectFromMap::listItemClicked ));
-
-   PG_Button* m = new PG_Button ( this, PG_Rect( 10, 230, 130, 20 ), "mark (~space~)");
-   m->sigClick.connect( SigC::slot( *this, &SelectFromMap::mark ));
-
-
-   PG_Button* b = new PG_Button ( this, PG_Rect( 10, 270, 130, 20 ), "~O~K");
-   b->sigClick.connect( SigC::slot( *this, &SelectFromMap::closeDialog ));
-
-   omp = getMainScreenWidget()->getOverviewMapPanel();
-   md  = getMainScreenWidget()->getMapDisplay();
-   md->mouseButtonOnField.connect( SigC::slot( *this, &SelectFromMap::markField2 ));
-   oldprio = md->setSignalPriority( 2 );
-   
-
-   showFieldMarking( coordinateList );
-   if ( !list.empty() )
-      md->cursor.goTo( *list.begin() );
-
-   updateList();
-};
 
 
 void SelectFromMap::Show( bool fade)

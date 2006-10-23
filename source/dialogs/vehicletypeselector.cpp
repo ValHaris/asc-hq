@@ -38,12 +38,21 @@ VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Poin
    lbl2->SetFontSize( lbl2->GetFontSize() -2 );
 
 
-   PG_Button* b = new PG_Button( this, PG_Rect( col1 + 3 * sw + 10, Height()/2-lineheight, 2*lineheight, 2*lineheight ));
+   PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 0 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
    b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
    b->sigClick.connect( SigC::slot( *this, &VehicleTypeBaseWidget::info ));
    
    SetTransparency( 255 );
 };
+
+int VehicleTypeBaseWidget::buttonXPos( int width, int num )
+{
+   int col1 = 50;
+   int sw = (width - col1 - 10) / 6;
+   return col1 + 3 * sw + (10 + sw) * num;
+}
+
+
 
 bool VehicleTypeBaseWidget::info()
 {
@@ -106,9 +115,22 @@ VehicleTypeCountWidget::VehicleTypeCountWidget( PG_Widget* parent, const PG_Poin
    lbl->SetFontSize( lbl->GetFontSize() + 5 );
 }
 
+VehicleTypeCountLocateWidget::VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player, int number )
+   : VehicleTypeCountWidget( parent, pos, width, vehicletype, player, number )
+{
+   int lineheight  = 20;
+   
+   PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 1 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
+   b->SetIcon( IconRepository::getIcon( "magnifier.png").getBaseSurface() );
+   b->sigClick.connect( SigC::slot( *this, &VehicleTypeCountLocateWidget::locate ));
+         
+}
 
-
-
+bool VehicleTypeCountLocateWidget::locate()
+{
+   locateVehicles( getVehicletype() );
+   return true;
+}
 
 
 VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, int player ) : actplayer(player), original_items( types )

@@ -35,6 +35,7 @@ class SelectFromMap : public ASC_PG_Dialog{
 
       PG_ListBox* listbox;
       bool justOne;
+      bool readOnly;
 
       bool markField2( const MapCoordinate& pos, const SPoint& mouse, bool cursorChanged, int button, int prio );
       int oldprio;
@@ -56,7 +57,7 @@ class SelectFromMap : public ASC_PG_Dialog{
       virtual bool isOk() { return true; };
       bool closeDialog() { if ( isOk()) QuitModal(); return true; };
    public:   
-      SelectFromMap( CoordinateList& list, GameMap* map, bool justOne = false );
+      SelectFromMap( CoordinateList& list, GameMap* map, bool justOne = false, bool readOnly = false );
       void Show( bool fade = false );
       ~SelectFromMap();
          

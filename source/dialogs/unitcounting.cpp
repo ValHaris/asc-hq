@@ -117,17 +117,49 @@ void VehicleCounterFactory::itemSelected( const SelectionWidget* widget, bool mo
 }
 */
 
+#include "fieldmarker.h"
+
+void showAllUnitPositions( const Vehicletype* vt, GameMap* gamemap ) 
+{
+   Player& player = gamemap->getPlayer( gamemap->actplayer );
+   
+   SelectFromMap::CoordinateList coordinates;
+   
+   for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i ) {
+      if ( (*i)->typ == vt )
+         if ( find ( coordinates.begin(), coordinates.end(),(*i)->getPosition() ) == coordinates.end() ) 
+         coordinates.push_back ( (*i)->getPosition() );
+   }
+   
+   SelectFromMap sfm( coordinates, gamemap, false, true );
+   sfm.Show();
+   sfm.RunModal();
+}
+
 class UnitSummaryWindow : public ItemSelectorWindow {
    private:
-      virtual void itemSelected( const SelectionWidget* ) {};
+      GameMap* gamemap;
+      
+      virtual void itemSelected( const SelectionWidget* sw) {
+         const VehicleTypeCountWidget* vtcw = dynamic_cast<const VehicleTypeCountWidget*>(sw);
+         assert( vtcw );
+         
+         if ( gamemap ) {
+            Hide();
+            showAllUnitPositions( vtcw->getVehicletype(), gamemap );
+            Show();
+         }
+         
+         
+      };
    public:
-      UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) : ItemSelectorWindow( parent, r, title, itemFactory ) {};
+      UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ) {};
 };      
       
 
 void showUnitCargoSummary( ContainerBase* cb )
 {
-   UnitSummaryWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( cb ));
+   UnitSummaryWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "cargo summary", new VehicleCounterFactory( cb ), NULL );
    isw.Show();
    isw.RunModal();
 }
@@ -135,7 +167,7 @@ void showUnitCargoSummary( ContainerBase* cb )
 
 void showUnitSummary( GameMap* actmap )
 {
-   UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "unit summary", new VehicleCounterFactory( actmap ));
+   UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "unit summary", new VehicleCounterFactory( actmap ), actmap );
    isw.Show();
    isw.RunModal();
 }

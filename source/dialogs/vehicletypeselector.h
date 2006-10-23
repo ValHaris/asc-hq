@@ -40,6 +40,7 @@ class VehicleTypeBaseWidget: public SelectionWidget  {
       const Vehicletype* getVehicletype() const { return vt; };
    protected:
       void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst );
+      static int buttonXPos( int width, int num );  
 };
 
 class VehicleTypeResourceWidget: public VehicleTypeBaseWidget  {
@@ -51,6 +52,15 @@ class VehicleTypeResourceWidget: public VehicleTypeBaseWidget  {
 class VehicleTypeCountWidget: public VehicleTypeBaseWidget  {
    public:
       VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player, int number );
+};
+
+class VehicleTypeCountLocateWidget: public VehicleTypeCountWidget  {
+   private:
+      bool locate();
+   public:
+      VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player, int number );
+      
+      SigC::Signal1<void,const Vehicletype*> locateVehicles;
 };
 
 
