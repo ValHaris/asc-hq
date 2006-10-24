@@ -41,7 +41,7 @@
 #include "cannedmessages.h"
 #include "viewcalculation.h"
 
-bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true )
+bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
 {
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
@@ -70,8 +70,13 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
                actmap->playerView = actmap->actplayer;  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
                do {
                   stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
-                  if ( !stat )
-                     return false;
+                  if ( !stat ) {
+                     if ( throwOnFailure ) {
+                        delete actmap;
+                        throw NoMapLoaded();
+                     } else
+                        return false;
+                  }
                } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
             }
       } else
@@ -241,7 +246,7 @@ void next_turn ( int playerView )
    actmap->playerView = -1;
    actmap->overviewMapHolder.clear();
    
-   if ( !authenticateUser( actmap, 0, false )) {
+   if ( !authenticateUser( actmap, 0, false, true, true )) {
       delete actmap;
       throw NoMapLoaded();
    }

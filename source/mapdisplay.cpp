@@ -216,6 +216,11 @@ MapRenderer::ViewPort::ViewPort()
 {
 };
 
+MapRenderer :: MapRenderer()  
+{ 
+   readData(); 
+};
+
 
 void MapRenderer::readData()
 {
@@ -401,8 +406,8 @@ void MapRenderer::paintTerrain( Surface& surf, GameMap* actmap, int playerView, 
          }
       additionalItemDisplayHook( surf, pass );
    }
+   
 }
-
 
 
 
@@ -433,6 +438,7 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
       zoom(-1),
       surface(NULL),
+      lastDisplayedMap(NULL),
       offset(0,0),
       dirty(Map),
       additionalUnit(NULL),
@@ -476,6 +482,7 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
    addMapLayer( new PipeLayer()         , "pipes" );
    
    parent->lockOptionsChanged.connect( SigC::slot( *this, &MapDisplayPG::lockOptionsChanged ));
+   GameMap::sigMapDeletion.connect( SigC::slot( *this, &MapDisplayPG::sigMapDeleted ));
 }
 
 
@@ -488,6 +495,13 @@ void MapDisplayPG::lockOptionsChanged( int options )
       EnableReceiver(true);
 }
 
+void MapDisplayPG::sigMapDeleted( GameMap& deletedMap )
+{
+   if ( &deletedMap == lastDisplayedMap ) { 
+      paintBackground();
+      Update();
+   }
+}
 
 
 MapDisplayPG::~MapDisplayPG ()
@@ -549,12 +563,21 @@ void MapDisplayPG::setNewZoom( int zoom )
 void MapDisplayPG::fillSurface( int playerView )
 {
    checkViewPosition( offset );
-   if ( !lock )
+   if ( !lock ) {
       paintTerrain( *surface, actmap, playerView, field.viewPort, offset );
+      lastDisplayedMap = actmap;
+   }
    else
-      paintBackground( *surface, field.viewPort );
+      paintBackground();
    dirty = Curs;
 }
+
+void MapDisplayPG::paintBackground( )
+{
+   MapRenderer::paintBackground( *surface, field.viewPort );
+   lastDisplayedMap = NULL;
+}
+
 
 
 void MapDisplayPG::checkViewPosition( MapCoordinate& offset )

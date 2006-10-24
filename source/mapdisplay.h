@@ -46,7 +46,7 @@ class MapRenderer {
       LayerRenderer layerRenderer;
      
       void readData();
-
+      
     public:  
       class FieldRenderInfo {
             public:
@@ -60,7 +60,7 @@ class MapRenderer {
       };
 
     protected:
-      MapRenderer() { readData(); };
+       MapRenderer(); 
 
       static const int surfaceBorder = 60;
             
@@ -142,6 +142,9 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       int zoom;
       Surface* surface;
       
+      GameMap* lastDisplayedMap;
+      void sigMapDeleted( GameMap& deletedMap );
+      
       MapCoordinate offset;
      
       void setupFastBlitterCommands();
@@ -176,6 +179,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void checkViewPosition( MapCoordinate& pos );
       
       void fillSurface( int playerView );
+      void paintBackground( );
 
 
    public:
