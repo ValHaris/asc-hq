@@ -349,6 +349,10 @@ else
 fi
 
 
+AC_CHECK_FILE( "source/unix/pbpedit/pbpeditor.cpp", PBPED=pbpedit )
+AC_SUBST([PBPED])
+
+
 dnl shell vars set by test&feature flag for libbz2
 AC_SUBST([LIBBZ2])
 AC_SUBST([LDADDLIBBZ2])
@@ -408,37 +412,38 @@ fi
 
 AC_SUBST([MUSICDIR])
 
-
-
-AC_OUTPUT(  Makefile \
-	    asc.spec \
-	    doc/Makefile \
-	    doc/manpages/Makefile \
-	    source/Makefile \
-	    source/ai/Makefile \
-	    source/clparser/Makefile \
-	    source/docs/Makefile \
-	    source/docs/en/Makefile \
-	    source/libs/Makefile \
-	    source/libs/sdlmm/Makefile \
-	    source/libs/sdlmm/src/Makefile \
-	    source/libs/triangul/Makefile \
-	    source/sdl/Makefile \
-	    source/tools/Makefile \
-	    source/tools/lib/Makefile \
-	    source/tools/linux/Makefile \
-	    source/unix/Makefile \
-	    source/unix/mapeditor/Makefile \
-	    source/unix/asc/Makefile \
-	    data/Makefile \
+AC_CONFIG_FILES( [ Makefile \
+       asc.spec \
+       doc/Makefile \
+       doc/manpages/Makefile \
+       source/Makefile \
+       source/ai/Makefile \
+       source/clparser/Makefile \
+       source/docs/Makefile \
+       source/docs/en/Makefile \
+       source/libs/Makefile \
+       source/libs/sdlmm/Makefile \
+       source/libs/sdlmm/src/Makefile \
+       source/libs/triangul/Makefile \
+       source/sdl/Makefile \
+       source/tools/Makefile \
+       source/tools/lib/Makefile \
+       source/tools/linux/Makefile \
+       source/unix/Makefile \
+       source/unix/mapeditor/Makefile \
+       source/unix/pbpedit/Makefile \
+       source/unix/asc/Makefile \
+       data/Makefile \
        data/buildings/Makefile \
        data/trrobj/Makefile \
        data/trrobj2/Makefile \
        data/units/Makefile \
        data/units/MK1/Makefile \
        data/units/MK3/Makefile \
-	    data/dialog/Makefile \
-	    data/music/Makefile  )
+       data/dialog/Makefile \
+       data/music/Makefile ]) 
+
+AC_OUTPUT
 
 AC_ARG_ENABLE( debug, [  --enable-debug          enables some debugging options and output], ENABLEDEBUG=1 )
 if test "X$ENABLEDEBUG" = "X1"; then
