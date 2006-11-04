@@ -113,11 +113,11 @@ SDL_Surface* getScreen()
 int copy2screen( void )
 {
   #ifdef _WIN32_  
-   SDL_ShowCursor(0);
+   // SDL_ShowCursor(0);
   #endif 
    SDL_UpdateRect ( screen , 0,0,0,0 );
   #ifdef _WIN32_  
-   SDL_ShowCursor(1);
+   // SDL_ShowCursor(1);
   #endif 
    return 0;
 }
@@ -125,7 +125,7 @@ int copy2screen( void )
 int copy2screen( int x1, int y1, int x2, int y2 )
 {
   #ifdef _WIN32_  
-   SDL_ShowCursor(0);
+   // SDL_ShowCursor(0);
   #endif 
    if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
       SDL_UpdateRect ( screen , 0,0,0,0 );
@@ -140,7 +140,7 @@ int copy2screen( int x1, int y1, int x2, int y2 )
 
 
   #ifdef _WIN32_  
-   SDL_ShowCursor(1);
+   // SDL_ShowCursor(1);
   #endif 
           
    return 0;

@@ -1,4 +1,4 @@
-//     $Id: typen.h,v 1.157 2005-04-24 10:09:31 mbickel Exp $
+//     $Id: typen.h,v 1.158 2006-11-04 08:51:02 mbickel Exp $
 
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -781,8 +781,8 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 //! The maximum number of fields a mining station can extract mineral resources from; Counted from its entry
 const int maxminingrange = 10;
 
-const float productionLineConstructionCostFactor = 0.5;
-const float productionLineRemovalCostFactor = 0.2;
+const double productionLineConstructionCostFactor = 0.5;
+const double productionLineRemovalCostFactor = 0.2;
 
 
 #define objectbuildmovecost 16  // vehicle->movement -= (8 + ( fld->movemalus[0] - 8 ) / ( objectbuildmovecost / 8 ) ) * kosten des obj

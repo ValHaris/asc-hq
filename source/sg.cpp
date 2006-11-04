@@ -2191,9 +2191,11 @@ int gamethread ( void* data )
    catch ( ASCexception ) {
       displaymessage ( "loading of game failed", 2 );
    }
+#ifndef WIN32
    catch ( ... ) {
       displaymessage ( "caught undefined exception", 2 );
    }
+#endif
 
    displayLogMessage ( 5, "loaddata completed successfully.\n" );
    setvgapalette256(pal);

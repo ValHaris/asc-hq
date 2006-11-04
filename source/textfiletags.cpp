@@ -190,7 +190,8 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "NetToSelf",
         "NetToBorder",
         "SpecialBiForest",
-        "AutoBorder" };
+        "AutoBorder",
+        "KeepOrientation" };
 
   const char* productionCostCalculationMethod[productionCostCalculationMethodNum] 
     = { "manual", "auto", "add" };

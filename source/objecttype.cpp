@@ -691,6 +691,9 @@ void         calculateobject( int       x,
                               pobjecttype obj,
                               pmap actmap )
 {
+   if ( obj->netBehaviour & ObjectType::KeepOrientation ) 
+      return;
+
    if ( obj->netBehaviour & ObjectType::SpecialForest ) {
       ForestCalculation::calculateforest( actmap, obj );
       return;

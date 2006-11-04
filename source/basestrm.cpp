@@ -625,6 +625,9 @@ int MemoryStreamCopy :: readdata  ( void* buffer, int _size, bool excpt )
 
 void MemoryStreamCopy :: seek ( int newpos )
 {
+   if ( newpos > size || newpos < 0 )
+     throw treadafterend ( getDeviceName() );
+
    pos = newpos;
 }
 

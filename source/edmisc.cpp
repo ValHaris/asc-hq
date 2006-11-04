@@ -2,7 +2,7 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.135 2006-07-08 08:21:05 mbickel Exp $
+//     $Id: edmisc.cpp,v 1.136 2006-11-04 08:51:02 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -3763,18 +3763,18 @@ void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
    title = "Select Transformation Table";
    numberoflines = unitSets[unitsetnum]->transtab.size();
    ey = ysize - 60;
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true);
-   addkey(2,ct_enter);
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true);
-   addkey(3,ct_esc);
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,202,true);
+   addkey(202,ct_enter);
+   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,203,true);
+   addkey(203,ct_esc);
 }
 
 void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(int         id)
 {
    tstringselect::buttonpressed(id);
    switch (id) {
-      case 2:
-      case 3:   action = id;
+      case 202:
+      case 203:   action = id-200;
                 break;
    }
 }

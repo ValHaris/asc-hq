@@ -738,7 +738,7 @@ void UnitCargoPage::buildContent() {
         type = addTREntryln(type, cmovemalitypes[h]);
       }
     }
-    addTREntry("Unit accessable to", type);
+    addTREntry("Unit accessable for", type);
     endTable();
     if ( !cbt.entranceSystems.empty() ) {
       addHeadline("Entrance System", 4);
