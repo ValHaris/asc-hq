@@ -35,6 +35,10 @@ const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0, 
                                                                          0.5, 0,  1 };
 
 
+#ifndef UNITVERSIONLIMIT
+# define UNITVERSIONLIMIT 0x7fffffff
+#endif
+
 
 
 Vehicle :: Vehicle (  )
@@ -1170,7 +1174,7 @@ const int vehicleVersion = 6;
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
     stream.writeWord ( 0 );
-    stream.writeInt( vehicleVersion );
+    stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT ) );
     stream.writeInt( typ->id );
 
     stream.writeChar ( color );
@@ -1192,8 +1196,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
              bm |= cem_ammunition2;
           if ( weapstrength[m] != typ->weapons.weapon[m].maxstrength )
              bm |= cem_weapstrength2;
-
        }
+
     if ( includeLoadedUnits )
        for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
@@ -1237,7 +1241,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     stream.writeInt( bm );
 
-    stream.writeInt( vehicleVersion );
+    stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT )  );
 
     if ( bm & cem_experience )
          stream.writeChar ( experience );
@@ -1262,7 +1266,10 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
           if ( *i ) 
              ++c;
 
-       stream.writeInt ( c );
+       if ( UNITVERSIONLIMIT > 3 ) 
+         stream.writeInt ( c );
+       else
+         stream.writeChar ( c );
 
        for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
@@ -1322,16 +1329,20 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     writeClassContainer( reactionfire.weaponShots, stream );
     writeClassContainer( reactionfire.nonattackableUnits, stream );
 
-    stream.writeInt( unitProduction.size() );
-    for ( int i = 0; i < unitProduction.size(); ++i )
-       stream.writeInt( unitProduction[i]->id );
+    if ( UNITVERSIONLIMIT >= 5 ) {
+      stream.writeInt( unitProduction.size() );
+      for ( int i = 0; i < unitProduction.size(); ++i )
+         stream.writeInt( unitProduction[i]->id );
+    }
 
-    stream.writeInt( maxresearchpoints );
-    stream.writeInt( researchpoints );
-    plus.write( stream );
-    maxplus.write( stream );
-    // actstorage.write( stream );
-    bi_resourceplus.write( stream );
+    if ( UNITVERSIONLIMIT >= 6 ) {
+      stream.writeInt( maxresearchpoints );
+      stream.writeInt( researchpoints );
+      plus.write( stream );
+      maxplus.write( stream );
+      // actstorage.write( stream );
+      bi_resourceplus.write( stream );
+    }
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1556,7 +1567,6 @@ void   Vehicle::readData ( tnstream& stream )
        maxplus.read( stream );
        bi_resourceplus.read( stream );
     } 
-       
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

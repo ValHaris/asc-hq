@@ -43,7 +43,7 @@
 // #include "gamedlg.h"
 #include "loaders.h"
 #include "gamemap.h"
-#include "turncontrol.h"
+// #include "turncontrol.h"
 
 #include "dialogs/admingame.h"
 
@@ -292,59 +292,4 @@ void networksupervisor ( void )
 namespace {
    const bool r1 = networkTransferMechanismFactory::Instance().registerClass( FileTransfer::mechanismID(), ObjectCreator<GameTransferMechanism, FileTransfer> );
 }
-
-
-void networksupervisor ()
-{
-   ASCString filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
-   if ( filename.empty() )
-      return;
-
-   StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
-   FileTransfer ft;
-   auto_ptr<GameMap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
-   if ( !newMap.get() )
-      return;
-
-   Password pwd = newMap->supervisorpasswordcrc;
-
-   if( pwd.empty() ) {
-      for ( int i = 0; i < newMap->getPlayerCount(); ++i )
-         if ( newMap->getPlayer(i).stat == Player::supervisor ) {
-            pwd = newMap->getPlayer(i).passwordcrc;
-            break;
-         }
-
-      if ( pwd.empty() ) {
-         errorMessage ("no supervisor setup in this game!" );
-         return;
-      }
-   }
-
-   smw.close();
-  
-
-   try {
-      bool ok = enterpassword ( newMap->supervisorpasswordcrc );
-      if ( !ok ) {
-         errorMessage ("invalid password!" );
-         return;
-      }
-   }
-   catch ( ... ) {
-      return;
-   }
-
-   TurnSkipper ts ( &skipTurn );
-   
-   if ( adminGame( newMap.get(), &ts  ) ) {
-      if ( !newMap->network ) {
-         errorMessage("no network set up for game");
-         return;
-      }
-      newMap->network->send( newMap.get(), -1, -1 );
-   }
-
-}
-
 

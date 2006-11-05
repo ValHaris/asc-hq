@@ -29,6 +29,7 @@
 #include "../global.h"
 // #include "keysymbols.h"
 #include "../errors.h"
+#include "../messaginghub.h"
 #include "graphicsqueue.h"
 
 volatile tmousesettings mouseparams;
@@ -541,9 +542,11 @@ int gameThreadWrapper ( void* data )
    }
 #ifndef WIN32
    catch ( ... ) {
+      fatalError ("An unhandled exception occured. Quitting application");
    }
 #else
    catch ( ASCexception ) {
+      fatalError ("An unhandled exception occured. Quitting application");
    }
 #endif
    closeEventThread = -1;

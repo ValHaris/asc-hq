@@ -32,6 +32,11 @@
 #include "itemrepository.h"
 #include "containercontrols.h"
 
+#ifndef BUILDINGVERSIONLIMIT
+# define BUILDINGVERSIONLIMIT -1000000000
+#endif
+
+
 const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,
                                                                           0,     1./3., 0,
                                                                           0,     0,     0 };
@@ -393,7 +398,7 @@ const int buildingstreamversion = -5;
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 {
-    stream.writeInt ( buildingstreamversion );
+    stream.writeInt ( max( buildingstreamversion, BUILDINGVERSIONLIMIT ));
 
     stream.writeInt ( typ->id );
     int i;
@@ -434,14 +439,22 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
           if ( *i ) 
              ++c;
 
-    stream.writeInt ( c );
+    if ( BUILDINGVERSIONLIMIT >= -3 )
+       stream.writeChar( c );
+    else
+       stream.writeInt ( c );
+
     if ( c )
        for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
              (*i)->write ( stream );
 
 
-    stream.writeInt( unitProduction.size() );
+    if ( BUILDINGVERSIONLIMIT >= -4 )
+       stream.writeChar( unitProduction.size() );
+    else
+       stream.writeInt( unitProduction.size() );
+
     for (int k = 0; k < unitProduction.size(); k++ ) {
        assert( unitProduction[k] );
        stream.writeInt( unitProduction[k]->id );
@@ -497,21 +510,22 @@ void Building:: read ( tnstream& stream )
 {
     int version = stream.readInt();
 
-    if ( version == buildingstreamversion || version == -1 ) {
+    if ( version >= buildingstreamversion && version <= -1 ) {
        stream.readInt (); // id
        for ( int i = 0; i < 3; i++ )
           bi_resourceplus.resource(i) = stream.readInt();
 
        stream.readChar(); // color
-       stream.readWord() ; // xpos
+       stream.readWord(); // xpos
+       stream.readWord(); // ypos
     } else {
        // int id = version;
        stream.readChar(); // color
        stream.readWord(); // xpos
+       stream.readWord(); // ypos
        bi_resourceplus = Resources ( 0, 0, 0);
     }
 
-    stream.readWord(); // ypos
     readData ( stream, version );
 }
 

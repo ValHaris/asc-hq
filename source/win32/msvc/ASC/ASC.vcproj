@@ -313,6 +313,9 @@
 				RelativePath="..\..\..\networkinterface.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\networksupervisor.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\newfont.cpp">
 			</File>
 			<File

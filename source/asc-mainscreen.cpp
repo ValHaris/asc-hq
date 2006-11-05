@@ -198,6 +198,7 @@ void Menu::setup()
    addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
    addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
    addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
+   addbutton ( "show ~V~isibility Range", ua_visibilityInfo );
    currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
@@ -440,6 +441,30 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
 };
 
 
+class VisibilityLayer : public MapLayer {
+    public: 
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+void VisibilityLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo, int layer, const SPoint& pos )
+{
+   static PG_Font* font = NULL; 
+   if ( !font ) {
+      PG_Label l( NULL );
+      font = new PG_Font( *(l.GetFont()));
+      font->SetSize( 10 );
+      font->SetColor( 0 );
+   }
+
+   if ( fieldvisiblenow( fieldInfo.fld, fieldInfo.gamemap->playerView, fieldInfo.gamemap )) {
+      ASCString s;
+      s.format( "%d/%d", fieldInfo.fld->view[fieldInfo.gamemap->playerView].view, fieldInfo.fld->view[fieldInfo.gamemap->playerView].jamming );
+      PG_FontEngine::RenderText( fieldInfo.surface.getBaseSurface() , PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey), pos.x+5, pos.y + 20, s, font );
+   }
+}
+
+
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    : MainScreenWidget( application ), standardActionsLocked(0), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL)
@@ -459,6 +484,9 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
 
    movementRangeLayer = new UnitMovementRangeLayer();
    mapDisplay->addMapLayer( movementRangeLayer, "moverange" );
+
+   mapDisplay->addMapLayer( new VisibilityLayer(), "visibilityvalue" );
+
 
    int counter = 0;
    for ( CGameOptions::PanelDataContainer::iterator i = CGameOptions::Instance()->panelData.begin(); i != CGameOptions::Instance()->panelData.end(); ++i ) {

@@ -646,6 +646,13 @@ void execuseraction ( tuseractions action )
          displaymap();
          break;
 
+      case ua_visibilityInfo:
+         if ( mainScreenWidget ) 
+            mainScreenWidget->toggleMapLayer( "visibilityvalue");
+         displaymap();
+         break;
+
+
       case ua_benchgamewov:
          benchgame( false );
          break;
@@ -1132,8 +1139,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
 
    hookReplayToSystem();
 }
-
-
 
 
 

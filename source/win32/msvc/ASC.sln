@@ -74,6 +74,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paragui_static", "..\..\lib
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbpeditor", "pbpeditor\pbpeditor.vcproj", "{2610C66C-BB44-11D5-8156-00805F852A9B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -108,6 +112,10 @@ Global
 		{269CF622-CA89-4BAB-A3EC-E2895969DCE3}.Debug.Build.0 = Debug|Win32
 		{269CF622-CA89-4BAB-A3EC-E2895969DCE3}.Release.ActiveCfg = Release|Win32
 		{269CF622-CA89-4BAB-A3EC-E2895969DCE3}.Release.Build.0 = Release|Win32
+		{2610C66C-BB44-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
+		{2610C66C-BB44-11D5-8156-00805F852A9B}.Debug.Build.0 = Debug|Win32
+		{2610C66C-BB44-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
+		{2610C66C-BB44-11D5-8156-00805F852A9B}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
