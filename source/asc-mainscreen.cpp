@@ -198,7 +198,7 @@ void Menu::setup()
    addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
    addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
    addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
-   addbutton ( "show ~V~isibility Range", ua_visibilityInfo );
+   addbutton ( "show ~V~isibility Range\t0", ua_visibilityInfo );
    currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
@@ -454,12 +454,25 @@ void VisibilityLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fiel
       PG_Label l( NULL );
       font = new PG_Font( *(l.GetFont()));
       font->SetSize( 10 );
-      font->SetColor( 0 );
    }
 
    if ( fieldvisiblenow( fieldInfo.fld, fieldInfo.gamemap->playerView, fieldInfo.gamemap )) {
       ASCString s;
-      s.format( "%d/%d", fieldInfo.fld->view[fieldInfo.gamemap->playerView].view, fieldInfo.fld->view[fieldInfo.gamemap->playerView].jamming );
+
+      int view = 0;
+      int jamming = fieldInfo.fld->getjamming();
+      for ( int i = 0; i < fieldInfo.gamemap->getPlayerCount(); ++i ) 
+         if ( fieldInfo.gamemap->getPlayer(i).diplomacy.sharesView( fieldInfo.gamemap->playerView)) {
+            view += fieldInfo.fld->view[i].view;
+            jamming += fieldInfo.fld->view[i].jamming;
+         }
+
+      s.format( "%d/%d", view, jamming);
+
+      font->SetColor( 0xffffff );
+      PG_FontEngine::RenderText( fieldInfo.surface.getBaseSurface() , PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey), pos.x+6, pos.y + 21, s, font );
+
+      font->SetColor( 0 );
       PG_FontEngine::RenderText( fieldInfo.surface.getBaseSurface() , PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey), pos.x+5, pos.y + 20, s, font );
    }
 }
@@ -694,7 +707,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev ( ua_viewPipeNet );
                return true;
 
-            case SDLK_0: execUserAction_ev( ua_writescreentopcx );
+            case SDLK_0: execUserAction_ev( ua_visibilityInfo );
                return true;
 
             case SDLK_PLUS:   
@@ -735,6 +748,9 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev ( ua_newGame );
                return true;
 
+            case SDLK_0: execUserAction_ev( ua_writescreentopcx );
+               return true;
+
             case SDLK_F12:
                   execUserAction_ev ( ua_exportUnitToFile );
                return true;
@@ -746,7 +762,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                      *c = 1;
                   }
                } 
-            return true;
+               return true;
 
             case SDLK_F10: {
                SDL_Surface* s = PG_Application::GetScreen();

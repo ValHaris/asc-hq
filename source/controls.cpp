@@ -635,8 +635,27 @@ void setupNextTech( Player& player )
    
 }
 
+bool anyTechAvailable( const Player& player )
+{
+   for (int i = 0; i < technologyRepository.getNum(); i++) {
+      const Technology* tech = technologyRepository.getObject_byPos( i );
+      if ( tech ) {
+         ResearchAvailabilityStatus a = player.research.techAvailable ( tech );
+         if ( a == Available )
+            return true;
+      }
+   }
+   return false;
+}
+
+
+
 void researchCheck( Player& player )
 {
+   // we have no research at all set up in the map
+   if ( !anyTechAvailable( player ) && player.research.developedTechnologies.empty() )
+      return;
+
    Research& research = player.research;
    if (research.activetechnology == NULL && research.progress ) 
       setupNextTech( player );

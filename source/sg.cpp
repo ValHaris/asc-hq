@@ -561,7 +561,7 @@ void helpAbout()
    ASCString s = "#fontsize=22#Advanced Strategic Command#fontsize=14#\n";
    s += getVersionAndCompilation();
 
-   s += "#fontsize=18#Credits#fontsize=14#\n";
+   s += "\n#fontsize=18#Credits#fontsize=14#\n";
 
    s += readtextmessage( 30 );
                      

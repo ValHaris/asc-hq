@@ -735,8 +735,8 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
       zoomSlider->SetPosition( 100 - mapDisplay->getZoom() );
    }   
 
-   const int labelnum = 3;
-   char* label[labelnum] = { "pipes", "container", "resources"};
+   const int labelnum = 4;
+   char* label[labelnum] = { "pipes", "container", "resources", "visibilityvalue"};
    for ( int i = 0; i < labelnum; ++i ) {
       PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label[i], true ) );
       if ( cb ) 

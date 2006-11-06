@@ -67,6 +67,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
    int str = viewdist;
    if ( f ) {
       int freefields = 0;
+#if 0
       if ( height > chhochfliegend )
          freefields = 5;
       else
@@ -78,6 +79,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
       else
       if ( height == chtieffliegend )
          freefields = 1;
+#endif
      tdrawgettempline lne ( freefields, gamemap );
 
      if ( startPos.x == -1 || startPos.y == -1 )
