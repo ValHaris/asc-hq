@@ -53,7 +53,7 @@ am_libdialogs_la_OBJECTS = editmapparam.lo cargowidget.lo \
 	alliancesetup.lo newgame.lo soundsettings.lo emailsetup.lo \
 	unitinfodialog.lo editgameoptions.lo vehicletypeselector.lo \
 	fieldmarker.lo admingame.lo pwd_dlg.lo terraininfo.lo \
-	messagedialog.lo
+	messagedialog.lo locatefile.lo
 libdialogs_la_OBJECTS = $(am_libdialogs_la_OBJECTS)
 libgamedialogs_la_DEPENDENCIES =
 am_libgamedialogs_la_OBJECTS = cargodialog.lo unitcounting.lo \
@@ -221,7 +221,7 @@ AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)
 noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la libmapeddialogs.la
 libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp \
                           emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp admingame.cpp pwd_dlg.cpp terraininfo.cpp \
-                          messagedialog.cpp
+                          messagedialog.cpp locatefile.cpp
 
 libdialogs_la_LIBADD = @SDL_LIBS@ 
 libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp \
@@ -301,6 +301,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventeditor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldmarker.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileselector.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/locatefile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messagedialog.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newgame.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newmap.Plo@am__quote@

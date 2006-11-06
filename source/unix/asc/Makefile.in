@@ -83,11 +83,11 @@ am_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	asc-mainscreen.$(OBJEXT) mapfield.$(OBJEXT) \
 	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
 	explosivemines.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
-	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
-	mapimageexport.$(OBJEXT) containercontrols.$(OBJEXT) \
-	containerbase-functions.$(OBJEXT) windowing.$(OBJEXT) \
-	turncontrol.$(OBJEXT) unitset.$(OBJEXT)
+	networksupervisor.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
+	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
+	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT) \
+	containercontrols.$(OBJEXT) containerbase-functions.$(OBJEXT) \
+	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT)
 asc_OBJECTS = $(am_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -274,7 +274,7 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp \
+messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp
 
@@ -408,6 +408,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkinterface.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networksupervisor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newfont.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objects.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@

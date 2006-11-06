@@ -381,12 +381,22 @@ PG_Widget* TextRenderer :: render( const ASCString& token )
    return w;
 };
 
+void TextRenderer::clear()
+{
+   for ( Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i )
+      delete *i;
+     
+   widgets.clear();
+}
+
 
 void TextRenderer::SetText( const string& text )
 {
+   clear();
    parse(text);
    layout();
    my_text = text;
+   Update();
 }
 
 bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)

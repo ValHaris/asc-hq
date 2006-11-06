@@ -7,7 +7,7 @@ noinst_LTLIBRARIES      = libdialogs.la libgamedialogs.la libmapeddialogs.la
 
 libdialogs_la_SOURCES   = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp \
                           emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp admingame.cpp pwd_dlg.cpp terraininfo.cpp \
-                          messagedialog.cpp
+                          messagedialog.cpp locatefile.cpp
                           
 libdialogs_la_LIBADD    = @SDL_LIBS@ 
 

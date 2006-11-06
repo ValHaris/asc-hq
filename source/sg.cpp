@@ -146,6 +146,7 @@
 #include "dialogs/nextcampaignmap.h"
 #include "dialogs/terraininfo.h"
 #include "dialogs/editplayerdata.h"
+#include "dialogs/locatefile.h"
 #include "stdio-errorhandler.h"
 #include "widgets/textrenderer.h"
 
@@ -905,6 +906,10 @@ void showCargoSummary( tfield* fld )
 
 
 
+
+
+
+
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
 {
@@ -1033,6 +1038,9 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_editPlayerData:
          editPlayerData( actmap );
+         break;
+      case ua_locatefile:
+         locateFile();
          break;
       default:
          break;

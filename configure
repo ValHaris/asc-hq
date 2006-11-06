@@ -22365,6 +22365,9 @@ fi
 if test "X$SDLSOUNDHEADER" = "Xno" ; then
   CFLAGS="$CFLAGS -I/usr/local/include/SDL"
   CPPFLAGS="$CPPFLAGS -I/usr/local/include/SDL"
+
+    unset ac_cv_header_SDL_sound_h
+
   if test "${ac_cv_header_SDL_sound_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for SDL_sound.h" >&5
 echo $ECHO_N "checking for SDL_sound.h... $ECHO_C" >&6; }

@@ -215,11 +215,14 @@ void Menu::setup()
    addbutton ( "Decrease Map Zoom\tKP-", ua_decrease_zoom );
 
 
+   addfield ( "~D~ebug" );
+   addbutton ( "Show ASC search ~P~ath", ua_showsearchdirs );
+   addbutton ( "SDL settings", ua_SDLinfo );
+   addbutton ( "Locate File", ua_locatefile );
+
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
    addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
-   addbutton ( "Show ASC search ~P~ath", ua_showsearchdirs );
-   addbutton ( "SDL settings", ua_SDLinfo );
    currentMenu->addSeparator();
    addbutton ( "~K~eys", ua_help );
 

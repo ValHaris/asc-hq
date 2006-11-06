@@ -193,3 +193,4 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
 }
 
 
+
