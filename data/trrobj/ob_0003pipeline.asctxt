@@ -1,0 +1,61 @@
+ObjectType { 
+   name = pipeline
+   canExistBeneathBuildings = false
+   ID = 3
+   groupID = 6
+   Weather = dry
+   visible_in_fogOfWar = false
+   LinkableObjects = 30 996
+   Armor = 200
+   Movemalus_abs = -1
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 10  10  10  10  10  10  10  3   2   10  10  0   10  10  10  10  10  10
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 5
+   Height = 114
+   ConstructionCost { 
+      Energy = 0
+      Material = 150
+      fuel = 80
+      Movement = 11
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 30
+      Movement = 5
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuilding
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand frozen_water
+      terrain_all = 
+      terrain_not = runway forest large_rocks swamp bridge pipeline railroad
+      terrain_kill = shallow_water water deep_water lava river
+   } TerrainAccess
+   TerrainProperties_Filter =
+   TerrainProperties_Add = Pipeline bridge
+   dry { 
+      UseGFXpics = false
+      picture = ob_PIPELINE_dry.pcx 64
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = PIPELINE_dry.pcx 64
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = PIPELINE_dry.pcx 64
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      picture = PIPELINE_dry.pcx 64
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = PIPELINE_dry.pcx 64
+   } much_snow
+} ObjectType

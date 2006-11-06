@@ -1,0 +1,55 @@
+ObjectType { 
+   ID = 1051
+   Weather = dry much_snow snow_and_ice
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 200
+   Movemalus_plus = 20 30 30  30  40  40  40  10  5   40  40  20  40  40  40  40  40  40 
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 1
+   Jamming_abs = -1
+   Jammming_plus = 2
+   Height = 113
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = waterhole & water pipeline
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand very_shallow_water 
+      terrain_all = 
+      terrain_not =  
+      terrain_kill = shallow_water water deep_water lava
+   } TerrainAccess
+   TerrainProperties_Filter = lowland hard_sand soft_sand road railroad ditch runway hillside 
+   TerrainProperties_Add = very_shallow_water Installation 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 331 
+      FlipPictures = 0 
+   } dry
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1703
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1703
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

@@ -1,0 +1,31 @@
+TerrainType { 
+   Parent = 2905
+   ID = 2906
+
+   Name = Frozen Lava + Dirt
+
+   dry { 
+      Picture = t2906.pcx
+   } dry
+
+   light_rain { 
+      Picture = t2906_lr.pcx
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2906_hr.pcx
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2906_fs.pcx
+   } few_snow
+
+   much_snow { 
+      Picture = t2068hs.pcx
+   } much_snow
+
+   snow_and_ice { 
+      Picture = t2068hs.pcx
+   } snow_and_ice
+
+} TerrainType

@@ -1,0 +1,60 @@
+TerrainType { 
+   Name = Installation parent
+   ID = 1211
+   weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   abstract = true
+   dry { 
+      UseGFXpics = true
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 20  20  20  20  20  20  20  15  15  20  20  16  20  20  20  20  20  30 
+      TerrainProperties = Installation 
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 6
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 20  20  20  20  20  20  20  15  15  20  20  16  20  20  20  20  20  30 
+      TerrainProperties = Installation 
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 7
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 20  20  20  20  20  20  20  15  15  20  20  16  20  20  20  20  20  30 
+      TerrainProperties = Installation 
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = true
+       DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 6
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 20  20  20  20  20  20  20  15  15  20  20  16  20  20  20  20  20  30 
+      TerrainProperties = Installation snow track_possible
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 8
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 30  30  30  30  30  30  30  20  15  30  30  16  30  30  30  30  30  30 
+      TerrainProperties = Installation deep_snow track_possible
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 8
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 30  30  30  30  30  30  30  20  15  30  30  16  30  30  30  30  30  30 
+      TerrainProperties = Installation deep_snow track_possible
+   } snow_and_ice
+} TerrainType

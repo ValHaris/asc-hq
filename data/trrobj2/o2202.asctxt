@@ -1,0 +1,17 @@
+ObjectType { 
+   Parent = 2200
+
+   ID = 2202
+
+   Name = Hill North-East
+
+   dry { 
+      UseGFXpics = false
+      picture = o2202.pcx 1
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = o2202_ms.pcx 1
+   } much_snow
+
+} ObjectType

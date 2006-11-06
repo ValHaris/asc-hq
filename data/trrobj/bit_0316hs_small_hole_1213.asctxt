@@ -1,0 +1,25 @@
+TerrainType { 
+   Name = mudhole
+   ID = 316
+   Weather = dry few_snow much_snow snow_and_ice
+   parent = 1213
+   dry { 
+      GFX_Picture = 179
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 5
+   } dry
+   few_snow { 
+      GFX_Picture = 644
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 7
+   } few_snow
+   much_snow { 
+      GFX_Picture = 750
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 10
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

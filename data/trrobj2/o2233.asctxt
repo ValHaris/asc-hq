@@ -1,0 +1,18 @@
+ObjectType { 
+   Parent = 2200
+
+   ID = 2233
+
+   Weather = dry much_snow
+
+   Name = Hill No.4
+
+   dry { 
+      picture = o2233.pcx 1
+   } dry
+
+   much_snow { 
+      picture = o2233_ms.pcx 1
+   } much_snow
+
+} ObjectType

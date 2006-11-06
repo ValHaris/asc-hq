@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = coast dark south little
+   ID = 154
+   parent = 1210
+   dry { 
+      GFX_Picture = 378
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow ->* TerrainType.dry 
+   much_snow { 
+      GFX_Picture = 878
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 963
+   } snow_and_ice
+} TerrainType

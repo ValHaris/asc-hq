@@ -1,0 +1,36 @@
+ObjectType { 
+   ID = 67
+   parent = 103
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   Name = hill west
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 281 
+      FlipPictures = 0 
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      GFXpictures = 1978 
+      FlipPictures = 0 
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      GFXpictures = 1977 
+      FlipPictures = 0 
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = true
+      GFXpictures = 1976 
+      FlipPictures = 0 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1975 
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1975 
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

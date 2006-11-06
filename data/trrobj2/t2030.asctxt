@@ -1,0 +1,58 @@
+TerrainType { 
+   Parent = 2060
+   ID = 2030
+
+   Name = Kai
+
+   dry { 
+      Picture = t2030_kaibeton.pcx
+      DefenseBonus = -1
+      BasicJamming = -2
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  10  10  10  10  10  10  10  10  10  10  10  16  10  10  10  10  10  10
+      TerrainProperties = hard_sand track_possible
+   } dry
+   light_rain { 
+      Picture = t2030_lr.pcx
+      DefenseBonus = 0
+      BasicJamming = -2
+
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  12  11  11  11  12  12  12  10  11  10  10  16  10  10  10  10  10  11
+      TerrainProperties = hard_sand track_possible
+   } light_rain
+   heavy_rain { 
+      Picture = t2030_hr.pcx
+      DefenseBonus = 1
+      BasicJamming = 1
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  14  13  13  13  14  14  14  11  13  13  13  16  13  13  13  13  13  14
+      TerrainProperties = hard_sand track_possible
+   } heavy_rain
+   few_snow { 
+      Picture = t2030_fs.pcx
+      DefenseBonus = -1
+      BasicJamming = -1
+
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  11  12  11  11  12  11  11  11  10  12 255  16  12  12 255 255  12  10
+      TerrainProperties = snow hard_sand track_possible
+   } few_snow
+   much_snow { 
+      Picture = t2030ms.pcx
+      BasicJamming = 2
+
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  22  20  17  21  17  15  16  14  25 255  16  25  25 255 255  25  12
+      TerrainProperties = deep_snow hard_sand track_possible
+   } much_snow
+   snow_and_ice { 
+      Picture = t2030ms.pcx
+      BasicJamming = 2
+
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  15  22  20  17  21  17  15  16  14  25 255  15  25  25 255 255  25  12
+      TerrainProperties = deep_snow hard_sand track_possible
+   } snow_and_ice
+
+} TerrainType

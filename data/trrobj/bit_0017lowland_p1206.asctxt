@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = lowland
+   ID = 17
+   parent = 1206
+   dry { 
+      GFX_Picture = 124
+   } dry
+   light_rain { 
+      GFX_Picture = 124
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 823
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 584
+   } few_snow
+   much_snow { 
+      GFX_Picture = 699
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 699
+   } snow_and_ice
+} TerrainType

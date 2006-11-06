@@ -1,0 +1,21 @@
+TerrainType { 
+   Name = hillside berg links
+   ID = 89
+   parent = 1215
+   dry { 
+      GFX_Picture = 211
+   } dry
+   light_rain { 
+      GFX_Picture = 1555
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1554
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 676
+   } few_snow
+   much_snow { 
+      GFX_Picture = 782
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

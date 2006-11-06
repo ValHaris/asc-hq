@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = muell rechts
+   ID = 227
+   parent = 1216
+   dry { 
+      GFX_Picture = 208
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow {
+      GFX_Picture = 673
+   } few_snow
+   much_snow { 
+      GFX_Picture = 779
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

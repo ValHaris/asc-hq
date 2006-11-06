@@ -1,0 +1,40 @@
+BuildingType {
+   Name = airport
+   ID = 10
+   parent = 499
+   Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+   Armor = 700
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_ASC_airport.pcx
+      few_snow = bld_asc_airport.pcx
+      much_snow = bld_asc_airport.pcx
+      snow_and_ice = bld_asc_airport_hs.pcx
+   } Pictures
+   RubbleObjects = false
+;   RubbleObjects = true
+;   rubble {
+;      A2 = 76
+;      A3 = 77
+;      A4 = 78
+;      B3 = 76
+;   } rubble
+   Entry = A4
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 2000
+      MaxLoadableMass = 1000000
+      CategoriesNOT = hoovercraft light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production Repair_Facility Recycling
+   ConstructionCost { 
+      Energy = 0
+      Material = 9000
+      fuel = 9000
+   } ConstructionCost
+   Height = ground_level 
+   ExternalLoading =  
+} BuildingType

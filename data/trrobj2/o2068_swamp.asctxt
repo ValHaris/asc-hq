@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 3560
+   ID = 2068
+
+   weather = dry much_snow snow_and_ice
+
+   dry { 
+      picture = o2068_single_swamp_256.pcx 1
+   } dry
+   much_snow {
+      UseGFXpics = false
+      picture = o2068_single_swamp_256_ms.pcx 1
+   } much_snow
+   snow_and_ice {
+      UseGFXpics = false
+      picture = o2068_single_swamp_256_ms.pcx 1
+   } snow_and_ice
+
+} ObjectType

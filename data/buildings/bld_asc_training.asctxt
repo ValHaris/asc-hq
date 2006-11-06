@@ -1,0 +1,38 @@
+BuildingType { 
+   Name = Training Center
+   ID = 23
+   Infotext = [Trainingszentrum fuer Trooper, Landfahrzeuge und Helicopter]
+   Armor = 600
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_training.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A4
+   Transportation { 
+      MaxLoadableUnits = 18
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 500
+      CategoriesNOT = default building|turret|object rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship
+   } Transportation
+   Functions = Training_Facility ResourceSink Ammo_Production 
+   ConstructionCost { 
+      Energy = 0
+      Material = 4000
+      fuel = 5500
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -100
+      Material = -100
+      fuel = -100
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -100
+      material = -100
+      fuel = -100
+   } defaultProduction
+} BuildingType

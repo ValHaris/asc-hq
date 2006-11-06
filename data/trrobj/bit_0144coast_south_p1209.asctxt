@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = coast south vsw
+   ID = 144
+   parent = 1209
+   dry { 
+      GFX_Picture = 105
+   } dry
+   light_rain { 
+      GFX_Picture = 1083
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1091
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 1035
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1059
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 965
+   } snow_and_ice
+} TerrainType

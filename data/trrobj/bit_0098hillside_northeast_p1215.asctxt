@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = hillside south east
+   ID = 98
+   parent = 1215
+   dry { 
+      GFX_Picture = 220
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 685
+   } few_snow
+   much_snow { 
+      GFX_Picture = 791
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

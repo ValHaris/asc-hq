@@ -1,0 +1,33 @@
+TerrainType { 
+   Parent = 3000
+   ID = 2001
+
+   Name = Seawater
+   dry { 
+      Picture = t2001.pcx
+      TerrainProperties = Water 
+   } dry
+   light_rain { 
+      Picture = t2001.pcx
+      TerrainProperties = Water 
+   } light_rain
+   heavy_rain { 
+      Picture = t2001_hr.pcx
+      TerrainProperties = Water 
+   } heavy_rain
+   few_snow { 
+      Picture = t2001.pcx
+      TerrainProperties = Water
+   } few_snow
+   much_snow { 
+      Picture = t2001_fs.pcx
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  25  25  25  25  25  25  25  25  11  25  14  11  25  25  16  12  25  25
+      TerrainProperties = Water pack_ice
+   } much_snow
+   snow_and_ice { 
+      Picture = t2001_ice.pcx
+      TerrainProperties = Water frozen_water
+   } snow_and_ice
+
+} TerrainType

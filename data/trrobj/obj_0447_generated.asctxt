@@ -1,0 +1,43 @@
+ObjectType { 
+   ID = 1076
+   Weather = dry 
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 255 255 255 255 255 255 255 14 255 
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 4
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 5
+   Jamming_abs = -1
+   Jammming_plus = 6
+   Height = 3
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = Mountain
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Mud 
+      terrain_all = 
+      terrain_not = Shallow_water Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Soft_sand Track_possible Small_rocks Mud Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation River 
+      terrain_kill = Shallow_water Water Deep_water Very_shallow_water River 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = Mountains 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 447 
+      FlipPictures = 0 
+   } dry
+} ObjectType

@@ -1,0 +1,48 @@
+ObjectType { 
+
+
+   Parent = 2502
+   ID = 2507
+   GroupID = 18
+
+   Name = Coast & Very Shallow Water
+
+   LinkableObjects = 2500 2502 2504 2503
+
+   dry { 
+      picture = o2507_coast_very_shallow.pcx 64
+      TerrainAccess ->* ObjectType.TAccess_ShallowWater
+      TerrainProperties_Add = very_shallow_water
+   } dry
+
+   light_rain { 
+      picture = o2507_coast_very_shallow.pcx 64
+      TerrainAccess ->* ObjectType.TAccess_ShallowWater
+      TerrainProperties_Add = very_shallow_water
+   } light_rain
+
+   heavy_rain { 
+      picture = o2507_coast_very_shallow.pcx 64
+      TerrainAccess ->* ObjectType.TAccess_ShallowWater
+      TerrainProperties_Add = very_shallow_water
+   } heavy_rain
+
+   few_snow {
+      picture = o2507_coast_very_shallow.pcx 64
+      TerrainAccess ->* ObjectType.TAccess_ShallowWater
+      TerrainProperties_Add = very_shallow_water
+   } few_snow
+
+   much_snow {
+      picture = o2507_coast_very_shallow_fs.pcx 64
+      TerrainAccess ->* ObjectType.TAccess_ShallowWater
+      TerrainProperties_Add = very_shallow_water pack_ice
+   } much_snow
+
+   snow_and_ice {
+      picture = o2507_coast_very_shallow_ice.pcx 64
+      TerrainAccess ->* ObjectType.TAccess_ShallowWater
+      TerrainProperties_Add = very_shallow_water frozen_water
+   } snow_and_ice
+
+} ObjectType

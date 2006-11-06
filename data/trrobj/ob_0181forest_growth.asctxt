@@ -1,0 +1,60 @@
+ObjectType { 
+   Name = forest
+   ID = 181
+   groupID = 10
+   TechAdapterRequired = o181
+   Weather = dry much_snow snow_and_ice
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 500
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 10  13  13  13  14  14  14  6   1   20  14  0  20  20  14  14  20  20
+   Movemalus_abs = -1 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 1
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 1
+   Jamming_abs = -1
+   Jammming_plus = 7
+   Height = 115
+   ConstructionCost { 
+      Energy = 0
+      Material = 1200
+      fuel = 100
+      Movement = 35
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -300
+      fuel = 20
+      Movement = 15
+   } RemovalCost
+   NetBehaviour = NetToSelf NetToBorder
+   growthRate = 0.10
+   TerrainAccess { 
+      terrain_any = Lowland Soft_sand hard_sand very_shallow_water 
+      terrain_all = 
+      terrain_not = road swamp large_rocks railroad snow deep_snow road runway forest bridge
+      terrain_kill = water deep_water river lava
+   } TerrainAccess
+   TerrainProperties_Filter = railroad runway 
+   TerrainProperties_Add = Forest 
+   dry { 
+      UseGFXpics = false
+      picture = ob_forest.pcx 64
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_forest_snow.pcx 64
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      picture = ob_forest_snow.pcx 64
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } snow_and_ice
+} ObjectType

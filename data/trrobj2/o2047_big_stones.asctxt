@@ -1,0 +1,16 @@
+ObjectType { 
+   Parent = 2046
+
+   ID = 2047
+
+   dry { 
+      picture = o2047.pcx 1
+   } dry
+   much_snow { 
+      picture = o2047ms.pcx 1
+   } much_snow
+   snow_and_ice { 
+      picture = o2047ms.pcx 1
+   } snow_and_ice
+
+} ObjectType

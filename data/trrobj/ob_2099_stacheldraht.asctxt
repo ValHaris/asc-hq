@@ -1,0 +1,84 @@
+ObjectType { 
+
+
+
+   ID = 2099
+   GroupID = 8
+
+   Name = Razor Wire
+
+   Weather = dry much_snow snow_and_ice
+
+   visible_in_fogOfWar = false
+
+   Height = 119 ;17-Aug 2003
+   Armor = 600
+
+   LinkableObjects = 
+   NetBehaviour = NetToSelf NetToBorder AutoBorder
+
+   ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = -1
+   Movemalus_plus =  50  10   7   5 120 100  80  50  35  50  50  50  50  50  50  50  50 100
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 85
+      fuel = 30
+      Movement = 25
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -60
+      fuel = 30
+      Movement = 35
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand hillside frozen_water very_shallow_water river
+      terrain_all = 
+      terrain_not = [Lava Morass Swamp Shallow_water Water Deep_water Pack_ice Ditch Pipeline Small_rocks
+                     Large_rocks Forest Turret_foundation Installation Mountains High_mountains]
+      terrain_kill = Shallow_water Water Deep_water Lava Pack_ice
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = installation
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_2099_stacheldraht_dry.pcx 64
+      ImageReference =  [-1 -1 -1 -1  2 -1 -1 -1  1 -1  5 -1  3 11  7 -1  2  5 -1 -1 -1 -1 -1 -1  3 11 19 -1
+                         -1 -1 -1 -1  2  3 20 28 18 19 22 30  5 11 21 29 19 27 23 31  6  7 22 30 22 23 -1 -1
+                          7 15 23 31 30 31 55 -1]
+      FlipPictures   =  [ 0  0  0  0  2  0  0  0  2  0  2  0  2  2  2  0  3  1  0  0  0  0  0  0  3  3  3  0
+                          0  0  0  0  1  1  2  2  1  1  2  2  3  1  2  2  2  1  2  2  1  1  3  3  1  1  0  0
+                          3  1  3  3  1  1  2  0]
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_2099_stacheldraht_ms.pcx 64
+      ImageReference =  [-1 -1 -1 -1  2 -1 -1 -1  1 -1  5 -1  3 11  7 -1  2  5 -1 -1 -1 -1 -1 -1  3 11 19 -1
+                         -1 -1 -1 -1  2  3 20 28 18 19 22 30  5 11 21 29 19 27 23 31  6  7 22 30 22 23 -1 -1
+                          7 15 23 31 30 31 55 -1]
+      FlipPictures   =  [ 0  0  0  0  2  0  0  0  2  0  2  0  2  2  2  0  3  1  0  0  0  0  0  0  3  3  3  0
+                          0  0  0  0  1  1  2  2  1  1  2  2  3  1  2  2  2  1  2  2  1  1  3  3  1  1  0  0
+                          3  1  3  3  1  1  2  0]
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      picture = ob_2099_stacheldraht_ms.pcx 64
+      ImageReference =  [-1 -1 -1 -1  2 -1 -1 -1  1 -1  5 -1  3 11  7 -1  2  5 -1 -1 -1 -1 -1 -1  3 11 19 -1
+                         -1 -1 -1 -1  2  3 20 28 18 19 22 30  5 11 21 29 19 27 23 31  6  7 22 30 22 23 -1 -1
+                          7 15 23 31 30 31 55 -1]
+      FlipPictures   =  [ 0  0  0  0  2  0  0  0  2  0  2  0  2  2  2  0  3  1  0  0  0  0  0  0  3  3  3  0
+                          0  0  0  0  1  1  2  2  1  1  2  2  3  1  2  2  2  1  2  2  1  1  3  3  1  1  0  0
+                          3  1  3  3  1  1  2  0]
+   } snow_and_ice
+
+} ObjectType

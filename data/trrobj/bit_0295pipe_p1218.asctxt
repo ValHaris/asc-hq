@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = pipeline
+   ID = 295
+   parent = 1218
+   dry { 
+      GFX_Picture = 160
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 625
+   } few_snow
+   much_snow { 
+      GFX_Picture = 731
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

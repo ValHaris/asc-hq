@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 3500
+
+   ID = 2004
+
+   Name = Harbour little Northend
+
+   dry { 
+      picture = o2004.pcx 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,44 @@
+ObjectType { 
+   ID = 42
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Armor = 400
+   Movemalus_plus = 
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 28 28  28  28  28  28  28  22  10  28  28  28  28  28  28  28  28  28
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 95
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = Installation Brunnen
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland High_mountains Road Railroad Runway Hard_sand Soft_sand Mountains Very_shallow_water Ditch Hillside Turret_foundation Installation Frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = very_shallow_water shallow_water water deep_water river lava
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Forest High_mountains Road Railroad Runway Hard_sand Soft_sand Mountains Ditch Hillside Turret_foundation Frozen_water 
+   TerrainProperties_Add = Installation 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 30 
+      FlipPictures = 0 
+   } dry
+} ObjectType

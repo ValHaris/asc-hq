@@ -1,0 +1,21 @@
+TerrainType { 
+   Parent = 2944
+   ID = 2946
+
+   dry { 
+      Picture = t2946_moon_lava.pcx
+   } dry
+
+   light_rain { 
+      Picture = t2946_lr.pcx
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2946_hr.pcx
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2946_fs.pcx
+   } few_snow
+
+} TerrainType

@@ -1,0 +1,44 @@
+TerrainType { 
+   Parent = 3003
+
+   ID = 2996
+   Name = Desert (Hard Sand)
+
+   dry { 
+      Picture = t2996_grass_desert.pcx
+      DefenseBonus = -1
+      AttackBonus = 0
+      BasicJamming = -1	
+   } dry
+   light_rain { 
+      Picture = t2996_lr.pcx
+      DefenseBonus = 1
+      AttackBonus = 0
+      BasicJamming = 2
+   } light_rain
+   heavy_rain { 
+      Picture = t2996_hr.pcx
+      DefenseBonus = 2
+      AttackBonus = 0
+      BasicJamming = 4
+   } heavy_rain
+   few_snow { 
+      Picture = t2996_fs.pcx
+      DefenseBonus = -1
+      AttackBonus = 0
+      BasicJamming = 2
+   } few_snow
+   much_snow { 
+      Picture = t2060ms.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 4
+   } much_snow
+   snow_and_ice { 
+      Picture = t2060ms.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 4
+   } snow_and_ice
+
+} TerrainType

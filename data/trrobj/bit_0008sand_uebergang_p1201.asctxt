@@ -1,0 +1,21 @@
+TerrainType { 
+   Name = Sand-Beton Uebergang
+   ID = 8
+   parent = 1201
+   dry { 
+      GFX_Picture = 14
+   } dry
+   light_rain { 
+      GFX_Picture = 1729
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1728
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 976
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1004
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

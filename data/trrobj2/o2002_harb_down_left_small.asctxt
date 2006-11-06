@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 3500
+
+   ID = 2002
+
+   Name = Harbour Southwest
+
+   dry { 
+      picture = o2002_harb_down_left_small.PCX 1 
+   } dry
+
+} ObjectType

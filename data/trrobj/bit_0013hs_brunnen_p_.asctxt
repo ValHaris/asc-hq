@@ -1,0 +1,37 @@
+TerrainType { 
+   Name = hard sand brunnen
+   ID = 13
+   Weather = dry few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 34
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  12  12  12  13  13  13  11  10  13  13  13  13  13  13  13  13  15
+      TerrainProperties = hard_sand track_possible
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 982
+       DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 13  13  13  13  14  14  14  12  10  14  14  14  14  14  14  14  14  15
+      TerrainProperties = hard_sand snow Track_possible 
+  } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 1011
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      BasicJamming = 10
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 17  17  17  17  17  17  17  15  13  17  17  17  17  17  17  17  17  12
+      TerrainProperties = hard_sand Deep_snow track_possible
+   } much_snow
+   snow_and_ice ->* terraintype.much_snow
+} TerrainType

@@ -1,0 +1,43 @@
+TerrainType { 
+   Parent = 2030
+   ID = 2924
+
+   Name = Kai + Desert
+
+   dry { 
+      Picture = t2924_hard_kaibeton.pcx
+      DefenseBonus = -1
+      AttackBonus = 0
+      BasicJamming = -1
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  13  13  13  13  13  13  13  11  10  13 255  16  13  13 255 255  13  10
+   } dry
+
+   light_rain { 
+      Picture = t2924_lr.pcx
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = -1
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  17  14  16  15  16  19  17  13  10  20 255  16  20  20 255 255  20  11
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2924_hr.pcx
+      DefenseBonus = 1
+      AttackBonus = 0
+      BasicJamming = 2
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  20  24  19  17  34  26  24  15  12  30 255  16  30  30 255 255  30  12
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2924_fs.pcx
+      DefenseBonus = -2
+      AttackBonus = 0
+      BasicJamming = -1
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  13  14  13  13  14  13  13  11  10  14 255  16  14  14 255 255  14  10
+   } few_snow
+
+} TerrainType

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 3500
+
+   ID = 2021
+
+   Name = o2021_harb_up_right_big
+
+   dry { 
+      picture = o2021_harb_up_right_big.PCX 1 
+   } dry
+
+} ObjectType

@@ -1,0 +1,15 @@
+ObjectType { 
+   Parent = 2200
+
+   ID = 2210
+
+   Weather = dry
+
+   Name = Hill (2) West-End
+
+   dry { 
+      UseGFXpics = false
+      picture = o2210.pcx 1
+   } dry
+
+} ObjectType

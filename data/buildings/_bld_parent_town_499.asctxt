@@ -1,0 +1,70 @@
+BuildingType {
+   abstract = true
+   Name = building parent
+   Infotext = 
+   ConstructionStages = 1
+   Weather = dry
+   visible_in_fogOfWar = false
+   Fields = A1 
+   ID = 499
+   Armor = 10000
+   View = 20
+   Jamming = 0
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 500
+      MaxLoadableMass = 1000
+      CategoriesNOT = default medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+        DisableAttack = false
+      } EntranceSystem0
+   } Transportation
+   Functions = 
+   Techlevel = 0
+   MaxResearch = 0
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand very_shallow_water 
+      terrain_all = 
+      terrain_not = railroad large_rocks swamp
+      terrain_kill = lava water deep_water river
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 0
+      material = 0
+      fuel = 0
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 300
+         fuel = 300
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType
+
+

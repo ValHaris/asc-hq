@@ -1,0 +1,40 @@
+ObjectType { 
+   Name = Mountain parent
+   ID = 104
+   canExistBeneathBuildings = true
+   abstract = true
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 25 25  25  25  25  25  25  20  20  25  25  16  25  25  25  25  25  35 
+   AttackBonus_abs = 1
+   AttackBonus_plus = 
+   DefenseBonus_abs = 1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jammming_plus = 5
+   Height = 91
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Water Deep_water Hard_sand Soft_sand Very_shallow_water lava river  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Water Deep_water Hard_sand Soft_sand Very_shallow_water lava Ditch Hillside Turret_foundation Morass Frozen_water 
+   TerrainProperties_Add = mountains 
+} ObjectType

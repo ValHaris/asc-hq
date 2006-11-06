@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = dark mountain south
+   ID = 186
+   parent = 1214
+   dry { 
+      GFX_Picture = 446
+   } dry
+   light_rain { 
+      GFX_Picture = 446
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 446
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 446
+   } few_snow
+   much_snow { 
+      GFX_Picture = 945
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 945
+   } snow_and_ice
+} TerrainType

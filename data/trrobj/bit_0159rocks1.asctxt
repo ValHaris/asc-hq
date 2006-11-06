@@ -1,0 +1,35 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 159
+   Weather = dry few_snow much_snow 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 170
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  20  20  20  15  11  20  20  20  20  20  20  20  20  30 
+      TerrainProperties = hard_sand Track_possible Small_rocks 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 635
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 7
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 22  22  22  22  22  22  22  17  12  22  22  22  22  22  22  22  22  32 
+      TerrainProperties = hard_sand snow Track_possible Small_rocks
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 741
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 12
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  20  13  25  25  25  25  25  25  25  25  35   
+      TerrainProperties = hard_sand Deep_snow Track_possible Small_rocks
+   } much_snow
+} TerrainType

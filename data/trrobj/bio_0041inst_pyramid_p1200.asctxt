@@ -1,0 +1,26 @@
+ObjectType { 
+   ID = 41
+   parent = 100
+   Weather = dry few_snow much_snow snow_and_ice
+   Name = Pyramid
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 28 
+      FlipPictures = 0 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFXpictures = 1019 
+      FlipPictures = 0 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1991
+      FlipPictures = 0 
+   } much_snow
+   snow_And_ice { 
+      UseGFXpics = true
+      GFXpictures = 1991
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

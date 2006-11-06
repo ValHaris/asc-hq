@@ -1,0 +1,58 @@
+BuildingType { 
+   Abstract = true
+   ID = 498
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   E X A M P L E S   --------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+;      EntranceSystemNum = 1
+;      EntranceSystem0 ->* VehicleType.GrIO
+;
+;      CategoriesNOT = -> VehicleType.cargo_trooper_only.CategoriesNOT
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   N O T   D E F I N A T I O N S   ------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   cargo_trooper_only {
+      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
+   } cargo_trooper_only
+
+   cargo_trtrain {
+      CategoriesNOT = hoovercraft medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft
+   } cargo_trtrain
+ 
+; ----------------------------------------------------------------------------------------------------------------
+; -----   C A R R I E R   L A N D I N G   ------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   carrier {
+        Mode = In out
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+   } carrier
+   
+   carrier_ground ->* BuildingType.carrier
+   carrier_ground.ContainerHeight = ground
+   
+; ----------------------------------------------------------------------------------------------------------------
+; -----   G R O U N D   I N & O U T   ----------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   GrIO {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+   } GrIO
+   
+} BuildingType

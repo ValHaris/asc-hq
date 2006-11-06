@@ -1,0 +1,45 @@
+TerrainType { 
+   Name = vsw
+   ID = 274
+   Weather = dry few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 121
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  22  22  22  22  22  22  15  10  22  17  19  22  22  17  17  22  20 
+      TerrainProperties = very_shallow_water forest
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 1047
+     DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  20  10  25  20  25  25  25  20  20  25  25 
+      TerrainProperties = very_shallow_water forest 
+    } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 1073
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 30  30  30  30  30  30  30  25  12  30  25  30  30  30  25  25  30  30 
+      TerrainProperties = very_shallow_water track_possible pack_ice forest
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFX_Picture = 1696
+      DefenseBonus = 0
+      AttackBonus = 0
+     BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 30  30  30  30  30  30  30  25  12  30  25  30  30  30  25  25  30  30 
+      TerrainProperties = very_shallow_water track_possible frozen_water forest
+   } snow_and_ice
+} TerrainType

@@ -1,0 +1,14 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 344
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 502
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 33 
+      TerrainProperties = 
+   } dry
+} TerrainType

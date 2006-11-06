@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = hillside south
+   ID = 92
+   parent = 1215
+   dry { 
+      GFX_Picture = 214
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 679
+   } few_snow
+   much_snow { 
+      GFX_Picture = 785
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

@@ -1,0 +1,43 @@
+ObjectType { 
+   ID = 1029
+   Weather = dry 
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 3
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = stones in water
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Shallow_water Very_shallow_water Pack_ice River Frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Building_entry_dont_use_it Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation River 
+   TerrainProperties_Add = Small_rocks 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 388 
+      FlipPictures = 0 
+   } dry
+} ObjectType

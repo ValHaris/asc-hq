@@ -1,0 +1,26 @@
+ObjectType { 
+   ID = 1069
+   parent = 100
+   Weather = dry few_snow much_snow snow_and_ice
+   Name = depot4
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 53 
+      FlipPictures = 0 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFXpictures = 1779
+      FlipPictures = 0 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1778
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1778
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

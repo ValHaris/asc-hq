@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 2501
+
+   ID = 2506
+
+   LinkableObjects = 2501 988  2500 2502 2503 2504 2505 2507 2508
+   LinkableTerrain = 2000 2001 2002
+
+   Name = MOUNTAIN Lavariver / Lavacoast
+   Height = 94 ;17-Aug 2003
+
+   TerrainAccess { 
+      terrain_any = mountains high_mountains
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+} ObjectType

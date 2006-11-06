@@ -1,0 +1,23 @@
+TerrainType { 
+   Parent = 2925
+   ID = 2927
+
+   Name = Kai + Desert
+
+   dry { 
+      Picture = t2927.pcx
+   } dry
+
+   light_rain { 
+      Picture = t2927_lr.pcx
+   } light_rain
+
+   heavy_rain { 
+      Picture = t2927_hr.pcx
+   } heavy_rain
+
+   few_snow { 
+      Picture = t2927_fs.pcx
+   } few_snow
+
+} TerrainType

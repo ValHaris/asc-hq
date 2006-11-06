@@ -1,0 +1,64 @@
+ObjectType { 
+
+
+
+   ID = 2200
+
+   Weather = dry much_snow
+
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+
+   Name = Hill North-West
+   Armor = 0
+   Height = 91 ;17-Aug 2003
+
+   canExistBeneathBuildings = true
+
+   ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_plus = 255  12  10   8  15  13  10   8   5 255 255   0 255 255 255 255 255 255
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = Lowland  
+      terrain_all = 
+      terrain_not = Forest Mountains High_mountains Small_rocks Large_rocks Ditch Hillside Turret_foundation Installation River Swamp Morass very_shallow_water shallow_water water deep_water
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = [very_shallow_water shallow_water water deep_water
+                               Lowland hard_sand soft_sand
+                               small_rocks large_rocks forest
+                               mud morass swamp
+                               track_possible]
+   TerrainProperties_Add = Mountains
+
+   dry { 
+      UseGFXpics = false
+      picture = o2200.pcx 1
+   } dry
+
+   much_snow { 
+      UseGFXpics = false
+      picture = o2200_ms.pcx 1
+   } much_snow
+
+} ObjectType

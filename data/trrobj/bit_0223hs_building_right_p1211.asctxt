@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = hs building right
+   ID = 223
+   parent = 1211
+   dry { 
+      GFX_Picture = 204
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 669
+   } few_snow
+   much_snow { 
+      GFX_Picture = 775
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

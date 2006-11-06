@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = 201 harbour south west
+   ID = 201
+   parent = 1207 
+   dry { 
+      GFX_Picture = 9
+   } dry
+   few_snow { 
+      GFX_Picture = 9
+   } few_snow
+   much_snow { 
+      GFX_Picture = 999
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1874
+   } snow_and_ice
+} TerrainType

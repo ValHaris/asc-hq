@@ -1,0 +1,64 @@
+ObjectType { 
+
+
+
+   ID = 2152
+   GroupID = 11
+
+   Weather = dry much_snow snow_and_ice
+
+   Name = Raps-Fields
+   Height = 100 ;17-Aug 2003
+   Armor = 0
+
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   NetBehaviour = 
+
+   ;               def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = -1
+   Movemalus_plus =  5
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 3
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 100
+      fuel = 0
+      Movement = 5
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = -200
+      Movement = 5
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = [lava river Shallow_water Water Deep_water Very_shallow_water Pack_ice Frozen_water
+                      installation forest turret_foundation]
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = 
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_2152_field_dry.pcx 1
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_2152_field_ms.pcx 1
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      picture = ob_2152_field_ms.pcx 1
+   } snow_and_ice
+
+} ObjectType

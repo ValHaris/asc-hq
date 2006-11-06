@@ -1,0 +1,41 @@
+TerrainType { 
+   ID = 2944
+   Parent = 2068
+
+   Name = Frozen Lava
+
+   dry { 
+      Picture = t2944_moon_lava.pcx
+   } dry
+   light_rain { 
+      Picture = t2944_lr.pcx
+      DefenseBonus = 1
+      AttackBonus = 0
+      BasicJamming = 2
+   } light_rain
+   heavy_rain { 
+      Picture = t2944_hr.pcx
+      DefenseBonus = 2
+      AttackBonus = 0
+      BasicJamming = 4
+   } heavy_rain
+   few_snow { 
+      Picture = t2944_fs.pcx
+      DefenseBonus = -1
+      AttackBonus = 0
+      BasicJamming = 2
+   } few_snow
+   much_snow { 
+      Picture = t2068hs.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 4
+   } much_snow
+   snow_and_ice { 
+      Picture = t2068hs.pcx
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 4
+   } snow_and_ice
+
+} TerrainType

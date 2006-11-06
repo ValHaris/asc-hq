@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = deep water dark
+   ID = 308
+   parent = 1208
+   dry { 
+      GFX_Picture = 387
+      TerrainProperties = deep_Water 
+   } dry
+   few_snow ->* TerrainType.dry
+   much_snow { 
+      GFX_Picture = 1700
+      TerrainProperties = deep_Water pack_ice 
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1701
+      TerrainProperties = deep_Water Track_possible frozen_water 
+   } snow_and_ice
+} TerrainType

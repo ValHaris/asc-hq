@@ -1,0 +1,28 @@
+ObjectType { 
+   ID = 40
+   parent = 100
+   Weather = dry much_snow snow_and_ice
+   Armor = 300
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 28 28  28  28  28  28  28  22  10  28  28  28  28  28  28  28  28  28
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Name = Kisten
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 23 
+      FlipPictures = 0 
+   } dry
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1028
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1028
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

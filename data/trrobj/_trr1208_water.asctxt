@@ -1,0 +1,32 @@
+TerrainType { 
+   Name =  water parent
+   ID = 1208
+   abstract = true
+   Weather = dry few_snow much_snow snow_and_ice 
+   dry { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20 20  20  20  20  20  20  10  10  20  10  11  20  20  10  10  20  10
+   } dry
+   few_snow ->* TerrainType.dry
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 996
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25 25  25  25  25  25  25  25  12  25  14  12  25  25  16  12  25  25 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 13 13  13  13  14  14  14  12  12  20  22  16  20  20  22  22  20  11  
+   } snow_and_ice
+} TerrainType

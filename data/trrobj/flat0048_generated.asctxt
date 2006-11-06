@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 48
+   Weather = dry much_snow 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 383
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 11 
+      TerrainProperties = Lowland Track_possible 
+   } dry
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 883
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 11 
+      TerrainProperties = Lowland Small_rocks Deep_snow 
+   } much_snow
+} TerrainType

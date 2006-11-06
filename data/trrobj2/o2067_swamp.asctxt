@@ -1,0 +1,8 @@
+ObjectType { 
+   Parent = 3560
+   ID = 2067
+
+   dry { 
+      picture = o2067_low_swamp_256.pcx 1
+   } dry
+} ObjectType
