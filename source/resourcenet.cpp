@@ -724,6 +724,14 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                   *log += s;
                }
             }
+            
+            if ( v1->damage != v2->damage ) {
+               diff = true;
+               if ( log ) {
+                  s.format ( "Vehicle (%d,%d) damage mismatch: %d after replay, but %d in actual map\n", v1->getPosition().x, v1->getPosition().y, v2->damage, v1->damage );
+                  *log += s;
+               }
+            }
          }
       }
 

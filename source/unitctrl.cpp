@@ -41,6 +41,7 @@
 #include "gameeventsystem.h"
 #include "actions/servicing.h"
 #include "soundList.h"
+#include "reactionfire.h"
 
 PendingVehicleActions pendingVehicleActions;
 
@@ -277,6 +278,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
    int movedist = 0;
    int fueldist = 0;
    int networkID = vehicle->networkid;
+   int operatingPlayer = vehicle->getOwner();
 
    bool viewInputChanged= false;
    bool mapDisplayUpToDate = true;
@@ -538,6 +540,9 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       }
    }
 
+   if ( rf->finalCheck( mapDisplay, operatingPlayer ))
+      finalRedrawNecessary = true;
+   
    if ( viewInputChanged ) {
       int fieldschanged;
       if ( actmap->playerView >= 0 )

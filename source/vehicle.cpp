@@ -749,6 +749,18 @@ bool Vehicle::ReactionFire::canMove() const
    return false;
 }
 
+bool Vehicle::ReactionFire:: canPerformAttack( Vehicle* target )
+{
+   if ( unit->getMap()->getPlayer(unit).diplomacy.isHostile( actmap->actplayer))
+      if ( getStatus() >= ready )
+         if ( find ( nonattackableUnits.begin(), nonattackableUnits.end(), target->networkid) == nonattackableUnits.end() ) 
+            if ( enemiesAttackable & ( 1 << target->getOwner() ))
+               return true;
+   
+   return false;
+}
+
+
 
 const Vehicletype::HeightChangeMethod* Vehicle::getHeightChange( int dir, int height ) const
 {

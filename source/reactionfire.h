@@ -43,9 +43,6 @@ struct treactionfire_replayinfo {
          int dd2 ;
          int wpnum;
 };
-typedef treactionfire_replayinfo* preactionfire_replayinfo;
-
-
 
 
 
@@ -53,33 +50,41 @@ class treactionfire {
           public:
              virtual int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md ) = 0;
              virtual void init ( Vehicle* eht, const AStar3D::Path&  fieldlist ) = 0;
+             virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer ) = 0;
              virtual ~treactionfire() {};
         };
 
 class treactionfirereplay : public treactionfire {
           protected:
              int num;
-             dynamic_array<preactionfire_replayinfo> replay;
+             dynamic_array<treactionfire_replayinfo*> replay;
              Vehicle* unit;
           public:
              treactionfirereplay ( void );
              ~treactionfirereplay ( );
              virtual int checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
              virtual void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
-   };
+             virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer ) { return 0; };
+};
 
 class tsearchreactionfireingunits : public treactionfire {
            protected:
 
+              int attack( Vehicle* attacker, Vehicle* target, MapDisplayInterface* md );
 
-                static int maxshootdist[8];     // f?r jede H”henstufe eine
+                static int maxshootdist[8];     // f?r jede Hhenstufe eine
                 void addunit ( Vehicle* vehicle );
                 void removeunit ( Vehicle* vehicle );
+                
+                typedef map<const Vehicle*,int> VisibleUnits;
+                VisibleUnits visibleUnits;
+                
            public:
 
                 tsearchreactionfireingunits( void );
                 void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
                 int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
+                virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer );
                 ~tsearchreactionfireingunits();
       };
 

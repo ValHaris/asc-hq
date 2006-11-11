@@ -46,6 +46,7 @@
 #include "turncontrol.h"
 #include "widgets/textrenderer.h"
 #include "actions/jumpdrive.h"
+#include "reactionfire.h"
 
 trunreplay runreplay;
 
@@ -1876,10 +1877,10 @@ void trunreplay :: readnextaction ( void )
 }
 
 
-preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
+treactionfire_replayinfo* trunreplay::getnextreplayinfo ( void )
 {
    if ( nextaction == rpl_reactionfire ) {
-      preactionfire_replayinfo reac = new treactionfire_replayinfo;
+      treactionfire_replayinfo* reac = new treactionfire_replayinfo;
       stream->readInt(); // size
 
       reac->x1 = stream->readInt();

@@ -124,6 +124,8 @@ class BuildingType;
          void endAnyTurn();
          void checkData();
 
+         bool canPerformAttack( Vehicle* target );
+         
          bool canMove() const;
        private:
          Status status;

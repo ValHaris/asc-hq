@@ -18,8 +18,10 @@
 #ifndef replayH
  #define replayH
 
-#include "reactionfire.h"
 #include "events.h"
+#include "ascstring.h"
+#include "gamemap.h"
+#include "basestreaminterface.h"
 
 /*! \file replay.h
     \brief Interface for recording and playing replays
@@ -81,6 +83,8 @@ enum trpl_actions { rpl_attack,
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
+struct treactionfire_replayinfo;
+
 class trunreplay {
             ASCString lastErrorMessage;
          protected:
@@ -103,7 +107,7 @@ class trunreplay {
 
          public:
 
-            preactionfire_replayinfo getnextreplayinfo ( void );
+            treactionfire_replayinfo* getnextreplayinfo ( void );
 
             trunreplay ( void );
             int status;
