@@ -315,7 +315,7 @@ void InfoPage::addMainText() {
 
     addParagraph(text.c_str() );
   } else {
-    addParagraph("No information available: Do you  want to write an info text? Send it to unitguide@asc-hq.org" );
+    addParagraph("No information available" );
   }
 }
 ofstream* InfoPage::openOFileStream(const ASCString& fileName) {
@@ -734,7 +734,7 @@ void UnitCargoPage::buildContent() {
         type = addTREntryln(type, cmovemalitypes[h]);
       }
     }
-    addTREntry("Unit accessable to", type);
+    addTREntry("Unit accessable for", type);
     endTable();
     if ( !cbt.entranceSystems.empty() ) {
       addHeadline("Entrance System", 4);

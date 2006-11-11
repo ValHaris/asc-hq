@@ -1,4 +1,4 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= asc mapeditor
+SUBDIRS 		= asc mapeditor @PBPED@
 

@@ -4,23 +4,23 @@ TerrainType {
 
    Name = Deep Seawater
    dry { 
-      Picture = t2000.pcx
+      Picture = t2000.png
       TerrainProperties = Deep_water 
    } dry
    light_rain { 
-      Picture = t2000.pcx
+      Picture = t2000.png
       TerrainProperties = Deep_water 
    } light_rain
    heavy_rain { 
-      Picture = t2000_hr.pcx
+      Picture = t2000.png
       TerrainProperties = Deep_water 
    } heavy_rain
    few_snow { 
-      Picture = t2000.pcx
+      Picture = t2000.png
       TerrainProperties = Deep_water
    } few_snow
    much_snow { 
-      Picture = t2000.pcx
+      Picture = t2000.png
       TerrainProperties = Deep_water
    } much_snow
    snow_and_ice { 

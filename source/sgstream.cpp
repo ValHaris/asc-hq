@@ -393,7 +393,7 @@ void checkDataVersion( )
       versionError ( "main.con", location );
 
 
-   checkFileVersion( "mk1.version", "mk1.con", 14 );
+   checkFileVersion( "mk1.version", "mk1.con", 17 );
    checkFileVersion( "mk3.version", "units-mk3.con", 13 );
    checkFileVersion( "buildings.version", "buildings.con", 11 );
    checkFileVersion( "trrobj.version", "trrobj.con", 13 );

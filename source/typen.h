@@ -476,8 +476,8 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 //! The maximum number of fields a mining station can extract mineral resources from; Counted from its entry
 const int maxminingrange = 10;
 
-const float productionLineConstructionCostFactor = 0.5;
-const float productionLineRemovalCostFactor = 0.2;
+const double productionLineConstructionCostFactor = 0.5;
+const double productionLineRemovalCostFactor = 0.2;
 
 
 

@@ -912,7 +912,7 @@ void trunreplay :: execnextreplaymove ( void )
                            vm.execute ( eht, x2, y2, 0, -2, 0 );
                            vm.execute ( eht, x2, y2, 2, height, -1 );
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
-                           vm.execute ( NULL, x2, y2, 3, height, noInterrupt );
+                           vm.execute ( NULL, x2, y2, 3, height, noInterrupt > 0 ? VehicleMovement::NoInterrupt : 0 );
 
                            if ( vm.getStatus() != 1000 ) {
                               if ( CGameOptions::Instance()->replayMovieMode ) {

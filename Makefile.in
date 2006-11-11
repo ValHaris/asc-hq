@@ -141,6 +141,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PARAGUI_CFLAGS = @PARAGUI_CFLAGS@
 PARAGUI_LIBS = @PARAGUI_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PBPED = @PBPED@
 PHYSFS_INCLUDE = @PHYSFS_INCLUDE@
 PHYSFS_LIB = @PHYSFS_LIB@
 PHYSFS_SUBDIR = @PHYSFS_SUBDIR@
@@ -651,6 +652,12 @@ uninstall-info: uninstall-info-recursive
 
 htmldoc:
 	cd source ; make htmldoc
+
+installer: 
+	cd $(top_srcdir)/installer && makensis pbp.nsi
+
+pbpinstaller: 
+	cd $(top_srcdir)/installer && makensis pbp.nsi
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

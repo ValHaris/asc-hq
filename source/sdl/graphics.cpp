@@ -92,7 +92,7 @@ Surface& getActiveSurface()
 int copy2screen( void )
 {
   #ifdef _WIN32_  
-   SDL_ShowCursor(0);
+   // SDL_ShowCursor(0);
   #endif 
    if ( !dummyScreenPaletteSetup ) {
       hgmp->surface->assignDefaultPalette();
@@ -103,7 +103,7 @@ int copy2screen( void )
       SDL_BlitSurface( hgmp->surface->getBaseSurface() , NULL, screen, NULL );
    SDL_UpdateRect ( screen , 0,0,0,0 );
   #ifdef _WIN32_  
-   SDL_ShowCursor(1);
+   // SDL_ShowCursor(1);
   #endif 
    return 0;
 }

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.1 2006-11-04 13:17:53 mbickel Exp $
+## $Id: Makefile.am,v 1.1.2.1 2006-11-11 16:11:43 mbickel Exp $
 
 vpath %.cpp ../..
 

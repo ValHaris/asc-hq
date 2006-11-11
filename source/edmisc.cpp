@@ -89,7 +89,7 @@ bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool
 }
    
    
-// õS Checkobject
+// ï¿½ Checkobject
 
 char checkobject(tfield* pf)
 {
@@ -98,7 +98,7 @@ char checkobject(tfield* pf)
 
 
 
-// õS PutResource
+// ï¿½ PutResource
 
 void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
@@ -194,7 +194,7 @@ void tputresourcesdlg :: run ( void )
 
 
 
-// õS Lines
+// ï¿½ Lines
 
 void lines(int x1,int y1,int x2,int y2)
 {
@@ -207,7 +207,7 @@ void lines(int x1,int y1,int x2,int y2)
 
 
 
-// õS PlayerChange
+// ï¿½ PlayerChange
 
 /* class   tcolorsel : public tstringselect {
            public :
@@ -535,7 +535,7 @@ void         exchg(int *       a1,
 
 
 
-// õS TCDPlayer
+// ï¿½ TCDPlayer
 
 /*
 
@@ -773,11 +773,11 @@ Vehicle*  selectUnitFromMap()
 
 #endif
 
-//* õS FillPolygonevent
+//* ï¿½ FillPolygonevent
 
 
 
-//* õS FillPolygonbdt
+//* ï¿½ FillPolygonbdt
 /*
 void tfillpolygonbodentyp::setpointabs    ( int x,  int y  )
 {
@@ -802,7 +802,7 @@ void tfillpolygonbodentyp::initevent ( void )
 {
 }
 
-// õS FillPolygonunit
+// ï¿½ FillPolygonunit
 
 void tfillpolygonunit::setpointabs    ( int x,  int y  )
 {
@@ -844,7 +844,7 @@ void tfillpolygonunit::initevent ( void )
 }
 
 
-// õS ChangePoly
+// ï¿½ ChangePoly
 */
 
 
@@ -922,7 +922,7 @@ void         newmap(void)
 }
 
 
-//* õS MapVals
+//* ï¿½ MapVals
 
 
 
@@ -1220,10 +1220,10 @@ void         changebuildingvalues( Building& b )
    displaymap();
 }
 
-// õS Class-Change
+// ï¿½ Class-Change
 
 
-// õS Polygon-Management
+// ï¿½ Polygon-Management
 /*
 class tpolygon_managementbox: public tstringselect {
               public:
@@ -1358,7 +1358,7 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
    else return 0;
 }
 */
-// õS Unit-Values
+// ï¿½ Unit-Values
 
 
 class   StringSelector : public tstringselect {
@@ -1805,7 +1805,7 @@ void         changeunitvalues(Vehicle* ae)
 }
 
 
-//* õS Resource
+//* ï¿½ Resource
 
      class tres: public tdialogbox {
         tfield* pf2;
@@ -1883,7 +1883,7 @@ void         changeresource(void)
    resource.done();
 }
 
-//* õS MineStrength
+//* ï¿½ MineStrength
 
      class tminestrength: public tdialogbox {
                tfield* pf2;
@@ -1961,7 +1961,7 @@ void         changeminestrength(void)
 
 
 #if 0
-//* õS Laderaum Unit-Cargo
+//* ï¿½ Laderaum Unit-Cargo
 
 class tladeraum : public tdialogbox {
                protected:
@@ -2423,7 +2423,7 @@ Vehicle* selectUnitFromContainer( ContainerBase* container )
 
 
 
-//* õS Laderaum2 Building-Cargo
+//* ï¿½ Laderaum2 Building-Cargo
 
 #if 0
 
@@ -2529,7 +2529,7 @@ void         building_cargo( Building* bld )
 }
 
 
-//* õS Production Building-Production
+//* ï¿½ Production Building-Production
 
 
 class tbuildingproduction : public tbuildingcargoprod {
@@ -2827,18 +2827,18 @@ void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
    title = "Select Transformation Table";
    numberoflines = unitSets[unitsetnum]->transtab.size();
    ey = ysize - 60;
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true);
-   addkey(2,ct_enter);
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true);
-   addkey(3,ct_esc);
+   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,202,true);
+   addkey(202,ct_enter);
+   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,203,true);
+   addkey(203,ct_esc);
 }
 
 void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(int         id)
 {
    tstringselect::buttonpressed(id);
    switch (id) {
-      case 2:
-      case 3:   action = id;
+      case 202:
+      case 203:   action = id-200;
                 break;
    }
 }

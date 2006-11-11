@@ -759,8 +759,6 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 } // namespace forestcalculation
 
 
-
-
 #else // ifdef converter
 
 

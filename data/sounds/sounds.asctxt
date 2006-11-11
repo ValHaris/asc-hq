@@ -1,0 +1,101 @@
+sounds {
+
+   shoot.cruisemissile.labels = default extended
+   shoot.cruisemissile.files = cruisemissile_wo_g.ogg cruisemissile_wo_g.ogg
+
+   shoot.mine.labels = default underwater extended
+   shoot.mine.files = mine_g.ogg mine_g.ogg mine_g.ogg
+
+   shoot.bomb.labels = default small extended ground_bomb
+   shoot.bomb.files = bomb_g.ogg bomb_g.ogg bomb_g.ogg bomb_g.ogg
+
+   shoot.airmissile.labels = default small extended flak
+   shoot.airmissile.files = airmissile_g.ogg airmissile_g.ogg airmissile_g.ogg airmissile_g.ogg
+
+   shoot.groundmissile.labels = default small extended
+   shoot.groundmissile.files = groundmissile_sh_g.ogg groundmissile_s.ogg groundmissile_g.ogg
+
+   shoot.smallmissile.files = groundmissile_sh_g.ogg
+
+   shoot.largemissile.files = groundmissile_sh_g.ogg
+
+   shoot.torpedo.labels = default small extended
+   shoot.torpedo.files = weapon05_s.ogg weapon05_s.ogg weapon05_s.ogg
+
+   shoot.machinegun.labels = default small extended pistol alternative
+   shoot.machinegun.files = machinegun_g.ogg machinegun_g.ogg machinegun_g.ogg machinegun_g.ogg machinegun_g.ogg
+
+   shoot.cannon.labels = default small extended flak artillery
+   shoot.cannon.files = canon_g.ogg canon_g.ogg canon_g.ogg canon_g.ogg canon_g.ogg
+
+   shoot.laser.labels = default small extended
+   shoot.laser.files = laser_g.ogg laser_g.ogg laser_g.ogg
+
+   move.default.labels = rocket hoovercraft default small extended virus
+   move.default.files = cruisemissile_wo_g.ogg hovercraft_s.ogg
+
+   move.light_tracked_vehicle.labels = default small extended robot
+   move.light_tracked_vehicle.files = tank_l_g.ogg tracked_s.ogg tracked_ext_s.ogg mech_s.ogg
+
+   move.medium_tracked_vehicle.labels = default small extended truck
+   move.medium_tracked_vehicle.files = tank_m_g.ogg tank_m_g.ogg tracked_ext_s.ogg truck_s.wav
+
+   move.heavy_tracked_vehicle.labels = default small extended truck
+   move.heavy_tracked_vehicle.files = tank_h_g.ogg tank_h_g.ogg tank_h_g.ogg truck_small_s.ogg
+
+   move.light_wheeled_vehicle.labels = default small extended
+   move.light_wheeled_vehicle.files = wheeled_l_g.ogg wheeled_l_g.ogg buggy_s.ogg
+
+   move.medium_wheeled_vehicle.labels = default small extended
+   move.medium_wheeled_vehicle.files = wheeled_m_g.ogg wheeled_m_g.ogg truck_s.wav
+
+   move.heavy_wheeled_vehicle.labels = default
+   move.heavy_wheeled_vehicle.files = wheeled_h_g.ogg
+
+   move.mech.labels = default
+   move.mech.files = mech_s.ogg
+
+   move.trooper.labels = default small extended diver
+   move.trooper.files = trooper_g.ogg trooper_marching_2_s.ogg trooper_marching_3_s.ogg diver_s.ogg
+
+   move.rail_vehicle.labels = default small extended
+   move.rail_vehicle.files = train.wav train_a_s.ogg train_h_s.ogg
+
+   move.turret.labels = default
+   move.turret.files = turret_g.ogg
+
+   move.light_aircraft.labels = default small extended satelite 
+   move.light_aircraft.files = aircraft_l_g.ogg aircraft_l_g.ogg drone_flight_s.ogg airmissile_wo_g.ogg
+
+   move.medium_aircraft.labels = default small extended satelite
+   move.medium_aircraft.files = aircraft_m_g.ogg aircraft_m_g.ogg aircraft_m_g.ogg airmissile_wo_g.ogg
+
+   move.heavy_aircraft.labels = default small extended satelite
+   move.heavy_aircraft.files = aircraft_m_g.ogg aircraft_m_g.ogg aircraft_prop_g.ogg airmissile_wo_g.ogg
+
+   move.helicopter.labels = default small extended
+   move.helicopter.files = heli_g.ogg heli_s_s.ogg heli_h_s.ogg
+
+   move.light_ship.labels = default small extended submarine
+   move.light_ship.files = ship_l_g.ogg ship_c_s.ogg ship_b_s.ogg submarine_down_s.ogg
+
+   move.medium_ship.labels = default small extended submarine
+   move.medium_ship.files = ship_a_s.ogg ship_l_g.ogg ship_b_s.ogg submarine_down_s.ogg
+
+   move.heavy_ship.labels = default small extended submarine
+   move.heavy_ship.files = ship_h_g.ogg ship_b_s.ogg ship_h_g.ogg submarine_down_s.ogg
+
+   move.hoovercraft.labels = default sy-ground sy_small_01 sy_small_02 sy_medium_01 sy_medium_02 sy_big
+   move.hoovercraft.files = hovercraft_s.ogg sy_ground_s.ogg sy_move_high_s.ogg sy_move_high_rumble_s.ogg sy_move_low_s.ogg sy_move_low_rumble_s.ogg sy_move_med_s.ogg
+
+   userinterface.acknowledge.files = interface_click3_s.wav
+
+   building_collapses.files = building_collapse_s.ogg
+
+   conquer_building..labels = default extended
+   conquer_building.files = conquerbuilding_g.ogg conquered_s.ogg
+
+   unit_explodes.labels = default trooper diver mech_robot rocket satelite space_station li_tank md_tank hv_tank li_plane md_plane hv_plane helicopter li_ship md_ship hv_ship hovercraft li_sub md_sub hv_sub
+   UNIT_EXPLODES.files = hartziel1_g.ogg gun_big_attached_s.ogg gun_big_attached_s.ogg hartziel2_g.ogg hartziel3_g.ogg explo_submarine2_s.ogg explo_submarine_s.ogg explo_wheeled_tank_s.ogg explo_md_tank_s.ogg hartziel3_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel4_g.ogg explo_big_ship_s.ogg hartziel2_g.ogg hartziel2_g.ogg explo_submarine2_s.ogg explo_submarine_s.ogg
+
+} sounds

@@ -125,6 +125,7 @@ PACKAGE_VERSION = @PACKAGE_VERSION@
 PARAGUI_CFLAGS = @PARAGUI_CFLAGS@
 PARAGUI_LIBS = @PARAGUI_LIBS@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PBPED = @PBPED@
 PHYSFS_INCLUDE = @PHYSFS_INCLUDE@
 PHYSFS_LIB = @PHYSFS_LIB@
 PHYSFS_SUBDIR = @PHYSFS_SUBDIR@
@@ -191,7 +192,7 @@ subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = asc mapeditor
+SUBDIRS = asc mapeditor @PBPED@
 all: all-recursive
 
 .SUFFIXES:

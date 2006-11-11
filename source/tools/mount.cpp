@@ -373,6 +373,9 @@ void testcompress ( char* name, int size )
                   printf ( "mzl compressed" );
                copyfile ( "temp.mzl", orgname, compr );
             }
+
+      unlink("temp.mzl");
+      unlink("temp.rle");
    }
    if ( name == newname )
       remove ( newname );

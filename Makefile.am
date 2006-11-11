@@ -6,3 +6,9 @@ AUTOMAKE_OPTIONS 	= foreign
 
 htmldoc:
 	cd source ; make htmldoc
+
+installer: 
+	cd $(top_srcdir)/installer && makensis pbp.nsi
+
+pbpinstaller: 
+	cd $(top_srcdir)/installer && makensis pbp.nsi
