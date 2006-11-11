@@ -76,6 +76,21 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    appendTerrainBits ( text, &fld->bdt );
 
 
+   text += "\n\n#eeinzug0##fontsize=14#Visibility#eeinzug20##fontsize=12#\n";
+
+   int view = 0;
+   int jamming = 0; 
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i ) 
+      if ( gamemap->getPlayer(i).diplomacy.sharesView( gamemap->playerView)) {
+         view += fld->view[i].view;
+         jamming += fld->view[i].jamming;
+      }
+
+   text += "View: " + ASCString::toString( view ) + "\n";
+   text += "Jamming: " + ASCString::toString( jamming ) + "\n";
+   text += "Terrain view obstruction (basejamming): " + ASCString::toString( fld->getjamming() ) + "\n";
+
+
    text += "\n#eeinzug0##fontsize=14#Movemali#eeinzug20##fontsize=12#\n";
 
 

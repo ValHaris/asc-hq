@@ -209,7 +209,6 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
-   addbutton ( "test messages", ua_testMessages );
    currentMenu->addSeparator();
    addbutton ( "Increase Map Zoom\tKP+", ua_increase_zoom );
    addbutton ( "Decrease Map Zoom\tKP-", ua_decrease_zoom );
@@ -219,6 +218,7 @@ void Menu::setup()
    addbutton ( "Show ASC search ~P~ath", ua_showsearchdirs );
    addbutton ( "SDL settings", ua_SDLinfo );
    addbutton ( "Locate File", ua_locatefile );
+   addbutton ( "test messages", ua_testMessages );
 
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
@@ -759,12 +759,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_F11:
-               if ( mod & KMOD_SHIFT ) {
-                  if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
-                     char* c = NULL;
-                     *c = 1;
-                  }
-               } 
                return true;
 
             case SDLK_F10: {

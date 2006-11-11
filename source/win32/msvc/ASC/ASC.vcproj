@@ -535,6 +535,9 @@
 					RelativePath="..\..\..\dialogs\fieldmarker.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\locatefile.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\messagedialog.cpp">
 				</File>
 				<File
