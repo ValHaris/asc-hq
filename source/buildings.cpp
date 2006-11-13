@@ -459,6 +459,10 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
        assert( unitProduction[k] );
        stream.writeInt( unitProduction[k]->id );
     }   
+
+    if ( BUILDINGVERSIONLIMIT >= -3 )
+       stream.writeChar(0);
+
 }
 
 

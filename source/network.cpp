@@ -93,6 +93,8 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
       }
 
       int nextPlayer = map->actplayer;
+      if ( nextPlayer < 0 )
+         nextPlayer = 0;
       
       ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
       if ( !map->player[nextPlayer].email.empty() )
@@ -139,8 +141,9 @@ ASCString FileTransfer::constructFileName( const GameMap* actmap, int lastPlayer
       else
          s.replace( s.find( "$t"), 2, ASCString::toString ( actmap->time.turn() ) );
    }
-      
-   s += tournamentextension;
+
+   if ( !s.endswith(tournamentextension ))
+      s += tournamentextension;
    return s;
 }
 

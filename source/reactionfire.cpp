@@ -209,7 +209,7 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
          if ( eht )
             if ( eht->color != vehicle->color )
                if ( eht->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
-                  if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
+                  // if ( eht->reactionfire.enemiesAttackable & ( 1 << ( vehicle->color / 8 )))
                      if ( actmap->player[eht->getOwner()].diplomacy.isHostile( actmap->actplayer))
                         if ( attackpossible2u ( eht, vehicle, NULL, vehicle->typ->height ) )
                            addunit ( eht );
@@ -288,7 +288,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
    int result = 0;
    if ( attacker->reactionfire.canPerformAttack( target )) { 
       pattackweap atw = attackpossible ( attacker, target->xpos, target->ypos );
-      if ( atw->count && (attacker->reactionfire.enemiesAttackable & (1 << (target->color / 8)))) {
+      if ( atw->count ) { // && (attacker->reactionfire.enemiesAttackable & (1 << (target->color / 8)))) {
 
          int ad1, ad2, dd1, dd2;
 
@@ -348,14 +348,14 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                   attacker->reactionfire.weaponShots[atw->num[num]]--;
                   attacker->reactionfire.nonattackableUnits.push_back ( nwid );
 
-                  removeunit ( attacker );
+                  // removeunit ( attacker );
 
                   battle.setresult();
 
-                  /*
+                  
                   if ( ad2 < 100 )
                      target->attacked = false;
-                  */
+                  
 
                   updateFieldInfo();
                }
@@ -415,13 +415,13 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
 
 int  tsearchreactionfireingunits :: finalCheck ( MapDisplayInterface* md, int currentPlayer )
 {
-   int destroyedUnits;
+   int destroyedUnits = 0;
    for ( int player = 0; player < actmap->getPlayerCount(); ++player ) {
       if ( actmap->getPlayer(currentPlayer).diplomacy.isHostile( player )) {
          list<int> exposedTargets;
          for ( Player::VehicleList::iterator exposedTarget = actmap->getPlayer(currentPlayer).vehicleList.begin(); exposedTarget != actmap->getPlayer(currentPlayer).vehicleList.end(); ++exposedTarget) {
             if ( fieldvisiblenow( actmap->getField( (*exposedTarget)->getPosition() ), player, actmap )) {
-               if ( visibleUnits.find( *exposedTarget ) == visibleUnits.end() ) { 
+               if ( visibleUnits.find( *exposedTarget ) == visibleUnits.end() || !(visibleUnits[*exposedTarget] & (1 << player)) ) { 
                   if ( (*exposedTarget)->getMap()->getField( (*exposedTarget)->getPosition() )->unitHere( *exposedTarget ))
                      exposedTargets.push_back( (*exposedTarget )->networkid );
                }
