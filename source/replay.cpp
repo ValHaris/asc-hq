@@ -136,7 +136,7 @@ void checkforreplay ( void )
    }
 
 
-   if ( actmap->replayinfo  &&  rpnum  &&  actmap->player[ actmap->actplayer ].stat == Player::human )
+   if ( actmap->replayinfo  &&  rpnum  &&  (actmap->player[ actmap->actplayer ].stat == Player::human || actmap->player[ actmap->actplayer ].stat == Player::supervisor) )
       if (choice_dlg("run replay of last turn ?","~y~es","~n~o") == 1) {
       
          MainScreenWidget::StandardActionLocker locker( mainScreenWidget, MainScreenWidget::LockOptions::Menu );
