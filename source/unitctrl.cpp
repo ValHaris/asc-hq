@@ -356,6 +356,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
               mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
               finalRedrawNecessary = true;
+              mapDisplayUpToDate = false;
          }
          pathStep++;
 
@@ -542,6 +543,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
    if ( rf->finalCheck( mapDisplay, operatingPlayer ))
       finalRedrawNecessary = true;
+   
+   // finalRedrawNecessary = true;
    
    if ( viewInputChanged ) {
       int fieldschanged;

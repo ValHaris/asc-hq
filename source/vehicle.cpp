@@ -195,8 +195,6 @@ void Vehicle :: init ( void )
    else
       reactionfire.status = ReactionFire::off;
 
-   reactionfire.enemiesAttackable = 0;
-
    generatoractive = 0;
 
    cleanRemove = false;
@@ -710,7 +708,6 @@ void Vehicle::ReactionFire::disable ( void )
 {
    if ( status != off ) {
        if ( status != init1a && status != init2 ) {
-          enemiesAttackable = 0;
           unit->setMovement ( 0, 0 );
        }
        status = off;
@@ -731,11 +728,6 @@ void Vehicle::ReactionFire::endOwnTurn()
       else
          if ( status == init2 || status == init1b )
             status = ready;
-
-      if ( status == ready )
-         enemiesAttackable = 0xff;
-      else
-         enemiesAttackable = 0;
    }
    nonattackableUnits.clear();
 }
@@ -1039,9 +1031,11 @@ void Vehicle :: removeview ( void )
 }
 
 
-void Vehicle :: postAttack()
+void Vehicle :: postAttack( bool reactionFire )
 {
-   attacked = true;
+   if ( !reactionFire )
+      attacked = true;
+   
    if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) )
       decreaseMovement ( maxMovement() * attackmovecost / 100 );
    else
@@ -1236,9 +1230,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( reactionfire.status )
        bm |= cem_reactionfire;
 
-    if ( reactionfire.enemiesAttackable )
-       bm |= cem_reactionfire2;
-
     if ( generatoractive )
        bm |= cem_poweron;
 
@@ -1314,9 +1305,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( bm & cem_reactionfire )
        stream.writeChar ( reactionfire.status );
-
-    if ( bm & cem_reactionfire2 )
-       stream.writeChar ( reactionfire.enemiesAttackable );
 
     if ( bm & cem_poweron )
        stream.writeInt ( generatoractive );
@@ -1497,14 +1485,12 @@ void   Vehicle::readData ( tnstream& stream )
     if ( bm & cem_reactionfire )
        reactionfirestatus = stream.readChar();
 
+    int reactionfireenemiesAttackable = 0;
     if ( bm & cem_reactionfire2 )
-       reactionfire.enemiesAttackable = stream.readChar();
-    else
-       reactionfire.enemiesAttackable = 0;
+       reactionfireenemiesAttackable = stream.readChar();  
 
-    if ( reactionfirestatus >= 8 && reactionfire.enemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
-       reactionfire.status = ReactionFire::Status ( reactionfire.enemiesAttackable );
-       reactionfire.enemiesAttackable = reactionfirestatus;
+    if ( reactionfirestatus >= 8 && reactionfireenemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
+       reactionfire.status = ReactionFire::Status ( reactionfireenemiesAttackable );
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
     } else
        reactionfire.status = ReactionFire::Status ( reactionfirestatus );

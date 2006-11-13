@@ -109,7 +109,7 @@ class BuildingType;
          enum Status { off, init1a, init2, ready, init1b };
 
          //! for each player that can still be attacked one bit is set
-         int enemiesAttackable;
+         // int enemiesAttackable;
          Status getStatus() const { return status;};
 
          //! enables the reaction fire or returns an error code ( result < 0 = -errorNr ) 
@@ -270,7 +270,7 @@ class BuildingType;
     bool getGeneratorStatus () const { return generatoractive; };
 
     //! callback that is called after the unit has attacked
-    void postAttack();
+    void postAttack( bool reactionFire );
 
     /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */

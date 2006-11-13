@@ -20,6 +20,9 @@
  *                                                                         *
  ***************************************************************************/
 
+// #define debugmapdisplay
+
+
 #include <cmath>
 #include <limits>
 
@@ -46,7 +49,11 @@
  #include "dialogs/attackpanel.h"
 #endif
 
-#define debugmapdisplay
+
+#ifdef debugmapdisplay
+#include <iostream>
+#endif
+
 
 MapRenderer::Icons MapRenderer::icons;
 
@@ -1127,6 +1134,10 @@ class MovePixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSe
 
 void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
 {
+#ifdef debugmapdisplay
+   surface->Fill( 0xff00ff00);
+#endif
+
    FieldRenderInfo fieldRenderInfo( *surface, movement.veh->getMap() );
    fieldRenderInfo.playerView = movement.playerView;
    for (int pass = 0; pass <= 18 ;pass++ ) {
@@ -1154,12 +1165,18 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
             }
    }
 
-#ifndef debugmapdisplay
+#ifdef debugmapdisplay
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_Valid> alphaBlitter;
    alphaBlitter.blit( *movement.mask, *surface, movement.maskPosition);
 #endif
    
    PG_Rect targetArea  ( widget2screen( SPoint( 0, 0 )).x, widget2screen( SPoint( 0, 0 )).y, Width(), Height() );
+   Surface s = Surface::Wrap( PG_Application::GetScreen() );
+   
+#ifdef debugmapdisplay
+   s.Fill( 0xff00ff );
+#endif
+
    if ( zoom != 100 ) {
       float fzoom = float(zoom) / 100.0;
       MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,MovePixSel,TargetPixelSelector_Rect> blitter;
@@ -1170,7 +1187,6 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
       blitter.setInnerSrcRectangle( movement.blitViewPortInternal  );
       
       blitter.setTargetRect( targetArea );
-      Surface s = Surface::Wrap( PG_Application::GetScreen() );
       blitter.blit( *surface, s, movement.targetBlitPos );
    } else {
       MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectSubRectangle,TargetPixelSelector_Rect> blitter;
@@ -1180,11 +1196,16 @@ void MapDisplayPG::displayMovementStep( Movement& movement, int percentage  )
       blitter.setInnerSrcRectangle( movement.blitViewPortInternal  );
       
       blitter.setTargetRect( targetArea  );
-      Surface s = Surface::Wrap( PG_Application::GetScreen() );
       blitter.blit( *surface, s, movement.targetBlitPos );
    }
 
+#ifdef debugmapdisplay
+   rectangle<4>( s, SPoint(targetArea.x, targetArea.y), targetArea.w, targetArea.h, ColorMerger_ColoredOverwrite<4>( 0x00ffff ), ColorMerger_ColoredOverwrite<4>( 0x00ffff ) );
+   rectangle<4>( s, SPoint(movement.blitViewPortScreen.x, movement.blitViewPortScreen.y), movement.blitViewPortScreen.w, movement.blitViewPortScreen.h, ColorMerger_ColoredOverwrite<4>( 0x0000ff ), ColorMerger_ColoredOverwrite<4>( 0x0000ff ) );
+   PG_Application::UpdateRect(PG_Application::GetScreen(), 0, 0, PG_Application::GetScreen()->w, PG_Application::GetScreen()->h );
+#else   
    PG_Application::UpdateRect(PG_Application::GetScreen(), movement.blitViewPortScreen.x, movement.blitViewPortScreen.y, movement.blitViewPortScreen.w, movement.blitViewPortScreen.h );
+#endif
 }
 
 
@@ -1199,9 +1220,15 @@ bool ccompare( const MapCoordinate& a, const MapCoordinate& b )
 
 void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
 {
+   static int col = 0xff;
+   
 #ifdef debugmapdisplay
-   surface->Fill( 0xff00);
+   col += 30;
+   if ( col > 255 )
+      col -= 255;
 #endif
+
+   surface->Fill( col << 8 );
    
    if ( !fieldInView( from ) && !fieldInView( to ))
       return;
@@ -1211,7 +1238,11 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       return;
 
    int startTime = ticker;
+#ifdef debugmapdisplay
+   int duration = CGameOptions::Instance()->movespeed * 20;
+#else
    int duration = CGameOptions::Instance()->movespeed;
+#endif
    int endTime = startTime + duration;
    
    // initialisation that is only executed the first time the code runs here
@@ -1296,12 +1327,18 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
    movement.playerView = actmap->playerView;
    
    int loopCounter = 0;
-   // int loopStartTicker = ticker;
+#ifdef debugmapdisplay
+   int loopStartTicker = ticker;
+#endif
+
    while ( ticker < endTime ) {
       displayMovementStep( movement, (ticker - startTime) * 100 / duration );
       ++loopCounter;
    }
-//   cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";
+   
+#ifdef debugmapdisplay
+   cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";
+#endif
 }
 
 void MapDisplayPG::displayAddons( Surface& surf, int pass)

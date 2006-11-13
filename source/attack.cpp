@@ -223,8 +223,9 @@ void tfight :: calc ( void )
 
 
 
-tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon )
+tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon, bool reactionfire )
 {
+   this->reactionfire = reactionfire;
    setup ( attackingunit, attackedunit, respond, weapon );
 }
 
@@ -357,10 +358,10 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-//   if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
-//      _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
+   _attackingunit->postAttack( reactionfire );
 
-   _attackingunit->postAttack();
+   _attackingunit->reactionfire.weaponShots[ av.weapnum]--;
+   _attackingunit->reactionfire.nonattackableUnits.push_back ( _attackedunit->networkid );
 
    _attackedunit->damage    = dv.damage;
    _attackingunit->damage    = av.damage;
@@ -477,7 +478,7 @@ void tunitattacksbuilding :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->postAttack();
+   _attackingunit->postAttack( false );
 
    _attackingunit->damage    = av.damage;
    _attackedbuilding->damage    = dv.damage;
@@ -696,7 +697,7 @@ void tunitattacksobject :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->postAttack();
+   _attackingunit->postAttack( false );
 
    _obji->damage    = dv.damage;
    _attackingunit->damage    = av.damage;

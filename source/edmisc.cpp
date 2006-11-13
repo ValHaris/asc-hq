@@ -1769,7 +1769,6 @@ void         tunit::buttonpressed(int         id)
          action = 1;
          if ( reactionfire )  {
             unit->reactionfire.enable();
-            unit->reactionfire.enemiesAttackable = 0xff;
          } else
             unit->reactionfire.disable();
 

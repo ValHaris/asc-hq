@@ -138,6 +138,7 @@ class tunitattacksunit : public UnitAttacksSomething
       Vehicle** _pattackedunit;
 
       int _respond;
+      bool reactionfire;
 
    protected:
 
@@ -146,7 +147,7 @@ class tunitattacksunit : public UnitAttacksSomething
           \param respond Does the unit that is being attacked retalliate ?
           \param weapon  The number of the weapon which the attacking unit attacks with. If it is -1, the best weapon is chosen.
       */
-      tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond = true, int weapon = -1);
+      tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond = true, int weapon = -1, bool reactionfire = false );
       void setup ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon );
       void setresult ( void );
 

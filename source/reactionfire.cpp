@@ -324,7 +324,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                      }
                   }
 
-                  tunitattacksunit battle ( attacker, target, 0, atw->num[num] );
+                  tunitattacksunit battle ( attacker, target, 0, atw->num[num], true );
                   int nwid = target->networkid;
 
                   ad1 = battle.av.damage;
@@ -343,19 +343,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                   else
                      result = 1;
 
-                     // attacker->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  (target->color / 8) );
-
-                  attacker->reactionfire.weaponShots[atw->num[num]]--;
-                  attacker->reactionfire.nonattackableUnits.push_back ( nwid );
-
-                  // removeunit ( attacker );
-
                   battle.setresult();
-
-                  
-                  if ( ad2 < 100 )
-                     target->attacked = false;
-                  
 
                   updateFieldInfo();
                }
