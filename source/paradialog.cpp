@@ -398,6 +398,10 @@ void ASC_PG_Dialog::StandardButtonDirection ( StandardButtonDirectonType dir )
 PG_Button* ASC_PG_Dialog::AddStandardButton( const ASCString& name )
 {
    ++stdButtonNum;
+   
+   if ( name.length() == 0 )
+      return NULL;
+   
    if ( standardButtonDir == Vertical )
       return new PG_Button( this, PG_Rect( Width() - 110, Height() - stdButtonNum * 40, 100, 30 ), name );
    else

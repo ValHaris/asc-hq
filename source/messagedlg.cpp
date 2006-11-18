@@ -1,7 +1,7 @@
 /***************************************************************************
                           messagedlg.cpp  -  description
                              -------------------
-    begin                : Mon Mär 24 2003
+    begin                : Mon Mï¿½ 24 2003
     copyright            : (C) 2003 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
@@ -26,6 +26,88 @@
 #include "dlg_box.h"
 #include "spfst.h"
 #include "widgets/textrenderer.h"
+
+
+#include "widgets/playerselector.h"
+#include "pgrichedit.h"
+#include "pgmultilineedit.h"
+
+#include "dialogs/fieldmarker.h"
+
+class  NewMessage : public ASC_PG_Dialog {
+      GameMap* gamemap;
+      Message* message;
+      PG_MultiLineEdit* editor;
+      PlayerSelector* to;
+      PlayerSelector* cc;
+      
+      bool ok()
+      {
+         if ( !message ) {
+            message = new Message ( editor->GetText(), gamemap, to->getSelectedPlayers(), 1 << actmap->actplayer );
+            gamemap->unsentmessage.push_back ( message );
+         } else {
+            message->text = editor->GetText();
+            message->to = to->getSelectedPlayers();
+         }
+         
+         QuitModal();
+         return true;
+      }
+      
+      bool cancel()
+      {
+         QuitModal();
+         return true;
+      }
+      
+      bool insertCoordinates()
+      {
+         SelectFromMap::CoordinateList coordinates;
+         
+         SelectFromMap sfm( coordinates, gamemap );
+         sfm.Show();
+         sfm.RunModal();
+         
+         ASCString text = "#coord("; 
+         for ( SelectFromMap::CoordinateList::iterator i = coordinates.begin(); i != coordinates.end(); ++i ) {
+            if ( i != coordinates.begin() )
+               text += ";";
+            text += ASCString::toString( i->x ) + "/" + ASCString::toString( i->y );
+         }
+         text += ")#";
+         editor->InsertText( text );
+         return true;
+      }
+   public:
+      NewMessage ( GameMap* gamemap, Message* msg = NULL ); 
+};
+
+
+NewMessage :: NewMessage ( GameMap* gamemap, Message* msg ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 500 ), "new message" )
+{
+   this->gamemap = gamemap;
+   message = msg;
+    
+   new PG_Label ( this, PG_Rect( 20, 30, 30, 20 ), "TO:");
+   to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap );
+   
+   new PG_Label ( this, PG_Rect( 210, 30, 30, 20 ), "CC:" );
+   cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap );
+   
+   editor = new PG_MultiLineEdit( this, PG_Rect(20, 200, Width() - 140, Height() - 210 ));
+   if ( message )
+      editor->SetText( message->text );
+    
+   AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &NewMessage::ok ));
+   AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &NewMessage::cancel ));
+   AddStandardButton("");
+   AddStandardButton("Coordinates")->sigClick.connect( SigC::slot( *this, &NewMessage::insertCoordinates ));
+   
+}
+      
+      
+      
 
 class tnewmessage : public tmessagedlg  {
             protected:
@@ -116,10 +198,16 @@ void tnewmessage :: run ( void )
 
 void newmessage ( void )
 {
+   /*
   tnewmessage nm;
   nm.init();
   nm.run();
   nm.done();
+   */
+   
+   NewMessage  nm ( actmap );
+   nm.Show();
+   nm.RunModal();
 }
 
 

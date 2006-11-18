@@ -20,6 +20,8 @@ public:
 	void SetCursorPos(int p);
 
 	void SetVPosition(int line);
+   
+   void InsertText(const std::string& c);
 
 protected:
 

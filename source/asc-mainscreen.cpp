@@ -207,9 +207,6 @@ void Menu::setup()
    addbutton ( "Map Control Panel", ua_viewMapControlPanel );
    // addbutton("Weathercast", ua_weathercast);
    currentMenu->addSeparator();
-   addbutton ( "clear image cache", ua_clearImageCache );
-   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
-   currentMenu->addSeparator();
    addbutton ( "Increase Map Zoom\tKP+", ua_increase_zoom );
    addbutton ( "Decrease Map Zoom\tKP-", ua_decrease_zoom );
 
@@ -220,6 +217,9 @@ void Menu::setup()
    addbutton ( "Locate File", ua_locatefile );
    addbutton ( "test messages", ua_testMessages );
    addbutton ( "view font", ua_viewfont );
+   currentMenu->addSeparator();
+   addbutton ( "clear image cache", ua_clearImageCache );
+   addbutton ( "reload dialog theme", ua_reloadDlgTheme );
 
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );

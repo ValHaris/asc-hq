@@ -589,17 +589,25 @@ void PG_MultiLineEdit::SetCursorPos(int p) {
 	//Update();
 }
 
-void PG_MultiLineEdit::InsertChar(const PG_Char& c) {
+void PG_MultiLineEdit::InsertText(const std::string& c) {
 	my_allowHiddenCursor = false;
 	if (my_mark != -1 && my_mark != my_cursorPosition) {
 		DeleteSelection();
 	}
 
-	PG_LineEdit::InsertChar(c);
+   for ( int i = 0; i < c.length(); ++i )
+	  PG_LineEdit::InsertChar(c[i]);
 	my_mark = -1;
 	CreateTextVector();
 	Update();
 }
+
+void PG_MultiLineEdit::InsertChar(const PG_Char& c) {
+   std::string s;
+   s += c;
+   InsertText( s );
+}
+
 
 void PG_MultiLineEdit::DeleteChar(Uint16 pos) {
 	my_allowHiddenCursor = false;
