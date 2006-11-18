@@ -905,6 +905,26 @@ void showCargoSummary( tfield* fld )
 }
 
 
+class FontViewer : public ASC_PG_Dialog {
+   public:
+      FontViewer() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 500 ), "view character set" ) 
+      {
+         for ( int i = 32; i < 255; ++i ) {
+            ASCString s;
+            s += char(i);
+            new PG_Label ( this, PG_Rect(30 + (i % 16) * 20, 30 + (i / 16) * 20, 20, 20 ), s );
+         }
+      };
+};
+
+void viewFont()
+{
+   FontViewer fv;
+   fv.Show();
+   fv.RunModal();
+}
+
+
 
 
 
@@ -1041,6 +1061,9 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_locatefile:
          locateFile();
+         break;
+      case ua_viewfont:
+         viewFont();
          break;
       default:
          break;

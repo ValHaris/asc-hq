@@ -219,6 +219,7 @@ void Menu::setup()
    addbutton ( "SDL settings", ua_SDLinfo );
    addbutton ( "Locate File", ua_locatefile );
    addbutton ( "test messages", ua_testMessages );
+   addbutton ( "view font", ua_viewfont );
 
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
