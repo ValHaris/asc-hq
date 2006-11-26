@@ -70,6 +70,7 @@ class TextRenderer : public PG_ScrollWidget {
       int AreaWidth();
       void layout();
       void addWidget( PG_Widget* w );
+      void addWidget( Widgets w );
       void addSpace( int space );
       void addLinebreak( int pixel, int lines );
       void addIndentation( int firstLine, int furtherLines );
@@ -80,7 +81,7 @@ class TextRenderer : public PG_ScrollWidget {
       PG_Widget* parsingError( const ASCString& errorMessage );
       
       virtual PG_Widget* render( const ASCString& token );
-      virtual PG_Widget* eval_command( const ASCString& token );
+      virtual Widgets eval_command( const ASCString& token );
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       
       void clear();

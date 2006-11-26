@@ -320,7 +320,7 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
             blitter.setAngle( img, directionangle[dir] );
             blitter.blit( img, dest, pos );
          } else {
-            MegaBlitter<4,gamemapPixelSize,ColorTransform_PlayerTrueCol, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation> blitter;
+            MegaBlitter<4,gamemapPixelSize,ColorTransform_PlayerTrueCol, ColorMerger_AlphaMerge, SourcePixelSelector_CacheRotation> blitter;
             blitter.setColor( gamemap->player[getOwner()].getColor() );
             blitter.setAngle( img, directionangle[dir] );
             blitter.blit( img, dest, pos );

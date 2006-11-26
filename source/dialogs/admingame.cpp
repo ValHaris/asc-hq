@@ -124,6 +124,8 @@ class AdminGameWindow : public ASC_PG_Dialog {
             gamemap->tribute.avail[j][player]= Resources();
             gamemap->tribute.paid[player][j] = Resources();
             gamemap->tribute.paid[j][player]= Resources();
+            gamemap->tribute.payStatusLastTurn[player][j] = Resources();
+            gamemap->tribute.payStatusLastTurn[j][player]= Resources();
          }
       }
       

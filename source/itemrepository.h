@@ -124,9 +124,6 @@ extern ItemRepositoryLoader<Technology>   technologyRepository;
 
 extern void  loadAllData( bool useCache = true );
 
-extern ObjectType* eisbrecherobject;
-extern ObjectType* fahrspurobject;
-
 typedef  deallocating_vector<TechAdapter*> TechAdapterContainer;
 extern TechAdapterContainer techAdapterContainer;
 

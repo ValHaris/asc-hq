@@ -906,13 +906,14 @@ void showCargoSummary( tfield* fld )
 
 
 class FontViewer : public ASC_PG_Dialog {
+      static const int spacing = 30;
    public:
-      FontViewer() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 500 ), "view character set" ) 
+      FontViewer() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 18 * spacing, 19 * spacing ), "view character set" ) 
       {
          for ( int i = 32; i < 255; ++i ) {
             ASCString s;
             s += char(i);
-            new PG_Label ( this, PG_Rect(30 + (i % 16) * 20, 30 + (i / 16) * 20, 20, 20 ), s );
+            new PG_Label ( this, PG_Rect( (i % 16 + 1) * spacing, (i / 16 + 2) * spacing, spacing, spacing ), s );
          }
       };
 };

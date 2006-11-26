@@ -525,16 +525,41 @@ Surface& getFieldMask()
 }
 
 
-void applyFieldMask( Surface& s, int x, int y )
+template<int pixelsize>
+class ColorMerger_MaskApply : public ColorMerger_AlphaHandler<pixelsize>
+{
+      typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+   protected:
+
+      void assign ( PixelType src, PixelType* dest )
+      {
+         if ( !isOpaque(src ) )
+            *dest &= 0xffffff;
+      };
+
+   public:
+      ColorMerger_MaskApply( NullParamType npt = nullParam )
+      {}
+      ;
+};
+
+
+void applyFieldMask( Surface& s, int x, int y, bool detecColorKey )
 {
    if ( s.GetPixelFormat().BitsPerPixel() == 8 ) {
       // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
       MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite> blitter;
       blitter.blit( getFieldMask(), s, SPoint(0,0)  );
+      s.detectColorKey (  );
    } else {
-      s.Blit( getFieldMask() );
+      if ( detecColorKey ) {
+         s.Blit( getFieldMask() );
+         s.detectColorKey (  );
+      } else {
+         MegaBlitter<1,4,ColorTransform_None,ColorMerger_MaskApply> blitter;
+         blitter.blit( getFieldMask(), s, SPoint(0,0)  );
+      }
    }
-   s.detectColorKey (  );
 }
 
 void applyLegacyFieldMask( Surface& s, int x, int y )

@@ -597,42 +597,29 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
       
    bool result = false;
    
-   if ((typ->hasFunction( ContainerBaseType::MakesTracks) || typ->hasFunction( ContainerBaseType::IceBreaker)) && (height == chfahrend || height == chschwimmend))  {
-     int dir = getdirection( start, dest );
+   if ( typ->objectLayedByMovement.size() && (height == chfahrend || height == chschwimmend))  {
+      int dir = getdirection( start, dest );
 
-     tfield* startField = gamemap->getField(start);
-     tfield* destField = gamemap->getField(dest);
-     if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
-        if ( fahrspurobject )
-           if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() ) {
-              startField->addobject ( fahrspurobject, 1 << dir );
-              result = true;
-           }
+      tfield* startField = gamemap->getField(start);
+      tfield* destField = gamemap->getField(dest);
 
-     if ( typ->hasFunction( ContainerBaseType::IceBreaker ))
-        if ( eisbrecherobject )
-              if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
-                   || startField->checkforobject ( eisbrecherobject ) ) {
-                 startField->addobject ( eisbrecherobject, 1 << dir );
-                 result = true;
-                   }
+      for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
+         for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
+            ObjectType* object = objectTypeRepository.getObject_byID( id );
+            if ( object ) 
+               if ( startField->addobject ( object, 1 << dir ))
+                  result = true;
+         }
+           
+      dir = (dir + sidenum/2) % sidenum;
 
-     dir = (dir + sidenum/2) % sidenum;
-
-     if ( typ->hasFunction( ContainerBaseType::MakesTracks ))
-          if ( fahrspurobject )
-           if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() ) {
-              destField->addobject ( fahrspurobject, 1 << dir );
-              result = true;
-           }
-
-     if ( typ->hasFunction( ContainerBaseType::IceBreaker ))
-          if ( eisbrecherobject )
-              if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
-                   || destField->checkforobject ( eisbrecherobject ) ) {
-                 destField->addobject ( eisbrecherobject, 1 << dir );
-                 result = true;
-              }
+      for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
+         for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
+            ObjectType* object = objectTypeRepository.getObject_byID( id );
+            if ( object ) 
+               if ( destField->addobject ( object, 1 << dir ))
+                  result = true;
+         }
    }
    
    return result;

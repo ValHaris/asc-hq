@@ -587,6 +587,12 @@
 					RelativePath="..\..\..\widgets\multilistbox.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\widgets\playerselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\targetcoordinatelocator.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\widgets\textrenderer.cpp">
 				</File>
 			</Filter>

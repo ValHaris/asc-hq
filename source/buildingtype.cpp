@@ -32,6 +32,7 @@
 
 #include "errors.h"
 #include "sgstream.h"
+#include "graphics/blitter.h"
 
 
 /*
@@ -431,6 +432,8 @@ BuildingType :: LocalCoordinate :: LocalCoordinate ( const ASCString& s )
 void BuildingType :: runTextIO ( PropertyContainer& pc )
 {
    try {
+
+      pc.addBreakpoint();
    
       ContainerBaseType::runTextIO ( pc );
    
@@ -518,17 +521,25 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                   Surface s;
                   pc.addImage ( weatherTags[w], s, fileName );
 
-                  if ( s.GetPixelFormat().BitsPerPixel() != 8 )
-                     fatalError("Building image " + filename + " does not have 8 Bit color depth!");
-                  
+//                  if ( s.GetPixelFormat().BitsPerPixel() != 8 )
+                     //fatalError("Building image " + filename + " does not have 8 Bit color depth!");
+            
+                  int depth = s.GetPixelFormat().BitsPerPixel();
                   for ( int c = 0; c < construction_steps; c++ )
                      for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
                         Surface& img = w_picture[w][c][i->x][i->y];
-                        img = Surface::createSurface(fieldsizex,fieldsizey,8);
+                        img = Surface::createSurface(fieldsizex,fieldsizey,depth);
                         int xx = 500*c + i->x * fielddistx + (i->y&1)*fielddisthalfx;
                         int yy = i->y * fielddisty;
-                        img.Blit( s, SDLmm::SRect(SPoint(xx,yy),fieldsizex,fieldsizey), SPoint(0,0));
-                        applyFieldMask(img);
+                        if ( depth == 8 ) {
+                           img.Blit( s, SDLmm::SRect(SPoint(xx,yy),fieldsizex,fieldsizey), SPoint(0,0));
+                           applyFieldMask(img);
+                        } else {
+                           MegaBlitter<4,4,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle> blitter;
+                           blitter.setSrcRectangle( SDLmm::SRect(SPoint(xx,yy),fieldsizex,fieldsizey) );
+                           blitter.blit( s, img, SPoint(0,0) );
+                           applyFieldMask(img,0,0,false);
+                        }
                      }
 
                }

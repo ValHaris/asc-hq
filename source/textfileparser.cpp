@@ -461,7 +461,7 @@ void TextFormatParser::parseLine ( const ASCString& line )
       levelDepth--;
       return;
    }
-   error ( "unknown operator at entry " + s1  );
+   error ( "unknown operator in entry " + line + "\n token1: " + s1 + " ; token2: " + s2 + " ; token3: " + s3 );
 }
 
 

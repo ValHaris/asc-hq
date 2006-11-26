@@ -29,6 +29,10 @@
  #include "graphics/blitter.h"
 #endif
 
+#ifdef WIN32
+#include "Windows.h"
+#endif
+
 
 const char* fileNameDelimitter = " =*/+<>,";
 
@@ -475,6 +479,19 @@ void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, 
 {
    NamedIntProperty* ip = new NamedIntProperty ( property, tagNum, tags, defaultValue );
    setup ( ip, name );
+}
+
+void PropertyContainer::addBreakpoint ()
+{
+   bool breakpoint = false;
+   if ( isReading() ) {
+      addBool( "breakpoint", breakpoint, false);
+      if ( breakpoint ) {
+        #ifdef WIN32
+        DebugBreak();
+        #endif
+      }
+   }
 }
 
 

@@ -28,6 +28,7 @@
 #include "../iconrepository.h"
 #include "../palette.h"
 #include "../dialogs/fileselector.h"
+#include "targetcoordinatelocator.h"
 
 void TextRenderer :: TextAttributes :: assign ( PG_Widget* w )
 {
@@ -134,6 +135,12 @@ void TextRenderer :: layout()
 
    //! this is a hack to get the scrollbars updated
    new PG_Widget( this, PG_Rect( maxx, y + lineHeight, 1, 1 ));
+}
+
+void TextRenderer :: addWidget( Widgets w )
+{
+   for ( Widgets::iterator i = w.begin(); i != w.end(); ++i )
+      addWidget( *i );
 }
 
 void TextRenderer :: addWidget( PG_Widget* w )
@@ -267,8 +274,13 @@ PG_Widget* TextRenderer :: parsingError( const ASCString& errorMessage )
    return w;
 }
 
-PG_Widget* TextRenderer :: eval_command( const ASCString& token )
+
+
+
+TextRenderer::Widgets TextRenderer :: eval_command( const ASCString& token )
 {
+   Widgets widgets;
+
    assert ( token[0] == '#' );
    boost::smatch what;
 
@@ -277,7 +289,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s;
       s.assign( what[1].first, what[1].second );
       textAttributes.fontsize = strtol(s.c_str(), NULL, 0 );
-      return NULL;
+      return widgets;
    }
 
    static boost::regex image( "#image=(\\S+)#");
@@ -285,8 +297,8 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s;
       s.assign( what[1].first, what[1].second );
       Surface& surf = IconRepository::getIcon(s);
-      PG_Widget* w = new PG_Image( this, PG_Point(0,0), surf.getBaseSurface(), false );
-      return w;
+      widgets.push_back( new PG_Image( this, PG_Point(0,0), surf.getBaseSurface(), false ));
+      return widgets;
    }
 
    static boost::regex color( "#fontcolor=((0x[a-fA-F\\d]+)|\\d+)#");
@@ -294,13 +306,13 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s;
       s.assign( what[1].first, what[1].second );
       textAttributes.textcolor = strtol(s.c_str(), NULL, 0 );
-      return NULL;
+      return widgets;
    }
 
    static boost::regex defcolor( "#fontcolor=default#");
    if( boost::regex_match( token, what, defcolor)) {
       textAttributes.textcolor = GetFontColor();
-      return NULL;
+      return widgets;
    }
 
    static boost::regex legacycolor( "#color(\\d+)#");
@@ -312,7 +324,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
          textAttributes.textcolor = (pal[index][0] << 18) + (pal[index][1] << 10) + (pal[index][2] << 2);
       else
          textAttributes.textcolor = GetFontColor();
-      return NULL;
+      return widgets;
    }
 
    static boost::regex crtp( "#crtp=?(\\d+)#");
@@ -320,13 +332,13 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s;
       s.assign( what[1].first, what[1].second );
       addLinebreak( strtol(s.c_str(), NULL, 0 ), 0);
-      return NULL;
+      return widgets;
    }
 
    static boost::regex crt( "#crt#");
    if( boost::regex_match( token, what, crt)) {
       addLinebreak( 0, 1 );
-      return NULL;
+      return widgets;
    }
 
    static boost::regex firstindent( "#eeinzug(\\d+)#");
@@ -334,7 +346,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s;
       s.assign( what[1].first, what[1].second );
       addIndentation( strtol(s.c_str(), NULL, 0 ), -1 );
-      return NULL;
+      return widgets;
    }
 
    static boost::regex furtherindent( "#aeinzug(\\d+)#");
@@ -342,7 +354,7 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s;
       s.assign( what[1].first, what[1].second );
       addIndentation( -1, strtol(s.c_str(), NULL, 0 ) );
-      return NULL;
+      return widgets;
    }
 
    static boost::regex indent( "#indent=(\\d+)\\,(\\d+)#");
@@ -352,23 +364,52 @@ PG_Widget* TextRenderer :: eval_command( const ASCString& token )
       ASCString s2;
       s2.assign( what[2].first, what[2].second );
       addIndentation( strtol(s1.c_str(), NULL, 0 ), strtol(s2.c_str(), NULL, 0 ) );
-      return NULL;
+      return widgets;
    }
 
    static boost::regex legacyfont1( "#font0*[1|0]#");
    if( boost::regex_match( token, what, legacyfont1)) {
       textAttributes.fontsize = 12;
-      return NULL;
+      return widgets;
    }
 
    static boost::regex legacyfont2( "#font0*2#");
    if( boost::regex_match( token, what, legacyfont2)) {
       textAttributes.fontsize = 20;
-      return NULL;
+      return widgets;
    }
 
-   return parsingError ( "unknown token: " + token );
+   // (\d+/\d+)
+   static boost::regex coordinates( "#coord\\((.*)\\)#");
+   if( boost::regex_match( token, what, coordinates)) {
+      ASCString s;
+      s.assign( what[1].first, what[1].second );
+
+      static boost::regex coordinates2( ";?(\\d+)/(\\d+)(.*)");
+      while ( boost::regex_match( s, what, coordinates2)) {
+         ASCString s2;
+         s2.assign ( what[1].first, what[1].second );
+         int x = strtol(s2.c_str(), NULL, 0 );
+
+         s2.assign ( what[2].first, what[2].second );
+         int y = strtol(s2.c_str(), NULL, 0 );
+
+         SelectFromMap::CoordinateList positions;
+         positions.push_back( MapCoordinate(x,y));
+         
+         s.assign( what[3].first, what[3].second );
+
+         widgets.push_back( new TargetCoordinateLocator( this, PG_Point(0,0), positions ) );
+      }
+
+      return widgets;
+   }
+
+   widgets.push_back ( parsingError ( "unknown token: " + token ) );
+   return widgets;
 }
+
+
 
       
 PG_Widget* TextRenderer :: render( const ASCString& token )

@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-19 19:56:01 $
+    Update Date:      $Date: 2006-11-26 20:38:05 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/font/pgfont.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.2 $
+    CVS/RCS Revision: $Revision: 1.1.2.3 $
     Status:           $State: Exp $
 */
 
@@ -535,7 +535,7 @@ bool PG_FontEngine::RenderText(SDL_Surface *Surface, const PG_Rect *ClipRect, in
 		PG_GlyphCacheItem* Glyph;
 		int OldBaseLineX = BaseLineX;
 
-		c0 = Text[i];
+		c0 = PG_Char(Text[i]);
 
 		//Skip drawing we go non-printable char
 		if (c0 < 32) {

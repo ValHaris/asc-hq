@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include "pgwidget.h"
 
 // #include "gamedlg.h"
 #include "messagedlg.h"
@@ -25,6 +26,7 @@
 #include "dialog.h"
 #include "dlg_box.h"
 #include "spfst.h"
+
 #include "widgets/textrenderer.h"
 
 
@@ -33,6 +35,8 @@
 #include "pgmultilineedit.h"
 
 #include "dialogs/fieldmarker.h"
+#include "dialogs/selectionwindow.h"
+
 
 class  NewMessage : public ASC_PG_Dialog {
       GameMap* gamemap;
@@ -103,10 +107,10 @@ NewMessage :: NewMessage ( GameMap* gamemap, Message* msg ) : ASC_PG_Dialog( NUL
    AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &NewMessage::cancel ));
    AddStandardButton("");
    AddStandardButton("Coordinates")->sigClick.connect( SigC::slot( *this, &NewMessage::insertCoordinates ));
-   
+  
 }
       
-      
+
       
 
 class tnewmessage : public tmessagedlg  {
@@ -534,6 +538,174 @@ void tviewmessages :: run ( void )
    } while ( !ok ); /* enddo */
 
 }
+
+#if 0
+
+class MessageLineWidget: public SelectionWidget
+{
+      const Message* message;
+      ASCString time;
+   public:
+      MessageLineWidget( PG_Widget* parent, const PG_Point& pos, int width, const Message* msg, Gamemap* gamemap ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 20 )), message( msg )
+      {
+#ifndef ctime_r
+         time = ctime( &msg->time);
+#else
+
+         char c[100];
+         ctime_r( &msg->time, c );
+         time  = c;
+#endif
+
+         int col1 =        width * 3 / 9;
+         int col2 = col1 + width * 3 / 9;
+
+         PG_Label* lbl1 = new PG_Label( this, PG_Rect( 0, 0, col1 - 10, Height() ), gamemap->getPlayer(msg->from) );
+         lbl1->SetFontSize( lbl1->GetFontSize() -2 );
+
+         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, 0, col2-col1-10, Height() ), time );
+         lbl2->SetFontSize( lbl2->GetFontSize() -2 );
+
+         int x = 0;
+         for ( int i = 0; i< gamemap->getPlayerCount(); ++i )
+            if ( msg->to & (1 << i)) {
+               new ColoredBar( gamemap->getPlayer(i).getColor(), this, PG_Rect( col2 + x, 0, col2+15 , 15 ));
+               x += 18;
+            }
+
+         SetTransparency( 255 );
+      };
+
+      ASCString getName() const
+      {
+         return "foobar";
+      };
+
+   protected:
+
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
+      {
+      }
+      ;
+};
+
+
+class MessageListItemFactory: public SelectionItemFactory  {
+   protected:
+      const MessagePntrContainer& messageContainer;
+      MessagePntrContainer::iterator it;
+      GameMap* gamemap;
+
+   public:
+      MessageListItemFactory( const MessagePntrContainer& messages, GameMap* g );
+      
+      void restart();
+      
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
+      
+      void itemMarked( const SelectionWidget* widget );
+      
+      void itemSelected( const SelectionWidget* widget, bool mouse );
+};
+
+
+MessageListItemFactory::MessageListItemFactory( const MessagePntrContainer& messages, GameMap* map ) : messageContainer ( messages ), gamemap(map)
+{
+   restart();
+};
+
+
+void MessageListItemFactory::restart()
+{
+   it = messageContainer.begin();
+};
+
+SelectionWidget* MessageListItemFactory::spawnNextItem( PG_Widget* parent, const PG_Point& pos )
+{
+   if ( it != messageContainer.end() )
+      return new MessageLineWidget( parent, pos, parent->Width() - 15, *(it++), gamemap );
+   else
+      return NULL;
+};
+
+
+void MessageListItemFactory::itemMarked( const SelectionWidget* widget )
+{
+   if ( !widget )
+      return;
+
+   const MessageLineWidget* mlw = dynamic_cast<const MessageLineWidget*>(widget);
+   assert( mlw );
+   // filenameMarked( fw->getName() );
+}
+
+void MessageListItemFactory::itemSelected( const SelectionWidget* widget, bool mouse )
+{
+   if ( !widget )
+      return;
+
+   const FileWidget* fw = dynamic_cast<const MessageLineWidget*>(widget);
+   assert( fw );
+   /*
+   if ( mouse )
+      filenameSelectedMouse( fw->getName() );
+   else
+      filenameSelectedKeyb( fw->getName() );
+      */
+}
+
+
+
+
+class MessageSelectionWindow : public ASC_PG_Dialog {
+   protected:
+      // void fileNameSelected( const ASCString& filename );
+      // void fileNameEntered( ASCString filename );
+   public:
+      MessageSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save );
+      ASCString getFilename() { return filename; };
+};
+
+
+void FileSelectionWindow::fileNameSelected( const ASCString& filename )
+{
+   // if ( !patimat ( wildcard.c_str(), filename.c_str() ))
+   this->filename = filename;
+   if ( this->filename.find('.') == ASCString::npos )
+      this->filename += wildcard.substr( wildcard.find_first_not_of("*") );
+   quitModalLoop(0);
+};
+
+void FileSelectionWindow::fileNameEntered( ASCString filename )
+{
+   if ( !patimat( wildcard, filename ))
+      filename += wildcard.substr(1);
+   fileNameSelected(filename);
+};
+
+
+FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "" ), wildcard( fileWildcard)
+{
+   if ( save )
+      SetTitle( "Enter Filename" );
+   else
+      SetTitle( "Choose File" );
+   
+   FileSelectionItemFactory* factory = new FileSelectionItemFactory( fileWildcard );
+   factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
+   factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
+   // factory->filenameMarked.connect   ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
+   ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
+   if ( save ) {
+      isw->constrainNames( false );
+      isw->nameEntered.connect( SigC::slot( *this, &FileSelectionWindow::fileNameEntered ));
+   }
+   isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+
+};
+
+#endif
+
 
 
 void viewmessages ( char* title, const MessagePntrContainer& msg, bool editable, int md  )    // mode : 0 verschickte ; 1 empfangene

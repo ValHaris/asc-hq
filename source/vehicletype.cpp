@@ -25,7 +25,6 @@
 #include "vehicletype.h"
 #include "sgstream.h"
 #include "graphicset.h"
-// #include "errors.h"
 #include "terraintype.h"
 #include "objecttype.h"
 #include "textfileparser.h"
@@ -137,7 +136,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 26;
+const int vehicle_version = 27;
 
 
 
@@ -547,6 +546,15 @@ void Vehicletype :: read ( tnstream& stream )
       jumpDrive.consumption.read( stream );
       jumpDrive.maxDistance = stream.readInt();
    }
+
+   if ( version >= 27 ) {
+      int num = stream.readInt();
+      for ( int i = 0; i < num; i++ ) {
+         int from = stream.readInt();
+         int to   = stream.readInt();
+         objectLayedByMovement.push_back ( IntRange ( from, to ));
+      }
+   }
 }
 
 
@@ -688,7 +696,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 
 
    stream.writeInt( heightChangeMethodNum );
-   for ( int i = 0; i < heightChangeMethodNum; i++ )
+   for ( i = 0; i < heightChangeMethodNum; i++ )
       heightChangeMethod[i].write( stream );
 
    techDependency.write( stream );
@@ -715,6 +723,12 @@ void Vehicletype:: write ( tnstream& stream ) const
    jumpDrive.targetterrain.write( stream );
    jumpDrive.consumption.write( stream );
    stream.writeInt( jumpDrive.maxDistance );
+
+   stream.writeInt ( objectLayedByMovement.size() );
+   for ( i = 0; i < objectLayedByMovement.size(); i++ ) {
+      stream.writeInt ( objectLayedByMovement[i].from );
+      stream.writeInt ( objectLayedByMovement[i].to );
+   }
 }
 
 
@@ -913,6 +927,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    } else
       pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
 
+
    pc.addIntegerArray ( "Movement", movement );
    for ( vector<int>::iterator i = movement.begin(); i != movement.end(); i++ )
       if ( *i > 255 )
@@ -1029,7 +1044,18 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    
    if ( jumpDrive.height && view )
       pc.error( "only units without radar may have a jump drive." ); 
-   
+
+   if ( !pc.isReading() || pc.find ( "ObjectsLayedByMovement" ))
+      pc.addIntRangeArray ( "ObjectsLayedByMovement", objectLayedByMovement );
+   else
+      objectLayedByMovement.clear();
+
+   if ( hasFunction( ContainerBaseType::IceBreaker ))
+      objectLayedByMovement.push_back ( IntRange ( 6, 6 ));
+
+   if ( hasFunction( ContainerBaseType::MakesTracks ))
+      objectLayedByMovement.push_back ( IntRange ( 7, 7 ));
+
 }
 
 BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& location )

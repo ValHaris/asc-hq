@@ -32,9 +32,6 @@
 SigC::Signal0<void> dataLoaderTicker;
 
 
-ObjectType* eisbrecherobject = NULL;
-ObjectType* fahrspurobject = NULL;
-
 const char* cacheFileName = "asc2.cache";
 
 typedef vector<TextFileDataLoader*> DataLoaders;
@@ -175,7 +172,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
-const int cacheVersion = 17;
+const int cacheVersion = 18;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;
@@ -356,8 +353,6 @@ void  loadAllData( bool useCache )
       textFileRepository.clear();
    }
 
-   eisbrecherobject = objectTypeRepository.getObject_byID( 6 );
-   fahrspurobject   = objectTypeRepository.getObject_byID( 7 );
 }
 
 

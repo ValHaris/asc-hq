@@ -97,6 +97,7 @@ class PropertyContainer {
          void addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue, bool inverted = false );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
+         void addBreakpoint();
         #ifdef ParserLoadImages
          // void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
          void addImage ( const ASCString& name, Surface& property, const ASCString& fileName );

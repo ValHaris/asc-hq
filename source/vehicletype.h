@@ -239,6 +239,8 @@ extern const char*  cvehiclefunctions[];
         //! the group-ids of objects this unit can remove
         vector<IntRange> objectGroupsRemovable;
 
+        //! the IDs of objects that are automatically layed by moving the movement
+        vector<IntRange> objectLayedByMovement;
 
         //! The weapons
         UnitWeapon   weapons;
