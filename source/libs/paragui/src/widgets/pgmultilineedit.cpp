@@ -120,6 +120,8 @@ void PG_MultiLineEdit::DrawText(const PG_Rect& dst) {
 }
 
 void PG_MultiLineEdit::DrawTextCursor() {
+   
+  
 	int x = my_xpos + 1;
 	int y = my_ypos + 1;
 	int xpos, ypos;
@@ -249,7 +251,7 @@ void PG_MultiLineEdit::GetCursorTextPos(unsigned int& horzOffset, unsigned int& 
 
 	// cycle through the lines, finding where our cursor lands
 	for (vector<PG_String>::iterator i = my_textdata.begin(); i != my_textdata.end(); ++i) {
-		if(currentPos < i->size() || (currentPos <= i->size() && my_isCursorAtEOL)) {
+		if(currentPos <= i->size() || (currentPos <= i->size() && my_isCursorAtEOL)) {
 			break;
 		}
 		currentPos -= i->size();
@@ -585,7 +587,7 @@ int PG_MultiLineEdit::ConvertCursorPos(unsigned int offset, unsigned int line) {
 void PG_MultiLineEdit::SetCursorPos(int p) {
 	my_isCursorAtEOL = false;
 	my_allowHiddenCursor = false;
-	//PG_LineEdit::SetCursorPos(p);
+	PG_LineEdit::SetCursorPos(p);
 	//Update();
 }
 
@@ -595,8 +597,10 @@ void PG_MultiLineEdit::InsertText(const std::string& c) {
 		DeleteSelection();
 	}
 
+   PG_Application::BulkModeActivator bulk;
    for ( int i = 0; i < c.length(); ++i )
 	  PG_LineEdit::InsertChar(c[i]);
+   bulk.disable();
 	my_mark = -1;
 	CreateTextVector();
 	Update();
@@ -624,7 +628,7 @@ void PG_MultiLineEdit::DeleteChar(Uint16 pos) {
 
 	my_mark = -1;
 	CreateTextVector();
-	Update();
+	// Update();
 }
 
 void PG_MultiLineEdit::DeleteSelection() {
