@@ -171,7 +171,8 @@ void   tspfldloaders::writedissections ( void )
 /*        Messages  schreiben / lesen                         */
 /**************************************************************/
 
-const int messageVersion = 0xabcdef;
+const int messageVersion = 0xabcdf0;
+const int messageMinVersion = 0xabcdef;
 
 void      tspfldloaders:: writemessages ( void )
 {
@@ -184,6 +185,7 @@ void      tspfldloaders:: writemessages ( void )
 
       stream->writeInt ( (*mi)->from );
       stream->writeInt ( (*mi)->to );
+      stream->writeInt ( (*mi)->cc );
       stream->writeInt ( (unsigned int) (*mi)->time );
       stream->writeInt ( 1 );
       stream->writeInt ( (*mi)->id );
@@ -256,13 +258,18 @@ void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 void      tspfldloaders:: readmessages ( void )
 {
    int magic = stream->readInt(); 
-   assert( magic == messageVersion );
+   assertOrThrow( magic >= messageMinVersion  && magic <= messageVersion );
 
    while ( spfld->__loadmessages ) {
       Message* msg = new Message ( spfld );
 
       msg->from    = stream->readInt();
       msg->to      = stream->readInt();
+      if ( magic >= 0xabcdf0 )
+         msg->cc      = stream->readInt();
+      else
+         msg->cc = 0;
+
       msg->time    = stream->readInt();
       bool msgtext = stream->readInt();
       msg->id      = stream->readInt();

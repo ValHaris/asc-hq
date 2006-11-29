@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-25 17:01:00 $
+    Update Date:      $Date: 2006-11-29 20:45:45 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.4 $
+    CVS/RCS Revision: $Revision: 1.1.2.5 $
     Status:           $State: Exp $
 */
 
@@ -583,6 +583,26 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	SignalXMLTag<> sigXMLTag;
 	SignalAppIdle<> sigAppIdle;
 
+
+   class BulkModeActivator {
+      bool active;
+   public:
+      BulkModeActivator() {
+         active = PG_Application::GetBulkMode();
+         if ( !active )
+            PG_Application::SetBulkMode( true );
+      };
+      void disable() {
+         if ( !active )
+            PG_Application::SetBulkMode( false );
+         active = true;
+      }
+      ~BulkModeActivator() {
+         disable();
+      };
+   };
+
+
 protected:
 
 	/**
@@ -609,6 +629,8 @@ protected:
 	virtual void eventIdle();
 
 	bool my_quitEventLoop;
+
+
 
 private:
 

@@ -691,15 +691,15 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_viewqueuedmessages:
-         viewmessages( "queued messages", actmap->unsentmessage, 1, 0 );
+         viewmessages( "queued messages", actmap->unsentmessage, 1 );
          break;
 
       case ua_viewsentmessages:
-         viewmessages( "sent messages", actmap->player[ actmap->actplayer ].sentmessage, 0, 0 );
+         viewmessages( "sent messages", actmap->player[ actmap->actplayer ].sentmessage, 0);
          break;
 
       case ua_viewreceivedmessages:
-         viewmessages( "received messages", actmap->player[ actmap->actplayer ].oldmessage, 0, 1 );
+         viewmessages( "received messages", actmap->player[ actmap->actplayer ].oldmessage, 0 );
          break;
 
       case ua_viewjournal:

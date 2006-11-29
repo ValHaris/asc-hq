@@ -1106,7 +1106,6 @@ void GameMap::beginTurn()
 }
 
 
-
 void GameMap::endTurn()
 {
    if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
@@ -1136,8 +1135,7 @@ void GameMap::endTurn()
 
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
          if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
-            ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
-            new Message ( ident, this, 1<<(*v)->getOwner());
+            new Message ( getUnitReference( *v ) + " crashed because of the strong wind", this, 1<<(*v)->getOwner());
             toRemove.push_back ( *v );
          } else {
 
@@ -1173,9 +1171,7 @@ void GameMap::endTurn()
 
 
             if (j < 0) {
-               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x);
-               ident += ASCString("/")+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
-               new Message ( ident, this, 1<<(*v)->getOwner());
+               new Message ( getUnitReference( *v ) + " crashed due to lack of fuel", this, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
                // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
             } else {

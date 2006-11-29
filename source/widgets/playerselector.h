@@ -24,8 +24,9 @@ class PlayerSelector : public MultiListBox {
       GameMap* gamemap;
       typedef PG_ListBoxDataItem<int> Item;
       void setup();
+      int suppressPlayers;
    public:
-      PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true );
+      PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true, int suppress = 0 );
       int getSelectedPlayers();
 };
 

@@ -221,7 +221,13 @@ class GameMap {
       {
          return player[p.getID() ];
       }
-      
+
+      const Player& getPlayer( PlayerID p ) const
+      {
+         return player[p.getID() ];
+      }
+
+
       Player& getCurrentPlayer()
       {
          return player[actplayer];

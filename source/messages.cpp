@@ -21,7 +21,7 @@
 #include "gamemap.h"
 #include "spfst.h"
 
-Message :: Message ( GameMap* spfld  )
+Message :: Message ( GameMap* spfld  )  : cc(0)
 {
    from = 1 << spfld->actplayer;
          
@@ -35,7 +35,7 @@ Message :: Message ( GameMap* spfld  )
 }
 
 
-Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from )  // f?r Meldungen vom System
+Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from ) : cc(0)  // f?r Meldungen vom System
 {
    from = _from;
    gametime = gamemap->time;
@@ -50,6 +50,19 @@ Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from 
    for ( int i = 0; i < 8; i++ )
       if ( to & ( 1 << i ))
          gamemap->player[i].unreadmessage.push_back ( this );
+}
+
+
+ASCString Message::bitMap2PlayerName( int p, const GameMap* gamemap  ) const
+{
+   ASCString s;
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
+      if ( p & ( 1 << i)) {
+         if ( !s.empty() )
+            s += ", ";
+         s += gamemap->getPlayer(i).getName();
+      }
+   return s;
 }
 
 

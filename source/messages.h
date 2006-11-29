@@ -28,14 +28,21 @@ class GameMap;
 
 //! A Message to a player. It may either be send by another player or by the system.
 class  Message {
+     ASCString bitMap2PlayerName( int p, const GameMap* gamemap  ) const;
    public:
      //! bitmapped variable showing the sender of the message. Bit 0 - 7 are the players, Bit 9 is the system.
      int from;
 
      ASCString getFromText( const GameMap* gamemap ) const;
+     ASCString getCcText( const GameMap* gamemap ) const { return bitMap2PlayerName( cc, gamemap ); };
+     ASCString getToText( const GameMap* gamemap ) const { return bitMap2PlayerName( to, gamemap ); };
      
      //! bitmapped variable showing the recipients of the message.
      int to;
+
+     //! bitmapped variable showing the recipients of the message.
+     int cc;
+
 
      //! the real world time the message was written
      time_t time;

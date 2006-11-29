@@ -317,6 +317,8 @@ extern const char*  cvehiclefunctions[];
  };
 
 
+extern ASCString getUnitReference ( Vehicle* veh );
+
 #endif
 
 

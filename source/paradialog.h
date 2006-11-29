@@ -70,7 +70,12 @@ class StartupScreen: public SigC::Object {
        int bitsperpixel;
        
        void messageDialog( const ASCString& message, MessagingHubBase::MessageType mt );
-       
+
+       typedef list<PG_MessageObject*> DeletionQueue;
+       DeletionQueue deletionQueue;
+
+       bool removeFromDeletionQueue( const PG_MessageObject* obj );
+
     protected:
        bool eventQuit(int id, PG_MessageObject* widget, unsigned long data);
 	    void eventIdle();
@@ -93,6 +98,8 @@ class StartupScreen: public SigC::Object {
        
        void processEvent();
        bool enableLegacyEventHandling( bool use );
+
+       bool queueWidgetForDeletion( PG_Widget* widget );
 
        ~ASC_PG_App();
 

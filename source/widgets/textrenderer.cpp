@@ -428,6 +428,7 @@ void TextRenderer::clear()
       delete *i;
      
    widgets.clear();
+   attributes.clear();
 }
 
 

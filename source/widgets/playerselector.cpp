@@ -11,7 +11,7 @@
 #include "playerselector.h"
 
 
-PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect ) : MultiListBox( parent, r), gamemap ( map )
+PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect, int suppress ) : MultiListBox( parent, r), gamemap ( map ), suppressPlayers(suppress)
 {
    setup();
 };
@@ -19,7 +19,7 @@ PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* 
 void PlayerSelector :: setup()
 {
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
-      if ( gamemap->getPlayer(i).exist() )
+      if ( gamemap->getPlayer(i).exist() && !(suppressPlayers & (1<<i)) )
          new Item( getListBox(), 15, gamemap->getPlayer(i).getName(), i );
 }
 

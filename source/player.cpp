@@ -338,6 +338,15 @@ ASCString Player :: getName( ) const
    return ASCString("Player ") + ASCString::toString(getPosition() );
 }
 
+int Player::getHumanPlayerNum( const GameMap* gamemap )
+{
+   int h = 0;
+   for ( int p = 0; p < gamemap->getPlayerCount(); ++p )
+      if ( gamemap->getPlayer(p).exist() && gamemap->getPlayer(p).isHuman() )
+         ++h;
+   return h;
+}
+
 
 
 void Player :: sendQueuedMessages()

@@ -1709,3 +1709,17 @@ const SingleWeapon* Vehicle::getWeapon( unsigned weaponNum )
 }
 
 
+ASCString posToString( const MapCoordinate& pos )
+{
+   ASCString s;
+   s.format( "#coord(%d/%d)#", pos.x, pos.y);
+   return s;
+}
+
+ASCString getUnitReference ( Vehicle* veh )
+{
+   ASCString s = "The unit " + veh->getName();
+   s += " (position: "+ posToString( veh->getPosition() ) + ") ";
+   return s;
+}
+

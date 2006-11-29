@@ -367,10 +367,7 @@ void  checkunitsforremoval ( void )
                 }
           }
           if ( erase ) {
-             ASCString ident = "The unit " + (*i)->getName() + " at position ("+strrr((*i)->getPosition().x)+"/";
-             ident += strrr((*i)->getPosition().y)+ASCString(") ");
-
-             msg += ident + reason;
+             msg += getUnitReference( eht ) + reason;
              msg += "\n\n";
 
              Vehicle* pv = *i;

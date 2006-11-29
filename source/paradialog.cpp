@@ -162,6 +162,23 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
    
 }
 
+bool ASC_PG_App :: queueWidgetForDeletion( PG_Widget* widget )
+{
+   deletionQueue.push_back( widget );
+   widget->sigDelete.connect( SigC::slot( *this, &ASC_PG_App::removeFromDeletionQueue ));
+   return true;
+}
+
+
+bool ASC_PG_App :: removeFromDeletionQueue( const PG_MessageObject* obj )
+{
+   DeletionQueue::iterator i = find ( deletionQueue.begin(), deletionQueue.end(), obj );
+   if ( i != deletionQueue.end() )
+      deletionQueue.erase( i );
+   return true;
+}
+
+
 void ASC_PG_App :: setIcon( const ASCString& filename )
 {
    SDL_Surface *icn = NULL;
@@ -193,6 +210,9 @@ void ASC_PG_App::eventIdle()
 	   PG_Application::UpdateRect(PG_Application::GetScreen(), 0,0,0,0);
       redrawScreen = false;
    }
+
+   if ( !deletionQueue.empty() )
+      delete deletionQueue.front();
 
    PG_Application::eventIdle();
 }
