@@ -185,9 +185,9 @@ ASCString tinvalidversion :: getMessage() const
 {
    ASCString s;
    if ( expected < found )
-      s.format( "File/module %s has invalid version.\nExpected file version %d\nFound file version %d\nThe file/module is newer than your application\nPlease install the latest version of ASC from www.asc-hq.org", 1, getFileName().c_str(), expected, found );
+      s.format( "File/module %s has invalid version.\nExpected file version %d\nFound file version %d\nThe file/module is newer than your application\nPlease install the latest version of ASC from www.asc-hq.org", getFileName().c_str(), expected, found );
    else
-      s.format ( "File/module %s has invalid version.\nExpected file version %d\nFound file version %d\nThis is a bug, please report it!", 1, getFileName().c_str(), expected, found );
+      s.format ( "File/module %s has invalid version.\nExpected file version %d\nFound file version %d\nThis is a bug, please report it!", getFileName().c_str(), expected, found );
 
    return s;
 }

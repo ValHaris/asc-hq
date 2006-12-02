@@ -17,6 +17,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include "global.h"
 #include "ascstring.h"
 #include "textfileparser.h"
@@ -489,6 +490,8 @@ void PropertyContainer::addBreakpoint ()
       if ( breakpoint ) {
         #ifdef WIN32
         DebugBreak();
+        #else
+        cerr << "breakpoint hit";
         #endif
       }
    }

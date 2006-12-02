@@ -325,7 +325,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                   }
 
                   tunitattacksunit battle ( attacker, target, 0, atw->num[num], true );
-                  int nwid = target->networkid;
+                  // int nwid = target->networkid;
 
                   ad1 = battle.av.damage;
                   dd1 = battle.dv.damage;

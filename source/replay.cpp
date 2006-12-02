@@ -1657,7 +1657,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
-                                 int destnwid = stream->readInt();
+                                 stream->readInt(); // int destnwid = 
                                  int amount = stream->readInt();
 
                                  readnextaction();
@@ -1809,8 +1809,8 @@ void trunreplay :: execnextreplaymove ( void )
                  stream->readInt();
                  int x = stream->readInt();
                  int y = stream->readInt();
-                 int cat = stream->readInt();
-                 int stat = stream->readInt();
+                 stream->readInt(); // int cat = 
+                 stream->readInt(); // int stat = 
                  readnextaction();
 
                  Building* bld = actmap->getField(x,y)->building;

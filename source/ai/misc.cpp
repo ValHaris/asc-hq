@@ -367,7 +367,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
 
       checkKeys();
 
-      Vehicle* veh = *i;
+      // Vehicle* veh = *i;
 
       int preferredHeight = getBestHeight ( *i );
 

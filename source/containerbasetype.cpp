@@ -91,7 +91,8 @@ bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
 
 bool ContainerBaseType::hasAnyFunction( BitSet functions ) const
 {
-   return (features & functions).any();
+   bool result = (features & functions).any(); 
+   return result;
 }
 
 void ContainerBaseType::setFunction( ContainerFunctions function )
@@ -153,6 +154,7 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
 
 void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 {
+   pc.addBreakpoint();
    pc.openBracket ( "Transportation" );
     int num = entranceSystems.size();
     pc.addInteger ( "EntranceSystemNum", num, 0 );
