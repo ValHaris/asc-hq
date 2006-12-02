@@ -458,15 +458,30 @@ void Surface::strech ( int width, int height )
    }
 }
 
+bool Surface::hasAlpha() 
+{
+   if ( GetPixelFormat().BitsPerPixel() > 8 ) {
+      for ( int y = 0; y < h(); ++y )
+         for ( int x = 0; x < w(); ++x )
+            if ( (GetPixel(x,y) >> GetPixelFormat().Ashift())  != SDL_ALPHA_OPAQUE ) {
+               GetSurface()->flags |= SDL_SRCALPHA;
+               return true;
+            }
+
+      GetSurface()->flags &= ~SDL_SRCALPHA; 
+   }
+   return false;
+}
+
+
 
 void Surface::detectColorKey ( bool RLE )
 {
 
    // detect if image has per pixel alpha - don't use ColorKey then
    if ( GetPixelFormat().BitsPerPixel() > 8 ) 
-      if ( (GetPixel(0,0) >> GetPixelFormat().Ashift())  != SDL_ALPHA_OPAQUE ) 
-         if ( flags() & SDL_SRCALPHA )
-            return;
+      if ( hasAlpha() ) 
+         return;
    
    int flags = SDL_SRCCOLORKEY;
    if ( RLE )
@@ -474,9 +489,9 @@ void Surface::detectColorKey ( bool RLE )
       
    SetAlpha ( 0, 0 );
       
-   if ( GetPixelFormat().BitsPerPixel() > 8 )
+   if ( GetPixelFormat().BitsPerPixel() > 8 ) {
       SetColorKey( flags, GetPixel(0,0) & ( GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask()));
-   else
+   } else
       SetColorKey( flags, GetPixel(0,0));
       // SetColorKey( flags, 255 );
 }
@@ -528,13 +543,21 @@ Surface& getFieldMask()
 template<int pixelsize>
 class ColorMerger_MaskApply : public ColorMerger_AlphaHandler<pixelsize>
 {
+      int alphamask;
       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
    protected:
+
+      void init( const Surface& srf )
+      {
+         alphamask = ~(srf.GetPixelFormat().Amask());
+         ColorMerger_AlphaHandler<pixelsize>::init(srf);
+      }
+
 
       void assign ( PixelType src, PixelType* dest )
       {
          if ( !isOpaque(src ) )
-            *dest &= 0xffffff;
+            *dest &= alphamask;
       };
 
    public:
@@ -569,14 +592,15 @@ void applyLegacyFieldMask( Surface& s, int x, int y )
       Surface& mask8 = getFieldMask();
       
       mask32 = new Surface ( Surface::createSurface( mask8.w(), mask8.h(), 32 ));
-      Uint8* s = (Uint8*) mask8.pixels();
-      Uint32* d = (Uint32*) mask32->pixels();
-      for ( int y = 0; y < mask8.h(); ++y )
+      for ( int y = 0; y < mask8.h(); ++y ) {
+         Uint8* s = ((Uint8*) mask8.pixels()) + mask8.pitch() * y;
+         Uint32* d = (Uint32*) ((Uint8*)(mask32->pixels()) + mask32->pitch() * y);
          for ( int x = 0; x < mask8.w(); ++x, ++s, ++d)
             if ( *s == 0 )
                *d = 0;   
             else
                *d = 0xfffefefe;
+      }
               
       mask32->SetColorKey( SDL_SRCCOLORKEY, 0 );
       
@@ -585,10 +609,16 @@ void applyLegacyFieldMask( Surface& s, int x, int y )
       // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
       MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite> blitter;
       blitter.blit( getFieldMask(), s, SPoint(0,0)  );
+      s.detectColorKey (  );
    } else {
-      s.Blit( *mask32 );
+      if ( s.hasAlpha() ) {
+         MegaBlitter<1,4,ColorTransform_None,ColorMerger_MaskApply> blitter;
+         blitter.blit( getFieldMask(), s, SPoint(0,0)  );
+      } else {
+         s.Blit( *mask32 );
+         s.detectColorKey (  );
+      }
    }
-   s.detectColorKey (  );
 }
 
 /*

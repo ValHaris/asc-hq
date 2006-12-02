@@ -62,7 +62,7 @@ class MapRenderer {
     protected:
        MapRenderer(); 
 
-      static const int surfaceBorder = 60;
+      static const int surfaceBorder = 90;
             
       struct ViewPort {
          ViewPort( int x1, int y1, int x2, int y2 );

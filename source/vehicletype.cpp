@@ -1006,7 +1006,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.openBracket ( "ConstructionCost" );
    productionCost.runTextIO ( pc );
-   int costCalcMethod;
+   int costCalcMethod = 0;
    pc.addNamedInteger( "CalculationMethod", costCalcMethod, productionCostCalculationMethodNum, productionCostCalculationMethod,  0 );
    if ( pc.isReading() ) {
       if ( !pc.find ( "material" ) && costCalcMethod == 0)
@@ -1067,6 +1067,8 @@ BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& locatio
       features.set( Paratrooper );
    if ( abilities & 4 )
       features.set( PlaceMines );
+   if ( abilities & 8 )
+      features.set( CruiserLanding );
    if ( abilities & 16 )
       features.set( ExternalRepair );
    if ( abilities & 32 )

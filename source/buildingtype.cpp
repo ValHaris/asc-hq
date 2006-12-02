@@ -505,7 +505,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          if ( !pc.isReading() ) {
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
-                  Surface s = Surface::createSurface( construction_steps*500, 250, 255 );
+                  Surface s = Surface::createSurface( construction_steps*500, 250, 32 );
                   for ( int c = 0; c < construction_steps; c++ )
                      for ( int x = 0; x < 4; x++ )
                         for ( int y = 0; y < 6; y++ )

@@ -149,7 +149,10 @@
         "Increase Zoom",
         "Decrease Zoom",
         "Edit Preferences",
-        "Clear Mineral Resources"};
+        "Clear Mineral Resources",
+        "Dump Building definition",
+        "Dump Vehicle definition",
+        "Dump Object definition" };
 
 
 
@@ -816,6 +819,42 @@ void execaction_pg(int code)
             }
             repaintMap();
       }
+      case act_dumpBuilding: 
+         if ( getactfield() && getactfield()->building ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "BuildingDump", stream );
+               actmap->getbuildingtype_byid(getactfield()->building->typ->id)->runTextIO( pc );
+            }
+         } else
+            errorMessage("no building selected");
+         break;
+      case act_dumpVehicle: 
+         if ( getactfield() && getactfield()->vehicle ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "VehicleDump", stream );
+               actmap->getvehicletype_byid(getactfield()->vehicle->typ->id)->runTextIO( pc );
+            }
+         } else
+            errorMessage("no building selected");
+         break;
+      case act_dumpObject: 
+         if ( getactfield() && !getactfield()->objects.empty() ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "ObjectDump", stream );
+               actmap->getobjecttype_byid( getactfield()->objects.front().typ->id)->runTextIO( pc );
+            }
+         } else
+            errorMessage("no building selected");
+         break;
+
+                             
+
          
    };
 }

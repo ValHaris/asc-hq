@@ -477,12 +477,7 @@ void showSearchPath()
 
 void changePassword( GameMap* gamemap )
 {
-   int humanCounter = 0;
-   for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
-      if ( gamemap->player[i].exist() && gamemap->player[i].stat == Player::human )
-         humanCounter++;
-
-   if ( humanCounter < 2 ) {
+   if ( Player::getHumanPlayerNum( gamemap) < 2 ) {
       infoMessage ("Passwords are only used for multiplayer games");
       return;
    }

@@ -103,6 +103,7 @@ public:
 
       bool isTransparent( SDLmm::Color col ) const;
 
+      bool hasAlpha();
       /*
       SDLmm::ColorRGB GetRGB(SDLmm::Color pixel) const;
       SDLmm::ColorRGBA GetRGBA(SDLmm::Color pixel) const;

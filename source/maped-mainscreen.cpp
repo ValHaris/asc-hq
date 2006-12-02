@@ -173,6 +173,12 @@ void Menu::setup()
     addbutton ( "setup item ~F~ilters\tctrl+h",  act_setunitfilter );
     addbutton ( "select ~G~raphic set",         act_selectgraphicset );
 
+   addfield ("~D~ebug");
+    addbutton ( "Dump ~B~uilding",          act_dumpBuilding );
+    addbutton ( "Dump ~V~ehicle",          act_dumpVehicle );
+    addbutton ( "Dump ~O~bject",          act_dumpObject );
+
+
    addfield ("~H~elp");
     addbutton ( "~U~nit Information\tctrl+U",    act_unitinfo );
     addbutton ( "unit~S~et Information",        act_unitSetInformation );

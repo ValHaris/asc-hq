@@ -97,9 +97,13 @@ NewMessage :: NewMessage ( GameMap* gamemap, Message* msg ) : ASC_PG_Dialog( NUL
     
    new PG_Label ( this, PG_Rect( 20, 30, 30, 20 ), "TO:");
    to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+   if ( msg )
+      to->setSelection( msg->to );
    
    new PG_Label ( this, PG_Rect( 210, 30, 30, 20 ), "CC:" );
    cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+   if ( msg )
+      cc->setSelection( msg->cc );
    
    editor = new PG_MultiLineEdit( this, PG_Rect(20, 200, Width() - 140, Height() - 210 ));
    if ( message )

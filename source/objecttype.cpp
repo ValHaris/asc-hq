@@ -37,7 +37,7 @@ ObjectType :: FieldModification::FieldModification()
    terrain_and.flip();
 }
 
-ObjectType :: ObjectType ( void )
+ObjectType :: ObjectType ( void ) : rotateImage(false)
 {
    namingMethod = AddToTerrain;
    groupID = -1;
@@ -213,10 +213,18 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
                   else   
                      megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
                } else {  
-                  if ( imageUsesAlpha )
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
-                  else
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                  if ( dir != 0 && rotateImage ) {
+                     const Surface& s = getPicture( dir, weather);
+                     if ( imageUsesAlpha )
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
+                     else
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
+                  } else {
+                     if ( imageUsesAlpha )
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                     else
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                  }
                }   
             }
          }   
@@ -769,7 +777,7 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 
 
 
-const int object_version = 17;
+const int object_version = 18;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -891,6 +899,9 @@ void ObjectType :: read ( tnstream& stream )
 
       if ( version >= 17 )
          growthDuration = stream.readInt();
+
+      if ( version >= 18 )
+         rotateImage = stream.readInt();
       
    } else
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
@@ -978,6 +989,8 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt( namingMethod );
     stream.writeInt( growthDuration );
+    stream.writeInt( rotateImage );
+
 }
 
 
@@ -1014,6 +1027,8 @@ void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
 
 void ObjectType :: runTextIO ( PropertyContainer& pc )
 {
+   pc.addBreakpoint();
+
    pc.addInteger  ( "ID", id );
    pc.addInteger  ( "GroupID", groupID, -1 );
    pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
@@ -1157,4 +1172,8 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
       }
 
    techDependency.runTextIO( pc );
+
+   if ( weatherPicture[0].images.size() == 1 && (netBehaviour&KeepOrientation) )
+      rotateImage = true;
+
 }

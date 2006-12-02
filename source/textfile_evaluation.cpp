@@ -1279,7 +1279,13 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
        Surface s2 = Surface::createSurface(fieldsizex,fieldsizey, depth );
        
        if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
-          s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
+          if ( s.GetPixelFormat().BitsPerPixel() == 32 ) {
+            MegaBlitter<4,4,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle > blitter;
+            blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
+            blitter.blit( s, s2, SPoint(0,0)  );
+          } else {
+            s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
+          }
           applyLegacyFieldMask(s2);
        } else {
           // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
@@ -1410,7 +1416,7 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
 
 ASCString ASCImageProperty::toString() const
 {
-   fatalError( "writing of Images not supported yet");
+   warning( "writing of Images not supported yet");
    return "";
    /*
    int width, height;
@@ -1478,7 +1484,7 @@ ASCImageArrayProperty::PropertyType ASCImageArrayProperty::operation_eq ( const 
 
 ASCString ASCImageArrayProperty::toString() const
 {
-   fatalError( "writing of Images not supported yet");
+   warning( "writing of Images not supported yet");
    return "";
    /*
    int num = property.size();
