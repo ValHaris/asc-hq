@@ -7,7 +7,7 @@ pkgdata_DATA 		= main.con
 
 pkgdatadir 		= $(datadir)/games/@PACKAGE@
 
-main.con: @MAINCONDATA@
+main.con: @MAINCONDATA@ icons/*.png icons/*.ascgui sounds/*.wav sounds/*.ogg sounds/*.asctxt
 	../source/tools/linux/asc_mount @MAINCONDATA@ icons/*.png icons/*.ascgui sounds/*.wav sounds/*.ogg sounds/*.asctxt main.con
 
 clean-local:

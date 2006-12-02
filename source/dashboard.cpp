@@ -343,7 +343,10 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
       
    if ( veh ) {
       setLabelText( "unittypename", veh->typ->name );
-      setLabelText( "unitname", veh->name );
+      if ( veh->name.empty() )
+         setLabelText( "unitname", veh->typ->description );
+      else
+         setLabelText( "unitname", veh->name );
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
       setLabelText( "unitstatus", 100-veh->damage );
       setBargraphValue( "unitfuel", veh->getStorageCapacity().fuel ? float( veh->getTank().fuel) / veh->getStorageCapacity().fuel : 0  );

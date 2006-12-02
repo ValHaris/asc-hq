@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-21 18:57:43 $
+    Update Date:      $Date: 2006-12-02 19:22:18 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglineedit.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.4 $
+    CVS/RCS Revision: $Revision: 1.1.2.5 $
     Status:           $State: Exp $
 */
 
@@ -535,8 +535,11 @@ void PG_LineEdit::SendDel() {
 
 void PG_LineEdit::SendBackspace() {
 	if(my_cursorPosition > 0) {
-		DeleteChar(my_cursorPosition-1);
+      PG_Application::BulkModeActivator bulk;
+      DeleteChar(my_cursorPosition-1);
 		SetCursorPos(--my_cursorPosition);
+      bulk.disable();
+      Update();
 	}
 }
 

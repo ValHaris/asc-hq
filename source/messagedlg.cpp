@@ -252,6 +252,8 @@ void newmessage ( void )
       infoMessage( "nobody is listening to our transmissions");
       return;
    }
+   
+   // PG_LineEdit::SetBlinkingTime(-1);
         
    NewMessage  nm ( actmap );
    nm.Show();

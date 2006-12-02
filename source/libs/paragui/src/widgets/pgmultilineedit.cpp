@@ -251,9 +251,15 @@ void PG_MultiLineEdit::GetCursorTextPos(unsigned int& horzOffset, unsigned int& 
 
 	// cycle through the lines, finding where our cursor lands
 	for (vector<PG_String>::iterator i = my_textdata.begin(); i != my_textdata.end(); ++i) {
-		if(currentPos <= i->size() || (currentPos <= i->size() && my_isCursorAtEOL)) {
+      if(currentPos < i->size() ) 
 			break;
-		}
+		
+      if ( currentPos <= i->size() && currentPos > 0 && (*i)[currentPos-1] != '\n')
+         break;
+      
+      if ( !i->size() )
+         break;
+      
 		currentPos -= i->size();
 		line++;
 	}

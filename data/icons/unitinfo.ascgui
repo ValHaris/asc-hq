@@ -13,7 +13,7 @@ panel {
       Widget0 {
         type = image
         Filename = unit-hole.png
-        x = 42
+        x = 36
         y = 4
         WidgetNum = 1
         Widget0 {
@@ -27,7 +27,7 @@ panel {
      Widget1 {
         type = image
         Filename = exp-field.png
-        x = 12
+        x = 5
         y = 25
         ToolTipHelp = unit experience
         
@@ -43,18 +43,17 @@ panel {
      Widget2 {
         type = image
         Filename = textbox.png
-        x = 10
+        x = 5
         y = 71
         
         WidgetNum = 1      
         Widget0 {
            type = textoutput
-           TextAlign = CENTER
+           TextAlign = LEFT
            FontColor = 0xffffff
            Fontsize = 11
-           x = 5
-           y = 6
-           x2 = -5
+           x = 7
+           y = 5
            y2 = -4
            name = unittypename
         } Widget0
@@ -63,21 +62,20 @@ panel {
      Widget3 {
         type = image
         Filename = textbox.png
-        x = 10
+        x = 5
         y = 91
         
         WidgetNum = 1    
         Widget0 {
            type = LineEdit
            text = 
-           TextAlign = CENTER
+           TextAlign = LEFT
            FontColor = 0xffffff
            Fontsize = 9
            x = 5
            y = 3
            transparency = 255
            bordersize = 0
-           x2 = -5
            y2 = -3
            name = unitname
         } Widget0
@@ -85,9 +83,9 @@ panel {
 
      widget4 {
         type = dummy
-        x = 112
+        x = 104
         y = 5
-        width = 50
+        width = 55
         height = 63
         ChildWidgets = MoveSymbol MoveField RangeSymbol RangeField ArmorField ArmorSymbol
 
