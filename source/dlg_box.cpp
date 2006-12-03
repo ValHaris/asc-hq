@@ -3284,23 +3284,22 @@ void         thelpsystem::done(void)
 
 void  help( int id)
 { 
-  thelpsystem  hs; 
-
-   hs.init(id,"help system"); 
-   hs.buildgraphics(); 
-   hs.run(); 
-   hs.done(); 
+   ASCString s = readtextmessage( id );
+                     
+   ViewFormattedText vft( "Help System", s, PG_Rect(-1,-1,450,550));
+   vft.Show();
+   vft.RunModal();
 } 
 
 
 void  viewtext2 ( int id)
 { 
-   thelpsystem  hs; 
 
-   hs.init(id,"message"); 
-   hs.buildgraphics(); 
-   hs.run(); 
-   hs.done(); 
+   ASCString s = readtextmessage( id );
+                     
+   ViewFormattedText vft( "Message", s, PG_Rect(-1,-1,450,550));
+   vft.Show();
+   vft.RunModal();
 } 
 
 

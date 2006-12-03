@@ -488,8 +488,10 @@ void PutTribute :: start ( int x, int y )
                   if ( need > avail )
                      need = avail;
                   MapNetwork :: start ( x, y );
-                  if ( !queryonly )
-                     startbuilding->getResource ( got, resourcetype, queryonly, 0 );
+                  if ( !queryonly ) {
+                     startbuilding->getResource ( got, resourcetype, queryonly, 0, startbuilding->getOwner() ); 
+                     // printf(" building at %d/%d had %d, pushed %d\n", x, y, avail, got );
+                  }
 
                }
             }

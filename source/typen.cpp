@@ -214,6 +214,13 @@ void MapCoordinate::move(int width, int height) {
    y +=height;
 }
 
+ASCString MapCoordinate::toString() const
+{
+   ASCString s;
+   s.format( "#coord(%d/%d)#", x, y);
+   return s;
+}
+
 
 vector<IntRange> String2IntRangeVector( const ASCString& t )
 {

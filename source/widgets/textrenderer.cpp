@@ -63,8 +63,11 @@ int TextRenderer :: arrangeLine( int y, const Widgets& line, int lineHeight, int
    for ( Widgets::const_iterator i = line.begin(); i != line.end(); ++i ) {
       (*i)->MoveWidget( x, y + lineHeight- (*i)->Height(), false );
       x += (*i)->Width();
-      if ( attributes.find(*i ) != attributes.end() )
+      if ( attributes.find(*i ) != attributes.end() ) {
          x += attributes[*i].spaceAfter;
+         if ( attributes[*i].absolutePosition >= 0 )
+            x = attributes[*i].absolutePosition;
+      }
    }
    return x;
 }
@@ -180,6 +183,15 @@ void TextRenderer :: addIndentation( int firstLine, int furtherLines )
    if ( furtherLines >= 0 )
       attributes[lastWidget].furtherLineIndent = furtherLines;
 
+}
+
+void TextRenderer :: addAbsPosition( int pos )
+{
+   if ( !lastWidget ) 
+      addWidget( new PG_Widget( this, PG_Rect(0,0,0,1)));
+   
+   if ( pos >= 0 )
+      attributes[lastWidget].absolutePosition = pos;
 }
 
 
@@ -366,6 +378,15 @@ TextRenderer::Widgets TextRenderer :: eval_command( const ASCString& token )
       addIndentation( strtol(s1.c_str(), NULL, 0 ), strtol(s2.c_str(), NULL, 0 ) );
       return widgets;
    }
+
+   static boost::regex abspos( "#pos(\\d+)#");
+   if( boost::regex_match( token, what, abspos)) {
+      ASCString s1;
+      s1.assign( what[1].first, what[1].second );
+      addAbsPosition( strtol(s1.c_str(), NULL, 0 ) );
+      return widgets;
+   }
+
 
    static boost::regex legacyfont1( "#font0*[1|0]#");
    if( boost::regex_match( token, what, legacyfont1)) {

@@ -464,11 +464,11 @@ bool Surface::hasAlpha()
       for ( int y = 0; y < h(); ++y )
          for ( int x = 0; x < w(); ++x )
             if ( (GetPixel(x,y) >> GetPixelFormat().Ashift())  != SDL_ALPHA_OPAQUE ) {
-               GetSurface()->flags |= SDL_SRCALPHA;
+               // GetSurface()->flags |= SDL_SRCALPHA;
                return true;
             }
 
-      GetSurface()->flags &= ~SDL_SRCALPHA; 
+      // GetSurface()->flags &= ~SDL_SRCALPHA; 
    }
    return false;
 }

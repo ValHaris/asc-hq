@@ -341,8 +341,6 @@ void showPlayerStrength()
 void execaction( int code)
 {
    switch(code) {
-    case act_help : help(1000);
-       break;
     case act_toggleresourcemode :  {
          if ( mainScreenWidget )
             mainScreenWidget->toggleMapLayer( "resources");
@@ -513,27 +511,19 @@ void execaction( int code)
                  } /* endif */
               } 
               break;
-              /*
+              
     case act_mirrorcursorx :   {
-                    cursor.gotoxy ( actmap->xsize-getxpos(), getypos() );
-                    int tmp = farbwahl;
-                    farbwahl = altefarbwahl;
-                    altefarbwahl = tmp;
-                    showallchoices();
-                    showStatusBar();
+                     MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+                     md->cursor.goTo( MapCoordinate(actmap->xsize - md->cursor.pos().x, md->cursor.pos().y ) );
                  }
 
        break;
     case act_mirrorcursory :   {
-                    cursor.gotoxy ( getxpos(), actmap->ysize-getypos() );
-                    int tmp = farbwahl;
-                    farbwahl = altefarbwahl;
-                    altefarbwahl = tmp;
-                    showallchoices();
-                    showStatusBar();
+                     MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+                     md->cursor.goTo( MapCoordinate(md->cursor.pos().x, actmap->ysize - md->cursor.pos().y ) );
                  }
        break;
-       */
+       
 //    case act_placemine : placemine();
 //       break;
     case act_placething : placeCurrentItem();
@@ -609,8 +599,8 @@ void execaction( int code)
    case act_setunitfilter: selectunitsetfilter();
                            filtersChangedSignal(); 
       break;
-   case act_setzoom : choosezoomlevel();
-      break;
+   // case act_setzoom : choosezoomlevel();
+   //    break;
    case act_unitsettransformation: unitsettransformation();
       break;
    case act_unitSetInformation: viewUnitSetinfo();
@@ -852,6 +842,8 @@ void execaction_pg(int code)
          } else
             errorMessage("no building selected");
          break;
+    case act_help : help(1000);
+       break;
 
                              
 

@@ -49,7 +49,6 @@ ObjectType :: ObjectType ( void ) : rotateImage(false)
    viewbonus_plus = 0;
    imageHeight = 0;
    physicalHeight = 0;
-   imageUsesAlpha = false;
    growthRate = 0;
    lifetime = -1;
    growthDuration = -1;
@@ -207,23 +206,23 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
                disp = false;
             #endif
             if ( disp ) {
+               const Surface& s = getPicture( dir, weather);
                if ( flip ) {
-                  if ( imageUsesAlpha )
+                  // if ( s.flags() & SDL_SRCALPHA )
                      megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
-                  else   
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                  // else   
+                  //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
                } else {  
                   if ( dir != 0 && rotateImage ) {
-                     const Surface& s = getPicture( dir, weather);
-                     if ( imageUsesAlpha )
+                     // if ( s.flags() & SDL_SRCALPHA )
                         megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
-                     else
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
+                     // else
+                     //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
                   } else {
-                     if ( imageUsesAlpha )
+                     // if ( s.flags() & SDL_SRCALPHA )
                         megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
-                     else
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                     // else
+                     //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
                   }
                }   
             }
@@ -1175,5 +1174,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
    if ( weatherPicture[0].images.size() == 1 && (netBehaviour&KeepOrientation) )
       rotateImage = true;
+
+
 
 }

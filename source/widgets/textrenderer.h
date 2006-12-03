@@ -20,11 +20,12 @@
 class TextRenderer : public PG_ScrollWidget {
 
       struct RenderingAttribute {
-         RenderingAttribute() : spaceAfter(0), baseline(0),vspace(0), linebreak(false),firstLineIndent(-1), furtherLineIndent(-1) {};
+         RenderingAttribute() : spaceAfter(0), baseline(0),vspace(0), linebreak(false),absolutePosition(-1),firstLineIndent(-1), furtherLineIndent(-1) {};
          int spaceAfter;
          int baseline;
          int vspace;
          bool linebreak;
+         int absolutePosition;
          int firstLineIndent;
          int furtherLineIndent;
       };
@@ -74,6 +75,7 @@ class TextRenderer : public PG_ScrollWidget {
       void addSpace( int space );
       void addLinebreak( int pixel, int lines );
       void addIndentation( int firstLine, int furtherLines );
+      void addAbsPosition( int pos );
       ASCString substr( const ASCString& text, ASCString::const_iterator begin, ASCString::const_iterator end );
       ASCString::const_iterator token ( const ASCString& text, ASCString::const_iterator start );
       ASCString::const_iterator token_command ( const ASCString& text, ASCString::const_iterator start );

@@ -738,6 +738,11 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       switch ( key->keysym.sym ) {
          case SDLK_d: execaction_ev(act_changeunitdir);
             return true;
+         case SDLK_F3 : execaction_ev(act_selbodentypAll);
+                        return true;
+   
+         case SDLK_F4 : execaction_ev(act_selobjectAll);
+                        return true;
          default:;
       }
    }

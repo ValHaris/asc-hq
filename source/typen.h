@@ -192,8 +192,8 @@ class MapCoordinate {
                y = stream.readInt ( );
             };
             bool valid() const { return x >= 0 && y >= 0 ; } ;
-//	    void move(const Vector2D& v);
-	    void move(int width, int height);
+	         void move(int width, int height);
+            ASCString toString() const;
       };
 
 inline MapCoordinate operator-( const MapCoordinate& a, const MapCoordinate& b )

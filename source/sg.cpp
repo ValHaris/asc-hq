@@ -921,6 +921,27 @@ void viewFont()
 }
 
 
+void resourceAnalysis()
+{
+   ASCString s;
+   Resources total;
+   for ( Player::BuildingList::iterator j = actmap->player[actmap->actplayer].buildingList.begin(); j != actmap->player[actmap->actplayer].buildingList.end() ; j++ ) {
+      Resources res = (*j)->getResource( Resources(maxint,maxint,maxint), true, 0 );
+      MapCoordinate pos = (*j)->getPosition();
+      s += (*j)->getName() + " #pos150#(" + ASCString::toString( pos.x ) + "/" + ASCString::toString( pos.y) + pos.toString() + ") : #pos300#" + ASCString::toString(res.energy) + "#pos400#" + ASCString::toString(res.material) + "#pos500#" + ASCString::toString(res.fuel) + "\n";
+      total += res;
+   }
+   s += "\nTotal:\n";
+
+   for ( int r = 0; r < 3; ++r)
+      if ( actmap->isResourceGlobal(r))
+         total.resource(r) = actmap->bi_resource[actmap->actplayer].resource(r);
+   s += total.toString();
+
+   ViewFormattedText vft("Resource Analysis", s, PG_Rect( -1, -1, 600, 550 ));
+   vft.Show();
+   vft.RunModal();
+}
 
 
 
@@ -1061,6 +1082,10 @@ void execuseraction2 ( tuseractions action )
       case ua_viewfont:
          viewFont();
          break;
+      case ua_resourceAnalysis:
+         resourceAnalysis();
+         break;
+
       default:
          break;
    }

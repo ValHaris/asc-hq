@@ -22,6 +22,7 @@
 #include <sstream>
 #include <pgimage.h>
 #include <pglistboxbaseitem.h>
+#include <pgtooltiphelp.h>
 
 #include "../iconrepository.h"
 #include "../gamemap.h"
@@ -234,6 +235,8 @@ AllianceSetupWidget::AllianceSetupWidget( GameMap* gamemap, bool allEditable, PG
          pw.name = new PG_LineEdit( horizontalBar, PG_Rect( sqaureWidth, barSpace, nameLength, lineHeight-2*barSpace ));
          pw.name->SetText( actmap->player[i].getName());
          pw.name->SetEditable( false );
+
+         new PG_ToolTipHelp( pw.name, "Position: " + ASCString::toString(i) );
 
          PG_ThemeWidget* col = new PG_ThemeWidget( horizontalBar, PG_Rect( barSpace, barSpace, sqaureWidth - 2*barSpace, lineHeight - 2*barSpace ));
          col->SetSimpleBackground(true);

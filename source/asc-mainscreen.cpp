@@ -220,6 +220,8 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
+   currentMenu->addSeparator();
+   addbutton ( "resource analysis", ua_resourceAnalysis );
 
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );

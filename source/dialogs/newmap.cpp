@@ -45,6 +45,7 @@ class NewMap: public ASC_PG_Dialog {
       bool random;
       PG_Button* terrainButton;
       int terrainid;
+      bool success;
 
 
       bool selectTerrain() {
@@ -88,6 +89,7 @@ class NewMap: public ASC_PG_Dialog {
                mapgenerator();
             
          }
+         success = true;
          
          QuitModal();
          
@@ -106,7 +108,7 @@ class NewMap: public ASC_PG_Dialog {
       }
       
    public:
-      NewMap( GameMap* map ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 400 ), "Map Properties" ), terrainid( 2998 )
+      NewMap( GameMap* map ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 400 ), "Map Properties" ), terrainid( 2998 ), success(false)
       {
          if ( map ) {
             create = false;
@@ -156,6 +158,9 @@ class NewMap: public ASC_PG_Dialog {
 
       GameMap* GetResult()
       {
+         if ( !success )
+            return NULL;
+
          GameMap* res = gamemap;
          gamemap = NULL;
          return res;

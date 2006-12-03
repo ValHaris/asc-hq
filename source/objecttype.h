@@ -28,7 +28,6 @@
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
  class ObjectType : public MapItemType, public LoadableItemType {
-     bool imageUsesAlpha;
      bool rotateImage;
      void realDisplay ( Surface& surface, const SPoint& pos, int dir, int weather ) const;
    public:
