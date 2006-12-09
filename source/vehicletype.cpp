@@ -1051,10 +1051,10 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
       objectLayedByMovement.clear();
 
    if ( hasFunction( ContainerBaseType::IceBreaker ))
-      objectLayedByMovement.push_back ( IntRange ( 6, 6 ));
+      objectLayedByMovement.push_back ( 6 );
 
    if ( hasFunction( ContainerBaseType::MakesTracks ))
-      objectLayedByMovement.push_back ( IntRange ( 7, 7 ));
+      objectLayedByMovement.push_back ( 7 );
 
 }
 

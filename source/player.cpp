@@ -354,9 +354,12 @@ void Player :: sendQueuedMessages()
    MessagePntrContainer::iterator mi = getParentMap()->unsentmessage.begin();
    while ( mi != getParentMap()->unsentmessage.end() ) {
       sentmessage.push_back ( *mi );
-      for ( int i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ ) {
          if ( (*mi)->to & ( 1 << i ))
             getParentMap()->player[ i ].unreadmessage.push_back ( *mi );
+         if ( (*mi)->cc & ( 1 << i ))
+            getParentMap()->player[ i ].unreadmessage.push_back ( *mi );
+      }
    
       mi = getParentMap()->unsentmessage.erase ( mi );
    }

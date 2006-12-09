@@ -158,7 +158,7 @@ public:
  void applyFieldMask( Surface& s, int x = 0, int y = 0, bool detectColorKey = true );
  
  //! applies a field mask that uses FEFEFE Color as Colorkey to load old images
- void applyLegacyFieldMask( Surface& s, int x = 0, int y = 0 );
+ void applyLegacyFieldMask( Surface& s, int x = 0, int y = 0, bool detectColorKey = false );
 
  Surface rotateSurface( Surface& s, int degrees );
 

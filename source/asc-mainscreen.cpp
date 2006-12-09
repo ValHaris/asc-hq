@@ -127,7 +127,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "~M~ain menu\tESC", ua_mainmenu );
    currentMenu->addSeparator();
-   addbutton ( "E~x~it\tctrl-x", ua_exitgame );
+   addbutton ( "~Q~uit\tctrl-q", ua_exitgame );
 
 
    addfield ("~G~ame");
@@ -677,6 +677,12 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
                return true;
 
+               case SDLK_F11: {
+                  int sz = actmap->player[1].unreadmessage.size();
+                  printf(" %d \n", sz );
+               }
+               return true;
+               
             case SDLK_1:
                execUserAction_ev ( ua_changeresourceview );
                return true;
@@ -761,9 +767,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                   execUserAction_ev ( ua_exportUnitToFile );
                return true;
 
-            case SDLK_F11:
-               return true;
-
             case SDLK_F10: {
                SDL_Surface* s = PG_Application::GetScreen();
                SDL_LockSurface( s );
@@ -777,7 +780,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             return true;
             
 
-            case SDLK_x:
+            case SDLK_q:
                execUserAction_ev ( ua_exitgame );
                return true;
             default:;

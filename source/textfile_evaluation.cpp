@@ -34,6 +34,8 @@
 #include "Windows.h"
 #endif
 
+#include <boost/regex.hpp>
+
 
 const char* fileNameDelimitter = " =*/+<>,";
 
@@ -1279,6 +1281,15 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
        Surface s2 = Surface::createSurface(fieldsizex,fieldsizey, depth );
        
        if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
+          
+          bool colorKeyAllowed = false;
+          static boost::regex pcx( "\\.pcx$");
+          boost::smatch what;
+          if( boost::regex_match( copytoLower(file) , what, pcx)) {
+             warning("Truecolor PCX image detected: " + file);
+             colorKeyAllowed = true;
+          }
+          
           if ( s.GetPixelFormat().BitsPerPixel() == 32 ) {
             MegaBlitter<4,4,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle > blitter;
             blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
@@ -1286,7 +1297,7 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
           } else {
             s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
           }
-          applyLegacyFieldMask(s2);
+          applyLegacyFieldMask(s2,0,0, colorKeyAllowed);
        } else {
           // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
           MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle > blitter;

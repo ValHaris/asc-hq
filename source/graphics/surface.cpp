@@ -585,7 +585,7 @@ void applyFieldMask( Surface& s, int x, int y, bool detecColorKey )
    }
 }
 
-void applyLegacyFieldMask( Surface& s, int x, int y )
+void applyLegacyFieldMask( Surface& s, int x, int y, bool detectColorKey )
 {
    static Surface* mask32 = NULL;
    if ( !mask32 ) {
@@ -611,7 +611,7 @@ void applyLegacyFieldMask( Surface& s, int x, int y )
       blitter.blit( getFieldMask(), s, SPoint(0,0)  );
       s.detectColorKey (  );
    } else {
-      if ( s.hasAlpha() ) {
+      if ( !detectColorKey || s.hasAlpha() ) {
          MegaBlitter<1,4,ColorTransform_None,ColorMerger_MaskApply> blitter;
          blitter.blit( getFieldMask(), s, SPoint(0,0)  );
       } else {

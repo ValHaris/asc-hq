@@ -114,11 +114,11 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton( "Edit Preferences", act_editpreferences );
    currentMenu->addSeparator();
-   addbutton ( "E~x~it\tEsc", act_end);
+   addbutton ( "~Q~uit\tctrl-q", act_end);
 
   addfield ("~E~dit");
    addbutton ( "~C~opy \tctrl+C",          act_copyToClipboard );
-   addbutton ( "Cu~t~",                   act_cutToClipboard );
+   addbutton ( "Cu~t~\tctrl+X",            act_cutToClipboard );
    addbutton ( "~P~aste \tctrl+V",         act_pasteFromClipboard );
    currentMenu->addSeparator();
    addbutton ( "Resi~z~e map\tR",             act_resizemap );
@@ -704,6 +704,9 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_p: execaction_ev(act_changeproduction);
                         return true;
    
+         case SDLK_q: execaction_ev(act_end);
+                        return true;
+                        
          case SDLK_r: execaction_ev(act_repaintdisplay);
                         return true;
    
@@ -719,8 +722,10 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_w: execaction_ev(act_setactweatherglobal);
                         return true;
 
-         case SDLK_x: execaction_ev(act_end);
+         case SDLK_x: execaction_ev(act_cutToClipboard);
                         return true;
+                        
+                                                
             case SDLK_F11:
                if ( mod & KMOD_SHIFT ) {
                   if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {

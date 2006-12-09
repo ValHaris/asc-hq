@@ -49,13 +49,14 @@ class  NewMessage : public ASC_PG_Dialog {
       bool ok()
       {
          if ( !message ) {
-            message = new Message ( editor->GetText(), gamemap, to->getSelectedPlayers(), 1 << actmap->actplayer );
+            message = new Message ( editor->GetText(), gamemap, 0, 1 << actmap->actplayer );
             gamemap->unsentmessage.push_back ( message );
          } else {
             message->text = editor->GetText();
             message->to = to->getSelectedPlayers();
          }
          message->cc = cc->getSelectedPlayers();
+         message->to = to->getSelectedPlayers();
          
          QuitModal();
          return true;

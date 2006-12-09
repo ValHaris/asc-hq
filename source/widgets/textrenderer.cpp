@@ -131,6 +131,10 @@ void TextRenderer :: layout()
 
          if ( at->second.furtherLineIndent >= 0 )
             furtherLineIndent = at->second.furtherLineIndent;
+         
+         if ( at->second.absolutePosition >= 0 )
+            x = at->second.absolutePosition;
+         
       }
 
    }

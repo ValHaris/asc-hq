@@ -272,6 +272,7 @@ class IntRange {
            int from;
            int to;
            IntRange(): from(-1), to(-1) {};
+           IntRange( int oneValue ): from(oneValue), to(oneValue) {};
            IntRange( int from_, int to_ ): from(from_), to(to_) {};
            void read ( tnstream& stream );
            void write ( tnstream& stream ) const;
