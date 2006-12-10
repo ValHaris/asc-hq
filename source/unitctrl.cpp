@@ -494,6 +494,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
       int newMovement = orgMovement - pos->dist;
 
+      vehicle->setnewposition ( pos->x, pos->y );
+
       if ( vehicle->typ->movement[log2(orgHeight)] ) {
          int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
 //         if ( nm < 0 )
@@ -508,8 +510,6 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          vehicle->setMovement ( 0 );
          vehicle->attacked = true;
       }
-
-      vehicle->setnewposition ( pos->x, pos->y );
 
       if ( vehicle ) {
          if ((fld->vehicle == NULL) && (fld->building == NULL)) {

@@ -96,7 +96,7 @@ protected:
     
     void setup( bool messageLine );
     
-    bool idleHandler( );
+    bool idleHandler( PG_MessageObject* msgObj );
 
     void mouseScrollChecker();
 

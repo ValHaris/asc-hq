@@ -130,7 +130,7 @@ void MainScreenWidget :: toggleMapLayer( const ASCString& name )
 }
 
 
-bool MainScreenWidget :: idleHandler( )
+bool MainScreenWidget :: idleHandler( PG_MessageObject* msgObj )
 {
    if ( ticker > lastMessageTime + 300 ) {
       displayMessage( "" );

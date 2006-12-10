@@ -44,6 +44,7 @@ class Vehicle;
 class ContainerBase {
    protected:
       GameMap* gamemap;
+      ContainerBase* cargoParent;
       virtual const ResourceMatrix& getRepairEfficiency ( void ) = 0;
 
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
@@ -51,8 +52,8 @@ class ContainerBase {
 
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
-   public:
       ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player );
+   public:
 
       virtual bool isBuilding() const = 0;
 
@@ -123,6 +124,8 @@ class ContainerBase {
       //! weight of all loaded units
       int cargoWeight() const;
 
+      //! returns the nesting depth of the cargo. The unit standing on the field is 0, its cargo is 1, the cargo's cargo 2 ...
+      int cargoNestingDepth();
       
     //@}
 

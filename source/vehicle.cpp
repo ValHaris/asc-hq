@@ -512,7 +512,7 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
          for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
             if ( *i ) {
                double lperc = perc;
-               if ( cargoDivisor )
+               if ( cargoDivisor && cargoNestingDepth() == 0 )
                   lperc /= cargoDivisor;
 
                (*i)->decreaseMovement ( max( 1, int( ceil( lperc * double( (*i)->typ->movement[ log2 ( (*i)->height)] )))));

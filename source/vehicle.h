@@ -210,6 +210,7 @@ class BuildingType;
     
     //! returns the free weight that can be used for cargo
     int freeWeight();
+
     //@}
 
   protected:

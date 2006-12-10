@@ -254,9 +254,11 @@ class GameMap {
       char         levelfinished;
 
       enum State { 
-         Normal,      /*!< normal operation */
-         Replay,      /*!< map is currently used to run a replay. Some ingame events are deactivated */
-         Destruction  /*!< only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either  */
+         Normal,
+         // NormalAuto,    /*!< normal operation, without user interaction */
+         // NormalManual,  /*!< normal operation, with user interaction  */
+         Replay,        /*!< map is currently used to run a replay. Some ingame events are deactivated */
+         Destruction    /*!< only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either  */
       } state;
 
 
@@ -477,6 +479,8 @@ class GameMap {
       void processJournal();
 
       unsigned int randomSeed;
+
+      static void setPlayerMode( Player& p, State s );
 };
 
 

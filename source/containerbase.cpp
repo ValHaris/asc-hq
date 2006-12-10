@@ -30,7 +30,7 @@
 #include "resourcenet.h"
 
 
-ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player ) : gamemap ( map ), baseType (bt)
+ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player ) : gamemap ( map ), cargoParent(NULL), baseType (bt)
 {
    damage = 0;
    color = player*8;
@@ -156,6 +156,15 @@ int ContainerBase::cargoWeight() const
 }
 
 
+int ContainerBase :: cargoNestingDepth()
+{
+   ContainerBase* cb = getCarrier();
+   if ( cb )
+      return cb->cargoNestingDepth() +1;
+   else
+      return 0;
+}
+
 
 const ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh ) const
 {
@@ -186,11 +195,13 @@ ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh )
          }
       }
 
-      return NULL;
+   return NULL;
 }
 
 ContainerBase* ContainerBase :: getCarrier() const
 {
+   return cargoParent;
+   /*
    tfield* fld = getMap()->getField( getPosition() );
    if ( fld->vehicle == this )
       return NULL;
@@ -202,6 +213,7 @@ ContainerBase* ContainerBase :: getCarrier() const
       return fld->vehicle->findParent( this );
 
    return NULL;
+   */
 }
 
 
@@ -346,6 +358,7 @@ void ContainerBase :: addToCargo( Vehicle* veh )
       }
 
    cargo.push_back( veh );
+   veh->cargoParent = this;
    cargoChanged();
 }
 
@@ -354,7 +367,7 @@ bool ContainerBase :: removeUnitFromCargo( Vehicle* veh, bool recursive )
    if ( !veh )
       return false;
    else {
-                     if ( removeUnitFromCargo( veh->networkid )) {
+      if ( removeUnitFromCargo( veh->networkid )) {
          cargoChanged();
          return true;
       } else
@@ -366,8 +379,8 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
 {
    for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i ) {
-
          if ( (*i)->networkid == nwid ) {
+            (*i)->cargoParent = NULL;
             *i = NULL;
             cargoChanged();
             return true;

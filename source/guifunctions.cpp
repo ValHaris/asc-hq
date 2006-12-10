@@ -1632,6 +1632,9 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
          logtoreplayinfo ( rpl_remobj2, pos.x, pos.y, obj->id, veh->networkid );
       }
 
+      if ( obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1 )
+         computeview( actmap );
+
       veh->getResource( num > 0 ? obj->buildcost : obj->removecost, false );
 
       veh->decreaseMovement ( num > 0 ? obj->build_movecost : obj->remove_movecost );

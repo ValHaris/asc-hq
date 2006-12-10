@@ -1283,10 +1283,10 @@ vector<Surface> loadASCImage ( const ASCString& file, int num )
        if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
           
           bool colorKeyAllowed = false;
-          static boost::regex pcx( "\\.pcx$");
+          static boost::regex pcx( ".*\\.pcx$");
           boost::smatch what;
           if( boost::regex_match( copytoLower(file) , what, pcx)) {
-             warning("Truecolor PCX image detected: " + file);
+             // warning("Truecolor PCX image detected: " + file);
              colorKeyAllowed = true;
           }
           

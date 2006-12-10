@@ -78,6 +78,8 @@
 #include <memory>
 #include <SDL_image.h>
 
+#include <boost/regex.hpp>
+
 #include "paradialog.h"
 
 #include "vehicletype.h"
@@ -1107,8 +1109,11 @@ void execUserAction_ev( tuseractions action )
 
 
 
-bool mainloopidle(  )
+bool mainloopidle( PG_MessageObject* msgObj )
 {
+   if ( msgObj != PG_Application::GetApp())
+      return false;
+
    if ( actmap ) {
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
          if ( !checkevents( &getDefaultMapDisplay() ))

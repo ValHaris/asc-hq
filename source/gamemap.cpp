@@ -253,6 +253,10 @@ GameMap :: GameMap ( void )
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
 
+   // sigPlayerUserInteractionBegins.connect( SigC::bind( SigC::slot( GameMap::setPlayerMode ), NormalManual));
+   // sigPlayerUserInteractionEnds.connect( SigC::bind( SigC::slot( GameMap::setPlayerMode ), NormalAuto));
+
+
 #ifdef WEATHERGENERATOR
    weatherSystem  = new WeatherSystem(this, 1, 0.03);
 #endif
@@ -1745,6 +1749,11 @@ VisibilityStates GameMap::getInitialMapVisibility( int player )
             c = visible_ago;
    }
    return c;
+}
+
+void GameMap::setPlayerMode(  Player& p, State s )
+{
+   p.getParentMap()->state = s;
 }
 
 
