@@ -805,13 +805,13 @@ void trunreplay :: wait ( int t )
 
 void trunreplay :: wait ( MapCoordinate pos, int t )
 {
-   if ( fieldvisiblenow ( actmap->getField ( pos ), actmap->playerView ))
+   if ( fieldvisiblenow ( actmap->getField ( pos ), actmap->getPlayerView() ))
       wait();
 }
 
 void trunreplay :: wait ( MapCoordinate pos1, MapCoordinate pos2, int t )
 {
-   if ( fieldvisiblenow ( actmap->getField ( pos1 ), actmap->playerView ) || fieldvisiblenow ( actmap->getField ( pos2 ), actmap->playerView ))
+   if ( fieldvisiblenow ( actmap->getField ( pos1 ), actmap->getPlayerView() ) || fieldvisiblenow ( actmap->getField ( pos2 ), actmap->getPlayerView() ))
       wait();
 }
 
@@ -976,7 +976,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                           tfield* fld = getfield ( x1, y1 );
                           tfield* targ = getfield ( x2, y2 );
-                          int attackvisible = fieldvisiblenow ( fld, actmap->playerView ) || fieldvisiblenow ( targ, actmap->playerView );
+                          int attackvisible = fieldvisiblenow ( fld, actmap->getPlayerView() ) || fieldvisiblenow ( targ, actmap->getPlayerView() );
                           if ( fld && targ && fld->vehicle ) {
                              if ( targ->vehicle ) {
                                 tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
@@ -1304,7 +1304,7 @@ void trunreplay :: execnextreplaymove ( void )
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
                               computeview( actmap );
-                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->playerView )) {
+                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->getPlayerView() )) {
                                  displaymap();
                                  wait();
                               }
@@ -1325,7 +1325,7 @@ void trunreplay :: execnextreplaymove ( void )
                               displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
                               computeview( actmap );
-                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->playerView )) {
+                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->getPlayerView() )) {
                                  displaymap();
                                  wait();
                               }
@@ -1922,7 +1922,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    }
    actmap->state = GameMap::Replay;
 
-   actmap->playerView = viewingplayer;
+   actmap->setPlayerView ( viewingplayer );
    actmap->getCursor() = orgmap->getCursor();
 
    tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );

@@ -200,7 +200,7 @@ void AI:: run ( bool benchMark )
 
    this->benchMark = benchMark;
 
-   if ( getMap()->playerView >= 0 && !benchMark)
+   if ( getMap()->getPlayerView() >= 0 && !benchMark)
       mapDisplay = rmd;
    else
       mapDisplay = NULL;

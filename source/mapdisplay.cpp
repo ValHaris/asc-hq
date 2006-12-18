@@ -112,9 +112,18 @@ void ResourceGraphLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
 {
 #ifndef karteneditor
    if ( fieldInfo.visibility >= visible_ago) {
-      if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) ){
-         paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[fieldInfo.playerView], Resources::materialColor );
-         paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[fieldInfo.playerView], Resources::fuelColor );
+      bool visible = false;
+
+      if ( fieldInfo.playerView == -1 )
+         visible = true;
+
+      if ( fieldInfo.playerView >= 0 )
+         if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) )
+            visible = true;
+
+      if ( visible ) {
+         paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[max(fieldInfo.playerView,0)], Resources::materialColor );
+         paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[max(fieldInfo.playerView,0)], Resources::fuelColor );
       }
    }
 #else
@@ -288,13 +297,13 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
 
       /* display buildings */
       if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) && fld->building->visible )
-         if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == fieldInfo.playerView*8 ))
+         if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->getOwner() == fieldInfo.playerView ))
             fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
 
       /* display units */
       if ( fld->vehicle  &&  (fld->vehicle->height == binaryUnitHeight))
-         if ( ( fld->vehicle->color == fieldInfo.playerView * 8 ) || (fieldInfo.visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
+         if ( ( fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
             fld->vehicle->paint( fieldInfo.surface, pos );
 
    }
@@ -334,7 +343,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
    } else {
       if (fieldInfo.visibility == visible_ago ) {
          if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) && fld->building->visible )
-            if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->color == fieldInfo.playerView*8 ))
+            if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->getOwner() == fieldInfo.playerView ))
                fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
       }
@@ -619,9 +628,8 @@ void MapDisplayPG::updateMap(bool force )
    if ( !actmap )
       return;
       
-   if ( dirty > Curs || force )
-      fillSurface( actmap->playerView );
-
+   if ( dirty > Curs || force ) 
+      fillSurface( actmap->getPlayerView() );
 }
 
 void MapDisplayPG::updateWidget()
@@ -1324,7 +1332,7 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       movement.maskPosition = mapGlobalPos2internalPos( from ) -  movementMask[dir].startFieldPos;
    }
    
-   movement.playerView = actmap->playerView;
+   movement.playerView = actmap->getPlayerView();
    
    int loopCounter = 0;
 #ifdef debugmapdisplay
@@ -1672,7 +1680,7 @@ class PG_MapDisplay : public MapDisplayInterface {
 
 int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart )
 {
-   if ( actmap->playerView < 0 )
+   if ( actmap->getPlayerView() == -2 )
       return 0;
 
    MapCoordinate3D newstart = start;
@@ -1695,15 +1703,19 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    }
    
    tfield* fld1 = actmap->getField ( start );
-   int view1 = fieldVisibility ( fld1, actmap->playerView, actmap );
+   int view1 = fieldVisibility ( fld1, actmap->getPlayerView(), actmap );
 
    tfield* fld2 = actmap->getField ( dest );
-   int view2 = fieldVisibility ( fld2, actmap->playerView, actmap );
+   int view2 = fieldVisibility ( fld2, actmap->getPlayerView(), actmap );
 
-   bool shareView = actmap->player[actmap->playerView].diplomacy.sharesView( vehicle->getOwner() );
+   bool shareView;
+   if ( actmap->getPlayerView() >= 0)
+      shareView = actmap->player[actmap->getPlayerView()].diplomacy.sharesView( vehicle->getOwner() );
+   else
+      shareView = false;
 
-   if (  (view1 >= visible_now  ||  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->playerView ) || shareView )
-      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) || ( view2 == visible_all )) || ( actmap->actplayer == actmap->playerView ) || shareView) {
+   if (  (view1 >= visible_now  ||  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->getPlayerView() ) || shareView || actmap->getPlayerView() == -1 )
+      if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) || ( view2 == visible_all )) || ( actmap->actplayer == actmap->getPlayerView() ) || shareView || actmap->getPlayerView() == -1 ) {
          soundStart( 1 );
          mapDisplayWidget->displayUnitMovement( actmap, vehicle, newstart, newdest );
       }

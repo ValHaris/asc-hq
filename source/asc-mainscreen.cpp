@@ -462,13 +462,13 @@ void VisibilityLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fiel
       font->SetSize( 10 );
    }
 
-   if ( fieldvisiblenow( fieldInfo.fld, fieldInfo.gamemap->playerView, fieldInfo.gamemap )) {
+   if ( fieldvisiblenow( fieldInfo.fld, fieldInfo.gamemap->getPlayerView(), fieldInfo.gamemap )) {
       ASCString s;
 
       int view = 0;
       int jamming = fieldInfo.fld->getjamming();
       for ( int i = 0; i < fieldInfo.gamemap->getPlayerCount(); ++i ) 
-         if ( fieldInfo.gamemap->getPlayer(i).diplomacy.sharesView( fieldInfo.gamemap->playerView)) {
+         if ( fieldInfo.gamemap->getPlayer(i).diplomacy.sharesView( fieldInfo.gamemap->getPlayerView())) {
             view += fieldInfo.fld->view[i].view;
             jamming += fieldInfo.fld->view[i].jamming;
          }

@@ -86,17 +86,14 @@ bool OverviewMapHolder :: idleHandler( )
 
 bool OverviewMapHolder::updateField( const MapCoordinate& pos )
 {
-   if ( map.playerView < 0 )
-      return false;
-   
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
    tfield* fld = map.getField( pos );
-   VisibilityStates visi = fieldVisibility( fld, map.playerView, &map );
+   VisibilityStates visi = fieldVisibility( fld, map.getPlayerView(), &map );
    if ( visi == visible_not ) {
       OverviewMapImage::fill ( overviewMapImage, imgpos, 0xff545454 );
    } else {
-      if ( fld->building && fieldvisiblenow( fld, map.playerView, &map) )
+      if ( fld->building && fieldvisiblenow( fld, map.getPlayerView(), &map) )
          OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
       else {
 
@@ -106,7 +103,7 @@ bool OverviewMapHolder::updateField( const MapCoordinate& pos )
             if ( visi > visible_ago || i->typ->visibleago )
                i->getOverviewMapImage( w )->blit( overviewMapImage, imgpos );
 
-         if ( fld->vehicle && fieldvisiblenow( fld, map.playerView) )
+         if ( fld->vehicle && fieldvisiblenow( fld, map.getPlayerView()) )
             OverviewMapImage::fillCenter ( overviewMapImage, imgpos, map.player[fld->vehicle->getOwner()].getColor() );
 
          if ( visi == visible_ago )
@@ -916,6 +913,22 @@ tfield*  GameMap :: getField(const MapCoordinate& pos )
 {
    return getField ( pos.x, pos.y );
 }
+
+int   GameMap :: getPlayerView() const
+{
+#ifdef karteneditor
+   return -1;
+#else
+   return playerView;
+#endif
+}
+
+
+void  GameMap :: setPlayerView( int player )
+{
+   playerView = player;
+}
+
 
 
 bool GameMap :: isResourceGlobal ( int resource )

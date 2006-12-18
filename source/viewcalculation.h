@@ -38,7 +38,7 @@
                       virtual void  testfield ( const MapCoordinate& mc );
 
                 public:
-                      tcomputeview ( GameMap* _actmap ) : SearchFields ( _actmap ), rangeJamming ( true ) { actView = _actmap->playerView; };
+                      tcomputeview ( GameMap* _actmap ) : SearchFields ( _actmap ), rangeJamming ( true ) { actView = _actmap->getPlayerView(); };
                  };
 
   class tcomputevehicleview : public tcomputeview {

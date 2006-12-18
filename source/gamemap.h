@@ -325,8 +325,17 @@ class GameMap {
       bool          __loadreplayinfo;
 
 
-      //! the player which is currently viewing the map. During replays, for example, this will be different from the player that moves units
+   private:
       int           playerView;
+   public:
+
+      /** the player which is currently viewing the map. 
+          During replays, for example, this will be different from the player that moves units
+          -1 means: everything is visible
+          -2 means: nothing is visible */
+      int   getPlayerView() const;
+      void  setPlayerView( int player );
+
       GameTime     lastjournalchange;
 
       //! in BI resource mode ( see #_resourcemode , #isResourceGlobal ) , this is where the globally available resources are stored. Note that not all resources are globally available.

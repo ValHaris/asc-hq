@@ -79,6 +79,9 @@ void DiplomaticStateVector::turnBegins()
 
 DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
 {
+   if ( towardsPlayer < 0 )
+      return WAR;
+
    if ( player.getPosition() == towardsPlayer )
       return ALLIANCE;
       
@@ -90,6 +93,8 @@ DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
 
 void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s, bool fireSignal )
 {
+   assert( towardsPlayer >= 0 );
+
    if ( towardsPlayer >= states.size() ) 
       states.resize(towardsPlayer+1);
       
@@ -101,6 +106,8 @@ void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s, boo
 
 void DiplomaticStateVector::sneakAttack( int towardsPlayer )
 {
+   assert( towardsPlayer >= 0 );
+
    setState( towardsPlayer, WAR );         
    player.getParentMap()->player[ towardsPlayer ].diplomacy.setState( player.getPosition(), WAR );
    
@@ -117,6 +124,8 @@ void DiplomaticStateVector::sneakAttack( int towardsPlayer )
 
 void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s, bool mail )
 {
+   assert( towardsPlayer >= 0 );
+
    int msgid;
    if ( s > getState( towardsPlayer ))
       msgid = 10003;  //  propose peace
@@ -156,6 +165,8 @@ void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s
 
 void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
 {
+   assert( towardsPlayer >= 0 );
+
    DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
 
    QueuedStateChanges::iterator i = targ.queuedStateChanges.find( player.getPosition() );
@@ -205,6 +216,8 @@ void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
 
 bool DiplomaticStateVector::getProposal( int fromPlayer, DiplomaticStates* state )
 {
+   assert( fromPlayer >= 0 );
+
    DiplomaticStateVector& targ = player.getParentMap()->player[ fromPlayer ].diplomacy;
 
    QueuedStateChanges::iterator i = targ.queuedStateChanges.find( player.getPosition() );

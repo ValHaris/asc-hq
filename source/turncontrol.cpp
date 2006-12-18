@@ -67,7 +67,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
                throw NoMapLoaded();
             } else {
                bool stat;
-               actmap->playerView = actmap->actplayer;  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
+               actmap->setPlayerView ( actmap->actplayer );  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
                do {
                   stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
                   if ( !stat ) {
@@ -85,7 +85,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
 
    moveparams.movestatus = 0;
 
-   actmap->playerView = actmap->actplayer;
+   actmap->setPlayerView ( actmap->actplayer );
 
    return true;
    
@@ -97,7 +97,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
 void runai( GameMap* actmap, int playerView )
 {
    MapDisplayPG::CursorHiding cusorHiding;
-   actmap->playerView = playerView;
+   actmap->setPlayerView ( playerView );
 
    computeview( actmap );
 
@@ -243,7 +243,7 @@ void next_turn ( int playerView )
  
    iterateToNextPlayer( actmap, true, lastPlayer, lastTurn );
    
-   actmap->playerView = -1;
+   actmap->setPlayerView ( -1 );
    actmap->overviewMapHolder.clear();
    
    if ( !authenticateUser( actmap, 0, false, true, true )) {
@@ -252,7 +252,7 @@ void next_turn ( int playerView )
    }
    
    actmap->beginTurn();
-   actmap->playerView  = actmap->actplayer;
+   actmap->setPlayerView ( actmap->actplayer );
    actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
 }
 
@@ -303,7 +303,7 @@ bool continuenetworkgame ()
 
    computeview( actmap );
    actmap->beginTurn();
-   actmap->playerView  = actmap->actplayer;
+   actmap->setPlayerView ( actmap->actplayer );
    return true;
 }
 

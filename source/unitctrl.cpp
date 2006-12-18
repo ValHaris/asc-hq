@@ -339,8 +339,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             printTimer(2);
             
             int view;
-            if ( actmap->playerView >= 0 )
-               view = 1 << actmap->playerView ;
+            if ( actmap->getPlayerView() >= 0 )
+               view = 1 << actmap->getPlayerView() ;
             else
                view = 0;
                
@@ -384,8 +384,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             
             dest->vehicle = vehicle;
             int fieldsWidthChangedVisibility; 
-            if ( actmap->playerView >= 0 ) 
-               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
+            if ( actmap->getPlayerView() >= 0 ) 
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 1 << actmap->getPlayerView() );
             else 
                fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 0);
             
@@ -399,7 +399,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          if ( vehicle ) {
 
-            if ( mapDisplay && fieldvisiblenow ( dest, vehicle, actmap->playerView ) ) {
+            if ( mapDisplay && fieldvisiblenow ( dest, vehicle, actmap->getPlayerView() ) ) {
                // here comes an ugly hack to get the shadow of starting / descending aircraft right
 
                int oldheight = vehicle->height;
@@ -444,7 +444,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             if ( dest->mineattacks ( vehicle )) {
                tmineattacksunit battle ( dest, -1, vehicle );
 
-               if ( mapDisplay && (fieldvisiblenow ( dest, actmap->playerView) || dest->mineowner() == actmap->playerView ))
+               if ( mapDisplay && (fieldvisiblenow ( dest, actmap->getPlayerView()) || dest->mineowner() == actmap->getPlayerView() ))
                   mapDisplay->showBattle( battle );
                else
                   battle.calc();
@@ -527,7 +527,7 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             cn->addToCargo( vehicle );
             if (cn->getOwner() != vehicle->getOwner() && fld->building && actmap->getPlayer(fld->building).diplomacy.isHostile( vehicle) ) {
                fld->building->convert( vehicle->color / 8 );
-               if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
+               if ( fieldvisiblenow ( fld, actmap->getPlayerView() ) || actmap->getPlayerView()  == vehicle->getOwner() )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
            }
            mapDisplayUpToDate = false;
@@ -548,8 +548,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
    
    if ( viewInputChanged ) {
       int fieldschanged;
-      if ( actmap->playerView >= 0 )
-         fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
+      if ( actmap->getPlayerView() >= 0 )
+         fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->getPlayerView() );
       else
          fieldschanged = evaluateviewcalculation ( actmap, 0 );
       
@@ -1065,7 +1065,7 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
       int yp1 = vehicle->ypos;
 
       int shown;
-      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerView) ) {
+      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->getPlayerView()) ) {
          mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
          mapDisplay->showBattle( *battle );
          mapDisplay->removeActionCursor ( );

@@ -231,6 +231,12 @@ void         clearvisibility( GameMap* gamemap, int  reset )
 
 VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial, int additionalEnemyJamming )
 {
+   if ( player == -1 )
+      return visible_all;
+   
+   if ( player <= -2 )
+      return visible_not;
+
    if ( gamemap->player[player].stat == Player::supervisor ) 
       return visible_all;
    
@@ -283,6 +289,9 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
 
 int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial )
 {
+   if ( player < 0 )
+      return 0;
+
    int originalVisibility;
    if ( initial == 2 ) {
       fld->setVisibility(visible_all, player);
@@ -390,6 +399,9 @@ int computeview( GameMap* gamemap, int player_fieldcount_mask, bool disableShare
 
 int getPlayersWithSharedViewMask( int player, GameMap* gamemap )
 {
+   if ( player < 0 )
+      return 0;
+
    int add = 0;
    for ( int i = 0; i < gamemap->getPlayerCount(); i++ )
       if ( gamemap->player[i].exist() && i != player )

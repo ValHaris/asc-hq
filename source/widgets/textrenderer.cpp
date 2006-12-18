@@ -473,7 +473,12 @@ bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)
       ASCString name = selectFile( "*.txt", false );
       if ( !name.empty() ) {
          tn_file_buf_stream s( name, tnstream::writing );
-         s.writeString( my_text, true );
+         if ( mod & KMOD_SHIFT ) {
+            static boost::regex tags( "#[^#]+#");
+            s.writeString( boost::regex_replace(my_text, tags, ""), true );
+         } else {
+            s.writeString( my_text, true );
+         }
       }
       
       return true;

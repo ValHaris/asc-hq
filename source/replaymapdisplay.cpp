@@ -62,20 +62,20 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 
 int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound )
 {
-   if ( actmap->playerView < 0 )
+   if ( actmap->getPlayerView() < 0 )
       return 0;
 
    
-   bool view1 = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView );
+   bool view1 = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->getPlayerView() );
    
    int view2;
    tfield* fld2 = actmap->getField ( dest );
    
-   if ( actmap->player[actmap->playerView].diplomacy.sharesView( vehicle->getOwner() )) 
-      view2 = fieldVisibility ( fld2, actmap->playerView, actmap );
+   if ( actmap->player[actmap->getPlayerView()].diplomacy.sharesView( vehicle->getOwner() )) 
+      view2 = fieldVisibility ( fld2, actmap->getPlayerView(), actmap );
    else {
       // This is a workaround to estimate if the target field will be visible or not once the units is there 
-      view2 = calcvisibilityfield ( actmap, fld2, actmap->playerView, -1, actmap->getgameparameter ( cgp_initialMapVisibility ), vehicle->typ->jamming );
+      view2 = calcvisibilityfield ( actmap, fld2, actmap->getPlayerView(), -1, actmap->getgameparameter ( cgp_initialMapVisibility ), vehicle->typ->jamming );
    }
 
    /*
@@ -104,7 +104,7 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
 
 void ReplayMapDisplay :: displayPosition ( int x, int y )
 {
-   if ( fieldvisiblenow ( getfield ( x, y ), actmap->playerView )) {
+   if ( fieldvisiblenow ( getfield ( x, y ), actmap->getPlayerView() )) {
       checkMapPosition  ( x, y );
       mapDisplay->displayPosition ( x, y );
    }
@@ -119,7 +119,7 @@ void ReplayMapDisplay :: removeActionCursor ( void )
 void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
 {
    if ( x1 >= 0 && y1 >= 0 ) {
-      int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView );
+      int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->getPlayerView() );
       if( i ) {
          cursor_goto( MapCoordinate( x1, y1 ));
          
@@ -131,7 +131,7 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
    }
 
    if ( x2 >= 0 && y2 >= 0 ) {
-      int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerView );
+      int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->getPlayerView() );
       if( i ) {
          cursor_goto( MapCoordinate( x2, y2 ));
          if ( secondWait )

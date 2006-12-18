@@ -704,7 +704,6 @@ void         generatemap( TerrainType::Weather*   bt,
    }
 
    actmap->_resourcemode = 1;
-   actmap->playerView = 0;
 }
 
 

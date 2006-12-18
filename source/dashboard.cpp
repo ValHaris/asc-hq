@@ -188,7 +188,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    
    if ( name == "field_weather" ) {
       MapCoordinate mc = actmap->getCursor();
-      if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc), actmap->playerView ) ) {
+      if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc), actmap->getPlayerView() ) ) {
          MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
 
          static const char* weathernames[] = {"terrain_weather_dry.png",
@@ -207,7 +207,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
 
 
    
-   if ( veh && !fieldvisiblenow( veh->getMap()->getField( veh->getPosition() ), veh->getMap()->playerView ))
+   if ( veh && !fieldvisiblenow( veh->getMap()->getField( veh->getPosition() ), veh->getMap()->getPlayerView() ))
       return;
    
 
@@ -277,7 +277,7 @@ void DashboardPanel::eval()
 
    setLabelText( "windspeed", actmap->weather.windSpeed );
 
-   if ( mc.valid() && fieldvisiblenow( fld, actmap->playerView )) {
+   if ( mc.valid() && fieldvisiblenow( fld, actmap->getPlayerView() )) {
       setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
       setLabelText( "terrain_pipe", fld->bdt.test(cbpipeline) || fld->building ? "YES" : "NO" );
 
@@ -316,12 +316,12 @@ void DashboardPanel::eval()
    }
 
    if ( mc.valid() && fld ) {
-      if ( veh && fieldvisiblenow( fld, actmap->playerView ) ) {
+      if ( veh && fieldvisiblenow( fld, actmap->getPlayerView() ) ) {
          showUnitData( veh, NULL );
       } else {
 
          Building* bld = fld->building;
-         if ( bld && fieldvisiblenow( fld, actmap->playerView ) ) 
+         if ( bld && fieldvisiblenow( fld, actmap->getPlayerView() ) ) 
             showUnitData( NULL, bld );
          else
             showUnitData( NULL, NULL );

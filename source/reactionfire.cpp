@@ -307,7 +307,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                   if ( md ) {
                      MessagingHub::Instance().statusInformation( "attacking with weapon " + ASCString::toString( atw->num[num] ));
 
-                     if ( fieldvisiblenow ( getfield (attacker->xpos, attacker->ypos ), actmap->playerView)) {
+                     if ( fieldvisiblenow ( getfield (attacker->xpos, attacker->ypos ), actmap->getPlayerView())) {
                         ++visibility;
                         md->cursor_goto( attacker->getPosition() );
                         int t = ticker;
@@ -315,7 +315,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                            releasetimeslice();
                      }
 
-                     if ( fieldvisiblenow ( fld, actmap->playerView)) {
+                     if ( fieldvisiblenow ( fld, actmap->getPlayerView())) {
                         ++visibility;
                         md->cursor_goto( target->getPosition() );
                         int t = ticker;

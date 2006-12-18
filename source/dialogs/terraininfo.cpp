@@ -81,7 +81,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    int view = 0;
    int jamming = 0; 
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i ) 
-      if ( gamemap->getPlayer(i).diplomacy.sharesView( gamemap->playerView)) {
+      if ( gamemap->getPlayer(i).diplomacy.sharesView( gamemap->getPlayerView() )) {
          view += fld->view[i].view;
          jamming += fld->view[i].jamming;
       }

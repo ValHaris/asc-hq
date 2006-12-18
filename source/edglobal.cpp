@@ -311,7 +311,7 @@ ASCString getVisibilityStatistics( GameMap* actmap )
 
    for ( int i = 0; i < actmap->getPlayerCount(); i++ ) {
       if ( actmap->player[i].exist() ) {
-         msg += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12\n" ;
+         msg += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
          int notVisible = 0;
          int fogOfWar = 0;
          int visible = 0;
@@ -348,7 +348,7 @@ ASCString getPlayerStrength( GameMap* gamemap )
          r += (*j)->typ->productionCost;
       }
 
-      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12\n" ;
+      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
       message += "strength: ";
       ASCString s;
       s.format("%9.0f", ceil(strength/10000) );
@@ -362,6 +362,7 @@ ASCString getPlayerStrength( GameMap* gamemap )
       message += "\n\n";
 
    }
+   return message;
 }
 
 

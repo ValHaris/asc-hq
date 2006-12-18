@@ -486,22 +486,17 @@ int getheightdelta ( int height1, int height2 )
 
 bool fieldvisiblenow( const tfield* pe, int player, Vehicle* veh, GameMap* actmap )
 {
-   if ( player < 0 ) {
-#ifdef karteneditor
-     return true;
-#else
-     return false;
-#endif
-   }
+   if ( player == -1 )
+      return true;
+
+   if ( player < -1 )
+      return false;
 
    if ( !actmap )
       return false;
   
    if ( pe ) {
       int c = (pe->visible >> ( player * 2)) & 3;
-#ifdef karteneditor
-         c = visible_all;
-#endif
 
       if ( c < actmap->getInitialMapVisibility( player ) )
          c = actmap->getInitialMapVisibility( player );
@@ -548,20 +543,16 @@ VisibilityStates fieldVisibility( const tfield* pe, int player )
 
 VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap )
 {
-#ifdef karteneditor
-   player = 0;
-#endif
-  if ( pe && player >= 0 ) {
-   VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
-#ifdef karteneditor
-         c = visible_all;
-#endif
+   if ( player < 0 )
+      return visible_all;
 
+   if ( pe ) {
+      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
       if ( c < gamemap->getInitialMapVisibility( player ) )
          c = gamemap->getInitialMapVisibility( player );
 
       return c;
-  } else
+   } else
      return visible_not;
 }
       
