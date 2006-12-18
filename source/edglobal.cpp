@@ -42,6 +42,7 @@
 #include "maped-mainscreen.h"
 #include "attack.h"
 #include "mapimageexport.h"
+#include "viewcalculation.h"
 
 #include "dialogs/unitinfodialog.h"
 #include "dialogs/editmapparam.h"   
@@ -301,50 +302,16 @@ double unitStrengthValue( Vehicle* veh )
    return s;
 }
 
-void showPlayerStrength()
-{
-   ASCString message;
-   for ( int i = 0; i< 8; ++i ) {
-      double strength = 0;
-      Resources r;
-      for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
-         strength += unitStrengthValue( *j );
-         r += (*j)->typ->productionCost;
-      }
-
-      message += "\nPlayer " + ASCString::toString(i) + " " + actmap->player[i].getName() + "\n";
-      message += "strength: ";
-      ASCString s;
-      s.format("%9.0f", ceil(strength/10000) );
-      message += s + "\n";
-      message += "Unit production cost: \n";
-      for ( int k = 0; k < 3; ++k ) {
-         message += resourceNames[k];
-         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "\n";
-      }
-      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size()));
-      message += "\n\n";
-
-   }
-   tviewanytext vat ;
-   vat.init ( "Player strength summary", message.c_str(), 20, -1 , 450, 480 );
-   vat.run();
-   vat.done();
-}
-
-
 
 ASCString getVisibilityStatistics( GameMap* actmap )
 {
    ASCString msg;
 
-   tmap::Shareview* sv = actmap->shareview;
-   actmap->shareview = NULL;
-   // computeview ( actmap );
+   computeview ( actmap, 0, true );
 
-   for ( int i = 0; i < 8; i++ )
+   for ( int i = 0; i < actmap->getPlayerCount(); i++ ) {
       if ( actmap->player[i].exist() ) {
-         msg += ASCString("#font02#Player ") + ASCString::toString( i ) + "#font01#\n" ;
+         msg += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12\n" ;
          int notVisible = 0;
          int fogOfWar = 0;
          int visible = 0;
@@ -363,18 +330,55 @@ ASCString getVisibilityStatistics( GameMap* actmap )
          msg += ASCString("  fog of war: ")  + ASCString::toString(fogOfWar ) + " fields\n";
          msg += ASCString("  visible: ")     + ASCString::toString(visible ) + " fields\n\n";
       } 
+   }
 
-
-   actmap->shareview = sv;
-   // computeview ( actmap );
+   computeview ( actmap, 0 , false );
 
    return msg;
 }
 
-
-void pbpplayerstatistics()
+ASCString getPlayerStrength( GameMap* gamemap )
 {
+   ASCString message;
+   for ( int i = 0; i< gamemap->getPlayerCount(); ++i ) {
+      double strength = 0;
+      Resources r;
+      for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
+         strength += unitStrengthValue( *j );
+         r += (*j)->typ->productionCost;
+      }
 
+      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12\n" ;
+      message += "strength: ";
+      ASCString s;
+      s.format("%9.0f", ceil(strength/10000) );
+      message += s + "\n";
+      message += "Unit production cost: \n";
+      for ( int k = 0; k < 3; ++k ) {
+         message += resourceNames[k];
+         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "\n";
+      }
+      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size()));
+      message += "\n\n";
+
+   }
+}
+
+
+
+void pbpplayerstatistics( GameMap* gamemap )
+{
+   ASCString msg= "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n"; 
+   
+   msg += "#fontsize=16#Visibility#fontsize=12#\n";
+   msg += getVisibilityStatistics( gamemap );
+   
+   msg += "#fontsize=16#Strength#fontsize=12#\n";
+   msg += getPlayerStrength( gamemap );
+   
+   ViewFormattedText vft ( "Map Statistics", msg, PG_Rect(-1,-1,600,600));
+   vft.Show();
+   vft.RunModal();
 }
 
 
@@ -734,7 +738,7 @@ void execaction( int code)
       break;
    case act_editTechAdapter: editTechAdapter();
       break;
-   case act_playerStrengthSummary: showPlayerStrength();
+   case act_playerStrengthSummary: pbpplayerstatistics( actmap );
       break;
 
     }
@@ -905,19 +909,13 @@ void execaction_pg(int code)
          break;
     case act_help : help(1000);
        break;
-    case act_pbpstatistics: pbpplayerstatistics();
+    case act_pbpstatistics: pbpplayerstatistics( actmap );
        break;
-
-                             
-
-         
    };
 }
 
 void         execaction_ev(int code)
 {
    execaction_pg(code);
-   // getPGApplication().enableLegacyEventHandling ( true );
    execaction(code);
-   // getPGApplication().enableLegacyEventHandling ( false );
 }

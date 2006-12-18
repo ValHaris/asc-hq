@@ -57,9 +57,10 @@
   /** completely computes the view
       \param gamemap  the map that the view is generated on
       \param player_fieldcount_mask bitmapped variable containing the players for whom the changed fields are calculated
+      \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields that have a changed visibility for the given players. If nothing changes, the map must not be displayed again after the view calculation
   */
-  extern int computeview( GameMap* gamemap, int player_fieldcount_mask = 0 );
+  extern int computeview( GameMap* gamemap, int player_fieldcount_mask = 0, bool disableShareView = false );
 
   /** evaluates the view on a given field and saves it for that field. Calls #calcvisibilityfield for the calculation
       Radar and jamming values must have already been applied to the field! 
@@ -75,9 +76,10 @@
       Radar and jamming values must have already been applied to the field! 
       \param gamemap the map that the view is calculated of
       \param player_fieldcount_mask determines, which players should be counted when the view has changed
+      \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields which have a changed visibility status
   */
-  extern int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask = 0 );
+  extern int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask = 0, bool disableShareView = false );
 
   /** evaluates the view on a part of the map.
       Radar and jamming values must have already been applied to the field! 
@@ -85,9 +87,10 @@
       \param pos  the central position around which the view is calculated
       \param distance the radius of the circle around pos in which the view is evaluated. The view is calculated in AT LEAST this circle, in reality it is a rectangle containing this circle.
       \param player_fieldcount_mask determines, which players should be counted when the view has changed
+      \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields which have a changed visibility status
   */
-  extern int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0 );
+  extern int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0, bool disableShareView = false);
 
   /** calculates the view on a given field.
       Radar and jamming values must have already been applied to the field! 

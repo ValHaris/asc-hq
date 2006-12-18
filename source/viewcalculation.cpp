@@ -124,9 +124,9 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
 
 void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mode: +1 = add view  ;  -1 = remove view ); )
 {
-   player = eht->color / 8;
+   player = eht->getOwner();
 
-   if ( player >= 8 )
+   if ( player >= eht->getMap()->getPlayerCount() )
       fatalError ( "ComputeVehicleView::init - invalid player ");
 
    if ( eht->height == chsatellit )
@@ -159,9 +159,9 @@ void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mo
 
 void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 {
-   player = bld->color / 8;
+   player = bld->getOwner();
 
-   if ( player >= 8 )
+   if ( player >= bld->getMap()->getPlayerCount() )
       fatalError ( "ComputeBuildingView::init - invalid player ");
 
    int  c, j ;
@@ -212,7 +212,7 @@ void         clearvisibility( GameMap* gamemap, int  reset )
    if (!gamemap || (gamemap->xsize <= 0) || (gamemap->ysize <= 0))
      return;
 
-   for ( int p = 0; p < 8; p++ )
+   for ( int p = 0; p < gamemap->getPlayerCount() ; p++ )
       for ( Player::VehicleList::iterator i = gamemap->player[p].vehicleList.begin(); i != gamemap->player[p].vehicleList.end(); i++ )
          if ( (*i)->isViewing())
             (*i)->removeview();
@@ -254,7 +254,7 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
    int satellite = 0;
    int direct = 0;
    int sonar = 0;
-   for ( int i = 0; i < 8; i++ ){
+   for ( int i = 0; i < gamemap->getPlayerCount(); i++ ){
       if ( add & ( 1 << i )) {
          sight += fld->view[i].view;
          mine  += fld->view[i].mine;
@@ -268,7 +268,7 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
       if ( fld->building && (fld->building->connection & cconnection_seen))
          buildingSeen();
 
-      if (( fld->vehicle  && ( fld->vehicle->color  == player * 8 ) && false ) ||
+      if (( fld->vehicle  && ( fld->vehicle->getOwner() == player ) && false ) ||
             ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
             ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
             ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
@@ -299,13 +299,15 @@ int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int ad
 }
 
 
-int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask )
+int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView )
 {
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
-   for ( int player = 0; player < 8; player++ )
+   for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
       if ( gamemap->player[player].exist() ) {
-         int add = getPlayersWithSharedViewMask( player, gamemap );
+         int add = 0;
+         if ( disableShareView )
+            add += getPlayersWithSharedViewMask( player, gamemap );
       
          int nm = gamemap->xsize * gamemap->ysize;
          if ( player_fieldcount_mask & (1 << player ))
@@ -318,7 +320,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask )
    return fieldsChanged;
 }
 
-int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask )
+int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask, bool disableShareView )
 {
    distance = (distance+maxmalq-1)/maxmalq;
    int x1 = pos.x - distance;
@@ -339,21 +341,21 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
 
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
-   for ( int player = 0; player < 8; player++ )
+   for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
       if ( gamemap->player[player].exist() ) {
          int add = 0;
-         for ( int i = 0; i < 8; i++ )
-            if ( gamemap->player[i].exist() && i != player )
-               if ( gamemap->player[i].diplomacy.sharesView( player) )
-                  add |= 1 << i;
+         if ( !disableShareView )
+            for ( int i = 0; i < gamemap->getPlayerCount(); i++ )
+               if ( gamemap->player[i].exist() && i != player )
+                  if ( gamemap->player[i].diplomacy.sharesView( player) )
+                     add |= 1 << i;
 
          for ( int yy = y1; yy <= y2; yy++ )
             for ( int xx = x1; xx <= x2; xx++ ) {
                tfield* fld = gamemap->getField ( xx, yy );
+               int result = evaluatevisibilityfield ( gamemap, fld, player, add, initial );
                if ( player_fieldcount_mask & (1 << player ))
-                  fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
-               else
-                  evaluatevisibilityfield ( gamemap, fld, player, add, initial );
+                  fieldsChanged += result;
             }
       }
    return fieldsChanged;
@@ -361,19 +363,19 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
 
 
 
-int computeview( GameMap* gamemap, int player_fieldcount_mask )
+int computeview( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView )
 {
-   if ((gamemap->xsize == 0) || (gamemap->ysize == 0))
+   if ( !gamemap || (gamemap->xsize == 0) || (gamemap->ysize == 0))
       return 0;
 
    clearvisibility( gamemap, 1 );
 
-   for ( int a = 0; a < 8; a++)
+   for ( int a = 0; a < gamemap->getPlayerCount(); a++)
       if (gamemap->player[a].exist() ) {
 
          for ( Player::VehicleList::iterator i = gamemap->player[a].vehicleList.begin(); i != gamemap->player[a].vehicleList.end(); i++ ) {
             Vehicle* actvehicle = *i;
-            if ( actvehicle == gamemap->getField(actvehicle->xpos,actvehicle->ypos)->vehicle)
+            if ( actvehicle == gamemap->getField(actvehicle->getPosition())->vehicle)
                actvehicle->addview();
          }
 
@@ -382,14 +384,14 @@ int computeview( GameMap* gamemap, int player_fieldcount_mask )
       }
 
 
-   return evaluateviewcalculation ( gamemap, player_fieldcount_mask );
+   return evaluateviewcalculation ( gamemap, player_fieldcount_mask, disableShareView );
 }
 
 
 int getPlayersWithSharedViewMask( int player, GameMap* gamemap )
 {
    int add = 0;
-   for ( int i = 0; i < 8; i++ )
+   for ( int i = 0; i < gamemap->getPlayerCount(); i++ )
       if ( gamemap->player[i].exist() && i != player )
          if ( gamemap->player[i].diplomacy.sharesView( player) )
             add |= 1 << i;
