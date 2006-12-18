@@ -150,8 +150,8 @@ void Menu::setup()
   addfield ("~T~ools");
    // addbutton ( "~V~iew map\tV",            act_viewmap );
    // addbutton ( "~S~how palette",             act_showpalette );
-   addbutton ( "~R~ebuild display\tctrl+R",   act_repaintdisplay );
-   currentMenu->addSeparator();
+   // addbutton ( "~R~ebuild display\tctrl+R",   act_repaintdisplay );
+   // currentMenu->addSeparator();
    addbutton ( "~M~ap generator\tG",          act_mapgenerator );
    addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
    addbutton ( "~U~nitset transformation",    act_unitsettransformation );
@@ -159,6 +159,8 @@ void Menu::setup()
    addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
    addbutton ( "Show Pipeline Net", act_showPipeNet );
    addbutton ( "Generate Tech Tree", act_generateTechTree );
+   currentMenu->addSeparator();
+   addbutton ( "PBP Player Statistics", act_pbpstatistics );
 
    addfield ("~O~ptions");
     addbutton ( "~M~ap values\tctrl+M",          act_changemapvals );

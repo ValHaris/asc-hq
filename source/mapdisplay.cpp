@@ -1372,7 +1372,7 @@ void MapDisplayPG::scrollMap( int dir )
    const int stepWidth = 2;
 
 
-   if ( dir == 7 || dir == 0 || dir == 2 )
+   if ( dir == 7 || dir == 0 || dir == 1 )
       offset.y -= 2 * stepWidth;
 
    if ( dir >= 1 && dir <= 3 )

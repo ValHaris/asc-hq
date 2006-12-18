@@ -153,7 +153,8 @@
         "Clear Mineral Resources",
         "Dump Building definition",
         "Dump Vehicle definition",
-        "Dump Object definition" };
+        "Dump Object definition",
+        "PBP statisticsc" };
 
 
 
@@ -329,6 +330,51 @@ void showPlayerStrength()
    vat.init ( "Player strength summary", message.c_str(), 20, -1 , 450, 480 );
    vat.run();
    vat.done();
+}
+
+
+
+ASCString getVisibilityStatistics( GameMap* actmap )
+{
+   ASCString msg;
+
+   tmap::Shareview* sv = actmap->shareview;
+   actmap->shareview = NULL;
+   // computeview ( actmap );
+
+   for ( int i = 0; i < 8; i++ )
+      if ( actmap->player[i].exist() ) {
+         msg += ASCString("#font02#Player ") + ASCString::toString( i ) + "#font01#\n" ;
+         int notVisible = 0;
+         int fogOfWar = 0;
+         int visible = 0;
+         for ( int x = 0; x < actmap->xsize; x++ )
+            for ( int y = 0; y < actmap->ysize; y++ ) {
+                VisibilityStates vs = fieldVisibility  ( actmap->getField ( x, y ), i );
+                switch ( vs ) {
+                   case visible_not: ++notVisible;
+                   break;
+                   case visible_ago: ++fogOfWar;
+                   break;
+                   default: ++visible;
+                }
+            }
+         msg += ASCString("  not visible: ") + ASCString::toString(notVisible ) + " fields\n";
+         msg += ASCString("  fog of war: ")  + ASCString::toString(fogOfWar ) + " fields\n";
+         msg += ASCString("  visible: ")     + ASCString::toString(visible ) + " fields\n\n";
+      } 
+
+
+   actmap->shareview = sv;
+   // computeview ( actmap );
+
+   return msg;
+}
+
+
+void pbpplayerstatistics()
+{
+
 }
 
 
@@ -858,6 +904,8 @@ void execaction_pg(int code)
             errorMessage("no building selected");
          break;
     case act_help : help(1000);
+       break;
+    case act_pbpstatistics: pbpplayerstatistics();
        break;
 
                              

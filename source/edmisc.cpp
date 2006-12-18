@@ -463,6 +463,15 @@ void         tplayerchange::buttonpressed(int         id)
               actmap->player[sel1].research = actmap->player[sel2].research;
               actmap->player[sel2].research = r;
 
+
+              // view 
+              // passwort
+              // diplomatie
+              // mails
+              // name und email
+              // cursorpositio
+              // status / AI / human / ...
+
               anzeige();
            }
         }
