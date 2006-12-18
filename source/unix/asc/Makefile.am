@@ -2,12 +2,11 @@ vpath %.cpp ../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
-			  -I$(top_builddir)/source -I$(top_src_dir)/source
+INCLUDES      = -I$(top_builddir) -I$(top_src_dir) -I$(top_builddir)/source -I$(top_src_dir)/source
 
-AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
+AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
 
-bin_PROGRAMS		= asc
+bin_PROGRAMS  = asc
 
 asc_SOURCES 		= unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
@@ -35,4 +34,5 @@ $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.l
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
- @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/sdl/libsdlsnd.la \
+@LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB)

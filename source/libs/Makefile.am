@@ -1,3 +1,3 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= triangul sdlmm paragui loki @LIBBZ2@
+SUBDIRS 		= triangul sdlmm paragui loki @SdlSoundDir@ @LIBBZ2@ 

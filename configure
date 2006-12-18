@@ -855,6 +855,8 @@ F77
 FFLAGS
 ac_ct_F77
 LIBTOOL
+abs_top_srcdir
+abs_top_builddir
 SGML2MAN
 DOCBOOK2MAN
 GENCLL
@@ -862,6 +864,12 @@ GENCL
 SDL_CONFIG
 SDL_CFLAGS
 SDL_LIBS
+VORBIS_CFLAGS
+VORBIS_LIBS
+VORBISFILE_LIBS
+VORBISENC_LIBS
+SdlSoundDir
+SDL_SOUND_LIB
 BOOST_LIBS
 PKG_CONFIG
 SIGC_CFLAGS
@@ -1491,12 +1499,16 @@ Optional Features:
   --disable-dependency-tracking  speeds up one-time build
   --enable-dependency-tracking   do not reject slow dependency extractors
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --disable-gcc296-detection  Do not perform gcc 2.96 detection test .
-  --enable-docbook2man    will build the man pages from the sgml source files.
+  --disable-gcc296-detection
+                          Do not perform gcc 2.96 detection test
+  --enable-docbook2man    will build the man pages from the sgml source files
   --enable-genparse       enables recreation of the command line parsers
   --disable-sdltest       Do not try to compile and run a test SDL program
+  --enable-internal_SDL_sound
+                          Don't use the system SDL_sound lib
+  --disable-vorbistest       Do not try to compile and run a test Vorbis program
   --disable-ft2test       disable the freetype check
-  --enable-libbz2-static      compiles a static libbz2 into the binary of asc.
+  --enable-libbz2-static  compiles a static libbz2 into the binary of asc
   --enable-debug          enables some debugging options and output
 
 Optional Packages:
@@ -1508,6 +1520,9 @@ Optional Packages:
   --with-tags[=TAGS]      include additional configurations [automatic]
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
+  --with-vorbis=PFX   Prefix where libvorbis is installed (optional)
+  --with-vorbis-libraries=DIR   Directory where libvorbis library is installed (optional)
+  --with-vorbis-includes=DIR   Directory where libvorbis header files are installed (optional)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4415,7 +4430,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4418 "configure"' > conftest.$ac_ext
+  echo '#line 4433 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7374,11 +7389,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7377: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7392: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7381: \$? = $ac_status" >&5
+   echo "$as_me:7396: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7642,11 +7657,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7645: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7660: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7649: \$? = $ac_status" >&5
+   echo "$as_me:7664: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7746,11 +7761,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7749: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7764: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7753: \$? = $ac_status" >&5
+   echo "$as_me:7768: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10187,7 +10202,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10190 "configure"
+#line 10205 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10287,7 +10302,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10290 "configure"
+#line 10305 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12655,11 +12670,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12658: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12673: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12662: \$? = $ac_status" >&5
+   echo "$as_me:12677: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12759,11 +12774,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12762: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12777: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12766: \$? = $ac_status" >&5
+   echo "$as_me:12781: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14320,11 +14335,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14323: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14338: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14327: \$? = $ac_status" >&5
+   echo "$as_me:14342: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14424,11 +14439,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14427: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14442: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14431: \$? = $ac_status" >&5
+   echo "$as_me:14446: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16643,11 +16658,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16646: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16661: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16650: \$? = $ac_status" >&5
+   echo "$as_me:16665: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16911,11 +16926,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16914: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16929: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16918: \$? = $ac_status" >&5
+   echo "$as_me:16933: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17015,11 +17030,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17018: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17033: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17022: \$? = $ac_status" >&5
+   echo "$as_me:17037: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -21115,6 +21130,8 @@ fi
 
 
 AdditionalIncludeDir=""
+AdditionalLibs=""
+
 gcc296test=yes
 # Check whether --enable-gcc296-detection was given.
 if test "${enable_gcc296_detection+set}" = set; then
@@ -21126,33 +21143,29 @@ if test "$GCC" = yes; then
    if test "X$gcc296test" = "Xyes"; then
       gcc_version296=`echo $gcc_version | grep 2.96`
       if test "X$gcc_version296" != "X"; then
-         { { echo "$as_me:$LINENO: error:
-**** GCC $gcc_version detected. This version of gcc is not an official release
-**** and does produce incorrect code. You may try to build ASC, but it will
-**** most likely NOT run.
-**** To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.
-**** You can bypass this test with --disable-gcc296-detection, so you can build
-**** ASC and see for yourself. And perhaps even rewrite some parts of ASC to
-**** make them Redhat compatible ;) " >&5
-echo "$as_me: error:
-**** GCC $gcc_version detected. This version of gcc is not an official release
-**** and does produce incorrect code. You may try to build ASC, but it will
-**** most likely NOT run.
-**** To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.
-**** You can bypass this test with --disable-gcc296-detection, so you can build
-**** ASC and see for yourself. And perhaps even rewrite some parts of ASC to
-**** make them Redhat compatible ;) " >&2;}
+         { { echo "$as_me:$LINENO: error:  GCC $gcc_version detected. This version of gcc is not an official release
+                and does produce incorrect code. You may try to build ASC, but it will
+                most likely NOT run.
+                To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.
+                You can bypass this test with --disable-gcc296-detection, so you can build
+                ASC and see for yourself. And perhaps even rewrite some parts of ASC to
+                make them Redhat compatible ;) " >&5
+echo "$as_me: error:  GCC $gcc_version detected. This version of gcc is not an official release
+                and does produce incorrect code. You may try to build ASC, but it will
+                most likely NOT run.
+                To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.
+                You can bypass this test with --disable-gcc296-detection, so you can build
+                ASC and see for yourself. And perhaps even rewrite some parts of ASC to
+                make them Redhat compatible ;) " >&2;}
    { (exit 1); exit 1; }; }
       fi
 
       gcc_version29=`echo $gcc_version | grep 2.9`
       if test "X$gcc_version29" != "X"; then
-         { echo "$as_me:$LINENO: WARNING:
-**** GCC $gcc_version detected. GCC 2.95 is currently still supported, but we
-**** are planning to drop support for GCC 2.x in the medium term. ) " >&5
-echo "$as_me: WARNING:
-**** GCC $gcc_version detected. GCC 2.95 is currently still supported, but we
-**** are planning to drop support for GCC 2.x in the medium term. ) " >&2;}
+         { echo "$as_me:$LINENO: WARNING:  GCC $gcc_version detected. GCC 2.95 is currently still supported, but we
+               are planning to drop support for GCC 2.x in the medium term.  " >&5
+echo "$as_me: WARNING:  GCC $gcc_version detected. GCC 2.95 is currently still supported, but we
+               are planning to drop support for GCC 2.x in the medium term.  " >&2;}
       fi
    fi
 fi
@@ -21163,6 +21176,8 @@ ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
 
 
 
@@ -21350,10 +21365,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-my_dir=`pwd`;
-
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I$my_dir/source/libs/paragui/include"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I\$(abs_top_srcdir)/source/libs/paragui/include"
 
 
 
@@ -21770,14 +21783,12 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
      fi
      SDL_CFLAGS=""
      SDL_LIBS=""
-     { { echo "$as_me:$LINENO: error:
-*** SDL version $SDL_VERSION not found! If you have a distribution supplied
-SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution
-does not include the SDL library, you can get it from http://www.libsdl.org/ " >&5
-echo "$as_me: error:
-*** SDL version $SDL_VERSION not found! If you have a distribution supplied
-SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution
-does not include the SDL library, you can get it from http://www.libsdl.org/ " >&2;}
+     { { echo "$as_me:$LINENO: error:  *** SDL version $SDL_VERSION not found! If you have a distribution supplied
+                   SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution
+                   does not include the SDL library, you can get it from http://www.libsdl.org/ " >&5
+echo "$as_me: error:  *** SDL version $SDL_VERSION not found! If you have a distribution supplied
+                   SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution
+                   does not include the SDL library, you can get it from http://www.libsdl.org/ " >&2;}
    { (exit 1); exit 1; }; }
   fi
 
@@ -21875,16 +21886,14 @@ _ACEOF
   LIBS="-lSDL_image $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error:
-ASC requires the SDL_image library. If you have a distribution supplied
-SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing.
-If your distribution does not include the SDL_image library, you can get it
-from http://www.libsdl.org/projects/SDL_image/ " >&5
-echo "$as_me: error:
-ASC requires the SDL_image library. If you have a distribution supplied
-SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing.
-If your distribution does not include the SDL_image library, you can get it
-from http://www.libsdl.org/projects/SDL_image/ " >&2;}
+  { { echo "$as_me:$LINENO: error:  ASC requires the SDL_image library. If you have a distribution supplied
+                     SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing.
+                     If your distribution does not include the SDL_image library, you can get it
+                     from http://www.libsdl.org/projects/SDL_image/ " >&5
+echo "$as_me: error:  ASC requires the SDL_image library. If you have a distribution supplied
+                     SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing.
+                     If your distribution does not include the SDL_image library, you can get it
+                     from http://www.libsdl.org/projects/SDL_image/ " >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -21985,18 +21994,16 @@ _ACEOF
   LIBS="-ljpeg $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error:
-ASC requires the jpeg library. This library will almost certainly be supplied
-with your distribution. If you have it already installed, perhaps a jpeg-devel
-package is missing.
-If your distribution really does not include the jpeg library, you can get it
-from http://www.ijg.org/ " >&5
-echo "$as_me: error:
-ASC requires the jpeg library. This library will almost certainly be supplied
-with your distribution. If you have it already installed, perhaps a jpeg-devel
-package is missing.
-If your distribution really does not include the jpeg library, you can get it
-from http://www.ijg.org/ " >&2;}
+  { { echo "$as_me:$LINENO: error:  ASC requires the jpeg library. This library will almost certainly be supplied
+                    with your distribution. If you have it already installed, perhaps a jpeg-devel
+                    package is missing.
+                    If your distribution really does not include the jpeg library, you can get it
+                    from http://www.ijg.org/ " >&5
+echo "$as_me: error:  ASC requires the jpeg library. This library will almost certainly be supplied
+                    with your distribution. If you have it already installed, perhaps a jpeg-devel
+                    package is missing.
+                    If your distribution really does not include the jpeg library, you can get it
+                    from http://www.ijg.org/ " >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -22088,16 +22095,14 @@ _ACEOF
   LIBS="-lSDL_mixer $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error:
-ASC requires the SDL_mixer library. If you have a distribution supplied
-SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
-If your distribution does not include the SDL_image library, you can get it
-from http://www.libsdl.org/projects/SDL_mixer/ " >&5
-echo "$as_me: error:
-ASC requires the SDL_mixer library. If you have a distribution supplied
-SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
-If your distribution does not include the SDL_image library, you can get it
-from http://www.libsdl.org/projects/SDL_mixer/ " >&2;}
+  { { echo "$as_me:$LINENO: error:  ASC requires the SDL_mixer library. If you have a distribution supplied
+                    SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
+                    If your distribution does not include the SDL_image library, you can get it
+                    from http://www.libsdl.org/projects/SDL_mixer/  " >&5
+echo "$as_me: error:  ASC requires the SDL_mixer library. If you have a distribution supplied
+                    SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.
+                    If your distribution does not include the SDL_image library, you can get it
+                    from http://www.libsdl.org/projects/SDL_mixer/  " >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -22188,17 +22193,7 @@ _ACEOF
   LIBS="-lSDL_sound $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error:
-ASC requires the SDL_sound library. If you have a distribution supplied
-SDL_sound package installed, perhaps the SDL_sound-devel package is missing.
-If your distribution does not include the SDL_sound library, you can get it
-from http://www.icculus.org/SDL_sound/ " >&5
-echo "$as_me: error:
-ASC requires the SDL_sound library. If you have a distribution supplied
-SDL_sound package installed, perhaps the SDL_sound-devel package is missing.
-If your distribution does not include the SDL_sound library, you can get it
-from http://www.icculus.org/SDL_sound/ " >&2;}
-   { (exit 1); exit 1; }; }
+  SDLsoundmissing=y
 fi
 
 
@@ -22207,7 +22202,14 @@ OLDCPPFLAGS=$CPPFLAGS
 
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 
-if test "${ac_cv_header_SDL_sound_h+set}" = set; then
+
+# Check whether --enable-internal_SDL_sound was given.
+if test "${enable_internal_SDL_sound+set}" = set; then
+  enableval=$enable_internal_SDL_sound; forceinternalSDLsound=yes
+fi
+
+if test "x$forceinternalSDLsound" = x; then
+   if test "${ac_cv_header_SDL_sound_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for SDL_sound.h" >&5
 echo $ECHO_N "checking for SDL_sound.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_SDL_sound_h+set}" = set; then
@@ -22363,13 +22365,13 @@ else
 fi
 
 
-if test "X$SDLSOUNDHEADER" = "Xno" ; then
-  CFLAGS="$CFLAGS -I/usr/local/include/SDL"
-  CPPFLAGS="$CPPFLAGS -I/usr/local/include/SDL"
+   if test "X$SDLSOUNDHEADER" = "Xno" ; then
+      CFLAGS="$CFLAGS -I/usr/local/include/SDL"
+      CPPFLAGS="$CPPFLAGS -I/usr/local/include/SDL"
 
-    unset ac_cv_header_SDL_sound_h
+            unset ac_cv_header_SDL_sound_h
 
-  if test "${ac_cv_header_SDL_sound_h+set}" = set; then
+      if test "${ac_cv_header_SDL_sound_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for SDL_sound.h" >&5
 echo $ECHO_N "checking for SDL_sound.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_SDL_sound_h+set}" = set; then
@@ -22525,27 +22527,287 @@ else
 fi
 
 
-  if test "X$SDLSOUNDHEADER2" = "Xno" ; then
-     { { echo "$as_me:$LINENO: error:
-Could not locate the the SDL_sound.h header file. Make sure it is available
-and add its search path to the CPPFLAGS
-Example:
-   export CPPFLAGS=-I/my/include/directory
-   ./configure
-     " >&5
-echo "$as_me: error:
-Could not locate the the SDL_sound.h header file. Make sure it is available
-and add its search path to the CPPFLAGS
-Example:
-   export CPPFLAGS=-I/my/include/directory
-   ./configure
-     " >&2;}
-   { (exit 1); exit 1; }; }
-  else
-     AdditionalIncludeDir="$AdditionalIncludeDir -I/usr/local/include/SDL/"
-     CFLAGS="$CFLAGS $AdditionalIncludeDir"
-  fi
+      if test "X$SDLSOUNDHEADER2" = "Xno" ; then
+         SDLsoundmissing=y
+      else
+         AdditionalIncludeDir="$AdditionalIncludeDir -I/usr/local/include/SDL/"
+         CFLAGS="$CFLAGS $AdditionalIncludeDir"
+      fi
+   fi
+else
+   SDLsoundmissing=y
 fi
+
+
+if test "X$SDLsoundmissing" = "Xy" ; then
+   { echo "$as_me:$LINENO: WARNING: SDL_sound not found. Using stripped down sound support" >&5
+echo "$as_me: WARNING: SDL_sound not found. Using stripped down sound support" >&2;};
+
+
+# Check whether --with-vorbis was given.
+if test "${with_vorbis+set}" = set; then
+  withval=$with_vorbis; vorbis_prefix="$withval"
+else
+  vorbis_prefix=""
+fi
+
+
+# Check whether --with-vorbis-libraries was given.
+if test "${with_vorbis_libraries+set}" = set; then
+  withval=$with_vorbis_libraries; vorbis_libraries="$withval"
+else
+  vorbis_libraries=""
+fi
+
+
+# Check whether --with-vorbis-includes was given.
+if test "${with_vorbis_includes+set}" = set; then
+  withval=$with_vorbis_includes; vorbis_includes="$withval"
+else
+  vorbis_includes=""
+fi
+
+# Check whether --enable-vorbistest was given.
+if test "${enable_vorbistest+set}" = set; then
+  enableval=$enable_vorbistest;
+else
+  enable_vorbistest=yes
+fi
+
+
+  if test "x$vorbis_libraries" != "x" ; then
+    VORBIS_LIBS="-L$vorbis_libraries"
+  elif test "x$vorbis_prefix" != "x" ; then
+    VORBIS_LIBS="-L$vorbis_prefix/lib"
+  elif test "x$prefix" != "xNONE"; then
+    VORBIS_LIBS="-L$prefix/lib"
+  fi
+
+  VORBIS_LIBS="$VORBIS_LIBS -lvorbis -lm"
+  VORBISFILE_LIBS="-lvorbisfile"
+  VORBISENC_LIBS="-lvorbisenc"
+
+  if test "x$vorbis_includes" != "x" ; then
+    VORBIS_CFLAGS="-I$vorbis_includes"
+  elif test "x$vorbis_prefix" != "x" ; then
+    VORBIS_CFLAGS="-I$vorbis_prefix/include"
+  elif test "x$prefix" != "xNONE"; then
+    VORBIS_CFLAGS="-I$prefix/include"
+  fi
+
+
+  { echo "$as_me:$LINENO: checking for Vorbis" >&5
+echo $ECHO_N "checking for Vorbis... $ECHO_C" >&6; }
+  no_vorbis=""
+
+
+  if test "x$enable_vorbistest" = "xyes" ; then
+    ac_save_CFLAGS="$CFLAGS"
+    ac_save_LIBS="$LIBS"
+    CFLAGS="$CFLAGS $VORBIS_CFLAGS $OGG_CFLAGS"
+    LIBS="$LIBS $VORBIS_LIBS $VORBISENC_LIBS $OGG_LIBS"
+      rm -f conf.vorbistest
+      if test "$cross_compiling" = yes; then
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <vorbis/codec.h>
+#include <vorbis/vorbisenc.h>
+
+int main ()
+{
+    vorbis_block 	vb;
+    vorbis_dsp_state	vd;
+    vorbis_info		vi;
+
+    vorbis_info_init (&vi);
+    vorbis_encode_init (&vi, 2, 44100, -1, 128000, -1);
+    vorbis_analysis_init (&vd, &vi);
+    vorbis_block_init (&vd, &vb);
+    /* this function was added in 1.0rc3, so this is what we're testing for */
+    vorbis_bitrate_addblock (&vb);
+
+    system("touch conf.vorbistest");
+    return 0;
+}
+
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  :
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+no_vorbis=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+  fi
+
+  if test "x$no_vorbis" = "x" ; then
+     { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+     :
+  else
+     { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+     if test -f conf.vorbistest ; then
+       :
+     else
+       echo "*** Could not run Vorbis test program, checking why..."
+       CFLAGS="$CFLAGS $VORBIS_CFLAGS"
+       LIBS="$LIBS $VORBIS_LIBS $OGG_LIBS"
+       cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <vorbis/codec.h>
+
+int
+main ()
+{
+ return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag" || test ! -s conftest.err'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+   echo "*** The test program compiled, but did not run. This usually means"
+       echo "*** that the run-time linker is not finding Vorbis or finding the wrong"
+       echo "*** version of Vorbis. If it is not finding Vorbis, you'll need to set your"
+       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+       echo "*** is required on your system"
+       echo "***"
+       echo "*** If you have an old version installed, it is best to remove it, although"
+       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	 echo "*** The test program failed to compile or link. See the file config.log for the"
+       echo "*** exact error that occured. This usually means Vorbis was incorrectly installed"
+       echo "*** or that you have moved Vorbis since it was installed."
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+     VORBIS_CFLAGS=""
+     VORBIS_LIBS=""
+     VORBISFILE_LIBS=""
+     VORBISENC_LIBS=""
+     :
+  fi
+
+
+
+
+  rm -f conf.vorbistest
+
+   if test "x$no_vorbis" = "x" ; then
+      AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/SDL_sound "
+
+      SDL_SOUND_LIB="\$(abs_top_srcdir)/source/libs/sdl_sound/libSDL_sound_int.la"
+
+      SdlSoundDir=sdl_sound
+
+
+   else
+      { { echo "$as_me:$LINENO: error: Vorbis library not found! If you have a distribution supplied
+                    vorbis package installed, perhaps the vorbis-devel.RPM is missing.
+                    If your distribution does not provide the vorbis library, you can get it from
+                     http://xiph.org/vorbis/ " >&5
+echo "$as_me: error: Vorbis library not found! If you have a distribution supplied
+                    vorbis package installed, perhaps the vorbis-devel.RPM is missing.
+                    If your distribution does not provide the vorbis library, you can get it from
+                     http://xiph.org/vorbis/ " >&2;}
+   { (exit 1); exit 1; }; }
+   fi
+else
+   SDL_SOUND_LIB=-lSDL_sound
+fi
+
+
+
+
+
+
+
 
 CPPFLAGS=$OLDCPPFLAGS
 
@@ -22734,18 +22996,15 @@ echo "${ECHO_T}$ac_cv_lib_boost_regex_gcc_main" >&6; }
 if test $ac_cv_lib_boost_regex_gcc_main = yes; then
   BOOST_LIBS="-lboost_regex-gcc"
 else
-  { { echo "$as_me:$LINENO: error:
-ASC requires the Boost library. If you have a distribution supplied
-Boost package installed, perhaps the Boost-devel package is missing.
-If your distribution does not include the Boost library, you can get it
-from http://www.boost.org/ " >&5
-echo "$as_me: error:
-ASC requires the Boost library. If you have a distribution supplied
-Boost package installed, perhaps the Boost-devel package is missing.
-If your distribution does not include the Boost library, you can get it
-from http://www.boost.org/ " >&2;}
+  { { echo "$as_me:$LINENO: error:  ASC requires the Boost library. If you have a distribution supplied
+                    Boost package installed, perhaps the Boost-devel package is missing.
+                    If your distribution does not provide the Boost library, you can get it
+                    from http://www.boost.org/ " >&5
+echo "$as_me: error:  ASC requires the Boost library. If you have a distribution supplied
+                    Boost package installed, perhaps the Boost-devel package is missing.
+                    If your distribution does not provide the Boost library, you can get it
+                    from http://www.boost.org/ " >&2;}
    { (exit 1); exit 1; }; }
-
 fi
 
 fi
@@ -22754,12 +23013,7 @@ fi
 
 
 
-# Check for libsigc++
-#AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[
-#ASC requires the sigc++ library. If you have a distribution supplied
-#sigc++.RPM installed, perhaps the sigc++-devel.RPM is missing.
-#If your distribution does not include the sigc++ library, you can get it
-#from http://libsigc.sourceforge.net ]]))
+
 
 
 
@@ -23000,27 +23254,6 @@ fi
 
 
 
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
-
-
-
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
-
-
 
 ft2test=yes
 # Check whether --enable-ft2test was given.
@@ -23033,8 +23266,8 @@ fi
 if test "$ft2test" = "yes"; then
 
 
-    have_freetype=no
-    # Extract the first word of "freetype-config", so it can be a program name with args.
+   have_freetype=no
+   # Extract the first word of "freetype-config", so it can be a program name with args.
 set dummy freetype-config; ac_word=$2
 { echo "$as_me:$LINENO: checking for $ac_word" >&5
 echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
@@ -23075,12 +23308,12 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 
-    if test "$ac_cv_path_freetype_config" != "no"; then
+   if test "$ac_cv_path_freetype_config" != "no"; then
       have_freetype=yes
-   FREETYPE_CFLAGS="`$ac_cv_path_freetype_config --cflags`"
-   FREETYPE_LIBS="`$ac_cv_path_freetype_config --libs`"
-    else
-   { echo "$as_me:$LINENO: checking for FT_Init_FreeType in -lfreetype" >&5
+      FREETYPE_CFLAGS="`$ac_cv_path_freetype_config --cflags`"
+      FREETYPE_LIBS="`$ac_cv_path_freetype_config --libs`"
+   else
+      { echo "$as_me:$LINENO: checking for FT_Init_FreeType in -lfreetype" >&5
 echo $ECHO_N "checking for FT_Init_FreeType in -lfreetype... $ECHO_C" >&6; }
 if test "${ac_cv_lib_freetype_FT_Init_FreeType+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -23161,7 +23394,7 @@ if test $ac_cv_lib_freetype_FT_Init_FreeType = yes; then
   have_freetype=yes
 fi
 
-   if test "${ac_cv_header_ft2build_h+set}" = set; then
+      if test "${ac_cv_header_ft2build_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for ft2build.h" >&5
 echo $ECHO_N "checking for ft2build.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_ft2build_h+set}" = set; then
@@ -23315,36 +23548,36 @@ if test $ac_cv_header_ft2build_h = yes; then
 fi
 
 
-   if test "$have_ft2build" != "yes"; then
-       have_freetype="no"
-   elif test "$have_freetype" = "yes"; then
-       FREETYPE_LIBS="-lfreetype"
-       ft2inc="no"
-       { echo "$as_me:$LINENO: checking freetype2 include directory" >&5
+      if test "$have_ft2build" != "yes"; then
+         have_freetype="no"
+      elif test "$have_freetype" = "yes"; then
+         FREETYPE_LIBS="-lfreetype"
+         ft2inc="no"
+         { echo "$as_me:$LINENO: checking freetype2 include directory" >&5
 echo $ECHO_N "checking freetype2 include directory... $ECHO_C" >&6; }
-       if test -d /usr/local/include/freetype2; then
-      ft2inc="/usr/local/include/freetype2"
-       elif test -d /usr/include/freetype2; then
-      ft2inc="/usr/include/freetype2"
-       fi
-       { echo "$as_me:$LINENO: result: $ft2inc" >&5
+         if test -d /usr/local/include/freetype2; then
+            ft2inc="/usr/local/include/freetype2"
+         elif test -d /usr/include/freetype2; then
+            ft2inc="/usr/include/freetype2"
+         fi
+         { echo "$as_me:$LINENO: result: $ft2inc" >&5
 echo "${ECHO_T}$ft2inc" >&6; }
-       FREETYPE_CFLAGS="-I$ft2inc"
+         FREETYPE_CFLAGS="-I$ft2inc"
+      fi
    fi
-    fi
 
-    if test x$have_freetype = xno; then
-   { { echo "$as_me:$LINENO: error: *** Unable to find the FreeType 2 library (http://www.freetype.org/)" >&5
+   if test x$have_freetype = xno; then
+      { { echo "$as_me:$LINENO: error: *** Unable to find the FreeType 2 library (http://www.freetype.org/)" >&5
 echo "$as_me: error: *** Unable to find the FreeType 2 library (http://www.freetype.org/)" >&2;}
    { (exit 1); exit 1; }; }
-    fi
-
+   fi
 fi
 
-    have_expat_lib=no
-    have_expat_include=no
 
-    if test "${ac_cv_header_expat_h+set}" = set; then
+have_expat_lib=no
+have_expat_include=no
+
+if test "${ac_cv_header_expat_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for expat.h" >&5
 echo $ECHO_N "checking for expat.h... $ECHO_C" >&6; }
 if test "${ac_cv_header_expat_h+set}" = set; then
@@ -23498,18 +23731,15 @@ if test $ac_cv_header_expat_h = yes; then
 fi
 
 
-
-    if test x$have_expat_include = xno; then
-          { { echo "$as_me:$LINENO: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
-      Please install the library and header files
-      " >&5
+if test x$have_expat_include = xno; then
+   { { echo "$as_me:$LINENO: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
+        Please install the library and header files  " >&5
 echo "$as_me: error: *** Unable to find expat header file! (http://expat.sourceforge.net)
-      Please install the library and header files
-      " >&2;}
+        Please install the library and header files  " >&2;}
    { (exit 1); exit 1; }; }
-    fi
+fi
 
-    { echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+{ echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
 echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6; }
 if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -23591,15 +23821,13 @@ if test $ac_cv_lib_expat_XML_ParserCreate = yes; then
 fi
 
 
-    if test x$have_expat_lib = xno; then
+if test x$have_expat_lib = xno; then
    { { echo "$as_me:$LINENO: error: *** Unable to find expat xml library! (http://expat.sourceforge.net)
-       Please install the library and header files
-       " >&5
+      Please install the library and header files " >&5
 echo "$as_me: error: *** Unable to find expat xml library! (http://expat.sourceforge.net)
-       Please install the library and header files
-       " >&2;}
+      Please install the library and header files " >&2;}
    { (exit 1); exit 1; }; }
-    fi
+fi
 
 
 EXPAT_INCLUDE=""
@@ -23899,7 +24127,7 @@ CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS $AdditionalIncludeDir"
 
 
 CFLAGS="$SAVE_CFLAGS $AdditionalIncludeDir"
-LIBS=$SAVE_LIBS
+LIBS="$SAVE_LIBS $AdditionalLibs"
 
 
 lib_bz2_static=no
@@ -25589,6 +25817,7 @@ fi
 
 
 
+
 MAINCONDATA="palette.pal data.version title.jpg title_mapeditor.jpg \
 progress.* smalaril.fnt usablack.fnt arial8.fnt \
 msystem.fnt gui.fnt guicol.fnt monogui.fnt \
@@ -25701,7 +25930,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile"
+ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -26315,6 +26544,7 @@ do
     "source/libs/sdlmm/src/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/src/Makefile" ;;
     "source/libs/triangul/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/triangul/Makefile" ;;
     "source/libs/loki/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/loki/Makefile" ;;
+    "source/libs/sdl_sound/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdl_sound/Makefile" ;;
     "source/libs/paragui/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/Makefile" ;;
     "source/libs/paragui/src/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/Makefile" ;;
     "source/libs/paragui/src/widgets/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/widgets/Makefile" ;;
@@ -26340,6 +26570,7 @@ do
     "data/units/MK3/Makefile") CONFIG_FILES="$CONFIG_FILES data/units/MK3/Makefile" ;;
     "data/dialog/Makefile") CONFIG_FILES="$CONFIG_FILES data/dialog/Makefile" ;;
     "data/music/Makefile") CONFIG_FILES="$CONFIG_FILES data/music/Makefile" ;;
+    "installer/Makefile") CONFIG_FILES="$CONFIG_FILES installer/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -26546,6 +26777,8 @@ F77!$F77$ac_delim
 FFLAGS!$FFLAGS$ac_delim
 ac_ct_F77!$ac_ct_F77$ac_delim
 LIBTOOL!$LIBTOOL$ac_delim
+abs_top_srcdir!$abs_top_srcdir$ac_delim
+abs_top_builddir!$abs_top_builddir$ac_delim
 SGML2MAN!$SGML2MAN$ac_delim
 DOCBOOK2MAN!$DOCBOOK2MAN$ac_delim
 GENCLL!$GENCLL$ac_delim
@@ -26553,6 +26786,12 @@ GENCL!$GENCL$ac_delim
 SDL_CONFIG!$SDL_CONFIG$ac_delim
 SDL_CFLAGS!$SDL_CFLAGS$ac_delim
 SDL_LIBS!$SDL_LIBS$ac_delim
+VORBIS_CFLAGS!$VORBIS_CFLAGS$ac_delim
+VORBIS_LIBS!$VORBIS_LIBS$ac_delim
+VORBISFILE_LIBS!$VORBISFILE_LIBS$ac_delim
+VORBISENC_LIBS!$VORBISENC_LIBS$ac_delim
+SdlSoundDir!$SdlSoundDir$ac_delim
+SDL_SOUND_LIB!$SDL_SOUND_LIB$ac_delim
 BOOST_LIBS!$BOOST_LIBS$ac_delim
 PKG_CONFIG!$PKG_CONFIG$ac_delim
 SIGC_CFLAGS!$SIGC_CFLAGS$ac_delim
@@ -26578,7 +26817,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 36; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 44; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -27381,8 +27620,7 @@ is just to inform you about the existence of the music.
 
 You can download the music files by calling the ./getmusic script and
 run configure again, which will properly install them.
-Alternatively, you can download and install them manually anytime later,
-which is described in the documentation.
+Alternatively, you can download and install them manually anytime later.
  " >&5
 echo "$as_me: WARNING:
 The music files could not be found. These are not distributed together with the
@@ -27392,8 +27630,7 @@ is just to inform you about the existence of the music.
 
 You can download the music files by calling the ./getmusic script and
 run configure again, which will properly install them.
-Alternatively, you can download and install them manually anytime later,
-which is described in the documentation.
+Alternatively, you can download and install them manually anytime later.
  " >&2;}
 fi
 

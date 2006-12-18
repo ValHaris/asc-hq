@@ -48,8 +48,11 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libsdl_la_DEPENDENCIES =
-am_libsdl_la_OBJECTS = sound.lo graphics.lo events.lo
+am_libsdl_la_OBJECTS = graphics.lo events.lo
 libsdl_la_OBJECTS = $(am_libsdl_la_OBJECTS)
+libsdlsnd_la_DEPENDENCIES =
+am_libsdlsnd_la_OBJECTS = sound.lo
+libsdlsnd_la_OBJECTS = $(am_libsdlsnd_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -61,8 +64,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(libsdl_la_SOURCES)
-DIST_SOURCES = $(libsdl_la_SOURCES)
+SOURCES = $(libsdl_la_SOURCES) $(libsdlsnd_la_SOURCES)
+DIST_SOURCES = $(libsdl_la_SOURCES) $(libsdlsnd_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -143,13 +146,21 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+SDL_SOUND_LIB = @SDL_SOUND_LIB@
 SET_MAKE = @SET_MAKE@
 SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
 SIGC_LIBS = @SIGC_LIBS@
 STRIP = @STRIP@
+SdlSoundDir = @SdlSoundDir@
 VERSION = @VERSION@
+VORBISENC_LIBS = @VORBISENC_LIBS@
+VORBISFILE_LIBS = @VORBISFILE_LIBS@
+VORBIS_CFLAGS = @VORBIS_CFLAGS@
+VORBIS_LIBS = @VORBIS_LIBS@
+abs_top_builddir = @abs_top_builddir@
+abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
@@ -202,10 +213,12 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = @SDL_CFLAGS@  @SIGC_CFLAGS@
-AM_CFLAGS = @SDL_CFLAGS@ 
-noinst_LTLIBRARIES = libsdl.la
-libsdl_la_SOURCES = sound.cpp graphics.cpp events.cpp 
-libsdl_la_LIBADD = @SDL_LIBS@ -lSDL_image -lSDL_mixer -ljpeg -lSDL_sound
+AM_CFLAGS = @SDL_CFLAGS@  
+noinst_LTLIBRARIES = libsdl.la libsdlsnd.la
+libsdl_la_SOURCES = graphics.cpp events.cpp 
+libsdl_la_LIBADD = @SDL_LIBS@ -lSDL_image -ljpeg 
+libsdlsnd_la_SOURCES = sound.cpp  
+libsdlsnd_la_LIBADD = @SDL_LIBS@ -lSDL_mixer @SDL_SOUND_LIB@ 
 all: all-am
 
 .SUFFIXES:
@@ -250,6 +263,8 @@ clean-noinstLTLIBRARIES:
 	done
 libsdl.la: $(libsdl_la_OBJECTS) $(libsdl_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libsdl_la_LDFLAGS) $(libsdl_la_OBJECTS) $(libsdl_la_LIBADD) $(LIBS)
+libsdlsnd.la: $(libsdlsnd_la_OBJECTS) $(libsdlsnd_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libsdlsnd_la_LDFLAGS) $(libsdlsnd_la_OBJECTS) $(libsdlsnd_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

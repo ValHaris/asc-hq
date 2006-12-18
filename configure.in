@@ -24,28 +24,30 @@ AC_PROG_CXX
 
 
 AdditionalIncludeDir=""
+AdditionalLibs=""
+
 gcc296test=yes
-AC_ARG_ENABLE( gcc296-detection, [  --disable-gcc296-detection  Do not perform gcc 2.96 detection test .], gcc296test=no )
+AC_ARG_ENABLE( gcc296-detection, AS_HELP_STRING([--disable-gcc296-detection],[Do not perform gcc 2.96 detection test]), gcc296test=no )
 if test "$GCC" = yes; then
    gcc_version=`gcc --version`
    if test "X$gcc296test" = "Xyes"; then
       gcc_version296=`echo $gcc_version | grep 2.96`
       if test "X$gcc_version296" != "X"; then
-         AC_MSG_ERROR([
-**** GCC $gcc_version detected. This version of gcc is not an official release
-**** and does produce incorrect code. You may try to build ASC, but it will
-**** most likely NOT run.
-**** To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.
-**** You can bypass this test with --disable-gcc296-detection, so you can build
-**** ASC and see for yourself. And perhaps even rewrite some parts of ASC to
-**** make them Redhat compatible ;) ])
+         AC_MSG_ERROR(
+              [[ GCC $gcc_version detected. This version of gcc is not an official release ]
+               [ and does produce incorrect code. You may try to build ASC, but it will]
+               [ most likely NOT run.]
+               [ To build ASC, we recommend GCC 3.2 ; GCC 2.95 is still supported too.]
+               [ You can bypass this test with --disable-gcc296-detection, so you can build ]
+               [ ASC and see for yourself. And perhaps even rewrite some parts of ASC to ]
+               [ make them Redhat compatible ;) ]])
       fi
 
       gcc_version29=`echo $gcc_version | grep 2.9`
       if test "X$gcc_version29" != "X"; then
-         AC_MSG_WARN([
-**** GCC $gcc_version detected. GCC 2.95 is currently still supported, but we
-**** are planning to drop support for GCC 2.x in the medium term. ) ])
+         AC_MSG_WARN(
+              [[ GCC $gcc_version detected. GCC 2.95 is currently still supported, but we ]
+               [are planning to drop support for GCC 2.x in the medium term.  ]])
       fi
    fi
 fi
@@ -53,6 +55,8 @@ fi
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
+AC_SUBST(abs_top_srcdir)
+AC_SUBST(abs_top_builddir)
 
 AC_CHECK_HEADERS( bitset,, 
                   AC_MSG_ERROR( [[
@@ -63,16 +67,14 @@ ISO/IEC 14882 conformant (for example gcc 3.2) ]]))
 AC_LANG_RESTORE
 
 
-my_dir=`pwd`;
-
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I$my_dir/source/libs/paragui/include"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I\$(abs_top_srcdir)/source/libs/paragui/include"
 
 
 
 
 dnl here comes the special stuff - done on demand (developers only?)
-AC_ARG_ENABLE( docbook2man, [  --enable-docbook2man    will build the man pages from the sgml source files.], SGML2MAN=manpages )
+AC_ARG_ENABLE( docbook2man, AS_HELP_STRING([--enable-docbook2man],[will build the man pages from the sgml source files]), SGML2MAN=manpages )
 AC_SUBST([SGML2MAN])
 if test "X$SGML2MAN" = "Xmanpages"; then
    AC_CHECK_PROGS(DOCBOOK2MAN, docbook-to-man docbook2man )
@@ -80,7 +82,7 @@ fi
 AC_SUBST(DOCBOOK2MAN)
 
 dnl mikem: sure this is one is only interesting for martin bickel ;)
-AC_ARG_ENABLE( genparse, [  --enable-genparse       enables recreation of the command line parsers], ENABLEGENPARSE=1 )
+AC_ARG_ENABLE( genparse, AS_HELP_STRING([--enable-genparse],[enables recreation of the command line parsers]), ENABLEGENPARSE=1 )
 if test "X$ENABLEGENPARSE" = "X1"; then
    AC_CHECK_PROG(GENCLL,genparse,genparse)
    if test "X$GENCLL" = "Xgenparse"; then
@@ -106,10 +108,10 @@ SAVE_LIBS=$LIBS
 dnl check for libSDL
 SDL_VERSION=1.2.2
 AM_PATH_SDL($SDL_VERSION,:,
-            AC_MSG_ERROR([[
-*** SDL version $SDL_VERSION not found! If you have a distribution supplied 
-SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution 
-does not include the SDL library, you can get it from http://www.libsdl.org/ ]]))
+            AC_MSG_ERROR(
+                 [[ *** SDL version $SDL_VERSION not found! If you have a distribution supplied ] 
+                  [ SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution] 
+                  [ does not include the SDL library, you can get it from http://www.libsdl.org/ ]]))
 
 dnl set up new FLAGS
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
@@ -118,11 +120,11 @@ LIBS="$LIBS $SDL_LIBS"
 
 AC_CHECK_LIB( SDL_image, 
               IMG_LoadJPG_RW,,
-	      AC_MSG_ERROR([[ 
-ASC requires the SDL_image library. If you have a distribution supplied 
-SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing. 
-If your distribution does not include the SDL_image library, you can get it 
-from http://www.libsdl.org/projects/SDL_image/ ]]))
+              AC_MSG_ERROR(
+                   [[ ASC requires the SDL_image library. If you have a distribution supplied ] 
+                    [ SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing. ] 
+                    [ If your distribution does not include the SDL_image library, you can get it ] 
+                    [ from http://www.libsdl.org/projects/SDL_image/ ]]))
 
 #AC_MSG_CHECKING("SDL_image.h")
 #AC_TRY_COMPILE( [#include <SDL_image.h>],[return 0;],
@@ -134,58 +136,84 @@ from http://www.libsdl.org/projects/SDL_image/ ]]))
 #AC_MSG_RESULT("yes")
 
 
-AC_CHECK_LIB(jpeg, jpeg_CreateDecompress,,
-	      AC_MSG_ERROR([[
-ASC requires the jpeg library. This library will almost certainly be supplied
-with your distribution. If you have it already installed, perhaps a jpeg-devel
-package is missing.
-If your distribution really does not include the jpeg library, you can get it
-from http://www.ijg.org/ ]]))
+AC_CHECK_LIB(jpeg, 
+             jpeg_CreateDecompress,,
+             AC_MSG_ERROR(  
+                  [[ ASC requires the jpeg library. This library will almost certainly be supplied ]
+                   [ with your distribution. If you have it already installed, perhaps a jpeg-devel ]
+                   [ package is missing. ]
+                   [ If your distribution really does not include the jpeg library, you can get it ]
+                   [ from http://www.ijg.org/ ]]))
 
 
-AC_CHECK_LIB( SDL_mixer, 
-              Mix_PlayChannelTimed,, 
-	      AC_MSG_ERROR( [[
-ASC requires the SDL_mixer library. If you have a distribution supplied 
-SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing. 
-If your distribution does not include the SDL_image library, you can get it 
-from http://www.libsdl.org/projects/SDL_mixer/ ]]))
+AC_CHECK_LIB(SDL_mixer, 
+             Mix_PlayChannelTimed,, 
+             AC_MSG_ERROR( 
+                  [[ ASC requires the SDL_mixer library. If you have a distribution supplied ] 
+                   [ SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.] 
+                   [ If your distribution does not include the SDL_image library, you can get it ] 
+                   [ from http://www.libsdl.org/projects/SDL_mixer/ ]] ))
 
-AC_CHECK_LIB( SDL_sound,
-              Sound_Init,,
-         AC_MSG_ERROR( [[
-ASC requires the SDL_sound library. If you have a distribution supplied
-SDL_sound package installed, perhaps the SDL_sound-devel package is missing.
-If your distribution does not include the SDL_sound library, you can get it
-from http://www.icculus.org/SDL_sound/ ]]))
+AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
 
 
 OLDCPPFLAGS=$CPPFLAGS
 
 CPPFLAGS="$CPPFLAGS $SDL_CFLAGS"
 
-AC_CHECK_HEADER( SDL_sound.h,,SDLSOUNDHEADER=no )
-if test "X$SDLSOUNDHEADER" = "Xno" ; then
-  CFLAGS="$CFLAGS -I/usr/local/include/SDL"
-  CPPFLAGS="$CPPFLAGS -I/usr/local/include/SDL"
 
-  dnl AC_CHECK_HEADER caches the result, so we must make it forget to do a new test 
-  unset ac_cv_header_SDL_sound_h
- 
-  AC_CHECK_HEADER( SDL_sound.h,,SDLSOUNDHEADER2=no )
-  if test "X$SDLSOUNDHEADER2" = "Xno" ; then
-     AC_MSG_ERROR( [[
-Could not locate the the SDL_sound.h header file. Make sure it is available 
-and add its search path to the CPPFLAGS  
-Example:
-   export CPPFLAGS=-I/my/include/directory
-   ./configure
-     ]])
-  else
-     AdditionalIncludeDir="$AdditionalIncludeDir -I/usr/local/include/SDL/"
-     CFLAGS="$CFLAGS $AdditionalIncludeDir"
-  fi
+AC_ARG_ENABLE( internal_SDL_sound, AS_HELP_STRING([--enable-internal_SDL_sound], [Don't use the system SDL_sound lib ]), forceinternalSDLsound=yes )
+if test "x$forceinternalSDLsound" = x; then
+   AC_CHECK_HEADER( SDL_sound.h,,SDLSOUNDHEADER=no )
+   if test "X$SDLSOUNDHEADER" = "Xno" ; then
+      CFLAGS="$CFLAGS -I/usr/local/include/SDL"
+      CPPFLAGS="$CPPFLAGS -I/usr/local/include/SDL"
+      
+      dnl AC_CHECK_HEADER caches the result, so we must make it forget to do a new test 
+      unset ac_cv_header_SDL_sound_h
+      
+      AC_CHECK_HEADER( SDL_sound.h,,SDLSOUNDHEADER2=no )
+      if test "X$SDLSOUNDHEADER2" = "Xno" ; then
+         SDLsoundmissing=y
+      else
+         AdditionalIncludeDir="$AdditionalIncludeDir -I/usr/local/include/SDL/"
+         CFLAGS="$CFLAGS $AdditionalIncludeDir"
+      fi
+   fi
+else
+   SDLsoundmissing=y
 fi
+   
+     
+if test "X$SDLsoundmissing" = "Xy" ; then
+   AC_MSG_WARN( SDL_sound not found. Using stripped down sound support, which only supports OGG ); 
+
+   dnl Check for ogg
+   XIPH_PATH_VORBIS
+   if test "x$no_vorbis" = "x" ; then
+      AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/SDL_sound "
+      
+      SDL_SOUND_LIB="\$(abs_top_srcdir)/source/libs/sdl_sound/libSDL_sound_int.la"
+      
+      SdlSoundDir=sdl_sound
+      AC_SUBST(SdlSoundDir)
+      
+   else
+      AC_MSG_ERROR( [Vorbis library not found! If you have a distribution supplied ] 
+                    [vorbis package installed, perhaps the vorbis-devel.RPM is missing.]
+                    [If your distribution does not provide the vorbis library, you can get it from ]
+                    [ http://xiph.org/vorbis/ ]) 
+   fi
+else
+   SDL_SOUND_LIB=-lSDL_sound
+fi
+
+AC_SUBST(SDL_SOUND_LIB)
+AC_SUBST(VORBIS_LIBS)
+AC_SUBST(VORBISFILE_LIBS)
+AC_SUBST(VORBISENC_LIBS)
+AC_SUBST(VORBIS_CFLAGS)
+     
      
 CPPFLAGS=$OLDCPPFLAGS
      
@@ -224,24 +252,21 @@ CPPFLAGS=$OLDCPPFLAGS
 AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
 
 if test x$BOOSTERR = xyes ; then
-  AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc", AC_MSG_ERROR([[
-ASC requires the Boost library. If you have a distribution supplied
-Boost package installed, perhaps the Boost-devel package is missing.
-If your distribution does not include the Boost library, you can get it
-from http://www.boost.org/ ]])
-)
+  AC_CHECK_LIB( boost_regex-gcc, 
+                main, 
+                BOOST_LIBS="-lboost_regex-gcc", 
+                AC_MSG_ERROR(
+                  [[ ASC requires the Boost library. If you have a distribution supplied ]
+                   [ Boost package installed, perhaps the Boost-devel package is missing. ]
+                   [ If your distribution does not provide the Boost library, you can get it ]
+                   [ from http://www.boost.org/ ]]))
 fi
 
 
 AC_SUBST(BOOST_LIBS)
 
 
-# Check for libsigc++
-#AM_PATH_SIGC(1.0.0, , AC_MSG_ERROR( [[
-#ASC requires the sigc++ library. If you have a distribution supplied
-#sigc++.RPM installed, perhaps the sigc++-devel.RPM is missing.
-#If your distribution does not include the sigc++ library, you can get it
-#from http://libsigc.sourceforge.net ]]))
+
 
 dnl SigC++
 PKG_CHECK_MODULES(SIGC, sigc++-1.2)
@@ -252,90 +277,69 @@ AC_SUBST(SIGC_CFLAGS)
 
 
 
-dnl ugly work around for this yet buggy SDLmm check
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-
-dnl AM_PATH_SDLMM(0.1.8, :, 
-dnl               AC_MSG_ERROR([[
-dnl *** SDLmm not found! ASC requires the SDLmm library. If you have a distribution
-dnl supplied SDLmm.RPM installed, perhaps the SDLmm-devel.RPM is missing. 
-dnl If your distribution does not include the SDLmm library, you can get it 
-dnl from http://sdlmm.sf.net ]]))
-
-
-
-
-
-AC_LANG_RESTORE
-
-
 
 dnl ***********************************
 dnl CHECKS FOR INCLUDED PARAGUI LIBRARY
 
 ft2test=yes
 AC_ARG_ENABLE(ft2test,
-   [  --disable-ft2test       disable the freetype check],
+   AS_HELP_STRING([--disable-ft2test],[disable the freetype check]),
    ft2test=no
 )
 
 if test "$ft2test" = "yes"; then
 
-    dnl Check for freetype2 with a reasonable fallback in case
-    dnl freetype-config is missing.
+   dnl Check for freetype2 with a reasonable fallback in case
+   dnl freetype-config is missing.
 
-    have_freetype=no
-    AC_PATH_PROG(freetype_config,freetype-config,no)
-    if test "$ac_cv_path_freetype_config" != "no"; then
+   have_freetype=no
+   AC_PATH_PROG(freetype_config,freetype-config,no)
+   if test "$ac_cv_path_freetype_config" != "no"; then
       have_freetype=yes
-   FREETYPE_CFLAGS="`$ac_cv_path_freetype_config --cflags`"
-   FREETYPE_LIBS="`$ac_cv_path_freetype_config --libs`"
-    else
-   AC_CHECK_LIB(freetype,FT_Init_FreeType,have_freetype=yes)
-   AC_CHECK_HEADER(ft2build.h,have_ft2build=yes)
-   if test "$have_ft2build" != "yes"; then
-       have_freetype="no"
-   elif test "$have_freetype" = "yes"; then
-       FREETYPE_LIBS="-lfreetype"
-       ft2inc="no"
-       AC_MSG_CHECKING(freetype2 include directory)
-       if test -d /usr/local/include/freetype2; then
-      ft2inc="/usr/local/include/freetype2"
-       elif test -d /usr/include/freetype2; then
-      ft2inc="/usr/include/freetype2"
-       fi
-       AC_MSG_RESULT($ft2inc)
-       FREETYPE_CFLAGS="-I$ft2inc"
+      FREETYPE_CFLAGS="`$ac_cv_path_freetype_config --cflags`"
+      FREETYPE_LIBS="`$ac_cv_path_freetype_config --libs`"
+   else
+      AC_CHECK_LIB(freetype,FT_Init_FreeType,have_freetype=yes)
+      AC_CHECK_HEADER(ft2build.h,have_ft2build=yes)
+      if test "$have_ft2build" != "yes"; then
+         have_freetype="no"
+      elif test "$have_freetype" = "yes"; then
+         FREETYPE_LIBS="-lfreetype"
+         ft2inc="no"
+         AC_MSG_CHECKING(freetype2 include directory)
+         if test -d /usr/local/include/freetype2; then
+            ft2inc="/usr/local/include/freetype2"
+         elif test -d /usr/include/freetype2; then
+            ft2inc="/usr/include/freetype2"
+         fi
+         AC_MSG_RESULT($ft2inc)
+         FREETYPE_CFLAGS="-I$ft2inc"
+      fi
    fi
-    fi
 
-    if test x$have_freetype = xno; then
-   AC_MSG_ERROR([*** Unable to find the FreeType 2 library (http://www.freetype.org/)])
-    fi
-    
+   if test x$have_freetype = xno; then
+      AC_MSG_ERROR([*** Unable to find the FreeType 2 library (http://www.freetype.org/)])
+   fi
 fi
 
-    have_expat_lib=no
-    have_expat_include=no
 
-    AC_CHECK_HEADER(expat.h, [have_expat_include=yes])
+have_expat_lib=no
+have_expat_include=no
 
-    if test x$have_expat_include = xno; then
-          AC_MSG_ERROR(
-      [*** Unable to find expat header file! (http://expat.sourceforge.net)]
-      [Please install the library and header files ]
-      )
-    fi
-
-    AC_CHECK_LIB(expat, XML_ParserCreate, have_expat_lib=yes)
-
-    if test x$have_expat_lib = xno; then
+AC_CHECK_HEADER(expat.h, [have_expat_include=yes])
+if test x$have_expat_include = xno; then
    AC_MSG_ERROR(
-       [*** Unable to find expat xml library! (http://expat.sourceforge.net)]
-       [Please install the library and header files ]
-       )
-    fi
+        [*** Unable to find expat header file! (http://expat.sourceforge.net)]
+        [Please install the library and header files ] )
+fi
+
+AC_CHECK_LIB(expat, XML_ParserCreate, have_expat_lib=yes)
+
+if test x$have_expat_lib = xno; then
+   AC_MSG_ERROR(
+      [*** Unable to find expat xml library! (http://expat.sourceforge.net)]
+      [Please install the library and header files ])
+fi
 
 
 EXPAT_INCLUDE=""
@@ -400,12 +404,12 @@ CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS $AdditionalIncludeDir"
 
 
 CFLAGS="$SAVE_CFLAGS $AdditionalIncludeDir"
-LIBS=$SAVE_LIBS
+LIBS="$SAVE_LIBS $AdditionalLibs"
 
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
-AC_ARG_ENABLE( libbz2-static, [  --enable-libbz2-static      compiles a static libbz2 into the binary of asc.], [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
+AC_ARG_ENABLE( libbz2-static, AS_HELP_STRING([--enable-libbz2-static],[compiles a static libbz2 into the binary of asc]), [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
 AC_CHECK_LIB( bz2, BZ2_bzReadOpen, :, [checklib_bz2_static=yes] )
 AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
 
@@ -558,6 +562,7 @@ AC_SUBST(DOCBOOK2MAN)
 
 AC_SUBST(asc_version)
 
+
 dnl *************************************************************************
 dnl Checking and assembling the data files
 
@@ -615,6 +620,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/libs/sdlmm/src/Makefile \
        source/libs/triangul/Makefile \
        source/libs/loki/Makefile \
+       source/libs/sdl_sound/Makefile \
        source/libs/paragui/Makefile \
        source/libs/paragui/src/Makefile \
        source/libs/paragui/src/widgets/Makefile \
@@ -639,11 +645,12 @@ AC_CONFIG_FILES( [ Makefile \
        data/units/MK1/Makefile \
        data/units/MK3/Makefile \
        data/dialog/Makefile \
-       data/music/Makefile ]) 
+       data/music/Makefile \
+       installer/Makefile ]) 
        
 AC_OUTPUT
 
-AC_ARG_ENABLE( debug, [  --enable-debug          enables some debugging options and output], ENABLEDEBUG=1 )
+AC_ARG_ENABLE( debug, AS_HELP_STRING([--enable-debug],[enables some debugging options and output]), ENABLEDEBUG=1 )
 if test "X$ENABLEDEBUG" = "X1"; then
    CXXFLAGS="$CXXFLAGS -O0 -g3 -Wall"
    echo SDL_CFLAGS $SDL_CFLAGS
@@ -677,8 +684,7 @@ is just to inform you about the existence of the music.
 
 You can download the music files by calling the ./getmusic script and 
 run configure again, which will properly install them.
-Alternatively, you can download and install them manually anytime later, 
-which is described in the documentation.
+Alternatively, you can download and install them manually anytime later.
 ] )
 fi
 

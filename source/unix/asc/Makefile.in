@@ -102,6 +102,7 @@ asc_DEPENDENCIES =  \
 	$(top_builddir)/source/actions/libactions.la \
 	$(top_builddir)/source/libs/paragui/src/libparagui.la \
 	$(top_builddir)/source/widgets/libwidgets.la \
+	$(top_builddir)/source/sdl/libsdlsnd.la $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
@@ -197,13 +198,21 @@ RANLIB = @RANLIB@
 SDL_CFLAGS = @SDL_CFLAGS@
 SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
+SDL_SOUND_LIB = @SDL_SOUND_LIB@
 SET_MAKE = @SET_MAKE@
 SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
 SIGC_LIBS = @SIGC_LIBS@
 STRIP = @STRIP@
+SdlSoundDir = @SdlSoundDir@
 VERSION = @VERSION@
+VORBISENC_LIBS = @VORBISENC_LIBS@
+VORBISFILE_LIBS = @VORBISFILE_LIBS@
+VORBIS_CFLAGS = @VORBIS_CFLAGS@
+VORBIS_LIBS = @VORBIS_LIBS@
+abs_top_builddir = @abs_top_builddir@
+abs_top_srcdir = @abs_top_srcdir@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
 ac_ct_F77 = @ac_ct_F77@
@@ -255,9 +264,7 @@ subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I$(top_builddir) -I$(top_src_dir) \
-			  -I$(top_builddir)/source -I$(top_src_dir)/source
-
+INCLUDES = -I$(top_builddir) -I$(top_src_dir) -I$(top_builddir)/source -I$(top_src_dir)/source
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
 asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
@@ -285,7 +292,8 @@ $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.l
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
- @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/sdl/libsdlsnd.la \
+@LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB)
 
 all: all-am
 
