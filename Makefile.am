@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= source data doc installer
+SUBDIRS 		= source data doc installer 
 EXTRA_DIST 		= asc.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm
 AUTOMAKE_OPTIONS 	= foreign
 
@@ -15,3 +15,7 @@ tarball:
 
 pbpinstaller: 
 	cd $(top_srcdir)/installer && make pbpinstaller 
+
+unitguide:
+	cd doc && make unitguide
+	

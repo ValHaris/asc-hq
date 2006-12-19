@@ -885,6 +885,8 @@ PHYSFS_LIB
 PHYSFS_SUBDIR
 LIBPHYSFS
 FREETYPE_LIBS
+inst_win32_build_dir
+inst_win32_DLL_dir
 PBPED
 LIBBZ2
 LDADDLIBBZ2
@@ -1523,6 +1525,12 @@ Optional Packages:
   --with-vorbis=PFX   Prefix where libvorbis is installed (optional)
   --with-vorbis-libraries=DIR   Directory where libvorbis library is installed (optional)
   --with-vorbis-includes=DIR   Directory where libvorbis header files are installed (optional)
+  --with-win32-build-path=dir
+                          Path to the win32 build dir (for installer target
+                          only)
+  --with-win32-DLL-path=dir
+                          Path to the win32 DLL dir (for installer target
+                          only)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4430,7 +4438,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4433 "configure"' > conftest.$ac_ext
+  echo '#line 4441 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7389,11 +7397,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7392: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7400: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7396: \$? = $ac_status" >&5
+   echo "$as_me:7404: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7657,11 +7665,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7660: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7668: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7664: \$? = $ac_status" >&5
+   echo "$as_me:7672: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7761,11 +7769,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7764: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7772: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7768: \$? = $ac_status" >&5
+   echo "$as_me:7776: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10202,7 +10210,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10205 "configure"
+#line 10213 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10302,7 +10310,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10305 "configure"
+#line 10313 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12670,11 +12678,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12673: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12681: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12677: \$? = $ac_status" >&5
+   echo "$as_me:12685: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12774,11 +12782,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12777: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12785: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12781: \$? = $ac_status" >&5
+   echo "$as_me:12789: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14335,11 +14343,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14338: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14346: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14342: \$? = $ac_status" >&5
+   echo "$as_me:14350: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14439,11 +14447,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14442: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14450: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14446: \$? = $ac_status" >&5
+   echo "$as_me:14454: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16658,11 +16666,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16661: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16669: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16665: \$? = $ac_status" >&5
+   echo "$as_me:16673: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16926,11 +16934,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16929: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16937: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16933: \$? = $ac_status" >&5
+   echo "$as_me:16941: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17030,11 +17038,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17033: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17041: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17037: \$? = $ac_status" >&5
+   echo "$as_me:17045: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -24123,6 +24131,28 @@ subdirs="$subdirs src/physfs"
 
 
 
+
+# Check whether --with-win32-build-path was given.
+if test "${with_win32_build_path+set}" = set; then
+  withval=$with_win32_build_path; inst_win32_build_dir="$withval"
+else
+  inst_win32_build_dir=""
+fi
+
+
+# Check whether --with-win32-DLL-path was given.
+if test "${with_win32_DLL_path+set}" = set; then
+  withval=$with_win32_DLL_path; inst_win32_DLL_dir="$withval"
+else
+  inst_win32_DLL_dir=""
+fi
+
+
+
+
+
+
+
 CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS $AdditionalIncludeDir"
 
 
@@ -25930,7 +25960,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile"
+ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile doc/unitguide/Makefile doc/unitguide/output/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile installer/asc.nsi"
 
 
 cat >confcache <<\_ACEOF
@@ -26530,6 +26560,8 @@ do
     "asc.spec") CONFIG_FILES="$CONFIG_FILES asc.spec" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
     "doc/manpages/Makefile") CONFIG_FILES="$CONFIG_FILES doc/manpages/Makefile" ;;
+    "doc/unitguide/Makefile") CONFIG_FILES="$CONFIG_FILES doc/unitguide/Makefile" ;;
+    "doc/unitguide/output/Makefile") CONFIG_FILES="$CONFIG_FILES doc/unitguide/output/Makefile" ;;
     "source/Makefile") CONFIG_FILES="$CONFIG_FILES source/Makefile" ;;
     "source/ai/Makefile") CONFIG_FILES="$CONFIG_FILES source/ai/Makefile" ;;
     "source/clparser/Makefile") CONFIG_FILES="$CONFIG_FILES source/clparser/Makefile" ;;
@@ -26571,6 +26603,7 @@ do
     "data/dialog/Makefile") CONFIG_FILES="$CONFIG_FILES data/dialog/Makefile" ;;
     "data/music/Makefile") CONFIG_FILES="$CONFIG_FILES data/music/Makefile" ;;
     "installer/Makefile") CONFIG_FILES="$CONFIG_FILES installer/Makefile" ;;
+    "installer/asc.nsi") CONFIG_FILES="$CONFIG_FILES installer/asc.nsi" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -26807,6 +26840,8 @@ PHYSFS_LIB!$PHYSFS_LIB$ac_delim
 PHYSFS_SUBDIR!$PHYSFS_SUBDIR$ac_delim
 LIBPHYSFS!$LIBPHYSFS$ac_delim
 FREETYPE_LIBS!$FREETYPE_LIBS$ac_delim
+inst_win32_build_dir!$inst_win32_build_dir$ac_delim
+inst_win32_DLL_dir!$inst_win32_DLL_dir$ac_delim
 PBPED!$PBPED$ac_delim
 LIBBZ2!$LIBBZ2$ac_delim
 LDADDLIBBZ2!$LDADDLIBBZ2$ac_delim
@@ -26817,7 +26852,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 44; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

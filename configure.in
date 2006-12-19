@@ -399,6 +399,15 @@ AC_SUBST(FREETYPE_LIBS)
 dnl ***********************************
 
 
+AC_ARG_WITH(win32-build-path, AS_HELP_STRING([--with-win32-build-path=dir],[Path to the win32 build dir (for installer target only)]), inst_win32_build_dir="$withval", inst_win32_build_dir="")
+AC_ARG_WITH(win32-DLL-path,   AS_HELP_STRING([--with-win32-DLL-path=dir],  [Path to the win32 DLL dir (for installer target only)]),   inst_win32_DLL_dir="$withval",   inst_win32_DLL_dir="")
+AC_SUBST(inst_win32_build_dir)
+AC_SUBST(inst_win32_DLL_dir)
+
+
+dnl ***********************************
+
+
 dnl restore old flags settings
 CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS $AdditionalIncludeDir"
 
@@ -606,6 +615,8 @@ AC_CONFIG_FILES( [ Makefile \
        asc.spec \
        doc/Makefile \
        doc/manpages/Makefile \
+       doc/unitguide/Makefile \
+       doc/unitguide/output/Makefile \
        source/Makefile \
        source/ai/Makefile \
        source/clparser/Makefile \
@@ -646,7 +657,8 @@ AC_CONFIG_FILES( [ Makefile \
        data/units/MK3/Makefile \
        data/dialog/Makefile \
        data/music/Makefile \
-       installer/Makefile ]) 
+       installer/Makefile \
+       installer/asc.nsi ]) 
        
 AC_OUTPUT
 

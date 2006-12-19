@@ -139,43 +139,33 @@ ImageConverter::ImageConverter() {}
 
 
 ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath) {
-  tvirtualdisplay sb(600,600,255);
+   Surface s = Surface::createSurface( 600, 600, 32, 0xf8f4f0 );
   int x=0; int y=0;
-  for ( int xp = 0; xp < 4; xp++ ) {
-    for ( int yp = 0; yp < 6; yp++ ) {
-      if ( bt.fieldExists(BuildingType::LocalCoordinate(xp,yp) )) 
-        bt.paintSingleField( getActiveSurface(), SPoint(x + xp * fielddistx + ( yp & 1 ) * fielddisthalfx, y + yp * fielddisty), BuildingType::LocalCoordinate( xp, yp) ) ;
-      
-    }
-  }
-  pal[255][0] = 254;
-  pal[255][1] = 253;
-  pal[255][2] = 252;
+  bt.paint( s, SPoint(x,y));
+  
   int xsize = 300;
   int ysize = 200;
-  convert(constructImgFileName(bt), filePath, xsize, ysize);
+  convert(constructImgFileName(bt), s, filePath, xsize, ysize);
   return  (constructImgPath(bt, RELATIVEIMGPATH)) ;
 }
 
 ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) {
-  tvirtualdisplay sb(100,100,255);
-  vt.paint( sb.getSurface(), SPoint(0,0), 0); 
-  pal[255][0] = 254;
-  pal[255][1] = 253;
-  pal[255][2] = 252;
-  convert(constructImgFileName(vt), filePath);
+   Surface s = Surface::createSurface(100, 100, 32, 0xf8f4f0);
+  vt.paint( s, SPoint(0,0), 0);
+   
+  convert(constructImgFileName(vt), s, filePath );
   return  (constructImgPath(vt, RELATIVEIMGPATH)) ;
 }
 
 
-void ImageConverter::convert(const ASCString&  fileName,  ASCString filePath, int xsize, int ysize) {
-  ASCString command;
+void ImageConverter::convert(const ASCString&  fileName, Surface& s, ASCString filePath, int xsize, int ysize) {
   ASCString tempFileName = InfoPageUtil::getTmpPath() + "tempPic.pcx";
-  command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";
-  writepcx ( tempFileName, 0, 0, xsize, ysize, pal );
+  writepcx ( tempFileName, s );
   cout << "creating image..." << fileName << endl;
+  
+  ASCString command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";
   system( command.c_str() );
-  remove ( tempFileName.c_str() );
+  // remove ( tempFileName.c_str() );
 }
 
 

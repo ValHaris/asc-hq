@@ -370,7 +370,7 @@ private:
   *@param xsize The width of the created image
   *@param ysize The height of the created image
   */
-  void convert(const ASCString&  fileName, ASCString filePath , int xsize = fieldsizex, int ysize = fieldsizey); 
+  void convert(const ASCString&  fileName, Surface& s, ASCString filePath , int xsize = fieldsizex, int ysize = fieldsizey); 
 
 
 };

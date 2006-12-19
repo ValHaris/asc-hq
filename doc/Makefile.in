@@ -182,6 +182,8 @@ host_vendor = @host_vendor@
 htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
+inst_win32_DLL_dir = @inst_win32_DLL_dir@
+inst_win32_build_dir = @inst_win32_build_dir@
 install_sh = @install_sh@
 libdir = @libdir@
 libexecdir = @libexecdir@
@@ -200,7 +202,7 @@ subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = manpages
+SUBDIRS = manpages unitguide
 EXTRA_DIST = *.html *.css
 all: all-recursive
 
@@ -511,6 +513,11 @@ uninstall-info: uninstall-info-recursive
 	mostlyclean-recursive pdf pdf-am ps ps-am tags tags-recursive \
 	uninstall uninstall-am uninstall-info-am
 
+
+.PHONY: unitguide
+
+unitguide:
+	cd unitguide && make unitguide
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
