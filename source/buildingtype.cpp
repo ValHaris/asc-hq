@@ -239,7 +239,7 @@ void BuildingType :: read ( tnstream& stream )
       efficiencymaterial = stream.readInt( );
       stream.readInt( ); // guibuildicon
       stream.readInt( ); // terrain_access = (TerrainAccess*)
-
+ 
       bi_mode_tank.energy = stream.readInt( );
       bi_mode_tank.material = stream.readInt( );
       bi_mode_tank.fuel = stream.readInt( );

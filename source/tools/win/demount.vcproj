@@ -12,7 +12,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../../Debug"
+			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -35,7 +35,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)/bin/demount.exe"
+				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin\demount.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
 				GenerateDebugInformation="TRUE"
@@ -63,7 +63,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../Release"
+			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -90,7 +90,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
-				OutputFile="$(OutDir)/bin/demount.exe"
+				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin/demount.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
 				GenerateDebugInformation="TRUE"

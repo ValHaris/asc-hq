@@ -139,7 +139,7 @@ ImageConverter::ImageConverter() {}
 
 
 ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath) {
-   Surface s = Surface::createSurface( 600, 600, 32, 0xf8f4f0 );
+  Surface s = Surface::createSurface( 600, 600, 32, 0xf8f4f0 );
   int x=0; int y=0;
   bt.paint( s, SPoint(x,y));
   
