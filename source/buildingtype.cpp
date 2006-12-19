@@ -109,7 +109,17 @@ void  BuildingType::paint ( Surface& s, SPoint pos, int player, int weather, int
 
 void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player, int weather, int constructionStep ) const
 {
-   s.Blit( getPicture(localCoordinate,weather,constructionStep),SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty));
+   megaBlitter<ColorTransform_PlayerCol,
+               ColorMerger_AlphaOverwrite,
+               SourcePixelSelector_Plain,
+               TargetPixelSelector_All>
+             ( getPicture(localCoordinate,weather,constructionStep), 
+               s, 
+               SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty), 
+               player, 
+               nullParam, nullParam, nullParam );
+   
+   // s.Blit( getPicture(localCoordinate,weather,constructionStep),SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty));
 }
 
 

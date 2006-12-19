@@ -180,11 +180,11 @@ ASCString ImageConverter::constructImgPath(const VehicleType&  vt, const ASCStri
 }
 
 ASCString ImageConverter::constructImgFileName(const BuildingType&  bt) {
-  return (strrr(bt.id) + ASCString("B.gif"));
+  return (strrr(bt.id) + ASCString("B.png"));
 }
 
 ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
-  return (strrr(vt.id) + ASCString("U.gif"));
+  return (strrr(vt.id) + ASCString("U.png"));
 }
 
 

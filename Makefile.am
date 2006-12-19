@@ -4,6 +4,8 @@ SUBDIRS 		= source data doc installer
 EXTRA_DIST 		= asc.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm
 AUTOMAKE_OPTIONS 	= foreign
 
+.PHONY: htmldoc installer tarball pbpinstaller unitguide
+
 htmldoc:
 	cd source && make htmldoc
 
