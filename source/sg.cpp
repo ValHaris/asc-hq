@@ -508,6 +508,18 @@ void showSDLInfo()
    sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
    s += buf;
 
+   s += "Byte order is ";
+#if SDL_BYTEORDER==SDL_LIL_ENDIAN
+   s += "little endian\n";
+#else
+#if SDL_BYTEORDER==SDL_BIG_ENDIAN
+   s += "big endian\n";
+#else
+   s += "undefined\n";
+#endif
+#endif
+   
+
    s += "SDL video driver: ";
    s += SDL_VideoDriverName( buf, 1000 );
    s += "\n";

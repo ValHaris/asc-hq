@@ -389,14 +389,6 @@ void testcompress ( char* name, int size )
 
 
 
-/*
-int  readInt  ( void )
-{
-   int i;
-   readdata2 ( i );
-   return SDL_SwapLE32( i );
-}
-*/
 
 int main(int argc, char *argv[] )
 {

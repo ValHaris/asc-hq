@@ -1216,7 +1216,7 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
       readAI();
 
    #ifdef sgmain
-   stream->readdata2( version );
+   version = stream->readInt();   
    if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
    #endif
