@@ -397,6 +397,8 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
       }   
 
       if ( page == MapParameterEditor && mapParameterEditorParent ) {
+         if ( mode == PBP )
+            newMap->setgameparameter(cgp_superVisorCanSaveMap,1);
          delete mapParameterEditor;
          mapParameterEditor = new GameParameterEditorWidget( newMap, mapParameterEditorParent, PG_Rect( 0, 0, mapParameterEditorParent->Width(), mapParameterEditorParent->Height() ));
       }   

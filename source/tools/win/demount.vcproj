@@ -33,11 +33,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib sigc-1.2.debug.lib"
 				ShowProgress="0"
 				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin\demount.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../$(ConfigurationName)/lib/&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/demount.pdb"/>
 			<Tool
@@ -89,10 +89,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
-				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin/demount.exe"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib sigc-1.2.lib"
+				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin\demount.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="$(SDL)/lib;$(OutDir)/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../$(ConfigurationName)/lib/&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/demount.pdb"/>
 			<Tool
