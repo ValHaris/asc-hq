@@ -5,7 +5,7 @@ AC_INIT(source/typen.h)
 
 dnl extracting the version number from the source code
 dnl (it has to be stored there to be accessible by the windows build too)
-asc_version=`cat source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+asc_version=`cat $(abs_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(asc,$asc_version)

@@ -405,73 +405,8 @@ void         tplayerchange::buttonpressed(int         id)
         }
         break; */
      case 4: {
-           if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) ) {
-
-              // exchanging the players sel1 and sel2
-
-              if ( sel2 != 8 && sel1 != 8 ) {
-                 typedef Player::VehicleList VL;
-                 typedef Player::VehicleList::iterator VLI;
-
-                 VL vl;
-                 for ( VLI i = actmap->player[sel1].vehicleList.begin(); i != actmap->player[sel1].vehicleList.end(); ) {
-                    (*i)->color = sel2*8;
-                    vl.push_back ( *i );
-                    i = actmap->player[sel1].vehicleList.erase( i );
-                 }
-
-                 for ( VLI i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
-                    (*i)->color = sel1*8;
-                    actmap->player[sel1].vehicleList.push_back ( *i );
-                    i = actmap->player[sel2].vehicleList.erase( i );
-                 }
-
-                 for ( VLI i = vl.begin(); i != vl.end(); ) {
-                    actmap->player[sel2].vehicleList.push_back ( *i );
-                    i = vl.erase( i );
-                 }
-              }
-
-
-              typedef Player::BuildingList BL;
-              typedef Player::BuildingList::iterator BLI;
-
-              BL bl;
-              for ( BLI i = actmap->player[sel1].buildingList.begin(); i != actmap->player[sel1].buildingList.end(); ++i)
-                 bl.push_back ( *i );
-
-              BL bl2 = actmap->player[sel2].buildingList;
-              for ( BLI i = bl2.begin(); i != bl2.end(); ++i)
-                 (*i)->convert(sel1);
-
-              for ( BLI i = bl.begin(); i != bl.end(); ++i)
-                 (*i)->convert(sel2);
-
-              for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 tfield* fld = &actmap->field[i];
-                 for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->player == sel1 && sel2 != 8 )
-                       i->player = sel2;
-                    else
-                       if ( i->player == sel2 && sel1 != 8 )
-                          i->player = sel1;
-
-
-              } /* endfor */
-
-              Research r = actmap->player[sel1].research;
-              actmap->player[sel1].research = actmap->player[sel2].research;
-              actmap->player[sel2].research = r;
-
-
-              // view 
-              // passwort
-              // diplomatie
-              // mails
-              // name und email
-              // cursorpositio
-              // status / AI / human / ...
-
+           if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) && ( sel1 != 8) && ( sel2 != 8 ) ) {
+              actmap->player[sel1].swap ( actmap->player[sel2] );
               anzeige();
            }
         }

@@ -384,3 +384,105 @@ bool Player::exist() const
   return !(buildingList.empty() && vehicleList.empty());
 }
 
+template <typename T> void swapData( T& t1, T& t2 )
+{
+   T temp = t1;
+   t1 = t2;
+   t2 = t1;
+}
+
+void Player::swap ( Player& secondPlayer )
+{
+   if ( &secondPlayer == this)
+      return;
+
+   typedef VehicleList VL;
+   typedef VehicleList::iterator VLI;
+
+   VL vl;
+   for ( VLI i = vehicleList.begin(); i != vehicleList.end(); ) {
+      (*i)->color = secondPlayer.player*8;
+      vl.push_back ( *i );
+      i = vehicleList.erase( i );
+   }
+
+   for ( VLI i = secondPlayer.vehicleList.begin(); i != secondPlayer.vehicleList.end(); ) {
+      (*i)->color = player*8;
+      vehicleList.push_back ( *i );
+      i = secondPlayer.vehicleList.erase( i );
+   }
+
+   for ( VLI i = vl.begin(); i != vl.end(); ) {
+      secondPlayer.vehicleList.push_back ( *i );
+      i = vl.erase( i );
+   }
+
+
+   typedef Player::BuildingList BL;
+   typedef Player::BuildingList::iterator BLI;
+
+   BL bl;
+   for ( BLI i = buildingList.begin(); i != buildingList.end(); ++i)
+      bl.push_back ( *i );
+
+   BL bl2 = secondPlayer.buildingList;
+   for ( BLI i = bl2.begin(); i != bl2.end(); ++i)
+      (*i)->convert( player );
+
+   for ( BLI i = bl.begin(); i != bl.end(); ++i)
+      (*i)->convert( secondPlayer.player );
+
+   for (int i =0; i < parentMap->xsize * parentMap->ysize ;i++ ) {
+      tfield* fld = &parentMap->field[i];
+
+      VisibilityStates temp = fld->getVisibility( player );
+      fld->setVisibility( fld->getVisibility( secondPlayer.player), player);
+      fld->setVisibility( temp, secondPlayer.player);
+
+
+      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
+         if ( i->player == player )
+            i->player = secondPlayer.player;
+         else
+            if ( i->player == secondPlayer.player  )
+               i->player = player;
+   } /* endfor */
+
+   swapData( research, secondPlayer.research );
+   swapData( existanceAtBeginOfTurn, secondPlayer.existanceAtBeginOfTurn );
+
+   delete ai;
+   ai = NULL;
+
+   delete secondPlayer.ai;
+   secondPlayer.ai = NULL;
+
+   swapData( stat, secondPlayer.stat );
+   swapData( passwordcrc, secondPlayer.passwordcrc );
+   swapData( dissections, secondPlayer.dissections );
+   swapData( unreadmessage, secondPlayer.unreadmessage );
+   swapData( oldmessage, secondPlayer.oldmessage );
+   swapData( sentmessage, secondPlayer.sentmessage );
+   swapData( queuedEvents, secondPlayer.queuedEvents );
+   swapData( ASCversion, secondPlayer.ASCversion );
+   swapData( playTime, secondPlayer.playTime );
+   swapData( cursorPos, secondPlayer.cursorPos );
+   swapData( email, secondPlayer.email );
+   swapData( name, secondPlayer.name );
+   swapData( color, secondPlayer.color );
+
+   diplomacy.swap( secondPlayer.diplomacy );
+}
+
+void DiplomaticStateVector::swap( DiplomaticStateVector& secondDSV )
+{
+   swapData( states, secondDSV.states );
+   swapData( queuedStateChanges, secondDSV.queuedStateChanges );
+}
+
+
+void Player::merge ( Player& secondPlayer )
+{
+
+}
+

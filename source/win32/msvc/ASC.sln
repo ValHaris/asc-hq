@@ -52,13 +52,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tools", "..\..\tools\win\to
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bin2txt", "..\..\tools\win\bin2text.vcproj", "{9DB90739-BAA7-11D5-8156-00805F852A9B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2D401A22-BAA4-11D5-8156-00805F852A9B} = {2D401A22-BAA4-11D5-8156-00805F852A9B}
-		{E14FAA4A-B45F-4E09-9BE6-78CA0247F915} = {E14FAA4A-B45F-4E09-9BE6-78CA0247F915}
-		{1714B977-BACD-11D5-8156-00805F852A9B} = {1714B977-BACD-11D5-8156-00805F852A9B}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "weaponguide", "..\..\tools\win\weaponguide.vcproj", "{5EC07E44-BAB8-11D5-8156-00805F852A9B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2D401A22-BAA4-11D5-8156-00805F852A9B} = {2D401A22-BAA4-11D5-8156-00805F852A9B}
@@ -78,10 +71,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbpeditor", "pbpeditor\pbpe
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL_image", "..\..\..\..\SDL_image.static\VisualC\SDL_image.vcproj", "{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{B7F902AB-FD64-48FB-B36A-50D48B03447F}.Debug.ActiveCfg = Debug|Win32
@@ -95,15 +94,15 @@ Global
 		{1714B977-BACD-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
 		{1714B977-BACD-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{2610C66C-BB44-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
+		{2610C66C-BB44-11D5-8156-00805F852A9B}.Debug.Build.0 = Debug|Win32
 		{2610C66C-BB44-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
+		{2610C66C-BB44-11D5-8156-00805F852A9B}.Release.Build.0 = Release|Win32
 		{9DB90739-BAA7-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
 		{9DB90739-BAA7-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{5EC07E44-BAB8-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
 		{5EC07E44-BAB8-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{2D401A22-BAA4-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
 		{2D401A22-BAA4-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
-		{9DB90739-BAA7-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
-		{9DB90739-BAA7-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{5EC07E44-BAB8-11D5-8156-00805F852A9B}.Debug.ActiveCfg = Debug|Win32
 		{5EC07E44-BAB8-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{7DD5348B-0DE1-4810-B856-723BA5D3733A}.Debug.ActiveCfg = Debug|Win32
@@ -116,6 +115,10 @@ Global
 		{2610C66C-BB44-11D5-8156-00805F852A9B}.Debug.Build.0 = Debug|Win32
 		{2610C66C-BB44-11D5-8156-00805F852A9B}.Release.ActiveCfg = Release|Win32
 		{2610C66C-BB44-11D5-8156-00805F852A9B}.Release.Build.0 = Release|Win32
+		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Debug.ActiveCfg = Debug|Win32
+		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Debug.Build.0 = Debug|Win32
+		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Release.ActiveCfg = Release|Win32
+		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

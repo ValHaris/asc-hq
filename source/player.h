@@ -80,6 +80,7 @@ class DiplomaticStateVector : public SigC::Object {
 
       void turnBegins();
       
+      void swap( DiplomaticStateVector& secondDSV );
             
       static SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> anyStateChanged;
 
@@ -112,6 +113,14 @@ class Player : public SigC::Object {
       
       void setParentMap( GameMap* map, int pos );
       
+
+      //! swaps all information, units, buildings etc with the given player
+      void swap ( Player& secondPlayer );
+
+      //! merges all units, buildings etc from secondplayer to this one
+      void merge( Player& secondPlayer );
+
+
       //! does the player exist at all
       bool         exist() const;
 

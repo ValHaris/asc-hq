@@ -23,7 +23,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(libexpat)/source/lib/&quot;;&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;"
+				AdditionalIncludeDirectories="&quot;$(libexpat)/source/lib/&quot;;&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;;$(SDL_image).static"
 				PreprocessorDefinitions="ZLIB_DLL;WIN32;_DEBUG;_WINDOWS;_USRDLL;PARAGUI_DYNAMIC_EXPORTS;PHYSFS_SUPPORTS_ZIP"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -87,7 +87,7 @@
 				Optimization="1"
 				InlineFunctionExpansion="1"
 				OptimizeForProcessor="1"
-				AdditionalIncludeDirectories="&quot;$(libexpat)/source/lib/&quot;;&quot;$(physfs)&quot;;../src/themes;../src/core;../include;&quot;$(libsigcpp)&quot;"
+				AdditionalIncludeDirectories="&quot;$(libexpat)/source/lib/&quot;;&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;;$(SDL_image).static"
 				PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"

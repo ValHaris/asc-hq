@@ -18,7 +18,6 @@
 #include <ctype.h>
 #include <algorithm>
 #include <memory>
-#include <SDL_image.h>
 #include <SDL_mixer.h>
 
 #include "paradialog.h"
@@ -105,7 +104,7 @@ void Menu::setup()
    addbutton ( "Load Clipboard",     act_readClipBoard );
    addbutton ( "Save Clipboard",     act_saveClipboard );
    currentMenu->addSeparator();
-   addbutton ( "~W~rite map to PCX-File\tctrl+G", act_maptopcx);
+   addbutton ( "~W~rite map to PNG-File\tctrl+G", act_maptopcx);
     addbutton ( "~I~mport BI map\tctrl-i", act_import_bi_map );
     addbutton ( "Insert ~B~I map", act_insert_bi_map );
    currentMenu->addSeparator();

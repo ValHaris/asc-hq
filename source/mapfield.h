@@ -172,6 +172,10 @@ class  tfield {
        visible ^= newval;
    };
 
+   VisibilityStates getVisibility( int actplayer ) {
+       return VisibilityStates((visible >> (2*actplayer)) & 3);
+   };
+
     int getx();
     int gety();
 

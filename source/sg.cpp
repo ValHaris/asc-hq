@@ -76,7 +76,6 @@
 #include <ctype.h>
 #include <algorithm>
 #include <memory>
-#include <SDL_image.h>
 
 #include <boost/regex.hpp>
 

@@ -42,7 +42,7 @@ namespace SigCX {
 #endif
 
 // (internal)
-struct DECLSPEC AdaptorConvertSlotNode : public SigC::AdaptorSlotNode {
+struct AdaptorConvertSlotNode : public SigC::AdaptorSlotNode {
 	SigC::FuncPtr convert_func_;
 
 	AdaptorConvertSlotNode(SigC::FuncPtr proxy, const SigC::Node& s, SigC::FuncPtr dtor);

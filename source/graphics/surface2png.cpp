@@ -19,7 +19,12 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifdef NO_INTERNAL_PNG
+#include <SDL_image.h>
+#else
 #include <png.h>
+#endif
+
 #include "surface2png.h"
 #include "../messaginghub.h"
 
@@ -52,8 +57,33 @@ void writePNG( const ASCString& filename, const Surface& s, const SDLmm::SRect& 
    writePNG( filename, s, rect.x, rect.y, rect.w, rect.h);
 }
 
+
+#ifdef NO_INTERNAL_PNG
+
 void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int w, int h  )
 {
+   if ( s.GetPixelFormat().BytesPerPixel () != 4 ) {
+      errorMessage("Only 32 Bit images are supported for PNG writing");
+      return;
+   } 
+
+   SDL_RWops *rw=SDL_RWFromFile( filename.c_str(),"wb");
+   if(rw==NULL) {
+      errorMessage("Could not open " + filename + " for writing"); 
+      return;
+   }
+   
+   IMG_WritePNG_RW( rw, s.GetSurface(), x1,y1,w,h);
+
+   SDL_RWclose(rw);
+
+}
+
+#else
+
+void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int w, int h  )
+{
+
    if ( x1 < 0 )
       x1 = 0;
    if ( y1 < 0 )
@@ -114,6 +144,6 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    fclose(fp);
    
 }
-
+#endif
 
 
