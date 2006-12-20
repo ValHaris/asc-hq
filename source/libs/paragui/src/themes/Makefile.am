@@ -8,7 +8,7 @@ INCLUDES = \
 	$(SIGC_CFLAGS) \
 	$(EXPAT_INCLUDE) \
 	$(SDL_CFLAGS) \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/source/libs/paragui/include
 
 EXTRA_DIST = \
 	theme_priv.h

@@ -12,4 +12,3 @@ libsdl_la_LIBADD	= @SDL_LIBS@ -lSDL_image -ljpeg
 libsdlsnd_la_SOURCES 	= sound.cpp  
 libsdlsnd_la_LIBADD	= @SDL_LIBS@ -lSDL_mixer @SDL_SOUND_LIB@ 
 
-

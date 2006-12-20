@@ -857,6 +857,8 @@ ac_ct_F77
 LIBTOOL
 abs_top_srcdir
 abs_top_builddir
+top_builddir
+top_srcdir
 SGML2MAN
 DOCBOOK2MAN
 GENCLL
@@ -1494,7 +1496,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-maintainer-mode  enable make rules and dependencies not useful
 			  (and sometimes confusing) to the casual installer
-  --enable-shared[=PKGS]  build shared libraries [default=yes]
+  --enable-shared[=PKGS]  build shared libraries [default=no]
   --enable-static[=PKGS]  build static libraries [default=yes]
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
@@ -1972,7 +1974,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-asc_version=`cat $(abs_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+asc_version=`cat source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+
+
 
 ac_config_headers="$ac_config_headers config.h"
 
@@ -2484,8 +2488,9 @@ if test "${enable_shared+set}" = set; then
       ;;
     esac
 else
-  enable_shared=yes
+  enable_shared=no
 fi
+
 
 
 # Check whether --enable-static was given.
@@ -4438,7 +4443,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4441 "configure"' > conftest.$ac_ext
+  echo '#line 4446 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7397,11 +7402,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7400: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7405: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7404: \$? = $ac_status" >&5
+   echo "$as_me:7409: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7665,11 +7670,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7668: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7673: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7672: \$? = $ac_status" >&5
+   echo "$as_me:7677: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7769,11 +7774,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7772: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7777: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7776: \$? = $ac_status" >&5
+   echo "$as_me:7781: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10210,7 +10215,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10213 "configure"
+#line 10218 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -10310,7 +10315,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10313 "configure"
+#line 10318 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12678,11 +12683,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12681: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12686: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12685: \$? = $ac_status" >&5
+   echo "$as_me:12690: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12782,11 +12787,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12785: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12790: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12789: \$? = $ac_status" >&5
+   echo "$as_me:12794: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14343,11 +14348,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14346: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14351: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:14350: \$? = $ac_status" >&5
+   echo "$as_me:14355: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14447,11 +14452,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14450: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14455: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14454: \$? = $ac_status" >&5
+   echo "$as_me:14459: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16666,11 +16671,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16669: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16674: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16673: \$? = $ac_status" >&5
+   echo "$as_me:16678: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16934,11 +16939,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16937: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16942: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16941: \$? = $ac_status" >&5
+   echo "$as_me:16946: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17038,11 +17043,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17041: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17046: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17045: \$? = $ac_status" >&5
+   echo "$as_me:17050: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -19723,7 +19728,6 @@ LIBTOOL='$(SHELL) $(top_builddir)/libtool'
 
 
 
-
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -21138,7 +21142,6 @@ fi
 
 
 AdditionalIncludeDir=""
-AdditionalLibs=""
 
 gcc296test=yes
 # Check whether --enable-gcc296-detection was given.
@@ -21179,15 +21182,18 @@ echo "$as_me: WARNING:  GCC $gcc_version detected. GCC 2.95 is currently still s
 fi
 
 
+
+
+
+
+
+
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-
-
-
 
 
 
@@ -21351,19 +21357,16 @@ if test `eval echo '${'$as_ac_Header'}'` = yes; then
 _ACEOF
 
 else
-  { { echo "$as_me:$LINENO: error:
-Header <bitset> not found. This is probably caused by having an outdated
-C++ compiler / standard library. Please upgrade to a compiler that is
-ISO/IEC 14882 conformant (for example gcc 3.2) " >&5
-echo "$as_me: error:
-Header <bitset> not found. This is probably caused by having an outdated
-C++ compiler / standard library. Please upgrade to a compiler that is
-ISO/IEC 14882 conformant (for example gcc 3.2) " >&2;}
+  { { echo "$as_me:$LINENO: error:  Header <bitset> not found. This is probably caused by having an outdated
+                 C++ compiler / standard library. Please upgrade to a compiler that is
+                 ISO/IEC 14882 conformant (for example gcc 3.2) " >&5
+echo "$as_me: error:  Header <bitset> not found. This is probably caused by having an outdated
+                 C++ compiler / standard library. Please upgrade to a compiler that is
+                 ISO/IEC 14882 conformant (for example gcc 3.2) " >&2;}
    { (exit 1); exit 1; }; }
 fi
 
 done
-
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -21374,7 +21377,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I\$(abs_top_srcdir)/source/libs/paragui/include"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_"
 
 
 
@@ -24157,7 +24160,7 @@ CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS $AdditionalIncludeDir"
 
 
 CFLAGS="$SAVE_CFLAGS $AdditionalIncludeDir"
-LIBS="$SAVE_LIBS $AdditionalLibs"
+LIBS="$SAVE_LIBS "
 
 
 lib_bz2_static=no
@@ -26812,6 +26815,8 @@ ac_ct_F77!$ac_ct_F77$ac_delim
 LIBTOOL!$LIBTOOL$ac_delim
 abs_top_srcdir!$abs_top_srcdir$ac_delim
 abs_top_builddir!$abs_top_builddir$ac_delim
+top_builddir!$top_builddir$ac_delim
+top_srcdir!$top_srcdir$ac_delim
 SGML2MAN!$SGML2MAN$ac_delim
 DOCBOOK2MAN!$DOCBOOK2MAN$ac_delim
 GENCLL!$GENCLL$ac_delim
@@ -26852,7 +26857,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 46; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 48; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

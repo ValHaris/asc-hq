@@ -5,8 +5,7 @@ vpath %.cpp ../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_builddir) -I$(top_src_dir) \
-			  -I$(top_builddir)/source -I$(top_src_dir)/source
+INCLUDES		= -I$(top_src_dir) -I$(top_src_dir)/source -I$(top_srcdir)/source/libs/paragui/include
 
 AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
 

@@ -30,7 +30,7 @@ INCLUDES = \
 	$(SIGC_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(PHYSFS_INCLUDE) \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/source/libs/paragui/include
 
 style_cvs:
 	astyle --style=kr --indent=tab=4 --indent-switches *.cpp

@@ -3,6 +3,9 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 AM_CXXFLAGS		= @SDL_CFLAGS@ @SIGC_CFLAGS@ -Dsgmain
 
+INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
+
+
 noinst_LTLIBRARIES 	= libai.la
 
 libai_la_SOURCES	= base.cpp misc.cpp strategy.cpp valuation.cpp \

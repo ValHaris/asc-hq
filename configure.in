@@ -5,16 +5,20 @@ AC_INIT(source/typen.h)
 
 dnl extracting the version number from the source code
 dnl (it has to be stored there to be accessible by the windows build too)
-asc_version=`cat $(abs_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+asc_version=`cat source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+
+dnl the following would be better - if it was working...
+dnl Why is asc_top_srcdir not available here? Is there an alternative?
+dnl asc_version=`cat $(asc_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(asc,$asc_version)
 AM_MAINTAINER_MODE
 
-dnl AC_DISABLE_SHARED
+AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
-
 
 dnl *************************************************************************
 dnl Checks for programs.
@@ -24,7 +28,6 @@ AC_PROG_CXX
 
 
 AdditionalIncludeDir=""
-AdditionalLibs=""
 
 gcc296test=yes
 AC_ARG_ENABLE( gcc296-detection, AS_HELP_STRING([--disable-gcc296-detection],[Do not perform gcc 2.96 detection test]), gcc296test=no )
@@ -52,23 +55,25 @@ if test "$GCC" = yes; then
    fi
 fi
 
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+
 
 AC_SUBST(abs_top_srcdir)
 AC_SUBST(abs_top_builddir)
+AC_SUBST(top_builddir)
+AC_SUBST(top_srcdir)
 
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
 AC_CHECK_HEADERS( bitset,, 
-                  AC_MSG_ERROR( [[
-Header <bitset> not found. This is probably caused by having an outdated 
-C++ compiler / standard library. Please upgrade to a compiler that is 
-ISO/IEC 14882 conformant (for example gcc 3.2) ]]))
-
+              AC_MSG_ERROR( 
+               [[ Header <bitset> not found. This is probably caused by having an outdated ] 
+                [ C++ compiler / standard library. Please upgrade to a compiler that is ]
+                [ ISO/IEC 14882 conformant (for example gcc 3.2) ]]))
 AC_LANG_RESTORE
 
 
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ -I\$(abs_top_srcdir)/source/libs/paragui/include"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_"
 
 
 
@@ -413,7 +418,7 @@ CXXFLAGS="$SAVE_CXXFLAGS $FREETYPE_CFLAGS $AdditionalIncludeDir"
 
 
 CFLAGS="$SAVE_CFLAGS $AdditionalIncludeDir"
-LIBS="$SAVE_LIBS $AdditionalLibs"
+LIBS="$SAVE_LIBS "
 
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)

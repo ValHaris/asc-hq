@@ -20,4 +20,4 @@ libparagui_la_LIBADD = \
 INCLUDES = \
 	$(SIGC_CFLAGS) \
 	$(SDL_CFLAGS) \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/source/libs/paragui/include 

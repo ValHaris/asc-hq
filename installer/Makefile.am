@@ -1,3 +1,4 @@
+CLEANFILES = *.exe *.tar.bz2
 
 installer: 
 	makensis asc.nsi

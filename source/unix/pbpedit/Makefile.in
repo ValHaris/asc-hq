@@ -17,12 +17,10 @@
 ######################################################################
 
 srcdir = @srcdir@
-top_srcdir = @top_srcdir@
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ../../..
 am__cd = CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)" && cd
 INSTALL = @INSTALL@
 install_sh_DATA = $(install_sh) -c -m 644
@@ -100,6 +98,8 @@ DIST_SOURCES = $(asc_pbpedit_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
+top_srcdir = @top_srcdir@
+top_builddir = @top_builddir@
 ACLOCAL = @ACLOCAL@
 AMDEP_FALSE = @AMDEP_FALSE@
 AMDEP_TRUE = @AMDEP_TRUE@
@@ -245,7 +245,7 @@ subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I$(top_builddir) -I$(top_src_dir) -I$(top_builddir)/source -I$(top_src_dir)/source
+INCLUDES = -I$(top_src_dir) -I$(top_src_dir)/source -I$(top_srcdir)/source/libs/paragui/include
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor -DNEWKEYB $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
 asc_pbpedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \

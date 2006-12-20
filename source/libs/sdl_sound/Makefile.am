@@ -1,7 +1,6 @@
-## Makefile.am for the SDLmm library
 
 
-INCLUDE			= -I$(top_builddir) -I$(top_src_dir)
+INCLUDE = -I$(top_src_dir)
 
 noinst_LTLIBRARIES	= libSDL_sound_int.la
 
