@@ -202,7 +202,7 @@ subdirs = @subdirs@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = triangul sdlmm paragui loki pngwriter @SdlSoundDir@ @LIBBZ2@ 
+SUBDIRS = triangul sdlmm paragui loki @SdlSoundDir@ @LIBBZ2@ 
 all: all-recursive
 
 .SUFFIXES:
