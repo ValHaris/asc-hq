@@ -10458,11 +10458,17 @@ test "$enable_shared" = yes || enable_static=yes
 { echo "$as_me:$LINENO: result: $enable_static" >&5
 echo "${ECHO_T}$enable_static" >&6; }
 
+echo "!!!!!!! ltmain is $ltmain"
+
+
 # The else clause should only fire when bootstrapping the
 # libtool distribution, otherwise you forgot to ship ltmain.sh
 # with your package, and you will get complaints that there are
 # no rules to generate ltmain.sh.
 if test -f "$ltmain"; then
+
+echo "!!!!!!! in if"
+
   # See if we are running on zsh, and set the options which allow our commands through
   # without removal of \ escapes.
   if test -n "${ZSH_VERSION+set}" ; then
