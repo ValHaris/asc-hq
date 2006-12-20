@@ -25960,7 +25960,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile doc/unitguide/Makefile doc/unitguide/output/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile installer/asc.nsi"
+ac_config_files="$ac_config_files Makefile asc.spec doc/Makefile doc/manpages/Makefile doc/unitguide/Makefile doc/unitguide/output/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/pngwriter/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile data/Makefile data/buildings/Makefile data/trrobj/Makefile data/trrobj2/Makefile data/units/Makefile data/units/MK1/Makefile data/units/MK3/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile installer/asc.nsi"
 
 
 cat >confcache <<\_ACEOF
@@ -26575,6 +26575,7 @@ do
     "source/libs/sdlmm/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/Makefile" ;;
     "source/libs/sdlmm/src/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/src/Makefile" ;;
     "source/libs/triangul/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/triangul/Makefile" ;;
+    "source/libs/pngwriter/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/pngwriter/Makefile" ;;
     "source/libs/loki/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/loki/Makefile" ;;
     "source/libs/sdl_sound/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdl_sound/Makefile" ;;
     "source/libs/paragui/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/Makefile" ;;

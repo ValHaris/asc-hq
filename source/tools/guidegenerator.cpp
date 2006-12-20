@@ -34,6 +34,7 @@
 #include "../terraintype.h"
 #include "../sgstream.h"
 #include "../unitset.h"
+#include "../graphics/surface2png.h"
 
 #include "guidegenerator.h"
 #include "infopage.h"
@@ -159,13 +160,8 @@ ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) 
 
 
 void ImageConverter::convert(const ASCString&  fileName, Surface& s, ASCString filePath, int xsize, int ysize) {
-  ASCString tempFileName = InfoPageUtil::getTmpPath() + "tempPic.pcx";
-  writepcx ( tempFileName, s );
   cout << "creating image..." << fileName << endl;
-  
-  ASCString command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";
-  system( command.c_str() );
-  // remove ( tempFileName.c_str() );
+  writePNGtrim ( filePath + fileName, s );
 }
 
 

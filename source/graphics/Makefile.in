@@ -48,7 +48,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgraphics_la_DEPENDENCIES =
-am_libgraphics_la_OBJECTS = surface.lo blitter.lo drawing.lo
+am_libgraphics_la_OBJECTS = surface.lo blitter.lo drawing.lo \
+	surface2png.lo
 libgraphics_la_OBJECTS = $(am_libgraphics_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -213,7 +214,7 @@ target_alias = @target_alias@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ 
 noinst_LTLIBRARIES = libgraphics.la
-libgraphics_la_SOURCES = surface.cpp blitter.cpp drawing.cpp
+libgraphics_la_SOURCES = surface.cpp blitter.cpp drawing.cpp surface2png.cpp
 libgraphics_la_LIBADD = @SDL_LIBS@ 
 all: all-am
 
@@ -269,6 +270,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blitter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drawing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface2png.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

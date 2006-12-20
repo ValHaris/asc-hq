@@ -29,7 +29,8 @@ class WholeMapRenderer : public MapRenderer {
    void render();
    public:
       WholeMapRenderer( GameMap* actmap );
-      void write( const ASCString& filename );
+      void writePCX( const ASCString& filename );
+      void writePNG( const ASCString& filename );
 
 };
 

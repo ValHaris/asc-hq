@@ -40,8 +40,8 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>source/tools/linux/asc_weaponguide</mainprogram>
-      <programargs>-s 100 -l html -t ../asc.css -m asc.css --roottech 101000,101913 --allbuildings -i -d /tmp</programargs>
+      <mainprogram>source/unix/mapeditor/asc_mapedit</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
@@ -87,7 +87,7 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs>-s 100 -l html -t ../asc.css -m asc.css --roottech 101000,101913 --allbuildings -i -d /tmp</programargs>
+      <programargs></programargs>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
       <runShellScript></runShellScript>
