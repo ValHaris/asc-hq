@@ -2,9 +2,10 @@ pkgdatadir 		= $(datadir)/games/@PACKAGE@
 
 pkgdata_DATA = asc2_dlg.zip
 
-asc2_dlg.zip: asc2_dlg.theme asc/*.bmp asc/*.ttf asc/*.png
-	chmod -R g-w asc*
-	chmod -R o-w asc*
-	(zip -9 -r asc2_dlg.zip asc_dlg.theme asc2_dlg.theme ./asc/* -i *.png *.bmp *.ttf *.theme)
+asc2_dlg.zip: $(srcdir)/asc2_dlg.theme $(srcdir)/asc/*.bmp $(srcdir)/asc/*.ttf $(srcdir)/asc/*.png
+	cd $(srcdir) && zip -9 -r @abs_builddir@/asc2_dlg.zip asc2_dlg.theme ./asc/* -i *.png *.bmp *.ttf *.theme
 
 CLEANFILES = asc2_dlg.zip 
+
+EXTRA_DIST=$(srcdir)/asc2_dlg.theme $(srcdir)/asc/*
+

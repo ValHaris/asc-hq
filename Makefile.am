@@ -1,7 +1,7 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
 SUBDIRS 		= source data doc installer 
-EXTRA_DIST 		= asc.kdevprj AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm
+EXTRA_DIST 		= asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap
 AUTOMAKE_OPTIONS 	= foreign
 
 .PHONY: htmldoc installer tarball pbpinstaller unitguide

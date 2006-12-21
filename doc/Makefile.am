@@ -1,7 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
 SUBDIRS 		= manpages unitguide
-EXTRA_DIST 		= *.html *.css
 
 .PHONY: unitguide
 

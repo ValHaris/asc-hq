@@ -1,8 +1,4 @@
-## Process this file with automake to produce Makefile.in
-######################################################################
-## $Id: Makefile.am,v 1.1.2.2 2006-12-20 22:28:42 mbickel Exp $
-
-vpath %.cpp ../..
+vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
@@ -12,7 +8,7 @@ AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor -DNEWKEYB $(PARAGUI_CFL
 
 bin_PROGRAMS 		= asc_pbpedit
 
-asc_pbpedit_SOURCES 	= edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
+nodist_asc_pbpedit_SOURCES 	= edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \

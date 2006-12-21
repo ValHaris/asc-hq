@@ -1,4 +1,4 @@
-vpath %.cpp ../..
+vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
@@ -8,7 +8,7 @@ AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
 
 bin_PROGRAMS  = asc
 
-asc_SOURCES 		= unitctrl.cpp soundList.cpp typen.cpp \
+nodist_asc_SOURCES   = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp pd.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
@@ -36,3 +36,4 @@ $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/sdl/libsdlsnd.la \
 @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB)
+

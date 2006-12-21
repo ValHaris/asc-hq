@@ -1,20 +1,29 @@
 dnl Process this file with autoconf to produce a configure script.
-dnl AC_REVISION($Revision: 1.70 $)dnl
-dnl AM_MAINTAINER_MODE
-AC_INIT(source/typen.h)
 
-dnl extracting the version number from the source code
-dnl (it has to be stored there to be accessible by the windows build too)
-asc_version=`cat source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+AC_INIT(asc,1.99.90.46)
+
+AM_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
+
+
+dnl AC_MSG_NOTICE("srcdir is $srcdir ")
+
+if test -f $srcdir/source/strtmesg.cpp; then
+   dnl extracting the version number from the source code
+   dnl (it has to be stored there to be accessible by the windows build too)
+   asc_version=`cat $srcdir/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+   PACKAGE_VERSION=$asc_version
+else
+   asc_version=$PACKAGE_VERSION
+fi
+
+AC_MSG_NOTICE([ASC version is $asc_version]) 
 
 dnl the following would be better - if it was working...
 dnl Why is asc_top_srcdir not available here? Is there an alternative?
 dnl asc_version=`cat $(asc_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
 
-
-AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(asc,$asc_version)
-AM_MAINTAINER_MODE
 
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
@@ -72,8 +81,8 @@ AC_CHECK_HEADERS( bitset,,
 AC_LANG_RESTORE
 
 
-CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_"
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_"
+CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_ "
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ "
 
 
 
@@ -423,30 +432,30 @@ LIBS="$SAVE_LIBS "
 
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
-AC_ARG_ENABLE( libbz2-static, AS_HELP_STRING([--enable-libbz2-static],[compiles a static libbz2 into the binary of asc]), [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
-AC_CHECK_LIB( bz2, BZ2_bzReadOpen, :, [checklib_bz2_static=yes] )
-AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
+dnl AC_ARG_ENABLE( libbz2-static, AS_HELP_STRING([--enable-libbz2-static],[compiles a static libbz2 into the binary of asc]), [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
+dnl AC_CHECK_LIB( bz2, BZ2_bzReadOpen, :, [checklib_bz2_static=yes] )
+dnl AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
 
 dnl ac_cv_lib_bz2_static holds cached flag state, checklib_bz2... holds check
 dnl now combine them with the current flag state if needed
-if test "x$lib_bz2_usecache" = "xyes"; then
-  lib_bz2_static=$ac_cv_lib_bz2_static;
-else
-  ac_cv_lib_bz2_static=$lib_bz2_static;
-fi
-if test "x$checklib_bz2_static" = "xyes"; then
-  lib_bz2_static=yes;
-fi
+dnl if test "x$lib_bz2_usecache" = "xyes"; then
+dnl  lib_bz2_static=$ac_cv_lib_bz2_static;
+dnl else
+dnl  ac_cv_lib_bz2_static=$lib_bz2_static;
+dnl fi
+dnl if test "x$checklib_bz2_static" = "xyes"; then
+dnl   lib_bz2_static=yes;
+dnl fi
 
-AC_MSG_RESULT( [making static libbz2... $lib_bz2_static] )
+dnl AC_MSG_RESULT( [making static libbz2... $lib_bz2_static] )
 
-if test "x$lib_bz2_static" = "xyes"; then
-  LIBBZ2=bzlib
-  LDADDLIBBZ2=\${top_builddir}/source/libs/bzlib/libbz2.a;
-else 
-  LDADDLIBBZ2=-lbz2
-  AC_DEFINE_UNQUOTED( USE_SYSTEM_BZ2, 1, [link against libbzip2] )
-fi
+dnl if test "x$lib_bz2_static" = "xyes"; then
+dnl   LIBBZ2=bzlib
+dnl   LDADDLIBBZ2=\${top_builddir}/source/libs/bzlib/libbz2.a;
+dnl else 
+   LDADDLIBBZ2=-lbz2
+   AC_DEFINE_UNQUOTED( USE_SYSTEM_BZ2, 1, [link against libbzip2] )
+dnl fi
 
 
 dnl *************************************************************************
@@ -562,14 +571,13 @@ else
   AC_MSG_RESULT("yes")
 fi
 
-
-AC_CHECK_FILE( "source/unix/pbpedit/pbpeditor.cpp", PBPED=pbpedit )
-AC_SUBST([PBPED])
+AC_CHECK_FILE( "$srcdir/source/unix/pbpedit/pbpeditor.cpp", PBPED=pbpedit )
+AC_SUBST(PBPED)
 
 
 dnl shell vars set by test&feature flag for libbz2
-AC_SUBST([LIBBZ2])
-AC_SUBST([LDADDLIBBZ2])
+AC_SUBST(LIBBZ2)
+AC_SUBST(LDADDLIBBZ2)
 
 dnl docbook2man
 AC_SUBST(DOCBOOK2MAN)
@@ -609,7 +617,7 @@ railstations2.map *.raw *.fnt \
 dnl what gehts packed into main.con (the data container file)
 AC_SUBST(MAINCONDATA)
 
-AC_CHECK_FILES( data/music/frontiers.ogg data/music/time_to_strike.ogg data/music/machine_wars.ogg,,missingmusic=x )
+AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
 if test "x$missingmusic" != xx ; then
   MUSICDIR=music
 else
@@ -620,6 +628,7 @@ AC_SUBST(MUSICDIR)
 
 AC_CONFIG_FILES( [ Makefile \
        asc.spec \
+       getmusic \
        doc/Makefile \
        doc/manpages/Makefile \
        doc/unitguide/Makefile \
@@ -633,6 +642,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/dialogs/Makefile \
        source/widgets/Makefile \
        source/actions/Makefile \
+       source/doc/Makefile \
        source/libs/Makefile \
        source/libs/sdlmm/Makefile \
        source/libs/sdlmm/src/Makefile \
@@ -655,6 +665,8 @@ AC_CONFIG_FILES( [ Makefile \
        source/unix/mapeditor/Makefile \
        source/unix/pbpedit/Makefile \
        source/unix/asc/Makefile \
+       source/win32/Makefile \
+       source/win32/msvc/Makefile \
        data/Makefile \
        data/buildings/Makefile \
        data/trrobj/Makefile \

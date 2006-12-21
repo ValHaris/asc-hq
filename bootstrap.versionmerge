@@ -1,0 +1,25 @@
+#!/usr/bin/perl -i~ -W
+use strict;
+my $version;
+my $input = "source/strtmesg.cpp";
+die "version file not found" unless -e $input;
+open F, $input;
+while (<F>) {
+   if ( /asc_release\s*=\s*\"ASC(\d+\.\d+.\d+.\d+)\"/ ) {
+      $version = $1;
+   } 
+}
+close F;
+die "version not found in input file" unless $version;
+
+my $replaceCount = 0;
+
+while(<>) {
+   if ( s/^(AC_INIT\(asc,)\d+\.\d+\.\d+\.\d+(\).*)/$1$version$2/) {
+      ++$replaceCount;
+   }
+   print;
+}
+  
+die "no replacement found" unless $replaceCount; 
+die "too many replacements " if $replaceCount > 1;

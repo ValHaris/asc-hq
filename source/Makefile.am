@@ -1,8 +1,8 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= @GENCL@ docs libs sdl ai graphics dialogs widgets actions unix tools 
+SUBDIRS 		= @GENCL@ docs libs sdl ai graphics dialogs widgets actions unix tools doc win32
 
-EXTRA_DIST 		= *.cpp *.h *.inc
+EXTRA_DIST  = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/clparser/*.cpp $(srcdir)/clparser/*.h $(srcdir)/clparser/Makefile.am $(srcdir)/clparser/Makefile.in
 
 htmldoc: doxygen.config
 	doxygen doxygen.config

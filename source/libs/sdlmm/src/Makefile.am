@@ -1,4 +1,4 @@
-INCLUDE			= -I$(top_src_dir)
+INCLUDE = -I$(top_src_dir) -I$(top_builddir)
 
 noinst_LTLIBRARIES	= libSDLmm.la
 
@@ -13,3 +13,4 @@ libSDLmm_la_SOURCES = sdlmm_global.cpp sdlmm_basesurface.cpp sdlmm_surface.cpp s
 	sdlmm_srect.cpp sdlmm_event.cpp sdlmm_audio.cpp sdlmm_timer.cpp \
 	sdlmm_joystick.cpp sdlmm_cd.cpp sdlmm_videoinfo.cpp
 	
+EXTRA_DIST=$(srcdir)/*.h

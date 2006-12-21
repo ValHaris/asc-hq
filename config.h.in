@@ -6,15 +6,6 @@
 /* Define to 1 if you have the <bitset> header file. */
 #undef HAVE_BITSET
 
-/* Define to 1 if you have the file `AC_File'. */
-#undef HAVE_DATA_MUSIC_FRONTIERS_OGG
-
-/* Define to 1 if you have the file `AC_File'. */
-#undef HAVE_DATA_MUSIC_MACHINE_WARS_OGG
-
-/* Define to 1 if you have the file `AC_File'. */
-#undef HAVE_DATA_MUSIC_TIME_TO_STRIKE_OGG
-
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
 #undef HAVE_DIRENT_H

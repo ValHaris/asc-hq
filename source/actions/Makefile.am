@@ -8,3 +8,4 @@ noinst_LTLIBRARIES 	= libactions.la
 libactions_la_SOURCES	= servicing.cpp jumpdrive.cpp
 libactions_la_LIBADD		= @SDL_LIBS@
 
+EXTRA_DIST=$(srcdir)/*.h
