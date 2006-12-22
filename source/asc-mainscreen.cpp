@@ -189,7 +189,7 @@ void Menu::setup()
    addbutton ( "~a~ppend to journal", ua_editjournal );
 
    addfield ( "~T~ools" );
-   addbutton ( "save ~M~ap as PCX\t9", ua_writemaptopcx );
+   addbutton ( "save ~M~ap as PNG\t9", ua_writemaptopcx );
    addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);

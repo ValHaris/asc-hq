@@ -976,42 +976,113 @@ class AvailableUnitWindow : public ItemSelectorWindow {
 };      
 
 
-void addProductionToString( ASCString& s, const ContainerBaseType* potentialFactory )
+
+
+int evaluateProduction( const ContainerBaseType* potentialFactory, const Vehicletype* vt, GameMap* gamemap )
 {
-   s += potentialFactory->getName() + " (" + ASCString::toString(potentialFactory->id) + ") ";
+   if ( potentialFactory->vehicleFit( vt ) && potentialFactory->hasFunction( ContainerBaseType::InternalVehicleProduction)) 
+      return 1;
+   else
+      return 0;
 }
 
-void evaluateProduction( ASCString& s, const ContainerBaseType* potentialFactory, const Vehicletype* vt )
-{
-   if ( potentialFactory->vehicleFit( vt ) && potentialFactory->hasFunction( ContainerBaseType::InternalVehicleProduction)) {
-      addProductionToString(s, potentialFactory);
-      s += " internally\n";
-   }
-}
-
-void evaluateProduction( ASCString& s, const Vehicletype* potentialFactory, const Vehicletype* vt )
+int evaluateProduction( const Vehicletype* potentialFactory, const Vehicletype* vt, GameMap* gamemap )
 {
    const ContainerBaseType* cbt = potentialFactory;
-   evaluateProduction( s, cbt, vt );
+   int res = evaluateProduction( cbt, vt, gamemap ); 
 
-   if ( potentialFactory->hasFunction( ContainerBaseType::ExternalVehicleProduction)) {
+   if ( potentialFactory->hasFunction( ContainerBaseType::ExternalVehicleProduction)) 
       for ( vector<IntRange>::const_iterator i = potentialFactory->vehiclesBuildable.begin(); i != potentialFactory->vehiclesBuildable.end(); ++i )
-         if( vt->id >= i->from && vt->id <= i->to ) {
-            addProductionToString(s, potentialFactory);
-            s += " externally\n";
-         }
-   }
+         if( vt->id >= i->from && vt->id <= i->to ) 
+            return res | 2;
+   return res;
 }
 
 
-void unitProductionAnalysis( GameMap* gamemap, bool checkResearch = false )
+ASCString getProductionString( const ContainerBaseType* potentialFactory, const Vehicletype* vt, GameMap* gamemap )
+{
+   ASCString s;
+   int res = evaluateProduction( potentialFactory, vt, gamemap);
+   if ( res ) {
+      s = potentialFactory->getName() + " (" + ASCString::toString(potentialFactory->id) + ") ";
+      if ( res & 1 )
+         s += " internally";
+      if ( res & 2 )
+         s += " externally";
+      s += "\n";
+   }
+   return s;
+}
+
+
+
+ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicletype* unitsToProduce, GameMap* gamemap, bool lineAvail )
+{
+   ASCString instances;
+   {
+      int count = 0;
+      ASCString units = evaluatedFactory->getName() + ": ";
+         
+      for ( Player::VehicleList::const_iterator j = gamemap->getCurrentPlayer().vehicleList.begin(); j != gamemap->getCurrentPlayer().vehicleList.end(); ++j )
+         if ( (*j)->typ == evaluatedFactory ) {
+            units += (*j)->getPosition().toString();
+            ++count;
+         }
+      if ( count )
+         instances += units + "\n";
+
+   }
+   {
+      int count = 0;
+      ASCString units = evaluatedFactory->getName() + ": ";
+         
+      for ( Player::BuildingList::const_iterator j = gamemap->getCurrentPlayer().buildingList.begin(); j != gamemap->getCurrentPlayer().buildingList.end(); ++j )
+         if ( (*j)->typ == evaluatedFactory ) 
+            if ( lineAvail ) {
+               for ( ContainerBase::Production::const_iterator k = (*j)->unitProduction.begin(); k != (*j)->unitProduction.end(); ++k )
+                  if ( *k == unitsToProduce ) {
+                     units += (*j)->getPosition().toString();
+                     ++count;
+                  }
+            } else {
+               units += (*j)->getPosition().toString();
+               ++count;
+            }
+      if ( count )
+         instances += units + "\n";
+   }
+
+   return instances;
+}
+
+template<typename T>
+void checkType( T* t, const Vehicletype* evaluatedUnitType, ASCString& instances, ASCString& lineAddable, ASCString& types, GameMap* gamemap, bool checkResearch )
+{
+   if ( evaluateProduction( t, evaluatedUnitType, gamemap)) {
+      instances += getInstances( t, evaluatedUnitType, gamemap, true );               
+      lineAddable += getInstances( t, evaluatedUnitType, gamemap, false );
+      if ( !checkResearch || t->techDependency.available( gamemap->getCurrentPlayer().research )) 
+         types += getProductionString( t, evaluatedUnitType, gamemap );
+   }
+}
+
+bool vehicleOwned( const Vehicletype* vt, GameMap* gamemap )
+{
+   for ( Player::VehicleList::const_iterator j = gamemap->getCurrentPlayer().vehicleList.begin(); j != gamemap->getCurrentPlayer().vehicleList.end(); ++j )
+      if ( (*j)->typ == vt )
+         return true;
+   return false;
+}
+
+
+void unitProductionAnalysis( GameMap* gamemap, bool checkResearch = true )
 {
    VehicleTypeSelectionItemFactory::Container c;
 
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       Vehicletype* p = vehicleTypeRepository.getObject_byPos(i);
       if ( p ) {
-         if ( !checkResearch || p->techDependency.available( gamemap->getCurrentPlayer().research ))
+         if ( vehicleOwned( p, gamemap ) || !checkResearch || p->techDependency.available( gamemap->getCurrentPlayer().research )  )
             c.push_back(p);
       }
    }
@@ -1021,19 +1092,30 @@ void unitProductionAnalysis( GameMap* gamemap, bool checkResearch = false )
    auw.RunModal();
    auw.Hide();
 
+
    if ( auw.getSelected() ) {
-      ASCString s;
+      ASCString types, instances, lineAddable;
 
       for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) 
-         if ( !checkResearch || vehicleTypeRepository.getObject_byPos(i)->techDependency.available( gamemap->getCurrentPlayer().research ))
-            evaluateProduction( s, vehicleTypeRepository.getObject_byPos(i), auw.getSelected());
-
+         checkType( vehicleTypeRepository.getObject_byPos(i), auw.getSelected(), instances, lineAddable, types, gamemap, checkResearch );
+      
       for ( int i = 0; i < buildingTypeRepository.getNum(); ++i ) 
-         if ( !checkResearch || buildingTypeRepository.getObject_byPos(i)->techDependency.available( gamemap->getCurrentPlayer().research ))
-            evaluateProduction( s, buildingTypeRepository.getObject_byPos(i), auw.getSelected());
+         checkType( buildingTypeRepository.getObject_byPos(i), auw.getSelected(), instances, lineAddable, types, gamemap, checkResearch );
 
+      if ( types.empty() )
+         types = "-none-\n";
 
-      ViewFormattedText vft("Unit Production Analysis", s, PG_Rect( -1, -1, 500, 400 ));
+      if ( instances.empty() )
+         instances = "-nowhere-\n";
+
+      if ( lineAddable.empty() )
+         lineAddable = "-nowhere-\n";
+
+      types = "\n#fontsize=18#Vehicle and Building types#fontsize=12#\n" + types;
+      instances = "\n#fontsize=18#Production available #fontsize=12#\n" + instances;
+      lineAddable = "\n#fontsize=18#Production can be added #fontsize=12#\n" + lineAddable;
+
+      ViewFormattedText vft("Unit Production Analysis", instances + lineAddable + types, PG_Rect( -1, -1, 500, 400 ));
       vft.Show();
       vft.RunModal();
    }
