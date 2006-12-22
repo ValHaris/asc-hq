@@ -49,7 +49,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
    int humannum = 0;
    for ( int i = 0; i < 8; i++ )
       if ( actmap->player[i].exist() )
-         if ( actmap->player[i].stat == Player::human )
+         if ( actmap->player[i].isHuman() )
             humannum++;
 
    if ( humannum > 1  ||  forcepasswordchecking > 0 ) {

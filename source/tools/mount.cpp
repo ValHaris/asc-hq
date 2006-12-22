@@ -224,12 +224,12 @@ ASCString getTempPath()
 #else
    ASCString name;
    if ( getenv ( "temp" ))
-      name = getenv ( "temp" ));
+      name = getenv ( "temp" );
    else
       if ( getenv ( "tmp" ))
-         name = getenv ( "tmp" ));
+         name = getenv ( "tmp" );
       else {
-         name = pathdelimitterstring + "tmp";
+         name = pathdelimitterstring + ASCString("tmp");
       }
 
       appendbackslash( name );
