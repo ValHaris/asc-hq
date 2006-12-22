@@ -24,6 +24,7 @@ InstallDirRegKey HKLM "Software\Advanced Strategic Command" "Orig_Install_Dir"
 
 ; Pages
 
+Page license
 Page components
 Page directory
 Page instfiles
@@ -32,6 +33,8 @@ UninstPage uninstConfirm
 UninstPage instfiles
 
 ;--------------------------------
+
+LicenseData=licdata.txt
 
 ; The stuff to install
 Section "ASC main program (required)"

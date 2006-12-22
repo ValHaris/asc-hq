@@ -10,14 +10,16 @@ htmldoc:
 	cd source && make htmldoc
 
 installer: 
-	cd $(top_srcdir)/installer && make installer
+	cd installer && make installer
 
 tarball:
-	cd $(top_srcdir)/installer && make tarball
+	cd installer && make tarball
 
 pbpinstaller: 
-	cd $(top_srcdir)/installer && make pbpinstaller 
+	cd installer && make pbpinstaller 
 
 unitguide:
 	cd doc && make unitguide
-	
+
+dist-hook:
+	rm -rf `find $(distdir) -name CVS`

@@ -1,6 +1,7 @@
-CLEANFILES = *.exe *.tar.bz2
+CLEANFILES = *.exe *.tar.bz2 licdata.txt
 
 installer: 
+	cat $(abs_top_srcdir)/COPYING | unix2dos > licdata.txt
 	makensis asc.nsi
 
 tarball:

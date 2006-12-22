@@ -32,7 +32,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = doc/manpages
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(dist_man_MANS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -46,7 +47,7 @@ DIST_SOURCES =
 man6dir = $(mandir)/man6
 am__installdirs = "$(DESTDIR)$(man6dir)"
 NROFF = nroff
-MANS = $(man_MANS)
+MANS = $(dist_man_MANS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -81,6 +82,7 @@ EXPAT_SUBDIR = @EXPAT_SUBDIR@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FREETYPE_LIBS = @FREETYPE_LIBS@
+GAME_DATADIR = @GAME_DATADIR@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 GREP = @GREP@
@@ -192,12 +194,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-MAINTAINERCLEANFILES = Makefile.in asc.6 asc_demount.6 \
-asc_mount.6 asc_mapedit.6 asc_makegfx.6 asc_weaponguide.6
-
-man_MANS = asc.6 asc_demount.6 asc_mount.6 \
-asc_mapedit.6 asc_makegfx.6  asc_weaponguide.6
-
+MAINTAINERCLEANFILES = Makefile.in asc.6 asc_demount.6 asc_mount.6 asc_mapedit.6 asc_makegfx.6 asc_weaponguide.6
+dist_man_MANS = $(srcdir)/asc.6 $(srcdir)/asc_demount.6 $(srcdir)/asc_mount.6 $(srcdir)/asc_mapedit.6 $(srcdir)/asc_makegfx.6 $(srcdir)/asc_weaponguide.6
 all: all-am
 
 .SUFFIXES:

@@ -78,6 +78,7 @@ EXPAT_SUBDIR = @EXPAT_SUBDIR@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FREETYPE_LIBS = @FREETYPE_LIBS@
+GAME_DATADIR = @GAME_DATADIR@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 GREP = @GREP@
@@ -189,7 +190,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-CLEANFILES = *.exe *.tar.bz2
+CLEANFILES = *.exe *.tar.bz2 licdata.txt
 all: all-am
 
 .SUFFIXES:
@@ -361,6 +362,7 @@ uninstall-am:
 
 
 installer: 
+	cat $(abs_top_srcdir)/COPYING | unix2dos > licdata.txt
 	makensis asc.nsi
 
 tarball:

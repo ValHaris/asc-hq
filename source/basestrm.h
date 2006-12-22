@@ -620,7 +620,7 @@ class FileName : public ASCString {
 
 extern const char pathdelimitter;
 extern const char* pathdelimitterstring;
-extern int filesize( char *name);
+extern int filesize( const char *name);
 
 extern void addSearchPath ( const ASCString& path );
 extern void appendbackslash ( char* String );

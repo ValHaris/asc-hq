@@ -87,6 +87,7 @@ EXPAT_SUBDIR = @EXPAT_SUBDIR@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FREETYPE_LIBS = @FREETYPE_LIBS@
+GAME_DATADIR = @GAME_DATADIR@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 GREP = @GREP@
@@ -199,8 +200,8 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-pkgdata_DATA = buildings.con
 EXTRA_DIST = $(srcdir)/*.asctxt $(srcdir)/*.pcx $(srcdir)/*.version $(srcdir)/*.txt   
+pkgdata_DATA = buildings.con
 all: all-am
 
 .SUFFIXES:

@@ -2260,7 +2260,7 @@ time_t get_filetime ( const char* fileName )
 }
 
 
-int filesize( char *name)
+int filesize( const char *name)
 {
   struct stat buf;
 

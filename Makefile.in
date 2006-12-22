@@ -106,6 +106,7 @@ EXPAT_SUBDIR = @EXPAT_SUBDIR@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FREETYPE_LIBS = @FREETYPE_LIBS@
+GAME_DATADIR = @GAME_DATADIR@
 GENCL = @GENCL@
 GENCLL = @GENCLL@
 GREP = @GREP@
@@ -465,6 +466,9 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
+	  dist-hook
 	-find $(distdir) -type d ! -perm -777 -exec chmod a+rwx {} \; -o \
 	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
 	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
@@ -656,8 +660,8 @@ uninstall-am:
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am am--refresh check check-am clean clean-generic \
 	clean-libtool ctags ctags-recursive dist dist-all dist-bzip2 \
-	dist-gzip dist-shar dist-tarZ dist-zip distcheck distclean \
-	distclean-generic distclean-hdr distclean-libtool \
+	dist-gzip dist-hook dist-shar dist-tarZ dist-zip distcheck \
+	distclean distclean-generic distclean-hdr distclean-libtool \
 	distclean-tags distcleancheck distdir distuninstallcheck dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
@@ -676,16 +680,19 @@ htmldoc:
 	cd source && make htmldoc
 
 installer: 
-	cd $(top_srcdir)/installer && make installer
+	cd installer && make installer
 
 tarball:
-	cd $(top_srcdir)/installer && make tarball
+	cd installer && make tarball
 
 pbpinstaller: 
-	cd $(top_srcdir)/installer && make pbpinstaller 
+	cd installer && make pbpinstaller 
 
 unitguide:
 	cd doc && make unitguide
+
+dist-hook:
+	rm -rf `find $(distdir) -name CVS`
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

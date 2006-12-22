@@ -5,7 +5,6 @@ MAINTAINERCLEANFILES    = Makefile.in
 EXTRA_DIST = $(srcdir)/* $(srcdir)/icons/* $(srcdir)/sounds/*
 
 pkgdata_DATA 		= main.con 
-
 pkgdatadir 		= $(datadir)/games/@PACKAGE@
 
 main.con: $(srcdir)/*.* $(srcdir)/icons/*.png $(srcdir)/icons/*.ascgui $(srcdir)/sounds/*.wav $(srcdir)/sounds/*.ogg $(srcdir)/sounds/*.asctxt
