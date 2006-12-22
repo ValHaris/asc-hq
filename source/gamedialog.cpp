@@ -146,7 +146,7 @@ bool GameDialog::singleGame(PG_Button* button) {
 bool GameDialog::multiGame(PG_Button* button) {
     Hide();
     // MultiPlayerDialog::multiPlayerDialog(this);
-    if ( continueAndStartMultiplayerGame() ) {
+    if ( continueAndStartMultiplayerGame( false ) ) {
        QuitModal();
     } else
       Show();

@@ -112,7 +112,7 @@ void VehicleCounterFactory::itemSelected( const SelectionWidget* widget, bool mo
    if ( !widget )
       return;
 
-   const VehicleTypeResourceWidget* fw = dynamic_cast<const VehicleTypeResourceWidget*>(widget);
+   const VehicleTypeBaseWidget* fw = dynamic_cast<const VehicleTypeBaseWidget*>(widget);
    assert( fw );
 }
 */

@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/**
+/*
  * \mainpage SDL_sound
  *
  * The latest version of SDL_sound can be found at:

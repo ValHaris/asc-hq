@@ -589,7 +589,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
          if ( !widget )
             return;
             
-         const VehicleTypeResourceWidget* fw = dynamic_cast<const VehicleTypeResourceWidget*>(widget);
+         const VehicleTypeBaseWidget* fw = dynamic_cast<const VehicleTypeBaseWidget*>(widget);
          assert( fw );
          sigVehicleTypeMarked( fw->getVehicletype() );
       }

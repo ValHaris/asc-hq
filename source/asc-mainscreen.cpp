@@ -137,6 +137,7 @@ void Menu::setup()
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
    currentMenu->addSeparator();
    addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
+   addbutton ( "Most recent network game\tShift-F3", ua_continuerecentnetworkgame);
    // addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change Passw~o~rd", ua_changepassword );
    addbutton ( "supervise network game", ua_networksupervisor );
@@ -163,6 +164,9 @@ void Menu::setup()
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
    addbutton ( "~C~argo Summary", ua_cargosummary );
    addbutton ( "Unit Summary", ua_unitsummary );
+   currentMenu->addSeparator();
+   addbutton ( "Unit Production Analysis", ua_unitproductionanalysis );
+   
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);
@@ -797,5 +801,14 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       }
    }
 
+   if ( mod & KMOD_SHIFT ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_F3:
+               execUserAction_ev ( ua_continuerecentnetworkgame );
+               return true;
+
+            default:;
+      }
+   }
    return false;
 }

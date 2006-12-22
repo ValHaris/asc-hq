@@ -67,6 +67,7 @@ class VehicleTypeCountLocateWidget: public VehicleTypeCountWidget  {
 class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
       Resources plantResources;
       int actplayer;
+      bool showResourcesForUnit;
    public:
       typedef vector<const Vehicletype*> Container;
 
@@ -76,13 +77,14 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       Container::iterator it;
       Container items;
 
-      virtual void vehicleTypeSelected( const Vehicletype* type ) = 0;
+      virtual void vehicleTypeSelected( const Vehicletype* type ) {};
       
    private:
       const Container& original_items;
       
    public:
       VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, int player );
+      VehicleTypeSelectionItemFactory( const Container& types, int player );
       
       SigC::Signal0<void> reloadAllItems;
 
@@ -90,7 +92,7 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
    
       void setAvailableResource( const Resources& plantResources ) { this->plantResources = plantResources; };
       
-      virtual Resources getCost( const Vehicletype* type ) = 0;
+      virtual Resources getCost( const Vehicletype* type ) {return Resources(); };
       
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
       

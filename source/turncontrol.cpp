@@ -283,9 +283,33 @@ void checkUsedASCVersions ( Player& currentPlayer )
 
 
 
-bool continuenetworkgame ()
+bool continuenetworkgame ( bool mostRecent )
 {
-   ASCString filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
+   ASCString filename;
+   if ( !mostRecent ) {
+      filename = selectFile( ASCString("*") + tournamentextension + ";*.asc", true );
+   } else {
+      int datefound = 0;
+
+      for ( int w = 0; w < 2; ++w) {
+
+         ASCString wildcard;
+         if ( w == 0 )
+            ASCString("*") + tournamentextension;
+         else
+            wildcard = "*.asc";
+
+         tfindfile ff ( wildcard );
+
+         tfindfile::FileInfo fi;
+         while ( ff.getnextname( fi ))
+            if ( fi.date > datefound ) {
+               datefound = fi.date;
+               filename = fi.name;
+            }
+      }
+   }
+
    if ( filename.empty() )
       return false;
 

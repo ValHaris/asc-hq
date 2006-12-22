@@ -133,10 +133,15 @@ bool VehicleTypeCountLocateWidget::locate()
 }
 
 
-VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, int player ) : actplayer(player), original_items( types )
+VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, int player ) : actplayer(player), showResourcesForUnit(true), original_items( types )
 {
    restart();
    setAvailableResource( plantResources );
+};
+
+VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( const Container& types, int player ) : actplayer(player), showResourcesForUnit(false), original_items( types )
+{
+   restart();
 };
 
 
@@ -162,13 +167,16 @@ SelectionWidget* VehicleTypeSelectionItemFactory::spawnNextItem( PG_Widget* pare
 {
    if ( it != items.end() ) {
       const Vehicletype* v = *(it++);
-      Resources cost  = getCost(v);
+      if ( showResourcesForUnit ) {
+         Resources cost  = getCost(v);
 
-      int lackingResources = 0;
-      for ( int r = 0; r < 3; ++r )
-         if ( plantResources.resource(r) < cost.resource(r))
-            lackingResources |= 1 << r;
-      return new VehicleTypeResourceWidget( parent, pos, parent->Width() - 15, v, lackingResources, cost, actplayer );
+         int lackingResources = 0;
+         for ( int r = 0; r < 3; ++r )
+            if ( plantResources.resource(r) < cost.resource(r))
+               lackingResources |= 1 << r;
+         return new VehicleTypeResourceWidget( parent, pos, parent->Width() - 15, v, lackingResources, cost, actplayer );
+      } else
+         return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actplayer );
    } else
       return NULL;
 };
@@ -181,7 +189,7 @@ void VehicleTypeSelectionItemFactory::itemSelected( const SelectionWidget* widge
    if ( !widget )
       return;
 
-   const VehicleTypeResourceWidget* fw = dynamic_cast<const VehicleTypeResourceWidget*>(widget);
+   const VehicleTypeBaseWidget* fw = dynamic_cast<const VehicleTypeBaseWidget*>(widget);
    assert( fw );
 
    showVehicleInfo( fw->getVehicletype() );

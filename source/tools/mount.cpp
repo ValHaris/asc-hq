@@ -253,6 +253,34 @@ void copyfile ( const char* name, const char* orgname, int size )
    compsize += size;
 }
 
+ASCString getTempPath()
+{
+#ifdef _UNIX_
+  return "/tmp/";
+#else
+   ASCString name;
+   if ( getenv ( "temp" ))
+      name = getenv ( "temp" ));
+   else
+      if ( getenv ( "tmp" ))
+         name = getenv ( "tmp" ));
+      else {
+         name = pathdelimitterstring + "tmp";
+      }
+
+   appendbackslash( name );
+   return name;
+#endif
+
+}
+
+ASCString getTempFileName( int type )
+{
+   if ( type == 0 )
+      return getTempPath() + "temp.rle";
+   else
+      return getTempPath() + "temp.mzl";
+}
 
 char buf2[10000];
 

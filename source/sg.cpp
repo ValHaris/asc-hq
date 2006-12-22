@@ -886,9 +886,9 @@ void execuseraction ( tuseractions action )
       };
 }
 
-bool continueAndStartMultiplayerGame()
+bool continueAndStartMultiplayerGame( bool mostRecent = false )
 {
-   if ( continuenetworkgame()) {
+   if ( continuenetworkgame( mostRecent )) {
       hookGuiToMap(actmap);
       actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
       displaymap();
@@ -957,6 +957,87 @@ void resourceAnalysis()
 }
 
 
+#include "dialogs/vehicletypeselector.h"
+
+class AvailableUnitWindow : public ItemSelectorWindow {
+   private:
+      const Vehicletype* selectedVehicleType;
+      
+      virtual void itemSelected( const SelectionWidget* sw) {
+         const VehicleTypeBaseWidget* vtcw = dynamic_cast<const VehicleTypeBaseWidget*>(sw);
+         assert( vtcw );
+         selectedVehicleType = vtcw->getVehicletype ();
+         if ( selectedVehicleType )
+            QuitModal();
+      };
+   public:
+      AvailableUnitWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) : ItemSelectorWindow( parent, r, title, itemFactory ), selectedVehicleType(NULL) {};
+      const Vehicletype* getSelected() { return selectedVehicleType; };
+};      
+
+
+void addProductionToString( ASCString& s, const ContainerBaseType* potentialFactory )
+{
+   s += potentialFactory->getName() + " (" + ASCString::toString(potentialFactory->id) + ") ";
+}
+
+void evaluateProduction( ASCString& s, const ContainerBaseType* potentialFactory, const Vehicletype* vt )
+{
+   if ( potentialFactory->vehicleFit( vt ) && potentialFactory->hasFunction( ContainerBaseType::InternalVehicleProduction)) {
+      addProductionToString(s, potentialFactory);
+      s += " internally\n";
+   }
+}
+
+void evaluateProduction( ASCString& s, const Vehicletype* potentialFactory, const Vehicletype* vt )
+{
+   const ContainerBaseType* cbt = potentialFactory;
+   evaluateProduction( s, cbt, vt );
+
+   if ( potentialFactory->hasFunction( ContainerBaseType::ExternalVehicleProduction)) {
+      for ( vector<IntRange>::const_iterator i = potentialFactory->vehiclesBuildable.begin(); i != potentialFactory->vehiclesBuildable.end(); ++i )
+         if( vt->id >= i->from && vt->id <= i->to ) {
+            addProductionToString(s, potentialFactory);
+            s += " externally\n";
+         }
+   }
+}
+
+
+void unitProductionAnalysis( GameMap* gamemap, bool checkResearch = false )
+{
+   VehicleTypeSelectionItemFactory::Container c;
+
+   for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
+      Vehicletype* p = vehicleTypeRepository.getObject_byPos(i);
+      if ( p ) {
+         if ( !checkResearch || p->techDependency.available( gamemap->getCurrentPlayer().research ))
+            c.push_back(p);
+      }
+   }
+
+   AvailableUnitWindow auw( NULL, PG_Rect( -1, -1, 400, 400), "Select Vehicle Type", new VehicleTypeSelectionItemFactory(c, gamemap->actplayer ));
+   auw.Show();
+   auw.RunModal();
+   auw.Hide();
+
+   if ( auw.getSelected() ) {
+      ASCString s;
+
+      for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) 
+         if ( !checkResearch || vehicleTypeRepository.getObject_byPos(i)->techDependency.available( gamemap->getCurrentPlayer().research ))
+            evaluateProduction( s, vehicleTypeRepository.getObject_byPos(i), auw.getSelected());
+
+      for ( int i = 0; i < buildingTypeRepository.getNum(); ++i ) 
+         if ( !checkResearch || buildingTypeRepository.getObject_byPos(i)->techDependency.available( gamemap->getCurrentPlayer().research ))
+            evaluateProduction( s, buildingTypeRepository.getObject_byPos(i), auw.getSelected());
+
+
+      ViewFormattedText vft("Unit Production Analysis", s, PG_Rect( -1, -1, 500, 400 ));
+      vft.Show();
+      vft.RunModal();
+   }
+}
 
 
 
@@ -1004,6 +1085,11 @@ void execuseraction2 ( tuseractions action )
       case ua_newGame: 
          startMultiplayerGame();
          break;
+
+      case ua_continuerecentnetworkgame:
+         continueAndStartMultiplayerGame( true );
+         break;
+
       case ua_continuenetworkgame:
          continueAndStartMultiplayerGame();
          break;
@@ -1097,6 +1183,9 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_resourceAnalysis:
          resourceAnalysis();
+         break;
+      case ua_unitproductionanalysis:
+         unitProductionAnalysis( actmap );
          break;
 
       default:
