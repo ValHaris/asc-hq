@@ -515,21 +515,21 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          if ( !pc.isReading() ) {
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
-                  Surface s = Surface::createSurface( construction_steps*500, 250, 32 );
+                  Surface s = Surface::createSurface( construction_steps*500, 250, 32, 0 );
                   for ( int c = 0; c < construction_steps; c++ )
                      for ( int x = 0; x < 4; x++ )
                         for ( int y = 0; y < 6; y++ )
                            if ( w_picture[w][c][x][y].valid() )
                               s.Blit( w_picture[w][c][x][y], SPoint( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty) );
 
-                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx" );
+                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx", false  );
                }
          } else {
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
                   ASCString fileName = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx";
                   Surface s;
-                  pc.addImage ( weatherTags[w], s, fileName );
+                  pc.addImage ( weatherTags[w], s, fileName, false );
 
 //                  if ( s.GetPixelFormat().BitsPerPixel() != 8 )
                      //fatalError("Building image " + filename + " does not have 8 Bit color depth!");

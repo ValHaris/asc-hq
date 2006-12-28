@@ -218,11 +218,12 @@
          class ASCImageProperty : public PTIMG2 {
                typedef Surface PropertyType;
                ASCString fileName;
+               bool fieldMask;
             protected:
                PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
                ASCString toString ( ) const;
             public:
-               ASCImageProperty ( Surface &property_, const ASCString& fileName_ ) : PTIMG2 ( property_ ), fileName ( fileName_ ) {};
+               ASCImageProperty ( Surface &property_, const ASCString& fileName_, bool applyFieldMask ) : PTIMG2 ( property_ ), fileName ( fileName_ ), fieldMask( applyFieldMask ) {};
          };
 
          typedef PropertyTemplate< vector<void*> > PTIMGA;
@@ -517,13 +518,6 @@ bool PropertyContainer::restoreContext( const ASCString& label )
 
 
 #ifdef ParserLoadImages
-#if 0
-void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )
-{
-   ImageArrayProperty* ip = new ImageArrayProperty ( property, filename );
-   setup ( ip, name );
-}
-#endif
 
 void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& filename )
 {
@@ -531,17 +525,10 @@ void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &
    setup ( ip, name );
 }
 
-#if 0
-void PropertyContainer::addImage ( const ASCString& name, void* &property, const ASCString& filename )
-{
-   ImageProperty* ip = new ImageProperty ( property, filename );
-   setup ( ip, name );
-}
-#endif
 
-void PropertyContainer::addImage ( const ASCString& name, Surface &property, const ASCString& filename )
+void PropertyContainer::addImage ( const ASCString& name, Surface &property, const ASCString& filename, bool applyFieldMask )
 {
-   ASCImageProperty* ip = new ASCImageProperty ( property, filename );
+   ASCImageProperty* ip = new ASCImageProperty ( property, filename, applyFieldMask );
    setup ( ip, name );
 }
 
@@ -1182,7 +1169,7 @@ ASCString NamedIntProperty::toString() const
 ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    try {
-      return loadASCFieldImage( entry.value );
+      return loadASCFieldImage( entry.value, fieldMask );
    }
    catch ( ASCexception ){
       propertyContainer->error( "error accessing file " + entry.value );

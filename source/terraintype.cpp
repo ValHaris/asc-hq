@@ -445,7 +445,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s = "terrain";
          s += strrr(terraintype->id);
       }
-      pc.addImage ( "picture", image, s + weatherAbbrev[w] );
+      pc.addImage ( "picture", image, s + weatherAbbrev[w], true );
       applyFieldMask( image );
    } else {
       pc.addInteger ( "GFX_Picture", bi_pict );

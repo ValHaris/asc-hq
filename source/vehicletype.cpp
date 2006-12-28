@@ -903,7 +903,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    } else
       fn = extractFileName_withoutSuffix( filename );
 
-   pc.addImage( "Picture", image, fn );
+   pc.addImage( "Picture", image, fn, true );
    if( image.w() < fieldsizex || image.h() < fieldsizey )
       image.strech( fieldsizex, fieldsizey );
 

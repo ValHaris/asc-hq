@@ -96,7 +96,7 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
    return images;
 }
 
-Surface loadASCFieldImage ( const ASCString& file )
+Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
 {
    StringTokenizer st ( file, fileNameDelimitter );
    FileName fn = st.getNextToken();
@@ -121,7 +121,8 @@ Surface loadASCFieldImage ( const ASCString& file )
       } while ( !fn.empty() );
       if ( s )  {
          Surface s3( *s );
-         applyFieldMask(s3,0,0,false);
+         if ( applyFieldMaskToImage )
+            applyFieldMask(s3,0,0,false);
 
          delete s;
          return s3;
@@ -140,7 +141,6 @@ Surface loadASCFieldImage ( const ASCString& file )
             errorMessage( "error loading file " + fn );
             
          Surface s ( surface );
-         // writePNG("test1.png", s );
 
          if ( s.GetPixelFormat().BitsPerPixel() == 8)
             s.SetColorKey( SDL_SRCCOLORKEY, 255 );
@@ -150,9 +150,10 @@ Surface loadASCFieldImage ( const ASCString& file )
          s.SetAlpha(SDL_SRCALPHA,SDL_ALPHA_OPAQUE);
          */
          
-         if ( s.w() >= fieldsizex && s.h() >= fieldsizey )
-            applyFieldMask(s,0,0,false);
-         // writePNG("test2.png", s );
+         if ( applyFieldMaskToImage )
+            if ( s.w() >= fieldsizex && s.h() >= fieldsizey )
+               applyFieldMask(s,0,0,false);
+
          return s;
       }
    return Surface();

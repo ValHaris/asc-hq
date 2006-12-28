@@ -98,6 +98,6 @@ sounds {
    unit_explodes.labels = default trooper diver mech_robot rocket satelite space_station li_tank md_tank hv_tank li_plane md_plane hv_plane helicopter li_ship md_ship hv_ship hovercraft li_sub md_sub hv_sub
    UNIT_EXPLODES.files = hartziel1_g.ogg gun_big_attached_s.ogg gun_big_attached_s.ogg hartziel2_g.ogg hartziel3_g.ogg explo_submarine2_s.ogg explo_submarine_s.ogg explo_wheeled_tank_s.ogg explo_md_tank_s.ogg hartziel3_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel1_g.ogg hartziel4_g.ogg explo_big_ship_s.ogg hartziel2_g.ogg hartziel2_g.ogg explo_submarine2_s.ogg explo_submarine_s.ogg
 
-   JUMPDRIVE = jumpdrive.ogg
+   JUMPDRIVE.files = jumpdrive.ogg
 
 } sounds
