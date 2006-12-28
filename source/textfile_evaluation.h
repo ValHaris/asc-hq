@@ -150,8 +150,4 @@ class PropertyWritingContainer : public PropertyContainer {
          virtual void closeBracket();
 };
 
-#ifdef ParserLoadImages
-extern void* getFieldMask();
-#endif
-
 #endif

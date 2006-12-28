@@ -31,7 +31,7 @@
 #include "sgstream.h"
 
 #include "itemrepository.h"
-
+#include "iconrepository.h"
 
 
 GraphicSetManager_Base::GraphicSetManager_Base() : activeSet(NULL)
@@ -61,9 +61,16 @@ int GraphicSetManager_Base :: getMode ( int num ) const
 
 Surface& GraphicSetManager_Base :: getPic ( int num )
 {
-   return activeSet->image[num];
+   if( num >= activeSet->image.size() )
+      return IconRepository::getIcon("emptyfld.raw");
+   else
+      return activeSet->image[num];
 }
 
+void GraphicSetManager_Base :: setPic( int num, Surface& pic )
+{
+   activeSet->image[num] = pic;
+}
 
 
 
@@ -131,12 +138,7 @@ void GraphicSetManager_Base::loadData()
 
    loadpalette();
 
-   Surface emptyField;
-   {
-      tnfilestream s ( "emptyfld.raw", tnstream::reading );
-      emptyField.read( s );
-   }
-   
+  
    
    /*
 
@@ -155,7 +157,7 @@ void GraphicSetManager_Base::loadData()
    ASCString filename = ff.getnextname( NULL, NULL, &location);
    while ( !filename.empty() ) {
 
-      tnfilestream s ( filename.c_str(), tnstream::reading );
+      tnfilestream s ( filename, tnstream::reading );
 
       displayLogMessage ( 5, "loading graphic set " + location + filename + "\n" );
 
@@ -183,7 +185,7 @@ void GraphicSetManager_Base::loadData()
                gs->picmode[i] = picmode[i];
             } else {
                gs->picmode[i] = 256 + 2;
-               gs->image[i] = emptyField;
+               gs->image[i] = IconRepository::getIcon("emptyfld.raw");
             }
            gs->image[i].assignDefaultPalette();
 

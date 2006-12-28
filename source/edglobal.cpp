@@ -54,6 +54,7 @@
 #include "dialogs/newmap.h"
 #include "dialogs/terraininfo.h"
 #include "widgets/textrenderer.h"
+#include "dialogs/exchangegraphics.h"
 
    
    const char* execactionnames[execactionscount] = {
@@ -155,7 +156,8 @@
         "Dump Building definition",
         "Dump Vehicle definition",
         "Dump Object definition",
-        "PBP statisticsc" };
+        "PBP statistics",
+        "Exchange Graphics" };
 
 
 
@@ -911,6 +913,8 @@ void execaction_pg(int code)
     case act_help : help(1000);
        break;
     case act_pbpstatistics: pbpplayerstatistics( actmap );
+       break;
+    case act_exchangeGraphics: exchangeGraphics();
        break;
    };
 }

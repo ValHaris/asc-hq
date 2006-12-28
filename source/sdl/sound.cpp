@@ -70,6 +70,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    if( off )
       return;
 
+   displayLogMessage(0,"Initializing sound device. If this hangs, you can run ASC without sound (asc -q)");
    if ( SDL_Init ( SDL_INIT_AUDIO ) < 0 ) {
       warning("Couldn't initialize SDL audio interface !");
       off = true;
@@ -77,7 +78,9 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
       return;
    }
 
+   displayLogMessage(0,"\nInitializing decoders (SDL_sound)... ");
    Sound_Init();
+   displayLogMessage(0,"success\n");
    
    sdl_initialized = true;
 

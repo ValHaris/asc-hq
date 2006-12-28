@@ -87,7 +87,7 @@
             void write ( tnstream& stream ) const;
       };
 
-      class  Weather {
+      class  Weather: public LoadableItemType {
           //! the color information for the small map
           OverviewMapImage* quickView;
         public:
@@ -124,6 +124,10 @@
           Weather ( TerrainType* base ) : quickView ( NULL ), terraintype ( base ) {};
           ~Weather();
           void runTextIO ( PropertyContainer& pc );
+          void read ( tnstream& stream );
+          void read ( tnstream& stream, int version );
+          void write ( tnstream& stream ) const;
+
       };
      Weather*           weather[cwettertypennum];
 

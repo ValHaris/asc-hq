@@ -123,13 +123,22 @@
 				RelativePath="..\..\basestrm.cpp">
 			</File>
 			<File
+				RelativePath="..\..\graphics\blitter.cpp">
+			</File>
+			<File
 				RelativePath="..\..\buildingtype.cpp">
 			</File>
 			<File
 				RelativePath="..\..\containerbasetype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\graphics\drawing.cpp">
+			</File>
+			<File
 				RelativePath="..\lib\errorout.cpp">
+			</File>
+			<File
+				RelativePath="..\..\fieldimageloader.cpp">
 			</File>
 			<File
 				RelativePath="..\..\gameoptions.cpp">
@@ -147,7 +156,13 @@
 				RelativePath="..\..\graphicset.cpp">
 			</File>
 			<File
+				RelativePath="..\..\iconrepository.cpp">
+			</File>
+			<File
 				RelativePath="..\..\loadpcxc.cpp">
+			</File>
+			<File
+				RelativePath="..\..\messaginghub.cpp">
 			</File>
 			<File
 				RelativePath="..\..\misc.cpp">
@@ -159,10 +174,19 @@
 				RelativePath="..\..\newfont.cpp">
 			</File>
 			<File
+				RelativePath="..\..\objects.cpp">
+			</File>
+			<File
 				RelativePath="..\..\objecttype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\overviewmapimage.cpp">
+			</File>
+			<File
 				RelativePath="..\..\palette.cpp">
+			</File>
+			<File
+				RelativePath="..\..\password.cpp">
 			</File>
 			<File
 				RelativePath="..\..\research.cpp">
@@ -174,10 +198,22 @@
 				RelativePath="..\..\simplestream.cpp">
 			</File>
 			<File
+				RelativePath="..\..\stack.cpp">
+			</File>
+			<File
+				RelativePath="..\..\stdio-errorhandler.cpp">
+			</File>
+			<File
 				RelativePath="..\..\stringtokenizer.cpp">
 			</File>
 			<File
 				RelativePath="..\..\strtmesg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\graphics\surface.cpp">
+			</File>
+			<File
+				RelativePath="..\..\graphics\surface2png.cpp">
 			</File>
 			<File
 				RelativePath="..\..\terraintype.cpp">
@@ -197,6 +233,13 @@
 			<File
 				RelativePath="..\..\vehicletype.cpp">
 			</File>
+			<Filter
+				Name="loki"
+				Filter="">
+				<File
+					RelativePath="..\..\libs\loki\SmallObj.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

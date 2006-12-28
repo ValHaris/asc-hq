@@ -24,6 +24,7 @@
 #include "textfiletags.h"
 #include "textfile_evaluation.h"
 #include "overviewmapimage.h"
+#include "graphics/blitter.h"
 
 const char*  cbodenarten[cbodenartennum+1]  = {"shallow water"       ,
                                              "normal lowland",
@@ -113,10 +114,17 @@ TerrainType::TerrainType()
 
 void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
 {
+   Surface* img;
    if ( bi_pict == -1 )
-      s.Blit ( image, pos);
+      img = &image;
    else 
-      s.Blit ( GraphicSetManager::Instance().getPic( bi_pict), pos );
+      img = &GraphicSetManager::Instance().getPic( bi_pict);
+
+   megaBlitter<ColorTransform_None, 
+               ColorMerger_AlphaOverwrite, 
+               SourcePixelSelector_Plain,
+               TargetPixelSelector_All>
+            (*img,s,pos,nullParam,nullParam,nullParam,nullParam);
 }
 
 
@@ -184,6 +192,87 @@ void TerrainType::MoveMalus::write ( tnstream& stream ) const
      stream.writeInt ( at(m) );
 }
 
+void TerrainType::Weather::read ( tnstream& stream )
+{
+   read( stream, terrain_version );
+}
+
+
+void TerrainType::Weather::read ( tnstream& stream, int version )
+{
+   bool loadImage = true;
+   if (version <=2 ) {
+      loadImage = stream.readInt();
+
+      for ( int j = 1; j < 8; j++ )
+         stream.readInt(); // pgbt->picture[j]
+
+      for ( int j = 0; j < 8; j++ )
+         stream.readInt(); // pgbt->direcpict[j] = (void*)
+   }
+
+   if ( version == 1 ) {
+      stream.readInt(); //dummy1
+      defensebonus = stream.readWord();
+      attackbonus = stream.readWord();
+      basicjamming = stream.readChar();
+   } else {
+      defensebonus = stream.readInt();
+      attackbonus = stream.readInt();
+      basicjamming = stream.readInt();
+   }
+   int move_maluscount = stream.readChar();
+   stream.readInt(); // pgbt->movemalus = (char*)
+   stream.readInt(); // pgbt->terraintype
+   stream.readInt(); // bool readQuickView
+
+   art.read ( stream );
+
+   bi_pict = stream.readInt();
+   for ( int j = 1; j < 6; j++ )
+      stream.readInt(); //pgbt->bi_picture[j] =
+
+   move_malus.read( stream, minmalq, move_maluscount );
+
+/*
+   for ( j=0; j<8 ;j++ )
+      if ( pgbt->picture[j] )
+         if ( pgbt->bi_picture[j] == -1 ) {
+            pgbt->picture[j] = asc_malloc ( fieldsize );
+            stream.readdata ( pgbt->picture[j], fieldsize );
+            } else
+               loadbi3pict_double ( pgbt->bi_picture[j],
+                                    &pgbt->picture[j],
+                                    CGameOptions::Instance()->bi3.interpolate.terrain );
+
+*/
+   if ( loadImage )
+      if ( bi_pict == -1 )
+         image.read ( stream );
+}
+
+void TerrainType::Weather::write ( tnstream& stream ) const
+{
+   stream.writeInt ( defensebonus );
+   stream.writeInt ( attackbonus );
+   stream.writeInt ( basicjamming );
+   stream.writeChar ( 0 ); // was: movemalus count
+   stream.writeInt ( 1 );
+   stream.writeInt ( 1 );
+   stream.writeInt ( 0); // was: quickview
+   art.write ( stream );
+
+
+   stream.writeInt ( bi_pict );
+   for ( int m = 1; m< 6; m++ )
+      stream.writeInt ( -1 );
+
+   move_malus.write ( stream );
+
+   if ( bi_pict == -1 )
+      image.write ( stream );
+}
+
 
 void TerrainType::read( tnstream& stream )
 {
@@ -205,105 +294,44 @@ void TerrainType::read( tnstream& stream )
       for ( int i=0; i<cwettertypennum ;i++ ) {
          if ( ___loadWeather[i] ) {
             weather[i] = new TerrainType::Weather ( this );
-            Weather* pgbt = weather[i];
-
-            bool loadImage = true;
-            if (version <=2 ) {
-               loadImage = stream.readInt();
-
-               for ( int j = 1; j < 8; j++ )
-                  stream.readInt(); // pgbt->picture[j]
-
-               for ( int j = 0; j < 8; j++ )
-                  stream.readInt(); // pgbt->direcpict[j] = (void*)
-            }
-
-            if ( version == 1 ) {
-               stream.readInt(); //dummy1
-               pgbt->defensebonus = stream.readWord();
-               pgbt->attackbonus = stream.readWord();
-               pgbt->basicjamming = stream.readChar();
-            } else {
-               pgbt->defensebonus = stream.readInt();
-               pgbt->attackbonus = stream.readInt();
-               pgbt->basicjamming = stream.readInt();
-            }
-            int move_maluscount = stream.readChar();
-            stream.readInt(); // pgbt->movemalus = (char*)
-            stream.readInt(); // pgbt->terraintype
-            stream.readInt(); // bool readQuickView
-
-            pgbt->art.read ( stream );
-
-            pgbt->bi_pict = stream.readInt();
-            for ( int j = 1; j < 6; j++ )
-               stream.readInt(); //pgbt->bi_picture[j] =
-
-            pgbt->move_malus.read( stream, minmalq, move_maluscount );
-
-/*
-            for ( j=0; j<8 ;j++ )
-               if ( pgbt->picture[j] )
-                  if ( pgbt->bi_picture[j] == -1 ) {
-                     pgbt->picture[j] = asc_malloc ( fieldsize );
-                     stream.readdata ( pgbt->picture[j], fieldsize );
-                   } else
-                      loadbi3pict_double ( pgbt->bi_picture[j],
-                                           &pgbt->picture[j],
-                                           CGameOptions::Instance()->bi3.interpolate.terrain );
-
-*/
-            if ( loadImage )
-               if ( pgbt->bi_pict == -1 )
-                  pgbt->image.read ( stream );
-
+            weather[i]->read( stream, version );
          } else
             weather[i] = NULL;
-
 
       } /* endfor */
 
    } else
       throw tinvalidversion ( stream.getDeviceName(), terrain_version, version );
+
+   /*
+   if ( version >= 5 ) {
+      filename = stream.readString();
+      location = stream.readString();
+   }
+   */
 }
 
 
 void TerrainType::write ( tnstream& stream ) const
 {
-   int m;
-
    stream.writeInt ( terrain_version );
    stream.writeInt ( !name.empty() );
    stream.writeInt ( id );
-   for ( m = 0; m < cwettertypennum; m++ )
+   for ( int m = 0; m < cwettertypennum; m++ )
       stream.writeInt ( weather[m] != NULL );
 
-   for ( m = 0; m < 8; m++ )
+   for ( int m = 0; m < 8; m++ )
       stream.writeInt ( 0 ); // bbt->neighbouringfield[nf]
 
    stream.writeString( name );
-   for (int i=0;i<cwettertypennum ;i++ ) {
-     if ( weather[i] ) {
-        stream.writeInt ( weather[i]->defensebonus );
-        stream.writeInt ( weather[i]->attackbonus );
-        stream.writeInt ( weather[i]->basicjamming );
-        stream.writeChar ( 0 ); // was: movemalus count
-        stream.writeInt ( 1 );
-        stream.writeInt ( 1 );
-        stream.writeInt ( 0); // was: quickview
-        weather[i]->art.write ( stream );
+   for ( int i = 0; i < cwettertypennum ; i++ ) 
+      if ( weather[i] ) 
+         weather[i]->write( stream );
 
-
-        stream.writeInt ( weather[i]->bi_pict );
-        for ( m = 1; m< 6; m++ )
-           stream.writeInt ( -1 );
-
-        weather[i]->move_malus.write ( stream );
-
-        if ( weather[i]->bi_pict == -1 )
-           weather[i]->image.write ( stream );
-     }
-   }
+   /*
+   stream.writeString(filename);
+   stream.writeString(location);
+   */
 }
 
 

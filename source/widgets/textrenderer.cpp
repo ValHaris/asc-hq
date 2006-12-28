@@ -17,9 +17,9 @@
 
 
 
+#include <boost/regex.hpp>
 #include <pglabel.h>
 #include <pgimage.h>
-#include <boost/regex.hpp>
 
 #include "../global.h"
 

@@ -37,7 +37,7 @@ class SoundList {
     static SoundList* instance;
 public:
     static SoundList& getInstance();
-    enum Sample { shooting, unitExplodes, buildingCollapses, moving, menu_ack, conquer_building, repair, refuel };
+    enum Sample { shooting, unitExplodes, buildingCollapses, moving, menu_ack, conquer_building, repair, refuel, jumpdrive };
 
     static void init( );
     Sound* playSound ( Sample snd, int subType = 0, bool looping = false, const ASCString& label = "" );

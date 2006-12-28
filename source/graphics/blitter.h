@@ -1744,6 +1744,13 @@ class SourcePixelSelector_Rectangle: public SourcePixelSelector_Plain<pixelsize>
       SourcePixelSelector_Rectangle() : x(0),y(0),x1(0),y1(0),w(0),h(0)
       {}
       ;
+public:
+
+      SourcePixelSelector_Rectangle( const SDLmm::SRect& rect ) : x(0),y(0),x1(0),y1(0),w(0),h(0)
+      {
+         setSrcRectangle( rect );
+      }
+protected:
 
       int getWidth()
       {

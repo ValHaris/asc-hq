@@ -187,6 +187,8 @@ void SoundList::initialize(  )
    readLine( pc, "REFUEL", SoundList::refuel );
    dataLoaderTicker();
    readLine( pc, "REPAIR", SoundList::repair );
+   dataLoaderTicker();
+   readLine( pc, "JUMPDRIVE", SoundList::jumpdrive );
 
 }
 

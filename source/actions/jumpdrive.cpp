@@ -25,6 +25,7 @@
 #include "../spfst.h"
 #include "../viewcalculation.h"
 #include "../replay.h"
+#include "../soundlist.h"
 
 bool JumpDrive::available( const Vehicle* subject )
 {
@@ -92,6 +93,8 @@ bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination )
    subject->getMap()->getField(destination)->vehicle = subject;
    evaluateviewcalculation( subject->getMap() );
    
+   SoundList::getInstance().playSound ( SoundList::jumpdrive, 0 );
+
    logtoreplayinfo( rpl_jump , subject->networkid, destination.x, destination.y );
    
    return true;

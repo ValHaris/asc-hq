@@ -155,9 +155,6 @@
 				RelativePath="..\..\itemrepository.cpp">
 			</File>
 			<File
-				RelativePath="..\..\messaginghub.cpp">
-			</File>
-			<File
 				RelativePath="..\..\objects.cpp">
 			</File>
 			<File
@@ -173,9 +170,6 @@
 				RelativePath="..\..\stdio-errorhandler.cpp">
 			</File>
 			<File
-				RelativePath="..\..\graphics\surface.cpp">
-			</File>
-			<File
 				RelativePath="..\..\graphics\surface2png.cpp">
 			</File>
 			<File
@@ -184,13 +178,6 @@
 			<File
 				RelativePath="..\weaponguide.cpp">
 			</File>
-			<Filter
-				Name="Loki"
-				Filter="">
-				<File
-					RelativePath="..\..\libs\loki\SmallObj.cpp">
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"

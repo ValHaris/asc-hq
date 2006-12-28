@@ -496,8 +496,16 @@ bool Surface::isTransparent( SDLmm::Color col ) const
 {
    if ( flags() & SDL_SRCCOLORKEY ) 
       return (col & (GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask())) == GetPixelFormat().colorkey();
-   else
-      return false;
+   else {
+      if ( GetPixelFormat().BitsPerPixel() == 8 )
+         return false;
+      else {
+         if ( ((col & GetPixelFormat().Amask()) >> GetPixelFormat().Ashift()) < opaque/2)
+            return true;
+         else
+            return false;
+      }
+   }
 }
 
 Surface::~Surface()

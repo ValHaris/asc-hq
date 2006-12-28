@@ -67,6 +67,7 @@
      bool picAvail ( int num ) const;
      int  getMode( int num ) const;
      Surface& getPic ( int num );
+     void setPic( int num, Surface& pic );
      const OverviewMapImage* getQuickView( int id );
      friend struct Loki::CreateUsingNew<GraphicSetManager_Base>;
      // friend struct CreateUsingNew;

@@ -93,8 +93,8 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    if ( h >= s.h()-y1 )
       h = s.h() -y1 ;
     
-   if ( s.GetPixelFormat().BytesPerPixel () != 4 ) {
-      errorMessage("Only 32 Bit images are supported for PNG writing");
+   if ( s.GetPixelFormat().BytesPerPixel() != 4 && s.GetPixelFormat().BytesPerPixel() != 1 ) {
+      errorMessage("Only 8 Bit and 32 Bit images are supported for PNG writing");
       return;
    } 
 
@@ -110,7 +110,28 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    png_infop info_ptr = png_create_info_struct(png_ptr);
    png_init_io(png_ptr, fp);
 
-   png_set_IHDR(png_ptr, info_ptr, w, h, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+   png_color my_palette[256];
+
+   if ( s.GetPixelFormat().BytesPerPixel() == 4 ){
+      png_set_IHDR(png_ptr, info_ptr, w, h, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+   } else {
+      png_set_IHDR(png_ptr, info_ptr, w, h, 8, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+
+      SDL_Palette* sdlpal = s.GetPixelFormat().palette();
+      if ( sdlpal->ncolors > 256 ) {
+         errorMessage("A palettes with more than 256 colors is not supported"); 
+         return;
+      }
+
+      for ( int c = 0; c < sdlpal->ncolors; ++c ) {
+         my_palette[c].red = sdlpal->colors[c].r;
+         my_palette[c].green = sdlpal->colors[c].g;
+         my_palette[c].blue = sdlpal->colors[c].b;
+      }
+
+      png_set_PLTE(png_ptr, info_ptr, my_palette, sdlpal->ncolors);
+   }
 
    time_t          gmt;
    png_time        mod_time;
@@ -131,10 +152,18 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    
    char* pix = (char*)s.pixels();
    for ( int y = y1; y < y1 + h; ++y ) {
-      Uint32* srcpix = (Uint32*)(pix + y * s.pitch());
-      srcpix += x1;
-      for ( int x = 0; x < w; ++x ) 
-         s.GetPixelFormat().GetRGBA( srcpix[x], linebuf[x*4],linebuf[x*4+1],linebuf[x*4+2],linebuf[x*4+3] ); 
+      Uint32* srcpix32 = (Uint32*)(pix + y * s.pitch());
+      srcpix32 += x1;
+      Uint8* srcpix8 = (Uint8*)(pix + y * s.pitch());
+      srcpix8 += x1;
+      if ( s.GetPixelFormat().BytesPerPixel() == 4) {
+         for ( int x = 0; x < w; ++x ) 
+            s.GetPixelFormat().GetRGBA( srcpix32[x], linebuf[x*4],linebuf[x*4+1],linebuf[x*4+2],linebuf[x*4+3] ); 
+      } else {
+         if ( s.GetPixelFormat().BytesPerPixel() == 1)
+            for ( int x = 0; x < w; ++x ) 
+               linebuf[x] = srcpix8[x];
+      }
       png_write_row(png_ptr, (png_bytep) linebuf);
    }
    delete[] linebuf;

@@ -13,7 +13,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2">
@@ -72,7 +72,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2">
@@ -200,6 +200,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\explosivemines.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\fieldimageloader.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\dialogs\fileselector.cpp">
@@ -551,6 +554,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\playersetup.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\productionanalysis.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
