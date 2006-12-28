@@ -27,7 +27,7 @@
 #include "../fieldimageloader.h"
 
 template<typename T, typename U>
-void eraseElement( T& t, U& u)
+void eraseElement( T& t, const U& u)
 {
    if ( t.find( u ) != t.end() )
       t.erase( t.find(u) );
@@ -195,8 +195,8 @@ class ExchangeGraphics: public ASC_PG_Dialog
          (new PG_Button( this, PG_Rect( 10, 280, 180, 30), "Replacement Summary"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::summary ));
          (new PG_Button( this, PG_Rect( 10, 320, 180, 30), "Close"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::close ));
 
-         cursorMoved.connect( SigC::slot( *this, ExchangeGraphics::newCursorPos ));
-         updateFieldInfo.connect( SigC::slot( *this, ExchangeGraphics::newCursorPos ));
+         cursorMoved.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));
+         updateFieldInfo.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));
    
          newCursorPos();
 

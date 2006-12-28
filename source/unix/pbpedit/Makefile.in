@@ -70,7 +70,8 @@ nodist_asc_pbpedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
 	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
 	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT)
+	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
+	fieldimageloader.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -256,7 +257,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp clipboard.cpp
+gameevent_dialogs.cpp clipboard.cpp fieldimageloader.cpp
 
 asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
@@ -355,6 +356,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmain.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmisc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edselfnt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldimageloader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevent_dialogs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameeventsystem.Po@am__quote@

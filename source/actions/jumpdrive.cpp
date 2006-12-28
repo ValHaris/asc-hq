@@ -25,7 +25,7 @@
 #include "../spfst.h"
 #include "../viewcalculation.h"
 #include "../replay.h"
-#include "../soundlist.h"
+#include "../soundList.h"
 
 bool JumpDrive::available( const Vehicle* subject )
 {

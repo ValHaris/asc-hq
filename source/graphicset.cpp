@@ -67,7 +67,7 @@ Surface& GraphicSetManager_Base :: getPic ( int num )
       return activeSet->image[num];
 }
 
-void GraphicSetManager_Base :: setPic( int num, Surface& pic )
+void GraphicSetManager_Base :: setPic( int num, Surface pic )
 {
    activeSet->image[num] = pic;
 }

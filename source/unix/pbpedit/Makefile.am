@@ -21,7 +21,7 @@ terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp clipboard.cpp
+gameevent_dialogs.cpp clipboard.cpp fieldimageloader.cpp
 
 asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \

@@ -76,7 +76,7 @@ nodist_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) \
 	groupfile.$(OBJEXT) guidegenerator.$(OBJEXT) \
 	infopage.$(OBJEXT) overviewmapimage.$(OBJEXT) \
 	iconrepository.$(OBJEXT) messaginghub.$(OBJEXT) \
-	objects.$(OBJEXT) unitset.$(OBJEXT)
+	objects.$(OBJEXT) unitset.$(OBJEXT) fieldimageloader.$(OBJEXT)
 asc_weaponguide_OBJECTS = $(nodist_asc_weaponguide_OBJECTS)
 asc_weaponguide_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/sdl/libsdl.la $(am__DEPENDENCIES_1) \
@@ -260,7 +260,7 @@ nodist_asc_mount_SOURCES = mount.cpp        basestrm.cpp simplestream.cpp misc.c
 #asc_makegfx_SOURCES     = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp
 #asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 #asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-nodist_asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp objects.cpp unitset.cpp
+nodist_asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp objects.cpp unitset.cpp fieldimageloader.cpp
 #asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 asc_mount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 asc_demount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
@@ -351,6 +351,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demount.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldimageloader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/groupfile.Po@am__quote@

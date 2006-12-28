@@ -73,13 +73,13 @@ nodist_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	clipboard.$(OBJEXT) resourceplacement.$(OBJEXT) \
 	resourceplacementdialog.$(OBJEXT) geometry.$(OBJEXT) \
 	guidimension.$(OBJEXT) unitset.$(OBJEXT) \
-	iconrepository.$(OBJEXT) overviewmapimage.$(OBJEXT) \
-	mapfield.$(OBJEXT) objects.$(OBJEXT) \
-	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
-	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
-	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
-	mapimageexport.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
-	windowing.$(OBJEXT)
+	fieldimageloader.$(OBJEXT) iconrepository.$(OBJEXT) \
+	overviewmapimage.$(OBJEXT) mapfield.$(OBJEXT) \
+	objects.$(OBJEXT) overviewmappanel.$(OBJEXT) \
+	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
+	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
+	cannedmessages.$(OBJEXT) mapimageexport.$(OBJEXT) \
+	mainscreenwidget.$(OBJEXT) windowing.$(OBJEXT)
 asc_mapedit_OBJECTS = $(nodist_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -274,7 +274,7 @@ stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
 textfile_evaluation.cpp containerbasetype.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
-geometry.cpp guidimension.cpp unitset.cpp \
+geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
@@ -377,6 +377,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmisc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edselfnt.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/explosivemines.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldimageloader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevent_dialogs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameeventsystem.Po@am__quote@

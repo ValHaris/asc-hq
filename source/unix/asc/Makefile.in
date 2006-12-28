@@ -59,20 +59,20 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
 	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
 	gamemap.$(OBJEXT) password.$(OBJEXT) replay.$(OBJEXT) \
-	research.$(OBJEXT) mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) \
-	dashboard.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
-	vehicle.$(OBJEXT) buildings.$(OBJEXT) \
-	networkinterface.$(OBJEXT) textfileparser.$(OBJEXT) \
-	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
-	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
-	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
-	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
-	containerbasetype.$(OBJEXT) messagedlg.$(OBJEXT) \
-	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
-	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
-	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
-	statisticdialog.$(OBJEXT) clipboard.$(OBJEXT) \
-	geometry.$(OBJEXT) guidimension.$(OBJEXT) \
+	research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
+	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
+	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
+	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
+	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
+	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
+	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
+	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
+	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
+	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
+	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
+	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
+	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
+	clipboard.$(OBJEXT) geometry.$(OBJEXT) guidimension.$(OBJEXT) \
 	guiiconhandler.$(OBJEXT) guifunctions.$(OBJEXT) \
 	iconrepository.$(OBJEXT) gamedialog.$(OBJEXT) \
 	infopopup.$(OBJEXT) overviewmapimage.$(OBJEXT) \
@@ -273,7 +273,7 @@ loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp \
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp stdio-errorhandler.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
-gamemap.cpp password.cpp replay.cpp research.cpp \
+gamemap.cpp password.cpp replay.cpp research.cpp fieldimageloader.cpp \
 mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
@@ -385,6 +385,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/explosivemines.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldimageloader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamedlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevent_dialogs.Po@am__quote@
