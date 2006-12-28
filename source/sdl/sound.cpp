@@ -70,7 +70,9 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    if( off )
       return;
 
-   displayLogMessage(0,"Initializing sound device. If this hangs, you can run ASC without sound (asc -q)");
+   displayLogMessage(0,"Initializing sound device. If this hangs, run ASC without sound (asc -q)\n");
+   displayLogMessage(0,"Step 1/3 (SDL_Init)...");
+
    if ( SDL_Init ( SDL_INIT_AUDIO ) < 0 ) {
       warning("Couldn't initialize SDL audio interface !");
       off = true;
@@ -78,9 +80,8 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
       return;
    }
 
-   displayLogMessage(0,"\nInitializing decoders (SDL_sound)... ");
+   displayLogMessage(0,"ok\nStep 2/3 (SDL_Sound Sound_Init)...");
    Sound_Init();
-   displayLogMessage(0,"success\n");
    
    sdl_initialized = true;
 
@@ -88,6 +89,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    Uint16 audio_format = MIX_DEFAULT_FORMAT;
    int audio_channels = 2;
 
+   displayLogMessage(0,"ok\nStep 3/3 (SDL_Mixer Mix_OpenAudio)...");
    if ( Mix_OpenAudio ( audio_rate, audio_format, audio_channels, 2048 ) < 0 ) {
       mix_initialized = false;
       warning("Couldn't initialize SDL_mixer !");
@@ -107,6 +109,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
       Mix_ChannelFinished( channelFinishedCallback );
 
    }
+   displayLogMessage(0,"ok\nSound system successfully initialized!\n");
 }
 
 
