@@ -34,7 +34,8 @@ UninstPage instfiles
 
 ;--------------------------------
 
-LicenseData=licdata.txt
+LicenseData licdata.txt
+
 
 ; The stuff to install
 Section "ASC main program (required)"
