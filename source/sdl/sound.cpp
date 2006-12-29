@@ -74,6 +74,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    displayLogMessage(0,"Step 1/3 (SDL_Init)...");
 
    if ( SDL_Init ( SDL_INIT_AUDIO ) < 0 ) {
+      displayLogMessage(0,"failed, disabling sound\n");
       warning("Couldn't initialize SDL audio interface !");
       off = true;
       sdl_initialized = false;
@@ -81,7 +82,13 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    }
 
    displayLogMessage(0,"ok\nStep 2/3 (SDL_Sound Sound_Init)...");
-   Sound_Init();
+   if (!Sound_Init()) {
+      displayLogMessage(0,"failed, disabling sound\n");
+      warning("Couldn't initialize SDL_sound !");
+      off = true;
+      sdl_initialized = false;
+      return;
+   }
    
    sdl_initialized = true;
 
@@ -91,6 +98,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
 
    displayLogMessage(0,"ok\nStep 3/3 (SDL_Mixer Mix_OpenAudio)...");
    if ( Mix_OpenAudio ( audio_rate, audio_format, audio_channels, 2048 ) < 0 ) {
+      displayLogMessage(0,"failed, disabling sound\n");
       mix_initialized = false;
       warning("Couldn't initialize SDL_mixer !");
       off = true;
@@ -108,8 +116,8 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
 
       Mix_ChannelFinished( channelFinishedCallback );
 
+      displayLogMessage(0,"ok\nSound system successfully initialized!\n");
    }
-   displayLogMessage(0,"ok\nSound system successfully initialized!\n");
 }
 
 

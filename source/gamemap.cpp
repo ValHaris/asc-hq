@@ -67,9 +67,16 @@ unsigned int RandomGenerator::getRandomValue (int lowerLimit, int upperLimit){
 
 
 
-OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initialized(false), secondMapReady(false), completed(false), x(0),y(0)
+OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initialized(false), secondMapReady(false), completed(false), connected(false), x(0),y(0)
 {
-   idleEvent.connect( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
+}
+
+void OverviewMapHolder :: connect()
+{
+   if ( !connected ) {
+      idleEvent.connect ( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
+      connected = true;
+   }
 }
 
 
@@ -269,6 +276,7 @@ GameMap::Campaign::Campaign()
 
 void GameMap :: guiHooked()
 {
+   overviewMapHolder.connect();
    dialogsHooked = true;
 }
 

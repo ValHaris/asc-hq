@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <boost/regex.hpp>
 
 #include "../paradialog.h"
 #include "fileselector.h"
@@ -25,6 +26,7 @@
 #include "exchangegraphics.h"
 #include "../widgets/textrenderer.h"
 #include "../fieldimageloader.h"
+#include "../itemrepository.h"
 
 template<typename T, typename U>
 void eraseElement( T& t, const U& u)
@@ -75,6 +77,23 @@ class ExchangeGraphics: public ASC_PG_Dialog
          return "O: " + o->filename;
       }
 
+      void setnewgfx ( int id, const ASCString& filename)
+      {
+         if ( orgTerrainGFX.find( id ) == orgTerrainGFX.end() )
+            orgTerrainGFX[id] = GraphicSetManager::Instance().getPic( id );
+
+         GraphicSetManager::Instance().setPic( id, loadASCFieldImage ( filename ) );
+         newGFX[id] = filename;
+      }
+
+      void setnewimage( TerrainType::Weather* trr, const ASCString& filename )
+      {
+         if ( orgTerrainSurf.find( trr ) == orgTerrainSurf.end() )
+            orgTerrainSurf[trr] = trr->image;
+
+         trr->image = loadASCFieldImage ( filename );
+         newSurfaces[getIdentifier(trr)] = filename;
+      }
 
       bool apply()
       { 
@@ -83,19 +102,9 @@ class ExchangeGraphics: public ASC_PG_Dialog
             try {
                if ( selectedType->GetSelectedItemIndex() == 0 ) {
                   if ( fld->typ->bi_pict >= 0 ) {
-                     if ( orgTerrainGFX.find( fld->typ->bi_pict ) == orgTerrainGFX.end() )
-                        orgTerrainGFX[fld->typ->bi_pict] = GraphicSetManager::Instance().getPic( fld->typ->bi_pict );
-
-                     GraphicSetManager::Instance().setPic( fld->typ->bi_pict, loadASCFieldImage ( filename->GetText() ) );
-
-                     newGFX[fld->typ->bi_pict] = filename->GetText();
+                     setnewgfx( fld->typ->bi_pict, filename->GetText() );
                   } else {
-                     if ( orgTerrainSurf.find( fld->typ ) == orgTerrainSurf.end() )
-                        orgTerrainSurf[fld->typ] = fld->typ->image;
-
-                     fld->typ->image = loadASCFieldImage ( filename->GetText() );
-
-                     newSurfaces[getIdentifier(fld->typ)] = filename->GetText();
+                     setnewimage( fld->typ, filename->GetText() );
                   }
                }
             }
@@ -120,17 +129,70 @@ class ExchangeGraphics: public ASC_PG_Dialog
          if ( fld ) {
             if ( selectedType->GetSelectedItemIndex() == 0 ) {
                if ( fld->typ->bi_pict >= 0 ) {
-                  GraphicSetManager::Instance().setPic( fld->typ->bi_pict, orgTerrainGFX[fld->typ->bi_pict] );
-                  eraseElement( newGFX, fld->typ->bi_pict );
+                  if ( orgTerrainGFX.find(fld->typ->bi_pict) != orgTerrainGFX.end() ) {
+                     GraphicSetManager::Instance().setPic( fld->typ->bi_pict, orgTerrainGFX[fld->typ->bi_pict] );
+                     eraseElement( newGFX, fld->typ->bi_pict );
+                  }
                } else {
-                  fld->typ->image = orgTerrainSurf[fld->typ];
-                  eraseElement( newSurfaces, getIdentifier(fld->typ) );
+                  if ( orgTerrainSurf.find(fld->typ) != orgTerrainSurf.end() ) {
+                     fld->typ->image = orgTerrainSurf[fld->typ];
+                     eraseElement( newSurfaces, getIdentifier(fld->typ) );
+                  }
                }
             }
          }
          repaintMap();
          return true;
       }
+
+      bool readFile()
+      {
+         ASCString filename = selectFile("*.txt", true );
+         if ( filename.empty() )
+            return false;
+
+         try {
+            tnfilestream stream ( filename, tnstream::reading );
+            bool finished = false;
+            while ( !finished ) {
+
+               ASCString line;
+               finished = !stream.readTextString( line );
+
+               boost::smatch what;
+
+               static boost::regex gfx( "^GFX+(\\d+) -> (\\S+)");
+               if( boost::regex_match( line, what, gfx)) {
+                  ASCString ids = what[1];
+                  int id = atoi( ids.c_str() );
+
+                  ASCString name = what[2];
+                  setnewgfx( id, name );
+               }
+
+               static boost::regex trr( "^(T: \\S+) -> (\\S+)");
+               if( boost::regex_match( line, what, trr)) {
+                  ASCString file = what[1];
+
+                  ASCString name = what[2];
+
+                  for ( int i = 0; i < terrainTypeRepository.getNum(); ++i ) {
+                     TerrainType* t = terrainTypeRepository.getObject_byPos(i);
+                     for ( int w = 0; w < cwettertypennum; ++w)
+                        if ( t->weather[w] )
+                           if ( getIdentifier(t->weather[w]) == file )
+                              setnewimage( t->weather[w], name );
+                  }
+               }
+            }
+         }
+         catch(...) {
+            errorMessage("an error occured");
+         }
+         repaintMap();
+         return true;
+      }
+
 
       bool summary()
       {
@@ -158,6 +220,10 @@ class ExchangeGraphics: public ASC_PG_Dialog
             ASCString s = "T: ID=" + ASCString::toString( fld->typ->terraintype->id );
             if ( fld->typ->bi_pict >= 0 )
                s += " GFX=" + ASCString::toString( fld->typ->bi_pict );
+
+            if ( newGFX.find( fld->typ->bi_pict ) != newGFX.end() || newSurfaces.find( getIdentifier(fld->typ) ) != newSurfaces.end() )
+               s += " (R) ";
+
             terrain->SetText( s );
          }
 
@@ -176,7 +242,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
 
    public:
-      ExchangeGraphics() : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - dlg_width, -1, dlg_width, 370 ), "Exchange Graphics"), filename(NULL), imageNum(NULL),terrain(NULL), object(NULL), selectedType(NULL)
+      ExchangeGraphics() : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - dlg_width, -1, dlg_width, 410 ), "Exchange Graphics"), filename(NULL), imageNum(NULL),terrain(NULL), object(NULL), selectedType(NULL)
       {
 
          selectedType = new DropDownSelector( this, PG_Rect( 10, 30, 180, 25 ));
@@ -193,7 +259,8 @@ class ExchangeGraphics: public ASC_PG_Dialog
          (new PG_Button( this, PG_Rect( 10, 200, 180, 30), "Apply"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::apply ));
          (new PG_Button( this, PG_Rect( 10, 240, 180, 30), "Restore Original"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::restore ));
          (new PG_Button( this, PG_Rect( 10, 280, 180, 30), "Replacement Summary"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::summary ));
-         (new PG_Button( this, PG_Rect( 10, 320, 180, 30), "Close"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::close ));
+         (new PG_Button( this, PG_Rect( 10, 320, 180, 30), "Load from file"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::readFile ));
+         (new PG_Button( this, PG_Rect( 10, 360, 180, 30), "Close"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::close ));
 
          cursorMoved.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));
          updateFieldInfo.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));

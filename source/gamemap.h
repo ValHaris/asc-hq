@@ -125,6 +125,7 @@ class OverviewMapHolder : public SigC::Object {
       bool initialized;
       bool secondMapReady;
       bool completed;
+      bool connected;
       int x;
       int y;
       Surface createNewSurface();
@@ -152,6 +153,7 @@ class OverviewMapHolder : public SigC::Object {
             
       void startUpdate();
       void clear();
+      void connect();
 };
 
 
