@@ -26,7 +26,7 @@ void StdIoErrorHandler::printStderr( const ASCString& msg )
 void StdIoErrorHandler::messageLogger( const ASCString& msg, int level )
 {
    // std::cout << "L" << level << ": " << msg << "\n";
-   std::cout << msg;
+   std::cout << msg << std::flush;
 }
 
 StdIoErrorHandler::StdIoErrorHandler()

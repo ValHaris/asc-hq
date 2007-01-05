@@ -163,18 +163,18 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
                static boost::regex gfx( "^GFX+(\\d+) -> (\\S+)");
                if( boost::regex_match( line, what, gfx)) {
-                  ASCString ids = what[1];
+                  ASCString ids ( what[1] );
                   int id = atoi( ids.c_str() );
 
-                  ASCString name = what[2];
+                  ASCString name ( what[2] );
                   setnewgfx( id, name );
                }
 
                static boost::regex trr( "^(T: \\S+) -> (\\S+)");
                if( boost::regex_match( line, what, trr)) {
-                  ASCString file = what[1];
+                  ASCString file ( what[1] );
 
-                  ASCString name = what[2];
+                  ASCString name ( what[2] );
 
                   for ( int i = 0; i < terrainTypeRepository.getNum(); ++i ) {
                      TerrainType* t = terrainTypeRepository.getObject_byPos(i);
