@@ -163,7 +163,7 @@ void Menu::setup()
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
    addbutton ( "~C~argo Summary", ua_cargosummary );
-   addbutton ( "Unit Summary", ua_unitsummary );
+   addbutton ( "Unit Summary\tctrl-f", ua_unitsummary );
    currentMenu->addSeparator();
    addbutton ( "Unit Production Analysis", ua_unitproductionanalysis );
    
@@ -751,6 +751,11 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
    if ( mod & KMOD_CTRL ) {
       switch ( key->keysym.sym ) {
+
+            case SDLK_f:
+               execUserAction_ev ( ua_unitsummary );
+               return true;
+
             case SDLK_l:
                execUserAction_ev ( ua_loadgame );
                return true;

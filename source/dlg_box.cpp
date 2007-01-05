@@ -1890,10 +1890,12 @@ void displaymessage( const ASCString& text, int num  )
 
    bool displayInternally = true;
 
+   /*
    if ( num == 2 )
       displayLogMessage ( 0, "fatal error" + text + "\n" );
    else
       displayLogMessage ( 0, text + "\n" );
+      */
 
 
    #ifndef NoStdio

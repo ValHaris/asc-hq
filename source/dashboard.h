@@ -35,6 +35,7 @@ class Building;
 class SingleWeapon;
 class MapDisplay;
 class GameMap;
+class tfield;
 
 class DashboardPanel : public LayoutablePanel {
    private:
@@ -56,7 +57,7 @@ class DashboardPanel : public LayoutablePanel {
 
    public:
       void eval();
-      void showUnitData( Vehicle* veh, Building* bld, bool redraw = false );
+      void showUnitData( Vehicle* veh, Building* bld, tfield* fld, bool redraw = false );
 
 };
 

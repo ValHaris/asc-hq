@@ -790,6 +790,8 @@ void tspfldloaders::readfields ( void )
       l++ ;
    }  while (l < cnt1);
 
+   spfld->overviewMapHolder.connect();
+
 }
 
 

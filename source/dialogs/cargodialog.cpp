@@ -418,7 +418,7 @@ class CargoDialog : public Panel
          }
          
          if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
-            mainScreenWidget->getUnitInfoPanel()->showUnitData( unit, NULL, true );
+            mainScreenWidget->getUnitInfoPanel()->showUnitData( unit, NULL, NULL, true );
       }
 
       void updateLoadMeter()
@@ -494,7 +494,7 @@ class CargoDialog : public Panel
          if ( cargoWidget ) {
             cargoWidget->redrawAll();
             if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() )
-               mainScreenWidget->getUnitInfoPanel()->showUnitData( cargoWidget->getMarkedUnit(), NULL, true );
+               mainScreenWidget->getUnitInfoPanel()->showUnitData( cargoWidget->getMarkedUnit(), NULL, NULL, true );
             
             checkStoringPosition( cargoWidget->getMarkedUnit() );
          }

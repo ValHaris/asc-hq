@@ -317,21 +317,21 @@ void DashboardPanel::eval()
 
    if ( mc.valid() && fld ) {
       if ( veh && fieldvisiblenow( fld, actmap->getPlayerView() ) ) {
-         showUnitData( veh, NULL );
+         showUnitData( veh, NULL, fld );
       } else {
 
          Building* bld = fld->building;
          if ( bld && fieldvisiblenow( fld, actmap->getPlayerView() ) ) 
-            showUnitData( NULL, bld );
+            showUnitData( NULL, bld, fld );
          else
-            showUnitData( NULL, NULL );
+            showUnitData( NULL, NULL, fld );
       }
    }
 
    // PG_Application::SetBulkMode(false);
    // Redraw(true);
 }
-void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
+void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bool redraw )
 {
    int weaponsDisplayed = 0;
    this->veh = veh;
@@ -394,7 +394,17 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, bool redraw )
          setLabelText( "armor", "" );
          setLabelText( "unittypename", "" );
          setLabelText( "unitname", "" );
-         setBargraphValue( "unitdamage", 0  );
+         bool objectFound = false;
+         if ( fld && fld->objects.size() ) {
+            for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+               if ( i->typ->armor > 0 ) {
+                  setBargraphValue( "unitdamage", float(100-i->damage) / 100  );
+                  objectFound = true;
+                  break;
+               }
+         } 
+         if ( !objectFound ) 
+            setBargraphValue( "unitdamage", 0  );
          setLabelText( "unitstatus", "" );
       }
    
