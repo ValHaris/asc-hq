@@ -39,6 +39,7 @@
        StringTokenizer ( const ASCString& _str, const char* delimitter_ );
        ASCString getNextToken ( );
        ASCString getRemaining ( );
+       void skipTill(char endchar );
  };
 
   class StringSplit {

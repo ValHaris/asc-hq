@@ -57,6 +57,12 @@ int StringTokenizer::CharSpace ( char c )
   } while ( true );
 }
 
+void StringTokenizer::skipTill(char endchar )
+{
+   const char* s = str.c_str();
+   while ( i < str.length() && s[i] != endchar )
+      ++i;
+}
 
 ASCString StringTokenizer::getNextToken( )
 {

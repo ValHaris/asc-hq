@@ -963,7 +963,14 @@ IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_eq ( const Te
    StringTokenizer st ( entry.value, true );
    ASCString s = st.getNextToken();
    while ( !s.empty() ) {
-      ia.push_back ( atoi ( s.c_str() ));
+
+      /*
+      if ( s.find( ";") == 0 ) 
+         st.skipTill('\n');
+      else
+      */
+         ia.push_back ( atoi ( s.c_str() ));
+
       s = st.getNextToken();
    }
    return ia;

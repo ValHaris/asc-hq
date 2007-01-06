@@ -17,7 +17,7 @@
 
 #include "containerbasetype.h"
 #include "textfiletags.h"
-#include "stringtokenizer.h"
+// #include "stringtokenizer.h"
 #include "textfile_evaluation.h"
 #include "vehicletype.h"
 #include "graphics/blitter.h"

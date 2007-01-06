@@ -2986,6 +2986,7 @@ void transformMap ( )
    vector<int> objecttranslation;
    vector<int> terrainobjtranslation;
    vector<int> buildingtranslation;
+   vector<int> vehicletranslation;
    try {
       tnfilestream s ( filename, tnstream::reading );
 
@@ -2998,6 +2999,8 @@ void transformMap ( )
       pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
       pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
       pc.addIntegerArray ( "BuildingTranslation", buildingtranslation );
+      if ( pc.find( "VehicleTranslation" ))
+         pc.addIntegerArray ( "VehicleTranslation", vehicletranslation );
 
       delete tpg;
    }
@@ -3026,6 +3029,11 @@ void transformMap ( )
    }
 
    if ( buildingtranslation.size() % 2 ) {
+      displaymessage ( "Map Translation : buildingtranslation - Invalid number of entries ", 1);
+      return;
+   }
+
+   if ( vehicletranslation.size() % 2 ) {
       displaymessage ( "Map Translation : buildingtranslation - Invalid number of entries ", 1);
       return;
    }
@@ -3097,6 +3105,36 @@ void transformMap ( )
              }
 
    }
+
+   for( int p = 0; p < actmap->getPlayerCount(); ++p )
+      for ( Player::VehicleList::iterator i = actmap->getPlayer(p).vehicleList.begin(); i != actmap->getPlayer(p).vehicleList.end(); ++i) {
+          for ( int j = 0; j < vehicletranslation.size()/2; j++ )
+             if ( (*i)->typ->id == vehicletranslation[j*2] ) {
+                Vehicletype* vt = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2+1] );
+                if ( vt )
+                  (*i)->transform( vt );
+             }
+      }
+
+   // for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i )
+
+   tn_file_buf_stream s ( "out.txt", tnstream::writing );
+   for ( int j = 0; j < vehicletranslation.size()/2; j++ ) {
+      Vehicletype* vt1 = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2] );
+      Vehicletype* vt2 = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2+1] );
+      ASCString st = ASCString::toString( vehicletranslation[j*2] ) + " " + 
+                     ASCString::toString( vehicletranslation[j*2+1] );
+      
+
+      if ( vt1 ) {
+         st += " ; " + vt1->name;
+         if ( vt2 ) 
+            st += " -> " + vt2->name;
+      }
+
+      s.writeString( st + "\n" );
+   }
+
    calculateallobjects();
    displaymap();
 }
