@@ -1243,57 +1243,63 @@ int gamethread ( void* data )
    virtualscreenbuf.init();
 
 
-   {
-      StartupScreen sus( "title.jpg", dataLoaderTicker );
+   std::auto_ptr<StartupScreen> startupScreen ( new StartupScreen( "title.jpg", dataLoaderTicker ));
 
 
-      try {
-         loaddata( resolx, resoly, gtp->filename.c_str() );
-      }
-      catch ( ParsingError err ) {
-         errorMessage ( "Error parsing text file " + err.getMessage() );
-         return -1;
-      }
-      catch ( tfileerror err ) {
-         errorMessage ( "Error loading file " + err.getFileName() );
-         return -1;
-      }
-      catch ( ASCexception ) {
-         errorMessage ( "loading of game failed" );
-         return -1;
-      }
-      catch ( ThreadExitException ) {
-         displayLogMessage(0, "caught thread exiting exception, shutting down");
-         return -1;
-      }
+   try {
+      loaddata( resolx, resoly, gtp->filename.c_str() );
+   }
+   catch ( ParsingError err ) {
+      errorMessage ( "Error parsing text file " + err.getMessage() );
+      return -1;
+   }
+   catch ( tfileerror err ) {
+      errorMessage ( "Error loading file " + err.getFileName() );
+      return -1;
+   }
+   catch ( ASCexception ) {
+      errorMessage ( "loading of game failed" );
+      return -1;
+   }
+   catch ( ThreadExitException ) {
+      displayLogMessage(0, "caught thread exiting exception, shutting down");
+      return -1;
+   }
 
 #ifndef _WIN32_
-      // Windows/MSVC will catch access violations with this, which we don't to, because it makes our dump files useless.
-      catch ( ... ) {
-         fatalError ( "caught undefined exception" );
-      }
+   // Windows/MSVC will catch access violations with this, which we don't want to, because it makes our dump files useless.
+   catch ( ... ) {
+      fatalError ( "caught undefined exception" );
+   }
 #endif
 
 
-      displayLogMessage ( 5, "loaddata completed successfully.\n" );
-      dataLoaderTicker();
-      
-      displayLogMessage ( 5, "starting music..." );
-      startMusic();
-      displayLogMessage ( 5, " done \n" );
-      dataLoaderTicker();
-      
-      repaintDisplay.connect( repaintMap );
-      
-      mainScreenWidget = new ASC_MainScreenWidget( getPGApplication());
-      dataLoaderTicker();
-   }
+   displayLogMessage ( 5, "loaddata completed successfully.\n" );
+   dataLoaderTicker();
    
+   displayLogMessage ( 5, "starting music..." );
+   startMusic();
+   displayLogMessage ( 5, " done \n" );
+   dataLoaderTicker();
+   
+   repaintDisplay.connect( repaintMap );
+   
+   mainScreenWidget = new ASC_MainScreenWidget( getPGApplication());
+   dataLoaderTicker();
+
+   //! we are performing this the first time here while the startup logo is still active
+   if ( actmap && actmap->actplayer == -1 ) {
+      displayLogMessage ( 8, "Startup :: performing first next_turn..." );
+      next_turn();
+      displayLogMessage ( 8, "done.\n" );
+   }
+
    displayLogMessage ( 5, "entering outer main loop.\n" );
    do {
       try {
          if ( !actmap || actmap->xsize <= 0 || actmap->ysize <= 0 ) {
             displayLogMessage ( 8, "gamethread :: starting main menu.\n" );
+            startupScreen.reset();
             GameDialog::gameDialog();
          } else {
             if ( actmap->actplayer == -1 ) {
@@ -1309,6 +1315,7 @@ int gamethread ( void* data )
             displayLogMessage ( 4, "Spawning MainScreenWidget\n ");
 
             mainScreenWidget->Show();
+            startupScreen.reset();
 
             displayLogMessage ( 7, "Entering main event loop\n");
    

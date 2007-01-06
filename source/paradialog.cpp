@@ -268,29 +268,69 @@ ASC_PG_App& getPGApplication()
 
 
      
-StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : infoLabel(NULL), versionLabel(NULL), progressBar(NULL), fullscreenImage(NULL)
+StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : infoLabel(NULL), versionLabel(NULL), background(NULL), progressBar(NULL), fullscreenImage(NULL)
 {
    MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &StartupScreen::disp ));
    
    tnfilestream s ( filename, tnstream::reading );
-   fullscreenImage = IMG_Load_RW( SDL_RWFromStream( &s ), true );
-   if ( fullscreenImage ) {
-      PG_Application::GetApp()->SetBackground( fullscreenImage, PG_Draw::STRETCH );
-      PG_Application::GetApp()->EnableBackground(true);
+
+
+   int rt = 0;
+   int gt = 0;
+   int bt = 0;
+
+   fullscreenImage = Surface( IMG_Load_RW( SDL_RWFromStream( &s ), true ));
+   if ( fullscreenImage.valid() ) {
+      for ( int y = 0; y < fullscreenImage.h(); ++y ) {
+         for ( int x = 0; x < fullscreenImage.w(); ++x ) {
+            Uint8 r,g,b;
+            fullscreenImage.GetPixelFormat().GetRGB( fullscreenImage.GetPixel(x,y), r,g,b ); 
+            rt += r;
+            gt += g;
+            bt += b;
+         }
+      }
+      rt /= fullscreenImage.h() * fullscreenImage.w();
+      gt /= fullscreenImage.h() * fullscreenImage.w();
+      bt /= fullscreenImage.h() * fullscreenImage.w();
    }
+
+
+
+
+   background = new PG_ThemeWidget(NULL, PG_Rect(0,0,PG_Application::GetScreenWidth(), PG_Application::GetScreenHeight()));
+   background->SetSimpleBackground(true);
+   background->SetBackgroundColor( PG_Color( rt, gt, bt ));
+
+   if ( fullscreenImage.valid() ) {
+      float enw = float(PG_Application::GetScreenWidth() )/float(fullscreenImage.w());
+      float enh = float(PG_Application::GetScreenHeight())/float(fullscreenImage.h());
+
+      // we allow a asymetric stretch of 5% 
+      if ( enw / enh < 0.95 || enw / enh > 1.05 ) 
+         enh = enw = min( enw, enh );
+
+      int w = ceil( enw * fullscreenImage.w());
+      int h = ceil( enh * fullscreenImage.h());
+      PG_Rect rect ( (PG_Application::GetScreenWidth()-w)/2, (PG_Application::GetScreenHeight()-h)/2, w,h);
+      PG_ThemeWidget* image = new PG_ThemeWidget( background, rect );
+      image->SetBackground ( fullscreenImage.getBaseSurface(), PG_Draw::STRETCH );
+   }
+
    int progressHeight = 15;
    SDL_Surface* screen = PG_Application::GetApp()->GetScreen();
-   progressBar = new AutoProgressBar( ticker, NULL, PG_Rect( 0, screen->h - progressHeight, screen->w, progressHeight ) );
-   progressBar->Show();
-   infoLabel = new PG_Label( NULL, PG_Rect( screen->w/2, screen->h - progressHeight - 25, screen->w/2 - 10, 20 ));
+   progressBar = new AutoProgressBar( ticker, background, PG_Rect( 0, screen->h - progressHeight, screen->w, progressHeight ) );
+
+   infoLabel = new PG_Label( background, PG_Rect( screen->w/2, screen->h - progressHeight - 25, screen->w/2 - 10, 20 ));
    infoLabel->SetAlignment( PG_Label::RIGHT );
-   infoLabel->Show();
+
    if ( MessagingHub::Instance().getVerbosity() > 0 ) {
-      versionLabel = new PG_Label( NULL, PG_Rect( 10, screen->h - progressHeight - 25, screen->w/2, 20 ));
+      versionLabel = new PG_Label( background, PG_Rect( 10, screen->h - progressHeight - 25, screen->w/2, 20 ));
       versionLabel->SetAlignment( PG_Label::LEFT );
       versionLabel->SetText( getVersionString() );
-      versionLabel->Show();
    }
+
+   background->Show();
 }
 
 void StartupScreen::disp( const ASCString& s )
@@ -301,12 +341,8 @@ void StartupScreen::disp( const ASCString& s )
          
 StartupScreen::~StartupScreen()
 {
-   PG_Application::GetApp()->DeleteBackground(); 
-   SDL_FreeSurface( fullscreenImage );   
    progressBar->close();
-   delete progressBar;
-   delete infoLabel;
-   delete versionLabel;
+   delete background;
 }
 
 

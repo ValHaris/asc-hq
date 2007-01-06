@@ -472,6 +472,19 @@ void Player::swap ( Player& secondPlayer )
    swapData( color, secondPlayer.color );
 
    diplomacy.swap( secondPlayer.diplomacy );
+
+   int a = player;
+   int b = secondPlayer.player;
+   for ( int i= 0; i < parentMap->getPlayerCount(); ++i )
+      if ( i != a ) {
+         swapData( parentMap->tribute.paid[i][a], parentMap->tribute.paid[i][b] );
+         swapData( parentMap->tribute.paid[a][i], parentMap->tribute.paid[b][i] );
+         swapData( parentMap->tribute.avail[i][a], parentMap->tribute.avail[i][b] );
+         swapData( parentMap->tribute.avail[a][i], parentMap->tribute.avail[b][i] );
+         swapData( parentMap->tribute.payStatusLastTurn[i][a], parentMap->tribute.payStatusLastTurn[i][b] );
+         swapData( parentMap->tribute.payStatusLastTurn[a][i], parentMap->tribute.payStatusLastTurn[b][i] );
+      }
+
 }
 
 void DiplomaticStateVector::swap( DiplomaticStateVector& secondDSV )

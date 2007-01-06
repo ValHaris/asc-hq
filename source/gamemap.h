@@ -265,9 +265,9 @@ class GameMap {
 
 
       /** The tribute can not only be used to demand resources from enemies but also to transfer resources to allies.
-            tribute.avail[a][b].energy is the ammount of energy that player b may (still) extract from the net of player a
-            tribute.paid[b][a].energy is the amount of energy that player b has already extracted from player a's net
-            a is source player, b is destination player
+            tribute.avail[S][D].energy is the ammount of energy that player D may (still) extract from the net of player S
+            tribute.paid[D][S].energy is the amount of energy that player D has already extracted from player S's net
+            S is source player, D is destination player
        **/
       class ResourceTribute {
         public:

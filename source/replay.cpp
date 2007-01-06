@@ -962,90 +962,94 @@ void trunreplay :: execnextreplaymove ( void )
                      }
          break;
       case rpl_attack: {
-                          stream->readInt();  // size
-                          int x1 = stream->readInt();
-                          int y1 = stream->readInt();
-                          int x2 = stream->readInt();
-                          int y2 = stream->readInt();
-                          int ad1 = stream->readInt();
-                          int ad2 = stream->readInt();
-                          int dd1 = stream->readInt();
-                          int dd2 = stream->readInt();
-                          int wpnum = stream->readInt();
-                          readnextaction();
+                           stream->readInt();  // size
+                           int x1 = stream->readInt();
+                           int y1 = stream->readInt();
+                           int x2 = stream->readInt();
+                           int y2 = stream->readInt();
+                           int ad1 = stream->readInt();
+                           int ad2 = stream->readInt();
+                           int dd1 = stream->readInt();
+                           int dd2 = stream->readInt();
+                           int wpnum = stream->readInt();
+                           readnextaction();
 
-                          tfield* fld = getfield ( x1, y1 );
-                          tfield* targ = getfield ( x2, y2 );
-                          int attackvisible = fieldvisiblenow ( fld, actmap->getPlayerView() ) || fieldvisiblenow ( targ, actmap->getPlayerView() );
-                          if ( fld && targ && fld->vehicle ) {
-                             if ( targ->vehicle ) {
-                                tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
-                                battle.av.damage = ad1;
-                                battle.dv.damage = dd1;
-                                if ( attackvisible ) {
-                                   displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   ReplayMapDisplay rmd( &getDefaultMapDisplay() );
-                                   rmd.showBattle( battle );
-                                   removeActionCursor();
-                                } else {
-                                   battle.calc ();
-                                }
-                                if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
-                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                battle.setresult ();
+                           tfield* fld = getfield ( x1, y1 );
+                           tfield* targ = getfield ( x2, y2 );
+                           int attackvisible = fieldvisiblenow ( fld, actmap->getPlayerView() ) || fieldvisiblenow ( targ, actmap->getPlayerView() );
+                           if ( fld && targ && fld->vehicle ) {
+                              if ( fieldvisiblenow ( targ, fld->vehicle->getOwner() )) {
+                                 if ( targ->vehicle ) {
+                                    tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
+                                    battle.av.damage = ad1;
+                                    battle.dv.damage = dd1;
+                                    if ( attackvisible ) {
+                                       displayActionCursor ( x1, y1, x2, y2, 0 );
+                                       ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                       rmd.showBattle( battle );
+                                       removeActionCursor();
+                                    } else {
+                                       battle.calc ();
+                                    }
+                                    if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
+                                       error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                    battle.setresult ();
 
-                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
-                                   computeview( actmap );
+                                    if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                       computeview( actmap );
 
-                                updateFieldInfo();
+                                    updateFieldInfo();
 
+                                 } else
+                                 if ( targ->building ) {
+                                    tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
+                                    battle.av.damage = ad1;
+                                    battle.dv.damage = dd1;
+                                    if ( attackvisible ) {
+                                       displayActionCursor ( x1, y1, x2, y2, 0 );
+                                       ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                       rmd.showBattle( battle );
+                                       removeActionCursor();
+                                    } else {
+                                       battle.calc ();
+                                       /*battle.av.damage = ad2;
+                                       battle.dv.damage = dd2; */
+                                    }
+                                    if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                       error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                    battle.setresult ();
+
+                                    if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                       computeview( actmap );
+                                    updateFieldInfo();
+                                 } else
+                                 if ( !targ->objects.empty() ) {
+                                    tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
+                                    if ( attackvisible ) {
+                                       displayActionCursor ( x1, y1, x2, y2, 0 );
+                                       ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                       rmd.showBattle( battle );
+                                       removeActionCursor();
+                                    } else {
+                                       battle.calc ();
+                                       //battle.av.damage = ad2;
+                                       //battle.dv.damage = dd2;
+                                    }
+                                    if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                       error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                    battle.setresult ();
+
+                                    if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                       computeview( actmap );
+
+                                    updateFieldInfo();
+                                 }
+                                 displaymap();
                              } else
-                             if ( targ->building ) {
-                                tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
-                                battle.av.damage = ad1;
-                                battle.dv.damage = dd1;
-                                if ( attackvisible ) {
-                                   displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   ReplayMapDisplay rmd( &getDefaultMapDisplay() );
-                                   rmd.showBattle( battle );
-                                   removeActionCursor();
-                                } else {
-                                   battle.calc ();
-                                   /*battle.av.damage = ad2;
-                                   battle.dv.damage = dd2; */
-                                }
-                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
-                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                battle.setresult ();
+                                 error("severe replay inconsistency:\nthe attacking unit can't view the target field!");
 
-                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
-                                   computeview( actmap );
-                                updateFieldInfo();
-                             } else
-                             if ( !targ->objects.empty() ) {
-                                tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
-                                if ( attackvisible ) {
-                                   displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   ReplayMapDisplay rmd( &getDefaultMapDisplay() );
-                                   rmd.showBattle( battle );
-                                   removeActionCursor();
-                                } else {
-                                   battle.calc ();
-                                   //battle.av.damage = ad2;
-                                   //battle.dv.damage = dd2;
-                                }
-                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
-                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                battle.setresult ();
-
-                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
-                                   computeview( actmap );
-
-                                updateFieldInfo();
-                             }
-                             displaymap();
-                          } else
-                             error("severe replay inconsistency:\nno vehicle for attack command !");
+                           } else
+                              error("severe replay inconsistency:\nno vehicle for attack command !");
 
                       }
          break;

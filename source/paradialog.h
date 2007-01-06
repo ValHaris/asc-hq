@@ -56,8 +56,9 @@ class AutoProgressBar;
 class StartupScreen: public SigC::Object {
        PG_Label* infoLabel;
        PG_Label* versionLabel;
+       PG_ThemeWidget* background;
        AutoProgressBar* progressBar; 
-       SDL_Surface* fullscreenImage;
+       Surface fullscreenImage;
         void disp( const ASCString& s );
      public:
          StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker );        
