@@ -11,7 +11,7 @@
 Name "ASC for Project Battle Planets"
 
 ; The file to write
-OutFile "ASC-1.99.90.48-Install.exe"
+OutFile "ASC-1.99.90.49-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -34,7 +34,8 @@ UninstPage instfiles
 
 ;--------------------------------
 
-LicenseData=licdata.txt
+LicenseData licdata.txt
+
 
 ; The stuff to install
 Section "ASC main program (required)"

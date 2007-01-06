@@ -22,4 +22,5 @@ unitguide:
 	cd doc && make unitguide
 
 dist-hook:
-	rm -rf `find $(distdir) -name CVS`
+	rm -rf `find $(distdir) -name CVS -o -name "*.con" -o -name "*music/*.ogg" -o -name asc2_dlg.zip `
+	rm -rf `find $(distdir)/data/music -name "*.ogg" `

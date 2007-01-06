@@ -295,7 +295,7 @@ bool continuenetworkgame ( bool mostRecent )
 
          ASCString wildcard;
          if ( w == 0 )
-            ASCString("*") + tournamentextension;
+            wildcard = ASCString("*") + tournamentextension;
          else
             wildcard = "*.asc";
 

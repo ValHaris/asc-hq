@@ -655,7 +655,12 @@ bool startMultiplayerGame()
     StartMultiplayerGame smg(NULL);
     smg.Show();
     smg.RunModal();
-    return smg.getSuccess();
+    bool res = smg.getSuccess();
+    smg.Hide();
+    if ( res )
+       actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
+    
+    return res;
 }
 
 

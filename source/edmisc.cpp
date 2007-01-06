@@ -2972,6 +2972,13 @@ MapSwitcher::Action MapSwitcher :: getDefaultAction ( )
 MapSwitcher mapSwitcher;
 
 
+Vehicletype* transform( int id, const vector<int>& translation )
+{
+   for ( int i = 0; i < translation.size()/2; i++ )
+      if ( id == translation[i*2] ) 
+         return vehicleTypeRepository.getObject_byID ( translation[i*2+1] );
+   return NULL;
+}
 
 void transformMap ( )
 {
@@ -3106,18 +3113,24 @@ void transformMap ( )
 
    }
 
-   for( int p = 0; p < actmap->getPlayerCount(); ++p )
+   for( int p = 0; p < actmap->getPlayerCount(); ++p ) {
       for ( Player::VehicleList::iterator i = actmap->getPlayer(p).vehicleList.begin(); i != actmap->getPlayer(p).vehicleList.end(); ++i) {
-          for ( int j = 0; j < vehicletranslation.size()/2; j++ )
-             if ( (*i)->typ->id == vehicletranslation[j*2] ) {
-                Vehicletype* vt = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2+1] );
-                if ( vt )
-                  (*i)->transform( vt );
-             }
+         (*i)->transform( transform( (*i)->typ->id, vehicletranslation));
+         
+         for ( ContainerBase::Production::iterator j = (*i)->unitProduction.begin(); j != (*i)->unitProduction.end(); ++j )
+            if ( *j && transform((*j)->id, vehicletranslation) )
+               *j = transform((*j)->id, vehicletranslation);
       }
+      for ( Player::BuildingList::iterator i = actmap->getPlayer(p).buildingList.begin(); i != actmap->getPlayer(p).buildingList.end(); ++i) {
+         for ( ContainerBase::Production::iterator j = (*i)->unitProduction.begin(); j != (*i)->unitProduction.end(); ++j )
+            if ( *j && transform((*j)->id, vehicletranslation) )
+               *j = transform((*j)->id, vehicletranslation);
+      }
+   }
 
    // for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i )
 
+      /*
    tn_file_buf_stream s ( "out.txt", tnstream::writing );
    for ( int j = 0; j < vehicletranslation.size()/2; j++ ) {
       Vehicletype* vt1 = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2] );
@@ -3134,6 +3147,7 @@ void transformMap ( )
 
       s.writeString( st + "\n" );
    }
+      */
 
    calculateallobjects();
    displaymap();

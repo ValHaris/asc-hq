@@ -833,7 +833,7 @@ tncontainerstream  :: ~tncontainerstream  ()
 class ContainerCollector : public ContainerIndexer {
    public:
       struct FileIndex {
-         char* name;
+         ASCString name;
          pncontainerstream container;
          int directoryLevel;
       };
@@ -852,7 +852,7 @@ class ContainerCollector : public ContainerIndexer {
       void init ( const char* wildcard );
       void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
            // pncontainerstream getfile ( const char* filename );
-      FileIndex* getfile ( const char* filename );
+      FileIndex* getfile ( const ASCString& filename );
       FileIndex* getfirstname ( void );
       FileIndex* getnextname ( void );
       ASCString listContainer();
@@ -994,7 +994,7 @@ struct FileLocation {
 void locateFile ( const ASCString& filename, FileLocation* loc )
 {
    loc->found = 0;
-   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename.c_str() );
+   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename );
    int maxnum;
    if ( idx ) {
       maxnum = idx->directoryLevel+1;
@@ -1081,28 +1081,27 @@ void ContainerCollector :: addfile ( const char* filename, const pncontainerstre
 
    int i1 = toupper ( filename[0] );
    for ( int i = 0; i <= index[i1].getlength(); i++ )
-      if ( stricmp ( index[i1][i].name, filename ) == 0 ) 
+      if ( index[i1][i].name.compare_ci ( filename ) == 0 ) 
          if ( index[i1][i].directoryLevel <= directoryLevel ) 
             return;
          else {
             cci = &(index[i1][i]);
-            free ( cci->name );
             found = 1;
          }
 
    if ( !found )
       cci = &( index[i1][ index[i1].getlength()+1 ] );
 
-   cci->name = strdup ( filename );
+   cci->name = filename;
    cci->container = stream;
    cci->directoryLevel = directoryLevel;
 }
 
-ContainerCollector::FileIndex* ContainerCollector :: getfile ( const char* filename )
+ContainerCollector::FileIndex* ContainerCollector :: getfile ( const ASCString& filename )
 {
    int i1 = toupper ( filename[0] );
    for ( int i = 0; i <= index[i1].getlength(); i++ )
-      if ( stricmp ( index[i1][i].name, filename ) == 0 )
+      if ( index[i1][i].name.compare_ci ( filename) == 0 )
          return &index[i1][i];
 
    return NULL;
@@ -1144,9 +1143,6 @@ ContainerCollector :: ~ContainerCollector()
   int i;
    for (i = 0; i < containernum; i++ )
       delete container[i];
-   for ( int j = 0; j < 255; j++ )
-      for ( int k = 0; k <= index[i].getlength(); k++ )
-         free ( index[i][k].name );
    containernum = 0;
 }
 
@@ -1946,7 +1942,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
           if ( patimat ( name.c_str(), c->name ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
-                if ( stricmp ( c->name, fileInfo[i].name.c_str() ) == 0 ) {
+                if ( stricmp ( c->name.c_str(), fileInfo[i].name.c_str() ) == 0 ) {
                    if ( fileInfo[i].directoryLevel <= c->directoryLevel )
                       f = 1;
                    else {

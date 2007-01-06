@@ -321,6 +321,9 @@ int Vehicle::size ( void )
 
 void Vehicle::transform ( const Vehicletype* type )
 {
+   if ( !type )
+      return;
+   
    typ = type;
 
    tank = getStorageCapacity();

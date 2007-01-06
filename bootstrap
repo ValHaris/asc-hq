@@ -4,13 +4,7 @@ if test "X$1" = X--force; then
    set -x
    set -e
    ./bootstrap.versionmerge configure.in
-   aclocal -I /usr/local/share/aclocal/ 
-   libtoolize --force --copy --automake
-   aclocal -I /usr/local/share/aclocal/ 
-   autoheader
-   automake --gnu --add-missing --copy
-   autoconf
-
+   autoreconf -I /usr/local/share/aclocal/ 
 else
    echo "You don't need to run bootstrap. Just run \"configure ; make\" "
 fi

@@ -729,14 +729,6 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                         return true;
                         
                                                 
-            case SDLK_F11:
-               if ( mod & KMOD_SHIFT ) {
-                  if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
-                     char* c = NULL;
-                     *c = 1;
-                  }
-               }  
-            return true;
          default:;
    
        } 
@@ -761,7 +753,21 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                getPGApplication().toggleFullscreen();
                return true;
 
-            default:;
+         case SDLK_F11:
+               /*
+            if ( mod & KMOD_SHIFT ) {
+            if (choice_dlg("Do you really want to crash ASC ?","~y~es","~n~o") == 1) {
+            char* c = NULL;
+            *c = 1;
+      }
+      }
+               */
+         {  for ( Player::VehicleList::iterator i = actmap->player[1].vehicleList.begin(); i != actmap->player[1].vehicleList.end(); ++i )
+            (*i)->direction = 3;
+         } 
+         return true;
+         
+         default:;
       }
    }
 

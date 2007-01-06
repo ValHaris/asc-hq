@@ -187,7 +187,6 @@ int main(int argc, char *argv[] )
    putenv("SDL_VIDEO_CENTERED=1") ;
 
    Cmdline* cl = NULL;
-   auto_ptr<Cmdline> apcl ( cl );
    try {
       cl = new Cmdline ( argc, argv );
    }
@@ -195,6 +194,7 @@ int main(int argc, char *argv[] )
       cerr << s;
       exit(1);
    }
+   auto_ptr<Cmdline> apcl ( cl );
 
    if ( cl->next_param() < argc ) {
       cerr << "invalid command line parameter\n";
