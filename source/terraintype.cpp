@@ -453,9 +453,9 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          fatalError ( "invalid BI-image " );
    }
    
-   pc.addInteger ( "DefenseBonus", defensebonus );
-   pc.addInteger ( "AttackBonus",  attackbonus );
-   pc.addInteger ( "BasicJamming", basicjamming );
+   pc.addInteger ( "DefenseBonus", defensebonus, 0 );
+   pc.addInteger ( "AttackBonus",  attackbonus, 0 );
+   pc.addInteger ( "BasicJamming", basicjamming, 0 );
    pc.addDFloatArray ( "MoveMalus", move_malus );
    while ( move_malus.size() < cmovemalitypenum ) 
      if ( move_malus.size() == 0 )

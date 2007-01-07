@@ -3,7 +3,8 @@ TerrainType {
    ID = 30
    Parent = 1203
    dry { 
-      GFX_Picture = 273
+      UseGFXpics = false
+      picture = texture-11.pcx
    } dry
    light_rain { 
       GFX_Picture = 838

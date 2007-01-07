@@ -3,11 +3,7 @@ TerrainType {
    ID = 77
    Weather = dry 
    dry { 
-      UseGFXpics = true
-      GFX_Picture = 525
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
+      Picture = mx1.pcx
       MoveMalus = 11 
       TerrainProperties = Lowland Track_possible 
    } dry

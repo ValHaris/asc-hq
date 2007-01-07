@@ -3,7 +3,8 @@ TerrainType {
    ID = 23
    parent = 22 1205
    dry { 
-      GFX_Picture = 151
+      UseGFXpics = false
+      picture = texture-n5b.pcx
    } dry
    few_snow { 
       GFX_Picture = 611

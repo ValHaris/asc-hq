@@ -3,11 +3,7 @@ TerrainType {
    ID = 19
    Weather = dry few_snow 
    dry { 
-      UseGFXpics = true
-      GFX_Picture = 139
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
+      picture = texture-10c.pcx
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       MoveMalus = 12  12  12  12  12  12  12  12  10  12  12  12  12  12  12  12  12  11
       TerrainProperties = Lowland Track_possible 

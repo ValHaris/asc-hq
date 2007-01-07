@@ -3,33 +3,55 @@ TerrainType {
    ID = 167
    Weather = dry few_snow much_snow 
    dry { 
-      UseGFXpics = true
-      GFX_Picture = 200
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
+      picture = texture-n3b0d.pcx
+
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+
       MoveMalus = 12  12  12  12  13  14  14  11  10  12  12  12  12  12  12  12  12  11
+
       TerrainProperties = hard_sand track_possible
+
    } dry
+
    few_snow { 
+
       UseGFXpics = true
+
       GFX_Picture = 665
+
        DefenseBonus = 0
+
       AttackBonus = 0
+
       BasicJamming = 5
+
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+
       MoveMalus = 13  13  13  13  14  14  15  12  10  13  13  13  13  13  13  13  13  11
+
       TerrainProperties = hard_sand snow track_possible
+
    } few_snow
+
    much_snow { 
+
       UseGFXpics = true
+
       GFX_Picture = 771
+
       DefenseBonus = 0
+
       AttackBonus = 0
+
       BasicJamming = 10
+
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+
       MoveMalus = 18  18  18  18  18  18  18  15  12  18  18  18  18  18  18  18  18  12
+
       TerrainProperties = hard_sand Deep_snow track_possible
+
    } much_snow
+
 } TerrainType
+
