@@ -358,7 +358,10 @@ class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< 
       
          if ( !container->baseType->vehicleFit( &item ))
             return true;
-              
+         
+         if ( !(container->baseType->vehicleCategoriesProduceable & (1 << item.movemalustyp)))
+            return true;
+
          return false;
       };
 

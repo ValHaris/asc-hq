@@ -114,6 +114,10 @@ class ContainerBaseType: public MapItemType, public LoadableItemType {
      //! bitmapped: vehicle categories that can be stored the container
      int vehicleCategoriesStorable;
 
+     //! bitmapped: vehicle categories that can be produced in the container
+     int vehicleCategoriesProduceable;
+
+
      class TransportationIO {
          public:
             TransportationIO ();

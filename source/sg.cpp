@@ -84,19 +84,15 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "ai/ai.h"
-// #include "basegfx.h"
 #include "misc.h"
-#include "newfont.h"
 #include "events.h"
 #include "typen.h"
 #include "spfst.h"
 #include "loaders.h"
 #include "dlg_box.h"
-#include "stack.h"
 #include "controls.h"
 #include "dlg_box.h"
 #include "dialog.h"
-#include "pd.h"
 #include "strtmesg.h"
 #include "gamedlg.h"
 #include "sg.h"
@@ -156,11 +152,9 @@
 # include "win32/win32-errormsg.h"
 # include  "win32/msvc/mdump.h"
  MiniDumper miniDumper( "main" );
-
-#include <direct.h>
-#include <stdlib.h>
-#include <stdio.h>
-
+# include <direct.h>
+# include <stdlib.h>
+# include <stdio.h>
 #endif
 
 tfield*        getSelectedField(void)
@@ -203,7 +197,6 @@ bool maintainencecheck( void )
 void positionCursor( Player& player )
 {
    getDefaultMapDisplay().displayPosition( player.getParentMap()->getCursor() );
-   
 }
 
 void viewcomp( Player& player )
@@ -518,8 +511,7 @@ void showSDLInfo()
    s += "undefined\n";
 #endif
 #endif
-   
-
+  
    s += "SDL video driver: ";
    s += SDL_VideoDriverName( buf, 1000 );
    s += "\n";
@@ -561,9 +553,7 @@ void showSDLInfo()
    ViewFormattedText vft( "SDL Settings", s, PG_Rect(-1,-1,450,550));
    vft.Show();
    vft.RunModal();
-
 #endif
-
 }
 
 void helpAbout()
@@ -578,7 +568,6 @@ void helpAbout()
    ViewFormattedText vft( "About", s, PG_Rect(-1,-1,450,550));
    vft.Show();
    vft.RunModal();
-
 }
 
 
@@ -1117,10 +1106,7 @@ void execuseraction2 ( tuseractions action )
 
 void execUserAction_ev( tuseractions action )
 {
-   // getPGApplication().enableLegacyEventHandling ( true );
    execuseraction( action );
-   // getPGApplication().enableLegacyEventHandling ( false );
-   
    execuseraction2( action );
 }
 
@@ -1183,7 +1169,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    shrinkfont ( schriften.guifont, -1 );
    shrinkfont ( schriften.guicolfont, -1 );
    shrinkfont ( schriften.monogui, -1 );
-   pulldownfont = schriften.smallarial ;
 
    dataLoaderTicker();
 
@@ -1441,14 +1426,13 @@ int main(int argc, char *argv[] )
    if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
       static char buf[100];
       strcpy(buf, "SDL_VIDEODRIVER=" );
-      strncpy( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
+      strncat( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
       buf[99] = 0;
       putenv( buf );
    }
 
 
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
-
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
@@ -1501,4 +1485,3 @@ int main(int argc, char *argv[] )
 
    return( returncode );
 }
-

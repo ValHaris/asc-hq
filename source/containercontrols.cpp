@@ -97,26 +97,8 @@ Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithA
 
    container->addToCargo( vehicle );
 
-   if ( fillWithAmmo ) {
-      /*
-      Resources res;
-      for ( int i = 0; i < fzt->weapons.count; ++i )
-         if ( fzt->weapons.weapon[i].count )
-            if ( fzt->weapons.weapon[i].getScalarWeaponType() >= 0 )
-               for ( int r = 0; r < 3; ++r )
-                  res.resource(r) += cwaffenproduktionskosten[fzt->weapons.weapon[i].getScalarWeaponType()][r] * fzt->weapons.weapon[i].count;
-
-      bool autoFill = false;
-      if ( CGameOptions::Instance()->container.filleverything == 1 )
-         autoFill = true;
-   
-      if ( CGameOptions::Instance()->container.filleverything == 2 )
-         if ( res.material < fzt->productionCost.material/2 && res.energy < fzt->productionCost.energy/2 )
-            autoFill = true;
-      */
-
+   if ( fillWithAmmo ) 
       refillAmmo( vehicle );
-   }
    
    if( fillWithResources )
       refillResources( vehicle );
@@ -429,7 +411,8 @@ vector<const Vehicletype*> ContainerControls :: productionLinesBuyable()
          if ( container->baseType->vehicleFit ( veh ) && !found )
             if ( container->vehicleUnloadable(veh) || container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
                if ( veh->techDependency.available ( container->getMap()->player[container->getMap()->actplayer].research ))
-                  list.push_back( veh );
+                  if ( container->baseType->vehicleCategoriesProduceable & (1 << veh->movemalustyp))
+                     list.push_back( veh );
       }
    }
    return list;

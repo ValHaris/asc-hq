@@ -1,6 +1,5 @@
 
 #include "overviewmapimage.h"
-#include "palette.h"
 #include "iconrepository.h"
 #include "graphics/drawing.h"
 

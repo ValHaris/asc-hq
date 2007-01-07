@@ -36,11 +36,9 @@
 #include "events.h"
 #include "loaders.h"
 #include "dlg_box.h"
-#include "stack.h"
 #include "spfst.h"
 #include "dialog.h"
 #include "strtmesg.h"
-#include "pd.h"
 #include "palette.h"
 #include "mapalgorithms.h"
 

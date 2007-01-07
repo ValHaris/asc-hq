@@ -47,6 +47,7 @@
 #include "dialogs/cargowidget.h"
 #include "dialogs/fieldmarker.h"
 #include "dialogs/newmap.h"
+#include "stack.h"
 
 #include "unitset.h"
 #include "maped-mainscreen.h"

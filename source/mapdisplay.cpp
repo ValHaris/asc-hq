@@ -35,7 +35,6 @@
 #include "dialog.h"
 #include "loaders.h"
 #include "gameoptions.h"
-#include "stack.h"
 #include "loadbi3.h"
 #include "mapalgorithms.h"
 #include "graphicset.h"

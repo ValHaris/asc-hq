@@ -38,7 +38,6 @@
 
 #include "gameevents.h"
 #include "events.h"
-#include "stack.h"
 #include "gameoptions.h"
 #include "loadimage.h"
 #include "errors.h"

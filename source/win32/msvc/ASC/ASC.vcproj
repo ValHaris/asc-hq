@@ -343,9 +343,6 @@
 				RelativePath="..\..\..\password.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\pd.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File

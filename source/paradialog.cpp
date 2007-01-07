@@ -310,8 +310,8 @@ StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ti
       if ( enw / enh < 0.95 || enw / enh > 1.05 ) 
          enh = enw = min( enw, enh );
 
-      int w = ceil( enw * fullscreenImage.w());
-      int h = ceil( enh * fullscreenImage.h());
+      int w = int( ceil( enw * fullscreenImage.w()));
+      int h = int( ceil( enh * fullscreenImage.h()));
       PG_Rect rect ( (PG_Application::GetScreenWidth()-w)/2, (PG_Application::GetScreenHeight()-h)/2, w,h);
       PG_ThemeWidget* image = new PG_ThemeWidget( background, rect );
       image->SetBackground ( fullscreenImage.getBaseSurface(), PG_Draw::STRETCH );

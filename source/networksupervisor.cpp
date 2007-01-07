@@ -39,7 +39,6 @@
 #include "sgstream.h"
 #include "loadpcx.h"
 #include "dialogs/pwd_dlg.h"
-#include "stack.h"
 #include "loaders.h"
 #include "gamemap.h"
 #include "turncontrol.h"

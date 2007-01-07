@@ -17,7 +17,6 @@
 
 #include "containerbasetype.h"
 #include "textfiletags.h"
-// #include "stringtokenizer.h"
 #include "textfile_evaluation.h"
 #include "vehicletype.h"
 #include "graphics/blitter.h"
@@ -82,6 +81,7 @@ ContainerBaseType :: ContainerBaseType ()
    maxresearchpoints = 0;
    defaultMaxResearchpoints = 0;
    nominalresearchpoints = 0;
+   vehicleCategoriesProduceable = 0xfffffff;
 }
 
 bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
@@ -140,7 +140,7 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
       pc.addTagInteger( "RequireUnitFunction", r, Vehicletype::legacyVehicleFunctionNum, vehicleAbilities, 0 );
       requiresUnitFeature = Vehicletype::convertOldFunctions(r, pc.getFileName() );
    } else
-      if ( pc.find( "RequiresUnitFeature" ))
+      if ( pc.find( "RequiresUnitFeature" ) || pc.isReading() )
          pc.addTagArray( "RequiresUnitFeature", requiresUnitFeature, ContainerBaseType::functionNum, containerFunctionTags );
       else
          requiresUnitFeature.reset();
@@ -215,7 +215,8 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.openBracket( "DefaultProduction" );
     defaultProduction.runTextIO ( pc, Resources(0,0,0) );
    pc.closeBracket();
-   
+
+   pc.addTagInteger( "CategoriesProduceable", vehicleCategoriesProduceable, cmovemalitypenum, unitCategoryTags, -1 );
 }
 
 
@@ -230,7 +231,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 3;
+const int containerBaseTypeVersion = 4;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -256,6 +257,8 @@ void ContainerBaseType :: read ( tnstream& stream )
    if ( version >= 3 )
       stream.readBitset( features );
 
+   if ( version >= 4 )
+      vehicleCategoriesProduceable = stream.readInt();
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -270,6 +273,7 @@ void ContainerBaseType :: write ( tnstream& stream ) const
       entranceSystems[i].write( stream );
    stream.writeString( infoImageFilename );
    stream.writeBitset( features );
+   stream.writeInt( vehicleCategoriesProduceable );
 }
 
 const int containerBaseTypeTransportVersion = 3;

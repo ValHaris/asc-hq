@@ -26,7 +26,6 @@
 
 #include "typen.h"
 #include "sgstream.h"
-#include "palette.h"
 #include "itemrepository.h"
 
 #ifdef converter

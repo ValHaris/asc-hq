@@ -30,7 +30,6 @@
 #include "spfst.h"
 #include "controls.h"
 #include "dialog.h"
-#include "stack.h"
 #include "gameoptions.h"
 #include "viewcalculation.h"
 #include "itemrepository.h"

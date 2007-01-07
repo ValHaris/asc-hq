@@ -55,6 +55,7 @@
 #include "dialogs/terraininfo.h"
 #include "widgets/textrenderer.h"
 #include "dialogs/exchangegraphics.h"
+#include "stack.h"
 
    
    const char* execactionnames[execactionscount] = {

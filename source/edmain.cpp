@@ -145,8 +145,6 @@ int mapeditorMainThread ( void* _mapname )
       displaymessage ( " error loading file %s ",2, err.getFileName().c_str() );
    } /* end catch */
 
-   pulldownfont = schriften.smallarial;
-
    activefontsettings.font = schriften.arial8;
    activefontsettings.color =lightblue ;
    activefontsettings.background =3;

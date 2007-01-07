@@ -94,11 +94,14 @@ class GetVideoModes {
                if ( find ( listedmodes.begin(), listedmodes.end(), make_pair( int(modes[i]->w), int(modes[i]->h ))) != listedmodes.end() )
                   continue;
                
-               ASCString s;
-               s.format( "%d*%d", modes[i]->w, modes[i]->h );
-               list.push_back ( s );
-               listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
+               if ( modes[i]->w >= 800 && modes[i]->h >= 600 ) {
+                  ASCString s;
+                  s.format( "%d*%d", modes[i]->w, modes[i]->h );
+                  list.push_back ( s );
+                  listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
+               }
             }
+            
          }
          return;
       };

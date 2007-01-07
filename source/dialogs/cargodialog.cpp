@@ -669,7 +669,6 @@ class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFac
          ContainerControls cc ( plant );
          return cc.buildProductionLineResourcesNeeded( type );
       };
-
 };
 
 

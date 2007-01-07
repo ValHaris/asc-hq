@@ -26,7 +26,6 @@
 #include "textrenderer.h"
 #include "../graphics/surface.h"
 #include "../iconrepository.h"
-#include "../palette.h"
 #include "../dialogs/fileselector.h"
 #include "targetcoordinatelocator.h"
 
