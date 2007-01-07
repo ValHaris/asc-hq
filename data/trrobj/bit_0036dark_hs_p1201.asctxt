@@ -2,12 +2,11 @@ TerrainType {
    Name = hard_sand small rocks dark
    ID = 36
    Parent = 1201
+   weather = dry few_snow much_snow
    dry { 
       UseGFXpics = false
       picture = texture-n3b1a.pcx
    } dry
-   light_rain ->* TerrainType.dry
-   heavy_rain ->* TerrainType.dry
    few_snow { 
        GFX_Picture = 1712
    } few_snow

@@ -901,6 +901,7 @@ void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
    }
    xsize = x;
    ysize = y;
+   overviewMapHolder.connect();
 }
 
 

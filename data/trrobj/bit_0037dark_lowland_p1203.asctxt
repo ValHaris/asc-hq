@@ -2,12 +2,11 @@ TerrainType {
    Name = dark lowland
    ID = 37
    parent = 1203
+   weather = dry few_snow much_snow
    dry { 
       UseGFXpics = false
       picture = texture-n3b2.pcx
    } dry
-   light_rain ->* TerrainType.dry
-   heavy_rain ->* TerrainType.dry
    few_snow { 
       GFX_Picture = 1711
    } few_snow

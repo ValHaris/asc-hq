@@ -50,11 +50,11 @@ nodist_asc_pbpedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
 	edglobal.$(OBJEXT) edmain.$(OBJEXT) edselfnt.$(OBJEXT) \
 	edmisc.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
 	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
-	pd.$(OBJEXT) palette.$(OBJEXT) newfont.$(OBJEXT) \
-	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
-	loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) dialog.$(OBJEXT) \
-	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
-	CLoadable.$(OBJEXT) Property.$(OBJEXT) PropertyGroup.$(OBJEXT) \
+	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
+	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
+	dlg_box.$(OBJEXT) dialog.$(OBJEXT) basestrm.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) CLoadable.$(OBJEXT) \
+	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) \
 	gameoptions.$(OBJEXT) Named.$(OBJEXT) buildingtype.$(OBJEXT) \
 	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
 	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
@@ -246,7 +246,7 @@ INCLUDES = -I$(top_src_dir) -I$(top_src_dir)/source -I$(top_srcdir)/source/libs/
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor -DNEWKEYB $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
 nodist_asc_pbpedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
-spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
+spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
 attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp \
 Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
@@ -380,7 +380,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password_dialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@

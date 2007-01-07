@@ -140,7 +140,7 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
       pc.addTagInteger( "RequireUnitFunction", r, Vehicletype::legacyVehicleFunctionNum, vehicleAbilities, 0 );
       requiresUnitFeature = Vehicletype::convertOldFunctions(r, pc.getFileName() );
    } else
-      if ( pc.find( "RequiresUnitFeature" ) || pc.isReading() )
+      if ( pc.find( "RequiresUnitFeature" ) || !pc.isReading() )
          pc.addTagArray( "RequiresUnitFeature", requiresUnitFeature, ContainerBaseType::functionNum, containerFunctionTags );
       else
          requiresUnitFeature.reset();
