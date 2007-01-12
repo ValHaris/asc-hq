@@ -1,4 +1,4 @@
-; Zu ändern: unitpad_weapon_source und  unitpad_weapon_target
+; Zu ï¿½dern: unitpad_weapon_source und  unitpad_weapon_target
 ; weapon_target_submerged und weapon_source_submerged werden eingeschaltet
 ; weapon_notarget_submerged und weapon_nosource_submerged  werden ausgeschaltet
 ;
@@ -9,18 +9,18 @@
 ;
 ; bei entrance system: 
 ;   dockingheight fehlt !!
-;   unitpad_transport_light_wheeled_vehicle & co besser durch eine Art LineWidget ersetzen und die Bilder für die einzelnen Typen
-;      einzeln abspeichern. Dann sind wir flexibler, wenn wir unser Sortiment an Typen ändern. Außerdem haben wir ja noch den Typ "Default"
-;      Ich weiß zwar nicht, was wir für ein symbol dafür nehmen sollen, aber den Typ haben wir nunmal ...
-;   außerdem würde ich eine Trennung der Parameter, die bei der Einheit festgelegt werden (anzahl stellplätze, gewichte) sowie der des EntranceSystems
+;   unitpad_transport_light_wheeled_vehicle & co besser durch eine Art LineWidget ersetzen und die Bilder fr die einzelnen Typen
+;      einzeln abspeichern. Dann sind wir flexibler, wenn wir unser Sortiment an Typen ï¿½dern. Auï¿½rdem haben wir ja noch den Typ "Default"
+;      Ich weiï¿½zwar nicht, was wir fr ein symbol dafr nehmen sollen, aber den Typ haben wir nunmal ...
+;   auï¿½rdem wrde ich eine Trennung der Parameter, die bei der Einheit festgelegt werden (anzahl stellplï¿½ze, gewichte) sowie der des EntranceSystems
 ;      gut finden
 ;
-; Bei LineWidgets bitte immer die Größe eines einzelnen Elements angeben, nicht die des gesamten Bereichs!
+; Bei LineWidgets bitte immer die Grï¿½e eines einzelnen Elements angeben, nicht die des gesamten Bereichs!
 ;
-; Das "picture" widget sollte vom Typ Image sein und das NO PICTURE überdecken
+; Das "picture" widget sollte vom Typ Image sein und das NO PICTURE berdecken
 ;
-; Für die Paragui-Objekte ScrollWidget, Multilinetextedit und Scrollbar müsstest Du noch den Style anpassen. Versuch' bitte, ohne
-; vollständig transparentes Hintergrundbild auszukommen und benutz' stattdessen lieber 
+; Fr die Paragui-Objekte ScrollWidget, Multilinetextedit und Scrollbar msstest Du noch den Style anpassen. Versuch' bitte, ohne
+; vollstï¿½dig transparentes Hintergrundbild auszukommen und benutz' stattdessen lieber 
 
 
 
@@ -1361,7 +1361,7 @@ panel {
               TextAlign = RIGHT
               Fontsize = 13
               type = TextOutput
-              name = weapon_strenghtmin
+              name = weapon_strenghtmax
               x = 198
               y = 285
               height = 13
@@ -1381,7 +1381,7 @@ panel {
               TextAlign = LEFT
               Fontsize = 13
               type = TextOutput
-              name = weapon_strenghtmax
+              name = weapon_strenghtmin
               x = 235
               y = 285
               height = 13

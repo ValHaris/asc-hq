@@ -79,8 +79,10 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
                   }
                } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
             }
-      } else
+      } else {
          infoMessage("next player is " + actmap->player[actmap->actplayer].getName() );
+         actmap->setPlayerView ( actmap->actplayer );
+      }
    }
 
    moveparams.movestatus = 0;

@@ -315,7 +315,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
    for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
       if ( gamemap->player[player].exist() ) {
          int add = 0;
-         if ( disableShareView )
+         if ( !disableShareView )
             add += getPlayersWithSharedViewMask( player, gamemap );
       
          int nm = gamemap->xsize * gamemap->ysize;

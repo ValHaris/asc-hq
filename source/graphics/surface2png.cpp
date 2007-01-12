@@ -150,6 +150,7 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    
    png_write_info(png_ptr, info_ptr);
    
+   int iii = 0;
    char* pix = (char*)s.pixels();
    for ( int y = y1; y < y1 + h; ++y ) {
       Uint32* srcpix32 = (Uint32*)(pix + y * s.pitch());
@@ -161,8 +162,11 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
             s.GetPixelFormat().GetRGBA( srcpix32[x], linebuf[x*4],linebuf[x*4+1],linebuf[x*4+2],linebuf[x*4+3] ); 
       } else {
          if ( s.GetPixelFormat().BytesPerPixel() == 1)
-            for ( int x = 0; x < w; ++x ) 
+            for ( int x = 0; x < w; ++x )  {
                linebuf[x] = srcpix8[x];
+               if ( linebuf[x] )
+                  ++iii; 
+            }
       }
       png_write_row(png_ptr, (png_bytep) linebuf);
    }

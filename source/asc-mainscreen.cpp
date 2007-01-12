@@ -191,11 +191,6 @@ void Menu::setup()
    addfield ( "~T~ools" );
    addbutton ( "save ~M~ap as PNG\t9", ua_writemaptopcx );
    addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
-   addbutton ( "benchmark without view calc", ua_benchgamewov );
-   addbutton ( "benchmark with view calc", ua_benchgamewv);
-   addbutton ( "compiler benchmark (AI)", ua_aibench );
-   // addbutton ( "test memory integrity", ua_heapcheck );
-   currentMenu->addSeparator();
    addbutton ( "select graphic set", ua_selectgraphicset );
 
    addfield ( "~V~iew" );
@@ -226,6 +221,11 @@ void Menu::setup()
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
    currentMenu->addSeparator();
    addbutton ( "resource analysis", ua_resourceAnalysis );
+   currentMenu->addSeparator();
+   addbutton ( "benchmark without view calc", ua_benchgamewov );
+   addbutton ( "benchmark with view calc", ua_benchgamewv);
+   addbutton ( "compiler benchmark (AI)", ua_aibench );
+   // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );
    addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
