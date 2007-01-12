@@ -579,7 +579,9 @@ void ServiceChecker :: check( ContainerBase* dest )
             Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
             if ( !srcVehicle ) {// it's a building
                bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
-               resource( dest, r, active );
+               if ( (ignoreChecks & ignoreHeight) || getheightdelta( source, dest)==0)
+                  if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
+                     resource( dest, r, active );
             } else {
                if ( serviceWeaponFits( dest )) {
                   bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );

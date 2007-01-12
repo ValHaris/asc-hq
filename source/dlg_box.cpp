@@ -2226,11 +2226,12 @@ void         tdialogbox::lne(int          x1,
                  char      einfuegen)
 {
  int          i, j, k;
- char* ss2;
 
-  ss2 = strdup ( s );
-  ss2 [ position ] = 0;
-   i = x1 + gettextwdth(ss2,activefontsettings.font);
+ ASCString ss2 = s;
+ if ( position < ss2.length() )
+    ss2.erase(position);
+
+   i = x1 + gettextwdth(ss2.c_str(),activefontsettings.font);
    j = y1; 
    k = y1 + activefontsettings.font->height; 
    collategraphicoperations cgo ( i-1, j, i+1, k );
@@ -2239,7 +2240,6 @@ void         tdialogbox::lne(int          x1,
       xorline(i + 1,j,i + 1,k,3); 
       xorline(i - 1,j,i - 1,k,3); 
    }  
-   asc_free ( ss2 );
 } 
 
 

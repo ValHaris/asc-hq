@@ -124,7 +124,6 @@ class StartupScreen: public SigC::Object {
  //! Adapter class for using Paragui Dialogs in ASC. This class transfers the event control from ASC to Paragui and back. All new dialog classes should be derived from this class
 class ASC_PG_Dialog : public PG_Window {
     private:
-       PG_Rect centerWindow( const PG_Rect& rect );
        int stdButtonNum;
    protected:
       PG_MessageObject* caller;
@@ -137,6 +136,9 @@ class ASC_PG_Dialog : public PG_Window {
        enum StandardButtonDirectonType { Vertical, Horizontal };
        void StandardButtonDirection ( StandardButtonDirectonType dir );
        int RunModal();
+
+       static PG_Rect centerRectangle( const PG_Rect& rect );
+
    private:
       StandardButtonDirectonType standardButtonDir;
 };

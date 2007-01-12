@@ -286,6 +286,17 @@ void CGameOptions::setDefaults ( void )
 }
 
 
+
+ASCString CGameOptions::Mouse::getButtonName(int button)
+{
+   static const char* my_mouseButtonNames[] = { "None", "Left", "Center", "Right", "4", "5", NULL };
+   if ( button <= 3 ) 
+      return my_mouseButtonNames[button];
+   else
+      return ASCString::toString( button );
+}
+
+
 /*
 void CGameOptions::copy ( const CGameOptions& cgo )
 {

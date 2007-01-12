@@ -42,6 +42,7 @@
 #include "../resourcenet.h"
 
 #include "../containerbase-functions.h"
+#include "../gameoptions.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -1786,6 +1787,11 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    try {
       if ( !setup() )
          return;
+
+      // to not block the weapon info on 800*600 screens
+      if ( my_xpos + Width() > PG_Application::GetScreenWidth() - 100 )
+         MoveWidget( 0, 0, false);
+
    } catch ( ParsingError err ) {
       errorMessage( err.getMessage() );
       return;
@@ -2473,6 +2479,8 @@ namespace CargoGuiFunctions {
          return;
 
       vector<Vehicle*> targets = parent.getControls().moveUnitDownTargets( veh );
+
+      infoMessage("You can also use Drag'n'Drop to move units in the Cargo Dialog\nMouse button: " + CGameOptions::Mouse::getButtonName( CGameOptions::Instance()->mouse.dragndropbutton ));
 
       Vehicle* target = selectVehicle( targets );
       if ( target )

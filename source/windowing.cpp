@@ -308,7 +308,7 @@ void  ASCGUI_Window::WidgetParameters::assign( PG_Widget* widget )
 
 
 ASCGUI_Window::ASCGUI_Window ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, const ASCString& baseStyle, bool loadTheme )
-   : PG_Window ( parent, r, "", DEFAULT, baseStyle, 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
+   : PG_Window ( parent, ASC_PG_Dialog::centerRectangle(r), "", DEFAULT, baseStyle, 9 ), panelName( panelName_ ), textPropertyGroup(NULL)
 {
       // FIXME Hide button does not delete Panel      
 }
@@ -852,11 +852,20 @@ bool ASCGUI_Window::setup()
          pc.addInteger( "x", x1 );
          pc.addInteger( "y", y1 );
 
-         if ( x1 < 0 )
+         if ( x1 < 0 && GetParent() )
             x1 = GetParent()->Width() - Width() + x1;
 
-         if ( y1 < 0 )
+         if ( y1 < 0 && GetParent() )
             y1 = GetParent()->Height() - Height() + y1;
+
+         int xofs = GetParent() ? GetParent()->my_xpos : 0;
+         int yofs = GetParent() ? GetParent()->my_ypos : 0;
+
+         if ( x1 + xofs + Width() > PG_Application::GetScreenWidth() )
+            x1 = max ( PG_Application::GetScreenWidth() - Width() - xofs, 0 );
+
+         if ( y1 + yofs + Height() > PG_Application::GetScreenHeight() )
+            y1 = max ( PG_Application::GetScreenHeight() - Height() - yofs, 0 );
 
          MoveWidget( x1, y1, false );
       }

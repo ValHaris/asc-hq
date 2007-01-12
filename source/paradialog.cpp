@@ -406,7 +406,7 @@ ASC_PG_App :: ~ASC_PG_App()
 
 
 ASC_PG_Dialog :: ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags, const ASCString& style, int heightTitlebar )
-   :PG_Window ( parent, centerWindow(r), windowtext, flags, style, heightTitlebar ),stdButtonNum(0), caller(0), standardButtonDir( Vertical )
+   :PG_Window ( parent, centerRectangle(r), windowtext, flags, style, heightTitlebar ),stdButtonNum(0), caller(0), standardButtonDir( Vertical )
 {
 
    // it looks nice if you can see the map behind the dialog, but seeing other dialogs stacked above each other is just confusing, so we reduce transparency
@@ -427,7 +427,7 @@ int ASC_PG_Dialog::RunModal()
 }
 
 
-PG_Rect ASC_PG_Dialog::centerWindow( const PG_Rect& rect )
+PG_Rect ASC_PG_Dialog::centerRectangle( const PG_Rect& rect )
 {
    PG_Rect r = rect;
 
@@ -443,6 +443,14 @@ PG_Rect ASC_PG_Dialog::centerWindow( const PG_Rect& rect )
 
    if ( r.y < 0 )
       r.y = (PG_Application::GetScreenHeight() - r.h) / 2;
+
+
+   if ( r.x + r.w >  PG_Application::GetScreenWidth() )
+      r.x = PG_Application::GetScreenWidth() - r.w;
+         
+   if ( r.y + r.h >  PG_Application::GetScreenHeight() )
+      r.y = PG_Application::GetScreenHeight() - r.h;
+
    return r;
 }
 

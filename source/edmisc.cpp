@@ -1663,11 +1663,11 @@ void         tunit::buttonpressed(int         id)
    int temp, storage;
 
    switch (id) {
-   case 3:  temp = unit->tank.material;
+   case 3: /* temp = unit->tank.material;
             unit->tank.material = 0;
             storage = unit->putResource(maxint, Resources::Material, 1 );
             addeingabe(12,&unit->tank.material, 0, storage );
-            unit->tank.material = min ( storage, temp );
+            unit->tank.material = min ( storage, temp );*/
       break;
 
    case 4 :
@@ -1689,11 +1689,11 @@ void         tunit::buttonpressed(int         id)
      unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ] );
    }
    break;
-   case 12: temp = unit->tank.fuel;
+   case 12: /* temp = unit->tank.fuel;
             unit->tank.fuel = 0;
             storage = unit->putResource(maxint, Resources::Fuel, 1 );
             addeingabe( 3, &unit->tank.fuel, 0, storage );
-            unit->tank.fuel = min ( storage, temp );
+            unit->tank.fuel = min ( storage, temp );*/
       break;
 
    case 14 :
