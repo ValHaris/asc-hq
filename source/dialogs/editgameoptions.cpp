@@ -220,7 +220,6 @@ class EditGameOptions : public ASC_PG_Dialog {
             
          new PG_PropertyField_IntDropDown<int, GetVideoModes::VList::iterator>( propertyEditor, "Video Mode", &videoMode, vmodes.getList().begin(), vmodes.getList().end() );
          
-         new PG_PropertyField_Checkbox<bool>( propertyEditor, "View own replays", &o->debugReplay );
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Automatic Training", &o->automaticTraining );
 
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Field Select", &o->mouse.fieldmarkbutton, mouseButtonNames );

@@ -354,6 +354,7 @@ void ContainerBase :: addToCargo( Vehicle* veh )
    for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( ! (*i) ) {
          *i = veh;
+         veh->cargoParent = this;
          return;
       }
 

@@ -203,7 +203,9 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
       
       if ( !cargoWidget )
          return false;
-      
+
+      PG_Application::ShowCursor( PG_Application::HARDWARE );
+
       int x,y;
       PG_Application::GetEventSupplier()->GetMouseState(x, y);
       
@@ -217,7 +219,6 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
          cargoWidget->releaseDrag( x, y);
       }
 
-      PG_Application::ShowCursor( PG_Application::HARDWARE );
       
       
       return true;

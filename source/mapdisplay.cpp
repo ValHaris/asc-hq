@@ -638,59 +638,6 @@ void MapDisplayPG::updateWidget()
 }
 
 
-class TargetPixelSelector_Rect {
-        PG_Rect rect; 
-        int x2,y2;
-        int xrange;
-        int w,h;
-        SPoint pos;
-     protected:
-        int skipTarget( int x, int y ) 
-        { 
-           int nx = x + pos.x;
-           int ny = y + pos.y;
-           if ( nx >= rect.x && ny >= rect.y && nx < x2 && ny < y2 )
-              return 0; 
-           else {
-              if ( ny < rect.y )
-                 return xrange - x;
-              else
-                 if ( nx < rect.x )
-                    return rect.x - nx;
-                 else   
-                    if (ny >= y2 )
-                       return -1;
-                    else
-                       if ( nx >= x2 )
-                          return xrange - x;
-                       else
-                          return 1;     
-           }      
-        };
-        void init( const Surface& srv, const SPoint& position, int xrange, int yrange ) 
-        {
-           w = srv.w();
-           h = srv.h();
-           pos = position;
-           this->xrange = xrange;
-        };
-        
-     public:
-        void setTargetRect( const SDL_Rect& r  ) 
-        { 
-           rect = r; 
-           x2 = r.x + r.w; 
-           y2 = r.y + r.h;
-        };
-        
-        void setClippingRect( SDL_Surface*  srv  ) 
-        { 
-           setTargetRect( srv->clip_rect );
-        };
-        
-        TargetPixelSelector_Rect ( NullParamType npt = nullParam ) :w(0xffffff),h(0xffffff) {};   
-  };
-
 
 void MapDisplayPG::blitInternalSurface( SDL_Surface* dest, const SPoint& pnt, const PG_Rect& dstClip )
 {

@@ -73,8 +73,12 @@ void OverviewMapPanel::painter ( const PG_Rect &src, const ASCString& name, cons
    if ( name == "overviewmap" && actmap && !locked ) {
       Surface s = actmap->overviewMapHolder.getOverviewMap( false );
 
-      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom> blitter;
+      MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
       blitter.setSize( s.w(), s.h(), dst.w, dst.h );
+
+      PG_Rect clip= dst.IntersectRect( PG_Application::GetScreen()->clip_rect );
+      blitter.setTargetRect( clip );
+
 
       currentZoom  = blitter.getZoomX();
       blitter.blit( s, screen, SPoint(dst.x, dst.y) );
