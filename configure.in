@@ -85,6 +85,15 @@ CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_ "
 CXXFLAGS="$CXXFLAGS -Wno-sign-compare -funsigned-char -D_UNIX_ -D_SDL_ "
 
 
+AC_DEFUN([AC_LIB_MISSING], [
+   AC_MSG_ERROR(
+      [[ ASC requires the $1 library$3. ]
+      [ If you have a distribution supplied $1 package installed,]
+      [ perhaps the $1-devel package is missing. ] 
+      [ If your distribution does not include the $1 library, $4you can get it from] 
+      [ $2 ]])
+])
+
 
 
 dnl here comes the special stuff - done on demand (developers only?)
@@ -121,24 +130,16 @@ SAVE_LIBS=$LIBS
 
 dnl check for libSDL
 SDL_VERSION=1.2.2
-AM_PATH_SDL($SDL_VERSION,:,
-            AC_MSG_ERROR(
-                 [[ *** SDL version $SDL_VERSION not found! If you have a distribution supplied ] 
-                  [ SDL.RPM installed, perhaps the SDL-devel.RPM is missing. If your distribution] 
-                  [ does not include the SDL library, you can get it from http://www.libsdl.org/ ]]))
+AM_PATH_SDL($SDL_VERSION,:, AC_LIB_MISSING( SDL, http://www.libsdl.org/, [ (version >= $SDL_VERSION)])) 
 
 dnl set up new FLAGS
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-AC_CHECK_LIB( SDL_image, 
+AC_CHECK_LIB( SDL_image,
               IMG_LoadJPG_RW,,
-              AC_MSG_ERROR(
-                   [[ ASC requires the SDL_image library. If you have a distribution supplied ] 
-                    [ SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing. ] 
-                    [ If your distribution does not include the SDL_image library, you can get it ] 
-                    [ from http://www.libsdl.org/projects/SDL_image/ ]]))
+              AC_LIB_MISSING( SDL_image, http://www.libsdl.org/projects/SDL_image/ )) 
 
 #AC_MSG_CHECKING("SDL_image.h")
 #AC_TRY_COMPILE( [#include <SDL_image.h>],[return 0;],
@@ -152,21 +153,11 @@ AC_CHECK_LIB( SDL_image,
 
 AC_CHECK_LIB(jpeg, 
              jpeg_CreateDecompress,,
-             AC_MSG_ERROR(  
-                  [[ ASC requires the jpeg library. This library will almost certainly be supplied ]
-                   [ with your distribution. If you have it already installed, perhaps a jpeg-devel ]
-                   [ package is missing. ]
-                   [ If your distribution really does not include the jpeg library, you can get it ]
-                   [ from http://www.ijg.org/ ]]))
-
+             AC_LIB_MISSING( jpeg, http://www.ijg.org/,,[ which is VERY unlikely,]))
 
 AC_CHECK_LIB(SDL_mixer, 
              Mix_PlayChannelTimed,, 
-             AC_MSG_ERROR( 
-                  [[ ASC requires the SDL_mixer library. If you have a distribution supplied ] 
-                   [ SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing.] 
-                   [ If your distribution does not include the SDL_image library, you can get it ] 
-                   [ from http://www.libsdl.org/projects/SDL_mixer/ ]] ))
+             AC_LIB_MISSING( SDL_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
 
 AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
 
@@ -200,12 +191,12 @@ fi
    
      
 if test "X$SDLsoundmissing" = "Xy" ; then
-   AC_MSG_WARN( SDL_sound not found. Using stripped down sound support, which only supports OGG ); 
+   AC_MSG_WARN( SDL_sound not found. Using stripped down sound support, which only supports OGG )
 
    dnl Check for ogg
    XIPH_PATH_VORBIS
    if test "x$no_vorbis" = "x" ; then
-      AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/SDL_sound "
+      AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/sdl_sound "
       
       SDL_SOUND_LIB="\$(abs_top_srcdir)/source/libs/sdl_sound/libSDL_sound_int.la"
       
@@ -213,10 +204,7 @@ if test "X$SDLsoundmissing" = "Xy" ; then
       AC_SUBST(SdlSoundDir)
       
    else
-      AC_MSG_ERROR( [Vorbis library not found! If you have a distribution supplied ] 
-                    [vorbis package installed, perhaps the vorbis-devel.RPM is missing.]
-                    [If your distribution does not provide the vorbis library, you can get it from ]
-                    [ http://xiph.org/vorbis/ ]) 
+      AC_LIB_MISSING( Vorbis, http://xiph.org/vorbis/ )
    fi
 else
    SDL_SOUND_LIB=-lSDL_sound
@@ -269,11 +257,7 @@ if test x$BOOSTERR = xyes ; then
   AC_CHECK_LIB( boost_regex-gcc, 
                 main, 
                 BOOST_LIBS="-lboost_regex-gcc", 
-                AC_MSG_ERROR(
-                  [[ ASC requires the Boost library. If you have a distribution supplied ]
-                   [ Boost package installed, perhaps the Boost-devel package is missing. ]
-                   [ If your distribution does not provide the Boost library, you can get it ]
-                   [ from http://www.boost.org/ ]]))
+                AC_LIB_MISSING( Boost, http://www.boost.org/, [( which may be splitted into several distinct libraries)]))
 fi
 
 
@@ -332,28 +316,14 @@ if test "$ft2test" = "yes"; then
    fi
 
    if test x$have_freetype = xno; then
-      AC_MSG_ERROR([*** Unable to find the FreeType 2 library (http://www.freetype.org/)])
+      AC_LIB_MISSING( FreeType2, http://www.freetype.org/)
    fi
 fi
 
 
-have_expat_lib=no
-have_expat_include=no
+AC_CHECK_HEADER(expat.h,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
+AC_CHECK_LIB(expat, XML_ParserCreate,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
 
-AC_CHECK_HEADER(expat.h, [have_expat_include=yes])
-if test x$have_expat_include = xno; then
-   AC_MSG_ERROR(
-        [*** Unable to find expat header file! (http://expat.sourceforge.net)]
-        [Please install the library and header files ] )
-fi
-
-AC_CHECK_LIB(expat, XML_ParserCreate, have_expat_lib=yes)
-
-if test x$have_expat_lib = xno; then
-   AC_MSG_ERROR(
-      [*** Unable to find expat xml library! (http://expat.sourceforge.net)]
-      [Please install the library and header files ])
-fi
 
 
 EXPAT_INCLUDE=""
@@ -374,26 +344,8 @@ PHYSFS_LIB="-lphysfs"
 PHYSFS_SUBDIR=""
 LIBPHYSFS="-lphysfs"
 
-    have_physfs_lib=no
-    have_physfs_include=no
-
-    AC_CHECK_HEADER(physfs.h, [have_physfs_include=yes])
-
-    if test x$have_physfs_include = xno; then
-          AC_MSG_ERROR(
-      [*** Unable to find PhysFS header file! (http://www.icculus.org/physfs)]
-      [Please install the library and header files]
-      )
-    fi
-
-    AC_CHECK_LIB(physfs, PHYSFS_init, have_physfs_lib=yes)
-
-    if test x$have_physfs_lib = xno; then
-   AC_MSG_ERROR(
-       [*** Unable to find PhysFS library! (http://www.icculus.org/physfs)]
-       [Please install the library and header files.]
-       )
-    fi
+AC_CHECK_HEADER(physfs.h,,AC_LIB_MISSING( physfs, http://www.icculus.org/physfs))
+AC_CHECK_LIB(physfs, PHYSFS_init,,AC_LIB_MISSING( physfs, http://www.icculus.org/physfs))
 
 AC_CONFIG_SUBDIRS(src/physfs)
 
@@ -433,7 +385,10 @@ LIBS="$SAVE_LIBS "
 dnl libbz2 stuff (should have a versionnr about 1.0.0)
 lib_bz2_static=no
 dnl AC_ARG_ENABLE( libbz2-static, AS_HELP_STRING([--enable-libbz2-static],[compiles a static libbz2 into the binary of asc]), [lib_bz2_static=$enableval], [lib_bz2_usecache=yes] )
-dnl AC_CHECK_LIB( bz2, BZ2_bzReadOpen, :, [checklib_bz2_static=yes] )
+
+AC_CHECK_LIB( bz2, BZ2_bzReadOpen,, AC_LIB_MISSING(libbz2,http://www.bzip.org/,,[ which is VERY unlikely,] ))
+AC_CHECK_HEADER( bzlib.h,, AC_LIB_MISSING(libbz2,http://www.bzip.org/,,[ which is VERY unlikely,] ))
+
 dnl AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
 
 dnl ac_cv_lib_bz2_static holds cached flag state, checklib_bz2... holds check

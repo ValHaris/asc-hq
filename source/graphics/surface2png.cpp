@@ -106,13 +106,9 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
       return;
    }
 
-   displayLogMessage(0, "PNG1\n");
-
    png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
    png_infop info_ptr = png_create_info_struct(png_ptr);
    png_init_io(png_ptr, fp);
-
-   displayLogMessage(0, "PNG2\n");
 
    png_color my_palette[256];
 
@@ -136,8 +132,6 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
       png_set_PLTE(png_ptr, info_ptr, my_palette, sdlpal->ncolors);
    }
 
-   displayLogMessage(0, "PNG3\n");
-
    time_t          gmt;
    png_time        mod_time;
    time(&gmt);
@@ -154,17 +148,12 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
 
    Uint8* linebuf = new Uint8[w*4];
    
-   displayLogMessage(0, "PNG4\n");
-
    png_write_info(png_ptr, info_ptr);
    
-
-   displayLogMessage(0, "PNG5\n");
 
    int iii = 0;
    char* pix = (char*)s.pixels();
    for ( int y = y1; y < y1 + h; ++y ) {
-      displayLogMessage(0, "PNG6 - y" + ASCString::toString(y) + "\n");
       Uint32* srcpix32 = (Uint32*)(pix + y * s.pitch());
       srcpix32 += x1;
       Uint8* srcpix8 = (Uint8*)(pix + y * s.pitch());
@@ -184,14 +173,9 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    }
    delete[] linebuf;
    
-   displayLogMessage(0, "PNG7\n");
-
    png_write_end(png_ptr, info_ptr);
    png_destroy_write_struct(&png_ptr, &info_ptr);
    fclose(fp);
-
-   displayLogMessage(0, "PNG8 - finished\n");
-
 }
 #endif
 
