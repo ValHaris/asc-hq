@@ -492,4 +492,6 @@ extern const char* cnetcontrol[cnetcontrolnum];
 
 extern const char* cgeneralnetcontrol[];
 
+const int maxViewRange = 255;
+
 #endif

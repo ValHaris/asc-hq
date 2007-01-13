@@ -109,4 +109,19 @@
   
   extern SigC::Signal0<void> buildingSeen;
 
+  class RecalculateAreaView {
+     MapCoordinate position;
+     int range;
+     GameMap* gamemap; 
+     bool active;
+
+     void removeFieldView( const MapCoordinate& pos );
+     void addFieldView( const MapCoordinate& pos );
+   public:
+      RecalculateAreaView( GameMap* gamemap, const MapCoordinate& pos, int range );
+      void removeView();
+      void addView();
+      ~RecalculateAreaView();
+  };
+
 #endif

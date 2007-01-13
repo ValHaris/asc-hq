@@ -275,11 +275,11 @@ class BuildingType;
 
     /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
-    void addview ( void );
+    void addview();
 
     /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
-    void removeview ( void );
+    void removeview();
 
     /** returns true if the units view is currently added to the maps global visibility.
         \sa viewcalculation.cpp */

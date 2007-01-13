@@ -432,3 +432,44 @@ VisibilityStates fieldVisibility( tfield* pe, int player, GameMap* gamemap, int 
      return visible_not;
 }
 #endif
+
+
+RecalculateAreaView :: RecalculateAreaView( GameMap* gamemap, const MapCoordinate& pos, int range ) : active(false)
+{
+   position = pos;
+   this->range = range;
+   this->gamemap = gamemap;
+}
+
+void RecalculateAreaView::removeView()
+{
+   circularFieldIterator( gamemap, position, 0, range, FieldIterationFunctor( this, &RecalculateAreaView::removeFieldView ));
+   active = true;
+}
+
+void RecalculateAreaView::addView()
+{
+   circularFieldIterator( gamemap, position, 0, range, FieldIterationFunctor( this, &RecalculateAreaView::addFieldView ));
+   evaluateviewcalculation( gamemap, position, range );
+   active = false;
+}
+
+void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
+{
+   tfield* fld = gamemap->getField(pos);
+   if ( fld && fld->getContainer() )
+      fld->getContainer()->removeview();
+}
+
+void RecalculateAreaView::addFieldView( const MapCoordinate& pos )
+{
+   tfield* fld = gamemap->getField(pos);
+   if ( fld && fld->getContainer() )
+      fld->getContainer()->addview();
+}
+
+RecalculateAreaView::~RecalculateAreaView()
+{
+   if ( active )
+      addView();
+}

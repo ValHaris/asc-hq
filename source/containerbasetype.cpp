@@ -184,8 +184,8 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 
    pc.addInteger( "ID", id );
    pc.addInteger( "View", view );
-   if ( view > 255 )
-      view = 255;
+   if ( view > maxViewRange )
+      view = maxViewRange;
 
    pc.addInteger( "Jamming", jamming, 0 );
    pc.addString( "InfoImage", infoImageFilename, "" );

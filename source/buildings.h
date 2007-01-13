@@ -105,16 +105,16 @@ class  Building : public ContainerBase {
     void convert ( int player );
 
     //! Adds the view and jamming of the building to the player's global radar field
-    void addview (  );
+    void addview();
 
     //! Removes the view and jamming of the building from the player's global radar field
-    void removeview ( void );
+    void removeview();
 
     //! returns the armor of the building. \see BuildingType::_armor
-    int  getArmor( ) const;
+    int  getArmor() const;
 
     //! returns the field the buildings entry is standing on
-    tfield* getEntryField ( ) const;
+    tfield* getEntryField() const;
 
     //! returns the position of the buildings entry
     MapCoordinate3D getEntry ( ) const;

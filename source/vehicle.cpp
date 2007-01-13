@@ -997,7 +997,7 @@ int Vehicle :: freeWeight ()
 }
 
 
-void Vehicle :: addview ( void )
+void Vehicle :: addview ()
 {
    if ( viewOnMap )
       fatalError ("void Vehicle :: addview - the vehicle is already viewing the map");
@@ -1008,7 +1008,7 @@ void Vehicle :: addview ( void )
    bes.startsearch();
 }
 
-void Vehicle :: removeview ( void )
+void Vehicle :: removeview ()
 {
    if ( !viewOnMap )
       fatalError ("void Vehicle :: removeview - the vehicle is not viewing the map");

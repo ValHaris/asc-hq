@@ -1622,6 +1622,14 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
       tfield* fld = actmap->getField(pos);
       ObjectType* obj = objectTypeRepository.getObject_byID( abs(num) );
 
+      RecalculateAreaView rav ( actmap, pos, maxViewRange / maxmalq + 1 );
+      
+
+      bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;
+      if ( objectAffectsVisibility )
+         rav.removeView();
+      
+
       if ( !fld->checkforobject ( obj ) ) {
          assert(num>0);
          fld-> addobject ( obj );
@@ -1632,8 +1640,8 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
          logtoreplayinfo ( rpl_remobj2, pos.x, pos.y, obj->id, veh->networkid );
       }
 
-      if ( obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1 )
-         computeview( actmap );
+      if ( objectAffectsVisibility )
+         rav.addView();
 
       veh->getResource( num > 0 ? obj->buildcost : obj->removecost, false );
 

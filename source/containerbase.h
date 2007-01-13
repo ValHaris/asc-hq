@@ -238,7 +238,6 @@ class ContainerBase {
       virtual void endRound ( void );
       
 
-      
       class Work {
          public:
             virtual bool finished() = 0;
