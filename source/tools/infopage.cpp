@@ -891,7 +891,7 @@ void UnitMainPage::buildContent() {
   addTREntry("View", vt.view);
   addTREntry("Jamming", vt.jamming);
   addTREntry("Auto-repair Rate", vt.autorepairrate);
-  if(vt.maxwindspeedonwater >= maxwindspeed) {
+  if(vt.maxwindspeedonwater >= 255) {
     addTREntry("Resists wind force", "Unlimited");
   } else {
     addTREntry("Resists wind force", vt.maxwindspeedonwater);

@@ -266,8 +266,10 @@ class ColorConverter<1,4>
          if ( targetSurface.flags() & SDL_SRCCOLORKEY ) {
             hasColorKey = true;
             colorKey = targetSurface.GetPixelFormat().colorkey();
-         } else
+         } else {
             hasColorKey = false;
+            colorKey = 0;
+         }
 
          palette = sourceSurface.GetPixelFormat().palette()->colors;
          rshift = targetSurface.GetPixelFormat().Rshift();

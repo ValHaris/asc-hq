@@ -1145,7 +1145,7 @@ ASCString TagIntProperty::toString() const
 
 int NamedIntProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
-   int i;
+   int i = 0;
 
    StringTokenizer st ( entry.value );
    ASCString s = st.getNextToken();

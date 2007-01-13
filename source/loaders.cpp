@@ -672,7 +672,7 @@ void tspfldloaders::readfields ( void )
             fld2->visible = 0;
 
          bool tempobjects[16];
-         int  tempobjectNum;
+         int  tempobjectNum = 0;
 
          if (b3 & csm_object ) {
 
