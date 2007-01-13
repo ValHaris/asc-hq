@@ -151,6 +151,7 @@ void GraphicSetManager_Base::loadData()
    }
    #endif
 */
+   IconRepository::getIcon("emptyfld.raw");
 
    ASCString location;
    tfindfile ff ( "*.gfx" );

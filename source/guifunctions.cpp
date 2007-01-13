@@ -1999,6 +1999,9 @@ void VehicleBuildingGui::addButton( int &num, const MapCoordinate& mc, Container
 void VehicleBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
 {
    tfield* fld =  actmap->getField(pos);
+   if ( !fld )
+      return;
+
    if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
       return;
 
@@ -2077,7 +2080,8 @@ void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, i
             NewGuiHost::pushIconHandler( &vehicleBuildingGui );
             repaintMap();
             updateFieldInfo();
-         }
+         } else
+            displaymessage2("no units produceable");
    }
 }
 
