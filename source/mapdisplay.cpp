@@ -1289,6 +1289,9 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       displayMovementStep( movement, (ticker - startTime) * 100 / duration );
       ++loopCounter;
    }
+
+   if( duration )
+      displayMovementStep( movement, 100 );
    
 #ifdef debugmapdisplay
    cout << (float(loopCounter) / float(ticker - loopStartTicker) * 100) << " / " << (float(loopCounter) / float(ticker - startTime) * 100) << " fps \n";

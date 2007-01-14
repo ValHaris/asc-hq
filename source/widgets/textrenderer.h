@@ -43,8 +43,9 @@ class TextRenderer : public PG_ScrollWidget {
       typedef std::map<PG_Widget*,RenderingAttribute> Attributes;
       Attributes attributes;
    
-   
+   public:
       typedef list<PG_Widget*> Widgets;
+   private:
       Widgets widgets;
       PG_Widget* lastWidget;
 
@@ -80,7 +81,6 @@ class TextRenderer : public PG_ScrollWidget {
       ASCString::const_iterator token ( const ASCString& text, ASCString::const_iterator start );
       ASCString::const_iterator token_command ( const ASCString& text, ASCString::const_iterator start );
       void parse( const ASCString& text );
-      PG_Widget* parsingError( const ASCString& errorMessage );
       
       virtual PG_Widget* render( const ASCString& token );
       virtual Widgets eval_command( const ASCString& token );
@@ -92,6 +92,16 @@ class TextRenderer : public PG_ScrollWidget {
       TextRenderer (PG_Widget *parent, const PG_Rect &r, const std::string& text, const std::string &style="ScrollWidget");
       TextRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null );
       void SetText( const std::string& text );
+
+      PG_Widget* parsingError( const ASCString& errorMessage );
+
+      class TagRenderer {
+         public:
+            virtual bool renderWidget( const ASCString& tag, Widgets& widgets, TextRenderer* parent  ) = 0;
+            virtual ~TagRenderer() {};
+      };
+
+      static bool registerTagRenderer ( TagRenderer* renderer );
 };
 
 

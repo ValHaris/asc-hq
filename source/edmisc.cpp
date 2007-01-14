@@ -1660,7 +1660,6 @@ void         tunit::run(void)
 void         tunit::buttonpressed(int         id)
 {
    int ht;
-   int temp, storage;
 
    switch (id) {
    case 3: /* temp = unit->tank.material;

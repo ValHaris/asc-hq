@@ -46,6 +46,7 @@
 #include "dialog.h"
 
 #include "dialogs/fieldmarker.h"
+#include "widgets/textrenderer.h"
 
 #ifdef karteneditor
 # include "edmisc.h"
@@ -475,107 +476,20 @@ void         tshowtechnology::run(void)
 void         showtechnology(const Technology*  tech )
 {
    if ( tech ) {
-   #if 0
-      if ( tech->pictfilename ) {
-         mousevisible(false);
-         bar ( 0,0, agmp->resolutionx-1, agmp->resolutiony-1, black );
-         activefontsettings.length = agmp->resolutionx - 40;
-         activefontsettings.justify = centertext;
-         activefontsettings.background = 255;
-         activefontsettings.height = 0;
-         activefontsettings.font = schriften.large;
-         activefontsettings.color = white;
-         showtext2 ( "A new technology" , 20, 200 );
-         showtext2 ( "has been discovered", 20, 280 );
-         int t = ticker;
-         while ( mouseparams.taste )
-            releasetimeslice();
-         do {
-            releasetimeslice();
-         } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste);
+      ASCString text = "#fontsize=18#Research completed#fontsize=12#\n";
 
-         int abrt = 0;
-         while ( keypress() )
-           r_key();
+      text = "Our scientists have mastered a new technology:\n#fontsize=18#";
 
+      text += tech->name + "#fontsize=12#\n";
 
-         int fs = loadFullscreenImage ( tech->pictfilename );
-         if ( fs ) {
+      if ( tech->relatedUnitID > 0 )
+         text += "#vehicletype=" + ASCString::toString(tech->relatedUnitID) + "#\n\n";
 
-            t = ticker;
-            while ( mouseparams.taste )
-               releasetimeslice();
+      text += tech->infotext;
 
-            do {
-               releasetimeslice();
-            } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
-
-            closeFullscreenImage();
-         }
-         activefontsettings.length = agmp->resolutionx - 40;
-         activefontsettings.justify = centertext;
-         activefontsettings.background = 255;
-         activefontsettings.height = 0;
-         activefontsettings.font = schriften.large;
-         activefontsettings.color = white;
-         bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, 0 );
-         showtext2 ( tech->name, 20, 20 );
-
-         if ( tech->infotext ) {
-            tviewtext vt;
-            vt.setparams ( 20, 50, agmp->resolutionx - 20, agmp->resolutiony - 20, tech->infotext, white, black );
-            vt.tvt_dispactive = 0;
-            vt.displaytext ();
-
-            int textsizeycomplete = vt.tvt_yp;
-            int textsizey = agmp->resolutiony - 70 ;
-
-            vt.tvt_dispactive = 1;
-            vt.displaytext ();
-   
-            abrt = 0;
-            int scrollspeed = 10;
-            do {
-               tkey taste = r_key();
-
-               if ( textsizeycomplete > textsizey ) {
-                  int oldstarty = vt.tvt_starty;
-                  if ( taste == ct_down ) 
-                     if ( vt.tvt_starty + textsizey + scrollspeed < textsizeycomplete )
-                        vt.tvt_starty += scrollspeed;
-                     else
-                         vt.tvt_starty = textsizeycomplete - textsizey;
-
-                  if ( taste == ct_up ) 
-                     if ( vt.tvt_starty - scrollspeed > 0 )
-                        vt.tvt_starty -= scrollspeed;
-                     else
-                         vt.tvt_starty = 0;
-
-                  if ( oldstarty != vt.tvt_starty )
-                      vt.displaytext();
-
-               }
-
-               if ( taste == ct_esc || taste == ct_enter || taste == ct_space )
-                  abrt = 1;
-
-            } while ( !abrt ); /* enddo */
-
-            // repaintdisplay();
-         }
-      } else {
-   #endif
-         //ASCString text = "A new technology has been researched:\n#font02#";
-         ASCString text = "#font02#";
-         text += tech->name;
-         text += "#font01#\n";
-         text += tech->infotext;
-       tviewanytext vat;
-       vat.init ( "new technology", text.c_str() );
-       vat.run();
-       vat.done();
-//      }
+      ViewFormattedText tr ("Research", text, PG_Rect(-1,-1, 300,250) );
+      tr.Show();
+      tr.RunModal();
    }
 }
 

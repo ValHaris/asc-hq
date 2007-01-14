@@ -1148,6 +1148,13 @@ void trunreplay :: execnextreplaymove ( void )
                               Resources cost;
                               int movecost;
 
+                              RecalculateAreaView rav ( actmap, MapCoordinate(x,y), maxViewRange / maxmalq + 1 );
+                              
+                              bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;
+                              if ( objectAffectsVisibility )
+                                 rav.removeView();
+
+
                               if ( actaction == rpl_remobj || actaction == rpl_remobj2 ) {
                                  cost = obj->removecost;
                                  fld->removeobject ( obj );
@@ -1157,6 +1164,10 @@ void trunreplay :: execnextreplaymove ( void )
                                  fld->addobject ( obj );
                                  movecost = obj->build_movecost;
                               }
+
+                              if ( objectAffectsVisibility )
+                                 rav.addView();
+
 
                               if ( unit > 0 ) {
                                  Vehicle* veh = actmap->getUnit(unit);
@@ -1169,13 +1180,10 @@ void trunreplay :: execnextreplaymove ( void )
                                        if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
                                           error("Resource mismatch: not enough resources to construct/remove object !");
 
-
                                  } else
                                     error("replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
 
-                              if ( obj->basicjamming_plus || obj->basicjamming_abs != -1 || obj->viewbonus_plus || obj->viewbonus_abs != -1 )
-                                 computeview( actmap );
                               displaymap();
                               wait(MapCoordinate(x,y));
                               removeActionCursor();

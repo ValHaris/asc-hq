@@ -1400,7 +1400,7 @@ void DisplayImmediateMessage::execute( MapDisplayInterface* md )
 void DisplayImmediateMessage::readData( tnstream& stream )
 {
    versionTest(stream,1,1);
-   message = stream.readString();
+   message = stream.readString(true);
 }
 
 void DisplayImmediateMessage::writeData( tnstream& stream )

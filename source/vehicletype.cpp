@@ -1037,7 +1037,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.openBracket ( "consumption" );
    jumpDrive.consumption.runTextIO ( pc, Resources(0,0,0) );
    pc.closeBracket();
-   if ( jumpDrive.height )
+   if ( jumpDrive.height || !pc.isReading() )
       jumpDrive.targetterrain.runTextIO ( pc );
    pc.addInteger( "MaxDistance", jumpDrive.maxDistance, maxint );
    pc.closeBracket();

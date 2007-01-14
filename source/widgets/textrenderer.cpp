@@ -27,7 +27,6 @@
 #include "../graphics/surface.h"
 #include "../iconrepository.h"
 #include "../dialogs/fileselector.h"
-#include "targetcoordinatelocator.h"
 
 void TextRenderer :: TextAttributes :: assign ( PG_Widget* w )
 {
@@ -289,6 +288,14 @@ PG_Widget* TextRenderer :: parsingError( const ASCString& errorMessage )
    return w;
 }
 
+typedef Loki::SingletonHolder< deallocating_vector<TextRenderer::TagRenderer*> > RenderingAddons;
+
+bool TextRenderer::registerTagRenderer ( TextRenderer::TagRenderer* renderer )
+{
+   RenderingAddons::Instance().push_back( renderer );
+   return true;
+}
+
 
 
 
@@ -403,30 +410,11 @@ TextRenderer::Widgets TextRenderer :: eval_command( const ASCString& token )
       return widgets;
    }
 
-   // (\d+/\d+)
-   static boost::regex coordinates( "#coord\\((.*)\\)#");
-   if( boost::regex_match( token, what, coordinates)) {
-      ASCString s;
-      s.assign( what[1].first, what[1].second );
 
-      static boost::regex coordinates2( ";?(\\d+)/(\\d+)(.*)");
-      while ( boost::regex_match( s, what, coordinates2)) {
-         ASCString s2;
-         s2.assign ( what[1].first, what[1].second );
-         int x = strtol(s2.c_str(), NULL, 0 );
-
-         s2.assign ( what[2].first, what[2].second );
-         int y = strtol(s2.c_str(), NULL, 0 );
-
-         SelectFromMap::CoordinateList positions;
-         positions.push_back( MapCoordinate(x,y));
-         
-         s.assign( what[3].first, what[3].second );
-
-         widgets.push_back( new TargetCoordinateLocator( this, PG_Point(0,0), positions ) );
-      }
-
-      return widgets;
+   for ( deallocating_vector<TextRenderer::TagRenderer*>::iterator i = RenderingAddons::Instance().begin(); i != RenderingAddons::Instance().end(); ++i ) {
+      Widgets w;
+      if ( (*i)->renderWidget( token, w, this ))
+         return w;
    }
 
    widgets.push_back ( parsingError ( "unknown token: " + token ) );
@@ -529,4 +517,6 @@ bool ViewFormattedText :: eventKeyDown(const SDL_KeyboardEvent* key)
    }
    return false;
 }
+
+
 
