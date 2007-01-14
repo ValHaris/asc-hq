@@ -225,6 +225,8 @@ class EditGameOptions : public ASC_PG_Dialog {
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Field Select", &o->mouse.fieldmarkbutton, mouseButtonNames );
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Center View", &o->mouse.centerbutton, mouseButtonNames );
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Drag'N'Drop", &o->mouse.dragndropbutton, mouseButtonNames );
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Zoom Out", &o->mouse.zoomoutbutton, mouseButtonNames );
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Zoom In", &o->mouse.zoominbutton, mouseButtonNames );
 
 
          if ( !mainApp )

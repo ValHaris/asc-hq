@@ -212,6 +212,9 @@ Sound* SoundList::getSound( const ASCString& filename )
         s = new Sound ( filename );
      }
 
+      dataLoaderTicker();
+
+
      soundFiles[filename] = s;
      if ( s != NULL )
         displayLogMessage ( 5, " loading sound completed\n" );

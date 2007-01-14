@@ -835,6 +835,21 @@ int MapDisplayPG::setSignalPriority( int priority )
       
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 4 ) {
+      changeZoom( 10 );
+      viewChanged();
+      repaintMap();
+      return true;
+   }
+
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 5 ) {
+      changeZoom( -10 );
+      viewChanged();
+      repaintMap();
+      return true;
+   }
+
+
    MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;

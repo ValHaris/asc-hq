@@ -144,6 +144,9 @@ class CGameOptions
          //! if != 0, a single click will mark a field AND open the small gui menu
          // int singleClickAction;
 
+         int zoomoutbutton;
+         int zoominbutton;
+
          static ASCString getButtonName( int button );
       }
       mouse;
