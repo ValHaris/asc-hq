@@ -50,6 +50,7 @@ ObjectType :: ObjectType ( void ) : rotateImage(false)
    imageHeight = 0;
    physicalHeight = 0;
    growthRate = 0;
+   growOnUnits = false;
    lifetime = -1;
    growthDuration = -1;
 }
@@ -72,7 +73,7 @@ const ObjectType::FieldModification&  ObjectType::getFieldModification ( int wea
 bool  ObjectType :: buildable ( tfield* fld ) const
 {
    #ifndef converter
-   if ( fld->building )
+   if ( fld->building && !growOnUnits )
       return false;
 
    if ( getFieldModification( fld->getweather() ).terrainaccess.accessible ( fld->bdt ) <= 0 )
@@ -776,7 +777,7 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 
 
 
-const int object_version = 18;
+const int object_version = 19;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -901,6 +902,9 @@ void ObjectType :: read ( tnstream& stream )
 
       if ( version >= 18 )
          rotateImage = stream.readInt();
+
+      if ( version >= 19 )
+         growOnUnits = stream.readInt();
       
    } else
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
@@ -989,7 +993,7 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt( namingMethod );
     stream.writeInt( growthDuration );
     stream.writeInt( rotateImage );
-
+    stream.writeInt( growOnUnits );
 }
 
 
@@ -1090,6 +1094,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addDFloat( "GrowthRate", growthRate, 0 );
    pc.addInteger( "MaxChildSpawnNumber", growthDuration, -1 );
    pc.addInteger( "LifeTime", lifetime, -1 );
+   pc.addBool( "GrowOnUnits", growOnUnits, false );
 
 
    pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );

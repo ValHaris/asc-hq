@@ -1305,23 +1305,24 @@ void GameMap::objectGrowth()
              if ( i->typ->growthRate > 0 && i->remainingGrowthTime != 0 )
                 for ( int d = 0; d < 6; ++d ) {
                    tfield* fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
-                   if ( fld2 && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) 
-                      if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) {
-                        double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
-                        if ( d > 0 ) {
-                           if ( d > 0.9 )
-                              d = 0.9;
+                   if ( fld2 ) 
+                      if ( i->typ->growOnUnits || ((!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ))
+                        if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) {
+                           double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
+                           if ( d > 0 ) {
+                              if ( d > 0.9 )
+                                 d = 0.9;
 
-                           int p = static_cast<int>(std::ceil ( double(1) / d));
-                           if ( p > 1 )
-                              if ( random ( p ) == 1 )
-                                 if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 ) {
-                                    newObjects.push_back( make_pair( fld2, i->typ->id ));
-                                    i->remainingGrowthTime -= 1;
-                                    remainingGrowthTime[fld2] = i->remainingGrowthTime;
-                                 }
+                              int p = static_cast<int>(std::ceil ( double(1) / d));
+                              if ( p > 1 )
+                                 if ( random ( p ) == 1 )
+                                    if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 ) {
+                                       newObjects.push_back( make_pair( fld2, i->typ->id ));
+                                       i->remainingGrowthTime -= 1;
+                                       remainingGrowthTime[fld2] = i->remainingGrowthTime;
+                                    }
+                           }
                         }
-                   }
                 }
       }
 

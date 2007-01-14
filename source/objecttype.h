@@ -176,6 +176,9 @@
      //! the probability that an object of this type spawns another object on a neighbouring field
      double growthRate;
 
+     //! is the object growth stopped by units and buildings
+     bool growOnUnits;
+
      //! the object is removed when it is lifetime turns old. -1 disables removal
      int lifetime;
 
