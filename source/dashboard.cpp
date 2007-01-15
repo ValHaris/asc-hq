@@ -469,15 +469,15 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
          if ( event->type == SDL_MOUSEBUTTONDOWN  ) {
 
             tfield* fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
-            const Vehicletype* vt = NULL;
-            const Vehicle* veh = NULL;
-            if ( fld && fld->vehicle ) {
+            const Vehicle* vehicle = veh;
+            const Vehicletype* vt = veh ? veh->typ : NULL;
+            if ( !veh && fld && fld->vehicle ) {
                vt = fld->vehicle->typ;
-               veh = fld->vehicle;
+               vehicle = fld->vehicle;
             }
             if ( vt || veh ) {
                // parent? PG_Application::GetWidgetById( ASC_PG_App::mainScreenID )
-               WeaponInfoPanel* wip = new WeaponInfoPanel( NULL, veh, vt );
+               WeaponInfoPanel* wip = new WeaponInfoPanel( NULL, vehicle, vt );
                wip->Show();
                wip->BringToFront();
                if ( modalWeaponInfo ) {

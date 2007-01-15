@@ -37,6 +37,7 @@
 class EventEditor : public ASC_PG_Dialog {
    private:
       DropDownSelector* eventType;
+      DropDownSelector* triggerConnection;
       PG_LineEdit* description;
       Event* event;
       bool result;
@@ -58,12 +59,12 @@ class EventEditor : public ASC_PG_Dialog {
             event->spawnAction( eai );
          else
             if ( event->action->getActionID() != eai ) {
-            delete event->action;
-            event->action = NULL;
-            event->spawnAction( eai );
+               delete event->action;
+               event->action = NULL;
+               event->spawnAction( eai );
             }
 
-            event->action->setup();
+         event->action->setup();
       }
 
       bool setupTrigger( int num )
@@ -124,6 +125,11 @@ class EventEditor : public ASC_PG_Dialog {
          }
 
          event->description = description->GetText();
+
+         if ( triggerConnection->GetSelectedItemIndex() == 0 )
+            event->triggerConnection = Event::AND;
+         else
+            event->triggerConnection = Event::OR;
 
          event->playerBitmap = 0;
          for ( int i = 0; i < playerlistbox->GetWidgetCount(); ++i ) {
@@ -199,7 +205,11 @@ class EventEditor : public ASC_PG_Dialog {
 
          new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25 ), "Logic:" );
          static const char* connectionNames[2] = {"all trigger must be triggered", "only one trigger must be triggered" };
-         eventType = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), 2, connectionNames );
+         triggerConnection = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), 2, connectionNames );
+         if ( event->triggerConnection == Event::AND )
+            triggerConnection->SelectItem( 0 );
+         else
+            triggerConnection->SelectItem( 1 );
          ypos += 40;
 
          

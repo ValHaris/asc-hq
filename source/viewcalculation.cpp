@@ -457,14 +457,14 @@ void RecalculateAreaView::addView()
 void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
 {
    tfield* fld = gamemap->getField(pos);
-   if ( fld && fld->getContainer() )
+   if ( fld && fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() )
       fld->getContainer()->removeview();
 }
 
 void RecalculateAreaView::addFieldView( const MapCoordinate& pos )
 {
    tfield* fld = gamemap->getField(pos);
-   if ( fld && fld->getContainer() )
+   if ( fld && fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() )  //excluding neutral buildings here
       fld->getContainer()->addview();
 }
 
