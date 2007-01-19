@@ -26,6 +26,8 @@
 #include <cmath>
 #include <limits>
 
+#include "pgeventsupplier.h"
+
 #include "global.h"
 #include "typen.h"
 #include "mapdisplay.h"
@@ -832,20 +834,29 @@ int MapDisplayPG::setSignalPriority( int priority )
    signalPrio = priority;
    return old;
 }
-      
+
+void filterQueuedZoomEvents()
+{
+   SDL_Event event;
+   while ( PG_Application::GetEventSupplier()->PeepEvent(&event) && (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) && (event.button.button == CGameOptions::Instance()->mouse.zoomoutbutton || event.button.button == CGameOptions::Instance()->mouse.zoominbutton ))
+      PG_Application::GetEventSupplier()->PollEvent ( &event );
+}
+
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
-   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 4 ) {
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoomoutbutton ) {
       changeZoom( 10 );
       viewChanged();
       repaintMap();
+      filterQueuedZoomEvents();
       return true;
    }
 
-   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 5 ) {
+   if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoominbutton ) {
       changeZoom( -10 );
       viewChanged();
       repaintMap();
+      filterQueuedZoomEvents();
       return true;
    }
 

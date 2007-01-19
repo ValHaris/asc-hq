@@ -8,8 +8,9 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef textrenderer-addonsH
-#define textrenderer-addonsH
+#ifndef textrenderer_addonsH
+#define textrenderer_addonsH
 
+extern void uselessCallToTextRenderAddons();
 
 #endif

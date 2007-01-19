@@ -25,10 +25,13 @@
 #include "../paradialog.h"
 
 class FileInfo;
+class FileSelectionItemFactory;
 
 class FileSelectionWindow : public ASC_PG_Dialog {
       ASCString filename;
       ASCString wildcard;
+      bool saveFile;
+      FileSelectionItemFactory* factory;
 
    protected:
       void fileNameSelected( const ASCString& filename );
@@ -53,6 +56,8 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
       static bool comp ( const FileInfo* i1, const FileInfo* i2 );
 
       void restart();
+
+      int getLevel( const ASCString& name );
       
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
       

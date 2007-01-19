@@ -205,9 +205,6 @@
 				RelativePath="..\..\..\fieldimageloader.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\dialogs\fileselector.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\gamedialog.cpp">
 			</File>
 			<File
@@ -536,6 +533,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\fieldmarker.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\fileselector.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\locatefile.cpp">

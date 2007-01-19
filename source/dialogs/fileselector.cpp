@@ -20,6 +20,7 @@
 
 
 #include "fileselector.h"
+#include "../dialog.h"
 
 class FileInfo
 {
@@ -27,9 +28,10 @@ class FileInfo
       ASCString name;
       ASCString location;
       time_t modificationTime;
-      FileInfo( const ASCString& filename, const ASCString& filelocation, time_t time  ) : name( filename), location( filelocation ), modificationTime( time )
+      int level;
+      FileInfo( const ASCString& filename, const ASCString& filelocation, time_t time, int directorylevel  ) : name( filename), location( filelocation ), modificationTime( time ), level( directorylevel )
       {}
-      FileInfo( const FileInfo& fi ) : name( fi.name ), location( fi.location ), modificationTime( fi.modificationTime )
+      FileInfo( const FileInfo& fi ) : name( fi.name ), location( fi.location ), modificationTime( fi.modificationTime ), level ( fi.level )
       {}
 }
 ;
@@ -98,7 +100,7 @@ FileSelectionItemFactory::FileSelectionItemFactory( const ASCString& wildcard )
    
       tfindfile::FileInfo fi;
       while ( ff.getnextname( fi) ) {
-         FileInfo* fi2 = new FileInfo( fi.name, fi.location, fi.date );
+         FileInfo* fi2 = new FileInfo( fi.name, fi.location, fi.date, fi.directoryLevel );
          items.push_back ( fi2 );
       }
    } while ( begin != ASCString::npos );
@@ -117,6 +119,15 @@ void FileSelectionItemFactory::restart()
 {
    it = items.begin();
 };
+
+int FileSelectionItemFactory::getLevel( const ASCString& name )
+{
+   for ( Items::iterator it = items.begin(); it != items.end(); ++it )
+      if ( (*it)->name == name )
+         return (*it)->level;
+   return -1;
+};
+
 
 SelectionWidget* FileSelectionItemFactory::spawnNextItem( PG_Widget* parent, const PG_Point& pos )
 {
@@ -158,6 +169,13 @@ void FileSelectionWindow::fileNameSelected( const ASCString& filename )
    this->filename = filename;
    if ( this->filename.find('.') == ASCString::npos )
       this->filename += wildcard.substr( wildcard.find_first_not_of("*") );
+
+   if ( saveFile && factory ) {
+      if ( factory->getLevel( this->filename ) == 0 )
+         if ( choice_dlg( "overwrite " + this->filename +" ?", "~y~es","~n~o") == 2) 
+            return;
+   }
+
    quitModalLoop(0);
 };
 
@@ -168,14 +186,14 @@ void FileSelectionWindow::fileNameEntered( ASCString filename )
    fileNameSelected(filename);
 };
 
-FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "" ), wildcard( fileWildcard)
+FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "" ), wildcard( fileWildcard), saveFile(save)
 {
    if ( save )
       SetTitle( "Enter Filename" );
    else
       SetTitle( "Choose File" );
    
-   FileSelectionItemFactory* factory = new FileSelectionItemFactory( fileWildcard );
+   factory = new FileSelectionItemFactory( fileWildcard );
    factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
    factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
    // factory->filenameMarked.connect   ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));

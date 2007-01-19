@@ -83,6 +83,14 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
 
    try {      
       ASCString fname = constructFileName( map, lastPlayer, lastturn );
+
+      tfindfile ff( fname );
+      tfindfile::FileInfo fi;
+      if ( ff.getnextname( fi ) && fi.directoryLevel == 0 )
+         do {
+            fname = selectFile( ASCString("*") + tournamentextension, false );
+         } while (fname.empty());
+
       {
          tnfilestream gamefile ( fname, tnstream::writing );
          tnetworkloaders nwl;

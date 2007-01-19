@@ -42,6 +42,7 @@
 #include "sg.h"
 #include "gameoptions.h"
 #include "dialog.h"
+#include "widgets/textrenderer-addons.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -524,7 +525,9 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
       spawnPanel( ButtonPanel );
       spawnPanel( OverviewMap );
    }
-      
+
+   // to persuade the linker to really link that file
+   uselessCallToTextRenderAddons();
 }
 
 

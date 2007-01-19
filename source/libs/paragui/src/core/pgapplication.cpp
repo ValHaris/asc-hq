@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-06-25 17:01:00 $
+    Update Date:      $Date: 2007-01-19 22:03:16 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.6 $
+    CVS/RCS Revision: $Revision: 1.1.2.7 $
     Status:           $State: Exp $
 */
 
@@ -151,6 +151,8 @@ PG_Application::~PG_Application() {
 
 	// remove all archives from PG_FileArchive
 	PG_FileArchive::RemoveAllArchives();
+   SDL_Quit();
+
 }
 
 /**  */
@@ -247,11 +249,11 @@ void PG_Application::ClearOldMousePosition() {
 		return;
 	}
 
-	if(GetBulkMode() || my_mouse_backingstore==NULL) {
+	if(GetBulkMode() || my_mouse_backingstore==NULL || my_mouse_mode != SOFTWARE ) {
 		return;
 	}
 
-	SDL_BlitSurface(my_mouse_backingstore, NULL, GetScreen(), &my_mouse_position);
+   SDL_BlitSurface(my_mouse_backingstore, NULL, GetScreen(), &my_mouse_position);
 
 	return;
 }
@@ -262,6 +264,7 @@ void PG_Application::DrawCursor(bool update) {
 	if(!my_mouse_pointer || my_mouse_mode != SOFTWARE) {
 		return;
 	}
+
 	if(SDL_ShowCursor(SDL_QUERY) == SDL_ENABLE) {
 		// Hide hardware cursor if visible
 		SDL_ShowCursor(SDL_DISABLE);
@@ -334,6 +337,7 @@ void PG_Application::DrawCursor(bool update) {
 		UpdateRects(screen, 3, rects);
 	}
 }
+
 void PG_Application::Quit() {
 	sigQuit(this);
 	eventQuit(0, this, 0);

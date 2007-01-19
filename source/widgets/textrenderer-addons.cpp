@@ -94,3 +94,8 @@ namespace {
    const bool r1 = TextRenderer::registerTagRenderer( new VehicleTypeRenderer );
    const bool r2 = TextRenderer::registerTagRenderer( new TargetCoordinateRenderer );
 }
+
+void uselessCallToTextRenderAddons()
+{
+   
+}
