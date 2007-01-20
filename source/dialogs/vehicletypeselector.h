@@ -77,7 +77,9 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       Container::iterator it;
       Container items;
 
-      virtual void vehicleTypeSelected( const Vehicletype* type ) {};
+      virtual void vehicleTypeSelected( const Vehicletype* type, bool mouse ) {};
+
+      virtual const Container& getOriginalItems() { return original_items; };
       
    private:
       const Container& original_items;

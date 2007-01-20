@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-08-25 19:01:05 $
+    Update Date:      $Date: 2007-01-20 12:27:59 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollwidget.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -34,8 +34,9 @@
 PG_ScrollWidget::PG_ScrollWidget(PG_Widget* parent, const PG_Rect& r, const std::string& style) : PG_ThemeWidget(parent, r, style),
 		my_objVerticalScrollbar(NULL),
 		my_objHorizontalScrollbar(NULL) ,
-		my_scrollLineSize(-1),
-my_scrollarea(NULL) {
+      my_scrollarea(NULL),
+      my_scrollLineSize(-1)
+{
 	my_enableVerticalScrollbar = true;
 	my_enableHorizontalScrollbar = true;
 	my_widthScrollbar = my_heightHorizontalScrollbar = 5;

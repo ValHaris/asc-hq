@@ -1227,12 +1227,12 @@ void       tloadBImap :: ReadSHOPPart( void )
                  if ( vt ) {
                     int fnd = 0;
                     for ( int l = 0; l < prodnum; l++ )
-                       if ( fld->building->unitProduction[l] == vt )
+                       if ( fld->building->getProduction()[l] == vt )
                           fnd++;
 
                     if ( !fnd )
                        if ( fld->building->typ->vehicleFit( vt ))
-                          fld->building->unitProduction [ prodnum++ ] = vt;
+                          fld->building->addProductionLine( vt );
                  }
               }
               for ( int l = 0; l < 64; l++ )
@@ -1241,11 +1241,11 @@ void       tloadBImap :: ReadSHOPPart( void )
                     if ( vt ) {
                        int fnd = 0;
                        for ( int l = 0; l < prodnum; l++ )
-                          if ( fld->building->unitProduction[l] == vt )
+                          if ( fld->building->getProduction()[l] == vt )
                              fnd++;
                        if ( !fnd )
                            if ( fld->building->typ->vehicleFit( vt ))
-                              fld->building->unitProduction [ prodnum++ ] = vt;
+                              fld->building->addProductionLine( vt );
                     }
                  }
               fld->building->bi_resourceplus.energy = energyfactor * FileShop.a.EP;

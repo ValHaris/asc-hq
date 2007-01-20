@@ -2875,15 +2875,14 @@ void UnitTypeTransformation :: run ( void )
                if ( *i )
                   transformvehicle ( *i, unitsetnum, translationsetnum );
                   
-            for ( int i = 0; i < fld->building->unitProduction.size(); ++i )
-               if ( fld->building->unitProduction[i] ) {
-                  Vehicletype* vt = transformvehicletype ( fld->building->unitProduction[i], unitsetnum, translationsetnum );
-                  if ( vt ) {
-                     fld->building->unitProduction[i] = vt;
-                     unitstransformed++;
-                  } else
-                     unitsnottransformed++;
+            ContainerBase::Production prod = fld->building->getProduction();
+            for ( ContainerBase::Production::iterator j = prod.begin(); j != prod.end(); ++j )
+               if ( *j && transformvehicletype ( *j, unitsetnum, translationsetnum ) ) {
+                  *j = transformvehicletype ( *j, unitsetnum, translationsetnum );
+                  ++unitstransformed;
                }
+               
+            fld->building->setProductionLines( prod );
          }   
       }
 
@@ -3117,14 +3116,20 @@ void transformMap ( )
       for ( Player::VehicleList::iterator i = actmap->getPlayer(p).vehicleList.begin(); i != actmap->getPlayer(p).vehicleList.end(); ++i) {
          (*i)->transform( transform( (*i)->typ->id, vehicletranslation));
          
-         for ( ContainerBase::Production::iterator j = (*i)->unitProduction.begin(); j != (*i)->unitProduction.end(); ++j )
-            if ( *j && transform((*j)->id, vehicletranslation) )
+         ContainerBase::Production prod = (*i)->getProduction();
+         for ( ContainerBase::Production::iterator j = prod.begin(); j != prod.end(); ++j )
+            if ( *j && transform((*j)->id, vehicletranslation) ) 
                *j = transform((*j)->id, vehicletranslation);
+            
+         (*i)->setProductionLines( prod );
       }
       for ( Player::BuildingList::iterator i = actmap->getPlayer(p).buildingList.begin(); i != actmap->getPlayer(p).buildingList.end(); ++i) {
-         for ( ContainerBase::Production::iterator j = (*i)->unitProduction.begin(); j != (*i)->unitProduction.end(); ++j )
-            if ( *j && transform((*j)->id, vehicletranslation) )
+         ContainerBase::Production prod = (*i)->getProduction();
+         for ( ContainerBase::Production::iterator j = prod.begin(); j != prod.end(); ++j )
+            if ( *j && transform((*j)->id, vehicletranslation) ) 
                *j = transform((*j)->id, vehicletranslation);
+            
+         (*i)->setProductionLines( prod );
       }
    }
 
@@ -3564,7 +3569,7 @@ void editTechAdapter()
    } while ( playerRes.first != 1 );
 }
 
-
+/*
 void resetPlayerData()
 {
    
@@ -3647,7 +3652,7 @@ void resetPlayerData()
    } while ( playerRes.first != 7 );
    
 }
-
+*/
 
 tfield*        getactfield(void)
 {

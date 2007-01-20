@@ -106,7 +106,7 @@ ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicle
       for ( Player::BuildingList::const_iterator j = gamemap->getCurrentPlayer().buildingList.begin(); j != gamemap->getCurrentPlayer().buildingList.end(); ++j )
          if ( (*j)->typ == evaluatedFactory ) 
             if ( lineAvail ) {
-               for ( ContainerBase::Production::const_iterator k = (*j)->unitProduction.begin(); k != (*j)->unitProduction.end(); ++k )
+               for ( ContainerBase::Production::const_iterator k = (*j)->getProduction().begin(); k != (*j)->getProduction().end(); ++k )
                   if ( *k == unitsToProduce ) {
                      units += (*j)->getPosition().toString();
                      ++count;

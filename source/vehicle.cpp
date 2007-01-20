@@ -1321,9 +1321,9 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     writeClassContainer( reactionfire.nonattackableUnits, stream );
 
     if ( UNITVERSIONLIMIT >= 5 ) {
-      stream.writeInt( unitProduction.size() );
-      for ( int i = 0; i < unitProduction.size(); ++i )
-         stream.writeInt( unitProduction[i]->id );
+      stream.writeInt( internalUnitProduction.size() );
+      for ( int i = 0; i < internalUnitProduction.size(); ++i )
+         stream.writeInt( internalUnitProduction[i]->id );
     }
 
     if ( UNITVERSIONLIMIT >= 6 ) {
@@ -1538,13 +1538,13 @@ void   Vehicle::readData ( tnstream& stream )
     if ( version >= 2 )
       readClassContainer( reactionfire.nonattackableUnits, stream );
 
-    unitProduction.clear();
+    internalUnitProduction.clear();
     if ( version >= 5 ) {
        int pcount = stream.readInt();
        for ( int i = 0; i< pcount; ++i ) {
           int id = stream.readInt();
-          unitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
-          if ( !unitProduction[i] )
+          internalUnitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
+          if ( !internalUnitProduction[i] )
              throw InvalidID ( "unit", id );
        }
     }

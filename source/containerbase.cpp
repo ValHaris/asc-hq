@@ -511,6 +511,41 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
    return height;
 }
 
+const ContainerBase::Production& ContainerBase::getProduction() const
+{
+   if ( productionCache.empty() && !internalUnitProduction.empty() ) {
+      for ( Production::const_iterator i = internalUnitProduction.begin(); i != internalUnitProduction.end(); ++i )
+         if ( vehicleUnloadable( *i ) || baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ) )
+            productionCache.push_back ( *i );
+   }
+
+   return productionCache;
+}
+
+void ContainerBase ::deleteProductionLine( const Vehicletype* type )
+{
+   internalUnitProduction.erase( remove( internalUnitProduction.begin(), internalUnitProduction.end(), type ), internalUnitProduction.end());
+   productionCache.clear();
+}
+
+void ContainerBase ::deleteAllProductionLines()
+{
+   internalUnitProduction.clear();
+   productionCache.clear();
+}
+
+void ContainerBase :: addProductionLine( const Vehicletype* type )
+{
+   if ( find ( internalUnitProduction.begin(), internalUnitProduction.end(), type ) == internalUnitProduction.end() )
+      internalUnitProduction.push_back( type );
+   productionCache.clear();
+}
+
+void ContainerBase :: setProductionLines( const Production& production  )
+{
+   internalUnitProduction = production;
+   productionCache.clear();
+}
 
 
 ContainerBase :: ~ContainerBase ( )

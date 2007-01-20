@@ -808,24 +808,24 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
          }
       } else {
          bool mismatch = false;
-         for ( int i = 0; i < b1->unitProduction.size(); ++i )
-            if ( b1->unitProduction[i] ) {
-            bool found = false;
-            for ( int j = 0; j < b2->unitProduction.size(); ++j)
-               if ( b2->unitProduction[j] == b1->unitProduction[i] )
-                  found = true;
-            if ( !found)
-               mismatch = true;
-            }
-
-            for ( int j = 0; j < b2->unitProduction.size(); ++j )
-               if ( b2->unitProduction[j] ) {
+         for ( int i = 0; i < b1->getProduction().size(); ++i )
+            if ( b1->getProduction()[i] ) {
                bool found = false;
-               for ( int i = 0; i < b1->unitProduction.size(); ++i)
-                  if ( b1->unitProduction[i] == b2->unitProduction[j] )
+               for ( int j = 0; j < b2->getProduction().size(); ++j)
+                  if ( b2->getProduction()[j] == b1->getProduction()[i] )
                      found = true;
                if ( !found)
                   mismatch = true;
+            }
+
+            for ( int j = 0; j < b2->getProduction().size(); ++j )
+               if ( b2->getProduction()[j] ) {
+                  bool found = false;
+                  for ( int i = 0; i < b1->getProduction().size(); ++i)
+                     if ( b1->getProduction()[i] == b2->getProduction()[j] )
+                        found = true;
+                  if ( !found)
+                     mismatch = true;
                }
 
                if ( mismatch ) {

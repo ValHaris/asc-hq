@@ -144,7 +144,7 @@ extern void generateTechTree();
 extern void editTechAdapter();
 // extern Vehicle* selectUnitFromContainer( ContainerBase* container );
 // extern Vehicle*  selectUnitFromMap();
-extern void resetPlayerData();
+// extern void resetPlayerData();
 
 extern void placeCurrentItem();
 

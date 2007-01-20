@@ -362,14 +362,14 @@ Resources ContainerControls :: buildProductionLineResourcesNeeded( const Vehicle
 
 int ContainerControls :: buildProductionLine ( const Vehicletype* veh  )
 {
-   if ( find( container->unitProduction.begin(), container->unitProduction.end(), veh ) != container->unitProduction.end() )
+   if ( find( container->getProduction().begin(), container->getProduction().end(), veh ) != container->getProduction().end() )
       return -503;
    
    if ( container->getResource( buildProductionLineResourcesNeeded(veh), 1 ) < buildProductionLineResourcesNeeded(veh))
       return -500;
 
    container->getResource( buildProductionLineResourcesNeeded(veh), 0 );
-   container->unitProduction.push_back(  const_cast<Vehicletype*>(veh) );
+   container->addProductionLine( veh );
 
    logtoreplayinfo ( rpl_buildProdLine, container->getIdentification(), veh->id );
 
@@ -385,14 +385,14 @@ Resources ContainerControls :: removeProductionLineResourcesNeeded( const Vehicl
 
 int ContainerControls :: removeProductionLine ( const Vehicletype* veh  )
 {
-   if ( find( container->unitProduction.begin(), container->unitProduction.end(), veh ) == container->unitProduction.end() )
+   if ( find( container->getProduction().begin(), container->getProduction().end(), veh ) == container->getProduction().end() )
       return -502;
    
    if ( container->getResource( removeProductionLineResourcesNeeded(veh), 1 ) < removeProductionLineResourcesNeeded(veh))
       return -500;
 
    container->getResource( removeProductionLineResourcesNeeded(veh), 0 );
-   container->unitProduction.erase( find( container->unitProduction.begin(), container->unitProduction.end(), veh ));
+   container->deleteProductionLine( veh );
    return 0;
 }
 
@@ -407,10 +407,10 @@ vector<const Vehicletype*> ContainerControls :: productionLinesBuyable()
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       Vehicletype* veh = actmap->getvehicletype_bypos ( i );
       if ( veh ) {
-         bool found = find( container->unitProduction.begin(), container->unitProduction.end(), veh ) != container->unitProduction.end();
+         bool found = find( container->getProduction().begin(), container->getProduction().end(), veh ) != container->getProduction().end();
          if ( container->baseType->vehicleFit ( veh ) && !found )
             if ( container->vehicleUnloadable(veh) || container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
-               if ( veh->techDependency.available ( container->getMap()->player[container->getMap()->actplayer].research ))
+               if ( veh->techDependency.available ( container->getMap()->getCurrentPlayer().research ))
                   if ( container->baseType->vehicleCategoriesProduceable & (1 << veh->movemalustyp))
                      list.push_back( veh );
       }

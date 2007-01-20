@@ -181,7 +181,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       void deleteProduction( int player )
       {
          for ( Player::BuildingList::iterator i = gamemap->player[player].buildingList.begin(); i != gamemap->player[player].buildingList.end(); ++i )
-            (*i)->unitProduction.clear();
+            (*i)->deleteAllProductionLines();
 
       }
       

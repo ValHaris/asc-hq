@@ -157,7 +157,7 @@ bool VehicleComp ( const Vehicletype* v1, const Vehicletype* v2 )
 
 void VehicleTypeSelectionItemFactory::restart()
 {
-   items = original_items;
+   items = getOriginalItems();
    sort( items.begin(), items.end(), VehicleComp );
    it = items.begin();
 };
@@ -194,6 +194,6 @@ void VehicleTypeSelectionItemFactory::itemSelected( const SelectionWidget* widge
 
    showVehicleInfo( fw->getVehicletype() );
    
-   vehicleTypeSelected( fw->getVehicletype() );
+   vehicleTypeSelected( fw->getVehicletype(), mouse );
 }
 

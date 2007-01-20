@@ -579,10 +579,11 @@ void cargoDialog( ContainerBase* cb )
 class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
       bool fillResources;
       bool fillAmmo;
+      const ContainerBase* plant;
    protected:
-      void vehicleTypeSelected( const Vehicletype* type )
+      void vehicleTypeSelected( const Vehicletype* type, bool mouse )
       {
-         sigVehicleTypeSelected( type );
+         sigVehicleTypeSelected( type, mouse );
       }
 
       void itemMarked( const SelectionWidget* widget, bool mouse )
@@ -595,10 +596,11 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
          sigVehicleTypeMarked( fw->getVehicletype() );
       }
 
-      
+      const Container& getOriginalItems() { return plant->getProduction(); };
+
    public:
-      VehicleProduction_SelectionItemFactory( Resources plantResources, const Container& types )
-         : VehicleTypeSelectionItemFactory( plantResources, types, actmap->actplayer ), fillResources(true), fillAmmo(true)
+      VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant )
+         : VehicleTypeSelectionItemFactory( plantResources, productionplant->getProduction(), actmap->actplayer ), fillResources(true), fillAmmo(true), plant(productionplant)
       {
       };
       
@@ -638,12 +640,12 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
             for ( int w = 0; w < type->weapons.count; ++w )
                if ( type->weapons.weapon[w].requiresAmmo() ) {
                   int wt = type->weapons.weapon[w].getScalarWeaponType();
-                  cost += Resources( cwaffenproduktionskosten[wt][0], cwaffenproduktionskosten[wt][1], cwaffenproduktionskosten[wt][2] );
+                  cost += Resources( cwaffenproduktionskosten[wt][0], cwaffenproduktionskosten[wt][1], cwaffenproduktionskosten[wt][2] ) * type->weapons.weapon[w].count;
                }
          return cost;
       };
 
-      SigC::Signal1<void,const Vehicletype* > sigVehicleTypeSelected;
+      SigC::Signal2<void,const Vehicletype*, bool > sigVehicleTypeSelected;
       SigC::Signal1<void,const Vehicletype* > sigVehicleTypeMarked;
       
 };
@@ -657,7 +659,7 @@ class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFac
          
       };
       
-      void vehicleTypeSelected( const Vehicletype* type )
+      void vehicleTypeSelected( const Vehicletype* type, bool mouse )
       {
          ContainerControls cc( plant );
          int res = cc.buildProductionLine( type );
@@ -680,10 +682,17 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       VehicleProduction_SelectionItemFactory* factory;
       ContainerBase* my_plant;
    protected:
-      void vtSelected( const Vehicletype* filename )
+      void vtMarked( const Vehicletype* vt )
       {
-         selected = filename;
-         // quitModalLoop(0);
+         vtSelected( vt, true );
+      }
+
+      void vtSelected( const Vehicletype* vt, bool mouse )
+      {
+         selected = vt;
+
+         if ( !mouse ) // enter pressed
+            produce();
       };
 
       bool produce()
@@ -715,13 +724,28 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
          factory->setAvailableResource(my_plant->getResource(Resources(maxint,maxint,maxint)));
          isw->reLoad( true );
       }
-      
-   public:
-      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const vector<const Vehicletype*>& items ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), finallySelected(NULL), isw(NULL), factory(NULL), my_plant( plant )
+
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
-         factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), items );
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+         if ( mod )
+            return false;
+
+         if ( key->keysym.sym == SDLK_ESCAPE ) {
+            closeWindow();
+            return true;
+         }
+
+         return false;
+      }
+
+
+   public:
+      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), finallySelected(NULL), isw(NULL), factory(NULL), my_plant( plant )
+      {
+         factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), plant );
          factory->sigVehicleTypeSelected.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
-         factory->sigVehicleTypeMarked.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
+         factory->sigVehicleTypeMarked.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtMarked ));
 
          isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight() - 40), factory );
          isw->sigQuitModal.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::quitSignalled));
@@ -2096,7 +2120,7 @@ namespace CargoGuiFunctions {
       bool refillResources;
       const Vehicletype* v;
       {
-         VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), parent.getContainer(), parent.getContainer()->unitProduction );
+         VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), parent.getContainer() );
          fsw.Show();
          fsw.RunModal();
          v = fsw.getVehicletype();

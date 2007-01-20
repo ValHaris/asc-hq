@@ -451,13 +451,13 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 
 
     if ( BUILDINGVERSIONLIMIT >= -4 )
-       stream.writeChar( unitProduction.size() );
+       stream.writeChar( internalUnitProduction.size() );
     else
-       stream.writeInt( unitProduction.size() );
+       stream.writeInt( internalUnitProduction.size() );
 
-    for (int k = 0; k < unitProduction.size(); k++ ) {
-       assert( unitProduction[k] );
-       stream.writeInt( unitProduction[k]->id );
+    for (int k = 0; k < internalUnitProduction.size(); k++ ) {
+       assert( internalUnitProduction[k] );
+       stream.writeInt( internalUnitProduction[k]->id );
     }   
 
     if ( BUILDINGVERSIONLIMIT >= -3 )
@@ -590,7 +590,7 @@ void Building :: readData ( tnstream& stream, int version )
     }
 
     
-    unitProduction.clear();
+    internalUnitProduction.clear();
     if ( version <= -5 )
        c = stream.readInt();
     else
@@ -605,8 +605,8 @@ void Building :: readData ( tnstream& stream, int version )
            else
               id = stream.readWord();
 
-           unitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
-           if ( !unitProduction[k] )
+           internalUnitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
+           if ( !internalUnitProduction[k] )
               throw InvalidID ( "unit", id );
        }
     }

@@ -61,7 +61,17 @@ class ContainerBase {
 
 
       typedef vector<const Vehicletype*> Production;
-      Production unitProduction;
+
+      const Production& getProduction() const;
+      void deleteProductionLine( const Vehicletype* type );
+      void deleteAllProductionLines();
+      void addProductionLine( const Vehicletype* type  );
+      void setProductionLines( const Production& production  );
+   private:
+      mutable Production productionCache;
+   protected:
+      Production internalUnitProduction;
+   public:
       
 
     //! @name Cargo related functions

@@ -467,7 +467,7 @@ class ProductionEditorWindow : public ASC_PG_Dialog {
 
       bool ok()
       {
-         container->unitProduction = production;
+         container->setProductionLines( production );
          QuitModal();
          return true;
       }
@@ -506,7 +506,7 @@ class ProductionEditorWindow : public ASC_PG_Dialog {
       ProductionEditorWindow ( ContainerBase* container ) : ASC_PG_Dialog ( NULL, PG_Rect( 20,20, 700, 550 ), "Unit Production" )
       {
          this->container = container;
-         production = container->unitProduction;
+         production = container->getProduction();
          
          const int centerSpace = 80;
          const int border  = 10;

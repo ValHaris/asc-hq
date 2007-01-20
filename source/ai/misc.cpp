@@ -860,9 +860,9 @@ void AI::production()
 
    for ( Player::BuildingList::iterator bli = getPlayer().buildingList.begin(); bli != getPlayer().buildingList.end(); bli ++ ) {
       Building* bld = *bli;
-      for ( int i = 0; i < bld->unitProduction.size(); i++ )
-         if ( bld->unitProduction[i] && bld->vehicleUnloadable ( bld->unitProduction[i] )) {
-            const Vehicletype* typ = bld->unitProduction[i];
+      for ( int i = 0; i < bld->getProduction().size(); i++ )
+         if ( bld->getProduction()[i] && bld->vehicleUnloadable ( bld->getProduction()[i] )) {
+            const Vehicletype* typ = bld->getProduction()[i];
             float rating = 0;
             for ( int j = 0; j < aiValueTypeNum; j++ )
                rating += enemyValue[j] * typ->aiparam[getPlayerNum()]->threat.threat[j];
@@ -875,7 +875,7 @@ void AI::production()
 
             rating /= 1 + log ( double(danger) );
 
-            UnitTypeSuccess::iterator uts = unitTypeSuccess.find ( bld->unitProduction[i]->id  );
+            UnitTypeSuccess::iterator uts = unitTypeSuccess.find ( bld->getProduction()[i]->id  );
             if ( uts != unitTypeSuccess.end() ) {
                if ( uts->second.second >= 1 )
                   rating *= uts->second.first / uts->second.second;
