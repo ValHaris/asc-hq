@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,1.99.90.53)
+AC_INIT(asc,1.99.90.54)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -640,6 +640,8 @@ AC_CONFIG_FILES( [ Makefile \
        source/win32/Makefile \
        source/win32/msvc/Makefile \
        data/Makefile \
+       data/icons/Makefile \
+       data/sounds/Makefile \
        data/buildings/Makefile \
        data/trrobj/Makefile \
        data/trrobj2/Makefile \

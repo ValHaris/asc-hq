@@ -1,8 +1,8 @@
-SUBDIRS 		= dialog units trrobj trrobj2 buildings @MUSICDIR@
-DIST_SUBDIRS= dialog units trrobj trrobj2 buildings music
+SUBDIRS 		= dialog units trrobj trrobj2 buildings icons sounds @MUSICDIR@
+DIST_SUBDIRS= dialog units trrobj trrobj2 buildings icons sounds music
 MAINTAINERCLEANFILES    = Makefile.in
 
-EXTRA_DIST = $(srcdir)/* $(srcdir)/icons/* $(srcdir)/sounds/*
+EXTRA_DIST = $(srcdir)/* 
 
 pkgdata_DATA 		= main.con 
 pkgdatadir 		= $(datadir)/games/@PACKAGE@
