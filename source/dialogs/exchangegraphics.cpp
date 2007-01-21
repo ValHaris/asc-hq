@@ -95,6 +95,20 @@ class ExchangeGraphics: public ASC_PG_Dialog
          newSurfaces[getIdentifier(trr)] = filename;
       }
 
+      void setnewimage( ObjectType* obj, const ASCString& filename )
+      {
+         obj->weatherPicture[0].images = loadASCFieldImageArray(filename, obj->weatherPicture[0].images.size() );
+         obj->displayMethod = 0;
+         /*
+         if ( orgTerrainSurf.find( obj ) == orgTerrainSurf.end() )
+            orgTerrainSurf[obj] = trr->image;
+
+         trr->image = loadASCFieldImage ( filename );
+         newSurfaces[getIdentifier(trr)] = filename;
+         */
+      }
+
+
       bool apply()
       { 
          tfield* fld = actmap->getField( actmap->getCursor() );
@@ -106,6 +120,10 @@ class ExchangeGraphics: public ASC_PG_Dialog
                   } else {
                      setnewimage( fld->typ, filename->GetText() );
                   }
+               }
+               if ( selectedType->GetSelectedItemIndex() == 1 ) {
+                  if ( fld->objects.size() )
+                     setnewimage( objectTypeRepository.getObject_byID( fld->objects[0].typ->id ), filename->GetText() );
                }
             }
             catch ( ... ) {

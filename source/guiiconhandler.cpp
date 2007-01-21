@@ -442,7 +442,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
    SmallGuiButton* firstSmallButton = NULL;
    
    int count = 0;
-   if ( !cursorChanged ) {
+   if ( !cursorChanged || CGameOptions::Instance()->mouse.singleClickAction ) {
       for ( int j = 0; j < buttons.size(); ++j)
          if ( !getButton(j)->IsHidden() )
             ++count;

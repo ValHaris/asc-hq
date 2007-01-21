@@ -147,9 +147,13 @@ class CGameOptions
          int zoomoutbutton;
          int zoominbutton;
 
+         //! marks a field and opens the small gui buttons with a single click (default: first click mark, second click: execute)
+         bool singleClickAction;
+
          static ASCString getButtonName( int button );
       }
       mouse;
+
 
       struct SoundSettings
       {

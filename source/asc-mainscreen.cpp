@@ -193,6 +193,8 @@ void Menu::setup()
    addbutton ( "save ~M~ap as PNG\t9", ua_writemaptopcx );
    addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
    addbutton ( "select graphic set", ua_selectgraphicset );
+   currentMenu->addSeparator();
+   addbutton ( "~G~oto coorindate\tctrl-g", ua_gotoPosition );
 
    addfield ( "~V~iew" );
    addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
@@ -757,6 +759,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_f:
                execUserAction_ev ( ua_unitsummary );
+               return true;
+
+            case SDLK_g:
+               execUserAction_ev( ua_gotoPosition );
                return true;
 
             case SDLK_l:

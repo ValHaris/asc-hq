@@ -133,7 +133,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addNamedInteger("ZoomOut", mouse.zoomoutbutton, mouseButtonNum, mouseButtons, mouse.zoomoutbutton );
    pc.addNamedInteger("ZoomIn", mouse.zoominbutton, mouseButtonNum, mouseButtons, mouse.zoominbutton );
    // add(new IntProperty("Mouse.UnitWeaponInfoButton"		,&_pOptions->mouse.unitweaponinfo));
-   // add(new IntProperty("Mouse.SingleClickAction"	   	,&_pOptions->mouse.singleClickAction));
+   pc.addBool("SingleClickAction", mouse.singleClickAction, false );
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
    pc.closeBracket();
 
@@ -240,6 +240,7 @@ void CGameOptions::setDefaults ( void )
    mouse.dragndropbutton = 3;
    mouse.zoomoutbutton = 4;
    mouse.zoominbutton = 5;
+   mouse.singleClickAction = false;
 
    replayspeed=0;
    debugReplay = 0;

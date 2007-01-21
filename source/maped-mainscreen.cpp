@@ -727,6 +727,9 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
          case SDLK_x: execaction_ev(act_cutToClipboard);
                         return true;
+
+         case SDLK_SPACE: execaction_ev( act_primaryAction );
+                        return true;
                         
                                                 
          default:;

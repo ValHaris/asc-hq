@@ -345,9 +345,19 @@ class CargoDialog : public Panel
 
       void onUnitClick ( Vehicle* veh,SPoint pos, bool first )
       {
-         if ( veh )
-            if ( mainScreenWidget&& mainScreenWidget->getGuiHost() && !first ) 
-               mainScreenWidget->getGuiHost()->showSmallIcons( this, SPoint( pos.x - smallGuiIconSizeX/2, pos.y - smallGuiIconSizeY/2  ), false );
+         // if ( veh )
+         if ( mainScreenWidget&& mainScreenWidget->getGuiHost() && !first ) { 
+            SPoint iconPos = pos;
+            if ( veh ) {
+               iconPos.x -= smallGuiIconSizeX/2;
+               iconPos.y -= smallGuiIconSizeY/2;
+            } else {
+               iconPos.x += 2;
+               iconPos.y += 2;
+            }
+
+            mainScreenWidget->getGuiHost()->showSmallIcons( this, iconPos, false );
+         }
             
       };
 
