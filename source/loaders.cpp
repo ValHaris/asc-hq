@@ -639,8 +639,11 @@ void tspfldloaders::readfields ( void )
             throw InvalidID ( "terrain", k );
 
          fld2->typ = trn->weather[weather];
-         if ( !fld2->typ ) 
-            throw InvalidID ( "terrain", k );
+         if ( !fld2->typ ) {
+            fld2->typ = trn->weather[0];
+            if ( !fld2->typ ) 
+               throw InvalidID ( "terrain", k );
+         }
 
          if (b1 & csm_direction )
             stream->readChar();  // fld2->direction = 0; 
