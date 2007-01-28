@@ -613,6 +613,9 @@ void EndTurn::execute( const MapCoordinate& pos, ContainerBase* subject, int num
       savegame ( name );
 
       autosave = !autosave;
+
+      actmap->sigPlayerUserInteractionEnds( actmap->player[actmap->actplayer] );
+
       next_turn();
 
       displaymap();

@@ -2152,12 +2152,12 @@ void showbdtbits( void )
    tfield* fld = actmap->getField(actmap->getCursor());
    char m[200];
    m[0] = 0;
-   for (int i = 0; i < cbodenartennum ; i++) {
+   for (int i = 0; i < terrainPropertyNum ; i++) {
       TerrainBits bts;
       bts.set ( i );
 
       if ( (fld->bdt & bts).any() ) {
-         strcat ( m, cbodenarten[i] );
+         strcat ( m, terrainProperty[i] );
          strcat ( m, "\n" );
       }
    } /* endfor */
@@ -2166,13 +2166,13 @@ void showbdtbits( void )
 
 void appendTerrainBits ( char* text, const TerrainBits* bdt )
 {
-   for (int i = 0; i < cbodenartennum ; i++) {
+   for (int i = 0; i < terrainPropertyNum ; i++) {
       TerrainBits bts;
       bts.set ( i );
 
       if ( (*bdt & bts).any() ) {
          strcat ( text, "    " );
-         strcat ( text, cbodenarten[i] );
+         strcat ( text, terrainProperty[i] );
          strcat  ( text, "\n" );
       }
    } /* endfor */

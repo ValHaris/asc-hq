@@ -19,7 +19,7 @@
  #define textfiletagsH
 
  extern const char* weatherTags[];
- extern const char* bodenarten[];
+ extern const char* terrainProperties[];
  extern const char* weatherAbbrev[];
  extern const char* heightTags[];
  extern const char* vehicleAbilities[]; //!< deprecated

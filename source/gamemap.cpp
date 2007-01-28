@@ -195,12 +195,17 @@ void OverviewMapHolder::startUpdate()
    y = 0;
 }
 
-void OverviewMapHolder::clear()
+void OverviewMapHolder::clear(bool allImages )
 {
    if ( !initialized )
       return;
    
    overviewMapImage.Fill( Surface::transparent );
+   if ( allImages ) {
+      completedMapImage.Fill( Surface::transparent );
+      secondMapReady = false;
+   }
+
    startUpdate();
 }
 
@@ -1134,9 +1139,6 @@ void GameMap::beginTurn()
 
 void GameMap::endTurn()
 {
-   if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
-      sigPlayerUserInteractionEnds( player[actplayer] );
-      
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
    pt.turn = time.turn();
@@ -1227,8 +1229,7 @@ void GameMap::endTurn()
       
    processJournal();   
 
-   if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
-      sigPlayerTurnHasEnded( player[actplayer] );
+   sigPlayerTurnHasEnded( player[actplayer] );
    
 }
 

@@ -77,6 +77,7 @@ class Maped_MainScreenWidget : public MainScreenWidget {
     DropDownSelector* playerSelector;
     DropDownSelector* brushSelector;
     PG_Label* selectionName;
+    PG_Label* selectionName2;
     PG_Label* coordinateDisplay;
     SelectionItemWidget* currentSelectionWidget;
     deallocating_vector<ContextAction*> contextActions;

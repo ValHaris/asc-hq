@@ -452,8 +452,8 @@ void BuildingTerrainPage::buildContent() {
   addTitle("Not Constructable on");
   addTitle("Fatal");
   *buildingInfStream << "</tr>" << endl;
-  for(int i=0; i< cbodenartennum; i++) {
-    ASCString terrain = cbodenarten[i];
+  for(int i=0; i< terrainPropertyNum; i++) {
+    ASCString terrain = terrainProperty[i];
 
     if (( bt.terrainaccess.terrain.test(i) )|| ( bt.terrainaccess.terrainnot.test(i) )
         || ( bt.terrainaccess.terrainkill.test(i) )) {
@@ -952,8 +952,8 @@ void UnitTerrainPage::buildContent() {
   addTitle("Blocked by");
   addTitle("Fatal");
   *buildingInfStream << "</tr>" << endl;
-  for(int i=0; i< cbodenartennum; i++) {
-    ASCString terrain = cbodenarten[i];
+  for(int i=0; i< terrainPropertyNum; i++) {
+    ASCString terrain = terrainProperty[i];
     if(vt.terrainaccess.terrain.test(i) && vt.terrainaccess.terrainreq.test(i)) {
       addTREntry(terrain, constructImageLink(STDGFXPATH + ASCString("haken.gif"), "YES") +
                  "</td><td class=\"wg\">" + constructImageLink(STDGFXPATH + ASCString("exkl.gif"), "YES") +

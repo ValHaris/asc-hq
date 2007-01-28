@@ -1510,7 +1510,6 @@ int main(int argc, char *argv[] )
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
-
    
    tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
 

@@ -25,7 +25,7 @@
  class OverviewMapImage;
 
  //! the number of bits that specify the terrain of a field
- const int cbodenartennum = 35;
+ const int terrainPropertyNum = 35;
 
 
   //! the properties of a terrain describing which units can move onto this field and which can't
@@ -139,7 +139,7 @@
  };
 
 
- extern const char*  cbodenarten[]  ;
+ extern const char*  terrainProperty[]  ;
 
  enum TerrainBitTypes { cbwater0 ,
                      cbwater1 ,

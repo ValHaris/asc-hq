@@ -78,24 +78,6 @@ class UnitInfoPanel : public DashboardPanel {
         UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
 };
 
-class WeaponInfoPanel : public Panel {
-        int weaponCount;
-        static ASCString name;
-     protected:
-        bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
-        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
-
-     public:
-        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
-        void showWeapon( const SingleWeapon* weap = NULL );
-
-        // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
-        bool   eventMouseButtonUp (const SDL_MouseButtonEvent *button);
-        
-        static const ASCString& WIP_Name();
-        // void eval();
-};
-
 
 class MapDisplayPG;
 

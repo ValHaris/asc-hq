@@ -29,7 +29,7 @@ const char* weatherTags[cwettertypennum]
         "much_snow",
         "snow_and_ice" };
 
-const char*  bodenarten[cbodenartennum]
+const char*  terrainProperties[terrainPropertyNum]
     = { "Shallow_water",
         "Lowland",
         "Swamp",

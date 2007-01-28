@@ -77,7 +77,7 @@ void networksupervisor ()
   
 
    try {
-      bool ok = enterpassword ( newMap->supervisorpasswordcrc );
+      bool ok = enterpassword ( pwd );
       if ( !ok ) {
          errorMessage ("invalid password!" );
          return;

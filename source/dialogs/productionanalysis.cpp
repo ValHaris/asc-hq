@@ -58,7 +58,7 @@ int evaluateProduction( const Vehicletype* potentialFactory, const Vehicletype* 
    const ContainerBaseType* cbt = potentialFactory;
    int res = evaluateProduction( cbt, vt, gamemap ); 
 
-   if ( potentialFactory->hasFunction( ContainerBaseType::ExternalVehicleProduction)) 
+   // if ( potentialFactory->hasFunction( ContainerBaseType::ExternalVehicleProduction)) 
       for ( vector<IntRange>::const_iterator i = potentialFactory->vehiclesBuildable.begin(); i != potentialFactory->vehiclesBuildable.end(); ++i )
          if( vt->id >= i->from && vt->id <= i->to ) 
             return res | 2;
@@ -86,7 +86,7 @@ ASCString getProductionString( const ContainerBaseType* potentialFactory, const 
 ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicletype* unitsToProduce, GameMap* gamemap, bool lineAvail )
 {
    ASCString instances;
-   {
+   if ( lineAvail ) {
       int count = 0;
       ASCString units = evaluatedFactory->getName() + ": ";
          
@@ -112,8 +112,15 @@ ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicle
                      ++count;
                   }
             } else {
-               units += (*j)->getPosition().toString();
-               ++count;
+               bool found = false;
+               for ( ContainerBase::Production::const_iterator k = (*j)->getProduction().begin(); k != (*j)->getProduction().end(); ++k )
+                  if ( *k == unitsToProduce ) 
+                     found = true;
+
+               if ( !found ) {
+                  units += (*j)->getPosition().toString();
+                  ++count;
+               }
             }
       if ( count )
          instances += units + "\n";

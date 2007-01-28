@@ -1024,8 +1024,8 @@ void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
    terrainaccess.runTextIO ( pc );
    pc.closeBracket ();
 
-   pc.addTagArray ( "TerrainProperties_Filter", terrain_and, cbodenartennum, bodenarten, true );
-   pc.addTagArray ( "TerrainProperties_Add", terrain_or, cbodenartennum, bodenarten );
+   pc.addTagArray ( "TerrainProperties_Filter", terrain_and, terrainPropertyNum, terrainProperties, true );
+   pc.addTagArray ( "TerrainProperties_Add", terrain_or, terrainPropertyNum, terrainProperties );
 }
 
 void ObjectType :: runTextIO ( PropertyContainer& pc )

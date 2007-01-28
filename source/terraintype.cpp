@@ -26,7 +26,7 @@
 #include "overviewmapimage.h"
 #include "graphics/blitter.h"
 
-const char*  cbodenarten[cbodenartennum+1]  = {"shallow water"       ,
+const char*  terrainProperty[terrainPropertyNum+1]  = {"shallow water"       ,
                                              "normal lowland",
                                              "swamp",
                                              "forest",
@@ -90,10 +90,10 @@ void TerrainAccess::write ( tnstream& stream ) const {
 
 void TerrainAccess::runTextIO ( PropertyContainer& pc )
 {
-   pc.addTagArray ( "terrain_any", terrain, cbodenartennum, bodenarten );
-   pc.addTagArray ( "terrain_all", terrainreq, cbodenartennum, bodenarten );
-   pc.addTagArray ( "terrain_not", terrainnot, cbodenartennum, bodenarten );
-   pc.addTagArray ( "terrain_kill", terrainkill, cbodenartennum, bodenarten );
+   pc.addTagArray ( "terrain_any", terrain, terrainPropertyNum, terrainProperties );
+   pc.addTagArray ( "terrain_all", terrainreq, terrainPropertyNum, terrainProperties );
+   pc.addTagArray ( "terrain_not", terrainnot, terrainPropertyNum, terrainProperties );
+   pc.addTagArray ( "terrain_kill", terrainkill, terrainPropertyNum, terrainProperties );
 }
 
 TerrainType::MoveMalus::MoveMalus()
@@ -464,7 +464,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
         move_malus.push_back ( move_malus[0] );
 
 
-   pc.addTagArray ( "TerrainProperties", art, cbodenartennum, bodenarten );
+   pc.addTagArray ( "TerrainProperties", art, terrainPropertyNum, terrainProperties );
 }
 
 

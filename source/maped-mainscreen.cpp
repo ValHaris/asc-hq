@@ -372,7 +372,7 @@ class DeleteAllObjects: public AutoTextContextAction {
 Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
               : MainScreenWidget( application ),
               vehicleSelector( NULL ), buildingSelector( NULL ), objectSelector(NULL), terrainSelector(NULL), mineSelector(NULL),
-              weatherSelector( NULL ), selectionName(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL), contextMenu(NULL)
+              weatherSelector( NULL ), selectionName(NULL), selectionName2(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL), contextMenu(NULL)
 {
 
    setup( false );
@@ -447,7 +447,9 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, ypos, BuildingItem::Width(), BuildingItem::Height() ) );
    ypos += BuildingItem::Height() + 5;
 
-   selectionName = new PG_Label( this, PG_Rect( xpos, currentSelectionWidget->my_ypos + currentSelectionWidget->Height() + 10, currentSelectionWidget->Width(), 20 ));
+   selectionName = new PG_Label( this, PG_Rect( xpos, ypos, currentSelectionWidget->Width(), 20 ));
+   ypos += 25;
+   selectionName2 = new PG_Label( this, PG_Rect( xpos, ypos, currentSelectionWidget->Width(), 20 ));
    ypos += 25;
    
    selection.selectionChanged.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
@@ -499,7 +501,8 @@ void Maped_MainScreenWidget::updateStatusBar()
 
 void Maped_MainScreenWidget::selectionChanged( const MapComponent* item )
 {
-   selectionName->SetText( item->getItemType()->getName() + "(ID: " + ASCString::toString( item->getItemType()->getID()   ) + ")");
+   selectionName->SetText( item->getItemType()->getName() );
+   selectionName2->SetText( "ID: " + ASCString::toString( item->getItemType()->getID() ) );
 }
 
 

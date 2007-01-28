@@ -37,6 +37,31 @@
 
 #include "sg.h"
 
+class WeaponInfoLine;
+
+class WeaponInfoPanel : public Panel {
+        int weaponCount;
+        static ASCString name;
+
+        vector<WeaponInfoLine*> weaponInfoLines;
+
+     protected:
+        bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+
+	     bool eventMouseMotion(const SDL_MouseMotionEvent* motion);
+
+     public:
+        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
+        void showWeapon( const SingleWeapon* weap = NULL );
+
+        // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
+        bool   eventMouseButtonUp (const SDL_MouseButtonEvent *button);
+        
+        static const ASCString& WIP_Name();
+        // void eval();
+};
+
 
 
 class ExperienceOverview : public PG_Widget {
@@ -561,7 +586,7 @@ class WeaponInfoLine: public PG_Image {
             wip->showWeapon();
       };
 
-	   bool eventMouseMotion(const SDL_MouseMotionEvent* motion)
+      bool activate()
       {
          if ( displayed != this ) {
             wip->showWeapon( weapon);
@@ -569,8 +594,7 @@ class WeaponInfoLine: public PG_Image {
             return true;
          } else
             return false;
-      };
-
+      }
 };
 
 WeaponInfoLine* WeaponInfoLine::displayed = NULL;
@@ -622,6 +646,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
       if ( veh )
          setLabelText( "weapon_currentammo", veh->ammo[displayedWeaponNum[i]], lineWidget );
 
+      weaponInfoLines.push_back( lineWidget );
    }
    setLabelText( "weapon_shootaftermove", vt->wait ? "no" : "yes" );
    setLabelText( "weapon_moveaftershoot", vt->hasFunction( ContainerBaseType::MoveAfterAttack  ) ? "yes" : "no" );
@@ -726,6 +751,13 @@ bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 }
 
 
+bool WeaponInfoPanel::eventMouseMotion(const SDL_MouseMotionEvent* motion)
+{
+   for ( int i = 0; i < weaponInfoLines.size();++i )
+      if ( weaponInfoLines[i]->IsMouseInside() )
+         return weaponInfoLines[i]->activate();
+   return false;
+};
 
 
 ASCString WeaponInfoPanel::name = "WeaponInfoPanel";

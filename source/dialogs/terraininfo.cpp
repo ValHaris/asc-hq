@@ -31,13 +31,13 @@
 
 void appendTerrainBits ( ASCString& text, const TerrainBits* bdt )
 {
-   for (int i = 0; i < cbodenartennum ; i++) {
+   for (int i = 0; i < terrainPropertyNum ; i++) {
       TerrainBits bts;
       bts.set ( i );
 
       if ( (*bdt & bts).any() ) {
          text += "- " ;
-         text += cbodenarten[i];
+         text += terrainProperty[i];
          text += "\n";
       }
    } /* endfor */

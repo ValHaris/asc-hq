@@ -334,7 +334,7 @@ pair<Sound_Sample*, Mix_Chunk*> loadWave ( const ASCString& name )
       if ( sample )
          displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded successfully\n");
       else {
-         displayLogMessage ( 10, " SoundSystem::loadWave - sound " + name + " loaded failed\n");
+         displayLogMessage (0, ASCString(" SoundSystem::loadWave" ) + name + " failed. Message: " + Sound_GetError() + "\n");
          return make_pair(sample,chunk);
       }
    }
@@ -345,6 +345,8 @@ pair<Sound_Sample*, Mix_Chunk*> loadWave ( const ASCString& name )
    }
 
    Uint32 size = Sound_DecodeAll ( sample );
+   if ( sample->buffer_size <= 0 ) 
+      warning( "decoding of file " + name + " failed");
 
    chunk = new Mix_Chunk;
    chunk->allocated = size;

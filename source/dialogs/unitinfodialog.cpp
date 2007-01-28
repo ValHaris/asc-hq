@@ -426,7 +426,7 @@ class UnitInfoDialog : public Panel {
          }
          if ( label == "unitpad_terrainaccess" && vt ) {
             int yoffset = 0;
-            for ( int i = 0; i < cbodenartennum ; ++i ) {
+            for ( int i = 0; i < terrainPropertyNum ; ++i ) {
                if ( vt->terrainaccess.terrain.test(i) || vt->terrainaccess.terrainkill.test(i) || vt->terrainaccess.terrainnot.test(i) || vt->terrainaccess.terrainreq.test(i) ) {
                   pc.openBracket( "LineWidget" );
                   widgetParams.runTextIO( pc );
@@ -439,7 +439,7 @@ class UnitInfoDialog : public Panel {
                   pc.closeBracket();
                   yoffset += sw->Height();
 
-                  setLabelText( "unitpad_unitmove_terraintype", cbodenarten[i], sw);
+                  setLabelText( "unitpad_unitmove_terraintype", terrainProperty[i], sw);
 
                   PG_Widget* w = sw->FindChild("unitpad_unitmove_terrainaccess", true);
                   if ( w ) {

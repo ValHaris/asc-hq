@@ -557,6 +557,14 @@ VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap
 }
       
 
+void  calculateobject( const MapCoordinate& pos, 
+                             bool mof,
+                             const ObjectType* obj,
+                             GameMap* gamemap  )
+{
+   calculateobject( pos.x, pos.y, mof, obj, gamemap );
+}
+
 
 void         calculateobject( int       x,
                               int       y,

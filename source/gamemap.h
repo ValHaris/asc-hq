@@ -152,7 +152,7 @@ class OverviewMapHolder : public SigC::Object {
       void resetSize();
             
       void startUpdate();
-      void clear();
+      void clear( bool allImages = false );
       void connect();
 };
 

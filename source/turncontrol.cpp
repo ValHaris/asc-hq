@@ -83,7 +83,9 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
          infoMessage("next player is " + actmap->player[actmap->actplayer].getName() );
          actmap->setPlayerView ( actmap->actplayer );
       }
-   }
+      actmap->overviewMapHolder.clear( true );
+   } else
+      actmap->overviewMapHolder.clear( true );
 
    moveparams.movestatus = 0;
 
@@ -246,7 +248,6 @@ void next_turn ( int playerView )
    iterateToNextPlayer( actmap, true, lastPlayer, lastTurn );
    
    actmap->setPlayerView ( -1 );
-   actmap->overviewMapHolder.clear();
    
    if ( !authenticateUser( actmap, 0, false, true, true )) {
       delete actmap;
@@ -255,12 +256,17 @@ void next_turn ( int playerView )
    
    actmap->beginTurn();
    actmap->setPlayerView ( actmap->actplayer );
+   actmap->overviewMapHolder.clear();
    actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
 }
 
 
 void skipTurn( GameMap* gamemap )
 {
+   if ( gamemap->actplayer >= 0 ) {
+      gamemap->beginTurn();
+      gamemap->endTurn();
+   }
    iterateToNextPlayer( gamemap, false, -1, -1 );
 }
 

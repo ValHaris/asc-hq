@@ -248,6 +248,13 @@ int TerrainItem::place( const MapCoordinate& mc ) const
    fld->typ = item->weather[0]; 
    fld->setweather( selection.getWeather() );
    fld->setparams();
+   for ( int d = 0; d < 6; ++d ) {
+      MapCoordinate pos = getNeighbouringFieldCoordinate( mc, d );
+      tfield* fld = actmap->getField( pos );
+      if ( fld ) 
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+            calculateobject( pos, false, i->typ, actmap );
+   }
    return 0;
 }
 

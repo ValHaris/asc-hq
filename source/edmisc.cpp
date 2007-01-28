@@ -2656,6 +2656,7 @@ void selectunitsetfilter ( void )
       buttons.push_back ( "~H~ide set" );
       buttons.push_back ( "~S~how set" );
       buttons.push_back ( "~S~how set only");
+      buttons.push_back ( "~S~how all sets");
       buttons.push_back ( "~O~k" );
 
       pair<int,int> playerRes;
@@ -2686,7 +2687,12 @@ void selectunitsetfilter ( void )
                else
                   ItemFiltrationSystem::itemFilters[i]->setActive(true);
 
-      } while ( playerRes.first != 3 );
+         if ( playerRes.first == 3 && playerRes.second >= 0)
+            for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
+               ItemFiltrationSystem::itemFilters[i]->setActive(false);
+
+
+      } while ( playerRes.first != 4 );
 
       filtersChangedSignal();
    } else
@@ -3093,7 +3099,7 @@ void transformMap ( )
                   int iteration = 0;
                   enum { trying, success, failed } state = trying;
                   do {
-                     if ( !bld->chainbuildingtofield( pos )) {
+                     if ( bld->chainbuildingtofield( pos )) {
                         pos = getNeighbouringFieldCoordinate( orgpos, iteration );
                      } else
                         state = success;

@@ -107,11 +107,12 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
 
 void viewOwnReplay( Player& player )
 {
-   if ( CGameOptions::Instance()->debugReplay && player.getParentMap()->replayinfo )
-      if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
-         // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
-         runSpecificReplay ( player.getPosition(), player.getPosition(), false );
-      }
+   if ( player.stat == Player::human || player.stat == Player::supervisor )
+      if ( CGameOptions::Instance()->debugReplay && player.getParentMap()->replayinfo )
+         if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
+            // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
+            runSpecificReplay ( player.getPosition(), player.getPosition(), false );
+         }
 }
 
 
