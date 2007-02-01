@@ -2393,6 +2393,9 @@ void BuildingConstruction::addButton( int &num, const MapCoordinate& mc, Contain
 void BuildingConstruction::search ( const MapCoordinate& pos, int& num, int pass )
 {
    tfield* entryfield =  actmap->getField(pos);
+   if ( !entryfield )
+      return;
+
    BuildingType* bld = buildingTypeRepository.getObject_byID( bldid );
 
    if ( bld ) {

@@ -366,6 +366,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
    if ( redraw )
       PG_Application::SetBulkMode(true);
       
+
    if ( veh ) {
       setLabelText( "unittypename", veh->typ->name );
       if ( veh->name.empty() )
@@ -374,6 +375,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
          setLabelText( "unitname", veh->name );
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
       setLabelText( "unitstatus", 100-veh->damage );
+
       setBargraphValue( "unitfuel", veh->getStorageCapacity().fuel ? float( veh->getTank().fuel) / veh->getStorageCapacity().fuel : 0  );
       setLabelText( "unitfuelstatus", veh->getTank().fuel );
       setBargraphValue( "unitmaterial", veh->getStorageCapacity().material ? float( veh->getTank().material) / veh->getStorageCapacity().material : 0  );
@@ -415,6 +417,18 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
          setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
          setLabelText( "unitstatus", 100-bld->damage );
          setLabelText( "armor", bld->getArmor() );
+
+         if ( 0 ) {
+            setLabelText( "unitfuelstatus", bld->getResource(maxint,2) );
+            setLabelText( "unitmaterialstatus", bld->getResource(maxint,1) );
+            setLabelText( "unitenergystatus", bld->getResource(maxint,0) );
+         } else {
+            setLabelText( "unitfuelstatus", "" );
+            setLabelText( "unitmaterialstatus", "" );
+            setLabelText( "unitenergystatus", "" );
+         }
+
+
       } else {
          setLabelText( "armor", "" );
          setLabelText( "unittypename", "" );
@@ -431,15 +445,18 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
          if ( !objectFound ) 
             setBargraphValue( "unitdamage", 0  );
          setLabelText( "unitstatus", "" );
+
+         setLabelText( "unitfuelstatus", "" );
+         setLabelText( "unitmaterialstatus", "" );
+         setLabelText( "unitenergystatus", "" );
+
       }
-   
-      setLabelText( "fuelrange", "-" );
+
       setBargraphValue( "unitfuel", 0  );
-      setLabelText( "unitfuelstatus", "" );
       setBargraphValue( "unitmaterial",  0  );
-      setLabelText( "unitmaterialstatus", "" );
       setBargraphValue( "unitenergy",  0  );
-      setLabelText( "unitenergystatus", "" );
+
+      setLabelText( "fuelrange", "-" );
       setLabelText( "movepoints", "" );
    }
    for ( int i = weaponsDisplayed; i < 10; ++i ) {

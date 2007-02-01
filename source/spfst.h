@@ -195,6 +195,8 @@ extern SigC::Signal0<void> repaintMap;
 extern SigC::Signal0<void> repaintDisplay;
 extern SigC::Signal0<void> updateFieldInfo;
 extern SigC::Signal0<void> cursorMoved;
+
+//! the view of the player onto the map changed, for example because he scrolled the map
 extern SigC::Signal0<void> viewChanged;
 extern SigC::Signal1<void,GameMap*> mapChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;

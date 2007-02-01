@@ -1291,6 +1291,16 @@ class GameThreadParams: public SigC::Object
       };
 };
 
+void diplomaticChange( GameMap* gm,int p1,int p2)
+{
+   if ( p1 == gm->getPlayerView() || p2 == gm->getPlayerView() ) {
+      computeview( gm );
+      mapChanged( gm );
+      repaintMap();
+   }
+}
+
+
 int gamethread ( void* data )
 {
    GameThreadParams* gtp = (GameThreadParams*) data;
@@ -1342,6 +1352,8 @@ int gamethread ( void* data )
    dataLoaderTicker();
    
    repaintDisplay.connect( repaintMap );
+
+   DiplomaticStateVector::shareViewChanged.connect( SigC::slot( &diplomaticChange ));
    
    mainScreenWidget = new ASC_MainScreenWidget( getPGApplication());
    dataLoaderTicker();

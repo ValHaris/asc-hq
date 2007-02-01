@@ -151,6 +151,10 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
 
    pc.addString("BI3.path", BI3directory, BI3directory );
 
+   pc.openBracket("UnitProduction");
+   pc.addBool("fillResources", unitProduction.fillResources, true );
+   pc.addBool("fillAmmo", unitProduction.fillAmmo, true );
+   pc.closeBracket();
    
    /*
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
@@ -286,6 +290,9 @@ void CGameOptions::setDefaults ( void )
    automaticTraining = true;
 
    replayMovieMode = false;
+
+   unitProduction.fillAmmo = true;
+   unitProduction.fillResources = true;
 
    setChanged();
 }

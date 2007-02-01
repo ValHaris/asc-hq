@@ -83,6 +83,7 @@ class DiplomaticStateVector : public SigC::Object {
       void swap( DiplomaticStateVector& secondDSV );
             
       static SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> anyStateChanged;
+      static SigC::Signal3<void,GameMap*,int,int> shareViewChanged;
 
       //! \returns true if there are any proposals
       bool getProposal( int fromPlayer, DiplomaticStates* state );

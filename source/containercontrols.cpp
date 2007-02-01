@@ -301,7 +301,9 @@ void ContainerControls :: destructUnit( Vehicle* veh )
 {
    Resources res = calcDestructionOutput ( veh );
    emptyeverything ( veh );
-   
+
+   logtoreplayinfo ( rpl_recycleUnit, container->getIdentification(), veh->networkid );
+
    container->putResource ( res.material, Resources::Material, false );
    container->removeUnitFromCargo( veh );
    delete veh;

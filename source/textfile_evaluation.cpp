@@ -1179,8 +1179,8 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
       return loadASCFieldImage( entry.value, fieldMask );
    }
    catch ( ASCexception ){
-      propertyContainer->error( "error accessing file " + entry.value );
    }
+   propertyContainer->error( "error accessing file " + entry.value );
    return Surface();
 }
 

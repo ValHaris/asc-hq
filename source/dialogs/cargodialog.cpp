@@ -524,21 +524,19 @@ class CargoDialog : public Panel
 
       bool ProcessEvent ( const SDL_Event *   event,bool   bModal = false  )
       {
+         // the unit info panel must get the events first. If a unit is renamed and a character entered, this
+         // key event shall go to the renaming - and not to the unit actions.
+         if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() ) 
+            if ( mainScreenWidget->getUnitInfoPanel()->ProcessEvent( event, bModal ))
+               return true;
 
          if ( mainScreenWidget && mainScreenWidget->getGuiHost() ) 
             if ( mainScreenWidget->getGuiHost()->ProcessEvent( event, bModal ))
                return true;
          
-         if ( !Panel::ProcessEvent( event, bModal )) {
-            if ( mainScreenWidget && mainScreenWidget->getUnitInfoPanel() ) 
-               if ( mainScreenWidget->getUnitInfoPanel()->ProcessEvent( event, bModal ))
-                  return true;
-               
-            
-
-         } else
+         if ( Panel::ProcessEvent( event, bModal )) 
             return true;
-
+             
          return false;
       }
 
@@ -754,6 +752,11 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), finallySelected(NULL), isw(NULL), factory(NULL), my_plant( plant )
       {
          factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), plant );
+
+         factory->setAmmoFilling( CGameOptions::Instance()->unitProduction.fillAmmo );
+         factory->setResourceFilling ( CGameOptions::Instance()->unitProduction.fillResources );
+
+
          factory->sigVehicleTypeSelected.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
          factory->sigVehicleTypeMarked.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtMarked ));
 
@@ -765,11 +768,15 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
          
          int y = GetTitlebarHeight() + isw->Height();
          PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 50, 20), "Fill with Resources" );
-         fillRes->SetPressed();
+         
+
+         if ( factory->getResourceFilling() ) 
+            fillRes->SetPressed();
          fillRes->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
          
          PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
-         fillAmmo->SetPressed();
+         if ( factory->getAmmoFilling() ) 
+            fillAmmo->SetPressed();
          fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
 
          PG_Rect rr ( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35);
@@ -2140,6 +2147,16 @@ namespace CargoGuiFunctions {
       if ( v ) {
          ContainerControls cc( parent.getContainer() );
          cc.produceUnit( v, refillAmmo, refillResources );
+
+         if ( CGameOptions::Instance()->unitProduction.fillAmmo != refillAmmo ) {
+            CGameOptions::Instance()->unitProduction.fillAmmo = refillAmmo;
+            CGameOptions::Instance()->setChanged();
+         }
+         if ( CGameOptions::Instance()->unitProduction.fillResources != refillResources ) {
+            CGameOptions::Instance()->unitProduction.fillResources = refillResources;
+            CGameOptions::Instance()->setChanged();
+         }
+
       }
       parent.cargoChanged(); // we need to update the resources because new production lines may have been build
    }

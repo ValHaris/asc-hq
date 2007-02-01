@@ -673,6 +673,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( building );
          stream->writeInt ( id );
       }
+
+      if ( action == rpl_recycleUnit ) {
+         int building = va_arg ( paramlist, int );
+         int id = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 2;
+         stream->writeInt ( size );
+         stream->writeInt ( building );
+         stream->writeInt ( id );
+      }
+
       if ( action == rpl_techResearched ) {
          int tech = va_arg ( paramlist, int );
          int player = va_arg ( paramlist, int );
@@ -1861,6 +1872,21 @@ void trunreplay :: execnextreplaymove ( void )
             
          }
          break;
+      case rpl_recycleUnit : {
+                                 stream->readInt();  // size
+                                 int building = stream->readInt();
+                                 int vehicleid = stream->readInt();
+                                 readnextaction();
+                                 Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
+                                 Vehicle* veh = actmap->getUnit ( vehicleid );
+                                 if ( bld && veh ) {
+                                    ContainerControls cc ( bld );
+                                    cc.destructUnit( veh );
+                                 } else
+                                    error("severe replay inconsistency:\nno unit for recycle command !");
+                              }
+         break;
+
 
       default:{
                  int size = stream->readInt();

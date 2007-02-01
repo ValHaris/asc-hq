@@ -34,6 +34,7 @@ PlayerID::PlayerID( const Player& p ) : num( p.getPosition() ) {};
 
 
 SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
+SigC::Signal3<void,GameMap*,int,int> DiplomaticStateVector::shareViewChanged;
 
 
 const char* diplomaticStateNames[diplomaticStateNum+1] = 
@@ -131,11 +132,17 @@ void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s
       msgid = 10003;  //  propose peace
    else
       msgid = 10002;  // declare war
-      
+
+
+   bool oldShareView = sharesView(towardsPlayer);
+
    setState( towardsPlayer, s );
    
    DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
    targ.setState( player.getPosition(), s );
+
+   if( sharesView(towardsPlayer) != oldShareView )
+      shareViewChanged( player.getParentMap(), player.getPosition(), towardsPlayer );
 
    if ( mail ) {
       ASCString txt;

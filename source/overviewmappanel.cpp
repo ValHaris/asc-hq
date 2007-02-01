@@ -37,7 +37,6 @@ OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisp
    ovmap = sdw;
    assert( ovmap );
       
-   viewChanged.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
    OverviewMapHolder::generationComplete.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
 
    lockMapdisplay.connect( SigC::slot( *this, &OverviewMapPanel::lockPanel ));

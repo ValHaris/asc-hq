@@ -303,7 +303,6 @@ void MainScreenWidget::spawnOverviewMapPanel ( const ASCString& panelName )
    assert( mapDisplay);
    overviewMapPanel = new OverviewMapPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay, panelName );
    overviewMapPanel->Show();
-   mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
 }
 
 

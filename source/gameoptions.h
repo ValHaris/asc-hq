@@ -172,6 +172,11 @@ class CGameOptions
       }
       sound;
 
+      struct {
+         bool fillResources;
+         bool fillAmmo;
+      } unitProduction;
+
       //! produce required ammo upon refuelling
       bool autoproduceammunition;
 
