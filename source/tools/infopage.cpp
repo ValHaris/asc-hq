@@ -1072,7 +1072,7 @@ void UnitWeaponPage::buildContent() {
     *buildingInfStream << "<tr>" << endl;
     addTitle("Ammo");
     for(int i = 0; i < vt.weapons.count; i++) {
-      addTDEntry(vt.weapons.weapon[i].count);
+      addTDEntry(vt.weapons.weapon[i].ammocount);
     }
     *buildingInfStream << "</tr>" << endl;
     bool laser = false;

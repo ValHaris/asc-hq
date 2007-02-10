@@ -202,7 +202,8 @@ void OverviewMapHolder::clear(bool allImages )
    
    overviewMapImage.Fill( Surface::transparent );
    if ( allImages ) {
-      completedMapImage.Fill( Surface::transparent );
+      if ( completedMapImage.valid() )
+         completedMapImage.Fill( Surface::transparent );
       secondMapReady = false;
    }
 

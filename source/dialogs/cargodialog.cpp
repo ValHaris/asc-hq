@@ -291,8 +291,6 @@ class CargoDialog : public Panel
       bool setupOK;
       Surface infoImage;
 
-      SigC::Signal0<void>  sigCargoChanged;
-
       typedef vector<SubWindow*> Activesubwindows;
       Activesubwindows activesubwindows;
       
@@ -559,6 +557,9 @@ class CargoDialog : public Panel
       GameMap* getMap() { if ( container ) return container->getMap(); else return NULL; };
       
       ContainerControls& getControls() { return containerControls; };
+
+      SigC::Signal0<void>  sigCargoChanged;
+
 
       ~CargoDialog()
       {
@@ -1016,7 +1017,6 @@ class NetControlWindow : public SubWindow {
 
 
 class CargoInfoWindow : public SubWindow {
-
    public:
       bool available( CargoDialog* cd )
       {
@@ -1031,6 +1031,12 @@ class CargoInfoWindow : public SubWindow {
       ASCString getFullName()
       {
          return "Cargo Info";
+      };
+
+      void registerSubwindow( CargoDialog* cd )
+      {
+         SubWindow::registerSubwindow( cd );
+         cargoDialog->sigCargoChanged.connect( SigC::slot( *this, &CargoInfoWindow::update ));
       };
 
 
@@ -1090,7 +1096,7 @@ class CargoInfoWindow : public SubWindow {
             cargoDialog->setLabelText ( "MaxWeight",  container()->baseType->maxLoadableWeight, widget );
          }
          
-         cargoDialog->setLabelText ( "FreeSlots", container()->baseType->maxLoadableUnits - container()->getCargo().size(), widget );
+         cargoDialog->setLabelText ( "FreeSlots", container()->baseType->maxLoadableUnits - container()->vehiclesLoaded(), widget );
          cargoDialog->setLabelText ( "MaxSlots",  container()->baseType->maxLoadableUnits , widget );
          cargoDialog->setLabelText ( "MaxUnitSize",  container()->baseType->maxLoadableUnitSize, widget );
          
@@ -2275,6 +2281,9 @@ namespace CargoGuiFunctions {
 
       Vehicle* veh = dynamic_cast<Vehicle*>(subject);
       if ( !veh )
+         return false;
+
+      if (!parent.getContainer()->baseType->hasFunction( ContainerBaseType::InternalUnitRepair ))
          return false;
 
       return veh->damage > 0;
