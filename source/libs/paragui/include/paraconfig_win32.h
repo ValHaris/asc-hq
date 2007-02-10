@@ -67,7 +67,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRALEAN
 #include <windows.h>
-extern int SDL_RegisterApp(char*, Uint32, void*);
+// extern int SDL_RegisterApp(char*, Uint32, void*);
 #undef SendMessage
 #endif // WIN32
 

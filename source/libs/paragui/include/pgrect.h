@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2006-03-19 19:56:01 $
+    Update Date:      $Date: 2007-02-10 19:37:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgrect.h,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -123,7 +123,7 @@ public:
 	@param	p		the point to test
 	@return			true if the point is inside the rectangle
 	*/
-	inline bool IsInside(const PG_Point& p) {
+	inline bool IsInside(const PG_Point& p) const {
 		return ( (x <= p.x) && (p.x <= x + w) && (y <= p.y) && (p.y <= y + h) );
 	}
 

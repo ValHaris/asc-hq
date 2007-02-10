@@ -62,6 +62,41 @@ void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMe
 
 }
 
+class PG_Rect;
+
+template<int BytePerPixel, class ColorMergerUL, class ColorMergerLR >
+void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMergerUL& ul, const ColorMergerLR& lr, const PG_Rect& clip )
+{
+   SurfaceLock lock( surface );
+   typedef typename PixelSize2Type<BytePerPixel>::PixelType TargetPixelType;
+
+   TargetPixelType* pix = (TargetPixelType*)( surface.pixels() );
+   pix += pos.y * surface.pitch()/BytePerPixel + pos.x;
+
+   int pitch = surface.pitch()/BytePerPixel;
+
+   h -= 1;
+   w -= 1;
+
+   for ( int x = 0; x <= w; ++x )
+      if ( clip.IsInside( PG_Point( pos.x+x, pos.y )))
+         ul.assign ( 1, (pix+x) );
+
+   for ( int y = 0; y <= h; ++y )
+      if ( clip.IsInside( PG_Point( pos.x, pos.y + y)))
+         ul.assign ( 1, (pix+y*pitch) );
+
+   for ( int x = 0; x <= w; ++x )
+      if ( clip.IsInside( PG_Point( pos.x+x, pos.y + h )))
+         lr.assign ( 1, (pix+x+h*pitch) );
+
+   for ( int y = 0; y <= h; ++y )
+      if ( clip.IsInside( PG_Point( pos.x+w, pos.y +y )))
+         lr.assign ( 1, (pix+y*pitch+w) );
+
+}
+
+
 template<int BytePerPixel, class ColorMerger>
 void paintFilledRectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMerger& ul )
 {

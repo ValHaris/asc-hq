@@ -75,11 +75,17 @@
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				OptimizeForProcessor="3"
+				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image).static&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				RuntimeLibrary="2"

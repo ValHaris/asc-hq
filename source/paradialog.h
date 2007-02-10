@@ -214,10 +214,12 @@ class Emboss : public PG_Widget {
 
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst) {
          Surface s = Surface::Wrap( PG_Application::GetScreen() );
+
+         PG_Rect clip= dst.IntersectRect( PG_Application::GetScreen()->clip_rect );
          if ( inv )
-            rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 0.7 ), ColorMerger_Brightness<4>( 1.4 ));
+            rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 0.7 ), ColorMerger_Brightness<4>( 1.4 ), clip);
          else
-            rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ));
+            rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ), clip);
       };
 };
 
