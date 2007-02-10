@@ -1435,10 +1435,9 @@ void showPlayerTime()
           p = 0;
    }
 
-   tviewanytext vat ;
-   vat.init ( "Play Time Information", text.c_str(), 20, -1 , 530, 480 );
-   vat.run();
-   vat.done();
+   ViewFormattedText vft( "Play Time Information", text, PG_Rect( -1, -1 , 500, 400 ));
+   vft.Show();
+   vft.RunModal();
 }
 
 void displaywindspeed( void )

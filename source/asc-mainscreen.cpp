@@ -496,7 +496,21 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    : MainScreenWidget( application ), standardActionsLocked(0), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL)
 {
 
-   setup( true );
+   int mapWidth = Width() - 30;
+
+   PG_Rect mapView(15,30,Width() - 200, Height() - 73);
+
+   if ( CGameOptions::Instance()->panelColumns & 1 ) {
+      mapView.x = 185;
+      mapWidth -= 170;
+   }
+   if ( CGameOptions::Instance()->panelColumns & 2 ) {
+      mapWidth -= 170;
+   }
+   mapView.my_width = mapWidth;
+
+
+   setup( true, mapView );
 
    displayLogMessage ( 7, "done\n  Menu ");
    menu = new Menu(this, PG_Rect(15,0,Width()-200,20));

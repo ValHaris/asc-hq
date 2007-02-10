@@ -94,7 +94,7 @@ protected:
 
     void spawnOverviewMapPanel ( const ASCString& panelName = "OverviewMap");
     
-    void setup( bool messageLine );
+    void setup( bool messageLine, const PG_Rect& mapView );
     
     bool idleHandler( PG_MessageObject* msgObj );
 

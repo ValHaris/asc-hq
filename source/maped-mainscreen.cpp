@@ -375,7 +375,7 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
               weatherSelector( NULL ), selectionName(NULL), selectionName2(NULL), coordinateDisplay(NULL), currentSelectionWidget(NULL), contextMenu(NULL)
 {
 
-   setup( false );
+   setup( false, PG_Rect(15,30,Width() - 200, Height() - 73) );
    mapDisplay->mouseButtonOnField.connect( SigC::slot( mousePressedOnField ));
    mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &Maped_MainScreenWidget::clickOnMap ));
    mapDisplay->mouseDraggedToField.connect( SigC::slot( mouseDraggedToField ));

@@ -85,14 +85,14 @@ MainScreenWidget::MainScreenWidget( PG_Application& application )
 }
 
 
-void MainScreenWidget::setup( bool messageLine )
+void MainScreenWidget::setup( bool messageLine, const PG_Rect& mapView )
 {
    displayLogMessage ( 5, "MainScreenWidget: initializing panels:\n");
 
    dataLoaderTicker();
 
    displayLogMessage ( 7, "  Mapdisplay ");
-   mapDisplay = new MapDisplayPG( this, PG_Rect(15,30,Width() - 200, Height() - 73));
+   mapDisplay = new MapDisplayPG( this, mapView );
    mapDisplay->SetID( ASC_PG_App::mapDisplayID );
    dataLoaderTicker();
 

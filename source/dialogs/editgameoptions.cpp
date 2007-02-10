@@ -130,6 +130,8 @@ class GetVideoModes {
 
 const char* mouseButtonNames[] = { "None", "Left", "Center", "Right", "4", "5", NULL };
 
+const char* infoPanelNames[] = { "None", "Left", "Right", "Left+Right", NULL };
+
 class EditGameOptions : public ASC_PG_Dialog {
    private:
       PG_PropertyEditor* propertyEditor;
@@ -206,6 +208,7 @@ class EditGameOptions : public ASC_PG_Dialog {
          if ( mainApp ) {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Game running Fullscreen", &o->forceWindowedMode, true );
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Produce Ammo when refuelling", &o->autoproduceammunition );
+            new PG_PropertyField_IntDropDown<int>( propertyEditor, "InfoPanels", &o->panelColumns, infoPanelNames );
          } else {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "MapEd running Fullscreen", &o->mapeditWindowedMode, true );
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Modal Selection Window", &o->maped_modalSelectionWindow );

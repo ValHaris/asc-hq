@@ -200,7 +200,9 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
       pc.addBool( "active", pd.visible );
       pc.closeBracket();
    }
-      
+
+   pc.addInteger( "PanelColumns", panelColumns, 2 );
+     
      
 }
 
@@ -293,6 +295,8 @@ void CGameOptions::setDefaults ( void )
 
    unitProduction.fillAmmo = true;
    unitProduction.fillResources = true;
+
+   panelColumns = 2;
 
    setChanged();
 }

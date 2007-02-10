@@ -186,6 +186,7 @@ class CGameOptions
       int replayspeed;
       // int showUnitOwner;
 
+      int panelColumns;
 
       bool cacheASCGUI;
 
