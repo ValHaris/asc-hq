@@ -97,6 +97,9 @@ void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMe
 }
 
 
+
+
+
 template<int BytePerPixel, class ColorMerger>
 void paintFilledRectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMerger& ul )
 {

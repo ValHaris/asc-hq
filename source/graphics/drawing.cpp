@@ -80,4 +80,37 @@ void lighten_Color( SDLmm::Color* color, float factor )
    *color = lighten_Color( *color, factor );
 }
 
+
+
+
+void PutPixel( Surface& s, const SPoint& pos, Uint32 src )
+{
+   typedef Uint32 PixelType;
+   
+   char* c = (char*) s.pixels();
+   c += pos.y * s.pitch();
+   PixelType* dest = (Uint32*) c;
+   dest += pos.x;
+
+   PixelType alpha = src >> 24;   
+   
+   if ( alpha != PixelType(Surface::transparent)) {
+      // copied from SDL
+
+      /*
+       * take out the middle component (green), and process
+       * the other two in parallel. One multiply less.
+       */
+      PixelType d = *dest;
+      PixelType dalpha = d & 0xff000000;
+      PixelType s1 = src & 0xff00ff;
+      PixelType d1 = d & 0xff00ff;
+      d1 = (d1 + ((s1 - d1) * alpha >> 8)) & 0xff00ff;
+      src &= 0xff00;
+      d &= 0xff00;
+      d = (d + ((src - d) * alpha >> 8)) & 0xff00;
+      *dest = d1 | d | dalpha;
+   }
+}
 #endif
+

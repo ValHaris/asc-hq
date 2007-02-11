@@ -24,16 +24,17 @@
 #include "mapdisplay.h"
 
 class WholeMapRenderer : public MapRenderer {
-   GameMap* gamemap;
-   Surface surface;
-   void render();
+      GameMap* gamemap;
+      Surface surface;
    public:
       WholeMapRenderer( GameMap* actmap );
+      void render();
       void writePCX( const ASCString& filename );
       void writePNG( const ASCString& filename );
+      void renderVisibility();
 
 };
 
-extern void writemaptopcx ( GameMap* gamemap );
+extern void writemaptopcx ( GameMap* gamemap, bool addview = false );
 
 #endif

@@ -809,7 +809,12 @@ void execaction_pg(int code)
        break;
     case act_savemapas :  k_savemap(true);
        break;
-    case act_maptopcx : writemaptopcx ( actmap );
+    case act_maptopcx : {
+       bool view = choice_dlg("Include view ?","~n~o", "~y~es") == 2;
+       if ( view )
+          computeview( actmap );
+       writemaptopcx ( actmap, view );
+                        }
        break;
     case act_end : {
           if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 

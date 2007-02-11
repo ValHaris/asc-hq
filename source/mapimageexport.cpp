@@ -21,7 +21,8 @@
 #include "mapimageexport.h"
 #include "dialogs/fileselector.h"
 #include "graphics/surface2png.h"
-
+#include "spfst.h"
+#include "iconrepository.h"
 
 WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 {
@@ -35,21 +36,49 @@ WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 void WholeMapRenderer::render()
 {
    paintTerrain( surface, gamemap, gamemap->getPlayerView(), ViewPort( 0, 0, gamemap->xsize, gamemap->ysize ), MapCoordinate( 0, 0 ) );
+   renderVisibility();
 }
+
+void WholeMapRenderer::renderVisibility()
+{
+   ColorMerger_AlphaMerge<4> cmam;
+
+   PutPixel<4, ColorMerger_AlphaMerge > pp(surface);
+
+   Surface& mask = IconRepository::getIcon("largehex.pcx");
+   for ( int y = 0; y < gamemap->ysize; ++y )
+      for ( int x = 0; x < gamemap->xsize; ++x ) {
+         int view = -1;
+         int maxview = 0;
+         for ( int i = 1; i < gamemap->getPlayerCount(); ++i )
+            if ( fieldvisiblenow( gamemap->getField(x,y), i, gamemap )) {
+               if ( gamemap->getField(x,y)->view[i].view > maxview ) {
+                  maxview = gamemap->getField(x,y)->view[i].view;
+                  view = i;
+               }
+            }
+
+
+         if ( view >= 0 )
+            for ( int yp = 0; yp < fieldsizey; ++yp)
+               for ( int xp = 0; xp < fieldsizex; ++xp)
+                  if ( mask.GetPixel(xp,yp) != 0xff ) 
+                     pp.set( getFieldPos(x,y) + SPoint(xp,yp), gamemap->getPlayer( view ).getColor().MapRGBA( surface.getBaseSurface()->format, min(maxview,255)/2));
+      }
+}
+
 
 void WholeMapRenderer::writePCX( const ASCString& filename )
 {
-   render();
    writepcx( filename, surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (gamemap->xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (gamemap->ysize - 1) * fielddisty + fieldysize ) );
 }
 
 void WholeMapRenderer::writePNG( const ASCString& filename )
 {
-   render();
    ::writePNG( constructFileName(0,"",filename), surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (gamemap->xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (gamemap->ysize - 1) * fielddisty + fieldysize ) );
 }
 
-void writemaptopcx ( GameMap* gamemap )
+void writemaptopcx ( GameMap* gamemap, bool addview )
 {
    ASCString name = selectFile( "*.png", false );
    
@@ -57,6 +86,10 @@ void writemaptopcx ( GameMap* gamemap )
    
    if ( !name.empty() ) {
       WholeMapRenderer wmr( gamemap );
+      wmr.render();
+      if ( addview ) 
+         wmr.renderVisibility();
+      
       wmr.writePNG( name );
    }
 }
