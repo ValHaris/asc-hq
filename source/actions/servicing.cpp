@@ -590,7 +590,8 @@ void ServiceChecker :: check( ContainerBase* dest )
             }
 
          } else {
-            bool active = source->getStorageCapacity().resource(r) && dest->getStorageCapacity().resource(r) ;
+            bool active =  (source->getStorageCapacity().resource(r) || source->isBuilding() )
+                        && (dest->getStorageCapacity().resource(r) || dest->isBuilding());
             resource( dest, r, active );
          }
       }

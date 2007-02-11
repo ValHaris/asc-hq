@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-02-10 13:27:38 $
+    Update Date:      $Date: 2007-02-11 10:51:50 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgscrollbar.cpp,v $
-    CVS/RCS Revision: $Revision: 1.1.2.3 $
+    CVS/RCS Revision: $Revision: 1.1.2.4 $
     Status:           $State: Exp $
 */
 
@@ -440,7 +440,7 @@ int PG_ScrollBar::GetMaxRange() {
 	return scroll_max;
 }
 
-int round( double f)
+int intround( double f)
 {
    return (int)(std::floor(f + 0.5));
 }
@@ -458,9 +458,9 @@ int PG_ScrollBar::ScrollButton::GetPosFromPoint(PG_Point p) {
 
 	//if(!my_tickMode) {
 	if(GetParent()->sb_direction == VERTICAL) {
-		pos = round((double)(p.y - GetParent()->position[2].y) / (((double)GetParent()->position[2].h - (double)GetParent()->position[3].h) / (double)range));
+		pos = intround((double)(p.y - GetParent()->position[2].y) / (((double)GetParent()->position[2].h - (double)GetParent()->position[3].h) / (double)range));
 	} else {
-		pos = round((double)(p.x - GetParent()->position[2].x) / (((double)GetParent()->position[2].w - (double)GetParent()->position[3].w) / (double)range));
+		pos = intround((double)(p.x - GetParent()->position[2].x) / (((double)GetParent()->position[2].w - (double)GetParent()->position[3].w) / (double)range));
 	}
 	/*} else {
 		if(GetParent()->sb_direction == VERTICAL) {

@@ -1357,7 +1357,7 @@ class GraphWidget : public PG_Widget {
          }
          int barNum = 0;
          for ( Bars::iterator b = bars.begin(); b != bars.end(); ++b ) {
-            int x = b->first * Width() / xrange;
+            int x = b->first * Width() / (xrange+1);
             int x2 = (b->first + 1) * Width() / xrange - 1;
             if ( x2 <= x )
                x2 = x + 1;
@@ -1412,6 +1412,8 @@ class ResearchGraph : public GraphWidget {
       {
          if ( cont->baseType->nominalresearchpoints ) {
             int res = x * xrange / Width() * lab->baseType->nominalresearchpoints / cont->baseType->nominalresearchpoints;
+            if ( res > xrange )
+               res = xrange;
             int old = lab->researchpoints;
             lab->researchpoints = res;
             return res != old;
@@ -1446,7 +1448,7 @@ class ResearchGraph : public GraphWidget {
    public:
       ResearchGraph( PG_Widget *parent, const PG_Rect& rect, ContainerBase* container ) : GraphWidget( parent, rect ), cont( container )
       {
-         setRange( cont->maxresearchpoints, returnResourcenUseForResearch( cont, cont->maxresearchpoints ).energy );
+         setRange( cont->maxresearchpoints+1, returnResourcenUseForResearch( cont, cont->maxresearchpoints ).energy );
          addCurve( 0x00ff00 );
          recalc();
       }
