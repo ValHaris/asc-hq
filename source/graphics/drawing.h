@@ -62,10 +62,8 @@ void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMe
 
 }
 
-class PG_Rect;
-
 template<int BytePerPixel, class ColorMergerUL, class ColorMergerLR >
-void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMergerUL& ul, const ColorMergerLR& lr, const PG_Rect& clip )
+void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMergerUL& ul, const ColorMergerLR& lr, const SDLmm::SRect& clip )
 {
    SurfaceLock lock( surface );
    typedef typename PixelSize2Type<BytePerPixel>::PixelType TargetPixelType;
@@ -79,19 +77,19 @@ void rectangle( Surface& surface, const SPoint& pos, int w, int h, const ColorMe
    w -= 1;
 
    for ( int x = 0; x <= w; ++x )
-      if ( clip.IsInside( PG_Point( pos.x+x, pos.y )))
+      if ( clip.Contains( SPoint( pos.x+x, pos.y )))
          ul.assign ( 1, (pix+x) );
 
    for ( int y = 0; y <= h; ++y )
-      if ( clip.IsInside( PG_Point( pos.x, pos.y + y)))
+      if ( clip.Contains( SPoint( pos.x, pos.y + y)))
          ul.assign ( 1, (pix+y*pitch) );
 
    for ( int x = 0; x <= w; ++x )
-      if ( clip.IsInside( PG_Point( pos.x+x, pos.y + h )))
+      if ( clip.Contains( SPoint( pos.x+x, pos.y + h )))
          lr.assign ( 1, (pix+x+h*pitch) );
 
    for ( int y = 0; y <= h; ++y )
-      if ( clip.IsInside( PG_Point( pos.x+w, pos.y +y )))
+      if ( clip.Contains( SPoint( pos.x+w, pos.y +y )))
          lr.assign ( 1, (pix+y*pitch+w) );
 
 }

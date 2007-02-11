@@ -152,13 +152,13 @@ extern void*     xlatbuffer;
       red colors, which can be made blue by adding 8 to them, 16 makes them brown, etc.. */
  extern void putrotspriteimage(int x1, int y1, void *buffer, int rotationvalue);
 
- //! like #putspriteimage, but rotates the image by 90ø clock-wise
+ //! like #putspriteimage, but rotates the image by 90 clock-wise
  extern void putrotspriteimage90(int x1, int y1, void *buffer, int rotationvalue);
 
- //! like #putspriteimage, but rotates the image by 180ø clock-wise
+ //! like #putspriteimage, but rotates the image by 180 clock-wise
  extern void putrotspriteimage180(int x1, int y1, void *buffer, int rotationvalue);
 
- //! like #putspriteimage, but rotates the image by 270ø clock-wise
+ //! like #putspriteimage, but rotates the image by 270 clock-wise
  extern void putrotspriteimage270(int x1, int y1, void *buffer, int rotationvalue);
 
  //! function not used any more and obsolete. Use #putimageprt instead
@@ -237,7 +237,7 @@ extern void         line(int x1, int y1, int x2, int y2, char color );
      that was previously there. And it can be undone by displaying it a second time. */
 extern void xorline( int x1, int y1, int x2, int y2, char color );
 
-//! draws a simple rectangle
+//! draws a simple rectangl
 extern void rectangle(int x1, int y1, int x2, int y2, char color );
 
 /** draws a simple rectangle on the screen, but performs a XOR operation between the pixel already
@@ -248,7 +248,7 @@ extern void  xorrectangle(int x1, int y1, int x2, int y2, char color) ;
 //! obsolete. not used any more. can be removed.
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation );
 
-/** rotates the image s by 90ø clockwise and writes it to d. d must point to a buffer
+/** rotates the image s by 90 clockwise and writes it to d. d must point to a buffer
      with the size of imagesize2(s)                    */
 void rotatepict90 ( void* s, void* d );
 

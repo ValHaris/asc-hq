@@ -3,8 +3,8 @@ TerrainType {
    ID = 111
    Weather = dry much_snow 
    dry { 
-      UseGFXpics = true
-      GFX_Picture = 418
+      UseGFXpics = false
+      picture = slope-hd1.pcx
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 0
