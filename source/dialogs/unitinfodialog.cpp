@@ -349,6 +349,8 @@ class UnitInfoDialog : public Panel {
                   for ( int i = 0; i < ContainerBaseType::functionNum; ++i )
                      if ( vt->hasFunction(ContainerBaseType::ContainerFunctions(i)))
                         abilities += ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(i)) + ASCString("\n");
+                  if ( vt->wait )
+                     abilities += "Wait for attack\n"; 
                   setLabelText( "unitpad_unitabilities", abilities );
 
 

@@ -314,7 +314,7 @@ class BuildingType;
     /** fills a unit with all resources it can carry and sets it class to "to be determined on map load".
         This function should only be called in the mapeditor !
     */
-    void fillMagically( void );
+    void fillMagically( bool ammo = true, bool resources = true );
 
 
     /** generates a new unit, loads its parameters from the stream (where they have been

@@ -219,7 +219,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       
       
    public:
-      AdminGameWindow( GameMap* actmap, PG_Widget *parent, TurnSkipper* turnSkipper ) : ASC_PG_Dialog( parent, PG_Rect( -1, -1, 600, 600 ), "Admin Game" ), gamemap( actmap ), successfullyClosed(false)
+      AdminGameWindow( GameMap* actmap, PG_Widget *parent, TurnSkipper* turnSkipper ) : ASC_PG_Dialog( parent, PG_Rect( -1, -1, 600, min(1000, PG_Application::GetScreenHeight()) ), "Admin Game" ), gamemap( actmap ), successfullyClosed(false)
       {
          this->turnSkipper = turnSkipper;
          

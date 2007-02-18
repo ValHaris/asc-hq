@@ -321,7 +321,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
             stream->writeInt ( noInterrupt );
          }
       }
-      if ( action == rpl_convert ) {
+      if ( action == rpl_convert  ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
@@ -331,6 +331,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( col );
+      }
+      if ( action == rpl_convert2  ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int col =  va_arg ( paramlist, int );
+         int nwid =  va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( col );
+         stream->writeInt ( nwid );
       }
       if ( action == rpl_buildobj || action == rpl_remobj ) {
          int x =  va_arg ( paramlist, int );
@@ -1110,31 +1123,40 @@ void trunreplay :: execnextreplaymove ( void )
 
                      }
          break;
-      case rpl_convert: {
+      case rpl_convert: 
+      case rpl_convert2: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int col = stream->readInt();
-                           readnextaction();
+                           if ( nextaction == rpl_convert2 ) {
+                              int nwid = stream->readInt();
+                              readnextaction();
 
-
-                           tfield* fld = getfield ( x, y );
-                           if ( fld ) {
-                              displayActionCursor ( x, y );
-                              if ( fld->vehicle )
-                                 fld->vehicle->convert ( col );
+                              Vehicle* veh = actmap->getUnit( x,y, nwid );
+                              if ( veh ) 
+                                 veh->convert(col);
                               else
-                                 if ( fld->building )
-                                    fld->building->convert ( col );
+                                 error("severe replay inconsistency:\nno vehicle for convert command !");
+                           } else {
+                              readnextaction();
 
-                              computeview( actmap );
-                              displaymap();
-                              wait( MapCoordinate(x,y) );
-                              removeActionCursor();
-                           } else
-                              error("severe replay inconsistency:\nno vehicle for convert command !");
+                              tfield* fld = getfield ( x, y );
+                              if ( fld ) {
+                                 displayActionCursor ( x, y );
+                                 if ( fld->vehicle )
+                                    fld->vehicle->convert ( col );
+                                 else
+                                    if ( fld->building )
+                                       fld->building->convert ( col );
 
-
+                                 computeview( actmap );
+                                 displaymap();
+                                 wait( MapCoordinate(x,y) );
+                                 removeActionCursor();
+                              } else
+                                 error("severe replay inconsistency:\nno vehicle for convert command !");
+                           }
                        }
          break;
       case rpl_remobj:

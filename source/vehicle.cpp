@@ -1121,17 +1121,16 @@ int Vehicle::searchForMineralResources ( void ) const
 }
 
 
-void Vehicle :: fillMagically( void )
+void Vehicle :: fillMagically( bool ammunition, bool resources )
 {
-   #ifndef karteneditor
-   fprintf(stderr, "ASC: Warning, Vehicle :: fillMagically called outside mapeditor");
-   #endif
-   tank = getStorageCapacity();
+   if ( resources )
+      tank = getStorageCapacity();
 
-   for ( int m = 0; m < typ->weapons.count ; m++) {
-      ammo[m] = typ->weapons.weapon[m].count;
-      weapstrength[m] = typ->weapons.weapon[m].maxstrength;
-   }
+   if ( ammunition ) 
+      for ( int m = 0; m < typ->weapons.count ; m++) {
+         ammo[m] = typ->weapons.weapon[m].count;
+         weapstrength[m] = typ->weapons.weapon[m].maxstrength;
+      }
 }
 
 
@@ -1431,9 +1430,10 @@ void   Vehicle::readData ( tnstream& stream )
     if ( ! (height & typ->height) )
        height = 1 << log2 ( typ->height );
 
-    if ( bm & cem_movement )
-       setMovement ( stream.readChar ( ), 0 );
-    else
+    if ( bm & cem_movement ) {
+       int m = stream.readChar ( );
+       setMovement ( min( m,typ->movement [ log2 ( height ) ]), 0 );
+    } else
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
 
     if ( bm & cem_direction )

@@ -768,6 +768,19 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       }
    }
 
+   if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
+      switch ( key->keysym.sym ) {
+            case SDLK_F11: {
+               tfield* fld = actmap->getField(actmap->getCursor() );
+               if ( actmap && actmap->getCurrentPlayer().stat == Player::supervisor && fld && fld->vehicle )
+                  fld->vehicle->fillMagically( true, false );
+               return true;
+            }
+
+            default:;
+      }
+   }
+
    if ( mod & KMOD_CTRL ) {
       switch ( key->keysym.sym ) {
 

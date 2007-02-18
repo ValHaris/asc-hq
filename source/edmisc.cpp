@@ -2687,7 +2687,7 @@ void selectunitsetfilter ( void )
                else
                   ItemFiltrationSystem::itemFilters[i]->setActive(true);
 
-         if ( playerRes.first == 3 && playerRes.second >= 0)
+         if ( playerRes.first == 3 )
             for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
                ItemFiltrationSystem::itemFilters[i]->setActive(false);
 

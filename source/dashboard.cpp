@@ -159,11 +159,19 @@ void DashboardPanel::containerDeleted( ContainerBase* c )
 
 bool DashboardPanel::containerRenamed( PG_LineEdit* lineEdit )
 {
-   if ( veh )
-      veh->name = lineEdit->GetText();
+   if ( veh ) {
+      if ( veh->getMap()->actplayer == veh->getOwner() )
+         veh->name = lineEdit->GetText();
+      else
+         lineEdit->SetText( veh->name );
+   }
    
-   if ( bld )
-      bld->name = lineEdit->GetText();
+   if ( bld ) {
+      if ( bld->getMap()->actplayer == veh->getOwner() )
+         bld->name = lineEdit->GetText();
+      else
+         lineEdit->SetText( bld->name );
+   }
 
    return true;
 }

@@ -271,7 +271,18 @@ namespace CargoGuiFunctions {
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
-   
+
+   class TransferUnitControl : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         TransferUnitControl( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
+
    
    
 }; // namespace CargoGuiFunctions
@@ -418,6 +429,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::CloseDialog( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitInfo( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::TransferUnitControl( *this ));
       }
 
       void checkStoringPosition( Vehicle* unit )
@@ -2436,7 +2448,65 @@ namespace CargoGuiFunctions {
    }
 
    //////////////////////////////////////////////////////////////////////////////////////////////
+
+
+   bool TransferUnitControl::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      if ( !subject )
+         return false;
+
+      if ( subject->getMap()->getgameparameter( cgp_disableUnitTransfer ) )
+         return false;
+
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      return veh->getOwner() == veh->getMap()->actplayer;
+   }
+
+
+   Surface& TransferUnitControl::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return IconRepository::getIcon("transferunitcontrol.png");
+   };
    
+   ASCString TransferUnitControl::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      return "transfer unit control";
+   };
+
+
+   void TransferUnitControl::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+   {
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( veh ) {
+
+         std::map<int,int> playerIDs;
+         vector<ASCString> entries;
+         for ( int p = 0; p < veh->getMap()->getPlayerCount(); ++p )
+            if ( p != veh->getOwner() )
+               if ( veh->getMap()->getPlayer(p).diplomacy.isAllied( veh->getOwner() )) {
+                  entries.push_back( veh->getMap()->getPlayer(p).getName() );
+                  playerIDs[entries.size()] = p;
+               }
+
+         if ( !entries.size() ) {
+            infoMessage("you don't have any allies!");
+            return;
+         }
+
+         int result = chooseString ( "Choose player", entries );
+         if ( result >= 0 ) {
+            int target = playerIDs[result];
+            veh->convert ( target );
+            logtoreplayinfo ( rpl_convert2, veh->getPosition().x, veh->getPosition().y, target, veh->networkid  );
+            parent.cargoChanged();
+         }
+
+
+      }
+   }
+
+   //////////////////////////////////////////////////////////////////////////////////////////////
+
    
 
    bool MoveUnitIntoInnerContainer::available( const MapCoordinate& pos, ContainerBase* subject, int num )

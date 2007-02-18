@@ -20,15 +20,25 @@
     pipelka@teleweb.at
   
     Last Update:      $Author: mbickel $ 
-    Update Date:      $Date: 2006-02-15 21:30:16 $ 
+    Update Date:      $Date: 2007-02-18 19:25:54 $ 
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgimage.cpp,v $ 
-    CVS/RCS Revision: $Revision: 1.1.2.1 $ 
+    CVS/RCS Revision: $Revision: 1.1.2.2 $ 
     Status:           $State: Exp $ 
 */
 
 #include "pgimage.h"
 
-PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, const std::string& filename, Uint32 colorkey, PG_Draw::BkMode drawmode, const std::string& style) : PG_ThemeWidget(parent, PG_Rect(p.x, p.y, 1, 1), style), my_cachedSrf(NULL), my_DrawMode(drawmode) {
+
+PG_Rect PG_Image::CalcWidgetSize( const PG_Point& p, const SDL_Surface* image )
+{
+   if ( image )
+      return PG_Rect (p.x, p.y, image->w, image->h );
+   else
+      return PG_Rect (p.x, p.y, 1,1 );
+}
+
+
+PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, const std::string& filename, Uint32 colorkey, PG_Draw::BkMode drawmode, const std::string& style) : PG_ThemeWidget(parent, CalcWidgetSize(p, NULL), style), my_cachedSrf(NULL), my_DrawMode(drawmode) {
 	LoadImage(filename, colorkey);
 
 	if(my_image != NULL && drawmode == PG_Draw::TILE) {
@@ -36,7 +46,7 @@ PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, const std::string& file
 	}
 }
 
-PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, const std::string& filename, PG_Draw::BkMode drawmode, const std::string& style) : PG_ThemeWidget(parent, PG_Rect(p.x, p.y, 1, 1), style), my_cachedSrf(NULL), my_DrawMode(drawmode) {
+PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, const std::string& filename, PG_Draw::BkMode drawmode, const std::string& style) : PG_ThemeWidget(parent, CalcWidgetSize(p, NULL), style), my_cachedSrf(NULL), my_DrawMode(drawmode) {
 	LoadImage(filename);
 
 	if(my_image != NULL && drawmode == PG_Draw::TILE) {
@@ -44,7 +54,9 @@ PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, const std::string& file
 	}
 }
 
-PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, SDL_Surface* image, bool freeimage, PG_Draw::BkMode drawmode, const std::string& style) : PG_ThemeWidget(parent, PG_Rect(p.x, p.y, 1, 1), style), my_cachedSrf(NULL), my_DrawMode(drawmode) {
+
+
+PG_Image::PG_Image(PG_Widget* parent, const PG_Point& p, SDL_Surface* image, bool freeimage, PG_Draw::BkMode drawmode, const std::string& style) : PG_ThemeWidget(parent, CalcWidgetSize(p, image), style), my_cachedSrf(NULL), my_DrawMode(drawmode) {
 	SetImage(image, freeimage);
 
 	if(my_image != NULL && drawmode == PG_Draw::TILE) {
