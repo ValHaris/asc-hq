@@ -8,10 +8,13 @@ TerrainType {
       picture = texture-n3b2a.pcx
    } dry
    few_snow { 
-      GFX_Picture = 1717
+      UseGFXpics = false
+      picture = texture-n3b2a.pcx fewsnow4.png
    } few_snow
    much_snow { 
-      GFX_Picture = 853
+      UseGFXpics = false
+      picture = texture-n3b2a.pcx
+      GraphicOperations = snow
    } much_snow
    snow_and_ice ->* TerrainType.much_snow
 } TerrainType

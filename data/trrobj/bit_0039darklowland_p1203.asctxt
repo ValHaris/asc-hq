@@ -2,23 +2,26 @@ TerrainType {
    Name = BI3 import
    ID = 39
    Parent = 1203
+   weather = dry few_snow much_snow light_rain heavy_rain
    dry { 
       UseGFXpics = false
-      picture = texture-n3b3b.pcx
+      picture = texture-n3b3b.pcx 
    } dry
    light_rain { 
-      GFX_Picture = 1889
+      UseGFXpics = false
+      picture = texture-n3b3b.pcx pfuetze-1a.png
    } light_rain
    heavy_rain { 
-      GFX_Picture = 1888
+      UseGFXpics = false
+      picture = texture-n3b3b.pcx pfuetze-1b.png
    } heavy_rain
    few_snow { 
-      GFX_Picture = 1887
+      UseGFXpics = false
+      picture = texture-n3b3b.pcx fewsnow4.png
    } few_snow
    much_snow { 
-      GFX_Picture = 854
+      UseGFXpics = false
+      picture = texture-n3b3b.pcx
+      GraphicOperations = snow
    } much_snow
-   snow_and_ice { 
-      GFX_Picture = 854
-   } snow_and_ice
 } TerrainType

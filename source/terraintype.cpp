@@ -402,6 +402,9 @@ void TerrainBits::write ( tnstream& stream ) const
 
 void TerrainType :: runTextIO ( PropertyContainer& pc )
 {
+   pc.addBreakpoint(); 
+  
+   
    BitSet weatherBits;
    for ( int i = 0; i < cwettertypennum; i++ )
       if ( weather[i] )

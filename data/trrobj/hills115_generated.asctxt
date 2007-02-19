@@ -1,23 +1,14 @@
 TerrainType { 
-   Name = BI3 import
    ID = 115
-   Weather = dry much_snow 
+
+   parent = 400
    dry { 
-      UseGFXpics = false
-      picture = slope3.pcx
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
-      MoveMalus = 11 
-      TerrainProperties = Track_possible Hillside 
+      picture =  slope3.pcx
    } dry
+   few_snow { 
+      picture =  slope3.pcx fewsnow4.png
+   } few_snow
    much_snow { 
-      UseGFXpics = true
-      GFX_Picture = 922
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
-      MoveMalus = 11 
-      TerrainProperties = Small_rocks Deep_snow Hillside 
+      picture =  slope3.pcx
    } much_snow
 } TerrainType
