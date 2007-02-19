@@ -26,6 +26,7 @@
 #include "mapalgorithms.h"
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
+#include "fieldimageloader.h"
 
 #ifndef converter
 #include "gamemap.h"
@@ -1154,6 +1155,16 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
                while ( weatherPicture[i].flip.size() < weatherPicture[i].images.size() )
                   weatherPicture[i].flip.push_back(0);
+
+               if ( pc.isReading() ) {
+                  int operations;
+                  pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
+                  if ( operations == 1 )  {
+                     for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
+                        snowify( weatherPicture[i].images[j] );
+                  }
+               }
+
 
             } else {
                for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {

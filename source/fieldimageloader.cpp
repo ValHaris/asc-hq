@@ -41,7 +41,7 @@ void snowify( Surface& s)
       return;
 
 
-   const int targetWhite = 220;
+   const int targetWhite = 210;
 
    float avg = 0;
    for ( int y = 0; y < s.h(); ++y ) {
@@ -171,11 +171,14 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
 
    } else
       if ( fn.suffix() == "pcx" ) {
-         tnfilestream fs ( fn, tnstream::reading );
+         SDL_Surface* surface;
+         {
+            tnfilestream fs ( fn, tnstream::reading );
 
-         RWOPS_Handler rwo ( SDL_RWFromStream( &fs ));
-         SDL_Surface* surface = IMG_LoadPCX_RW ( rwo.Get() );
-         rwo.Close();
+            RWOPS_Handler rwo ( SDL_RWFromStream( &fs ));
+            surface = IMG_LoadPCX_RW ( rwo.Get() );
+            rwo.Close();
+         }
 
          if ( !surface )
             errorMessage( "error loading file " + fn );
@@ -189,7 +192,21 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
             s.SetColorKey( SDL_SRCCOLORKEY, 0xfefefe );
          s.SetAlpha(SDL_SRCALPHA,SDL_ALPHA_OPAQUE);
          */
-         
+
+         fn = st.getNextToken();
+         while ( !fn.empty() ) {
+            tnfilestream fs ( fn, tnstream::reading );
+            RWOPS_Handler rwo( SDL_RWFromStream( &fs ) );
+            SDLmm::Surface s2 ( IMG_LoadPNG_RW ( rwo.Get() ));
+            rwo.Close();
+            int res = s.Blit ( s2 );
+            if ( res < 0 )
+               warning ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
+
+            fn = st.getNextToken();
+         }
+
+
          if ( applyFieldMaskToImage )
             if ( s.w() >= fieldsizex && s.h() >= fieldsizey )
                applyFieldMask(s,0,0,false);

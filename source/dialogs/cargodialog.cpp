@@ -2455,10 +2455,16 @@ namespace CargoGuiFunctions {
       if ( !subject )
          return false;
 
+      if ( !exist("transferunitcontrol.png"))
+         return false;
+
       if ( subject->getMap()->getgameparameter( cgp_disableUnitTransfer ) )
          return false;
 
       Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( !veh )
+         return false;
+
       return veh->getOwner() == veh->getMap()->actplayer;
    }
 
