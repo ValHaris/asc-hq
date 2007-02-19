@@ -211,6 +211,20 @@ class ExchangeGraphics: public ASC_PG_Dialog
          return true;
       }
 
+      bool snow()
+      {
+         tfield* fld = actmap->getField( actmap->getCursor() );
+         if ( fld ) {
+            if ( selectedType->GetSelectedItemIndex() == 0 ) {
+               if ( fld->typ->bi_pict < 0 )
+                  snowify( fld->typ->image );
+            }
+         }
+         repaintMap();
+
+         return true;
+      }
+
 
       bool summary()
       {
@@ -260,7 +274,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
 
    public:
-      ExchangeGraphics() : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - dlg_width, -1, dlg_width, 410 ), "Exchange Graphics"), filename(NULL), imageNum(NULL),terrain(NULL), object(NULL), selectedType(NULL)
+      ExchangeGraphics() : ASC_PG_Dialog( NULL, PG_Rect( PG_Application::GetScreenWidth() - dlg_width, -1, dlg_width, 450 ), "Exchange Graphics"), filename(NULL), imageNum(NULL),terrain(NULL), object(NULL), selectedType(NULL)
       {
 
          selectedType = new DropDownSelector( this, PG_Rect( 10, 30, 180, 25 ));
@@ -279,6 +293,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
          (new PG_Button( this, PG_Rect( 10, 280, 180, 30), "Replacement Summary"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::summary ));
          (new PG_Button( this, PG_Rect( 10, 320, 180, 30), "Load from file"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::readFile ));
          (new PG_Button( this, PG_Rect( 10, 360, 180, 30), "Close"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::close ));
+         (new PG_Button( this, PG_Rect( 10, 400, 180, 30), "Snow"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::snow ));
 
          cursorMoved.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));
          updateFieldInfo.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));

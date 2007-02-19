@@ -33,6 +33,10 @@
  const int productionCostCalculationMethodNum = 3;
  extern const char* productionCostCalculationMethod[];
 
+ const int graphicOperationNum = 2;
+ extern const char* graphicOperations[];
+ 
+
  extern const char* objectDisplayingMethodTags[];
 
  extern const char* AItasks[];

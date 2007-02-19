@@ -225,6 +225,11 @@ const char*  buildingFunctionTags[24]  =
         "_ms",
         "_si" };
 
+ const char* graphicOperations[graphicOperationNum]
+    = { "none",
+        "snow" };
+
+
  const char* objectDisplayingMethodTags[objectDisplayingMethodNum]
     = { "Normal",
         "Shadow",

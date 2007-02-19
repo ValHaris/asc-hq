@@ -35,6 +35,46 @@
 const char* fileNameDelimitter = " =*/+<>,";
 
 
+void snowify( Surface& s)
+{
+   if ( s.GetPixelFormat().BitsPerPixel() != 32 )
+      return;
+
+
+   const int targetWhite = 220;
+
+   float avg = 0;
+   for ( int y = 0; y < s.h(); ++y ) {
+      const char* c = (char*) s.pixels();
+      c += y * s.pitch();
+      for ( int x = 0; x < s.w(); ++x ) {
+         avg += c[0] + c[1] + c[2];
+         c += 4;
+      }
+   }
+
+   avg /= float(s.h() * s.w() * 3);
+
+   for ( int y = 0; y < s.h(); ++y ) {
+      char* c = (char*) s.pixels();
+      c += y * s.pitch();
+      for ( int x = 0; x < s.w(); ++x ) {
+         if ( c[3] != Surface::transparent ) {
+            int v = (c[0] + c[1] + c[2]) / 3;
+
+            int nv = targetWhite + ( v - int(avg)) * (255-targetWhite) / 64;
+            if ( nv > 255)
+               nv = 255;
+            if ( nv < 0 )
+               nv = 0;
+            c[0] = c[1] = c[2] = nv;
+         }
+         c += 4;
+
+      }
+   }
+}
+
 vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
 {
    vector<Surface> images;
@@ -158,3 +198,5 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
       }
    return Surface();
 }
+
+

@@ -25,6 +25,7 @@
 #include "textfile_evaluation.h"
 #include "overviewmapimage.h"
 #include "graphics/blitter.h"
+#include "fieldimageloader.h"
 
 const char*  terrainProperty[terrainPropertyNum+1]  = {"shallow water"       ,
                                              "normal lowland",
@@ -446,7 +447,16 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s += strrr(terraintype->id);
       }
       pc.addImage ( "picture", image, s + weatherAbbrev[w], true );
-      applyFieldMask( image );
+      // applyFieldMask( image );
+
+      if ( pc.isReading() ) {
+         int operations;
+         pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
+         if ( operations == 1 )  {
+            snowify( image );
+         }
+      }
+
    } else {
       pc.addInteger ( "GFX_Picture", bi_pict );
       if  ( bi_pict < 0 )

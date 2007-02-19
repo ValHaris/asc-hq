@@ -14,6 +14,7 @@
 
 extern vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num );
 extern Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMask = true );
+extern void snowify( Surface& s);
 
 
 #endif
