@@ -77,9 +77,10 @@ nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	overviewmapimage.$(OBJEXT) mapfield.$(OBJEXT) \
 	objects.$(OBJEXT) overviewmappanel.$(OBJEXT) \
 	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
-	cannedmessages.$(OBJEXT) mapimageexport.$(OBJEXT) \
-	mainscreenwidget.$(OBJEXT) windowing.$(OBJEXT)
+	legacynetworkloaders.$(OBJEXT) network.$(OBJEXT) \
+	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
+	mapimageexport.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
+	windowing.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -275,7 +276,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
+messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp network.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
@@ -402,6 +403,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/network.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkinterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newfont.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objects.Po@am__quote@

@@ -24,7 +24,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
+messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp network.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
