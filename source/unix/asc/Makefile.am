@@ -2,7 +2,7 @@ vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES      = -I$(top_src_dir) -I$(top_src_dir)/source -I$(top_srcdir)/source/libs/paragui/include
+INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
 
 AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
 

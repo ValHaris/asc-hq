@@ -2,12 +2,11 @@ vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_src_dir) -I$(top_src_dir)/source -I$(top_srcdir)/source/libs/paragui/include
+INCLUDES		= -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
 
 AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
 
 bin_PROGRAMS 		= asc_mapedit
-#asc_map2pcx
 
 nodist_asc_mapedit_SOURCES 	= edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \

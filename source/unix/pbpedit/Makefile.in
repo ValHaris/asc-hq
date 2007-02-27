@@ -46,38 +46,53 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-nodist_asc_pbpedit_OBJECTS = edevents.$(OBJEXT) edgen.$(OBJEXT) \
-	edglobal.$(OBJEXT) edmain.$(OBJEXT) edselfnt.$(OBJEXT) \
-	edmisc.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
-	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
-	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
-	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
-	dlg_box.$(OBJEXT) dialog.$(OBJEXT) basestrm.$(OBJEXT) \
-	basegfx.$(OBJEXT) attack.$(OBJEXT) CLoadable.$(OBJEXT) \
-	Property.$(OBJEXT) PropertyGroup.$(OBJEXT) \
-	gameoptions.$(OBJEXT) Named.$(OBJEXT) buildingtype.$(OBJEXT) \
-	vehicletype.$(OBJEXT) containerbase.$(OBJEXT) \
+nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
+	edmain.$(OBJEXT) edselfnt.$(OBJEXT) edmisc.$(OBJEXT) \
+	typen.$(OBJEXT) strtmesg.$(OBJEXT) stack.$(OBJEXT) \
+	spfst.$(OBJEXT) sgstream.$(OBJEXT) palette.$(OBJEXT) \
+	newfont.$(OBJEXT) misc.$(OBJEXT) loadpcxc.$(OBJEXT) \
+	loaders.$(OBJEXT) loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) \
+	dialog.$(OBJEXT) basestrm.$(OBJEXT) basegfx.$(OBJEXT) \
+	attack.$(OBJEXT) gameoptions.$(OBJEXT) \
+	maped-mainscreen.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
+	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
+	containerbase.$(OBJEXT) ed_mapcomponent.$(OBJEXT) \
 	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) password_dialog.$(OBJEXT) \
-	research.$(OBJEXT) mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) \
-	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
-	networkdata.$(OBJEXT) resourcenet.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) research.$(OBJEXT) \
+	mapdisplay.$(OBJEXT) ascstring.$(OBJEXT) graphicset.$(OBJEXT) \
+	vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	networkinterface.$(OBJEXT) resourcenet.$(OBJEXT) \
 	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
 	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
 	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
 	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
 	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	soundList.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) clipboard.$(OBJEXT) \
-	fieldimageloader.$(OBJEXT)
+	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
+	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
+	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
+	clipboard.$(OBJEXT) resourceplacement.$(OBJEXT) \
+	resourceplacementdialog.$(OBJEXT) geometry.$(OBJEXT) \
+	guidimension.$(OBJEXT) unitset.$(OBJEXT) \
+	fieldimageloader.$(OBJEXT) iconrepository.$(OBJEXT) \
+	overviewmapimage.$(OBJEXT) mapfield.$(OBJEXT) \
+	objects.$(OBJEXT) overviewmappanel.$(OBJEXT) \
+	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
+	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
+	cannedmessages.$(OBJEXT) mapimageexport.$(OBJEXT) \
+	mainscreenwidget.$(OBJEXT) windowing.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+	$(top_builddir)/source/graphics/libgraphics.la \
+	$(top_builddir)/source/dialogs/libdialogs.la \
+	$(top_builddir)/source/dialogs/libmapeddialogs.la \
+	$(top_builddir)/source/widgets/libwidgets.la \
+	$(top_builddir)/source/libs/paragui/src/libparagui.la \
+	$(top_builddir)/source/libs/loki/libloki.la \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -242,27 +257,34 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I$(top_src_dir) -I$(top_src_dir)/source -I$(top_srcdir)/source/libs/paragui/include
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor -DNEWKEYB $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
-nodist_asc_pbpedit_SOURCES = edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS)
+nodist_asc_pbpedit_SOURCES = edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
-attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp \
-Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
+attack.cpp gameoptions.cpp maped-mainscreen.cpp stdio-errorhandler.cpp\
+buildingtype.cpp vehicletype.cpp containerbase.cpp ed_mapcomponent.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
-password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
-vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
+research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
+vehicle.cpp buildings.cpp networkinterface.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
+textfile_evaluation.cpp containerbasetype.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp clipboard.cpp fieldimageloader.cpp
+gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
+geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
+iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
+messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
+player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(SDL_LIBS)
+$(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
+$(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
+$(top_builddir)/source/libs/paragui/src/libparagui.la \
+$(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
 
 all: all-am
 
@@ -335,59 +357,71 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CLoadable.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Named.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Property.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/PropertyGroup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cannedmessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clipboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edevents.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ed_mapcomponent.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edgen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edglobal.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmain.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edmisc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edselfnt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/explosivemines.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldimageloader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevent_dialogs.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameeventsystem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamemap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/legacynetworkloaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainscreenwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maped-mainscreen.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapfield.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapimageexport.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mappolygons.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkdata.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkinterface.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newfont.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objects.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmapimage.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmappanel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password_dialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourcenet.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourceplacement.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/resourceplacementdialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundList.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-errorhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraintype.Po@am__quote@
@@ -395,9 +429,11 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfileparser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
