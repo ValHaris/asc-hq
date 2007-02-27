@@ -198,6 +198,45 @@ class AdminGameWindow : public ASC_PG_Dialog {
          resetTribute( player );
       }
 
+      static const int techID = 0xE1C8;
+
+      void exportTechs( int player )
+      {
+         ASCString filename = selectFile( "*.asctechs", false );
+         if ( filename.empty() )
+            return;
+
+         tnfilestream stream( filename, tnstream::writing );
+         stream.writeInt( techID );
+         stream.writeInt( 1 );
+         writeClassContainer( gamemap->player[player].research.developedTechnologies, stream );
+      }
+
+      void importTechs( int player )
+      {
+         ASCString filename = selectFile( "*.asctechs", true );
+         if ( filename.empty() )
+            return;
+
+         tnfilestream stream( filename, tnstream::reading );
+         if ( stream.readInt() != techID ) {
+            errorMessage("invalid file contents");
+            return;
+         }
+
+         if ( stream.readInt() != 1 ) {
+            errorMessage("invalid file version");
+            return;
+         }
+         vector<int> dt;
+         readClassContainer( dt, stream );
+         vector<int>& techs = gamemap->player[player].research.developedTechnologies;
+         copy( dt.begin(), dt.end(), back_inserter( techs ));
+         sort( techs.begin(), techs.end() );
+         techs.erase( unique( techs.begin(), techs.end()), techs.end() );
+      }
+
+
       bool saveAsMap()
       {
          apply();
@@ -250,12 +289,14 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "reset tribute", PlayerActionFunctor( this, &AdminGameWindow::resetTribute));
          new ActionItem( actionlistbox, 20, "reset diplomacy (->truce)", PlayerActionFunctor( this, &AdminGameWindow::resetDiplomacy));
          new ActionItem( actionlistbox, 20, "reset password", PlayerActionFunctor( this, &AdminGameWindow::resetPassword));
-         new ActionItem( actionlistbox, 20, "enter new password", PlayerActionFunctor( this, &AdminGameWindow::newPassword));
          new ActionItem( actionlistbox, 20, "delete units", PlayerActionFunctor( this, &AdminGameWindow::deleteUnits));
          new ActionItem( actionlistbox, 20, "delete buildings", PlayerActionFunctor( this, &AdminGameWindow::deleteBuildings));
          new ActionItem( actionlistbox, 20, "delete production", PlayerActionFunctor( this, &AdminGameWindow::deleteProduction));
          new ActionItem( actionlistbox, 20, "delete resources + ammo", PlayerActionFunctor( this, &AdminGameWindow::deleteResources));
          new ActionItem( actionlistbox, 20, "delete mines", PlayerActionFunctor( this, &AdminGameWindow::deleteMines));
+         new ActionItem( actionlistbox, 20, "enter new password", PlayerActionFunctor( this, &AdminGameWindow::newPassword));
+         new ActionItem( actionlistbox, 20, "export technology", PlayerActionFunctor( this, &AdminGameWindow::exportTechs));
+         new ActionItem( actionlistbox, 20, "import technology", PlayerActionFunctor( this, &AdminGameWindow::importTechs));
 
          (new PG_Button( scrollwidget, PG_Rect( 3*gap+2*selectorWidth, ypos, 50, selectorHeight ), "Apply" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::apply ));
          

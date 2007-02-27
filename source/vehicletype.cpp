@@ -136,7 +136,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 27;
+const int vehicle_version = 28;
 
 
 
@@ -182,8 +182,12 @@ void Vehicletype :: read ( tnstream& stream )
       }
    }
 
-   productionCost.energy   = stream.readWord();
-   productionCost.material = stream.readWord();
+   if ( version <= 27 ) {
+      productionCost.energy   = stream.readWord();
+      productionCost.material = stream.readWord();
+   } else
+      productionCost.read( stream );
+
    armor = stream.readWord();
 
    bool picture[8];
@@ -581,8 +585,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    else
       stream.writeInt( 0 );
 
-   stream.writeWord( productionCost.energy );
-   stream.writeWord( productionCost.material );
+   productionCost.write( stream );
    stream.writeWord( armor );
    stream.writeChar( height );
    stream.writeWord(0); // researchid
