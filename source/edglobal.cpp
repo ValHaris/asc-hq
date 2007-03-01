@@ -486,16 +486,18 @@ void execaction( int code)
                          tfield* pf2 = getactfield();
                          mapsaved = false;
                          if (pf2 != NULL) {
-                            if (pf2->vehicle != NULL)
-                               delete pf2->vehicle;
-                            else
-                               if (pf2->building != NULL)
-                                  delete pf2->building;
-                               else
-                                  if ( !pf2->mines.empty() )
-                                     pf2->removemine( -1 );
-                                  else
-                                     pf2->removeobject( NULL );
+                            if ( !removeCurrentItem() )
+                              if (pf2->vehicle != NULL)
+                                 delete pf2->vehicle;
+                              else
+                                 if (pf2->building != NULL)
+                                    delete pf2->building;
+                                 else
+                                    if ( !pf2->mines.empty() )
+                                       pf2->removemine( -1 );
+                                    else 
+                                       pf2->removeobject( NULL );
+                                  
 
                             mapsaved = false;
                             mapChanged( actmap );

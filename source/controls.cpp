@@ -198,6 +198,8 @@ void         destructbuildinglevel2( int xp, int yp)
          if ( bb->getCompletion() ) {
             bb->setCompletion ( bb->getCompletion()-1 );
          } else {
+            bb->netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
+            Resources put = bb->putResource( bb->actstorage, false );
             delete bb;
          }
          logtoreplayinfo ( rpl_removebuilding3, xp, yp, eht->networkid, res.energy, res.material, res.fuel );

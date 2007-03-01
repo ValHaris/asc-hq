@@ -67,7 +67,15 @@ void placeCurrentItem()
       mapChanged( actmap );
    }    
 }
-   
+
+bool removeCurrentItem()
+{
+   if ( selection.getSelection() && actmap->getCursor().valid() ) 
+      return selection.getSelection()->remove( actmap->getCursor() );
+   else
+      return false;
+}
+
    
 bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio )
 {

@@ -57,6 +57,7 @@ class MapComponent {
        virtual int displayHeight() const = 0;
        virtual MapComponent* clone() const = 0;
        virtual int place( const MapCoordinate& mc ) const = 0;
+       virtual bool remove ( const MapCoordinate& mc ) const { return false; };
        //! just a wrapper so we have a function return void
        void vPlace( const MapCoordinate& mc ) const { place( mc ); };
        virtual void display( Surface& s, const SPoint& pos ) const = 0;
@@ -128,6 +129,7 @@ class ObjectItem : public BasicItem<ObjectType> {
        virtual int place( const MapCoordinate& mc ) const;
        virtual void display( Surface& s, const SPoint& pos ) const { item->display (s, pos); };
        virtual MapComponent* clone() const { return new ObjectItem( item ); };
+       virtual bool remove ( const MapCoordinate& mc ) const;
 };
 template<> class ItemTypeSelector<ObjectType> {
    public:

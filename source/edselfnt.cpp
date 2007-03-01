@@ -241,6 +241,17 @@ int ObjectItem::place( const MapCoordinate& mc ) const
 }
 
 
+bool ObjectItem::remove ( const MapCoordinate& mc ) const
+{
+   if ( item && actmap->getField(mc)->checkforobject(item) ) {
+      actmap->getField(mc)->removeobject ( item );
+      return true;
+   }
+   return false;
+
+}
+
+
 template<typename T> Surface BasicItem<T>::clippingSurface;
 int TerrainItem::place( const MapCoordinate& mc ) const
 {

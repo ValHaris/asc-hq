@@ -134,7 +134,7 @@ void Menu::setup()
    addbutton ( "~E~dit technologies",          act_editResearch );
    addbutton ( "edit ~R~esearch points",          act_editResearchPoints );
    addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
-   addbutton ( "reset player data...",   act_resetPlayerData );
+   addbutton ( "edit player data...",   act_resetPlayerData );
 
   addfield ("~S~elect");
    addbutton ( "Vehicle\tF2",  act_selunit );

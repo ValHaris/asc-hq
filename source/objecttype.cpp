@@ -217,7 +217,7 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
                } else {  
                   if ( dir != 0 && rotateImage ) {
                      // if ( s.flags() & SDL_SRCALPHA )
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir%6]),nullParam); 
                      // else
                      //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
                   } else {
@@ -234,7 +234,7 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
 
 void ObjectType :: display ( Surface& surface, const SPoint& pos ) const
 {
-   display ( surface, pos, 64, 0 );
+   display ( surface, pos, rotateImage? 0 : 64, 0 );
 }
 
 

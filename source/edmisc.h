@@ -147,6 +147,7 @@ extern void editTechAdapter();
 // extern void resetPlayerData();
 
 extern void placeCurrentItem();
+extern bool removeCurrentItem();
 
 
 #endif
