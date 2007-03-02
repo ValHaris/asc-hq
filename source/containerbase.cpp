@@ -368,7 +368,7 @@ bool ContainerBase :: removeUnitFromCargo( Vehicle* veh, bool recursive )
    if ( !veh )
       return false;
    else {
-      if ( removeUnitFromCargo( veh->networkid )) {
+      if ( removeUnitFromCargo( veh->networkid, recursive )) {
          cargoChanged();
          return true;
       } else

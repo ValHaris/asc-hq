@@ -167,7 +167,7 @@ bool DashboardPanel::containerRenamed( PG_LineEdit* lineEdit )
    }
    
    if ( bld ) {
-      if ( bld->getMap()->actplayer == veh->getOwner() )
+      if ( bld->getMap()->actplayer == bld->getOwner() )
          bld->name = lineEdit->GetText();
       else
          lineEdit->SetText( bld->name );

@@ -129,7 +129,7 @@ class CargoWidget : public PG_ScrollWidget {
 
       void enableDragNDrop( bool enable ) { dragNdrop = enable; };
       bool dragNdropEnabled() const { return dragNdrop; }; 
-      void registerStoringPositions( vector<StoringPosition*> sp, int colcount );
+      void registerStoringPositions( vector<StoringPosition*> sp, const int& colcount );
       HighLightingManager& getHighLightingManager() { return unitHighLight; };
 };
 

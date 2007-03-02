@@ -315,7 +315,7 @@ CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase
       my_objHorizontalScrollbar->sigScrollTrack.connect ( SigC::slot( *this, &CargoWidget::handleScrollTrack ));
 };
 
-void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, int colCount )
+void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, const int& colCount )
 {
    unitColumnCount = colCount;
    storingPositionVector  = sp;
