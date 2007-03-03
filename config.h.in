@@ -34,6 +34,9 @@
 /* Define to 1 if you have the `physfs' library (-lphysfs). */
 #undef HAVE_LIBPHYSFS
 
+/* Define to 1 if you have the `png' library (-lpng). */
+#undef HAVE_LIBPNG
+
 /* Define to 1 if you have the `SDL_image' library (-lSDL_image). */
 #undef HAVE_LIBSDL_IMAGE
 

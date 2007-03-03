@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,1.99.92.61)
+AC_INIT(asc,1.99.92.63)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -389,29 +389,11 @@ dnl AC_ARG_ENABLE( libbz2-static, AS_HELP_STRING([--enable-libbz2-static],[compi
 AC_CHECK_LIB( bz2, BZ2_bzReadOpen,, AC_LIB_MISSING(libbz2,http://www.bzip.org/,,[ which is VERY unlikely,] ))
 AC_CHECK_HEADER( bzlib.h,, AC_LIB_MISSING(libbz2,http://www.bzip.org/,,[ which is VERY unlikely,] ))
 
-dnl AC_CACHE_CHECK( [for static libbz2 flag state], [ac_cv_lib_bz2_static], [ ac_cv_lib_bz2_static=$lib_bz2_static ] )
+LDADDLIBBZ2=-lbz2
+AC_DEFINE_UNQUOTED( USE_SYSTEM_BZ2, 1, [link against libbzip2] )
 
-dnl ac_cv_lib_bz2_static holds cached flag state, checklib_bz2... holds check
-dnl now combine them with the current flag state if needed
-dnl if test "x$lib_bz2_usecache" = "xyes"; then
-dnl  lib_bz2_static=$ac_cv_lib_bz2_static;
-dnl else
-dnl  ac_cv_lib_bz2_static=$lib_bz2_static;
-dnl fi
-dnl if test "x$checklib_bz2_static" = "xyes"; then
-dnl   lib_bz2_static=yes;
-dnl fi
 
-dnl AC_MSG_RESULT( [making static libbz2... $lib_bz2_static] )
-
-dnl if test "x$lib_bz2_static" = "xyes"; then
-dnl   LIBBZ2=bzlib
-dnl   LDADDLIBBZ2=\${top_builddir}/source/libs/bzlib/libbz2.a;
-dnl else 
-   LDADDLIBBZ2=-lbz2
-   AC_DEFINE_UNQUOTED( USE_SYSTEM_BZ2, 1, [link against libbzip2] )
-dnl fi
-
+AC_CHECK_LIB( png, png_create_write_struct,, AC_LIB_MISSING(png,http://www.cdrom.com/pub/png/,,[ which is VERY unlikely,] ), -lz )
 
 dnl *************************************************************************
 dnl Checks for header files.
