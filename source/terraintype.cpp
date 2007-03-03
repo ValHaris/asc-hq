@@ -62,6 +62,8 @@ const char*  terrainProperty[terrainPropertyNum+1]  = {"shallow water"       ,
                                              "frozen water",
                                              "bridge",
                                              "lava barrier",
+                                             "spaceport",
+                                             "beacon",
                                              NULL };
 
 

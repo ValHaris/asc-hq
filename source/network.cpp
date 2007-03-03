@@ -88,7 +88,8 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
       tfindfile::FileInfo fi;
       if ( ff.getnextname( fi ) && fi.directoryLevel == 0 )
          do {
-            fname = selectFile( ASCString("*") + tournamentextension, false );
+            if (choice_dlg("overwrite " + fname,"~y~es","~n~o") == 2) 
+               fname = selectFile( ASCString("*") + tournamentextension, false );
          } while (fname.empty());
 
       {

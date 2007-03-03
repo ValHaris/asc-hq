@@ -99,7 +99,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
      tfield* fld = actmap->getField ( pos );
      Vehicle* veh = pasteUnit ( stream );
 
-     if ( !fieldAccessible ( fld, veh ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
+     if ( !fieldAccessible ( fld, veh, -2, NULL, true ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
         delete veh;
         return;
      }

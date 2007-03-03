@@ -159,6 +159,7 @@ extern const char*  cbuildingfunctions[];
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
 
+        bool buildingNotRemovable;
 
         
 };

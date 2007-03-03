@@ -49,21 +49,6 @@ const int gamemapPixelSize = 4;
 const int playerNum = 9;
 
 
-#if 0
-//! A Ellipse that is used for highlighting elements of the screen during the tutorial
-class  EllipseOnScreen {
-   public:
-      int x1, y1, x2, y2;
-      int color;
-      float precision;
-      int active;
-      EllipseOnScreen ( void ) { active = 0; };
-      void paint ( void );
-      void read( tnstream& stream );
-      void write ( tnstream& stream );
-   };
-#endif
-
 //! The number of different weapon types
 const int waffenanzahl = 8;
 
@@ -419,7 +404,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 const int attackmovecost = 0;  
 
 //! the movemalus for all submerged units
-const int submarineMovement = 11;
+const int submarineMovement = 10;
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12
@@ -462,8 +447,8 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 #define cnet_stopfueloutput     0x800
 
 
-#define resource_fuel_factor 30         // die im boden liegenden Bodenschtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
-#define resource_material_factor 30     // "
+#define resource_fuel_factor 80         // die im boden liegenden Bodenschtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
+#define resource_material_factor 80     // "
 
 #define destruct_building_material_get 2 // beim Abreissen erhlt man 1/2 des eingesetzten Materials zur?ck
 #define destruct_building_fuel_usage 10  // beim Abreissen wird 10 * fuelconsumption Fuel fuelconsumptiont

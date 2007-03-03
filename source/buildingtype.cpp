@@ -74,6 +74,8 @@ BuildingType :: BuildingType ( void )
             for ( int c = 0; c < maxbuildingpicnum; ++c )
                 bi_picture[w][c][x][y] = -1;
       }
+
+   buildingNotRemovable = false;
 }
 
 
@@ -164,7 +166,7 @@ BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordin
 
 
 
-const int building_version = 10;
+const int building_version = 11;
 
 
 void BuildingType :: read ( tnstream& stream )
@@ -309,6 +311,8 @@ void BuildingType :: read ( tnstream& stream )
       if ( version >= 8 )
          infotext = stream.readString();
 
+      if ( version >= 11 )
+         buildingNotRemovable = stream.readInt();
    } else
       throw tinvalidversion  ( stream.getLocation(), building_version, version );
 }
@@ -409,6 +413,7 @@ void BuildingType :: write ( tnstream& stream ) const
     stream.writeInt( defaultMaxResearchpoints );
 
     stream.writeString ( infotext );
+    stream.writeInt( buildingNotRemovable );
 }
 
 
@@ -588,7 +593,6 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          convertOldFunctions( special, pc.getFileName() );
       } else
          pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
-      
       pc.addInteger ( "Techlevel", technologylevel );
 
       pc.openBracket("TerrainAccess" );
@@ -603,6 +607,8 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
+
+      pc.addBool ( "NotRemovable", buildingNotRemovable, false );
 
       techDependency.runTextIO( pc, ASCString("b")+strrr(id) );
 

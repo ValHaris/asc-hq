@@ -1072,8 +1072,10 @@ BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& locatio
       features.set( PlaceMines );
    if ( abilities & 8 )
       features.set( CruiserLanding );
-   if ( abilities & 16 )
+   if ( abilities & 16 ) {
       features.set( ExternalRepair );
+      features.set( InternalUnitRepair );
+   }
    if ( abilities & 32 )
       features.set( ConquerBuildings );
    if ( abilities & 64 )
