@@ -399,7 +399,7 @@ void checkDataVersion( )
    checkFileVersion( "trrobj.version", "trrobj.con", 13 );
    checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
 
-   if ( exist( "pbp.version" ))
+   if ( exist( "pbp.con" ))
       checkFileVersion( "pbp.version", "pbp.con", 20 );
 }
 
