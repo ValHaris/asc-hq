@@ -63,7 +63,7 @@ void WholeMapRenderer::renderVisibility()
             for ( int yp = 0; yp < fieldsizey; ++yp)
                for ( int xp = 0; xp < fieldsizex; ++xp)
                   if ( mask.GetPixel(xp,yp) != 0xff ) 
-                     pp.set( getFieldPos(x,y) + SPoint(xp,yp), gamemap->getPlayer( view ).getColor().MapRGBA( surface.getBaseSurface()->format, min(maxview,160)*2/3));
+                     pp.set( getFieldPos(x,y) + SPoint(xp,yp), gamemap->getPlayer( view ).getColor().MapRGBA( surface.getBaseSurface()->format, min(maxview,150)*2/3));
       }
 }
 
