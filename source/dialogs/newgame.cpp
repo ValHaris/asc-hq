@@ -482,6 +482,20 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
 
 bool StartMultiplayerGame::checkPlayerStat()
 {
+   if ( mode == NewCampagin || mode == ContinueCampaign ) {
+      bool humanFound = false;
+      for ( int i = 0; i < newMap->getPlayerCount(); ++i )
+         if ( newMap->player[i].exist() )
+            if ( newMap->player[i].stat == Player::human )
+               humanFound = true;
+
+      if ( !humanFound ) {
+         warning("no human players on map!");
+         return false;
+      }
+      return true;
+   }
+
    if ( mode == Skirmish ) {
       bool humanFound = false;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )

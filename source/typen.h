@@ -121,8 +121,8 @@ class Resources {
      static const char* name( int r );
      ASCString toString();
      
-     static const int materialColor = 0x8b3d1e;
-     static const int fuelColor = 0x8b7800;
+     static const int materialColor = 0xff0000; // 0x8b3d1e;
+     static const int fuelColor = 0x00ff00; // 0x8b7800;
      static const int energyColor = 0x3b2dd7;
 };
 

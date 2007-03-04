@@ -96,12 +96,21 @@ void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
  
 class ResourceGraphLayer : public MapLayer {
       void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int row, int amount, int color ) {
+         /*
          int length = amount / 10;
          int maxlength = 255/10;
          if ( amount ) 
             paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10, pos.y + 2 + row*12), length, 5, ColorMerger_ColoredOverwrite<4>( color ));
          if ( length < maxlength )
             paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10 + length, pos.y + 2 + row*12), maxlength-length, 5, ColorMerger_ColoredOverwrite<4>( 0x888888 ));
+         */
+
+         int length = amount * 28 / 255;
+         int maxlength = 28;
+         if ( amount ) 
+            paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10, pos.y + 12 + row*15), length, 8, ColorMerger_ColoredOverwrite<4>( color ));
+         if ( length < maxlength )
+            paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 10 + length, pos.y + 12 + row*15), maxlength-length, 8, ColorMerger_ColoredOverwrite<4>( 0 ));
            
       };
     public: 
