@@ -44,6 +44,8 @@
 #include "infopage.h"
 #include "guidegenerator.h"
 
+#include "../stdio-errorhandler.h"
+
 #ifdef WIN32
 #undef main
 #endif
@@ -53,7 +55,9 @@
 #include "../clparser/weaponguide.cpp"
 
 
-int main(int argc, char *argv[] ) {
+int main(int argc, char *argv[] ) 
+{
+   StdIoErrorHandler stdioerrorhandler;
    try {
       Cmdline cl ( argc, argv );
 

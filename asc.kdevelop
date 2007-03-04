@@ -12,6 +12,7 @@
     <description/>
     <ignoreparts/>
     <secondaryLanguages/>
+    <projectname>asc</projectname>
   </general>
   <kdevautoproject>
     <general>
@@ -115,6 +116,21 @@
       <codeCompletionDelay>250</codeCompletionDelay>
       <argumentsHintDelay>400</argumentsHintDelay>
       <headerCompletionDelay>250</headerCompletionDelay>
+      <showOnlyAccessibleItems>false</showOnlyAccessibleItems>
+      <completionBoxItemOrder>0</completionBoxItemOrder>
+      <howEvaluationContextMenu>true</howEvaluationContextMenu>
+      <showCommentWithArgumentHint>true</showCommentWithArgumentHint>
+      <statusBarTypeEvaluation>false</statusBarTypeEvaluation>
+      <namespaceAliases>std=_GLIBCXX_STD;__gnu_cxx=std</namespaceAliases>
+      <processPrimaryTypes>true</processPrimaryTypes>
+      <processFunctionArguments>false</processFunctionArguments>
+      <preProcessAllHeaders>false</preProcessAllHeaders>
+      <parseMissingHeaders>false</parseMissingHeaders>
+      <resolveIncludePaths>true</resolveIncludePaths>
+      <alwaysParseInBackground>true</alwaysParseInBackground>
+      <usePermanentCaching>true</usePermanentCaching>
+      <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
+      <includePaths>.;</includePaths>
     </codecompletion>
     <creategettersetter>
       <prefixGet/>
@@ -127,7 +143,12 @@
     <qt>
       <used>false</used>
       <version>3</version>
-      <root/>
+      <root>/usr/share/qt3</root>
+      <includestyle>3</includestyle>
+      <designerintegration>EmbeddedKDevDesigner</designerintegration>
+      <qmake>/usr/bin/qmake-qt3</qmake>
+      <designer></designer>
+      <designerpluginpaths/>
     </qt>
   </kdevcppsupport>
   <kdevfilecreate>
