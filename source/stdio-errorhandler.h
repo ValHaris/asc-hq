@@ -21,7 +21,7 @@
        void printStderr( const ASCString& msg );
        void messageLogger( const ASCString& msg, int level );
     public:
-       StdIoErrorHandler();
+       StdIoErrorHandler( bool quitOnFatalError = true );
  };
 
 

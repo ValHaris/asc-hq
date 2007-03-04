@@ -29,13 +29,17 @@ void StdIoErrorHandler::messageLogger( const ASCString& msg, int level )
    std::cout << msg << std::flush;
 }
 
-StdIoErrorHandler::StdIoErrorHandler()
+StdIoErrorHandler::StdIoErrorHandler( bool quitOnFatalError )
 {
    MessagingHub::Instance().warning.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
    MessagingHub::Instance().error.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
    MessagingHub::Instance().fatalError.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
    MessagingHub::Instance().infoMessage.connect( SigC::slot( *this, &StdIoErrorHandler::printStdout ));
    MessagingHub::Instance().logMessage.connect( SigC::slot( *this, &StdIoErrorHandler::messageLogger ));
+
+   if ( quitOnFatalError )
+      MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit ), -1 ));
+
 }
 
 

@@ -180,7 +180,7 @@ int main(int argc, char *argv[] )
 {
    // setenv( "DISPLAY", "192.168.0.61:0", 1 );
    
-   StdIoErrorHandler stdIoErrorHandler;
+   StdIoErrorHandler stdIoErrorHandler(false);
    
    putenv("SDL_VIDEO_CENTERED=1") ;
 

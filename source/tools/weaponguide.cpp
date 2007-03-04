@@ -68,7 +68,6 @@ int main(int argc, char *argv[] )
       cout << "*******Starting guide generation*******" << endl;
       MessagingHub::Instance().setVerbosity( cl.r() );
 
-      
       SDL_Init( SDL_INIT_VIDEO );
       
       initFileIO( cl.c(), 4 );  // passing the filename from the command line options

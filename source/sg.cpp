@@ -1470,7 +1470,7 @@ int main(int argc, char *argv[] )
       fullscreen = SDL_TRUE;
 
    MessagingHub::Instance().setVerbosity( cl->r() );
-   StdIoErrorHandler stdIoErrorHandler;
+   StdIoErrorHandler stdIoErrorHandler(false);
    MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
 
 #ifdef WIN32
