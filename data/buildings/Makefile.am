@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES    = Makefile.in
 
 EXTRA_DIST=$(srcdir)/*.asctxt $(srcdir)/*.pcx $(srcdir)/*.version $(srcdir)/*.txt   
 
-pkgdata_DATA = buildings.con
+# pkgdata_DATA = buildings.con
 pkgdatadir   = $(datadir)/games/@PACKAGE@
 
 
