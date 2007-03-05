@@ -158,7 +158,9 @@
         "Dump Vehicle definition",
         "Dump Object definition",
         "PBP statistics",
-        "Exchange Graphics" };
+        "Exchange Graphics",
+        "Open Ctrl-key panel",
+        "Close Ctrl-key panel" };
 
 
 
@@ -386,7 +388,75 @@ void pbpplayerstatistics( GameMap* gamemap )
 }
 
 
+class PlayerColorPanel : public PG_Widget {
+      int openTime;
+   public:
+      PlayerColorPanel() : PG_Widget(NULL, PG_Rect(20,20,320,40))
+      {
+         int width = 30;
+         int gap = 5;
+         for ( int i = 0; i < max(actmap->getPlayerCount(),9); ++i ) {
+            PG_Widget* bar = new ColoredBar( actmap->getPlayer(i).getColor(), this, PG_Rect( gap + i * (width+gap), gap, width, width ));
+            PG_Label* lab = new PG_Label( bar, PG_Rect(5,5,width-10,width-10), ASCString::toString(i));
+            lab->SetFontSize(15);
+         }
 
+         PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PlayerColorPanel::idler ));
+      }
+
+      void Show( bool fade = false )
+      {
+         openTime = ticker;
+         PG_Widget::Show(fade);
+      }
+
+      void Hide( bool fade = false )
+      {
+         openTime = 0;
+         PG_Widget::Hide(fade);
+      }
+
+
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         if ( key->keysym.sym >= '0' && key->keysym.sym <= '9' ) {
+            selection.setPlayer( key->keysym.sym - '0' );
+            return true;
+         }
+         Hide();
+         return false;
+      }
+
+      bool idler()
+      {
+         if ( !IsVisible() )
+            return false;
+
+         if ( !openTime )
+            return false;
+
+         if ( ticker > openTime + 200 ) {
+            Hide();
+            return true;
+         } else
+            return false;
+
+      }
+
+};
+
+
+void showPlayerPanel( bool open )
+{
+   static PlayerColorPanel* pcp = NULL;
+   if ( open && !pcp ) 
+      pcp = new PlayerColorPanel();
+
+   if( open )
+      pcp->Show();
+   else
+      pcp->Hide();
+}
 
 
 // � ExecAction
@@ -923,6 +993,10 @@ void execaction_pg(int code)
     case act_pbpstatistics: pbpplayerstatistics( actmap );
        break;
     case act_exchangeGraphics: exchangeGraphics();
+       break;
+    case act_openControlPanel: showPlayerPanel(true);
+       break;
+    case act_releaseControlPanel: showPlayerPanel(false);
        break;
    };
 }

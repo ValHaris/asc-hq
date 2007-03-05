@@ -516,6 +516,9 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( mod )
       return false;
 
+   if ( !IsVisible() )
+      return false;
+
    if ( key->keysym.sym == SDLK_RETURN   ) {
       if ( !enterKeyPressed ) {
          mapDisplay->keyboadCursorMovement( false );

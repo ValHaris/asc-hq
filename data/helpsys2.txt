@@ -107,6 +107,8 @@
 #pos10# +  #pos70#: zoom in 
 #pos10# -  #pos70#: zoom out
 
+
+#pos10# ctrl+0-8  #pos70#: Select player
 #pos10# ctrl+A  #pos70#: Alliances
 #pos10# ctrl+B  #pos70#: Toggle resource view
 #pos10# ctrl+C  #pos70#: Copy to Clipboard

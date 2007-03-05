@@ -104,9 +104,12 @@ protected:
     
     void brushChanged( int i );
     void selectionChanged( const MapComponent* item ); 
+    bool eventKeyUp(const SDL_KeyboardEvent* key);
     bool eventKeyDown(const SDL_KeyboardEvent* key);
     void setupStatusBar();
     
+    void playerChanged( int player );
+
     ASCString getBackgroundImageFilename() { return "mapeditor-background.png"; };
     
     bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);

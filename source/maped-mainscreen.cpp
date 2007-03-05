@@ -443,6 +443,9 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
       playerSelector->AddItem( "Player " + ASCString::toString(i) );
    playerSelector->selectionSignal.connect( SigC::slot( selection, &SelectionHolder::setPlayer ) );
    ypos += 25;
+
+   selection.playerChanged.connect( SigC::slot( *this, &Maped_MainScreenWidget::playerChanged ));
+
    
    currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, ypos, BuildingItem::Width(), BuildingItem::Height() ) );
    ypos += BuildingItem::Height() + 5;
@@ -468,6 +471,19 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    addContextAction( new ContextMenu::DeleteTopObject );
    addContextAction( new ContextMenu::DeleteAllObjects );
 }
+
+void Maped_MainScreenWidget::playerChanged( int player )
+{
+   static int recursionPreventer = 0;
+   recursionPreventer++;
+   if ( recursionPreventer == 1 ) 
+      playerSelector->SelectItem( player );
+   recursionPreventer--;
+}
+
+
+
+
 
 
 bool Maped_MainScreenWidget::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
@@ -578,9 +594,24 @@ bool Maped_MainScreenWidget::runContextAction  (PG_PopupMenu::MenuItem* menuItem
 #endif
 
 
+bool Maped_MainScreenWidget::eventKeyUp(const SDL_KeyboardEvent* key)
+{
+   if ( key->keysym.sym ==  SDLK_RCTRL || key->keysym.sym == SDLK_LCTRL ) {
+      execaction_ev( act_releaseControlPanel );
+      return true;
+   }
+   return false;
+}
+
+
 bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+
+   if ( key->keysym.sym ==  SDLK_RCTRL || key->keysym.sym == SDLK_LCTRL ) {
+      execaction_ev( act_openControlPanel );
+      return true;
+   }
 
    if ( !mod  ) {
       switch ( key->keysym.sym ) {
