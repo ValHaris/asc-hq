@@ -1030,9 +1030,20 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if ( pc.find( "guideSortHelp") )
       pc.addIntegerArray("guideSortHelp", guideSortHelp );
 
+   bool hasService = false;
    for ( int w = 0; w < weapons.count; ++w )
-      if ( weapons.weapon[w].canRefuel() )
+      if ( weapons.weapon[w].canRefuel() ) {
          setFunction( ExternalAmmoTransfer );
+         hasService = true;
+      }
+   if ( !hasService ) {
+      features.reset( ExternalRepair );
+      features.reset( ExternalEnergyTransfer );
+      features.reset( ExternalMaterialTransfer );
+      features.reset( ExternalFuelTransfer );
+      features.reset( ExternalAmmoTransfer );
+   }
+
    
    
    pc.openBracket ( "JumpDrive" );
