@@ -241,6 +241,10 @@ class IngameMessageViewer : public ASC_PG_Dialog {
          return ASC_PG_Dialog::eventKeyDown( key );
       };
 
+      ~IngameMessageViewer()
+      {
+         displayLogMessage ( 9, "~IngameMessageViewer\n" );
+      }
       
 };
 

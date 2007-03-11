@@ -203,7 +203,7 @@ bool ASC_PG_App::eventQuit(int id, PG_MessageObject* widget, unsigned long data)
    return PG_Application::eventQuit( id, widget, data );
 }
 
-void ASC_PG_App::eventIdle( PG_MessageObject* msgObj )
+void ASC_PG_App::eventIdle()
 {
    if ( redrawScreen  ) {
       PG_Widget::UpdateScreen();
@@ -400,6 +400,9 @@ int ASC_PG_App::Run ( )
 
 ASC_PG_App :: ~ASC_PG_App()
 {
+   while ( !deletionQueue.empty() )
+      delete deletionQueue.front();
+   
    shutdownASCGraphicSubsystem();
 }
 
