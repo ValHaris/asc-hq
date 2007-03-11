@@ -1494,6 +1494,7 @@ void         EditAiParam::buttonpressed(int         id)
                 int         w2, heightxs;
                 char        namebuffer[1000];
                 char        reactionfire;
+                int owner;
               public:
                // char     checkvalue( char id, char* p );
                 tunit ( Vehicle* v ) : tus ( v ), unit ( v ) {};
@@ -1524,6 +1525,8 @@ void         tunit::init(  )
    diry= y1 + 100;
    action = 0;
 
+   owner = unit->getOwner();
+
 
    strcpy ( namebuffer, unit->name.c_str() );
 
@@ -1543,6 +1546,9 @@ void         tunit::init(  )
    addeingabe(12,&unit->tank.material, 0, unit->getStorageCapacity().material );
 
    addbutton("AI Parameter", 50, 280, 250, 300, 0, 1, 115, true );
+
+   addbutton("Unit owner",50,320,250,340,2,1,116,true);
+   addeingabe(116, &owner, 0, 7 );
 
    int unitheights = 0;
    heightxs = 520;
@@ -1725,6 +1731,8 @@ void         tunit::buttonpressed(int         id)
             unit->reactionfire.disable();
 
          unit->name = namebuffer;
+         if ( owner != unit->getOwner() )
+            unit->convert( owner );
         }
         break;
     case 31 : action = 1;

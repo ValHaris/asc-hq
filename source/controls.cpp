@@ -323,7 +323,7 @@ void  putMine( const MapCoordinate& pos, int typ, int delta )
                         eht->ammo[i]--;
                         eht->setMovement ( eht->getMovement() - mineputmovedecrease );
                         strength = eht->weapstrength[i];
-                        logtoreplayinfo ( rpl_putmine, pos.x, pos.y, (int) actmap->actplayer, (int) typ, (int) MineBasePunch[typ-1] * strength / 64 );
+                        logtoreplayinfo ( rpl_putmine2, pos.x, pos.y, (int) actmap->actplayer, (int) typ, (int) MineBasePunch[typ-1] * strength / 64, eht->networkid );
                         break;
                      }
 

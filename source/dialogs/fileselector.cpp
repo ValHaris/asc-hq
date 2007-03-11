@@ -172,8 +172,11 @@ void FileSelectionWindow::fileNameSelected( const ASCString& filename )
 
    if ( saveFile && factory ) {
       if ( factory->getLevel( this->filename ) == 0 )
-         if ( choice_dlg( "overwrite " + this->filename +" ?", "~y~es","~n~o") == 2) 
+         if ( choice_dlg( "overwrite " + this->filename +" ?", "~y~es","~n~o") == 2) {
+            // isw->resetNamesearch();
+            this->filename = "";
             return;
+         }
    }
 
    quitModalLoop(0);

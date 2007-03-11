@@ -632,24 +632,33 @@ ServiceTargetSearcher::ServiceTargetSearcher( ContainerBase* src ) : ServiceChec
 bool ServiceTargetSearcher::available()
 {
    Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
-   if ( srcVehicle && !srcVehicle->attacked ) {
+   if ( srcVehicle ) {
+      if ( srcVehicle->attacked ) 
+         return false;
+
+
       if ( srcVehicle->reactionfire.getStatus() == Vehicle::ReactionFire::off )
          if ( source->getMap()->getField( source->getPosition() )->unitHere( srcVehicle )) {
-         const SingleWeapon* weap = getServiceWeapon();
-         if( weap )
-            return true;
-         }
+            const SingleWeapon* weap = getServiceWeapon();
+            if( weap ) 
+               if ( source->baseType->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) || 
+                    source->baseType->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) || 
+                    source->baseType->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) || 
+                    source->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer  )) 
+                    return true;
+            
+         }         
    } else {
       if ( source->baseType->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
-         if ( source->getStorageCapacity().energy )
+         // if ( source->getStorageCapacity().energy )
             return true;
 
       if ( source->baseType->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
-         if ( source->getStorageCapacity().material )
+         // if ( source->getStorageCapacity().material )
             return true;
 
       if ( source->baseType->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
-         if ( source->getStorageCapacity().fuel )
+         // if ( source->getStorageCapacity().fuel )
             return true;
 
    }

@@ -135,6 +135,7 @@ void Menu::setup()
    addbutton ( "~N~ew Game\tctrl-n", ua_newGame );
    currentMenu->addSeparator();
    addbutton ( "~L~oad game\tctrl-l", ua_loadgame );
+   addbutton ( "Load most recent game\tctrl-shift-l", ua_loadrecentgame );
    addbutton ( "~S~ave game\tctrl-s", ua_savegame );
    currentMenu->addSeparator();
    addbutton ( "Continue network game\tF3", ua_continuenetworkgame);
@@ -776,6 +777,9 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                   fld->vehicle->fillMagically( true, false );
                return true;
             }
+            case SDLK_l:
+               execUserAction_ev ( ua_loadrecentgame );
+               return true;
 
             default:;
       }

@@ -424,20 +424,32 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          if ( action == rpl_putbuilding2 )
             stream->writeInt ( va_arg ( paramlist, int ));
       }
-      if ( action == rpl_putmine ) {
+      if ( action == rpl_putmine || action == rpl_putmine2 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
          int typ = va_arg ( paramlist, int );
          int strength = va_arg ( paramlist, int );
+         int nwid = -1; 
+
          stream->writeChar ( action );
-         int size = 5;
+         int size;
+         if ( action == rpl_putmine ) {
+            size = 5;
+         } else {
+            nwid = va_arg ( paramlist, int );
+            size = 6;
+         }
          stream->writeInt ( size );
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( col );
          stream->writeInt ( typ );
          stream->writeInt ( strength );
+
+         if ( action == rpl_putmine2 ) 
+            stream->writeInt ( nwid );
+         
       }
       if ( action == rpl_removemine ) {
          int x =  va_arg ( paramlist, int );
@@ -1335,19 +1347,34 @@ void trunreplay :: execnextreplaymove ( void )
                                   error("severe replay inconsistency:\nCannot find building to build/remove building!" );
                             }
          break;
-      case rpl_putmine: {
+      case rpl_putmine:
+      case rpl_putmine2: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int col = stream->readInt();
                            int typ = stream->readInt();
                            int strength = stream->readInt();
+                           int nwid = -1;
+                           if ( nextaction == rpl_putmine2) 
+                              nwid = stream->readInt();
+
                            readnextaction();
 
                            tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
+                              if ( nwid >= 0 ) {
+                                 Vehicle* veh = actmap->getUnit( nwid );
+                                 if ( veh ) {
+                                    ContainerControls cc( veh );
+                                    if ( cc.getammunition( cwminen, 1, true, true ) != 1 )
+                                       error("could not obtain ammo for mine placement");
+
+                                 } else 
+                                    error("could not find unit for mine placement");
+                              }
                               computeview( actmap );
                               if ( fieldvisiblenow ( actmap->getField(x,y), actmap->getPlayerView() )) {
                                  displaymap();

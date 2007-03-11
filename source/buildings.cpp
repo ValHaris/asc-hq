@@ -558,7 +558,7 @@ void Building :: readData ( tnstream& stream, int version )
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
 
-    if ( researchpoints < typ->maxresearchpoints  &&  !(typ->hasFunction(ContainerBaseType::Research)))
+    if ( (researchpoints < typ->maxresearchpoints  &&  !(typ->hasFunction(ContainerBaseType::Research))) || (researchpoints > typ->maxresearchpoints))
        researchpoints = typ->maxresearchpoints;
 
 

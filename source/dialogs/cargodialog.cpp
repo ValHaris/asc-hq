@@ -1423,9 +1423,15 @@ class ResearchGraph : public GraphWidget {
       bool setResearch ( ContainerBase* lab, int x )
       {
          if ( cont->baseType->nominalresearchpoints ) {
-            int res = x * xrange / Width() * lab->baseType->nominalresearchpoints / cont->baseType->nominalresearchpoints;
-            if ( res > xrange )
-               res = xrange;
+            int res;
+            
+            if ( returnResourcenUseForResearch ( lab, lab->maxresearchpoints ) == Resources(0,0,0))
+               res = lab->maxresearchpoints;
+            else
+               res = x * xrange / Width() * lab->baseType->nominalresearchpoints / cont->baseType->nominalresearchpoints;
+
+            if ( res > lab->maxresearchpoints )
+               res = lab->maxresearchpoints;
             int old = lab->researchpoints;
             lab->researchpoints = res;
             return res != old;
@@ -2490,8 +2496,8 @@ namespace CargoGuiFunctions {
          for ( int p = 0; p < veh->getMap()->getPlayerCount(); ++p )
             if ( p != veh->getOwner() )
                if ( veh->getMap()->getPlayer(p).diplomacy.isAllied( veh->getOwner() )) {
-                  entries.push_back( veh->getMap()->getPlayer(p).getName() );
                   playerIDs[entries.size()] = p;
+                  entries.push_back( veh->getMap()->getPlayer(p).getName() );
                }
 
          if ( !entries.size() ) {

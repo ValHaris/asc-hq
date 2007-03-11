@@ -81,7 +81,8 @@ enum trpl_actions { rpl_attack,
                     rpl_jump,
                     rpl_repairBuilding,
                     rpl_recycleUnit,
-                    rpl_convert2  };
+                    rpl_convert2,
+                    rpl_putmine2 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

@@ -255,9 +255,22 @@ bool loadGame( const ASCString& filename )
 }
 
 
-bool loadGame()
+bool loadGame( bool mostRecent )
 {
-   ASCString s1 = selectFile( savegameextension, true );
+   ASCString s1;
+   if ( mostRecent ) {
+      int datefound = 0;
+
+      tfindfile ff ( savegameextension );
+      tfindfile::FileInfo fi;
+      while ( ff.getnextname( fi ))
+         if ( fi.date > datefound ) {
+            datefound = fi.date;
+            s1 = fi.name;
+         }
+   } else {
+      s1 = selectFile( savegameextension, true );
+   }
 
    if ( !s1.empty() ) {
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
@@ -1068,7 +1081,9 @@ void execuseraction2 ( tuseractions action )
       case ua_continuenetworkgame:
          continueAndStartMultiplayerGame();
          break;
-      case ua_loadgame: loadGame();
+      case ua_loadgame: loadGame( false);
+         break;
+      case ua_loadrecentgame: loadGame ( true );
          break;
       case ua_savegame: saveGame( true );
          break;

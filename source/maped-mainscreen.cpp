@@ -131,7 +131,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "~S~etup Players",     act_setupplayers );
    addbutton ( "Setup ~A~lliances",     act_setupalliances );
-   addbutton ( "~E~dit technologies",          act_editResearch );
+   addbutton ( "~E~dit Research",          act_editResearch );
    addbutton ( "edit ~R~esearch points",          act_editResearchPoints );
    addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
    addbutton ( "edit player data...",   act_resetPlayerData );

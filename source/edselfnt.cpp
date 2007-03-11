@@ -208,7 +208,7 @@ int BuildingItem::place( const MapCoordinate& mc ) const
                f++;
          }
    if ( f ) {
-      // if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2)
+      if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2)
          return -1 ;
    }      
 

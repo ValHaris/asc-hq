@@ -117,7 +117,7 @@ bool GameDialog::saveGame(PG_Button* button) {
 }
 
 bool GameDialog::loadGame(PG_Button* button) {
-   if ( ::loadGame()) 
+   if ( ::loadGame(false)) 
       QuitModal();
       
     return true;
