@@ -363,7 +363,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
          VehicleMovement vm ( NULL, NULL );
 
 
-         int orgMovement = veh->getMovement(false);
+         TemporaryContainerStorage tcs( veh );
          veh->setMovement( veh->maxMovement(), 0 );
          if ( vm.available ( veh )) {
 
@@ -383,7 +383,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
             }
 
          }
-         veh->setMovement( orgMovement, 0 );
+         tcs.restore();
       
          if ( counter )
             fields[veh->getPosition()] |= 2;

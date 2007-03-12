@@ -555,11 +555,13 @@ void ServiceChecker :: check( ContainerBase* dest )
       for ( int a = 0; a < cwaffentypennum; ++a ) {
          if ( source->maxAmmo( a ) && dest->maxAmmo( a )) {
             if ( weaponAmmo[a] ) {
-               if ( externalTransfer  ) {
+               if ( externalTransfer ) {
                   if ( source->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ||  dest->baseType->hasFunction( ContainerBaseType::ExternalAmmoTransfer ) ) {
                      Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
                      if ( !srcVehicle ) {// it's a building
-                        if ( (ignoreChecks & ignoreHeight) || getheightdelta( source, dest)==0)
+                        Building* bld = dynamic_cast<Building*>(source);
+                        assert(bld);
+                        if ( (ignoreChecks & ignoreHeight) || (bld->typ->externalloadheight & dest->getHeight()) )
                            if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
                               ammo(dest, a);
                      } else {
@@ -578,8 +580,10 @@ void ServiceChecker :: check( ContainerBase* dest )
          if (  externalTransfer ) {
             Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
             if ( !srcVehicle ) {// it's a building
+               Building* bld = dynamic_cast<Building*>(source);
+               assert(bld);
                bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
-               if ( (ignoreChecks & ignoreHeight) || getheightdelta( source, dest)==0)
+               if ( (ignoreChecks & ignoreHeight) || (bld->typ->externalloadheight & dest->getHeight()) )
                   if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
                      resource( dest, r, active );
             } else {
@@ -637,7 +641,7 @@ bool ServiceTargetSearcher::available()
          return false;
 
 
-      if ( srcVehicle->reactionfire.getStatus() == Vehicle::ReactionFire::off )
+      if ( srcVehicle->reactionfire.getStatus() == Vehicle::ReactionFire::off || srcVehicle->baseType->hasFunction(ContainerBaseType::MoveWithReactionFire))
          if ( source->getMap()->getField( source->getPosition() )->unitHere( srcVehicle )) {
             const SingleWeapon* weap = getServiceWeapon();
             if( weap ) 

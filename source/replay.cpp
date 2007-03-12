@@ -2048,6 +2048,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
 //   cursor.show();
 
 //   cursor.checkposition( getxpos(), getypos() );
+
    bool resourcesCompared = false;
    do {
        if ( status == 2 ) {
@@ -2092,6 +2093,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
                         vft.Show();
                         vft.RunModal();
                      }
+
                   } else
                      error("Replay: no map to compare to!");
                }

@@ -170,7 +170,7 @@ int         fieldAccessible( const tfield*        field,
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
                else 
-                 if ((field->vehicle->height != vehicle->height) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
+                 if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
                     return 1;
       }
       else {   // building
