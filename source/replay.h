@@ -82,7 +82,8 @@ enum trpl_actions { rpl_attack,
                     rpl_repairBuilding,
                     rpl_recycleUnit,
                     rpl_convert2,
-                    rpl_putmine2 };
+                    rpl_putmine2,
+                    rpl_repairUnit3 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -100,7 +101,8 @@ class trunreplay {
             void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ticker );
             int actplayer;
 
-            void error( const char* message, ... );
+            void error( const ASCString& message, ... );
+            void error( const MapCoordinate& pos, const ASCString& message, ... );
 
             char nextaction;
 

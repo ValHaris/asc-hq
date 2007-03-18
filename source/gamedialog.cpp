@@ -39,7 +39,7 @@ const int GameDialog::ySize = 500;
 const int GameDialog::buttonIndent = 150;
 GameDialog* GameDialog::instance = 0;
 
-GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Game", SHOW_CLOSE ) {
+GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( -1, -1, xSize, ySize ), "Game", SHOW_CLOSE ) {
     singlePlayerButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "New Game", 90);
     singlePlayerButton->sigClick.connect( SigC::slot( *this, &GameDialog::newGame));
 

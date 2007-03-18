@@ -1580,6 +1580,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
       bool checkObject( tfield* fld, ObjectType* objtype, Mode mode );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
 
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
@@ -1682,6 +1683,13 @@ Surface buildGuiIcon( const Surface& image, bool remove = false )
    return s;
 }
 
+
+bool ObjectBuildingGui::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+{
+   return false;
+   // return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
+}
+
 Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == 0 )
@@ -1705,7 +1713,7 @@ Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* s
 ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( num == 0 )
-      return "cancel (~ESC~)";
+      return "~c~ancel";
 
    ObjectType* objtype = objectTypeRepository.getObject_byID( abs(num) );
    if ( !objtype )
@@ -1992,7 +2000,7 @@ ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, ContainerBase* 
       return "";
 
    ASCString result;
-   result.format( "Build %s (%d Material, %d Fuel)", vehtype->name.c_str(), vehtype->productionCost.material, vehtype->productionCost.fuel );
+   result.format( "Build %s (%d Material, %d Fuel)", vehtype->name.c_str(), vehtype->productionCost.material, vehtype->productionCost.energy );
 
    return result;
 }

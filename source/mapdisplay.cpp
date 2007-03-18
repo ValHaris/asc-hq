@@ -154,15 +154,27 @@ class PipeLayer : public MapLayer {
                return true;
          return false;
       };
+
+      bool isObjectPipeline( const ObjectType* obj )
+      {
+         if ( !obj )
+            return false;
+         return (obj->displayMethod <= 1 ) && obj->fieldModification[0].terrain_or.test( cbpipeline );
+      }
+
     public: 
       PipeLayer() : buried_pipeline( NULL ), pipeline ( NULL )
       {
+         pipeline = objectTypeRepository.getObject_byID( 3 );
+         if ( !isObjectPipeline( pipeline )) 
+            pipeline = NULL;
+
          for ( int i = 0; i < objectTypeRepository.getNum(); ++i ) {
             ObjectType* obj = objectTypeRepository.getObject_byPos( i );
             if (obj->displayMethod == 1 && obj->fieldModification[0].terrain_or.test( cbpipeline )) {
                buried_pipeline = obj;
             }
-            if (obj->displayMethod == 0 && obj->fieldModification[0].terrain_or.test( cbpipeline )) {
+            if (obj->displayMethod == 0 && obj->fieldModification[0].terrain_or.test( cbpipeline ) && !pipeline) {
                pipeline = obj;
             }
          }

@@ -58,7 +58,11 @@ void MineType::paint( MineTypes type, int player, Surface& surf, const SPoint& p
      };
    }
    if ( images[type] ) {
-      megaBlitter< ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All > 
+      if ( type != cmmooredmine )
+         megaBlitter< ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All > 
+                ( *images[type], surf, pos, nullParam,nullParam, nullParam,nullParam);
+      else
+         megaBlitter< ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_Plain, TargetPixelSelector_All > 
                 ( *images[type], surf, pos, nullParam,nullParam, nullParam,nullParam);
    }
 }

@@ -2337,7 +2337,7 @@ namespace CargoGuiFunctions {
       
 
       parent.getContainer()->repairItem ( veh , 0 );
-      logtoreplayinfo ( rpl_repairUnit2, parent.getContainer()->getPosition().x, parent.getContainer()->getPosition().y, veh->networkid, 0 );
+      logtoreplayinfo ( rpl_repairUnit3, parent.getContainer()->getIdentification(), veh->networkid, 0 );
       
       parent.cargoChanged();
    }
@@ -2359,7 +2359,7 @@ namespace CargoGuiFunctions {
 
    bool MoveUnitUp::checkForKey( const SDL_KeyboardEvent* key, int modifier )
    {
-      return ( key->keysym.sym == 'u' );
+      return ( key->keysym.sym == 'o' );
    };
 
    Surface& MoveUnitUp::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2369,7 +2369,7 @@ namespace CargoGuiFunctions {
    
    ASCString MoveUnitUp::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      return "move unit to outer transport";
+      return "move unit to ~o~uter transport";
    };
 
 
