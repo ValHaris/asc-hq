@@ -66,7 +66,7 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
    public:
       AttackGui() : attackEngine( NULL ) {};
@@ -75,7 +75,7 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
 
 };
 
-bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
    if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' ) {
       // execute( actmap->getCursor(), actmap->getField( actmap->getCursor())->getContainer() , -1 );
@@ -235,7 +235,7 @@ void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num 
    }
 };
 
-bool Cancel::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+bool Cancel::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
    return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
 };
@@ -253,7 +253,7 @@ ASCString Cancel::getName( const MapCoordinate& pos, ContainerBase* subject, int
 
 
 
-bool Movement::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+bool Movement::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
    return ( key->keysym.sym == SDLK_SPACE );
 };
@@ -371,7 +371,7 @@ class Ascend : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 's' );
       };
@@ -471,7 +471,7 @@ class Descend : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'd' );
       };
@@ -580,7 +580,7 @@ class EndTurn : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'e' );
       };
@@ -628,7 +628,7 @@ class Attack : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'a' );
       };
@@ -702,7 +702,7 @@ class PowerOn : public GuiFunction
          return false;
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'p' );
       };
@@ -743,7 +743,7 @@ class PowerOff : public GuiFunction
          return false;
       };
       
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'p' );
       };
@@ -781,7 +781,7 @@ class UnitInfo : public GuiFunction
       {
          return "unit ~i~nfo";
       };
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'i' );
       };
@@ -931,7 +931,7 @@ class OpenContainer : public GuiFunction
          return IconRepository::getIcon("container.png");
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'l' );
       };
@@ -964,7 +964,7 @@ class EnableReactionfire : public GuiFunction
 
          return false;
       };
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'x' );
       };
@@ -1005,7 +1005,7 @@ class DisableReactionfire : public GuiFunction
          return false;
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'x' );
       };
@@ -1055,7 +1055,7 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
          return false;
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'j' );
       };
@@ -1157,7 +1157,7 @@ class RepairUnit : public GuiFunction
          return false;
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'r' );
       };
@@ -1237,7 +1237,7 @@ class RefuelUnit : public GuiFunction
 
          return false;
       };
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'f' );
       };
@@ -1306,7 +1306,7 @@ class RefuelUnitDialog : public GuiFunction
 
          return false;
       };
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'f' && (modifier & KMOD_SHIFT)  );
       };
@@ -1379,7 +1379,7 @@ class PutMine : public GuiFunction
                         return true;
          return false;
       };
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'm' );
       };
@@ -1580,7 +1580,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
       bool checkObject( tfield* fld, ObjectType* objtype, Mode mode );
 
       void search ( const MapCoordinate& pos, int& num, int pass );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
@@ -1684,10 +1684,12 @@ Surface buildGuiIcon( const Surface& image, bool remove = false )
 }
 
 
-bool ObjectBuildingGui::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+bool ObjectBuildingGui::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
-   return false;
-   // return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
+   if ( num > 0 )
+      return false;
+   else
+      return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
 }
 
 Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1874,7 +1876,7 @@ class BuildObject : public GuiFunction
       {
          return "object ~c~onstruction";
       };
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'c' );
       };
@@ -2598,7 +2600,7 @@ class ReplayPlay : public GuiFunction
          return "start re~p~lay";
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'p' );
       };
@@ -2633,7 +2635,7 @@ class ReplayPause : public GuiFunction
          return "~p~ause replay";
       };
       
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'p' );
       };
@@ -2676,7 +2678,7 @@ class ReplayFaster : public GuiFunction
          return "increase replay speed (~+~)";
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == '+' );
       };
@@ -2713,7 +2715,7 @@ class ReplaySlower : public GuiFunction
          return "decrease replay speed (~-~)";
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == '-' );
       };
@@ -2748,7 +2750,7 @@ class ReplayRewind : public GuiFunction
          return "~r~estart replay";
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'r' );
       };
@@ -2783,7 +2785,7 @@ class ReplayExit : public GuiFunction
          return "e~x~it replay";
       };
 
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier )
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'x' );
       };

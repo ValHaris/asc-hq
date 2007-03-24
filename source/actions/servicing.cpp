@@ -549,6 +549,31 @@ void ServiceChecker :: check( ContainerBase* dest )
       ContainerBaseType::ExternalMaterialTransfer,
       ContainerBaseType::ExternalFuelTransfer };
 
+
+      for ( int r = 0; r < resourceTypeNum; r++ ) {
+         if (  externalTransfer ) {
+            Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
+            if ( !srcVehicle ) {// it's a building
+               Building* bld = dynamic_cast<Building*>(source);
+               assert(bld);
+               bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
+               if ( (ignoreChecks & ignoreHeight) || (bld->typ->externalloadheight & dest->getHeight()) )
+                  if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
+                     resource( dest, r, active );
+            } else {
+               if ( serviceWeaponFits( dest )) {
+                  bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
+                  resource( dest, r, active );
+               }
+            }
+
+         } else {
+            bool active =  (source->getStorageCapacity().resource(r) || source->isBuilding() )
+                        && (dest->getStorageCapacity().resource(r) || dest->isBuilding());
+            resource( dest, r, active );
+         }
+      }
+
    /* it is important that the ammo transfers are in front of the resource transfers, because ammo production affects resource amounts
       and their prelimarny commitment would cause inconsistencies */
 
@@ -576,29 +601,6 @@ void ServiceChecker :: check( ContainerBase* dest )
          }
       }
 
-      for ( int r = 0; r < resourceTypeNum; r++ ) {
-         if (  externalTransfer ) {
-            Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
-            if ( !srcVehicle ) {// it's a building
-               Building* bld = dynamic_cast<Building*>(source);
-               assert(bld);
-               bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
-               if ( (ignoreChecks & ignoreHeight) || (bld->typ->externalloadheight & dest->getHeight()) )
-                  if ( (ignoreChecks & ignoreDistance) || beeline(source->getPosition(), dest->getPosition()) < 20 )
-                     resource( dest, r, active );
-            } else {
-               if ( serviceWeaponFits( dest )) {
-                  bool active = source->baseType->hasFunction( resourceVehicleFunctions[r] ) ||  dest->baseType->hasFunction( resourceVehicleFunctions[r] );
-                  resource( dest, r, active );
-               }
-            }
-
-         } else {
-            bool active =  (source->getStorageCapacity().resource(r) || source->isBuilding() )
-                        && (dest->getStorageCapacity().resource(r) || dest->isBuilding());
-            resource( dest, r, active );
-         }
-      }
 }
 
 

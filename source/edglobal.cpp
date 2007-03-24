@@ -160,7 +160,8 @@
         "PBP statistics",
         "Exchange Graphics",
         "Open Ctrl-key panel",
-        "Close Ctrl-key panel" };
+        "Close Ctrl-key panel",
+        "Dump all vehicle definitions" };
 
 
 
@@ -998,6 +999,15 @@ void execaction_pg(int code)
        break;
     case act_releaseControlPanel: showPlayerPanel(false);
        break;
+    case act_dumpAllVehicleDefinitions: {
+                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all units" );
+                                          for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
+                                             Vehicletype* veh = vehicleTypeRepository.getObject_byPos( i );
+                                             tn_file_buf_stream stream ( "Vehicle" + ASCString::toString( i ) + ".dump", tnstream::writing );
+                                             PropertyWritingContainer pc ( "VehicleDump", stream );
+                                             veh->runTextIO( pc );
+                                          }
+                                        };
    };
 }
 

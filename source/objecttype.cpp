@@ -200,7 +200,12 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
          blitter.blit( getPicture( dir, weather), surface, pos );
       } else
          if ( displayMethod == 4 ) {
-            megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+            const Surface& s = getPicture( dir, weather);
+            if ( dir != 0 && rotateImage ) {
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir%6]),nullParam); 
+            } else {
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,    TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam, flip, nullParam); 
+            }
          } else {
             bool disp = true;
             #ifndef karteneditor

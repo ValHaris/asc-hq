@@ -1,4 +1,4 @@
-//     $Id: guifunctions-interface.h,v 1.1.2.1 2005-12-11 14:42:38 mbickel Exp $
+//     $Id: guifunctions-interface.h,v 1.1.2.2 2007-03-24 15:55:43 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -37,7 +37,7 @@ class Movement : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
 };
@@ -48,7 +48,7 @@ class Cancel : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
       Surface& getImage( const MapCoordinate& po, ContainerBase* subject, int nums );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
 };

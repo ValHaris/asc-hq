@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.26 2006-09-21 19:04:01 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.27 2007-03-24 15:55:43 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -44,7 +44,7 @@ class GuiFunction {
 
      public:
        virtual bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
-       virtual bool checkForKey( const SDL_KeyboardEvent* key, int modifier ) { return false; };
+       virtual bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) { return false; };
        virtual void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
        virtual Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
        virtual ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num ) = 0;
@@ -151,6 +151,8 @@ class NewGuiHost : public DashboardPanel {
         int keyPressedButton;
         
         void lockOptionsChanged( int options );
+
+        void mapDeleted( GameMap& map );
         
      protected:
         bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio );

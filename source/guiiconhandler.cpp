@@ -100,7 +100,7 @@ void GuiButton::eventMouseLeave()
 bool GuiButton::checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
    if ( func->available( pos, subject, id ))
-      if ( func->checkForKey( key, modifier)) {
+      if ( func->checkForKey( key, modifier, id)) {
          func->execute( pos, subject, id );
          return true;
       }
@@ -212,7 +212,7 @@ bool GuiIconHandler::checkForKey( const SDL_KeyboardEvent* key, int modifier )
    
    for ( Functions::iterator i = functions.begin(); i != functions.end(); ++i )
       if ( (*i)->available(actmap->getCursor(), subject, 0 ))
-         if ( (*i)->checkForKey( key, modifier)) {
+         if ( (*i)->checkForKey( key, modifier, 0)) {
             (*i)->execute(actmap->getCursor(), subject, 0 );
             return true;
          }
@@ -257,6 +257,7 @@ NewGuiHost :: NewGuiHost (MainScreenWidget *parent, MapDisplayPG* mapDisplay, co
    
    parent->lockOptionsChanged.connect( SigC::slot( *this, &NewGuiHost::lockOptionsChanged ));
 
+   GameMap::sigMapDeletion.connect( SigC::slot( *this, &NewGuiHost::mapDeleted ));
 }
 
 void NewGuiHost::lockOptionsChanged( int options )
@@ -290,6 +291,13 @@ void NewGuiHost::evalCursor()
    
    eval( mc, subject );
 }
+
+void NewGuiHost::mapDeleted( GameMap& map )
+{
+   while ( theGuiHost->iconHandlerStack.size() >= 1 )
+      popIconHandler();
+}
+
 
 void NewGuiHost::eval( const MapCoordinate& pos, ContainerBase* subject )
 {

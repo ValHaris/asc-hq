@@ -132,7 +132,7 @@ namespace CargoGuiFunctions {
          CloseDialog( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -145,7 +145,7 @@ namespace CargoGuiFunctions {
          Movement( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -158,7 +158,7 @@ namespace CargoGuiFunctions {
          UnitProduction( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -170,7 +170,7 @@ namespace CargoGuiFunctions {
          UnitTraining( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -182,7 +182,7 @@ namespace CargoGuiFunctions {
          RefuelUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -194,7 +194,7 @@ namespace CargoGuiFunctions {
          RefuelUnitDialog( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -206,7 +206,7 @@ namespace CargoGuiFunctions {
          RepairUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -218,7 +218,7 @@ namespace CargoGuiFunctions {
          MoveUnitUp ( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -230,7 +230,7 @@ namespace CargoGuiFunctions {
          MoveUnitIntoInnerContainer ( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -243,7 +243,7 @@ namespace CargoGuiFunctions {
          OpenContainer( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -255,7 +255,7 @@ namespace CargoGuiFunctions {
          RecycleUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -267,7 +267,7 @@ namespace CargoGuiFunctions {
          UnitInfo( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
@@ -2053,7 +2053,7 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
 namespace CargoGuiFunctions {
    
 
-   bool Movement::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool Movement::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == SDLK_SPACE );
    };
@@ -2142,7 +2142,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool UnitProduction::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool UnitProduction::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'p' );
    };
@@ -2209,7 +2209,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool UnitTraining::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool UnitTraining::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 't' );
    };
@@ -2263,7 +2263,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool RefuelUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool RefuelUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'f' );
    };
@@ -2310,7 +2310,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool RepairUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool RepairUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'p' );
    };
@@ -2357,7 +2357,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool MoveUnitUp::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool MoveUnitUp::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'o' );
    };
@@ -2396,7 +2396,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool CloseDialog::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool CloseDialog::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'x' );
    };
@@ -2430,7 +2430,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool UnitInfo::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool UnitInfo::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'i' );
    };
@@ -2534,7 +2534,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   bool MoveUnitIntoInnerContainer::checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool MoveUnitIntoInnerContainer::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.sym == 'i' );
    };
@@ -2670,7 +2670,7 @@ namespace CargoGuiFunctions {
       return IconRepository::getIcon("refuel-dialog.png");
    };
 
-   bool RefuelUnitDialog :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool RefuelUnitDialog :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.unicode == 'd' );
    };
@@ -2712,7 +2712,7 @@ namespace CargoGuiFunctions {
       return IconRepository::getIcon("container.png");
    };
 
-   bool OpenContainer :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+   bool OpenContainer :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
       return ( key->keysym.unicode == 'l' );
    };
@@ -2766,7 +2766,7 @@ Surface& RecycleUnit :: getImage( const MapCoordinate& pos, ContainerBase* subje
    return IconRepository::getIcon("recycle.png");
 };
 
-bool RecycleUnit :: checkForKey( const SDL_KeyboardEvent* key, int modifier )
+bool RecycleUnit :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
    return false;
 };

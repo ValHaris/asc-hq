@@ -62,7 +62,7 @@ class TransferWidget : public PG_Widget {
       TransferWidget ( PG_Widget* parent, const PG_Rect& pos, Transferrable* transferrable, TransferHandler& handler ) : PG_Widget( parent,pos ), trans( transferrable ), slider(NULL)
       {
          if ( transferrable->isExchangable() ) {
-            slider = new PG_Slider( this, PG_Rect( 0, 30, pos.w, 15 ),  PG_ScrollBar::HORIZONTAL );
+            slider = new PG_Slider( this, PG_Rect( 0, 25, pos.w, 15 ),  PG_ScrollBar::HORIZONTAL );
    
             updateRange();
    

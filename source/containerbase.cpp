@@ -397,10 +397,10 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
 
 bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
 {
-
+   bool isConquering = isBuilding() && getMap()->getPlayer(this).diplomacy.isHostile( vehicle) && vehicle->color != color;
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
-      if ( vehiclesLoaded() < baseType->maxLoadableUnits || (vehicle->color != color ) )
-         if ( cargoWeight() + vehicle->weight() <= baseType->maxLoadableWeight || findParent ( vehicle ) || (vehicle->color != color )) // if the unit is already  loaded, the container already bears its weight
+      if ( vehiclesLoaded() < baseType->maxLoadableUnits || isConquering )
+         if ( cargoWeight() + vehicle->weight() <= baseType->maxLoadableWeight || findParent ( vehicle ) || isConquering) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;

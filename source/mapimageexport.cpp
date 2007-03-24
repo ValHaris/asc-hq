@@ -29,7 +29,6 @@ WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
    int bufsizex = actmap->xsize * fielddistx + 200 ;
    int bufsizey = actmap->ysize * fielddisty + 200 ;
    surface = Surface::createSurface( bufsizex, bufsizey, 32, Surface::transparent << 24 );
-   
 }
 
 
@@ -47,24 +46,22 @@ void WholeMapRenderer::renderVisibility()
 
    Surface& mask = IconRepository::getIcon("largehex.pcx");
    for ( int y = 0; y < gamemap->ysize; ++y )
-      for ( int x = 0; x < gamemap->xsize; ++x ) {
-         int view = -1;
-         int maxview = 0;
-         for ( int i = 1; i < gamemap->getPlayerCount(); ++i )
-            if ( fieldvisiblenow( gamemap->getField(x,y), i, gamemap )) {
+      for ( int x = 0; x < gamemap->xsize; ++x ) 
+         if ( fieldvisiblenow( gamemap->getField(x,y), gamemap->getPlayerView(), gamemap )) {
+            int view = -1;
+            int maxview = 0;
+            for ( int i = 1; i < gamemap->getPlayerCount(); ++i )
                if ( gamemap->getField(x,y)->view[i].view > maxview ) {
                   maxview = gamemap->getField(x,y)->view[i].view;
                   view = i;
                }
-            }
 
-
-         if ( view >= 0 )
-            for ( int yp = 0; yp < fieldsizey; ++yp)
-               for ( int xp = 0; xp < fieldsizex; ++xp)
-                  if ( mask.GetPixel(xp,yp) != 0xff ) 
-                     pp.set( getFieldPos(x,y) + SPoint(xp,yp), gamemap->getPlayer( view ).getColor().MapRGBA( surface.getBaseSurface()->format, min(maxview,150)*2/3));
-      }
+            if ( view >= 0 )
+               for ( int yp = 0; yp < fieldsizey; ++yp)
+                  for ( int xp = 0; xp < fieldsizex; ++xp)
+                     if ( mask.GetPixel(xp,yp) != 0xff ) 
+                        pp.set( getFieldPos(x,y) + SPoint(xp,yp), gamemap->getPlayer( view ).getColor().MapRGBA( surface.getBaseSurface()->format, min(maxview,150)*2/3));
+         }
 }
 
 
