@@ -144,8 +144,8 @@ class AdminGameWindow : public ASC_PG_Dialog {
       {
          for ( int j = 0; j< gamemap->getPlayerCount(); ++j ) {
             if ( j != player ) {
-               gamemap->getPlayer(player).diplomacy.setState( j, TRUCE, false );
-               gamemap->getPlayer(j).diplomacy.setState( player, TRUCE, false );
+               gamemap->getPlayer(player).diplomacy.setState( j, WAR, false );
+               gamemap->getPlayer(j).diplomacy.setState( player, WAR, false );
             }
          }
       }

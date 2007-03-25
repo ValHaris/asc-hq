@@ -178,7 +178,9 @@ void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
 
    QueuedStateChanges::iterator i = targ.queuedStateChanges.find( player.getPosition() );
          
-   if ( i == targ.queuedStateChanges.end() || (s < getState( towardsPlayer ) && i->second > getState(towardsPlayer))) {
+   DiplomaticStates currentState = getState( towardsPlayer ) ;
+
+   if ( i == targ.queuedStateChanges.end() || (s < currentState && i->second > currentState)) {
       // we only send a message if this is an initial proposal OR
       // if the other player proposed a more peaceful state, but we are setting a more hostile state
       ASCString txt;

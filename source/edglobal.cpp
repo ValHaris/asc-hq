@@ -349,9 +349,16 @@ ASCString getPlayerStrength( GameMap* gamemap )
    for ( int i = 0; i< gamemap->getPlayerCount(); ++i ) {
       double strength = 0;
       Resources r;
+      Resources total;
       for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
          strength += unitStrengthValue( *j );
          r += (*j)->typ->productionCost;
+         total += (*j)->typ->productionCost;
+         total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
+      }
+
+      for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); ++j ) {
+         total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
       }
 
       message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
@@ -359,12 +366,13 @@ ASCString getPlayerStrength( GameMap* gamemap )
       ASCString s;
       s.format("%9.0f", ceil(strength/10000) );
       message += s + "\n";
-      message += "Unit production cost: \n";
-      for ( int k = 0; k < 3; ++k ) {
+      message += "Unit production cost ";
+      for ( int k = 1; k < 2; ++k ) { // just material
          message += resourceNames[k];
-         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "\n";
+         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "k\n";
       }
-      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size()));
+      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size())) + "\n";
+      message += "Material index: " + ASCString::toString( total.material/1000 ) + "k\n";
       message += "\n\n";
 
    }
@@ -375,13 +383,18 @@ ASCString getPlayerStrength( GameMap* gamemap )
 
 void pbpplayerstatistics( GameMap* gamemap )
 {
-   ASCString msg= "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n"; 
-   
-   msg += "#fontsize=16#Visibility#fontsize=12#\n";
-   msg += getVisibilityStatistics( gamemap );
-   
-   msg += "#fontsize=16#Strength#fontsize=12#\n";
-   msg += getPlayerStrength( gamemap );
+   ASCString msg;
+   { 
+      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "calculating... " );
+
+      msg = "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n"; 
+      
+      msg += "#fontsize=16#Visibility#fontsize=12#\n";
+      msg += getVisibilityStatistics( gamemap );
+      
+      msg += "#fontsize=16#Strength#fontsize=12#\n";
+      msg += getPlayerStrength( gamemap );
+   }
    
    ViewFormattedText vft ( "Map Statistics", msg, PG_Rect(-1,-1,600,600));
    vft.Show();

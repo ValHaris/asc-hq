@@ -95,6 +95,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addInteger("XResolution", xresolution, xresolution);
    pc.addInteger("YResolution", yresolution, yresolution);
    pc.addString("GraphicsDriver", graphicsDriver, graphicsDriver );
+   pc.addBool("HardwareSurface", hardwareSurface, hardwareSurface );
 
    pc.addInteger("MapEditor_XResolution", mapeditor_xresolution, mapeditor_xresolution);
    pc.addInteger("MapEditor_YResolution", mapeditor_yresolution, mapeditor_yresolution);
@@ -288,6 +289,7 @@ void CGameOptions::setDefaults ( void )
    mapeditor_yresolution = 740;
 
    graphicsDriver = "default";
+   hardwareSurface = false;
 
    automaticTraining = true;
 

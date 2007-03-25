@@ -302,20 +302,22 @@ void AllianceSetupWidget::Apply()
             if ( getState( acting, second ) != actmap->player[acting].diplomacy.getState( second ))
                actmap->player[acting].diplomacy.setState( second, getState( acting, second ));         
          } else {
-            if ( stateChanges[acting][second] == SNEAK_ATTACK ) {
-               actmap->player[acting].diplomacy.sneakAttack( second );         
-            } else {
-               DiplomaticStates s = DiplomaticStates( stateChanges[acting][second] - 1);
-               DiplomaticStates t;
-               DiplomaticStateVector::QueuedStateChanges::iterator q = actmap->player[acting].diplomacy.queuedStateChanges.find( second );
-               if ( q == actmap->player[acting].diplomacy.queuedStateChanges.end() )
-                  t = getState( acting, second );
-               else
-                  t = q->second;   
-                  
-               if ( t != s )
-                  actmap->player[acting].diplomacy.propose( second, s );         
-            }   
+            if ( acting == actmap->actplayer ) {
+               if ( stateChanges[acting][second] == SNEAK_ATTACK ) {
+                  actmap->player[acting].diplomacy.sneakAttack( second );         
+               } else {
+                  DiplomaticStates s = DiplomaticStates( stateChanges[acting][second] - 1);
+                  DiplomaticStates t;
+                  DiplomaticStateVector::QueuedStateChanges::iterator q = actmap->player[acting].diplomacy.queuedStateChanges.find( second );
+                  if ( q == actmap->player[acting].diplomacy.queuedStateChanges.end() )
+                     t = getState( acting, second );
+                  else
+                     t = q->second;   
+                     
+                  if ( t != s )
+                     actmap->player[acting].diplomacy.propose( second, s );         
+               }   
+            }
          }
       }
 };

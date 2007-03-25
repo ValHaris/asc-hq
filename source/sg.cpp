@@ -536,6 +536,10 @@ void showSDLInfo()
    s += "Hardware surfaces available: ";
    s += videoInfo->hw_available ? "yes" : "no";
 
+
+   s += "\nScreen uses hardware surface: ";
+   s += PG_Application::GetScreen()->flags & SDL_HWSURFACE ? "yes" : "no";
+
    s += "\nWindow manager available: ";
    s += videoInfo->wm_available ? "yes" : "no";
 
@@ -1546,7 +1550,13 @@ int main(int argc, char *argv[] )
 
    cursorMoved.connect( updateFieldInfo );
 
-   int flags = SDL_SWSURFACE;
+   int flags = 0;
+
+   if ( CGameOptions::Instance()->hardwareSurface )
+      flags |= SDL_HWSURFACE;
+   else
+      flags |= SDL_SWSURFACE;
+
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
 

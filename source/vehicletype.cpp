@@ -1194,7 +1194,7 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    } else {
       pc.openBracket("WeaponEffectiveness" );
       for ( int i = 0; i < cmovemalitypenum; i++ )
-         if ( targetingAccuracy[i] != 100 )
+         // if ( targetingAccuracy[i] != 100 )
             pc.addInteger( unitCategoryTags[i], targetingAccuracy[i] );
       pc.closeBracket();
    }

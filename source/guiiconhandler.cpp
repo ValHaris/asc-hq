@@ -271,7 +271,37 @@ void NewGuiHost::lockOptionsChanged( int options )
 }
 
 
-PG_Widget* NewGuiHost :: smallButtonHolder = NULL;
+class SmallButtonHolder : public SpecialInputWidget {
+   public:
+      void Lock() { SetCapture(); };
+      void Unlock() { ReleaseCapture(); };
+
+      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ) {};
+      bool eventMouseMotion (const SDL_MouseMotionEvent *motion) { return true; };
+      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) { return true; };
+      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { Unlock(); return true; };
+
+      bool ProcessEvent(const SDL_Event * event, bool bModal) { return SpecialInputWidget::ProcessEvent( event, bModal ); };
+      bool ProcessEvent ( const SDL_Event *   event  )
+      {
+         /*
+         PG_RectList* cl = GetChildList ();
+		   for(PG_Widget* i = cl->first(); i != NULL; i = i->next()) {
+			   if ( i->ProcessEvent( event, true ))
+               return true;
+		   }
+         */
+        
+         if ( SpecialInputWidget::ProcessEvent( event, true )) 
+            return true;
+             
+         return false;
+      }
+};
+
+
+
+SmallButtonHolder* NewGuiHost :: smallButtonHolder = NULL;
 
 
 void NewGuiHost::evalCursor()
@@ -368,13 +398,6 @@ void NewGuiHost::disableButtons( int i )
    }
 }
 
-class SmallButtonHolder : public SpecialInputWidget {
-   public:
-      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ) {};
-      bool eventMouseMotion (const SDL_MouseMotionEvent *motion) { return true; };
-      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) { return true; };
-      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { return true; };
-};
 
 
 bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio )
@@ -480,6 +503,8 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
    if ( smallButtonHolder && count ) {
       smallButtonHolder->BringToFront();
       smallButtonHolder->Show();
+      // smallButtonHolder->Lock();
+
       if ( firstSmallButton ) {
          firstSmallButton->press();
          firstSmallButton->showInfoText();
@@ -625,8 +650,10 @@ bool NewGuiHost::clearSmallIcons()
 
 bool NewGuiHost::clearSmallIcons()
 {
-   if ( smallButtonHolder )
+   if ( smallButtonHolder ) {
+      smallButtonHolder->ReleaseCapture();
       smallButtonHolder->Hide();
+   }
    return true;
 }
 

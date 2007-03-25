@@ -88,6 +88,9 @@ class CGameOptions
       //! force ASC to run in windowed mode (and not fullscreen, which is default)
       bool forceWindowedMode;
 
+      //! use screen buffer on the graphics card instead of main memory
+      bool hardwareSurface;
+
       //! enables the option to review your own replay to find replay bugs
       bool debugReplay;
 

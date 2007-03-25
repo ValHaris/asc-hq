@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.1.2.27 2007-03-24 15:55:43 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.1.2.28 2007-03-25 10:07:18 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -110,7 +110,6 @@ class SmallGuiButton : public PG_Button {
 
 
 
-
 class GuiIconHandler {
 
        typedef list<GuiFunction*> Functions;
@@ -141,6 +140,7 @@ class GuiIconHandler {
 
 class MapDisplayPG;
 class MainScreenWidget;
+class SmallButtonHolder;
 
 class NewGuiHost : public DashboardPanel {
         GuiIconHandler* handler;
@@ -166,7 +166,7 @@ class NewGuiHost : public DashboardPanel {
         SmallGuiButton* getSmallButton( int i );
         
         
-        static PG_Widget* smallButtonHolder;
+        static SmallButtonHolder* smallButtonHolder;
 
 
         bool eventKeyDown(const SDL_KeyboardEvent* key);
