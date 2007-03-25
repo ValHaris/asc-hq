@@ -427,9 +427,9 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitIntoInnerContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
-         handler.registerUserFunction( new CargoGuiFunctions::CloseDialog( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitInfo( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::TransferUnitControl( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::CloseDialog( *this ));
       }
 
       void checkStoringPosition( Vehicle* unit )

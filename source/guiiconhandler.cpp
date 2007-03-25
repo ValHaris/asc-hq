@@ -272,15 +272,16 @@ void NewGuiHost::lockOptionsChanged( int options )
 
 
 class SmallButtonHolder : public SpecialInputWidget {
+      bool locked;
    public:
-      void Lock() { SetCapture(); };
-      void Unlock() { ReleaseCapture(); };
+      void Lock() { SetCapture(); locked = true; };
+      void Unlock() { ReleaseCapture(); locked = false; };
 
-      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ) {};
+      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ), locked(false) {};
       bool eventMouseMotion (const SDL_MouseMotionEvent *motion) { return true; };
       bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) { return true; };
       bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { Unlock(); return true; };
-
+      
       bool ProcessEvent(const SDL_Event * event, bool bModal) { return SpecialInputWidget::ProcessEvent( event, bModal ); };
       bool ProcessEvent ( const SDL_Event *   event  )
       {
@@ -292,11 +293,23 @@ class SmallButtonHolder : public SpecialInputWidget {
 		   }
          */
         
+         bool result = false;
+         
+         if ( locked ) 
+            ReleaseCapture();
+         
          if ( SpecialInputWidget::ProcessEvent( event, true )) 
-            return true;
+            result = true;
+         
+         if ( locked )
+            SetCapture();
              
-         return false;
+         if ( !result && event->type == SDL_MOUSEBUTTONUP )
+            Unlock();
+         
+         return result;
       }
+
 };
 
 
@@ -453,7 +466,7 @@ SmallGuiButton* NewGuiHost::getSmallButton( int i )
 
 bool   NewGuiHost::ProcessEvent (const SDL_Event *event, bool bModal)
 {
-   if ( smallButtonHolder && smallButtonHolder->ProcessEvent( event, bModal ))
+   if ( smallButtonHolder && smallButtonHolder->ProcessEvent( event ))
       return true;
    
    if ( DashboardPanel::ProcessEvent( event, bModal ))
@@ -503,7 +516,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
    if ( smallButtonHolder && count ) {
       smallButtonHolder->BringToFront();
       smallButtonHolder->Show();
-      // smallButtonHolder->Lock();
+      smallButtonHolder->Lock();
 
       if ( firstSmallButton ) {
          firstSmallButton->press();
@@ -650,8 +663,8 @@ bool NewGuiHost::clearSmallIcons()
 
 bool NewGuiHost::clearSmallIcons()
 {
-   if ( smallButtonHolder ) {
-      smallButtonHolder->ReleaseCapture();
+   if ( smallButtonHolder && smallButtonHolder->IsVisible() ) {
+      smallButtonHolder->Unlock();
       smallButtonHolder->Hide();
    }
    return true;
