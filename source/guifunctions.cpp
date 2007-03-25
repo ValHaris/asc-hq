@@ -56,10 +56,16 @@ namespace GuiFunctions
 
 
 
-class AttackGui : public GuiIconHandler, public GuiFunction {
+class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
      VehicleAttack* attackEngine;
 
      pair<pattackweap, int> getEntry( const MapCoordinate& pos, int num );
+
+      void mapDeleted( GameMap& map )
+      {
+         if ( NewGuiHost::getIconHandler() == this )
+            NewGuiHost::popIconHandler();
+      }
 
    protected:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
@@ -69,7 +75,10 @@ class AttackGui : public GuiIconHandler, public GuiFunction {
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
    public:
-      AttackGui() : attackEngine( NULL ) {};
+      AttackGui() : attackEngine( NULL ) 
+      {
+         GameMap::sigMapDeletion.connect( SigC::slot( *this, &AttackGui::mapDeleted )); 
+      };
       void setupWeapons( VehicleAttack* va ) { attackEngine = va; };
       void eval( const MapCoordinate& mc, ContainerBase* subject );
 
@@ -1567,9 +1576,16 @@ class RemoveMine : public GuiFunction
 
 
 
-class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
+class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
       Vehicle* veh;
       bool buttonDone( std::map<int,bool>& map, int id ) { return map.find( id ) != map.end(); };
+
+      void mapDeleted( GameMap& map )
+      {
+         if ( NewGuiHost::getIconHandler() == this )
+            NewGuiHost::popIconHandler();
+      }
+
    protected:
       enum Mode { Build, Remove };
 
@@ -1585,7 +1601,11 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction {
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
    public:
-      ObjectBuildingGui() : veh( NULL ) {};
+      ObjectBuildingGui() : veh( NULL ) 
+      { 
+         GameMap::sigMapDeletion.connect( SigC::slot( *this, &ObjectBuildingGui::mapDeleted )); 
+      };
+
       bool init( Vehicle* vehicle );
       void eval( const MapCoordinate& mc, ContainerBase* subject );
 
@@ -1919,8 +1939,15 @@ void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, in
 
 
 
-class VehicleBuildingGui : public GuiIconHandler, public GuiFunction {
+class VehicleBuildingGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
       Vehicle* veh;
+
+      void mapDeleted( GameMap& map )
+      {
+         if ( NewGuiHost::getIconHandler() == this )
+            NewGuiHost::popIconHandler();
+      }
+
    protected:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int id  );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int id  );
@@ -1932,7 +1959,11 @@ class VehicleBuildingGui : public GuiIconHandler, public GuiFunction {
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
    public:
-      VehicleBuildingGui() : veh( NULL ) {};
+      VehicleBuildingGui() : veh( NULL ) 
+      { 
+         GameMap::sigMapDeletion.connect( SigC::slot( *this, &VehicleBuildingGui::mapDeleted )); 
+      };
+
       bool init( Vehicle* vehicle );
       void eval( const MapCoordinate& mc , ContainerBase* subject );
 
@@ -2117,9 +2148,16 @@ void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, i
 
 
 
-class BuildingConstruction : public GuiIconHandler, public GuiFunction {
+class BuildingConstruction : public GuiIconHandler, public GuiFunction, public SigC::Object {
       Vehicle* veh;
       int bldid;
+
+      void mapDeleted( GameMap& map )
+      {
+         if ( NewGuiHost::getIconHandler() == this )
+            NewGuiHost::popIconHandler();
+      }
+
       map<MapCoordinate,int> entryPos;
    protected:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int id  );
@@ -2132,7 +2170,10 @@ class BuildingConstruction : public GuiIconHandler, public GuiFunction {
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
 
    public:
-      BuildingConstruction() : veh( NULL ), bldid(-1) {};
+      BuildingConstruction() : veh( NULL ), bldid(-1) 
+      { 
+         GameMap::sigMapDeletion.connect( SigC::slot( *this, &BuildingConstruction::mapDeleted )); 
+      };
       bool init( Vehicle* vehicle );
       bool setup();
       void eval( const MapCoordinate& mc, ContainerBase* subject );

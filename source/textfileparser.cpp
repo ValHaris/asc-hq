@@ -68,10 +68,13 @@ TextPropertyGroup* TextPropertyList::get ( int id )
 ///////////////////// TextPropertyGroup //////////////////////////
 
 
-void TextPropertyGroup :: error ( const ASCString& msg )
+void TextPropertyGroup :: error ( const ASCString& msg, bool printInheritance )
 {
-   fatalError ( "Error evaluating file " + location + "\n" + msg + "\nThe inheritance is\n" + listInheritanceFilenames() );
+   ASCString message = "Error evaluating file " + location + "\n" + msg;
+   if ( printInheritance )
+      message += "\nThe inheritance is\n" + listInheritanceFilenames() ;
 
+   fatalError ( message );
 }
 
 void TextPropertyGroup :: print( int indent )
@@ -99,7 +102,7 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
 
    if ( !inheritanceBuild ) {
       if ( std::find ( callStack.begin(), callStack.end(), this ) != callStack.end() )
-         error ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ));
+         error ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ), false);
 
       callStack.push_back( this );
 

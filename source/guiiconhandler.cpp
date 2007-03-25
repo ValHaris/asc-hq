@@ -337,8 +337,10 @@ void NewGuiHost::evalCursor()
 
 void NewGuiHost::mapDeleted( GameMap& map )
 {
+   /*
    while ( theGuiHost->iconHandlerStack.size() >= 1 )
       popIconHandler();
+      */
 }
 
 

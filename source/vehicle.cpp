@@ -224,7 +224,7 @@ int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int s
       if ( player < 0 )
          player = getMap()->actplayer;
       
-      if ( player != getOwner() && !getMap()->getPlayer(getOwner()).diplomacy.getState(player) > PEACE )
+      if ( player != getOwner() && !(getMap()->getPlayer(getOwner()).diplomacy.getState(player) > PEACE) )
          return 0;
 
       int spaceAvail = getStorageCapacity().resource( resourcetype ) - tank.resource(resourcetype);
