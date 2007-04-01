@@ -391,6 +391,13 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
       setBargraphValue( "unitenergy", veh->getStorageCapacity().energy ? float( veh->getTank().energy) / veh->getStorageCapacity().energy : 0  );
       setLabelText( "unitenergystatus", veh->getTank().energy );
 
+      int endurance = UnitHooveringLogic::getEndurance( veh );
+      if ( endurance >= 0 )
+         setLabelText( "unitEndurance", endurance );
+      else
+         setLabelText( "unitEndurance", "-" );
+
+
       ASCString moveString = ASCString::toString( veh->getMovement() / 10 );
       if ( veh->getMovement() % 10 )
          moveString += "." + ASCString::toString(veh->getMovement()%10);

@@ -1721,3 +1721,34 @@ ASCString getUnitReference ( Vehicle* veh )
    return s;
 }
 
+
+
+int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
+{
+   if ( veh->height < chtieffliegend || veh->height > chhochfliegend )
+      return 0;
+
+   int mo = veh->maxMovement();
+   if ( mo )
+      return ( mo - veh->getMovement(false) )  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
+   else
+      return (veh->getMap()->weather.windSpeed * maxwindspeed / 256 ) * veh->typ->fuelConsumption / ( minmalq * 64 );
+}
+
+int UnitHooveringLogic::getEndurance ( const Vehicle* veh )
+{
+   if ( veh->height < chtieffliegend || veh->height > chhochfliegend || veh->typ->fuelConsumption <= 0)
+      return -1;
+
+
+   int fuelUsage = calcFuelUsage( veh );
+   if ( fuelUsage > veh->getTank().fuel )
+      return 0;
+
+
+   int fields = (veh->getTank().fuel - fuelUsage) * FuelConsumption / (veh->typ->fuelConsumption * 100 ); 
+   if ( veh->maxMovement() )
+      return 1 + (fields / veh->maxMovement() );
+   else
+      return 1;
+}

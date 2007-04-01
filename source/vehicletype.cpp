@@ -1027,7 +1027,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.closeBracket ();
 
-   if ( pc.find( "guideSortHelp") )
+   if ( pc.find( "guideSortHelp") || !pc.isReading() )
       pc.addIntegerArray("guideSortHelp", guideSortHelp );
 
    bool hasService = false;

@@ -1168,37 +1168,7 @@ void GameMap::endTurn()
             toRemove.push_back ( *v );
          } else {
 
-            int j = actvehicle->getTank().fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
-
-            if ( actvehicle->height <= chhochfliegend ) {
-               int mo = actvehicle->typ->movement[log2(actvehicle->height)];
-               if ( mo )
-                  j -= ( actvehicle->getMovement() * 64 / mo)  * (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-               else
-                  j -= (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-            }
-           //          movement * 64        windspeed * maxwindspeed         fuelConsumption
-           // j -=   ----------------- *  ----------------------------- *   -----------
-           //          typ->movement                 256                       64 * 8
-           //
-           //
-
-           //gek?rzt:
-           //
-           //             movement            windspeed * maxwindspeed
-           // j -= --------------------- *  ----------------------------   * fuelConsumption
-           //           typ->movement             256   *      8
-           //
-           //
-           //
-           // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
-           // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
-           // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so da�er hier nur
-
-           // noch fuer das ?briggebliebene movement stattfinden mu�
-           //
-
-
+            int j = actvehicle->getTank().fuel - UnitHooveringLogic::calcFuelUsage( actvehicle );
             if (j < 0) {
                new Message ( getUnitReference( *v ) + " crashed due to lack of fuel", this, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );

@@ -65,6 +65,9 @@ class TechDependency: public LoadableItemType {
      */
      bool eventually_available( const Research& res, list<const Technology*>* dependencies ) const;
      bool eventually_available( const Research& res, list<const Technology*>* dependencies, list<int>& stack ) const;
+
+
+     ASCString showDebug( const Research& research ) const;
      
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
@@ -102,6 +105,7 @@ class TechAdapterDependency {
    public:
      TechAdapterDependency();
      bool available( const Research& research ) const;
+     ASCString showDebug( const Research& research ) const;
 
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;

@@ -25,6 +25,22 @@
 
 class BuildingType;
 
+
+class UnitHooveringLogic {
+   //! the percentage of fuel that is required for a flying plane just hoovering in the air (unit: percentage)
+   static const int FuelConsumption = 50;
+
+   public:
+      static int calcFuelUsage( const Vehicle* veh );
+
+      /** calculates the time until the unit crashes because of lack of fuel
+          \returns time in turns or -1 if the unit can't crash because of missing fuel in its current height
+      */
+      static int getEndurance ( const Vehicle* veh );
+
+};
+
+ 
  class Vehicle : public ContainerBase {
     bool cleanRemove;
 

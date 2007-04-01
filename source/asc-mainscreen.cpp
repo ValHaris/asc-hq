@@ -225,6 +225,7 @@ void Menu::setup()
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
    currentMenu->addSeparator();
    addbutton ( "resource analysis", ua_resourceAnalysis );
+   addbutton ( "show techadapter", ua_showTechAdapter );
    currentMenu->addSeparator();
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);

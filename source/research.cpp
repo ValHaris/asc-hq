@@ -330,6 +330,52 @@ void TechDependency::writeInvertTreeOutput ( const ASCString techName, tnstream&
       }
 }
 
+ASCString TechDependency::showDebug( const Research& research ) const
+{
+   ASCString s;
+   if ( requireAllListedTechnologies )
+      s += "All of the following Technologies required:\n";
+   else
+      s += "One of the following Technologies required:\n";
+
+   s += "#indent=20,20#";
+   for ( RequiredTechnologies::const_iterator r = requiredTechnologies.begin(); r != requiredTechnologies.end(); ++r ) {
+      for ( int i = r->from; i <= r->to; ++i ) {
+         Technology* t = technologyRepository.getObject_byID(i);
+         if ( t ) {
+            s += "  " + t->name + " ";
+            if ( research.techResearched( t->id ))
+               s += "#fontcolor=0x00FF00#available";
+            else
+               s += "#fontcolor=0xFF0000#missing";
+            s += "#fontcolor=default#\n";
+         }
+      }
+   }
+   s += "#indent=0,0#";
+
+   if ( !blockingTechnologies.empty() ) {
+      s += "The following Technologies must NOT be researched:\n";
+      s += "#indent=20,20#";
+      for ( RequiredTechnologies::const_iterator r =  blockingTechnologies.begin(); r !=  blockingTechnologies.end(); ++r ) {
+         for ( int i = r->from; i <= r->to; ++i ) {
+            Technology* t = technologyRepository.getObject_byID(i);
+            if ( t ) {
+               s += "  " + t->name;
+               if ( !research.techResearched( t->id ))
+                  s += "#fontcolor=0x00FF00#not available";
+               else
+                  s += "#fontcolor=0xFF0000#available";
+               s += "#fontcolor=default#\n";
+            }
+         }
+      }
+   }
+
+   return s;
+}
+
+
 
 
 void TechAdapter::read ( tnstream& stream )
@@ -431,6 +477,25 @@ void TechAdapterDependency::writeInvertTreeOutput ( const ASCString& tech, tnstr
             (*i)->techDependency.writeInvertTreeOutput ( tech, stream, history, blockedPrintList, onlyWithBaseTechs );
 }
 
+ASCString TechAdapterDependency::showDebug( const Research& research ) const
+{
+   ASCString s;
+   if ( requireAllListedTechAdapter )
+      s += "All of the following TechAdapter required:\n";
+   else
+      s += "One of the following TechAdapter required:\n";
+
+   for ( RequiredTechAdapter::const_iterator r = requiredTechAdapter.begin(); r != requiredTechAdapter.end(); ++r ) {
+      s += "  " + *r;
+      if ( research.techAdapterAvail( *r ))
+         s += "#image=pad_symbol_ok.png#";
+      else
+         s += "#image=pad_symbol_no.png#";
+      s += "\n";
+   }
+
+   return s;
+}
 
 
 Technology::Technology()
@@ -710,11 +775,28 @@ void Research::evalTechAdapter()
 ASCString Research::listTriggeredTechAdapter() const
 {
    ASCString s;
-   for ( TriggeredTechAdapter::const_iterator i = triggeredTechAdapter.begin(); i != triggeredTechAdapter.end(); ++i )
+   for ( TriggeredTechAdapter::const_iterator i = triggeredTechAdapter.begin(); i != triggeredTechAdapter.end(); ++i ) {
+      s += "#fontsize=14# ";
       s += i->first + "\n";
+      s += "#fontsize=10#";
+      int counter = 0;
+      for ( TechAdapterContainer::iterator j = techAdapterContainer.begin(); j != techAdapterContainer.end(); ++j ) {
+         if ( (*j)->getName() == i->first ) {
+            if ( counter )
+               s += " ----\n";
+            ++counter;
+
+            s += (*j)->techDependency.showDebug( *this );
+         }
+      }
+      s += "#fontsize=14#\n";
+      
+
+   }
    
    return s;
 }
+
 
 
 

@@ -33,6 +33,7 @@
 #include "selectionwindow.h"
 
 #include "pgmultilineedit.h"
+#include "../widgets/textrenderer.h"
 
 class TechWidget: public SelectionWidget  {
       const Technology* tech;
@@ -254,6 +255,18 @@ class ChooseTech : public ASC_PG_Dialog
             return false;
       }
 
+      bool showPrerequisites()
+      {
+         if ( goal ) {
+            ASCString msg = "Prerequisites for Technology " + goal->name + ":\n";
+            msg += goal->techDependency.showDebug( player.research );
+            ViewFormattedText vft("Technology Prerequisites", msg, PG_Rect( -1, -1, 500, 400 ));
+            vft.Show();
+            vft.RunModal();
+         }
+         return true;
+      }
+
    
    public:
       ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 770, 600), "Choose Technology" ) , factory(NULL), player( my_player ), goal(NULL)
@@ -268,6 +281,7 @@ class ChooseTech : public ASC_PG_Dialog
          pointsLabel = new PG_Label( this, PG_Rect( 450, 250, 300, 25 ));
          availLabel = new PG_Label( this, PG_Rect( 450, 280, 300, 25 ), "Accumulated research points: " + ASCString::toString( player.research.progress) );
 
+         (new PG_Button( this, PG_Rect( 450, 320, 300, 20), "List Prerequisites" ))->sigClick.connect( SigC::slot( *this, &ChooseTech::showPrerequisites ));
 
          AddStandardButton("~O~K")->sigClick.connect( SigC::slot( *this, &ChooseTech::ok ));
       };

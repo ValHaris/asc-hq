@@ -1187,6 +1187,11 @@ void execuseraction2 ( tuseractions action )
          gp.RunModal();
           break;
       };
+      case ua_showTechAdapter: {
+               ViewFormattedText vft("TechAdapter", actmap->getCurrentPlayer().research.listTriggeredTechAdapter(), PG_Rect( -1,-1,300,500));
+               vft.Show();
+               vft.RunModal();
+                               };
 
       default:
          break;
