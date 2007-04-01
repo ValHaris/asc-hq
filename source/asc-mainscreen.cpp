@@ -226,6 +226,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "resource analysis", ua_resourceAnalysis );
    addbutton ( "show techadapter", ua_showTechAdapter );
+   addbutton ( "calc airplane endurance", ua_showUnitEndurance );
    currentMenu->addSeparator();
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);

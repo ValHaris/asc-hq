@@ -1728,11 +1728,34 @@ int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
    if ( veh->height < chtieffliegend || veh->height > chhochfliegend )
       return 0;
 
-   int mo = veh->maxMovement();
-   if ( mo )
-      return ( mo - veh->getMovement(false) )  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
+   if ( veh->maxMovement() )
+      return veh->getMovement(false)  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
    else
       return (veh->getMap()->weather.windSpeed * maxwindspeed / 256 ) * veh->typ->fuelConsumption / ( minmalq * 64 );
+}
+
+
+int UnitHooveringLogic::getEndurance ( const Vehicletype* veh, int height, int resourceModel )
+{
+   assert( height < 8 );
+   
+   if ( ! (veh->height & (chtieffliegend | chfliegend | chhochfliegend )))
+      return -1;
+   
+   if ( !veh->fuelConsumption )
+      return -1;
+   
+   int maxmove;
+   if ( height == -1 ) 
+      maxmove = max( max( veh->movement[4], veh->movement[5]), veh->movement[6] );
+   else 
+      maxmove = veh->movement[height];
+      
+   int fields = veh->getStorageCapacity(resourceModel).fuel * 100 / (veh->fuelConsumption * FuelConsumption ); 
+   if ( maxmove )
+      return (fields * minmalq / maxmove );
+   else
+      return 0;
 }
 
 int UnitHooveringLogic::getEndurance ( const Vehicle* veh )
@@ -1746,9 +1769,9 @@ int UnitHooveringLogic::getEndurance ( const Vehicle* veh )
       return 0;
 
 
-   int fields = (veh->getTank().fuel - fuelUsage) * FuelConsumption / (veh->typ->fuelConsumption * 100 ); 
+   int fields = (veh->getTank().fuel - fuelUsage) * 100 / (veh->typ->fuelConsumption * FuelConsumption ); 
    if ( veh->maxMovement() )
-      return 1 + (fields / veh->maxMovement() );
+      return 1 + (fields * minmalq / veh->maxMovement() );
    else
       return 1;
 }

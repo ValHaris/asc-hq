@@ -22,6 +22,7 @@
 #include "../vehicle.h"
 #include "../containerbase.h"
 #include "../gamemap.h"
+#include "../unitset.h"
 
 
 
@@ -74,7 +75,7 @@ VehicleCounterFactory :: VehicleCounterFactory( GameMap* actmap ) : gamemap ( ac
    for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
       items.push_back( i->first );
       
-   sort( items.begin(), items.end(), VehicleComp );
+   sort( items.begin(), items.end(), vehicleComp );
    restart();
 };
 
@@ -85,7 +86,7 @@ VehicleCounterFactory::VehicleCounterFactory( const ContainerBase* container ) :
    for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
       items.push_back( i->first );
       
-   sort( items.begin(), items.end(), VehicleComp );
+   sort( items.begin(), items.end(), vehicleComp );
    restart();
 }
 

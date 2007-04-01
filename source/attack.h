@@ -342,10 +342,8 @@ extern bool vehicleplattfahrbar( const Vehicle* vehicle, const tfield* field );
 class WeapDist
 {
    public:
-      float getWeapStrength ( const SingleWeapon* weap, int dist =-1, int attacker_height =-1, int defender_height = -1, int reldiff = -1 );
+      static float getWeapStrength ( const SingleWeapon* weap, int dist =-1, int attacker_height =-1, int defender_height = -1, int reldiff = -1 );
 };
-
-extern WeapDist weapDist;
 
 
 #endif

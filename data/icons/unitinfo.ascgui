@@ -84,10 +84,10 @@ panel {
      widget4 {
         type = dummy
         x = 104
-        y = 5
+        y = 1
         width = 55
-        height = 63
-        ChildWidgets = MoveSymbol MoveField RangeSymbol RangeField ArmorField ArmorSymbol
+        height = 66
+        ChildWidgets = MoveSymbol MoveField RangeSymbol RangeField ArmorField ArmorSymbol EnduranceField EnduranceSymbol
 
         textalign = center
         FontSize = 9
@@ -126,7 +126,7 @@ panel {
           type = image
           Filename = text-hole.png
           x = 15 
-          y = 21
+          y = 18
           widgetnum = 1
           ToolTipHelp = range with current fuel
           Widget0 {
@@ -144,7 +144,7 @@ panel {
           Filename = fuelrange.png
           ToolTipHelp = range with current fuel
           x = 1
-          y = 22
+          y = 19
           width = 14
           height = 14
         } RangeSymbol
@@ -153,7 +153,7 @@ panel {
           type = image
           Filename = text-hole.png
           x = 15
-          y = 42
+          y = 35
           widgetnum = 1
           Widget0 {
            type = Textoutput
@@ -171,12 +171,41 @@ panel {
           type = image
           Filename = shield.png
           x = 1
-          y = 43
+          y = 36
           width = 14
           height = 14
           ToolTipHelp = armor
         } Armorsymbol
 
+        EnduranceSymbol {
+          type = image
+          Filename = unitendurance.png
+          ToolTipHelp = time until unit runs out of fuel (without move)
+          x = 2
+          y = 53
+          width = 14
+          height = 14
+        } EnduranceSymbol
+              
+        EnduranceField {
+          type = image
+          Filename = text-hole.png
+          x = 15
+          y = 51
+          widgetnum = 1
+          Widget0 {
+           type = Textoutput
+           name = unitEndurance
+           ToolTipHelp = time until unit runs out of fuel (without move)
+
+           x = 3
+           y = 4
+           x2 = -3
+           height = 10
+          } Widget0
+        } EnduranceField
+        
+              
      } widget4
   } Widget0
 

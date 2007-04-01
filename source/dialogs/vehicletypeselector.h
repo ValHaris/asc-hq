@@ -101,6 +101,5 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       void itemSelected( const SelectionWidget* widget, bool mouse );
 };
 
-bool VehicleComp ( const Vehicletype* v1, const Vehicletype* v2 );
 
 #endif

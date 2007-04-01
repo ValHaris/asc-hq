@@ -37,6 +37,7 @@ class UnitHooveringLogic {
           \returns time in turns or -1 if the unit can't crash because of missing fuel in its current height
       */
       static int getEndurance ( const Vehicle* veh );
+      static int getEndurance ( const Vehicletype* veh, int height = -1, int resourceModel = 0 );
 
 };
 

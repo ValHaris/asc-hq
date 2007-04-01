@@ -68,4 +68,7 @@ class BuildingType;
 extern int getUnitSetID( const Vehicletype* veh );
 extern int getUnitSetID( const BuildingType* bld );
 
+extern bool vehicleComp( const Vehicletype* v1, const Vehicletype* v2 );
+
+
 #endif

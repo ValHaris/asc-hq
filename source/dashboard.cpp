@@ -470,6 +470,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
       setBargraphValue( "unitfuel", 0  );
       setBargraphValue( "unitmaterial",  0  );
       setBargraphValue( "unitenergy",  0  );
+      setLabelText( "unitEndurance", "" );
 
       setLabelText( "fuelrange", "-" );
       setLabelText( "movepoints", "" );

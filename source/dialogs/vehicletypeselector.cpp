@@ -145,20 +145,11 @@ VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( const Contai
 };
 
 
-bool VehicleComp ( const Vehicletype* v1, const Vehicletype* v2 )
-{
-   int id1 = getUnitSetID(v1);
-   int id2 = getUnitSetID(v2);
-   return (id1 <  id2) ||
-          (id1 == id2 && v1->movemalustyp  < v2->movemalustyp ) ||
-          (id1 == id2 && v1->movemalustyp == v2->movemalustyp && v1->name < v2->name);
-};
-
 
 void VehicleTypeSelectionItemFactory::restart()
 {
    items = getOriginalItems();
-   sort( items.begin(), items.end(), VehicleComp );
+   sort( items.begin(), items.end(), vehicleComp );
    it = items.begin();
 };
 

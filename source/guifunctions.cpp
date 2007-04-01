@@ -98,7 +98,7 @@ pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
 {
    int counter = 0;
    
-   AttackFieldList* afl;
+   AttackFieldList* afl = NULL;
    for ( int i = 0; i < 3; ++i ) {
       switch ( i ) {
          case 0: afl = &attackEngine->attackableVehicles; break;
