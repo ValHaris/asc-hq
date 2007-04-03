@@ -810,34 +810,50 @@ trunreplay :: trunreplay ( void )
    movenum = 0;
 }
 
-void trunreplay::error( const MapCoordinate& pos, const ASCString& message, ... )
+void trunreplay::error( const MapCoordinate& pos, const ASCString& message )
+{
+   error( message );
+}
+
+
+void trunreplay::error( const MapCoordinate& pos, const char* message, ... )
 {
    va_list paramlist;
    va_start ( paramlist, message );
    char tempbuf[1000];
-   int lng = vsprintf( tempbuf, message.c_str(), paramlist );
+   int lng = vsprintf( tempbuf, message, paramlist );
 
    error( tempbuf );
    // error( message + "\nPosition: " + pos.toString() );
 }
 
-void trunreplay::error( const ASCString& message, ... )
+void trunreplay::error( const char* message, ... )
 {
-   if ( CGameOptions::Instance()->replayMovieMode )
-      return;
-
-   // return;
-   va_list paramlist;
-   va_start ( paramlist, message );
    if ( message != lastErrorMessage ) {
+      va_list paramlist;
+      va_start ( paramlist, message );
+
       char tempbuf[1000];
 
-      int lng = vsprintf( tempbuf, message.c_str(), paramlist );
+      int lng = vsprintf( tempbuf, message, paramlist );
       if ( lng >= 1000 )
          displaymessage ( "trunreplay::error: String to long !\nPlease report this error", 1 );
 
       va_end ( paramlist );
       
+      displaymessage(tempbuf, 1 );
+      lastErrorMessage = message;
+   }
+}
+
+void trunreplay::error( const ASCString& message )
+{
+   if ( CGameOptions::Instance()->replayMovieMode )
+      return;
+
+   if ( message != lastErrorMessage ) {
+      char tempbuf[1000];
+
       displaymessage(tempbuf, 1 );
       lastErrorMessage = message;
    }

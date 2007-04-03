@@ -101,8 +101,10 @@ class trunreplay {
             void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ticker );
             int actplayer;
 
-            void error( const ASCString& message, ... );
-            void error( const MapCoordinate& pos, const ASCString& message, ... );
+            void error( const char* message, ... );
+            void error( const MapCoordinate& pos, const char* message, ... );
+            void error( const ASCString& message );
+            void error( const MapCoordinate& pos, const ASCString& message );
 
             char nextaction;
 
