@@ -2322,6 +2322,13 @@ namespace CargoGuiFunctions {
    
    ASCString RepairUnit::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
+      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+      if ( veh && parent.getContainer() ) {
+         Resources r;
+         parent.getContainer()->getMaxRepair ( veh, 0, r);
+         return "~r~epair unit (cost: " + r.toString() + ")";
+      }
+
       return "repair unit";
    };
 

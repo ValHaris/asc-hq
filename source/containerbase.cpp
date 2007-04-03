@@ -344,7 +344,12 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
 
 void ContainerBase :: clearCargo()
 {
-   cargo.clear();
+   while ( !cargo.empty() )
+      if ( cargo.front() )
+         delete cargo.front();
+      else
+         cargo.erase( cargo.begin() );
+
    cargoChanged();
 }
 

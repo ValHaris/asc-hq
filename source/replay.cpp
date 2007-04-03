@@ -1757,7 +1757,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 ContainerBase* bld = actmap->getUnit( serviceNWID );
+                                 ContainerBase* bld = actmap->getContainer( serviceNWID );
                                  Vehicle* dest = actmap->getUnit ( destnwid );
                                  if ( bld && dest ) {
                                     bld->repairItem ( dest, amount );

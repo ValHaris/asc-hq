@@ -1220,6 +1220,12 @@ class RepairUnit : public GuiFunction
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
+         tfield* fld = actmap->getField(pos);
+         if ( fld && fld->vehicle && pendingVehicleActions.service ) {
+            Resources r;
+            pendingVehicleActions.service->getVehicle()->getMaxRepair ( fld->vehicle, 0, r);
+            return "~r~epair unit (cost: " + r.toString() + ")";
+         }
          return "~r~epair a unit";
       };
 };
