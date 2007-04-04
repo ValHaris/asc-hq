@@ -52,6 +52,8 @@
 #include "unitset.h"
 #include "maped-mainscreen.h"
 
+#include "pgeventsupplier.h"
+
    bool       mapsaved;
 
 
@@ -2959,10 +2961,22 @@ void MapSwitcher :: toggle ( )
    maps[active].changed = !mapsaved;
    active = !active;
 
+   
+
    actmap = maps[active].map;
    mapsaved = !maps[active].changed;
 
+
+   if ( getMainScreenWidget() ) {
+      MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+      if ( md )
+         md->cursor.goTo( actmap->getCursor() );
+   }
+
    viewChanged();
+
+   int x,y;
+   while ( PG_Application::GetEventSupplier()->GetMouseState(x,y));
 }
 
 string MapSwitcher :: getName ()

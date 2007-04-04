@@ -108,8 +108,9 @@ class MapSwitcher {
            public:
               GameMap* map;
               bool changed;
-              int cursorx, cursory;
-              Mappntr ( ) : map ( NULL ), changed ( false ) { cursorx=cursory=0;};
+              MapCoordinate cursorpos;
+              MapCoordinate windowpos;
+              Mappntr ( ) : map ( NULL ), changed ( false ) {};
         } maps[2];
      public:
         enum Action { select, set };

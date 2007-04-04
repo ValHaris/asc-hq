@@ -160,7 +160,7 @@ class EditGameOptions : public ASC_PG_Dialog {
                }
 
                fullscreen = !CGameOptions::Instance()->forceWindowedMode;
-                  
+
             } else {
                if ( (x != CGameOptions::Instance()->mapeditor_xresolution || y != CGameOptions::Instance()->mapeditor_yresolution) && x && y ) {
                   warn = true;
@@ -171,7 +171,7 @@ class EditGameOptions : public ASC_PG_Dialog {
             }
 
             if ( warn )
-               infoMessage( "The new resolution will be used after you restart ASC");
+               infoMessage( "The new graphic settings will be active after you restart ASC");
 
             if ( getPGApplication().isFullscreen() != fullscreen ) 
                getPGApplication().toggleFullscreen();
