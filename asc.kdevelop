@@ -43,12 +43,12 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/martin/asc/v2/amd64/source/unix/asc/asc</mainprogram>
-      <programargs/>
+      <mainprogram>/home/martin/asc/v2/amd64/source/unix/mapeditor/asc_mapedit</mainprogram>
+      <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
-      <globaldebugarguments/>
+      <globaldebugarguments></globaldebugarguments>
       <globalcwd>/home/martin/asc/v2/amd64</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
@@ -191,13 +191,13 @@
   </kdevvisualadvance>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem></docsystem>
-      <docurl></docurl>
-      <usermanualurl></usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments></customArguments>
+    <customArguments/>
     <customTagfilePath>/home/martin/asc/v2/amd64/tags</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>

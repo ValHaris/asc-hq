@@ -161,7 +161,8 @@
         "Exchange Graphics",
         "Open Ctrl-key panel",
         "Close Ctrl-key panel",
-        "Dump all vehicle definitions" };
+        "Dump all vehicle definitions",
+        "Clear Selection" };
 
 
 
@@ -181,6 +182,12 @@ void SelectionHolder::setPlayer( int player )
    if ( currentItem )
       selectionChanged( currentItem );
 }
+
+void SelectionHolder::clear()
+{ 
+   currentItem = NULL;       
+   selectionChanged( NULL ); 
+}; 
 
 void SelectionHolder::setWeather( int weather )
 {
@@ -1021,6 +1028,8 @@ void execaction_pg(int code)
                                              veh->runTextIO( pc );
                                           }
                                         };
+      case act_clearSelection: selection.clear();
+      break;
    };
 }
 

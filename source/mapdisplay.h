@@ -325,6 +325,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
             MapCoordinate& pos();
           public:
             void goTo( const MapCoordinate& position );
+            void goTo( const MapCoordinate& cursorPosition, const MapCoordinate& upperLeftScreenCorner );
             void intoView();
       } cursor; 
             

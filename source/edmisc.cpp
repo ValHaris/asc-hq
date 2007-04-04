@@ -2959,6 +2959,13 @@ void MapSwitcher :: toggle ( )
 {
    maps[active].map = actmap;
    maps[active].changed = !mapsaved;
+   
+   if ( getMainScreenWidget() ) {
+      MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+      if ( md )
+         maps[active].windowpos = md->upperLeftCorner();
+   }
+   
    active = !active;
 
    
@@ -2970,13 +2977,16 @@ void MapSwitcher :: toggle ( )
    if ( getMainScreenWidget() ) {
       MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
       if ( md )
-         md->cursor.goTo( actmap->getCursor() );
+         md->cursor.goTo( actmap->getCursor(), maps[active].windowpos );
    }
 
+   displaymap();
    viewChanged();
 
    int x,y;
-   while ( PG_Application::GetEventSupplier()->GetMouseState(x,y));
+   SDL_Event ev;
+   while ( PG_Application::GetEventSupplier()->GetMouseState(x,y))
+      PG_Application::GetEventSupplier()->WaitEvent (&ev);
 }
 
 string MapSwitcher :: getName ()

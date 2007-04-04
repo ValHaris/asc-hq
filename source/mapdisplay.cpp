@@ -1610,6 +1610,30 @@ MapDisplayPG::CursorHiding::~CursorHiding()
 }
 
 
+void MapDisplayPG::Cursor::goTo( const MapCoordinate& cursorPosition, const MapCoordinate& upperLeftScreenCorner )
+{
+   bool redraw = false;
+   
+   if ( upperLeftScreenCorner.valid() )
+      if ( upperLeftScreenCorner != mapDisplay->offset ) {
+         redraw = true;
+         mapDisplay->offset = upperLeftScreenCorner;
+      }
+   
+   MapCoordinate oldpos = pos();
+   if ( !mapDisplay->fieldInView( cursorPosition) )
+      mapDisplay->centerOnField(cursorPosition);
+   
+   pos()=cursorPosition;
+   
+   if ( pos() != oldpos || redraw) {
+      invisible = 0;
+      mapDisplay->dirty = MapDisplayPG::Curs;
+      mapDisplay->Update();
+      // mapDisplay->updateWidget();
+   }
+}
+
 void MapDisplayPG::Cursor::goTo( const MapCoordinate& position )
 {
    MapCoordinate oldpos = pos();

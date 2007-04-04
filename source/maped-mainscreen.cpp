@@ -518,8 +518,13 @@ void Maped_MainScreenWidget::updateStatusBar()
 
 void Maped_MainScreenWidget::selectionChanged( const MapComponent* item )
 {
-   selectionName->SetText( item->getItemType()->getName() );
-   selectionName2->SetText( "ID: " + ASCString::toString( item->getItemType()->getID() ) );
+   if ( item ) {
+      selectionName->SetText( item->getItemType()->getName() );
+      selectionName2->SetText( "ID: " + ASCString::toString( item->getItemType()->getID() ) );
+   } else {
+      selectionName->SetText( "" );
+      selectionName2->SetText( "" );
+   }
 }
 
 
@@ -684,7 +689,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_TAB: execaction_ev(act_switchmaps );
                         return true;
 
-         case SDLK_ESCAPE: execaction_ev(act_end);
+         case SDLK_ESCAPE: execaction_ev(act_clearSelection);
                         return true;
          case SDLK_PLUS:
          case SDLK_KP_PLUS: execaction_ev( act_increase_zoom );
