@@ -1723,6 +1723,8 @@ ASCString getUnitReference ( Vehicle* veh )
 
 
 
+const int UnitHooveringLogic::FuelConsumption = 50;
+
 int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
 {
    if ( veh->height < chtieffliegend || veh->height > chhochfliegend )
@@ -1751,9 +1753,9 @@ int UnitHooveringLogic::getEndurance ( const Vehicletype* veh, int height, int r
    else 
       maxmove = veh->movement[height];
       
-   int fields = veh->getStorageCapacity(resourceModel).fuel * 100 / (veh->fuelConsumption * FuelConsumption ); 
+   int fields = minmalq * veh->getStorageCapacity(resourceModel).fuel * 100 / (veh->fuelConsumption * FuelConsumption ); 
    if ( maxmove )
-      return (fields * minmalq / maxmove );
+      return (fields / maxmove );
    else
       return 0;
 }

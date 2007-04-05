@@ -259,8 +259,11 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
 
    const SingleWeapon* weap = attackingunit->getWeapon(_weapon);
 
+
+   int targetWeather = attackedunit->getMap()->getField( attackedunit->getPosition() )->getweather();
+
    av.strength = int ( ceil( attackingunit->weapstrength[_weapon]
-                        * WeapDist::getWeapStrength(weap, dist, attackingunit->height, attackedunit->height )
+                        * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, attackedunit->height )
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[attackedunit->typ->movemalustyp] / 100 ));
    av.armor  = attackingunit->getArmor();
    av.damage     = attackingunit->damage;
@@ -314,8 +317,11 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 
+
+      int attackerWeather = attackingunit->getMap()->getField( attackingunit->getPosition() )->getweather();
+
       dv.strength  = int ( ceil( attackedunit->weapstrength[ dv.weapnum ]
-                           * WeapDist::getWeapStrength(weap, dist, attackedunit->height, attackingunit->height )
+                           * WeapDist::getWeaponStrength(weap, attackerWeather, dist, attackedunit->height, attackingunit->height )
                            * attackedunit->typ->weapons.weapon[ dv.weapnum ].targetingAccuracy[attackingunit->typ->movemalustyp] / 100 ));
       field = getfield ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
@@ -425,8 +431,11 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
       _weapon  = weapon;
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
+
+   int targetWeather = getfield(x,y)->getweather();
+
    av.strength  = int (ceil( attackingunit->weapstrength[_weapon]
-                        * WeapDist::getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
+                        * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
 
    av.armor = attackingunit->getArmor();
@@ -651,7 +660,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
    av.strength  = int ( ceil( attackingunit->weapstrength[weapon]
-                        * WeapDist::getWeapStrength(weap, dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
+                        * WeapDist::getWeaponStrength(weap, targetField->getweather(), dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
 
    av.armor = attackingunit->getArmor();
@@ -983,7 +992,7 @@ bool vehicleplattfahrbar( const Vehicle*     vehicle,
 } 
 
 
-float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
+float WeapDist::getWeaponStrength ( const SingleWeapon* weap, int weather, int dist, int attacker_height, int defender_height, int reldiff  )
 {
 /*
   int         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 6, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -1041,13 +1050,27 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
 
    float relstrength = weap->maxstrength - relpos * ( weap->maxstrength - weap->minstrength );
 
+   float weatherFactor = 1;
    int heightEff = 100;
    if ( attacker_height != -1 && defender_height != -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
       heightEff = weap->efficiency[6+hd];
+
+      if ( attacker_height >= chtieffliegend && weather != 0 && defender_height != -1) {
+         int weatherRelevantHeightDelta = min( abs( getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ))), 3);
+         if ( weather == 1 || weather == 3 || weather == 5 )
+            weatherFactor = 1 - 0.07*weatherRelevantHeightDelta;
+         else
+            if ( weather == 2 || weather == 4 )
+               weatherFactor = 1 - 0.2 * weatherRelevantHeightDelta;
+      }
+
+      if ( attacker_height == chsatellit )
+         weatherFactor = 1 - (1-weatherFactor)/2;
    }
 
-   return relstrength * heightEff / float(weap->maxstrength * 100) ;
+
+   return relstrength * heightEff * weatherFactor / float(weap->maxstrength * 100) ;
 
 /*   if ( attacker_height != -1 && defender_height!= -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));

@@ -28,7 +28,7 @@ class BuildingType;
 
 class UnitHooveringLogic {
    //! the percentage of fuel that is required for a flying plane just hoovering in the air (unit: percentage)
-      static const int FuelConsumption = 40;
+      static const int FuelConsumption; 
 
    public:
       static int calcFuelUsage( const Vehicle* veh );

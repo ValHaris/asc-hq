@@ -78,7 +78,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( const Vehi
                   AttackFormula af;
                   for ( int e = (fzt->weapons.weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons.weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++;
-                     int n = int( WeapDist::getWeapStrength( &fzt->weapons.weapon[i], e*maxmalq ) * fzt->weapons.weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
+                     int n = int( WeapDist::getWeaponStrength( &fzt->weapons.weapon[i], 0, e*maxmalq ) * fzt->weapons.weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
                      m += int( n / log10(double(10*d)));
                   }
                   if (getammunition(i) == 0)
@@ -317,7 +317,7 @@ void AI :: WeaponThreatRange :: testfield ( const MapCoordinate& mc )
    if ( dist*maxmalq <= veh->typ->weapons.weapon[weap].maxdistance )
       if ( dist*maxmalq >= veh->typ->weapons.weapon[weap].mindistance ) {
          AttackFormula af;
-         int strength = int ( WeapDist::getWeapStrength( &veh->typ->weapons.weapon[weap], dist*maxmalq, veh->height, 1 << height )
+         int strength = int ( WeapDist::getWeaponStrength( &veh->typ->weapons.weapon[weap], ai->getMap()->getField(mc)->getweather(), dist*maxmalq, veh->height, 1 << height )
                               * veh->typ->weapons.weapon[weap].maxstrength
                               * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( gamemap->getField(startPos)->getattackbonus() ))
                               * af.strength_damage ( veh->damage )

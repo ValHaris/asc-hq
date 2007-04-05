@@ -404,7 +404,7 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 const int attackmovecost = 0;  
 
 //! the movemalus for all submerged units
-const int submarineMovement = 10;
+const int submarineMovement = 11;
 
 #define movement_cost_for_repaired_unit 24
 #define movement_cost_for_repairing_unit 12
