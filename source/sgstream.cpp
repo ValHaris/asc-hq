@@ -381,6 +381,7 @@ void checkFileVersion( const ASCString& filename, const ASCString& containername
 
 void checkDataVersion( )
 {
+   return;
    ASCString location;
    if ( exist ( "data.version" )) {
       tnfilestream s ( "data.version", tnstream::reading );
