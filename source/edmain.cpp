@@ -2,9 +2,12 @@
     \brief The map editor's main program 
 */
 
-//     $Id: edmain.cpp,v 1.70 2006-03-24 19:07:01 mbickel Exp $
+//     $Id: edmain.cpp,v 1.71 2007-04-11 10:35:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.70  2006/03/24 19:07:01  mbickel
+//      Window is now centered on screen
+//
 //     Revision 1.69  2006/03/19 07:55:49  mbickel
 //      RF now correctly recorded in Replay
 //
@@ -650,6 +653,17 @@ void         editor(void)
                         *c = 10;
                      }
                      break;
+
+                  case ct_f11 + ct_stp: {
+                     for ( int y = 0; y < actmap->ysize; ++y )
+                        for ( int x = 0; x < actmap->xsize; ++x )
+                           if ( getfield(x,y)->typ->terraintype->id == 38 ) {
+                              cursor.gotoxy(x,y);
+                              break;
+                           }
+                     }
+                     break;
+
                   case ct_a + ct_stp :  execaction(act_setupalliances);
                      break;
                   case ct_b + ct_stp:  execaction(act_toggleresourcemode);
