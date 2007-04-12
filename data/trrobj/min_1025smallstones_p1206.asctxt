@@ -1,6 +1,0 @@
-ObjectType { 
-   ID = 1025
-   parent = 106
-   Weather = dry much_snow snow_and_ice
-   Name = little stones
-} ObjectType
