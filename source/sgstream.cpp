@@ -49,6 +49,7 @@
 #ifdef _WIN32_
  #include <windows.h>
  #include <winreg.h>
+ #include <shlobj.h>
 #endif 
 
 
@@ -126,6 +127,87 @@ bool makeDirectory ( const ASCString& path )
    }
 
    return true;
+}
+
+class ConfigurationFileLocator {
+      ASCString cmdline;
+
+   protected:
+      vector<ASCString> getDefaultDirectory();
+
+   public:
+      void CommandLineParam( const ASCString& path );
+
+      ASCString getConfig();
+      ASCString getConfigForPrinting();
+};
+
+
+void ConfigurationFileLocator::CommandLineParam( const ASCString& path )
+{
+   cmdline = path;
+}
+
+vector<ASCString> ConfigurationFileLocator::getDefaultDirectory()
+{
+   vector<ASCString> dirs;
+#ifdef _WIN32_
+   HKEY key;
+   if (  RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
+                           "SOFTWARE\\Advanced Strategic Command\\",
+                           0,
+                           KEY_READ,
+                           &key ) == ERROR_SUCCESS) {
+
+      DWORD type;
+      const int size = 2000;
+      char  buf[size];
+      DWORD size2 = size;
+      if ( RegQueryValueEx ( key, "InstallDir2", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
+         if ( type == REG_SZ	 ) {
+            ASCString dir = buf;
+            appendbackslash ( dir );
+            dirs.push_back( dir );
+         }
+      }
+
+      RegCloseKey ( key );
+   }
+
+   TCHAR szPath[MAX_PATH];
+
+   if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
+      ASCString dir = szPath;
+      appendbackslash ( dir );
+      dirs.push_back( dir );
+   }
+
+   if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
+      ASCString dir = szPath;
+      appendbackslash ( dir );
+      dirs.push_back( dir );
+   }
+
+#else
+
+#endif
+
+   return dirs;
+
+}
+
+
+ASCString ConfigurationFileLocator::getConfig()
+{
+   if ( cmdline.length() ) {
+      
+   }
+   return "";
+}
+
+ASCString ConfigurationFileLocator::getConfigForPrinting()
+{
+   return "";
 }
 
 

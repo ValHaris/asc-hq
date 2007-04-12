@@ -186,7 +186,8 @@ void ASC_PG_App :: setIcon( const ASCString& filename )
       tnfilestream iconl ( filename, tnstream::reading );
       icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
       // SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
-      SDL_WM_SetIcon( icn, NULL );
+      if ( icn )
+         SDL_WM_SetIcon( icn, NULL );
    } catch ( ... ) {}
 }
 

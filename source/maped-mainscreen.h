@@ -89,7 +89,9 @@ public:
     bool selectVehicle();
     bool selectBuilding();
     bool selectObject();
+    bool selectObjectList();
     bool selectTerrain();
+    bool selectTerrainList();
     bool selectMine();
     void updateStatusBar();
 

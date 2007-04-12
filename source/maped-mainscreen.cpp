@@ -408,12 +408,19 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    button2->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectBuilding ));
    ypos += 25;
 
-   PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Object" );
+   PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w - 50, 20), "Sel. Object" );
    button3->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectObject ));
+
+   PG_Button* button3b = new PG_Button( this, PG_Rect( xpos+ w - 45, ypos, 45, 20), "List" );
+   button3b->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectObjectList ));
    ypos += 25;
-   
-   PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Terrain" );
+
+
+   PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w - 50, 20), "Sel. Terrain" );
    button4->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectTerrain ));
+
+   PG_Button* button4b = new PG_Button( this, PG_Rect( xpos + w - 45, ypos, 45, 20), "List" );
+   button4b->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectTerrainList ));
    ypos += 25;
 
    PG_Button* button5 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Mine" );
@@ -875,15 +882,31 @@ bool Maped_MainScreenWidget :: selectBuilding()
 
 bool Maped_MainScreenWidget :: selectObject()
 {
+   execaction_ev( act_switchmaps );
+   // showSelectionWindow( this, objectSelector, objectTypeRepository );
+   return true;
+}
+
+bool Maped_MainScreenWidget :: selectObjectList()
+{
    showSelectionWindow( this, objectSelector, objectTypeRepository );
    return true;
 }
 
+
 bool Maped_MainScreenWidget :: selectTerrain()
+{
+   execaction_ev( act_switchmaps );
+   // showSelectionWindow( this, terrainSelector, terrainTypeRepository );
+   return true;
+}
+
+bool Maped_MainScreenWidget :: selectTerrainList()
 {
    showSelectionWindow( this, terrainSelector, terrainTypeRepository );
    return true;
 }
+
 
 bool Maped_MainScreenWidget :: selectMine()
 {
