@@ -2,7 +2,7 @@
     \brief Interface to the polygon triangulation library
 */
 
-//     $Id: polygontriangulation.h,v 1.3 2005-04-09 13:44:19 mbickel Exp $
+//     $Id: polygontriangulation.h,v 1.4 2007-04-12 20:52:49 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -52,6 +52,7 @@ class  PolygonPainter {
              virtual bool checkpolygon   ( const Poly& poly );
              //! returns true if lines a-b and c-d don't intersect
              virtual bool checkline      ( typename Poly::Point a, typename Poly::Point b, typename Poly::Point d, typename Poly::Point e );
+             virtual ~PolygonPainter() {};
           };
 
 template <class Poly>

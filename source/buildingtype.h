@@ -31,7 +31,7 @@
  #include "textfileparser.h"
  #include "research.h"
 
-
+/*
 const int cbuildingfunctionnum = 24;
 extern const char*  cbuildingfunctions[];
  #define cghqn 0
@@ -74,10 +74,20 @@ extern const char*  cbuildingfunctions[];
  #define cgselfdestruct_at_conquerb ( 1 << cgselfdestruct_at_conquern )
  #define cgsatviewn 23
  #define cgsatviewb ( 1 << cgsatviewn )
-
+*/
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
+        bool             field_Exists[4][6];
+        Surface          w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+        int              bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
+
+        BitSet weatherBits; // for which weather are images available
+
+        void convertOldFunctions( int abilities, const ASCString& location );
+        
+        static const int cbuildingfunctionnum = 24;
+        
    public:
         //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {
@@ -86,11 +96,10 @@ extern const char*  cbuildingfunctions[];
               LocalCoordinate ( int _x, int _y ) : x(_x), y(_y) {};
               LocalCoordinate ( ) : x(-1), y(-1) {};
               LocalCoordinate ( const ASCString& s );
+              bool valid() const  { return x>=0 && y>=0; };
               ASCString toString ( ) const;
         };
 
-        void*        w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
-        int          bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
 
         //! when the building is destroyed, it can leave rubble objects behind. If set to 0 no objects are being created
         int          destruction_objects [4][6];
@@ -102,9 +111,6 @@ extern const char*  cbuildingfunctions[];
             game, since the map may modify the armor of buildings with a map parameter.
             Use Building::getArmor() to query the effective armor. */
         int          _armor;
-
-        //! bitmapped: functions the building can perfom. see #cbuildingfunctions
-        int          special;
 
         //! not used at the moment
         int          technologylevel;
@@ -118,55 +124,44 @@ extern const char*  cbuildingfunctions[];
         //! the number of stages that are required to construct a building using a construction unit. Each stage has a separate picture. Range is 1 to 8
         int          construction_steps;
 
-        //! the maximum number of research points a research center may produce
-        int          maxresearchpoints;
-
-        //! when a building of this type is placed on a map, its maxResearch property will be set to this value
-        int          defaultMaxResearchpoints;
-
-        //! the number of reseach points for which the plus settings apllies
-        int          nominalresearchpoints;
-
-        //! the amount of resources stored in the building. Use Building::getResource( int, int, int, int) to access this field, since depending on the map settings some resources may be globally available and stored in a global pool: #tmap::bi_resource
-        Resources    _tank;
-        Resources    maxplus;
-
-        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
-        int          efficiencyfuel;
-
-        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
-        int          efficiencymaterial;
-
-        //! the picture for the GUI that is used for selecting a building that is going to be constructed by a unit
-        void*        guibuildicon;
-
-        //! the maximum resource storage in BI resource mode.
-        Resources    _bi_maxstorage;
-
-        //! if a new building is constructed, this will be the resource production of the building
-        Resources    defaultProduction;
-
         //! bitmapped: the level of height that this building will reside on.
         int          buildingheight;
+
+        int getMoveMalusType() const {
+           return 11;
+        };
+
 
         //! bitmapped: units on these levels of height may be refuelled when standing next to the buildings entry
         int          externalloadheight;
 
-        void*        getpicture ( const LocalCoordinate& localCoordinate ) const;
+        const Surface& getPicture ( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0 ) const;
+        void         paint ( Surface& s, SPoint pos, int player = 0, int weather = 0, int constructionStep = 0 ) const;
+        void         paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player = 0, int weather = 0, int constructionStep = 0 ) const;
 
+        int          getBIPicture( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0) const;
+        
+        
+        bool         fieldExists(const LocalCoordinate& localCoordinate) const { return field_Exists[localCoordinate.x][localCoordinate.y]; } ;
+        
         BuildingType ( void );
 
         /** returns the Mapcoordinate of a buildings field
             \param entryOnMap The location of the buildings entry on the map
             \param localCoordinate The relative coordinate of the buildings segment for which is global MapCoordinate is going to be calculated and returned.
         */
-        MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate );
+        MapCoordinate getFieldCoordinate( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinate ) const;
 
+        //! converts a global coordinate into a local coordinate.
+        LocalCoordinate getLocalCoordinate( const MapCoordinate& entryOnMap, const MapCoordinate& field ) const;
 
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
 
+        bool buildingNotRemovable;
+
+        
 };
 
 

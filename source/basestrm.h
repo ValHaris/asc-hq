@@ -1,143 +1,7 @@
 /*! \file basestrm.h
-    \brief The interface for the various streams that ASC offers, 
-           like file and memory streams. 
+    \brief The interface for the various streams that ASC offers,
+           like file and memory streams.
 */
-
-
-//     $Id: basestrm.h,v 1.62 2006-04-18 19:29:29 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.61  2005/04/29 17:57:12  mbickel
-//      Prepared 1.16 release
-//      Added object translation
-//
-//     Revision 1.60  2005/04/24 10:09:30  mbickel
-//      Added object growth
-//      Updated version numbers
-//      Fixed mine and object removal
-//
-//     Revision 1.59  2004/05/29 15:07:37  mbickel
-//      Fixed maps
-//      Fixed crash with asc.cache
-//      ai speed up
-//
-//     Revision 1.58  2004/05/16 11:28:00  mbickel
-//      Speed up of startup loading by using a cache file
-//
-//     Revision 1.57  2004/01/25 19:44:16  mbickel
-//      Many, many bugfixes
-//      Removed #pragma pack whereever possible
-//
-//     Revision 1.56  2003/11/16 21:46:39  mbickel
-//      Some cleanup and restructuring
-//      Fixed: newly produced units could not leave building
-//
-//     Revision 1.55  2003/06/01 15:03:16  mbickel
-//      Some updates to the build system for FreeBSD
-//
-//     Revision 1.54  2003/05/01 18:02:22  mbickel
-//      Fixed: no movement decrease for cargo when transport moved
-//      Fixed: reactionfire not working when descending into range
-//      Fixed: objects not sorted
-//      New map event: add object
-//
-//     Revision 1.53  2003/03/20 10:08:29  mbickel
-//      KI speed up
-//      mapeditor: added clipboard
-//      Fixed movement issues
-//
-//     Revision 1.52  2002/10/02 20:21:00  mbickel
-//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
-//
-//     Revision 1.51  2002/02/14 20:58:13  mbickel
-//      Started integration of paragui
-//
-//     Revision 1.50  2002/01/29 20:42:16  mbickel
-//      Improved finding of files with relative path
-//      Added wildcards to music playlist files
-//
-//     Revision 1.49  2001/10/21 13:16:59  mbickel
-//      Cleanup and documentation
-//
-//     Revision 1.48  2001/10/08 14:44:22  mbickel
-//      Some cleanup
-//
-//     Revision 1.47  2001/10/08 14:12:20  mbickel
-//      Fixed crash in AI
-//      Speedup of AI
-//      Map2PCX improvements
-//      Mapeditor usability improvements
-//
-//     Revision 1.46  2001/08/27 21:03:55  mbickel
-//      Terraintype graphics can now be mounted from any number of PNG files
-//      Several AI improvements
-//
-//     Revision 1.45  2001/07/28 11:19:10  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.44  2001/07/27 21:13:34  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.43  2001/07/14 13:15:17  mbickel
-//      Rewrote sound handling
-//
-//     Revision 1.42  2001/06/14 14:46:46  mbickel
-//      The resolution of ASC can be specified in the configuration file
-//      The fileselect dialog box shows the file's location
-//      new ascmap2pcx param: outputdir
-//
-//     Revision 1.41  2001/05/18 22:30:30  mbickel
-//      The data file is now installed in the correct directory
-//      If the installation directory is changed with configure, the new path
-//       will now be compiled directly into ASC
-//
-//     Revision 1.40  2001/05/16 23:21:01  mbickel
-//      The data file is mounted using automake
-//      Added sgml documentation
-//      Added command line parsing functionality;
-//        integrated it into autoconf/automake
-//      Replaced command line parsing of ASC and ASCmapedit
-//
-//     Revision 1.39  2001/02/28 14:10:05  mbickel
-//      Added some small editors to linux makefiles
-//      Added even more dirty hacks to basegfx: some more truecolor functions
-//
-//     Revision 1.38  2001/02/26 22:03:18  mbickel
-//      Some adjustments for Watcom C++
-//
-//     Revision 1.37  2001/02/26 21:14:30  mbickel
-//      Added two small editors to the linux makefiles
-//      Added some more truecolor hacks to the graphics engine
-//
-//     Revision 1.36  2001/02/18 15:37:02  mbickel
-//      Some cleanup and documentation
-//      Restructured: vehicle and building classes into separate files
-//         tmap, tfield and helper classes into separate file (gamemap.h)
-//      basestrm : stream mode now specified by enum instead of int
-//
-//     Revision 1.35  2001/02/11 11:39:28  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.34  2001/01/28 14:04:03  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.33  2001/01/04 15:13:30  mbickel
-//      configure now checks for libSDL_image
-//      AI only conquers building that cannot be conquered back immediately
-//      tfindfile now returns strings instead of char*
-//
-//     Revision 1.32  2000/12/21 11:00:44  mbickel
-//      Added some code documentation
-//
-//     Revision 1.31  2000/11/09 17:48:46  mbickel
-//      The size of a stream can now be queried
-//      PCX loader (in C) can now load unpatched images provided they are not
-//        compressed
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -169,11 +33,15 @@
 #include <vector>
 #include <queue>
 
+#ifdef _SDL_
+ #include <SDL.h>
+#endif
+
+
 #include "global.h"
 #include "basestreaminterface.h"
 #include "lzw.h"
 #include "errors.h"
-#include "tpascal.inc"
 
 #include "simplestream.h"
 
@@ -185,6 +53,21 @@
   #include "libs/bzlib/bzlib.h"
  }
 #endif
+
+#ifdef _SDL_
+ extern SDL_RWops *SDL_RWFromStream( pnstream stream );
+
+class RWOPS_Handler {
+      SDL_RWops *rwo;
+   public:
+      RWOPS_Handler( SDL_RWops *rw ) : rwo (rw) {};
+      SDL_RWops* Get() { return rwo; };
+      void Close() { if ( rwo ) { SDL_RWclose(rwo); rwo = NULL; } };
+      ~RWOPS_Handler() { Close(); };
+};
+
+#endif
+
 
 
 const int maxFileStringSize = 10000;    // is used for some character arrays
@@ -233,6 +116,7 @@ class tinvalidversion : public tfileerror {
      tinvalidversion ( const ASCString& fileName, int ex, int fnd );
      const int expected;
      const int found;
+     ASCString getMessage() const;
 };
 
 
@@ -435,6 +319,7 @@ class t_compressor_stream_interface {
            public:
              virtual void writecmpdata ( const void* buf, int size ) = 0;
              virtual int readcmpdata ( void* buf, int size, bool excpt = true ) = 0;
+             virtual ~t_compressor_stream_interface() {};
       };
 /*
 class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
@@ -581,6 +466,7 @@ typedef tnfilestream*  pnfilestream ;
 class ContainerIndexer {
        public:
            virtual void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel ) = 0;
+           virtual ~ContainerIndexer() {};
      };
 
 
@@ -605,35 +491,9 @@ class tncontainerstream : public tn_file_buf_stream {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ContainerCollector : public ContainerIndexer {
-         public:
-           struct FileIndex {
-              char* name;
-              pncontainerstream container;
-              int directoryLevel;
-           };
-         protected:
-
-           dynamic_array<FileIndex> index[256];    // not very efficient, but who cares :-)
-
-           dynamic_array<pncontainerstream> container;
-           int containernum;
-           struct {
-              int alpha;
-              int index;
-           } namesearch;       // next entry to return
-         public:
-           ContainerCollector ( void );
-           void init ( const char* wildcard );
-           void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
-           // pncontainerstream getfile ( const char* filename );
-           FileIndex* getfile ( const char* filename );
-           FileIndex* getfirstname ( void );
-           FileIndex* getnextname ( void );
-           virtual ~ContainerCollector();
-        };
 
 
+extern ASCString listContainer();
 
 
 
@@ -720,11 +580,12 @@ extern int compressrle ( const void* p, void* q);
 /** checks whether the regular expression pat matches the string str . This functions
     only understands dos/windows style wildcards: * and ?
 */
-extern bool patimat (const char *pat, const char *str, bool forceCaseInsensitivity = false );
+// extern bool patimat (const char *pat, const char *str);
+extern bool patimat (const ASCString& pat, const ASCString& str, bool forceCaseInsensitivity = false) ;
 
 extern int checkforvaliddirectory ( char* dir );
 
-extern char* getnextfilenumname ( const char* first, const char* suffix, int num = -1  );
+extern ASCString getnextfilenumname ( const ASCString& first, const ASCString& suffix, int num = -1  );
 
 
 #define writedata2(a)  writedata ( &(a), sizeof(a) )
@@ -744,8 +605,6 @@ extern const char* filewritemode;
 extern const char* filereadmodetext;
 extern const char* filewritemodetext;
 
-extern int verbosity;
-
 
 //! This class handles filenames. All operations that work on filenames will be added here
 class FileName : public ASCString {
@@ -761,12 +620,13 @@ class FileName : public ASCString {
 
 extern const char pathdelimitter;
 extern const char* pathdelimitterstring;
-extern int filesize( char *name);
+extern int filesize( const char *name);
 
-extern void addSearchPath ( const char* path );
-extern void appendbackslash ( char* string );
-extern void appendbackslash ( ASCString& string );
+extern void addSearchPath ( const ASCString& path );
+extern void appendbackslash ( char* String );
+extern void appendbackslash ( ASCString& String );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
+extern ASCString constructFileName( int directoryLevel, const ASCString& path, ASCString filename );
 extern int directoryExist ( const char* path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
@@ -779,10 +639,130 @@ extern ASCString getSearchPath ( int i );
 //! converts path delimitters from foreign operating systems to the ones used by the current operating system. On Linux, this function converts backslashes to slashes, on Windows vice versa
 extern void convertPathDelimitters ( ASCString& path );
 
-#ifdef _SDL_
- #include <SDL.h>
- extern SDL_RWops *SDL_RWFromStream( pnstream stream );
-#endif
+
+
+
+template<typename C>
+      void writePointerContainer ( const C& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef typename C::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      (*i)->write ( stream );
+}
+
+template<typename BaseType>
+      void readPointerContainer ( vector<BaseType*>& v, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   v.clear();
+   for ( int i = 0; i < num; ++i ) {
+      BaseType* bt = new BaseType;
+      bt->read( stream );
+      v.push_back( bt );
+   }
+}
+
+
+
+template<typename C>
+      void writeClassContainer ( const C& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef typename C::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      i->write ( stream );
+}
+
+template<typename C>
+      void readClassContainer ( C& c, tnstream& stream  )
+{
+   int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
+      
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i ) {
+      typedef typename C::value_type VT;
+      VT vt;
+      vt.read( stream );
+      c.push_back( vt );
+   }
+}
+
+template<>
+      inline void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<ASCString>::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      stream.writeString(*i);
+}
+
+
+template<>
+      inline void readClassContainer<> ( vector<ASCString>& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i )
+      c.push_back( stream.readString() );
+}
+
+template<>
+      inline void writeClassContainer<> ( const vector<int>& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<int>::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i )
+      stream.writeInt(*i);
+}
+
+
+template<>
+      inline void readClassContainer<> ( vector<int>& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i )
+      c.push_back ( stream.readInt() );
+}
+
+template<>
+      inline void writeClassContainer<> ( const vector<pair<int,int> >& c, tnstream& stream  )
+{
+   stream.writeInt ( 1 );
+   stream.writeInt ( c.size() );
+   typedef vector<pair<int,int> >::const_iterator IT;
+   for ( IT i = c.begin(); i != c.end(); ++i ) {
+      stream.writeInt(i->first);
+      stream.writeInt(i->second );
+   }
+}
+
+
+template<>
+      inline void readClassContainer<> ( vector<pair<int,int> >& c, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i ) {
+      int first = stream.readInt();
+      int second = stream.readInt();
+      c.push_back ( make_pair(first,second) );
+   }
+}
+
+
 
 #endif
 

@@ -1,0 +1,835 @@
+panel {
+   height = 320
+   WidgetNum = 4
+   Widget0 {
+      type = area
+      x = 5
+      y = 10
+      width = 162
+      height = 115  
+
+      WidgetNum = 5
+      
+      Widget0 {
+        type = image
+        Filename = unit-hole.png
+        x = 36
+        y = 4
+        WidgetNum = 1
+        Widget0 {
+          type = SpecialDisplay
+          name = unit_pic
+          x = 11
+          y = 9
+        } widget0
+     } widget0
+
+     Widget1 {
+        type = image
+        Filename = exp-field.png
+        x = 5
+        y = 25
+        ToolTipHelp = unit experience
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+	        name = unitexp
+        } Widget0
+     } Widget1
+
+     Widget2 {
+        type = image
+        Filename = textbox.png
+        x = 5
+        y = 71
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = textoutput
+           TextAlign = LEFT
+           FontColor = 0xffffff
+           Fontsize = 11
+           x = 7
+           y = 5
+           y2 = -4
+           name = unittypename
+        } Widget0
+     } Widget2
+
+     Widget3 {
+        type = image
+        Filename = textbox.png
+        x = 5
+        y = 91
+        
+        WidgetNum = 1    
+        Widget0 {
+           type = LineEdit
+           text = 
+           TextAlign = LEFT
+           FontColor = 0xffffff
+           Fontsize = 9
+           x = 5
+           y = 3
+           transparency = 255
+           bordersize = 0
+           y2 = -3
+           name = unitname
+        } Widget0
+      } Widget3
+
+     widget4 {
+        type = dummy
+        x = 104
+        y = 1
+        width = 55
+        height = 66
+        ChildWidgets = MoveSymbol MoveField RangeSymbol RangeField ArmorField ArmorSymbol EnduranceField EnduranceSymbol
+
+        textalign = center
+        FontSize = 9
+        FontColor = 0xffffff
+        
+        MoveField {
+          type = image
+          Filename = text-hole.png
+          x = 15
+          y = 0
+          widgetnum = 1
+          Widget0 {
+              type = Textoutput
+              name = movepoints
+              ToolTipHelp = movement points
+   
+              x = 3
+              y = 4
+              x2 = -3
+              height = 10
+          } Widget0
+        } MoveField
+
+        MoveSymbol {
+          type = image
+          Filename = moverange.png
+          ToolTipHelp = movement points
+          x = 0
+          y = 1
+          width = 14
+          height = 14
+        } MoveSymbol
+
+          
+        RangeField {
+          type = image
+          Filename = text-hole.png
+          x = 15 
+          y = 18
+          widgetnum = 1
+          ToolTipHelp = range with current fuel
+          Widget0 {
+            type = Textoutput
+            name = fuelrange
+            x = 3
+            y = 4
+            x2 = -3
+            height = 10
+         } Widget0
+       } RangeField
+
+        RangeSymbol {
+          type = image
+          Filename = fuelrange.png
+          ToolTipHelp = range with current fuel
+          x = 1
+          y = 19
+          width = 14
+          height = 14
+        } RangeSymbol
+
+        ArmorField {
+          type = image
+          Filename = text-hole.png
+          x = 15
+          y = 35
+          widgetnum = 1
+          Widget0 {
+           type = Textoutput
+           name = armor
+           ToolTipHelp = armor
+
+           x = 3
+           y = 4
+           x2 = -3
+           height = 10
+          } Widget0
+        } ArmorField
+
+        Armorsymbol {
+          type = image
+          Filename = shield.png
+          x = 1
+          y = 36
+          width = 14
+          height = 14
+          ToolTipHelp = armor
+        } Armorsymbol
+
+        EnduranceSymbol {
+          type = image
+          Filename = unitendurance.png
+          ToolTipHelp = time until unit runs out of fuel (without move)
+          x = 2
+          y = 53
+          width = 14
+          height = 14
+        } EnduranceSymbol
+              
+        EnduranceField {
+          type = image
+          Filename = text-hole.png
+          x = 15
+          y = 51
+          widgetnum = 1
+          Widget0 {
+           type = Textoutput
+           name = unitEndurance
+           ToolTipHelp = time until unit runs out of fuel (without move)
+
+           x = 3
+           y = 4
+           x2 = -3
+           height = 10
+          } Widget0
+        } EnduranceField
+        
+              
+     } widget4
+  } Widget0
+
+  Widget1 {
+      type = area
+      x = 5
+      y = 128
+      width = 162
+      height = 40
+      widgetnum = 4
+      Widget0 {
+        type = image
+        Filename = damage+fuel_field.png
+        x = 5
+        y = 5
+        width = 90
+        height = 29
+        
+        WidgetNum = 4      
+        Widget0 {
+           type = BarGraph
+           BackgroundColor = 0x1d7810
+           name = unitdamage
+           x = 23
+           y = 4
+           width = 63
+           height = 9
+           colors= 3
+           color0 {
+             color = 0x1d7810
+             fraction = 1
+           } color0
+           color1 {
+             color = 0xfff000
+             fraction = 0.40
+           } color1
+           color2 {
+             color = 0xd6000f
+             fraction = 0.11
+           } color2
+        } Widget0
+
+        Widget1 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 9
+           FontColor = 0xffffff
+           name = unitstatus
+           ToolTipHelp = health
+
+           x = 14
+           y = 5
+           width = 71
+           height = 9
+       } Widget1
+
+
+        Widget2 {
+           type = BarGraph
+           BackgroundColor = 0x1d7810
+           name = unitfuel
+           x = 23
+           y = 16
+           width = 63
+           height = 9
+           colors= 3
+           color0 {
+             color = 0x1d7810
+             fraction = 1
+           } color0
+           color1 {
+             color = 0xfff000
+             fraction = 0.4
+           } color1
+           color2 {
+             color = 0xd6000f
+             fraction = 0.11
+           } color2
+        } Widget2
+
+       Widget3 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 9
+           FontColor = 0xffffff
+           name = unitfuelstatus
+           ToolTipHelp = fuel
+           x = 14
+           y = 17
+           width = 71
+           height = 9
+        } Widget3
+     } widget0
+
+     Widget1 {
+        type = image
+        Filename = bar_split.png
+        x = 35
+        y = 7
+     } Widget1
+  
+     Widget2 {
+        type = image
+        Filename = bar_split.png
+        x = 35
+        y = 19
+     } Widget2
+  
+     Widget3 {
+        type = image
+        Filename = material+energy_field.png
+        x = 95
+        y = 5
+        
+        WidgetNum = 4      
+        Widget0 {
+           type = BarGraph
+           BackgroundColor = 0x707070
+           name = unitmaterial
+           x = 23
+           y = 4
+           width = 38
+           height = 9
+        } Widget0
+
+        Widget1 {
+           type = Textoutput
+           textalign = Right
+           FontSize = 8
+           FontColor = 0xffffff
+           name = unitmaterialstatus
+           ToolTipHelp = material
+           x = 0
+           y = 5
+           width = 60
+           height = 8
+       } Widget1
+
+        Widget2 {
+           type = BarGraph
+           BackgroundColor = 0x707070
+           name = unitenergy
+           x = 23
+           y = 16
+           width = 38
+           height = 9
+        } Widget2
+
+         Widget3 {
+           type = TextOutput
+           textalign = Right
+           FontSize = 8
+           FontColor = 0xffffff
+           name = unitenergystatus
+           ToolTipHelp = energy
+           x = 0
+           y = 17
+           width = 60
+           height = 8
+       } Widget3
+
+     } widget3
+  } widget1
+      
+
+
+   Widget2 {
+      type = SpecialInput
+      x = 5
+      y = 171
+      width = 114
+      height = 145
+      widgetnum = 1
+  
+      name = weapinfo
+      
+      widget0 {
+         type = image
+         Filename = weapon_light.png
+         x = 5
+         y = 7
+         widgetnum = 6         
+         widget0 {
+           type = dummy
+           name = weapon_symbols
+           x = 3
+           y = 0
+           widgetnum = 10
+           widget0 {
+             type = specialdisplay
+             x = 0
+             y = 4
+             name = symbol_weapon0
+           } widget0
+           widget1 {
+             type = specialdisplay
+             x = 0
+             y = 17
+             name = symbol_weapon1
+           } widget1
+           widget2 {
+             type = specialdisplay
+             x = 0
+             y = 30
+             name = symbol_weapon2
+           } widget2
+           widget3 {
+             type = specialdisplay
+             x = 0
+             y = 43
+             name = symbol_weapon3
+           } widget3
+           widget4 {
+             type = specialdisplay
+             x = 0
+             y = 56
+             name = symbol_weapon4
+           } widget4 
+           widget5 {
+             type = specialdisplay
+             x = 0
+             y = 69
+             name = symbol_weapon5
+           } widget5
+           widget6 {
+             type = specialdisplay
+             x = 0
+             y = 82
+             name = symbol_weapon6
+           } widget6
+           widget7 {
+             type = specialdisplay
+             x = 0
+             y = 95
+             name = symbol_weapon7
+           } widget7
+           widget8 {
+             type = specialdisplay
+             x = 0
+             y = 108
+             name = symbol_weapon8
+           } widget8
+           widget9 {
+             type = specialdisplay
+             x = 0
+             y = 121
+             name = symbol_weapon9
+           } widget9
+         } widget0    
+        
+
+         widget1 {
+           ToolTipHelp = punch
+           type = dummy
+           name = weapon_punch
+           x = 29
+           y = 0
+           width = 23
+           widgetnum = 10
+           textalign = CENTER
+           FontSize = 9
+           FontColor = 0xffffff
+           Widget0 {
+             type = TextOutput
+             name = punch_weapon0
+             x = 0
+             y = 5
+             height = 9
+           } Widget0
+           Widget1 {
+             type = TextOutput
+             name = punch_weapon1
+             x = 0
+             y = 18
+             height = 9
+           } Widget1
+           Widget2 {
+             type = TextOutput
+             name = punch_weapon2
+             x = 0
+             y = 31
+             height = 9
+           } Widget2
+           Widget3 {
+             type = TextOutput
+             name = punch_weapon3
+             x = 0
+             y = 44
+             height = 9
+           } Widget3
+           Widget4 {
+             type = TextOutput
+             name = punch_weapon4
+             x = 0
+             y = 57
+             height = 9
+           } Widget4
+           Widget5 {
+             type = TextOutput
+             name = punch_weapon5
+             x = 0
+             y = 70
+             height = 9
+           } Widget5
+           Widget6 {
+             type = TextOutput
+             name = punch_weapon6
+             x = 0
+             y = 83
+             height = 9
+           } Widget6
+           Widget7 {
+             type = TextOutput
+             name = punch_weapon7
+             x = 0
+             y = 96
+             height = 9
+           } Widget7
+           Widget8 {
+             type = TextOutput
+             name = punch_weapon8
+             x = 0
+             y = 109
+             height = 9
+           } Widget8
+           Widget9 {
+             type = TextOutput
+             name = punch_weapon9
+             x = 0
+             y = 122
+             height = 9
+           } Widget9
+         } widget1
+
+         widget2 {
+           type = dummy
+           name = weapon_RF
+           x = 57
+           y = 0
+           width = 5
+           widgetnum = 10
+           textalign = CENTER
+           FontSize = 9
+           FontColor = 0xffffff
+           ToolTipHelp = reaction fire shots
+           Widget0 {
+             type = TextOutput
+             name = RF_weapon0
+             x = 0
+             y = 5
+             height = 9
+           } Widget0
+           Widget1 {
+             type = TextOutput
+             name = RF_weapon1
+             x = 0
+             y = 18
+             height = 9
+           } Widget1
+           Widget2 {
+             type = TextOutput
+             name = RF_weapon2
+             x = 0
+             y = 31
+             height = 9
+           } Widget2
+           Widget3 {
+             type = TextOutput
+             name = RF_weapon3
+             x = 0
+             y = 44
+             height = 9
+           } Widget3
+           Widget4 {
+             type = TextOutput
+             name = RF_weapon4
+             x = 0
+             y = 57
+             height = 9
+           } Widget4
+           Widget5 {
+             type = TextOutput
+             name = RF_weapon5
+             x = 0
+             y = 70
+             height = 9
+           } Widget5
+           Widget6 {
+             type = TextOutput
+             name = RF_weapon6
+             x = 0
+             y = 83
+             height = 9
+           } Widget6
+           Widget7 {
+             type = TextOutput
+             name = RF_weapon7
+             x = 0
+             y = 96
+             height = 9
+           } Widget7 
+           Widget8 {
+             type = TextOutput
+             name = RF_weapon8
+             x = 0
+             y = 109
+             height = 9
+           } Widget8
+           Widget9 {
+             type = TextOutput
+             name = RF_weapon9
+             x = 0
+             y = 122
+             height = 9
+           } Widget9
+        } widget2
+
+        widget3 {
+          type = dummy
+          name = ammobar
+          x = 83
+          y = 0
+          width = 18
+          widgetnum = 20 
+          textalign = Right
+          FontSize = 9
+          FontColor = 0xffffff
+          ToolTipHelp = ammo
+          Widget0 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo0
+            x = 0
+            y = 4
+            height = 9
+          } Widget0
+          Widget1 {
+            type = TextOutput
+            name = status_ammo0
+            x = 0
+            y = 5
+            height = 9
+          } Widget1
+          Widget2 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo1
+            x = 0
+            y = 17
+            height = 9
+          } Widget2
+          Widget3 {
+            type = TextOutput
+            name = status_ammo1
+            x = 0
+            y = 18
+            height = 9
+          } Widget3
+          Widget4 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo2
+            x = 0
+            y = 30
+            height = 9
+          } Widget4
+          Widget5 {
+            type = TextOutput
+            name = status_ammo2
+            x = 0
+            y = 31
+            height = 9
+          } Widget5
+          Widget6 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo3
+            x = 0
+            y = 43
+            height = 9
+          } Widget6
+          Widget7 {
+            type = TextOutput
+            name = status_ammo3
+            x = 0
+            y = 44
+            height = 9
+          } Widget7
+          Widget8 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo4
+            x = 0
+            y = 56
+            height = 9
+          } Widget8
+          Widget9 {
+            type = TextOutput
+            name = status_ammo4
+            x = 0
+            y = 57
+            height = 9
+          } Widget9
+          Widget10 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo5
+            x = 0
+            y = 69
+            height = 9
+          } Widget10
+          Widget11 {
+            type = TextOutput
+            name = status_ammo5
+            x = 0
+            y = 70
+            height = 9
+          } Widget11
+          Widget12 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo6
+            x = 0
+            y = 82
+            height = 9
+          } Widget12
+          Widget13 {
+            type = TextOutput
+            name = status_ammo6
+            x = 0
+            y = 83
+            height = 9
+          } Widget13
+          Widget14 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo7
+            x = 0
+            y = 95
+            height = 9
+          } Widget14
+          Widget15 {
+            type = TextOutput
+            name = status_ammo7
+            x = 0
+            y = 96
+            height = 9
+          } Widget15
+          Widget16 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo8
+            x = 0
+            y = 108
+            height = 9
+          } Widget16
+          Widget17 {
+            type = TextOutput
+            name = status_ammo8
+            x = 0
+            y = 109
+            height = 9
+          } Widget17
+          Widget18 {
+            type = BarGraph
+            BackgroundColor = 0x707070
+            name = bar_ammo9
+            x = 0
+            y = 121
+            height = 9
+          } Widget18
+          Widget19 {
+            type = TextOutput
+            name = status_ammo9
+            x = 0
+            y = 122
+            height = 9
+          } Widget19
+        } widget3
+
+        widget4 {
+          type = SpecialDisplay
+          x = 72
+          y = 40
+          width = 3
+          height = 24
+          name = showplayercolor0
+       } widget4
+       widget5 {
+         type = SpecialDisplay
+         x = 72
+         y = 70
+         width = 3
+         height = 24
+         name = showplayercolor1
+       } widget5
+    } widget0
+   
+   } Widget2
+
+   Widget3 {
+      type = area
+      x = 122
+      y = 171
+      width = 40
+      height = 145
+      widgetnum = 1
+      widget0 {
+         type = image
+         Filename = level_display.png
+         ToolTipHelp = levels of height
+         x = 5
+         y = 20
+         widgetnum = 1
+         widget0 {
+           type = specialdisplay
+           x = 4
+           y = 3
+           name = unit_level
+           width = 21
+           height = 135
+         } widget0
+      } widget0
+   } Widget3
+  
+  
+} panel

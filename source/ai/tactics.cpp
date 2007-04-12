@@ -21,7 +21,7 @@
 const int attack_unitdestroyed_bonus = 90;
 
 
-void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus )
+void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus )
 {
 
    npush ( veh->xpos );
@@ -94,7 +94,7 @@ void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVecto
 
          for ( int nf = 0; nf < sidenum; nf++ ) {
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), nf );
-            pfield fld = getMap()->getField(mc);
+            tfield* fld = getMap()->getField(mc);
             if ( fld && !veh->typ->wait)
                mv->neighbouringFieldsReachable[nf] = (vm.fieldVisited( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
             else
@@ -117,7 +117,7 @@ void AI :: searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVecto
             }
 
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), checkDir%sidenum );
-            pfield fld = getMap()->getField(mc);
+            tfield* fld = getMap()->getField(mc);
             if ( fld && !fld->building && !fld->vehicle )
                hemmingFactor += AttackFormula::getHemmingFactor ( nf );
          }
@@ -165,7 +165,7 @@ bool AI::moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv
    // return ( mv1->result < mv2->result || (mv1->result == mv2->result && mv1->moveDist > mv2->moveDist ));
 }
 
-void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne, bool executeService )
+void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne, bool executeService )
 {
 
    //! first check
@@ -196,9 +196,9 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
    int enemycount = 0;
    for ( int y = y1; y <= y2 && !enemycount; ++y)
       for ( int x = x1; x <= x2; ++x) {
-         pfield fld = getMap()->getField(x,y);
+         tfield* fld = getMap()->getField(x,y);
          if ( fld && fld->vehicle)
-            if ( getdiplomaticstatus2 ( fld->vehicle->color, getPlayerNum()*8 ) != capeace )
+            if ( getPlayer(fld->vehicle->getOwner()).diplomacy.isHostile( getPlayerNum() )  )
                enemycount++;
       }
 
@@ -226,7 +226,7 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
       int fuelLacking = 0;
       for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff )
          if ( !ff->hasAttacked ) {
-            pfield fld = getMap()->getField (ff->h);
+            tfield* fld = getMap()->getField (ff->h);
             if ( !fld->vehicle && !fld->building ) {
                 if ( !apl || apl->returnFromPositionPossible ( ff->h )) {
                    searchTargets ( veh, ff->h, tv, beeline ( ff->h.x, ff->h.y, orgxpos, orgypos ), vm, hemmingBonus );
@@ -247,7 +247,7 @@ void AI::getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBo
    }
 }
 
-AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
+AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
 {
    int unitNetworkID = veh->networkid;
    AiResult result;
@@ -310,7 +310,7 @@ AI::AiResult AI::executeMoveAttack ( pvehicle veh, TargetVector& tv )
    return result;
 }
 
-bool AI::targetsNear( pvehicle veh )
+bool AI::targetsNear( Vehicle* veh )
 {
    AStar3D ast ( getMap(), veh, false, veh->getMovement() );
    ast.findAllAccessibleFields ();
@@ -323,7 +323,7 @@ bool AI::targetsNear( pvehicle veh )
 }
 
 
-int AI::getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv )
+int AI::getDirForBestTacticsMove ( const Vehicle* veh, TargetVector& tv )
 {
    if ( tv.size() <= 0 )
       return -1;
@@ -332,7 +332,7 @@ int AI::getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv )
    return getdirection ( veh->xpos, veh->ypos, mv->movePos.x, mv->movePos.y );
 }
 
-MapCoordinate AI::getDestination ( const pvehicle veh )
+MapCoordinate AI::getDestination ( Vehicle* veh )
 {
    AiParameter::Task task = veh->aiparam[ getPlayerNum() ]->getTask();
    if ( task == AiParameter::tsk_nothing || task == AiParameter::tsk_tactics ) {
@@ -359,7 +359,7 @@ MapCoordinate AI::getDestination ( const pvehicle veh )
 }
 
 
-AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3, int preferredHeight )
+AI::AiResult AI::moveToSavePlace ( Vehicle* veh, VehicleMovement& vm3, int preferredHeight )
 {
    int unitNetworkID = veh->networkid;
 
@@ -422,7 +422,7 @@ AI::AiResult AI::moveToSavePlace ( pvehicle veh, VehicleMovement& vm3, int prefe
 }
 
 
-int AI::changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDirection )
+int AI::changeVehicleHeight ( Vehicle* veh, VehicleMovement* vm, int preferredDirection )
 {
 #if 0  // ####
    int bh = getBestHeight ( veh );
@@ -540,7 +540,7 @@ AI::AiResult AI::tactics( void )
    TactVehicles tactVehicles;
 
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-      pvehicle veh = *vi;
+      Vehicle* veh = *vi;
 
       bool unitUsable = false;
       if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight
@@ -576,11 +576,11 @@ AI::AiResult AI::tactics( void )
          int xdist = ydist / 4;
          for ( int x = veh->xpos - xdist; x <= veh->xpos + xdist; x++ )
             for ( int y = veh->ypos - ydist; y <= veh->ypos + ydist; y++ ) {
-               pfield fld = getMap()->getField(x,y );
+               tfield* fld = getMap()->getField(x,y );
                if ( fld ) {
-                  if ( fld->vehicle && getdiplomaticstatus2 ( veh->color, fld->vehicle->color ) == cawar )
+                  if ( fld->vehicle && getPlayer(veh->getOwner()).diplomacy.isHostile( fld->vehicle->getOwner() )  )
                      enemiesNear = true;
-                  if ( fld->building && getdiplomaticstatus2 ( veh->color, fld->building->color ) == cawar )
+                  if ( fld->building && getPlayer(veh->getOwner()).diplomacy.isHostile( fld->building->getOwner() )  )
                      enemiesNear = true;
                }
             }
@@ -604,7 +604,7 @@ AI::AiResult AI::tactics( void )
       do {
          directAttackNum = 0;
          for ( TactVehicles::iterator i = tactVehicles.begin(); i != tactVehicles.end(); ) {
-            pvehicle veh = getMap()->getUnit( *i );
+            Vehicle* veh = getMap()->getUnit( *i );
             if ( veh ) {
 
                unitCounter++;
@@ -634,7 +634,7 @@ AI::AiResult AI::tactics( void )
    
                      int freeNeighbouringFields = 0;
                      for ( int j = 0; j < sidenum; j++ ) {
-                        pfield fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
+                        tfield* fld = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(mv->attackx, mv->attacky), j));
                         if ( fld )
                            if ( !fld->building && !fld->vehicle )
                               freeNeighbouringFields++;
@@ -719,7 +719,7 @@ AI::AiResult AI::tactics( void )
          */
          do {   // while currentTarget != targets.end()
 
-            pvehicle enemy = getMap()->getUnit( currentTarget->first);
+            Vehicle* enemy = getMap()->getUnit( currentTarget->first);
             // the enemy may have been shot down by a direct attack earlier
             if ( enemy ) {
                affectedFields.push_back ( MapCoordinate(enemy->xpos, enemy->ypos) );
@@ -730,8 +730,8 @@ AI::AiResult AI::tactics( void )
                sort( attacker.begin(), attacker.end() );
 
                MoveVariantContainer::iterator mvci = attacker.begin();
-               pvehicle positions[sidenum];
-               pvehicle finalPositions[sidenum];
+               Vehicle* positions[sidenum];
+               Vehicle* finalPositions[sidenum];
                for ( int i = 0; i< sidenum; i++ ) {
                   positions[i] = NULL;
                   finalPositions[i] = NULL;
@@ -745,12 +745,13 @@ AI::AiResult AI::tactics( void )
                      if ( finalPositions[i] ) {
                         int nwid = finalPositions[i]->networkid;
                         _vision = org_vision;
+                        MapCoordinate affected =  MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos);
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
                         dst.setnum ( dst.x, dst.y, -2 );
                         moveUnit ( finalPositions[i], dst );
                         _vision = visible_all;
 
-                        affectedFields.push_back ( MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos) );
+                        affectedFields.push_back ( affected );
                         // the unit may have been shot down due to reaction fire
 
                         if ( !getMap()->getUnit ( nwid ) ) {
@@ -778,14 +779,14 @@ AI::AiResult AI::tactics( void )
                      tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
 
 
-                     pfield enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
+                     tfield* enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
                      for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy && finalAttackNum < maxint; i++ ) {
                         checkKeys();
                         if ( finalOrder[i] < 0 )
                            warning("!!!");
                         // if ( i+1 < finalAttackNum ) {
                         if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
-                           pvehicle a = finalPositions[finalOrder[i]];
+                           Vehicle* a = finalPositions[finalOrder[i]];
                            VehicleAttack va ( mapDisplay, NULL );
                            if ( finalOrder[i] < 0 )
                               warning("!!!");
@@ -817,7 +818,7 @@ AI::AiResult AI::tactics( void )
                   if ( hemmingBonus == currentTarget->second.size()-1 ) {
                      for ( AffectedFields::iterator i = affectedFields.begin(); i != affectedFields.end(); i++ )
                         for ( MoveVariantContainer::iterator j = currentTarget->second.begin(); j != currentTarget->second.end(); j++ ) {
-                            pvehicle veh = j->attacker;
+                            Vehicle* veh = j->attacker;
 
                             // here are only vehicles that attack neighbouring fields; ranged attacks are handled as "directAttacks" earlier
                             if ( beeline ( *i, veh->getPosition()) < veh->maxMovement()+20 )
@@ -847,7 +848,7 @@ AI::AiResult AI::tactics( void )
    return result;
 }
 
-void AI :: tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum )
+void AI :: tactics_findBestAttackOrder ( Vehicle** units, int* attackOrder, Vehicle* enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum )
 {
    if ( damage > enemy->damage )
       if ( (depth < finalAttackNum && damage==finalDamage) || damage > finalDamage ) {
@@ -890,7 +891,7 @@ void AI :: tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pveh
 
 }
 
-float AI :: getAttackValue ( const tfight& battle, const pvehicle attackingUnit, const pvehicle attackedUnit, float factor )
+float AI :: getAttackValue ( const tfight& battle, const Vehicle* attackingUnit, const Vehicle* attackedUnit, float factor )
 {
    float result = (battle.dv.damage - attackedUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() * factor - 1/config.aggressiveness * (battle.av.damage - attackingUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() ;
    if ( battle.dv.damage >= 100 )
@@ -902,17 +903,17 @@ float AI :: getAttackValue ( const tfight& battle, const pvehicle attackingUnit,
 
 class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
            bool neighbours[sidenum];
-           bool checkHemming ( pvehicle d_eht, int direc )
+           bool checkHemming ( Vehicle* d_eht, int direc )
            {
               return neighbours[direc];
            };
         public:
-          UnitAttacksUnit_FakeHemming ( AI* ai, pvehicle attacker, pvehicle defender, pvehicle* _neighbours ) : tunitattacksunit ( attacker , defender )
+          UnitAttacksUnit_FakeHemming ( AI* ai, Vehicle* attacker, Vehicle* defender, Vehicle** _neighbours ) : tunitattacksunit ( attacker , defender )
           {
              for ( int i = 0; i < sidenum; i++ ) {
-                pfield fld = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ));
+                tfield* fld = ai->getMap()->getField ( getNeighbouringFieldCoordinate ( attacker->getPosition(), i ));
 
-                pvehicle v = NULL;
+                Vehicle* v = NULL;
                 if ( fld )
                    v = fld->vehicle;
 
@@ -936,11 +937,11 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
 
 
 
-void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalPosition, float& finalValue, int unitsPositioned, int recursionDepth, int startTime )
+void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, Vehicle** positions, float value, Vehicle** finalPosition, float& finalValue, int unitsPositioned, int recursionDepth, int startTime )
 {
    if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 || (startTime + config.maxTactTime < ticker && !benchMark)) {
       float value = 0;
-      pvehicle target = mvc.begin()->enemy;
+      Vehicle* target = mvc.begin()->enemy;
       npush ( target->damage );
       for ( int i = 0; i < sidenum && target->damage!=100; i++ )
          if ( positions[i] ) {
@@ -989,12 +990,12 @@ void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVa
 
 
 
-bool AI :: vehicleValueComp ( const pvehicle v1, const pvehicle v2 )
+bool AI :: vehicleValueComp ( const Vehicle* v1, const Vehicle* v2 )
 {
    return v1->aiparam[ v1->color/8 ]->getValue() < v2->aiparam[ v1->color/8 ]->getValue();
 }
 
-bool AI :: buildingValueComp ( const pbuilding v1, const pbuilding v2 )
+bool AI :: buildingValueComp ( const Building* v1, const Building* v2 )
 {
    return v1->aiparam[ v1->color/8 ]->getValue() < v2->aiparam[ v1->color/8 ]->getValue();
 }

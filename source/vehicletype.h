@@ -25,9 +25,8 @@
  #include "terraintype.h"
  #include "research.h"
 
-
+/*
 //! The number of 'special' vehicle functions
-const int cvehiclefunctionsnum = 28;
 extern const char*  cvehiclefunctions[];
  #define cfsonar 1
  #define cfparatrooper 2
@@ -55,8 +54,46 @@ extern const char*  cvehiclefunctions[];
  #define cfenergyref ( 1 << 25 )
  #define cfownFieldJamming ( 1 << 26 )
  #define cfmovewithRF ( 1 << 27 )
+ #define cfonlytransmove ( 1 << 28 )
 
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
+*/
+
+#define cwaffentypennum 13
+ extern const char*  cwaffentypen[cwaffentypennum] ;
+ #define cwcruisemissile 0
+ #define cwcruisemissileb ( 1 << cwcruisemissile )
+ #define cwminen 1
+ #define cwmineb ( 1 << cwminen   )
+ #define cwbombn 2
+ #define cwbombb ( 1 << cwbombn  )
+ #define cwlargemissilen 3
+ #define cwlargemissileb ( 1 << cwlargemissilen  )
+ #define cwsmallmissilen 4
+ #define cwsmallmissileb ( 1 << cwsmallmissilen  )
+ #define cwtorpedon 5
+ #define cwtorpedob ( 1 << cwtorpedon  )
+ #define cwmachinegunn 6
+ #define cwmachinegunb ( 1 << cwmachinegunn )
+ #define cwcannonn 7
+ #define cwcannonb ( 1 << cwcannonn )
+ #define cwweapon ( cwcruisemissileb | cwbombb | cwlargemissileb | cwsmallmissileb | cwtorpedob | cwmachinegunb | cwcannonb | cwlaserb )
+ #define cwshootablen 11
+ #define cwshootableb ( 1 << cwshootablen  )
+ #define cwlasern 10
+ #define cwlaserb ( 1 << cwlasern  )
+ #define cwammunitionn 9
+ #define cwammunitionb ( 1 << cwammunitionn )
+ #define cwservicen 8
+ #define cwserviceb ( 1 << cwservicen )
+ #define cwobjectplacementn 12
+ #define cwobjectplacementb ( 1 << cwobjectplacementn )
+ extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
+
+
+ extern const bool weaponAmmo[cwaffentypennum];
+
+
 
  //! A single weapon of a #Vehicletype
  class SingleWeapon {
@@ -108,6 +145,8 @@ extern const char*  cvehiclefunctions[];
 
      ASCString    soundLabel;
 
+     ASCString    name;
+
      int          getScalarWeaponType(void) const;
      bool         requiresAmmo(void) const;
      bool         shootable( void ) const;
@@ -118,6 +157,7 @@ extern const char*  cvehiclefunctions[];
      int          gettype ( void ) const { return typ; };
      bool         offensive( void ) const;
      ASCString    getName ( void ) const;
+     static ASCString   getIconFileName( int weaponType );
      void         runTextIO ( PropertyContainer& pc );
  };
 
@@ -132,37 +172,30 @@ extern const char*  cvehiclefunctions[];
 
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
+        //! the image of the unit.
+        Surface  image;
     public:
+        static const int legacyVehicleFunctionNum = 29;
+        
         //! short description of the units role, for example "strategic bomber"
         ASCString    description;
 
-        const ASCString&    getName() const;
+        ASCString    getName() const;
 
         int armor;
 
-        //! the image of the unit. Only 6 images are used
-        void*        picture[8];
-
+        
         //! the levels of height which this unit can enter
         int          height;
 
         //! if a transport moves the movement for the units inside a transport is decreased by 1/n of the tranport's distance
         double     cargoMovementDivisor;
 
-        // if the unit can change the level of height, this is the number of fields the unit must move to go from one level to the next
-        // int          steigung;
-
         //! If the unit cannot attack in the same turn after it has moved, it has to wait
         bool         wait;
 
-        //! the resource storage capacity
-        Resources    tank;
-
         //! the fuel consumption to move a single field
         int          fuelConsumption;
-
-        //! Special abilities of the unit (bitmapped). \see cvehiclefunctions
-        int          functions;
 
         //! the distance a unit can travel each round. One value for each of the 8 levels of height
         vector<int>  movement;
@@ -188,9 +221,6 @@ extern const char*  cvehiclefunctions[];
         //! the image index from the GraphicSet , or -1 if no graphics from graphic sets are used.
         int           bipicture;
 
-        //! the gui icon for selecting this unit by construction vehicles
-        void*        buildicon;
-
         //! the ids of buildings this unit can construct
         vector<IntRange> buildingsBuildable;
 
@@ -209,6 +239,8 @@ extern const char*  cvehiclefunctions[];
         //! the group-ids of objects this unit can remove
         vector<IntRange> objectGroupsRemovable;
 
+        //! the IDs of objects that are automatically layed by moving the movement
+        vector<IntRange> objectLayedByMovement;
 
         //! The weapons
         UnitWeapon   weapons;
@@ -220,7 +252,7 @@ extern const char*  cvehiclefunctions[];
         vector<int> wreckageObject;
 
         //! some information the AI stores about this unit
-        AiValue* aiparam[8];
+        mutable AiValue* aiparam[8];
 
         //! the recommended task for the unit, set by the unit creater
         AiParameter::Job recommendedAIJob;
@@ -233,6 +265,8 @@ extern const char*  cvehiclefunctions[];
 
         //! this label can select a special sound to be played when this unit is killed
         ASCString    killSoundLabel;
+
+        vector<int> guideSortHelp;
 
         int heightChangeMethodNum;
         class HeightChangeMethod{
@@ -257,11 +291,33 @@ extern const char*  cvehiclefunctions[];
         void runTextIO ( PropertyContainer& pc );
         ~Vehicletype ( );
         Resources calcProductionsCost();
-     private:
-        void setupPictures();
+
+        int getMoveMalusType() const {
+           return movemalustyp;
+        }
+
+        struct JumpDrive {
+           JumpDrive() : height(0), maxDistance(maxint) {};
+           //! bitmapped: on these levels of height the jump drive can be activated
+           int height; 
+           Resources consumption;
+           TerrainAccess targetterrain;
+           int maxDistance;
+        } jumpDrive;
+           
+        
+        
+        void  paint ( Surface& s, SPoint pos, int player, int direction = 0 ) const;
+        const Surface&  getImage () const { return image;};
+        Surface&  getImage () { return image;};
+
+        static BitSet convertOldFunctions( int abilities, const ASCString& location );
+    private:
         void setupRemovableObjectsFromOldFileLayout();
  };
 
+
+extern ASCString getUnitReference ( Vehicle* veh );
 
 #endif
 

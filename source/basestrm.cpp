@@ -57,18 +57,16 @@
 #include <SDL_endian.h>
 
 
+#include "messaginghub.h"
 
 
-
- const int maxSearchDirNum = 10;
+ const int maxSearchDirNum = 30;
  int searchDirNum = 0;
  char* ascDirectory[maxSearchDirNum] = { NULL, NULL, NULL, NULL, NULL,
                                          NULL, NULL, NULL, NULL, NULL };
 
 
 
-
- int verbosity = 0;
 
 #pragma pack(1)
 struct trleheader {
@@ -181,6 +179,17 @@ tinternalerror::tinternalerror (  const char* filename, int l )
 tinvalidversion :: tinvalidversion ( const ASCString& _fileName, int ex, int fnd )
                  : tfileerror ( _fileName ), expected ( ex ), found ( fnd )
 {
+}
+
+ASCString tinvalidversion :: getMessage() const
+{
+   ASCString s;
+   if ( expected < found )
+      s.format( "File/module %s has invalid version.\nExpected file version %d\nFound file version %d\nThe file/module is newer than your application\nPlease install the latest version of ASC from www.asc-hq.org", getFileName().c_str(), expected, found );
+   else
+      s.format ( "File/module %s has invalid version.\nExpected file version %d\nFound file version %d\nThis is a bug, please report it!", getFileName().c_str(), expected, found );
+
+   return s;
 }
 
 
@@ -327,7 +336,7 @@ float tnstream::readFloat ( void )
 void tnstream::writeInt  ( size_t i )
 {
 #ifdef HAVE_LIMITS
-   assert( i <=  numeric_limits<int>::max());
+   // assert( i <=  numeric_limits<int>::max());
 #endif
    writeInt( int(i) );
 }
@@ -645,9 +654,9 @@ static int stream_seek( struct SDL_RWops *context, int offset, int whence)
    	if ( whence == SEEK_CUR )
 	      stream->seek ( offset + stream->getPosition() );
 	   else
-         if ( whence == SEEK_SET )
+         if ( whence == SEEK_END )
             stream->seek ( offset + stream->getSize() );
-  return 0;
+  return stream->getPosition();
 }
 
 
@@ -697,7 +706,7 @@ SDL_RWops *SDL_RWFromStream( pnstream stream )
 
 
 tncontainerstream :: tncontainerstream ( const char* containerfilename, ContainerIndexer* indexer, int dirLevel )
-        : tn_file_buf_stream ( containerfilename, reading )
+        : tn_file_buf_stream ( containerfilename, reading ), index(NULL)
 {
    num = 0;
    char magic[4];
@@ -750,8 +759,10 @@ int  tncontainerstream :: getcontainerfilesize ( const char* name )
 
 void tncontainerstream :: opencontainerfile ( const char* name )
 {
-   if ( actfile )
-      throw tfileerror ( name );
+   if ( actfile ) {
+      ASCString err = ASCString("two files simultaneously: ") + actfile->name + " and " + name;
+      throw tfileerror (  err );
+   }
 
    containerfilepos = 0;
    int i = 0;
@@ -819,6 +830,36 @@ tncontainerstream  :: ~tncontainerstream  ()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class ContainerCollector : public ContainerIndexer {
+   public:
+      struct FileIndex {
+         ASCString name;
+         pncontainerstream container;
+         int directoryLevel;
+      };
+   protected:
+
+      dynamic_array<FileIndex> index[256];    // not very efficient, but who cares :-)
+
+      dynamic_array<pncontainerstream> container;
+      int containernum;
+      struct {
+         int alpha;
+         int index;
+      } namesearch;       // next entry to return
+   public:
+      ContainerCollector ( void );
+      void init ( const char* wildcard );
+      void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
+           // pncontainerstream getfile ( const char* filename );
+      FileIndex* getfile ( const ASCString& filename );
+      FileIndex* getfirstname ( void );
+      FileIndex* getnextname ( void );
+      ASCString listContainer();
+      virtual ~ContainerCollector();
+};
+
+
 ContainerCollector containercollector;
 
 char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename )
@@ -839,8 +880,10 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 
      appendbackslash ( buf );
 
-     char name2[ maxFileStringSize ];
      if ( filename && strchr ( filename, pathdelimitter )) {
+     
+        char name2[ maxFileStringSize ];
+        // filename contains directories
         strcpy ( name2, filename );
         int i = strlen ( name2 )-1;
         while ( name2[i] != pathdelimitter )
@@ -850,6 +893,9 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
 
         filename2 = &filename[i+1];
 
+        // filename2 is now the pure filename without directory
+        // name2 is the directory
+        
         if ( buf[0] && name2[0]==pathdelimitter )
            strcpy ( buf, name2+1);
         else
@@ -877,6 +923,68 @@ char* constructFileName( char* buf, int directoryLevel, const char* path, const 
   return buf;
 }
 
+bool isPathRelative( const ASCString& path )
+{
+  if ( path.length() < 2 )
+     return true;
+     
+  if ( path[0] == '~' && path[1] == pathdelimitter )
+     return false;
+     
+  if ( path[0] == pathdelimitter )
+     return false;
+
+  return true;     
+}
+
+ASCString constructFileName( int directoryLevel, const ASCString& path, ASCString filename )
+{
+     ASCString result;
+   
+     // filenames beginning with / or ~/ have an absolute path ; ignore variable path for them
+     if ( isPathRelative( filename )) {
+        if ( !path.empty() )
+           result += path;
+        else
+           if ( directoryLevel >= 0 && ascDirectory[ directoryLevel ] )
+              result += ascDirectory[ directoryLevel ];
+     }
+
+     appendbackslash ( result );
+
+     if ( !filename.empty() && filename.find( pathdelimitter )!= ASCString::npos ) {
+        ASCString dir = filename;
+        
+        dir.erase( dir.rfind( pathdelimitter ) + 1);
+
+        filename.erase( 0, filename.find( pathdelimitter ) + 1 );
+        
+        if ( dir.find( pathdelimitter ) == 0 )
+           dir.erase( 0, 1 );
+           
+        result = dir;   
+     }
+
+     if ( result.length() > 2 && result[0] == '~' && result[1] == pathdelimitter ) {
+        char* home = getenv ( "HOME" );
+        if ( home ) {
+           ASCString temp = result;
+           result = home;
+           appendbackslash ( result );
+           result += temp.substr( 2 );
+        }
+     }
+
+
+     appendbackslash ( result );
+
+     result += filename;
+
+     return result;
+}
+
+
+
 struct FileLocation {
         int directoryLevel;
         pncontainerstream container;
@@ -886,7 +994,7 @@ struct FileLocation {
 void locateFile ( const ASCString& filename, FileLocation* loc )
 {
    loc->found = 0;
-   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename.c_str() );
+   ContainerCollector::FileIndex* idx = containercollector.getfile ( filename );
    int maxnum;
    if ( idx ) {
       maxnum = idx->directoryLevel+1;
@@ -927,6 +1035,12 @@ void locateFile ( const ASCString& filename, FileLocation* loc )
 
 
 
+ASCString listContainer()
+{
+   return containercollector.listContainer();
+}
+
+
 ContainerCollector :: ContainerCollector ( void )
 {
   containernum = 0;
@@ -951,7 +1065,7 @@ void ContainerCollector :: init ( const char* wildcard )
             }
             if ( patimat ( buf3, direntp->d_name )) {
                container[containernum++] = new tncontainerstream( constructFileName ( buf, i, buf2, direntp->d_name), this, i);
-               if ( verbosity >= 2 )
+               if ( MessagingHub::Instance().getVerbosity() >= 2 )
                   printf("container %s mounted\n", buf );
             }
          } 
@@ -967,28 +1081,27 @@ void ContainerCollector :: addfile ( const char* filename, const pncontainerstre
 
    int i1 = toupper ( filename[0] );
    for ( int i = 0; i <= index[i1].getlength(); i++ )
-      if ( stricmp ( index[i1][i].name, filename ) == 0 ) 
+      if ( index[i1][i].name.compare_ci ( filename ) == 0 ) 
          if ( index[i1][i].directoryLevel <= directoryLevel ) 
             return;
          else {
             cci = &(index[i1][i]);
-            free ( cci->name );
             found = 1;
          }
 
    if ( !found )
       cci = &( index[i1][ index[i1].getlength()+1 ] );
 
-   cci->name = strdup ( filename );
+   cci->name = filename;
    cci->container = stream;
    cci->directoryLevel = directoryLevel;
 }
 
-ContainerCollector::FileIndex* ContainerCollector :: getfile ( const char* filename )
+ContainerCollector::FileIndex* ContainerCollector :: getfile ( const ASCString& filename )
 {
    int i1 = toupper ( filename[0] );
    for ( int i = 0; i <= index[i1].getlength(); i++ )
-      if ( stricmp ( index[i1][i].name, filename ) == 0 )
+      if ( index[i1][i].name.compare_ci ( filename) == 0 )
          return &index[i1][i];
 
    return NULL;
@@ -1013,15 +1126,23 @@ ContainerCollector::FileIndex* ContainerCollector :: getnextname ( void )
    return &index[namesearch.alpha][namesearch.index++];
 }
 
+ASCString ContainerCollector :: listContainer()
+{
+   ASCString s;
+   for ( int i = 0; i < containernum; i++ )
+      s += container[i]->getLocation() + "\n";
+
+   return s;
+   
+}
+
+
 
 ContainerCollector :: ~ContainerCollector()
 {
   int i;
    for (i = 0; i < containernum; i++ )
       delete container[i];
-   for ( int j = 0; j < 255; j++ )
-      for ( int k = 0; k <= index[i].getlength(); k++ )
-         free ( index[i][k].name );
    containernum = 0;
 }
 
@@ -1586,13 +1707,12 @@ int    compressrle ( const void* p, void* q)
 
    {
       int bts[256];
-      int i;
       memset ( bts, 0, sizeof ( bts ));
-      for (i = 0; i < size ;i++ ) 
-        bts[s[i+4]]++;
+      for ( int i = 0; i < size ;i++ )
+         bts[int(s[i+4])]++;
 
       int min = 70000;
-      for ( i = 0; i < 256; i++ )
+      for ( int i = 0; i < 256; i++ )
          if ( bts[i] < min ) {
             min = bts[i];
             header->rle = i;
@@ -1646,34 +1766,37 @@ int    compressrle ( const void* p, void* q)
 
 
 
-
 bool patimat (const char *pat, const char *str, bool forceCaseInsensitivity )
 {
-      switch (*pat)
-      {
+   switch (*pat)
+   {
       case '\0':
-            return !*str;
+         return !*str;
 
       case '*' :
-            return patimat(pat+1, str, forceCaseInsensitivity) || *str && patimat(pat, str+1, forceCaseInsensitivity);
+         return patimat(pat+1, str, forceCaseInsensitivity) || *str && patimat(pat, str+1, forceCaseInsensitivity);
 
       case '?' :
-            return *str && patimat(pat+1, str+1, forceCaseInsensitivity);
+         return *str && patimat(pat+1, str+1, forceCaseInsensitivity);
 
       default  :
-         if ( forceCaseInsensitivity ||  
+         if ( forceCaseInsensitivity ||
 #if CASE_SENSITIVE_FILE_NAMES == 0
               true
 #else
               false
 #endif
-            )
-              return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1, forceCaseInsensitivity);
+           )
+            return (toupper(*pat) == toupper(*str)) && patimat(pat+1, str+1, forceCaseInsensitivity);
          else
             return (*pat == *str) && patimat(pat+1, str+1, forceCaseInsensitivity );
       }
 }
 
+bool patimat (const ASCString& pat, const ASCString& str, bool forceCaseInsensitivity)
+{
+   return patimat( pat.c_str(), str.c_str(), forceCaseInsensitivity );
+}
 
 
 tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTypes searchTypes )
@@ -1721,9 +1844,9 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
          }
 
          int dirsToProcess;
-         if ( searchPosition == AllDirs )
+         if ( searchPosition == AllDirs ) {
             dirsToProcess = searchDirNum;
-         else
+         } else
             dirsToProcess = 1;
 
          dirNum = 0;
@@ -1744,6 +1867,12 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
 
             directory[dirNum++] = dir + strippedPath;
          }
+
+         if ( !dirNum  ) {
+            directory[0] = ".";
+            dirNum = 1;
+         }
+
       }
 
       wildcard.assign ( name, ppos+1, name.npos );
@@ -1813,7 +1942,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
           if ( patimat ( name.c_str(), c->name ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
-                if ( stricmp ( c->name, fileInfo[i].name.c_str() ) == 0 ) {
+                if ( stricmp ( c->name.c_str(), fileInfo[i].name.c_str() ) == 0 ) {
                    if ( fileInfo[i].directoryLevel <= c->directoryLevel )
                       f = 1;
                    else {
@@ -2055,37 +2184,30 @@ int tmemorystream :: dataavail ( void )
 }
 
 
-char tempstringbuf[ maxFileStringSize ];
 
-char* getnextfilenumname ( const char* first, const char* suffix, int num )
+ASCString getnextfilenumname ( const ASCString& first, const ASCString& suffix, int num )
 {
-
-   int found = 0;
-
+   ASCString name;
+   
    if ( num < 0 )
      num = 0;
 
-   // int sl = strlen ( first );
-   char tmp[260];
    do {
-      strcpy ( tmp, first );
-      itoa ( num, tempstringbuf, 10 );
-      while ( strlen ( tmp ) + strlen ( tempstringbuf ) < 8 )
-         strcat ( tmp, "0" );
-      strcat ( tmp, tempstringbuf );
-      strcat ( tmp, "." );
-      strcat ( tmp, suffix );
+      name = first;
+      while ( name.length() - first.length() + ASCString::toString(num).length() < 3 )
+         name += "0";
 
-      tfindfile ff ( tmp );
-      string c = ff.getnextname();
-      if ( c.empty() ) {
-         strcpy ( tempstringbuf, tmp );
-         found = 1;
-      }
+      name += ASCString::toString(num) + "." + suffix;
+
+      tfindfile ff ( name );
+      ASCString c = ff.getnextname();
+      if ( c.empty() )
+         return name;
+      
       num++;
-   } while ( found == 0 ); /* enddo */
+   } while ( true ); 
 
-   return tempstringbuf;
+   return "";
 }
 
 
@@ -2134,7 +2256,7 @@ time_t get_filetime ( const char* fileName )
 }
 
 
-int filesize( char *name)
+int filesize( const char *name)
 {
   struct stat buf;
 
@@ -2162,23 +2284,19 @@ int directoryExist ( const char* path )
    return existence;
 }
 
-void addSearchPath ( const char* path )
+void addSearchPath ( const ASCString& path )
 {
-   if ( path && path[0] ) {
-      char buf[ maxFileStringSize ];
-      char* string = new char[ strlen(path) +  maxFileStringSize ];
-      strcpy ( string, constructFileName ( buf, -3, path, NULL ) );
+   if ( !path.empty() ) {
+      ASCString s = constructFileName ( -3, path, "" );
 
-      if ( directoryExist( buf )) {
-         int found = 0;
+      if ( directoryExist( s.c_str() )) {
+         bool found = false;
          for ( int i = 0; i < searchDirNum; i++ )
-            if ( strcmp ( string, ascDirectory[i]) == 0 )
-               found++;
+            if ( s == ascDirectory[i] )
+               found = true;
    
          if ( !found )
-            ascDirectory[ searchDirNum++ ] = string;
-         else
-            delete[] string;
+            ascDirectory[ searchDirNum++ ] = strdup ( s.c_str() );
       }
    }
 }

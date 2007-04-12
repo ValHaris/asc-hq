@@ -75,7 +75,7 @@ class TextPropertyGroup {
          typedef list<Entry*> EntryPointerList;
 
       protected:
-         void error ( const ASCString& msg );
+         void error ( const ASCString& msg, bool printInheritance = true );
          bool processAlias( Entry& e, Entries& entriesToAdd, EntryPointerList& markAsResolved );
          int findGeneration ( Entry* e );
          ASCString listInheritanceFilenames();

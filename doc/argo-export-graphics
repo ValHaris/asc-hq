@@ -1,0 +1,1 @@
+java -Xmx256M -jar /usr/share/java/argouml.jar -command "org.argouml.uml.ui.ActionOpenProject=design.zargo" -command "org.argouml.ui.cmd.ActionGotoDiagram=Class Diagram 1" -command "org.argouml.uml.ui.ActionSaveGraphics=classes.gif" -command "org.argouml.ui.cmd.ActionExit=yes"

@@ -41,9 +41,6 @@
 #include "memorycheck.cpp"
 #include "graphicset.h"
 
-pprogressbar actprogressbar = NULL;
-
-void repaintdisplay ( void ) {};
 
 void         loadcursor(void)
 { 
@@ -94,8 +91,6 @@ void         loadcursor(void)
 void loaddata( void ) 
 {
    loadcursor();
-
-   loadguipictures();
 
    loadalltextfiles();
 
@@ -320,7 +315,7 @@ int main(int argc, char *argv[] )
 
    virtualscreenbuf.init();
 
-   initializeEventHandling ( mapeditorMainThread, NULL, NULL );
+   initializeEventHandling ( mapeditorMainThread, NULL );
 
    return 0;
 }

@@ -1,0 +1,1739 @@
+
+panel {
+   x = 50
+   y = 50
+   width = 704
+   height = 604
+   FontColor = 0xffffff
+   name = MainWidget
+   TitlebarHeight = 0
+   
+   Title = Cargo
+
+   backgroundimage = cargo_pad.png
+      
+   ChildWidgets = GeneralInfoPane UnitScrollArea SubWindowPane SubWindowSelectorPane 
+   
+
+   GeneralInfoPane {
+      type = dummy
+      x = 69
+      y = 22
+      x2 = 674
+      y2 = 90      
+
+      ChildWidgets = Resources Names MunitionsIMG MunitionsCNT ContainerImage AmmoSkipper1 AmmoSkipper2
+
+      ContainerImage {
+         type = SpecialDisplay
+         x = 2
+         y = 6 
+         x2 = 50
+         y2 = 60
+         name = unitpad_unitsymbol
+      } ContainerImage
+
+      Resources {
+         type = dummy
+         
+         x = 259
+         y = 0
+         width = 340
+         height = 36
+         
+         ChildWidgets = Energy Material Fuel Damage EnergyLabel MaterialLabel FuelLabel DamageLabel
+            
+         Damage {
+            type = TextOutput
+            x = 0
+            y = 0
+            width = 165
+            height = 17
+            name = numericaldamage
+            TextAlign = Right
+         } Damage
+
+         Energy {
+            type = TextOutput
+            x = 172
+            y = 0
+            width = 165
+            height = 17
+            name = energyavail
+            TextAlign = Right
+         } Energy
+
+         Material {
+            type = TextOutput
+            x = 0
+            y = 18
+            width = 165
+            height = 17
+            name = materialavail
+            TextAlign = Right
+         } Material
+         
+         Fuel {
+            type = TextOutput
+            x = 172
+            y = 18
+            width = 165
+            height = 17
+            name = fuelavail
+            TextAlign = Right
+         } Fuel
+
+         DamageLabel {
+            type = StaticText
+            x = 2
+            y = 0
+            width = 165
+            height = 17
+            Text = Damage
+         } DamageLabel
+
+         EnergyLabel {
+            type = StaticText
+            x = 174
+            y = 0
+            width = 165
+            height = 17
+            Text = Energy
+         } EnergyLabel
+
+         MaterialLabel {
+            type = StaticText
+            x = 2
+            y = 18
+            width = 165
+            height = 17
+            Text = Material
+         } MaterialLabel
+         
+         FuelLabel {
+            type = StaticText
+            x = 174
+            y = 18
+            width = 165
+            height = 17
+            Text = Fuel
+         } FuelLabel
+
+      } Resources
+      
+      Names { 
+         type = dummy
+   
+         x = 65
+         y = 0
+         x2 = 231
+         y2 = 62
+   
+         Childwidgets = UnitName UnitClass
+   
+         UnitName {
+                  type = TextOutput
+                  x = 1
+                  y = 42
+                  x2 = -1
+                  height = 15
+                  name = UnitName
+         } UnitName
+   
+         UnitClass {
+                  type = TextOutput
+                  x = 1
+                  y = 1
+                  x2 = -1
+                  height = 15
+                  name = UnitClass
+         } UnitClass
+
+      } Names
+      
+      MunitionsIMG {
+         type = dummy
+
+         x = 264
+         y = 41
+         height = 10
+         x2 = 672
+
+         Childwidgets = CruiseMissile Mine Bomb LargeMissile SmallMissile MachineGun Cannon Torpedo
+   
+         CruiseMissile {
+                           type = image
+                           x = 0
+                           y = 0
+                           filename = weap-cruisemissile-small.png
+                           ToolTipHelp = Cruise Missile
+                           } CruiseMissile
+   
+         Mine {
+                           type = image
+                           x = 35
+                           y = 0
+                           width = 20         
+                           filename = weap-mine-small.png
+                           ToolTipHelp = Mine
+                           } Mine   
+         
+         Bomb {
+                           type = image
+                           x = 70
+                           y = 0
+                           width = 20         
+                           filename = weap-bomb-small.png
+                           ToolTipHelp = Bomb
+                           } Bomb
+   
+         LargeMissile  {
+                           type = image
+                           x = 105
+                           y = 0
+                           width = 20         
+                           filename = weap-bigmissile-small.png
+                           ToolTipHelp = Big Missile
+                           } LargeMissile
+   
+         SmallMissile  {
+                           type = image
+                           x = 140
+                           y = 0
+                           width = 20         
+                           filename = weap-smallmissile-small.png
+                           ToolTipHelp = Small Missile
+                           } SmallMissile
+   
+         MachineGun    {
+                           type = image
+                           x = 175
+                           y = 0
+                           width = 20         
+                           filename = weap-machinegun-small.png
+                           ToolTipHelp = Machine Gun
+                           } MachineGun
+   
+         Cannon          {
+                           type = image
+                           x = 210
+                           y = 0
+                           width = 20         
+                           filename = weap-cannon-small.png
+                           ToolTipHelp = Cannon
+                           } Cannon
+   
+         Torpedo {
+                           type = image
+                           x = 245
+                           y = 0
+                           width = 20         
+                           filename = weap-torpedo-small.png
+                           ToolTipHelp = Torpedo
+                           } Torpedo      
+      } MunitionsIMG
+
+
+      MunitionsCNT {
+         type = dummy
+
+         x = 264
+         y = 55
+         height = 10
+         x2 = 672
+         TextAlign = Right  
+
+         Childwidgets = CruiseMissile Mine Bomb LargeMissile SmallMissile MachineGun Cannon Torpedo
+   
+         CruiseMissile {
+                           type = TextOutput
+                           x = 0
+                           y = 1
+                           width = 20         
+                           name = cmmun
+                           ToolTipHelp = Cruise Missile
+                           } CruiseMissile
+   
+         Mine {
+                           type = TextOutput
+                           x = 35
+                           y = 1
+                           width = 20         
+                           name = minemun
+                           ToolTipHelp = Mine
+                           } Mine   
+         
+         Bomb {
+                           type = TextOutput
+                           x = 70
+                           y = 1
+                           width = 20         
+                           name = bombmun
+                           ToolTipHelp = Bomb
+                           } Bomb
+   
+         LargeMissile  {
+                           type = TextOutput
+                           x = 105
+                           y = 1
+                           width = 20         
+                           name = lmmun
+                           ToolTipHelp = Large Missile
+                           } LargeMissile
+   
+         SmallMissile  {
+                           type = TextOutput
+                           x = 140
+                           y = 1
+                           width = 20         
+                           name = smmun
+                           ToolTipHelp = Small Missile
+                           } SmallMissile
+   
+         MachineGun    {
+                           type = TextOutput
+                           x = 175
+                           y = 1
+                           width = 20         
+                           name = mgmun
+                           ToolTipHelp = Machine Gun
+                           } MachineGun
+   
+         Cannon          {
+                           type = TextOutput
+                           x = 210
+                           y = 1
+                           width = 20         
+                           name = canmun
+                           ToolTipHelp = Cannon
+                           } Cannon
+   
+         Torpedo {
+                           type = TextOutput
+                           x = 245
+                           y = 1
+                           width = 20         
+                           name = torpmun
+                           ToolTipHelp = Torpedo
+                           } Torpedo      
+      } MunitionsCNT
+
+
+      AmmoSkipper1 {
+         type = Plain
+         x = 538
+         y = 38
+         width = 32
+         height = 30
+         BackgroundColor = 0x5e5e5e
+      } AmmoSkipper1
+
+      AmmoSkipper2 {
+         type = Plain
+         x = 573
+         y = 38
+         width = 32
+         height = 30  
+         BackgroundColor = 0x5e5e5e
+      } AmmoSkipper2
+
+   } GeneralInfoPane
+  
+   UnitScrollArea {
+      type = dummy
+      ; backgroundcolor = 0x3f3f3f
+      ; localtransparency = 255
+      x = 143
+      y = 147
+      x2 = 638
+      y2 = 365
+      userhandler = ScrollArea
+      UnitSlot {
+         type = SpecialDisplay
+         x = 0
+         y = 0
+         width = 78
+         height = 71 
+         ChildWidgets = DamageBar FuelBar 
+
+         unitposx = 15
+         unitposy = 11
+
+         DamageBar {
+           type = BarGraph
+           BackgroundColor = 0xff00
+           x = 5 
+           y = 5
+           width = 12
+           height = 61
+           Direction = buttom2top
+           ToolTipHelp = damage
+         } DamageBar
+         FuelBar {
+           type = BarGraph
+           BackgroundColor = 0xff
+           x = 61 
+           y = 5
+           width = 12
+           height = 61
+           Direction = buttom2top
+           ToolTipHelp = fuel
+         } FuelBar
+      } UnitSlot
+
+   } UnitScrollArea
+
+   LoadingMeter {
+      type = BarGraph
+
+      ; this graph shows how much of the transports max carrying weight is used up right now by its cargo
+
+      x = -14
+      y = 162
+      x2 = -1
+      height = 200
+      Direction = buttom2top
+      BackgroundColor = 0x00FF00
+   } LoadingMeter
+
+   SubWindowPane {
+      type = plain
+      localtransparency = 255
+      backgroundcolor = 0x3f3f30
+
+      x = 115
+      y = 418
+      x2 = 639
+      y2 = 588
+
+      ChildWidgets = info cargoinfo conventionalpower mining research resourceinfo solarpower windpower damagecontrol
+      
+      
+      info {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         
+         ChildWidgets = InfoText
+         InfoText {
+            type = StaticText
+            text = info
+            x = 10
+            y = 10
+            height = 20
+            width = 100
+         } InfoText   
+         
+      } info
+
+      damagecontrol {
+         type = image
+         filename = cargo-buildingcontrol.png
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         
+         ChildWidgets = InfoText EnergyCost MaterialCost FuelCost DamageBar RepairButton MeterLabel BuildingInfo RepairCostLabel
+
+         MeterLabel {
+            type= dummy
+            x = 27
+            y = 36
+            x2 = 219
+            y2 = 51 
+
+            ChildWidgets = zero label hundret 
+           
+            zero {
+              textalign = right
+              x = 0
+              y = 0
+              type = Statictext
+              text = 0%
+            } zero
+
+            hundret {
+              textalign = left
+              x = 0
+              y = 0
+              type = Statictext
+              text = 100%
+            } hundret
+           
+            label {
+              textalign = center
+              x = 0
+              y = 0
+              type = Statictext
+              text = damage
+            } label
+         } MeterLabel
+
+         DamageBar {
+            type = dummy
+            UserHandler = DamageBar
+            color = 0xFFDDDD
+            x = 27
+            y = 54
+            x2 = 218
+            y2 = 72
+         } DamageBar
+
+
+         InfoText {
+            type = StaticText
+            text = Building Status
+            x = 20
+            y = 6
+            x2 = 241
+            y2 = 20
+         } InfoText   
+
+         RepairButton {
+            type = button
+            x = 327
+            y = 109
+            x2 = 398
+            y2 = 135
+            text = Repair!
+         } RepairButton
+
+         RepairCostLabel {
+            type = TextOutput
+            x = 239
+            y = 54
+            x2 =  349
+            y2 = 71
+         } RepairCostLabel
+
+         EnergyCost {
+            type = TextOutput
+            textalign = right
+            x = 354
+            y = 55
+            width = 50
+            height = 16
+         } EnergyCost
+         MaterialCost {
+            type = TextOutput
+            textalign = right
+            x = 406
+            y = 55
+            width = 50
+            height = 16
+         } MaterialCost
+         FuelCost {
+            type = TextOutput
+            textalign = right
+            x = 458
+            y = 55
+            width = 50
+            height = 16
+         } FuelCost
+
+         BuildingInfo {
+            type = dummy
+            x = 27
+            y = 98
+            x2 = 218
+            y2 = 149
+            ChildWidgets = ViewLabel View JammingLabel Jamming ArmorLabel Armor 
+
+            ViewLabel {
+               type = staticText
+               text = View
+               x = 2
+               y = 0
+               width = 137
+               height = 15
+            } ViewLabel
+            JammingLabel {
+               type = staticText
+               text = Jamming
+               x = 2
+               y = 18
+               width = 137
+               height = 15
+            } JammingLabel
+            ArmorLabel {
+               type = staticText
+               text = Armor
+               x = 2
+               y = 36
+               width = 137
+               height = 15
+            } ArmorLabel
+
+            View {
+               textalign = right
+               type = textoutput
+               x = 140
+               y = 0
+               width = 50
+               height = 15
+            } View
+            Jamming {
+               textalign = right
+               type = textoutput
+               x = 140
+               y = 18
+               width = 50
+               height = 15
+            } Jamming
+            Armor {
+               textalign = right
+               type = textoutput
+               x = 140
+               y = 36
+               width = 50
+               height = 15
+            } Armor
+
+         } BuildingInfo
+        
+      } damagecontrol
+
+      
+      cargoinfo {
+         type = image
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         
+         Filename = cargo-cargoinfo-subwin.png
+
+         ChildWidgets = InfoText LoadingMeter2 MeterLabel Label3 CurrentCargo FreeLabel MaxLabel WeightLabel SlotLabel FreeWeight MaxWeight FreeSlots MaxSlots TypeLabel TypeImage MaxUnitSizeLabel MaxUnitSize UnitTypeLabel UnitTypeList
+         InfoText {
+            type = StaticText
+            text = Cargo Info
+            x = 20
+            y = 6
+            x2 = 241
+            y2 = 20
+         } InfoText 
+
+         FreeLabel {
+            textalign = right
+            type = StaticText
+            text = free
+            x = 142
+            y = 30
+            width = 100
+            height = 10
+         } FreeLabel
+
+         MaxLabel {
+            textalign = right
+            type = StaticText
+            text = max
+            x = 246
+            y = 30
+            width = 100
+            height = 10
+         } MaxLabel
+
+         WeightLabel {
+            type = StaticText
+            text = weight
+            x = 27
+            y = 45
+            width = 100
+            height = 12
+         } WeightLabel
+
+         SlotLabel {
+            type = StaticText
+            text = storing positions
+            x = 27
+            y = 61
+            width = 100
+            height = 12
+         } SlotLabel
+
+         FreeWeight {
+            textalign = right
+            type = TextOutput
+            x = 142
+            y = 45
+            width = 100
+            height = 12
+         } FreeWeight
+
+         MaxWeight {
+            textalign = right
+            type = TextOutput
+            x = 246
+            y = 45
+            width = 100
+            height = 12
+         } MaxWeight
+
+         FreeSlots {
+            textalign = right
+            type = TextOutput
+            x = 142
+            y = 61
+            width = 100
+            height = 12
+         } FreeSlots
+
+         MaxSlots {
+            textalign = right
+            type = TextOutput
+            x = 246
+            y = 61
+            width = 100
+            height = 12
+         } MaxSlots
+
+         Label3 {
+            type = StaticText
+            text = Selected unit's weight
+            x = 27
+            y = 92
+            x2 = 137
+            height = 12
+         } Label3
+
+         CurrentCargo {
+            textalign = right
+            type = TextOutput
+            x = 142
+            y = 92
+            x2 = 227
+            height = 12
+         } CurrentCargo
+
+
+
+         TypeLabel {
+            type = statictext
+            x = 246
+            y = 85
+            x2 = 301
+            y2 = 110
+            text = type
+         } TypeLabel
+      
+         TypeImage {
+            type = image
+            x = 303
+            y = 85
+            x2 = 347
+            y2 = 110 
+         } TypeImage
+
+
+         LoadingMeter2 {
+            type = BarGraph
+      
+            ; this graph shows how much of the transports max carrying weight is used up right now by its cargo
+      
+            x = 27
+            y = 140
+            x2 = 347
+            y2 = 158
+            Direction = left2right
+            BackgroundColor = 0x00FF00
+         } LoadingMeter2
+
+         MeterLabel {
+            type= dummy
+            x = 27
+            y = 122
+            x2 = 347
+            y2 = 137 
+
+            ChildWidgets = zero label hundret 
+           
+            zero {
+              textalign = left
+              x = 0
+              y = 0
+              type = Statictext
+              text = 0%
+            } zero
+
+            hundret {
+              textalign = right
+              x = 0
+              y = 0
+              type = Statictext
+              text = 100%
+            } hundret
+           
+            label {
+              textalign = center
+              x = 0
+              y = 0
+              type = Statictext
+              text = used loading capacity
+            } label
+         } MeterLabel
+
+         Label1 {
+            type = StaticText
+            text = used cargo capacity
+            x = 40
+            y = 40
+            width = 200
+            height = 15
+         } Label1
+
+         CargoUsage {
+            type = TextOutput
+            x = 240
+            y = 40
+            width = 100
+            height = 15
+         } CargoUsage
+
+         MaxUnitSizeLabel {
+            x = 405
+            y = 131
+            x2 = 476
+            y2 = 140
+            type = StaticText
+            Text = Max unit weight
+         } MaxUnitSizeLabel
+         
+         MaxUnitSize {
+            x = 405
+            y = 144
+            x2 = 476
+            y2 = 156
+            type = TextOutput
+            textalign = right
+         } MaxUnitSize
+
+         UnitTypeLabel {
+            x = 405
+            y = 30
+            x2 = 476
+            y2 = 40
+            type = statictext
+            text = Loadable types
+         } UnitTypeLabel
+         
+         UnitTypeList {
+            type = scrollarea
+            userhandler = UnitTypeList
+            x = 405
+            y = 43
+            x2 = 476
+            y2 = 118
+         } UnitTypeList
+         
+         
+      } cargoinfo
+      
+      conventionalpower {
+         type = image
+         fontsize = 10
+         filename = cargo-matterconverter.png
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         
+         ; We only need two Lines: Input and Output
+
+         ChildWidgets = Input Output PowerSlider
+
+         PowerSlider {
+            type = slider
+            style = slider
+            x = 27
+            y = 127
+            x2 = 295
+            y2  = 141
+            Orientation = horizontal
+
+         } PowerSlider
+ 
+
+         Input {
+            type = dummy
+            x = 27
+            y = 56
+            x2 = 295
+            height = 15
+            ChildWidgets = Label energyIn materialIn fuelIn
+            Label {
+               type = StaticText
+               text = Consumption
+               x = 0
+               y = 0
+               width = 110
+               y2 = -1
+            } Label
+            energyIn {
+              type = TextOutput 
+              x = 115
+              y = 0
+              width = 50
+              y2 = -1
+              TextAlign = Right
+            } energyIn 
+            materialIn {
+              type = TextOutput 
+              x = 167
+              y = 0
+              width = 50
+              y2 = -1
+              TextAlign = Right
+            } materialIn
+            fuelIn {
+              type = TextOutput 
+              x = 219
+              y = 0
+              width = 50
+              y2 = -1
+              TextAlign = Right
+            } fuelIn 
+         } Input
+         Output {
+            type = dummy
+            x = 27
+            y = 74
+            x2 = 295
+            height = 15
+            ChildWidgets = Label energyOut materialOut fuelOut
+            Label {
+               type = StaticText
+               text = Output
+               x = 0
+               y = 0
+               width = 79
+               y2 = -1
+            } Label
+            energyOut {
+              type = TextOutput 
+              x = 115
+              y = 0
+              width = 45
+              y2 = -1
+              TextAlign = Right
+            } energyOut 
+            materialOut {
+              type = TextOutput 
+              x = 167
+              y = 0
+              width = 45
+              y2 = -1
+              TextAlign = Right
+            } materialOut
+            fuelOut {
+              type = TextOutput 
+              x = 219
+              y = 0
+              width = 45
+              y2 = -1
+              TextAlign = Right
+            } fuelOut 
+         } Output
+
+         GraphArea {
+            type = dummy
+            x = 275
+            y = 40
+            x2 = 509
+            y2 = 157
+            UserHandler = ResourceGraph
+         } GraphArea
+         
+      } conventionalpower
+      
+      mining {
+         type = image
+         filename = cargo-mining-window.png
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+
+         ChildWidgets = Input Output PowerSlider GraphArea
+
+         GraphArea {
+            type = dummy
+            x = 318
+            y = 36
+            x2 = 507
+            y2 = 155
+            UserHandler = MiningGraph
+         } GraphArea
+
+
+         PowerSlider {
+            type = slider
+            style = slider
+            x = 27
+            y = 141
+            x2 = 295
+            y2  = 141
+            Orientation = horizontal
+         } PowerSlider
+ 
+
+         Input {
+            type = dummy
+            x = 27
+            y = 56
+            x2 = 295
+            height = 15
+            ChildWidgets = Label energyIn materialIn fuelIn
+            Label {
+               type = StaticText
+               text = Consumption
+               x = 0
+               y = 0
+               width = 110
+               y2 = -1
+            } Label
+            energyIn {
+              type = TextOutput 
+              x = 115
+              y = 0
+              width = 50
+              y2 = -1
+              TextAlign = Right
+            } energyIn 
+            materialIn {
+              type = TextOutput 
+              x = 167
+              y = 0
+              width = 50
+              y2 = -1
+              TextAlign = Right
+            } materialIn
+            fuelIn {
+              type = TextOutput 
+              x = 219
+              y = 0
+              width = 50
+              y2 = -1
+              TextAlign = Right
+            } fuelIn 
+         } Input
+         Output {
+            type = dummy
+            x = 27
+            y = 74
+            x2 = 295
+            height = 15
+            ChildWidgets = Label energyOut materialOut fuelOut
+            Label {
+               type = StaticText
+               text = Output
+               x = 0
+               y = 0
+               width = 79
+               y2 = -1
+            } Label
+            energyOut {
+              type = TextOutput 
+              x = 115
+              y = 0
+              width = 45
+              y2 = -1
+              TextAlign = Right
+            } energyOut 
+            materialOut {
+              type = TextOutput 
+              x = 167
+              y = 0
+              width = 45
+              y2 = -1
+              TextAlign = Right
+            } materialOut
+            fuelOut {
+              type = TextOutput 
+              x = 219
+              y = 0
+              width = 45
+              y2 = -1
+              TextAlign = Right
+            } fuelOut 
+         } Output
+
+        
+      } mining
+      
+      netcontrol {
+
+         ;  NETCONTROL IS NOT USED ANY MORE !!
+
+         type = dummy
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         
+         ChildWidgets = Background
+         Background {
+            type = image
+            Filename = cargo-netcontrol-subwin.png
+            x = 0
+            y = 0
+            x2 = -1
+            y2 = -1
+
+            ChildWidgets = InfoText Line1Text Line2Text Line3Text Line4Text ButtonColA ButtonColB ButtonColC
+            InfoText {
+               type = StaticText
+               text = Resource Net Control
+               x = 20
+               y = 6
+               x2 = 241
+               y2 = 20
+            } InfoText 
+
+            Line1Text {
+               type = StaticText
+               text = Pump Dry
+               x = 16
+               y = 46
+               x2 = 150
+               height = 15
+            } Line1Text
+
+            Line2Text {
+               type = StaticText
+               text = Fill storage
+               x = 16
+               y = 76
+               x2 = 150
+               height = 15
+            } Line2Text
+
+            Line3Text {
+               type = StaticText
+               text = stop draining
+               x = 16
+               y = 106
+               x2 = 150
+               height = 15
+            } Line3Text
+
+            Line4Text {
+               type = StaticText
+               text = stop filling in
+               x = 16
+               y = 136
+               x2 = 150
+               height = 15
+            } Line4Text
+
+            ButtonColA {
+               type = dummy
+               x = 315
+               y = 44
+               width = 30
+               height = 112
+
+               ChildWidgets = Button1a Button2a Button3a Button4a
+
+               Button1a {
+                  type = button
+                  x = 0
+                  y = 0
+                  x2 = -1
+                  height = 22
+               } Button1a
+
+               Button2a {
+                  type = button
+                  x = 0
+                  y = 30
+                  x2 = -1
+                  height = 22
+               } Button2a
+
+               Button3a {
+                  type = button
+                  x = 0
+                  y = 60
+                  x2 = -1
+                  height = 22
+               } Button3a
+
+               Button4a {
+                  type = button
+                  x = 0
+                  y = 90
+                  x2 = -1
+                  height = 22
+               } Button4a
+            } ButtonColA
+
+            ButtonColB {
+               type = dummy
+               x = 382
+               y = 44
+               width = 30
+               height = 112
+
+               ChildWidgets = Button1b Button2b Button3b Button4b
+
+               Button1b {
+                  type = button
+                  x = 0
+                  y = 0
+                  x2 = -1
+                  height = 22
+               } Button1b
+
+               Button2b {
+                  type = button
+                  x = 0
+                  y = 30
+                  x2 = -1
+                  height = 22
+               } Button2b
+
+               Button3b {
+                  type = button
+                  x = 0
+                  y = 60
+                  x2 = -1
+                  height = 22
+               } Button3b
+
+               Button4b {
+                  type = button
+                  x = 0
+                  y = 90
+                  x2 = -1
+                  height = 22
+               } Button4b
+            } ButtonColB
+
+            ButtonColC {
+               type = dummy
+               x = 447
+               y = 44
+               width = 30
+               height = 112
+
+               ChildWidgets = Button1c Button2c Button3c Button4c
+
+               Button1c {
+                  type = button
+                  x = 0
+                  y = 0
+                  x2 = -1
+                  height = 22
+               } Button1c
+
+               Button2c {
+                  type = button
+                  x = 0
+                  y = 30
+                  x2 = -1
+                  height = 22
+               } Button2c
+
+               Button3c {
+                  type = button
+                  x = 0
+                  y = 60
+                  x2 = -1
+                  height = 22
+               } Button3c
+
+               Button4c {
+                  type = button
+                  x = 0
+                  y = 90
+                  x2 = -1
+                  height = 22
+               } Button4c
+            } ButtonColC
+
+
+         } Background
+         
+      } netcontrol
+      
+      research {
+         type = image
+         Filename = cargo-dialog-research.png
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         ChildWidgets = CurrentTech ResPerTurnLabel ResPerTurnLabelGlobal ResPerTurnLocal ResPerTurnGlobal   CostLabelLocal CostLabelGlobal AvailLabel AvailGlobal GraphArea CostLocal0 CostGlobal0 CostLocal1 CostGlobal1 CostLocal2 CostGlobal2 Description
+
+         Description {
+            type = StaticText
+            text = Research Lab
+            x = 10
+            y = 9
+            x2 = 285
+            y2 = 21
+         } Description
+
+
+         CurrentTech {
+            type = TextOutput
+            x = 48
+            y = 30
+            x2 = 311
+            y2 = 45
+         } CurrentTech
+
+         AvailLabel {
+            type = StaticText
+            text = Turns till completion
+            x = 48
+            y = 47
+            x2 = 268
+            y2 = 62
+         } AvailLabel
+
+         AvailGlobal {
+            type = TextOutput
+            text = Cost
+            x = 272
+            y = 47
+            x2 = 311
+            y2 = 62
+            TextAlign = Right
+         } AvailGlobal
+
+
+         ResPerTurnLabel {
+            type = StaticText
+            text = Research - this lab
+            x = 48
+            y = 73
+            x2 = 268
+            height = 15
+         } ResPerTurnLabel
+
+         ResPerTurnLocal {
+            type = TextOutput
+            x = 272
+            y = 73
+            x2 = 311
+            height = 15
+            TextAlign = Right
+         } ResPerTurnLocal
+
+         ResPerTurnLabelGlobal {
+            type = StaticText
+            text = Research - all labs
+            x = 48
+            y = 90
+            x2 = 268
+            height = 15
+         } ResPerTurnLabelGlobal
+         ResPerTurnGlobal {
+            type = TextOutput
+            x = 272
+            y = 90
+            x2 = 311
+            height = 15
+            TextAlign = Right
+         } ResPerTurnGlobal
+
+
+         CostLabelLocal {
+            type = StaticText
+            text = Cost - this lab
+            x = 48
+            y = 126
+            x2 = 181
+            height = 15
+         } CostLabelLocal
+         CostLabelGlobal {
+            type = StaticText
+            text = Cost - all labs
+            x = 48
+            y = 143
+            x2 = 181
+            height = 15
+         } CostLabelGlobal
+
+         CostLocal0 {
+            type = TextOutput
+            x = 185
+            y = 126
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostLocal0
+         CostGlobal0 {
+            type = TextOutput
+            text = Cost
+            x = 185
+            y = 143
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostGlobal0
+
+         CostLocal1 {
+            type = TextOutput
+            x = 228
+            y = 126
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostLocal1
+         CostGlobal1 {
+            type = TextOutput
+            text = Cost
+            x = 228
+            y = 143
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostGlobal1
+
+         CostLocal2 {
+            type = TextOutput
+            x = 270
+            y = 126
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostLocal2
+         CostGlobal2 {
+            type = TextOutput
+            text = Cost
+            x = 270
+            y = 143
+            width = 40
+            height = 15
+            TextAlign = Right
+         } CostGlobal2
+
+
+         GraphArea {
+            type = dummy
+            x = 334
+            y = 38
+            x2 = 502
+            y2 = 143
+            UserHandler = ResearchGraph
+         } GraphArea
+
+         
+      } research
+
+      resourceinfo {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = -1
+         y2 = -1
+         
+         ChildWidgets = Background
+         Background {
+            type = image
+            Filename = cargo-dialog-resourceinfo.png
+            x = 0
+            y = 0
+            x2 = -1
+            y2 = -1
+
+            ChildWidgets = LineLabels ColumnLabels Data Description
+
+            Description {
+               type = StaticText
+               text = Resource Network Info
+               x = 10
+               y = 9
+               x2 = 285
+               y2 = 21
+            } Description
+
+             ; Local1 Local2 Local3 Net1 Net2 Net3 Global1 Global2 Global3
+            LineLabels {
+               type = dummy
+               x = 14
+               y = 77
+               x2 = 70
+               y2 = 162
+               ChildWidgets = avail capacity plus usage
+               avail {
+                  type = StaticText
+                  text = Avail
+                  x = 0
+                  y = 0
+                  x2 = -1 
+                  height = 15
+               } avail
+               capacity {
+                  type = StaticText
+                  text = Capacity
+                  x = 0
+                  y = 23
+                  x2 = -1 
+                  height = 15
+               } capacity
+               plus {
+                  type = StaticText
+                  text = Plus
+                  x = 0
+                  y = 46
+                  x2 = -1 
+                  height = 15
+               } plus
+               usage {
+                  type = StaticText
+                  text = Usage
+                  x = 0
+                  y = 69
+                  x2 = -1 
+                  height = 15
+               } usage
+            } LineLabels
+
+            ColumnLabels {
+               type = dummy
+               x = 116
+               y = 29
+               x2 = 480
+               y2 = 47
+               TextAlign = Center
+               ChildWidgets = local net global
+               local {
+                  type = StaticText
+                  text = Local
+                  x = 0
+                  y = 0
+                  width = 58
+                  y2 = -1
+               } local 
+
+               net {
+                  type = StaticText
+                  text = Network
+                  x = 150
+                  y = 0
+                  width = 58
+                  y2 = -1
+               } net 
+
+               global {
+                  type = StaticText
+                  text = Global
+                  x = 300
+                  y = 0
+                  width = 58
+                  y2 = -1
+               } global 
+            } ColumnLabels
+
+            Data {
+               type = dummy
+               TextAlign = Right
+               x = 72
+               y = 75
+               x2 = 515
+               y2 = 165
+               UserHandler = ResourceTable
+            } Data
+         } Background
+         
+      } resourceinfo
+            
+      solarpower {
+         type = dummy
+         x = 0
+         y = 0
+         width = 524
+         height = 170
+         
+         ChildWidgets = BKGR
+         BKGR {
+            type = image
+            FileName = cargo-dialog-solar.png
+            x = 0
+            y = 0
+            width = 524
+            height = 170
+
+            ; We don't really need a third line with "power storable" 
+
+            ChildWidgets = Description MaxPower CurrentPower MaxPower2 CurrentPower2 Weather Weather2
+            Description {
+               type = StaticText
+               text = Solar Power Plant
+               x = 10
+               y = 9
+               x2 = 285
+               y2 = 21
+            } Description
+
+            Weather2 {
+               type = StaticText
+               text = Current Weather
+               x = 28
+               y = 38
+               x2 = 164
+               height = 14
+            } Weather2
+
+            Weather {
+               type = image
+               x = 196
+               y = 38
+               x2 = 226
+               height = 14
+               textalign = right
+            } Weather
+
+
+            MaxPower2 {
+               type = StaticText
+               text = Max Power
+               x = 28
+               y = 100
+               x2 = 164
+               height = 14
+            } MaxPower2
+
+            MaxPower {
+               type = TextOutput
+               x = 167
+               y = 100
+               x2 = 226
+               height = 14
+               textalign = right
+            } MaxPower
+
+            CurrentPower2 {
+               type = StaticText
+               text = Current Power
+               x = 28
+               y = 69
+               x2 = 164
+               height = 14
+            } CurrentPower2
+
+
+            CurrentPower {
+               type = TextOutput
+               text = Solar Power Plant
+               x = 167
+               y = 69
+               x2 = 226
+               height = 14
+               textalign = right
+            } CurrentPower
+
+
+         } BKGR
+         
+      } solarpower
+      
+      windpower {
+         type = dummy
+         x = 0
+         y = 0
+         width = 524
+         height = 170
+         
+         ChildWidgets = BKGR
+         BKGR {
+            type = image
+            FileName = cargo-dialog-wind.png
+            x = 0
+            y = 0
+            width = 524
+            height = 170
+
+            ; We don't really need a third line with "power storable" 
+
+            ChildWidgets = Description MaxPower CurrentPower MaxPower2 CurrentPower2 Weather Weather2
+            Description {
+               type = StaticText
+               text = Wind Power Plant
+               x = 10
+               y = 9
+               x2 = 285
+               y2 = 21
+            } Description
+
+
+            Weather2 {
+               type = StaticText
+               text = Wind Speed
+               x = 28
+               y = 38
+               x2 = 164
+               height = 14
+            } Weather2
+
+            Weather {
+               type = TextOutput
+               x = 167
+               y = 38
+               x2 = 226
+               height = 14
+               textalign = right
+            } Weather
+
+
+            MaxPower2 {
+               type = StaticText
+               text = Max Power
+               x = 28
+               y = 100
+               x2 = 164
+               height = 14
+            } MaxPower2
+
+            MaxPower {
+               type = TextOutput
+               x = 167
+               y = 100
+               x2 = 226
+               height = 14
+               textalign = right
+            } MaxPower
+
+            CurrentPower2 {
+               type = StaticText
+               text = Current Power
+               x = 28
+               y = 69
+               x2 = 164
+               height = 14
+            } CurrentPower2
+
+
+            CurrentPower {
+               type = TextOutput
+               text = Solar Power Plant
+               x = 167
+               y = 69
+               x2 = 226
+               height = 14
+               textalign = right
+            } CurrentPower
+         } BKGR
+      } windpower
+      
+   } SubWindowPane
+  
+   SubWindowSelectorPane {
+      type = dummy
+      x = 14
+      y = 234
+      x2 = 63
+      y2 = 562
+      Userhandler = ButtonPanel
+   
+   } SubWindowSelectorPane
+     
+        
+} panel
+

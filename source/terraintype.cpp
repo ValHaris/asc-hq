@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "terraintype.h"
 #include "gameoptions.h"
 #include "graphicset.h"
@@ -23,8 +23,11 @@
 #include "textfileparser.h"
 #include "textfiletags.h"
 #include "textfile_evaluation.h"
+#include "overviewmapimage.h"
+#include "graphics/blitter.h"
+#include "fieldimageloader.h"
 
-const char*  cbodenarten[cbodenartennum]  = {"shallow water"       ,
+const char*  terrainProperty[terrainPropertyNum+1]  = {"shallow water"       ,
                                              "normal lowland",
                                              "swamp",
                                              "forest",
@@ -58,7 +61,10 @@ const char*  cbodenarten[cbodenartennum]  = {"shallow water"       ,
                                              "river",
                                              "frozen water",
                                              "bridge",
-                                             "lava barrier" };
+                                             "lava barrier",
+                                             "spaceport",
+                                             "beacon",
+                                             NULL };
 
 
 
@@ -87,10 +93,10 @@ void TerrainAccess::write ( tnstream& stream ) const {
 
 void TerrainAccess::runTextIO ( PropertyContainer& pc )
 {
-   pc.addTagArray ( "terrain_any", terrain, cbodenartennum, bodenarten );
-   pc.addTagArray ( "terrain_all", terrainreq, cbodenartennum, bodenarten );
-   pc.addTagArray ( "terrain_not", terrainnot, cbodenartennum, bodenarten );
-   pc.addTagArray ( "terrain_kill", terrainkill, cbodenartennum, bodenarten );
+   pc.addTagArray ( "terrain_any", terrain, terrainPropertyNum, terrainProperties );
+   pc.addTagArray ( "terrain_all", terrainreq, terrainPropertyNum, terrainProperties );
+   pc.addTagArray ( "terrain_not", terrainnot, terrainPropertyNum, terrainProperties );
+   pc.addTagArray ( "terrain_kill", terrainkill, terrainPropertyNum, terrainProperties );
 }
 
 TerrainType::MoveMalus::MoveMalus()
@@ -108,27 +114,42 @@ TerrainType::TerrainType()
 
 }
 
-void      TerrainType::Weather::paint ( int x1, int y1 )
+
+void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
 {
- #ifndef converter
-   putspriteimage ( x1, y1, pict );
- #endif
+   Surface* img;
+   if ( bi_pict == -1 )
+      img = &image;
+   else 
+      img = &GraphicSetManager::Instance().getPic( bi_pict);
+
+   megaBlitter<ColorTransform_None, 
+               ColorMerger_AlphaOverwrite, 
+               SourcePixelSelector_Plain,
+               TargetPixelSelector_All>
+            (*img,s,pos,nullParam,nullParam,nullParam,nullParam);
 }
 
-const FieldQuickView* TerrainType::Weather::getQuickView()
+
+const OverviewMapImage* TerrainType::Weather::getQuickView()
 {
    if  ( bi_pict >= 0 ) {
-      return getActiveGraphicSet()->getQuickView( bi_pict );
+      return GraphicSetManager::Instance().getQuickView( bi_pict );
    } else {
       if (!quickView ) {
-         quickView = generateAverageCol( pict );
+         quickView = new OverviewMapImage( image );
       }
       return quickView;
    }
 }
 
+TerrainType::Weather::~Weather()
+{ 
+   delete quickView; 
+}
 
-const int terrain_version = 2;
+
+const int terrain_version = 4;
 
 
 void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveMalusCount )
@@ -174,6 +195,87 @@ void TerrainType::MoveMalus::write ( tnstream& stream ) const
      stream.writeInt ( at(m) );
 }
 
+void TerrainType::Weather::read ( tnstream& stream )
+{
+   read( stream, terrain_version );
+}
+
+
+void TerrainType::Weather::read ( tnstream& stream, int version )
+{
+   bool loadImage = true;
+   if (version <=2 ) {
+      loadImage = stream.readInt();
+
+      for ( int j = 1; j < 8; j++ )
+         stream.readInt(); // pgbt->picture[j]
+
+      for ( int j = 0; j < 8; j++ )
+         stream.readInt(); // pgbt->direcpict[j] = (void*)
+   }
+
+   if ( version == 1 ) {
+      stream.readInt(); //dummy1
+      defensebonus = stream.readWord();
+      attackbonus = stream.readWord();
+      basicjamming = stream.readChar();
+   } else {
+      defensebonus = stream.readInt();
+      attackbonus = stream.readInt();
+      basicjamming = stream.readInt();
+   }
+   int move_maluscount = stream.readChar();
+   stream.readInt(); // pgbt->movemalus = (char*)
+   stream.readInt(); // pgbt->terraintype
+   stream.readInt(); // bool readQuickView
+
+   art.read ( stream );
+
+   bi_pict = stream.readInt();
+   for ( int j = 1; j < 6; j++ )
+      stream.readInt(); //pgbt->bi_picture[j] =
+
+   move_malus.read( stream, minmalq, move_maluscount );
+
+/*
+   for ( j=0; j<8 ;j++ )
+      if ( pgbt->picture[j] )
+         if ( pgbt->bi_picture[j] == -1 ) {
+            pgbt->picture[j] = asc_malloc ( fieldsize );
+            stream.readdata ( pgbt->picture[j], fieldsize );
+            } else
+               loadbi3pict_double ( pgbt->bi_picture[j],
+                                    &pgbt->picture[j],
+                                    CGameOptions::Instance()->bi3.interpolate.terrain );
+
+*/
+   if ( loadImage )
+      if ( bi_pict == -1 )
+         image.read ( stream );
+}
+
+void TerrainType::Weather::write ( tnstream& stream ) const
+{
+   stream.writeInt ( defensebonus );
+   stream.writeInt ( attackbonus );
+   stream.writeInt ( basicjamming );
+   stream.writeChar ( 0 ); // was: movemalus count
+   stream.writeInt ( 1 );
+   stream.writeInt ( 1 );
+   stream.writeInt ( 0); // was: quickview
+   art.write ( stream );
+
+
+   stream.writeInt ( bi_pict );
+   for ( int m = 1; m< 6; m++ )
+      stream.writeInt ( -1 );
+
+   move_malus.write ( stream );
+
+   if ( bi_pict == -1 )
+      image.write ( stream );
+}
+
 
 void TerrainType::read( tnstream& stream )
 {
@@ -195,137 +297,54 @@ void TerrainType::read( tnstream& stream )
       for ( int i=0; i<cwettertypennum ;i++ ) {
          if ( ___loadWeather[i] ) {
             weather[i] = new TerrainType::Weather ( this );
-            Weather* pgbt = weather[i];
-
-            int j;
-
-            pgbt->pict = (void*) stream.readInt();
-
-            for ( j = 1; j < 8; j++ )
-               stream.readInt(); // pgbt->picture[j]
-
-            for ( j = 0; j < 8; j++ )
-               stream.readInt(); // pgbt->direcpict[j] = (void*)
-
-            if ( version == 1 ) {
-               stream.readInt(); //dummy1
-               pgbt->defensebonus = stream.readWord();
-               pgbt->attackbonus = stream.readWord();
-               pgbt->basicjamming = stream.readChar();
-            } else {
-               pgbt->defensebonus = stream.readInt();
-               pgbt->attackbonus = stream.readInt();
-               pgbt->basicjamming = stream.readInt();
-            }
-            int move_maluscount = stream.readChar();
-            stream.readInt(); // pgbt->movemalus = (char*)
-            stream.readInt(); // pgbt->terraintype
-            bool readQuickView = stream.readInt();
-
-            pgbt->art.read ( stream );
-
-            pgbt->bi_pict = stream.readInt();
-            for ( j = 1; j < 6; j++ )
-               stream.readInt(); //pgbt->bi_picture[j] =
-
-            pgbt->move_malus.read( stream, minmalq, move_maluscount );
-
-/*
-            for ( j=0; j<8 ;j++ )
-               if ( pgbt->picture[j] )
-                  if ( pgbt->bi_picture[j] == -1 ) {
-                     pgbt->picture[j] = asc_malloc ( fieldsize );
-                     stream.readdata ( pgbt->picture[j], fieldsize );
-                   } else
-                      loadbi3pict_double ( pgbt->bi_picture[j],
-                                           &pgbt->picture[j],
-                                           CGameOptions::Instance()->bi3.interpolate.terrain );
-
-*/
-            if ( pgbt->pict )
-               if ( pgbt->bi_pict == -1 ) {
-                  int sze;
-                  stream.readrlepict ( &pgbt->pict, false, &sze );
-                  // stream.readdata ( pgbt->pict, fieldsize ); // endian ????
-                } else
-                   loadbi3pict_double ( pgbt->bi_pict,
-                                        &pgbt->pict,
-                                        CGameOptions::Instance()->bi3.interpolate.terrain );
-
-
-            if ( readQuickView )
-               pgbt->readQuickView( stream );
-
+            weather[i]->read( stream, version );
          } else
             weather[i] = NULL;
-
 
       } /* endfor */
 
    } else
       throw tinvalidversion ( stream.getDeviceName(), terrain_version, version );
-}
 
-void TerrainType::Weather::readQuickView ( tnstream& stream )
-{
-   quickView = new FieldQuickView;
-
-   stream.readdata ( quickView, sizeof ( *quickView )); // endian ok !!!
-
-   FieldQuickView temp;
-   for ( int i = 1; i < 8; i++ )
-      stream.readdata ( &temp, sizeof ( *quickView )); // endian ok !!!
+   /*
+   if ( version >= 5 ) {
+      filename = stream.readString();
+      location = stream.readString();
+   }
+   */
 }
 
 
 void TerrainType::write ( tnstream& stream ) const
 {
-   int m;
-
    stream.writeInt ( terrain_version );
    stream.writeInt ( !name.empty() );
    stream.writeInt ( id );
-   for ( m = 0; m < cwettertypennum; m++ )
+   for ( int m = 0; m < cwettertypennum; m++ )
       stream.writeInt ( weather[m] != NULL );
 
-   for ( m = 0; m < 8; m++ )
+   for ( int m = 0; m < 8; m++ )
       stream.writeInt ( 0 ); // bbt->neighbouringfield[nf]
 
    stream.writeString( name );
-   for (int i=0;i<cwettertypennum ;i++ ) {
-     if ( weather[i] ) {
-        stream.writeInt ( weather[i]->pict == NULL ?  0 : 1 );
+   for ( int i = 0; i < cwettertypennum ; i++ ) 
+      if ( weather[i] ) 
+         weather[i]->write( stream );
 
-        for ( m = 1; m < 8; m++ )
-           stream.writeInt ( 0 );
-
-        for ( m = 0; m < 8; m++ )
-           stream.writeInt ( 0 );
-
-        stream.writeInt ( weather[i]->defensebonus );
-        stream.writeInt ( weather[i]->attackbonus );
-        stream.writeInt ( weather[i]->basicjamming );
-        stream.writeChar ( 0 ); // was: movemalus count
-        stream.writeInt ( 1 );
-        stream.writeInt ( 1 );
-        stream.writeInt ( 0); // was: quickview
-        weather[i]->art.write ( stream );
-
-
-        stream.writeInt ( weather[i]->bi_pict );
-        for ( m = 1; m< 6; m++ )
-           stream.writeInt ( -1 );
-
-        weather[i]->move_malus.write ( stream );
-
-        if ( weather[i]->pict && weather[i]->bi_pict == -1 )
-           stream.writeImage ( weather[i]->pict, false );
-
-     }
-   }
+   /*
+   stream.writeString(filename);
+   stream.writeString(location);
+   */
 }
 
 
+TerrainType::~TerrainType()
+{
+   for ( int i = 0; i< cwettertypennum; ++i) {
+      delete weather[i];
+      weather[i] = NULL;
+   }
+}
 
 
 TerrainAccess :: TerrainAccess ( void )
@@ -385,6 +404,9 @@ void TerrainBits::write ( tnstream& stream ) const
 
 void TerrainType :: runTextIO ( PropertyContainer& pc )
 {
+   pc.addBreakpoint(); 
+  
+   
    BitSet weatherBits;
    for ( int i = 0; i < cwettertypennum; i++ )
       if ( weather[i] )
@@ -416,7 +438,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
       if ( bi_pict >= 0 )
          bi3pics = true;
 
-   pc.addBool  ( "UseGFXpics", bi3pics );
+   pc.addBool  ( "UseGFXpics", bi3pics, false );
    if ( !bi3pics ) {
       bi_pict = -1;
       int w = cwettertypennum-1;
@@ -429,18 +451,26 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s = "terrain";
          s += strrr(terraintype->id);
       }
-      pc.addImage ( "picture", pict, s + weatherAbbrev[w] );
+      pc.addImage ( "picture", image, s + weatherAbbrev[w], true );
+      // applyFieldMask( image );
+
+      if ( pc.isReading() ) {
+         int operations;
+         pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
+         if ( operations == 1 )  {
+            snowify( image );
+         }
+      }
 
    } else {
       pc.addInteger ( "GFX_Picture", bi_pict );
-      loadbi3pict_double ( bi_pict,
-                           &pict,
-                           CGameOptions::Instance()->bi3.interpolate.terrain );
+      if  ( bi_pict < 0 )
+         fatalError ( "invalid BI-image " );
    }
    
-   pc.addInteger ( "DefenseBonus", defensebonus );
-   pc.addInteger ( "AttackBonus",  attackbonus );
-   pc.addInteger ( "BasicJamming", basicjamming );
+   pc.addInteger ( "DefenseBonus", defensebonus, 0 );
+   pc.addInteger ( "AttackBonus",  attackbonus, 0 );
+   pc.addInteger ( "BasicJamming", basicjamming, 0 );
    pc.addDFloatArray ( "MoveMalus", move_malus );
    while ( move_malus.size() < cmovemalitypenum ) 
      if ( move_malus.size() == 0 )
@@ -449,7 +479,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
         move_malus.push_back ( move_malus[0] );
 
 
-   pc.addTagArray ( "TerrainProperties", art, cbodenartennum, bodenarten );
+   pc.addTagArray ( "TerrainProperties", art, terrainPropertyNum, terrainProperties );
 }
 
 

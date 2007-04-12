@@ -1,4 +1,4 @@
-Last update: June 20, 2001
+Last update: April 4, 2003
 
 Directions:
 
@@ -8,13 +8,27 @@ If you use the small object allocator directly or indirectly (through the Functo
 
 If you use Singletons with longevity you must add Singleton.cpp to your project/makefile.
 
+
 Compatibility:
 
-Loki has been tested with Metrowerks CodeWarrior Pro 6 under Windows. CodeWarrior has a problem with the Conversion template (see TypeManip.h) and, though it compiles it, it doesn't provide correct results. Consequently, the DerivedToFront algorithm in Typelist.h does not function. This affects the static dispatcher in Multimethods.h. As a fix, you must order the types (putting the most derived ones in the front) when providing the typelist argument to StaticDispatcher.
+Supported Compilers:
+Gcc v2.95.3
+Microsoft Visual C++ v7.0
+Borland C++ Builder v6.0
 
-Also, Loki has been ported to gcc 2.95.3 by Nick Thurn.
+Mostly Supported:
+CodeWarrior 6.0
+Microsoft Visual C++ v6.0 (see readme for port)
+
+
+CodeWarrior has a problem with the Conversion template (see TypeManip.h) and, though it compiles it, it doesn't provide correct results. Consequently, the DerivedToFront algorithm in Typelist.h does not function. This affects the static dispatcher in Multimethods.h. As a fix, you must order the types (putting the most derived ones in the front) when providing the typelist argument to StaticDispatcher.
+
 
 
 More info:
 
 http://moderncppdesign.com
+http://sourceforge.net/projects/loki-lib/
+http://sourceforge.net/projects/loki-exp/
+
+

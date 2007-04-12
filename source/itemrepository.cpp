@@ -1,3 +1,4 @@
+
 /***************************************************************************
                           itemrepository.cpp   -  description
                              -------------------
@@ -25,21 +26,13 @@
 #include "textfileparser.h"
 #include "sgstream.h"
 #include "textfile_evaluation.h"
+#include "messaginghub.h"
 
-#ifndef converter
-#  include "dialog.h"
-#  include "sg.h"
-#else
- class ProgressBar {
-    public:
-       void point() {};
- };
-ProgressBar* actprogressbar = NULL;
-#endif
 
-pobjecttype eisbrecherobject = NULL;
-pobjecttype fahrspurobject = NULL;
+SigC::Signal0<void> dataLoaderTicker;
 
+
+const char* cacheFileName = "asc2.cache";
 
 typedef vector<TextFileDataLoader*> DataLoaders;
 DataLoaders dataLoaders;
@@ -74,11 +67,10 @@ void ItemRepository<T>::add( T* obj )
 
 
 template<class T>
-void ItemRepository<T>::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
+void ItemRepositoryLoader<T>::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
    T* t = new T;
    t->runTextIO ( prc );
-   prc.run();
 
    t->filename = fileName;
    t->location = location;
@@ -87,19 +79,21 @@ void ItemRepository<T>::readTextFiles( PropertyReadingContainer& prc, const ASCS
 
 
 template<class T>
-void ItemRepository<T>::read( tnstream& stream )
+void ItemRepositoryLoader<T>::read( tnstream& stream )
 {
    int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
    int num = stream.readInt();
    for ( int i = 0; i< num; ++i ) {
-      if ( actprogressbar )
-        actprogressbar->point();
+      dataLoaderTicker();
 
       T* t = new T;
       t->read( stream );
 
       t->filename = stream.readString();
       t->location = stream.readString();
+      dataLoaderTicker();
 
       add ( t );
       // add ( T::newFromStream(stream ));
@@ -108,16 +102,17 @@ void ItemRepository<T>::read( tnstream& stream )
 
 
 template<class T>
-void ItemRepository<T>::write( tnstream& stream )
+void ItemRepositoryLoader<T>::write( tnstream& stream )
 {
    stream.writeInt( 1 );
-   stream.writeInt( container.size() );
-   for ( typename vector<T*>::iterator i = container.begin(); i != container.end(); ++i ) {
+   stream.writeInt( ItemRepository<T>::container.size() );
+   for ( typename vector<T*>::iterator i = ItemRepository<T>::container.begin(); i != ItemRepository<T>::container.end(); ++i ) {
        (*i)->write( stream );
        stream.writeString ( (*i)->filename );
        stream.writeString ( (*i)->location );
    }
 }
+
 
 template<class T>
 void ItemRepository<T>::addIdTranslation( int from, int to )
@@ -125,12 +120,23 @@ void ItemRepository<T>::addIdTranslation( int from, int to )
     idTranslation[from] = to;
 }
 
+MineTypeRepository  mineTypeRepository;
 
-ItemRepository<Vehicletype>  vehicleTypeRepository( "vehicletype" );
-ItemRepository<TerrainType>  terrainTypeRepository( "terraintype" );
-ItemRepository<ObjectType>   objectTypeRepository ( "objecttype" );
-ItemRepository<BuildingType> buildingTypeRepository ("buildingtype");
-ItemRepository<Technology>   technologyRepository ( "technology");
+
+MineTypeRepository::MineTypeRepository() : ItemRepository<MineType>("Mines")
+{
+   add( new MineType( cmantipersonnelmine ) );
+   add( new MineType( cmantitankmine ) );
+   add( new MineType( cmmooredmine ) );
+   add( new MineType( cmfloatmine ) );
+}
+
+
+ItemRepositoryLoader<Vehicletype>  vehicleTypeRepository( "vehicletype" );
+ItemRepositoryLoader<TerrainType>  terrainTypeRepository( "terraintype" );
+ItemRepositoryLoader<ObjectType>   objectTypeRepository ( "objecttype" );
+ItemRepositoryLoader<BuildingType> buildingTypeRepository ("buildingtype");
+ItemRepositoryLoader<Technology>   technologyRepository ( "technology");
 
 TechAdapterContainer techAdapterContainer;
 
@@ -145,7 +151,6 @@ class TechAdapterLoader : public TextFileDataLoader {
       void readTextFiles(PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) {
            TechAdapter* ta = new TechAdapter;
            ta->runTextIO ( prc );
-           prc.run();
 
            ta->filename = fileName;
            ta->location = location;
@@ -167,7 +172,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
-const int cacheVersion = 14;
+const int cacheVersion = 20;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;
@@ -198,8 +203,8 @@ FileCache::FileCache( )
          actualFileInfo.push_back ( fi );
    }
 
-   if ( exist ( "asc.cache" )) {
-      stream = new tnfilestream ( "asc.cache", tnstream::reading );
+   if ( exist ( cacheFileName )) {
+      stream = new tnfilestream ( cacheFileName, tnstream::reading );
       int version = stream->readInt();
 
       if ( version == cacheVersion )
@@ -256,7 +261,7 @@ void FileCache::write()
    if ( stream )
       delete stream;
 
-   stream = new tn_file_buf_stream ( "asc.cache", tnstream::writing );
+   stream = new tn_file_buf_stream ( cacheFileName, tnstream::writing );
 
    stream->writeInt ( cacheVersion );
    writeClassContainer ( actualFileInfo, *stream );
@@ -310,22 +315,25 @@ void  loadAllData( bool useCache )
          cache.load();
       }
       catch ( tinvalidversion err ) {
-         fatalError("the cache seems to have been generated with a newer version of ASC than this one.\nPlease upgrade to that version, or delete asc.cache and try again");
+         fatalError("the cache seems to have been generated with a newer version of ASC than this one.\nPlease upgrade to that version, or delete " + ASCString(cacheFileName) + " and try again");
       }
       displayLogMessage ( 4, "loading of cache completed\n");
    } else {
+      MessagingHub::Instance().statusInformation("rebuilding data cache, please be patient");
+      
       loadalltextfiles();
 
       for ( DataLoaders::iterator dl = dataLoaders.begin(); dl != dataLoaders.end(); ++dl) {
          TextPropertyList& tpl = textFileRepository[ (*dl)->getTypeName() ];
          for ( TextPropertyList::iterator i = tpl.begin(); i != tpl.end(); i++ ) {
-            if ( actprogressbar )
-              actprogressbar->point();
+            dataLoaderTicker();
 
             if ( !(*i)->isAbstract() ) {
                PropertyReadingContainer pc ( (*dl)->getTypeName(), *i );
 
+               displayLogMessage ( 5, "loading " + (*i)->location );
                (*dl)->readTextFiles( pc, (*i)->fileName, (*i)->location );
+               displayLogMessage ( 5, " done\n");
             }
          }
 
@@ -345,8 +353,6 @@ void  loadAllData( bool useCache )
       textFileRepository.clear();
    }
 
-   eisbrecherobject = objectTypeRepository.getObject_byID( 6 );
-   fahrspurobject   = objectTypeRepository.getObject_byID( 7 );
 }
 
 
@@ -359,8 +365,7 @@ void  loadalltextfiles ( )
    ASCString c = ff.getnextname();
 
    while( !c.empty() ) {
-      if ( actprogressbar )
-         actprogressbar->point();
+      dataLoaderTicker();
 
       tnfilestream s ( c, tnstream::reading );
 
@@ -388,7 +393,7 @@ void  loadalltextfiles ( )
       for ( TextPropertyList::iterator j = i->second.begin(); j != i->second.end(); j++ ) {
           displayLogMessage( 9, "Building inheritance: " + (*j)->location + "\n");
           (*j)->buildInheritance( i->second );
-          if ( verbosity >= 10 )
+          if ( MessagingHub::Instance().getVerbosity() >= 10 )
              (*j)->print();
       }
    }
@@ -401,7 +406,7 @@ void  loadalltextfiles ( )
 
 
 
-vector<ItemFiltrationSystem::ItemFilter*> ItemFiltrationSystem::itemFilters;
+deallocating_vector<ItemFiltrationSystem::ItemFilter*> ItemFiltrationSystem::itemFilters;
 
 
 ItemFiltrationSystem::ItemFilter::ItemFilter( const ASCString& _name, const IntRangeArray& unitsetIDs, bool _active )
@@ -491,11 +496,36 @@ bool ItemFiltrationSystem::isFiltered ( ItemFiltrationSystem::Category cat, int 
 }
 
 
+bool ItemFiltrationSystem::isFiltered( const Vehicletype* item )
+{
+   return isFiltered( Vehicle, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const BuildingType* item )
+{
+   return isFiltered( Building, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const ObjectType* item )
+{
+   return isFiltered( Object, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const TerrainType* item )
+{
+   return isFiltered( Terrain, item->id );
+}
+
+bool ItemFiltrationSystem::isFiltered( const MineType* item )
+{
+   return false;
+}
+
+
 void ItemFiltrationSystem::DataLoader::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
 {
    ItemFilter* itf = new ItemFilter;
    itf->runTextIO ( prc );
-   prc.run();
 
    // bmtt->filename = (*i)->fileName;
    // bmtt->location = (*i)->location;

@@ -2,7 +2,6 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameeventsystem.h,v 1.3 2005-04-02 13:57:06 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -31,12 +30,11 @@
 
 #include "typen.h"
 #include "libs/loki/Singleton.h"
+#include "factory.h"
 
-#if defined(sgmain) || defined(karteneditor)
-# include "mapdisplay.h"
-#else
- class MapDisplayInterface {};
-#endif
+#include "mapdisplayinterface.h"
+
+class MapDisplayInterface;
 
 enum  EventConnections { cconnection_destroy = 1,
                          cconnection_conquer = 2,
@@ -46,7 +44,7 @@ enum  EventConnections { cconnection_destroy = 1,
                          cconnection_areaentered_specificunit = 32 };
 
 
-extern void  checkevents( MapDisplayInterface* md );
+extern bool  checkevents( MapDisplayInterface* md );
 
 extern void  checktimedevents( MapDisplayInterface* md );
 
@@ -69,7 +67,7 @@ class EventTrigger {
    protected:
       EventTrigger ( EventTriggerID id ) : triggerID ( id ), gamemap(NULL), event(NULL), stateCache(unfulfilled), triggerFinal( false ), invert(false) {};
       virtual State getState( int player ) = 0;
-      tmap* gamemap;
+      GameMap* gamemap;
       Event* event;
 
       bool isFulfilled();
@@ -87,7 +85,7 @@ class EventTrigger {
       virtual ASCString getName() const = 0;
       virtual void setup() = 0;
       virtual void arm() {};
-      void setMap( tmap* gamemap_ ) { gamemap = gamemap_; };
+      void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };
       void setEvent( Event* ev ) { event = ev; };
       EventTriggerID getTriggerID() { return triggerID; };
 
@@ -99,7 +97,7 @@ class EventTrigger {
 class EventAction {
       EventActionID actionID;
    protected:
-      tmap* gamemap;
+      GameMap* gamemap;
       EventAction( EventActionID id ) : actionID ( id ), gamemap(NULL) {};
    public:
 
@@ -109,17 +107,18 @@ class EventAction {
 
       virtual void execute( MapDisplayInterface* md ) = 0;
       virtual void setup() = 0;
-      void setMap( tmap* gamemap_ ) { gamemap = gamemap_; };
+      void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };
       EventActionID getActionID() { return actionID; };
       virtual ~EventAction() {};
 };
 
 class Event {
-      tmap& gamemap;
+      GameMap& gamemap;
 
       void clear();
    public:
-      Event( tmap& map_ );
+      Event( GameMap& map_ );
+      const GameMap* getMap() const { return &gamemap; };
 
       enum Status { Untriggered, Triggered, Timed, Executed } status;
 
@@ -159,34 +158,14 @@ class Event {
       virtual ~Event();
 };
 
-
-
-template < class AbstractProduct,
-           typename IdentifierType >
-class Factory{
+class VariableLocker {
+   bool& var;
    public:
-      typedef AbstractProduct* (*ObjectCreatorCallBack)();
-   private:
-      typedef map<IdentifierType, ObjectCreatorCallBack> CallbackMap;
-      CallbackMap callbackMap;
-   public:
-      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn ) { callbackMap[id] = createFn; return true; };
-      AbstractProduct* createObject( IdentifierType id )
-      {
-         typename CallbackMap::const_iterator i = callbackMap.find(id);
-         if ( i != callbackMap.end() )
-            return (i->second)();
-         else
-            fatalError("Factory: Object ID not found");
-		 return NULL;
-      };
+      VariableLocker( bool& variable ) : var ( variable ) { var = true; };
+      ~VariableLocker() { var = false; };
 };
 
-template<class Base, class Derived>
-Base* ObjectCreator()
-{
-   return new Derived;
-}
+
 
 typedef Loki::SingletonHolder< Factory< EventTrigger, EventTriggerID > > triggerFactory;
 typedef Loki::SingletonHolder< Factory< EventAction , EventActionID  > > actionFactory;

@@ -48,6 +48,7 @@ void         checktimedevents ( MapDisplayInterface* md )
       checkevents( md );
       actmap->eventTimes.pop_back();
    }
+   
 }
 
 
@@ -60,17 +61,25 @@ void eventReady()
 
 
 
-void         checkevents( MapDisplayInterface* md )
+bool checkevents( MapDisplayInterface* md )
 {
+   // this is not for synchronizing between threads, but in the same threat inside the call stack 
+   static bool isRunning = false;
+   if ( isRunning )
+      return false;
+
+   VariableLocker l( isRunning );
+   
    actmap->player[actmap->actplayer].queuedEvents++;
    while ( actmap->player[actmap->actplayer].queuedEvents ) {
 
       actmap->player[actmap->actplayer].queuedEvents = 0;
 
-      for ( tmap::Events::iterator ev = actmap->events.begin(); ev != actmap->events.end(); ++ev )
+      for ( GameMap::Events::iterator ev = actmap->events.begin(); ev != actmap->events.end(); ++ev )
          (*ev)->check( md );
 
    }
+   return true;
 }
 
 
@@ -118,7 +127,7 @@ const char* EventActionName[] = { "Nothing",
                                  "Set View Sharing" };
 
 
-Event::Event ( tmap& map_ ) : gamemap ( map_ ), playerBitmap(0xff), action(NULL), reArmNum(0)
+Event::Event ( GameMap& map_ ) : gamemap ( map_ ), playerBitmap(0xff), reArmNum(0), action(NULL)
 {
    id = ++gamemap.eventID;
    triggerTime.abstime = -1;
@@ -284,13 +293,13 @@ void Event::execute( MapDisplayInterface* md )
          status = Timed;
       }
       if ( status == Timed && gamemap.time.abstime >= triggerTime.abstime ) {
+         if ( action )
+            action->execute( md );
+         
          if ( reArmNum > 0 )
             status = Untriggered;
          else
             status = Executed;
-
-         if ( action )
-            action->execute( md );
 
          if ( gamemap.getgameparameter(cgp_debugEvents) )
             infoMessage( "Event " + description + " executed");

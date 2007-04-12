@@ -1,8 +1,8 @@
 /*! \file mappolygons.h
-    \brief operating with polygons on a map
+    \brief operating with polygons on tje map
 */
 
-//     $Id: mappolygons.h,v 1.1 2004-01-16 19:14:55 mbickel Exp $
+//     $Id: mappolygons.h,v 1.2 2007-04-12 20:52:48 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -43,7 +43,7 @@ class Poly_gon {
 
 
 
-class  PolygonPainerSquareCoordinate : protected PolygonPainter<Poly_gon> {
+class  PolygonPainterSquareCoordinate : protected PolygonPainter<Poly_gon> {
         protected:
              virtual void setpoint    ( int x,  int y  );
              virtual void setpointabs ( int x,  int y  )=0;

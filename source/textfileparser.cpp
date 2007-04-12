@@ -19,7 +19,6 @@
 #include <SDL_image.h>
 #include <algorithm>
 #include "ascstring.h"
-#include "basicmessages.h"
 #include "textfileparser.h"
 #include "stringtokenizer.h"
 #include "textfile_evaluation.h"
@@ -69,10 +68,13 @@ TextPropertyGroup* TextPropertyList::get ( int id )
 ///////////////////// TextPropertyGroup //////////////////////////
 
 
-void TextPropertyGroup :: error ( const ASCString& msg )
+void TextPropertyGroup :: error ( const ASCString& msg, bool printInheritance )
 {
-   fatalError ( "Error evaluating file " + location + "\n" + msg + "\nThe inheritance is\n" + listInheritanceFilenames() );
+   ASCString message = "Error evaluating file " + location + "\n" + msg;
+   if ( printInheritance )
+      message += "\nThe inheritance is\n" + listInheritanceFilenames() ;
 
+   fatalError ( message );
 }
 
 void TextPropertyGroup :: print( int indent )
@@ -100,7 +102,7 @@ void TextPropertyGroup :: buildInheritance(TextPropertyList& tpl )
 
    if ( !inheritanceBuild ) {
       if ( std::find ( callStack.begin(), callStack.end(), this ) != callStack.end() )
-         error ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ));
+         error ( "endless inheritance loop detected: type " + typeName + "; ID " + strrr ( id ), false);
 
       callStack.push_back( this );
 
@@ -196,8 +198,10 @@ void TextPropertyGroup :: resolveAllAlias( )
          (*i)->op = Entry::alias_all_resolved;
 
       if ( !resolvedCounter && !unresolved.empty() )
-         for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ )
-            error (  "could not resolve the reference " + (*i)->value + " for " + typeName + " :: " + (*i)->propertyName  );
+         for ( Unresolved::iterator i = unresolved.begin(); i != unresolved.end(); i++ ) {
+            error (  "could not resolve the reference for " + typeName + " :: " + (*i)->propertyName + " with operand " + (*i)->value + "\nSee STDOUT for a dump of current item" );
+            print();
+         }
          
       loop++;
    } while ( !unresolved.empty() );
@@ -460,7 +464,7 @@ void TextFormatParser::parseLine ( const ASCString& line )
       levelDepth--;
       return;
    }
-   error ( "unknown operator at entry " + s1  );
+   error ( "unknown operator in entry " + line + "\n token1: " + s1 + " ; token2: " + s2 + " ; token3: " + s3 );
 }
 
 

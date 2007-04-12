@@ -80,10 +80,10 @@ int getpicsize2( void* hd2 )
 
 void 
 rahmen(bool invers,
-       integer x1,
-       integer y1,
-       integer x2,
-       integer y2)
+       int x1,
+       int y1,
+       int x2,
+       int y2)
 {
 	collategraphicoperations cgo ( x1, y1, x2, y2 );
 	int col	=	(invers == false)	?	white	:	darkgray;
@@ -423,7 +423,7 @@ void* halfpict ( void* vbuf )
    return xlatbuffer;
 } 
 
-
+#if 0
 void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 {
    Uint16* w = (Uint16*) ptr;
@@ -445,7 +445,7 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
    }
 
 }
-
+#endif
 void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
 {
    Uint16* w = (Uint16*) ptr;
@@ -1205,13 +1205,6 @@ void* uncompress_rlepict ( void* pict )
       return NULL;
 }
 
-void setvgapalette256 ( dacpalette256 pal )
-{
-   if ( graphicinitialized )
-      set_vgapalette256( pal );
-   else
-      memcpy ( activepalette256, pal, sizeof ( *activepalette256 ));
-}
 
 
 void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
@@ -1292,8 +1285,17 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
       agmp->redfieldposition = 0;
       agmp->greenfieldposition = 8;
       agmp->bluefieldposition = 16;
+      surface = agmp->surface = new Surface (  Surface::CreateSurface( buf, x, y, depth, 0xff, 0xff00, 0xff0000) );
+   } else {
+      surface = agmp->surface = new Surface ( Surface::CreateSurface( buf, x, y, depth, agmp->scanlinelength ) );
+      agmp->surface->assignDefaultPalette();
    }
 
+}
+
+Surface& tvirtualdisplay :: getSurface()
+{
+   return *surface;
 }
 
 tvirtualdisplay :: tvirtualdisplay ( int x, int y )
@@ -1309,6 +1311,7 @@ tvirtualdisplay :: tvirtualdisplay ( int x, int y, int color, int depth )
 
 tvirtualdisplay :: ~tvirtualdisplay ( )
 {
+   delete agmp->surface;
    asc_free (  buf ) ;
    *agmp = oldparams;
 }
@@ -1389,7 +1392,7 @@ int dpmscapabilities;
 int actdpmsmode;
  
 dacpalette256  activepalette;
-int       palette16[256][4];
+// int       palette16[256][4];
 void*     xlatbuffer;
  // dacpalette256  *activepalette256;
 
@@ -1429,7 +1432,7 @@ void getimage(int x1, int y1, int x2, int y2, void *buffer)
       cb += 4;
 
       for ( int y = y1; y <= y2; y++ ) {
-         for ( int x = x1; x <= x2; x++ ) 
+         for ( int x = x1; x <= x2; x++ )
             *(cb++) = *(buf++);
 
          buf+=spacelength;
@@ -1589,7 +1592,7 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
                   src++;
                buf++;
             }
-   
+
             buf+=spacelength;
          }
       }
@@ -1890,7 +1893,7 @@ void copybuf2displaymemory(int size, void *buf)
    memcpy ( (void*) agmp->linearaddress, buf, size );
 }
 
-
+#if 0
 void* xlatpict ( ppixelxlattable xl, void* vbuf )
 {
 
@@ -1901,7 +1904,7 @@ void* xlatpict ( ppixelxlattable xl, void* vbuf )
 
    trleheader*   hd = (trleheader*) vbuf; 
 
-   if ( hd->id == 16973 ) { 
+   if ( hd->id == 16973 ) {
       memcpy ( xlatbuffer, vbuf, sizeof ( *hd ));
 
       trleheader* desthead = (trleheader*) xlatbuffer; 
@@ -1950,6 +1953,7 @@ void* xlatpict ( ppixelxlattable xl, void* vbuf )
    }
    return xlatbuffer;
 }
+#endif
 
 int loga2 ( int a )
 {
@@ -1992,14 +1996,14 @@ void showtext ( const char* text, int x, int y, int textcol )
     int    characterdist[1024];
     int ps = 0;
     while ( *t ) {
-       if ( activefontsettings.font->character[*t].width ) {
-          characterwidth[ps] = activefontsettings.font->character[*t].width;
-          characterpointer[ps] = activefontsettings.font->character[*t].memposition + 2;
+       if ( activefontsettings.font->character[int(*t)].width ) {
+          characterwidth[ps] = activefontsettings.font->character[int(*t)].width;
+          characterpointer[ps] = activefontsettings.font->character[int(*t)].memposition + 2;
           if ( t[1] )
-             characterdist[ps] = activefontsettings.font->kerning[t[1]][t[0]] + 2;
+             characterdist[ps] = activefontsettings.font->kerning[int(t[1])][int(t[0])] + 2;
           else
              characterdist[ps] = 0;
-          length +=activefontsettings.font->character[*t].width;
+          length +=activefontsettings.font->character[int(*t)].width;
           length += characterdist[ps];
           ps++;
        }
@@ -2153,6 +2157,41 @@ void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
 
   s.Unlock();
   return buf;
+}
+
+SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees )
+{
+   const float pi = 3.14159265;
+   double angle = double(-degrees) / 360 * 2 * pi;
+
+   double dx = pos.x - width/2 ;
+   double dy = height/2 - pos.y;
+   float nx, ny;
+   if ( degrees == 0 ) {
+      nx = dx;
+      ny = dy;
+   } else
+      if ( degrees == 180 || degrees == -180) {
+         nx = -dx;
+         ny = -dy;
+      } else {
+         float wnk ;
+         if ( dy  )
+            wnk = atan2 ( -dx, dy );
+         else
+            if ( dx < 0 )
+               wnk = pi/2;
+            else
+               wnk = -pi/2;
+
+         wnk += angle;
+         float radius = sqrt ( dx * dx + dy * dy );
+
+         nx = -radius * sin ( wnk );
+         ny = radius * cos ( wnk );
+      }
+
+   return SPoint( int( width/2 + nx), int ( -ny + height/2));
 }
 
 

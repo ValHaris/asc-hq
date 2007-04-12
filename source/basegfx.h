@@ -1,5 +1,5 @@
 /*! \file basegfx.h
-   \brief basegfx.h is the interface for the graphic routines (of which some are platform dependent).
+   \brief basegfx.h is the interface for the legacy graphic routines (of which some are platform dependent).
 
    basegfx.h additionally includes the definitions of routines, 
     whose implementation is platform dependant, but whose interface
@@ -8,9 +8,8 @@
     The graphic routines are older than ASC itself, first written in 1993 as a protected
     mode replacement for Borlands BGI. (That's why the uncompressed image structure
     is exactly the same as in the BGI).
-    This is the most badly designed and ugly part of ASC, which should be completely rewritten,
-    to make use of high- and truecolor, hardware acceleration and to provide a nice, object
-    oriented C++ interface.
+
+   the code here is being replaced by the new graphics system found in the graphics subdirectory
 */
 
 /*
@@ -37,12 +36,16 @@
 #define basegfxH
 
 #include "libs/sdlmm/src/sdlmm.h"
-#include "tpascal.inc"
 #include "global.h"
 #include "palette.h"
 #include "sdl/graphics.h"
+#include "graphics/surface.h"
 
 #pragma pack(1)
+
+const int colorDepth = 4;
+
+
 
 //! a graphical surface.
 struct  tgraphmodeparameters {
@@ -68,14 +71,15 @@ struct  tgraphmodeparameters {
             char          bitperpix         ;      //!< the size of a pixel(?) in bits
             char          memorymodel;             //!< unused
             int           directscreenaccess;      //!< if 0 no call to an update function (which copies the buffer to the screen) is performed
-            int           reserved[9];
+            Surface*      surface;
+            tgraphmodeparameters() : surface(NULL) {};
     };
 
 
 struct trleheader {
    Uint16 id;
    Uint16 size;
-   pascal_byte rle;
+   char rle;
    Uint16 x;
    Uint16 y;
 };
@@ -107,7 +111,7 @@ extern tgraphmodeparameters activegraphmodeparameters;
 extern tgraphmodeparameters hardwaregraphmodeparameters;
 
 extern dacpalette256 activepalette;
-extern int       palette16[256][4];
+// extern int       palette16[256][4];
 extern void*     xlatbuffer;
 
 
@@ -148,13 +152,13 @@ extern void*     xlatbuffer;
       red colors, which can be made blue by adding 8 to them, 16 makes them brown, etc.. */
  extern void putrotspriteimage(int x1, int y1, void *buffer, int rotationvalue);
 
- //! like #putspriteimage, but rotates the image by 90ø clock-wise
+ //! like #putspriteimage, but rotates the image by 90 clock-wise
  extern void putrotspriteimage90(int x1, int y1, void *buffer, int rotationvalue);
 
- //! like #putspriteimage, but rotates the image by 180ø clock-wise
+ //! like #putspriteimage, but rotates the image by 180 clock-wise
  extern void putrotspriteimage180(int x1, int y1, void *buffer, int rotationvalue);
 
- //! like #putspriteimage, but rotates the image by 270ø clock-wise
+ //! like #putspriteimage, but rotates the image by 270 clock-wise
  extern void putrotspriteimage270(int x1, int y1, void *buffer, int rotationvalue);
 
  //! function not used any more and obsolete. Use #putimageprt instead
@@ -172,20 +176,20 @@ extern void*     xlatbuffer;
       The rectangle x1/y1 - x2/y2 may be larger than texture.                   */
  extern void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy );
 
+#if 0
  /** Performs a color translation of the image pntr. The image is not modified. The new image
       is written to a static buffer. The address of the buffer is returned. The call to xlatpict
       will overwrite the buffer. The conversion itself will replace color by xl[color]    */
  extern void* xlatpict ( ppixelxlattable xl, void* pntr );
+#endif
 
  //! returns the position of the lowest bit of a which is set. This equals an inter logarithm to the base of 2
  extern int loga2 ( int a );
  
 
+ //! transforms the coordinate for an image rotation
+ extern SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees );
 
-
-
- //! sets the color palette in 8 bit mode
- extern void setvgapalette256 ( dacpalette256 pal );
 
  //! puts a single pixel on the screen. This is one of the few functions that work in truecolor mode too
  extern void putpixel(int x1, int y1, int color);
@@ -206,23 +210,24 @@ extern void*     xlatbuffer;
       is allocated and returned, so it must be freed later                          */
  extern void* uncompress_rlepict ( void* pict );
 
- /** A translation table ( to be used by #xlatpict ) is generated to translate any color of palette
+ /** A translation table ( to be used by xlatpict ) is generated to translate any color of palette
       pal to its gray value. The new pixels after the translation are still to be used with the 
       palette pal. offset and size specify a range of colors that are assumed to be a linear
       transition from white to black. So all colors are mapped to one of the colors of the
       offset-size range. */
  extern void  generategrayxlattable( ppixelxlattable tab, char offset, char size, dacpalette256* pal );
 
+#if 0
  /** puts a shadow of an image on the screen. This is done by replacing all pixels on the screen
       by xl[pixel] if the pixel of the image ptr is non-transparent. The actual color of the image
       does not matter. */
  extern void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl  );
-
+#endif
 
 
 /** paints a pseudo-3D rectangle on the screen. invers specifies wheather the rectangle
      seems to be pressed into the screen or coming out  */
-extern void         rahmen( bool invers, integer x1, integer y1, integer x2, integer y2);
+extern void         rahmen( bool invers, int x1, int y1, int x2, int y2);
 
 //! draws a simple line on the screen. Not very fast...
 extern void         line(int x1, int y1, int x2, int y2, char color );
@@ -232,7 +237,7 @@ extern void         line(int x1, int y1, int x2, int y2, char color );
      that was previously there. And it can be undone by displaying it a second time. */
 extern void xorline( int x1, int y1, int x2, int y2, char color );
 
-//! draws a simple rectangle
+//! draws a simple rectangl
 extern void rectangle(int x1, int y1, int x2, int y2, char color );
 
 /** draws a simple rectangle on the screen, but performs a XOR operation between the pixel already
@@ -243,7 +248,7 @@ extern void  xorrectangle(int x1, int y1, int x2, int y2, char color) ;
 //! obsolete. not used any more. can be removed.
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation );
 
-/** rotates the image s by 90ø clockwise and writes it to d. d must point to a buffer
+/** rotates the image s by 90 clockwise and writes it to d. d must point to a buffer
      with the size of imagesize2(s)                    */
 void rotatepict90 ( void* s, void* d );
 
@@ -253,7 +258,7 @@ void flippict ( void* s, void* d, int dir = 1 );
 
 /** reduces a pictures size. The new picture will have half the size in x and y direction, 
      resulting in a quarting of the area. The new image will be written to a static buffer that
-     is overwritten the next time halfpict or #xlatpict is called. The address of the buffer is
+     is overwritten the next time halfpict or xlatpict is called. The address of the buffer is
      returned.                                                                 */
 void* halfpict ( void* vbuf );
 
@@ -299,17 +304,20 @@ class tdrawline {
          public: 
            void start ( int x1, int y1, int x2, int y2 );
            virtual void putpix ( int x, int y ) = 0;
+           virtual ~tdrawline() {};
        };
 
 /** A virtual screen is allocated and the agmp pointer set to it. All graphic operations will
      operate on this virtual display until it is deleted              */
 class tvirtualdisplay {
+           Surface* surface;
            void* buf;
            tgraphmodeparameters oldparams;
            void init ( int x, int y, int col, int depth );
         public: 
            tvirtualdisplay ( int x, int y );
            tvirtualdisplay ( int x, int y, int color, int depth= 8 );
+           Surface& getSurface();
            ~tvirtualdisplay ();
         };
 
@@ -428,5 +436,7 @@ extern void setWindowCaption ( const char* s );
     \param paletteTranslation If the source surface is 8 bit, convertSurface will convert the palette to the ASC palette if this is set to true.
 */
 extern void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation = true );
+
+extern SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees );
 
 #endif

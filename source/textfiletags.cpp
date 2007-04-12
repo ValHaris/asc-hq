@@ -29,7 +29,7 @@ const char* weatherTags[cwettertypennum]
         "much_snow",
         "snow_and_ice" };
 
-const char*  bodenarten[cbodenartennum]
+const char*  terrainProperties[terrainPropertyNum]
     = { "Shallow_water",
         "Lowland",
         "Swamp",
@@ -64,7 +64,9 @@ const char*  bodenarten[cbodenartennum]
         "River",
         "Frozen_water",
         "bridge",
-        "lava_barrier" };
+        "lava_barrier",
+        "spaceport",
+        "beacon" };
 
  const char* heightTags[choehenstufennum]
     = { "deep_submerged",
@@ -75,8 +77,8 @@ const char*  bodenarten[cbodenartennum]
         "medium_level_flight",
         "high_level_flight",
         "orbit" };
-
- const char* vehicleAbilities[cvehiclefunctionsnum]
+        
+ const char* vehicleAbilities[Vehicletype::legacyVehicleFunctionNum]
      = {           "sonar",
                    "paratrooper",
                    "mine_layer",
@@ -104,8 +106,11 @@ const char*  bodenarten[cbodenartennum]
                    "immune_to_mines",
                    "energy_transfer",
                    "jam_only_own_field",
-                   "MoveDuringReactionFire" };
+                   "MoveDuringReactionFire",
+                   "onlyTransMove" };
+        
 
+        
 const char*  weaponTags[cwaffentypennum]
    = {  "cruise_missile",
         "mine",
@@ -141,8 +146,8 @@ const char*  unitCategoryTags[cmovemalitypenum] =
      "helicopter",
      "hoovercraft"
    };
-
-const char*  buildingFunctionTags[cbuildingfunctionnum]  =
+   
+const char*  buildingFunctionTags[24]  =
               { "HeadQuarters",
                 "Training_Facility",
                 "__unused__",
@@ -167,7 +172,52 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
                 "NoObjectChaining",
                 "Selfdestruct_at_conquer",
                 "satelliteview" };
+   
 
+  const char*  containerFunctionTags[ContainerBaseType::functionNum]  =
+  {"Training_Facility",
+   "Vehicle_Production",
+   "Ammo_Production",
+   "Repair_Facility",
+   "Recycling",
+   "Research",
+   "Sonar",
+   "satelliteview",
+   "mineview",
+   "Wind_Power_Plant",
+   "Solar_Power_Plant",
+   "Matter_Converter",
+   "Mining_Station",
+   "Produce_Units_that_cannot_leave",
+   "ResourceSink",
+   "ExternalEnergyTransfer",
+   "ExternalMaterialTransfer",
+   "ExternalFuelTransfer",
+   "ExternalAmmoTransfer",
+   "ExternalRepair",
+   "NoObjectChaining",
+   "Selfdestruct_at_conquer",
+   "paratrooper",
+   "mine_layer",
+   "cruiserlanding",
+   "conquer_buildings",
+   "move_after_attack",
+   "construct_vehicles",
+   "construct_specific_buildings",
+   "icebreaker",
+   "no_midair_refuel",
+   "leaves_tracks",
+   "automatic_resource_searching",
+   "no_reactionfire",
+   "self_repairing",
+   "Kamikaze_only",
+   "immune_to_mines",
+   "jam_only_own_field",
+   "MoveDuringReactionFire",
+   "onlyTransMove" 
+   };
+   
+   
 
  const char* weatherAbbrev[cwettertypennum]
     = { "_dry",
@@ -176,6 +226,11 @@ const char*  buildingFunctionTags[cbuildingfunctionnum]  =
         "_fs",
         "_ms",
         "_si" };
+
+ const char* graphicOperations[graphicOperationNum]
+    = { "none",
+        "snow" };
+
 
  const char* objectDisplayingMethodTags[objectDisplayingMethodNum]
     = { "Normal",

@@ -18,59 +18,60 @@
 #define GAMEOPTIONS_H
 
 #include <string>
-#include "Named.h"
 #include "password.h"
+
+#include "textfileparser.h"
+#include "textfile_evaluation.h"
+
 
 class CGameOptions
 {
    public:
-      friend class CLoadableGameOptions;
-      static const int searchPathNum;
       /** returns the only Instance */
-      static	CGameOptions* Instance();
+      static CGameOptions* Instance();
 
-      CGameOptions(void);
-      CGameOptions( const CGameOptions& cgo );
+      CGameOptions();
+      void setDefaults();
+/*      CGameOptions( const CGameOptions& cgo );
 
-      void setDefaults( void );
       void copy ( const CGameOptions& cgo );
+      */
 
-      bool	isChanged();
-      void	setChanged(bool flag	=      true);
+      void runTextIO ( PropertyContainer& pc );
+      
+      
+      bool isChanged();
+      void setChanged(bool flag = true);
+      
+      void load( const ASCString& filename );
+      void save( const ASCString& filename );
+      
 
-      const char*	getSearchPath(int i)
-      {
-         return(searchPath+i)->getName();
-      };
-      int getSearchPathNum ( void );
+      int getSearchPathNum();
 
-      void setSearchPath ( int i, const char* path );
+      void setSearchPath ( int i, const ASCString& path );
+      void addSearchPath ( const ASCString& path );
+      ASCString getSearchPath( int i);
 
       int version;
 
       //! the number of steps to perform a move: 0 -> 3 step; != 0 -> 2 steps
-      int fastmove;
+      bool fastmove;
 
       //! 1/100 sec for a unit to move from one field to the next
       int movespeed;
 
       //! question "do you want to end your turn"
-      int endturnquestion;
-
-      //! either the small map or the wind information is displayed
-      int smallmapactive;
+      bool endturnquestion;
 
       //! are units that cannot move but shoot displayed in gray ?
-      int units_gray_after_move;
+      bool  units_gray_after_move;
 
       //! the zoom of the map display in ASC
       int mapzoom;
 
       //! the zoom of the map display in the map editor
       int mapzoomeditor;
-
-      //! not used at the moment
-      int startupcount;
 
       //! are fields marked that a unit could move to if there was no other unit standing
       // int dontMarkFieldsNotAccessible_movement;
@@ -85,13 +86,16 @@ class CGameOptions
       int attackspeed3;
 
       //! force ASC to run in windowed mode (and not fullscreen, which is default)
-      int forceWindowedMode;
+      bool forceWindowedMode;
+
+      //! use screen buffer on the graphics card instead of main memory
+      bool hardwareSurface;
 
       //! enables the option to review your own replay to find replay bugs
-      int debugReplay;
+      bool debugReplay;
 
       //! force the mapeditor to run in fullscreen mode (and not windowed, which is default)
-      int mapeditForceFullscreenMode;
+      bool mapeditWindowedMode;
 
       //! the horizontal resolution ASC uses
       int xresolution;
@@ -105,51 +109,65 @@ class CGameOptions
       //! the vertical resolution the mapeditor uses
       int mapeditor_yresolution;
 
-      int automaticTraining;
+      bool maped_modalSelectionWindow;
+      
+      //! are units automatically trained in training centers
+      bool automaticTraining;
 
       //! the mouse configuration. Mouse button are: bit 0 = left button ; bit 1 = right button ; bit 2 = center button
       struct Mouse
       {
-         int scrollbutton;
+         // int scrollbutton;
+         
          //! the button to select a field without opening the menu
          int fieldmarkbutton;
+         
          //! the button to select a field and open the menu there
-         int smallguibutton;
+         // int smallguibutton;
 
          //! the button to use the big icons on the right side
-         int largeguibutton;
+         // int largeguibutton;
 
          /** specifies the occasions when the small icons are positioned directly under the mouse pointer (instead of some pixel upwards)
              0 = never
              1 = always
              2 = only if there is a building or a unit on the field or if the field is a destination for the current unit action (default)
          */
-         int smalliconundermouse;
+         // int smalliconundermouse;
 
          //! the button to center the map around the selected field
          int centerbutton;
+         
+         //! used in the container dialog
+         int dragndropbutton;
 
          //! the button to display the vehicle information
-         int unitweaponinfo;
-
-         //! not used
-         int dragndropmovement;
+         // int unitweaponinfo;
 
          //! if != 0, a single click will mark a field AND open the small gui menu
-         int singleClickAction;
+         // int singleClickAction;
+
+         int zoomoutbutton;
+         int zoominbutton;
+
+         //! marks a field and opens the small gui buttons with a single click (default: first click mark, second click: execute)
+         bool singleClickAction;
+
+         static ASCString getButtonName( int button );
       }
       mouse;
+
 
       struct SoundSettings
       {
          //! muted soud can be reactivated during the game
-         int muteEffects;
+         bool muteEffects;
 
          //! muted soud can be reactivated during the game
-         int muteMusic;
+         bool muteMusic;
 
          //! if the sound is off, it can only be reactivated by restarting asc, but doesn't lock the sound device
-         int off;
+         bool off;
 
          int soundVolume;
 
@@ -157,57 +175,66 @@ class CGameOptions
       }
       sound;
 
-      class Container
-      {
-         public:
-            int autoproduceammunition;
-            int filleverything;
-      }
-      container;
+      struct {
+         bool fillResources;
+         bool fillAmmo;
+      } unitProduction;
 
-      int onlinehelptime;
-      int smallguiiconopenaftermove;
+      //! produce required ammo upon refuelling
+      bool autoproduceammunition;
+
+      // int onlinehelptime;
+      // int smallguiiconopenaftermove;
 
       int replayspeed;
-      int showUnitOwner;
+      // int showUnitOwner;
 
-      struct Bi3
-      {
-         Named dir;
-         struct Interpolate
-         {
-            Interpolate()
-            {}
-            ;
-            int terrain;
-            int units;
-            int objects;
-            int buildings;
-         }
-         interpolate;
-      }
-      bi3;
-      Named startupMap;
-      Named defaultPassword;
-      Named defaultSuperVisorPassword;
+      int panelColumns;
+
+      bool cacheASCGUI;
+
+      bool replayMovieMode;
+
+      struct PanelData {
+         int x;
+         int y;
+         bool visible;
+      };
+
+      typedef map<ASCString, PanelData> PanelDataContainer;
+      PanelDataContainer panelData;
+
+      bool getPanelData( const ASCString& name, PanelData& data );
+      void updatePanelData( const ASCString& name, PanelData data );
+      
+      ASCString BI3directory;
+
+      ASCString graphicsDriver;
+
+      ASCString startupMap;
+      ASCString defaultPassword;
+      ASCString defaultSuperVisorPassword;
       Password getDefaultPassword ( );
       Password getDefaultSupervisorPassword ( );
 
+      static const int maxSearchPathNum;
+      int searchPathNum;
+      ASCString searchPath[30];
+
    private:
-      bool	_changed;
-      Named* searchPath;
+      bool _changed;
 };
 
 inline
-bool	CGameOptions::isChanged()
+bool CGameOptions::isChanged()
 {
    return _changed;
 }
 
 inline
-void	CGameOptions::setChanged(bool flag	)
+void CGameOptions::setChanged(bool flag )
 {
-   _changed	=	flag;
+   _changed = flag;
 }
 
 

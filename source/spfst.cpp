@@ -22,64 +22,49 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                                                                   
+#include <stdio.h>
 #include <cstring>
 #include <utility>
 #include <map>
-#include <SDL_image.h>
 
 
 #include "vehicletype.h"
 #include "buildingtype.h"
 
-#include "basestrm.h"
-#include "tpascal.inc"
-#include "misc.h"
-#include "basegfx.h"
-#include "newfont.h"
 #include "typen.h"
 #include "spfst.h"
-#include "events.h"
-#include "dlg_box.h"
-#include "loaders.h"
-#include "stack.h"
-#include "loadpcx.h"
 #include "attack.h"
-#include "gameoptions.h"
-#include "itemrepository.h"
 
-#ifndef karteneditor
-  #include "gamedlg.h"
-#endif
-
-#include "dialog.h"
-#include "loadbi3.h"
 #include "mapalgorithms.h"
-#include "mapdisplay.h"
 #include "vehicle.h"
 #include "buildings.h"
+#include "mapfield.h"
+
+SigC::Signal0<void> repaintMap;
+SigC::Signal0<void> repaintDisplay;
+SigC::Signal0<void> updateFieldInfo;
+SigC::Signal0<void> cursorMoved;
+SigC::Signal1<void,ContainerBase*> showContainerInfo;
+SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
+SigC::Signal0<void> viewChanged;
+SigC::Signal1<void,GameMap*> mapChanged;
+SigC::Signal0<bool> idleEvent;
 
 
-   tcursor            cursor;
-   pmap              actmap;
+
+void displaymap()
+{
+   repaintMap();
+}   
+
+  
+   GameMap*    actmap = NULL;
 
    Schriften schriften;
 
 
-int  rol ( int valuetorol, int rolwidth )
-{
-   int newvalue = valuetorol << rolwidth;
-   newvalue |= valuetorol >> ( 32 - rolwidth );
-   return newvalue;
-}
 
-
-
-
-
-
-
-int          terrainaccessible ( const pfield        field, const Vehicle*     vehicle, int uheight )
+int          terrainaccessible ( const tfield*        field, const Vehicle*     vehicle, int uheight )
 {
    int res  = terrainaccessible2 ( field, vehicle, uheight );
    if ( res < 0 )
@@ -88,7 +73,7 @@ int          terrainaccessible ( const pfield        field, const Vehicle*     v
       return res;
 }
 
-int          terrainaccessible2 ( const pfield        field, const Vehicle*     vehicle, int uheight )
+int          terrainaccessible2 ( const tfield*        field, const Vehicle*     vehicle, int uheight )
 {
    if ( uheight == -1 )
       uheight = vehicle->height;
@@ -100,7 +85,7 @@ int          terrainaccessible2 ( const pfield        field, const Vehicle*     
    return terrainaccessible2( field, vehicle->typ->terrainaccess, uheight );
 }
 
-int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight )
+int          terrainaccessible2 ( const tfield*        field, const TerrainAccess& terrainAccess, int uheight )
 {
    if ( uheight >= chtieffliegend)
       return 2;
@@ -133,8 +118,8 @@ int          terrainaccessible2 ( const pfield        field, const TerrainAccess
 
 
 
-int         fieldAccessible( const pfield        field,
-                            const pvehicle     vehicle,
+int         fieldAccessible( const tfield*        field,
+                            const Vehicle*     vehicle,
                             int  uheight,
                             const bool* attacked,
                             bool ignoreVisibility )
@@ -171,7 +156,7 @@ int         fieldAccessible( const pfield        field,
          return 0;
    } else {
       if (field->vehicle) {
-         if (field->vehicle->color == vehicle->color) {
+         if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isAllied( field->vehicle->getOwner()) ) {
             if ( field->vehicle->vehicleLoadable ( vehicle, uheight ) )
                return 2;
             else
@@ -184,13 +169,9 @@ int         fieldAccessible( const pfield        field,
            if ( terrainaccessible ( field, vehicle, uheight ) )
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
-              else
-                 if ((attackpossible28(field->vehicle,vehicle) == false) || (getdiplomaticstatus(field->vehicle->color) == capeace))
-                   if ( terrainaccessible ( field, vehicle, uheight ) )
-                      return 1;
-                   else
-                      return 0;
-
+               else 
+                 if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
+                    return 1;
       }
       else {   // building
         if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight, attacked ))
@@ -208,60 +189,9 @@ int         fieldAccessible( const pfield        field,
 
 
 
-void         generatemap( TerrainType::Weather*   bt,
-                               int                xsize,
-                               int                ysize)
-{ 
-   delete actmap;
-   actmap = new tmap;
-   for (int k = 1; k < 8; k++)
-      actmap->player[k].stat = Player::computer;
-
-   actmap->maptitle = "new map";
-
-   actmap->allocateFields(xsize, ysize);
-
-   if ( actmap->field== NULL)
-      displaymessage ( "Could not generate map !! \nProbably out of enough memory !",2);
-
-   for ( int l = 0; l < xsize*ysize; l++ ) {
-      actmap->field[l].typ = bt;
-      actmap->field[l].setparams();
-      actmap->field[l].setMap( actmap );
-   }
-
-   actmap->_resourcemode = 1;
-   actmap->playerView = 0;
-}
 
 
-
-
-int getxpos(void)
-{ 
-   return cursor.posx + actmap->xpos; 
-} 
-
-
-int getypos(void)
-{
-   return cursor.posy + actmap->ypos;
-}
-
-
-
-
-#include "movecurs.inc"      
-
-
-pfield        getactfield(void)
-{
-   return getfield ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy ); 
-} 
-
-
-
-pfield        getfield(int          x,
+tfield*        getfield(int          x,
                      int          y)
 { 
    if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
@@ -272,361 +202,19 @@ pfield        getfield(int          x,
 
 
 
-
-
-
-
-void* uncompressedMinePictures[4] = { NULL, NULL, NULL, NULL };
-
-
-void*      getmineadress(  int num , int uncompressed )
-{ 
-   if ( !uncompressed ) 
-      return icons.mine[num-1]; 
-   else {
-      int type = num-1;
-      if ( !uncompressedMinePictures[type] ) 
-         uncompressedMinePictures[type] = uncompress_rlepict ( icons.mine[num-1] );
-
-      return uncompressedMinePictures[type];
-   }
-} 
-
-
-
-void         tcursor::init ( void )
-{
-   actpictwidth = 0;
-
-   backgrnd = new int [  imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-
-   {
-      tnfilestream iconl ( "markedfield.pcx", tnstream::reading );
-      SDLmm::Surface markedField ( IMG_Load_RW( SDL_RWFromStream ( &iconl ), true ));
-
-      cursor.markfield = convertSurface ( markedField, false );
-   }
-
-   {
-      int w;
-      tnfilestream stream ( "curshex.raw", tnstream::reading );
-      stream.readrlepict ( &cursor.orgpicture, false, &w);
-      void* newpic = uncompress_rlepict ( cursor.orgpicture );
-      if ( newpic ) {
-         delete[] cursor.orgpicture ;
-         cursor.orgpicture = newpic;
-      }
-   }
-
-   int h,w;
-   getpicsize ( orgpicture, w, h );
-   actpictwidth = w;
-   picture = new char [ getpicsize2 ( orgpicture )];
-   memcpy ( picture, orgpicture, getpicsize2 ( orgpicture ));
-
-   posx = 0;
-   posy = 0;
-   oposx = 0;
-   oposy = 0;
-}
-
-void  tcursor :: checksize ( void )
-{
-   int actwidth = idisplaymap.getfieldsizex();
-   if ( actpictwidth != actwidth ) {
-      delete[] picture;
-
-      TrueColorImage* zimg = zoomimage ( orgpicture, idisplaymap.getfieldsizex(), idisplaymap.getfieldsizey(), pal, 0 );
-      picture = convertimage ( zimg, pal ) ;
-      delete zimg;
-
-      int h;
-      getpicsize ( picture, actpictwidth, h );
-
-   }
-}
-
-
-void       tcursor::reset ( void )
-{
-   if (an) hide();
-   posx = 0; 
-   posy = 0; 
-   oposx = 0; 
-   oposy = 0; 
-
-}
-
-
-void       tcursor::getimg ( void )
-{
-     int xp = idisplaymap.getfieldposx( posx, posy );
-     int yp = idisplaymap.getfieldposy( posx, posy );
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush(*agmp);
-        *agmp = *hgmp;
-        getimage(xp, yp, xp + idisplaymap.getfieldsizex(), yp + idisplaymap.getfieldsizey(), backgrnd );
-        npop (*agmp);
-     } else {
-        getimage(xp, yp, xp + idisplaymap.getfieldsizex(), yp + idisplaymap.getfieldsizey(), backgrnd );
-     } /* endif */
-}
-
-void       tcursor::putbkgr ( void )
-{
-     int xp = idisplaymap.getfieldposx( posx, posy );
-     int yp = idisplaymap.getfieldposy( posx, posy );
-
-     collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putimage(xp, yp, backgrnd );
-        npop ( *agmp );
-     } else {
-        putimage(xp, yp, backgrnd );
-     } /* endif */
-}
-
-void       tcursor::putimg ( void )
-{
-     int xp = idisplaymap.getfieldposx( posx, posy );
-     int yp = idisplaymap.getfieldposy( posx, posy );
-
-     checksize();
-
-     collategraphicoperations cgo ( xp, yp, xp + fieldxsize, yp + fieldysize );
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putrotspriteimage(xp, yp, picture,color );
-        npop ( *agmp );
-     } else {
-        putrotspriteimage(xp, yp, picture,color );
-     } /* endif */
-}
-
-
-void         tcursor::setcolor( int col )
-{ 
-   color = col; 
-} 
-
-
-int        tcursor::checkposition ( int x, int y )
-{
-   if ( x >= actmap->xsize )
-      x = actmap->xsize - 1;
-   if ( y >= actmap->ysize )
-      y = actmap->ysize - 1;
-
-   int result = 0;
-   int a = actmap->xpos; 
-   int b = actmap->ypos; 
-   int xss = idisplaymap.getscreenxsize();
-   int yss = idisplaymap.getscreenysize();
-
-   if ((x < a) || (x >= a + xss )) { 
-      if (x >= xss / 2) 
-         actmap->xpos = (x - xss / 2); 
-      else 
-         actmap->xpos = 0; 
-
-      result++;
-   } 
-
-   if (y < b   ||   y >= b + yss  ) {
-      if (y >= yss / 2) 
-         actmap->ypos = (y - yss / 2); 
-      else 
-         actmap->ypos = 0; 
-      if ( actmap->ypos & 1 )
-         actmap->ypos--;
-
-      result++;
-   }
-
-   if (actmap->xpos + xss > actmap->xsize) 
-      actmap->xpos = actmap->xsize - xss ; 
-   if (actmap->ypos + yss  > actmap->ysize) 
-      actmap->ypos = actmap->ysize - yss ; 
-
-   if ((actmap->xpos != a) || (actmap->ypos != b)) {
-      displaymap(); 
-      result++;
-   }
-
-   cursor.posx = x - actmap->xpos; 
-   cursor.posy = y - actmap->ypos; 
-
-   return result;
-}
-
-
-int tcursor::gotoxy(int x, int y, int disp)
-{ 
-   if ( x >= actmap->xsize )
-      x = actmap->xsize-1;
-
-   if ( y >= actmap->ysize )
-      y = actmap->ysize-1;
-
-   if ( x < 0 )
-      x = 0;
-
-   if ( y < 0 )
-      y = 0;
-
-   int res = 0;
-   if ( disp || an )
-      cursor.hide(); 
-
-   if ( disp )
-      res = checkposition ( x, y );
-   else {
-      cursor.posx = x - actmap->xpos; 
-      cursor.posy = y - actmap->ypos; 
-   }
-
-   if ( disp )
-      cursor.show(); 
-
-   return res;
-} 
-
-
-
-bool         tcursor::show(void)
-{ 
-   if ( !actmap || actmap->xsize == 0  || actmap->ysize == 0 )
-      return false;
-
-   int ms = getmousestatus (); 
-   if (ms == 2) 
-       mousevisible(false); 
-
-    
-   int poschange = checkposition ( actmap->xpos + posx, actmap->ypos + posy );
-
-   if (  an == false || poschange ) {
-         oposx = posx;
-         oposy = posy;
-
-         getimg();
-         putimg();
-   } 
-      
-   an = true; 
-
-   if (ms == 2)
-      mousevisible(true);
-
-   return poschange > 0;
-}
-
-
-void         tcursor::hide(void)
-{
-   int ms = getmousestatus();
-   if (ms == 2) mousevisible(false);
-   if ( an )
-      putbkgr();
-   an = false;
-   if (ms == 2) mousevisible(true);
-}
-
-
-
-int         getdiplomaticstatus(int         b)
-{
-   if ( b & 7 )
-     displaymessage("getdiplomaticstatus: \n parameter has to be in [0,8,16,..,64]",2);
-
-   if ( b/8 == actmap->actplayer )
-      return capeace;
-
-   if ( b == 64 )  // neutral
-      return capeace;
-
-   char d = actmap->alliances[ b/8 ][ actmap->actplayer ] ;
-   char e = actmap->alliances[ actmap->actplayer ][ b/8 ] ;
-
-   if (  (d == capeace || d == canewsetwar1 || d == cawarannounce || d == capeace_with_shareview )
-       &&(e == capeace || e == canewsetwar1 || e == cawarannounce || e == capeace_with_shareview))
-      return capeace;
-   else
-      return cawar;
-}
-
-
-int        getdiplomaticstatus2(int    b, int    c)
-{
-   if ( (b & 7) || ( c & 7 ) )
-      displaymessage("getdiplomaticstatus: \n parameters have to be in [0,8,16,..,64]",2);
-
-   if ( b == c )
-      return capeace;
-
-   if ( b == 64 || c == 64 )  // neutral
-      return capeace;
-
-
-   char d = actmap->alliances [ b/8][ c/8 ];
-   char e = actmap->alliances [ c/8][ b/8 ];
-
-   if (  (d == capeace || d == canewsetwar1 || d == cawarannounce || d == capeace_with_shareview )
-       &&(e == capeace || e == canewsetwar1 || e == cawarannounce || e == capeace_with_shareview))
-      return capeace;
-   else
-      return cawar;
-}
-
-
-
-
-
-
-
-
-
-
-int isresourcenetobject ( pobjecttype obj )
-{
-   if ( obj->id == 3 || obj->id == 30 || obj->id == 4 )
-      return 1;
-   else
-      return 0;
-}
-
-
-
-
-
-
-void         tcursor::display(void)
-{ 
-      hide(); 
-      oposx = posx;
-      oposy = posy;
-      show(); 
-} 
-
-
-
 void         putbuilding( const MapCoordinate& entryPosition,
                          int          color,
-                         pbuildingtype buildingtyp,
+                         const BuildingType* buildingtyp,
                          int          completion,
                          int          ignoreunits )
 { 
    if ( color & 7 )
-      displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
+      fatalError("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
-         if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate( a, b ) ) ) {
-            pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
+         if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
+            tfield* field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL) 
                return ;
             else {
@@ -638,7 +226,7 @@ void         putbuilding( const MapCoordinate& entryPosition,
          } 
 
 
-   pbuilding gbde = new Building ( actmap , entryPosition, buildingtyp, color/8 );
+   Building* gbde = new Building ( actmap , entryPosition, buildingtyp, color/8 );
 
    if (completion >= buildingtyp->construction_steps)
       completion = buildingtyp->construction_steps - 1;
@@ -649,15 +237,15 @@ void         putbuilding( const MapCoordinate& entryPosition,
 
 void         putbuilding2( const MapCoordinate& entryPosition,
                            int         color,
-                           pbuildingtype buildingtyp)
+                           BuildingType* buildingtyp)
 { 
    if ( color & 7 )
-      displaymessage("putbuilding muá eine farbe aus 0,8,16,24,.. ?bergeben werden !",2); 
+      fatalError("putbuilding muss eine farbe aus 0,8,16,24,.. uebergeben werden !",2);
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ )
-         if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate( a, b ) ) ) {
-            pfield field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
+         if ( buildingtyp->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
+            tfield* field = actmap->getField( buildingtyp->getFieldCoordinate( entryPosition, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL)
                return ;
             else {
@@ -667,7 +255,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
          }
 
    if ( !actmap->getField(entryPosition)->building ) {
-      pbuilding gbde = new Building ( actmap, entryPosition, buildingtyp, color/8 );
+      Building* gbde = new Building ( actmap, entryPosition, buildingtyp, color/8 );
 
       Resources maxplus;
       Resources actplus;
@@ -675,8 +263,8 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       /*
       int maxresearch = 0;
       bool found = false;
-      for ( tmap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
-         pbuilding bld = *i;
+      for ( GameMap::Player::BuildingList::iterator i = actmap->player[color/8].buildingList.begin(); i != actmap->player[ color/8].buildingList.end(); i++ ) {
+         Building* bld = *i;
          if ( bld->typ == gbde->typ  && bld != gbde ) {
             found = true;
 
@@ -729,7 +317,7 @@ void         putbuilding2( const MapCoordinate& entryPosition,
       gbde->setCompletion ( 0 );
    }
    else {
-      pbuilding gbde = actmap->getField(entryPosition)->building;
+      Building* gbde = actmap->getField(entryPosition)->building;
       if (gbde->getCompletion() < gbde->typ->construction_steps-1)
          gbde->setCompletion( gbde->getCompletion()+1 );
 
@@ -740,71 +328,12 @@ void         putbuilding2( const MapCoordinate& entryPosition,
 
 
 
-void         resetallbuildingpicturepointers ( void )
-{
-   for (int s = 0; s < 9; s++)
-      for ( tmap::Player::BuildingList::iterator i = actmap->player[s].buildingList.begin(); i != actmap->player[s].buildingList.end(); i++ )
-         (*i)->resetPicturePointers ();
-}
-
-
-void     putstreets2  ( int      x1,
-                        int      y1,
-                        int      x2,
-                        int      y2,
-                        pobjecttype obj )
-{
-
-   int x = x1;
-   int y = y1;
-
-   pfield fld = getfield( x1, y1 );
-
-
-   if ( !obj->buildable ( getfield(x2,y2)))
-      return;
-
-   if ( !obj->buildable ( fld ))
-      return;
-   
-   getfield ( x1, y1 ) -> addobject ( obj );
-
-   while ((x != x2) || (y != y2)) {
-      int orgdir = getdirection ( x, y, x2, y2 );
-      int dir = orgdir;
-      int t = 0;
-      int a, b;
-      do {
-
-         a = x;
-         b = y;
-         getnextfield ( a, b, dir );
-
-         static int obstacle[8] = { -1, 1, -2, 2, -3, 3, -4, 4 };
-
-         dir = orgdir + obstacle[t++];
-
-      } while ( !obj->buildable ( getfield( a, b )) && (t < sidenum)  );
-
-      if ( obj->buildable ( getfield( a, b ))) {
-         getfield ( a, b ) -> addobject ( obj );
-         x = a;
-         y = b;
-      } else 
-         getnextfield ( x, y, orgdir );
-
-   }
-
-   calculateallobjects();
-}
-
-
 
 void checkobjectsforremoval ( void )
 {
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
             if ( i->typ->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
                fld->removeobject ( i->typ, true );
@@ -820,8 +349,8 @@ void  checkunitsforremoval ( void )
       ASCString msg;
       for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
 
-          pvehicle eht = *i;
-          pfield field = getfield(eht->xpos,eht->ypos);
+          Vehicle* eht = *i;
+          tfield* field = getfield(eht->xpos,eht->ypos);
           bool erase = false;
 
           ASCString reason;
@@ -838,10 +367,7 @@ void  checkunitsforremoval ( void )
                 }
           }
           if ( erase ) {
-             ASCString ident = "The unit " + (*i)->getName() + " at position ("+strrr((*i)->getPosition().x)+"/";
-             ident += strrr((*i)->getPosition().y)+ASCString(") ");
-
-             msg += ident + reason;
+             msg += getUnitReference( eht ) + reason;
              msg += "\n\n";
 
              Vehicle* pv = *i;
@@ -863,7 +389,7 @@ void  checkunitsforremoval ( void )
 }
 
 
-int  getwindheightforunit ( const pvehicle eht, int uheight )
+int  getwindheightforunit ( const Vehicle* eht, int uheight )
 {
    if ( uheight == -1 )
       uheight = eht->height;
@@ -877,9 +403,9 @@ int  getwindheightforunit ( const pvehicle eht, int uheight )
          return 0;
 }
 
-int  getmaxwindspeedforunit ( const pvehicle eht )
+int  getmaxwindspeedforunit ( const Vehicle* eht )
 {
-   pfield field = getfield(eht->xpos,eht->ypos);
+   tfield* field = getfield(eht->xpos,eht->ypos);
    if ( field->vehicle == eht) {
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
          return eht->typ->movement[log2(eht->height)] * 256 ;
@@ -891,179 +417,7 @@ int  getmaxwindspeedforunit ( const pvehicle eht )
 }
 
 
-
-
 /*
-int getcrc ( const pvehicletype fzt )
-{
-    if ( !fzt )
-       return -1;
-
-    Vehicletype fz = *fzt;
-    fz.name = NULL;
-    fz.description = NULL;
-    fz.infotext = NULL;
-    for ( int i = 0; i < 8; i++ ) {
-       fz.picture[i] = NULL;
-       fz.classnames[i] = NULL;
-    }
-    fz.buildicon = NULL;
-    int terr = 0; // fz.terrainaccess->getcrc();
-    fz.terrainaccess = NULL;
-    
-    int crcob = 0;
-    if ( fz.objectsbuildablenum ) 
-       crcob = crc32buf ( fz.objectsbuildableid, fz.objectsbuildablenum*4 );
-    fz.objectsbuildableid = NULL;
-
-    int crcbld = 0;
-    if ( fz.buildingsbuildablenum ) 
-       crcbld = crc32buf ( fz.buildingsbuildable, fz.buildingsbuildablenum*sizeof(tbuildrange) );
-    fz.buildingsbuildable = NULL;
-
-
-    int crcfz = 0;
-    if ( fz.vehiclesbuildablenum ) 
-       crcob = crc32buf ( fz.vehiclesbuildableid, fz.vehiclesbuildablenum*4 );
-    fz.vehiclesbuildableid = NULL;
-
-   int crctr = 0;
-   if ( fz.terrainaccess ) 
-      crctr = crc32buf ( fz.terrainaccess, sizeof ( *fz.terrainaccess ));
-   
-   int crcweap = crc32buf ( fz.weapons, sizeof ( *fz.weapons ));
-   fz.weapons = NULL;
-
-   memset ( &fz.oldattack, 0 , sizeof ( fz.oldattack ));
-   
-   for ( int j = 0; j < 8; j++ )
-      fz.aiparam[j] = NULL;
-
-   fz.terrainaccess = NULL;
-   return crc32buf ( &fz, sizeof ( fz )) + crcob + crctr + crcfz + crcbld + terr + crcweap;
-}
-
-int getcrc ( const ptechnology tech )
-{
-  if ( !tech )
-       return -1;
-
-    ttechnology t = *tech;
-    t.icon = NULL;
-    t.infotext = NULL;
-    t.name = NULL;
-    for ( int i = 0; i < 6; i++ )
-       if ( tech->requiretechnology )
-          t.requiretechnologyid[i] = tech->requiretechnology[i]->id;
-       else
-          t.requiretechnologyid[i] = 0;
-
-    t.pictfilename = NULL;
-    
-    return crc32buf ( &t, sizeof ( t )) ;
-}
-
-int getcrc ( const pobjecttype obj )
-{
-    if ( !obj )
-       return -1;
-
-    tobjecttype o = *obj;
-    for ( int ww= 0; ww < cwettertypennum; ww++ )
-       o.picture[ww] = NULL;
-
-    int crc1;
-    if ( o.movemalus_plus_count )
-       crc1 = crc32buf ( o.movemalus_plus, o.movemalus_plus_count );
-    else
-       crc1 = 0;
-
-    int crc2;
-    if ( o.movemalus_abs_count )
-       crc2 = crc32buf ( o.movemalus_abs, o.movemalus_abs_count );
-    else
-       crc2 = 0;
-
-    o.movemalus_plus = NULL;
-    o.movemalus_abs  = NULL;
-
-    o.name = NULL;
-    o.buildicon = NULL;
-    o.removeicon = NULL;
-    o.objectslinkable = NULL;
-    o.oldpicture = NULL;
-    o.dirlist = NULL;
-    
-    return crc32buf ( &o, sizeof ( o )) + crc1 + crc2;
-}
-
-int getcrc ( const pterraintype bdn )
-{
-    if ( !bdn )
-       return -1;
-
-    int crc = bdn->id;
-    for ( int i = 0; i < cwettertypennum; i++ ) 
-       if ( bdn->weather[i] ) {
-          TerrainType::Weather b = *bdn->weather[i];
-          for ( int j = 0; j < 8; j++) {
-             b.picture[j] = NULL;
-             b.direcpict[j]= NULL;
-          }
-          if ( b.movemaluscount )
-             crc += crc32buf ( b.movemalus, b.movemaluscount );
-
-          b.movemalus = NULL;
-          b.terraintype = NULL;
-          b.quickview = NULL;
-
-          crc += crc32buf ( &b, sizeof ( b ));
-      }
-    
-    return crc;
-}
-
-
-int getcrc ( const pbuildingtype bld )
-{
-    if ( !bld )
-       return -1;
-
-    Buildingtype b = *bld;
-    for ( int i = 0; i < maxbuildingpicnum; i++ )
-       for ( int j = 0; j < 4; j++ )
-          for ( int k = 0; k < 6; k++ )
-              for ( int w = 0; w < cwettertypennum; w++ )
-		b.w_picture[w][i][j][k] = NULL;
-
-    b.name = NULL;
-    b.guibuildicon = NULL;
-    b.terrain_access = NULL;
-    
-    return crc32buf ( &b, sizeof ( b ));
-}
-*/
-
-
-
-
-
-
-
-
-
-//////  Functions, that belong to TYPEN.CPP , but need functions defined here ...
-
-
-
-
-
-
-
-
-
-
-
 
 
 void tdrawline8 :: start ( int x1, int y1, int x2, int y2 )
@@ -1078,8 +432,8 @@ void tdrawline8 :: putpix ( int x, int y )
        if ( (x & 1) == (y & 1) )
           putpix8( x/2, y );
 }
-
-
+*/
+/*
 void EllipseOnScreen :: paint ( void )
 {
    if ( active )
@@ -1108,6 +462,12 @@ void EllipseOnScreen :: write ( tnstream& stream )
    stream.writeInt( active );
 }
 
+*/
+
+int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 )
+{
+   return getheightdelta( log2(c1->getHeight()), log2(c2->getHeight() ));
+}
 
 
 int getheightdelta ( int height1, int height2 )
@@ -1124,56 +484,199 @@ int getheightdelta ( int height1, int height2 )
    return hd;
 }
 
-bool fieldvisiblenow( const pfield pe, int player )
+bool fieldvisiblenow( const tfield* pe, int player, Vehicle* veh, GameMap* actmap )
 {
-  if ( player < 0 ) {
-     #ifdef karteneditor
-     return true;
-     #else
-     return false;
-     #endif
-  }
+   if ( player == -1 )
+      return true;
 
-  if ( pe ) { 
+   if ( player < -1 )
+      return false;
+
+   if ( !actmap )
+      return false;
+  
+   if ( pe ) {
       int c = (pe->visible >> ( player * 2)) & 3;
-      #ifdef karteneditor
-         c = visible_all;
-      #endif
 
       if ( c < actmap->getInitialMapVisibility( player ) )
          c = actmap->getInitialMapVisibility( player );
 
-      if (c > visible_ago) { 
-         if ( pe->vehicle ) { 
-            if ((c == visible_all) || (pe->vehicle->color / 8 == player ) || ((pe->vehicle->height >= chschwimmend) && (pe->vehicle->height <= chhochfliegend)))
-               return true; 
-         } 
-         else 
-            if (pe->building != NULL) { 
-               if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8)) 
-                  return true; 
-            } 
+      if (c > visible_ago) {
+         if ( !veh )
+            veh = pe->vehicle;
+         
+         if ( veh ) {
+            if ((c == visible_all) || (veh->color / 8 == player ) || ((veh->height >= chschwimmend) && (veh->height <= chhochfliegend)))
+               return true;
+         }
+         else
+            if (pe->building != NULL) {
+            if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8))
+               return true;
+            }
             else
-               return true; 
-      } 
+               return true;
+      }
    }
-   return false; 
-} 
+   return false;
+}
 
 
-VisibilityStates fieldVisibility( const pfield pe, int player )
+bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player  )
 {
-  if ( pe && player >= 0 ) {
-      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
-      #ifdef karteneditor
-         c = visible_all;
-      #endif
+   return fieldvisiblenow( pe, player, veh, veh->getMap());
+}
 
-      if ( c < actmap->getInitialMapVisibility( player ) )
-         c = actmap->getInitialMapVisibility( player );
+bool fieldvisiblenow( const tfield* pe, int player, GameMap* actmap )
+{
+   return fieldvisiblenow( pe, player, NULL, actmap );
+
+}
+
+
+
+
+VisibilityStates fieldVisibility( const tfield* pe, int player )
+{
+   return fieldVisibility( pe, player, actmap );
+}
+
+VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap )
+{
+   if ( player < 0 )
+      return visible_all;
+
+   if ( pe ) {
+      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
+      if ( c < gamemap->getInitialMapVisibility( player ) )
+         c = gamemap->getInitialMapVisibility( player );
 
       return c;
    } else
-      return visible_not;
+     return visible_not;
 }
+      
+
+void  calculateobject( const MapCoordinate& pos, 
+                             bool mof,
+                             const ObjectType* obj,
+                             GameMap* gamemap  )
+{
+   calculateobject( pos.x, pos.y, mof, obj, gamemap );
+}
+
+
+void         calculateobject( int       x,
+                              int       y,
+                              bool      mof,
+                              const ObjectType* obj,
+                              GameMap* actmap )
+{
+   if ( obj->netBehaviour & ObjectType::KeepOrientation ) 
+      return;
+   
+   if ( obj->netBehaviour & ObjectType::SpecialForest ) {
+      // ForestCalculation::calculateforest( actmap, obj );
+      return;
+   }
+
+   tfield* fld = actmap->getField(x,y) ;
+   Object* oi2 = fld-> checkforobject (  obj  );
+
+   int c = 0;
+   for ( int dir = 0; dir < sidenum; dir++) {
+      int a = x;
+      int b = y;
+      getnextfield( a, b, dir );
+      tfield* fld2 = actmap->getField(a,b);
+
+      if ( fld2 ) {
+         for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
+            Object* oi;
+            if ( oj == -1 )
+               oi = fld2->checkforobject ( obj );
+            else
+               oi = fld2->checkforobject ( actmap->getobjecttype_byid ( obj->linkableObjects[oj] ) );
+
+            if ( oi ) {
+               c |=  1 << dir ;
+               if ( mof )
+                  calculateobject ( a, b, false, oi->typ, actmap );
+
+            }
+         }
+         for ( unsigned int t = 0; t < obj->linkableTerrain.size(); t++ )
+            if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
+               c |=  1 << dir ;
+
+         if ( fld2->building && !fld2->building->typ->hasFunction( ContainerBaseType::NoObjectChaining  ) ) {
+            if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
+               c |= 1 << dir;
+
+            if ( obj->netBehaviour & ObjectType::NetToBuildings )
+               c |= 1 << dir;
+         }
+
+      }
+      else {
+         if ( obj->netBehaviour & ObjectType::NetToBorder )
+            c |= 1 << dir;
+      }
+   }
+
+   if ( obj->netBehaviour & ObjectType::AutoBorder ) {
+      int autoborder = 0;
+      int count = 0;
+      for ( int dir = 0; dir < sidenum; dir++) {
+         int a = x;
+         int b = y;
+         getnextfield( a, b, dir );
+         tfield* fld2 = actmap->getField(a,b);
+         if ( !fld2 ) {
+            // if the field opposite of the border field is connected to, make a straight line out of the map.
+            if ( c & (1 << ((dir+sidenum/2) % sidenum ))) {
+               autoborder |= 1 << dir;
+               count++;
+            }
+         }
+      }
+      if ( count == 1 )
+         c |= autoborder;
+   }
+
+   if ( oi2 ) {
+     oi2->setdir ( c );
+     fld->setparams();
+   }
+
+}
+
+
+
+
+void         calculateallobjects( GameMap* actmap )
+{
+   // vector<ObjectType*> forestObjects;
+   for ( int y = 0; y < actmap->ysize ; y++)
+      for ( int x = 0; x < actmap->xsize ; x++) {
+         tfield* fld = actmap->getField(x,y);
+
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
+             // if ( !(i->typ->netBehaviour & ObjectType::SpecialForest) )
+                calculateobject( x, y, false, i->typ, actmap );
+                #if 0
+             else
+                if ( find ( forestObjects.begin(), forestObjects.end(), i->typ ) == forestObjects.end())
+                   forestObjects.push_back ( i->typ );
+                   #endif
+
+         fld->setparams();
+      }
+#if 0
+   for ( vector<ObjectType*>::iterator i = forestObjects.begin(); i != forestObjects.end(); i++ )
+      ForestCalculation::calculateforest( actmap, *i );
+#endif      
+}
+
+
 

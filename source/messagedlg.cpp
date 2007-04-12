@@ -1,7 +1,7 @@
 /***************************************************************************
                           messagedlg.cpp  -  description
                              -------------------
-    begin                : Mon Mär 24 2003
+    begin                : Mon Mï¿½ 24 2003
     copyright            : (C) 2003 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
@@ -15,622 +15,478 @@
  *                                                                         *
  ***************************************************************************/
 
-
-#include "gamedlg.h"
 #include "messagedlg.h"
+#include "gamemap.h"
 
-class tnewmessage : public tmessagedlg  {
-            protected:
-               char* rtitle;
-            public:
-               tnewmessage( void );
-               void init ( void );
-               void buttonpressed ( int id );
-               void run ( void );
-       };
 
-tnewmessage :: tnewmessage ( void )
+
+#include "paradialog.h"
+#include "gameeventsystem.h"
+
+
+#include "dialog.h"
+#include "dlg_box.h"
+#include "spfst.h"
+
+#include "widgets/textrenderer.h"
+
+#include "messages.h"
+#include "pgwidget.h"
+#include "widgets/playerselector.h"
+#include "pgrichedit.h"
+#include "pgmultilineedit.h"
+
+#include "dialogs/fieldmarker.h"
+#include "dialogs/selectionwindow.h"
+
+class  NewMessage : public ASC_PG_Dialog {
+      GameMap* gamemap;
+      Message* message;
+      PG_MultiLineEdit* editor;
+      PlayerSelector* to;
+      PlayerSelector* cc;
+      
+      bool ok()
+      {
+         if ( !message ) {
+            message = new Message ( editor->GetText(), gamemap, 0, 1 << actmap->actplayer );
+            gamemap->unsentmessage.push_back ( message );
+         } else {
+            message->text = editor->GetText();
+            message->to = to->getSelectedPlayers();
+         }
+         message->cc = cc->getSelectedPlayers();
+         message->to = to->getSelectedPlayers();
+         
+         QuitModal();
+         return true;
+      }
+      
+      bool cancel()
+      {
+         QuitModal();
+         return true;
+      }
+      
+      bool insertCoordinates()
+      {
+         SelectFromMap::CoordinateList coordinates;
+         
+         SelectFromMap sfm( coordinates, gamemap );
+         sfm.Show();
+         sfm.RunModal();
+         
+         ASCString text = "#coord("; 
+         for ( SelectFromMap::CoordinateList::iterator i = coordinates.begin(); i != coordinates.end(); ++i ) {
+            if ( i != coordinates.begin() )
+               text += ";";
+            text += ASCString::toString( i->x ) + "/" + ASCString::toString( i->y );
+         }
+         text += ")#";
+         editor->InsertText( text );
+         return true;
+      }
+   public:
+      NewMessage ( GameMap* gamemap, Message* msg = NULL ); 
+};
+
+
+NewMessage :: NewMessage ( GameMap* gamemap, Message* msg ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 500 ), "new message" )
 {
-   rtitle = "new message";
+   this->gamemap = gamemap;
+   message = msg;
+    
+   new PG_Label ( this, PG_Rect( 20, 30, 30, 20 ), "TO:");
+   to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+   if ( msg )
+      to->setSelection( msg->to );
+   
+   new PG_Label ( this, PG_Rect( 210, 30, 30, 20 ), "CC:" );
+   cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+   if ( msg )
+      cc->setSelection( msg->cc );
+   
+   editor = new PG_MultiLineEdit( this, PG_Rect(20, 200, Width() - 140, Height() - 210 ));
+   if ( message )
+      editor->SetText( message->text );
+    
+   AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &NewMessage::ok ));
+   AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &NewMessage::cancel ));
+   AddStandardButton("");
+   AddStandardButton("Coordinates")->sigClick.connect( SigC::slot( *this, &NewMessage::insertCoordinates ));
+  
 }
+      
 
-void tnewmessage :: init ( void )
-{
-   tdialogbox :: init ( );
-   title = rtitle;
-   for ( int i = 0; i < 8; i++ )
-      if ( actmap->player[i].exist() &&  actmap->actplayer != i )
-         to[i] = 1;
-      else
-         to[i] = 0;
+class IngameMessageViewer : public ASC_PG_Dialog {
+      PG_Widget* textViewer;
+      const Message* message;
+      PG_Label* from;
+      PG_Label* to;
+      PG_Label* cc;
 
-   setup();
-   buildgraphics();
-
-
-   rectangle ( x1 + tx1 - 2, y1 + ty1 - 2, x1 + tx2 + 2, y1 + ty2 + 2 ,black );
-
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.length = tx2 - tx1 -1 ;
-   activefontsettings.height = activefontsettings.font->height+5;
-   activefontsettings.background = dblue;
-   activefontsettings.color = black;
-   activefontsettings.justify = lefttext;
-
-   inserttext ( "" );
-   actparagraph = firstparagraph;
-   actparagraph->cursor = 0;
-   actparagraph->setpos( x1 + tx1, y1 + ty1, y1 + ty2, 0, 13 );
-
-   while ( actparagraph ) {
-      actparagraph->reflow( 0 );
-      actparagraph = actparagraph->next;
-   }
-   actparagraph = firstparagraph;
-   actparagraph->checkscrolldown();
-   actparagraph->display();
+      bool ok()
+      {
+         Hide();
+         QuitModal();
+         return true;
+      };
 
 
-}
+      PG_Label* addHeaderLine( int y, const ASCString& name )
+      {
+         PG_Rect f( 10, y, Width() - 20, 25 );
 
-
-void tnewmessage :: buttonpressed ( int id )
-{
-   tmessagedlg :: buttonpressed ( id );
-   if ( id == 1 )
-      ok = 1;
-   if ( id == 2 )
-      ok = 2;
-}
-
-
-void tnewmessage :: run ( void )
-{
-   mousevisible ( true );
-
-   do {
-
-      tmessagedlg::run ( );
-
-   } while ( !ok ); /* enddo */
-   if ( ok == 1 ) {
-      Message* message = new Message ( extracttext(), actmap, 0, 1 << actmap->actplayer );
-      for ( int i = 0; i < 8; i++ ) {
-         if ( actmap->player[i].exist() )
-            if ( actmap->actplayer != i )
-               message->to |= to[i] << i;
+         new PG_Label( this, PG_Rect( f.x, f.y, 50, f.h ), name );
+         Emboss* emb = new Emboss( this, PG_Rect( f.x + 50, f.y, f.w - 50, f.h ), true );
+         return new PG_Label( emb, PG_Rect( 2, 2, emb->w - 4, emb->h - 4) );
       }
 
-      actmap->unsentmessage.push_back ( message );
-   }
-}
+   public:
+      IngameMessageViewer ( const ASCString& title, const Message& msg, const ASCString& buttonText = "ok", PG_Rect rect = PG_Rect( 50, 50, 500, 400 ), bool autoHeader = true ) : ASC_PG_Dialog ( NULL, rect, title ), message(NULL), from(NULL), to(NULL), cc(NULL)
+      {
+
+         int footerHeight;
+         if ( !buttonText.empty() ) {
+            PG_Button* b = new PG_Button( this, PG_Rect( Width() - 110, Height() - 40, 100, 30), buttonText );
+            b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::ok) );
+            footerHeight = 50;
+         } else
+            footerHeight = 10;
+
+         int y = 40;
+         if ( !msg.getFromText( actmap ).empty()  ) {
+
+
+            from = addHeaderLine( y, "From:");
+            y += 30;
+
+            if ( !autoHeader || (msg.to && !(msg.from & 512))  ) {
+               to = addHeaderLine( y, "To:");
+               y += 30;
+            }
+
+            if ( !autoHeader || msg.cc ) {
+               cc = addHeaderLine( y, "CC:");
+               y += 30;
+            }
+
+
+         }
+
+         PG_Rect r ( 10, y, Width() - 20, Height() - (y + footerHeight ));
+         new Emboss( this, r, true );
+
+#ifdef RICHEDIT
+         PG_RichEdit* re = new PG_RichEdit( this, PG_Rect(r.x + 2, r.y+2, r.w-4, r.h-4));
+
+         ASCString text  = msg.text;
+         while ( text.find ( "#crt#" ) != ASCString::npos )
+            text.replace ( text.find  ("#crt#"), 5, " \n");
+
+         re->SetText( text );
+         re->SetTransparency(255);
+         textViewer = re;
+#else
+         TextRenderer* tr = new TextRenderer( this, PG_Rect(r.x + 2, r.y+2, r.w-4, r.h-4));
+         tr->SetText( msg.text );
+         textViewer = tr;
+#endif
+         SetMessage( msg );
+      };
+
+      void SetMessage( const Message& msg )
+      {
+         if ( &msg != message) {
+            PG_Application::BulkModeActivator bulk;
+            textViewer->SetText( msg.text );
+
+            if ( from )
+               from->SetText( msg.getFromText( actmap ));
+
+            if ( cc )
+               cc->SetText( msg.getCcText( actmap ));
+
+            if ( to )
+               to->SetText( msg.getToText( actmap ));
+
+
+            bulk.disable();
+            Show();
+            message = &msg;
+         }
+      };
+
+
+      void 	Hide (bool fade=false)
+      {
+         ASC_PG_Dialog::Hide(fade);
+         getPGApplication().queueWidgetForDeletion( this );
+      }
+
+      bool eventKeyDown (const SDL_KeyboardEvent *key)
+      {
+         if (  key->keysym.sym == SDLK_ESCAPE ) {
+            quitModalLoop(10);
+            return true;
+         }
+         if (  key->keysym.sym == SDLK_RETURN || key->keysym.sym == SDLK_KP_ENTER ) {
+            quitModalLoop(11);
+            return true;
+         }
+         if (  key->keysym.sym == SDLK_SPACE ) {
+            quitModalLoop(12);
+            return true;
+         }
+         return ASC_PG_Dialog::eventKeyDown( key );
+      };
+
+      ~IngameMessageViewer()
+      {
+         displayLogMessage ( 9, "~IngameMessageViewer\n" );
+      }
+      
+};
+
+
+
 
 void newmessage ( void )
 {
-  tnewmessage nm;
-  nm.init();
-  nm.run();
-  nm.done();
-}
-
-
-
-class teditmessage : public tmessagedlg  {
-            protected:
-               Message* message;
-            public:
-               void init ( Message* msg );
-               void buttonpressed ( int id );
-               void run ( void );
-       };
-
-
-void teditmessage :: init ( Message* msg  )
-{
-   message = msg;
-   tdialogbox :: init ( );
-   title = "edit message";
-
-   for ( int i = 0; i < 8; i++ )
-      to[i] = (message->to & ( 1 << i )) > 0;
-
-   setup();
-   buildgraphics();
-
-
-   rectangle ( x1 + tx1 - 2, y1 + ty1 - 2, x1 + tx2 + 2, y1 + ty2 + 2 ,black );
-
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.length = tx2 - tx1 -1 ;
-   activefontsettings.height = activefontsettings.font->height+5;
-   activefontsettings.background = dblue;
-   activefontsettings.color = black;
-   activefontsettings.justify = lefttext;
-
-   inserttext ( msg->text );
-   actparagraph = firstparagraph;
-   actparagraph->cursor = 0;
-   actparagraph->setpos( x1 + tx1, y1 + ty1, y1 + ty2, 0, 13 );
-
-   while ( actparagraph ) {
-      actparagraph->reflow( 0 );
-      actparagraph = actparagraph->next;
+   if ( Player::getHumanPlayerNum( actmap ) < 2 ) {
+      infoMessage( "nobody is listening to our transmissions");
+      return;
    }
-   actparagraph = firstparagraph;
-   actparagraph->checkscrolldown();
-   actparagraph->display();
-
-
+   
+   // PG_LineEdit::SetBlinkingTime(-1);
+        
+   NewMessage  nm ( actmap );
+   nm.Show();
+   nm.RunModal();
 }
 
 
-void teditmessage :: buttonpressed ( int id )
+
+
+class MessageLineWidget: public SelectionWidget
 {
-   tmessagedlg :: buttonpressed ( id );
-   if ( id == 1 )
-      ok = 1;
-   if ( id == 2 )
-      ok = 2;
-}
+       Message* message;
+      ASCString msgtime;
+      GameMap* map;
+   public:
+      MessageLineWidget( PG_Widget* parent, const PG_Point& pos, int width, Message* msg, GameMap* gamemap );
 
+      ASCString getName() const
+      {
+         if ( message->from > 0 && message->from <= 255 )
+            return map->getPlayer(log2(message->from)).getName();
+         else
+            if ( message->from & ( 1 << 9 ))
+               return "system";
+         return "";
+      };
 
-void teditmessage :: run ( void )
-{
-   mousevisible ( true );
+      Message* getMessage() const { return message; };
 
-   do {
-      tmessagedlg::run ( );
-   } while ( !ok ); /* enddo */
+   protected:
 
-   if ( ok == 1 ) {
-      message->text = extracttext();
-      message->to = 0;
-      for ( int i = 0; i < 8; i++ ) {
-         if ( actmap->player[i].exist() )
-            if ( actmap->actplayer != i )
-               message->to |= to[i] << i;
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
+      {
       }
-   }
-}
+      ;
+};
 
 
-void editmessage ( Message& msg )
+
+MessageLineWidget::MessageLineWidget( PG_Widget* parent, const PG_Point& pos, int width,  Message* msg, GameMap* gamemap ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 20 )), message( msg ), map(gamemap)
 {
-  teditmessage nm;
-  nm.init( &msg );
-  nm.run();
-  nm.done();
-}
+#ifndef ctime_r
+   msgtime = ctime( &msg->time);
+#else
 
-class tviewmessages : public tdialogbox {
-               typedef vector<Message*> MsgVec;
-               MsgVec msg;
-               MsgVec::iterator firstdisplayed;
-               MsgVec::iterator marked;
-               int player[8];
-               int mode;
-               int ok;
-               int dispnum;
-               int scrollpos;
-               int __num;
+   char c[100];
+   ctime_r( &msg->time, c );
+   msgtime  = c;
+#endif
 
-            public:
-               tviewmessages ( const MessagePntrContainer& _msglist );
-               void init ( char* ttl, bool editable, int md  );    // mode : 0 verschickte ; 1 empfangene
-               int  getcapabilities ( void ) { return 1; };
-               void redraw ( void );
-               void run ( void );
-               void buttonpressed ( int id );
-               void paintmessages ( void );
-               void checkforscroll ( bool mouse );
-          };
+   int col1 =        width * 3 / 10;
+   int col2 = col1 + width * 4 / 10;
 
 
-tviewmessages :: tviewmessages ( const MessagePntrContainer& msglist )
+   PG_Label* lbl1 = new PG_Label( this, PG_Rect( 0, 0, col1 - 10, Height() ), getName() );
+   lbl1->SetFontSize( lbl1->GetFontSize() -2 );
+
+   PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, 0, col2-col1-10, Height() ), msgtime );
+   lbl2->SetFontSize( lbl2->GetFontSize() -2 );
+
+   int x = 0;
+   for ( int i = 0; i< gamemap->getPlayerCount(); ++i )
+      if ( msg->to & (1 << i)) {
+         new ColoredBar( gamemap->getPlayer(i).getColor(), this, PG_Rect( col2 + x, 0, 15 , 15 ));
+         x += 18;
+      }
+
+   SetTransparency( 255 );
+};
+
+
+class MessageListItemFactory: public SelectionItemFactory  {
+   protected:
+      const MessagePntrContainer& messageContainer;
+      MessagePntrContainer::const_iterator it;
+      GameMap* gamemap;
+
+   public:
+      MessageListItemFactory( const MessagePntrContainer& messages, GameMap* g );
+      
+      void restart();
+      
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
+      
+      void itemMarked( const SelectionWidget* widget );
+      void itemSelected( const SelectionWidget* widget, bool mouse );
+
+      SigC::Signal1<void, Message* > messageSelected;
+};
+
+
+MessageListItemFactory::MessageListItemFactory( const MessagePntrContainer& messages, GameMap* map ) : messageContainer ( messages ), gamemap(map)
 {
-   msg.insert ( msg.end(), msglist.begin(), msglist.end());
-   ok = 0;
-   dispnum = 10;
-   marked = msg.end();
-   firstdisplayed = msg.begin();
-   __num = msg.size();
-   scrollpos = 0;
-}
+   restart();
+};
 
-void tviewmessages :: init ( char* ttl, bool editable, int md )
+
+void MessageListItemFactory::restart()
 {
-   mode = md;
-   tdialogbox :: init ( );
+   it = messageContainer.begin();
+};
 
-   xsize =  400;
-   ysize =  300;
-   title = ttl;
-   windowstyle &= ~dlg_in3d;
-   if ( editable ) {
-     addbutton ( "~V~iew",    10,              ysize - 30, xsize / 3 - 5, ysize - 10 ,   0, 1, 1, msg.size() > 0 );
-     addkey    ( 1, ct_enter );
-
-     addbutton ( "~E~dit",    xsize / 3 + 5,   ysize - 30, 2*xsize / 3 - 5, ysize - 10 , 0, 1, 2, msg.size() > 0 );
-
-     addbutton ( "e~x~it",  2*xsize / 3 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
-     addkey    ( 3, ct_esc );
-   } else {
-     addbutton ( "~V~iew",    10,            ysize - 30, xsize / 2 - 5, ysize - 10 ,   0, 1, 1, msg.size() > 0  );
-     addkey    ( 1, ct_enter );
-
-     addbutton ( "e~x~it",  xsize / 2 + 5, ysize - 30, xsize - 10, ysize - 10 ,      0, 1, 3, true );
-     addkey    ( 3, ct_esc );
-   }
-
-   if ( msg.size() > dispnum )
-     addscrollbar ( xsize - 25, starty, xsize - 10, ysize - 40 , &__num, dispnum, &scrollpos, 4, 0 );
-
-   int b = 0;
-
-   for ( int i = 0; i < 8; i++ )
-      if ( actmap->player[i].exist()  &&  actmap->actplayer != i )
-         player[i] = b++;
-      else
-         player[i] = -1;
-
-   buildgraphics();
-
-}
-
-void tviewmessages :: buttonpressed ( int id )
+SelectionWidget* MessageListItemFactory::spawnNextItem( PG_Widget* parent, const PG_Point& pos )
 {
-   if ( id == 1 )
-      if ( marked != msg.end() )
-         viewmessage ( **marked );
-
-   if ( id == 2 )
-      if ( marked != msg.end() )
-         editmessage ( **marked );
-
-   if ( id == 3 )
-      ok = 1;
-
-   if ( id == 4 ) {
-      checkforscroll( true );
-      paintmessages();
-   }
-}
-
-void tviewmessages :: paintmessages ( void )
-{
-    MsgVec::iterator a = firstdisplayed;
-    activefontsettings.font = schriften.smallarial;
-    activefontsettings.background = dblue;
-    activefontsettings.justify = lefttext;
-    int displayed = 0;
-    while ( a != msg.end()  &&  displayed < dispnum ) {
-       if ( a == marked )
-          activefontsettings.color= white;
-       else
-          activefontsettings.color= black;
-
-       activefontsettings.length = 190;
-
-       tm *tmbuf;
-       tmbuf = localtime ( &( (*a)->time ) );
-       int y = y1 + starty + 10 + ( a - firstdisplayed ) * 20 ;
-
-       showtext2 (asctime (tmbuf), x1 + 20, y);
-
-       activefontsettings.length = 100;
-       if ( mode ) {
-          int fr = log2 ( (*a)->from );
-          if ( fr < 8 )
-             showtext2 ( actmap->player[ fr ].getName().c_str(), x1 + 220, y );
-          else
-             showtext2 ( "system", x1 + 220, y );
-       } else {
-          for ( int i = 0; i < 8; i++ )
-             if ( player[i] >= 0 ) {
-                int x = x1 + 220 + player[i] * 15;
-                int color;
-                if ( (*a)->to & ( 1 << i ) )
-                   color = 20 + i * 8;
-                else
-                   color = dblue ;
-
-                bar ( x, y, x + 10, y + 10, color );
-
-             }
-       }
-
-       a++;
-       displayed++;
-    }
-}
-
-void tviewmessages :: checkforscroll ( bool mouse )
-{
-   firstdisplayed = msg.begin() + scrollpos;
-   if ( firstdisplayed >= msg.end() )
-      displaymessage (" tviewmessages :: checkforscroll  -- invalid scrolling operation ", 2 );
-
-   MsgVec::iterator oldfirst = firstdisplayed;
-   if ( mouse ) {
-      // if called by scrollbar the marked position is changed according to
-      // scrolling position; else vice versa
-      if ( marked < firstdisplayed )
-        marked = firstdisplayed;
-      if ( marked > firstdisplayed + (dispnum-1) )
-         marked = firstdisplayed + (dispnum-1) ;
-   } else {
-      if ( marked < firstdisplayed )
-        firstdisplayed = marked;
-      if ( marked > firstdisplayed + (dispnum-1) )
-         firstdisplayed = marked - (dispnum-1) ;
-   }
-
-   if ( oldfirst != firstdisplayed )
-      if ( msg.size() > dispnum )
-         enablebutton ( 4 );
-}
-
-
-void tviewmessages :: redraw ( void )
-{
-   tdialogbox::redraw();
-   if ( msg.size() > dispnum )
-     rahmen ( true, x1 + 10, y1 + starty, x1 + xsize - 30, y1 + ysize - 40 );
+   if ( it != messageContainer.end() )
+      return new MessageLineWidget( parent, pos, parent->Width() - 15, *(it++), gamemap );
    else
-     rahmen ( true, x1 + 10, y1 + starty, x1 + xsize - 10, y1 + ysize - 40 );
+      return NULL;
+};
 
-   paintmessages();
+
+void MessageListItemFactory::itemMarked( const SelectionWidget* widget )
+{
+   if ( !widget )
+      return;
+
+   const MessageLineWidget* mlw = dynamic_cast< const MessageLineWidget*>(widget);
+   assert( mlw );
+   messageSelected( mlw->getMessage() );
 }
 
-void tviewmessages :: run ( void )
+void MessageListItemFactory::itemSelected( const SelectionWidget* widget, bool mouse )
 {
-   int mstatus = 0;
+   if ( !widget )
+      return;
 
-   mousevisible( true );
-   do {
-      tdialogbox :: run ( );
-         if ( taste == ct_down  &&  marked+1 < msg.end() ) {
-            marked++;
-            checkforscroll( false );
-            paintmessages();
-         }
-         if ( taste == ct_up  &&  marked > msg.begin() ) {
-            marked--;
-            checkforscroll( false );
-            paintmessages();
-         }
-         if ( taste == ct_pos1  && marked > msg.begin() ) {
-            marked=msg.begin();
-            checkforscroll( false );
-            paintmessages();
-         }
-         if ( taste == ct_ende  &&  marked+1 < msg.end() ) {
-            marked = msg.end()-1;
-            checkforscroll( false );
-            paintmessages();
-         }
-
-         if ( mouseinrect ( x1 + 10, y1 + starty, x1 + xsize - 30, y1 + ysize - 40 )) {
-            if ( mouseparams.taste == 1 ) {
-                int ps = (mouseparams.y - (y1 + starty + 10)) / 20;
-                if ( ps < dispnum && ps >= 0 ) {
-                   MsgVec::iterator n = firstdisplayed + ps;
-                   if ( n < msg.end() ) {
-                      if ( n != marked ) {
-                         marked = n;
-                         paintmessages();
-                         mstatus = 1;
-                      }
-                      if ( n == marked  &&  mstatus == 2 ) {
-                         buttonpressed ( 1 );
-                         mstatus = 0;
-                      }
-                   }
-                }
-            }
-
-         }
-         if ( mouseparams.taste == 0  && mstatus == 1 )
-            mstatus = 2;
-
-   } while ( !ok ); /* enddo */
-
-}
-
-
-void viewmessages ( char* title, const MessagePntrContainer& msg, bool editable, int md  )    // mode : 0 verschickte ; 1 empfangene
-{
-   tviewmessages vm ( msg );
-   vm.init  ( title, editable, md );
-   vm.run ();
-   vm.done();
+   const MessageLineWidget* fw = dynamic_cast<const MessageLineWidget*>(widget);
+   assert( fw );
+   messageSelected( fw->getMessage() );
 }
 
 
 
 
+class MessageSelectionWindow : public ASC_PG_Dialog {
+   private:
+      bool edit;
+
+      bool viewerDeleted( const PG_MessageObject* obj )
+      {
+         if ( viewer == obj )
+            viewer = NULL;
+         return true;
+      };
+
+      bool ProcessEvent ( const SDL_Event *   event, bool bModal = false  )
+      {
+         if ( ASC_PG_Dialog::ProcessEvent( event, bModal ) )
+            return true;
+
+         if ( viewer ) 
+            if ( viewer->ProcessEvent( event, bModal ))
+               return true;
+         
+         return false;
+      };
 
 
+   protected:
+      void messageSelected( Message* msg );
+      IngameMessageViewer* viewer;
 
+   public:
+      MessageSelectionWindow( PG_Widget *parent, const PG_Rect &r, const MessagePntrContainer& messages, GameMap* g, bool editable );
+};
 
-  class   tviewmessage : public tdialogbox, public tviewtextwithscrolling {
-               public:
-                   const char*          txt;
-                   char                 ok;
-
-                   char                 scrollbarvisible;
-                   char                 action;
-                   int                  textstart;
-                   int                  from;
-                   int                  cc;
-                   int                  rightspace;
-
-                   void                 init( const Message& msg );
-                   virtual void         run ( void );
-                   virtual void         buttonpressed( int id);
-                   void                 redraw ( void );
-                   int                  getcapabilities ( void ) { return 1; };
-                   void                 repaintscrollbar( void );
-                };
-
-
-
-void         tviewmessage::init( const Message& msg )
+void MessageSelectionWindow::messageSelected(  Message* msg )
 {
-
-   // dialogbox initialisieren
-
-   tdialogbox::init();
-   x1 = 20;
-   y1 = 50;
-   xsize = 500;
-   ysize = 360;
-   textstart = 42 + 45;
-   textsizey = (ysize - textstart - 35);
-   starty = starty + 10;
-   title = "message";
-   windowstyle ^= dlg_in3d;
-   action=0;
-
-
-   txt = msg.text.c_str();
-   from = msg.from;
-   cc = msg.to;
-
-
-   setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 35, txt, black, dblue);
-   tvt_dispactive = 0;
-   displaytext(  );
-   textsizeycomplete = tvt_yp;
-   tvt_dispactive = 1;
-
-
-   if (textsizeycomplete >= textsizey) {
-      scrollbarvisible = true;
-
-      #ifdef NEWKEYB
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,0);
-      #else
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 35,&textsizeycomplete, textsizey, &tvt_starty,1,1);
-      #endif
-      setscrollspeed ( 1 , 1 );
-
-      rightspace = 40;
+   if ( edit ) {
+      NewMessage  nm ( actmap, msg );
+      nm.Show();
+      nm.RunModal();
+   } else {
+      if ( !viewer ) {
+         PG_Rect r ( my_xpos + Width(), my_ypos, min( PG_Application::GetScreenWidth()/2, 500), Height() );
+         viewer = new IngameMessageViewer( "Message", *msg, "ok", r );
+         viewer->Show();
+         viewer->sigDelete.connect( SigC::slot( *this, &MessageSelectionWindow::viewerDeleted ));
+      } else 
+         viewer->SetMessage( *msg );
    }
-   else {
-      rightspace = 10;
-      scrollbarvisible = false;
-   }
-
-   addbutton ( "~o~k", 10, ysize - 25, xsize - 10, ysize - 5, 0, 1, 4, true );
-
-   tvt_starty = 0;
-   buildgraphics();
-}
+};
 
 
-void         tviewmessage::repaintscrollbar( void )
+MessageSelectionWindow::MessageSelectionWindow( PG_Widget *parent, const PG_Rect &r, const MessagePntrContainer& messages, GameMap* gamemap, bool editable ) 
+   : ASC_PG_Dialog( parent, r, "Messages" ), edit( editable), viewer(NULL)
 {
-   enablebutton ( 1 );
-}
+  
+   MessageListItemFactory* factory = new MessageListItemFactory( messages, gamemap );
+   factory->messageSelected.connect ( SigC::slot( *this, &MessageSelectionWindow::messageSelected ));
+
+   ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 10, r.Height() - GetTitlebarHeight()), factory );
+   isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+};
 
 
-void         tviewmessage::redraw(void)
+
+
+void viewmessages ( char* title, const MessagePntrContainer& msg, bool editable  )    // mode : 0 verschickte ; 1 empfangene
 {
-  int i;
-
-   tdialogbox::redraw();
-   rahmen(true,x1 + 10,y1 + textstart - 2,x1 + xsize - rightspace,y1 + textstart + textsizey + 2);
-
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   activefontsettings.justify = lefttext;
-   activefontsettings.background = dblue;
-   activefontsettings.length =0;
-
-   int yp = 36;
-   if ( from != 1 << actmap->actplayer ) {
-      showtext2 ( "from: ", x1 + 13, y1 + textstart - 45 );
-      int n = log2 ( from );
-      if ( n < 8 ) {
-         activefontsettings.color = 20 + 8 * n;
-         showtext2 ( actmap->player[n].getName().c_str(), x1 + 60, y1 + textstart - 45 );
-      } else
-         showtext2 ( "system", x1 + 60, y1 + textstart - 45 );
-
-      yp = 26;
-   }
-
-   activefontsettings.color = black;
-   if ( from != 1 << actmap->actplayer )
-      showtext2 ( "cc: ", x1 + 13, y1 + textstart - yp );
-   else
-      showtext2 ( "to: ", x1 + 13, y1 + textstart - yp );
-
-   int n = 0;
-   for (i = 0; i < 8; i++ )
-      if ( actmap->player[i].exist()  && i != actmap->actplayer )
-         if ( cc & ( 1 << i ))
-            n++;
-   if ( n ) {
-      activefontsettings.length = (xsize - (n+1) * 5 - 60 - rightspace ) / n;
-
-      n = 0;
-      for ( i = 0; i < 8; i++ )
-         if ( actmap->player[i].exist()  && i != actmap->actplayer )
-            if ( cc & ( 1 << i )) {
-               activefontsettings.color = 20 + 8 * i;
-               //activefontsettings.background = 17 + 8 * i;
-               showtext2 ( actmap->player[i].getName().c_str(), x1 + 60 + n * activefontsettings.length + n * 5 , y1 + textstart - yp );
-               n++;
-            }
-   }
-   activefontsettings.color = black;
-   activefontsettings.height = textsizey / linesshown;
-
-   rahmen(true,x1 + 10,y1 + textstart - 47,x1 + xsize - rightspace,y1 + textstart - 7 );
-
-   int xd = 15 - (rightspace - 10) / 2;
-
-   setpos ( x1 + 13 + xd, y1 + textstart, x1 + xsize - 41 + xd, y1 + ysize - 35 );
-   displaytext();
-
-}
-
-
-void         tviewmessage::buttonpressed( int id )
-{
-   tdialogbox::buttonpressed(id);
-   if (id == 1)
-      displaytext();
-
-   if (id == 4)
-      action = 12;
-}
-
-
-void         tviewmessage::run(void)
-{
-   mousevisible(true);
-   do {
-      tdialogbox::run();
-      checkscrolling ( );
-      if (taste == ct_esc || taste == ct_enter || taste == ct_space )
-         action = 11;
-   }  while (action < 10);
+   int ww = min( PG_Application::GetScreenWidth()/2, 500 );
+   PG_Rect r ( max(PG_Application::GetScreenWidth()/2,0) - ww, -1, ww, 500 );
+   MessageSelectionWindow msw ( NULL, r, msg, actmap, editable );
+   msw.Show();
+   msw.RunModal();
 }
 
 
 
 void viewmessage ( const Message& message )
 {
-   tviewmessage vm;
-   vm.init ( message );
-   vm.run();
-   vm.done();
+   assert( !legacyEventSystemActive() );
+   IngameMessageViewer igm( "incoming message...", message );
+   igm.Show();
+   igm.RunModal();
+   
+}
+
+
+
+void checkJournal( Player& player )
+{
+   GameMap* actmap = player.getParentMap();
+   
+   if ( actmap->lastjournalchange.abstime )
+      if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||
+            (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
+               viewjournal();
 }
 
 void viewjournal ( void )
@@ -654,12 +510,26 @@ void editjournal ( void )
 }
 
 
-void viewunreadmessages ( void )
+void viewunreadmessages ( Player& player )
 {
-   MessagePntrContainer::iterator mi = actmap->player[ actmap->actplayer ].unreadmessage.begin();
-   while ( mi != actmap->player[ actmap->actplayer ].unreadmessage.end()  ) {
-      viewmessage ( **mi );
-      actmap->player[ actmap->actplayer ].oldmessage.push_back ( *mi );
-      mi = actmap->player[ actmap->actplayer ].unreadmessage.erase ( mi );
+
+   /** this is hack to prevent several message windows popping up at once.
+       The problem is that the idle handler of the first message viewer may trigger or evaluate further events,
+       which may themself view new messages 
+       */
+
+   static bool isRunning = false;
+   if ( isRunning )
+      return;
+
+   VariableLocker l( isRunning );
+   
+   MessagePntrContainer::iterator mi = player.unreadmessage.begin();
+   while ( mi != player.unreadmessage.end()  ) {
+      Message* msg = *mi;
+      player.oldmessage.push_back ( *mi );
+      player.unreadmessage.erase ( mi );
+      viewmessage ( *msg );
+      mi = player.unreadmessage.begin();
    }
 }

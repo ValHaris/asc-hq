@@ -1,10 +1,8 @@
 /*! \file controls.h
-   Controlling units (which is graudally moved to #vehicletype.cpp and #unitctrl.cpp );
+   Controlling units (which is graudally moved to vehicletype.cpp and unitctrl.cpp );
    Resource networks
    Things that are run when starting and ending someones turn   
 */
-
-//     $Id: controls.h,v 1.56 2005-01-06 19:39:37 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -26,23 +24,19 @@
     Boston, MA  02111-1307  USA
 */
 
-#if defined(karteneditor) && !defined(pbpeditor)
+#if defined(karteneditor) 
  #error the mapeditor should not need to use controls.h !
 #endif
 
 
 #ifndef controlsH
 #define controlsH
-#include "gui.h"
 #include "typen.h"
-// #include "mousecontrol.h"
-#include "soundList.h"
 #include "astar2.h"
 
 
 
-
-   //! some old system for keeping track which unit action is currently running. As units actions are moved to #unitctrl.cpp , this structure is beeing replaced by #pendingVehicleActions
+   //! some old system for keeping track which unit action is currently running. As units actions are moved to unitctrl.cpp , this structure is beeing replaced by #pendingVehicleActions
    struct tmoveparams { 
                         unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
                                                                              0:  garnichts, standard
@@ -53,14 +47,15 @@
                                                                              115: removebuilding
                                                                              120: construct vehicle
                                                                              130: external loading
+                                                                             140: jumpdrive
                                                                    */
 
                         int           movesx, movesy, moveerr; 
-                        pvehicle     vehicletomove;
+                        Vehicle*     vehicletomove;
                         int          newheight; 
                         int          oldheight; 
                         char         heightdir; 
-                        pbuildingtype buildingtobuild;   /*  nur bei movestatus = 111  */ 
+                        BuildingType* buildingtobuild;   /*  nur bei movestatus = 111  */ 
                         int          movespeed;
                         int          uheight;
                      }; 
@@ -74,22 +69,13 @@
 */
 extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                                     const MapCoordinate3D& dest,
-                                    pvehicle     vehicle,
+                                    const Vehicle*     vehicle,
                                     WindMovement* wm = NULL,
                                     bool*  inhibitAttack = NULL,
                                     bool container2container  = false );
 
-//! return the distance between x1/y1 and x2/y2 using the power of the wind factors calculated for a specific unit with #initwindmovement
+//! return the distance between x1/y1 and x2/y2 using the power of the wind factors precalculated in #WindMovement
 extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm );
-
-
-/*! Ends the turn of the current player and runs AI until a player is human again
-    \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
-*/
-extern void next_turn ( int playerView = -2 );
-
-//! checks if the current player has terminated another player or even won
-extern void  checkforvictory ( );
 
 
 /////////////////////////////////////////////////////////////////////
@@ -97,36 +83,14 @@ extern void  checkforvictory ( );
 /////////////////////////////////////////////////////////////////////
 
 
-//! An old procedure for building and removing objects with a unit.
-extern void  setspec( pobjecttype obj );
-
-//! A helper function for #setspec
-extern int  object_constructable ( int x, int y, pobjecttype obj );
-
-//! A helper function for #setspec
-extern int  object_removeable ( int x, int y, pobjecttype obj );
-
-//! A helper function for #setspec
-extern void build_objects_reset( void );
-
-
 //! An old procedure for building vehicle (like turrets) with a unit.
-extern void  constructvehicle( pvehicletype tnk );
+extern void  constructvehicle( Vehicletype* tnk );
 
 //! A helper function for #constructvehicle
 extern void build_vehicles_reset( void );
 
 //! An old procedure for putting and removing mines.
-extern void  legemine( int typ, int delta );
-
-//! An old procedure for constructing a building with a vehicle
-extern void  putbuildinglevel1(void);
-
-//! An old procedure for constructing a building with a vehicle
-extern void  putbuildinglevel2( const pbuildingtype bld, integer      xp, integer      yp);
-
-//! An old procedure for constructing a building with a vehicle
-extern void  putbuildinglevel3(integer      x, integer      y);
+extern void  putMine( const MapCoordinate& pos, int typ, int delta );
 
 //! An old procedure for removing a building with a vehicle
 extern void         destructbuildinglevel2( int xp, int yp);
@@ -136,107 +100,18 @@ extern void         destructbuildinglevel1( int xp, int yp);
 
 
 
-//! continues a PBeM game; the current map is deleted
-extern void continuenetworkgame ( void );
-
-
-
 //! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
-extern void dissectvehicle ( pvehicle eht );
+extern void dissectvehicle ( Vehicle* eht );
 
 
 
 
-struct treactionfire_replayinfo {
-         int x1 ;
-         int y1 ;
-         int x2 ;
-         int y2 ;
-         int ad1 ;
-         int ad2 ;
-         int dd1 ;
-         int dd2 ;
-         int wpnum;
-};
-typedef treactionfire_replayinfo* preactionfire_replayinfo;
-
-
-
-
-/** creates a new vehicle, setting up its class depending on the research. If this vehicletype is
-     not available (because it hasn't been researched, for example), vehicle will be set to NULL,
-     else it will contain a pointer to the newly created vehicle. The vehicle will be empty after
-     creation (no fuel, etc). The resources for the creation must be seperately 'consumed'. */
-extern void   generatevehicle_cl ( pvehicletype fztyp,
-                                                int               col,
-                                                pvehicle &    vehicle,
-                                                int               x, 
-                                                int               y );
-
-extern int searchexternaltransferfields ( pbuilding bld );
+// extern int searchexternaltransferfields ( Building* bld );
 
 extern Resources getDestructionCost( Building* bld, Vehicle* veh );
 
 
-class treactionfire {
-          public:
-             virtual int  checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md ) = 0;
-             virtual void init ( pvehicle eht, const AStar3D::Path&  fieldlist ) = 0;
-             virtual ~treactionfire() {};
-        };
-
-class treactionfirereplay : public treactionfire {
-          protected:
-             int num;
-             dynamic_array<preactionfire_replayinfo> replay;
-             pvehicle unit;
-          public:
-             treactionfirereplay ( void );
-             ~treactionfirereplay ( );
-             virtual int checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md );
-             virtual void init ( pvehicle eht, const AStar3D::Path& fieldlist );
-   };
-
-class tsearchreactionfireingunits : public treactionfire {
-           protected:
-
-
-                static int maxshootdist[8];     // f?r jede H”henstufe eine
-                void addunit ( pvehicle vehicle );
-                void removeunit ( pvehicle vehicle );
-           public:
-
-                tsearchreactionfireingunits( void );
-                void init ( pvehicle eht, const AStar3D::Path& fieldlist );
-                int  checkfield ( const MapCoordinate3D& pos, pvehicle &eht, MapDisplayInterface* md );
-                ~tsearchreactionfireingunits();
-      };
-
-extern void initNetworkGame( void );
-
-class ReplayMapDisplay : public MapDisplayInterface {
-           MapDisplay* mapDisplay;
-           int cursorDelay;
-           void wait ( int minTime = 0 );
-         public:
-           ReplayMapDisplay ( MapDisplay* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slm );
-           void displayPosition ( int x, int y );
-           void deleteVehicle ( pvehicle vehicle ) { mapDisplay->deleteVehicle ( vehicle ); };
-           void displayMap ( void ) { mapDisplay->displayMap(); };
-           void resetMovement ( void ) { mapDisplay->resetMovement(); };
-           void startAction ( void ) { mapDisplay->startAction(); };
-           void stopAction ( void ) { mapDisplay->stopAction(); };
-           void displayActionCursor ( int x1, int y1, int x2 , int y2 , int secondWait );
-           void displayActionCursor ( int x1, int y1 ) { displayActionCursor ( x1, y1, -1, -1, 0 ); };
-           void displayActionCursor ( int x1, int y1, int x2 , int y2 ) { displayActionCursor ( x1, y1, x2, y2, 0 ); };
-           void removeActionCursor ( void );
-           int checkMapPosition ( int x, int y );
-           void setCursorDelay  ( int time ) { cursorDelay = time; };
-           void updateDashboard() { mapDisplay->updateDashboard(); };
-           void repaintDisplay () { mapDisplay->repaintDisplay(); };
-
-    };
-
+//! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs
+extern void researchCheck( Player& player );
 
 #endif

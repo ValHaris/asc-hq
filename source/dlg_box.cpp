@@ -30,7 +30,6 @@
 #include <cstring>
 #include <iostream>
 
-#include "tpascal.inc"
 #include "typen.h"
 #include "basegfx.h"
 #include "newfont.h"
@@ -40,19 +39,15 @@
 #include "events.h"
 #include "stack.h"
 #include "dlg_box.h"
-#include "loadpcx.h"
+#include "paradialog.h"
+#include "widgets/textrenderer.h"
 
-
-#ifdef sgmain
- #include "building.h"
-#endif
 
 #ifdef _WIN32_
  #include <windows.h>
  #include <winuser.h>
 #endif
 
-bool gameStartupComplete = false;
 
 
 char strrstring[200];
@@ -113,7 +108,7 @@ tvirtualscreenbuf :: tvirtualscreenbuf ( void )
 void tvirtualscreenbuf:: init ( void )
 {
    size = hgmp->bytesperscanline * hgmp->resolutiony;
-   buf = new char[ size ];
+   buf = asc_malloc( size );
 }
 
 tvirtualscreenbuf:: ~tvirtualscreenbuf ()
@@ -143,6 +138,8 @@ collategraphicoperations* tdialogbox::pcgo = NULL;
 
 tdialogbox::tdialogbox()
 {
+   eventQueue = setEventRouting ( false, true );
+
    npush ( activefontsettings );
    activefontsettings.font = schriften.smallarial;
    activefontsettings.color = black;
@@ -153,13 +150,8 @@ tdialogbox::tdialogbox()
    virtualbufoffset = 0;
    boxstatus = 0;
 
-   pushallmouseprocs ( );
-
-   if ( mouseparams.pictpointer != icons.mousepointer )
-       setnewmousepointer ( icons.mousepointer, 0,0 );
-
    dlg_mode =  0;
-   int rdw = 1;
+   int rdw = 0;
 
    if ( first ) {
      pdialogbox rn = first;
@@ -177,10 +169,6 @@ tdialogbox::tdialogbox()
       prev = NULL;
    }
    next = NULL;
-#ifdef sgmain
-   if ( recursiondepth > -1 )
-      rdw = 0;
-#endif
 
    if ( rdw )
      dlg_mode |= 2;
@@ -196,7 +184,7 @@ extern void repaintdisplay ( void );
 
 
 void          tdialogbox::repaintdisplay( void )
-{
+{/*
    int ms = getmousestatus();
    if ( ms == 2 )
       mousevisible ( false );
@@ -227,6 +215,7 @@ void          tdialogbox::repaintdisplay( void )
 
    if ( ms == 2 )
       mousevisible ( true );
+      */
 
 }
 
@@ -236,7 +225,7 @@ void          tdialogbox::redrawall ( void )
    if ( prev )
       prev->redrawall(); 
    else
-      repaintdisplay();
+      repaintDisplay();
 }
 
 void           tdialogbox::redrawall2 ( int xx1, int yy1, int xx2, int yy2 )
@@ -246,7 +235,7 @@ void           tdialogbox::redrawall2 ( int xx1, int yy1, int xx2, int yy2 )
       if ( prev )
          prev->redrawall2 ( xx1, yy1, xx2, yy2 ); 
       else
-         repaintdisplay();
+         repaintDisplay();
 }
 
 
@@ -344,7 +333,7 @@ void         tdialogbox::init(void)
    markedtab = 0; 
    disablecolor = darkgray; 
    boxstatus = 1;
-   dlg_mode |= getcapabilities();
+   dlg_mode = 0; // |= getcapabilities();
 } 
 
 
@@ -660,7 +649,7 @@ void         tdialogbox::rebuildtaborder(void)
 { 
   pbutton      pb;
   pbutton      pb2;
-  integer      i = 0; 
+  int      i = 0;
   ttaborder    b; 
 
    pb = firstbutton; 
@@ -1003,7 +992,7 @@ void         tdialogbox::disablebutton(int         id)
   pbutton      pb; 
   int      *pl; 
   Uint16         *pw, *pw2; 
-  pascal_byte         *pbt; 
+  char         *pbt;
   char      *pbl;
   char*         s;
   char*         t;
@@ -1256,7 +1245,10 @@ void         tdialogbox::done(void)
       }
 
       if (imagesaved) {
-         putimage(x1,y1,tp);
+         if ( first == this )
+            ::repaintDisplay();
+         else    
+            putimage(x1,y1,tp);
          asc_free ( tp );
       }
       npop( activefontsettings );
@@ -1549,7 +1541,7 @@ void         tdialogbox::run(void)
             if ( prev )
                prev->redrawall2(  oldx, oldy, oldx + xsize, oldy + ysize ); 
             else
-               repaintdisplay();
+               repaintDisplay();
 
          } 
 
@@ -1668,7 +1660,7 @@ void         tdialogbox::editfield(pbutton      pb)
   char         *ps;
   int      *pl; 
   Uint16         *pw; 
-  pascal_byte         *pbt; 
+  char         *pbt;
   int      l;
 
   activefontsettings.font = schriften.smallarial;
@@ -1720,10 +1712,10 @@ void         tdialogbox::editfield(pbutton      pb)
 
 
 void         tdialogbox::rahmen3(char *       txt,
-                     integer      x1,
-                     integer      y1,
-                     integer      x2,
-                     integer      y2,
+                     int      x1,
+                     int      y1,
+                     int      x2,
+                     int      y2,
                      int         style)
 { 
    collategraphicoperations cgs( x1, y1, x2, y2 );
@@ -1898,17 +1890,18 @@ void displaymessage( const ASCString& text, int num  )
 
    bool displayInternally = true;
 
+   /*
    if ( num == 2 )
       displayLogMessage ( 0, "fatal error" + text + "\n" );
+   else
+      displayLogMessage ( 0, text + "\n" );
+      */
 
 
    #ifndef NoStdio
    if ( num == 2 )
       displayInternally = false;
    #endif
-
-   if ( !graphicinitialized )
-      displayInternally = false;
 
 
    if ( num == 2 )
@@ -1928,43 +1921,45 @@ void displaymessage( const ASCString& text, int num  )
         }
       #endif
 
-      setvgapalette256(pal);
-
-      static int messageboxopen = 0;
-      if ( messageboxopen )
-         return;
-
-      messageboxopen++;
-      if ( messagebox ) {
-        if ( messagebox->boxstatus )
-           messagebox->done();
-        delete messagebox;
-        messagebox = NULL;
+      if ( legacyEventSystemActive() ) {
+         static int messageboxopen = 0;
+         if ( messageboxopen )
+            return;
+   
+         messageboxopen++;
+         if ( messagebox ) {
+            if ( messagebox->boxstatus )
+               messagebox->done();
+            delete messagebox;
+            messagebox = NULL;
+         }
+   
+         messagebox = new tdisplaymessage;
+   
+         if ( num== 2 )
+            messagebox->init( stringtooutput, num, linenum, "~q~uit program");
+         else
+            messagebox->init( stringtooutput, num, linenum);
+   
+         if (num != 0 ) {
+            messagebox->run();
+            messagebox->done();
+            delete messagebox;
+            messagebox = NULL;
+         }
+   
+         messageboxopen--;
+      } else {
+         MessagingHub::Instance().warning( text );
       }
-
-      messagebox = new tdisplaymessage;
-
-      if ( num== 2 )
-         messagebox->init( stringtooutput, num, linenum, "~q~uit program");
-      else
-         messagebox->init( stringtooutput, num, linenum);
-
-      if (num != 0 ) {
-         messagebox->run();
-         messagebox->done();
-         delete messagebox;
-         messagebox = NULL;
-      }
-
-      messageboxopen--;
    } /* endif */
 
    if ( num == 2 ) {
       #ifdef _WIN32_
-        if ( !gameStartupComplete ) {
+//        if ( !gameStartupComplete ) {
            MessageBox(NULL, text.c_str(), "Fatal Error", MB_ICONERROR | MB_OK | MB_TASKMODAL );
            exit(1);
-        }
+  //      }
       #endif
       exit ( 1 );
    }
@@ -2004,12 +1999,6 @@ void         tdialogbox::stredit(char *       s,
    char      einfuegen; 
    int         position; 
    int          i;
-
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   closekeyb();
-   #endif
-  #endif
 
    if ( strlen ( s ) > max )
       max = strlen ( s );
@@ -2221,12 +2210,6 @@ void         tdialogbox::stredit(char *       s,
       strcpy(s,ss);
    delete[] ss;
    delete[] ss2;
-
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   initkeyb();
-   #endif
-  #endif
 } 
 
 
@@ -2243,11 +2226,12 @@ void         tdialogbox::lne(int          x1,
                  char      einfuegen)
 {
  int          i, j, k;
- char* ss2;
 
-  ss2 = strdup ( s );
-  ss2 [ position ] = 0;
-   i = x1 + gettextwdth(ss2,activefontsettings.font);
+ ASCString ss2 = s;
+ if ( position < ss2.length() )
+    ss2.erase(position);
+
+   i = x1 + gettextwdth(ss2.c_str(),activefontsettings.font);
    j = y1; 
    k = y1 + activefontsettings.font->height; 
    collategraphicoperations cgo ( i-1, j, i+1, k );
@@ -2256,7 +2240,6 @@ void         tdialogbox::lne(int          x1,
       xorline(i + 1,j,i + 1,k,3); 
       xorline(i - 1,j,i - 1,k,3); 
    }  
-   asc_free ( ss2 );
 } 
 
 
@@ -2276,12 +2259,6 @@ void         tdialogbox::intedit(int *    st,
    int          i;
    int          ml;
    char ok;
-
-  #ifdef _DOS_
-   #ifdef NEWKEYB
-   closekeyb();
-   #endif
-  #endif
 
    ml =  12 ;
    activefontsettings.justify = lefttext; 
@@ -2505,12 +2482,6 @@ void         tdialogbox::intedit(int *    st,
    delete[] ss;
    delete[] ss2;
 
-   #ifdef _DOS_
-    #ifdef NEWKEYB
-    initkeyb();
-    #endif
-   #endif
-
 } 
 
 
@@ -2544,11 +2515,6 @@ tdialogbox::~tdialogbox()
       done();
    boxstatus = 0;
 
-
-   popallmouseprocs ( );
-   // addmouseproc ( (void*) mousescrollproc );
-   // npop ( mouseproc );
-
    if ( prev ) {
       prev->next = NULL;
 
@@ -2556,10 +2522,11 @@ tdialogbox::~tdialogbox()
          prev->redrawall2( x1, y1, x1 + xsize, y1 + ysize );
    } else {
       first = NULL;
-      if ( dlg_mode & 2 )
-         repaintdisplay();
+      repaintDisplay();
    }
    npop ( activefontsettings );
+
+   setEventRouting ( eventQueue, !eventQueue );
 }
 
 
@@ -2720,7 +2687,9 @@ void tviewtext::setparams ( int xx1, int yy1, int xx2, int yy2, const char* ttxt
 
 void tviewtext::displaytext ( void )
 {
-  collategraphicoperations cgo ( tvt_x1, tvt_y1, tvt_x2, tvt_y2 );
+  auto_ptr<collategraphicoperations> cgo;
+  if ( tvt_dispactive )
+    cgo.reset( new collategraphicoperations ( tvt_x1, tvt_y1, tvt_x2, tvt_y2 ) );
 
    tvt_color = defaulttextcolor;
    tvt_maxlineheight = activefontsettings.font->height + 5;
@@ -2730,7 +2699,7 @@ void tviewtext::displaytext ( void )
 
   char         *actword, *s5;
   const char* s1;
-  integer      i;
+  int      i;
 
    tvt_xp = 0;
    tvt_yp = 0;
@@ -2814,7 +2783,7 @@ void tviewtext::displaytext ( void )
              activefontsettings.length = 0;
              strcpy ( actline, actword );
           }
-   
+
           if (*s1 == '\n') {
              displaysingleline ( actline );
              nextline ( eeinzug, s1 );
@@ -2841,7 +2810,7 @@ void tviewtext::displaytext ( void )
    delete[] actword;
    delete[] actline;
 
-   asc_free( tvt_firstlinebuf );
+   delete[] tvt_firstlinebuf;
 
    npop ( activefontsettings );
 
@@ -3013,8 +2982,6 @@ tviewtext::~tviewtext()
 
 void tviewtextwithscrolling::checkscrolling ( void )
 {
-
-         #ifdef NEWKEYB
          int pagepressed_scrollspeedmultiplicator = 8;
          int tick = ticker;
          while ( (skeypress ( ct_down ) ||  skeypress ( ct_2k )) && (tvt_starty + textsizey < textsizeycomplete)) {
@@ -3073,8 +3040,6 @@ void tviewtextwithscrolling::checkscrolling ( void )
             repaintscrollbar();
          }
 
-
-         #endif
 }
 
 
@@ -3238,6 +3203,7 @@ void         thelpsystem::init(int id, char* titlet )
    setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 40, txt.c_str(), black, dblue);
 
    tvt_dispactive = 0;
+   // buildgraphics();
    displaytext(  );
    textsizeycomplete = tvt_yp;
    tvt_dispactive = 1;
@@ -3245,11 +3211,7 @@ void         thelpsystem::init(int id, char* titlet )
 
    if (textsizeycomplete >= textsizey) {
       scrollbarvisible = true; 
-      #ifdef NEWKEYB
       addscrollbar(xsize - 30,starty,xsize - 15,ysize - 40,&textsizeycomplete, textsizey, &tvt_starty,1,0);
-      #else
-      addscrollbar(xsize - 30,starty,xsize - 15,ysize - 40,&textsizeycomplete, textsizey, &tvt_starty,1,1);
-      #endif
       setscrollspeed ( 1 , 1 );
 
    }                                                                                       
@@ -3324,23 +3286,22 @@ void         thelpsystem::done(void)
 
 void  help( int id)
 { 
-  thelpsystem  hs; 
-
-   hs.init(id,"help system"); 
-   hs.buildgraphics(); 
-   hs.run(); 
-   hs.done(); 
+   ASCString s = readtextmessage( id );
+                     
+   ViewFormattedText vft( "Help System", s, PG_Rect(-1,-1,450,550));
+   vft.Show();
+   vft.RunModal();
 } 
 
 
 void  viewtext2 ( int id)
 { 
-   thelpsystem  hs; 
 
-   hs.init(id,"message"); 
-   hs.buildgraphics(); 
-   hs.run(); 
-   hs.done(); 
+   ASCString s = readtextmessage( id );
+                     
+   ViewFormattedText vft( "Message", s, PG_Rect(-1,-1,450,550));
+   vft.Show();
+   vft.RunModal();
 } 
 
 
@@ -3390,7 +3351,7 @@ void         tviewtextquery::buttonpressed( int id)
 } 
 
 
-int         viewtextquery( int          id,
+int         legacy_viewtextquery( int          id,
                            char *       title,
                            char *       s1,
                            char *       s2)
@@ -3406,55 +3367,47 @@ int         viewtextquery( int          id,
 } 
 
 
+class ViewTextQuery : public ASC_PG_Dialog {
+
+   public:
+      ViewTextQuery( int id, const ASCString& title, const ASCString& button1, const ASCString& button2 ) : ASC_PG_Dialog( NULL, PG_Rect(-1, -1, 450, 500 ), title )
+      {
+         PG_Rect r;
+         if ( button2.length() ) {
+            r = PG_Rect( 10, Height() - 40, Width()/2-15, 30 );
+            PG_Button* b = new PG_Button( this, PG_Rect( Width()/2+5, Height() - 40, Width()/2-15, 30 ), button2 );
+            b->sigClick.connect( SigC::bind( SigC::slot( *this, &ViewTextQuery::quitModalLoop ), 1));
+            b->activateHotkey(0);
+         } else 
+            r = PG_Rect( 10, Height() - 40, Width() - 20, 30 );
+         
+
+
+        PG_Button* b = new PG_Button( this, r, button1 );
+        b->sigClick.connect( SigC::bind( SigC::slot( *this, &ViewTextQuery::quitModalLoop ), 0));
+        b->activateHotkey(0);
+
+        new TextRenderer( this, PG_Rect( 10, 30, Width()-20, Height() - 70 ), readtextmessage( id ));
+      }
+};
+
+
+int         viewtextquery( int          id,
+                           char *       title,
+                           char *       s1,
+                           char *       s2)
+{ 
+   if ( legacyEventSystemActive() ) 
+      return legacy_viewtextquery( id, title, s1, s2 );
+   else {
+      ViewTextQuery vtq( id, title, s1, s2 );
+      vtq.Show();
+      return vtq.RunModal();
+   }
+} 
+
+
 tdisplaymessage* messagebox = NULL;
-
-
-int displaymessage2( const char* formatstring, ... )
-{
-   const int maxlength = 2000;
-   char stringtooutput[maxlength];
-   char* c = new char[maxlength];
-   // int linenum = 0;
-
-   memset (stringtooutput, 0, sizeof ( stringtooutput ));
-
-   va_list paramlist;
-   va_start ( paramlist, formatstring );
-
-   int lng = vsprintf( stringtooutput, formatstring, paramlist );
-   if ( lng >= maxlength )
-      displaymessage ( "dlg_box.cpp / displaymessage2:   string to long !\nPlease report this error",1 );
-
-   va_end ( paramlist );
-
-
-   npush ( activefontsettings );
-   activefontsettings.justify = lefttext;
-   activefontsettings.font = schriften.guifont;
-   activefontsettings.color = 20 + ((actmap)?actmap->actplayer:0) * 8;
-   activefontsettings.markcolor = yellow;
-   activefontsettings.background = 172;
-   activefontsettings.height = activefontsettings.font->height;
-   activefontsettings.length = agmp->resolutionx - ( 640 - 387);
-
-   int yy = agmp->resolutiony - ( 480 - 450 );
-   collategraphicoperations cgo ( 37, yy, 37 + activefontsettings.length, yy + activefontsettings.font->height );
-   showtext3c( stringtooutput, 37, yy );
-
-   npop( activefontsettings );
-
-   if ( formatstring == NULL  ||  formatstring[0] == 0 )
-      lastdisplayedmessageticker = 0xffffff;
-   else
-      lastdisplayedmessageticker = ticker;
-   
-
-   delete[] c;
-
-   return ++actdisplayedmessage;
-}
-
-
 
 
 
@@ -3535,7 +3488,7 @@ void         tstringselect::buttonpressed(int         id)
 void         tstringselect::run(void)
 {
   char      view;
-  integer      my;
+  int      my;
   int         ms;
 
    tdialogbox::run();
@@ -3636,7 +3589,7 @@ void         tstringselect::viewtext(void)
 {
   char         s1[200];
   Uint16         yp;
-  integer      l;
+  int      l;
 
    mousevisible(false);
    //showbutton(1);
@@ -3762,54 +3715,21 @@ int      getid( const char*  title, int lval,int min,int max)
    return gi.mid;
 }
 
-void fatalError ( const char* formatstring, ... )
-{
-   va_list paramlist;
-   va_start ( paramlist, formatstring );
-
-   char tempbuf[1000];
-
-   int lng = vsprintf( tempbuf, formatstring, paramlist );
-   va_end ( paramlist );
-   if ( lng >= 1000 )
-      displaymessage ( "dlg_box.cpp / fatalError:   string to long !\nPlease report this error",1 );
-
-   fatalError ( ASCString(tempbuf) );
-}
-
-void fatalError ( const ASCString& string )
-{
-   displaymessage ( string.c_str(), 2 );
-}
-
-void warning ( const ASCString& str )
-{
-	fprintf(stderr, "ASC: %s \n", str.c_str());
-   fflush( stderr );
-}
-
-void errorMessage ( const ASCString& string )
-{
-   displaymessage ( string.c_str(), 1 );
-}
-
-void infoMessage ( const ASCString& string )
-{
-   displaymessage ( string.c_str(), 3 );
-}
-
 
 class   ChooseString : public tstringselect {
-                 const vector<ASCString>& strings;
-                 const vector<ASCString>& buttons;
-                 char buf[10000];
-           public :
-                 ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry );
-                 void setup( );
-                 virtual void buttonpressed(int id);
-                 void run(void);
-                 virtual void get_text(int nr);
-              };
+   private:
+      const vector<ASCString>& strings;
+      const vector<ASCString>& buttons;
+      char buf[10000];
+   public :
+      ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry );
+      void setup( );
+      virtual void buttonpressed(int id);
+      void run(void);
+      virtual void get_text(int nr);
+};
+
+
 
 ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, const vector<ASCString>& _buttons, int defaultEntry )
               : strings ( _strings ), buttons ( _buttons )
@@ -3860,6 +3780,13 @@ void         ChooseString ::run(void)
 }
 
 
+
+
+
+
+
+
+
 int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry  )
 {
    vector<ASCString> b;
@@ -3867,16 +3794,26 @@ int chooseString ( const ASCString& title, const vector<ASCString>& entries, int
    return chooseString ( title, entries, b, defaultEntry).second;
 }
 
+
+
+
 pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry  )
 {
-   ChooseString  gps ( title, entries, buttons, defaultEntry );
 
-   gps.init();
-   gps.run();
-   gps.done();
-   return make_pair(gps.action-20,gps.redline);
+   if ( legacyEventSystemActive() ) {
+      ChooseString  gps ( title, entries, buttons, defaultEntry );
+
+      gps.init();
+      gps.run();
+      gps.done();
+      return make_pair(gps.action-20,gps.redline);
+   } else {
+      return new_chooseString ( title, entries, buttons, defaultEntry );
+   }
+   
 
 }
+
 
 
 
@@ -3924,7 +3861,6 @@ void         StringEdit::init(void)
 
 void         StringEdit::run(void)
 {
-   int orig = mid;
    tdialogbox::run ();
    pbutton pb = firstbutton;
    while ( pb &&  (pb->id != 3))
@@ -3969,6 +3905,7 @@ ASCString editString( const ASCString& title, const ASCString& defaultValue  )
    gi.done();
    return gi.text;
 }
+
 
 
 
@@ -4074,7 +4011,7 @@ void         tstringselect::buttonpressed(int         id)
 void         tstringselect::run(void)
 {
   char      view;
-  integer      my;
+  int      my;
   int         ms;
 
    tdialogbox::run();
@@ -4175,7 +4112,7 @@ void         tstringselect::viewtext(void)
 {
   char         s1[200];
   Uint16         yp;
-  integer      l;
+  int      l;
 
    mousevisible(false);
    //showbutton(1);

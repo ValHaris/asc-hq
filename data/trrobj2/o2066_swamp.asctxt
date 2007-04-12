@@ -1,8 +1,0 @@
-ObjectType { 
-   Parent = 3560
-   ID = 2066
-
-   dry { 
-      picture = o2066_med_swamp_256.pcx 1
-   } dry
-} ObjectType

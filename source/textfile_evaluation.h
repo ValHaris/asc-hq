@@ -29,6 +29,10 @@
 #include "textfileparser.h"
 #include "typen.h"
 
+#ifdef ParserLoadImages
+#include "graphics/surface.h"
+#endif
+
 
 class PropertyContainer {
          bool reading;
@@ -37,6 +41,9 @@ class PropertyContainer {
          int levelDepth;
          typedef list<ASCString> Level;
          Level level;
+
+         typedef map< ASCString, pair<int, Level> > StoredContext;
+         StoredContext storedContext;
 
          TextPropertyGroup* textPropertyGroup;
       public:
@@ -72,6 +79,7 @@ class PropertyContainer {
 
          virtual void openBracket( const ASCString& name );
          virtual void closeBracket();
+         ASCString getNameStack();
 
          void addString ( const ASCString& name, ASCString& property );
          void addString ( const ASCString& name, ASCString& property, const ASCString& defaultValue );
@@ -89,14 +97,20 @@ class PropertyContainer {
          void addTagInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue, bool inverted = false );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags );
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
+         void addBreakpoint();
         #ifdef ParserLoadImages
-         void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
-         void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
+         // void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
+         void addImage ( const ASCString& name, Surface& property, const ASCString& fileName, bool applyFieldMask );
+         // void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
+         void addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& fileName );
         #endif
          void addBool  ( const ASCString& name, bool &property );
          void addBool  ( const ASCString& name, bool &property, bool defaultValue  );
 
-         void run ( );
+         void storeContext( const ASCString& label );
+         bool restoreContext( const ASCString& label );
+
+         // void run ( );
          bool isReading() { return reading; };
          void warning ( const ASCString& errmsg );
          void error ( const ASCString& errmsg );
@@ -135,9 +149,5 @@ class PropertyWritingContainer : public PropertyContainer {
          virtual void openBracket( const ASCString& name );
          virtual void closeBracket();
 };
-
-#ifdef ParserLoadImages
-extern void* getFieldMask();
-#endif
 
 #endif

@@ -27,7 +27,7 @@
 #include "gamemap.h"
 
 
-tdrawgettempline :: tdrawgettempline ( int _freefields, pmap _gamemap )
+tdrawgettempline :: tdrawgettempline ( int _freefields, GameMap* _gamemap )
 {
    gamemap = _gamemap;
    tempsum = 0;
@@ -205,7 +205,7 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
 
 
 
-SearchFields :: SearchFields ( pmap _gamemap )
+SearchFields :: SearchFields ( GameMap* _gamemap )
 {
    gamemap = _gamemap;
    cancelSearch = false;
@@ -263,6 +263,29 @@ void         SearchFields::startsearch(void)
 
    }  while (!((dist - step == lastDistance) || cancelSearch));
 }
+
+
+class SearchFieldsIterator : public SearchFields {
+   public:
+      typedef FieldIterationFunctor MyFunctor;
+   private:   
+      MyFunctor& myFunctor;
+   protected:
+      void testfield ( const MapCoordinate& pos ) {
+         myFunctor(pos);
+      };      
+   public: 
+      SearchFieldsIterator ( GameMap* _gamemap, MyFunctor& functor ) : SearchFields( _gamemap ), myFunctor( functor ) {};
+           
+};
+
+void circularFieldIterator( GameMap* gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor )
+{
+   SearchFieldsIterator searchFields( gamemap, functor );
+   searchFields.initsearch( center, startDist, stopDist );
+   searchFields.startsearch();      
+}
+
 
 int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 };
 
@@ -357,7 +380,7 @@ int          getdirection(    int      x1,
 }
 
 
-int beeline ( const pvehicle a, const pvehicle b )
+int beeline ( const Vehicle* a, const Vehicle* b )
 {
    return beeline ( a->xpos, a->ypos, b->xpos, b->ypos );
 }
@@ -408,11 +431,11 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
       wm[i] = 0;
 
    int movement = 0;
-   for ( int height = 4; height <= 6; height++ )
+   for ( int height = 4; height <= 6; height++ ){
       if ( vehicle->typ->movement[height] )
          if ( vehicle->typ->movement[height] > movement )
             movement = vehicle->typ->movement[height];
-
+   }
 
    if ( movement ) {
       int wmn[7];
@@ -436,6 +459,7 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
             ++lastDir;
          }
       }
+            
       
       for ( int i = 0; i <= 3; i++ ) {
          wm[(i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
@@ -449,8 +473,16 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
 
 int WindMovement::getDist ( int dir )
 {
+   assert( dir >= 0 && dir <= 5 );
    return wm[dir];
 }
 
 
+/*
+Wenn Du Wind aus Westen hast und willst nach norden fliegen, dann darf der Flieger nicht Kurs auf Norden nehmen, denn dann wrde er abgetrieben. Er muss stattdessen etwas gegen den Wind fliegen. 
+
+Diesen Winkel ermittel' ich durch plumpes ausprobieren, in WindMovement::WindMovement
+
+Solange die Sollrichtung der Einheitenbewegung und die WindRichtungen bereinstimmen, brauche ich nur den Fall fr 1 Windrichtung berechnen. Ich ermittel' dann fr die 6 Einheitenrichtungen den Malus. Fr andere Windrichtungen verschiebe ich einfach nur die Werte in die Tabelle (die letzten beiden Anweisungen in WindMovement), da das entscheidende ja nur der Winkelunterschied zwischen Wind- und Sollbewegungsrichtung ist.
+*/
 

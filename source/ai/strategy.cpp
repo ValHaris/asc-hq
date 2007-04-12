@@ -20,7 +20,7 @@
 
 
 
-void AI::findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x, int y )
+void AI::findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x, int y )
 {
   StratAStar stratAStar ( this, veh );
   stratAStar.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
@@ -42,7 +42,7 @@ AI::AiResult AI::strategy( void )
          units.push_back( (*vi)->networkid );
 
       for ( vector<int>::iterator vi = units.begin(); vi != units.end(); ++vi ) {
-         pvehicle veh = getMap()->getUnit(*vi);
+         Vehicle* veh = getMap()->getUnit(*vi);
          if ( veh )
            if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
             if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics

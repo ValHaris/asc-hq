@@ -38,24 +38,18 @@
 #include <fstream>
 
 #include "global.h"
-#include "CLoadable.h"
-#include "tpascal.inc"
 #include "typen.h"
-#include "buildingtype.h"
-#include "vehicletype.h"
 #include "basegfx.h"
 #include "misc.h"
 #include "sgstream.h"
-#include "stack.h"
 #include "basestrm.h"
 #include "palette.h"
 #include "gameoptions.h"
-#include "graphicset.h"
-#include "itemrepository.h"
 
 #ifdef _WIN32_
  #include <windows.h>
  #include <winreg.h>
+ #include <shlobj.h>
 #endif 
 
 
@@ -64,315 +58,6 @@ int dataVersion = 0;
 
 const int object_version = 1;
 const int technology_version = 1;
-
-void* leergui = NULL;
-void* removegui = NULL;
-
-
-void* generate_vehicle_gui_build_icon ( pvehicletype tnk )
-{
-
-   int wd;
-   int hg;
-   getpicsize ( leergui, wd, hg );
-
-   int minx = 0;
-   int miny = 0;
-   int maxx = 0;
-   int maxy = 0;
-
-   tvirtualdisplay vdsp ( 500, 500 );
-
-   bar ( 0, 0, 450, 450, 255 );
-
-   putspriteimage ( 0, 0, tnk->picture[0] );
-   maxx= fieldxsize;
-   maxy= fieldysize;
-
-   int sze = imagesize ( minx, miny, maxx, maxy );
-   void* buf = new char [ sze ];
-   getimage ( minx, miny, maxx, maxy, buf );
-
-   while ( (maxx - minx + 1 > wd ) || ( maxy - miny + 1 > hg )) {
-      void* temp = halfpict ( buf );
-
-      char* dst = (char*) buf;
-      char* src = (char*) temp;
-
-      for ( int i = 0; i < sze; i++ )
-         *(dst++) = *(src++);
-
-      minx = 0;
-      miny = 0;
-      getpicsize ( buf, maxx, maxy );
-
-   } /* endwhile */
-
-   putimage ( 0, 0, leergui );
-   putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
-
-   char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
-   getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   asc_free ( buf );
-
-   return newbuildingpic;
-}
-
-
-
-
-
-void* generate_building_gui_build_icon ( pbuildingtype bld )
-{
-
-   int wd;
-   int hg;
-   getpicsize ( leergui, wd, hg );
-
-   int minx = 1000;
-   int miny = 1000;
-   int maxx = 0;
-   int maxy = 0;
-
-   tvirtualdisplay vdsp ( 500, 500 );
-
-    bar ( 0, 0, 450, 450, 255 );
-  
-    for (int y = 0; y <= 5; y++)
-       for (int x = 0; x <= 3; x++)
-          if (bld->getpicture( BuildingType::LocalCoordinate(x,y) ) ) {
-             int xp = fielddistx * x  + fielddisthalfx * ( y & 1);
-             int yp = fielddisty * y ;
-             if ( xp < minx )
-                minx = xp;
-             if ( yp < miny )
-                miny = yp;
-             if ( xp > maxx )
-                maxx = xp;
-             if ( yp > maxy )
-                maxy = yp;
-
-             putspriteimage ( xp, yp, bld->getpicture(BuildingType::LocalCoordinate(x,y)) );
-          }
-   maxx += fieldxsize;
-   maxy += fieldysize;
-
-   int sze = imagesize ( minx, miny, maxx, maxy );
-   char* buf = new char [ sze ];
-   getimage ( minx, miny, maxx, maxy, buf );
-
-/*
-   while ( (maxx - minx + 1 > wd ) || ( maxy - miny + 1 > hg )) {
-      void* temp = halfpict ( buf );
-
-      char* dst = (char*) buf;
-      char* src = (char*) temp;
-
-      for ( int i = 0; i < sze; i++ )
-         *(dst++) = *(src++);
-
-      minx = 0;
-      miny = 0;
-      getpicsize ( buf, maxx, maxy );
-
-   } 
-*/
-   TrueColorImage* img = zoomimage ( buf, wd, hg, pal, 1 );
-   delete[] buf;
-
-   buf = convertimage ( img, pal );
-   delete img;
-   getpicsize ( buf, maxx, maxy );
-
-   putimage ( 0, 0, leergui );
-   putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
-
-   char* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
-   getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   delete[] buf;
-
-   return newbuildingpic;
-
-
-}
-
-
-
-void* generate_object_gui_build_icon ( pobjecttype obj, int remove )
-{
-
-   int wd;
-   int hg;
-   getpicsize ( leergui, wd, hg );
-
-   int minx = 0;
-   int miny = 0;
-   int maxx = 0;
-   int maxy = 0;
-
-   tvirtualdisplay vdsp ( 500, 500 );
-
-   bar ( 0, 0, 450, 450, 255 );
-
-   obj->display( 0, 0 );
-   maxx= fieldxsize;
-   maxy= fieldysize;
-
-   int sze = imagesize ( minx, miny, maxx, maxy );
-   void* buf = new char [ sze ];
-   getimage ( minx, miny, maxx, maxy, buf );
-
-   while ( (maxx - minx + 1 > wd ) || ( maxy - miny + 1 > hg )) {
-      void* temp = halfpict ( buf );
-
-      char* dst = (char*) buf;
-      char* src = (char*) temp;
-
-      for ( int i = 0; i < sze; i++ )
-         *(dst++) = *(src++);
-
-      minx = 0;
-      miny = 0;
-      getpicsize ( buf, maxx, maxy );
-
-   } /* endwhile */
-
-   putimage ( 0, 0, leergui );
-   putspriteimage ( (wd - maxx) / 2, (hg - maxy) / 2, buf );
-
-   if ( remove )
-     putspriteimage ( (wd-18)/2, (hg-18)/2, removegui );
-
-   void* newbuildingpic = new char [ imagesize ( 0, 0, wd-1, hg-1 ) ];
-   getimage ( 0, 0, wd-1, hg-1, newbuildingpic );
-   asc_free( buf );
-
-   return newbuildingpic;
-}
-
-void loadguipictures( void )
-{
-   if ( !leergui ) {
-      tnfilestream stream ( "leergui.raw", tnstream::reading );
-      int sze;
-      stream.readrlepict ( &leergui, 0, &sze );
-   }
-   if ( !removegui ) {
-      tnfilestream stream ( "guiremov.raw", tnstream::reading );
-      int sze;
-      stream.readrlepict ( &removegui, 0, &sze );
-   }
-}
-
-
-
-void generatedirecpict ( void* orgpict, void* direcpict )
-{
-  int t, u;
-
-   tvirtualdisplay vfb ( 100, 100 );
-   putspriteimage ( 10, 10, orgpict );
-
-   char *b = (char*) direcpict;
-
-   for (t = 1; t < 20; t++) {
-       for (u = 20-t; u < 20+t; u++) {
-          *b = getpixel(  10 + u, 9 + t);
-          b++;
-       }
-    }
-
-    for (t = 20; t > 0; t-- ) {
-       for (u =20-t; u<= 19 + t; u++) {
-          *b = getpixel(  10 + u, 10 + 39 - t );
-          b++;
-       }
-    }
-
-}
-
-
-
-extern dacpalette256 pal;
-
-#define sqr(a) (a)*(a)
-
-
-void generateaveragecolprt ( int x1, int y1, int x2, int y2, void* buf, char* pix1 )
-{
-   Uint16 *w = (Uint16*) buf;
-   // int size = ( w[0] + 1) * (w[1] + 1);
-
-
-   char *c ; // = (char*) buf;
-             // c+=4;
-
-   int pixnum = 0;
-
-   int i,j;
-   int r=0, g=0, b=0;
-   for (j=y1; j< y2 ; j++ ) {
-       for (i=x1; i< x2 ; i++ ) {
-          c = (char*) buf + j * ( w[0] + 1) + i + 4;
-          if (*c < 255) {
-             r+=pal[*c][0];
-             g+=pal[*c][1];
-             b+=pal[*c][2];
-             pixnum ++;
-          }
-      } /* endfor */
-   } /* endfor */
-
-   if (pixnum) {
-      int r1 = r / pixnum;
-      int g1 = g / pixnum;
-      int b1 = b / pixnum;
-
-
-      int diff = 0xFFFFFFF;
-      int actdif;
-
-
-      for (i=0;i<256 ;i++ ) {
-         actdif = sqr( pal[i][0] - r1 ) + sqr( pal[i][1] - g1 ) + sqr( pal[i][2] - b1 );
-         if (actdif < diff) {
-            diff = actdif;
-            *pix1 = i;
-         }
-      }
-
-/*
-      int sml = ( r1 >> 2) + (( g1 >> 2) << 6) + (( b1 >> 2) << 12);
-      *pix1 = truecolor2pal_table[sml];
-*/
-
-   } else {
-      *pix1 = 255;
-   }
-}
-
-
-
-FieldQuickView* generateAverageCol ( void* image )
-{
-   FieldQuickView* qv = new FieldQuickView ;
-
-   char* c = &qv->p1 ;
-   // int dx,dy;
-
-   for ( int i=1; i<6 ;i+=2 ) {
-      // dx = fieldxsize / i;
-      // dy = fieldysize / i;
-      for ( int k=0;k<i ; k++) {
-         for ( int j=0 ; j<i ; j++) {
-             generateaveragecolprt ( k * fieldxsize / i, j * fieldysize / i, (k+1) * fieldxsize / i, (j+1) * fieldysize / i, image,  c );
-             c++;
-         } /* endfor */
-      } /* endfor */
-   } /* endfor */
-
-   return qv;
-}
 
 
 
@@ -384,7 +69,8 @@ void loadpalette ( void )
 
       tnfilestream stream ("palette.pal", tnstream::reading);
       stream.readdata( & pal, sizeof(pal));
-      colormixbuf = (pmixbuf) new char [ sizeof ( tmixbuf ) ];
+      colormixbufchar = new char [ sizeof ( tmixbuf ) ];
+      colormixbuf = (pmixbuf) colormixbufchar;
       stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
 
       for ( int i= 0; i < 8; i++ ) {
@@ -422,10 +108,13 @@ void loadpalette ( void )
 
 
 
-bool makeDirectory ( const char* path )
+bool makeDirectory ( const ASCString& path )
 {
+   if ( path.empty() )
+      return false;
+      
    char tmp[10000];
-   constructFileName( tmp, 0, path, NULL );
+   constructFileName( tmp, 0, path.c_str(), NULL );
 
    int existence = directoryExist ( tmp );
 
@@ -440,32 +129,102 @@ bool makeDirectory ( const char* path )
    return true;
 }
 
-char* configFileNameUsed = NULL;
-char* configFileNameToWrite = NULL;
+class ConfigurationFileLocator {
+      ASCString cmdline;
 
-char* getConfigFileName ( char* buffer )
+   protected:
+      vector<ASCString> getDefaultDirectory();
+
+   public:
+      void CommandLineParam( const ASCString& path );
+
+      ASCString getConfig();
+      ASCString getConfigForPrinting();
+};
+
+
+void ConfigurationFileLocator::CommandLineParam( const ASCString& path )
 {
-   if ( buffer ) {
-      if ( configFileNameUsed )
-         strcpy ( buffer, configFileNameUsed );
-      else
-         strcpy ( buffer, "-none- ; default values used" );
-   }
-   return buffer;
+   cmdline = path;
 }
+
+vector<ASCString> ConfigurationFileLocator::getDefaultDirectory()
+{
+   vector<ASCString> dirs;
+#ifdef _WIN32_
+   HKEY key;
+   if (  RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
+                           "SOFTWARE\\Advanced Strategic Command\\",
+                           0,
+                           KEY_READ,
+                           &key ) == ERROR_SUCCESS) {
+
+      DWORD type;
+      const int size = 2000;
+      char  buf[size];
+      DWORD size2 = size;
+      if ( RegQueryValueEx ( key, "InstallDir2", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
+         if ( type == REG_SZ	 ) {
+            ASCString dir = buf;
+            appendbackslash ( dir );
+            dirs.push_back( dir );
+         }
+      }
+
+      RegCloseKey ( key );
+   }
+
+   TCHAR szPath[MAX_PATH];
+
+   if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
+      ASCString dir = szPath;
+      appendbackslash ( dir );
+      dirs.push_back( dir );
+   }
+
+   if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
+      ASCString dir = szPath;
+      appendbackslash ( dir );
+      dirs.push_back( dir );
+   }
+
+#else
+
+#endif
+
+   return dirs;
+
+}
+
+
+ASCString ConfigurationFileLocator::getConfig()
+{
+   if ( cmdline.length() ) {
+      
+   }
+   return "";
+}
+
+ASCString ConfigurationFileLocator::getConfigForPrinting()
+{
+   return "";
+}
+
+
+ASCString configFileName;
+
 
 ASCString getConfigFileName ()
 {
-   if ( configFileNameUsed )
-      return configFileNameUsed ;
+   if ( !configFileName.empty() )
+      return configFileName ;
    else
       return "-none- ; default values used";
 }
 
 
-CLoadableGameOptions* loadableGameOptions =     NULL;
 
-int readgameoptions ( const char* filename )
+int readgameoptions ( const ASCString& filename )
 {
    displayLogMessage ( 4, "loading game options ... " );
 
@@ -474,7 +233,7 @@ int readgameoptions ( const char* filename )
    ASCString fn;
    ASCString installDir;
 
-   if ( filename && filename[0] )
+   if ( !filename.empty() )
       fn = filename;
    else
       if ( getenv ( asc_EnvironmentName ))
@@ -493,7 +252,7 @@ int readgameoptions ( const char* filename )
              const int size = 2000;
              char  buf[size];
              DWORD size2 = size;
-             if ( RegQueryValueEx ( key, "InstallDir", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
+             if ( RegQueryValueEx ( key, "InstallDir2", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
                 if ( type == REG_SZ	 ) {
                    fn = buf;
                    appendbackslash ( fn );
@@ -508,164 +267,116 @@ int readgameoptions ( const char* filename )
          }
 
 #endif
-         if ( !registryKeyFound )
-             fn = asc_configurationfile;
+         if ( !registryKeyFound ) {
+            fn = asc_configurationfile;
+            if ( fn.find( pathdelimitter ) == ASCString::npos )
+               fn = ASCString(".") + pathdelimitter + asc_configurationfile;
+         }
       }
 
    char completeFileName[10000];
    constructFileName ( completeFileName, -3, NULL, fn.c_str() );
 
-   configFileNameToWrite = strdup ( completeFileName );
+   configFileName = completeFileName;
 
    displayLogMessage ( 6, ASCString("Path is ") + completeFileName + "; " );
 
 
    if ( exist ( completeFileName )) {
-      configFileNameUsed = strdup ( completeFileName );
-
-      if ( !loadableGameOptions )
-         loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
-
-      std::ifstream is( completeFileName );
-      loadableGameOptions->Load(is);
+      displayLogMessage ( 6, "found, " );
+      try {
+         CGameOptions::Instance()->load( completeFileName );
+      } 
+      catch ( ParsingError err ) {
+         fatalError ( "Error parsing text file " + err.getMessage() );
+      }
+      catch ( tfileerror err ) {
+         fatalError ( "Error loading file " + err.getFileName() );
+      }
+      catch ( ... ) {
+         fatalError ( "caught undefined exception" );
+      }
 
       if ( registryKeyFound ) {
          ASCString primaryPath = CGameOptions::Instance()->getSearchPath(0);
-         if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" )
-            CGameOptions::Instance()->setSearchPath(0, installDir.c_str() );
-      }
-
-   } else {
-      CGameOptions::Instance()->setChanged(); // to generate a configuration file
-      if ( exist ( "sg.cfg" ) ) {
-         tnfilestream stream ( "sg.cfg", tnstream::reading);
-         int version = stream.readInt ( );
-         if ( version == 102 ) {
-            CGameOptions::Instance()->fastmove = stream.readInt();
-            stream.readInt();
-            CGameOptions::Instance()->movespeed = stream.readInt();
-            CGameOptions::Instance()->endturnquestion = stream.readInt();
-            CGameOptions::Instance()->smallmapactive = stream.readInt();
-            CGameOptions::Instance()->units_gray_after_move = stream.readInt();
-            CGameOptions::Instance()->mapzoom = stream.readInt();
-            CGameOptions::Instance()->mapzoomeditor = stream.readInt();
-            CGameOptions::Instance()->startupcount = stream.readInt();
-            stream.readInt(); // dontMarkFieldsNotAccessible_movement
-            CGameOptions::Instance()->attackspeed1 = stream.readInt();
-            CGameOptions::Instance()->attackspeed2 = stream.readInt();
-            CGameOptions::Instance()->attackspeed3 = stream.readInt();
-            CGameOptions::Instance()->sound.muteEffects = stream.readInt();
-            for ( int i = 0; i < 9; i++ )
-               stream.readInt();  // dummy
-
-            CGameOptions::Instance()->mouse.scrollbutton = stream.readInt();
-            CGameOptions::Instance()->mouse.fieldmarkbutton = stream.readInt();
-            CGameOptions::Instance()->mouse.smallguibutton = stream.readInt();
-            CGameOptions::Instance()->mouse.largeguibutton = stream.readInt();
-            CGameOptions::Instance()->mouse.smalliconundermouse = stream.readInt();
-            CGameOptions::Instance()->mouse.centerbutton = stream.readInt();
-            CGameOptions::Instance()->mouse.unitweaponinfo = stream.readInt();
-            CGameOptions::Instance()->mouse.dragndropmovement = stream.readInt();
-            for ( int j = 0; j < 7; j++ )
-               stream.readInt();
-
-            CGameOptions::Instance()->container.autoproduceammunition = stream.readInt();
-            CGameOptions::Instance()->container.filleverything = stream.readInt();
-            stream.readInt(); // CGameOptions::Instance()->container.emptyeverything =
-            for ( int k = 0; k < 10; k++ )
-               stream.readInt();
-
-            CGameOptions::Instance()->onlinehelptime = stream.readInt();
-            CGameOptions::Instance()->smallguiiconopenaftermove = stream.readInt();
-            CGameOptions::Instance()->defaultPassword.setName ( strrr ( stream.readInt() ));
-            CGameOptions::Instance()->replayspeed = stream.readInt();
-            int bi3dir = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.terrain = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.units = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.objects = stream.readInt();
-            CGameOptions::Instance()->bi3.interpolate.buildings = stream.readInt();
-
-            if ( bi3dir ) {
-               char* tmp;
-               stream.readpchar ( &tmp );
-               CGameOptions::Instance()->bi3.dir.setName( tmp );
-               delete[] tmp;
-            }
-
+         if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" ) {
+            CGameOptions::Instance()->setSearchPath(0, installDir );
+            displayLogMessage ( 6, "Setting path0 to " + installDir + ", " );
          }
       }
 
-      if ( registryKeyFound )
-         CGameOptions::Instance()->setSearchPath(0, installDir.c_str() );
+   } else {
+     displayLogMessage ( 6, "not found, using defaults, " );
 
+     if ( registryKeyFound ) {
+        CGameOptions::Instance()->setSearchPath(0, installDir );
+        displayLogMessage ( 6, "Registry Key HKEY_LOCAL_MACHINE\\SOFTWARE\\Advanced Strategic Command\\InstallDir found, setting path0 to " + installDir);
+     }
+
+     if ( !configFileName.empty() ) {
+        CGameOptions::Instance()->setChanged();
+        if ( writegameoptions( configFileName ))
+           displayLogMessage ( 6, "A config file has been sucessfully written to " + configFileName + " ");
+        else
+           displayLogMessage ( 6, "Failed to write config file to " + configFileName + " ");
+     }
    }
 
-
-   #ifdef sgmain
-   if ( CGameOptions::Instance()->startupcount < 10 ) {
-      CGameOptions::Instance()->startupcount++;
-      CGameOptions::Instance()->setChanged();
-   }
-   #endif
+   displayLogMessage ( 4, "done\n" );
 
    makeDirectory ( CGameOptions::Instance()->getSearchPath(0) );
 
-   displayLogMessage ( 4, "done\n" );
    return 0;
 }
 
-int writegameoptions ( void )
+bool writegameoptions ( ASCString configFileName )
 {
-   if ( CGameOptions::Instance()->isChanged() && configFileNameToWrite ) {
-      char buf[10000];
-      if ( makeDirectory ( extractPath ( buf, configFileNameToWrite ))) {
-         if ( !loadableGameOptions )
-            loadableGameOptions = new CLoadableGameOptions (CGameOptions::Instance());
-         std::ofstream os( configFileNameToWrite );
-         loadableGameOptions->Save(os);
-         return 1;
+   try {
+      if ( configFileName.empty() )
+         configFileName = ::configFileName;
+
+      if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
+         char buf[10000];
+         if ( makeDirectory ( extractPath ( buf, configFileName.c_str() ))) {
+            CGameOptions::Instance()->save( configFileName );
+            return true;
+         }
       }
    }
-   return 0;
+   catch ( ... ) {
+      // warning("Could not save game options");
+   }
+   return false;
 }
 
-void checkFileLoadability ( const char* filename )
+void checkFileLoadability ( const ASCString& filename )
 {
    try {
       tnfilestream strm ( filename, tnstream::reading );
       strm.readChar();
    }
    catch ( ASCexception ) {
-      ASCString pathSearched;
-      for ( int i = 0; i < 5; i++ )
-         if ( CGameOptions::Instance()->getSearchPath(i) ) {
-            pathSearched += " ";
-            pathSearched += CGameOptions::Instance()->getSearchPath(i);
-            pathSearched +=  "\n";
-         }
-
-      ASCString confName;
-      char temp3[1000];
-      temp3[0] = 0;
-      if ( !configFileNameUsed ) {
-         CGameOptions::Instance()->setChanged();
-         if ( writegameoptions())
-            sprintf(temp3, "A configuration file has been written to %s\n", configFileNameToWrite );
-      }
-
-      char temp5[10000];
-      char temp2[1000];
-      sprintf ( temp5, "Unable to access %s\n"
-                       "Make sure the data files are in one of the search paths specified in your \n"
+      ASCString msg = "Unable to access " + filename + "\n";
+      msg +=           "Make sure the data files are in one of the search paths specified in your \n"
                        "config file ! ASC requires these data files to be present:\n"
                        " main.con ; mk1.con ; buildings.con ; trrobj.con ; trrobj2.con \n"
                        "If you don't have these files , get and install them from http://www.asc-hq.org\n"
-                       "If you DO have these files, they are probably outdated. \n" 
-                       "The configuration file that is used is: %s \n%s"
-                       "These paths are being searched for data files:\n%s\n",
-                       filename, getConfigFileName(temp2), temp3, pathSearched.c_str() );
+                       "If you DO have these files, they are probably outdated. \n";
+      msg +=           "The configuration file that is used is: " + configFileName + "\n";
 
-     fatalError ( temp5 );
+      if ( !configFileName.empty() ) {
+         CGameOptions::Instance()->setChanged();
+         if ( writegameoptions( configFileName ))
+            msg += "A configuration file has been written to " + configFileName + "\n";
+      }
+
+      msg +=           "These paths are being searched for data files:\n ";
+      
+      for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); ++i )
+         if ( !CGameOptions::Instance()->getSearchPath(i).empty() ) 
+            msg += CGameOptions::Instance()->getSearchPath(i) + "\n ";
+
+     fatalError ( msg );
    }
    catch ( ... ) {
       fatalError ( "checkFileLoadability threw an unspecified exception\n" );
@@ -674,11 +385,11 @@ void checkFileLoadability ( const char* filename )
 
 void initFileIO ( const ASCString& configFileName, int skipChecks )
 {
-   readgameoptions( configFileName.c_str() );
+   readgameoptions( configFileName );
 
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
-      if ( CGameOptions::Instance()->getSearchPath(i)   ) {
-         displayLogMessage ( 3, "adding search patch %s\n", CGameOptions::Instance()->getSearchPath(i));
+      if ( !CGameOptions::Instance()->getSearchPath(i).empty()   ) {
+         displayLogMessage ( 3, "adding search patch " + CGameOptions::Instance()->getSearchPath(i) + "\n" );
          addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
       }
    try {
@@ -717,6 +428,10 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
 
    if ( ! (skipChecks & 0x20 ))
       checkFileLoadability ( "buildings.version" );
+
+   if ( ! (skipChecks & 0x40 ))
+      checkFileLoadability ( "markedfielddark.png" );
+   
 }
 
 void versionError( const ASCString& filename, const ASCString& location )
@@ -748,8 +463,8 @@ void checkFileVersion( const ASCString& filename, const ASCString& containername
 
 void checkDataVersion( )
 {
+   return;
    ASCString location;
-   bool dataOk = true;
    if ( exist ( "data.version" )) {
       tnfilestream s ( "data.version", tnstream::reading );
       dataVersion = s.readInt();
@@ -761,212 +476,13 @@ void checkDataVersion( )
       versionError ( "main.con", location );
 
 
-   checkFileVersion( "mk1.version", "mk1.con", 17 );
-   checkFileVersion( "mk3.version", "units-mk3.con", 13 );
-   checkFileVersion( "buildings.version", "buildings.con", 11 );
-   checkFileVersion( "trrobj.version", "trrobj.con", 13 );
+   checkFileVersion( "mk1.version", "mk1.con", 21 );
+   checkFileVersion( "mk3.version", "units-mk3.con", 20 );
+   checkFileVersion( "buildings.version", "buildings.con", 14 );
+   checkFileVersion( "trrobj.version", "trrobj.con", 15 );
    checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
+
+   if ( exist( "pbp.con" ))
+      checkFileVersion( "pbp.version", "pbp.con", 21 );
 }
 
-//===================================================================================
-
-
-bool SingleUnitSet :: isMember ( int id, Type type )
-{
-   if ( type == unit ) {
-      for ( int i = 0; i < unitIds.size(); i++ )
-        if ( id >= unitIds[i].from && id <= unitIds[i].to )
-           return true;
-   }
-   if ( type == building ) {
-      for ( int i = 0; i < buildingIds.size(); i++ )
-        if ( id >= buildingIds[i].from && id <= buildingIds[i].to )
-           return true;
-   }
-   return false;
-}
-
-
-std::vector<IntRange> SingleUnitSet::parseIDs ( const char* s )
-{
-   char buf[10000];
-
-   std::vector<IntRange> res;
-
-   if ( s && s[0] ) {
-
-      strcpy ( buf, s);
-
-      char* piclist = strtok ( buf, ";\r\n" );
-
-      char* pic = strtok ( piclist, "," );
-      while ( pic ) {
-         int from, to;
-         if ( strchr ( pic, '-' )) {
-            char* a = strchr ( pic, '-' );
-            *a = 0;
-            from = atoi ( pic );
-            to = atoi ( ++a );
-         } else
-            from = to = atoi ( pic );
-
-         IntRange ir;
-         ir.from = from;
-         ir.to = to;
-         res.push_back ( ir );
-
-         pic = strtok ( NULL, "," );
-      }
-   }
-   return res;
-}
-
-void SingleUnitSet::TranslationTable::parseString ( const char* s )
-{
-   if ( s && s[0] && strchr ( s, ';' )) {
-      char buf[10000];
-      if ( s[0] == '#' )
-         strcpy ( buf, s+1 );
-      else
-         strcpy ( buf, s );
-
-      char* tname = strtok ( buf, ";\n\r");
-      if ( tname )
-         name = tname;
-
-      char* xl = strtok ( NULL, ";\n\r" );
-      while ( xl ) {
-         if ( strchr ( xl, ',' )) {
-            char* a = strchr ( xl, ',' );
-            *a = 0;
-            IntRange ir;
-            ir.from = atoi ( xl );
-            ir.to = atoi ( ++a );
-
-            translation.push_back ( ir );
-
-         }
-         xl = strtok ( NULL, ";\n\r" );
-      }
-
-   }
-}
-
-
-void SingleUnitSet::read ( pnstream stream )
-{
-   if ( !stream )
-      return;
-   const char separator = '=';
-   ASCString s;
-   int data = stream->readTextString ( s );
-   if ( s == "#V2#" ) {
-      while ( data ) {
-         ASCString s2;
-         data = stream->readTextString ( s2 );
-
-         size_t seppos = s2.find_first_of ( separator );
-         if ( seppos >= 0 ) {
-            ASCString b = s2.substr(0, seppos);
-            ASCString e = s2.substr( seppos+1 );
-            if ( b == "NAME" )
-               name = e;
-
-            if ( b == "ACTIVE" )
-               active = atoi ( e.c_str() );
-
-
-            if ( b == "TRANSFORMATION" ) {
-               TranslationTable* tt = new TranslationTable;
-               tt->parseString ( e.c_str() );
-               transtab.push_back ( tt );
-            }
-
-            if ( b == "MAINTAINER" )
-               maintainer = e;
-
-            if ( b == "INFORMATION" )
-               information = e;
-
-            if ( b == "FILTERBUILDINGS" )
-               filterBuildings = atoi ( e.c_str() );
-
-            if ( b == "IDENTIFICATION" )
-               ID = atoi ( e.c_str() );
-
-
-            if ( b == "ID" )
-               unitIds = parseIDs ( e.c_str() );
-
-            if ( b == "BUILDINGID" )
-               buildingIds = parseIDs ( e.c_str() );
-
-         }
-      }
-   } else {
-      size_t seppos = s.find_first_of ( ';' );
-      if ( seppos >= 0 ) {
-         ASCString b = s.substr(0, seppos);
-         ASCString e = s.substr( seppos+1 );
-         name = b;
-         parseIDs ( e.c_str() );
-
-         while ( data ) {
-            ASCString s2;
-            data = stream->readTextString ( s2 );
-            if ( s2.length() ) {
-               TranslationTable* tt = new TranslationTable;
-               tt->parseString ( s2.c_str() );
-               transtab.push_back ( tt );
-            }
-         }
-      }
-   }
-}
-
-
-void loadUnitSets ( void )
-{
-   displayLogMessage ( 4, "loading unit set definition files\n" );
-   tfindfile ff ( "*.set" );
-   string n = ff.getnextname();
-   while ( !n.empty() ) {
-      displayLogMessage ( 5, " loading unit set definition file %s ... ",n.c_str() );
-      tnfilestream stream ( n.c_str(), tnstream::reading );
-
-      SingleUnitSet* set = new SingleUnitSet;
-      set->read ( &stream );
-      unitSets.push_back ( set );
-
-//      ItemFiltrationSystem::ItemFilter* itf = new ItemFiltrationSystem::ItemFilter ( set->name, set->ids, !set->active );
-//      ItemFiltrationSystem::itemFilters.push_back ( itf );
-
-      n = ff.getnextname();
-      displayLogMessage ( 5, "done\n" );
-   } /* endwhile */
-}
-
-std::vector<SingleUnitSet*> unitSets;
-
-
-
-void displayLogMessage ( int msgVerbosity, char* message, ... )
-{
-   va_list arglist;
-   va_start ( arglist, message );
-   if ( msgVerbosity <= verbosity ) {
-      char buf[10000];
-      vsprintf ( buf, message, arglist );
-
-      displayLogMessage( msgVerbosity, ASCString(buf) );
-   }
-   va_end ( arglist );
-}
-
-void displayLogMessage ( int msgVerbosity, const ASCString& message )
-{
-   if ( msgVerbosity <= verbosity ) {
-      fprintf ( stdout, "%s", message.c_str() );
-      fflush ( stdout );
-   }
-}

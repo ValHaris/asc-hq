@@ -2,7 +2,6 @@
     \brief various functions for the mapeditor
 */
 
-//     $Id: edmisc.cpp,v 1.136 2006-11-04 08:51:02 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -29,15 +28,15 @@
 #include <iostream>
 #include <math.h>
 
+#include "sdl/graphics.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "edmisc.h"
 #include "loadbi3.h"
-#include "edevents.h"
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
-#include "password_dialog.h"
+#include "dialogs/pwd_dlg.h"
 #include "mapdisplay.h"
 #include "graphicset.h"
 #include "itemrepository.h"
@@ -45,281 +44,72 @@
 #include "textfile_evaluation.h"
 #include "textfiletags.h"
 #include "clipboard.h"
+#include "dialogs/cargowidget.h"
+#include "dialogs/fieldmarker.h"
+#include "dialogs/newmap.h"
+#include "stack.h"
 
-#ifdef _DOS_
- #include "dos\memory.h"
-#endif
+#include "unitset.h"
+#include "maped-mainscreen.h"
 
-   tkey         ch;
-   pfield               pf2;
+#include "pgeventsupplier.h"
 
-   pterraintype auswahl;
-   pvehicletype auswahlf;
-   pobjecttype  actobject;
-   pbuildingtype        auswahlb;
-   int          auswahls;
-   int          auswahlm;       
-   int          auswahlw;
-   int          auswahld;
-   int          farbwahl;
-   int                  altefarbwahl;
+   bool       mapsaved;
 
-   tfontsettings        rsavefont;
-   int                  lastselectiontype;
-   selectrec            sr[10];
 
-   char         tfill,polyfieldmode;
-   int          fillx1, filly1;
 
-   int                  i;
-   pbuilding            gbde;
-   char         mapsaved;
-   tmycursor            mycursor;
+void placeCurrentItem()
+{
+   if ( selection.getSelection() && actmap->getCursor().valid() ) {
+      if ( selection.getSelection()->supportMultiFieldPlacement()  && selection.brushSize > 1 ) {
+         circularFieldIterator( actmap, actmap->getCursor(), 0, selection.brushSize-1, FieldIterationFunctor( selection.getSelection(), &MapComponent::vPlace ));
+      } else {
+         selection.getSelection()->place( actmap->getCursor() );
+      }
+      mapChanged( actmap );
+   }    
+}
 
-//   tpolygon_management  polymanage;
-   tpulldown            pd;
-   // tcdrom            cdrom;
+bool removeCurrentItem()
+{
+   if ( selection.getSelection() && actmap->getCursor().valid() ) 
+      return selection.getSelection()->remove( actmap->getCursor() );
+   else
+      return false;
+}
 
-// õS Checkobject
+   
+bool mousePressedOnField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio )
+{
+   if ( prio > 1 )
+      return false;
+   
+   if ( button == 1 ) {
+      execaction_ev( act_primaryAction );
+      return true;
+   } else
+      return false;
+}
 
-char checkobject(pfield pf)
+bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int prio )
+{
+   if ( prio > 1 )
+      return false;
+   execaction_ev( act_primaryAction );
+   return true;
+}
+   
+   
+// ï¿½ Checkobject
+
+char checkobject(tfield* pf)
 {
    return !pf->objects.empty();
 }
 
-// õS MouseButtonBox
-
-#define maxmouseboxitems 20
-
-class   tmousebuttonbox {
-           public :
-                 char holdbutton; //true : menu only opens if button is held
-                 int actcode;
-                 void init(void);
-                 void additem(int code);
-                 int getboxundermouse(void); 
-                 void checkfields(void);
-                 void run(void);
-                 void done(void);
-           protected :
-                 pfont savefont;
-                 void *background;
-                 int lastpos,actpos;
-                 int mousestat;
-                 int maxslots;
-                 int itemcount,boxxsize,boxysize,slotsize,boxx,boxy;
-                 int item[maxmouseboxitems];
-                 };
-
-void tmousebuttonbox::init(void)
-{
-   ch = ct_invvalue;
-   mousestat = mouseparams.taste;
-   boxx = mouseparams.x;
-   boxy = mouseparams.y;
-   itemcount = 0;
-   holdbutton=false;
-   boxxsize = 0;
-   boxysize = 0;
-   savefont = activefontsettings.font;
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   slotsize = activefontsettings.font->height + 4;
-
-   if (maxmouseboxitems * slotsize > agmp->resolutiony ) maxslots = ( agmp->resolutiony - 20 ) / slotsize;
-   else maxslots = maxmouseboxitems;
-   
-}
-
-void tmousebuttonbox::additem(int code)
-{  int txtwidth;
-
-   if (itemcount < maxslots ) {
-
-      // two times the same item will be discarded; usually happens with separators only
-      if ( itemcount > 0 && item[itemcount-1] == code )
-         return;
-
-      item[itemcount] = code;
-      txtwidth = gettextwdth((char * ) execactionnames[code], activefontsettings.font);
-      if (txtwidth > boxxsize) boxxsize = txtwidth;
-      itemcount++;
-   } 
-}
-
-int tmousebuttonbox::getboxundermouse(void)
-{  int mx,my;
-
-   mx=mouseparams.x;
-   my=mouseparams.y;
-   if ( (mx > boxx ) && (mx < boxx+boxxsize ) ) 
-      if ( (my > boxy ) && (my < boxy + boxysize -5 ) ) {
-         return ( my - boxy - 4 ) / slotsize;
-      } 
-   return -1;
-}
-
-void tmousebuttonbox::checkfields(void)
-{
-   if (keypress()) ch = r_key();
-   actpos = getboxundermouse();
-   if (actpos != lastpos) {
-      mousevisible(false);
-      if ( ( lastpos != -1 ) && ( item[lastpos] != act_seperator) ) rectangle(boxx + 3, boxy + 3 + lastpos * slotsize, boxx + boxxsize -3, boxy + 3 + ( lastpos +1 ) * slotsize,lightgray);
-      if ( ( actpos != -1 ) && ( item[actpos] != act_seperator) ) lines(boxx + 3, boxy + 3 + actpos * slotsize, boxx + boxxsize -3, boxy + 3 + ( actpos +1 ) * slotsize);
-      mousevisible(true);
-      lastpos =actpos;
-      if (actpos != -1 ) {
-         if (item[actcode] != act_seperator) actcode = item[actpos];
-         else actcode = -1;
-      } else actcode = -1;
-   }
-}
-
-void tmousebuttonbox::run(void)
-{  
-   lastpos = -1;
-   actcode = -1;
-   boxxsize+=15;
-   boxysize= slotsize * itemcount + 5;
-
-   if (boxy + boxysize > agmp->resolutiony -5 ) boxy = agmp->resolutiony - 5 - boxysize;
-   if (boxx + boxxsize > agmp->resolutionx -5 ) boxx = agmp->resolutionx - 5 - boxxsize;
-
-   background = malloc(imagesize(boxx,boxy,boxx+boxxsize,boxy+boxysize));
-
-   mousevisible(false);
-   getimage(boxx,boxy,boxx+boxxsize,boxy+boxysize,background);
-
-   bar(boxx,boxy,boxx+boxxsize,boxy+boxysize,lightgray);
-   lines(boxx,boxy,boxx+boxxsize,boxy+boxysize);
-
-   activefontsettings.length = boxxsize - 10;
-   activefontsettings.background = lightgray;
-   activefontsettings.color = black;
-   activefontsettings.justify = lefttext;
-
-   for (int i=0;i < itemcount ;i++ ) {
-      if (item[i] != act_seperator) showtext2((char*) execactionnames[item[i]],boxx+5,boxy + 5 + slotsize * i);
-      else line( boxx + 5, boxy + 5 + slotsize / 2 + slotsize * i, boxx + boxxsize - 5, boxy + 5 + slotsize / 2 + slotsize * i,black) ;
-   } /* endfor */
-   mousevisible(true);
-   while (mouseparams.taste == mousestat) {
-      checkfields();
-      releasetimeslice();
-   } /* endwhile */
-   if ( (actpos == -1) && (holdbutton == false ) ) {
-      while ( (mouseparams.taste == 0) && (ch != ct_esc) ) {
-         checkfields();
-         releasetimeslice();
-      } /* endwhile */
-   }
-}
 
 
-void tmousebuttonbox::done(void)
-{
-   mousevisible(false);
-   putimage(boxx,boxy,background);
-   mousevisible(true);
-   asc_free(background);
-   activefontsettings.font = savefont;
-   while (keypress())
-      ch = r_key();
-
-   while (mouseparams.taste != 0)
-      releasetimeslice();
-   ch = ct_invvalue;
-}
-
-
-// õS Rightmousebox
-
-int rightmousebox(void)
-{  tmousebuttonbox tmb;
-
-   tmb.init();
-   pf2 = getactfield();
-   if (pf2 != NULL) {
-
-      if ( pf2->vehicle ) {
-         tmb.additem(act_changeunitvals);
-         if ( pf2->vehicle->typ->maxLoadableUnits > 0 )
-            tmb.additem(act_changecargo);
-         tmb.additem(act_deleteunit);
-      }
-      tmb.additem(act_seperator);
-      if ( pf2->building ) {
-         tmb.additem(act_changeunitvals);
-         if ( pf2->building->typ->maxLoadableUnits > 0  )
-            tmb.additem(act_changecargo);
-         if ( pf2->building->typ->special & cgvehicleproductionb )
-            tmb.additem(act_changeproduction);
-         tmb.additem(act_deletebuilding);
-         tmb.additem(act_deleteunit);
-      }
-      tmb.additem(act_seperator);
-      if ( !pf2->mines.empty() ) {
-         tmb.additem(act_changeminestrength);
-         tmb.additem(act_deletemine);
-      }
-      tmb.additem(act_seperator);
-
-      tmb.additem(act_changeresources);
-
-      tmb.additem(act_seperator);
-
-      if ( !pf2->objects.empty() ) {
-         tmb.additem( act_deletetopmostobject );
-         tmb.additem( act_deleteobject );
-         tmb.additem( act_deleteallobjects );
-      }
-   }
-
-   tmb.run();
-   tmb.done();
-   return tmb.actcode;
-}
-
-// õS Leftmousebox
-
-int leftmousebox(void)
-{  tmousebuttonbox tmb;
-
-   tmb.init();
-   tmb.holdbutton=true;
-   tmb.additem(act_placebodentyp);
-   tmb.additem(act_placeunit);
-   tmb.additem(act_placebuilding);
-   tmb.additem(act_placeobject);
-   tmb.additem(act_placemine);
-   tmb.additem(act_pasteFromClipboard);
-
-   tmb.additem(act_seperator);
-
-   //tmb.additem(act_selbodentyp);
-   //tmb.additem(act_selunit);
-   //tmb.additem(act_selbuilding);
-   //tmb.additem(act_selobject);
-   //tmb.additem(act_selmine);
-   //tmb.additem(act_selweather);
-   tmb.additem(act_setactivefieldvals);
-
-   //tmb.additem(act_seperator);
-
-   tmb.additem(act_viewmap);
-   tmb.additem(act_repaintdisplay);
-
-   tmb.additem(act_seperator);
-
-   tmb.additem(act_help);
-
-   tmb.run();
-   tmb.done();
-   return tmb.actcode;
-}
-
-// õS PutResource
+// ï¿½ PutResource
 
 void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
@@ -337,11 +127,11 @@ void tputresources :: testfield ( const MapCoordinate& mc )
    int dist = beeline ( mc, centerPos ) / 10;
    int m = maxresource - dist * ( maxresource - minresource ) / maxdst;
 
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( resourcetype == 1 )
-      fld->material = m;
+      fld->material = min( 255, fld->material + m);
    else
-      fld->fuel = m;
+      fld->fuel = min( 255, fld->fuel + m );
 }
 
 void tputresourcesdlg :: init ( void )
@@ -408,256 +198,14 @@ void tputresourcesdlg :: run ( void )
    } while ( status < 10 ); /* enddo */
    if ( status == 11 ) {
       tputresources pr ( actmap );
-      pr.init ( getxpos(), getypos(), dist, resourcetype ? 1 : 2, maxresource, minresource );
+      pr.init ( actmap->getCursor().x, actmap->getCursor().y, dist, resourcetype ? 1 : 2, maxresource, minresource );
    }
 }
 
 
-//* õS Place-Functions
-
-void placebodentyp(void)
-{
-   int fillx2, filly2;
-   int i, j;
-
-   cursor.hide(); 
-   mousevisible(false); 
-   mapsaved = false;
-   if (polyfieldmode) {
-     /*
-      tfillpolygonbodentyp fillpoly;
-
-      fillpoly.tempvalue = 0;
-
-      if (fillpoly.paint_polygon ( pfpoly ) == 0)
-         displaymessage("Invalid Polygon !",1 );
-
-      polyfieldmode = false;
-      pdbaroff();
-      displaymap();
-      */
-   } else {
-      lastselectiontype = cselbodentyp;
-      pf2 = getactfield();
-      if (tfill) {
-         filly2 = cursor.posy + actmap->ypos;
-         fillx2 = cursor.posx + actmap->xpos;
-         if (fillx1 > fillx2) exchg(&fillx1,&fillx2);
-         if (filly1 > filly2) exchg(&filly1,&filly2);
-         for (i = filly1; i <= filly2; i++)
-            for (j = fillx1; j <= fillx2; j++) {
-               pf2 = getfield(j,i);
-               if ( pf2 ) {
-                  if ( auswahl->weather[auswahlw] )
-                     pf2->typ = auswahl->weather[auswahlw]; 
-                  else
-                     pf2->typ = auswahl->weather[0]; 
-   
-                  pf2->direction = auswahld;
-                  pf2->setparams();
-                  if (pf2->vehicle != NULL) 
-                     if ( (pf2->vehicle->typ->terrainaccess.accessible (pf2->bdt ) < 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
-                        delete pf2->vehicle;
-                        pf2->vehicle = NULL;
-                     }
-               }
-            }
-         displaymap();
-         tfill = false;
-         pdbaroff();
-      }
-      else {
-         if ( auswahl->weather[auswahlw] )
-            pf2->typ = auswahl->weather[auswahlw];
-         else
-            pf2->typ = auswahl->weather[0];
-         pf2->direction = auswahld;
-         pf2->setparams();
-         if (pf2->vehicle != NULL)
-            if ( (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt )< 0) || (pf2->vehicle->typ->terrainaccess.accessible ( pf2->bdt ) == 0 && actmap->getgameparameter( cgp_movefrominvalidfields ) == 0 )) {
-               delete pf2->vehicle;
-               pf2->vehicle = NULL;
-            }
-      }
-   } /* endif */
-   displaymap(); 
-   mousevisible(true); 
-   cursor.show(); 
-}
 
 
-void placeunit(void)
-{
-   if (polyfieldmode) {
-   /*
-      cursor.hide();
-      mousevisible(false);
-      mapsaved = false;
-
-      tfillpolygonunit fillpoly;
-
-      fillpoly.tempvalue = 0;
-
-      if (fillpoly.paint_polygon ( pfpoly ) == 0)
-         displaymessage("Invalid Polygon !",1 );
-
-      polyfieldmode = false;
-      pdbaroff();
-
-      displaymap();
-      mousevisible(true);
-      cursor.show();
-      */
-   } else {
-      lastselectiontype = cselunit;
-      if (farbwahl < 8) {
-         cursor.hide();
-         mousevisible(false);
-         mapsaved = false;
-         pf2 = getactfield();
-         int accessible = 1;
-         if ( auswahlf ) {
-            accessible = auswahlf->terrainaccess.accessible ( pf2->bdt );
-            if ( auswahlf->height >= chtieffliegend )
-               accessible = 1;
-         }
-
-         if (pf2 != NULL)
-              // !( pf2->bdt & cbbuildingentry)
-            if ( !( pf2->building ) && ( accessible || actmap->getgameparameter( cgp_movefrominvalidfields)) ) {
-               int set = 1;
-               if ( pf2->vehicle ) {
-                  if ( pf2->vehicle->typ != auswahlf ) {
-                     delete pf2->vehicle;
-                     pf2->vehicle = NULL;
-                   } else {
-                      set = 0;
-                      pf2->vehicle->convert( farbwahl );
-                   }
-               }
-               if ((auswahlf != NULL) && set ) {
-                  pf2->vehicle = new Vehicle ( auswahlf, actmap, farbwahl );
-                  pf2->vehicle->setnewposition ( getxpos(), getypos() );
-                  pf2->vehicle->fillMagically();
-                  pf2->vehicle->height=1;
-                  while ( ! ( ( ( ( pf2->vehicle->height & pf2->vehicle->typ->height ) > 0) && (terrainaccessible(pf2,pf2->vehicle) == 2) ) ) && (pf2->vehicle->height != 0) )
-                     pf2->vehicle->height = pf2->vehicle->height * 2;
-                  if (pf2->vehicle->height == 0 ) {
-                     if ( actmap->getgameparameter( cgp_movefrominvalidfields) ) {
-                        pf2->vehicle->height=1;
-                        while ( !(pf2->vehicle->height & pf2->vehicle->typ->height) && pf2->vehicle->height )
-                           pf2->vehicle->height = pf2->vehicle->height * 2;
-                     }
-                     if (pf2->vehicle->height == 0 ) {
-                        delete pf2->vehicle;
-                        pf2->vehicle = NULL;
-                     }
-                  }
-                  if ( pf2->vehicle ) {
-                     pf2->vehicle->setMovement ( pf2->vehicle->typ->movement[log2(pf2->vehicle->height)] );
-                     pf2->vehicle->direction = auswahld;
-                  }
-               }
-            }
-            else
-               if (auswahlf == NULL)
-                  if (pf2->vehicle != NULL) {
-                     delete pf2->vehicle;
-                     pf2->vehicle = NULL;
-                  }
-         displaymap();
-         mousevisible(true);
-         cursor.show();
-      }
-   } /* endif */
-}
-
-
-void placeobject(void)
-{
-   cursor.hide();
-   mousevisible(false);
-   mapsaved = false;
-   pf2 = getactfield(); 
-   if (tfill) { 
-      putstreets2(fillx1,filly1,cursor.posx + actmap->xpos,cursor.posy + actmap->ypos, actobject ); 
-      // 5. parameter zeiger auf object
-      displaymap(); 
-      tfill = false; 
-      pdbaroff(); 
-   } else {
-      pf2 = getactfield();
-      pvehicle eht = pf2->vehicle;
-      pf2->vehicle = NULL;
-      pf2->addobject( actobject );
-      pf2->vehicle = eht;
-   }
-
-   lastselectiontype = cselobject;
-   displaymap(); 
-   mousevisible(true); 
-   cursor.show(); 
-}
-
-void placemine(void)
-{
-   cursor.hide();
-   mousevisible(false); 
-   mapsaved = false;
-   getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
-   lastselectiontype = cselmine;
-   displaymap();
-   mousevisible(true); 
-   cursor.show(); 
-}
-
-
-void putactthing ( void )
-{
-    cursor.hide();
-    mousevisible(false); 
-    mapsaved = false;
-    pf2 = getactfield();
-    switch (lastselectiontype) {
-       case cselbodentyp :
-       case cselweather : placebodentyp();
-          break;
-       case cselunit:
-       case cselcolor:  placeunit();
-          break;
-       case cselbuilding:   placebuilding(farbwahl,auswahlb,true);
-          break;
-       case cselobject:   placeobject();
-          break;
-       case cselmine:   if ( farbwahl < 8 ) getactfield()->putmine(farbwahl,auswahlm+1,MineBasePunch[auswahlm]);
-          break;
-    } 
-    displaymap(); 
-    mousevisible(true); 
-    cursor.show(); 
-}
-
-
-// õS ShowPalette
-
-void         showpalette(void)
-{ 
-   bar ( 0, 0, 639, 479, black );
-   int x=7;
-
-   for ( char a = 0; a <= 15; a++) 
-      for ( char b = 0; b <= 15; b++) { 
-         bar(     a * 40, b * 20,a * 40 +  x,b * 20 + 20, xlattables.a.light    [a * 16 + b]);
-         bar( x + a * 40, b * 20,a * 40 + 2*x,b * 20 + 20, xlattables.nochange [a * 16 + b]); 
-         bar(2*x + a * 40, b * 20,a * 40 + 3*x,b * 20 + 20, xlattables.a.dark1    [a * 16 + b]); 
-         bar(3*x + a * 40, b * 20,a * 40 + 4*x,b * 20 + 20, xlattables.a.dark2    [a * 16 + b]); 
-         bar(4*x + a * 40, b * 20,a * 40 + 5*x,b * 20 + 20, xlattables.a.dark3    [a * 16 + b]); 
-      }      
-   wait();
-   repaintdisplay();
-} 
-
-// õS Lines
+// ï¿½ Lines
 
 void lines(int x1,int y1,int x2,int y2)
 {
@@ -669,86 +217,8 @@ void lines(int x1,int y1,int x2,int y2)
 
 
 
-// õS PDSetup
 
-void         pdsetup(void)
-{
-  pd.addfield ( "~F~ile" );
-   pd.addbutton ( "~N~ew mapõctrl+N" , act_newmap    );
-   pd.addbutton ( "~L~oad mapõctrl+L", act_loadmap   );
-   pd.addbutton ( "~S~ave mapõS",      act_savemap   );
-   pd.addbutton ( "Save map ~a~s",     act_savemapas );
-   pd.addbutton ( "Edit Map ~A~rchival Information", act_editArchivalInformation );
-   pd.addbutton ( "seperator",         -1            );
-   pd.addbutton ( "Load Clipboard",     act_readClipBoard );
-   pd.addbutton ( "Save Clipboard",     act_saveClipboard );
-   pd.addbutton ( "seperator",         -1            );
-   pd.addbutton ( "~W~rite map to PCX-Fileõctrl+G", act_maptopcx);
-    pd.addbutton ( "~I~mport BI mapõctrl-i", act_import_bi_map );
-    pd.addbutton ( "Insert ~B~I map", act_insert_bi_map );
-    pd.addbutton ( "seperator", -1 );
-    pd.addbutton ( "set zoom level", act_setzoom );
-   pd.addbutton ( "seperator", -1 );
-   pd.addbutton ( "E~x~itõEsc", act_end);
-
-  pd.addfield ("~E~dit");
-   pd.addbutton ( "~C~opy õctrl+C",          act_copyToClipboard );
-   pd.addbutton ( "Cu~t~",                   act_cutToClipboard );
-   pd.addbutton ( "~P~aste õctrl+V",         act_pasteFromClipboard );
-   pd.addbutton ( "seperator",                  -1 );
-   pd.addbutton ( "Resi~z~e mapõR",             act_resizemap );
-   pd.addbutton ( "set global ~w~eatherõctrl-W", act_setactweatherglobal );
-   pd.addbutton ( "~C~reate ressourcesõctrl+F", act_createresources );
-#ifdef pbpeditor
-   pd.addbutton ( "~S~et turn number",        act_setTurnNumber );
-#endif
-   pd.addbutton ( "~E~dit technologies",          act_editResearch );
-   pd.addbutton ( "edit ~R~search points",          act_editResearchPoints );
-   pd.addbutton ( "edit ~T~ech adapter",          act_editTechAdapter );
-   pd.addbutton ( "reset player data...",   act_resetPlayerData );
-
-  pd.addfield ("~T~ools");
-   pd.addbutton ( "~V~iew mapõV",            act_viewmap );
-   // pd.addbutton ( "~S~how palette",             act_showpalette );
-   pd.addbutton ( "~R~ebuild displayõctrl+R",   act_repaintdisplay );
-   pd.addbutton ( "seperator",                  -1 );
-   pd.addbutton ( "~M~ap generatorõG",          act_mapgenerator );
-   pd.addbutton ( "Sm~o~oth coasts",          act_smoothcoasts );
-   pd.addbutton ( "~U~nitset transformation",    act_unitsettransformation );
-   pd.addbutton ( "map ~t~ransformation",        act_transformMap );
-   pd.addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
-   pd.addbutton ( "Show Pipeline Net", act_showPipeNet );
-   pd.addbutton ( "Generate Tech Tree", act_generateTechTree );
-   pd.addbutton ( "Show Player Strength", act_playerStrengthSummary );
-
-
-   pd.addfield ("~O~ptions");
-    pd.addbutton ( "~M~ap valuesõctrl+M",          act_changemapvals );
-    pd.addbutton ( "~C~hange playersõO",           act_changeplayers);
-    pd.addbutton ( "~E~dit eventsõE",              act_events );
-    pd.addbutton ( "~S~etup Player + Alliancesõctrl+A",     act_setupalliances );
-//    pd.addbutton ( "unit production ~L~imitation", act_specifyunitproduction );
-    pd.addbutton ( "seperator",                    -1);
-    pd.addbutton ( "~T~oggle ResourceViewõctrl+B", act_toggleresourcemode);
-    pd.addbutton ( "~B~I ResourceMode",            act_bi_resource );
-    pd.addbutton ( "~A~sc ResourceMode",           act_asc_resource );
-    pd.addbutton ( "edit map ~P~arameters",        act_setmapparameters );
-    pd.addbutton ( "setup item ~F~iltersõctrl+h",  act_setunitfilter );
-    pd.addbutton ( "select ~G~raphic set",         act_selectgraphicset );
-
-   pd.addfield ("~H~elp");
-    pd.addbutton ( "~U~nit Informationõctrl+U",    act_unitinfo );
-    pd.addbutton ( "unit~S~et Information",        act_unitSetInformation );
-    pd.addbutton ( "~T~errain Information",        act_terraininfo );
-    pd.addbutton ( "seperator",                    -1 );
-    pd.addbutton ( "~H~elp SystemõF1",             act_help );
-    pd.addbutton ( "~A~bout",                      act_about );
-
-    pd.init();
-    pd.setshortkeys();
-}
-
-// õS PlayerChange
+// ï¿½ PlayerChange
 
 /* class   tcolorsel : public tstringselect {
            public :
@@ -853,7 +323,7 @@ void         tplayerchange::init(void)
 
    windowstyle = windowstyle ^ dlg_in3d;
 
-   for (i=0;i<=8 ;i++ ) {
+   for ( int i=0;i<=8 ;i++ ) {
       s1 = new(char[12]);
       if (i == 8) {
          strcpy(s1,"~N~eutral");
@@ -876,7 +346,7 @@ void         tplayerchange::init(void)
 
    buildgraphics();
 
-   for (i=0;i<=8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
+   for ( int i=0;i<=8 ;i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
 
    anzeige();
 
@@ -886,9 +356,10 @@ void         tplayerchange::init(void)
 void         tplayerchange::anzeige(void)
 {
    int e,b,m[9];
-   for (i=0;i<=8 ;i++ ) m[i] =0;
-   int i;
-   for (i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
+   for ( int i=0;i<=8 ;i++ )
+      m[i] =0;
+   
+   for ( int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
       int color = actmap->field[i].mineowner();
       if ( color >= 0 && color < 8 )
          m[color]++;
@@ -902,7 +373,7 @@ void         tplayerchange::anzeige(void)
    showtext2("Units",x1+210,y1+35);
    showtext2("Build.",x1+260,y1+35);
    showtext2("Mines",x1+310,y1+35);
-   for (i=0;i<=8 ;i++ ) {
+   for ( int i=0;i<=8 ;i++ ) {
       if (i == sel1 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
       else if ( i == sel2 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 28 );
       else rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
@@ -945,59 +416,8 @@ void         tplayerchange::buttonpressed(int         id)
         }
         break; */
      case 4: {
-           if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) ) {
-
-              // exchanging the players sel1 and sel2
-
-              if ( sel2 != 8 && sel1 != 8 ) {
-                 typedef tmap::Player::VehicleList VL;
-                 typedef tmap::Player::VehicleList::iterator VLI;
-
-                 VL vl;
-                 for ( VLI i = actmap->player[sel1].vehicleList.begin(); i != actmap->player[sel1].vehicleList.end(); ) {
-                    (*i)->color = sel2*8;
-                    vl.push_back ( *i );
-                    i = actmap->player[sel1].vehicleList.erase( i );
-                 }
-
-                 for ( VLI i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
-                    (*i)->color = sel1*8;
-                    actmap->player[sel1].vehicleList.push_back ( *i );
-                    i = actmap->player[sel2].vehicleList.erase( i );
-                 }
-
-                 for ( VLI i = vl.begin(); i != vl.end(); ) {
-                    actmap->player[sel2].vehicleList.push_back ( *i );
-                    i = vl.erase( i );
-                 }
-              }
-
-
-              typedef tmap::Player::BuildingList BL;
-              typedef tmap::Player::BuildingList::iterator BLI;
-
-              BL bl;
-              for ( BLI i = actmap->player[sel1].buildingList.begin(); i != actmap->player[sel1].buildingList.end(); ++i)
-                 bl.push_back ( *i );
-
-              BL bl2 = actmap->player[sel2].buildingList;
-              for ( BLI i = bl2.begin(); i != bl2.end(); ++i)
-                 (*i)->convert(sel1);
-
-              for ( BLI i = bl.begin(); i != bl.end(); ++i)
-                 (*i)->convert(sel2);
-
-              for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 pfield fld = &actmap->field[i];
-                 for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->player == sel1 && sel2 != 8 )
-                       i->player = sel2;
-                    else
-                       if ( i->player == sel2 && sel1 != 8 )
-                          i->player = sel1;
-
-
-              } /* endfor */
+           if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) && ( sel1 != 8) && ( sel2 != 8 ) ) {
+              actmap->player[sel1].swap ( actmap->player[sel2] );
               anzeige();
            }
         }
@@ -1008,18 +428,18 @@ void         tplayerchange::buttonpressed(int         id)
               // adding everything from player sel2 to sel1
 
               if ( sel1 != 8 )
-                 for ( tmap::Player::VehicleList::iterator i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
+                 for ( Player::VehicleList::iterator i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
                     (*i)->color = sel1*8;
                     actmap->player[sel1].vehicleList.push_back ( *i );
                     i = actmap->player[sel2].vehicleList.erase( i );
                  }
 
-              tmap::Player::BuildingList bl = actmap->player[sel2].buildingList;
-              for ( tmap::Player::BuildingList::iterator i = bl.begin(); i != bl.end(); ++i)
+              Player::BuildingList bl = actmap->player[sel2].buildingList;
+              for ( Player::BuildingList::iterator i = bl.begin(); i != bl.end(); ++i)
                  (*i)->convert( sel1 );
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 pfield fld = &actmap->field[i];
+                 tfield* fld = &actmap->field[i];
                  for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
                     if ( i->player == sel2 && sel1 != 8)
                        i->player = sel1;
@@ -1056,60 +476,6 @@ void playerchange(void)
 }
 
 
-//* õS Mycursor
-
-void       tmycursor::getimg ( void )
-{
-     int xp, yp;
-
-     xp = sx + posx * ix;
-     yp = sy + posy * iy;
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush(*agmp);
-        *agmp = *hgmp;
-        getimage(xp, yp, xp + fieldsizex, yp + fieldsizey, backgrnd );
-        npop (*agmp);
-     } else {
-        getimage(xp, yp, xp + fieldsizex, yp + fieldsizey, backgrnd );
-     }
-}
-
-void       tmycursor::putbkgr ( void )
-{
-     int xp, yp;
-
-     xp = sx + posx * ix;
-     yp = sy + posy * iy;
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putimage(xp, yp, backgrnd );
-        npop ( *agmp );
-     } else {
-        putimage(xp, yp, backgrnd );
-     }
-
-
-}
-
-void       tmycursor::putimg ( void )
-{
-     int xp, yp;
-
-     xp = sx + posx * ix;
-     yp = sy + posy * iy;
-
-     if (agmp-> linearaddress != hgmp-> linearaddress ) {
-        npush( *agmp );
-        *agmp = *hgmp;
-        putrotspriteimage(xp, yp, picture,color );
-        npop ( *agmp );
-     } else {
-        putrotspriteimage(xp, yp, picture,color );
-     }
-}
 
 
 void         exchg(int *       a1,
@@ -1122,25 +488,9 @@ void         exchg(int *       a1,
 }
 
 
-void         pdbaroff(void)
-{
-   mousevisible(false);
-   pd.baroff();
-   rsavefont = activefontsettings;
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = 1;
-   activefontsettings.background = black;
-   activefontsettings.length = 200;
-   activefontsettings.justify = lefttext;
-
-   showStatusBar();
-   activefontsettings = rsavefont;
-   mousevisible(true);
-}
 
 
-// õS TCDPlayer
+// ï¿½ TCDPlayer
 
 /*
 
@@ -1233,19 +583,6 @@ void cdplayer( void )
 
 */
 
-void         repaintdisplay(void)
-{
-   mousevisible(false);
-   cursor.hide();
-   bar(0,0,agmp->resolutionx-1,agmp->resolutiony-1,0);
-   if ( !lockdisplaymap )
-      displaymap();
-
-   pdbaroff();
-   showallchoices();
-   cursor.show();
-   mousevisible(true);
-}
 
 #ifndef pbpeditor
 
@@ -1259,49 +596,43 @@ void         k_savemap(char saveas)
       filename = actmap->preferredFileNames.mapname[0];;
    }
 
-   mousevisible(false);
    if ( saveas || !nameavail ) {
-      fileselectsvga(mapextension, filename, false);
+      filename = selectFile(mapextension, false);
    }
    if ( !filename.empty() ) {
       mapsaved = true;
-      cursor.hide();
       actmap->preferredFileNames.mapname[0] = filename;
-      savemap( filename.c_str() );
+      savemap( filename.c_str(), actmap );
       displaymap();
-      cursor.show();
    }
-   mousevisible(true);
 }
 
 
 void         k_loadmap(void)
 {
-   ASCString s1;
-
-   mousevisible(false);
-   fileselectsvga( mapextension, s1, true );
+   ASCString s1 = selectFile( mapextension, true );
    if ( !s1.empty() ) {
-      cursor.hide();
-      displaymessage("loading map %s",0, s1.c_str() );
-      loadmap(s1.c_str());
-      actmap->startGame();
+      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading map " + s1 );
+      GameMap* mp = mapLoadingExceptionChecker( s1, MapLoadingFunction( tmaploaders::loadmap ));
+      if ( !mp )
+         return;
+         
+      delete actmap;
+      actmap =  mp;
 
-      if ( actmap->campaign && !actmap->campaign->directaccess && actmap->codeword[0]) {
+      if ( actmap->campaign.avail && !actmap->campaign.directaccess && !actmap->codeWord.empty() ) {
          tlockdispspfld ldsf;
          removemessage();
          Password pwd;
-         pwd.setUnencoded ( actmap->codeword );
+         pwd.setUnencoded ( actmap->codeWord );
          enterpassword ( pwd );
       } else
          removemessage();
 
 
       displaymap();
-      cursor.show();
       mapsaved = true;
    }
-   mousevisible(true);
 }
 
 #else
@@ -1310,66 +641,22 @@ void         k_loadmap(void)
 
 #endif
 
-void         placebuilding(int               colorr,
-                          pbuildingtype   buildingtyp,
-                          char            choose)
 
+void selectUnitFromMap ( GameMap* gamemap, MapCoordinate& pos )
 {
-   #define bx   100
-   #define by   100
-   #define sts  bx + 200
+   SelectFromMap::CoordinateList list;
+   list.push_back( pos );
 
-   pbuilding    gbde;
+   SelectFromMap sfm( list, gamemap );
+   sfm.Show();
+   sfm.RunModal();
 
-   mousevisible(false);
-   cursor.hide();
-   mapsaved = false;
-
-   int f = 0;
-   if (choose == true) {
-      for ( int x = 0; x < 4; x++ )
-         for ( int y = 0; y < 6; y++ )
-            if ( buildingtyp->getpicture ( BuildingType::LocalCoordinate(x, y) )) {
-               MapCoordinate mc = buildingtyp->getFieldCoordinate ( MapCoordinate (getxpos(), getypos()), BuildingType::LocalCoordinate (x, y) );
-               if ( !actmap->getField (mc) )
-                  return;
-
-               if ( buildingtyp->terrainaccess.accessible ( actmap->getField (mc)->bdt ) <= 0 )
-                  f++;
-            }
-      if ( f )
-         if (choice_dlg("Invalid terrain for building !","~i~gnore","~c~ancel") == 2)
-            return;
-
-      putbuilding( MapCoordinate( getxpos(),getypos()), colorr * 8,buildingtyp,buildingtyp->construction_steps);
-   }
-
-   gbde = getactfield()->building;
-   if (gbde == NULL) return;
-
-   // gbde->plus = gbde->maxplus;
-   gbde->maxplus = gbde->plus;
-
-   activefontsettings.color = 1;
-   activefontsettings.background = lightgray;
-   activefontsettings.length = 100;
-
-   changebuildingvalues(*gbde);
-   if (choose == true)
-      building_cargo( gbde );
-
-   lastselectiontype = cselbuilding;
-   displaymap();
-   cursor.show();
-   mousevisible(true);
+   if ( list.empty() )
+      pos = MapCoordinate( -1, -1 );
+   else
+      pos = *list.begin();
 }
 
-
-
-void         freevariables(void)
-{
-   asc_free ( mycursor.backgrnd );
-}
 
 
 void         setstartvariables(void)
@@ -1379,66 +666,27 @@ void         setstartvariables(void)
    activefontsettings. background = 0;
 
    mapsaved = true;
-   polyfieldmode = false;
 
-   auswahl  = terrainTypeRepository.getObject_byPos(0);
-   auswahlf = vehicleTypeRepository.getObject_byPos(0);
-   auswahlb = buildingTypeRepository.getObject_byPos(0);
-   actobject = objectTypeRepository.getObject_byPos(0);
-   auswahls = 0;
-   auswahlm = 1;
-   auswahlw = 0;
-   auswahld = 0;
-   farbwahl = 0;
-
-   sr[0].maxanz = terrainTypeRepository.getNum();
-   sr[0].showall = true;
-   sr[1].maxanz = vehicleTypeRepository.getNum();
-   sr[1].showall = true;
-   sr[2].maxanz = 9;
-   sr[2].showall = true;
-   sr[3].maxanz = buildingTypeRepository.getNum();
-   sr[3].showall = true;
-   sr[4].maxanz = vehicleTypeRepository.getNum();
-   sr[4].showall = false;
-   sr[5].maxanz = objectTypeRepository.getNum();
-   sr[5].showall = true;
-   sr[6].maxanz = vehicleTypeRepository.getNum();
-   sr[6].showall = false;
-   sr[7].maxanz = vehicleTypeRepository.getNum();
-   sr[7].showall = false;
-   sr[8].maxanz = minecount;
-   sr[8].showall = true;
-   sr[9].maxanz = cwettertypennum;
-   sr[9].showall = true;
-
-   mycursor.picture = cursor.orgpicture;
-   mycursor.backgrnd = malloc (10000);
-
-   atexit( freevariables );
 }
 
-
+#if 0
 
 int  selectfield(int * cx ,int  * cy)
 {
    // int oldposx = getxpos();
    // int oldposy = getypos();
-   cursor.gotoxy( *cx, *cy );
+   actmap->getCursor() = MapCoordinate( *cx, *cy );
    displaymap();
-   cursor.show();
    tkey ch = ct_invvalue;
    do {
       if (keypress()) {
          ch = r_key();
-         movecursor( ch );
+         // movecursor( ch );
       } else
          releasetimeslice();
    } while ( ch!=ct_enter  &&  ch!=ct_space  && ch!=ct_esc); /* enddo */
-   cursor.hide();
-   *cx=cursor.posx+actmap->xpos;
-   *cy=cursor.posy+actmap->ypos;
-   // cursor.gotoxy( oldposx, oldposy );
+   *cx=actmap->getCursor().x;
+   *cy=actmap->getCursor().y;
    if ( ch == ct_enter )
       return 1;
    else
@@ -1453,13 +701,12 @@ int  selectfield(int * cx ,int  * cy)
 Vehicle*  selectUnitFromMap()
 {
    displaymap();
-   cursor.show();
    tkey ch = ct_invvalue;
    Vehicle* veh = NULL;
    do {
       if (keypress()) {
          ch = r_key();
-         movecursor( ch );
+         // movecursor( ch );
          if( ch == 'c' &&  getactfield()->getContainer()  )
             veh = selectUnitFromContainer( getactfield()->getContainer() );
 
@@ -1472,7 +719,6 @@ Vehicle*  selectUnitFromMap()
 
 
    } while ( !veh  && ch!=ct_esc); /* enddo */
-   cursor.hide();
 
    if ( ch == ct_enter || ct_space )
       return veh;
@@ -1480,35 +726,17 @@ Vehicle*  selectUnitFromMap()
       return NULL;
 }
 
+#endif
+
+//* ï¿½ FillPolygonevent
 
 
-//* õS FillPolygonevent
 
-class  ShowPolygonUsingTemps : public PolygonPainerSquareCoordinate {
-        protected:
-             virtual void setpointabs ( int x,  int y  ) {
-                pfield ffield = getfield ( x , y );
-                if (ffield)
-                    ffield->a.temp2 = 1;
-             };
-        public:
-             bool paintPolygon   (  const Poly_gon& poly ) {
-                bool res = PolygonPainerSquareCoordinate::paintPolygon ( poly );
-                for ( int i = 0; i < poly.vertex.size(); ++i ) {
-                   pfield ffield = actmap->getField ( poly.vertex[i] );
-                   if (ffield)
-                       ffield->a.temp = 1;
-                }
-                return res;
-             };
-};
-
-
-//* õS FillPolygonbdt
+//* ï¿½ FillPolygonbdt
 /*
 void tfillpolygonbodentyp::setpointabs    ( int x,  int y  )
 {
-       pfield ffield = getfield ( x , y );
+       tfield* ffield = getfield ( x , y );
        if (ffield) {
            ffield->a.temp = tempvalue;
            if ( auswahl->weather[auswahlw] )
@@ -1529,11 +757,11 @@ void tfillpolygonbodentyp::initevent ( void )
 {
 }
 
-//* õS FillPolygonunit
+// ï¿½ FillPolygonunit
 
 void tfillpolygonunit::setpointabs    ( int x,  int y  )
 {
-       pfield ffield = getfield ( x , y );
+       tfield* ffield = getfield ( x , y );
        if (ffield) {
           if ( terrainaccessible(ffield,ffield->vehicle) )
                {
@@ -1571,307 +799,85 @@ void tfillpolygonunit::initevent ( void )
 }
 
 
-//* õS ChangePoly
+// ï¿½ ChangePoly
 */
 
-void PolygonEditor::display()
-{
-   actmap->cleartemps();
-   ShowPolygonUsingTemps sput;
-   if ( !sput.paintPolygon ( poly ) )
-      displaymessage("Invalid Polygon !",1 );
-   displaymap();
-}
+
+class  ShowPolygonUsingTemps : public PolygonPainterSquareCoordinate {
+   protected:
+      virtual void setpointabs ( int x,  int y  ) {
+         tfield* ffield = getfield ( x , y );
+         if (ffield)
+            ffield->a.temp2 = 1;
+      };
+   public:
+      bool paintPolygon   (  const Poly_gon& poly ) {
+         bool res = PolygonPainterSquareCoordinate::paintPolygon ( poly );
+         for ( int i = 0; i < poly.vertex.size(); ++i ) {
+            tfield* ffield = actmap->getField ( poly.vertex[i] );
+            if (ffield)
+               ffield->a.temp = 1;
+         }
+         return res;
+      };
+};
 
 
+class PolygonEditor : public SelectFromMap {
+   protected:
+      void showFieldMarking( const CoordinateList& coordinateList )
+      {
+         Poly_gon poly;
+         for ( CoordinateList::const_iterator i = coordinateList.begin(); i != coordinateList.end(); ++i ) 
+            poly.vertex.push_back( MapCoordinate(*i) );
 
+         ShowPolygonUsingTemps sput;
+         if ( !sput.paintPolygon ( poly ) )
+            displaymessage("Invalid Polygon !",1 );
 
-void  PolygonEditor::run(void)
-{
-   int x = 0;
-   int y = 0;
-
-   display();
-
-   int r;
-   savemap ( "_backup_polygoneditor.map" );
-   displaymessage("use space to select the vertices of the polygon\nfinish the selection by pressing enter",3);
-   do {
-      r = selectfield(&x,&y);
-      if ( r != 1   &&   (x != 50000) ) {
-         Poly_gon::VertexIterator i = find ( poly.vertex.begin(), poly.vertex.end(), MapCoordinate (x,y) );
-         if ( i != poly.vertex.end() )
-            poly.vertex.erase( i );
-         else
-            poly.vertex.push_back ( MapCoordinate( x, y ));
-
-         display();
+         repaintMap();
       }
-   } while ( r != 1 ); /* enddo */
-   actmap->cleartemps();
-   displaymap();
-}
+      
+   public:
+      PolygonEditor( CoordinateList& list, GameMap* map ) : SelectFromMap( list, map ) {};
+};
+
+
 
 void editpolygon(Poly_gon& poly)
 {
-  PolygonEditor cp ( poly );
-  cp.run();
-}
+   savemap ( "_backup_polygoneditor.map", actmap );
 
+   PolygonEditor::CoordinateList list;
+   
+   for ( Poly_gon::VertexIterator  i = poly.vertex.begin(); i != poly.vertex.end(); ++i )
+      list.push_back( *i );
+   
+   PolygonEditor cp ( list, actmap );
+   cp.Show();
+   cp.RunModal();
 
-//* õS NewMap
-
-  class tnewmap : public tdialogbox {
-            char maptitle[10000];
-        public :
-               int action;
-               char passwort[11];
-               int sxsize,sysize;
-               char valueflag,random,campaign;
-               tmap::Campaign cmpgn;
-               pterraintype         tauswahl;
-               int auswahlw;
-               void init(void);
-               virtual void run(void);
-               virtual void buttonpressed(int  id);
-               void done(void);
-               };
-
-
-void         tnewmap::init(void)
-{
-  int w;
-  char      b;
-
-   tdialogbox::init();
-   action = 0;
-   if (valueflag == true )
-      title = "New Map";
-   else
-      title = "Map Values";
-   x1 = 70;
-   xsize = 500;
-   y1 = 70;
-   ysize = 350;
-   campaign = !!actmap->campaign;
-   sxsize = actmap->xsize;
-   sysize = actmap->ysize;
-   strcpy ( maptitle, actmap->maptitle.c_str() );
-
-   if (valueflag == true ) {
-      strcpy(passwort,"");
-      memset(&cmpgn,0,sizeof(cmpgn));
-   }
-   else {
-      strcpy(passwort, actmap->codeword);
-      if (actmap->campaign != NULL) {
-         campaign = true;
-         memcpy (&cmpgn , actmap->campaign, sizeof(cmpgn));
-      }
-      else memset(&cmpgn,0,sizeof(cmpgn));
-   }
-   random = false;
-   auswahlw = 0; /* !!! */
-
-   w = (xsize - 60) / 2;
-   windowstyle = windowstyle ^ dlg_in3d;
-
-   addbutton("~T~itle",15,70,xsize - 30,90,1,1,1,true);
-   addeingabe(1,maptitle,0,100);
-
-   if (valueflag == true ) {
-      addbutton("~X~ Size",15,130,235,150,2,1,2,true);
-      addeingabe(2,&sxsize,idisplaymap.getscreenxsize(1),65534);
-
-      addbutton("~Y~ Size",250,130,470,150,2,1,3,true);
-      addeingabe(3,&sysize,idisplaymap.getscreenysize(1),65534);
-
-      addbutton("~R~andom",250,190,310,210,3,1,11,true);
-      addeingabe(11,&random,0,lightgray);
-
-      if ( ! random) b = true;
-      else b =false;
-
-      addbutton("~B~dt",350,190,410,210,0,1,12,b);
-   }
-
-   addbutton("~P~assword (10 letters)",15,190,235,210,1,1,9,true);
-   addeingabe(9,passwort,10,10);
-
-   addbutton("C~a~mpaign",15,230,235,245,3,1,5,true);
-   addeingabe(5,&campaign,0,lightgray);
-
-   addbutton("~M~ap ID",15,270,235,290,2,1,6,campaign);
-   addeingabe(6,&cmpgn.id,0,65535);
-
-   addbutton("Pr~e~vious Map ID",250,270,470,290,2,1,7,campaign);
-   addeingabe(7,&cmpgn.prevmap,0,65535);
-
-   addbutton("~D~irect access to map",250,230,470,245,3,1,8,campaign);
-   addeingabe(8,&cmpgn.directaccess,0,lightgray);
-
-   if (valueflag == true ) addbutton("~S~et Map",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
-   else addbutton("~S~et Mapvalues",20,ysize - 40,20 + w,ysize - 10,0,1,10,true);
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,4,true);
-
-   tauswahl = auswahl;
-
-   buildgraphics();
-   if (valueflag == true )
-      if ( ! random ) {
-         mousevisible(false);
-         if ( tauswahl->weather[auswahlw] )
-            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
-         else
-            putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
-         mousevisible(true);
-      }
-   rahmen(true,x1 + 10,y1 + starty,x1 + xsize - 10,y1 + ysize - 45);
-   rahmen(true,x1 + 11,y1 + starty + 1,x1 + xsize - 11,y1 + ysize - 46);
-   mousevisible(true);
-}
-
-
-void         tnewmap::run(void)
-{
-   do {
-      tdialogbox::run();
-      if (action == 3) {
-         if ( sysize & 1 ) {
-            displaymessage("YSize must be even !",1 );
-            action = 0;
-         }
-         #ifdef UseMemAvail
-         if (action != 4)
-            if ( sxsize * sysize * sizeof( tfield ) > memavail() ) {
-               displaymessage("Not enough memory for map.\nGenerate smaller map or free more memory",1);
-               action = 0;
-            }
-         #endif
-      }
-   }  while (!((taste == ct_esc) || (action >= 2)));
-
-   if (action == 3) {
-      if (valueflag == true ) {
-         if ( tauswahl->weather[auswahlw] )
-            generatemap(tauswahl->weather[auswahlw], sxsize , sysize );
-         else
-            generatemap(tauswahl->weather[0], sxsize , sysize );
-         if ( random)
-            mapgenerator();
-      }
-
-      mapsaved = false;
-
-      actmap->maptitle = maptitle;
-
-      strcpy(actmap->codeword,passwort);
-      if (campaign == true ) {
-         if (actmap->campaign == NULL)
-            actmap->campaign = new tmap::Campaign;
-
-         actmap->campaign->id = cmpgn.id;
-         actmap->campaign->prevmap = cmpgn.prevmap;
-         actmap->campaign->directaccess = cmpgn.directaccess;
-      }
-      else
-         if ( actmap->campaign ) {
-            delete actmap->campaign;
-            actmap->campaign = NULL;
-         }
-   }
-}
-
-
-void         tnewmap::buttonpressed(int id)
-{
-   if (id == 4)
-      action = 2;
-   if (id == 10)
-      action = 3;
-   if (id == 5)
-      if (campaign) {
-         enablebutton(6);
-         enablebutton(7);
-         enablebutton(8);
-      }
-      else {
-         disablebutton(6);
-         disablebutton(7);
-         disablebutton(8);
-      }
-   if (id == 12) {
-      npush ( lastselectiontype );
-      npush ( auswahl );
-
-      void *p;
-
-      mousevisible(false);
-      p=malloc( imagesize(430,0,639,479) );
-      getimage(430,0,639,479,p);
-      mousevisible(true);
-
-      lastselectiontype = cselbodentyp;
-      selterraintype( ct_invvalue );
-
-      mousevisible(false);
-      putimage(430,0,p);
-      mousevisible(true);
-
-      tauswahl = auswahl;
-
-      npop ( auswahl );
-      npop ( lastselectiontype );
-
-      if ( tauswahl->weather[auswahlw] )
-         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[auswahlw]->pict );
-      else
-         putspriteimage(x1 + 440,y1 + 182,tauswahl->weather[0]->pict );
-   }
-   if (id == 11)
-      if ( ! random) {
-         enablebutton(12);
-      }
-      else {
-         disablebutton(12);
-      }
-}
-
-
-void         tnewmap::done(void)
-{
-   tdialogbox::done();
-   if (action == 3) displaymap();
+   poly.vertex.clear();
+   for ( PolygonEditor::CoordinateList::iterator i = list.begin(); i != list.end(); ++i )
+      poly.vertex.push_back( *i );
 }
 
 
 
 void         newmap(void)
 {
-  tnewmap      nm;
-
-   nm.valueflag = true;
-   nm.init();
-   nm.run();
-   nm.done();
-   pdbaroff();
+   GameMap* map = createNewMap();
+   if ( map ) {
+      delete actmap;
+      actmap = map;
+      // displaymap();
+      mapChanged( actmap );
+      // tspfldloaders::mapLoaded( actmap );
+   }
 }
 
 
-//* õS MapVals
-
-
-void         changemapvalues(void)
-{
-  tnewmap      nm;
-
-   nm.valueflag = false;
-   nm.init();
-   nm.run();
-   nm.done();
-//   if (actmap->campaign != NULL) setupalliances();
-   pdbaroff();
-}
+//* ï¿½ MapVals
 
 
 
@@ -1933,38 +939,51 @@ void         BuildingValues::init(void)
    addeingabe(10,&name[0],0,25);
 
    addbutton("~E~nergy-Storage",15,90,215,110,2,1,1,true);
-   addeingabe(1,&storage.energy,0,gbde.gettank(0));
+   addeingabe(1,&storage.energy,0,gbde.getStorageCapacity().resource(0));
 
    addbutton("~M~aterial-Storage",15,130,215,150,2,1,2,true);
-   addeingabe(2,&storage.material,0,gbde.gettank(1));
+   addeingabe(2,&storage.material,0,gbde.getStorageCapacity().resource(1));
 
    addbutton("~F~uel-Storage",15,170,215,190,2,1,3,true);
-   addeingabe(3,&storage.fuel,0,gbde.gettank(2));
+   addeingabe(3,&storage.fuel,0,gbde.getStorageCapacity().resource(2));
 
-   if ( gbde.typ->special & (cgconventionelpowerplantb | cgsolarkraftwerkb | cgwindkraftwerkb | cgminingstationb | cgresourceSinkB)) b = true;
-   else b = false;
-
-   addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
-   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
-
-   if ( gbde.typ->special & (cgconventionelpowerplantb | cgminingstationb | cgresourceSinkB )) b = true;
-   else b = false;
-
-   addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
-   addeingabe(4,&plus.energy,0,mplus.energy);
-
-   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencymaterial ) || (gbde.typ->special & cgresourceSinkB))
+   if ( gbde.typ->hasFunction( ContainerBaseType::MatterConverter  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::SolarPowerPlant  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::WindPowerPlant  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::MiningStation  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ))
       b = true;
    else
       b = false;
 
+   addbutton("Energy-Max-Plus",230,50,430,70,2,1,13,b);
+   addeingabe(13,&mplus.energy,0,gbde.typ->maxplus.energy);
+
+   if ( gbde.typ->hasFunction( ContainerBaseType::MatterConverter  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::MiningStation  ) ||
+        gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ))
+      b = true;
+   else
+      b = false;
+   
+
+   addbutton("Energ~y~-Plus",230,90,430,110,2,1,4,b);
+   addeingabe(4,&plus.energy,0,mplus.energy);
+
+   if ( ((gbde.typ->hasFunction( ContainerBaseType::MatterConverter) || gbde.typ->hasFunction( ContainerBaseType::MiningStation)) && gbde.typ->efficiencymaterial )
+          || gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ) )
+      b = true;
+   else
+      b = false;
+   
    addbutton("Material-Max-Plus",230,130,430,150,2,1,14,b);
    addeingabe(14,&mplus.material,0,gbde.typ->maxplus.material);
 
    addbutton("M~a~terial-Plus",230,170,430,190,2,1,5,b);
    addeingabe(5,&plus.material,0,mplus.material);
 
-   if ( (gbde.typ->special & cgconventionelpowerplantb) || ((gbde.typ->special & cgminingstationb ) && gbde.typ->efficiencyfuel )|| (gbde.typ->special & cgresourceSinkB))
+   if ( ((gbde.typ->hasFunction( ContainerBaseType::MatterConverter) || gbde.typ->hasFunction( ContainerBaseType::MiningStation)) && gbde.typ->efficiencyfuel )
+          || gbde.typ->hasFunction( ContainerBaseType::ResourceSink  ) )
       b = true;
    else
       b = false;
@@ -1975,7 +994,7 @@ void         BuildingValues::init(void)
    addbutton("F~u~el-Plus",230,250,430,270,2,1,6,b);
    addeingabe(6,&plus.fuel, 0, mplus.fuel);
 
-   if ( ( gbde.typ->special & cgresearchb ) || ( gbde.typ->maxresearchpoints > 0))
+   if ( gbde.typ->hasFunction( ContainerBaseType::Research) || ( gbde.typ->maxresearchpoints > 0))
       b = true;
    else
       b = false;
@@ -2156,10 +1175,10 @@ void         changebuildingvalues( Building& b )
    displaymap();
 }
 
-// õS Class-Change
+// ï¿½ Class-Change
 
 
-// õS Polygon-Management
+// ï¿½ Polygon-Management
 /*
 class tpolygon_managementbox: public tstringselect {
               public:
@@ -2294,7 +1313,7 @@ int        getpolygon(ppolygon *poly) //return Fehlerstatus
    else return 0;
 }
 */
-// õS Unit-Values
+// ï¿½ Unit-Values
 
 
 class   StringSelector : public tstringselect {
@@ -2364,13 +1383,13 @@ int selectString( int lc, char* title, const char** text, int itemNum )
 
 
 class EditAiParam : public tdialogbox {
-           pvehicle unit;
+           Vehicle* unit;
            TemporaryContainerStorage tus;
            int action;
            AiParameter& aiv;
            int z;
         public:
-           EditAiParam ( pvehicle veh, int player ) : unit ( veh ), tus ( veh ), aiv ( *veh->aiparam[player] ) {};
+           EditAiParam ( Vehicle* veh, int player ) : unit ( veh ), tus ( veh ), aiv ( *veh->aiparam[player] ) {};
            void init ( );
            void run ( );
            void buttonpressed ( int id );
@@ -2450,12 +1469,13 @@ void         EditAiParam::buttonpressed(int         id)
                 aiv.setJob ( j );
              }
              break;
+             /*
    case 22 : getxy ( &aiv.dest.x, &aiv.dest.y );
              aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, -2 );
              z = -2;
              redraw();
              break;
-
+             */
    case 30 : action = 1;
              aiv.dest.setnum ( aiv.dest.x, aiv.dest.y, z );
              break;
@@ -2472,13 +1492,14 @@ void         EditAiParam::buttonpressed(int         id)
                 TemporaryContainerStorage tus;
                 int        dirx,diry;
                 int        action;
-                pvehicle    unit;
+                Vehicle*    unit;
                 int         w2, heightxs;
                 char        namebuffer[1000];
                 char        reactionfire;
+                int owner;
               public:
                // char     checkvalue( char id, char* p );
-                tunit ( pvehicle v ) : tus ( v ), unit ( v ) {};
+                tunit ( Vehicle* v ) : tus ( v ), unit ( v ) {};
                 void        init( void );
                 void        run( void );
                 void        buttonpressed( int id );
@@ -2506,6 +1527,8 @@ void         tunit::init(  )
    diry= y1 + 100;
    action = 0;
 
+   owner = unit->getOwner();
+
 
    strcpy ( namebuffer, unit->name.c_str() );
 
@@ -2519,19 +1542,22 @@ void         tunit::init(  )
    addeingabe(2, &unit->damage, 0, 100 );
 
    addbutton("~F~uel of Unit",50,200,250,220,2,1,3,true);
-   addeingabe( 3, &unit->tank.fuel, 0, unit->typ->tank.fuel );
+   addeingabe( 3, &unit->tank.fuel, 0, unit->getStorageCapacity().fuel );
 
    addbutton("~M~aterial",50,240,250,260,2,1,12,true);
-   addeingabe(12,&unit->tank.material, 0, unit->typ->tank.material );
+   addeingabe(12,&unit->tank.material, 0, unit->getStorageCapacity().material );
 
    addbutton("AI Parameter", 50, 280, 250, 300, 0, 1, 115, true );
 
+   addbutton("Unit owner",50,320,250,340,2,1,116,true);
+   addeingabe(116, &owner, 0, 7 );
+
    int unitheights = 0;
    heightxs = 520;
-   pfield fld = getfield ( unit->xpos, unit->ypos);
+   tfield* fld = getfield ( unit->xpos, unit->ypos);
    if ( fld && fld->vehicle == unit ) {
       npush ( unit->height );
-      for (i=0;i<=7 ;i++) {
+      for ( int i=0;i<=7 ;i++) {
           unit->height = 1 << i;
           if (( ( unit->height & unit->typ->height ) > 0) && ( terrainaccessible( fld, unit ) == 2)) {
              addbutton("",20+( i * w2),heightxs,w2 * (i +1 ),heightxs+24,0,1,i+4,true);
@@ -2542,7 +1568,10 @@ void         tunit::init(  )
       npop ( unit->height );
    }
 
-   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->functions & cfno_reactionfire) == 0 );
+   if ( unit->typ->hasFunction( ContainerBaseType::NoReactionfire  ))
+      unit->reactionfire.disable();
+
+   addbutton("~R~eactionfire",dirx-50,250,dirx+50,260,3,1,22,(unit->typ->hasFunction( ContainerBaseType::NoReactionfire  )) == 0 );
    reactionfire = unit->reactionfire.getStatus();
    addeingabe(22, &reactionfire, 0, lightgray);
 
@@ -2553,7 +1582,7 @@ void         tunit::init(  )
 
    const int maxeditable = 10;
 
-   for(i =0;i < unit->typ->weapons.count;i++) {
+   for( int i =0;i < unit->typ->weapons.count;i++) {
      if (i < maxeditable) {
         weaponammo = new(char[25]);
         strcpy(weaponammo,"Wpn Ammo ");
@@ -2570,13 +1599,35 @@ void         tunit::init(  )
 
    mousevisible(false);
 
-   if ( unitheights )
-       for (i=0;i<=7 ;i++) {
+
+   static bool heightIconsLoaded = false;
+   static void* iconsheight[8];
+   static void* iconspfeil[8];
+
+   
+   if ( !heightIconsLoaded ) {
+      {
+         tnfilestream stream ("height.raw",tnstream::reading);
+         int w;
+         for ( int i = 0; i <= 7; i++)
+            stream.readrlepict( &iconsheight[i],false,&w);
+      }
+      {
+         tnfilestream stream ("pfeil-a0.raw", tnstream::reading);
+         for ( int i=0;i<8 ;i++ )
+             stream.readrlepict( &iconspfeil[i], false, &w);
+      }
+   }
+         
+   
+   
+   if ( unitheights ) 
+       for ( int i=0;i<=7 ;i++) {
            if ( unit->height == (1 << i) )
               bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
 
            if ( unitheights & ( 1 << i ))
-              putimage(x1 + 28+( i * w2), y1 + heightxs + 2 ,icons.height[i]);
+              putimage(x1 + 28+( i * w2), y1 + heightxs + 2 ,iconsheight[i]);
        }
 
    // 8 im Kreis bis 7
@@ -2589,14 +1640,14 @@ void         tunit::init(  )
 
       addbutton("", x-10, y - 10, x + 10, y + 10,0,1,14+i,true);
       enablebutton ( 14 + i );
-      void* pic = rotatepict ( icons.pfeil2[0], directionangle[i] );
+      void* pic = rotatepict ( iconspfeil[0], directionangle[i] );
       int h,w;
       getpicsize ( pic, w, h );
       putspriteimage ( x1 + x - w/2, y1 + y - h/2, pic );
-      delete pic;
+      asc_free( pic );
   } /*Buttons 14 - 14 +sidenum*/
 
-   putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
+   // unit->paint( getActiveSurface(), SPoint( dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));
    mousevisible(true);
 }
 
@@ -2625,14 +1676,13 @@ void         tunit::run(void)
 void         tunit::buttonpressed(int         id)
 {
    int ht;
-   int temp, storage;
 
    switch (id) {
-   case 3:  temp = unit->tank.material;
+   case 3: /* temp = unit->tank.material;
             unit->tank.material = 0;
             storage = unit->putResource(maxint, Resources::Material, 1 );
             addeingabe(12,&unit->tank.material, 0, storage );
-            unit->tank.material = min ( storage, temp );
+            unit->tank.material = min ( storage, temp );*/
       break;
 
    case 4 :
@@ -2646,7 +1696,7 @@ void         tunit::buttonpressed(int         id)
    {
      int h = 1 << ( id - 4 );
      bar(x1 +20,y1 + heightxs-5,x1 + 480,y1 + heightxs-3,lightgray);
-     for (i=0;i<=7 ;i++) {
+     for (int i=0;i<=7 ;i++) {
         ht = 1 << i;
         if ( ht == h ) bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
      } /* endfor */
@@ -2654,11 +1704,11 @@ void         tunit::buttonpressed(int         id)
      unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ] );
    }
    break;
-   case 12: temp = unit->tank.fuel;
+   case 12: /* temp = unit->tank.fuel;
             unit->tank.fuel = 0;
             storage = unit->putResource(maxint, Resources::Fuel, 1 );
             addeingabe( 3, &unit->tank.fuel, 0, storage );
-            unit->tank.fuel = min ( storage, temp );
+            unit->tank.fuel = min ( storage, temp );*/
       break;
 
    case 14 :
@@ -2671,7 +1721,7 @@ void         tunit::buttonpressed(int         id)
    case 21 :  {
                   unit->direction = id-14;
                   bar(dirx + x1 -fieldsizex/2, diry + y1 - fieldsizey/2 ,dirx + x1 + fieldsizex/2 ,diry + y1 +fieldsizey/2,lightgray);
-                  putrotspriteimage(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2, unit->typ->picture[ unit->direction ],unit->color);
+                  // unit->paint( getActiveSurface(), SPoint(dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));
                }
          break;
    case 30 : {
@@ -2679,11 +1729,12 @@ void         tunit::buttonpressed(int         id)
          action = 1;
          if ( reactionfire )  {
             unit->reactionfire.enable();
-            unit->reactionfire.enemiesAttackable = 0xff;
          } else
             unit->reactionfire.disable();
 
          unit->name = namebuffer;
+         if ( owner != unit->getOwner() )
+            unit->convert( owner );
         }
         break;
     case 31 : action = 1;
@@ -2703,7 +1754,7 @@ void         tunit::buttonpressed(int         id)
 }
 
 
-void         changeunitvalues(pvehicle ae)
+void         changeunitvalues(Vehicle* ae)
 {
    if ( !ae )
       return;
@@ -2715,9 +1766,10 @@ void         changeunitvalues(pvehicle ae)
 }
 
 
-//* õS Resource
+//* ï¿½ Resource
 
      class tres: public tdialogbox {
+        tfield* pf2;
             public :
                 int action;
                 int fuel,material;
@@ -2792,9 +1844,10 @@ void         changeresource(void)
    resource.done();
 }
 
-//* õS MineStrength
+//* ï¿½ MineStrength
 
      class tminestrength: public tdialogbox {
+               tfield* pf2;
             public :
                 int action;
                 int strength;
@@ -2858,8 +1911,7 @@ void         tminestrength::buttonpressed(int         id)
 
 void         changeminestrength(void)
 {
-   pf2 =  getactfield();
-   if ( pf2->mines.empty() )
+   if ( getactfield()->mines.empty() )
       return;
 
    tminestrength  ms;
@@ -2869,22 +1921,8 @@ void         changeminestrength(void)
 }
 
 
-//* õS Pulldown
-
-void         pulldown( void )
-
-{
-   pd.checkpulldown();
-   if ( pd.action2execute >= 0 ) {
-      execaction ( pd.action2execute );
-
-      if (mouseparams.y <= pd.pdb.pdbreite )
-         pd.baron();
-      pd.action2execute = -1;
-   }
-}
-
-//* õS Laderaum Unit-Cargo
+#if 0
+//* ï¿½ Laderaum Unit-Cargo
 
 class tladeraum : public tdialogbox {
                protected:
@@ -2970,8 +2008,6 @@ void tladeraum :: displaysingleitem ( int pos )
       putspriteimage( x, y, icons.X );
 
    displaysingleitem ( pos, x, y );
-   if ( pos == cursorpos )
-      putspriteimage ( x, y, mycursor.picture );
 }
 
 int tladeraum :: mouseoverfield ( int pos )
@@ -3012,24 +2048,16 @@ void         tladeraum::run(void)
       checkforadditionalkeys ( taste );
       int oldpos = cursorpos;
       switch (taste) {
-       #ifdef NEWKEYB
          case ct_up:
-       #endif
          case ct_8k:   cursorpos -= itemsperline;
             break;
-       #ifdef NEWKEYB
          case ct_left:
-       #endif
          case ct_4k:   cursorpos--;
             break;
-       #ifdef NEWKEYB
          case ct_right:
-       #endif
          case ct_6k:   cursorpos++;
             break;
-       #ifdef NEWKEYB
          case ct_down:
-       #endif
          case ct_2k:   cursorpos += itemsperline;
             break;
       }
@@ -3081,11 +2109,11 @@ void         tladeraum::done(void)
    npop ( farbwahl );
    ch = 0;
 }
-
-
+#endif
+/*
 class UnitProductionLimitation : public tladeraum {
-              tmap::UnitProduction::IDsAllowed ids;
-              tmap::UnitProduction& up;
+              GameMap::UnitProduction::IDsAllowed ids;
+              GameMap::UnitProduction& up;
          protected:
               virtual const char* getinfotext ( int pos );
               virtual void additem ( void );
@@ -3093,7 +2121,7 @@ class UnitProductionLimitation : public tladeraum {
               void displaysingleitem ( int pos, int x, int y );
               virtual void finish ( int cancel );
           public:
-              UnitProductionLimitation ( tmap::UnitProduction& _up ) : up ( _up ) { ids = up.idsAllowed;  };
+              UnitProductionLimitation ( GameMap::UnitProduction& _up ) : up ( _up ) { ids = up.idsAllowed;  };
               void init (  );
 };
 
@@ -3101,7 +2129,7 @@ class UnitProductionLimitation : public tladeraum {
 const char* UnitProductionLimitation:: getinfotext ( int pos )
 {
    if ( ids.size() > pos ) {
-      pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
+      Vehicletype* vt = actmap->getvehicletype_byid( ids[pos] );
       if ( vt )
          return vt->name.c_str();
    }
@@ -3117,17 +2145,17 @@ void UnitProductionLimitation :: init (  )
 void UnitProductionLimitation :: displaysingleitem ( int pos, int x, int y )
 {
    if ( ids.size() > pos ) {
-      pvehicletype vt = actmap->getvehicletype_byid( ids[pos] );
+      Vehicletype* vt = actmap->getvehicletype_byid( ids[pos] );
       if ( vt )
-         putrotspriteimage ( x, y, vt->picture[0], farbwahl * 8 );
+         vt->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
    }
 }
 
 void UnitProductionLimitation :: additem  ( void )
 {
-   pvehicletype vt = selvehicletype ( ct_invvalue );
+   Vehicletype* vt = selvehicletype ( ct_invvalue );
    if ( vt ) {
-      for ( tmap::UnitProduction::IDsAllowed::iterator i = ids.begin(); i != ids.end(); i++ )
+      for ( GameMap::UnitProduction::IDsAllowed::iterator i = ids.begin(); i != ids.end(); i++ )
          if ( *i == vt->id )
             return;
 
@@ -3162,17 +2190,17 @@ void unitProductionLimitation(  )
       warned = true;
    }
 }
+*/
 
 
-
-
+#if 0
 
 
 
 class tvehiclecargo : public tladeraum {
                     TemporaryContainerStorage tus;
                protected:
-                    pvehicle transport;
+                    Vehicle* transport;
                     virtual const char* getinfotext ( int pos );
                     virtual void additem ( void );
                     virtual void removeitem ( int pos );
@@ -3181,7 +2209,7 @@ class tvehiclecargo : public tladeraum {
                     virtual void finish ( int cancel );
 
                 public:
-                    tvehiclecargo ( pvehicle unit ) : tus ( unit, true ), transport ( unit ) {};
+                    tvehiclecargo ( Vehicle* unit ) : tus ( unit, true ), transport ( unit ) {};
                     void init (  );
 
 
@@ -3190,15 +2218,20 @@ class tvehiclecargo : public tladeraum {
 
 const char* tvehiclecargo :: getinfotext ( int pos )
 {
-   if ( transport->loading[ pos ] )
-      if ( !transport->loading[ pos ]->name.empty() )
-         return transport->loading[ pos ]->name.c_str();
+   if ( transport->cargo.size() <= pos )
+      return NULL;
+      
+   Vehicle* veh = transport->cargo[pos];
+   if ( !veh )
+      return NULL;
+      
+   if ( !veh->name.empty() )
+      return veh->name.c_str();
+   else
+      if ( !veh->typ->name.empty() )
+         return veh->typ->name.c_str();
       else
-         if ( !transport->loading[ pos ]->typ->name.empty() )
-            return transport->loading[ pos ]->typ->name.c_str();
-         else
-            return transport->loading[ pos ]->typ->description.c_str();
-   return NULL;
+         return veh->typ->description.c_str();
 }
 
 
@@ -3209,48 +2242,45 @@ void tvehiclecargo :: init (  )
 
 void tvehiclecargo :: displaysingleitem ( int pos, int x, int y )
 {
-   if ( transport->loading[ pos ] )
-      putrotspriteimage ( x, y, transport->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+   if ( transport->cargo.size() > pos && transport->cargo[pos] )
+      transport->cargo[ pos ]->typ->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
 }
 
 void tvehiclecargo :: additem  ( void )
 {
-   selcargo ( transport );
+ //  selcargo ( transport );
 }
 
 void tvehiclecargo :: removeitem ( int pos )
 {
-   if ( transport->loading[ pos ] ) {
-      delete transport->loading[ pos ] ;
-      transport->loading[ pos ] = NULL;
+   if ( transport->cargo.size() > pos && transport->cargo[pos] ) {
+      delete transport->cargo[ pos ] ;
+      transport->cargo[ pos ] = NULL;
    }
 }
 
 void tvehiclecargo :: checkforadditionalkeys ( tkey ch )
 {
-   if ( transport->loading[ cursorpos ] ) {
+   if ( transport->cargo.size() > cursorpos && transport->cargo[cursorpos] ) {
+   
        if ( ch == ct_p )
-          changeunitvalues( transport->loading[ cursorpos ] );
+          changeunitvalues( transport->cargo[ cursorpos ] );
        if ( ch == ct_c )
-          unit_cargo( transport->loading[ cursorpos ] );
+          cargoEditor( transport->cargo[ cursorpos ] );
 
        if ( ch == ct_c + ct_stp )
-          if ( transport->loading[ cursorpos ] ) {
+          if ( transport->cargo[ cursorpos ] ) {
              ClipBoard::Instance().clear();
-             ClipBoard::Instance().addUnit( transport->loading[ cursorpos ] );
+             ClipBoard::Instance().addUnit( transport->cargo[ cursorpos ] );
           }
    }
    if ( ch == ct_v + ct_stp ) {
       Vehicle* veh = ClipBoard::Instance().pasteUnit();
-      if ( transport->vehicleFit( veh ))
-         for ( int i = 0; i < 32; i++ )
-            if ( !transport->loading[i] ) {
-               veh->convert( log2(transport->color) );
-               transport->loading[i] = veh;
-               redraw();
-               return;
-            }
-      delete veh;
+      if ( transport->vehicleFit( veh )) {
+         transport->addToCargo( veh );
+         redraw();
+      } else   
+         delete veh;
    }
 }
 
@@ -3262,17 +2292,9 @@ void tvehiclecargo :: finish ( int cancel )
 }
 
 
-void         unit_cargo( pvehicle vh )
-{
-   if ( vh && vh->typ->maxLoadableUnits ) {
-      tvehiclecargo laderaum ( vh );
-      laderaum.init();
-      laderaum.run();
-      laderaum.done();
-   }
-}
+#endif
 
-
+#if 0
 
 class SelectFromContainer : public tladeraum {
                protected:
@@ -3315,7 +2337,7 @@ void SelectFromContainer :: init (  )
 void SelectFromContainer :: displaysingleitem ( int pos, int x, int y )
 {
    if ( transport->loading[ pos ] )
-      putrotspriteimage ( x, y, transport->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+      transport->loading[ pos ]->typ->paint( getActiveSurface(), SPoint( x, y), farbwahl );
 }
 
 void SelectFromContainer :: additem  ( void )
@@ -3346,26 +2368,33 @@ void SelectFromContainer :: finish ( int cancel )
 {
 }
 
+#endif
+
 Vehicle* selectUnitFromContainer( ContainerBase* container )
 {
+#if 0
    SelectFromContainer sfc ( container );
    sfc.init();
    sfc.run();
    sfc.done();
    return sfc.unit;
+   #endif
+   return NULL;
 }
 
 
 
-//* õS Laderaum2 Building-Cargo
+//* ï¿½ Laderaum2 Building-Cargo
+
+#if 0
 
 class tbuildingcargoprod : public tladeraum {
                     TemporaryContainerStorage tus;
                protected:
-                    pbuilding building;
+                    Building* building;
                     void finish ( int cancel );
                 public:
-                    tbuildingcargoprod ( pbuilding bld ) : tus ( bld, true ), building ( bld ) {};
+                    tbuildingcargoprod ( Building* bld ) : tus ( bld, true ), building ( bld ) {};
        };
 
 
@@ -3374,7 +2403,8 @@ void tbuildingcargoprod :: finish ( int cancel )
    if ( cancel )
       tus.restore();
 }
-
+#endif
+#if 0
 class tbuildingcargo : public tbuildingcargoprod {
                protected:
                     virtual const char* getinfotext ( int pos );
@@ -3383,7 +2413,7 @@ class tbuildingcargo : public tbuildingcargoprod {
                     virtual void checkforadditionalkeys ( tkey ch );
                     void displaysingleitem ( int pos, int x, int y );
                public:
-                    tbuildingcargo ( pbuilding bld ) : tbuildingcargoprod ( bld ) {};
+                    tbuildingcargo ( Building* bld ) : tbuildingcargoprod ( bld ) {};
    };
 
 
@@ -3391,7 +2421,7 @@ class tbuildingcargo : public tbuildingcargoprod {
 void tbuildingcargo :: displaysingleitem ( int pos, int x, int y )
 {
    if ( building->loading[ pos ] )
-      putrotspriteimage ( x, y, building->loading[ pos ]->typ->picture[0], farbwahl * 8 );
+      building->loading[ pos ]->typ->paint( getActiveSurface(), SPoint( x, y), farbwahl );
 }
 
 void tbuildingcargo :: additem  ( void )
@@ -3449,7 +2479,7 @@ const char* tbuildingcargo :: getinfotext ( int pos )
 }
 
 
-void         building_cargo( pbuilding bld )
+void         building_cargo( Building* bld )
 {
    if ( bld  ) {
       tbuildingcargo laderaum ( bld );
@@ -3459,7 +2489,9 @@ void         building_cargo( pbuilding bld )
    }
 }
 
-//* õS Production Building-Production
+
+//* ï¿½ Production Building-Production
+
 
 class tbuildingproduction : public tbuildingcargoprod {
                protected:
@@ -3468,13 +2500,13 @@ class tbuildingproduction : public tbuildingcargoprod {
                     virtual void removeitem ( int pos );
                     void displaysingleitem ( int pos, int x, int y );
                public:
-                    tbuildingproduction ( pbuilding bld ) : tbuildingcargoprod ( bld ) {};
+                    tbuildingproduction ( Building* bld ) : tbuildingcargoprod ( bld ) {};
    };
 
 void tbuildingproduction :: displaysingleitem ( int pos, int x, int y )
 {
-   if ( building->production[ pos ] )
-      putrotspriteimage ( x, y, building->production[ pos ]->picture[0], farbwahl * 8 );
+   if ( building->unitProduction[ pos ] )
+      building->unitProduction[ pos ]->paint( getActiveSurface(), SPoint ( x, y), farbwahl );
 }
 
 void tbuildingproduction :: additem  ( void )
@@ -3484,37 +2516,31 @@ void tbuildingproduction :: additem  ( void )
 
 void tbuildingproduction :: removeitem ( int pos )
 {
-   building->production[ pos ] = NULL;
+   building->unitProduction[ pos ] = NULL;
 }
 
 const char* tbuildingproduction :: getinfotext ( int pos )
 {
-   if ( building->production[ pos ] )
-      if ( !building->production[ pos ]->name.empty() )
-         return building->production[ pos ]->name.c_str();
+   if ( building->unitProduction[ pos ] )
+      if ( !building->unitProduction[ pos ]->name.empty() )
+         return building->unitProduction[ pos ]->name.c_str();
       else
-         return building->production[ pos ]->description.c_str();
+         return building->unitProduction[ pos ]->description.c_str();
    return NULL;
 }
 
-
-void         building_production( pbuilding bld )
-{
-   if ( bld  && (bld->typ->special & cgvehicleproductionb ) ) {
-      tbuildingproduction laderaum ( bld );
-      laderaum.init( "production" );
-      laderaum.run();
-      laderaum.done();
-   }
-}
+bool isNull(const Vehicletype* v ) { return !v; };
+#endif
 
 
 void movebuilding ( void )
 {
+   warning("sorry, not implemented yet in ASC2!");
+#if 0
    mapsaved = false;
-   pfield fld = getactfield();
+   tfield* fld = getactfield();
    if ( fld->vehicle ) {
-      pvehicle v = fld->vehicle;
+      Vehicle* v = fld->vehicle;
       fld->vehicle = NULL;
 
       int x = v->xpos;
@@ -3536,7 +2562,7 @@ void movebuilding ( void )
 
    }
    if ( fld->building ) {
-      pbuilding bld = fld->building;
+      Building* bld = fld->building;
 
       bld->unchainbuildingfromfield ();
 
@@ -3559,10 +2585,11 @@ void movebuilding ( void )
       }
       displaymap();
    }
+#endif
 }
 
 
-
+#if 0
 class SelectUnitSet : public tdialogbox {
                int* active;
                int action;
@@ -3637,6 +2664,7 @@ void         SelectUnitSet::buttonpressed(int         id)
           break;
   }
 }
+#endif
 
 void selectunitsetfilter ( void )
 {
@@ -3646,6 +2674,7 @@ void selectunitsetfilter ( void )
       buttons.push_back ( "~H~ide set" );
       buttons.push_back ( "~S~how set" );
       buttons.push_back ( "~S~how set only");
+      buttons.push_back ( "~S~how all sets");
       buttons.push_back ( "~O~k" );
 
       pair<int,int> playerRes;
@@ -3676,12 +2705,14 @@ void selectunitsetfilter ( void )
                else
                   ItemFiltrationSystem::itemFilters[i]->setActive(true);
 
-      } while ( playerRes.first != 3 );
+         if ( playerRes.first == 3 )
+            for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
+               ItemFiltrationSystem::itemFilters[i]->setActive(false);
 
-      resetvehicleselector();
-      resetbuildingselector();
-      resetterrainselector();
-      resetobjectselector();
+
+      } while ( playerRes.first != 4 );
+
+      filtersChangedSignal();
    } else
       displaymessage ( " no Filters defined !", 1 );
 }
@@ -3709,8 +2740,8 @@ class UnitTypeTransformation {
                 int unitstransformed;
                 int unitsnottransformed;
 
-                pvehicletype transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
-                void transformvehicle ( pvehicle veh, int unitsetnum, int translationnum );
+                Vehicletype* transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
+                void transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum );
                 dynamic_array<int> vehicleTypesNotTransformed;
                 int vehicleTypesNotTransformedNum ;
              public:
@@ -3794,11 +2825,11 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
       redline = -1;
 } 
 
-pvehicletype UnitTypeTransformation :: transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum )
+Vehicletype* UnitTypeTransformation :: transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {
-         pvehicletype tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
+         Vehicletype* tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
          if ( tp ) 
             return tp;
       }
@@ -3814,13 +2845,13 @@ pvehicletype UnitTypeTransformation :: transformvehicletype ( const Vehicletype*
    return NULL;
 }
 
-void  UnitTypeTransformation ::transformvehicle ( pvehicle veh, int unitsetnum, int translationnum )
+void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum )
 {
-   for ( int i = 0; i < 32; i++ )
-      if ( veh->loading[i] )
-         transformvehicle ( veh->loading[i], unitsetnum, translationnum );
+   for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+      if ( *i )
+         transformvehicle ( *i, unitsetnum, translationnum );
 
-   pvehicletype nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
+   Vehicletype* nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
    if ( !nvt ) {
       unitsnottransformed++;
       return;
@@ -3860,31 +2891,32 @@ void UnitTypeTransformation :: run ( void )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          if ( fld->vehicle )
             transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
-         if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() )
-            for ( int i = 0; i < 32; i++ ) {
-               if ( fld->building->loading[i] ) 
-                  transformvehicle ( fld->building->loading[i], unitsetnum, translationsetnum );
-               if ( fld->building->production[i] ) {
-                  pvehicletype vt = transformvehicletype ( fld->building->production[i], unitsetnum, translationsetnum );
-                  if ( vt ) {
-                     fld->building->production[i] = vt;
-                     unitstransformed++;
-                  } else
-                     unitsnottransformed++;
+         if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() ) {
+            for ( ContainerBase::Cargo::const_iterator i = fld->building->getCargo().begin(); i != fld->building->getCargo().end(); ++i )
+               if ( *i )
+                  transformvehicle ( *i, unitsetnum, translationsetnum );
+                  
+            ContainerBase::Production prod = fld->building->getProduction();
+            for ( ContainerBase::Production::iterator j = prod.begin(); j != prod.end(); ++j )
+               if ( *j && transformvehicletype ( *j, unitsetnum, translationsetnum ) ) {
+                  *j = transformvehicletype ( *j, unitsetnum, translationsetnum );
+                  ++unitstransformed;
                }
-            }
+               
+            fld->building->setProductionLines( prod );
+         }   
       }
 
     if ( vehicleTypesNotTransformedNum ) {
-       string s = "The following vehicles could not be transformed: ";
+       ASCString s = "The following vehicles could not be transformed: ";
        for ( int i = 0; i < vehicleTypesNotTransformedNum; i++ ) {
           s += "\n ID ";
           s += strrr ( vehicleTypesNotTransformed[i] );
           s += " : ";
-          pvehicletype vt = vehicleTypeRepository.getObject_byID ( vehicleTypesNotTransformed[i] );
+          Vehicletype* vt = vehicleTypeRepository.getObject_byID ( vehicleTypesNotTransformed[i] );
           if ( !vt-> name.empty() )
              s += vt->name;
           else
@@ -3914,18 +2946,47 @@ void unitsettransformation( void )
 }
 
 
+void MapSwitcher::deleteMaps()
+{
+   delete actmap;
+   actmap = NULL;
+   toggle();
+   delete actmap;
+   actmap = NULL;
+}
+
 void MapSwitcher :: toggle ( )
 {
    maps[active].map = actmap;
    maps[active].changed = !mapsaved;
-   maps[active].cursorx = getxpos();
-   maps[active].cursory = getypos();
+   
+   if ( getMainScreenWidget() ) {
+      MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+      if ( md )
+         maps[active].windowpos = md->upperLeftCorner();
+   }
+   
    active = !active;
+
+   
 
    actmap = maps[active].map;
    mapsaved = !maps[active].changed;
-   if  ( actmap )
-      cursor.gotoxy( maps[active].cursorx, maps[active].cursory );
+
+
+   if ( getMainScreenWidget() ) {
+      MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+      if ( md )
+         md->cursor.goTo( actmap->getCursor(), maps[active].windowpos );
+   }
+
+   displaymap();
+   viewChanged();
+
+   int x,y;
+   SDL_Event ev;
+   while ( PG_Application::GetEventSupplier()->GetMouseState(x,y))
+      PG_Application::GetEventSupplier()->WaitEvent (&ev);
 }
 
 string MapSwitcher :: getName ()
@@ -3956,77 +3017,18 @@ MapSwitcher::Action MapSwitcher :: getDefaultAction ( )
 MapSwitcher mapSwitcher;
 
 
-void showStatusBar(void)
+Vehicletype* transform( int id, const vector<int>& translation )
 {
-   npush ( activefontsettings );
-
-   char       s[200];
-   s[0] = 0;
-   if ( actmap )
-      sprintf(s, "X:%d/%d Y:%d/%d", getxpos(), int(actmap->xsize), getypos(), int(actmap->ysize));
-
-   int y = agmp->resolutiony - 45;
-
-   activefontsettings.color = black;
-   activefontsettings.length = 150;
-   activefontsettings.background = lightgray;
-   activefontsettings.height = 20;
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.justify = centertext;
-
-   int x = 10;
-   showtext2(s,x,y+20);
-   x+=activefontsettings.length+2;
-
-   activefontsettings.length = 200;
-   showtext2(mapSwitcher.getName().c_str(),x,y+20);
-   x+=activefontsettings.length+2;
-
-/*
-   if ( actmap ) {
-      strcpy(s,"Title : ");
-      showtext2(strcat(s,actmap->title),10,5);
-      strcpy(s,"X-Size : ");
-      showtext2(strcat(s,strrr()),10,y);
-      strcpy(s,"Y-Size : ");
-      showtext2(strcat(s,strrr(actmap->ysize)),100,y);
-   }
-*/
-
-   string ss = "PolyFill: ";
-   if (polyfieldmode)
-      ss += "on";
-   else
-      ss += "off";
-
-   activefontsettings.length = 100;
-   showtext2(ss.c_str(),x,y+20);
-   x+=activefontsettings.length+2;
-
-
-   activefontsettings.length = 120;
-   ss = "RectFill: ";
-   if (tfill) {
-      ss += "on (";
-      ss += strrr ( fillx1 );
-      ss += "/";
-      ss += strrr ( filly1 );
-      ss += ")";
-   } else
-      ss += "off";
-
-   showtext2(ss.c_str(),x,y+20);
-   x+=activefontsettings.length+2;
-
-   npop ( activefontsettings );
+   for ( int i = 0; i < translation.size()/2; i++ )
+      if ( id == translation[i*2] ) 
+         return vehicleTypeRepository.getObject_byID ( translation[i*2+1] );
+   return NULL;
 }
-
 
 void transformMap ( )
 {
 
-   ASCString filename;
-   fileselectsvga ( "*.ascmapxlat", filename, true );
+   ASCString filename = selectFile( "*.ascmapxlat", true );
 
    if ( filename.empty() )
       return;
@@ -4036,6 +3038,7 @@ void transformMap ( )
    vector<int> objecttranslation;
    vector<int> terrainobjtranslation;
    vector<int> buildingtranslation;
+   vector<int> vehicletranslation;
    try {
       tnfilestream s ( filename, tnstream::reading );
 
@@ -4048,8 +3051,8 @@ void transformMap ( )
       pc.addIntegerArray ( "TerrainObjTranslation", terrainobjtranslation );
       pc.addIntegerArray ( "ObjectTranslation", objecttranslation );
       pc.addIntegerArray ( "BuildingTranslation", buildingtranslation );
-
-      pc.run();
+      if ( pc.find( "VehicleTranslation" ))
+         pc.addIntegerArray ( "VehicleTranslation", vehicletranslation );
 
       delete tpg;
    }
@@ -4082,10 +3085,15 @@ void transformMap ( )
       return;
    }
 
+   if ( vehicletranslation.size() % 2 ) {
+      displaymessage ( "Map Translation : buildingtranslation - Invalid number of entries ", 1);
+      return;
+   }
+
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-          pfield fld = actmap->getField ( x, y );
+          tfield* fld = actmap->getField ( x, y );
           for ( int i = 0; i < terraintranslation.size()/2; i++ )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
@@ -4116,6 +3124,9 @@ void transformMap ( )
                       fld->setparams();
                       j = -1; // restarting the outer loop
                       break;
+                   } else {
+                      fld->removeobject( fld->objects[j].typ );
+                      j = -1;
                    }
                 }
           for ( int b = 0; b < buildingtranslation.size()/2; ++b )
@@ -4123,7 +3134,7 @@ void transformMap ( )
                BuildingType* newtype = buildingTypeRepository.getObject_byID ( buildingtranslation[b*2+1] );
                if ( newtype ) {
                   Building* bld  = fld->building;
-                  BuildingType* orgtype = fld->building->typ;
+                  const BuildingType* orgtype = fld->building->typ;
                   MapCoordinate orgpos = bld->getEntry();
                   MapCoordinate pos = orgpos;
                   bld->unchainbuildingfromfield();
@@ -4131,7 +3142,7 @@ void transformMap ( )
                   int iteration = 0;
                   enum { trying, success, failed } state = trying;
                   do {
-                     if ( !bld->chainbuildingtofield( pos )) {
+                     if ( bld->chainbuildingtofield( pos )) {
                         pos = getNeighbouringFieldCoordinate( orgpos, iteration );
                      } else
                         state = success;
@@ -4149,13 +3160,56 @@ void transformMap ( )
              }
 
    }
+
+   for( int p = 0; p < actmap->getPlayerCount(); ++p ) {
+      for ( Player::VehicleList::iterator i = actmap->getPlayer(p).vehicleList.begin(); i != actmap->getPlayer(p).vehicleList.end(); ++i) {
+         (*i)->transform( transform( (*i)->typ->id, vehicletranslation));
+         
+         ContainerBase::Production prod = (*i)->getProduction();
+         for ( ContainerBase::Production::iterator j = prod.begin(); j != prod.end(); ++j )
+            if ( *j && transform((*j)->id, vehicletranslation) ) 
+               *j = transform((*j)->id, vehicletranslation);
+            
+         (*i)->setProductionLines( prod );
+      }
+      for ( Player::BuildingList::iterator i = actmap->getPlayer(p).buildingList.begin(); i != actmap->getPlayer(p).buildingList.end(); ++i) {
+         ContainerBase::Production prod = (*i)->getProduction();
+         for ( ContainerBase::Production::iterator j = prod.begin(); j != prod.end(); ++j )
+            if ( *j && transform((*j)->id, vehicletranslation) ) 
+               *j = transform((*j)->id, vehicletranslation);
+            
+         (*i)->setProductionLines( prod );
+      }
+   }
+
+   // for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i )
+
+      /*
+   tn_file_buf_stream s ( "out.txt", tnstream::writing );
+   for ( int j = 0; j < vehicletranslation.size()/2; j++ ) {
+      Vehicletype* vt1 = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2] );
+      Vehicletype* vt2 = vehicleTypeRepository.getObject_byID ( vehicletranslation[j*2+1] );
+      ASCString st = ASCString::toString( vehicletranslation[j*2] ) + " " + 
+                     ASCString::toString( vehicletranslation[j*2+1] );
+      
+
+      if ( vt1 ) {
+         st += " ; " + vt1->name;
+         if ( vt2 ) 
+            st += " -> " + vt2->name;
+      }
+
+      s.writeString( st + "\n" );
+   }
+      */
+
    calculateallobjects();
    displaymap();
 }
 
 
 class EditArchivalInformation : public tdialogbox {
-         tmap* gamemap;
+         GameMap* gamemap;
          char maptitle[10000];
          char author[10000];
          ASCString description;
@@ -4163,14 +3217,14 @@ class EditArchivalInformation : public tdialogbox {
          char requirements[10000];
          int action;
        public:
-         EditArchivalInformation ( tmap* map );
+         EditArchivalInformation ( GameMap* map );
          void init();
          void run();
          void buttonpressed ( int id );
 };
 
 
-EditArchivalInformation :: EditArchivalInformation ( tmap* map ) : gamemap ( map )
+EditArchivalInformation :: EditArchivalInformation ( GameMap* map ) : gamemap ( map )
 {
   strcpy ( maptitle, map->maptitle.c_str() );
   strcpy ( author, map->archivalInformation.author.c_str() );
@@ -4255,7 +3309,6 @@ void resourceComparison ( )
       Resources plus;
       Resources have;
       for ( Player::BuildingList::iterator b = actmap->player[i].buildingList.begin(); b != actmap->player[i].buildingList.end(); ++b ) {
-         Building& bld = **b;
          if ( actmap->_resourcemode == 0 )
             plus += (*b)->plus;
          else
@@ -4293,8 +3346,7 @@ void resourceComparison ( )
 
 void readClipboard()
 {
-   ASCString filename;
-   fileselectsvga(clipboardFileExtension, filename, true);
+   ASCString filename = selectFile(clipboardFileExtension, true);
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::reading );
       ClipBoard::Instance().read( stream );
@@ -4303,8 +3355,7 @@ void readClipboard()
 
 void saveClipboard()
 {
-   ASCString filename;
-   fileselectsvga(clipboardFileExtension, filename, false);
+   ASCString filename = selectFile( clipboardFileExtension, false);
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::writing );
       ClipBoard::Instance().write( stream );
@@ -4379,10 +3430,16 @@ void editResearch()
                         techIds.push_back ( t->id );
                      }
                }
-               // sort (techs.begin(), techs.end() );
-               pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
-               if ( r.first == 0 && r.second >= 0 )
-                  devTech.push_back ( techIds[r.second] );
+
+               if ( techIds.empty() ) {
+                  infoMessage("No technologies found. Please review Item Filters");
+               } else {
+                  // sort (techs.begin(), techs.end() );
+                  pair<int,int> r = chooseString ( "Unresearched Technologies", techs, buttons2 );
+                  if ( r.first == 0 && r.second >= 0 ) {
+                     devTech.push_back ( techIds[r.second] );
+                  }
+               }
             } else
             if ( res.first == 1 && res.second >= 0 ) {
                vector<int>::iterator p = find ( devTech.begin(), devTech.end(), techIds[techs[res.second]]);
@@ -4417,8 +3474,7 @@ void editResearchPoints()
 
 void generateTechTree()
 {
-   ASCString filename;
-   fileselectsvga("*.dot", filename, false);
+   ASCString filename = selectFile("*.dot", false);
    if ( !filename.empty() ) {
 
       map<ASCString,int> temptechs;
@@ -4545,7 +3601,6 @@ void editTechAdapter()
          pair<int,int> res;
          do {
 
-            // Research::TriggeredTechAdapter& tta = actmap->player[player].research.triggeredTechAdapter;
             vector<ASCString>& ta = actmap->player[player].research.predefinedTechAdapter;
             res = chooseString ( "Registered TechAdapter", ta, buttons );
             if ( res.first == 0 ) {
@@ -4563,9 +3618,10 @@ void editTechAdapter()
    } while ( playerRes.first != 1 );
 }
 
-
+/*
 void resetPlayerData()
 {
+   
    vector<ASCString> buttonsP;
    buttonsP.push_back ( "~V~iew" );
    buttonsP.push_back ( "r~E~search" );
@@ -4594,7 +3650,7 @@ void resetPlayerData()
             if ( playerRes.first == 0 ) {
                  for ( int x = 0; x < actmap->xsize; x++ )
                     for ( int y = 0; y < actmap->ysize; y++ ) {
-                       pfield fld = actmap->getField(x,y);
+                       tfield* fld = actmap->getField(x,y);
                        fld->setVisibility( visible_not, player );
                        if ( fld->resourceview )
                           fld->resourceview->visible &= ~(1<<player);
@@ -4608,8 +3664,7 @@ void resetPlayerData()
 
             if ( playerRes.first == 2 ) {
                for ( Player::BuildingList::iterator i = actmap->player[player].buildingList.begin(); i != actmap->player[player].buildingList.end(); ++i )
-                  for ( int j = 0; j < 32; ++j )
-                     (*i)->production[j] = NULL;
+                  (*i)->unitProduction.clear();
             }
 
             if ( playerRes.first == 3 ) {
@@ -4644,4 +3699,12 @@ void resetPlayerData()
 
 
    } while ( playerRes.first != 7 );
+   
 }
+*/
+
+tfield*        getactfield(void)
+{
+   return actmap->getField( actmap->getCursor() );; 
+} 
+

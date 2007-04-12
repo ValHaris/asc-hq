@@ -18,7 +18,7 @@
 #include "ai_common.h"
 
 
-float AI :: getCaptureValue ( const pbuilding bld, const pvehicle veh  )
+float AI :: getCaptureValue ( const Building* bld, Vehicle* veh  )
 {
    HiddenAStar ast ( this, veh );
    HiddenAStar::Path path;
@@ -66,16 +66,16 @@ void AI :: BuildingCapture :: read ( tnstream& stream )
 class  SearchReconquerBuilding : public SearchFields {
                                 protected:
                                    AI& ai;
-                                   pbuilding buildingToCapture;
+                                   Building* buildingToCapture;
                                    int mode;        // (1): nur fusstruppen; (2): 1 und transporter; (3): 2 und geb„ude
-                                   vector<pvehicle> enemyUnits; // that can conquer the building
-                                   float getThreatValueOfUnit ( pvehicle veh );
+                                   vector<Vehicle*> enemyUnits; // that can conquer the building
+                                   float getThreatValueOfUnit ( Vehicle* veh );
                                 public:
                                    void testfield ( const MapCoordinate& mc );
                                    bool returnresult ( );
-                                   void unitfound ( pvehicle eht );
-                                   bool canUnitCapture ( pvehicle veh );
-                                   SearchReconquerBuilding ( AI& _ai, pbuilding bld ) : SearchFields ( _ai.getMap() ), ai ( _ai ), buildingToCapture ( bld ), mode(3) {};
+                                   void unitfound ( Vehicle* eht );
+                                   bool canUnitCapture ( Vehicle* veh );
+                                   SearchReconquerBuilding ( AI& _ai, Building* bld ) : SearchFields ( _ai.getMap() ), ai ( _ai ), buildingToCapture ( bld ), mode(3) {};
                                 };
 
 bool SearchReconquerBuilding :: returnresult( )
@@ -84,25 +84,25 @@ bool SearchReconquerBuilding :: returnresult( )
 }
 
 
-void         SearchReconquerBuilding :: unitfound(pvehicle     eht)
+void         SearchReconquerBuilding :: unitfound(Vehicle*     eht)
 {
   enemyUnits.push_back ( eht );
   buildingToCapture->aiparam[ai.getPlayerNum()]->setAdditionalValue ( buildingToCapture->aiparam[ai.getPlayerNum()]->getValue() );
 }
 
-bool SearchReconquerBuilding :: canUnitCapture( pvehicle eht )
+bool SearchReconquerBuilding :: canUnitCapture( Vehicle* eht )
 {
-   return (eht->typ->functions & cf_conquer )
+   return (eht->typ->hasFunction( ContainerBaseType::ConquerBuildings ) )
            && fieldAccessible ( buildingToCapture->getEntryField(), eht) == 2 ;
 
 }
 
 void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
 {
-      pvehicle eht = gamemap->getField(mc)->vehicle;
-      // pbuilding bld = getfield(xp,yp)->building;
+      Vehicle* eht = gamemap->getField(mc)->vehicle;
+      // Building* bld = getfield(xp,yp)->building;
       if ( eht )
-         if (getdiplomaticstatus(eht->color) != capeace)
+         if ( ai.getPlayer().diplomacy.isHostile( eht->getOwner() ) )
             if ( canUnitCapture ( eht )) {
                VehicleMovement vm ( NULL );
                if ( vm.available ( eht )) {
@@ -114,10 +114,10 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
             else
                if (mode >= 2)
                   if (eht->typ->maxLoadableUnits > 0)
-                     for ( int w = 0; w <= 31; w++)
-                        if ( eht->loading[w] )
-                           if ( canUnitCapture ( eht->loading[w] ))
-                              if (eht->maxMovement() + eht->loading[w]->maxMovement() >= beeline(mc, startPos))
+                     for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
+                        if ( *i )
+                           if ( canUnitCapture ( *i ))
+                              if (eht->maxMovement() + (*i)->maxMovement() >= beeline(mc, startPos))
                                  unitfound(eht);
 
 
@@ -135,7 +135,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
 }
 
 
-float AI :: getCaptureValue ( const pbuilding bld, int traveltime  )
+float AI :: getCaptureValue ( const Building* bld, int traveltime  )
 {
    if ( traveltime < 0 )
       traveltime = 0;
@@ -143,7 +143,7 @@ float AI :: getCaptureValue ( const pbuilding bld, int traveltime  )
 }
 
 
-bool AI :: checkReConquer ( pbuilding bld, pvehicle veh )
+bool AI :: checkReConquer ( Building* bld, Vehicle* veh )
 {
    SearchReconquerBuilding srb ( *this, bld );
    srb.initsearch ( bld->getEntry(), (maxTransportMove + maxUnitMove/2) / maxmalq + 1, 1 );
@@ -152,25 +152,25 @@ bool AI :: checkReConquer ( pbuilding bld, pvehicle veh )
 
    if ( enemyNear && veh ) {
       float f = 0;
-      for ( int i = 0; i < 32; i++ )
-         if ( bld->loading[i] )
-            if ( bld->loading[i]->getMovement() )
-               f += bld->loading[i]->aiparam[ getPlayerNum()]->getValue();
+      for ( ContainerBase::Cargo::const_iterator i = bld->getCargo().begin(); i != bld->getCargo().end(); ++i )
+         if ( *i )
+            if ( (*i)->getMovement() )
+               f += (*i)->aiparam[ getPlayerNum()]->getValue();
 
       //! if the units inside the building are more worth than the own unit, capture the building regardless of whether it can be recaptured
       if ( f > veh->aiparam[getPlayerNum()]->getValue())
          return false;
       else
          return true;
-   } else
-      return false;
-
+   }
+   
+   return false;
 }
 
 
 struct CaptureTriple {
-  pbuilding bld;
-  pvehicle veh;
+  Building* bld;
+  Vehicle* veh;
   float val;
 };
 
@@ -193,15 +193,15 @@ void AI :: checkConquer( )
    for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
       BuildingCaptureContainer::iterator nxt = bi;
       ++nxt;
-      pvehicle veh= getMap()->getUnit ( bi->second.unit );
-      pbuilding bld = getMap()->getField( bi->first )->building;
+      Vehicle* veh= getMap()->getUnit ( bi->second.unit );
+      Building* bld = getMap()->getField( bi->first )->building;
       if ( !bld ) {
          buildingCapture.erase ( bi );
          bi = nxt;
          continue;
       }
 
-      if ( getdiplomaticstatus2( bld->color, getPlayerNum()*8 ) != cawar
+      if ( !getPlayer(bld->getOwner()).diplomacy.isHostile( getPlayerNum() ) 
            || !( veh && fieldAccessible ( getMap()->getField( bi->first ), veh ) == 2 )) {
 
          if ( veh ) {
@@ -235,10 +235,10 @@ void AI :: checkConquer( )
    for ( int c = 0; c <= 8; c++ ) {
       if ( c<8 ) {
          if ( !getPlayer(c).exist() ) continue;
-         if ( getdiplomaticstatus2 ( getPlayerNum()*8, c*8 ) != cawar ) continue;
+         if ( !getPlayer().diplomacy.isHostile( c)  ) continue;
       }
       for ( Player::BuildingList::iterator bi = getPlayer(c).buildingList.begin(); bi != getPlayer(c).buildingList.end(); bi++ ) {
-         pbuilding bld = *bi;
+         Building* bld = *bi;
          int reachable = 0;
          if ( buildingCapture[ bld->getEntry() ].state != BuildingCapture::conq_noUnit ) continue;
          bool enemyNear = checkReConquer ( bld, 0 );
@@ -247,10 +247,10 @@ void AI :: checkConquer( )
          displaymessage2("check for capturing building %d ", buildingCounter);
 
          for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-            pvehicle veh = *vi;
+            Vehicle* veh = *vi;
             if ( !veh->canMove() ) continue;
             if ( fieldAccessible ( bld->getEntryField(), veh ) != 2 ) continue;
-            if ( c!=8 && !(veh->typ->functions & cf_conquer) ) continue;
+            if ( c!=8 && !(veh->typ->hasFunction( ContainerBaseType::ConquerBuildings  )) ) continue;
             if ( veh->aiparam[getPlayerNum()]->hasJob( AiParameter::job_conquer)  &&
                  veh->aiparam[getPlayerNum()]->getTask() != AiParameter::tsk_nothing ) continue;
 
@@ -286,9 +286,9 @@ void AI :: checkConquer( )
    sort ( captureList.begin(), captureList.end(), CaptureTripleComp() );
 
    for ( CaptureList::iterator i = captureList.begin(); i != captureList.end(); i++ ) {
-      pbuilding bld = (*i)->bld;
-      pvehicle veh = (*i)->veh;
-//      float val = (*i)->val;
+      Building* bld = (*i)->bld;
+      Vehicle* veh = (*i)->veh;
+      // float val = (*i)->val;
       delete (*i);
 
       // check whether bld and veh are still available
@@ -298,7 +298,7 @@ void AI :: checkConquer( )
 
       // dispatch capture order
       BuildingCapture& bc = buildingCapture[ bld->getEntry() ];
-      if ( veh->typ->functions & cf_conquer )
+      if ( veh->typ->hasFunction( ContainerBaseType::ConquerBuildings  ))
          bc.state = BuildingCapture::conq_conqUnit;
       else
          bc.state = BuildingCapture::conq_unitNotConq;
@@ -313,7 +313,7 @@ void AI :: checkConquer( )
    for ( BuildingCaptureContainer::iterator bi = buildingCapture.begin(); bi != buildingCapture.end(); ) {
       BuildingCaptureContainer::iterator nxt = bi;
       ++nxt;
-      pvehicle veh = getMap()->getUnit ( bi->second.unit );
+      Vehicle* veh = getMap()->getUnit ( bi->second.unit );
       if ( veh ) {
          MapCoordinate3D dest = veh->aiparam[getPlayerNum()]->dest;
          int nwid = veh->networkid;

@@ -22,7 +22,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <stdio.h>                                                                
+#include <stdio.h>
 
 #include <cstring>
 
@@ -31,7 +31,7 @@
 #include "vehicletype.h"
 #include "newfont.h"
 #include "typen.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 
 #include "gameevent_dialogs.h"
 #include "spfst.h"
@@ -42,15 +42,14 @@
 #include "errors.h"
 #include "itemrepository.h"
 #include "messagedlg.h"
-#include "mapdisplay.h"
+#include "mapdisplayinterface.h"
 
 #ifdef sgmain
-# include "gamedlg.h"
+// # include "gamedlg.h"
 # include "viewcalculation.h"
 # include "resourcenet.h"
+# include "unitctrl.h"
 #endif
-
-extern void repaintdisplay();
 
 const int EventActionNum = 21;
 const int EventTriggerNum = 18;
@@ -70,7 +69,7 @@ void    viewtextmessage ( int id, int player )
       new Message ( txt, actmap, to );
       #ifdef sgmain
       if ( player == actmap->actplayer )
-         viewunreadmessages (  );
+         viewunreadmessages ( actmap->player[ actmap->actplayer ] );
       #endif
    } else
       displaymessage( "Message %d not found", 1, id );
@@ -83,10 +82,17 @@ void    viewtextmessage ( int id, int player )
 // Trigger
 
 
+int versionTest( tnstream& stream, int min, int max )
+{
+   int version = stream.readInt();
+   if ( version < min || version > max )
+      throw tinvalidversion( stream.getLocation(), max, version );
+   return version;
+}      
 
 void TriggerNothing::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
 }
 
 void TriggerNothing::writeData( tnstream& stream )
@@ -115,7 +121,7 @@ void TurnPassed::arm()
 
 void TurnPassed::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    turn = stream.readInt();
    move = stream.readInt();
 }
@@ -163,7 +169,7 @@ void BuildingPositionTrigger::setup()
 
 EventTrigger::State BuildingConquered::getState( int player )
 {
-   pfield fld = gamemap->getField ( pos );
+   tfield* fld = gamemap->getField ( pos );
    if( !fld ) {
       displaymessage ("invalid event - map field not found!", 1);
       return finally_failed;
@@ -185,7 +191,7 @@ void BuildingConquered::arm()
       return;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( bld )
       bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
 }
@@ -215,7 +221,7 @@ void BuildingLost::arm()
       return;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( bld ) {
       bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
       bld->destroyed.connect( SigC::slot( *this, &BuildingConquered::triggered ));
@@ -226,7 +232,7 @@ void BuildingLost::arm()
 
 void PositionTrigger::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    pos.read( stream );
 }
 
@@ -244,7 +250,7 @@ EventTrigger::State BuildingDestroyed::getState( int player )
       return finally_fulfilled;
    }
 
-   pfield fld = gamemap->getField ( pos );
+   tfield* fld = gamemap->getField ( pos );
    if ( !fld->building )
       return finally_fulfilled;
    else
@@ -259,15 +265,15 @@ EventTrigger::State BuildingSeen::getState( int player )
       return finally_fulfilled;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( !bld )
       return finally_failed;
 
    int cnt = 0;
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) {
-         if ( bld->typ->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
-            pfield fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
+         if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) ) {
+            tfield* fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
             if ( fld ) {
                int vis = (fld-> visible >> (player*2) ) & 3;
                if ( bld->typ->buildingheight >= chschwimmend && bld->typ->buildingheight <= chhochfliegend ) {
@@ -294,7 +300,7 @@ void BuildingSeen::arm()
       return;
    }
 
-   pbuilding bld = gamemap->getField ( pos )->building;
+   Building* bld = gamemap->getField ( pos )->building;
    if ( bld ) {
       bld->connection |= cconnection_seen;
       #ifdef sgmain
@@ -340,7 +346,7 @@ ASCString AllUnitsLost::getName() const
 
 void UnitTrigger::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    unitID = stream.readInt();
 }
 
@@ -375,7 +381,7 @@ void UnitTrigger::triggered()
 
 void UnitLost::arm()
 {
-   pvehicle veh = gamemap->getUnit( unitID );
+   Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh ) {
       veh->destroyed.connect( SigC::slot( *this, &UnitLost::triggered ));
       veh->conquered.connect( SigC::slot( *this, &UnitLost::triggered ));
@@ -385,7 +391,7 @@ void UnitLost::arm()
 
 EventTrigger::State UnitLost::getState( int player )
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( !veh )
      return finally_fulfilled;
   if ( veh->getOwner() != player )
@@ -404,7 +410,7 @@ ASCString UnitLost::getName() const
 
 EventTrigger::State UnitConquered::getState( int player )
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( !veh )
      return finally_failed;
   if ( veh->getOwner() == player )
@@ -420,7 +426,7 @@ ASCString UnitConquered::getName() const
 
 void UnitConquered::arm()
 {
-   pvehicle veh = gamemap->getUnit( unitID );
+   Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh )
       veh->conquered.connect( SigC::slot( *this, &UnitConquered::triggered ));
 }
@@ -430,7 +436,7 @@ void UnitConquered::arm()
 
 EventTrigger::State UnitDestroyed::getState( int player )
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( !veh )
      return finally_fulfilled;
   return unfulfilled;
@@ -443,7 +449,7 @@ ASCString UnitDestroyed::getName() const
 
 void UnitDestroyed::arm()
 {
-  pvehicle veh = gamemap->getUnit( unitID );
+  Vehicle* veh = gamemap->getUnit( unitID );
   if ( veh )
      veh->destroyed.connect( SigC::slot( *this, &UnitDestroyed::triggered ));
 }
@@ -453,7 +459,7 @@ void UnitDestroyed::arm()
 
 EventTrigger::State EventTriggered::getState( int player )
 {
-   for ( tmap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i )
+   for ( GameMap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i )
       if ( (*i)->id == eventID && (*i)->status == Event::Executed )
         return finally_fulfilled;
   return unfulfilled;
@@ -461,7 +467,7 @@ EventTrigger::State EventTriggered::getState( int player )
 
 void EventTriggered::readData ( tnstream& stream )
 {
-   stream.readInt();
+   versionTest(stream,1,1);
    eventID = stream.readInt();
 }
 
@@ -474,7 +480,7 @@ void EventTriggered::writeData ( tnstream& stream )
 
 Event* EventTriggered::getTargetEventName() const
 {
-   for ( tmap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i )
+   for ( GameMap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i )
       if ( (*i)->id == eventID )
          return *i;
    return NULL;
@@ -501,7 +507,7 @@ void EventTriggered::setup()
    vector<ASCString> eventnames;
    int fnd = -1;
    int counter = 0;
-   for ( tmap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
+   for ( GameMap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
       eventnames.push_back( (*i)->action->getName() + " : " + (*i)->description );
       eventIDs.push_back ( (*i)->id );
       if ( (*i)->id == eventID )
@@ -531,7 +537,6 @@ void EventTriggered::triggered()
 EventTrigger::State AllEnemyUnitsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
-      if ( getdiplomaticstatus2( player*8, i*8 ) != capeace )
          if ( !gamemap->player[i].vehicleList.empty() )
             return unfulfilled;
 
@@ -548,7 +553,7 @@ void AllEnemyUnitsDestroyed::arm()
    ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered));
 }
 
-void AllEnemyUnitsDestroyed::triggered()
+void AllEnemyUnitsDestroyed::triggered( ContainerBase* c )
 {
    if ( isFulfilled() )
       eventReady();
@@ -558,7 +563,7 @@ void AllEnemyUnitsDestroyed::triggered()
 EventTrigger::State AllEnemyBuildingsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
-      if ( getdiplomaticstatus2( player*8, i*8 ) != capeace )
+      if ( actmap->getPlayer(player).diplomacy.isHostile(i))
          if ( !gamemap->player[i].buildingList.empty() )
             return unfulfilled;
 
@@ -576,7 +581,7 @@ void AllEnemyBuildingsDestroyed::arm()
    ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered));
 }
 
-void AllEnemyBuildingsDestroyed::triggered()
+void AllEnemyBuildingsDestroyed::triggered( ContainerBase* c )
 {
    if ( isFulfilled() )
       eventReady();
@@ -595,7 +600,7 @@ EventTrigger::State SpecificUnitEntersPolygon::getState( int player )
 
 void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( !arming ) {
       if ( fld && fld->vehicle )
          if ( fld->vehicle->networkid == unitID || unitID == -1 )
@@ -611,7 +616,7 @@ void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 
 void SpecificUnitEntersPolygon::readData ( tnstream& stream )
 {
-  stream.readInt();
+  versionTest(stream,1,1);
   readMapModificationData( stream );
   unitID = stream.readInt();
 }
@@ -674,16 +679,16 @@ EventTrigger::State AnyUnitEntersPolygon::getState( int player )
 
 void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( !arming ) {
       if ( fld && fld->vehicle )
          if ( (1 << fld->vehicle->getOwner()) & player )
             found = true;
 
       if ( fld && fld->building )
-         for ( int i = 0; i < 32; ++i )
-            if ( fld->building->loading[i] )
-               if ( (1 << fld->building->loading[i]->getOwner()) & player )
+         for ( ContainerBase::Cargo::const_iterator i = fld->building->getCargo().begin(); i != fld->building->getCargo().end(); ++i )
+            if ( *i ) 
+               if ( (1 << (*i)->getOwner()) & player )
                   found = true;
 
    } else {
@@ -694,7 +699,7 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 
 void AnyUnitEntersPolygon::readData ( tnstream& stream )
 {
-  stream.readInt();
+  versionTest(stream,1,1);
   readMapModificationData( stream );
   player = stream.readInt();
 }
@@ -751,7 +756,7 @@ EventTrigger::State ResourceTribute::getState( int player )
 
 void ResourceTribute::readData ( tnstream& stream )
 {
-   stream.readInt();
+   versionTest(stream,1,1);
    payingPlayer = stream.readInt();
    demand.read ( stream );
 }
@@ -821,15 +826,13 @@ void WindChange::execute( MapDisplayInterface* md )
    if ( direction != -1 )
       gamemap->weather.windDirection = direction;
 
-   resetallbuildingpicturepointers();
-
    if ( md )
       md->updateDashboard();
 }
 
 void WindChange::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    speed = stream.readInt();
    direction = stream.readInt();
 }
@@ -852,13 +855,13 @@ void WindChange::setup()
 void ChangeGameParameter::execute( MapDisplayInterface* md )
 {
    if ( parameterNum >= 0 )
-      if ( gameParameterChangeableByEvent [ parameterNum ] )
+      if ( gameParameterSettings[parameterNum ].changeableByEvent )
          gamemap->setgameparameter( GameParameter(parameterNum) , parameterValue );
 }
 
 void ChangeGameParameter::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    parameterNum = stream.readInt();
    parameterValue = stream.readInt();
 }
@@ -872,29 +875,34 @@ void ChangeGameParameter::writeData( tnstream& stream )
 
 void ChangeGameParameter::setup()
 {
+/*
     int nr = selectgameparameter( parameterNum );
     if ( (nr >= 0) && ( nr < gameparameternum) ) {
-       if ( gameParameterChangeableByEvent[ nr ] ) {
+       if ( gameParameterSettings[nr].changeableByEvent ) {
           int org = parameterValue;
-          if ( org < gameParameterLowerLimit[nr] && org > gameParameterUpperLimit[nr] )
-             org = gameparameterdefault[nr];
-          parameterValue = getid("Parameter Val", org, gameParameterLowerLimit[nr], gameParameterUpperLimit[nr]);
+          if ( org < gameParameterSettings[nr].minValue && org > gameParameterSettings[nr].maxValue )
+             org = gameParameterSettings[nr].defaultValue;
+          parameterValue = getid("Parameter Val", org, gameParameterSettings[nr].minValue, gameParameterSettings[nr].maxValue);
           parameterNum = nr;
        } else
           displaymessage("This parameter cannot be changed by events",1);
     }
+    */
 }
 
 
 
 void DisplayMessage::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    viewtextmessage ( messageNum , gamemap->actplayer );
 }
 
 void DisplayMessage::readData( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    messageNum = stream.readInt();
 }
 
@@ -957,7 +965,7 @@ void FieldAddressing::setGlobal()
 
 void FieldAddressing::readMapModificationData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1000,1000);
    addressingMode = AddressingMode ( stream.readInt() );
    if ( addressingMode == singleField )
       readClassContainer( fields, stream );
@@ -981,14 +989,14 @@ void FieldAddressing::setup ()
 
    addressingMode = AddressingMode( c );
 
-   switch ( addressingMode ) {
-      case singleField: selectFields( fields );
-                        break;
-      case poly: if ( !polygons.size() )
-                    polygons.push_back ( Poly_gon() );
-                 editpolygon ( polygons[0] );
-                 break;
-   }
+   if (  addressingMode == singleField )
+      selectFields( fields );
+   else
+      if ( addressingMode == poly ) {
+         if ( !polygons.size() )
+            polygons.push_back ( Poly_gon() );
+         editpolygon ( polygons[0] );
+      }
 }
 
 
@@ -1016,7 +1024,7 @@ void MapModificationEvent::execute( MapDisplayInterface* md )
 
 void WeatherChange :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    weather = stream.readInt();
    readMapModificationData ( stream );
 }
@@ -1031,7 +1039,7 @@ void WeatherChange :: writeData ( tnstream& stream )
 
 void WeatherChange :: fieldOperator( const MapCoordinate& mc )
 {
-   pfield field = gamemap->getField ( mc );
+   tfield* field = gamemap->getField ( mc );
    if ( field ) {
      if ( field->typ->terraintype->weather[ weather ] )
         field->typ = field->typ->terraintype->weather[ weather ];
@@ -1051,7 +1059,7 @@ void WeatherChange :: setup ()
 
 void MapChange :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    terrainID = stream.readInt();
    readMapModificationData ( stream );
 }
@@ -1070,7 +1078,7 @@ void MapChange :: fieldOperator( const MapCoordinate& mc )
    if ( !typ )
       return;
 
-   pfield field = gamemap->getField ( mc );
+   tfield* field = gamemap->getField ( mc );
    if ( field ) {
       int w = field->getweather();
       if (typ->weather[w] == NULL)
@@ -1091,7 +1099,7 @@ void MapChange :: setup ()
 
 void AddObject :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    objectID = stream.readInt();
    readMapModificationData ( stream );
 }
@@ -1111,7 +1119,7 @@ void AddObject :: fieldOperator( const MapCoordinate& mc )
    if ( !obj )
       return;
 
-   pfield field = gamemap->getField ( mc );
+   tfield* field = gamemap->getField ( mc );
    if ( field ) {
       field->addobject ( obj, -1, true );
       field->setparams();
@@ -1129,7 +1137,7 @@ void AddObject :: setup ()
 
 void RemoveAllObjects :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    readMapModificationData ( stream );
 }
 
@@ -1143,7 +1151,7 @@ void RemoveAllObjects :: writeData ( tnstream& stream )
 
 void RemoveAllObjects :: fieldOperator( const MapCoordinate& mc )
 {
-   pfield field = gamemap->getField ( mc );
+   tfield* field = gamemap->getField ( mc );
    if ( field ) {
       field->objects.clear();
       field->setparams();
@@ -1172,7 +1180,7 @@ void MapChangeCompleted :: execute( MapDisplayInterface* md )
 
 void ChangeBuildingDamage::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    damage = stream.readInt();
    position.read ( stream );
 }
@@ -1186,7 +1194,7 @@ void ChangeBuildingDamage::writeData ( tnstream& stream )
 
 void ChangeBuildingDamage::execute( MapDisplayInterface* md )
 {
-   pfield fld = gamemap->getField ( position );
+   tfield* fld = gamemap->getField ( position );
    if ( fld && fld->building ) {
       if ( damage >= 100 ) {
          delete fld->building;
@@ -1213,7 +1221,7 @@ void ChangeBuildingDamage::setup()
 
 void NextMap::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    mapID = stream.readInt();
 }
 
@@ -1225,6 +1233,15 @@ void NextMap::writeData ( tnstream& stream )
 
 void NextMap::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
+   ASCString name = gamemap->preferredFileNames.mapname[0];
+   if ( name.find('.') != ASCString::npos )
+      name.erase( name.find('.') );
+
+   
+   savegame( "map-" + name + "-completed" + (savegameextension + 1) );
    throw  LoadNextMap(mapID);
 }
 
@@ -1237,6 +1254,9 @@ void NextMap::setup()
 
 void LoseMap::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    if ( !gamemap->continueplaying ) {
       displaymessage ( "You have been defeated !", 3 );
       delete gamemap;
@@ -1248,7 +1268,7 @@ void LoseMap::execute( MapDisplayInterface* md )
 
 void DisplayEllipse::readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    x1 = stream.readInt();
    x2 = stream.readInt();
    y1 = stream.readInt();
@@ -1270,6 +1290,8 @@ void DisplayEllipse::writeData ( tnstream& stream )
 
 void DisplayEllipse::execute( MapDisplayInterface* md )
 {
+   warning("Ellipses are not supported any more!");
+   /*
    if ( !gamemap->ellipse )
       gamemap->ellipse = new EllipseOnScreen;
 
@@ -1296,7 +1318,7 @@ void DisplayEllipse::execute( MapDisplayInterface* md )
    if ( md )
       md->updateDashboard();
 
-
+   */
 }
 
 void DisplayEllipse::setup()
@@ -1312,11 +1334,13 @@ void DisplayEllipse::setup()
 
 void RemoveEllipse::execute( MapDisplayInterface* md )
 {
+   /*
    if ( gamemap->ellipse ) {
       gamemap->ellipse->active = 0;
       if ( md )
          md->repaintDisplay();
    }
+   */
 }
 
 
@@ -1324,7 +1348,7 @@ void RemoveEllipse::execute( MapDisplayInterface* md )
 
 void ChangeBuildingOwner :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    pos.read( stream );
    newOwner = stream.readInt();
 }
@@ -1346,7 +1370,7 @@ void ChangeBuildingOwner :: setup ()
 
 void ChangeBuildingOwner :: execute( MapDisplayInterface* md )
 {
-   pfield fld = gamemap->getField ( pos );
+   tfield* fld = gamemap->getField ( pos );
    if ( fld && fld->building ) {
       fld->building->convert ( newOwner );
       #ifdef sgmain
@@ -1362,18 +1386,21 @@ void ChangeBuildingOwner :: execute( MapDisplayInterface* md )
 
 void DisplayImmediateMessage::execute( MapDisplayInterface* md )
 {
+   if ( gamemap->state == GameMap::Replay )
+      return;
+
    if ( !message.empty() ) {
-      new Message ( message, gamemap, 1 << gamemap->actplayer );
+      new Message ( message, gamemap, 1 << gamemap->actplayer, 0 );
       #ifdef sgmain
-      viewunreadmessages (  );
+      viewunreadmessages ( gamemap->player[ gamemap->actplayer ] );
       #endif
    }
 }
 
 void DisplayImmediateMessage::readData( tnstream& stream )
 {
-   int version = stream.readInt();
-   message = stream.readString();
+   versionTest(stream,1,1);
+   message = stream.readString(true);
 }
 
 void DisplayImmediateMessage::writeData( tnstream& stream )
@@ -1384,10 +1411,11 @@ void DisplayImmediateMessage::writeData( tnstream& stream )
 
 void DisplayImmediateMessage::setup()
 {
-   MultilineEdit mle ( message, "Message" );
-   mle.init();
-   mle.run();
-   mle.done();
+   while ( message.find ( "#CRT#" ) != ASCString::npos )
+      message.replace ( message.find ( "#CRT#" ), 5, "\n" );
+   while ( message.find ( "#crt#" ) != ASCString::npos )
+      message.replace ( message.find ( "#crt#" ), 5, "\n" );
+   MultiLineEditor( "Message", message );
 }
 
 
@@ -1395,7 +1423,7 @@ void DisplayImmediateMessage::setup()
 
 void AddProductionCapability :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    pos.read( stream );
    vehicleTypeID = stream.readInt();
 }
@@ -1417,21 +1445,17 @@ void AddProductionCapability :: setup ()
 
 void AddProductionCapability :: execute( MapDisplayInterface* md )
 {
-   pfield fld = gamemap->getField ( pos );
-   if ( fld && fld->building && vehicleTypeID >= 0 ) {
-      int i = 0;
-      while ( i < 32 && fld->building->production[i] )
-         ++i;
-      if ( i < 32 && !fld->building->production[i] )
-         fld->building->production[i] = gamemap->getvehicletype_byid(vehicleTypeID);
-   }
+   tfield* fld = gamemap->getField ( pos );
+   if ( fld && fld->building && vehicleTypeID >= 0 )
+      fld->building->addProductionLine( gamemap->getvehicletype_byid(vehicleTypeID) );
+   
 }
 
 
 
 void ChangeDiplomaticStatus :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    proposingPlayer = stream.readInt();
    targetPlayer = stream.readInt();
    proposal = Proposal(stream.readInt());
@@ -1463,12 +1487,12 @@ void ChangeDiplomaticStatus :: setup ()
 void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 {
    if ( proposal == Peace )
-      gamemap->alliances[targetPlayer][proposingPlayer] = capeaceproposal;
+      gamemap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, PEACE );
    else
       if ( proposal == War )
-         gamemap->alliances[targetPlayer][proposingPlayer] = cawarannounce;
+         gamemap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, WAR );
       else {
-         gamemap->alliances[targetPlayer][proposingPlayer] = canewsetwar2;
+         gamemap->getPlayer(proposingPlayer).diplomacy.setState( targetPlayer, WAR );
       }
 }
 
@@ -1476,7 +1500,7 @@ void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 
 void SetViewSharing :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    viewingPlayer = stream.readInt();
    providingPlayer = stream.readInt();
    enable = stream.readInt();
@@ -1506,13 +1530,12 @@ void SetViewSharing :: setup ()
 
 void SetViewSharing :: execute( MapDisplayInterface* md )
 {
-   if ( !gamemap->shareview )
-      gamemap->shareview = new tmap::Shareview;
-
    if ( enable )
-      gamemap->shareview->mode[providingPlayer][viewingPlayer] = true;
+      gamemap->player[providingPlayer].diplomacy.setState( viewingPlayer, PEACE_SV );
    else
-      gamemap->shareview->mode[providingPlayer][viewingPlayer] = false;
+      if ( gamemap->player[providingPlayer].diplomacy.getState( viewingPlayer ) >= PEACE_SV )
+         gamemap->player[providingPlayer].diplomacy.setState( viewingPlayer, PEACE );
+         
    #ifdef sgmain
    computeview( gamemap );
    #endif
@@ -1527,7 +1550,7 @@ void SetViewSharing :: execute( MapDisplayInterface* md )
 
 void AddResources :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    res.read( stream );
    pos.read( stream );
 }
@@ -1552,7 +1575,7 @@ void AddResources :: setup ()
 
 void AddResources :: execute( MapDisplayInterface* md )
 {
-   pfield fld = gamemap->getField ( pos );
+   tfield* fld = gamemap->getField ( pos );
    if ( fld && fld->building )
       fld->building->putResource( res, 0 );
 }
@@ -1560,7 +1583,7 @@ void AddResources :: execute( MapDisplayInterface* md )
 
 void Reinforcements :: readData ( tnstream& stream )
 {
-   int version = stream.readInt();
+   versionTest(stream,1,1);
    objectNum = stream.readInt();
    buf.readfromstream ( &stream );
 }
@@ -1592,38 +1615,16 @@ void Reinforcements :: setup ()
       objectNum = 0;
    }
 
-
-   displaymessage("use space to select the units/buildings\nfinish the selection by pressing enter",3);
-   int res;
-   do {
-      int x,y;
-      res = selectfield(&x,&y);
-      if ( res == 2 ) {
-         pfield fld = gamemap->getField ( x, y );
-         if ( fld->vehicle ) {
-            tmemorystream stream ( &buf, tnstream::appending );
-            stream.writeInt( ReinfVehicle );
-            fld->vehicle->write ( stream );
-            objectNum++;
-            delete fld->vehicle;
-            fld->vehicle = NULL;
-         } else
-            if ( fld->building ) {
-               tmemorystream stream ( &buf, tnstream::appending );
-               stream.writeInt( ReinfBuilding );
-               fld->building->write ( stream );
-               objectNum++;
-               delete fld->building;
-               fld->building = NULL;
-            }
-      }
-   } while ( res == 2 ); /* enddo */
+   ReinforcementSelector::CoordinateList fieldlist;
+   ReinforcementSelector rs( fieldlist, gamemap, buf, objectNum );
+   rs.Show();
+   rs.RunModal();
 }
 
 class FindUnitPlacementPos : public SearchFields {
       Vehicle* vehicle;
    public:
-      FindUnitPlacementPos ( pmap gamemap, Vehicle* veh )
+      FindUnitPlacementPos ( GameMap* gamemap, Vehicle* veh )
         : SearchFields ( gamemap ), vehicle(veh)
         {
            initsearch(MapCoordinate(veh->xpos, veh->ypos),0,10);
@@ -1632,7 +1633,7 @@ class FindUnitPlacementPos : public SearchFields {
 
       void testfield ( const MapCoordinate& pos )
       {
-         pfield fld = gamemap->getField( pos );
+         tfield* fld = gamemap->getField( pos );
          if ( fld && !fld->vehicle ) {
             if ( fieldAccessible( fld, vehicle, -2, NULL, true ) == 2 ) {
                fld->vehicle = vehicle;
@@ -1669,7 +1670,7 @@ void Reinforcements :: execute( MapDisplayInterface* md )
         for ( int x = 0; x < 4; x++ )
            for ( int y = 0; y < 6; y++ )
               if ( bld->typ->getpicture ( BuildingType::LocalCoordinate( x , y ) )) {
-                 pfield field = gamemap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
+                 tfield* field = gamemap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
                  if ( !field ) {
                     delete bld;
                     // displaymessage("building does not fit here", 1 );
@@ -1696,7 +1697,6 @@ void Reinforcements :: execute( MapDisplayInterface* md )
               }
          bld->chainbuildingtofield( pos );
          #endif
-         bld->resetPicturePointers ();
          gamemap->calculateAllObjects();
          bld->addview();
       }

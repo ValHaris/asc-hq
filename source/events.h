@@ -25,9 +25,27 @@
 #ifndef events_h_included
 #define events_h_included
 
-extern void initializeEventHandling ( int (*fn)(void *) , void *data, void* mousepointer );
+#include <SDL.h>
+
+/**
+  Defines what happens with the SDL events
+  \param queue   Events are queued to be extracted with getQueuedEvent
+  \param legacy  Events are evaluated and the global legacy structures updated
+  \returns the previous state of the event queing 
+*/    
+extern bool setEventRouting( bool queue, bool legacy );
+
+extern bool legacyEventSystemActive();
+
+extern int initializeEventHandling ( int (*fn)(void *) , void *data );
 
 extern SDL_mutex* eventHandlingMutex;
+
+extern void exit_asc( int returnresult );
+
+class ThreadExitException {};
+
+extern bool redrawScreen;
 
 /***************************************************************************
  *                                                                         *
@@ -85,25 +103,10 @@ class tmousesettings {
 
 
 
-class tsubmousehandler {
-        protected:
-           tmouserect offarea;
-        public:
-           tsubmousehandler ( void ) { offarea.x1 = 0; offarea.y1 = 0; offarea.x2 = 0; offarea.y2 = 0; };
-           virtual void mouseaction ( void ) = 0;
-           virtual void invisiblerect ( tmouserect newoffarea ) { offarea = newoffarea; };
-     };
-
 
 extern void mouseintproc2( void );
 extern volatile tmousesettings mouseparams;
 
-
-extern void addmouseproc ( tsubmousehandler* proc );
-extern void removemouseproc ( tsubmousehandler* proc );
-
-extern void pushallmouseprocs ( void );
-extern void popallmouseprocs ( void );
 
 /***************************************************************************
  *                                                                         *
@@ -145,12 +148,12 @@ extern void popallmouseprocs ( void );
     extern int  releasetimeslice( void );
 
 
-    //! should the SDL Events be queued
-    extern void queueEvents( bool active );
-
     //! if the events are being queue, get one. \returns false if no event available
     extern bool getQueuedEvent ( SDL_Event& event );
 
+    //! gets the next event without removing it from the queue. \returns false if no event available
+    extern bool peekEvent ( SDL_Event& event );
 
+    
 
 #endif

@@ -21,33 +21,10 @@
 #include "gamemap.h"
 #include "spfst.h"
 
-/*
-#ifndef sgmain
-
-Message :: Message ( pmap spfld )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-   gametime.set( 0, 0);
-}
-
-
-Message :: Message ( const ASCString& , pmap gamemap, int rec, int from )
-{
-   from = 0;
-   to = 0;
-   time = 0;
-   id = 0;
-   gametime.set( 0, 0);
-}
-
-#else
-*/
-Message :: Message ( pmap spfld  )
+Message :: Message ( GameMap* spfld  )  : cc(0)
 {
    from = 1 << spfld->actplayer;
+         
    gametime = spfld->time;
    time = ::time( NULL );
    to = 0;
@@ -58,7 +35,7 @@ Message :: Message ( pmap spfld  )
 }
 
 
-Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  // f?r Meldungen vom System
+Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from ) : cc(0)  // f?r Meldungen vom System
 {
    from = _from;
    gametime = gamemap->time;
@@ -72,7 +49,33 @@ Message :: Message ( const ASCString& msg, pmap gamemap, int rec, int _from )  /
 
    for ( int i = 0; i < 8; i++ )
       if ( to & ( 1 << i ))
-         actmap->player[i].unreadmessage.push_back ( this );
+         gamemap->player[i].unreadmessage.push_back ( this );
+  
+}
+
+
+ASCString Message::bitMap2PlayerName( int p, const GameMap* gamemap  ) const
+{
+   ASCString s;
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
+      if ( p & ( 1 << i)) {
+         if ( !s.empty() )
+            s += ", ";
+         s += gamemap->getPlayer(i).getName();
+      }
+   return s;
+}
+
+
+ASCString Message::getFromText( const GameMap* gamemap ) const
+{
+   if ( from <= 0 )
+      return "";
+   
+   if ( from == (1<<9))
+      return "system";
+   
+   return gamemap->player[log2(from)].getName();
 }
 
 

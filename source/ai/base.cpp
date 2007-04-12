@@ -17,9 +17,13 @@
 
 #include "ai_common.h"
 
-#include "../sg.h"
+#include "../replaymapdisplay.h"
+#include "../turncontrol.h"
+#include "../widgets/textrenderer.h"
+#include "../mapdisplay.h"
+#include "../asc-mainscreen.h"
 
-AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
+AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
    strictChecks = false;
    benchMark = false;
@@ -30,7 +34,7 @@ AI :: AI ( pmap _map, int _player ) : activemap ( _map ) , sections ( this )
    fieldInformation = NULL;
 
    reset();
-   ReplayMapDisplay* r = new ReplayMapDisplay ( &defaultMapDisplay );
+   ReplayMapDisplay* r = new ReplayMapDisplay ( &getDefaultMapDisplay() );
    r->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
    rmd = r;
    mapDisplay = rmd;
@@ -81,7 +85,7 @@ void    AI :: setup (void)
 
 /*
    for ( i = 0; i <= 8; i++) {
-      pbuilding building = actmap->player[i].firstbuilding;
+      Building* building = actmap->player[i].firstbuilding;
       while (building != NULL) {
          generatethreatvaluebuilding(building);
          building = building->next;
@@ -116,7 +120,7 @@ void    AI :: setup (void)
 
 
    for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); ++i)
-       if ( (*i)->typ->functions & cfmovewithRF )
+      if ( (*i)->typ->hasFunction( ContainerBaseType::MoveWithReactionFire ) )
           if ( (*i)->reactionfire.getStatus() == Vehicle::ReactionFire::off )
              (*i)->reactionfire.enable();
 
@@ -130,22 +134,73 @@ void    AI :: setup (void)
 
 void AI::checkKeys ( void )
 {
-   if ( keypress() ) {
-      tkey k = r_key();
-      if ( k == ct_esc ) {
-         mapDisplay = NULL;
-         tlockdispspfld a;
-         repaintdisplay();
-      }
-   }
+   for ( int i = 0; i < 5; ++i )
+      getPGApplication().processEvent();
 }
+
+void AI::removeDisplay()
+{
+   mapDisplay = NULL;
+}
+
+
+typedef Loki::Functor<void> CloseScreenCallback;
+
+
+class AI_KeyboardWatcher : public SigC::Object {
+      CloseScreenCallback callback;
+      MapDisplayPG::LockDisplay* lock;
+      PG_Widget* w;
+      MainScreenWidget::StandardActionLocker menuLocker;
+
+      bool keyPressed( const SDL_KeyboardEvent* key )
+      {
+         if ( key->keysym.sym == SDLK_ESCAPE  ) {
+            callback();
+
+            if ( !lock )
+               lock = new MapDisplayPG::LockDisplay;
+
+            return true;
+         } else
+            return false;
+      }
+
+   public:   
+      AI_KeyboardWatcher( CloseScreenCallback callback ) : lock(NULL), w(NULL), menuLocker( mainScreenWidget, MainScreenWidget::LockOptions::Menu + MainScreenWidget::LockOptions::MapActions + MainScreenWidget::LockOptions::MapControl)
+      {
+         
+         // w = new PG_Widget(NULL);
+         // w->SetCapture();
+         this->callback = callback;
+         // w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         
+      };
+
+      void release()
+      {
+         delete w;
+         w = NULL;
+         delete lock;
+         lock = NULL;
+      }
+
+      ~AI_KeyboardWatcher() 
+      {
+         release();
+      }
+};
+
 
 
 void AI:: run ( bool benchMark )
 {
+   AI_KeyboardWatcher kw ( CloseScreenCallback( this, &AI::removeDisplay )); 
+
    this->benchMark = benchMark;
 
-   if ( getMap()->playerView >= 0 && !benchMark)
+   if ( getMap()->getPlayerView() >= 0 && !benchMark)
       mapDisplay = rmd;
    else
       mapDisplay = NULL;
@@ -153,28 +208,30 @@ void AI:: run ( bool benchMark )
    int startTime = ticker;
    AiResult res;
 
-   cursor.hide();
-
-   initReplayLogging();
-
    unitCounter = 0;
    _isRunning = true;
    _vision = visible_ago;
 
    int setupTime = ticker;
-   tempsvisible = false;
+   if ( mapDisplay ) 
+      mapDisplay->setTempView( false );
+   
    setup();
 
-//   tmap::Weather weatherBackup = getMap()->weather;
+//   GameMap::Weather weatherBackup = getMap()->weather;
 //   for ( int i = 0; i < 3; i++ )
 //      getMap()->weather.wind[i].speed = 0;
 
+   diplomacy();
 
    if ( !originalUnitDistribution.calculated )
       originalUnitDistribution = calcUnitDistribution();
 
    calcReconPositions();
-   tempsvisible = true;
+
+   if ( mapDisplay )
+      mapDisplay->setTempView( true );
+   
    setupTime = ticker-setupTime;
 
    int serviceTime = ticker;
@@ -210,11 +267,12 @@ void AI:: run ( bool benchMark )
 
    _isRunning = false;
    if ( !mapDisplay )
-      displaymap();
+      repaintMap();
    int duration = ticker-startTime;
 
 
-   closeReplayLogging();
+   if ( getMap()->replayinfo )
+      getMap()->replayinfo->closeLogging();
 
 //   getMap()->weather = weatherBackup;
 
@@ -237,6 +295,22 @@ void AI:: run ( bool benchMark )
    displaymessage2("AI completed in %d second", duration/100);
 
    checkforvictory();
+}
+
+
+void AI :: diplomacy ()
+{
+   for ( int i = 0; i < getMap()->getPlayerCount(); ++i ) {
+      if ( i != getPlayerNum() ) {
+         DiplomaticStates proposal;
+         if ( getPlayer().diplomacy.getProposal( i, &proposal )) {
+            if ( proposal > getPlayer().diplomacy.getState( i ))
+               new Message( "Your diplomatic proposal is declined", getMap(), 1 << i, 1 << getPlayerNum() );
+            else
+               getPlayer().diplomacy.propose( i, proposal );
+         }
+      }
+   }
 }
 
 
@@ -273,7 +347,7 @@ void AI :: showFieldInformation ( int x, int y )
                                 threat.threat[4], threat.threat[3], threat.threat[2],
                                 threat.threat[1], threat.threat[0], getFieldInformation(x,y).control );
 
-   pfield fld = getfield (x, y );
+   tfield* fld = getfield (x, y );
    if ( fld->vehicle && fieldvisiblenow ( fld ) && fld->vehicle->aiparam[getPlayerNum()] ) {
       char text2[1000];
       sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
@@ -297,7 +371,7 @@ void AI :: showFieldInformation ( int x, int y )
    for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ )
       getMap()->getField( i->first )->a.temp2 = 1;
 
-   displaymap();
+   repaintMap();
 
 
    strcat ( text, "\n#font02#Section Information#font01##aeinzug20##eeinzug10##crtp10#");
@@ -341,10 +415,10 @@ void AI :: showFieldInformation ( int x, int y )
    }
 
    strcat ( text, s.c_str() );
-   tviewanytext vat;
-   vat.init ( "AI information", text );
-   vat.run();
-   vat.done();
+
+   ViewFormattedText vft( "AI information", text, PG_Rect( -1, -1, 500, 550 ) );
+   vft.Show();
+   vft.RunModal();
 }
 
 
@@ -411,8 +485,8 @@ void AI :: read ( tnstream& stream )
    if ( version >= 104 ) {
       int id = stream.readInt();
       while ( id >= 0 ) {
-         float enemyValue = stream.readFloat();
-         float ownValue = stream.readFloat();
+         stream.readFloat(); // enemyValue
+         stream.readFloat(); // ownValue
          id = stream.readInt();
       }
    }

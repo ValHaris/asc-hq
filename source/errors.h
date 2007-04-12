@@ -26,13 +26,6 @@
  #include "global.h"
  #include "misc.h"
 
- extern void fatalError ( const char* formatstring, ... );
- extern void fatalError ( const ASCString& string );
- extern void errorMessage ( const ASCString& string );
- extern void warning ( const ASCString& string );
- extern void longWarning ( const ASCString& string );
- extern void infoMessage ( const ASCString& string );
-
 
  #ifdef HAVE_EXCEPTION
   #include <exception>
@@ -55,8 +48,8 @@
                  InvalidID ( string msg, int id ) : ASCmsgException ( "Could not find a " + msg )
                  {
                     message += " with an ID of ";
-                    message += strrr ( id );
-                    message += "\nThis is usually caused when the file you are trying to load uses objects\n"
+                    message += ASCString::toString( id );
+                    message += "\nThis is usually caused when the file you are trying to load uses objects "
                                "from optional data packages that you don't have installed." ;
 
                  };

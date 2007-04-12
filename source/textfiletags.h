@@ -19,18 +19,23 @@
  #define textfiletagsH
 
  extern const char* weatherTags[];
- extern const char* bodenarten[];
+ extern const char* terrainProperties[];
  extern const char* weatherAbbrev[];
  extern const char* heightTags[];
- extern const char* vehicleAbilities[];
+ extern const char* vehicleAbilities[]; //!< deprecated
  extern const char* weaponTags[];
  extern const char* unitCategoryTags[];
- extern const char* buildingFunctionTags[];
+ extern const char* buildingFunctionTags[]; //!< deprecated
+ extern const char* containerFunctionTags[];
  extern const char* objectNetMethod[];
  extern const char* entranceModes[];
 
  const int productionCostCalculationMethodNum = 3;
  extern const char* productionCostCalculationMethod[];
+
+ const int graphicOperationNum = 2;
+ extern const char* graphicOperations[];
+ 
 
  extern const char* objectDisplayingMethodTags[];
 

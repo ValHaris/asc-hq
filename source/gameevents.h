@@ -2,85 +2,6 @@
     \brief Interface to the event handling of ASC
 */
 
-//     $Id: gameevents.h,v 1.5 2005-04-02 13:57:06 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.4  2005/04/02 12:59:18  mbickel
-//      Fixes for MSVC compilation
-//
-//     Revision 1.3  2004/02/07 12:34:50  mbickel
-//      Fixed compilation problems
-//      Version now 1.14.0.0
-//
-//     Revision 1.2  2004/02/01 13:39:53  mbickel
-//      New event action: set view sharing
-//      Fixed lots of bugs
-//
-//     Revision 1.1  2004/01/16 19:14:55  mbickel
-//      Adding files for new event system
-//
-//     Revision 1.12  2003/07/06 13:16:22  mbickel
-//      Updated maps
-//
-//     Revision 1.11  2003/06/26 21:00:18  mbickel
-//      Fixed: land mines could not be carried on bridges
-//
-//     Revision 1.10  2003/05/01 18:02:22  mbickel
-//      Fixed: no movement decrease for cargo when transport moved
-//      Fixed: reactionfire not working when descending into range
-//      Fixed: objects not sorted
-//      New map event: add object
-//
-//     Revision 1.9  2003/01/28 17:48:42  mbickel
-//      Added sounds
-//      Rewrote soundsystem
-//      Fixed: tank got stuck when moving from one transport ship to another
-//
-//     Revision 1.8  2001/02/26 12:35:23  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.7  2001/02/11 11:39:40  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.6  2001/01/28 14:04:14  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.5  2001/01/19 13:33:51  mbickel
-//      The AI now uses hemming
-//      Several bugfixes in Vehicle Actions
-//      Moved all view calculation to viewcalculation.cpp
-//      Mapeditor: improved keyboard support for item selection
-//
-//     Revision 1.4  2000/10/11 14:26:44  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.3  2000/07/05 10:49:36  mbickel
-//      Fixed AI bugs
-//      setbuildingdamage event now updates the screen
-//
-//     Revision 1.2  1999/11/16 03:42:10  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -106,7 +27,6 @@
 #define gameeventsH
 
 #include "typen.h"
-#include "mapdisplay.h"
 #include "gameeventsystem.h"
 #include "mappolygons.h"
 
@@ -162,8 +82,8 @@ enum EventAction_ID { EventAction_Nothing,
 
 class EventTriggered;
 
-class FieldAddressing: protected PolygonPainerSquareCoordinate  {
-      pmap& gameMap;
+class FieldAddressing: protected PolygonPainterSquareCoordinate  {
+      GameMap*& gameMap;
    public:
       typedef vector<MapCoordinate> Fields;
       typedef vector< Poly_gon > Polygons;
@@ -174,7 +94,7 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       virtual ~FieldAddressing() {};
 
    protected:
-      FieldAddressing( pmap& gamemap ) : gameMap(gamemap), addressingMode( none )  {};
+      FieldAddressing( GameMap*& gamemap ) : gameMap(gamemap), addressingMode( none ) {};
       enum AddressingMode { none, singleField, poly, global };
 
       AddressingMode addressingMode;
@@ -188,7 +108,7 @@ class FieldAddressing: protected PolygonPainerSquareCoordinate  {
       void setpointabs ( int x,  int y  );
 
       void setup();
-      friend Event* readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+      friend Event* readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 };
 
 
@@ -385,7 +305,9 @@ class EventTriggered : public EventTrigger, public SigC::Object {
 };
 
 class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
-    protected:
+   private:
+      void triggered( ContainerBase* c );
+   protected:
       virtual State getState( int player );
     public:
       AllEnemyUnitsDestroyed() : EventTrigger ( Trigger_AllEnemyUnitsDestroyed ) {};
@@ -396,11 +318,12 @@ class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
       ASCString getName() const;
       void setup() {};
       void arm();
-      void triggered();
 };
 
 class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
-    protected:
+   private:
+      void triggered( ContainerBase* c );
+   protected:
       virtual State getState( int player );
     public:
       AllEnemyBuildingsDestroyed() : EventTrigger ( Trigger_AllEnemyBuildingsDestroyed ) {};
@@ -410,7 +333,6 @@ class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
       ASCString getName() const;
       void setup() {};
       void arm();
-      void triggered();
 };
 
 class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {
@@ -764,6 +686,7 @@ class AddResources : public EventAction {
 class Reinforcements : public EventAction {
       tmemorystreambuf buf;
       int objectNum;
+      friend class ReinforcementSelector;
       enum Type { ReinfVehicle, ReinfBuilding };
    public:
       Reinforcements(): EventAction( EventAction_Reinforcements ), objectNum(0) {};

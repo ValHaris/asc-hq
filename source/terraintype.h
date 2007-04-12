@@ -18,10 +18,14 @@
 #ifndef terraintypeH
  #define terraintypeH
 
+ #include "graphics/surface.h"
  #include "typen.h"
+ #include "mapitemtype.h"
 
-//! the number of bits that specify the terrain of a field
-const int cbodenartennum = 35;
+ class OverviewMapImage;
+
+ //! the number of bits that specify the terrain of a field
+ const int terrainPropertyNum = 37;
 
 
   //! the properties of a terrain describing which units can move onto this field and which can't
@@ -65,10 +69,13 @@ const int cbodenartennum = 35;
  typedef class TerrainType* pterraintype;
 
  //! The type of a field
- class TerrainType : public LoadableItemType {
+ class TerrainType : public MapItemType, public LoadableItemType {
     public:
       int                id;
+      int                getID() const { return id; };
       ASCString          name;
+      ASCString          getName() const { return name; };
+      
       class MoveMalus: public vector<int> {
          public: MoveMalus();
            #ifdef _vector_at_broken_
@@ -80,12 +87,12 @@ const int cbodenartennum = 35;
             void write ( tnstream& stream ) const;
       };
 
-      class  Weather {
+      class  Weather: public LoadableItemType {
           //! the color information for the small map
-          FieldQuickView* quickView;
+          OverviewMapImage* quickView;
         public:
           //! the image of the field
-          void*          pict;
+          Surface        image;
 
           //! the defense bonus for the unit standing on this field. \see AttackFormula::defense_defensebonus(int)
           int            defensebonus;
@@ -100,8 +107,9 @@ const int cbodenartennum = 35;
           TerrainType::MoveMalus   move_malus;
 
           //! displays the image on the screen coordinates x1/y1
-          void           paint ( int x1, int y1 );
-
+          void           paint ( Surface& s, SPoint pos );
+          
+          
           //! the image index from the graphic set. -1 if graphics is not from graphic set. \see  GraphicSet
           int            bi_pict;
 
@@ -111,11 +119,15 @@ const int cbodenartennum = 35;
           //! pointer to the outer structure
           TerrainType*   terraintype;
 
-          const FieldQuickView* getQuickView();
-          void readQuickView ( tnstream& stream );
+          const OverviewMapImage* getQuickView();
 
-          Weather ( TerrainType* base ) : quickView ( NULL ), pict( NULL ), terraintype ( base ) {};
+          Weather ( TerrainType* base ) : quickView ( NULL ), terraintype ( base ) {};
+          ~Weather();
           void runTextIO ( PropertyContainer& pc );
+          void read ( tnstream& stream );
+          void read ( tnstream& stream, int version );
+          void write ( tnstream& stream ) const;
+
       };
      Weather*           weather[cwettertypennum];
 
@@ -123,10 +135,11 @@ const int cbodenartennum = 35;
      void runTextIO ( PropertyContainer& pc );
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
+     ~TerrainType();
  };
 
 
- extern const char*  cbodenarten[]  ;
+ extern const char*  terrainProperty[]  ;
 
  enum TerrainBitTypes { cbwater0 ,
                      cbwater1 ,

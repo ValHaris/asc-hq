@@ -5,8 +5,6 @@
 
 */
 
-//     $Id: loaders.h,v 1.34 2005-08-11 19:10:32 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -30,13 +28,16 @@
 #ifndef loadersH
 #define loadersH
 
+#include <sigc++/sigc++.h>
+
+#include "libs/loki/Functor.h"
+
 #include "ascstring.h"
 #include "sgstream.h"
-#include "spfst.h"
+#include "messages.h"
 
 
 
-extern ticons icons;
 extern const int fileterminator;
 
 extern const char* savegameextension;
@@ -45,50 +46,40 @@ extern const char* tournamentextension;
 
 
 
-extern pguiicon loadguiicon( const char *       name);
-
-
 //! saves the map located in #actmap to the map file name
-extern void  savemap( const char *       name );
-
-//! loads the map from the file name to #actmap
-extern void  loadmap( const char *       name );
+extern void  savemap( const char *       name, GameMap* gamemap );
 
 //! saves the game located in #actmap to the savegame file name
-extern void  savegame( const char *       name );
-
-//! loads the game from the file name to  #actmap
-extern void  loadgame( const char *       name );
+extern void  savegame( const ASCString& name );
 
 
+typedef Loki::Functor<GameMap*, TYPELIST_1(const ASCString&) > MapLoadingFunction;
+extern GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader );
 
-extern tmap*  loadreplay( pmemorystreambuf streambuf );
+
+
+extern GameMap*  loadreplay( pmemorystreambuf streambuf );
 
 //! writes all replay relevant map information of player num to the replay variable of #actmap
-extern void  savereplay( int num );
+extern void  savereplay( GameMap* gamemap, int num );
 
 
-extern void  loadicons(void);
-
-extern void  savecampaignrecoveryinformation( const ASCString& filename, int id);
-
-const int actsavegameversion  = 0xff43;
+const int actsavegameversion  = 0xff61;
 const int minsavegameversion  = 0xff31;
-const int actmapversion       = 0xfe31;
+const int actmapversion       = 0xfe51;
 const int minmapversion       = 0xfe24;
-const int actnetworkversion   = 0x0016;
+const int actnetworkversion   = 0x0031;
 const int minnetworkversion   = 0x0004;
 const int actreplayversion    = 0x0003;
 const int minreplayversion    = 0x0001;
 
 
-
 class  tspfldloaders {
        public:
            pnstream        stream;
-           tmap*     spfld;
+           GameMap*     spfld;
 
-           void            writeevent  ( pevent event );
+           static SigC::Signal1<void,GameMap*> mapLoaded; 
 
            void            readoldevents     ( void );
 
@@ -96,8 +87,7 @@ class  tspfldloaders {
            void            writedissections ( void );
            void            readdissections ( void );
 
-           void            writenetwork ( void );
-           void            readnetwork  ( void );
+           void            readLegacyNetwork  ( void );
 
            virtual void    initmap ( void ) = 0;
 
@@ -112,20 +102,23 @@ class  tspfldloaders {
            void            readmessages ( void );
            void            readmessagelist( MessagePntrContainer& lst );
 
-           void            chainitems ( pmap actmap );
+           void            chainitems ( GameMap* actmap );
            void            setplayerexistencies ( void );
            virtual ~tspfldloaders();
            tspfldloaders ( void );
 };
 
+
+
 class  tmaploaders : public tspfldloaders {
-           pmap oldmap;
            void            initmap ( void );
+           GameMap*           _loadmap ( const ASCString& name );
          public:
-           int             loadmap ( const char* name );
-           int             savemap ( const ASCString& name );
-           tmaploaders (void ) { oldmap = NULL; };
-           ~tmaploaders();
+           static GameMap* loadmap ( const ASCString& name );
+           
+           
+           int             savemap ( const ASCString& name, GameMap* gamemap );
+           tmaploaders (void ) {};
 };
 
 
@@ -139,17 +132,18 @@ class  tgameloaders : public tspfldloaders {
 
 class tnetworkloaders : public tgameloaders {
         public:
-           int             loadnwgame ( pnstream strm );
-           int             savenwgame ( pnstream strm );
+           GameMap*           loadnwgame ( pnstream strm );
+           int             savenwgame ( pnstream strm, const GameMap* gamemap );
 };
 
 class tsavegameloaders : public tgameloaders {
         public:
-           tmap*           loadgame ( pnstream strm );
-           void            savegame ( pnstream strm, pmap gamemap, bool writeReplays = true );
+           GameMap*        loadgame ( pnstream strm );
+           static GameMap*  loadGameFromFile ( const ASCString& name );
 
-           int             loadgame ( const char* name );
-           void            savegame ( const char* name );
+           void            savegame ( pnstream strm, GameMap* gamemap, bool writeReplays = true );
+
+           void            savegame ( const ASCString& name );
 };
 
 /*
@@ -162,13 +156,22 @@ class treplayloaders : public tspfldloaders {
 */
 
 //! checks, whether filename is a valid map file
-extern bool validatemapfile ( const char* filename );
+extern bool validatemapfile ( const ASCString& filename );
 
 //! checks, whether filename is a valid savegame
-extern bool validatesavfile ( const char* filename );
+extern bool validatesavfile ( const ASCString& filename );
 
 //! checks, whether filename is a valid email game
-extern bool validateemlfile ( const char* filename );
+extern bool validateemlfile ( const ASCString& filename );
+
+
+struct MapConinuationInfo {
+   ASCString title;
+   ASCString codeword;
+   ASCString filename;
+};
+
+extern MapConinuationInfo findNextCampaignMap( int id = -1 );
 
 
 #endif

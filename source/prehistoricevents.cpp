@@ -1,5 +1,5 @@
-/*! \file gameevents.cpp
-    \brief The event handling of ASC
+/*! \file prehistoricevents.cpp
+    \brief The old event system of ASC, is only used to load old maps
 */
 
 /*
@@ -31,6 +31,8 @@
 #include "gameeventsystem.h"
 #include "gameevents.h"
 #include "dialog.h"
+#include "buildings.h"
+#include "gamemap.h"
 
 //        .l             .l                !              .l                !               !
  enum { cemessage,   ceweatherchange, cenewtechnology, celosecampaign, cerunscript,     cenewtechnologyresearchable,
@@ -57,7 +59,7 @@ extern const char*  ceventtrigger[];
 
   /*  Datenaufbau des triggerData fieldes: [ hi 16 Bit ] [ low 16 Bit ] [ 32 bit Integer ] [ Pointer ]      [ low 24 Bit       ]  [ high 8 Bit ]
      'turn/move',                            move           turn
-     'building/unit     ',Kartened/Spiel                                                   PBuilding/Pvehicle
+     'building/unit     ',Kartened/Spiel                                                   Building/Vehicle
                           disk               ypos           xpos
      'technology researched',                                             Tech. ID
      'event',                                                             Event ID
@@ -160,6 +162,7 @@ extern const char*  ceventtrigger[];
 
 #pragma pack(1)
 
+ typedef class tevent* pevent ;
 
    class PrehistoricEventStructure {
      public:
@@ -168,7 +171,7 @@ extern const char*  ceventtrigger[];
          int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
        } ;
 
-       pascal_byte         player;   // 0..7  fuer die normalen Spieler
+       char         player;   // 0..7  fuer die normalen Spieler
        // 8 wenn das Event unabh"ngig vom Spieler sofort auftreten soll
 
        char         description[20];
@@ -206,7 +209,7 @@ extern const char*  ceventtrigger[];
            GameTime time;
            int xpos, ypos;
            int networkid;
-           pbuilding    building;
+           Building*    building;
            int         dummy;
            int          mapid;
            int          id;
@@ -219,8 +222,8 @@ extern const char*  ceventtrigger[];
 
        LargeTriggerData* trigger_data[4];
 
-       pascal_byte         triggerconnect[4];   /*  CEventTriggerConn */
-       pascal_byte         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
+       char         triggerconnect[4];   /*  CEventTriggerConn */
+       char         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
                                             1: erf?llt, kann sich aber noch "ndern
                                             2: unwiederruflich erf?llt
                                             3: unerf?llbar */
@@ -302,10 +305,10 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen", "irrelevant (used internally)"};
 
-Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 
 
-void  readOldEventLists ( pnstream stream, bool passedEvents, pmap spfld )
+void  readOldEventLists ( pnstream stream, bool passedEvents, GameMap* spfld )
 {
    #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 
@@ -466,7 +469,7 @@ PrehistoricEventStructure :: ~PrehistoricEventStructure ()
 
 
 
-Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents )
+Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents )
 {
 
 /////////////////////////////////////////////////////
@@ -561,7 +564,7 @@ Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTransla
                                     }
                                     break;
 
-       default:                     displaymessage("The event action %s has not been converted and will be missing!", 1, ceventactions[event1.a.action] );
+       default:                     displaymessage("The event action %s has not been converted and will be missing!", 1, ceventactions[int(event1.a.action)] );
      };
 
      if ( ea ) {
@@ -584,7 +587,7 @@ Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTransla
               (event1.trigger[m] == ceventt_buildingdestroyed) ||
               (event1.trigger[m] == ceventt_building_seen )) {
 
-              integer xpos, ypos;
+              Sint16 xpos, ypos;
               stream->readdata2 ( xpos );
               stream->readdata2 ( ypos );
 
@@ -609,7 +612,7 @@ Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTransla
               (event1.trigger[m] == ceventt_unitdestroyed)) {
 
               if ( version == 0 ) {
-                 integer xpos, ypos;
+                 Sint16 xpos, ypos;
                  stream->readdata2 ( xpos );
                  stream->readdata2 ( ypos );
                  event1.trigger_data[m]->xpos = xpos;
@@ -663,7 +666,7 @@ Event*   readOldEvent( pnstream stream, pmap gamemap, map<int,int>& eventTransla
            }
            if (event1.trigger[m] == ceventt_any_unit_enters_polygon ||
                event1.trigger[m] == ceventt_specific_unit_enters_polygon) {
-                  int i = stream->readInt();
+                  stream->readInt(); // i
                   event1.trigger_data[m]->unitpolygon = new PrehistoricEventStructure::LargeTriggerData::PolygonEntered;
                   stream->readdata2( *event1.trigger_data[m]->unitpolygon );
                   event1.trigger_data[m]->unitpolygon->data = new int [ event1.trigger_data[m]->unitpolygon->dataSize ];

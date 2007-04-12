@@ -1,8 +1,0 @@
-BuildingType { 
-   Name = LAB 2.5
-   ID = 28
-   parent = 27
-   Infotext = [Sonderforschungslab für Einzelmissionen Faktor 2.5]
-   MaxResearch = 400
-   NominalResearch = 100
-} BuildingType

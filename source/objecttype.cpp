@@ -18,13 +18,15 @@
 #include <algorithm>
 
 #include "objecttype.h"
-#include "basegfx.h"
 #include "graphicset.h"
 #include "textfileparser.h"
 #include "textfiletags.h"
 #include "sgstream.h"
 #include "textfile_evaluation.h"
 #include "mapalgorithms.h"
+#include "graphics/blitter.h"
+#include "graphics/drawing.h"
+#include "fieldimageloader.h"
 
 #ifndef converter
 #include "gamemap.h"
@@ -36,10 +38,9 @@ ObjectType :: FieldModification::FieldModification()
    terrain_and.flip();
 }
 
-ObjectType :: ObjectType ( void )
+ObjectType :: ObjectType ( void ) : rotateImage(false)
 {
-   buildicon = NULL;
-   removeicon = NULL;
+   namingMethod = AddToTerrain;
    groupID = -1;
 
    displayMethod = 0;
@@ -50,10 +51,19 @@ ObjectType :: ObjectType ( void )
    imageHeight = 0;
    physicalHeight = 0;
    growthRate = 0;
+   growOnUnits = false;
    lifetime = -1;
+   growthDuration = -1;
 }
 
-ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
+const int ObjectType::namingMethodNum = 3;
+
+const char* ObjectType::namingMethodNames[namingMethodNum+1] = { "ReplaceTerrain", "AddToTerrain", "UnNamed", NULL };
+
+      
+
+
+const ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather ) const
 {
    if ( this->weather.test( weather ))
       return fieldModification[weather];
@@ -61,10 +71,10 @@ ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather )
       return fieldModification[0];
 }
 
-bool  ObjectType :: buildable ( pfield fld )
+bool  ObjectType :: buildable ( tfield* fld ) const
 {
    #ifndef converter
-   if ( fld->building )
+   if ( fld->building && !growOnUnits )
       return false;
 
    if ( getFieldModification( fld->getweather() ).terrainaccess.accessible ( fld->bdt ) <= 0 )
@@ -74,84 +84,162 @@ bool  ObjectType :: buildable ( pfield fld )
    return true;
 }
 
-int ObjectType :: getEffectiveHeight()
+int ObjectType :: getEffectiveHeight() const
 {
   return 1 << physicalHeight;
 }
 
 
-void* ObjectType :: getpic ( int i, int w )
+const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weather  ) const
+{
+   if ( !this->weather.test(weather) )
+      weather = 0;
+
+   if ( weatherPicture[weather].images.size() <= picnum )
+      picnum = 0;
+
+   if ( weatherPicture[weather].bi3pic[picnum] > 0 )
+      return GraphicSetManager::Instance().getQuickView( weatherPicture[weather].bi3pic[picnum] );
+   else {
+      if ( weatherPicture[weather].overviewMapImage.size() <= picnum )
+         weatherPicture[weather].overviewMapImage.resize( picnum+1 );
+
+      if ( !weatherPicture[weather].overviewMapImage[picnum].valid() )
+         weatherPicture[weather].overviewMapImage[picnum].create( weatherPicture[weather].images[picnum] );
+
+      return &weatherPicture[weather].overviewMapImage[picnum];
+   }
+}
+
+
+const Surface& ObjectType :: getPicture ( int i, int w ) const
 {
    if ( !weather.test(w) )
       w = 0;
 
    if ( weatherPicture[w].images.size() <= i )
-      i = 0;
+      if ( i >= 64 && weatherPicture[w].images.size() > 34 )
+         i = 34;
+      else
+         i = 0;
 
-   return weatherPicture[w].images[i];
+   if ( weatherPicture[w].bi3pic[i] > 0 )
+      return GraphicSetManager::Instance().getPic(weatherPicture[w].bi3pic[i]);
+   else
+      return weatherPicture[w].images[i];
 }
 
 
-
-
-void ObjectType :: display ( int x, int y, int dir, int weather )
+void ObjectType :: display ( Surface& surface, const SPoint& pos, int dir, int weather ) const
 {
-   #ifndef converter
-  if ( id == 1 || id == 2 ) {
-     putspriteimage ( x, y,  getpic( dir, weather ) );
-  } else
-  if ( id == 4 ) {
-     if ( dir == 68 )
-        putspriteimage ( x, y,  getpic ( 9, weather ) );
-     else
-     if ( dir == 34 )
-        putspriteimage ( x, y,  getpic ( 10, weather ) );
-     else
-     if ( dir == 17 )
-        putspriteimage ( x, y,  getpic ( 11, weather ) );
-     else
-     if ( dir == 136)
-        putspriteimage ( x, y,  getpic ( 12, weather ) );
-     else
-     if ( dir == 0)
-        putspriteimage ( x, y,  getpic ( 0, weather ) );
-     else
-        for (int i = 0; i <= 7; i++)
-           if ( dir & (1 << i))
-              putspriteimage( x, y,  getpic ( i + 1, weather ) );
+   if ( !this->weather.test( weather) )
+      weather = 0;
 
-  } else
-  if (  id == 5 ) {
-     putspriteimage  ( x, y,  getpic ( 0, weather ) );
-  } else
-  /*
-      if ( dirlistnum ) {
-         for ( int i = 0; i < dirlistnum; i++ )
-            if ( dirlist [ i ] == dir ) {
-               putspriteimage ( x, y, getpic ( i, weather ) );
-               return;
-            }
+   if ( id == 4 ) {
+     switch ( dir ) {
+        case  68 : realDisplay( surface, pos,  9, weather ); break;
+        case  34 : realDisplay( surface, pos, 10, weather ); break;
+        case  17 : realDisplay( surface, pos, 11, weather ); break;
+        case 136 : realDisplay( surface, pos, 12, weather ); break;
+        case   0 : realDisplay( surface, pos,  0, weather ); break;
+        default  : {
+           for (int i = 0; i <= 7; i++)
+              if ( dir & (1 << i))
+                 realDisplay( surface, pos,  i+1, weather ); 
+        }
+     }
+   } else
+      realDisplay( surface, pos, dir, weather ); 
 
-         for ( int j = 0; j < dirlistnum; j++ )
-            if ( dirlist [ j ] == 0 ) {
-               putspriteimage ( x, y, getpic ( j, weather ) );
-               return;
-            }
+}
 
-         putspriteimage ( x, y, getpic ( 0, weather ) );
 
+template<
+int BytesPerSourcePixel,
+int BytesPerTargetPixel
+>
+class ColorConverter_PassThrough
+{
+   public:
+      typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType SourcePixelType;
+      typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType TargetPixelType;
+   private:
+      SourcePixelType srcColorKey;
+      TargetPixelType destColorKey;
+   public:
+      ColorConverter_PassThrough( const Surface& sourceSurface, Surface& targetSurface )
+      {}
+      ;
+      TargetPixelType convert ( SourcePixelType sp )
+      {
+         return sp;
+      };
+};
+
+
+
+void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int weather ) const
+{
+   int flip = 0;
+   if ( dir < weatherPicture[weather].flip.size() )
+      flip = weatherPicture[weather].flip[dir];
+
+   if ( displayMethod==1 ) { // SHADOW: buried pipeline, tracks, ...
+      megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, 0.7, flip, nullParam); 
+   } else
+      if ( displayMethod == 2 ) {  // translation
+         MegaBlitter< 1,4,
+                     ColorTransform_None, 
+                     ColorMerger_Alpha_XLAT_TableShifter, 
+                     SourcePixelSelector_DirectFlip,
+                     TargetPixelSelector_All,
+                     ColorConverter_PassThrough
+                    >
+             blitter;
+         blitter.setFlipping( flip & 1, flip & 2 );
+         blitter.blit( getPicture( dir, weather), surface, pos );
       } else
-      */
-         putspriteimage ( x, y, getpic ( dir, weather ) );
-
-  #endif
+         if ( displayMethod == 4 ) {
+            const Surface& s = getPicture( dir, weather);
+            if ( dir != 0 && rotateImage ) {
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir%6]),nullParam); 
+            } else {
+               megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_DirectFlip,    TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam, flip, nullParam); 
+            }
+         } else {
+            bool disp = true;
+            #ifndef karteneditor
+            if ( displayMethod == 3 ) // mapeditorOnly
+               disp = false;
+            #endif
+            if ( disp ) {
+               const Surface& s = getPicture( dir, weather);
+               if ( flip ) {
+                  // if ( s.flags() & SDL_SRCALPHA )
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                  // else   
+                  //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+               } else {  
+                  if ( dir != 0 && rotateImage ) {
+                     // if ( s.flags() & SDL_SRCALPHA )
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir%6]),nullParam); 
+                     // else
+                     //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
+                  } else {
+                     // if ( s.flags() & SDL_SRCALPHA )
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                     // else
+                     //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                  }
+               }   
+            }
+         }   
 }
 
 
-
-void ObjectType :: display ( int x, int y )
+void ObjectType :: display ( Surface& surface, const SPoint& pos ) const
 {
-   display ( x, y, 34, 0 );
+   display ( surface, pos, rotateImage? 0 : 64, 0 );
 }
 
 
@@ -262,10 +350,10 @@ int  UnSmoothDarkBanksData [] = {
 
 
 class Smoothing {
-         pmap actmap;
+         GameMap* actmap;
        public:
-         Smoothing ( pmap gamemap ) : actmap ( gamemap ) {};
-         pfield getfield ( int x, int y )
+         Smoothing ( GameMap* gamemap ) : actmap ( gamemap ) {};
+         tfield* getfield ( int x, int y )
          {
             return actmap->getField ( x, y );
          }
@@ -302,17 +390,17 @@ class Smoothing {
          };
 
 
-         int  GetNeighbourMask( int x, int y, int* Arr, pobjecttype o )
+         int  GetNeighbourMask( int x, int y, int* Arr, ObjectType* o )
          {
             int res = 0;
             for ( int d = 0; d < sidenum; d++ ) {
                int x1 = x;
                int y1 = y;
                getnextfield ( x1, y1, d );
-               pfield fld = getfield ( x1, y1 );
+               tfield* fld = getfield ( x1, y1 );
                if ( fld ) {
 
-                  pobject obj = fld->checkforobject ( o );
+                  Object* obj = fld->checkforobject ( o );
                   if ( obj )
                      if ( obj->typ->weather.test(0) )
                         if ( IsInSetOfWord ( obj->typ->weatherPicture[0].bi3pic[ obj->dir ], Arr ))
@@ -334,7 +422,7 @@ class Smoothing {
                int x1 = x;
                int y1 = y;
                getnextfield ( x1, y1, d );
-               pfield fld = getfield ( x1, y1 );
+               tfield* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   if ( IsInSetOfWord ( fld->typ->bi_pict, Arr ))
@@ -379,7 +467,7 @@ class Smoothing {
          };
 
 
-         int SmoothIt( pobjecttype TerObj, int* SmoothData )
+         int SmoothIt( ObjectType* TerObj, int* SmoothData )
          {
            int P0 = SmoothData[0];
            int P1 = SmoothData[1];
@@ -389,7 +477,7 @@ class Smoothing {
            for ( int Y = 0 ; Y < actmap->ysize; Y++ )
              for ( int X = 0; X < actmap->xsize; X++ ) {
                  if ( TerObj ) {
-                    pobject obj = getfield ( X, Y )-> checkforobject ( TerObj );
+                    Object* obj = getfield ( X, Y )-> checkforobject ( TerObj );
                     if ( obj  && obj->typ->weather.test(0) ) {
                        int Old = obj->dir; // bipicnum
                                            //    Old:= TRawArrEck(Mission.ACTN[Y, X])[TerObj];  // bisherige Form / oder Bildnummer ?
@@ -413,9 +501,9 @@ class Smoothing {
                           Res = 1;
                     }
                  } else {
-                    pfield fld = getfield ( X, Y );
+                    tfield* fld = getfield ( X, Y );
                     TerrainType::Weather* old = fld->typ;
-                    int odir = fld->direction;
+                    // int odir = fld->direction;
 
                     if ( IsInSetOfWord( fld->typ->bi_pict, &SmoothData[P0] )) {    // Nur die "allesWald"-fielder werden gesmootht
                        int Mask = GetNeighbourMask( X, Y, &SmoothData[P1] );
@@ -444,7 +532,7 @@ class Smoothing {
                           */
                        }
                     }
-                    if ( old != fld->typ  ||  odir != fld->direction )
+                    if ( old != fld->typ  )
                        Res = 1;
 
                  }
@@ -454,7 +542,7 @@ class Smoothing {
 
 
 
-         void smooth ( int what, pobjecttype woodObj )
+         void smooth ( int what, ObjectType* woodObj )
          {
            int ShowAgain = 0;
            if ( what & 2 ) {
@@ -613,18 +701,18 @@ Smoothdaten
 */
 
 
-void smooth ( int what, pmap gamemap, pobjecttype woodObj )
+void smooth ( int what, GameMap* gamemap, ObjectType* woodObj )
 {
   Smoothing s ( gamemap );
   s.smooth ( what, woodObj );
 }
 
 
-void calculateforest( pmap actmap, pobjecttype woodObj )
+void calculateforest( GameMap* actmap, ObjectType* woodObj )
 {
    for ( int y = 0; y < actmap->ysize ; y++)
      for ( int x = 0; x < actmap->xsize ; x++) {
-        pfield fld = actmap->getField(x,y);
+        tfield* fld = actmap->getField(x,y);
 
         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
            if ( i->typ == woodObj )
@@ -641,7 +729,7 @@ void calculateforest( pmap actmap, pobjecttype woodObj )
       changed = 0;
       for ( int y = 0; y < actmap->ysize ; y++)
          for ( int x = 0; x < actmap->xsize ; x++) { 
-            pfield fld = actmap->getField(x,y);
+            tfield* fld = actmap->getField(x,y);
    
             for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
                if ( o->typ == woodObj ) {
@@ -650,10 +738,10 @@ void calculateforest( pmap actmap, pobjecttype woodObj )
                      int a = x;
                      int b = y;
                      getnextfield( a, b, i );
-                     pfield fld2 = actmap->getField(a,b);
+                     tfield* fld2 = actmap->getField(a,b);
 
                      if ( fld2 ) {
-                        pobject oi = fld2->checkforobject ( o->typ );
+                        Object* oi = fld2->checkforobject ( o->typ );
                         if ( oi )
                            if ( oi->dir <= 20  ||  run == 0 )
                               c |=  1 << i ;
@@ -685,118 +773,6 @@ void calculateforest( pmap actmap, pobjecttype woodObj )
 } // namespace forestcalculation
 
 
-void         calculateobject( int       x,
-                              int       y,
-                              bool      mof,
-                              pobjecttype obj,
-                              pmap actmap )
-{
-   if ( obj->netBehaviour & ObjectType::KeepOrientation ) 
-      return;
-
-   if ( obj->netBehaviour & ObjectType::SpecialForest ) {
-      ForestCalculation::calculateforest( actmap, obj );
-      return;
-   }
-
-   pfield fld = actmap->getField(x,y) ;
-   pobject oi2 = fld-> checkforobject (  obj  );
-
-   int c = 0;
-   for ( int dir = 0; dir < sidenum; dir++) {
-      int a = x;
-      int b = y;
-      getnextfield( a, b, dir );
-      pfield fld2 = actmap->getField(a,b);
-
-      if ( fld2 ) {
-         for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
-            pobject oi;
-            if ( oj == -1 )
-               oi = fld2->checkforobject ( obj );
-            else
-               oi = fld2->checkforobject ( actmap->getobjecttype_byid ( obj->linkableObjects[oj] ) );
-
-            if ( oi ) {
-               c |=  1 << dir ;
-               if ( mof )
-                  calculateobject ( a, b, false, oi->typ, actmap );
-
-            }
-         }
-         for ( unsigned int t = 0; t < obj->linkableTerrain.size(); t++ )
-            if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
-               c |=  1 << dir ;
-
-         if ( fld2->building && !(fld2->building->typ->special & cgnoobjectchainingb) ) {
-            if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )
-               c |= 1 << dir;
-
-            if ( obj->netBehaviour & ObjectType::NetToBuildings )
-               c |= 1 << dir;
-         }
-
-      }
-      else {
-         if ( obj->netBehaviour & ObjectType::NetToBorder )
-            c |= 1 << dir;
-      }
-   }
-
-   if ( obj->netBehaviour & ObjectType::AutoBorder ) {
-      int autoborder = 0;
-      int count = 0;
-      for ( int dir = 0; dir < sidenum; dir++) {
-         int a = x;
-         int b = y;
-         getnextfield( a, b, dir );
-         pfield fld2 = actmap->getField(a,b);
-         if ( !fld2 ) {
-            // if the field opposite of the border field is connected to, make a straight line out of the map.
-            if ( c & (1 << ((dir+sidenum/2) % sidenum ))) {
-               autoborder |= 1 << dir;
-               count++;
-            }
-         }
-      }
-      if ( count == 1 )
-         c |= autoborder;
-   }
-
-   if ( oi2 ) {
-     oi2->setdir ( c );
-     fld->setparams();
-   }
-
-}
-
-
-
-
-void         calculateallobjects( pmap actmap )
-{
-   vector<ObjectType*> forestObjects;
-   for ( int y = 0; y < actmap->ysize ; y++)
-      for ( int x = 0; x < actmap->xsize ; x++) {
-         pfield fld = actmap->getField(x,y);
-
-         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
-             if ( !(i->typ->netBehaviour & ObjectType::SpecialForest) )
-                calculateobject( x, y, false, i->typ, actmap );
-             else
-                if ( find ( forestObjects.begin(), forestObjects.end(), i->typ ) == forestObjects.end())
-                   forestObjects.push_back ( i->typ );
-
-         fld->setparams();
-      }
-
-   for ( vector<ObjectType*>::iterator i = forestObjects.begin(); i != forestObjects.end(); i++ )
-      ForestCalculation::calculateforest( actmap, *i );
-}
-
-
-
-
 #else // ifdef converter
 
 
@@ -807,7 +783,7 @@ void         calculateallobjects( pmap actmap )
 
 
 
-const int object_version = 13;
+const int object_version = 19;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -879,9 +855,11 @@ void ObjectType :: read ( tnstream& stream )
 
        displayMethod = stream.readInt();
 
-       int w;
-       stream.readrlepict ( &buildicon,  false, &w);
-       stream.readrlepict ( &removeicon, false, &w);
+       if ( version < 15 ) {
+          Surface s;
+          s.read( stream );
+          s.read( stream );
+       }
 
        techDependency.read ( stream );
 
@@ -900,7 +878,7 @@ void ObjectType :: read ( tnstream& stream )
          if ( weather.test ( ww ) ) {
 
             int pictnum = stream.readInt();
-            weatherPicture[ww].gfxReference = stream.readInt(  );
+            stream.readInt(  ); // weatherPicture[ww].gfxReference = 
 
             weatherPicture[ww].bi3pic.resize( pictnum );
             weatherPicture[ww].flip.resize( pictnum );
@@ -910,74 +888,32 @@ void ObjectType :: read ( tnstream& stream )
                int bi3 = stream.readInt();
                if ( bi3 == 1 ) {
                   weatherPicture[ww].bi3pic[n] = stream.readInt();
-                  weatherPicture[ww].flip[n] = 0;
-
-                  loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
-                                      &weatherPicture[ww].images[n],
-                                      1,
-                                      weatherPicture[ww].gfxReference );  // CGameOptions::Instance()->bi3.interpolate.objects
+                  weatherPicture[ww].flip[n] = stream.readInt();
                } else {
                   weatherPicture[ww].bi3pic[n] = -1;
-                  weatherPicture[ww].flip[n] = 0;
-                  stream.readrlepict ( &weatherPicture[ww].images[n], false, &w);
+                  weatherPicture[ww].images[n].read ( stream );
+                  if ( object_version >= 13 )
+                     weatherPicture[ww].flip[n] = stream.readInt();
+                  else   
+                     weatherPicture[ww].flip[n] = 0;
                }
             }
          }
 
+      if ( version >= 16 )
+         namingMethod = NamingMethod( stream.readInt() );
+
+      if ( version >= 17 )
+         growthDuration = stream.readInt();
+
+      if ( version >= 18 )
+         rotateImage = stream.readInt();
+
+      if ( version >= 19 )
+         growOnUnits = stream.readInt();
+      
    } else
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
-}
-
-void ObjectType :: setupImages()
-{
-   int copycount = 0;
-   #ifndef converter
-   for ( int ww = 0; ww < cwettertypennum; ww++ )
-      if ( weather.test( ww ) )
-         for ( int n = 0; n < weatherPicture[ww].bi3pic.size(); n++ )
-			   if ( weatherPicture[ww].flip.size() > n ) {
-               if ( weatherPicture[ww].flip[n] == 1 ) {
-                  void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                  flippict ( weatherPicture[ww].images[n], buf , 1 );
-                  asc_free ( weatherPicture[ww].images[n] );
-                  weatherPicture[ww].images[n] = buf;
-                  copycount++;
-               }
-
-               if ( weatherPicture[ww].flip[n] == 2 ) {
-                  void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                  flippict ( weatherPicture[ww].images[n], buf , 2 );
-                  asc_free ( weatherPicture[ww].images[n] );
-                  weatherPicture[ww].images[n] = buf;
-                  copycount++;
-               }
-
-               if ( weatherPicture[ww].flip[n] == 3 ) {
-                  void* buf = new char [ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
-                  flippict ( weatherPicture[ww].images[n], buf , 2 );
-                  flippict ( buf, weatherPicture[ww].images[n], 1 );
-                  asc_free( buf );
-                  copycount++;
-               }
-
-
-//            if ( weatherPicture[ww].bi3pic[n] == -1 )
-//               weatherPicture[ww].flip[n] = 0;
-            }
-   #endif
-
-   /*
-   if ( copycount == 0 )
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
-         if ( weather.test ( ww ) )
-            for ( int n = 0; n < weatherPicture[ww].images.size(); n++ )
-               if ( weatherPicture[ww].bi3pic[n] != -1 ) {
-                  asc_free ( weatherPicture[ww].images[n] );
-                  loadbi3pict_double ( weatherPicture[ww].bi3pic[n],
-                                       &weatherPicture[ww].images[n],
-                                       1 ); // CGameOptions::Instance()->bi3.interpolate.objects );
-               }
-   */
 }
 
 
@@ -1037,9 +973,6 @@ void ObjectType :: write ( tnstream& stream ) const
 
     stream.writeInt ( displayMethod );
 
-    stream.writerlepict( buildicon );
-    stream.writerlepict( removeicon );
-
     techDependency.write ( stream );
 
     stream.writeFloat( growthRate );
@@ -1049,18 +982,24 @@ void ObjectType :: write ( tnstream& stream ) const
     for ( int ww = 0; ww < cwettertypennum; ww++ )
        if ( weather.test( ww ) ) {
           stream.writeInt( weatherPicture[ww].images.size() );
-          stream.writeInt( weatherPicture[ww].gfxReference );
+          stream.writeInt( 0 ); // weatherPicture[ww].gfxReference
 
           for ( int l = 0; l < weatherPicture[ww].images.size(); l++ ) {
-             if ( weatherPicture[ww].bi3pic[l] >= 0 && weatherPicture[ww].flip[l] == 0 ) {
+             if ( weatherPicture[ww].bi3pic[l] >= 0 ) {
                 stream.writeInt ( 1 );
                 stream.writeInt ( weatherPicture[ww].bi3pic[l] );
              } else {
                 stream.writeInt ( 2 );
-                stream.writeImage( weatherPicture[ww].images[l], false );
+                weatherPicture[ww].images[l].write( stream );
              }
+             stream.writeInt ( weatherPicture[ww].flip.at(l) );
           }
        }
+
+    stream.writeInt( namingMethod );
+    stream.writeInt( growthDuration );
+    stream.writeInt( rotateImage );
+    stream.writeInt( growOnUnits );
 }
 
 
@@ -1091,12 +1030,14 @@ void ObjectType :: FieldModification :: runTextIO ( PropertyContainer& pc )
    terrainaccess.runTextIO ( pc );
    pc.closeBracket ();
 
-   pc.addTagArray ( "TerrainProperties_Filter", terrain_and, cbodenartennum, bodenarten, true );
-   pc.addTagArray ( "TerrainProperties_Add", terrain_or, cbodenartennum, bodenarten );
+   pc.addTagArray ( "TerrainProperties_Filter", terrain_and, terrainPropertyNum, terrainProperties, true );
+   pc.addTagArray ( "TerrainProperties_Add", terrain_or, terrainPropertyNum, terrainProperties );
 }
 
 void ObjectType :: runTextIO ( PropertyContainer& pc )
 {
+   pc.addBreakpoint();
+
    pc.addInteger  ( "ID", id );
    pc.addInteger  ( "GroupID", groupID, -1 );
    pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
@@ -1154,9 +1095,13 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.closeBracket ();
 
    pc.addString( "Name", name );
+   pc.addTagInteger ( "NamingMethod", namingMethod, namingMethodNum, namingMethodNames, int(0) );
 
    pc.addDFloat( "GrowthRate", growthRate, 0 );
+   pc.addInteger( "MaxChildSpawnNumber", growthDuration, -1 );
    pc.addInteger( "LifeTime", lifetime, -1 );
+   pc.addBool( "GrowOnUnits", growOnUnits, false );
+
 
    pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );
 
@@ -1183,24 +1128,9 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
          if ( bi3pics ) {
             pc.addIntegerArray ( "GFXpictures", weatherPicture[i].bi3pic );
             pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip );
-            int oldsize = weatherPicture[i].flip.size();
+            // int oldsize = weatherPicture[i].flip.size();
             weatherPicture[i].flip.resize( weatherPicture[i].bi3pic.size() );
             weatherPicture[i].images.resize( weatherPicture[i].bi3pic.size() );
-            for ( int r = oldsize; r < weatherPicture[i].flip.size(); r++ )
-               weatherPicture[i].flip[r] = 0;
-
-            weatherPicture[i].gfxReference = true;
-            for ( int r = 0; r <  weatherPicture[i].flip.size(); r++ )
-               if ( weatherPicture[i].flip[r] > 0 )
-                  weatherPicture[i].gfxReference = false;
-
-            if ( pc.isReading() )
-               for ( int j = 0; j < weatherPicture[i].bi3pic.size(); j++ )
-                   loadbi3pict_double (  weatherPicture[i].bi3pic[j],
-                                        &weatherPicture[i].images[j],
-                                        1,
-                                        weatherPicture[i].gfxReference );
-
          } else {
             ASCString s = extractFileName_withoutSuffix( filename );
             if ( s.empty() ) {
@@ -1208,11 +1138,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                s += strrr(id);
             }
             pc.addImageArray ( "picture",   weatherPicture[i].images, s + weatherAbbrev[i] );
+            weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
+            weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
 
             if ( pc.find ( "FlipPictures" ) ) {
                vector<int>   imgReferences;
-               weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
-               weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
                imgReferences.resize ( weatherPicture[i].images.size() );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ ) {
@@ -1225,46 +1155,47 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                pc.addIntegerArray ( "ImageReference", imgReferences );
 
                for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                  if ( imgReferences.size() > j && imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() ) {
-                     if ( weatherPicture[i].images[j] )
-                        asc_free ( weatherPicture[i].images[j] );
-                     int newimg = imgReferences[j];
-                     int size = getpicsize2( weatherPicture[i].images[newimg] );
-                     void* p = asc_malloc(size);
-                     memcpy ( p, weatherPicture[i].images[newimg], size );
-                     weatherPicture[i].images[j] = p;
+                  if ( j < imgReferences.size() && imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() )
+                     weatherPicture[i].images[j] = weatherPicture[i].images[imgReferences[j]];
+
+               while ( weatherPicture[i].flip.size() < weatherPicture[i].images.size() )
+                  weatherPicture[i].flip.push_back(0);
+
+               if ( pc.isReading() ) {
+                  int operations;
+                  pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
+                  if ( operations == 1 )  {
+                     for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
+                        snowify( weatherPicture[i].images[j] );
                   }
+               }
+
 
             } else {
-               weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
-               weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
                for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {
                   weatherPicture[i].bi3pic[u] = -1;
                   weatherPicture[i].flip[u] = 0;
                }
             }
-
-            if ( pc.find ( "DisplayMethod" ) )
-               pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
-            else
-               displayMethod = 0;
-
          }
+         
+         if ( pc.find ( "DisplayMethod" ) )
+            pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
+         else
+            displayMethod = 0;
 
+         
          if ( !oldWeatherSpecification ) {
             fieldModification[i].runTextIO( pc );
          }
          pc.closeBracket (  );
       }
 
-   if ( pc.isReading() )
-      setupImages();
-
    techDependency.runTextIO( pc );
 
-   #ifndef converter
-    buildicon = generate_object_gui_build_icon ( this, 0 );
-    removeicon = generate_object_gui_build_icon ( this, 1 );
-   #endif
+   if ( weatherPicture[0].images.size() == 1 && (netBehaviour&KeepOrientation) )
+      rotateImage = true;
+
+
 
 }

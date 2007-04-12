@@ -1,192 +1,3 @@
-//     $Id: unitctrl.h,v 1.37 2005-04-02 13:57:06 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.36  2004/08/01 20:13:29  mbickel
-//      Updated railstations
-//      Fixed replay bugs
-//      Fixed: resetting a units movement points
-//
-//     Revision 1.35  2004/03/27 21:48:15  mbickel
-//      Added function ViewPipeNet to ASC
-//      Fixed: trigger specificunitenterespoly not working for fields with buildings
-//      fixed: default map title was asc000 instead of asc001
-//      Speedup for resource transfer operations
-//
-//     Revision 1.34  2004/01/16 15:33:48  mbickel
-//     Completely rewritten game event system
-//     TPWM-decoding-Patch
-//     Fixed: swallog message: wrong coordinates
-//     Autotraining for units with max ammo only
-//     Movement required for clearing mines
-//     Unit names can be edited
-//     weather dependen object properties
-//     Unit swallowed by ground -> unified message
-//     units cannot enter enemy transports
-//     Building entry has constant movemalus
-//     Message for resource transfer for providing player
-//     increased ammo production cost
-//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
-//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
-//     Container: Movemalus override for unloading
-//     Startup map specified in ASC.INI
-//
-//     Revision 1.33  2003/03/24 11:18:47  mbickel
-//      Fixed compilation problems with gcc 2.95
-//
-//     Revision 1.32  2003/03/07 17:11:41  mbickel
-//      AI improvements
-//
-//     Revision 1.31  2003/02/27 16:12:46  mbickel
-//      Restructuring of new pathfinding code completed
-//
-//     Revision 1.30  2003/02/19 19:47:26  mbickel
-//      Completely rewrote Pathfinding code
-//      Wind not different any more on different levels of height
-//
-//     Revision 1.29  2002/09/19 20:20:06  mbickel
-//      Cleanup and various bug fixes
-//
-//     Revision 1.28  2002/03/26 22:23:09  mbickel
-//      Fixed: music was started even if turned off in ini file
-//      Fixed: crash in reaction fire
-//      Fixed: reaction fire not occuring when changing height
-//
-//     Revision 1.27  2001/11/28 13:03:16  mbickel
-//      Fixed: attack selectable although 0% hit accuracy
-//      Fixed: refuelling not possible if weapon had wrong target height
-//      Fixed: repair icon displayed when refuelling
-//
-//     Revision 1.26  2001/11/15 20:46:05  mbickel
-//      Fixed: replay not working when moving units out of carriers
-//
-//     Revision 1.25  2001/09/25 15:13:07  mbickel
-//      New version number
-//      Fixed crash when reaction fire during ascend
-//
-//     Revision 1.24  2001/03/30 12:43:16  mbickel
-//      Added 3D pathfinding
-//      some cleanup and documentation
-//      splitted the ai into several files, now located in the ai subdirectory
-//      AI cares about airplane servicing and range constraints
-//
-//     Revision 1.23  2001/02/04 21:27:02  mbickel
-//      The AI status is written to savegames -> new savegame revision
-//      Lots of bug fixes
-//
-//     Revision 1.22  2001/01/25 23:45:06  mbickel
-//      Moved map displaying routins to own file (mapdisplay.cpp)
-//      Wrote program to create pcx images from map files (map2pcx.cpp)
-//      Fixed bug in repair function: too much resource consumption
-//      AI improvements and bug fixes
-//      The BI3 map import function now evaluates the player status (human/
-//       computer)
-//
-//     Revision 1.21  2001/01/19 13:33:57  mbickel
-//      The AI now uses hemming
-//      Several bugfixes in Vehicle Actions
-//      Moved all view calculation to viewcalculation.cpp
-//      Mapeditor: improved keyboard support for item selection
-//
-//     Revision 1.20  2000/12/28 16:58:39  mbickel
-//      Fixed bugs in AI
-//      Some cleanup
-//      Fixed crash in building construction
-//
-//     Revision 1.19  2000/11/21 20:27:11  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.18  2000/11/14 20:36:47  mbickel
-//      The AI can now use supply vehicles
-//      Rewrote objecttype IO routines to make the structure independant of
-//       the memory layout
-//
-//     Revision 1.17  2000/11/11 11:05:21  mbickel
-//      started AI service functions
-//
-//     Revision 1.16  2000/11/08 19:31:18  mbickel
-//      Rewrote IO for the tmap structure
-//      Fixed crash when entering damaged building
-//      Fixed crash in AI
-//      Removed item CRCs
-//
-//     Revision 1.15  2000/10/31 10:42:48  mbickel
-//      Added building->vehicle service to vehicle controls
-//      Moved tmap methods to gamemap.cpp
-//
-//     Revision 1.14  2000/10/11 15:33:48  mbickel
-//      Adjusted small editors to the new ASC structure
-//      Watcom compatibility
-//
-//     Revision 1.13  2000/10/11 14:26:53  mbickel
-//      Modernized the internal structure of ASC:
-//       - vehicles and buildings now derived from a common base class
-//       - new resource class
-//       - reorganized exceptions (errors.h)
-//      Split some files:
-//        typen -> typen, vehicletype, buildingtype, basecontainer
-//        controls -> controls, viewcalculation
-//        spfst -> spfst, mapalgorithm
-//      bzlib is now statically linked and sources integrated
-//
-//     Revision 1.12  2000/09/27 16:08:32  mbickel
-//      AI improvements
-//
-//     Revision 1.11  2000/09/25 20:04:43  mbickel
-//      AI improvements
-//
-//     Revision 1.10  2000/09/25 13:25:55  mbickel
-//      The AI can now change the height of units
-//      Heightchaning routines improved
-//
-//     Revision 1.9  2000/09/24 19:57:06  mbickel
-//      ChangeUnitHeight functions are now more powerful since they use
-//        UnitMovement on their own.
-//
-//     Revision 1.8  2000/09/17 15:20:38  mbickel
-//      AI is now automatically invoked (depending on gameoptions)
-//      Some cleanup
-//
-//     Revision 1.7  2000/07/16 14:20:06  mbickel
-//      AI has now some primitive tactics implemented
-//      Some clean up
-//        moved weapon functions to attack.cpp
-//      Mount doesn't modify PCX files any more.
-//
-//     Revision 1.6  2000/06/09 10:51:00  mbickel
-//      Repaired keyboard control of pulldown menu
-//      Fixed compile errors at fieldlist with gcc
-//
-//     Revision 1.5  2000/06/08 21:03:44  mbickel
-//      New vehicle action: attack
-//      wrote documentation for vehicle actions
-//
-//     Revision 1.4  2000/06/04 21:39:22  mbickel
-//      Added OK button to ViewText dialog (used in "About ASC", for example)
-//      Invalid command line parameters are now reported
-//      new text for attack result prediction
-//      Added constructors to attack functions
-//
-//     Revision 1.3  2000/05/23 20:40:53  mbickel
-//      Removed boolean type
-//
-//     Revision 1.2  2000/05/06 20:25:26  mbickel
-//      Fixed: -recognition of a second mouse click when selection a pd menu item
-//             -movement: fields the unit can only pass, but not stand on them,
-//                        are marked darker
-//             -intedit/stredit: mouseclick outside is like hitting enter
-//
-//     Revision 1.1  2000/04/27 16:25:31  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -219,12 +30,13 @@
 #include "basestrm.h"
 #include "spfst.h"
 #include "attack.h"
-#include "mapdisplay.h"
 #include "astar2.h"
+#include "actions/servicing.h"
 
 
 /** \file unitctrl.h
    New system for actions performed by units
+   This design is considered a failure, it won't be used for any new code
 */
 
 #ifdef karteneditor
@@ -237,7 +49,7 @@ extern SigC::Signal0<void> fieldCrossed;
 
 template<class T>
 class FieldList {
-       pmap localmap;
+       GameMap* localmap;
        int fieldnum;
        std::vector<int> xpos;
        std::vector<int> ypos;
@@ -245,16 +57,17 @@ class FieldList {
      public:
        FieldList ( void );
        int getFieldNum ( void ) const;
-       pfield getField ( int num ) const;
+       tfield* getField ( int num ) const;
        T& getData ( int num );
        T& getData ( int x, int y );
        void getFieldCoordinates ( int num, int* x, int* y ) const;
+       MapCoordinate getFieldCoordinates ( int num ) const;
        void addField ( int x, int y, const T& _data );
        void addField ( const MapCoordinate& mc, const T& _data );
        void addField ( int x, int y );
        void addField ( const MapCoordinate& mc );
-       void setMap ( pmap map );
-       pmap getMap ( void );
+       void setMap ( GameMap* map );
+       GameMap* getMap ( void );
        bool isMember ( int x, int y );
        bool isMember ( const MapCoordinate& mc );
      };
@@ -267,7 +80,7 @@ typedef FieldList<AttackWeap> AttackFieldList;
 typedef class PendingVehicleActions* PPendingVehicleActions;
 
 
-enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack, vat_service };
+enum VehicleActionType { vat_nothing, vat_move, vat_ascent, vat_descent, vat_attack, vat_service, vat_newservice };
 
 class VehicleAction {
            protected:
@@ -275,8 +88,8 @@ class VehicleAction {
               VehicleActionType actionType;
            public:
               virtual int getStatus( void ) = 0;
-              virtual int available ( pvehicle veh ) const = 0;
-              virtual int execute ( pvehicle veh, int x, int y, int step, int param1, int param2 ) = 0;
+              virtual int available ( Vehicle* veh ) const = 0;
+              virtual int execute ( Vehicle* veh, int x, int y, int step, int param1, int param2 ) = 0;
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleAction ( VehicleActionType _actionType, PPendingVehicleActions _pva  );
               virtual ~VehicleAction ( );
@@ -303,6 +116,7 @@ class VehicleAction {
 
 typedef int trichtungen[sidenum];
 
+class MapDisplayInterface;
 
 class BaseVehicleMovement : public VehicleAction {
            protected:
@@ -312,22 +126,22 @@ class BaseVehicleMovement : public VehicleAction {
               BaseVehicleMovement ( VehicleActionType _actionType, PPendingVehicleActions _pva, MapDisplayInterface* md ) : VehicleAction ( _actionType, _pva ),mapDisplay(md), status(0), attackedByReactionFire(false)  {};
               BaseVehicleMovement ( MapDisplayInterface* md ) : VehicleAction ( vat_move, NULL ),mapDisplay(md), status(0), attackedByReactionFire(false) {};
               AStar3D::Path path;
-              int execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt );
+              int execute ( Vehicle* veh, int x, int y, int step, int height, int noInterrupt );
               bool attackedByReactionFire;
-              pvehicle getVehicle ( void ) { return vehicle; };
+              Vehicle* getVehicle ( void ) { return vehicle; };
               void registerMapDisplay ( MapDisplayInterface* _mapDisplay ) { mapDisplay = _mapDisplay; };
               virtual int getStatus ( void ) { return status; };
-              int available ( pvehicle veh ) const;
+              int available ( Vehicle* veh ) const;
 
 
             protected:
-               pvehicle vehicle;
+               Vehicle* vehicle;
 
                int moveunitxy ( AStar3D::Path& pathToMove, int noInterrupt = -1 );
 
                class PathFinder : public AStar3D {
                  public:
-                   PathFinder ( pmap actmap, pvehicle veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
+                   PathFinder ( GameMap* actmap, Vehicle* veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
 
                    /** searches for all fields that are within the range of maxDist and marks them.
                        On each field one bit for each level of height will be set.
@@ -342,10 +156,11 @@ class VehicleMovement : public BaseVehicleMovement {
            public:
               IntFieldList reachableFields;
               IntFieldList reachableFieldsIndirect;
-              int available ( pvehicle veh ) const;
+              int available ( Vehicle* veh ) const { return status==0 && avail(veh); };
+              static bool avail ( Vehicle* veh );
 
               enum  { NoInterrupt = 1, DisableHeightChange = 2 };
-              int execute ( pvehicle veh, int x, int y, int step, int height, int capabilities );
+              int execute ( Vehicle* veh, int x, int y, int step, int height, int capabilities );
 
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleMovement ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
@@ -380,21 +195,23 @@ class ChangeVehicleHeight : public BaseVehicleMovement {
               int dir;
            public:
               IntFieldList reachableFields;
-              int execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int disableMovement );
+              int execute ( Vehicle* veh, int x, int y, int step, int noInterrupt, int disableMovement );
               ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva , VehicleActionType vat, int dir_ );
           };
 
 class IncreaseVehicleHeight : public ChangeVehicleHeight {
            public:
               IncreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
-              int available ( pvehicle veh ) const;
+              static bool avail ( Vehicle* veh );
+              int available ( Vehicle* veh ) const;
               ~IncreaseVehicleHeight();
           };
 
 class DecreaseVehicleHeight : public ChangeVehicleHeight {
            public:
               DecreaseVehicleHeight ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
-              int available ( pvehicle veh ) const;
+              static bool avail ( Vehicle* veh );
+              int available ( Vehicle* veh ) const;
               ~DecreaseVehicleHeight();
           };
 
@@ -419,19 +236,19 @@ class DecreaseVehicleHeight : public ChangeVehicleHeight {
 
 
 class VehicleAttack : public VehicleAction {
-              pvehicle vehicle;
+              Vehicle* vehicle;
               int status;
               int kamikaze;
               class tsearchattackablevehicles : public SearchFields {
                                   VehicleAttack* va;
                                public:
                                   int       anzahlgegner;
-                                  pvehicle  angreifer;
+                                  const Vehicle*  angreifer;
                                   int       kamikaze;
-                                  void            init ( const pvehicle eht, int _kamikaze, VehicleAttack* _va );
+                                  void            init ( const Vehicle* eht, int _kamikaze, VehicleAttack* _va );
                                   virtual void    testfield ( const MapCoordinate& mc );
                                   int             run ( void );
-                                  tsearchattackablevehicles ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
+                                  tsearchattackablevehicles ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
                           } search;
 
            protected:
@@ -442,8 +259,10 @@ class VehicleAttack : public VehicleAction {
               AttackFieldList attackableObjects;
 
               int getStatus( void ) { return status; };
-              virtual int available ( pvehicle veh ) const;
-              virtual int execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum );
+              Vehicle* getAttacker() { return vehicle; };
+              virtual int available ( Vehicle* veh ) const { return status==0 && avail(veh); };
+              static bool avail( Vehicle* veh );
+              virtual int execute ( Vehicle* veh, int x, int y, int step, int _kamikaze, int weapnum );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
               virtual ~VehicleAttack ( );
@@ -467,15 +286,15 @@ class VehicleAttack : public VehicleAction {
 
 
 class VehicleService : public VehicleAction {
-              pvehicle vehicle;
-              pbuilding building;
+              Vehicle* vehicle;
+              Building* building;
               int status;
 
           public:
               class FieldSearch : public SearchFields {
                      VehicleService& vs;
-                     pvehicle        veh;
-                     pbuilding       bld;
+                     Vehicle*        veh;
+                     Building*       bld;
                      Resources       buildingResources;
                      Resources       resourcesCapacity;
                   public:
@@ -484,25 +303,25 @@ class VehicleService : public VehicleAction {
                        bool height;
                      } bypassChecks;
                      virtual void     testfield ( const MapCoordinate& mc );
-                     void             checkVehicle2Vehicle ( pvehicle veh, int xp, int yp );
-                     void             checkBuilding2Vehicle ( pvehicle veh );
+                     void             checkVehicle2Vehicle ( Vehicle* veh, int xp, int yp );
+                     void             checkBuilding2Vehicle ( Vehicle* veh );
                      bool             initrefuelling( int xp1, int yp1 );
-                     void             init ( pvehicle _veh, pbuilding _bld );
+                     void             init ( Vehicle* _veh, Building* _bld );
                      void             run (  );
-                     FieldSearch ( VehicleService& _vs, pmap _gamemap ) : SearchFields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
+                     FieldSearch ( VehicleService& _vs, GameMap* _gamemap ) : SearchFields ( _gamemap ), vs ( _vs ) { bypassChecks.distance = false; bypassChecks.height = false; };
                   } fieldSearch;
 
 
            protected:
               MapDisplayInterface* mapDisplay;
            public:
-              pvehicle getVehicle ( void ) { return vehicle; };
-              pbuilding getBuilding ( void ) { return building; };
+              Vehicle* getVehicle ( void ) { return vehicle; };
+              Building* getBuilding ( void ) { return building; };
 
               enum Service { srv_repair, srv_resource, srv_ammo };
               class Target {
                  public:
-                    pvehicle dest;
+                    Vehicle* dest;
 
                     struct Service {
                       VehicleService::Service type;
@@ -520,9 +339,10 @@ class VehicleService : public VehicleAction {
               TargetContainer dest;
 
               int getStatus( void ) { return status; };
-              virtual int available ( pvehicle veh ) const;
-              int getServices ( pvehicle veh ) const;
-              int execute ( pvehicle veh, int targetNWID, int dummy, int step, int pos, int amount );
+              virtual int available ( Vehicle* veh ) const;
+              static int avail ( const Vehicle* veh );
+              static int getServices ( Vehicle* veh );
+              int execute ( Vehicle* veh, int targetNWID, int dummy, int step, int pos, int amount );
               int fillEverything ( int targetNWID, bool repairsToo );
               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
               VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
@@ -554,6 +374,64 @@ class VehicleService : public VehicleAction {
 
 
 
+         
+#if 1
+
+         class NewVehicleService : public VehicleAction {
+            public:
+               typedef ServiceTargetSearcher::Targets Targets;
+               ServiceTargetSearcher::Targets targets;
+            private:
+               ContainerBase* container;
+               int status;
+               
+               
+            protected:
+               MapDisplayInterface* mapDisplay;
+            public:
+               ContainerBase* getContainer() { return container; };
+
+               int getStatus( void ) { return status; };
+               virtual int available ( ContainerBase* veh ) const;
+               virtual int available ( Vehicle* veh ) const;
+               static int avail ( ContainerBase* veh );
+               int executeContainer ( ContainerBase* veh, int x, int y, int step, int pos, int amount );
+               int execute ( Vehicle* veh, int x, int y, int step, int pos, int amount );
+               
+               bool targetAvail( const ContainerBase* target );
+               
+               int fillEverything ( ContainerBase* target, bool repairsToo = false );
+               virtual void registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva );
+               NewVehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva = NULL );
+               virtual ~NewVehicleService ( );
+
+              //! here the gui stores which icon initiated the service; thus preventing the occurance of an repair icon when a fuel transfer was initiated.
+               int guimode;
+         };
+
+
+
+/* NewVehicleService:
+         *
+         *   Step 0:   execute ( vehicle, -1, -1, step = 0 , -1, -1 );
+         *                 if vehicle is going to service some units
+         *                  OR
+         *             execute ( NULL, xpos, ypos, step = 0 , -1, -1 );
+         *                 if the building at xpos, ypos is going to service some units
+         *
+         *                 dest then contains all units that can be services together with the services
+         *                 Use the units networkID as Index
+         *
+         *
+         *   Step 2:   execute ( NULL, targetNWID, -1, step = 2, pos, amount );
+         *                 targetNWID is the unit that is going to be serviced
+         *                 pos is the position of the service: dest[targetNWID].service[pos]
+         *                 amount is the amount of the service that is going to be transferred
+ */
+
+#endif
+         
+
 
 class PendingVehicleActions {
           public:
@@ -566,6 +444,7 @@ class PendingVehicleActions {
             DecreaseVehicleHeight* descent;
             VehicleAttack* attack;
             VehicleService* service;
+            NewVehicleService* newservice;
             ~PendingVehicleActions ( );
          };
 
@@ -588,7 +467,7 @@ template<class T> int FieldList<T> :: getFieldNum ( void ) const
    return fieldnum;
 }
 
-template<class T> pfield FieldList<T> :: getField ( int num ) const
+template<class T> tfield* FieldList<T> :: getField ( int num ) const
 {
    if ( num < fieldnum && num >= 0 )
       return getfield ( xpos[num], ypos[num] );
@@ -623,6 +502,15 @@ template<class T> void FieldList<T> :: getFieldCoordinates ( int num, int* x, in
    } else {
       *x = -1;
       *y = -1;
+   }
+}
+
+template<class T> MapCoordinate FieldList<T> :: getFieldCoordinates ( int num ) const
+{
+   if ( num < fieldnum && num >= 0 ) {
+      return MapCoordinate( xpos[num], ypos[num] );
+   } else {
+      return MapCoordinate( -1, -1 );
    }
 }
 
@@ -670,12 +558,12 @@ template<class T> void FieldList<T> :: addField ( int x, int y )
 }
 
 
-template<class T> void FieldList<T> :: setMap ( pmap map )
+template<class T> void FieldList<T> :: setMap ( GameMap* map )
 {
    localmap = map;
 }
 
-template<class T> pmap FieldList<T> :: getMap ( void )
+template<class T> GameMap* FieldList<T> :: getMap ( void )
 {
    return localmap;
 }

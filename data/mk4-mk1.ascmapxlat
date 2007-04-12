@@ -1,0 +1,329 @@
+maptranslation {
+   TerrainTranslation = [  ]
+   TerrainObjTranslation = [  ]
+   ObjectTranslation = [ ] 
+   
+   BuildingTranslation = [ 
+                           1000  1  
+                           ; Depot
+                           
+                           1001 12  
+                           ; Small Vehicle Plant
+                           
+                           1002  3  
+                           ; Headquarter
+                           
+                           1003 -1  
+                           ; Bunker HQ
+                           
+                           1004 24  
+                           ; Town 
+                           
+                           1005 -1  
+                           ; Secret Depot
+                           
+                           1008 11  
+                           ; great vehicle plant
+                           
+                           1009 -1  
+                           ; mountain entrance
+                           
+                           1010 -1  
+                           ; HQ Titan Net
+                           
+                           1015 -1  
+                           ; Bunker HQ
+                           
+                           1016 -1  
+                           ; Bunker HQ
+                           
+                           1200 15  
+                           ; solar power plant
+                           
+                           1201  5  
+                           ; wind power plant
+                           
+                           1202 -1  
+                           ; secret factory
+                           
+                           1203 -1  
+                           ; secret town
+                           
+                           1204 20  
+                           ; mining station
+                           
+                           1205 22  
+                           ; research institute
+                           
+                           1206  1  
+                           ; mining station
+                           
+                           1211 13  
+                           ; oil platform
+                           
+                           1212  4  
+                           ; oil tower
+                           
+                           1213  6  
+                           ; gas station
+                           
+                           1214 13  
+                           ; oil platform
+                           
+                             50 17  
+                             ; shipyard
+                           
+                             51 21  
+                             ; airport (entrance north)
+                           
+                             52 10  
+                             ; airport (entrance south)
+                           
+                             53 11  
+                             ; great vehicle plant
+                           
+                             54  2  
+                             ; depot ( entrance on wrong side !)
+                           
+                             55  3  
+                             ; HQ
+                             
+                             56  3  
+                             ; HQ (entrance on wrong side!) 
+                             
+                             57 23  
+                             ; training center
+                             
+                             58 24  
+                             ; Villa Deng
+                             
+                             59 24  
+                             ; Town
+                             
+                             60 24  
+                             ; Town
+                             
+                             61 -1  
+                             ; submarine base 
+                           ] 
+                           
+   VehicleTranslation = [ 
+                           1200 6  
+                           ; RANGER -> WEASEL
+                           
+                           1201 26 
+                           ; PLANUM 5 -> ANT
+                           
+                           1202 13 
+                           ; SINUS -> COSINUS
+                           
+                           1203 -1 
+                           ; BUGGY
+                           
+                           1204 16 
+                           ; ORION OR-3 -> ORACLE
+                           
+                           1205 17 
+                           ; DEMON I31 -> SHOCK TROOPER
+                           
+                           1206 4  
+                           ; IMPERATOR -> ARMADILLO
+                           
+                           1207 65 
+                           ; TECCNO -> TERMITE
+                           
+                           1208 -1 
+                           ; SNAKE
+                           
+                           1209 7  
+                           ; STING -> HORNET
+                           
+                           1210 66 
+                           ; SAM 2 -> NOVA
+                           
+                           1211 2  
+                           ; PULSAR A3 -> COMA
+                           
+                           1212 3  
+                           ; NASHORN -> ASSAULT
+                           
+                           1213 17 
+                           ; GOLEM -> SHOCK TROOPER
+                           
+                           1214 51 
+                           ; ELIXIR -> VORTEX
+                           
+                           1215 17 
+                           ; TROLL I42 -> SHOCK TROOPER
+                           
+                           1216 2  
+                           ; ARCHIMEDES -> COMA
+                           
+                           1217 10 
+                           ; ALGOL -> ALGUIN
+                           
+                           1218 11 
+                           ; ALCOR -> CETI
+                           
+                           1219 16 
+                           ; RUNE -> ORACLE
+                           
+                           1220 61 
+                           ; MEDUSA -> SAM TURRET
+                           
+                           1221 49 
+                           ; SKULL -> FORT
+                           
+                           1222 56 
+                           ; IONSTAR -> BIGGUN
+                           
+                           1223 25 
+                           ; ATLAS -> ATUIN
+                           
+                           1224 72 
+                           ; DOLMEN -> FLUX
+                           
+                           1225 57 
+                           ; ANACONDA -> PUNCH
+                           
+                           1226 58 
+                           ; Excalibur Z3 -> CALLANDOR
+                           
+                           1227 7  
+                           ; PYTHON -> HORNET
+                           
+                           1228 59 
+                           ; MONOLITH -> JUDY
+                           
+                           1229 18 
+                           ; COMET FP-42 -> SWATTER
+                           
+                           1230 1  
+                           ; QUASAR -> BLACKOUT
+                           
+                           1231 66 
+                           ; SAM 3 -> NOVA
+                           
+                           1232 64 
+                           ; MEDUSA 2 -> SPIKE
+                           
+                           1233 -1 
+                           ; UX-2
+                           
+                           1234  4 
+                           ; AXIS -> ARMADILLO
+                           
+                           1235  4 
+                           ; CITADELLE -> ARMADILLO
+                           
+                           1236 53 
+                           ; Paratrooper
+                           
+                           1237 -1 
+                           ; Diver
+                           
+                           1238 -1 
+                           ; ParaTec
+                           
+                           1239 -1 
+                           ; ParaPlanum
+                           
+                           1240 12 
+                           ; Lurat -> Vesuvius
+                           
+                           1241  9 
+                           ; UHU -> SCOPE
+                           
+                           1242 22 
+                           ; GHOST -> DOMINATOR
+                           
+                           1243 29 
+                           ; STORMBRINGER -> TIMBER
+                           
+                           1244 19 
+                           ; THUNDER FX -> ARROW
+                           
+                           1245 55 
+                           ; DRAGON -> TUPI
+                           
+                           1246 19 
+                           ; GENOM -> ARROW
+                           
+                           1247 52 
+                           ; SPERBER -> EAGLE
+                           
+                           1248 31 
+                           ; SPECTRUM -> NIGHTCAP
+                           
+                           1249 87 
+                           ; VISION -> Vast
+                           
+                           1250 29 
+                           ; PTERRANO -> TIMBER
+                           
+                           1251 15 
+                           ; CRUX -> RAVEN
+                           
+                           1252 15 
+                           ; GUPPI -> RAVEN
+                           
+                           1253 88 
+                           ; Vision GA -> Primerose
+                           
+                           1254 86 
+                           ; Orbiter -> Shuttle
+                           
+                           1255 -1 
+                           ; Albatros
+                           
+                           1256 39 
+                           ; REX -> FIX
+                           
+                           1257 42 
+                           ; MOEWE -> WAKE
+                           
+                           1258 47 
+                           ; PATRIX -> SHARK
+                           
+                           1259 14 
+                           ; TITAN -> WEDGE
+                           
+                           1260 36 
+                           ; SHELL -> CLAM
+                           
+                           1261 34 
+                           ; ORCA -> EEL
+                           
+                           1262 47 
+                           ; POLAR -> SHARK
+                           
+                           1263 37 
+                           ; ZENIT -> APOGEE
+                           
+                           1264 38 
+                           ; HYDRA -> STREAK
+                           
+                           1265  5 
+                           ; VADER -> HOOVERCRAFT
+                           
+                           1266  5 
+                           ; VADER DF -> HOOVERCRAFT
+                           
+                           1267 35 
+                           ; PLUTO -> Tsunami
+                           
+                           1270 26 
+                           ; REGIO -> ANT
+                           
+                           1271 21 
+                           ; EXTERMINATOR -> IMPACT
+                           
+                           1276 -1 
+                           ; SUPER VIRUS
+                           
+                           1277 -1 
+                           ; ALDINIUM
+                           
+                         ]
+
+} maptranslation

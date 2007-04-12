@@ -27,7 +27,7 @@
 #include "mapalgorithms.h"
 #include "dlg_box.h"
 #include "dialog.h"
-
+#include "cannedmessages.h"
 
 SigC::Signal0<void> tributeTransferred;
 
@@ -35,7 +35,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 {
   int s;
 
-   pfield fld = actmap->getField ( x, y );
+   tfield* fld = actmap->getField ( x, y );
    if ( !fld )
       return;
 
@@ -103,7 +103,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 void MapNetwork :: searchvehicle ( int x, int y )
 {
    if ( pass == 2 ) {
-      pfield newfield = actmap->getField ( x, y );
+      tfield* newfield = actmap->getField ( x, y );
       if ( newfield )
          if ( !newfield->a.temp2 )
            if ( newfield->vehicle ) {
@@ -116,11 +116,11 @@ void MapNetwork :: searchvehicle ( int x, int y )
 
 void MapNetwork :: searchbuilding ( int x, int y )
 {
-   pbuilding bld = actmap->getField( x, y )->building;
+   Building* bld = actmap->getField( x, y )->building;
    if ( !bld )
       return;
 
-   pfield entry = bld->getEntryField();
+   tfield* entry = bld->getEntryField();
    if ( entry->a.temp )
       return;
 
@@ -133,13 +133,13 @@ void MapNetwork :: searchbuilding ( int x, int y )
       for( int i = 0; i < 4; i++ )
          for ( int j = 0; j < 6; j++ ) {
             MapCoordinate mc = bld->getFieldCoordinates ( BuildingType::LocalCoordinate(i, j) );
-            pfield fld2 = actmap->getField ( mc );
+            tfield* fld2 = actmap->getField ( mc );
             if ( fld2 && fld2->building == bld )
                for ( int d = 0; d < sidenum; d++ ) {
                   int xp2 = mc.x;
                   int yp2 = mc.y;
                   getnextfield ( xp2, yp2, d );
-                  pfield newfield = actmap->getField ( xp2, yp2 );
+                  tfield* newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
                      searchfield ( xp2, yp2, d );
 
@@ -152,7 +152,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
 
 int MapNetwork :: instancesrunning = 0;
 
-MapNetwork :: MapNetwork ( pmap gamemap, int checkInstances ) : actmap ( gamemap )
+MapNetwork :: MapNetwork ( GameMap* gamemap, int checkInstances ) : actmap ( gamemap )
 {
    if ( checkInstances ) {
       if ( instancesrunning )
@@ -176,14 +176,14 @@ MapNetwork :: ~MapNetwork ()
 void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
 {
    pass++;
-   for ( tmap::Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
+   for ( Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
       MapCoordinate3D mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
-         pfield fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
+         tfield* fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
          if ( fld ) {
-            pbuilding bld = fld->building;
+            Building* bld = fld->building;
             if ( bld && bld->color == (*j)->color ) {
-               pfield fld2 = actmap->getField( (*j)->getPosition());
+               tfield* fld2 = actmap->getField( (*j)->getPosition());
                if ( !fld2->a.temp2 ) {
                   fld2->a.temp2 = 1;
                   checkvehicle ( *j );
@@ -200,7 +200,7 @@ void MapNetwork :: start ( int x, int y )
       for ( int i = 0; i < 8; i++ )
          if ( actmap->player[i].exist() ) {
 
-            for ( tmap::Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
+            for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); j++ )
                checkbuilding(*j);
 
             // if ( !searchfinished() )
@@ -225,7 +225,7 @@ void MapNetwork :: start ( int x, int y )
          }
       } else  
          if ( globalsearch() == 0 ) {
-            pfield fld = actmap->getField ( x, y );
+            tfield* fld = actmap->getField ( x, y );
             if ( fld )
                if ( fld->building ) {
                   if ( pass == 1 )
@@ -242,8 +242,8 @@ void MapNetwork :: start ( int x, int y )
 
 int ResourceNet :: fieldavail ( int x, int y )
 {
-    pfield fld = actmap->getField ( x, y );
-/*    pobject o = fld->checkforobject ( pipelineobject ) ; 
+    tfield* fld = actmap->getField ( x, y );
+/*    Object* o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
     else */
@@ -261,7 +261,7 @@ int ResourceNet :: fieldavail ( int x, int y )
              int xp = x;
              int yp = y;
              getnextfield ( xp, yp , i );
-             pfield fld2 = actmap->getField ( xp, yp );
+             tfield* fld2 = actmap->getField ( xp, yp );
              if ( fld2 )
                 if ( (fld2->bdt & tb).any() ||  fld2->building )
                    d |= ( 1 << i );
@@ -306,21 +306,21 @@ int StaticResourceNet :: searchfinished ( void )
 
 
 
-GetResource :: GetResource ( pmap gamemap, int scope )
+GetResource :: GetResource ( GameMap* gamemap, int scope )
              : StaticResourceNet ( gamemap, scope )
 {
    memset ( tributegot, 0, sizeof ( tributegot ));
 }
 
 
-void GetResource :: checkvehicle ( pvehicle v )
+void GetResource :: checkvehicle ( Vehicle* v )
 {
    if ( v->color/8 == player && resourcetype == 0 )
-      got += v->getResource( need-got, Resources::Energy, queryonly );
+      got += v->getResource( need-got, Resources::Energy, queryonly, 1, player );
 }
 
 
-void GetResource :: checkbuilding ( pbuilding b )
+void GetResource :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyoutput << resourcetype)) == 0) {
@@ -395,7 +395,7 @@ void GetResource :: start ( int x, int y )
 
 
 
-void PutResource :: checkbuilding ( pbuilding b )
+void PutResource :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
@@ -406,8 +406,8 @@ void PutResource :: checkbuilding ( pbuilding b )
             b->actstorage.resource( resourcetype ) = 0;
          }
          
-         if ( b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
-            tostore = b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype );
+         if ( b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
+            tostore = b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype );
       
          if ( !queryonly )
             b->actstorage.resource( resourcetype ) += tostore;
@@ -436,13 +436,13 @@ void PutResource :: start ( int x, int y )
 
 
 
-void PutTribute :: checkbuilding ( pbuilding b )
+void PutTribute :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == targplayer ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
          int tostore = need-got;
-         if ( b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
-            tostore = b->gettank ( resourcetype ) - b->actstorage.resource( resourcetype );
+         if ( b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype ) < tostore )
+            tostore = b->getStorageCapacity().resource( resourcetype ) - b->actstorage.resource( resourcetype );
       
          if ( !queryonly ) {
             b->actstorage.resource( resourcetype ) += tostore;
@@ -488,8 +488,10 @@ void PutTribute :: start ( int x, int y )
                   if ( need > avail )
                      need = avail;
                   MapNetwork :: start ( x, y );
-                  if ( !queryonly )
-                     startbuilding->getResource ( got, resourcetype, queryonly, 0 );
+                  if ( !queryonly ) {
+                     startbuilding->getResource ( got, resourcetype, queryonly, 0, startbuilding->getOwner() ); 
+                     // printf(" building at %d/%d had %d, pushed %d\n", x, y, avail, got );
+                  }
 
                }
             }
@@ -498,7 +500,7 @@ void PutTribute :: start ( int x, int y )
    } while ( targplayer < 8  && pl == -1 );
 }
 
-int PutTribute :: puttribute ( pbuilding start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope )
+int PutTribute :: puttribute ( Building* start, int resource, int _queryonly, int _forplayer, int _fromplayer, int _scope )
 {
    startbuilding = start;
    targplayer = _forplayer;
@@ -506,10 +508,11 @@ int PutTribute :: puttribute ( pbuilding start, int resource, int _queryonly, in
 }
 
 
-void transfer_all_outstanding_tribute ( void )
+void transfer_all_outstanding_tribute ( Player& player )
 {
-   int targplayer = actmap->actplayer;
-     // for ( int player = 0; player < 8; player++ )
+   int targplayer = player.getPosition();
+   GameMap* actmap = player.getParentMap();
+   
    if ( actmap->player[targplayer].exist() ) {
       ASCString text;
 
@@ -523,7 +526,7 @@ void transfer_all_outstanding_tribute ( void )
                   topay[ resourcetype ] = actmap->tribute.avail[ player ][ targplayer ].resource( resourcetype ) + got[ resourcetype ];
 
                   if ( !actmap->isResourceGlobal (resourcetype) ) {
-                     for ( tmap::Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
+                     for ( Player::BuildingList::iterator j = actmap->player[player].buildingList.begin(); j != actmap->player[player].buildingList.end() &&  topay[resourcetype] > got[resourcetype] ; j++ ) {
                         PutTribute pt ( actmap );
                         got[resourcetype] += pt.puttribute ( *j, resourcetype, 0, targplayer, player, 1 );
                      }
@@ -587,11 +590,11 @@ void transfer_all_outstanding_tribute ( void )
 }
 
 
-void GetResourceCapacity :: checkbuilding ( pbuilding b )
+void GetResourceCapacity :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) {
       if ((b->netcontrol & (cnet_stopenergyinput << resourcetype)) == 0) {
-         int t = b->gettank ( resourcetype );
+         int t = b->getStorageCapacity().resource( resourcetype );
          if ( t > maxint - got )
             got = maxint;
          else
@@ -635,7 +638,7 @@ int ResourceChangeNet :: getresource ( int x, int y, int resource, int _player, 
 
 
 
-void GetResourcePlus :: checkvehicle ( pvehicle v )
+void GetResourcePlus :: checkvehicle ( Vehicle* v )
 {/*
    if ( resourcetype == 0 )
       if ( v->getGeneratorStatus() )
@@ -644,7 +647,7 @@ void GetResourcePlus :: checkvehicle ( pvehicle v )
 }
 
 
-void GetResourcePlus :: checkbuilding ( pbuilding bld )
+void GetResourcePlus :: checkbuilding ( Building* bld )
 {
    if ( bld->color/8 == player )
       got += bld->getResourcePlus().resource( resourcetype );
@@ -654,9 +657,187 @@ void GetResourcePlus :: checkbuilding ( pbuilding bld )
 
 
 
-void GetResourceUsage :: checkbuilding ( pbuilding b )
+void GetResourceUsage :: checkbuilding ( Building* b )
 {
    if ( b->color/8 == player ) 
       got += b->getResourceUsage().resource( resourcetype );
+}
+
+
+
+bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, ASCString* log )
+{
+   ASCString s;
+   bool diff  = false;
+   for ( int r = 0; r < 3; ++r ) {
+      if ( currentMap->isResourceGlobal( r )) {
+         if ( currentMap->bi_resource[player].resource(r) != replaymap->bi_resource[player].resource(r) ) {
+            diff = true;
+            if ( log ) {
+               s.format ( "Global resource mismatch: %d %s available after replay, but %d available in actual map\n", replaymap-> bi_resource[player].resource(r), resourceNames[r], currentMap->bi_resource[player].resource(r) );
+               *log += s;
+            }
+         }
+      } else {
+         GetConnectedBuildings::BuildingContainer cb;
+         for ( Player::BuildingList::iterator b = currentMap->player[player].buildingList.begin(); b != currentMap->player[player].buildingList.end(); ++b ) {
+            Building* b1 = *b;
+            ContainerBase* b2 = replaymap->getContainer( b1->getIdentification() );
+            if ( !b1 || !b2 ) {
+               if ( log ) {
+                  s.format ( "Building missing! \n");
+                  *log += s;
+               }
+            } else {
+               if ( find ( cb.begin(), cb.end(), b1 ) == cb.end()) {
+                  int ab1 = b1->getResource( maxint, r, true, 1, player );
+                  int ab2 = b2->getResource( maxint, r, true, 1, player);
+                  if ( ab1 != ab2 ) {
+                     diff = true;
+                     if ( log ) {
+                        s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
+                        *log += s;
+                     }
+                  }
+                  cb.push_back ( b1 );
+                  GetConnectedBuildings::BuildingContainer cbl;
+                  GetConnectedBuildings gcb ( cbl, b1->getMap(), r );
+                  gcb.start ( b1->getPosition().x, b1->getPosition().y );
+                  cb.insert ( cb.end(), cbl.begin(), cbl.end() );
+               }
+            }
+         }
+      }
+      for ( Player::VehicleList::iterator v = currentMap->player[player].vehicleList.begin(); v != currentMap->player[player].vehicleList.end(); ++v ) {
+         Vehicle* v1 = *v;
+         Vehicle* v2 = replaymap->getUnit( v1->networkid );
+         if ( !v1 || !v2 ) {
+            if ( log ) {
+               s.format ( "Vehicle missing! \n");
+               *log += s;
+            }
+         } else {
+            int av1 = v1->getResource( maxint, r, true, 1, player );
+            int av2 = v2->getResource( maxint, r, true, 1, player );
+            if ( av1 != av2 ) {
+               diff = true;
+               if ( log ) {
+                  s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
+                  *log += s;
+               }
+            }
+            
+            if ( v1->damage != v2->damage ) {
+               diff = true;
+               if ( log ) {
+                  s.format ( "Vehicle (%d,%d) damage mismatch: %d after replay, but %d in actual map\n", v1->getPosition().x, v1->getPosition().y, v2->damage, v1->damage );
+                  *log += s;
+               }
+            }
+         }
+      }
+
+   }
+   if ( currentMap->player[player].vehicleList.size() != replaymap->player[player].vehicleList.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "The number of units differ. Replay: %d ; actual map: %d", replaymap->player[player].vehicleList.size(), currentMap->player[player].vehicleList.size());
+         *log += s;
+
+         GameMap* more;
+         GameMap* less;
+         if ( currentMap->player[player].vehicleList.size() > replaymap->player[player].vehicleList.size() ) {
+            more = currentMap;
+            less = replaymap;
+         } else {
+            more = replaymap;
+            less = currentMap;
+         }
+
+         for ( Player::VehicleList::iterator i = more->player[player].vehicleList.begin(); i != more->player[player].vehicleList.end(); ++i )
+            if ( !less->getUnit( (*i)->networkid )) {
+               s.format( "Type: %s at %d/%d\n", (*i)->getName().c_str(), (*i)->getPosition().x, (*i)->getPosition().y );
+               *log += s;
+            }
+
+
+      }
+   }
+   if ( currentMap->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "The number of buildings differ. Replay: %d ; actual map: %d", replaymap->player[player].buildingList.size(), currentMap->player[player].buildingList.size());
+         *log += s;
+      }
+   }
+
+   if ( currentMap->player[player].research.progress != replaymap->player[player].research.progress ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "Research points mismatch! Replay: %d ; actual map: %d", replaymap->player[player].research.progress, currentMap->player[player].research.progress);
+         *log += s;
+      }
+   }
+
+   sort ( currentMap->player[player].research.developedTechnologies.begin(), currentMap->player[player].research.developedTechnologies.end() );
+   sort ( replaymap->player[player].research.developedTechnologies.begin(), replaymap->player[player].research.developedTechnologies.end() );
+   if ( replaymap->player[player].research.developedTechnologies.size() != currentMap->player[player].research.developedTechnologies.size() ) {
+      diff = true;
+      if ( log ) {
+         s.format ( "Number of developed technologies differ !\n" );
+         *log += s;
+      }
+   } else {
+      for ( int i = 0; i < replaymap->player[player].research.developedTechnologies.size(); ++i )
+         if ( replaymap->player[player].research.developedTechnologies[i] != currentMap->player[player].research.developedTechnologies[i] ) {
+         diff = true;
+         if ( log ) {
+            s.format ( "Different technologies developed !\n" );
+            *log += s;
+         }
+         }
+   }
+
+   for ( Player::BuildingList::iterator b = currentMap->player[player].buildingList.begin(); b != currentMap->player[player].buildingList.end(); ++b ) {
+      Building* b1 = *b;
+      Building* b2 = dynamic_cast<Building*>(replaymap->getContainer( b1->getIdentification() ));
+      if ( !b1 || !b2 ) {
+         if ( log ) {
+            s.format ( "Building missing! \n");
+            *log += s;
+         }
+      } else {
+         bool mismatch = false;
+         for ( int i = 0; i < b1->getProduction().size(); ++i )
+            if ( b1->getProduction()[i] ) {
+               bool found = false;
+               for ( int j = 0; j < b2->getProduction().size(); ++j)
+                  if ( b2->getProduction()[j] == b1->getProduction()[i] )
+                     found = true;
+               if ( !found)
+                  mismatch = true;
+            }
+
+            for ( int j = 0; j < b2->getProduction().size(); ++j )
+               if ( b2->getProduction()[j] ) {
+                  bool found = false;
+                  for ( int i = 0; i < b1->getProduction().size(); ++i)
+                     if ( b1->getProduction()[i] == b2->getProduction()[j] )
+                        found = true;
+                  if ( !found)
+                     mismatch = true;
+               }
+
+               if ( mismatch ) {
+                  diff = true;
+                  if ( log ) {
+                     s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
+                     *log += s;
+                  }
+               }
+      }
+   }
+
+   return diff;
 }
 

@@ -30,38 +30,91 @@
 #include "spfst.h"
 #include "controls.h"
 #include "dialog.h"
-#include "stack.h"
 #include "gameoptions.h"
-#include "sg.h"
 #include "viewcalculation.h"
-#include "dashboard.h"
 #include "itemrepository.h"
-#include "building_controls.h"
+#include "containercontrols.h"
 #include "resourcenet.h"
-
+#include "guiiconhandler.h"
+#include "guifunctions.h"
+#include "cannedmessages.h"
+#include "unitctrl.h"
+#include "replaymapdisplay.h"
+#include "asc-mainscreen.h"
+#include "loaders.h"
+#include "turncontrol.h"
+#include "widgets/textrenderer.h"
+#include "actions/jumpdrive.h"
+#include "reactionfire.h"
 
 trunreplay runreplay;
 
 int startreplaylate = 0;
 
 
-void runSpecificReplay( int player, int viewingplayer )
+class ReplayGuiIconHandleHandler {
+   static GuiIconHandler* replayIconHandler;
+   bool active;
+   public:
+      ReplayGuiIconHandleHandler()
+      {
+         if ( !replayIconHandler ) {
+            replayIconHandler = new GuiIconHandler();
+            registerReplayGuiFunctions( *replayIconHandler );
+         }
+         
+         if ( NewGuiHost::getIconHandler() != replayIconHandler ) {
+            active = true;
+            NewGuiHost::pushIconHandler( replayIconHandler );
+         } else
+            active = false;
+      };
+
+      ~ReplayGuiIconHandleHandler()
+      {
+         if ( active )
+            NewGuiHost::popIconHandler();
+      };
+};
+GuiIconHandler* ReplayGuiIconHandleHandler::replayIconHandler = NULL;
+
+
+
+
+
+void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperations )
 {
     if ( actmap->replayinfo->map[player] && actmap->replayinfo->guidata[player] ) {
+       try {
+         int t;
+         do {
+            t = runreplay.run ( player, viewingplayer, performEndTurnOperations );
+         } while ( t ); /* enddo */
+       }
 
-       npush ( lockdisplaymap );
-       lockdisplaymap = 0;
-
-       int t;
-
-       do {
-          t = runreplay.run ( player, viewingplayer );
-       } while ( t ); /* enddo */
-
-       npop ( lockdisplaymap );
-
+#ifndef _DEBUG
+       catch ( ... ) {
+#else
+       catch ( GameMap ) {  // will never be thrown, but we need catch statement for the try block
+#endif
+          errorMessage("An unrecognized error occured during the replay");
+          delete actmap;
+          actmap = NULL;
+          throw NoMapLoaded();
+       }
     }
 }
+
+void viewOwnReplay( Player& player )
+{
+   if ( player.stat == Player::human || player.stat == Player::supervisor )
+      if ( CGameOptions::Instance()->debugReplay && player.getParentMap()->replayinfo )
+         if (choice_dlg("run replay of your turn ?","~y~es","~n~o") == 1) {
+            // cursor.gotoxy( actmap->cursorpos.position[oldplayer].cx, actmap->cursorpos.position[oldplayer].cy );
+            runSpecificReplay ( player.getPosition(), player.getPosition(), false );
+         }
+}
+
 
 void checkforreplay ( void )
 {
@@ -83,8 +136,12 @@ void checkforreplay ( void )
    }
 
 
-   if ( actmap->replayinfo  &&  rpnum  &&  actmap->player[ actmap->actplayer ].stat == Player::human )
+   if ( actmap->replayinfo  &&  rpnum  &&  (actmap->player[ actmap->actplayer ].stat == Player::human || actmap->player[ actmap->actplayer ].stat == Player::supervisor) )
       if (choice_dlg("run replay of last turn ?","~y~es","~n~o") == 1) {
+      
+         MainScreenWidget::StandardActionLocker locker( mainScreenWidget, MainScreenWidget::LockOptions::Menu );
+         ReplayGuiIconHandleHandler guiIconHandler;
+         
          int s = actmap->actplayer + 1;
          if ( s >= 8 )
             s = 0;
@@ -105,148 +162,33 @@ void checkforreplay ( void )
 }
 
 
-void initReplayLogging()
+void initReplayLogging( Player& player )
 {
+   GameMap* gamemap = player.getParentMap();
+   
    if ( startreplaylate ) {
-      actmap->replayinfo = new tmap::ReplayInfo;
+      gamemap->replayinfo = new GameMap::ReplayInfo;
       startreplaylate = 0;
    }
 
-   if ( actmap->replayinfo && actmap->player[ actmap->actplayer ].stat != Player::off ) {
-      if ( actmap->replayinfo->actmemstream )
-         displaymessage2( "actmemstream already open at begin of turn ",2 );
+   if ( gamemap->replayinfo && player.stat != Player::off ) {
+      if ( gamemap->replayinfo->actmemstream )
+         fatalError( "actmemstream already open at begin of turn " );
 
-      if ( actmap->replayinfo->guidata[actmap->actplayer] ) {
-         delete actmap->replayinfo->guidata[actmap->actplayer];
-         actmap->replayinfo->guidata[actmap->actplayer] = NULL;
+      if ( gamemap->replayinfo->guidata[ player.getPosition() ] ) {
+         delete gamemap->replayinfo->guidata[ player.getPosition() ];
+         gamemap->replayinfo->guidata[ player.getPosition() ] = NULL;
       }
 
-      savereplay ( actmap->actplayer );
+      savereplay ( gamemap, player.getPosition() );
 
-      actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-      actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
+      gamemap->replayinfo->guidata[ player.getPosition() ] = new tmemorystreambuf;
+      gamemap->replayinfo->actmemstream = new tmemorystream ( gamemap->replayinfo->guidata[ player.getPosition() ], tnstream::writing );
    }
 }
 
-void closeReplayLogging()
-{
-   if ( actmap->replayinfo )
-      if ( actmap->replayinfo->actmemstream ) {
-         delete actmap->replayinfo->actmemstream;
-         actmap->replayinfo->actmemstream = NULL;
-      }
-}
 
-
-int ReplayMapDisplay :: checkMapPosition ( int x, int y )
-{
-   if ( x >= actmap->xsize )
-      x = actmap->xsize - 1;
-   if ( y >= actmap->ysize )
-      y = actmap->ysize - 1;
-
-   int a = actmap->xpos;
-   int b = actmap->ypos;
-   int xss = idisplaymap.getscreenxsize();
-   int yss = idisplaymap.getscreenysize();
-
-   if ((x < a) || (x >= a + xss )) {
-      if (x >= xss / 2)
-         actmap->xpos = (x - xss / 2);
-      else
-         actmap->xpos = 0;
-
-   }
-
-   if (y < b   ||   y >= b + yss  ) {
-      if (y >= yss / 2)
-         actmap->ypos = (y - yss / 2);
-      else
-         actmap->ypos = 0;
-      if ( actmap->ypos & 1 )
-         actmap->ypos--;
-
-   }
-
-   if (actmap->xpos + xss > actmap->xsize)
-      actmap->xpos = actmap->xsize - xss ;
-   if (actmap->ypos + yss  > actmap->ysize)
-      actmap->ypos = actmap->ysize - yss ;
-
-   if ((actmap->xpos != a) || (actmap->ypos != b))
-      return 1;
-   else
-      return 0;
-}
-
-
-int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, pvehicle vehicle, int fieldnum, int totalmove, SoundLoopManager* slc )
-{
-   if ( actmap->playerView < 0 )
-      return 0;
-
-   if ( fieldvisiblenow ( getfield ( start.x, start.y ), actmap->playerView) || fieldvisiblenow ( getfield ( dest.x, dest.y ), actmap->playerView)) {
-      if ( checkMapPosition  ( start.x, start.y ))
-         displayMap();
-
-      int fc = mapDisplay->displayMovingUnit ( start, dest, vehicle, fieldnum, totalmove, slc );
-      if ( fc == 1 ) {
-         mapDisplay->resetMovement();
-         mapDisplay->displayMap();
-      }
-
-      return fc;
-   } else
-      return 0;
-}
-
-void ReplayMapDisplay :: displayPosition ( int x, int y )
-{
-   if ( fieldvisiblenow ( getfield ( x, y ), actmap->playerView )) {
-      checkMapPosition  ( x, y );
-      mapDisplay->displayPosition ( x, y );
-   }
-}
-
-void ReplayMapDisplay :: removeActionCursor ( void )
-{
-   cursor.hide();
-}
-
-void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
-{
-   if ( x1 >= 0 && y1 >= 0 ) {
-      int i = fieldvisiblenow ( getfield ( x1, y1 ), actmap->playerView );
-      if( i ) {
-         cursor.gotoxy ( x1, y1, i );
-         if ( x2 >= 0 && y2 >= 0 )
-            wait( 30 );
-         else
-            wait();
-      }
-   }
-
-   if ( x2 >= 0 && y2 >= 0 ) {
-      int i = fieldvisiblenow ( getfield ( x2, y2 ), actmap->playerView );
-      if( i ) {
-         cursor.gotoxy ( x2, y2, i );
-         if ( secondWait )
-            wait();
-      }
-   }
-}
-
-void ReplayMapDisplay :: wait ( int minTime )
-{
-   int t = ticker;
-   while ( ticker < t + max ( cursorDelay, minTime ) )
-      releasetimeslice();
-}
-
-
-
-
-LockReplayRecording::LockReplayRecording( tmap::ReplayInfo& _ri )
+LockReplayRecording::LockReplayRecording( GameMap::ReplayInfo& _ri )
                     : ri ( _ri )
 {
    ri.stopRecordingActions++;
@@ -261,9 +203,9 @@ LockReplayRecording::~LockReplayRecording()
 Resources getUnitResourceCargo ( Vehicle* veh )
 {
    Resources res = veh->getTank();
-   for ( int i = 0; i < 32; ++i )
-      if ( veh->loading[i] )
-         res += getUnitResourceCargo ( veh->loading[i] );
+   for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+      if ( *i )
+         res += getUnitResourceCargo ( *i );
    return res;
 }
 
@@ -379,7 +321,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
             stream->writeInt ( noInterrupt );
          }
       }
-      if ( action == rpl_convert ) {
+      if ( action == rpl_convert  ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
@@ -389,6 +331,19 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( col );
+      }
+      if ( action == rpl_convert2  ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int col =  va_arg ( paramlist, int );
+         int nwid =  va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 4;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( col );
+         stream->writeInt ( nwid );
       }
       if ( action == rpl_buildobj || action == rpl_remobj ) {
          int x =  va_arg ( paramlist, int );
@@ -469,20 +424,32 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          if ( action == rpl_putbuilding2 )
             stream->writeInt ( va_arg ( paramlist, int ));
       }
-      if ( action == rpl_putmine ) {
+      if ( action == rpl_putmine || action == rpl_putmine2 ) {
          int x =  va_arg ( paramlist, int );
          int y =  va_arg ( paramlist, int );
          int col =  va_arg ( paramlist, int );
          int typ = va_arg ( paramlist, int );
          int strength = va_arg ( paramlist, int );
+         int nwid = -1; 
+
          stream->writeChar ( action );
-         int size = 5;
+         int size;
+         if ( action == rpl_putmine ) {
+            size = 5;
+         } else {
+            nwid = va_arg ( paramlist, int );
+            size = 6;
+         }
          stream->writeInt ( size );
          stream->writeInt ( x );
          stream->writeInt ( y );
          stream->writeInt ( col );
          stream->writeInt ( typ );
          stream->writeInt ( strength );
+
+         if ( action == rpl_putmine2 ) 
+            stream->writeInt ( nwid );
+         
       }
       if ( action == rpl_removemine ) {
          int x =  va_arg ( paramlist, int );
@@ -569,6 +536,8 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( exp );
          stream->writeInt ( nwid );
       }
+      /*
+      not supported any more because of new diplomatic model
       if ( action == rpl_shareviewchange ) {
          stream->writeChar ( action );
          if ( actmap->shareview ) {
@@ -583,13 +552,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
             stream->writeInt ( size );
          }
       }
-      if ( action == rpl_alliancechange ) {
+      */
+      if ( action == rpl_alliancechange2 ) {
          stream->writeChar ( action );
-         int size = sizeof ( actmap->alliances ) / sizeof ( int );
-         stream->writeInt ( size );
-         for ( int a = 0; a < 8; a++ )
-            for ( int b = 0; b < 8; b++ )
-               stream->writeChar ( actmap->alliances[a][b] );
+         stream->writeInt( 3 ); // size
+
+         int actingPlayer =  va_arg ( paramlist, int );
+         int targetPlayer =  va_arg ( paramlist, int );
+         int state = va_arg ( paramlist, int );
+         stream->writeInt( actingPlayer );
+         stream->writeInt( targetPlayer );
+         stream->writeInt( state );
       }
       if ( action == rpl_refuel || action == rpl_refuel2 ) {
          int x =  va_arg ( paramlist, int );
@@ -647,6 +620,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( nwid_to );
          stream->writeInt ( nwid_moving );
       }
+      if ( action == rpl_moveUnitUp ) {
+         int x =  va_arg ( paramlist, int );
+         int y =  va_arg ( paramlist, int );
+         int nwid = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 3;
+         stream->writeInt ( size );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+         stream->writeInt ( nwid );
+      }
       if ( action == rpl_productionResourceUsage ) {
          int en = va_arg ( paramlist, int );
          int ma = va_arg ( paramlist, int );
@@ -678,7 +662,7 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( matremain );
          stream->writeInt ( fuelremain );
       }
-      if ( action == rpl_repairUnit2 ) {
+      if ( action == rpl_repairUnit2 || action == rpl_repairBuilding ) {
          int x = va_arg ( paramlist, int );
          int y = va_arg ( paramlist, int );
          int destnwid = va_arg ( paramlist, int );
@@ -689,6 +673,18 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( size );
          stream->writeInt ( x );
          stream->writeInt ( y );
+         stream->writeInt ( destnwid );
+         stream->writeInt ( amount );
+      }
+      if ( action == rpl_repairUnit3  ) {
+         int serviceNWID = va_arg ( paramlist, int );
+         int destnwid = va_arg ( paramlist, int );
+         int amount = va_arg ( paramlist, int );
+
+         stream->writeChar ( action );
+         int size = 3;
+         stream->writeInt ( size );
+         stream->writeInt ( serviceNWID );
          stream->writeInt ( destnwid );
          stream->writeInt ( amount );
       }
@@ -714,6 +710,17 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( building );
          stream->writeInt ( id );
       }
+
+      if ( action == rpl_recycleUnit ) {
+         int building = va_arg ( paramlist, int );
+         int id = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 2;
+         stream->writeInt ( size );
+         stream->writeInt ( building );
+         stream->writeInt ( id );
+      }
+
       if ( action == rpl_techResearched ) {
          int tech = va_arg ( paramlist, int );
          int player = va_arg ( paramlist, int );
@@ -780,24 +787,52 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( cat );
          stream->writeInt ( stat );
       }
+      if ( action == rpl_jump ) {
+         int nwid = va_arg ( paramlist, int );
+         int x = va_arg ( paramlist, int );
+         int y = va_arg ( paramlist, int );
+         stream->writeChar ( action );
+         int size = 3;
+         stream->writeInt ( size );
+         stream->writeInt ( nwid );
+         stream->writeInt ( x );
+         stream->writeInt ( y );
+      }
 
       va_end ( paramlist );
    }
 }
 
 
-trunreplay :: trunreplay ( void ) : gui ( replayGuiHost ) 
+trunreplay :: trunreplay ( void )  
 {
    status = -1;
    movenum = 0;
 }
 
-void trunreplay::error( const char* message, ... )
+void trunreplay::error( const MapCoordinate& pos, const ASCString& message )
 {
-   // return;
+   error( message );
+}
+
+
+void trunreplay::error( const MapCoordinate& pos, const char* message, ... )
+{
    va_list paramlist;
    va_start ( paramlist, message );
+   char tempbuf[1000];
+   int lng = vsprintf( tempbuf, message, paramlist );
+
+   error( tempbuf );
+   // error( message + "\nPosition: " + pos.toString() );
+}
+
+void trunreplay::error( const char* message, ... )
+{
    if ( message != lastErrorMessage ) {
+      va_list paramlist;
+      va_start ( paramlist, message );
+
       char tempbuf[1000];
 
       int lng = vsprintf( tempbuf, message, paramlist );
@@ -811,55 +846,20 @@ void trunreplay::error( const char* message, ... )
    }
 }
 
-
-int    trunreplay :: removeunit ( pvehicle eht, int nwid )
+void trunreplay::error( const ASCString& message )
 {
-   if ( !eht )
-      return 0;
+   if ( CGameOptions::Instance()->replayMovieMode )
+      return;
 
-    for ( int i = 0; i < 32; i++ )
-       if ( eht->loading[i] )
-          if ( eht->loading[i]->networkid == nwid ) {
-             delete eht->loading[i];
-             eht->loading[i] = NULL;
-             return 1;
-          } else {
-             int ld = removeunit ( eht->loading[i], nwid );
-             if ( ld )
-                return ld;
-          }
-   return 0;
+   if ( message != lastErrorMessage ) {
+      char tempbuf[1000];
+
+      displaymessage(tempbuf, 1 );
+      lastErrorMessage = message;
+   }
 }
 
-int  trunreplay :: removeunit ( int x, int y, int nwid )
-{
-   pfield fld  = getfield ( x, y );
-   if ( !fld->vehicle )
-      if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ ) {
-            if ( fld->building->loading[i] ) {
-               if ( fld->building->loading[i]->networkid == nwid ) {
-                  delete fld->building->loading[i];
-                  fld->building->loading[i] = NULL;
-                  return 1;
-               } else {
-                  int ld = removeunit ( fld->building->loading[i], nwid );
-                  if ( ld )
-                     return ld;
-               }
-            }
-         }
-         return 0;
-      } else
-         return 0;
-   else
-      if ( fld->vehicle->networkid == nwid ) {
-         delete fld->vehicle ;
-         fld->vehicle = NULL;
-         return 1;
-      } else
-         return removeunit ( fld->vehicle, nwid );
-}
+
 
 
 void trunreplay :: wait ( int t )
@@ -879,13 +879,13 @@ void trunreplay :: wait ( int t )
 
 void trunreplay :: wait ( MapCoordinate pos, int t )
 {
-   if ( fieldvisiblenow ( actmap->getField ( pos ), actmap->playerView ))
+   if ( fieldvisiblenow ( actmap->getField ( pos ), actmap->getPlayerView() ))
       wait();
 }
 
 void trunreplay :: wait ( MapCoordinate pos1, MapCoordinate pos2, int t )
 {
-   if ( fieldvisiblenow ( actmap->getField ( pos1 ), actmap->playerView ) || fieldvisiblenow ( actmap->getField ( pos2 ), actmap->playerView ))
+   if ( fieldvisiblenow ( actmap->getField ( pos1 ), actmap->getPlayerView() ) || fieldvisiblenow ( actmap->getField ( pos2 ), actmap->getPlayerView() ))
       wait();
 }
 
@@ -905,22 +905,21 @@ void trunreplay :: setcursorpos ( int x, int y )
 
 void trunreplay :: displayActionCursor ( int x1, int y1, int x2, int y2, int secondWait )
 {
-    ReplayMapDisplay rmd( &defaultMapDisplay );
+    ReplayMapDisplay rmd( &getDefaultMapDisplay() );
     rmd.setCursorDelay ( CGameOptions::Instance()->replayspeed );
     rmd.displayActionCursor ( x1, y1, x2, y2, secondWait );
 }
 
 void trunreplay :: removeActionCursor ( void )
 {
-    ReplayMapDisplay rmd( &defaultMapDisplay );
+    ReplayMapDisplay rmd( &getDefaultMapDisplay() );
     rmd.removeActionCursor (  );
 }
 
 
 void trunreplay :: execnextreplaymove ( void )
 {
-   if ( verbosity >= 8 )
-     printf("executing replay move %d\n", movenum );
+   displayLogMessage( 8, "executing replay move %d\n", movenum );
 
    displaymessage2("executing replay move %d\n", movenum );
    movenum++;
@@ -936,9 +935,9 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         readnextaction();
 
-                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
+                        Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd ( &defaultMapDisplay );
+                           ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
                            VehicleMovement vm ( &rmd, NULL );
                            vm.execute ( eht, -1, -1, 0 , -1, -1 );
 
@@ -952,7 +951,7 @@ void trunreplay :: execnextreplaymove ( void )
                         }
 
                         if ( !eht )
-                           error("severe replay inconsistency:\nno vehicle for move1 command !");
+                           error("severe replay inconsistency:\nno vehicle for move1 command at " + MapCoordinate(x1,y1).toString() );
                      }
          break;
       case rpl_move5:
@@ -980,9 +979,9 @@ void trunreplay :: execnextreplaymove ( void )
 
                         readnextaction();
 
-                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
+                        Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd( &defaultMapDisplay );
+                           ReplayMapDisplay rmd( &getDefaultMapDisplay() );
                            VehicleMovement vm ( &rmd );
                            int t = ticker;
                            vm.execute ( eht, x2, y2, 0, -2, 0 );
@@ -990,8 +989,34 @@ void trunreplay :: execnextreplaymove ( void )
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            vm.execute ( NULL, x2, y2, 3, height, noInterrupt > 0 ? VehicleMovement::NoInterrupt : 0 );
 
-                           if ( vm.getStatus() != 1000 )
+                           if ( vm.getStatus() != 1000 ) {
+                              if ( CGameOptions::Instance()->replayMovieMode ) {
+
+                                 tfield* fld = eht->getMap()->getField(x1,y1);
+                                 if ( fld->vehicle == eht ) {
+                                    fld->vehicle = NULL;
+                                 } else {
+                                    if ( fld->getContainer() )
+                                       fld->getContainer()->removeUnitFromCargo( eht, true );
+                                 }
+
+                                 if ( eht->isViewing() )
+                                    eht->removeview();
+
+                                 eht->setnewposition(x2,y2);
+                                 if ( height >= 0 )
+                                    eht->height = 1 << height;
+
+                                 tfield* fld2 = eht->getMap()->getField(x2,y2);
+                                 if ( !fld2->getContainer() ) {
+                                    fld2->vehicle = eht;
+                                    eht->addview();
+                                 } else
+                                    fld2->getContainer()->addToCargo( eht );
+                              }
                               eht = NULL;
+
+                           }
 
                            if ( destDamage >= 0 ) {
                               int realDamage;
@@ -1002,90 +1027,103 @@ void trunreplay :: execnextreplaymove ( void )
                                  realDamage = 100;
 
                               if ( destDamage != realDamage )
-                                 error( "severe replay inconsistency:\ndamage after movement differs: recorded=%d, actual=%d", destDamage, realDamage );
+                                 error( MapCoordinate(x1,y1), "severe replay inconsistency:\ndamage after movement differs: recorded=%d, actual=%d", destDamage, realDamage );
                            }
                         }
 
                         if ( !eht )
-                           error("severe replay inconsistency:\nno vehicle for move2 command !");
+                           error("severe replay inconsistency:\nno vehicle for move2 command at " + MapCoordinate(x1,y1).toString() );
                      }
          break;
       case rpl_attack: {
-                          stream->readInt();  // size
-                          int x1 = stream->readInt();
-                          int y1 = stream->readInt();
-                          int x2 = stream->readInt();
-                          int y2 = stream->readInt();
-                          int ad1 = stream->readInt();
-                          int ad2 = stream->readInt();
-                          int dd1 = stream->readInt();
-                          int dd2 = stream->readInt();
-                          int wpnum = stream->readInt();
-                          readnextaction();
+                           stream->readInt();  // size
+                           int x1 = stream->readInt();
+                           int y1 = stream->readInt();
+                           int x2 = stream->readInt();
+                           int y2 = stream->readInt();
+                           int ad1 = stream->readInt();
+                           int ad2 = stream->readInt();
+                           int dd1 = stream->readInt();
+                           int dd2 = stream->readInt();
+                           int wpnum = stream->readInt();
+                           readnextaction();
 
-                          pfield fld = getfield ( x1, y1 );
-                          pfield targ = getfield ( x2, y2 );
-                          int attackvisible = fieldvisiblenow ( fld, actmap->playerView ) || fieldvisiblenow ( targ, actmap->playerView );
-                          if ( fld && targ && fld->vehicle ) {
-                             if ( targ->vehicle ) {
-                                tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
-                                battle.av.damage = ad1;
-                                battle.dv.damage = dd1;
-                                if ( attackvisible ) {
-                                   displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay ( );
-                                   removeActionCursor();
-                                } else {
-                                   battle.calc ();
-                                }
-                                if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
-                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                battle.setresult ();
-                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
-                                   computeview( actmap );
-                                dashboard.x = 0xffff;
+                           tfield* fld = getfield ( x1, y1 );
+                           tfield* targ = getfield ( x2, y2 );
+                           int attackvisible = fieldvisiblenow ( fld, actmap->getPlayerView() ) || fieldvisiblenow ( targ, actmap->getPlayerView() );
+                           if ( fld && targ && fld->vehicle ) {
+                              if ( fieldvisiblenow ( targ, fld->vehicle->getOwner() )) {
+                                 if ( targ->vehicle ) {
+                                    tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, wpnum );
+                                    battle.av.damage = ad1;
+                                    battle.dv.damage = dd1;
+                                    if ( attackvisible ) {
+                                       displayActionCursor ( x1, y1, x2, y2, 0 );
+                                       ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                       rmd.showBattle( battle );
+                                       removeActionCursor();
+                                    } else {
+                                       battle.calc ();
+                                    }
+                                    if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
+                                       error(MapCoordinate(x2,y2), "severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d", battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                    battle.setresult ();
+
+                                    if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                       computeview( actmap );
+
+                                    updateFieldInfo();
+
+                                 } else
+                                 if ( targ->building ) {
+                                    tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
+                                    battle.av.damage = ad1;
+                                    battle.dv.damage = dd1;
+                                    if ( attackvisible ) {
+                                       displayActionCursor ( x1, y1, x2, y2, 0 );
+                                       ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                       rmd.showBattle( battle );
+                                       removeActionCursor();
+                                    } else {
+                                       battle.calc ();
+                                       /*battle.av.damage = ad2;
+                                       battle.dv.damage = dd2; */
+                                    }
+                                    if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                       error(MapCoordinate(x2,y2), "severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d", battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                    battle.setresult ();
+
+                                    if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                       computeview( actmap );
+                                    updateFieldInfo();
+                                 } else
+                                 if ( !targ->objects.empty() ) {
+                                    tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
+                                    if ( attackvisible ) {
+                                       displayActionCursor ( x1, y1, x2, y2, 0 );
+                                       ReplayMapDisplay rmd( &getDefaultMapDisplay() );
+                                       rmd.showBattle( battle );
+                                       removeActionCursor();
+                                    } else {
+                                       battle.calc ();
+                                       //battle.av.damage = ad2;
+                                       //battle.dv.damage = dd2;
+                                    }
+                                    if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
+                                       error(MapCoordinate(x2,y2), "severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d", battle.av.damage,ad2 ,battle.dv.damage, dd2);
+                                    battle.setresult ();
+
+                                    if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
+                                       computeview( actmap );
+
+                                    updateFieldInfo();
+                                 }
+                                 displaymap();
                              } else
-                             if ( targ->building ) {
-                                tunitattacksbuilding battle ( fld->vehicle, x2, y2 , wpnum );
-                                battle.av.damage = ad1;
-                                battle.dv.damage = dd1;
-                                if ( attackvisible ) {
-                                   displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay (  );
-                                   removeActionCursor();
-                                } else {
-                                   battle.calc ();
-                                   /*battle.av.damage = ad2;
-                                   battle.dv.damage = dd2; */
-                                }
-                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
-                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                battle.setresult ();
-                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
-                                   computeview( actmap );
-                                dashboard.x = 0xffff;
-                             } else
-                             if ( !targ->objects.empty() ) {
-                                tunitattacksobject battle ( fld->vehicle, x2, y2, wpnum );
-                                if ( attackvisible ) {
-                                   displayActionCursor ( x1, y1, x2, y2, 0 );
-                                   battle.calcdisplay (  );
-                                   removeActionCursor();
-                                } else {
-                                   battle.calc ();
-                                   //battle.av.damage = ad2;
-                                   //battle.dv.damage = dd2;
-                                }
-                                if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
-                                   error("severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d\n", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                battle.setresult ();
-                                if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
-                                   computeview( actmap );
-                                dashboard.x = 0xffff;
-                             }
-                             displaymap();
-                          } else
-                             error("severe replay inconsistency:\nno vehicle for attack command !");
+                                error(MapCoordinate(x2,y2), "severe replay inconsistency:\nthe attacking unit can't view the target field!" );
+
+                           } else
+                              error(MapCoordinate(x1,y1), "severe replay inconsistency:\nno vehicle for attack command !" );
 
                       }
          break;
@@ -1107,9 +1145,9 @@ void trunreplay :: execnextreplaymove ( void )
 
                         readnextaction();
 
-                        pvehicle eht = actmap->getUnit ( x1, y1, nwid );
+                        Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd( &defaultMapDisplay );
+                           ReplayMapDisplay rmd( &getDefaultMapDisplay() );
                            VehicleAction* va;
                            if ( newheight > oldheight )
                               va = new IncreaseVehicleHeight ( &rmd, NULL );
@@ -1130,36 +1168,45 @@ void trunreplay :: execnextreplaymove ( void )
                         }
 
                         if ( !eht )
-                           error("severe replay inconsistency:\nno vehicle for changeheight command !");
+                           error(MapCoordinate(x1,y1), "severe replay inconsistency:\nno vehicle for changeheight command !");
 
 
                      }
          break;
-      case rpl_convert: {
+      case rpl_convert: 
+      case rpl_convert2: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int col = stream->readInt();
-                           readnextaction();
+                           if ( nextaction == rpl_convert2 ) {
+                              int nwid = stream->readInt();
+                              readnextaction();
 
-
-                           pfield fld = getfield ( x, y );
-                           if ( fld ) {
-                              displayActionCursor ( x, y );
-                              if ( fld->vehicle )
-                                 fld->vehicle->convert ( col );
+                              Vehicle* veh = actmap->getUnit( x,y, nwid );
+                              if ( veh ) 
+                                 veh->convert(col);
                               else
-                                 if ( fld->building )
-                                    fld->building->convert ( col );
+                                 error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for convert command !");
+                           } else {
+                              readnextaction();
 
-                              computeview( actmap );
-                              displaymap();
-                              wait( MapCoordinate(x,y) );
-                              removeActionCursor();
-                           } else
-                              error("severe replay inconsistency:\nno vehicle for convert command !");
+                              tfield* fld = getfield ( x, y );
+                              if ( fld ) {
+                                 displayActionCursor ( x, y );
+                                 if ( fld->vehicle )
+                                    fld->vehicle->convert ( col );
+                                 else
+                                    if ( fld->building )
+                                       fld->building->convert ( col );
 
-
+                                 computeview( actmap );
+                                 displaymap();
+                                 wait( MapCoordinate(x,y) );
+                                 removeActionCursor();
+                              } else
+                                 error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for convert command !");
+                           }
                        }
          break;
       case rpl_remobj:
@@ -1176,14 +1223,21 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           pobjecttype obj = objectTypeRepository.getObject_byID ( id );
+                           ObjectType* obj = objectTypeRepository.getObject_byID ( id );
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( obj && fld ) {
                               displayActionCursor ( x, y );
 
                               Resources cost;
                               int movecost;
+
+                              RecalculateAreaView rav ( actmap, MapCoordinate(x,y), maxViewRange / maxmalq + 1 );
+                              
+                              bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;
+                              if ( objectAffectsVisibility )
+                                 rav.removeView();
+
 
                               if ( actaction == rpl_remobj || actaction == rpl_remobj2 ) {
                                  cost = obj->removecost;
@@ -1195,29 +1249,30 @@ void trunreplay :: execnextreplaymove ( void )
                                  movecost = obj->build_movecost;
                               }
 
+                              if ( objectAffectsVisibility )
+                                 rav.addView();
+
+
                               if ( unit > 0 ) {
                                  Vehicle* veh = actmap->getUnit(unit);
                                  if ( veh ) {
                                     if ( veh->getMovement() < movecost )
-                                       error("not enough movement to construct/remove object !");
+                                       error(MapCoordinate(x,y), "not enough movement to construct/remove object !");
                                     veh->decreaseMovement( movecost );
                                     Resources res2 =  static_cast<ContainerBase*>(veh)->getResource( cost, 0, 1  );
                                     for ( int r = 0; r < 3; r++ )
                                        if ( res2.resource(r) < cost.resource(r)  && cost.resource(r) > 0 )
-                                          error("Resource mismatch: not enough resources to construct/remove object !");
-
+                                          error("Resource mismatch: not enough resources to construct/remove object !\nPosition: " + MapCoordinate(x,y).toString());
 
                                  } else
-                                    error("replay inconsistency:\nCannot find Unit to build/remove Object !");
+                                    error(MapCoordinate(x,y), "replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
 
-                              if ( obj->basicjamming_plus || obj->basicjamming_abs != -1 || obj->viewbonus_plus || obj->viewbonus_abs != -1 )
-                                 computeview( actmap );
                               displaymap();
                               wait(MapCoordinate(x,y));
                               removeActionCursor();
                            } else
-                              error("severe replay inconsistency:\nCannot find Object to build/remove !");
+                              error(MapCoordinate(x,y), "severe replay inconsistency:\nCannot find Object to build/remove !");
 
                        }
          break;
@@ -1246,13 +1301,13 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
 
-                           pvehicletype tnk = vehicleTypeRepository.getObject_byID ( id );
+                           Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
 
                            if ( fld && tnk && !fld->vehicle ) {
                               displayActionCursor ( x, y );
-                              pvehicle v = new Vehicle ( tnk, actmap, col );
+                              Vehicle* v = new Vehicle ( tnk, actmap, col );
                               v->xpos = x;
                               v->ypos = y;
                               fld->vehicle = v;
@@ -1260,16 +1315,16 @@ void trunreplay :: execnextreplaymove ( void )
                                  v->height = height;
 
                               if ( constx >= 0 && consty >= 0 ) {
-                                 pfield constructorField = getfield(constx, consty );
+                                 tfield* constructorField = getfield(constx, consty );
                                  if ( constructorField->vehicle ) {
                                     Resources r ( 0, tnk->productionCost.material, tnk->productionCost.energy );
                                     Resources rr = constructorField->getContainer()->getResource( r, 0 );
                                     if ( rr < r ) {
                                        displayActionCursor ( x, y );
-                                       error("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", v->typ->description.c_str(), r.energy, r.material, r.fuel, rr.energy, rr.material, rr.fuel);
+                                       error(MapCoordinate(x,y), "severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", v->typ->description.c_str(), r.energy, r.material, r.fuel, rr.energy, rr.material, rr.fuel);
                                     }
                                  } else
-                                    error("severe replay inconsistency: could not find constructor !");
+                                    error(MapCoordinate(x,y), "severe replay inconsistency: could not find constructor !");
 
                               }
 
@@ -1278,7 +1333,7 @@ void trunreplay :: execnextreplaymove ( void )
                               wait(MapCoordinate(x,y) );
                               removeActionCursor();
                            } else
-                              error("severe replay inconsistency:\nCannot find Vehicle to build !");
+                              error(MapCoordinate(x,y), "severe replay inconsistency:\nCannot find Vehicle to build !");
 
                        }
          break;
@@ -1295,9 +1350,9 @@ void trunreplay :: execnextreplaymove ( void )
 
                                readnextaction();
 
-                               pfield fld = getfield ( x, y );
+                               tfield* fld = getfield ( x, y );
 
-                               pbuildingtype bld = buildingTypeRepository.getObject_byID ( id );
+                               BuildingType* bld = buildingTypeRepository.getObject_byID ( id );
 
                                if ( bld && fld ) {
                                   displayActionCursor ( x, y );
@@ -1317,40 +1372,55 @@ void trunreplay :: execnextreplaymove ( void )
                                        Resources res ( 0, bld->productionCost.material * mf / 100, bld->productionCost.fuel * ff / 100 );
                                        Resources got = static_cast<ContainerBase*>(veh)->getResource( res, 0 );
                                        if ( got < res )
-                                          error("severe replay inconsistency:\nnot enough resources to build/remove building !");
+                                          error(MapCoordinate(x,y), "severe replay inconsistency:\nnot enough resources to build/remove building !");
 
                                      } else
-                                        error("severe replay inconsistency:\nCannot find vehicle to build/remove building !");
+                                        error(MapCoordinate(x,y), "severe replay inconsistency:\nCannot find vehicle to build/remove building !");
                                   }
 
                                   displaymap();
                                   wait(MapCoordinate(x,y));
                                   removeActionCursor();
                                } else
-                                  error("severe replay inconsistency:\nCannot find building to build/remove building!" );
+                                  error(MapCoordinate(x,y), "severe replay inconsistency:\nCannot find building to build/remove building!" );
                             }
          break;
-      case rpl_putmine: {
+      case rpl_putmine:
+      case rpl_putmine2: {
                            stream->readInt();  // size
                            int x = stream->readInt();
                            int y = stream->readInt();
                            int col = stream->readInt();
                            int typ = stream->readInt();
                            int strength = stream->readInt();
+                           int nwid = -1;
+                           if ( nextaction == rpl_putmine2) 
+                              nwid = stream->readInt();
+
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, typ, strength );
+                              if ( nwid >= 0 ) {
+                                 Vehicle* veh = actmap->getUnit( nwid );
+                                 if ( veh ) {
+                                    ContainerControls cc( veh );
+                                    if ( cc.getammunition( cwminen, 1, true, true ) != 1 )
+                                       error(MapCoordinate(x,y), "could not obtain ammo for mine placement");
+
+                                 } else 
+                                    error(MapCoordinate(x,y), "could not find unit for mine placement");
+                              }
                               computeview( actmap );
-                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->playerView )) {
+                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->getPlayerView() )) {
                                  displaymap();
                                  wait();
                               }
                               removeActionCursor();
                            } else
-                              error("severe replay inconsistency:\nno field for putmine command !");
+                              error(MapCoordinate(x,y), "severe replay inconsistency:\nno field for putmine command !");
 
                        }
          break;
@@ -1360,18 +1430,18 @@ void trunreplay :: execnextreplaymove ( void )
                            int y = stream->readInt();
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
                               computeview( actmap );
-                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->playerView )) {
+                              if ( fieldvisiblenow ( actmap->getField(x,y), actmap->getPlayerView() )) {
                                  displaymap();
                                  wait();
                               }
                               removeActionCursor ( );
                            } else
-                              error("severe replay inconsistency:\nno field for remove mine command !");
+                              error(MapCoordinate(x,y), "severe replay inconsistency:\nno field for remove mine command !");
 
                        }
          break;
@@ -1394,24 +1464,26 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           pfield fld = getfield ( x, y );
+                           tfield* fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
-                              pbuilding bb = fld->building;
+                              Building* bb = fld->building;
                               if ( nwid >=  0 ) {
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {
                                     Resources r = getDestructionCost ( bb, veh );
                                     if ( !veh || veh->getResource(r,false) != res )
-                                       error("severe replay inconsistency:\nfailed to obtain vehicle resources for removebuilding command !");
+                                       error(MapCoordinate(x,y), "severe replay inconsistency:\nfailed to obtain vehicle resources for removebuilding command !");
 
                                  } else
-                                   error("severe replay inconsistency:\nfailed to obtain vehicle for removebuilding command !");
+                                   error(MapCoordinate(x,y), "severe replay inconsistency:\nfailed to obtain vehicle for removebuilding command !");
                               }
 
                               if ( bb->getCompletion() ) {
                                  bb->setCompletion( bb->getCompletion()-1);
                               } else {
+                                 bb->netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
+                                 Resources put = bb->putResource( bb->actstorage, false );
                                  delete bb;
                               }
                               computeview( actmap );
@@ -1419,7 +1491,7 @@ void trunreplay :: execnextreplaymove ( void )
                               wait();
                               removeActionCursor();
                            } else
-                              error("severe replay inconsistency:\nno building for removebuilding command !");
+                              error(MapCoordinate(x,y), "severe replay inconsistency:\nno building for removebuilding command !");
 
                        }
          break;
@@ -1429,20 +1501,20 @@ void trunreplay :: execnextreplaymove ( void )
                                  int col = stream->readInt();
                                  int x = stream->readInt();
                                  int y = stream->readInt();
-                                 int cl = stream->readInt();
+                                 stream->readInt(); // class
                                  int nwid = stream->readInt();
                                  readnextaction();
 
-                                 pfield fld = getfield ( x, y );
+                                 tfield* fld = getfield ( x, y );
 
-                                 pvehicletype tnk = vehicleTypeRepository.getObject_byID ( id );
+                                 Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
                                  if ( tnk && fld) {
                                  
                                     #if 0
                                     printf("produced unit: pos %d / %d; nwid %d; typ id %d; typ %s \n", x,y,nwid,id,tnk->description.c_str() );
                                     #endif
 
-                                    pvehicle eht = new Vehicle ( tnk, actmap, col / 8 );
+                                    Vehicle* eht = new Vehicle ( tnk, actmap, col / 8 );
                                     eht->xpos = x;
                                     eht->ypos = y;
                                     eht->networkid = nwid;
@@ -1451,12 +1523,9 @@ void trunreplay :: execnextreplaymove ( void )
                                        Resources r = fld->building->getResource( tnk->productionCost, 0 );
                                        if ( r < tnk->productionCost ) {
                                           displayActionCursor ( x, y );
-                                          error("severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
+                                          error(MapCoordinate(x,y), "severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
                                        }
-                                       int i = 0;
-                                       while ( fld->building->loading[i])
-                                          i++;
-                                       fld->building->loading[i] = eht;
+                                       fld->building->addToCargo( eht );
                                     } else {
                                        displayActionCursor ( x, y );
                                        fld->vehicle = eht;
@@ -1466,7 +1535,7 @@ void trunreplay :: execnextreplaymove ( void )
                                        removeActionCursor();
                                     }
                                  } else
-                                    error("severe replay inconsistency:\nCannot find vehicle to build/remove !");
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nCannot find vehicle to build/remove !");
 
                               }
          break;
@@ -1476,14 +1545,12 @@ void trunreplay :: execnextreplaymove ( void )
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
                                  readnextaction();
-                                 pfield fld = getfield(x,y);
+                                 tfield* fld = getfield(x,y);
                                  if ( !fld->vehicle || fld->vehicle->networkid != nwid && fld->building ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( fld->building );
-                                    pvehicle veh = actmap->getUnit( nwid );
-                                    bc.recycling.recycle( veh );
+                                    ContainerControls cc ( fld->building );
+                                    cc.destructUnit( actmap->getUnit( nwid ) );
                                  } else
-                                    if ( !removeunit ( x, y, nwid ))
+                                    if ( !fld->getContainer() || !fld->getContainer()->removeUnitFromCargo ( nwid, true ))
                                        displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
                               }
          break;
@@ -1491,28 +1558,28 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
-                                 int exp = stream->readInt();
+                                 stream->readInt(); // experience
                                  int nwid = stream->readInt();
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( x, y, nwid );
-                                 pbuilding bld = actmap->getField ( x, y )->building;
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid );
+                                 Building* bld = actmap->getField ( x, y )->building;
                                  if ( eht && bld ) {
-                                    cbuildingcontrols bc;
-                                    bc.init( bld );
-                                    if ( bc.training.available( eht )) 
-                                       bc.training.trainunit( eht );
+                                    ContainerControls cc( bld );
+                                    if ( cc.unitTrainingAvailable(eht) )
+                                       cc.trainUnit( eht );
                                     else
-                                       error("severe replay inconsistency:\nno vehicle for trainunit command !");
+                                       error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for trainunit command !");
                                  } else
-                                    error("severe replay inconsistency:\nno vehicle for trainunit command !");
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for trainunit command !");
 
 
                               }
          break;
+         /*
       case rpl_shareviewchange: {
                                  int size = stream->readInt();
-                                 tmap::Shareview* sv = new tmap::Shareview;
+                                 GameMap::Shareview* sv = new GameMap::Shareview;
                                  if ( size ) {
                                     for ( int a = 0; a < 8; a++ )
                                        for ( int b = 0; b < 8; b++)
@@ -1534,13 +1601,15 @@ void trunreplay :: execnextreplaymove ( void )
                                  displaymap();
                               }
          break;
-      case rpl_alliancechange: {
+         */
+      case rpl_alliancechange2: {
                                  stream->readInt();  // size
-                                 for ( int a = 0; a < 8; a++ )
-                                    for ( int b = 0; b < 8; b++ )
-                                       actmap->alliances[a][b] = stream->readChar();
+                                 int actingPlayer = stream->readInt();
+                                 int targetPlayer = stream->readInt();
+                                 int state = stream->readInt();
+                                 actmap->player[actingPlayer].diplomacy.setState( targetPlayer, DiplomaticStates( state ));
+                                 
                                  readnextaction();
-                                 dashboard.x = 0xffff;
                               }
          break;
       case rpl_refuel :
@@ -1557,19 +1626,21 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( x, y, nwid );
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
-                                    if ( pos < 16 )
+                                    if ( pos < 16 ) {
+                                       if ( old >= 0 && old != eht->ammo[pos] )
+                                          error(MapCoordinate(x,y), "severe replay inconsistency:\nthe ammo of unit not matching. \nrecorded: %d , expected: %d !", old, eht->ammo[pos] );
                                        eht->ammo[pos] = amnt;
-                                     else {
+                                    } else {
                                         int res = pos - 1000;
                                         int avl = eht->getTank().resource(res);
                                         if ( avl != old && old >= 0 )
-                                            error("severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, avl);
+                                            error(MapCoordinate(x,y), "severe replay inconsistency:\nthe resources of unit not matching. \nrecorded: %d , expected: %d !", old, avl);
                                         eht->getResource ( avl - amnt, res, false );
                                      }
                                  } else
-                                    error("severe replay inconsistency:\nno vehicle for refuel-unit command !");
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for refuel-unit command !");
                               }
          break;
       case rpl_refuel3 : {
@@ -1581,9 +1652,16 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  ContainerBase* cb = actmap->getContainer ( id );
                                  if ( cb ) {
-                                    int d = cb->getResource(delta, type-1000, false);
-                                    if ( d != delta )
-                                       error("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", delta, d);
+                                    int got;
+                                    if ( type >= 1000 ) {
+                                       got = cb->getResource(delta, type-1000, false);
+                                    } else {
+                                       ContainerControls cc( cb );
+                                       got = cc.getammunition( type, delta, true, true );
+                                    }
+                                    if ( got != delta )
+                                       error("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", delta, got);
+                                       
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for refuel3 command !");
                               }
@@ -1596,64 +1674,58 @@ void trunreplay :: execnextreplaymove ( void )
                                  int amnt = stream->readInt();
                                  readnextaction();
 
-                                 pbuilding bld = actmap->getField(x,y)->building;
+                                 Building* bld = actmap->getField(x,y)->building;
                                  if ( bld ) {
                                     if ( pos < 16 )
                                         bld->ammo[pos] = amnt;
                                      else
                                         bld->getResource ( amnt, pos-1000, 0 );
                                  } else
-                                    error("severe replay inconsistency:\nno building for refuel-unit command !");
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nno building for refuel-unit command !");
                               }
          break;
-      case rpl_moveUnitUpDown: {
+         case rpl_moveUnitUpDown: {
+            stream->readInt();  // size
+            int x =  stream->readInt();
+            int y =  stream->readInt();
+            stream->readInt(); // dummy(basegfx_0)
+            int nwid_to = stream->readInt();
+            int nwid_moving = stream->readInt();
+
+            readnextaction();
+
+            ContainerBase* b = actmap->getField(x,y)->getContainer();
+            if ( b ) {
+               b->removeUnitFromCargo( nwid_moving, true );
+
+               Vehicle* veh_targ = actmap->getUnit( nwid_to );
+               Vehicle* veh_moving = actmap->getUnit( nwid_moving );
+               if ( veh_targ && veh_moving )
+                  veh_targ->addToCargo( veh_moving );
+               else
+                  error ( MapCoordinate(x,y), "Could not locate unit for MoveToInnerTransport");
+            } else
+               error( MapCoordinate(x,y), "severe replay inconsistency in MoveUnitUp !");
+                                 
+         }
+         break;
+         case rpl_moveUnitUp: {
                                  stream->readInt();  // size
                                  int x =  stream->readInt();
                                  int y =  stream->readInt();
-                                 int nwid_from = stream->readInt();
-                                 int nwid_to = stream->readInt();
-                                 int nwid_moving = stream->readInt();
+                                 int nwid = stream->readInt();
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( x, y, nwid_moving );
-
-                                 ContainerBase* from;
-                                 if ( nwid_from >= 0 )
-                                    from = actmap->getUnit ( x, y, nwid_from );
-                                 else
-                                    from = actmap->getField ( x, y )->building;
-
-                                 ContainerBase* to;
-                                 if ( nwid_to >= 0 )
-                                    to = actmap->getUnit ( x, y, nwid_to );
-                                 else
-                                    to = actmap->getField ( x, y )->building;
-
-                                 if ( eht && from && to ) {
-                                    int i = 0;
-                                    while ( from->loading[i] != eht )
-                                       i++;
-
-                                    if ( i >= 32 ) {
-                                       error("severe replay inconsistency: container for moveUpDown 2 !");
-                                       return;
-                                    }
-
-                                    from->loading[i] = NULL;
-
-                                    while ( to->loading[i]  )
-                                       i++;
-
-                                    if ( i >= 32 ) {
-                                       error("severe replay inconsistency: container for moveUpDown 3 !");
-                                       return;
-                                    }
-
-                                    to->loading[i] = eht;
-
+                                 Vehicle* eht = actmap->getUnit ( x, y, nwid );
+                                 if ( eht ) {
+                                    ContainerBase* from = eht->getCarrier();
+                                    ContainerControls cc ( from );
+                                    if ( !cc.moveUnitUp( eht ))
+                                       error(MapCoordinate(x,y), "severe replay inconsistency in MoveUnitUp !");
                                  } else
-                                    error("severe replay inconsistency: container for moveUpDown !");
+                                    error(MapCoordinate(x,y), "Unit not found for MoveUnitUp !");
+                                 
                               }
                               break;
       case rpl_repairUnit : {
@@ -1666,8 +1738,8 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( nwid );
-                                 pvehicle dest = actmap->getUnit ( destnwid );
+                                 Vehicle* eht = actmap->getUnit ( nwid );
+                                 Vehicle* dest = actmap->getUnit ( destnwid );
                                  if ( eht && dest ) {
                                     eht->repairItem ( dest, amount );
                                     if ( eht->getTank().fuel != fuelremain || eht->getTank().material != matremain )
@@ -1685,12 +1757,44 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pbuilding bld = getfield(x,y)->building;
-                                 pvehicle dest = actmap->getUnit ( destnwid );
+                                 ContainerBase* bld = getfield(x,y)->getContainer();
+                                 Vehicle* dest = actmap->getUnit ( destnwid );
+                                 if ( bld && dest ) {
+                                    bld->repairItem ( dest, amount );
+                                 } else
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for repair-unit command !");
+                              }
+         break;
+      case rpl_repairUnit3 : {
+                                 stream->readInt();  // size
+                                 int serviceNWID = stream->readInt();
+                                 int destnwid = stream->readInt();
+                                 int amount = stream->readInt();
+
+                                 readnextaction();
+
+                                 ContainerBase* bld = actmap->getContainer( serviceNWID );
+                                 Vehicle* dest = actmap->getUnit ( destnwid );
                                  if ( bld && dest ) {
                                     bld->repairItem ( dest, amount );
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for repair-unit command !");
+                              }
+         break;
+      case rpl_repairBuilding : {
+                                 stream->readInt();  // size
+                                 int x = stream->readInt();
+                                 int y = stream->readInt();
+                                 stream->readInt(); // int destnwid = 
+                                 int amount = stream->readInt();
+
+                                 readnextaction();
+
+                                 ContainerBase* bld = getfield(x,y)->getContainer();
+                                 if ( bld ) {
+                                    bld->repairItem ( bld, amount );
+                                 } else
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nno building for repair-building command !");
                               }
          break;
       case rpl_produceAmmo : {
@@ -1700,13 +1804,12 @@ void trunreplay :: execnextreplaymove ( void )
                                  int type = stream->readInt();
                                  int amount = stream->readInt();
                                  readnextaction();
-                                 pbuilding bld = getfield(x,y)->building;
+                                 Building* bld = getfield(x,y)->building;
                                  if ( bld ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( bld );
-                                    bc.produceammunition.produce( type, amount );
+                                    ContainerControls cc( bld );
+                                    cc.produceAmmo( type, amount );
                                  } else
-                                    error("severe replay inconsistency:\nno building for produce ammo command !");
+                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nno building for produce ammo command !");
 
                               }
          break;
@@ -1719,9 +1822,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
                                     if ( veh->techDependency.available( actmap->player[ bld->getOwner()].research )) {
-                                       cbuildingcontrols bc;
-                                       bc.init ( bld );
-                                       int result = bc.buildProductionLine.build( veh );
+                                       ContainerControls cc( bld );
+                                       int result = cc.buildProductionLine( veh );
                                        if ( result < 0)
                                           error("severe replay inconsistency:\ncould not build production line!\n%s !", getmessage(result));
                                     } else
@@ -1740,9 +1842,8 @@ void trunreplay :: execnextreplaymove ( void )
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
-                                    cbuildingcontrols bc;
-                                    bc.init ( bld );
-                                    int result = bc.removeProductionLine.remove( veh );
+                                    ContainerControls cc( bld );
+                                    int result = cc.removeProductionLine( veh );
                                     if ( result < 0)
                                        error("severe replay inconsistency:\ncould not remove production line!\n%s !", getmessage(result));
 
@@ -1784,7 +1885,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  readnextaction();
 
-                                 pvehicle eht = actmap->getUnit ( nwid );
+                                 Vehicle* eht = actmap->getUnit ( nwid );
                                  if ( eht )
                                     eht->setGeneratorStatus( status );
                                  else
@@ -1826,30 +1927,71 @@ void trunreplay :: execnextreplaymove ( void )
                  if ( bld ) {
                     for ( int r = 0; r< 3; ++r )
                        if ( abs(p.resource(r)) > abs(bld->typ->maxplus.resource(r)) )
-                          error ("Building can not produ ");
+                          error (MapCoordinate(x,y), "Building can not produ ");
                      bld->plus = p;
                  } else
-                    error ("Building not found on for rpl_setResourceProcessingAmount ");
+                    error (MapCoordinate(x,y), "Building not found on for rpl_setResourceProcessingAmount ");
          }
          break;
          case rpl_netcontrol: {
                  stream->readInt();
                  int x = stream->readInt();
                  int y = stream->readInt();
-                 int cat = stream->readInt();
-                 int stat = stream->readInt();
+                 stream->readInt(); // int cat = 
+                 stream->readInt(); // int stat = 
                  readnextaction();
 
                  Building* bld = actmap->getField(x,y)->building;
                  if ( bld ) {
+                    // not supported
+                    /*
                     cbuildingcontrols bc;
                     bc.init( bld );
                     bc.netcontrol.setnetmode( cat, stat );
-                    bld->execnetcontrol(); 
+                    bld->execnetcontrol();
+                    */
                  } else
-                    error ("Building not found on for rpl_setResourceProcessingAmount ");
+                    error (MapCoordinate(x,y), "Building not found on for rpl_setResourceProcessingAmount ");
          }
          break;
+         case rpl_jump: {
+            stream->readInt();
+            int nwid = stream->readInt();
+            int x = stream->readInt();
+            int y = stream->readInt();
+            readnextaction();
+
+            Vehicle* veh = actmap->getUnit(nwid);
+            if ( veh ) {
+               JumpDrive jd;
+               if ( jd.available( veh )) {
+                  displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
+                  if ( !jd.jump(veh, MapCoordinate(x,y) ))
+                     error(MapCoordinate(x,y), "Unit cannot jump to this position");
+                  
+               } else
+                  error(MapCoordinate(x,y), "Unit cannot jump");
+            } else
+               error (MapCoordinate(x,y), "Unit not found for Jump ");
+            
+            
+         }
+         break;
+      case rpl_recycleUnit : {
+                                 stream->readInt();  // size
+                                 int building = stream->readInt();
+                                 int vehicleid = stream->readInt();
+                                 readnextaction();
+                                 Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
+                                 Vehicle* veh = actmap->getUnit ( vehicleid );
+                                 if ( bld && veh ) {
+                                    ContainerControls cc ( bld );
+                                    cc.destructUnit( veh );
+                                 } else
+                                    error("severe replay inconsistency:\nno unit for recycle command !");
+                              }
+         break;
+
 
       default:{
                  int size = stream->readInt();
@@ -1864,7 +2006,7 @@ void trunreplay :: execnextreplaymove ( void )
 
    } else {
       status = 10;
-      dashboard.x = -1;
+      updateFieldInfo();
    }
 
 }
@@ -1878,10 +2020,10 @@ void trunreplay :: readnextaction ( void )
 }
 
 
-preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
+treactionfire_replayinfo* trunreplay::getnextreplayinfo ( void )
 {
    if ( nextaction == rpl_reactionfire ) {
-      preactionfire_replayinfo reac = new treactionfire_replayinfo;
+      treactionfire_replayinfo* reac = new treactionfire_replayinfo;
       stream->readInt(); // size
 
       reac->x1 = stream->readInt();
@@ -1903,14 +2045,13 @@ preactionfire_replayinfo trunreplay::getnextreplayinfo ( void )
 }
 
 
-int  trunreplay :: run ( int player, int viewingplayer )
+int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOperations )
 {
    if ( status < 0 )
       firstinit ( );
 
    lastErrorMessage = "";
 
-   cursor.hide();
    movenum = 0;
 
    actplayer = actmap->actplayer;
@@ -1922,10 +2063,10 @@ int  trunreplay :: run ( int player, int viewingplayer )
       actmap = orgmap;
       return 0;
    }
+   actmap->state = GameMap::Replay;
 
-   transfer_all_outstanding_tribute();   
-
-   actmap->playerView = viewingplayer;
+   actmap->setPlayerView ( viewingplayer );
+   actmap->getCursor() = orgmap->getCursor();
 
    tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
    stream = &guidatastream;
@@ -1937,29 +2078,31 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
 //   orgmap.replayinfo->actmemstream = stream;
 
-   npush (actgui);
-   actgui = &gui;
-   actgui->restorebackground();
 
-   actmap->xpos = orgmap->cursorpos.position[ viewingplayer ].sx;
-   actmap->ypos = orgmap->cursorpos.position[ viewingplayer ].sy;
+   ReplayGuiIconHandleHandler guiIconHandler;
 
-   cursor.gotoxy ( orgmap->cursorpos.position[ viewingplayer ].cx, orgmap->cursorpos.position[ viewingplayer ].cy , 0);
-
-
-   if ( stream->dataavail () )
-      status = 1;
-   else
+   if ( stream->dataavail () ) {
+      if ( CGameOptions::Instance()->replayMovieMode ) 
+         status = 2;
+      else
+         status = 1;
+   } else
       status = 11;
+
+   // force completion of overview map rendering
+   actmap->overviewMapHolder.getOverviewMap( );
 
    computeview( actmap );
    displaymap ();
 
-   dashboard.x = 0xffff;
-   mousevisible( true );
+   updateFieldInfo();
+
+   MainScreenWidget::StandardActionLocker locker( mainScreenWidget, MainScreenWidget::LockOptions::Menu );
+   
 //   cursor.show();
 
-   cursor.checkposition( getxpos(), getypos() );
+//   cursor.checkposition( getxpos(), getypos() );
+
    bool resourcesCompared = false;
    do {
        if ( status == 2 ) {
@@ -1968,65 +2111,64 @@ int  trunreplay :: run ( int player, int viewingplayer )
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
          */
-       } else
+       }  else {
+          PG_Application::GetApp()->sigAppIdle( PG_Application::GetApp() );
           releasetimeslice();
-
-       if (nextaction == rpl_finished  || status != 2) {
-          if ( !cursor.an )
-             cursor.show();
-          if ( nextaction == rpl_finished && !resourcesCompared ) {
-
-             displaymessage2("running final comparison" );
-
-             actmap->endTurn();
-             actmap->nextPlayer();
-             resourcesCompared = true;
-             ASCString resourceComparisonResult;
-             tmap* comparisonMap = NULL;
-             tmap* nextPlayerMap = NULL;
-             if ( actmap->actplayer == orgmap->actplayer )
-                comparisonMap = orgmap;
-             else
-                comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[actmap->actplayer]  );
-
-             if ( comparisonMap ) {
-                if ( comparisonMap->compareResources( actmap, player, &resourceComparisonResult)) {
-                   tviewanytext vat;
-                   vat.init ( "warning", resourceComparisonResult.c_str() );
-                   vat.run();
-                   vat.done();
-                }
-             } else
-                error("Replay: no map to compare to!");
-
-             delete nextPlayerMap;
-          }
-       } else
-          if ( cursor.an )
-             cursor.hide();
-
-
-       tkey input;
-       while (keypress ()) {
-           mainloopgeneralkeycheck ( input );
        }
 
-       mainloopgeneralmousecheck ();
+       if (nextaction == rpl_finished  || status != 2 ) {
+          if ( CGameOptions::Instance()->replayMovieMode && status != 1 ) 
+             status = 100;
+          else {
+            if ( nextaction == rpl_finished && !resourcesCompared ) {
+
+               displaymessage2("running final comparison" );
+
+               int replayedplayer  = actmap->actplayer; 
+               actmap->endTurn();
+               int nextplayer = findNextPlayer( actmap );
+               if ( nextplayer < actmap->actplayer && performEndTurnOperations )
+                  actmap->endRound();
+                
+               resourcesCompared = true;
+               ASCString resourceComparisonResult;
+               GameMap* comparisonMap = NULL;
+               GameMap* nextPlayerMap = NULL;
+
+               if ( replayedplayer == orgmap->actplayer )
+                  comparisonMap = orgmap;
+               else
+                  comparisonMap = nextPlayerMap = loadreplay ( orgmap->replayinfo->map[nextplayer]  );
+
+               if ( !CGameOptions::Instance()->replayMovieMode ) {
+                  if ( comparisonMap ) {
+                     if ( compareMapResources( comparisonMap, actmap, player, &resourceComparisonResult)) {
+                        ViewFormattedText vft( "warning", resourceComparisonResult, PG_Rect( -1, -1, 500, 550 ) );
+                        vft.Show();
+                        vft.RunModal();
+                     }
+
+                  } else
+                     error("Replay: no map to compare to!");
+               }
+
+               delete nextPlayerMap;
+            }
+          }
+       }
+
+       for ( int i = 0; i < 5; ++i )
+          getPGApplication().processEvent();
 
    } while ( status > 0  &&  status < 100 ) ;
-
-   actgui->restorebackground();
 
    delete actmap;
    actmap = orgmap;
 
-   npop ( actgui );
-
    int st = status;
    status = 0;
 
-   cursor.gotoxy ( orgmap->cursorpos.position[ actplayer ].cx, orgmap->cursorpos.position[ actplayer ].cy );
-   dashboard.x = 0xffff;
+   updateFieldInfo();
 
    if ( st == 101 )
       return 1;
@@ -2036,7 +2178,16 @@ int  trunreplay :: run ( int player, int viewingplayer )
 
 void trunreplay :: firstinit ( void )
 {
-    gui.init ( hgmp->resolutionx, hgmp->resolutiony );
-    gui.starticonload();
     status = 0;
+}
+
+
+void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticStates s)
+{
+   logtoreplayinfo ( rpl_alliancechange2, player1, player2, int(s) );
+}
+
+void hookReplayToSystem()
+{
+   DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
 }

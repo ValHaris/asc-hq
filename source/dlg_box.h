@@ -2,173 +2,6 @@
     \brief Interface for some basic classes from which all of ASC's dialogs are derived
 */
 
-//     $Id: dlg_box.h,v 1.33 2004-07-12 18:15:04 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.32  2004/05/11 20:22:33  mbickel
-//      Readded research system to ASC
-//
-//     Revision 1.31  2004/01/16 15:33:45  mbickel
-//     Completely rewritten game event system
-//     TPWM-decoding-Patch
-//     Fixed: swallog message: wrong coordinates
-//     Autotraining for units with max ammo only
-//     Movement required for clearing mines
-//     Unit names can be edited
-//     weather dependen object properties
-//     Unit swallowed by ground -> unified message
-//     units cannot enter enemy transports
-//     Building entry has constant movemalus
-//     Message for resource transfer for providing player
-//     increased ammo production cost
-//     Fixed: unit could attack after movement (with RF on) although "no attack after move" property was set
-//     Buildings: new properties: "ExternalResourceTransfer", "ExternalAmmoTransfer"
-//     Container: Movemalus override for unloading
-//     Startup map specified in ASC.INI
-//
-//     Revision 1.30  2002/10/05 21:22:09  mbickel
-//      Added inheritance to textfiles
-//
-//     Revision 1.29  2002/10/02 20:21:00  mbickel
-//      Many tweaks to compile ASC with gcc 3.2 (not completed yet)
-//
-//     Revision 1.28  2002/03/19 20:38:56  mbickel
-//      Some cleanup and documentation in dlg_box
-//      Fixed some type assignment errors
-//
-//     Revision 1.27  2001/12/19 17:16:28  mbickel
-//      Some include file cleanups
-//
-//     Revision 1.26  2001/10/11 10:41:06  mbickel
-//      Restructured platform fileio handling
-//      Added map archival information to mapeditor
-//
-//     Revision 1.25  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.24  2001/08/09 10:28:22  mbickel
-//      Fixed AI problems
-//      Mapeditor can edit a units AI parameter
-//
-//     Revision 1.23  2001/07/15 21:00:25  mbickel
-//      Some cleanup in the vehicletype class
-//
-//     Revision 1.22  2001/07/14 21:07:46  mbickel
-//      Sound works now under Win32 too
-//      Error reporting on Win32 during startup works again.
-//
-//     Revision 1.21  2001/05/21 12:46:19  mbickel
-//      Fixed infinite loop in AI::strategy
-//      Fixed bugs in mapeditor - event editing
-//      Fixed bugs in even loading / writing
-//      Fixed wrong build order AI <-> main program
-//
-//     Revision 1.20  2001/02/26 12:35:08  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.19  2001/01/28 14:04:12  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.18  2000/12/28 11:12:45  mbickel
-//      Fixed: no redraw when restoring fullscreen focus in WIN32
-//      Better error message handing in WIN32
-//
-//     Revision 1.17  2000/11/21 20:27:01  mbickel
-//      Fixed crash in tsearchfields (used by object construction for example)
-//      AI improvements
-//      configure.in: added some debug output
-//                    fixed broken check for libbz2
-//
-//     Revision 1.16  2000/10/18 14:14:04  mbickel
-//      Rewrote Event handling; DOS and WIN32 may be currently broken, will be
-//       fixed soon.
-//
-//     Revision 1.15  2000/08/26 15:33:42  mbickel
-//      Warning message displayed if empty password is entered
-//      pcxtank now displays error messages
-//
-//     Revision 1.14  2000/08/12 12:52:45  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.13  2000/08/12 09:17:25  gulliver
-//     *** empty log message ***
-//
-//     Revision 1.12  2000/08/08 09:48:08  mbickel
-//
-//      speed up of dialog boxes in linux
-//      fixed graphical errors in attack
-//      fixed graphical error in ammo transfer
-//      fixed reaction fire not allowing manual attack
-//
-//     Revision 1.11  2000/08/06 11:38:58  mbickel
-//      New map paramter: fuel globally available
-//      Mapeditor can now filter buildings too
-//      Fixed unfreed memory in fullscreen image loading
-//      Fixed: wasted cpu cycles in building
-//      map parameters can be specified when starting a map
-//      map parameters are reported to all players in multiplayer games
-//
-//     Revision 1.10  2000/08/03 13:12:09  mbickel
-//      Fixed: on/off switching of generator vehicle produced endless amounts of energy
-//      Repairing units now reduces their experience
-//      negative attack- and defenseboni possible
-//      changed attackformula
-//
-//     Revision 1.9  2000/05/23 20:40:42  mbickel
-//      Removed boolean type
-//
-//     Revision 1.8  2000/05/06 20:25:23  mbickel
-//      Fixed: -recognition of a second mouse click when selection a pd menu item
-//             -movement: fields the unit can only pass, but not stand on them,
-//                        are marked darker
-//             -intedit/stredit: mouseclick outside is like hitting enter
-//
-//     Revision 1.7  2000/04/27 16:25:20  mbickel
-//      Attack functions cleanup
-//      New vehicle categories
-//      Rewrote resource production in ASC resource mode
-//      Improved mine system: several mines on a single field allowed
-//      Added unitctrl.* : Interface for vehicle functions
-//        currently movement and height change included
-//      Changed timer to SDL_GetTicks
-//
-//     Revision 1.6  2000/03/29 09:58:45  mbickel
-//      Improved memory handling for DOS version
-//      Many small changes I can't remember ;-)
-//
-//     Revision 1.5  2000/01/04 19:43:51  mbickel
-//      Continued Linux port
-//
-//     Revision 1.4  2000/01/01 19:04:17  mbickel
-//     /tmp/cvsVhJ4Z3
-//
-//     Revision 1.3  1999/11/22 18:27:14  mbickel
-//      Restructured graphics engine:
-//        VESA now only for DOS
-//        BASEGFX should be platform independant
-//        new interface for initialization
-//      Rewrote all ASM code in C++, but it is still available for the Watcom
-//        versions
-//      Fixed bugs in RLE decompression, BI map importer and the view calculation
-//
-//     Revision 1.2  1999/11/16 03:41:25  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -192,8 +25,6 @@
 #ifndef dlg_boxH
 #define dlg_boxH
 
-#include <cstring>
-
 #include "newfont.h"
 #include "events.h"
 #include "basegfx.h"
@@ -203,11 +34,6 @@
   #define dlg_notitle 4  
   #define dlg_3dtitle 8
 
-
-/** This variable is set to true after the game is finished loading and is operational.
-    It is used for the fatal error message dialog box on win32, which will be the
-    standard Win32 dialog during startup, while during game it will use ASCs dialog system */
-extern bool gameStartupComplete;
 
   class   tdlgengine {
                  protected:
@@ -221,7 +47,7 @@ extern bool gameStartupComplete;
                                                                                     þ 1:   standard
                                                                                     þ 2:   mit "dauerfeuer"  */
 
-                               integer      x1, y1, x2, y2;              /*  1: texteingabefield  */
+                               int      x1, y1, x2, y2;              /*  1: texteingabefield  */
                                int id;                          /*  2: zahleingabefield  */
                                int style;                       /*  3: checkbox
                                                                                   style:
@@ -254,7 +80,7 @@ extern bool gameStartupComplete;
                   struct ttaborder {
                      int         id;
                      tbutton*      button;
-                     integer      x1, y1, x2, y2;
+                     int      x1, y1, x2, y2;
                   };
 
                      pbutton      firstbutton;
@@ -326,9 +152,10 @@ extern bool gameStartupComplete;
 typedef class tdialogbox* pdialogbox;
 
   class   tdialogbox : public tdlgengine  {
+                     bool eventQueue;
                  public:
                      int             textcolor;
-                     integer          starty;
+                     int          starty;
                      int           ms;
                      void*      tp;
                      char      imagesaved; 
@@ -385,35 +212,35 @@ typedef class tdialogbox* pdialogbox;
                       virtual void copyvirtualframebuf ( void );
 
                       char knopfsuccessful;
-                      void         newknopf(integer      xx1,
-                                            integer      yy1,
-                                            integer      xx2,
-                                            integer      yy2);
+                      void         newknopf(int      xx1,
+                                            int      yy1,
+                                            int      xx2,
+                                            int      yy2);
                       void         knopfdruck(int      xx1,
                                               int      yy1,
                                               int      xx2,
                                               int      yy2);
-                      void         knopf(integer      xx1,
-                                         integer      yy1,
-                                         integer      xx2,
-                                         integer      yy2);
-                      void         newknopfdruck4(integer      xx1,
-                                                  integer      yy1,
-                                                  integer      xx2,
-                                                  integer      yy2);
-                      void         newknopfdruck3(integer      xx1,
-                                                  integer      yy1,
-                                                  integer      xx2,
-                                                  integer      yy2);
-                      void         newknopfdruck2(integer      xx1,
-                                                  integer      yy1,
-                                                  integer      xx2,
-                                                  integer      yy2);
+                      void         knopf(int      xx1,
+                                         int      yy1,
+                                         int      xx2,
+                                         int      yy2);
+                      void         newknopfdruck4(int      xx1,
+                                                  int      yy1,
+                                                  int      xx2,
+                                                  int      yy2);
+                      void         newknopfdruck3(int      xx1,
+                                                  int      yy1,
+                                                  int      xx2,
+                                                  int      yy2);
+                      void         newknopfdruck2(int      xx1,
+                                                  int      yy1,
+                                                  int      xx2,
+                                                  int      yy2);
 
-                      void         newknopfdruck(integer      xx1,
-                                                 integer      yy1,
-                                                 integer      xx2,
-                                                 integer      yy2);
+                      void         newknopfdruck(int      xx1,
+                                                 int      yy1,
+                                                 int      xx2,
+                                                 int      yy2);
                       void         rahmen(bool      invers,
                                           int          x1,
                                           int          y1,
@@ -423,10 +250,10 @@ typedef class tdialogbox* pdialogbox;
                                           tmouserect   rect );
 
                       void         rahmen3(char *       txt,
-                                           integer      x1,
-                                           integer      y1,
-                                           integer      x2,
-                                           integer      y2,
+                                           int      x1,
+                                           int      y1,
+                                           int      x2,
+                                           int      y2,
                                            int         style);
                       void         bar ( tmouserect rect, int color );
                       void         bar ( int x1, int y1, int x2, int y2, int color );
@@ -462,8 +289,6 @@ typedef class tdialogbox* pdialogbox;
                    };
 
 
-//! displays a message in the status line of ASC
-extern int  displaymessage2( const char* formatstring, ... );
 
 /** displays a dialog box with a message
    \param formatstring the text, which may contain the same format arguments as sprintf
@@ -536,7 +361,7 @@ class tviewtext {
          int tvt_maxlineheight;
          const char*  tvt_text;
          char*  actline;
-         void*  tvt_firstlinebuf;
+         char*  tvt_firstlinebuf;
          tgraphmodeparameters tvt_firstlinebufparm;
          int   tvt_firstlinebufheight;
                      
@@ -606,24 +431,29 @@ class   tstringselect : public tdialogbox {
                      void done(void);
                  };
 
+
+                 
 extern int getid( const char* title, int lval, int min, int max );
 extern ASCString editString( const ASCString& title, const ASCString& defaultValue = "" );
 
 
+
 /** displays a dialogbox which lets you chose one of a number of strings.
-    \param tittle the title of the dialog box
-    \param entires the list of strings
+    \param title the title of the dialog box
+    \param entries the list of strings
+    \param defaultEntry the entry that is selected by default (-1 if none)
     \returns the selected index or -1 if nothing was selected
-*/
+ */
 extern int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry = -1 );
 
 /** displays a dialogbox which lets you chose one of a number of strings.
-    \param tittle the title of the dialog box
-    \param entires the list of strings
+    \param title the title of the dialog box
+    \param entries the list of strings
+    \param buttons the names of the buttons that are going to be displayed
+    \param defaultEntry the entry that is selected by default (-1 if none)
     \returns button-number, selected index 
-*/
+ */
 extern pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
-
 
 #endif
 

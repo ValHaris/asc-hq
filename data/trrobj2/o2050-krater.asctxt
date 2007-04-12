@@ -1,8 +1,0 @@
-ObjectType { 
-   Parent = 3550
-   ID = 2050
-
-   dry { 
-      picture = o2050.pcx 1
-   } dry
-} ObjectType

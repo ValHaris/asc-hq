@@ -17,9 +17,53 @@
 
 #include "containerbasetype.h"
 #include "textfiletags.h"
-#include "stringtokenizer.h"
 #include "textfile_evaluation.h"
 #include "vehicletype.h"
+#include "graphics/blitter.h"
+
+
+const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
+              { "training",
+                "internal vehicle production",
+                "ammunition production",
+                "internal unit repair",
+                "recycling",
+                "research",
+                "sonar",
+                "view satellites",
+                "view mines",
+                "wind power plant",
+                "solar power plant",
+                "matter converter",
+                "mining station",
+                "construct units that cannot move out",
+                "resource sink",
+                "external energy transfer",
+                "external material transfer",
+                "external fuel transfer",
+                "external ammo transfer",
+                "external repair",
+                "no object chaining",
+                "self destruct on conquer",
+               "paratrooper",
+               "mine-layer",
+               "cruiser landing",
+               "conquer buildings",
+               "move after attack",
+               "external vehicle production",
+               "construct specific buildings",
+               "icebreaker",
+               "cannot be refuelled in air",
+               "makes tracks",
+               "search for mineral resources automatically",
+               "no reactionfire",
+               "auto repair",
+               "Kamikaze only",
+               "immune to mines",
+               "jams only own field",
+               "move with reaction fire on",
+               "only move to and from transports",
+              NULL };
 
 
 ContainerBaseType :: ContainerBaseType ()
@@ -31,7 +75,42 @@ ContainerBaseType :: ContainerBaseType ()
    id = 0;
    jamming = 0;
    view = 0;
+   efficiencyfuel = 1024;
+   efficiencymaterial = 1024;
+
+   maxresearchpoints = 0;
+   defaultMaxResearchpoints = 0;
+   nominalresearchpoints = 0;
+   vehicleCategoriesProduceable = 0xfffffff;
 }
+
+bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
+{
+   return features.test( int(function) );
+}
+
+bool ContainerBaseType::hasAnyFunction( BitSet functions ) const
+{
+   bool result = (features & functions).any(); 
+   return result;
+}
+
+void ContainerBaseType::setFunction( ContainerFunctions function )
+{
+   features.set( int(function) );
+}
+
+           
+
+
+const char* ContainerBaseType::getFunctionName( ContainerFunctions function )
+{
+   if ( function < functionNum )
+      return ccontainerfunctions[function];
+   else
+      return NULL;
+}
+
 
 ContainerBaseType::TransportationIO::TransportationIO()
 {
@@ -42,7 +121,6 @@ ContainerBaseType::TransportationIO::TransportationIO()
   vehicleCategoriesLoadable = -1;
   dockingHeight_abs = 0;
   dockingHeight_rel = 0;
-  requireUnitFunction = 0;
   disableAttack = false;
   movecost = -1;
 }
@@ -57,7 +135,16 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
    pc.addTagInteger( "CategoriesNOT", vehicleCategoriesLoadable, cmovemalitypenum, unitCategoryTags, true );
    pc.addTagInteger( "DockingHeightAbs", dockingHeight_abs, choehenstufennum, heightTags, 0 );
    pc.addInteger( "DockingHeightRel", dockingHeight_rel, -100 );
-   pc.addTagInteger( "RequireUnitFunction", requireUnitFunction, cvehiclefunctionsnum, vehicleAbilities, 0 );
+   if ( pc.find( "RequireUnitFunction" )) {
+      int r = 0;
+      pc.addTagInteger( "RequireUnitFunction", r, Vehicletype::legacyVehicleFunctionNum, vehicleAbilities, 0 );
+      requiresUnitFeature = Vehicletype::convertOldFunctions(r, pc.getFileName() );
+   } else
+      if ( pc.find( "RequiresUnitFeature" ) || !pc.isReading() )
+         pc.addTagArray( "RequiresUnitFeature", requiresUnitFeature, ContainerBaseType::functionNum, containerFunctionTags );
+      else
+         requiresUnitFeature.reset();
+      
    pc.addBool( "DisableAttack", disableAttack, false );
    pc.addInteger( "MoveCost", movecost, -1 );
    if ( movecost < 10 && movecost >= 0 )
@@ -67,6 +154,7 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
 
 void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 {
+   pc.addBreakpoint();
    pc.openBracket ( "Transportation" );
     int num = entranceSystems.size();
     pc.addInteger ( "EntranceSystemNum", num, 0 );
@@ -77,8 +165,6 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
        pc.closeBracket();
     }
     pc.addInteger ( "MaxLoadableUnits", maxLoadableUnits, 0 );
-    if ( maxLoadableUnits > 18 )
-       maxLoadableUnits = 18;
 
     pc.addInteger ( "MaxLoadableUnitSize", maxLoadableUnitSize, maxint );
     pc.addInteger ( "MaxLoadableMass", maxLoadableWeight, maxint );
@@ -87,24 +173,50 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 
    pc.addString( "Name", name );
 
-   ASCString it = infotext;
+   pc.addString( "Infotext", infotext, "" );
 
-   while ( it.find ( "\n" ) != ASCString::npos )
-      it.replace ( it.find ( "\n" ), 1, "#crt#" );
-   while ( it.find ( "\r" ) != ASCString::npos )
-      it.replace ( it.find ( "\r" ), 1, "" );
-
-   pc.addString( "Infotext", it, "" );
-
-   if ( pc.isReading() )
-      infotext = it;
+   while ( infotext.find ( "#CRT#" ) != ASCString::npos )
+      infotext.replace ( infotext.find ( "#CRT#" ), 5, "\n" );
+   while ( infotext.find ( "#crt#" ) != ASCString::npos )
+      infotext.replace ( infotext.find ( "#crt#" ), 5, "\n" );
+   while ( infotext.find ( "\r" ) != ASCString::npos )
+      infotext.replace ( infotext.find ( "\r" ), 1, "" );
 
    pc.addInteger( "ID", id );
    pc.addInteger( "View", view );
-   if ( view > 255 )
-      view = 255;
+   if ( view > maxViewRange )
+      view = maxViewRange;
 
    pc.addInteger( "Jamming", jamming, 0 );
+   pc.addString( "InfoImage", infoImageFilename, "" );
+
+   pc.openBracket ( "MaxResourceProduction" );
+   maxplus.runTextIO ( pc, Resources(0,0,0) );
+   pc.closeBracket ();
+
+   pc.openBracket ( "ResourceExtractionEfficiency");
+    pc.addInteger( "Material", efficiencymaterial, 1024 );
+    pc.addInteger( "Fuel", efficiencyfuel, 1024 );
+   pc.closeBracket ();
+
+   pc.openBracket ( "StorageCapacity" );
+    pc.openBracket( "BImode" );
+     bi_mode_tank.runTextIO ( pc, Resources(0,0,0) );
+    pc.closeBracket();
+    pc.openBracket ( "ASCmode" );
+     asc_mode_tank.runTextIO ( pc, Resources(0,0,0) );
+    pc.closeBracket();
+   pc.closeBracket ();
+   
+   pc.addInteger ( "MaxResearch", maxresearchpoints, 0 );
+   pc.addInteger ( "NominalResearch", nominalresearchpoints, maxresearchpoints/2 );
+   pc.addInteger ( "MaxResearchpointsDefault", defaultMaxResearchpoints, maxresearchpoints );
+   
+   pc.openBracket( "DefaultProduction" );
+    defaultProduction.runTextIO ( pc, Resources(0,0,0) );
+   pc.closeBracket();
+
+   pc.addTagInteger( "CategoriesProduceable", vehicleCategoriesProduceable, cmovemalitypenum, unitCategoryTags, -1 );
 }
 
 
@@ -119,7 +231,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 1;
+const int containerBaseTypeVersion = 4;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -138,6 +250,15 @@ void ContainerBaseType :: read ( tnstream& stream )
    entranceSystems.resize(num);
    for ( int i = 0; i < num; i++ )
       entranceSystems[i].read( stream );
+
+   if ( version >= 2 )
+      infoImageFilename = stream.readString();
+
+   if ( version >= 3 )
+      stream.readBitset( features );
+
+   if ( version >= 4 )
+      vehicleCategoriesProduceable = stream.readInt();
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -150,9 +271,12 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    stream.writeInt( entranceSystems.size() );
    for ( int i = 0; i < entranceSystems.size(); i++ )
       entranceSystems[i].write( stream );
+   stream.writeString( infoImageFilename );
+   stream.writeBitset( features );
+   stream.writeInt( vehicleCategoriesProduceable );
 }
 
-const int containerBaseTypeTransportVersion = 2;
+const int containerBaseTypeTransportVersion = 3;
 
 
 void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
@@ -170,12 +294,18 @@ void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
    vehicleCategoriesLoadable = stream.readInt();
    dockingHeight_abs = stream.readInt();
    dockingHeight_rel = stream.readInt();
-   requireUnitFunction = stream.readInt();
+   if ( version <= 2 ) {
+      int r = stream.readInt();
+      requiresUnitFeature = Vehicletype::convertOldFunctions(r, stream.getLocation());
+   } else
+      stream.readBitset( requiresUnitFeature );
+      
    disableAttack = stream.readInt();
    if ( version >= 2 )
       movecost = stream.readInt();
    else
       movecost = -1;
+   
 }
 
 void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
@@ -188,9 +318,18 @@ void ContainerBaseType :: TransportationIO :: write ( tnstream& stream ) const
    stream.writeInt ( vehicleCategoriesLoadable );
    stream.writeInt ( dockingHeight_abs );
    stream.writeInt ( dockingHeight_rel );
-   stream.writeInt ( requireUnitFunction );
+   stream.writeBitset ( requiresUnitFeature );
    stream.writeInt ( disableAttack );
    stream.writeInt ( movecost );
+}
+
+
+Resources ContainerBaseType::getStorageCapacity( int mode ) const
+{
+   if ( mode == 1 )
+      return bi_mode_tank;
+   else
+      return asc_mode_tank;
 }
 
 

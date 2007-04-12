@@ -38,359 +38,127 @@
 #include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
-#include "mapdisplay.h"
-#include "password_dialog.h"
-#include "stack.h"
-#include "gamedlg.h"
+#include "dialogs/pwd_dlg.h"
+#include "loaders.h"
+#include "gamemap.h"
 
-pbasenetworkconnection firstnetworkconnection = NULL;
+#include "dialogs/admingame.h"
 
-tfiletransfernetworkconnection filetransfernetworkconnection;
-pbasenetworkconnection defaultnetworkconnection  = &filetransfernetworkconnection;
-
-
-tbasenetworkconnection::tbasenetworkconnection ( void )
+void FileTransfer::readChildData ( tnstream& stream )
 {
-   next = firstnetworkconnection;
-   firstnetworkconnection = this;
-   stream = NULL;
+   stream.readInt();
+   filename = stream.readString();
 }
 
-tbasenetworkconnection::~tbasenetworkconnection ( )
+void FileTransfer::writeChildData ( tnstream& stream ) const
 {
+   stream.writeInt( 1 );
+   stream.writeString( filename );
 }
 
-
-tfiletransfernetworkconnection::tfiletransfernetworkconnection ( void )
+void FileTransfer::setup()
 {
-   orgstream = NULL;
-   strcpy( suffix, tournamentextension );
-}
-
-char* tfiletransfernetworkconnection::getname ( void )                
-{
-   return "direct file transfer";
+   enterfilename();
 }
 
 
-int   tfiletransfernetworkconnection::getid ( void )                
+void FileTransfer::setup( const ASCString& filename )
 {
-   return 1;  // auch dialogboxen „ndern !
+   this->filename = filename;
+}
+
+bool FileTransfer::enterfilename()
+{
+   filename = editString( "Enter Filename", filename );
+   return true;
 }
 
 
-
-tfiletransfernetworkconnection::tsetup::tsetup ( void )
+void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
 {
-   exitpossible = 1;
-}
-
-void tfiletransfernetworkconnection::tsetup::init ( void )
-{
-   status = 0;
-   xsize = 400;
-   ysize = 300;
-   x1 = -1;
-   y1 = -1;
-   addbutton ( "~f~ilename", 20, starty + 40, xsize - 160, starty + 70, 1 , 0, 1, true );
-   addeingabe ( 1, filename, 1, maxfilenamelength );
-
-   addbutton ( "~s~elect",   xsize - 140, starty + 40, xsize - 20, starty + 70, 0 , 1, 2, true );
-
-   if ( exitpossible ) {
-      addbutton ( "~O~k", 10, ysize - 40, xsize / 2 - 5, ysize - 10, 0, 1, 3 , true);
-      addkey ( 3, ct_enter );
-      addbutton ( "e~x~it", xsize / 2 + 5, ysize - 40, xsize - 10, ysize - 10, 0, 1, 4, true );
-      addkey ( 4, ct_esc );
-   } else {
-      addbutton ( "~O~k", 10, ysize - 40, xsize - 10, ysize - 10, 0, 1, 3 , true);
-      addkey ( 3, ct_enter );
-   }
-   if ( !filename[0] && actmap ) {
-      ASCString fn = actmap->preferredFileNames.mapname[0];
-      if ( fn.find ( "." ) != ASCString::npos )
-         fn.erase ( fn.find ( "." ) );
-
-      fn += "-";
-      char buf = 'A'+actmap->actplayer;
-      fn += buf;
-      fn += "-%";
-      strcpy ( filename, fn.c_str() );
-      //strcpy ( filename, "turnier%");
+   while ( filename.empty() ) {
+      if( !enterfilename() )
+         return;
    }
 
-   buildgraphics();
-}
+   try {      
+      ASCString fname = constructFileName( map, lastPlayer, lastturn );
 
-void  tfiletransfernetworkconnection::tsetup::buttonpressed ( int id )
-{
-   ASCString s1;
+      tfindfile ff( fname );
+      tfindfile::FileInfo fi;
+      if ( ff.getnextname( fi ) && fi.directoryLevel == 0 )
+         do {
+            if (choice_dlg("overwrite " + fname,"~y~es","~n~o") == 2) 
+               fname = selectFile( ASCString("*") + tournamentextension, false );
+         } while (fname.empty());
 
-   tdialogbox::buttonpressed ( id );
-   switch ( id ) {
-      case 2:    mousevisible( false ); 
-                 fileselectsvga( tournamentextension, s1, true );
-                 if ( !s1.empty() ) {
-                    strcpy ( filename, s1.c_str() );
-                    showbutton ( 1 );
-                 }
-                 mousevisible( true );
-                 break;
-                 
-      case 3:    status = 2;           
-                 break;
-   
-      case 4:    status = 1;
-                 break;
-                 
-   } /* endswitch */
-
-}
-
-
-void tfiletransfernetworkconnection::treceivesetup::init ( pnetworkconnectionparameters  d )
-{
-   tdialogbox::init ();
-   dtaptr = d;
-   memcpy ( dta , dtaptr, sizeof ( dta ));
-
-   filename = &dta[8];
-
-   int* pi = (int*) dta;
-   pi[0] = 1;
-   pi[1] = 1;
-
-
-   title = ttl;
-   strcpy ( ttl, "direct file transfer setup for receiving" );
-   /*tfiletransfernetworkconnection::*/tsetup::init (  );
-}
-
-void tfiletransfernetworkconnection::tsendsetup::init ( pnetworkconnectionparameters  d, int exitposs  )
-{
-   tdialogbox::init ();
-   title = ttl;
-   strcpy ( ttl, "direct file transfer setup for sending" );
-
-   dtaptr = d;
-   memcpy ( dta , dtaptr, sizeof ( dta ));
-   filename = &dta[8];
-
-   int* pi = (int*) dta;
-   pi[0] = 1;
-   pi[1] = 2;
-   exitpossible = exitposs;
-
-   /*tfiletransfernetworkconnection::*/tsetup::init (  );
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.justify = lefttext;
-   activefontsettings.length = 0;
-   showtext2("Please enter the filename into which ASC will", x1+25, y1+130 );
-   showtext2("write your game. Send this file to the next player.", x1+25, y1+150 );
-   showtext2("You will not be asked for this filename again during", x1+25, y1+170 );
-   showtext2("this game, so place the % character somehwere.", x1+25, y1+190 );
-   showtext2("The % character will automatically be replaced by", x1+25, y1+210 );
-   showtext2("the turn number to allow archiving of the files.", x1+25, y1+230 );
-}
-
-
-void tfiletransfernetworkconnection::tsetup::run ( void )
-{
-   mousevisible ( true );
-   do {
-       tdialogbox::run();
-   } while ( status == 0 ); /* enddo */
-   if ( status == 2 ) 
-     memcpy ( dtaptr , dta, sizeof ( dta ));
-
-}
-
-
-int   tfiletransfernetworkconnection::setupforsending   ( pnetworkconnectionparameters  data, int exitpossible  )
-{
-
-   tsendsetup sendsetup;
-   sendsetup.init( data, exitpossible );
-   sendsetup.run();
-   sendsetup.done();
-   return sendsetup.status-1;
-}
-
-int   tfiletransfernetworkconnection::setupforreceiving ( pnetworkconnectionparameters  data )
-{
-   treceivesetup receivesetup;
-   receivesetup.init( data );
-   receivesetup.run();
-   receivesetup.done();
-   return receivesetup.status-1;
-}
-
-
-void  tfiletransfernetworkconnection::initconnection  ( tnetworkchannel channel )          
-{
-   chann = channel;
-}
-
-int   tfiletransfernetworkconnection::connectionopen  ( void )          
-{
-   return 0;
-}
-
-
-void  tfiletransfernetworkconnection::closeconnection ( void )          
-{
-
-}
-
-void  tfiletransfernetworkconnection::mountfilename ( char* newname, char* oldname )
-{
-   strcpy ( newname, oldname );
-
-   int p = 0; 
-   while ( newname[p] != 0  && newname[p] != '%' )
-      p++;
-
-   if ( newname[p] == '%' ) {
-      int r = p;
-      newname[p] = 0;
-      char temp[10];
-      itoa ( actmap->time.turn(), temp, 10 );
-      while ( strlen ( temp ) + strlen ( newname ) > maxfilenamelength ) {
-         p--;
-         newname[p] = 0;
+      {
+         tnfilestream gamefile ( fname, tnstream::writing );
+         tnetworkloaders nwl;
+         nwl.savenwgame( &gamefile, map );
       }
-      strcat ( newname, temp );
-      strcat ( newname, &oldname[r+1] );
 
-      p = strlen ( newname );
-      if ( !strchr ( newname, '.' ) ) {
-         while ( strlen ( newname ) > maxfilenamelength ) {
-            p--;
-            newname[p] = 0;
-         }
-      } else {
-         while ( strlen ( newname ) > maxfilenamelength ) {
-            p--;
-            newname[p] = 0;
-         }
-      }
-   }
-
-   if ( strchr ( newname, '.' ) == NULL )
-      strcat ( newname, &suffix[1] );
-
-}
-
-
-int   tfiletransfernetworkconnection::validateparams ( pnetworkconnectionparameters data, tnetworkchannel chann  )
-{
-   int* pi = (int*) data;
-   if ( pi[0] != getid() )
-      return 0;
+      int nextPlayer = map->actplayer;
+      if ( nextPlayer < 0 )
+         nextPlayer = 0;
       
-   filename = &(*data)[8];
-   if ( !filename[0] )
-      return 0;
-
-   if ( chann == TN_SEND ) {
-      char tempfilename[200];
-      mountfilename ( tempfilename, filename );
-
-      if ( exist( tempfilename ) ) {
-         char stempp[100];
-         sprintf(stempp, "file %s already exists ! Overwrite ?", tempfilename );
-         if (choice_dlg(stempp,"~y~es","~n~o") == 2) 
-            return 0;
-      }
-
-   } else {
-      char temp[20];
-      strcpy ( temp, filename );
-      if ( strchr ( temp, '.' ) == NULL )
-         strcat ( temp, &suffix[1] );
-      if ( !exist( temp ) )
-         return 0;
+      ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
+      if ( !map->player[nextPlayer].email.empty() )
+         msg += " (" + map->player[nextPlayer].email + ")";
+      infoMessage( msg );
+   } catch ( tfileerror ) {
+      errorMessage ( "error writing file " + filename );
    }
-
-   return 1;
 }
 
 
-int   tfiletransfernetworkconnection::transferopen  ( void )          
+GameMap* FileTransfer::receive()
 {
-   if ( stream || orgstream )
-      return 1;
-   else 
-      return 0;
+   return loadPBEMFile( filename );
+}   
+
+GameMap* FileTransfer::loadPBEMFile( const ASCString& filename )
+{
+   GameMap* map = NULL;
+   try {      
+      tnfilestream gamefile ( filename, tnstream::reading );
+      tnetworkloaders nwl;
+      map = nwl.loadnwgame( &gamefile );
+   } catch ( tfileerror ) {
+      errorMessage ( filename + " is not a legal email game" );
+      return NULL;
+   }
+   return map;
 }
 
-
-void  tfiletransfernetworkconnection::inittransfer  ( pnetworkconnectionparameters data )          
+ASCString FileTransfer::constructFileName( const GameMap* actmap, int lastPlayer, int lastturn ) const
 {
-   if ( stream )
-      displaymessage ( "tfiletransfernetworkconnection::inittransfer ( pnetworkconnectionparameters ) \n stream bereits initialisiert !",2);
-
-   if ( orgstream )
-      displaymessage ( "tfiletransfernetworkconnection::inittransfer ( pnetworkconnectionparameters ) \n orgstream bereits initialisiert !",2);
-
-   while ( validateparams ( data, chann ) == 0 ) {
-      if ( chann == TN_SEND )
-        setupforsending ( data, 0 );
+   ASCString s = filename;
+   while ( s.find( "$p") != ASCString::npos ) {
+      if ( lastPlayer >= 0 )
+         s.replace( s.find( "$p"), 2, 1, 'A' + lastPlayer );
       else
-        setupforreceiving ( data );
+         s.replace( s.find( "$p"), 2, "SV" );
    }
 
-   char tempfilename[200];
-   mountfilename ( tempfilename, filename );
-
-   if ( chann == TN_SEND )
-      orgstream = new  tnfilestream ( tempfilename, tnstream::writing );
-   else
-      orgstream = new  tnfilestream ( tempfilename, tnstream::reading );
-
-   stream = orgstream;
-}
-
-void  tfiletransfernetworkconnection::closetransfer ( void )          
-{
-   if ( orgstream ) { 
-      delete orgstream;
-      orgstream = NULL;
-      stream = NULL;
+   while ( s.find( "$t") != ASCString::npos ) {
+      if ( lastturn >= 0 )
+         s.replace( s.find( "$t"), 2, ASCString::toString( lastturn ) );
+      else
+         s.replace( s.find( "$t"), 2, ASCString::toString ( actmap->time.turn() ) );
    }
+
+   if ( !s.endswith(tournamentextension ))
+      s += tournamentextension;
+   return s;
 }
 
 
-
-
-
-
-pbasenetworkconnection getconnectforid( int id )
-{
-   pbasenetworkconnection conn = firstnetworkconnection;
-   while ( conn && conn->getid() != id  )
-      conn = conn->next;
-
-   return conn;
-}
-
-void setallnetworkpointers ( pnetwork net )
-{
-   for (int i = 0; i < 8; i++) {
-      if ( net->computer[i].send.transfermethodid )
-         net->computer[i].send.transfermethod = getconnectforid ( net->computer[i].send.transfermethodid );
-      if ( net->computer[i].receive.transfermethodid )
-         net->computer[i].receive.transfermethod = getconnectforid ( net->computer[i].receive.transfermethodid );
-   } /* endfor */
-}
-
-
-
+#if 0
 void networksupervisor ( void )
 {
    class tcarefordeletionofmap {
-         pmap tmp;
+         GameMap* tmp;
       public:
          tcarefordeletionofmap ()
          {
@@ -527,3 +295,11 @@ void networksupervisor ( void )
       actmap = NULL;
    }
 }
+   #endif
+
+
+
+namespace {
+   const bool r1 = networkTransferMechanismFactory::Instance().registerClass( FileTransfer::mechanismID(), ObjectCreator<GameTransferMechanism, FileTransfer> );
+}
+

@@ -210,48 +210,35 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 
 ##0030
 
-#color004##font1#
+#color004##fontsize=18#
 ADVANCED STRATEGIC COMMAND
-#color000##font0#
-(C) 1994 - 2004 by Martin Bickel and Kevin Hirschmann
+#color000##fontsize=14#
+(C) 1994 - 2006 by Martin Bickel, Steffen Fröhlich and Daniel Korbely
 
-Graphics by Christian Mayer, Steffen Fr”hlich, Daniel Korbely and Frank Fiedler.
+Contributions:
 
-Campaign created by Daniel Korbely
+Christian Mayer (graphics)
+Frank Fiedler (graphics)
+Michael Kievernagel (music)
+Torsten Maekler (objects, terrain)
+Kevin Hirschmann (code, unit and building guide)
+Jeffrey M. Wacheski (sound)
+Tom Wilson, Simon Britnell (linux porting)
 
-The port to Linux was done by Tom Wilson, Simon Britnell and Martin Bickel
 
-Steffen Fr”hlich maintains the standard unit set and has created several map graphics.
+Many thanks to:
 
-Many objects, terrain and buildings were contributed by Torsten Maekler.
-
-Music composed by Michael Kievernagel.
-
-Many thanks to Marius Rickenbacher for his efforts in debugging the replay system
-
-Alexander Sch„fer originally implemented the 'small editors' and created the first version of the ASC vehicle set.
-
-Jeffrey M. Wacheski contributed sound effects
-
-Many thanks go to J”rg Richter for giving us the source of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC. 
-
-The pathfinding code is based on code by Amit Patel, who was very helpful helpful in pointing out that his code is correct (and my modifications were not :-)
-
-Thanks Michael Moerz, Nicolas Raffenaud, Frank Landgraf, Bernhard Oemer and Shamada Diundra for contributing code and general help.
+Marius Rickenbacher for debugging
+Alexander Schäfer for helping with the very first versions of ASC
+Amit Patel for his pathfinding algorithm implementation
+Jörg Richter for giving us sources of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC.
+Michael Moerz, Nicolas Raffenaud, Frank Landgraf, Bernhard Oemer and Shamada Diundra for contributing code and general help.
+Karel Voracek for the experience symbols.
 
 Advanced Strategic Command and its utility programs use code of The Independent JPEG Group .
-
-The data compression is based on routines by Julian R Seward.
-
+The data compression uses bzlib by Julian R Seward.
 The windows installer for this product was created using Installer VISE from MindVision Software.
-
-Some tutorial levels are based on Battle Isle maps by Steffen Fr”hlich and Thomas Blaser.
-
-Karel Voracek created the experience symbols. 
-
-Some icons created by Michael Lange.
-
-Many thanks also to the numerous bug reporters, first to mention Torsten Maekler and Steffen Fröhlich.
+Some tutorial levels are based on Battle Isle maps by Steffen Fröhlich and Thomas Blaser.
 
 
 

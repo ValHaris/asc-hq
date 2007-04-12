@@ -1,5 +1,8 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= manpages
-EXTRA_DIST 		= *.html *.css
+SUBDIRS 		= manpages unitguide
 
+.PHONY: unitguide
+
+unitguide:
+	cd unitguide && make unitguide

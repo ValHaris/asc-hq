@@ -29,7 +29,7 @@
 #include "vehicletype.h"
 #include "newfont.h"
 #include "typen.h"
-#include "basegfx.h"
+// #include "basegfx.h"
 #include "dlg_box.h"
 #include "newfont.h"
 #include "vehicletype.h"
@@ -38,7 +38,6 @@
 
 #include "gameevents.h"
 #include "events.h"
-#include "stack.h"
 #include "gameoptions.h"
 #include "loadimage.h"
 #include "errors.h"
@@ -46,17 +45,20 @@
 #include "gameevent_dialogs.h"
 #include "dialog.h"
 
+#include "dialogs/fieldmarker.h"
+#include "widgets/textrenderer.h"
 
 #ifdef karteneditor
-#include "edmisc.h"
-#include "edselfnt.h"
-extern int  selectfield(int * cx ,int  * cy);
+# include "edmisc.h"
+# include "edselfnt.h"
+# include "maped-mainscreen.h"
+ extern int  selectfield(int * cx ,int  * cy);
+
 #else
 int  selectfield(int * cx ,int  * cy)
 {
   return 0;
 }
-void selweather( tkey ench ){};
 void editpolygon (Poly_gon& poly) {};
 Vehicle* selectUnitFromMap() { return NULL; };
 #endif
@@ -66,9 +68,17 @@ Vehicle* selectUnitFromMap() { return NULL; };
 bool chooseWeather( int& weather )
 {
 #ifdef karteneditor
-  auswahlw = weather;
-  selweather( ct_invvalue );
-  weather = auswahlw;
+   vector<ASCString> entries;
+
+   for ( int w = 0; w < cwettertypennum; ++w )
+      entries.push_back ( cwettertypen[ w ] );
+
+   int value = chooseString ( "choose operation target", entries, weather );
+   if ( value < 0 )
+      return false;
+   else
+      weather = value;
+
 #endif
   return true;
 }
@@ -76,9 +86,7 @@ bool chooseWeather( int& weather )
 bool chooseTerrain( int& terrainID )
 {
 #ifdef karteneditor
-  auswahl = actmap->getterraintype_byid( terrainID );
-  selterraintype( ct_invvalue );
-  terrainID = auswahl->id;
+   selectItemID( terrainID, terrainTypeRepository );
 #endif
   return true;
 }
@@ -86,9 +94,7 @@ bool chooseTerrain( int& terrainID )
 bool chooseObject( int& objectID )
 {
 #ifdef karteneditor
-  actobject  = actmap->getobjecttype_byid( objectID );
-  selobject( ct_invvalue );
-  objectID = actobject->id;
+   selectItemID( objectID, objectTypeRepository );
 #endif
   return true;
 }
@@ -96,13 +102,12 @@ bool chooseObject( int& objectID )
 bool chooseVehicleType( int& vehicleTypeID )
 {
 #ifdef karteneditor
-  auswahlf  = actmap->getvehicletype_byid( vehicleTypeID );
-  selvehicletype( ct_invvalue );
-  vehicleTypeID = auswahlf->id;
+   selectItemID( vehicleTypeID, vehicleTypeRepository );
 #endif
   return true;
 }
 
+#if 0
 
 class  tgetxy : public tdialogbox {
               ASCString titlename;
@@ -171,8 +176,8 @@ void         tgetxy::buttonpressed(int         id)
    break;
       case 3: {
                   mousevisible(false);
-                  x = getxpos();
-                  y = getypos();
+                  x = actmap->getCursor().x;
+                  y = actmap->getCursor().y;
                   displaymap();
                   mousevisible(true);
                   do {
@@ -303,6 +308,35 @@ void         getxy_building(int *x,int *y)
    *y = gb.y;
    gb.done();
 } 
+
+
+#endif
+
+
+void         getxy_building(int *x,int *y)
+{
+   SelectBuildingFromMap::CoordinateList list;
+   list.push_back ( MapCoordinate( *x, *y ));
+   
+   SelectBuildingFromMap sbfm( list, actmap );
+   sbfm.Show();
+   sbfm.RunModal();
+
+   if ( list.empty() ) {
+      *x = -1;
+      *y = -1;
+   } else {
+      *x = list.begin()->x;
+      *y = list.begin()->y;
+   }
+}
+
+void selectFields( FieldAddressing::Fields& fields )
+{
+   SelectFromMap sbfm( fields, actmap );
+   sbfm.Show();
+   sbfm.RunModal();
+}
 
 
 
@@ -442,107 +476,20 @@ void         tshowtechnology::run(void)
 void         showtechnology(const Technology*  tech )
 {
    if ( tech ) {
-   #if 0
-      if ( tech->pictfilename ) {
-         mousevisible(false);
-         bar ( 0,0, agmp->resolutionx-1, agmp->resolutiony-1, black );
-         activefontsettings.length = agmp->resolutionx - 40;
-         activefontsettings.justify = centertext;
-         activefontsettings.background = 255;
-         activefontsettings.height = 0;
-         activefontsettings.font = schriften.large;
-         activefontsettings.color = white;
-         showtext2 ( "A new technology" , 20, 200 );
-         showtext2 ( "has been discovered", 20, 280 );
-         int t = ticker;
-         while ( mouseparams.taste )
-            releasetimeslice();
-         do {
-            releasetimeslice();
-         } while ( t + 200 > ticker  &&  !keypress()  && !mouseparams.taste);
+      ASCString text = "#fontsize=18#Research completed#fontsize=12#\n";
 
-         int abrt = 0;
-         while ( keypress() )
-           r_key();
+      text = "Our scientists have mastered a new technology:\n#fontsize=18#";
 
+      text += tech->name + "#fontsize=12#\n";
 
-         int fs = loadFullscreenImage ( tech->pictfilename );
-         if ( fs ) {
+      if ( tech->relatedUnitID > 0 )
+         text += "#vehicletype=" + ASCString::toString(tech->relatedUnitID) + "#\n\n";
 
-            t = ticker;
-            while ( mouseparams.taste )
-               releasetimeslice();
+      text += tech->infotext;
 
-            do {
-               releasetimeslice();
-            } while ( t + 600 > ticker  &&  !keypress()  && !mouseparams.taste && !abrt ); /* enddo */
-
-            closeFullscreenImage();
-         }
-         activefontsettings.length = agmp->resolutionx - 40;
-         activefontsettings.justify = centertext;
-         activefontsettings.background = 255;
-         activefontsettings.height = 0;
-         activefontsettings.font = schriften.large;
-         activefontsettings.color = white;
-         bar ( 0, 0, agmp->resolutionx-1, agmp->resolutiony-1, 0 );
-         showtext2 ( tech->name, 20, 20 );
-
-         if ( tech->infotext ) {
-            tviewtext vt;
-            vt.setparams ( 20, 50, agmp->resolutionx - 20, agmp->resolutiony - 20, tech->infotext, white, black );
-            vt.tvt_dispactive = 0;
-            vt.displaytext ();
-
-            int textsizeycomplete = vt.tvt_yp;
-            int textsizey = agmp->resolutiony - 70 ;
-
-            vt.tvt_dispactive = 1;
-            vt.displaytext ();
-   
-            abrt = 0;
-            int scrollspeed = 10;
-            do {
-               tkey taste = r_key();
-
-               if ( textsizeycomplete > textsizey ) {
-                  int oldstarty = vt.tvt_starty;
-                  if ( taste == ct_down ) 
-                     if ( vt.tvt_starty + textsizey + scrollspeed < textsizeycomplete )
-                        vt.tvt_starty += scrollspeed;
-                     else
-                         vt.tvt_starty = textsizeycomplete - textsizey;
-
-                  if ( taste == ct_up ) 
-                     if ( vt.tvt_starty - scrollspeed > 0 )
-                        vt.tvt_starty -= scrollspeed;
-                     else
-                         vt.tvt_starty = 0;
-
-                  if ( oldstarty != vt.tvt_starty )
-                      vt.displaytext();
-
-               }
-
-               if ( taste == ct_esc || taste == ct_enter || taste == ct_space )
-                  abrt = 1;
-
-            } while ( !abrt ); /* enddo */
-
-            // repaintdisplay();
-         }
-      } else {
-   #endif
-         //ASCString text = "A new technology has been researched:\n#font02#";
-         ASCString text = "#font02#";
-         text += tech->name;
-         text += "#font01#\n";
-         text += tech->infotext;
-       tviewanytext vat;
-       vat.init ( "new technology", text.c_str() );
-       vat.run();
-       vat.done();
-//      }
+      ViewFormattedText tr ("Research", text, PG_Rect(-1,-1, 300,250) );
+      tr.Show();
+      tr.RunModal();
    }
 }
 
@@ -573,10 +520,10 @@ void  tshownewtanks :: init ( bool*      buf2 )
    int i, num = 0;
    for (i=0; i < vehicleTypeRepository.getNum() ;i++ ) {
       if ( buf[i] ) {
-         pvehicletype tnk = vehicleTypeRepository.getObject_byPos ( i );
+         Vehicletype* tnk = vehicleTypeRepository.getObject_byPos ( i );
          if ( tnk ) {
             bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
-            putrotspriteimage (  x1 + 30, y1 + 50 + num * 50, tnk -> picture[0] , actmap->actplayer * 8);
+            tnk->paint( getActiveSurface(), SPoint (  x1 + 30, y1 + 50 + num * 50), actmap->actplayer );
             showtext2( tnk -> name, x1 + 70, y1 + 45 + num * 50 );
             showtext2( tnk -> description, x1 + 70, y1 + 45 + 40 + num * 50 - activefontsettings.font->height );
             num++;
@@ -602,36 +549,24 @@ void  tshownewtanks :: buttonpressed ( int id )
 }
 
 
-pvehicle selectunit ( pvehicle unit )
-{
-    int x, y;
-    int cnt = 0;
-    for ( int pp = 0; pp < 9; pp++ )
-       if ( !actmap->player[pp].vehicleList.empty() )
-          cnt++;
-    if ( cnt ) {
-       if ( unit ) {
-          x = unit->xpos;
-          y = unit->ypos;
-       } else {
-          x = 0;
-          y = 0;
-       }
-
-       cursor.gotoxy(x,y);
-       return selectUnitFromMap();
-    } else {
-       displaymessage("no vehicles on map !", 1 );
-       return NULL;
-    }
-}
-
 int selectunit ( int unitnetworkid )
 {
-  pvehicle v = actmap->getUnit ( unitnetworkid );
-  v = selectunit ( v );
+  SelectUnitFromMap::CoordinateList list;
+
+  Vehicle* v = actmap->getUnit ( unitnetworkid );
   if ( v )
-     return v->networkid;
+      list.push_back ( v->getPosition() );
+
+  SelectUnitFromMap sufm ( list, actmap );
+  sufm.Show();
+  sufm.RunModal();
+
+  if ( list.empty() )
+     return 0;
+  
+  tfield* fld = actmap->getField( *list.begin() );
+  if ( fld && fld->vehicle )
+     return fld->vehicle->networkid;
   else
      return 0;
 }
@@ -747,6 +682,45 @@ void playerselall( int *playerbitmap)
    sc.run();
    sc.done();
    *playerbitmap = sc.playerbit;
+}
+
+
+
+bool ReinforcementSelector::mark()
+{
+   MapCoordinate pos = actmap->getCursor();
+   if  ( !accept(pos))
+      return false;
+
+   CoordinateList::iterator i = find( coordinateList.begin(), coordinateList.end(), pos );
+   if ( i == coordinateList.end() )
+      coordinateList.push_back ( pos );
+
+   tfield* fld = actmap->getField( pos );
+   if (!fld )
+      return false;
+
+   if ( fld->vehicle ) {
+      tmemorystream stream ( &buf, tnstream::appending );
+      stream.writeInt( Reinforcements::ReinfVehicle );
+      fld->vehicle->write ( stream );
+      objectNum++;
+      delete fld->vehicle;
+      fld->vehicle = NULL;
+   } else
+      if ( fld->building ) {
+         tmemorystream stream ( &buf, tnstream::appending );
+         stream.writeInt( Reinforcements::ReinfBuilding );
+         fld->building->write ( stream );
+         objectNum++;
+         delete fld->building;
+         fld->building = NULL;
+      }
+
+   showFieldMarking( coordinateList );
+
+   updateList();
+   return true;
 }
 
 

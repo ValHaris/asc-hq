@@ -19,24 +19,30 @@
  #define mapalgorithmsH
 
  #include "typen.h"
+ #include "vehicle.h"
+ #include "libs/loki/Functor.h"
 
   /** searches fields in hexagonal "circles" around a field and calls testfield for each field
   */
   class   SearchFields {
                 protected:
-                    pmap gamemap;
+                    GameMap* gamemap;
                     MapCoordinate startPos;
                     bool        cancelSearch;
                     int         firstDistance, lastDistance;
                     int         dist;
                     virtual void testfield ( const MapCoordinate& pos ) = 0;
                 public:
-                    SearchFields ( pmap _gamemap );
+                    SearchFields ( GameMap* _gamemap );
                     void initsearch ( const MapCoordinate& startPosition, int _firstDistance, int _lastDistance );
                     virtual void startsearch ( void );
                     virtual ~SearchFields() {};
                  };
 
+  typedef Loki::Functor<void, TYPELIST_1(const MapCoordinate&) > FieldIterationFunctor;
+  extern void circularFieldIterator( GameMap* gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor ); 
+
+                 
   /** draws a straight line on the hexagonal map and calls putpix8 for each field.
       Awfully unoptimized!
   */
@@ -52,17 +58,18 @@
                   void init ( void );
 
                protected:
-                  pmap gamemap;
+                  GameMap* gamemap;
 
                public:
                    int tempsum;
-                   tdrawgettempline ( int _freefields, pmap _gamemap );
+                   tdrawgettempline ( int _freefields, GameMap* _gamemap );
 
                    void start ( int x1, int y1, int x2, int y2 );
 
                    virtual void putpix8 ( int x, int y );
                    double winkel ( int x, int y );
                    int winkelcomp ( double w1, double w2 );
+                   virtual ~tdrawgettempline() {};
               };
 
 //! changes x and y to the coordinates of the neighbouring field of (x/y) in the direction direc
@@ -88,7 +95,7 @@ extern int   getdirection( const MapCoordinate& start, const MapCoordinate& dest
 extern int beeline ( int x1, int y1, int x2, int y2 );
 
 //! returns the distance between the units a and b
-extern int beeline ( const pvehicle a, const pvehicle b );
+extern int beeline ( const Vehicle* a, const Vehicle* b );
 
 //! returns the distance between map positions a and b
 extern int beeline ( const MapCoordinate& a, const MapCoordinate& b );

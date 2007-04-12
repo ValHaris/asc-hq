@@ -1,36 +1,3 @@
-//     $Id: network.h,v 1.8 2003-01-28 17:48:42 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.7  2002/02/21 17:06:51  mbickel
-//      Completed Paragui integration
-//      Moved mail functions to own file (messages)
-//
-//     Revision 1.6  2001/02/26 12:35:25  mbickel
-//      Some major restructuing:
-//       new message containers
-//       events don't store pointers to units any more
-//       tfield class overhauled
-//
-//     Revision 1.5  2000/08/12 12:52:49  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.4  1999/12/28 21:03:12  mbickel
-//      Continued Linux port
-//      Added KDevelop project files
-//
-//     Revision 1.3  1999/12/07 22:13:25  mbickel
-//      Fixed various bugs
-//      Extended BI3 map import tables
-//
-//     Revision 1.2  1999/11/16 03:42:14  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -52,101 +19,30 @@
 */
 
 
-#if defined(karteneditor) && !defined(pbpeditor)
-#error The mapeditor should not need the network routines
-#endif
 
 #ifndef network_h
 #define network_h
 
-#include "typen.h"
-#include "sgstream.h"
-#include "dlg_box.h"
-#include "networkdata.h"
+#include "networkinterface.h"
 
 
-
-
-
-extern pbasenetworkconnection firstnetworkconnection ;
-extern pbasenetworkconnection defaultnetworkconnection ;
-
-class tbasenetworkconnection {
-        public:
-           pbasenetworkconnection next;
-
-           virtual char* getname ( void )                  = 0;
-           virtual int   getid ( void )                    = 0;
-           virtual int   setupforsending   ( pnetworkconnectionparameters   data, int exitpossible = 1 )  = 0;
-           virtual int   setupforreceiving ( pnetworkconnectionparameters   data )  = 0;
-           virtual int validateparams ( pnetworkconnectionparameters data, tnetworkchannel chann ) = 0;
-           virtual void  initconnection  ( tnetworkchannel channel )          = 0;
-           virtual void  inittransfer    ( pnetworkconnectionparameters data )          = 0;
-           virtual int   transferopen ( void ) = 0;
-           virtual int   connectionopen ( void ) = 0;
-           virtual void  closeconnection ( void )          = 0;
-           virtual void  closetransfer   ( void )          = 0;
-           tbasenetworkconnection ( void );
-           virtual ~tbasenetworkconnection (  );
-           pnstream stream;
-       };
-
-
-class tfiletransfernetworkconnection : public tbasenetworkconnection {
-        protected:
-            tnetworkchannel chann;
-            char suffix[8];
-            char* filename;
-            tnfilestream* orgstream;
-
-            class tsetup : public tdialogbox {
-                               protected:
-                                   char ttl[100];
-                                   char* filename;
-
-                                   tnetworkconnectionparameters  dta;
-                                   pnetworkconnectionparameters  dtaptr;
-                                   int exitpossible;
-                               public: 
-                                   int  status;
-                                   tsetup ( void );
-                                   int  getcapabilities ( void ) { return 1; };
-                                   void init ( void );
-                                   virtual void buttonpressed ( int id );
-                                   void run ( void );
-                               } ;
-            class tsendsetup : public tsetup {
-                               public: 
-                                   void init ( pnetworkconnectionparameters  d, int exittposs = 1 );
-                               };
-
-            class treceivesetup : public tsetup {
-                               public: 
-                                   void init ( pnetworkconnectionparameters  d );
-                              };
-
-
-           void mountfilename ( char* newname, char* oldname );
-        public:                 
-           tfiletransfernetworkconnection( void );  
-           virtual char* getname ( void )                  ;
-           virtual int   getid ( void )                    ;
-           virtual int validateparams ( pnetworkconnectionparameters data, tnetworkchannel chann  );
-           virtual int   setupforsending   ( pnetworkconnectionparameters data, int exitpossible = 1 )  ;
-           virtual int   setupforreceiving ( pnetworkconnectionparameters data )  ;
-           virtual void  initconnection  ( tnetworkchannel channel )          ;
-           virtual void  inittransfer    ( pnetworkconnectionparameters data )          ;
-           virtual int   transferopen ( void );
-           virtual int   connectionopen ( void );
-           virtual void  closeconnection ( void )          ;
-           virtual void  closetransfer   ( void )          ;
-       };
-
-
-
-
-extern pbasenetworkconnection getconnectforid( int id );
-extern void setallnetworkpointers ( pnetwork net );
+class FileTransfer : public GameTransferMechanism {
+      ASCString filename;
+   protected:   
+      void readChildData ( tnstream& stream );
+      void writeChildData ( tnstream& stream ) const;
+      bool enterfilename();
+      ASCString constructFileName( const GameMap* actmap, int lastPlayer, int lastturn ) const;
+   public:
+      void setup();
+      void setup( const ASCString& filename );
+      
+      void send( const GameMap* map, int lastPlayer, int lastturn  );
+      GameMap* receive();
+      GameMap* loadPBEMFile( const ASCString& filename );
+      ASCString getMechanismID() const { return mechanismID(); };
+      static ASCString mechanismID() { return "FileTransfer"; };
+};
 
 extern void networksupervisor ( void );
 

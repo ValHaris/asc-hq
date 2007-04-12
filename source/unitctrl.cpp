@@ -21,6 +21,8 @@
 #include <vector>
 #include <algorithm> 
 #include <cmath>
+#include <SDL.h>
+#include <SDL_thread.h>
 
 #include "unitctrl.h"
 #include "controls.h"
@@ -31,10 +33,15 @@
 #include "buildingtype.h"
 #include "viewcalculation.h"
 #include "replay.h"
-#include "dashboard.h"
 #include "gameoptions.h"
 #include "itemrepository.h"
 #include "astar2.h"
+#include "containercontrols.h"
+#include "mapdisplayinterface.h"
+#include "gameeventsystem.h"
+#include "actions/servicing.h"
+#include "soundList.h"
+#include "reactionfire.h"
 
 PendingVehicleActions pendingVehicleActions;
 
@@ -81,7 +88,7 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
       int move = int(i->second->gval);
       Fields::key_type key = i->first;
       ++i;
-      while ( i->first == key && i != fields.end() ) {
+      while ( i != fields.end() && i->first == key ) {
          if ( i->second->gval  < move || ( i->second->gval == move && abs(i->second->h.getNumericalHeight()-orgHeight) < abs(height-orgHeight) ))
             height = i->second->h.getNumericalHeight();
          ++i;
@@ -90,16 +97,154 @@ void BaseVehicleMovement :: PathFinder :: getMovementFields ( IntFieldList& reac
    }
 }
 
+bool multiThreadedViewCalculation = false;
+
+
+
+class BackgroundViewCalculator {
+   private:
+      SDL_Thread *viewThreat;
+      SDL_sem* sem;
+      bool endThreat;
+      int changedFields;
+
+      enum Status { waiting, dataavail, running, finished } status;
+      
+   public:
+
+
+      struct Data {
+         GameMap* gamemap;
+         int view;
+         Data( GameMap* map, int v ) : gamemap ( map ), view( v) {};
+         Data() : gamemap(NULL), view(-1) {};
+      };
+      
+      BackgroundViewCalculator() : endThreat(false), changedFields(0)
+      {
+         status = waiting;
+         sem = SDL_CreateSemaphore( 1 );
+         viewThreat = SDL_CreateThread( &BackgroundViewCalculator::calculator, this );
+      }
+
+      void postData( Data data )
+      {
+         SDL_SemWait( sem );
+         if ( status == waiting || status == finished ) {
+            this->data = data;
+            status = dataavail;
+         } else
+            fatalError( "Sequence error in BackgroundViewCalculator");
+         SDL_SemPost(sem );
+
+      }
+      
+      bool dataAvail( Data& data )
+      {
+         bool result;
+         SDL_SemWait( sem );
+         if ( status == dataavail ) {
+            result = true;
+            data = this->data;
+         } else
+            result = false;
+         SDL_SemPost(sem );
+         return result;
+      }
+
+      void setCalculationCompletion( int changedFields )
+      {
+         SDL_SemWait( sem );
+         status = finished;
+         this->changedFields = changedFields;
+         SDL_SemPost(sem );
+      }
+
+      bool isCalculationCompleted()
+      {
+         bool result;
+         SDL_SemWait( sem );
+         if ( status == finished ) {
+            result = true;
+         } else
+            result = false;
+         SDL_SemPost(sem );
+         return result;
+      }
+
+      int waitForCompletion()
+      {
+         while ( !isCalculationCompleted() )
+            SDL_Delay(10);
+         return changedFields;
+      }
+
+      bool haltThreat()
+      {
+         return endThreat;
+      }
+      
+      ~BackgroundViewCalculator()
+      {
+         endThreat = true;
+         SDL_WaitThread( viewThreat, NULL );
+         SDL_DestroySemaphore( sem );
+      }
+
+   private:
+
+      Data data;
+      
+      static int calculator( void* object )
+      {
+         BackgroundViewCalculator* bvc = static_cast<BackgroundViewCalculator*>(object);
+         Data data;
+         do {
+            SDL_Delay(10);
+            if ( bvc->dataAvail( data )) {
+               int changedFields = evaluateviewcalculation ( data.gamemap, data.view );
+               bvc->setCalculationCompletion( changedFields );
+            }
+         } while ( !bvc->haltThreat() && !exitprogram );
+         return 0;
+      }
+
+};
+      
+
+
+void printTimer( int i )
+{
+#if 0
+   static int lastTimer = 0;
+   if ( i == 1 )
+      lastTimer = SDL_GetTicks();
+   else {
+      printf("%d - %d : %d \n", i-1, i, SDL_GetTicks() - lastTimer);
+      lastTimer = SDL_GetTicks();
+   }
+#endif
+}
+      
+      
+
 int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrupt )
 {
    WindMovement* wind;
+
+#ifdef WEATHERGENERATOR
+   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weatherSystem->getCurrentWindSpeed() ) {
+      wind = new WindMovement ( vehicle );
+   } else
+      wind = NULL;
+#else
    if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
       wind = new WindMovement ( vehicle );
    } else
       wind = NULL;
+#endif
 
-
-   pfield oldfield = getfield( vehicle->xpos, vehicle->ypos );
+   tfield* oldfield = getfield( vehicle->xpos, vehicle->ypos );
 
    AStar3D::Path::iterator pos = path.begin();
    AStar3D::Path::iterator stop = path.end()-1;
@@ -117,20 +262,27 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
       oldfield->vehicle = NULL;
    } else {
       ContainerBase* cn = oldfield->getContainer();
-      int i = 0;
-      while (cn->loading[i] != vehicle)
-         i++;
-      cn->loading[i] = NULL;
-      cn->regroupUnits();
+      cn->removeUnitFromCargo( vehicle );      
    }
 
-   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel ), false );
+   int soundHeight = -1;
+   if ( pos->getRealHeight() >= 0 )
+      soundHeight = pos->getRealHeight();
+   else
+      soundHeight = stop->getRealHeight();
+
+   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel, soundHeight ), false );
 
    int cancelmovement = 0;
 
    int movedist = 0;
    int fueldist = 0;
    int networkID = vehicle->networkid;
+   int operatingPlayer = vehicle->getOwner();
+
+   bool viewInputChanged= false;
+   bool mapDisplayUpToDate = true;
+   bool finalRedrawNecessary = false;
 
    bool inhibitAttack = false;
    while ( pos != stop  && vehicle && cancelmovement!=1 ) {
@@ -150,8 +302,6 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          vehicle->setAttacked();
 
 
-      // vehicle->decreaseMovement( mm.first );
-
       if ( next->getRealHeight() != pos->getRealHeight() && next->getRealHeight() >= 0 )
          vehicle->setNewHeight ( 1 << next->getRealHeight() );
 
@@ -168,42 +318,102 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
             to = getNeighbouringFieldCoordinate ( to, getdirection ( to, *next ));
          to.setnum ( to.x, to.y, next->getRealHeight() );
 
-         pfield dest = getfield ( to.x, to.y );
-
-         if ( mapDisplay ) {
-            if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
-               slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
-              mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, &slm );
-         }
-         pathStep++;
+         tfield* dest = getfield ( to.x, to.y );
 
 
          if ( vehicle ) {
-            vehicle->spawnMoveObjects( from, to );
-            int dir = getdirection( from, to );
-            if ( dir >= 0 && dir <= 5 )
-               vehicle->direction = dir;
             vehicle->xpos = to.x;
             vehicle->ypos = to.y;
-            if ( inhibitAttack )
-               vehicle->setAttacked();
             vehicle->addview();
          }
 
-         int fieldschanged = 0;
-         if ( actmap->playerView >= 0 )
-            fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
-         else
-            evaluateviewcalculation ( actmap, 0);
+         
+         printTimer(1);
+         static BackgroundViewCalculator* bvc = NULL;
+         if ( multiThreadedViewCalculation ) {
+            
+            
+            if ( !bvc )
+               bvc = new BackgroundViewCalculator;
+
+            printTimer(2);
+            
+            int view;
+            if ( actmap->getPlayerView() >= 0 )
+               view = 1 << actmap->getPlayerView() ;
+            else
+               view = 0;
+               
+            
+            bvc->postData( BackgroundViewCalculator::Data( actmap, view ));
+            printTimer(3);
+         }
+
+         
+         if ( mapDisplay ) {
+
+            if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
+               slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
+              mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
+              finalRedrawNecessary = true;
+              mapDisplayUpToDate = false;
+         }
+         pathStep++;
+
+         printTimer(4);
 
          if ( vehicle ) {
-            // npush ( dest->vehicle );
-            // dest->vehicle = vehicle;
-            if ( mapDisplay )
-               mapDisplay->displayMap();
+            if ( vehicle->spawnMoveObjects( from, to ) )
+               mapDisplayUpToDate = false;
+            
+            int dir = getdirection( from, to );
+            if ( dir >= 0 && dir <= 5 )
+               vehicle->direction = dir;
+            if ( inhibitAttack )
+               vehicle->setAttacked();
+         }
 
+         
+         printTimer(5);
+         if ( multiThreadedViewCalculation ) {
+            if ( bvc->waitForCompletion())
+               mapDisplayUpToDate = false;
+               
+         } else {
+            Vehicle* temp = dest->vehicle;
+            
+            dest->vehicle = vehicle;
+            int fieldsWidthChangedVisibility; 
+            if ( actmap->getPlayerView() >= 0 ) 
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 1 << actmap->getPlayerView() );
+            else 
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 0);
+            
+            if ( fieldsWidthChangedVisibility )
+               mapDisplayUpToDate = false;
+            dest->vehicle = temp;
+         }
+         printTimer(6);
 
-            // npop ( dest->vehicle );
+         viewInputChanged = false;
+
+         if ( vehicle ) {
+
+            if ( mapDisplay && fieldvisiblenow ( dest, vehicle, actmap->getPlayerView() ) ) {
+               // here comes an ugly hack to get the shadow of starting / descending aircraft right
+
+               int oldheight = vehicle->height;
+               if ( next->getRealHeight() > pos->getRealHeight() && pathStep < pathStepNum )
+                  vehicle->height = 1 << pos->getRealHeight();
+               
+               if ( !mapDisplayUpToDate ) {
+                  mapDisplay->displayMap( vehicle );
+                  mapDisplayUpToDate = true;
+                  finalRedrawNecessary = false;
+               }
+
+               vehicle->height = oldheight;
+            }
 
             if ( rf->checkfield ( to, vehicle, mapDisplay )) {
                cancelmovement = 1;
@@ -211,27 +421,41 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                vehicle = actmap->getUnit ( networkID );
             }
             if ( !vehicle && mapDisplay ) {
-               mapDisplay->deleteVehicle( vehicle );
                mapDisplay->displayMap();
+               mapDisplayUpToDate = true;
+               finalRedrawNecessary = false;
+               
+               viewInputChanged = true;
             }
          } else
             if ( mapDisplay ) {
-               mapDisplay->deleteVehicle( vehicle );
                mapDisplay->displayMap();
-            }
+               mapDisplayUpToDate = true;
+               finalRedrawNecessary = false;
+             }
 
+         printTimer(7);
+            
+            
          if ( vehicle ) {
-            vehicle->removeview();
+            if ( !(stop->x == to.x && stop->y == to.y && next == stop ))
+               vehicle->removeview();
+            
             if ( dest->mineattacks ( vehicle )) {
                tmineattacksunit battle ( dest, -1, vehicle );
 
-               if ( mapDisplay && fieldvisiblenow ( dest, actmap->playerView) || dest->mineowner() == actmap->playerView )
-                  battle.calcdisplay ();
+               if ( mapDisplay && (fieldvisiblenow ( dest, actmap->getPlayerView()) || dest->mineowner() == actmap->getPlayerView() ))
+                  mapDisplay->showBattle( battle );
                else
                   battle.calc();
 
                battle.setresult ();
-               dashboard.x = 0xffff;
+               if ( battle.dv.damage >= 100 ) {
+                  vehicle = NULL;
+                  viewInputChanged = true;
+               }
+               
+               updateFieldInfo();
                cancelmovement = 1;
            }
          }
@@ -254,12 +478,13 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                
             npop ( dest->vehicle );
          }
+         printTimer(8);
       } while ( (to.x != next->x || to.y != next->y) && vehicle );
 
       pos = next;
    }
 
-   pfield fld = getfield ( pos->x, pos->y );
+   tfield* fld = getfield ( pos->x, pos->y );
 
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 
@@ -268,6 +493,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
    if ( vehicle ) {
 
       int newMovement = orgMovement - pos->dist;
+
+      vehicle->setnewposition ( pos->x, pos->y );
 
       if ( vehicle->typ->movement[log2(orgHeight)] ) {
          int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
@@ -284,53 +511,67 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
          vehicle->attacked = true;
       }
 
-      vehicle->setnewposition ( pos->x, pos->y );
-
       if ( vehicle ) {
          if ((fld->vehicle == NULL) && (fld->building == NULL)) {
             fld->vehicle = vehicle;
-            vehicle->addview();
+            if ( !vehicle->isViewing() ) {
+               vehicle->addview();
+               viewInputChanged = true;
+            }
          } else {
             ContainerBase* cn = fld->getContainer();
-            int i = 0;
-            while ( cn->loading[i] && (i < 31))
-               i++;
-            cn->loading[i] = vehicle;
-            if (cn->getOwner() != vehicle->getOwner() && fld->building ) {
+            if ( vehicle->isViewing() ) {
+               vehicle->removeview();
+               viewInputChanged = true;
+            }
+            cn->addToCargo( vehicle );
+            if (cn->getOwner() != vehicle->getOwner() && fld->building && actmap->getPlayer(fld->building).diplomacy.isHostile( vehicle) ) {
                fld->building->convert( vehicle->color / 8 );
-               if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
+               if ( fieldvisiblenow ( fld, actmap->getPlayerView() ) || actmap->getPlayerView()  == vehicle->getOwner() )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
            }
+           mapDisplayUpToDate = false;
+
          }
 
          if ( rf->checkfield ( *pos, vehicle, mapDisplay )) {
             attackedByReactionFire = true;
             vehicle = actmap->getUnit ( networkID );
          }
-
-         dashboard.x = 0xffff;
       }
    }
 
-   int fieldschanged;
-   if ( actmap->playerView >= 0 )
-      fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->playerView );
-   else
-      fieldschanged = evaluateviewcalculation ( actmap, 0 );
+   if ( rf->finalCheck( mapDisplay, operatingPlayer ))
+      finalRedrawNecessary = true;
+   
+   // finalRedrawNecessary = true;
+   
+   if ( viewInputChanged ) {
+      int fieldschanged;
+      if ( actmap->getPlayerView() >= 0 )
+         fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->getPlayerView() );
+      else
+         fieldschanged = evaluateviewcalculation ( actmap, 0 );
+      
+      if ( fieldschanged )
+         mapDisplayUpToDate = false;
+         
+   }
 
    if ( mapDisplay ) {
       mapDisplay->resetMovement();
-      if ( fieldschanged > 0 )
+      // if ( fieldschanged > 0 )
+      if (finalRedrawNecessary || !mapDisplayUpToDate)
          mapDisplay->displayMap();
-      else
-         mapDisplay->displayPosition ( pos->x, pos->y );
+      // else
+      //   mapDisplay->displayPosition ( pos->x, pos->y );
    }
    return result;
 }
 
 
 
-int BaseVehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int noInterrupt )
+int BaseVehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int height, int noInterrupt )
 {
    if ( step != status )
       return -1;
@@ -389,7 +630,7 @@ int BaseVehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int h
 }
 
 
-int BaseVehicleMovement :: available ( pvehicle veh ) const
+int BaseVehicleMovement :: available ( Vehicle* veh ) const
 {
    if ( status == 0 )
       if ( veh )
@@ -459,12 +700,11 @@ VehicleMovement :: ~VehicleMovement ( )
       pva->move = NULL;
 }
 
-int VehicleMovement :: available ( pvehicle veh ) const
+bool VehicleMovement :: avail ( Vehicle* veh ) 
 {
-   if ( status == 0 )
-      if ( veh )
-         return veh->canMove();
-   return 0;
+   if ( veh )
+      return veh->canMove();
+   return false;
 }
 
 
@@ -480,7 +720,7 @@ int VehicleMovement :: available ( pvehicle veh ) const
       };
 
 
-int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int height, int capabilities )
+int VehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int height, int capabilities )
 {
    if ( step != status )
       return -1;
@@ -547,10 +787,14 @@ int VehicleMovement :: execute ( pvehicle veh, int x, int y, int step, int heigh
       status = 3;
       return status;
    } else
-    if ( status == 3 )
-       return BaseVehicleMovement::execute ( veh, x, y, step, height, capabilities & NoInterrupt );
-    else
-       status = 0;
+      if ( status == 3 ) {
+         int res = BaseVehicleMovement::execute ( veh, x, y, step, height, capabilities & NoInterrupt );
+         mapChanged( actmap );
+         return res;
+      }
+      else
+         status = 0;
+
   return status;
 }
 
@@ -581,7 +825,7 @@ ChangeVehicleHeight :: ChangeVehicleHeight ( MapDisplayInterface* md, PPendingVe
       };
 
 
-int ChangeVehicleHeight :: execute ( pvehicle veh, int x, int y, int step, int noInterrupt, int disableMovement )
+int ChangeVehicleHeight :: execute ( Vehicle* veh, int x, int y, int step, int noInterrupt, int disableMovement )
 {
    if ( step != status )
       return -1;
@@ -650,14 +894,19 @@ IncreaseVehicleHeight :: IncreaseVehicleHeight ( MapDisplayInterface* md, PPendi
       pva->ascent = this;
 }
 
-int IncreaseVehicleHeight :: available ( pvehicle veh ) const
+bool IncreaseVehicleHeight :: avail ( Vehicle* veh )
 {
    if ( veh )
-      // if ( veh->getMovement() )
-         if ( veh->getHeightChange( +1 ))
-            return 1;
-   return 0;
+      if ( veh->getHeightChange( +1 ))
+         return true;
+   return false;
 }
+
+int IncreaseVehicleHeight :: available ( Vehicle* veh ) const
+{
+   return avail( veh );
+}
+
 
 IncreaseVehicleHeight :: ~IncreaseVehicleHeight ( )
 {
@@ -674,14 +923,19 @@ DecreaseVehicleHeight :: DecreaseVehicleHeight ( MapDisplayInterface* md, PPendi
       pva->descent = this;
 }
 
-int DecreaseVehicleHeight :: available ( pvehicle veh ) const
+bool DecreaseVehicleHeight :: avail ( Vehicle* veh )
 {
    if ( veh )
-      // if ( veh->getMovement() )
          if ( veh->getHeightChange( -1 ))
-            return 1;
-   return 0;
+            return true;
+   return false;
 }
+
+int DecreaseVehicleHeight :: available ( Vehicle* veh ) const
+{
+   return avail(veh);
+}
+
 
 DecreaseVehicleHeight :: ~DecreaseVehicleHeight ( )
 {
@@ -721,23 +975,18 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 }
 
 
-int VehicleAttack :: available ( pvehicle eht ) const
+bool VehicleAttack :: avail ( Vehicle* eht )
 {
-   if (eht != NULL)
-      if (eht->attacked == false)
+   if ( eht )
+      if ( eht->attacked == false )
          if ( eht->weapexist() )
             if (eht->typ->wait == false  ||  !eht->hasMoved() )
-//               if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off ) {
-                  return 1;
-//               } else {
-//                  return 1;
-  //             }
-
-   return 0;
+                  return true;
+   return false;
 }
 
 
-int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamikaze, int weapnum )
+int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamikaze, int weapnum )
 {
    if ( step != status )
       return -1;
@@ -816,9 +1065,9 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int yp1 = vehicle->ypos;
 
       int shown;
-      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->playerView) ) {
+      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->getPlayerView()) ) {
          mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
-         battle->calcdisplay ();
+         mapDisplay->showBattle( *battle );
          mapDisplay->removeActionCursor ( );
          shown = 1;
       } else {
@@ -829,7 +1078,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
       int ad2 = battle->av.damage;
       int dd2 = battle->dv.damage;
 
-      if ( !(vehicle->typ->functions & cf_moveafterattack) )
+      if ( !vehicle->typ->hasFunction( ContainerBaseType::MoveAfterAttack )) 
          vehicle->setMovement ( 0 );
 
       battle->setresult ();
@@ -849,7 +1098,7 @@ int VehicleAttack :: execute ( pvehicle veh, int x, int y, int step, int _kamika
 
 
 
-void     VehicleAttack :: tsearchattackablevehicles :: init( const pvehicle eht, int _kamikaze, VehicleAttack* _va )
+void     VehicleAttack :: tsearchattackablevehicles :: init( const Vehicle* eht, int _kamikaze, VehicleAttack* _va )
 { 
    angreifer = eht; 
    kamikaze = _kamikaze; 
@@ -871,14 +1120,15 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordin
                   break;
                case AttackWeap::object:   va->attackableObjects.addField   ( mc, *atw );
                   break;
+               default:;
             } /* endswitch */
             anzahlgegner++;
          } 
          delete atw;
       } else {
-          pfield fld = gamemap->getField(mc);
+          tfield* fld = gamemap->getField(mc);
           if (fieldvisiblenow( fld )) {
-             pvehicle eht = fld->vehicle;
+             Vehicle* eht = fld->vehicle;
              if (eht != NULL) 
                 if (((angreifer->height >= chtieffliegend) && (eht->height <= angreifer->height) && (eht->height >= chschwimmend)) 
                   || ((angreifer->height == chfahrend) && (eht->height == chfahrend)) 
@@ -953,7 +1203,7 @@ VehicleAttack :: ~VehicleAttack ( )
 
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
                : VehicleAction ( vat_service, _pva ), fieldSearch ( *this, actmap )
@@ -968,11 +1218,11 @@ VehicleService :: VehicleService ( MapDisplayInterface* md, PPendingVehicleActio
 }
 
 
-int VehicleService :: available ( pvehicle veh ) const
+int  VehicleService :: avail ( const Vehicle* veh )
 {
    int av = 0;
    if ( veh && !veh->attacked ) {
-      if ( veh->canRepair( NULL ) && (veh->typ->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->typ->hasFunction( ContainerBaseType::ExternalRepair  )))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                av++;
@@ -982,16 +1232,16 @@ int VehicleService :: available ( pvehicle veh ) const
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
 
-            if ( veh->typ->functions & cfenergyref )
-               if ( fzt->tank.energy )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
+               if ( veh->getStorageCapacity().energy )
                   av++;
 
-            if ( veh->typ->functions & cfmaterialref )
-               if ( fzt->tank.material )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
+               if ( veh->getStorageCapacity().material )
                   av++;
 
-            if ( veh->typ->functions & cffuelref )
-               if ( fzt->tank.fuel )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
+               if ( veh->getStorageCapacity().fuel )
                   av++;
 
          }
@@ -1005,11 +1255,16 @@ int VehicleService :: available ( pvehicle veh ) const
       return 0;
 }
 
-int VehicleService :: getServices ( pvehicle veh ) const
+int VehicleService :: available ( Vehicle* veh ) const
+{
+   return avail(veh);
+}
+
+int VehicleService :: getServices ( Vehicle* veh ) 
 {
    int res = 0;
    if ( veh ) {
-      if ( veh->canRepair( NULL ) && (veh->typ->functions & cfrepair))
+      if ( veh->canRepair( NULL ) && (veh->typ->hasFunction( ContainerBaseType::ExternalRepair  )))
          for ( int i = 0; i < veh->typ->weapons.count; i++ )
             if ( veh->typ->weapons.weapon[i].service() )
                if ( !veh->attacked )
@@ -1019,14 +1274,14 @@ int VehicleService :: getServices ( pvehicle veh ) const
       const Vehicletype* fzt = veh->typ;
       for ( int i = 0; i < fzt->weapons.count; i++ ) {
          if ( fzt->weapons.weapon[i].service() ) {
-            if ( veh->typ->functions & cfenergyref )
-               if ( fzt->tank.energy )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) )
+               if ( veh->getStorageCapacity().energy )
                   res |= 1 << srv_resource;
-            if ( veh->typ->functions & cfmaterialref )
-               if ( fzt->tank.material )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) )
+               if ( veh->getStorageCapacity().material )
                   res |= 1 << srv_resource;
-            if ( veh->typ->functions & cffuelref)
-               if ( fzt->tank.fuel )
+            if ( veh->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) )
+               if ( veh->getStorageCapacity().fuel )
                   res |= 1 << srv_resource;
          }
 
@@ -1041,7 +1296,7 @@ int VehicleService :: getServices ( pvehicle veh ) const
 
 
 
-void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicle targetUnit, int xp, int yp )
+void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( Vehicle* targetUnit, int xp, int yp )
 {
    VehicleService::Target targ;
    targ.dest = targetUnit;
@@ -1075,9 +1330,9 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
             const SingleWeapon& sourceWeapon = veh->typ->weapons.weapon[i];
             if ( sourceWeapon.service() || sourceWeapon.canRefuel() ) {
                if ( targetUnit && serviceWeapon )
-                  if ( !(targetUnit->typ->functions & cfnoairrefuel) || targetUnit->height <= chfahrend )
+                  if ( !targetUnit->typ->hasFunction(ContainerBaseType::NoInairRefuelling) || targetUnit->height <= chfahrend )
                      if ( serviceWeapon->targetingAccuracy[targetUnit->typ->movemalustyp] > 0  )
-                        if (getdiplomaticstatus2(veh->color, targetUnit->color) == capeace)
+                        if ( actmap->player[veh->getOwner()].diplomacy.getState( targetUnit->getOwner()) >= PEACE )
                            if ( (serviceWeapon->maxdistance >= dist && serviceWeapon->mindistance <= dist) || bypassChecks.distance )
                               if ( targetUnit->height & targheight || ( bypassChecks.height && ( targetUnit->typ->height & targheight) )) {
                                  if ( sourceWeapon.canRefuel() ) {
@@ -1104,9 +1359,11 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                  }
 
                                  if ( sourceWeapon.service() ) {
-                                    static int resourceVehicleFunctions[resourceTypeNum] = { cfenergyref, cfmaterialref, cffuelref };
+                                    static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
+                                                                                             ContainerBaseType::ExternalMaterialTransfer,
+                                                                                             ContainerBaseType::ExternalFuelTransfer };
                                     for ( int r = 0; r < resourceTypeNum; r++ )
-                                       if ( veh->typ->tank.resource(r) && targetUnit->typ->tank.resource(r) && (veh->typ->functions & resourceVehicleFunctions[r])) {
+                                       if ( veh->getStorageCapacity().resource(r) && targetUnit->getStorageCapacity().resource(r) && veh->typ->hasFunction(resourceVehicleFunctions[r])) {
                                           VehicleService::Target::Service s;
                                           s.type = VehicleService::srv_resource;
                                           s.sourcePos = r;
@@ -1116,12 +1373,12 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
                                           s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
                                           int sourceSpace = veh->putResource(maxint, r, 1);
                                           s.minAmount = max ( s.curAmount - sourceSpace, 0 );
-                                          s.maxPercentage = 100 * s.maxAmount/ veh->typ->tank.resource(r);
+                                          s.maxPercentage = 100 * s.maxAmount/ veh->getStorageCapacity().resource(r);
                                           targ.service.push_back ( s );
                                        }
 
-                                    if ( veh->canRepair( targetUnit ) && (veh->typ->functions & cfrepair))
-                                       if ( veh->getTank().fuel && veh->getTank().material )
+                                       if ( veh->canRepair( targetUnit ) && (veh->typ->hasFunction( ContainerBaseType::ExternalRepair )))
+                                          if ( veh->getTank().fuel && veh->getTank().material )
                                          // if ( targetUnit->getMovement() >= movement_cost_for_repaired_unit )
                                              if ( targetUnit->damage ) {
                                                 VehicleService::Target::Service s;
@@ -1150,9 +1407,9 @@ void             VehicleService :: FieldSearch :: checkVehicle2Vehicle ( pvehicl
 
 }
 
-void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehicle targetUnit )
+void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicle* targetUnit )
 {
-   if ( getdiplomaticstatus2(bld->color, targetUnit->color) != capeace)
+   if ( actmap->player[bld->getOwner()].diplomacy.getState( targetUnit->getOwner()) < PEACE )
       return;
       
    VehicleService::Target targ;
@@ -1165,7 +1422,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
    targ.dest = targetUnit;
 
 
-   if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb ))
+/*   if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb ))
       for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
          if ( targetUnit->typ->tank.resource(r) ) {
             VehicleService::Target::Service s;
@@ -1181,12 +1438,12 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
             s.minAmount = max ( s.curAmount - sourceSpace, 0 );
             targ.service.push_back ( s );
          }
-
+*/
    for (int i = 0; i < targetUnit->typ->weapons.count ; i++)
       if ( targetUnit->typ->weapons.weapon[i].requiresAmmo() ) {
          int type = targetUnit->typ->weapons.weapon[i].getScalarWeaponType();
          if ( type >= 0 )
-            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->special & cgammunitionproductionb)) && ((bld->typ->special & (cgexternalloadingb | cgexternalammoloadingb )) || dist == 0 )) {
+            if ( (bld->ammo[type] || targetUnit->ammo[i] || (bld->typ->hasFunction(ContainerBaseType::AmmoProduction) && bld->typ->hasFunction(ContainerBaseType::ExternalAmmoTransfer)) || dist == 0 )) {
                const SingleWeapon& destWeapon = targetUnit->typ->weapons.weapon[i];
 
                VehicleService::Target::Service s;
@@ -1197,7 +1454,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                s.orgSourceAmount = bld->ammo[type];
                int stillNeeded = destWeapon.count - targetUnit->ammo[i] - s.orgSourceAmount;
                int produceable;
-               if ( (stillNeeded > 0) && (bld->typ->special & cgammunitionproductionb)) {
+               if ( (stillNeeded > 0) && (bld->typ->hasFunction( ContainerBaseType::AmmoProduction  ))) {
                   Resources res;
                   for( int j = 0; j< resourceTypeNum; j++ )
                      res.resource(j) = cwaffenproduktionskosten[type][j] * stillNeeded;
@@ -1219,6 +1476,25 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
                targ.service.push_back ( s );
             }
       }
+
+      static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
+         ContainerBaseType::ExternalMaterialTransfer,
+         ContainerBaseType::ExternalFuelTransfer };
+      for ( int r = 1; r < resourceTypeNum; r++ )  // no energy !!
+         if ( (bld->typ->hasFunction( resourceVehicleFunctions[r]) || dist == 0) && targetUnit->getStorageCapacity().resource(r) ) {
+            VehicleService::Target::Service s;
+            s.type = VehicleService::srv_resource;
+            s.sourcePos = r;
+            s.targetPos = r;
+            s.curAmount = targetUnit->getTank().resource(r);
+            // s.orgSourceAmount = bld->getResource (maxint, r, 1 );
+            s.orgSourceAmount = buildingResources.resource(r);
+            s.maxAmount = s.curAmount + min ( targetUnit->putResource(maxint, r, 1) , s.orgSourceAmount );
+            // int sourceSpace = bld->putResource(maxint, r, 1);
+            int sourceSpace = resourcesCapacity.resource(r);
+            s.minAmount = max ( s.curAmount - sourceSpace, 0 );
+            targ.service.push_back ( s );
+         }
 
 
    if ( bld->canRepair( targetUnit ) )
@@ -1244,12 +1520,12 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( pvehic
 
 void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
 {
-   pfield fld = gamemap->getField ( mc );
+   tfield* fld = gamemap->getField ( mc );
    if ( fld && veh && fld->vehicle ) {
       if ( fld->vehicle == veh ) {
-         for ( int i = 0; i < 32; i++ )
-            if ( veh->loading[i] )
-              checkVehicle2Vehicle ( veh->loading[i], mc.x, mc.y );
+         for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+            if ( *i )
+              checkVehicle2Vehicle ( *i, mc.x, mc.y );
       }
       if ( fld->vehicle )
          checkVehicle2Vehicle ( fld->vehicle, mc.x, mc.y );
@@ -1257,9 +1533,9 @@ void  VehicleService :: FieldSearch :: testfield( const MapCoordinate& mc )
 
    if ( fld && bld ) {
       if ( fld->building == bld && beeline( mc.x, mc.y, startPos.x, startPos.y)== 0) {
-         for ( int i = 0; i < 32; i++ )
-            if ( bld->loading[i] )
-               checkBuilding2Vehicle ( bld->loading[i] );
+         for ( ContainerBase::Cargo::const_iterator i = bld->getCargo().begin(); i != bld->getCargo().end(); ++i )
+            if ( *i )
+               checkBuilding2Vehicle ( *i );
       }
       if ( fld->vehicle )
          checkBuilding2Vehicle ( fld->vehicle );
@@ -1282,7 +1558,10 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
    }
 
    if ( bld ) {
-      if ( bld->typ->special & (cgexternalloadingb | cgexternalresourceloadingb | cgexternalammoloadingb ))
+      if ( bld->typ->hasFunction( ContainerBaseType::ExternalEnergyTransfer  ) ||
+           bld->typ->hasFunction( ContainerBaseType::ExternalMaterialTransfer  ) ||
+           bld->typ->hasFunction( ContainerBaseType::ExternalFuelTransfer  ) ||
+           bld->typ->hasFunction( ContainerBaseType::ExternalAmmoTransfer  ) )
          maxdist = 1;
       else
          maxdist = 0;
@@ -1295,7 +1574,7 @@ bool  VehicleService :: FieldSearch ::initrefuelling( int xp1, int yp1 )
 
 
 
-void VehicleService :: FieldSearch :: init ( pvehicle _veh, pbuilding _bld )
+void VehicleService :: FieldSearch :: init ( Vehicle* _veh, Building* _bld )
 {
    if ( !_veh && !_bld)
       return;
@@ -1323,7 +1602,7 @@ void VehicleService :: FieldSearch :: run (  )
 }
 
 
-int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int step, int pos, int amount )
+int VehicleService :: execute ( Vehicle* veh, int targetNWID, int dummy, int step, int pos, int amount )
 {
    if ( step != status )
       return -1;
@@ -1411,9 +1690,8 @@ int VehicleService :: execute ( pvehicle veh, int targetNWID, int dummy, int ste
                           building->ammo[ serv.sourcePos ] -= delta;
                           MapCoordinate mc = building->getEntry();
                           if ( building->ammo[ serv.sourcePos ] < 0 ) {
-                             int amount = -building->ammo[ serv.sourcePos ];
-                             building->produceAmmo ( serv.sourcePos, amount );
-                             logtoreplayinfo ( rpl_produceAmmo, mc.x, mc.y, serv.sourcePos, amount );
+                             ContainerControls cc ( building );
+                             cc.produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
                           }
                           if ( building->ammo[ serv.sourcePos ] < 0 ) 
                              fatalError("negative amount of ammo available! \nPlease report this to bugs@asc-hq.org" );
@@ -1471,5 +1749,194 @@ VehicleService :: ~VehicleService ( )
    if ( pva )
       pva->service = NULL;
 }
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+#if 1
+
+NewVehicleService :: NewVehicleService ( MapDisplayInterface* md, PPendingVehicleActions _pva )
+   : VehicleAction ( vat_newservice, _pva )
+{
+   container = NULL;
+   status = 0;
+   mapDisplay = md;
+   if ( pva )
+      pva->newservice = this;
+}
+
+bool NewVehicleService :: targetAvail( const ContainerBase* target )
+{
+   return find( targets.begin(), targets.end(), target) != targets.end();
+}
+
+
+int  NewVehicleService :: avail ( ContainerBase* veh  )
+{
+   ServiceTargetSearcher sts( veh );
+   return sts.available();
+}
+
+int NewVehicleService :: available (  ContainerBase* veh ) const
+{
+   return avail(veh);
+}
+
+
+int NewVehicleService :: available (  Vehicle* veh ) const
+{
+   return avail(veh);
+}
+
+
+int NewVehicleService :: execute ( Vehicle* veh, int x, int y, int step, int pos, int amount )
+{
+   return executeContainer( veh, x, y, step, pos, amount );
+}
+
+int NewVehicleService :: executeContainer ( ContainerBase* veh, int x, int y, int step, int pos, int amount )
+{
+   if ( step != status )
+      return -1;
+
+   if ( status == 0 ) {
+      container = veh ;
+      if ( !container ) {
+         status = -101;
+         return status;
+      }
+
+      ServiceTargetSearcher sts( container );
+      sts.startSearch();
+      targets = sts.getTargets();
+            
+      if ( targets.size() > 0 )
+         status = 2;
+      else
+         status = -210;
+
+      return status;
+   } 
+#if 0
+else
+      if ( status == 2 ) {
+         TargetContainer::iterator i = dest.find(targetNWID);
+         if ( i == dest.end() )
+            return -211;
+
+         Target& t = i->second;
+         if ( pos < 0 || pos >= t.service.size())
+            return -211;
+
+         Target::Service& serv = t.service[pos];
+         if ( amount < serv.minAmount || amount > serv.maxAmount )
+            return -212;
+
+         if ( vehicle ) {
+            int delta;
+            switch ( serv.type ) {
+               case srv_resource: {
+                  delta = amount - serv.curAmount;
+                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
+                  int oldavail = vehicle->getTank().resource(serv.sourcePos);
+                  vehicle->getResource ( put, serv.sourcePos, 0 );
+                  logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
+                  logtoreplayinfo ( rpl_refuel2, vehicle->xpos, vehicle->ypos, vehicle->networkid, int(1000+serv.sourcePos), vehicle->getTank().resource(serv.sourcePos), oldavail );
+               }
+               break;
+               case srv_repair: vehicle->repairItem ( t.dest, amount );
+               logtoreplayinfo ( rpl_repairUnit, vehicle->networkid, t.dest->networkid, amount, vehicle->getTank().material, vehicle->getTank().fuel );
+                            /*
+               if ( mapDisplay )
+               if ( fieldvisiblenow ( fld, actmap->playerView ) || actmap->playerView*8  == vehicle->color )
+               SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
+                            */
+               break;
+               case srv_ammo: delta = amount - serv.curAmount;
+               t.dest->ammo[ serv.targetPos ] += delta;
+               vehicle->ammo[ serv.sourcePos ] -= delta;
+               logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
+               logtoreplayinfo ( rpl_refuel, vehicle->xpos, vehicle->ypos, vehicle->networkid, serv.targetPos, vehicle->ammo[ serv.sourcePos ] );
+               break;
+            }
+         } else if ( building ) {
+            int delta;
+            switch ( serv.type ) {
+               case srv_resource: {
+                  delta = amount - serv.curAmount;
+                  int put = t.dest->putResource ( delta, serv.targetPos, 0 );
+                  building->getResource ( put, serv.sourcePos, 0 );
+                  logtoreplayinfo ( rpl_refuel2, t.dest->xpos, t.dest->ypos, t.dest->networkid, int(1000+serv.targetPos), amount, serv.curAmount );
+                  MapCoordinate mc = building->getEntry();
+                  logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, int(1000+serv.sourcePos), put );
+               }
+               break;
+               case srv_repair: building->repairItem ( t.dest, amount );
+                            // logtoreplayinfo ( rpl_refuel, eht->xpos, eht->ypos, eht->networkid, int(1002), newfuel );
+               break;
+               case srv_ammo: delta = amount - serv.curAmount;
+               t.dest->ammo[ serv.targetPos ] += delta;
+               building->ammo[ serv.sourcePos ] -= delta;
+               MapCoordinate mc = building->getEntry();
+               if ( building->ammo[ serv.sourcePos ] < 0 ) {
+                  ContainerControls cc ( building );
+                  cc.produceAmmo ( serv.sourcePos, -building->ammo[ serv.sourcePos ] );
+               }
+               if ( building->ammo[ serv.sourcePos ] < 0 )
+                  fatalError("negative amount of ammo available! \nPlease report this to bugs@asc-hq.org" );
+
+               logtoreplayinfo ( rpl_refuel, t.dest->xpos, t.dest->ypos, t.dest->networkid, serv.targetPos, t.dest->ammo[ serv.targetPos ] );
+               logtoreplayinfo ( rpl_bldrefuel, mc.x, mc.y, serv.targetPos, building->ammo[ serv.sourcePos ] );
+               break;
+            }
+         }
+         fieldSearch.init ( vehicle, building );
+         fieldSearch.run (  );
+      }
+#endif
+      return status;
+}
+
+
+int NewVehicleService :: fillEverything ( ContainerBase* target, bool repairsToo )
+{
+   if ( status != 2 )
+      return -1;
+
+   if ( !targetAvail( target ))
+      return -211;
+
+   TransferHandler tf( getContainer(), target );
+   tf.fillDest();
+   tf.commit();
+
+   return 0;
+}
+
+
+void NewVehicleService :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
+{
+   VehicleAction::registerPVA ( _actionType, _pva );
+   if ( pva )
+      pva->newservice = this;
+}
+
+
+NewVehicleService :: ~NewVehicleService ( )
+{
+   if ( pva )
+      pva->newservice = NULL;
+}
+
+
+
+#endif
 
 

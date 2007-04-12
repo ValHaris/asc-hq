@@ -1,14 +1,14 @@
-SUBDIRS 		= dialog units trrobj trrobj2 buildings @MUSICDIR@
-
+SUBDIRS 		= dialog units trrobj trrobj2 buildings icons sounds @MUSICDIR@
+DIST_SUBDIRS= dialog units trrobj trrobj2 buildings icons sounds music
 MAINTAINERCLEANFILES    = Makefile.in
-# main.con buildings.con mk1.con trrobj.con trrobj2.con
+
+EXTRA_DIST = $(srcdir)/* 
 
 pkgdata_DATA 		= main.con 
-
 pkgdatadir 		= $(datadir)/games/@PACKAGE@
 
-main.con: @MAINCONDATA@
-	../source/tools/linux/asc_mount @MAINCONDATA@ main.con
+main.con: $(srcdir)/*.* $(srcdir)/icons/*.png $(srcdir)/icons/*.ascgui $(srcdir)/sounds/*.wav $(srcdir)/sounds/*.ogg $(srcdir)/sounds/*.asctxt
+	cd $(srcdir) && @abs_top_builddir@/source/tools/linux/asc_mount @MAINCONDATA@ icons/*.png icons/*.ascgui sounds/*.wav sounds/*.ogg sounds/*.asctxt @abs_builddir@/main.con
 
 clean-local:
 	rm -f main.con

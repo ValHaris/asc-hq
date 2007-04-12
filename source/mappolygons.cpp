@@ -1,4 +1,4 @@
-/*! \file weather.cpp
+/*! \file mappolygons.cpp
     \brief Operating with polygons on the map
 */
 
@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include "typen.h"
 #include "misc.h"
-#include "basegfx.h"
 #include "newfont.h"
 #include "loaders.h"
 #include "spfst.h"
@@ -35,13 +34,13 @@
 
 
 
-void  PolygonPainerSquareCoordinate::setpoint    ( int x,  int y  )
+void  PolygonPainterSquareCoordinate::setpoint    ( int x,  int y  )
 {
     if ( (x & 1) == (y & 1) )
        setpointabs ( x / 2, y);
 }
           
-bool    PolygonPainerSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
+bool    PolygonPainterSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
 {
    Poly_gon poly1;
    for ( int i=0; i< poly.vertex.size() ; i++ )
@@ -55,6 +54,8 @@ bool    PolygonPainerSquareCoordinate::paintPolygon   ( const Poly_gon& poly )
 void Poly_gon::read ( tnstream& stream )
 {
    int version = stream.readInt();
+   if ( version != 100 )
+      throw tinvalidversion( stream.getLocation(), 100, version );
    readClassContainer ( vertex, stream );
 }
 

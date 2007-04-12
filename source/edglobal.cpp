@@ -28,7 +28,6 @@
 #include "buildingtype.h"
 #include "edmisc.h"
 #include "loadbi3.h"
-#include "edevents.h"
 #include "edgen.h"
 #include "edselfnt.h"
 #include "edglobal.h"
@@ -36,24 +35,44 @@
 #include "mapdisplay.h"
 #include "itemrepository.h"
 #include "clipboard.h"
+#include "resourceplacementdialog.h"
+#ifdef WEATHERGENERATOR
+# include "weatherdialog.h"
+#endif
+#include "maped-mainscreen.h"
 #include "attack.h"
+#include "mapimageexport.h"
+#include "viewcalculation.h"
 
-mc_check mc;
+#include "dialogs/unitinfodialog.h"
+#include "dialogs/editmapparam.h"   
+#include "dialogs/alliancesetup.h"
+#include "dialogs/playersetup.h"
+#include "dialogs/editgameoptions.h"
+#include "dialogs/admingame.h"
+#include "dialogs/eventeditor.h"
+#include "dialogs/newmap.h"
+#include "dialogs/terraininfo.h"
+#include "widgets/textrenderer.h"
+#include "dialogs/exchangegraphics.h"
+#include "stack.h"
 
-
+   
    const char* execactionnames[execactionscount] = {
         "End MapEdit",
         "Help",
         "Goto EditMode",
         "Select terrain",
-        "Select terrainALL",
+        "Select terrainAll",
         "Select unit",
         "Select color",
         "Select building",
-        "Select special object",
+        "Select object",
+        "Select objectAll",
         "Select mine",
         "Select weather",
         "Setup alliances",
+        "Setup Players",
         "Toggle ResourceMode",
         "Change UnitDirection",
         "Asc-Resource Mode",
@@ -66,7 +85,6 @@ mc_check mc;
         "Open UnitInfo",
         "View map",
         "About",
-        "Change GlobalDirection",
         "Create resources",
         "View/Change cargo",
         "View/Change resources",
@@ -84,10 +102,6 @@ mc_check mc;
         "View/Change item Values",
         "Mirror CX-Pos",
         "Mirror CY-Pos",
-        "Place terrain",
-        "Place Unit",
-        "Place building",
-        "Place special object",
         "Place mine",
         "Place active thing",
         "Delete Unit",
@@ -131,10 +145,88 @@ mc_check mc;
         "Generate TechTree",
         "Edit TechAdapter",
         "Reset Player Data...",
-        "View Player Strength" };
+        "Fill map with resources",
+        "setup weather generation",
+        "Primary action",
+        "Reset Player Data...",
+        "View Player Strength",
+        "Increase Zoom",
+        "Decrease Zoom",
+        "Edit Preferences",
+        "Clear Mineral Resources",
+        "Dump Building definition",
+        "Dump Vehicle definition",
+        "Dump Object definition",
+        "PBP statistics",
+        "Exchange Graphics",
+        "Open Ctrl-key panel",
+        "Close Ctrl-key panel",
+        "Dump all vehicle definitions",
+        "Clear Selection" };
 
 
-// ıS Infomessage
+
+SelectionHolder selection;
+
+void SelectionHolder::setSelection( const MapComponent& component ) 
+{
+   delete currentItem;
+   currentItem = component.clone();
+   selectionChanged( currentItem );
+}
+
+void SelectionHolder::setPlayer( int player )
+{
+   actplayer = player;
+   playerChanged( player );
+   if ( currentItem )
+      selectionChanged( currentItem );
+}
+
+void SelectionHolder::clear()
+{ 
+   currentItem = NULL;       
+   selectionChanged( NULL ); 
+}; 
+
+void SelectionHolder::setWeather( int weather )
+{
+   currentWeather = weather;
+   if ( currentItem )
+      selectionChanged( currentItem );
+}
+
+
+const MapComponent* SelectionHolder::getSelection()
+{
+   return currentItem;
+}
+
+void SelectionHolder::pickup ( tfield* fld )
+{
+   if ( fld->vehicle ) {
+      VehicleItem v ( fld->vehicle->typ );
+      actplayer = fld->vehicle->getOwner();
+      setSelection( v );
+   } else
+   if ( fld->building ) {
+      BuildingItem b ( fld->building->typ );
+      actplayer = fld->building->getOwner();
+      setSelection( b );
+   } else
+   if ( !fld->objects.empty() ) {
+      ObjectItem o ( fld->objects.begin()->typ );
+      setSelection( o );
+   } else {
+      TerrainItem t ( fld->typ->terraintype );
+      setSelection( t );
+   }
+}
+
+
+      
+        
+// ÔøΩ Infomessage
 
 int infomessage( char* formatstring, ... )
 {
@@ -178,193 +270,41 @@ int infomessage( char* formatstring, ... )
    return ++actdisplayedmessage;
 }
 
-//ıS MC_CHeck
 
-void mc_check::on(void)
+ASCString getbipath ( void )
 {
-   if (mycursor.an == false ) {
-      int ms = getmousestatus();
-      if (ms == 1) { 		//mouse off
-         if (mstatus == 0) mousevisible(true);
-         else mstatus++;
-      } else { 			//mouse on
-         mstatus++;
-      }
-      if (cursor.an == false) {  //cursor off
-         if (cstatus == 0) cursor.show();
-         else cstatus++;
-      } else { 			//cursor on
-         cstatus++;
-      } /* endif */
-   }
-}
-
-void mc_check::off(void)
-{
-   if (mycursor.an == false ) {
-      int ms = getmousestatus(); 
-      if (ms == 1) { 		//mouse off
-         mstatus--;
-      } else { 			//mouse on
-         if (mstatus == 0) mousevisible(false);
-         else mstatus--;
-      }
-      if (cursor.an == false) {  	//cursor off
-         cstatus--;
-      } else { 			//cursor on
-         if (cstatus == 0) cursor.hide();
-         else cstatus--;
-      } /* endif */
-   }
-}
-
-
-
-class  GetString : public tdialogbox {
-          public :
-              int action;
-              char* buf;
-              void init(char* _title);
-              virtual void run(void);
-              virtual void buttonpressed(int id);
-           };
-
-void         GetString::init(char* _title)
-{ 
-   tdialogbox::init();
-   title = _title; 
-   x1 = 120;
-   xsize = 400; 
-   y1 = 150;
-   ysize = 140; 
-   action = 0; 
-
-   windowstyle = windowstyle ^ dlg_in3d; 
-
-   addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true); 
-   addkey(1,ct_enter); 
-   addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true); 
-   addkey(2, ct_esc );
-
-   addbutton("",20,60,xsize - 20,80,1,1,3,true);
-   addeingabe(3,buf,0,1000);
-
-   buildgraphics(); 
-
-   mousevisible(true); 
-} 
-
-
-void         GetString::run(void)
-{
-   if ( pcgo ) {
-      delete pcgo;
-      pcgo = NULL;
-   }
-   pbutton pb = firstbutton;
-   while ( pb &&  (pb->id != 3)) 
-      pb = pb->next;
-
-   if ( pb )
-      if ( pb->id == 3 )
-         execbutton( pb , false );
-
-   do { 
-      tdialogbox::run(); 
-   }  while ( !action );
-} 
-
-
-void         GetString::buttonpressed(int         id)
-{ 
-   tdialogbox::buttonpressed(id); 
-   switch (id) {
-      
-      case 1:   
-      case 2:   action = id;
-   break; 
-   } 
-}
-
-
-char*    getstring( char*  title, char* orgval )
-
-{ 
-   GetString     gi;
-
-   gi.buf = orgval;
-   gi.init( title );
-   gi.run();
-   gi.done();
-   if ( gi.action == 2 )
-      return NULL;
-   else
-      return gi.buf;
-} 
-
-char* getbipath ( void )
-{
-   char filename[1000];
-   if ( getbi3path() )
-      strcpy ( filename, getbi3path() );
-   else
-      filename[0] = 0;
-
-   char filename2[1000];
-   strcpy ( filename2, filename );
-   appendbackslash( filename2 );
-   strcat ( filename2, "mis");
-   strcat ( filename2, pathdelimitterstring );
-   strcat ( filename2, "*.dat");
+   ASCString filename = getbi3path();
+   appendbackslash( filename );
+   filename += "mis";
+   filename += pathdelimitterstring;
+   filename += "*.dat";
 
    int cnt = 0;
 
-   while ( !exist ( filename2 )) {
-      char* res = getstring("enter Battle Isle path", filename );
-      if ( res == NULL )
-         return NULL;
+   while ( !exist ( filename )) {
+      filename = editString("enter Battle Isle path", filename );
+      if ( filename.empty() )
+         return "";
 
+      appendbackslash(filename);
+      
+      CGameOptions::Instance()->BI3directory = filename;
       CGameOptions::Instance()->setChanged ( 1 );
 
-      strcpy ( filename2, filename );
-      appendbackslash( filename2 );
-      strcat ( filename2, "mis");
-      strcat ( filename2, pathdelimitterstring );
-      strcat ( filename2, "*.dat");
+      filename += "mis";
+      filename += pathdelimitterstring;
+      filename += "*.dat";
+      
       cnt++;
       #if CASE_SENSITIVE_FILE_NAMES == 1
-      if (!exist ( filename2 ) && cnt == 1 )
+      if (!exist ( filename ) && cnt == 1 )
          displaymessage("The 'mis' and 'ger' / 'eng' directories must be lower case to import files from them !", 1 );
       #endif
    }
-   appendbackslash( filename );
-   char* buf = strdup ( filename );
-   CGameOptions::Instance()->bi3.dir.setName( filename );
 
-   return buf;
+   return getbi3path();
 }
 
-
-void showPipeNet()
-{
-   static bool isShown = false;
-
-   if ( isShown ) {
-      actmap->cleartemps();
-      displaymap();
-      isShown = false;
-   } else {
-      TerrainBits tb = getTerrainBitType(cbpipeline);
-      for ( int x = 0; x < actmap->xsize; ++x )
-         for ( int y = 0; y < actmap->ysize; ++y ) {
-             pfield fld = actmap->getField ( x, y );
-             if ( (fld->bdt & tb).any() )
-                fld->a.temp = 1;
-         }
-      displaymap();
-   }
-   isShown = true;
-}
 
 double unitStrengthValue( Vehicle* veh )
 {
@@ -375,112 +315,183 @@ double unitStrengthValue( Vehicle* veh )
    return s;
 }
 
-void showPlayerStrength()
+
+ASCString getVisibilityStatistics( GameMap* actmap )
+{
+   ASCString msg;
+
+   computeview ( actmap, 0, true );
+
+   for ( int i = 0; i < actmap->getPlayerCount(); i++ ) {
+      if ( actmap->player[i].exist() ) {
+         msg += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
+         int notVisible = 0;
+         int fogOfWar = 0;
+         int visible = 0;
+         for ( int x = 0; x < actmap->xsize; x++ )
+            for ( int y = 0; y < actmap->ysize; y++ ) {
+                VisibilityStates vs = fieldVisibility  ( actmap->getField ( x, y ), i );
+                switch ( vs ) {
+                   case visible_not: ++notVisible;
+                   break;
+                   case visible_ago: ++fogOfWar;
+                   break;
+                   default: ++visible;
+                }
+            }
+         msg += ASCString("  not visible: ") + ASCString::toString(notVisible ) + " fields\n";
+         msg += ASCString("  fog of war: ")  + ASCString::toString(fogOfWar ) + " fields\n";
+         msg += ASCString("  visible: ")     + ASCString::toString(visible ) + " fields\n\n";
+      } 
+   }
+
+   computeview ( actmap, 0 , false );
+
+   return msg;
+}
+
+ASCString getPlayerStrength( GameMap* gamemap )
 {
    ASCString message;
-   for ( int i = 0; i< 8; ++i ) {
+   for ( int i = 0; i< gamemap->getPlayerCount(); ++i ) {
       double strength = 0;
       Resources r;
+      Resources total;
       for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
          strength += unitStrengthValue( *j );
          r += (*j)->typ->productionCost;
+         total += (*j)->typ->productionCost;
+         total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
       }
 
-      message += "\nPlayer " + ASCString::toString(i) + " " + actmap->player[i].getName() + "\n";
+      for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); ++j ) {
+         total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
+      }
+
+      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
       message += "strength: ";
       ASCString s;
       s.format("%9.0f", ceil(strength/10000) );
       message += s + "\n";
-      message += "Unit production cost: \n";
-      for ( int k = 0; k < 3; ++k ) {
+      message += "Unit production cost ";
+      for ( int k = 1; k < 2; ++k ) { // just material
          message += resourceNames[k];
-         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "\n";
+         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "k\n";
       }
-      message += "Unit count: " + ASCString::toString( actmap->player[i].vehicleList.size());
+      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size())) + "\n";
+      message += "Material index: " + ASCString::toString( total.material/1000 ) + "k\n";
       message += "\n\n";
 
    }
-   tviewanytext vat ;
-   vat.init ( "Player strength summary", message.c_str(), 20, -1 , 450, 480 );
-   vat.run();
-   vat.done();
+   return message;
 }
 
 
 
+void pbpplayerstatistics( GameMap* gamemap )
+{
+   ASCString msg;
+   { 
+      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "calculating... " );
+
+      msg = "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n"; 
+      
+      msg += "#fontsize=16#Visibility#fontsize=12#\n";
+      msg += getVisibilityStatistics( gamemap );
+      
+      msg += "#fontsize=16#Strength#fontsize=12#\n";
+      msg += getPlayerStrength( gamemap );
+   }
+   
+   ViewFormattedText vft ( "Map Statistics", msg, PG_Rect(-1,-1,600,600));
+   vft.Show();
+   vft.RunModal();
+}
 
 
-// ıS ExecAction
+class PlayerColorPanel : public PG_Widget {
+      int openTime;
+   public:
+      PlayerColorPanel() : PG_Widget(NULL, PG_Rect(20,20,320,40))
+      {
+         int width = 30;
+         int gap = 5;
+         for ( int i = 0; i < max(actmap->getPlayerCount(),9); ++i ) {
+            PG_Widget* bar = new ColoredBar( actmap->getPlayer(i).getColor(), this, PG_Rect( gap + i * (width+gap), gap, width, width ));
+            PG_Label* lab = new PG_Label( bar, PG_Rect(5,5,width-10,width-10), ASCString::toString(i));
+            lab->SetFontSize(15);
+         }
 
-void execaction(int code)
+         PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PlayerColorPanel::idler ));
+      }
+
+      void Show( bool fade = false )
+      {
+         openTime = ticker;
+         PG_Widget::Show(fade);
+      }
+
+      void Hide( bool fade = false )
+      {
+         openTime = 0;
+         PG_Widget::Hide(fade);
+      }
+
+
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         if ( key->keysym.sym >= '0' && key->keysym.sym <= '9' ) {
+            selection.setPlayer( key->keysym.sym - '0' );
+            return true;
+         }
+         Hide();
+         return false;
+      }
+
+      bool idler()
+      {
+         if ( !IsVisible() )
+            return false;
+
+         if ( !openTime )
+            return false;
+
+         if ( ticker > openTime + 200 ) {
+            Hide();
+            return true;
+         } else
+            return false;
+
+      }
+
+};
+
+
+void showPlayerPanel( bool open )
+{
+   static PlayerColorPanel* pcp = NULL;
+   if ( open && !pcp ) 
+      pcp = new PlayerColorPanel();
+
+   if( open )
+      pcp->Show();
+   else
+      pcp->Hide();
+}
+
+
+// ÔøΩ ExecAction
+
+
+//! this executes all functions that use legacy Eventhandling
+void execaction( int code)
 {
    switch(code) {
-    case act_help :   if ( polyfieldmode ) help ( 1040 );
-                       else help(1000);
-       break;
-    case act_selbodentypAll : {
-                        ch = 0;
-                        cursor.hide();
-                        selterraintype( ct_f3 );
-                        cursor.show();
-                     }
-       break;
-    case act_selunit : {
-                       ch = 0;
-                       cursor.hide();
-                       selvehicletype( ct_f4 );
-                       cursor.show();
-                     }
-       break;
-    case act_selcolor : {
-                       ch = 0;
-                       cursor.hide();
-                       selcolor( ct_f5 );
-                       cursor.show();
-                     }
-       break;
-    case act_selbuilding : {
-                       ch = 0;
-                       cursor.hide();
-                       selbuilding( ct_f6);
-                       cursor.show();
-                     }
-       break;
-    case act_selobject : {
-                       ch = 0;
-                       cursor.hide();
-                       selobject( ct_f7 );
-                       cursor.show();
-                     }
-       break;
-    case act_selmine : {
-                       ch = 0;
-                       cursor.hide();
-                       selmine( ct_f8 );
-                       cursor.show();
-                     }
-       break;
-    case act_selweather : {
-                       ch = 0;
-                       cursor.hide();
-                       selweather( ct_f9  );   // !!!!!         // Test (Boolean) Testet, ob das wetter auch verfÅgbar ist fÅr bodentyp
-                       cursor.show();                           // True : WIRD getestet / false : kein Test
-                     }
-       break;
-    case act_setupalliances :  setupalliances();
-       break;
     case act_toggleresourcemode :  {
-                      if (showresources < 2) showresources++;
-                      else showresources = 0;
-                      displaymap();
+         if ( mainScreenWidget )
+            mainScreenWidget->toggleMapLayer( "resources");
+         displaymap();
        }
-       break;
-    case act_changeglobaldir : {
-                                  auswahld++;
-                                  if (auswahld > sidenum-1) auswahld = 0;
-                                 //// if ( selectnr > cselcolor) selectnr = cselbodentyp; ???????
-                                  showallchoices();
-                                }
        break;
     case act_asc_resource :   {
                                   actmap->_resourcemode = false;
@@ -492,35 +503,7 @@ void execaction(int code)
                                   displaymessage ( "Battle Isle Resource mode enabled", 3 );
                                }
        break;
-    case act_maptopcx : writemaptopcx ();  
-       break;
-    case act_loadmap :   {
-                            if (mapsaved == false )
-                               if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
-                                  k_savemap(false);
-
-                            pmap oldmap = actmap;
-                            actmap = NULL;
-                            try {
-                                k_loadmap();
-                            }
-                            catch ( ... ) {
-                                displaymessage ( "error loading file",1 );
-                            }
-                            if ( !actmap ) {
-                                actmap = oldmap;
-                                oldmap = NULL;
-                            } else {
-                               delete oldmap;
-                               oldmap = NULL;
-                            }
-                            pdbaroff();
-                            displaymap();
-                          } 
-       break;
     case act_changeplayers : playerchange();
-       break;
-    case act_newmap :   newmap();
        break;
        /*
     case act_polymode :   {
@@ -541,25 +524,21 @@ void execaction(int code)
        }
        break;
        */
-    case act_repaintdisplay :   repaintdisplay();
-       break;
-    case act_unitinfo :  vehicle_information();
-       break;
     case act_viewmap :  
              {
              while (mouseparams.taste != 0)
                 releasetimeslice();
-             cursor.hide();
-             showmap ();
+             // showmap ();
              displaymap();
-             cursor.show();
              }
        break;
     case act_changeunitdir : {
-                      pf2 = getactfield();
-                      if ( (pf2 != NULL) && (pf2->vehicle != NULL ) ){
+                      tfield* pf2 = getactfield();
+                      if ( pf2 && pf2->vehicle  ) {
                          pf2->vehicle->direction++;
-                         if (pf2->vehicle->direction>sidenum-1) pf2->vehicle->direction = 0;
+                         if (pf2->vehicle->direction >= sidenum )
+                            pf2->vehicle->direction = 0;
+                         
                          mapsaved = false;
                          displaymap();
                       } 
@@ -572,30 +551,14 @@ void execaction(int code)
                            prd.init();
                            prd.run();
                            prd.done();
+                           if ( mainScreenWidget )
+                              mainScreenWidget->activateMapLayer( "resources", true);
+                        
+                           repaintMap();
+
                          }
        break;
-    case act_changecargo :   {
-                 cursor.hide();
-                 if ( getactfield()->building )                    
-                    building_cargo( getactfield()->building );
-                 else 
-                    if ( getactfield()->vehicle )
-                       unit_cargo( getactfield()->vehicle );
-                 cursor.show(); 
-              }
-       break;
-    case act_changeterraindir : {
-                      pf2 = getactfield();
-                      if (pf2 != NULL) {
-                         pf2->direction++;
-                         if (pf2->direction>sidenum-1) pf2->direction = 0;
-                         mapsaved = false;
-                         displaymap();
-                      }
-                   }
-       break;
-    case act_events :   event();
-       break;
+       /*
     case act_fillmode :   if ( polyfieldmode == false ) {   
                  if (tfill == true) tfill = false;
                  else tfill = true; 
@@ -604,130 +567,87 @@ void execaction(int code)
                  pdbaroff(); 
               } 
        break;
+       */
     case act_mapgenerator : mapgenerator();
        break;
-    case act_setactivefieldvals : {
-                  pfield fld = getactfield();
-
-                  if ( fld->vehicle ) {
-                     auswahlf = vehicleTypeRepository.getObject_byID ( fld->vehicle->typ->id );
-                     altefarbwahl = farbwahl;
-                     farbwahl = fld->vehicle->color/8;
-                     lastselectiontype = cselunit;
-                     setnewvehicleselection ( auswahlf );
-                  } else
-                  if ( fld->building ) {
-                     auswahlb = fld->building->typ;
-                     altefarbwahl = farbwahl;
-                     farbwahl = fld->building->color/8;
-                     lastselectiontype = cselbuilding;
-                     setnewbuildingselection ( auswahlb );
-                  } else
-                  if ( !fld->objects.empty() ) {
-                     actobject = fld->objects.begin()->typ ;
-                     lastselectiontype = cselobject;
-                     setnewobjectselection ( actobject );
-                  } else {
-                     auswahld = fld->direction;
-                     auswahl = fld->typ->terraintype;
-                     lastselectiontype = cselbodentyp;
-                     setnewterrainselection ( auswahl );
-                  }
-                  showallchoices();
-               }
+    case act_setactivefieldvals : if ( getactfield() ) 
+                                      selection.pickup( getactfield() ); 
        break;
-       
     case act_deletething : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          mapsaved = false;
                          if (pf2 != NULL) {
-                            if (pf2->vehicle != NULL)
-                               delete pf2->vehicle;
-                            else
-                               if (pf2->building != NULL)
-                                  delete pf2->building;
-                               else
-                                  if ( !pf2->mines.empty() )
-                                     pf2->removemine( -1 );
-                                  else
-                                     pf2->removeobject( NULL );
+                            if ( !removeCurrentItem() )
+                              if (pf2->vehicle != NULL)
+                                 delete pf2->vehicle;
+                              else
+                                 if (pf2->building != NULL)
+                                    delete pf2->building;
+                                 else
+                                    if ( !pf2->mines.empty() )
+                                       pf2->removemine( -1 );
+                                    else 
+                                       pf2->removeobject( NULL );
+                                  
 
                             mapsaved = false;
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
     case act_deleteunit : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if (pf2 != NULL)
                             if (pf2->vehicle != NULL) {
                                delete pf2->vehicle;
                                mapsaved = false;
-                               displaymap();
+                               mapChanged( actmap );
                             }
                          }
         break;
      case act_deletebuilding : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if (pf2 != NULL)
                             if (pf2->building != NULL) {
                                delete pf2->building;
                                mapsaved = false;
-                               displaymap();
+                               mapChanged( actmap );
                             }
                       }
         break;
-     case act_deleteobject : {
-                         pf2 = getactfield();
-                         if ( pf2 ) {
-                            mapsaved = false;
-                            pf2->removeobject( actobject );
-                            displaymap();
-                         }
-                      }
-        break;
+     case act_deleteobject :
      case act_deletetopmostobject : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->removeobject( NULL );
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
      case act_deleteallobjects : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->objects.clear( );
                             calculateallobjects();
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
      case act_deletemine : {
-                         pf2 = getactfield();
+                         tfield* pf2 = getactfield();
                          if (pf2 != NULL) {
                             mapsaved = false;
                             pf2->removemine( -1 );
-                            displaymap();
+                            mapChanged( actmap );
                          }
                       }
         break;
-    case act_showpalette : showpalette();
-       break;
     case act_changeminestrength : changeminestrength();
        break;
-    case act_changemapvals :   changemapvalues();
-       break;                                        
-    case act_changeproduction :   if ( getactfield()->building ) building_production( getactfield()->building );
-       break;
-    case act_savemap :  k_savemap(false);
-       break;
-    case act_savemapas :  k_savemap(true);
-       break;
     case act_changeunitvals :   {
-                 pf2 = getactfield();
+                 tfield* pf2 = getactfield();
                  if ( pf2  ) {
                     if ( pf2->vehicle ) {
                        changeunitvalues(pf2->vehicle);
@@ -739,36 +659,22 @@ void execaction(int code)
                  } /* endif */
               } 
               break;
+              
     case act_mirrorcursorx :   {
-                    cursor.gotoxy ( actmap->xsize-getxpos(), getypos() );
-                    int tmp = farbwahl;
-                    farbwahl = altefarbwahl;
-                    altefarbwahl = tmp;
-                    showallchoices();
-                    showStatusBar();
+                     MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+                     md->cursor.goTo( MapCoordinate(actmap->xsize - md->cursor.pos().x, md->cursor.pos().y ) );
                  }
 
        break;
     case act_mirrorcursory :   {
-                    cursor.gotoxy ( getxpos(), actmap->ysize-getypos() );
-                    int tmp = farbwahl;
-                    farbwahl = altefarbwahl;
-                    altefarbwahl = tmp;
-                    showallchoices();
-                    showStatusBar();
+                     MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
+                     md->cursor.goTo( MapCoordinate(md->cursor.pos().x, actmap->ysize - md->cursor.pos().y ) );
                  }
        break;
-    case act_placebodentyp : placebodentyp();
-       break;
-    case act_placeunit : placeunit();
-       break;
-    case act_placebuilding : placebuilding(farbwahl,auswahlb,true);
-       break;
-    case act_placeobject : placeobject();
-       break;
-    case act_placemine : placemine();
-       break;
-    case act_placething : putactthing();
+       
+//    case act_placemine : placemine();
+//       break;
+    case act_placething : placeCurrentItem();
        break;
        /*
     case act_endpolyfieldmode : {
@@ -786,27 +692,28 @@ void execaction(int code)
        }
        break;
        */
-    case act_end : {
-       if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
-          execaction(act_switchmaps);
-          ch = ct_invvalue;
-       } else
-          if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 2) ch = ct_invvalue;
-             else {
-                ch = ct_esc; //Exit MapEdit
-                if (mapsaved == false )
-                   if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) k_savemap(false);
-               }
-          }
-       break;
     case act_about :
     case act_aboutbox : {
+       
+       ASCString s = "#fontsize=22#Advanced Strategic Command\nMap Editor#fontsize=14#\n";
+       s += getVersionAndCompilation();
+
+       // s += "\n#fontsize=18#Credits#fontsize=14#\n";
+
+       s += readtextmessage( 1020 );
+                     
+       ViewFormattedText vft( "About", s, PG_Rect(-1,-1,450,550));
+       vft.Show();
+       vft.RunModal();
+       
+       /*
          help(1020);
          tviewanytext vat;
          ASCString msg = kgetstartupmessage();
          vat.init ( "about", msg.c_str() );
          vat.run();
          vat.done();
+       */
       }
       break;
    case act_smoothcoasts : {
@@ -815,131 +722,100 @@ void execaction(int code)
       }
       break;
    case act_import_bi_map : {
-         char filename2[260];
-         char* path = getbipath();
-         if ( !path )
+         ASCString path = getbipath();
+         if ( path.empty() )
             break;
-            
-         strcpy ( filename2, path );
-         strcat ( filename2, "mis");
-         strcat ( filename2, pathdelimitterstring );
-         strcat ( filename2, "*.dat");
 
-         ASCString filename;
-         fileselectsvga ( filename2, filename, true );
+         ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
+
+         ASCString filename = selectFile( wildcard, true );
          if ( !filename.empty() ) {
-            strcpy ( filename2, path );
-            strcat ( filename2, "mis");
-            strcat ( filename2, pathdelimitterstring );
-            strcat ( filename2, filename.c_str());
-            TerrainType::Weather* t = auswahl->weather[auswahlw];
-            if ( !t )
-               t = auswahl->weather[0];
-            importbattleislemap ( path, filename.c_str(), t );
+            importbattleislemap ( path.c_str(), filename.c_str(), terrainTypeRepository.getObject_byID(9999)->weather[0] );
             displaymap();
          }
       }
       break;
    case act_insert_bi_map : {
-         char filename2[260];
-
-         char* path = getbipath();
-         if ( !path )
+         ASCString path = getbipath();
+         if ( path.empty() )
             break;
-            
-         strcpy ( filename2, path );
-         strcat ( filename2, "mis");
-         strcat ( filename2, pathdelimitterstring );
-         strcat ( filename2, "*.dat");
 
-         ASCString filename;
-         fileselectsvga ( filename2, filename, true );
+         ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
+
+         ASCString filename = selectFile( wildcard, true );
          if ( !filename.empty() ) {
-            strcpy ( filename2, path );
-            strcat ( filename2, "mis");
-            strcat ( filename2, pathdelimitterstring );
-            strcat ( filename2, filename.c_str());
-            insertbattleislemap ( getxpos(), getypos(), path, filename.c_str() );
+            insertbattleislemap ( actmap->getCursor().x, actmap->getCursor().y, path.c_str(), filename.c_str() );
             displaymap();
          }
       }
       break;
-   case act_resizemap : cursor.hide();
-                        resizemap();
-                        cursor.checkposition ( actmap->xpos + cursor.posx, actmap->ypos + cursor.posy );
-                        cursor.show();
+   case act_resizemap : resizemap();
       break;
    case act_movebuilding: movebuilding();
       break;
-   case act_setactweatherglobal: setweatherall ( auswahlw );
+      case act_setactweatherglobal: setweatherall ( selection.getWeather() );
                                  displaymap();
       break;
-   case act_setmapparameters: setmapparameters();
-      break;
-   case act_terraininfo: viewterraininfo();
+   case act_terraininfo: viewterraininfo( actmap, actmap->getCursor(), true);
       break;
    case act_setunitfilter: selectunitsetfilter();
+                           filtersChangedSignal(); 
       break;
-   case act_selectgraphicset: selectgraphicset();
-                              showallchoices();
-      break;
-   case act_setzoom : choosezoomlevel();
-      break;
+   // case act_setzoom : choosezoomlevel();
+   //    break;
    case act_unitsettransformation: unitsettransformation();
       break;
    case act_unitSetInformation: viewUnitSetinfo();
       break;
-   case act_selbodentyp: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
-                            execaction ( act_setactivefieldvals );
-                            /*
-                            auswahl = getactfield()->typ->terraintype;
-                            setnewterrainselection ( auswahl );
-                            showallchoices();
-                            */
-                         } else
-                            lastselectiontype = cselbodentyp;
-                         execaction(act_switchmaps);
-                         break;
+   case act_primaryAction: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) {
+                              execaction ( act_setactivefieldvals );
+                              execaction(act_switchmaps);
+                           } else 
+                             execaction( act_placething );
+                             
+                           break;
+                           
    case act_switchmaps: mapSwitcher.toggle();
                         displaymap();
-                        showStatusBar();
-                        showallchoices();
-      break;
-   case act_transformMap: transformMap();
+                        updateFieldInfo();
       break;
    case act_editArchivalInformation: editArchivalInformation();
       break;
    case act_displayResourceComparison : resourceComparison();
       break;
+      /*
    case act_specifyunitproduction: unitProductionLimitation();
       break;
-   case act_pasteFromClipboard: if ( !getactfield()->getContainer() ) {
-                                   ClipBoard::Instance().place( MapCoordinate(getxpos(), getypos() ));
+      */
+   case act_pasteFromClipboard: if ( getactfield() && !getactfield()->getContainer() ) {
+                                   ClipBoard::Instance().place( actmap->getCursor() );
                                    mapsaved = false;
                                    displaymap();
                                 }
       break;
-   case act_copyToClipboard: if ( getactfield()->vehicle ) {
-                                ClipBoard::Instance().clear();
-                                ClipBoard::Instance().addUnit( getactfield()->vehicle );
-                             } else
-                                if ( getactfield()->building ) {
-                                   ClipBoard::Instance().clear();
-                                   ClipBoard::Instance().addBuilding( getactfield()->building );
-                                }
+   case act_copyToClipboard: if ( getactfield() )
+                                 if ( getactfield()->vehicle ) {
+                                    ClipBoard::Instance().clear();
+                                    ClipBoard::Instance().addUnit( getactfield()->vehicle );
+                                 } else
+                                    if ( getactfield()->building ) {
+                                       ClipBoard::Instance().clear();
+                                       ClipBoard::Instance().addBuilding( getactfield()->building );
+                                    }
       break;
-   case act_cutToClipboard: if ( getactfield()->vehicle ) {
-                                ClipBoard::Instance().clear();
-                                ClipBoard::Instance().addUnit( getactfield()->vehicle );
-                                execaction ( act_deleteunit );
-                                mapsaved = false;
-                             } else
-                                if ( getactfield()->building ) {
-                                   ClipBoard::Instance().clear();
-                                   ClipBoard::Instance().addBuilding( getactfield()->building );
-                                   execaction ( act_deletebuilding );
-                                   mapsaved = false;
-                                }
+   case act_cutToClipboard: if ( getactfield() )
+                              if ( getactfield()->vehicle ) {
+                                 ClipBoard::Instance().clear();
+                                 ClipBoard::Instance().addUnit( getactfield()->vehicle );
+                                 execaction ( act_deleteunit );
+                                 mapsaved = false;
+                              } else
+                                 if ( getactfield()->building ) {
+                                    ClipBoard::Instance().clear();
+                                    ClipBoard::Instance().addBuilding( getactfield()->building );
+                                    execaction ( act_deletebuilding );
+                                    mapsaved = false;
+                                 }
       break;
    case act_saveClipboard:  saveClipboard();
       break;
@@ -948,7 +824,8 @@ void execaction(int code)
       break;
    case act_setTurnNumber:  actmap->time.set ( getid("Turn",actmap->time.turn(),0,maxint), 0 );
       break;
-   case act_showPipeNet: showPipeNet();
+   case act_showPipeNet:    mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
+      repaintMap();
       break;
    case act_editResearch:  editResearch();
       break;
@@ -958,11 +835,206 @@ void execaction(int code)
       break;
    case act_editTechAdapter: editTechAdapter();
       break;
-   case act_resetPlayerData: resetPlayerData();
-      break;
-   case act_playerStrengthSummary: showPlayerStrength();
+   case act_playerStrengthSummary: pbpplayerstatistics( actmap );
       break;
 
     }
 }
 
+//! this executes all functions that use Paragui Eventhandling
+void execaction_pg(int code) 
+{
+   switch(code) {
+#ifdef WEATHERGENERATOR
+      case act_setactnewweather: weatherConfigurationDialog();
+         break;
+#endif
+    case act_selbodentyp : if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                              execaction ( act_setactivefieldvals );
+                           execaction( act_switchmaps);
+       break;
+    case act_selbodentypAll : mainScreenWidget->selectTerrain();
+       break;
+    case act_selunit : mainScreenWidget->selectVehicle();
+       break;
+    case act_selbuilding : mainScreenWidget->selectBuilding(); 
+       break;
+    case act_selobject : mainScreenWidget->selectObject();
+       break;
+    case act_selobjectAll: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+                              execaction ( act_setactivefieldvals );
+                           execaction( act_switchmaps);
+       break;                    
+    case act_selmine : mainScreenWidget->selectMine();
+       break;
+    case act_unitinfo :  unitInfoDialog();
+       break;
+    case act_setmapparameters: setmapparameters( actmap );
+       break;
+    case act_setupalliances :  setupalliances( actmap, true );
+       break;
+    case act_setupplayers :  setupPlayers( actmap, true );
+       break;
+    case act_loadmap :   {
+                            if (mapsaved == false )
+                               if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
+                                  k_savemap(false);
+
+                            GameMap* oldmap = actmap;
+                            actmap = NULL;
+                            try {
+                                k_loadmap();
+                            }
+                            catch ( ... ) {
+                                displaymessage ( "error loading file",1 );
+                            }
+                            if ( !actmap ) {
+                                actmap = oldmap;
+                                oldmap = NULL;
+                            } else {
+                               delete oldmap;
+                               oldmap = NULL;
+                            }
+                            displaymap();
+                          } 
+       break;
+    case act_savemap :  k_savemap(false);
+       break;
+    case act_savemapas :  k_savemap(true);
+       break;
+    case act_maptopcx : {
+       bool view = choice_dlg("Include view ?","~n~o", "~y~es") == 2;
+       if ( view )
+          computeview( actmap );
+       writemaptopcx ( actmap, view );
+                        }
+       break;
+    case act_end : {
+          if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+             execaction(act_switchmaps);
+          else
+             if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 1) {
+                if (mapsaved == false )
+                   if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1)
+                      k_savemap(false);
+                   
+                getPGApplication().Quit();
+             }
+       }
+       break;
+       case act_changecargo :
+          if ( getactfield() && getactfield()->getContainer() )
+             cargoEditor( getactfield()->getContainer() );
+       
+       break;
+       case act_createresources2 : resourcePlacementDialog();
+         displaymap();
+       break;
+       case act_changeproduction :   if ( getactfield() && getactfield()->getContainer() ) {
+                                       if ( getactfield()->getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction  ))
+                                          editProduction( getactfield()->getContainer() );
+                                       else
+                                          warning("this unit/building has no production capabilities");
+                                     }
+       break;
+       case act_selectgraphicset: selectgraphicset();
+                              // showallchoices();
+       break;
+       case act_transformMap: transformMap();
+       break;
+      case act_increase_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->changeZoom( 10 );
+            viewChanged();
+            repaintMap();
+         }
+         break;
+      case act_decrease_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->changeZoom( -10 );
+            viewChanged();
+            repaintMap();
+         }
+         break;
+      case act_editpreferences:
+         editGameOptions( false );
+         break;
+
+      case act_events :   eventEditor();
+         break;
+      case act_resetPlayerData: adminGame( actmap );
+         break;
+      case act_changemapvals :   editMap(actmap);
+         break;
+      case act_newmap :   newmap();
+         break;
+      case act_clearresources: {
+         for ( int y = 0; y < actmap->ysize; ++y)
+            for ( int x = 0; x < actmap->xsize; ++x ) {
+               actmap->getField(x,y)->fuel = 0;
+               actmap->getField(x,y)->material = 0;
+            }
+            repaintMap();
+      }
+      case act_dumpBuilding: 
+         if ( getactfield() && getactfield()->building ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "BuildingDump", stream );
+               actmap->getbuildingtype_byid(getactfield()->building->typ->id)->runTextIO( pc );
+            }
+         } else
+            errorMessage("no building selected");
+         break;
+      case act_dumpVehicle: 
+         if ( getactfield() && getactfield()->vehicle ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "VehicleDump", stream );
+               actmap->getvehicletype_byid(getactfield()->vehicle->typ->id)->runTextIO( pc );
+            }
+         } else
+            errorMessage("no building selected");
+         break;
+      case act_dumpObject: 
+         if ( getactfield() && !getactfield()->objects.empty() ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "ObjectDump", stream );
+               actmap->getobjecttype_byid( getactfield()->objects.front().typ->id)->runTextIO( pc );
+            }
+         } else
+            errorMessage("no building selected");
+         break;
+    case act_help : help(1000);
+       break;
+    case act_pbpstatistics: pbpplayerstatistics( actmap );
+       break;
+    case act_exchangeGraphics: exchangeGraphics();
+       break;
+    case act_openControlPanel: showPlayerPanel(true);
+       break;
+    case act_releaseControlPanel: showPlayerPanel(false);
+       break;
+    case act_dumpAllVehicleDefinitions: {
+                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all units" );
+                                          for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
+                                             Vehicletype* veh = vehicleTypeRepository.getObject_byPos( i );
+                                             tn_file_buf_stream stream ( "Vehicle" + ASCString::toString( i ) + ".dump", tnstream::writing );
+                                             PropertyWritingContainer pc ( "VehicleDump", stream );
+                                             veh->runTextIO( pc );
+                                          }
+                                        };
+      case act_clearSelection: selection.clear();
+      break;
+   };
+}
+
+void         execaction_ev(int code)
+{
+   execaction_pg(code);
+   execaction(code);
+}

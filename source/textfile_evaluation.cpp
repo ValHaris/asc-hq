@@ -17,21 +17,26 @@
 
 #include <vector>
 #include <algorithm>
+#include <iostream>
 #include "global.h"
 #include "ascstring.h"
 #include "textfileparser.h"
 #include "textfile_evaluation.h"
 #include "stringtokenizer.h"
-#include "basicmessages.h"
 #ifdef ParserLoadImages
  #include <SDL_image.h>
- #include "loadpcx.h"
- #include "basegfx.h"
+ // #include "basegfx.h"
  #include "typen.h"
+ #include "graphics/blitter.h"
+ #include "fieldimageloader.h"
+ #include "graphics/surface2png.h"
 #endif
 
+#ifdef WIN32
+#include "Windows.h"
+#endif
 
-const char* fileNameDelimitter = " =*/+<>,";
+#include <boost/regex.hpp>
 
 
          template <class T>
@@ -198,7 +203,7 @@ const char* fileNameDelimitter = " =*/+<>,";
                NamedIntProperty ( int& property_, int tagNum_, const char** tags_, int defaultValue_ ) : PTNI ( property_, defaultValue_ ), tagNum (tagNum_), tags ( tags_ ) {};
          };
 
-
+/*
          typedef PropertyTemplate<void*> PTIMG;
          class ImageProperty : public PTIMG {
                ASCString fileName;
@@ -207,6 +212,18 @@ const char* fileNameDelimitter = " =*/+<>,";
                ASCString toString ( ) const;
             public:
                ImageProperty ( void* &property_, const ASCString& fileName_ ) : PTIMG ( property_ ), fileName ( fileName_ ) {};
+         };
+*/
+         typedef PropertyTemplate<Surface> PTIMG2;
+         class ASCImageProperty : public PTIMG2 {
+               typedef Surface PropertyType;
+               ASCString fileName;
+               bool fieldMask;
+            protected:
+               PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
+               ASCString toString ( ) const;
+            public:
+               ASCImageProperty ( Surface &property_, const ASCString& fileName_, bool applyFieldMask ) : PTIMG2 ( property_ ), fileName ( fileName_ ), fieldMask( applyFieldMask ) {};
          };
 
          typedef PropertyTemplate< vector<void*> > PTIMGA;
@@ -220,10 +237,20 @@ const char* fileNameDelimitter = " =*/+<>,";
                ImageArrayProperty ( PropertyType &property_, const ASCString& fileName_ ) : PTIMGA ( property_ ), fileName ( fileName_ ) {};
          };
 
+         typedef PropertyTemplate< vector<Surface> > PTIMGA2;
+         class ASCImageArrayProperty : public PTIMGA2 {
+               typedef vector<Surface> PropertyType;
+               ASCString fileName;
+            protected:
+               PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
+               ASCString toString ( ) const;
+            public:
+               ASCImageArrayProperty ( PropertyType &property_, const ASCString& fileName_ ) : PTIMGA2 ( property_ ), fileName ( fileName_ ) {};
+         };
 
 
 
-
+/*
 void PropertyContainer :: run ( )
 {
    if ( isReading() )
@@ -235,6 +262,7 @@ void PropertyContainer :: run ( )
    if ( levelDepth )
       error ( "PropertyReadingContainer :: ~PropertyReadingContainer - still brackets open" );
 }
+*/
 
 void PropertyReadingContainer :: writeProperty ( Property& p, const ASCString& value )
 {
@@ -275,6 +303,17 @@ void PropertyWritingContainer :: writeProperty ( Property& p, const ASCString& v
    stream.writeString ( output, false );
 }
 
+
+ASCString PropertyContainer :: getNameStack()
+{
+   ASCString s;
+   for ( Level::iterator i = level.begin(); i != level.end(); ++i ) {
+      if ( s.length() )
+         s += ".";
+      s += *i;
+   }
+   return s;
+}
 
 void PropertyContainer :: openBracket( const ASCString& name )
 {
@@ -445,21 +484,54 @@ void PropertyContainer::addNamedInteger ( const ASCString& name, int& property, 
    setup ( ip, name );
 }
 
+void PropertyContainer::addBreakpoint ()
+{
+   bool breakpoint = false;
+   if ( isReading() ) {
+      addBool( "breakpoint", breakpoint, false);
+      if ( breakpoint ) {
+        #ifdef WIN32
+        DebugBreak();
+        #else
+        cerr << "breakpoint hit";
+        #endif
+      }
+   }
+}
+
+
+void PropertyContainer::storeContext( const ASCString& label )
+{
+   storedContext[label] = make_pair( levelDepth, level );
+}
+
+bool PropertyContainer::restoreContext( const ASCString& label )
+{
+   StoredContext::iterator pos = storedContext.find( label );
+   if ( pos != storedContext.end() ) {
+      levelDepth = pos->second.first;
+      level = pos->second.second;
+      return true;
+   }
+   return false;
+}
+
 
 #ifdef ParserLoadImages
 
-void PropertyContainer::addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& filename )
+void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& filename )
 {
-   ImageArrayProperty* ip = new ImageArrayProperty ( property, filename );
+   ASCImageArrayProperty* ip = new ASCImageArrayProperty ( property, filename );
    setup ( ip, name );
 }
 
 
-void PropertyContainer::addImage ( const ASCString& name, void* &property, const ASCString& filename )
+void PropertyContainer::addImage ( const ASCString& name, Surface &property, const ASCString& filename, bool applyFieldMask )
 {
-   ImageProperty* ip = new ImageProperty ( property, filename );
+   ASCImageProperty* ip = new ASCImageProperty ( property, filename, applyFieldMask );
    setup ( ip, name );
 }
+
 
 #endif
 
@@ -564,7 +636,9 @@ T PropertyTemplate<T>::parse ( const TextPropertyGroup::Entry& entry ) const
       case TextPropertyGroup::Entry::mult_eq : return operation_mult ( entry );
       case TextPropertyGroup::Entry::add_eq :  return operation_add ( entry );
       case TextPropertyGroup::Entry::sub_eq :  return operation_sub ( entry );
+      default:;
    }
+
    propertyContainer->error ( "PropertyTemplate::parse - invalid operator !");
    return defaultValue;
 }
@@ -628,7 +702,25 @@ void PropertyTemplate<T>::evaluate ()
 
 int IntegerProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
-   return atoi ( entry.value.c_str() );    //   strtol(nptr, NULL, 10);
+   char* p = NULL;
+
+   ASCString value = entry.value;
+   ASCString::size_type i;
+   while ( (i = value.find_first_of( " \t\n\r" )) != ASCString::npos )
+      value.erase( i, 1 );
+
+   while ( value.find( "0") == 0 && value.find( "0x") != 0)  // removing leading zeroes
+      value.erase(0,1);
+
+
+   int res =  strtol ( value.c_str(), &p, 0  );    //   strtol(nptr, NULL, 10);
+   if ( *p != 0 && *p != ';' ) {
+      ASCString s = name + ": value "+ entry.value +" is no numerical value \n" ;
+      // propertyContainer->error ( s );
+      fprintf(stderr, s.c_str()  );
+   }
+   
+   return res;
 }
 
 
@@ -722,12 +814,12 @@ ASCString StringProperty::operation_eq ( const TextPropertyGroup::Entry& entry )
     ASCString s = entry.value;
     ASCString::size_type pos = s.find_first_not_of ( TextFormatParser::whiteSpace );
     if ( pos == ASCString::npos )
-       s.erase();
+       s.erase();                            
     else
        s.erase ( 0, pos );
 
     pos = s.find_last_not_of ( TextFormatParser::whiteSpace );
-    if ( pos != ASCString::npos && pos+1 < s.length() )
+    if ( pos != ASCString::npos )
        s.erase ( pos+1 );
 
     return s;
@@ -871,7 +963,14 @@ IntegerArrayProperty::PropertyType IntegerArrayProperty::operation_eq ( const Te
    StringTokenizer st ( entry.value, true );
    ASCString s = st.getNextToken();
    while ( !s.empty() ) {
-      ia.push_back ( atoi ( s.c_str() ));
+
+      /*
+      if ( s.find( ";") == 0 ) 
+         st.skipTill('\n');
+      else
+      */
+         ia.push_back ( atoi ( s.c_str() ));
+
       s = st.getNextToken();
    }
    return ia;
@@ -1046,7 +1145,7 @@ ASCString TagIntProperty::toString() const
 
 int NamedIntProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
-   int i;
+   int i = 0;
 
    StringTokenizer st ( entry.value );
    ASCString s = st.getNextToken();
@@ -1072,141 +1171,42 @@ ASCString NamedIntProperty::toString() const
 }
 
 #ifdef ParserLoadImages
-void* getFieldMask()
+
+
+ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
-   static void* mask = NULL;
-   if ( !mask ) {
-      int i ;
-      tnfilestream s ( "largehex.raw", tnstream::reading );
-      s.readrlepict ( &mask, false, & i );
-   }
-   return mask;
-}
-
-vector<void*> loadImage ( const ASCString& file, int num )
-{
-   vector<void*> images;
-
-   int imgwidth = fieldsizex;
-   int imgheight = fieldsizey;
-
-   int xsize;
-   if ( num <= 10)
-      xsize = (num+1)* 100;
-   else
-      xsize = 1100;
-
-   ASCString lowerFile = copytoLower( file );
-   
-   int pcxwidth;
-   int pcxheight;
-   int depth = pcxGetColorDepth ( lowerFile, &pcxwidth, &pcxheight );
-   if ( depth > 8 ) {
-      tvirtualdisplay vdp ( xsize, (num/10+1)*100, TCalpha, 32 );
-      if ( num == 1 )
-         loadpcxxy ( lowerFile, 0, 0, 0, &imgwidth, &imgheight );
-      else
-         loadpcxxy ( lowerFile, 0, 0, 0 );
-
-      for ( int i = 0; i < num; i++ ) {
-          int x1 = (i % 10) * 100;
-          int y1 = (i / 10) * 100;
-          TrueColorImage* tci = getimage ( x1, y1, x1 + imgwidth-1, y1 + imgheight-1 );
-
-          tvirtualdisplay vdp ( 100, 100, 255 );
-          void* img = convertimage ( tci, pal );
-          putimage ( 0, 0, img );
-          putmask ( 0, 0, getFieldMask(), 0 );
-          getimage ( 0, 0, imgwidth-1, imgheight-1, img );
-          images.push_back ( img );
-      }
-   } else {
-      tvirtualdisplay vdp ( max(xsize, pcxwidth), max( (num/10+1)*100, pcxheight), 255, 8 );
-
-      if ( num == 1 )
-         loadpcxxy ( lowerFile, 0, 0, 0, &imgwidth, &imgheight );
-      else
-         loadpcxxy ( lowerFile, 0, 0, 0 );
-
-      for ( int i = 0; i < num; i++ ) {
-          int x1 = (i % 10) * 100;
-          int y1 = (i / 10) * 100;
-          if ( num > 1 )
-             putmask ( x1, y1, getFieldMask(), 0 );
-          void* img = new char[imagesize (0, 0, imgheight-1, imgwidth-1)];
-          getimage ( x1, y1, x1+imgwidth-1, y1+imgheight-1, img );
-          images.push_back ( img );
-      }
-   }
-
-   return images;
-}
-
-
-void* ImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
-{
-   void* img;
-
-   ASCString lstring = copytoLower( entry.value );
-   
    try {
-      StringTokenizer st ( lstring, fileNameDelimitter );
-      FileName fn = st.getNextToken();
-      fn.toLower();
-      if ( fn.suffix() == "png" ) {
-         SDLmm::Surface* s = NULL;
-         do {
-            tnfilestream fs ( fn, tnstream::reading );
-            SDLmm::Surface s2 ( IMG_LoadPNG_RW ( SDL_RWFromStream( &fs )));
-            s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
-            if ( !s )
-               s = new SDLmm::Surface ( s2 );
-            else {
-               int res = s->Blit ( s2 );
-               if ( res < 0 )
-                  propertyContainer->warning ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
-            }
-
-            fn = st.getNextToken();
-         } while ( !fn.empty() );
-         if ( s )
-            img = convertSurface ( *s );
-         else
-            img = NULL;
-      } else
-         if ( fn.suffix() == "pcx" ) {
-            img = loadImage ( fn, 1 )[0];
-         }
+      return loadASCFieldImage( entry.value, fieldMask );
    }
    catch ( ASCexception ){
-      propertyContainer->error( "error accessing file " + lstring );
-      return NULL;
    }
-   return img;
+   propertyContainer->error( "error accessing file " + entry.value );
+   return Surface();
 }
 
-ASCString ImageProperty::toString() const
+ASCString ASCImageProperty::toString() const
 {
-   int width, height;
-   getpicsize( property, width, height) ;
-   tvirtualdisplay vdp ( width+10, height+10, 255, 8 );
-   putimage ( 0, 0, property );
-   ASCString valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx";
-   writepcx ( valueToWrite, 0, 0, width-1, height-1, pal );
+   ASCString valueToWrite = constructFileName( 0, "", extractFileName_withoutSuffix(fileName) + ".png");
+   writePNG( valueToWrite, property );
    return valueToWrite;
 }
+ 
 
-
-ImageArrayProperty::PropertyType ImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
+ASCImageArrayProperty::PropertyType ASCImageArrayProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    try {
-      StringTokenizer st ( entry.value, fileNameDelimitter );
-      ASCString imgName = st.getNextToken();
-      ASCString imgNumS = st.getNextToken();
-      if ( imgNumS.empty() )
-         propertyContainer->error( name + ": image number missing" );
-      int imgNum = atoi ( imgNumS.c_str() );
-      return loadImage ( imgName, imgNum );
+      boost::smatch what;
+      static boost::regex splitter( "\\s*(\\S+)\\s+(\\d+)\\s*");
+      if( boost::regex_match( entry.value, what, splitter)) {
+         ASCString imgName;
+         imgName.assign( what[1].first, what[1].second );
+
+         ASCString imgNumS;
+         imgNumS.assign( what[2].first, what[2].second );
+         int imgNum = atoi ( imgNumS.c_str() );
+         return loadASCFieldImageArray ( imgName, imgNum );
+      } else 
+         propertyContainer->error( name + ": invalid format. Syntax is <ImageName> <ImageNum>" );
    }
    catch ( ASCexception ){
       propertyContainer->error( "error accessing file " + entry.value );
@@ -1215,19 +1215,23 @@ ImageArrayProperty::PropertyType ImageArrayProperty::operation_eq ( const TextPr
 }
 
 
-ASCString ImageArrayProperty::toString() const
+ASCString ASCImageArrayProperty::toString() const
 {
-   size_t num = property.size();
-   tvirtualdisplay vdp ( 1100, 100 * (num / 10 + 1), 255, 8 );
+   int num = property.size();
+
+   Surface s = Surface::createSurface( 1100, 100 * (num / 10 + 1), property.front().GetPixelFormat().BitsPerPixel(), 0 );
+
    int cnt = 0;
    for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {
-      putimage ( (cnt % 10) * 100, (cnt / 10) * 100, *i );
+      megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All> ( *i, s, SPoint( (cnt % 10) * 100, (cnt / 10) * 100), nullParam, nullParam, nullParam, nullParam);
       cnt++;
    }
-   ASCString valueToWrite = extractFileName_withoutSuffix(fileName) + ".pcx" + " " + strrr( cnt );
-   writepcx ( extractFileName_withoutSuffix(fileName) + ".pcx", 0, 0, 1100 - 1, 100 * (num / 10 + 1) - 1, pal );
-   return valueToWrite;
+
+   ASCString valueToWrite = constructFileName( 0, "", extractFileName_withoutSuffix(fileName) + ".png");
+   writePNG ( valueToWrite , s );
+   return valueToWrite + " " + ASCString::toString(cnt);
 }
+
 
 #endif
 

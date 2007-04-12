@@ -34,7 +34,7 @@ const int ccbt_training = 150;
                          protected:
                               AI*               ai;
 
-                              Vehicletype*      fzt;
+                              const Vehicletype*      fzt;
                               int               weapthreat[8];
                               int               value;
 
@@ -43,24 +43,25 @@ const int ccbt_training = 150;
                               virtual int       getammunition( int i )  { return 1;   };
                               virtual int       getheight ( void )      { return 255; };
                           public:
-                              void              calc_threat_vehicletype ( Vehicletype* _fzt );
+                              void              calc_threat_vehicletype ( const Vehicletype* _fzt );
                               CalculateThreat_VehicleType ( AI* _ai ) { ai = _ai; };
+                              virtual ~CalculateThreat_VehicleType() {};
                        };
 
   class CalculateThreat_Vehicle : public CalculateThreat_VehicleType {
                            protected:
-                                pvehicle          eht;
+                                Vehicle*          eht;
                                 virtual int       getdamage ( void );
                                 virtual int       getexpirience ( void );
                                 virtual int       getammunition( int i );
                                 virtual int       getheight ( void );
                            public:
-                              void              calc_threat_vehicle ( pvehicle _eht );
+                              void              calc_threat_vehicle ( Vehicle* _eht );
                               CalculateThreat_Vehicle ( AI* _ai ) : CalculateThreat_VehicleType ( _ai ) {};
                        };
 
 
-void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletype* _fzt )
+void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( const Vehicletype* _fzt )
 {
    fzt = _fzt;
 
@@ -77,7 +78,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( Vehicletyp
                   AttackFormula af;
                   for ( int e = (fzt->weapons.weapon[i].mindistance + maxmalq - 1)/ maxmalq; e <= fzt->weapons.weapon[i].maxdistance / maxmalq; e++ ) {    // the distance between two fields is maxmalq
                      d++;
-                     int n = int( weapDist.getWeapStrength( &fzt->weapons.weapon[i], e*maxmalq ) * fzt->weapons.weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
+                     int n = int( WeapDist::getWeaponStrength( &fzt->weapons.weapon[i], 0, e*maxmalq ) * fzt->weapons.weapon[i].maxstrength * af.strength_damage(getdamage()) * ( 1 + af.strength_experience(getexpirience())) );
                      m += int( n / log10(double(10*d)));
                   }
                   if (getammunition(i) == 0)
@@ -143,7 +144,7 @@ int          CalculateThreat_Vehicle :: getexpirience(void)
 }
 
 
-void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
+void         CalculateThreat_Vehicle :: calc_threat_vehicle ( Vehicle* _eht )
 {
 
    eht = _eht;
@@ -157,21 +158,22 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
       aip->threat.threat[l] = eht->typ->aiparam[ ai->getPlayerNum() ]->threat.threat[l];
 
    int value = eht->typ->aiparam[ ai->getPlayerNum() ]->getValue();
-   for ( int i = 0; i < 32; i++ )
-      if ( eht->loading[i] ) {
-         if ( !eht->loading[i]->aiparam[ai->getPlayerNum()] ) {
+   for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
+      if ( *i ) {
+         if ( !(*i)->aiparam[ai->getPlayerNum()] ) {
             CalculateThreat_Vehicle ctv ( ai );
-            ctv.calc_threat_vehicle( eht->loading[i] );
+            ctv.calc_threat_vehicle( *i );
          }
-         value += eht->loading[i]->aiparam[ai->getPlayerNum()]->getValue();
+         value += (*i)->aiparam[ai->getPlayerNum()]->getValue();
       }
+      
 
    aip->setValue ( value );
 
 
    if ( aip->getJob() == AiParameter::job_undefined )
       if ( eht->canMove() )
-         aip->setJob( AI::chooseJob ( eht->typ, eht->typ->functions ));
+         aip->setJob( AI::chooseJob ( eht->typ ));
 /*
    generatethreatvalue();
    int l = 0;
@@ -186,7 +188,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( pvehicle _eht )
 */
 }
 
-AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
+AiParameter::JobList AI::chooseJob ( const Vehicletype* typ )
 {
    AiParameter::JobList jobList;
 
@@ -210,11 +212,11 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
       if ( typ->weapons.weapon[w].service() )
          service = true;
 
-   if ( ((functions & cfrepair) || service) && maxmove >= minmalq && maxstrength < 45)
+   if ( ( typ->hasFunction( ContainerBaseType::ExternalRepair ) || service) && maxmove >= minmalq && maxstrength < 45)
       jobList.push_back ( AiParameter::job_supply );
 
 
-   if ( functions & cf_conquer ) {
+   if ( typ->hasFunction( ContainerBaseType::ConquerBuildings ) ) {
       /* if ( functions & cf_trooper )  {
          if ( typ->height & chfahrend )
             jobList.push_back ( AiParameter::job_conquer );
@@ -225,7 +227,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
    }
 
    if ( ( maxstrength*1.5 < typ->view
-        || (maxstrength*1.5 < typ->jamming && !(typ->functions & cfownFieldJamming)))
+           || (maxstrength*1.5 < typ->jamming && !typ->hasFunction( ContainerBaseType::JamsOnlyOwnField )))
        && maxmove > minmalq  )
       jobList.push_back (  AiParameter::job_recon );
 
@@ -238,27 +240,27 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ, int functions )
 
 
 
-void  AI :: calculateThreat ( pvehicletype vt)
+void  AI :: calculateThreat ( const Vehicletype* vt)
 {
    CalculateThreat_VehicleType ctvt ( this );
    ctvt.calc_threat_vehicletype( vt );
 }
 
 
-void  AI :: calculateThreat ( pvehicle eht )
+void  AI :: calculateThreat ( Vehicle* eht )
 {
    CalculateThreat_Vehicle ctv ( this );
    ctv.calc_threat_vehicle( eht );
 }
 
 
-void  AI :: calculateThreat ( pbuilding bld )
+void  AI :: calculateThreat ( Building* bld )
 {
    calculateThreat ( bld, getPlayerNum());
 //   calculateThreat ( bld, 8 );
 }
 
-void  AI :: calculateThreat ( pbuilding bld, int player )
+void  AI :: calculateThreat ( Building* bld, int player )
 {
    if ( !bld->aiparam[ player ] )
       bld->aiparam[ player ] = new AiValue ( log2 ( bld->typ->buildingheight ) );
@@ -267,28 +269,28 @@ void  AI :: calculateThreat ( pbuilding bld, int player )
 
 
    // Since we have two different resource modes now, this calculation should be rewritten....
-   int value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20) + (bld->maxresearchpoints / 10) ;
-   for (b = 0; b <= 31; b++)
-      if ( bld->loading[b]  ) {
-         if ( !bld->loading[b]->aiparam[ player ] )
-            calculateThreat ( bld->loading[b] );
-         value += bld->loading[b]->aiparam[ player ]->getValue();
+   int value = (bld->plus.energy / 10) + (bld->plus.fuel / 10) + (bld->plus.material / 10) + (bld->actstorage.energy / 20) + (bld->actstorage.fuel / 20) + (bld->actstorage.material / 20);
+   
+   for ( ContainerBase::Cargo::const_iterator i = bld->getCargo().begin(); i != bld->getCargo().end(); ++i )
+      if ( *i ) {
+         if ( !(*i)->aiparam[ player ] )
+            calculateThreat ( *i );
+         value += (*i)->aiparam[ player ]->getValue();
       }
 
-   for (b = 0; b <= 31; b++)
-      if ( bld->production[b] )  {
-         if ( !bld->production[b]->aiparam[ player ] )
-            calculateThreat ( bld->production[b] );
-         value += bld->production[b]->aiparam[ player ]->getValue() / 10;
+   for (b = 0; b < bld->getProduction().size(); b++)
+      if ( bld->getProduction()[b] )  {
+         if ( !bld->getProduction()[b]->aiparam[ player ] )
+            calculateThreat ( bld->getProduction()[b] );
+         value += bld->getProduction()[b]->aiparam[ player ]->getValue() / 10;
       }
 
-   if (bld->typ->special & cgrepairfacilityb )
+   if (bld->typ->hasFunction( ContainerBaseType::InternalUnitRepair  ))
       value += ccbt_repairfacility;
-   if (bld->typ->special & cghqb )
-      value += ccbt_hq;
-   if (bld->typ->special & cgtrainingb )
+   
+   if (bld->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
       value += ccbt_training;
-   if (bld->typ->special & cgrecyclingplantb )
+   if (bld->typ->hasFunction( ContainerBaseType::RecycleUnits  )  )
       value += ccbt_recycling;
 
    bld->aiparam[ player ]->setValue ( value );
@@ -296,7 +298,7 @@ void  AI :: calculateThreat ( pbuilding bld, int player )
 
 
 
-void AI :: WeaponThreatRange :: run ( pvehicle _veh, int x, int y, AiThreat* _threat )
+void AI :: WeaponThreatRange :: run ( Vehicle* _veh, int x, int y, AiThreat* _threat )
 {
    threat = _threat;
    veh = _veh;
@@ -315,7 +317,7 @@ void AI :: WeaponThreatRange :: testfield ( const MapCoordinate& mc )
    if ( dist*maxmalq <= veh->typ->weapons.weapon[weap].maxdistance )
       if ( dist*maxmalq >= veh->typ->weapons.weapon[weap].mindistance ) {
          AttackFormula af;
-         int strength = int ( weapDist.getWeapStrength( &veh->typ->weapons.weapon[weap], dist*maxmalq, veh->height, 1 << height )
+         int strength = int ( WeapDist::getWeaponStrength( &veh->typ->weapons.weapon[weap], ai->getMap()->getField(mc)->getweather(), dist*maxmalq, veh->height, 1 << height )
                               * veh->typ->weapons.weapon[weap].maxstrength
                               * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( gamemap->getField(startPos)->getattackbonus() ))
                               * af.strength_damage ( veh->damage )
@@ -349,9 +351,9 @@ void AI :: calculateFieldInformation ( void )
    for ( int y = 0; y < activemap->ysize; y++ ) {
       checkKeys();
       for ( int x = 0; x < activemap->xsize; x++ ) {
-         pfield fld = getfield ( x, y );
+         tfield* fld = activemap->getField ( x, y );
          if ( config.wholeMapVisible || fieldvisiblenow ( fld, getPlayerNum() ) )
-            if ( fld->vehicle && getdiplomaticstatus2 ( getPlayerNum()*8, fld->vehicle->color) == cawar ) {
+            if ( fld->vehicle && getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() )) {
                WeaponThreatRange wr ( this );
                if ( !fld->vehicle->typ->wait ) {
 
@@ -395,7 +397,7 @@ void AI :: calculateFieldInformation ( void )
 
          FieldInformation& fi = fieldInformation[y*getMap()->xsize+x];
          for ( int i = 0; i< sidenum; i++ ) {
-            pfield f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
+            tfield* f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
             if ( f && f->vehicle && f->vehicle->weapexist() && f->vehicle->color < 8*8 )
                fi.units[f->vehicle->color/8] += 1;
          }
@@ -418,7 +420,7 @@ void     AI :: calculateAllThreats( void )
    // Calculates the basethreats for all vehicle types
    if ( !baseThreatsCalculated ) {
       for ( int w = 0; w < vehicleTypeRepository.getNum(); w++) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos(w);
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos(w);
          if ( fzt )
             calculateThreat( fzt );
 
@@ -429,16 +431,16 @@ void     AI :: calculateAllThreats( void )
    // Some further calculations that only need to be done once.
    if ( maxTrooperMove == 0) {
       for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
-            if ( fzt->functions & cf_conquer )
-               if ( fzt->movement[chfahrend] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
-                  maxTrooperMove = fzt->movement[chfahrend];
+            if ( fzt->hasFunction( ContainerBaseType::ConquerBuildings  ) )
+               if ( fzt->movement[log2(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
+                  maxTrooperMove = fzt->movement[log2(chfahrend)];
       }
    }
    if ( maxTransportMove == 0 ) {
       for (int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-         pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
+         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             for ( int w = 0; w <= 7; w++) // cycle through all levels of height
                if (fzt->movement[w] > maxTransportMove)
@@ -452,7 +454,7 @@ void     AI :: calculateAllThreats( void )
          maxWeapDist[height] = 0; // It may be possible that there is no weapon to shoot to a specific height
 
          for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-            pvehicletype fzt = vehicleTypeRepository.getObject_byPos( v );
+            Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
             if ( fzt )
                for ( int w = 0; w < fzt->weapons.count ; w++)
                   if ( fzt->weapons.weapon[w].maxdistance > maxWeapDist[height] )
@@ -470,7 +472,7 @@ void     AI :: calculateAllThreats( void )
 
          // Now we cycle through all units of this player
          for ( Player::VehicleList::iterator vi = getPlayer(v).vehicleList.begin(); vi != getPlayer(v).vehicleList.end(); vi++ ) {
-            pvehicle veh = *vi;
+            Vehicle* veh = *vi;
             // if ( !veh->aiparam[ getPlayerNum() ] )
                calculateThreat ( veh );
          }
@@ -541,8 +543,8 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ ) {
          absFieldThreat += ai->getFieldThreat ( x, y );
-         pfield fld = getfield ( x, y );
-         if ( fld->vehicle && getdiplomaticstatus ( fld->vehicle->color )==cawar) {
+         tfield* fld = ai->activemap->getField ( x, y );
+         if ( fld->vehicle && ai->getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() ) ) {
             if ( !fld->vehicle->aiparam[ ai->getPlayerNum() ] )
                ai->calculateThreat ( fld->vehicle );
             AiParameter& aip = * fld->vehicle->aiparam[ ai->getPlayerNum() ];
@@ -558,12 +560,12 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
 
 }
 
-int AI :: Section :: numberOfAccessibleFields ( const pvehicle veh )
+int AI :: Section :: numberOfAccessibleFields ( const Vehicle* veh )
 {
    int num = 0;
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ )
-         if ( fieldAccessible ( getfield ( x, y ), veh ) == 2)
+         if ( fieldAccessible ( ai->activemap->getField ( x, y ), veh ) == 2)
             num++;
 
    return num;
@@ -625,7 +627,7 @@ AI::Section& AI :: Sections :: getForPos ( int xn, int yn )
    return section[xn+yn*numX];
 }
 
-AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun )
+AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun )
 {
    /*
       In the first pass wwe check were all the units would go if there wouldn't be
@@ -710,7 +712,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
 
                    for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                       for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
-                         pfield fld = ai->getMap()->getField(xp, yp );
+                         tfield* fld = ai->getMap()->getField(xp, yp );
                          if ( fld->a.temp & h ) {
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {
@@ -752,7 +754,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, const pvehicle veh, MapCoordi
                          }
                       } else
                          if ( allowRefuellOrder ) {
-                            if ( rfc && rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->typ->tank.fuel ))
+                            if ( rfc && rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->getStorageCapacity().fuel ))
                                sectionsPossibleWithMaxFuell++;
                          }
 

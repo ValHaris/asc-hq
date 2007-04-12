@@ -1,5 +1,3 @@
-//     $Id: strtmesg.cpp,v 1.332 2006-11-04 08:51:02 mbickel Exp $
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-2005  Martin Bickel  and  Marc Schellenberger
@@ -15,14 +13,15 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
 
 // These strings should be the same as the release tags in CVS !
-const char* asc_release="ASC1.16.4.0";
+// don't alter the format of this string, as quite a lot of tools evaluate it!
+const char* asc_release="ASC1.99.92.77";
 
 #include <stdio.h>
 #include "strtmesg.h"
@@ -30,12 +29,12 @@ const char* asc_release="ASC1.16.4.0";
 #include "misc.h"
 
 
-const char* getVersionString (  )
+const char* getVersionString()
 {
   return &asc_release[3];
 }
 
-int getNumericVersion ( )
+int getNumericVersion()
 {
    int vers = 0;
    const char* d = asc_release+3;
@@ -61,11 +60,17 @@ const char* getFullVersionString (  )
   return asc_release;
 }
 
+ASCString getVersionAndCompilation()
+{
+   char startupmessagebuffer[1000];
+   sprintf( startupmessagebuffer, "Version: %s\nCompiled %s      %s\n", asc_release, __DATE__, __TIME__);
+   return ASCString(startupmessagebuffer);
+}
+
 ASCString getstartupmessage (  )
 {
-    char startupmessagebuffer[1000];
-    sprintf( startupmessagebuffer, "\nAdvanced Strategic Command : %s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
-    return ASCString(startupmessagebuffer);
+   ASCString s = "\nAdvanced Strategic Command\n" + getVersionAndCompilation();
+   return s;
 }
 
 ASCString getaboutmessage (  )

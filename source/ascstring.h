@@ -5,6 +5,7 @@
 
 #include "ASCStringHelpers.h"
 #include <stdexcept>      // for range_error
+#include <stdarg.h>
 
 using std::range_error;
 
@@ -65,7 +66,16 @@ public:
     int compare_ci ( size_type p0, size_type n0, const charT* pS, size_type pos ) const;
 
     //! converts the parameter to a String
-    static ASCString toString(int i );
+    static ASCString toString( int i );
+    
+   #ifdef SIZE_T_not_identical_to_INT
+    static ASCString toString( size_t i );
+   #endif 
+    
+    //! converts the parameter to a String with base radix
+    // static ASCString toString(int i, int radix );
+    //! converts the parameter to a String
+    static ASCString toString( double d );
 
     // Case-manipulation helpers
     ASCString&  toLower    ();
@@ -73,7 +83,11 @@ public:
 
     // Printing and formating helpers.
     ASCString&  format     ( const charT* pFormat, ... );
+    ASCString&  vaformat     ( const charT* pFormat, va_list ap );
     void        printf     ();
+    
+    // convenience functions
+    bool endswith( const ASCString& s ) const;
 };
 
 // CONSTRUCTORS
@@ -221,7 +235,7 @@ inline ASCString::ASCString ( const ASCAdaptatorString& s, size_type pos, size_t
 // Copy Operators for ASCAdaptatorString type
 
 /*!
-    \overload ASCString& ASCString::operator=( const ASCAdaptatorString& s )
+    \overload ASCString& ASCString::operator= ( const ASCAdaptatorString& s )
 
     \param s a const reference to an ASCAdaptatorString object to be assigned to this ASCString.
 
@@ -322,5 +336,8 @@ inline int ASCString::compare_ci ( size_type p0, size_type n0, const charT* pS, 
 // GLOBALS
 ASCString copytoLower ( const ASCString& s );
 ASCString copytoUpper ( const ASCString& s );
+
+// extern const ASCString operator+ ( const ASCString& s1, const ASCString& s2 );
+extern const ASCString operator+ ( const char* s1, const ASCString& s2 );
 
 #endif // _ASC_STRING_H_INCLUDED_

@@ -1,65 +1,64 @@
 ; Kommentarzeilen beginnen mit einem Semikolon
-; Diese Datei kann (muß) Befehle enthalten, die die Anzeige des Hilfetextes
-; steuern. Jeder Befehl beginnt mit einem # und muß auch (mit Ausnahme des
-; Befehls Abschnittseinleitung ##) und muß auch mit einem # abgeschlossen
-; werden. Die Länge des Befehls ist egal, groß- und Kleinschreibung ebenfalls.
+; Diese Datei kann (muï¿½ Befehle enthalten, die die Anzeige des Hilfetextes
+; steuern. Jeder Befehl beginnt mit einem # und muï¿½auch (mit Ausnahme des
+; Befehls Abschnittseinleitung ##) und muï¿½auch mit einem # abgeschlossen
+; werden. Die Lï¿½ge des Befehls ist egal, groï¿½ und Kleinschreibung ebenfalls.
 ;
-; Folgende Befehle werden momentan unterstützt:
+; Folgende Befehle werden momentan untersttzt:
 ;  ##XXXX   Mit diesem Befehl beginnt ein Hilfethema. xxxx stellt eine
 ;           Zahl im Bereich von 0000 bis 9999 dar und entspricht der ID,
-;           die der Prozedur HELP als Parameter übergeben wird. Das Hilfthema
-;           endet mit dem nächsten Auftreten von ## oder dem Ende der Datei
+;           die der Prozedur HELP als Parameter bergeben wird. Das Hilfthema
+;           endet mit dem nï¿½hsten Auftreten von ## oder dem Ende der Datei
 ;           Leerzeilen am Anfang und am Ende werden auch angezeigt. Dieser
 ;           Befehl MUSS genau 6 Zeichen lang sein.
 ;
-;  #colorX#   Ändert die Textfarbe auf den Wert von x. Standardmäßig ist
-;           schwarz eingestellt. Gültige Werte von x sind 0 bis 255
+;  #colorX#   ï¿½dert die Textfarbe auf den Wert von x. Standardmï¿½ig ist
+;           schwarz eingestellt. Gltige Werte von x sind 0 bis 255
 ;           Empfohlene Werte sind:
 ;           000: Schwarz   001: Blue         002: Green      003: Cyan
 ;           004: Red       005: Magenta      006: Brown      007: LightGray
 ;           008: DarkGray  009: LightBlue    010: LightGreen 011: LightCyan
 ;           012: LightRed  013: LightMagenta 014: Yellow     015: White
 ;           256: default
-;  #backgroundX#  Ändert die Hintergrundfarbe für die Textdarstellung. Die
+;  #backgroundX#  ï¿½dert die Hintergrundfarbe fr die Textdarstellung. Die
 ;           Farbwerte sind die selben wie bei #color
 ;
-;  #fontX#   Änter die Schriftart. Standardwert ist 01. Gültige Werte von
+;  #fontX#   ï¿½ter die Schriftart. Standardwert ist 01. Gltige Werte von
 ;           x sind:
 ;             01:  SmallArial
 ;             02:  Arial8
-;          Die Schriftartwechseln innerhalb einer Zeile ist zu beachten, daß
-;          die Schriften NICHT an der Grundlinie ausgerichtet werden, sondern an
+;          Die Schriftartwechseln innerhalb einer Zeile ist zu beachten, daï¿½;          die Schriften NICHT an der Grundlinie ausgerichtet werden, sondern an
 ;          der Textoberkannte. Aus diesem Grund sollte eine Zeile immer nur eine
 ;          Schriftart enthalten.
 ;
 ;  #tabX#  Setzt einen Tabulator der weite x. Damit wird die Xposition
-;          auf das nächste Vielfache von x gesetzt.
+;          auf das nï¿½hste Vielfache von x gesetzt.
 ;  #posX#  Setzt die Xposition auf den Wert xxx.
 ;
 ;  #aeinzugX#  Setzt den Absatzeinzug auf X Pixel. Die erste Zeile eines
 ;          Absatzes wird nicht mit diesem Befehl, sondern mit #eeinzug#
-;          eingerückt. aeinzug wirkt erst ab der nächsten Zeile.
+;          eingerckt. aeinzug wirkt erst ab der nï¿½hsten Zeile.
 ;  #eeinzugX#  Wie #aeinzug, nur dass jeweils die erste Zeile eines Absatzes
-;          eingezogen wird. Auch #eeinzug wirkt erst ab dem nächsten Absatz.
+;          eingezogen wird. Auch #eeinzug wirkt erst ab dem nï¿½hsten Absatz.
 ;
-;  #crt#   führt einen Zeilenwechsel (=Absatzwechsel) durch. Hat die selbe
+;  #crt#   fhrt einen Zeilenwechsel (=Absatzwechsel) durch. Hat die selbe
 ;          Wirkung wie ein Zeilenwechsel in der Textdatei. Von #crt# gibt es
-;          noch eine Variante, die zusätzlich den Zeilenabstand der nächsten
-;          Zeile verändert:
+;          noch eine Variante, die zusï¿½zlich den Zeilenabstand der nï¿½hsten
+;          Zeile verï¿½dert:
 ;  #crtpX# Setzt den Zeilenabstand auf X Pixel mehr als ein normales #crt# dies
 ;          getan hat. 
 ;
-;  #pictrnnnnnnnnXXXYYY  Lädt das Bild, das als RAW-Datei unter dem Namen
-;          nnnnnnnn vorliegt (der Name MUß 8 Zeichen lang sein, als Endung
-;          wird automatisch .RAW angehängt) und zeigt es an der Position
+;  #pictrnnnnnnnnXXXYYY  Lï¿½t das Bild, das als RAW-Datei unter dem Namen
+;          nnnnnnnn vorliegt (der Name MUï¿½8 Zeichen lang sein, als Endung
+;          wird automatisch .RAW angehï¿½gt) und zeigt es an der Position
 ;          XXX / aktuelleYposition-YYY an.
-;          Es ist zu beachten, daß der untere Rand des Bildes nicht in die
-;          nächste Zeile ragt, da sonst dieser Teil überschrieben wird. Bei
-;          Bildern, die höher als die Zeilenhöhe sind, muß YYY ein Wert
-;          zugewiesen werden, der mindestetens BildHöhe-Zeilenhöhe beträgt.
+;          Es ist zu beachten, daï¿½der untere Rand des Bildes nicht in die
+;          nï¿½hste Zeile ragt, da sonst dieser Teil berschrieben wird. Bei
+;          Bildern, die hï¿½er als die Zeilenhï¿½e sind, muï¿½YYY ein Wert
+;          zugewiesen werden, der mindestetens BildHï¿½e-Zeilenhï¿½e betrï¿½t.
 ;          Sollte in der selben Zeile noch Text stehen, empfiehlt es sich, den
-;          Picture-Befehl an das Ende der Zeile zu schreiben, um mögliche
-;          Überschneidungen mit dem Text zu vermeiden.
+;          Picture-Befehl an das Ende der Zeile zu schreiben, um mï¿½liche
+;          ï¿½erschneidungen mit dem Text zu vermeiden.
 ;
 ;
 
@@ -68,61 +67,72 @@
 
 #pos10# KartenEd-keys:
 #aeinzug80#
-#pos10# space #pos70#: Place last selected thing
-#pos10# tab #pos70#: Toggle between primary and secondary map
+#pos10# space #pos70#: 
+#pos10# enter #pos70#: Primary map: place selected artifect ; Palette map: select artifact from field
+#pos10# tab #pos70#: Toggle between primary and palette map
 #pos10# 3  #pos70#: Place terrain
 #pos10# 4  #pos70#: Place unit
 #pos10# 6  #pos70#: Place building
 #pos10# 7  #pos70#: Place special object
 #pos10# 8  #pos70#: Place mine
 #pos10# F1 #pos70#: Help
-#pos10# F2  #pos70#: Editor
-#pos10# F3  #pos70#: Choose terrain from palette map
-#pos10# shift+F3  #pos70#: Choose terrain from list
-#pos10# F4  #pos70#: Choose unit
-#pos10# F5  #pos70#: Choose color
-#pos10# F6  #pos70#: Choose building
-#pos10# F7  #pos70#: Choose object from palette.map
-#pos10# shift+F7  #pos70#: Choose object from list
-#pos10# F8  #pos70#: Choose mine
-#pos10# F9  #pos70#: Choose weather
-#pos10# F10  #pos70#: Exit
+#pos10# F2  #pos70#: Select unit type
+#pos10# F3  #pos70#: Select terrain type from palette map
+#pos10# shift+F3  #pos70#: Select terrain from list
+#pos10# F4  #pos70#: Select object type from palette map
+#pos10# shift+F4  #pos70#: Select object type from list
+#pos10# F5  #pos70#: Select building type
+#pos10# F6  #pos70#: Select mine type
 #pos10# a  #pos70#: Move building / vehicle
-#pos10# b  #pos70#: Edit resources
-#pos10# c  #pos70#: View/Change cargo
-#pos10# d  #pos70#: Change direction of active field
+#pos10# b  #pos70#: Edit mineral resources on field
+#pos10# c  #pos70#: Edit unit/building cargo
+; #pos10# d  #pos70#: Change direction of active field
 #pos10# shift-d #pos70#: Change direction of unit
-#pos10# ctrl-d #pos70#: Change direction of fields to place
-#pos10# e  #pos70#: Edit events
-#pos10# f  #pos70#: enable rectangle terrain placement mode
-#pos10# g  #pos70#: Map-Generator (Preview)
-#pos10# h  #pos70#: Select unit/terrain from cursor position
-#pos10# l  #pos70#: Show pallette 
-#pos10# m  #pos70#: View/Change minestrength
+; #pos10# ctrl-d #pos70#: Change direction of fields to place
+#pos10# e  #pos70#: game event editor
+#pos10# f  #pos70#: edit factory production lines
+#pos10# g  #pos70#: Map-Generator 
+#pos10# h  #pos70#: Select artifact from cursor position
+; #pos10# l  #pos70#: Show pallette 
+#pos10# m  #pos70#: edit mine punch
+#pos10# o  #pos70#: exchange player positions
 #pos10# p  #pos70#: Edit vehicle/building properties
+#pos10# r  #pos70#: resize map
 #pos10# s  #pos70#: Save map
-#pos10# v  #pos70#: View map
+; #pos10# v  #pos70#: View map
 #pos10# x  #pos70#: Go to opposite x position
 #pos10# y  #pos70#: Go to opposite y position
-#pos10# z  #pos70#: Set zoom level
-#pos10# Entf  #pos70#: Erase last selected thing
+; #pos10# z  #pos70#: Set zoom level
+#pos10# Del  #pos70#: Erase artifact from cursor position
+#pos10# +  #pos70#: zoom in 
+#pos10# -  #pos70#: zoom out
+
+
+#pos10# ctrl+0-8  #pos70#: Select player
 #pos10# ctrl+A  #pos70#: Alliances
 #pos10# ctrl+B  #pos70#: Toggle resource view
 #pos10# ctrl+C  #pos70#: Copy to Clipboard
-#pos10# ctrl+D  #pos70#: Change direction
-#pos10# ctrl+E  #pos70#: Toggle Resourcemode
+; #pos10# ctrl+D  #pos70#: Change direction
+; #pos10# ctrl+E  #pos70#: Toggle Resourcemode
 #pos10# ctrl+F  #pos70#: Fill with resources
 #pos10# ctrl+G  #pos70#: Write whole map to PCX-file
-#pos10# ctrl+H  #pos70#: Set unit filters
+#pos10# ctrl+H  #pos70#: Set artifacty filters
 #pos10# ctrl+L  #pos70#: Load map
-#pos10# ctrl+M  #pos70#: Change map values
+#pos10# ctrl+M  #pos70#: Change map properties
 #pos10# ctrl+N  #pos70#: New map
-#pos10# ctrl+O  #pos70#: Polygon mode
+; #pos10# ctrl+O  #pos70#: Polygon mode
 #pos10# ctrl+P  #pos70#: View/Change a building's production
-#pos10# ctrl+R  #pos70#: Repaint display
-#pos10# ctrl+U  #pos70#: View army-statistics
+#pos10# ctrl+Q  #pos70#: quit application
+; #pos10# ctrl+R  #pos70#: Repaint display
+#pos10# ctrl+S  #pos70#: save map
+#pos10# ctrl+U  #pos70#: Show info about unit
 #pos10# ctrl+V  #pos70#: Paste from clipboard
 #pos10# ctrl+W  #pos70#: Set selected weather to whole map
+#pos10# ctrl+X  #pos70#: Cut to clipboard
+
+#pos10# Alt+Enter  #pos70#: toggle fullscreen
+
+
 #pos10# Esc  #pos70#: Exit
 
 
@@ -158,7 +168,7 @@ ADVANCED STRATEGIC COMMAND
 #color000#
 Map Editor
 
-(C) 1994 - 2003 by Marc Schellenberger and Martin Bickel.
+(C) 1994 - 2007 by Martin Bickel and Marc Schellenberger
 
 See README.TXT for details.
 

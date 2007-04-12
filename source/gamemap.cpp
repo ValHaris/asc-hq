@@ -1,5 +1,5 @@
 /*! \file gamemap.cpp
-    \brief Implementation of THE central asc class: tmap 
+    \brief Implementation of THE central asc class: GameMap
 */
 
 /***************************************************************************
@@ -28,108 +28,267 @@
 #include "typen.h"
 #include "vehicletype.h"
 #include "buildingtype.h"
-#include "spfst.h"
-#include "dlg_box.h"
+#include "gamemap.h"
 #include "dialog.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
-
-#ifdef sgmain
- #include "network.h"
- #include "gameoptions.h"
- #include "resourcenet.h"
-#endif
+// #include "graphics/blitter.h"
+#include "overviewmapimage.h"
+#include "gameeventsystem.h"
+#include "spfst.h"
 
 
-const char* MineNames[cminenum]  = {"antipersonnel mine", "antitank mine", "antisub mine", "antiship mine"};
-const int MineBasePunch[cminenum]  = { 60, 120, 180, 180 };
+RandomGenerator::RandomGenerator(int seedValue){
+
+}
+
+RandomGenerator::~RandomGenerator(){
+
+
+}
+
+unsigned int RandomGenerator::getPercentage(){
+  return getRandomValue(100);
+}
+
+unsigned int RandomGenerator::getRandomValue(int limit) {
+  return getRandomValue(0, limit); 
+}
+
+unsigned int RandomGenerator::getRandomValue (int lowerLimit, int upperLimit){
+   if(upperLimit == 0) {
+        return 1;
+   }
+   int random_integer = rand();
+   random_integer = random_integer % upperLimit;
+   return (lowerLimit + random_integer);
+}
 
 
 
 
-tmap :: tmap ( void )
+OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initialized(false), secondMapReady(false), completed(false), connected(false), x(0),y(0)
+{
+}
+
+void OverviewMapHolder :: connect()
+{
+   if ( !connected ) {
+      idleEvent.connect ( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
+      connected = true;
+   }
+}
+
+
+SigC::Signal0<void> OverviewMapHolder::generationComplete;
+
+bool OverviewMapHolder :: idleHandler( )
+{
+   int t = ticker;
+   while ( !completed && (t + 5 > ticker ))
+      drawNextField( true );
+   return true;
+}
+
+
+bool OverviewMapHolder::updateField( const MapCoordinate& pos )
+{
+   SPoint imgpos = OverviewMapImage::map2surface( pos );
+
+   tfield* fld = map.getField( pos );
+   VisibilityStates visi = fieldVisibility( fld, map.getPlayerView(), &map );
+   if ( visi == visible_not ) {
+      OverviewMapImage::fill ( overviewMapImage, imgpos, 0xff545454 );
+   } else {
+      if ( fld->building && fieldvisiblenow( fld, map.getPlayerView(), &map) )
+         OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
+      else {
+
+         int w = fld->getweather();
+         fld->typ->getQuickView()->blit( overviewMapImage, imgpos );
+         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+            if ( visi > visible_ago || i->typ->visibleago )
+               i->getOverviewMapImage( w )->blit( overviewMapImage, imgpos );
+
+         if ( fld->vehicle && fieldvisiblenow( fld, map.getPlayerView()) )
+            OverviewMapImage::fillCenter ( overviewMapImage, imgpos, map.player[fld->vehicle->getOwner()].getColor() );
+
+         if ( visi == visible_ago )
+            OverviewMapImage::lighten( overviewMapImage, imgpos, 0.7 ); 
+
+      }
+
+   }
+   return true;
+}
+
+void OverviewMapHolder::drawNextField( bool signalOnCompletion )
+{
+   if ( !init() )
+      return;
+      
+   if ( x == map.xsize ) {
+      x = 0;
+      ++y;
+   }   
+   if ( y < map.ysize ) {
+      if ( !updateField( MapCoordinate(x,y)))
+         return;
+      
+      ++x;
+   }
+   if ( y == map.ysize ) {
+      completed = true;
+      if ( signalOnCompletion )
+         generationComplete();
+
+      completedMapImage = overviewMapImage.Duplicate();
+      secondMapReady = true;
+   }
+}
+
+Surface OverviewMapHolder::createNewSurface()
+{
+   Surface s;
+   if ( map.xsize > 0 && map.ysize > 0 ) {
+      s =  Surface::createSurface( (map.xsize+1) * 6, 4 + map.ysize * 2 , 32, 0 );
+   }
+   return s;
+}
+
+bool OverviewMapHolder::init()
+{
+   if ( map.ysize <= 0 || map.xsize <= 0 )
+      return false;
+
+   if ( !initialized ) {
+      overviewMapImage = createNewSurface();
+      initialized = true;
+   }
+   return initialized;
+}   
+
+void OverviewMapHolder::resetSize()
+{
+   initialized = false;
+}
+
+
+const Surface& OverviewMapHolder::getOverviewMap( bool complete )
+{
+   bool initialized = init();
+   assert( initialized );
+   if ( complete )
+      while ( !completed )
+         drawNextField( false );
+
+   if(  secondMapReady )
+      return completedMapImage;
+   else
+      return overviewMapImage;
+}
+
+void OverviewMapHolder::startUpdate()
+{
+   completed = false;
+   x = 0;
+   y = 0;
+}
+
+void OverviewMapHolder::clear(bool allImages )
+{
+   if ( !initialized )
+      return;
+   
+   overviewMapImage.Fill( Surface::transparent );
+   if ( allImages ) {
+      if ( completedMapImage.valid() )
+         completedMapImage.Fill( Surface::transparent );
+      secondMapReady = false;
+   }
+
+   startUpdate();
+}
+
+void OverviewMapHolder::clearmap( GameMap* actmap )
+{
+   if ( actmap )
+      actmap->overviewMapHolder.clear();
+}
+
+
+GameMap :: GameMap ( void )
+      : overviewMapHolder( *this ), network(NULL)
 {
    randomSeed = rand();
+   dialogsHooked = false;
 
    eventID = 0;
 
-   __mapDestruction = false;
+   state = Normal;
+
    int i;
 
    xsize = 0;
    ysize = 0;
-   xpos = 0;
-   ypos = 0;
    field = NULL;
-   codeword[0] = 0;
-   campaign = NULL;
 
    actplayer = -1;
    time.abstime = 0;
 
    _resourcemode = 0;
 
-   for ( i = 0; i < 8; i++ )
-      for ( int j = 0; j < 8; j++ )
-          alliances[i][j] = cawar;
-
-   for ( i = 0; i< 9; i++ ) {
-      player[i].ai = NULL;
-
+   for ( i = 0; i < 9; ++i ) {
+      player[i].setParentMap ( this, i );
       if ( i == 0 )
          player[i].stat = Player::human;
       else
-         player[i].stat = Player::off;
-
-      player[i].queuedEvents = 0;
-      if ( i < 8 ) {
-         player[i].humanname = "human ";
-         player[i].humanname += strrr( i );
-         player[i].computername = "computer ";
-         player[i].computername += strrr( i );
-      } else
-         player[i].humanname = player[i].computername = "neutral";
-
-
+         player[i].stat = Player::computer;
+      
       player[i].research.chainToMap ( this, i );
-      player[i].ASCversion = 0;
    }
-
+          
    unitnetworkid = 0;
 
    levelfinished = 0;
 
-   network = 0;
-
-   for ( i = 0; i < 8; i++ ) {
-      cursorpos.position[i].cx = 0;
-      cursorpos.position[i].sx = 0;
-      cursorpos.position[i].cy = 0;
-      cursorpos.position[i].sy = 0;
-   }
-
    messageid = 0;
-   for ( i = 0; i< 8; i++ )
-      alliances_at_beginofturn[i] = 0;
 
-   shareview = NULL;
-   continueplaying = 0;
+   continueplaying = false;
    replayinfo = NULL;
-   playerView = -1;
+   playerView = 0;
    lastjournalchange.abstime = 0;
-   ellipse = 0;
    graphicset = 0;
    gameparameter_num = 0;
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
 
+   // sigPlayerUserInteractionBegins.connect( SigC::bind( SigC::slot( GameMap::setPlayerMode ), NormalManual));
+   // sigPlayerUserInteractionEnds.connect( SigC::bind( SigC::slot( GameMap::setPlayerMode ), NormalAuto));
+
+
+#ifdef WEATHERGENERATOR
+   weatherSystem  = new WeatherSystem(this, 1, 0.03);
+#endif
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
 }
 
+GameMap::Campaign::Campaign()
+{
+   avail = false;
+   id = 0;
+   directaccess = true;
+}
 
-const int tmapversion = 8;
+void GameMap :: guiHooked()
+{
+   overviewMapHolder.connect();
+   dialogsHooked = true;
+}
 
-void tmap :: read ( tnstream& stream )
+const int tmapversion = 19;
+
+void GameMap :: read ( tnstream& stream )
 {
    int version;
    int i;
@@ -140,18 +299,26 @@ void tmap :: read ( tnstream& stream )
    if ( xsize == 0xfffe  && ysize == 0xfffc ) {
      version = stream.readInt();
      if ( version > tmapversion )
-        throw tinvalidversion ( "tmap", tmapversion, version );
+        throw tinvalidversion ( "GameMap", tmapversion, version );
 
      xsize = stream.readInt();
      ysize = stream.readInt();
    } else
       version = 1;
 
-   xpos = stream.readWord();
-   ypos = stream.readWord();
+   stream.readWord(); // xpos
+   stream.readWord(); // ypos
    stream.readInt(); // dummy
    field = NULL;
-   stream.readdata ( codeword, 11 ); // endian ok !
+
+   if ( version <= 13 ) {
+      char buf[11]; 
+      stream.readdata ( buf, 11 );
+      buf[10] = 0;
+      codeWord = buf;
+   } else {
+      codeWord = stream.readString();
+   }
 
    if ( version < 2 )
       ___loadtitle = stream.readInt();
@@ -160,22 +327,30 @@ void tmap :: read ( tnstream& stream )
 
    bool loadCampaign = stream.readInt();
    actplayer = stream.readChar();
-   time.abstime = stream.readInt();
+   time.abstime = stream.readInt();   
+   if(version < 9 || version >= 17){
+     stream.readChar();
+     weather.windSpeed = stream.readChar();
+     weather.windDirection = stream.readChar();
+   }
 
-   weather.fog = stream.readChar();
-   weather.windSpeed = stream.readChar();
-   weather.windDirection  = stream.readChar();
+   if ( version >= 11 ) 
+      if ( stream.readInt() != 0x12345678 )
+         throw ASCmsgException("marker not matched when loading GameMap");
+   
+      
    for ( int j = 0; j < 4; j++ )
       stream.readChar(); // was: different wind in different altitudes
-
    for ( i = 0; i< 12; i++ )
       stream.readChar(); // dummy
 
    _resourcemode = stream.readInt();
 
-   for ( i = 0; i < 8; i++ )
-      for ( int j = 0; j < 8; j++ )
-         alliances[j][i] = stream.readChar();
+   int alliances[8][8];
+   if ( version <= 10 )
+      for ( i = 0; i < 8; i++ )
+         for ( int j = 0; j < 8; j++ )
+            alliances[j][i] = stream.readChar();
 
    int dummy_playername[9];
    for ( i = 0; i< 9; i++ ) {
@@ -188,7 +363,7 @@ void tmap :: read ( tnstream& stream )
          player[i].research.read ( stream );
 
       player[i].ai = (BaseAI*)stream.readInt() ;
-      player[i].stat = Player::tplayerstat ( stream.readChar() );
+      player[i].stat = Player::PlayerStatus ( stream.readChar() );
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();
       player[i].passwordcrc.read ( stream );
@@ -200,7 +375,30 @@ void tmap :: read ( tnstream& stream )
          player[i].ASCversion = stream.readInt();
       else
          player[i].ASCversion = 0;
+         
+      if ( version >= 9 )
+         player[i].cursorPos.read( stream );
+         
+      if ( version >= 11 ) 
+         player[i].diplomacy.read( stream );
+      else {
+         if ( i < 8 ) // no alliances for neutral 'player'
+            for ( int j = 0; j< 8; ++j ) {
+               if ( alliances[i][j] == 0 ) 
+                  player[i].diplomacy.setState( j, PEACE, false ); 
+               else
+                  player[i].diplomacy.setState( j, WAR, false ); 
+            }
+      }
+      
+      if ( version >= 12 )
+         player[i].email = stream.readString();
    }
+   
+   if ( version >= 11 ) 
+      if ( stream.readInt() != 0x12345678 )
+         throw ASCmsgException("marker not matched when loading GameMap");
+         
 
 
 
@@ -214,19 +412,30 @@ void tmap :: read ( tnstream& stream )
 
    unitnetworkid = stream.readInt();
    levelfinished = stream.readChar();
-   network = (pnetwork)stream.readInt();
+   
    bool alliance_names_not_used_any_more[8];
-   for ( i = 0; i < 8; i++ )
-      alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
-
-   for ( i = 0; i< 8; i++ ) {
-      cursorpos.position[i].cx = stream.readWord();
-      cursorpos.position[i].sx = stream.readWord();
-      cursorpos.position[i].cy = stream.readWord();
-      cursorpos.position[i].sy = stream.readWord();
+   if ( version <= 9 ) {
+      ___loadLegacyNetwork  = stream.readInt();
+      for ( i = 0; i < 8; i++ )
+         alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
+   } else {
+      ___loadLegacyNetwork = false;
+      for ( i = 0; i < 8; i++ )
+         alliance_names_not_used_any_more[i] = 0;
    }
 
-   stream.readInt(); // loadtribute
+   if ( version <= 12 ) {
+      for ( i = 0; i< 8; i++ ) {
+         stream.readWord(); // cursorpos.position[i].cx = 
+         stream.readWord(); // cursorpos.position[i].sx = 
+         stream.readWord(); // cursorpos.position[i].cy = 
+         stream.readWord(); // cursorpos.position[i].sy = 
+      }
+   }
+
+   if ( version <= 9 )
+      stream.readInt(); // loadtribute
+      
    __loadunsentmessage = stream.readInt();
    __loadmessages = stream.readInt();
 
@@ -253,11 +462,14 @@ void tmap :: read ( tnstream& stream )
 
    supervisorpasswordcrc.read ( stream );
 
-   for ( i = 0; i < 8; i++ )
-      alliances_at_beginofturn[i] = stream.readChar();
+   if ( version <= 10 )
+      for ( i = 0; i < 8; i++ )
+         stream.readChar(); // alliances_at_beginofturn[i] = 
 
-   stream.readInt(); // was objectcrc = (pobjectcontainercrcs)
-   bool load_shareview = stream.readInt();
+   stream.readInt(); // was objectcrc = (Object*containercrcs)
+   bool load_shareview = false;
+   if ( version <= 10 )
+      load_shareview = stream.readInt();
 
    continueplaying = stream.readInt();
    __loadreplayinfo =  stream.readInt();
@@ -270,7 +482,6 @@ void tmap :: read ( tnstream& stream )
    int preferredfilenames = stream.readInt();
 
    bool __loadEllipse = stream.readInt();
-   ellipse = NULL;
    graphicset = stream.readInt();
    gameparameter_num = stream.readInt();
 
@@ -286,27 +497,37 @@ void tmap :: read ( tnstream& stream )
    for ( i = 0; i < 8; i++ )
        _oldgameparameter[i] = stream.readInt();
 
-// return;
+   if ( version >= 11 ) 
+      if ( stream.readInt() != 0x12345678 )
+         throw ASCmsgException("marker not matched when loading GameMap");
 
 /////////////////////
 // Here initmap was called
 /////////////////////
 
 
+
     if ( ___loadtitle )
        maptitle = stream.readString();
 
     if ( loadCampaign ) {
-       campaign = new Campaign;
-       campaign->id = stream.readWord();
-       campaign->prevmap = stream.readWord();
-       campaign->player = stream.readChar();
-       campaign->directaccess = stream.readChar();
-       for ( int d = 0; d < 21; d++ )
-          stream.readChar(); // dummy
+       if ( version <= 14 ) {
+         campaign.id = stream.readWord();
+         stream.readWord(); // campaign->prevmap 
+         stream.readChar(); // campaign->player 
+         campaign.directaccess = stream.readChar();
+         campaign.avail = true;
+         for ( int d = 0; d < 21; d++ )
+            stream.readChar(); // dummy
+       } else {
+          campaign.id = stream.readInt();
+          campaign.directaccess = stream.readChar();
+          if ( version > 15 )
+             campaign.avail = stream.readInt();
+       }
     }
 
-    for (char w=0; w<9 ; w++ ) {
+    for ( int w=0; w<9 ; w++ ) {
        if (dummy_playername[w] )
           stream.readString();
 
@@ -314,10 +535,10 @@ void tmap :: read ( tnstream& stream )
 
 
        if ( exist_humanplayername[w] )
-          player[w].humanname = stream.readString();
+          player[w].setName( stream.readString() );
 
        if ( exist_computerplayername[w] )
-          player[w].computername = stream.readString();
+          stream.readString();
 
     } /* endfor */
 
@@ -333,11 +554,17 @@ void tmap :: read ( tnstream& stream )
 
     stream.readInt();
 
-    if ( load_shareview ) {
-       shareview = new tmap::Shareview;
-       shareview->read ( stream );
-    } else
-       shareview = NULL;
+    if ( load_shareview && version <= 10 ) {
+    
+      for ( int i = 0; i < 8; i++ )
+         for ( int j =0; j < 8; j++ ) {
+            int sv = stream.readChar();
+            if ( sv )
+               player[i].diplomacy.setState( j, PEACE_SV, false );
+         }      
+               
+      stream.readInt();
+    } 
 
     if ( preferredfilenames ) {
        int p;
@@ -370,10 +597,11 @@ void tmap :: read ( tnstream& stream )
     }
 
     if ( __loadEllipse ) {
-       ellipse = new EllipseOnScreen;
-       ellipse->read( stream );
-    } else
-       ellipse = NULL;
+       for ( int i = 0; i < 5; ++i )
+          stream.readInt();
+       stream.readFloat();
+       stream.readInt();
+    }
 
     int orggpnum = gameparameter_num;
     gameparameter_num = 0;
@@ -423,10 +651,16 @@ void tmap :: read ( tnstream& stream )
 
     if ( version >= 8 )
        randomSeed = stream.readInt();
+       
+    if ( version >= 12 ) {
+      bool nw = stream.readInt();
+      if ( nw ) 
+         network = GameTransferMechanism::read( stream );         
+    }
 }
 
 
-void tmap :: write ( tnstream& stream )
+void GameMap :: write ( tnstream& stream )
 {
    int i;
 
@@ -437,19 +671,23 @@ void tmap :: write ( tnstream& stream )
    stream.writeInt( xsize );
    stream.writeInt( ysize );
 
-   stream.writeWord( xpos );
-   stream.writeWord( ypos );
+   stream.writeWord( 0 );
+   stream.writeWord( 0 );
    stream.writeInt (1); // dummy
-   stream.writedata ( codeword, 11 );
+   stream.writeString ( codeWord );
 
-   stream.writeInt( campaign != NULL);
+   
+   
+   stream.writeInt( campaign.avail  );
    stream.writeChar( actplayer );
    stream.writeInt( time.abstime );
-
-   stream.writeChar( weather.fog );
+   
+   stream.writeChar(0);
    stream.writeChar( weather.windSpeed );
    stream.writeChar( weather.windDirection );
-
+   
+   stream.writeInt( 0x12345678 );
+   
    for  ( i= 0; i < 4; i++ )
       stream.writeChar( 0 );
 
@@ -457,10 +695,6 @@ void tmap :: write ( tnstream& stream )
       stream.writeChar( 0 ); // dummy
 
    stream.writeInt( _resourcemode );
-
-   for ( i = 0; i < 8; i++ )
-      for ( int j = 0; j < 8; j++ )
-         stream.writeChar( alliances[j][i] );
 
    for ( i = 0; i< 9; i++ ) {
       stream.writeChar( player[i].existanceAtBeginOfTurn );
@@ -477,40 +711,30 @@ void tmap :: write ( tnstream& stream )
       stream.writeInt( 1 );
       stream.writeInt( 1 );
       stream.writeInt ( player[i].ASCversion );
+      player[i].cursorPos.write( stream );
+      player[i].diplomacy.write( stream );
+      stream.writeString ( player[i].email );
    }
 
+   stream.writeInt( 0x12345678 );
+   
    stream.writeInt( unitnetworkid );
    stream.writeChar( levelfinished );
-   stream.writeInt( network != NULL );
-   for ( i = 0; i < 8; i++ )
-      stream.writeInt( 0 ); // dummy
 
-   for ( i = 0; i< 8; i++ ) {
-      stream.writeWord( cursorpos.position[i].cx );
-      stream.writeWord( cursorpos.position[i].sx );
-      stream.writeWord( cursorpos.position[i].cy );
-      stream.writeWord( cursorpos.position[i].sy );
-   }
-
-   stream.writeInt( -1 );
    stream.writeInt( 1 );
    stream.writeInt( !messages.empty() );
 
    stream.writeInt( messageid );
 
    for ( i = 0; i < 8; i++ )
-      stream.writeInt( !player[i].humanname.empty() );
+      stream.writeInt( 1 );
 
    for ( i = 0; i < 8; i++ )
-      stream.writeInt( !player[i].computername.empty() );
+      stream.writeInt( 0 );
 
    supervisorpasswordcrc.write ( stream );
 
-   for ( i = 0; i < 8; i++ )
-      stream.writeChar( alliances_at_beginofturn[i] );
-
    stream.writeInt( 0 );
-   stream.writeInt( shareview != NULL );
 
    stream.writeInt( continueplaying );
    stream.writeInt( replayinfo != NULL );
@@ -521,7 +745,7 @@ void tmap :: write ( tnstream& stream )
       bi_resource[i].write ( stream );
 
    stream.writeInt( 1 );
-   stream.writeInt( ellipse != NULL );
+   stream.writeInt( 0 ); // was: ellipse
    stream.writeInt( graphicset );
    stream.writeInt( gameparameter_num );
 
@@ -537,6 +761,9 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt( getgameparameter(GameParameter(i)) );
 
 
+   stream.writeInt( 0x12345678 );
+
+       
 ///////////////////
 // second part
 //////////////////
@@ -545,23 +772,14 @@ void tmap :: write ( tnstream& stream )
 
    stream.writeString( maptitle );
 
-   if ( campaign ) {
-      stream.writeWord( campaign->id );
-      stream.writeWord( campaign->prevmap );
-      stream.writeChar( campaign->player );
-      stream.writeChar( campaign->directaccess );
-      for ( int d = 0; d < 21; d++ )
-         stream.writeChar(0); // dummy
+   if ( campaign.avail ) {
+      stream.writeInt( campaign.id );
+      stream.writeChar( campaign.directaccess );
+      stream.writeInt( campaign.avail );
    }
 
-   for (int w=0; w<8 ; w++ ) {
-
-      if ( !player[w].humanname.empty() )
-         stream.writeString ( player[w].humanname );
-
-      if ( !player[w].computername.empty() )
-         stream.writeString ( player[w].computername );
-   }
+   for (int w=0; w<8 ; w++ ) 
+      stream.writeString ( player[w].getName() );
 
    if ( !tribute.empty() ) {
        stream.writeInt ( -1 );
@@ -570,9 +788,6 @@ void tmap :: write ( tnstream& stream )
        stream.writeInt ( 0 );
 
     stream.writeInt ( 0 );
-
-    if ( shareview )
-       shareview->write ( stream );
 
     int p;
     for ( p = 0; p < 8; p++ )
@@ -592,9 +807,6 @@ void tmap :: write ( tnstream& stream )
        stream.writeString ( preferredFileNames.savegame[k] );
     }
 
-
-    if ( ellipse )
-       ellipse->write( stream );
 
     for ( int ii = 0 ; ii < gameparameter_num; ii++ )
        stream.writeInt ( game_parameter[ii] );
@@ -626,12 +838,42 @@ void tmap :: write ( tnstream& stream )
     for ( Events::iterator i = events.begin(); i != events.end(); ++i )
        (*i)->write( stream );
 
-    if ( tmapversion >= 8 )
-       stream.writeInt( randomSeed );
+    stream.writeInt( randomSeed );
+
+    if ( network ) {
+      stream.writeInt( 1 );
+      network->write( stream );
+    } else
+      stream.writeInt( 0 );
 }
 
 
-void tmap :: cleartemps( int b, int value )
+
+
+MapCoordinate& GameMap::getCursor()
+{
+   #ifdef sgmain
+   if ( actplayer >= 0 ) {
+      if ( !player[actplayer].cursorPos.valid() ) {
+         bool found = false;
+         for ( int y = 0; y < ysize && !found; ++y )
+            for ( int x = 0; x < xsize  && !found; ++x )
+               if ( getField(x,y)->getContainer() )
+                  if ( getField(x,y)->getContainer()->getOwner() == actplayer ) {
+                     player[actplayer].cursorPos = getField(x,y)->getContainer()->getPosition();
+                     found = true;
+                  }
+      }
+      return player[actplayer].cursorPos;
+   } else
+      return player[0].cursorPos;
+#else
+   return player[8].cursorPos;
+   #endif
+}
+
+
+void GameMap :: cleartemps( int b, int value )
 {
   if ( xsize <= 0 || ysize <= 0)
      return;
@@ -653,22 +895,28 @@ void tmap :: cleartemps( int b, int value )
      }
 }
 
-void tmap :: allocateFields ( int x, int y )
+void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
 {
    field = new tfield[x*y];
-   for ( int i = 0; i < x*y; i++ )
+   for ( int i = 0; i < x*y; i++ ) {
+      if ( terrain ) {
+         field[i].typ = terrain;
+         field[i].setparams();
+      }
       field[i].setMap ( this );
+   }
    xsize = x;
    ysize = y;
+   overviewMapHolder.connect();
 }
 
 
-void tmap :: calculateAllObjects ( void )
+void GameMap :: calculateAllObjects ( void )
 {
    calculateallobjects();
 }
 
-pfield  tmap :: getField(int x, int y)
+tfield*  GameMap :: getField(int x, int y)
 {
    if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
       return NULL;
@@ -676,13 +924,29 @@ pfield  tmap :: getField(int x, int y)
       return (   &field[y * xsize + x] );
 }
 
-pfield  tmap :: getField(const MapCoordinate& pos )
+tfield*  GameMap :: getField(const MapCoordinate& pos )
 {
    return getField ( pos.x, pos.y );
 }
 
+int   GameMap :: getPlayerView() const
+{
+#ifdef karteneditor
+   return -1;
+#else
+   return playerView;
+#endif
+}
 
-bool tmap :: isResourceGlobal ( int resource )
+
+void  GameMap :: setPlayerView( int player )
+{
+   playerView = player;
+}
+
+
+
+bool GameMap :: isResourceGlobal ( int resource )
 {
    if ( _resourcemode == 1 ) { // BI-Mode
       if ( resource == 1 ) // material
@@ -705,18 +969,18 @@ bool tmap :: isResourceGlobal ( int resource )
    }
 }
 
-int tmap :: getgameparameter ( GameParameter num )
+int GameMap :: getgameparameter ( GameParameter num )
 {
   if ( game_parameter && num < gameparameter_num ) {
      return game_parameter[num];
   } else
      if ( num < gameparameternum )
-        return gameparameterdefault[ num ];
+        return gameParameterSettings[num].defaultValue;
      else
         return 0;
 }
 
-void tmap :: setgameparameter ( GameParameter num, int value )
+void GameMap :: setgameparameter ( GameParameter num, int value )
 {
    if ( game_parameter ) {
      if ( num < gameparameter_num )
@@ -728,7 +992,7 @@ void tmap :: setgameparameter ( GameParameter num, int value )
            game_parameter[i] = oldparam[i];
         for ( int j = gameparameter_num; j < num; j++ )
            if ( j < gameparameternum )
-              game_parameter[j] = gameparameterdefault[j];
+              game_parameter[j] = gameParameterSettings[j].defaultValue;
            else
               game_parameter[j] = 0;
         game_parameter[num] = value;
@@ -739,7 +1003,7 @@ void tmap :: setgameparameter ( GameParameter num, int value )
        game_parameter = new int[num+1];
        for ( int j = 0; j < num; j++ )
           if ( j < gameparameternum )
-             game_parameter[j] = gameparameterdefault[j];
+             game_parameter[j] = gameParameterSettings[j].defaultValue;
           else
              game_parameter[j] = 0;
        game_parameter[num] = value;
@@ -747,7 +1011,7 @@ void tmap :: setgameparameter ( GameParameter num, int value )
    }
 }
 
-void tmap :: setupResources ( void )
+void GameMap :: setupResources ( void )
 {
    for ( int n = 0; n< 8; n++ ) {
       bi_resource[n].energy = 0;
@@ -767,41 +1031,22 @@ void tmap :: setupResources ( void )
 }
 
 
-const ASCString& tmap :: Player :: getName( )
-{
-   static ASCString off = "off";
-   switch ( stat ) {
-     case 0: return humanname;
-     case 1: return computername;
-     default: return off;
-   }
-}
 
 
-const ASCString& tmap :: getPlayerName ( int playernum )
-{
-   if ( playernum >= 8 )
-      playernum /= 8;
-
-   return player[playernum].getName();
-}
-
-
-
-int tmap :: eventpassed( int saveas, int action, int mapid )
+int GameMap :: eventpassed( int saveas, int action, int mapid )
 {
    return eventpassed ( (action << 16) | saveas, mapid );
 }
 
 
 
-int tmap :: eventpassed( int id, int mapid )
+int GameMap :: eventpassed( int id, int mapid )
 {
    return 0;
 }
 
 
-pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
+Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
 {
    if ( !eht )
       return NULL;
@@ -809,12 +1054,12 @@ pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
       if ( eht->networkid == nwid )
          return eht;
       else
-         for ( int i = 0; i < 32; i++ )
-            if ( eht->loading[i] )
-               if ( eht->loading[i]->networkid == nwid )
-                  return eht->loading[i];
+         for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
+            if ( *i ) 
+               if ( (*i)->networkid == nwid )
+                  return *i;
                else {
-                  pvehicle ld = getUnit ( eht->loading[i], nwid );
+                  Vehicle* ld = getUnit ( *i, nwid );
                   if ( ld )
                      return ld;
                }
@@ -822,7 +1067,7 @@ pvehicle tmap :: getUnit ( pvehicle eht, int nwid )
    }
 }
 
-pvehicle tmap :: getUnit ( int nwid )
+Vehicle* GameMap :: getUnit ( int nwid )
 {
    VehicleLookupCache::iterator i = vehicleLookupCache.find( nwid );
    if ( i != vehicleLookupCache.end() )
@@ -841,37 +1086,30 @@ pvehicle tmap :: getUnit ( int nwid )
 }
 
 
-pvehicle tmap :: getUnit ( int x, int y, int nwid )
+Vehicle* GameMap :: getUnit ( int x, int y, int nwid )
 {
-   pfield fld  = getField ( x, y );
+   tfield* fld  = getField ( x, y );
    if ( !fld )
       return NULL;
 
-   if ( !fld->vehicle )
-      if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ ) {
-            pvehicle ld = getUnit ( fld->building->loading[i], nwid );
-            if ( ld )
-               return ld;
-         }
-         return NULL;
-      } else
-         return NULL;
-   else
-      if ( fld->vehicle->networkid == nwid )
+   if ( fld->vehicle && fld->vehicle->networkid == nwid )
          return fld->vehicle;
-      else
-         return getUnit ( fld->vehicle, nwid );
+         
+   if ( fld->getContainer() )
+      return fld->getContainer()->findUnit( nwid );
+      
+   return NULL;
+     
 }
 
-ContainerBase* tmap::getContainer ( int nwid )
+ContainerBase* GameMap::getContainer ( int nwid )
 {
    if ( nwid > 0 )
       return getUnit(nwid);
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      pfield fld = getfield(x,y);
+      tfield* fld = getfield(x,y);
       if ( !fld )
          return NULL;
 
@@ -879,225 +1117,60 @@ ContainerBase* tmap::getContainer ( int nwid )
    }
 }
 
-bool tmap :: compareResources( tmap* replaymap, int player, ASCString* log )
+
+
+void GameMap::beginTurn()
 {
-  #ifdef sgmain   
-   ASCString s;
-   bool diff  = false;
-   for ( int r = 0; r < 3; ++r ) {
-      if ( isResourceGlobal( r )) {
-         if ( bi_resource[player].resource(r) != replaymap-> bi_resource[player].resource(r) ) {
-            diff = true;
-            if ( log ) {
-               s.format ( "Global resource mismatch: %d %s available after replay, but %d available in actual map\n", replaymap-> bi_resource[player].resource(r), resourceNames[r], bi_resource[player].resource(r) );
-               *log += s;
-            }
+   if ( !player[actplayer].exist() )
+      if ( replayinfo )
+         if ( replayinfo->guidata[actplayer] ) {
+            delete replayinfo->guidata[actplayer];
+            replayinfo->guidata[actplayer] = NULL;
          }
-      } else {
-         GetConnectedBuildings::BuildingContainer cb;
-         for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
-            Building* b1 = *b;
-            ContainerBase* b2 = replaymap->getContainer( b1->getIdentification() );
-            if ( !b1 || !b2 ) {
-               if ( log ) {
-                  s.format ( "Building missing! \n");
-                  *log += s;
-               }
-            } else {
-               if ( find ( cb.begin(), cb.end(), b1 ) == cb.end()) {
-                  int ab1 = b1->getResource( maxint, r, true);
-                  int ab2 = b2->getResource( maxint, r, true);
-                  if ( ab1 != ab2 ) {
-                     diff = true;
-                     if ( log ) {
-                        s.format ( "Building (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", b1->getPosition().x, b1->getPosition().y, ab1, resourceNames[r], ab2 );
-                        *log += s;
-                     }
-                  }
-                  cb.push_back ( b1 );
-                  GetConnectedBuildings::BuildingContainer cbl;
-                  GetConnectedBuildings gcb ( cbl, b1->getMap(), r );
-                  gcb.start ( b1->getPosition().x, b1->getPosition().y );
-                  cb.insert ( cb.end(), cbl.begin(), cbl.end() );
-               }
-            }
-         }
-      }
-      for ( Player::VehicleList::iterator v = this->player[player].vehicleList.begin(); v != this->player[player].vehicleList.end(); ++v ) {
-         Vehicle* v1 = *v;
-         Vehicle* v2 = replaymap->getUnit( v1->networkid );
-         if ( !v1 || !v2 ) {
-            if ( log ) {
-               s.format ( "Vehicle missing! \n");
-               *log += s;
-            }
-         } else {
-            int av1 = v1->getResource( maxint, r, true );
-            int av2 = v2->getResource( maxint, r, true );
-            if ( av1 != av2 ) {
-               diff = true;
-               if ( log ) {
-                  s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
-                  *log += s;
-               }
-            }
-         }
-      }
+            
+   if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
+      sigPlayerTurnBegins( player[actplayer] );
+      
+//      if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
+//         sigPlayerUserInteractionEnds( player[actplayer] );
 
    }
-   if ( this->player[player].vehicleList.size() != replaymap->player[player].vehicleList.size() ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "The number of units differ. Replay: %d ; actual map: %d", replaymap->player[player].vehicleList.size(), this->player[player].vehicleList.size());
-         *log += s;
-      }
-   }
-   if ( this->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "The number of buildings differ. Replay: %d ; actual map: %d", replaymap->player[player].buildingList.size(), this->player[player].buildingList.size());
-         *log += s;
-      }
-   }
-
-   if ( this->player[player].research.progress != replaymap->player[player].research.progress ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "Research points mismatch! Replay: %d ; actual map: %d", replaymap->player[player].research.progress, this->player[player].research.progress);
-         *log += s;
-      }
-   }
-
-   sort ( this->player[player].research.developedTechnologies.begin(), this->player[player].research.developedTechnologies.end() );
-   sort ( replaymap->player[player].research.developedTechnologies.begin(), replaymap->player[player].research.developedTechnologies.end() );
-   if ( replaymap->player[player].research.developedTechnologies.size() != this->player[player].research.developedTechnologies.size() ) {
-      diff = true;
-      if ( log ) {
-         s.format ( "Number of developed technologies differ !\n" );
-         *log += s;
-      }
-   } else {
-      for ( int i = 0; i < replaymap->player[player].research.developedTechnologies.size(); ++i )
-         if ( replaymap->player[player].research.developedTechnologies[i] != this->player[player].research.developedTechnologies[i] ) {
-            diff = true;
-            if ( log ) {
-               s.format ( "Different technologies developed !\n" );
-               *log += s;
-            }
-         }
-   }
-
-   for ( Player::BuildingList::iterator b = this->player[player].buildingList.begin(); b != this->player[player].buildingList.end(); ++b ) {
-      Building* b1 = *b;
-      Building* b2 = dynamic_cast<Building*>(replaymap->getContainer( b1->getIdentification() ));
-      if ( !b1 || !b2 ) {
-         if ( log ) {
-            s.format ( "Building missing! \n");
-            *log += s;
-         }
-      } else {
-         bool mismatch = false;
-         for ( int i = 0; i < 32; ++i )
-            if ( b1->production[i] ) {
-               bool found = false;
-               for ( int j = 0; j < 32; ++j)
-                  if ( b2->production[j] == b1->production[i] )
-                     found = true;
-               if ( !found)
-                  mismatch = true;
-            }
-
-         for ( int j = 0; j < 32; ++j )
-            if ( b2->production[j] ) {
-               bool found = false;
-               for ( int i = 0; i < 32; ++i)
-                  if ( b1->production[i] == b2->production[j] )
-                     found = true;
-               if ( !found)
-                  mismatch = true;
-            }
-
-         if ( mismatch ) {
-            diff = true;
-            if ( log ) {
-               s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
-               *log += s;
-            }
-         }
-      }
-   }
-
-   return diff;
-   #else
-   return true;
-   #endif
 }
 
 
-void tmap::endTurn()
+void GameMap::endTurn()
 {
-   cursorpos.position[actplayer].cx = getxpos();
-   cursorpos.position[actplayer].cy = getypos();
-   cursorpos.position[actplayer].sx = xpos;
-   cursorpos.position[actplayer].sy = ypos;
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
    pt.turn = time.turn();
    ::time ( &pt.date );
    player[actplayer].playTime.push_back ( pt );
+   
+   sigPlayerTurnEnds( player[actplayer] );
 
-   for ( tmap::Player::BuildingList::iterator b = player[actplayer].buildingList.begin(); b != player[actplayer].buildingList.end(); ++b )
-      (*b)->endTurn();
+   for ( int i = 0; i < 9; ++i )
+     for ( Player::BuildingList::iterator v = player[i].buildingList.begin(); v != player[i].buildingList.end(); ++v ) {
+         if ( i == actplayer )
+            (*v)->endOwnTurn();
+         (*v)->endAnyTurn();
+     }
 
-   tmap::Player::VehicleList toRemove;
-   for ( tmap::Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
-      pvehicle actvehicle = *v;
 
-      // Bei Žnderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
+   Player::VehicleList toRemove;
+   for ( Player::VehicleList::iterator v = player[actplayer].vehicleList.begin(); v != player[actplayer].vehicleList.end(); ++v ) {
+      Vehicle* actvehicle = *v;
+
+      // Bei Aenderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
       if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
          if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
-            ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x)+"/"+strrr((*v)->getPosition().y)+") crashed because of the strong wind";
-            new Message ( ident, actmap, 1<<(*v)->getOwner());
+            new Message ( getUnitReference( *v ) + " crashed because of the strong wind", this, 1<<(*v)->getOwner());
             toRemove.push_back ( *v );
          } else {
 
-            int j = actvehicle->getTank().fuel - actvehicle->typ->fuelConsumption * nowindplanefuelusage;
-
-            if ( actvehicle->height <= chhochfliegend ) {
-               int mo = actvehicle->typ->movement[log2(actvehicle->height)];
-               if ( mo )
-                  j -= ( actvehicle->getMovement() * 64 / mo)
-                       * (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-               else
-                  j -= (weather.windSpeed * maxwindspeed / 256 ) * actvehicle->typ->fuelConsumption / ( minmalq * 64 );
-            }
-           //          movement * 64        windspeed * maxwindspeed         fuelConsumption
-           // j -=   ----------------- *  ----------------------------- *   -----------
-           //          typ->movement                 256                       64 * 8
-           //
-           //
-
-           //gek?rzt:
-           //
-           //             movement            windspeed * maxwindspeed
-           // j -= --------------------- *  ----------------------------   * fuelConsumption
-           //           typ->movement             256   *      8
-           //
-           //
-           //
-           // Falls eine vehicle sich nicht bewegt hat, bekommt sie soviel Sprit abgezogen, wie sie zum zur?cklegen der Strecke,
-           // die der Wind pro Runde zur?ckgelegt hat, fuelConsumptionen w?rde.
-           // Wenn die vehicle sich schon bewegt hat, dann wurde dieser Abzug schon beim movement vorgenommen, so daá er hier nur
-
-           // noch fuer das ?briggebliebene movement stattfinden muá.
-           //
-
-
+            int j = actvehicle->getTank().fuel - UnitHooveringLogic::calcFuelUsage( actvehicle );
             if (j < 0) {
-               ASCString ident = "The unit " + (*v)->getName() + " at position ("+strrr((*v)->getPosition().x);
-               ident += ASCString("/")+strrr((*v)->getPosition().y)+") crashed due to lack of fuel";
-               new Message ( ident, actmap, 1<<(*v)->getOwner());
+               new Message ( getUnitReference( *v ) + " crashed due to lack of fuel", this, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
                // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
             } else {
@@ -1112,20 +1185,27 @@ void tmap::endTurn()
 
    }
 
-   for ( tmap::Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
+   for ( Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
       delete *v;
 
    checkunitsforremoval();
 
   for ( int i = 0; i < 9; ++i ) 
-     for ( tmap::Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
+     for ( Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
          (*v)->endAnyTurn();
 
+ 
+   if ( replayinfo )
+      replayinfo->closeLogging();
+      
+   processJournal();   
 
+   sigPlayerTurnHasEnded( player[actplayer] );
+   
 }
 
 
-void tmap::endRound()
+void GameMap::endRound()
 {
     actplayer = 0;
     time.set ( time.turn()+1, 0 );
@@ -1137,23 +1217,34 @@ void tmap::endRound()
     for (int i = 0; i <= 7; i++)
        if (player[i].exist() ) {
 
-          for ( tmap::Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
+          for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
              (*j)->endRound();
 
-          typedef PointerList<Building::Work*> BuildingWork;
+          for ( Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ )
+             (*j)->endRound();
+          
+          typedef PointerList<ContainerBase::Work*> BuildingWork;
           BuildingWork buildingWork;
 
-          for ( tmap::Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
-             Building::Work* w = (*j)->spawnWorkClasses( false );
+          for ( Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
+             ContainerBase::Work* w = (*j)->spawnWorkClasses( false );
              if ( w )
                 buildingWork.push_back ( w );
           }
 
+          for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ ) {
+             ContainerBase::Work* w = (*j)->spawnWorkClasses( false );
+             if ( w )
+                buildingWork.push_back ( w );
+          }
+          
+          
           bool didSomething;
           do {
              didSomething = false;
              for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ )
                 if ( ! (*j)->finished() ) 
+    //weatherSystem->update(time);
                    if ( (*j)->run() )
                       didSomething = true;
 
@@ -1168,69 +1259,61 @@ void tmap::endRound()
 #include "libs/rand/rand_r.h"
 #include "libs/rand/rand_r.c"
 
-int tmap::random( int max )
+int GameMap::random( int max )
 {
    return asc_rand_r( &randomSeed ) % max;
 }
 
-void tmap::objectGrowth()
+void GameMap::objectGrowth()
 {
-   typedef vector< pair<pfield,int> > NewObjects;
+   typedef vector< pair<tfield*,int> > NewObjects;
+   map<tfield*,int> remainingGrowthTime;
+
    NewObjects newObjects;
    for ( int y = 0; y < ysize; ++y )
       for ( int x = 0; x < xsize; ++x ) {
-          pfield fld = getField( x, y );
+          tfield* fld = getField( x, y );
           for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i)
-             if ( i->typ->growthRate > 0 )
+             if ( i->typ->growthRate > 0 && i->remainingGrowthTime != 0 )
                 for ( int d = 0; d < 6; ++d ) {
-                   pfield fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
-                   if ( fld2 && (!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ) 
-                      if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) {
-                        double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
-                        if ( d > 0 ) {
-                           if ( d > 0.9 )
-                              d = 0.9;
+                   tfield* fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
+                   if ( fld2 ) 
+                      if ( i->typ->growOnUnits || ((!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ))
+                        if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) {
+                           double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
+                           if ( d > 0 ) {
+                              if ( d > 0.9 )
+                                 d = 0.9;
 
-                           int p = static_cast<int>(std::ceil ( double(1) / d));
-                           if ( p > 1 )
-                              if ( random ( p ) == 1 )
-                                 if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 )
-                                    newObjects.push_back( make_pair( fld2, i->typ->id ));
+                              int p = static_cast<int>(std::ceil ( double(1) / d));
+                              if ( p > 1 )
+                                 if ( random ( p ) == 1 )
+                                    if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 ) {
+                                       newObjects.push_back( make_pair( fld2, i->typ->id ));
+                                       i->remainingGrowthTime -= 1;
+                                       remainingGrowthTime[fld2] = i->remainingGrowthTime;
+                                    }
+                           }
                         }
-                   }
                 }
       }
 
    for ( NewObjects::iterator i = newObjects.begin(); i != newObjects.end(); ++i )
-      i->first->addobject ( getobjecttype_byid( i->second ));
-}
-
-
-bool tmap::nextPlayer()
-{
-   int runde = 0;
-   do {
-      actplayer++;
-      time.set ( time.turn(), 0 );
-      if (actplayer > 7) {
-         endRound();
-         runde++;
+      if ( !i->first->checkforobject( getobjecttype_byid( i->second ))) {
+         if ( i->first->addobject ( getobjecttype_byid( i->second ))) {
+            Object* o = i->first->checkforobject( getobjecttype_byid( i->second ));
+            assert(o);
+            o->remainingGrowthTime = remainingGrowthTime[i->first];
+         }
       }
-
-      if ( !player[actplayer].exist() )
-         if ( replayinfo )
-            if ( replayinfo->guidata[actplayer] ) {
-               delete replayinfo->guidata[actplayer];
-               replayinfo->guidata[actplayer] = NULL;
-            }
-
-   }  while ( (!player[actplayer].exist() || player[actplayer].stat == Player::off)  && (runde <= 2)  );
-   return runde <= 2;
 }
 
-tmap :: ~tmap ()
+SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
+
+GameMap :: ~GameMap ()
 {
-   __mapDestruction = true;
+   sigMapDeletion( *this );
+   state = Destruction;
 
    if ( field )
 
@@ -1239,7 +1322,7 @@ tmap :: ~tmap ()
             delete field[l].building;
 
 
-         pvehicle aktvehicle = field[l].vehicle;
+         Vehicle* aktvehicle = field[l].vehicle;
          if ( aktvehicle )
             delete aktvehicle;
 
@@ -1253,12 +1336,6 @@ tmap :: ~tmap ()
       }
    }
 
-
-   if ( shareview ) {
-      delete shareview;
-      shareview = NULL;
-   }
-
    if ( replayinfo ) {
       delete replayinfo;
       replayinfo = NULL;
@@ -1268,6 +1345,16 @@ tmap :: ~tmap ()
       delete[] game_parameter;
       game_parameter = NULL;
    }
+   
+   if ( network ) {
+      delete network;
+      network = NULL;
+   }   
+      
+
+#ifdef WEATHERGENERATOR
+   delete weatherSystem;
+#endif
 
    if ( field ) {
       delete[] field;
@@ -1276,6 +1363,7 @@ tmap :: ~tmap ()
 
    if ( actmap == this )
       actmap = NULL;
+
 }
 
 /*
@@ -1290,7 +1378,7 @@ gamemap :: ResourceTribute :: tresourcetribute ( )
 }
 */
 
-bool tmap :: ResourceTribute :: empty ( )
+bool GameMap :: ResourceTribute :: empty ( )
 {
    for (int i = 0; i < 8; i++)
       for (int j = 0; j < 8; j++)
@@ -1306,7 +1394,7 @@ bool tmap :: ResourceTribute :: empty ( )
 
 const int tributeVersion = 1;  // we are counting backwards, -2 is newer than -1
 
-void tmap :: ResourceTribute :: read ( tnstream& stream )
+void GameMap :: ResourceTribute :: read ( tnstream& stream )
 {
    int version = stream.readInt();
    bool noVersion;
@@ -1336,7 +1424,7 @@ void tmap :: ResourceTribute :: read ( tnstream& stream )
              paid[b][c].resource(a) = stream.readInt();
 }
 
-void tmap :: ResourceTribute :: write ( tnstream& stream )
+void GameMap :: ResourceTribute :: write ( tnstream& stream )
 {
    stream.writeInt ( -tributeVersion );
    for ( int a = 0; a < 8; a++ )
@@ -1357,7 +1445,7 @@ void tmap :: ResourceTribute :: write ( tnstream& stream )
 
 
 
-int  tmap::resize( int top, int bottom, int left, int right )  // positive: larger
+int  GameMap::resize( int top, int bottom, int left, int right )  // positive: larger
 {
   if ( !top && !bottom && !left && !right )
      return 0;
@@ -1370,6 +1458,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
 
   if ( bottom & 1 || top & 1 )
      return 3;
+
 
   int ox1, oy1, ox2, oy2;
 
@@ -1408,22 +1497,22 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      ox2 = xsize;
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ )
+     for ( Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ )
         (*i)->unchainbuildingfromfield();
 
 
   int newx = xsize + left + right;
   int newy = ysize + top + bottom;
 
-  pfield newfield = new tfield [ newx * newy ];
+  tfield* newfield = new tfield [ newx * newy ];
   for ( int i = 0; i < newx * newy; i++ )
      newfield[i].setMap ( this );
 
   int x;
   for ( x = ox1; x < ox2; x++ )
      for ( int y = oy1; y < oy2; y++ ) {
-        pfield org = getField ( x, y );
-        pfield dst = &newfield[ (x + left) + ( y + top ) * newx];
+        tfield* org = getField ( x, y );
+        tfield* dst = &newfield[ (x + left) + ( y + top ) * newx];
         *dst = *org;
      }
 
@@ -1461,7 +1550,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
 
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {
+     for ( Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {
         MapCoordinate mc = (*i)->getEntry();
         mc.x += left;
         mc.y += top;
@@ -1469,7 +1558,7 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      }
 
   for (int s = 0; s < 9; s++)
-     for ( tmap::Player::VehicleList::iterator i = player[s].vehicleList.begin(); i != player[s].vehicleList.end(); i++ ) {
+     for ( Player::VehicleList::iterator i = player[s].vehicleList.begin(); i != player[s].vehicleList.end(); i++ ) {
         (*i)->xpos += left;
         (*i)->ypos += top;
      }
@@ -1482,91 +1571,127 @@ int  tmap::resize( int top, int bottom, int left, int right )  // positive: larg
      ypos = ysize - idisplaymap.getscreenysize() ;
    */
 
-  return 0;
+   overviewMapHolder.resetSize();
+
+   return 0;
 }
 
-bool tmap::Player::exist()
-{
-  return !(buildingList.empty() && vehicleList.empty());
-}
-
-pterraintype tmap :: getterraintype_byid ( int id )
+pterraintype GameMap :: getterraintype_byid ( int id )
 {
    return terrainTypeRepository.getObject_byID ( id );
 }
 
-pobjecttype tmap :: getobjecttype_byid ( int id )
+ObjectType* GameMap :: getobjecttype_byid ( int id )
 {
    return objectTypeRepository.getObject_byID ( id );
 }
 
-pvehicletype tmap :: getvehicletype_byid ( int id )
+Vehicletype* GameMap :: getvehicletype_byid ( int id )
 {
    return vehicleTypeRepository.getObject_byID ( id );
 }
 
-pbuildingtype tmap :: getbuildingtype_byid ( int id )
+BuildingType* GameMap :: getbuildingtype_byid ( int id )
 {
    return buildingTypeRepository.getObject_byID ( id );
 }
 
-const Technology* tmap :: gettechnology_byid ( int id )
+const Technology* GameMap :: gettechnology_byid ( int id )
 {
    return technologyRepository.getObject_byID ( id );
 }
 
 
-pterraintype tmap :: getterraintype_bypos ( int pos )
+pterraintype GameMap :: getterraintype_bypos ( int pos )
 {
    return terrainTypeRepository.getObject_byPos ( pos );
 }
 
-pobjecttype tmap :: getobjecttype_bypos ( int pos )
+ObjectType* GameMap :: getobjecttype_bypos ( int pos )
 {
    return objectTypeRepository.getObject_byPos ( pos );
 }
 
-pvehicletype tmap :: getvehicletype_bypos ( int pos )
+Vehicletype* GameMap :: getvehicletype_bypos ( int pos )
 {
    return vehicleTypeRepository.getObject_byPos ( pos );
 }
 
-pbuildingtype tmap :: getbuildingtype_bypos ( int pos )
+BuildingType* GameMap :: getbuildingtype_bypos ( int pos )
 {
    return buildingTypeRepository.getObject_byPos ( pos );
 }
 
-const Technology* tmap :: gettechnology_bypos ( int pos )
+const Technology* GameMap :: gettechnology_bypos ( int pos )
 {
    return technologyRepository.getObject_byPos ( pos );
 }
 
-int tmap :: getTerrainTypeNum ( )
+int GameMap :: getTerrainTypeNum ( )
 {
    return  terrainTypeRepository.getNum();
 }
 
-int tmap :: getObjectTypeNum ( )
+int GameMap :: getObjectTypeNum ( )
 {
    return  objectTypeRepository.getNum();
 }
 
-int tmap :: getVehicleTypeNum ( )
+int GameMap :: getVehicleTypeNum ( )
 {
    return  vehicleTypeRepository.getNum();
 }
 
-int tmap :: getBuildingTypeNum ( )
+int GameMap :: getBuildingTypeNum ( )
 {
    return  buildingTypeRepository.getNum();
 }
 
-int tmap :: getTechnologyNum ( )
+int GameMap :: getTechnologyNum ( )
 {
    return  technologyRepository.getNum();
 }
 
-void tmap :: startGame ( )
+void GameMap::processJournal()
+{
+  if ( !newJournal.empty() ) {
+     ASCString add = gameJournal;
+
+     char tempstring[100];
+     char tempstring2[100];
+     sprintf( tempstring, "#color0# %s ; turn %d #color0##crt##crt#", player[actplayer].getName().c_str(), time.turn() );
+     sprintf( tempstring2, "#color%d#", getplayercolor ( actplayer ));
+
+     int fnd;
+     do {
+        fnd = 0;
+        if ( !add.empty() )
+           if ( add.find ( '\n', add.length()-1 ) != add.npos ) {
+              add.erase ( add.length()-1 );
+              fnd++;
+           } else
+             if ( add.length() > 4 )
+                if ( add.find ( "#crt#", add.length()-5 ) != add.npos ) {
+                  add.erase ( add.length()-5 );
+                  fnd++;
+                }
+
+     } while ( fnd ); /* enddo */
+
+     add += tempstring2;
+     add += newJournal;
+     add += tempstring;
+
+     gameJournal = add;
+     newJournal.erase();
+
+     lastjournalchange.set ( time.turn(), actplayer );
+  }
+ 
+}
+
+
+void GameMap :: startGame ( )
 {
    time.set ( 1, 0 );
 
@@ -1574,70 +1699,38 @@ void tmap :: startGame ( )
       player[j].queuedEvents = 1;
 
    levelfinished = false;
-   network = NULL;
-   int num = 0;
-   int cols[72];
-
-   memset ( cols, 0, sizeof ( cols ));
-   int i;
-   for ( i = 0; i < 8 ; i++) {
-      if ( player[i].exist() ) {
-         num++;
-         cols[ i * 8 ] = 1;
-      } else
-         cols[ i * 8 ] = 0;
-
-      cursorpos.position[ i ].sx = 0;
-      cursorpos.position[ i ].sy = 0;
-
-   }
-
-   i = 0;                                                                        
-   int sze = xsize * ysize;
-   do {
-      if ( field[i].vehicle ) 
-         if ( cols[ field[i].vehicle->color] ) {
-            cursorpos.position[ field[i].vehicle->color / 8 ].cx = field[i].vehicle->xpos;
-            cursorpos.position[ field[i].vehicle->color / 8 ].cy = field[i].vehicle->ypos;
-            num--;
-            cols[ field[i].vehicle->color] = 0;
-         }
-
-      if ( field[i].building && field[i].building->color < 64 ) 
-         if ( cols[ field[i].building->color] ) {
-            cursorpos.position[ field[i].building->color / 8 ].cx = field[i].building->getEntry().x;
-            cursorpos.position[ field[i].building->color / 8 ].cy = field[i].building->getEntry().y;
-            num--;
-            cols[ field[i].building->color] = 0;
-         }
-      i++;
-   } while ( num   &&   i <= sze ); /* enddo */
-
 
    for ( int n = 0; n< 8; n++ ) {
       bi_resource[n].energy = 0;
       bi_resource[n].material = 0;
       bi_resource[n].fuel = 0;
+      player[n].research.setMultiplier( getgameparameter(cgp_researchOutputMultiplier) );
    }
 
-
+   
+   
    #ifndef karteneditor
    actplayer = -1;
    #else
    actplayer = 0;
    #endif
+   
+   setupResources();
+   
+   // calling signal
+   newRound();
 } 
 
-bool tmap::UnitProduction::check ( int id )
+bool GameMap::UnitProduction::check ( int id )
 {
-   for ( tmap::UnitProduction::IDsAllowed::iterator i = idsAllowed.begin(); i != idsAllowed.end(); i ++ )
+   for ( GameMap::UnitProduction::IDsAllowed::iterator i = idsAllowed.begin(); i != idsAllowed.end(); i ++ )
       if( *i == id )
          return true;
 
     return false;
 }
 
-VisibilityStates tmap::getInitialMapVisibility( int player )
+VisibilityStates GameMap::getInitialMapVisibility( int player )
 {
    VisibilityStates c = VisibilityStates( getgameparameter ( cgp_initialMapVisibility ));
 
@@ -1653,562 +1746,16 @@ VisibilityStates tmap::getInitialMapVisibility( int player )
    return c;
 }
 
-
-
-void tmap::operator= ( const tmap& map )
+void GameMap::setPlayerMode(  Player& p, State s )
 {
-  throw ASCmsgException ( "tmap::operator= undefined");
-}
-
-bool Mine :: attacksunit ( const pvehicle veh )
-{
-     if  (!( ( veh->typ->functions & cfmineimmune ) ||
-              ( veh->height > chfahrend ) ||
-              ( getdiplomaticstatus2 ( veh->color, player*8 ) == capeace ) ||
-              ( (veh->typ->movemalustyp ==  cmm_trooper) && (type != cmantipersonnelmine)) || 
-              ( veh->height <= chgetaucht && type != cmmooredmine ) || 
-              ( veh->height == chschwimmend && type != cmfloatmine ) ||
-              ( veh->height == chfahrend && type != cmantipersonnelmine  && type != cmantitankmine )
-            ))
-         return true;
-     return false;
+   p.getParentMap()->state = s;
 }
 
 
 
-tfield :: tfield ( pmap gamemap_ )
+void GameMap::operator= ( const GameMap& map )
 {
-  init();
-  setMap( gamemap_ );
-}
-
-tfield :: tfield (  )
-{
-  init();
-}
-
-
-void tfield::init ()
-{
-   bdt.set ( 0 );
-   typ = NULL;
-   picture = NULL;
-   vehicle = NULL;
-   building = NULL;
-   a.temp = 0;
-   a.temp2 = 0;
-   temp3 = 0;
-   temp4 = 0;
-   visible = 0;
-   direction = 0;
-   fuel = 0;
-   material = 0;
-   resourceview = NULL;
-   connection = 0;
-   gamemap = NULL;
-   viewbonus = 0;
-}
-
-
-
-bool AgeableItem::age( AgeableItem& obj )
-{
-   if ( obj.lifetimer > 0 ) {
-      --obj.lifetimer;
-      return obj.lifetimer==0;
-   } else
-      return false;
-}
-
-void tfield::endRound( int turn )
-{
-   bool recalc = false;
-   for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); ) {
-      if ( AgeableItem::age( *i )) {
-         i = objects.erase(i);
-         recalc = true;
-      } else
-         ++i;
-   }
-   // remove_if( objects.begin(), objects.end(), Object::age );
-
-   for ( MineContainer::iterator i = mines.begin(); i != mines.end(); ) {
-      if ( AgeableItem::age( *i )) {
-         i = mines.erase(i);
-         recalc = true;
-      } else
-         ++i;
-   }
-   // remove_if( mines.begin(), mines.end(), Object::age );
-
-   if ( recalc )
-      setparams();
-}
-
-
-void tfield::operator= ( const tfield& f )
-{
-   typ = f.typ;
-   fuel = f.fuel;
-   material = f.material;
-   visible = f.visible;
-   direction = f.direction;
-   tempw = f.tempw;
-   temp3 = f.temp3;
-   temp4 = f.temp4;
-   vehicle = f.vehicle;
-   building = f.building;
-   if ( f.resourceview ) {
-      resourceview = new Resourceview;
-      *resourceview = *f.resourceview;
-   } else
-      resourceview = NULL;
-   mines = f.mines;
-   objects = f.objects;
-   connection = f.connection;
-   bdt = f.bdt;
-   for ( int i = 0; i < 8; i++ )
-      view[i] = f.view[i];
-}
-
-
-Mine::Mine( MineTypes type, int strength, int player, tmap* gamemap )
-{
-   assertOrThrow( type > 0 && type <= 4 );
-   this->type = type;
-   this->strength = strength;
-   this->player = player;
-   lifetimer = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + type - 1));
-}
-
-
-
-int tfield :: mineattacks ( const pvehicle veh )
-{
-   int i = 1;
-   for ( MineContainer::iterator m = mines.begin(); m != mines.end(); m++, i++ )
-      if ( m->attacksunit ( veh ))
-         return i;
-
-   return 0;
-}
-
-Mine& tfield::getMine ( int n )
-{
-  int c = 0;
-  MineContainer::iterator i;
-  for ( i = mines.begin(); c < n; i++,c++ );
-  return *i;
-}
-
-void  tfield :: addobject( pobjecttype obj, int dir, bool force )
-{
-   if ( !obj )
-      return;
-
-   pobject i = checkforobject ( obj );
-   if ( !i ) {
-     int buildable = obj->buildable ( this );
-     #ifdef karteneditor
-     if ( !buildable )
-          if ( force )
-             buildable = 1;
-          else
-             if (choice_dlg("object cannot be built here","~i~gnore","~c~ancel") == 1)
-                buildable = 1;
-     #else
-     if ( !buildable )
-          if ( force )
-             buildable = 1;
-     #endif
-
-     if ( buildable ) {
-         Object o ( obj );
-         if ( dir != -1 )
-            o.dir = dir;
-         else
-            o.dir = 0;
-
-         objects.push_back ( o );
-
-         if ( dir == -1 )
-            calculateobject( getx(), gety(), true, obj, gamemap );
-
-         sortobjects();
-         setparams();
-     }
-   } else {
-      if ( dir != -1 )
-         i->dir |= dir;
-
-      i->lifetimer = obj->lifetime;
-      sortobjects();
-   }
-}
-
-
-void tfield :: removeobject( pobjecttype obj , bool force)
-{
-   if ( !force && building )
-      return;
-
-   #ifndef karteneditor
-   if ( !force )
-      if ( vehicle )
-         if ( vehicle->color != gamemap->actplayer << 3)
-           return;
-   #endif
-
-   if ( !obj ) {
-      if ( objects.size() ) {
-         obj = objects.rbegin()->typ;
-         objects.pop_back();
-      }
-   } else
-      for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); )
-         if ( o->typ == obj )
-            o = objects.erase( o );
-         else
-            o++;
-
-   setparams();
-   if ( obj )
-      calculateobject( getx(), gety(), true, obj );
-}
-
-void tfield :: deleteeverything ( void )
-{
-   if ( vehicle ) {
-      delete vehicle;
-      vehicle = NULL;
-   }
-
-   if ( building ) {
-      delete building;
-      building = NULL;
-   }
-
-   setparams();
-}
-
-
-bool tfield :: unitHere ( const Vehicle* veh )
-{
-   if ( vehicle == veh )
-      return true;
-
-   if ( vehicle && veh && vehicle->networkid == veh->networkid )
-      return true;
-   return false;
-}
-
-int tfield :: getweather ( void )
-{
-   if ( !typ )
-      return 0;
-   for ( int w = 0; w < cwettertypennum; w++ )
-      if ( typ == typ->terraintype->weather[w] )
-         return w;
-   return -1;
-}
-
-void tfield :: setweather ( int weather )
-{
-     if (typ->terraintype->weather[ weather ] ) {
-        typ = typ->terraintype->weather[ weather ];
-        setparams();
-     } else {
-        typ = typ->terraintype->weather[ 0 ];
-        setparams();
-     }
-}
-
-bool compareObjectHeight ( const Object& o1, const Object& o2 )
-{
-   return o1.typ->imageHeight < o2.typ->imageHeight;
-}
-
-void tfield :: sortobjects ( void )
-{
-   sort ( objects.begin(), objects.end(), compareObjectHeight );
-}
-
-bool  tfield :: putmine( int col, int typ, int strength )
-{
-   if ( mineowner() >= 0  && mineowner() != col )
-      return false;
-
-   if ( mines.size() >= gamemap->getgameparameter ( cgp_maxminesonfield ))
-      return false;
-
-   MineTypes mt =  MineTypes(typ);
-   Mine mymine ( mt, strength, col, gamemap );
-   mines.push_back ( mymine );
-   return true;
-}
-
-int tfield :: mineowner( void )
-{
-   if ( mines.empty() )
-      return -1;
-   else
-      return mines.begin()->player;
-}
-
-
-void tfield :: removemine( int num )
-{ 
-   if ( num == -1 )
-      num = mines.size() - 1;
-
-   int i = 0;
-   for ( MineContainer::iterator m = mines.begin(); m != mines.end(); i++)
-      if ( i == num )
-         m = mines.erase ( m );
-      else
-          m++;
-}
-
-
-int tfield :: getx( void )
-{
-   int n = this - gamemap->field;
-   return n % gamemap->xsize;
-}
-
-int tfield :: gety( void )
-{
-   int n = this - gamemap->field;
-   return n / gamemap->xsize;
-}
-
-
-int tfield :: getattackbonus ( void )
-{
-   int a = typ->attackbonus;
-   for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
-      if ( o->typ->attackbonus_abs != -1 )
-         a = o->typ->attackbonus_abs;
-      else
-         a += o->typ->attackbonus_plus;
-   }
-
-   if ( a > -8 )
-      return a;
-   else
-      return -7;
-}
-
-int tfield :: getdefensebonus ( void )
-{
-   int a = typ->defensebonus;
-   for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
-      if ( o->typ->defensebonus_abs != -1 )
-         a = o->typ->defensebonus_abs;
-      else
-         a += o->typ->defensebonus_plus;
-   }
-
-   if ( a > -8 )
-      return a;
-   else
-      return -7;
-}
-
-int tfield :: getjamming ( void )
-{
-   int a = typ->basicjamming;
-   for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
-      if ( o->typ->basicjamming_abs >= 0 )
-         a = o->typ->basicjamming_abs;
-      else
-         a += o->typ->basicjamming_plus;
-   }
-   if ( a > 0 )
-      return a;
-   else
-      return 0;
-}
-
-int tfield :: getmovemalus ( const pvehicle veh )
-{
-   int mnum = mines.size();
-   if ( mnum ) {
-      int movemalus = __movemalus.at(veh->typ->movemalustyp);
-      int col = mineowner();
-      if ( veh->color == col*8 )
-         movemalus += movemalus * mine_movemalus_increase * mnum / 100;
-
-      if ( movemalus < minmalq )
-         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
-
-      return movemalus;
-   } else {
-      int mm = __movemalus.at(veh->typ->movemalustyp);
-      if ( mm < minmalq )
-         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
-      return mm;
-   }
-}
-
-int tfield :: getmovemalus ( int type )
-{
-  return __movemalus.at(type);
-}
-
-void tfield :: setparams ( void )
-{
-   int i;
-   bdt = typ->art;
-
-   for ( i = 0; i < cmovemalitypenum; i++ )   {
-      __movemalus.at(i) = typ->move_malus[i];
-      if ( __movemalus[i] < minmalq )
-         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
-   }
-
-   viewbonus = 0;
-
-   for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
-      if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
-         if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
-            objects.erase(o);
-            setparams();
-            return;
-         }
-
-      bdt  &=  o->typ->getFieldModification(getweather()).terrain_and;
-      bdt  |=  o->typ->getFieldModification(getweather()).terrain_or;
-
-      for ( i = 0; i < cmovemalitypenum; i++ ) {
-         __movemalus[i] += o->typ->getFieldModification(getweather()).movemalus_plus[i];
-         if ( (o->typ->getFieldModification(getweather()).movemalus_abs[i] != 0) && (o->typ->getFieldModification(getweather()).movemalus_abs[i] != -1) )
-            __movemalus[i] = o->typ->getFieldModification(getweather()).movemalus_abs[i];
-         if ( __movemalus[i] < minmalq )
-            __movemalus[i] = minmalq;
-      }
-
-      viewbonus += o->typ->viewbonus_plus;
-      if ( o->typ->viewbonus_abs != -1 )
-         viewbonus = o->typ->viewbonus_plus;
-   }
-
-   if ( building ) {
-      if ( this == building->getField( building->typ->entry ))
-         bdt |= getTerrainBitType(cbbuildingentry);
-
-      if ( building )
-         for (int x = 0; x < 4; x++)
-            for ( int y = 0; y < 6; y++ )
-               if ( building->getField ( BuildingType::LocalCoordinate(x, y) ) == this )
-                  if ( building->getpicture ( BuildingType::LocalCoordinate(x, y) ) )
-                     picture = building->getpicture ( BuildingType::LocalCoordinate(x, y) );
-   }
-}
-
-
-tfield :: ~tfield()
-{
-   if ( resourceview ) {
-      delete resourceview;
-      resourceview = NULL;
-   }
-}
-
-
-Object :: Object ( void )
-{
-   typ = NULL;
-   dir = 0;
-   damage = 0;
-}
-
-Object :: Object ( pobjecttype t )
-{
-   lifetimer = t->lifetime;
-   typ = t;
-   dir = 0;
-   damage = 0;
-}
-
-
-void Object :: setdir ( int direc )
-{
-   dir = direc;
-}
-
-int  Object :: getdir ( void )
-{
-   return dir;
-}
-
-void Object :: display ( int x, int y, int weather )
-{
-  if ( typ->id == 7 || typ->id == 30 || typ->displayMethod==1 ) // buried pipeline,
-      putshadow  ( x, y,  typ->getpic ( dir, weather ) , &xlattables.a.dark1);
-  else
-     if ( typ->displayMethod == 2 ) // hillside
-        putxlatfilter ( x, y,  typ->getpic( dir, weather ), xlattables.nochange );
-     else
-        if ( typ->displayMethod == 3 ) { // mapeditorOnly
-           #ifdef karteneditor
-           typ->display ( x, y, dir, weather );
-           #endif
-        } else
-           if ( typ->displayMethod == 4 ) {
-              putpicturemix ( x, y,  typ->getpic( dir, weather ),  0, (char*) colormixbuf );
-           } else
-              typ->display ( x, y, dir, weather );
-}
-
-
-pobject tfield :: checkforobject ( pobjecttype o )
-{
-   for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); i++ )
-      if ( i->typ == o )
-         return &(*i);
-
-   return NULL;
-}
-
-
-
-tfield::Resourceview :: Resourceview ( void )
-{
-   visible = 0;
-   memset ( &fuelvisible, 0, sizeof ( fuelvisible ));
-   memset ( &materialvisible, 0, sizeof ( materialvisible ));
-}
-
-tmap::Shareview :: Shareview ( const tmap::Shareview* org )
-{
-   memcpy ( mode, org->mode, sizeof ( mode ));
-   recalculateview = org->recalculateview;
-}
-
-tmap::Shareview :: Shareview ( void )
-{
-   recalculateview = 0;
-   for ( int i = 0; i < 8; i++ )
-      for ( int j = 0; j< 8; j++ )
-         mode[i][j] = false;
-}
-
-
-void tmap::Shareview :: read ( tnstream& stream )
-{
-   for ( int i = 0; i < 8; i++ )
-      for ( int j =0; j < 8; j++ )
-         mode[i][j] = stream.readChar();
-   recalculateview = stream.readInt();
-}
-
-void tmap::Shareview :: write( tnstream& stream )
-{
-   for ( int i = 0; i < 8; i++ )
-      for ( int j =0; j < 8; j++ )
-         stream.writeChar( mode[i][j] );
-   stream.writeInt( recalculateview );
+  throw ASCmsgException ( "GameMap::operator= undefined");
 }
 
 
@@ -2312,7 +1859,7 @@ void AiThreat :: reset ( void )
       threat[i] = 0;
 }
 
-AiParameter :: AiParameter ( pvehicle _unit ) : AiValue ( log2( _unit->height ))
+AiParameter :: AiParameter ( Vehicle* _unit ) : AiValue ( log2( _unit->height ))
 {
    reset( _unit );
 }
@@ -2356,7 +1903,7 @@ bool AiParameter::hasJob ( AiParameter::Job j )
 }
 
 
-void AiParameter :: reset ( pvehicle _unit )
+void AiParameter :: reset ( Vehicle* _unit )
 {
    unit = _unit;
    AiValue::reset ( log2( _unit->height ) );
@@ -2385,7 +1932,7 @@ void AiParameter :: clearJobs()
 
 
 
-tmap :: ReplayInfo :: ReplayInfo ( void )
+GameMap :: ReplayInfo :: ReplayInfo ( void )
 {
    for (int i = 0; i < 8; i++) {
       guidata[i] = NULL;
@@ -2395,7 +1942,7 @@ tmap :: ReplayInfo :: ReplayInfo ( void )
    stopRecordingActions = 0;
 }
 
-void tmap :: ReplayInfo :: read ( tnstream& stream )
+void GameMap :: ReplayInfo :: read ( tnstream& stream )
 {
    bool loadgui[8];
    bool loadmap[8];
@@ -2425,7 +1972,7 @@ void tmap :: ReplayInfo :: read ( tnstream& stream )
    actmemstream = NULL;
 }
 
-void tmap :: ReplayInfo :: write ( tnstream& stream )
+void GameMap :: ReplayInfo :: write ( tnstream& stream )
 {
    for ( int i = 0; i < 8; i++ )
       stream.writeInt ( guidata[i] != NULL );
@@ -2444,8 +1991,15 @@ void tmap :: ReplayInfo :: write ( tnstream& stream )
    }
 }
 
+void GameMap :: ReplayInfo :: closeLogging()
+{
+   if ( actmemstream ) {
+      delete actmemstream;
+      actmemstream = NULL;
+   }
+}
 
-tmap :: ReplayInfo :: ~ReplayInfo ( )
+GameMap :: ReplayInfo :: ~ReplayInfo ( )
 {
    for (int i = 0; i < 8; i++)  {
       if ( guidata[i] ) {
@@ -2463,174 +2017,39 @@ tmap :: ReplayInfo :: ~ReplayInfo ( )
   }
 }
 
-
-
-const int gameparameterdefault [ gameparameternum ] = { 1,                       //       cgp_fahrspur                        
-                                                        2,                       //       cgp_eis,                            
-                                                        0,                       //       cgp_movefrominvalidfields,          
-                                                        100,                     //       cgp_building_material_factor,       
-                                                        100,                     //       cgp_building_fuel_factor,           
-                                                        1,                       //       cgp_forbid_building_construction,   
-                                                        0,                       //       cgp_forbid_unitunit_construction,   
-                                                        0,                       //       cgp_bi3_training,                   
-                                                        1,                       //       cgp_maxminesonfield,                
-                                                        0,                       //       cgp_antipersonnelmine_lifetime,     
-                                                        0,                       //       cgp_antitankmine_lifetime,          
-                                                        0,                       //       cgp_mooredmine_lifetime,            
-                                                        0,                       //       cgp_floatingmine_lifetime,          
-                                                        100,                     //       cgp_buildingarmor,                  
-                                                        100,                     //       cgp_maxbuildingrepair,              
-                                                        100,                     //       cgp_buildingrepairfactor,           
-                                                        1,                       //       cgp_globalfuel,                     
-                                                        maxunitexperience,       //       cgp_maxtrainingexperience,          
-                                                        0,                       //       cgp_initialMapVisibility,           
-                                                        40,                      //       cgp_attackPower,                    
-                                                        100,                     //       cgp_jammingAmplifier,               
-                                                        10,                      //       cgp_jammingSlope,                   
-                                                        0,                       //       cgp_superVisorCanSaveMap,           
-                                                        1,                       //       cgp_objectsDestroyedByTerrain,      
-                                                        2,                       //       cgp_trainingIncrement,              
-                                                        1,                       //       gp_experienceDivisorAttack
-                                                        0,                       //       cgp_disableDirectView
-                                                        0,                       //       cgp_disableUnitTransfer
-                                                        1,                       //       cgp_experienceDivisorDefense
-                                                        0,                       //       cgp_debugEvents
-                                                        0,                       //       cgp_objectGrowthMultiplier
-                                                        0 };                     //       cgp_objectGrowOnOtherObjects
-
-
-const bool gameParameterChangeableByEvent [ gameparameternum ] = { true,   //       cgp_fahrspur
-                                                                 true,     //       cgp_eis,
-                                                                 true,     //       cgp_movefrominvalidfields,
-                                                                 true,     //       cgp_building_material_factor,
-                                                                 true,     //       cgp_building_fuel_factor,
-                                                                 true,     //       cgp_forbid_building_construction,
-                                                                 true,     //       cgp_forbid_unitunit_construction,
-                                                                 true,     //       cgp_bi3_training,
-                                                                 true,     //       cgp_maxminesonfield,
-                                                                 true,     //       cgp_antipersonnelmine_lifetime,
-                                                                 true,     //       cgp_antitankmine_lifetime,
-                                                                 true,     //       cgp_mooredmine_lifetime,
-                                                                 true,     //       cgp_floatingmine_lifetime,
-                                                                 true,     //       cgp_buildingarmor,
-                                                                 true,     //       cgp_maxbuildingrepair,
-                                                                 true,     //       cgp_buildingrepairfactor,
-                                                                 true,     //       cgp_globalfuel,
-                                                                 true,     //       cgp_maxtrainingexperience,
-                                                                 true,     //       cgp_initialMapVisibility,
-                                                                 true,     //       cgp_attackPower,
-                                                                 true,     //       cgp_jammingAmplifier,
-                                                                 true,     //       cgp_jammingSlope,
-                                                                 false,    //       cgp_superVisorCanSaveMap,
-                                                                 true,     //       cgp_objectsDestroyedByTerrain,
-                                                                 true,     //       cgp_trainingIncrement,
-                                                                 false,    //       cgp_experienceDivisorAttack };
-                                                                 false,    //       cgp_disableDirectView
-                                                                 false,    //       cgp_disableUnitTransfer
-                                                                 false,    //       cgp_experienceDivisorDefense
-                                                                 true,     //       cgp_debugEvents
-                                                                 true,     //       cgp_objectGrowthMultiplier
-                                                                 false };  //       cgp_objectGrowOnOtherObjects
-
-const int gameParameterLowerLimit [ gameparameternum ] = { 1,    //       cgp_fahrspur
-                                                           1,    //       cgp_eis,
-                                                           0,    //       cgp_movefrominvalidfields,
-                                                           1,    //       cgp_building_material_factor,
-                                                           1,    //       cgp_building_fuel_factor,
-                                                           0,    //       cgp_forbid_building_construction,
-                                                           0,    //       cgp_forbid_unitunit_construction,
-                                                           0,    //       cgp_bi3_training,
-                                                           0,    //       cgp_maxminesonfield,
-                                                           0,    //       cgp_antipersonnelmine_lifetime,
-                                                           0,    //       cgp_antitankmine_lifetime,
-                                                           0,    //       cgp_mooredmine_lifetime,
-                                                           0,    //       cgp_floatingmine_lifetime,
-                                                           1,    //       cgp_buildingarmor,
-                                                           0,    //       cgp_maxbuildingrepair,
-                                                           1,    //       cgp_buildingrepairfactor,
-                                                           0,    //       cgp_globalfuel,
-                                                           0,    //       cgp_maxtrainingexperience,
-                                                           0,    //       cgp_initialMapVisibility,
-                                                           1,    //       cgp_attackPower,
-                                                           0,    //       cgp_jammingAmplifier,
-                                                           0,    //       cgp_jammingSlope,
-                                                           0,    //       cgp_superVisorCanSaveMap,
-                                                           0,    //       cgp_objectsDestroyedByTerrain,
-                                                           1,    //       cgp_trainingIncrement,
-                                                           1,    //       gp_experienceDivisorAttack
-                                                           0,    //       cgp_disableDirectView
-                                                           0,    //       cgp_disableUnitTransfer
-                                                           1,    //       cgp_experienceDivisorDefense
-                                                           0,    //       cgp_debugEvents
-                                                           0,    //       cgp_objectGrowthMultiplier
-                                                           0 };  //       cgp_objectGrowOnOtherObjects
-
-
-
-const int gameParameterUpperLimit [ gameparameternum ] = { maxint,                //       cgp_fahrspur
-                                                           maxint,                //       cgp_eis,
-                                                           1,                     //       cgp_movefrominvalidfields,
-                                                           maxint,                //       cgp_building_material_factor,
-                                                           maxint,                //       cgp_building_fuel_factor,
-                                                           1,                     //       cgp_forbid_building_construction,
-                                                           2,                     //       cgp_forbid_unitunit_construction,
-                                                           maxunitexperience,     //       cgp_bi3_training,
-                                                           maxint,                //       cgp_maxminesonfield,
-                                                           maxint,                //       cgp_antipersonnelmine_lifetime,
-                                                           maxint,                //       cgp_antitankmine_lifetime,
-                                                           maxint,                //       cgp_mooredmine_lifetime,
-                                                           maxint,                //       cgp_floatingmine_lifetime,
-                                                           maxint,                //       cgp_buildingarmor,
-                                                           100,                   //       cgp_maxbuildingrepair,
-                                                           maxint,                //       cgp_buildingrepairfactor,
-                                                           1,                     //       cgp_globalfuel,
-                                                           maxunitexperience,     //       cgp_maxtrainingexperience,
-                                                           2,                     //       cgp_initialMapVisibility,
-                                                           100,                   //       cgp_attackPower,
-                                                           1000,                  //       cgp_jammingAmplifier,
-                                                           100,                   //       cgp_jammingSlope,
-                                                           1,                     //       cgp_superVisorCanSaveMap,
-                                                           1,                     //       cgp_objectsDestroyedByTerrain,
-                                                           maxunitexperience,     //       cgp_trainingIncrement,
-                                                           10,                    //       cgp_experienceDivisorAttack;
-                                                           1,                     //       cgp_disableDirectView
-                                                           1,                     //       cgp_disableUnitTransfer
-                                                           10,                    //       cgp_experienceDivisorDefense
-                                                           2,                     //       cgp_debugEvents
-                                                           maxint,                //       cgp_objectGrowthMultiplier
-                                                           1 };                   //       cgp_objectGrowOnOtherObjects
-
-
-const char* gameparametername[ gameparameternum ] = { "lifetime of tracks",
-                                                      "freezing time of icebreaker fairway",
-                                                      "move vehicles from unaccessible fields",
-                                                      "building construction material factor (percent)",
-                                                      "building construction fuel factor (percent)",
-                                                      "forbid construction of buildings",
-                                                      "limit construction of units by other units",
-                                                      "use BI3 style training factor ",
-                                                      "maximum number of mines on a single field",
-                                                      "lifetime of antipersonnel mine",
-                                                      "lifetime of antitank mine",
-                                                      "lifetime of antisub mine",
-                                                      "lifetime of antiship mine",
-                                                      "building armor factor (percent)",
-                                                      "max building damage repair / turn",
-                                                      "building repair cost increase (percent)",
-                                                      "fuel globally available (BI Resource Mode)",
-                                                      "maximum experience that can be gained by training",
-                                                      "initial map visibility",
-                                                      "attack power (EXPERIMENTAL!)",
-                                                      "jamming amplifier (EXPERIMENTAL!)",
-                                                      "jamming slope (EXPERIMENTAL!)",
-                                                      "The Supervisor may save a game as new map (spying!!!)",
-                                                      "objects can be destroyed by terrain",
-                                                      "training centers: training increment",
-                                                      "experience effect divisor for attack",
-                                                      "disable direct View",
-                                                      "disable transfering units/buildings to other players",
-                                                      "experience effect divisor for defense",
-                                                      "debug game events",
-                                                      "Object growth rate (percentage)",
-                                                      "Objects can grow on files with other objects" };
+GameParameterSettings gameParameterSettings[gameparameternum ] = {
+      {  "LifetimeTrack",                      1,                    1,   maxint,             true,   false,   "lifetime of tracks"},//       cgp_fahrspur                        
+      {  "LifetimeBrokenIce",                  2,                    1,   maxint,             true,   false,   "freezing time of icebreaker fairway"},   //       cgp_eis,                            
+      {  "MoveFromInaccessibleFields",         1,                    0,   1,                  true,   false,    "move vehicles from unaccessible fields"},   //       cgp_movefrominvalidfields,          
+      {  "BuildingConstructionFactorMaterial", 100,                  0,   maxint,             true,   false,   "building construction material factor (percent)"},   //       cgp_building_material_factor,
+      {  "BuildingConstructionFactorEnergy",   100,                  0,   maxint,             true,   false,   "building construction fuel factor (percent)"},   //       cgp_building_fuel_factor,
+      {  "ForbidBuildingConstruction",         0,                    0,   1,                  true,   false,   "forbid construction of buildings"},   //       cgp_forbid_building_construction,
+      {  "LimitUnitProductionByUnit",          0,                    0,   2,                  true,   false,   "limit construction of units by other units"},   //       cgp_forbid_unitunit_construction,   
+      {  "Bi3Training",                        0,                    0,   maxunitexperience,  true,   false,   "use BI3 style training factor "},   //       cgp_bi3_training,                   
+      {  "MaxMinesOnField",                    1,                    0,   maxint,             true,   false,   "maximum number of mines on a single field"},   //       cgp_maxminesonfield,                
+      {  "LifetimeAntipersonnelMine",          0,                    0,   maxint,             true,   false,   "lifetime of antipersonnel mine"},   //       cgp_antipersonnelmine_lifetime,     
+      {  "LifetimeAntiTankMine",               0,                    0,   maxint,             true,   false,   "lifetime of antitank mine"},   //       cgp_antitankmine_lifetime,          
+      {  "LifetimeAntiSubMine",                0,                    0,   maxint,             true,   false,   "lifetime of antisub mine"},   //       cgp_mooredmine_lifetime,            
+      {  "LifetimeAntiShipMine",               0,                    0,   maxint,             true,   false,   "lifetime of antiship mine"},   //       cgp_floatingmine_lifetime,          
+      {  "BuildingArmorFactor",                100,                  1,   maxint,             true,   false,   "building armor factor (percent)"},   //       cgp_buildingarmor,                  
+      {  "MaxBuildingRepair",                  100,                  0,   100,                true,   false,   "max building damage repair / turn"},   //       cgp_maxbuildingrepair,              
+      {  "BuildingRepairCostIncrease",         100,                  1,   maxint,             true,   false,   "building repair cost increase (percent)"},   //       cgp_buildingrepairfactor,           
+      {  "GlobalFuel",                         1,                    0,   1,                  true,   false,   "fuel globally available (BI Resource Mode)"},   //       cgp_globalfuel,                     
+      {  "MaxTrainingExperience",              maxunitexperience,    0,   maxunitexperience,  true,   false,   "maximum experience that can be gained by training"},   //       cgp_maxtrainingexperience,          
+      {  "InitialMapVisibility",               0,                    0,   2,                  true,   false,   "initial map visibility"},   //       cgp_initialMapVisibility,           
+      {  "AttackPower",                        40,                   1,   100,                true,   false,   "attack power (EXPERIMENTAL!)"},   //       cgp_attackPower,                    
+      {  "JammingAmplifier",                   100,                  0,   1000,               true,   false,   "jamming amplifier (EXPERIMENTAL!)"},   //       cgp_jammingAmplifier,               
+      {  "JammingSlope",                       10,                   0,   100,                true,   false,   "jamming slope (EXPERIMENTAL!)"},   //       cgp_jammingSlope,                   
+      {  "SupervisorMapSave",                  0,                    0,   1,                  false,  false,   "The Supervisor may save a game as new map (spying!!!)"},  //       cgp_superVisorCanSaveMap,           
+      {  "ObjectsDestroyedByTerrain",          1,                    0,   1,                  true,   false,   "objects can be destroyed by terrain"},   //       cgp_objectsDestroyedByTerrain,      
+      {  "TrainingIncrement",                  2,                    1,   maxunitexperience,  true,   false,   "training centers: training increment"},   //       cgp_trainingIncrement,              
+      {  "ExperienceEffectDivisorAttack",      1,                    1,   10,                 false,  false,   "experience effect divisor for attack"},  //       gp_experienceDivisorAttack
+      {  "DisableDirectView",                  0,                    0,   1,                  false,  false,   "disable direct View"},  //       cgp_disableDirectView
+      {  "DisableUnitTrade",                   0,                    0,   1,                  false,  false,   "disable transfering units/buildings to other players"},  //       cgp_disableUnitTransfer
+      {  "ExperienceEffectDivisorDefense",     1,                    1,   10,                 false,  false,   "experience effect divisor for defense"},  //       cgp_experienceDivisorDefense
+      {  "DebugGameEvents",                    0,                    0,   2,                  true,   false,   "debug game events"},  //       cgp_debugEvents
+      {  "ObjectGrowthRate",                   0,                    0,   maxint,             true,   false,   "Object growth rate (percentage)" },  //       cgp_objectGrowthMultiplier
+      {  "ObjectsGrowOnOtherObjects",          1,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  },  //       cgp_objectGrowOnOtherObjects
+      {  "ResearchOutputMultiplier",           1,                    1,   maxint,             false,   false,   "Multiplies the research output of all labs"  }  //       cgp_researchOutputMultiplier
+};
 

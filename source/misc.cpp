@@ -31,7 +31,6 @@
 #endif
 
 #include "global.h"
-#include "tpascal.inc"
 #include "misc.h"
 #include "ascstring.h"
 
@@ -43,28 +42,17 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 char strstring[1000];
 
 
-#ifndef UseMemAvail
-int memavail ( void )
+int firstBit(int zahl)
 {
-   return 0x7fffffff ;
-}
-#endif
-
-
-
-/** Count the number of zero bits on the LSB side of "zahl"
- */
-int log2(int zahl)
-{
-   char log;
-   log = 0;
    if (zahl != 0) {
-      while ((zahl & 1) == 0)  {
+      int log = 0;
+      while ( !(zahl & 1))  {
         zahl>>=1;
         log++;
       }
-   }
-   return log;
+      return log;
+   } else
+      return 0;
 }
 
 
@@ -167,6 +155,17 @@ int  crc32buf(const void *vbuf, int len)
 
       return crc = oldcrc32 = ~oldcrc32;
 
+}
+
+
+int atoi ( const std::string& s )
+{
+   return atoi ( s.c_str() );
+}
+
+double atof ( const std::string& s )
+{
+   return atof ( s.c_str() );
 }
 
 

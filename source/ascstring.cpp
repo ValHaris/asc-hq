@@ -80,6 +80,16 @@ ASCString& ASCString::format ( const charT* pFormat, ... )
     std::va_list arg_ptr;
     va_start ( arg_ptr, pFormat );
 
+    vaformat( pFormat, arg_ptr );
+
+    va_end ( arg_ptr );
+
+    return *this;
+}
+
+
+ASCString&  ASCString::vaformat     ( const charT* pFormat, va_list ap )
+{
     int  l_iNbChar = 10000;
     bool l_bIsDone = false;
 
@@ -87,7 +97,7 @@ ASCString& ASCString::format ( const charT* pFormat, ... )
     {
         charT* l_pBuf = new charT [ l_iNbChar ];
 
-        int l_iNbCharWritten = ASCStringHelpers::_Vsnprintf ( l_pBuf, l_iNbChar, pFormat, arg_ptr );
+        int l_iNbCharWritten = ASCStringHelpers::_Vsnprintf ( l_pBuf, l_iNbChar, pFormat, ap );
 
         if ( l_iNbCharWritten != -1 )
         {
@@ -105,11 +115,9 @@ ASCString& ASCString::format ( const charT* pFormat, ... )
 
         delete [] l_pBuf;
     };
-
-    va_end ( arg_ptr );
-
     return *this;
 }
+
 
 /*!
     Print this ASCString to the standard output stream.
@@ -130,6 +138,21 @@ void ASCString::printf ( )
 {
     ASCStringHelpers::_Printf ( c_str () );
 }
+
+
+/**
+   Checks if the last characters of string are equal to s
+*/    
+bool ASCString::endswith( const ASCString& s ) const
+{
+   size_type p =  rfind( s );
+   if ( p != npos ) 
+      return p == length() - s.length();
+   else   
+      return false;
+}
+
+
 
 /*!
     Duplicate and convert to lowercase.
@@ -171,6 +194,37 @@ ASCString ASCString::toString(int i )
 {
    ASCString s;
    s.format("%d",i);
+   return s;
+}
+
+#ifdef SIZE_T_not_identical_to_INT
+ASCString ASCString::toString( size_t i )
+{
+   ASCString s;
+   s.format("%d",i);
+   return s;
+}
+#endif 
+
+
+ASCString ASCString::toString(double d )
+{
+   ASCString s;
+   s.format("%f",d);
+   return s;
+}
+
+const ASCString operator+ ( const ASCString& s1, const ASCString& s2 )
+{
+   ASCString s = s1;
+   s += s2;
+   return s;
+}
+
+const ASCString operator+ ( const char* s1, const ASCString& s2 )
+{
+   ASCString s = s1;
+   s += s2;
    return s;
 }
 

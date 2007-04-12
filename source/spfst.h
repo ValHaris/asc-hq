@@ -27,10 +27,11 @@
 #ifndef spfstH
   #define spfstH
 
+ #include <sigc++/sigc++.h>
+  
+  
   #include "newfont.h"
-  #include "basegfx.h"
   #include "typen.h"
-  #include "events.h"
   #include "gamemap.h"
 
    struct Schriften {
@@ -44,119 +45,66 @@
             } ; 
    extern Schriften schriften;
 
-   class tcursor { 
-           public:
-              int       posx, posy;
-              char      an; 
-              int       color; 
 
-              int  gotoxy (int x, int y, int disp = 1 );     // result: 0: map wurde nicht neu angezeigt     1: map wurde neu angezeigt
-              //! \returns true if map repositioned
-              bool show ( void );
-              void hide ( void );
-              void setcolor ( int col );
-              void init ( void );
-              void display ( void );
-              void reset ( void );
-              void*        markfield;
-              void*        picture; 
-              void*        orgpicture;
-              int          actpictwidth;
-
-              int         checkposition ( int x, int y );
-
-              virtual void getimg  ( void );
-              virtual void putimg  ( void );
-              virtual void putbkgr ( void );
-              int          oposx, oposy;
-              void*      backgrnd; 
-              virtual void checksize ( void );
-   };
-
-
-  extern tcursor cursor;
-
-  //! this is the one and only map that is loaded by ASC
-  extern pmap actmap; 
-
-
- //! passes a key to the map-cursor
- extern void  movecursor(tkey         ch);
- 
-
-//! returns the field that is selected with the cursor
-extern pfield getactfield(void);
+  extern GameMap* actmap; 
 
 //! returns the field at the given coordinates
-extern pfield getfield(int x, int y);
-
-//! returns the x coordinate of the cursor location
-extern int  getxpos(void);
-
-//!returns the y coordinate of the cursor location
-extern int  getypos(void);
+extern tfield* getfield(int x, int y);
 
 
-//! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
-extern int getdiplomaticstatus( int b );
+// ! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
+//extern int getdiplomaticstatus( int b );
 
-//! returns the diplomatic status between the players with color c and b (note that the color is playernum*8 ) 
-extern int getdiplomaticstatus2( int c, int b);
+// ! returns the diplomatic status between the players with color c and b (note that the color is playernum*8 ) 
+// extern int getdiplomaticstatus2( int c, int b);
 
 extern void  putbuilding( const MapCoordinate& entryPosition,
                          int          color,
-                         pbuildingtype buildingtyp,
+                         const BuildingType* buildingtyp,
                          int          completion,
                          int          ignoreunits = 0 ); // f?r Kartened
 
 extern void  putbuilding2( const MapCoordinate& entryPosition,
                           int color,
-                          pbuildingtype buildingtyp);  // f?r Spiel
+                          BuildingType* buildingtyp);  // f?r Spiel
 
 
 //! recalculates the connection (like road interconnections) of all objects on the map
-extern void  calculateallobjects( pmap m = actmap );
+extern void  calculateallobjects( GameMap* m = actmap );
 
 /** recalculates the connection (like road interconnections) of an object
       \param x The x coordinate of the field
       \param y The y coordinate of the field
       \param mof Should the neighbouring fields be modified if necessary
       \param obj The objecttype that is to be aligned on this field
+      \param gamemap the map that the object is on
 */
 extern void  calculateobject(int  x,
                              int  y,
                              bool mof,
-                             pobjecttype obj,
-                             pmap gamemap = actmap );
+                             const ObjectType* obj,
+                             GameMap* gamemap = actmap );
 
-//! generate a map of size xsize/ysize and consisting just of fields bt. The map is stored in #actmap
-extern void  generatemap( TerrainType::Weather* bt,
-                          int          xsize,
-                          int          ysize);
+extern void  calculateobject( const MapCoordinate& pos, 
+                             bool mof,
+                             const ObjectType* obj,
+                             GameMap* gamemap = actmap );
 
-//! puts a line of objects from x1/y1 to x2/y2, moving round obstacles
-extern void  putstreets2( int          x1,
-                          int          y1,
-                          int          x2,
-                          int          y2,
-                          pobjecttype obj );
 
 
 /*! tests if the vehicle can move onto the field
-
+   
    \param uheight the level of height for which the check should be done. Use -2 to use the current height of the unit
    \retval 0 unit cannot move there
    \retval 1 unit can pass over the field
    \retval 2 unit can stop its movement there
 */
-extern int fieldAccessible( const pfield        field,
-                            const pvehicle     vehicle,
+extern int fieldAccessible( const tfield*        field,
+                            const Vehicle*     vehicle,
                             int  uheight = -2,
                             const bool* attacked = NULL,
                             bool ignoreVisibility = false );
 
-//! returns the image of an (explosive) mine. The type of the mine is specified by num.
-extern void* getmineadress( int num , int uncompressed = 0 );
 
 /** removes all units that cannot exist any more, either due to invalid terrin
     (like tanks on melting ice) or too much wind (eg. hoovercrafts in a storm) */
@@ -166,27 +114,27 @@ extern void  checkunitsforremoval ( void );
 extern void checkobjectsforremoval ( void );
 
 //! returns the maximum wind speed that the unit can endure
-extern int          getmaxwindspeedforunit ( const pvehicle eht );
+extern int          getmaxwindspeedforunit ( const Vehicle* eht );
 
 /** Wind may be different at different heights. This function returns the index 
     for the wind array. If uheight != -1 it is assumed the unit was uheight instead
     the actual level of height */
-extern int          getwindheightforunit   ( const pvehicle eht, int uheight = -1 );
+extern int          getwindheightforunit   ( const Vehicle* eht, int uheight = -1 );
 
-/** Each field that has a building on it stores a pointer to the picture of the 
-    buildings' part for faster displaying. This function refreshes these pointers
-    on all fields */
-extern void         resetallbuildingpicturepointers ( void );
 
 /** Checks if the unit can drive on the field
+    \param field the field that the unit is checked again
+    \param vehicle the unit who accessabilit to field is tested
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
     \returns 0=unit cannot access this field; 
              1=unit can move across this field but cannot keep standing there
              2=unit can move and stand there
 */
-extern int          terrainaccessible (  const pfield field, const Vehicle* vehicle, int uheight = -1 );
+extern int          terrainaccessible (  const tfield* field, const Vehicle* vehicle, int uheight = -1 );
 
 /** Checks if the unit can drive on the field
+    \param field the field that the unit is checked again
+    \param vehicle the unit who accessabilit to field is tested
     \param uheight if != -1, the unit is assumed to be on this height instead of the actual one.
     \returns 0=unit cannot access this field;
              1=unit can move across this field but cannot keep standing there;
@@ -196,7 +144,7 @@ extern int          terrainaccessible (  const pfield field, const Vehicle* vehi
                   -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-extern int          terrainaccessible2 ( const pfield        field, const Vehicle* vehicle, int uheight = -1 );
+extern int          terrainaccessible2 ( const tfield*        field, const Vehicle* vehicle, int uheight = -1 );
 
 
 /** Checks if the field can be accessed
@@ -208,41 +156,54 @@ extern int          terrainaccessible2 ( const pfield        field, const Vehicl
                   -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-int          terrainaccessible2 ( const pfield        field, const TerrainAccess& terrainAccess, int uheight );
+int          terrainaccessible2 ( const tfield*        field, const TerrainAccess& terrainAccess, int uheight );
 
 
 /*!
-  \brief calculate the height difference between two levels of height
+  \brief calculate the height difference between two levels of height. 
 
   Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
+  Height is a numeric (and not bitmapped) value
  */
+//! {@ 
 extern int getheightdelta ( int height1, int height2 );
+extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
+//! }@
 
   /*!
     evaluates the visibility of a field
     \param pe the field to be evaluated
     \param player the player who is 'looking'
   */
-  extern bool fieldvisiblenow( const pfield pe, int player = actmap->actplayer );
+//! {@ 
+  extern bool fieldvisiblenow( const tfield* pe, int player = actmap->actplayer, GameMap* map = actmap );
+  extern bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player = actmap->actplayer  );
+//! }@
 
   /*!
     evaluates the visibility of a field
     \param pe the field to be evaluated
     \param player the player who is 'looking'
    */
-  extern VisibilityStates fieldVisibility  ( const pfield pe, int player = actmap->actplayer );
+//! {@ 
+  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player = actmap->actplayer );
+  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player, GameMap* gamemap );
+//! }@
 
 
+extern SigC::Signal0<void> repaintMap;
+extern SigC::Signal0<void> repaintDisplay;
+extern SigC::Signal0<void> updateFieldInfo;
+extern SigC::Signal0<void> cursorMoved;
 
+//! the view of the player onto the map changed, for example because he scrolled the map
+extern SigC::Signal0<void> viewChanged;
+extern SigC::Signal1<void,GameMap*> mapChanged;
+extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
+extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
+extern SigC::Signal0<bool> idleEvent;
 
-class tdrawline8 : public tdrawline {
-         public:
-           void start ( int x1, int y1, int x2, int y2 );
-           virtual void putpix ( int x, int y );
-           virtual void putpix8 ( int x, int y ) = 0;
-       };
-
-extern int  rol ( int valuetorol, int rolwidth );
+extern void displaymap();
 
 
 #endif

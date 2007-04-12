@@ -1,6 +1,14 @@
-//     $Id: newfont.h,v 1.14 2004-07-14 19:26:48 mbickel Exp $
+//     $Id: newfont.h,v 1.15 2007-04-12 20:52:49 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.14.2.1  2006/03/01 21:00:50  mbickel
+//      Clean up of source
+//      Fixed to construction icons
+//
+//     Revision 1.14  2004/07/14 19:26:48  mbickel
+//      Fixed display glitches
+//      Rewrote some endian dependent parts
+//
 //     Revision 1.13  2004/07/12 18:15:08  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //
@@ -85,7 +93,6 @@
 #define newfont_h
 #include "global.h" 
 #include "basestrm.h"
-#include "tpascal.inc"
 #include "palette.h"
 
 #pragma pack(1)
@@ -111,14 +118,14 @@ struct toldfont {
          char             number;
          char          color;
          toldcharacter    character[256];
-         integer          height;
+         Sint16          height;
          tkernchartable   kernchartable;
          tkerning         kerning;
          Uint16           dummy;
          char             useems;
          char             caps;
          dacpalette256*   palette;
-         pascal_byte      groundline;
+         char      groundline;
          void read ( tnstream& stream );
       };
 
@@ -134,11 +141,11 @@ struct tfont {
          char*            name;
          char          color;
          char          caps;
-         integer          height;
+         Sint16          height;
          tcharacter       character[256];
          signed char      kerning[256][256]; 
          dacpalette256*   palette;
-         pascal_byte      groundline;
+         char      groundline;
       };
 
 

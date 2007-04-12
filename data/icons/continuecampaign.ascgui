@@ -1,0 +1,84 @@
+
+panel {
+  width = 400
+  height = 400
+  name = MainWidget
+
+  Title = Continue Campaign
+    
+  ChildWidgets = Message TitleHeader Title CodeWordHeader CodeWord FilenameHeader Filename GO
+  
+    
+  Message {
+      type = StaticText
+      text = Next Campaign Map 
+      x = 40
+      y = 40
+      height = 30
+      width = 200
+  } Message
+
+
+  CodeWordHeader  {
+      type = StaticText
+      text = Codeword:
+      x = 40
+      y = 80
+      height = 30
+      width = 200
+   } CodeWordHeader
+        
+  CodeWord  {
+      type = TextOutput
+      x = 60
+      y = 110
+      height = 30
+      width = 200
+   } CodeWord
+
+
+  TitleHeader  {
+      type = StaticText
+      text = Title:
+      x = 40
+      y = 150
+      height = 30
+      width = 200
+   } TitleHeader
+        
+  Title  {
+      type = TextOutput
+      x = 60
+      y = 180
+      height = 30
+      width = 200
+   } Title
+
+
+   FilenameHeader {
+      type = StaticText
+      text = Filename: 
+      x = 40
+      y = 220
+      height = 30
+      width = 200
+   } FilenameHeader
+
+   Filename {
+      type = TextOutput
+      x = 60
+      y = 250
+      height = 30
+      width = 200
+   } Filename
+
+   GO {
+      type = Button
+      text = Start
+      x = 40
+      y = -50
+      x2 = -40
+      height = 30
+   } GO
+
+} panel

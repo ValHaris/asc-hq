@@ -5,9 +5,17 @@
      which was never finished.
 */
 
-//     $Id: dlgraph.cpp,v 1.13 2001-07-30 17:43:13 mbickel Exp $
+//     $Id: dlgraph.cpp,v 1.14 2007-04-12 20:52:45 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.13.2.1  2006/03/01 21:00:50  mbickel
+//      Clean up of source
+//      Fixed to construction icons
+//
+//     Revision 1.13  2001/07/30 17:43:13  mbickel
+//      Added Microsoft Visual Studio .net project files
+//      Fixed some warnings
+//
 //     Revision 1.12  2001/07/14 14:26:10  mbickel
 //      Some cleanup
 //
@@ -108,10 +116,10 @@ void                 tdialogbox::rahmen(	bool      invers,
    rahmen ( invers, rect.x1, rect.y1, rect.x2,rect.y2 );
 }
 
-void         tdialogbox::knopf(integer      xx1,
-                   integer      yy1,
-                   integer      xx2,
-                   integer      yy2)
+void         tdialogbox::knopf(int      xx1,
+                   int      yy1,
+                   int      xx2,
+                   int      yy2)
 { 
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
@@ -129,7 +137,7 @@ void         tdialogbox::knopfdruck(int      xx1,
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
     void*      p;
-    integer      mt;
+    int      mt;
 
      mt = mouseparams.taste;
      mousevisible(false);
@@ -166,10 +174,10 @@ void         tdialogbox::knopfdruck(int      xx1,
 
 
 
-void         tdialogbox::newknopf(integer      xx1,
-                      integer      yy1,
-                      integer      xx2,
-                      integer      yy2)
+void         tdialogbox::newknopf(int      xx1,
+                      int      yy1,
+                      int      xx2,
+                      int      yy2)
 { 
      collategraphicoperations cgs ( xx1-1, yy1-1, xx2+1, yy2+1 );
 
@@ -180,15 +188,15 @@ void         tdialogbox::newknopf(integer      xx1,
 } 
 
 
-void         tdialogbox::newknopfdruck2(integer      xx1,
-                            integer      yy1,
-                            integer      xx2,
-                            integer      yy2)
+void         tdialogbox::newknopfdruck2(int      xx1,
+                            int      yy1,
+                            int      xx2,
+                            int      yy2)
 {
 
     void*      p;
     bool      kn; 
-    integer      mt; 
+    int      mt;
     {
        collategraphicoperations cgs ( xx1 -1, yy1 -1, xx2 + 1, yy2 + 1 );
        mt = mouseparams.taste;
@@ -246,10 +254,10 @@ void         tdialogbox::newknopfdruck2(integer      xx1,
 } 
 
 
-void         tdialogbox::newknopfdruck3(integer      xx1,
-                            integer      yy1,
-                            integer      xx2,
-                            integer      yy2)
+void         tdialogbox::newknopfdruck3(int      xx1,
+                            int      yy1,
+                            int      xx2,
+                            int      yy2)
 {
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
@@ -269,10 +277,10 @@ void         tdialogbox::newknopfdruck3(integer      xx1,
 
 
 
-void         tdialogbox::newknopfdruck4(integer      xx1,
-                            integer      yy1,
-                            integer      xx2,
-                            integer      yy2)
+void         tdialogbox::newknopfdruck4(int      xx1,
+                            int      yy1,
+                            int      xx2,
+                            int      yy2)
 {
      collategraphicoperations cgs ( xx1, yy1, xx2, yy2 );
 
@@ -288,15 +296,15 @@ void         tdialogbox::newknopfdruck4(integer      xx1,
 } 
 
 
-void         tdialogbox::newknopfdruck(integer      xx1,
-                           integer      yy1,
-                           integer      xx2,
-                           integer      yy2)
+void         tdialogbox::newknopfdruck(int      xx1,
+                           int      yy1,
+                           int      xx2,
+                           int      yy2)
 {
 
    void*      p;
    bool      kn;
-   integer      mt;
+   int      mt;
    void*    pq ;
    {
      collategraphicoperations cgs( xx1-1, yy1-1, xx2+1, yy2+1 );

@@ -18,22 +18,16 @@
     Boston, MA  02111-1307  USA
 */
 
-//*Actions fÅr Editor
+//*Actions fr Editor
 
-class mc_check {
-   public :
-      void on(void);
-      void off(void);
-   protected :
-      signed char mstatus,cstatus;
-   };
+#ifndef edglobalH
+#define edglobalH
 
-
-extern mc_check mc;
+#include "ed_mapcomponent.h"
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 90;
+const int execactionscount = 104;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -47,9 +41,11 @@ enum tuseractions {
      act_selcolor,
      act_selbuilding,
      act_selobject,
+     act_selobjectAll,
      act_selmine,
      act_selweather,
      act_setupalliances,
+     act_setupplayers,
      act_toggleresourcemode,
      act_changeunitdir,
      act_asc_resource,
@@ -62,7 +58,6 @@ enum tuseractions {
      act_unitinfo,
      act_viewmap,
      act_about,
-     act_changeglobaldir,
      act_createresources,
      act_changecargo,
      act_changeresources,
@@ -80,10 +75,6 @@ enum tuseractions {
      act_changeunitvals,
      act_mirrorcursorx,
      act_mirrorcursory,
-     act_placebodentyp,
-     act_placeunit,
-     act_placebuilding,
-     act_placeobject,
      act_placemine,
      act_placething,
      act_deleteunit,
@@ -127,6 +118,54 @@ enum tuseractions {
      act_generateTechTree,
      act_editTechAdapter,
      act_resetPlayerData,
-     act_playerStrengthSummary};
+     act_createresources2,
+     act_setactnewweather,
+     act_primaryAction, 
+     act_playerStrengthSummary,
+     act_increase_zoom,
+     act_decrease_zoom,
+     act_editpreferences,
+     act_clearresources,
+     act_dumpBuilding,
+     act_dumpVehicle,
+     act_dumpObject,
+     act_pbpstatistics,
+     act_exchangeGraphics,
+     act_openControlPanel,
+     act_releaseControlPanel,
+     act_dumpAllVehicleDefinitions,
+     act_clearSelection
+ };
 
+class SelectionHolder : public SigC::Object {
+     const MapComponent* currentItem;
+     int actplayer;
+     int currentWeather;
+     
+  public:
+     SelectionHolder() : currentItem(NULL), actplayer(0), currentWeather(0),brushSize(1) {};
+ 
+     int getPlayer() { return actplayer; };
+     void setPlayer( int player );
+     SigC::Signal1<void,int> playerChanged;
+     
+     void setWeather( int weather );
+     int getWeather() { return currentWeather; };
+     
+     int brushSize;
+     const MapComponent* getSelection();
+     void setSelection( const MapComponent& component ) ;
+     void pickup ( tfield* fld );
+     
+     SigC::Signal1<void,const MapComponent*> selectionChanged;
+     void clear(); 
+};
+ 
+extern SelectionHolder selection;
+
+  
+ 
+extern void         execaction_ev(int code);
 extern void         execaction(int code);
+
+#endif

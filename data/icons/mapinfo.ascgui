@@ -1,0 +1,117 @@
+panel {
+   height = 120
+   WidgetNum = 1
+   
+   Widget0 {
+      type = dummy
+      x = 3
+      y = 10
+      x2 = -3
+      y2 = -1
+      
+      WidgetNum = 7
+   
+      fontsize = 9
+      fontcolor = 0xffffff
+      Widget0 {
+         name = pipes
+         type = checkbox
+         x = 0
+         y = 0
+         x2 = 0
+         height = 15
+         text = Show Pipelines
+         ToolTipHelp = hotkey: 9
+      } Widget0
+      
+      Widget1 {
+         name = container
+         type = checkbox
+         x = 0
+         y = 15
+         x2 = 0
+         height = 15
+         text = Show Cargo
+         ToolTipHelp = Ctrl 2
+      } Widget1
+
+      Widget2 {
+         name = resources
+         type = checkbox
+         x = 0
+         y = 30
+         x2 = 0
+         height = 15
+         text = Mineral Resources
+         ToolTipHelp = 1
+      } Widget2
+
+      Widget6 {
+         name = visibilityvalue
+         type = checkbox
+         x = 0
+         y = 45
+         x2 = 0
+         height = 15
+         text = visibility
+         ToolTipHelp = 0
+      } Widget6
+
+      
+      Widget3 {
+         name = weaprange
+         type = button
+         x = 0
+         y = 61
+         x2 = 0
+         height = 15
+         text = show weapon range
+         ToolTipHelp = Ctrl 5
+      } Widget3
+      
+      Widget4 {
+         name = moverange
+         type = button
+         x = 0
+         y = 77
+         x2 = 0
+         height = 15
+         text = show movement range
+         ToolTipHelp = Ctrl 6
+      } Widget4
+   
+      Widget5 {
+         type = dummy
+         widgetnum = 2
+         x = 0
+         y = 93
+         ToolTipHelp = Hotkeys: Keypad + - 
+   
+         Widget0 {
+            name = zoomscroller
+            type = slider
+            Orientation = horizontal
+            x = 30
+            y = 0
+            x2 = 0
+            height = 15
+            style = slider
+         } Widget0
+      
+         Widget1 {
+           type = statictext
+           text = Zoom
+           x = 0
+           y = 0
+           width = 28
+           height = 15 
+         } Widget1
+       } widget5
+   
+   } Widget0
+      
+      
+   
+
+  
+} panel

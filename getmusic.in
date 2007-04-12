@@ -1,0 +1,2 @@
+cd @top_srcdir@/data/music
+wget -nc http://www.asc-hq.org/music/frontiers.ogg http://www.asc-hq.org/music/time_to_strike.ogg http://www.asc-hq.org/music/machine_wars.ogg

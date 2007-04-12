@@ -19,46 +19,31 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
 
 
 #include <stdio.h>
-#include "tpascal.inc"
+#include <math.h>
+
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
 #include "attack.h"
-#include "newfont.h"
-#include "basegfx.h"
 #include "spfst.h"
-#include "dlg_box.h"
-#include "sgstream.h"
-#include "events.h"
-#include "loaders.h"
-#include "gameoptions.h"
-#include "viewcalculation.h"
-
-#include "mapalgorithms.h"
-
-#ifdef sgmain
- #include "soundList.h"
-#endif
 
 
 
-
-
-bool  AttackFormula :: checkHemming ( pvehicle     d_eht,  int     direc )
+bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
 { 
-   pvehicle     s_eht;
+   Vehicle*     s_eht;
 
    int x = d_eht->xpos;
    int y = d_eht->ypos; 
    getnextfield(x, y, direc);
-   pfield fld = getfield(x,y);
+   tfield* fld = getfield(x,y);
 
    if ( fld )
       s_eht = fld->vehicle;
@@ -85,13 +70,13 @@ float AttackFormula :: getHemmingFactor ( int relDir )
       relDir += sidenum;
 
    if ( relDir == 5 )
-      displaymessage("float AttackFormula :: getHemmingFactor - invalid direction", 1 );
+      warning("float AttackFormula :: getHemmingFactor - invalid direction" );
       
    return hemming[relDir]*maxHemmingFactor/maxHemmingSum;
 }
 
 
-float AttackFormula :: strength_hemming ( int  ax,  int ay,  pvehicle d_eht )
+float AttackFormula :: strength_hemming ( int  ax,  int ay,  Vehicle* d_eht )
 {
    float hemm = 0;
    int attackDir = getdirection(ax,ay,d_eht->xpos,d_eht->ypos);
@@ -151,7 +136,6 @@ float AttackFormula :: defense_defensebonus ( int defensebonus )
 
 tfight :: tfight ( void )
 {
-   synchronedisplay = 0;
 }
 
 
@@ -170,10 +154,10 @@ void tfight :: calc ( void )
       float absdefense = float(dv.armor / armordivisor )
                           * ( 1 + defense_defensebonus ( dv.defensebonus ) + defense_experience ( dv.experience ) );
 
-      int w = int(dv.damage + absstrength / absdefense * 1000 / damagefactor );
+      int w = int( ceil(dv.damage + absstrength / absdefense * 1000 / damagefactor ));
 
       if (dv.damage > w ) 
-         displaymessage("fatal error at attack: \ndecrease of damage d!",1);
+         warning("fatal error at attack: \ndecrease of damage d!");
 
       if (dv.damage == w )
          w = dv.damage+1;
@@ -206,10 +190,10 @@ void tfight :: calc ( void )
       float absdefense = float(av.armor / armordivisor)
                           * ( 1 + defense_defensebonus ( av.defensebonus )+ defense_experience ( av.experience ));
 
-      int w = int(av.damage + absstrength / absdefense * 1000 / damagefactor );
+      int w = int( ceil(av.damage + absstrength / absdefense * 1000 / damagefactor ));
 
       if (av.damage > w ) 
-         displaymessage("fatal error at attack: \ndecrease of damage a!",1);
+         warning("fatal error at attack: \ndecrease of damage a!");
 
       if (w > 100) 
          av.damage = 100; 
@@ -238,218 +222,14 @@ void tfight :: calc ( void )
 }
 
 
-int positions[][4] = {{ 459,    312,    468,      412  },
-                      { 471,    312,    480,      412  },
-                      { 483,    312,    492,      412  },
-                      { 494,    312,    504,      412  },
-                      { 510,    312,    531,      412  },
-                      { 542,    312,    563,      412  },
-                      { 569,    312,    578,      412  },
-                      { 581,    312,    590,      412  },
-                      { 593,    312,    602,      412  },
-                      { 605,    312,    614,      412  }};
 
-void tfight :: paintbar ( int num, int val, int col )
+tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon, bool reactionfire )
 {
-   if ( val ) 
-      bar ( agmp->resolutionx - ( 640 - positions[num][0] ) , positions[num][3] - ( val - 1), agmp->resolutionx - ( 640 - positions[num][2] ), positions[num][3], col );
-
-}
-
-void tfight :: paintline ( int num, int val, int col )
-{
-   if ( val ) 
-      line ( agmp->resolutionx - ( 640 - positions[num][0] ) , positions[num][3] - ( val - 1), agmp->resolutionx - ( 640 - positions[num][2] ), positions[num][3] - ( val - 1), col );
-
-}
-
-
-
-#define maxdefenseshown 24
-#define maxattackshown 24
-
-void tunitattacksunit::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-  SoundList::getInstance().playSound ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
-  #endif
-  tfight::calcdisplay(ad,dd);
-  #ifdef sgmain
-   if ( av.damage >= 100  )
-      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackingunit->typ->killSoundLabel );
-   if ( dv.damage >= 100 )
-      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackedunit->typ->killSoundLabel );
-
-
-  #endif
-}
-  
-void tfight :: calcdisplay ( int ad, int dd )
-{
-
-   collategraphicoperations cgo ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 );
-
-   if ( !icons.attack.orgbkgr ) {
-      icons.attack.orgbkgr = new char [ imagesize ( agmp->resolutionx - ( 640 - 450), 211, agmp->resolutionx - ( 640 - 623 ), 426 ) ];
-   }
-   getimage ( agmp->resolutionx - ( 640 - 451 ), 211, agmp->resolutionx - ( 640 - 624 ), 426, icons.attack.orgbkgr );
-
-   int bk = 156;
-
-   putimage ( agmp->resolutionx - ( 640 - 450 ), 211, icons.attack.bkgr );
-   paintimages ( agmp->resolutionx - ( 640 - 481 ), 226, agmp->resolutionx - ( 640 - 563 ), 226 );
-
-   int ac = 20 + av.color * 8;
-   int dc = 20 + dv.color * 8;
-
-   // ursprungs-heilheit zeichnen 
-   paintbar ( 4, 100 - av.damage, ac );
-   int avd = av.damage;
-
-   paintbar ( 5, 100 - dv.damage, dc );
-   int dvd = dv.damage;
-
-
-   // einkeilung;
-
-   paintbar ( 6, int( 100 *  (dv.hemming - 1 ) / 4), dc );
-
-   if ( av.attackbonus > 0 )
-      if ( av.attackbonus > maxattackshown )
-         paintbar ( 0, 100, ac - 2 );
-      else
-         paintbar ( 0, 100 * av.attackbonus / maxattackshown, ac );
-   else
-      if ( av.attackbonus < -maxattackshown )
-         paintbar ( 0, 100 , yellow );
-      else
-         paintbar ( 0, -100 * av.attackbonus / maxattackshown, yellow );
-
-
-   if ( av.defensebonus > 0 )
-      if ( av.defensebonus > maxdefenseshown )
-         paintbar ( 1, 100, ac - 2 );
-      else
-         paintbar ( 1, 100 * av.defensebonus / maxdefenseshown, ac );
-   else
-      if ( av.defensebonus < -maxdefenseshown )
-         paintbar ( 1, 100, yellow );
-      else
-         paintbar ( 1, -100 * av.defensebonus / maxdefenseshown, yellow );
-
-
-
-
-   if ( dv.attackbonus > 0 )
-      if ( dv.attackbonus > maxattackshown )
-         paintbar ( 9, 100, dc - 2 );
-      else
-         paintbar ( 9, 100 * dv.attackbonus / maxattackshown, dc );
-   else
-      if ( dv.attackbonus < -maxattackshown )
-         paintbar ( 9, 100 , yellow );
-      else
-         paintbar ( 9, -100 * dv.attackbonus / maxattackshown, yellow );
-
-
-   if ( dv.defensebonus > 0 )
-      if ( dv.defensebonus > maxdefenseshown )
-         paintbar ( 8, 100, dc - 2 );
-      else
-         paintbar ( 8, 100 * dv.defensebonus / maxdefenseshown, dc );
-   else
-      if ( dv.defensebonus < -maxdefenseshown )
-         paintbar ( 8, 100, yellow );
-      else
-         paintbar ( 8, -100 * dv.defensebonus / maxdefenseshown, yellow );
-
-   cgo.off();
-
-   int t = ticker;
-   calc();
-
-
-   int time1 = CGameOptions::Instance()->attackspeed1;
-   if ( time1 <= 0 )
-      time1 = 30;
-
-   int time2 = CGameOptions::Instance()->attackspeed2;
-   if ( time2 <= 0 )
-      time2 = 50;
-
-   int time3 = CGameOptions::Instance()->attackspeed3;
-   if ( time3 <= 0 )
-      time3 = 30;
-
-
-
-   do {
-      releasetimeslice();
-   } while ( t + time1 > ticker ); /* enddo */
-
-
-
-
-   if ( ad != -1 )
-      av.damage = ad;
-   if ( dd != -1 )
-      dv.damage = dd;
-
-
-
-   int steps;
-   if ( av.damage - avd > dv.damage - dvd )
-      steps = av.damage - avd ;
-   else
-      steps = dv.damage - dvd;
-
-   int d1 = avd;
-   int d2 = dvd;
-
-   int starttime = ticker;
-   while ( ticker < starttime + time2 ) {
-      int finished = 1000 * (ticker - starttime) / time2;
-      int newpos1 = avd + steps * finished / 1000;
-      int newpos2 = dvd + steps * finished / 1000;
-      cgo.on();
-
-      int i;
-      if ( avd != av.damage )
-         for ( i = d1; i <= newpos1 && i <= av.damage; i++ )
-            paintline ( 4, 100 - i, bk );
-
-      d1 = i;
-
-      int j;
-      if ( dvd != dv.damage )
-         for ( j = d2; j <= newpos2 && j <= dv.damage; j++ )
-            paintline ( 5, 100 - j, bk );
-
-      d2 = j;
-
-      cgo.off();
-   }
-   for ( int i = 0; i < av.damage; i++ )
-      paintline ( 4, 100 - i, bk );
-
-   for ( int i = 0; i < dv.damage; i++ )
-      paintline ( 5, 100 - i, bk );
-
-   t = ticker;
-   do {
-      releasetimeslice();
-   } while ( t + time3 > ticker ); /* enddo */
-   putimage ( agmp->resolutionx - ( 640 - 451 ), 211, icons.attack.orgbkgr );
-}
-
-
-
-
-tunitattacksunit :: tunitattacksunit ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon )
-{
+   this->reactionfire = reactionfire;
    setup ( attackingunit, attackedunit, respond, weapon );
 }
 
-void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit, bool respond, int weapon )
+void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon )
 {
    _attackingunit = attackingunit;
    _attackedunit  = attackedunit;
@@ -479,10 +259,13 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
    const SingleWeapon* weap = attackingunit->getWeapon(_weapon);
 
-   av.strength = int( attackingunit->weapstrength[_weapon]
-                      * weapDist.getWeapStrength(weap, dist, attackingunit->height, attackedunit->height )
-                      * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[attackedunit->typ->movemalustyp] / 100 );
-   av.armor  = attackingunit->armor;
+
+   int targetWeather = attackedunit->getMap()->getField( attackedunit->getPosition() )->getweather();
+
+   av.strength = int ( ceil( attackingunit->weapstrength[_weapon]
+                        * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, attackedunit->height )
+                        * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[attackedunit->typ->movemalustyp] / 100 ));
+   av.armor  = attackingunit->getArmor();
    av.damage     = attackingunit->damage;
    av.experience  = attackingunit->experience;
    av.hemming    = 1;
@@ -490,9 +273,11 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    av.weapcount  = attackingunit->ammo [ _weapon ];
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
-   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
+   av.height = attackingunit->height;
+   av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       if ( dist <= maxmalq )
@@ -506,6 +291,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    }
 
 
+   dv.weapnum = -1;
    if ( dist <= maxmalq  &&  respond  && !av.kamikaze  && fieldvisiblenow( field, attackedunit->getOwner()) ) {
       AttackWeap atw;
       attackpossible2n ( attackedunit, attackingunit, &atw );
@@ -525,20 +311,24 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    } else
       respond = 0;
 
-   if ( attackedunit->typ->functions & cfkamikaze )
+   if ( attackedunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  ))
       respond = 0;
 
    if ( respond ) {
       weap = attackedunit->getWeapon( dv.weapnum );
 
-      dv.strength  = int( attackedunit->weapstrength[ dv.weapnum ]
-                          * weapDist.getWeapStrength(weap, dist, attackedunit->height, attackingunit->height )
-                          * attackedunit->typ->weapons.weapon[ dv.weapnum ].targetingAccuracy[attackingunit->typ->movemalustyp] / 100 );
+
+      int attackerWeather = attackingunit->getMap()->getField( attackingunit->getPosition() )->getweather();
+
+      dv.strength  = int ( ceil( attackedunit->weapstrength[ dv.weapnum ]
+                           * WeapDist::getWeaponStrength(weap, attackerWeather, dist, attackedunit->height, attackingunit->height )
+                           * attackedunit->typ->weapons.weapon[ dv.weapnum ].targetingAccuracy[attackingunit->typ->movemalustyp] / 100 ));
       field = getfield ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
       _respond = 1;
 
       dv.weapcount   = attackedunit->ammo [ dv.weapnum ];
+      dv.weapontype = attackedunit->typ->weapons.weapon[ dv.weapnum ].getScalarWeaponType();
 
    } else {
       dv.strength = 0;
@@ -547,7 +337,7 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
    }
 
 
-   dv.armor = attackedunit->armor;
+   dv.armor = attackedunit->getArmor();
    dv.damage    = attackedunit->damage;
    dv.experience = attackedunit->experience;
    if ( dist <= maxmalq && attackingunit->height < chtieffliegend )
@@ -563,6 +353,8 @@ void tunitattacksunit :: setup ( pvehicle &attackingunit, pvehicle &attackedunit
 
    dv.color      = attackedunit->getOwner();
    dv.initiative = attackedunit->typ->initiative;
+   dv.kamikaze = 0;
+   dv.height = attackedunit->height;
 }
 
 
@@ -572,10 +364,10 @@ void tunitattacksunit :: setresult ( void )
    _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-//   if ( _attackingunit->reactionfire.getStatus() >= Vehicle::ReactionFire::ready )
-//      _attackingunit->reactionfire.enemiesAttackable &= 0xff ^ ( 1 <<  dv.color );
+   _attackingunit->postAttack( reactionfire );
 
-   _attackingunit->postAttack();
+   _attackingunit->reactionfire.weaponShots[ av.weapnum]--;
+   _attackingunit->reactionfire.nonattackableUnits.push_back ( _attackedunit->networkid );
 
    _attackedunit->damage    = dv.damage;
    _attackingunit->damage    = av.damage;
@@ -599,11 +391,6 @@ void tunitattacksunit :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
-void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
-{
-   putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
-   putrotspriteimage ( xd, yd, _attackedunit ->typ->picture[0], _attackedunit->color  );
-};
 
 
 
@@ -611,14 +398,13 @@ void tunitattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
 
 
 
-
-tunitattacksbuilding :: tunitattacksbuilding ( pvehicle attackingunit, int x, int y, int weapon )
+tunitattacksbuilding :: tunitattacksbuilding ( Vehicle* attackingunit, int x, int y, int weapon )
 {
    setup ( attackingunit, x, y, weapon );
 }
 
 
-void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int weapon )
+void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int weapon )
 {
    _attackingunit = attackingunit;
    _x = x;
@@ -637,29 +423,34 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
             s = atw->strength[i];
             n = i;
          }
-   
+
       _weapon = atw->num[n];
-   
+
       delete atw;
    } else
       _weapon  = weapon;
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
-   av.strength  = int( attackingunit->weapstrength[_weapon]
-                       * weapDist.getWeapStrength(weap, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
-                       * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
 
-   av.armor = attackingunit->armor;
+   int targetWeather = getfield(x,y)->getweather();
+
+   av.strength  = int (ceil( attackingunit->weapstrength[_weapon]
+                        * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
+                        * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
+
+   av.armor = attackingunit->getArmor();
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
    av.hemming    = 1;
    av.weapnum    = _weapon;
    av.weapcount  = attackingunit->ammo [ _weapon ];
+   av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
    av.color      = attackingunit->getOwner();
    av.initiative = attackingunit->typ->initiative;
-   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
+   av.height = attackingunit->height;
 
-   pfield field = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field->getdefensebonus();
@@ -681,24 +472,13 @@ void tunitattacksbuilding :: setup ( pvehicle attackingunit, int x, int y, int w
    dv.damage    = _attackedbuilding->damage;
    dv.experience = 0;
    dv.hemming    = 1;
+   dv.weapnum = -1;
 
    dv.defensebonus = 0; // getfield ( x, y ) -> getdefensebonus();
    dv.color      = _attackedbuilding->getOwner();
    dv.initiative = 0;
    dv.kamikaze = 0;
-
-
-}
-
-void tunitattacksbuilding::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-   SoundList::getInstance().playSound( SoundList::shooting  , _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
-  #endif
-  tfight::calcdisplay(ad,dd);
-  #ifdef sgmain
-   if ( dv.damage >= 100 )
-      SoundList::getInstance().playSound( SoundList::buildingCollapses );
-  #endif
+   dv.height = _attackedbuilding->typ->buildingheight;
 }
 
 
@@ -707,7 +487,7 @@ void tunitattacksbuilding :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->postAttack();
+   _attackingunit->postAttack( false );
 
    _attackingunit->damage    = av.damage;
    _attackedbuilding->damage    = dv.damage;
@@ -728,27 +508,20 @@ void tunitattacksbuilding :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
-void tunitattacksbuilding :: paintimages ( int xa, int ya, int xd, int yd )
-{
-   putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
-   putrotspriteimage ( xd, yd, getfield ( _x, _y ) -> picture , _attackedbuilding->color  );
-};
 
 
-
-
-tmineattacksunit :: tmineattacksunit ( pfield mineposition, int minenum, pvehicle &attackedunit )
+tmineattacksunit :: tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
 {
    setup ( mineposition, minenum, attackedunit );
 }
 
-void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &attackedunit )
+void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
 {
    if ( mineposition->mines.empty() )
-      displaymessage(" tmineattacksunit :: setup \n no mine to attack !\n",2 );
+      errorMessage(" tmineattacksunit :: setup \n no mine to attack !\n" );
 
    if ( attackedunit->height >= chtieffliegend )
-      displaymessage(" tmineattacksunit :: setup \n mine attacks flying unit!\n",2 );
+      errorMessage(" tmineattacksunit :: setup \n mine attacks flying unit!\n" );
 
 
    _mineposition = mineposition;
@@ -791,9 +564,11 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    av.initiative = 256;
    av.attackbonus = 8;
    av.kamikaze = 0;
+   av.height = 0;
+   av.weapontype = cwminen;
 
    dv.strength = 0;
-   dv.armor = attackedunit->armor;
+   dv.armor = attackedunit->getArmor();
    dv.damage    = attackedunit->damage;
    dv.experience = attackedunit->experience;
    dv.defensebonus = 0;
@@ -804,17 +579,7 @@ void tmineattacksunit :: setup ( pfield mineposition, int minenum, pvehicle &att
    dv.initiative = attackedunit->typ->initiative;
    dv.attackbonus = 0;
    dv.kamikaze = 0;
-}
-
-void tmineattacksunit::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-  SoundList::getInstance().playSound( SoundList::shooting , 1 );
-  #endif
-  tfight::calcdisplay(ad,dd);
-  #ifdef sgmain
-   if ( dv.damage >= 100 )
-      SoundList::getInstance().playSound( SoundList::unitExplodes , 0, false, _attackedunit->typ->killSoundLabel );
-  #endif
+   dv.height = attackedunit->height;
 }
 
 
@@ -839,29 +604,23 @@ void tmineattacksunit :: setresult ( void )
 
 }
 
-void tmineattacksunit :: paintimages ( int xa, int ya, int xd, int yd )
+
+Mine* tmineattacksunit :: getFirstMine()
 {
-   if ( _minenum == -1 ) {
-      tfield::MineContainer::iterator m = _mineposition->mines.begin();
-      while ( ! m->attacksunit  ( _attackedunit ))
-         m++;
-
-      putspriteimage    ( xa, ya, getmineadress ( m->type ));
-   } else
-      putspriteimage    ( xa, ya, getmineadress ( _mineposition->getMine(_minenum).type ));
-
-   putrotspriteimage ( xd, yd, _attackedunit->typ->picture[0], _attackedunit->color  );
+   if ( _mineposition && _mineposition->mines.size() )
+      return &( * _mineposition->mines.begin() );
+   else
+      return NULL;
 }
 
 
 
-
-tunitattacksobject :: tunitattacksobject ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
+tunitattacksobject :: tunitattacksobject ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon )
 {
    setup ( attackingunit, obj_x, obj_y, weapon );
 }
 
-void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y, int weapon )
+void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon )
 {
 
    _x = obj_x;
@@ -900,18 +659,20 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
       _weapon  = weapon;
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
-   av.strength  = int( attackingunit->weapstrength[weapon]
-                       * weapDist.getWeapStrength(weap, dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
-                       * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 );
+   av.strength  = int ( ceil( attackingunit->weapstrength[weapon]
+                        * WeapDist::getWeaponStrength(weap, targetField->getweather(), dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
+                        * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
 
-   av.armor = attackingunit->armor;
+   av.armor = attackingunit->getArmor();
    av.damage    = attackingunit->damage;
    av.experience = attackingunit->experience;
    av.weapnum    = _weapon;
    av.weapcount   = attackingunit->ammo [ _weapon ];
-   av.kamikaze   = attackingunit->typ->functions & cfkamikaze;
+   av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
+   av.height = attackingunit->height;
+   av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   pfield field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field2->getdefensebonus();
@@ -936,14 +697,7 @@ void tunitattacksobject :: setup ( pvehicle attackingunit, int obj_x, int obj_y,
    dv.hemming    = 1;
    dv.color = 8 ;
    dv.kamikaze = 0;
-
-}
-
-void tunitattacksobject::calcdisplay( int ad, int dd ) {
-  #ifdef sgmain
-  SoundList::getInstance().playSound ( SoundList::shooting, _attackingunit->getWeapon(av.weapnum)->getScalarWeaponType(), false, _attackingunit->getWeapon(av.weapnum)->soundLabel );
-  #endif
-  tfight::calcdisplay(ad,dd);
+   dv.height = 0;
 }
 
 
@@ -952,7 +706,7 @@ void tunitattacksobject :: setresult ( void )
    // _attackingunit->experience = av.experience;
    _attackingunit->ammo[ av.weapnum ] = av.weapcount;
 
-   _attackingunit->postAttack();
+   _attackingunit->postAttack( false );
 
    _obji->damage    = dv.damage;
    _attackingunit->damage    = av.damage;
@@ -974,21 +728,11 @@ void tunitattacksobject :: setresult ( void )
 }
 
 
-void tunitattacksobject :: paintimages ( int xa, int ya, int xd, int yd )
-{
-   putrotspriteimage ( xa, ya, _attackingunit->typ->picture[0], _attackingunit->color );
-   _obji->typ->display ( xd - 5, yd - 5 );
-}
 
 
 
 
-
-
-
-
-
-pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
+pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
 {
   pattackweap atw = new AttackWeap;
 
@@ -1002,7 +746,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
    if (angreifer->typ->weapons.count == 0)
       return atw;
 
-   pfield efield = getfield(x,y);
+   tfield* efield = getfield(x,y);
 
    if ( efield->vehicle ) {
       if (fieldvisiblenow(efield, angreifer->color/8))
@@ -1010,7 +754,7 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
    }
    else
       if (efield->building != NULL) {
-         if (getdiplomaticstatus2(efield->building->color, angreifer->color) == cawar || efield->building->color == 8*8 )
+         if ( actmap->getPlayer(angreifer).diplomacy.isHostile( efield->building->getOwner() ) || efield->building->color == 8*8 )
             for (int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
@@ -1052,8 +796,8 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
                      if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwairmissilen ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwgroundmissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlargemissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwsmallmissilen ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
                         if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
                               if (fieldvisiblenow(efield, angreifer->color/8)) {
@@ -1087,13 +831,13 @@ pattackweap  attackpossible( const pvehicle     angreifer, int x, int y)
 }
 
 
-bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackweap atw, int uheight )
+bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetheight )
 {
-   if ( uheight == -1 )
-      uheight = target->height;
+   if ( targetheight == -1 )
+      targetheight = target->height;
 
-   pvehicle angreifer = attacker;
-   pvehicle verteidiger = target;
+   const Vehicle* angreifer = attacker;
+   const Vehicle* verteidiger = target;
    int result = false;
    if ( atw )
       atw->count = 0;
@@ -1107,10 +851,10 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
    if (angreifer->typ->weapons.count == 0)
      return false ;
 
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
+   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          for ( int h = 0; h < 8; h++ )
-            if ( uheight & (1<<h))
+            if ( targetheight & (1<<h))
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
                      if ( (1<<h) & angreifer->typ->weapons.weapon[i].targ )
@@ -1133,11 +877,14 @@ bool attackpossible2u( const pvehicle attacker, const pvehicle target, pattackwe
 
 
 
-bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackweap atw )
+bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetHeight )
 {
-   pvehicle angreifer = attacker;
-   pvehicle verteidiger = target;
+   const Vehicle* angreifer = attacker;
+   const Vehicle* verteidiger = target;
 
+   if ( targetHeight < 0 )
+      targetHeight = target->height;
+   
    int result = false;
    if ( atw )
       atw->count = 0;
@@ -1151,16 +898,16 @@ bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackwe
    if (angreifer->typ->weapons.count == 0)
      return false ;
 
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
+//   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
       for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
          if (angreifer->typ->weapons.weapon[i].shootable() )
             if (angreifer->typ->weapons.weapon[i].offensive() )
-               if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
+               if (targetHeight & angreifer->typ->weapons.weapon[i].targ )
                   if (minmalq <= angreifer->typ->weapons.weapon[i].maxdistance)
                      if (minmalq >= angreifer->typ->weapons.weapon[i].mindistance)
                         if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
                            if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
-                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(verteidiger->height))] )
+                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(targetHeight))] )
                                  if (angreifer->ammo[i] > 0) {
                                     result =  true;
                                     if ( atw ) {
@@ -1176,10 +923,10 @@ bool attackpossible28( const pvehicle attacker, const pvehicle target, pattackwe
 }
 
 
-bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackweap atw )
+bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap atw )
 {
-   pvehicle angreifer = attacker;
-   pvehicle verteidiger = target;
+   const Vehicle* angreifer = attacker;
+   const Vehicle* verteidiger = target;
 
    int result = false;
    if ( atw )
@@ -1195,7 +942,7 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
      return false ;
 
    int dist = beeline ( angreifer, verteidiger );
-   if ( getdiplomaticstatus2 ( angreifer->color, verteidiger->color ) == cawar )
+   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() ) )
       if ( !angreifer->attacked )
          if ( !angreifer->typ->wait || !angreifer->hasMoved() || angreifer->reactionfire.getStatus() == Vehicle::ReactionFire::ready)
             for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
@@ -1222,8 +969,8 @@ bool attackpossible2n( const pvehicle attacker, const pvehicle target, pattackwe
    return result;
 }
 
-bool vehicleplattfahrbar( const pvehicle     vehicle,
-                           const pfield        field)
+bool vehicleplattfahrbar( const Vehicle*     vehicle,
+                           const tfield*        field)
 {
    return false;
 /*
@@ -1235,7 +982,7 @@ bool vehicleplattfahrbar( const pvehicle     vehicle,
       return ( false );
 
    if ((vehicle->color != field->vehicle->color) &&
-      (vehicle->height == chfahrend) && 
+      (vehicle->height == chfahrend) &&
       (field->vehicle->height == chfahrend) && 
       (field->vehicle->functions & cftrooper) && 
       (vehicle->weight() >= fusstruppenplattfahrgewichtsfaktor * field->vehicle->weight()))
@@ -1245,7 +992,7 @@ bool vehicleplattfahrbar( const pvehicle     vehicle,
 } 
 
 
-float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attacker_height, int defender_height, int reldiff  )
+float WeapDist::getWeaponStrength ( const SingleWeapon* weap, int weather, int dist, int attacker_height, int defender_height, int reldiff  )
 {
 /*
   int         translat[31]  = { 6, 255, 1, 3, 2, 4, 0, 5, 255, 255, 6, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -1279,7 +1026,7 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
 
    if ( reldiff == -1) {
       if ( dist < weap->mindistance || dist > weap->maxdistance ) {
-         displaymessage("tweapdist::getweapstrength: invalid range: \n min = %d ; max = %d ; req = %d ",1, weap->mindistance, weap->maxdistance, dist);
+         warning("tweapdist::getweapstrength: invalid range: \n min = " + ASCString::toString(weap->mindistance ) + " ; max = " + ASCString::toString( weap->maxdistance ) + " ; req = " + ASCString::toString( dist));
          return 0;
       }
 
@@ -1303,13 +1050,27 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
 
    float relstrength = weap->maxstrength - relpos * ( weap->maxstrength - weap->minstrength );
 
+   float weatherFactor = 1;
    int heightEff = 100;
    if ( attacker_height != -1 && defender_height != -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
       heightEff = weap->efficiency[6+hd];
+
+      if ( attacker_height >= chtieffliegend && weather != 0 && defender_height != -1) {
+         int weatherRelevantHeightDelta = min( abs( getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ))), 3);
+         if ( weather == 1 || weather == 3 || weather == 5 )
+            weatherFactor = 1 - 0.07*weatherRelevantHeightDelta;
+         else
+            if ( weather == 2 || weather == 4 )
+               weatherFactor = 1 - 0.2 * weatherRelevantHeightDelta;
+      }
+
+      if ( attacker_height == chsatellit )
+         weatherFactor = 1 - (1-weatherFactor)/2;
    }
 
-   return relstrength * heightEff / float(weap->maxstrength * 100) ;
+
+   return relstrength * heightEff * weatherFactor / float(weap->maxstrength * 100) ;
 
 /*   if ( attacker_height != -1 && defender_height!= -1 ) {
       int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
@@ -1319,5 +1080,4 @@ float WeapDist::getWeapStrength ( const SingleWeapon* weap, int dist, int attack
       */
 }
 
-WeapDist weapDist;
 

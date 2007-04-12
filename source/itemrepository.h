@@ -19,6 +19,7 @@
 #define itemrepositoryH
 
 #include <vector>
+#include <sigc++/sigc++.h>
 #include "ascstring.h"
 #include "typen.h"
 #include "terraintype.h"
@@ -27,6 +28,7 @@
 #include "buildingtype.h"
 #include "research.h"
 #include "textfile_evaluation.h"
+#include "objects.h"
 
 
 class TextFileDataLoader {
@@ -35,6 +37,7 @@ class TextFileDataLoader {
       virtual void read ( tnstream& stream ) = 0;
       virtual void write ( tnstream& stream ) = 0;
       virtual ASCString getTypeName() = 0;
+      virtual ~TextFileDataLoader() {};
 };
 
 
@@ -46,9 +49,12 @@ extern void registerDataLoader( TextFileDataLoader& dataLoader );
 
 
 template<class T>
-class ItemRepository: public TextFileDataLoader {
+class ItemRepository  {
+   protected:
       ASCString typeName;
-      vector<T*>   container;
+      
+      typedef vector<T*> ItemContainerType;
+      ItemContainerType   container;
       typedef map<int,T*>  ObjectMap;
       ObjectMap hash;
 
@@ -58,7 +64,8 @@ class ItemRepository: public TextFileDataLoader {
 
    public:
       ItemRepository( const ASCString& typeName_ ) : typeName( typeName_ ) {};
-      T* getObject_byPos( int pos ) { return container[pos]; };
+      
+      T* getObject_byPos( int pos ) const { return container[pos]; };
 
       T* getObject_byID( int id ) { 
          typename ObjectMap::iterator i = hash.find( id );
@@ -72,33 +79,52 @@ class ItemRepository: public TextFileDataLoader {
          return NULL;
       };
 
-      size_t getNum() { return container.size(); };
+      size_t getNum() const { return container.size(); };
+
+      vector<T*>& getVector() { return container; };
+      virtual ~ItemRepository() {    
+         for ( typename ItemContainerType::iterator i = container.begin(); i != container.end(); ++i )
+            delete *i;
+      };
+
+
+      void addIdTranslation( int from, int to );
+      ASCString getTypeName() { return typeName; };
+};
+
+template<class T>
+class ItemRepositoryLoader: public ItemRepository<T>, public TextFileDataLoader {
+
+   public:
+      ItemRepositoryLoader( const ASCString& typeName_ ) : ItemRepository<T>( typeName_ ) {};
       void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
       void read( tnstream& stream );
       void write( tnstream& stream );
-      ASCString getTypeName() { return typeName; };
-
-      vector<T*>& getVector() { return container; };
-      virtual ~ItemRepository() {};
-
-      void addIdTranslation( int from, int to );
-
+      ASCString getTypeName() { return ItemRepository<T>::getTypeName(); };
 };
 
 
 
-extern ItemRepository<Vehicletype>  vehicleTypeRepository;
-extern ItemRepository<TerrainType>  terrainTypeRepository;
-extern ItemRepository<ObjectType>   objectTypeRepository;
-extern ItemRepository<BuildingType> buildingTypeRepository;
-extern ItemRepository<Technology>   technologyRepository;
+class MineTypeRepository : public ItemRepository<MineType>  {
+   public:
+      MineTypeRepository();
+};
+
+extern MineTypeRepository mineTypeRepository;
+
+
+extern SigC::Signal0<void> dataLoaderTicker;
+
+
+extern ItemRepositoryLoader<Vehicletype>  vehicleTypeRepository;
+extern ItemRepositoryLoader<TerrainType>  terrainTypeRepository;
+extern ItemRepositoryLoader<ObjectType>   objectTypeRepository;
+extern ItemRepositoryLoader<BuildingType> buildingTypeRepository;
+extern ItemRepositoryLoader<Technology>   technologyRepository;
 
 extern void  loadAllData( bool useCache = true );
 
-extern pobjecttype eisbrecherobject;
-extern pobjecttype fahrspurobject;
-
-typedef  vector<TechAdapter*> TechAdapterContainer;
+typedef  deallocating_vector<TechAdapter*> TechAdapterContainer;
 extern TechAdapterContainer techAdapterContainer;
 
 
@@ -128,7 +154,7 @@ class ItemFiltrationSystem {
                  void write ( tnstream& stream ) ;
                  bool isContained ( ItemFiltrationSystem::Category cat, int id );
          };
-         static vector<ItemFilter*> itemFilters;
+         static deallocating_vector<ItemFilter*> itemFilters;
 
          class DataLoader : public TextFileDataLoader {
             public:
@@ -140,6 +166,12 @@ class ItemFiltrationSystem {
 
 
          static bool isFiltered ( Category cat, int id );
+         static bool isFiltered( const Vehicletype* item );
+         static bool isFiltered( const BuildingType* item );
+         static bool isFiltered( const ObjectType* item );
+         static bool isFiltered( const TerrainType* item );
+         static bool isFiltered( const MineType* item );
+       
 };
 
 #endif

@@ -2,75 +2,6 @@
     \brief Interface for all the dialog boxes used by the game and the mapeditor
 */
 
-//     $Id: dialog.h,v 1.27 2004-07-12 18:15:04 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.26  2004/05/20 14:01:09  mbickel
-//      Many bugfixes and new features, among them:
-//        - Container.FillUnitsAutomatically = 2
-//        - generate Tech Tree
-//        - show research info
-//        - edit research in mapeditor
-//        - limit production to units that can leave a building
-//
-//     Revision 1.25  2003/07/06 15:10:26  mbickel
-//      Better configure messages
-//      code cleanup
-//      Replays update resources for constructing / removing objects
-//
-//     Revision 1.24  2002/11/20 20:00:53  mbickel
-//      New features: specify passwords when starting a game
-//      Better error messages when loading a game through command line parameters
-//      Fixed .ASCTXT problems with alias and inheritance
-//
-//     Revision 1.23  2002/03/14 18:14:37  mbickel
-//      Improved messages for proposing peace
-//      Fixed display error when enterering passwords
-//
-//     Revision 1.22  2002/03/03 14:13:48  mbickel
-//      Some documentation updates
-//      Soundsystem update
-//      AI bug fixed
-//
-//     Revision 1.21  2002/02/21 17:06:50  mbickel
-//      Completed Paragui integration
-//      Moved mail functions to own file (messages)
-//
-//     Revision 1.20  2001/10/11 10:41:06  mbickel
-//      Restructured platform fileio handling
-//      Added map archival information to mapeditor
-//
-//     Revision 1.19  2001/10/02 14:06:28  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.18  2001/02/01 22:48:36  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.17  2001/01/31 14:52:35  mbickel
-//      Fixed crashes in BI3 map importing routines
-//      Rewrote memory consistency checking
-//      Fileselect dialog now uses ASCStrings
-//
-//     Revision 1.16  2001/01/28 14:04:11  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.15  2001/01/21 12:48:35  mbickel
-//      Some cleanup and documentation
-//
-//     Revision 1.14  2000/11/29 09:40:18  mbickel
-//      The mapeditor has now two maps simultaneously active
-//      Moved memorychecking functions to its own file: memorycheck.cpp
-//      Rewrote password handling in ASC
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -94,68 +25,34 @@
 #ifndef dialogH
 #define dialogH
 
+
+#include <sigc++/sigc++.h>
 #include "ascstring.h"
 #include "dlg_box.h"
-#include "loaders.h"
 #include "password.h"
+#include "typen.h"
 
 const int dbluedark = 248;
 
-#define maxstringlength 50  
+ASCString  selectFile( const ASCString& ext, bool load );
 
-/*! Selects a file
-
-  \param ext the wildcard to search ( *.map for example )
-  \param filename A string which will contain the selected filename. If it is empty, the dialog was canceled.
-  \param load  true for selecting an existing file for loading; false for entering a filename to save to
-*/
-extern void   fileselectsvga( const ASCString& ext, ASCString& filename, bool load );
-
-extern void  startnextcampaignmap( int id);
-
-extern void  setupalliances( int supervisor = 0 );
-
-
-
-
-   
-extern void  vehicle_information ( const Vehicletype* type = NULL);
+extern void displaymessage2( const char* formatstring, ... );
    
 //! displays a message in the message line
-extern int   dispmessage2(int          id,
+extern void  dispmessage2(int          id,
                           char *       st = NULL );
    
-//! loads all messages from the files message?.txt
-extern void  loadmessages(void);
+  
+  
+// extern void  statisticarmies(void);
    
-extern void  statisticarmies(void);
+// extern void  statisticbuildings(void);
    
-extern void  statisticbuildings(void);
-   
-/*! displays a dialog with two buttons, to select one of them
-
-    \param title: the message text; printf style arguments allowed
-    \param s1 the text on the left button
-    \param s2 the text on the right button
-    \returns 1 if the left button has been pressed; 2 if the right button has been pressed
-*/
-extern int   choice_dlg(const char *       title,
-                        const char *       s1,
-                        const char *       s2,
-                        ... );
-   
-
-
-//! shows a small overview map in a dialog box
-extern void showmap ( void );
 
 
 extern char mix3colors ( int p1, int p2, int p3 );
 extern char mix2colors ( int a, int b );
 extern char mix4colors ( int a, int b, int c, int d );
-
-//! returns a pointer to the message id. The messages must have been loaded with loadmessages
-extern const char* getmessage( int id );
 
 
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
@@ -181,103 +78,24 @@ extern const char* getmessage( int id );
 //! the dialog box for setting up how to load bi3 graphics and maps. Since ASC now uses its own graphics, this dialog is not used any more.
 extern void bi3preferences  ( void );
 
-typedef class tprogressbar* pprogressbar;
-class tprogressbar {
-       public:
-         void start ( int _color, int _x1, int _y1, int _x2, int _y2, pnstream stream );
-         void end ( void );
-         void point ( void );
-         void startgroup ( void );
-         void writetostream ( pnstream stream );
-       private:
-         int x1, y1, x2, y2, color;
-         int starttick;
-         int time;
-         int first;
-
-            struct tgroup {
-               int num;
-               int orgnum;
-               int time;
-               int newtime;
-               int timefromstart;
-               dynamic_array<int> point;
-            };
-   
-            dynamic_array<tgroup> group;
-            int groupnum;
-            int actgroupnum;
-
-       int ended;
-       int lastpaintedpos;
-       void lineto ( float pos );
-
-
-};
-
-class tbasicshowmap {
-         public:
-            tbasicshowmap ( void );
-            int  generatemap ( int autosize );
-            void freebuf ( void );
-            void dispimage ( void );
-            void generatemap_var ( void );
-            void init ( int x1, int y1, int xsize, int ysize );
-            void checkformouse ( void );
-
-         protected :
-            unsigned char      *buffer, *buffer2;
-            int       zoom;
-            int       mxsize,mysize;
-            int       lastmapxsize, lastmapysize;
-            int       xofs, yofs;           // Anzahl der Pixel links und oben des virtuellen Bildes, die NICHT angezeigt werden
-            int       dispxpos, dispypos;   // Koordinaten des linken oberen fieldes des Bildschirmouseschnitts
-            int       border;               
-            int       maxzoom;
-            int txsize, tysize;   // Gr”áe des angezeigten Fensters
-            int bufsizex, bufsizey;
-            int xp1, yp1;
-
-            int getbufpos( int x, int y ) { return (y * mxsize + x + 4);};
-            int scrxsize ;
-            int scrysize ;
-
-            int lastmapposx;
-            int lastmapposy;
-            int lastmaptick;
-            int maxmapscrollspeed;
-
-            void saveimage ( void );
-
-            tmouserect  mapwindow;   // Rechteck, in dem die Karte angezeigt wird. Relativ zu x1/y1 der DLG-Box
-            int getfieldposx ( int c );
-            int getfieldposy ( int c );
-            int getposfieldx ( int c );
-            int getposfieldy ( int c );
-
-            void generatemap1 ( void );
-            void generatemap2 ( void );
-            void generatemap3 ( void );
-            // void displaymap ( void );
-            void interpolatemap ( void );
-
-            void setmapposition ( void );
-    };
-
 
 //! a dialog box that lets a user resize the active map. Should only be used in the mapeditor
 extern void resizemap ( void );
 
 extern void choosezoomlevel ( void );
 
-extern void viewterraininfo ( void );
-
 extern void viewUnitSetinfo ( void );
 
-extern int selectgameparameter( int lc );
+/*! displays a dialog with two buttons, to select one of them
 
-extern void setmapparameters ( void );
-
+    \param title: the message text; printf style arguments allowed
+    \param leftButton the text on the left button
+    \param rightButton the text on the right button
+    \returns 1 if the left button has been pressed; 2 if the right button has been pressed
+ */
+extern int   choice_dlg(const ASCString& title,
+                        const ASCString& leftButton,
+                        const ASCString& rightButton );
 
 
 

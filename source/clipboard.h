@@ -41,8 +41,8 @@ class ClipBoardBase {
       ~ClipBoardBase() {};
    public:
       void clear();
-      void addUnit ( pvehicle unit );
-      void addBuilding ( pbuilding bld );
+      void addUnit ( Vehicle* unit );
+      void addBuilding ( Building* bld );
       Vehicle* pasteUnit();
       Vehicle* pasteUnit( tnstream& stream);
       void place ( const MapCoordinate& pos );

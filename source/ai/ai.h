@@ -2,95 +2,6 @@
     \brief The interface for the artificial intelligence of ASC. 
 */
 
-
-//     $Id: ai.h,v 1.20 2004-10-23 19:16:24 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.19  2003/05/29 13:54:53  mbickel
-//      Fixed: unit could not enter container when having max size
-//      Added SDL_Delay() to movement loop (for FreeBSD)
-//      Added Lava_Barrier terrain bit
-//      AI logs unit success
-//      Replay have a much stricted consistency checking for refuelling
-//
-//     Revision 1.18  2003/04/23 18:31:11  mbickel
-//      Fixed: AI problems
-//      Improved cheating detection in replay
-//
-//     Revision 1.17  2003/03/31 20:29:16  mbickel
-//      Fixed AI bugs
-//      Fixed clipboard in mapeditor
-//
-//     Revision 1.16  2003/03/30 13:19:47  mbickel
-//      Fixed: ai warnings
-//      Fixed: wrong hotkey for seeting unit properties in containers
-//
-//     Revision 1.15  2003/03/08 14:24:38  mbickel
-//      Code cleanup
-//      AI fixes and improvements
-//
-//     Revision 1.14  2003/03/07 17:11:41  mbickel
-//      AI improvements
-//
-//     Revision 1.13  2002/12/12 11:34:19  mbickel
-//      Fixed: ai crashing when weapon has no ammo
-//      Fixed: ASC crashed when loading game with ID not found
-//      Fixed: more ai problems
-//      AI now faster
-//      Fixed: removing objects overfill a units tank
-//
-//     Revision 1.12  2002/03/19 20:38:57  mbickel
-//      Some cleanup and documentation in dlg_box
-//      Fixed some type assignment errors
-//
-//     Revision 1.11  2002/03/03 14:13:49  mbickel
-//      Some documentation updates
-//      Soundsystem update
-//      AI bug fixed
-//
-//     Revision 1.10  2001/11/29 17:34:18  mbickel
-//      AI can be used as benchmark
-//      Improved AI unit job determination mechanism
-//
-//     Revision 1.9  2001/10/31 20:10:26  mbickel
-//      Circumvented a bug in gcc
-//
-//     Revision 1.8  2001/10/02 14:06:29  mbickel
-//      Some cleanup and documentation
-//      Bi3 import tables now stored in .asctxt files
-//      Added ability to choose amoung different BI3 import tables
-//      Added map transformation tables
-//
-//     Revision 1.7  2001/08/27 21:03:55  mbickel
-//      Terraintype graphics can now be mounted from any number of PNG files
-//      Several AI improvements
-//
-//     Revision 1.6  2001/08/24 15:50:08  mbickel
-//      AI performs better services when there are no service units
-//
-//     Revision 1.5  2001/07/27 21:13:35  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.4  2001/05/24 15:37:51  mbickel
-//      Fixed: reaction fire could not be disabled when unit out of ammo
-//      Fixed several AI problems
-//
-//     Revision 1.3  2001/04/03 11:54:17  mbickel
-//      AI Improvements: production , servicing
-//
-//     Revision 1.2  2001/04/01 12:59:35  mbickel
-//      Updated win32 project files to new ai file structure
-//      Added viewid win32-project
-//      Improved AI : production and service path finding
-//
-//     Revision 1.1  2001/03/30 12:43:16  mbickel
-//      Added 3D pathfinding
-//      some cleanup and documentation
-//      splitted the ai into several files, now located in the ai subdirectory
-//      AI cares about airplane servicing and range constraints
-//
-
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -123,7 +34,6 @@
 #include "../objecttype.h"
 #include "../spfst.h"
 #include "../unitctrl.h"
-#include "../building_controls.h"
 #include "../buildingtype.h"
 #include "../astar2.h"
 
@@ -143,7 +53,7 @@
            int maxWeapDist[8]; 
            int baseThreatsCalculated;
 
-           pmap activemap;
+           GameMap* activemap;
            MapDisplayInterface* mapDisplay;
            MapDisplayInterface* rmd;
 
@@ -155,7 +65,7 @@
                   //! if service == ammo: weapon number ; if service == resource : resource type
                   GameTime time;
                   int failure;
-                  pbuilding nextServiceBuilding;
+                  Building* nextServiceBuilding;
                   int nextServiceBuildingDistance;
                   bool active;
                public:
@@ -166,11 +76,11 @@
                   ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
                   ServiceOrder ( AI* _ai, tnstream& stream );
                   AStar3D::Path::iterator lastmatchServiceOrder ( AI* _ai, tnstream& stream );
-                  pvehicle getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
-                  pvehicle getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
-                  void setServiceUnit ( pvehicle veh );
-                  int possible ( pvehicle supplier );
-                  bool execute1st ( pvehicle supplier );
+                  Vehicle* getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
+                  Vehicle* getServiceUnit ( ) const { return ai->getMap()->getUnit ( serviceUnitID );};
+                  void setServiceUnit ( Vehicle* veh );
+                  int possible ( Vehicle* supplier );
+                  bool execute1st ( Vehicle* supplier );
                   bool timeOut ( );
                   bool canWait ( );
 
@@ -200,19 +110,19 @@
            };
            friend class ServiceOrder;
 
-           void removeServiceOrdersForUnit ( const pvehicle veh );
+           void removeServiceOrdersForUnit ( const Vehicle* veh );
 
            class ServiceTargetEquals : public unary_function<ServiceOrder&,bool> {
-                 const pvehicle target;
+                 const Vehicle* target;
               public:
-                 explicit ServiceTargetEquals ( const pvehicle _target ) : target ( _target ) {};
+                 explicit ServiceTargetEquals ( const Vehicle* _target ) : target ( _target ) {};
                  bool operator() (const ServiceOrder& so ) const;
            };
 
 
 
-           static bool vehicleValueComp ( const pvehicle v1, const pvehicle v2 );
-           static bool buildingValueComp ( const pbuilding v1, const pbuilding v2 );
+           static bool vehicleValueComp ( const Vehicle* v1, const Vehicle* v2 );
+           static bool buildingValueComp ( const Building* v1, const Building* v2 );
 
            typedef list<ServiceOrder> ServiceOrderContainer;
            ServiceOrderContainer serviceOrders;
@@ -222,14 +132,14 @@
            //! issues a single service. If the same service-order already exists, it will not be issued a second time
            ServiceOrder& issueService ( VehicleService::Service requiredService, int UnitID, int pos = -1 );
 
-           ServiceOrder& issueRefuelOrder ( pvehicle veh, bool returnImmediately );
-           void runServiceUnit ( pvehicle supplyUnit );
+           ServiceOrder& issueRefuelOrder ( Vehicle* veh, bool returnImmediately );
+           void runServiceUnit ( Vehicle* supplyUnit );
 
            class RefuelConstraint {
                    AI& ai;
-                   pvehicle veh;
+                   Vehicle* veh;
                    AStar3D* ast;
-                   typedef map<int, pbuilding> ReachableBuildings;
+                   typedef map<int, Building*> ReachableBuildings;
                    ReachableBuildings reachableBuildings;
 
                    typedef map<int, MapCoordinate3D> LandingPositions;
@@ -237,17 +147,17 @@
                    bool positionsCalculated;
                    int maxMove;
                 public:
-                   RefuelConstraint ( AI& ai_, pvehicle veh_, int maxMove_ = -1 ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false), maxMove ( maxMove_ ) {};
+                   RefuelConstraint ( AI& ai_, Vehicle* veh_, int maxMove_ = -1 ) : ai ( ai_ ), veh ( veh_ ), ast(NULL), positionsCalculated(false), maxMove ( maxMove_ ) {};
                    MapCoordinate3D getNearestRefuellingPosition ( bool buildingRequired, bool refuel, bool repair );
                    bool returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel = -1 );
                    //! checks whether the unit can crash do to lack of fuel; this is usually true for airplanes. A unit that does not crash does not need to care about landing positions.
                    void findPath();
-                   static bool necessary (const pvehicle veh, AI& ai );
+                   static bool necessary (const Vehicle* veh, AI& ai );
                    ~RefuelConstraint() { if (ast) delete ast; };
            };
            friend class RefuelConstraint;
 
-           bool runUnitTask ( pvehicle veh );
+           bool runUnitTask ( Vehicle* veh );
            // void searchServices ( );
 
            class FieldInformation {
@@ -284,9 +194,9 @@
            void runReconUnits();
 
            //! checks whether a building can be conquered by the enemy during the next turn
-           bool checkReConquer ( pbuilding bld, pvehicle veh );
-           float getCaptureValue ( const pbuilding bld, int travelTime );
-           float getCaptureValue ( const pbuilding bld, const pvehicle veh );
+           bool checkReConquer ( Building* bld, Vehicle* veh );
+           float getCaptureValue ( const Building* bld, int travelTime );
+           float getCaptureValue ( const Building* bld,  Vehicle* veh );
 
            class BuildingCapture {
                   public:
@@ -311,11 +221,11 @@
                     };
            };
 
-           class BuildingValueComp : public binary_function<pbuilding,pbuilding,bool> {
+           class BuildingValueComp : public binary_function<Building*,Building*,bool> {
                  AI* ai;
               public:
                  explicit BuildingValueComp ( AI* _ai ) : ai ( _ai ) {};
-                 bool operator() (const pbuilding& a, const pbuilding& b ) const {
+                 bool operator() (const Building*& a, const Building*& b ) const {
                      return ai->buildingCapture[ a->getEntry() ].captureValue > ai->buildingCapture[ b->getEntry() ].captureValue;
                  };
            };
@@ -326,21 +236,21 @@
 
 
            void calculateFieldInformation ( void );
-           void calculateFieldThreats_SinglePosition ( pvehicle eht, int x, int y );
+           void calculateFieldThreats_SinglePosition ( Vehicle* eht, int x, int y );
            class WeaponThreatRange : public SearchFields {
-                     pvehicle veh;
+                     Vehicle* veh;
                      int weap, height;
                      AiThreat* threat;
                      AI*       ai;
                      void testfield ( const MapCoordinate& mc );
                   public:
-                     void run ( pvehicle _veh, int x, int y, AiThreat* _threat );
+                     void run ( Vehicle* _veh, int x, int y, AiThreat* _threat );
                      WeaponThreatRange( AI* _ai ) : SearchFields ( _ai->getMap()), ai ( _ai ) {};
            };
 
 
            struct Config {
-               // int movesearchshortestway;   /*  kÅrzesten oder nur irgendeinen  */
+               // int movesearchshortestway;   /*  krzesten oder nur irgendeinen  */
                int lookIntoTransports;   /*  gegnerische transporter einsehen  */
                int lookIntoBuildings;
                int wholeMapVisible;
@@ -364,8 +274,8 @@
                   int damageAfterAttack;
                   MapCoordinate3D movePos;
                   int attackx, attacky;
-                  pvehicle enemy;
-                  pvehicle attacker;
+                  Vehicle* enemy;
+                  Vehicle* attacker;
                   int enemyOrgDamage;
                   int enemyDamage;
                   int weapNum;
@@ -404,24 +314,24 @@
                   };
             };
 
-            bool moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings = true, bool intoTransports = true );
+            bool moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool intoBuildings = true, bool intoTransports = true );
 
             /** \returns 1 = destination reached;
                          0 = everything ok, but not enough movement to reach destination;
                          -1 = error
              */
-            int moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
+            int moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
 
-            void getAttacks ( AStar3D& vm, pvehicle veh, TargetVector& tv, int hemmingBonus, bool justOne = false, bool executeService = true );
-            void searchTargets ( pvehicle veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
-            bool targetsNear( pvehicle veh );
+            void getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne = false, bool executeService = true );
+            void searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
+            bool targetsNear( Vehicle* veh );
 
-            AiResult executeMoveAttack ( pvehicle veh, TargetVector& tv );
-            int getDirForBestTacticsMove ( const pvehicle veh, TargetVector& tv );
-            MapCoordinate getDestination ( const pvehicle veh );
-            AiResult moveToSavePlace ( pvehicle veh, VehicleMovement& vm, int preferredHeight = -1 );
-            int  getBestHeight ( const pvehicle veh );
-            float getAttackValue ( const tfight& battle, const pvehicle attackingUnit, const pvehicle attackedUnit, float factor = 1 );
+            AiResult executeMoveAttack ( Vehicle* veh, TargetVector& tv );
+            int getDirForBestTacticsMove ( const Vehicle* veh, TargetVector& tv );
+            MapCoordinate getDestination ( Vehicle* veh );
+            AiResult moveToSavePlace ( Vehicle* veh, VehicleMovement& vm, int preferredHeight = -1 );
+            int  getBestHeight (  Vehicle* veh );
+            float getAttackValue ( const tfight& battle, const Vehicle* attackingUnit, const Vehicle* attackedUnit, float factor = 1 );
 
             /** chenges a vehicles height
                 \returns 1 = height change successful ;
@@ -429,14 +339,14 @@
                          -1 = no space to change height
                          -2 = cannot change height here principially
             */
-            int changeVehicleHeight ( pvehicle veh, VehicleMovement* vm, int preferredDirection = -1 );
+            int changeVehicleHeight ( Vehicle* veh, VehicleMovement* vm, int preferredDirection = -1 );
 
-            void  calculateThreat ( pvehicletype vt);
-            void  calculateThreat ( pvehicle eht );
-            void  calculateThreat ( pbuilding bld );
-            void  calculateThreat ( pbuilding bld, int player );
+            void  calculateThreat ( const Vehicletype* vt);
+            void  calculateThreat ( Vehicle* eht );
+            void  calculateThreat ( Building* bld );
+            void  calculateThreat ( Building* bld, int player );
 
-            static AiParameter::JobList chooseJob ( const Vehicletype* typ, int functions );
+            static AiParameter::JobList chooseJob ( const Vehicletype* typ );
             friend class CalculateThreat_Vehicle;
 
             /** This structure helps identifying units which don't reach any
@@ -446,13 +356,13 @@
 
             void  calculateAllThreats( void );
             AiResult  tactics( void );
-            void tactics_findBestAttackOrder ( pvehicle* units, int* attackOrder, pvehicle enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
-            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, pvehicle* positions, float value, pvehicle* finalposition, float& finalvalue, int unitsPositioned, int recursionDepth, int startTime );
+            void tactics_findBestAttackOrder ( Vehicle** units, int* attackOrder, Vehicle* enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
+            void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, Vehicle** positions, float value, Vehicle** finalposition, float& finalvalue, int unitsPositioned, int recursionDepth, int startTime );
 
             /** a special path finding where fields occupied by units get an addidional movemalus.
                 This helps finding a path that is not thick with units and prevents units to queue all one after another
             */
-            void findStratPath ( vector<MapCoordinate>& path, pvehicle veh, int x2, int y2 );
+            void findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x2, int y2 );
 
             class  UnitDistribution {
                public:
@@ -465,13 +375,13 @@
                   void write ( tnstream& stream ) const;
             };
             UnitDistribution originalUnitDistribution;
-            UnitDistribution::Group getUnitDistributionGroup ( pvehicle veh );
-            UnitDistribution::Group getUnitDistributionGroup ( pvehicletype veh );
+            UnitDistribution::Group getUnitDistributionGroup ( Vehicle* veh );
+            UnitDistribution::Group getUnitDistributionGroup ( Vehicletype* veh );
 
             UnitDistribution calcUnitDistribution();
             struct ProductionRating {
-               Vehicletype* vt;
-               pbuilding    bld;
+               const Vehicletype* vt;
+               Building*    bld;
                float        rating;
                bool operator< ( const ProductionRating& pr ) { return rating < pr.rating; };
             };
@@ -501,7 +411,7 @@
             AiResult  strategy();
             AiResult  buildings ( int process );
             AiResult  transports ( int process );
-            AiResult  container ( ccontainercontrols& cc );
+            AiResult  container ( ContainerBase* cb );
             AiResult  executeServices ();
             void      setup();
 
@@ -526,7 +436,7 @@
                   AiThreat avgFieldThreat;
                   float value[ aiValueTypeNum ];
 
-                  int numberOfAccessibleFields ( const pvehicle veh );
+                  int numberOfAccessibleFields ( const Vehicle* veh );
                   void init ( int _x, int _y, int xsize, int ysize, int _xp, int _yp );
                   void init ( AI* _ai, int _x, int _y, int xsize, int ysize, int _xp, int _yp );
                   Section ( AI* _ai ) : ai ( _ai ) {};
@@ -547,29 +457,34 @@
                   Section& getForPos ( int xn, int yn );                //!< returns the xth and yth section
 
                   // secondRun should only be used when this function calls itself recursively
-                  Section* getBest ( int pass, const pvehicle veh, MapCoordinate3D* dest = NULL, bool allowRefuellOrder = false, bool secondRun = false );
+                  Section* getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest = NULL, bool allowRefuellOrder = false, bool secondRun = false );
                   Sections ( AI* _ai );
                   void reset( void );
             } sections;
             friend class Sections;
 
             void checkKeys ( void );
+            void removeDisplay();
 
+            void diplomacy ();
+
+            
         public:
-           AI ( pmap _map, int _player ) ;
+           AI ( GameMap* _map, int _player ) ;
 
            void run (  ) { run ( false );};
            //! starts the Ai. If benchmark is true, the AI might take longer since it is not time limited, it won't display any graphics and will output the time it needed to run completely
            void run ( bool benchmark );
 
            //! returns the map this AI runson
-           pmap getMap ( void ) { return activemap; };
+           GameMap* getMap ( void ) { return activemap; };
 
            //! returns the number of the player which is controlled by this ai
            int getPlayerNum ( void ) { return player; };
 
            Player& getPlayer ( void ) { return getMap()->player[player]; };
            Player& getPlayer ( int player ) { return getMap()->player[player]; };
+           Player& getPlayer ( PlayerID id ) { return getMap()->player[id.getID()]; };
            void showFieldInformation ( int x, int y );
            bool isRunning ( void );
 
@@ -584,5 +499,3 @@
            void write ( tnstream& stream ) const ;
            ~AI ( );
     };
-
-

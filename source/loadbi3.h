@@ -26,26 +26,22 @@
 
 #include "typen.h"
 #include "sgstream.h"
-#include "palette.h"
 #include "itemrepository.h"
-
 
 #ifdef converter
  #error The small editors should not need to use LoadBi3
 #endif
 
 
-//! checks wheather the path to a BI3 installtion stored in CGameOptions is valid
-extern void check_bi3_dir ( void );
 
 /** Imports a Battle Isle map 
   \param path the path to the BI3 installation
   \param filename The name of the map
   \param trrn The terrain that is used for all fields which are unknown to ASC
   \param errorOutput Pointer to a string which will store all warning and error messages from the import. May be NULL.
-  \param fakeMap If true ASC tries to make the map look like the Battle Isle map, generating new ObjectType and TerrainType instances if necessary.
-                 This must not be used by any program other than map2pcx, since the maps can not be played. This is only used to generate
-                 the images of the Battle Isle Map Archive.   
+  \param __fakeMap If true ASC tries to make the map look like the Battle Isle map, generating new ObjectType and TerrainType instances if necessary.
+                   This must not be used by any program other than map2pcx, since the maps can not be played. This is only used to generate
+                   the images of the Battle Isle Map Archive.   
 */
 extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL, bool __fakeMap = false );
 
@@ -58,7 +54,7 @@ extern void importbattleislemap ( const char* path, const char* filename, Terrai
 extern void insertbattleislemap ( int x, int y, const char* path, const char* filename  );
 
 //! returns the path to the BI3 installation
-extern const char* getbi3path ( void );
+extern ASCString getbi3path();
 
 //! to prevent the appearnce of the dialog "choose import translation table" when running in batch mode, a default translation table can be specified
 extern void setDefaultBI3ImportTranslationTable( const ASCString& filename );

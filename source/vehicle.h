@@ -23,6 +23,25 @@
  #include "containerbase.h"
  #include "ascstring.h"
 
+class BuildingType;
+
+
+class UnitHooveringLogic {
+   //! the percentage of fuel that is required for a flying plane just hoovering in the air (unit: percentage)
+      static const int FuelConsumption; 
+
+   public:
+      static int calcFuelUsage( const Vehicle* veh );
+
+      /** calculates the time until the unit crashes because of lack of fuel
+          \returns time in turns or -1 if the unit can't crash because of missing fuel in its current height
+      */
+      static int getEndurance ( const Vehicle* veh );
+      static int getEndurance ( const Vehicletype* veh, int height = -1, int resourceModel = 0 );
+
+};
+
+ 
  class Vehicle : public ContainerBase {
     bool cleanRemove;
 
@@ -49,15 +68,16 @@
 
     bool movementLeft() const;
 
-    Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID  );
+    Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID  );
 
 
    public:
 
-    Vehicle ( const Vehicletype* t, pmap actmap, int player );
+    Vehicle ( const Vehicletype* t, GameMap* actmap, int player );
+
+    int repairableDamage() { return damage; };
 
     bool isBuilding() const { return false; };
-
 
     const Vehicletype* typ;
     int          ammo[16];
@@ -80,7 +100,7 @@
     int          xpos, ypos;
 #ifndef karteneditor
   private:
-#endif  
+#endif
     //! the resources that the unit is carrying
     Resources    tank;
   public:
@@ -88,7 +108,7 @@
     //! if events are triggered by this unit (if it is lost for example), this will set connection != 0
     int          connection;
 
-    int          armor;
+    int          getArmor() const;
 
     /** a unique identification of the unit that is used everywhere in ASC
        (and not only the network protocols where is was first used, hence the name)
@@ -106,7 +126,7 @@
          enum Status { off, init1a, init2, ready, init1b };
 
          //! for each player that can still be attacked one bit is set
-         int enemiesAttackable;
+         // int enemiesAttackable;
          Status getStatus() const { return status;};
 
          //! enables the reaction fire or returns an error code ( result < 0 = -errorNr ) 
@@ -121,6 +141,8 @@
          void endAnyTurn();
          void checkData();
 
+         bool canPerformAttack( Vehicle* target );
+         
          bool canMove() const;
        private:
          Status status;
@@ -130,6 +152,9 @@
 
     AiParameter* aiparam[8];
 
+
+    //! @name Movement related functions
+    //@{
     //! can the unit move from its current position (does not check neighbouring fields)
     bool canMove ( void ) const;
 
@@ -137,44 +162,73 @@
     int getMovement ( bool checkFuel = true ) const ;
 
     /** sets a new distance that the unit can move
-        \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched ; -1 is default
-    */
+    \param cargoDivisor : the cargo of this unit gets 1/cargodivisor the change that this unit is getting; if 0 the cargo is not touched ; -1 is default
+     */
     void setMovement ( int newmove, double cargoDivisor = -1 );
 
     //! did the unit move this turn
     bool hasMoved ( void ) const;
 
     //! the maximum distance that the unit can drive in a single turn on the current level of height
-    int maxMovement ( void );
+    int maxMovement ( ) const;
 
     /** reduces the movement by the given amount. Negative values are possible.
-        Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
+    Don't use something like "setmovement ( getmovement() - amount )", because getmovement may return a lower amount due to lack of fuel. */
     void decreaseMovement ( int movement );
 
     //! resets a units movement. This is called at the beginning of each turn.
     void resetMovement( void );
 
+    //@}
+    
+    
+
     //! changes a units height and adjusts the movement so that the percentage of used movepoints remains constant
-    void setNewHeight( int height );
+    void setNewHeight( int bitmappedheight );
 
-    //! add the objects like tracks or broken ice
-    void spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
+    /** add the objects like tracks or broken ice
+        \returns true if any objects were created
+    */
+    bool spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
 
-    int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
-    int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1 );
+    //! @name Resource related functions
+    //@{
+    
+    int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1, int player = -1 );
+    int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1, int player = -1 );
+    int getResource ( int amount, int resourcetype ) const;
+    Resources getResource ( const Resources& res ) const;
 
-    Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
-    Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
+    Resources putResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 ) { return ContainerBase::putResource ( res, queryonly, scope, player ); };
+    Resources getResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 ) { return ContainerBase::getResource ( res, queryonly, scope, player ); };
 
-    Resources getTank() { return ContainerBase::getResource(typ->tank,true);};
+    //! returns the resources that the unit is carrying
+    Resources getTank() const;
 
+    //@}
+    
+    //! returns the bitmapped level of height. Only one bit will be set, of course
+    int getHeight() const { return height; };
+    
+
+
+    //! returns the units name or, if it does not exist, the unit type's name or description
+    ASCString    getName() const;
+
+    int getAmmo( int type, int num, bool queryOnly );
+    int putAmmo( int type, int num, bool queryOnly );
+    int maxAmmo( int type ) const ;
+
+    //! @name Cargo related functions
+    //@{
 
     //! weight of unit including cargo
     int weight( void ) const;
+    
+    //! returns the free weight that can be used for cargo
+    int freeWeight();
 
-    //! returns the units name or, if it does not exist, the unit type's name or description
-    const ASCString&    getName() const;
-
+    //@}
 
   protected:
     const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
@@ -188,9 +242,6 @@
     int searchstackforfreeweight ( Vehicle* searchedInnerVehicle );
 
   public:
-
-    //! returns the free weight that can be used for cargo
-    int freeWeight();
 
     //! Returns the size of a unit. A size is equal to the weight of the unit without any cargo or carried resources.
     int size ( void );
@@ -208,15 +259,20 @@
     int getIdentification() { return networkid; };
 
 
+    //! @name Construction related functions
+    //@{
     //! constructs a vehicle at the given position.
-    Vehicle* constructvehicle ( pvehicletype tnk, int x, int y );
+    Vehicle* constructvehicle ( Vehicletype* tnk, int x, int y );
 
     //! checks whether the unit can construct a vehicle of the given type at the given position.
-    bool vehicleconstructable ( pvehicletype tnk, int x, int y );
+    bool vehicleconstructable ( Vehicletype* tnk, int x, int y );
 
-    //! displays the unit at position x/y on the screen
-    void putimage ( int x, int y );
-
+    /** checks whether the unit can construct a building of the given type.
+    This method does not check if there is enough space around the unit to place
+    the building */
+    bool buildingconstructable ( const BuildingType* bld, bool checkResources = true );
+    //@}
+    
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
     void setnewposition ( const MapCoordinate& mc );
@@ -232,32 +288,28 @@
     bool getGeneratorStatus () const { return generatoractive; };
 
     //! callback that is called after the unit has attacked
-    void postAttack();
+    void postAttack( bool reactionFire );
 
-    /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
+    /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
-    void addview ( void );
+    void addview();
 
-    /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( pmap, int)
+    /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
-    void removeview ( void );
+    void removeview();
 
     /** returns true if the units view is currently added to the maps global visibility.
         \sa viewcalculation.cpp */
     bool isViewing ( ) const { return viewOnMap; };
     const SingleWeapon *getWeapon( unsigned weaponNum );
 
-    /** checks whether the unit can construct a building of the given type.
-        This method does not check if there is enough space around the unit to place
-        the building */
-    bool buildingconstructable ( pbuildingtype bld );
 
     /** searches for mineral resources.
         \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
     */
-    int searchForMineralResources( void );
+    int searchForMineralResources( ) const;
 
-    bool searchForMineralResourcesAvailable();
+//    bool searchForMineralResourcesAvailable();
 
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;
@@ -265,22 +317,27 @@
     //! returns the units position; if  inside building then Height is -1
     MapCoordinate3D getPosition3D ( ) const;
 
+
+    // Searches this and all nested transport for the unit. Returns the direct parent carrier.
+    // Vehicle* findCarrierUnit ( const Vehicle* veh );
+
+    
     /** can the unit repair anything? This does not necessarily mean that the unit can repair
         other units, because a service weapon is additionally needed for that. It may be the
         case that the unit can only repair itself.
     */
-    bool canRepair( const ContainerBase* item );
+    bool canRepair( const ContainerBase* item ) const;
 
     /** fills a unit with all resources it can carry and sets it class to "to be determined on map load".
         This function should only be called in the mapeditor !
     */
-    void fillMagically( void );
+    void fillMagically( bool ammo = true, bool resources = true );
 
 
     /** generates a new unit, loads its parameters from the stream (where they have been
         previously written with #write) and returns this new unit.
     */
-    static Vehicle* newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID = -1 );
+    static Vehicle* newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID = -1 );
 
     /** replaces the parameters of the unit by the ones form the stream. The VehicleType on
         the stream and the current one must be the same!
@@ -288,19 +345,25 @@
     void read ( tnstream& stream );
 
     void write ( tnstream& stream, bool includeLoadedUnits = true );
+
+    //! displays the unit at position spos on s
+    void paint ( Surface& s, SPoint pos, int shadowDist = -1 ) const;
+    void paint ( Surface& s, SPoint pos, bool shaded, int shadowDist = -1 ) const;
+
+
   private:
     void readData ( tnstream& stream );
   public:
 
     //! For the AI: calculating the ValueType if the unit was on the height uheight
-    int getValueType ( int uheight ) { return log2(uheight); };
+    int getValueType ( int uheight ) const { return log2(uheight); };
 
     //! For the AI: calculating the ValueType
-    int getValueType ( ) { return log2(height); };
+    int getValueType ( ) const { return log2(height); };
 
 
     //! to be used with EXTREME caution, and only in the mapeditor !!
-    void transform ( const pvehicletype type );
+    void transform ( const Vehicletype* type );
 
     /** returns the method for changing the height in the specified direction, or none if there is none.
         \param dir  +1 is up;  -1 is down
@@ -312,6 +375,9 @@
     bool weapexist ( void );
     void prepareForCleanRemove() { cleanRemove = true; };
     ~Vehicle ( );
+  protected:
+     vector<MapCoordinate> getCoveredFields();
+       
 };
 
 

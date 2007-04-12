@@ -20,7 +20,7 @@
 
 
 
-bool AI :: runUnitTask ( pvehicle veh )
+bool AI :: runUnitTask ( Vehicle* veh )
 {
    if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_move || veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat ) {
       bool moveIntoBuildings = false;
@@ -43,7 +43,7 @@ bool AI :: runUnitTask ( pvehicle veh )
 
 
 
-int  AI :: getBestHeight ( const pvehicle veh )
+int  AI :: getBestHeight (  Vehicle* veh )
 {
    int heightNum = 0;
    for ( int i = 0; i < 8; i++ )
@@ -116,9 +116,9 @@ int  AI :: getBestHeight ( const pvehicle veh )
 
 class SaveUnitMovement {
        int m;
-       pvehicle unit;
+       Vehicle* unit;
     public:
-       SaveUnitMovement ( pvehicle veh ) {
+       SaveUnitMovement ( Vehicle* veh ) {
           unit = veh;
           npush ( unit->xpos );
           npush ( unit->ypos );
@@ -172,7 +172,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
       int dist = int(i->gval );
       if ( i->h.getNumericalHeight() == -1 ) {
-          pfield fld = getfield( i->h.x, i->h.y );
+          tfield* fld = getfield( i->h.x, i->h.y );
           if ( fld->building && fld->building->color == veh->color )
              reachableBuildings[ dist ] = fld->building;
       }
@@ -185,7 +185,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
        if ((veh->height > chfahrend) && (i->h.getNumericalHeight() == chfahrend) ) {
           // we don't want to land in hostile territory
           FieldInformation& fi = ai.getFieldInformation ( i->h.x, i->h.y );
-          if ( fi.control == -1 || getdiplomaticstatus2 ( fi.control * 8, ai.getPlayerNum()*8 ) == capeace )
+          if ( fi.control == -1 || !actmap->player[fi.control].diplomacy.isHostile( ai.getPlayerNum() ) )
               landingPositions[dist] = i->h;
        }
    }
@@ -197,7 +197,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
          for ( int h = 0; h < 8; h++ )
             if ( veh->typ->height & ( 1 << h)) {
 
-                pfield fld = getfield( x,y );
+                tfield* fld = getfield( x,y );
                 const AStar3D::Node* node = ast->fieldVisited( MapCoordinate3D( x,y, 1 << h));
                 if ( node ) {
                    int dist = int(node->gval);
@@ -222,7 +222,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 
    if ( buildingRequired ) {
       for ( ReachableBuildings::iterator rb = reachableBuildings.begin(); rb != reachableBuildings.end(); rb++  ) {
-         if ( !repair || (rb->second->typ->special & cgrepairfacilityb))
+         if ( !repair || (rb->second->typ->hasFunction( ContainerBaseType::InternalUnitRepair )))
             return rb->second->getPosition3D();
       }
    }
@@ -290,14 +290,14 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
             return true;
    }
 
-   if ( theoreticalFuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->typ->tank.fuel )
+   if ( theoreticalFuel - (dist + dist2) / maxmalq * veh->typ->fuelConsumption > 0.2 * veh->getStorageCapacity().fuel )
       return true;
    else
       return false;
 
 }
 
-bool AI::RefuelConstraint::necessary (const pvehicle veh, AI& ai )
+bool AI::RefuelConstraint::necessary (const Vehicle* veh, AI& ai )
 {
    if ( !veh->typ->fuelConsumption )
       return false;
@@ -344,31 +344,34 @@ void AI::VehicleTypeEfficiencyCalculator::calc()
    ai.unitTypeSuccess[ownTypeID].second += ownValue   * (newOwnDamage   - orgOwnDamage  ) * 0.01;
 }
 
-AI::AiResult  AI :: container ( ccontainercontrols& cc )
+AI::AiResult  AI :: container ( ContainerBase* cb )
 {
+   ContainerControls cc( cb );
    AiResult result;
 
    // move idle units out
-   std::vector<pvehicle> idleUnits;
-   for ( int j= 0; j < 32; j++ ) {
-      pvehicle veh = cc.getloadedunit ( j );
+   std::vector<Vehicle*> idleUnits;
+   for ( vector<Vehicle*>::const_iterator j = cb->getCargo().begin(); j != cb->getCargo().end(); ++j ) {
+      Vehicle* veh = *j;
       if ( veh )
          if ( veh->canMove() )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing
                || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_script  )
             idleUnits.push_back ( veh );
    }
+   
    // move the most important unit first, to get the best position
    sort ( idleUnits.begin(), idleUnits.end(), vehicleValueComp );
 
-   for ( std::vector<pvehicle>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
+   for ( std::vector<Vehicle*>::iterator i = idleUnits.begin(); i != idleUnits.end(); i++ ) {
 
       checkKeys();
 
+      // Vehicle* veh = *i;
 
       int preferredHeight = getBestHeight ( *i );
 
-      VehicleMovement* vm = cc.movement ( *i );
+      VehicleMovement* vm = ContainerControls::movement ( *i );
       // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
       if ( vm ) {
          vm->registerMapDisplay ( mapDisplay );
@@ -379,7 +382,8 @@ AI::AiResult  AI :: container ( ccontainercontrols& cc )
          if ( va.available ( *i )) {
             TargetVector tv;
 
-            AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );
+            // AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );  ?? Why was maxMovement used here ??
+            AStar3D ast ( getMap(), *i, false, (*i)->getMovement() );
             ast.findAllAccessibleFields ();
 
             getAttacks ( ast, *i, tv, 0 );
@@ -428,21 +432,22 @@ AI::AiResult AI::buildings( int process )
       buildingCounter++;
       displaymessage2("processing building %d", buildingCounter );
 
-      cbuildingcontrols bc;
-      bc.init ( *bi );
+      ContainerControls bc( *bi );
 
-      for ( int j= 0; j < 32; j++ ) {
-         pvehicle veh = bc.getloadedunit ( j );
+      int unitCounter = 0;
+      for ( vector<Vehicle*>::const_iterator j=  (*bi)->getCargo().begin(); j != (*bi)->getCargo().end(); j++ ) {
+         Vehicle* veh = *j;
          if ( veh ) {
-            displaymessage2("processing building %d (unit %d)", buildingCounter, j );
+            ++unitCounter;
+            displaymessage2("processing building %d (unit %d)", buildingCounter, unitCounter );
             if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
-               bc.refill.resource ( veh, Resources::Fuel, maxint );
+               bc.fillResource( veh, Resources::Fuel, maxint );
             else
-               bc.refill.filleverything( veh );
+               bc.refilleverything( veh );
          }
       }
 
-      result += container ( bc );
+      result += container ( *bi );
 
       checkKeys();
    }
@@ -460,14 +465,11 @@ AI::AiResult AI::transports( int process )
 
    int transportCounter = 0;
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
-      pvehicle veh = *vi;
+      Vehicle* veh = *vi;
       transportCounter++;
       displaymessage2("processing unit %d for transportation ", transportCounter );
 
-      ctransportcontrols tc;
-      tc.init ( veh );
-
-      result += container ( tc );
+      result += container ( veh );
 
       checkKeys();
    }
@@ -478,7 +480,7 @@ AI::AiResult AI::transports( int process )
 
 
 
-bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool intoBuildings, bool intoTransports )
+bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool intoBuildings, bool intoTransports )
 {
    // are we operating in 3D space or 2D space? Pathfinding in 3D has not
    // been available at the beginning of the AI work; and it is faster anyway
@@ -506,7 +508,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
          int x = path[i].x;
          int y = path[i].y;
 
-         pfield fld = getfield ( x, y );
+         tfield* fld = getfield ( x, y );
          if ( !fld)
             break;
 
@@ -567,7 +569,7 @@ bool AI :: moveUnit ( pvehicle veh, const MapCoordinate3D& destination, bool int
 //   }
 }
 
-int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
+int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
 {
    AStar3D::Path::const_iterator pi = path.begin();
    if ( pi == path.end() )
@@ -577,7 +579,7 @@ int AI::moveUnit ( pvehicle veh, const AStar3D::Path& path, bool intoBuildings, 
 
    AStar3D::Path::const_iterator lastmatch = pi;
    while ( pi != path.end() ) {
-      pfield fld = getfield ( pi->x, pi->y );
+      tfield* fld = getfield ( pi->x, pi->y );
       bool ok = true;
       if ( fld->getContainer() ) {
          if ( pi+1 !=path.end() )
@@ -662,7 +664,7 @@ void AI::CheckFieldRecon :: testfield ( const MapCoordinate& mc )
 {
    FieldInformation& fi = ai->getFieldInformation ( mc.x, mc.y );
    if( fi.control != -1 )
-      if ( getdiplomaticstatus2 ( player*8, fi.control*8 ) == capeace )
+      if ( !actmap->player[player].diplomacy.isHostile( fi.control )  )
          ownFields[dist]++;
       else
          enemyFields[dist]++;
@@ -674,7 +676,7 @@ void AI :: calcReconPositions()
    for ( int y = 0; y < getMap()->ysize; y++ )
       for ( int x = 0; x < getMap()->xsize; x++ ) {
          FieldInformation& fi = getFieldInformation ( x, y );
-         pfield fld = getMap()->getField(x,y);
+         tfield* fld = getMap()->getField(x,y);
          if ( fi.control == getPlayerNum() && !fld->building && ( !fld->vehicle || fld->vehicle->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon )) {
             CheckFieldRecon cfr ( this );
             int qual = cfr.run(x,y);
@@ -692,7 +694,7 @@ void AI ::  runReconUnits ( )
       nvi = vi;
       ++nvi;
 
-      pvehicle veh = *vi;
+      Vehicle* veh = *vi;
 
       int maxUnitMovement = veh->typ->maxSpeed();
 
@@ -703,7 +705,7 @@ void AI ::  runReconUnits ( )
             int mindist = maxint;
             MapCoordinate mc;
             for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
-               pfield fld = getMap()->getField( i->first );
+               tfield* fld = getMap()->getField( i->first );
                if ( !fld->vehicle && !fld->building ) {
                   AStar ast ( getMap(), veh );
                   ast.findAllAccessibleFields( maxUnitMovement );
@@ -727,9 +729,9 @@ void AI ::  runReconUnits ( )
    }
 }
 
-AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicletype* vt )
 {
-   switch ( chooseJob ( vt, vt->functions ).front() ) {
+   switch ( chooseJob ( vt ).front() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
       case AiParameter::job_recon  : return UnitDistribution::recon;
       case AiParameter::job_conquer: return UnitDistribution::conquer;
@@ -751,7 +753,7 @@ AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicletype vt )
 }
 
 
-AI::UnitDistribution::Group AI::getUnitDistributionGroup ( pvehicle veh )
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicle* veh )
 {
    switch ( veh->aiparam[getPlayerNum()]->getJob() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
@@ -835,7 +837,7 @@ void AI::production()
       enemyValue[i] = 0;
 
    for ( int p = 0; p < 8; p++ )
-      if ( getdiplomaticstatus2( p*8, getPlayerNum()*8 ) != capeace )
+      if ( actmap->player[p].diplomacy.isHostile( getPlayerNum() ) )
           for ( Player::VehicleList::iterator vli = getMap()->player[p].vehicleList.begin(); vli != getMap()->player[p].vehicleList.end(); vli++ ) {
               enemyThreat += (*vli)->aiparam[getPlayerNum()]->threat;
               enemyValue[(*vli)->aiparam[getPlayerNum()]->valueType] += (*vli)->aiparam[getPlayerNum()]->getValue();
@@ -857,10 +859,10 @@ void AI::production()
    Produceable produceable;
 
    for ( Player::BuildingList::iterator bli = getPlayer().buildingList.begin(); bli != getPlayer().buildingList.end(); bli ++ ) {
-      pbuilding bld = *bli;
-      for ( int i = 0; i < 32; i++ )
-         if ( bld->production[i] && bld->vehicleUnloadable ( bld->production[i] )) {
-            Vehicletype* typ = bld->production[i];
+      Building* bld = *bli;
+      for ( int i = 0; i < bld->getProduction().size(); i++ )
+         if ( bld->getProduction()[i] && bld->vehicleUnloadable ( bld->getProduction()[i] )) {
+            const Vehicletype* typ = bld->getProduction()[i];
             float rating = 0;
             for ( int j = 0; j < aiValueTypeNum; j++ )
                rating += enemyValue[j] * typ->aiparam[getPlayerNum()]->threat.threat[j];
@@ -873,7 +875,7 @@ void AI::production()
 
             rating /= 1 + log ( double(danger) );
 
-            UnitTypeSuccess::iterator uts = unitTypeSuccess.find ( bld->production[i]->id  );
+            UnitTypeSuccess::iterator uts = unitTypeSuccess.find ( bld->getProduction()[i]->id  );
             if ( uts != unitTypeSuccess.end() ) {
                if ( uts->second.second >= 1 )
                   rating *= uts->second.first / uts->second.second;
@@ -912,16 +914,17 @@ void AI::production()
                       ProductionRating& pr = p->second;
 
                       if ( find ( lockedBuildings.begin(), lockedBuildings.end(), pr.bld ) == lockedBuildings.end()) {
-                         cbuildingcontrols bc;
-                         bc.init ( pr.bld );
-                         int lack;
-                         if  ( bc.produceunit.available( pr.vt, &lack ) && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
-                             pvehicle veh = bc.produceunit.produce( pr.vt, true );
-                             calculateThreat ( veh );
-                             container ( bc );
-                             // currentUnitDistribution.group[i] += inc;
-                             produced = true;
-                             break;  // exit produceable llop
+                         ContainerControls bc( pr.bld );
+                         int lack = bc.unitProductionPrerequisites( pr.vt );
+                         if  ( !lack && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
+                             Vehicle* veh = bc.produceUnit( pr.vt, true, true );
+                             if ( veh ) {
+                                 calculateThreat ( veh );
+                                 container ( pr.bld );
+                                 // currentUnitDistribution.group[i] += inc;
+                                 produced = true;
+                                 break;  // exit produceable loop
+                             }
                          } else {
 
                             // the ai will save for move expensive units

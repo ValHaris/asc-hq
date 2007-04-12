@@ -23,19 +23,21 @@
 #include "buildingtype.h"
 #include "viewcalculation.h"
 #include "errors.h"
-#include "basegfx.h"
 #include "graphicset.h"
 #include "errors.h"
 #include "gameoptions.h"
-#include "basegfx.h"
 #include "spfst.h"
 #include "itemrepository.h"
-
+#include "graphics/blitter.h"
 
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
                                                                          0.5, 0,  1 };
 
+
+#ifndef UNITVERSIONLIMIT
+# define UNITVERSIONLIMIT 0x7fffffff
+#endif
 
 
 
@@ -50,7 +52,7 @@ Vehicle :: Vehicle ( const Vehicle& v )
 }
 
 
-Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
+Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
           : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
@@ -66,7 +68,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player )
    gamemap->vehicleLookupCache[networkid] = this;
 }
 
-Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkID )
+Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID )
           : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
@@ -93,19 +95,30 @@ Vehicle :: Vehicle ( const Vehicletype* t, pmap actmap, int player, int networkI
 Vehicle :: ~Vehicle (  )
 {
    #ifndef karteneditor
-   if ( !typ->wreckageObject.empty() && gamemap && !gamemap->__mapDestruction && !cleanRemove) {
-      pfield fld = getMap()->getField(getPosition());
+   if ( !typ->wreckageObject.empty() && gamemap && gamemap->state != GameMap::Destruction && !cleanRemove) {
+      tfield* fld = getMap()->getField(getPosition());
       if ( fld->vehicle ==  this ) {
          for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
-            pobjecttype obj = getMap()->getobjecttype_byid( *i );
-            if ( obj )
+            ObjectType* obj = getMap()->getobjecttype_byid( *i );
+            if ( obj ) {
                getMap()->getField(getPosition()) -> addobject ( obj );
+               Object* o = getMap()->getField(getPosition())->checkforobject(obj);
+               if ( o )
+                  o->setdir( direction );
+            }
          }
       }
    }
    #endif
 
-   if ( viewOnMap && gamemap && !gamemap->__mapDestruction ) {
+   for ( int i = 0; i < 8; i++ ) {
+      delete aiparam[i];
+      aiparam[i] = NULL;
+   }
+      
+
+   
+   if ( viewOnMap && gamemap && gamemap->state != GameMap::Destruction ) {
       removeview();
       viewOnMap = false;
    }
@@ -113,28 +126,22 @@ Vehicle :: ~Vehicle (  )
    if ( gamemap ) {
       int c = color/8;
 
-      tmap::Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
+      Player::VehicleList::iterator i = find ( gamemap->player[c].vehicleList.begin(), gamemap->player[c].vehicleList.end(), this );
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
 
-      tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find(networkid);
+      GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find(networkid);
       if ( j != gamemap->vehicleLookupCache.end() )
          gamemap->vehicleLookupCache.erase(j);
    }
 
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         delete loading[i];
-
-   pfield fld = gamemap->getField( xpos, ypos);
+   tfield* fld = gamemap->getField( xpos, ypos);
    if ( fld ) {
       if ( fld->vehicle  == this )
         fld->vehicle = NULL;
       else {
-        if ( fld->building )
-           fld->building->searchAndRemove(this);
-        if ( fld->vehicle )
-           fld->vehicle->searchAndRemove(this);
+         if ( fld->getContainer() )
+            fld->getContainer()->removeUnitFromCargo( this, true );
       }
    }
 }
@@ -144,9 +151,6 @@ Vehicle :: ~Vehicle (  )
 
 void Vehicle :: init ( void )
 {
-   for ( int j = 0; j < 32; j++ )
-       loading[j] = NULL;
-
    xpos = -1;
    ypos = -1;
 
@@ -170,14 +174,12 @@ void Vehicle :: init ( void )
          if (typ->height & chschwimmend )
             height = chschwimmend;
 
-      armor = typ->armor;
       for ( int m = 0; m < typ->weapons.count ; m++)
          weapstrength[m] = typ->weapons.weapon[m].maxstrength;
 
       setMovement ( typ->movement[log2(height)], 0 );
    } else {
       height = 0;
-      armor = 0;
 
       setMovement ( 0, 0 );
    }
@@ -187,8 +189,11 @@ void Vehicle :: init ( void )
    ypos = -1;
    connection = 0;
    networkid = -1;
-   reactionfire.status = ReactionFire::off;
-   reactionfire.enemiesAttackable = 0;
+
+   if ( typ && typ->hasFunction(ContainerBaseType::MoveWithReactionFire))
+      reactionfire.status = ReactionFire::ready;
+   else
+      reactionfire.status = ReactionFire::off;
 
    generatoractive = 0;
 
@@ -199,57 +204,104 @@ void Vehicle :: init ( void )
 }
 
 
-bool Vehicle :: canRepair( const ContainerBase* item )
+bool Vehicle :: canRepair( const ContainerBase* item ) const
 {
-   return (typ->functions & cfrepair) || (item == this && typ->autorepairrate ) ;
+   return typ->hasFunction( ContainerBaseType::InternalUnitRepair  ) ||
+          typ->hasFunction( ContainerBaseType::ExternalRepair  ) ||
+          (item == this && typ->autorepairrate ) ;
 }
 
-int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int scope )
+int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player )
 {
    //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
 
    if ( amount < 0 ) {
-      return -getResource( -amount, resourcetype, queryonly, scope );
+      return -getResource( -amount, resourcetype, queryonly, scope, player );
    } else {
       if ( resourcetype == 0 )  // no energy storable
          return 0;
+      
+      if ( player < 0 )
+         player = getMap()->actplayer;
+      
+      if ( player != getOwner() && !(getMap()->getPlayer(getOwner()).diplomacy.getState(player) > PEACE) )
+         return 0;
 
-      int spaceAvail = typ->tank.resource( resourcetype ) - tank.resource(resourcetype);
+      int spaceAvail = getStorageCapacity().resource( resourcetype ) - tank.resource(resourcetype);
       if ( spaceAvail < 0 )
          spaceAvail = 0;
 
       int tostore = min ( spaceAvail, amount);
-      if ( !queryonly )
+      if ( !queryonly ) {
          tank.resource(resourcetype) += tostore;
+         // if ( tostore > 0 )
+         //   resourceChanged();
+      }
 
       return tostore;
    }
 }
 
-int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int scope )
+int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int scope, int player )
 {
    //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
 
    if ( amount < 0 ) {
-      return -putResource( -amount, resourcetype, queryonly, scope );
+      return -putResource( -amount, resourcetype, queryonly, scope, player );
    } else {
       if ( resourcetype == 0 && !getGeneratorStatus() )
          return 0;
 
+      if ( player < 0 )
+         player = getMap()->actplayer;
+      
+      if ( player != getOwner() && !getMap()->getPlayer(getOwner()).diplomacy.isAllied(player) )
+         return 0;
+      
+      
       int toget = min ( tank.resource(resourcetype), amount);
-      if ( !queryonly )
+      if ( !queryonly ) {
          tank.resource(resourcetype) -= toget;
-
+         // if ( toget > 0 )
+         //   resourceChanged();
+      }
 
       return toget;
    }
+}
+
+int Vehicle :: getResource ( int amount, int resourcetype ) const
+{
+   //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
+
+   if ( resourcetype == 0 && !getGeneratorStatus() )
+      return 0;
+
+   int toget = min ( tank.resource(resourcetype), amount);
+   return toget;
+}
+
+
+Resources Vehicle::getResource ( const Resources& res ) const
+{
+   Resources got;
+   for ( int r = 0; r < 3; ++r )
+      got.resource(r) = getResource( res.resource(r), r);
+        
+   return got;
+}
+
+
+Resources Vehicle::getTank() const
+{
+   return tank;
 }
 
 
 
 void Vehicle :: setGeneratorStatus ( bool status )
 {
-   if ( typ->functions & cfgenerator ) {
+   if ( typ->hasFunction( ContainerBaseType::MatterConverter )) {
       generatoractive = status;
    } else
      generatoractive = 0;
@@ -259,7 +311,7 @@ void Vehicle :: setGeneratorStatus ( bool status )
 
 int Vehicle::weight( void ) const
 {
-   return typ->weight + cargo();
+   return typ->weight + cargoWeight();
 }
 
 int Vehicle::size ( void )
@@ -267,20 +319,22 @@ int Vehicle::size ( void )
    return typ->weight;
 }
 
-void Vehicle::transform ( const pvehicletype type )
+void Vehicle::transform ( const Vehicletype* type )
 {
+   if ( !type )
+      return;
+   
    typ = type;
 
-   tank.fuel = typ->tank.fuel;
-   tank.material = typ->tank.material;
+   tank = getStorageCapacity();
    tank.energy = 0;
+   
    generatoractive = 0;
 
    for ( int m = 0; m < typ->weapons.count ; m++) {
       ammo[m] = typ->weapons.weapon[m].count;
       weapstrength[m] = typ->weapons.weapon[m].maxstrength;
    }
-   armor = typ->armor;
 }
 
 void Vehicle :: postRepair ( int oldDamage )
@@ -293,7 +347,7 @@ void Vehicle :: postRepair ( int oldDamage )
 
 
 /*
-void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
+void Vehicle :: repairunit(Vehicle* vehicle, int maxrepair )
 {
    if ( vehicle->damage  &&  tank.fuel  &&  tank.material ) {
 
@@ -357,8 +411,9 @@ void Vehicle :: repairunit(pvehicle vehicle, int maxrepair )
 
 void Vehicle :: endRound ( void )
 {
-   if ( typ->functions & cfgenerator ) {
-      int endiff = typ->tank.energy - tank.energy;
+   ContainerBase::endRound();
+   if ( typ->hasFunction( ContainerBaseType::MatterConverter )) {
+      int endiff = getStorageCapacity().energy - tank.energy;
       if ( tank.fuel < endiff * generatortruckefficiency )
          endiff = tank.fuel / generatortruckefficiency;
 
@@ -369,12 +424,15 @@ void Vehicle :: endRound ( void )
 
 void Vehicle :: endAnyTurn()
 {
+   ContainerBase::endAnyTurn();
    reactionfire.endAnyTurn();
 }
 
 
 void Vehicle :: endOwnTurn()
 {
+   ContainerBase::endOwnTurn();
+   
    if ( typ->autorepairrate > 0 )
       if ( damage )
          repairItem ( this, max ( damage - typ->autorepairrate, 0 ) );
@@ -428,14 +486,14 @@ void Vehicle :: resetMovement ( void )
 }
 
 
-void Vehicle :: setNewHeight( int newHeight )
+void Vehicle :: setNewHeight( int bitmappedheight )
 {
   if ( maxMovement() ) {
      float oldperc = float(getMovement ( false )) / float(maxMovement());
-     height = newHeight;
+     height = bitmappedheight;
      setMovement ( int(floor(maxMovement() * oldperc + 0.5)) , 0 );
   } else {
-     height = newHeight;
+     height = bitmappedheight;
      warning("Internal error: unit has invalid height");
   }
 }
@@ -454,15 +512,14 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
       if ( typ->movement[ log2 ( height ) ] ) {
          double diff = _movement - newmove;
          double perc = diff / typ->movement[ log2 ( height ) ] ;
-         for ( int i = 0; i < 32; i++ ) {
-            if ( loading[i] ) {
+         for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+            if ( *i ) {
                double lperc = perc;
-               if ( cargoDivisor )
+               if ( cargoDivisor && cargoNestingDepth() == 0 )
                   lperc /= cargoDivisor;
 
-               loading[i]->decreaseMovement ( max( 1, int( ceil( lperc * double(loading[i]->typ->movement[ log2 ( loading[i]->height)] )))));
+               (*i)->decreaseMovement ( max( 1, int( ceil( lperc * double( (*i)->typ->movement[ log2 ( (*i)->height)] )))));
             }
-         } /* endfor */
    }
    _movement = newmove;
 }
@@ -520,15 +577,15 @@ bool Vehicle :: canMove ( void ) const
    //   return false;
 
    if ( movementLeft() && reactionfire.canMove() ) {
-      pfield fld = gamemap->getField ( getPosition() );
+      tfield* fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {
          if ( terrainaccessible ( fld, this ) || actmap->getgameparameter( cgp_movefrominvalidfields))
             return true;
       } else {
          ContainerBase* cnt = fld->getContainer();
          if ( cnt )
-            for ( int i = 0; i < 32; i++ )
-               if ( cnt->loading[i] == this )
+            for ( Cargo::const_iterator i = cnt->getCargo().begin(); i != cnt->getCargo().end(); ++i )
+               if ( *i == this ) 
                   if ( cnt->vehicleUnloadable( typ ) > 0 || cnt->vehicleDocking( this, true ) > 0 )
                      return true;
       }
@@ -536,42 +593,39 @@ bool Vehicle :: canMove ( void ) const
    return false;
 }
 
-void Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
+bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
 {
    if ( start == dest )
-      return;
+      return false;
       
-   if ((typ->functions & ( cffahrspur | cficebreaker )) && (height == chfahrend || height == chschwimmend))  {
-     int dir = getdirection( start, dest );
+   bool result = false;
+   
+   if ( typ->objectLayedByMovement.size() && (height == chfahrend || height == chschwimmend))  {
+      int dir = getdirection( start, dest );
 
-     pfield startField = gamemap->getField(start);
-     pfield destField = gamemap->getField(dest);
-     if ( typ->functions & cffahrspur )
-        if ( fahrspurobject )
-           if ( (startField->bdt & getTerrainBitType(cbfahrspur)).any() )
-              startField->addobject ( fahrspurobject, 1 << dir );
+      tfield* startField = gamemap->getField(start);
+      tfield* destField = gamemap->getField(dest);
 
-     if ( typ->functions & cficebreaker )
-        if ( eisbrecherobject )
-              if (   (startField->bdt & getTerrainBitType(cbicebreaking) ).any()
-                   || startField->checkforobject ( eisbrecherobject ) ) {
-                 startField->addobject ( eisbrecherobject, 1 << dir );
-              }
+      for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
+         for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
+            ObjectType* object = objectTypeRepository.getObject_byID( id );
+            if ( object ) 
+               if ( startField->addobject ( object, 1 << dir ))
+                  result = true;
+         }
+           
+      dir = (dir + sidenum/2) % sidenum;
 
-     dir = (dir + sidenum/2) % sidenum;
-
-     if ( typ->functions & cffahrspur )
-        if ( fahrspurobject )
-           if ( (destField->bdt & getTerrainBitType(cbfahrspur)).any() )
-              destField->addobject ( fahrspurobject, 1 << dir );
-
-     if ( typ->functions & cficebreaker )
-        if ( eisbrecherobject )
-              if (   (destField->bdt & getTerrainBitType(cbicebreaking) ).any()
-                   || destField->checkforobject ( eisbrecherobject ) ) {
-                 destField->addobject ( eisbrecherobject, 1 << dir );
-              }
+      for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
+         for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
+            ObjectType* object = objectTypeRepository.getObject_byID( id );
+            if ( object ) 
+               if ( destField->addobject ( object, 1 << dir ))
+                  result = true;
+         }
    }
+   
+   return result;
 }
 
 
@@ -605,7 +659,7 @@ void Vehicle::ReactionFire::resetShotCount()
 
 int Vehicle::ReactionFire::enable ( void )
 {
-   if ( unit->typ->functions & cfno_reactionfire )
+   if ( unit->typ->hasFunction( ContainerBaseType::NoReactionfire  ) )
       return -216;
       
    #ifdef karteneditor
@@ -643,8 +697,7 @@ int Vehicle::ReactionFire::enable ( void )
 void Vehicle::ReactionFire::disable ( void )
 {
    if ( status != off ) {
-       if ( status != init1a && status != init2 ) {
-          enemiesAttackable = 0;
+      if ( status != init1a && status != init2 && !unit->typ->hasFunction(ContainerBaseType::MoveWithReactionFire)  ) {
           unit->setMovement ( 0, 0 );
        }
        status = off;
@@ -665,23 +718,31 @@ void Vehicle::ReactionFire::endOwnTurn()
       else
          if ( status == init2 || status == init1b )
             status = ready;
-
-      if ( status == ready )
-         enemiesAttackable = 0xff;
-      else
-         enemiesAttackable = 0;
    }
    nonattackableUnits.clear();
 }
 
 bool Vehicle::ReactionFire::canMove() const
 {
-   if ( unit->typ->functions & cfmovewithRF )
+   if ( unit->typ->hasFunction( ContainerBaseType::MoveWithReactionFire  ))
       return true;
    if ( status == off )
       return true;
    return false;
 }
+
+bool Vehicle::ReactionFire:: canPerformAttack( Vehicle* target )
+{
+   if ( !unit->getCarrier() )
+      if ( unit->getMap()->getPlayer(unit).diplomacy.isHostile( actmap->actplayer))
+         if ( getStatus() >= ready )
+            if ( find ( nonattackableUnits.begin(), nonattackableUnits.end(), target->networkid) == nonattackableUnits.end() ) 
+               // if ( enemiesAttackable & ( 1 << target->getOwner() ))
+                  return true;
+   
+   return false;
+}
+
 
 
 const Vehicletype::HeightChangeMethod* Vehicle::getHeightChange( int dir, int height ) const
@@ -715,42 +776,13 @@ bool Vehicle :: weapexist( void )
 }
 
 
-void Vehicle :: putimage ( int x, int y )
-{
-  #ifdef sgmain
-   int shaded = !canMove() && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
-  #else
-   int shaded = 0;
-  #endif
-    if ( height <= chgetaucht ) {
-       if ( shaded )
-          putpicturemix ( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color, (char*) colormixbuf );
-       else
-          putpicturemix ( x, y,  typ->picture[ direction],  color, (char*) colormixbuf );
-    } else {
-          if ( height >= chtieffliegend ) {
-             int d = 6 * ( log2 ( height) - log2 ( chfahrend ));
-             putshadow ( x + d, y + d, typ->picture[direction] , &xlattables.a.dark3);
-          } else
-             if ( height == chfahrend )
-                putshadow ( x + 1, y + 1,  typ->picture[ direction] , &xlattables.a.dark3);
-
-          if ( shaded )
-             putrotspriteimage( x, y, xlatpict(xlatpictgraytable,  typ->picture[  direction ]),  color);
-          else
-             putrotspriteimage( x, y,  typ->picture[ direction],  color);
-    }
-}
-
-
 void Vehicle :: setnewposition ( int x , int y )
 {
-  xpos = x;
-  ypos = y;
-  if ( typ->maxLoadableUnits > 0)
-     for ( int i = 0; i <= 31; i++)
-        if ( loading[i] )
-           loading[i]->setnewposition ( x , y );
+   xpos = x;
+   ypos = y;
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setnewposition ( x , y );
 }
 
 void Vehicle :: setnewposition ( const MapCoordinate& mc )
@@ -784,11 +816,11 @@ int Vehicle :: getstrongestweapon( int aheight, int distance)
 void Vehicle::convert ( int col )
 {
   if ( col > 8)
-     fatalError("convertvehicle: \n color muá im bereich 0..8 sein ",2);
+     fatalError("convertvehicle: \n color muï¿½im bereich 0..8 sein ",2);
 
    int oldcol = getOwner();
 
-   tmap::Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
+   Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
    if ( i != gamemap->player[oldcol].vehicleList.end())
       gamemap->player[oldcol].vehicleList.erase ( i );
 
@@ -796,21 +828,22 @@ void Vehicle::convert ( int col )
 
    color = col << 3;
 
-   for ( int i = 0; i < 32; i++)
-      if ( loading[i] )
-         loading[i]->convert( col );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->convert( col );
 
    // emit signal
    conquered();
 }
 
-Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
+Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
 {
    if ( gamemap && vehicleconstructable( tnk, x, y )) {
-      pvehicle v = new Vehicle( tnk, gamemap, color/8 );
+      Vehicle* v = new Vehicle( tnk, gamemap, color/8 );
       v->xpos = x;
       v->ypos = y;
-
+      v->addview();
+   
       for ( int j = 0; j < 8; j++ ) {
          int a = int(height) << j;
          int b = int(height) >> j;
@@ -830,7 +863,7 @@ Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
       tank.material -= tnk->productionCost.material;
       tank.fuel -= tnk->productionCost.energy;
 
-
+      /*
       int refuel = 0;
       for ( int i = 0; i < typ->weapons.count; i++ )
          if ( typ->weapons.weapon[i].service()  )
@@ -840,14 +873,14 @@ Vehicle* Vehicle :: constructvehicle ( pvehicletype tnk, int x, int y )
                if ( typ->functions & (cffuelref | cfmaterialref) )
                   refuel = 1;
             }
-
+      */
       v->attacked = 1;
       return v;
    } else
       return NULL;
 }
 
-bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
+bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
 {
    if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
       return 0;
@@ -869,7 +902,7 @@ bool  Vehicle :: vehicleconstructable ( pvehicletype tnk, int x, int y )
 }
 
 
-bool Vehicle :: buildingconstructable ( pbuildingtype building )
+bool Vehicle :: buildingconstructable ( const BuildingType* building, bool checkResources )
 {
    if ( !building )
       return 0;
@@ -896,31 +929,27 @@ bool Vehicle :: buildingconstructable ( pbuildingtype building )
       return 0;
 
 
-   if ( building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel ) {
-      int found = 0;
-      if ( typ->functions & cfputbuilding )
-         found = 1;
-      if ( typ->functions & cfspecificbuildingconstruction )
+   if ( (building->productionCost.material * mf / 100 <= tank.material   &&   building->productionCost.fuel * ff / 100 <= tank.fuel) || !checkResources ) {
+      if ( typ->hasFunction( ContainerBaseType::ConstructBuildings) )
          for ( int i = 0; i < typ->buildingsBuildable.size(); i++ )
             if ( typ->buildingsBuildable[i].from <= building->id &&
                  typ->buildingsBuildable[i].to   >= building->id )
-                 found = 1;
-
-      return found;
-   } else
-      return false;
+               return true;
+   }
+   
+   return false;
 }
 
 int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
 {
    if ( searchedInnerVehicle == this ) {
-      return typ->maxLoadableWeight - cargo();
+      return typ->maxLoadableWeight - cargoWeight();
    } else {
-      int currentFreeWeight = typ->maxLoadableWeight - cargo();
+      int currentFreeWeight = typ->maxLoadableWeight - cargoWeight();
       int innerFreeWeight = -1;
-      for ( int i = 0; i < 32; i++ )
-         if ( loading[i] ) {
-            int w = loading[i]->searchstackforfreeweight ( searchedInnerVehicle );
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) {
+            int w = (*i)->searchstackforfreeweight ( searchedInnerVehicle );
             if ( w >= 0 )
                innerFreeWeight = w;
          }
@@ -931,18 +960,35 @@ int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
          return -1;
    }
 }
+/*
+Vehicle* Vehicle::findCarrierUnit ( const Vehicle* veh )
+{
+   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) {
+         if ( *i == veh )
+            return this;
+         else {
+            const ContainerBase* cb = (*i)->findParentUnit( veh );
+            if ( cb )
+               return cb;
+         }
+      }
+
+   return NULL;
+}
+*/
 
 
 int Vehicle :: freeWeight ()
 {
-   pfield fld = gamemap->getField ( xpos, ypos );
+   tfield* fld = gamemap->getField ( xpos, ypos );
    if ( fld->vehicle )
       return fld->vehicle->searchstackforfreeweight ( this );
    else
       if ( fld->building ) {
-         for ( int i = 0; i < 32; i++ )
-            if ( fld->building->loading[i] ) {
-               int w3 = fld->building->loading[i]->searchstackforfreeweight ( this );
+         for ( Cargo::const_iterator i = fld->building->getCargo().begin(); i != fld->building->getCargo().end(); ++i )
+            if ( *i ) {
+               int w3 = (*i)->searchstackforfreeweight ( this );
                if ( w3 >= 0 )
                   return w3;
             }
@@ -952,7 +998,7 @@ int Vehicle :: freeWeight ()
 }
 
 
-void Vehicle :: addview ( void )
+void Vehicle :: addview ()
 {
    if ( viewOnMap )
       fatalError ("void Vehicle :: addview - the vehicle is already viewing the map");
@@ -963,7 +1009,7 @@ void Vehicle :: addview ( void )
    bes.startsearch();
 }
 
-void Vehicle :: removeview ( void )
+void Vehicle :: removeview ()
 {
    if ( !viewOnMap )
       fatalError ("void Vehicle :: removeview - the vehicle is not viewing the map");
@@ -976,10 +1022,12 @@ void Vehicle :: removeview ( void )
 }
 
 
-void Vehicle :: postAttack()
+void Vehicle :: postAttack( bool reactionFire )
 {
-   attacked = true;
-   if ( typ->functions & cf_moveafterattack )
+   if ( !reactionFire )
+      attacked = true;
+   
+   if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) )
       decreaseMovement ( maxMovement() * attackmovecost / 100 );
    else
       if ( reactionfire.getStatus() == ReactionFire::off )
@@ -990,9 +1038,9 @@ void Vehicle :: postAttack()
 void Vehicle::setAttacked()
 {
    attacked = true;
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         loading[i]->setAttacked();
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setAttacked();
 }
 
 
@@ -1000,22 +1048,22 @@ class tsearchforminablefields: public SearchFields {
       int shareview;
     public:
       int numberoffields;
-      int run ( pvehicle     eht );
+      int run ( const Vehicle*     eht );
       virtual void testfield ( const MapCoordinate& mc );
-      tsearchforminablefields ( pmap _gamemap ) : SearchFields ( _gamemap ) {};
-      static bool available( pvehicle eht );
+      tsearchforminablefields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
   };
 
+  /*
 bool Vehicle::searchForMineralResourcesAvailable()
 {
    return tsearchforminablefields::available( this );
 }
-
+  */
 
 
 void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 {
-    pfield fld = gamemap->getField ( mc );
+    tfield* fld = gamemap->getField ( mc );
     if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
        if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
           if ( !fld->resourceview )
@@ -1031,70 +1079,58 @@ void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 }
 
 
-bool tsearchforminablefields::available( pvehicle eht )
-{
-   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
-      if ( eht->attacked ||
-          (eht->typ->wait && eht->hasMoved() ) ||
-          (eht->getMovement() < searchforresorcesmovedecrease ))
-          return false;
-   return true;
-}
 
 
-int  tsearchforminablefields::run( pvehicle eht )
+int  tsearchforminablefields::run( const Vehicle* eht )
 {
-   if ( !available( eht ) )
+   if ( !eht->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) )
       return -311;
 
 
    shareview = 1 << ( eht->color / 8);
-   if ( gamemap->shareview )
-      for ( int i = 0; i < 8; i++ )
-         if ( i*8 != eht->color )
-            if ( gamemap->player[i].exist() )
-               if ( gamemap->shareview->mode[eht->color/8][i] )
-                  shareview += 1 << i;
+   for ( int i = 0; i < 8; i++ )
+      if ( i*8 != eht->color )
+         if ( gamemap->player[i].exist() )
+            if ( gamemap->getPlayer(eht).diplomacy.sharesView(i) )
+               shareview += 1 << i;
 
    numberoffields = 0;
    initsearch( eht->getPosition(), eht->typ->digrange, 0 );
    if ( eht->typ->digrange )
       startsearch();
 
-   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
-      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
+//   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
+//      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
 
-   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
-      gamemap->mineralResourcesDisplayed = 1;
+//   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
+//      gamemap->mineralResourcesDisplayed = 1;
 
    return 1;
 }
 
 
-int Vehicle::maxMovement ( void )
+int Vehicle::maxMovement ( void ) const
 {
    return typ->movement[log2(height)];
 }
 
-int Vehicle::searchForMineralResources ( void )
+int Vehicle::searchForMineralResources ( void ) const
 {
     tsearchforminablefields sfmf ( gamemap );
     return sfmf.run( this );
 }
 
 
-void Vehicle :: fillMagically( void )
+void Vehicle :: fillMagically( bool ammunition, bool resources )
 {
-   #ifndef karteneditor
-   fprintf(stderr, "ASC: Warning, Vehicle :: fillMagically called outside mapeditor");
-   #endif
-   tank = typ->tank;
+   if ( resources )
+      tank = getStorageCapacity();
 
-   for ( int m = 0; m < typ->weapons.count ; m++) {
-      ammo[m] = typ->weapons.weapon[m].count;
-      weapstrength[m] = typ->weapons.weapon[m].maxstrength;
-   }
-   armor = typ->armor;
+   if ( ammunition ) 
+      for ( int m = 0; m < typ->weapons.count ; m++) {
+         ammo[m] = typ->weapons.weapon[m].count;
+         weapstrength[m] = typ->weapons.weapon[m].maxstrength;
+      }
 }
 
 
@@ -1129,12 +1165,12 @@ void Vehicle :: fillMagically( void )
 
 
 
-const int vehicleVersion = 3;
+const int vehicleVersion = 6;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 {
     stream.writeWord ( 0 );
-    stream.writeInt( vehicleVersion );
+    stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT ) );
     stream.writeInt( typ->id );
 
     stream.writeChar ( color );
@@ -1151,17 +1187,17 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     bm |= cem_material;
 
     if ( typ->weapons.count )
-       for (char m = 0; m < typ->weapons.count ; m++) {
+       for (int m = 0; m < typ->weapons.count ; m++) {
           if ( ammo[m] < typ->weapons.weapon[m].count )
              bm |= cem_ammunition2;
           if ( weapstrength[m] != typ->weapons.weapon[m].maxstrength )
              bm |= cem_weapstrength2;
-
        }
+
     if ( includeLoadedUnits )
-       for ( int i = 0; i < 32; i++ )
-          if ( loading[i] )
-              bm |= cem_loading;
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             bm |= cem_loading;
 
     if ( attacked  )
        bm |= cem_attacked;
@@ -1175,9 +1211,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
        bm |= cem_direction;
 
 
-    if ( armor != typ->armor )
-       bm |= cem_armor;
-
     if ( networkid )
        bm |= cem_networkid;
 
@@ -1186,9 +1219,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( reactionfire.status )
        bm |= cem_reactionfire;
-
-    if ( reactionfire.enemiesAttackable )
-       bm |= cem_reactionfire2;
 
     if ( generatoractive )
        bm |= cem_poweron;
@@ -1204,7 +1234,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     stream.writeInt( bm );
 
-    stream.writeInt( vehicleVersion );
+    stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT )  );
 
     if ( bm & cem_experience )
          stream.writeChar ( experience );
@@ -1224,17 +1254,19 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
          stream.writeInt ( weapstrength[j] );
 
     if ( bm & cem_loading ) {
-       char c=0;
-       for ( int k = 0; k <= 31; k++)
-          if ( loading[k] )
-             c++;
+       int c=0;
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             ++c;
 
-       stream.writeChar ( c );
+       if ( UNITVERSIONLIMIT > 3 ) 
+         stream.writeInt ( c );
+       else
+         stream.writeChar ( c );
 
-       if ( c )
-          for ( int k = 0; k <= 31; k++)
-             if ( loading[k] )
-                loading[k]->write ( stream );
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             (*i)->write ( stream );
     }
 
     if ( bm & cem_height )
@@ -1252,9 +1284,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
     if ( bm & cem_energy )
          stream.writeInt ( tank.energy );
 
-    if ( bm & cem_armor )
-         stream.writeWord ( armor );
-
     if ( bm & cem_networkid )
          stream.writeInt ( networkid );
 
@@ -1266,9 +1295,6 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( bm & cem_reactionfire )
        stream.writeChar ( reactionfire.status );
-
-    if ( bm & cem_reactionfire2 )
-       stream.writeChar ( reactionfire.enemiesAttackable );
 
     if ( bm & cem_poweron )
        stream.writeInt ( generatoractive );
@@ -1292,6 +1318,21 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     writeClassContainer( reactionfire.weaponShots, stream );
     writeClassContainer( reactionfire.nonattackableUnits, stream );
+
+    if ( UNITVERSIONLIMIT >= 5 ) {
+      stream.writeInt( internalUnitProduction.size() );
+      for ( int i = 0; i < internalUnitProduction.size(); ++i )
+         stream.writeInt( internalUnitProduction[i]->id );
+    }
+
+    if ( UNITVERSIONLIMIT >= 6 ) {
+      stream.writeInt( maxresearchpoints );
+      stream.writeInt( researchpoints );
+      plus.write( stream );
+      maxplus.write( stream );
+      // actstorage.write( stream );
+      bi_resourceplus.write( stream );
+    }
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1331,10 +1372,10 @@ void   Vehicle::readData ( tnstream& stream )
 
     if ( bm & cem_fuel ) {
        tank.fuel = stream.readInt();
-       if ( tank.fuel > typ->tank.fuel )
-          tank.fuel = typ->tank.fuel;
+       if ( tank.fuel > getStorageCapacity().fuel )
+          tank.fuel = getStorageCapacity().fuel;
     } else
-       tank.fuel = typ->tank.fuel;
+       tank.fuel = getStorageCapacity().fuel;
 
     if ( bm & cem_ammunition ) {
        for ( int i = 0; i < 8; i++ )
@@ -1367,18 +1408,17 @@ void   Vehicle::readData ( tnstream& stream )
           weapstrength[i] = typ->weapons.weapon[i].maxstrength;
 
     if ( bm & cem_loading ) {
-       char c = stream.readChar();
+       int c;
+       if ( version <= 3 )
+          c = stream.readChar();
+       else
+          c = stream.readInt();   
 
        if ( c ) {
           for (int k = 0; k < c; k++) {
-             loading[k] = Vehicle::newFromStream ( gamemap, stream );
-             if ( loading[k]->color != color )
-                loading[k]->convert( color/8 );
-
+             Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
+             addToCargo(v);
           }
-
-          for ( int l = c; l < 32; l++ )
-             loading[l] = NULL;
        }
     }
 
@@ -1390,9 +1430,10 @@ void   Vehicle::readData ( tnstream& stream )
     if ( ! (height & typ->height) )
        height = 1 << log2 ( typ->height );
 
-    if ( bm & cem_movement )
-       setMovement ( stream.readChar ( ), 0 );
-    else
+    if ( bm & cem_movement ) {
+       int m = stream.readChar ( );
+       setMovement ( min( m,typ->movement [ log2 ( height ) ]), 0 );
+    } else
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
 
     if ( bm & cem_direction )
@@ -1401,24 +1442,22 @@ void   Vehicle::readData ( tnstream& stream )
        direction = 0;
 
     if ( bm & cem_material ){
-       tank.material = min( stream.readInt(), typ->tank.material);
+       tank.material = min( stream.readInt(), getStorageCapacity().material);
     } else
-       tank.material = typ->tank.material;
+       tank.material = getStorageCapacity().material;
 
     if ( bm & cem_energy ) {
-       tank.energy = min ( stream.readInt(), typ->tank.energy);
+       tank.energy = min ( stream.readInt(), getStorageCapacity().energy);
        if ( tank.energy < 0 )
           tank.energy = 0;
     } else
-       tank.energy = typ->tank.energy;
+       tank.energy = getStorageCapacity().energy;
 
     if ( bm & cem_class )
        stream.readChar(); // was: class
 
     if ( bm & cem_armor )
-       armor = stream.readWord();
-    else
-       armor = typ->armor;
+       stream.readWord(); // was: armor
 
     if ( bm & cem_networkid )
        networkid = stream.readInt();
@@ -1437,14 +1476,12 @@ void   Vehicle::readData ( tnstream& stream )
     if ( bm & cem_reactionfire )
        reactionfirestatus = stream.readChar();
 
+    int reactionfireenemiesAttackable = 0;
     if ( bm & cem_reactionfire2 )
-       reactionfire.enemiesAttackable = stream.readChar();
-    else
-       reactionfire.enemiesAttackable = 0;
+       reactionfireenemiesAttackable = stream.readChar();  
 
-    if ( reactionfirestatus >= 8 && reactionfire.enemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
-       reactionfire.status = ReactionFire::Status ( reactionfire.enemiesAttackable );
-       reactionfire.enemiesAttackable = reactionfirestatus;
+    if ( reactionfirestatus >= 8 && reactionfireenemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
+       reactionfire.status = ReactionFire::Status ( reactionfireenemiesAttackable );
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
     } else
        reactionfire.status = ReactionFire::Status ( reactionfirestatus );
@@ -1488,7 +1525,6 @@ void   Vehicle::readData ( tnstream& stream )
           throw ASCmsgException ( "Vehicle::read() - inconsistent data stream" );
     }
 
-    armor = typ->armor;
     for ( int m = 0; m < typ->weapons.count ; m++)
        if ( typ->weapons.weapon[m].getScalarWeaponType() >= 0 )
           weapstrength[m] = typ->weapons.weapon[m].maxstrength;
@@ -1501,6 +1537,25 @@ void   Vehicle::readData ( tnstream& stream )
     }
     if ( version >= 2 )
       readClassContainer( reactionfire.nonattackableUnits, stream );
+
+    internalUnitProduction.clear();
+    if ( version >= 5 ) {
+       int pcount = stream.readInt();
+       for ( int i = 0; i< pcount; ++i ) {
+          int id = stream.readInt();
+          internalUnitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
+          if ( !internalUnitProduction[i] )
+             throw InvalidID ( "unit", id );
+       }
+    }
+
+    if ( version >= 6 ) {
+       maxresearchpoints = stream.readInt();
+       researchpoints = stream.readInt();
+       plus.read( stream );
+       maxplus.read( stream );
+       bi_resourceplus.read( stream );
+    } 
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const
@@ -1520,7 +1575,7 @@ MapCoordinate3D Vehicle :: getPosition3D ( ) const
 }
 
 
-const ASCString&  Vehicle::getName() const
+ASCString  Vehicle::getName() const
 {
    if ( name.empty() )
       return typ->getName();
@@ -1528,8 +1583,92 @@ const ASCString&  Vehicle::getName() const
       return name;
 }
 
+int Vehicle::getAmmo( int type, int num, bool queryOnly ) 
+{
+   if ( num < 0 )
+      return -putAmmo( type, -num, queryOnly );
 
-Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetworkID )
+   int got = 0;
+   int weap = 0;
+   while ( weap < typ->weapons.count && got < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
+         int toget = min( num - got, ammo[weap]);
+         if ( !queryOnly )
+            ammo[weap] -= toget;
+         got += toget;
+      }
+      ++weap;
+   }
+   // if ( got && !queryOnly )
+   //   ammoChanged();
+   return got;
+}
+
+int Vehicle::putAmmo( int type, int num, bool queryOnly )
+{
+   if ( num < 0 )
+      return -getAmmo( type, -num, queryOnly );
+
+   int put = 0;
+   int weap = 0;
+   while ( weap < typ->weapons.count && put < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
+         int toput = min( num - put, typ->weapons.weapon[weap].count - ammo[weap]);
+         if ( !queryOnly )
+            ammo[weap] += toput;
+         put += toput;
+      }
+      ++weap;
+   }
+   // if ( put && !queryOnly )
+   //   ammoChanged();
+   return put;
+}
+
+
+int Vehicle::maxAmmo( int type ) const
+{
+   int ammo = 0;
+   for ( int i = 0; i < typ->weapons.count; ++i ) 
+      if ( typ->weapons.weapon[i].getScalarWeaponType() == type )
+         ammo += typ->weapons.weapon[i].count;
+   return ammo;
+
+}
+
+
+int Vehicle::getArmor() const
+{
+   return typ->armor;
+}
+
+
+void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
+{
+  #ifdef sgmain
+   bool shaded = (!canMove()) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+  #else
+   bool shaded = 0;
+  #endif
+
+   paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
+}
+
+void Vehicle::paint ( Surface& s, SPoint pos, bool shaded, int shadowDist ) const
+{
+   paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
+}
+
+vector<MapCoordinate> Vehicle::getCoveredFields()
+{
+   vector<MapCoordinate> fields;
+   fields.push_back( getPosition() );
+   return fields;
+}
+
+
+
+Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
    int version = 0;
@@ -1538,7 +1677,7 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetwo
       id = stream.readInt();
    }
 
-   pvehicletype fzt = gamemap->getvehicletype_byid ( id );
+   Vehicletype* fzt = gamemap->getvehicletype_byid ( id );
    if ( !fzt )
       throw InvalidID ( "vehicle", id );
 
@@ -1551,7 +1690,7 @@ Vehicle* Vehicle::newFromStream ( pmap gamemap, tnstream& stream, int forceNetwo
    if ( forceNetworkID > 0 )
       v->networkid = forceNetworkID;
 
-   tmap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
+   GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
    if ( j != gamemap->vehicleLookupCache.end() ) {
       // warning("duplicate network id detected !");
       gamemap->unitnetworkid++;
@@ -1573,3 +1712,68 @@ const SingleWeapon* Vehicle::getWeapon( unsigned weaponNum )
      return NULL;
 }
 
+
+
+ASCString getUnitReference ( Vehicle* veh )
+{
+   ASCString s = "The unit " + veh->getName();
+   s += " (position: "+ veh->getPosition().toString() + ") ";
+   return s;
+}
+
+
+
+const int UnitHooveringLogic::FuelConsumption = 50;
+
+int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
+{
+   if ( veh->height < chtieffliegend || veh->height > chhochfliegend )
+      return 0;
+
+   if ( veh->maxMovement() )
+      return veh->getMovement(false)  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
+   else
+      return (veh->getMap()->weather.windSpeed * maxwindspeed / 256 ) * veh->typ->fuelConsumption / ( minmalq * 64 );
+}
+
+
+int UnitHooveringLogic::getEndurance ( const Vehicletype* veh, int height, int resourceModel )
+{
+   assert( height < 8 );
+   
+   if ( ! (veh->height & (chtieffliegend | chfliegend | chhochfliegend )))
+      return -1;
+   
+   if ( !veh->fuelConsumption )
+      return -1;
+   
+   int maxmove;
+   if ( height == -1 ) 
+      maxmove = max( max( veh->movement[4], veh->movement[5]), veh->movement[6] );
+   else 
+      maxmove = veh->movement[height];
+      
+   int fields = minmalq * veh->getStorageCapacity(resourceModel).fuel * 100 / (veh->fuelConsumption * FuelConsumption ); 
+   if ( maxmove )
+      return (fields / maxmove );
+   else
+      return 0;
+}
+
+int UnitHooveringLogic::getEndurance ( const Vehicle* veh )
+{
+   if ( veh->height < chtieffliegend || veh->height > chhochfliegend || veh->typ->fuelConsumption <= 0)
+      return -1;
+
+
+   int fuelUsage = calcFuelUsage( veh );
+   if ( fuelUsage > veh->getTank().fuel )
+      return 0;
+
+
+   int fields = (veh->getTank().fuel - fuelUsage) * 100 / (veh->typ->fuelConsumption * FuelConsumption ); 
+   if ( veh->maxMovement() )
+      return 1 + (fields * minmalq / veh->maxMovement() );
+   else
+      return 1;
+}

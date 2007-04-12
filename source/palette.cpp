@@ -36,6 +36,7 @@ ppixelxlattable xlatpictgraytable;
 
 txlattables xlattables;
 tmixbuf *colormixbuf;
+char* colormixbufchar;
 tpixelxlattable bi2asc_color_translation_table;
 
 bool asc_paletteloaded = 0;
@@ -44,3 +45,6 @@ char* borland_c_sucks ( void )
 {
    return "just some code";
 }
+
+
+

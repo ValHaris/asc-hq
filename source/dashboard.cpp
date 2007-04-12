@@ -20,1311 +20,865 @@
  *                                                                         *
  ***************************************************************************/
 
+ #include "sigc++/retype.h"
 
-#include "mapdisplay.h"
-#include "vehicletype.h"
-#include "buildingtype.h"
-#include "spfst.h"
-#include "typen.h"
-#include "loaders.h"
-#include "gameoptions.h"
-#include "dialog.h"
-#include "stack.h"
-#include "loadbi3.h"
-#include "mapalgorithms.h"
-#include "gamedlg.h"
-#include "attack.h"
 #include "dashboard.h"
-#include "viewcalculation.h"
-
-         tdashboard  dashboard;
-
-tdashboard::tdashboard ( void )
-{
-   fuelbkgr  = NULL;
-   imagebkgr = NULL;
-   movedisp  = 0;
-   windheightshown = 0;
-   for ( int i = 0; i< 8; i++ )
-      weaps[i].displayed = 0;
-   repainthard = 1;
-   materialdisplayed = 1;
-}
-
-void tdashboard::paint ( const pfield ffield, int playerview )
-{
-   if ( playerview >= 0 ) {
-      if (fieldvisiblenow(ffield, playerview ))
-         paintvehicleinfo ( ffield->vehicle, ffield->building, ffield, NULL );
-      else
-         paintvehicleinfo( NULL, NULL, NULL, NULL );
-   }
-}
-
-void         tdashboard::putheight(integer      i, integer      sel)
-                                      //          h”he           m”glichk.
-{
-   putrotspriteimage ( agmp->resolutionx - ( 640 - 589), 92  + i * 13, icons.height2[sel][i], actmap->actplayer * 8);
-}
-
-
-
-
-
-
-void         tdashboard::paintheight(void)
-{
-   if ( vehicle )
-          for ( int i = 0; i <= 7; i++) {
-             if (vehicle->typ->height & (1 << (7 - i)))
-                if (vehicle->height & (1 << (7 - i)))
-                  putheight(i,1);
-                else
-                  putheight(i,2);
-             else
-               putheight(i,0);
-          }
-
-    else
-       if ( vehicletype ) {
-          for ( int i = 0; i <= 7; i++) {
-             if (vehicletype->height & (1 << (7 - i)))
-               putheight(i,2);
-             else
-               putheight(i,0);
-          }
-       } else
-          for ( int i = 0; i <= 7; i++)
-              putheight(i,0);
-}
-
-
-
-void         tdashboard::painttank(void)
-{
-    int         w;
-    int         c;
-
-    int x1 = agmp->resolutionx - ( 640 - 520);
-    int x2 = agmp->resolutionx - ( 640 - 573);
-    int y1 = 59;
-    int y2 = 67;
-
-    if ( vehicle )
-       if ( vehicle->typ->tank.fuel )
-          w = ( x2 - x1 + 1) * vehicle->getTank().fuel / vehicle->typ->tank.fuel;
-       else
-          w = 0;
-    else
-      w = 0;
-
-    if (w < ( x2 - x1 + 1) )
-       bar( x1 + w , y1 , x2, y2 , 172);
-
-    c = vgcol;
-    if (w < 25)
-       c = 14;
-    if (w < 15)
-       c = red;
-    if ( w )
-       bar(x1, y1, x1 + w - 1 , y2 ,c);
-
-    putspriteimage ( x1, y1, fuelbkgr );
-}
-
-
-char*         tdashboard:: str_2 ( int num )
-{
-      char* tmp;
-
-      if ( num >= 1000000 ) {
-         tmp = strrr ( num / 1000000 );
-         strcat ( tmp, "M");
-         return tmp;
-      } else
-         if ( num >= 10000 ) {
-            tmp = strrr ( num / 1000 );
-            strcat ( tmp, "k");
-            return tmp;
-         } else
-            return strrr ( num );
-}
-
-
-void         tdashboard::paintweaponammount(int h, int num, int max, bool dash )
-{
-      int         w;
-
-      w = 20 * num / max;
-      if (w > 0)
-         bar( agmp->resolutionx - ( 640 - 552),     93 + h * 13, agmp->resolutionx - ( 640 - 551 ) + w, 101 + h * 13, 168 );
-      if (w < 20)
-         bar( agmp->resolutionx - ( 640 - 552) + w, 93 + h * 13, agmp->resolutionx - ( 640 - 571 ),     101 + h * 13, 172 );
-
-      activefontsettings.justify = righttext;
-      activefontsettings.font = schriften.guifont;
-      activefontsettings.height = 9;
-      activefontsettings.background = 255;
-      activefontsettings.length = 19;
-
-      if ( dash )
-         showtext2c( "-", agmp->resolutionx - ( 640 - 552), 93 + h * 13);
-      else
-         showtext2c( str_2( num ), agmp->resolutionx - ( 640 - 552), 93 + h * 13);
-}
-
-
-void         tdashboard::paintweapon(int         h, int num, int strength,  const SingleWeapon  *weap )
-{
-      if ( weap->getScalarWeaponType() >= 0 ) {
-         void* img;
-         if ( weap->gettype() & cwlaserb )
-            img = icons.unitinfoguiweapons[ 13 ] ;
-         else
-            img = icons.unitinfoguiweapons[ weap->getScalarWeaponType() ] ;
-
-         if ( weap->canRefuel() )
-            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, xlatpict ( &xlattables.a.light, img));
-         else
-            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, img );
-      } else
-         if ( weap->service() )
-            putimage ( agmp->resolutionx - ( 640 - 465), 93 + h * 13, icons.unitinfoguiweapons[ cwservicen ] );
-
-
-      paintweaponammount( h, num, weap->count );
-
-
-      activefontsettings.background = 172;
-      activefontsettings.justify = righttext;
-      activefontsettings.font = schriften.guifont;
-      activefontsettings.height = 9;
-      activefontsettings.length = 27;
-      if ( weap->shootable() ) {
-         showtext2c( strrr(strength), agmp->resolutionx - ( 640 - 503), 93 + h * 13);
-
-         weaps[h].displayed = 1;
-         weaps[h].maxstrength = int(strength * weapDist.getWeapStrength(weap, weap->mindistance, -1, -1 ));
-         weaps[h].minstrength = int(strength * weapDist.getWeapStrength(weap, weap->maxdistance, -1, -1 ));
-         weaps[h].mindist = weap->mindistance;
-         weaps[h].maxdist = weap->maxdistance;
-
-      } else {
-         bar( agmp->resolutionx - ( 640 - 503),  93 + h * 13 ,agmp->resolutionx - ( 640 - 530), 101 + h * 13, 172 );
-         weaps[h].displayed = 0;
-      }
-
-
-
-}
-
-
-
-
-void         tdashboard::paintweapons(void)
-{
-   memset ( weaps, 0, sizeof ( weaps ));
-
-   int i, j;
-
-   activefontsettings.color = black;
-   activefontsettings.background = 255;
-   activefontsettings.justify = lefttext;
-   activefontsettings.font = font;
-
-   int serv = 0;
-
-
-   int xp = agmp->resolutionx - ( 640 - 465);
-
-   activefontsettings.justify = righttext;
-   i = 0;
-   int k = 7;
-
-   const Vehicletype* vt;
-   if ( vehicle )
-      vt = vehicle->typ;
-   else
-      vt = vehicletype;
-
-    if ( vt ) {
-       if ( vt->weapons.count )
-          for (j = 0; j < vt->weapons.count && j < 8; j++) {
-             if ( vt->weapons.weapon[j].count ) {
-                paintweapon(i, ( vehicle ? vehicle->ammo[j] : vt->weapons.weapon[j].count ), ( vehicle ? vehicle-> weapstrength[j] : vt->weapons.weapon[j].maxstrength ), &vt->weapons.weapon[j] );
-                i++;
-             }
-             else {
-                if ( vt->weapons.weapon[j].service() ) {
-                   serv = 1;
-                   if ( materialdisplayed )
-                      if ( vt->tank.fuel ) {
-                         putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 8 ] ));
-                         paintweaponammount ( k, ( vehicle ? vehicle->getTank().fuel : vt->tank.fuel ), vt->tank.fuel );
-                         k--;
-                      }
-                }
-             }
-          }
-
-       if ( materialdisplayed ) {
-          if ( vt->tank.material ) {
-             if ( serv )
-                putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 11 ] ));
-             else
-                putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 11 ] );
-              paintweaponammount ( k, ( vehicle ? vehicle->getTank().material : vt->tank.material ), vt->tank.material );
-              k--;
-          }
-          if ( vt->tank.energy ) {
-             if ( serv )
-                putimage ( xp, 93 + k * 13, xlatpict ( &xlattables.a.light, icons.unitinfoguiweapons[ 9 ] ));
-             else
-                putimage ( xp, 93 + k * 13, icons.unitinfoguiweapons[ 9 ] );
-
-              if ( vehicle && vehicle->getGeneratorStatus() )
-                  paintweaponammount ( k, ( vehicle ? vehicle->getTank().energy : vt->tank.energy ), vt->tank.energy );
-              else
-                  paintweaponammount ( k, 0, vt->tank.energy, true );
-              k--;
-          }
-       }
-    }
-
-    for (j = i; j <= k; j++) {
-       putimage( xp, 93 + j * 13, icons.unitinfoguiweapons[12]);
-       bar( agmp->resolutionx - ( 640 - 552),  93 + j * 13 ,agmp->resolutionx - ( 640 - 571), 101 + j * 13, 172 );
-       bar( agmp->resolutionx - ( 640 - 503),  93 + j * 13 ,agmp->resolutionx - ( 640 - 530), 101 + j * 13, 172 );
-    }
-}
-
-void         tdashboard :: paintlweaponinfo ( void )
-{
-   paintlargeweaponinfo();
-}
-
-void         tdashboard :: paintlargeweaponinfo ( void )
-{
-   int i = 0;
-   for ( int lw = 0; lw < 16; lw++ )
-      largeWeaponsDisplayPos[lw] = -1;
-
-   int serv = -1;
-   const Vehicletype* vt;
-   if ( vehicle )
-      vt = vehicle->typ;
-   else
-      vt = vehicletype;
-   if ( vt ) {
-       npush ( activefontsettings );
-
-       int x1 = (agmp->resolutionx - 640) / 2;
-       int y1 = 150;
-
-       int count = 0;
-       if ( vt->weapons.count )
-          for ( int j = 0; j < vt->weapons.count ; j++)
-             if ( vt->weapons.weapon[j].getScalarWeaponType() >= 0 )
-                count++;
-             else
-                if (vt->weapons.weapon[j].service() )
-                   serv = count;
-
-
-       if ( serv >= 0 )
-          count++;
-
-       if ( vt->tank.energy )
-          count++;
-
-       int funcs;
-       if ( vehicle )
-          funcs = vehicle->typ->functions;
-       else
-          funcs  = vt->functions;
-
-
-       if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->tank.material )
-          count++;
-
-       if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank.fuel )
-          count++;
-
-       count++;
-
-       void* imgbuf = asc_malloc ( imagesize ( x1, y1, x1 + 640, y1 + count * 25 + 110 ));
-       getimage ( x1, y1, x1 + 640, y1 + count * 25 + 110, imgbuf );
-
-       putimage ( x1, y1, icons.weaponinfo[0] );
-
-       if ( vt->weapons.count )
-          for ( int j = 0; j < vt->weapons.count ; j++) {
-             if ( vt->weapons.weapon[j].getScalarWeaponType() >= 0 ) {
-                int maxstrength = vt->weapons.weapon[j].maxstrength;
-                int minstrength = vt->weapons.weapon[j].minstrength;
-                if ( vehicle && maxstrength ) {
-                   minstrength = minstrength * vehicle->weapstrength[j] / maxstrength;
-                   maxstrength = vehicle->weapstrength[j];
-                }
-
-                paintlargeweapon(i, cwaffentypen[ vt->weapons.weapon[j].getScalarWeaponType() ],
-                               ( vehicle ? vehicle->ammo[j] : vt->weapons.weapon[j].count ) , vt->weapons.weapon[j].count,
-                               vt->weapons.weapon[j].shootable(), vt->weapons.weapon[j].canRefuel(),
-                               maxstrength,
-                               minstrength,
-                               vt->weapons.weapon[j].maxdistance,
-                               vt->weapons.weapon[j].mindistance,
-                               vt->weapons.weapon[j].sourceheight & vt->height,
-                               vt->weapons.weapon[j].targ );
-                largeWeaponsDisplayPos[i] = j;
-                i++;
-             }
-          }
-
-       if ( serv >= 0 ) {
-          paintlargeweapon(i, cwaffentypen[ cwservicen ], -1, -1, -1, -1, -1, -1,
-                         vt->weapons.weapon[serv].maxdistance, vt->weapons.weapon[serv].mindistance,
-                         vt->weapons.weapon[serv].sourceheight, vt->weapons.weapon[serv].targ );
-          largeWeaponsDisplayPos[i] = serv;
-          i++;
-       }
-       if ( vt->tank.energy ) {
-          paintlargeweapon(i, resourceNames[ 0 ], ( vehicle ? vehicle->getTank().energy : vt->tank.energy ), vt->tank.energy, -1, -1, -1, -1, -1, -1, -1, -1 );
-          largeWeaponsDisplayPos[i] = -1;
-          i++;
-       }
-
-       if ( (serv>= 0 || (funcs & cfmaterialref)) && vt->tank.material ) {
-          paintlargeweapon(i, resourceNames[ 1 ], ( vehicle ? vehicle->getTank().material : vt->tank.material ), vt->tank.material, -1, -1, -1, -1, -1, -1, -1, -1 );
-          largeWeaponsDisplayPos[i] = -1;
-          i++;
-       }
-       if ( (serv>= 0 || (funcs & cffuelref)) && vt->tank.fuel ) {
-          paintlargeweapon(i, resourceNames[ 2 ], ( vehicle ? vehicle->getTank().fuel : vt->tank.fuel ), vt->tank.fuel, -1, -1, -1, -1, -1, -1, -1, -1 );
-          largeWeaponsDisplayPos[i] = -1;
-          i++;
-       }
-
+#include "graphics/blitter.h"
+#include "graphics/drawing.h"
+#include "gamemap.h"
+#include "iconrepository.h"
+#include "spfst.h"
+#include "pgimage.h"
+#include "textfiletags.h"
+#include "mapdisplay.h"
+#include "dialogs/unitinfodialog.h"
+#include "dialogs/vehicletypeselector.h"
+#include "gameoptions.h"
+
+#include "sg.h"
+
+class WeaponInfoLine;
+
+class WeaponInfoPanel : public Panel {
+        int weaponCount;
+        static ASCString name;
+
+        vector<WeaponInfoLine*> weaponInfoLines;
+
+     protected:
+        bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+
+	     bool eventMouseMotion(const SDL_MouseMotionEvent* motion);
+
+     public:
+        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
+        void showWeapon( const SingleWeapon* weap = NULL );
+
+        // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
+        bool   eventMouseButtonUp (const SDL_MouseButtonEvent *button);
+        
+        static const ASCString& WIP_Name();
+        // void eval();
+};
+
+
+
+class ExperienceOverview : public PG_Widget {
+      static const int columns = 4;
+   protected:
+      bool 	eventMouseButtonUp (const SDL_MouseButtonEvent *button)
       {
-         int x = x1;
-         int y = y1 + i * 14 + 28;
+         QuitModal();
+         return true;
+      };
 
-         int height, width;
-         getpicsize ( icons.weaponinfo[4], width, height );
-
-         putspriteimage ( x, y, icons.weaponinfo[4] );
-
-         activefontsettings.justify = centertext;
-         activefontsettings.font = schriften.guifont;
-         activefontsettings.height = 11;
-         activefontsettings.length = 80;
-         activefontsettings.background = 255;
-         if ( vt->wait )
-            showtext2c ( "no", x + 140, y +  2 );
-         else
-            showtext2c ( "yes", x + 140, y +  2 );
-
-         if ( funcs & cf_moveafterattack )
-            showtext2c ( "yes", x + 364, y +  2 );
-         else
-            showtext2c ( "no", x + 364, y +  2 );
-
-         i++;
+      static PG_Rect getSize( const PG_Point& pos )
+      {
+         const Surface& s = IconRepository::getIcon("experience0.png");
+         return PG_Rect( pos.x, pos.y, columns * s.w(), (maxunitexperience + columns-1)/columns * s.h() );
+      }
+      
+   public:
+      ExperienceOverview( const PG_Point& pos, int exp = -1 ) : PG_Widget( NULL, getSize(pos), true )
+      {
+         // PG_Application::GetApp()->sigMouseButtonUp.connect( SigC::slot( *this, &ExperienceOverview::QuitModal ));
       }
 
 
-
-      int lastpainted = -1;
-      int first = 1;
-      while ( mouseparams.taste == 2) {
-         int topaint  = -1;
-         int serv = 0;
-         for ( int j = 0; j < vt->weapons.count ; j++) {
-            int x = (agmp->resolutionx - 640) / 2;
-            int y = 150 + 28 + (j - serv) * 14;
-            if ( mouseinrect ( x, y, x + 640, y+ 14 ))
-               if ( largeWeaponsDisplayPos[j] != -1 )
-                  topaint = largeWeaponsDisplayPos[j];
-
-         }
-         if ( topaint != lastpainted ) {
-            if ( topaint == -1 )
-               paintlargeweaponefficiency ( i, NULL, first, NULL );
-            else {
-               int effic[13];
-               for ( int k = 0; k < 13; k++ )
-                  effic[k] = vt->weapons.weapon[topaint].efficiency[k];
-               int mindelta = 1000;
-               int maxdelta = -1000;
-               for ( int h1 = 0; h1 < 8; h1++ )
-                  for ( int h2 = 0; h2 < 8; h2++ )
-                     if ( vt->weapons.weapon[topaint].sourceheight & ( 1 << h1 ))
-                        if ( vt->weapons.weapon[topaint].targ & ( 1 << h2 )) {
-                           int delta = getheightdelta ( h1, h2);
-                           if ( delta > maxdelta )
-                              maxdelta = delta;
-                           if ( delta < mindelta )
-                              mindelta = delta;
-                        }
-               for ( int a = -6; a < mindelta; a++ )
-                  effic[6+a] = -1;
-               for ( int b = maxdelta+1; b < 7; b++ )
-                  effic[6+b] = -1;
-
-               paintlargeweaponefficiency ( i, effic, first, vt->weapons.weapon[topaint].targetingAccuracy );
-            }
-            lastpainted = topaint;
-            first = 0;
-         }
-         releasetimeslice();
+      int RunModal()
+      {
+         SetCapture();
+         return PG_Widget::RunModal();
       }
 
-      putimage ( x1, y1, imgbuf );
+      void 	eventDraw (SDL_Surface *surface, const PG_Rect &rect) 
+      {
+         const Surface& s = IconRepository::getIcon("experience0.png");
+         int width = s.w();
+         int height = s.h();
 
-      asc_free  ( imgbuf );
+         Surface s2 = Surface::Wrap( surface );
+         for ( int i = 0; i <= maxunitexperience; ++i ) 
+            s2.Blit( IconRepository::getIcon("experience" + ASCString::toString(i) + ".png"), SPoint( i % columns * width , i/columns*height) );
+      }
+};
 
-      npop ( activefontsettings );
+DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
+   :LayoutablePanel ( parent, r, panelName_, loadTheme ), veh(NULL), bld(NULL)
+{
+   updateFieldInfo.connect ( SigC::slot( *this, &DashboardPanel::eval ));
+   registerSpecialDisplay( "windarrow" );
+
+   registerSpecialDisplay( "unitexp" );
+   registerSpecialDisplay( "unit_level" );
+   registerSpecialDisplay( "unit_pic" );
+   for ( int i = 0; i < 10; ++i)
+      registerSpecialDisplay( "symbol_weapon" + ASCString::toString(i) );
+   registerSpecialDisplay( "showplayercolor0" );
+   registerSpecialDisplay( "showplayercolor1" );
+   registerSpecialDisplay( "field_weather" );
+
+   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &DashboardPanel::containerDeleted ));
+   
+   GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
+
+   PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
+   if ( l ) {
+      l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
+      l->sigEditUpdate.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
    }
 
+   PG_Widget* w = parent->FindChild( "unitexp", true );
+   if ( w )
+      w->sigMouseButtonDown.connect( SigC::slot( *this, &DashboardPanel::viewExperienceOverview ));
+};
+
+bool DashboardPanel::viewExperienceOverview()
+{
+   PG_Widget* w = GetParent()->FindChild( "unitexp", true );
+   if ( w ) {
+      ExperienceOverview eo(PG_Point( w->my_xpos, w->my_ypos ));
+      eo.Show();
+      eo.RunModal();
+      return true;
+   } else
+      return false;
 }
 
-void         tdashboard::paintlargeweaponefficiency ( int pos, int* e, int first, const int* hit )
+
+void DashboardPanel::containerDeleted( ContainerBase* c )
 {
-   int x = (agmp->resolutionx - 640) / 2;
-   int y = 150 + 28 + pos * 14;
-
-   int height, width;
-   getpicsize ( icons.weaponinfo[3], width, height );
-
-   if ( first )
-      putspriteimage ( x, y, icons.weaponinfo[3] );
-
-   static int bk1 = -1;
-   static int bk2 = -1;
-   if ( bk1 == -1 )
-      bk1 = getpixel ( x + 100, y + 5 );
-   if ( bk2 == -1 )
-      bk2 = getpixel ( x + 100, y + 19);
-
-   activefontsettings.justify = centertext;
-   activefontsettings.font = schriften.guifont;
-   activefontsettings.height = 10;
-   activefontsettings.length = 36;
-
-/*   int maxunitheigt = 0;
-   int minunitheight = 1000;
-   int maxtargetheight = 0;
-   int mintargetheight = 1000; */
+   if ( c == veh )
+      veh = NULL;
+   
+   if ( c == bld )
+      bld = NULL;
+}
 
 
-   for ( int i = 0; i < 13; i++ )
-      if ( e && e[i] != -1 ) {
-         activefontsettings.background = bk1;
-         showtext2c ( strrr ( i - 6 ), x + 88 + i * 42, y +  2 );
-         activefontsettings.background = bk2;
-         showtext4c ( "%s%%", x + 88 + i * 42, y + 15, strrr ( e[i] ) );
-      } else {
-         activefontsettings.background = bk1;
-         showtext2c ( "", x + 88 + i * 42, y +  2 );
-         activefontsettings.background = bk2;
-         showtext2c ( "",  x + 88 + i * 42, y + 15 );
-     }
+bool DashboardPanel::containerRenamed( PG_LineEdit* lineEdit )
+{
+   if ( veh ) {
+      if ( veh->getMap()->actplayer == veh->getOwner() )
+         veh->name = lineEdit->GetText();
+      else
+         lineEdit->SetText( veh->name );
+   }
+   
+   if ( bld ) {
+      if ( bld->getMap()->actplayer == bld->getOwner() )
+         bld->name = lineEdit->GetText();
+      else
+         lineEdit->SetText( bld->name );
+   }
 
-   activefontsettings.length = 179;
-   // activefontsettings.background = white;
-   activefontsettings.color = 86;
-   activefontsettings.justify = lefttext;
-   // activefontsettings.color = black;
-   for ( int j = 0; j < cmovemalitypenum; j++ ) {
-      int xp = x + 88 + (j % 3) * 180;
-      int yp = y + 15 + 16 + (j / 3) * 12;
-      if ( hit ) {
-         ASCString s = ASCString(cmovemalitypes[j]) + "=" + strrr ( hit[j] ) + "%";
-         if ( hit[j] == 100 ) {
-            activefontsettings.font = schriften.guifont;
-            showtext2c (  s, xp, yp );
-         } else
-            if ( hit[j] > 0 && hit[j] < 100 ) {
-               activefontsettings.font = schriften.guicolfont;
-               showtext2c (  s, xp, yp );
+   return true;
+}
+
+void DashboardPanel::reset(GameMap& map)
+{
+   if ( veh && veh->getMap() == &map )
+      veh = NULL;
+   
+   if ( bld && bld->getMap() == &map )
+      bld = NULL;
+}
+
+
+
+void DashboardPanel::registerSpecialDisplay( const ASCString& name )
+{
+   SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
+   if ( sdw )
+     sdw->display.connect( SigC::slot( *this, &DashboardPanel::painter ));
+}
+
+
+void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+{
+   if ( !actmap )
+      return;
+
+   Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+
+   if ( name == "windarrow" ) {
+      if ( actmap && actmap->weather.windSpeed > 0 ) {
+         MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectRotation> blitter;
+         blitter.setAngle( (6 - actmap->weather.windDirection) * (360 /6));
+         blitter.blit ( IconRepository::getIcon("wind-arrow.png"), screen, SPoint(dst.x, dst.y) );
+      }
+      return;
+   }
+
+   if( name == "showplayercolor0" || name == "showplayercolor1" ) {
+      MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
+      blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+      blitter.blit( IconRepository::getIcon("show_playercolor.png"), screen, SPoint(dst.x, dst.y));
+      return;
+   }
+   
+   
+   if ( name == "field_weather" ) {
+      MapCoordinate mc = actmap->getCursor();
+      if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc), actmap->getPlayerView() ) ) {
+         MegaBlitter<4,colorDepth,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
+
+         static const char* weathernames[] = {"terrain_weather_dry.png",
+                                              "terrain_weather_lightrain.png",
+                                              "terrain_weather_heavyrain.png",
+                                              "terrain_weather_lightsnow.png",
+                                              "terrain_weather_heavysnow.png",
+                                              "terrain_weather_ice.png" };
+
+         blitter.blit ( IconRepository::getIcon(weathernames[actmap->getField(mc)->getweather()]), screen, SPoint(dst.x, dst.y) );
+      }
+      return;
+   }
+
+
+
+
+   
+   if ( veh && !fieldvisiblenow( veh->getMap()->getField( veh->getPosition() ), veh->getMap()->getPlayerView() ))
+      return;
+   
+
+
+      if ( name == "unitexp" ) {
+         int experience = 0;
+         if ( veh )
+            experience = veh->experience;
+
+         screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(experience) + ".png"), SPoint(dst.x, dst.y) );
+      }
+
+      if ( name == "unit_level" ) {
+         int height1 = 0;
+         int height2 = 0;
+         if ( veh ) {
+            height1 = veh->height;
+            height2 = veh->typ->height;
+         }
+
+         for ( int i = 0; i < 8; ++i ) {
+            if ( height1 & (1 << i )) {
+               MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
+               blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+               blitter.blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), screen, SPoint(dst.x, dst.y + (7-i) * 13));
             } else
-               if ( hit[j] > 100 ) {
-                  activefontsettings.color = 26;
-                  activefontsettings.font = schriften.monogui;
-                  showtext2 (  s, xp, yp );
-               } else {
-                  activefontsettings.color = 86;
-                  activefontsettings.font = schriften.monogui;
-                  showtext2 (  s, xp, yp );
-               }
-      } else {
-         activefontsettings.font = schriften.monogui;
-         showtext2 ( "-", xp, yp );
-      }
-   }
-   activefontsettings.font = schriften.guifont;
-}
+               if ( height2 & (1 << i ))
+                  screen.Blit( IconRepository::getIcon("height-a" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13 ) );
 
-
-void         tdashboard::paintlargeweapon ( int pos, const char* name, int ammoact, int ammomax, int shoot, int refuel, int strengthmax, int strengthmin, int distmax, int distmin, int from, int to )
-{
-   int height, width;
-   getpicsize ( icons.weaponinfo[1], width, height );
-
-
-
-   int x = (agmp->resolutionx - 640) / 2;
-   int y = 150 + 28 + pos * 14;
-
-   putspriteimage ( x, y, icons.weaponinfo[1] );
-   y += 4;
-
-   activefontsettings.background = 255;
-   activefontsettings.font = schriften.guifont;
-   activefontsettings.height = 11;
-   activefontsettings.length = 75;
-
-   if ( name ) {
-      activefontsettings.justify = lefttext;
-      activefontsettings.length = 75;
-      showtext2c ( name, x + 2, y );
-   }
-
-   if ( ammoact >= 0 ) {
-      activefontsettings.length = 20;
-      char buf[100];
-      char buf2[100];
-      char buf3[100];
-      sprintf(buf3, "%s / %s", int2string ( ammoact, buf ), int2string ( ammomax, buf2 ) );
-      activefontsettings.length = 50;
-      activefontsettings.justify = centertext;
-      showtext2c ( buf3, x + 77, y );
-   }
-
-   if ( shoot >= 0 ) {
-      activefontsettings.justify = centertext;
-      activefontsettings.length = 25;
-      if ( shoot )
-         showtext2c ( "yes", x + 130, y );
-      else
-         showtext2c ( "no", x + 130, y );
-   }
-
-   if ( refuel >= 0 ) {
-      activefontsettings.justify = centertext;
-      activefontsettings.length = 25;
-      if ( refuel )
-         showtext2c ( "yes", x + 158, y );
-      else
-         showtext2c ( "no", x + 158, y );
-   }
-
-   if ( strengthmax >= 0 ) {
-      activefontsettings.justify = lefttext;
-      activefontsettings.length = 38;
-      showtext2c ( strrr( strengthmax ), x + 190, y );
-   }
-
-   if ( strengthmin >= 0 ) {
-      activefontsettings.length = 38;
-      activefontsettings.justify = righttext;
-      showtext2c ( strrr( strengthmin ), x + 190, y );
-   }
-
-   if ( distmin >= 0 ) {
-      activefontsettings.length = 36;
-      activefontsettings.justify = lefttext;
-      showtext2c ( strrrd8u( distmin ), x + 237, y );
-   }
-
-   if ( distmax >= 0 ) {
-      activefontsettings.length = 36;
-      activefontsettings.justify = righttext;
-      showtext2c ( strrrd8d( distmax ), x + 237, y );
-   }
-
-
-   if ( from > 0 )
-      for ( int i = 0; i < 8; i++ )
-         if ( from & ( 1 << i ))
-            putimage ( x + 285 + i * 22, y-2, icons.weaponinfo[2] );
-
-   if ( to > 0 )
-      for ( int i = 0; i < 8; i++ )
-         if ( to & ( 1 << i ))
-            putimage ( x + 465 + i * 22, y-2, icons.weaponinfo[2] );
-
-   activefontsettings.justify = lefttext;
-
-}
-
-
-
-
-void         tdashboard::allocmem ( void )
-{
-    int x1 = 520;
-    int x2 = 573;
-    int y1 = 71;
-    int y2 = 79;
-
-    fuelbkgrread = 0;
-    fuelbkgr = new char[  imagesize ( x1, y1, x2, y2 ) ] ;
-
-    x1 = 460;
-    y1 = 31;
-
-    imagebkgr = new char[  imagesize ( x1, y1, x1 + 30, y1 + 30 ) ];
-    imageshown = 10;
-
-}
-
-
-void         tdashboard::paintdamage(void)
-{
-    int x1 = agmp->resolutionx - ( 640 - 520);
-    int x2 = agmp->resolutionx - ( 640 - 573);
-    int y1 = 71;
-    int y2 = 79;
-
-    if ( fuelbkgrread == 0 ) {
-       getimage ( x1, y1, x2, y2, fuelbkgr );
-       int sze = imagesize ( x1, y1, x2, y2 );
-       char *pc = (char*) fuelbkgr;
-       int cl  = getpixel ( agmp->resolutionx - 81, 63 );
-       for ( int m = 4; m < sze; m++ )
-          if ( pc[m] == cl )
-             pc[m] = 255;
-       fuelbkgrread = 1;
-    }
-
-
-    int w = 0;
-    int         c;
-
-
-
-    if ( vehicle ) {
-       w = (x2 - x1 + 1) * ( 100 - vehicle->damage ) / 100;
-       if ( w > 23 )       // container :: subwin :: buildinginfo :: damage verwendet die selben Farben
-          c = vgcol;
-       else
-          if ( w > 15 )
-             c = yellow;
-          else
-             if ( w > 7 )
-                c = lightred;
-             else
-                c = red;
-    } else
-       if ( building ) {
-          w = (x2 - x1 + 1) * ( 100 - building->damage ) / 100;
-          if (building->damage >= mingebaeudeeroberungsbeschaedigung)
-             c = red;
-          else
-             c = vgcol;
-
-       }
-       else
-          if ( objfield ) {
-             c = darkgray;
-             for ( tfield::ObjectContainer::iterator i = objfield->objects.begin(); i != objfield->objects.end(); i++ )
-               if ( i->typ->armor > 0 )
-                  w = (x2 - x1 + 1) * ( 100 - i->damage ) / 100;
-
-          } else
-             w = 0;
-
-
-    if (w < (x2 - x1 + 1) )
-       bar( x1 + w , y1 , x2, y2 , 172);
-
-    if ( w )
-       bar(x1, y1, x1 + w - 1, y2 ,c);
-
-    putspriteimage ( x1, y1, fuelbkgr );
-}
-
-
-
-
-void         tdashboard::paintexperience(void)
-{
-    if (vehicle)
-       putimage( agmp->resolutionx - ( 640 - 587),  27, icons.experience[vehicle->experience]);
-    else
-       bar( agmp->resolutionx - ( 640 - 587), 27,agmp->resolutionx - ( 640 - 611), 50, 171);
-}
-
-
-
-
-void         tdashboard::paintmovement(void)
-{
-    if ( vehicle ) {
-       activefontsettings.justify = centertext;
-       activefontsettings.color = white;
-       activefontsettings.background = 172;
-       activefontsettings.font = schriften.guifont;
-       activefontsettings.length = 17;
-       activefontsettings.height = 9;
-       if ( vehicle->typ->fuelConsumption ) {
-          if ( movedisp  || (minmalq*vehicle->getTank().fuel / vehicle->typ->fuelConsumption  < vehicle->getMovement() ))
-             showtext2c( strrrd8d( minmalq*vehicle->getTank().fuel / vehicle->typ->fuelConsumption ), agmp->resolutionx - ( 640 - 591), 59);
-          else
-             showtext2c( strrrd8d(vehicle->getMovement() ), agmp->resolutionx - ( 640 - 591), 59);
-       } else
-          if ( movedisp )
-             showtext2c( "-", agmp->resolutionx - ( 640 - 591), 59);
-          else
-             showtext2c( strrrd8d( vehicle->getMovement() ), agmp->resolutionx - ( 640 - 591), 59);
-    } else
-       bar( agmp->resolutionx - ( 640 - 591), 59,agmp->resolutionx - ( 640 - 608), 67, 172);
-}
-
-void         tdashboard::paintarmor(void)
-{
-    if ( vehicle || vehicletype ) {
-       activefontsettings.justify = centertext;
-       activefontsettings.color = white;
-       activefontsettings.background = 172;
-       activefontsettings.font = schriften.guifont;
-       activefontsettings.length = 18;
-       activefontsettings.height = 9;
-       int arm;
-       if ( vehicle )
-          arm = vehicle->armor;
-       else
-          arm = vehicletype->armor;
-
-       showtext2c( strrr(arm),agmp->resolutionx - ( 640 - 591), 71);
-    } else
-       bar(agmp->resolutionx - ( 640 - 591), 71,agmp->resolutionx - ( 640 - 608), 79, 172);
-}
-
-void         tdashboard::paintwind( int repaint )
-{
-  int j, i;
-
-/*   void *p;
-   if (actmap->weather.wind.direction & 1)
-      p = icons.wind.southwest[actmap->weather.wind.speed >> 6];
-   else
-      p = icons.wind.south[actmap->weather.wind.speed >> 6];
-
-   switch (actmap->weather.wind.direction >> 1) {
-      case 0: putimage(430,320,p);
-         break;
-      case 1: putrotspriteimage90(430,320,p,0);
-         break;
-      case 2: putrotspriteimage180(430,320,p,0);
-         break;
-      case 3: putrotspriteimage270(430,320,p,0);
-         break;
-   }
-
-   activefontsettings.justify = centertext;
-   activefontsettings.color = black;
-   activefontsettings.background = white;
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.length = 30;
-   showtext2( strrr(actmap->weather.wind.speed),430,354);
-
-   */
-
-   if ( !CGameOptions::Instance()->smallmapactive ) {
-      static int lastdir = -1;
-
-      if ( repaint ) {
-         putimage ( agmp->resolutionx - ( 640 - 450), 211, icons.windbackground );
-         lastdir = -1;
+         }
       }
 
-
-      if ( !windheightshown ) {
-         int x1 = agmp->resolutionx - ( 640 - 489 );
-         int x2 = agmp->resolutionx - ( 640 - 509 );
-         int y1 = 284;
-         int y2 = 294;
-         windheightbackground = new char [imagesize ( x1, y1, x2, y2 )];
-         getimage ( x1, y1, x2, y2, windheightbackground );
-         windheightshown = 1;
+      if ( name == "unit_pic" ) {
+         if ( veh )
+           veh->typ->paint( screen, SPoint( dst.x, dst.y ), veh->getOwner() );
       }
 
+      if ( veh ) {
+         int pos = 0;
+         for ( int i = 0; i < veh->typ->weapons.count; ++i) {
+            if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
+               if ( name == "symbol_weapon" + ASCString::toString(pos) )
+                  screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( veh->typ->weapons.weapon[i].getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
+
+               ++pos;
+             }
+          }
+      }
+
+}
+
+
+void DashboardPanel::eval()
+{
+   if ( !actmap || actmap->actplayer < 0 )
+      return;
+
+
+   MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
+   tfield* fld = actmap->getField(mc);
+
+   Vehicle* veh = fld? fld->vehicle : NULL;
+
+   BulkGraphicUpdates bgu( this );
+
+   setBargraphValue( "winddisplay", float(actmap->weather.windSpeed ) / 255  );
+
+   setLabelText( "windspeed", actmap->weather.windSpeed );
+
+   if ( mc.valid() && fieldvisiblenow( fld, actmap->getPlayerView() )) {
+      setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
+      setLabelText( "terrain_pipe", fld->bdt.test(cbpipeline) || fld->building ? "YES" : "NO" );
+
+      setLabelText( "terrain_defencebonus", fld->getdefensebonus() );
+      setLabelText( "terrain_attackbonus", fld->getattackbonus() );
+      setLabelText( "terrain_jam", fld->getjamming() );
+      setLabelText( "terrain_name", fld->typ->terraintype->name );
 
       int unitspeed;
-      if ( vehicle )
-         unitspeed = getmaxwindspeedforunit ( vehicle );
+      if ( veh )
+         unitspeed = getmaxwindspeedforunit ( veh );
       else
          unitspeed = maxint;
 
-      if ( actmap->weather.windSpeed ) {
-          if ( lastdir != actmap->weather.windDirection ) {
-             putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
-             char* pic = rotatepict_grw ( icons.windarrow, directionangle[ actmap->weather.windDirection ] );
-             int h1,w1, h2, w2;
-             getpicsize ( pic, w2, h2 );
-             getpicsize ( icons.wind[ 8 ], w1, h1 );
-             putspriteimage ( agmp->resolutionx - ( 640 - (506 + w1/2 - w2/2)), 227 + h1/2- h2/2, pic );
-             delete[] pic;
-             lastdir = actmap->weather.windDirection;
-          }
-      } else
-         putimage ( agmp->resolutionx - ( 640 - 506), 227, icons.wind[ 8 ] );
+       int windspeed = actmap->weather.windSpeed*maxwindspeed ;
+       if ( unitspeed < 255*256 ) {
+          if ( windspeed > unitspeed*9/10 )
+             setBarGraphColor( "winddisplay", 0xff0000  );
+          else
+             if ( windspeed > unitspeed*66/100 )
+                setBarGraphColor( "winddisplay", 0xffff00  );
+             else
+                setBarGraphColor( "winddisplay", 0x00ff00  );
+       } else
+          setBarGraphColor( "winddisplay", 0x00ff00  );
 
-      for (i = 0; i < (actmap->weather.windSpeed+31) / 32 ; i++ ) {
-         int color = green;
-
-         if ( vehicle == NULL ) {
-            /*
-            if ( i >= 6 )
-               color = red;
-            else
-               if ( i >= 4 )
-                  color = yellow;
-             */
-         } else {
-             int windspeed = actmap->weather.windSpeed*maxwindspeed ;
-             if ( unitspeed < 255*256 )
-                if ( windspeed > unitspeed*9/10 )
-                   color = red;
-                else
-                   if ( windspeed > unitspeed*66/100 )
-                     color = yellow;
-         }
-         bar ( agmp->resolutionx - ( 640 - 597), 282-i*7, agmp->resolutionx - ( 640 - 601), 284-i*7, color );
-      } /* endfor */
-      for (j = i; j < 8; j++ )
-         bar ( agmp->resolutionx - ( 640 - 597), 282-j*7, agmp->resolutionx - ( 640 - 601), 284-j*7, black );
-
-   }
-}
-
-
-void         tdashboard::paintimage(void)
- {
-
-    int x1 = agmp->resolutionx - ( 640 - 460);
-    int y1 = 31;
-    if ( imageshown == 10 ) {
-       getimage ( x1, y1, x1 + 30, y1 + 30 , imagebkgr );
-       imageshown = 0;
-    }
-
-    if ( imageshown )
-       putimage ( x1, y1, imagebkgr );
-
-    if ( vehicle ) {
-       TrueColorImage* zimg = zoomimage ( vehicle->typ->picture[0], fieldsizex/2, fieldsizey/2, pal, 0 );
-       char* pic = convertimage ( zimg, pal ) ;
-       putrotspriteimage ( x1+3, y1+3, pic, vehicle->color );
-       delete[] pic;
-       delete zimg;
-
-       /*
-       {
-          tvirtualdisplay vi ( 50, 50, 255 );
-          putrotspriteimage ( 0, 0, vehicle->typ->picture[0], vehicle->color );
-          putmask ( 0, 0, icons.hex2octmask, 0 );
-          getimage ( (fieldsizex-30) / 2, (fieldsizey-30) / 2, (fieldsizex-30) / 2 + 30, (fieldsizey-30) / 2 + 30, xlatbuffer );
-       }
-       putspriteimage( x1, y1, xlatbuffer );
-       */
-
-       imageshown = 1;
-    } else
-       imageshown = 0;
-
-}
-
-
-void         tdashboard::paintclasses ( void )
-{
-   if ( CGameOptions::Instance()->showUnitOwner ) {
-      const char* owner = NULL;
-      if ( vehicle )
-         owner = actmap->getPlayerName(vehicle->color / 8).c_str();
-      else
-         if ( building )
-            owner = actmap->getPlayerName(building->color / 8).c_str();
-
-      if ( owner ) {
-         activefontsettings.justify = lefttext;
-         activefontsettings.color = white;
-         activefontsettings.background = 171;
-         activefontsettings.font = schriften.guifont;
-         activefontsettings.length = 75;
-         activefontsettings.height = 0;
-         showtext2c( owner, agmp->resolutionx - ( 640 - 500), 42);
-         activefontsettings.height = 9;
-      } else
-         bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
    } else {
-      const Vehicletype* vt;
-      if ( vehicle )
-         vt = vehicle->typ;
-      else
-         vt = vehicletype;
+      setLabelText( "terrain_harbour", "" );
+      setLabelText( "terrain_pipe", "" );
 
-      if ( vt && !vt->description.empty() ) {
-         activefontsettings.justify = lefttext;
-         activefontsettings.color = white;
-         activefontsettings.background = 171;
-         activefontsettings.font = schriften.guifont;
-         activefontsettings.length = 75;
-         activefontsettings.height = 0;
-         showtext2c( vt->description ,agmp->resolutionx - ( 640 - 500 ), 42);
-         activefontsettings.height = 9;
-     } else
-         bar ( agmp->resolutionx - ( 640 - 499), 42, agmp->resolutionx - ( 640 - 575), 50, 171 );
+      setLabelText( "terrain_defencebonus", "" );
+      setLabelText( "terrain_attackbonus", "" );
+      setLabelText( "terrain_jam", "" );
+      setLabelText( "terrain_name", "" );
+      setBarGraphColor( "winddisplay", 0x00ff00  );
    }
-}
 
-void         tdashboard::paintname ( void )
-{
-   if ( vehicle || building || vehicletype) {
-      activefontsettings.justify = lefttext;
-      activefontsettings.color = white;
-      activefontsettings.background = 171;
-      activefontsettings.font = schriften.guifont;
-      activefontsettings.length = 75;
-      activefontsettings.height = 9;
-      const Vehicletype* vt;
-      if ( vehicle )
-         vt = vehicle->typ;
-      else
-         vt = vehicletype;
+   if ( mc.valid() && fld ) {
+      if ( veh && fieldvisiblenow( fld, actmap->getPlayerView() ) ) {
+         showUnitData( veh, NULL, fld );
+      } else {
 
-      if ( vehicle || vt ) {
-         if ( vehicle && !vehicle->name.empty() )
-            showtext2c( vehicle->name.c_str() , agmp->resolutionx - ( 640 - 500 ), 27);
+         Building* bld = fld->building;
+         if ( bld && fieldvisiblenow( fld, actmap->getPlayerView() ) ) 
+            showUnitData( NULL, bld, fld );
          else
-            if ( !vt->name.empty() )
-               showtext2c( vt->name , agmp->resolutionx - ( 640 - 500 ), 27);
-            else
-               /*
-               if ( !vt->description.empty() )
-                  showtext2c( vt->description ,agmp->resolutionx - ( 640 - 500 ), 27);
-               else
-               */
-               bar ( agmp->resolutionx - ( 640 - 499 ), 27, agmp->resolutionx - ( 640 - 575 ), 35, 171 );
-
-      } else
-         showtext2c( building->getName(), agmp->resolutionx - ( 640 - 500), 27);
-
-      activefontsettings.height = 0;
-   } else
-      bar ( agmp->resolutionx - ( 640 - 499), 27, agmp->resolutionx - ( 640 - 575), 35, 171 );
-}
-
-void         tdashboard::paintplayer( void )
-{
-   putspriteimage ( agmp->resolutionx - ( 640 - 540), 127, icons.player[actmap->actplayer] );
-}
-
-
-void         tdashboard::paintalliances ( void )
-{
-   int j = 0;
-   for (int i = 0; i< 8 ; i++ ) {
-      if ( i != actmap->actplayer ) {
-         if ( actmap->player[i].exist() ) {
-            if ( getdiplomaticstatus ( i*8 ) == capeace )
-               putimage ( agmp->resolutionx - ( 640 - 476) + j * 19, agmp->resolutiony - ( 480 - 452), icons.allianz[i][0] );
-            else
-               putimage ( agmp->resolutionx - ( 640 - 476) + j * 19, agmp->resolutiony - ( 480 - 452), icons.allianz[i][1] );
-         } else
-             putimage ( agmp->resolutionx - ( 640 - 476) + j * 19, agmp->resolutiony - ( 480 - 452), icons.allianz[i][2] );
-         j++;
+            showUnitData( NULL, NULL, fld );
       }
-   } /* endfor */
-}
-
-void         tdashboard::paintzoom( void )
-{
-   int h;
-   getpicsize ( zoom.pic, zoom.picwidth, h );
-   zoom.x1 = agmp->resolutionx - ( 640 - 464);
-   zoom.x2 = agmp->resolutionx - ( 640 - 609);
-   zoom.y1 = agmp->resolutiony - ( 480 - 444);
-   zoom.y2 = agmp->resolutiony - ( 480 - 464);
-
-   collategraphicoperations cgo  ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 );
-
-   static void* background = NULL;
-   if ( !background ) {
-      background = asc_malloc ( imagesize ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 ));
-      getimage ( zoom.x1, zoom.y1, zoom.x2, zoom.y2, background );
-   } else
-      putimage ( zoom.x1, zoom.y1, background );
-
-   int actzoom = zoomlevel.getzoomlevel() - zoomlevel.getminzoom();
-   int maxzoom = zoomlevel.getmaxzoom() - zoomlevel.getminzoom();
-   int dist = zoom.x2 - zoom.picwidth - zoom.x1;
-   putimage ( zoom.x1 + dist - dist * actzoom / maxzoom, zoom.y1, zoom.pic );
-
-}
-
-
-class tmainshowmap : public tbasicshowmap {
-          public:
-            void checkformouse ( void );
-       };
-
-void tmainshowmap :: checkformouse ( void )
-{
-   if ( mouseparams.taste == 1 ) {
-       int oldx = dispxpos;
-       int oldy = dispypos;
-       tbasicshowmap :: checkformouse();
-       if ( oldx != dispxpos  ||  oldy != dispypos ) {
-          setmapposition();
-          displaymap();
-       }
-   }
-}
-
-tmainshowmap* smallmap = NULL;
-
-void         tdashboard::paintsmallmap ( int repaint )
-{
-   if ( !smallmap ) {
-      smallmap = new tmainshowmap;
-      CGameOptions::Instance()->smallmapactive = 1;
-      CGameOptions::Instance()->setChanged();
-      repaint = 1;
    }
 
-   if ( repaint )
-      bar ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305, greenbackgroundcol );
-
-   smallmap->init ( agmp->resolutionx - ( 800 - 612 ) , 213, 781-612, 305-213 );
-   smallmap->generatemap ( 1 );
-   smallmap->dispimage ( );
-
+   // PG_Application::SetBulkMode(false);
+   // Redraw(true);
 }
-
-void         tdashboard::checkformouse ( int func )
+void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bool redraw )
 {
-    if ( vehicle ) {
-       // tmouserect experience = { 0,0,0,0};
-       tmouserect experience;
-       experience.x1 = agmp->resolutionx - ( 640 - 587);
-       experience.y1 = 27;
-       experience.x2 = agmp->resolutionx - ( 640 - 587) + 25;
-       experience.y2 = 27 + 24 ;
+   int weaponsDisplayed = 0;
+   this->veh = veh;
+   this->bld = bld;
+   
+   bool bulk = PG_Application::GetBulkMode();
+   if ( redraw )
+      PG_Application::SetBulkMode(true);
+      
 
-       if ( mouseinrect ( &experience ) && mouseparams.taste != 0 ) {
-          int xnum = 4;
-          int ynum = 6;
-          int xwidth;
-          int ywidth;
-          getpicsize ( icons.experience[0], xwidth, ywidth );
-          tmouserect r;
-          r.x1 = experience.x2 - xnum*(xwidth+2)-2;
-          r.y1 = experience.y1;
-          r.x2 = experience.x2;
-          r.y2 = experience.y1 + (ywidth+2)*ynum+2 ;
-          void* p = asc_malloc ( imagesize ( r.x1, r.y1, r.x2, r.y2 ));
-          getimage  ( r.x1, r.y1, r.x2, r.y2, p );
-          rahmen ( true, r.x1, r.y1, r.x2, r.y2 );
-          bar ( r.x1, r.y1, r.x2, r.y2, 171 );
-          for ( int x = 0; x < xnum; x++ )
-             for ( int y = 0; y < ynum; y++ )
-                 if ( y*xnum+x <= maxunitexperience ) {
-                    void* q;
-                    if ( vehicle->experience != y*xnum+x )
-                       q = xlatpict ( xlatpictgraytable, icons.experience[y*xnum+x] );
-                    else
-                       q = icons.experience[y*xnum+x];
-
-                    putimage( r.x1 +1 + (2 + xwidth)*x, r.y1 + 1 + (2 + ywidth)*y, q );
-                }
-
-          while ( mouseinrect ( &r ) && mouseparams.taste != 0 )
-             releasetimeslice();
-          putimage ( r.x1, r.y1, p );
-          asc_free ( p );
-       }
-    }
-
-    if ( mouseinrect ( agmp->resolutionx - ( 800 - 612), 213, agmp->resolutionx - ( 800 - 781), 305 ) && (mouseparams.taste == 2)) {
-       CGameOptions::Instance()->smallmapactive = !CGameOptions::Instance()->smallmapactive;
-       CGameOptions::Instance()->setChanged();
-
-       if ( CGameOptions::Instance()->smallmapactive )
-          dashboard.paintsmallmap( 1 );
-       else
-          dashboard.paintwind( 1 );
-
-       while ( mouseparams.taste == 2 )
-          releasetimeslice();
-    }
-    /*
-    if ( mouseinrect ( agmp->resolutionx - ( 800 - 620),  90, agmp->resolutionx - ( 800 - 735), 196 ) && (mouseparams.taste == 2)) {
-       npush ( activefontsettings );
-       materialdisplayed = !materialdisplayed;
-       setinvisiblemouserectanglestk ( agmp->resolutionx - ( 800 - 620),  90, agmp->resolutionx - ( 800 - 735), 196 );
-       paintweapons();
-       while ( mouseparams.taste == 2 );
-       getinvisiblemouserectanglestk ();
-       npop ( activefontsettings );
-    }
-    */
-
-    if ( (func & 1) == 0 ) {
-       if ( smallmap  &&  CGameOptions::Instance()->smallmapactive )
-          smallmap->checkformouse();
-
-       if ( !CGameOptions::Instance()->smallmapactive ) {
-          if ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) ) {
-             displaywindspeed();
-             while ( mouseparams.x >= agmp->resolutionx - ( 640 - 588 )  &&   mouseparams.x <= agmp->resolutionx - ( 640 - 610 )  &&   mouseparams.y >= 227   &&   mouseparams.y <= 290  && (mouseparams.taste & 1) )
-                releasetimeslice();
-          }
-       }
-
-       if ( mouseparams.taste == 1 )
-          if ( mouseinrect ( zoom.x1, zoom.y1, zoom.x2, zoom.y2 )) {
-             int pos = mouseparams.x - zoom.x1;
-             pos -= zoom.picwidth / 2;
-             int w = zoom.x2 - zoom.x1 - zoom.picwidth;
-             int perc = 1000 * pos / w;
-             if ( perc < 0 )
-                perc = 0;
-             if ( perc > 1000 )
-                perc = 1000;
-             int newzoom = zoomlevel.getminzoom() + (zoomlevel.getmaxzoom() - zoomlevel.getminzoom()) * ( 1000 - perc ) / 1000;
-             if ( newzoom != zoomlevel.getzoomlevel() ) {
-                cursor.hide();
-                zoomlevel.setzoomlevel( newzoom );
-                paintzoom();
-                cursor.show();
-                displaymap();
-                displaymessage2("new zoom level %d%%", newzoom );
-                dashboard.x = 0xffff;
-             }
-          }
-    }
-
-    if ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) ) {
-       dashboard.movedisp = !dashboard.movedisp;
-       dashboard.x = 0xffff;
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 578 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 609 )  &&   mouseparams.y >=  59   &&   mouseparams.y <=  67  && (mouseparams.taste & 1) )
-          releasetimeslice();
-    }
-
-    for ( int i = 0; i < 8; i++ ) {
-       if ( dashboard.weaps[i].displayed )
-          if ( mouseinrect ( agmp->resolutionx - ( 640 - 502 ), 92 + i * 13, agmp->resolutionx - ( 640 - 572 ), 102 + i * 13 ) && (mouseparams.taste == 1)) {
-             char tmp1[100];
-             char tmp2[100];
-             strcpy ( tmp1, strrrd8d ( dashboard.weaps[i].maxdist ));
-             strcpy ( tmp2, strrrd8u ( dashboard.weaps[i].mindist ));
-             displaymessage2 ( "min strength is %d at %s fields, max strength is %d at %s fields", dashboard.weaps[i].minstrength, tmp1, dashboard.weaps[i].maxstrength, tmp2 );
-
-             while ( mouseinrect ( agmp->resolutionx - ( 640 - 502 ), 92 + i * 13, agmp->resolutionx - ( 640 - 572 ), 102 + i * 13 ) && (mouseparams.taste == 1))
-                releasetimeslice();
-          }
-   }
-
-   if ( (vehicle || vehicletype  ) && mouseinrect ( agmp->resolutionx - ( 640 - 461 ), 89, agmp->resolutionx - ( 640 - 577 ), 196 ) && (mouseparams.taste == 2))
-      paintlargeweaponinfo();
-
-
-   if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) ) {
-       pfield fld = getactfield();
-       if ( fieldvisiblenow ( fld ) ) {
-          if ( vehicle )
-             displaymessage2("damage is %d", vehicle->damage );
-          else
-          if ( fld->building )
-             displaymessage2("damage is %d", fld->building->damage );
-          else
-          if ( !fld->objects.empty() ) {
-             ASCString temp = "damage is ";
-             for ( tfield::ObjectContainer::reverse_iterator i = fld->objects.rbegin(); i != fld->objects.rend(); i++ )
-                if ( i->typ->armor >= 0 ) {
-                   temp += strrr ( i->damage );
-                   temp += " ";
-                }
-
-             displaymessage2( temp.c_str() );
-          }
-
-       }
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )  &&   mouseparams.y >= 71    &&   mouseparams.y <= 79   && (mouseparams.taste & 1) )
-          releasetimeslice();
-   }
-
-   if ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) ) {
-      /*
-       pfield fld = getactfield();
-       if ( fieldvisiblenow ( fld ) ) {
-          if ( fld->vehicle )
-             displaymessage2("unit has %d fuel", fld->vehicle->tank.fuel );
-       }
-       */
-       if ( vehicle )
-          displaymessage2("unit has %d fuel", vehicle->getTank().fuel );
-       while ( mouseparams.x >= agmp->resolutionx - ( 640 - 501 )   &&   mouseparams.x <= agmp->resolutionx - ( 640 - 573 )   &&   mouseparams.y >= 59    &&   mouseparams.y <= 67   && (mouseparams.taste & 1) )
-          releasetimeslice();
-   }
-}
-
-
-
-void   tdashboard :: paintvehicleinfo( const pvehicle     vehicle,
-                                       const pbuilding    building,
-                                       const pfield       _objfield,
-                                       const pvehicletype vt )
-{
-   {
-      collategraphicoperations cgo ( agmp->resolutionx - 800 + 610, 15, agmp->resolutionx - 800 + 783, 307 );
-
-      int         ms;
-
-      npush( activefontsettings );
-      ms = getmousestatus();
-      if (ms == 2) mousevisible(false);
-      dashboard.backgrndcol    = 24;
-      dashboard.vgcol          = green;    /* 26 / 76  */
-      dashboard.ymx            = 471;    /*  469 / 471  */
-      dashboard.ymn            = 380;
-      dashboard.ydl            = dashboard.ymx - dashboard.ymn;
-      dashboard.munitnumberx   = 545;
-      dashboard.vehicle        = vehicle;
-      dashboard.building       = building;
-      dashboard.objfield       = _objfield;
-      dashboard.vehicletype    = vt;
-
-      dashboard.paintheight();
-      dashboard.paintweapons();
-      dashboard.paintdamage();
-      dashboard.painttank();
-      dashboard.paintexperience();
-      dashboard.paintmovement();
-      dashboard.paintarmor();
-
-      if ( CGameOptions::Instance()->smallmapactive )
-         dashboard.paintsmallmap( dashboard.repainthard );
+   if ( veh ) {
+      setLabelText( "unittypename", veh->typ->name );
+      if ( veh->name.empty() )
+         setLabelText( "unitname", veh->typ->description );
       else
-         dashboard.paintwind( dashboard.repainthard );
+         setLabelText( "unitname", veh->name );
+      setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
+      setLabelText( "unitstatus", 100-veh->damage );
 
-      dashboard.paintname();
-      dashboard.paintclasses ();
-      dashboard.paintimage();
-      dashboard.paintplayer();
-      dashboard.x = getxpos();
-      dashboard.y = getypos();
-      if (ms == 2) mousevisible(true);
-      npop( activefontsettings );
+      setBargraphValue( "unitfuel", veh->getStorageCapacity().fuel ? float( veh->getTank().fuel) / veh->getStorageCapacity().fuel : 0  );
+      setLabelText( "unitfuelstatus", veh->getTank().fuel );
+      setBargraphValue( "unitmaterial", veh->getStorageCapacity().material ? float( veh->getTank().material) / veh->getStorageCapacity().material : 0  );
+      setLabelText( "unitmaterialstatus", veh->getTank().material );
+      setBargraphValue( "unitenergy", veh->getStorageCapacity().energy ? float( veh->getTank().energy) / veh->getStorageCapacity().energy : 0  );
+      setLabelText( "unitenergystatus", veh->getTank().energy );
 
-      dashboard.repainthard = 0;
+      int endurance = UnitHooveringLogic::getEndurance( veh );
+      if ( endurance >= 0 )
+         setLabelText( "unitEndurance", endurance );
+      else
+         setLabelText( "unitEndurance", "-" );
 
-      if ( actmap && actmap->ellipse )
-         actmap->ellipse->paint();
 
+      ASCString moveString = ASCString::toString( veh->getMovement() / 10 );
+      if ( veh->getMovement() % 10 )
+         moveString += "." + ASCString::toString(veh->getMovement()%10);
+
+      setLabelText( "movepoints", moveString );
+
+      if ( veh->typ->fuelConsumption )
+         setLabelText( "fuelrange", veh->getTank().fuel / veh->typ->fuelConsumption );
+      else
+         setLabelText( "fuelrange", "-" );
+
+      setLabelText( "armor", veh->typ->armor );
+
+      int &pos = weaponsDisplayed;
+      for ( int i = 0; i < veh->typ->weapons.count; ++i) {
+         if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
+            ASCString ps = ASCString::toString(pos);
+            setLabelText( "punch_weapon" + ps, veh->typ->weapons.weapon[i].maxstrength );
+            if ( veh->typ->hasFunction( ContainerBaseType::NoReactionfire  ) || !veh->typ->weapons.weapon[i].shootable() || veh->typ->weapons.weapon[i].getScalarWeaponType() == cwminen )
+               setLabelText( "RF_weapon" + ps, "-" );
+            else
+               setLabelText( "RF_weapon" + ps, veh->typ->weapons.weapon[i].reactionFireShots );
+            setLabelText( "status_ammo" + ps, veh->ammo[i] );
+            setBargraphValue( "bar_ammo" + ps, veh->typ->weapons.weapon[i].count ? float(veh->ammo[i]) / veh->typ->weapons.weapon[i].count : 0 );
+            ++pos;
+         }
+      }
+   } else {
+      if ( bld ) {
+         setLabelText( "unittypename", bld->typ->name );
+         setLabelText( "unitname", bld->name );
+         setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
+         setLabelText( "unitstatus", 100-bld->damage );
+         setLabelText( "armor", bld->getArmor() );
+
+         if ( 0 ) {
+            setLabelText( "unitfuelstatus", bld->getResource(maxint,2) );
+            setLabelText( "unitmaterialstatus", bld->getResource(maxint,1) );
+            setLabelText( "unitenergystatus", bld->getResource(maxint,0) );
+         } else {
+            setLabelText( "unitfuelstatus", "" );
+            setLabelText( "unitmaterialstatus", "" );
+            setLabelText( "unitenergystatus", "" );
+         }
+
+
+      } else {
+         setLabelText( "armor", "" );
+         setLabelText( "unittypename", "" );
+         setLabelText( "unitname", "" );
+         bool objectFound = false;
+         if ( fld && fld->objects.size() ) {
+            for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+               if ( i->typ->armor > 0 ) {
+                  setBargraphValue( "unitdamage", float(100-i->damage) / 100  );
+                  objectFound = true;
+                  break;
+               }
+         } 
+         if ( !objectFound ) 
+            setBargraphValue( "unitdamage", 0  );
+         setLabelText( "unitstatus", "" );
+
+         setLabelText( "unitfuelstatus", "" );
+         setLabelText( "unitmaterialstatus", "" );
+         setLabelText( "unitenergystatus", "" );
+
+      }
+
+      setBargraphValue( "unitfuel", 0  );
+      setBargraphValue( "unitmaterial",  0  );
+      setBargraphValue( "unitenergy",  0  );
+      setLabelText( "unitEndurance", "" );
+
+      setLabelText( "fuelrange", "-" );
+      setLabelText( "movepoints", "" );
    }
-   dashboard.paintzoom();
-}   /*  paintvehicleinfo  */
+   for ( int i = weaponsDisplayed; i < 10; ++i ) {
+      ASCString ps = ASCString::toString(i);
+      setLabelText( "punch_weapon" + ps, "" );
+      setLabelText( "RF_weapon" + ps, "" );
+      setLabelText( "status_ammo" + ps, "" );
+      setBargraphValue( "bar_ammo" + ps, 0 );
+   }
+   
+   if ( redraw ) {
+      if ( !bulk )
+         PG_Application::SetBulkMode(false);
+      Redraw(true);
+   }
+}
+
+
+
+WindInfoPanel::WindInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardPanel( parent, r, "WindInfo" )
+{
+}
+
+
+
+
+UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardPanel( parent, r, "UnitInfo" )
+{
+   SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
+   if ( siw ) {
+      siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+      siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+   }
+
+   VehicleTypeSelectionItemFactory::showVehicleInfo.connect( SigC::slot( *this, &UnitInfoPanel::showUnitInfo ));
+}
+
+void UnitInfoPanel::showUnitInfo( const Vehicletype* vt )
+{
+   // showUnitData( vt, NULL, true );
+}
+
+
+bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event )
+{
+
+   static const bool modalWeaponInfo = true;
+   
+   SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>(obj);
+   if ( siw ) {
+      if ( event->button == SDL_BUTTON_RIGHT ) {
+         if ( event->type == SDL_MOUSEBUTTONDOWN  ) {
+
+            tfield* fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
+            const Vehicle* vehicle = veh;
+            const Vehicletype* vt = veh ? veh->typ : NULL;
+            if ( !veh && fld && fld->vehicle ) {
+               vt = fld->vehicle->typ;
+               vehicle = fld->vehicle;
+            }
+            if ( vt || veh ) {
+               // parent? PG_Application::GetWidgetById( ASC_PG_App::mainScreenID )
+               WeaponInfoPanel* wip = new WeaponInfoPanel( NULL, vehicle, vt );
+               wip->Show();
+               wip->BringToFront();
+               if ( modalWeaponInfo ) {
+                  wip->SetCapture();
+                  wip->RunModal();
+                  delete wip;
+               } // else
+              //     PG_Application::
+            }
+            return true;
+         }
+         if ( event->type == SDL_MOUSEBUTTONUP && !modalWeaponInfo ) {
+            bool result = false;
+            PG_Widget* wip;
+            do  {
+               wip = PG_Application::GetWidgetByName( WeaponInfoPanel::WIP_Name() );
+               if ( wip ) {
+                  delete wip;
+                  result = true;
+               }
+            } while ( wip );
+            return result;
+         }
+      }
+   }
+   return false;
+}
+
+class WeaponInfoLine: public PG_Image {
+      const SingleWeapon* weapon;
+      const Vehicletype* veh;
+      WeaponInfoPanel* wip;
+      static WeaponInfoLine* displayed;
+   public:
+      WeaponInfoLine( WeaponInfoPanel* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap, const Vehicletype* vehicle )
+           : PG_Image( parent, p, image, false ), weapon(weap), veh ( vehicle ), wip(parent)
+      {
+      };
+
+      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
+      {
+         Surface screen = Surface::Wrap( PG_Application::GetScreen() );
+         if ( name == "weapon_symbol1" )
+            screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( weapon->getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
+
+         if ( name == "weapon_targets" || name == "weapon_shootfrom" ) {
+            int height;
+            if (name == "weapon_targets")
+               height = weapon->targ;
+            else {
+               height = weapon->sourceheight;
+               if ( veh )
+                  height &= veh->height;
+            }
+
+            for ( int i = 0; i < 8; ++i )
+               if ( height & (1 << i )) {
+                  Surface& tick = IconRepository::getIcon("weapon_ok.png");
+                  screen.Blit( tick, SPoint(dst.x + i * tick.w(), dst.y  ) );
+               }
+         }
+
+      };
+
+      void registerSpecialDisplay( const ASCString& name )
+      {
+         SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
+         if ( sdw )
+            sdw->display.connect( SigC::slot( *this, &WeaponInfoLine::painter ));
+      };
+
+	   void eventMouseEnter()
+      {
+         wip->showWeapon( weapon );
+         displayed = this;
+      };
+
+      void eventMouseLeave()
+      {
+         if ( displayed == this )
+            wip->showWeapon();
+      };
+
+      bool activate()
+      {
+         if ( displayed != this ) {
+            wip->showWeapon( weapon);
+            displayed = this;
+            return true;
+         } else
+            return false;
+      }
+};
+
+WeaponInfoLine* WeaponInfoLine::displayed = NULL;
+
+
+
+WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) : Panel( parent, PG_Rect::null, "WeaponInfo" ), weaponCount(0)
+{
+   SetName(name);
+
+   vector<const SingleWeapon*> displayedWeapons;
+   vector<int> displayedWeaponNum;
+
+   for ( int j = 0; j < vt->weapons.count ; j++)
+      if ( vt->weapons.weapon[j].getScalarWeaponType() >= 0 ) {
+         ++weaponCount;
+         displayedWeapons.push_back( &vt->weapons.weapon[j] );
+         displayedWeaponNum.push_back(j);
+      }
+
+
+   Surface& head = IconRepository::getIcon("weapon_large_top.png");
+   Surface& line = IconRepository::getIcon("weapon_large_line.png");
+   Surface& foot = IconRepository::getIcon("weapon_large_bottom.png");
+   int height = head.h() + foot.h() + weaponCount * line.h() + GetTitlebarHeight();
+
+   SizeWidget( head.w(), height, false );
+
+   int lineStartY = GetTitlebarHeight() + head.h()  - 1;
+
+   PG_Widget* footWidget = FindChild( "bottom", true );
+   assert( footWidget != NULL );
+   footWidget->MoveWidget(0,  lineStartY + line.h() * weaponCount, false );
+
+   for ( int i = 0; i < weaponCount; ++i ) {
+      WidgetParameters widgetParams = getDefaultWidgetParams();
+      WeaponInfoLine* lineWidget = new WeaponInfoLine ( this, PG_Point( 0,  lineStartY + i * line.h() ), line.getBaseSurface(), displayedWeapons[i], vt );
+
+      PropertyReadingContainer pc ( "panel", textPropertyGroup );
+
+      pc.openBracket("LineWidget");
+      parsePanelASCTXT( pc, lineWidget, widgetParams );
+      pc.closeBracket();
+
+
+      assignWeaponInfo( this, lineWidget, *displayedWeapons[i] );
+      lineWidget->registerSpecialDisplay( "weapon_shootfrom" );
+      lineWidget->registerSpecialDisplay( "weapon_targets" );
+      if ( veh )
+         setLabelText( "weapon_currentammo", veh->ammo[displayedWeaponNum[i]], lineWidget );
+
+      weaponInfoLines.push_back( lineWidget );
+   }
+   setLabelText( "weapon_shootaftermove", vt->wait ? "no" : "yes" );
+   setLabelText( "weapon_moveaftershoot", vt->hasFunction( ContainerBaseType::MoveAfterAttack  ) ? "yes" : "no" );
+
+   /*
+   for ( int i = 0; i < cmovemalitypenum; ++i ) 
+      setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], cmovemalitypes[i] );
+      */
+}
+
+
+void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
+{
+   PG_Application::SetBulkMode(true);
+   int effic[13];
+   for ( int k = 0; k < 13; k++ )
+      if ( weap )
+         effic[k] = weap->efficiency[k];
+      else
+         effic[k] = -1;
+
+   if ( weap ) {
+      int mindelta = 1000;
+      int maxdelta = -1000;
+      for ( int h1 = 0; h1 < 8; h1++ )
+         for ( int h2 = 0; h2 < 8; h2++ )
+            if ( weap->sourceheight & ( 1 << h1 ) )
+               if ( weap->targ & ( 1 << h2 )) {
+                  int delta = getheightdelta ( h1, h2);
+                  if ( delta > maxdelta )
+                     maxdelta = delta;
+                  if ( delta < mindelta )
+                     mindelta = delta;
+               }
+      for ( int a = -6; a < mindelta; a++ )
+         effic[6+a] = -1;
+      for ( int b = maxdelta+1; b < 7; b++ )
+         effic[6+b] = -1;
+   }
+
+   for ( int i = -6; i <= 6; ++i ) {
+      if ( effic[6+i] >= 0 )
+         setLabelText( "weapon_distance_" + ASCString::toString(i), i );
+      else
+         setLabelText( "weapon_distance_" + ASCString::toString(i), "" );
+
+      if ( weap && effic[6+i] >= 0 )
+         setLabelText( "weapon_efficiency_" + ASCString::toString(i), weap->efficiency[6+i]  );
+      else
+         setLabelText( "weapon_efficiency_" + ASCString::toString(i), "" );
+   }
+
+                                   // grey light grey  yellow,    blue      red        green
+   static const int colors[6] = { 0x969595, 0xdfdfdf, 0xfac914,  0x5383e6,   0xff5e5e, 0x08ce37 };
+
+   for ( int i = 0; i< cmovemalitypenum; ++i)
+      if ( weap ) {
+         int col;
+         if ( weap->targetingAccuracy[i] < 10 )
+            col = colors[0] ;
+         else
+            if ( weap->targetingAccuracy[i] < 30 )
+               col = colors[1] ;
+            else
+               if ( weap->targetingAccuracy[i] < 80 )
+                  col = colors[3] ;
+               else
+                  if ( weap->targetingAccuracy[i] < 120 )
+                     col = colors[2];
+                  else
+                     col = colors[4];
+         setLabelColor( ASCString("weapon_efficiency_") + unitCategoryTags[i], col );
+         setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], weap->targetingAccuracy[i]  );
+      } else
+         setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], "" );
+
+   if ( weap )
+      setLabelText( "weapon_text2",  weap->getName() );
+   else
+      setLabelText( "weapon_text2",  "" );
+
+   if ( weap )  {
+      setImage( "weapon_symbol2", IconRepository::getIcon(SingleWeapon::getIconFileName( weap->getScalarWeaponType()) + "-small.png") );
+      show( "weapon_symbol2" );
+   } else
+      hide( "weapon_symbol2" );
+
+   PG_Application::SetBulkMode(false);
+   Update();
+}
+
+bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
+{
+   if ( Panel::eventMouseButtonUp( button ))
+      return true;
+   
+   if ( button->button == SDL_BUTTON_RIGHT ) {
+      QuitModal();
+      return true;
+   } else
+      return false;
+}
+
+
+bool WeaponInfoPanel::eventMouseMotion(const SDL_MouseMotionEvent* motion)
+{
+   for ( int i = 0; i < weaponInfoLines.size();++i )
+      if ( weaponInfoLines[i]->IsMouseInside() )
+         return weaponInfoLines[i]->activate();
+   return false;
+};
+
+
+ASCString WeaponInfoPanel::name = "WeaponInfoPanel";
+const ASCString& WeaponInfoPanel::WIP_Name()
+{
+   return name;
+}
+
+
+MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay ) : DashboardPanel( parent, r, "MapInfo" ), zoomSlider(NULL), changeActive(false)
+{
+   assert( mapDisplay );
+   this->mapDisplay = mapDisplay;
+   
+   zoomSlider = dynamic_cast<PG_Slider*>( FindChild( "zoomscroller", true ) );
+   if ( zoomSlider ) {
+      zoomSlider->SetRange(0,75); // results in zoomlevels from 100 - 25
+      zoomSlider->sigSlide.connect( SigC::slot( *this, &MapInfoPanel::scrollTrack ));
+      mapDisplay->newZoom.connect( SigC::slot( *this, &MapInfoPanel::zoomChanged ));
+      zoomSlider->SetPosition( 100 - mapDisplay->getZoom() );
+   }   
+
+   const int labelnum = 4;
+   char* label[labelnum] = { "pipes", "container", "resources", "visibilityvalue"};
+   for ( int i = 0; i < labelnum; ++i ) {
+      PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label[i], true ) );
+      if ( cb ) 
+         cb->sigClick.connect( SigC::bind( SigC::slot( *this, &MapInfoPanel::checkBox ), label[i] ));
+   }      
+   
+   mapDisplay->layerChanged.connect( SigC::slot( *this, &MapInfoPanel::layerChanged ));
+      
+   PG_Button* b = dynamic_cast<PG_Button*>( FindChild( "weaprange", true ) );
+   if ( b )
+      b->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showWeaponRange ));
+   
+   PG_Button* b2 = dynamic_cast<PG_Button*>( FindChild( "moverange", true ) );
+   if ( b2 )
+      b2->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showMovementRange ));
+   
+}
+
+void MapInfoPanel::layerChanged( bool state, const ASCString& label )
+{
+   PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label, true ) );
+   if ( cb && ! changeActive ) 
+      if ( state )
+         cb->SetPressed();
+      else
+         cb->SetUnpressed();
+}
+
+bool MapInfoPanel::showWeaponRange()
+{
+   execuseraction( ua_viewunitweaponrange );
+   return true;
+}
+
+bool MapInfoPanel::showMovementRange()
+{
+   execuseraction( ua_viewunitmovementrange );
+   return true;
+}
+
+
+void MapInfoPanel::zoomChanged( int zoom )
+{
+   if ( !changeActive )
+      if ( zoomSlider )
+         zoomSlider->SetPosition( 100 - zoom );
+}
+
+bool MapInfoPanel::scrollTrack( long pos )
+{
+   changeActive = true;
+   mapDisplay->setNewZoom( 100 - pos );
+   repaintMap();
+   changeActive = false;
+   return true;
+}
+
+bool MapInfoPanel::checkBox( bool state, const char* name )
+{
+   changeActive = true;
+   mapDisplay->activateMapLayer( name, state );
+   repaintMap();
+   changeActive = false;
+   return true;
+}
+
+

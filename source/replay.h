@@ -18,8 +18,10 @@
 #ifndef replayH
  #define replayH
 
-#include "gui.h"
-#include "controls.h"
+#include "events.h"
+#include "ascstring.h"
+#include "gamemap.h"
+#include "basestreaminterface.h"
 
 /*! \file replay.h
     \brief Interface for recording and playing replays
@@ -73,26 +75,36 @@ enum trpl_actions { rpl_attack,
                     rpl_setResourceProcessingAmount,
                     rpl_removebuilding3,
                     rpl_netcontrol,
-                    rpl_move5 };
+                    rpl_move5,
+                    rpl_alliancechange2,
+                    rpl_moveUnitUp,
+                    rpl_jump,
+                    rpl_repairBuilding,
+                    rpl_recycleUnit,
+                    rpl_convert2,
+                    rpl_putmine2,
+                    rpl_repairUnit3 };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
+
+struct treactionfire_replayinfo;
 
 class trunreplay {
             ASCString lastErrorMessage;
          protected:
             int movenum;
-            treplayguihost& gui;
             void execnextreplaymove ( void );
-            pmap orgmap;
+            GameMap* orgmap;
             pmemorystream stream;
-            int removeunit ( int x, int y, int nwid );
-            int removeunit ( pvehicle eht, int nwid );
             void wait ( int t = ticker );
             void wait ( MapCoordinate pos, int t = ticker );
             void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ticker );
             int actplayer;
 
             void error( const char* message, ... );
+            void error( const MapCoordinate& pos, const char* message, ... );
+            void error( const ASCString& message );
+            void error( const MapCoordinate& pos, const ASCString& message );
 
             char nextaction;
 
@@ -102,18 +114,18 @@ class trunreplay {
 
          public:
 
-            preactionfire_replayinfo getnextreplayinfo ( void );
+            treactionfire_replayinfo* getnextreplayinfo ( void );
 
             trunreplay ( void );
             int status;
             void firstinit ( void );
-            int  run ( int player, int viewingplayer );
+            int  run ( int player, int viewingplayer, bool performEndTurnOperations );
    };
 
 class LockReplayRecording {
-        tmap::ReplayInfo& ri;
+        GameMap::ReplayInfo& ri;
      public:
-        LockReplayRecording ( tmap::ReplayInfo& _ri );
+        LockReplayRecording ( GameMap::ReplayInfo& _ri );
         ~LockReplayRecording();
 };
 
@@ -126,13 +138,15 @@ extern int startreplaylate;
 extern void checkforreplay ( void );
 
 //! Initialized the replay logging at the beginning of a players or the ai's turn.
-extern void initReplayLogging();
-
-//! Close the replay logging at the end of a players or the ai's turn.
-extern void closeReplayLogging();
+extern void initReplayLogging( Player& player );
 
 //! runs the replay for the given player
-extern void runSpecificReplay( int player, int viewingplayer );
+extern void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperations = true );
 
+//! runs the replay of the current player. This is used primarily for debugging the replay system
+extern void viewOwnReplay( Player& player );
+
+//! initialized the replay system at program startup
+extern void hookReplayToSystem();
 
 #endif

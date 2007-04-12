@@ -2,89 +2,6 @@
     \brief The random map generator
 */
 
-//     $Id: edgen.cpp,v 1.20 2004-07-12 18:15:05 mbickel Exp $
-//
-//     $Log: not supported by cvs2svn $
-//     Revision 1.19  2004/05/12 20:05:52  mbickel
-//      Restructured file loading routines for upcoming data cache
-//
-//     Revision 1.18  2002/04/21 21:27:00  mbickel
-//      Mapeditor: Fixed crash in "Put Resources"
-//      Updating the small map after AI
-//      Fixed infinite loop "quit game" after sending signal
-//
-//     Revision 1.17  2002/04/17 22:41:34  mbickel
-//      Updated build system to warn about missing music
-//      Updated build system to insert version information automatically
-//      edgen.cpp compiles with gcc 3.0.4 again
-//
-//     Revision 1.16  2002/04/05 09:25:09  mbickel
-//      Project files now for Borland C++ Builder 6
-//      Fixed: netcontrol not working
-//      Fixed: replay errors when constructing turrets
-//      Submarine require no fuel for sufacing
-//      Field info dialog extended
-//      Fixed several buffer overruns
-//
-//     Revision 1.15  2001/12/14 10:20:05  mbickel
-//      Cleanup and enhancements to configure.in
-//      Removed last remains of octagonal version from source files
-//
-//     Revision 1.14  2001/10/31 18:34:31  mbickel
-//      Some adjustments and fixes for gcc 3.0.2
-//
-//     Revision 1.13  2001/10/11 10:22:49  mbickel
-//      Some cleanup and fixes for Visual C++
-//
-//     Revision 1.12  2001/08/09 10:28:22  mbickel
-//      Fixed AI problems
-//      Mapeditor can edit a units AI parameter
-//
-//     Revision 1.11  2001/07/28 11:19:10  mbickel
-//      Updated weaponguide
-//      moved item repository from spfst to itemrepository
-//
-//     Revision 1.10  2001/07/27 21:13:34  mbickel
-//      Added text based file formats
-//      Terraintype and Objecttype restructured
-//
-//     Revision 1.9  2001/02/01 22:48:37  mbickel
-//      rewrote the storing of units and buildings
-//      Fixed bugs in bi3 map importing routines
-//      Fixed bugs in AI
-//      Fixed bugs in mapeditor
-//
-//     Revision 1.8  2001/01/28 14:04:13  mbickel
-//      Some restructuring, documentation and cleanup
-//      The resource network functions are now it their own files, the dashboard
-//       as well
-//      Updated the TODO list
-//
-//     Revision 1.7  2000/12/23 13:19:45  mbickel
-//      Made ASC compileable with Borland C++ Builder
-//
-//     Revision 1.6  2000/08/12 12:52:45  mbickel
-//      Made DOS-Version compile and run again.
-//
-//     Revision 1.5  2000/05/23 20:40:44  mbickel
-//      Removed boolean type
-//
-//     Revision 1.4  2000/05/10 19:55:48  mbickel
-//      Fixed empty loops when waiting for mouse events
-//
-//     Revision 1.3  2000/05/05 21:15:02  mbickel
-//      Added Makefiles for mount/demount and mapeditor
-//      mapeditor can now be compiled for linux, but is not running yet
-//
-//     Revision 1.2  1999/11/16 03:41:31  tmwilson
-//     	Added CVS keywords to most of the files.
-//     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)
-//     	Wrote replacement routines for kbhit/getch for Linux
-//     	Cleaned up parts of the code that gcc barfed on (char vs unsigned char)
-//     	Added autoconf/automake capabilities
-//     	Added files used by 'automake --gnu'
-//
-//
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
@@ -110,6 +27,7 @@
 #include "edgen.h"
 #include "vehicletype.h"
 #include "itemrepository.h"
+#include "paradialog.h"
 
 #define layercount 5
 #define centerlayer 65000
@@ -135,7 +53,7 @@
        protected :
                char flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
                char initialized[ layercount ];
-               pascal_byte *constructionlayer;
+               char *constructionlayer;
                int layer,actlayer;
                int barsize,maxbarsize;
                int whereland;
@@ -144,7 +62,7 @@
                pmemoryblock mblocks[ layercount ];
                pterraintype btyp[numofbdts];
                int overwritecolor[maxoverwrite];
-               pfield pf;
+               tfield* pf;
                };
 
 const char* clayer[layercount]  = {"Land", "Forest", "Desert","Material","Fuel"};
@@ -186,7 +104,7 @@ void         tmapgenerator::init(void)
 
    barsize = maxbarsize;
 
-   constructionlayer = new ( pascal_byte[plasma.maxx * plasma.maxy ]); // =blockcount
+   constructionlayer = new ( char[plasma.maxx * plasma.maxy ]); // =blockcount
 
    addbutton("",480,80,510,100,0,1,7,true);
    addkey(7,ct_down);
@@ -265,11 +183,13 @@ void         tmapgenerator::init(void)
    showtext2(strcat(s1,strrr(plasma.maxx)),x1+10,y1+10);
    showtext2(strcat(s2,strrr(plasma.maxy)),x1+120,y1+10);
 
+   /*
    putspriteimage(x1 + 487,y1 + 83,icons.pfeil2[6]);
    putspriteimage(x1 + 537,y1 + 83,icons.pfeil2[2]);
 
    putspriteimage(x1 + 487,y1 + 373,icons.pfeil2[6]);
    putspriteimage(x1 + 537,y1 + 373,icons.pfeil2[2]);
+   */
 
    rahmen(true,x1 + 450,y1 + 40,x1 + 590,y1 + 400);
    rahmen(true,x1 + 10,y1 + 40,x1 + 440,y1 + 390);
@@ -299,8 +219,8 @@ void tmapgenerator::montlayer(int layer)
             }
             else j++;
          } while ( ( found == false ) && (j < mblocks[layer]->tilevalcount ) ); /* enddo */
-         if ( (j == mblocks[layer]->tilevalcount ) && ( mblocks[layer]->color[mblocks[layer]->tilevalcount] != ctransparent ) )
-               constructionlayer[i] =  mblocks[layer]->color[mblocks[layer]->tilevalcount];
+         if ( (j == mblocks[layer]->tilevalcount ) && ( mblocks[layer]->color[int(mblocks[layer]->tilevalcount)] != ctransparent ) )
+            constructionlayer[i] =  mblocks[layer]->color[int(mblocks[layer]->tilevalcount)];
       } /* endfor */
    } else {
       for (i=0;i<plasma.blockcount;i++ ) {
@@ -315,7 +235,8 @@ void tmapgenerator::montlayer(int layer)
                   }
                   else j++;
                } while ( ( found == false ) && (j < mblocks[layer]->tilevalcount ) ); /* enddo */
-               if (j == mblocks[layer]->tilevalcount ) constructionlayer[i] =  mblocks[layer]->color[mblocks[layer]->tilevalcount];
+               if (j == mblocks[layer]->tilevalcount )
+                  constructionlayer[i] =  mblocks[layer]->color[int(mblocks[layer]->tilevalcount)];
             }
          } /* endfor */
       } /* endfor */
@@ -466,7 +387,7 @@ char tmapgenerator::checkland(int x, int y)
 
 void tmapgenerator::addcoast(void)
 {
-   pfield pf;
+   tfield* pf;
    const int id[2]={42,83};
  
    for (int i=0;i<2;i++ ) {
@@ -501,35 +422,35 @@ void tmapgenerator::addcoast(void)
                } /* endif */
                if (whereland & 1) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 0;
+                  // pf->direction = 0;
                } 
                if (whereland & 2) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 0;
+                  // pf->direction = 0;
                } 
                if (whereland & 4) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 1;
+                  // pf->direction = 1;
                } 
                if (whereland & 8) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 1;
+                  // pf->direction = 1;
                } 
                if (whereland & 16) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 2;
+                  // pf->direction = 2;
                } 
                if (whereland & 32) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 2;
+                  // pf->direction = 2;
                } 
                if (whereland & 64) {
                   pf->typ = btyp[0]->weather[0];
-                  pf->direction = 3;
+                  // pf->direction = 3;
                } 
                if (whereland & 128) {
                   pf->typ = btyp[1]->weather[0];
-                  pf->direction = 3;
+                  // pf->direction = 3;
                } 
             } 
          } /* endfor */
@@ -636,7 +557,6 @@ void tmapgenerator::setmap(void)
          for (i=0;i< ( plasma.maxx / 2 ) ;i++ ) {
             for (j=0;j<plasma.maxy;j++ ) {
                pf = &actmap->field[ ( plasma.maxx / 2 - i - 1 ) + ( ( plasma.maxy - j -1) * plasma.maxx / 2 ) ];
-               pf->direction = 0;
                int plasmalayernr = ( i * 2 + ( j & 1 ) ) + ( j * plasma.maxx );
                setpfield ( plasmalayernr ) ;
                pf->setparams();
@@ -653,7 +573,6 @@ void tmapgenerator::setmap(void)
          for (i=0;i< ( plasma.maxx / 2 ) ;i++ ) {
             for (j=0;j<plasma.maxy;j++ ) {
                pf = &actmap->field[i + ( j * plasma.maxx / 2 ) ];
-               pf->direction = 0;
                int plasmalayernr = ( i * 2 + ( j & 1 ) ) + ( j * plasma.maxx );
                setpfield ( plasmalayernr ) ;
                pf->setparams();

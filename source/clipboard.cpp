@@ -47,7 +47,7 @@ void ClipBoardBase::clear()
 }
 
 
-void ClipBoardBase::addUnit ( pvehicle unit )
+void ClipBoardBase::addUnit ( Vehicle* unit )
 {
   tmemorystream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipVehicle );
@@ -55,7 +55,7 @@ void ClipBoardBase::addUnit ( pvehicle unit )
   objectNum++;
 }
 
-void ClipBoardBase::addBuilding ( pbuilding bld )
+void ClipBoardBase::addBuilding ( Building* bld )
 {
   tmemorystream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipBuilding );
@@ -96,10 +96,10 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
   tmemorystream stream ( &buf, tnstream::reading );
   Type type = Type(stream.readInt());
   if ( type == ClipVehicle ) {
-     pfield fld = actmap->getField ( pos );
+     tfield* fld = actmap->getField ( pos );
      Vehicle* veh = pasteUnit ( stream );
 
-     if ( !fieldAccessible ( fld, veh ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
+     if ( !fieldAccessible ( fld, veh, -2, NULL, true ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
         delete veh;
         return;
      }
@@ -114,8 +114,8 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
 
      for ( int x = 0; x < 4; x++ )
         for ( int y = 0; y < 6; y++ )
-           if ( bld->typ->getpicture ( BuildingType::LocalCoordinate( x , y ) )) {
-              pfield field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
+           if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate( x , y ) )) {
+              tfield* field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
               if ( !field ) {
                  delete bld;
                  displaymessage("building does not fit here", 1 );

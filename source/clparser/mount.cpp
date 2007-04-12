@@ -28,7 +28,6 @@
 
 Cmdline::Cmdline(int argc, char *argv[]) throw (string)
 {
-  extern char *optarg;
   extern int optind;
   int option_index = 0;
   int c;

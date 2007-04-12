@@ -6,8 +6,8 @@
     email                : bickel@asc-hq.org
  ***************************************************************************/
 
-/*! \file buildingtype.h
-    \brief The interface for the Building class
+/*! \file buildings.h
+    \brief The buildings which a placed on the map
 */
 
 /***************************************************************************
@@ -28,6 +28,8 @@
  #include "buildingtype.h"
  #include "mapalgorithms.h"
 
+class tfield;
+
 //! An actual building on the map, which references a #BuildingType
 class  Building : public ContainerBase {
     MapCoordinate entryPosition;
@@ -35,131 +37,21 @@ class  Building : public ContainerBase {
     char         _completion;
 
     friend class tprocessminingfields;
+  protected:
 
-  public:
-    class Work {
-        public:
-          virtual bool finished() = 0;
-          virtual bool run() = 0;
-          virtual Resources getPlus() = 0;
-          virtual Resources getUsage() = 0;
-    };
-
-
-    class MatterConverter : public Work {
-          Building* bld;
-          int percentage;
-        public:
-          MatterConverter( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus();
-          virtual Resources getUsage();
-    };
-
-    class ResourceSink : public Work {
-          Building* bld;
-          Resources toGet;
-        public:
-          ResourceSink( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus();
-          virtual Resources getUsage();
-    };
-
-
-    /*
-    class Research : public Work {
-          Building* bld;
-          int percentage;
-        public:
-          MatterConverter( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus() {return Resources; };
-          virtual Resources getUsage();
-    };
-    */
-
-
-    class RegenerativePowerPlant : public Work {
-        protected:
-          Building* bld;
-          Resources toProduce;
-        public:
-          RegenerativePowerPlant( Building* _bld ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getUsage();
-    };
-
-    class WindPowerplant : public RegenerativePowerPlant {
-        public:
-          WindPowerplant( Building* _bld ) : RegenerativePowerPlant ( _bld ) { toProduce = getPlus(); };
-          virtual Resources getPlus();
-    };
-
-    class SolarPowerplant : public RegenerativePowerPlant {
-        public:
-          SolarPowerplant( Building* _bld ) : RegenerativePowerPlant ( _bld ) { toProduce = getPlus(); };
-          virtual Resources getPlus();
-    };
-
-    class BiResourceGeneration: public RegenerativePowerPlant {
-        public:
-          BiResourceGeneration ( Building* bld_ ) : RegenerativePowerPlant ( bld_ ) { toProduce = getPlus(); };
-          virtual Resources getPlus();
-    };
-
-    class MiningStation : public Work, protected SearchFields {
-         Building* bld;
-         bool justQuery;
-         bool hasRun;
-         Resources toExtract_thisTurn;
-         Resources spaceAvail;
-         Resources powerAvail;
-         Resources actuallyExtracted; // with increasing distance this gets lower and lower
-
-         float consumed[3];
-         float usageRatio[3];
-      protected:
-          void testfield ( const MapCoordinate& mc );
-      public:
-          MiningStation( Building* _bld, bool justQuery_ ) ;
-          virtual bool finished();
-          virtual bool run();
-          virtual Resources getPlus();
-          virtual Resources getUsage();
-    };
-
-    Work* spawnWorkClasses( bool justQuery );
-     BuildingType* typ;
-
-    pvehicletype      production[32];
-
-    //! the Resources that are produced each turn
-    Resources   plus;
-
-    //! the maximum amount of Resources that the building can produce each turn in the ASC resource mode ; see also #bi_resourceplus
-    Resources   maxplus;
-
-    //! the current storage of Resources
-    Resources   actstorage;
+    //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
+    int           repairedThisTurn;
+    
+   public:
+    const BuildingType* typ;
 
     //! the ammo that is stored in the building
     int         ammo[waffenanzahl];
 
-    //! the maximum amount of research that the building can conduct every turn
-    int         maxresearchpoints;
-
-    //! the current amount of research that the building conducts every turn
-    int         researchpoints;
-
     //! the building's name
     ASCString    name;
 
-    //! a bitmapped variable containing the status of the resource-net connection. \see execnetcontrol()
+    //! a bitmapped variable containing the status of the resource-net connection. \see execnetcontrol() \deprecated
     int          netcontrol;
 
     //! bitmapped: are there events that are triggered by actions affecting this building
@@ -168,26 +60,16 @@ class  Building : public ContainerBase {
     //! is the building visible? Building can be made invisible, but this feature should be used only in some very special cases
     bool         visible;
 
-    //! the vehicletype that the building can produce
-    pvehicletype  productionbuyable[32];
-
-    //! the maximum amount of Resources that the building can produce each turn in the BI resource mode ; see also #maxplus
-    Resources    bi_resourceplus;
-
-    //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
-    int           repairedThisTurn;
 
     AiValue*      aiparam[8];
 
-    Building( pmap map, const MapCoordinate& entryPosition, const pbuildingtype type , int player, bool setupImages = true, bool chainToField = true);
+    Building( GameMap* map, const MapCoordinate& entryPosition, const BuildingType* type , int player, bool setupImages = true, bool chainToField = true);
 
     int lastmineddist;
 
-    bool canRepair ( const ContainerBase* item );
+    bool canRepair ( const ContainerBase* item ) const;
 
-    bool isBuilding() const { return true; };
-
-    static Building* newFromStream ( pmap gamemap, tnstream& stream, bool chainToField = true );
+    static Building* newFromStream ( GameMap* gamemap, tnstream& stream, bool chainToField = true );
     void write ( tnstream& stream, bool includeLoadedUnits = true );
     void read ( tnstream& stream );
   private:
@@ -198,55 +80,55 @@ class  Building : public ContainerBase {
     void execnetcontrol ( void );
     // int  getmininginfo ( int res );
 
-    int  putResource ( int amount,    int resourcetype, bool queryonly, int scope = 1 );
-    int  getResource ( int amount,    int resourcetype, bool queryonly, int scope = 1 );
-    Resources putResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::putResource ( res, queryonly, scope ); };
-    Resources getResource ( const Resources& res, bool queryonly, int scope = 1 ) { return ContainerBase::getResource ( res, queryonly, scope ); };
+    int  putResource ( int amount,    int resourcetype, bool queryonly, int scope = 1, int player = -1 );
+    int  getResource ( int amount,    int resourcetype, bool queryonly, int scope = 1, int player = -1 );
+    int  getResource ( int amount,    int resourcetype ) const;
+    Resources putResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 ) { return ContainerBase::putResource ( res, queryonly, scope, player ); };
+    Resources getResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 ) { return ContainerBase::getResource ( res, queryonly, scope, player ); };
 
-    //! returns the resource that the building consumes for its operation.
-    Resources getResourceUsage ( );
 
-    Resources getResourcePlus ( );
-
+    //! the current storage of Resources
+    Resources   actstorage;
+    
     int getIdentification();
 
 
     //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on
-    void* getpicture ( const BuildingType::LocalCoordinate& localCoordinate );
+    const Surface& getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const;
+
+    void paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const;
+
+    bool isBuilding() const { return true; };
+    
     
     //! changes the building's owner. \param player range: 0 .. 8
     void convert ( int player );
 
     //! Adds the view and jamming of the building to the player's global radar field
-    void addview ( void );
+    void addview();
 
     //! Removes the view and jamming of the building from the player's global radar field
-    void removeview ( void );
+    void removeview();
 
-    //! returns the local storage capacity for the given resource, which depends on the resource mode of the map. \see tmap::_resourcemode
-    int  gettank ( int resource );
-    
     //! returns the armor of the building. \see BuildingType::_armor
-    int  getArmor( void );
+    int  getArmor() const;
 
     //! returns the field the buildings entry is standing on
-    pfield getEntryField ( ) const;
+    tfield* getEntryField() const;
 
     //! returns the position of the buildings entry
     MapCoordinate3D getEntry ( ) const;
 
     //! returns the pointer to the field which the given part of the building is standing on
-    pfield getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
-
+    tfield* getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
+    
     //! returns the absolute map coordinate of the given part of the building
     MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates ) const;
 
-    //! produces ammunition and stores it in #ammo
-    void produceAmmo ( int type, int num );
-
-    //! updates the pointers to the pictures , which are part of tfield (to speed up displaying)
-    void resetPicturePointers ( void );
-
+    
+    //! converts a global coordinate into a local coordinate.
+    BuildingType::LocalCoordinate getLocalCoordinate( const MapCoordinate& field ) const;
+    
     //! returns the position of the buildings entry
     MapCoordinate3D getPosition ( ) const { return getEntry(); };
 
@@ -259,8 +141,6 @@ class  Building : public ContainerBase {
     //! unregister the building from the map position
     int  unchainbuildingfromfield ( void );
 
-    // void getpowerplantefficiency ( int* material, int* fuel );
-
     //! returns the completion of the building. \see setCompletion(int,bool)
     int getCompletion() const { return _completion; };
 
@@ -272,43 +152,32 @@ class  Building : public ContainerBase {
     void setCompletion ( int completion, bool setupImages = true  );
 
     //! hook that is called when a turn ends
-    void endTurn( void );
+    void endRound( void );
 
     //! returns a name for the building. If the building itself has a name, it will be returned. If it doesn't, the name of the building type will be returned.
-    const ASCString& getName ( ) const;
+    ASCString getName ( ) const;
 
-    //! returns the amount of resources that the net which the building is connected to produces each turn
-    Resources netResourcePlus( ) const;
+    int getAmmo( int type, int num, bool queryOnly );
+    int putAmmo( int type, int num, bool queryOnly );
+    int maxAmmo( int type ) const { return maxint; };
 
+
+    //! returns the bitmapped level of height. Only one bit will be set, of course
+    int getHeight() const { return typ->buildingheight; };
+    
+    
     ~Building();
+
+    virtual int repairableDamage();
 
   protected:
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
-     virtual void postRepair ( int oldDamage ) {};
+     virtual void postRepair ( int oldDamage );
+     vector<MapCoordinate> getCoveredFields();
 };
 
 
-//! calculates some mining statistics for a mining station
-class GetMiningInfo : public SearchFields {
-          protected:
-             void testfield ( const MapCoordinate& mc );
-          public:
-             class MiningInfo {
-                  public:
-                     MiningInfo ( );
-                     Resources avail[maxminingrange+2];
-                     int efficiency[maxminingrange+2];
-                     Resources max[maxminingrange+2];            // the theoretical maximum of the mineral resources in the given distance
-             };
-             GetMiningInfo ( pmap _gamemap );
-             const MiningInfo& getMiningInfo() {return miningInfo; };
-             void run ( const pbuilding bld );
-          protected:
-             MiningInfo miningInfo;
-         };
-
-
-extern void doresearch ( tmap* actmap, int player );
+extern void doresearch ( GameMap* actmap, int player );
 
 #endif

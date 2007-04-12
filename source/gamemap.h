@@ -1,5 +1,5 @@
 /*! \file gamemap.h
-    \brief Definition of THE central asc class: tmap 
+    \brief Definition of THE central asc class: GameMap 
 */
 
 /***************************************************************************
@@ -24,29 +24,42 @@
  #define gamemapH
 
  #include <vector>
+ #include <time.h>
 
  #include "typen.h"
  #include "baseaiinterface.h"
  #include "vehicle.h"
  #include "buildings.h"
  #include "basestrm.h"
- #include "time.h"
  #include "messages.h"
- #include "gameeventsystem.h"
  #include "research.h"
  #include "password.h"
+#ifdef WEATHERGENERATOR
+ # include "weatherarea.h"
+#endif
+ #include "objects.h"
+ #include "mapfield.h"
+ #include "networkinterface.h"
+ #include "player.h"
+ 
+ class RandomGenerator{
+   public:
+
+      RandomGenerator(int seedValue);
+      ~RandomGenerator();
+      
+      unsigned int getPercentage();
+      unsigned int getRandomValue(int upperLimit);
+      unsigned int getRandomValue (int lowerLimit, int upperLimit);
+ };
+ 
+  
+#ifdef WEATHERGENERATOR
+class WeatherSystem;
+#endif
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 32;
-
-//! The names of the game paramter. \sa gameparameterdefault
-extern const char* gameparametername[ gameparameternum ];
-
-extern const int gameparameterdefault [ gameparameternum ];
-
-extern const int gameParameterLowerLimit [ gameparameternum ];
-extern const int gameParameterUpperLimit [ gameparameternum ];
-extern const bool gameParameterChangeableByEvent [ gameparameternum ];
+const int gameparameternum = 33;
 
 enum GameParameter { cgp_fahrspur,
        cgp_eis,
@@ -79,59 +92,21 @@ enum GameParameter { cgp_fahrspur,
        cgp_experienceDivisorDefense,
        cgp_debugEvents,
        cgp_objectGrowthMultiplier,
-       cgp_objectGrowOnOtherObjects };
+       cgp_objectGrowOnOtherObjects,
+       cgp_researchOutputMultiplier};
 
 
-class AgeableItem {
-    protected:
-       AgeableItem() : lifetimer(-1) {};
-    public:
-       int lifetimer;
-
-       //! ages the object by one turn. Returns true if the object shall be removed
-       static bool age( AgeableItem& obj );
+struct GameParameterSettings {
+         const char* name;
+         int defaultValue;
+         int minValue;
+         int maxValue;
+         bool changeableByEvent;
+         bool legacy;
+         const char* longName;
 };
-
-//! an instance of an object type (#tobjecttype) on the map
-class Object : public AgeableItem {
-    public:
-       pobjecttype typ;
-       int damage;
-       int dir;
-       // int dummy[4];
-       Object ( void );
-       Object ( pobjecttype t );
-       void display ( int x, int y, int weather = 0 );
-       void setdir ( int dir );
-       int  getdir ( void );
-
-};
-
-#define cminenum 4
-extern const char* MineNames[cminenum] ;
-extern const int MineBasePunch[cminenum]  ;
-
-enum MineTypes { cmantipersonnelmine = 1 , cmantitankmine, cmmooredmine, cmfloatmine  };
-
-
-class Mine : public AgeableItem {
-   public:
-      Mine( MineTypes type, int strength, int player, tmap* gamemap );
-
-
-      MineTypes type;
-
-      //! the effective punch of the mine
-      int strength;
-
-      //! the player who placed the mine; range 0 .. 7
-      int player;
-
-      //! can the mine attack this unit
-      bool attacksunit ( const pvehicle veh );
-};
-
-
+extern GameParameterSettings gameParameterSettings[gameparameternum ];
+       
 class LoadNextMap {
        public:
           int id;
@@ -140,209 +115,83 @@ class LoadNextMap {
 
 
 
-//! a single field of the map
-class  tfield {
-    pmap gamemap;
-    void init();
-  protected:
-    tfield (  );
-    friend class tmap;
-  public:
-    tfield ( pmap gamemap_ );
-    void operator= ( const tfield& f );
-
-    void setMap ( pmap gamemap_ ) { gamemap = gamemap_; };
-
-    //! the terraintype (#pwterraintype) of the field
-    TerrainType::Weather* typ;
-
-    //! mineral resources on this field (should be changed to #ResourcesType sometime...)
-    char         fuel, material;
-
-    //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
-    Uint16       visible;
-
-    //! in the old octagonal version of ASC it was possible to rotate the terraintype; this is not used in the hexagonal version any more
-    char         direction;
-
-    //! units standing on this object will get a bonus to their view
-    int          viewbonus;
-
-    void*      picture;
-
-    //@{ 
-    //! Various algorithms need to store some information in the fields they process. These variables are used for this.
-    union  {
-      struct {
-        char         temp;
-        char         temp2;
-      }a;
-      Uint16 tempw;
-    };
-    int          temp3;
-    int          temp4;
-    //@}
-
-    pvehicle     vehicle;
-    pbuilding    building;
-
-    struct Resourceview {
-      Resourceview ( void );
-      char    visible;      // BM
-      char    fuelvisible[8];
-      char    materialvisible[8];
-    };
-
-    //! the mineral resources that were seen by a player on this field; since the actual amount may have decreased since the player looked, this value is not identical to the fuel and material fields.
-    Resourceview*  resourceview;
-
-    typedef list<Mine> MineContainer;
-    MineContainer mines;
-
-    //! returns the nth mine. This function should only be used by legacy code; new code should store an iterator instead of an index
-    Mine& getMine ( int n );
 
 
-    typedef vector<Object> ObjectContainer;
-    ObjectContainer objects;
 
-    /** add an object to the field
-         \param obj The object type
-         \param dir The direction of the object type; -1 to use default direction
-         \param force Put the object there even if it cannot normally be placed on this terrain
-    **/
-    void addobject ( pobjecttype obj, int dir = -1, bool force = false );
-
-    //! removes all objects of the given type from the field
-    void removeobject ( pobjecttype obj, bool force = false );
-
-    //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
-    void sortobjects ( void );
-
-    //! checks if there are objects from the given type on the field and returns them
-    pobject checkforobject ( pobjecttype o );
-
-
-    //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)
-    TerrainBits  bdt;
-
-    //! are any events connected to this field
-    int connection;
-
-
-    //! deletes everything placed on the field
-    void deleteeverything ( void );
-
-    //! recalculates the terrain properties, movemalus etc from the terraintype and the objects,
-    void setparams ( void );
-
-    //! the defense bonus that unit get when they are attacked
-    int getdefensebonus ( void );
-
-    //! the attack bonus that unit get when they are attacking
-    int getattackbonus  ( void );
-
-    //! the weather that is on this field
-    int getweather ( void );
-    void setweather( int weather );
-
-    //! the radar jamming that is on this field
-    int getjamming ( void );
-    int getmovemalus ( const pvehicle veh );
-    int getmovemalus ( int type );
-
-    //! can any of the mines on this field attack this unit
-    int mineattacks ( const pvehicle veh );
-
-    //! the player who placed the mines on this field.
-    int mineowner ( void );
-
-    //! checks if the unit is standing on this field. Since units are being cloned for some checks, this method should be used instead of comparing the pointers to the unit
-    bool unitHere ( const Vehicle* veh );
-
-    //! returns a pointer to the #ContainerBase of the field or NULL if there is none
-    ContainerBase* getContainer() { if ( vehicle ) return vehicle; else return building; };
-
-    //! put a mine of type typ for player col (0..7) and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
-    bool  putmine ( int col, int typ, int strength );
-
-    /** removes a mine
-         \param num The position of the mine; if num is -1, the last mine is removed)
-    **/
-    void  removemine ( int num ); 
-
-    void endRound( int turn );
-
-    //! some variables for the viewcalculation algorithm. see #viewcalculation.cpp for details
-    struct View {
-      int view;
-      int jamming;
-      char mine, satellite, sonar, direct;
-    } view[8];
-
-   /** The visibility status for all players is stored in a bitmapped variable. This functions changes the status in this variable for a single player
-      \param valtoset the value that is going to be written into the visibility variable
-      \param actplayer the player for which the view is changed
-   */
-   void setVisibility ( VisibilityStates valtoset, int actplayer ) {
-       int newval = (valtoset ^ 3) << ( 2 * actplayer );
-       int oneval = 3 << ( 2 * actplayer );
-
-       visible |= oneval;
-       visible ^= newval;
-   };
-
-
-    ~tfield();
-  private:
-    int getx( void );
-    int gety( void );
-    TerrainType::MoveMalus __movemalus;
+class OverviewMapHolder : public SigC::Object {
+      GameMap& map;
+      Surface overviewMapImage;
+      Surface completedMapImage;
+      bool initialized;
+      bool secondMapReady;
+      bool completed;
+      bool connected;
+      int x;
+      int y;
+      Surface createNewSurface();
+      
+   protected:   
+      bool idleHandler( );
+      bool init();
+      void drawNextField( bool signalOnCompletion = true );
+      bool updateField( const MapCoordinate& pos );
+      
+   public:
+      OverviewMapHolder( GameMap& gamemap );
+   
+      /** 
+      returns the overview surface for the map. 
+      \param complete complete the image if it is not ready (might take several seconds)
+      */
+      const Surface& getOverviewMap( bool complete = true );
+      
+      static void clearmap( GameMap* actmap );
+      
+      static SigC::Signal0<void> generationComplete;
+      
+      void resetSize();
+            
+      void startUpdate();
+      void clear( bool allImages = false );
+      void connect();
 };
 
 
-
-
+class Event;
 
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
-class tmap {
-      void operator= ( const tmap& map );
-
+class GameMap {
+      void operator= ( const GameMap& map );
+      bool dialogsHooked;
    public:
       //! the size of the map
       int          xsize, ysize;
 
       //! the coordinate of the map that is displayed on upper left corner of the screen
-      int          xpos, ypos;
+      // int          xpos, ypos;
 
       //! the array of fields
-      pfield       field;
+      tfield*       field;
 
       //! the codeword for accessing a map in a campaign
-      char         codeword[11]; 
+      ASCString    codeWord;
 
       //! the title of the map
       ASCString    maptitle;
 
 
       struct Campaign {
+          //! is this a campaign map?
+          bool avail;
+         
           //! an identification for identifying a map in the chain of maps that make up a campaign
           int         id;
 
-          //! the id of the previous map in the campaign. This is only used as a fallback mechanism if the event based chaining fails. It will probably be discared sooner or later
-          int         prevmap;   
-
-          //! a campaign is usually designed to be played by a specific player
-          unsigned char         player;   
-
           //! can the map be loaded just by knowing its filenmae? If 0, the codeword is required
-          char      directaccess;   
-
-      };
-
-      //! the campaign properties of map
-      Campaign*    campaign;
+          bool      directaccess;
+          Campaign();
+      } campaign;
 
       //! the player who is currently making his moves (may be human or AI)
       signed char  actplayer; 
@@ -351,106 +200,45 @@ class tmap {
       GameTime    time;
 
       struct Weather {
-         Weather():fog(0),windSpeed(0),windDirection(0){};
-         //! the idea of fog is to reduce the visibility, but this is currently not used
-         int fog;
-
+         Weather():windSpeed(0),windDirection(0){};
          int windSpeed;
          int windDirection;
       } weather;
 
+#ifdef WEATHERGENERATOR
+      WeatherSystem* weatherSystem;
+#endif
       /** how are Resources handled on this map
              0= "ASC mode": complex system with mineral resources etc
              1= "BI mode": simpler system like in Battle Isle
       **/
       int _resourcemode;
 
-      //! the diplomatic status between the players
-      char         alliances[8][8];
+
+      Player player[9];
+
+      int getPlayerCount() const { return 8; };
+      
+      Player& getPlayer( PlayerID p )
+      {
+         return player[p.getID() ];
+      }
+
+      const Player& getPlayer( PlayerID p ) const
+      {
+         return player[p.getID() ];
+      }
 
 
-      //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
-      class Player {
-         public:
-            //! does the player exist at all
-            bool         exist();
+      Player& getCurrentPlayer()
+      {
+         return player[actplayer];
+      }
 
-            //! did the player exist when the turn started? Required for checking if a player has been terminated
-            bool existanceAtBeginOfTurn;
-
-            typedef list<pvehicle> VehicleList;
-            //! a list of all units
-            VehicleList  vehicleList;
-
-            typedef list<pbuilding> BuildingList;
-            //! a list of all units
-            BuildingList  buildingList;
-
-            //! the status of the scientific research
-            Research    research;
-
-            //! if the player is run by an AI, this is the pointer to it
-            BaseAI*      ai;
-
-            //! the status of the player: 0=human ; 1=AI ; 2=off
-            enum tplayerstat { human, computer, off } stat;
-
-            //! the name of the player that is used if the player is human
-            ASCString       humanname;
-
-            //! the name of the player that is used if the player is the AI
-            ASCString       computername;
-
-            //! returns the name of the player depending on the status
-            const ASCString& getName( );
-
-            //! the Password required for playing this player
-            Password passwordcrc;
-
-            class Dissection {
-               public:
-                  pvehicletype  fzt;
-                  const Technology*   tech;
-                  int           orgpoints;
-                  int           points;
-                  int           num;
-            };
-
-            //! the list of dissected units
-            typedef list<Dissection> DissectionContainer;
-            DissectionContainer dissections;
-
-            bool __dissectionsToLoad;
-
-            //! the list of messages that haven't been read by the player yet
-            MessagePntrContainer  unreadmessage;
-            bool __loadunreadmessage;
-
-            //! the list of messages that already have been read by the player yet
-            MessagePntrContainer  oldmessage;
-            bool __loadoldmessage;
-
-            //! the list of messages that have been sent yet
-            MessagePntrContainer  sentmessage;
-            bool __loadsentmessage;
-
-            //! if ASC should check all events for fullfilled triggers, this variable will be set to true. This does not mean that there really ARE events that are ready to be executed
-            int queuedEvents;
-
-            //! the version of ASC that this player has used to make his last turn 
-            int ASCversion;
-
-            struct PlayTime {
-              int turn;
-              time_t date;
-            };
-            typedef list<PlayTime> PlayTimeContainer;
-
-            //! The time this player ended his turns. This is very informative in email games with > 2 players to find out who is delaying the game.
-            PlayTimeContainer playTime;
-
-      } player[9];
-
+      int getNeutralPlayerNum() const { return 8; };
+      
+      MapCoordinate& getCursor();
+      
       typedef map<int, Vehicle*> VehicleLookupCache;
       VehicleLookupCache vehicleLookupCache; 
 
@@ -461,45 +249,25 @@ class tmap {
 
       vector<GameTime> eventTimes;
 
-      /*
-      //! a container for events that were executed during previous maps of the campaign
-      peventstore  oldevents;
-
-      //! the list of events that haven't been triggered yet.
-      pevent       firsteventtocome;
-
-      //! the list of events that already have been triggered.
-      pevent       firsteventpassed;
-      */
-
-      // required for loading the old map file format; no usage outside the loading routine
-      // bool loadeventstore,loadeventstocome,loadeventpassed;
-
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
 
       int          unitnetworkid;
       char         levelfinished;
-      pnetwork     network;
-      // int          alliance_names_not_used_any_more[8];
 
-      //! only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either 
-      bool __mapDestruction;
-
-      struct tcursorpos {
-        struct {
-          integer cx;
-          integer sx;
-          integer cy;
-          integer sy;
-        } position[8];
-      } cursorpos;
+      enum State { 
+         Normal,
+         // NormalAuto,    /*!< normal operation, without user interaction */
+         // NormalManual,  /*!< normal operation, with user interaction  */
+         Replay,        /*!< map is currently used to run a replay. Some ingame events are deactivated */
+         Destruction    /*!< only to be used by units and buildings. To speed up map destruction, the view won't be recalculated. No signals will be send when units & buildings are destroyed, either  */
+      } state;
 
 
       /** The tribute can not only be used to demand resources from enemies but also to transfer resources to allies.
-            tribute.avail[a][b].energy is the ammount of energy that player b may (still) extract from the net of player a
-            tribute.paid[b][a].energy is the amount of energy that player b has already extracted from player a's net
-            a is source player, b is destination player
+            tribute.avail[S][D].energy is the ammount of energy that player D may (still) extract from the net of player S
+            tribute.paid[D][S].energy is the amount of energy that player D has already extracted from player S's net
+            S is source player, D is destination player
        **/
       class ResourceTribute {
         public:
@@ -517,7 +285,7 @@ class tmap {
       MessagePntrContainer  unsentmessage;
       bool __loadunsentmessage;
 
-      //! these are the messages themselfs. A #pmessagelist only stores pointers to message body which are archived here
+      //! these are the messages themselfs. A MessagePntrContainer only stores pointers to message body which are archived here
       MessageContainer messages;
       bool __loadmessages;
 
@@ -525,31 +293,14 @@ class tmap {
       int           messageid;
 
       //! temporary variables for loading the map
-      bool ___loadJournal, ___loadNewJournal, ___loadtitle;
+      bool ___loadJournal, ___loadNewJournal, ___loadtitle, ___loadLegacyNetwork;
 
-      void allocateFields ( int x, int y );
+      void allocateFields ( int x, int y, TerrainType::Weather* terrain = NULL );
 
       ASCString     gameJournal;
       ASCString     newJournal;
+      
       Password      supervisorpasswordcrc;
-
-      char          alliances_at_beginofturn[8];
-
-      class  Shareview {
-         public:
-            Shareview ( void );
-            Shareview ( const Shareview* org );
-            bool mode[8][8];
-            int recalculateview;
-            void read ( tnstream& stream );
-            void write( tnstream& stream );
-       };
-       // mode[1][6] = visible_all    =>  Spieler 1 gibt Spieler 6 die view frei
-
-      Shareview*    shareview;
-
-      //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
-      int           continueplaying;
 
       class ReplayInfo {
       public:
@@ -563,6 +314,9 @@ class tmap {
           int stopRecordingActions;
           void read ( tnstream& stream );
           void write ( tnstream& stream );
+          
+           //! Close the replay logging at the end of a players or the ai's turn.
+          void closeLogging();
           ~ReplayInfo ( );
         };
 
@@ -573,8 +327,17 @@ class tmap {
       bool          __loadreplayinfo;
 
 
-      //! the player which is currently viewing the map. During replays, for example, this will be different from the player that moves units
+   private:
       int           playerView;
+   public:
+
+      /** the player which is currently viewing the map. 
+          During replays, for example, this will be different from the player that moves units
+          -1 means: everything is visible
+          -2 means: nothing is visible */
+      int   getPlayerView() const;
+      void  setPlayerView( int player );
+
       GameTime     lastjournalchange;
 
       //! in BI resource mode ( see #_resourcemode , #isResourceGlobal ) , this is where the globally available resources are stored. Note that not all resources are globally available.
@@ -584,9 +347,6 @@ class tmap {
         ASCString mapname[8];
         ASCString savegame[8];
       } preferredFileNames;
-
-      //! for tutorial missions it is possible to highlight elements of the interface with an ellipse using the event system.
-      EllipseOnScreen* ellipse;
 
       //! the ID of the graphic set
       int           graphicset;
@@ -613,53 +373,89 @@ class tmap {
             IDsAllowed idsAllowed;
       } unitProduction;
 
-      tmap ( void );
+      GameMap ( void );
 
-      pvehicle getUnit ( int x, int y, int nwid );
-      pvehicle getUnit ( int nwid );
+      Vehicle* getUnit ( int x, int y, int nwid );
+      Vehicle* getUnit ( int nwid );
       ContainerBase* getContainer ( int nwid );
       int  getgameparameter ( GameParameter num );
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      void setupResources ( void );
-      const ASCString& getPlayerName ( int playernum );
-      pfield getField ( int x, int y );
-      pfield getField ( const MapCoordinate& pos );
+      tfield* getField ( int x, int y );
+      tfield* getField ( const MapCoordinate& pos );
+      
+      
+      /** @name Turn Management
+        *  These methods control the game advance of a player to the next player
+        */
+      //@{
+      
+      //! prepares a new game for being played
       void startGame ( );
 
+      //! called when a player starts his turn
+      void beginTurn();
+      
+      
       //! called after a player ends his turn
       void endTurn();
 
       //! called between endTurn() of player 7 and the next turn of player 0
       void endRound();
 
-      //! changes to the next player and calls endRound() if necessary. \Returns false if there are no players left
-      bool nextPlayer();
 
+      SigC::Signal1<void,Player&> sigPlayerTurnBegins;
+      SigC::Signal1<void,Player&> sigPlayerUserInteractionBegins;
+      SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
+      SigC::Signal1<void,Player&> sigPlayerTurnEnds;
+      SigC::Signal1<void,Player&> sigPlayerTurnHasEnded;
+
+      static SigC::Signal1<void,GameMap&> sigMapDeletion;
+      
+      //! called when a new round starts (after switching from player 7 to player 0 )
+      SigC::Signal0<void> newRound;
+
+
+      //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1
+      bool  continueplaying;
+      
+      
+      //@}
+
+      
+            
+      
       VisibilityStates getInitialMapVisibility( int player );
 
       //! resizes the map. Positive numbers enlarge the map in that direction
       int  resize( int top, int bottom, int left, int right );
 
-      bool compareResources( tmap* replaymap, int player, ASCString* log = NULL );
+      // bool compareResources( GameMap* replaymap, int player, ASCString* log = NULL );
 
       void calculateAllObjects ( void );
 
       void read ( tnstream& stream );
       void write ( tnstream& stream );
 
+      OverviewMapHolder overviewMapHolder;
 
+      /** @name Access to item types
+       *  
+       */
+      //@{
+
+      
       pterraintype getterraintype_byid ( int id );
-      pobjecttype getobjecttype_byid ( int id );
-      pvehicletype getvehicletype_byid ( int id );
-      pbuildingtype getbuildingtype_byid ( int id );
+      ObjectType* getobjecttype_byid ( int id );
+      Vehicletype* getvehicletype_byid ( int id );
+      BuildingType* getbuildingtype_byid ( int id );
       const Technology* gettechnology_byid ( int id );
 
       pterraintype getterraintype_bypos ( int pos );
-      pobjecttype getobjecttype_bypos ( int pos );
-      pvehicletype getvehicletype_bypos ( int pos );
-      pbuildingtype getbuildingtype_bypos ( int pos );
+      ObjectType* getobjecttype_bypos ( int pos );
+      Vehicletype* getvehicletype_bypos ( int pos );
+      BuildingType* getbuildingtype_bypos ( int pos );
       const Technology* gettechnology_bypos ( int pos );
 
       int getTerrainTypeNum ( );
@@ -668,24 +464,37 @@ class tmap {
       int getBuildingTypeNum ( );
       int getTechnologyNum ( );
 
-      ~tmap();
+      //@}
+      
+      ~GameMap();
 
       //! just a helper variable for loading the map; no function outside;
       bool loadOldEvents;
 
       //! generated a pseudo-random number with the map-internal seed
       int random( int max );
+      
+      void guiHooked();
+      bool getGuiHooked() { return dialogsHooked; };
 
+      
+      GameTransferMechanism* network;
+      
    private:
-      pvehicle getUnit ( pvehicle eht, int nwid );
+      Vehicle* getUnit ( Vehicle* eht, int nwid );
 
       void objectGrowth();
+      void setupResources ( void );
+      
+      //! adds the current players new journal entries to the map journal
+      void processJournal();
 
       unsigned int randomSeed;
-};
 
-typedef tmap::Player Player;
+      static void setPlayerMode( Player& p, State s );
+};
 
 
 
 #endif
+

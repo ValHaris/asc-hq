@@ -7,7 +7,7 @@
  ***************************************************************************/
 
 /*! \file buildings.cpp
-    \brief Implementation of the Building class 
+    \brief The buildings which a placed on the map
 */
 
 /***************************************************************************
@@ -30,17 +30,18 @@
 #include "spfst.h"
 #include "resourcenet.h"
 #include "itemrepository.h"
+#include "containercontrols.h"
 
-#ifdef sgmain
-# include "gameoptions.h"
-# include "building_controls.h"
+#ifndef BUILDINGVERSIONLIMIT
+# define BUILDINGVERSIONLIMIT -1000000000
 #endif
+
 
 const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3., 0,     1. / 3. ,
                                                                           0,     1./3., 0,
                                                                           0,     0,     0 };
 
-Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const pbuildingtype type, int player, bool setupImages, bool chainToField )
+Building :: Building ( GameMap* actmap, const MapCoordinate& _entryPosition, const BuildingType* type, int player, bool setupImages, bool chainToField )
            : ContainerBase ( type, actmap, player ), typ ( type ), repairEfficiency ( repairEfficiencyBuilding )
 {
    int i;
@@ -51,19 +52,11 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
    connection = 0;
 
    lastmineddist= 0;
-   maxresearchpoints = typ->defaultMaxResearchpoints;
-   researchpoints = min ( maxresearchpoints, typ->nominalresearchpoints );
 
    for ( i = 0; i < waffenanzahl; i++ )
       ammo[i] = 0;
 
    netcontrol = 0;
-
-   for ( i = 0; i< 32; i++ ) {
-      production[i] = 0;
-      productionbuyable[i] = 0;
-      loading[i] = 0;
-   }
 
    repairedThisTurn = 0;
    visible = 1;
@@ -75,21 +68,30 @@ Building :: Building ( pmap actmap, const MapCoordinate& _entryPosition, const p
 
    if ( chainToField )
       chainbuildingtofield ( entryPosition, setupImages );
-   /*
-   #ifdef karteneditor
-   plus = maxplus = typ->maxplus;
-   #endif
-   */
    plus = typ->defaultProduction;
 }
 
 
-bool Building::canRepair ( const ContainerBase* item )
+int Building::repairableDamage()
 {
-   if ( (typ->special & cgrepairfacilityb) || item == this )
-      return true;
-   else
-      return false;
+   int d = getMap()->getgameparameter ( cgp_maxbuildingrepair ) - repairedThisTurn;
+   if ( d < 0 )
+      d = 0;
+   if ( d > damage )
+      d = damage;
+   return d;
+}
+
+void Building::postRepair ( int oldDamage )
+{
+   repairedThisTurn += oldDamage - damage;
+}
+
+bool Building::canRepair ( const ContainerBase* item ) const
+{
+   return typ->hasFunction( ContainerBaseType::InternalUnitRepair  ) ||
+         typ->hasFunction( ContainerBaseType::ExternalRepair  ) ||
+         (item == this  ) ;
 }
 
 int Building::getIdentification()
@@ -100,13 +102,21 @@ int Building::getIdentification()
 void Building :: convert ( int player )
 {
    if (player > 8)
-      fatalError("convertbuilding: \n color muá im bereich 0..8 sein ");
+      fatalError("convertbuilding: \n color muï¿½im bereich 0..8 sein ");
 
    #ifdef sgmain
-   if ( typ->special & cgselfdestruct_at_conquerb ) {
+   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
       delete this;
       return;
    }
+
+   int oldnetcontrol = netcontrol;
+   netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
+   Resources put = putResource( actstorage, false );
+   actstorage -= put;
+
+   netcontrol = oldnetcontrol;
+
    #endif
 
    int oldcol = getOwner();
@@ -123,7 +133,7 @@ void Building :: convert ( int player )
    if ( color < 8*8 )
       removeview();
 
-   tmap::Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
+   Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
    if ( i != gamemap->player[oldcol].buildingList.end())
       gamemap->player[oldcol].buildingList.erase ( i );
 
@@ -134,44 +144,45 @@ void Building :: convert ( int player )
    if ( player < 8 )
       addview();
 
-   for ( int i = 0; i < 32; i++)
-      if ( loading[i] )
-         loading[i]->convert ( player );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->convert( player );
 
    conquered();
 }
 
 
 
-
-void* Building :: getpicture ( const BuildingType::LocalCoordinate& localCoordinate )
+const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const
 {
-//                      if ( bld->typ->id == 8 ) {          // Windkraftwerk
-
-   pfield fld = getField ( localCoordinate );
+   static Surface emptySurface;
+   tfield* fld = getField ( localCoordinate );
    if ( fld ) {
-      int w = fld->getweather();
-
-       if ( typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y] )
-          return typ->w_picture[w][_completion][localCoordinate.x][localCoordinate.y];
-       else
-          return typ->w_picture[0][_completion][localCoordinate.x][localCoordinate.y];
+      return typ->getPicture(localCoordinate, fld->getweather(), _completion);
    } else
-      return NULL;
+      return emptySurface;
 }
+
+void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const
+{
+   if ( getHeight() <= chfahrend )
+      paintField( getPicture( pos ), s, imgpos, 0, false, 0 );
+   else
+      paintField( getPicture( pos ), s, imgpos, 0, false );
+}
+
 
 
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
-int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
-int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope ) { return 0; };
+int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
+int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
+int Building :: getResource ( int amount, int resourcetype ) const { return 0; };
 #endif
 
 void Building :: setCompletion ( int completion, bool setupImages )
 {
   _completion = completion;
-  if ( setupImages )
-     resetPicturePointers ( );
 }
 
 
@@ -185,8 +196,8 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
-         if ( typ->getpicture ( BuildingType::LocalCoordinate( a, b) )) {
-            pfield f = getField( BuildingType::LocalCoordinate( a, b) );
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate( a, b) )) {
+            tfield* f = getField( BuildingType::LocalCoordinate( a, b) );
             if ( !f || f->building ) {
                entryPosition = oldpos;
                return 1;
@@ -195,8 +206,8 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
 
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
-         if ( typ->getpicture ( BuildingType::LocalCoordinate( a , b ) )) {
-            pfield field = getField( BuildingType::LocalCoordinate( a, b) );
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate( a , b ) )) {
+            tfield* field = getField( BuildingType::LocalCoordinate( a, b) );
 
             tfield::ObjectContainer::iterator i = field->objects.begin();
             while ( i != field->objects.end()) {
@@ -212,20 +223,29 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
             }
 
             field->building = this;
-           }
+         }
 
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         loading[i]->setnewposition ( entryPos.x, entryPos.y );
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setnewposition ( entryPos.x, entryPos.y );
 
-   pfield field = getField( typ->entry );
+   tfield* field = getField( typ->entry );
    if ( field )
       field->bdt |= getTerrainBitType(cbbuildingentry) ;
 
-   if ( setupImages ) {
-      resetPicturePointers ();
+   if ( setupImages ) 
       gamemap->calculateAllObjects();
-   }
+
+      
+   for ( int a = 0; a < 4; a++)
+      for ( int b = 0; b < 6; b++) 
+         if ( typ->fieldExists(BuildingType::LocalCoordinate(a,b))) {
+            MapCoordinate p = getFieldCoordinates( BuildingType::LocalCoordinate(a,b));
+            BuildingType::LocalCoordinate lc = getLocalCoordinate(p);
+            if ( lc.x != a || lc.y!= b )
+               warning( "bug in building coordinate calculation");
+         }
+         
 
    return 0;
 }
@@ -236,21 +256,18 @@ int  Building :: unchainbuildingfromfield ( void )
    int set = 0;
    for (int i = 0; i <= 3; i++)
       for (int j = 0; j <= 5; j++)
-         if ( typ->getpicture ( BuildingType::LocalCoordinate(i,j) ) ) {
-            pfield fld = getField( BuildingType::LocalCoordinate(i,j) );
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {
+            tfield* fld = getField( BuildingType::LocalCoordinate(i,j) );
             if ( fld && fld->building == this ) {
                set = 1;
                fld->building = NULL;
-               fld->picture = NULL;
-               // if ( fld->vehicle )
-               //   removevehicle( &fld->vehicle );
 
                TerrainBits t = getTerrainBitType(cbbuildingentry);
                t.flip();
                fld->bdt &= t;
 
                #ifdef sgmain
-                if ( !gamemap->__mapDestruction )
+               if ( gamemap->state != GameMap::Destruction )
                    if ( typ->destruction_objects[i][j] )
                       fld->addobject ( actmap->getobjecttype_byid ( typ->destruction_objects[i][j] ), -1, true );
                #endif
@@ -286,28 +303,19 @@ MapCoordinate3D Building::getPosition3D() const
    return p3;
 }
 
-int Building :: getArmor ( void )
+int Building :: getArmor ( ) const
 {
    return typ->_armor * gamemap->getgameparameter( cgp_buildingarmor ) / 100;
 }
 
-int Building :: gettank ( int resource )
-{
-   if ( gamemap && gamemap->_resourcemode == 1 )
-      return typ->_bi_maxstorage.resource(resource);
-   else
-      return typ->_tank.resource(resource);
-}
 
-
-
-pfield        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
+tfield*        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
 {
   return gamemap->getField ( getFieldCoordinates ( lc ));
 }
 
 
-pfield        Building :: getEntryField( ) const
+tfield*        Building :: getEntryField( ) const
 {
   return getField ( typ->entry );
 }
@@ -324,19 +332,13 @@ MapCoordinate Building :: getFieldCoordinates ( const BuildingType::LocalCoordin
   return typ->getFieldCoordinate ( entryPosition, lc );
 }
 
-void        Building :: resetPicturePointers ( void )
-{
-   if ( visible )
-      for (int x = 0; x < 4; x++)
-         for ( int y = 0; y < 6; y++ ) {
-            BuildingType::LocalCoordinate lc ( x,y );
-            if ( getpicture (lc) )
-                getField ( lc )->picture = getpicture ( lc );
-         }
 
+BuildingType::LocalCoordinate Building::getLocalCoordinate( const MapCoordinate& field ) const
+{
+  return typ->getLocalCoordinate( entryPosition, field );
 }
 
-
+#if 0
 void    Building :: produceAmmo ( int type, int num )
 {
    Resources res;
@@ -359,21 +361,18 @@ void    Building :: produceAmmo ( int type, int num )
 
    ammo[type] += produceablePackages;
 }
-
+#endif
 
 Building :: ~Building ()
 {
    if ( gamemap ) {
       int c = color/8;
 
-      tmap::Player::BuildingList::iterator i = find ( gamemap->player[c].buildingList.begin(), gamemap->player[c].buildingList.end(), this );
+      Player::BuildingList::iterator i = find ( gamemap->player[c].buildingList.begin(), gamemap->player[c].buildingList.end(), this );
       if ( i != gamemap->player[c].buildingList.end() )
          gamemap->player[c].buildingList.erase ( i );
    }
 
-   for ( int i = 0; i < 32; i++ )
-      if ( loading[i] )
-         delete loading[i] ;
 
    unchainbuildingfromfield();
 
@@ -394,12 +393,12 @@ Building :: ~Building ()
 }
 
 
-const int buildingstreamversion = -3;
+const int buildingstreamversion = -5;
 
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 {
-    stream.writeInt ( buildingstreamversion );
+    stream.writeInt ( max( buildingstreamversion, BUILDINGVERSIONLIMIT ));
 
     stream.writeInt ( typ->id );
     int i;
@@ -433,55 +432,47 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
 
     stream.writeInt ( repairedThisTurn );
 
-    char c = 0;
+    int c = 0;
 
     if ( includeLoadedUnits )
-       for ( int k = 0; k <= 31; k++)
-          if (loading[k] )
-             c++;
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             ++c;
 
-    stream.writeChar ( c );
+    if ( BUILDINGVERSIONLIMIT >= -3 )
+       stream.writeChar( c );
+    else
+       stream.writeInt ( c );
+
     if ( c )
-       for ( int k = 0; k <= 31; k++)
-          if ( loading[k] )
-             loading[k]->write ( stream );
+       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+          if ( *i ) 
+             (*i)->write ( stream );
 
 
-    c = 0;
-    if (typ->special & cgvehicleproductionb )
-       for (int k = 0; k <= 31; k++)
-          if ( production[k] )
-             c++;
+    if ( BUILDINGVERSIONLIMIT >= -4 )
+       stream.writeChar( internalUnitProduction.size() );
+    else
+       stream.writeInt( internalUnitProduction.size() );
 
-    stream.writeChar ( c );
-    if ( c )
-       for (int k = 0; k <= 31; k++)
-          if (production[k] )
-             stream.writeInt( production[k]->id );
+    for (int k = 0; k < internalUnitProduction.size(); k++ ) {
+       assert( internalUnitProduction[k] );
+       stream.writeInt( internalUnitProduction[k]->id );
+    }   
 
-
-    c = 0;
-    if (typ->special & cgvehicleproductionb )
-       for (int k = 0; k <= 31; k++)
-          if ( productionbuyable[k] )
-             c++;
-
-    stream.writeChar ( c );
-    if ( c )
-       for ( int k = 0; k <= 31; k++)
-          if ( productionbuyable[k] )
-             stream.writeInt( productionbuyable[k]->id );
+    if ( BUILDINGVERSIONLIMIT >= -3 )
+       stream.writeChar(0);
 
 }
 
 
-Building* Building::newFromStream ( pmap gamemap, tnstream& stream, bool chainToField )
+Building* Building::newFromStream ( GameMap* gamemap, tnstream& stream, bool chainToField )
 {
     int version = stream.readInt();
     int xpos, ypos, color;
     Resources res;
 
-    pbuildingtype typ;
+    BuildingType* typ;
 
     if ( version < buildingstreamversion )
        throw tinvalidversion( stream.getDeviceName(), buildingstreamversion, version );
@@ -523,21 +514,22 @@ void Building:: read ( tnstream& stream )
 {
     int version = stream.readInt();
 
-    if ( version == buildingstreamversion || version == -1 ) {
+    if ( version >= buildingstreamversion && version <= -1 ) {
        stream.readInt (); // id
        for ( int i = 0; i < 3; i++ )
           bi_resourceplus.resource(i) = stream.readInt();
 
        stream.readChar(); // color
-       stream.readWord() ; // xpos
+       stream.readWord(); // xpos
+       stream.readWord(); // ypos
     } else {
        // int id = version;
        stream.readChar(); // color
        stream.readWord(); // xpos
+       stream.readWord(); // ypos
        bi_resourceplus = Resources ( 0, 0, 0);
     }
 
-    stream.readWord(); // ypos
     readData ( stream, version );
 }
 
@@ -558,9 +550,7 @@ void Building :: readData ( tnstream& stream, int version )
 
 
     for ( i = 0; i< 3; i++ )
-       actstorage.resource(i) = min(stream.readInt(), gettank(i));
-
-    // printf("building at %d / %d has %d / %d / %d EMF \n", getEntry().x, getEntry().y, actstorage.energy, actstorage.material, actstorage.fuel );
+       actstorage.resource(i) = min(stream.readInt(), getStorageCapacity().resource(i) );
 
     for ( i = 0; i < waffenanzahl; i++)
        ammo[i] = stream.readWord();
@@ -568,9 +558,16 @@ void Building :: readData ( tnstream& stream, int version )
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
 
+    if ( (researchpoints < typ->maxresearchpoints  &&  !(typ->hasFunction(ContainerBaseType::Research))) || (researchpoints > typ->maxresearchpoints))
+       researchpoints = typ->maxresearchpoints;
+
+
     visible = stream.readChar();
     damage = stream.readChar();
+    
     netcontrol = stream.readInt();
+    netcontrol = 0;
+    
     name = stream.readString ();
 
     if ( version <= -2 )
@@ -578,23 +575,27 @@ void Building :: readData ( tnstream& stream, int version )
     else
        repairedThisTurn = 0;
 
-    char c = stream.readChar();
+    int c;
+    if ( version <= -4 )
+       c = stream.readInt();
+    else
+       c = stream.readChar();
+       
     if ( c ) {
        for ( int k = 0; k < c; k++) {
-          loading[k] = Vehicle::newFromStream ( gamemap, stream );
-          loading[k]->setnewposition ( getEntry().x, getEntry().y );
-          if ( loading[k]->color != color ) {
-             ASCString msg;
-             msg.format("warning: the building at position %d / %d , which is owned by player %d, contained units from player %d ", getEntry().x, getEntry().y, color/8, loading[k]->color/8 );
-             warning(msg);
-             loading[k]->convert(getOwner());
-          }
+          Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
+          v->setnewposition ( getEntry().x, getEntry().y );
+          addToCargo(v);
        }
-       for ( int l = c; l < 32; l++ )
-          loading[l] = NULL;
     }
 
-    c = stream.readChar();
+    
+    internalUnitProduction.clear();
+    if ( version <= -5 )
+       c = stream.readInt();
+    else
+       c = stream.readChar();
+    
     if ( c ) {
        for ( int k = 0; k < c ; k++) {
 
@@ -604,32 +605,23 @@ void Building :: readData ( tnstream& stream, int version )
            else
               id = stream.readWord();
 
-           production[k] = gamemap->getvehicletype_byid ( id ) ;
-           if ( !production[k] )
+           internalUnitProduction.push_back ( gamemap->getvehicletype_byid ( id ) );
+           if ( !internalUnitProduction[k] )
               throw InvalidID ( "unit", id );
        }
-       for ( int l = c; l < 32; l++ )
-          production[l] = NULL;
     }
 
-    c = stream.readChar();
-    if ( c ) {
-       for ( int k = 0; k < c ; k++) {
-           int id;
-           if ( version <= -3 )
-              id = stream.readInt();
-           else
-              id = stream.readWord();
-
-           productionbuyable[k] = gamemap->getvehicletype_byid ( id );
-
-           if ( !productionbuyable[k] )
-              throw InvalidID ( "unit", id );
-       }
-       for ( int l = c; l < 32; l++ )
-          productionbuyable[l] = NULL;
-    }
-
+    if ( version >= -3 ) {
+         c = stream.readChar();
+         if ( c ) {
+            for ( int k = 0; k < c ; k++) {
+               if ( version <= -3 )
+                  stream.readInt();
+               else
+                  stream.readWord();
+            }
+         }
+    }    
 
     for ( i = 0; i< 3; i++ ) {
        if ( typ->maxplus.resource(i) > 0 ) {
@@ -648,7 +640,7 @@ void Building :: readData ( tnstream& stream, int version )
     }
 }
 
-const ASCString& Building::getName ( ) const
+ASCString Building::getName ( ) const
 {
    if ( name.empty())
       return typ->name;
@@ -656,606 +648,46 @@ const ASCString& Building::getName ( ) const
       return name;
 }
 
-void Building::endTurn(  )
+int Building::getAmmo( int type, int num, bool queryOnly ) 
 {
-#ifdef sgmain
-   if ( CGameOptions::Instance()->automaticTraining && (typ->special & cgtrainingb )) {
-      for ( int i = 0; i < 32; ++i )
-         if ( loading[i] ) {
-            bool ammoFull = true;
-            for ( int w = 0; w < loading[i]->typ->weapons.count; ++w )
-               if ( loading[i]->ammo[w] < loading[i]->typ->weapons.weapon[w].count )
-                  ammoFull = false;
-
-            if ( ammoFull ) {
-               cbuildingcontrols bc;
-               bc.init(this);
-               if ( bc.training.available( loading[i] )) {
-                  bc.training.trainunit( loading[i] );
-                  bc.refill.filleverything( loading[i] );
-               }
-            }
-         }
+   assert( type >= 0 && type < waffenanzahl );
+   int got = min( ammo[type], num );
+   if ( !queryOnly ) {
+      ammo[type] -= got;
+      // ammoChanged();
    }
+   return got;
+}
+
+int Building::putAmmo( int type, int num, bool queryOnly ) 
+{
+   assert( type >= 0 && type < waffenanzahl );
+   if ( !queryOnly ) {
+      ammo[type] += num;
+      // ammoChanged();
+   }
+   return num;
+}
+
+
+
+void Building::endRound(  )
+{
+   ContainerBase::endRound();
    repairedThisTurn = 0;
-#endif
 }
 
 
-Resources Building::netResourcePlus( ) const
+vector<MapCoordinate> Building::getCoveredFields()
 {
-   Resources res;
-   for ( int resourcetype = 0; resourcetype < resourceTypeNum; resourcetype++ ) {
-      GetResourcePlus grp ( getMap() );
-      res.resource(resourcetype) += grp.getresource ( getEntry().x, getEntry().y, resourcetype, color/8, 1 );
-   }
-   return res;
-}
-
-
-
-Building::Work* Building::spawnWorkClasses( bool justQuery )
-{
-   if ( actmap->_resourcemode != 1 ) {
-      if ( typ->special & cgwindkraftwerkb )
-         return new WindPowerplant ( this );
-
-      if ( typ->special & cgsolarkraftwerkb )
-         return new SolarPowerplant ( this );
-
-      if ( typ->special & cgconventionelpowerplantb )
-         return new MatterConverter ( this );
-
-      if ( typ->special & cgminingstationb )
-         return new MiningStation ( this, justQuery );
-
-      if ( typ->special & cgresourceSinkB )
-         return new ResourceSink ( this );
-   } else {
-      return new BiResourceGeneration ( this );
-   }
-
-   return NULL;
-}
-
-
-
-
-float  getminingstationeficency ( int dist )
-{
-  // f ( x ) = a / ( b * ( x + d ) ) - c
-
-double a,b,c,d;
-
-a          =     10426.400 ;
-b          =     1.0710969 ;
-c          =     568.88887 ;
-d          =     6.1111109 ;
-
-   return (a / ( b * (dist + d)) - c) / 1024;
-}
-
-
-GetMiningInfo::MiningInfo::MiningInfo()
-{
-   for ( int i = 0; i < maxminingrange+2; i++ )
-      efficiency[i] = 0;
-}
-
-GetMiningInfo :: GetMiningInfo ( pmap _gamemap ) : SearchFields ( _gamemap )
-{
-}
-
-void GetMiningInfo :: testfield ( const MapCoordinate& mc )
-{
-   pfield fld = gamemap->getField ( mc );
-   if ( miningInfo.efficiency[ dist ] == 0 )
-      miningInfo.efficiency[ dist ] = int(getminingstationeficency ( dist ) * 1024);
-
-   miningInfo.avail[dist].material += fld->material * resource_material_factor;
-   miningInfo.avail[dist].fuel     += fld->fuel     * resource_fuel_factor;
-   miningInfo.max[dist].material   += 255 * resource_material_factor;
-   miningInfo.max[dist].fuel       += 255 * resource_fuel_factor;
-}
-
-
-void GetMiningInfo :: run (  const pbuilding bld )
-{
-   initsearch ( bld->getEntry(), maxminingrange, 0 );
-   startsearch();
-}
-
-
-
-
-Building::MatterConverter :: MatterConverter( Building* _bld ) : bld ( _bld ), percentage ( 100 )
-{
-}
-
-bool Building::MatterConverter :: run()
-{
-   int perc = percentage;
-
-   int usageNum = 0;
-   for ( int r = 0; r < 3; r++ )
-      if ( bld->plus.resource(r) < 0 )
-         ++usageNum;
-
-   if ( usageNum > 0 ) {
-      // if the resource generation requires other resources, don't waste anything
-      // by producing more than storage capacity available
-
-      for ( int r = 0; r < 3; r++ )
-         if ( bld->plus.resource(r) > 0 ) {
-            int p = bld->putResource ( bld->plus.resource(r), r, 1 );
-
-            if ( perc > 100 * p / bld->plus.resource(r) )
-               perc = 100 * p / bld->plus.resource(r) ;
-         }
-   }
-
-   Resources toGet = bld->plus * perc / 100  ;
-   for ( int r = 0; r < 3; r++ )
-      if ( toGet.resource(r) < 0 )
-         toGet.resource(r)  = - toGet.resource(r) ;
-      else
-         toGet.resource(r) = 0;
-
-
-   Resources avail = bld->getResource ( toGet, 1 );
-
-   for ( int r = 0; r < 3; r++ ) {
-      if ( bld->plus.resource(r) < 0 ) {
-         int p = 100 * avail.resource(r) / -bld->plus.resource(r);
-         if ( p < perc )
-            perc = p;
-      }
-   }
-
-
-   bool didSomething = false;
-
-   for ( int r = 0; r < 3; r++ )
-      if ( bld->plus.resource(r) > 0 ) {
-         bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
-         if ( bld->plus.resource(r) * perc / 100  > 0)
-            didSomething = true;
-
-      } else {
-         if ( bld->plus.resource(r) < 0 )
-            bld->getResource( -bld->plus.resource(r) * perc  / 100, r , 0);
-      }
-
-   percentage -= perc;
-   return didSomething;
-}
-
-
-bool Building::MatterConverter :: finished()
-{
-   return percentage == 0;
-}
-
-Resources Building::MatterConverter :: getPlus()
-{
-  Resources r;
-  for ( int i = 0; i < 3; i++ )
-     if ( bld->plus.resource(i) > 0 )
-        r.resource(i) = bld->plus.resource(i);
-  return r;
-}
-
-Resources Building::MatterConverter :: getUsage()
-{
-  Resources r;
-  for ( int i = 0; i < 3; i++ )
-     if ( bld->plus.resource(i) < 0 )
-        r.resource(i) = -bld->plus.resource(i);
-  return r;
-}
-
-
-Building::ResourceSink :: ResourceSink( Building* _bld ) : bld ( _bld )
-{
-   toGet = bld->plus;
-   for ( int r = 0; r < 3; r++ )
-      if ( toGet.resource(r) < 0 )
-         toGet.resource(r)  = - toGet.resource(r) ;
-      else
-         toGet.resource(r) = 0;
-}
-
-bool Building::ResourceSink :: run()
-{
-   Resources got  = bld->getResource( toGet, 0 );
-   toGet -= got;
-   for ( int r = 0; r < 3; r++ )
-      if ( got.resource(r) > 0 )
-         return true;
-
-   return false;
-}
-
-
-bool Building::ResourceSink :: finished()
-{
-   for ( int r = 0; r < 3; r++ )
-      if ( toGet.resource(r) > 0 )
-         return false;
-   return true;
-}
-
-Resources Building::ResourceSink :: getPlus()
-{
-  return Resources();
-}
-
-Resources Building::ResourceSink :: getUsage()
-{
-  Resources r;
-  for ( int i = 0; i < 3; i++ )
-     if ( bld->plus.resource(i) < 0 )
-        r.resource(i) = -bld->plus.resource(i);
-  return r;
-}
-
-
-/*
-Research :: Research( Building* _bld ) : bld ( _bld ), percentage ( 100 )
-{
-}
-
-bool Research :: run()
-{
-   int perc = percentage;
-
-   int usageNum = 0;
-   for ( int r = 0; r < 3; r++ )
-      if ( plus.resource(r) < 0 )
-         ++usageNum;
-
-   if ( usageNum > 0 ) {
-      // if the resource generation requires other resources, don't waste anything
-      // by producing more than storage capacity available
-
-      for ( int r = 0; r < 3; r++ )
-         if ( bld->plus.resource(r) > 0 ) {
-            int p = putResource ( bld->plus.resource(r), 0, 1 );
-
-            if ( perc > 100 * p / bld->plus.resource(r) )
-               perc = 100 * p / bld->plus.resource(r) ;
-         }
-   }
-
-   Resources toGet = bld->plus * perc / 100  ;
-   for ( int r = 0; r < 3; r++ )
-      if ( toGet.resource(r) < 0 )
-         toGet.resource(r)  = - toGet.resource(r) ;
-      else
-         toGet.resource(r) = 0;
-
-
-   Resources avail = bld->getResource ( toGet, 1 );
-
-   for ( int r = 0; r < 3; r++ ) {
-      if ( bld->plus.resource(r) ) {
-         int p = 100 * avail.resource(r) / bld->plus.resource(r);
-         if ( p < perc )
-            perc = P;
-      }
-   }
-
-
-   bool didSomething = false;
-
-   for ( int r = 0; r < 3; r++ )
-      if ( bld->plus.resource(r) > 0 ) {
-         bld->putResource( bld->plus.resource(r) * perc  / 100, r , 0);
-         if ( bld->plus.resource(r) * perc / 100  > 0)
-            didSomething = true;
-
-      } else {
-         bld->getResource( -bld->plus.resource(r) * perc  / 100, r , 0);
-      }
-
-   percentage = perc;
-   return didSomething;
-}
-
-
-bool Research :: finished()
-{
-   return percentage == 0;
-}
-
-Resources Research :: getUsage()
-{
-  Resources r;
-  for ( int i = 0; i < 3; i++ 9
-     if ( bld->plus.resource(r) < 0 )
-        r.resource(r) = -bld->plus.resource(r)
-  return r;
-}
-   **/
-
-Building::RegenerativePowerPlant :: RegenerativePowerPlant( Building* _bld ) : bld ( _bld )
-{
-}
-
-bool Building::RegenerativePowerPlant :: finished()
-{
-   for( int r = 0; r < 3; r++ )
-      if ( toProduce.resource(r) > 0 )
-         return false;
-   return true;
-}
-
-bool Building::RegenerativePowerPlant :: run()
-{
-   Resources tp = bld->putResource( toProduce , 0 );
-   bool didSomething = false;
-   for  ( int r = 0; r < 3; r++ )
-      if ( tp.resource(r) ) {
-         didSomething = true;
-         toProduce.resource(r) -= tp.resource(r);
-      }
-   return didSomething;
-}
-
-Resources Building::RegenerativePowerPlant :: getUsage()
-{
-   return Resources();
-}
-
-Resources Building::WindPowerplant :: getPlus()
-{
-   Resources p;
-   for ( int r = 0; r < 3; r++ )
-      p.resource(r) =  bld->maxplus.resource(r) * actmap->weather.windSpeed / 255;
-   return p;
-}
-
-Resources Building::SolarPowerplant :: getPlus()
-{
-   int sum = 0;
-   int num = 0;
+   vector<MapCoordinate> fields;
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++)
-         if ( bld->getpicture ( BuildingType::LocalCoordinate(x, y) ) ) {
-            pfield fld = bld->getField ( BuildingType::LocalCoordinate(x, y) );
-            int weather = 0;
-            while ( fld->typ != fld->typ->terraintype->weather[weather] )
-               weather++;
-
-            sum += csolarkraftwerkleistung[weather];
-            num ++;
-         }
-
-   Resources rplus;
-   for ( int r = 0; r < 3; r++ )
-      rplus.resource(r) = bld->maxplus.resource(r) * sum / ( num * 1024 );
-   return rplus;
+         if ( typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) )
+            fields.push_back ( getFieldCoordinates( BuildingType::LocalCoordinate(x, y)));
+   return fields;
 }
 
-
-Resources Building::BiResourceGeneration::getPlus()
-{
-   return bld->bi_resourceplus;
-}
-
-
-
-
-Building::MiningStation :: MiningStation( Building* bld_  , bool justQuery_) : SearchFields ( bld_->getMap() ), bld ( bld_ ), justQuery( justQuery_ )
-{
-   int counter = 0;
-   for ( int r = 1; r < 3; r++ ) {
-      if ( bld->plus.resource(r) > 0 ) {
-         ++counter;
-         if ( counter == 2 )
-            fatalError( ASCString("A mining station can only produce ONE kind of resource; building ID" ) + strrr(bld->typ->id) + " is violating this" );
-
-         toExtract_thisTurn.resource(r) = bld->plus.resource(r);
-
-         for ( int rr = 0; rr < 3; rr++ )
-            if ( bld->plus.resource(rr) < 0 )
-               usageRatio[rr] = -double(bld->plus.resource(rr)) / double(bld->plus.resource(r));
-            else
-               usageRatio[rr] = 0;
-      }
-   }
-
-   if( justQuery ) {
-      hasRun = false;
-      run();
-      hasRun = true;
-   } else
-      hasRun = false;
-}
-
-bool Building::MiningStation :: run()
-{
-   if ( justQuery && hasRun )
-      return false;
-
-   actuallyExtracted = Resources();
-
-   for ( int r = 0; r < 3;++r)
-      consumed[r] = 0;
-
-   if ( !justQuery ) {
-      spaceAvail = bld->putResource( toExtract_thisTurn, 1 );
-      for ( int r = 0; r <3; ++r )
-         if ( spaceAvail.resource(r) < 0 ) {
-            warning( ASCString("map corruption detected; building space availability is negative! ") + resourceNames[r] );
-            spaceAvail.resource( r ) = 0;
-         }
-   } else
-      spaceAvail = toExtract_thisTurn;
-
-   Resources toConsume;
-   for ( int r = 0; r < 3; r++ )
-      if ( bld->plus.resource(r) < 0 )
-         toConsume.resource(r) = -bld->plus.resource(r);
-
-   if ( !justQuery ) {
-      powerAvail = bld->getResource( toConsume, 1 );
-      for ( int r = 0; r <3; ++r )
-         if ( powerAvail.resource(r) < 0 ) {
-            warning( ASCString("map corruption detected; available power for mining station is negative! ") + resourceNames[r] );
-            powerAvail.resource( r ) = 0;
-         }
-   } else
-      powerAvail = toConsume;
-
-
-   initsearch( bld->getEntry(), 0, maxminingrange );
-   startsearch();
-
-   if ( !justQuery) {
-      for ( int r = 0; r < 3; ++r )
-         bld->getResource( int(consumed[r]), r, 0 );
-      bld->putResource(actuallyExtracted, 0 );
-   }
-
-   for ( int r = 0; r < 3; r++ )
-      if ( actuallyExtracted.resource(r) > 0 )
-         return true;
-
-   return false;
-}
-
-void Building::MiningStation :: testfield ( const MapCoordinate& mc )
-{
-   cancelSearch = true;
-   for ( int r = 0; r < 3; r++ )
-      if ( toExtract_thisTurn.resource(r) > 0 )
-         cancelSearch = false;
-
-   if ( cancelSearch == false ) {
-      pfield fld = gamemap->getField ( mc );
-      float distEfficiency = getminingstationeficency ( dist );
-
-      for ( int r = 1; r < 3; r++ ) {
-         if ( toExtract_thisTurn.resource(r) > 0 ) {
-
-            float resourceFactor;
-            char *fieldResource;
-
-            if ( r==1) {
-               resourceFactor = resource_material_factor * double(bld->typ->efficiencymaterial) / 1024;
-               fieldResource = &fld->material;
-            } else {
-               resourceFactor = resource_fuel_factor * double(bld->typ->efficiencyfuel) / 1024;
-               fieldResource = &fld->fuel;
-            }
-
-            float perc = 1;
-
-            // is enough resource available on the field
-            perc = min  ( perc, (*fieldResource * resourceFactor) / (toExtract_thisTurn.resource(r) * distEfficiency));
-
-            perc = min ( perc, float( double(spaceAvail.resource(r)) / (toExtract_thisTurn.resource(r) * distEfficiency )));
-
-            for ( int i = 0; i < 3; ++i )
-               if ( usageRatio[i] * toExtract_thisTurn.resource(r) > 0 )
-                  perc = min  ( perc, float( double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r)));
-
-            if ( perc < 0 ) {
-               warning("Warning: mining station inconsistency\n");
-               perc = 0;
-            }   
-                  
-            if ( !justQuery )
-               *fieldResource -= int( toExtract_thisTurn.resource(r) * perc * distEfficiency / resourceFactor );
-
-            int ex = int( ceil(toExtract_thisTurn.resource(r) * perc * distEfficiency));
-            actuallyExtracted.resource(r) += ex;
-            spaceAvail.resource(r) -= ex;
-            for ( int i = 0; i < 3; ++i) {
-               if ( spaceAvail.resource(i) < -2 )  // we allow for small deviations due to rounding errors
-                  warning("Warning: mining station inconsistency 2!\n");
-                  
-               if ( spaceAvail.resource(i) < 0 )
-                  spaceAvail.resource(i) = 0;
-            }
-                   
-
-            for ( int i = 0; i < 3; i++ ) {
-               float c = usageRatio[i] * toExtract_thisTurn.resource(r) * perc;
-               consumed[i] += c;
-               powerAvail.resource(i) -= int( ceil(c) );
-               if ( powerAvail.resource(i) < 0 )
-                  powerAvail.resource(i) = 0;
-                  
-            }
-
-            toExtract_thisTurn.resource(r) -= int( toExtract_thisTurn.resource(r) * perc);
-
-
-            if ( !justQuery ) {
-               if ( !fld->resourceview )
-                  fld->resourceview = new tfield::Resourceview;
-               fld->resourceview->visible |= 1 << bld->getOwner();
-               fld->resourceview->fuelvisible[bld->getOwner()] = fld->fuel;
-               fld->resourceview->materialvisible[bld->getOwner()] = fld->material;
-            }
-         }
-      }
-   }
-}
-
-bool Building::MiningStation :: finished()
-{
-   for ( int r = 0; r < 3; r++ )
-      if ( toExtract_thisTurn.resource(r) )
-         return false;
-   return true;
-}
-
-Resources Building::MiningStation :: getPlus()
-{
-   return actuallyExtracted;
-}
-
-Resources Building::MiningStation :: getUsage()
-{
-   Resources res;
-   for ( int r = 0; r < 3; ++r)
-      res.resource(r) = int( ceil(consumed[r]));
-   return res;
-}
-
-
-
-
-Resources Building :: getResourcePlus( )
-{
-  Work* w = spawnWorkClasses ( true );
-  Resources r;
-  if ( w )
-    r = w->getPlus();
-  delete w;
-
-//  printf ("building %s %d / %d : plus %d %d %d \n", typ->name.c_str(), getPosition().x, getPosition().y, r.energy, r.material, r.fuel );
-
-  return r;
-}
-
-Resources Building :: getResourceUsage( )
-{
-   Work* w = spawnWorkClasses ( true );
-   Resources r;
-   if ( w )
-     r = w->getUsage();
-   delete w;
-
-   if ( typ->special & cgresearchb )
-      r += returnResourcenUseForResearch( this, researchpoints );
-
-
-  return r;
-}
 
 
 /*
@@ -1277,20 +709,19 @@ void Building :: getresourceusage ( Resources* usage )
 
    struct  ResearchEfficiency {
                float eff;
-               pbuilding  bld;
+               Building*  bld;
                bool operator<( const ResearchEfficiency& re) const { return eff > re.eff; };
            };
 
 
-void doresearch ( tmap* actmap, int player )
+void doresearch ( GameMap* actmap, int player )
 {
-
    typedef vector<ResearchEfficiency> VRE;
    VRE vre;
 
-   for ( tmap::Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
-      pbuilding bld = *bi;
-      if ( bld->typ->special & cgresearchb ) {
+   for ( Player::BuildingList::iterator bi = actmap->player[player].buildingList.begin(); bi != actmap->player[player].buildingList.end(); bi++ ) {
+      Building* bld = *bi;
+      if ( bld->typ->hasFunction( ContainerBaseType::Research  ) ) {
          Resources res = returnResourcenUseForResearch ( bld, bld->researchpoints );
 
          int m = max ( res.energy, max ( res.material, res.fuel));
@@ -1306,14 +737,14 @@ void doresearch ( tmap* actmap, int player )
          vre.push_back(re);
       } else
          if ( bld->researchpoints > 0 )
-            actmap->player[player].research.progress += bld->researchpoints;
+            actmap->player[player].research.progress += bld->researchpoints *  actmap->player[player].research.getMultiplier();
    }
    sort( vre.begin(), vre.end());
 
    for ( VRE::iterator i = vre.begin(); i != vre.end(); ++i ) {
-      pbuilding bld = i->bld;
+      Building* bld = i->bld;
       Resources r = returnResourcenUseForResearch ( bld, bld->researchpoints );
-      Resources got = bld->getResource ( r, 1 );
+      Resources got = bld->getResource ( r, true, 1, player );
 
       int res = bld->researchpoints;
       if ( got < r ) {
@@ -1346,12 +777,12 @@ void doresearch ( tmap* actmap, int player )
 
       }
 
-      got = bld->getResource ( r, 0 );
+      got = bld->getResource ( r, false, 1, player );
 
       if ( got < r )
          fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
 
-      actmap->player[player].research.progress += res;
+      actmap->player[player].research.progress += res * actmap->player[player].research.getMultiplier();
    }
 }
 

@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <cstring>
+#include <cmath>
 
 #include "global.h"
 #include "ascstring.h"
@@ -27,16 +28,7 @@
 #include "misc.h"
 #include "typen.h"
 #include "graphicset.h"
-#include "basegfx.h" 
-
-#ifndef converter
-#include "spfst.h"
-#endif
-
-#ifdef sgmain
- #include "network.h"
- #include "gameoptions.h"
-#endif
+// #include "basegfx.h" 
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -47,8 +39,6 @@
 const char*  choehenstufen[choehenstufennum] = {"deep submerged", "submerged", "floating", "ground level", "low-level flight", "flight", "high-level flight", "orbit"};
 
 
-const char*  cwaffentypen[cwaffentypennum]  = {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
-                                               "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"};
 
 const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "light tracked vehicle", "medium tracked vehicle", "heavy tracked vehicle",
@@ -58,30 +48,35 @@ const char*  cmovemalitypes[cmovemalitypenum] = { "default",
                                                  "heavy aircraft",        "light ship",             "heavy ship",  "helicopter",
                                                  "hoovercraft"  };
 
+const char* moveMaliTypeIcons[cmovemalitypenum] = { "pad_symbol_default.png",
+                                 "pad_symbol_lighttracked.png",
+                                 "pad_symbol_mediumtracked.png",
+                                 "pad_symbol_heavytracked.png",
+                                 "pad_symbol_lightwheeled.png",
+                                 "pad_symbol_mediumwheeled.png",
+                                 "pad_symbol_heavywheeled.png",
+                                 "pad_symbol_trooper.png",
+                                 "pad_symbol_rail.png",
+                                 "pad_symbol_mediumair.png",
+                                 "pad_symbol_mediumship.png",
+                                 "pad_symbol_turret.png",
+                                 "pad_symbol_lightair.png",
+                                 "pad_symbol_heavyair.png",
+                                 "pad_symbol_lightship.png",
+                                 "pad_symbol_heavyship.png",
+                                 "pad_symbol_helicopter.png",
+                                 "pad_symbol_hoovercraft.png" };
+
+                                                 
 const char* cnetcontrol[cnetcontrolnum] = { "store energy",           "store material",           "store fuel",
                                             "move out all energy",           "move out all material",           "move out all fuel",
                                             "stop storing energy", "stop storing material", "stop storing fuel",
                                             "stop energy extraction", "stop material extraction", "stop fuelextraction" };
 const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing", "stop using" };
-                                          // Functionen in Geb„uden ....
+                                          // Functionen in Gebuden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"};
-const int  cwaffenproduktionskosten[cwaffentypennum][3]    = { {1500,1500,1500},  // cruise missile
-                                                               {10, 10, 10},     // mine
-                                                               {40, 40, 40},     // bomb
-                                                               {200, 200, 200},     // big missile
-                                                               {50, 50, 50},     // small missile
-                                                               {20, 30, 40},     // torpedo
-                                                               {1, 1, 1},     // machine gun
-                                                               {5, 5, 1},     // cannon
-                                                               {0, 0, 0},     // service
-                                                               {0, 0, 0},     // ammo refuel
-                                                               {0, 0, 0},     // laser
-                                                               {0, 0, 0},     // shootable
-                                                               {0, 0, 0}};    // objectPlacement
-
-                                                                              // jeweils f?r weaponpackagesize Pack !
 
 //! when repairing a unit, the experience of the unit is decreased by one when passing each of these damage levels
 const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };
@@ -213,6 +208,18 @@ ASCString Resources::toString()
    return s;
 }
 
+
+void MapCoordinate::move(int width, int height) {
+   x +=width;
+   y +=height;
+}
+
+ASCString MapCoordinate::toString() const
+{
+   ASCString s;
+   s.format( "#coord(%d/%d)#", x, y);
+   return s;
+}
 
 
 vector<IntRange> String2IntRangeVector( const ASCString& t )

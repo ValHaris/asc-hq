@@ -21,10 +21,15 @@
  #include "typen.h"
  #include "terraintype.h"
  #include "research.h"
+ #include "overviewmapimage.h"
+ #include "mapitemtype.h"
+ #include "mapfield.h"
 
 
  //! An object that can be placed on fields. Roads, pipelines and ditches are examples of objects. \sa Object
- class ObjectType : public LoadableItemType {
+ class ObjectType : public MapItemType, public LoadableItemType {
+     bool rotateImage;
+     void realDisplay ( Surface& surface, const SPoint& pos, int dir, int weather ) const;
    public:
      //! the id of the object, used when referencing objects in files
      int id;
@@ -65,7 +70,7 @@
         void runTextIO ( PropertyContainer& pc );
      } fieldModification[cwettertypennum];
 
-     FieldModification& getFieldModification( int weather );
+     const FieldModification& getFieldModification( int weather ) const;
 
      //! this is added to the current attackbonus of the field to form the new attackbonus.
      int attackbonus_plus;
@@ -112,6 +117,16 @@
 
      //! The name of the object
      ASCString name;
+     
+     ASCString getName() const { return name; };
+
+     enum NamingMethod { ReplaceTerrain, AddToTerrain, UnNamed };
+     int  namingMethod;
+     static const char* namingMethodNames[];
+     static const int namingMethodNum;
+     
+     int getID() const { return id; };    
+     
 
      static const int netBehaviourNum = 7;
      enum NetBehaviour { NetToBuildings = 1, NetToBuildingEntry = 2, NetToSelf = 4, NetToBorder = 8, SpecialForest = 0x10, AutoBorder = 0x20, KeepOrientation = 0x40 };
@@ -121,34 +136,28 @@
 
      ObjectType ( void );
 
-     //! the icon used for selecting the object when executing the "build object" function of a unit. The image is automatically generated at load time
-     void* buildicon;
-     //! the icon used for selecting the object when executing the "remove object" function of a unit. The image is automatically generated at load time
-     void* removeicon;
-
-
      TechAdapterDependency techDependency;
+
+     const OverviewMapImage* getOverviewMapImage( int picnum, int weather ) const ; 
 
      //! the images of the objects
      struct WeatherPicture {
-        WeatherPicture(){ gfxReference=false;};
-        vector<void*> images;
+        mutable vector<OverviewMapImage> overviewMapImage;
+        vector<Surface> images;
         vector<int>   bi3pic;
         vector<int>   flip;
-        //! are the pictures referenced or copied when using GFX-system pics
-        bool gfxReference;
         void resize(int i) { flip.resize(i); bi3pic.resize(i); images.resize(i); };
      } weatherPicture [cwettertypennum];
 
      //! displays the objecttype at x/y on the screen
-     void display ( int x, int y );
-     void display ( int x, int y, int dir, int weather = 0 );
-
+     void display ( Surface& surface, const SPoint& pos ) const ;
+     void display ( Surface& surface, const SPoint& pos, int dir, int weather = 0 ) const;
+     
      //! returns the pointer to the image i
-     void* getpic ( int i, int weather = 0 );
+     const Surface& getPicture ( int i = 0, int weather = 0 ) const;
 
      //! can the object be build on the field fld
-     bool buildable ( pfield fld );
+     bool buildable ( tfield* fld ) const;
 
      //! reads the objecttype from a stream
      void read ( tnstream& stream );
@@ -162,25 +171,33 @@
      int displayMethod;
 
      //! returns the level of height of this object in the normal 8 level scheme of asc (deep submerged, submerged, ... )
-     int getEffectiveHeight();
+     int getEffectiveHeight() const;
 
      //! the probability that an object of this type spawns another object on a neighbouring field
      double growthRate;
 
-     //! the object is removed when it is lifetime turns old. -1 disables removal 
+     //! is the object growth stopped by units and buildings
+     bool growOnUnits;
+
+     //! the object is removed when it is lifetime turns old. -1 disables removal
      int lifetime;
+
+     /** the time after which any growth stops. This parameter is passed to all child-objects spawned through growth and should 
+         therefor be bigger than lifetime. Use -1 for unlimited */
+     int growthDuration;
 
    private:
      //! the loading functions call this method to setup the objects images
      void setupImages();
-
  };
 
+ 
+ 
 const int objectDisplayingMethodNum = 5;
 
 namespace ForestCalculation {
   //! automatically adjusting the pictures of woods and coasts to form coherent structures
-  extern void smooth ( int what, pmap gamemap, pobjecttype woodObj );
+  extern void smooth ( int what, GameMap* gamemap, ObjectType* woodObj );
 };
 
 
