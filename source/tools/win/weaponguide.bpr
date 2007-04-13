@@ -4,17 +4,24 @@
   <MACROS>
     <VERSION value="BCB.06.00"/>
     <PROJECT value="weaponguide.exe"/>
-    <OBJFILES value="obj\weaponguide.obj obj\itemrepository.obj obj\research.obj 
-      obj\groupfile.obj obj\guidegenerator.obj obj\infopage.obj obj\sgstream.obj"/>
+    <OBJFILES value="..\..\..\..\asc\source\tools\win\obj\weaponguide.obj 
+      ..\..\..\..\asc\source\tools\win\obj\itemrepository.obj 
+      ..\..\..\..\asc\source\tools\win\obj\research.obj 
+      ..\..\..\..\asc\source\tools\win\obj\groupfile.obj 
+      ..\..\..\..\asc\source\tools\win\obj\guidegenerator.obj 
+      ..\..\..\..\asc\source\tools\win\obj\infopage.obj 
+      ..\..\..\..\asc\source\tools\win\obj\sgstream.obj 
+      ..\..\..\..\asc\source\tools\win\obj\surface.obj"/>
     <RESFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value="tools.lib ..\..\..\..\sdl\bin\sdl.lib ..\..\libs\bzlib\win\bzlib.lib 
-      ..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\libs\sdlmm\SDLmm.lib"/>
+      ..\..\..\..\SDL_image\bin\SDL_image.lib ..\..\libs\sdlmm\SDLmm.lib 
+      ..\..\libs\libsigc++\libsigcpp.lib"/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi bcbsmp.bpi dclocx.bpi"/>
-    <PATHCPP value=".;..;..\.."/>
+    <PATHCPP value=".;..;..\..;..\..\graphics"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -24,8 +31,8 @@
     <USERDEFINES value="HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG;USE_GRAPHVIZ"/>
     <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
     <MAINSOURCE value="weaponguide.bpf"/>
-    <INCLUDEPATH value="..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++"/>
-    <LIBPATH value="..\;..;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\;..\..\graphics;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++;..\..\..\..\SDL_ttf;..\..\..\..\SDL_image"/>
+    <LIBPATH value="..\;..\..\graphics;..;..\..;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-pck -w-par"/>
     <OTHERFILES value=""/>
   </MACROS>
@@ -59,6 +66,8 @@
       <FILE FILENAME="..\guidegenerator.cpp" FORMNAME="" UNITNAME="guidegenerator.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\infopage.cpp" FORMNAME="" UNITNAME="infopage.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="..\..\sgstream.cpp" FORMNAME="" UNITNAME="sgstream" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\libs\libsigc++\libsigcpp.lib" FORMNAME="" UNITNAME="libsigcpp.lib" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\graphics\surface.cpp" FORMNAME="" UNITNAME="surface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
   </FILELIST>
   <BUILDTOOLS>
   </BUILDTOOLS>
@@ -95,39 +104,46 @@ Comments=
 c:\programme\borland\cbuilder6\Bin\dclite60.bpl=Borland Integrierte Übersetzungsumgebung
 
 [HistoryLists\hlIncludePath]
-Count=12
-Item0=..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++
-Item1=..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include
-Item2=..\;..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include
-Item3=..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include
-Item4=..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src
-Item5=..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\SDLmm\src
-Item6=..\..;..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\SDLmm\src
-Item7=..\..;..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
-Item8=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
-Item9=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
-Item10=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl
-Item11=..;$(BCB)\include;$(BCB)\include\vcl
+Count=16
+Item0=..\..\graphics;..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++;..\..\..\..\SDL_ttf;..\..\..\..\SDL_image
+Item1=..\..\graphics;..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++;..\..\..\..\SDL_ttf
+Item2=..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++;..\..\..\..\SDL_ttf
+Item3=..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++
+Item4=..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include;..\..\libs\libsigc++
+Item5=..\;..;..\..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include
+Item6=..\;..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include
+Item7=..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src;..\..\..\..\SDL\include
+Item8=..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\..\SDLmm\src
+Item9=..\..;..;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\SDLmm\src
+Item10=..\..;..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt;..\..\..\SDLmm\src
+Item11=..\..;..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
+Item12=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;..\..\LIBS\getopt
+Item13=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl;C:\Programme\ASCSRC\GAMES\ASC\SOURCE\LIBS\getopt
+Item14=..\;..\..\tools;$(BCB)\include;$(BCB)\include\vcl
+Item15=..;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=6
-Item0=..\;..;..\..;$(BCB)\lib\obj;$(BCB)\lib
-Item1=..\;..\..;..;$(BCB)\lib\obj;$(BCB)\lib
-Item2=..\..;..;$(BCB)\lib\obj;$(BCB)\lib
-Item3=..\..;..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
-Item4=..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
-Item5=..;$(BCB)\lib\obj;$(BCB)\lib
+Count=8
+Item0=..\..\graphics;..\;..;..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..;..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\;..;..\..;$(BCB)\lib\obj;$(BCB)\lib
+Item3=..\;..\..;..;$(BCB)\lib\obj;$(BCB)\lib
+Item4=..\..;..;$(BCB)\lib\obj;$(BCB)\lib
+Item5=..\..;..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
+Item6=..\;..\..\tools;$(BCB)\lib\obj;$(BCB)\lib
+Item7=..;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
 Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=4
+Count=5
 Item0=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG;USE_GRAPHVIZ
-Item1=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG
-Item2=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
-Item3=_DEBUG
+Item1=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG;USE_GRAPHVIZ;_WINDOWS_
+Item2=HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_;_DEBUG
+Item3=_DEBUG;HEXAGON;_WIN32_;WIN32;converter;minimalIO;_NOASM_
+Item4=_DEBUG
 
 [HistoryLists\hlIntOutputDir]
 Count=2

@@ -148,7 +148,7 @@ int main(int argc, char *argv[] )
          {
             printf("\nLoading objects:\n");
             for ( int ob = 0; ob < objecttypenum; ob++ ) {
-               pobjecttype obj = getobjecttype_forpos( ob );
+               Object*type obj = getobjecttype_forpos( ob );
                fprintf(fp, "\n%s ; id %d ; pictures ", obj->filename.c_str(), obj->id );
 
                for ( int w = 0; w < cwettertypennum; w++ )
@@ -179,7 +179,7 @@ int main(int argc, char *argv[] )
             printf("\nLoading buildings:\n");
             for ( int bl = 0; bl < buildingtypenum; bl++ ) {
 
-               pbuildingtype bld = getbuildingtype_forpos ( bl );
+               BuildingType* bld = getbuildingtype_forpos ( bl );
                fprintf(fp, "\n%s ; id %d ; pictures ", bld->filename.c_str(), bld->id );
 
                for ( int i = 0; i< cwettertypennum ; i++ )
@@ -207,7 +207,7 @@ int main(int argc, char *argv[] )
             printf("\nLoading vehicles:\n");
             for ( int ve = 0; ve < vehicletypenum; ve++ ) {
 
-               pvehicletype tnk = getvehicletype_forpos( ve );
+               Vehicletype* tnk = getvehicletype_forpos( ve );
                fprintf(fp, "\n%s ; id %d ; pictures ", tnk->filename.c_str(), tnk->id );
 
                if ( tnk->bipicture > 0 ) {

@@ -66,7 +66,7 @@ main (int argc, char *argv[] )
    t_carefor_containerstream cfcst;
 
    try {
-      pobjecttype ft;
+      Object*type ft;
       tfile          datfile;
       char           pict = YES;       // Bilder einlesen
       char           dif = 1;          // Anzahl der Bilder

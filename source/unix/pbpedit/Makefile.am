@@ -1,36 +1,42 @@
-## Process this file with automake to produce Makefile.in
-######################################################################
-## $Id: Makefile.am,v 1.1 2006-11-04 13:17:53 mbickel Exp $
-
-vpath %.cpp ../..
+vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_builddir) -I$(top_src_dir) -I$(top_builddir)/source -I$(top_src_dir)/source
+INCLUDES		= -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
 
-AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor -DNEWKEYB $(PARAGUI_CFLAGS) $(SIGC_CFLAGS)
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS)
 
 bin_PROGRAMS 		= asc_pbpedit
 
-asc_pbpedit_SOURCES 	= edevents.cpp edgen.cpp edglobal.cpp edmain.cpp \
+nodist_asc_pbpedit_SOURCES 	= edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
-spfst.cpp sgstream.cpp pd.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
+spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
-attack.cpp CLoadable.cpp Property.cpp PropertyGroup.cpp gameoptions.cpp \
-Named.cpp buildingtype.cpp vehicletype.cpp containerbase.cpp \
+attack.cpp gameoptions.cpp maped-mainscreen.cpp stdio-errorhandler.cpp\
+buildingtype.cpp vehicletype.cpp containerbase.cpp ed_mapcomponent.cpp \
 mapalgorithms.cpp viewcalculation.cpp gamemap.cpp password.cpp \
-password_dialog.cpp research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
-vehicle.cpp buildings.cpp networkdata.cpp resourcenet.cpp textfileparser.cpp \
+research.cpp mapdisplay.cpp ascstring.cpp graphicset.cpp \
+vehicle.cpp buildings.cpp networkinterface.cpp resourcenet.cpp textfileparser.cpp \
 terraintype.cpp objecttype.cpp textfiletags.cpp itemrepository.cpp \
 stringtokenizer.cpp music.cpp messages.cpp paradialog.cpp \
-textfile_evaluation.cpp containerbasetype.cpp soundList.cpp simplestream.cpp \
+textfile_evaluation.cpp containerbasetype.cpp simplestream.cpp \
 mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
-gameevent_dialogs.cpp clipboard.cpp
+gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
+geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
+iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
+messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp network.cpp \
+player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
-$(PARAGUI_LIBS) $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(SDL_LIBS)
+$(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
+$(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
+$(top_builddir)/source/libs/paragui/src/libparagui.la \
+$(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+
+
+
 
 
 

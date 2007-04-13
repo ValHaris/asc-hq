@@ -3,7 +3,7 @@
    STL. Should be scrapped and replaced by STL functions.
 */
 
-//     $Id: basetemp.h,v 1.8 2007-04-12 20:52:44 mbickel Exp $
+//     $Id: basetemp.h,v 1.9 2007-04-13 16:15:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.7.2.1  2006/02/11 21:46:17  mbickel

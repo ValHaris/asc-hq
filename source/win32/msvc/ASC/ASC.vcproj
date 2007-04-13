@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="ASC"
+	Name="ASC2"
 	ProjectGUID="{B7F902AB-FD64-48FB-B36A-50D48B03447F}"
+	RootNamespace="ASC"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -12,41 +13,40 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;../../../libs/libsigc++&quot;;&quot;$(paragui10)/include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image).static&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include"
+				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				MinimalRebuild="TRUE"
-				BasicRuntimeChecks="0"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="TRUE"
 				DisableLanguageExtensions="FALSE"
 				DefaultCharIsUnsigned="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4267"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib paraguid.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib expat.lib sdl_sound_d.lib libpng13d.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)/bin/ASC.exe"
+				OutputFile="$(OutDir)/bin/ASC2-debug.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Debug&quot;;&quot;$(SDL_image)/VisualC/Debug&quot;;&quot;$(OutDir)/lib&quot;;../../../libs/SDLmm/SDLmm/debug;&quot;$(SDL)/VisualC/SDLmain/Debug&quot;;&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;../../../libs/libsigc++/sigc++/Debug&quot;;../../../debug/lib"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image).static/VisualC/$(ConfigurationName)/&quot;;&quot;$(SDL_image)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
-				GenerateMapFile="TRUE"
-				MapLines="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -72,33 +72,40 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)/include&quot;;../../../libs/SDLmm/include;&quot;$(SDL_mixer)&quot;;../../../libs/;&quot;../../../libs/libsigc++&quot;;../../../libs/getopt;&quot;$(paragui10)/include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_"
+				OmitFramePointers="TRUE"
+				OptimizeForProcessor="3"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image).static&quot;;&quot;$(SDL_mixer)&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include"
+				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;_NOASM_;NOMINMAX"
 				RuntimeLibrary="2"
 				DefaultCharIsUnsigned="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				BrowseInformation="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4267"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267;4290"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc++.lib paragui.lib"
-				OutputFile="$(OutDir)/bin/ASC.exe"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib jpeglib.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib expat.lib sdl_sound.lib libpng13.lib"
+				OutputFile="$(OutDir)/bin/ASC2.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/Release&quot;;&quot;$(SDL_image)/VisualC/Release&quot;;../../../Release/lib;&quot;../../../libs/libsigc++/sigc++/release&quot;;../../../libs/SDLmm/SDLmm/release;&quot;$(SDL)/VisualC/SDLmain/Release&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(paragui10)/lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image).static/VisualC/$(ConfigurationName)/&quot;;&quot;$(SDL_image)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
 				SubSystem="2"
@@ -134,6 +141,9 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
+				RelativePath="..\..\..\asc-mainscreen.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ascstring.cpp">
 			</File>
 			<File
@@ -156,25 +166,28 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\building.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\buildings.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\buildingtype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\cannedmessages.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\clipboard.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\CLoadable.cpp">
+				RelativePath="..\..\..\containerbase-functions.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\containerbase.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\containerbasetype.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\containercontrols.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\controls.cpp">
@@ -187,6 +200,18 @@
 			</File>
 			<File
 				RelativePath="..\..\..\dlg_box.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\editmapparam.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\explosivemines.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\fieldimageloader.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\gamedialog.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\gamedlg.cpp">
@@ -207,6 +232,9 @@
 				RelativePath="..\..\..\gameoptions.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\geometry.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\libs\getopt\getopt.c">
 			</File>
 			<File
@@ -216,10 +244,25 @@
 				RelativePath="..\..\..\graphicset.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\gui.cpp">
+				RelativePath="..\..\..\guidimension.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\guifunctions.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\guiiconhandler.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\iconrepository.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\itemrepository.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\actions\jumpdrive.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\legacynetworkloaders.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\loadbi3.cpp">
@@ -231,10 +274,19 @@
 				RelativePath="..\..\..\loadpcxc.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\mainscreenwidget.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\mapalgorithms.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\mapdisplay.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\mapfield.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\mapimageexport.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\mappolygons.cpp">
@@ -249,13 +301,13 @@
 				RelativePath="..\..\..\messages.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\messaginghub.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\misc.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\music.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Named.cpp">
 			</File>
 			<File
 				RelativePath="..\ndir.c">
@@ -264,13 +316,25 @@
 				RelativePath="..\..\..\network.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\networkdata.cpp">
+				RelativePath="..\..\..\networkinterface.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\networksupervisor.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\newfont.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\objects.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\objecttype.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\overviewmapimage.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\overviewmappanel.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\palette.cpp">
@@ -282,28 +346,28 @@
 				RelativePath="..\..\..\password.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\password_dialog.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\pd.cpp">
+				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\prehistoricevents.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Property.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\PropertyGroup.cpp">
+				RelativePath="..\..\..\reactionfire.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\replay.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\replaymapdisplay.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\research.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\resourcenet.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\actions\servicing.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\sg.cpp">
@@ -318,6 +382,9 @@
 				RelativePath="..\..\..\soundList.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\soundsettings.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\spfst.cpp">
 			</File>
 			<File
@@ -325,6 +392,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\statisticdialog.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\stdio-errorhandler.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\stringtokenizer.cpp">
@@ -345,10 +415,16 @@
 				RelativePath="..\..\..\textfiletags.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\turncontrol.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\typen.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\unitctrl.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\unitset.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\vehicle.cpp">
@@ -358,6 +434,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\viewcalculation.cpp">
+			</File>
+			<File
+				RelativePath="..\..\win32-errormsg.cpp">
 			</File>
 			<Filter
 				Name="AI"
@@ -396,16 +475,490 @@
 					RelativePath="..\..\..\ai\valuation.cpp">
 				</File>
 			</Filter>
+			<Filter
+				Name="graphics"
+				Filter="">
+				<File
+					RelativePath="..\..\..\graphics\blitter.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\graphics\drawing.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\graphics\surface.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\graphics\surface2png.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="Loki"
+				Filter="">
+				<File
+					RelativePath="..\..\..\libs\loki\Singleton.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\libs\loki\SmallObj.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="dialogs"
+				Filter="">
+				<File
+					RelativePath="..\..\..\dialogs\admingame.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\alliancesetup.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\ammotransferdialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\attackpanel.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\buildingtypeselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\cargodialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\cargowidget.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\choosetech.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\editgameoptions.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\editplayerdata.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\emailsetup.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\fieldmarker.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\fileselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\locatefile.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\messagedialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\newgame.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\nextcampaignmap.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\playersetup.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\productionanalysis.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\selectionwindow.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\terraininfo.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\unitcounting.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\unitinfodialog.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\vehicletypeselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\windowing.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="widgets"
+				Filter="">
+				<File
+					RelativePath="..\..\..\widgets\autoprogressbar.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\bargraphwidget.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\dropdownselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\multilistbox.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\playerselector.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\targetcoordinatelocator.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\textrenderer-addons.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\textrenderer.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="sdl"
+				Filter="">
+				<File
+					RelativePath="..\..\..\sdl\sound.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc">
 			<File
+				RelativePath="..\..\..\dialogs\alliancesetup.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ascstring.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ASCStringHelpers.h">
+			</File>
+			<File
+				RelativePath="..\..\..\astar2.h">
+			</File>
+			<File
+				RelativePath="..\..\..\attack.h">
+			</File>
+			<File
+				RelativePath="..\..\..\baseaiinterface.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basegfx.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basestreaminterface.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basestrm.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basetemp.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basicmessages.h">
+			</File>
+			<File
+				RelativePath="..\..\..\basictypes.h">
+			</File>
+			<File
+				RelativePath="..\..\..\building.h">
+			</File>
+			<File
+				RelativePath="..\..\..\building_controls.h">
+			</File>
+			<File
+				RelativePath="..\..\..\buildings.h">
+			</File>
+			<File
+				RelativePath="..\..\..\buildingtype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\cargodialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\clipboard.h">
+			</File>
+			<File
+				RelativePath="..\..\..\containerbase.h">
+			</File>
+			<File
+				RelativePath="..\..\..\containerbasetype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\controls.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dashboard.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dlg_box.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edevents.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edgen.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edglobal.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\editmapparam.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edmisc.h">
+			</File>
+			<File
+				RelativePath="..\..\..\edselfnt.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\emailsetup.h">
+			</File>
+			<File
+				RelativePath="..\..\..\errors.h">
+			</File>
+			<File
+				RelativePath="..\..\..\events.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\fileselector.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gamedialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gamedlg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gameevent_dialogs.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gameevents.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gameeventsystem.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gamemap.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gameoptions.h">
+			</File>
+			<File
+				RelativePath="..\..\..\geometry.h">
+			</File>
+			<File
+				RelativePath="..\..\..\graphicselector.h">
+			</File>
+			<File
+				RelativePath="..\..\..\graphicset.h">
+			</File>
+			<File
+				RelativePath="..\..\..\gui.h">
+			</File>
+			<File
+				RelativePath="..\..\..\guidimension.h">
+			</File>
+			<File
+				RelativePath="..\..\..\guifunctions.h">
+			</File>
+			<File
+				RelativePath="..\..\..\guiiconhandler.h">
+			</File>
+			<File
+				RelativePath="..\..\..\iconrepository.h">
+			</File>
+			<File
+				RelativePath="..\..\..\infopopup.h">
+			</File>
+			<File
+				RelativePath="..\..\..\itemrepository.h">
+			</File>
+			<File
+				RelativePath="..\..\..\loadbi3.h">
+			</File>
+			<File
+				RelativePath="..\..\..\loaders.h">
+			</File>
+			<File
+				RelativePath="..\..\..\loadimage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\loadpcx.h">
+			</File>
+			<File
+				RelativePath="..\..\..\lzw.h">
+			</File>
+			<File
+				RelativePath="..\..\..\mapalgorithms.h">
+			</File>
+			<File
+				RelativePath="..\..\..\mapdisplay.h">
+			</File>
+			<File
+				RelativePath="..\..\..\mapdisplay2.h">
+			</File>
+			<File
+				RelativePath="..\..\..\mappolygons.h">
+			</File>
+			<File
+				RelativePath="..\..\..\messagedlg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\messages.h">
+			</File>
+			<File
+				RelativePath="..\..\..\misc.h">
+			</File>
+			<File
+				RelativePath="..\..\..\music.h">
+			</File>
+			<File
 				RelativePath="..\ndir.h">
+			</File>
+			<File
+				RelativePath="..\..\..\network.h">
+			</File>
+			<File
+				RelativePath="..\..\..\networkdata.h">
+			</File>
+			<File
+				RelativePath="..\..\..\newfont.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\newgame.h">
+			</File>
+			<File
+				RelativePath="..\..\..\objecttype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\overviewmapimage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\palette.h">
+			</File>
+			<File
+				RelativePath="..\..\..\paradialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\password.h">
+			</File>
+			<File
+				RelativePath="..\..\..\password_dialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\pd.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\playersetup.h">
+			</File>
+			<File
+				RelativePath="..\..\..\pointers.h">
+			</File>
+			<File
+				RelativePath="..\..\..\polygontriangulation.h">
+			</File>
+			<File
+				RelativePath="..\..\..\prehistoricevents.h">
+			</File>
+			<File
+				RelativePath="..\..\..\replay.h">
+			</File>
+			<File
+				RelativePath="..\..\..\research.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">
 			</File>
+			<File
+				RelativePath="..\..\..\resourcenet.h">
+			</File>
+			<File
+				RelativePath="..\..\..\resourceplacement.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\selectionwindow.h">
+			</File>
+			<File
+				RelativePath="..\..\..\sg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\sgstream.h">
+			</File>
+			<File
+				RelativePath="..\..\..\simplestream.h">
+			</File>
+			<File
+				RelativePath="..\..\..\soundList.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\soundsettings.h">
+			</File>
+			<File
+				RelativePath="..\..\..\spfst.h">
+			</File>
+			<File
+				RelativePath="..\..\..\stack.h">
+			</File>
+			<File
+				RelativePath="..\..\..\statisticdialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\stringtokenizer.h">
+			</File>
+			<File
+				RelativePath="..\..\..\strtmesg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\terraintype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\textfile_evaluation.h">
+			</File>
+			<File
+				RelativePath="..\..\..\textfileparser.h">
+			</File>
+			<File
+				RelativePath="..\..\..\textfiletags.h">
+			</File>
+			<File
+				RelativePath="..\..\..\typen.h">
+			</File>
+			<File
+				RelativePath="..\..\..\unitctrl.h">
+			</File>
+			<File
+				RelativePath="..\..\..\dialogs\unitinfodialog.h">
+			</File>
+			<File
+				RelativePath="..\..\..\vehicle.h">
+			</File>
+			<File
+				RelativePath="..\..\..\vehicletype.h">
+			</File>
+			<File
+				RelativePath="..\..\..\viewcalculation.h">
+			</File>
+			<File
+				RelativePath="..\..\..\weatherarea.h">
+			</File>
+			<File
+				RelativePath="..\..\..\weathercast.h">
+			</File>
+			<Filter
+				Name="graphics"
+				Filter="">
+				<File
+					RelativePath="..\..\..\graphics\blitter.h">
+				</File>
+				<File
+					RelativePath="..\..\..\graphics\drawing.h">
+				</File>
+				<File
+					RelativePath="..\..\..\graphics\surface.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
@@ -415,9 +968,6 @@
 			</File>
 			<File
 				RelativePath=".\ASC.rc">
-			</File>
-			<File
-				RelativePath=".\icon2.ico">
 			</File>
 		</Filter>
 	</Files>

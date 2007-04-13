@@ -32,7 +32,7 @@ namespace SDLmm {
     the events you need to handle.
     \sa Event::HandleEvents()
   */
-  class DECLSPEC EventHandler {
+  class  EventHandler {
   public:
     virtual ~EventHandler() { }
   

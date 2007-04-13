@@ -27,7 +27,7 @@ namespace SDLmm {
     
     \author Adam Gates
   */
-  class DECLSPEC SPoint {
+  class  SPoint {
   public:
     //! Default constructor which creates an empty SPoint (xy variables set
     //! to zero).

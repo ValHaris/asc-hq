@@ -44,7 +44,7 @@ void* rast2;
 void* haken;
 
    char bilder[4][6];
-   pbuildingtype  bld;
+   BuildingType*  bld;
  
 void* mousepntr;
 

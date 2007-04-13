@@ -40,7 +40,7 @@ namespace SDLmm {
     subsystem must already be initialized.
     \sa Display::Init(), Display::SetVideoMode()
   */    
-  class DECLSPEC VideoInfo {
+  class  VideoInfo {
   public:
     //! The video info struct.
     /*!

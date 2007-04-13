@@ -44,6 +44,12 @@
   #define addToLog(a)
 #endif
 
+void fatalError ( const ASCString& s )
+{
+   fprintf( stderr, "%s \n", s.c_str() );
+   exit(1);
+}
+
 int readInt  ( FILE* f )
 {
    int i;

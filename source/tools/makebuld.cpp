@@ -329,7 +329,7 @@ main ()
          clearscreen ();
          fileselect("*.bld", _A_NORMAL, datfile);
          clearscreen ();
-         pbuildingtype pbld = loadbuildingtype(datfile.name);
+         BuildingType* pbld = loadbuildingtype(datfile.name);
          memcpy ( &bld, pbld, sizeof ( bld ));
          free ( pbld );
    

@@ -23,88 +23,67 @@
 #include "../basegfx.h"
 #include "../global.h"
 #include "../ascstring.h"
-#include "../errors.h"
+#include "../messaginghub.h"
 
 
+#include "sdlstretch.cpp"
 
 SDL_Surface *screen = NULL;
 int fullscreen = 1;
 
-int reinitgraphics(int modenum)
-{
-  return 1;
-}
-
-int isfullscreen ( void )
-{
-   if ( !screen )
-      return 0;
-   else
-      return screen->flags & SDL_FULLSCREEN;
-}
 
 void setWindowCaption ( const char* s )
 {
    SDL_WM_SetCaption ( s, NULL );
 }
 
-int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon )
-{
-  if ( SDL_Init(SDL_INIT_VIDEO  ) < 0 )  // | SDL_INIT_NOPARACHUTE
-     fatalError ( ASCString("Couldn't initialize SDL: ") + SDL_GetError());
 
+bool dummyScreenPaletteSetup = false;
 
-  setWindowCaption ( "Advanced Strategic Command" );
-
-  if ( icon )
-     SDL_WM_SetIcon( icon->GetSurface(), NULL );
-
-
-  /* Initialize the display in a 640x480 8-bit palettized mode */
-  int flags = SDL_SWSURFACE;
-  if ( fullscreen )
-     flags |= SDL_FULLSCREEN;
-
-  SDL_Surface* screen = SDL_SetVideoMode(x, y, depth, flags ); // | SDL_FULLSCREEN
-  if ( !screen )
-     fatalError ( "Couldn't set %dx%dx%d video mode: %s\n", x,y,depth, SDL_GetError());
-
-  initASCGraphicSubsystem ( screen, icon );
-
-  return 1;
-}
-
-void initASCGraphicSubsystem ( SDL_Surface* _screen, SDLmm::Surface* icon )
+void initASCGraphicSubsystem ( SDL_Surface* _screen )
 {
   screen = _screen;
   agmp->resolutionx = screen->w;
   agmp->resolutiony = screen->h;
   agmp->windowstatus = 100;
-  agmp->scanlinelength = screen->w;
   agmp->scanlinenumber = screen->h;
-  agmp->bytesperscanline = screen->w * screen->format->BytesPerPixel;
-  agmp->byteperpix = screen->format->BytesPerPixel ;
-  agmp->linearaddress = (PointerSizedInt) screen->pixels;
-  agmp->bitperpix = screen->format->BitsPerPixel;
+  agmp->byteperpix = 1 ;
+  agmp->bitperpix = 8;
   agmp->directscreenaccess = 0;
+  delete agmp->surface;
+  if ( _screen->format->BitsPerPixel == 8 ) {
+     agmp->surface = new Surface ( _screen );
+     dummyScreenPaletteSetup = true;
+  } else {
+     agmp->surface = new Surface( Surface::createSurface(screen->w, screen->h, 8 ));
+     dummyScreenPaletteSetup = false;
+  }
+  agmp->linearaddress = (PointerSizedInt) agmp->surface->pixels();
+  agmp->scanlinelength = agmp->bytesperscanline = agmp->surface->pitch();
+     
 
   *hgmp = *agmp;
-
-  graphicinitialized = 1;
 }
 
 
-void  closegraphics ( void )
+
+void shutdownASCGraphicSubsystem()
 {
-        SDL_FreeSurface ( screen );
-        screen = NULL;
+   if ( agmp && agmp->surface )
+      delete agmp->surface;
 }
 
+/*
 SDL_Surface* getScreen()
 {
    return screen;
 }
+*/
 
+Surface& getActiveSurface()
+{
+   return *agmp->surface;
+}   
 
 
 //*********** Misc ************
@@ -115,6 +94,13 @@ int copy2screen( void )
   #ifdef _WIN32_  
    // SDL_ShowCursor(0);
   #endif 
+   if ( !dummyScreenPaletteSetup ) {
+      hgmp->surface->assignDefaultPalette();
+      dummyScreenPaletteSetup = true;
+   }   
+  
+   if ( screen->format->BitsPerPixel > 8 ) 
+      SDL_BlitSurface( hgmp->surface->getBaseSurface() , NULL, screen, NULL );
    SDL_UpdateRect ( screen , 0,0,0,0 );
   #ifdef _WIN32_  
    // SDL_ShowCursor(1);
@@ -124,13 +110,27 @@ int copy2screen( void )
 
 int copy2screen( int x1, int y1, int x2, int y2 )
 {
-  #ifdef _WIN32_  
-   // SDL_ShowCursor(0);
-  #endif 
+   MouseHider mouseHider;
+
+   if ( !dummyScreenPaletteSetup ) {
+      hgmp->surface->assignDefaultPalette();
+      dummyScreenPaletteSetup = true;
+   }   
+   
+   if ( screen->format->BitsPerPixel > 8 ) {
+      SDL_Rect r;
+      r.x = min(x1,x2);
+      r.y = min(y1,y2);
+      r.w = abs(x2-x1)+1;
+      r.h = abs(y2-y1)+1;
+      
+      SDL_BlitSurface( hgmp->surface->getBaseSurface() , &r, screen, &r );
+   }
+   
    if ( x1 == -1 || y1 == -1 || x2 == -1 || y2 == -1 )
       SDL_UpdateRect ( screen , 0,0,0,0 );
    else
-      if ( x1 <= x2 && y1 <= y2 )
+      if ( x1 <= x2 && y1 <= y2 ) 
          SDL_UpdateRect ( screen , x1, y1, x2-x1+1, y2-y1+1 );
       else
          if( x1 > x2 )
@@ -138,39 +138,30 @@ int copy2screen( int x1, int y1, int x2, int y2 )
          else
             SDL_UpdateRect ( screen , x1, y2, x2-x1+1, y1-y2+1 );
 
-
-  #ifdef _WIN32_  
-   // SDL_ShowCursor(1);
-  #endif 
-          
    return 0;
 }
 
-
-void setdisplaystart( int x, int y)
+MouseHider::MouseHider() : locked(true)
 {
+  #ifdef _WIN32_  
+   SDL_GetMouseState(&x, &y);
+   SDL_ShowCursor(0);
+  #endif 
 }
 
-void set_vgapalette256 ( dacpalette256 pal )
+void MouseHider::unlock()
 {
-        SDL_Color spal[256];
-        int col;
-        for ( int i = 0; i < 256; i++ ) {
-           for ( int c = 0; c < 3; c++ ) {
-         if ( pal[i][c] == 255 )
-            col = activepalette[i][c];
-         else {
-            col = pal[i][c];
-            activepalette[i][c] = col;
-         }
-         switch ( c ) {
-            case 0: spal[i].r = col * 4; break;
-            case 1: spal[i].g = col * 4; break;
-            case 2: spal[i].b = col * 4; break;
-         };
-     }
-        }       
-        SDL_SetColors ( screen, spal, 0, 256 );
+  #ifdef _WIN32_  
+   SDL_WarpMouse(x, y);
+   SDL_ShowCursor(1);
+   // SDL_WarpMouse(x, y);
+   locked = false;
+  #endif 
+
 }
 
-
+MouseHider::~MouseHider()
+{
+   if ( locked )
+      unlock();
+}

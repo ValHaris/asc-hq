@@ -33,6 +33,7 @@
    using namespace std;
   #endif
   #define HAVE_STRICMP
+  #define HAVE_STRDUP
   #define HAVE_ITOA
   #define HAVE_DIRENT_H
   #define HAVE_STDIO_H

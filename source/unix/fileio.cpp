@@ -26,5 +26,5 @@
  const char* foreignPathDelimitterString = "\\";
 
  const int maxfilenamelength = 255;
- const char* asc_configurationfile = "~/.asc/ascrc";
+ const char* asc_configurationfile = "~/.asc/asc2rc";
  const bool has_drive_letters = false;

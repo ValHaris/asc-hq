@@ -76,7 +76,7 @@ main (int argc, char *argv[] )
          return 1;
       }
 
-      pobjecttype ft;
+      Object*type ft;
       tfile          datfile;
       char           pict = YES;       // Bilder einlesen
       char           dif = 1;          // Anzahl der Bilder
@@ -341,7 +341,7 @@ main (int argc, char *argv[] )
          ft->no_autonet = c;
          if ( !ft->no_autonet ) {
          
-               dynamic_array<pobjecttype> obj;
+               dynamic_array<Object*type> obj;
                dynamic_array<pchar> name;
          
                int objectlayernum = 0; 

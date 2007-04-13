@@ -154,7 +154,7 @@ class    cfileselect {
 } ;
 
 extern void settxt50mode ( void );
-extern void terrainaccess_ed ( pterrainaccess ft, char* name );
+extern void terrainaccess_ed ( TerrainAccess* ft, char* name );
 
 
 #endif

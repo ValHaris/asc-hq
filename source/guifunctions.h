@@ -1,4 +1,4 @@
-//     $Id: guifunctions.h,v 1.2 2007-04-12 20:52:47 mbickel Exp $
+//     $Id: guifunctions.h,v 1.3 2007-04-13 16:15:53 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

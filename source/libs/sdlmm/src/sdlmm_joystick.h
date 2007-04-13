@@ -24,7 +24,7 @@
 #define SDLMM_JOYSTICK_H
 
 namespace SDLmm {
-  class DECLSPEC Joystick {
+  class  Joystick {
   public:
     static bool Init();
     static void Quit();

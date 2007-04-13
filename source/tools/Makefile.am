@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.5 2001-12-19 11:46:36 mbickel Exp $
+## $Id: Makefile.am,v 1.6 2007-04-13 16:16:09 mbickel Exp $
 
 MAINTAINERCLEANFILES	= Makefile.in
 
 SUBDIRS			= lib linux
+
+EXTRA_DIST = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/win/*.vcproj 

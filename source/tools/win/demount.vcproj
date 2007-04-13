@@ -12,7 +12,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="../../Debug"
+			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -24,7 +24,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="2"
+				RuntimeLibrary="3"
 				DefaultCharIsUnsigned="TRUE"
 				WarningLevel="3"
 				DebugInformationFormat="3"
@@ -33,11 +33,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib sigc-1.2.debug.lib"
 				ShowProgress="0"
-				OutputFile="$(OutDir)/bin/demount.exe"
+				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin\demount.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(OutDir)/lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../$(ConfigurationName)/lib/&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/demount.pdb"/>
 			<Tool
@@ -63,7 +63,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="../../Release"
+			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -89,10 +89,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib"
-				OutputFile="$(OutDir)/bin/demount.exe"
+				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib sigc-1.2.lib"
+				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin\demount.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(OutDir)/lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SDL)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../$(ConfigurationName)/lib/&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/demount.pdb"/>
 			<Tool

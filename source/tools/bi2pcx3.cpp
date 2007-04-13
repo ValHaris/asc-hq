@@ -147,7 +147,7 @@ int main(int argc, char *argv[] )
                printf(".");
             fflush ( stdout );
    
-            pobjecttype obj = loadobjecttype ( c );
+            Object*type obj = loadobjecttype ( c );
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( (obj->weather & ( 1 << w)) && obj->picture[w] )
                   for ( int i = 0; i< obj->pictnum ; i++ )
@@ -182,7 +182,7 @@ int main(int argc, char *argv[] )
                printf(".");
             fflush ( stdout );
    
-            pbuildingtype bld = loadbuildingtype ( c );
+            BuildingType* bld = loadbuildingtype ( c );
    
             for ( int i = 0; i< cwettertypennum ; i++ )
                for ( int j = 0; j < maxbuildingpicnum; j++ )
@@ -216,7 +216,7 @@ int main(int argc, char *argv[] )
                   printf(".");
                fflush ( stdout );
       
-               pvehicletype tnk = loadvehicletype ( c );
+               Vehicletype* tnk = loadvehicletype ( c );
       
                if ( tnk->bipicture > 0 ) {
                   int n = tnk->bipicture;

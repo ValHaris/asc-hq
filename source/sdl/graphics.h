@@ -16,28 +16,20 @@
  ***************************************************************************/
 
 
-#ifndef sdlgraph_h
-#define sdlgraph_h
+#ifndef graphicsH
+#define graphicsH
 
 #include "../global.h"
-#include "../tpascal.inc"
 #include "../palette.h"
 #include "../basegfx.h"
+#include "../graphics/surface.h"
 
 
 
 //*********** Initialization ************
 
-extern int reinitgraphics(int modenum);
-extern int initgraphics ( int x, int y, int depth, SDLmm::Surface* icon = NULL );
-             // returns > 0  modenum to reestablish this mode
-             //         < 0 : error
-
-extern void initASCGraphicSubsystem ( SDL_Surface* screen, SDLmm::Surface* icon );
-
-extern void  closegraphics ( void );
-
-
+extern void initASCGraphicSubsystem ( SDL_Surface* screen );
+extern void shutdownASCGraphicSubsystem();
 
 //*********** Misc ************
 
@@ -45,13 +37,19 @@ extern void  closegraphics ( void );
 extern int copy2screen( void );
 extern int copy2screen( int x1, int y1, int x2, int y2 );
 
-extern void setdisplaystart( int x, int y);
-extern void set_vgapalette256 ( dacpalette256 pal );
+// extern SDL_Surface* getScreen();
 
-extern int graphicinitialized;
+extern Surface& getActiveSurface();
 
-extern int isfullscreen ( void );
+class MouseHider {
+      int x;
+      int y;
+      bool locked;
+   public:
+      MouseHider();
+      void unlock();
+      ~MouseHider();
+};
 
-extern SDL_Surface* getScreen();
 
 #endif

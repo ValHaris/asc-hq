@@ -9,7 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-/*
+
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,6 +33,8 @@
 #include "../loadpcx.h"
 #include "../terraintype.h"
 #include "../sgstream.h"
+#include "../unitset.h"
+#include "../graphics/surface2png.h"
 
 #include "guidegenerator.h"
 #include "infopage.h"
@@ -131,52 +133,35 @@ void InfoPageUtil::updateFile(ASCString fileName, ASCString exportPath) {
 #endif
   ASCString exportTarget = exportPath + destilledFileName ;
   ASCString tmpTarget = InfoPageUtil::getTmpPath() + destilledFileName;
-  bool updatedFile = InfoPageUtil::diffMove(tmpTarget, exportTarget);
+  InfoPageUtil::diffMove(tmpTarget, exportTarget);
 }
 //*************************************************************************************************************
 ImageConverter::ImageConverter() {}
 
 
 ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath) {
-  tvirtualdisplay sb(600,600,255);
+  Surface s = Surface::createSurface( 600, 600, 32, 0xf8f4f0 );
   int x=0; int y=0;
-  for ( int xp = 0; xp < 4; xp++ ) {
-    for ( int yp = 0; yp < 6; yp++ ) {
-      if ( bt.getpicture(BuildingType::LocalCoordinate(xp,yp) )) {
-        putspriteimage ( x + xp * fielddistx + ( yp & 1 ) *
-                         fielddisthalfx, y + yp * fielddisty, bt.getpicture(
-                           BuildingType::LocalCoordinate( xp, yp) ) );
-      }
-    }
-  }
-  pal[255][0] = 254;
-  pal[255][1] = 253;
-  pal[255][2] = 252;
+  bt.paint( s, SPoint(x,y));
+  
   int xsize = 300;
   int ysize = 200;
-  convert(constructImgFileName(bt), filePath, xsize, ysize);
+  convert(constructImgFileName(bt), s, filePath, xsize, ysize);
   return  (constructImgPath(bt, RELATIVEIMGPATH)) ;
 }
 
 ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) {
-  tvirtualdisplay sb(100,100,255);
-  putspriteimage ( 0, 0, vt.picture[0] );
-  pal[255][0] = 254;
-  pal[255][1] = 253;
-  pal[255][2] = 252;
-  convert(constructImgFileName(vt), filePath);
+   Surface s = Surface::createSurface(100, 100, 32, 0xf8f4f0);
+  vt.paint( s, SPoint(0,0), 0);
+   
+  convert(constructImgFileName(vt), s, filePath );
   return  (constructImgPath(vt, RELATIVEIMGPATH)) ;
 }
 
 
-void ImageConverter::convert(const ASCString&  fileName,  ASCString filePath, int xsize, int ysize) {
-  ASCString command;
-  ASCString tempFileName = InfoPageUtil::getTmpPath() + "tempPic.pcx";
-  command = "convert \"" + tempFileName + "\" -transparent \"#f8f4f0\" " + "\"" + filePath + fileName + "\"";
-  writepcx ( tempFileName, 0, 0, xsize, ysize, pal );
+void ImageConverter::convert(const ASCString&  fileName, Surface& s, ASCString filePath, int xsize, int ysize) {
   cout << "creating image..." << fileName << endl;
-  system( command.c_str() );
-  remove ( tempFileName.c_str() );
+  writePNGtrim ( filePath + fileName, s );
 }
 
 
@@ -191,18 +176,18 @@ ASCString ImageConverter::constructImgPath(const VehicleType&  vt, const ASCStri
 }
 
 ASCString ImageConverter::constructImgFileName(const BuildingType&  bt) {
-  return (strrr(bt.id) + ASCString("B.gif"));
+  return (strrr(bt.id) + ASCString("B.png"));
 }
 
 ASCString ImageConverter::constructImgFileName(const VehicleType&  vt) {
-  return (strrr(vt.id) + ASCString("U.gif"));
+  return (strrr(vt.id) + ASCString("U.png"));
 }
 
 
 //**************************************************************************************************************
 
 
-GuideGenerator::GuideGenerator(ASCString fp, ASCString menuCss, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), menuCSSFile(menuCss), setID(id), mainCSSFile(maCSSFile), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath), createImg(imgCreate), createUpload(upload), imageWidth(imageSize) 
+GuideGenerator::GuideGenerator(ASCString fp, ASCString menuCss, int id, ASCString maCSSFile, ASCString techIDs, bool imgCreate, ASCString relativeMenuPath, bool upload, int imageSize):filePath(fp), menuCSSFile(menuCss), mainCSSFile(maCSSFile), createImg(imgCreate), setID(id), imageWidth(imageSize), createUpload(upload), techTreeIDs(String2IntRangeVector(techIDs)), relMenuPath(relativeMenuPath)
 {
    if ( relMenuPath.length() > 0  ){
      if(relMenuPath.find_last_of("/")!=relMenuPath.size()-1){
@@ -306,22 +291,20 @@ void BuildingGuideGen::generateCategories() const {
           if(s->isMember(bt->id, SingleUnitSet::building)&&(processedBuildingIds.find(bt->id)!=processedBuildingIds.end())) {
             ASCString fileLink = relMenuPath + strrr(bt->id) + APPENDIX + ASCString(MAINLINKSUFFIX) + HTML;
             CategoryMember* dataEntry = new CategoryMember(bt->name.toUpper(), menuCSSFile, fileLink, TARGET);
-            if ( bt->special & cghqb ) {
-              hqCat->addEntry(dataEntry);
-            } else if ( bt->special & cgvehicleproductionb ) {
+            if ( bt->hasFunction( ContainerBaseType::InternalVehicleProduction  )) {
               facCat->addEntry(dataEntry);
-            } else if ( bt->special & cgresearchb ) {
+            } else if ( bt->hasFunction( ContainerBaseType::Research ) ) {
               researchCat->addEntry(dataEntry);
-            } else if ( bt->special & cgwindkraftwerkb ) {
+            } else if ( bt->hasFunction( ContainerBaseType::WindPowerPlant  )) {
               windpowCat->addEntry(dataEntry);
-            } else if(bt->special & cgsolarkraftwerkb) {
-              solarpowCat->addEntry(dataEntry);
-            } else if ( bt->special & cgconventionelpowerplantb ) {
-              mattconCat->addEntry(dataEntry);
-            } else if ( bt->special & cgminingstationb ) {
-              mineCat->addEntry(dataEntry);
-            } else if ( bt->special & cgtrainingb ) {
-              trainCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::SolarPowerPlant  )) {
+               solarpowCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::MatterConverter  )) {
+               mattconCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::MiningStation  )) {
+               mineCat->addEntry(dataEntry);
+            } else if ( bt->hasFunction( ContainerBaseType::TrainingCenter  )) {
+               trainCat->addEntry(dataEntry);
             } else {
               noCat->addEntry(dataEntry);
             }

@@ -1,6 +1,12 @@
-//     $Id: global_os.h,v 1.2 2004-12-27 15:54:55 mbickel Exp $
+//     $Id: global_os.h,v 1.3 2007-04-13 16:16:19 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1.2.1  2005/02/15 14:21:45  mbickel
+//      Merged changes of 1.15.3
+//
+//     Revision 1.2  2004/12/27 15:54:55  mbickel
+//      Fixed mapeditor crash and limitations when resizing maps
+//
 //     Revision 1.1  2004/07/12 18:15:10  mbickel
 //      Lots of tweaks and fixed for more portability and compilation with mingw
 //

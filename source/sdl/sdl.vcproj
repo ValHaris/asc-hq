@@ -126,28 +126,10 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath=".\asc_IMG_jpg.c">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="1"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath=".\events.cpp">
 			</File>
 			<File
 				RelativePath=".\graphics.cpp">
-			</File>
-			<File
-				RelativePath=".\loadimage.cpp">
-			</File>
-			<File
-				RelativePath=".\SDLStretch.cpp">
-			</File>
-			<File
-				RelativePath=".\sound.cpp">
 			</File>
 		</Filter>
 		<Filter

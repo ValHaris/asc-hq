@@ -27,7 +27,6 @@
 
   typedef unsigned int PointerSizedInt;
 
-
   #ifdef __cplusplus 
     #include <string>
     using namespace std;

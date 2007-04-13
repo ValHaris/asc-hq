@@ -110,7 +110,7 @@ main(int argc, char *argv[], char *envp[])
             suffix++;
 
          if (strcmpi(suffix,".TNK") == 0) {
-            pvehicletype tnk = loadvehicletypetype(fileinfo.name);
+            Vehicletype* tnk = loadvehicletypetype(fileinfo.name);
             if (loaderror == 0) { 
                setgraph();
 
@@ -183,7 +183,7 @@ main(int argc, char *argv[], char *envp[])
             } 
          } 
          if (strcmpi(suffix,".bld") == 0) {
-            pbuildingtype bld = loadbuildingtype( fileinfo.name );
+            BuildingType* bld = loadbuildingtype( fileinfo.name );
             if (loaderror == 0) { 
                setgraph();
                for (int k = 0; k < bld->construction_steps; k++)

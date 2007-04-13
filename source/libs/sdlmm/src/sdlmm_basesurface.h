@@ -40,7 +40,7 @@ namespace SDLmm {
 
     \author David Hedbor <david@hedbor.org>
   */
-  class DECLSPEC BaseSurface {
+  class  BaseSurface {
 
   protected:
     //! The actual SDL_Surface allocated for this BaseSurface.
@@ -66,6 +66,8 @@ namespace SDLmm {
     
     BaseSurface(const BaseSurface& other)
       : me(other.me) {
+      if ( other.me )
+         other.me->refcount++;
     }
     
     BaseSurface &operator=(const BaseSurface& other) {
@@ -191,7 +193,7 @@ namespace SDLmm {
     /*!
       \warning You can only use this function when the surface is locked.
     */
-    Color GetPixel(const SRect& point) const { return GetPixel(point.x, point.y); }
+    Color GetPixel(const SPoint& point) const { return GetPixel(point.x, point.y); }
 
     //! Sets the color key (transparent pixel) in a blittable surface
     //! and enables or disables RLE blit acceleration.

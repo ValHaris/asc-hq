@@ -2,7 +2,7 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.h,v 1.8 2007-04-12 20:52:49 mbickel Exp $
+//     $Id: palette.h,v 1.9 2007-04-13 16:15:54 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.7.2.1  2004/10/11 18:14:04  mbickel

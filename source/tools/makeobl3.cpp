@@ -71,7 +71,7 @@ main (int argc, char *argv[] )
 { 
    t_carefor_containerstream cfcst;
 
-   pobjecttype ft = new tobjecttype;
+   Object*type ft = new tobjecttype;
  
    char filename[260];
    filename[0] = 0;

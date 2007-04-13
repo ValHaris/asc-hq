@@ -11,19 +11,23 @@
 #ifndef sound_h_included
 #define sound_h_included
 
-#include <SDL_mixer.h>
 #include "../ascstring.h"
 #include "../music.h"
 
+
+class Sound_InternalData;
 
 class Sound {
    public:
      /** Create a Sound from the .wav file specified by filename.
       *  If it's not possible to use the wave file for some reason, the
       *  sound is set to silence.
+      *  \param filename the file that is loaded
       *  \param fadeIn is a time in milliseconds
       */
      Sound( const ASCString& filename, int fadeIn = 0 );
+     Sound( const ASCString& startSoundFilename, const ASCString& continuousSoundFilename, int fadeIn = 0 );
+
 
      void play(void);
      void playWait(void);
@@ -33,47 +37,59 @@ class Sound {
 
      void fadeOut ( int ms );
 
+     bool load();
+
+     friend class SoundSystem;
+
      ~Sound(void);
    private:
      /** A name for this sound - mostly for debugging purposes */
      const ASCString name;
 
-     //! the actual wave data
-     Mix_Chunk *wave;
+     //! returns the channel
+     int startPlaying( bool loop ); 
 
+     void finishedSignal( int channelnum );
+
+     Sound_InternalData* internalData;
+     
      int fadeIn;
+     bool waitingForMainWave;
 };
 
 
+class SoundSystem_InternalData;
+
 class SoundSystem {
       bool effectsMuted;
-      int off;
+      bool off;
       bool sdl_initialized;
       bool mix_initialized;
       int musicVolume;
       int effectVolume;
 
       static SoundSystem* instance;
-      Mix_Music *musicBuf;
-      MusicPlayList* currentPlaylist;
 
-      Sound* channel[MIX_CHANNELS];
+      SoundSystem_InternalData* internalData;
+      
 
       //! callback for SDL_mixer
       static void trackFinished( void );
 
       void nextTrack ( void );
 
+      static void channelFinishedCallback( int channelnum );
+
       enum MusicState { uninitialized, init_ready, init_paused, playing, paused } musicState;
    protected:
 
       //! loads a sound from the wave file called name to an Mix_buffer.
-      Mix_Chunk* loadWave ( const ASCString& name );
       friend class Sound;
 
    public:
       /** Sets up ASC's sound system.
-         \param mute The sound is going to be initialized, but no sounds played. Sounds can be enabled at runtime
+         \param muteEffects The sound is going to be initialized, but no sounds played. Sounds can be enabled at runtime
+         \param muteMusic The sound is going to be initialized, but no music played. Music can be enabled at runtime
          \param off  The sound system is not even going to be initiliazed. Can only be restartet by restarting ASC
       */
       SoundSystem ( bool muteEffects, bool muteMusic, bool off );
@@ -109,6 +125,8 @@ class SoundSystem {
       int getEffectVolume( ) { return effectVolume; };
 
       static SoundSystem* getInstance() { return instance; };
+
+      ASCString getDiagnosticText();
 
       ~SoundSystem();
 };

@@ -27,20 +27,28 @@
 #include "../stack.h"
 #include "../basegfx.h"
 #include "../global.h"
-#include "keysymbols.h"
-
+// #include "keysymbols.h"
+#include "../errors.h"
+#include "../messaginghub.h"
+#include "graphicsqueue.h"
 
 volatile tmousesettings mouseparams;
 
 SDL_mutex* keyboardmutex = NULL;
 SDL_mutex* eventHandlingMutex = NULL;
 SDL_mutex* eventQueueMutex = NULL;
+SDL_mutex* graphicsQueueMutex = NULL;
 
 queue<tkey>   keybuffer_sym;
 queue<Uint32> keybuffer_prnt;
 queue<SDL_Event> eventQueue;
-bool _queueEvents = false;
+bool _queueEvents = true;
+bool _fillLegacyEventStructures = false;
 
+bool eventThreadRunning = false;
+
+
+std::list<GraphicsQueueOperation*> graphicsQueue;
 
 int exitprogram = 0;
 
@@ -52,21 +60,7 @@ int exitprogram = 0;
  ***************************************************************************/
 
 
-const int mouseprocnum = 10;
-tsubmousehandler* pmouseprocs[ mouseprocnum ];
 bool redrawScreen = false;
-
-int mouse_in_off_area ( void )
-{
-   if ( mouseparams.off.x1 == -1     ||   mouseparams.off.y1 == -1 )
-      return 0;
-   else
-      return ( mouseparams.x1+mouseparams.xsize >= mouseparams.off.x1  &&
-               mouseparams.y1+mouseparams.ysize >= mouseparams.off.y1   &&
-               mouseparams.x1 <= mouseparams.off.x2  &&
-               mouseparams.y1 <= mouseparams.off.y2 ) ;
-}
-
 
 
 
@@ -77,13 +71,6 @@ void mousevisible( int an)
 int getmousestatus ()
 {
    return 2;
-}
-
-void callsubhandler ( void )
-{
-   for ( int i = 0; i < mouseprocnum; i++ )
-      if ( pmouseprocs[i] )
-         pmouseprocs[i]->mouseaction();
 }
 
 int mouseTranslate ( int m)
@@ -126,42 +113,6 @@ int mouseinrect ( const tmouserect* rect )
       return 0;
 }
 
-
-void addmouseproc ( tsubmousehandler* proc )
-{
-   int i;
-   for (i = 0; i < mouseprocnum ; i++) {
-      if ( !pmouseprocs[i] ) {
-         pmouseprocs[i] = proc;
-         break;
-      }
-   } /* endfor */
-
-   if ( i >= mouseprocnum )
-      exit(1);
-}
-
-void removemouseproc ( tsubmousehandler* proc )
-{
-   for (int i = 0; i < mouseprocnum ; i++)
-      if ( pmouseprocs[i] == proc )
-         pmouseprocs[i] = NULL;
-}
-
-void pushallmouseprocs ( void )
-{
-   for (int i = 0; i < mouseprocnum ; i++) {
-      npush ( pmouseprocs[i] );
-      pmouseprocs[i] = NULL;
-   }
-}
-
-
-void popallmouseprocs ( void )
-{
-   for (int i = 0; i < mouseprocnum ; i++)
-      npop ( pmouseprocs[i] );
-}
 
 
 tmouserect tmouserect :: operator+ ( const tmouserect& b ) const
@@ -290,12 +241,6 @@ tkey char2key(int c )
       return ct_invvalue;
 }
 
-/*
-char *get_key(tkey keynr)
-{
-   return "not yet implemented";
-}
-*/
 
 int  releasetimeslice( void )
 {
@@ -356,9 +301,7 @@ char time_elapsed(int time)
  *                                                                         *
  ***************************************************************************/
 
-//! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
-SDL_Thread* secondThreadHandle = NULL;
-
+#include <iostream>
 
 int closeEventThread = 0;
 
@@ -378,7 +321,8 @@ int processEvents ( )
    SDL_Event event;
    int result;
    if ( SDL_PollEvent ( &event ) == 1) {
-      switch ( event.type ) {
+      if ( _fillLegacyEventStructures ) {
+        switch ( event.type ) {
          case SDL_MOUSEBUTTONUP:
          case SDL_MOUSEBUTTONDOWN:
             {
@@ -390,7 +334,6 @@ int processEvents ( )
                   mouseparams.taste &= ~(1 << taste);
                mouseparams.x = event.button.x;
                mouseparams.y = event.button.y;
-               callsubhandler();
             }
             break;
 
@@ -404,7 +347,6 @@ int processEvents ( )
                for ( int i = 0; i < 3; i++ )
                   if ( event.motion.state & (1 << i) )
                      mouseparams.taste |= 1 << mouseTranslate(i);
-               callsubhandler();
             }
             break;
          case SDL_KEYDOWN:
@@ -437,12 +379,18 @@ int processEvents ( )
             exitprogram = 1;
             break;
 #ifdef _WIN32_
-         case SDL_ACTIVEEVENT:
-              // if ( event.active.state == SDL_APPACTIVE )
-              //   if ( event.active.gain )
-                    redrawScreen = true;
+         case SDL_ACTIVEEVENT: 
+            redrawScreen = true;
             break;
 #endif
+        } 
+      } else {
+#ifdef _WIN32_
+         if ( event.type  == SDL_ACTIVEEVENT ) {
+            queueOperation( new UpdateRectOp( SDL_GetVideoSurface(), 0,0,0,0), false, true );
+         }
+#endif
+
       }
       result = 1;
       if ( _queueEvents ) {
@@ -450,6 +398,8 @@ int processEvents ( )
          eventQueue.push ( event );
          SDL_mutexV( eventQueueMutex );
       }
+
+
    } else
       result = 0;
 
@@ -457,29 +407,162 @@ int processEvents ( )
    return result;
 }
 
+#if defined(_WIN32_) | defined(__APPLE__)
+#define FirstThreadEvents 1
+#endif
+
+bool syncGraphics = true;
+
+void queueOperation( GraphicsQueueOperation* gqo, bool wait, bool forceAsync )
+{
+   if ( !eventThreadRunning ) {
+      gqo->execute();
+      delete gqo;
+      return;
+   }
+
+   SDL_mutexP( graphicsQueueMutex );
+   graphicsQueue.push_back( gqo );
+   SDL_mutexV( graphicsQueueMutex );
+
+   if ( forceAsync )
+      return;
+
+   if ( syncGraphics || wait ) {
+      bool finished = false;
+      do {
+         SDL_Delay(10);
+         SDL_mutexP( graphicsQueueMutex );
+         finished = graphicsQueue.empty();
+         SDL_mutexV( graphicsQueueMutex );
+      } while (!finished);
+   }
+}
+
+
+void UpdateRectOp::execute()
+{ 
+   SDL_ShowCursor( 0 );
+   SDL_UpdateRect( screen, x,y,w,h); 
+   SDL_ShowCursor( 1 );
+};
+
+
+UpdateRectsOp::UpdateRectsOp( SDL_Surface *screen, int numrects, SDL_Rect *rects) 
+{
+   this->numrects = numrects;
+   this->rects = new SDL_Rect[numrects];
+   for ( int i = 0; i< numrects; ++i )
+      this->rects[i] = rects[i];
+   this->screen = screen;
+};
+
+UpdateRectsOp::~UpdateRectsOp()
+{
+   delete[] rects;
+}
+
+void UpdateRectsOp::execute() 
+{ 
+   SDL_ShowCursor( 0 );
+   SDL_UpdateRects( screen, numrects, rects); 
+   SDL_ShowCursor( 1 );
+}
+
+
+void InitScreenOp::execute() 
+{ 
+   SDL_ShowCursor( 0 );
+   SDL_Surface* screen = SDL_SetVideoMode(x, y, depth, flags);
+   if (screen == NULL) 
+      screen = SDL_SetVideoMode(x, y, depth, flags & ~SDL_FULLSCREEN );
+
+   srf( screen );
+   initASCGraphicSubsystem( screen );
+   SDL_ShowCursor( 1 );
+};
+
+
+bool processGraphicsQueue()
+{
+#ifdef FirstThreadEvents
+   GraphicsQueueOperation* gqo = NULL;
+   SDL_mutexP( graphicsQueueMutex );
+   if ( !graphicsQueue.empty() ) {
+      gqo = graphicsQueue.front();
+      SDL_mutexV( graphicsQueueMutex );
+      if ( gqo ) {
+         gqo->execute();
+
+         SDL_mutexP( graphicsQueueMutex );
+         graphicsQueue.pop_front();
+         SDL_mutexV( graphicsQueueMutex );
+         delete gqo;
+         return true;
+      } else
+         return false;
+   } else {
+      SDL_mutexV( graphicsQueueMutex );
+      return false;   
+   }
+#else
+   return false;
+#endif
+}
+
 int eventthread ( void* nothing )
 {
+#ifdef FirstThreadEvents
+   eventThreadRunning = true;
+#endif
    while ( !closeEventThread ) {
       if ( !processEvents() )
          SDL_Delay(10);
+      processGraphicsQueue();
       ticker = SDL_GetTicks() / 10;
    }
-   return 0;
+#ifdef FirstThreadEvents
+   eventThreadRunning = false;
+   while ( processGraphicsQueue() ) 
+      SDL_Delay(10);
+#endif
+   return closeEventThread;
 }
 
-#if defined(_WIN32_) | defined(__APPLE__)
+
+#ifdef FirstThreadEvents 
 int (*_gamethread)(void *);
 
 int gameThreadWrapper ( void* data )
 {
-   int res = _gamethread ( data );
-   closeEventThread = 1;
-   return res;
+   try {
+      int res = _gamethread ( data );
+      closeEventThread = 1;
+      return res;
+   }
+#ifndef WIN32
+   catch ( ... ) {
+      fatalError ("An unhandled exception occured. Quitting application");
+   }
+#else
+   catch ( ASCexception ) {
+      fatalError ("An unhandled exception occured. Quitting application");
+   }
+#endif
+   closeEventThread = -1;
+   return -1;
 }
 #endif
 
-void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mousepointer )
+
+//! The handle for the second thread; depending on platform this could be the event handling thread or the game thread
+SDL_Thread* secondThreadHandle = NULL;
+
+
+
+int initializeEventHandling ( int (*gamethread)(void *) , void *data )
 {
+
    mouseparams.xsize = 10;
    mouseparams.ysize = 10;
 
@@ -502,34 +585,75 @@ void initializeEventHandling ( int (*gamethread)(void *) , void *data, void* mou
       exit(1);
    }
 
+   graphicsQueueMutex = SDL_CreateMutex();
+   if ( !graphicsQueueMutex ) {
+      printf("creating graphicsQueueMutex failed\n" );
+      exit(1);
+   }
 
    SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
-#if defined(_WIN32_) | defined(__APPLE__)
+   
+#ifdef FirstThreadEvents 
    _gamethread = gamethread;
    secondThreadHandle = SDL_CreateThread ( gameThreadWrapper, data );
-   eventthread( NULL );
+   int res = eventthread( NULL );
 #else
    secondThreadHandle = SDL_CreateThread ( eventthread, NULL );
-   gamethread( data );
+   int res = gamethread( data );
    closeEventThread = 1;
 #endif
 
+
    SDL_WaitThread ( secondThreadHandle, NULL );
+   return res;
 }
 
 
 
-void queueEvents( bool active )
+void exit_asc( int returnresult )
 {
-   _queueEvents = active;
-   if ( !active ) {
+#ifndef FirstThreadEvents 
+   if ( secondThreadHandle ) {
+      closeEventThread = 1;
+      SDL_WaitThread ( secondThreadHandle, NULL );
+   }   
+   exit( returnresult );   
+#else
+   if ( secondThreadHandle ) {
+      throw ThreadExitException();
+   }
+   exit( returnresult );   
+
+
+#endif
+
+   
+}
+
+
+bool setEventRouting( bool queue, bool legacy )
+{
+  bool prev = _queueEvents;
+  
+  _fillLegacyEventStructures = legacy;
+  
+  _queueEvents = queue;
+  if ( !queue ) {
+      // clear all waiting events in the queue
       SDL_mutexP( eventQueueMutex );
       while ( !eventQueue.empty())
          eventQueue.pop();
       SDL_mutexV( eventQueueMutex );
    }
+   
+   return prev;
+}
+
+bool legacyEventSystemActive()
+{
+   return _fillLegacyEventStructures;   
 }
 
 
@@ -545,4 +669,17 @@ bool getQueuedEvent ( SDL_Event& event )
    SDL_mutexV( eventQueueMutex );
    return false;
 }
+    
+bool peekEvent ( SDL_Event& event )
+{
+   SDL_mutexP( eventQueueMutex );
+   if ( !eventQueue.empty() ) {
+      event = eventQueue.front();
+      SDL_mutexV( eventQueueMutex );
+      return true;
+   }
+   SDL_mutexV( eventQueueMutex );
+   return false;
+}
+
 

@@ -55,11 +55,17 @@
 #define Sentinel    0xF0   /* the sentinel flag */
 #define BUFFER_SIZE 30000
 
-#define WriteCode(a,b,c) \
-            fprintf( outfile, "%c%c%c", a, b, c )
+#define WriteCode(a,b,c) fprintf( outfile, "%c%c%c", a, b, c )
 
 
 
+void fatalError ( const ASCString& s )
+{
+   fprintf( stderr, "%s \n", s.c_str() );
+   exit(1);
+}
+
+            
 int writeInt  ( FILE* f, int i )
 {
    i = SDL_SwapLE32(i);
@@ -80,7 +86,7 @@ const char* containerName = NULL;
 FILE *infile,
 *outfile;
 
-int rlemain ( char* argv1, char* argv2  )
+int rlemain ( const char* argv1, const char* argv2  )
 {
    unsigned char *buffer;
    unsigned char prev_char;
@@ -192,7 +198,7 @@ int rlemain ( char* argv1, char* argv2  )
 
 
 int
-bzmain( char *argv1, char* argv2  )
+bzmain( const char *argv1, const char* argv2  )
 {
    int size = filesize ( argv1 );
    void* buf = malloc ( size );
@@ -210,6 +216,35 @@ bzmain( char *argv1, char* argv2  )
    return 0;
 }
 
+
+ASCString getTempPath()
+{
+#ifdef _UNIX_
+  return "/tmp/";
+#else
+   ASCString name;
+   if ( getenv ( "temp" ))
+      name = getenv ( "temp" );
+   else
+      if ( getenv ( "tmp" ))
+         name = getenv ( "tmp" );
+      else {
+         name = pathdelimitterstring + ASCString("tmp");
+      }
+
+      appendbackslash( name );
+      return name;
+#endif
+
+}
+
+ASCString getTempFileName( int type )
+{
+   if ( type == 0 )
+      return getTempPath() + "temp.rle";
+   else
+      return getTempPath() + "temp.mzl";
+}
 
 
 
@@ -251,7 +286,7 @@ void copyfile ( const char* name, const char* orgname, int size )
 char buf2[10000];
 
 /* mikem: seems to test a file for asc compression */
-void testcompress ( char* name, int size )
+void testcompress ( const char* name, int size )
 {
    if ( strcmp ( name, "temp.mzl") == 0
      || strcmp ( name, "temp.rle") == 0
@@ -261,29 +296,20 @@ void testcompress ( char* name, int size )
         return;
       }
       
-   char newname[1000];
-   char* orgname = name;
+   
+   ASCString newname;
+   bool deleteNewName = false;
+   
+   const char* orgname = name;
    if ( patimat ( "*.pcx", name, true ) ) {
 
       FILE* infile = fopen ( name, filereadmode );
 
-      if ( getenv ( "temp" ))
-         strcpy ( newname, getenv ( "temp" ));
-      else
-         if ( getenv ( "tmp" ))
-            strcpy ( newname, getenv ( "tmp" ));
-         else {
-            strcpy ( newname, pathdelimitterstring );
-            strcat ( newname, "tmp" );
-         }
-      if ( strlen ( newname ) && newname[strlen ( newname ) -1] != pathdelimitter )
-         strcat ( newname, pathdelimitterstring );
+      newname = getTempPath() + name;
 
-      strcat ( newname, name );
-
-      FILE* outfile = fopen ( newname, filewritemode );
+      FILE* outfile = fopen ( newname.c_str(), filewritemode );
       if ( !outfile )
-         fatalError( "Unable to open " + ASCString(newname) + " for writing." );
+         fatalError( "Unable to open " + newname + " for writing." );
 
       int size = filesize ( name );
       char* pc = (char*) malloc ( size );
@@ -296,9 +322,10 @@ void testcompress ( char* name, int size )
       int w = fwrite ( pc, 1, size, outfile );
       fclose ( outfile );
       if ( w != size )
-         fatalError( "Could not write file " + ASCString(newname) );
+         fatalError( "Could not write file " + newname );
 
-      name = newname;
+      name = newname.c_str();
+      deleteNewName = true;
    }
 
    uncompsize += size;
@@ -329,20 +356,20 @@ void testcompress ( char* name, int size )
       int r;
       fflush ( stdout );
 
-      r = rlemain( name, "temp.rle");
+      r = rlemain( name, getTempFileName(0).c_str() );
       if ( r ) {
          fatalError ( "error executing rle1; errno is " + ASCString(strrr (errno)) );
          exit ( r );
       }
-      int rl = filesize ( "temp.rle" );
+      int rl = filesize ( getTempFileName(0).c_str() );
 
       fflush ( stdout );
-      r = bzmain ( name, "temp.mzl" );
+      r = bzmain ( name, getTempFileName(1).c_str() );
       if ( r ) {
          fatalError ( "error executing mbzip; errno is " + ASCString ( strrr ( errno)));
          exit ( r );
       }
-      int mz = filesize ( "temp.mzl" );
+      int mz = filesize ( getTempFileName(1).c_str() );
 
       if ( !size ) {
          fatalError(" encountered a file of size 0 !" );
@@ -360,19 +387,19 @@ void testcompress ( char* name, int size )
          if ( compr == rl ) {
             if ( verbose )
                printf ( "rle compressed" );
-            copyfile ( "temp.rle", orgname, compr );
+            copyfile ( getTempFileName(0).c_str(), orgname, compr );
          } else
             if ( compr == mz ) {
                if ( verbose )
                   printf ( "mzl compressed" );
-               copyfile ( "temp.mzl", orgname, compr );
+               copyfile ( getTempFileName(1).c_str(), orgname, compr );
             }
 
-      unlink("temp.mzl");
-      unlink("temp.rle");
+      unlink(getTempFileName(0).c_str());
+      unlink(getTempFileName(1).c_str());
    }
-   if ( name == newname )
-      remove ( newname );
+   if ( deleteNewName )
+      remove ( newname.c_str() );
 
 }
 
@@ -383,14 +410,6 @@ void testcompress ( char* name, int size )
 
 
 
-/*
-int  readInt  ( void )
-{
-   int i;
-   readdata2 ( i );
-   return SDL_SwapLE32( i );
-}
-*/
 
 int main(int argc, char *argv[] )
 {

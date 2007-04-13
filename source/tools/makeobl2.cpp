@@ -68,7 +68,7 @@ void *       loadpcx2(char *       filestring);
 main (int argc, char *argv[] )
 { 
 
-   pobjecttype ft;
+   Object*type ft;
    tfile          datfile;
    char           pict = YES;       // Bilder einlesen
    char           dif = 1;          // Anzahl der Bilder

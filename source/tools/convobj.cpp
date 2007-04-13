@@ -38,7 +38,7 @@ void main ( void )
 {
   find_t  fileinfo;
   unsigned rc;        /* return code */
-  pobjecttype nobj;
+  Object*type nobj;
   int i;
   rc = _dos_findfirst( "*.obl", _A_NORMAL, &fileinfo );
   while( rc == 0 ) { 

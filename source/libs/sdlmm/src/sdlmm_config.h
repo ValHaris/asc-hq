@@ -1,6 +1,6 @@
 /*
  * SDmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright  2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -23,7 +23,7 @@
 #define SDLMM_SDLMM_CONFIG_H
 
 #ifndef WIN32
-# include "../../../../config.h"
+# include "config.h"
 #endif
 
 #ifdef ASSERTIONS

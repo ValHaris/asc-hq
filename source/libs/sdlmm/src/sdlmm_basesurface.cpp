@@ -149,7 +149,7 @@ namespace SDLmm {
         g = *(the_pixel + pf.Gshift()/8);
         b = *(the_pixel + pf.Bshift()/8);
         color = r << pf.Rshift();
-        color |= g << pf.Rshift();
+        color |= g << pf.Gshift();
         color |= b << pf.Bshift();
         return color;
       }

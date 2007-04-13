@@ -31,7 +31,7 @@ namespace SDLmm {
     \author Adam Gates
   */
 
-  class DECLSPEC PixelFormat {
+  class  PixelFormat {
   protected:
     //! The actual SDL_PixelFormat for this PixelFormat.
     SDL_PixelFormat *me;
@@ -45,9 +45,8 @@ namespace SDLmm {
     */
     explicit PixelFormat(SDL_PixelFormat *pixelformat): me(pixelformat) {  }
     
-    //! The destructor.
-    virtual ~PixelFormat() {
-    }
+    // The destructor.
+    // virtual ~PixelFormat() { }
     
     //! \name Informational methods
     //@{
@@ -61,6 +60,7 @@ namespace SDLmm {
     Uint8 Rshift() const { return me->Rshift; }
     Uint8 Gshift() const { return me->Gshift; }
     Uint8 Bshift() const { return me->Bshift; }
+    Uint8 Ashift() const { return me->Ashift; }
 
     Uint8 Rloss() const { return me->Rloss; }
     Uint8 Gloss() const { return me->Gloss; }
@@ -100,6 +100,8 @@ namespace SDLmm {
     Color MapRGB(Uint8 r, Uint8 g, Uint8 b) const;
     
     Color MapRGB(const ColorRGB& colorrgb) const { return MapRGB(colorrgb.r, colorrgb.g, colorrgb.b); }
+
+    Color MapRGB(const SDL_Color& colorrgb) const { return MapRGB(colorrgb.r, colorrgb.g, colorrgb.b); }
     
     //! Map a RGBA color value to a pixel format.
     /*!

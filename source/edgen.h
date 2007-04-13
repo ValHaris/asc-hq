@@ -2,7 +2,7 @@
     \brief Interface for the random map generator
 */
 
-//     $Id: edgen.h,v 1.9 2007-04-12 20:52:46 mbickel Exp $
+//     $Id: edgen.h,v 1.10 2007-04-13 16:15:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.8.2.2  2006/06/15 14:15:57  mbickel

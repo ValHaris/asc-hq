@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.3 2007-04-12 20:52:46 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.4 2007-04-13 16:15:53 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

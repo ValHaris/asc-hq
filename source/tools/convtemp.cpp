@@ -45,7 +45,7 @@ main (void)
           
    while (rc == 0) {
       quantity++;
-      pvehicletype   ft;
+      Vehicletype*   ft;
       ft = loadvehicletypetype(fileinfo.name);
 
       if ( ft->terrainreq1 )

@@ -38,7 +38,7 @@ namespace SDLmm {
     \author David Hedbor <david@hedbor.org>
   */
   
-  class DECLSPEC Surface : public BaseSurface
+  class  Surface : public BaseSurface
   {
   public:
     //! Constructor from an SDL_Surface*
@@ -54,8 +54,10 @@ namespace SDLmm {
 
     Surface(const Surface& other)
       : BaseSurface(other) {
+      /*
       if (me)
         ++(me->refcount);
+      */  
     }
     
     //! Create an uninitialized surface.
@@ -83,9 +85,8 @@ namespace SDLmm {
 
     static Surface CreateSurface(const BaseSurface& other) {
       return Surface(
-          SDL_CreateRGBSurface(other.w(), other.h(),
+          SDL_CreateRGBSurface( SDL_SWSURFACE ,other.w(), other.h(),
                                other.GetPixelFormat().BitsPerPixel(),
-                               other.pitch(),
                                other.GetPixelFormat().Rmask(),
                                other.GetPixelFormat().Gmask(),
                                other.GetPixelFormat().Bmask(),

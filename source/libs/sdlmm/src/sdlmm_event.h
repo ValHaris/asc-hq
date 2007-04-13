@@ -29,7 +29,7 @@ namespace SDLmm {
     probably the most important class after Surface. The Event class
     can be used to store any type of event.
   */
-  class DECLSPEC Event {
+  class  Event {
   public:
     //! The event structure.
     /*!

@@ -1,4 +1,4 @@
-//     $Id: newfont.h,v 1.15 2007-04-12 20:52:49 mbickel Exp $
+//     $Id: newfont.h,v 1.16 2007-04-13 16:15:53 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
 //     Revision 1.14.2.1  2006/03/01 21:00:50  mbickel

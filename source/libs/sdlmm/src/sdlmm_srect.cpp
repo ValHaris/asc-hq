@@ -1,6 +1,6 @@
 /*
  * SDLmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright  2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -73,8 +73,10 @@ namespace SDLmm {
     r.y = Max(r1.y, r2.y);
     r.w = Min(r1.x + r1.w, r2.x + r2.w) - r.x;
     r.h = Min(r1.y + r1.h, r2.y + r2.h) - r.y;
-    if (r.w < 0) r.w = 0;
-    if (r.h < 0) r.h = 0;
+    // if (r.w < 0) r.w = 0;
+    // if (r.h < 0) r.h = 0;
+    ASSERT(r.w >= 0);
+    ASSERT(r.h >= 0);
     return r;
   }
 

@@ -100,7 +100,7 @@ void readtextfile ( char* name, pchar &buf, int allocated )
 main (int argc, char *argv[] )
 { 
 
-   pvehicletype   ft;
+   Vehicletype*   ft;
    tfile          datfile;
    char           pict = YES;       // Bilder einlesen
    char           dif = 1;          // Anzahl der Bilder
@@ -109,7 +109,7 @@ main (int argc, char *argv[] )
    char           maxmovement = 0;
    long           erwartungen;
  
-   ft = (pvehicletype) calloc (sizeof (tvehicletype), 1) ;
+   ft = (Vehicletype*) calloc (sizeof (tvehicletype), 1) ;
    for (int i = 0; i <= 1; i++) ft->picture[i] = NULL;
    strcpy (datfile.name, "");
 

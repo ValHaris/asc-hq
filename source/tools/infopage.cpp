@@ -14,6 +14,7 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -59,7 +60,7 @@ InfoPage::~InfoPage() {}
 ;
 
 
-InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):filePath(fp), fileName(fn), cbt(baseType), index(in), generator(gen), pageTitle(title), fullFileName(filePath + fileName + index + HTML) {
+InfoPage::InfoPage(const ContainerBaseType&  baseType, ASCString fn, ASCString fp, ASCString in, ASCString title, GuideGenerator* gen):fileName(fn), filePath(fp), index(in), pageTitle(title), cbt(baseType), generator(gen), fullFileName(filePath + fileName + index + HTML) {
   buildingInfStream = openOFileStream(fullFileName);
 
 }
@@ -150,6 +151,7 @@ void InfoPage::startTable(int border, TableWidth interpretWAs, int width, TableW
     case ABSOLUTE: *buildingInfStream << "px\""; break;
     case RELATIVE: *buildingInfStream << "%%\"";
       break;
+      default: break;
     }
   }
   *buildingInfStream <<  "border=\"" << border << "\" ";
@@ -313,7 +315,7 @@ void InfoPage::addMainText() {
 
     addParagraph(text.c_str() );
   } else {
-    addParagraph("No information available: Do you  want to write an info text? Send it to unitguide@asc-hq.org" );
+    addParagraph("No information available" );
   }
 }
 ofstream* InfoPage::openOFileStream(const ASCString& fileName) {
@@ -367,37 +369,33 @@ BuildingMainPage::BuildingMainPage(const BuildingType&  bt, ASCString filePath, 
 
 void BuildingMainPage::addCategory() {
 
-  if ( bt.special & cghqb ) {
-    addTREntry("Category", HQ);
-    return;
-  }
-  if ( bt.special & cgvehicleproductionb ) {
+   if ( bt.hasFunction( ContainerBaseType::InternalVehicleProduction  )) {
     addTREntry("Category", FACTORY);
     return;
   }
-  if ( bt.special & cgresearchb ) {
-    addTREntry("Category", RESEARCHFAC);
+  if ( bt.hasFunction( ContainerBaseType::Research  )) {
+     addTREntry("Category", RESEARCHFAC);
     return;
   }
 
-  if ( bt.special & cgwindkraftwerkb ) {
-    addTREntry("Category", WINDPOWERPLANT);
+  if ( bt.hasFunction( ContainerBaseType::WindPowerPlant  )) {
+     addTREntry("Category", WINDPOWERPLANT);
     return;
   }
-  if ( bt.special & cgsolarkraftwerkb ) {
-    addTREntry("Category", SOLARPOWERPLANT);
+  if ( bt.hasFunction( ContainerBaseType::SolarPowerPlant  )) {
+     addTREntry("Category", SOLARPOWERPLANT);
     return;
   }
-  if ( bt.special & cgconventionelpowerplantb ) {
-    addTREntry("Category", MATTERCONVERTER);
+  if ( bt.hasFunction( ContainerBaseType::MatterConverter )) {
+     addTREntry("Category", MATTERCONVERTER);
     return;
   }
-  if ( bt.special & cgminingstationb ) {
-    addTREntry("Category", MININGSTATION);
+  if ( bt.hasFunction( ContainerBaseType::MiningStation  )) {
+     addTREntry("Category", MININGSTATION);
     return;
   }
-  if ( bt.special & cgtrainingb ) {
-    addTREntry("Category", TRAININGCENTER);
+  if ( bt.hasFunction( ContainerBaseType::TrainingCenter  )) {
+     addTREntry("Category", TRAININGCENTER);
     return;
   }
   addTREntry("Category", NOCATEGORY);
@@ -408,10 +406,7 @@ void BuildingMainPage::addCategory() {
 
 void BuildingMainPage::addCapabilities() {
   ASCString cap;
-  for ( int i = 0; i < cbuildingfunctionnum; ++i)
-  if ( bt.special & ( 1 << i )){
-     cap = addTREntryln(cap, cbuildingfunctions[i] );
-  }
+
   addTREntry("Capabilities", cap);
   return;
 
@@ -457,8 +452,8 @@ void BuildingTerrainPage::buildContent() {
   addTitle("Not Constructable on");
   addTitle("Fatal");
   *buildingInfStream << "</tr>" << endl;
-  for(int i=0; i< cbodenartennum; i++) {
-    ASCString terrain = cbodenarten[i];
+  for(int i=0; i< terrainPropertyNum; i++) {
+    ASCString terrain = terrainProperty[i];
 
     if (( bt.terrainaccess.terrain.test(i) )|| ( bt.terrainaccess.terrainnot.test(i) )
         || ( bt.terrainaccess.terrainkill.test(i) )) {
@@ -599,12 +594,13 @@ void BuildingCargoPage::buildContent() {
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
         ASCString funcs;
         bool none = true;
-        for ( int j = 0; j<cvehiclefunctionsnum; j++) {
-          if ( i->requireUnitFunction & ( 1 << j )) {
-            funcs = addTREntryln(funcs, cvehiclefunctions[j]);
-            none = false;
-          }
-        }
+        for ( int j = 0; j < ContainerBaseType::functionNum; ++j)
+           if ( i->requiresUnitFeature.test(j) ) {
+              funcs = addTREntryln(funcs, ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(j)) );
+               none = false;
+            }
+        
+
         if(none) {
           addTDEntry("None");
         } else {
@@ -640,7 +636,7 @@ void BuildingResourcePage::buildContent() {
   addTREntry("Effeciency material", bt.efficiencymaterial);
 
   {
-    Resources stor = bt._tank;
+     Resources stor = bt.getStorageCapacity(0);
     ASCString storage;
     int energyStorage = stor.resource(0);
     int materialStorage = stor.resource(1);
@@ -649,7 +645,7 @@ void BuildingResourcePage::buildContent() {
     addTREntry("Maximum storage (ASC mode)", storage);
   }
   {
-    Resources biStorage = bt._bi_maxstorage;
+     Resources biStorage = bt.getStorageCapacity(1);
     ASCString storage;
     int energyCost = biStorage.resource(0);
     int materialCost = biStorage.resource(1);
@@ -722,9 +718,9 @@ UnitInfoPage(vt, filePath, CARGOLINKSUFFIX, TITLE, generator) {}
 void UnitCargoPage::buildContent() {
   addHeadline("Capacaties: Resources", 4);
   startTable(1, RELATIVE, 100, RELATIVE, 100);
-  addTREntry("Energy", vt.tank.energy);
-  addTREntry("Material", vt.tank.material);
-  addTREntry("Fuel", vt.tank.fuel);
+  addTREntry("Energy", vt.getStorageCapacity(0).energy);
+  addTREntry("Material", vt.getStorageCapacity(0).material);
+  addTREntry("Fuel", vt.getStorageCapacity(0).fuel);
   endTable();
   addHeadline("Capacaties: Units", 4);
   if(cbt.maxLoadableUnits) {
@@ -826,12 +822,13 @@ void UnitCargoPage::buildContent() {
       for ( ContainerBaseType::EntranceSystems::const_iterator i = cbt.entranceSystems.begin(); i != cbt.entranceSystems.end(); i++ ) {
         ASCString funcs;
         bool none = true;
-        for ( int j = 0; j<cvehiclefunctionsnum; j++) {
-          if ( i->requireUnitFunction & ( 1 << j )) {
-            funcs = addTREntryln(funcs, cvehiclefunctions[j]);
-            none = false;
-          }
-        }
+
+        for ( int j = 0; j < ContainerBaseType::functionNum; ++j)
+           if ( i->requiresUnitFeature.test(j) ) {
+               funcs = addTREntryln(funcs, ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(j)) );
+               none = false;
+            }
+      
         if(none) {
           addTDEntry("None");
         } else {
@@ -862,11 +859,11 @@ UnitMainPage::UnitMainPage(const VehicleType&  vtype, ASCString filePath, UnitGu
 void UnitMainPage::addCapabilities() {
 
  ASCString cap;
+ 
+ for ( int j = 0; j < ContainerBaseType::functionNum; ++j)
+    if ( vt.hasFunction( ContainerBaseType::ContainerFunctions(j) ) ) 
+    cap = addTREntryln(cap, ContainerBaseType::getFunctionName(ContainerBaseType::ContainerFunctions(j)) );
 
- for ( int i = 0; i < cvehiclefunctionsnum; ++i)
-  if ( vt.functions & ( 1 << i )){       
-   cap = addTREntryln(cap, cvehiclefunctions[i] );
- }
  addTREntry("Capabilities & Properties", cap);
  return;
 }
@@ -894,12 +891,12 @@ void UnitMainPage::buildContent() {
   addTREntry("View", vt.view);
   addTREntry("Jamming", vt.jamming);
   addTREntry("Auto-repair Rate", vt.autorepairrate);
-  if(vt.maxwindspeedonwater >= maxwindspeed) {
+  if(vt.maxwindspeedonwater >= 255) {
     addTREntry("Resists wind force", "Unlimited");
   } else {
     addTREntry("Resists wind force", vt.maxwindspeedonwater);
   }
-  if( vt.functions & ( cfautodigger | cfmanualdigger) ) {
+  if( vt.hasFunction( ContainerBaseType::DetectsMineralResources ) ) {
     addTREntry("Mineral resource detection range", vt.digrange );
   }
 
@@ -917,9 +914,9 @@ UnitTerrainPage::UnitTerrainPage(const VehicleType&  vt, ASCString filePath, Uni
 void UnitTerrainPage::buildContent() {
   addHeadline("General", 4);
   startTable(1, RELATIVE, 100, RELATIVE, 100);
-  addTREntry("Fuel tank", vt.tank.fuel );
+  addTREntry("Fuel tank", vt.getStorageCapacity(0).fuel );
   addTREntry("Fuel Consumption", vt.fuelConsumption);
-  addTREntry("Range", vt.fuelConsumption ? strrr(vt.tank.fuel/vt.fuelConsumption) : "None");   
+  addTREntry("Range", vt.fuelConsumption ? strrr(vt.getStorageCapacity(0).fuel/vt.fuelConsumption) : "None");
   endTable();
   addHeadline("Speed", 4);
   startTable(1, RELATIVE, 100, NONE, 0);
@@ -955,8 +952,8 @@ void UnitTerrainPage::buildContent() {
   addTitle("Blocked by");
   addTitle("Fatal");
   *buildingInfStream << "</tr>" << endl;
-  for(int i=0; i< cbodenartennum; i++) {
-    ASCString terrain = cbodenarten[i];
+  for(int i=0; i< terrainPropertyNum; i++) {
+    ASCString terrain = terrainProperty[i];
     if(vt.terrainaccess.terrain.test(i) && vt.terrainaccess.terrainreq.test(i)) {
       addTREntry(terrain, constructImageLink(STDGFXPATH + ASCString("haken.gif"), "YES") +
                  "</td><td class=\"wg\">" + constructImageLink(STDGFXPATH + ASCString("exkl.gif"), "YES") +
@@ -1216,7 +1213,7 @@ void UnitConstructionPage::buildContent() {
     startTable(1, RELATIVE, 100);
     for ( unsigned int i = 0; i < vt.objectsBuildable.size(); i++ ) {
       for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-        pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
+        ObjectType* obj = objectTypeRepository.getObject_byPos ( b );
         if (     obj->id >= vt.objectsBuildable[i].from
                  && obj->id <= vt.objectsBuildable[i].to ) {
           names = addTREntryln(names, obj->name.c_str() + ASCString("(") + strrr(obj->id )+ ")");
@@ -1234,7 +1231,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.objectsRemovable.size(); i++ ) {
       for ( int b = 0; b < objectTypeRepository.getNum(); b++ ) {
-        pobjecttype obj = objectTypeRepository.getObject_byPos ( b );
+        ObjectType* obj = objectTypeRepository.getObject_byPos ( b );
         if (     obj->id >= vt.objectsRemovable[i].from
                  && obj->id <= vt.objectsRemovable[i].to ) {
           ASCString s;
@@ -1285,7 +1282,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.buildingsBuildable.size(); i++ ) {
       for ( int b = 0; b < buildingTypeRepository.getNum(); b++ ) {
-        pbuildingtype bld = buildingTypeRepository.getObject_byPos ( b );
+        BuildingType* bld = buildingTypeRepository.getObject_byPos ( b );
         if (     bld->id >= vt.buildingsBuildable[i].from
                  && bld->id <= vt.buildingsBuildable[i].to ) {
 
@@ -1304,7 +1301,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.vehiclesBuildable.size(); i++ ) {
       for ( int b = 0; b < vehicleTypeRepository.getNum(); b++ ) {
-        pvehicletype veh = vehicleTypeRepository.getObject_byPos ( b );
+        Vehicletype* veh = vehicleTypeRepository.getObject_byPos ( b );
         if (     veh->id >= vt.vehiclesBuildable[i].from
                  && veh->id <= vt.vehiclesBuildable[i].to ) {
           names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", "./" + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));

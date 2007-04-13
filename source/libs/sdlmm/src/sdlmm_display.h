@@ -36,7 +36,7 @@ namespace SDLmm {
     \note Since the actual SDL_Surface representation is shared among all
     Display instances, they will always reference the correct surface.
   */
-  class DECLSPEC Display : public BaseSurface {
+  class  Display : public BaseSurface {
   protected:
     //! Dummy implementation of operator=() to stop initialization.
     Display& operator= (Display&);

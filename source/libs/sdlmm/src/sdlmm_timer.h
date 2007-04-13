@@ -24,7 +24,7 @@
 #define SDLMM_TIMER_H
 
 namespace SDLmm {
-  class DECLSPEC Timer {
+  class  Timer {
   public:
     typedef unsigned int Ticks;
 
