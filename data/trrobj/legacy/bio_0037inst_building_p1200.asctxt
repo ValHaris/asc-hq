@@ -1,0 +1,26 @@
+ObjectType { 
+   ID = 37
+   Weather = dry few_snow much_snow snow_and_ice
+   parent = 100
+   Name = Installation
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 19 
+      FlipPictures = 0 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFXpictures = 1027
+      FlipPictures = 0 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1856
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1856
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

@@ -1,0 +1,38 @@
+TerrainType {
+   Name = ebener Fels
+   ID = 505
+   abstract = true
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 10  10  10  10  11  11  11  10  10  20  20  16  20  20  20  20  20  10
+      TerrainProperties = hard_sand
+   } dry
+   
+   light_rain ->* TerrainType.dry
+   light_rain.BasicJamming = 1
+   
+   heavy_rain ->* TerrainType.dry
+   heavy_rain.BasicJamming = 2
+
+   few_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 11  11  11  11  11  11  11  11  10  20  20  16  20  20  20  20  20  10
+      TerrainProperties = hard_sand snow track_possible
+   } few_snow
+   much_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  11
+      TerrainProperties = hard_Sand snow deep_snow track_possible
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

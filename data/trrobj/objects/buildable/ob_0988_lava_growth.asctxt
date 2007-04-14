@@ -1,0 +1,9 @@
+ObjectType { 
+   Name = Magma
+   ID = 0988
+   parent = 519
+   GroupID = 21
+
+   growthRate = 0.10
+
+} ObjectType

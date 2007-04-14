@@ -1,0 +1,29 @@
+TerrainType { 
+   Name = Lava hole
+   ID = 311
+   parent = 1206
+   dry { 
+      GFX_Picture = 141
+      TerrainProperties = lava
+   } dry
+   light_rain { 
+      GFX_Picture = 141
+      TerrainProperties = lava
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1550
+      TerrainProperties = lava
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 601
+      TerrainProperties = lava 
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1549
+      TerrainProperties = lava
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1549
+      TerrainProperties = lava
+   } snow_and_ice
+} TerrainType

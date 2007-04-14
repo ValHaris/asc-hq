@@ -1,0 +1,26 @@
+ObjectType { 
+   Name = small railroad
+   ID = 991
+   parent = 2
+   LinkableObjects = 999 995 2 992
+   Armor = 80
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 5   3   3   3   5   5   5   2   0   10  5   1   10  10  5   5   10  5
+   ConstructionCost { 
+      Energy = 0
+      Material = 100
+      fuel = 40
+      Movement = 13
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -50
+      fuel = 30
+      Movement = 10
+   } RemovalCost
+   TerrainAccess { 
+      terrain_not = Forest railroad road Runway Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp
+      terrain_kill = large_rocks very_shallow_water shallow_water Water Deep_water lava 
+   } TerrainAccess
+   TerrainProperties_Filter = forest small_rocks 
+} ObjectType

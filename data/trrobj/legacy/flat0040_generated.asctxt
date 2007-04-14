@@ -1,0 +1,21 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 40
+   Weather = dry few_snow much_snow 
+   dry { 
+      picture = texture-n3b4.png
+      MoveMalus = 11 
+      TerrainProperties = Lowland Track_possible 
+   } dry
+   few_snow { 
+      picture = texture-n3b4.png fewsnow3b.png
+      MoveMalus = 11 
+      TerrainProperties = Lowland Track_possible 
+   } few_snow
+   much_snow { 
+      picture = texture-n3b4.png
+      MoveMalus = 12 
+      GraphicOperations = snow
+      TerrainProperties = Lowland Deep_snow 
+   } much_snow
+} TerrainType

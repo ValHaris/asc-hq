@@ -1,0 +1,24 @@
+TerrainType { 
+   Name = rubber dark
+   ID = 320
+   Parent = 1212
+   dry { 
+      UseGFXpics = false
+      picture = texture-n3d1.png
+   } dry
+   light_rain { 
+      GFX_Picture = 1807
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1806
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 1805
+   } few_snow
+   much_snow { 
+      GFX_Picture = 0870
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 0870
+   } snow_and_ice
+} TerrainType

@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = harbour north
+   ID = 198
+   parent = 1207 
+   dry { 
+      GFX_Picture = 6
+   } dry
+   few_snow { 
+      GFX_Picture = 1904
+   } few_snow
+   much_snow { 
+      GFX_Picture = 996
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1905
+   } snow_and_ice
+} TerrainType

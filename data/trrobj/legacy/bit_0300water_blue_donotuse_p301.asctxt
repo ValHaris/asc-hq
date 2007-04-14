@@ -1,0 +1,5 @@
+TerrainType { 
+   Name = do not use !
+   ID = 300
+   parent = 301
+} TerrainType

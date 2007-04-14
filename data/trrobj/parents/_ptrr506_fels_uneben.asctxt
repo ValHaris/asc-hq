@@ -1,0 +1,41 @@
+TerrainType {
+   Name = unebener Fels
+   ID = 506
+   abstract = true
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  12  12  12  14  14  14  12  10  20  20  16  20  20  20  20  20  14
+      TerrainProperties = hard_sand small_rocks
+   } dry
+   light_rain ->* TerrainType.dry
+   light_rain.Basicjamming = 2
+   heavy_rain {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  12  12  12  15  15  15  12  10  20  20  16  20  20  20  20  20  14
+      TerrainProperties = hard_sand small_rocks mud track_possible
+   } heavy_rain
+   few_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  12  12  12  14  14  14  12  10  20  20  16  20  20  20  20  20  14
+      TerrainProperties = hard_sand small_rocks snow track_possible
+   } few_snow
+   much_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  14
+      TerrainProperties = hard_sand small_rocks snow deep_snow track_possible
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

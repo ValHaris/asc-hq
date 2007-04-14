@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = building (addon)
+   ID = 1019
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 509
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 12
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  18  13  25  25  25  25  25  25  25  25  35 
+      TerrainProperties = hard_sand Installation 
+   } dry
+} TerrainType

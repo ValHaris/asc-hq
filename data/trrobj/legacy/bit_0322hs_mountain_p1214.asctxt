@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = dark hs mountain right
+   ID = 322
+   parent = 1214 
+   dry { 
+      GFX_Picture = 441
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow { 
+      GFX_Picture = 441
+   } few_snow
+   much_snow { 
+      GFX_Picture = 941
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

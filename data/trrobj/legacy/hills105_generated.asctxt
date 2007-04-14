@@ -1,0 +1,15 @@
+TerrainType { 
+   ID = 105
+
+   parent = 400
+   dry { 
+      picture = slope-ld48.png
+   } dry
+   few_snow { 
+      picture = slope-ld48.png fewsnow4.png
+   } few_snow
+   much_snow { 
+      picture = slope-ld48.png
+   } much_snow
+
+} TerrainType

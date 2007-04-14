@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = hs installation
+   ID = 231
+   parent = 1211
+   dry { 
+      GFX_Picture = 227
+   } dry
+   light_rain { 
+      GFX_Picture = 227
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 227
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 692
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1276
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1276
+   } snow_and_ice
+} TerrainType

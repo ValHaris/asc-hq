@@ -1,0 +1,46 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 271
+   Weather = dry few_snow much_snow snow_and_ice
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 127
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  22  22  22  22  22  22  15  10  22  13  19  22  22  13  13  22  12 
+      TerrainProperties = very_shallow_water 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFX_Picture = 587
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  23  23  23  23  23  23  13  11  23  14  19  23  23  14  14  23  13 
+      TerrainProperties = very_shallow_water   
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 698
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  22  22  22  22  22  22  15  12  22  13  19  22  22  13  13  22  12 
+      TerrainProperties = very_shallow_water pack_ice snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFX_Picture = 969
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  22  22  22  22  22  22  15  12  22  13  19  22  22  13  13  22  12 
+      TerrainProperties = very_shallow_water frozen_water snow track_possible
+   } snow_and_ice
+} TerrainType
+

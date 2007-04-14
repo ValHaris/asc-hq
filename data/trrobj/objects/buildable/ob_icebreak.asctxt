@@ -1,0 +1,58 @@
+ObjectType { 
+;   ERSETZT NoSelfChaning
+;   NetBehaviour = NetToBuilding NetToBuildingEntry NetToSelf NetToBorder SpecialBIForest AutoBorder
+
+   ID = 6
+
+
+   Name = Icebreaker Line
+
+   Weather = dry 
+
+   visible_in_fogOfWar = false
+
+   Height = 1
+   Armor = 0
+   lifetime = 3
+   LinkableObjects = 
+   LinkableTerrain = 
+   NetBehaviour = NetToSelf NetToBorder AutoBorder NetToBuildingEntry
+
+   ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = -1
+   Movemalus_plus =  10  10  10  10  10  10  10   5   0   5  -9   0   5   5  -9  -9   5  14
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = -2
+   Jamming_abs = -1
+   Jammming_plus = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = frozen_water
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = very_shallow_water shallow_water water deep_water river lowland hard_sand soft_sand
+   } TerrainAccess
+   TerrainProperties_Filter = frozen_water
+   TerrainProperties_Add = pack_ice
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_icebreak_dry.png 64
+   } dry
+
+} ObjectType

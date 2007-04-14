@@ -1,0 +1,42 @@
+ObjectType { 
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+
+   Name = Small Hill
+   Parent = 508
+   ID = 2154
+
+   dry { 
+      UseGFXpics = false
+      Picture = obj_hill_small_1.png 1
+      DisplayMethod = Translation
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = obj_hill_small_1.png 1
+      DisplayMethod = Translation
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = obj_hill_small_1.png 1
+      DisplayMethod = Translation
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = obj_hill_small_1.png 1
+      DisplayMethod = Translation
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_hill_small_1.png 1
+      DisplayMethod = Translation
+      GraphicOperations = Snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = obj_hill_small_1.png 1
+      DisplayMethod = Translation
+      GraphicOperations = Snow
+   } snow_and_ice
+
+} ObjectType

@@ -1,0 +1,23 @@
+ObjectType { 
+
+   Weather = dry much_snow snow_and_ice
+
+   Name = Quay 16
+   Parent = 3500
+   ID = 2010
+   Weather = dry much_snow snow_and_ice
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_quay_1_short_north.png 1
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = obj_quay_1_short_north_ms.png 1
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      picture = obj_quay_1_short_north_ms.png 1
+   } snow_and_ice
+
+} ObjectType

@@ -1,0 +1,19 @@
+TerrainType { 
+   Name = coast dark northeast
+   ID = 150
+   parent = 1210
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 374
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow ->* TerrainType.dry 
+   much_snow { 
+      GFX_Picture = 874
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 959
+   } snow_and_ice
+} TerrainType
+

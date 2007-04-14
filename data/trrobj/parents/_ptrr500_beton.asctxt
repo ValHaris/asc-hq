@@ -1,0 +1,34 @@
+TerrainType {
+   Name = Beton
+   ID = 500
+   abstract = true
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 10  10  10  10  10  10  10  10  10  18  20  16  18  18  20  20  18  10
+      TerrainProperties = hard_sand
+   } dry
+
+   light_rain ->* TerrainType.dry
+   light_rain.BasicJamming = 1
+
+   heavy_rain ->* TerrainType.dry
+   heavy_rain.BasicJamming = 2
+
+   few_snow ->* TerrainType.dry
+   few_snow.BasicJamming = 1
+   few_snow.TerrainProperties = hard_sand Track_possible snow
+
+   much_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  15  15  15  17  17  17  15  12  20  20  16  20  20  20  20  20  11
+      TerrainProperties = hard_sand track_possible Deep_snow
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

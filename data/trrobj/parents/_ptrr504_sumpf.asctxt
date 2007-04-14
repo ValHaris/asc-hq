@@ -1,0 +1,49 @@
+TerrainType {
+   Name = Sumpf
+   ID = 504
+   abstract = true
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+
+   dry {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  25  25  25  20  10  25  20  16  25  25  20  20  25  10
+      TerrainProperties = Lowland mud morass Swamp track_possible
+   } dry
+   light_rain {
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 20  20  20  20  25  25  25  20  10  25  20  16  25  25  20  20  25  10
+      TerrainProperties = Lowland mud morass Swamp track_possible
+   } light_rain
+   heavy_rain {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  14  14  14  16  16  16  12  10  19  10  11  19  19  10  10  19  10
+      TerrainProperties = shallow_water
+   } heavy_rain
+   few_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  14  14  14  17  17  17  15  10  20  20  16  20  20  20  20  20  10
+      TerrainProperties = lowland mud morass snow Track_possible
+   } few_snow
+   much_snow {
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  11
+      TerrainProperties = lowland snow deep_snow track_possible
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

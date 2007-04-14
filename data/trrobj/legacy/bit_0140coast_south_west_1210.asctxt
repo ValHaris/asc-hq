@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = coast south west
+   ID = 140
+   parent = 1210
+   dry { 
+      GFX_Picture = 101
+   } dry
+   light_rain { 
+      GFX_Picture = 1079
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 1089
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 1033
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1055
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 0961
+   } snow_and_ice
+} TerrainType

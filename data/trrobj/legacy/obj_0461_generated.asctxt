@@ -1,0 +1,43 @@
+ObjectType { 
+   ID = 1064
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Armor = 50
+   Movemalus_plus = 255 255 255 255 255 255 255 8 255 
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 10
+   Jamming_abs = -1
+   Jammming_plus = 4
+   Height = 3
+   ConstructionCost { 
+      Energy = 0
+      Material = 80
+      fuel = 20
+      Movement = 10
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 25
+      fuel = 0
+      Movement = 5
+   } RemovalCost
+   Name = rotating waterspiller
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Buried_pipeline Hard_sand Soft_sand Track_possible Mud Hillside 
+      terrain_all = 
+      terrain_not = Shallow_water High_mountains Road Railroad Runway Pipeline Water Deep_water Mountains Very_shallow_water Large_rocks Lava Ditch Turret_foundation Installation River 
+      terrain_kill = Shallow_water Water Deep_water Very_shallow_water River 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 1197 
+      FlipPictures = 0 
+   } dry
+} ObjectType

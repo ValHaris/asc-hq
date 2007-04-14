@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = pipeline
+   ID = 1017
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 1110
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 25  25  25  25  25  25  25  15  10  25  25  25  25  25  25  25  25  35
+      TerrainProperties = installation Pipeline track_possible 
+   } dry
+} TerrainType

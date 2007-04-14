@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = Beton
+   ID = 11
+   Parent = 1200
+   dry { 
+      GFX_Picture = 32
+   } dry
+   light_rain { 
+      GFX_Picture = 32
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 32
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 980
+   } few_snow
+   much_snow { 
+      GFX_Picture = 1009
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1009
+   } snow_and_ice
+} TerrainType

@@ -1,0 +1,78 @@
+ObjectType { 
+; Objekt ergänzt den Untergrund mit kleinen Steinen "small_rocks"
+
+   Name = kleine Steine
+   ID = 506
+   GroupID = 11
+   abstract = true
+   LinkableObjects = 
+   Armor = 0
+   Height = 96
+
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   NoSelfChaining = true
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -200
+      fuel = 20
+      Movement = 6
+   } RemovalCost
+
+; dry
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_plus = 4   3   3   3   4   4   4   2   4   4   4   0   4   4   4   4   4  5 
+   Movemalus_abs = -1
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = 
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jammming_plus = 1
+
+   TerrainAccess { 
+      terrain_any = Lowland Road Railroad Runway Hard_sand Soft_sand ditch installation very_shallow_water
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = small_rocks
+
+   dry {
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_plus = 4   3   3   3   4   4   4   2   4   4   4   0   4   4   4   4   4  5 
+   Movemalus_abs = -1
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = 
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jammming_plus = 1
+
+   TerrainAccess { 
+      terrain_any = Lowland Road Railroad Runway Hard_sand Soft_sand ditch installation very_shallow_water
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = small_rocks
+   } dry
+
+   light_rain ->* ObjectType.dry
+   heavy_rain ->* ObjectType.dry
+   few_snow ->* ObjectType.dry
+   much_snow ->* ObjectType.dry
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType

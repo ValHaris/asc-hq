@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = harbour north west
+   ID = 200
+   parent = 1207 
+   dry { 
+      GFX_Picture = 8
+   } dry
+   few_snow { 
+      GFX_Picture = 8
+   } few_snow
+   much_snow { 
+      GFX_Picture = 998
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1886
+   } snow_and_ice
+} TerrainType

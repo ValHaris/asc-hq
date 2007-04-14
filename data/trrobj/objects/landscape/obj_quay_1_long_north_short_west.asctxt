@@ -1,0 +1,14 @@
+ObjectType { 
+
+   Weather = dry
+
+   Name = Quay 11
+   Parent = 3500
+   ID = 2020
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_quay_1_long_north_short_west.png 1
+   } dry
+
+} ObjectType

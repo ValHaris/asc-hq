@@ -1,0 +1,6 @@
+ObjectType { 
+   Name = forest (no growth)
+   ID = 990
+   parent = 181
+   growthRate = 0.00
+} ObjectType

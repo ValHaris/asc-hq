@@ -1,0 +1,35 @@
+TerrainType { 
+   Name = Dark Waterfal south
+   ID = 242
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 450
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 30 
+      TerrainProperties = 
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow ->* TerrainType.dry 
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 949
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 30 
+      TerrainProperties = 
+   } much_snow
+   snow_and_ice {
+      UseGFXpics = true
+      GFX_Picture = 973
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 30 
+      TerrainProperties = frozen_water snow 
+   } snow_and_ice
+} TerrainType

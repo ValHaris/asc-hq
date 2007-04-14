@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = Black Background (not for use in MAPS)
+   ID = 9999
+   Weather = dry
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_black_1.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+} TerrainType

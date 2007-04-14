@@ -1,0 +1,44 @@
+ObjectType { 
+   ID = 56
+   Weather = dry 
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus =  
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 25 25  25  25  25  25  25  20  20  25  25  25  25  25  25  25  25  25
+   AttackBonus_abs = -1
+   AttackBonus_plus = 1
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 4
+   Jamming_abs = -1
+   Jammming_plus = 10
+   Height = 91
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = Mountain
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not =  
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = frozen_water high_mountains Shallow_water Water Deep_water Very_shallow_water Pack_ice River Frozen_water swamp morass lowland hard_sand soft_sand
+   TerrainProperties_Add = mountains 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 302 
+      FlipPictures = 0 
+   } dry
+} ObjectType

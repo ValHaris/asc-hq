@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = forest (nGr nDe nRe)
+   ID = 81
+   parent = 990
+   Armor = 0
+   GroupID = 0
+   growthRate = 0.00
+} ObjectType

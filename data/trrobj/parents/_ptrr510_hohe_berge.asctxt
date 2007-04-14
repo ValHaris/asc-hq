@@ -1,0 +1,36 @@
+TerrainType { 
+   Name = hohe Berge
+   ID = 510
+   abstract = true
+   weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 24  24  24  24  28  28  28  24  15  28  28  16  28  28  28  28  28  28 
+      TerrainProperties = high_mountains 
+   } dry
+
+   light_rain ->* TerrainType.dry 
+   light_rain.BasicJamming = 4
+
+   heavy_rain ->* TerrainType.dry 
+   heavy_rain.BasicJamming = 5
+
+   few_snow ->* TerrainType.dry 
+   few_snow.BasicJamming = 4
+   few_snow.TerrainProperties = high_mountains snow
+
+   much_snow { 
+      DefenseBonus = 2
+      AttackBonus = 1
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 30  30  30  30  30  30  30  20  15  30  30  16  30  30  30  30  30  30 
+      TerrainProperties = high_mountains deep_snow track_possible
+   } much_snow
+
+   snow_and_ice ->* TerrainType.much_snow  
+
+} TerrainType

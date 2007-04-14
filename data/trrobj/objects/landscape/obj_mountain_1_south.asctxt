@@ -1,0 +1,34 @@
+ObjectType { 
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+
+   Name = Mountain 1 S
+   Parent = 509
+   ID = 2205
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_mountain_1_south.png 1
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_grassland_7_lr.png 1
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_grassland_7_hr.png 1
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_grassland_7_fs.png 1
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_grassland_7_ms.png 1
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_grassland_7_ms.png 1
+   } snow_and_ice
+
+} ObjectType

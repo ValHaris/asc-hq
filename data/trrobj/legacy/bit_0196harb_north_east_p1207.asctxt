@@ -1,0 +1,17 @@
+TerrainType { 
+   Name = 196 harbour north east
+   ID = 196
+   parent = 1207 
+   dry { 
+      GFX_Picture = 2
+   } dry
+   few_snow { 
+      GFX_Picture = 2
+   } few_snow
+   much_snow { 
+      GFX_Picture = 992
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 1863
+   } snow_and_ice
+} TerrainType

@@ -1,0 +1,25 @@
+TerrainType { 
+   Name = Morass 1
+   Parent = 503
+   ID = 2065
+
+   dry { 
+      Picture = trr_morass_1.png
+   } dry
+   light_rain { 
+      Picture = trr_morass_1_lr.png
+   } light_rain
+   heavy_rain { 
+      Picture = trr_morass_1_hr.png
+   } heavy_rain
+   few_snow { 
+      Picture = trr_morass_1_fs.png
+   } few_snow
+   much_snow { 
+      Picture = trr_morass_1_ms.png
+   } much_snow
+   snow_and_ice { 
+      Picture = trr_morass_1_ms.png
+   } snow_and_ice
+
+} TerrainType

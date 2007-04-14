@@ -1,0 +1,10 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 77
+   Weather = dry 
+   dry { 
+      Picture = mx1.png
+      MoveMalus = 11 
+      TerrainProperties = Lowland Track_possible 
+   } dry
+} TerrainType

@@ -1,0 +1,25 @@
+TerrainType {
+   Name = Beton gfx Parent
+   ID = 1200
+   parent = 500
+   abstract = true
+
+   dry {
+      UseGFXpics = true
+   } dry
+   light_rain {
+      UseGFXpics = true
+   } light_rain
+   heavy_rain {
+      UseGFXpics = true
+   } heavy_rain
+   few_snow {
+      UseGFXpics = true
+   } few_snow
+   much_snow {
+      UseGFXpics = true
+   } much_snow
+   snow_and_ice {
+      UseGFXpics = true
+   } snow_and_ice
+} TerrainType

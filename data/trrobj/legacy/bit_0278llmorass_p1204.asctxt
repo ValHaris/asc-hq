@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = lowland morass
+   ID = 278
+   parent = 1204
+   dry { 
+      GFX_Picture = 129
+   } dry
+   light_rain {
+      GFX_Picture = 802
+   } light_rain
+   heavy_rain {
+      GFX_Picture = 816
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 589
+   } few_snow
+   much_snow { 
+      GFX_Picture = 700
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 700
+   } snow_and_ice
+} TerrainType

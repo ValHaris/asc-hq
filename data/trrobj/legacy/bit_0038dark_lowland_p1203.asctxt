@@ -1,0 +1,20 @@
+TerrainType { 
+   Name = dark lowland
+   ID = 38
+   Parent = 1203
+   weather = dry few_snow much_snow
+   dry { 
+      UseGFXpics = false
+      picture = texture-n3b2a.png
+   } dry
+   few_snow { 
+      UseGFXpics = false
+      picture = texture-n3b2a.png fewsnow4.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = texture-n3b2a.png
+      GraphicOperations = snow
+   } much_snow
+   snow_and_ice ->* TerrainType.much_snow
+} TerrainType

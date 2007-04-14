@@ -1,0 +1,96 @@
+ObjectType { 
+; Objekt ersetzt komplett den Untergrund
+
+   Name = Wiese
+   ID = 501
+   abstract = true
+   LinkableObjects = 
+   Armor = 0
+   Height = 1
+
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   NoSelfChaining = true
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   MoveMalus_abs = 11  11  11  11  12  12  12  11  10  20  20  16  20  20  20  20  20  10
+   MoveMalus_plus =  
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = 
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jammming_plus = 
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand hillside mountains high_mountains  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Road Lowland Shallow_water Swamp Forest High_mountains Railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Hillside Turret_foundation Morass lava
+   TerrainProperties_Add = lowland track_possible
+
+   dry {
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   MoveMalus_abs = 11  11  11  11  12  12  12  11  10  20  20  16  20  20  20  20  20  10
+   MoveMalus_plus =  
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = 
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jammming_plus = 
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand hillside mountains high_mountains  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Road Lowland Shallow_water Swamp Forest High_mountains Railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Hillside Turret_foundation Morass lava
+   TerrainProperties_Add = lowland track_possible
+   } dry
+
+   light_rain ->* ObjectType.dry
+   ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   light_rain.MoveMalus_abs = 12  11  11  11  13  13  13  12  10  20  20  16  20  20  20  20  20  10
+   light_rain.Jamming_abs = 1
+
+   heavy_rain ->* ObjectType.dry
+   ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   heavy_rain.MoveMalus_abs = 13  12  12  12  14  14  14  13  10  20  20  16  20  20  20  20  20  10
+   heavy_rain.TerrainProperties_Add = lowland mud track_possible
+   heavy_rain.Jamming_abs = 2
+
+   few_snow ->* ObjectType.dry
+   ;                       def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   few_snow.MoveMalus_abs = 11  11  11  11  11  11  11  11  10  20  20  16  20  20  20  20  20  10
+   few_snow.TerrainProperties_Add = lowland Track_possible snow
+   few_snow.Jamming_abs = 1
+
+   much_snow ->* ObjectType.dry
+   ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   much_snow.MoveMalus_abs = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  11
+   much_snow.TerrainProperties_Add = lowland track_possible Deep_snow
+   much_snow.Jamming_abs = 2
+
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType

@@ -1,0 +1,37 @@
+ObjectType { 
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+
+   Name = Lava Crater 1
+   Parent = 507
+   ID = 2055
+   GroupID = 14
+
+   TerrainProperties_Add += Lava
+
+   dry { 
+      UseGFXpics = false
+      Picture = obj_crater_lava_1.png 1
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = obj_crater_lava_1.png 1
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = obj_crater_lava_1.png 1
+   } heavy_rain
+   few_snow {
+      UseGFXpics = false
+      picture = obj_crater_lava_1.png 1
+   } few_snow
+   much_snow {
+      UseGFXpics = false
+      picture = obj_crater_lava_1.png 1
+   } much_snow
+   snow_and_ice {
+      UseGFXpics = false
+      picture = obj_crater_lava_1.png 1
+   } snow_and_ice
+
+} ObjectType

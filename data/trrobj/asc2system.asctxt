@@ -1,0 +1,9 @@
+itemfilter {
+   Vehicles =
+   Buildings = 
+   Objects = 2000-3999
+   Terrain = 2000-3999
+   name = asc2 grafic system
+   activated = false
+} itemfilter
+   

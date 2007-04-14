@@ -1,0 +1,33 @@
+TerrainType { 
+   Name = Sand 4
+   Parent = 2030
+   ID = 2924
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_sand_4.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_sand_4_lr.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_sand_4_hr.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_sand_4_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_sand_4.png
+      GraphicOperations = Snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_sand_4.png
+      GraphicOperations = Snow
+   } snow_and_ice
+
+} TerrainType

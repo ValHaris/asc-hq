@@ -1,0 +1,23 @@
+TerrainType { 
+   Name = hs few things
+   ID = 165
+   parent = 1213
+   dry { 
+      GFX_Picture = 185
+   } dry
+   light_rain { 
+      GFX_Picture = 185
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 185
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 650
+   } few_snow
+   much_snow { 
+      GFX_Picture = 756
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 756
+   } snow_and_ice
+} TerrainType

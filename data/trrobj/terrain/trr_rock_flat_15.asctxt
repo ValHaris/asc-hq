@@ -1,0 +1,33 @@
+TerrainType { 
+   Name = Flat Rock 15
+   Parent = 505
+   ID = 2927
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_rock_flat_15.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_rock_flat_15_lr.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_rock_flat_15_hr.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_rock_flat_15_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_rock_flat_15.png
+      GraphicOperations = Snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_rock_flat_15.png
+      GraphicOperations = Snow
+   } snow_and_ice
+
+} TerrainType

@@ -1,0 +1,25 @@
+ObjectType { 
+   ID = 106
+   abstract = true
+   parent = 506
+   dry {
+      UseGFXpics = true
+      GFXpictures = 313 
+      FlipPictures = 0 
+   } dry
+   light_rain {
+      UseGFXpics = true
+   } light_rain
+   heavy_rain {
+      UseGFXpics = true
+   } heavy_rain
+   few_snow {
+      UseGFXpics = true
+   } few_snow
+   much_snow {
+      UseGFXpics = true
+      GFXpictures = 1074 
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice ->* ObjectType.much_snow
+} ObjectType

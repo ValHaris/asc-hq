@@ -1,0 +1,29 @@
+TerrainType { 
+   Name = lowland and metal
+   ID = 314
+   parent = 1206
+   dry { 
+      GFX_Picture = 144
+      TerrainProperties += small_rocks 
+   } dry
+   light_rain { 
+      GFX_Picture = 144
+      TerrainProperties += small_rocks 
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 829
+      TerrainProperties += small_rocks 
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 604
+      TerrainProperties += small_rocks 
+   } few_snow
+   much_snow { 
+      GFX_Picture = 715
+      TerrainProperties += small_rocks 
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 715
+      TerrainProperties += small_rocks 
+   } snow_and_ice
+} TerrainType

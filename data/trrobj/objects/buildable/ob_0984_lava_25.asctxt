@@ -1,0 +1,10 @@
+ObjectType { 
+   Name = Lavafluss
+   ID = 0984
+   parent = 519
+   GroupID = 21
+
+   MaxChildSpawnNumber = 25
+   growthRate = 0.30
+
+} ObjectType

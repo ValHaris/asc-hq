@@ -1,0 +1,46 @@
+ObjectType { 
+   Name = road
+   ID = 1
+   groupid = 1
+   canExistBeneathBuildings = true
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 1000 997
+   Armor = 1100
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 
+   Movemalus_abs =  10  10  10  10  10  10  10  10  12  17  20  10  17  17  20  20  17  10
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 97
+   ConstructionCost { 
+      Energy = 0
+      Material = 80
+      fuel = 20
+      Movement = 15
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -40
+      fuel = 20
+      Movement = 10
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuildingEntry
+   TerrainAccess { 
+      terrain_any = road Lowland Hard_sand Soft_sand frozen_water 
+      terrain_all = 
+      terrain_not = Forest road Large_rocks Ditch Installation turret_foundation railroad swamp
+      terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water river lava 
+   } TerrainAccess
+   TerrainProperties_Filter = lowland hard_sand soft_sand hillside ditch mountains high_mountains installation mud morass swamp very_shallow_water shallow_water snow deep_snow forest small_rocks large_rocks 
+   TerrainProperties_Add = Road 
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025 2026 2027 2028 2029 2030 2031 2032 2033 2034 2035 2036 2037 2038 2039 2040 2041 2042 2043 2044 2045 2046 2047 2048 2049 2050 2051 2052 2053 2054 2055 2056 2057 2058 2059 2060 2061 2062 2063 
+      FlipPictures = 0
+   } dry
+} ObjectType

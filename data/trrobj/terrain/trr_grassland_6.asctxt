@@ -1,0 +1,31 @@
+TerrainType { 
+   Name = Grassland 6
+   Parent = 501
+   ID = 2904
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_grassland_6.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_grassland_6_lr.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_grassland_6_hr.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_grassland_6_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_grassland_6_ms.png
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_grassland_6_ms.png
+   } snow_and_ice
+
+} TerrainType

@@ -1,0 +1,15 @@
+TerrainType { 
+   Name = BI3 import
+   ID = 359
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 479
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 35  35  35  35  35  35  35  25  12  35  35  19  35  35  35  35  35  35  
+      TerrainProperties = Turret_foundation 
+   } dry
+} TerrainType

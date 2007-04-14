@@ -1,0 +1,21 @@
+TerrainType { 
+   Name = building wreck
+   ID = 312
+   parent = 1211
+   Weather = dry heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      GFX_Picture = 142
+   } dry
+   heavy_rain { 
+      GFX_Picture = 827
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 602
+   } few_snow
+   much_snow { 
+      GFX_Picture = 713
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 713
+   } snow_And_ice
+} TerrainType

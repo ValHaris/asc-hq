@@ -1,0 +1,45 @@
+ObjectType { 
+   name = strong pipeline
+   ID = 996
+   groupID = 15
+   canExistBeneathBuildings = true
+   Weather = dry
+   visible_in_fogOfWar = false
+   LinkableObjects = 3 30
+   Armor = 0
+   Movemalus_plus = 
+   Movemalus_abs = 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 95
+   ConstructionCost { 
+      Energy = 0
+      Material = 1900
+      fuel = 920
+      Movement = 25
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 120
+      Movement = 20
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuilding
+   TerrainAccess { 
+      terrain_any = water hillside installation turret_foundation mountains river
+      terrain_all = 
+      terrain_not = pipeline
+      terrain_kill = deep_water lava
+   } TerrainAccess
+   TerrainProperties_Filter =
+   TerrainProperties_Add = pipeline 
+   dry { 
+      UseGFXpics = false
+      picture = ob_pipeline_dry_shadow.png 64
+      
+   } dry
+} ObjectType

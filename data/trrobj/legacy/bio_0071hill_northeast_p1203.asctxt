@@ -1,0 +1,36 @@
+ObjectType { 
+   ID = 71
+   parent = 103
+   weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   Name = hill north-east
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 285 
+      FlipPictures = 0 
+   } dry
+   light_rain { 
+      UseGFXpics = true
+      GFXpictures = 1834
+      FlipPictures = 0 
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = true
+      GFXpictures = 1833
+      FlipPictures = 0 
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = true
+      GFXpictures = 1832
+      FlipPictures = 0 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1831
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1831
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

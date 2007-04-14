@@ -1,0 +1,34 @@
+ObjectType { 
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+
+   Name = Swamp 5
+   Parent = 504
+   ID = 2067
+
+   dry { 
+      UseGFXpics = false
+      Picture = obj_swamp_5.png 1
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = obj_swamp_5.png 1
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = obj_swamp_5.png 1
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = obj_swamp_5.png 1
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_swamp_5_ms.png 1
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = obj_swamp_5_ms.png 1
+   } snow_and_ice
+
+} ObjectType

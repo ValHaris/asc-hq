@@ -1,0 +1,33 @@
+TerrainType { 
+   Name = Mud 2
+   Parent = 502
+   ID = 2922
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_mud_2.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_mud_2_lr.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_mud_2_hr.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_mud_2_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_mud_2.png
+      GraphicOperations = Snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_mud_2.png
+      GraphicOperations = Snow
+   } snow_and_ice
+
+} TerrainType

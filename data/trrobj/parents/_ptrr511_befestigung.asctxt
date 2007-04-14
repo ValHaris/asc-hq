@@ -1,0 +1,36 @@
+TerrainType { 
+   Name = Befestigung
+   ID = 511
+   abstract = true
+   weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      DefenseBonus = 4
+      AttackBonus = 3
+      BasicJamming = 4
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus =  25  25  25  25  25  25  25  15  25  25  25  16  25  25  25  25  25  25
+      TerrainProperties = ditch 
+   } dry
+
+   light_rain ->* TerrainType.dry 
+   light_rain.BasicJamming = 4
+
+   heavy_rain ->* TerrainType.dry 
+   heavy_rain.BasicJamming = 5
+
+   few_snow ->* TerrainType.dry 
+   few_snow.BasicJamming = 4
+   few_snow.TerrainProperties = ditch snow
+
+   much_snow { 
+      DefenseBonus = 4
+      AttackBonus = 3
+      BasicJamming = 5
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 30  30  30  30  30  30  30  20  25  30  30  16  30  30  30  30  30  30 
+      TerrainProperties = ditch deep_snow 
+   } much_snow
+
+   snow_and_ice ->* TerrainType.much_snow  
+
+} TerrainType

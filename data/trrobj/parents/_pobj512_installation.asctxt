@@ -1,0 +1,91 @@
+ObjectType { 
+; Objekt ersetzt komplett das Feld durch "installation"
+
+   Name = Installation
+   ID = 512
+   abstract = true
+   LinkableObjects = 
+
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   NoSelfChaining = true
+   Armor = 0
+   Height = 117
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 25  25  25  25  25  25  25  15  25  25  25  16  25  25  25  25  25  25
+   Movemalus_plus = 
+
+   AttackBonus_abs = 1
+   AttackBonus_plus = 
+   DefenseBonus_abs = 1
+   DefenseBonus_plus = 
+   Jamming_abs = 1
+   Jammming_plus = 
+   ViewBonus_abs = 0
+   ViewBonus_plus = 
+
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Water Deep_water Hard_sand Soft_sand Very_shallow_water lava river  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Lowland mud morass swamp forest High_mountains Shallow_water Water deep_water Hard_sand Soft_sand Very_shallow_water lava Ditch Hillside Turret_foundation Frozen_water 
+   TerrainProperties_Add = Installation 
+
+   dry {
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 25  25  25  25  25  25  25  15  25  25  25  16  25  25  25  25  25  25
+   Movemalus_plus = 
+
+   AttackBonus_abs = 1
+   AttackBonus_plus = 
+   DefenseBonus_abs = 1
+   DefenseBonus_plus = 
+   Jamming_abs = 1
+   Jammming_plus = 
+   ViewBonus_abs = -1
+   ViewBonus_plus = 0
+
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Water Deep_water Hard_sand Soft_sand Very_shallow_water lava river  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Lowland mud morass swamp forest High_mountains Shallow_water Water deep_water Hard_sand Soft_sand Very_shallow_water lava Ditch Hillside Turret_foundation Frozen_water 
+   TerrainProperties_Add = Installation 
+   } dry
+
+   light_rain ->* ObjectType.dry
+   light_rain.Jamming_abs = 2
+
+   heavy_rain ->* ObjectType.dry
+   heavy_rain.Jamming_abs = 3
+
+   few_snow ->* ObjectType.dry
+   few_snow.Jamming_abs = 2
+   few_snow.TerrainProperties_Add = Installation snow
+
+   much_snow ->* ObjectType.few_snow
+   ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   much_snow.Movemalus_abs = 30  30  30  30  30  30  30  20  15  30  30  16  30  30  30  30  30  30 
+   much_snow.Jamming_abs = 3
+   
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType

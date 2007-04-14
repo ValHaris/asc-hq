@@ -1,0 +1,37 @@
+TerrainType { 
+   Name = Installation
+   ID = 512
+   abstract = true
+
+   weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   dry { 
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 1
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus =  25  25  25  25  25  25  25  15  10  25  25  16  25  25  25  25  25  25
+      TerrainProperties = installation 
+   } dry
+
+   light_rain ->* TerrainType.dry 
+   light_rain.BasicJamming = 2
+
+   heavy_rain ->* TerrainType.dry 
+   heavy_rain.BasicJamming = 3
+
+   few_snow ->* TerrainType.dry 
+   few_snow.BasicJamming = 2
+   few_snow.TerrainProperties = installation snow
+
+   much_snow { 
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 3
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus = 30  30  30  30  30  30  30  20  12  30  30  16  30  30  30  30  30  30 
+      TerrainProperties = installation deep_snow 
+   } much_snow
+
+   snow_and_ice ->* TerrainType.much_snow  
+
+} TerrainType

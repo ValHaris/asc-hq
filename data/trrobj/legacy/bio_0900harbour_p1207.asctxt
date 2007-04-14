@@ -1,0 +1,26 @@
+ObjectType { 
+   ID = 900
+   parent = 107
+   Weather = dry few_snow much_snow snow_and_ice 
+   Name = Harbour
+   dry { 
+      UseGFXpics = true
+      GFXpictures = 2165 
+      FlipPictures = 0 
+   } dry
+   few_snow { 
+      UseGFXpics = true
+      GFXpictures = 1724
+      FlipPictures = 0 
+   } few_snow
+   much_snow { 
+      UseGFXpics = true
+      GFXpictures = 1723
+      FlipPictures = 0 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFXpictures = 1723
+      FlipPictures = 0 
+   } snow_and_ice
+} ObjectType

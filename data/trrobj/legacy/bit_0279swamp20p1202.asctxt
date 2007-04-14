@@ -1,0 +1,24 @@
+TerrainType { 
+   Name = Swamp
+   ID = 279
+   Parent = 1202
+   dry { 
+      UseGFXpics = false
+      picture = texture-10cw1.png
+   } dry
+   light_rain { 
+      GFX_Picture = 798
+   } light_rain
+   heavy_rain { 
+      GFX_Picture = 825
+   } heavy_rain
+   few_snow { 
+      GFX_Picture = 591
+   } few_snow
+   much_snow { 
+      GFX_Picture = 702
+   } much_snow
+   snow_and_ice { 
+      GFX_Picture = 702
+   } snow_and_ice
+} TerrainType

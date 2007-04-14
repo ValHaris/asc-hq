@@ -1,0 +1,33 @@
+TerrainType { 
+   Name = Mud 9
+   Parent = 502
+   ID = 2917
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_mud_9.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_mud_9_lr.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_mud_9_hr.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_mud_9_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_mud_9.png
+      GraphicOperations = Snow
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_mud_9.png
+      GraphicOperations = Snow
+   } snow_and_ice
+
+} TerrainType

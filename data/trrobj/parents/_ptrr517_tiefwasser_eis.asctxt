@@ -1,0 +1,44 @@
+TerrainType { 
+   Name = Tiefwasser Eis
+   ID = 517
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   abstract = true
+   dry { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 12  14  14  14  16  16  16  12  10  19  10  11  19  19  10  10  19  10
+      TerrainProperties = deep_water 
+   } dry
+   
+   light_rain ->* TerrainType.dry 
+   light_rain.BasicJamming = 1
+   
+   heavy_rain ->* TerrainType.dry
+   heavy_rain.BasicJamming = 2
+   
+   few_snow ->* TerrainType.dry
+   few_snow.BasicJamming = 1
+   
+   much_snow { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 30  30  30  30  30  30  30  30  10  30  20  12  30  30  19  18  30  30
+      TerrainProperties = deep_water Pack_ice
+   } much_snow
+   
+   snow_and_ice { 
+      UseGFXpics = true
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+  ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus = 13  13  13  13  14  14  14  12  12  14  22  16  14  14  22  22  14  10
+      TerrainProperties = deep_water frozen_water track_possible snow
+   } snow_and_ice
+} TerrainType

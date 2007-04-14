@@ -1,0 +1,14 @@
+TerrainType { 
+   Name = Turret Foundation
+   ID = 1018
+   Weather = dry 
+   dry { 
+      UseGFXpics = true
+      GFX_Picture = 571
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 8
+      MoveMalus = 19 
+      TerrainProperties = Turret_foundation 
+   } dry
+} TerrainType

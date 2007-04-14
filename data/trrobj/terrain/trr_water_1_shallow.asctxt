@@ -1,0 +1,31 @@
+TerrainType { 
+   Name = Shallow Water 1
+   Parent = 514
+   ID = 2002
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_water_1_shallow.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_water_1_shallow.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_water_1_shallow.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_water_1_shallow.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_water_1_shallow_ms.png
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_water_1_shallow_ice.png
+   } snow_and_ice
+
+} TerrainType

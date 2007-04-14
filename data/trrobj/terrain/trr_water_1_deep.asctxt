@@ -1,0 +1,31 @@
+TerrainType { 
+   Name = Deep Water 1
+   Parent = 517
+   ID = 2003
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_water_1_deep.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      Picture = trr_water_1_deep.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      Picture = trr_water_1_deep.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_water_1_deep.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_water_1_deep_ms.png
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_water_1_deep_ice.png
+   } snow_and_ice
+
+} TerrainType
