@@ -1,0 +1,10 @@
+technology {
+   Name = Spirit
+   infotext = 
+   id = 513
+   RelatedUnitID = 513
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100003,100104,100205,100305,500,529,508 
+} Technology

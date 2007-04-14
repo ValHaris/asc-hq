@@ -1,0 +1,10 @@
+technology {
+   Name = Gunboat
+   infotext = Forschungsprojekt abgeschlossen! Gunboat verfuegbar!
+   id = 80
+   RelatedUnitID = 80
+   parent = 100000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100000,100004,100101,100211,41,38 
+} Technology

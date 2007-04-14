@@ -1,0 +1,10 @@
+technology {
+   Name = DD21
+   infotext = 
+   id = 609
+   RelatedUnitID = 609
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100004,100104,100305,586,587,588 
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 34
+   ;Bezeichnung der verknüpften Technologie: Eel
+   TechnologiesRequired = 34
+} TechAdapter

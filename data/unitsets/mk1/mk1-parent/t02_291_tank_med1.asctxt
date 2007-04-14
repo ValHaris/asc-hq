@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = med tank 1
+   ID = 291
+   parent = 400 401 402 405
+   abstract = true
+   
+   Description = medium tank
+   Infotext = [Tank Hunter]
+   WreckageObject = 466
+   GuideSortHelp = 503 291 0 0 0 0 0 0 0 0
+
+
+   Armor = 750
+   Weight = 70
+
+   Tank { 
+      fuel = 1200
+   } Tank
+   FuelConsumption = 16
+   Movement = 0 0 0 77 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.TankSpGun 
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+      Weapon0.Name = Panzerabwehrkanone
+
+      Weapon1 ->* VehicleType.MG30low
+      Weapon1.Name = leichtes Maschinengewehr
+
+   } Weapons
+} VehicleType

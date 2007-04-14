@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 26
+   ;Bezeichnung der verknüpften Technologie: Ant
+   TechnologiesRequired = 26
+} TechAdapter

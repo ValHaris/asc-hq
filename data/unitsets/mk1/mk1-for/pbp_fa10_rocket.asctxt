@@ -1,0 +1,16 @@
+ Technology {
+   name = "rocket technology"
+   infotext = "advanced technology"
+   id = 100310
+   researchpoints = 1000
+   
+   techlevel = 4
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100002,100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

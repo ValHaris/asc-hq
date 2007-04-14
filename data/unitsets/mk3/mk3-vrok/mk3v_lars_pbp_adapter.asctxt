@@ -1,0 +1,5 @@
+Techadapter {
+   ; LARS
+   Name = 550
+   TechnologiesRequired = 550
+} TechAdapter

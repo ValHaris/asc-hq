@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = radar plane
+   abstract = true
+   ID = 247
+   parent = 400 401 402 414 496
+   Description = Recce Plane
+   Infotext = [The Recce plane can be vital to the success of a battle. It provides
+              a commander with detailed data about a sizable area. The Recce
+              Plane can prevent nasty surprises!]
+   GuideSortHelp = 0 247 0 0 0 0 0 0 0 0
+
+
+   Armor = 350
+   Weight = 180
+   View = 100
+   Abilities = satelliteview
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } Tank
+   FuelConsumption = 22
+   Movement = 0 0 0 65 130 150 150 0 
+} VehicleType

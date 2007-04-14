@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = sonar boje
+   abstract = true
+   parent = 400 401 402 423
+   ID = 249
+   Description = sonar boje
+   Infotext = []
+   GuideSortHelp = 0 249 0 0 0 0 0 0 0 0
+
+   Jamming = 39
+   View = 65
+   Abilities = sonar paratrooper jam_only_own_field
+
+   Height = floating 
+   TerrainAccess ->* VehicleType.verysmallship_terrain
+   Movement = 0 0 19 0 0 0 0 0
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

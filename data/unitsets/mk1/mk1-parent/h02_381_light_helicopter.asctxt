@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = light helicopter
+   parent = 400 401 402 409 497
+   ID = 381
+   abstract = true
+   
+   Description = light helicopter
+   Infotext = []
+   GuideSortHelp = 515 381 0 0 0 0 0 0 0 0
+
+   Armor = 330
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   FuelConsumption = 22
+   Weight = 35
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.smASM 
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 68
+      Weapon0.Punch@MinRange = 68
+
+      Weapon1 ->* VehicleType.smAAM 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 65
+      Weapon1.Punch@MinRange = 65
+
+      Weapon2 ->* VehicleType.Air_MG 
+      Weapon2.Ammo = 10
+      Weapon2.Punch@MaxRange = 50
+      Weapon2.Punch@MinRange = 50
+   } Weapons
+} VehicleType

@@ -1,0 +1,40 @@
+VehicleType { 
+   abstract = true
+   Name = sam slow
+   ID = 219
+   parent = 400 401 402 411
+
+   Description = slow missile air defence
+   Infotext = []
+   GuideSortHelp = 219 508 0 0 0 0 0 0 0 0
+
+   Armor = 300
+   View = 50
+   Picture = G_patriot.pcx
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 750
+   } Tank
+   FuelConsumption = 25
+   Abilities += MoveDuringReactionFire
+   Movement = 0 0 0 20 0 0 0 0 
+   Category = Medium_wheeled_vehicle
+   Weight = 20
+   TerrainAccess { 
+      terrain_any = road runway hard_sand lowland ditch turret_foundation Frozen_water
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks morass swamp deep_snow
+      terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water River lava
+   } TerrainAccess
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.MaxRange = 60
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 75
+   } Weapons
+} VehicleType

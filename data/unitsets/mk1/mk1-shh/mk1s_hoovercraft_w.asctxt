@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Hoovercraft Wreckage
+   ID = 405
+   parent = 499
+   dry { 
+      picture = MK1s_hoovercraft_w.pcx 1
+   } dry
+} ObjectType

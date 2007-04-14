@@ -1,0 +1,10 @@
+technology {
+   Name = ICBM
+   infotext = 
+   id = 574
+   RelatedUnitID = 574
+   parent = 100010
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 100010,100002,100105,100301,100310,550,551,565,552 
+} Technology

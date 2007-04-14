@@ -1,0 +1,10 @@
+technology {
+   Name = Spaceshuttle
+   infotext = 
+   id = 521
+   RelatedUnitID = 521
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100003,100102,100302,520 
+} Technology

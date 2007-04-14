@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = TERRIBLE
+   ID = 67
+   parent = 235
+
+   Description = space station
+   Picture = MK1o_terrible.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+
+   Weapons { 
+
+      Weapon0.Punch@MaxRange -= 2
+      Weapon0.Punch@MinRange -= 2
+
+      Weapon1.Punch@MaxRange -= 2
+      Weapon1.Punch@MinRange -= 2
+
+   } Weapons
+} VehicleType

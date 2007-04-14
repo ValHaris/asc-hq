@@ -1,0 +1,10 @@
+technology {
+   Name = LST
+   infotext = 
+   id = 607
+   RelatedUnitID = 607
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100004,100103 
+} Technology

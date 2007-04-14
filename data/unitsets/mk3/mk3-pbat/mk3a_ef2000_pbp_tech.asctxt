@@ -1,0 +1,10 @@
+technology {
+   Name = EF2000
+   infotext = 
+   id = 512
+   RelatedUnitID = 512
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100003,100102,100206,509 
+} Technology

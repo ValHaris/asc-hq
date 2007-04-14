@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = VICTORIA
+   parent = 364 
+   ID = 611
+   
+   picture = MK3s_victoria.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+
+   Movement += 0 11 0 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+
+      Weapon1 ->* VehicleType.UTorp 
+      Weapon1.Ammo = 3
+      Weapon1.Punch@MaxRange = 125
+      Weapon1.Punch@MinRange = 125
+   } Weapons
+} VehicleType

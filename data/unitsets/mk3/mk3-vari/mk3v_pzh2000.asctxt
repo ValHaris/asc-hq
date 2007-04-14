@@ -1,0 +1,20 @@
+VehicleType {
+   Name = PzH2000
+   ID = 605
+   parent = 252
+
+   Description = heavy artillery
+   Infotext = []
+   Picture = mk3v_PzH2000.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor += 20
+   Movement += 0 0 0 10 0 0 0 0 
+   Weight = 55
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

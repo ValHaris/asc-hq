@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B2
+   ;Bezeichnung der verknüpften Technologie: Depot
+   TechnologiesRequired = 100000
+} TechAdapter

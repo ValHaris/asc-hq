@@ -1,0 +1,49 @@
+VehicleType { 
+   Name = medium mixed fighter
+   parent = 400 401 402 414 498
+   ID = 329
+   abstract = true
+   
+   Description = Fighter-Bomber
+   Infotext = [Fighter/Bombers combine ground assault with air defense. While
+              a Fighter/Bomber cannot stand up to a Heavy Fighter, it has
+              sufficient means of defending itself. If you need a convoy taken
+              out, and cannot afford to wait for escorts, the Fighter/Bomber
+              is the ideal choice.]
+   GuideSortHelp = 329 513 0 0 0 0 0 0 0 0
+
+   Armor = 350
+   Weight = 80
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4500
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 60 180 180 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.smAAM 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 67
+      Weapon0.Punch@MinRange = 67
+
+      Weapon1. ->* VehicleType.Air_MG 
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 42
+      Weapon1.Punch@MinRange = 42
+
+      Weapon2 ->* VehicleType.smASM 
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 69
+      Weapon2.Punch@MinRange = 69
+
+      Weapon3 ->* VehicleType.medBomb 
+      Weapon3.Ammo = 4
+      Weapon3.Punch@MaxRange = 80
+      Weapon3.Punch@MinRange = 80
+   } Weapons
+} VehicleType

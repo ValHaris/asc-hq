@@ -1,0 +1,5 @@
+Techadapter {
+   ; Daring
+   Name = 585
+   TechnologiesRequired = 585
+} TechAdapter

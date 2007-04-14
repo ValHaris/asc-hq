@@ -1,0 +1,5 @@
+Techadapter {
+   ; Berkut
+   Name = 560
+   TechnologiesRequired = 560
+} TechAdapter

@@ -1,0 +1,16 @@
+VehicleType {
+   abstract = true
+   ID = 499
+   Transportation { 
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } Transportation
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Hawkeye
+   infotext = 
+   id = 501
+   RelatedUnitID = 501
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100003,100102,100208 
+} Technology

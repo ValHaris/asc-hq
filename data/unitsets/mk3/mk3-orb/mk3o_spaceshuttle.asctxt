@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = SPACESHUTTLE
+   parent = 231
+   ID = 521
+   Description = orbit transport
+   Infotext = []
+   Picture = MK3o_spaceshuttle.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor += 50
+   Movement += 0 0 0 0 0 0 0 10 
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.AmmoBomb 
+      Weapon0.Ammo = 10
+      Weapon1 ->* VehicleType.AmmoCM 
+      Weapon1.Ammo = 6
+      Weapon2 ->* VehicleType.ServiceOrbit 
+   } Weapons
+} VehicleType

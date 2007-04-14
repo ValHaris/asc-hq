@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B15
+   ;Bezeichnung der verknüpften Technologie: Solar Power Plant
+   TechnologiesRequired = 100000
+} TechAdapter

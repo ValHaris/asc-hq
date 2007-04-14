@@ -1,0 +1,5 @@
+Techadapter {
+   ; Maus
+   Name = 615
+   TechnologiesRequired = 615
+} TechAdapter

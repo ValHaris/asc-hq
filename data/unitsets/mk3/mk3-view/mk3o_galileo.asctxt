@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = GALILEO
+   Id = 527
+   parent = 246 
+
+   Description = espionage satellite
+   Infotext = [The Communications Satellite is an orbital unit designed to discover
+              surface activity. Since the Satellite is out of range (and even
+              out of view) of most enemy units, it is ideally suited to monitor
+              enemy operations. Its internal sensor array also allows it to
+              spot enemy sattelites.]
+   Picture = MK3o_GALILEO.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Jamming = 40
+   Abilities += jam_only_own_field
+
+} VehicleType

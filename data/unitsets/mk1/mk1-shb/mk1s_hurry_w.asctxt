@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Hurry Wreckage
+   ID = 408
+   parent = 498
+   Armor = 100
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 100
+      Movement = 30
+   } RemovalCost
+   dry { 
+      picture = MK1s_hurry.pcx 1
+   } dry
+} ObjectType

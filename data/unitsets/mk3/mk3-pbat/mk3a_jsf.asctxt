@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = JSF
+   parent = 339
+   ID = 603
+   Description = join strike fighter
+
+   picture = MK3a_JSF.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+
+      Weapon1.Punch@MaxRange += 2
+      Weapon1.Punch@MinRange += 2
+
+   } Weapons
+} VehicleType

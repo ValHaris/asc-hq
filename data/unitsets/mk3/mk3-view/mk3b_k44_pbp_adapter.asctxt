@@ -1,0 +1,5 @@
+Techadapter {
+   ; K44
+   Name = 510
+   TechnologiesRequired = 510
+} TechAdapter

@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = TIGER
+   parent = 381
+   ID = 503
+   
+   Description = battle helicopter
+   Infotext = []          
+   picture = MK3h_tiger.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Movement += 0 0 0 0 10 10 0 0 
+
+   Weapons { 
+
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+
+      Weapon1.Punch@MaxRange += 3
+      Weapon1.Punch@MinRange += 3
+
+   } Weapons
+} VehicleType

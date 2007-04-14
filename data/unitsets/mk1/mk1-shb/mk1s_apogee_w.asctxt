@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Apogee Wreckage
+   ID = 437
+   parent = 498
+   Armor = 1000
+   RemovalCost { 
+      Energy = 0
+      Material = -10000
+      fuel = 1000
+      Movement = 50
+   } RemovalCost
+   dry { 
+      picture = MK1s_apogee.pcx 1
+   } dry
+} ObjectType

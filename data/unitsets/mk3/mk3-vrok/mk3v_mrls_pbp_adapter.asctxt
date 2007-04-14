@@ -1,0 +1,5 @@
+Techadapter {
+   ; MRLS
+   Name = 551
+   TechnologiesRequired = 551
+} TechAdapter

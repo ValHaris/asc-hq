@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = FORT
+   ID = 49
+   parent = 316
+
+   Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse gegen Soldatenansturm zu verteidigen .]
+   picture = MK1b_fort.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 100
+
+} VehicleType

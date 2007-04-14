@@ -1,0 +1,10 @@
+technology {
+   Name = Seawolf
+   infotext = 
+   id = 612
+   RelatedUnitID = 612
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100004,100104,100208,100310,610,611 
+} Technology

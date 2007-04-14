@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = ROLAND
+   ID = 532
+   parent = 220
+
+   Description = anti aircraft tank
+   Picture = MK3v_roland.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   Movement += 0 0 0 4 0 0 0 0 
+} VehicleType

@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = vehicle tracked
+   abstract = true
+   ID = 336
+   parent = 400 401 402
+
+   Description = wheeled vehicle
+   Infotext = []
+   WreckageObject = 497 496
+
+   Armor = 450
+   View = 30
+   Jamming = 0
+   Abilities = leaves_tracks 
+   Category = medium_tracked_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 45
+
+   Height = ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 14
+   Movement = 0 0 0 77 0 0 0 0 
+   TerrainAccess ->* VehicleType.med_terrain 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   WaitFortack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

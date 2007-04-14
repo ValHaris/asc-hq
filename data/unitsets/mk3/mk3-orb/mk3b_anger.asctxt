@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = ANGER
+   ID = 622
+   parent = 400 401 402 422
+
+   Description = mobile rocket laucher
+   Infotext = [ bedingt mobile stationaere Boden-Orbital Raketenabschußrampe. ]
+   Picture = MK3b_Anger.pcx
+   GuideSortHelp = 509 600 0 0 3 0 0 0 0 0
+
+   Armor = 400
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 100
+   } Tank
+   FuelConsumption = 20
+   Abilities = moveduringreactionfire
+   Weight = 190
+   TerrainAccess ->* VehicleType.turret_all
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.SOM
+      Weapon0.MaxRange = 70
+   } Weapons
+} VehicleType

@@ -1,0 +1,44 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402 493
+   ID = 363
+
+   Name = support submarine
+   Description = support sumarine
+   Infotext = []
+   GuideSortHelp = 519 363 0 0 0 0 0 0 0 0
+
+
+   Armor = 900
+   View = 30
+   Jamming = 0
+   WaitFortack = false
+   Abilities = sonar
+   Category = medium_ship
+   MaxSurvivableStorm = 210
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 2000
+
+   Height = deep_submerged submerged floating 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5000
+   } Tank
+   FuelConsumption = 20
+   Movement = 77 77 77 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.mediumship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

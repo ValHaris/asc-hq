@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = RAFALE
+   ID = 623
+   parent = 327
+   Picture = MK3a_RAFALE.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   Movement += 0 0 0 0 10 10 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+
+      Weapon1.Punch@MaxRange += 2
+      Weapon1.Punch@MinRange += 2
+   } Weapons
+} VehicleType

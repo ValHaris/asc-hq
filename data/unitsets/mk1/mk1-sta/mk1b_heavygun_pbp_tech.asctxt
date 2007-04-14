@@ -1,0 +1,10 @@
+technology {
+   Name = Heavy Gun
+   infotext = Forschungsprojekt abgeschlossen! Heavy Gun verfuegbar!
+   id = 110
+   RelatedUnitID = 110
+   parent = 100000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100000,100002,100104,100203,100309,49,56,94 
+} Technology

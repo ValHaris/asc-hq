@@ -1,0 +1,10 @@
+technology {
+   Name = PRD
+   infotext = 
+   id = 544
+   RelatedUnitID = 544
+   parent = 100010
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100010,100002 
+} Technology

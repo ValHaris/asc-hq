@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = CM bunker
+   ID = 304
+   abstract = true
+   parent = 400 401 402 403
+
+   Description = main rocket bunker
+   Infotext = [ Gepanzerte stationaere Boden-Boden Raketenanlage. Aufgrund der große Treibstofftanks ist der Sprengkopf der 
+   Rakete eher klein ausgefallen.]
+   GuideSortHelp = 505 304 0 0 0 0 0 0 0 0
+
+
+   Armor -= 500
+   View = 30
+   Abilities = no_reactionfire
+   Weight = 12000
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   FuelConsumption = 0
+   Movement = 0 0 0 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.turret_lowland 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 200
+      Weapon0.MinRange = 100
+      Weapon0.Ammo = 3
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+      Weapon1 ->* VehicleType.Def_MG 
+   } Weapons
+} VehicleType

@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = DUMPER
+   parent = 335
+   ID = 577
+   
+   Description = transport vehicle
+   Infotext = [Material transpor unit]
+   picture = MK3v_dumper.pcx
+   GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Abilities += material_transfer
+   Category = heavy_wheeled_vehicle
+   Weight = 80
+
+   Tank { 
+      Material = 30000
+      fuel = 2000
+   } Tank
+   FuelConsumption = 12
+   TerrainAccess ->* VehicleType.offroad 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* Vehicletype.ServiceGround 
+   } Weapons
+} VehicleType

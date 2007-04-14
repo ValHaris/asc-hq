@@ -1,0 +1,54 @@
+VehicleType { 
+   Name = heavy mixed fighter
+   parent = 400 401 402 414 498
+   ID = 330
+   abstract = true
+   
+   Description = heavy mixed fighter
+   Infotext = [The heavy mixed is a prototype fighter that is capable of performing multirole engagements.
+Its weapons are able of attacking all kinds of ground, air and even orbital targets.
+He moves at very high speeds on all atmospheric altitudes.
+Its only downside is its high price and its inability to perform ranged attacks.
+]
+   GuideSortHelp = 330 513 600 0 0 0 0 0 0 0
+
+   Armor = 400
+   Weight = 105
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5000
+   } Tank
+   FuelConsumption = 26
+   Movement = 0 0 0 60 200 220 220 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.AAMH 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 78
+      Weapon0.Punch@MinRange = 78
+
+      Weapon1 ->* VehicleType.AMO 
+      Weapon1.MaxRange = 10 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+
+      Weapon2 ->* VehicleType.ASM 
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 84
+      Weapon2.Punch@MinRange = 84
+
+      Weapon3 ->* VehicleType.AirH_MG 
+
+      Weapon4 ->* VehicleType.medBomb 
+      Weapon4.Ammo = 3
+      Weapon4.Punch@MaxRange = 100
+      Weapon4.Punch@MinRange = 100
+
+   } Weapons
+} VehicleType

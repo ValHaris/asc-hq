@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = SHUTTLE
+   parent = 231
+   ID = 86
+
+   Description = spaceshuttle
+   Infotext = []
+   Picture = MK1o_shuttle.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+   Abilities += repair_vehicle
+   Movement -= 0 0 0 0 10 10 10 10 
+   Weapons { 
+      Initiative = 0
+      Number = 4
+
+      Weapon0 ->* VehicleType.Orbit_Cannon 
+      
+      Weapon1 ->* VehicleType.AmmoSM 
+      Weapon1.Ammo = 10
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.AmmoCM 
+      Weapon3.Ammo = 5
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Inca
+   infotext = Forschungsprojekt abgeschlossen! Inca verfuegbar!
+   id = 54
+   RelatedUnitID = 54
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100003,100103,100207,23,55 
+} Technology

@@ -1,0 +1,26 @@
+VehicleType { 
+   abstract = true
+   Name = flak short
+   ID = 217
+
+   parent = 400 401 402 404
+   Description = anti aircraft tank
+   GuideSortHelp = 217 508 0 0 0 0 0 0 0 0
+
+   Infotext = []
+   Armor = 450
+   FuelConsumption = 13
+   Abilities += MoveDuringReactionFire
+   Movement = 0 0 0 80 0 0 0 0 
+   Weight = 35
+   Weapons { 
+      Initiative = 10
+      Number = 2
+      Weapon0 ->* VehicleType.Flak 
+      Weapon0.Ammo = 12
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
+      
+      Weapon1 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

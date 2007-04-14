@@ -1,0 +1,10 @@
+technology {
+   Name = Mirage
+   infotext = 
+   id = 581
+   RelatedUnitID = 581
+   parent = 100010
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100010,100004 
+} Technology

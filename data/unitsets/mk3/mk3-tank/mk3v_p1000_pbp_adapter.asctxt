@@ -1,0 +1,5 @@
+Techadapter {
+   ; P1000
+   Name = 563
+   TechnologiesRequired = 563
+} TechAdapter

@@ -1,0 +1,25 @@
+VehicleType { 
+   abstract = true
+   Name = SAM TURRET
+   ID = 222
+   parent = 400 401 402 422
+
+   Description = air-defence turret
+   Infotext = []
+   GuideSortHelp = 222 508 0 0 0 0 0 0 0 0
+
+   view = 50
+   Picture = b_samturret.pcx
+   Weight = 290
+   TerrainAccess ->* VehicleType.turret_only
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SAMT 
+      Weapon0.Ammo = 12
+
+      Weapon1 ->* VehicleType.AirMiniGun 
+      Weapon1.Ammo = 10
+      Weapon1.Reactionfireshots = 1
+   } Weapons
+} VehicleType

@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = SHARK
+   parent = 355
+   ID = 47
+   
+   Description = cruiser
+   picture = MK1s_shark.pcx
+   WreckageObject = 447
+
+   Armor += 100
+   Abilities += sonar
+   GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
+
+   Weapons { 
+      Initiative = 20
+      Number = 8
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 120
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.Ship_Flak 
+      Weapon1.Ammo = 15
+
+      Weapon2 ->* VehicleType.MG45med 
+      Weapon2.Ammo = 100
+ 
+      Weapon3 ->* VehicleType.DCS 
+      Weapon3.Ammo = 3
+
+      Weapon4 ->* VehicleType.SAMH
+      Weapon4.MaxRange = 30
+      Weapon4.ReactionFireShots = 1      
+
+      Weapon5 ->* VehicleTYpe.AmmoSM
+      Weapon6 ->* VehicleType.AmmoTorp
+      Weapon7 ->* VehicleType.AmmoBomb
+   } Weapons
+} VehicleType

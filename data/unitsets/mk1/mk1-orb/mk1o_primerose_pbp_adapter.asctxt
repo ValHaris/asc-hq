@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 88
+   ;Bezeichnung der verknüpften Technologie: Primerose
+   TechnologiesRequired = 88
+} TechAdapter

@@ -1,0 +1,16 @@
+VehicleType {
+   abstract = true
+   ID = 492
+   Transportation { 
+      EntranceSystemNum = 2
+      EntranceSystem1 {
+        Mode = in out docking
+        UnitHeightAbs =  submerged deep_submerged
+        UnitHeightRel = 0
+        ContainerHeight = submerged deep_submerged
+        CategoriesNOT = 
+        DockingHeightAbs = submerged deep_submerged
+        DockingHeightRel = 0
+      } EntranceSystem1
+   } Transportation
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Roland
+   Name = 532
+   TechnologiesRequired = 532
+} TechAdapter

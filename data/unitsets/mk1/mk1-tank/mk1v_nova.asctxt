@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = NOVA
+   ID = 66
+   parent = 291
+   Description = medium tank
+   Picture = MK1v_nova.pcx
+   WreckageObject = 466
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+
+   Movement -= 0 0 0 5 0 0 0 0 
+
+   Weapons { 
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange -= 2
+      Weapon0.Punch@MinRange -= 2
+
+   } Weapons
+} VehicleType

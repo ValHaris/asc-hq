@@ -1,0 +1,5 @@
+Techadapter {
+   ; EF2000
+   Name = 512
+   TechnologiesRequired = 512
+} TechAdapter

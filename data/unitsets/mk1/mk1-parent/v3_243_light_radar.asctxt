@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = light radar
+   abstract = true
+   parent = 400 401 402 423
+   ID = 243
+   Description = light radar
+   Infotext = []
+   GuideSortHelp = 0 243 0 0 0 0 0 0 0 0
+
+
+   View = 75
+   TerrainAccess ->* VehicleType.Device_terrain
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

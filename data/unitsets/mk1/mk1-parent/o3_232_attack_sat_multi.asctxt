@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = attack sat multi
+   abstract = true
+   ID = 232
+   parent = 400 401 402 407
+
+   Description = Attack Satellite
+   Infotext = [top secret]
+   GuideSortHelp = 516 232 507 508 0 509 0 0 0 0
+
+
+   Armor += 50
+   Abilities += MoveDuringReactionFire 
+
+   TerrainAccess ->* Vehicletype.sat_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.OAM
+      
+      Weapon1 ->* VehicleType.OGM
+   } Weapons
+} VehicleType

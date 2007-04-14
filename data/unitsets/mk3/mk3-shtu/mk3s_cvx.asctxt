@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = CVX
+   parent = 360
+   ID = 569
+   
+   Description =  aircraft carrier
+   picture = MK3s_cvx.pcx
+   Abilities += sonar
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 150
+   Movement += 0 0 10 0 0 0 0 0 
+
+   Weapons { 
+      Number = 6
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.ReactionFireShots = 3
+      Weapon0.Type = air_missile ammo_transfer shootable 
+      Weapon0.MaxRange = 60
+      Weapon0.Ammo = 100
+
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 100
+
+      Weapon2 ->* VehicleType.AmmoGM 
+      Weapon2.Ammo = 100
+
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 100
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 100
+
+      Weapon5 ->* vehicleType.AmmoMG 
+      Weapon5.Ammo = 200
+   } Weapons
+} VehicleType

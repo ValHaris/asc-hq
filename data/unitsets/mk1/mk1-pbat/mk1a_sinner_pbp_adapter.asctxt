@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 82
+   ;Bezeichnung der verknüpften Technologie: Sinner
+   TechnologiesRequired = 82
+} TechAdapter

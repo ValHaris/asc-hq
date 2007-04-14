@@ -1,0 +1,5 @@
+Techadapter {
+   ; A-Sat
+   Name = 528
+   TechnologiesRequired = 528
+} TechAdapter

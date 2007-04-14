@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = very light helicopter
+   parent = 400 401 402 409 497
+   ID = 380
+   abstract = true
+
+   Description = leichter Kampfhubschrauber
+   Infotext = []
+   GuideSortHelp = 515 380 0 0 0 0 0 0 0 0
+
+   Armor = 280
+   wreckageobject = 495 494
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 0 30 140 140 0 0 
+   Weight = 25
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 50
+      Weapon0.Punch@MinRange = 50
+
+      Weapon1 ->* vehicleType.smASM 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 65
+      Weapon1.Punch@MinRange = 65
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Ship Wreckage
+   ID = 441
+   parent = 498
+   dry { 
+      picture = MK1s_tide.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; ICCE
+   Name = 570
+   TechnologiesRequired = 570
+} TechAdapter

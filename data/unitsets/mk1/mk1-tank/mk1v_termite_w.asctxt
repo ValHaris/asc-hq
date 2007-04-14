@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Termite Wreckage
+   ID = 465
+   parent = 499
+   dry { 
+      picture = MK1v_termite_w.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = CRAB
+   parent = 370
+   ID = 24
+
+   Description = Armored Supply Ship
+   Infotext = [A Supply Ship is a core vessel in almost any navy. It carries
+              ammunition for other ships. A Nuclear Submarine without a Supply
+              Ship to back it up will become useless with a couple of shots,
+              and many other ships will find themselves in need of more ordinance
+              as well.]
+   picture = MK1s_crab.pcx
+   WreckageObject = 424
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Weapons { 
+      Weapon6.Ammo = 300
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Silencer
+   Name = 525
+   TechnologiesRequired = 525
+} TechAdapter

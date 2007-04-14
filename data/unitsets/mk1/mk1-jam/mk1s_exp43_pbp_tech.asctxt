@@ -1,0 +1,10 @@
+technology {
+   Name = EXP 43
+   infotext = Forschungsprojekt abgeschlossen! EXP 43 verfuegbar!
+   id = 75
+   RelatedUnitID = 75
+   parent = 100000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100000,100004,100105,100306,47 
+} Technology

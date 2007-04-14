@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 123
+   ;Bezeichnung der verknüpften Technologie: Rasak
+   TechnologiesRequired = 123
+} TechAdapter

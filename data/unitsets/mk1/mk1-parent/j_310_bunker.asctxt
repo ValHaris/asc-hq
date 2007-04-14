@@ -1,0 +1,26 @@
+VehicleType {
+   Name = JAM Bunker
+   ID = 310
+   parent = 400 401 402 403
+   abstract = true
+
+   Description = armored jammer system
+   Infotext = [Dieser Bunker ist eine stationäre Radarstöreinheit.
+Dank des Maschinengewehrs kann dieser Turm sich sogar gegen tief fliegende Lufteinheiten verteidigen.
+Die gute Panzerung garantiert ausserdem das diese Anlage auch schwerem Beschuss stand hält.
+]
+   GuideSortHelp = 0 310 0 0 0 0 0 0 0 0
+
+
+   Armor -= 100
+   View = 40
+   Jamming = 55
+
+   TerrainAccess ->* VehicleType.turret_lowland 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG45med 
+      Weapon0.Ammo = 20
+   } Weapons
+} VehicleType

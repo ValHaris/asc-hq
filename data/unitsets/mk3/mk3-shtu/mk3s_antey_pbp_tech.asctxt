@@ -1,0 +1,10 @@
+technology {
+   Name = Antey
+   infotext = 
+   id = 542
+   RelatedUnitID = 542
+   parent = 100010
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100010,100004,100105,100208,100301,610,611,612 
+} Technology

@@ -1,0 +1,46 @@
+VehicleType {
+   abstract = true 
+   Name = LIGHT SHIP
+   parent = 400 401 402
+   ID = 420
+   Description = patrol boat
+   Infotext = []
+   Armor = 800
+   View = 30
+   Picture = s_tide.pcx
+   WreckageObject = 441
+   Height = floating 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2733
+   } Tank
+   FuelConsumption = 17
+   Abilities = MoveDuringReactionFire
+   Movement = 0 0 81 0 0 0 0 0 
+   Category = light_ship
+   MaxSurvivableStorm = 180
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 200
+   TerrainAccess ->* VehicleType.smallship_terrain
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Ship_Gun 
+         Ammo = 10
+         Punch@MaxRange = 55
+         Punch@MinRange = 69
+
+      Weapon1 ->* VehicleType.Ship_MG
+      Weapon1.Ammo = 10
+
+   } Weapons
+} VehicleType

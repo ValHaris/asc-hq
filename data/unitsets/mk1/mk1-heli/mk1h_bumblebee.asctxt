@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = BUMBLEBEE
+   parent = 384
+   ID = 23
+   Description = Transport Helicopter
+   Infotext = [If you have no Paratroopers available, but just NEED to take
+              that power plant, take out your Transport Helicopter. It can
+              carry a small amount of troops across a sizable area in little
+              time. Drawbacks are a lack of armament and a not-so-large fuel
+              tank.]
+   picture = MK1h_bumblebee.pcx
+   GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
+
+   Armor += 20
+   Transportation.EntranceSystemNum = 5
+   Transportation.EntranceSystem4 ->* VehicleType.ParaDevice
+   Abilities += sonar
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+
+      Weapon1 ->* VehicleType.AUTorp 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 100
+   } Weapons
+} VehicleType
+                     

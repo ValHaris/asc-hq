@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = BULLDOZER D7G
+   ID = 540
+   parent = 336
+   
+   Description = Bulldozer
+   Infotext = [The Bulldozer is a fully tracked, low speed, medium drawbar pull bulldozer with a ripper or winch. It is used by engineer units.]
+   picture = MK3v_bulldozer.pcx
+   GuideSortHelp = 556 0 0 0 3 0 0 0 0 0
+
+   Armor = 380
+   Abilities += immune_to_mines view_mines mine_layer material_transfer
+   Weight = 53
+
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 3000
+   } Tank
+   FuelConsumption = 17
+   Movement = 0 0 0 69 0 0 0 0 
+   TerrainAccess ->* VehicleType.Offroad
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 1 9 10 45
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MineWeapon 
+      Weapon0.Ammo = 0
+      Weapon0.Punch@MaxRange = 0
+      Weapon0.Punch@MinRange = 0
+      
+      Weapon1 ->* vehicleType.ServiceGround
+   } Weapons
+} VehicleType

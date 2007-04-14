@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = TOMCAT
+   parent = 273
+   ID = 564
+
+   Description = air strike fighter
+   Infotext = []
+   Picture = MK3a_TOMCAT.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
+   Jamming = 12
+   Abilities += jam_only_own_field
+   Movement += 0 0 0 0 10 10 10 0 
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0.Punch@MaxRange += 1
+      Weapon0.Punch@MinRange += 1
+
+      Weapon1.Punch@MaxRange += 1
+      Weapon1.Punch@MinRange += 1
+
+      Weapon2.Punch@MaxRange += 1
+      Weapon2.Punch@MinRange += 1
+
+   } Weapons
+} VehicleType

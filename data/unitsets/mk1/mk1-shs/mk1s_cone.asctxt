@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = CONE
+   ID = 46
+   parent = 419
+
+   Description = icebreaker-minelayer
+   Infotext = [ Icebreaker - Minelayer  ]
+   picture = MK1s_cone.pcx
+   WreckageObject = 446
+   GuideSortHelp = 0 0 0 0 1 562 0 0 0 0
+
+   Armor += 100
+   Abilities += icebreaker mine_layer view_mines
+   MaxSurvivableStorm = 255
+
+   TerrainAccess ->* VehicleType.icebreaker_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* vehicleType.MineSea 
+      Weapon0.Ammo = 25
+      Weapon0.Punch@MaxRange = 150
+      Weapon0.Punch@MinRange = 150
+ 
+      Weapon1 ->* VehicleType.Ship_MG
+
+      Weapon2 ->* VehicleType.Flak
+      Weapon2.ReactionFireShots = 1
+      
+   } Weapons
+} VehicleType

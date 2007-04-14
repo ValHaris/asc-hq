@@ -1,0 +1,5 @@
+Techadapter {
+   ; Lynx
+   Name = 604
+   TechnologiesRequired = 604
+} TechAdapter

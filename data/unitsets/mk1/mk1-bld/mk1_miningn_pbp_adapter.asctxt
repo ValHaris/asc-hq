@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B1
+   ;Bezeichnung der verknüpften Technologie: Mining N
+   TechnologiesRequired = 100000
+} TechAdapter

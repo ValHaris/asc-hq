@@ -1,0 +1,10 @@
+technology {
+   Name = Radar Bunker
+   infotext = Forschungsprojekt abgeschlossen! Radar Bunker verfuegbar!
+   id = 111
+   RelatedUnitID = 111
+   parent = 100000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 100000,100002,100105,100210,100307,16,95,307 
+} Technology

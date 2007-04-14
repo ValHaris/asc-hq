@@ -1,0 +1,10 @@
+technology {
+   Name = LARS
+   infotext = 
+   id = 550
+   RelatedUnitID = 550
+   parent = 100010
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100010,100002,100102,100310 
+} Technology

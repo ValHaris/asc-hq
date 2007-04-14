@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 86
+   ;Bezeichnung der verknüpften Technologie: Shuttle
+   TechnologiesRequired = 86
+} TechAdapter

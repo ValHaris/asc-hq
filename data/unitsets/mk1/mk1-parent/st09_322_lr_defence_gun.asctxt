@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = long range def gun
+   ID = 322
+   parent = 400 401 402 403
+   abstract = true
+
+   Description = lr defence gun
+   Infotext = []
+   GuideSortHelp = 507 322 0 0 0 0 0 0 0 0
+
+
+   Weight = 20000
+
+   TerrainAccess ->* VehicleType.Turret_lowland
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 90
+      Weapon0.MinRange = 40
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 95
+      Weapon0.Punch@MinRange = 120
+      Weapon0.Reactionfireshots = 3
+      
+      Weapon1 ->* VehicleType.MG45med
+   } Weapons
+} VehicleType

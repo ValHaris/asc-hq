@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = SAM BUNKER
+   ID = 117
+   parent = 223
+
+   Description = air-defence bunker
+   Infotext = [Vollstationäre langreichweiten Luftabwehr. ]
+   Picture = MK1b_sambunker.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 50
+   Movement = 0 0 0 0 0 0 0 0 
+   Weight = 2000
+   TerrainAccess ->* VehicleType.Turret_lowland 
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 3
+      Weapon0.Punch@MinRange -= 3
+   } Weapons
+} VehicleType

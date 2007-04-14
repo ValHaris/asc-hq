@@ -1,0 +1,50 @@
+VehicleType { 
+   Name = spacestation
+   abstract = true
+   ID = 235
+   parent = 400 401 402 407
+   Description = space station
+   Infotext = [ ]
+   GuideSortHelp = 516 235 507 508 0 509 550 553 0 0
+
+   Armor = 650
+   View = 120
+   ResourceDrillingRange = 6
+   SelfRepairRate = 10
+   Weight = 4000
+   Category = heavy_aircraft
+   Abilities += self_repairing material_transfer fuel_transfer repair_vehicle automatic_resource_searching moveduringreactionfire
+
+   Transportation ->* VehicleType.TransSpSt 
+   Tank { 
+      Energy = 0
+      Material = 16000
+      fuel = 16000
+   } Tank
+   Height = orbit 
+   Movement = 0 0 0 0 0 0 0 20 
+   FuelConsumption = 100
+   TerrainAccess ->* VehicleType.sat_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+
+      Weapon0 ->* VehicleType.OAM 
+      Weapon0.Ammo = 30
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.OGM 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 30
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
+
+      Weapon2 ->* VehicleType.OCM 
+
+      Weapon3 ->* VehicleType.Orbit_Cannon 
+
+   } Weapons
+} VehicleType

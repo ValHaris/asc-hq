@@ -1,0 +1,10 @@
+technology {
+   Name = Ark
+   infotext = Forschungsprojekt abgeschlossen! Ark verfuegbar!
+   id = 43
+   RelatedUnitID = 43
+   parent = 100000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100000,100004,100101 
+} Technology

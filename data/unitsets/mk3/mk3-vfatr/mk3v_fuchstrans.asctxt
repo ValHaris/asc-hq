@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = FUCHS TR
+   parent = 335
+   ID = 539
+   
+   Description = Truppenpanzerwagen
+   Infotext = [Der Transportpanzer ist ein geländegängiges, gepanzertes Radfahrzeug, das zwei 
+   Besatzungsmitglieder und acht Soldaten aufnehmen kann. Der Standard-Fuchs ist schwimmfähig und gegen Beschuss aus Handfeuerwaffen und gegen Splitter gepanzert. Seine 
+   Bewaffnung besteht aus einem MG]
+   picture = MK3v_FUCHSTRANS.pcx
+   GuideSortHelp = 552 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   Transportation ->* VehicleType.TransTrooper 
+
+   Movement += 0 0 0 15 0 0 0 0 
+   TerrainAccess ->* VehicleType.amphibian 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG40low 
+      Weapon0.Ammo = 12
+   } Weapons
+} VehicleType

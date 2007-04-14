@@ -1,0 +1,52 @@
+VehicleType { 
+   Name = CETI
+   ID = 11
+   parent = 336
+   
+   Description = ammunition transport
+   Infotext = [Ammunition Transport Vehicles are vital for the functioning of
+              units like Railroad Guns and Heavy Artillery that have a small
+              ammo capacity. Ammunition Transport Vehicles carry all sorts
+              of different ordinance, to fit every combat unit. They cannot
+              fire any themselves, however. To keep an army running, several
+              Ammonution Transport Vehicles are necessary as they carry only
+              limited amounts of each ammo type.]
+   picture = MK1v_ceti.pcx
+   WreckageObject = 411
+   GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Type = machinegun ammo_transfer shootable
+      Weapon0.targets = floating ground_level 
+      Weapon0.Ammo = 50
+
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 70
+      
+      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2.Ammo = 35
+
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.Ammo = 50
+
+      Weapon4 ->* VehicleType.AmmoMine 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.ServiceGroundTr
+      
+      Weapon6 ->* VehicleType.AmmoCM 
+      Weapon6.Ammo = 4
+
+      Weapon7 ->* VehicleType.AmmoTorp 
+      Weapon7.Ammo = 30
+
+      Weapon8 ->* VehicleType.AmmoBomb 
+      Weapon8.Ammo = 30
+
+   } Weapons
+} VehicleType

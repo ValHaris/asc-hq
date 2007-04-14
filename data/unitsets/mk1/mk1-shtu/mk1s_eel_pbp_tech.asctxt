@@ -1,0 +1,10 @@
+technology {
+   Name = Eel
+   infotext = Forschungsprojekt abgeschlossen! Eel verfuegbar!
+   id = 34
+   RelatedUnitID = 34
+   parent = 100000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100000,100004,100102,100208 
+} Technology

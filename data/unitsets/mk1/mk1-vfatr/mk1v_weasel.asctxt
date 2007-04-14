@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = WEASEL
+   parent = 336
+   ID = 6
+   
+   Description = Infiltrator Squad
+   Infotext = [Infiltrator Squads, often referred to as "Weasels", are very
+              light vehicles that carry a three-man team of infiltrators.
+              They are very fast, and can take an enemy installation by surprise,
+              routing the available rescources to their allies. Their armament
+              is very weak, however.]
+   picture = MK1v_WEASEL.pcx
+   WreckageObject = 406
+   GuideSortHelp = 503 552 546 0 1 0 0 0 0 0
+
+   Category = light_tracked_vehicle
+   Armor -= 100
+   Transportation ->* VehicleType.TransLowTrooper
+   Abilities += paratrooper move_after_attack
+   Weight = 15
+
+   Tank.fuel = 1000
+   FuelConsumption = 10
+   Movement = 0 0 0 80 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG40low 
+      Weapon0.Ammo = 12
+   } Weapons
+} VehicleType

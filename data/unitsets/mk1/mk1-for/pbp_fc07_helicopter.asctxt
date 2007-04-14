@@ -1,0 +1,16 @@
+ Technology {
+   name = "helicopter technology"
+   infotext = "conventional technology"
+   id = 100207
+   researchpoints = 300
+   
+   techlevel = 2
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100003,100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

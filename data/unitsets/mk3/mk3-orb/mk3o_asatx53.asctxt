@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = A-SAT-X53
+   ID = 528
+   parent = 232
+   Description = Attack Satellite
+   Infotext = [top secret]
+   Picture = MK3o_ASATX53.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   Jamming = 11
+   Abilities += Jam_Only_Own_field
+
+   Tank { 
+      Energy = 0
+      Material = 800
+      fuel = 1000
+   } Tank
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 6
+      Weapon1 ->* VehicleTYpe.type_laser 
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange += 4
+      Weapon1.Punch@MinRange += 6
+   } Weapons
+} VehicleType

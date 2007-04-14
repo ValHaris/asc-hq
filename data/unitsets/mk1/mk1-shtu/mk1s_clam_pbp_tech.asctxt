@@ -1,0 +1,10 @@
+technology {
+   Name = Clam
+   infotext = Forschungsprojekt abgeschlossen! Clam verfuegbar!
+   id = 36
+   RelatedUnitID = 36
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100004,100103,100208,34 
+} Technology

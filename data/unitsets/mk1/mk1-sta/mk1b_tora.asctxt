@@ -1,0 +1,9 @@
+VehicleType { 
+   Name = TORA
+   ID = 122
+   parent = 322
+   
+   picture = MK1b_TORA.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+} VehicleType

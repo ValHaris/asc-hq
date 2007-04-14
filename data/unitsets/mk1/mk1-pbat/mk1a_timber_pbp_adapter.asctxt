@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 29
+   ;Bezeichnung der verknüpften Technologie: Timber
+   TechnologiesRequired = 29
+} TechAdapter

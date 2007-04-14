@@ -1,0 +1,5 @@
+Techadapter {
+   ; Buffalo
+   Name = 537
+   TechnologiesRequired = 537
+} TechAdapter

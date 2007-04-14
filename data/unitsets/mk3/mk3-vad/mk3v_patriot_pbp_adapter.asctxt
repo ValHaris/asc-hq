@@ -1,0 +1,5 @@
+Techadapter {
+   ; Patriot
+   Name = 556
+   TechnologiesRequired = 556
+} TechAdapter

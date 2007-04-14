@@ -1,0 +1,22 @@
+VehicleType {
+   Name = FH 77
+   ID = 598
+   parent = 251
+
+   Picture = MK3v_FH77.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Category = medium_wheeled_vehicle
+   Armor -= 50
+
+   Tank { 
+      fuel += 100
+   } Tank
+   FuelConsumption = 15
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 1
+      Weapon0.Punch@MinRange += 3
+   } Weapons
+} VehicleType

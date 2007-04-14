@@ -1,0 +1,10 @@
+technology {
+   Name = Apogee
+   infotext = Forschungsprojekt abgeschlossen! Apogee verfuegbar!
+   id = 37
+   RelatedUnitID = 37
+   parent = 100000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100000,100004,100104,100211,41,38,80,47,115 
+} Technology

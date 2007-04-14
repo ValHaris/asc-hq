@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = TIGER II
+   ID = 596
+   parent = 291
+   Description = medium tank
+   Picture = MK3v_tigerII.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 150
+   Movement -= 0 0 0 11 0 0 0 0 
+   Weight -= 15
+
+   Weapons { 
+      Weapon0.Ammo = 12
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange -= 5
+
+      Weapon1 ->* VehicleType.MG45low 
+      Weapon1.targets = floating ground_level
+      Weapon1.Ammo = 10
+   } Weapons
+} VehicleType

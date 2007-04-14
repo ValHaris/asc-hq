@@ -1,0 +1,16 @@
+ Technology {
+   name = "train technology"
+   infotext = "conventional technology"
+   id = 100204
+   researchpoints = 300
+   
+   techlevel = 2
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100002,100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

@@ -1,0 +1,10 @@
+technology {
+   Name = Spacelab
+   infotext = 
+   id = 562
+   RelatedUnitID = 562
+   parent = 100010
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100010,100003,100105,100210,100302,100313,520,528 
+} Technology

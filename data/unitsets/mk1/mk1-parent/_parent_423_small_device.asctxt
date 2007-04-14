@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = small device
+   abstract = true
+   ID = 423
+   Description = small device
+   Infotext = []
+;   Picture = B_prd.pcx
+
+   Armor = 150
+   View = 20
+
+   Height = ground_level 
+   Jamming = 29
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1
+   } Tank
+   FuelConsumption = 0
+   Abilities = jam_only_own_field onlyTransMove
+   Movement = 0 0 0 17 0 0 0 0 
+   Category = default
+   MaxSurvivableStorm = 200
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 1
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+} VehicleType

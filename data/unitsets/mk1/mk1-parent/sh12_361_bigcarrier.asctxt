@@ -1,0 +1,51 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402
+   ID = 361
+
+   Name = big aircraft carrier
+   Description = big aircraft carrier
+   Infotext = [Aircraft Carriers are very expensive floating airbases. It allows
+              for an aerial campaign into enemy territory, by eliminating
+              the need for aircraft to return to base. A Carrier may refuel,
+              repair and rearm any aircraft that can land on it. Due to their
+              size, some large airplanes can not land on Carriers. The Carrier
+              itself has some weapons, but they are not suited for heavy combat.]
+   WreckageObject = 481
+   GuideSortHelp = 520 361 0 0 0 0 0 0 0 0
+
+
+   Armor = 1900
+   View = 70
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire repair_vehicle fuel_transfer material_transfer self_repairing sonar
+   Category = heavy_ship
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 8
+   Weight = 12000
+   Transportation ->* Vehicletype.TransHvyCarrier 
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 70000
+      fuel = 150000
+   } Tank
+   FuelConsumption = 40
+   Movement = 0 0 51 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.very_bigship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

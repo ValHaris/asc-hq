@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = ANT
+   ID = 26
+   parent = 336
+   
+   Description = construction vehicle
+   Infotext = [The Construction Vehicle is necessary for the construction of
+              infrastructure such as roads, ditches, bridges and the like.
+              A very important unit if you aspire a well defended, smoothly
+              operating base.]
+   picture = MK1v_ant.pcx
+   WreckageObject = 426
+   GuideSortHelp = 556 0 0 0 1 0 0 0 0 0
+
+   Armor -= 100
+   Abilities += fuel_transfer material_transfer
+
+   Tank { 
+      Material = 4000
+      fuel = 4000
+   } Tank
+   TerrainAccess ->* VehicleType.offroad 
+
+   Construction { 
+      Objects = 1 2 3 9 10 30 45 1000 999 998 997 996 995
+      ObjectsRemovable = 1 2 3 4 5 8 9 10 30 44 45 1000
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 11 12 13 14
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon1 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

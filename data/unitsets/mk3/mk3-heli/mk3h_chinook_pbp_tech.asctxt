@@ -1,0 +1,10 @@
+technology {
+   Name = Chinook
+   infotext = 
+   id = 502
+   RelatedUnitID = 502
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100003,100102,100207,507 
+} Technology

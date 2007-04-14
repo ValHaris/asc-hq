@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = SWATTER2
+   ID = 107
+   parent = 218
+   Description = anti aircraft tank
+   Infotext = [The Anti-Aircraft Tank may not be the nemesis for aircraft, but
+              is is quite effective at short range. A commander sending an
+              attack party would do well to include a few AA Tanks to provide
+              cover. ]
+   Picture = MK1v_swatterii.pcx
+   WreckageObject = 418
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+   Abilities += MoveDuringReactionFire
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 3
+      Weapon0.Punch@MinRange -= 3
+   } Weapons
+} VehicleType

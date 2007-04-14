@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = KASPIAN SM
+   ID = 559
+   parent = 368
+
+   Description = ekranoplane
+   Infotext = [ Lun (name of the kaspian sea monster) is a combat missile craft. 
+   
+WIG is an abbreviation of Wing-In-Ground effect. A WIG craft can be seen as a crossover 
+between a hovercraft and an aircraft. It flies just above the surface, usually the water 
+surface therefore others use the term WISE or WISES (Wing In Surface Effect Ship). 
+
+A hovercraft is floating on a cushion of air that is created by a fan that blows in a cavity 
+under the hull. The cavity is bounded by so called skirts, rubber curtains that restrict air 
+leakage and more or less seal the cavity. The air curshion reduces the friction drag of the 
+hovercraft with the water which would make it a very efficient vehicle if is wasn't for the 
+fan that creates the cushion. A WIG craft also sits on a cushion of air, but this cushion is 
+created by aerodynamics. This means that it only exists when the WIG craft has sufficient 
+forward speed. This is called a dynamic air cushion as opposed to the hovercrafts static air 
+cushion. You can compare this to the relation aircraft-helicopter, the aircrafts wings generate 
+lift because of their forward speed, whereas the helicopters rotor has work continuously for 
+generating lift. #crt#
+
+A WIG craft is especially designed to take advantage of the benefits of ground effect. 
+Therefore a WIG vehicle will always fly close to the surface. Although it is called ground 
+effect, most WIG vehicles only fly over water, but some are amphibious.]
+   picture = MK3s_ksm.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Jamming = 39
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 30
+      Number = 1
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 40
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+   } Weapons
+} VehicleType

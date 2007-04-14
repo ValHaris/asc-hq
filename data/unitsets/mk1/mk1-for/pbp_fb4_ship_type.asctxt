@@ -1,0 +1,16 @@
+ Technology {
+   name = "ship technology"
+   infotext = "base technology"
+   id = 100004
+   researchpoints = 100
+   
+   techlevel = 1
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100006
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 58
+   ;Bezeichnung der verknüpften Technologie: Callandor
+   TechnologiesRequired = 58
+} TechAdapter

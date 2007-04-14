@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = PARA
+   ID = 53
+   parent = 207
+   Description = Paratrooper
+   Infotext = [The Paratrooper is the ideal unit for surprise attacks. It has
+              the same armament as the regular Shock Trooper, excepting the
+              explosives. In addition, it is equipped with a parachute so
+              it can exit an airborne plane. These Troopers are slower than
+              Shock Troopers, due to the weight of the parachute.]
+   Picture = MK1i_PARA.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+   Weapons { 
+   } Weapons
+} VehicleType

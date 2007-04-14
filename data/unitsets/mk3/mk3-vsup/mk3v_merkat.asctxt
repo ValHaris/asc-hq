@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = MERKAT
+   ID = 619
+   parent = 335
+   
+   Description = mine detector
+   Infotext = [One of the most defensively centered vehicles is the Mine Layer.
+              It has a mechanism in its base that swiftly digs a hole in the
+              ground, inserts one of two types of mines, and refills the hole.
+              This system allows for quickly creating mine fields. The procedure
+              can be reversed, so minefields can be cleared as well.]
+   Picture = MK3v_Merkat.pcx
+   GuideSortHelp = 563 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+   View = 40
+   Abilities += view_mines immune_to_mines
+   Category = light_wheeled_vehicle
+   Weight = 15
+   waitfortack = true
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon1 ->* VehicleType.AntiMine
+   } Weapons
+} VehicleType

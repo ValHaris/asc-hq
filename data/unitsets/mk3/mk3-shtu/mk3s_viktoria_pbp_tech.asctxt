@@ -1,0 +1,10 @@
+technology {
+   Name = Victoria
+   infotext = 
+   id = 611
+   RelatedUnitID = 611
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100004,100102,100208,610 
+} Technology

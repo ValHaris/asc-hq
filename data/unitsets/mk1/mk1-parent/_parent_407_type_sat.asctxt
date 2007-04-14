@@ -1,0 +1,34 @@
+ VehicleType { 
+   Abstract = true
+   ID = 407
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   S A T E L L I T E   ------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+
+   Infotext = []
+   Armor = 350
+   View = 50
+   Height = ground_level orbit 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 500
+   } Tank
+   FuelConsumption = 5
+   Abilities = 
+   Movement = 0 0 0 20 0 0 0 30 
+   Category = light_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 25
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+} VehicleType

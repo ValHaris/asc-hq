@@ -1,0 +1,10 @@
+technology {
+   Name = Sinner
+   infotext = Forschungsprojekt abgeschlossen! Sinner verfuegbar!
+   id = 82
+   RelatedUnitID = 82
+   parent = 100000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100000,100003,100105,100205,100206,100307,21,52,33 
+} Technology

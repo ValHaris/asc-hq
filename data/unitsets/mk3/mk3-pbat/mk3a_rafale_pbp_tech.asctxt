@@ -1,0 +1,10 @@
+technology {
+   Name = RAFALE
+   infotext = 
+   id = 623
+   RelatedUnitID = 623
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100003,100104,100206,509,512 
+} Technology

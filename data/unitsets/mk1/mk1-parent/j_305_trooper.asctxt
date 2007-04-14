@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = JAM Trooper
+   ID = 305
+   parent = 400 401 402 410
+   abstract = true
+
+   Description = Radarstörspezialist
+   Infotext = [ Spezialist fuer die Störung gegnerischen Radars. Die komplizierte Elektronik ist anfällig 
+   und muss vor feindlichem Beschuss geschuetzt werden. ]
+   GuideSortHelp = 501 305 0 0 0 0 0 0 0 0
+
+
+   Armor = 170
+   Jamming = 35
+   Abilities = conquer_buildings self_repairing
+
+   Movement = 0 0 0 44 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG_Trooper 
+   } Weapons
+} VehicleType

@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = WEDGE
+   parent = 360
+   ID = 14
+
+   Description = aircraft carrier
+   Infotext = [Aircraft Carriers are very expensive floating airbases. It allows
+              for an aerial campaign into enemy territory, by eliminating
+              the need for aircraft to return to base. A Carrier may refuel,
+              repair and rearm any aircraft that can land on it. Due to their
+              size, some large airplanes can not land on Carriers. The Carrier
+              itself has some weapons, but they are not suited for heavy combat.]
+   picture = MK1s_wedge.pcx
+   WreckageObject = 414
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 100
+
+   Weapons { 
+      Initiative = -30
+      Number = 7
+      Weapon0 ->* VehicleType.Ship_Flak 
+      Weapon0.Ammo = 20
+      
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 50
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2.Ammo = 100
+
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.Ammo = 100
+
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 50
+
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 100
+
+      Weapon6 ->* VehicleType.AmmoMG 
+      Weapon6.Ammo = 200
+   } Weapons
+} VehicleType

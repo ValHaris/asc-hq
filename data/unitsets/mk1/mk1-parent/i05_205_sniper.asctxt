@@ -1,0 +1,25 @@
+VehicleType { 
+   abstract = true
+   Name = sniper
+   ID = 205
+   parent = 400 401 402 410 
+
+   Description = sniper
+   Infotext = []
+   GuideSortHelp = 501 205 0 0 0 0 0 0 0 0
+
+   Armor = 170
+   View = 35
+   Jamming += 10
+
+   Movement = 0 0 0 44 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Sniper
+      Weapon0.Name = Scharfschützengewehr
+       
+      Weapon1 ->* VehicleType.MG_Trooper
+      Weapon1.Name = Pistole
+   } Weapons
+} VehicleType

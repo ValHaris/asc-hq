@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B23
+   ;Bezeichnung der verknüpften Technologie: Training Center
+   TechnologiesRequired = 100000
+} TechAdapter

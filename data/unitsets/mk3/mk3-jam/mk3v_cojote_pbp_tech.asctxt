@@ -1,0 +1,10 @@
+technology {
+   Name = Cojote
+   infotext = 
+   id = 594
+   RelatedUnitID = 594
+   parent = 100010
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100010,100002,100104,100306,545
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 47
+   ;Bezeichnung der verknüpften Technologie: Shark
+   TechnologiesRequired = 47
+} TechAdapter

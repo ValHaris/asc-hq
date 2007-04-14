@@ -1,0 +1,46 @@
+VehicleType { 
+   Name = medium vto
+   parent = 400 401 402 414 497
+   ID = 339
+   abstract = true
+
+   Description = medium vto
+   Infotext = []
+   GuideSortHelp = 339 513 561 0 0 0 0 0 0 0
+
+   Armor = 360
+   Abilities += cruiserlanding
+   Weight = 90
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4500
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 45 180 190 190 0 
+   TerrainAccess ->* VehicleType.Heli_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.ASM
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.AAMH 
+      Weapon1.Ammo = 3
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+
+      Weapon2 ->* VehicleType.AirH_MG 
+      
+      Weapon3 ->* VehicleType.ASM
+      Weapon3.MaxRange = 20
+      Weapon3.Ammo = 2
+      Weapon3.Punch@MaxRange = 75
+      Weapon3.Punch@MinRange = 75
+   } Weapons
+} VehicleType

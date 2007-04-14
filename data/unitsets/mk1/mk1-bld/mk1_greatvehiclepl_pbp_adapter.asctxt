@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B11
+   ;Bezeichnung der verknüpften Technologie: Great Vehicle Plant
+   TechnologiesRequired = 100000
+} TechAdapter

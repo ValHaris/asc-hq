@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 101
+   ;Bezeichnung der verknüpften Technologie: Light Assault
+   TechnologiesRequired = 101
+} TechAdapter

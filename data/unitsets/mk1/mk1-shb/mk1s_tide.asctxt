@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = TIDE
+   parent = 352
+   ID = 41
+
+   Description = patrol corvette
+;   Infotext = []
+   picture = MK1s_tide.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   View += 20
+   Transportation ->* VehicleType.TransLowTrooper2 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 60
+      Weapon0.Punch@MinRange = 69
+
+      Weapon1 ->* VehicleType.Ship_MG
+      Weapon1.Ammo = 10
+
+      Weapon2 ->* VehicleType.Flak
+      Weapon2.Ammo = 10
+      Weapon2.ReactionFireShots = 1
+   } Weapons
+} VehicleType

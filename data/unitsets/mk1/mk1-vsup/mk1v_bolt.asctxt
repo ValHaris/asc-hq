@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = BOLT
+   ID = 30
+   parent = 335
+   
+   Description = generator vehicle
+   Infotext = [In times of war, energy supplies can not always be distrubuted
+              easily. If a factory is running out of energy, dispatch a Generator
+              Vehicle. Its batteries can hold enough to build a modest army.]
+   picture = MK1v_bolt.pcx
+   WreckageObject = 430
+   GuideSortHelp = 525 0 0 0 1 0 0 0 0 0
+
+   Abilities += resource_converter 
+   Armor -= 100
+   Category = heavy_wheeled_vehicle
+
+   Tank { 
+      Energy = 2000
+      fuel = 5000
+   } Tank
+   Movement -= 0 0 0 10 0 0 0 0 
+
+} VehicleType

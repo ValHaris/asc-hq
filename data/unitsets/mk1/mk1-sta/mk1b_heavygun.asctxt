@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = HEAVY GUN
+   ID = 110
+   parent = 321
+   
+   Description = main defence gun
+   Infotext = [A Turret Emplacement is a fearsome structure. It is capable of
+              demolishing tank platoons before the latter can even detect
+              the Turret on their radars. Its only drawback is that it cannot
+              get a lock on very small targets.]
+   picture = MK1b_HEAVYGUN.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Armor += 50
+
+} VehicleType

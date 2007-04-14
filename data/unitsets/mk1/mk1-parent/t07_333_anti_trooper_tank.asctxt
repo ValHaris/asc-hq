@@ -1,0 +1,29 @@
+VehicleType { 
+   abstract = true
+   Name = anti trooper tank
+   ID = 333
+   parent = 400 401 402 404
+
+   Description = anti infantry tank
+   Infotext = [The Anti Infantry Tank is a special purpose vehicle. Armed with
+              a fast revolving, rapid firing chaingun, its only purpose is
+              to hunt down enemy infantrists.]
+   GuideSortHelp = 503 333 0 0 0 0 0 0 0 0
+
+   Armor = 500
+   Weight = 45
+
+   Tank { 
+      fuel = 1200
+   } Tank
+   FuelConsumption = 14
+   Movement = 0 0 0 80 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MiniGun 
+      Weapon0.target = floating ground_level low_level_flight medium_level_flight
+      Weapon0.Ammo = 16
+   } Weapons
+} VehicleType

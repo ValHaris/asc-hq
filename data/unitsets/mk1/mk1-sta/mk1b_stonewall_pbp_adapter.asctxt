@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 94
+   ;Bezeichnung der verknüpften Technologie: Stone Wall
+   TechnologiesRequired = 94
+} TechAdapter

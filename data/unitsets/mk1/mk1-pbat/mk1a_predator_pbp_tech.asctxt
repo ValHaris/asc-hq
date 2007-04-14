@@ -1,0 +1,10 @@
+technology {
+   Name = Predator
+   infotext = Forschungsprojekt abgeschlossen! Predator verfuegbar!
+   id = 70
+   RelatedUnitID = 70
+   parent = 100000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100000,100003,100105,100206,100305,19,92,22 
+} Technology

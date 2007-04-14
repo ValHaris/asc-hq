@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = SCUD
+   ID = 552
+   parent = 301
+
+   Description = SSM Long Range
+   Picture = Mk3v_scud.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Falcon
+   infotext = 
+   id = 509
+   RelatedUnitID = 509
+   parent = 100010
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100010,100003,100101,100206 
+} Technology

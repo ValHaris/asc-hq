@@ -1,0 +1,10 @@
+technology {
+   Name = Follow
+   infotext = Forschungsprojekt abgeschlossen! Follow verfuegbar!
+   id = 83
+   RelatedUnitID = 83
+   parent = 100000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100000,100002,100104,100204,100301,100310,65,7,114 
+} Technology

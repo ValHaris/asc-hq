@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 96
+   ;Bezeichnung der verknüpften Technologie: Sniper
+   TechnologiesRequired = 96
+} TechAdapter

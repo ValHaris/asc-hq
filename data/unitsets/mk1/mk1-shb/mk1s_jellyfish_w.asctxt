@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Jellyfish Wreckage
+   ID = 427
+   parent = 438
+   dry { 
+      picture = MK1s_jellyfish.pcx 1
+   } dry
+} ObjectType

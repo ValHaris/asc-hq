@@ -1,0 +1,10 @@
+technology {
+   Name = CVX
+   infotext = 
+   id = 569
+   RelatedUnitID = 569
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100004,100104,100209,568,614 
+} Technology

@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = SPACELAB
+   ID = 562
+   parent = 235
+   Description = space station
+   Infotext = []
+   Picture = MK3o_spacelab.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Jamming = 21
+   Transportation ->* VehicleType.TransSpSt 
+   Tank { 
+      Energy = 0
+      Material = 18000
+      fuel = 18000
+   } Tank
+   FuelConsumption = 100
+   Abilities += jam_only_own_field
+
+   Weapons { 
+      Number = 5
+      Weapon0 ->* vehicleType.type_laser 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 6
+
+      Weapon1 ->* VehicleType.type_laser 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange += 4
+      Weapon1.Punch@MinRange += 6
+
+      Weapon3 ->* VehicleType.type_laser 
+      Weapon3.Ammo = 4
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 10
+   } Weapons
+} VehicleType

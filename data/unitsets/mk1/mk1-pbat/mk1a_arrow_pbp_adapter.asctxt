@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 19
+   ;Bezeichnung der verknüpften Technologie: Arrow
+   TechnologiesRequired = 19
+} TechAdapter

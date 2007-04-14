@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Eel Wreckage
+   ID = 434
+   parent = 498
+   Armor = 300
+   RemovalCost { 
+      Energy = 0
+      Material = -3000
+      fuel = 300
+      Movement = 30
+   } RemovalCost
+   dry { 
+      picture = MK1s_eel.pcx 1
+   } dry
+} ObjectType

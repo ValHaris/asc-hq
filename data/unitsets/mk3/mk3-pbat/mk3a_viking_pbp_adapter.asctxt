@@ -1,0 +1,5 @@
+Techadapter {
+   ; Viking
+   Name = 514
+   TechnologiesRequired = 514
+} TechAdapter

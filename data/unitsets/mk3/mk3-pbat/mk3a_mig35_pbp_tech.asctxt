@@ -1,0 +1,10 @@
+technology {
+   Name = MIG
+   infotext = 
+   id = 506
+   RelatedUnitID = 506
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100003,100104,100206,509,512,623 
+} Technology

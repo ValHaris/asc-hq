@@ -1,0 +1,39 @@
+VehicleType { 
+   Name = light vto
+   parent = 400 401 402 414 497
+   ID = 338
+   abstract = true
+   
+   Description = vertical take-off plane
+   Infotext = []
+   GuideSortHelp = 338 513 561 0 0 0 0 0 0 0
+
+   abilities += cruiserlanding
+   Weight = 75
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4500
+   } Tank
+   FuelConsumption = 24
+   Movement = 0 0 0 35 180 180 0 0 
+   TerrainAccess ->* VehicleType.Heli_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.smASM 
+      Weapon0.Ammo = 5
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+
+      Weapon1 ->* VehicleType.smAAM 
+      Weapon1.Ammo = 5
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+
+      Weapon2 ->* VehicleType.Air_MG 
+      Weapon2.Ammo = 20
+   } Weapons
+} VehicleType

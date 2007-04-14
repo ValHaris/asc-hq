@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = espionage plane
+   abstract = true
+   parent = 400 401 402 414 496
+   ID = 248
+   Description = Espionage Plane
+   Infotext = [Espionahe Planes are small one-man aircraft that carry equipment
+              to photograph a small amount of territory. An Espionage Plane
+              is able to enter te enemy's territory and report back on what
+              it finds. It is able to reach high altitudes, making itself
+              very hard to destroy. Even so, it must be careful, since its
+              armament is minimal and its view is nowhere near as large as
+              the Recce Plane's.]
+   GuideSortHelp = 0 248 0 0 0 0 0 0 0 0
+
+
+   Armor = 350
+   Weight = 115
+   View = 60
+   Jamming = 51
+   Abilities = jam_only_own_field satelliteview
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 0 65 150 190 210 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

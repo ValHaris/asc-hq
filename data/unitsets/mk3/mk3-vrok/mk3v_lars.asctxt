@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = LARS
+   ID = 550
+   parent = 296
+
+   Description = Light Artillery Rocket System
+   Picture = Mk3v_lars.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Category = medium_wheeled_vehicle
+   Weight = 43
+
+   Tank.fuel += 200
+   FuelConsumption = 12
+   TerrainAccess ->* VehicleType.lt_wheeled 
+   TerrainAccess.terrain_any = road runway hard_sand lowland Frozen_water ditch
+   Movement += 0 0 0 15 0 0 0 0 
+
+   Weapons { 
+      Weapon0.MaxRange = 30
+      Weapon0.MinRange = 20
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange -= 5
+   } Weapons
+} VehicleType

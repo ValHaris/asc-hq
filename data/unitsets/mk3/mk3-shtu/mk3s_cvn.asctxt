@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = CVN
+   parent = 359
+   ID = 568
+   
+   Description = light aircraft carrier
+   picture = MK3s_cvn.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 150
+   Movement += 0 0 10 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = -30
+      Number = 6
+
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.Type = air_missile ammo_transfer shootable 
+      Weapon0.MaxRange = 40
+      Weapon0.MinRange = 10
+      Weapon0.Ammo = 80
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
+
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 80
+
+      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2.Ammo = 80
+
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 80
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 80
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 100
+   } Weapons
+} VehicleType

@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = BLACKOUT
+   ID = 1
+   parent = 250
+   Description = light artillery
+   Infotext = [The Light Artillery is a good support vehicle. It fires a light
+              shrapnel grenade that is effective against Troopers and vehicles.
+              With its ranged fire, it is an effective defense against ambushes.]
+   Picture = mk1v_blackout.pcx
+   WreckageObject = 401
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+   Tank { 
+      fuel = 645
+   } Tank
+   FuelConsumption = 16
+   Movement -= 0 0 0 5 0 0 0 0 
+   Weight += 5
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Armstrong
+   infotext = 
+   id = 522
+   RelatedUnitID = 522
+   parent = 100010
+   researchpoints *= 12
+   techlevel = 4
+   TechnologiesRequired = 100010,100001,100104,100302 
+} Technology

@@ -1,0 +1,52 @@
+VehicleType { 
+   Name = LYNX
+   parent = 400 401 402 409
+   ID = 604
+   Description = sea helicopter
+   Infotext = [The Lynx airframe is constructed of composite and light alloy. The non-retractable tricycle-type landing gear is designed for the helicopter to operate from small ships in Sea State 6 and features oleo-pneumatic struts which absorb the shock of a 6ft/s descent rate. A hydraulically operated harpoon deck lock securing system secures the helicopter to the deck. The main wheels can be toed out allowing the aircraft to turn into the wind while the decklock harpoon remains engaged. This removes the need for the ship to change course.
+
+The cabin space of approximately 5.2m³ can accommodate up to nine troops. Up to 1,360kg of cargo can be underslung from an external cargo hook for ship-to-shore and ship-to-ship replenishment.
+
+WEAPONS
+
+Sea Skua is an all weather anti-ship missile developed by Matra BAe Dynamics to provide medium and long range defence. Countries deploying the Sea Skua missile include the United Kingdom, Bahrain, Germany, South Korea, Brazil and Turkey. Malaysian Navy Super Lynx 300 will also be armed with Sea Skua. The Lynx carries four Sea Skua missiles. The range of both the semi-active radar-guided Sea Skua missile and the Seaspray radar is approximately 25km which gives a stand-off capability to the Lynx helicopter.
+
+Super Lynx can carry a range of depth charges, including the Mark 11 depth charges, and torpedoes, including the Mark 44, Mark 46, the A244S and the Stingray torpedoes.
+
+]
+   picture = MK3h_lynx.pcx
+   GuideSortHelp = 515 602 0 0 3 0 0 0 0 0
+
+   Armor = 350
+   Abilities += sonar 
+   Weight = 40
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2500
+   } Tank
+   FuelConsumption = 20
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* Vehicletype.ASM 
+      Weapon0.targets = floating
+      Weapon0.Ammo = 3
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 95
+
+      Weapon1 ->* VehicleType.AUTorp 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 95
+      
+      Weapon2 ->* VehicleType.DCA 
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 100
+      
+   } Weapons
+} VehicleType

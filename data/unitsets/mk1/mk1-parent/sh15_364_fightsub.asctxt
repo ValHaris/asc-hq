@@ -1,0 +1,45 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402 493
+   ID = 364
+
+   Name = fight submarine
+   Description = fight sumarine
+   Infotext = []
+   WreckageObject = 434
+   GuideSortHelp = 519 364 0 0 0 0 0 0 0 0
+
+
+   Armor = 1100
+   View = 30
+   Jamming = 0
+   WaitFortack = false
+   Abilities = sonar move_after_attack
+   Category = medium_ship
+   MaxSurvivableStorm = 210
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 3000
+
+   Height = deep_submerged submerged floating 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } Tank
+   FuelConsumption = 30
+   Movement = 88 88 80 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.mediumship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

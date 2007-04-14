@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = VIKING
+   parent = 326
+   ID = 514
+
+   Description = anti ship plane
+   picture = MK3a_VIKING.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.ATorp 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+
+      Weapon1 ->* VehicleType.Air_MG 
+   } Weapons
+} VehicleType

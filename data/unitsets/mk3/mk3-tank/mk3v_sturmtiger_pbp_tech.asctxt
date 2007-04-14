@@ -1,0 +1,10 @@
+technology {
+   Name = Sturmtiger
+   infotext = 
+   id = 575
+   RelatedUnitID = 575
+   parent = 100010
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100010,100002,100102,100201,595 
+} Technology

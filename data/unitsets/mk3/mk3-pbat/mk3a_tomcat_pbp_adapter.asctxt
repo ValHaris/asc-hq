@@ -1,0 +1,5 @@
+Techadapter {
+   ; Tomcat
+   Name = 564
+   TechnologiesRequired = 564
+} TechAdapter

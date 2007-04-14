@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = LCC BLUE RIDGE
+   parent = 358
+   ID = 614
+   
+   Description = amphibious command ship
+   picture = MK3s_lcc.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+   Abilities += satelliteview
+
+   Weapons { 
+      Initiative = -100
+      Number = 9
+      Weapon0 ->* VehicleType.Ship_MG
+      Weapon1 ->* VehicleType.Ship_Flak
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 20
+      Weapon4 ->* VehicleType.AmmoBomb
+      Weapon4.Ammo = 80
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 60
+      Weapon6 ->* VehicleType.AmmoSM 
+      Weapon6.Ammo = 60
+      Weapon7 ->* VehicleType.AmmoMine 
+      Weapon7.Ammo = 60
+      Weapon8 ->* VehicleType.AmmoMG 
+      Weapon8.Ammo = 200
+   } Weapons
+} VehicleType

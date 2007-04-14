@@ -1,0 +1,10 @@
+technology {
+   Name = Eagle
+   infotext = Forschungsprojekt abgeschlossen! Eagle verfuegbar!
+   id = 52
+   RelatedUnitID = 52
+   parent = 100000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100000,100003,100205,100206,100101,100102,21 
+} Technology

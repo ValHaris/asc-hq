@@ -1,0 +1,10 @@
+technology {
+   Name = Hoovercraft
+   infotext = Forschungsprojekt abgeschlossen! Hoovercraft verfuegbar!
+   id = 5
+   RelatedUnitID = 5
+   parent = 100000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100000,100004,100101,100212 
+} Technology

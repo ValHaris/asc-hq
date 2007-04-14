@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = FUCHS
+   parent = 335
+   ID = 538
+   
+   Description = Spuerpanzer
+   Infotext = [Der Spürpanzer "Fuchs" ist eine modifizierte Version des Transportpanzers "Fuchs".
+   Seine technische Daten sind mit den Spezifikationen des Transportpanzers identisch, er 
+   kann jedoch nur 3 Besatzungsmitglieder aufnehmen und besitzt eine umfangreiche Zusatzausstattung zum Aufspüren von 
+   Bodenschätzen in seiner Umgebung.]
+   picture = MK3v_FUCHS.pcx
+   GuideSortHelp = 552 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Transportation ->* VehicleType.TransLowTrooper3 
+   Abilities += manual_resource_drilling
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 5
+
+   Movement += 0 0 0 15 0 0 0 0 
+   TerrainAccess ->* VehicleType.amphibian 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Ammo = 8
+   } Weapons
+} VehicleType

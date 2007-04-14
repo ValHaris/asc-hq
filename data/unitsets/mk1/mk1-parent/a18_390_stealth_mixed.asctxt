@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = stealth multi role
+   parent = 400 401 402 414 498
+   ID = 390
+   abstract = true
+   
+   Description = stealth multi role
+   Infotext = []
+   GuideSortHelp = 290 513 0 0 0 0 0 0 0 0
+
+   Armor = 320
+   Weight = 115
+   Jamming = 70
+   Abilities += jam_only_own_field
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 7000
+   } Tank
+   FuelConsumption = 27
+   Movement = 0 0 0 60 170 190 190 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.AAMH 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 74
+      Weapon0.Punch@MinRange = 74
+
+      Weapon1 ->* VehicleType.ASM 
+      Weapon1.MaxRange = 20
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+
+      Weapon2 ->* vehicleType.highBomb 
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
+   } Weapons
+} VehicleType

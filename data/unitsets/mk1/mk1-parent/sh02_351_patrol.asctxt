@@ -1,0 +1,44 @@
+VehicleType {
+   abstract = true 
+   parent = 400 401 402
+   ID = 351
+
+   Name = patrol boat
+   Description = patrol boat
+   Infotext = []
+   WreckageObject = 441
+   GuideSortHelp = 0 351 0 0 0 0 0 0 0 0
+
+
+   Armor = 700
+   View = 50
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire
+   Category = light_ship
+   MaxSurvivableStorm = 180
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 700
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 81 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.smallship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

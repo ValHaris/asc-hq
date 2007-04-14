@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = medium railroadgun
+   abstract = true
+   ID = 254
+   parent = 400 401 402 412
+
+   Description = railroad gun
+   Infotext = [Railroad Guns are the ultimate artillery on land. Its primary
+              heavy grenade cannon out-ranges even the powerful Turret Emplacement.
+               A Railroad Gun can, if slowly, travel by rail, making it a
+              dreaded instrument of destruction. The grenade cannon can decimate
+              an unsuspecting enemy within seconds. It has a limited ammunition
+              storage, so the Railroad guns are often seen accompanied by
+              Ammunition Transports.]
+   WreckageObject = 458
+   GuideSortHelp = 506 254 0 0 0 0 0 0 0 0
+
+   Armor -= 100
+   View = 30
+   WaitFortack = true
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2126
+   } Tank
+   FuelConsumption = 15
+   Abilities += move_after_attack
+   Movement -= 0 0 0 10 0 0 0 0 
+   Weight = 250
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 70
+      Weapon0.MinRange = 40
+      Weapon0.Ammo = 5
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 100
+
+      Weapon1 ->* VehicleType.Def_MG 
+   } Weapons
+} VehicleType

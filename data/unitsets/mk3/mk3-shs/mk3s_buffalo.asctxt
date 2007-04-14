@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = BUFFALO
+   parent = 369
+   ID = 537
+   
+   Description = transport ship
+   Infotext = [ 
+Schnelles Transportschiff mit hoher Ladekapazität. Begleitschutz ist dringens 
+erforderlich, da es nur schwach gepanzert ist.] 
+   picture = MK3s_buffalo.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+
+   Movement += 0 0 10 0 0 0 0 0 
+
+   Weapons { 
+      Weapon5.Ammo = 200
+   } Weapons
+} VehicleType

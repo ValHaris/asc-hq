@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Fix Wreckage
+   ID = 439
+   parent = 498
+   Armor = 800
+   RemovalCost { 
+      Energy = 0
+      Material = -8000
+      fuel = 800
+      Movement = 50
+   } RemovalCost
+   dry { 
+      picture = MK1s_fix.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Assault Wreckage
+   ID = 403
+   parent = 499
+   dry { 
+      picture = MK1v_assault_w.pcx 1
+   } dry
+} ObjectType

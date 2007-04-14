@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = BANG
+   parent = 280
+   ID = 20
+   
+   Picture = mk1a_bang.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Armor += 40
+} VehicleType

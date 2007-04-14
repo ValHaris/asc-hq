@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = DOMINATOR
+   parent = 272
+   ID = 22
+
+   Description = heavy fighter
+   Infotext = [Heavy Fighters are the big boys in the air. In close combat,
+              the Heavy Fighter is equalled by none. This makes the airplane
+              ideal for taking out enemy aircraft. But beware of ground support,
+              for the Heavy Fighter has no ground-targeted weaponry.]
+   Picture = MK1a_dominator.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 1
+      Weapon0.Punch@MinRange -= 1
+
+   } Weapons
+} VehicleType

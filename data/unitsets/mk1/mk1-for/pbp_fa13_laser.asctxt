@@ -1,0 +1,16 @@
+ Technology {
+   name = "laser technology"
+   infotext = "advanced technology"
+   id = 100313
+   researchpoints = 1000
+   
+   techlevel = 2
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100003,100103
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

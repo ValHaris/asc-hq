@@ -1,0 +1,277 @@
+ VehicleType {
+   Abstract = true
+   ID = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   D E F I N I T I O N S   F O R   A L L   U N I T S   ----------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   ConstructionCost {
+      CalculationMethod = auto
+      energy =
+      material =
+      fuel =
+   } ConstructionCost
+
+;   TerrainAccess ->* VehicleType.
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T R O O P E R   ----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   trooper_terrain {
+      terrain_any = very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside Mountains High_mountains Ditch Turret_foundation Installation small_rocks Large_rocks Railroad Frozen_water Forest
+      terrain_all =
+      terrain_not =
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } trooper_terrain
+
+   mech_trooper_terrain {
+      terrain_any =  very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside mountains Ditch Turret_foundation Frozen_water
+      terrain_all =
+      terrain_not = swamp
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } mech_trooper_terrain
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   A I R C R A F T   --------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   aircraft_terrain {
+      terrain_any = Runway
+      terrain_all = Runway
+      terrain_not = small_rocks large_rocks forest railroad bridge swamp
+      terrain_kill = very_shallow_water Shallow_water Water Deep_water River lava swamp
+   } aircraft_terrain
+
+   aircraft_terrain_road {
+      terrain_any = Road Runway
+      terrain_all =
+      terrain_not = small_rocks large_rocks forest railroad bridge swamp
+      terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water River lava
+   } aircraft_terrain_road
+
+   heli_terrain {
+      terrain_any = Road Runway Lowland hard_sand soft_sand frozen_water
+      terrain_all =
+      terrain_not = forest large_rocks swamp
+      terrain_kill = very_shallow_water Shallow_water Water Deep_water lava river
+   } heli_Terrain
+
+   aircraft_water {
+      terrain_any = Runway very_shallow_water shallow_water
+      terrain_all = Runway
+      terrain_not = small_rocks large_rocks forest railroad bridge swamp
+      terrain_kill = Deep_water lava swamp
+   } aircraft_water
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   R A I L R O A D   --------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   rail_terrain {
+      terrain_any = Railroad
+      terrain_all = railroad
+      terrain_not = forest small_rocks large_rocks
+      terrain_kill = shallow_water water deep_water lava river swamp
+   } rail_terrain
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   S H I P   ----------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   nodeepwatership_terrain {
+      terrain_any = very_shallow_water shallow_water water river
+      terrain_all =
+      terrain_not = large_rocks frozen_water
+      terrain_kill = lava
+   } nodeepwatership_terrain
+
+   verysmallship_allterrain {
+      terrain_any = very_shallow_water shallow_water water deep_water river
+      terrain_all =
+      terrain_not = large_rocks frozen_water
+      terrain_kill = lava
+   } verysmallship_allterrain
+
+   verysmallship_terrain {
+      terrain_any = very_shallow_water shallow_water water deep_water river
+      terrain_all =
+      terrain_not = small_rocks large_rocks frozen_water
+      terrain_kill = lava
+   } verysmallship_terrain
+
+   smallship_terrain {
+      terrain_any = shallow_water water deep_water river
+      terrain_all =
+      terrain_not = small_rocks large_rocks frozen_water
+      terrain_kill = lava
+   } smallship_terrain
+
+   mediumship_terrain {
+      terrain_any = shallow_water water deep_water river
+      terrain_all =
+      terrain_not = forest small_rocks large_rocks frozen_water
+      terrain_kill = lava
+   } mediumship_terrain
+
+   bigship_terrain {
+      terrain_any = water deep_water river
+      terrain_all =
+      terrain_not = forest small_rocks large_rocks frozen_water
+      terrain_kill = lava
+   } bigship_terrain
+
+   very_bigship_terrain {
+      terrain_any = water deep_water
+      terrain_all =
+      terrain_not = forest small_rocks large_rocks frozen_water
+      terrain_kill = lava
+   } very_bigship_terrain
+
+   icebreaker_terrain {
+      terrain_not = forest small_rocks large_rocks
+   } icebreaker_terrain
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   H O O V E R C R A F T    -------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   hooverfull_terrain {
+      terrain_any = road runway hard_sand soft_sand lowland very_shallow_water shallow_water water deep_water river
+      terrain_all =
+      terrain_not = forest large_rocks
+      terrain_kill = lava
+   } hooverfull_terrain
+
+   hoover_terrain {
+      terrain_any = road runway hard_sand soft_sand lowland very_shallow_water shallow_water water river
+      terrain_all =
+      terrain_not = forest small_rocks large_rocks
+      terrain_kill = lava
+   } hoover_terrain
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   S A T E L L I T E    -----------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Sat_Terrain {
+      terrain_any = runway
+      terrain_all =
+      terrain_not =
+      terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water Very_shallow_water river lava
+   } Sat_Terrain
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T R A C K E D    -----------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   lt_terrain {
+      terrain_any = very_shallow_water road runway hard_sand lowland soft_sand ditch hillside Frozen_water
+      terrain_all =
+      terrain_not = large_rocks swamp
+      terrain_kill = shallow_water water deep_water river lava
+   } lt_terrain
+
+   med_terrain {
+      terrain_any = very_shallow_water road runway hard_sand lowland soft_sand ditch Frozen_water
+      terrain_all =
+      terrain_not = large_rocks swamp
+      terrain_kill = shallow_water water deep_water river lava
+   } med_terrain
+
+   hvy_terrain {
+      terrain_any = very_shallow_water road runway hard_sand lowland soft_sand ditch
+      terrain_all =
+      terrain_not = large_rocks swamp
+      terrain_kill = shallow_water water deep_water river lava
+   } hvy_terrain
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   W H E E L E D    -----------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   offroad {
+      terrain_any = road runway hard_sand lowland soft_sand ditch hillside Frozen_water
+      terrain_all =
+      terrain_not = swamp
+      terrain_kill = shallow_water water deep_water river lava
+   } offroad
+
+   lt_wheeled {
+      terrain_any = road runway hard_sand lowland Frozen_water
+      terrain_all =
+      terrain_not = large_rocks morass swamp deep_snow
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } lt_wheeled
+
+   wheeled {
+      terrain_any = road runway hard_sand lowland Frozen_water
+      terrain_all =
+      terrain_not = forest small_rocks large_rocks morass swamp deep_snow
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } wheeled
+
+   mud_wheeled {
+      terrain_any = road runway hard_sand lowland Frozen_water
+      terrain_all =
+      terrain_not = forest small_rocks large_rocks mud morass swamp deep_snow
+      terrain_kill = very_shallow_water Shallow_water Water Deep_water River lava
+   } mud_wheeled
+
+   hvy_wheeled {
+      terrain_any = road runway hard_sand lowland soft_sand
+      terrain_all =
+      terrain_not = forest large_rocks swamp deep_snow
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } hvy_wheeled
+
+   amphibian { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand very_shallow_water shallow_water river Frozen_water 
+      terrain_all = 
+      terrain_not = swamp deep_snow large_rocks
+      terrain_kill = Water Deep_water Lava 
+   } amphibian
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T U R R E T    -----------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Turret_only {
+      terrain_any = turret_foundation
+      terrain_all =
+      terrain_not =
+      terrain_kill = shallow_water Water Deep_water lava river
+   } Turret_only
+
+   Turret_lowland {
+      terrain_any = lowland hard_sand soft_sand
+      terrain_all =
+      terrain_not = railroad forest large_rocks swamp
+      terrain_kill = shallow_water Water Deep_water lava river
+   } Turret_lowland
+
+   Turret_all {
+      terrain_any = lowland hard_sand soft_sand hillside mountains turret_foundation
+      terrain_all =
+      terrain_not = railroad forest
+      terrain_kill = shallow_water Water Deep_water lava river
+   } Turret_all
+
+   Turret_ditch {
+      terrain_any = lowland hard_sand soft_sand hillside mountains turret_foundation ditch
+      terrain_all =
+      terrain_not = railroad forest
+      terrain_kill = shallow_water Water Deep_water lava river
+   } Turret_ditch
+
+   Device_terrain {
+      terrain_any = hard_sand lowland soft_sand hillside ditch mountains high_mountains installation turret_foundation large_rocks frozen_water
+      terrain_all =
+      terrain_not = swamp
+      terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water river lava
+   } Device_terrain
+} VehicleType

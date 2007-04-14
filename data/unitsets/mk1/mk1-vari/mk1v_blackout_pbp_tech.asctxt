@@ -1,0 +1,10 @@
+technology {
+   Name = Blackout
+   infotext = Forschungsprojekt abgeschlossen! Blackout verfuegbar!
+   id = 1
+   RelatedUnitID = 1
+   parent = 100000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100000,100002 
+} Technology

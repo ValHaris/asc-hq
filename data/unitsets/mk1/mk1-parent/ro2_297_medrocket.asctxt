@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = medium Rocket tank
+   ID = 297
+   abstract = true
+   parent = 400 401 402 405
+
+   Description = med rocket tank
+   Infotext = [Rocket Tanks may not be as powerful as a Heavy Combat Tank or
+              as fast as a Light Tank, but it has a short range ballistic
+              rocket array which enables the Rocket Tank to back up the heavy
+              guns from a safe distance. Are you in need of quick support
+              and you can't wait for the artillery to arrive? Call in the
+              Rocket Tanks.]
+   WreckageObject = 407
+   GuideSortHelp = 505 297 0 0 0 0 0 0 0 0
+
+
+   Armor = 400
+   Weight = 40
+   Abilities += no_reactionfire
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1000
+   } Tank
+   FuelConsumption = 16
+   Movement = 0 0 0 62 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 40
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 85
+      Weapon0.WeaponEffectiveness.Trooper = 25
+
+      Weapon1 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = spaceman
+   abstract = true
+   ID = 236
+   parent = 400 401 402 410
+   Description = Spaceman
+   Infotext = [Trooper that can walk into Space and conquere Spacestations. Only armed with a high explosive bomb against satellites and Spacestations.]
+   GuideSortHelp = 516 236 553 600 0 0 0 0 0 0
+
+
+   Height = ground_level orbit 
+   Movement = 0 0 0 39 0 0 0 39
+   Tank.Fuel = 7000
+   Tank.Material = 5000 
+   Abilities += repair_vehicle
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.C4 
+      Weapon0.targets = orbit
+      Weapon0.shotFrom = orbit 
+      Weapon0.cantHit = trooper
+
+      Weapon1 ->* VehicleType.ServiceGround
+      Weapon1.targets = orbit
+      Weapon1.shotfrom = orbit
+   } Weapons
+} VehicleType

@@ -1,0 +1,42 @@
+VehicleType {
+   abstract = true 
+   Name = MEDIUM SHIP
+   parent = 400 401 402
+   ID = 419
+
+   Description = medium ship
+   Infotext = []
+   WreckageObject = 419
+
+   Armor = 1000
+   View = 40
+   Jamming = 0
+   Abilities = MoveDuringReactionFire
+   Category = medium_ship
+   MaxSurvivableStorm = 190
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 4000
+
+   Height = floating 
+   Movement = 0 0 70 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.mediumship_terrain
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   FuelConsumption = 25
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   WaitFortack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

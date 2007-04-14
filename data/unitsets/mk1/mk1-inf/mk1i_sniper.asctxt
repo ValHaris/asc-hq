@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = SNIPER
+   ID = 96
+   parent = 205 
+
+   Description = Sniper
+   Infotext = [Scharfschuetze, sehr effektiv gegen Trooper nur bedingt einsatzfaehig gegen Fahrzeuge.]
+   Picture = MK1i_SNIPER.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange -= 5
+   } Weapons
+} VehicleType

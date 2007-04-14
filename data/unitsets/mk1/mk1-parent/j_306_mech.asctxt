@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = JAM Mech
+   ID = 306
+   parent = 212
+   abstract = true
+   
+   Description = JAM Mech
+   Infotext = [Gepanzerter Trooper mit Radarstöhrelektronik. ]
+   GuideSortHelp = 502 306 0 0 0 0 0 0 0 0
+
+   Jamming = 41
+} VehicleType

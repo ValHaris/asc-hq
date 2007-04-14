@@ -1,0 +1,5 @@
+Techadapter {
+   ; FH70
+   Name = 597
+   TechnologiesRequired = 597
+} TechAdapter

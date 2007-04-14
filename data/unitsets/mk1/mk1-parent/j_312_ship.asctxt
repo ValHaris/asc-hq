@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = JAM ship
+   parent = 400 401 402 418
+   ID = 312
+   abstract = true
+   
+   Description = anti radar cruiser
+   Infotext = [Top Secret]
+   WreckageObject = 447
+   GuideSortHelp = 355 312 565 0 0 0 0 0 0 0
+
+
+   Armor = 1400
+   View = 30
+   Transportation ->* VehicleType.TransCruiser 
+   Jamming = 41
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4556
+   } Tank
+   FuelConsumption = 40
+   Movement = 0 0 60 0 0 0 0 0 
+   Weight = 5000
+   Weapons { 
+      Initiative = 20
+      Number = 1
+      Weapon0 ->* VehicleType.Ship_MG 
+      Weapon1 ->* VehicleType.Ship_Flak 
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Raytheon
+   infotext = 
+   id = 515
+   RelatedUnitID = 515
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100003,100103,100210 
+} Technology

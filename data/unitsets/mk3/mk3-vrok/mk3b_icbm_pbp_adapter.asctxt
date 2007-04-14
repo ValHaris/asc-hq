@@ -1,0 +1,5 @@
+Techadapter {
+   ; ICBM
+   Name = 574
+   TechnologiesRequired = 574
+} TechAdapter

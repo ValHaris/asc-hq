@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = AA-Ship Wreckage
+   ID = 428
+   parent = 498
+   Armor = 500
+   RemovalCost { 
+      Energy = 0
+      Material = -5000
+      fuel = 500
+      Movement = 50
+   } RemovalCost
+   dry { 
+      picture = MK1s_GASP.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Atuin Wreckage
+   ID = 425
+   parent = 499
+   dry { 
+      picture = MK1v_atuin_w.pcx 1
+   } dry
+} ObjectType

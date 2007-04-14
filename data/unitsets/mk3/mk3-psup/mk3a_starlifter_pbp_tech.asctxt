@@ -1,0 +1,10 @@
+technology {
+   Name = Starlifter
+   infotext = 
+   id = 519
+   RelatedUnitID = 519
+   parent = 100010
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100010,100003,100101 
+} Technology

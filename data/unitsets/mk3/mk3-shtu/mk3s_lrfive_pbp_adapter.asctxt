@@ -1,0 +1,5 @@
+Techadapter {
+   ; LR5
+   Name = 610
+   TechnologiesRequired = 610
+} TechAdapter

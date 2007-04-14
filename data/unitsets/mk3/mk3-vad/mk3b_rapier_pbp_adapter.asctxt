@@ -1,0 +1,5 @@
+Techadapter {
+   ; Rapier
+   Name = 531
+   TechnologiesRequired = 531
+} TechAdapter

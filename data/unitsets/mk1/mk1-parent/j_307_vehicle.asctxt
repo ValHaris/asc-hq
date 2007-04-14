@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = JAM Vehicle
+   ID = 307
+   Parent = 400 401 402 404
+   abstract = true
+
+   Description = jammer
+   Infotext = [Jammer units are one of the more important vehicles an army should
+              contain. As the name implies, Jammers can block enemy radars.
+              The advantage in this is a cover for the movements of the army,
+              along with protection against artillery. Jammers tend to get
+              destroyed a lot, since their field of jamming is small.]
+   GuideSortHelp = 525 307 0 0 0 0 0 0 0 0
+
+
+   Armor = 350
+   Jamming = 45
+   Weight = 40
+   WreckageObject = 451
+
+   Movement = 0 0 0 70 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.DEF_MG
+   } Weapons
+} VehicleType

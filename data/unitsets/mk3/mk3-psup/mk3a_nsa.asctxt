@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = NSA
+   parent = 325
+   ID = 517
+   picture = MK3a_NSA.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Movement += 0 0 0 0 10 10 150 0 
+   Weight = 200
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* vehicleType.ServiceHighAir 
+   } Weapons
+} VehicleType

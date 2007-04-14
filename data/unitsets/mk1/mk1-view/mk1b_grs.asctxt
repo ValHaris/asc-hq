@@ -1,0 +1,11 @@
+VehicleType {
+   Name = GRS
+   ID = 95
+   parent = 244
+
+   Description = ground radar
+   Infotext = [ground radar system]
+   Picture = Mk1b_GRS.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+} VehicleType

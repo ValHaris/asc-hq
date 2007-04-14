@@ -1,0 +1,35 @@
+VehicleType {
+   Name = medium artillery
+   abstract = true
+   ID = 251
+   parent = 400 401 402 405
+   Description = medium artillery
+   Infotext = []
+   WreckageObject = 402
+   GuideSortHelp = 506 251 0 0 0 0 0 0 0 0
+
+
+   Armor = 400
+   WaitFortack = true
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 750
+   } Tank
+   FuelConsumption = 16
+   Abilities += moveduringreactionfire
+   Movement = 0 0 0 30 0 0 0 0 
+   Weight = 40
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 50
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

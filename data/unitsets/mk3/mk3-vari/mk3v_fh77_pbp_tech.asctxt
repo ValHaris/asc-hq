@@ -1,0 +1,10 @@
+technology {
+   Name = FH77
+   infotext = 
+   id = 598
+   RelatedUnitID = 598
+   parent = 100010
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100010,100002,100101,100203,597 
+} Technology

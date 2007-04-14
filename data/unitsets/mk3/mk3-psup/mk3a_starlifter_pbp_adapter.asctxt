@@ -1,0 +1,5 @@
+Techadapter {
+   ; Starlifter
+   Name = 519
+   TechnologiesRequired = 519
+} TechAdapter

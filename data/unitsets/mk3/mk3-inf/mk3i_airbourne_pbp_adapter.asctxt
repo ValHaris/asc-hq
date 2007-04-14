@@ -1,0 +1,5 @@
+Techadapter {
+   ; Airbourne
+   Name = 613
+   TechnologiesRequired = 613
+} TechAdapter

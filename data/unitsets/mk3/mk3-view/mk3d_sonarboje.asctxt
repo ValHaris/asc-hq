@@ -1,0 +1,7 @@
+VehicleType { 
+   Name = SONARBOJE
+   parent = 249
+   ID = 621
+   Picture = MK3d_SonarBOJE.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+} VehicleType

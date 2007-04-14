@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 37
+   ;Bezeichnung der verknüpften Technologie: Apogee
+   TechnologiesRequired = 37
+} TechAdapter

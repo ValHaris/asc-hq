@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 8
+   ;Bezeichnung der verknüpften Technologie: Hurry
+   TechnologiesRequired = 8
+} TechAdapter

@@ -1,0 +1,23 @@
+VehicleType { 
+   abstract = true
+   Name = medium attack trooper
+   ID = 202
+   parent = 400 401 402 410
+
+   Description = medium attack trooper
+   Infotext = []
+   GuideSortHelp = 501 202 0 0 0 0 0 0 0 0
+
+   Armor = 220
+   Movement = 0 0 0 42 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Panzerfaust
+      Weapon0.Ammo = 6
+      Weapon0.Name = Panzerfaust
+
+      Weapon1 ->* VehicleType.MG30low 
+      Weapon1.Name = Maschinenpistole
+   } Weapons
+} VehicleType

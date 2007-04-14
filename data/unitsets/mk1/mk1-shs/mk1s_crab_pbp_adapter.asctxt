@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 24
+   ;Bezeichnung der verknüpften Technologie: Crab
+   TechnologiesRequired = 24
+} TechAdapter

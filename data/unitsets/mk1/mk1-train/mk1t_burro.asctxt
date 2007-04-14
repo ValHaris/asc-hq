@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = BURRO
+   parent = 400 401 402 412
+   ID = 79
+   
+   Description = helitrans train
+   Infotext = []
+   picture = MK1t_burro.pcx
+   WreckageObject = 472
+   GuideSortHelp = 553 565 0 0 1 0 0 0 0 0
+
+   Abilities = fuel_transfer material_transfer repair_vehicle
+   Transportation ->* VehicleType.TransHeliTrain 
+
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+   } Tank
+   FuelConsumption = 11
+
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Ammo = 16
+      Weapon0.Punch@MaxRange = 44
+      Weapon0.Punch@MinRange = 44
+      Weapon0.HitAccuracy.u1 = 100
+      Weapon1 ->* VehicleType.AmmoBomb
+      Weapon1.Ammo = 30
+      Weapon2 ->* VehicleType.AmmoAM
+      Weapon2.Ammo = 30
+      Weapon3 ->* VehicleType.AmmoGM
+      Weapon3.Ammo = 30
+      Weapon4 ->* VehicleType.AmmoCannon
+      Weapon4.Ammo = 40
+      Weapon5 ->* VehicleType.AmmoMG
+      Weapon5.Ammo = 100
+   } Weapons
+} VehicleType

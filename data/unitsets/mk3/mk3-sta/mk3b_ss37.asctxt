@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = SS37
+   ID = 624
+   parent = 320
+   Description = surface defence system
+   Infotext = []
+   picture = MK3b_SS37.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+   TerrainAccess ->* VehicleType.Turret_ditch 
+
+
+   Weapons { 
+      Weapon0 ->* VehicleType.type_large_missile 
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 105
+   } Weapons
+} VehicleType

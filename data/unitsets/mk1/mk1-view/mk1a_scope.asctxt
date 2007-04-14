@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = SCOPE
+   ID = 9
+   parent = 247
+
+   Description = Recce Plane
+   Infotext = [The Recce plane can be vital to the success of a battle. It provides
+              a commander with detailed data about a sizable area. The Recce
+              Plane can prevent nasty surprises!]
+   Picture = MK1a_scope.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor -= 30
+   FuelConsumption = 22
+   Weight -= 40
+} VehicleType

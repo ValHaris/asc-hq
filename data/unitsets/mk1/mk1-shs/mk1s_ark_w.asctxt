@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Ark Wreckage
+   ID = 443
+   parent = 498
+   Armor = 600
+   RemovalCost { 
+      Energy = 0
+      Material = -6000
+      fuel = 600
+      Movement = 50
+   } RemovalCost
+   dry { 
+      picture = MK1s_ark.pcx 1
+   } dry
+} ObjectType

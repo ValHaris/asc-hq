@@ -1,0 +1,69 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402
+   ID = 369
+
+   Name = transport ship
+   Description = transport ship
+   Infotext = [Fierce battles are sometimes fought over the waves, and many
+              generals have owed their victory to their fleet. However, sooner
+              or later the ground troops have to take over from the navy in
+              order to invade the enemy homeland. The gap is bridged by the
+              Transport Ship. This ship is designed to carry a heavy load
+              while still having great mobility; it can move right up to the
+              shore and deploy the army.]
+   WreckageObject = 443
+   GuideSortHelp = 0 369 550 551 0 0 0 0 0 0
+
+
+   Armor = 1000
+   View = 30
+   Jamming = 0
+   WaitFortack = false
+   Abilities = fuel_transfer material_transfer
+   Category = heavy_ship
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 5000
+   Transportation ->* VehicleType.TransShip 
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 50000
+      fuel = 100000
+   } Tank
+   FuelConsumption = 35
+   Movement = 0 0 70 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.bigship_terrain 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = -100
+      Number = 9
+      Weapon0 ->* VehicleType.ServiceGround 
+      Weapon1 ->* VehicleType.AmmoMG 
+      Weapon1.Ammo = 150
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 50
+      Weapon4 ->* VehicleType.AmmoBomb
+      Weapon4.Ammo = 100
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 100
+      Weapon6 ->* VehicleType.AmmoSM 
+      Weapon6.Ammo = 100
+      Weapon7 ->* VehicleType.AmmoMine 
+      Weapon7.Ammo = 100
+      Weapon8 ->* VehicleType.AmmoCM 
+      Weapon8.Ammo = 20
+   } Weapons
+
+} VehicleType

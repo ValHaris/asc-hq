@@ -1,0 +1,5 @@
+Techadapter {
+   ; Booster
+   Name = 520
+   TechnologiesRequired = 520
+} TechAdapter

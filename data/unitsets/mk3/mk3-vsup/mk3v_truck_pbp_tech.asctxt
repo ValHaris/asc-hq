@@ -1,0 +1,10 @@
+technology {
+   Name = Truck
+   infotext = 
+   id = 591
+   RelatedUnitID = 591
+   parent = 100010
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100010,100002,100101 
+} Technology

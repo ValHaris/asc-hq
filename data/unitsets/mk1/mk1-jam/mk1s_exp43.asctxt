@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = EXP 43
+   parent = 312
+   ID = 75
+
+   Description = anti radar cruiser
+   Infotext = [Top Secret]
+   picture = MK1s_EXP43.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+
+} VehicleType

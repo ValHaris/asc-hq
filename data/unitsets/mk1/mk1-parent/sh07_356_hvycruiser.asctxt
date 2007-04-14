@@ -1,0 +1,45 @@
+VehicleType {
+   abstract = true 
+   parent = 400 401 402
+   ID = 356
+
+   Name = heavy cruiser
+   Description = heavy cruiser
+   Infotext = []
+   WreckageObject = 447
+   GuideSortHelp = 0 356 565 0 0 0 0 0 0 0
+
+
+   Armor = 1600
+   View = 50
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire repair_vehicle fuel_transfer
+   Category = heavy_ship
+   MaxSurvivableStorm = 240
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 7000
+   Transportation ->* VehicleType.TransCruiser
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 6000
+      fuel = 12000
+   } Tank
+   FuelConsumption = 30
+   Movement = 0 0 61 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.bigship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = P1000
+   parent = 294
+   ID = 563
+   Description = old prototype tank
+   Picture = MK3v_P1000.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Weight = 200
+   Transportation ->* VehicleType.TransLowTrooper2 
+
+   Tank.fuel = 2000
+   FuelConsumption = 30
+   Movement -= 0 0 0 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+
+      Weapon2 ->* VehicleType.MG45low 
+      Weapon2.Type = machinegun ammo_transfer shootable 
+      Weapon2.Ammo = 20
+
+      Weapon3 ->* VehicleType.AirMiniGun
+      Weapon3.Ammo = 20
+
+   } Weapons
+} VehicleType

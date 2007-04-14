@@ -1,0 +1,5 @@
+Techadapter {
+   ; Tiger
+   Name = 503
+   TechnologiesRequired = 503
+} TechAdapter

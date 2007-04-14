@@ -1,0 +1,10 @@
+technology {
+   Name = Apache
+   infotext = 
+   id = 504
+   RelatedUnitID = 504
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100003,100103,100207,507,503 
+} Technology

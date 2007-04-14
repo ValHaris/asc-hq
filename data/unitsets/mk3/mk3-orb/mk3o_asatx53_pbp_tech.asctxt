@@ -1,0 +1,10 @@
+technology {
+   Name = A-Sat
+   infotext = 
+   id = 528
+   RelatedUnitID = 528
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100003,100104,100302,100313,520 
+} Technology

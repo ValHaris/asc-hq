@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Wedge Wreckage
+   ID = 414
+   parent = 498
+   Armor = 700
+   RemovalCost { 
+      Energy = 0
+      Material = -7000
+      fuel = 700
+      Movement = 50
+   } RemovalCost
+   dry { 
+      picture = MK1s_wedge.pcx 1
+   } dry
+} ObjectType

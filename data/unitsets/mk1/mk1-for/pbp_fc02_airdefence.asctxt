@@ -1,0 +1,16 @@
+ Technology {
+   name = "air defence technology"
+   infotext = "conventional technology"
+   id = 100202
+   researchpoints = 300
+   
+   techlevel = 2
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

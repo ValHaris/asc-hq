@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = EF2000
+   parent = 271
+   ID = 512
+   Description = medium fighter
+   Infotext = [EF2000
+
+Der Euro-Fighter ist auf die Bekämpfung von fliegenden Zielen aller Art ausgelegt. Er hat begrenzte Stealthfähigkeiten, die es ihm ermöglichen feindliche Jaeger unentdeckt anzufliegen um seine toedlichen Waffen zum Einsatz zu bringen. Auf diese Weise kann er sogar Hoehenbomber und hoch fliegende Jaeger bekaempfen. Da er aber selbst nicht in duenner Atmosphaere fliegen kann und quasi keine Bodenwaffen besitzt, ist es ratsam feindliche Luftabwehrstellungen weitraeumig zu umfliegen.  
+
+The Euro-Fighter is used to eliminate aerial threats of all kinds. It has limited stealth capability, enableing it to approach enemy fighters unseen and deliver an enormous punsh with its high altitude missiles.
+Scince it can not fly in high alltitudes, and has virtually no ground-strike-weapons it is best to avoide AA-sites with this fighter.
+]
+   Picture = MK3a_EF2000.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   Jamming += 30
+   Abilities += jam_only_own_field
+   Movement += 0 0 0 0 10 10 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 1
+      Weapon0.Punch@MinRange += 1
+
+      Weapon2.Punch@MaxRange += 1
+      Weapon2.Punch@MinRange += 1
+
+      Weapon3.Punch@MaxRange += 1
+      Weapon3.Punch@MinRange += 1
+   } Weapons
+} VehicleType

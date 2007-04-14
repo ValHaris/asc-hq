@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 22
+   ;Bezeichnung der verknüpften Technologie: Dominator
+   TechnologiesRequired = 22
+} TechAdapter

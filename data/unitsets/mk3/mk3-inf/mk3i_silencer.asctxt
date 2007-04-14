@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = SILENCER
+   ID = 525
+   parent = 205
+
+   Description = Sniper
+   Infotext = [Scharfschuetze, sehr effektiv gegen Trooper nur bedingt einsatzfaehig gegen Fahrzeuge.]
+   picture = MK3i_SILENCER.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
+   Movement += 0 0 0 1 0 0 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 4
+   } Weapons
+} VehicleType

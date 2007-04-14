@@ -1,0 +1,5 @@
+Techadapter {
+   ; Gepard
+   Name = 533
+   TechnologiesRequired = 533
+} TechAdapter

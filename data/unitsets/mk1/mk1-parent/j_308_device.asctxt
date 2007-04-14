@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = JAM device
+   ID = 308
+   parent = 400 401 402 423
+   abstract = true
+
+   Description = radio frequence blocker
+   Infotext = []
+   GuideSortHelp = 0 308 0 0 0 0 0 0 0 0
+
+
+   Jamming = 45
+   Abilities = onlyTransMove
+
+   TerrainAccess ->* VehicleType.Device_terrain
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

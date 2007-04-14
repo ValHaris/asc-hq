@@ -1,0 +1,10 @@
+technology {
+   Name = Bumblebee
+   infotext = Forschungsprojekt abgeschlossen! Bumblebee verfuegbar!
+   id = 23
+   RelatedUnitID = 23
+   parent = 100000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100000,100003,100101,100207 
+} Technology

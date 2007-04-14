@@ -1,0 +1,5 @@
+Techadapter {
+   ; Scud
+   Name = 552
+   TechnologiesRequired = 552
+} TechAdapter

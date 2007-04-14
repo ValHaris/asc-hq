@@ -1,0 +1,10 @@
+technology {
+   Name = Bolt
+   infotext = Forschungsprojekt abgeschlossen! Bolt verfuegbar!
+   id = 30
+   RelatedUnitID = 30
+   parent = 100000
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100000,100002,100103 
+} Technology

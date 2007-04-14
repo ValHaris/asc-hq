@@ -1,0 +1,28 @@
+VehicleType { 
+   abstract = true
+   Name = paratrooper
+   ID = 207
+   parent = 400 401 402 410
+
+   Description = paratrooper
+   Infotext = []
+   GuideSortHelp = 501 207 562 564 0 0 0 0 0 0
+
+
+   Armor = 150
+;   Picture = I_PARA.pcx
+   Abilities += paratrooper mine_layer view_mines 
+   Movement = 0 0 0 42 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.MG30low
+      Weapon0.Name = Maschinenpistole
+      Weapon1 ->* VehicleType.MineWeapon
+      Weapon1.Ammo = 4
+      Weapon1.Name = Tellermine 
+      Weapon2 ->* VehicleType.C4small
+      Weapon2.Ammo = 4
+      Weapon2.Name = Sprengstoff
+   } Weapons
+} VehicleType

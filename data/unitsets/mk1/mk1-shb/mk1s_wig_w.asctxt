@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Wig Wreckage
+   ID = 471
+   parent = 498
+   Armor = 100
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 200
+      Movement = 30
+   } RemovalCost
+   dry { 
+      picture = MK1s_wig.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,45 @@
+ObjectType { 
+   ID = 499
+   abstract = true
+   groupID = 13
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Armor = 100
+   Movemalus_plus = 2
+   Movemalus_abs = -1
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 
+   Height = 119
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 100
+      Movement = 20
+   } RemovalCost
+   Name = Wreck
+   NoSelfChaining = false
+   TerrainAccess { 
+      terrain_any = road runway Lowland Hard_sand Soft_sand Mountains high_mountains Very_shallow_water Hillside turret_foundation ditch
+      terrain_all = 
+      terrain_not =  
+      terrain_kill = shallow_water Water Deep_water river Lava  
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add =  
+   dry { 
+      UseGFXpics = false
+      flippicture = -1
+   } dry
+   NetBehaviour = KeepOrientation
+} ObjectType

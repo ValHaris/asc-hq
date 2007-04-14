@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 56
+   ;Bezeichnung der verknüpften Technologie: Big Gun
+   TechnologiesRequired = 56
+} TechAdapter

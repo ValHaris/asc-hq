@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = RAPTOR
+   parent = 329
+   ID = 505
+
+   Description = Fighter-Bomber
+   picture = MK3a_RAPTOR.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Jamming = 39
+   Abilities += jam_only_own_field 
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+
+      Weapon3.Ammo = 6
+   } Weapons
+} VehicleType

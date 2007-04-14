@@ -1,0 +1,16 @@
+ Technology {
+   name = "please delete this"
+   infotext = "advanced technology"
+   id = 100308
+   researchpoints = 1000
+   
+   techlevel = 4
+   
+   requireEvent = false
+   
+   TechnologiesRequired = -1
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

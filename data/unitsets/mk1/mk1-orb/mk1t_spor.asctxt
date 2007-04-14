@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = SPOR
+   ID = 118
+   parent = 400 401 402 412
+
+   Description = anti orbital train
+   Infotext = [Railbased anti satellite rocket system.]
+   Picture = MK1t_spor.pcx
+   WreckageObject = 483
+   GuideSortHelp = 509 600 0 0 1 0 0 0 0 0
+
+   WaitFortack = true
+   Abilities += move_after_attack
+   Weight = 250
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2200
+   } Tank
+   FuelConsumption = 20
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SOM 
+      Weapon0.MaxRange = 80 
+      Weapon0.Ammo = 4
+      Weapon0.ReactionFireShots = 2
+      
+      Weapon1 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

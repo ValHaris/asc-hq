@@ -1,0 +1,10 @@
+technology {
+   Name = Spear
+   infotext = Forschungsprojekt abgeschlossen! Spear verfuegbar!
+   id = 73
+   RelatedUnitID = 73
+   parent = 100000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100000,100002,100104,100204,100303,18,107,64 
+} Technology

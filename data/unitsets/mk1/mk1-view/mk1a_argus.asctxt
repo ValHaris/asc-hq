@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = ARGUS
+   parent = 248
+   ID = 32
+
+   Description = Espionage Plane
+   Infotext = [Espionahe Planes are small one-man aircraft that carry equipment
+              to photograph a small amount of territory. An Espionage Plane
+              is able to enter te enemy's territory and report back on what
+              it finds. It is able to reach high altitudes, making itself
+              very hard to destroy. Even so, it must be careful, since its
+              armament is minimal and its view is nowhere near as large as
+              the Recce Plane's.]
+   Picture = MK1a_ARGUS.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Movement -= 0 0 0 0 10 10 0 0 
+
+} VehicleType

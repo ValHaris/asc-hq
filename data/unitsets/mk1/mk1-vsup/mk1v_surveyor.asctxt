@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = SURVEYOR
+   ID = 40
+   parent = 335
+   
+   Description = Surveyor
+   Infotext = [The Surveyor is not a combat unit. It has no weapons and can
+              easily be destroyed. However, it is equipped with advanced sensor
+              systems that scan the ground the Surveyor is on and transmit
+              the data to the central computer located in Headquarters which
+              then calculates the exact amount of raw resources available
+              in that area.]
+   picture = MK1v_surveyor.pcx
+   WreckageObject = 440
+   GuideSortHelp = 525 0 0 0 1 0 0 0 0 0
+
+   View += 10
+   Abilities += manual_resource_drilling 
+   ResourceDrillingRange = 8
+
+   TerrainAccess ->* VehicleType.offroad 
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+
+} VehicleType

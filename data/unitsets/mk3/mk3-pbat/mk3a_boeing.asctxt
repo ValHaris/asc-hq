@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = BOEING
+   parent = 400 401 402 415 496
+   ID = 601
+   Description = nuklear aircraft
+   Infotext = [Boeing
+
+Dieses experimentelle Flugzeug ist fähig alle Ziele, vom Schiff bis zum Satellit, auf Distanz und mit starker Feuerkraft anzugreifen. Leider ist die Boeing schlecht gepanzert und kann nicht in dünner Atmosphäre fliegen. Am besten setzt man sie gegen unvorbereitete feindliche Orbitaleinheiten ein.
+
+This experimental plane is able to attack all targets above the water-line and in orbit at a range and with good firepower. However, the Boeing is weak when under fire and unable to perform high-alltitude flight. Use it to strike unprepared enemy orbital craft.
+]
+   picture = MK3a_boeing.pcx
+   GuideSortHelp = 522 600 0 0 3 0 0 0 0 0
+
+   Armor = 350
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 4000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 65 140 160 0 0 
+   Weight = 300
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ML 
+      Weapon0.MaxRange = 20
+      Weapon0.LaserRechargeCost.Material = 100
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 80
+   } Weapons
+} VehicleType

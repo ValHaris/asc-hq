@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = ZEPPELIN
+   parent = 275 
+   ID = 48
+
+   Picture = MK1a_zeppelin.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+
+} VehicleType

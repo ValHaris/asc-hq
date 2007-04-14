@@ -1,0 +1,10 @@
+technology {
+   Name = LSS
+   infotext = 
+   id = 614
+   RelatedUnitID = 614
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100004,100102,100209 
+} Technology

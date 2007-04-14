@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = TERROR
+   parent = 400 401 402 409 497
+   ID = 90
+   Description = trooper hunter
+   Infotext = [Dieser wendige und gegen Bodenbeschuss gut gepanzerte Helicopter ist die ultimative Waffe gegen heranrückende 
+   gegnerische Infantrieverbaende. Die sehr weitreichende miniGun bekämft die Gegner aus Distance. Der TERROR kann sich sofort 
+   nach dem Angriff wieder zurueckziehen und kann auch kleine Gruppen von eigenen Soldaten transportieren.]
+   picture = MK1h_terror.pcx
+   GuideSortHelp = 515 384 552 0 1 0 0 0 0 0
+
+   Armor = 300
+   Transportation ->* vehicleType.TransHeliTrooper 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 18
+   Weight = 30
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.Ammo = 8
+
+      Weapon1 ->* VehicleType.Air_MG 
+      Weapon1.targets = floating ground_level
+      Weapon1.shotFrom = loW_level_flight
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 8
+      Weapon1.Punch@MaxRange = 45
+      Weapon1.Punch@MinRange = 55
+      Weapon1.HitAccuracy.d1 = 100
+      Weapon1.HitAccuracy.0 = 0
+
+   } Weapons
+} VehicleType

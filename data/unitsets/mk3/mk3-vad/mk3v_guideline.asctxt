@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = GUIDELINE
+   ID = 567
+   parent = 225
+
+   Description = SAM long range
+   Picture = MK3v_guideline.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
+   Weapons { 
+      Weapon0.Punch@MaxRange += 3
+      Weapon0.Punch@MinRange += 3
+   } Weapons
+} VehicleType

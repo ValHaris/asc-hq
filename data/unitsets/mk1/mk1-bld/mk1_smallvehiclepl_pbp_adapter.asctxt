@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B12
+   ;Bezeichnung der verknüpften Technologie: Small Vehicle Plant
+   TechnologiesRequired = 100000
+} TechAdapter

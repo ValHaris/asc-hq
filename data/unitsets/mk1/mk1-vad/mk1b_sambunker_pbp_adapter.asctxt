@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 117
+   ;Bezeichnung der verknüpften Technologie: SAMBunker
+   TechnologiesRequired = 117
+} TechAdapter

@@ -1,0 +1,61 @@
+VehicleType { 
+   Name = defence turret
+   parent = 400 401 402 422
+   ID = 317
+   abstract = true
+
+   Description = defence turret
+   Infotext = []
+   GuideSortHelp = 507 317 0 0 0 0 0 0 0 0
+
+   
+   View = 60
+   WaitFortack = true
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 25
+      MaxLoadableMass = 80
+      CategoriesNOT = hoovercraft light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+   FuelConsumption = 200
+   Weight = 450
+
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 3000
+   } Tank
+   TerrainAccess ->* VehicleType.Turret_only 
+
+   Weapons { 
+      Initiative = 0
+      Number = 7
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.ReactionFireShots = 2
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.Ship_MG 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.Ammo = 10
+
+      Weapon4 ->* VehicleType.AmmoSM 
+      Weapon4.Ammo = 50
+
+      Weapon5 ->* vehicleType.AmmoMine 
+      Weapon5.Ammo = 50
+
+      Weapon6 ->* vehicleType.AmmoMG 
+      Weapon6.Ammo = 80
+   } Weapons
+} VehicleType

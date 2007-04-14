@@ -1,0 +1,5 @@
+Techadapter {
+   ; Boeing
+   Name = 601
+   TechnologiesRequired = 601
+} TechAdapter

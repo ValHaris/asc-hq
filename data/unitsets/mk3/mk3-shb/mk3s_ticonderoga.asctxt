@@ -1,0 +1,67 @@
+VehicleType { 
+   Name = TICONDEROGA
+   parent = 356
+   ID = 566
+   
+   Armor -= 100
+   Description = Lenkwaffenkreuzer
+   picture = MK3s_TICONDEROGA.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Abilities += sonar 
+
+   Weapons { 
+      Initiative = 20
+      Number = 11
+      Weapon0 ->* vehicleType.Ship_Gun 
+      Weapon0.Ammo = 16
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* vehicleType.SSM 
+      Weapon1.MaxRange = 40
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 20
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
+      Weapon1.ReactionFireShots = 2
+
+      Weapon2 ->* vehicleType.SSM 
+      Weapon2.targets = ground_level
+      Weapon2.MaxRange = 70
+      Weapon2.MinRange = 30
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 95
+      Weapon2.ReactionFireShots = 0
+
+      Weapon3 ->* VehicleType.ShM
+      Weapon3.MaxRange = 60
+      Weapon3.MinRange = 20
+      Weapon3.Ammo = 8
+      Weapon3.Punch@MaxRange = 105
+      Weapon3.Punch@MinRange = 105
+      Weapon3.ReactionFireShots = 0
+
+      Weapon4 ->* VehicleType.SAMH 
+      Weapon4.MaxRange = 40
+
+      Weapon5 ->* VehicleType.STorp
+
+      Weapon6 ->* vehicleType.AmmoTorp 
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* VehicleType.AmmoMG 
+      Weapon7.Ammo = 40
+
+      Weapon8 ->* vehicleType.AmmoBomb 
+      Weapon8.Ammo = 20
+
+      Weapon9 ->* vehicleType.AmmoAM 
+      Weapon9.Ammo = 20
+
+      Weapon10 ->* vehicleType.AmmoGM 
+      Weapon10.Ammo = 20
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = light tank
+   ID = 290
+   abstract = true
+   
+   parent = 400 401 404
+   Description = light tank
+   Infotext = [Light Tanks are economic tanks. While not being very heavily
+              armed, they make a decent pace and aren't as expensive to build
+              as Combat Tanks. Light tanks are well suited for strike force
+              support.]
+   GuideSortHelp = 503 290 0 0 0 0 0 0 0 0
+
+
+   WreckageObject = 465
+;   Picture = g_termite.pcx
+
+   Armor = 550
+   Weight = 50
+
+   Tank { 
+      fuel = 1200
+   } Tank
+   FuelConsumption = 14
+   Movement = 0 0 0 88 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Tank_Gun 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+      Weapon0.Name = leichte Kanone
+
+      Weapon1 ->* VehicleType.MG40low 
+      Weapon1.Ammo = 10
+      Weapon1.Name = Machinengewehr
+
+   } Weapons
+} VehicleType

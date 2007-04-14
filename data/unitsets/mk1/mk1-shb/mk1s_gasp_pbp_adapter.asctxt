@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 28
+   ;Bezeichnung der verknüpften Technologie: Gasp
+   TechnologiesRequired = 28
+} TechAdapter

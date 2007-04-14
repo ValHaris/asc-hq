@@ -1,0 +1,10 @@
+technology {
+   Name = Dumper
+   infotext = 
+   id = 577
+   RelatedUnitID = 577
+   parent = 100010
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100010,100002 
+} Technology

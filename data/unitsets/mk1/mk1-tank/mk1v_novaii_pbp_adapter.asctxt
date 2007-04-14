@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 100
+   ;Bezeichnung der verknüpften Technologie: Nova 2
+   TechnologiesRequired = 100
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 61
+   ;Bezeichnung der verknüpften Technologie: SAM Turret
+   TechnologiesRequired = 61
+} TechAdapter

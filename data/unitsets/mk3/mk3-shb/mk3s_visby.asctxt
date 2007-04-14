@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = VISBY
+   parent = 352
+   ID = 587
+   
+   Description = stealth corvette
+   picture = MK3s_visby.pcx
+   GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
+
+   jamming = 61
+   Transportation ->* VehicleType.TransCruiserSmall 
+   Abilities += jam_only_own_field sonar
+
+   Tank { 
+      Material = 2000
+   } Tank
+
+   Weapons { 
+      Initiative = 0
+      Number = 10
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 62
+      Weapon0.Punch@MinRange = 70
+      
+      Weapon1 ->* VehicleType.ShM
+      Weapon1.Ammo = 8
+      Weapon1.MaxRange = 30
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+
+      Weapon2 ->* VehicleType.UTorp
+      Weapon2.Ammo = 4
+      Weapon2.ReactionFireShots = 2
+
+      Weapon3 ->* VehicleType.DCS
+      Weapon3.Ammo = 6
+
+      Weapon4 ->* VehicleType.SAM
+      Weapon4.MaxRange = 30
+      Weapon4.ReactionFireShots = 1
+
+      Weapon5 ->* vehicleType.AmmoTorp 
+      Weapon5.Ammo = 6
+
+      Weapon6 ->* VehicleType.AmmoMG 
+      Weapon6.Ammo = 40
+
+      Weapon7 ->* vehicleType.AmmoBomb 
+      Weapon7.Ammo = 20
+
+      Weapon8 ->* vehicleType.AmmoAM 
+      Weapon8.Ammo = 20
+
+      Weapon9 ->* vehicleType.AmmoGM 
+      Weapon9.Ammo = 20
+
+   } Weapons
+} VehicleType

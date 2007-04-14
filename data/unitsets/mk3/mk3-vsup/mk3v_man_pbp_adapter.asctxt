@@ -1,0 +1,5 @@
+Techadapter {
+   ; MAN
+   Name = 580
+   TechnologiesRequired = 580
+} TechAdapter

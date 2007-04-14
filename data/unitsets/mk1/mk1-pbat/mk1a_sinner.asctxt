@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = SINNER
+   parent = 340
+   ID = 82
+
+   Description = flying fortress
+   picture = Mk1a_sinner.pcx
+   GuideSortHelp += 0 0 0 0 1 600 0 0 0 0
+
+   Armor += 100
+   View += 10
+   Abilities += satelliteview
+
+   Weapons { 
+      Number = 5
+
+      Weapon4 ->* VehicleType.AMO 
+      Weapon4.MaxRange = 30
+      Weapon4.Ammo = 4
+   } Weapons
+} VehicleType

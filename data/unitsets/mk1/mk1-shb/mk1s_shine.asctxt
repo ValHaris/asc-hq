@@ -1,0 +1,39 @@
+VehicleType { 
+   Name = SHINE
+   parent = 356
+   ID = 115
+   
+   Description = heavy gun cruiser
+   picture = MK1s_shine.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 100
+
+   Weapons { 
+      Initiative = 20
+      Number = 4
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 60
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 110
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Ship_Gun
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 12
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 140
+
+      Weapon2 ->* VehicleType.Ship_Flak 
+      Weapon2.Ammo = 18
+
+      Weapon3 ->* VehicleType.Ship_MG 
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleType.SAMH
+      Weapon4.MaxRange = 20
+      Weapon4.ReactionFireShots = 1      
+   } Weapons
+} VehicleType

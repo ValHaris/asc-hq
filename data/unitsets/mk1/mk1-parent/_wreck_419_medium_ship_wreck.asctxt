@@ -1,0 +1,16 @@
+ObjectType { 
+   Name = medium ship wreckage
+   ID = 419
+   parent = 498
+   Armor = 350
+   Movemalus_plus = 3
+   RemovalCost { 
+      Energy = 0
+      Material = -4000
+      fuel = 500
+      Movement = 40
+   } RemovalCost
+   dry { 
+      picture = MK1s_streak.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 50
+   ;Bezeichnung der verknüpften Technologie: Adder
+   TechnologiesRequired = 50
+} TechAdapter

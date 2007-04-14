@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = SILO
+   ID = 84
+   parent = 304
+
+   Description = main rocket bunker
+   Infotext = [ Gepanzerte stationaere Boden-Boden Raketenanlage. Aufgrund der groﬂe Treibstofftanks ist der Sprengkopf der 
+   Rakete eher klein ausgefallen.]
+   Picture = Mk1b_silo.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+} VehicleType

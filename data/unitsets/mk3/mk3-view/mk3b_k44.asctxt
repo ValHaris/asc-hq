@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = K44
+   ID = 510
+   parent = 244
+
+   Description = ground radar
+   Picture = MK3B_k44.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+   View += 10
+
+} VehicleType

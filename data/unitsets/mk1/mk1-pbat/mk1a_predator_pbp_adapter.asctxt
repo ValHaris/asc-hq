@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 70
+   ;Bezeichnung der verknüpften Technologie: Predator
+   TechnologiesRequired = 70
+} TechAdapter

@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = BOOMERANG
+   parent = 271
+   ID = 92
+
+   Description = medium fighter
+   Infotext = []
+   Picture = MK1a_BOOMERANG.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 40
+   Movement -= 0 0 0 0 0 10 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 2
+      Weapon0.Punch@MinRange -= 2
+
+      Weapon2.Punch@MaxRange -= 2
+      Weapon2.Punch@MinRange -= 2
+   } Weapons
+} VehicleType

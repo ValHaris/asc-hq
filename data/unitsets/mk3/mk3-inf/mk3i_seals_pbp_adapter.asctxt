@@ -1,0 +1,5 @@
+Techadapter {
+   ; Seals
+   Name = 523
+   TechnologiesRequired = 523
+} TechAdapter

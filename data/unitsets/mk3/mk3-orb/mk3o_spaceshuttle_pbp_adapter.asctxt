@@ -1,0 +1,5 @@
+Techadapter {
+   ; Spaceshuttle
+   Name = 521
+   TechnologiesRequired = 521
+} TechAdapter

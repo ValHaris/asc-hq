@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = light mech
+   ID = 208
+   abstract = true
+   parent = 400 401 402 408
+
+   Description = light mechwarrior
+   Infotext = []
+   GuideSortHelp = 502 208 0 0 0 0 0 0 0 0
+
+
+   Armor = 340
+   Weight -= 1
+   Movement += 0 0 0 10 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.BigMiniGun 
+      Weapon0.Ammo = 16
+      Weapon0.Name = MiniGun
+   } Weapons
+} VehicleType

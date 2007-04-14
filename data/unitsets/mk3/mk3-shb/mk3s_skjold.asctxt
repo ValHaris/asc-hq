@@ -1,0 +1,56 @@
+VehicleType { 
+   Name = SKJOLD
+   parent = 351 493
+   ID = 590
+   
+   Description = patrol boat
+   Infotext = [The Skjold class of missile fast patrol boats is characterised by its speed, reduced signatures, small size with heavy weapon load and its littoral combat capability. The Skjold has an air-cushioned catamaran hull which, with waterjet propulsion, provides high speed and manoeuvrability.]
+   picture = MK3s_skjold.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   jamming = 41
+   Transportation ->* VehicleType.TransLowTrooper2 
+
+   Tank { 
+      Material = 1000
+   } Tank
+   Height = floating ground_level 
+   Movement += 0 0 0 10 0 0 0 0
+   TerrainAccess ->* VehicleType.nodeepwatership_terrain
+   Abilities += fuel_transfer material_transfer jam_only_own_field
+
+   Weapons { 
+      Initiative = 0
+      Number = 8
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 58
+      Weapon0.Punch@MinRange = 67
+
+      Weapon1 ->* VehicleType.ShM
+      Weapon1.Ammo = 6
+      Weapon1.MaxRange = 30
+      Weapon1.Punch@MaxRange = 72
+      Weapon1.Punch@MinRange = 72
+
+      Weapon2. ->* VehicleType.smSAM
+      Weapon2.Ammo = 4
+
+      Weapon3 ->* VehicleTYpe.AmmoMine
+      Weapon3.Ammo = 10
+      
+      Weapon4 ->* VehicleType.AmmoMG 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* vehicleType.AmmoBomb 
+      Weapon5.Ammo = 10
+
+      Weapon6 ->* vehicleType.AmmoAM 
+      Weapon6.Ammo = 10
+
+      Weapon7 ->* vehicleType.AmmoGM 
+      Weapon7.Ammo = 10
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 77
+   ;Bezeichnung der verknüpften Technologie: EXP 21
+   TechnologiesRequired = 77
+} TechAdapter

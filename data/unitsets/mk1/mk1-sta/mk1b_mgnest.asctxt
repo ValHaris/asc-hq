@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = MG NEST
+   parent = 314
+   ID = 104
+
+   Description = Verteidigungsstellung
+   Infotext = [ Durch Sandsäcke geschützte MG Stellung]
+   picture = MK1b_mgnest.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Leopard2
+   infotext = 
+   id = 558
+   RelatedUnitID = 558
+   parent = 100010
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100010,100002,100103,100201,555,534 
+} Technology

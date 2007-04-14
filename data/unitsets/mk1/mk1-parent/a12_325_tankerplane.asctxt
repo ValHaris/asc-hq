@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = tankerplane
+   ID = 325
+   abstract = true
+   parent = 400 401 402 415 496
+
+   Description = Tanker Plane
+   Infotext = [Tanker Planes are basically flying fuel transports. Their only
+              use is refuelling other airplanes. This ability can be a life-saver
+              if an aircraft is unable to reach the base with its remaining
+              fuel supply.]
+   GuideSortHelp = 325 550 561 0 0 0 0 0 0 0
+
+   Armor = 350
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 40000
+   } Tank
+   FuelConsumption = 23
+   Abilities += fuel_transfer 
+   Movement = 0 0 0 65 140 160 0 0 
+   Weight = 250
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* vehicleType.ServiceAir 
+   } Weapons
+} VehicleType

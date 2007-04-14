@@ -1,0 +1,39 @@
+VehicleType {
+   Name = med tank 2
+   ID = 292
+   parent = 400 401 402 405
+   abstract = true
+
+   Description = medium tank
+   Infotext =
+   WreckageObject = 466
+   GuideSortHelp = 503 292 0 0 0 0 0 0 0 0
+
+   Armor = 800
+   Weight = 75
+
+   Tank {
+      Energy = 0
+      Material = 0
+      fuel = 1200
+   } Tank
+   FuelConsumption = 16
+   Movement = 0 0 0 77 0 0 0 0
+
+   Weapons {
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Tank_Gun
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 95
+      Weapon0.Punch@MinRange = 95
+      Weapon0.Name = Kanone
+
+      Weapon1 ->* VehicleType.MG40low
+      Weapon1.targets = floating ground_level
+      Weapon1.Name = Maschinengewehr
+
+      Weapon2 ->* VehicleType.AirMiniGun
+      Weapon2.Name = Luftabwehr MG
+   } Weapons
+} VehicleType

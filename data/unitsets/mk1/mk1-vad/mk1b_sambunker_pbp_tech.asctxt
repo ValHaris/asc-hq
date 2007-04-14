@@ -1,0 +1,10 @@
+technology {
+   Name = SAM BUNKER
+   infotext = Forschungsprojekt abgeschlossen! SAM BUNKER verfuegbar!
+   id = 117
+   RelatedUnitID = 117
+   parent = 100000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 100000,100002,100105,100303,61 
+} Technology

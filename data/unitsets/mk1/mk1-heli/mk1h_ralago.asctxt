@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = RALAGO
+   parent = 383
+   ID = 78
+   
+   Description = Heavy Attack Helicopter
+   picture = MK1h_ralago.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Armor += 20
+
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = APACHE
+   parent = 382
+   ID = 504
+   Description = attack helicopter
+   Infotext = [Apache
+
+Der Apache ist ein schwerer Kampfhubschrauber, ausgerüstet um Bodenziele zu bekämpfen. Er hat auch begrenzte Luftkampffähigkeiten, wird aber von feindlichen Flugzeugen schnell ausmaneuvriert. Seine größte Stärke ist die Fähigkeit Bodenziele auf Distanz anzugreifen, was die Luftabwehr der meisten Panzer sinnlos werden lässt.
+Diese Eigenschaften machen den Apache sehr kosten-effizient. 
+Apache sollten feindliche Infanteristen umgehen, der Helikopter hat nur sehr begrenzte Bewaffnung für den Kampf gegen Infanterie.
+
+The Apache is a heavy attack helicopter, equiped for fighting against ground-targets.
+It has limited aerial firepower and is easily outmaneuvred by planes. 
+Its great strength lies in its ability to strike at ground targets from a distance, which will render the anti-air of most tanks useless. This propertiy makes the Apache very cost-effective.
+Avoid enemy troopers, the apache has only very limited weaponery when attacking infantry.
+
+]
+   picture = MK3h_APACHE.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 6
+
+      Weapon1.Punch@MaxRange += 2
+      Weapon1.Punch@MinRange += 2
+   } Weapons
+} VehicleType

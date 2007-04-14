@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = rocket weapon
+   abstract = true
+   parent = 400 401 402 413 497
+   ID = 424
+   Description = rocket weapon
+   Infotext = []
+   Armor = 100
+   View = 10
+;   Picture = SF_SAM.pcx
+   Height = low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 300
+   } Tank
+   FuelConsumption = 10
+   Abilities = Kamikaze_only jam_only_own_field no_midair_refuel
+   Category = default
+   Movement = 0 0 0 0 140 140 140 0 
+   Weight = 1
+   Weapons { 
+      Initiative = 120
+      Number = 1
+      Weapon0 { 
+         Type = laser shootable 
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0 
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+	 WeaponEffectiveness {
+ 	 } WeaponEffectiveness
+      } Weapon0
+   } Weapons
+} VehicleType

@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = VESUVIUS
+   ID = 12
+   parent = 336
+   
+   Description = constructor
+   Infotext = [Building und turretunit constructors are perhaps the most important constructing
+              vehicles. They are able to place new factories, weapon emplacements,
+              power stations, mines, and so on. Without at least one building
+              bonstructor, expansion is impossible.]
+   picture = MK1v_vesuvius.pcx
+   WreckageObject = 412
+   GuideSortHelp = 554 0 0 0 1 0 0 0 0 0
+
+   Armor -= 100
+   Abilities += construct_vehicles construct_specific_buildings
+
+   Tank { 
+      Material = 30000
+      fuel = 30000
+   } Tank
+   FuelConsumption = 19
+
+   Construction { 
+      Buildings = 1 2 4-7 10-23 30
+      Vehicles =  61 49 56 93 95 104
+      Objects = 44 2098 2097
+      ObjectsRemovable = 2097
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 11 13
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

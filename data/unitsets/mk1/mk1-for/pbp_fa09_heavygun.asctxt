@@ -1,0 +1,16 @@
+ Technology {
+   name = "heavy gun technology"
+   infotext = "advanced technology"
+   id = 100309
+   researchpoints = 1000
+   
+   techlevel = 4
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100002 100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = LEOPARD3
+   ID = 546
+   parent = 293
+   Description = [Main Battle Tank]
+   Picture = MK3v_leopard3.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Weight -= 15
+
+   Movement += 0 0 0 11 0 0 0 0 
+   TerrainAccess ->* VehicleType.med_terrain 
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+
+   } Weapons
+} VehicleType

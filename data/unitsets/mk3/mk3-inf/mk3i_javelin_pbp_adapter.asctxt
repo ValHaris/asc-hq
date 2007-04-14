@@ -1,0 +1,5 @@
+Techadapter {
+   ; Javelin
+   Name = 618
+   TechnologiesRequired = 618
+} TechAdapter

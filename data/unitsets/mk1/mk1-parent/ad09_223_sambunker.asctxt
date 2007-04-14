@@ -1,0 +1,25 @@
+VehicleType { 
+   abstract = true
+   Name = SAM BUNKER
+   ID = 223
+   parent = 400 401 402 403
+
+   Description = air-defence bunker
+   Infotext = [ ]
+   GuideSortHelp = 223 508 0 0 0 0 0 0 0 0
+
+   view = 60
+   Picture = b_sambunker.pcx
+   Weight = 290
+   TerrainAccess ->* VehicleType.Turret_lowland 
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.SAMB 
+      Weapon0.Ammo = 20
+
+      Weapon1 ->* VehicleType.AirMiniGun
+
+      Weapon2 ->* VehicleType.Def_MG 
+   } Weapons
+} VehicleType

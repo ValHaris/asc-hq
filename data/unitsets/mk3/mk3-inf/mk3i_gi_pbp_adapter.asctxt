@@ -1,0 +1,5 @@
+Techadapter {
+   ; GI
+   Name = 535
+   TechnologiesRequired = 535
+} TechAdapter

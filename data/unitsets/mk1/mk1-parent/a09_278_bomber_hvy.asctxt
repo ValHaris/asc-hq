@@ -1,0 +1,46 @@
+VehicleType { 
+   Name = heavy bomber
+   parent = 400 401 402 415 496
+   ID = 278
+   abstract = true
+   
+   Description = Long-Range Bomber
+   Infotext = [Long Range Bombers are heavy support airplanes. They carry 300
+              kg bombs capable of turning an enemy tank unit into a smoking
+              crater. Beware of other planes, however, as Bombers have no
+              air defense. Due to the altitude at which the bombs are dropped,
+              and the inaccuracy that accompanies it.]
+   GuideSortHelp = 278 511 560 0 0 0 0 0 0 0
+
+   Armor = 400
+   Weight = 200
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 10000
+   } Tank
+   FuelConsumption = 30
+   Movement = 0 0 0 60 140 160 150 0 
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.highBomb 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+
+      Weapon1 ->* VehicleType.highBomb 
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 130
+      Weapon1.Punch@MinRange = 130
+
+      Weapon2 ->* VehicleType.highBomb 
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 150
+      Weapon2.Punch@MinRange = 150
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 89
+   ;Bezeichnung der verknüpften Technologie: Privater
+   TechnologiesRequired = 89
+} TechAdapter

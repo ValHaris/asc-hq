@@ -1,0 +1,5 @@
+Techadapter {
+   ; Volcano
+   Name = 620
+   TechnologiesRequired = 620
+} TechAdapter

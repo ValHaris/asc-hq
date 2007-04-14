@@ -1,0 +1,10 @@
+technology {
+   Name = LTT
+   infotext = Forschungsprojekt abgeschlossen! LTT verfuegbar!
+   id = 120
+   RelatedUnitID = 120
+   parent = 100000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100000,100002,100102 
+} Technology

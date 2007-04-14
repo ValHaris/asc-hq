@@ -1,0 +1,2169 @@
+ VehicleType { 
+   Abstract = true
+   ID = 400
+   Weapons.Initiative = 0
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   D E F I N I T I O N S   F O R   A L L   U N I T S   ----------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   ConstructionCost { 
+      CalculationMethod = auto
+      energy =
+      material =
+      fuel = 
+   } ConstructionCost
+
+   HitAcc { 
+      d6 = 0
+      d5 = 0
+      d4 = 0
+      d3 = 0
+      d2 = 0
+      d1 = 0
+      0 = 0
+      u1 = 0
+      u2 = 0
+      u3 = 0
+      u4 = 0
+      u5 = 0
+      u6 = 0
+   } HitAcc
+
+;      WeaponX.ReactionFireShots = 2
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   M A C H I N E   G U N S   ------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   MG_Trooper {
+      Type = machinegun shootable 
+      targets = floating ground_level low_level_flight 
+      shotFrom = floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 10
+      Punch@MaxRange = 20
+      Punch@MinRange = 20
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+      HitAccuracy.u1 = 80
+
+      WeaponEffectiveness {      
+         trooper = 130
+         rail_vehicle = 60
+         building|turret|object = 50
+         hoovercraft = 90
+         helicopter = 90
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 65
+         heavy_tracked_vehicle = 50
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 90
+         heavy_wheeled_vehicle = 80
+         
+         light_ship = 80
+         medium_ship  = 60
+         heavy_ship = 50
+
+         light_aircraft = 100
+         medium_aircraft  = 90
+         heavy_aircraft = 80
+      } WeaponEffectiveness
+   } MG_Trooper
+
+   MG25low ->* VehicleType.MG_Trooper
+   MG25low.Punch@MaxRange = 25
+   MG25low.Punch@MinRange = 25
+
+   MG30low ->* VehicleType.MG_Trooper
+   MG30low.Punch@MaxRange = 30
+   MG30low.Punch@MinRange = 30
+   
+   MG35low ->* VehicleType.MG_Trooper
+   MG35low.Punch@MaxRange = 35
+   MG35low.Punch@MinRange = 35
+
+   MG40low ->* VehicleType.MG_Trooper
+   MG40low.Punch@MaxRange = 40
+   MG40low.Punch@MinRange = 40
+
+   MG45low ->* VehicleType.MG_Trooper
+   MG45low.Punch@MaxRange = 45
+   MG45low.Punch@MinRange = 45
+
+   MGmed ->* VehicleType.MG_Trooper
+   MGmed.targets = floating ground_level low_level_flight medium_level_flight
+   MGmed.HitAccuracy.u1 = 90
+   MGmed.HitAccuracy.u2 = 80
+   
+   MG40med ->* VehicleType.MGmed
+   MG40med.Punch@MaxRange = 40
+   MG40med.Punch@MinRange = 40
+
+   MG45med ->* VehicleType.MGmed
+   MG45med.Punch@MaxRange = 45
+   MG45med.Punch@MinRange = 45
+
+   Def_MG ->* VehicleType.MG_Trooper
+   Def_MG.targets = floating ground_level
+   Def_MG.ammo = 4
+   Def_MG.ReactionFireShots = 0
+
+; alte MG Definierungen
+
+   MG_Tank ->* VehicleType.MG35low
+
+   Ship_MG ->* VehicleType.MG45med
+   Ship_MG.targets = floating ground_level low_level_flight medium_level_flight
+   Ship_MG.shotFrom = floating ground_level
+   Ship_MG.Punch@MaxRange = 45
+   Ship_MG.Punch@MinRange = 45
+
+   Air_MG ->* VehicleType.MG_Tank
+   Air_MG.targets = floating ground_level low_level_flight medium_level_flight
+   Air_MG.shotFrom = ground_level low_level_flight medium_level_flight
+   Air_MG.Punch@MaxRange = 38
+   Air_MG.Punch@MinRange = 38
+   Air_MG.HitAccuracy.d1 = 90
+   Air_MG.HitAccuracy.0 = 100
+   Air_MG.HitAccuracy.u1 = 0
+
+   AirH_MG ->* VehicleType.MG_Tank
+   AirH_MG.targets = ground_level low_level_flight medium_level_flight high_level_flight
+   AirH_MG.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
+   AirH_MG.Punch@MaxRange = 38
+   AirH_MG.Punch@MinRange = 38
+   AirH_MG.HitAccuracy.d1 = 0
+   AirH_MG.HitAccuracy.0 = 100
+   AirH_MG.HitAccuracy.u1 = 0
+
+   AirHG_MG ->* VehicleType.MG_Tank
+   AirHG_MG.targets = ground_level low_level_flight medium_level_flight high_level_flight
+   AirHG_MG.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
+   AirHG_MG.Punch@MaxRange = 38
+   AirHG_MG.Punch@MinRange = 38
+   AirHG_MG.HitAccuracy.d1 = 90
+   AirHG_MG.HitAccuracy.0 = 100
+   AirHG_MG.HitAccuracy.u1 = 90
+
+   A2A_MG ->* VehicleType.MG_Tank
+   A2A_MG.targets = low_level_flight medium_level_flight high_level_flight
+   A2A_MG.shotFrom = low_level_flight medium_level_flight high_level_flight
+   A2A_MG.Punch@MaxRange = 38
+   A2A_MG.Punch@MinRange = 38
+   A2A_MG.HitAccuracy.d1 = 0
+   A2A_MG.HitAccuracy.0 = 100
+   A2A_MG.HitAccuracy.u1 = 0
+
+   A2G_MG ->* VehicleType.MG_Tank
+   A2G_MG.targets = floating ground_level
+   A2G_MG.shotFrom = low_level_flight
+   A2G_MG.Punch@MaxRange = 38
+   A2G_MG.Punch@MinRange = 38
+   A2G_MG.HitAccuracy.d1 = 100
+   A2G_MG.HitAccuracy.0 = 0
+   A2G_MG.HitAccuracy.u1 = 0
+
+   MiniGun {
+      Type = machinegun shootable 
+      targets = floating ground_level low_level_flight medium_level_flight
+      shotFrom = floating ground_level 
+      MaxRange = 20
+      MinRange = 10
+      Ammo = 10
+      Punch@MaxRange = 40
+      Punch@MinRange = 48
+      ReactionFireShots = 2
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+      HitAccuracy.u1 = 90
+      HitAccuracy.u2 = 55
+
+      WeaponEffectiveness {      
+         trooper = 150
+         rail_vehicle = 40
+         building|turret|object = 30
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 95
+         medium_tracked_vehicle = 70
+         heavy_tracked_vehicle = 45
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 95
+         
+         light_ship = 90
+         medium_ship  = 50
+         heavy_ship = 25
+
+         light_aircraft = 100
+         medium_aircraft  = 95
+         heavy_aircraft = 90
+      } WeaponEffectiveness
+   } MiniGun
+
+   BigMiniGun ->* VehicleType.MiniGun
+   BigMiniGun.Punch@MaxRange = 45
+   BigMiniGun.Punch@MinRange = 55
+
+   AirMiniGun ->* Vehicletype.BigMiniGun
+   AirMiniGun.targets = low_level_flight medium_level_flight
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   C A N N O N   -   S Y S T E M S   --------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Sniper {
+         Type = cannon shootable 
+         targets = ground_level floating low_level_flight 
+         shotFrom = ground_level 
+         MaxRange = 30
+         MinRange = 20
+         Ammo = 4
+         Punch@MaxRange = 100
+         Punch@MinRange = 120
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 90
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 0
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+      } WeaponEffectiveness
+      } Sniper
+
+   SniperSmall ->* VehicleType.Sniper
+   SniperSmall.MaxRange = 20
+   SniperSmall.Punch@MinRange -> VehicleType.Sniper.Punch@MaxRange
+
+   Artillery { 
+      Type = cannon shootable 
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 30
+      MinRange = 10
+      Ammo = 5
+      Punch@MaxRange = 60
+      Punch@MinRange = 80
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+
+      WeaponEffectiveness {      
+         trooper = 90
+         rail_vehicle = 100
+         building|turret|object = 110
+         hoovercraft = 90
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 90
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 90
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 90
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } Artillery
+
+   Tank_Gun {
+      Type = cannon shootable 
+      targets = floating ground_level 
+      shotFrom = ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 10
+      Punch@MaxRange = 70
+      Punch@MinRange = 70
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+
+      WeaponEffectiveness {      
+         trooper = 50
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 90
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } Tank_Gun
+
+   TankSpGun ->* VehicleType.Tank_Gun
+   TankSpGun.WeaponEffectiveness.Trooper = 25
+   TankSpGun.WeaponEffectiveness.rail_vehicle = 120
+   TankSpGun.WeaponEffectiveness.building|turret|object = 120
+   TankSpGun.WeaponEffectiveness.light_tracked_vehicle = 80
+   TankSpGun.WeaponEffectiveness.heavy_tracked_vehicle = 120
+   TankSpGun.WeaponEffectiveness.heavy_wheeled_vehicle = 120
+   TankSpGun.WeaponEffectiveness.medium_ship = 120
+   TankSpGun.WeaponEffectiveness.heavy_ship = 120
+   TankSpGun.WeaponEffectiveness.heavy_aircraft = 120
+   
+   Flak {
+      Type = cannon shootable 
+      targets = low_level_flight medium_level_flight 
+      shotFrom = floating ground_level 
+      MaxRange = 20
+      MinRange = 10
+      Ammo = 10
+      ReactionFireShots = 2
+      Punch@MaxRange = 60
+      Punch@MinRange = 80
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.u1 = 100
+      HitAccuracy.u2 = 95
+
+      WeaponEffectiveness {      
+         trooper = 50
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } Flak
+
+   AA_Gun ->* Vehicletype.Tank_Gun
+   AA_Gun.targets = low_level_flight medium_level_flight high_level_flight
+   AA_Gun.shotFrom = low_level_flight medium_level_flight high_level_flight
+   AA_Gun.MaxRange = 20
+   AA_Gun.Punch@MaxRange = 60
+   AA_Gun.HitAccuracy.u1 = 80
+
+   AU_Gun ->* Vehicletype.Tank_Gun
+   AU_Gun.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+   AU_Gun.shotFrom = low_level_flight medium_level_flight high_level_flight
+   AU_Gun.MaxRange = 20
+   AU_Gun.Punch@MaxRange = 60
+   AU_Gun.HitAccuracy.u1 = 80
+
+
+;überflüssig   
+   Ship_Artillery ->* VehicleType.Artillery
+
+   Ship_Gun ->* Vehicletype.Tank_Gun
+   Ship_Gun.shotFrom = floating ground_level
+   Ship_Gun.MaxRange = 20
+
+   Ship_Flak ->* Vehicletype.Flak
+   Ship_Flak.MaxRange = 30
+  
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T O R P E D O   -   S Y S T E M S   --------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+
+   UTorp { 
+      Type = torpedo shootable 
+      targets = deep_submerged submerged floating 
+      shotFrom = deep_submerged submerged floating ground_level
+      MaxRange = 20
+      MinRange = 10
+      Ammo = 6
+      Punch@MaxRange = 100
+      Punch@MinRange = 100
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.d1 = 85
+      HitAccuracy.0 = 100
+      HitAccuracy.u1 = 100
+
+      WeaponEffectiveness {
+         trooper = 25
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 80
+         helicopter = 100
+
+         light_tracked_vehicle = 70
+         medium_tracked_vehicle = 85
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 70
+         medium_wheeled_vehicle = 85
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 80
+         medium_ship  = 90
+         heavy_ship = 100
+
+         light_aircraft = 70
+         medium_aircraft  = 85
+         heavy_aircraft = 100
+       } WeaponEffectiveness
+
+   } UTorp
+
+   STorp ->* Vehicletype.UTorp
+   STorp.targets = floating
+
+   GTorp ->* Vehicletype.UTorp
+   GTorp.targets = floating
+   GTorp.shotFrom = ground_level
+
+   ATorp ->* Vehicletype.UTorp
+   ATorp.targets = floating
+   ATorp.shotFrom = low_level_flight
+   ATorp.HitAccuracy.d1 = 100
+   ATorp.HitAccuracy.0 = 0
+   ATorp.HitAccuracy.u1 = 0
+
+   AUTorp ->* Vehicletype.UTorp
+   AUTorp.targets = floating submerged
+   AUTorp.shotFrom = low_level_flight
+   AUTorp.HitAccuracy.d2 = 100
+   AUTorp.HitAccuracy.d1 = 100
+   AUTorp.HitAccuracy.0 = 0
+   AUTorp.HitAccuracy.u1 = 0
+
+   SUTorp ->* Vehicletype.UTorp
+   SUTorp.targets = submerged deep_submerged
+   SUTorp.shotFrom = floating
+   SUTorp.HitAccuracy.d2 = 70
+   SUTorp.HitAccuracy.d1 = 100
+   SUTorp.HitAccuracy.0 = 0
+   SUTorp.HitAccuracy.u1 = 0
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   A N T I - A I R   M I S S I L E - S Y S T E M S   ----------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+; air-air missile
+      AAM { 
+         Type = air_missile shootable 
+         targets = low_level_flight medium_level_flight 
+         shotFrom = low_level_flight medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 98
+            0 = 100
+            u1 = 98
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+     	 WeaponEffectiveness {
+	    trooper = 25
+	 } WeaponEffectiveness
+      } AAM
+; air-air distance missile
+      AAM2 ->* VehicleType.AAM 
+      AAM2.MaxRange = 20
+      AAM2.MinRange = 20
+
+
+; small air-air missile
+      smAAM ->* VehicleType.AAM
+      smAAM.Type = ground_missile shootable
+      smAAM.Punch@MaxRange = 65
+      smAAM.Punch@MinRange = 65
+      smAAM.HitAccuracy.d1 = 95
+      smAAM.HitAccuracy.u1 = 95
+; smallair-air distance missile
+      smAAM2 ->* VehicleType.smAAM 
+      smAAM2.MaxRange = 20
+      smAAM2.MinRange = 20
+
+
+; highair-highair missile
+      AAMH ->* VehicleType.AAM 
+      AAMH.targets = low_level_flight medium_level_flight high_level_flight
+      AAMH.shotFrom = low_level_flight medium_level_flight high_level_flight
+      AAMH.HitAccuracy.d2 = 90
+      AAMH.HitAccuracy.u2 = 90
+; highair-highair distance missile
+      AAMH2 ->* VehicleType.AAMH 
+      AAMH2.MaxRange = 20
+      AAmH2.MinRange = 20
+
+; highair/orbital-highair/orbital missile
+      AAMO ->* VehicleType.AAMH 
+      AAMO.targets = low_level_flight medium_level_flight high_level_flight orbit
+      AAMO.shotFrom = low_level_flight medium_level_flight high_level_flight orbit
+
+      AAMO2 ->* VehicleType.AAMO
+      AAMO2.MaxRange = 20
+      AAmO2.MinRange = 20
+
+; surface-air missile
+      SAM { 
+         Type = air_missile shootable 
+         targets = low_level_flight medium_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 4
+         ReactionFireShots = 2
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 
+            u1 = 100
+            u2 = 98
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+     	 WeaponEffectiveness {
+	    trooper = 50
+	 } WeaponEffectiveness
+      } SAM
+
+; SAM Trooper
+; small surface-air misslile
+      smSAM ->* VehicleType.SAM
+      smSAM.MAxRange = 30
+      smSAM.Type = ground_missile shootable
+      smSAM.Punch@MaxRange = 65
+      smSAM.Punch@MinRange = 65
+      smSAM.HitAccuracy.u2 = 94
+
+; surface-highair misslie
+      SAMH ->* VehicleType.SAM 
+      SAMH.targets = low_level_flight medium_level_flight high_level_flight
+      SAMH.HitAccuracy.u3 = 92
+
+; surface-highair misslie
+      SAMT ->* VehicleType.SAMH 
+      SAMT.MAxRange = 60
+      SAMT.Punch@MaxRange = 80
+      SAMT.Punch@MinRange = 80
+      SAMT.ReactionFireShots = 2
+
+; surface-highair misslie
+      SAMB ->* VehicleType.SAMH 
+      SAMB.MaxRange = 90
+      SAMB.Punch@MaxRange = 85
+      SAMB.Punch@MinRange = 85
+      SAMB.ReactionFireShots = 3
+
+; surface-highair-ultra misslie
+      SAMHU ->* VehicleType.SAM 
+      SAMHU.targets = low_level_flight medium_level_flight high_level_flight
+      SAMHU.HitAccuracy.u1 = 80
+      SAMHU.HitAccuracy.u2 = 95
+      SAMHU.HitAccuracy.u3 = 100
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   G R O U N D   M I S S I L E  -   S Y S T E M S   -------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+; air-surface missile
+      ASM { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = low_level_flight medium_level_flight
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 75
+         Punch@MinRange = 75
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 100
+            d1 = 100
+            0 = 
+            u1 = 
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+     	 WeaponEffectiveness {
+	    trooper = 25
+         } WeaponEffectiveness
+      } ASM
+
+      smASM ->* VehicleType.ASM 
+      smASM.Type = ground_missile shootable 
+      smASM.Punch@MaxRange = 60
+      smASM.Punch@MinRange = 60
+
+      ASMH ->* VehicleType.ASM 
+      ASMH.shotFrom = low_level_flight medium_level_flight high_level_flight
+
+; surface-surface missile
+      SSM { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = submerged floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 2
+         Punch@MaxRange = 75
+         Punch@MinRange = 75
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 95
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+     	 WeaponEffectiveness {
+         trooper = 0
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+	 } WeaponEffectiveness
+      } SSM
+
+; smallsurface-surface missile
+      smSSM ->* VehicleType.SSM
+      smSSM.Type = ground_missile shootable
+      smSSM.Punch@MaxRange = 60
+      smSSM.Punch@MinRange = 60
+; medium attack trooper
+      Panzerfaust ->* VehicleType.smSSM
+      Panzerfaust.Type = ground_missile shootable
+      Panzerfaust.Punch@MaxRange = 75
+      Panzerfaust.Punch@MinRange = 75
+
+; surface-ship missile
+      ShM ->* VehicleType.SSM 
+      ShM.targets = floating
+
+; surface-land missile
+      SgM ->* VehicleType.SSM 
+      SgM.targets = ground_level
+
+
+; überflüssig
+      SSSM ->* VehicleTYpe.SSM
+
+
+
+; multi missile
+      MSM { 
+         Type = air_missile shootable 
+         targets = floating ground_level low_level_flight medium_level_flight
+         shotFrom = floating ground_level
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 75
+         Punch@MinRange = 75
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 100
+            u2 = 80
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+     	 WeaponEffectiveness {
+	    trooper = 25
+	 } WeaponEffectiveness
+      } MSM
+
+      smMSM ->* VehicleType.MSM 
+      smMSM.Type = ground_missile shootable 
+      smMSM.Punch@MaxRange = 60
+      smMSM.Punch@MinRange = 60
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   C R U I S E  M I S S I L E  -   S Y S T E M S   -------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+; Cruise missile Vehicle
+      CMG { 
+         Type = cruise_missile shootable 
+         targets =  ground_level 
+         shotFrom = submerged floating ground_level 
+         MaxRange = 100
+         MinRange = 40
+         Ammo = 1
+         ReactionFireShots = 0
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 100
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 25
+         rail_vehicle = 75
+         building|turret|object = 100
+         hoovercraft = 75
+         helicopter = 100
+
+         light_tracked_vehicle = 55
+         medium_tracked_vehicle = 65
+         heavy_tracked_vehicle = 75
+
+         light_wheeled_vehicle = 60
+         medium_wheeled_vehicle = 70
+         heavy_wheeled_vehicle = 80
+         
+         light_ship = 80
+         medium_ship  = 90
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } CMG
+
+; Cruise Missile Ship      
+      CMS ->* VehicleType.CMG
+      CMS.targets = floating
+
+; Cruise Missile multi Ground
+      CMGS ->* VehicleType.CMG
+      CMGS.targets = floating ground_level
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   A N T I   O R B I T   M I S S I L E  -   S Y S T E M S   -----------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+; Cruise Missile Orbit
+      CMO { 
+         Type = cruise_missile shootable 
+         targets = orbit 
+         shotFrom = submerged ground_level floating
+         MaxRange = 130
+         MinRange = 10
+         Ammo = 1
+         Punch@MaxRange = 120
+         Punch@MinRange = 130
+         ReactionFireShots = 0
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 
+            u1 = 
+            u2 = 
+            u3 = 
+            u4 = 100 
+            u5 = 90
+            u6 = 
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 50
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+    } CMO
+
+; surface orbit missile
+      SOM ->* VehicleType.CMO
+      SOM.Type = air_missile shootable
+      SOM.Ammo = 6
+      SOM.ReactionFireShots = 1
+      SOM.MaxRange = 60
+      SOM.MinRange = 10
+      SOM.Punch@MaxRange = 80
+      SOM.Punch@MinRange = 90
+
+      SOMT ->* VehicleType.SOM
+      SOMT.ReactionFireShots = 2
+      SOMT.MaxRange = 90
+      SOMT.MinRange = 10
+      SOMT.Ammo = 10
+      SOMT.Punch@MaxRange = 90
+      SOMT.Punch@MinRange = 100
+
+      SOMB ->* VehicleType.SOM
+      SOMB.ReactionFireShots = 3
+      SOMB.MaxRange = 100
+      SOMB.MinRange = 10
+      SOMB.Ammo = 15
+      SOMB.Punch@MaxRange = 100
+      SOMB.Punch@MinRange = 110
+
+; air missle orbit
+      AMO {
+         Type = air_missile shootable 
+         targets = orbit 
+         shotFrom = high_level_flight orbit
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 80
+         Punch@MinRange = 80
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 100
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 50
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } AMO
+; ----------------------------------------------------------------------------------------------------------------
+; -----   O R B I T   M I S S I L E  -   S Y S T E M S   ---------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+; orbit air missile
+      OAM { 
+         Type = air_missile shootable 
+         targets = medium_level_flight high_level_flight orbit 
+         shotFrom = orbit 
+         ReactionFireShots = 1
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 8
+         Punch@MaxRange = 72
+         Punch@MinRange = 72
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 94
+            d1 = 98
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } OAM
+
+; orbit cruise missile      
+      OCM { 
+         Type = cruise_missile shootable 
+         targets = floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 70
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 110
+         Punch@MinRange = 120
+         Reactionfireshots = 0
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 0
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } OCM
+
+; orbit ground missile
+      OGM { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 30
+         MinRange = 10
+         Ammo = 6
+         Punch@MaxRange = 95
+         Punch@MinRange = 95
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 0
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 95
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 90
+         medium_wheeled_vehicle = 95
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } OGM
+
+      OGSM ->* VehicleType.OGM
+      OGSM.targets = submerged floating ground_level
+      OGSM.HitAccuracy.d5 = 90
+
+      Orbit_Cannon { 
+         Type = cannon shootable ammo_transfer
+         targets = medium_level_flight high_level_flight orbit 
+         shotFrom = medium_level_flight high_level_flight orbit 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 30
+         Punch@MaxRange = 55
+         Punch@MinRange = 65
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 95
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } Orbit_Cannon
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   D E P T H   C H A R G E   ------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      DCA {
+         Type = bomb shootable 
+         targets = submerged 
+         shotFrom = low_level_flight  
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 2
+         Punch@MaxRange = 90
+         Punch@MinRange = 90
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 100
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+     	 WeaponEffectiveness {
+	    trooper = 50
+	 } WeaponEffectiveness
+      } DCA
+
+      DCS {
+         Type = bomb shootable 
+         targets = submerged deep_submerged 
+         shotFrom = floating  
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 2
+         Punch@MaxRange = 90
+         Punch@MinRange = 90
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 50
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+     	 WeaponEffectiveness {
+	    trooper = 50
+	 } WeaponEffectiveness
+      } DCS
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   B O M B I N G   ----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      ; Tankhunter
+      lowBomb { 
+         Type = bomb shootable 
+         targets = floating ground_level 
+         shotFrom = low_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 0
+         rail_vehicle = 100
+         building|turret|object = 110
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 110
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 110
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 120
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } lowBomb
+
+      ; Brandbombe
+      napalm { 
+         Type = bomb shootable 
+         targets = floating ground_level 
+         shotFrom = low_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 1
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 50
+         helicopter = 50
+
+         light_tracked_vehicle = 40
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 60
+         medium_wheeled_vehicle = 50
+         heavy_wheeled_vehicle = 40
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 50
+         medium_aircraft  = 50
+         heavy_aircraft = 50
+      } WeaponEffectiveness
+      } napalm
+
+
+      medBomb { 
+         Type = bomb shootable 
+         targets = floating ground_level 
+         shotFrom = low_level_flight medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 85
+            d1 = 100
+            0 = 
+            u1 = 
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 80
+         rail_vehicle = 100
+         building|turret|object = 110
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 80
+         medium_ship  = 100
+         heavy_ship = 120
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } medBomb
+
+      HighBomb { 
+         Type = bomb shootable 
+         targets = floating ground_level 
+         shotFrom = medium_level_flight high_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 80
+            d2 = 100
+            d1 = 
+            0 = 
+            u1 = 
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 80
+         rail_vehicle = 100
+         building|turret|object = 110
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 80
+         medium_ship  = 100
+         heavy_ship = 120
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } HighBomb
+
+;heavy attack trooper
+   GrL { 
+      Type = bomb shootable 
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 20
+      MinRange = 20
+      Ammo = 6
+      Punch@MaxRange = 75
+      Punch@MinRange = 75
+      HitAccuracy { 
+         d6 = 
+         d5 = 
+         d4 = 
+         d3 = 
+         d2 = 
+         d1 = 
+         0 = 100
+         u1 = 
+         u2 = 
+         u3 = 
+         u4 = 
+         u5 = 
+         u6 = 
+      } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 70
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 90
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 90
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 90
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 90
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } GrL
+
+;Diver
+      C4 { 
+         Type = bomb shootable 
+         targets = submerged floating ground_level 
+         shotFrom = submerged ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 2
+         ReactionFireShots = 0
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 100
+            u2 =
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+	 WeaponEffectiveness {
+	    default = 50
+		light_tracked_vehicle = 30
+		medium_tracked_vehicle = 40
+		heavy_tracked_vehicle = 50
+		light_wheeled_vehicle = 25
+		medium_wheeled_vehicle = 35
+		heavy_wheeled_vehicle = 45
+		light_ship = 60
+		medium_ship = 70
+		heavy_ship = 80
+		light_aircraft = 60
+		medium_aircraft = 70
+		heavy_aircraft = 80
+		rail_vehicle = 90
+		helicopter = 50
+		hoovercraft = 50
+		trooper = 20
+	 } WeaponEffectiveness 
+      } C4
+;Specialist
+   C4small ->* VehicleType.C4
+   C4small.Punch@MaxRange = 100
+   C4small.Punch@MinRange = 100
+
+   HGr { 
+      Type = bomb shootable 
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 2
+      Punch@MaxRange = 100
+      Punch@MinRange = 100
+      HitAccuracy { 
+         d6 = 
+         d5 = 
+         d4 = 
+         d3 = 
+         d2 = 
+         d1 = 
+         0 = 100
+         u1 = 
+         u2 = 
+         u3 = 
+         u4 = 
+         u5 = 
+         u6 = 
+      } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 10
+         building|turret|object = 5
+         hoovercraft = 20
+         helicopter = 20
+
+         light_tracked_vehicle = 20
+         medium_tracked_vehicle = 10
+         heavy_tracked_vehicle = 10
+
+         light_wheeled_vehicle = 50
+         medium_wheeled_vehicle = 40
+         heavy_wheeled_vehicle = 30
+         
+         light_ship = 15
+         medium_ship  = 10
+         heavy_ship = 10
+
+         light_aircraft = 20
+         medium_aircraft  = 10
+         heavy_aircraft = 10
+      } WeaponEffectiveness
+   } HGr
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   M I N E   L A Y E R   ----------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+    MineWeapon {
+      Type = mine shootable 
+      targets = floating ground_level 
+      shotFrom = ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 2
+      Punch@MaxRange = 120
+      Punch@MinRange = 120
+      HitAccuracy ->* VehicleType.HitAcc 
+      HitAccuracy.0 = 100
+      WeaponEffectiveness {
+      } WeaponEffectiveness
+   } MineWeapon
+
+   Mine2Weapon ->* VehicleType.MineWeapon
+   Mine2Weapon.MaxRange = 20
+   
+    MineAir {
+      Type = mine shootable 
+      targets = submerged floating ground_level 
+      shotFrom = low_level_flight 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 2
+      Punch@MaxRange = 120
+      Punch@MinRange = 120
+      HitAccuracy ->* VehicleType.HitAcc 
+      HitAccuracy.d1 = 100
+      WeaponEffectiveness {
+      } WeaponEffectiveness
+   } MineAir
+   
+    MineSea {
+      Type = mine shootable 
+      targets = submerged floating 
+      shotFrom = submerged floating 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 2
+      Punch@MaxRange = 120
+      Punch@MinRange = 120
+      HitAccuracy ->* VehicleType.HitAcc 
+      HitAccuracy.d1 = 100
+      HitAccuracy.0 = 100
+      HitAccuracy.u1 = 100
+      WeaponEffectiveness {
+      } WeaponEffectiveness
+   } MineSea
+
+    AntiMine {
+      Type = mine shootable 
+      targets = submerged floating ground_level
+      shotFrom = submerged floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 0
+      Punch@MaxRange = 0
+      Punch@MinRange = 0
+      HitAccuracy ->* VehicleType.HitAcc 
+      HitAccuracy.d1 = 100
+      HitAccuracy.0 = 100
+      HitAccuracy.u1 = 100
+      WeaponEffectiveness {
+      } WeaponEffectiveness
+   } AntiMine
+
+
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   S E R V I C E   ----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   ServiceGround { 
+      Type = Service  
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 0
+      Punch@MaxRange = 0
+      Punch@MinRange = 0
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+
+      canthit = Trooper
+   } ServiceGround
+
+   ServiceGroundTr ->* VehicleType.ServiceGround
+   ServiceGroundTr.cantHit =
+
+   ServiceTurret ->* VehicleType.ServiceGround
+   ServiceTurret.cantHit = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
+
+   ServiceRepGr ->* VehicleType.ServiceGround
+
+   ServiceAir ->* VehicleType.ServiceGround 
+   ServiceAir.targets = floating ground_level medium_level_flight
+   ServiceAir.shotFrom = ground_level medium_level_flight
+
+   ServiceHighAir ->* VehicleType.ServiceGround 
+   ServiceHighAir.targets = floating ground_level medium_level_flight high_level_flight
+   ServiceHighAir.shotFrom = ground_level medium_level_flight high_level_flight
+
+   ServiceAirAll ->* VehicleType.ServiceGround 
+   ServiceAirAll.targets = floating low_level_flight ground_level medium_level_flight high_level_flight orbit
+   ServiceAirAll.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit
+
+   ServiceOrbit ->* VehicleType.ServiceGround
+   ServiceOrbit.targets = orbit
+   ServiceOrbit.shotfrom = orbit
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   A M M O   T R A N S F E R   ----------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   AmmoMG { 
+      Type = machinegun ammo_transfer 
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+      Ammo = 20
+      Punch@MaxRange = 0
+      Punch@MinRange = 0
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+
+      WeaponEffectiveness {
+      } WeaponEffectiveness
+   } AmmoMG
+
+   AmmoCannon ->* VehicleType.AmmoMG
+   AmmoCannon.Type = Cannon ammo_transfer
+
+   AmmoBomb ->* VehicleType.AmmoMG
+   AmmoBomb.Type = bomb ammo_transfer
+
+   AmmoSM ->* VehicleType.AmmoMG
+   AmmoSM.Type = ground_missile ammo_transfer
+
+   AmmoLM ->* VehicleType.AmmoMG
+   AmmoLM.Type = air_missile ammo_transfer
+
+   AmmoCM ->* VehicleType.AmmoMG
+   AmmoCM.Type = Cruise_missile ammo_transfer
+
+   AmmoTorp ->* VehicleType.AmmoMG
+   AmmoTorp.Type = torpedo ammo_transfer
+
+   AmmoMine ->* VehicleType.AmmoMG
+   AmmoMine.Type = Mine ammo_transfer
+
+;alt
+   AmmoGM ->* VehicleType.AmmoMG
+   AmmoGM.Type = ground_missile ammo_transfer
+
+   AmmoAM ->* VehicleType.AmmoMG
+   AmmoAM.Type = air_missile ammo_transfer
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   L A S E R   --------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      OAL { 
+         Type = laser shootable 
+         targets = low_level_flight medium_level_flight high_level_flight orbit 
+         shotFrom = orbit 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 4
+         ReactionFireShots = 2
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 40
+            fuel = 10
+         } LaserRechargeCost
+         Punch@MaxRange = 70
+         Punch@MinRange = 75
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 80
+            d2 = 90
+            d1 = 95
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } OAL
+
+      OGL { 
+         Type = laser shootable 
+         targets = floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 30
+         MinRange = 10
+         Ammo = 3
+	      LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 60
+            fuel = 15
+         } LaserRechargeCost
+         Punch@MaxRange = 90
+         Punch@MinRange = 120
+         HitAccuracy { 
+            d6 = 0
+            d5 = 
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit = 
+      } OGL
+
+      ML { 
+         Type = laser shootable 
+         targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+         shotFrom = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 3
+	      LaserRechargeRate = 2
+         LaserRechargeCost {
+            energy = 0
+            material = 40
+            fuel = 10
+         } LaserRechargeCost
+         Punch@MaxRange = 70
+         Punch@MinRange = 75
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 65
+            d1 = 95
+            0 = 100
+            u1 = 95
+            u2 = 65
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 80
+         building|turret|object = 50
+         hoovercraft = 90
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 70
+         heavy_tracked_vehicle = 60
+
+         light_wheeled_vehicle = 90
+         medium_wheeled_vehicle = 85
+         heavy_wheeled_vehicle = 80
+         
+         light_ship = 80
+         medium_ship  = 65
+         heavy_ship = 50
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } ML
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   SPECIAL   --------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Sword {
+      Type = laser shootable
+      Sound = sword.wav     
+	   LaserRechargeRate = 3
+      Ammo = 4
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+
+      WeaponEffectiveness {      
+         trooper = 150
+         rail_vehicle = 10
+         building|turret|object = 10
+         hoovercraft = 40
+         helicopter = 40
+
+         light_tracked_vehicle = 15
+         medium_tracked_vehicle = 10
+         heavy_tracked_vehicle = 10
+
+         light_wheeled_vehicle = 90
+         medium_wheeled_vehicle = 70
+         heavy_wheeled_vehicle = 50
+         
+         light_ship = 15
+         medium_ship  = 10
+         heavy_ship = 10
+
+         light_aircraft = 30
+         medium_aircraft  = 25
+         heavy_aircraft = 20
+      } WeaponEffectiveness
+   } Sword
+
+   Laser_Gun { 
+         Type = Laser shootable 
+         targets =  floating ground_level low_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 6
+	      LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 3
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 80
+            u2 = 60
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 50
+         building|turret|object = 50
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 80
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 95
+         heavy_wheeled_vehicle = 90
+         
+         light_ship = 90
+         medium_ship  = 70
+         heavy_ship = 50
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } Laser_Gun
+
+   EMP { 
+         Type = Laser shootable 
+         targets =  submerged floating ground_level low_level_flight medium_level_flight
+         shotFrom = floating ground_level 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 1
+	      LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 200
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 80
+            0 = 100
+            u1 = 90
+            u2 = 70
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 50
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } EMP
+
+   Walker_Foot { 
+         Type = Laser shootable 
+         targets =  floating ground_level
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
+         Ammo = 4
+         ReactionFireShots = 3
+	      LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 200
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 0
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+      } WeaponEffectiveness
+   } Walker_Foot
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   TYPE CHANGE WEAPONS   --------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      type_small_missile { 
+         Type = ground_missile shootable 
+      } type_small_missile
+
+      type_large_missile { 
+         Type = air_missile shootable 
+      } type_large_missile
+
+      type_cruise_missile { 
+         Type = cruise_missile shootable 
+      } type_cruise_missile
+
+      type_cannon { 
+         Type = cannon shootable 
+      } type_cannon
+
+      type_bomb { 
+         Type = bomb shootable 
+      } type_bomb
+
+      type_MG { 
+         Type = machinegun shootable 
+      } type_MG
+
+      type_torpedo { 
+         Type = torpedo shootable 
+      } type_torpedo
+
+      type_laser { 
+         Type = laser shootable 
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 100
+            fuel = 100
+         } LaserRechargeCost
+      } type_laser
+
+      type_animal { 
+         Type = laser shootable
+         Ammo = 10
+         LaserRechargeRate = 3
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+      } type_animal
+
+} VehicleType

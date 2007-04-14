@@ -1,0 +1,10 @@
+technology {
+   Name = Railroadgun
+   infotext = 
+   id = 599
+   RelatedUnitID = 599
+   parent = 100010
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100010,100002,100104,100204,597,598,605 
+} Technology

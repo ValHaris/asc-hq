@@ -1,0 +1,5 @@
+Techadapter {
+   ; SS74
+   Name = 625
+   TechnologiesRequired = 625
+} TechAdapter

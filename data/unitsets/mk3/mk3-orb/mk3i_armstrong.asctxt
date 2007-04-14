@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = ARMSTRONG
+   ID = 522
+   parent = 236
+   Description = Spaceman
+   Infotext = [Trooper that can walk into Space and conquere Spacestations. Only armed with a high explosive bomb against satellites and Spacestations.]
+   Picture = Mk3i_ARMSTRONG.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

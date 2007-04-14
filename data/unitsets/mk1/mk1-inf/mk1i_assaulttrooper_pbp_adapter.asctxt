@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 99
+   ;Bezeichnung der verknüpften Technologie: Assault Trooper
+   TechnologiesRequired = 99
+} TechAdapter

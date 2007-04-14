@@ -1,0 +1,11 @@
+itemfilter {
+   Vehicles = 
+   Buildings = 
+   Objects = 
+   Terrain = 
+;                 PBP           ISG         MK1   MK3     MK4                   MK5       SY        KG          MA          AQ
+   Technologies = 100000-100999 12000-12999 0-499 500-999 1200-1299 14000-14999 1400-1499 1300-1399 12000-12999 22000-22999 30000-30999
+   name = PBP base technologie
+   activated = true
+} itemfilter
+   

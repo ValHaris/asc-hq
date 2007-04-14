@@ -1,0 +1,10 @@
+technology {
+   Name = Guideline
+   infotext = 
+   id = 567
+   RelatedUnitID = 567
+   parent = 100010
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 100010,100002,100105,100202,100303,100310,533,556,532,553 
+} Technology

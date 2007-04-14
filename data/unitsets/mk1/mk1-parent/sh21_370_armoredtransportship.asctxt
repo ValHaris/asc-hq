@@ -1,0 +1,75 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402
+   ID = 370
+
+   Name = transport ship
+   Description = transport ship
+   Infotext = []
+   WreckageObject = 424
+   GuideSortHelp = 0 370 550 551 0 0 0 0 0 0
+
+
+   Armor = 1500
+   View = 30
+   Jamming = 0
+   WaitFortack = false
+   Abilities = fuel_transfer material_transfer moveduringreactionfire icebreaker
+   Category = heavy_ship
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 8000
+   Transportation ->* VehicleType.TransShipArmor 
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 30000
+      fuel = 50000
+   } Tank
+   FuelConsumption = 40
+   Movement = 0 0 60 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.very_bigship_terrain 
+   TerrainAccess.terrain_not = forest small_rocks large_rocks
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 10
+      Weapon0 ->* VehicleType.ServiceGround 
+
+      Weapon1 ->* VehicleType.Ship_MG
+      Weapon1.ReactionFireShots = 2
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 100
+
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.Ammo = 100
+
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 50
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 200
+
+      Weapon6 ->* VehicleType.AmmoCannon 
+      Weapon6.Ammo = 200
+
+      Weapon7 ->* VehicleType.AmmoBomb 
+      Weapon7.Ammo = 100
+
+      Weapon8 ->* VehicleType.AmmoMine 
+      Weapon8.Ammo = 100
+
+      Weapon9 ->* VehicleType.AmmoCM 
+      Weapon9.Ammo = 10
+   } Weapons
+
+} VehicleType

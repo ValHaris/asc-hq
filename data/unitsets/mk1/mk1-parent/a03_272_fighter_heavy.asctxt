@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = heavy fighter
+   parent = 400 401 414 498
+   abstract = true
+   ID = 272
+   
+   Description = Heavy Fighter
+   Infotext = [Heavy Fighters are the big boys in the air. In close combat,
+              the Heavy Fighter is equalled by none. This makes the airplane
+              ideal for taking out enemy aircraft. But beware of ground support,
+              for the Heavy Fighter has no ground-targeted weaponry.]
+   GuideSortHelp = 272 512 600 0 0 0 0 0 0 0
+
+   Armor = 400
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4800
+   } Tank
+   FuelConsumption = 28
+   Movement = 0 0 0 60 180 200 200 0 
+   Weight = 105
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.AAMH 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 72
+      Weapon0.Punch@MinRange = 72
+
+      Weapon1 ->* VehicleType.AMO 
+      Weapon1.Ammo = 2
+
+      Weapon2 ->* VehicleType.AirH_MG 
+      Weapon2.Ammo = 6
+
+      Weapon3 ->* VehicleType.AAMH2 
+      Weapon3.Ammo = 3
+      Weapon3.Punch@MaxRange = 70
+      Weapon3.Punch@MinRange = 70
+   } Weapons
+} VehicleType

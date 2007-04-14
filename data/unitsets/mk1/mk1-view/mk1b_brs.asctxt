@@ -1,0 +1,14 @@
+VehicleType {
+   Name = BRS
+   ID = 111
+   parent = 245
+
+   Description = armored radar system
+   Infotext = [Das BRS ist ein stationärer, bewaffneter und gepanzerter Radarturm.
+Gegenüber dem mobilen ORACLE besitzt das BRS eine bessere Aufklärungsreichweite
+und aufgrund der weitaus besseren Panzerung eine höhere Lebenserwartung.
+]
+   Picture = Mk1b_BRS.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+} VehicleType

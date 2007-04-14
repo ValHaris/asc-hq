@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = LEOPARD1
+   ID = 555
+   parent = 290
+
+   Picture = MK3v_leopard1.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Movement += 0 0 0 1 0 0 0 0 
+
+} VehicleType

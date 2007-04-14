@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = SEK
+   ID = 602
+   parent = 204
+
+   Description = special operations
+   Infotext = []
+   picture = MK3i_SEK.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Jamming = 39
+   abilities += move_after_attack jam_only_own_field
+   Movement += 0 0 0 1 0 0 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 4
+      Weapon1.Punch@MaxRange += 5
+      Weapon1.Punch@MinRange += 5
+   } Weapons
+} VehicleType

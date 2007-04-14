@@ -1,0 +1,9 @@
+itemfilter {
+   Vehicles = 0-499
+   Buildings = 
+   Objects = 
+   Terrain = 
+   Technologies = 0-499 100000
+   name = MKI Unit Set
+} itemfilter
+   

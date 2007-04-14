@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Speedboat Wreckage
+   ID = 442
+   parent = 498
+   Armor = 100
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 100
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = MK1s_wake.pcx 1
+   } dry
+} ObjectType

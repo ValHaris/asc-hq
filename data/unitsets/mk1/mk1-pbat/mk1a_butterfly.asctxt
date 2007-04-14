@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = BUTTERFLY
+   ID = 69
+   parent = 277
+
+   Picture = MK1a_butterfly.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Jamming = 39
+   Abilities += jam_only_own_field
+
+} VehicleType

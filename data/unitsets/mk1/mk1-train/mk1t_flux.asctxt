@@ -1,0 +1,63 @@
+VehicleType { 
+   Name = FLUX
+   ID = 72
+   parent = 400 401 402 412
+
+   Description = transport train
+   Infotext = [Transport Trains come into the picture when the battle runs in
+              your favor. As the frontline moves away from the base, reinforcements
+              take more time to get there. To get them there in time, the
+              Transport Train is needed. It can load up a fair amount of units
+              before it is full, and it moves faster than most ground units.]
+   picture = MK1t_flux.pcx
+   WreckageObject = 472
+   GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
+
+   Armor += 50
+   Weight += 5
+   Transportation ->* VehicleType.TransTrain 
+   Abilities += fuel_transfer material_transfer 
+
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 40000
+   } Tank
+   FuelConsumption = 14
+   Movement = 0 0 0 120 0 0 0 0 
+
+
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Type = machinegun shootable ammo_transfer
+      Weapon0.targets = ground_level low_level_flight
+      Weapon0.Ammo = 100
+      Weapon0.Punch@MaxRange = 44
+      Weapon0.Punch@MinRange = 44
+
+      Weapon1 ->* VehicleType.ServiceGround 
+
+      Weapon2 ->* VehicleType.AmmoBomb 
+      Weapon2.Ammo = 30
+
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.Ammo = 30
+
+      Weapon4 ->* VehicleType.AmmoSM 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.AmmoTorp 
+      Weapon5.Ammo = 10
+
+      Weapon6 ->* VehicleType.AmmoCM 
+      Weapon6.Ammo = 4
+
+      Weapon7 ->* VehicleType.AmmoCannon 
+      Weapon7.Ammo = 40
+
+      Weapon8 ->* VehicleType.AmmoMine 
+      Weapon8.Ammo = 20
+   } Weapons
+} VehicleType

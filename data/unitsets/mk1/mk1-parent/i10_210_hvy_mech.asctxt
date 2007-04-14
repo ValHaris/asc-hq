@@ -1,0 +1,33 @@
+VehicleType { 
+   abstract = true
+   Name = heavy mech
+   ID = 210
+   parent = 400 401 402 408
+   Description = heavy mechwarrior
+   Infotext = []
+   GuideSortHelp = 502 210 0 0 0 0 0 0 0 0
+
+
+   Armor = 500
+   View = 40
+   Weight += 1
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 6
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.MiniGun 
+      Weapon2.Ammo = 10
+   } Weapons
+} VehicleType

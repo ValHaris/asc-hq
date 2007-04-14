@@ -1,0 +1,5 @@
+Techadapter {
+   ; TigerPanzer
+   Name = 595
+   TechnologiesRequired = 595
+} TechAdapter

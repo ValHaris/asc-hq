@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = ROTOS
+   ID = 109
+   parent = 256
+   Description = railroad gun
+   Infotext = [Railroad Guns are the ultimate artillery on land. Its primary
+              heavy grenade cannon out-ranges even the powerful Turret Emplacement.
+               A Railroad Gun can, if slowly, travel by rail, making it a
+              dreaded instrument of destruction. The grenade cannon can decimate
+              an unsuspecting enemy within seconds. It has a limited ammunition
+              storage, so the Railroad guns are often seen accompanied by
+              Ammunition Transports.]
+   Picture = MK1t_rotos.pcx
+   WreckageObject = 458
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 50
+   Weapons { 
+   } Weapons
+} VehicleType

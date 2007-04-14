@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = HAWK
+   ID = 68
+   parent = 279
+
+   Picture = MK1a_HAWK.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 40
+
+} VehicleType

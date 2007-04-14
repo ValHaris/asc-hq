@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = PHM
+   ID = 536
+   parent = 352 493
+
+   Description = hydrofoil boat
+   Infotext = [PHM 1 Pegasus hydrofoil boats were designed to operate offensively against hostile surface combatants and 
+   other surface craft; and conduct surveillance, screening and special operations. ]
+   picture = MK3s_phm.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+   Abilities += move_after_attack
+
+   Height = floating ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   Movement = 0 0 60 102 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.Ship_MG 
+      Weapon1.Ammo = 15
+
+      Weapon2 ->* VehicleType.Flak
+      Weapon2.shotFrom = ground_level floating
+      Weapon2.ReactionFireShots = 1
+ 
+   } Weapons
+} VehicleType

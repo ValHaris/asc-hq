@@ -1,0 +1,10 @@
+technology {
+   Name = Shock Trooper
+   infotext = Forschungsprojekt abgeschlossen! Shock Trooper verfuegbar!
+   id = 17
+   RelatedUnitID = 17
+   parent = 100000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100000,100001 
+} Technology

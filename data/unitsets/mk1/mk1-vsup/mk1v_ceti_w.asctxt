@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Ceti Wreckage
+   ID = 411
+   parent = 499
+   dry { 
+      picture = MK1v_ceti_w.pcx 1
+   } dry
+} ObjectType

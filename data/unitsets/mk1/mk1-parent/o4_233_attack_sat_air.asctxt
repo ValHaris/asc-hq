@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = attack sat air
+   abstract = true
+   ID = 233
+   parent = 400 401 402 407
+
+   Description = air attack satellite
+   Infotext = [top secret]
+   GuideSortHelp = 516 233 508 509 0 0 0 0 0 0
+
+
+   Armor += 50
+   Abilities += MoveDuringReactionFire 
+
+   TerrainAccess ->* Vehicletype.sat_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.OAM
+      Weapon0.ReactionFireShots = 2
+   } Weapons
+} VehicleType

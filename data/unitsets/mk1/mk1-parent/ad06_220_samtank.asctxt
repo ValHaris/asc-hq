@@ -1,0 +1,29 @@
+VehicleType { 
+   abstract = true
+   Name = sam tank
+   ID = 220
+   parent = 400 401 404
+
+   Description = anti aircraft system
+   Infotext = []
+   GuideSortHelp = 220 508 0 0 0 0 0 0 0 0
+
+   Armor = 480
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 750
+   } Tank
+   FuelConsumption = 15
+   Abilities += MoveDuringReactionFire
+   Movement = 0 0 0 66 0 0 0 0 
+   Weight = 43
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* vehicleType.SAMH 
+      Weapon0.Ammo = 12
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+   } Weapons
+} VehicleType

@@ -1,0 +1,39 @@
+VehicleType { 
+   Name = CM launcher
+   ID = 300
+   abstract = true
+   parent = 400 401 402 411
+
+   Description = CM medium range
+   Infotext = []
+   GuideSortHelp = 505 300 0 0 0 0 0 0 0 0
+
+
+   Armor = 300
+   View = 20
+   Jamming = 30
+   WaitFortack = true
+   Abilities += no_reactionfire jam_only_own_field
+   Category = light_wheeled_vehicle
+   Weight = 30
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 900
+   } Tank
+   FuelConsumption = 10
+   Movement = 0 0 0 19 0 0 0 0 
+   TerrainAccess ->* VehicleType.lt_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 130
+      Weapon0.MinRange = 50
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 140
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Nighcap
+   infotext = Forschungsprojekt abgeschlossen! Nighcap verfuegbar!
+   id = 31
+   RelatedUnitID = 31
+   parent = 100000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100000,100003,100101 
+} Technology

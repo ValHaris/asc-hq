@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = light tank
+   abstract = true
+   ID = 404
+   parent = 402
+   Description = light tank
+   Infotext = 
+   RecommendedAIJob = fight
+   Armor = 400
+   View = 30
+   WreckageObject = 497 496
+   Height = ground_level 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1000
+   } Tank
+   FuelConsumption = 12
+   Abilities = leaves_tracks 
+   Movement = 0 0 0 65 0 0 0 0 
+   Category = light_tracked_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 50
+   TerrainAccess ->* VehicleType.lt_terrain 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

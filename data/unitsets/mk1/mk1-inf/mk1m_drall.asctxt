@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = DRALL
+   ID = 121
+   parent = 213
+
+   Picture = MK1m_Drall.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+   
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Boeing
+   infotext = 
+   id = 601
+   RelatedUnitID = 601
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100003,100104,100313 
+} Technology

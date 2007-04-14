@@ -1,0 +1,5 @@
+Techadapter {
+   ; SealBoat
+   Name = 586
+   TechnologiesRequired = 586
+} TechAdapter

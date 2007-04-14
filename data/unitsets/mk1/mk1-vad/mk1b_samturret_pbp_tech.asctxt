@@ -1,0 +1,10 @@
+technology {
+   Name = SAM Turret
+   infotext = Forschungsprojekt abgeschlossen! SAM Turret verfuegbar!
+   id = 61
+   RelatedUnitID = 61
+   parent = 100000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100000,100002,100102,100202,100310 
+} Technology

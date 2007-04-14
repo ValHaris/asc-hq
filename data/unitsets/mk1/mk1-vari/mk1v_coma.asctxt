@@ -1,0 +1,124 @@
+VehicleType {
+   Name = COMA
+   ID = 2
+   parent = 251
+   Description = medium artillery
+   Infotext = [#font2#Artillery#font1##crt##crt#Artillery is one of the three
+              main branches of an ARMY, along with the INFANTRY and the CAVALRY.
+               Artillery refers both to the personnel who transport and serve
+              its weapons and to the weapons themselves. Traditionally, artillery
+              weapons include larger firearms such as guns, HOWITZERS, MORTARS,
+              and rocket launchers.  #crt#In the United States, artillery
+              weapons are those that use ammunition larger than 25.4 mm (1
+              in), except for portable rocket launchers such as the BAZOOKA,
+              the RECOILLESS RIFLE, and small mortars.#crt##crt##crt#Early
+              Artillery#crt##crt#The term artillery once applied to all weapons
+              that used projectiles:  the BOW AND ARROW, the slingshot, and
+              the many variations of the CATAPULT. Soon after GUNPOWDER was
+              introduced in Europe in the 13th century, machinery for utilizing
+              it in warfare began to be devised.  The earliest reference to
+              artillery manufacture in Britain dates from the reign of Edward
+              III (1327-77), when John Ryker, artillator regis ("the king's
+              artillery man"), received sixpence a day for making spingards,
+              a type of small CANNON.  During the 15th century the French
+              and the Italians attempted to make artillery more mobile by
+              mounting some of the lighter pieces on carriages.  A key technical
+              development was the trunnion:  two posts, one on either side
+              of the barrel, fixed the tube to the mount and permitted it
+              to be raised or lowered.#crt##crt##crt#16th and 17th Centuries#crt##crt#During
+              the 16th century the use and development of artillery increased.
+              The younger duke of Ferrara used his artillery to destroy the
+              Venetian fleet that had sailed up the Po River within a short
+              distance of his capital in 1509.  Henry VIII patronized the
+              art of gun founding in England after being forced to import
+              his cannon.  He encouraged the development of hollow shells
+              filled with powder.  In 1537, the Italian mathematician Niccolo
+              Tartaglia founded the science of BALLISTICS in his Nuova Scienzia,
+              in which he described the trajectory of a cannonball.#crt##crt#The
+              Swedish king Gustav II Adolf (r.  1611-32), an innovative military
+              tactician, developed effective methods for using artillery on
+              the battlefield.  Gustavus limited his field artillery to nothing
+              heavier than the 12-pounder, and he increased the ratio of cannon
+              from one gun to six for every 1,000 infantry.  He concentrated
+              his firepower, frequently massing guns in strong batteries,
+              and he utilized the distinctions among siege, field, and regimental
+              artillery.#crt##crt#As the standing-army principle that began
+              about 1500 came into general use, artillery became an organized
+              arm of the military. Louis XIV of France raised a regiment of
+              artillerymen in 1671 and established schools of artillery instruction.#crt##crt##crt#18th
+              Century#crt##crt#In 1715 Britain organized the Royal Regiment
+              of Artillery, consisting of two permanent companies.  The English
+              scientist Benjamin Robins laid the groundwork for modern ordnance
+              theory and practice in his New Principles of Gunnery (1742)
+              and contributed to the introduction of carronades (short, light
+              pieces useful on ships) in 1779.#crt##crt#During the Seven Years'
+              War, Frederick the Great (1740-86) of Prussia developed a horse
+              artillery to accompany his cavalry. Mobility was improved considerably
+              by adding a second pair of wheels to the gun carriage or by
+              placing a four-wheel wagon, with interchangeable wheels and
+              iron axletrees, under the rear part of the gun carriage.  Napoleon
+              used his field artillery as a shock weapon, sending guns in
+              front of his own infantry to fire grape and canister shot at
+              the enemy infantry and literally blast holes in the opposing
+              lines.#crt##crt##crt#19th Century#crt##crt#Cannon began to change
+              rapidly during the 19th century. Improvements included the rifled
+              barrel, breech-loading mechanisms, smokeless powder, recoil-absorbing
+              systems, and better metallurgy.  During the U.S. Civil War,
+              Parrott and Rodman guns were commonplace.  The gunmaker R. P.
+              Parrott made cannon by surrounding a central tube of cast iron
+              or steel with wrought-iron or steel hoops.  Thomas J. Rodman
+              devised a method of casting barrels around a removable core
+              that was cooled with water;  each successive layer shrank and
+              compressed the previous layer.#crt##crt#Alfred KRUPP of Germany
+              produced a successful all-steel gun drilled out of a single
+              block of cast metal, but he soon returned to the built-up hoop
+              system.  The hoops were replaced by countless turns of fine
+              wire coiled under tension, creating wire-wound guns.#crt##crt##crt#Development
+              of Modern Artillery#crt##crt#The science of mechanics contributed
+              to the development of a gun mount that could absorb recoil--the
+              backward movement of the gun caused by firing the projectile.
+               Compression cylinders were used to absorb the recoil, and heavy
+              springs returned the barrel to its original position. Because
+              the recoil force could also be harnessed to open the breech
+              and eject the shell, the French developed a 75-mm cannon that
+              was capable of firing 15 rounds a minute;  its rapid fire compensated
+              for its lighter projectiles.  #crt#The Germans developed heavier
+              guns and howitzers, with longer ranges and larger bores.  The
+              largest used in World War I, "Big Bertha," was a 420-mm howitzer
+              that fired an 800-kg (1,764-lb) shell about 10 km (6 mi).#crt##crt#To
+              support infantry advances in World War I, the artillery developed
+              a standard pattern.  First, barrages were directed against entrenched
+              positions and against barbed-wire entanglements;  then, as the
+              troops moved across open ground, the artillery laid down a "walking
+              barrage" in front of them. The quantity of shells and guns needed
+              for the artillery severely strained the industrial capacity
+              of the belligerents.#crt##crt#During World War II the Germans
+              developed a self-propelled howitzer of two calibers, 540 mm
+              and 600 mm.  They also had a railroad gun ("Gustave") of 800
+              mm, used only at the siege of Sebastopol, on the Russian front.
+              Improvements in mobility resulted in such versatile guns as
+              the 105-mm howitzer that the U.S.  Army found so useful in World
+              War II.  The U.S. Army now has a 155-mm gun for long-range use,
+              and a cannon-fired nuclear warhead.#crt##crt#Postwar developments
+              have begun to erase the distinction between artillery and other
+              forms of armament. Shoulder-carried recoilless rifles and ground-launched
+              rockets and missiles are included within the definition of artillery,
+              which is usually classified into three main groups:  field artillery
+              includes howitzers, mortars, and large recoilless weapons; antiaircraft
+              artillery comprises cannon, medium-caliber automatic weapons,
+              rockets, and SURFACE-TO-AIR MISSILES;  antitank artillery includes
+              ROCKETS AND MISSILES and cannon.  Most U.  S.  artillery weapons
+              are protected by an armored, wheeled- or track-mounted chasis,
+              and are self-propelled. Towed howitzers are gradually falling
+              into disuse.#crt##crt#]
+   Picture = mk1v_coma.pcx
+   WreckageObject = 402
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0.Punch@MaxRange -= 3
+   } Weapons
+} VehicleType

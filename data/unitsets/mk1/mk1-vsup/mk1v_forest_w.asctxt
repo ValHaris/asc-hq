@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Forest Ranger Wreckage
+   ID = 462
+   parent = 499
+   dry { 
+      picture = MK1v_forest_w.pcx 1
+   } dry
+} ObjectType

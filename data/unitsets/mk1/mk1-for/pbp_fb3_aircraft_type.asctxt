@@ -1,0 +1,16 @@
+ Technology {
+   name = "aircraft technology"
+   infotext = "base technology"
+   id = 100003
+   researchpoints = 100
+   
+   techlevel = 1
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100006
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

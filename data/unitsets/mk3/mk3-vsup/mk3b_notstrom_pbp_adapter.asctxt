@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 593
+   ;Bezeichnung der verknüpften Technologie: Notstromaggregat
+   TechnologiesRequired = 593
+} TechAdapter

@@ -1,0 +1,10 @@
+technology {
+   Name = Buff
+   infotext = 
+   id = 508
+   RelatedUnitID = 508
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100003,100103,100205,500,529 
+} Technology

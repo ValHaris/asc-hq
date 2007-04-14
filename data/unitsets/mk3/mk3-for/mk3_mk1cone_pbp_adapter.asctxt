@@ -1,0 +1,5 @@
+Techadapter {
+   ; MK1Cone
+   Name = 46
+   TechnologiesRequired = 606
+} TechAdapter

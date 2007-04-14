@@ -1,0 +1,10 @@
+technology {
+   Name = Vast
+   infotext = Forschungsprojekt abgeschlossen! Vast verfuegbar!
+   id = 87
+   RelatedUnitID = 87
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100003,100103,100210,100302,86 
+} Technology

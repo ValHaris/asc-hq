@@ -1,0 +1,10 @@
+technology {
+   Name = Punch
+   infotext = Forschungsprojekt abgeschlossen! Punch verfuegbar!
+   id = 57
+   RelatedUnitID = 57
+   parent = 100000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100000,100002,100102,100204 
+} Technology

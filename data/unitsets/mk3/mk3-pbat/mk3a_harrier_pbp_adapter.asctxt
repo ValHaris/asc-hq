@@ -1,0 +1,5 @@
+Techadapter {
+   ; Harrier
+   Name = 530
+   TechnologiesRequired = 530
+} TechAdapter

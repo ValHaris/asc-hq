@@ -1,0 +1,46 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402
+   ID = 359
+
+   Name = light aircraft carrier
+   Description = light aircraft carrier
+   Infotext = []
+   WreckageObject = 441
+   GuideSortHelp = 520 359 0 0 0 0 0 0 0 0
+
+
+   Armor = 1500
+   View = 60
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire repair_vehicle fuel_transfer material_transfer self_repairing
+   Category = heavy_ship
+   MaxSurvivableStorm = 245
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+   Weight = 8000
+   Transportation ->* Vehicletype.TransLightCarrier 
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 100000
+   } Tank
+   FuelConsumption = 35
+   Movement = 0 0 70 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.mediumship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 4
+   ;Bezeichnung der verknüpften Technologie: Armadillo
+   TechnologiesRequired = 4
+} TechAdapter

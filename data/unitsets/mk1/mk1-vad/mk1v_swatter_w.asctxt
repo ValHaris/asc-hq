@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Swatter Wreckage
+   ID = 418
+   parent = 499
+   dry { 
+      picture = MK1v_swatter_w.pcx 1
+   } dry
+} ObjectType

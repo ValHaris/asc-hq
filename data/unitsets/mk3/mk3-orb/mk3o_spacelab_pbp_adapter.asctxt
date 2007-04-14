@@ -1,0 +1,5 @@
+Techadapter {
+   ; Spacelab
+   Name = 562
+   TechnologiesRequired = 562
+} TechAdapter

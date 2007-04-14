@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 17
+   ;Bezeichnung der verknüpften Technologie: Shock Trooper
+   TechnologiesRequired = 17
+} TechAdapter

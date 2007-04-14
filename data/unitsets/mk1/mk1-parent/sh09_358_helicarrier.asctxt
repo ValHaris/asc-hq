@@ -1,0 +1,46 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402
+   ID = 358
+
+   Name = helicopter carrier
+   Description = helicopter carrier
+   Infotext = []
+   WreckageObject = 441
+   GuideSortHelp = 520 358 0 0 0 0 0 0 0 0
+
+
+   Armor = 1300
+   View = 70
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire repair_vehicle fuel_transfer material_transfer
+   Category = heavy_ship
+   MaxSurvivableStorm = 240
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 6000
+   Transportation ->* Vehicletype.TransHeliCarrier 
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 30000
+      fuel = 100000
+   } Tank
+   FuelConsumption = 32
+   Movement = 0 0 70 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.mediumship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

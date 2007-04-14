@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Tsunami Wreckage
+   ID = 435
+   parent = 498
+   Armor = 390
+   RemovalCost { 
+      Energy = 0
+      Material = -9000
+      fuel = 300
+      Movement = 40
+   } RemovalCost
+   dry { 
+      picture = MK1s_tsunami.pcx 1
+   } dry
+} ObjectType

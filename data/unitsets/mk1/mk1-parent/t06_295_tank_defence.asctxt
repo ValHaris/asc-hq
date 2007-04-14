@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = defence tank
+   ID = 295
+   parent = 400 401 402 406
+   abstract = true
+   
+   Description = defence tank
+   Infotext = []
+   WaitFortack = true
+   GuideSortHelp = 503 295 507 0 0 0 0 0 0 0
+
+   Armor = 850
+   Weight = 80
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 520
+   } Tank
+
+   FuelConsumption = 17
+   Movement = 0 0 0 66 0 0 0 0 
+
+   Weapons { 
+      Initiative = -50
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 12
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.MG45med
+      Weapon1.Ammo = 10
+   } Weapons
+} VehicleType

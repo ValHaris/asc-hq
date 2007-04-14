@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = JAM Heli
+   parent = 400 401 402 409 497
+   ID = 311
+   abstract = true
+   
+   Description = Jamming Helicopter
+   Infotext = []
+   GuideSortHelp = 515 311 0 0 0 0 0 0 0 0
+
+   Armor = 220
+   Jamming = 38
+   Weight = 78
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1200
+   } Tank
+   FuelConsumption = 15
+   Movement = 0 0 0 35 110 110 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.A2A_MG
+   } Weapons
+} VehicleType

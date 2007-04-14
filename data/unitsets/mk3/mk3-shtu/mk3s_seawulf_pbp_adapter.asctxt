@@ -1,0 +1,5 @@
+Techadapter {
+   ; Seawulf
+   Name = 612
+   TechnologiesRequired = 612
+} TechAdapter

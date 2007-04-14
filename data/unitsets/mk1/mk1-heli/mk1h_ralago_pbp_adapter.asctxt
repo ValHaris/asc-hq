@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 78
+   ;Bezeichnung der verknüpften Technologie: Ralago
+   TechnologiesRequired = 78
+} TechAdapter

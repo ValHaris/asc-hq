@@ -1,0 +1,10 @@
+technology {
+   Name = Arsenal
+   infotext = 
+   id = 616
+   RelatedUnitID = 616
+   parent = 100010
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100010,100004,100105,100305,586,587,588,609
+} Technology

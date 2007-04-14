@@ -1,0 +1,52 @@
+VehicleType {
+   abstract = true 
+   parent = 400 401 402
+   ID = 357
+
+   Name = battle ship
+   Description = battle ship
+   Infotext = [The Battleship is a huge floating chunk of steel bristling with
+              weapons. It is the most powerful vessel available. Featuring
+              several long-range cannons, the Battleship it suited for off-shore
+              bombardment as well as naval support. It has no defense against
+              submarines, however, because it is too slow to accurately release
+              depth charges. Very effective when teamed up with Cruisers and
+              Destroyers.#crt##color2##crt#Pros:#crt#- Very powerful#crt#-
+              Can repair itself#crt##color4##crt#Cons:#crt#- Slow movement#crt#-
+              Cannot fire after moving#crt#- Can not enter shallow water]
+   WreckageObject = 437
+   GuideSortHelp = 0 357 0 0 0 0 0 0 0 0
+
+
+   Armor = 1800
+   View = 60
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire sonar self_repairing
+   Category = heavy_ship
+   MaxSurvivableStorm = 250
+   ResourceDrillingRange = 0
+   SelfRepairRate = 10
+   Weight = 10000
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 3000
+      fuel = 10000
+   } Tank
+   FuelConsumption = 40
+   Movement = 0 0 61 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.very_bigship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

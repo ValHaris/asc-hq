@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 87
+   ;Bezeichnung der verknüpften Technologie: Vast
+   TechnologiesRequired = 87
+} TechAdapter

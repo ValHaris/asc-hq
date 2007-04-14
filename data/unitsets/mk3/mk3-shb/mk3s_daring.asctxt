@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = DARING
+   parent = 354
+   ID = 585
+
+   Description = anti aircraft destroyer
+   Infotext = [The main mission of the Daring Type anti-air warfare destroyer is to provide local area fleet defence. ]
+   picture = MK3s_daring.pcx
+   GuideSortHelp += 0 0 0 0 3 508 0 0 0 0
+
+   Armor -= 100
+   View += 10
+   jamming += 11
+   Abilities += jam_only_own_field
+
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 72
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.SAM
+      Weapon1.MaxRange = 60
+      Weapon1.Ammo = 16
+      
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.Ammo = 16
+      Weapon2.MaxRange = 50
+
+      Weapon3 ->* VehicleType.ShM
+      Weapon3.Ammo = 2
+      Weapon3.MaxRange = 30
+      Weapon3.Punch@MaxRange = 75
+      Weapon3.Punch@MinRange = 75
+      Weapon3.ReactionFireShots = 0
+
+      Weapon4 ->* vehicleType.AmmoTorp 
+      Weapon4.Ammo = 20
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 40
+
+      Weapon6 ->* vehicleType.AmmoBomb 
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* vehicleType.AmmoAM 
+      Weapon7.Ammo = 20
+
+      Weapon8 ->* vehicleType.AmmoGM 
+      Weapon8.Ammo = 20
+
+   } Weapons
+} VehicleType

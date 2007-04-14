@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B18
+   ;Bezeichnung der verknüpften Technologie: Shipyard NO
+   TechnologiesRequired = 100000
+} TechAdapter

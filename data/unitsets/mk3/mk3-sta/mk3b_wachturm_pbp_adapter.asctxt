@@ -1,0 +1,5 @@
+Techadapter {
+   ; Wachturm
+   Name = 572
+   TechnologiesRequired = 572
+} TechAdapter

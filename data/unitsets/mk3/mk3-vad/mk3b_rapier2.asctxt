@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = RAPIER2
+   ID = 617
+   parent = 223
+
+   Description = air-defence turret
+   Infotext = []
+   Picture = MK3b_rapier2.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+  
+   Armor -= 200
+   Jamming = 21
+   Abilities += jam_only_own_field
+
+   TerrainAccess ->* VehicleType.turret_ditch 
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 4
+   } Weapons
+} VehicleType

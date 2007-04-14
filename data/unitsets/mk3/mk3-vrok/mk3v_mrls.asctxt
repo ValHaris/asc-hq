@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = MRLS
+   ID = 551
+   parent = 297
+
+   Description = Multiple Rocket Launch System
+   Picture = MK3v_mrls.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 1
+      Weapon0.Punch@MinRange += 1
+   } Weapons
+} VehicleType

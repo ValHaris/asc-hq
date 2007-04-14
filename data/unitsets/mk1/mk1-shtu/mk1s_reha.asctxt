@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = REHA
+   parent = 361
+   ID = 81
+
+   Description = super carrier
+   Infotext = [Aircraft Carriers are very expensive floating airbases. It allows
+              for an aerial campaign into enemy territory, by eliminating
+              the need for aircraft to return to base. A Carrier may refuel,
+              repair and rearm any aircraft that can land on it. Due to their
+              size, some large airplanes can not land on Carriers. The Carrier
+              itself has some weapons, but they are not suited for heavy combat.]
+   picture = MK1s_reha.pcx
+   WreckageObject = 481
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 100
+
+   Weapons { 
+      Initiative = -30
+      Number = 6
+      Weapon0 ->* VehicleType.Ship_Flak 
+      Weapon0.Type = cannon ammo_transfer shootable 
+      Weapon0.Ammo = 150
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.Type = air_missile ammo_transfer shootable 
+      Weapon1.MaxRange = 60
+      Weapon1.Ammo = 150
+
+      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2.Ammo = 150
+
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 150
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 150
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 150
+   } Weapons
+} VehicleType

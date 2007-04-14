@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 68
+   ;Bezeichnung der verknüpften Technologie: Hawk
+   TechnologiesRequired = 68
+} TechAdapter

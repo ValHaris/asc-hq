@@ -1,0 +1,23 @@
+VehicleType { 
+   abstract = true
+   Name = special mech
+   ID = 212
+   parent = 400 401 402 408
+
+   Description = special Mech
+   Infotext = []
+   GuideSortHelp = 502 0 0 0 0 0 0 0 0 0
+
+   Armor = 350
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 300
+   } Tank
+   FuelConsumption = 3
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

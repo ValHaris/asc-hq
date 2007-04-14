@@ -1,0 +1,10 @@
+technology {
+   Name = MRLS
+   infotext = 
+   id = 551
+   RelatedUnitID = 551
+   parent = 100010
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100010,100002,100103,100310,550 
+} Technology

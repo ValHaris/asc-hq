@@ -1,0 +1,45 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402 493
+   ID = 368
+
+   Name = wig
+   Description = wig
+   Infotext = []
+   WreckageObject = 471
+   GuideSortHelp = 519 368 0 0 0 0 0 0 0 0
+
+
+   Armor = 450
+   View = 30
+   Jamming = 19
+   WaitFortack = false
+   Abilities = move_after_attack jam_only_own_field
+   Category = hoovercraft
+   MaxSurvivableStorm = 160
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 400
+
+   Height = floating ground_level
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2500
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 65 130 0 0 0 0 
+   TerrainAccess ->* VehicleType.smallship_terrain 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 67
+   ;Bezeichnung der verknüpften Technologie: Terrible
+   TechnologiesRequired = 67
+} TechAdapter

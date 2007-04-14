@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = FH 70
+   ID = 597
+   parent = 250
+
+   Description = light artillery
+   Picture = mk3v_FH70.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+   Weight = 25
+
+   Tank { 
+      fuel = 100
+   } Tank
+   FuelConsumption = 5
+   Movement -= 0 0 0 20 0 0 0 0 
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

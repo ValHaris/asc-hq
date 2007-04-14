@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = ARMY RANGER	
+   ID = 524
+   parent = 203
+
+   Description = Heavy Trooper
+   Infotext = []
+   picture = MK3i_ARMYRANGER.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
+   Movement += 0 0 0 1 0 0 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+   } Weapons
+} VehicleType

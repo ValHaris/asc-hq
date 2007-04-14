@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = RADAR SAT
+   abstract = true
+   ID = 246
+   parent = 400 401 402 407
+   Description = Comm. Sattelite
+   Infotext = [The Communications Sattelite is an orbital unit designed to discover
+              surface activity. Since the Sattelite is out of range (and even
+              out of view) of most enemy units, it is ideally suited to monitor
+              enemy operations. Its internal sensor array also allows it to
+              spot enemy sattelites.]
+   GuideSortHelp = 516 246 0 0 0 0 0 0 0 0
+
+   View = 120
+   ResourceDrillingRange = 5
+   Abilities += automatic_resource_searching
+
+   TerrainAccess ->* Vehicletype.sat_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

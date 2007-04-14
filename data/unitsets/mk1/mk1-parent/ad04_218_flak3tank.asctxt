@@ -1,0 +1,24 @@
+VehicleType { 
+   abstract = true
+   Name = flak 
+   ID = 218
+   parent = 400 401 402 405
+
+   Description = anti aircraft tank
+   Infotext = []
+   GuideSortHelp = 218 508 0 0 0 0 0 0 0 0
+
+
+   Armor = 400
+   Abilities += MoveDuringReactionFire
+   Weight = 35
+
+   Movement = 0 0 0 72 0 0 0 0 
+   Weapons { 
+      Initiative = 10
+      Number = 1
+      Weapon0 ->* VehicleType.Flak 
+      Weapon0.Ammo = 10
+      Weapon0.maxRange = 30
+   } Weapons
+} VehicleType

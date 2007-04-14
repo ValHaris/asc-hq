@@ -1,0 +1,5 @@
+Techadapter {
+   ; Kornuta
+   Name = 545
+   TechnologiesRequired = 545
+} TechAdapter

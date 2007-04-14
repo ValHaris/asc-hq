@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 84
+   ;Bezeichnung der verknüpften Technologie: SILO
+   TechnologiesRequired = 84
+} TechAdapter

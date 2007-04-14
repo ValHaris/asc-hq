@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 120
+   ;Bezeichnung der verknüpften Technologie: LTT
+   TechnologiesRequired = 120
+} TechAdapter

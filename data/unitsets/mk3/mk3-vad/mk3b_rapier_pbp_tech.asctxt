@@ -1,0 +1,10 @@
+technology {
+   Name = Rapier
+   infotext = 
+   id = 531
+   RelatedUnitID = 531
+   parent = 100010
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100010,100002,100101,100202,100310 
+} Technology

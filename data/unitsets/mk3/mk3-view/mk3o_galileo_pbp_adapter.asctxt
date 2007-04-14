@@ -1,0 +1,5 @@
+Techadapter {
+   ; Spysat
+   Name = 527
+   TechnologiesRequired = 527
+} TechAdapter

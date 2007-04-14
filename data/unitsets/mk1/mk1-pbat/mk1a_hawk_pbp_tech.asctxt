@@ -1,0 +1,10 @@
+technology {
+   Name = Hawk
+   infotext = Forschungsprojekt abgeschlossen! Hawk verfuegbar!
+   id = 68
+   RelatedUnitID = 68
+   parent = 100000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100000,100003,100104,100205,100305,48,69,20,29 
+} Technology

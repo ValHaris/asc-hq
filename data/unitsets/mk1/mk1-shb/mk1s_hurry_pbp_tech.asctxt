@@ -1,0 +1,10 @@
+technology {
+   Name = Hurry
+   infotext = Forschungsprojekt abgeschlossen! Hurry verfuegbar!
+   id = 8
+   RelatedUnitID = 8
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100004,100103,100312,42 
+} Technology

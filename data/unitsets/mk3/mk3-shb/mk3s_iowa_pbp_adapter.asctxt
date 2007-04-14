@@ -1,0 +1,5 @@
+Techadapter {
+   ; Iowa
+   Name = 541
+   TechnologiesRequired = 541
+} TechAdapter

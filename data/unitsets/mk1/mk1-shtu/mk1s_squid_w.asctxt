@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Squid Wreckage
+   ID = 491
+   parent = 498
+   dry { 
+      picture = MK1s_squid.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 499
+   ID = 495
+
+   Name = Helicopter Wreckage
+
+   Armor = 150
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1300
+      fuel = 50
+      Movement = 15
+   } RemovalCost
+   dry { 
+      picture = _wreck_495_heli.pcx 1
+   } dry
+
+} ObjectType

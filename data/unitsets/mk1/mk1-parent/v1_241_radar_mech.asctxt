@@ -1,0 +1,18 @@
+VehicleType { 
+   abstract = true
+   Name = radar mech
+   ID = 241
+   parent = 400 401 402 408
+   Description = radar mech
+   Infotext = []
+   GuideSortHelp = 502 241 0 0 0 0 0 0 0 0
+
+   Armor = 350
+   View = 75
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG40low 
+   } Weapons
+} VehicleType

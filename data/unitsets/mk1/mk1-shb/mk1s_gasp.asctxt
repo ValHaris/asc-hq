@@ -1,0 +1,52 @@
+VehicleType { 
+   Name = GASP
+   ID = 28
+   parent = 355
+   GuideSortHelp += 0 0 0 0 1 508 600 0 0 0
+   
+   Description = AntiAircraftShip
+   Infotext = [Developed in reaction to the deadly threat which torpedoes, missiles, 
+and heavy bombs launched or dropped from land- and carrier-based 
+warplanes impose even on the biggest and most heavily armored ships, 
+the GASP class anti-aircraft cruisers combine fairly high speed and 
+good armor protection with an extensive arsenal of anti-aircraft and 
+anti-spacecraft missile launchers, a number of heavy anti-aircraft 
+artillery twin-turrets and highly advanced fire-guidance systems which 
+allow to combat several air and space targets simultaneously. For self 
+defense against light ships the GASP is additionally equipped with naval 
+target artillery of light caliber.
+On the after body of the ship there are shelters for two light helicopters.
+
+The GASP class AA cruiser is by far the most effective weapon system 
+available to protect your navy from enemy air raids.]
+   picture = MK1s_GASP.pcx
+   WreckageObject = 428
+
+   Armor -= 50
+   View += 10
+
+   Weapons { 
+      Initiative = 10
+      Number = 5
+      Weapon0 ->* VehicleType.SAM 
+      Weapon0.MaxRange = 60
+      Weapon0.Ammo = 8
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 50
+      Weapon1.Ammo = 8
+
+      Weapon2 ->* VehicleType.Ship_Flak 
+      Weapon2.Ammo = 20
+      Weapon2.ReactionfireShots = 1
+
+      Weapon3 ->* VehicleType.SOM 
+      Weapon3.Ammo = 2
+
+      Weapon4 ->* VehicleType.Ship_Gun 
+      Weapon4.MaxRange = 20
+      Weapon4.Ammo = 8
+      Weapon4.Punch@MaxRange = 60
+
+   } Weapons
+} VehicleType

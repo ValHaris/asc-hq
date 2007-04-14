@@ -1,0 +1,9 @@
+VehicleType { 
+   Name = BOJE
+   parent = 249
+   ID = 119
+
+   Picture = MK1B_BOJE.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+} VehicleType

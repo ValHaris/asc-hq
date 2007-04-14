@@ -1,0 +1,34 @@
+ VehicleType { 
+   Abstract = true
+   ID = 422
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T U R R E T    -----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   WreckageObject = 497 496
+   Armor = 800
+   View = 40
+   Jamming = 0
+   WaitFortack = true
+   Abilities = onlyTransMove
+
+   Height = ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2100
+   } Tank
+   FuelConsumption = 300
+   Movement = 0 0 0 17 0 0 0 0 
+   Category = building|turret|object
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 190
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+} VehicleType

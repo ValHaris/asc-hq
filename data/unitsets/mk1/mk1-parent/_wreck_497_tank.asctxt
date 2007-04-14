@@ -1,0 +1,33 @@
+ObjectType { 
+   ID = 497
+   parent = 499
+   Armor = 200
+   Movemalus_plus = 3
+   Movemalus_abs = -1
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 1
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 90
+      Movement = 20
+   } RemovalCost
+   Name = tank wreckage
+   NoSelfChaining = false
+   dry { 
+      UseGFXpics = false
+      picture = _wreck_497_tank.pcx 1
+      flippicture = -1
+   } dry
+} ObjectType

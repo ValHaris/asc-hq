@@ -1,0 +1,5 @@
+Techadapter {
+   ; ElitePioneers
+   Name = 576
+   TechnologiesRequired = 576
+} TechAdapter

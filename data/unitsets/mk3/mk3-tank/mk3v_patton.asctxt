@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = PATTON
+   ID = 534
+   parent = 292
+   Description = medium tank
+   Picture = MK3v_patton.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 30
+
+   Weapons { 
+   } Weapons
+} VehicleType
+  

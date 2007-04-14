@@ -1,0 +1,745 @@
+ VehicleType { 
+   Abstract = true
+   ID = 401
+
+   ConstructionCost { 
+      CalculationMethod = auto
+      energy =
+      material =
+      fuel = 
+   } ConstructionCost
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   E X A M P L E S   --------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+;      EntranceSystemNum = 1
+;      EntranceSystem0 ->* VehicleType.GrIO
+;      EntranceSystem1 ->* VehicleType.Para
+;
+;      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   N O T   D E F I N A T I O N S   ------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   cargo_trooper_only {
+      CategoriesNOT = default light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   } cargo_trooper_only
+
+   cargo_deftro_only {
+      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   } cargo_deftro_only
+
+   cargo_vehicle_light {
+      CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft 
+   } cargo_vehicle_light
+
+   cargo_vehicle_med {
+      CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft 
+   } cargo_vehicle_med
+   
+   cargo_vehicle_heavy {
+      CategoriesNOT = rail_vehicle medium_aircraft heavy_aircraft medium_ship heavy_ship hoovercraft 
+   } cargo_vehicle_heavy
+
+   cargo_lship_only {
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship building|turret|object helicopter hoovercraft default
+   } cargo_lship_only
+
+   cargo_turret_only {
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft 
+   } cargo_turret_only
+
+   cargo_deftur_only {
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft building|turret|object
+   } cargo_deftur_only
+
+   cargo_noplane {
+      CategoriesNot = light_aircraft medium_aircraft heavy_aircraft helicopter
+   } cargo_noplane
+
+   cargo_trtrain {
+      CategoriesNOT = hoovercraft medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft
+   } cargo_trtrain
+
+   cargo_cruiser {
+      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default
+   } cargo_cruiser
+
+   cargo_carrier {
+      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default
+   } cargo_carrier
+
+   cargo_bigcarrier {
+      CategoriesNOT = light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Rail_vehicle Light_ship Medium_ship Heavy_Ship Building|turret|object default 
+   } cargo_bigcarrier
+
+   Cargo_transplane {
+      CategoriesNOT = light_ship medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft rail_vehicle building|turret|object
+   } cargo_transplane 
+
+   cargo_drop {
+      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   } cargo_drop
+
+   cargo_allground {
+      CategoriesNOT = hoovercraft Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } cargo_allground
+
+   cargo_shuttle {
+      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
+   } cargo_shuttle
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   C A R R I E R   L A N D I N G   ------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   carrier {
+        Mode = In out
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        MoveCost = 50 
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+   } carrier
+   
+   carrier_ground ->* VehicleType.carrier
+   carrier_ground.ContainerHeight = ground_level
+
+   cruiser {
+        Mode = In out
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        MoveCost = 30 
+        CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft medium_ship heavy_ship building|turret|object hoovercraft default
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+        RequireUnitFunction = cruiserlanding
+   } cruiser
+
+   cruiser_ground ->* VehicleType.cruiser
+   cruiser_ground.ContainerHeight = ground_level
+
+   
+; ----------------------------------------------------------------------------------------------------------------
+; -----   G R O U N D   I N & O U T   ----------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   GrIO {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+   } GrIO
+
+   GrIO_Carrier ->* VehicleType.GrIO
+   GrIO_Carrier.Mode = In Out
+
+   TurretOut ->* VehicleType.GrIO
+   TurretOut.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+   TurretOut.MoveCost = 10 
+   TurretOut.DisableAttack = true
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   S U B M A R I N E   ------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      SubIO {
+        Mode = in out docking
+        UnitHeightAbs =  submerged deep_submerged
+        UnitHeightRel = 0
+        ContainerHeight = submerged deep_submerged
+        CategoriesNOT = 
+        DockingHeightAbs = submerged deep_submerged
+        DockingHeightRel = 0
+      } SubIO
+
+      Fl2Sub {
+        Mode = in out
+        UnitHeightAbs =  submerged
+        UnitHeightRel = 1
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = 0
+      } Fl2Sub
+; ----------------------------------------------------------------------------------------------------------------
+; -----   O R B I T   --------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   OrbIO {
+        Mode = In out docking
+        UnitHeightAbs = orbit 
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT = 
+        MoveCost = 20
+        DockingHeightAbs = orbit 
+        DockingHeightRel = -100 
+   } OrbIO
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   P A R A T R O O P E R   --------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      Para {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight medium_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        DisableAttack = true
+        RequireUnitFunction = paratrooper
+      } Para
+
+      ParaTr {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight medium_level_flight
+        CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT 
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        RequireUnitFunction = paratrooper
+        MoveCost = 20
+      } ParaTr
+
+      ParaVeh {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = medium_level_flight
+        CategoriesNOT = default building|turret|object
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        RequireUnitFunction = paratrooper
+        MoveCost = 20
+      } ParaVeh
+
+      diver_out {
+        Mode = out
+        UnitHeightAbs = floating submerged
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = default building|turret|object
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+      } diver_out
+
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   A I R C R A F T  ----------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+      Drop {
+        Mode = out
+        UnitHeightAbs = medium_level_flight high_level_flight
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = 0
+        DisableAttack = false
+        RequireUnitFunction = paratrooper
+        MoveCost = 30 
+      } Drop
+
+     ParaDevice {
+        Mode = out
+        UnitHeightAbs = ground_level floating submerged
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        RequireUnitFunction = paratrooper
+        DisableAttack = true
+        MoveCost = 10
+     } ParaDevice
+
+     Weapon_Air_out {
+        Mode = out
+        UnitHeightAbs = medium_level_flight high_level_flight
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = 0
+        DisableAttack = false
+     } Weapon_Air_out
+      
+; ----------------------------------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+; -----   U N I T T Y P E S - C O M P L E T E   ----------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+; Transportzug
+   TransTrain { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 800
+      MaxLoadableMass = 800
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = light_ship
+      EntranceSystem1 ->* VehicleType.GrIO
+      EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
+      EntranceSystem1.DisableAttack = true
+   } TransTrain
+
+; Transportzug
+   TransTrainBunker { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 1100
+      MaxLoadableMass = 2100
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } TransTrainBunker
+
+
+; Helicopter-Service-Zug
+   TransHeliTrain { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 150
+      CategoriesNOT -> VehicleType.cargo_cruiser.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.Cruiser
+   } TransHeliTrain
+
+;---------- Vehicle -------------
+
+; Soldatentransportwagen
+   TransTrooper { 
+      MaxLoadableUnits = 8
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 16
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransTrooper
+
+; Truppentransportwagen
+   TransBigTrooper { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 6
+      MaxLoadableMass = 36
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransBigTrooper
+
+; gepanzerter Soldatentransportwagen   
+   TransTrooperArmor { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 3
+      MaxLoadableMass = 10
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransTrooperArmor
+
+; Fahrzeugtransportwagen
+
+   TransVehicleHeavy { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 195
+      MaxLoadableMass = 195
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = light_ship building|turret|object
+      EntranceSystem1 ->* VehicleType.GrIO
+      EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
+      EntranceSystem1.DisableAttack = true
+      EntranceSystem2 ->* VehicleType.GrIO
+      EntranceSystem2.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+      EntranceSystem2.MoveCost = 10 
+      EntranceSystem2.DisableAttack = true
+   } TransVehicleHeavy
+
+;---------- Hoovercraft ----------
+
+; Transportluftkissenfahrzeug
+   TransHoovercraft { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 170
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransHoovercraft
+
+;---------- Ships -------------
+
+   TransShipTrooper { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 4
+      MaxLoadableMass = 8
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.Fl2Sub
+      EntranceSystem1 ->* VehicleType.GrIO
+   } TransShipTrooper
+
+   TransShipSmall { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 50
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_vehicle_light.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.Fl2Sub
+      EntranceSystem1 ->* VehicleType.GrIO
+   } TransShipSmall
+
+   TransShip {
+      MaxLoadableUnits = 18
+      MaxLoadableUnitSize = 1200
+      MaxLoadableMass = 8000
+      CargoMovementDivisor = 1.5
+      CategoriesNOT = medium_ship heavy_ship 
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = light_ship
+      EntranceSystem1 ->* VehicleType.GrIO
+      EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
+      EntranceSystem1.DisableAttack = true
+   } TransShip
+
+   TransShipArmor {
+      MaxLoadableUnits = 14
+      MaxLoadableUnitSize = 600
+      MaxLoadableMass = 4000
+      CargoMovementDivisor = 1.5
+      CategoriesNOT = light_ship medium_ship heavy_ship medium_aircraft heavy_aircraft
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransShipArmor
+
+
+   TransCruiserSmall { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 60
+      MaxLoadableMass = 60
+      CategoriesNOT -> VehicleType.cargo_cruiser.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.Cruiser
+   } TransCruiserSmall
+
+   TransCruiser { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 100
+      CategoriesNOT -> VehicleType.cargo_cruiser.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.Cruiser
+   } TransCruiser
+
+   TransHeliCarrier {
+      MaxLoadableUnits = 12
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 1000
+      CategoriesNOT = medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_ship heavy_ship heavy_aircraft rail_vehicle
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO_Carrier
+      EntranceSystem1 ->* VehicleType.Cruiser
+      EntranceSystem2 ->* VehicleType.fl2sub
+   } TransHeliCarrier
+
+   TransLightCarrier { 
+      MaxLoadableUnits = 14
+      MaxLoadableUnitSize = 80
+      MaxLoadableMass = 1200
+      CategoriesNOT -> VehicleType.cargo_carrier.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.Carrier
+      EntranceSystem1 ->* VehicleType.Cruiser
+   } TransLightCarrier
+
+   TransMedCarrier { 
+      MaxLoadableUnits = 17
+      MaxLoadableUnitSize = 105
+      MaxLoadableMass = 1500
+      CategoriesNOT -> VehicleType.cargo_carrier.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.Carrier
+      EntranceSystem1 ->* VehicleType.Cruiser
+   } TransMedCarrier
+
+   TransHvyCarrier { 
+      MaxLoadableUnits = 20
+      MaxLoadableUnitSize = 150
+      MaxLoadableMass = 2000
+      CategoriesNOT -> VehicleType.cargo_bigcarrier.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.Carrier
+      EntranceSystem1 ->* VehicleType.Cruiser
+   } TransHvyCarrier
+
+   TransDroneCruiser { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 150
+      CategoriesNOT -> VehicleType.cargo_drop.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO_Carrier
+      EntranceSystem0.RequireUnitFunction = paratrooper
+      EntranceSystem1 ->* VehicleType.carrier
+      EntranceSystem1.RequireUnitFunction = paratrooper
+   } TransDroneCruiser
+
+   TransDroneDestroyer { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 120
+      CategoriesNOT -> VehicleType.cargo_drop.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO_Carrier
+      EntranceSystem0.RequireUnitFunction = paratrooper
+      EntranceSystem1 ->* VehicleType.carrier
+      EntranceSystem1.RequireUnitFunction = paratrooper
+   } TransDroneDestroyer
+
+;---------- Submarines ------------
+
+   TransSubTrooper { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 3
+      MaxLoadableMass = 12
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.SubIO
+   } TransSubTrooper
+
+   TransSubmarine { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 60
+      MaxLoadableMass = 100
+      CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship hoovercraft
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.SubIO
+   } TransSubmarine
+
+;---------- Aircrafts ---------
+
+   TransPlane { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 300
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_transplane.CategoriesNOT
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.ParaVeh
+   } TransPlane
+
+   TransPlaneLight { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 100
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_vehicle_light.CategoriesNOT
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.ParaVeh
+   } TransPlaneLight
+
+   TransDronePlane { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 80
+      MaxLoadableMass = 300
+      CategoriesNOT -> VehicleType.cargo_drop.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Drop
+   } TransDronePlane
+
+   TransWeaponPlane { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 20
+      CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Weapon_Air_Out
+   } TransWeaponPlane
+
+   SonarSeaPlane { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 1
+      MaxLoadableMass = 6
+      CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaDevice
+   } SonarSeaPlane
+
+;---------- Helicopter ------------
+
+   TransHeliTrooper { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 4
+      MaxLoadableMass = 12
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.Diver_Out
+   } TransHeliTrooper
+
+   TransHeli { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 70
+      MaxLoadableMass = 70
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_allground.CategoriesNOT
+      EntranceSystemNum = 4
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.ParaVeh
+      EntranceSystem3 ->* VehicleType.Diver_Out
+   } TransHeli
+
+   TransHeliHvy { 
+      MaxLoadableUnits = 8
+      MaxLoadableUnitSize = 120
+      MaxLoadableMass = 120
+      CargoMovementDivisor = 1.5
+      CategoriesNOT = hoovercraft light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship
+      EntranceSystemNum = 4
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.ParaVeh
+      EntranceSystem3 ->* VehicleType.Diver_Out
+   } TransHeliHvy
+
+;---------- Orbital ----------
+
+   TransShuttle { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 40
+      MaxLoadableMass = 110
+      CargoMovementDivisor = 1.5
+      CategoriesNOT -> VehicleType.cargo_shuttle.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.OrbIO
+   } TransShuttle
+
+   TransSpSt { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 500
+      MaxLoadableMass = 500
+      CargoMovementDivisor = 3
+      CategoriesNOT = building|turret|object light_ship medium_ship heavy_ship rail_vehicle
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.OrbIO
+   } TransSpSt
+
+;---------- TurretSystem -----------
+
+   TransDevice { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 4
+      MaxLoadableMass = 4
+      CargoMovementDivisor = 3
+      CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.DisableAttack = true
+   } TransDevice
+
+   TransTurretMed { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 300
+      MaxLoadableMass = 300
+      CargoMovementDivisor = 3
+      CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.DisableAttack = true
+   } TransTurretMed
+
+   TransTurretBig { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 500
+      MaxLoadableMass = 500
+      CargoMovementDivisor = 3
+      CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.DisableAttack = true
+   } TransTurretBig
+
+   TransTurretBig2 { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 500
+      MaxLoadableMass = 1000
+      CargoMovementDivisor = 3
+      CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.DisableAttack = true
+   } TransTurretBig2
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----      ----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   TransLowTrooper { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 2
+      MaxLoadableMass = 2
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransLowTrooper
+
+   TransLowTrooper2 ->* VehicleType.TransLowTrooper 
+   TransLowTrooper2.MaxLoadableUnits = 2
+   TransLowTrooper2.MaxLoadableUnitSize = 3
+   TransLowTrooper2.MaxLoadableMass = 4
+
+   TransLowTrooper3 ->* VehicleType.TransLowTrooper 
+   TransLowTrooper3.MaxLoadableUnits = 3
+   TransLowTrooper3.MaxLoadableUnitSize = 4
+   TransLowTrooper3.MaxLoadableMass = 6
+
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----      ----------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+
+} VehicleType

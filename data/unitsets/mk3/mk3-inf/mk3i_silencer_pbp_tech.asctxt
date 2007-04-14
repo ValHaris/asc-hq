@@ -1,0 +1,10 @@
+technology {
+   Name = Silencer
+   infotext = 
+   id = 525
+   RelatedUnitID = 525
+   parent = 100010
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 100010,100001,100103,535,618,524 
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 55
+   ;Bezeichnung der verknüpften Technologie: Tupi
+   TechnologiesRequired = 55
+} TechAdapter

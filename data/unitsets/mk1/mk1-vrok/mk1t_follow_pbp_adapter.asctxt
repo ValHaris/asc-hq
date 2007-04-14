@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 83
+   ;Bezeichnung der verknüpften Technologie: Follow
+   TechnologiesRequired = 83
+} TechAdapter

@@ -1,0 +1,10 @@
+technology {
+   Name = SealBoat
+   infotext = 
+   id = 586
+   RelatedUnitID = 586
+   parent = 100010
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100010,100004,100101,100305 
+} Technology

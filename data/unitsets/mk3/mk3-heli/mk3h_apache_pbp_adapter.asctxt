@@ -1,0 +1,5 @@
+Techadapter {
+   ; Apache
+   Name = 504
+   TechnologiesRequired = 504
+} TechAdapter

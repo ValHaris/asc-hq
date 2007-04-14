@@ -1,0 +1,10 @@
+technology {
+   Name = Cosinus
+   infotext = Forschungsprojekt abgeschlossen! Cosinus verfuegbar!
+   id = 13
+   RelatedUnitID = 13
+   parent = 100000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100000,100002,100102 
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = Ceti
+   infotext = Forschungsprojekt abgeschlossen! Ceti verfuegbar!
+   id = 11
+   RelatedUnitID = 11
+   parent = 100000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100000,100002,100101 
+} Technology

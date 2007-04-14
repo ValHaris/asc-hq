@@ -1,0 +1,10 @@
+technology {
+   Name = Daring
+   infotext = 
+   id = 585
+   RelatedUnitID = 585
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100004,100102,100202,100211,581,582,583,584 
+} Technology

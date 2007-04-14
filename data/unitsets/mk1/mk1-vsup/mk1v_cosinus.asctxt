@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = COSINUS
+   ID = 13
+   parent = 336
+   
+   Description = repair vehicle
+   Infotext = [A Rapair Vehicle can make the difference between victory and
+              defeat. It is capable of rapairing a damaged unit in the field,
+              saving precious time. Don't put it in the front row, since a
+              Repair vehicle can take very little abuse.]
+   picture = MK1v_cosinus.pcx
+   WreckageObject = 413
+   GuideSortHelp = 553 0 0 0 1 0 0 0 0 0
+
+   Armor -= 100
+   Abilities += repair_vehicle self_repairing
+   SelfRepairRate = 20
+
+   Tank { 
+      Material = 8000
+      fuel = 10000
+   } Tank
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.def_MG 
+      Weapon1 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 499
+   ID = 400
+
+   Name = Aircraft Wreckage
+
+   Armor = 150
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1300
+      fuel = 50
+      Movement = 15
+   } RemovalCost
+   dry { 
+      picture = _wreck_400_aircraft.pcx 1
+   } dry
+
+} ObjectType

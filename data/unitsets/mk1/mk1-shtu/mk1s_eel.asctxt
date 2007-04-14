@@ -1,0 +1,214 @@
+VehicleType { 
+   Name = EEL
+   parent = 364 
+   ID = 34
+
+   Description = submarine
+   Infotext = [#font2#submarine#font1##crt##crt#A submarine is a self-propelled
+              vessel capable of operating underwater. The submarines that
+              were used in the two world wars could remain underwater for
+              only a few hours at a time. They functioned at the surface for
+              long periods and had to be so designed, with sharply pointed
+              bows and long, slender hulls. In contrast, vessels designed
+              primarily for underwater operation, such as nuclear submarines
+              (the first true submarines), instead have a relatively broad
+              tear shape or fish shape with a blunt, rounded bow and a drawn-out,
+              tapering stern.  In addition, whereas surface hulls are designed
+              with the greatest breadth above the waterline for surface stability,
+              underwater hulls have generally circular cross sections that
+              increase hull strength and reduce surface area and friction
+              drag.#crt##crt#A more general term also used for devices designed
+              to operate underwater is "submersible." Such devices range from
+              diving bells and BATHYSPHERES to the balloonlike BATHYSCAPHES
+              and the many small research craft available to explore the ocean
+              depths (see OCEANOGRAPHY).#crt##crt##crt#BASIC SUBMARINE STRUCTURE#crt##crt#A
+              submarine is fundamentally an air space contained by a hull
+              that is designed to withstand deep ocean pressures and to move
+              easily underwater. The hull is a double steel shell.  The inner,
+              or pressure, hull contains all the machinery for propelling
+              and guiding the vessel, plus living quarters for the crew. 
+              The outer hull holds the ballast tanks.  When the vessel submerges,
+              these tanks are opened and flooded with seawater. For surfacing,
+              the seawater is forced out of the ballast tanks and replaced
+              by compressed air.#crt##crt##crt#Submersion#crt##crt#Flooding
+              the ballast tanks is only one step in the process of submerging.
+              The submarine is also propelled downward by rear-mounted propellers
+              that force the craft forward, and by diving planes, which are
+              movable horizontal rudders that direct the angle of the dive.
+               When the desired depth is reached, the water level in the vessel's
+              trim tanks is adjusted to keep the craft stable.#crt##crt##crt#Power
+              Sources#crt##crt#Nonnuclear submarines are propelled on the
+              surface by diesel engines; when submerged, propulsion is provided
+              by electric batteries and motors. The batteries must be recharged
+              on the surface by the diesels after a short running time.  Nuclear
+              submarines are powered by a shielded nuclear reactor that generates
+              steam to turn the propulsion turbines and also supplies electricity
+              for subsidiary systems such as lighting, the vent controls of
+              the ballast tanks, the operation of the torpedo tubes, the periscope,
+              and the maintenance of the life-support systems--the air and
+              water supply that is manufactured on board.#crt##crt#Nuclear
+              power generation is self-contained:  because it does not involve
+              combustion, it does not draw oxygen from the vessel's air supply.
+               In addition a nuclear reactor can power a submarine for many
+              thousands of kilometers without refueling. Nuclear submarines
+              therefore have a virtually unlimited range.#crt##crt##crt#Navigation#crt##crt#Until
+              after World War II, submerged submarines were navigated with
+              a simple magnetic compass, supplemented by periscopic sextant
+              shots and observation of the shoreline.  Most periscopes could
+              not be used at depths greater than 9 m (30 ft).  Improvements
+              in gyroscopic navigational aids ultimately led to the development
+              of modern inertial navigation systems capable of providing accurate
+              guidance without the need for frequent external "fixes" (see
+              GUIDANCE AND CONTROL SYSTEMS).#crt##crt##crt#The Conning Tower#crt##crt#The
+              fin-shaped superstructure mounted on top of the submarine serves
+              as a bridge when the vessel is on the surface.  It holds a number
+              of instruments:  the periscopes, the various radio and radar
+              antennas, and the snorkel, a system of air intake and exhaust
+              pipes.  On nuclear submarines the conning tower is known as
+              the "sail" and carries a set of diving planes.#crt##crt##crt#SUBMARINE
+              DEVELOPMENT#crt##crt#The first craft known to have maneuvered
+              underwater was constructed by Cornelis DREBBEL, court engineer
+              to James I of England, and was demonstrated on the Thames in
+              1620.  Propelled by oars sealed at the locks by leather gaskets,
+              it apparently submerged by admitting water into the hull and
+              surfaced by pumping it out again.#crt##crt#Although the idea
+              of the submarine continued to intrigue inventors, the lack of
+              a power source to propel the vessel was a major obstacle to
+              its development.  The wooden TURTLE, designed by David BUSHNELL,
+              an American, was driven by hand- and foot-cranked propellers.
+               Its armament was an explosive charge that, in theory, could
+              be fastened to an enemy ship's hull by a detachable auger. 
+              The Turtle's one foray (1776), against a British ship lying
+              off New York harbor, was frustrated in part by the difficulty
+              of maneuvering the vessel underwater.#crt##crt#In 1801, Robert
+              FULTON demonstrated his three-man metal submarine, the NAUTILUS,
+              for the French navy.  Like the Turtle, the Nautilus was driven
+              by a hand-cranked propeller, but for depth control it had movable
+              horizontal surfaces--the diving planes now used on all modern
+              submarines. Its warhead was a towed contact mine, designed to
+              explode when it was dragged against the enemy target.  The military
+              potential of the Nautilus was never realized in its time, but
+              it presaged the first successful submarine attack, over 60 years
+              later, by the Confederate vessel Hunley.#crt##crt##crt#Submarines
+              in the U.S. Civil War#crt##crt#In response to the Northern blockade
+              of shipping during the Civil War, the Southern navy developed
+              a group of semisubmersibles known as "Davids"--small craft intended
+              to battle the Union's Goliath fleet. Although not true submersibles--their
+              smokestacks and air intakes were always above water--they were
+              the first vessels to use submergence with tactical success.#crt##crt#Another
+              Confederate development was the Hunley, a true submersible.
+              Although it used the old hand-cranked propeller system and was
+              slower than the "Davids," it could submerge completely.  Fitted
+              with a spar torpedo--a 6-m (20-ft) pole tipped with an explosive
+              charge--the Hunley went down on the night of Feb.  17, 1864,
+              sinking a Federal corvette, the U.S.S. Housatonic, off Charleston
+              but destroying itself in the process.#crt##crt#At the same time,
+              European submarine technology was also accelerating.  In 1863
+              the French inventor Charles Brun used compressed air to propel
+              his vessel, the Plongeur, and to expel water from its ballast
+              tanks, a method that is still used.  The French navy built several
+              all-electric submarines in the 1880s and '90s.  These demonstrated
+              the potential of electric power underwater but were severely
+              limited by the need to recharge the batteries in port.  They
+              had no engines other than their battery-powered electric motors.
+               Robert Whitehead's self-propelled TORPEDO gave the submarine
+              a genuine offensive capability;  the Swedish inventor Torsten
+              Nordenfelt (1842-1920) developed internal torpedo tubes for
+              submarines in the 1880s.#crt##crt##crt#The Holland#crt##crt#The
+              Irish-American John P.  HOLLAND (1840-1914) had experimented
+              with submarine designs for a quarter century when he sold (1900)
+              the U.S.  Navy its first submarine.  The U.S.S. Holland used
+              an electric motor for propulsion underwater and a gasoline engine
+              for surface propulsion and for recharging the batteries.  The
+              submarines of the two world wars differed in basic design from
+              the Holland only in the substitution of diesels for the gasoline
+              engine.  Like most later submarines, the Holland submerged by
+              flooding its ballast tanks, used trim tanks and diving planes
+              to control pitch when submerged and fired torpedoes and blew
+              the ballast tanks empty with compressed air.#crt##crt##crt#World
+              War I#crt##crt#From the early years of the 20th century, fleets
+              of submarines were built by every major European power.  The
+              German vessels were the most efficient;  by 1911, German designers
+              had abandoned both steam and gasoline--which was volatile, and
+              therefore hazardous within the confines of a submarine--and
+              had equipped all their vessels with diesel engines. Also, German
+              periscopes were the best in the world.#crt##crt#World War I
+              provided the first opportunity to use submarines as attack vessels
+              on a large scale.  With its fleet of U-boats (Unterseebooten),
+              Germany came close to severing Britain's overseas lifelines.
+               Britain countered with efforts to confine the German submarines
+              to their ports, using air and surface patrols and laying MINE
+              belts.#crt##crt#DEPTH CHARGES and hydrophones--underwater listening
+              devices--were developed and used extensively;  the British successfully
+              employed killer submarines as well--small antisubmarine vessels
+              that could maintain underwater speeds of up to 15 knots for
+              as long as 2 hours.  Finally, merchant sailings were concentrated
+              into large, well-escorted convoys, a tactic for which the Germans
+              had not found an answer by the war's end.#crt##crt##crt#World
+              War II#crt##crt#As in World War I, Germany began World War II
+              with a small but seasoned submarine force and immediately applied
+              it to isolate Britain from overseas resources.  Britain again
+              replied with heavily escorted convoys, and the Germans responded
+              by sending U-boats out in large "wolf packs" that used radio
+              communications to search and attack in concert.#crt##crt#Tactical
+              complexities multiplied:  hydrophones were supplemented by underwater
+              sound-ranging systems (SONAR) and the use of RADAR and radar
+              warning devices became widespread. The Germans used long-range
+              search aircraft to coordinate the wolf packs;  the British and
+              Americans replied with antisubmarine aircraft carriers and fleets
+              of hunter-killer submarines that were guided to the German vessels
+              by sensitive high-frequency direction-finding radios installed
+              aboard surface vessels.#crt##crt#American submarines in the
+              Pacific and British submarines in the Mediterranean enjoyed
+              the success denied the Germans in the Atlantic. Submarine destruction
+              of Axis supplies played a major role in the Allied victory in
+              North Africa.  American submarines effectively halted Japanese
+              maritime commerce by mid-1944. Britain and Italy both had isolated
+              but spectacular successes with miniature one- and two-man submarines
+              in port attacks on enemy ships.#crt##crt##crt#THE NUCLEAR SUBMARINE#crt##crt#The
+              first nuclear submarine, the U.S.S.  NAUTILUS, launched in 1954,
+              resembled conventional submarines in many respects, but its
+              great range both above and below the surface made it a revolutionary
+              and formidable weapon.  The Nautilus sailed almost 170,000 km
+              (91,324 naut mi) before refueling;  146,000 km (78,885 naut
+              mi) were spent submerged.  On August 3, 1958, it sailed under
+              the Arctic ice and the North Pole.#crt##crt#Following the Nautilus
+              and a group of submarines of the same design, the U.S.  Navy
+              developed the Skipjack class of nuclear submarine, which had
+              a teardrop-shaped hull design and was capable of reaching underwater
+              speeds of more than 30 knots. Succeeding types of nuclear submarines,
+              the Thresher and Sturgeon classes, have been designed to be
+              high-speed detection and attack vessels.  The U.S.S.  Triton,
+              launched in 1959, is among the largest and is propelled by two
+              nuclear reactors.  In 1960 the Triton circumnavigated the globe
+              underwater, traveling 78,858 km (41,500 naut mi) in 84 days.#crt##crt#Whereas
+              the nuclear attack submarine represents the most advanced use
+              of hydrodynamic technology, the nuclear BALLISTIC MISSILE submarine
+              is perhaps the ultimate development of the submarine's military
+              potential, having the ability to launch as many as several dozen
+              intercontinental ballistic missiles while submerged.  Following
+              the first underwater launch of a POLARIS missile from the U.S.S.
+               George Washington in 1960, such submarines have entered the
+              U.S.  and Soviet navies in increasing numbers and are also possessed
+              by Great Britain and France.  U.S.  nuclear submarine classes
+              include those carrying the POSEIDON missile and a growing new
+              fleet of TRIDENT submarines, which were first launched in the
+              early 1980s.#crt#]
+   picture = MK1s_eel.pcx
+   WreckageObject = 434
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 100
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+
+      Weapon1 ->* VehicleType.Ship_MG 
+      Weapon1.Ammo = 10
+   } Weapons
+} VehicleType

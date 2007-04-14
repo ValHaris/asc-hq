@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = JELLYFISH
+   ID = 27
+   parent = 354
+
+   Description = submarine destroyer
+   Infotext = [As any experienced naval commander should know, submarines are
+              not to be taken lightly. They can take down the larger ships
+              in a short time, and even a group of Destroyers may find itself
+              hard pressed to avert the enemy. To lighten their load, a specialized
+              Submarine Hunter has been commisioned. Think of it as a submarine-targeting
+              artillery unit. It is equipped with a large payload of self-propelled
+              Class IX Long Range Torpedoes. It can quickly decimate an underwater
+              attack party, provided it is being defended from the party itself;
+              it is very vulnerable to submarines up close]
+   picture = MK1s_jellyfish.pcx
+   WreckageObject = 427
+   GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
+
+   Armor -= 100
+   Abilities += sonar
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 65
+      Weapon0.Punch@MinRange = 75
+
+      Weapon1 ->* VehicleType.DCS 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 118
+      Weapon1.ReactionFireShots = 2
+
+      Weapon2 ->* VehicleType.Ship_Flak 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.DCS 
+      Weapon3.Ammo = 10
+      Weapon3.Punch@MaxRange = 120
+      Weapon3.Punch@MinRange = 120
+   } Weapons
+} VehicleType

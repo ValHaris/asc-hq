@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = hvy railroadgun
+   abstract = true
+   ID = 256
+   parent = 400 401 402 412
+
+   Description = railroad gun
+   Infotext = [Railroad Guns are the ultimate artillery on land. Its primary
+              heavy grenade cannon out-ranges even the powerful Turret Emplacement.
+               A Railroad Gun can, if slowly, travel by rail, making it a
+              dreaded instrument of destruction. The grenade cannon can decimate
+              an unsuspecting enemy within seconds. It has a limited ammunition
+              storage, so the Railroad guns are often seen accompanied by
+              Ammunition Transports.]
+   GuideSortHelp = 506 256 0 0 0 0 0 0 0 0
+   WreckageObject = 458
+
+   Armor -= 100
+   View = 30
+   WaitFortack = true
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 18
+   Movement -= 0 0 0 20 0 0 0 0 
+   Weight = 250
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 90
+      Weapon0.MinRange = 50
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 120
+
+   } Weapons
+} VehicleType

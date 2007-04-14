@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = hvy rocket tank
+   ID = 298
+   abstract = true
+   parent = 400 401 402 406
+
+   Description = Raketenpanzer
+   Infotext = [ Leistungsstarker Boden-Boden-Raketenpanzer mit veraenderten Abschussvorrichtungen und staerkerer Panzerung als der STING. ]
+   GuideSortHelp = 505 298 0 0 0 0 0 0 0 0
+
+
+   Armor = 650
+   Weight = 65
+   Abilities += no_reactionfire
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1000
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 0 60 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+      Weapon0.WeaponEffectiveness.Trooper = 25
+
+      Weapon1 ->* VehicleType.MG40low 
+   } Weapons
+} VehicleType

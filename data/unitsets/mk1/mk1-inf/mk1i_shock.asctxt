@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = SHOCK TROOPER
+   parent = 201
+   ID = 17
+   Description = Shock Trooper
+   Infotext = [The Shock Trooper is a light infantry unit whose primary purpose
+              is to capture enemy installations and take out enemy infantry.
+              A Shock Trooper unit is armed with rifles and a packet of explosives
+              in case it comes up against a heavy obstacle. Keep in mind that
+              the explosives are not very effective. A Shock Trooper can get
+              to its target faster than any other Trooper. #crt# #color2# #crt# Pros: #crt# -
+              Can capture buildings #crt# - Can enter most terrain #crt#- Fast
+              movement rate for a trooper #crt#- Effective against infantry #crt# #color4# #crt# Cons: #crt# -
+              Ineffective against most vehicles
+              #crt# #crt#
+              Der Shock Trooper ist eine leichte Infanterieeinheit deren Primärzweck es ist, 
+              feindliche Anlagen zu erobern und feindliche Infanterie auszuschalten. Eine 
+              Einheit ist mit Gewehren und einem Paket Minen bewaffnet. Beachten Sie , dass 
+              die nicht sehr wirkungsvoll sind. Ein Shock Trooper kann schneller als alle 
+              anderen Trooper an sein Ziel gelangen. #CRT# 
+              - kann Gebäude erobern #CRT# 
+              - kann das meiste Terrain #crt# 
+              - schnelle Bewegung für einen Trooper #CRT# 
+              - wirkungsvoll gegen Infanterie #CRT# ]
+   picture = MK1i_shock.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 3
+      Weapon0.Punch@MinRange -= 3
+      Weapon0.Name = Maschinengewehr
+      
+      Weapon1.Name = Tellermine
+   } Weapons
+} VehicleType
+

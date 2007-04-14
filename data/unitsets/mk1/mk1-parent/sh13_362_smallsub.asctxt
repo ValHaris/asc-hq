@@ -1,0 +1,44 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402 493
+   ID = 362
+
+   Name = small submarine
+   Description = small sumarine
+   Infotext = []
+   GuideSortHelp = 519 362 552 0 0 0 0 0 0 0
+
+   Armor = 500
+   View = 20
+   Jamming = 39
+   WaitFortack = false
+   Abilities = jam_only_own_field fuel_transfer sonar manual_resource_drilling mine_layer view_mines
+   Category = light_ship
+   MaxSurvivableStorm = 210
+   ResourceDrillingRange = 5
+   SelfRepairRate = 0
+   Weight = 100
+   Transportation ->* VehicleType.TransSubTrooper 
+
+   Height = deep_submerged submerged floating 
+   Tank { 
+      Energy = 0
+      Material = 500
+      fuel = 2000
+   } Tank
+   FuelConsumption = 15
+   Movement = 55 55 40 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.verysmallship_allterrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 115
+   ;Bezeichnung der verknüpften Technologie: Shine
+   TechnologiesRequired = 115
+} TechAdapter

@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Flux Wreckage
+   ID = 472
+   parent = 499
+   Armor = 220
+   RemovalCost { 
+      Energy = 0
+      Material = -1700
+      fuel = 80
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = MK1t_flux_w.pcx 1
+   } dry
+} ObjectType

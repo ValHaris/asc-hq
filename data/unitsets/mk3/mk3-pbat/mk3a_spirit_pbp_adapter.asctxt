@@ -1,0 +1,5 @@
+Techadapter {
+   ; Spirit
+   Name = 513
+   TechnologiesRequired = 513
+} TechAdapter

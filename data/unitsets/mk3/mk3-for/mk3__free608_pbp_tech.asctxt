@@ -1,0 +1,10 @@
+technology {
+   Name = free
+   infotext = 
+   id = 608
+   RelatedUnitID = 
+   parent = 100010
+   researchpoints *= 10
+   techlevel = 2
+   TechnologiesRequired = -1
+} Technology

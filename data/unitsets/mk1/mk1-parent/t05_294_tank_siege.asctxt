@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = siege tank
+   ID = 294
+   parent = 400 401 402 406
+   abstract = true
+   
+   Description = siege tank
+   Infotext = []
+   WreckageObject = 404
+   GuideSortHelp = 503 294 0 0 0 0 0 0 0 0
+
+   Armor = 1050
+   Weight = 150
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1400
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 0 44 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Tank_Gun 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 115
+      Weapon0.Name = Artilleriekanone
+
+      Weapon1 ->* VehicleType.Weapons.Weapon0 
+   } Weapons
+} VehicleType

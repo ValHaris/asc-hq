@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Bolt Wreckage
+   ID = 430
+   parent = 499
+   dry { 
+      picture = MK1v_bolt_w.pcx 1
+   } dry
+} ObjectType

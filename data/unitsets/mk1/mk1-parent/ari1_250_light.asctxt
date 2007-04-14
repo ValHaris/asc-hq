@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = light artillery
+   abstract = true
+   ID = 250
+   parent = 400 401 401 404
+   Description = light artillery
+   Infotext = [The Light Artillery is a good support vehicle. It fires a light
+              shrapnel grenade that is effective against Troopers and vehicles.
+              With its ranged fire, it is an effective defense against ambushes.]
+   GuideSortHelp = 506 250 0 0 0 0 0 0 0 0
+
+   Armor = 400
+   WreckageObject = 401
+   Tank { 
+      fuel = 645
+   } Tank
+   FuelConsumption = 16
+   Movement = 0 0 0 50 0 0 0 0 
+   Weight = 35
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MinRange = 20
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* Vehicletype.Def_MG
+   } Weapons
+} VehicleType

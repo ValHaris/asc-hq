@@ -1,0 +1,10 @@
+technology {
+   Name = Alguin
+   infotext = Forschungsprojekt abgeschlossen! Alguin verfuegbar!
+   id = 10
+   RelatedUnitID = 10
+   parent = 100000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100000,100002 
+} Technology

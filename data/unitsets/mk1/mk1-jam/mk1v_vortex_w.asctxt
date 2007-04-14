@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = vortex wreckage
+   ID = 451
+   parent = 499
+   dry { 
+      picture = MK1v_vortex_w.pcx 1
+   } dry
+} ObjectType

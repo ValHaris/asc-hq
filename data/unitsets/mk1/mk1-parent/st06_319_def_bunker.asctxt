@@ -1,0 +1,58 @@
+VehicleType { 
+   Name = defence bunker
+   parent = 400 401 402 403
+   ID = 319
+   abstract = true
+
+   Description = heavy bunker
+   Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse zu verteidigen.]
+   GuideSortHelp = 507 319 0 0 0 0 0 0 0 0
+
+
+   Armor += 700
+   View = 50
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 300
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+   Abilities = repair_vehicle material_transfer fuel_transfer
+   Weight = 11500
+
+   Tank { 
+      Energy = 0
+      Material = 5000
+      fuel = 5000
+   } Tank
+   FuelConsumption = 0
+   Movement = 0 0 0 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.Turret_lowland 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 22
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 85
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.Flak 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 16
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 80
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.SAMH 
+      Weapon2.MaxRange = 40
+      Weapon2.Ammo = 20
+      Weapon2.Punch@MaxRange = 65
+      Weapon2.Punch@MinRange = 75
+
+   } Weapons
+} VehicleType

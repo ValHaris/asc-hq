@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = HORMONE
+   parent = 400 401 402 409
+   ID = 507
+   Description = transport helicopter
+   Infotext = [Hormone 
+
+Der Hormone ist ein kleiner Transporthelikopter fuer Infanterie und wird hauptsaechlich in Marine-Kampfgruppen eingesetzt. Er ist faehig Taucher in kuerzester Zeit abzusetzen, wenn er von Kreuzern aus operiert, und seine Bewaffnung mit weitreichenden Torpedos machen ihn zu einem ernstzunehmenden Gegner fuer jedes Schiff und U-Boot. Und das alles zu einem guenstigen Preis.
+
+The Hormone is a small personell transport helicopter for use in naval battle groups.
+It is able to quickly insert personell into the battle when operating from cruiser platforms and its ability to fire torpedoes from a range at ships and submarines alike make is a fast and cheap choice for anti-naval combat.
+]
+   picture = MK3h_hormone.pcx
+   GuideSortHelp = 515 552 601 566 3 0 0 0 0 0
+
+   Armor = 350
+   Weight = 30
+   Abilities += sonar 
+
+   Transportation ->* VehicleType.TransHeliTrooper 
+   Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2500
+   } Tank
+   FuelConsumption = 20
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* Vehicletype.Air_MG 
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 43
+      Weapon0.Punch@MinRange = 43
+      
+      Weapon1 ->* VehicleType.AUTorp 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 105
+   } Weapons
+} VehicleType

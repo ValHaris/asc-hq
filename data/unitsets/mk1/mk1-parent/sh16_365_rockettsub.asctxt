@@ -1,0 +1,45 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402 493
+   ID = 365
+
+   Name = rocket submarine
+   Description = rocket submarine
+   Infotext = []
+   WreckageObject = 435
+   GuideSortHelp = 519 365 0 0 0 0 0 0 0 0
+
+
+   Armor = 1000
+   View = 30
+   Jamming = 0
+   WaitFortack = false
+   Abilities = sonar
+   Category = heavy_ship
+   MaxSurvivableStorm = 220
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 6000
+
+   Height = deep_submerged submerged floating 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5000
+   } Tank
+   FuelConsumption = 35
+   Movement = 66 66 60 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.very_bigship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

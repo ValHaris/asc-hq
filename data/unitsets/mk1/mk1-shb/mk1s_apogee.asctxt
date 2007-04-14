@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = APOGEE
+   ID = 37
+   parent = 357
+
+   picture = MK1s_APOGEE.pcx
+   WreckageObject = 437
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 100
+
+   Weapons { 
+      Initiative = 20
+      Number = 4
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 80
+      Weapon0.MinRange = 40
+      Weapon0.Ammo = 14
+      Weapon0.ReactionFireShots = 0
+      Weapon0.Punch@MaxRange = 98
+      Weapon0.Punch@MinRange = 185
+
+      Weapon1 ->* VehicleType.Ship_MG 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.Ship_Artillery
+      Weapon2.MaxRange = 50
+      Weapon2.MinRange = 10
+      Weapon2.Ammo = 16
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 100
+      Weapon2.ReactionFireShots = 2
+
+      Weapon3 ->* VehicleType.Ship_Flak 
+      Weapon3.Ammo = 12
+   } Weapons
+} VehicleType

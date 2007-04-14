@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = TIMBER
+   parent = 278
+   ID = 29
+   Description = Long-Range Bomber
+   Infotext = [Long Range Bombers are heavy support airplanes. They carry 300
+              kg bombs capable of turning an enemy tank unit into a smoking
+              crater. Beware of other planes, however, as Bombers have no
+              air defense. Due to the altitude at which the bombs are dropped,
+              and the inaccuracy that accompanies it.]
+   Picture = MK1a_timber.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+} VehicleType

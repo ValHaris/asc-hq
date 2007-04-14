@@ -1,0 +1,5 @@
+Techadapter {
+   ; Blackbird
+   Name = 518
+   TechnologiesRequired = 518
+} TechAdapter

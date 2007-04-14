@@ -1,0 +1,10 @@
+technology {
+   Name = Rasak
+   infotext = Forschungsprojekt abgeschlossen! Rasak verfuegbar!
+   id = 123
+   RelatedUnitID = 123
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100003,100103,100206,19,92 
+} Technology

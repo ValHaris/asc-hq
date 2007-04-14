@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = light fighter
+   parent = 400 401 413 498 
+   abstract = true
+   ID = 270
+
+   Description = light fighter
+   Infotext = []
+   GuideSortHelp = 270 512 0 0 0 0 0 0 0 0
+
+   Armor = 300
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4500
+   } Tank
+   FuelConsumption = 24
+   Movement = 0 0 0 60 200 200 0 0 
+   Weight = 60
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.smAAM 
+      Weapon0.Ammo = 4
+
+      Weapon1 ->* VehicleType.AirH_MG 
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 40
+      Weapon1.Punch@MinRange = 40
+
+      Weapon2 ->* VehicleType.smAAM2 
+      Weapon2.Ammo = 3
+
+      Weapon3 ->* VehicleType.AAMH 
+      Weapon3.Ammo = 2
+   } Weapons
+} VehicleType

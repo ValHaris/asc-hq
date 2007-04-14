@@ -1,0 +1,10 @@
+technology {
+   Name = Tupi
+   infotext = Forschungsprojekt abgeschlossen! Tupi verfuegbar!
+   id = 55
+   RelatedUnitID = 55
+   parent = 100000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100000,100003,100102,100207,23 
+} Technology

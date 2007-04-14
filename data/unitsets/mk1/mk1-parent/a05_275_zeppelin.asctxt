@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = ZEPPELIN
+   parent = 400 401 402 413 497 
+   ID = 275
+   abstract = true
+
+   Description = zeppelin
+   Infotext = 
+   GuideSortHelp = 275 276 511 0 0 0 0 0 0 0
+
+   Armor = 290
+   Weight = 160
+   View = 50
+   abilities = move_after_attack no_midair_refuel
+   Transportation ->* VehicleType.TransHeliTrooper 
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } Tank
+   FuelConsumption = 10
+   Movement = 0 0 0 30 110 110 0 0 
+   TerrainAccess ->* VehicleType.heli_Terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* vehicleType.medBomb 
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* vehicleType.ASM 
+      Weapon1.Ammo = 4
+      Weapon1.MaxRange = 20
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 85
+
+      Weapon2 ->* VehicleType.Air_MG 
+
+   } Weapons
+} VehicleType

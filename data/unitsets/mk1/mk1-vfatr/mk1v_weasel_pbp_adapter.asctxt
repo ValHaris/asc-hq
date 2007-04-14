@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 6
+   ;Bezeichnung der verknüpften Technologie: Weasel
+   TechnologiesRequired = 6
+} TechAdapter

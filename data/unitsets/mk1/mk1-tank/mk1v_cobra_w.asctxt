@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Cobra Wreckage
+   ID = 463
+   parent = 499
+   dry { 
+      picture = MK1v_cobra_w.pcx 1
+   } dry
+} ObjectType

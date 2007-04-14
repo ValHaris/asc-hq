@@ -1,0 +1,10 @@
+technology {
+   Name = Ralago
+   infotext = Forschungsprojekt abgeschlossen! Ralago verfuegbar!
+   id = 78
+   RelatedUnitID = 78
+   parent = 100000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100000,100003,100104,100207,23,55,54 
+} Technology

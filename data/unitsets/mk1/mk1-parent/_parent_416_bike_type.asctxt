@@ -1,0 +1,46 @@
+VehicleType {
+   Name = Bike
+   abstract = true
+   parent =  401 402
+   ID = 416
+   Description = schweres Motorrad
+   Infotext = [Spezialfahrzeug der Sirenen.]
+   RecommendedAIJob = fight
+   Armor = 290
+   View = 30
+   WreckageObject = 497 496
+   Height = ground_level 
+   Jamming = 0
+   WaitFortack = false
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 10
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT 
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 400
+   } Tank
+   FuelConsumption = 8
+   Abilities = conquer_buildings move_after_attack leaves_tracks
+   Movement = 0 0 0 100 0 0 0 0 
+   Category = light_wheeled_vehicle
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 2
+   TerrainAccess ->* VehicleType.offroad 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

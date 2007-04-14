@@ -1,0 +1,5 @@
+Techadapter {
+   ; Bulldozer
+   Name = 540
+   TechnologiesRequired = 540
+} TechAdapter

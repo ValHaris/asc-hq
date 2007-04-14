@@ -1,0 +1,52 @@
+VehicleType { 
+   Name = heavy vto
+   parent = 400 401 402 415 497
+   ID = 340
+   abstract = true
+
+   Description = heavy vto
+   Infotext = []
+   GuideSortHelp = 340 513 561 0 0 0 0 0 0 0
+
+   Armor = 600
+   View = 50
+   Weight = 300
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Transportation ->* VehicleType.TransPlaneLight 
+   Abilities = move_after_attack MoveDuringReactionFire
+
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 7000
+   } Tank
+   FuelConsumption = 30
+   Movement = 0 0 0 30 60 80 70 0 
+
+   TerrainAccess ->* VehicleType.Heli_terrain 
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.AAMH 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 75
+
+      Weapon1 ->* VehicleType.ASM
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 120
+
+      Weapon2 ->* VehicleType.ASM
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 10
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 90
+
+      Weapon3 ->* VehicleType.AirHG_MG
+      Weapon3.Ammo = 20
+   } Weapons
+} VehicleType

@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Destroyer Wreckage
+   ID = 438
+   parent = 498
+   Armor = 400
+   RemovalCost { 
+      Energy = 0
+      Material = -4000
+      fuel = 400
+      Movement = 40
+   } RemovalCost
+   dry { 
+      picture = MK1s_streak.pcx 1
+   } dry
+} ObjectType

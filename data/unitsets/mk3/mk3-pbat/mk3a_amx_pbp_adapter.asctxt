@@ -1,0 +1,5 @@
+Techadapter {
+   ; AMX
+   Name = 500
+   TechnologiesRequired = 500
+} TechAdapter

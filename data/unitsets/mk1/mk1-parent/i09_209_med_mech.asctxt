@@ -1,0 +1,29 @@
+VehicleType { 
+   abstract = true
+   Name = medium mech
+   ID = 209
+
+   parent = 400 401 402 408
+   Description = medium mech
+   Infotext = []
+   GuideSortHelp = 502 209 0 0 0 0 0 0 0 0
+
+   Armor = 390
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 10
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.smSAM 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.MiniGun 
+
+   } Weapons
+} VehicleType

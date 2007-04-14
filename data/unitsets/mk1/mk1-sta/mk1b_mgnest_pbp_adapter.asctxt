@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 104
+   ;Bezeichnung der verknüpften Technologie: MGNest
+   TechnologiesRequired = 104
+} TechAdapter

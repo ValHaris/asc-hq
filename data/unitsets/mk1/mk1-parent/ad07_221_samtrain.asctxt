@@ -1,0 +1,37 @@
+VehicleType { 
+   abstract = true
+   Name = SAM Train
+   ID = 221
+   parent = 400 401 402 412
+
+   Description = Anti aircraft train
+   Infotext = []
+   GuideSortHelp = 221 508 0 0 0 0 0 0 0 0
+
+   WaitFortack = true
+   Abilities += MoveDuringReactionFire
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1100
+   } Tank
+   FuelConsumption = 13
+
+   Weapons { 
+      Initiative = 20
+      Number = 2
+
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.MaxRange = 70
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 10
+      Weapon0.Reactionfireshots = 1
+
+      Weapon1 ->* VehicleType.SAMH
+      Weapon1.MaxRange = 30
+      Weapon1.Reactionfireshots = 1
+
+      Weapon2 ->* VehicleType.Def_MG 
+
+   } Weapons
+} VehicleType

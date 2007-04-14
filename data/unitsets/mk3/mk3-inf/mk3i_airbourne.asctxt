@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = AIRBOURNE
+   ID = 613
+   parent = 207
+   Description = Paratrooper
+   Infotext = [The Paratrooper is the ideal unit for surprise attacks. It has
+              the same armament as the regular Shock Trooper, excepting the
+              explosives. In addition, it is equipped with a parachute so
+              it can exit an airborne plane. These Troopers are slower than
+              Shock Troopers, due to the weight of the parachute.]
+   Armor -= 10
+   picture = MK3i_airbourne.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Movement += 0 0 0 1 0 0 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 3
+      Weapon0.Punch@MinRange += 3
+   } Weapons
+} VehicleType

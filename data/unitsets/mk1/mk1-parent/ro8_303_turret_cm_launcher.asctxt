@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = turret CM launcher
+   ID = 303
+   abstract = true
+   parent = 400 401 402 422
+
+   Description = turret CM laucher
+   Infotext = [ bedingt mobile stationaere Boden-Boden Raketenabschußrampe. ]
+   GuideSortHelp = 505 303 0 0 0 0 0 0 0 0
+
+
+   Armor -= 200
+   Weight = 320
+   View = 10
+   WaitFortack = true
+   Abilities += no_reactionfire
+   TerrainAccess ->* VehicleType.Turret_only 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 180
+      Weapon0.MinRange = 90
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+   } Weapons
+} VehicleType

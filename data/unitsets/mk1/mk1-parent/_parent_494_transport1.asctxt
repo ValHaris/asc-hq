@@ -1,0 +1,18 @@
+VehicleType { 
+   abstract = true
+   ID = 494
+   Transportation { 
+      EntranceSystemNum = 2
+      EntranceSystem1 {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight medium_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        DisableAttack = true
+        RequireUnitFunction = paratrooper
+      } EntranceSystem1
+   } Transportation
+} VehicleType

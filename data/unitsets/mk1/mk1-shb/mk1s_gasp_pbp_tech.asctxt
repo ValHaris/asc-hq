@@ -1,0 +1,10 @@
+technology {
+   Name = Gasp
+   infotext = Forschungsprojekt abgeschlossen! Gasp verfuegbar!
+   id = 28
+   RelatedUnitID = 28
+   parent = 100000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100000,100004,100102,100202,100211,41,38,80,47 
+} Technology

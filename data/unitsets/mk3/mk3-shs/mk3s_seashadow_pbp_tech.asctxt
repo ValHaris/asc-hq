@@ -1,0 +1,10 @@
+technology {
+   Name = SeaShadow
+   infotext = 
+   id = 561
+   RelatedUnitID = 561
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100004,100103,100305 
+} Technology

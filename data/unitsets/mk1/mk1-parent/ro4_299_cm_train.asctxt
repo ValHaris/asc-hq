@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = CM Train
+   ID = 299
+   abstract = true
+   parent = 400 401 402 412
+
+   Description = railroad rocket
+   Infotext = [Railbased medium range surface-surface rocket system.]
+   WreckageObject = 483
+   GuideSortHelp = 505 299 0 0 0 0 0 0 0 0
+
+
+   Armor = 350
+   WaitFortack = true
+   Abilities = no_reactionfire
+   Weight = 250
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2200
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 0 80 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 120
+      Weapon0.MinRange = 50
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 140
+   } Weapons
+} VehicleType

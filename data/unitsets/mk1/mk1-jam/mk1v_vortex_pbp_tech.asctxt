@@ -1,0 +1,10 @@
+technology {
+   Name = Vortex
+   infotext = Forschungsprojekt abgeschlossen! Vortex verfuegbar!
+   id = 51
+   RelatedUnitID = 51
+   parent = 100000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100000,100002,100104,100306,326 
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = Surveyor
+   infotext = Forschungsprojekt abgeschlossen! Surveyor verfuegbar!
+   id = 40
+   RelatedUnitID = 40
+   parent = 100000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100000,100002,100101 
+} Technology

@@ -1,0 +1,14 @@
+ObjectType { 
+   Name = Oracle Wreckage
+   ID = 416
+   parent = 499
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 100
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = MK1v_oracle_w.pcx 1
+   } dry
+} ObjectType

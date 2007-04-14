@@ -1,0 +1,5 @@
+Techadapter {
+   ; Lance
+   Name = 565
+   TechnologiesRequired = 565
+} TechAdapter

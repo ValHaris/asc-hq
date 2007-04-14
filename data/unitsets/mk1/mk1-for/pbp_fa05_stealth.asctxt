@@ -1,0 +1,16 @@
+ Technology {
+   name = "stealth technology"
+   infotext = "advanced technology"
+   id = 100305
+   researchpoints = 1000
+   
+   techlevel = 4
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

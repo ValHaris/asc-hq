@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = light bomber
+   parent = 400 401 402 413 498
+   ID = 276
+   abstract = true
+   
+   Description = light bomber
+   Infotext = [light bomber]
+   GuideSortHelp = 276 511 0 0 0 0 0 0 0 0
+
+   Armor = 310
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4500
+   } Tank
+   FuelConsumption = 26
+   Movement = 0 0 0 60 180 180 0 0 
+   Weight = 70
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.smAAM 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 60
+      Weapon0.Punch@MinRange = 60
+
+      Weapon1 ->* VehicleType.Air_MG 
+
+      Weapon2 ->* VehicleType.medBomb 
+      Weapon2.Ammo = 8
+      Weapon2.Punch@MaxRange = 110
+      Weapon2.Punch@MinRange = 110
+
+   } Weapons
+} VehicleType

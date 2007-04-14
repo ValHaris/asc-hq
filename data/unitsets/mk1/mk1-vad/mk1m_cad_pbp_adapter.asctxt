@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 74
+   ;Bezeichnung der verknüpften Technologie: CAD
+   TechnologiesRequired = 74
+} TechAdapter

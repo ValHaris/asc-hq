@@ -1,0 +1,10 @@
+technology {
+   Name = Burke
+   infotext = 
+   id = 584
+   RelatedUnitID = 584
+   parent = 100010
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100010,100004,100102,100211,581,582,583 
+} Technology

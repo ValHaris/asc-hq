@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = SPIKE
+   ID = 64
+   parent = 220
+
+   Description = AA-rocket system
+   Infotext = [The AA-artillery unit is one of the most dangerous anti-air weapons
+              on wheels. It's armed with ranged Surface to Air Missiles that
+              can be quickly fired after the unit has come to a halt ]
+   Picture = MK1v_spike.pcx
+   WreckageObject = 464
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor +=20
+   Movement -= 0 0 0 11 0 0 0 0 
+   Weight = 43
+   Weapons { 
+      Weapon0.MaxRange = 50
+      Weapon0.Punch@MaxRange -= 3
+      Weapon0.Punch@MinRange -= 3
+   } Weapons
+} VehicleType

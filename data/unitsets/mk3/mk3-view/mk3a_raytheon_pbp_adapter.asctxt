@@ -1,0 +1,5 @@
+Techadapter {
+   ; Raytheon
+   Name = 515
+   TechnologiesRequired = 515
+} TechAdapter

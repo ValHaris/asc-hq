@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = PRIMEROSE
+   ID = 88
+   parent = 232
+
+   Description = Attack Satellite
+   Infotext = [top secret]
+   Picture = MK1o_PRIMEROSE.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 2
+      Weapon0.Punch@MinRange -= 2
+
+      Weapon1.Punch@MaxRange -= 4
+      Weapon1.Punch@MinRange -= 4
+   } Weapons
+} VehicleType

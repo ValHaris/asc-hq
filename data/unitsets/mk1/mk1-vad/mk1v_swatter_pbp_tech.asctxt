@@ -1,0 +1,10 @@
+technology {
+   Name = Swatter
+   infotext = Forschungsprojekt abgeschlossen! Swatter verfuegbar!
+   id = 18
+   RelatedUnitID = 18
+   parent = 100000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100000,100002
+} Technology

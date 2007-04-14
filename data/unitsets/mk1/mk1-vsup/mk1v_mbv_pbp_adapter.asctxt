@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 85
+   ;Bezeichnung der verknüpften Technologie: MBV
+   TechnologiesRequired = 85
+} TechAdapter

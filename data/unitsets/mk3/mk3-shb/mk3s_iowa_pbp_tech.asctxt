@@ -1,0 +1,10 @@
+technology {
+   Name = Iowa
+   infotext = 
+   id = 541
+   RelatedUnitID = 541
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100004,100104,100211,581,582,583,584,566 
+} Technology

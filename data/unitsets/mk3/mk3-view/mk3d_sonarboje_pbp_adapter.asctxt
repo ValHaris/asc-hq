@@ -1,0 +1,5 @@
+Techadapter {
+   ; Sonarboje
+   Name = 621
+   TechnologiesRequired = 100208
+} TechAdapter

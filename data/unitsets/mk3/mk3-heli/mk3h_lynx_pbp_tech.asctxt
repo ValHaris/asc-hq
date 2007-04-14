@@ -1,0 +1,10 @@
+technology {
+   Name = Lynx
+   infotext = 
+   id = 604
+   RelatedUnitID = 604
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100003,100104,100207,507,503,504 
+} Technology

@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = RASAK
+   ID = 123
+   parent = 327
+
+   Picture = MK1a_RASAK.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor +=20
+   
+} VehicleType

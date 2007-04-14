@@ -1,0 +1,10 @@
+technology {
+   Name = Nighthawk
+   infotext = 
+   id = 516
+   RelatedUnitID = 516
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100003,100104,100205,100206,505,100305 
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = Vertic
+   infotext = Forschungsprojekt abgeschlossen! Vertic verfuegbar!
+   id = 33
+   RelatedUnitID = 33
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100003,100103,100205,100206,21,52 
+} Technology

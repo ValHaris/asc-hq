@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = GAINFUL
+   ID = 553
+   parent = 224
+
+   Description = SAM medium range
+   Picture = Mk3v_gainful.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 20
+
+   Weapons {
+      Weapon0.Punch@MaxRange += 3
+      Weapon0.Punch@MinRange += 3
+   } Weapons
+} VehicleType

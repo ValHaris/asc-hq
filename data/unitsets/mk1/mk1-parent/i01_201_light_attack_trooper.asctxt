@@ -1,0 +1,24 @@
+VehicleType { 
+   abstract = true
+   Name = light attack trooper
+   parent = 400 401 410
+   ID = 201
+
+   Description = light attack trooper
+   Infotext = []
+   GuideSortHelp = 501 201 562 0 0 0 0 0 0 0
+
+   Armor = 180
+   Abilities += mine_layer view_mines
+   Movement = 0 0 0 48 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MG35low
+      Weapon0.Name = Maschinengewehr
+
+      Weapon1 ->* VehicleType.MineWeapon
+      Weapon1.Name = Tellermine 
+   } Weapons
+} VehicleType
+

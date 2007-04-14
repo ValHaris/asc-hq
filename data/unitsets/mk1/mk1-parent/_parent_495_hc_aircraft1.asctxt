@@ -1,0 +1,34 @@
+VehicleType {
+   name = Parent Height Change Aircraft
+   abstract = true
+   ID = 495
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 {
+      movecost = 40
+      heightdelta = 1
+      dist = 1
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 25
+      heightdelta = 1
+      dist = 1
+      startheight = low_level_flight medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 15
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight high_level_flight orbit
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 30
+      heightdelta = -1
+      dist = 1
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod3
+} VehicleType

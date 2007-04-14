@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = THUNDERBOLT
+   parent = 280
+   ID = 529
+
+   Picture = MK3a_THUNDERBOLT.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 5
+
+   Movement += 0 0 0 0 10 10 0 0 
+   Weight = 70
+
+   Weapons { 
+      Weapon1.Punch@MaxRange += 4
+      Weapon1.Punch@MinRange += 4
+
+      Weapon2.Punch@MaxRange += 5
+      Weapon2.Punch@MinRange += 5
+   } Weapons
+} VehicleType

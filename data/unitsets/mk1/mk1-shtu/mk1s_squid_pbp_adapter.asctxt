@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 91
+   ;Bezeichnung der verknüpften Technologie: Squid
+   TechnologiesRequired = 91
+} TechAdapter

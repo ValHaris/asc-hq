@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = SDI
+   ID = 511
+   parent = 238
+   Description = SpaceDefenceSystem
+   Infotext = [Main space defence system - medium range rockets to fight against enemy satellites, 
+   spaceships and spacestations.]
+   Picture = MK3B_SDI.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Weapons { 
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 4
+   } Weapons
+} VehicleType

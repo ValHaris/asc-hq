@@ -1,0 +1,19 @@
+VehicleType {
+   Name = radar turret
+   abstract = true
+   ID = 244
+   parent = 400 401 402 422
+   Description = radar turret
+   Infotext = [ground radar system]
+   GuideSortHelp = 0 244 0 0 0 0 0 0 0 0
+
+   Armor -= 100
+   View = 105
+   Abilities += satelliteview
+
+   TerrainAccess ->* VehicleType.turret_only
+   Weapons {
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

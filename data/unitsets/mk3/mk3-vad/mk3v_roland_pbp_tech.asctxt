@@ -1,0 +1,10 @@
+technology {
+   Name = Roland
+   infotext = 
+   id = 532
+   RelatedUnitID = 532
+   parent = 100010
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 100010,100002,100103,100202,100310,533,556 
+} Technology

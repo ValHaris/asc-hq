@@ -1,0 +1,5 @@
+Techadapter {
+   ; Skjold
+   Name = 590
+   TechnologiesRequired = 590
+} TechAdapter

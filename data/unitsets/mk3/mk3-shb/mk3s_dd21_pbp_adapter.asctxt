@@ -1,0 +1,5 @@
+Techadapter {
+   ; DD21
+   Name = 609
+   TechnologiesRequired = 609
+} TechAdapter

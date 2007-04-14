@@ -1,0 +1,10 @@
+technology {
+   Name = ElitePioneers
+   infotext = 
+   id = 576
+   RelatedUnitID = 576
+   parent = 100010
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 100010,100001,100103,548,549 
+} Technology

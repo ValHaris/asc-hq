@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = STARLIFTER
+   parent = 401 402 415 496
+   ID = 519
+   
+   Description = transport plane
+   picture = MK3a_starlifter.pcx
+   GuideSortHelp = 550 551 0 0 3 0 0 0 0 0
+
+   Armor = 300
+   View = 30
+   Transportation ->* VehicleType.TransPlane 
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 7000
+   } Tank
+   FuelConsumption = 24
+   Abilities = material_transfer
+   Movement = 0 0 0 65 160 160 0 0 
+   Weight = 250
+} VehicleType

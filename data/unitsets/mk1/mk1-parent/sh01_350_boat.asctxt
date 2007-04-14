@@ -1,0 +1,44 @@
+VehicleType {
+   abstract = true 
+   parent = 400 401 402
+   ID = 350
+
+   Name = boat
+   Description = boat
+   Infotext = []
+   WreckageObject = 441
+   GuideSortHelp = 0 350 0 0 0 0 0 0 0 0
+
+
+   Armor = 500
+   View = 40
+   Jamming = 0
+   WaitFortack = false
+   Abilities = MoveDuringReactionFire
+   Category = light_ship
+   MaxSurvivableStorm = 160
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 150
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 81 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.verysmallship_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

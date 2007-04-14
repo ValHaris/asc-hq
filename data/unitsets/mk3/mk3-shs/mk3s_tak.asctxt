@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = TAK 3015
+   parent = 370
+   ID = 543
+   
+   Description = armored supply ship
+   picture = MK3s_tak.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+
+   Movement += 0 0 10 0 0 0 0 0 
+
+   Weapons { 
+      Weapon2.Ammo = 200
+   } Weapons
+} VehicleType

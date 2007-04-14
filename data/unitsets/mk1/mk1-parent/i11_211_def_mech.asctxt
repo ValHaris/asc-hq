@@ -1,0 +1,33 @@
+VehicleType { 
+   abstract = true
+   Name = defence mech
+   ID = 211
+   parent = 400 401 402 408
+
+   Description = defence mech
+   Infotext = []
+   GuideSortHelp = 502 211 507 0 0 0 0 0 0 0
+
+   Armor = 440
+   Weight += 1
+   Abilities += moveduringreactionfire
+   Movement -= 0 0 0 10 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.Flak 
+      Weapon1.Reactionfireshots = 1 
+      Weapon1.Ammo = 10
+
+      Weapon2 ->* VehicleType.MiniGun
+      Weapon2.Reactionfireshots = 1 
+      Weapon2.Ammo = 10
+
+   } Weapons
+} VehicleType

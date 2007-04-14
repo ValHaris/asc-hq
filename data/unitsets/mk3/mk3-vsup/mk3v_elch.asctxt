@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = ELCH
+   ID = 547
+   parent = 336
+
+   Description = construction vehicle
+   Infotext = [The Construction Vehicle is necessary for the construction of
+              infrastructure such as bridges railroads and pipelines.
+              A very important unit if you aspire a well defended, smoothly
+              operating base.]
+   picture = MK3v_elch.pcx
+   GuideSortHelp = 556 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Abilities += material_transfer
+
+   Tank { 
+      Material = 5000
+      fuel = 5000
+   } Tank
+   FuelConsumption = 14
+   Movement = 0 0 0 70 0 0 0 0 
+   TerrainAccess ->* VehicleType.Offroad 
+   TerrainAccess.terrain_any = road runway railroad hard_sand lowland soft_sand ditch hillside Frozen_water
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 2 3 30 999 1000 998 997 996 995
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 2 3 4 6 8 9 13 15
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

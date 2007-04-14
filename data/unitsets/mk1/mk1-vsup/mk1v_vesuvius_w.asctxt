@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Vesuvius Wreckage
+   ID = 412
+   parent = 499
+   dry { 
+      picture = MK1v_vesuvius_w.pcx 1
+   } dry
+} ObjectType

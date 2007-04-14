@@ -1,0 +1,10 @@
+technology {
+   Name = Airbourne
+   infotext = 
+   id = 613
+   RelatedUnitID = 613
+   parent = 100010
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 100010,100001,100101,100311 
+} Technology

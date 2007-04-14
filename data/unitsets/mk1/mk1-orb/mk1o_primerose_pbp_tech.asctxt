@@ -1,0 +1,10 @@
+technology {
+   Name = Primerose
+   infotext = Forschungsprojekt abgeschlossen! Primerose verfuegbar!
+   id = 88
+   RelatedUnitID = 88
+   parent = 100000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100000,100003,100104,100302,86 
+} Technology

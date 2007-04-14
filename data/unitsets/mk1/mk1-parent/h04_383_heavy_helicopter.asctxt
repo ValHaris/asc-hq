@@ -1,0 +1,49 @@
+VehicleType { 
+   Name = heavy helicopter
+   parent = 400 401 402 409 497
+   ID = 383
+   abstract = true
+   
+   Description = Heavy Helicopter
+   Infotext = [Attack Helicopters are short range killing machines. They have
+              missiles to blow up both air and ground targets, making them
+              ideal and diverse. On top of that, they have a machine gun mounted
+              under the nose, giving it an edge over the faster and stronger
+              Fighter/Bomber. An Attack Helicopter still cannot hope to survive
+              a run-in with a squad of SAM Troopers, though.]
+   GuideSortHelp = 515 383 0 0 0 0 0 0 0 0
+
+
+   Armor = 430
+   Weight = 85
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+
+   FuelConsumption = 26
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.ASM 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* VehicleType.smAAM 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 68
+      Weapon1.Punch@MinRange = 68
+      
+      Weapon2 ->* VehicleType.Air_MG 
+      
+      Weapon3 ->* VehicleType.ASM 
+      Weapon3.MaxRange = 20
+      Weapon3.Ammo = 6
+      Weapon3.Punch@MaxRange = 80
+      Weapon3.Punch@MinRange = 80
+   } Weapons
+} VehicleType

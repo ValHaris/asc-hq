@@ -1,0 +1,10 @@
+technology {
+   Name = Adder
+   infotext = Forschungsprojekt abgeschlossen! Adder verfuegbar!
+   id = 50
+   RelatedUnitID = 50
+   parent = 100000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100000,100002,100102 
+} Technology

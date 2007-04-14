@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = BERKUT
+   parent = 330
+   ID = 560
+   Description = heavy mixed fighter
+   Infotext = [Berkut
+
+Der Berkut Prototyp ist ein Multifunktions-Jäger. Seine Waffen sind fähig alle Arten von Boden-, 
+Luft- und sogar Orbitalzielen anzugreifen. Der Berkut erreicht auf allen atmosphärischen 
+Höhenstufen hohe Geschwindigkeiten. Die einzigen Nachteile sind sein hoher Preis und die 
+Unfähigkeit Distanzangriffe zu fliegen.
+
+The Berkut is a prototype fighter that is capable of performing multirole engagements.
+Its weapons are able of attacking all kinds of ground, air and even orbital targets.
+The Berkut moves at very high speeds on all atmospheric altitudes.
+Its only downside is its high price and its inability to perform ranged attacks.
+]
+   picture = MK3a_berkut.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Jamming = 21
+   Abilities += jam_only_own_field
+   Movement += 0 0 0 0 0 10 10 0 
+   Weight = 105
+
+   Weapons { 
+   } Weapons
+} VehicleType

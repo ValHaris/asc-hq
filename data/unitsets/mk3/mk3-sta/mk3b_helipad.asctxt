@@ -1,0 +1,50 @@
+VehicleType { 
+   Name = Helipad
+   parent = 400 401 402 422
+   ID = 579
+   
+   Description = mobile helicenter
+   Infotext = [Diese mobile Helicopterreparaturwerkstatt ist schnell aufgebaut und einsatzbereit. Sie verfügt über leichte Verteidigungseinrichtungen und bietet schnellen Service für beschädigte oder treibstoffarme Helicopter und VTOs.]
+   picture = MK3b_helipad.pcx
+   WreckageObject = 472
+   GuideSortHelp = 550 553 565 0 3 0 0 0 0 0
+
+   Armor -= 200
+   Jamming = 21
+   Transportation { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 300 
+      CategoriesNOT = 
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.Cruiser_ground
+   } Transportation
+   Abilities = fuel_transfer material_transfer repair_vehicle jam_only_own_field
+   Weight = 190
+
+   Tank { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } Tank
+   FuelConsumption = 0
+   TerrainAccess ->* VehicleType.turret_lowland 
+
+   Weapons { 
+      Initiative = 0
+      Number = 7
+      Weapon0 ->* VehicleType.MiniGun
+      Weapon1 ->* VehicleType.AmmoBomb
+      Weapon1.Ammo = 40
+      Weapon2 ->* VehicleType.AmmoAM
+      Weapon2.Ammo = 35
+      Weapon3 ->* VehicleType.AmmoGM
+      Weapon3.Ammo = 35
+      Weapon4 ->* VehicleType.AmmoCannon
+      Weapon4.Ammo = 40
+      Weapon5 ->* VehicleType.AmmoMG
+      Weapon5.Ammo = 100
+      Weapon6 ->* VehicleType.AmmoTorp
+      Weapon6.Ammo = 15
+   } Weapons
+} VehicleType

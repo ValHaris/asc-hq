@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = transport helicopter
+   parent = 400 401 402 409
+   ID = 384
+   abstract = true
+   
+   Description = Transport Helicopter
+   Infotext = [If you have no Paratroopers available, but just NEED to take
+              that power plant, take out your Transport Helicopter. It can
+              carry a small amount of troops across a sizable area in little
+              time. Drawbacks are a lack of armament and a not-so-large fuel
+              tank.]
+   GuideSortHelp = 515 384 551 0 0 0 0 0 0 0
+
+   Armor = 300
+   Weight = 50
+
+   Transportation ->* VehicleType.TransHeli 
+   
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 7000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 35 120 120 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.Ammo = 10
+   } Weapons
+} VehicleType
+                     

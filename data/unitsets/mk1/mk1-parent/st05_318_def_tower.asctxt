@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = defence tower
+   parent = 400 401 402 403
+   ID = 318
+   abstract = true
+   
+   Description = defence tower
+   Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Luftabwehrraketen.]
+   GuideSortHelp = 507 318 0 0 0 0 0 0 0 0
+
+   Armor -= 400
+   View = 60
+   Transportation ->* VehicleType.TransLowTrooper3 
+   Abilities += material_transfer fuel_transfer
+   Weight = 1150
+
+   Tank { 
+      Energy = 0
+      Material = 3000
+      fuel = 3000
+   } Tank
+   TerrainAccess ->* VehicleType.Turret_ditch
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.BigMiniGun
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 20
+      Weapon0.ReactionFireShots = 2
+      
+      Weapon1 ->* VehicleType.SAMH
+      Weapon1.Ammo = 6
+      Weapon1.ReactionFireShots = 1
+      
+      Weapon2 ->* VehicleType.smSSM
+      Weapon2.Punch@MaxRange = 68
+      Weapon2.Punch@MinRange = 68
+      Weapon2.maxRange = 40
+      Weapon2.Ammo = 8
+   } Weapons
+} VehicleType

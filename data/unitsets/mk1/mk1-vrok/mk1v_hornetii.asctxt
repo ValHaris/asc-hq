@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = HORNET II
+   ID = 114
+   parent = 297
+   Description = rocket tank
+   Infotext = [Rocket Tanks may not be as powerful as a Heavy Combat Tank or
+              as fast as a Light Tank, but it has a short range ballistic
+              rocket array which enables the Rocket Tank to back up the heavy
+              guns from a safe distance. Are you in need of quick support
+              and you can't wait for the artillery to arrive? Call in the
+              Rocket Tanks.]
+   Picture = mk1v_hornetII.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 20
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 4
+      Weapon0.Punch@MinRange -= 4
+   } Weapons
+} VehicleType

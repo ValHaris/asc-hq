@@ -1,0 +1,5 @@
+Techadapter {
+   ; Helipad
+   Name = 579
+   TechnologiesRequired = 579
+} TechAdapter

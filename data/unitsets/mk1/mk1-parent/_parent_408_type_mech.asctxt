@@ -1,0 +1,39 @@
+ VehicleType { 
+   Abstract = true
+   ID = 408
+   parent = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   M E C H   W A R R I O R   ------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Infotext = []
+   Armor = 350
+   View = 30
+   Height = ground_level 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 250
+   } Tank
+   FuelConsumption = 5
+   Abilities = conquer_buildings 
+   Movement = 0 0 0 50 0 0 0 0 
+   Category = light_tracked_vehicle
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 5
+   TerrainAccess ->* Vehicletype.mech_trooper_terrain 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

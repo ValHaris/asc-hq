@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = PRD 12
+   parent = 243
+   ID = 544
+
+   Description = light radar
+   Picture = MK3d_prd.pcx
+   GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
+
+   Jamming += 10
+   Abilities += paratrooper
+
+} VehicleType

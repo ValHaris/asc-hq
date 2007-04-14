@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = vehicle wheeled
+   abstract = true
+   ID = 335
+   parent = 400 401 402
+
+   Description = wheeled vehicle
+   Infotext = []
+   WreckageObject = 497 496
+
+   Armor = 400
+   View = 30
+   Jamming = 0
+   Abilities = leaves_tracks 
+   Category = medium_wheeled_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 40
+
+   Height = ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 14
+   Movement = 0 0 0 80 0 0 0 0 
+   TerrainAccess ->* VehicleType.wheeled 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   WaitFortack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

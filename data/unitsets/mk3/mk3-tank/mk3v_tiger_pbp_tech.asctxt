@@ -1,0 +1,10 @@
+technology {
+   Name = TigerPanzer
+   infotext = 
+   id = 595
+   RelatedUnitID = 595
+   parent = 100010
+   researchpoints *= 2
+   techlevel = 1
+   TechnologiesRequired = 100010,100002 
+} Technology

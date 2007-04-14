@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = NOTSTROMAGGREGAT
+   ID = 593
+   parent = 400 401 402 423
+
+   Description = generator vehicle
+   Infotext = [In times of war, energy supplies can not always be distrubuted
+              easily. If a factory is running out of energy, dispatch a Generator
+              Vehicle. Its batteries can hold enough to build a modest army.]
+   picture = MK3b_notstrom.pcx
+   GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
+
+   Abilities += resource_converter 
+   Weight = 10
+
+   Tank { 
+      Energy = 2000
+      Material = 0
+      fuel = 5000
+   } Tank
+   FuelConsumption = 7
+   TerrainAccess ->* VehicleType.device_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

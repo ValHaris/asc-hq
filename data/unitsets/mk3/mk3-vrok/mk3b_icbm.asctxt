@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = ICBM
+   ID = 574
+   parent = 304
+
+   Description = Raketensilo
+   Infotext = [Atlas ICBM Silo]
+   Picture = mk3b_icbm.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 100
+   Jamming = 80
+   Abilities += no_reactionfire jam_only_own_field
+
+   TerrainAccess.terrain_any = hard_sand soft_sand lowland hillside mountains 
+
+} VehicleType

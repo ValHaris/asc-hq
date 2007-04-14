@@ -1,0 +1,5 @@
+Techadapter {
+   ; Raptor
+   Name = 505
+   TechnologiesRequired = 505
+} TechAdapter

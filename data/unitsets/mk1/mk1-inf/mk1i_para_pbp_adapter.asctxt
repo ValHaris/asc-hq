@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 53
+   ;Bezeichnung der verknüpften Technologie: Para Trooper
+   TechnologiesRequired = 53
+} TechAdapter

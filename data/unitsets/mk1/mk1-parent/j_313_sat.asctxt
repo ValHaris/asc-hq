@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = JAM Sat
+   ID = 313
+   parent = 400 401 402 407
+   abstract = true
+   
+   Description = jammer satellite
+   Infotext = [ - geheim -]
+   GuideSortHelp = 516 313 0 0 0 0 0 0 0 0
+
+
+   Jamming = 45
+   Abilities = 
+
+   TerrainAccess ->* Vehicletype.sat_terrain 
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

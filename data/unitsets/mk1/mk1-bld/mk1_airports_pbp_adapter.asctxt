@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B10
+   ;Bezeichnung der verknüpften Technologie: Airport S
+   TechnologiesRequired = 100000
+} TechAdapter

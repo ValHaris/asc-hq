@@ -1,0 +1,41 @@
+ VehicleType { 
+   Abstract = true
+   ID = 410
+   parent = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T R O O P E R   ----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+; -- Shock Trooper --
+
+   WreckageObject = 417
+   RecommendedAIJob = conquer
+   Armor = 200
+   View = 30
+   Height = ground_level 
+   Jamming = 11
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 300
+      fuel = 300
+   } Tank
+   FuelConsumption = 0
+   Abilities = conquer_buildings self_repairing jam_only_own_field
+   Movement = 0 0 0 46 0 0 0 0 
+   Category = trooper
+   MaxSurvivableStorm = 100
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+   Weight = 2
+   TerrainAccess ->* Vehicletype.trooper_terrain 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

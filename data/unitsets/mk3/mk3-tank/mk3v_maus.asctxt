@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = MAUS
+   ID = 615
+   parent = 295
+   Description = [Main Battle Tank]
+   Picture = Mk3v_maus.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor += 100
+   Weight += 10
+
+   Movement = 0 0 0 50 0 0 0 0 
+
+   Weapons { 
+      Number = 3
+
+      Weapon0.Ammo = 3
+      Weapon0.Punch@MaxRange += 15
+      Weapon0.Punch@MinRange += 15
+      Weapon0.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.tank_gun 
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 95
+   } Weapons
+} VehicleType

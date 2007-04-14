@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 49
+   ;Bezeichnung der verknüpften Technologie: Fort
+   TechnologiesRequired = 49
+} TechAdapter

@@ -1,0 +1,10 @@
+technology {
+   Name = T.M.L.
+   infotext = Forschungsprojekt abgeschlossen! T.M.L. verfuegbar!
+   id = 76
+   RelatedUnitID = 76
+   parent = 100000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 100000,100002,100105,100301,100310,7,114,83 
+} Technology

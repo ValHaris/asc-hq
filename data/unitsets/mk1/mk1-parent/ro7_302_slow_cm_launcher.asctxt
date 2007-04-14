@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = slow CM launcher
+   ID = 302
+   abstract = true
+   parent = 400 401 402 406
+
+   Description = slow CM launcher
+   Infotext = []
+   GuideSortHelp = 505 302 0 0 0 0 0 0 0 0
+
+
+   Armor = 250
+   Weight = 210
+   View = 20
+   WaitFortack = true
+   Abilities = no_reactionfire
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 400
+   } Tank
+   FuelConsumption = 40
+   Movement = 0 0 0 16 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = Road Runway lowland Hard_sand Turret_foundation
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks swamp morass deep_snow
+      terrain_kill = swamp Shallow_water Water Deep_water Very_shallow_water River Lava 
+   } TerrainAccess
+
+   Weapons { 
+      Initiative = 127
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 170
+      Weapon0.MinRange = 80
+      Weapon0.Ammo = 1
+   } Weapons
+} VehicleType

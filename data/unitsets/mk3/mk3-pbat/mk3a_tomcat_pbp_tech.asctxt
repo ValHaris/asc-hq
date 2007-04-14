@@ -1,0 +1,10 @@
+technology {
+   Name = Tomcat
+   infotext = 
+   id = 564
+   RelatedUnitID = 564
+   parent = 100010
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100010,100003,100105,100206,509,512,506,623 
+} Technology

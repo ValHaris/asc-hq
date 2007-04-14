@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = medium bomber
+   ID = 277
+   parent = 400 401 402 414 498
+   abstract = true
+   
+   Description = Medium Bomber
+   Infotext = []
+   GuideSortHelp = 277 512 0 0 0 0 0 0 0 0
+
+   Armor = 360
+   Weight = 80
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4500
+   } Tank
+   FuelConsumption = 28
+   Movement = 0 0 0 60 170 170 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* vehicleType.medBomb 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
+
+      Weapon1 ->* VehicleType.Air_MG 
+   } Weapons
+} VehicleType

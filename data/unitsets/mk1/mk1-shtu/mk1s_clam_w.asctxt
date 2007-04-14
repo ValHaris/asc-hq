@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Clam Wreckage
+   ID = 436
+   parent = 498
+   Armor = 200
+   RemovalCost { 
+      Energy = 0
+      Material = -2000
+      fuel = 200
+      Movement = 30
+   } RemovalCost
+   dry { 
+      picture = MK1s_clam.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = LANCE
+   ID = 565
+   parent = 300
+ 
+   Description = SSM medium range
+   Picture = Mk3v_lance.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+} VehicleType

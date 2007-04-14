@@ -1,0 +1,14 @@
+ObjectType { 
+   Name = Follow Wreckage
+   ID = 483
+   parent = 499
+   Armor = 150
+   RemovalCost { 
+      Material = -1500
+      fuel = 150
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = MK1t_follow_w.pcx 1
+   } dry
+} ObjectType

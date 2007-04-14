@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = MG NEST
+   parent = 400 401 402 422
+   ID = 314
+   abstract = true
+
+   Description = MG Verteidigungsstellung
+   Infotext = [ Durch Sandsäcke geschützte MG Stellung]
+   WreckageObject = 
+   GuideSortHelp = 507 314 0 0 0 0 0 0 0 0
+
+   Armor = 400
+   View = 30
+   Jamming = 11
+   Abilities += self_repairing jam_only_own_field MoveDuringReactionFire
+   SelfRepairRate = 5
+   Weight = 3
+   Transportation ->* VehicleType.TransLowTrooper
+
+   Tank { 
+      Energy = 0
+      Material = 400
+      fuel = 400
+   } Tank
+   FuelConsumption = 0
+   TerrainAccess ->* VehicleType.Device_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MiniGun 
+      Weapon0.Ammo = 20
+      Weapon0.ReactionFireShots = 3
+   } Weapons
+} VehicleType

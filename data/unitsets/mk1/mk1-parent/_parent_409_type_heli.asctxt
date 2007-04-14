@@ -1,0 +1,42 @@
+ VehicleType { 
+   Abstract = true
+   ID = 409
+   parent = 402 497
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   H E L I C O P T E R    ---------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+
+   Infotext = []
+   RecommendedAIJob = fight
+   Armor = 300
+   View = 30
+   WreckageObject = 495 496
+   Height = ground_level low_level_flight medium_level_flight
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 20
+   Abilities = move_after_attack no_midair_refuel cruiserlanding
+   Movement = 0 0 0 35 130 130 0 0 
+   TerrainAccess ->* VehicleType.heli_terrain 
+   Category = helicopter
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 30
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

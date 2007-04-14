@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = BUFF
+   parent = 278
+   ID = 508
+
+   Picture = MK3a_buff.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 5
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+
+      Weapon1.Punch@MaxRange += 5
+      Weapon1.Punch@MinRange += 5
+
+      Weapon2.Punch@MaxRange += 5
+      Weapon2.Punch@MinRange += 5
+
+   } Weapons
+} VehicleType

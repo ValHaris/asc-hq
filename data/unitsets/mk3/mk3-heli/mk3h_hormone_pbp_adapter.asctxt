@@ -1,0 +1,5 @@
+Techadapter {
+   ; Hormone
+   Name = 507
+   TechnologiesRequired = 507
+} TechAdapter

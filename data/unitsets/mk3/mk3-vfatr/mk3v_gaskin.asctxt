@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = GASKIN
+   ID = 554
+   parent = 335
+   
+   Description = Fast Attack Vehicle
+   Infotext = []
+   picture = MK3v_gaskin.pcx
+   GuideSortHelp = 504 0 0 0 3 0 0 0 0 0
+
+   Armor -= 50
+   Abilities += move_after_attack
+   Category = light_wheeled_vehicle
+   Weight = 22
+
+   Movement += 0 0 0 20 0 0 0 0 
+   TerrainAccess ->* VehicleType.offroad 
+
+   Weapons { 
+      Initiative = 50
+      Number = 3
+      Weapon0 ->* VehicleType.smSSM 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+
+      Weapon1 ->* VehicleType.smSAM 
+      Weapon1.Ammo = 4
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.MG30low
+   } Weapons
+} VehicleType

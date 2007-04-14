@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = GEPARD
+   ID = 533
+   parent = 218
+   Description = anti aircraft tank
+   Infotext = [Air defense cannon tank Gepard]
+   Picture = Mk3v_gepard.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   
+   Armor -= 20
+   Movement += 0 0 0 10 0 0 0 0 
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = MISTRAL
+   ID = 526
+   parent = 215
+   
+   Description = Air Defence Trooper
+   Picture = MK3i_MISTRAL.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
+
+   Movement += 0 0 0 2 0 0 0 0 
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 3
+      Weapon0.Punch@MinRange += 3
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Hawkeye
+   Name = 501
+   TechnologiesRequired = 501
+} TechAdapter

@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = SQUID
+   parent = 363
+   ID = 91
+
+   Description = espionage submarine
+   Infotext = [ Spionage U-Boot können getaucht bis dicht an die gegnerische Küste heranfahren und Defensivstellungen auskundschaften.]
+   picture = MK1s_squid.pcx
+   WreckageObject = 491
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   View = 90
+   Abilities += move_after_attack
+
+   Tank.fuel = 8000
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 4
+   } Weapons
+} VehicleType

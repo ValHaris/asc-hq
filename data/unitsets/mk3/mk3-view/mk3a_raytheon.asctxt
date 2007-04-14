@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = RAYTHEON
+   parent = 247
+   ID = 515
+   Description = Radar Plane
+   Armor -= 10
+   Picture = MK3a_RAYTHEON.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Abilities = satelliteview
+   Movement += 0 0 0 0 10 10 10 0 
+} VehicleType

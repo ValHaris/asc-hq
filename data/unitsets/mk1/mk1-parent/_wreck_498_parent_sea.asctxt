@@ -1,0 +1,46 @@
+ObjectType { 
+   ID = 498
+   abstract = true
+   groupID = 15
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Armor = 200
+   Movemalus_plus = 3
+   Movemalus_abs = -1
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 
+   Height = 89
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -2000
+      fuel = 200
+      Movement = 20
+   } RemovalCost
+   Name = Wreck
+   NoSelfChaining = false
+   TerrainAccess { 
+      terrain_any = very_shallow_water very_shallow_water shallow_water water river
+      terrain_all = 
+      terrain_not =  
+      terrain_kill = lava deep_water  
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add =  
+   dry { 
+      UseGFXpics = false
+      flippicture = -1
+      DisplayMethod = shadow
+   } dry
+   NetBehaviour = KeepOrientation
+} ObjectType

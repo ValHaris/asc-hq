@@ -1,0 +1,10 @@
+technology {
+   Name = Fort
+   infotext = Forschungsprojekt abgeschlossen! Fort verfuegbar!
+   id = 49
+   RelatedUnitID = 49
+   parent = 100000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100000,100002 
+} Technology

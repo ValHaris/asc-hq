@@ -1,0 +1,10 @@
+technology {
+   Name = Patton
+   infotext = 
+   id = 534
+   RelatedUnitID = 534
+   parent = 100010
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100010,100002,100102,100201,555 
+} Technology

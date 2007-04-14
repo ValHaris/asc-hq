@@ -1,0 +1,37 @@
+VehicleType {
+   abstract = true 
+   Name = Submarine
+   parent = 402 493
+   ID = 421
+   Description = submarine
+   Infotext = []
+   Armor = 800
+   View = 30
+   WreckageObject = 434
+   Height = deep_submerged submerged floating 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2733
+   } Tank
+   FuelConsumption = 17
+   Abilities = sonar
+   Movement = 70 70 70 0 0 0 0 0 
+   Category = medium_ship
+   MaxSurvivableStorm = 210
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 200
+   TerrainAccess ->* VehicleType.mediumship_terrain
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

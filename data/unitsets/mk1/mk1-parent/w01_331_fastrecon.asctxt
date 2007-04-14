@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = fast recon
+   ID = 331
+   abstract = true
+   parent = 400 401 402 411
+   Description = fast recon vehicle
+   Infotext = [Das schnelle Spähfahrzeug ist das schnellste Landfahrzeug. Durch seine Wendigkeit
+              ist es in der Lage sich nach einem Angriff sofort wieder zurückzuziehen.
+              Kleinere Anhöhen und schwieriges Gelände sind kein Problem. Auf einem Notsitz kann 
+              ein weiterer Soldat Platz finden. Es gibt unterschiedliche Ausführungen, sowohl 2, 3 oder 4-rädrig.]
+   GuideSortHelp = 504 331 0 0 0 0 0 0 0 0
+
+
+   Armor -= 20
+   View += 20
+   Jamming = 11
+   Transportation ->* VehicleType.TransLowTrooper 
+   Abilities += move_after_attack jam_only_own_field
+   Category = light_wheeled_vehicle
+
+   FuelConsumption = 10
+   Movement += 0 0 0 48 0 0 0 0 
+   Weight = 2
+   TerrainAccess ->* VehicleType.offroad 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.MG40low 
+   } Weapons
+} VehicleType

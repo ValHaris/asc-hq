@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = MG Tower
+   ID = 316
+   parent = 400 401 402 403
+   abstract = true
+
+   Description = MG tower
+   Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse zu verteidigen.]
+   GuideSortHelp = 507 316 0 0 0 0 0 0 0 0
+
+
+   Armor -= 200
+   Transportation {
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 25
+      MaxLoadableMass = 300
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } Transportation
+   Abilities += material_transfer fuel_transfer
+   Weight = 11500
+
+   Tank { 
+      Energy = 0
+      Material = 4000
+      fuel = 4000
+   } Tank
+   TerrainAccess ->* VehicleType.Turret_all 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.BigMiniGun
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MinRange = 60
+
+      Weapon1 ->* VehicleType.BigMiniGun
+      Weapon1.Ammo = 20
+      Weapon1.Punch@MinRange = 60
+   } Weapons
+} VehicleType

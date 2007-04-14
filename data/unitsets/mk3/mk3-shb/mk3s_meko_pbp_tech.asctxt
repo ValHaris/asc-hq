@@ -1,0 +1,10 @@
+technology {
+   Name = MEKO
+   infotext = 
+   id = 588
+   RelatedUnitID = 588
+   parent = 100010
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100010,100004,100103,100305,586,587 
+} Technology

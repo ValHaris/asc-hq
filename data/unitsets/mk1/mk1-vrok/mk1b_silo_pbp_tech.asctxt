@@ -1,0 +1,10 @@
+technology {
+   Name = SILO
+   infotext = Forschungsprojekt abgeschlossen! SILO verfuegbar!
+   id = 84
+   RelatedUnitID = 84
+   parent = 100000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 100000,100002,100105,100301,100310,7,114,83,76
+} Technology

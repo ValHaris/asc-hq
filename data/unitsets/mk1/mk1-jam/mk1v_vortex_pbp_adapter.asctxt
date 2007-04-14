@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 51
+   ;Bezeichnung der verknüpften Technologie: Vortex
+   TechnologiesRequired = 51
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 65
+   ;Bezeichnung der verknüpften Technologie: Termite
+   TechnologiesRequired = 65
+} TechAdapter

@@ -1,0 +1,39 @@
+VehicleType { 
+   Name = IOWA
+   ID = 541
+   parent = 357
+
+   Description = battleship
+   picture = MK3s_iowa.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Weapons { 
+      Initiative = 50
+      Number = 5
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.ReactionFireShots = 0
+      Weapon0.MaxRange = 80
+      Weapon0.MinRange = 40
+      Weapon0.Ammo = 16
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 160
+
+      Weapon1 ->* VehicleType.Ship_Gun 
+      Weapon1.MaxRange = 50
+      Weapon1.Ammo = 15
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 110
+
+      Weapon2 ->* VehicleType.Ship_Gun 
+      Weapon2.MaxRange = 50
+      Weapon2.Ammo = 15
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 110
+
+      Weapon3 ->* VehicleType.Ship_Flak 
+      Weapon3.Ammo = 14
+      Weapon3.Punch@MinRange = 80
+
+      Weapon4 ->* VehicleType.Minigun 
+   } Weapons
+} VehicleType

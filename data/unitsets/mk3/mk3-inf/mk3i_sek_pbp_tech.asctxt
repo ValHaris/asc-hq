@@ -1,0 +1,10 @@
+technology {
+   Name = SEK
+   infotext = 
+   id = 602
+   RelatedUnitID = 602
+   parent = 100010
+   researchpoints *= 12
+   techlevel = 4
+   TechnologiesRequired = 100010,100001,100104,535,618,524,525
+} Technology

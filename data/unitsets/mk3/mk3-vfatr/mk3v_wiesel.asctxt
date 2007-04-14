@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = WIESEL
+   parent = 336
+   ID = 592
+   
+   Description = Infiltrator Squad
+   Infotext = []
+   picture = MK3v_WIESEL.pcx
+   WreckageObject = 406
+   GuideSortHelp = 503 504 552 0 3 0 0 0 0 0
+   
+   Armor -= 100
+   Transportation ->* VehicleType.TransLowTrooper 
+   Abilities += paratrooper move_after_attack
+   Weight = 15
+
+   Tank { 
+      fuel = 1000
+   } Tank
+   FuelConsumption = 10
+   Movement = 0 0 0 90 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG45low 
+   } Weapons
+} VehicleType

@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = LIGHT ASSAULT
+   ID = 101
+   parent = 290
+   Description = light assault tank
+   Infotext = [Light Tanks are economic tanks. While not being very heavily
+              armed, they make a decent pace and aren't as expensive to build
+              as Combat Tanks. Light tanks are well suited for strike force
+              support.]
+   Picture = MK1v_lassault.pcx
+   WreckageObject = 465
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor -= 60
+   
+   FuelConsumption = 16
+   Movement += 0 0 0 1 0 0 0 0 
+   Weight = 50
+   Weapons { 
+      Number = 1
+      Weapon0.Ammo = 12
+      Weapon0.Punch@MaxRange += 15
+      Weapon0.Punch@MinRange += 15
+      Weapon0.WeaponEffectiveness ->* VehicleType.TankSpGun.WeaponEffectiveness
+      Weapon0.Name = Panzerabwehrkanone
+   } Weapons
+} VehicleType

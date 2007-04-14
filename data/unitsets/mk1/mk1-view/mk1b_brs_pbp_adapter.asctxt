@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 111
+   ;Bezeichnung der verknüpften Technologie: Radar Bunker
+   TechnologiesRequired = 111
+} TechAdapter

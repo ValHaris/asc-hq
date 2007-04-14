@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = tank hunter
+   parent = 400 401 402 414 498
+   ID = 280
+   abstract = true
+   
+   Description = tank hunter
+   Infotext = [ ]
+   GuideSortHelp = 280 511 0 0 0 0 0 0 0 0
+
+   Armor = 300
+   Weight = 75
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 60 170 170 0 0 
+   TerrainAccess ->* VehicleType.Aircraft_terrain_road 
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Air_MG
+
+      Weapon1 ->* VehicleType.ASM
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 85
+
+      Weapon2 ->* VehicleType.lowbomb 
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 110
+      Weapon2.Punch@MinRange = 110
+
+      Weapon3 ->* VehicleType.napalm 
+      Weapon3.Ammo = 1
+      Weapon3.Punch@MaxRange = 110
+      Weapon3.Punch@MinRange = 110
+
+   } Weapons
+} VehicleType

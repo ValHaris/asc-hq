@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = distance fighter
+   parent = 400 401 414 498
+   abstract = true
+   ID = 273
+   
+   Description = air strike fighter
+   Infotext = []
+   GuideSortHelp = 273 512 0 0 0 0 0 0 0 0
+
+   Armor = 380
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5000
+   } Tank
+   FuelConsumption = 28
+   Abilities += jam_only_own_field
+   Movement = 0 0 0 60 180 200 200 0 
+   Weight = 105
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.AAMH 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+
+      Weapon1 ->* VehicleType.AAMH2 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+
+      Weapon2 ->* VehicleType.AAMH2 
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 72
+      Weapon2.Punch@MinRange = 72
+
+      Weapon3 ->* VehicleType.AirH_MG 
+   } Weapons
+} VehicleType

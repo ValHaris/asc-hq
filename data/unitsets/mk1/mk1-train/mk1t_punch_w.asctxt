@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Punch Wreckage
+   ID = 457
+   parent = 499
+   Armor = 480
+   RemovalCost { 
+      Energy = 0
+      Material = -2100
+      fuel = 80
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = MK1t_punch_w.pcx 1
+   } dry
+} ObjectType

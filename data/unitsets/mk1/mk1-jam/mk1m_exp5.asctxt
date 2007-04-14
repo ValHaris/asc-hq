@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = EXP 5
+   ID = 105
+   parent = 306
+
+   Infotext = [Gepanzerter MechTrooper mit neuartiger Radarstöhrelektronik. ]
+   picture = MK1m_EXP5.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 30
+   Jamming +=5
+} VehicleType

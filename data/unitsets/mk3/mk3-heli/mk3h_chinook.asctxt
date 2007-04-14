@@ -1,0 +1,60 @@
+VehicleType { 
+   Name = CHINOOK
+   parent = 400 401 402 409 497
+   ID = 502
+
+   Description = heavy transport heli
+   Infotext = [Chinook
+
+Der Chinook ist ein schwerer Transporthelikopter. Zwar ist er wehrlos wenn er angegriffen wird, aber er ist trotzdem eine unverzichtbare Einheit wenn man Treibstoff und Munition zu schnellen Einheiten transportieren muss. Er kann auch die schwersten Fahrzeuge tragen und sogar Züge finden in seinem Laderaum Platz. Das macht ihn zur ersten Wahl wann immer neue Truppen an die Front verlegt werden müssen.
+
+The Chinnok is a heavy transport and support helicopter. It is defenceless under enemy fire but nevertheless an invaluable unit when it comes to providing fuel and ammuniton to highly mobily ground forces. It can carry even the heaviest vehicles and trains, making it the first choice whenever you need to send frech troops to a frontline far away.
+]
+   picture = MK3h_chinook.pcx
+   GuideSortHelp = 515 550 551 0 3 0 0 0 0 0
+
+   Armor = 360
+   Transportation ->* VehicleType.TransHeliHvy 
+   Abilities += fuel_transfer material_transfer
+
+   Tank { 
+      Energy = 0
+      Material = 7000
+      fuel = 7000
+   } Tank
+   FuelConsumption = 18
+   Movement -= 0 0 0 0 10 10 0 0 
+   Weight = 66
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.Type = machinegun shootable ammo_transfer  
+      Weapon0.Ammo = 50
+      Weapon0.Punch@MaxRange = 42
+      Weapon0.Punch@MinRange = 42
+
+      Weapon1 ->* VehicleType.ServiceGround 
+
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 50
+
+      Weapon3 ->* VehicleType.AmmoGM 
+      Weapon3.Ammo = 30
+
+      Weapon4 ->* VehicleType.AmmoAM 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 40
+
+      Weapon6 ->* VehicleType.AmmoMine 
+      Weapon6.Ammo = 40
+      
+      Weapon7 ->* VehicleType.AmmoCM
+      Weapon7.Ammo = 4
+      
+      Weapon8 ->* VehicleType.AmmoTorp
+      Weapon8.Ammo = 6
+   } Weapons
+} VehicleType

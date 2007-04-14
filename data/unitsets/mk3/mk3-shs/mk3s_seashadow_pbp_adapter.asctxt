@@ -1,0 +1,5 @@
+Techadapter {
+   ; SeaShadow
+   Name = 561
+   TechnologiesRequired = 561
+} TechAdapter

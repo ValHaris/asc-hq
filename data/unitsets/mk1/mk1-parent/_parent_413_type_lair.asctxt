@@ -1,0 +1,40 @@
+ VehicleType { 
+   Abstract = true
+   ID = 413
+   parent = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   L I G H T   A I R C R A F T    -------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   wreckageobject = 400 300
+   Infotext = []
+   Armor = 300
+   View = 40
+   Height = ground_level low_level_flight medium_level_flight
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 18
+   Abilities = move_after_attack no_reactionfire
+   Movement = 0 0 0 60 190 190 0 0 
+   TerrainAccess ->* VehicleType.aircraft_terrain 
+   Category = light_aircraft
+   MaxSurvivableStorm = 160
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 60
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = VERTIC
+   parent = 338
+   ID = 33
+   
+   Description = vertical take-off plane
+   picture = Mk1a_vertic.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Armor += 30
+
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = fast CM launcher
+   ID = 301
+   abstract = true
+   parent = 400 401 402 411
+
+   Description = fast CM launcher
+   Infotext = [ ]
+   GuideSortHelp = 505 301 0 0 0 0 0 0 0 0
+
+
+   Armor = 280
+   View = 20
+   WaitFortack = true
+   Abilities += no_reactionfire
+   Category = heavy_wheeled_vehicle
+   Weight = 210
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 900
+   } Tank
+   FuelConsumption = 17
+   Movement = 0 0 0 50 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Ditch Frozen_water 
+      terrain_all = 
+      terrain_not = morass swamp large_rocks 
+      terrain_kill = Shallow_water Water Deep_water River lava 
+   } TerrainAccess
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 160
+      Weapon0.MinRange = 90
+      Weapon0.Ammo = 1
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Lance
+   infotext = 
+   id = 565
+   RelatedUnitID = 565
+   parent = 100010
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100010,100002,100104,100301,100310,550,551 
+} Technology

@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = mobile bunker
+   parent = 400 401 402 406
+   ID = 337
+   abstract = true
+
+   Description = mobile bunker
+   Infotext = [ Schwer gepanzertes langsam fahrendes Bunkersystem.]
+
+   Armor = 1000
+   View = 40
+   Weight = 1000
+
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 4000
+   } Tank
+   FuelConsumption = 100
+   Movement = 0 0 0 20 0 0 0 0 
+
+   TerrainAccess {
+      terrain_any = Lowland Road Runway Hard_sand soft_sand very_shallow_water  
+      terrain_all = 
+      terrain_not = swamp large_rocks forest morass
+      terrain_kill = Water Deep_water lava river
+   } TerrainAccess
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Stone Wall
+   infotext = Forschungsprojekt abgeschlossen! Stone Wall verfuegbar!
+   id = 94
+   RelatedUnitID = 94
+   parent = 100000
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100000,100002,100104,100203,100307,100309,49,56 
+} Technology

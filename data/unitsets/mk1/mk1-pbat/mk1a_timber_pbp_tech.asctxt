@@ -1,0 +1,10 @@
+technology {
+   Name = Timber
+   infotext = Forschungsprojekt abgeschlossen! Timber verfuegbar!
+   id = 29
+   RelatedUnitID = 29
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100003,100103,100205,48,69,20 
+} Technology

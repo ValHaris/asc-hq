@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = FALCON
+   parent = 270
+   ID = 509
+   Description = Light Fighter
+   Infotext = [Falcon
+
+Der Falcon ist ein wendiger Jaeger, entwickelt um feindliche Flugzeuge zu bekaempfen.
+Trotz der guten Luft-Luft-Raketen wird er durch seine schwache Panzerung und die niedrige Flughoehe dazu gezwungen lediglich schnelle Schlaege gegen feindliche Bomber, Transportflugzeuge und Helikopter zu fuehren. Er ist nicht dazu ausgelegt laengere Zeit im Kampfgebiet zu verweilen.
+
+The Falcon is a nimble aircraft designed to combat defenceless aerial threats.
+While having good aa-firepower, its weak armor and low flight level determine it for hit and run attacks at enemy bombers, transports and support aircraft.
+]
+   Picture = MK3a_FALCON.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2400
+   } Tank
+   FuelConsumption = 20
+   Movement -= 0 0 0 0 10 10 0 0 
+   Weapons { 
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 2
+
+      Weapon2.Punch@MaxRange += 2
+      Weapon2.Punch@MinRange += 2
+
+      Weapon3.Punch@MaxRange += 1
+      Weapon3.Punch@MinRange += 1
+   } Weapons
+} VehicleType

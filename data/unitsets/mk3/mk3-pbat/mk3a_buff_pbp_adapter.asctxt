@@ -1,0 +1,5 @@
+Techadapter {
+   ; Buff
+   Name = 508
+   TechnologiesRequired = 508
+} TechAdapter

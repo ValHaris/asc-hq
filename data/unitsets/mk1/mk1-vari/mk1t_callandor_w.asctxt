@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Callandor Wreckage
+   ID = 458
+   parent = 499
+   Armor = 205
+   RemovalCost { 
+      Energy = 0
+      Material = -2400
+      fuel = 100
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = MK1t_callandor_w.pcx 1
+   } dry
+} ObjectType

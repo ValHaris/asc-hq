@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = SEALBOAT
+   parent = 350
+   ID = 586
+   
+   Description = stealth patrol boat
+   Infotext = [Used for armed escort, command, control, and communications, transport, armed reconnaissance and pursuit.]
+   picture = MK3s_sealboat.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Jamming = 50
+   Transportation ->* VehicleType.TransShipTrooper 
+   Abilities = fuel_transfer material_transfer jam_only_own_field
+
+   Tank { 
+      Material = 500
+   } Tank
+   TerrainAccess ->* VehicleType.nodeepwatership_terrain
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.MiniGun
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 39
+      Weapon0.Punch@MinRange = 46
+
+      Weapon1 ->* VehicleType.AmmoMG 
+      Weapon1.Ammo = 40
+
+      Weapon2 ->* vehicleType.AmmoBomb 
+      Weapon2.Ammo = 12
+      
+      Weapon3 ->* vehicleType.AmmoMine 
+      Weapon3.Ammo = 6
+
+      Weapon4 ->* vehicleType.AmmoSM 
+      Weapon4.Ammo = 12
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; SDI
+   Name = 511
+   TechnologiesRequired = 511
+} TechAdapter

@@ -1,0 +1,41 @@
+ VehicleType { 
+   Abstract = true
+   ID = 412
+   parent = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T R A I N S    -----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Infotext = []
+   RecommendedAIJob = fight
+   WreckageObject = 497 496
+   Armor = 500
+   View = 30
+   Height = ground_level 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 15
+   Abilities = 
+   Movement = 0 0 0 100 0 0 0 0 
+   Category = rail_vehicle
+   MaxSurvivableStorm = 200
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 200
+   TerrainAccess ->* VehicleType.rail_terrain 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

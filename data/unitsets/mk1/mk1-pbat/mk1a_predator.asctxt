@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = PREDATOR
+   ID = 70
+   parent = 272
+   Description = Stealth Fighter
+   Infotext = [The Stealth Fighter relies on a high altitude to avoid getting
+              hit. It is primarily intended to get rid of lower flying aircraft
+              and orbital units. It is hard to hit a Stealth Fighter grom
+              the ground, but at least it cannot hit you either.]
+   Picture = MK1a_predator.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor -= 50
+   Jamming = 70
+   Abilities += jam_only_own_field
+   Movement -= 0 0 0 0 0 10 10 0 
+   Weapons { 
+      Weapon0.Ammo = 3
+      Weapon0.Punch@MaxRange -= 2
+      Weapon0.Punch@MinRange -= 2
+
+      Weapon1.Ammo = 1
+
+      Weapon2 ->* VehicleType.AAMH
+      Weapon2.Ammo = 1
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 75
+
+      Weapon3.Ammo = 2
+   } Weapons
+} VehicleType

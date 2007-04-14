@@ -1,0 +1,16 @@
+ Technology {
+   name = "cruise missile technology"
+   infotext = "advanced technology"
+   id = 100301
+   researchpoints = 1000
+   
+   techlevel = 4
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100002,100310,100104
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

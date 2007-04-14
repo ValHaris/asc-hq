@@ -1,0 +1,10 @@
+technology {
+   Name = Scope
+   infotext = Forschungsprojekt abgeschlossen! Scope verfuegbar!
+   id = 9
+   RelatedUnitID = 9
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100003,100103,100210 
+} Technology

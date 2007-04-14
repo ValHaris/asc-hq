@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = MEKO A200
+   parent = 353
+   ID = 588
+
+   Description = stealth fregatte
+   picture = MK3s_meko.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor += 50
+   jamming = 65
+   Transportation ->* VehicleType.TransCruiser 
+   Abilities += sonar jam_only_own_field
+   
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.Ammo = 12
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 80
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.targets = ground_level
+      Weapon1.Ammo = 6
+      Weapon1.MaxRange = 40
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+      Weapon1.ReactionFireShots = 0
+      
+      Weapon2 ->* VehicleType.ShM
+      Weapon2.Ammo = 6
+      Weapon2.MaxRange = 40
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 90
+      Weapon2.ReactionFireShots = 0
+
+      Weapon3 ->* VehicleType.SAMH
+      Weapon3.Ammo = 8
+
+      Weapon4 ->* vehicleType.AmmoTorp 
+      Weapon4.Ammo = 20
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 40
+
+      Weapon6 ->* vehicleType.AmmoBomb 
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* vehicleType.AmmoAM 
+      Weapon7.Ammo = 20
+
+      Weapon8 ->* vehicleType.AmmoGM 
+      Weapon8.Ammo = 20
+
+   } Weapons
+} VehicleType

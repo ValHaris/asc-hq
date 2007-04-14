@@ -1,0 +1,5 @@
+Techadapter {
+   ; Falcon
+   Name = 509
+   TechnologiesRequired = 509
+} TechAdapter

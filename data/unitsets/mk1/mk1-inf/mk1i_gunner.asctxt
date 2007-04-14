@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = GUNNER
+   ID = 106
+   parent = 203
+   Description = heavy attack trooper
+   Infotext = [Der GUNNER ist ein Trooper, der zur Panzerjag geeignet, günstiger als der ASSAULT TROOPER
+und mit mehr Muniotn ausgestattet ist.
+Allerdings ist er wie sämtliche Trooper empfindlich gegen nahezu jeglichen Beschuss.
+Halten sie ihn möglichst in Deckung und geben sie auf feindliche Scharfschützen acht!
+]
+   Picture = MK1i_gunner.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor += 10
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 3
+      Weapon0.Punch@MinRange -= 3
+   } Weapons
+} VehicleType

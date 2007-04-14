@@ -1,0 +1,5 @@
+Techadapter {
+   ; Sturmtiger
+   Name = 575
+   TechnologiesRequired = 575
+} TechAdapter

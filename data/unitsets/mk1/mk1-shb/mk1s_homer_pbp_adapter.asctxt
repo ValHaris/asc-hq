@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 113
+   ;Bezeichnung der verknüpften Technologie: Homer
+   TechnologiesRequired = 113
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Chinook
+   Name = 502
+   TechnologiesRequired = 502
+} TechAdapter

@@ -1,0 +1,34 @@
+VehicleType { 
+   abstract = true
+   Name = lrad tank
+   ID = 224
+   parent = 400 401 402 405
+
+   Description = SAM medium range
+   Infotext = []
+   GuideSortHelp = 224 508 0 0 0 0 0 0 0 0
+
+   Armor = 450
+   Picture = g_spike.pcx
+   WaitFortack = true
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1400
+   } Tank
+   FuelConsumption = 14
+   Abilities += MoveDuringReactionFire
+   Movement = 0 0 0 50 0 0 0 0 
+   Weight = 40
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.SAMHU 
+      Weapon0.ReactionFireShots = 1
+      Weapon0.MaxRange = 80
+      Weapon0.MinRange = 30
+      Weapon0.Ammo = 3
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+   } Weapons
+} VehicleType

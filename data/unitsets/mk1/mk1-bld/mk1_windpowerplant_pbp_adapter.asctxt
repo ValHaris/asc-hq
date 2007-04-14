@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B5
+   ;Bezeichnung der verknüpften Technologie: Wind Power Plant
+   TechnologiesRequired = 100000
+} TechAdapter

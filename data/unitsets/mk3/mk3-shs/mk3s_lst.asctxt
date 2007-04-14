@@ -1,0 +1,60 @@
+VehicleType { 
+   Name = LST
+   ID = 607
+   parent = 400 401 402 419
+
+   Description = repair and build ship
+   Infotext = [ repair an buildship ]
+   picture = MK3s_lst.pcx
+   GuideSortHelp = 553 554 0 0 3 0 0 0 0 0
+
+   Abilities = construct_vehicles repair_vehicle self_repairing fuel_transfer material_transfer manual_resource_drilling construct_specific_buildings 
+   ResourceDrillingRange = 4
+   SelfRepairRate = 10
+   Transportation ->* VehicleType.TransTurretBig2
+
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 40000
+   } Tank
+
+   Construction { 
+      Buildings = 13 14 16 17 18 19
+      Vehicles = 531 617 510 511
+      Objects = 995 996 997 998 999 1000 44 30 3
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 15
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.ServiceGround 
+
+      Weapon1 ->* VehicleType.Ship_MG 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 12
+      Weapon1.Punch@MinRange = 50
+
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 50
+
+      Weapon3 ->* vehicleType.AmmoTorp 
+      Weapon3.Ammo = 30
+
+      Weapon4 ->* VehicleType.AmmoSM 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 30
+
+      Weapon6 ->* VehicleTYpe.AmmoBomb 
+      Weapon6.Ammo = 30
+
+      Weapon7 ->* VehicleType.AmmoMine 
+      Weapon7.Ammo = 30
+
+      Weapon8 ->* VehicleType.AmmoMG
+      Weapon8.Ammo = 50
+   } Weapons
+} VehicleType

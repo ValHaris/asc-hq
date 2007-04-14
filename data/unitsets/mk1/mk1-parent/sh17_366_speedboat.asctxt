@@ -1,0 +1,54 @@
+VehicleType { 
+   abstract = true 
+   parent = 400 401 402
+   ID = 366
+
+   Name = speed boat
+   Description = speedboat
+   Infotext = [Captains all over the world have mentioned the Speed Boat as
+              the "most annoying ship that was ever made". A speed boat is
+              armed with computer guided ballistic charges which allows them
+              to fire upon enemy ships from a distance. Also, Speed Boats
+              are designed with minimum friction in mind. This gives them
+              the opportunity to launch an assault, then sweep out of cannon
+              range before the enemy has had time to lock on. Unfortunately,
+              this also means that the Speed Boat is marginally armored, and
+              needs to be resupplied regularly.]
+   WreckageObject = 442
+   GuideSortHelp = 518 366 0 0 0 0 0 0 0 0
+
+
+   Armor = 500
+   View = 40
+   Jamming = 29
+   WaitFortack = false
+   Abilities = move_after_attack jam_only_own_field
+   Category = light_ship
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 100
+   Transportation ->* VehicleType.TransLowTrooper
+
+   Height = floating 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2000
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 110 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.nodeepwatership_terrain 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

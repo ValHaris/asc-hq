@@ -1,0 +1,41 @@
+VehicleType {
+   Name = twice gun artillery
+   abstract = true
+   ID = 253
+   parent = 400 401 402 405
+
+   Description = twice gun artillery
+   Infotext = []
+   WreckageObject = 402
+   GuideSortHelp = 506 253 0 0 0 0 0 0 0 0
+
+   Armor = 350
+   Weight = 55
+   WaitFortack = true
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 735
+   } Tank
+   FuelConsumption = 17
+   Movement = 0 0 0 30 0 0 0 0 
+   TerrainAccess { 
+      terrain_not = forest small_rocks large_rocks swamp morass deep_snow
+   } TerrainAccess
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 60
+      Weapon0.MinRange = 30
+      Weapon0.Ammo = 5
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+      Weapon1 ->* VehicleType.Artillery 
+      Weapon1.MaxRange = 60
+      Weapon1.MinRange = 30
+      Weapon1.Ammo = 5
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 90
+   } Weapons
+} VehicleType

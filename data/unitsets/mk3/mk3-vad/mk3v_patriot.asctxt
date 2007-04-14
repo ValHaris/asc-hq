@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = PATRIOT
+   ID = 556
+   parent = 219
+   
+   Description = missile air defence
+   Infotext = [The Patriot is an surface-to-air, mobile, air defense missile system.]
+   Picture = MK3v_patriot.pcx
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   
+   Armor -= 20
+   View += 10
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 3
+      Weapon0.Punch@MinRange += 3
+   } Weapons
+} VehicleType

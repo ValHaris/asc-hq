@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 40
+   ;Bezeichnung der verknüpften Technologie: Surveyor
+   TechnologiesRequired = 40
+} TechAdapter

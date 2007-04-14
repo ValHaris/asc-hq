@@ -1,0 +1,40 @@
+VehicleType { 
+   abstract = true
+   Name = lrad slow
+   ID = 225
+   parent = 400 401 402 411
+
+   Description = SAM long range
+   Infotext = []
+   GuideSortHelp = 222 508 0 0 0 0 0 0 0 0
+
+   Armor = 250
+   Picture = g_spike.pcx
+   WaitFortack = true
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 500
+   } Tank
+   FuelConsumption = 10
+   Abilities += MoveDuringReactionFire move_after_attack
+   Movement = 0 0 0 26 0 0 0 0 
+   Category = light_wheeled_vehicle
+   Weight = 20
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Ditch Frozen_water 
+      terrain_not = morass swamp large_rocks deep_snow
+   } TerrainAccess
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.SAMHU 
+      Weapon0.ReactionFireShots = 1
+      Weapon0.targets = medium_level_flight high_level_flight 
+      Weapon0.MaxRange = 100
+      Weapon0.MinRange = 40
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 75
+   } Weapons
+} VehicleType

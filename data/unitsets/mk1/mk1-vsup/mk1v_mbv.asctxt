@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = MBV
+   ID = 85
+   parent = 336
+   
+   Description = Main Builder Vehicle
+   Infotext = [Building und turretunit constructors are perhaps the most important constructing
+              vehicles. They are able to place new factories, weapon emplacements,
+              power stations, mines, and so on. Without at least one building
+              bonstructor, expansion is impossible.]
+   picture = MK1v_mbv.pcx
+
+   Armor -= 100
+   Transportation ->* VehicleType.TransTurretBig 
+   Abilities = construct_vehicles leaves_tracks construct_specific_buildings
+
+   Tank { 
+      Material = 60000
+      fuel = 70000
+   } Tank
+   Movement -= 0 0 0 10 0 0 0 0 
+   Weight = 90
+
+   Construction { 
+      Buildings = 26 29
+      Vehicles = 76 84 94 110 111 112 117 122
+      Objects = 9 44 2098 992 2097
+      ObjectsRemovable = 992 988 2097
+      ObjectGroupsRemovable = 1 2 3 4 8 14 21
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

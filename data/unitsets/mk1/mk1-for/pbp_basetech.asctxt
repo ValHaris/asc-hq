@@ -1,0 +1,12 @@
+ Technology {
+   name = "PBP base-technology"
+   infotext = 
+   id = 100006
+   researchpoints = 0
+   techlevel = 10
+   requireEvent = false
+   TechnologiesRequired = -1
+   BlockingTechnologies = 
+   BlockingOtherTechnologies = 
+   RequireAllListedTechnologies = true
+} Technology 

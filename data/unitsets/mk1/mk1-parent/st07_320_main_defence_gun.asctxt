@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = main defence gun
+   ID = 320
+   parent = 400 401 402 422
+   abstract = true
+
+   Description = main defence gun
+   Infotext = [A Turret Emplacement is a fearsome structure. It is capable of
+              demolishing tank platoons before the latter can even detect
+              the Turret on their radars. Its only drawback is that it cannot
+              get a lock on very small targets.]
+   GuideSortHelp = 507 320 0 0 0 0 0 0 0 0
+
+
+   Weight = 430
+   Abilities += moveduringreactionfire
+
+   TerrainAccess ->* VehicleType.Turret_only 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 70
+      Weapon0.MinRange = 20
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Ammo = 12
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 120
+
+      Weapon1 ->* VehicleType.MG40low 
+      Weapon1.Ammo = 20
+   } Weapons
+} VehicleType
