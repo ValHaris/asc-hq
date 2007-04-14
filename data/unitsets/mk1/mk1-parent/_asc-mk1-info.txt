@@ -1,0 +1,163 @@
+Standart ASC Einheiten
+Überarbeitung und Standardisierung unter Leitung von Steffen Fröhlich (GAMER)
+(Format - Windows Editor)
+
+UnitID/parentID - Name der Einheit - Kurzbeschreibung
+Version Beta1
+
+--Trooper--
+ID  17/201  Shock            shock trooper
+ID  53/207  PARA             para trooper
+ID  96/205  SNIPER           sniper
+ID  99/202  Assault Trooper  heavy trooper
+ID 106/203  Gunner           HeavyGunTrooper
+--Mechanical--
+ID  97/208  Crazy            Mech trooper
+ID 121/206  Drall            dive mech
+
+--Radar Units--
+ID   9/247  Scope            radar plane
+ID  16/242  Oracle           radar unit
+ID  32/248  Argus            espionage plane
+ID  87/246  COMSAT           communication satellite
+ID  95/244  GRS              turret radar system
+ID 111/245  BRS              bunker radar system
+ID 119/249  Boje             sonar boje                   
+
+--Jamming--
+ID  51/307  Vortex           jamming vehicle
+ID  75/312  Exp 43           jamming ship
+ID  77/311  EXP 21           jamming helicopter
+ID 105/306  EXP5             jamming mech
+ID 112/310  EXP49            heavy armored jamming system
+
+--Tank--
+ID   3/291  Assault          special combat tank
+ID   4/293  Armadillo        heavy tank
+ID  63/326  Cobra            anti infantrie tank
+ID  65/290  Termite          light tank
+ID  66/291  Nova             medium tank type 1
+ID 100/292  Nova2            medium tank type 2
+ID 101/290  LightAssault     special combat tank light
+ID 102/294  Armadillo2       siege tank
+
+--Air Defence--
+ID  18/217  Swatter          AA-Tank                    
+ID  61/222  SAM Turret       air defence turret        
+ID  64/220  Spike            air defence vehicle    
+ID  73/221  Spear            anti aircraft train
+ID  74/216  CAD              air defence Mech
+ID  98/215  SAM Trooper      air defence trooper
+ID 107/118  Swatter2         Anti Aircraft Tank
+ID 117/223  SAM Bunker       long range airdefence        
+
+--Artillery--
+ID   1/250  Blackout         light artillery
+ID   2/251  Coma             medium artillerie
+ID  58/255  Callandor        railroadgun
+ID 103/252  Coma2            heavy artillerie
+ID 108/253  Coma3            twicegun artillery
+ID 109/256  Rotos            Railroad gun
+
+--Rocket systems--
+ID   7/296  Hornet           light rocket tank
+ID  76/303  T.M.L.           turret missile launcher
+ID  83/299  Follow           cruise missile train
+ID  84/394  Silo             Cruise missile bunker
+ID 114/297  Hornet2          medium Rocket tank
+
+--Fast attack & Transport --
+ID   6/336  Weasel           infiltrator squad (T)
+ID  25/335  Atuin            transport vehicle (W)
+ID 120/336  LTT              trooper transport (T)
+ID  89/336  PRIVATER         heavy armored transport (T)
+
+--Support vehicle --
+ID  10/336  Alguin           fuel vehicle
+ID  11/336  Ceti             weapon transport
+ID  12/336  Vesuvius         constructor
+ID  13/336  Cosinus          repair vehicle
+ID  26/336  Ant              infrastructur builder
+ID  30/335  Bolt             generator vehicle
+ID  40/335  Surveyor         resource searcher
+ID  50/335  Adder            mine layer
+ID  62/335  Forest ranger    forest vehicle
+ID  85/336  MBV              main builder vehicle
+
+--Stationäre Bodendefence--
+ID  49/316  FORT             anti infantrie bunker
+ID  56/320  BIGGUN           main defence gun
+ID  94/319  Stonewall        main defence bunker
+ID 104/314  MG-Nest          armored MG point
+ID 110/321  Heavy Gun        heavy defence Gun
+ID 122/322  Tora             lr defence gun
+
+
+--Orbital--
+ID  69/235  SPACELAB         support spacestation              
+ID  86/231  SHUTTLE          transport starship                   
+ID  88/232  Primerose        multi attack satellite
+ID  93/238  SDB              space defence system
+ID 118/-    Spor             anti orbital train
+
+--Plane--
+ID  19/270  ARROW            light fighter             
+ID  20/280  Bang             tank hunter
+ID  22/272  DOMINATOR        heavy fighter
+ID  29/278  Timber           long range bomber
+ID  31/325  Nightcap         tanker plane
+ID  48/275  ZEPPELIN         zeppelin
+ID  52/326  EAGLE            seaplane
+ID  68/279  Hawk             stealth bomber
+ID  70/272  Predator         stealth fighter
+ID  92/271  BOOMERANG        medium fighter
+ID 123/327  Rasak            defence fighter
+
+--Ballteship--              
+ID   8/268  Hurry            torpedo wig
+ID  27/354  Jellyfish        Subhunter (destroyer)
+ID  28/355  GASP             AA-SHIP (cruiser)
+ID  37/357  Apogee           battleship       
+ID  38/354  Streak           destroyer
+ID  41/352  Tide             Patrol corvette
+ID  42/366  Wake             speed boat	            
+ID  47/355  SHark            Cruiser
+ID  71/368  Monster WIG      WIG plane                  
+ID  80/354  Gunboat          gunboat destroyer
+ID 113/357  Homer            Main Artillery Ship (Battleship)
+ID 115/356  Shine            medium gunship (heavy cruiser)
+
+--Submarines/Carrier--
+ID  14/360  Wedge            Aircraft Carrier
+ID  34/364  EEL              hunter submarine
+ID  35/365  Tsunami          nuclear submarine          
+ID  36/363  Clam             transport Submarine
+ID  81/361  Reha             super carrier
+ID  91/363  Squid            espionage submarine
+
+--Support Ships--
+ID   5/    HOOVERVRAFT   air cushion vehicle
+ID  24/370  Crab             armored transport ship
+ID  39/419  Fix              repair & build ship
+ID  43/369  Ark              transport ship
+ID  46/419  Cone             Ice Breaker/Mine Layer
+
+
+__________________________________________________
+AIR
+ID 15  Raven
+ID 21  Impact
+ID 33  Vertic
+ID 90  Terror          trooper hunter
+ID 23         Bumblebee                   
+ID 54         Inca                      
+ID 82         Sinner
+ID 78  (-)   (   ) Ralago     heavy attack helicopter
+ID 116 Raven2       heavy transport plane
+
+Trains
+
+ID 57              Punch      battle train
+ID 59              Judy       repair train
+ID 72        (472) Flux       transport train
+ID 79  (-)   (472) Burro      helicopter platform train

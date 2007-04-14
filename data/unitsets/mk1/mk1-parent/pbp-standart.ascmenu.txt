@@ -1,0 +1,12 @@
+unitmenu {
+ID (?) = 0
+UNITIDS = 0-999 1200-1499 12000-12999 
+blocknumber = 2
+block0 { 
+   name = Trooper
+   menuitem = light_attack_trooper medium_attack_trooper
+} block0
+block1 {
+   name = Tanks
+   menuitem = light_tank medium_tank heavy_tank defend_tank siege_tank
+} block1

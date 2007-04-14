@@ -1,0 +1,322 @@
+Mark3 Unit Set Advanced Strategic Command
+grafics and specifications by
+GAMER battle-planet@gmx.de
+
+_________________
+v19.02 beta
+-GuideSortHelp integriert
+-Flugzeuge + hubschrauber +1 Feld
+-Tanks Flugzeuge erhöht
+
+_________________
+v19.01 beta
+-Burke 2x RF gefixt
+-TechAnpasungen, Flak/Sniper/Taucher/Ari/Support/Bau
+-Standardisierung Helicopter/Mixed Fighter/Züge
+Neu:
+-Truck (Munitionstransporter, Ceti Ersatz)
+
+
+_________________
+v19.00 04.03.2007
+-Release
+
+_________________
+v18.04beta
+-DD21 RF bugfix
+-Skold +2 Ammo SAM
+-Raptor 39 Stealth
+
+_________________
+v18.03beta
+-Pioniere Gewicht deutlich angehoben
+-Standardisierung Stationäre EInheiten,Schiffsrümpfe,Fahrzeuge
+-Anpassung für ASC2
+-PBP Forschung und neue Forschung integert
+Neu:
+-RAFALE
+-SS34
+-SS73
+
+_________________
+v16.01 04.07.2006
+-Sp.Pio kann wieder Kornuta bauen
+-Visby Sonar Bugfix
+
+_________________
+v16.00 19.06.2006
+-Fuchs und FuchsTrans etwas schneller + shallow_water
+-ICBM Stealth Bugfix
+-Kornuta+PRD abwerfbar wie sonarboje
+-Armstrong mehr Movement
+-Standardisierung Jammer
+-Elch Baubugfix
+-Pio3 etwas mehr tank
+
+_________________
+v15.01 26.02.2006
+-Raketenpanzer Defaults
+
+_________________
+v15.00 27.12.2005
+-Bomber+Panzer Kategorien
+-Gaskin +MG
+-Visby + Wasserbombe
+
+_________________
+v14.04 21.11.2005
+-Bugfix Building Pio Tankinhalt
+-Wachturn, RF Anzahl reduziert
+
+_________________
+v14.03 28.09.2005
+-diverse Bugfixes
+-Anpassung an Lavamineral
+
+_________________
+v14.02 16.09.2005
+-Anger, mehr Armor, maxRange=70
+-default fighter (Falcon,EF,MIG,Tomcat)
+-Pioniere verladen MG Munition
+-Elite Pio baut Anger
+
+_________________
+v14.01 31.08.2005
+-Helipad Gewicht 190
+-neue Testfunktion beim Building Pioneer
+
+_________________
+v14.00 26.08.2005
+-default units (ari, Boje)
+Neu:
+-Grafiken FH70,FH77,PzH2000
+-Volcano
+-Merkat
+-Cojote
+-Sonarboje
+-Anger
+
+_________________
+v13.00
+-default units (view+sat+satdefence)
+-Bugfix Chinook,Hormone, Taucher/LR5 ausladen
+-DD21 heavy ship
+-very_big_ship(noriver) = Iowa,Ticonderoga,Arsenal,DD21,CVX,Antey,TAK
+
+_________________
+v12.00
+-neue Basisversion für ASC Update
+-kleinere Bugs beseitigt
+
+_________________
+v11.00
+-Anpassung auf Default Trooper und default AD
+-Armstrong, repariert im Orbit
+Neu:
+-LST
+-Airbourne
+-Javelin
+-Notstromaggregat
+
+_________________
+v10.03 ZV
+-SpaceLab nur noch Orbit,2xRF Air
+-AntiSatWaffe vom Antey ins Seawolf verlegt
+Neu:
+-FH70
+-FH77
+-PzH
+(alle ohne neue Grafik)
+
+_________________
+v10.02 ZV
+- standardisiertes Transportsystem
+- standardisierte Gewichtseinteilung
+Neu:
+-Wiesel
+
+_________________
+23.04.2005 v10.00
+- Umbau Rapier auf "sockelgebunden"
+- angleich SAM (Anzahl RF + Power)
+- JSF Bugfix Waffen
+- SDI 3x RF
+- Carrier-Transporter "Durchstartbug" gefixt
+- Transportschiff läd Heavy Aircraft
+- LR5, Minenräumer
+- Triton, Weapon Bugfix
+- Schiff Viewwerte standardisiert
+- Spaceshuttle extern Service
+Neu:
+-Rapier2, baubar durch Special Pioneer
+
+________________
+04.02.2005 v9.05
+-Diverse kleine Bugfix
+-Wachturm überarbeitet
+
+________________
+21.01.2005 v9.04
+-Waffenupdates
+-Helipad + MiniGun
+-kleinere Bugfixes
+
+________________
+17.11.2004 v9.03
+-A-Sat, Weaponbugfix
+-Lynx Weapon Bugfix
+-LR5 durch Chinook über Wasser abwerfbar
+-Aufwertung MG_Nest,Wachturm
+-Torpedowaffen aktualisiert
+-Turrets nach Bewegen nicht mehr ausladbar.
+
+________________
+24.10.2004 v9.01
+LYnx + Kornuta, Infotext korrigiert
+SeaWulf, Weaponupgrade
+Special Pioneers größerer Tank
+
+________________
+01.10.2004 v9.01
+Bugfix, Movement Schiffe
+Harrier+JSF, Move bugfix
+
+________________
+19.09.2004 v9.00
+-Überarbeitung Techstufe 5
+-SEK, Stealth Bugfix
+-LR5, Category = light_ship
+-Sealboat, Stealth Bugfix
+-LCC/CVN/CVX umgestellt auf andere Stellplätz
+Neu:
+-Arsenal, stealth rocket ship
+
+________________
+08.09.2004 v8.00
+-Überarbeitung Techstufe 4
+-Anpassung Multiple RF
+Neu:
+-SEK, Trooper
+-MAus, Heavy tank
+-Boeing, nuklear aircraft
+-Lynx, helicopter
+-DD21, stealth cruiser
+
+________________
+20.08.2004 v7.00
+-Überarbeitung Techstufe 3
+-SDI Tech1
+-Bugfix TAK, Munition
+-FuchsTR 6 Stellplätze
+-Bugfix KSM Stealth
+-SpaceLab mehr Gewicht
+-Elch, light tank +GroupID15
+-Bugfix, AirDefence Technologiestrang
+-Transportschiffe MoveCost 20
+-TransportZug CargoMovementDifisor 3
+Neu:
+-TigerII, WW2 Tank
+-JSF, vertical takeoff plane
+-SeaWulf, AttackSubmarine (ersetzt Clam)
+
+________________
+25.06.2004 v6.03
+-Überarbeitung Tech2 komplett
+-neues Design: Buffalo+Tak+Sturmtiger
+-K44 Gewicht reduziert
+Neu:
+-Tiger, light tank 
+-LR5, rescue submarine
+-LSS, light ship and Helicoptercarrier
+-Victoria, long patrol submarine (ersetzt Eel)
+
+
+________________
+13.06.2004 v6.02
+Aircraft+Ship Tech0+1 überarbeitet
+
+________________
+01.06.2004 v6.01
+Überarbeitung Vehicle+Turrets Tech0+1
+
+________________
+26.05.2004 v6.00
+Umstellung auf neues Forschungssystem
+Trooper überarbeitet
+
+________________
+06.05.2004 v5.02
+notwendige Änderungen wegen Umstellung small,large,cruise missile
+
+___________________
+12.04.2004 v5.01
+Neu:
+-Mirage
+-Baynunah
+-Triton
+-Burke
+-Daring
+-SealBoat
+-Visby
+-Meko
+-Pomornik
+-Skjold
+Änderung:
+Aegis -> Ticonderoga
+PRD, jamming 40
+Wachturm, Loading bugfix
+
+________________
+08.04.2004
+Neu:
+-MAN Tanklaster
+-Helipad
+Änderungen:
+-Wachturm, kann Trooper laden
+-Kornuta,PRd,Rapier,MG_Nest nicht mehr auf Road+Runway
+-SeaShadow light
+-Iowa, etwas billiger, bessere Waffen
+-Fix mehr Panzerung
+-Antey, selb repair bugfix
+-Guideline billiger
+-F14 Waffen etwas besser
+-Lars,MRLS bessere Waffen
+-Bugfix A-Sat Laser
+-Guideline, kein MAM mehr
+-Berkut, OrbitWaffe 1Feld Reichweite
+
+________________
+02.03.2004 v4.10
+Änderungen:
+-Bugfix Rapier Waffe
+-Pioniere mit weiteren Servicefunktionen
+-PHM Schneller
+-KSM schneller unf kann mehr Sturm aushalten
+
+__________
+29.02.2004
+Änderungen:
+-Konzeptänderung Ammotransport, Chinnok und ICE übernehmen Hauptaufgabe, Ceti wird ersetzt durch leichten LKW
+-Aegis, Reichweite CM vergrößert, Reichweite SAM verringert, +MDRF
+-Blackbird, Waffe weg, +SatView
+-MIG, Waffe3 = 2 Felder
+-Starlifter, +MaterialTank
+-K44,Kornuta,PRD,MGNest,Rapier transportabel per USSL und Pioniere
+-Rapier, MG weg, stärker auf Entfernung
+-Patriot, kann nach bewegung feuern
+-Special pioneer, kann Kornuta, PRD,MG Nest befördern
+-Antey teurer
+-Sea Shadow, bugfix Stealth, Umfunktionierung Transporter
+
+__________
+10.01.2004
+Neu:
+-
+
+Änderungen
+-Bugfix, USSL
+-Roland: Preise leicht verändert
+-Buffalo: Kann kleine Schiffe transportieren
+-Aegis,Iowa,CVX,CVN: "MoveDuringReaktionfire"
+-Scud,ICBM,Lance: kein Reaktionfire mehr
+-Harrier: "Cruiserlanding"

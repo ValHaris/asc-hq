@@ -1,0 +1,183 @@
+ASC Einheitenset Erde
+Erstellt von Steffen Fröhlich (GAMER)
+(Format - Windows Editor)
+
+UnitID/parentID - Name der Einheit - Kurzbeschreibung
+Version Beta1
+
+
+
+--Infantrie--
+
+ID 523/206 NAVY SEALS       diving trooper
+ID 524/203 Army Ranger      heavy trooper
+ID 525/205 SILENCER         sniper
+ID 535/201 GI               trooper
+ID 602/204 SEK              Sonder Einsatz kommando
+ID 613/207 AirBourne        paratrooper
+ID 618/202 Javelin          Anti Tank Trooper       
+
+--Tanks--
+ID 534/292 PATTON           medium tank type 2
+ID 546/293 LEOPARD3         MainBattleTank
+ID 555/290 Leopard 1        light tank
+ID 558/291 Leopard 2        medium tank type 1
+ID 563/294 P1000            old prototype siege stank
+ID 575/292 Sturmtiger       old medium tank
+ID 595/290 Tiger            old light tank
+ID 596/291 Tiger II         old medium tank
+ID 615/295 Maus             defence Tank
+
+--Air Defence --
+ID 526/215 MISTRAL          air defence trooper
+ID 531/222 RAPIER           air defence turret        
+ID 532/220 ROLAND           air defence tank
+ID 533/218 GEPARD           AA-Tank
+ID 553/224 Gainful          SAM medium range
+ID 556/219 Patriot          missile air defence
+ID 567/225 Guideline        long range air missle
+ID 617/223 Rapier 2         lr air defence turret
+
+--Artillery--
+ID 597/250 FH 70            light artillery
+ID 598/251 FH 77            medium artillery
+ID 599/254 Railroadgun
+ID 605/252 PzH2000          heavy Artillery
+
+--Rocket--
+ID 550/296 LARS             Light Artillery Rocket System (LARS)
+ID 551/297 MLRS             Multiple Rocket Launch System
+ID 552/301 Scud             moblile rocket launch system
+ID 565/300 Lance            medium Range Rocket System
+ID 574/304 ICBM             langstreckenraketensilo
+
+--View--
+ID 510/244 K44              ground radar system
+ID 515/247 RAYTHEON         radar plane
+ID 518/248 BLACKBIRD        espionge plane
+ID 527/246 Galileo          communication satellite
+ID 544/243 PDR 12           light radar	device
+ID 557/242 Longtrack        radar vehicle
+ID 621/249 SonarBoje        sonarboje
+
+--Jamming--
+ID 545/308 KORNUTA          radio frequence blocker
+ID 594/307 Cojote           jammer vehicle
+
+--Transport/FastAttack--
+ID 538/335 FUCHS            Spürpanzer
+ID 539/335 FUCHS TR         Truppentransporter
+ID 554/335 GASKIN           fast attack vehicle
+ID 578/335 USSL             vehicle transport
+ID 592/336 Wiesel           infiltrator squad   
+
+--stationäre Anlagen--
+ID 572/318 Wachturm         Verteidigungsturm
+ID 573/314 MG-Nest          MG Verteidigungsstellung
+ID 579/-   Helipad          mobile helicenter
+ID 624/320 SS37             surface defence system
+ID 625/322 SS74             long range defence system
+
+--Support vehicle--
+ID 540/336 BULLDOZER        Abrisseinheit
+ID 547/336 ELCH             Brückenlegepanzer 
+ID 548/-   Build. PIONEERS  Bautrupp
+ID 549/-   Special PIONEERS Bau- und Reparaturtrupp
+ID 576/-   ELITE PIONEERS   Spezialbautrupp
+ID 577/335 Dumper           Material transporter
+ID 580/335 MAN              Treibstofftransporter
+ID 593/422 Notstrom         Generator
+ID 619/335 Merkat           minensucher
+ID 620/335 Volcano          Minenleger
+
+
+--orbital--
+ID 511/238 SDI              space defence system
+ID 520/230 BOOSTER          Shuttle Booster
+ID 521/231 Spaceshuttle     Sattransporter
+ID 522/236 ARMSTRONG        spaceman
+ID 528/232 A-SAT-X53        multi attack satellite
+ID 562/235 SPACELAB         Raumstation
+ID 622/-   Anger            moblie anti-sat launcher
+
+--aircrafts--
+ID 500/276 AMX              light bomber
+ID 506/272 MIG-35           heavy fighter
+ID 508/278 BUFF             long range bomber
+ID 509/270 FALCON           light fighter  
+ID 512/271 EF2000           medium fighter
+ID 513/279 Spirit           stealth bomber
+ID 514/326 VIKING           anti ship plane
+ID 517/325 NSA              tanker plane
+ID 529/280 THUNDERBOLT      tank hunter
+ID 564/273 Tomcat           distance fighter
+ID 623/327 Mirage           defence fighter
+
+--BattleShip--
+ID 536/251 PHM              hydrofoil boat
+ID 541/257 IOWA             battleship
+ID 566/356 Ticonderoga      Raketenkreuzer
+ID 581/251 Mirage           Patrol Boat
+ID 582/252 BAYNUNAH         Corvette
+ID 583/253 TRITON           Fregatte
+ID 584/254 Burke            missile Destroyer
+ID 585/254 Daring           anti arcraft Destroyer
+ID 586/250 SealBoat         Stealth Patrol
+ID 587/252 Visby            Stealth Corvette
+ID 588/253 Meko             Stealth fregatte
+ID 590/251 Skjold           Stealth Fast Attack
+ID 609/255 DD21             stealth cruiser
+ID 616/256 Arsenal          stealth rocket cruiser
+
+--Support/Speedships--
+ID 537/369 Buffalo          transportship
+ID 543/359 TAK              armored transport ship
+ID 559/368 KASPIAN SM       ekranoplane
+ID 561/352 Sea Shadow       stealth ship
+ID 589/371 Pomornik         Hoovercraft
+ID 607/419 LST              repair and build ship
+
+--Submarines/carrier--
+ID 542/365 ANTEY            nuclear submarine
+ID 568/359 CVN              light carrier
+ID 569/360 CVX              medium carrier
+ID 610/362 LR5              mini submarine
+ID 611/364 Viktoria         fight submarine
+ID 612/365 Seawulf          rocket submarine
+ID 614/358 LCC              Helicopter carrier  
+
+
+
+AIR
+
+ID 519 (15)   STARLIFTER                  http://www.fas.org/man/dod-101/sys/ac/c-141.htm
+ID 505 (21)   RAPTOR                      http://www.fas.org/man/dod-101/sys/ac/f-22.htm
+ID 507 (23)   HORMONE                     http://www.fas.org/man/dod-101/sys/ac/row/ka-25.htm
+ID 530 (33)   HARRIER                     http://www.fas.org/man/dod-101/sys/ac/av-8.htm
+ID 504 (54)   APACHE                      http://www.fas.org/man/dod-101/sys/ac/ah-64.htm
+ID 503 (55)   TIGER                       http://www.fas.org/man/dod-101/sys/ac/row/tiger.htm
+ID 501        HAWKEYE          sensor plane              http://www.fas.org/man/dod-101/sys/ac/e-2.htm
+ID 502        CHINOOK          heavy transport heli      http://www.fas.org/man/dod-101/sys/ac/h-47.htm
+ID 516 (70)   Nighthawk
+ID 560        Berkut           heavy mixed fighter
+ID 603 JSF
+ID 601 Boeing
+ID 604 Lynx
+
+
+
+Ground 
+
+
+Trains
+
+ID 570 (   ) (   ) ICCE
+ID 571 (   ) (   ) ICSE
+
+unbesetzt
+ID 591 Ceti
+ID 600 Punch
+ID 605 Hermes
+ID 606 Cone
+ID 608 free
+  

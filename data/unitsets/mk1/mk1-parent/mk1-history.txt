@@ -1,0 +1,417 @@
+ASC Standart Units
+Specifications by GAMER (gamer@ulrichshorst.de)
+
+_____________________
+v20.04 beta
+-Guidesorthelp komplett integriert
+-Privateer Service entfernt
+-Flugzeuge und Helicopter 1 Feld schneller
+- Hangar bauoption  -> vesuvius
+- Atomkraftwerk bauoption -> MBV
+
+_____________________
+v20.03 beta
+-GuideSortHelp defaultFlugzeuge+defaultLuftabwehr
+
+_____________________
+v20.02beta
+-Überbreite Bunkergrafiken beseitigt.
+-Default Ergänzungen
+
+_____________________
+v20.01beta 22.03.2007
+-Schwerer Transportschiffe zu Eisbrecher aufgewertet.
+-Reha icebreaker Ability entfernt (war ohne Funktion)
+-Überarbeitung Transportsystem (trooper/Mechs)
+-Helicopter Standardisiert
+-Züge standardisiert (alle mind. 100 move)
+-Mixed Fighter standardisiert
+-Spor aufgewertet
+-Adder 20 Minen
+-Cone 25 Minen
+-default Panzer +50 Armor
+-Tech-Anpassung/Ari/Sniper/
+
+_________________
+v20.00 04.03.2007
+-Release
+
+_________________
+v19.07beta
+-CM Waffen überarbeitet, MinRange angehoben -> 50% Max Range, Min/MaxPunch angeglichen
+-sehr langsame CM Launcher, movement eröht und lowland zugelassen.
+-defence Bunker, Eingang vergrößert, Kapazität verkleinert.
+-Vesuvius/MBV def MG + Straße/Schiene abreissbar
+-LTT parent ID bugfix
+-Flakpanzer(default) an Panzergeschwindigkleiten angepasst.
+-MG Nest (mdRF) (default)
+-Butterfly 39 STealth
+
+_________________
+v19.05beta
+-Diverabsprung jetzt auch über tiefem Wasser möglich
+-Anpasung für ASC2
+ * Parameter onlyTransMove
+ * Sats Angriff auf 1 Feld
+-PBP Forschung + neue Forschung integiert
+
+_________________
+v19.01beta 
+-Standardisierung stationäre Bodenabwehr überarbeitet
+-Flugzeuge größerer Fueltank
+-Wrackobjekte weniger Movemalus
+-Anpassung Bewegungsreichweite bei Panzern
+-Rakerenpanzer kein RF mehr
+-Standardisierung Restfahrzeuge
+-Service Pioniere auf Fahrzeuggewicht angehoben
+-SeaPlane,defenceplane-parent
+-Jellyfish, +1Feld Wasserbombe
+Neu:
+-Drall (tauchroboter)
+-Tora  (long range defence gun)
+-Rasak (defence fighter)
+
+_________________
+v16.01
+-Jammship und -heli etwas weniger jamming
+
+_________________
+v16 14.06.2006
+-Weasel nur noch 1 Trooperplatz
+-MechTrooper schneller
+-Spor kann nach Angriff zurückziehen
+-Standardisierung jammer, stationäre Ari
+-Defence Tanks = Artilleriekanone
+-default Radar etwas mehr View
+-default Jammer etwas mehr jamming
+
+_________________
+v15.01 26.02.2006
+-Raketenpanzer Defaults
+-kleinere Bugfixes Fahren im schnee
+
+_________________
+v15.00 07.01.2006
+-Bomber+Panzer Kategorien
+-Default: Luft-Boden Raketen überwiegend nur noch aus medium/Low Air abfeuerbar
+-T.M.L. durch MBV baubar
+-Neu: Brandbombe, AntiTank Bombe (Tankhunterflugzeug)
+-Anpassungen bei heavy tank und troopertransportsystem
+-EXP5+21 MG
+
+_________________
+v14.05 28.09.2005
+-diverse Bugfixes
+-Anpasung an Lavamineral
+
+_________________
+v14.04 16.09.2005
+-Primerose, Angriff Ground 3 Felder
+-Default Fighter (Arrow,Boomerang,Dominator,Predator)
+
+_________________
+v14.03 31.08.2005
+-diverse kleine Anpassungen bei den default Units
+-SAM slow, 19Move + Feuern nach Bewegung
+
+_________________
+v14.02 25.08.2005
+-default Units, Artillerie
+-diverse Bugfixes (Argus)
+Neu:
+-Sonarboje
+-LTT
+
+_________________
+v14.01 08.08.2004
+-Bugfix Streak, Flak
+-Anpassung MBV an Silo-Preis
+-AA-Ship = Gasp
+
+_________________
+v14.00 07.08.2005
+-default units (view+sat+satdefence)
+-Umbau MG Waffen für Flugzeuge/Helicopter
+-Transporkapazität Fahrzeugtransporter+Luftkissenboot erhöht
+-very_big_ship(noriver) = Apogee,Shine,Reha,Wedge,Tsunami,Crab
+-Neue Namen für Orbitaleinheiten
+
+_________________
+v13.00
+-neue Basisversion für ASC-Update
+-kleiner Bugs beseitigt
+
+_________________
+v12.00
+-parent Units (Trooper+AD) integriert
+-turrets an neues Movementsystem angepasst
+-MBV, baut Panzerschiene
+
+
+_________________
+v11.03 - ZV
+-Adder, ohne Fremdminensicht, 2 Felder Minenlegen
+-Paratrooper, Minenleger/-seher
+-Spacestation nur noch Orbit, 2x RF vs. Air
+-Bugfix RF Shine
+-Bugfix Transport Dronenträger
+Neu:
+-Spor, anti sat train
+
+_________________
+v11.02 - ZV
+-Transportsystem standardisiert
+-Fix wieder floating only
+-Gewicht Schiffe standardisiert
+Neu:
+
+_________________
+23.04.2005 v11.00
+-Shuttle extern Service orbit
+-SDB 3x RF
+-alle Bunker mit VerteidigungsMG
+-Transportschiff läd Heavy Aircraft
+-Schiff Viewwerte standardisiert
+
+_________________
+26.03.2005 v10.08
+Neu:
+-SAM Bunker, baubar durch MBV
+Änderungen:
+-Carrier StartBug beseitigt.
+
+_________________
+04.02.2005 v10.07
+-diverse kleine Bugfixes
+-Fix kann nun in Ground_level_wechseln und dort Turrets bauen
+
+_________________
+21.01.2005 v10.06
+-Anpassung (balancing) bestimmter Standartwaffen
+-Anschläge über Höhendifferenzen bei SAm+ verkleinert
+-Munitionsvorräte der LowTechFlieger vergrößert
+-MG für hochfliegende Flugzeuge feuert nicht mehr auf Bodentruppen
+
+_________________
+27.12.2004 v10.05
+-Überarbeitung der Munitionsvorräte
+-Enfernung überflüssiger Programmcode
+-Beseitigung kleinerer Bugs
+
+_________________
+17.11.2004 v10.04
+-Ship Flak nur 2xRF
+-EXP5 Namen korrigiert
+-AA-Ship neu konfiguriert
+-diverse Anpassungen bei Schiffen
+-neue 3D Grafiken Trooper
+-Torpedo Waffensysteme aktualisiert
+-verladbare Turrets angepasst (nicht sofort ausladen nach Bewegung)
+-Aufwertung Cobra+Fort
+
+_________________
+05.11.2004 v10.03
+-Tide kein Minenleger mehr
+-BigGun Armor +50
+-Ark, Beschreibung korrigiert
+-Hornet2 neue Grafik
+-neue 3D Grafiken beim MK1 UnitGuide
+
+_________________
+26.10.2004 v10.02
+-Helicopter Weaponupgrade
+-StandartWracks für Helicopter,Trains,Vehicle integriert
+-Movement Bug bei Schiffen behoben
+
+
+_________________
+28.09.2004 v10.01
+-Aktivierung automatische Kostenberechnung
+-Grafik Bugfix HeavyGun
+-Icebreaker move bugfix
+
+_________________
+18.09.2004 v10.00
+-Überarbeitung Technologiestufe 5
+Neu:
+-Rotos, Tech5 Schienengeschütz
+-HeavyGun
+-BRS, Amored radar
+-EXP 49, amored jamming system
+-Homer, heavy artillery ship
+
+________________
+16.09.2004 v9.01
+-MechTrooper Bewegung auf mountains möglich
+-RavenII, Kurze Landung auf Runway und Road möglich
+-Zeppelin RF möglich
+-Wake, MAM
+-EXP43, Helideck
+
+________________
+04.09.2004 v9.00
+-Überarbeitung TechStufe 4
+-multiple RF Überarbeitung
+-Basis Set Stealth auf 70 gesetzt
+-Wedge -> Tech3
+Neu:
+-EXP5 , Jam Mech
+-Coma3, twiceGun Artillery
+-Raven2, Heavy Amored Transport Plane
+
+________________
+28.08.2004 v8.03beta
+- Update Multiple RF
+
+________________
+23.08.2004 v8.02
+-Bugfix Move-Sat
+
+________________
+20.08.2004 v8.01
+-DefaultWaffen Aktualisierung
+-Bugfix Zuweisung Grafiken
+
+________________
+08.08.2004 v8.00
+Überarbeitung
+-Techstufe 3
+-SDB -> Tech 1
+-Fix, Baufunktionen erweitert
+-Shark, Sonar+Wasserbomben
+Neu:
+-Hornet II, missile tank
+-Shine, heavy gun cruiser
+
+________________
+07.07.2004 v7.04
+-Bugfix Shark, Hauptwaffe
+-Punch, Armor 950, 3 Stellplätze
+-Privateer 4 Stellplätze
+
+________________
+21.06.2004 v7.03
+Überarbeitung Techstufe2
+Neu: Gunner, Swatter2
+
+________________
+13.06.2004 v7.02
+Aircraft+Ships Techstufe 0+1 überarbeitet.
+Basetechs Wurzel-Techabhängig.
+
+________________
+01.06.2004 v7.01
+Vehicle+Turrets Techstufe 0+1 überarbeitet.
+
+________________
+26.05.2004 v7.00
+Umstellung auf neues Forschungssystem
+Trooper überarbeitet.
+
+________________
+06.05.2004 v6.02
+notwendige Änderungen wegen Umstellung small,large,cruise missile
+
+11.08.2003
+Änderungen:
+-Tide, Transport Bugfix
+-Clam, Service nur noch über Wasser
+-Bolt, größerer Energietank
+-diverse default Weapon Erweiterungen.
+________________
+08.04.2004 v6.01
+Änderungen:
+-Verbesserung A-Sat
+-Spear, MoveDuringReactionFire
+-MBV +Baufunktion Jammergebäude
+
+________________
+23.03.2004 v6.00
+Neu:
+-lightAssault
+-Nova2
+-Armadillo2 
+-Coma2
+-MG Nest für Missionskarten
+Änderungen:
+-Dominator, HighChance bugfix
+-Clam, Ladesystem Bugfix
+-TML, kein Angriff nach Bewegung
+-Gunboat, 2 Felder vs Air
+-Stonewall, Einschränkungen beim Terrain
+-Fix mehr Panzerung
+-Stealth auf 80 erhöht
+-Predator etwas bessere Waffen
+-Hornet bessere Waffe
+-Blackout bessere Waffe
+-Assault Tank, etwas mehr Panzerung
+
+________________
+02.03.2004 v5.12
+Änderungen
+-AA-Ship + MDRF
+
+__________
+28.02.2004
+Änderungen
+-Flak-Waffen bessere Power auf 2-3 Felder
+-Vortex, kann Eis befahren
+-Cone +MG+Flak+MDRF
+-Ceti kann durch tiefen Schnee fahren.
+-Streak +Flak +MDRF
+-Apogee +MDRF
+-Jellyfish +Flak +MDRF
+-Hurry stärkere Waffen
+-Gunboat +MDRF
+-Tide , Minenlegerfähigkeit beschränkt
+-Argus, Waffe weg, dafür SatView, schneller
+-Fort, +Flak, nicht mehr Turretsockel gebunden
+-BigGun,GRS,SAM Turret, transportabel per MBV
+-CAD Grafik Bugfix
+-Cone auch Flachwasser
+-Wake verträgt Sturm bis 150
+-MBV kann kann turrets transportieren.
+-Dominator weitere 2 Feld Waffe
+
+----------
+10.01.2004
+Neu: 
+-CAD -crazy based air defence
+Änderungen:
+-Bugfix: Air-Surface Missle-High, Surface-Air Missile-High, Vertic
+-Anpassung Vesuvius an neue Gebäude
+-Dominator neuer Look
+-Predator schwerer, kann nicht mehr auf kleinem Träger landen.
+-Bolt mit größerem Fuel und Energietank
+-Apogee,Wedge,Reha,Shark = "MoveDuringReaktionFire"
+-AA-Ship kein Satview mehr
+-Spike, teurer
+-Ark, kann leichte Schiffe transportieren.
+-Follow,Silo,TML,Tsunami,Calandor kein Reaktionfire mehr
+
+----------
+09.12.2004
+- balancing Bang,SAM Turret
+- Bugfix Crazy, Dominator, Predator, Air_MG
+
+----------
+22.10.2003
+Torpedowaffen standardisiert.
+Neue Einheit: Borro
+
+27.11.2002
+Ground Units Tech0 optisch und technisch Überarbeitet
+
+26.11.2002
+Ground Units des standart Baumenüs optisch und technisch überarbeiten und AI Job hinzugefügt.
+Units auf neue Grounp ID 13,14 aktuakisiert 
+
+22.11.2002
+Constructor B: Baufunktion gas Station hinzugefügt
+
+11.11.2002
+Constructor B: Baufunktion "Windkraftwerk"+Turret hinzugefügt+ Remove funktion
+Transporter: Ressouecensuche auf 1 Feld beschränkt
+
+09.11.2002
+Construcor B: Baufunktion Oiltower hinzugefügt
