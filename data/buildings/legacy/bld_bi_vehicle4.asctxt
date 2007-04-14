@@ -1,0 +1,22 @@
+BuildingType {
+   Name = great vehicle plant
+   ID = 53
+   parent = 11
+   TechAdapterRequired = 14753
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A4 A5 B5 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 77
+            A4 = 76
+            A5 = 78
+            B5 = 79
+         } Stage1
+      } dry
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A4
+} BuildingType

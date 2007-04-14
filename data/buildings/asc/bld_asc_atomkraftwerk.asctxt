@@ -1,0 +1,59 @@
+BuildingType { 
+   Name = Atomkraftwerk
+   ID = 29
+   Armor = 1000
+   View = 30
+   parent = 499
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1 A2 A3 A4 A5 A6 B1 B2 B3 B4 B5
+   UseGFXpics = false
+   Pictures {
+      dry = bld_asc_Atomkraftwerk.png
+   } Pictures
+   RubbleObjects = true
+   Entry = A6
+   rubble {
+      A1 = 983
+      A2 = 983
+      A3 = 983
+      A4 = 983
+      A5 = 983
+      A6 = 983
+      B1 = 983
+      B2 = 983
+      B3 = 983
+      B4 = 983
+      B5 = 983
+   } rubble
+
+
+   Functions = matter_converter
+   MaxResearch = 0
+   NominalResearch = 0
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 15
+      MaxLoadableMass = 15
+      CategoriesNOT = 
+      EntranceSystemNum = 1
+   } Transportation
+   MaxResourceProduction { 
+      Energy = 10000
+      Material = -1000
+      fuel = -1000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 10000
+      material = -1000
+      fuel = -1000
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 5000
+         Material = 1000
+         fuel = 1000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

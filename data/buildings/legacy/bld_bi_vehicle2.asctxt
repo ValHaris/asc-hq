@@ -1,0 +1,38 @@
+BuildingType { 
+   Name = small vehicle plant
+   ID = 1001
+   TechAdapterRequired = 14701
+   parent = 12 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 A3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 69
+            A3 = 70
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A1 = 1998
+            A3 = 1996
+         } Stage1
+      } few_snow
+       much_snow { 
+         Stage1 { 
+            A1 = 1997
+            A3 = 1995
+         } Stage1
+      } much_snow
+       snow_and_ice { 
+         Stage1 { 
+            A1 = 1997
+            A3 = 1995
+         } Stage1
+      } snow_and_ice
+  } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+} BuildingType

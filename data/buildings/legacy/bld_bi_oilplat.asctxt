@@ -1,0 +1,17 @@
+BuildingType { 
+   Name = oilplattform
+   ID = 1211
+   TechAdapterRequired = 14811
+   parent = 13 499 498
+   ConstructionStages = 1
+   Weather = dry much_snow snow_and_ice
+   Fields = C3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_bi_oilplat_dry.png
+      much_snow = bld_bi_oilplat_ms.png
+      snow_and_ice = bld_bi_oilplat_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = C3
+} BuildingType

@@ -1,0 +1,40 @@
+BuildingType { 
+   Name = Town
+   ID = 24
+   Armor = 100000
+   View = 50
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_ASC_town.png
+   } Pictures
+   RubbleObjects = false
+;   rubble {
+;      A1 = 78
+;   } rubble
+   Entry = A1
+   Functions = matter_converter
+   notRemovable = true
+   MaxResearch = 10
+   NominalResearch = 10
+   MaxResourceProduction { 
+      Energy = 500
+      Material = 500
+      fuel = 500
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 500
+      material = 500
+      fuel = 500
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 2000
+         Material = 2000
+         fuel = 2000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

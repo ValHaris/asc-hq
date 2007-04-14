@@ -1,0 +1,51 @@
+BuildingType { 
+   Name = Sectret Town
+   ID = 1203
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry heavy_rain few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 1571
+         } Stage1
+      } dry
+      heavy_rain { 
+         Stage1 { 
+            A1 = 1571
+         } Stage1
+      } heavy_rain
+      few_snow { 
+         Stage1 { 
+            A1 = 1570
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 1569
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 1569
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+   Functions += NoObjectChaining matter_converter
+   MaxResearch = 1
+   NominalResearch = 1
+   MaxResourceProduction { 
+      Energy = 150
+      Material = 150
+      fuel = 150
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 150
+      material = 150
+      fuel = 150
+   } defaultProduction
+} BuildingType

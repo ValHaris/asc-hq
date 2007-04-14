@@ -1,0 +1,37 @@
+BuildingType { 
+   Name = research institute
+   ID = 22
+   parent = 499
+   Infotext = [Forschungszentrum]
+   ConstructionStages = 1
+   Weather = dry
+   Fields = B1 B2 B3 B4 C3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_lab.png
+   } Pictures
+   RubbleObjects = false
+   Entry = B3
+   Armor = 1500
+   transportation { 
+      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } transportation
+   Functions = Research
+   MaxResearch = 100
+   NominalResearch = 40
+   ConstructionCost { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -800
+      Material = -800
+      fuel = -800
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -800
+      material = -800
+      fuel = -800
+   } defaultProduction
+} BuildingType

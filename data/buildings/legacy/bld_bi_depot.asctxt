@@ -1,0 +1,52 @@
+BuildingType {
+   Name = depot
+   ID = 54
+   TechAdapterRequired = 14754
+   parent = 2 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 46
+            A3 = 44
+            A4 = 47
+            B3 = 49
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A2 = 1795
+            A3 = 1793
+            A4 = 1791
+            B3 = 1789
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A2 = 1794
+            A3 = 1792
+            A4 = 1790
+            B3 = 1788
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A2 = 1794
+            A3 = 1792
+            A4 = 1790
+            B3 = 1788
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      A4 = 77
+      B3 = 78
+      A3 = 76
+   } rubble
+   Entry = A3
+} BuildingType

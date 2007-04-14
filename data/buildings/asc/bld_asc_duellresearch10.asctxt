@@ -1,0 +1,48 @@
+BuildingType { 
+   Name = LAB 10
+   ID = 27
+   parent = 499
+   Infotext = [Sonderforschungslab für Einzelmissionen]
+   Armor = 10000
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1  
+  UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_akku.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   Functions = Research
+   MaxResearch = 1000
+   NominalResearch = 300
+   Transportation { 
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 0
+      MaxLoadableMass = 0
+      CategoriesNOT = Medium_aircraft Heavy_aircraft Medium_ship Heavy_Ship building|turret|object
+      EntranceSystemNum = 1
+   } Transportation
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -800
+      Material = -800
+      fuel = -800
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -800
+      material = -800
+      fuel = -800
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+} BuildingType

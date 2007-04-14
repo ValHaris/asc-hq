@@ -1,0 +1,42 @@
+BuildingType {
+   Name = Jamming Station
+   ID = 26
+   parent = 499
+   Infotext = [ Radarstöhranlage ]
+   Armor = 800
+   View = 50
+   Jamming = 61
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_jammer.png
+      few_snow = bld_asc_jammer.png
+      much_snow = bld_asc_jammer.png
+      snow_and_ice = bld_asc_jammer.png
+   } Pictures
+   RubbleObjects = false
+;   rubble {
+;      A1 = 76
+;   } rubble
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 15
+      MaxLoadableMass = 15
+      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } Transportation
+   Functions = 
+   TerrainAccess { 
+      terrain_any = Lowland road runway Hard_sand Soft_sand hillside mountains high_mountains
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava water deep_water river
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 10034
+      fuel = 10837
+   } ConstructionCost
+} BuildingType

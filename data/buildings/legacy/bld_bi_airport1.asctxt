@@ -1,0 +1,52 @@
+BuildingType {
+   Name = airport
+   ID = 51
+   TechAdapterRequired = 14751
+   parent = 10 499
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 80
+            A3 = 82
+            A4 = 85
+            B3 = 83
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A2 = 80
+            A3 = 1741
+            A4 = 81
+            B3 = 1736
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A2 = 80
+            A3 = 1740
+            A4 = 81
+            B3 = 1736
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A2 = 80
+            A3 = 1740
+            A4 = 81
+            B3 = 1736
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      A3 = 77
+      A4 = 78
+      B3 = 76
+   } rubble
+   Entry = A2
+} BuildingType

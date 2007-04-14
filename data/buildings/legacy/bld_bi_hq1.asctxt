@@ -1,0 +1,66 @@
+BuildingType {
+   Name = Headquarter
+   ID = 55
+   parent = 3 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 A5 A6 B3 B5 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 56
+            A3 = 59
+            A4 = 58
+            A5 = 60
+            A6 = 55
+            B3 = 61
+            B5 = 62
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A2 = 1924
+            A3 = 1844
+            A4 = 1842
+            A5 = 1840
+            A6 = 1920
+            B3 = 1838
+            B5 = 1836
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A2 = 1923
+            A3 = 1843
+            A4 = 1841
+            A5 = 1839
+            A6 = 1919
+            B3 = 1837
+            B5 = 1835
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A2 = 1923
+            A3 = 1843
+            A4 = 1841
+            A5 = 1839
+            A6 = 1919
+            B3 = 1837
+            B5 = 1835
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = true
+   Rubble {
+      A2 = 76
+      A3 = 77
+      A4 = 78
+      A5 = 76
+      A6 = 77
+      B3 = 78
+      B5 = 76
+   } Rubble
+   Entry = A6
+} BuildingType

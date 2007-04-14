@@ -1,0 +1,49 @@
+BuildingType {
+   Name = Hangar
+   ID = 30
+   parent = 499
+   Infotext = [Lager- und Wartungshalle für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+   Armor = 2000
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_ASC_hangar.png
+   } Pictures
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 2000
+      MaxLoadableMass = 20000
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
+   } Transportation
+   Functions = Ammo_Production Repair_Facility Recycling ResourceSink
+   ExternalLoading =  
+   MaxResourceProduction { 
+      Energy = -100
+      Material = -100
+      fuel = -100
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -100
+      material = -100
+      fuel = -100
+   } defaultProduction
+   ConstructionCost { 
+      Energy = 0
+      Material = 7000
+      fuel = 7000
+   } ConstructionCost
+   Height = ground_level 
+   TerrainAccess { 
+      terrain_any = runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava river water deep_water
+   } TerrainAccess
+} BuildingType

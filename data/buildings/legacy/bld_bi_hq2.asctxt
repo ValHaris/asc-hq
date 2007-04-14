@@ -1,0 +1,24 @@
+BuildingType {
+   Name = Headquarter
+   ID = 56
+   parent = 3 499
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A3 A4 A5 A6 B3 B5 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 54
+            A3 = 59
+            A4 = 58
+            A5 = 60
+            A6 = 57
+            B3 = 61
+            B5 = 62
+         } Stage1
+      } dry
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

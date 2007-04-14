@@ -1,0 +1,40 @@
+BuildingType {
+   Name = great vehicle plant
+   ID = 11
+   parent = 499
+   InfoText = [Produktionsanlage für schwere Landfahrzeuge, incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+   Armor = 2000
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A4 B1 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_ASC_factory.png
+      few_snow = bld_asc_factory.png
+      much_snow = bld_asc_factory.png
+      snow_and_ice = bld_asc_factory.png
+   } Pictures
+   RubbleObjects = false
+;   rubble {
+;      A2 = 76
+;      A4 = 77
+;      B1 = 78
+;      B3 = 76
+;  } rubble
+   Entry = B3
+   Transportation { 
+      MaxLoadableUnits = 12
+      MaxLoadableUnitSize = 5000
+      MaxLoadableMass = 100000
+      CategoriesNOT = default helicopter light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production Repair_Facility recycling
+   CategoriesProduceable = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle hoovercraft building|turret|object
+
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 9000
+      fuel = 8000
+   } ConstructionCost
+} BuildingType

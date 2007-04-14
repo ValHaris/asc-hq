@@ -1,0 +1,75 @@
+BuildingType {
+   Name = Mountain Entrance
+   ID = 1009
+   Armor = 1000
+   View = 20
+   Jamming = 25
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 1760
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A1 = 1759
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 1758
+         } Stage1
+      } much_snow
+       snow_and_ice { 
+         Stage1 { 
+            A1 = 1758
+         } Stage1
+      } snow_and_ice
+  } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 1000
+      CategoriesNOT = heavy_tracked_vehicle heavy_wheeled_vehicle light_aircraft medium_aircraft heavy_aircraft helicopter hoovercraft rail_vehicle light_ship medium_ship heavy_ship building|turret|object
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production Repair_Facility Recycling
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = mountains high_mountains 
+      terrain_all = 
+      terrain_not =  
+      terrain_kill = lava water deep_water River 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 8000
+      fuel = 9000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 15000
+         Material = 15000
+         fuel = 15000
+      } BImode
+      ASCmode { 
+         Energy = 1000
+         Material = 1000
+         fuel = 1000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

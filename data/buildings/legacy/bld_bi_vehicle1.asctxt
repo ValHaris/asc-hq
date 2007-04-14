@@ -1,0 +1,21 @@
+BuildingType { 
+   Name = vehicle plant
+   ID = 1008
+   Armor = 500
+   parent = 53
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A3 B3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 76
+            A3 = 78
+            B3 = 79
+         } Stage1
+      } dry
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

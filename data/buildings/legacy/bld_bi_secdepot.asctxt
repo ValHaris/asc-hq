@@ -1,0 +1,75 @@
+BuildingType { 
+   Name = Secret Depot
+   ID = 1005
+   Armor = 800
+   View = 15
+   Jamming = 0
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 394
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A1 = 1911
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 894
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 894
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 2000
+      CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter rail_vehicle
+   } Transportation
+   Functions = Repair_Facility ammo_production recycling NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand
+      terrain_all = 
+      terrain_not = swamp forest railroad
+      terrain_kill = Shallow_water Water Deep_water Very_shallow_water river lava
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 2250
+      fuel = 1500
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 200
+         Material = 8000
+         fuel = 6000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

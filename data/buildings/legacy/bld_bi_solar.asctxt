@@ -1,0 +1,18 @@
+BuildingType { 
+   Name = solar powerplant
+   ID = 1200
+   TechAdapterRequired = 14800
+   parent = 15
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 A5 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_bi_solar_dry.png
+      few_snow = bld_bi_solar_fs.png
+      much_snow = bld_bi_solar_ms.png
+      snow_and_ice = bld_bi_solar_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = B3
+} BuildingType

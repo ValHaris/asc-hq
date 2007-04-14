@@ -1,0 +1,70 @@
+BuildingType { 
+   Name = Bunker-HQ
+   ID = 1003
+   Armor = 1000
+   View = 50
+   Jamming = 20
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 1773
+         } Stage1
+      } dry
+      much_snow { 
+         Stage1 { 
+            A1 = 1772
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 1772
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 300
+      CategoriesNOT = light_aircraft Medium_aircraft Heavy_aircraft helicopter hoovercraft Light_ship Medium_ship Heavy_Ship Building|turret|object
+      EntranceSystemNum = 1
+   } Transportation
+   Functions = ammo_production matter_converter
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 500
+      Material = 500
+      fuel = 500
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 500
+      material = 500
+      fuel = 500
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000000000
+         Material = 1000000000
+         fuel = 1000000000
+      } BImode
+      ASCmode { 
+         Energy = 2000
+         Material = 2000
+         fuel = 2000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

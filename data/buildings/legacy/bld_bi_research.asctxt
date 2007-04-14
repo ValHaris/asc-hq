@@ -1,0 +1,18 @@
+BuildingType { 
+   Name = research institute
+   ID = 1205
+   TechAdapterRequired = 14805
+   parent = 22
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = C3 C4 D1 D3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_bi_research_dry.png
+      few_snow = bld_bi_research_fs.png
+      much_snow = bld_bi_research_ms.png
+      snow_and_ice = bld_bi_research_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = D3
+} BuildingType

@@ -1,0 +1,57 @@
+BuildingType { 
+   Name = Mining Station
+   ID = 1
+   parent = 499
+   InfoText = [ Bergwerk, Materialfoerderung]
+   Armor = 1500
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_mine2.png
+      few_snow = bld_asc_mine_fs.png
+      much_snow = bld_asc_mine_ms.png
+      snow_and_ice = bld_asc_mine_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+   Transportation { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 300
+      CategoriesNOT = heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft helicopter hoovercraft light_ship heavy_ship medium_ship
+   } Transportation
+   Functions = Mining_Station
+   TerrainAccess { 
+      terrain_any = Lowland road runway Hard_sand Soft_sand hillside mountains high_mountains very_shallow_water  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava river water deep_water
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 8000
+      fuel = 8000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -400
+      Material = 2000
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -400
+      material = 2000
+      fuel = 
+   } defaultProduction
+   ResourceExtractionEfficiency {
+      Material = 2000
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 0
+         Material = 4000
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+} BuildingType

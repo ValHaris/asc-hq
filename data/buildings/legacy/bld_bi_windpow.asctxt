@@ -1,0 +1,19 @@
+BuildingType { 
+   Name = wind power plant
+   ID = 1201
+   parent = 5
+   TechAdapterRequired = 14801
+   Armor = 410
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 B1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_bi_windpow_dry.png
+      few_snow = bld_bi_windpow_fs.png
+      much_snow = bld_bi_windpow_ms.png
+      snow_and_ice = bld_bi_windpow_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

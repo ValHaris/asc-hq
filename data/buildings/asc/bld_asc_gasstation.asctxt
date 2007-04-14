@@ -1,0 +1,36 @@
+BuildingType { 
+   Name = Gas Station
+   ID = 6
+   parent = 499
+   Infotext = [Tankstelle für alle am Boden befindlichen oder schwimmenden Einheiten.]
+   Armor = 300
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_gasstation.png
+      few_snow = bld_asc_gasstation_fs.png
+      much_snow = bld_asc_gasstation_ms.png
+      snow_and_ice = bld_asc_gasstation_ms.png
+   } Pictures
+   RubbleObjects = false
+;   rubble {
+;      A1 = 76
+;   } rubble
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 20
+      MaxLoadableMass = 100
+      CategoriesNOT = default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle light_aircraft medium_aircraft heavy_aircraft
+      EntranceSystemNum = 1
+   } Transportation
+   Functions = external_loading
+   ConstructionCost { 
+      Energy = 0
+      Material = 3000
+      fuel = 3000
+   } ConstructionCost
+   ExternalLoading = ground_level floating
+} BuildingType

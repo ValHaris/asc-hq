@@ -1,0 +1,74 @@
+BuildingType { 
+   Name = Secret factory
+   ID = 1202
+   Armor = 800
+   View = 20
+   Jamming = 10
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry heavy_rain few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 143
+         } Stage1
+      } dry
+      heavy_rain { 
+         Stage1 { 
+            A1 = 828
+         } Stage1
+      } heavy_rain
+      few_snow { 
+         Stage1 { 
+            A1 = 603
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 714
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 714
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 1000
+      CategoriesNOT = heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle helicopter hoovercraft light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production Repair_Facility Recycling NoObjectChaining
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 10000
+         Material = 10000
+         fuel = 10000
+      } BImode
+      ASCmode { 
+         Energy = 200
+         Material = 2000
+         fuel = 2000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

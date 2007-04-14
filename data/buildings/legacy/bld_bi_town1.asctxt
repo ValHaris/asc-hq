@@ -1,0 +1,36 @@
+BuildingType { 
+   Name = Town
+   ID = 59
+   parent = 24
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 86
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A1 = 1914
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 1913
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 1913
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+} BuildingType

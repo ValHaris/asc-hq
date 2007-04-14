@@ -1,0 +1,22 @@
+BuildingType { 
+   Name = Mining Station
+   ID = 1206
+   TechAdapterRequired = 14806
+   parent = 1 499
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 54
+            A3 = 48
+            A4 = 57
+            B3 = 49
+         } Stage1
+      } dry
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

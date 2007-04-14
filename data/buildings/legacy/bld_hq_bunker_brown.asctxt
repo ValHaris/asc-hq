@@ -1,0 +1,22 @@
+BuildingType {
+   Name = Bunker-HQ
+   ID = 1016
+   parent = 1003
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 1770
+         } Stage1
+      } dry
+      much_snow { 
+         Stage1 { 
+            A1 = 1772
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 1772
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+} BuildingType

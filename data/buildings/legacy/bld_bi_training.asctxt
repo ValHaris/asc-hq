@@ -1,0 +1,48 @@
+BuildingType { 
+   Name = training center
+   ID = 57
+   TechAdapterRequired = 14757
+   Armor = 800
+   parent = 23 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 A2 A3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 67
+            A2 = 66
+            A3 = 68
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A1 = 1804
+            A2 = 1802
+            A3 = 1800
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 1803
+            A2 = 1801
+            A3 = 1799
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 1803
+            A2 = 1801
+            A3 = 1799
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+      A2 = 77
+      A3 = 78
+   } rubble
+   Entry = A2
+} BuildingType

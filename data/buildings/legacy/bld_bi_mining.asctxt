@@ -1,0 +1,46 @@
+BuildingType { 
+   Name = Mining Station
+   ID = 1204
+   TechAdapterRequired = 14804
+   parent = 1 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A2 = 56
+            A3 = 48
+            A4 = 55
+            B3 = 49
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A2 = 1924
+            A3 = 1922
+            A4 = 1920
+            B3 = 1918
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A2 = 1923
+            A3 = 1921
+            A4 = 1919
+            B3 = 1917
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A2 = 1923
+            A3 = 1921
+            A4 = 1919
+            B3 = 1917
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A4
+} BuildingType

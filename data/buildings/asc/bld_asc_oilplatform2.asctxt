@@ -1,0 +1,56 @@
+BuildingType { 
+   Name = great oilplattform
+   ID = 14
+   parent = 499 498
+   Infotext = [Oelfoerderplatform fuer Gewaesser]
+   Armor = 2500
+   View = 50
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_oilplatform2.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A4
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 1000
+      CategoriesNOT = default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+      EntranceSystemNum = 2
+      EntranceSystem1 ->* BuildingType.carrier
+   } Transportation
+   Functions = Mining_Station External_Loading 
+   TerrainAccess { 
+      terrain_any = Water
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 16800
+      fuel = 10000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 
+      material = 
+      fuel = 4000
+   } defaultProduction
+   ResourceExtractionEfficiency {
+      Fuel = 2000
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      ASCmode { 
+         fuel = 20000
+      } ASCmode
+   } StorageCapacity
+   ExternalLoading = floating ground_level 
+} BuildingType

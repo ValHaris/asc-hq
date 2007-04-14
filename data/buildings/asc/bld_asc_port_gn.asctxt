@@ -1,0 +1,44 @@
+BuildingType {
+   Name = Shipyard North
+   ID = 16
+   parent = 499
+   Infotext = [Fertigungsanlage für Schiffe, incl. Munition, Reparatur und Wiederverwertung.]
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1 A3 A4 B1 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_ASC_port.png
+   } Pictures
+   RubbleObjects = false
+;   rubble {
+;      A1 = 76
+;      A2 = 77
+;      A3 = 78
+;      B1 = 76
+;      B3 = 77
+;   } rubble
+   Entry = A4
+   Armor = 2500
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 20000
+      MaxLoadableMass = 40000
+      CategoriesNOT =  
+      DisableAttack = false
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production Repair_Facility External_Loading recycling
+   CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Very_shallow_water river lowland hard_sand
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava deep_water
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 12000
+      fuel = 9000
+   } ConstructionCost
+   ExternalLoading = floating ground_level 
+} BuildingType

@@ -1,0 +1,49 @@
+BuildingType { 
+   Name = Villa Deng
+   ID = 58
+   View = 25
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 88
+         } Stage1
+      } dry
+      few_snow { 
+         Stage1 { 
+            A1 = 984
+         } Stage1
+      } few_snow
+      much_snow { 
+         Stage1 { 
+            A1 = 1761
+         } Stage1
+      } much_snow
+      snow_and_ice { 
+         Stage1 { 
+            A1 = 1761
+         } Stage1
+      } snow_and_ice
+   } GFXpictures
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+   MaxResearch = 1
+   NominalResearch = 1
+   MaxResourceProduction { 
+      Energy = 150
+      Material = 150
+      fuel = 150
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 150
+      material = 150
+      fuel = 150
+   } defaultProduction
+} BuildingType

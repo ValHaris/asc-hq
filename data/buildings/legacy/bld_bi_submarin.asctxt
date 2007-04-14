@@ -1,0 +1,70 @@
+BuildingType {
+   Name = submarine base
+   ID = 61
+   Armor = 1000
+   View = 30
+   Jamming = 0
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = true
+   GFXpictures { 
+      dry { 
+         Stage1 { 
+            A1 = 63
+         } Stage1
+      } dry
+   } GFXpictures
+   RubbleObjects = false
+   Entry = A1
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 10000
+      MaxLoadableMass = 10000
+      CategoriesNOT = Default hoovercraft Light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Building|turret|object Rail_vehicle
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = submerged 
+        UnitHeightRel = -100
+        ContainerHeight = submerged
+        CategoriesNOT = 
+        DockingHeightAbs = submerged 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production Repair_Facility NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 7000
+      fuel = 6000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 100
+         Material = 2000
+         fuel = 2000
+      } ASCmode
+   } StorageCapacity
+   Height = submerged 
+   ExternalLoading = 
+} BuildingType

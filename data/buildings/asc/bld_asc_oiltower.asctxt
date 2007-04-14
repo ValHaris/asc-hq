@@ -1,0 +1,49 @@
+BuildingType { 
+   Name = oiltower
+   ID = 4
+   InfoText = [Oelfoerderanlage für Land.]
+   parent = 499
+   Armor = 1000
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A3 A4 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_oiltower.png
+      few_snow = bld_asc_oiltower_fs.png
+      much_snow = bld_asc_oiltower_ms.png
+      snow_and_ice = bld_asc_oiltower_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A3
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 60
+      MaxLoadableMass = 100
+      CategoriesNOT = default hoovercraft Heavy_tracked_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } Transportation
+   Functions = Mining_Station
+   ConstructionCost { 
+      Energy = 0
+      Material = 6000
+      fuel = 6000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -200
+      Material = 0
+      fuel = 1500
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = 
+      fuel = 1500
+   } defaultProduction
+   ResourceExtractionEfficiency {
+      Fuel = 2000
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      ASCmode { 
+         fuel = 3000
+      } ASCmode
+   } StorageCapacity
+} BuildingType
