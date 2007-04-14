@@ -393,7 +393,7 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
          addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
       }
    try {
-     opencontainer ( "*.con" );
+     opencontainer ( "*.ascdat" );
    }
    catch ( tfileerror err ) {
       fatalError ( "a fatal IO error occured while mounting the container file %s\n"
@@ -416,9 +416,6 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
 
    if ( ! (skipChecks & 2 ))
       checkFileLoadability ( "data.version" );
-
-   if ( ! (skipChecks & 4 ))
-      checkFileLoadability ( "mk1.version" );
 
    if ( ! (skipChecks & 8 ))
       checkFileLoadability ( "trrobj.version" );
@@ -463,7 +460,6 @@ void checkFileVersion( const ASCString& filename, const ASCString& containername
 
 void checkDataVersion( )
 {
-   return;
    ASCString location;
    if ( exist ( "data.version" )) {
       tnfilestream s ( "data.version", tnstream::reading );
@@ -476,13 +472,11 @@ void checkDataVersion( )
       versionError ( "main.con", location );
 
 
-   checkFileVersion( "mk1.version", "mk1.con", 21 );
-   checkFileVersion( "mk3.version", "units-mk3.con", 20 );
    checkFileVersion( "buildings.version", "buildings.con", 14 );
    checkFileVersion( "trrobj.version", "trrobj.con", 15 );
    checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
 
-   if ( exist( "pbp.con" ))
+   if ( exist( "pbp.ascdat" ))
       checkFileVersion( "pbp.version", "pbp.con", 21 );
 }
 

@@ -193,7 +193,7 @@ FileCache::FileCache( )
 {
    tfindfile::FileInfo fi;
    {
-      tfindfile f ( "*.con", tfindfile::AllDirs, tfindfile::OutsideContainer);
+      tfindfile f ( "*.ascdat", tfindfile::AllDirs, tfindfile::OutsideContainer);
       while ( f.getnextname( fi ))
          actualFileInfo.push_back ( fi );
    }

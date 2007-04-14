@@ -23,6 +23,8 @@
 #include <cstring>
 #include <cerrno>
 #include <cstdio>
+#include <iostream>
+#include <fstream>
 
 #include <SDL_types.h>
 #include <SDL_endian.h>
@@ -409,7 +411,73 @@ void testcompress ( const char* name, int size )
 
 
 
+void processFiles( const char* files, const char* orgWorkingDir )
+{
+   int compress = 1;
 
+
+   char buf[10000];
+   strncpy( buf, files, 10000 );
+
+   char* filename = buf;
+   char* dirname = ".";
+
+   while ( strchr( buf, foreignPathDelimitter ))
+      *strchr( buf, foreignPathDelimitter ) = pathdelimitter;
+
+   if ( strchr( filename , pathdelimitter )) {
+      char* c = filename + strlen( filename );
+      while ( *c != pathdelimitter ) 
+         c -= 1;
+      
+      dirname = buf;
+      filename = c+1;
+      *c = 0;
+   }
+
+   
+
+   DIR * dirp = opendir( dirname );
+   if( dirp != NULL ) {
+      for(;;) {
+         struct ASC_direct *direntp = readdir( dirp );
+         if ( direntp == NULL )
+            break;
+
+         if ( patimat ( filename , direntp->d_name, true ) &&
+               strcmp ( direntp->d_name, "." ) != 0 &&
+               strcmp ( direntp->d_name, ".." ) != 0 ) {
+            int    fnd = 0;
+            int j   = 0;
+
+            while( !fnd && ( j < num ) ) {
+               //                for ( int j = 0; j < num; j++ )
+               if ( strcmpi ( nindex[j++].name, direntp->d_name ) == 0 )
+                  fnd = 1;
+            }
+
+            if ( !fnd ) {
+               if ( chdir(dirname)  != 0 )
+                  fatalError( "could not change directory (1)");
+
+               if ( verbose )
+                  printf( direntp->d_name );
+               if ( compress )
+                  testcompress ( direntp->d_name,  filesize(direntp->d_name) );
+               else {
+                  if ( verbose )
+                     printf ( " is not compressed, " );
+                  copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
+               }
+               if ( chdir(orgWorkingDir)  != 0 )
+                  fatalError( "could not change directory (2)");
+            }
+         }
+      }
+      closedir( dirp );
+   }
+   
+}
 
 int main(int argc, char *argv[] )
 {
@@ -450,69 +518,19 @@ int main(int argc, char *argv[] )
 
 
    for ( int df = cl.next_param(); df < argc-1; df++ ) {
-      int compress = 1;
-
-
-      char buf[10000];
-      strncpy( buf, argv[df], 10000 );
-
-      char* filename = buf;
-      char* dirname = ".";
-
-      while ( strchr( buf, foreignPathDelimitter ))
-         *strchr( buf, foreignPathDelimitter ) = pathdelimitter;
-
-      if ( strchr( filename , pathdelimitter )) {
-         char* c = filename + strlen( filename );
-         while ( *c != pathdelimitter ) 
-            c -= 1;
+      if ( argv[df][0] == '@' ) {
+         std::ifstream list( argv[df]+1 );
+         if ( !list )
+            fatalError( "could not open file " + ASCString(argv[df]) );
          
-         dirname = buf;
-         filename = c+1;
-         *c = 0;
-      }
-
-      
-
-      DIR * dirp = opendir( dirname );
-      if( dirp != NULL ) {
-         for(;;) {
-            struct ASC_direct *direntp = readdir( dirp );
-            if ( direntp == NULL )
-               break;
-
-            if ( patimat ( filename , direntp->d_name, true ) &&
-                  strcmp ( direntp->d_name, "." ) != 0 &&
-                  strcmp ( direntp->d_name, ".." ) != 0 ) {
-               int    fnd = 0;
-               int j   = 0;
-
-               while( !fnd && ( j < num ) ) {
-                  //                for ( int j = 0; j < num; j++ )
-                  if ( strcmpi ( nindex[j++].name, direntp->d_name ) == 0 )
-                     fnd = 1;
-               }
-
-               if ( !fnd ) {
-                  if ( chdir(dirname)  != 0 )
-                     fatalError( "could not change directory (1)");
-
-                  if ( verbose )
-                     printf( direntp->d_name );
-                  if ( compress )
-                     testcompress ( direntp->d_name,  filesize(direntp->d_name) );
-                  else {
-                     if ( verbose )
-                        printf ( " is not compressed, " );
-                     copyfile ( direntp->d_name, direntp->d_name,  filesize(direntp->d_name)  );
-                  }
-                  if ( chdir(orgWorkingDir)  != 0 )
-                     fatalError( "could not change directory (2)");
-               }
-            }
+         while (! list.eof() ) {
+            ASCString filename;
+            getline (list, filename);
+            processFiles( filename.c_str(), orgWorkingDir  );
          }
-         closedir( dirp );
-      }
+      } else 
+         processFiles( argv[df], orgWorkingDir );
+      
    } /* endwhile */
 
    if ( verbose )
