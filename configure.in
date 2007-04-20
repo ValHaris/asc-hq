@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc, )
+AC_INIT(asc,1.99.92.77)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -35,6 +35,11 @@ dnl
 AC_PROG_CC
 AC_PROG_CXX
 
+
+AC_CHECK_PROG(PERLFOUND,perl,yes,no)
+if test "$PERLFOUND" = no; then
+     AC_MSG_ERROR([Perl not found. It is required for this configure script.])
+fi
 
 AdditionalIncludeDir=""
 
@@ -539,37 +544,11 @@ AC_SUBST(DOCBOOK2MAN)
 AC_SUBST(asc_version)
 
 
-dnl *************************************************************************
-dnl Checking and assembling the data files
+maindatainclude="include main.mak"
+AC_SUBST(maindatainclude)
 
+dnl perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", @a); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
 
-dnl what gehts packed into main.con (the data container file) and in which
-dnl order
-
-MAINCONDATA="palette.pal data.version title.jpg title_mapeditor.jpg \
-progress.* smalaril.fnt usablack.fnt arial8.fnt \
-msystem.fnt gui.fnt guicol.fnt monogui.fnt \
-height2.raw windp.raw windpfei.raw farbe.raw \
-allianc.raw weapicon.raw expicons.raw hexinvi2.raw \
-hexinvis.raw fg8.raw windrose.raw hexfld_a.raw \
-hexfld.raw in_ach.raw in_h.raw build_ah.raw \
-build_h.raw hexbuild.raw allianc2.raw iconship.raw \
-icontank.raw iconplan.raw pfeil2.raw pfeil3.raw \
-height.raw weapons.dat message1.txt waffen.raw \
-knorein.raw compi2.raw pfeil-a0.raw mausi.raw \
-gebasym2.raw netcontr.raw ammoprod.raw resorinf.raw \
-windpowr.raw solarpwr.raw ammotran.raw research.raw \
-pwrplant.raw bldinfo.raw mining.raw tabmark.raw \
-traninfo.raw attack.raw hexfeld.raw mapbkgr.raw \
-hex2oct.raw weapinfo.raw amatur.raw hxborder.raw \
-leergui.raw guiremov.raw  \
-hexmines.raw curshex2.raw markedfield.pcx curshex.raw \
-railstations2.map *.raw *.fnt \
-*.dat *.map helpsys?.txt message?.txt *.pcx lcac2.jpg \
-*.gif *.asctxt *.gfx *.ascmapxlat"
-
-dnl what gehts packed into main.con (the data container file)
-AC_SUBST(MAINCONDATA)
 
 AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
 if test "x$missingmusic" != xx ; then

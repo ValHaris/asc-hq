@@ -30,8 +30,6 @@ trrobj/*.asctxt
 trrobj/*.version
 trrobj/legacy/*.asctxt
 trrobj/legacy/*.png
-trrobj/objects/legacy/*.asctxt
-trrobj/objects/legacy/*.png
 trrobj/objects/legacy/*.pcx
 trrobj/objects/landscape/*.asctxt
 trrobj/objects/landscape/*.png
@@ -85,8 +83,6 @@ unitsets/mk3/mk3-sta/*.asctxt
 unitsets/mk3/mk3-vad/*.asctxt
 unitsets/mk3/mk3-parent/*.asctxt
 unitsets/mk3/mk3-parent/*.txt
-unitsets/mk1/mk1-bld/*.pcx
-unitsets/mk1/mk1-for/*.pcx
 unitsets/mk1/mk1-jam/*.pcx
 unitsets/mk1/mk1-inf/*.pcx
 unitsets/mk1/mk1-orb/*.pcx
@@ -118,7 +114,6 @@ unitsets/mk3/mk3-vrok/*.pcx
 unitsets/mk3/mk3-vsup/*.pcx
 unitsets/mk3/mk3-train/*.pcx
 unitsets/mk3/mk3-vfatr/*.pcx
-unitsets/mk3/mk3-for/*.pcx
 unitsets/mk3/mk3-jam/*.pcx
 unitsets/mk3/mk3-inf/*.pcx
 unitsets/mk3/mk3-orb/*.pcx
@@ -127,4 +122,3 @@ unitsets/mk3/mk3-shh/*.pcx
 unitsets/mk3/mk3-shs/*.pcx
 unitsets/mk3/mk3-sta/*.pcx
 unitsets/mk3/mk3-vad/*.pcx
-unitsets/mk3/mk3-parent/*.pcx
