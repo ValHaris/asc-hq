@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,1.99.93.80)
+AC_INIT(asc,1.99.93.81)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -453,34 +453,34 @@ AC_LANG_CPLUSPLUS
 
 dnl GCC 2.95.3 came with a broken standard library
 
-AC_MSG_CHECKING("broken std::string compare")
+AC_MSG_CHECKING(broken std::string compare)
 AC_TRY_COMPILE( [#include <string>], [
       std::string s = "Hello World";
       s.compare  ( 0, 0, "Hello");
 ],, string_compare_broken=yes)
 
 if test "x$string_compare_broken" = x ; then
-  AC_MSG_RESULT("no")
+  AC_MSG_RESULT(no)
 else
   CXXFLAGS="$CXXFLAGS -D_string_compare_broken_"
-  AC_MSG_RESULT("yes")
+  AC_MSG_RESULT(yes)
 fi
 
-AC_MSG_CHECKING("broken c_str Unicode support")
+AC_MSG_CHECKING(broken c_str Unicode support)
 AC_TRY_COMPILE( [#include <string>], [
    std::basic_string<wchar_t> test;
    test.c_str();
 ],, Unicode_broken=yes)
 
 if test "x$Unicode_broken" = x ; then
-  AC_MSG_RESULT("no")
+  AC_MSG_RESULT(no)
 else
   CXXFLAGS="$CXXFLAGS -D_UNICODE_BROKEN_"
-  AC_MSG_RESULT("yes")
+  AC_MSG_RESULT(yes)
 fi
 
 
-AC_MSG_CHECKING("broken std::vector")
+AC_MSG_CHECKING(broken std::vector)
 AC_TRY_COMPILE( [#include <vector>], [
       std::vector<int> s;
       s.push_back(1);
@@ -488,14 +488,14 @@ AC_TRY_COMPILE( [#include <vector>], [
 ],, stdvector_broken=yes)
 
 if test "x$stdvector_broken" = x ; then
-  AC_MSG_RESULT("no")
+  AC_MSG_RESULT(no)
 else
   CXXFLAGS="$CXXFLAGS -D_vector_at_broken_"
-  AC_MSG_RESULT("yes")
+  AC_MSG_RESULT(yes)
 fi
 
 
-AC_MSG_CHECKING("distinct size_t type")
+AC_MSG_CHECKING(distinct size_t type)
 AC_COMPILE_IFELSE( [
     #include <string>
    void foo( int i ) {};
@@ -510,9 +510,9 @@ AC_COMPILE_IFELSE( [
 ], size_t_type=distinct )
 
 if test "x$size_t_type" = x ; then
-  AC_MSG_RESULT("no")
+  AC_MSG_RESULT(no)
 
-  AC_MSG_CHECKING("size_t conversion")
+  AC_MSG_CHECKING(size_t conversion)
   AC_COMPILE_IFELSE( [
     #include <string>
     void foo( int i ) {};
@@ -547,9 +547,6 @@ dnl this is a hack to prevent automake from interpreting the include statement; 
 maindatainclude="include main.mak"
 AC_SUBST(maindatainclude)
 
-mkdir -p data
-perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", map ( $_ = "\$(srcdir)/" . $_ , @a )); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
-
 
 AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
 if test "x$missingmusic" != xx ; then
@@ -559,6 +556,11 @@ else
 fi
 
 AC_SUBST(MUSICDIR)
+
+AC_MSG_NOTICE( Creating Makefile for main.ascdat )
+mkdir -p data
+perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", map ( $_ = "\$(srcdir)/" . $_ , @a )); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
+
 
 AC_CONFIG_FILES( [ Makefile \
        asc.spec \

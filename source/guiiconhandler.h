@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.4 2007-04-22 13:28:49 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.5 2007-04-22 13:56:58 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

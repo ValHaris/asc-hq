@@ -122,6 +122,9 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
       if ( num != highlight.getMark() )
          ypos += 1;
 
+      
+      storage[num]->direction = 0;
+      
       if( storage[num]->getMovement() > 0  )
          storage[num]->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getOwner() );
       else

@@ -130,7 +130,7 @@ class GetVideoModes {
 
 const char* mouseButtonNames[] = { "None", "Left", "Center", "Right", "4", "5", NULL };
 
-const char* infoPanelNames[] = { "None", "Left", "Right", "Left+Right", NULL };
+const char* infoPanelNames[] = { "None", "Left (not recommended)", "Right", "Left+Right", NULL };
 
 class EditGameOptions : public ASC_PG_Dialog {
    private:
