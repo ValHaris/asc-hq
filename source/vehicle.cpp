@@ -1418,6 +1418,8 @@ void   Vehicle::readData ( tnstream& stream )
           for (int k = 0; k < c; k++) {
              Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
              addToCargo(v);
+             if ( v && !v->baseType->hasFunction( ContainerBaseType::MoveWithReactionFire ))
+                v->reactionfire.disable();
           }
        }
     }
@@ -1485,6 +1487,11 @@ void   Vehicle::readData ( tnstream& stream )
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
     } else
        reactionfire.status = ReactionFire::Status ( reactionfirestatus );
+
+
+    if ( reactionfire.status != ReactionFire::off  && !baseType->hasFunction(ContainerBaseType::NoReactionfire ))
+       reactionfire.status = ReactionFire::off;
+
 
     if ( bm & cem_poweron )
        generatoractive = stream.readInt();

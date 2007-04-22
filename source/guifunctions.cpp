@@ -962,14 +962,15 @@ class EnableReactionfire : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* eht = actmap->getField(pos)->vehicle;
-         if ( eht )
+         if ( eht ) 
             if ( eht->color == actmap->actplayer * 8)
-               if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
-                  if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-                     if ( eht->weapexist() )
-                        for ( int i = 0; i < eht->typ->weapons.count; ++i )
-                           if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
-                              return true;
+               if ( !eht->baseType->hasFunction(ContainerBaseType::NoReactionfire ))
+                  if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
+                     if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+                        if ( eht->weapexist() )
+                           for ( int i = 0; i < eht->typ->weapons.count; ++i )
+                              if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
+                                 return true;
 
          return false;
       };

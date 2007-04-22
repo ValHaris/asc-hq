@@ -586,6 +586,10 @@ void Building :: readData ( tnstream& stream, int version )
           Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
           v->setnewposition ( getEntry().x, getEntry().y );
           addToCargo(v);
+
+          if ( v && !v->baseType->hasFunction( ContainerBaseType::MoveWithReactionFire ))
+             v->reactionfire.disable();
+
        }
     }
 
