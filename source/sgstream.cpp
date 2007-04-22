@@ -461,22 +461,9 @@ void checkFileVersion( const ASCString& filename, const ASCString& containername
 void checkDataVersion( )
 {
    ASCString location;
-   if ( exist ( "data.version" )) {
-      tnfilestream s ( "data.version", tnstream::reading );
-      dataVersion = s.readInt();
-      location = s.getLocation();
-   } else
-      dataVersion = 0;
-
-   if ( dataVersion < 12 || dataVersion > 0xffff )
-      versionError ( "main.con", location );
-
-
-   checkFileVersion( "buildings.version", "buildings.con", 14 );
-   checkFileVersion( "trrobj.version", "trrobj.con", 15 );
-   checkFileVersion( "trrobj2.version", "trrobj2.con", 2 );
+   checkFileVersion( "main.version", "main.ascdat", 2 );
 
    if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.con", 21 );
+      checkFileVersion( "pbp.version", "pbp.ascdat", 21 );
 }
 
