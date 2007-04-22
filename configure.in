@@ -543,11 +543,11 @@ AC_SUBST(DOCBOOK2MAN)
 
 AC_SUBST(asc_version)
 
-
+dnl this is a hack to prevent automake from interpreting the include statement; it would do so if it was directly in data/Makefile.am
 maindatainclude="include main.mak"
 AC_SUBST(maindatainclude)
 
-dnl perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", @a); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
+perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", @a); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
 
 
 AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )

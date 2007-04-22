@@ -154,7 +154,7 @@
       <includestyle>3</includestyle>
       <designerintegration>EmbeddedKDevDesigner</designerintegration>
       <qmake>/usr/bin/qmake-qt3</qmake>
-      <designer/>
+      <designer></designer>
       <designerpluginpaths/>
     </qt>
     <splitheadersource>
