@@ -214,7 +214,8 @@ class IngameMessageViewer : public ASC_PG_Dialog {
             bulk.disable();
             Show();
             message = &msg;
-         }
+         } else
+            Show();
       };
 
 
