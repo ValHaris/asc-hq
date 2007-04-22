@@ -453,6 +453,9 @@ class CargoDialog : public Panel
          if ( !draggedUnit )
             return;
          
+         if ( draggedUnit == targetUnit )
+            return;
+         
          if ( targetUnit ) {
             containerControls.moveUnitDown( draggedUnit, targetUnit );
          } else {

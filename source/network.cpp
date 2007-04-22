@@ -124,7 +124,11 @@ GameMap* FileTransfer::loadPBEMFile( const ASCString& filename )
       tnfilestream gamefile ( filename, tnstream::reading );
       tnetworkloaders nwl;
       map = nwl.loadnwgame( &gamefile );
-   } catch ( tfileerror ) {
+   } 
+   catch ( tinvalidversion iv ) {
+      throw iv;
+   }
+   catch ( tfileerror ) {
       errorMessage ( filename + " is not a legal email game" );
       return NULL;
    }

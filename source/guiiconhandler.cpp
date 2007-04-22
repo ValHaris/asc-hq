@@ -87,8 +87,7 @@ void GuiButton::unregisterFunc()
 void GuiButton::eventMouseEnter()
 {
    PG_Button::eventMouseEnter();
-   if ( func )
-      MessagingHub::Instance().statusInformation( func->getName(pos, subject, id));
+   showInfoText();
 }
 
 void GuiButton::eventMouseLeave()
@@ -105,6 +104,12 @@ bool GuiButton::checkForKey( const SDL_KeyboardEvent* key, int modifier )
          return true;
       }
    return false;
+}
+
+void GuiButton::showInfoText()
+{
+   if ( func )
+      MessagingHub::Instance().statusInformation( func->getName(pos, subject, id));
 }
 
 
@@ -551,6 +556,7 @@ bool NewGuiHost::setNewButtonPressed( int i )
          if ( button ) {
             button->SetToggle(true);
             button->SetPressed(true);
+            button->showInfoText();
          }
       }
       return true;

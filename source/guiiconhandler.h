@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.3 2007-04-13 16:15:53 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.4 2007-04-22 13:28:49 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -89,6 +89,7 @@ class GuiButton : public PG_Button {
           void unregisterFunc();
           bool exec();
           bool ready() { return func; };
+          void showInfoText();
 };
 
 class NewGuiHost;

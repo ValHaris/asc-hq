@@ -123,9 +123,9 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
          ypos += 1;
 
       if( storage[num]->getMovement() > 0  )
-         storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getOwner() );
+         storage[num]->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getOwner() );
       else
-         storage[num]->typ->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
+         storage[num]->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
 
       setBargraphValue( "DamageBar", float(100-storage[num]->damage)/100 );
 
@@ -249,7 +249,7 @@ bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
             MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
             blitter.blit( IconRepository::getIcon("mouse.png"), surf, SPoint(0,0));
             
-            getUnit()->typ->paint( surf, SPoint(0,0), getUnit()->getOwner() );
+            getUnit()->paint( surf, SPoint(0,0), getUnit()->getOwner() );
             PG_Application::SetCursor( const_cast<SDL_Surface*>( surf.getBaseSurface() ));
             PG_Application::ShowCursor( PG_Application::SOFTWARE );
          }

@@ -1590,8 +1590,25 @@ int Vehicle::getAmmo( int type, int num, bool queryOnly )
 
    int got = 0;
    int weap = 0;
+   
+   
+   // pass 1: only weapons with refuel 
+   
    while ( weap < typ->weapons.count && got < num ) {
-      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type  && typ->weapons.weapon[weap].canRefuel() ) {
+         int toget = min( num - got, ammo[weap]);
+         if ( !queryOnly )
+            ammo[weap] -= toget;
+         got += toget;
+      }
+      ++weap;
+   }
+   
+   
+   // pass 2: all the others
+   
+   while ( weap < typ->weapons.count && got < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type && !typ->weapons.weapon[weap].canRefuel()) {
          int toget = min( num - got, ammo[weap]);
          if ( !queryOnly )
             ammo[weap] -= toget;

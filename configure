@@ -24910,7 +24910,7 @@ maindatainclude="include main.mak"
 
 
 mkdir -p data
-perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", @a); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
+perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", map ( $_ = "\$(srcdir)/" . $_ , @a )); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
 
 
 as_ac_File=`echo "ac_cv_file_$srcdir/data/music/frontiers.ogg" | $as_tr_sh`

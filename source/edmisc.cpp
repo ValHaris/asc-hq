@@ -2756,17 +2756,17 @@ void         UnitTypeTransformation :: UnitSetSelection::setup(void)
    numberoflines = unitSets.size();
    ey = ysize - 60;
    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,2,true);
-   addkey(2,ct_enter);
+   addkey(202,ct_enter);
    addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,3,true);
-   addkey(3,ct_esc);
+   addkey(203,ct_esc);
 }
 
 void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(int         id)
 {
    tstringselect::buttonpressed(id);
    switch (id) {
-      case 2:
-      case 3:   action = id;
+      case 202:
+      case 203:   action = id - 200;
                 break;
    }
 }

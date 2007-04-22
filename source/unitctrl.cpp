@@ -354,9 +354,9 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
-              mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
-              finalRedrawNecessary = true;
-              mapDisplayUpToDate = false;
+            mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
+            finalRedrawNecessary = true;
+            mapDisplayUpToDate = false;
          }
          pathStep++;
 
@@ -501,6 +501,10 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 //         if ( nm < 0 )
 //            result = -1;
          vehicle->setMovement ( nm );
+         
+         // the unit will be shaded if movement is exhausted
+         if ( vehicle->getMovement() < 10 )
+            finalRedrawNecessary = true;
       }
 
 

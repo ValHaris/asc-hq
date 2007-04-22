@@ -11,7 +11,7 @@
 Name "ASC for Project Battle Planets"
 
 ; The file to write
-OutFile "ASC-1.99.92.77-Install.exe"
+OutFile "ASC-1.99.93.80-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC

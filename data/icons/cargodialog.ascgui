@@ -361,7 +361,7 @@ panel {
 
          DamageBar {
            type = BarGraph
-           BackgroundColor = 0xff00
+           BackgroundColor = 0x69c59a
            x = 5 
            y = 5
            width = 12
@@ -371,7 +371,7 @@ panel {
          } DamageBar
          FuelBar {
            type = BarGraph
-           BackgroundColor = 0xff
+           BackgroundColor = 0xff00
            x = 61 
            y = 5
            width = 12
