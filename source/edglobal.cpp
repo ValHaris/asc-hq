@@ -726,6 +726,8 @@ void execaction( int code)
          if ( path.empty() )
             break;
 
+         appendbackslash( path );
+
          ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
 
          ASCString filename = selectFile( wildcard, true );

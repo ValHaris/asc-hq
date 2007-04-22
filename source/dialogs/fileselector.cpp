@@ -46,7 +46,11 @@ class FileWidget: public SelectionWidget
       FileWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 18 )), fileInfo( *fi )
       {
 #ifndef ctime_r
-         time = ctime( &fileInfo.modificationTime );
+         char* c = ctime( &fileInfo.modificationTime );
+         if ( c )
+            time = c;
+         else
+            time = "-";
 #else
 
          char c[100];

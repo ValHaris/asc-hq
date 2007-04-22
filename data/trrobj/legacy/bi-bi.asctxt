@@ -93,5 +93,16 @@ bi3maptranslation {
 			     92    9 
 			     93    10 ]
 
+
+
+
+     ; Transforms an object into an terrain and optionally several other objects;
+     ; These are entries with 7 items per line
+     ;   1) BI picture number
+     ;   2-5) Picture numbers for objects, use -1 to ignore
+     ;   6) Terrain ID
+     ;   7) Weather
+
+     ; Object3Translation [ 1 2 3 4 5 6 7 ]
 			    
 } bi3maptranslation

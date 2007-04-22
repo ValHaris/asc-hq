@@ -357,11 +357,10 @@ void checkFileLoadability ( const ASCString& filename )
    }
    catch ( ASCexception ) {
       ASCString msg = "Unable to access " + filename + "\n";
-      msg +=           "Make sure the data files are in one of the search paths specified in your \n"
-                       "config file ! ASC requires these data files to be present:\n"
-                       " main.con ; mk1.con ; buildings.con ; trrobj.con ; trrobj2.con \n"
-                       "If you don't have these files , get and install them from http://www.asc-hq.org\n"
-                       "If you DO have these files, they are probably outdated. \n";
+      msg +=           "Make sure the file main.ascdat is in one of the search paths \n"
+                       "specified in your config file !\n" 
+                       "If you don't have this file , get and install it from http://www.asc-hq.org\n"
+                       "If you DO have the file, it is probably outdated. \n";
       msg +=           "The configuration file that is used is: " + configFileName + "\n";
 
       if ( !configFileName.empty() ) {
@@ -401,7 +400,7 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
    }
    catch ( tcompressionerror err ) {
       fatalError ( "a fatal error occured while decompressing a container file.\n"
-                   "If you have several *.con files in your ASC directory, try removing all but main.con.\n"
+                   "If you have several *.ascdat files in your ASC directory, try removing all but main.ascdat.\n"
                    "If the error still occurs then, get a new data package from www.asc-hq.org\n" );
    }
    catch ( ASCexception ) {

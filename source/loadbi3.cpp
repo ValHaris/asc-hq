@@ -1449,8 +1449,8 @@ void tloadBImap :: LoadTXTFile ( char* filename )
    fseek(fp, 0, SEEK_SET);
 
    // databuffer which holds the textdata 
-   char *txtbuffer=(char *)malloc(txtsize+1);
-   memset(txtbuffer, 0, txtsize+1);
+   char *txtbuffer=(char *)malloc(txtsize+10000);
+   memset(txtbuffer, 0, txtsize+10000);
 
    char buf[1000];
    fread ( buf, 1, 4, fp );
@@ -1459,7 +1459,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
 //      unsigned long tpwmsize=txtsize; // store the size of the compressed file.
       fread(&txtsize, 4, 1, fp); // this is the uncompressed size.
       unsigned long outptr=0;
-      txtbuffer=(char *)realloc(txtbuffer, txtsize);
+      txtbuffer=(char *)realloc(txtbuffer, txtsize+10000);
 
       // the tpwm algorithm is quite simple:
       // you have datablocks containing 1 codebyte and 8 values.

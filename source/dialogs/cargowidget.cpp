@@ -126,9 +126,9 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
       storage[num]->direction = 0;
       
       if( storage[num]->getMovement() > 0  )
-         storage[num]->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getOwner() );
+         storage[num]->paint( clippingSurface, SPoint(xpos,ypos), 0 ); // storage[num]->getOwner() );
       else
-         storage[num]->paint( clippingSurface, SPoint(xpos,ypos), storage[num]->getMap()->getNeutralPlayerNum() );
+         storage[num]->paint( clippingSurface, SPoint(xpos,ypos), true, 0 ); // storage[num]->getMap()->getNeutralPlayerNum() );
 
       setBargraphValue( "DamageBar", float(100-storage[num]->damage)/100 );
 

@@ -1,5 +1,5 @@
 ObjectType { 
-   name = buried pipeline
+   name = subterranean pipeline
    ID = 30
    groupID = 9
    canExistBeneathBuildings = true

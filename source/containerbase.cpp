@@ -301,11 +301,26 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
          TargetPixelSelector_All>
          ( img, dest, pos, nullParam,nullParam, dirpair, nullParam);
       } else {
-         megaBlitter< ColorTransform_PlayerCol,
-         ColorMerger_AlphaMixer,
-         SourcePixelSelector_CacheRotation,
-         TargetPixelSelector_All>
-         ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
+         if ( img.GetPixelFormat().BytesPerPixel() == 1 ) {
+            MegaBlitter<1,gamemapPixelSize,ColorTransform_PlayerCol, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter;
+            blitter.setPlayer( getOwner() );
+            blitter.setAngle( img, directionangle[dir] );
+            blitter.blit( img, dest, pos );
+
+            /*
+            megaBlitter< ColorTransform_PlayerCol,
+            ColorMerger_AlphaMixer,
+            SourcePixelSelector_CacheRotation,
+            TargetPixelSelector_All>
+            ( img, dest, pos, getOwner(),nullParam, dirpair, nullParam);
+            */
+         } else {
+            MegaBlitter<4,gamemapPixelSize,ColorTransform_PlayerTrueCol, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation> blitter;
+            blitter.setColor( gamemap->player[getOwner()].getColor() );
+            blitter.setAngle( img, directionangle[dir] );
+            blitter.blit( img, dest, pos );
+
+         }
       }
    } else {
       if ( height >= chfahrend && shadowDist ) {

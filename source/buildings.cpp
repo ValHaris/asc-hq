@@ -587,7 +587,7 @@ void Building :: readData ( tnstream& stream, int version )
           v->setnewposition ( getEntry().x, getEntry().y );
           addToCargo(v);
 
-          if ( v && !v->baseType->hasFunction( ContainerBaseType::MoveWithReactionFire ))
+          if ( v && v->reactionfire.getStatus() != Vehicle::ReactionFire::off && !v->baseType->hasFunction( ContainerBaseType::MoveWithReactionFire ))
              v->reactionfire.disable();
 
        }

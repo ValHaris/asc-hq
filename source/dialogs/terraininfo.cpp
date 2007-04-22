@@ -62,6 +62,9 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
 
    text += "ID: " + ASCString::toString( fld->typ->terraintype->id ) + "\n";
 
+   text += "Weather: " + ASCString(cwettertypen[fld->getweather() ]) + "\n";
+
+
    ASCString sub;
    float ab = fld->getattackbonus();
    float db = fld->getdefensebonus();
