@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,1.99.92.77)
+AC_INIT(asc,1.99.93.80)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -547,6 +547,7 @@ dnl this is a hack to prevent automake from interpreting the include statement; 
 maindatainclude="include main.mak"
 AC_SUBST(maindatainclude)
 
+mkdir -p data
 perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", @a); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
 
 
