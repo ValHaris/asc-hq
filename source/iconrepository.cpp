@@ -76,4 +76,11 @@ void IconRepository::insert( const ASCString& name, Surface* s )
    repository[name] = s;
 }
 
+int IconRepository::getMemoryFootprint()
+{
+   int size = 0;
+   for ( Repository::iterator i = repository.begin(); i != repository.end(); ++i  )
+      size += i->second->getMemoryFootprint();
+   return size;
+}
 

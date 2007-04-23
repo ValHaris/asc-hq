@@ -54,12 +54,12 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) dlg_box.$(OBJEXT) \
 	dialog.$(OBJEXT) controls.$(OBJEXT) basestrm.$(OBJEXT) \
 	basegfx.$(OBJEXT) attack.$(OBJEXT) replaymapdisplay.$(OBJEXT) \
-	gameoptions.$(OBJEXT) astar2.$(OBJEXT) vehicletype.$(OBJEXT) \
-	objects.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
-	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
-	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) replay.$(OBJEXT) \
-	research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
+	memory-measurement.$(OBJEXT) gameoptions.$(OBJEXT) \
+	astar2.$(OBJEXT) vehicletype.$(OBJEXT) objects.$(OBJEXT) \
+	stdio-errorhandler.$(OBJEXT) buildingtype.$(OBJEXT) \
+	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
+	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
+	replay.$(OBJEXT) research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
 	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
 	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
 	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
@@ -271,7 +271,7 @@ nodist_asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp palette.cpp \
 newfont.cpp network.cpp misc.cpp loadpcxc.cpp loaders.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
-basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp \
+basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp memory-measurement.cpp \
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp stdio-errorhandler.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp replay.cpp research.cpp fieldimageloader.cpp \
@@ -412,6 +412,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapfield.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapimageexport.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mappolygons.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory-measurement.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messagedlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@

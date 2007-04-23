@@ -13,6 +13,12 @@ OverviewMapImage::OverviewMapImage( const Surface& image )
    create ( image );
 }
 
+int OverviewMapImage::getMemoryFootprint() const
+{
+   return sizeof(*this);  
+}
+
+
 
 SPoint OverviewMapImage::map2surface( const MapCoordinate& pos )
 {

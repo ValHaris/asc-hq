@@ -186,6 +186,9 @@
          therefor be bigger than lifetime. Use -1 for unlimited */
      int growthDuration;
 
+     
+     int getMemoryFootprint() const;
+     
    private:
      //! the loading functions call this method to setup the objects images
      void setupImages();

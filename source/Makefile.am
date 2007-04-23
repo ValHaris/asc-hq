@@ -7,3 +7,5 @@ EXTRA_DIST  = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/c
 htmldoc: doxygen.config
 	doxygen doxygen.config
 	cd libs/paragui ; make paraguidoc
+_SOURCES = memory-measurement.h
+_SOURCES = memsize_interface.h

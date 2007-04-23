@@ -220,6 +220,7 @@ void Menu::setup()
    addbutton ( "Locate File", ua_locatefile );
    addbutton ( "test messages", ua_testMessages );
    addbutton ( "view font", ua_viewfont );
+   addbutton ( "memory footprint", ua_getMemoryFootprint );
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );

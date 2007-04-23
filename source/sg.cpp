@@ -148,6 +148,8 @@
 #include "widgets/textrenderer.h"
 #include "dialogs/productionanalysis.h"
 
+#include "memory-measurement.h"
+
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
 # include  "win32/msvc/mdump.h"
@@ -1065,6 +1067,19 @@ void showUnitEndurance()
 }
 
 
+void showMemoryFootprint()
+{
+   
+   MemoryMeasurement mm;
+   mm.measureTypes();
+   mm.measureIcons();
+   
+   ViewFormattedText vft("Memory Usage", mm.getResult(), PG_Rect( -1, -1, 750, 550 ));
+   vft.Show();
+   vft.RunModal();
+   
+}
+
 
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
@@ -1226,6 +1241,9 @@ void execuseraction2 ( tuseractions action )
                vft.RunModal();
                                };
       case ua_showUnitEndurance: showUnitEndurance();
+         break;
+         
+      case ua_getMemoryFootprint: showMemoryFootprint();
          break;
 
       default:

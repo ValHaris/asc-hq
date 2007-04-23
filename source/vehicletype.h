@@ -310,6 +310,8 @@ extern const char*  cvehiclefunctions[];
         void  paint ( Surface& s, SPoint pos, int player, int direction = 0 ) const;
         const Surface&  getImage () const { return image;};
         Surface&  getImage () { return image;};
+        
+        int getMemoryFootprint() const;
 
         static BitSet convertOldFunctions( int abilities, const ASCString& location );
     private:

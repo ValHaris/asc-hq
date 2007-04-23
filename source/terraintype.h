@@ -127,7 +127,7 @@
           void read ( tnstream& stream );
           void read ( tnstream& stream, int version );
           void write ( tnstream& stream ) const;
-
+          int getMemoryFootprint() const;
       };
      Weather*           weather[cwettertypennum];
 
@@ -135,6 +135,7 @@
      void runTextIO ( PropertyContainer& pc );
      void read ( tnstream& stream );
      void write ( tnstream& stream ) const;
+     int getMemoryFootprint() const;
      ~TerrainType();
  };
 

@@ -693,3 +693,20 @@ void* Surface::toBGI() const
    return p;
 }
 
+int Surface::getMemoryFootprint() const
+{
+   int size = sizeof(*this);
+   
+   const SDL_Surface* s = getBaseSurface();
+   if ( s ) {
+      size += sizeof( SDL_Surface );
+      if ( s->format ) {
+         size += sizeof( SDL_PixelFormat );
+         if ( s->format->palette )
+            size += sizeof ( SDL_Palette ) + s->format->palette->ncolors * sizeof(SDL_Color);
+      }
+      size += s->h * s->pitch;
+   }
+   return size;
+}
+

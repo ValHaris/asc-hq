@@ -109,7 +109,10 @@ public:
       SDLmm::ColorRGBA GetRGBA(SDLmm::Color pixel) const;
       */
 
+      int getMemoryFootprint() const;
+      
       SDL_Surface* getBaseSurface() { return me; };
+      const SDL_Surface* getBaseSurface() const { return me; };
       ~Surface();
    protected:
       virtual int getDepthFormat() { return -1; };

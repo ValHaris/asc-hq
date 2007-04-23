@@ -79,6 +79,19 @@ BuildingType :: BuildingType ( void )
 }
 
 
+int BuildingType :: getMemoryFootprint() const
+{
+   int size = sizeof(*this);
+   
+   for ( int i = 0; i < cwettertypennum; ++i )
+      for ( int j = 0; j < maxbuildingpicnum; ++j )
+         for ( int k = 0; k < 4; ++k )
+            for ( int l = 0; l < 6; ++l )
+               size += w_picture[i][j][k][l].getMemoryFootprint() - sizeof( Surface ); 
+   return size;
+}
+
+
 int   BuildingType :: getBIPicture( const LocalCoordinate& localCoordinate, int weather , int constructionStep ) const
 {
    return bi_picture [weather][constructionStep][localCoordinate.x][localCoordinate.y];

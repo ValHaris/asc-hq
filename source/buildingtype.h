@@ -160,6 +160,8 @@ extern const char*  cbuildingfunctions[];
         void runTextIO ( PropertyContainer& pc );
 
         bool buildingNotRemovable;
+        
+        int getMemoryFootprint() const;
 
         
 };

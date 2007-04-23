@@ -751,6 +751,11 @@ int Vehicletype :: maxSpeed ( ) const
    return maxUnitMovement;
 }
 
+int Vehicletype::getMemoryFootprint() const 
+{
+   return sizeof(*this) + image.getMemoryFootprint(); 
+}
+
 
 Vehicletype :: ~Vehicletype ( )
 {

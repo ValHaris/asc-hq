@@ -338,6 +338,27 @@ void TerrainType::write ( tnstream& stream ) const
 }
 
 
+int TerrainType::getMemoryFootprint() const
+{
+   int size = sizeof(*this);
+   
+   for ( int w = 0; w < cwettertypennum; ++w )
+      if ( weather[w] ) 
+         size += weather[w]->getMemoryFootprint();
+      
+   return size;
+}
+
+int TerrainType::Weather::getMemoryFootprint() const
+{
+   int size = sizeof(*this);
+   size += image.getMemoryFootprint();
+   if ( quickView )
+      size += quickView->getMemoryFootprint();
+   return size;
+}
+
+
 TerrainType::~TerrainType()
 {
    for ( int i = 0; i< cwettertypennum; ++i) {

@@ -27,6 +27,7 @@
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
 #include "fieldimageloader.h"
+#include "memsize_interface.h"
 
 #ifndef converter
 #include "gamemap.h"
@@ -780,6 +781,18 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 #endif
 
 
+
+int ObjectType :: getMemoryFootprint() const
+{
+   int size = sizeof( *this );
+   for ( int ww = 0; ww < cwettertypennum; ww++ ) {
+      size += for_each( weatherPicture[ww].images.begin(), weatherPicture[ww].images.end(), MemorySum<Surface>() ).size;
+      size += for_each( weatherPicture[ww].overviewMapImage.begin(), weatherPicture[ww].overviewMapImage.end(), MemorySum<OverviewMapImage>() ).size;
+   }
+   
+   return size;
+     
+}
 
 
 

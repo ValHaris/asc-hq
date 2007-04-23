@@ -44,6 +44,8 @@ class OverviewMapImage {
          static void fillCenter( Surface& s, const SPoint& pos, SDLmm::Color color );
          static void fillCenter( Surface& s, const SPoint& pos, SDL_Color color );
          static void lighten( Surface& s, const SPoint& pos, float value );
+         
+         int getMemoryFootprint() const;
 };
 
 #endif

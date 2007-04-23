@@ -21,8 +21,9 @@
  #include "typen.h"
  #include "research.h"
  #include "mapitemtype.h"
+ #include "memsize_interface.h"
 
-class ContainerBaseType: public MapItemType, public LoadableItemType {
+class ContainerBaseType: public MapItemType, public LoadableItemType, public MemorySizeQueryInterface {
    protected:
       std::bitset<64> features;
    public:
