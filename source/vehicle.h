@@ -375,6 +375,9 @@ class UnitHooveringLogic {
     bool weapexist ( void );
     void prepareForCleanRemove() { cleanRemove = true; };
     ~Vehicle ( );
+
+     int getMemoryFootprint() const;
+
   protected:
      vector<MapCoordinate> getCoveredFields();
        
