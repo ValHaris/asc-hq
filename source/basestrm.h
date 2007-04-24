@@ -199,6 +199,7 @@ class tmemorystreambuf {
            void writetostream ( pnstream stream );
            void readfromstream ( pnstream stram );
            void clear() { used= 0; };
+           int getMemoryFootprint() const { return allocated; };
            ~tmemorystreambuf ( );
       };
 

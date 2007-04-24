@@ -1072,6 +1072,7 @@ void showMemoryFootprint()
    
    MemoryMeasurement mm;
    mm.measureTypes();
+   mm.measure( actmap );
    mm.measureIcons();
    
    ViewFormattedText vft("Memory Usage", mm.getResult(), PG_Rect( -1, -1, 750, 550 ));

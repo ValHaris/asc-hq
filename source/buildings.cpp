@@ -675,6 +675,7 @@ int Building::putAmmo( int type, int num, bool queryOnly )
 
 
 
+
 void Building::endRound(  )
 {
    ContainerBase::endRound();
@@ -690,6 +691,12 @@ vector<MapCoordinate> Building::getCoveredFields()
          if ( typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) )
             fields.push_back ( getFieldCoordinates( BuildingType::LocalCoordinate(x, y)));
    return fields;
+}
+
+
+int Building::getMemoryFootprint() const
+{
+   return sizeof(*this);
 }
 
 

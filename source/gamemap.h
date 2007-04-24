@@ -479,7 +479,9 @@ class GameMap {
 
       
       GameTransferMechanism* network;
-      
+
+      int getMemoryFootprint() const;
+
    private:
       Vehicle* getUnit ( Vehicle* eht, int nwid );
 

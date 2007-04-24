@@ -1751,6 +1751,19 @@ void GameMap::setPlayerMode(  Player& p, State s )
    p.getParentMap()->state = s;
 }
 
+int GameMap::getMemoryFootprint() const
+{
+   int size = sizeof(*this);
+   if( replayinfo )
+      for ( int i = 0; i < 8; ++i ) {
+         if ( replayinfo->guidata[i] )
+            size += replayinfo->guidata[i]->getMemoryFootprint();
+         if ( replayinfo->map[i] )
+            size += replayinfo->map[i]->getMemoryFootprint();
+      }
+   return size;
+}
+
 
 
 void GameMap::operator= ( const GameMap& map )

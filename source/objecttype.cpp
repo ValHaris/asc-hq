@@ -781,7 +781,6 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 #endif
 
 
-
 int ObjectType :: getMemoryFootprint() const
 {
    int size = sizeof( *this );
@@ -789,9 +788,8 @@ int ObjectType :: getMemoryFootprint() const
       size += for_each( weatherPicture[ww].images.begin(), weatherPicture[ww].images.end(), MemorySum<Surface>() ).size;
       size += for_each( weatherPicture[ww].overviewMapImage.begin(), weatherPicture[ww].overviewMapImage.end(), MemorySum<OverviewMapImage>() ).size;
    }
-   
+
    return size;
-     
 }
 
 

@@ -468,6 +468,13 @@ tfield::Resourceview :: Resourceview ( void )
 }
 
 
+int tfield :: getMemoryFootprint() const
+{
+   int size = sizeof(*this);
+   return size;
+}
+
+
 tfield :: ~tfield()
 {
    if ( resourceview ) {

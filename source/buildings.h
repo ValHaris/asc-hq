@@ -170,6 +170,8 @@ class  Building : public ContainerBase {
 
     virtual int repairableDamage();
 
+     int getMemoryFootprint() const;
+
   protected:
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };

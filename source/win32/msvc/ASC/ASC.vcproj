@@ -295,6 +295,9 @@
 				RelativePath="..\mdump.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\memory-measurement.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\messagedlg.cpp">
 			</File>
 			<File

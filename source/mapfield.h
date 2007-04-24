@@ -179,6 +179,8 @@ class  tfield {
     int getx();
     int gety();
 
+    int getMemoryFootprint() const;
+
     ~tfield();
   private:
     TerrainType::MoveMalus __movemalus;

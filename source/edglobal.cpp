@@ -473,6 +473,10 @@ void showPlayerPanel( bool open )
    if ( open && !pcp ) 
       pcp = new PlayerColorPanel();
 
+
+   if ( !pcp )
+      return;
+
    if( open )
       pcp->Show();
    else

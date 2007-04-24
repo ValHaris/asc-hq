@@ -1691,6 +1691,12 @@ vector<MapCoordinate> Vehicle::getCoveredFields()
 }
 
 
+int Vehicle::getMemoryFootprint() const
+{
+   return sizeof(*this);
+}
+
+
 
 Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID )
 {
