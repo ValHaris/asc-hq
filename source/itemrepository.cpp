@@ -117,7 +117,7 @@ void ItemRepositoryLoader<T>::write( tnstream& stream )
 {
    stream.writeInt( 1 );
    stream.writeInt( ItemRepository<T>::container.size() );
-   for ( ItemContainerType::iterator i = ItemRepository<T>::container.begin(); i != ItemRepository<T>::container.end(); ++i ) {
+   for ( typename ItemRepository<T>::ItemContainerType::iterator i = ItemRepository<T>::container.begin(); i != ItemRepository<T>::container.end(); ++i ) {
        (*i)->write( stream );
        stream.writeString ( (*i)->filename );
        stream.writeString ( (*i)->location );
