@@ -183,6 +183,10 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
       infotext.replace ( infotext.find ( "\r" ), 1, "" );
 
    pc.addInteger( "ID", id );
+
+   if ( pc.find( "SecondaryIDs") || !pc.isReading())
+      pc.addIntegerArray("SecondaryIDs", secondaryIDs );
+
    pc.addInteger( "View", view );
    if ( view > maxViewRange )
       view = maxViewRange;
@@ -231,7 +235,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 4;
+const int containerBaseTypeVersion = 5;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -259,6 +263,10 @@ void ContainerBaseType :: read ( tnstream& stream )
 
    if ( version >= 4 )
       vehicleCategoriesProduceable = stream.readInt();
+
+   if ( version >= 5 )
+      readClassContainer( secondaryIDs, stream );
+
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -274,6 +282,8 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    stream.writeString( infoImageFilename );
    stream.writeBitset( features );
    stream.writeInt( vehicleCategoriesProduceable );
+   writeClassContainer( secondaryIDs, stream );
+
 }
 
 const int containerBaseTypeTransportVersion = 3;

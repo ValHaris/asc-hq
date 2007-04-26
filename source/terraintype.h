@@ -72,6 +72,10 @@
  class TerrainType : public MapItemType, public LoadableItemType {
     public:
       int                id;
+
+      //! when loading a file and these IDs are encountered, this object will be used.
+      vector<int> secondaryIDs;
+
       int                getID() const { return id; };
       ASCString          name;
       ASCString          getName() const { return name; };

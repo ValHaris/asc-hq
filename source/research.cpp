@@ -507,7 +507,7 @@ Technology::Technology()
    techlevel = 0;
 }
 
-const int technologyVersion = 3;
+const int technologyVersion = 4;
 
 void Technology::read( tnstream& stream )
 {
@@ -529,6 +529,9 @@ void Technology::read( tnstream& stream )
    if ( version >= 3 )
       readClassContainer( blockingOtherTechnologies, stream );
 
+   if ( version >= 4 )
+      readClassContainer( secondaryIDs, stream );
+
 }
 
 void Technology::write( tnstream& stream ) const
@@ -543,6 +546,7 @@ void Technology::write( tnstream& stream ) const
    techDependency.write( stream );
    stream.writeInt ( relatedUnitID );
    writeClassContainer( blockingOtherTechnologies, stream );
+   writeClassContainer( secondaryIDs, stream );
 }
 
 void Technology::runTextIO ( PropertyContainer& pc )
@@ -551,6 +555,9 @@ void Technology::runTextIO ( PropertyContainer& pc )
    pc.addString( "Infotext", infotext);
 
    pc.addInteger( "Id", id );
+   if ( pc.find( "SecondaryIDs") || !pc.isReading())
+      pc.addIntegerArray("SecondaryIDs", secondaryIDs );
+
    pc.addInteger( "Researchpoints", researchpoints );
 
    pc.addInteger( "Techlevel", techlevel );

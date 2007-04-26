@@ -121,8 +121,14 @@ class TechAdapterDependency {
 
      void*        icon;
      ASCString    infotext;
+
      int          id;
+     //! when loading a file and these IDs are encountered, this object will be used.
+     vector<int> secondaryIDs;
+
+
      int          researchpoints;
+
      ASCString    name;
      int          techlevel;
      int          relatedUnitID;

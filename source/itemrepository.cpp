@@ -53,16 +53,27 @@ void duplicateIDError ( const ASCString& itemtype, int id, const ASCString& file
 }
 
 
+template<class T> 
+void ItemRepository<T>::RegisterID::operator() (int id )
+{
+   typename ObjectMap::iterator i = repository.hash.find ( object->id );
+   if ( i != repository.hash.end() && i->second )
+      duplicateIDError ( repository.typeName, object->id, object->location, object->name, i->second->location, i->second->name );
+   repository.hash[ object->id ] = object;
+}
+
+
 
 template<class T>
 void ItemRepository<T>::add( T* obj )
 {
-   typename ObjectMap::iterator i = hash.find ( obj->id );
-   if ( i != hash.end() && i->second )
-     duplicateIDError ( typeName, obj->id, obj->location, obj->name, i->second->location, i->second->name );
+   RegisterID reg(*this, obj);
+   reg( obj->id );
+
+   for_each ( obj->secondaryIDs.begin(), obj->secondaryIDs.end(), reg );
+
 
    container.push_back( obj );
-   hash[ obj->id ] = obj;
 }
 
 
@@ -106,7 +117,7 @@ void ItemRepositoryLoader<T>::write( tnstream& stream )
 {
    stream.writeInt( 1 );
    stream.writeInt( ItemRepository<T>::container.size() );
-   for ( typename vector<T*>::iterator i = ItemRepository<T>::container.begin(); i != ItemRepository<T>::container.end(); ++i ) {
+   for ( ItemContainerType::iterator i = ItemRepository<T>::container.begin(); i != ItemRepository<T>::container.end(); ++i ) {
        (*i)->write( stream );
        stream.writeString ( (*i)->filename );
        stream.writeString ( (*i)->location );

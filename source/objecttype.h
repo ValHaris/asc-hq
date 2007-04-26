@@ -34,6 +34,10 @@
      //! the id of the object, used when referencing objects in files
      int id;
 
+
+     //! when loading a file and these IDs are encountered, this object will be used.
+     vector<int> secondaryIDs;
+
      //! the group ID allows units to specify whole groups of objects to be buildable / removable without specifying each individual object.
      int groupID;
 

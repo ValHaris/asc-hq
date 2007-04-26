@@ -517,11 +517,19 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
       if ( vehicle ) {
          if ((fld->vehicle == NULL) && (fld->building == NULL)) {
-            fld->vehicle = vehicle;
             if ( !vehicle->isViewing() ) {
                vehicle->addview();
                viewInputChanged = true;
+
+               // do we really need this check?
+               if ( rf->checkfield ( *pos, vehicle, mapDisplay )) {
+                  attackedByReactionFire = true;
+                  vehicle = actmap->getUnit ( networkID );
+               }
+
             }
+            fld->vehicle = vehicle;
+
          } else {
             ContainerBase* cn = fld->getContainer();
             if ( vehicle->isViewing() ) {
@@ -538,10 +546,6 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
 
          }
 
-         if ( rf->checkfield ( *pos, vehicle, mapDisplay )) {
-            attackedByReactionFire = true;
-            vehicle = actmap->getUnit ( networkID );
-         }
       }
    }
 

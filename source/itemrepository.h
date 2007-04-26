@@ -62,6 +62,17 @@ class ItemRepository  {
 
       map<int,int> idTranslation;
 
+      class RegisterID {
+            ItemRepository<T>& repository;
+            T* object;
+         public:
+            RegisterID( ItemRepository<T>& parent, T* obj  ) : repository ( parent ), object(obj) {};
+            void operator() (int id);
+      };
+
+      friend class RegisterID;
+
+
    public:
       ItemRepository( const ASCString& typeName_ ) : typeName( typeName_ ) {};
       

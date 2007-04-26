@@ -67,6 +67,10 @@ class MineType : public MapItemType {
       MineTypes type;
    public:
       int id;
+
+      //! not really used for minetypes.
+      vector<int> secondaryIDs;
+
       ASCString name;
       ASCString location;
       

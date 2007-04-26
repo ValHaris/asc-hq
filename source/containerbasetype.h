@@ -83,6 +83,10 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      
      int id;
 
+     //! when loading a file and these IDs are encountered, this object will be used.
+     vector<int> secondaryIDs;
+
+
      //! a short name, for example B-52
      ASCString    name;
 

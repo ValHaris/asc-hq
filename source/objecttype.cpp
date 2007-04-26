@@ -794,7 +794,7 @@ int ObjectType :: getMemoryFootprint() const
 
 
 
-const int object_version = 19;
+const int object_version = 20;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -922,7 +922,10 @@ void ObjectType :: read ( tnstream& stream )
 
       if ( version >= 19 )
          growOnUnits = stream.readInt();
-      
+
+      if ( version >= 20 )
+         readClassContainer( secondaryIDs, stream );
+
    } else
        throw tinvalidversion  ( stream.getLocation(), object_version, version );
 }
@@ -1011,6 +1014,9 @@ void ObjectType :: write ( tnstream& stream ) const
     stream.writeInt( growthDuration );
     stream.writeInt( rotateImage );
     stream.writeInt( growOnUnits );
+
+    writeClassContainer( secondaryIDs, stream );
+
 }
 
 
@@ -1050,6 +1056,10 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addBreakpoint();
 
    pc.addInteger  ( "ID", id );
+
+   if ( pc.find( "SecondaryIDs") || !pc.isReading())
+      pc.addIntegerArray("SecondaryIDs", secondaryIDs );
+
    pc.addInteger  ( "GroupID", groupID, -1 );
    pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
    pc.addBool     ( "visible_in_fogOfWar", visibleago );
