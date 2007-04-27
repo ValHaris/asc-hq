@@ -1,0 +1,25 @@
+ObjectType { 
+
+   Name = Border 15
+   Parent = 2300
+   ID = 2315
+
+   LinkableTerrain = 2991
+   LinkableObjects = 
+
+   dry { 
+      Picture = obj_link_trr_grassland_15.png 65
+   } dry
+   light_rain { 
+      Picture = obj_link_trr_grassland_15_lr.png 64
+   } light_rain
+   heavy_rain { 
+      Picture = obj_link_trr_grassland_15_hr.png 64
+   } heavy_rain
+   few_snow { 
+      Picture = obj_link_trr_grassland_15_fs.png 64
+   } few_snow
+   much_snow ->* ObjectType.dry
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType

@@ -1,0 +1,79 @@
+ObjectType { 
+
+   Name = Terrain Border
+   ID = 2300
+   abstract = true
+   LinkableObjects = 2301-2317 2361 2341-2349 2421-2451 2461 2481-2490 2381 2401-2404
+   Armor = 0
+   Height = 0
+
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   NetBehaviour = NetToSelf NetToBorder AutoBorder
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+  ; dry
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = -1
+   Movemalus_plus = 
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = 
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jammming_plus = 
+
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Water Deep_water Hard_sand Soft_sand Small_rocks Very_shallow_water Large_rocks Ditch Hillside Turret_foundation Mountains High_Mountains River Swamp Installation Road Lava
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = 
+
+   dry {
+      UseGFXpics = false
+ImageReference = [63 35  7 30  7  7 15 -1 35 63  7
+                      7 30  7  7 -1  7  7 63 35 35
+                     63  7  7 30  7 35 63 35 35 -1
+                     -1  7 30 35 -1 63 35  7 30  7
+                      7 63 35 35 63  7 31 15  7  7
+                     30  7  7 63 -1  7 15  7 31 30
+                     31 55 -1]
+
+FlipPictures   =  [0  0  0  2  2  0  0  0  2  0  2
+                      0  0  2  2  0  3  1  0  0  2
+                      0  2  0  1  3  2  0  2  2  0
+                      0  1  3  0  0  0  0  0  2  3
+                      3  0  0  2  0  2  2  1  1  1
+                      3  3  1  0  0  3  1  3  3  1
+                      1  2  0]
+   } dry
+
+   light_rain ->* ObjectType.dry
+
+   heavy_rain ->* ObjectType.dry
+
+   few_snow ->* ObjectType.dry
+
+   much_snow ->* ObjectType.dry
+   much_snow.GraphicOperations = Snow
+
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType

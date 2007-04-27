@@ -1,0 +1,24 @@
+ObjectType { 
+
+   Name = Border 126
+   Parent = 2300
+   ID = 2426
+
+   LinkableTerrain = 2905
+   LinkableObjects = 
+
+   Weather = dry heavy_rain few_snow much_snow snow_and_ice
+
+   dry { 
+      Picture = obj_link_trr_rock_flat_6.png 65
+   } dry
+   heavy_rain { 
+      Picture = obj_link_trr_rock_flat_6_hr.png 64
+   } heavy_rain
+   few_snow { 
+      Picture = obj_link_trr_rock_flat_6_fs.png 64
+   } few_snow
+   much_snow ->* ObjectType.dry
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType
