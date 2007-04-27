@@ -1,7 +1,10 @@
 TerrainType { 
-   Name = rough Rock 1
+
+   Name = Rough Rock 1
    Parent = 506
    ID = 2068
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
 
    dry { 
       UseGFXpics = false
@@ -21,11 +24,9 @@ TerrainType {
    } few_snow
    much_snow { 
       UseGFXpics = false
-      Picture = trr_rock_rough_1_ms.png
+      Picture = trr_rock_rough_1.png
+      GraphicOperations = Snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = trr_rock_rough_1_ms.png
-   } snow_and_ice
+   snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType

@@ -1,0 +1,18 @@
+TerrainType { 
+
+   Name = Ocean
+   Parent = 516
+   ID = 2000
+
+   Weather = dry snow_and_ice
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_water_5_ocean.png
+   } dry
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_water_5_ocean_ice.png
+   } snow_and_ice
+
+} TerrainType

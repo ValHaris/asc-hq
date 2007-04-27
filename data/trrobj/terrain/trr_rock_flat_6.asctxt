@@ -1,7 +1,10 @@
 TerrainType { 
+
    Name = Flat Rock 6
    Parent = 505
    ID = 2905
+
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
 
    dry { 
       UseGFXpics = false
@@ -24,10 +27,6 @@ TerrainType {
       Picture = trr_rock_flat_6.png
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = trr_rock_flat_6.png
-      GraphicOperations = Snow
-   } snow_and_ice
+   snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType

@@ -1,4 +1,5 @@
 TerrainType { 
+
    Name = Mud 2
    Parent = 502
    ID = 2922
@@ -24,10 +25,6 @@ TerrainType {
       Picture = trr_mud_2.png
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = trr_mud_2.png
-      GraphicOperations = Snow
-   } snow_and_ice
+   snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType

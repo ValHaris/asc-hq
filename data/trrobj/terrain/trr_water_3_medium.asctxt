@@ -1,0 +1,22 @@
+TerrainType { 
+
+   Name = Medium Water
+   Parent = 515
+   ID = 2001
+
+   Weather = dry much_snow snow_and_ice
+
+   dry { 
+      UseGFXpics = false
+      Picture = trr_water_3_medium.png
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_water_3_medium_ms.png
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_water_3_medium_ice.png
+   } snow_and_ice
+
+} TerrainType

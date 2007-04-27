@@ -1,4 +1,5 @@
 TerrainType { 
+
    Name = Grassland 3
    Parent = 501
    ID = 2061
@@ -21,11 +22,9 @@ TerrainType {
    } few_snow
    much_snow { 
       UseGFXpics = false
-      Picture = trr_grassland_3_ms.png
+      Picture = trr_grassland_3.png
+      GraphicOperations = Snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = trr_grassland_3_ms.png
-   } snow_and_ice
+   snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType

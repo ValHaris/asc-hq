@@ -1,6 +1,7 @@
 TerrainType { 
+
    Name = Sand 3
-   Parent = 2912
+   Parent = 505
    ID = 2914
 
    dry { 
@@ -24,10 +25,6 @@ TerrainType {
       Picture = trr_sand_3.png
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = trr_sand_3.png
-      GraphicOperations = Snow
-   } snow_and_ice
+   snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType
