@@ -1,8 +1,8 @@
-Grafiken: GAMER und Schicksal
+Grafiken: GAMER,Schicksal,AndreasK,Xyphagoroszh und Grom
 Spezifikationen: GAMER
 
 BUILDINGS HISTORY
-
+v21 26.04.2007
 _________________
 v13.01 beta
 - "alles bau"-bug behoben

@@ -1,7 +1,10 @@
 Gfx terrain System
 Advanced Strategic Command
 Specifications by GAMER
-Grafics by GAMER & Snuggels
+Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
+
+v21.00
+- komplette Überarbeitung sowie Einbau von optionalen Terrain Übergängen die nur Verwendung bei freiem Arbeitsspeicher für ASC >500 MB verwendet werden sollten
 
 ________________
 v15.00
