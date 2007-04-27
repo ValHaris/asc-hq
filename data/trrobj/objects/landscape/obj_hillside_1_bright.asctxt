@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   Weather = dry
 
    Name = Bright Hillside
    Parent = 508
@@ -10,7 +10,7 @@ ObjectType {
 
    dry { 
       UseGFXpics = false
-      Picture = obj_hillside_bright.png 64
+      Picture = obj_hillside_bright.pcx 64
       DisplayMethod = Translation
       ImageReference = [-1 -1 -1 -1 -1  7 -1 -1  1 -1
                         -1  9  3 11 10 13 -1 -1 26 26
@@ -27,100 +27,5 @@ ObjectType {
                          3  3  1  1  0  0  3  1  3  3
                          1  1  2  0 ]
    } dry
-   light_rain { 
-      UseGFXpics = false
-      Picture = obj_hillside_bright.png 64
-      DisplayMethod = Translation
-      ImageReference = [-1 -1 -1 -1 -1  7 -1 -1  1 -1
-                        -1  9  3 11 10 13 -1 -1 26 26
-                        -1 -1 26  3 16  9 -1 -1 20 -1
-                        22 -1 -1  3 20 20 26 26 26 26
-                        10 11 -1 29 19 27 23 31  6 48
-                        30 30 30 23 -1 -1  7 15 23 31
-                        30 31 55 -1 ]
-      FlipPictures   = [ 0  0  0  0  0  0  0  0  2  0
-                         0  0  2  0  0  0  0  0  0  0
-                         0  0  0  3  0  3  0  0  0  0
-                         0  0  0  1  2  2  1  1  1  1
-                         1  1  0  2  2  1  2  2  1  0
-                         3  3  1  1  0  0  3  1  3  3
-                         1  1  2  0 ]
-   } light_rain
-   heavy_rain { 
-      UseGFXpics = false
-      Picture = obj_hillside_bright.png 64
-      DisplayMethod = Translation
-      ImageReference = [-1 -1 -1 -1 -1  7 -1 -1  1 -1
-                        -1  9  3 11 10 13 -1 -1 26 26
-                        -1 -1 26  3 16  9 -1 -1 20 -1
-                        22 -1 -1  3 20 20 26 26 26 26
-                        10 11 -1 29 19 27 23 31  6 48
-                        30 30 30 23 -1 -1  7 15 23 31
-                        30 31 55 -1 ]
-      FlipPictures   = [ 0  0  0  0  0  0  0  0  2  0
-                         0  0  2  0  0  0  0  0  0  0
-                         0  0  0  3  0  3  0  0  0  0
-                         0  0  0  1  2  2  1  1  1  1
-                         1  1  0  2  2  1  2  2  1  0
-                         3  3  1  1  0  0  3  1  3  3
-                         1  1  2  0 ]
-   } heavy_rain
-   few_snow { 
-      UseGFXpics = false
-      Picture = obj_hillside_bright.png 64
-      DisplayMethod = Translation
-      ImageReference = [-1 -1 -1 -1 -1  7 -1 -1  1 -1
-                        -1  9  3 11 10 13 -1 -1 26 26
-                        -1 -1 26  3 16  9 -1 -1 20 -1
-                        22 -1 -1  3 20 20 26 26 26 26
-                        10 11 -1 29 19 27 23 31  6 48
-                        30 30 30 23 -1 -1  7 15 23 31
-                        30 31 55 -1 ]
-      FlipPictures   = [ 0  0  0  0  0  0  0  0  2  0
-                         0  0  2  0  0  0  0  0  0  0
-                         0  0  0  3  0  3  0  0  0  0
-                         0  0  0  1  2  2  1  1  1  1
-                         1  1  0  2  2  1  2  2  1  0
-                         3  3  1  1  0  0  3  1  3  3
-                         1  1  2  0 ]
-   } few_snow
-   much_snow { 
-      UseGFXpics = false
-      Picture = obj_hillside_bright.png 64
-      DisplayMethod = Translation
-      ImageReference = [-1 -1 -1 -1 -1  7 -1 -1  1 -1
-                        -1  9  3 11 10 13 -1 -1 26 26
-                        -1 -1 26  3 16  9 -1 -1 20 -1
-                        22 -1 -1  3 20 20 26 26 26 26
-                        10 11 -1 29 19 27 23 31  6 48
-                        30 30 30 23 -1 -1  7 15 23 31
-                        30 31 55 -1 ]
-      FlipPictures   = [ 0  0  0  0  0  0  0  0  2  0
-                         0  0  2  0  0  0  0  0  0  0
-                         0  0  0  3  0  3  0  0  0  0
-                         0  0  0  1  2  2  1  1  1  1
-                         1  1  0  2  2  1  2  2  1  0
-                         3  3  1  1  0  0  3  1  3  3
-                         1  1  2  0 ]
-   } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = obj_hillside_bright.png 64
-      DisplayMethod = Translation
-      ImageReference = [-1 -1 -1 -1 -1  7 -1 -1  1 -1
-                        -1  9  3 11 10 13 -1 -1 26 26
-                        -1 -1 26  3 16  9 -1 -1 20 -1
-                        22 -1 -1  3 20 20 26 26 26 26
-                        10 11 -1 29 19 27 23 31  6 48
-                        30 30 30 23 -1 -1  7 15 23 31
-                        30 31 55 -1 ]
-      FlipPictures   = [ 0  0  0  0  0  0  0  0  2  0
-                         0  0  2  0  0  0  0  0  0  0
-                         0  0  0  3  0  3  0  0  0  0
-                         0  0  0  1  2  2  1  1  1  1
-                         1  1  0  2  2  1  2  2  1  0
-                         3  3  1  1  0  0  3  1  3  3
-                         1  1  2  0 ]
-   } snow_and_ice
 
 } ObjectType

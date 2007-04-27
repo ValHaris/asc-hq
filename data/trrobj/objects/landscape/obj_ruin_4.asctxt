@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   Weather = dry much_snow snow_and_ice
 
    Name = Ruin 4
    Parent = 512
@@ -11,25 +11,10 @@ ObjectType {
       UseGFXpics = false
       picture = obj_ruin_4.png 1
    } dry
-   light_rain { 
-      UseGFXpics = false
-      picture = obj_ruin_4.png 1
-   } light_rain
-   heavy_rain { 
-      UseGFXpics = false
-      picture = obj_ruin_4.png 1
-   } heavy_rain
-   few_snow {
-      UseGFXpics = false
-      picture = obj_ruin_4.png 1
-   } few_snow
    much_snow {
       UseGFXpics = false
       picture = obj_ruin_4.png 1
    } much_snow
-   snow_and_ice {
-      UseGFXpics = false
-      picture = obj_ruin_4.png 1
-   } snow_and_ice
+   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

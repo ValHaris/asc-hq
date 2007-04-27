@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+   Weather = dry few_snow much_snow snow_and_ice
 
    Name = Swamp 3
    Parent = 504
@@ -10,25 +10,15 @@ ObjectType {
       UseGFXpics = false
       Picture = obj_swamp_3.png 1
    } dry
-   light_rain { 
-      UseGFXpics = false
-      Picture = obj_swamp_3.png 1
-   } light_rain
-   heavy_rain { 
-      UseGFXpics = false
-      Picture = obj_swamp_3.png 1
-   } heavy_rain
    few_snow { 
       UseGFXpics = false
       Picture = obj_swamp_3_fs.png 1
    } few_snow
    much_snow { 
       UseGFXpics = false
-      Picture = obj_swamp_3_ms.png 1
+      Picture = obj_swamp_3.png 1
+      GraphicOperations = Snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-      Picture = obj_swamp_3_ms.png 1
-   } snow_and_ice
+   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType
