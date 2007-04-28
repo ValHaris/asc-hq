@@ -214,10 +214,10 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( repaintMap.slot() ));
       
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
       

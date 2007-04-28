@@ -2870,11 +2870,11 @@ void registerReplayGuiFunctions( GuiIconHandler& handler )
 void registerGuiFunctions( GuiIconHandler& handler )
 {
    handler.registerUserFunction( new GuiFunctions::Movement() );
+   handler.registerUserFunction( new GuiFunctions::UnitInfo() );
    handler.registerUserFunction( new GuiFunctions::Attack() );
    handler.registerUserFunction( new GuiFunctions::JumpDriveIcon() );
    handler.registerUserFunction( new GuiFunctions::PowerOn() );
    handler.registerUserFunction( new GuiFunctions::PowerOff() );
-   handler.registerUserFunction( new GuiFunctions::UnitInfo() );
    handler.registerUserFunction( new GuiFunctions::BuildObject() );
    handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
