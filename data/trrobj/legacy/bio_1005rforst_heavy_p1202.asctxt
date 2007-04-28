@@ -1,5 +1,0 @@
-ObjectType { 
-   ID = 1005
-   parent = 81
-   LinkableObjects = 1001-1015
-} ObjectType

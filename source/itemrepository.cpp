@@ -56,10 +56,10 @@ void duplicateIDError ( const ASCString& itemtype, int id, const ASCString& file
 template<class T> 
 void ItemRepository<T>::RegisterID::operator() (int id )
 {
-   typename ObjectMap::iterator i = repository.hash.find ( object->id );
+   typename ObjectMap::iterator i = repository.hash.find ( id );
    if ( i != repository.hash.end() && i->second )
-      duplicateIDError ( repository.typeName, object->id, object->location, object->name, i->second->location, i->second->name );
-   repository.hash[ object->id ] = object;
+      duplicateIDError ( repository.typeName, id, object->location, object->name, i->second->location, i->second->name );
+   repository.hash[ id ] = object;
 }
 
 

@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+
 #include <algorithm>
 
 #include "objecttype.h"
@@ -29,9 +30,12 @@
 #include "fieldimageloader.h"
 #include "memsize_interface.h"
 
+
+
 #ifndef converter
 #include "gamemap.h"
 #endif
+
 
 
 ObjectType :: FieldModification::FieldModification()
@@ -66,10 +70,7 @@ const char* ObjectType::namingMethodNames[namingMethodNum+1] = { "ReplaceTerrain
 
 const ObjectType::FieldModification&  ObjectType::getFieldModification ( int weather ) const
 {
-   if ( this->weather.test( weather ))
-      return fieldModification[weather];
-   else
-      return fieldModification[0];
+   return fieldModification[getWeather(weather)];
 }
 
 bool  ObjectType :: buildable ( tfield* fld ) const
@@ -91,10 +92,24 @@ int ObjectType :: getEffectiveHeight() const
 }
 
 
+int ObjectType :: getWeather( int weather ) const
+{
+   while ( !this->weather.test(weather) ) {
+      if ( weather == 5 )
+         weather = 4;
+      else
+         if ( weather == 2 )
+            weather = 1;
+         else
+            weather = 0;
+   }
+   return weather;
+}
+
+
 const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weather  ) const
 {
-   if ( !this->weather.test(weather) )
-      weather = 0;
+   weather = getWeather(weather);
 
    if ( weatherPicture[weather].images.size() <= picnum )
       picnum = 0;
@@ -115,8 +130,7 @@ const OverviewMapImage* ObjectType :: getOverviewMapImage( int picnum, int weath
 
 const Surface& ObjectType :: getPicture ( int i, int w ) const
 {
-   if ( !weather.test(w) )
-      w = 0;
+   w = getWeather(w);
 
    if ( weatherPicture[w].images.size() <= i )
       if ( i >= 64 && weatherPicture[w].images.size() > 34 )
@@ -133,8 +147,7 @@ const Surface& ObjectType :: getPicture ( int i, int w ) const
 
 void ObjectType :: display ( Surface& surface, const SPoint& pos, int dir, int weather ) const
 {
-   if ( !this->weather.test( weather) )
-      weather = 0;
+   weather = getWeather(weather);
 
    if ( id == 4 ) {
      switch ( dir ) {

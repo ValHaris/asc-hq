@@ -192,6 +192,8 @@
 
      
      int getMemoryFootprint() const;
+   protected:
+     int getWeather( int weather ) const;    
      
    private:
      //! the loading functions call this method to setup the objects images

@@ -33,6 +33,7 @@ trrobj/legacy/*.png
 trrobj/objects/legacy/*.pcx
 trrobj/objects/landscape/*.asctxt
 trrobj/objects/landscape/*.png
+trrobj/objects/landscape/*.pcx
 trrobj/objects/buildable/*.asctxt
 trrobj/objects/buildable/*.png
 trrobj/parents/*.asctxt

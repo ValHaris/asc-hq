@@ -823,6 +823,7 @@ void trunreplay::error( const MapCoordinate& pos, const char* message, ... )
    char tempbuf[1000];
    int lng = vsprintf( tempbuf, message, paramlist );
 
+   assert(lng < 1000);
    error( tempbuf );
    // error( message + "\nPosition: " + pos.toString() );
 }
