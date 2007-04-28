@@ -84,6 +84,7 @@ unitsets/mk3/mk3-sta/*.asctxt
 unitsets/mk3/mk3-vad/*.asctxt
 unitsets/mk3/mk3-parent/*.asctxt
 unitsets/mk3/mk3-parent/*.txt
+unitsets/mk3/mk3-parent/*.set
 unitsets/mk1/mk1-jam/*.pcx
 unitsets/mk1/mk1-inf/*.pcx
 unitsets/mk1/mk1-orb/*.pcx
@@ -93,6 +94,7 @@ unitsets/mk1/mk1-shs/*.pcx
 unitsets/mk1/mk1-sta/*.pcx
 unitsets/mk1/mk1-vad/*.pcx
 unitsets/mk1/mk1-parent/*.pcx
+unitsets/mk1/mk1-parent/*.set
 unitsets/mk1/mk1-train/*.pcx
 unitsets/mk1/mk1-vfatr/*.pcx
 unitsets/mk1/mk1-heli/*.pcx
