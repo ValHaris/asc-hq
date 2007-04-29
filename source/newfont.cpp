@@ -249,7 +249,7 @@ void         showtext3( const char *       txt,
 
     char         *s, *s2, *s3;
     int         i, j,k;
-    int         newx; 
+    int         newx = 0;
     signed char  cnt;
     int         orgjus; 
 
@@ -339,7 +339,7 @@ void         showtext3c( const char *       txt,
    // collategraphicoperations cgo;
 
     int         i, j,k;
-    int         newx;
+    int         newx = 0;
     int          cnt;
     int         orgjus; 
 

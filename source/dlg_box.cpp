@@ -647,12 +647,10 @@ void         tdlgengine::addscrollbar(int          lx1,
 
 void         tdialogbox::rebuildtaborder(void)
 { 
-  pbutton      pb;
-  pbutton      pb2;
+  pbutton      pb = firstbutton;
   int      i = 0;
   ttaborder    b; 
 
-   pb = firstbutton; 
    tabcount = 0; 
    while (pb != NULL) { 
       if ((pb->art >= 0) && (pb->art <= 3)) 
@@ -681,12 +679,12 @@ void         tdialogbox::rebuildtaborder(void)
          } 
    } 
 
+   
+   pbutton      pb2 = NULL;
    if (i > 0) { 
       if (markedtab > 0) 
          pb2 = taborder[i].button; 
    } 
-   else 
-      pb2 = NULL; 
 
    showtabmark(markedtab); 
 
@@ -1657,10 +1655,10 @@ void         tdialogbox::editfield( int id )
 
 void         tdialogbox::editfield(pbutton      pb)
 { 
-  char         *ps;
-  int      *pl; 
-  Uint16         *pw; 
-  char         *pbt;
+  char         *ps = NULL;
+  int      *pl = NULL; 
+  Uint16         *pw = NULL; 
+  char         *pbt = NULL;
   int      l;
 
   activefontsettings.font = schriften.smallarial;
@@ -2891,7 +2889,7 @@ void tviewtext::evalcommand ( const char** s)
 
       k = atoi ( s4 );
 
-      int tvtxp;
+      int tvtxp = 0; 
       if (k)
         tvtxp = (tvt_xp / k + 1) * k;
 
@@ -3199,7 +3197,7 @@ void         thelpsystem::init(int id, char* titlet )
 
    setup();                    
 
-   // Koordinaten auch bei setpos „ndern
+   // Koordinaten auch bei setpos ndern
    setparams ( x1 + 13, y1 + textstart, x1 + xsize - 41, y1 + ysize - 40, txt.c_str(), black, dblue);
 
    tvt_dispactive = 0;

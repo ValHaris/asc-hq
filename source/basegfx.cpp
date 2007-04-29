@@ -566,7 +566,8 @@ char* rotatepict ( void* image, int organgle )
       for ( int x = 0; x < fieldxsize; x++ ) {
          int dx = x - fieldxsize/2 ;
          int dy = fieldysize/2 - y;
-         double nx, ny;
+         double nx = 0;
+         double ny = 0;
          if ( organgle != 0 && organgle != -180 && organgle != 180) {
             float wnk ;
             if ( dx  )
@@ -627,7 +628,8 @@ char* rotatepict_grw ( void* image, int organgle )
       for ( int x = 0; x < d; x++ ) {
          int dx = x - d/2 ;
          int dy = d/2 - y;
-         float nx, ny;
+         float nx = 0;
+         float ny = 0;
          if ( organgle != 0 && organgle != -180 && organgle != 180) {
             float wnk ;
             if ( dx  )
@@ -1081,7 +1083,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
                      int sml = r  + ( g << 6) + ( b << 12 );
       
                      int diff = 0xFFFFFFF;
-                     int pix1;
+                     int pix1 = 0;
             
                      for ( int k=0;k<256 ;k++ ) {
                         int actdif = sqr( pal[k][0]  - r ) + sqr( pal[k][1]  - g ) + sqr( pal[k][2]  - b );
@@ -2009,8 +2011,8 @@ void showtext ( const char* text, int x, int y, int textcol )
        }
        t++;
     }
-    int leftextralength;
-    int rightextralength;
+    int leftextralength = 0;
+    int rightextralength = 0;
 
     if ( !activefontsettings.length )
        leftextralength = rightextralength = 0;
