@@ -133,7 +133,18 @@ if ( $argl >= 2 ) {
    $idxprefix = $prefix;
 }   
 
-parsefile("entries.txt", 0);
+
+my $argcount = @ARGV >= 1;
+print $a;
+
+my $filename;
+if ( @ARGV >= 1 ) {
+   $filename = $ARGV[0];
+} else {
+   $filename = "entries.txt";
+}
+
+parsefile($filename, 0);
 
 
 
