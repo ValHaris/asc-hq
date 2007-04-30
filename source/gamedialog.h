@@ -50,8 +50,8 @@ private:
   bool loadGame(PG_Button* button);
   bool showOptions(PG_Button* button);
   bool exitGame(PG_Button* button);
-  
-  
+  bool supervise(PG_Button* button);
+ 
   
 };
 

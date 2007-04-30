@@ -32,10 +32,10 @@
 #include "loaders.h"
 #include "spfst.h"
 //#include "basestrm.h"
-
+#include "networksupervisor.h"
 
 const int GameDialog::xSize = 450;
-const int GameDialog::ySize = 500;
+const int GameDialog::ySize = 550;
 const int GameDialog::buttonIndent = 150;
 GameDialog* GameDialog::instance = 0;
 
@@ -55,7 +55,12 @@ GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( -1, -1, xSize, ySize ), 
     saveGameButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Save Game", 90);
     saveGameButton->sigClick.connect( SigC::slot( *this, &GameDialog::saveGame));
 
-    p = ScreenToClient(saveGameButton->x, saveGameButton->y);
+    p = ScreenToClient(loadGameButton->x, saveGameButton->y);
+    PG_Button* superViseButton= new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Supervise Net Game", 90);
+    superViseButton->sigClick.connect( SigC::slot( *this, &GameDialog::supervise));
+
+
+    p = ScreenToClient(superViseButton->x, superViseButton->y);
     optionsButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Options", 90);
     optionsButton->sigClick.connect( SigC::slot( *this, &GameDialog::showOptions));
 
@@ -101,6 +106,15 @@ bool GameDialog::exitGame(PG_Button* button) {
     quitModalLoop(1);
     return true;
 }
+
+
+bool GameDialog::supervise(PG_Button* button) {
+   networksupervisor();
+    return true;
+}
+
+
+
 
 bool GameDialog::showOptions(PG_Button* button) {
     Hide();
