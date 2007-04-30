@@ -1915,11 +1915,12 @@ bool AiParameter::hasJob ( AiParameter::Job j )
    return find ( jobs.begin(), jobs.end(), j ) != jobs.end();
 }
 
-
 void AiParameter :: reset ( Vehicle* _unit )
 {
    unit = _unit;
+   lastDamage = unit->damage;
    AiValue::reset ( log2( _unit->height ) );
+   data = 0;
 
    clearJobs();
    resetTask();
@@ -1996,6 +1997,7 @@ void GameMap :: ReplayInfo :: write ( tnstream& stream )
    stream.writeInt ( actmemstream != NULL );
 
    for ( int i = 0; i < 8; i++ ) {
+      printf("GameMap :: ReplayInfo :: write  i=%d\n", i );
       if ( guidata[i] )
          guidata[i]->writetostream ( &stream );
 

@@ -693,7 +693,7 @@ unitguide:
 	cd doc && make unitguide
 
 dist-hook:
-	rm -rf `find $(distdir) -name CVS -o -name "*.con" -o -name "*music/*.ogg" -o -name asc2_dlg.zip `
+	rm -rf `find $(distdir) -name CVS -o -name "*.ascdat" -o -wholename "*music/*.ogg" -o -name asc2_dlg.zip `
 	rm -rf `find $(distdir)/data/music -name "*.ogg" `
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

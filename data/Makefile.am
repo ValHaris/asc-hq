@@ -1,8 +1,9 @@
 SUBDIRS      = dialog  @MUSICDIR@
-DIST_SUBDIRS = dialog unitsets trrobj buildings icons sounds music
+DIST_SUBDIRS = dialog music
+# unitsets trrobj buildings icons sounds 
 MAINTAINERCLEANFILES  = Makefile.in
 
-EXTRA_DIST = $(srcdir)/* 
+EXTRA_DIST = $(srcdir)/* $(srcdir)/sounds/*
 
 pkgdata_DATA 		= main.ascdat 
 pkgdatadir 		= $(datadir)/games/@PACKAGE@
@@ -14,3 +15,10 @@ main.ascdat: main.d
 
 clean-local:
 	rm -f main.ascdat main.d main.mak
+
+
+dist-hook:
+	cp -pr $(srcdir)/buildings $(srcdir)/unitsets $(srcdir)/icons $(srcdir)/trrobj $(distdir)
+	cp -p `find $(srcdir) -maxdepth 1 -type f` $(distdir)
+	rm -f $(distdir)/main.ascdat
+	
