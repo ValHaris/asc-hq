@@ -11,7 +11,7 @@
 Name "ASC for Project Battle Planets"
 
 ; The file to write
-OutFile "ASC-1.99.93.84-Install.exe"
+OutFile "ASC-1.99.93.85-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -74,13 +74,7 @@ Section "ASC main program (required)"
 
   ; Data Files
   File "../data/dialog/asc2_dlg.zip"
-  File "../data/units/MK1/mk1.con"
-  File "../data/units/MK3/units-mk3.con"
-  File "../data/main.con"
-  File "../data/asc.gfx"
-  File "../data/trrobj2/trrobj2.con"
-  File "../data/buildings/buildings.con"
-  File "../data/trrobj/trrobj.con"
+  File "../data/main.ascdat"
 
   ; Write the installation path into the registry
   WriteRegStr HKLM SOFTWARE\NSIS_Example2 "Install_Dir" "$INSTDIR"

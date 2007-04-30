@@ -91,7 +91,7 @@ FILE *infile,
 int rlemain ( const char* argv1, const char* argv2  )
 {
    unsigned char *buffer;
-   unsigned char prev_char;
+   unsigned char prev_char = 0 ;
    int  bytes_read,
    count,
    eof,
