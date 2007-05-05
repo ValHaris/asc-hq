@@ -853,9 +853,7 @@ void trunreplay::error( const ASCString& message )
       return;
 
    if ( message != lastErrorMessage ) {
-      char tempbuf[1000];
-
-      displaymessage(tempbuf, 1 );
+      displaymessage(message.c_str(), 1 );
       lastErrorMessage = message;
    }
 }

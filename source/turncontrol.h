@@ -32,8 +32,11 @@
 #ifndef turncontrolH
 #define turncontrolH
 
+#include "ascstring.h"
+
 class Player;
 class GameMap;
+
 
 /*! Ends the turn of the current player and runs AI until a player is human again
     \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
@@ -46,6 +49,8 @@ extern void  checkforvictory ( );
 
 //! continues a PBeM game; the current map is deleted
 extern bool continuenetworkgame ( bool mostRecent = false );
+
+extern bool continuenetworkgame ( const ASCString& filename );
 
 
 //! this checks if one player has been using a new ASC version than the current player. If this is the case, the current player is notified and asked to upgrade

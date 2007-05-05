@@ -331,7 +331,10 @@ void loadmap( const ASCString& name, bool campaign )
       actmap->campaign.avail = false;
 }
 
-void loadStartupMap ( const char *gameToLoad=NULL )
+
+enum MapTypeLoaded { None, Map, Savegame, Mailfile };
+
+MapTypeLoaded loadStartupMap ( const char *gameToLoad=NULL )
 {
    if ( gameToLoad && gameToLoad[0] ) {
       try {
@@ -341,9 +344,11 @@ void loadStartupMap ( const char *gameToLoad=NULL )
                fatalError( "Email gamefile %s is invalid. Aborting.", gameToLoad );
 
             try {
-               tnfilestream gamefile ( gameToLoad, tnstream::reading );
-               tnetworkloaders nwl;
-               nwl.loadnwgame( &gamefile );
+
+               if ( continuenetworkgame( ASCString(gameToLoad) )) 
+                  hookGuiToMap(actmap);
+
+               return Mailfile;
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal email game.", gameToLoad );
             }
@@ -354,6 +359,7 @@ void loadStartupMap ( const char *gameToLoad=NULL )
             try {
                loadGame( gameToLoad );
                computeview( actmap );
+               return Savegame;
             } catch ( tfileerror ) {
                fatalError ( "%s is not a legal savegame. ", gameToLoad );
             }
@@ -413,8 +419,11 @@ void loadStartupMap ( const char *gameToLoad=NULL )
       }
 
       loadmap( s, true );
+      return Map;
       displayLogMessage ( 6, "done\n" );
    }
+
+   return None;
 }
 
 
@@ -1292,7 +1301,7 @@ pfont load_font ( const char* name )
 
 
 
-void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
+void loaddata( int resolx, int resoly )
 {
 
    schriften.smallarial = load_font("smalaril.fnt");
@@ -1337,10 +1346,6 @@ void loaddata( int resolx, int resoly, const char *gameToLoad=NULL )
    dataLoaderTicker();
 
    loadUnitSets();
-
-   loadStartupMap( gameToLoad );
-
-   dataLoaderTicker();
 
    displayLogMessage ( 6, "done\n" );
 
@@ -1393,8 +1398,11 @@ int gamethread ( void* data )
    std::auto_ptr<StartupScreen> startupScreen ( new StartupScreen( "title.jpg", dataLoaderTicker ));
 
 
+   MapTypeLoaded mtl = None;
+
    try {
-      loaddata( resolx, resoly, gtp->filename.c_str() );
+      loaddata( resolx, resoly );
+      mtl = loadStartupMap( gtp->filename.c_str() );
    }
    catch ( ParsingError err ) {
       errorMessage ( "Error parsing text file " + err.getMessage() );
@@ -1450,12 +1458,13 @@ int gamethread ( void* data )
             displayLogMessage ( 8, "gamethread :: starting main menu.\n" );
             startupScreen.reset();
             GameDialog::gameDialog();
+            mtl = None;
          } else {
             if ( actmap->actplayer == -1 ) {
                displayLogMessage ( 8, "gamethread :: performing next_turn..." );
                next_turn();
                displayLogMessage ( 8, "done.\n" );
-            }
+            } 
 
             moveparams.movestatus = 0;
 
@@ -1468,6 +1477,11 @@ int gamethread ( void* data )
 
             displayLogMessage ( 7, "Entering main event loop\n");
    
+            if ( mtl == Mailfile ) 
+               actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
+
+            mtl = None;
+
             getPGApplication().Run();
             displayLogMessage ( 7, "mainloop exited\n");
          }

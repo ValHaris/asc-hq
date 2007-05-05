@@ -322,6 +322,12 @@ bool continuenetworkgame ( bool mostRecent )
       return false;
 
    StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
+
+   return continuenetworkgame( filename );
+}
+
+bool continuenetworkgame ( const ASCString& filename )
+{
    FileTransfer ft;
    auto_ptr<GameMap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
    if ( !newMap.get() )
