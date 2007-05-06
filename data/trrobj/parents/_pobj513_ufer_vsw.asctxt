@@ -1,7 +1,7 @@
 ObjectType { 
 ; Objekt ersetzt komplett das Feld durch "very_shallow_water"
 
-   Name = Ufer
+   Name = coast (very shallow water)
    ID = 513
    abstract = true
    LinkableObjects = 

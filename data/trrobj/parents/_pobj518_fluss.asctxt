@@ -1,7 +1,7 @@
 ObjectType { 
 ; Objekt ersetzt das Feld komplett durch "river"
 
-   Name = River
+   Name = river
    ID = 518
    abstract = true
 
