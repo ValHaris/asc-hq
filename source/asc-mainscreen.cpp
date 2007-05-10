@@ -459,6 +459,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
 
 
 class VisibilityLayer : public MapLayer {
+     void renderText( const MapRenderer::FieldRenderInfo& fieldInfo, SPoint pos, const ASCString& text );
     public: 
       bool onLayer( int layer ) { return layer == 17; };
       void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
@@ -466,24 +467,18 @@ class VisibilityLayer : public MapLayer {
 
 void VisibilityLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo, int layer, const SPoint& pos )
 {
-   static PG_Font* font = NULL; 
-   if ( !font ) {
-      PG_Label l( NULL );
-      font = new PG_Font( *(l.GetFont()));
-      font->SetSize( 10 );
-   }
-
    if ( fieldvisiblenow( fieldInfo.fld, fieldInfo.gamemap->getPlayerView(), fieldInfo.gamemap )) {
-      ASCString s;
 
       int view = 0;
-      int jamming = fieldInfo.fld->getjamming();
+      int jamming = 0;
       for ( int i = 0; i < fieldInfo.gamemap->getPlayerCount(); ++i ) 
          if ( fieldInfo.gamemap->getPlayer(i).diplomacy.sharesView( fieldInfo.gamemap->getPlayerView())) {
             view += fieldInfo.fld->view[i].view;
             jamming += fieldInfo.fld->view[i].jamming;
          }
 
+#if 0
+      ASCString s;
       s.format( "%d/%d", view, jamming);
 
       font->SetColor( 0xffffff );
@@ -491,9 +486,30 @@ void VisibilityLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fiel
 
       font->SetColor( 0 );
       PG_FontEngine::RenderText( fieldInfo.surface.getBaseSurface() , PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey), pos.x+5, pos.y + 20, s, font );
+#else
+
+      renderText( fieldInfo, SPoint(pos.x + 10, pos.y + 5), ASCString::toString( view ) + "V");
+      renderText( fieldInfo, SPoint(pos.x + 10, pos.y + 18), ASCString::toString( jamming ) + "J");
+      renderText( fieldInfo, SPoint(pos.x + 10, pos.y + 31), ASCString::toString( fieldInfo.fld->getjamming() ) + "T" );
+#endif
    }
 }
 
+void VisibilityLayer::renderText( const MapRenderer::FieldRenderInfo& fieldInfo, SPoint pos, const ASCString& text )
+{
+   static PG_Font* font = NULL; 
+   if ( !font ) {
+      PG_Label l( NULL );
+      font = new PG_Font( *(l.GetFont()));
+      font->SetSize( 12 );
+   }
+
+   font->SetColor( 0xffffff );
+   PG_FontEngine::RenderText( fieldInfo.surface.getBaseSurface() , PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey), pos.x+1, pos.y + 13, text, font );
+
+   font->SetColor( 0 );
+   PG_FontEngine::RenderText( fieldInfo.surface.getBaseSurface() , PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey), pos.x, pos.y+12, text, font );
+}
 
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )

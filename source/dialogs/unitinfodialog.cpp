@@ -252,9 +252,9 @@ class UnitInfoDialog : public Panel {
                      Surface& icon = IconRepository::getIcon( ASCString("height-a") + ASCString::toString( j==0 ? i->second : i->first) + ".png");
                      int y;
                      if ( j == 0)
-                        y = 2;
-                     else  
                         y = 27;
+                     else  
+                        y = 2;
                      screen.Blit( icon, SPoint( dst.x + xoffs+2, dst.y+y ));
                   }
                   Surface& icon = IconRepository::getIcon("pad_transport_leveldisplay.png");

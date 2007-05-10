@@ -759,7 +759,7 @@ class ColorTransform_Gray<4>
       Color transform( Color col)
       {
          int i = ((col & 0xff) + ((col >> 8) & 0xff) + ((col >> 16) & 0xff)) / 3;
-         return i + (i<<8) + (i <<16);
+         return i + (i<<8) + (i <<16) + (col & 0xff000000);
       };
 
       void init( const Surface& src )

@@ -67,7 +67,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
    int str = viewdist;
    if ( f ) {
       int freefields = 0;
-#if 0
+#if 1
       if ( height > chhochfliegend )
          freefields = 5;
       else
