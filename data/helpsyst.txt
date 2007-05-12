@@ -323,6 +323,27 @@ The following variables exist to describe the resource system. Unless otherwise 
  - energy and fuel for each player in BI resource mode
 #aeinzug0#
 
+##0049
+The resource Layer shows the mineral resources in the terrain that can mined:
+
+#image=help-view-resource.png#
+
+
+The Visibility Layer shows how much view is on the terrain:
+
+#image=help-view-visibility.png#
+
+V is your View
+J is the enemy Jamming.
+T is the view obstruction of the terrain.
+
+A field is visible if the View is greater than the Jamming.
+The terrain view obstruction determines how much view will go to the next field, in the line of sight of a unit (indicated by blue arrow in this example). The viewing power is reduced by 10+T for each field. 
+This is can be seen by the reduction from 59V to 42V (10+7) and from 42V to 32V (10+0).
+
+The terrain view obstruction has a reduced effect on airplanes and satellites.
+
+
 ##0050
 #font02# Muliplayer Settings
 #font01#

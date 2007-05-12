@@ -235,10 +235,12 @@ void Menu::setup()
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );
-   addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
-   addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
-   currentMenu->addSeparator();
+   // addbutton ( "HowTo ~S~tart email games", ua_howtostartpbem );
+   // addbutton ( "HowTo ~C~ontinue email games", ua_howtocontinuepbem );
+   // currentMenu->addSeparator();
    addbutton ( "~K~eys", ua_help );
+   addbutton ( "~M~ap Layer", ua_viewlayerhelp );
+   currentMenu->addSeparator();
 
    addbutton ( "~A~bout", ua_viewaboutmessage );
 }

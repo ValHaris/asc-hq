@@ -740,6 +740,10 @@ void execuseraction ( tuseractions action )
          helpAbout();
          break;
 
+      case ua_viewlayerhelp:
+         help(49);
+         break;
+
       case ua_SDLinfo:
          showSDLInfo();
          break;
