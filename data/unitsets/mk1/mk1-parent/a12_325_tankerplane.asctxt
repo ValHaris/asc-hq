@@ -9,7 +9,7 @@ VehicleType {
               use is refuelling other airplanes. This ability can be a life-saver
               if an aircraft is unable to reach the base with its remaining
               fuel supply.]
-   GuideSortHelp = 325 550 561 0 0 0 0 0 0 0
+   GuideSortHelp = 325 550 560 0 0 0 0 0 0 0
 
    Armor = 350
    Tank { 

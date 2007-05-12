@@ -8,16 +8,16 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 515 311 0 0 0 0 0 0 0 0
 
-   Armor = 220
+   Armor = 300
    Jamming = 38
-   Weight = 78
+   Weight = 45
 
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 1200
+      fuel = 4000
    } Tank
-   FuelConsumption = 15
+   FuelConsumption = 25
    Movement = 0 0 0 35 110 110 0 0 
    Weapons { 
       Initiative = 0

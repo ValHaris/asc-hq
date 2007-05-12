@@ -12,6 +12,7 @@ VehicleType {
 
    Armor -= 100
    Transportation ->* VehicleType.TransTurretBig 
+   Transportation.MaxLoadableUnits = 2
    Abilities = construct_vehicles leaves_tracks construct_specific_buildings
 
    Tank { 

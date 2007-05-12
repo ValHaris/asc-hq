@@ -2,6 +2,11 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 _____________________
+v20.05 09.5.2007
+-Vesuvius mittleres Turrettransportsystem
+-MBV 2. Stellplatz
+
+_____________________
 v20.04 beta
 -Guidesorthelp komplett integriert
 -Privateer Service entfernt
