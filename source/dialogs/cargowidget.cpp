@@ -244,7 +244,7 @@ bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
       
             static Surface surf;
             if ( !surf.valid() ) {
-               surf = Surface::createSurface( fieldsizex, fieldsizey, 32 );
+               surf = Surface::createSurface( fieldsizex+20, fieldsizey+20, 32 ); // somewhat larger because of potential shadow
                mouseCursorOffset = PG_Point( fieldsizex/2, fieldsizey/2);
             }
             surf.Fill( 0 );
