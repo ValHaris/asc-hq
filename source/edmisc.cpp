@@ -3125,8 +3125,9 @@ void transformMap ( )
                       j = -1; // restarting the outer loop
                       break;
                    } else {
-                      fld->removeobject( fld->objects[j].typ );
+                      fld->removeobject( fld->objects[j].typ, true );
                       j = -1;
+                      break;
                    }
                 }
           for ( int b = 0; b < buildingtranslation.size()/2; ++b )
