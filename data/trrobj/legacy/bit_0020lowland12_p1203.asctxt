@@ -13,12 +13,17 @@ TerrainType {
       GFX_Picture = 824
    } heavy_rain
    few_snow { 
-      GFX_Picture = 609
+     UseGFXpics = false
+      picture = texture-10b.png fewsnow4.png
    } few_snow
    much_snow { 
-      GFX_Picture = 720
+      UseGFXpics = false
+      picture = texture-10b.png
+GraphicOperations = snow
    } much_snow
    snow_and_ice { 
-      GFX_Picture = 720
+UseGFXpics = false
+      picture = texture-10b.png
+GraphicOperations = snow
    } snow_and_ice
 } TerrainType

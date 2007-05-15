@@ -20,4 +20,5 @@ TerrainType {
       MoveMalus = 11 
       TerrainProperties = Small_rocks Deep_snow Hillside 
    } much_snow
+snow_and_ice ->* TerrainType.much_snow
 } TerrainType

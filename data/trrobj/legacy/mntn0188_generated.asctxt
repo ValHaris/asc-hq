@@ -1,7 +1,7 @@
 TerrainType { 
    Name = BI3 import
    ID = 188
-   Weather = dry much_snow 
+   Weather = dry much_snow snow_and_ice
    dry { 
       UseGFXpics = true
       GFX_Picture = 448
@@ -20,4 +20,5 @@ TerrainType {
       MoveMalus = 11 
       TerrainProperties = High_mountains Track_possible Deep_snow 
    } much_snow
+snow_and_ice ->* TerrainType.much_snow
 } TerrainType

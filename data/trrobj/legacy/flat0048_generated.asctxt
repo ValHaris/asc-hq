@@ -1,19 +1,33 @@
 TerrainType { 
    Name = BI3 import
    ID = 48
-   Weather = dry 
+   parent = 501
    dry { 
       picture = texture-n3b6.png
       MoveMalus = 11 
       TerrainProperties = Lowland Track_possible 
    } dry
+light_rain { 
+      picture = texture-n3b6.png pfuetze-1a.png
+   } light_rain
+   heavy_rain { 
+      picture = texture-n3b6.png pfuetze-1c.png
+   } heavy_rain
+few_snow { 
+     UseGFXpics = false
+      picture = texture-n3b6.png fewsnow3.png
+   } few_snow
+
    much_snow { 
-      UseGFXpics = true
-      GFX_Picture = 883
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
-      MoveMalus = 11 
-      TerrainProperties = Lowland Small_rocks Deep_snow 
+      UseGFXpics = false
+picture = texture-n3b6.png
+GraphicOperations = snow
    } much_snow
+
+snow_and_ice {
+UseGFXpics = false
+picture = texture-n3b6.png
+GraphicOperations = snow
+   } snow_and_ice
+
 } TerrainType

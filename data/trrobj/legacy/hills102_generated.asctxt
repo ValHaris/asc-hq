@@ -11,5 +11,6 @@ TerrainType {
    much_snow { 
       picture = slope-d34.png
    } much_snow
+snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType

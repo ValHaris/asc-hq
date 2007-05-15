@@ -2,7 +2,7 @@ TerrainType {
    Name = Hillside
    ID = 400
    abstract = true
-   Weather = dry few_snow much_snow  
+   Weather = dry few_snow much_snow  snow_and_ice
    dry { 
       UseGFXpics = false
       DefenseBonus = 0
@@ -28,4 +28,15 @@ TerrainType {
       TerrainProperties = Small_rocks Deep_snow Hillside 
       GraphicOperations = snow
    } much_snow
+
+snow_and_ice { 
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 11 
+      TerrainProperties = Small_rocks Deep_snow Hillside 
+      GraphicOperations = snow
+   } snow_and_ice 
+
 } TerrainType

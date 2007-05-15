@@ -2,7 +2,7 @@ TerrainType {
    Name = BI3 import
    ID = 39
    Parent = 1203
-   weather = dry few_snow much_snow light_rain heavy_rain
+   weather = dry few_snow much_snow snow_and_ice light_rain heavy_rain
    dry { 
       UseGFXpics = false
       picture = texture-n3b3b.png 
@@ -24,4 +24,9 @@ TerrainType {
       picture = texture-n3b3b.png
       GraphicOperations = snow
    } much_snow
+snow_and_ice { 
+      UseGFXpics = false
+      picture = texture-n3b3b.png
+      GraphicOperations = snow
+   } snow_and_ice
 } TerrainType

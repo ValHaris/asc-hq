@@ -1,57 +1,41 @@
 TerrainType { 
    Name = hard sand
    ID = 167
-   Weather = dry few_snow much_snow 
+   parent = 505
+   Weather = dry few_snow much_snow snow_and_ice light_rain heavy_rain
    dry { 
+UseGFXpics = false
       picture = texture-n3b0d.png
-
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-
-      MoveMalus = 12  12  12  12  13  14  14  11  10  12  12  12  12  12  12  12  12  11
-
-      TerrainProperties = hard_sand track_possible
-
    } dry
+
+light_rain { 
+      UseGFXpics = false
+      picture = texture-n3b0d.png pfuetze-1a.png
+   } light_rain
+
+   heavy_rain { 
+      UseGFXpics = false
+      picture = texture-n3b0d.png pfuetze-1c.png
+   } heavy_rain
 
    few_snow { 
 
-      UseGFXpics = true
-
-      GFX_Picture = 665
-
-       DefenseBonus = 0
-
-      AttackBonus = 0
-
-      BasicJamming = 5
-
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-
-      MoveMalus = 13  13  13  13  14  14  15  12  10  13  13  13  13  13  13  13  13  11
-
-      TerrainProperties = hard_sand snow track_possible
+      UseGFXpics = false
+picture = texture-n3b0d.png fewsnow4.png
 
    } few_snow
 
    much_snow { 
+      UseGFXpics = false
+picture = texture-n3b0d.png
+GraphicOperations = snow
+         } much_snow
 
-      UseGFXpics = true
-
-      GFX_Picture = 771
-
-      DefenseBonus = 0
-
-      AttackBonus = 0
-
-      BasicJamming = 10
-
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-
-      MoveMalus = 18  18  18  18  18  18  18  15  12  18  18  18  18  18  18  18  18  12
-
-      TerrainProperties = hard_sand Deep_snow track_possible
-
-   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+picture = texture-n3b0d.png
+GraphicOperations = snow
+         } snow_and_ice
 
 } TerrainType
 

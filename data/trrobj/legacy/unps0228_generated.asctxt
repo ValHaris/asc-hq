@@ -29,4 +29,5 @@ TerrainType {
       MoveMalus = 11 
       TerrainProperties = Track_possible Deep_snow 
    } much_snow
+snow_and_ice ->* TerrainType.much_snow 
 } TerrainType

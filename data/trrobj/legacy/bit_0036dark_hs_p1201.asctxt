@@ -2,11 +2,21 @@ TerrainType {
    Name = hard_sand small rocks dark
    ID = 36
    Parent = 1201
-   weather = dry few_snow much_snow
+   weather = dry few_snow much_snow snow_and_ice light_rain heavy_rain
    dry { 
       UseGFXpics = false
       picture = texture-n3b1a.png
    } dry
+light_rain { 
+      UseGFXpics = false
+      picture = texture-n3b1a.png pfuetze-1a.png
+   } light_rain
+
+   heavy_rain { 
+      UseGFXpics = false
+      picture = texture-n3b1a.png pfuetze-1c.png
+   } heavy_rain
+
    few_snow { 
       UseGFXpics = false
       picture = texture-n3b1a.png fewsnow4.png
@@ -16,5 +26,10 @@ TerrainType {
       picture = texture-n3b1a.png
       GraphicOperations = snow
    } much_snow
-   snow_and_ice ->* TerrainType.much_snow
+
+   snow_and_ice { 
+      UseGFXpics = false
+      picture = texture-n3b1a.png
+      GraphicOperations = snow
+   } snow_and_ice
 } TerrainType

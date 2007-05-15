@@ -1,10 +1,37 @@
 TerrainType { 
    Name = BI3 import
    ID = 77
-   Weather = dry 
+   parent = 501
+   weather = dry few_snow much_snow snow_and_ice light_rain heavy_rain
    dry { 
       Picture = mx1.png
-      MoveMalus = 11 
-      TerrainProperties = Lowland Track_possible 
    } dry
+light_rain { 
+      UseGFXpics = false
+      picture = mx1.png pfuetze-1a.png
+   } light_rain
+
+   heavy_rain { 
+      UseGFXpics = false
+      picture = mx1.png pfuetze-1b.png
+   } heavy_rain
+
+   few_snow { 
+
+      UseGFXpics = false
+picture = mx1.png fewsnow1.png
+
+   } few_snow
+
+   much_snow { 
+      UseGFXpics = false
+picture = mx1.png
+GraphicOperations = snow
+         } much_snow
+
+   snow_and_ice { 
+      UseGFXpics = false
+picture = mx1.png
+GraphicOperations = snow
+         } snow_and_ice
 } TerrainType

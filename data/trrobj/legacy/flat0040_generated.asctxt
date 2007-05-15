@@ -1,12 +1,20 @@
 TerrainType { 
    Name = BI3 import
    ID = 40
-   Weather = dry few_snow much_snow 
+   Weather = dry few_snow much_snow snow_and_ice light_rain heavy_rain
+   Parent = 501
    dry { 
       picture = texture-n3b4.png
       MoveMalus = 11 
       TerrainProperties = Lowland Track_possible 
    } dry
+light_rain { 
+      picture = texture-n3b4.png pfuetze-1a.png
+   } light_rain
+
+   heavy_rain { 
+      picture = texture-n3b4.png pfuetze-1c.png
+   } heavy_rain
    few_snow { 
       picture = texture-n3b4.png fewsnow3b.png
       MoveMalus = 11 
@@ -18,4 +26,5 @@ TerrainType {
       GraphicOperations = snow
       TerrainProperties = Lowland Deep_snow 
    } much_snow
+snow_and_ice ->* TerrainType.much_snow
 } TerrainType

@@ -11,5 +11,5 @@ TerrainType {
    much_snow { 
       picture =  slope-h2.png
    } much_snow
-
+snow_and_ice ->* TerrainType.much_snow
 } TerrainType
