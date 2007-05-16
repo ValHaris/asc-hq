@@ -1,0 +1,5 @@
+Techadapter {
+   ; OilTowerMK3
+   Name = B4
+   TechnologiesRequired = 100010
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; DepotMK3
+   Name = B2
+   TechnologiesRequired = 100010
+} TechAdapter

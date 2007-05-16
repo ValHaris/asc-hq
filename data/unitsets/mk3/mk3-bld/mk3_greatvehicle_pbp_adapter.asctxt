@@ -1,0 +1,5 @@
+Techadapter {
+   ; GreatVehicleMK3
+   Name = B11
+   TechnologiesRequired = 100010
+} TechAdapter

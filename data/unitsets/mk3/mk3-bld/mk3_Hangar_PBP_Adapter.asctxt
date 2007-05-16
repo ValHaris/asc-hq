@@ -1,0 +1,5 @@
+Techadapter {
+   ; Hangar
+   Name = B30
+   TechnologiesRequired = 100010
+} TechAdapter

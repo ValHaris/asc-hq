@@ -1,0 +1,5 @@
+Techadapter {
+   ; PortSouthMK3
+   Name = B17
+   TechnologiesRequired = 100010
+} TechAdapter
