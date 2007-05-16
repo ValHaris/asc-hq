@@ -2183,7 +2183,8 @@ void trunreplay :: firstinit ( void )
 
 void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticStates s)
 {
-   logtoreplayinfo ( rpl_alliancechange2, player1, player2, int(s) );
+   if ( map == actmap && actmap )
+      logtoreplayinfo ( rpl_alliancechange2, player1, player2, int(s) );
 }
 
 void hookReplayToSystem()

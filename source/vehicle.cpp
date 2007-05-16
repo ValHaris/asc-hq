@@ -1635,6 +1635,17 @@ int Vehicle::putAmmo( int type, int num, bool queryOnly )
    int put = 0;
    int weap = 0;
    while ( weap < typ->weapons.count && put < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type && typ->weapons.weapon[weap].shootable() ) {
+         int toput = min( num - put, typ->weapons.weapon[weap].count - ammo[weap]);
+         if ( !queryOnly )
+            ammo[weap] += toput;
+         put += toput;
+      }
+      ++weap;
+   }
+
+   weap = 0;
+   while ( weap < typ->weapons.count && put < num ) {
       if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
          int toput = min( num - put, typ->weapons.weapon[weap].count - ammo[weap]);
          if ( !queryOnly )
@@ -1643,6 +1654,7 @@ int Vehicle::putAmmo( int type, int num, bool queryOnly )
       }
       ++weap;
    }
+
    // if ( put && !queryOnly )
    //   ammoChanged();
    return put;
