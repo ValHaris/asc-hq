@@ -7,7 +7,7 @@ VehicleType {
    gegnerische Infantrieverbaende. Die sehr weitreichende miniGun bekämft die Gegner aus Distance. Der TERROR kann sich sofort 
    nach dem Angriff wieder zurueckziehen und kann auch kleine Gruppen von eigenen Soldaten transportieren.]
    picture = MK1h_terror.pcx
-   GuideSortHelp = 515 384 552 0 1 0 0 0 0 0
+   GuideSortHelp = 515 432 552 380 1 0 0 0 0 0
 
    Armor = 300
    Transportation ->* vehicleType.TransHeliTrooper 

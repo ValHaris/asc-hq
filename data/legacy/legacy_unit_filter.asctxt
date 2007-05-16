@@ -1,8 +1,0 @@
-itemfilter {
-   Vehicles = 1002 60 1000 44 45 1001
-   Buildings = 
-   Objects = 
-   Terrain =
-   name = Legacy Units, don't them use any more.
-   activated = true 
-} itemfilter

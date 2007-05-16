@@ -18,13 +18,13 @@ VehicleType {
 
    Tank { 
       Energy = 0
-      Material = 25000
-      fuel = 25000
+      Material = 30000
+      fuel = 30000
    } Tank
    Movement = 0 0 0 49 0 0 0 0 
 
    Construction { 
-      Buildings = 1 2 4-7 10-23 30
+      Buildings = 1 2 4-7 10-23 30-31
       Vehicles = 510 511 531 572 624
       Objects = 10 44 2098 2097
       ObjectsRemovable = 2097

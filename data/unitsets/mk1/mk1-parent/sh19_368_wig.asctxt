@@ -7,7 +7,7 @@ VehicleType {
    Description = wig
    Infotext = []
    WreckageObject = 471
-   GuideSortHelp = 519 368 0 0 0 0 0 0 0 0
+   GuideSortHelp = 518 368 0 0 0 0 0 0 0 0
 
 
    Armor = 450

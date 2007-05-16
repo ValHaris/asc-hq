@@ -14,7 +14,7 @@ VehicleType {
    Jamming = 29
    WaitFortack = false
    Abilities = move_after_attack jam_only_own_field
-   Category = medium_ship
+   Category = light_ship
    MaxSurvivableStorm = 170
    ResourceDrillingRange = 0
    SelfRepairRate = 0

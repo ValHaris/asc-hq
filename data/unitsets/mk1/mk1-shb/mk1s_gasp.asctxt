@@ -2,7 +2,7 @@ VehicleType {
    Name = GASP
    ID = 28
    parent = 355
-   GuideSortHelp += 0 0 0 0 1 508 600 0 0 0
+   GuideSortHelp += 0 0 0 0 1 508 600 422 0 0
    
    Description = AntiAircraftShip
    Infotext = [Developed in reaction to the deadly threat which torpedoes, missiles, 

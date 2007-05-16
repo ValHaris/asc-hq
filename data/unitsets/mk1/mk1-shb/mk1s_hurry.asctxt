@@ -6,7 +6,7 @@ VehicleType {
    Description = torpedo WIG
    picture = MK1s_hurry.pcx
    WreckageObject = 408
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   GuideSortHelp = 518 420 0 0 1 0 0 0 0 0
 
    Armor += 50
    Jamming = 39

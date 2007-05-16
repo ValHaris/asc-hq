@@ -5,6 +5,6 @@ VehicleType {
  
    Description = SSM medium range
    Picture = Mk3v_lance.pcx
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   GuideSortHelp = 505 413 0 0 3 0 0 0 0 0
 
 } VehicleType

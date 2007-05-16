@@ -34,4 +34,5 @@ ID 27 ASC TestLab
 ID 28 ASC Duellresearch
 ID 29 ASC Atomkraftwerk
 ID 30 ASC Hangar
+ID 31 ASC Solarkraftwerk2
 

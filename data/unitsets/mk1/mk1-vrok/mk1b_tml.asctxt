@@ -6,6 +6,6 @@ VehicleType {
    Description = turret rocket laucher
    Infotext = [ bedingt mobile stationaere Boden-Boden Raketenabschuﬂrampe. ]
    Picture = MK1b_tml.pcx
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   GuideSortHelp = 505 414 0 0 1 0 0 0 0 0
 
 } VehicleType

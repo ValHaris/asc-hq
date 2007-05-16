@@ -5,6 +5,6 @@ VehicleType {
 
    Description = SSM Long Range
    Picture = Mk3v_scud.pcx
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   GuideSortHelp = 505 414 0 0 3 0 0 0 0 0
 
 } VehicleType

@@ -6,7 +6,7 @@ VehicleType {
    Description = anti aircraft destroyer
    Infotext = [The main mission of the Daring Type anti-air warfare destroyer is to provide local area fleet defence. ]
    picture = MK3s_daring.pcx
-   GuideSortHelp += 0 0 0 0 3 508 0 0 0 0
+   GuideSortHelp += 0 0 0 0 3 508 422 0 0 0
 
    Armor -= 100
    View += 10

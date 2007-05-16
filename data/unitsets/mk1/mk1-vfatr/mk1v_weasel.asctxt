@@ -11,7 +11,7 @@ VehicleType {
               is very weak, however.]
    picture = MK1v_WEASEL.pcx
    WreckageObject = 406
-   GuideSortHelp = 503 552 546 0 1 0 0 0 0 0
+   GuideSortHelp = 503 425 564 410 1 0 0 0 0 0
 
    Category = light_tracked_vehicle
    Armor -= 100

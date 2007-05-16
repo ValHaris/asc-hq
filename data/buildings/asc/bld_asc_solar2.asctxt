@@ -1,0 +1,8 @@
+BuildingType { 
+   ID = 31
+   parent = 15
+   Entry = B1
+   Pictures { 
+      dry = bld_asc_solar2.png
+   } Pictures
+} BuildingType

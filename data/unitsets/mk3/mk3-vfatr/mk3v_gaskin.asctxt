@@ -6,7 +6,7 @@ VehicleType {
    Description = Fast Attack Vehicle
    Infotext = []
    picture = MK3v_gaskin.pcx
-   GuideSortHelp = 504 0 0 0 3 0 0 0 0 0
+   GuideSortHelp = 504 417 0 0 3 0 0 0 0 0
 
    Armor -= 50
    Abilities += move_after_attack

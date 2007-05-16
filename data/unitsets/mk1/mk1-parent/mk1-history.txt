@@ -2,6 +2,12 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 _____________________
+v20.06 16.05.2007
+-vesuvius Solar2 baubar
+-Speedship default -> light ship
+-AU-Gun default , Waffenbugfix
+
+_____________________
 v20.05 09.5.2007
 -Vesuvius mittleres Turrettransportsystem
 -MBV 2. Stellplatz

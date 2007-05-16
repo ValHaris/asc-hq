@@ -195,7 +195,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    offroad {
-      terrain_any = road runway hard_sand lowland soft_sand ditch hillside Frozen_water
+      terrain_any = road runway hard_sand lowland soft_sand ditch hillside Frozen_water very_shallow_water
       terrain_all =
       terrain_not = swamp
       terrain_kill = shallow_water water deep_water river lava

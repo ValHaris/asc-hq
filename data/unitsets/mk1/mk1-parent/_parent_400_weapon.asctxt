@@ -414,7 +414,7 @@
    AU_Gun.shotFrom = low_level_flight medium_level_flight high_level_flight
    AU_Gun.MaxRange = 20
    AU_Gun.Punch@MaxRange = 60
-   AU_Gun.HitAccuracy.u1 = 80
+   AU_Gun.HitAccuracy.d1 = 80
 
 
 ;überflüssig   

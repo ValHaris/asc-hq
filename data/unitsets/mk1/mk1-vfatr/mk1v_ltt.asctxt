@@ -6,7 +6,7 @@ VehicleType {
    Description = trooper transport
    Infotext = []
    Picture = MK1v_LTT.pcx
-   GuideSortHelp = 552 0 0 0 1 0 0 0 0 0
+   GuideSortHelp = 552 423 0 0 1 0 0 0 0 0
 
    Transportation ->* VehicleType.TransTrooper
 

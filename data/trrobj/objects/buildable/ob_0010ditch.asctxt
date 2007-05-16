@@ -20,13 +20,13 @@ ObjectType {
       Energy = 0
       Material = 100
       fuel = 100
-      Movement = 16
+      Movement = 30
    } ConstructionCost
    RemovalCost { 
       Energy = 0
       Material = 50
       fuel = 20
-      Movement = 10
+      Movement = 15
    } RemovalCost
    NetBehaviour = NetToSelf Autoborder 
    TerrainAccess { 
