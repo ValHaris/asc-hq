@@ -63,6 +63,7 @@ unitsets/mk1/mk1-vari/*.asctxt
 unitsets/mk1/mk1-view/*.asctxt
 unitsets/mk1/mk1-vrok/*.asctxt
 unitsets/mk1/mk1-vsup/*.asctxt
+unitsets/mk3/mk3-bld/*.asctxt
 unitsets/mk3/mk3-heli/*.asctxt
 unitsets/mk3/mk3-pbat/*.asctxt
 unitsets/mk3/mk3-psup/*.asctxt
