@@ -1,0 +1,16 @@
+BuildingType { 
+   Name = Depot
+   ID = 32
+   parent = 2
+   Infotext = [Depot
+               Speichert Material, Fuel und Munition, repariert Fahrzeuge und effizientes recycling möglich.]
+   Weather = dry few_snow much_snow
+   Fields = A2 A3 A4 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_depot2.png
+      few_snow = bld_asc_depot2_fs.png
+      much_snow = bld_asc_depot2_hs.png
+   } Pictures
+   Entry = A3
+} BuildingType

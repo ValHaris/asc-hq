@@ -35,7 +35,7 @@ ObjectType {
    NetBehaviour = NetToSelf NetToBorder
    growthRate = 0.10
    TerrainAccess { 
-      terrain_any = Lowland Soft_sand hard_sand very_shallow_water 
+      terrain_any = Lowland Soft_sand hard_sand very_shallow_water Hillside
       terrain_all = 
       terrain_not = road swamp large_rocks railroad snow deep_snow road runway forest bridge
       terrain_kill = water deep_water river lava

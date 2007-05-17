@@ -23,7 +23,7 @@ VehicleType {
    FuelConsumption = 19
 
    Construction { 
-      Buildings = 1 2 4-7 10-23 30-31
+      Buildings = 1 2 4-7 10-23 30-32
       Vehicles =  61 49 56 93 95 104
       Objects = 44 2098 2097
       ObjectsRemovable = 2097
