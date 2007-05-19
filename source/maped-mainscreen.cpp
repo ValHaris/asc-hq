@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <memory>
 #include <SDL_mixer.h>
+#include <iostream>
+#include <set>
 
 #include "paradialog.h"
 #include "pgtooltiphelp.h"
@@ -616,6 +618,31 @@ bool Maped_MainScreenWidget::eventKeyUp(const SDL_KeyboardEvent* key)
    return false;
 }
 
+void helperFunction()
+{
+   set<int> s;
+   for ( int i = 0; i < 1083; ++i )
+      s.insert(i);
+   for ( int y = 0; y < actmap->ysize; ++y)
+      for ( int x = 0; x < actmap->xsize; ++x) 
+         if ( s.find( actmap->getField(x,y)->typ->terraintype->id ) != s.end() )
+            s.erase( actmap->getField(x,y)->typ->terraintype->id );
+
+   int start  = -1;
+   for ( int i = 0; i <= 1083; ++i ) {
+      if ( s.find(i) != s.end() ) {
+         if ( start < 0 )
+            start = i;
+      } else {
+         if ( start >= 0 ) {
+            cout << start << "-" << i-1 << " ";
+            start = -1;
+         }
+      }
+   }
+   cout << "\n";
+}
+
 
 bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 {
@@ -644,6 +671,10 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                         return true;
          case SDLK_F6 : execaction_ev(act_selmine);
                         return true;
+
+         case SDLK_F11: helperFunction();
+                        return true;
+
          case SDLK_a:   execaction_ev(act_movebuilding);
                         return true;
          case SDLK_b:   execaction_ev(act_changeresources);

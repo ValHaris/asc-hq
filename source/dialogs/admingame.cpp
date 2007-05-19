@@ -255,6 +255,13 @@ class AdminGameWindow : public ASC_PG_Dialog {
             return false;
          return true;
       }
+
+      bool turnEdited()
+      {
+         gamemap->time.set( atoi( turn->GetText() ), 0 );
+         updateTurn();
+         return true;
+      }
       
       
    public:
@@ -305,6 +312,8 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new PG_Label( scrollwidget, PG_Rect( 20, ypos, 100, 20 ), "Turn:" );
          turn = new PG_LineEdit( scrollwidget, PG_Rect( 130, ypos, 50, 20));
          turn->SetEditable( true );
+         turn->sigEditEnd.connect( SigC::slot( *this, &AdminGameWindow::turnEdited ));
+         turn->sigEditReturn.connect( SigC::slot( *this, &AdminGameWindow::turnEdited ));
 
          if ( turnSkipper ) {
              PG_Button* b = new PG_Button ( scrollwidget, PG_Rect( 200, ypos, 100, 50 ), "skip player" );

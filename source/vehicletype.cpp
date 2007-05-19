@@ -918,7 +918,11 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    image.assignDefaultPalette();
 
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
-   pc.addBool ( "WaitFortack", wait );
+   if ( pc.isReading() && pc.find( "WaitFortack" ))
+      pc.addBool ( "WaitFortack", wait );
+   else
+      pc.addBool ( "WaitForAttack", wait );
+
    pc.openBracket( "Tank" );
    Resources tank;
    tank.runTextIO ( pc );

@@ -666,11 +666,18 @@ bool StartMultiplayerGame::start()
 
 bool startMultiplayerGame()
 {
+   bool res = false;
+   try {
     StartMultiplayerGame smg(NULL);
     smg.Show();
     smg.RunModal();
-    bool res = smg.getSuccess();
+    res = smg.getSuccess();
     smg.Hide();
+   }
+   catch ( ShutDownMap sdm ) {
+      warning("No players found on map");
+      throw sdm;
+   }
     /*
     if ( res )
        actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );

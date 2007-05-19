@@ -169,7 +169,10 @@ bool GameDialog::multiGame(PG_Button* button) {
 
 
 bool GameDialog::gameDialog() {
-    if(GameDialog::instance == 0) {
+   GameDialog gd;
+   gd.Show();
+   gd.RunModal();
+   /*
         GameDialog* gd = new GameDialog();
         instance = gd;
         gd->Show();
@@ -177,6 +180,7 @@ bool GameDialog::gameDialog() {
         delete gd;
         GameDialog::instance = 0;
     }
+    */
     return true;
 }
 

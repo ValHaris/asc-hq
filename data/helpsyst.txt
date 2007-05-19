@@ -334,10 +334,10 @@ The Visibility Layer shows how much view is on the terrain:
 #image=help-view-visibility.png#
 
 V is your View
-J is the enemy Jamming.
+J is your Jamming.
 T is the view obstruction of the terrain.
 
-A field is visible if the View is greater than the Jamming.
+A field is visible if the View is greater than the enemy Jamming (which is a value you don't see).
 The terrain view obstruction determines how much view will go to the next field, in the line of sight of a unit (indicated by blue arrow in this example). The viewing power is reduced by 10+T for each field. 
 This is can be seen by the reduction from 59V to 42V (10+7) and from 42V to 32V (10+0).
 

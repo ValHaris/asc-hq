@@ -453,16 +453,15 @@ class CargoDialog : public Panel
          if ( !draggedUnit )
             return;
          
-         if ( draggedUnit == targetUnit )
-            return;
-         
-         if ( targetUnit ) {
-            containerControls.moveUnitDown( draggedUnit, targetUnit );
-         } else {
-            if ( container->getCarrier() )
-               containerControls.moveUnitUp( draggedUnit );
-            else {
-                 
+         if ( draggedUnit != targetUnit ) {
+            if ( targetUnit ) {
+               containerControls.moveUnitDown( draggedUnit, targetUnit );
+            } else {
+               if ( container->getCarrier() )
+                  containerControls.moveUnitUp( draggedUnit );
+               else {
+                    
+               }
             }
          }
          cargoChanged();

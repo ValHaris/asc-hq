@@ -1137,7 +1137,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addBool( "GrowOnUnits", growOnUnits, false );
 
 
-   pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(0) );
+   pc.addTagInteger ( "NetBehaviour", netBehaviour, netBehaviourNum, objectNetMethod, int(NetToSelf) );
 
    if ( pc.isReading() && pc.find ( "NoSelfChaining" )) {
       bool no_autonet;
