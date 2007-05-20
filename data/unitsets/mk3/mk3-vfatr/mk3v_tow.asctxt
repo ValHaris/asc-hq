@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = TOW
+   parent = 336
+   ID = 626
+   
+   Description = anti tank unit
+   Infotext = []
+   picture = MK3v_WIESEL.pcx
+   WreckageObject = 406
+   GuideSortHelp = 503 504 0 0 3 0 0 0 0 0
+   
+   Armor -= 100
+   Abilities += paratrooper move_after_attack
+   Weight = 15
+
+   Tank { 
+      fuel = 1000
+   } Tank
+   FuelConsumption = 10
+   Movement = 0 0 0 90 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MG35low
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 4 
+   } Weapons
+} VehicleType

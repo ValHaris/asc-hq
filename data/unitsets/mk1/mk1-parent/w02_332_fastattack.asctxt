@@ -17,7 +17,7 @@ VehicleType {
    Abilities += move_after_attack jam_only_own_field
 
    FuelConsumption = 14
-   Movement = 0 0 0 102 0 0 0 0 
+   Movement = 0 0 0 110 0 0 0 0 
    TerrainAccess ->* VehicleType.offroad 
 
    Weapons { 

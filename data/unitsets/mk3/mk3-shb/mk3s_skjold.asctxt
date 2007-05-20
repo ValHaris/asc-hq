@@ -9,14 +9,15 @@ VehicleType {
    GuideSortHelp = 518 418 0 0 3 0 0 0 0 0
 
    Armor -= 50
-   jamming = 41
-   Transportation ->* VehicleType.TransLowTrooper2 
+   jamming = 39
+   Transportation ->* VehicleType.TransLowTrooper2
+   Abilities += move_after_attack 
 
    Tank { 
       Material = 1000
    } Tank
    Height = floating ground_level 
-   Movement += 0 0 0 10 0 0 0 0
+   Movement += 0 0 0 100 0 0 0 0
    TerrainAccess ->* VehicleType.nodeepwatership_terrain
    Abilities += fuel_transfer material_transfer jam_only_own_field
 

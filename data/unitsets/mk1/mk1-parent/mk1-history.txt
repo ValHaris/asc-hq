@@ -1,6 +1,11 @@
 ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
+_________________
+v20.07 19.05.2007
+-Boote nur noch 80 Gewicht
+
+
 _____________________
 v20.06 16.05.2007
 -vesuvius Solar2 baubar

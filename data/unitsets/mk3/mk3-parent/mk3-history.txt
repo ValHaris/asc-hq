@@ -1,11 +1,16 @@
 Mark3 Unit Set Advanced Strategic Command
 grafics and specifications by
-GAMER battle-planet@gmx.de
+GAMER (gamer@ulrichshorst.de)
+
 
 _________________
 v19.03 16.05.2007
 -Building Pio Tank auf 30000MF
 -Solarkraftwerk2 baubar durch Building Pionier 
+-------20.05.2007
+-Skjold Bewgungsbugfix
+Neu:
+-TOW
 
 _________________
 v19.02 beta

@@ -69,7 +69,8 @@ ID 538/335 FUCHS            Spürpanzer
 ID 539/335 FUCHS TR         Truppentransporter
 ID 554/335 GASKIN           fast attack vehicle
 ID 578/335 USSL             vehicle transport
-ID 592/336 Wiesel           infiltrator squad   
+ID 592/336 Wiesel           infiltrator squad
+ID 626/336 TOW  
 
 --stationäre Anlagen--
 ID 572/318 Wachturm         Verteidigungsturm

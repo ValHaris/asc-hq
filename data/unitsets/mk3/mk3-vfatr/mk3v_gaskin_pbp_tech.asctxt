@@ -4,7 +4,7 @@ technology {
    id = 554
    RelatedUnitID = 554
    parent = 100010
-   researchpoints *= 11
-   techlevel = 3
-   TechnologiesRequired = 100010,100002,100103,100312 
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100010,100002,100102,100312 
 } Technology

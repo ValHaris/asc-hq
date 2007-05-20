@@ -1,0 +1,5 @@
+Techadapter {
+   ; TOW
+   Name = 626
+   TechnologiesRequired = 626
+} TechAdapter
