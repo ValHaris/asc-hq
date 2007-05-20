@@ -18,7 +18,7 @@ ObjectType {
    DefenseBonus_abs = -1
    DefenseBonus_plus = 1
    Jamming_abs = -1
-   Jammming_plus = 7
+   Jamming_plus = 5
    Height = 115
    ConstructionCost { 
       Energy = 0
@@ -28,7 +28,7 @@ ObjectType {
    } ConstructionCost
    RemovalCost { 
       Energy = 0
-      Material = -300
+      Material = -250
       fuel = 20
       Movement = 15
    } RemovalCost
