@@ -178,6 +178,7 @@ void Menu::setup()
 
    addfield ("~D~evelopment");
     addbutton ( "Dump ~B~uilding",          act_dumpBuilding );
+    addbutton ( "Dump all Buildings",          act_dumpAllBuildings );
     addbutton ( "Dump ~V~ehicle",          act_dumpVehicle );
     addbutton ( "Dump all Vehicles",       act_dumpAllVehicleDefinitions );
     addbutton ( "Dump ~O~bject",          act_dumpObject );
@@ -620,6 +621,7 @@ bool Maped_MainScreenWidget::eventKeyUp(const SDL_KeyboardEvent* key)
 
 void helperFunction()
 {
+   /*
    set<int> s;
    for ( int i = 0; i < 1083; ++i )
       s.insert(i);
@@ -641,6 +643,7 @@ void helperFunction()
       }
    }
    cout << "\n";
+   */
 }
 
 

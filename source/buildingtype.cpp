@@ -538,14 +538,20 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                      for ( int x = 0; x < 4; x++ )
                         for ( int y = 0; y < 6; y++ )
                            if ( w_picture[w][c][x][y].valid() )
-                              s.Blit( w_picture[w][c][x][y], SPoint( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty) );
-
-                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx", false  );
+                              megaBlitter<ColorTransform_None,
+                                          ColorMerger_AlphaOverwrite,
+                                          SourcePixelSelector_Plain,
+                                          TargetPixelSelector_All>
+                                       ( w_picture[w][c][x][y], 
+                                          s,
+                                          SPoint( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty), 
+                                          nullParam, nullParam, nullParam, nullParam );
+                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png", false  );
                }
          } else {
             for ( int w = 0; w < cwettertypennum; w++ )
                if ( weatherBits.test(w) ) {
-                  ASCString fileName = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".pcx";
+                  ASCString fileName = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png";
                   Surface s;
                   pc.addImage ( weatherTags[w], s, fileName, false );
 

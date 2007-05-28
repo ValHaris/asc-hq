@@ -162,7 +162,8 @@
         "Open Ctrl-key panel",
         "Close Ctrl-key panel",
         "Dump all vehicle definitions",
-        "Clear Selection" };
+        "Clear Selection",
+        "Dump all building definitions" };
 
 
 
@@ -1034,6 +1035,18 @@ void execaction_pg(int code)
                                              veh->runTextIO( pc );
                                           }
                                         };
+       break;
+    case act_dumpAllBuildings: {
+                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all buildings" );
+                                          for ( int i = 0; i < buildingTypeRepository.getNum(); ++i ) {
+                                             BuildingType* bld = buildingTypeRepository.getObject_byPos( i );
+                                             tn_file_buf_stream stream ( "Building" + ASCString::toString( i ) + ".dump", tnstream::writing );
+                                             PropertyWritingContainer pc ( "BuildingDump", stream );
+                                             bld->runTextIO( pc );
+                                          }
+                                        };
+       break;
+
       case act_clearSelection: selection.clear();
       break;
    };

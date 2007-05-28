@@ -594,7 +594,7 @@ void         calculateobject( int       x,
          for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
             Object* oi = NULL;
             if ( oj == -1 ) {
-               // if ( obj->netBehaviour & ObjectType::NetToSelf )
+               if ( obj->netBehaviour & ObjectType::NetToSelf )
                   oi = fld2->checkforobject ( obj );
             } else
                oi = fld2->checkforobject ( actmap->getobjecttype_byid ( obj->linkableObjects[oj] ) );
