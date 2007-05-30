@@ -15,12 +15,7 @@ While having good aa-firepower, its weak armor and low flight level determine it
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 2400
-   } Tank
-   FuelConsumption = 20
+
    Movement -= 0 0 0 0 10 10 0 0 
    Weapons { 
       Weapon0.Punch@MaxRange += 2

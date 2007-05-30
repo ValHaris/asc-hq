@@ -28,6 +28,11 @@ BuildingType {
       B5 = 983
    } rubble
 
+   ConstructionCost { 
+      Energy = 0
+      Material = 35000
+      fuel = 35000
+   } ConstructionCost
 
    Functions = matter_converter
    MaxResearch = 0
