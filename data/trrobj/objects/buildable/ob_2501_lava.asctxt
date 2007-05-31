@@ -4,7 +4,7 @@ ObjectType {
    Weather = dry 
 
    visible_in_fogOfWar = true
-   LinkableObjects = 2506 988 2502-2505 2508
+   LinkableObjects = 2506 988 2502-2505 2508 2097
    LinkableTerrain = 2000 2001 2002
 
    NetBehaviour = NetToSelf NetToBorder AutoBorder
