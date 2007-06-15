@@ -39,7 +39,7 @@ ObjectType {
    ViewBonus_plus = 0
 
    TerrainAccess { 
-      terrain_any = Road Lowland Hard_sand Soft_sand Ditch Hillside Turret_foundation Installation  
+      terrain_any = Road Lowland Hard_sand Soft_sand Ditch Turret_foundation Installation  
       terrain_all = 
       terrain_not = 
       terrain_kill = mountains High_mountains
