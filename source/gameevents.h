@@ -431,6 +431,8 @@ class WindChange: public EventAction {
 class ChangeGameParameter: public EventAction {
       int parameterNum;
       int parameterValue;
+      int selectgameparameter( int para );
+
     public:
      ChangeGameParameter(): EventAction( EventAction_ChangeGameParameter ),
                             parameterNum(-1),

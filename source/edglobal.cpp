@@ -367,6 +367,7 @@ ASCString getPlayerStrength( GameMap* gamemap )
 
       for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); ++j ) {
          total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
+         total += (*j)->typ->productionCost;
       }
 
       message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;

@@ -67,7 +67,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
    int str = viewdist;
    if ( f ) {
       int freefields = 0;
-#if 1
+#if 0
       if ( height > chhochfliegend )
          freefields = 5;
       else
@@ -80,6 +80,18 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
       if ( height == chtieffliegend )
          freefields = 1;
 #endif
+      if ( height > chhochfliegend )
+         baseJammingMultiplier = 33;
+      else
+      if ( height == chhochfliegend )
+         baseJammingMultiplier = 50;
+      else
+      if ( height == chfliegend )
+         baseJammingMultiplier = 66;
+      else
+         baseJammingMultiplier = 100;
+      
+
      tdrawgettempline lne ( freefields, gamemap );
 
      if ( startPos.x == -1 || startPos.y == -1 )
@@ -87,7 +99,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
 
      lne.start ( startPos.x, startPos.y, mc.x, mc.y );
      str -= f;
-     str -= lne.tempsum;
+     str -= lne.tempsum * baseJammingMultiplier / 100;
    }
 
    if ( str > 0 ) {

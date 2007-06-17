@@ -35,7 +35,7 @@ WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 void WholeMapRenderer::render()
 {
    paintTerrain( surface, gamemap, gamemap->getPlayerView(), ViewPort( 0, 0, gamemap->xsize, gamemap->ysize ), MapCoordinate( 0, 0 ) );
-   renderVisibility();
+   // renderVisibility();
 }
 
 void WholeMapRenderer::renderVisibility()

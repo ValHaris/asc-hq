@@ -176,8 +176,8 @@ void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::Local
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
 int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
-int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
-int Building :: getResource ( int amount, int resourcetype ) const { return 0; };
+int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return actstorage.resource(resourcetype); };
+int Building :: getResource ( int amount, int resourcetype ) const { return actstorage.resource(resourcetype); };
 #endif
 
 void Building :: setCompletion ( int completion, bool setupImages )

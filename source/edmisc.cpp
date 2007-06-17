@@ -1000,10 +1000,16 @@ void         BuildingValues::init(void)
       b = false;
 
    addbutton("~R~esearch-Points",15,210,215,230,2,1,9,b);
-   addeingabe(9,&rs,0,gbde.typ->maxresearchpoints);
+   if ( gbde.typ->hasFunction(ContainerBaseType::Research))
+      addeingabe(9,&rs,0,gbde.typ->maxresearchpoints);
+   else
+      addeingabe(9,&rs,gbde.typ->maxresearchpoints,gbde.typ->maxresearchpoints);
 
    addbutton("Ma~x~research-Points",15,250,215,270,2,1,11,b);
-   addeingabe(11,&mrs,0,gbde.typ->maxresearchpoints);
+   if ( gbde.typ->hasFunction(ContainerBaseType::Research))
+      addeingabe(11,&mrs,0,gbde.typ->maxresearchpoints);
+   else
+      addeingabe(11,&mrs,gbde.typ->maxresearchpoints,gbde.typ->maxresearchpoints);
 
 
    addbutton("~V~isible",15,290,215,300,3,1,12,true);

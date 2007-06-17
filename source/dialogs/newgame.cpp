@@ -482,6 +482,7 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
 
 bool StartMultiplayerGame::checkPlayerStat()
 {
+   ASCString msg;
    if ( mode == NewCampagin || mode == ContinueCampaign ) {
       bool humanFound = false;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
@@ -501,9 +502,10 @@ bool StartMultiplayerGame::checkPlayerStat()
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
          if ( newMap->player[i].exist() )
             if ( newMap->player[i].stat == Player::human || newMap->player[i].stat == Player::supervisor )
-               if ( humanFound )
+               if ( humanFound ) {
                   newMap->player[i].stat = Player::computer;
-               else
+                  msg += newMap->player[i].getName() + " has been switch to AI\n";
+               } else
                   humanFound = true;   
                   
       if ( !humanFound )            
@@ -511,6 +513,7 @@ bool StartMultiplayerGame::checkPlayerStat()
             if ( newMap->player[i].exist() )
                if ( newMap->player[i].stat == Player::computer ) {
                   newMap->player[i].stat = Player::human;
+                  msg += newMap->player[i].getName() + " has been switch to human\n";
                   humanFound = true;   
                   break;
                }   
@@ -526,6 +529,7 @@ bool StartMultiplayerGame::checkPlayerStat()
             if ( newMap->player[i].exist() )
                if ( newMap->player[i].stat == Player::off ) {
                   newMap->player[i].stat = Player::computer;
+                  msg += newMap->player[i].getName() + " has been switch to AI\n";
                   aiFound = true;   
                   break;
                }   
@@ -551,6 +555,7 @@ bool StartMultiplayerGame::checkPlayerStat()
             if ( newMap->player[i].exist() )
                if ( newMap->player[i].stat == Player::computer || newMap->player[i].stat == Player::off ) {
                   newMap->player[i].stat = Player::human;
+                  msg += newMap->player[i].getName() + " has been switch to human\n";
                   ++humanNum;
                }
             
@@ -575,10 +580,13 @@ bool StartMultiplayerGame::checkPlayerStat()
             if ( newMap->player[i].exist() )
                if ( newMap->player[i].stat == Player::computer || newMap->player[i].stat == Player::off ) {
                   newMap->player[i].stat = Player::human;
+                  msg += newMap->player[i].getName() + " has been switch to human\n";
                   ++humanNum;
                }
    }
    
+  // if ( !msg.empty() )
+  //    infoMessage( msg );
    return true;
 }
 
@@ -624,8 +632,8 @@ bool StartMultiplayerGame::start()
    if ( !newMap )
       return false;
    
-   if ( !checkPlayerStat() )
-      return false;
+//   if ( !checkPlayerStat() )
+//      return false;
 
    if ( replay )
       newMap->replayinfo = new GameMap::ReplayInfo;

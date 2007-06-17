@@ -814,8 +814,18 @@ bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int 
 
 class DestructBuilding : public GuiFunction
 {
+      bool cancel;
    public:
+      DestructBuilding() : cancel(false) {};
+
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         if ( key->keysym.sym == SDLK_ESCAPE ) {
+            cancel = true;
+            return true;
+         } else return false;
+      };
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -830,6 +840,9 @@ class DestructBuilding : public GuiFunction
 
 bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
+    if ( cancel )
+       return true;
+
     tfield* fld = actmap->getField(pos);
     if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
        if ( fld->vehicle )
@@ -850,9 +863,18 @@ bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subje
 
 void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
+   if( cancel ) {
+      actmap->cleartemps(7);
+      moveparams.movestatus = 0;
+      cancel = false;
+      updateFieldInfo();
+      return;
+   }
+
    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
       destructbuildinglevel1( pos.x, pos.y );
       displaymap();
+      updateFieldInfo();
    }
    else
       if (moveparams.movestatus == 115) {
@@ -1693,7 +1715,7 @@ Surface buildGuiIcon( const Surface& image, bool remove = false )
 
    const Surface& o = image;
    if ( o.GetPixelFormat().BitsPerPixel() == 32 ) {
-      MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectZoom> blitter;
+      MegaBlitter<4,4,ColorTransform_None, ColorMerger_PlainOverwrite, SourcePixelSelector_DirectZoom> blitter;
       blitter.setSize( o.w(), o.h(), s.w(), s.h() );
       blitter.blit( o, s, SPoint(int((s.w() - blitter.getZoomX() * o.w())/2), int((s.h() - blitter.getZoomY() * o.h())/2)));
    } else {

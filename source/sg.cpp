@@ -1181,7 +1181,7 @@ void execuseraction2 ( tuseractions action )
          MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message. Game will be exited." );
          break;
       case ua_writemaptopcx :
-         writemaptopcx ( actmap );
+         writemaptopcx ( actmap, choice_dlg("Include View ?","~y~es","~n~o")==1  );
          break;
       case ua_exitgame:
          if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)

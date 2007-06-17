@@ -191,7 +191,7 @@ void Menu::setup()
    addbutton ( "~a~ppend to journal", ua_editjournal );
 
    addfield ( "~T~ools" );
-   addbutton ( "save ~M~ap as PNG\t9", ua_writemaptopcx );
+   addbutton ( "save ~M~ap as PNG", ua_writemaptopcx );
    addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
    addbutton ( "select graphic set", ua_selectgraphicset );
    currentMenu->addSeparator();

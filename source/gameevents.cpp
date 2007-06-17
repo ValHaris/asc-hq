@@ -873,9 +873,16 @@ void ChangeGameParameter::writeData( tnstream& stream )
    stream.writeInt( parameterValue );
 }
 
+int ChangeGameParameter::selectgameparameter( int para )
+{
+   vector<ASCString> list;
+   for ( int i = 0; i < gameparameternum; ++i )
+      list.push_back ( gameParameterSettings[i].name );
+   return chooseString("Select GameParameter", list, para );
+}
+
 void ChangeGameParameter::setup()
 {
-/*
     int nr = selectgameparameter( parameterNum );
     if ( (nr >= 0) && ( nr < gameparameternum) ) {
        if ( gameParameterSettings[nr].changeableByEvent ) {
@@ -887,7 +894,7 @@ void ChangeGameParameter::setup()
        } else
           displaymessage("This parameter cannot be changed by events",1);
     }
-    */
+    
 }
 
 
