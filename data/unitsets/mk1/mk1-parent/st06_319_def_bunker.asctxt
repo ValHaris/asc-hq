@@ -37,8 +37,8 @@ VehicleType {
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 22
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 85
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 140
       Weapon0.ReactionFireShots = 2
 
       Weapon1 ->* VehicleType.Flak 
@@ -51,7 +51,7 @@ VehicleType {
       Weapon2 ->* VehicleType.SAMH 
       Weapon2.MaxRange = 40
       Weapon2.Ammo = 20
-      Weapon2.Punch@MaxRange = 65
+      Weapon2.Punch@MaxRange = 75
       Weapon2.Punch@MinRange = 75
 
    } Weapons

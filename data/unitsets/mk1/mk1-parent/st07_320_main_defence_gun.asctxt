@@ -25,8 +25,8 @@ VehicleType {
       Weapon0.MinRange = 20
       Weapon0.ReactionFireShots = 2
       Weapon0.Ammo = 12
-      Weapon0.Punch@MaxRange = 90
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 130
 
       Weapon1 ->* VehicleType.MG40low 
       Weapon1.Ammo = 20

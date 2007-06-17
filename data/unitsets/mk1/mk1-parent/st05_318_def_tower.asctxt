@@ -34,8 +34,8 @@ VehicleType {
       Weapon1.ReactionFireShots = 1
       
       Weapon2 ->* VehicleType.smSSM
-      Weapon2.Punch@MaxRange = 68
-      Weapon2.Punch@MinRange = 68
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
       Weapon2.maxRange = 40
       Weapon2.Ammo = 8
    } Weapons
