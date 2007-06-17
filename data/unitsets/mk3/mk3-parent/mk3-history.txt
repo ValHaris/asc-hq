@@ -2,6 +2,9 @@ Mark3 Unit Set Advanced Strategic Command
 grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
+_________________
+v19.04 15.06.2007
+-Tank Upgrade:Lynx,Hormone,Hawkeye,Falcon,Raytheon
 
 _________________
 v19.03 16.05.2007

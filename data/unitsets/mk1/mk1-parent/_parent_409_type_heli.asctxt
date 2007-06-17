@@ -19,7 +19,7 @@
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 2000
+      fuel = 4000
    } Tank
    FuelConsumption = 20
    Abilities = move_after_attack no_midair_refuel cruiserlanding

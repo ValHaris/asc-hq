@@ -24,7 +24,7 @@ It is able to quickly insert personell into the battle when operating from cruis
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 2500
+      fuel += 1000
    } Tank
    FuelConsumption = 20
 

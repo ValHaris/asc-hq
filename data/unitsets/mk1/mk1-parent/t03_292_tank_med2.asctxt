@@ -4,7 +4,7 @@ VehicleType {
    parent = 400 401 402 405
    abstract = true
 
-   Description = medium tank
+   Description = type2 medium tank
    Infotext =
    WreckageObject = 466
    GuideSortHelp = 503 292 0 0 0 0 0 0 0 0

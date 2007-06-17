@@ -20,12 +20,6 @@ Super Lynx can carry a range of depth charges, including the Mark 11 depth charg
    Armor = 350
    Abilities += sonar 
    Weight = 40
-
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 2500
-   } Tank
    FuelConsumption = 20
 
    Weapons { 

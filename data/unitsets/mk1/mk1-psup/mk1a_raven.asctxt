@@ -4,7 +4,8 @@ VehicleType {
    ID = 15
 
    Description = Transport Plane
-   Infotext = []
+   Infotext = [Taktische Transportflugzeuge dienen dazu, Truppen und Material direkt in ein Einsatzgebiet zu befördern. Hierfür ist es häufig notwendig, auch in Regionen ohne Instrumentennavigation oder befestigte Landebahnen tätig sein zu können. Dazu sind diese Transportflugzeuge mit Niederdruckreifen ausgestattet. Falls keine Landebahn zur Verfügung steht, können die Lasten oder Fallschirmspringer aus der Luft abgesetzt (mit Fallschirmen) bzw. abgeworfen (ohne Schirm) werden, indem die Heckklappe oder seitliche Türen geöffnet werden. Taktische Transportflugzeuge werden in aller Regel von Propellern angetrieben und sind in ihrer Größe begrenzt. Hierdurch sind sie nicht nur unanfälliger für Beschädigungen durch Fremdkörper, die angesaugt werden, sondern besitzen gute Eigenschaften beim Starten und Landen auf kurzen Bahnen und bei langsamen Fluggeschwindigkeiten.
+]
    picture = Mk1a_RAVEN.pcx
    GuideSortHelp = 551 560 0 0 1 0 0 0 0 0
 
