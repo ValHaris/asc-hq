@@ -749,6 +749,7 @@ void Research::clear()
 {
    progress = 0;
    activetechnology = NULL;
+   goal = NULL;
    developedTechnologies.clear();
    predefinedTechAdapter.clear();
    triggeredTechAdapter.clear();

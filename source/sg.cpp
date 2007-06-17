@@ -845,6 +845,7 @@ void execuseraction ( tuseractions action )
             if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
                actmap->player[actmap->actplayer].research.progress = 0;
                actmap->player[actmap->actplayer].research.activetechnology = NULL;
+               actmap->player[actmap->actplayer].research.goal = NULL;
             }
          } else
             displaymessage("you are not researching anything", 3);
