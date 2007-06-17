@@ -1,8 +1,7 @@
 ObjectType { 
    Name = Raps (growth)
    ID = 2153
-   GroupID = 11
-
+   GroupID = 10
    TechAdapterRequired = o2153
    growthRate = 0.10
 
