@@ -1707,7 +1707,7 @@ void         tunit::buttonpressed(int         id)
         if ( ht == h ) bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
      } /* endfor */
      unit->height = h;
-     unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ] );
+     unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ], 0 );
    }
    break;
    case 12: /* temp = unit->tank.fuel;
