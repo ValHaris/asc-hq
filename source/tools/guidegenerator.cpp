@@ -48,7 +48,8 @@ const ASCString UnitGuideGen::TROOPER = "Trooper";
 const ASCString UnitGuideGen::GROUNDUNIT = "Ground unit";
 const ASCString UnitGuideGen::AIRUNIT = "Aircraft";
 const ASCString UnitGuideGen::SEAUNIT = "Marine";
-const ASCString UnitGuideGen:: TURRETUNIT = "Turret";
+const ASCString UnitGuideGen::TURRETUNIT = "Turret";
+const ASCString UnitGuideGen::ORBITUNIT = "Orbital";
 
 bool InfoPageUtil::equalFiles(const ASCString src, const ASCString dst) {
   const int maxFileSize = 10000000;
@@ -434,6 +435,7 @@ void UnitGuideGen::generateCategories() const {
           Category* trooperCat = new Category(TROOPER, menuCSSFile);
           Category* groundCat = new Category(GROUNDUNIT, menuCSSFile);
           Category* airCat = new Category(AIRUNIT, menuCSSFile);
+          Category* orbitCat = new Category(ORBITUNIT, menuCSSFile);
           Category* seaCat = new Category(SEAUNIT, menuCSSFile);
           Category* turretCat = new Category(TURRETUNIT, menuCSSFile);
           Category* miscCat = new Category(NOCATEGORY, menuCSSFile);
@@ -444,6 +446,7 @@ void UnitGuideGen::generateCategories() const {
           set.addEntry(trooperCat);
           set.addEntry(groundCat);
           set.addEntry(airCat);
+          set.addEntry(orbitCat);
           set.addEntry(seaCat);
           set.addEntry(turretCat);
           set.addEntry(miscCat);
@@ -471,7 +474,10 @@ void UnitGuideGen::generateCategories() const {
               case 12:  // "light aircraft",
               case 13:  // "heavy aircraft",
               case 16:  //  "helicopter",
-                airCat->addEntry(dataEntry);
+                if ( vt->height & chsatellit )
+                    orbitCat->addEntry(dataEntry);
+                   else
+                    airCat->addEntry(dataEntry);
                 break;
               case 10:  // "medium ship",
               case 14:  // "light ship",

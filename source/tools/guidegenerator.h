@@ -294,6 +294,10 @@ public:
   *The label for the category ground unit
   */
   static const ASCString GROUNDUNIT;
+  /**
+  *The label for the category orbital unit
+  */
+  static const ASCString ORBITUNIT;
   
 
   /**
