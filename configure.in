@@ -548,14 +548,10 @@ maindatainclude="include main.mak"
 AC_SUBST(maindatainclude)
 
 
-AC_ARG_ENABLE( music_check, AS_HELP_STRING([--disable-music-check], [Don't check for music and don't install it ]), [], [with_music_check=yes] )
-if test "x$with_music_check" != xno ; then
-   AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
-   if test "x$missingmusic" != xx ; then
-      MUSICDIR=music
-   else
-      MUSICDIR=""
-   fi
+
+AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
+if test "x$missingmusic" != xx ; then
+   MUSICDIR=music
 else
    MUSICDIR=""
 fi
@@ -646,7 +642,7 @@ AC_SUBST(PARAGUI_LIBS)
    
    
 if test "x$missingmusic" == xx ; then
-  AC_MSG_WARN( [ 
+AC_MSG_NOTICE( [ 
 The music files could not be found. These are not distributed together with the 
 source code because of their size. 
 ASC can run without the music files being present, this message
