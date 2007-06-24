@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,1.99.93.85)
+AC_INIT(asc,1.99.93.92)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -548,11 +548,16 @@ maindatainclude="include main.mak"
 AC_SUBST(maindatainclude)
 
 
-AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
-if test "x$missingmusic" != xx ; then
-  MUSICDIR=music
+AC_ARG_ENABLE( music_check, AS_HELP_STRING([--disable-music-check], [Don't check for music and don't install it ]), [], [with_music_check=yes] )
+if test "x$with_music_check" != xno ; then
+   AC_CHECK_FILES( $srcdir/data/music/frontiers.ogg $srcdir/data/music/time_to_strike.ogg $srcdir/data/music/machine_wars.ogg,,missingmusic=x )
+   if test "x$missingmusic" != xx ; then
+      MUSICDIR=music
+   else
+      MUSICDIR=""
+   fi
 else
-  MUSICDIR=""
+   MUSICDIR=""
 fi
 
 AC_SUBST(MUSICDIR)
