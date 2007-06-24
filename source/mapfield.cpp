@@ -63,6 +63,19 @@ void tfield::init ()
 }
 
 
+void tfield::Resourceview::setview( int player, int material, int fuel )
+{
+   visible |= 1 << player;
+   materialvisible[player] = material;
+   fuelvisible[player] = fuel;
+}
+
+void tfield::Resourceview::resetview( int player )
+{
+   visible &= ~(1<<player);
+}
+
+
 void tfield::endRound( int turn )
 {
    bool recalc = false;

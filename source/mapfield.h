@@ -65,6 +65,8 @@ class  tfield {
 
     struct Resourceview {
       Resourceview ( void );
+      void setview( int player, int material, int fuel );
+      void resetview( int player );
       char    visible;      // BM
       char    fuelvisible[8];
       char    materialvisible[8];

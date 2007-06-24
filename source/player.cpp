@@ -455,6 +455,21 @@ void Player::swap ( Player& secondPlayer )
          else
             if ( i->player == secondPlayer.player  )
                i->player = player;
+      if ( fld->resourceview ) {
+         bool b = fld->resourceview->visible & (1 << player);
+         int m = fld->resourceview->materialvisible[player];
+         int f = fld->resourceview->fuelvisible[player];
+
+         if ( fld->resourceview->visible & (1 << secondPlayer.player ) )
+            fld->resourceview->setview( player, fld->resourceview->materialvisible[secondPlayer.player], fld->resourceview->fuelvisible[secondPlayer.player] );
+         else
+            fld->resourceview->resetview( player );
+
+         if ( b ) 
+            fld->resourceview->setview( secondPlayer.player, m, f );
+         else
+            fld->resourceview->resetview( secondPlayer.player );
+      }
    } /* endfor */
 
    swapData( research, secondPlayer.research );
@@ -480,7 +495,8 @@ void Player::swap ( Player& secondPlayer )
    swapData( name, secondPlayer.name );
    swapData( color, secondPlayer.color );
 
-   diplomacy.swap( secondPlayer.diplomacy );
+   diplomacy.swap( secondPlayer.player );
+
 
    int a = player;
    int b = secondPlayer.player;
@@ -496,10 +512,16 @@ void Player::swap ( Player& secondPlayer )
 
 }
 
-void DiplomaticStateVector::swap( DiplomaticStateVector& secondDSV )
+void DiplomaticStateVector::swap( int secondPlayer )
 {
+   DiplomaticStateVector& secondDSV = player.getParentMap()->getPlayer(secondPlayer).diplomacy;
+
    swapData( states, secondDSV.states );
    swapData( queuedStateChanges, secondDSV.queuedStateChanges );
+
+   for ( int i= 0; i < player.getParentMap()->getPlayerCount(); ++i )
+      swapData( player.getParentMap()->getPlayer(i).diplomacy.states[secondPlayer],  player.getParentMap()->getPlayer(i).diplomacy.states[player.getPosition()] );
+
 }
 
 
