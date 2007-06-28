@@ -1590,6 +1590,22 @@ ASCString  Vehicle::getName() const
       return name;
 }
 
+
+int Vehicle::getAmmo( int type, int num ) const
+{
+   int got = 0;
+   int weap = 0;
+   while ( weap < typ->weapons.count && got < num ) {
+      if ( typ->weapons.weapon[weap].getScalarWeaponType() == type ) {
+         int toget = min( num - got, ammo[weap]);
+         got += toget;
+      }
+      ++weap;
+   }
+
+   return got;
+}
+
 int Vehicle::getAmmo( int type, int num, bool queryOnly ) 
 {
    if ( num < 0 )
@@ -1693,6 +1709,14 @@ void Vehicle::paint ( Surface& s, SPoint pos, bool shaded, int shadowDist ) cons
 {
    paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
 }
+
+Surface Vehicle::getImage() const
+{
+   Surface s = Surface::createSurface( fieldsizex, fieldsizey, 32, Surface::transparent << 24 );
+   paint( s, SPoint(0,0), false, 0 );
+   return s;
+}
+
 
 vector<MapCoordinate> Vehicle::getCoveredFields()
 {

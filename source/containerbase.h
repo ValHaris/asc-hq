@@ -59,6 +59,7 @@ class ContainerBase {
 
       const ContainerBaseType*  baseType;
 
+      virtual Surface getImage() const = 0;
 
       typedef vector<const Vehicletype*> Production;
 
@@ -222,6 +223,7 @@ class ContainerBase {
       virtual ASCString getName ( ) const = 0;
 
       virtual int getAmmo( int type, int num, bool queryOnly )  = 0;
+      virtual int getAmmo( int type, int num ) const  = 0;
       virtual int putAmmo( int type, int num, bool queryOnly )  = 0;
       virtual int maxAmmo( int type ) const = 0 ;
 

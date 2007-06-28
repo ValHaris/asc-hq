@@ -139,10 +139,6 @@ void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoord
 
 
 
-#define compensatebuildingcoordinateorgx (a) (dx & (~a))
-#define compensatebuildingcoordinatex ( + (dx & ~b) )
-
-
 
 MapCoordinate  BuildingType :: getFieldCoordinate ( const MapCoordinate& entryOnMap, const LocalCoordinate& localCoordinates ) const
 {

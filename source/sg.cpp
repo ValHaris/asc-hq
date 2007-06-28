@@ -921,6 +921,17 @@ bool continueAndStartMultiplayerGame( bool mostRecent = false )
 }
 
 
+void ammoCounter( const ContainerBase* c, map<int,int>& amount )
+{
+   for ( int i = 0; i < cwaffentypennum; ++i )
+      if ( weaponAmmo[i] )
+         amount[i] += c->getAmmo(i,maxint );
+   for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
+      if ( *i )
+         ammoCounter( *i, amount );
+}
+
+
 void showCargoSummary( tfield* fld )
 {
    if ( !fld->vehicle ) {
@@ -928,9 +939,19 @@ void showCargoSummary( tfield* fld )
       return;
    }
 
-   if ( actmap->getCurrentPlayer().diplomacy.isAllied( fld->vehicle  ))
+   if ( actmap->getCurrentPlayer().diplomacy.isAllied( fld->vehicle  )) {
       showUnitCargoSummary( fld->vehicle );
-   else
+      map<int,int> ammo;
+      ammoCounter( fld->vehicle, ammo );
+      ASCString s;
+      for ( int i = 0; i < cwaffentypennum; ++i )
+         if ( weaponAmmo[i] )
+            s += ASCString(cwaffentypen[i]) + ": " + ASCString::toString( ammo[i] ) + "\n";
+
+      ViewFormattedText vft("Ammo summary", s, PG_Rect( -1, -1, 300, 300 ));
+      vft.Show();
+      vft.RunModal();
+   } else
       infoMessage( "The unit is not yours");
    
 }

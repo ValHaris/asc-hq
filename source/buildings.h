@@ -98,6 +98,9 @@ class  Building : public ContainerBase {
 
     void paintSingleField ( Surface& s, SPoint imgpos, BuildingType::LocalCoordinate pos ) const;
 
+    virtual Surface getImage() const;
+
+
     bool isBuilding() const { return true; };
     
     
@@ -158,6 +161,7 @@ class  Building : public ContainerBase {
     ASCString getName ( ) const;
 
     int getAmmo( int type, int num, bool queryOnly );
+    int getAmmo( int type, int num ) const;
     int putAmmo( int type, int num, bool queryOnly );
     int maxAmmo( int type ) const { return maxint; };
 

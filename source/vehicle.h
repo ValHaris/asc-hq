@@ -216,6 +216,7 @@ class UnitHooveringLogic {
     ASCString    getName() const;
 
     int getAmmo( int type, int num, bool queryOnly );
+    int getAmmo( int type, int num ) const;
     int putAmmo( int type, int num, bool queryOnly );
     int maxAmmo( int type ) const ;
 
@@ -349,6 +350,8 @@ class UnitHooveringLogic {
     //! displays the unit at position spos on s
     void paint ( Surface& s, SPoint pos, int shadowDist = -1 ) const;
     void paint ( Surface& s, SPoint pos, bool shaded, int shadowDist = -1 ) const;
+
+    virtual Surface getImage() const;
 
 
   private:

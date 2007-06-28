@@ -94,6 +94,9 @@ class AmmoTransferWindow : public ASC_PG_Dialog {
       ContainerBase* second;
       TransferHandler handler;
 
+
+      Surface img1,img2;
+
       bool ok()
       {
          handler.commit();
@@ -123,19 +126,28 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
    int ypos = 30;
    int border = 10;
 
+
+   img1 = source->getImage();
+   img2 = destination->getImage();
+
    const int singleTransferHeight = 60;
 
    int expectedHeight = handler.getTransfers().size() * singleTransferHeight;
    if ( handler.ammoProductionPossible() )
       expectedHeight  += 30;
 
-   int newHeight = min( PG_Application::GetScreen()->h - 60, expectedHeight + 80 );
+   int newHeight = min( PG_Application::GetScreen()->h - 60, expectedHeight + 130 );
    SizeWidget( w, newHeight );
+
 
    PG_ScrollWidget* area = new PG_ScrollWidget ( this, PG_Rect( border, ypos, w - border, h - 80 ));
    area->SetTransparency( 255 );
-         
-   ypos = 0;
+
+   (new PG_ThemeWidget( area, PG_Rect( 5,3, fieldsizex, fieldsizey)))->SetBackground( img1.getBaseSurface(), PG_Draw::STRETCH );
+   (new PG_ThemeWidget( area, PG_Rect( area->Width() - 5 - fieldsizex, 3, fieldsizex, fieldsizey)))->SetBackground( img2.getBaseSurface(), PG_Draw::STRETCH );
+
+
+   ypos = fieldsizex + 5;
    if ( handler.ammoProductionPossible() ) {
       PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 30, 20 ), "allow ammo production" );
       if ( CGameOptions::Instance()->autoproduceammunition )

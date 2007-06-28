@@ -31,6 +31,7 @@
 #include "resourcenet.h"
 #include "itemrepository.h"
 #include "containercontrols.h"
+#include "misc.h"
 
 #ifndef BUILDINGVERSIONLIMIT
 # define BUILDINGVERSIONLIMIT -1000000000
@@ -172,6 +173,50 @@ void Building::paintSingleField ( Surface& s, SPoint imgpos, BuildingType::Local
 }
 
 
+
+// fucking namespace pollution, we are defining our own...
+
+template<typename T>
+T ASC_min ( T a, T b )
+{
+   if ( a > b )
+      return b;
+   else
+      return a;
+}
+template<typename T>
+T ASC_max ( T a, T b )
+{
+   if ( a > b )
+      return a;
+   else
+      return b;
+}
+
+
+
+Surface Building::getImage() const
+{
+   int minx = maxint;
+   int maxx = 0;
+   int maxy = 0;
+   int miny = maxint;
+
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ ) 
+         if ( typ->fieldExists(BuildingType::LocalCoordinate(x,y) )) {
+            SPoint pos ( x * fielddistx + ( y & 1 ) * fielddisthalfx, y * fielddisty);
+            minx = ASC_min( minx, int(pos.x) );
+            maxx = ASC_max( maxx, int(pos.x) + fieldsizex );
+            miny = ASC_min ( miny, int(pos.y) );
+            maxy = ASC_max ( maxy, int(pos.y) + fieldsizey );
+         }
+
+   Surface s = Surface::createSurface(maxx-minx+1,maxy-miny+1, 32,Surface::transparent << 24 );
+
+   typ->paint ( s, SPoint(-minx,-miny), getOwner() ); 
+   return s;
+}
 
 #ifndef sgmain
 void Building :: execnetcontrol ( void ) {}
@@ -662,6 +707,13 @@ int Building::getAmmo( int type, int num, bool queryOnly )
    }
    return got;
 }
+
+int Building::getAmmo( int type, int num ) const
+{
+   assert( type >= 0 && type < waffenanzahl );
+   return min( ammo[type], num );
+}
+
 
 int Building::putAmmo( int type, int num, bool queryOnly ) 
 {
