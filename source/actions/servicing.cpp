@@ -545,6 +545,10 @@ void ServiceChecker :: check( ContainerBase* dest )
    if ( getTransferLimitation( dest ) == ALL )
       return;
 
+
+   if ( source->getMap()->getPlayer(source).diplomacy.getState(dest->getOwner()) < PEACE )
+      return;
+
    static ContainerBaseType::ContainerFunctions resourceVehicleFunctions[resourceTypeNum] = { ContainerBaseType::ExternalEnergyTransfer,
       ContainerBaseType::ExternalMaterialTransfer,
       ContainerBaseType::ExternalFuelTransfer };
