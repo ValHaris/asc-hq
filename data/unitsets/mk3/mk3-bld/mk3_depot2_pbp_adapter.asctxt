@@ -1,0 +1,5 @@
+Techadapter {
+   ; Depot2 MK3
+   Name = B32
+   TechnologiesRequired = 100010
+} TechAdapter
