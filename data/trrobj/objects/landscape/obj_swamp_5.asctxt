@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry much_snow snow_and_ice
+   Weather = dry much_snow
 
    Name = Swamp 5
    Parent = 504
@@ -15,6 +15,5 @@ ObjectType {
       Picture = obj_swamp_5.png 1
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

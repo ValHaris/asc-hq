@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry much_snow snow_and_ice
+   Weather = dry much_snow
 
    Name = Large Rocks 1
    Parent = 507
@@ -14,6 +14,5 @@ ObjectType {
       UseGFXpics = false
       picture = obj_rocks_large_1_ms.png 1
    } much_snow
-   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

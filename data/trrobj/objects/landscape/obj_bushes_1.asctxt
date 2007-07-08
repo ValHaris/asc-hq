@@ -5,7 +5,7 @@ ObjectType {
    ID = 2043
    GroupID = 10
 
-   Weather = dry much_snow snow_and_ice
+   Weather = dry much_snow
 
    Name = bushes
    Armor = 0
@@ -56,6 +56,5 @@ ObjectType {
       Picture = obj_bushes_1.png 1
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

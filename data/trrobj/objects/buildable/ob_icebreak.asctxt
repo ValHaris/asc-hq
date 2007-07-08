@@ -1,11 +1,6 @@
 ObjectType { 
-;   ERSETZT NoSelfChaning
-;   NetBehaviour = NetToBuilding NetToBuildingEntry NetToSelf NetToBorder SpecialBIForest AutoBorder
-
    ID = 6
-
-
-   Name = Icebreaker Line
+   Name = Icebreaker Fairway
 
    Weather = dry 
 
@@ -15,7 +10,7 @@ ObjectType {
    Armor = 0
    lifetime = 3
    LinkableObjects = 
-   LinkableTerrain = 
+   LinkableTerrain = 2000
    NetBehaviour = NetToSelf NetToBorder AutoBorder NetToBuildingEntry
 
    ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
@@ -52,7 +47,7 @@ ObjectType {
 
    dry { 
       UseGFXpics = false
-      picture = ob_icebreak_dry.png 64
+      picture = ob_icebreak_dry.png 65
    } dry
 
 } ObjectType

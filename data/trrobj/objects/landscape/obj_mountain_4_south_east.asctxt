@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry much_snow snow_and_ice
+   Weather = dry much_snow
 
    Name = Mountain 4 SE
    Parent = 509
@@ -15,6 +15,5 @@ ObjectType {
       Picture = obj_mountain_4_south_east.png 1
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

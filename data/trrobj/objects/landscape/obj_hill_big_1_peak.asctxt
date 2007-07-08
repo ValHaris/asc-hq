@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry much_snow snow_and_ice
+   Weather = dry much_snow
 
    Name = Big Hill 1 Peak
    Parent = 508
@@ -15,6 +15,5 @@ ObjectType {
       Picture = obj_hill_big_1_peak.png 1
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

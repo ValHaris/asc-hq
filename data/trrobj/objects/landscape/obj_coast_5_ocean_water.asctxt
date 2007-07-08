@@ -7,7 +7,7 @@ ObjectType {
    ID = 2504
    GroupID = 20
    LinkableObjects = 2500 2502 2503 2507 2509
-   LinkableTerrain = 2000 2001 2002 2003 2004
+   LinkableTerrain = 2000 2001 2002 2003
    NetBehaviour = NetToSelf NetToBorder
 
    dry { 

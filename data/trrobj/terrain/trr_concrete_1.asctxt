@@ -4,7 +4,7 @@ TerrainType {
    Parent = 500
    ID = 2030
 
-   Weather = dry few_snow much_snow snow_and_ice
+   Weather = dry few_snow much_snow
 
    dry { 
       UseGFXpics = false
@@ -19,6 +19,5 @@ TerrainType {
       Picture = trr_concrete_1.png
       GraphicOperations = Snow
    } much_snow
-   snow_and_ice ->* TerrainType.much_snow
 
 } TerrainType

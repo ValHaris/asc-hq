@@ -1,13 +1,13 @@
 ObjectType { 
 
-   Weather = dry much_snow snow_and_ice
+   Weather = dry much_snow
 
    Name = Very Shallow Water Coast 1
    Parent = 513
    ID = 2507
    GroupID = 18
-   LinkableObjects = 2500 2502 2504 2503 2509
-   LinkableTerrain = 2000 2001 2002 2003 2004
+   LinkableObjects = 2500 2502 2503 2504 2509
+   LinkableTerrain = 2000 2001 2002 2003
    NetBehaviour = NetToSelf NetToBorder
 
    dry { 
@@ -46,6 +46,5 @@ ObjectType {
                             0  1  1  0  0  3  0  3  3  0
                             1  0  0]
    } much_snow
-   snow_and_ice ->* ObjectType.much_snow
 
 } ObjectType

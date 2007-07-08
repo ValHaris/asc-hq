@@ -1,13 +1,19 @@
 ObjectType { 
-   Parent = 2501
-
+   Name = Mountain Lava
+   Parent = 519
    ID = 2506
 
-   LinkableObjects = 2501 988  2500 2502 2503 2504 2505 2507 2508
-   LinkableTerrain = 2000 2001 2002
+   LinkableObjects = 983 984 985 986 987 988  2500 2501 2502 2503 2504 2505 2507 2508
+   LinkableTerrain = 2000 2001 2002 2003
 
-   Name = MOUNTAIN Lavariver / Lavacoast
    Height = 94 ;17-Aug 2003
+
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
 
    TerrainAccess { 
       terrain_any = mountains high_mountains
