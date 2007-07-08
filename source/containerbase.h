@@ -171,7 +171,7 @@ class ContainerBase {
       */
       virtual int putResource ( int amount, int resourcetype, bool queryonly, int scope = 1, int player = -1 ) = 0;
       virtual int getResource ( int amount, int resourcetype, bool queryonly, int scope = 1, int player = -1 ) = 0;
-      virtual int getResource ( int amount, int resourcetype ) const = 0;
+      virtual int getAvailableResource ( int amount, int resourcetype, int scope = 1 ) const = 0;
 
       Resources putResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 );
       Resources getResource ( const Resources& res, bool queryonly, int scope = 1, int player = -1 );

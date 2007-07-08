@@ -926,6 +926,10 @@ void ammoCounter( const ContainerBase* c, map<int,int>& amount )
    for ( int i = 0; i < cwaffentypennum; ++i )
       if ( weaponAmmo[i] )
          amount[i] += c->getAmmo(i,maxint );
+
+   for ( int i = 1000; i < 1003; ++i )
+      amount[i] += c->getAvailableResource( maxint, i-1000, 0 );
+
    for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
       if ( *i )
          ammoCounter( *i, amount );
@@ -947,6 +951,10 @@ void showCargoSummary( tfield* fld )
       for ( int i = 0; i < cwaffentypennum; ++i )
          if ( weaponAmmo[i] )
             s += ASCString(cwaffentypen[i]) + ": " + ASCString::toString( ammo[i] ) + "\n";
+
+      s += "\n";
+      for ( int i = 1000; i < 1003; ++i )
+         s += ASCString(Resources::name(i-1000)) + ": " + ASCString::toString( ammo[i] ) + "\n";
 
       ViewFormattedText vft("Ammo summary", s, PG_Rect( -1, -1, 300, 300 ));
       vft.Show();
@@ -1598,6 +1606,7 @@ int main(int argc, char *argv[] )
 
    displayLogMessage( 1, getstartupmessage() );
 
+   ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
    initFileIO( cl->c() );  // passing the filename from the command line options
 
    try {

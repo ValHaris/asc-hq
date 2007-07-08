@@ -37,7 +37,7 @@ ppixelxlattable xlatpictgraytable;
 txlattables xlattables;
 tmixbuf *colormixbuf;
 char* colormixbufchar;
-tpixelxlattable bi2asc_color_translation_table;
+// tpixelxlattable bi2asc_color_translation_table;
 
 bool asc_paletteloaded = 0;
 

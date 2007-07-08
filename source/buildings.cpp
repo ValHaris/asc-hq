@@ -222,7 +222,7 @@ Surface Building::getImage() const
 void Building :: execnetcontrol ( void ) {}
 int Building :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return 0; };
 int Building :: getResource ( int amount, int resourcetype, bool queryonly, int scope, int player ) { return actstorage.resource(resourcetype); };
-int Building :: getResource ( int amount, int resourcetype ) const { return actstorage.resource(resourcetype); };
+int Building :: getAvailableResource ( int amount, int resourcetype, int scope ) const { return actstorage.resource(resourcetype); };
 #endif
 
 void Building :: setCompletion ( int completion, bool setupImages )

@@ -2267,17 +2267,17 @@ int filesize( const char *name)
 }
 
 
-int directoryExist ( const char* path )
+bool directoryExist ( const ASCString& path )
 {
-   int existence = 0;
+   bool existence = false;
 
-   DIR *dirp = opendir( path );
+   DIR *dirp = opendir( path.c_str() );
 
    if( dirp ) {
       if ( readdir( dirp ) )
-         existence = 1;
+         existence = true;
       else
-         existence = 0;
+         existence = false;
 
       closedir( dirp );
    }

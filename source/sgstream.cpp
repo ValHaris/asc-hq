@@ -36,6 +36,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fstream>
+#include <boost/regex.hpp>
 
 #include "global.h"
 #include "typen.h"
@@ -90,9 +91,10 @@ void loadpalette ( void )
       stream.readdata( &xlattables.light,  sizeof ( xlattables.light ));
       xlattables.light[255] = 255;
   */
+#ifdef use_truecolor2pal
       stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
       stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
-
+#endif
       xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
       // xlatpictgraytable = new tpixelxlattable;
       generategrayxlattable(xlatpictgraytable,160,16,&pal);
@@ -129,28 +131,39 @@ bool makeDirectory ( const ASCString& path )
    return true;
 }
 
-class ConfigurationFileLocator {
-      ASCString cmdline;
 
-   protected:
-      vector<ASCString> getDefaultDirectory();
+ASCString getDirectory( ASCString filename )
+{
+   if ( directoryExist( filename ))
+      return filename;
 
-   public:
-      void CommandLineParam( const ASCString& path );
+   ASCString directory;
 
-      ASCString getConfig();
-      ASCString getConfigForPrinting();
-};
+   static boost::regex dir( "(.*)[\\\\/:][^\\\\/:]+");
+   boost::smatch what;
+   if( boost::regex_match( filename, what, dir)) {
+      directory.assign( what[1].first, what[1].second );
+      return directory;
+   } else
+      return ".";
+}
 
 
-void ConfigurationFileLocator::CommandLineParam( const ASCString& path )
+void ConfigurationFileLocatorCore::setCommandLineParam( const ASCString& path )
 {
    cmdline = path;
 }
 
-vector<ASCString> ConfigurationFileLocator::getDefaultDirectory()
+void ConfigurationFileLocatorCore::setExecutableLocation( const ASCString& path )
+{
+   exePath = getDirectory( path );
+}
+
+
+vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
 {
    vector<ASCString> dirs;
+
 #ifdef _WIN32_
    HKEY key;
    if (  RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
@@ -179,17 +192,21 @@ vector<ASCString> ConfigurationFileLocator::getDefaultDirectory()
    if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
       ASCString dir = szPath;
       appendbackslash ( dir );
+      dir += "ASC";
+      appendbackslash ( dir );
       dirs.push_back( dir );
    }
 
    if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
       ASCString dir = szPath;
       appendbackslash ( dir );
+      dir += "ASC";
+      appendbackslash ( dir );
       dirs.push_back( dir );
    }
 
 #else
-
+   dirs.push_back( "~/.asc/" );
 #endif
 
    return dirs;
@@ -197,25 +214,61 @@ vector<ASCString> ConfigurationFileLocator::getDefaultDirectory()
 }
 
 
-ASCString ConfigurationFileLocator::getConfig()
+ASCString ConfigurationFileLocatorCore::getConfigFileName()
 {
    if ( cmdline.length() ) {
-      
+      configFileType = 1;
+      return cmdline;      
    }
-   return "";
+
+   if ( getenv ( asc_EnvironmentName )) {
+      configFileType = 2;
+      return getenv ( asc_EnvironmentName );
+   }
+
+   if ( !exePath.empty()) {
+      ASCString completeName = exePath + "/" + asc_configurationfile;
+      if ( exist( completeName )) {
+         configFileType = 3;
+         return completeName;
+      }
+   }
+
+   vector<ASCString> list = getDefaultDirectory();
+   if ( list.size() >= 1 ) {
+      configFileType = 4;
+      return list[0] + asc_configurationfile;
+   }
+
+   configFileType = 5;
+   return asc_configurationfile;
+
 }
 
-ASCString ConfigurationFileLocator::getConfigForPrinting()
+ASCString ConfigurationFileLocatorCore::getConfigForPrinting()
 {
    return "";
 }
 
+ConfigurationFileLocatorCore::ConfigurationFileLocatorCore() : configFileType(-1) 
+{
+}
 
-ASCString configFileName;
-
+void ConfigurationFileLocatorCore::writeDefaultPathsToOptions()
+{
+   #ifdef WIN32
+   vector<ASCString> dirs = getDefaultDirectory();
+   CGameOptions::Instance()->searchPathNum = 0;
+   for ( vector<ASCString>::iterator i = dirs.begin(); i != dirs.end(); ++i )
+      CGameOptions::Instance()->addSearchPath ( *i );
+   #else
+   CGameOptions::Instance().setDefaultDirectories();
+   #endif
+}
 
 ASCString getConfigFileName ()
 {
+   ASCString configFileName = ConfigurationFileLocator::Instance().getConfigFileName();
    if ( !configFileName.empty() )
       return configFileName ;
    else
@@ -228,64 +281,14 @@ int readgameoptions ( const ASCString& filename )
 {
    displayLogMessage ( 4, "loading game options ... " );
 
-   bool registryKeyFound = false;
 
-   ASCString fn;
-   ASCString installDir;
-
-   if ( !filename.empty() )
-      fn = filename;
-   else
-      if ( getenv ( asc_EnvironmentName ))
-         fn = getenv ( asc_EnvironmentName );
-      else {
-
-#ifdef _WIN32_
-          HKEY key;
-          if (  RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
-                                    "SOFTWARE\\Advanced Strategic Command\\",
-                                    0,
-                                    KEY_READ,
-                                    &key ) == ERROR_SUCCESS) {
-
-             DWORD type;
-             const int size = 2000;
-             char  buf[size];
-             DWORD size2 = size;
-             if ( RegQueryValueEx ( key, "InstallDir2", NULL, &type, (BYTE*)buf, &size2 ) == ERROR_SUCCESS ) {
-                if ( type == REG_SZ	 ) {
-                   fn = buf;
-                   appendbackslash ( fn );
-                   installDir = fn;
-                   fn += asc_configurationfile;
-
-                   registryKeyFound = true;
-                }
-             }
-
-             RegCloseKey ( key );
-         }
-
-#endif
-         if ( !registryKeyFound ) {
-            fn = asc_configurationfile;
-            if ( fn.find( pathdelimitter ) == ASCString::npos )
-               fn = ASCString(".") + pathdelimitter + asc_configurationfile;
-         }
-      }
-
-   char completeFileName[10000];
-   constructFileName ( completeFileName, -3, NULL, fn.c_str() );
-
-   configFileName = completeFileName;
-
-   displayLogMessage ( 6, ASCString("Path is ") + completeFileName + "; " );
+   displayLogMessage ( 6, ASCString("Path is ") + filename + "; " );
 
 
-   if ( exist ( completeFileName )) {
+   if ( exist ( filename )) {
       displayLogMessage ( 6, "found, " );
       try {
-         CGameOptions::Instance()->load( completeFileName );
+         CGameOptions::Instance()->load( filename );
       } 
       catch ( ParsingError err ) {
          fatalError ( "Error parsing text file " + err.getMessage() );
@@ -297,28 +300,17 @@ int readgameoptions ( const ASCString& filename )
          fatalError ( "caught undefined exception" );
       }
 
-      if ( registryKeyFound ) {
-         ASCString primaryPath = CGameOptions::Instance()->getSearchPath(0);
-         if ( primaryPath == "." || primaryPath == ".\\" || primaryPath == "./" ) {
-            CGameOptions::Instance()->setSearchPath(0, installDir );
-            displayLogMessage ( 6, "Setting path0 to " + installDir + ", " );
-         }
-      }
-
    } else {
      displayLogMessage ( 6, "not found, using defaults, " );
 
-     if ( registryKeyFound ) {
-        CGameOptions::Instance()->setSearchPath(0, installDir );
-        displayLogMessage ( 6, "Registry Key HKEY_LOCAL_MACHINE\\SOFTWARE\\Advanced Strategic Command\\InstallDir found, setting path0 to " + installDir);
-     }
+     ConfigurationFileLocator::Instance().writeDefaultPathsToOptions();
 
-     if ( !configFileName.empty() ) {
+     if ( !filename.empty() ) {
         CGameOptions::Instance()->setChanged();
-        if ( writegameoptions( configFileName ))
-           displayLogMessage ( 6, "A config file has been sucessfully written to " + configFileName + " ");
+        if ( writegameoptions( filename ))
+           displayLogMessage ( 6, "A config file has been sucessfully written to " + filename + " ");
         else
-           displayLogMessage ( 6, "Failed to write config file to " + configFileName + " ");
+           displayLogMessage ( 6, "Failed to write config file to " + filename + " ");
      }
    }
 
@@ -333,7 +325,7 @@ bool writegameoptions ( ASCString configFileName )
 {
    try {
       if ( configFileName.empty() )
-         configFileName = ::configFileName;
+         configFileName = ConfigurationFileLocator::Instance().getConfigFileName();
 
       if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
          char buf[10000];
@@ -357,17 +349,17 @@ void checkFileLoadability ( const ASCString& filename )
    }
    catch ( ASCexception ) {
       ASCString msg = "Unable to access " + filename + "\n";
-      msg +=           "Make sure the file main.ascdat is in one of the search paths \n"
-                       "specified in your config file !\n" 
-                       "If you don't have this file , get and install it from http://www.asc-hq.org\n"
-                       "If you DO have the file, it is probably outdated. \n";
-      msg +=           "The configuration file that is used is: " + configFileName + "\n";
+      msg +=           "Make sure the file main.ascdat is in one of the search paths specified in your config file !\n";
 
-      if ( !configFileName.empty() ) {
-         CGameOptions::Instance()->setChanged();
-         if ( writegameoptions( configFileName ))
-            msg += "A configuration file has been written to " + configFileName + "\n";
-      }
+      ASCString configFileName = ConfigurationFileLocator::Instance().getConfigFileName();
+      if ( exist( configFileName ))
+         msg +=        "The configuration file that is used is: " + configFileName  + "\n";
+      else
+         if ( !configFileName.empty() ) {
+            CGameOptions::Instance()->setChanged();
+            if ( writegameoptions( configFileName ))
+               msg += "A configuration file has been written to " + configFileName + "\n";
+         }
 
       msg +=           "These paths are being searched for data files:\n ";
       
@@ -384,12 +376,21 @@ void checkFileLoadability ( const ASCString& filename )
 
 void initFileIO ( const ASCString& configFileName, int skipChecks )
 {
-   readgameoptions( configFileName );
+
+   ConfigurationFileLocator::Instance().setCommandLineParam( configFileName );
+   
+   readgameoptions( ConfigurationFileLocator::Instance().getConfigFileName() );
 
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
       if ( !CGameOptions::Instance()->getSearchPath(i).empty()   ) {
          displayLogMessage ( 3, "adding search patch " + CGameOptions::Instance()->getSearchPath(i) + "\n" );
-         addSearchPath ( CGameOptions::Instance()->getSearchPath(i) );
+         ASCString path = CGameOptions::Instance()->getSearchPath(i);
+         if ( isPathRelative( path ) && !isPathRelative( ConfigurationFileLocator::Instance().getConfigFileName() )) {
+            ASCString path2 = getDirectory( ConfigurationFileLocator::Instance().getConfigFileName() );
+            appendbackslash ( path2 );
+            addSearchPath( path2 + path );
+         } else
+            addSearchPath ( path );
       }
    try {
      opencontainer ( "*.ascdat" );

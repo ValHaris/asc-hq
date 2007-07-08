@@ -2,9 +2,12 @@
     \brief The color palette and various color translation tables
 */
 
-//     $Id: palette.h,v 1.9 2007-04-13 16:15:54 mbickel Exp $
+//     $Id: palette.h,v 1.10 2007-07-08 15:25:21 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2007/04/13 16:15:54  mbickel
+//      Merged ASC2 branch
+//
 //     Revision 1.7.2.1  2004/10/11 18:14:04  mbickel
 //      Converted units to use new graphic system
 //      Wrote new blitter
@@ -97,13 +100,17 @@ extern tpixelxlattable dark1;
 extern tpixelxlattable dark2;
 extern tpixelxlattable light;
 */
+
+// tables storing the color that results when two palette colors are mixed
 extern tmixbuf *colormixbuf;
 extern char* colormixbufchar;
+
+
 extern dacpalette256 pal;
 
 extern bool asc_paletteloaded;
 extern ppixelxlattable xlatpictgraytable;  
-extern tpixelxlattable bi2asc_color_translation_table;
+// extern tpixelxlattable bi2asc_color_translation_table;
 
 #pragma pack()
 

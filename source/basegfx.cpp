@@ -1067,7 +1067,7 @@ imagesize(int x1, int y1, int x2, int y2)
 	return ((x2 - x1 + 1) * (y2 - y1 + 1) + 4);
 }
 
-
+#if 0
 char* convertimage ( TrueColorImage* img, dacpalette256 pal )
 {
   #ifndef minimal
@@ -1131,7 +1131,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
       printf("\a");
    return (char*)wp;
 }
-
+#endif
 
 fatalgraphicserror :: fatalgraphicserror ( char* strng ) {
    strcpy ( st, strng );
@@ -1237,7 +1237,7 @@ void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
 
 
 
-char truecolor2pal_table[262144];
+// char truecolor2pal_table[262144];
 
 
 dacpalette256* activepalette256;
@@ -1250,7 +1250,9 @@ class tinitgfxengine {
 
 tinitgfxengine::tinitgfxengine ( void )
 {
+#ifdef use_truecolor2pal
    memset ( truecolor2pal_table, 255, sizeof ( truecolor2pal_table ));
+#endif
    hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparameters;
    agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
    activepalette256 = (dacpalette256*) &activepalette;
@@ -2126,7 +2128,7 @@ void showtext2c ( const ASCString& text, int x, int y )
    showtext ( text.c_str(), x, y, -1 );
 }
 
-
+#ifdef use_truecolor2pal
 void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
 {
   s.Lock();
@@ -2160,6 +2162,7 @@ void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
   s.Unlock();
   return buf;
 }
+#endif
 
 SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees )
 {

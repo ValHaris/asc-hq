@@ -383,7 +383,7 @@ extern TrueColorImage* convertimage2tc ( void* buf, dacpalette256 pal );
 
 /** a table to speed up conversion from truecolor to 8bit palette. The 6 most significant bits
      of each color component (RGB) form the the index.       */
-extern char truecolor2pal_table[262144];
+// extern char truecolor2pal_table[262144];
 
 //! puts the image pointed to by tci to the screen. Both must be truecolor images. This function is a quick and unoptimized hack!
 extern void putimage ( int x1, int y1, TrueColorImage* tci );
@@ -431,11 +431,13 @@ extern int fullscreen;
 //! sets the caption of the main window
 extern void setWindowCaption ( const char* s );
 
+#ifdef use_truecolor2pal
 /** converts a SDLmm::Surface to an old style image buffer
     \param s The source surface
     \param paletteTranslation If the source surface is 8 bit, convertSurface will convert the palette to the ASC palette if this is set to true.
 */
 extern void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation = true );
+#endif
 
 extern SPoint getPixelRotationLocation( SPoint pos, int width, int height, int degrees );
 

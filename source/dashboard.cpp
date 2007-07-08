@@ -434,9 +434,9 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
          setLabelText( "armor", bld->getArmor() );
 
          if ( 0 ) {
-            setLabelText( "unitfuelstatus", bld->getResource(maxint,2) );
-            setLabelText( "unitmaterialstatus", bld->getResource(maxint,1) );
-            setLabelText( "unitenergystatus", bld->getResource(maxint,0) );
+            setLabelText( "unitfuelstatus", bld->getAvailableResource(maxint,2) );
+            setLabelText( "unitmaterialstatus", bld->getAvailableResource(maxint,1) );
+            setLabelText( "unitenergystatus", bld->getAvailableResource(maxint,0) );
          } else {
             setLabelText( "unitfuelstatus", "" );
             setLabelText( "unitmaterialstatus", "" );

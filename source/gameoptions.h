@@ -32,6 +32,7 @@ class CGameOptions
 
       CGameOptions();
       void setDefaults();
+      void setDefaultDirectories();
 /*      CGameOptions( const CGameOptions& cgo );
 
       void copy ( const CGameOptions& cgo );

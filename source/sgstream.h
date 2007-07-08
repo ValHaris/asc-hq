@@ -32,6 +32,30 @@
 #include "basestrm.h"
 // #include "graphics/surface.h"
 
+#include "libs/loki/Singleton.h"
+
+
+
+class ConfigurationFileLocatorCore {
+      ASCString cmdline;
+      ASCString exePath;
+      int configFileType;
+   protected:
+      vector<ASCString> getDefaultDirectory();
+
+
+   public:
+      ConfigurationFileLocatorCore();
+      void setCommandLineParam( const ASCString& path );
+      void setExecutableLocation( const ASCString& path );
+
+      ASCString getConfigFileName();
+      ASCString getConfigForPrinting();
+      void writeDefaultPathsToOptions();
+};
+
+
+typedef Loki::SingletonHolder< ConfigurationFileLocatorCore > ConfigurationFileLocator;
 
 
 extern void generatedirecpict ( void* orgpict, void* direcpict );

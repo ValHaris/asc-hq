@@ -553,7 +553,7 @@ void Building :: execnetcontrol ( void )
             if (  netcontrol & (cnet_storeenergy << i )) {
                npush (  netcontrol );
                netcontrol |= (cnet_stopenergyoutput << i );
-               actstorage.resource(i) += getResource ( getStorageCapacity().resource(i) -  actstorage.resource(i), i, 0 );
+               actstorage.resource(i) += getResource ( getStorageCapacity().resource(i) -  actstorage.resource(i), i, false );
                npop (  netcontrol );
             }
       }
@@ -606,9 +606,8 @@ int  Building :: getResource ( int      need,    int resourcetype, bool queryonl
    }
 }
 
-int  Building :: getResource ( int      need,    int resourcetype ) const
+int  Building :: getAvailableResource ( int      need,    int resourcetype, int scope ) const
 {
-   int scope = 1;
    int got;
    {
       GetResource gr ( getMap(), scope );

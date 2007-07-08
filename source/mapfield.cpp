@@ -267,8 +267,18 @@ void tfield :: setweather ( int weather )
         typ = typ->terraintype->weather[ weather ];
         setparams();
      } else {
-        typ = typ->terraintype->weather[ 0 ];
-        setparams();
+        if ( weather == 2 )
+           setweather(1);
+        else
+           if ( weather == 5 )
+              setweather(4);
+           else
+              if (weather==4)
+                 setweather(3);
+              else {
+                 typ = typ->terraintype->weather[ 0 ];
+                 setparams();
+              }
      }
 }
 

@@ -270,7 +270,7 @@ int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int s
    }
 }
 
-int Vehicle :: getResource ( int amount, int resourcetype ) const
+int Vehicle :: getAvailableResource ( int amount, int resourcetype, int scope ) const
 {
    //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
 
@@ -286,7 +286,7 @@ Resources Vehicle::getResource ( const Resources& res ) const
 {
    Resources got;
    for ( int r = 0; r < 3; ++r )
-      got.resource(r) = getResource( res.resource(r), r);
+      got.resource(r) = getAvailableResource( res.resource(r), r);
         
    return got;
 }

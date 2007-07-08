@@ -89,7 +89,8 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
    tnfilestream fs ( file, tnstream::reading );
    
    Surface s ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));
-   assert( s.valid());
+   if ( !s.valid() )
+      fatalError("could not read image " + file );
    
    if ( s.GetPixelFormat().BitsPerPixel() == 8 )
       s.assignDefaultPalette();

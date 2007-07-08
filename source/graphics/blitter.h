@@ -237,15 +237,17 @@ class ColorConverter<4,1>
 
 
       };
-
       TargetPixelType convert ( SourcePixelType sp )
       {
+         #ifdef use_truecolor2pal
          if ( srcHasColorKey && (sp & srcColorMask) == srcColorKey )
             return destColorKey;
          else
             return truecolor2pal_table[ ((sp >> rshift) & 0x3f) + (((sp >> gshift) & 0x3f) << 6) + (((sp >> bshift) & 0x3f) << 12)];
+         #else
+         return destColorKey;
+         #endif
       };
-
 };
 
 template<>

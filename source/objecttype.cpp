@@ -202,16 +202,19 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
       megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, 0.7, flip, nullParam); 
    } else
       if ( displayMethod == 2 ) {  // translation
-         MegaBlitter< 1,4,
-                     ColorTransform_None, 
-                     ColorMerger_Alpha_XLAT_TableShifter, 
-                     SourcePixelSelector_DirectFlip,
-                     TargetPixelSelector_All,
-                     ColorConverter_PassThrough
-                    >
-             blitter;
-         blitter.setFlipping( flip & 1, flip & 2 );
-         blitter.blit( getPicture( dir, weather), surface, pos );
+         if ( getPicture( dir, weather).GetPixelFormat().BitsPerPixel() == 8 ) {
+            MegaBlitter< 1,4,
+                        ColorTransform_None, 
+                        ColorMerger_Alpha_XLAT_TableShifter, 
+                        SourcePixelSelector_DirectFlip,
+                        TargetPixelSelector_All,
+                        ColorConverter_PassThrough
+                     >
+               blitter;
+            blitter.setFlipping( flip & 1, flip & 2 );
+            blitter.blit( getPicture( dir, weather), surface, pos );
+         } // else
+           // warning("objects with palette translation as display method may not have truecolor images");
       } else
          if ( displayMethod == 4 ) {
             const Surface& s = getPicture( dir, weather);
@@ -1195,27 +1198,30 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                while ( weatherPicture[i].flip.size() < weatherPicture[i].images.size() )
                   weatherPicture[i].flip.push_back(0);
 
-               if ( pc.isReading() ) {
-                  int operations;
-                  pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
-                  if ( operations == 1 )  {
-                     for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                        snowify( weatherPicture[i].images[j] );
-                  }
-               }
-
-
             } else {
                for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {
                   weatherPicture[i].bi3pic[u] = -1;
                   weatherPicture[i].flip[u] = 0;
                }
             }
+
+            if ( pc.isReading() ) {
+               int operations;
+               pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
+               if ( operations == 1 )  {
+                  for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
+                     snowify( weatherPicture[i].images[j] );
+               }
+            }
+
          }
          
-         if ( pc.find ( "DisplayMethod" ) )
+         if ( pc.find ( "DisplayMethod" ) ) {
             pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
-         else
+            if ( displayMethod == 2 && pc.isReading() && weatherPicture[i].images[0].GetPixelFormat().BitsPerPixel() != 8 )
+               pc.error("Error parsing object " + name + " (ID=" + ASCString::toString(id)+"): invalid image; displaymethod=translation is only a available for 8 Bit images");
+
+         } else
             displayMethod = 0;
 
          

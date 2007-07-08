@@ -217,7 +217,7 @@ int main(int argc, char *argv[] )
    Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
 #endif
 
-
+   ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
    initFileIO( cl->c() );
 
    signal ( SIGINT, SIG_IGN );

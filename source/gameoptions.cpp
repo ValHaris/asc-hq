@@ -266,21 +266,7 @@ void CGameOptions::setDefaults ( void )
 
    cacheASCGUI = true;
 
-#if USE_HOME_DIRECTORY == 0
-
-   searchPathNum = 1;
-   searchPath[0] =  ".\\" ;
-#else
-
-   searchPathNum = 6;
-   
-   searchPath[0] =  "~/.asc/" ;
-   searchPath[1] = GAME_DATADIR ;
-   searchPath[2] = "/var/local/games/asc/" ;
-   searchPath[3] = "/var/games/asc/" ;
-   searchPath[4] = "/usr/local/share/games/asc/" ;
-   searchPath[5] =  "/usr/share/games/asc/" ;
-#endif
+   setDefaultDirectories();
 
    xresolution = 1024;
    yresolution = 768;
@@ -304,6 +290,25 @@ void CGameOptions::setDefaults ( void )
 }
 
 
+void CGameOptions::setDefaultDirectories()
+{
+#if USE_HOME_DIRECTORY == 0
+
+   searchPathNum = 1;
+   searchPath[0] =  ".\\" ;
+#else
+
+   searchPathNum = 6;
+   
+   searchPath[0] =  "~/.asc/" ;
+   searchPath[1] = GAME_DATADIR ;
+   searchPath[2] = "/var/local/games/asc/" ;
+   searchPath[3] = "/var/games/asc/" ;
+   searchPath[4] = "/usr/local/share/games/asc/" ;
+   searchPath[5] =  "/usr/share/games/asc/" ;
+#endif
+
+}
 
 ASCString CGameOptions::Mouse::getButtonName(int button)
 {

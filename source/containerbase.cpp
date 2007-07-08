@@ -63,7 +63,7 @@ Resources ContainerBase :: getResource ( const Resources& res ) const
 {
    Resources result;
    for ( int i = 0; i < resourceNum; i++ )
-      result.resource(i) = getResource ( res.resource(i), i );
+      result.resource(i) = getAvailableResource ( res.resource(i), i );
    return result;
 }
 

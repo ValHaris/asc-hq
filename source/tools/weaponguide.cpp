@@ -70,6 +70,7 @@ int main(int argc, char *argv[] )
 
       SDL_Init( SDL_INIT_VIDEO );
       
+      ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
       initFileIO( cl.c(), 4 );  // passing the filename from the command line options
       ASCString prefixDir = cl.d();
       if ( !prefixDir.empty() )

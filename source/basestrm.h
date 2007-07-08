@@ -628,7 +628,7 @@ extern void appendbackslash ( char* String );
 extern void appendbackslash ( ASCString& String );
 extern char* constructFileName( char* buf, int directoryLevel, const char* path, const char* filename );
 extern ASCString constructFileName( int directoryLevel, const ASCString& path, ASCString filename );
-extern int directoryExist ( const char* path );
+extern bool directoryExist ( const ASCString& path );
 extern char* extractPath ( char* buf, const char* filename );
 extern char* extractFileName ( char* buf, const char* filename );
 extern ASCString extractFileName ( const ASCString& filename );
@@ -636,6 +636,7 @@ extern ASCString extractFileName_withoutSuffix ( const ASCString& filename );
 extern int createDirectory ( const char* name );
 extern int getSearchPathNum();
 extern ASCString getSearchPath ( int i );
+extern bool isPathRelative( const ASCString& path );
 
 //! converts path delimitters from foreign operating systems to the ones used by the current operating system. On Linux, this function converts backslashes to slashes, on Windows vice versa
 extern void convertPathDelimitters ( ASCString& path );

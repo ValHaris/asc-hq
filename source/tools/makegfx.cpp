@@ -221,6 +221,7 @@ int main(int argc, char *argv[] )
 
    try {
 
+      ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
       initFileIO( cl.c().c_str() );
       addSearchPath ( "." );
       opencontainer ( "*.con");
