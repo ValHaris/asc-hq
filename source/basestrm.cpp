@@ -930,6 +930,12 @@ bool isPathRelative( const ASCString& path )
      
   if ( path[0] == '~' && path[1] == pathdelimitter )
      return false;
+
+#ifdef WIN32
+  if ( path[1] == ':' && path[2] == pathdelimitter )
+     return false;
+
+#endif
      
   if ( path[0] == pathdelimitter )
      return false;

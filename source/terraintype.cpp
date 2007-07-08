@@ -482,9 +482,11 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
       if ( pc.isReading() ) {
          int operations;
          pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
-         if ( operations == 1 )  {
+         if ( operations == 1 )  
             snowify( image );
-         }
+         else
+            if ( operations == 2 )
+               snowify( image, false );
       }
 
    } else {

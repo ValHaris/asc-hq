@@ -225,7 +225,7 @@
             public:
                ASCImageProperty ( Surface &property_, const ASCString& fileName_, bool applyFieldMask ) : PTIMG2 ( property_ ), fileName ( fileName_ ), fieldMask( applyFieldMask ) {};
          };
-
+/*
          typedef PropertyTemplate< vector<void*> > PTIMGA;
          class ImageArrayProperty : public PTIMGA {
                typedef vector<void*> PropertyType;
@@ -236,6 +236,7 @@
             public:
                ImageArrayProperty ( PropertyType &property_, const ASCString& fileName_ ) : PTIMGA ( property_ ), fileName ( fileName_ ) {};
          };
+*/
 
          typedef PropertyTemplate< vector<Surface> > PTIMGA2;
          class ASCImageArrayProperty : public PTIMGA2 {

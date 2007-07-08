@@ -33,7 +33,7 @@
  const int productionCostCalculationMethodNum = 3;
  extern const char* productionCostCalculationMethod[];
 
- const int graphicOperationNum = 2;
+ const int graphicOperationNum = 3;
  extern const char* graphicOperations[];
  
 

@@ -229,7 +229,8 @@ const char*  buildingFunctionTags[24]  =
 
  const char* graphicOperations[graphicOperationNum]
     = { "none",
-        "snow" };
+        "snow",
+        "snow_const"};
 
 
  const char* objectDisplayingMethodTags[objectDisplayingMethodNum]

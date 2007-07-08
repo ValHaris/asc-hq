@@ -536,7 +536,7 @@ void showSDLInfo()
 #endif
 #endif
   
-   s += "SDL video driver: ";
+   s += "Graphics backend: ";
    s += SDL_VideoDriverName( buf, 1000 );
    s += "\n";
 
@@ -1112,7 +1112,6 @@ void showUnitEndurance()
 
 void showMemoryFootprint()
 {
-   
    MemoryMeasurement mm;
    mm.measureTypes();
    mm.measure( actmap );
@@ -1121,7 +1120,6 @@ void showMemoryFootprint()
    ViewFormattedText vft("Memory Usage", mm.getResult(), PG_Rect( -1, -1, 750, 550 ));
    vft.Show();
    vft.RunModal();
-   
 }
 
 

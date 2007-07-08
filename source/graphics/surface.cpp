@@ -710,3 +710,19 @@ int Surface::getMemoryFootprint() const
    return size;
 }
 
+
+void Surface::ColorKey2AlphaChannel() 
+{
+   Lock();
+   for ( int y = 0; y < h(); ++y ) {
+      char* cp = (char*) pixels();
+      cp += y * pitch();
+      int* ip = (int*) cp;
+      for ( int x = 0; x < w(); ++x, ++ip ) 
+         if ( (*ip & ~(0xff << GetPixelFormat().Ashift())) == GetPixelFormat().colorkey())
+            *ip &= ~(Surface::transparent << GetPixelFormat().Ashift());
+   }
+   GetSurface()->flags &= ~SDL_SRCCOLORKEY;
+   Unlock();
+}
+

@@ -1211,7 +1211,11 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                if ( operations == 1 )  {
                   for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
                      snowify( weatherPicture[i].images[j] );
-               }
+               } else
+                  if ( operations == 2 )  {
+                     for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
+                        snowify( weatherPicture[i].images[j], false );
+                  } 
             }
 
          }
