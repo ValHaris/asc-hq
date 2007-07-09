@@ -262,7 +262,7 @@ void ConfigurationFileLocatorCore::writeDefaultPathsToOptions()
    for ( vector<ASCString>::iterator i = dirs.begin(); i != dirs.end(); ++i )
       CGameOptions::Instance()->addSearchPath ( *i );
    #else
-   CGameOptions::Instance().setDefaultDirectories();
+   CGameOptions::Instance()->setDefaultDirectories();
    #endif
 }
 

@@ -35,7 +35,6 @@
 #include "network.h"
 #include "dlg_box.h"
 #include "dialog.h"
-#include "events.h"
 #include "sgstream.h"
 #include "loadpcx.h"
 #include "dialogs/pwd_dlg.h"

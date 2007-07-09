@@ -21,7 +21,6 @@
   #include <sstream>
   #include "global.h"
   #include "paradialog.h"
-  #include "events.h"
   #include "gameoptions.h"
   #include "sdl/sound.h"  
 

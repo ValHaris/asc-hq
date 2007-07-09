@@ -33,7 +33,6 @@
 #include "vehicletype.h"
 #include "misc.h"
 #include "gameoptions.h"
-#include "events.h"
 #include "graphicset.h"
 #include "spfst.h"
 #include "loaders.h"

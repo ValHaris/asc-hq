@@ -159,7 +159,9 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
    PG_LineEdit::SetBlinkingTime( 500 );
 
    SetHighlightingTag( '~' );
-   
+
+   setMouseUpdateFlag( &CGameOptions::Instance()->hideMouseOnScreenUpdates );
+
 }
 
 bool ASC_PG_App :: queueWidgetForDeletion( PG_Widget* widget )

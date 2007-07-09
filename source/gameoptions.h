@@ -92,6 +92,9 @@ class CGameOptions
       //! use screen buffer on the graphics card instead of main memory
       bool hardwareSurface;
 
+      //! hides the mouse cursor when screen updates are performed
+      bool hideMouseOnScreenUpdates;
+
       //! enables the option to review your own replay to find replay bugs
       bool debugReplay;
 

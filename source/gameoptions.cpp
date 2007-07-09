@@ -136,6 +136,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    // add(new IntProperty("Mouse.UnitWeaponInfoButton"		,&_pOptions->mouse.unitweaponinfo));
    pc.addBool("SingleClickAction", mouse.singleClickAction, false );
    // add(new IntProperty("Mouse.dragndropmovement"		,&_pOptions->mouse.dragndropmovement));
+   pc.addBool("HideOnScreenUpdates",hideMouseOnScreenUpdates, hideMouseOnScreenUpdates );
    pc.closeBracket();
 
    pc.addBool("AmmoProductionOnRefuelling", autoproduceammunition, autoproduceammunition );
@@ -215,6 +216,7 @@ CGameOptions::CGameOptions()
 
 void CGameOptions::setDefaults ( void )
 {
+   hideMouseOnScreenUpdates = true;
    forceWindowedMode = false;
    mapeditWindowedMode = true;
    maped_modalSelectionWindow = true;

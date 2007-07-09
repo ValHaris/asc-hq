@@ -62,6 +62,14 @@ int exitprogram = 0;
 
 bool redrawScreen = false;
 
+const bool trueflag = true;
+
+const bool* mouseUpdateFlag = &trueflag;
+
+void setMouseUpdateFlag( const bool* flag )
+{
+   mouseUpdateFlag = flag;
+}
 
 
 void mousevisible( int an)
@@ -442,9 +450,13 @@ void queueOperation( GraphicsQueueOperation* gqo, bool wait, bool forceAsync )
 
 void UpdateRectOp::execute()
 { 
-   SDL_ShowCursor( 0 );
+   if ( *mouseUpdateFlag )
+      SDL_ShowCursor( 0 );
+
    SDL_UpdateRect( screen, x,y,w,h); 
-   SDL_ShowCursor( 1 );
+
+   if ( *mouseUpdateFlag )
+      SDL_ShowCursor( 1 );
 };
 
 
@@ -464,22 +476,30 @@ UpdateRectsOp::~UpdateRectsOp()
 
 void UpdateRectsOp::execute() 
 { 
-   SDL_ShowCursor( 0 );
+   if ( *mouseUpdateFlag )
+      SDL_ShowCursor( 0 );
+
    SDL_UpdateRects( screen, numrects, rects); 
-   SDL_ShowCursor( 1 );
+
+   if ( *mouseUpdateFlag )
+      SDL_ShowCursor( 1 );
 }
 
 
 void InitScreenOp::execute() 
 { 
-   SDL_ShowCursor( 0 );
+   if ( *mouseUpdateFlag )
+      SDL_ShowCursor( 0 );
+
    SDL_Surface* screen = SDL_SetVideoMode(x, y, depth, flags);
    if (screen == NULL) 
       screen = SDL_SetVideoMode(x, y, depth, flags & ~SDL_FULLSCREEN );
 
    srf( screen );
    initASCGraphicSubsystem( screen );
-   SDL_ShowCursor( 1 );
+
+   if ( *mouseUpdateFlag )
+      SDL_ShowCursor( 1 );
 };
 
 

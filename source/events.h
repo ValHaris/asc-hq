@@ -154,6 +154,8 @@ extern volatile tmousesettings mouseparams;
     //! gets the next event without removing it from the queue. \returns false if no event available
     extern bool peekEvent ( SDL_Event& event );
 
+    //! passes a references which' value determines if the mouse cursor is hidden on screen updates
+    extern void setMouseUpdateFlag( const bool* flag );
     
 
 #endif

@@ -37,7 +37,7 @@
 #include "spfst.h"
 
 #include "gameevents.h"
-#include "events.h"
+// #include "events.h"
 #include "gameoptions.h"
 #include "loadimage.h"
 #include "errors.h"
