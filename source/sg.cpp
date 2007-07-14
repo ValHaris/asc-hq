@@ -679,6 +679,11 @@ void execuseraction ( tuseractions action )
          displaymap();
          break;
 
+      case ua_showCargoLayer:
+         if ( mainScreenWidget ) 
+            mainScreenWidget->toggleMapLayer( "container");
+         displaymap();
+         break;
 
       case ua_benchgamewov:
          benchgame( false );

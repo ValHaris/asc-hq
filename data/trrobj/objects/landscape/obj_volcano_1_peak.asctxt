@@ -1,0 +1,30 @@
+ObjectType { 
+
+   Weather = dry much_snow
+
+   Name = Volcano 1 Peak
+   Parent = 507
+   ID = 19005
+   GroupID = 
+   Height = 1
+
+   TerrainAccess.terrain_kill = 
+
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_volcano_1_peak.png 1
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_volcano_1_peak.png 1
+      GraphicOperations = Snow
+   } much_snow
+
+} ObjectType

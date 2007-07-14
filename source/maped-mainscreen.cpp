@@ -158,7 +158,7 @@ void Menu::setup()
    addbutton ( "~U~nitset transformation",    act_unitsettransformation );
    addbutton ( "map ~t~ransformation",        act_transformMap );
    addbutton ( "Com~p~are Resources ", act_displayResourceComparison );
-   addbutton ( "Show Pipeline Net", act_showPipeNet );
+   addbutton ( "Show Pipeline Net\t9", act_showPipeNet );
    addbutton ( "Generate Tech Tree", act_generateTechTree );
    currentMenu->addSeparator();
    addbutton ( "PBP Player Statistics", act_pbpstatistics );
@@ -724,8 +724,12 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_z:   execaction_ev(act_setzoom );
                         return true;
 
-         case SDLK_8 : execaction_ev(act_placemine);
+         case SDLK_8 :  execaction_ev(act_placemine);
                         return true;
+
+         case SDLK_9:   execaction_ev(act_showPipeNet);
+                        return true;
+
 
          case SDLK_TAB: execaction_ev(act_switchmaps );
                         return true;

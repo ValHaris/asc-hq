@@ -157,14 +157,14 @@ void Menu::setup()
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
    addbutton ( "Unit ~w~eapon range\t3", ua_viewunitweaponrange );
    addbutton ( "Unit ~m~ovement range\t4", ua_viewunitmovementrange );
-   addbutton ( "~G~ame Time\t5", ua_GameStatus );
-   addbutton ( "unit ~S~et information\t6", ua_UnitSetInfo );
+   addbutton ( "~G~ame Time", ua_GameStatus );
+   addbutton ( "unit ~S~et information", ua_UnitSetInfo );
    addbutton ( "~T~errain\t7", ua_viewterraininfo );
    addbutton ( "~U~nit weight\t8", ua_unitweightinfo );
    currentMenu->addSeparator();
    addbutton ( "~R~esearch", ua_researchinfo );
    addbutton ( "~P~lay time", ua_showPlayerSpeed );
-   addbutton ( "~C~argo Summary", ua_cargosummary );
+   addbutton ( "~C~argo Summary\tctrl-c", ua_cargosummary );
    addbutton ( "Unit Summary\tctrl-f", ua_unitsummary );
    currentMenu->addSeparator();
    addbutton ( "Unit Production Analysis", ua_unitproductionanalysis );
@@ -744,13 +744,20 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev( ua_viewunitmovementrange );
                return true;
 
+               /*
             case SDLK_5:
                execUserAction_ev ( ua_GameStatus );
                return true;
+               */
 
+            case SDLK_5: execUserAction_ev ( ua_showCargoLayer );
+               return true;
+
+               /*
             case SDLK_6:
                execUserAction_ev ( ua_UnitSetInfo );
                return true;
+               */
 
             case SDLK_7:
                execUserAction_ev ( ua_viewterraininfo );
@@ -766,6 +773,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_0: execUserAction_ev( ua_visibilityInfo );
                return true;
+
 
             case SDLK_PLUS:   
             case SDLK_KP_PLUS: execUserAction_ev( ua_increase_zoom );
@@ -811,6 +819,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_f:
                execUserAction_ev ( ua_unitsummary );
+               return true;
+
+            case SDLK_c:
+               execUserAction_ev ( ua_cargosummary );
                return true;
 
             case SDLK_g:

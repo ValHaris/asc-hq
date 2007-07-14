@@ -106,55 +106,51 @@ There are two display modes:
 ;
 ;
 ;
-#font02##pos080# Keys
-#font01#
-The folowing function are also available by using the GUI:
+#font02#Keyboard shortcuts#font01#
+
 #aeinzug040#
-space #pos030#: Movement / execute order;
-e  #pos030#: End turn
-r  #pos030#: Start building roads, railroads, and other objects
-#pos010#r  #pos040#: Build road
-#pos010#w  #pos040#: Build railway
-#pos010#p  #pos040#: Build pipeline
-#pos010#o  #pos040#: Build powerline
-p  #pos030#: Repair unit
-a  #pos030#: Attack
-s  #pos030#: Ascend
-d  #pos030#: Descend
-f  #pos030#: Refuel
-;#pos010#g  #pos040#: Refuel via dialog 
-l  #pos030#: Show loading
-i  #pos030#: Information
-m  #pos030#: Put any mine
-#pos010#t  #pos040#: Put anti tank mine 
-#pos010#p  #pos040#: Put anti personal mine 
-#pos010#m  #pos040#: Put moored mine 
-#pos010#f  #pos040#: Put floating mine 
-#pos010#r  #pos040#: Remove mine 
-b  #pos030#: Put building
-v  #pos030#: View map 
 
----------------------------
+F1 #pos050#: Help
+ESC #pos050#: Main Menu
+e  #pos050#: End turn
+ctrl-g#pos050#: Goto coordinate
+ctrl-q#pos050#: Quit game
+ctrl-n#pos050#: New game
+ctrl-l#pos050#: Load game
+ctrl-s#pos050#: Save game
+F3 #pos050#: Continue Network Game
+shift-F3#pos050#: Continue most recent Network Game
++#pos050#: Zoom in
+-#pos050#: Zoom out
+Unit actions:
 
-F1 #pos030#: Help
-F2 #pos030#: Main Menu
-F3 #pos030#: Continue Network Game
-1 #pos030#: Toggle view of resourcs
-2 #pos030#: Toggle unit shading
-3 #pos030#: Show weapon range of unit
-4 #pos030#: Show movement range of unit
-7 #pos030#: Terrain infos
-8 #pos030#: Show weight of unit
-9 #pos030#: Write whole map to PCX-File
-0 #pos030#: Save screen to PCX-File
-strg x #pos030#: Exit program
-strg F12 #pos030#: cut unit to clipboard file
----------------------------
+space #pos050#: Movement / execute action
+c  #pos050#: Construct object (like road, railroad, ... )
+r  #pos050#: Repair unit
+a  #pos050#: Attack
+s  #pos050#: Ascend
+d  #pos050#: Descend
+f  #pos050#: Refuel
+l  #pos050#: Show loaded units
+i  #pos050#: Unit information
+m  #pos050#: Put any mine
+b  #pos050#: Construct building
+v  #pos050#: View map 
 
-r  #pos030#: repaint display (mainscreen only)
 
-#aeinzug0#
+Information:
 
+1 #pos050#: Toggle view of resourcs
+2 #pos050#: Toggle unit shading
+3 #pos050#: Show weapon range of unit
+4 #pos050#: Show movement range of unit
+5 #pos050#: Show cargo
+7 #pos050#: Terrain infos
+8 #pos050#: Show weight of unit
+9 #pos050#: Show pipeline net
+0 #pos050#: Show visibility range
+ctrl-f#pos050#: Find unit (includes unit summary)
+ctrl-c#pos050#: Cargo summary
 
 ##0021
 #font2#Starting a PbeM game#font1#

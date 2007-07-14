@@ -17,6 +17,7 @@
 
 
 #include <algorithm>
+#include <set>
 
 #include "objecttype.h"
 #include "graphicset.h"
@@ -1207,14 +1208,22 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
             if ( pc.isReading() ) {
                int operations;
+               std::set<void*> processedImages;
                pc.addNamedInteger("GraphicOperations", operations, graphicOperationNum, graphicOperations, 0 );
                if ( operations == 1 )  {
                   for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                     snowify( weatherPicture[i].images[j] );
+                     if ( processedImages.find( weatherPicture[i].images[j].getBaseSurface() ) == processedImages.end() ) {
+                        snowify( weatherPicture[i].images[j] );
+                        processedImages.insert( weatherPicture[i].images[j].getBaseSurface() ) ;
+                     }
                } else
                   if ( operations == 2 )  {
                      for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                        snowify( weatherPicture[i].images[j], false );
+                        if ( processedImages.find( weatherPicture[i].images[j].getBaseSurface() ) == processedImages.end() ) {
+                           snowify( weatherPicture[i].images[j], false );
+                           processedImages.insert( weatherPicture[i].images[j].getBaseSurface() ) ;
+                        }
+                     
                   } 
             }
 

@@ -1,0 +1,19 @@
+ObjectType { 
+
+   Weather = dry much_snow
+
+   Name = Volcano 1 NE
+   Parent = 509
+   ID = 19003
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_volcano_1_north_east.png 1
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_volcano_1_north_east.png 1
+      GraphicOperations = Snow
+   } much_snow
+
+} ObjectType

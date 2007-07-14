@@ -198,11 +198,16 @@ void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,
             if ( o )
                pipeline->display( fieldInfo.surface, pos, o->dir, 0 );
             else {
+               bool objfound = false;
                for ( tfield::ObjectContainer::iterator i = fieldInfo.fld->objects.begin(); i != fieldInfo.fld->objects.end(); ++i )
                   if ( i->typ->fieldModification[0].terrain_or.test( cbpipeline ) ) {
                      pipeline->display( fieldInfo.surface, pos, i->dir, 0 );
+                     objfound = true;
                      break;
                   }   
+
+               if ( !objfound )
+                  pipeline->display( fieldInfo.surface, pos, 63, 0 );
                      
             }
          }

@@ -32,6 +32,8 @@ trrobj/*.version
 trrobj/legacy/*.asctxt
 trrobj/legacy/*.png
 trrobj/objects/legacy/*.pcx
+trrobj/objects/legacy/*.asctxt
+trrobj/objects/legacy/*.png
 trrobj/objects/landscape/*.asctxt
 trrobj/objects/landscape/*.png
 trrobj/objects/landscape/*.pcx

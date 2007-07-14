@@ -130,7 +130,8 @@ int mapeditorMainThread ( void* _mapname )
       mapSwitcher.toggle();
       if ( exist ( "palette.map" ))
          actmap = mapLoadingExceptionChecker( "palette.map", MapLoadingFunction( tmaploaders::loadmap )); 
-      else
+      
+      if (!actmap )
          buildemptymap();
 
       actmap->preferredFileNames.mapname[0] = "";
