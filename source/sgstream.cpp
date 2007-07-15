@@ -206,7 +206,10 @@ vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
    }
 
 #else
-   dirs.push_back( "~/.asc/" );
+   ASCString dir = getenv("HOME");
+   appendbackslash ( dir );
+   dir += ".asc/";
+   dirs.push_back( dir );
 #endif
 
    return dirs;

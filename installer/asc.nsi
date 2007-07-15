@@ -11,7 +11,7 @@
 Name "ASC for Project Battle Planets"
 
 ; The file to write
-OutFile "ASC-1.99.93.93-Install.exe"
+OutFile "ASC-1.99.93.96-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -76,8 +76,8 @@ Section "ASC main program (required)"
   File "../data/dialog/asc2_dlg.zip"
   File "../data/main.ascdat"
 
-  ; Write the installation path into the registry
-  WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
+  ; Write the installation path into the registry - not used any more, since we store in AppData
+  ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2"
