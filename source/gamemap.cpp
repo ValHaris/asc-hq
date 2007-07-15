@@ -1997,7 +1997,7 @@ void GameMap :: ReplayInfo :: write ( tnstream& stream )
    stream.writeInt ( actmemstream != NULL );
 
    for ( int i = 0; i < 8; i++ ) {
-      printf("GameMap :: ReplayInfo :: write  i=%d\n", i );
+      // printf("GameMap :: ReplayInfo :: write  i=%d\n", i );
       if ( guidata[i] )
          guidata[i]->writetostream ( &stream );
 
