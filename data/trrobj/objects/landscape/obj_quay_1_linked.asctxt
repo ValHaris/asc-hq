@@ -20,7 +20,7 @@ ObjectType {
       Picture = obj_quay_1_linked.png 64
       ImageReference =  -1 -1 -1 -1 -1 -1 -1  5 -1 -1 -1 -1 -1 11 10 11 -1 -1 -1 -1 -1 -1 -1 21 -1 -1 -1 63 -1 63 -1 63 -1 -1 -1 -1 -1 -1 -1 -1 -1 25 -1 63 -1 63 -1 63 -1 17 -1 -1 -1 -1 -1 21 40 25 -1 63 -1 63 42 -1 28
       FlipPictures   =   0
-      GraphicOperations = Snow
+      GraphicOperations = Snow_const
    } much_snow
 
 

@@ -1,6 +1,6 @@
 ObjectType { 
 
-   Weather = dry
+   Weather = dry much_snow
 
    Name = Quay 1
    Parent = 500
@@ -10,5 +10,10 @@ ObjectType {
       UseGFXpics = false
       picture = obj_quay_1_l_long_north_short_east.png 1
    } dry
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_quay_1_l_long_north_short_east.png 1
+      GraphicOperations = Snow_const
+   } much_snow
 
 } ObjectType

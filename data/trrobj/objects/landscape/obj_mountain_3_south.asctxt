@@ -13,7 +13,7 @@ ObjectType {
    much_snow { 
       UseGFXpics = false
       Picture = obj_mountain_3_south.png 1
-      GraphicOperations = Snow
+      GraphicOperations = Snow_const
    } much_snow
 
 } ObjectType

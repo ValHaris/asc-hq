@@ -56,7 +56,7 @@ void snowify( Surface& s, bool adaptive )
 
       avg /= float(s.h() * s.w() * 3);
    } else
-      avg = 100;
+      avg = 150;
 
    for ( int y = 0; y < s.h(); ++y ) {
       char* c = (char*) s.pixels();

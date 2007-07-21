@@ -3,9 +3,9 @@ ObjectType {
    Parent = 3500
    ID = 2018
 
-   LinkableObjects = 2009
+   LinkableObjects = 2009 2019 2024 2025 2026 2027 2028 2029
    LinkableTerrain = 2030
-   NetBehaviour = NetToSelf
+   NetBehaviour = NetToSelf NetToBorder
 
    Weather = dry much_snow
 
@@ -20,7 +20,7 @@ ObjectType {
       Picture = obj_quay_2_linked.png 64
       ImageReference =  -1 0 0 -1 0 0 0 -1 0 0 0 3 -1 12 -1 -1 0 0 0 3 0 0 0 7 -1 24 24 -1 -1 28 -1 -1 0 -1 0 -1 0 33 0 -1 0 33 0 35 12 -1 14 -1 0 -1 0 -1 0 49 -1 -1 -1 -1 56 -1 -1 -1 -1 -1 54
       FlipPictures   =  0
-      GraphicOperations = Snow
+      GraphicOperations = Snow_const
    } much_snow
 
 } ObjectType
