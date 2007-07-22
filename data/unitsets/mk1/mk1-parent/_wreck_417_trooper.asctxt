@@ -2,6 +2,8 @@ ObjectType {
    ID = 417
    GroupID = 13
    parent = 499
+   SecondID = 1205
+
    Weather = dry 
    visible_in_fogOfWar = false
    LinkableObjects = 
