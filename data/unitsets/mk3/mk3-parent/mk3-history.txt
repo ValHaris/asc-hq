@@ -3,6 +3,10 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 _________________
+v19.04 16.7.2007
+-Upgrade Bodenverteidigung
+
+_________________
 v19.04 15.06.2007
 -Tank Upgrade:Lynx,Hormone,Hawkeye,Falcon,Raytheon
 
