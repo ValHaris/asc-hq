@@ -137,6 +137,7 @@ class EditGameOptions : public ASC_PG_Dialog {
       PG_PropertyEditor* propertyEditor;
       
       GetVideoModes vmodes;
+      ASCString defaultPassword;
       
       int videoMode;
       bool ascmain;
@@ -178,6 +179,12 @@ class EditGameOptions : public ASC_PG_Dialog {
             
             
             CGameOptions::Instance()->setChanged();
+            if ( !defaultPassword.empty() && defaultPassword.find_first_not_of('*') != ASCString::npos ) {
+               Password p;
+               p.setUnencoded ( defaultPassword );
+               CGameOptions::Instance()->defaultPassword = p.toString();
+            }
+            
             quitModalLoop(0);
 
             return true;
@@ -189,6 +196,9 @@ class EditGameOptions : public ASC_PG_Dialog {
       EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Map Parameters"), videoMode(0), ascmain( mainApp )
       {
          CGameOptions* o = CGameOptions::Instance();
+
+         if ( !o->defaultPassword.empty() )
+            defaultPassword = "******";
 
          
          if ( mainApp ) 
@@ -239,6 +249,9 @@ class EditGameOptions : public ASC_PG_Dialog {
             
          if ( mainApp ) 
             new PG_PropertyField_String<ASCString>( propertyEditor , "Startup Map", &o->startupMap );
+
+         if ( mainApp ) 
+            (new PG_PropertyField_String<ASCString>( propertyEditor , "Default Password", &defaultPassword ))->SetPassHidden('*');
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: Cache GUI Definition (*.ascgui)", &o->cacheASCGUI );
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: View own replay", &o->debugReplay );

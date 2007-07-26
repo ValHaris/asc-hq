@@ -861,7 +861,7 @@ void execaction_pg(int code)
                               execaction ( act_setactivefieldvals );
                            execaction( act_switchmaps);
        break;
-    case act_selbodentypAll : mainScreenWidget->selectTerrain();
+    case act_selbodentypAll : mainScreenWidget->selectTerrainList();
        break;
     case act_selunit : mainScreenWidget->selectVehicle();
        break;
@@ -869,9 +869,11 @@ void execaction_pg(int code)
        break;
     case act_selobject : mainScreenWidget->selectObject();
        break;
-    case act_selobjectAll: if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
+    case act_selobjectAll: mainScreenWidget->selectTerrainList();
+       /* if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
                               execaction ( act_setactivefieldvals );
                            execaction( act_switchmaps);
+                           */
        break;                    
     case act_selmine : mainScreenWidget->selectMine();
        break;
@@ -1050,6 +1052,8 @@ void execaction_pg(int code)
 
       case act_clearSelection: selection.clear();
       break;
+      case act_locateItemByID: locateItemByID();
+         break;
    };
 }
 

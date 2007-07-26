@@ -3,7 +3,7 @@ TerrainType {
    Name = Shallow Water
    Parent = 514
    ID = 2002
-   SecondaryID = 2004
+   SecondaryIDs = 2004
 
    Weather = dry much_snow snow_and_ice
 

@@ -547,7 +547,7 @@ bool StartMultiplayerGame::checkPlayerStat()
       int humanNum = 0;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
          if ( newMap->player[i].exist() )
-            if ( newMap->player[i].stat == Player::human )
+            if ( newMap->player[i].stat == Player::human || newMap->player[i].stat == Player::supervisor )
                ++humanNum;   
             
       if ( humanNum <= 1 )
@@ -572,7 +572,7 @@ bool StartMultiplayerGame::checkPlayerStat()
       int humanNum = 0;
       for ( int i = 1; i < newMap->getPlayerCount(); ++i )
          if ( newMap->player[i].exist() )
-            if ( newMap->player[i].stat == Player::human )
+            if ( newMap->player[i].stat == Player::human || newMap->player[i].stat == Player::supervisor )
                ++humanNum;   
             
       if ( humanNum < 1 )

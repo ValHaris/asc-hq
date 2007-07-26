@@ -143,7 +143,7 @@ void Menu::setup()
    addbutton ( "Terrain from map\tF3",  act_selbodentyp );
    addbutton ( "Terrain from list\tctrl-F3",  act_selbodentypAll );
    addbutton ( "Object from map \tF4",  act_selbodentyp );
-   addbutton ( "Object from list \tctrl-F4",  act_selobject );
+   addbutton ( "Object from list \tctrl-F4",  act_selobjectAll );
    addbutton ( "Building Type\tF5", act_selbuilding );
    addbutton ( "Mine\tF6", act_selmine );
    
@@ -182,6 +182,7 @@ void Menu::setup()
     addbutton ( "Dump ~V~ehicle",          act_dumpVehicle );
     addbutton ( "Dump all Vehicles",       act_dumpAllVehicleDefinitions );
     addbutton ( "Dump ~O~bject",          act_dumpObject );
+    addbutton ( "Locate Item by ~I~D",    act_locateItemByID );
    currentMenu->addSeparator();
     addbutton ( "Exchange ~G~raphics",          act_exchangeGraphics );
 

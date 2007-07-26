@@ -4,7 +4,7 @@ ObjectType {
 
    Name = Volcano 1 SW
    Parent = 509
-   ID = 19008
+   ID = 2608
 
    dry { 
       UseGFXpics = false

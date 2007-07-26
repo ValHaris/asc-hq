@@ -205,6 +205,10 @@ vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
       dirs.push_back( dir );
    }
 
+   if ( !exePath.empty()) 
+      dirs.push_back( exePath );
+
+
 #else
    ASCString dir = getenv("HOME");
    appendbackslash ( dir );

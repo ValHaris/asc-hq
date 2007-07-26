@@ -3715,3 +3715,98 @@ tfield*        getactfield(void)
    return actmap->getField( actmap->getCursor() );; 
 } 
 
+
+class ItemLocator : public ASC_PG_Dialog {
+
+      PG_LineEdit* idField;
+      DropDownSelector* typeSelector;
+
+
+      bool findUnit( ContainerBase* c, int id )
+      {
+         if ( !c )
+            return false;
+
+         for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i ) {
+            if ( (*i) ) {
+               if ( (*i)->typ->id == id )
+                  return true;
+               if ( findUnit( *i, id ))
+                  return true;
+            }
+         }
+         return false;
+      }
+
+      bool ok()
+      {
+         int id = atoi ( idField->GetText().c_str() );
+         if ( id != 0 ) {
+            for ( int y = 0; y < actmap->ysize; ++y )
+               for ( int x = 0; x < actmap->xsize; ++x ) {
+                  tfield* fld = actmap->getField(x,y);
+                  if ( fld ) {
+                     bool found = false;
+                     switch ( typeSelector->GetSelectedItemIndex () ) {
+                        case 0: if ( fld->typ->terraintype->id == id )
+                                   found = true;
+                           break;
+                        case 1: if ( fld->vehicle && fld->vehicle->typ->id == id )
+                                   found = true;
+                                 if ( findUnit( fld->vehicle, id ))
+                                    found = true;
+                           break;
+                        case 2: if ( fld->building && fld->building->typ->id == id )
+                                   found = true;
+                                 if ( findUnit( fld->building, id ))
+                                    found = true;
+                           break;
+                        case 3: if ( fld->checkforobject( objectTypeRepository.getObject_byID( id )) )
+                                   found = true;
+                           break;
+                     }
+
+
+                     if ( found ) {
+                         getMainScreenWidget()->getMapDisplay()->cursor.goTo(MapCoordinate(x,y));
+                        QuitModal();
+                        return true;
+                     }
+                  }
+               }
+
+         } 
+         return false;
+      }
+
+      bool cancel()
+      {
+         QuitModal();
+         return true;
+      }
+          
+   public:
+      ItemLocator() : ASC_PG_Dialog(NULL, PG_Rect(-1,-1,400,200 ), "Item Locator")
+      {
+         AddStandardButton("OK")->sigClick.connect( SigC::slot(*this, &ItemLocator::ok ));
+         AddStandardButton("cancel")->sigClick.connect( SigC::slot(*this, &ItemLocator::cancel ));
+
+         typeSelector = new DropDownSelector(this, PG_Rect(20, 60, 150, 25 ));
+         typeSelector->AddItem("Terrain");
+         typeSelector->AddItem("Vehicle");
+         typeSelector->AddItem("Building");
+         typeSelector->AddItem("Object");
+
+         new PG_Label ( this, PG_Rect(20, 100, 50, 25), "ID: " );
+         idField = new PG_LineEdit( this, PG_Rect( 70, 100, 150, 25 ));
+      }
+
+};
+
+
+void locateItemByID()
+{
+   ItemLocator il;
+   il.Show();
+   il.RunModal();
+}

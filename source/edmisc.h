@@ -150,5 +150,6 @@ extern void editTechAdapter();
 extern void placeCurrentItem();
 extern bool removeCurrentItem();
 
+extern void locateItemByID();
 
 #endif
