@@ -20,6 +20,7 @@
     <general>
       <mainprogram>asc</mainprogram>
       <useconfiguration>default</useconfiguration>
+      <activetarget>source/unix/asc/asc</activetarget>
     </general>
     <configure>
       <configargs/>

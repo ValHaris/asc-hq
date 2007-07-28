@@ -111,6 +111,7 @@ void loadpalette ( void )
 
 ASCString resolvePath( ASCString path )
 {
+#ifdef WIN32
    static boost::regex exevar( "\\$\\(?EXEPATH\\)?", boost::regex::icase);
    path = boost::regex_replace( path, exevar, ConfigurationFileLocator::Instance().getExecutableLocation(), boost::regex_constants::format_literal );
 
@@ -119,7 +120,7 @@ ASCString resolvePath( ASCString path )
 
    static boost::regex commonappdata( "\\$\\(?COMMIN_APPDATA\\)?", boost::regex::icase);
    path = boost::regex_replace( path, commonappdata, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_COMMON_APPDATA ), boost::regex_constants::format_literal );
-
+#endif
 
    /*
    boost::smatch what;
@@ -527,6 +528,6 @@ void checkDataVersion( )
    checkFileVersion( "main.version", "main.ascdat", 2 );
 
    if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.ascdat", 21 );
+      checkFileVersion( "pbp.version", "pbp.ascdat", 22 );
 }
 
