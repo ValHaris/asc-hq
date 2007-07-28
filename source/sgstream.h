@@ -48,6 +48,8 @@ class ConfigurationFileLocatorCore {
       ConfigurationFileLocatorCore();
       void setCommandLineParam( const ASCString& path );
       void setExecutableLocation( const ASCString& path );
+      ASCString getExecutableLocation();
+      ASCString getSpecialPath( int type );
 
       ASCString getConfigFileName();
       ASCString getConfigForPrinting();

@@ -55,6 +55,17 @@
 #endif
 
 
+
+const int actsavegameversion  = 0xff61;
+const int minsavegameversion  = 0xff31;
+const int actmapversion       = 0xfe51;
+const int minmapversion       = 0xfe24;
+const int actnetworkversion   = 0x0032;
+const int minnetworkversion   = 0x0004;
+const int actreplayversion    = 0x0003;
+const int minreplayversion    = 0x0001;
+
+
 const int fileterminator = 0xa01a;
 
 

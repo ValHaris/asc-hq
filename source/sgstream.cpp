@@ -109,6 +109,34 @@ void loadpalette ( void )
 
 
 
+ASCString resolvePath( ASCString path )
+{
+   static boost::regex exevar( "\\$\\(?EXEPATH\\)?", boost::regex::icase);
+   path = boost::regex_replace( path, exevar, ConfigurationFileLocator::Instance().getExecutableLocation(), boost::regex_constants::format_literal );
+
+   static boost::regex appdata( "\\$\\(?APPDATA\\)?", boost::regex::icase);
+   path = boost::regex_replace( path, appdata, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_APPDATA ), boost::regex_constants::format_literal );
+
+   static boost::regex commonappdata( "\\$\\(?COMMIN_APPDATA\\)?", boost::regex::icase);
+   path = boost::regex_replace( path, commonappdata, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_COMMON_APPDATA ), boost::regex_constants::format_literal );
+
+
+   /*
+   boost::smatch what;
+   if ( boost::regex_match(path, what, exevar )) 
+      return boost::regex_match( ConfigurationFileLocator::Instance().getExecutableLocation() + "\\";
+
+   static boost::regex appdata( "\\$\\(?APPDATA\\)?", boost::regex::icase);
+   if ( boost::regex_match(path, what, appdata )) 
+      return ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_APPDATA ) + "\\";
+
+   static boost::regex commonappdata( "\\$\\(?COMMIN_APPDATA\\)?", boost::regex::icase);
+   if ( boost::regex_match(path, what, commonappdata )) 
+      return ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_COMMON_APPDATA ) + "\\" ;
+*/
+   return path;
+}
+
 
 bool makeDirectory ( const ASCString& path )
 {
@@ -160,6 +188,29 @@ void ConfigurationFileLocatorCore::setExecutableLocation( const ASCString& path 
 }
 
 
+ASCString ConfigurationFileLocatorCore::getExecutableLocation()
+{
+   return exePath;
+}
+
+
+ASCString ConfigurationFileLocatorCore::getSpecialPath( int type)
+{
+#ifdef WIN32
+   TCHAR szPath[MAX_PATH];
+
+   if ( SUCCEEDED(SHGetFolderPath( NULL, type, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
+      ASCString dir = szPath;
+      appendbackslash ( dir );
+      dir += "ASC";
+      appendbackslash ( dir );
+      return dir;
+   } 
+
+#endif
+   return "";
+}
+
 vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
 {
    vector<ASCString> dirs;
@@ -187,26 +238,24 @@ vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
       RegCloseKey ( key );
    }
 
-   TCHAR szPath[MAX_PATH];
+/*
+   ASCString dir = getSpecialPath( CSIDL_APPDATA );
+   if ( !dir.empty() )
+      dirs.push_back(dir);
 
-   if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
-      ASCString dir = szPath;
-      appendbackslash ( dir );
-      dir += "ASC";
-      appendbackslash ( dir );
-      dirs.push_back( dir );
-   }
+   dir = getSpecialPath( CSIDL_COMMON_APPDATA );
+   if ( !dir.empty() )
+      dirs.push_back(dir);
+      */
 
-   if ( SUCCEEDED(SHGetFolderPath( NULL, CSIDL_COMMON_APPDATA, NULL, SHGFP_TYPE_CURRENT, szPath ))) {
-      ASCString dir = szPath;
-      appendbackslash ( dir );
-      dir += "ASC";
-      appendbackslash ( dir );
-      dirs.push_back( dir );
-   }
 
+   dirs.push_back( "$(APPDATA)\\" );
+   dirs.push_back( "$(COMMON_APPDATA)\\" );
+   dirs.push_back( "$(EXEPATH)\\" );
+   /*
    if ( !exePath.empty()) 
       dirs.push_back( exePath );
+      */
 
 
 #else
@@ -219,6 +268,8 @@ vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
    return dirs;
 
 }
+
+
 
 
 ASCString ConfigurationFileLocatorCore::getConfigFileName()
@@ -244,7 +295,7 @@ ASCString ConfigurationFileLocatorCore::getConfigFileName()
    vector<ASCString> list = getDefaultDirectory();
    if ( list.size() >= 1 ) {
       configFileType = 4;
-      return list[0] + asc_configurationfile;
+      return resolvePath( list[0] ) + asc_configurationfile;
    }
 
    configFileType = 5;
@@ -334,6 +385,8 @@ bool writegameoptions ( ASCString configFileName )
       if ( configFileName.empty() )
          configFileName = ConfigurationFileLocator::Instance().getConfigFileName();
 
+      configFileName = resolvePath( configFileName );
+
       if ( CGameOptions::Instance()->isChanged() && !configFileName.empty() ) {
          char buf[10000];
          if ( makeDirectory ( extractPath ( buf, configFileName.c_str() ))) {
@@ -370,9 +423,9 @@ void checkFileLoadability ( const ASCString& filename )
 
       msg +=           "These paths are being searched for data files:\n ";
       
-      for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); ++i )
-         if ( !CGameOptions::Instance()->getSearchPath(i).empty() ) 
-            msg += CGameOptions::Instance()->getSearchPath(i) + "\n ";
+      for ( int i = 0; i < getSearchPathNum(); ++i )
+         if ( !getSearchPath(i).empty() ) 
+            msg += getSearchPath(i) + "\n ";
 
      fatalError ( msg );
    }
@@ -380,6 +433,8 @@ void checkFileLoadability ( const ASCString& filename )
       fatalError ( "checkFileLoadability threw an unspecified exception\n" );
    }
 }
+
+
 
 void initFileIO ( const ASCString& configFileName, int skipChecks )
 {
@@ -391,7 +446,8 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
    for ( int i = 0; i < CGameOptions::Instance()->getSearchPathNum(); i++ )
       if ( !CGameOptions::Instance()->getSearchPath(i).empty()   ) {
          displayLogMessage ( 3, "adding search patch " + CGameOptions::Instance()->getSearchPath(i) + "\n" );
-         ASCString path = CGameOptions::Instance()->getSearchPath(i);
+         ASCString path = resolvePath( CGameOptions::Instance()->getSearchPath(i) );
+
          if ( isPathRelative( path ) && !isPathRelative( ConfigurationFileLocator::Instance().getConfigFileName() )) {
             ASCString path2 = getDirectory( ConfigurationFileLocator::Instance().getConfigFileName() );
             appendbackslash ( path2 );
