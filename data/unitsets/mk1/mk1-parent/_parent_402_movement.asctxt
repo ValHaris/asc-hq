@@ -269,7 +269,7 @@
    } Turret_ditch
 
    Device_terrain {
-      terrain_any = hard_sand lowland soft_sand hillside ditch mountains high_mountains installation turret_foundation large_rocks frozen_water
+      terrain_any = road runway hard_sand lowland soft_sand hillside ditch mountains high_mountains installation turret_foundation large_rocks frozen_water
       terrain_all =
       terrain_not = swamp
       terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water river lava
