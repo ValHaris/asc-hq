@@ -149,7 +149,7 @@ void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s
       txt.format( getmessage( msgid ), player.getName().c_str(), diplomaticStateNames[s]  );
       new Message ( txt, player.getParentMap(), 1 << towardsPlayer );
    }
-
+/*
    for ( int p = 0; p < player.getParentMap()->getPlayerCount(); ++p )
       if ( p != player.getPosition() ) {
          if ( getState( p ) == ALLIANCE ) {
@@ -167,6 +167,7 @@ void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s
       
          }
       }
+      */
 }
 
 

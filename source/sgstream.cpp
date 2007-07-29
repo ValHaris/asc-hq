@@ -528,6 +528,6 @@ void checkDataVersion( )
    checkFileVersion( "main.version", "main.ascdat", 2 );
 
    if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.ascdat", 22 );
+      checkFileVersion( "pbp.version", "pbp.ascdat", 21 );
 }
 
