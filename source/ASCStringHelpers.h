@@ -1,6 +1,7 @@
 #ifndef __ASC_STRING_HELPERS_H_INCLUDED__
 #define __ASC_STRING_HELPERS_H_INCLUDED__
 
+#include <cstdlib>
 #include <cassert>
 #include <cstdarg>
 #include <cstdio>
