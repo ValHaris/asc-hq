@@ -798,6 +798,12 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt ( x );
          stream->writeInt ( y );
       }
+      if ( action == rpl_transferTribute ) {
+         stream->writeChar( action );
+         stream->writeInt( 1 );
+         int player = va_arg( paramlist, int );
+         stream->writeInt( player );
+      }
 
       va_end ( paramlist );
    }
@@ -1989,6 +1995,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  } else
                                     error("severe replay inconsistency:\nno unit for recycle command !");
                               }
+         break;
+      case rpl_transferTribute: {
+         stream->readInt();
+         int player = stream->readInt();
+         readnextaction();
+         transfer_all_outstanding_tribute( actmap->getPlayer( player ) );
+                                }
          break;
 
 

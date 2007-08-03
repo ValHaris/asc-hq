@@ -510,6 +510,7 @@ int PutTribute :: puttribute ( Building* start, int resource, int _queryonly, in
 
 void transfer_all_outstanding_tribute ( Player& player )
 {
+
    int targplayer = player.getPosition();
    GameMap* actmap = player.getParentMap();
    

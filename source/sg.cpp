@@ -1555,10 +1555,17 @@ int gamethread ( void* data )
 }
 
 
+void tributeTransfer( Player& player )
+{
+   logtoreplayinfo( rpl_transferTribute, player.getPosition() );
+   transfer_all_outstanding_tribute( player );
+}
+
+
 void deployMapPlayingHooks ( GameMap* map )
 {
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
-   map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
+   map->sigPlayerTurnBegins.connect( SigC::slot( tributeTransfer ));   
 }
 
 

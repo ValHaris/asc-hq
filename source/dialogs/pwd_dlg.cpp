@@ -70,6 +70,7 @@
                   }
 
                   password = CGameOptions::Instance()->getDefaultPassword();
+                  success = true;
                   QuitModal();
                   return true;
                }
