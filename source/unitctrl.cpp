@@ -420,6 +420,8 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                attackedByReactionFire = true;
                vehicle = actmap->getUnit ( networkID );
             }
+
+
             if ( !vehicle && mapDisplay ) {
                mapDisplay->displayMap();
                mapDisplayUpToDate = true;
@@ -526,9 +528,13 @@ int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrup
                   attackedByReactionFire = true;
                   vehicle = actmap->getUnit ( networkID );
                }
+               fld->vehicle = vehicle;
 
+            } else {
+               fld->vehicle = vehicle;
+               for ( int i = 0; i < actmap->getPlayerCount(); ++i )
+                  evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
             }
-            fld->vehicle = vehicle;
 
          } else {
             ContainerBase* cn = fld->getContainer();
