@@ -151,5 +151,5 @@ extern void placeCurrentItem();
 extern bool removeCurrentItem();
 
 extern void locateItemByID();
-
+extern void mirrorMap();
 #endif

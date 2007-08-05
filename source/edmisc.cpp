@@ -3810,3 +3810,378 @@ void locateItemByID()
    il.Show();
    il.RunModal();
 }
+
+
+/********************************************************************/
+/********************************************************************/
+/****** mirrorMap and utitity methods                          ******/
+/********************************************************************/
+/********************************************************************/
+
+   class MirrorMap : public tdialogbox
+   {
+      int mirrorUnits;
+      int mirrorBuildings;
+      int mirrorObjects;
+      int mirrorMines;
+      int mirrorResources;
+      int mirrorWeather;
+      
+      int playerTranslation[ 9 ];
+      
+      bool doneMirrorMap;
+      
+      public:
+         void init( void );
+         void buttonpressed ( int id );
+         void run ( void );
+         char checkvalue( int id, void* p );
+         
+      protected:
+      
+         void copyVehicleData( Vehicle* source, Vehicle* target );
+         void copyBuildingData( Building* source, Building* target );
+         void copyFieldStep1( tfield* sourceField, tfield* targetField );
+         void copyFieldStep2( tfield* sourceField, tfield* targetField, int *directionTranslation );
+         
+         void mirrorX();
+         void mirrorY();
+   };
+
+   char MirrorMap::checkvalue( int id, void* p )
+   {
+      return 1;
+   }
+   
+   void MirrorMap::buttonpressed( int id )
+   {
+      tdialogbox::buttonpressed( id );
+      
+      if ( id == 1 ) 
+         doneMirrorMap = true;
+      
+      if ( id == 2 )
+      {
+         mirrorX();
+         doneMirrorMap = true;
+      }
+   
+      if ( id == 3 )
+      {
+         mirrorY();
+         doneMirrorMap = true;
+      }
+   
+   }
+   
+   void MirrorMap::init( void )
+   {
+      doneMirrorMap = false;
+      
+      mirrorUnits = true;
+      mirrorBuildings = true;
+      mirrorObjects = true;
+      mirrorMines = true;
+      mirrorResources = true;
+      mirrorWeather = true;
+      for( int i=0; i<8; i++ )
+         playerTranslation[ i ] = 7-i;
+      playerTranslation[ 8 ] = 8;
+
+      tdialogbox::init();
+      title = "Mirror Map";
+      
+      xsize = 400;
+      ysize = 450;
+      
+      x1 = -1;
+      y1 = -1;
+      
+      addbutton( "~C~ancel", 10, ysize - 35, xsize / 3 - 5, ysize - 10, 0, 1, 1, true );
+      addkey ( 1, ct_esc );
+      
+      addbutton( "Mirror ~X~", xsize / 3 + 5, ysize - 35, xsize / 3 * 2 - 5, ysize - 10, 0, 1, 2, true );
+      addkey ( 2, ct_x );
+      
+      addbutton ( "Mirror ~Y~", xsize / 3 * 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 3, true );
+      addkey ( 3, ct_y );
+      
+      addbutton( "~O~bjects", xsize - 100, 50, xsize - 10, 65, 3, 0, 4, true );
+      addeingabe( 4, &mirrorObjects, 0, lightgray );
+      addkey ( 4, ct_o );
+
+      addbutton( "~U~nits", xsize - 100, 70, xsize - 10, 85, 3, 0, 5, true );
+      addeingabe( 5, &mirrorUnits, 0, lightgray );
+      addkey ( 5, ct_u );
+
+      addbutton( "~B~uildings", xsize - 100, 90, xsize - 10, 105, 3, 0, 6, true );
+      addeingabe( 6, &mirrorBuildings, 0, lightgray );
+      addkey ( 6, ct_b );
+
+      addbutton( "~M~ines", xsize - 100, 110, xsize - 10, 125, 3, 0, 7, true );
+      addeingabe( 7, &mirrorMines, 0, lightgray );
+      addkey ( 7, ct_m );
+
+      addbutton( "~R~esources", xsize - 100, 130, xsize - 10, 145, 3, 0, 8, true );
+      addeingabe( 8, &mirrorResources, 0, lightgray );
+      addkey ( 8, ct_r );
+
+      addbutton( "~W~eather", xsize - 100, 150, xsize - 10, 165, 3, 0, 9, true );
+      addeingabe( 9, &mirrorWeather, 0, lightgray );
+      addkey ( 9, ct_w );
+      
+      addbutton( "Player Conversions:", 30, 50, xsize - 120, 70, 0, 0, 10, true );
+      addbutton( "Player 0:", 30, 80, 130, 95, 2, 0, 12, true );
+      addeingabe( 12, &playerTranslation[ 0 ], 0, 8 );
+      addbutton( "Player 1:", 30, 110, 130, 125, 2, 0, 13, true );
+      addeingabe( 13, &playerTranslation[ 1 ], 0, 8 );
+      addbutton( "Player 2:", 30, 140, 130, 155, 2, 0, 14, true );
+      addeingabe( 14, &playerTranslation[ 2 ], 0, 8 );
+      addbutton( "Player 3:", 30, 170, 130, 185, 2, 0, 15, true );
+      addeingabe( 15, &playerTranslation[ 3 ], 0, 8 );
+      addbutton( "Player 4:", 30, 200, 130, 215, 2, 0, 16, true );
+      addeingabe( 16, &playerTranslation[ 4 ], 0, 8 );
+      addbutton( "Player 5:", 150, 80, xsize - 120, 95, 2, 0, 17, true );
+      addeingabe( 17, &playerTranslation[ 5 ], 0, 8 );
+      addbutton( "Player 6:", 150, 110, xsize - 120, 125, 2, 0, 18, true );
+      addeingabe( 18, &playerTranslation[ 6 ], 0, 8 );
+      addbutton( "Player 7:", 150, 140, xsize - 120, 155, 2, 0, 19, true );
+      addeingabe( 19, &playerTranslation[ 7 ], 0, 8 );
+      addbutton( "Player 8:", 150, 170, xsize - 120, 185, 2, 0, 20, true );
+      addeingabe( 20, &playerTranslation[ 8 ], 0, 8 );
+
+      buildgraphics(); 
+      
+      activefontsettings.font = schriften.smallarial; 
+      activefontsettings.justify = lefttext; 
+      activefontsettings.length = 0;
+      activefontsettings.background = 255;
+      
+      showtext2( "Warnings:",   x1 + 25, y1 + 220 );
+      showtext2( "right&lower border might have to be manually fixed", x1 + 25, y1 + 260 );
+      showtext2( "mountains, battle isle graphics coasts and similar", x1 + 25, y1 + 280 );
+      showtext2( "terrain needs manual adaption", x1 + 25, y1 + 300 );
+      showtext2( "building directions might be weird, resulting in:", x1 + 25, y1 + 330 );
+      showtext2( "- pipeline net might be broken due to building directions", x1 + 25, y1 + 350 );
+      showtext2( "- buildings might be missing due to terrain", x1 + 25, y1 + 370 );
+      showtext2( "- units might be missing due to building locations", x1 + 25, y1 + 390 );
+      
+   }
+
+
+   void MirrorMap::run ( void )
+   {
+       mousevisible ( true );
+       do {
+            tdialogbox::run();
+       } while ( !doneMirrorMap ); /* enddo */
+   }
+
+   void MirrorMap::copyVehicleData( Vehicle* source, Vehicle* target )
+   {
+      target->height = source->height;
+      target->tank = source->getTank();
+      target->name = source->name;
+      target->experience = source->experience;
+      target->damage = source->damage;
+      
+      
+      if( source->reactionfire.getStatus() == Vehicle::ReactionFire::off )
+         target->reactionfire.disable();
+      else
+         target->reactionfire.enable();
+      
+      // for( int i=0; i<8; i++ ) target->aiparam[ i ] = source->aiparam[ i ];
+      for( int i=0; i<16; i++ ) target->ammo[ i ] = source->ammo[ i ];
+      
+      // containing units
+      ContainerBase::Cargo sourceCargo = source->getCargo();
+      for( int i=0; i<sourceCargo.size(); i++ )
+      {
+         int playerID = playerTranslation[ sourceCargo[ i ]->getOwner() ];
+         Vehicle* cargo = new Vehicle( sourceCargo[ i ]->typ, actmap, playerID );
+         copyVehicleData( sourceCargo[ i ], cargo );
+         target->addToCargo( cargo );
+      }
+   }
+   
+   
+   void MirrorMap::copyBuildingData( Building* source, Building* target )
+   {
+      for( int i=0; i<waffenanzahl; i++ ) 
+         target->ammo[ i ] = source->ammo[ i ];
+      target->name = source->name;
+      target->netcontrol = source->netcontrol;
+      target->visible = source->visible;
+      /*
+      for( int i=0; i<8; i++ ) 
+         target->aiparam[ i ] = source->aiparam[ i ];
+      */
+      target->lastmineddist = source->lastmineddist;
+      target->actstorage = source->actstorage;
+      target->damage = source->damage;
+
+      if( mirrorUnits )
+      {
+         // containing units
+         ContainerBase::Cargo sourceCargo = source->getCargo();
+         for( int i=0; i<sourceCargo.size(); i++ )
+         {
+            int playerID = playerTranslation[ sourceCargo[ i ]->getOwner() ];
+            Vehicle* cargo = new Vehicle( sourceCargo[ i ]->typ, actmap, playerID );
+            copyVehicleData( sourceCargo[ i ], cargo );
+            target->addToCargo( cargo );
+         }
+      }
+      
+   }
+   
+   void MirrorMap::copyFieldStep1( tfield* sourceField, tfield* targetField )
+   {
+      targetField->deleteeverything();
+      while( targetField->objects.size() > 0 )
+         targetField->removeobject( targetField->objects[ 0 ].typ, true );
+      
+      targetField->typ = sourceField->typ; 
+      targetField->bdt = sourceField->bdt;
+      
+      if( mirrorResources )
+      {
+         targetField->fuel = sourceField->fuel; 
+         targetField->material = sourceField->material;
+      }
+      if( mirrorWeather ) targetField->setweather( sourceField->getweather() ); 
+   }
+   
+   void MirrorMap::copyFieldStep2( tfield* sourceField, tfield* targetField, int *directionTranslation )
+   {
+      if( mirrorObjects )
+      {
+         for( int i=0; i<sourceField->objects.size(); i++ )
+            targetField->addobject( sourceField->objects[ i ].typ, -1, true );
+      }
+      
+      if( mirrorBuildings )
+      {
+         if( sourceField->building != NULL && sourceField->building->getEntryField() == sourceField )
+         {
+            int playerID = playerTranslation[ sourceField->building->getOwner() ];
+            Building *newBuilding = new Building( actmap, MapCoordinate( targetField->getx(), targetField->gety() ), sourceField->building->typ, playerID );
+            copyBuildingData( sourceField->building, newBuilding );
+         }
+      }
+      
+      if( mirrorUnits )
+      {
+         if( sourceField->vehicle != NULL )
+         {
+            int playerID = playerTranslation[ sourceField->vehicle->getOwner() ];
+            targetField->vehicle = new Vehicle( sourceField->vehicle->typ, actmap, playerID );
+            copyVehicleData( sourceField->vehicle, targetField->vehicle );
+            targetField->vehicle->direction = directionTranslation[ sourceField->vehicle->direction ];
+         }
+      }
+      
+      if( mirrorMines )
+      {
+         for( int i=0; i<sourceField->mines.size(); i++ )
+         {
+            Mine sourceMine = sourceField->getMine( i );
+            targetField->putmine( playerTranslation[ sourceMine.player ], sourceMine.type, sourceMine.strength );
+         }
+      }
+   }
+   
+   void MirrorMap::mirrorX()
+   {
+      if( actmap->xsize % 2 == 1 ) actmap->resize ( 0, 0, 0, 1 );
+      int maxX = actmap->xsize/2;
+      int xOffset = 2;
+      int directionTranslation[ 6 ] = { 0, 5, 4, 3, 2, 1 };
+   
+      // run 1: object removal and terrain copy
+      for( int x=0; x<maxX; x++ )
+      {
+         for( int y=0; y<actmap->ysize; y++ )
+         {
+            int targetX = actmap->xsize - x - xOffset;
+            if( y%2 == 0 ) targetX++;
+            if( targetX >= actmap->xsize || targetX == x ) continue;
+            
+            tfield *targetField = actmap->getField( targetX, y );
+            tfield *sourceField = actmap->getField( x, y );
+            
+            copyFieldStep1( sourceField, targetField );
+         }
+      }
+      
+      // run 2: object copy
+      for( int x=0; x<maxX; x++ )
+      {
+         for( int y=0; y<actmap->ysize; y++ )
+         {
+            int targetX = actmap->xsize - x - xOffset;
+            if( y%2 == 0 ) targetX++;
+            if( targetX >= actmap->xsize || targetX == x ) continue;
+            
+            tfield *targetField = actmap->getField( targetX, y );
+            tfield *sourceField = actmap->getField( x, y );
+            
+            copyFieldStep2( sourceField, targetField, directionTranslation );
+         }
+      }
+      doneMirrorMap = true;
+   }
+
+   void MirrorMap::mirrorY()
+   {
+      int yOffset = 2;
+      int maxY = actmap->ysize/2;
+      int directionTranslation[ 6 ] = { 3, 2, 1, 0, 5, 4 };
+   
+      // run 1: object removal and terrain copy
+      for( int x=0; x<actmap->xsize; x++ )
+      {
+         for( int y=0; y<maxY; y++ )
+         {
+            int targetY = actmap->ysize - y - yOffset;
+            
+            tfield *targetField = actmap->getField( x, targetY );
+            tfield *sourceField = actmap->getField( x, y );
+            
+            copyFieldStep1( sourceField, targetField );
+         }
+      }
+
+      // run 2: object copy
+      for( int x=0; x<actmap->xsize; x++ )
+      {
+         for( int y=0; y<maxY; y++ )
+         {
+            int targetY = actmap->ysize - y - yOffset;
+            
+            tfield *targetField = actmap->getField( x, targetY );
+            tfield *sourceField = actmap->getField( x, y );
+            
+            copyFieldStep2( sourceField, targetField, directionTranslation );
+         }
+      }
+      doneMirrorMap = true;
+   }
+   
+   void mirrorMap()
+   {
+      MirrorMap mm;
+      mm.init();
+      mm.run();
+      mm.done();
+      mapChanged( actmap );
+      displaymap();
+   }
+
+/********************************************************************/
+/********************************************************************/
+/****** mirrorMap and utitity methods END                      ******/
+/********************************************************************/
+/********************************************************************/
+

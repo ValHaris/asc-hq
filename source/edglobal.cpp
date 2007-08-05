@@ -163,7 +163,8 @@
         "Close Ctrl-key panel",
         "Dump all vehicle definitions",
         "Clear Selection",
-        "Dump all building definitions" };
+        "Dump all building definitions",
+        "Mirror map"};
 
 
 
@@ -1053,6 +1054,8 @@ void execaction_pg(int code)
       case act_clearSelection: selection.clear();
       break;
       case act_locateItemByID: locateItemByID();
+         break;
+      case act_mirrorMap: mirrorMap();
          break;
    };
 }

@@ -118,7 +118,7 @@ ASCString resolvePath( ASCString path )
    static boost::regex appdata( "\\$\\(?APPDATA\\)?", boost::regex::icase);
    path = boost::regex_replace( path, appdata, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_APPDATA ), boost::regex_constants::format_literal );
 
-   static boost::regex commonappdata( "\\$\\(?COMMIN_APPDATA\\)?", boost::regex::icase);
+   static boost::regex commonappdata( "\\$\\(?COMMON_APPDATA\\)?", boost::regex::icase);
    path = boost::regex_replace( path, commonappdata, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_COMMON_APPDATA ), boost::regex_constants::format_literal );
 #endif
 
