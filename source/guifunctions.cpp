@@ -2393,7 +2393,7 @@ Surface generate_gui_build_icon ( BuildingType* bld )
                 maxy = yp;
 
              // bld->paintSingleField( s, SPoint(xp,yp), BuildingType::LocalCoordinate(x,y) );
-             s.Blit( bld->getPicture( BuildingType::LocalCoordinate(x,y)), SPoint(xp,yp) );
+             bld->paintSingleField( s, SPoint(xp,yp),BuildingType::LocalCoordinate(x,y) );
           }
    maxx += fieldxsize;
    maxy += fieldysize;
@@ -2429,6 +2429,14 @@ Surface& BuildingConstruction::getImage( const MapCoordinate& pos, ContainerBase
    if ( id <= 0 )
       return IconRepository::getIcon("cancel.png");
 
+   /*
+   It would be nicer if we displayed a small image of the building, but there is a bug somewhere 
+   and I'm too lazy to fix it. So just the default icon....
+   */
+
+   return IconRepository::getIcon("constructbuilding.png");
+/*
+
    BuildingType* bld = buildingTypeRepository.getObject_byID( id );
 
    if ( !bld )
@@ -2442,6 +2450,7 @@ Surface& BuildingConstruction::getImage( const MapCoordinate& pos, ContainerBase
    removeIconRepository[id] = buildGuiIcon( generate_gui_build_icon( bld) );
 
    return removeIconRepository[id];
+   */
 }
 
 

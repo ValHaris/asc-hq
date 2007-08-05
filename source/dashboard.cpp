@@ -123,12 +123,6 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
 
-   PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
-   if ( l ) {
-      l->sigEditEnd.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
-      l->sigEditUpdate.connect( SigC::slot( *this, &DashboardPanel::containerRenamed ));
-   }
-
    PG_Widget* w = parent->FindChild( "unitexp", true );
    if ( w )
       w->sigMouseButtonDown.connect( SigC::slot( *this, &DashboardPanel::viewExperienceOverview ));
@@ -505,6 +499,12 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
    if ( siw ) {
       siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
       siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+   }
+
+   PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
+   if ( l ) {
+      l->sigEditEnd.connect( SigC::slot( *this, &UnitInfoPanel::containerRenamed ));
+      l->sigEditUpdate.connect( SigC::slot( *this, &UnitInfoPanel::containerRenamed ));
    }
 
    VehicleTypeSelectionItemFactory::showVehicleInfo.connect( SigC::slot( *this, &UnitInfoPanel::showUnitInfo ));

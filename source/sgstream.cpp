@@ -120,6 +120,9 @@ ASCString resolvePath( ASCString path )
 
    static boost::regex commonappdata( "\\$\\(?COMMON_APPDATA\\)?", boost::regex::icase);
    path = boost::regex_replace( path, commonappdata, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_COMMON_APPDATA ), boost::regex_constants::format_literal );
+
+   static boost::regex myDocs( "\\$\\(?MY_DOCUMENTS\\)?", boost::regex::icase);
+   path = boost::regex_replace( path, myDocs, ConfigurationFileLocator::Instance().getSpecialPath( CSIDL_PERSONAL ), boost::regex_constants::format_literal );
 #endif
 
    /*
@@ -250,6 +253,7 @@ vector<ASCString> ConfigurationFileLocatorCore::getDefaultDirectory()
       */
 
 
+   dirs.push_back( "$(MY_DOCUMENTS)\\" );
    dirs.push_back( "$(APPDATA)\\" );
    dirs.push_back( "$(COMMON_APPDATA)\\" );
    dirs.push_back( "$(EXEPATH)\\" );
@@ -296,6 +300,11 @@ ASCString ConfigurationFileLocatorCore::getConfigFileName()
    vector<ASCString> list = getDefaultDirectory();
    if ( list.size() >= 1 ) {
       configFileType = 4;
+      for ( vector<ASCString>::iterator i = list.begin(); i != list.end(); ++i ) {
+         ASCString p = resolvePath( *i ) + asc_configurationfile; 
+         if( exist( p ))
+            return p;
+      }
       return resolvePath( list[0] ) + asc_configurationfile;
    }
 
