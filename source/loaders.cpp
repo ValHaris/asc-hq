@@ -338,7 +338,17 @@ void   tspfldloaders::readoldevents ( void )
    }
 }
 
-
+void checkForUniqueUnitIDs( GameMap* gamemap )
+{
+   map<int,int> units;
+   for ( int p = 0; p < gamemap->getPlayerCount(); ++p )
+      for ( Player::VehicleList::iterator i = gamemap->getPlayer(p).vehicleList.begin(); i != gamemap->getPlayer(p).vehicleList.end(); ++i )
+         if ( units[(*i)->networkid]++ > 0 ) {
+            warning("unit with duplicate network ids: " + ASCString::toString( (*i)->networkid ) + "\nThis will lead to replay errors during the next turn." );
+            gamemap->unitnetworkid++;
+            (*i)->networkid = actmap->unitnetworkid;
+         }
+}
 
 /**************************************************************/
 /*     map schreiben / lesen / initialisieren          */
@@ -346,6 +356,7 @@ void   tspfldloaders::readoldevents ( void )
 
 void    tspfldloaders::writemap ( void )
 {
+      checkForUniqueUnitIDs( spfld );
        if ( !spfld )
           displaymessage ( "tspfldloaders::writemap  ; no map to write ! ",2);
 
@@ -970,6 +981,7 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
    spfld->time.set ( 1, 0 );
    spfld->levelfinished = false;
    spfld->preferredFileNames.mapname[0] = name ;
+   checkForUniqueUnitIDs( spfld );
    spfld->startGame();
 
    displayLogMessage ( 4, "done\n");
@@ -1113,6 +1125,7 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
    seteventtriggers( spfld );
 
    calculateallobjects( spfld );
+   checkForUniqueUnitIDs( spfld );
 
    mapLoaded( spfld );
 
@@ -1242,6 +1255,8 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
    seteventtriggers( spfld );
 
    calculateallobjects( spfld );
+
+   checkForUniqueUnitIDs( spfld );
 
    spfld->levelfinished = false;
    

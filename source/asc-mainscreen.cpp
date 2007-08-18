@@ -184,7 +184,7 @@ void Menu::setup()
    addfield ( "~M~essage");
    addbutton ( "~n~ew message", ua_newmessage );
    addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages );
-   addbutton ( "view ~s~end messages", ua_viewsentmessages );
+   addbutton ( "view ~s~ent messages", ua_viewsentmessages );
    addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages);
    currentMenu->addSeparator();
    addbutton ( "view ~j~ournal", ua_viewjournal );

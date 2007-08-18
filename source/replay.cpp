@@ -46,7 +46,7 @@
 #include "widgets/textrenderer.h"
 #include "actions/jumpdrive.h"
 #include "reactionfire.h"
-
+#include "gameeventsystem.h"
 trunreplay runreplay;
 
 int startreplaylate = 0;
@@ -2119,6 +2119,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    do {
        if ( status == 2 ) {
           execnextreplaymove ( );
+          checktimedevents( &getDefaultMapDisplay() );
          /*
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );

@@ -3,7 +3,7 @@ ObjectType {
    Parent = 3500
    ID = 2018
 
-   LinkableObjects = 2009 2019 2024 2025 2026 2027 2028 2029
+   LinkableObjects = 2019 2024 2025 2026 2027 2028 2029
    LinkableTerrain = 2030
    NetBehaviour = NetToSelf NetToBorder
 

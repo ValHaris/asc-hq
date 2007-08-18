@@ -718,21 +718,29 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                *log += s;
             }
          } else {
-            int av1 = v1->getResource( maxint, r, true, 1, player );
-            int av2 = v2->getResource( maxint, r, true, 1, player );
-            if ( av1 != av2 ) {
+            if ( v1->typ != v2->typ ) {
                diff = true;
                if ( log ) {
-                  s.format ( "Vehicle (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
+                  s.format ( "Vehicles with NWID %d don't have matching type, probably production inconsistency. (%s <-> %s)\n", v1->networkid, v1->typ->getName().c_str(), v2->typ->getName().c_str() );
                   *log += s;
                }
-            }
-            
-            if ( v1->damage != v2->damage ) {
-               diff = true;
-               if ( log ) {
-                  s.format ( "Vehicle (%d,%d) damage mismatch: %d after replay, but %d in actual map\n", v1->getPosition().x, v1->getPosition().y, v2->damage, v1->damage );
-                  *log += s;
+            } else {
+               int av1 = v1->getResource( maxint, r, true, 1, player );
+               int av2 = v2->getResource( maxint, r, true, 1, player );
+               if ( av1 != av2 ) {
+                  diff = true;
+                  if ( log ) {
+                     s.format ( "Vehicle %s (%d,%d) resource mismatch: %d %s available after replay, but %d available in actual map\n", v1->typ->getName().c_str(), v1->getPosition().x, v1->getPosition().y, av2, resourceNames[r], av1 );
+                     *log += s;
+                  }
+               }
+               
+               if ( v1->damage != v2->damage ) {
+                  diff = true;
+                  if ( log ) {
+                     s.format ( "Vehicle (%d,%d) damage mismatch: %d after replay, but %d in actual map\n", v1->getPosition().x, v1->getPosition().y, v2->damage, v1->damage );
+                     *log += s;
+                  }
                }
             }
          }
@@ -760,10 +768,9 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                s.format( "Type: %s at %d/%d\n", (*i)->getName().c_str(), (*i)->getPosition().x, (*i)->getPosition().y );
                *log += s;
             }
-
-
       }
    }
+
    if ( currentMap->player[player].buildingList.size() != replaymap->player[player].buildingList.size() ) {
       diff = true;
       if ( log ) {

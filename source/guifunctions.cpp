@@ -47,7 +47,7 @@
 #include "itemrepository.h"
 #include "turncontrol.h"
 #include "dialogs/buildingtypeselector.h"
-
+#include "dialogs/internalAmmoTransferDialog.h"
 #include "actions/jumpdrive.h"
 
 
@@ -2871,6 +2871,42 @@ class ReplayExit : public GuiFunction
       
 };
 
+class InternalAmmoTransferDialog : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+                              //tfield* fld = actmap->getField(pos);
+                              return internalAmmoTransferAvailable( subject );
+                               /*
+         if ( pendingVehicleActions.newservice && fld->a.temp && fld->getContainer() ) // && pendingVehicleActions.service->guimode == 2
+            return true;
+
+         return false;*/
+      };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 't' && (modifier & KMOD_SHIFT)  );
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         internalAmmoTransferWindow( (Vehicle*) subject );
+         actmap->cleartemps ( 7 );
+         displaymap();
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("internalAmmoTransfer-dialog.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "internal Ammo ~T~ransfer dialog ";
+      };
+};
 
 
 GuiIconHandler primaryGuiIcons;
@@ -2926,6 +2962,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::PutAntiShipMine );
    handler.registerUserFunction( new GuiFunctions::PutAntiSubMine );
    handler.registerUserFunction( new GuiFunctions::RemoveMine );
+   handler.registerUserFunction( new GuiFunctions::InternalAmmoTransferDialog );
    
    handler.registerUserFunction( new GuiFunctions::EndTurn() );
    handler.registerUserFunction( new GuiFunctions::Cancel() );

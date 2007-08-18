@@ -159,6 +159,7 @@ extern const char*  cvehiclefunctions[];
      ASCString    getName ( void ) const;
      static ASCString   getIconFileName( int weaponType );
      void         runTextIO ( PropertyContainer& pc );
+     bool         equals( const SingleWeapon* otherWeapon ) const;
  };
 
  //! all the weapons of a #Vehicletype

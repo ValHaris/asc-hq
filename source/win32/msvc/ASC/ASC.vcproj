@@ -547,6 +547,9 @@
 					RelativePath="..\..\..\dialogs\fileselector.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\internalAmmoTransferDialog.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\locatefile.cpp">
 				</File>
 				<File

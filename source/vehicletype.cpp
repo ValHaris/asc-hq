@@ -888,6 +888,34 @@ ASCString    SingleWeapon::getIconFileName( int numerical )
 }
 
 
+bool SingleWeapon::equals( const SingleWeapon* otherWeapon ) const
+{
+      if(
+              otherWeapon->targ == this->targ &&
+              otherWeapon->sourceheight == this->sourceheight &&
+              otherWeapon->maxdistance == this->maxdistance &&
+              otherWeapon->mindistance == this->mindistance &&
+              otherWeapon->count == this->count &&
+              otherWeapon->maxstrength == this->maxstrength &&
+              otherWeapon->minstrength == this->minstrength &&
+              otherWeapon->gettype() == this->gettype()
+      )
+      {
+              bool equal = true;
+              for( int i=0; i<13; i++ )
+              {
+                      if( otherWeapon->efficiency[ i ] != this->efficiency[ i ] )
+                      {
+                              equal = false;
+                      }
+              }
+              if( equal ) return true;
+      }
+
+      return false;
+}
+
+
 UnitWeapon :: UnitWeapon ( void )
 {
    count = 0;

@@ -535,11 +535,24 @@ bool ASC_PG_Dialog::closeWindow(){
 
 
 
-
+class AntiBulkHandler {
+      bool bulk;   
+public:
+   AntiBulkHandler() {
+      bulk = PG_Application::GetBulkMode();
+      if ( bulk )
+         PG_Application::SetBulkMode(false);
+   }
+   ~AntiBulkHandler() {
+      if ( bulk )
+         PG_Application::SetBulkMode(true);
+   }
+};
 
 
 void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::MessageType mt )
 {
+   AntiBulkHandler abh;
    ASCString title;
    ASCString style;
    switch ( mt ) {
