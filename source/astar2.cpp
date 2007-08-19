@@ -723,7 +723,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                       tfield* fld = actmap->getField( pos );
                       if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
                          if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
-                            if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() )
+                            if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() 
+                                 && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
                                if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                   Node N2 = N;
                                   N2.h.setnum ( pos.x, pos.y, -1);
