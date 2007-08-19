@@ -2105,6 +2105,7 @@ int checkforvaliddirectory ( char* dir )
            buf = NULL;
         }
         if ( used > 0 || allocated > 0 ) {
+           allocated = max(allocated,used);
            buf = new char[allocated];
            stream->readdata ( buf, used );
         }
