@@ -521,7 +521,8 @@ bool ServiceChecker::serviceWeaponFits( ContainerBase* dest )
             if ( (ignoreChecks & ignoreDistance) || (serviceWeapon->mindistance <= dist && serviceWeapon->maxdistance >= dist) )
                if ( serviceWeapon->targetingAccuracy[dest->baseType->getMoveMalusType()] > 0  )
                   if ( (ignoreChecks & ignoreHeight) || (serviceWeapon->efficiency[6+getheightdelta(source,dest)] > 0  ))
-                     return true;
+                     if ( ! ((source->getHeight() & (chtieffliegend | chfliegend | chhochfliegend)) && dest->baseType->hasFunction(ContainerBaseType::NoInairRefuelling)))
+                        return true;
 
          }
 
