@@ -25,14 +25,14 @@ BuildingType {
    Functions = Ammo_Production Repair_Facility Recycling ResourceSink
    ExternalLoading =  
    MaxResourceProduction { 
-      Energy = -100
-      Material = -100
-      fuel = -100
+      Energy = 0
+      Material = 0
+      fuel = 0
    } MaxResourceProduction
    defaultProduction {
-      energy = -100
-      material = -100
-      fuel = -100
+      energy = 0
+      material = 0
+      fuel = 0
    } defaultProduction
    ConstructionCost { 
       Energy = 0
