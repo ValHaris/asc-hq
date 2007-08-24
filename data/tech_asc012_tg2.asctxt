@@ -1,6 +1,6 @@
  Technology {
    name = "Ground-Unit Technology Level 2"
-   infotext = "Ground-Unit Technology Level 3 activated"
+   infotext = "Ground-Unit Technology Level 2 activated"
    id = 101902
    researchpoints = 0
    
@@ -13,7 +13,7 @@
    ; this technology can only be researched after a specific event enabling this tech has been triggered
    ; usually false
    
-   TechnologiesRequired = 101000,101901,101001,101066,101007,1011096,101101
+   TechnologiesRequired = 101000,101901,101001,101066,101007,101106,101101
    ; this technology depends on the technologies with ID 122 and 123   
    
    BlockingTechnologies = 
