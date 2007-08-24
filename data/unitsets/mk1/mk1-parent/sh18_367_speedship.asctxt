@@ -21,7 +21,7 @@ VehicleType {
    Weight = 500
    Transportation ->* VehicleType.TransLowTrooper
 
-   Height = floating 
+   Height = floating ground_level
    Tank { 
       Energy = 0
       Material = 0
