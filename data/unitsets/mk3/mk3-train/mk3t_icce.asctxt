@@ -32,5 +32,6 @@ VehicleType {
       Weapon4.Ammo = 30
       Weapon5 ->* VehicleType.AmmoMine 
       Weapon5.Ammo = 30
+      Weapon6 ->* VehicleType.ServiceGround 
    } Weapons
 } VehicleType
