@@ -2876,14 +2876,12 @@ class InternalAmmoTransferDialog : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-                              //tfield* fld = actmap->getField(pos);
-                              return internalAmmoTransferAvailable( subject );
-                               /*
-         if ( pendingVehicleActions.newservice && fld->a.temp && fld->getContainer() ) // && pendingVehicleActions.service->guimode == 2
-            return true;
-
-         return false;*/
+			if( subject && subject->getMap()->getPlayer(subject).diplomacy.isAllied( subject->getMap()->actplayer ))
+ 				return internalAmmoTransferAvailable( subject );
+         
+         return false;
       };
+
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 't' && (modifier & KMOD_SHIFT)  );

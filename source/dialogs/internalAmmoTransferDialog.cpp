@@ -28,6 +28,7 @@
 #include "../gameoptions.h"
 #include "../actions/servicing.h"
 #include "../iconrepository.h"
+#include "../replay.h"
 
 bool internalAmmoTransferAvailable( ContainerBase* container )
 {
@@ -289,6 +290,7 @@ void InternalAmmoTransferHandler::performTransfer()
 	// also jetzt dem fahrzeug zuweisen
 	for( int i=0; i<16; i++ )
 	{
+      logtoreplayinfo ( rpl_refuel2, _vehicle->xpos, _vehicle->ypos, _vehicle->networkid, i, weaponAmmo[ i ], _vehicle->ammo[ i ] );
 		_vehicle->ammo[ i ] = weaponAmmo[ i ];
 	}
 }

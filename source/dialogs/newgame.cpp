@@ -49,10 +49,10 @@ class StartMultiplayerGame: public ConfigurableWindow {
       bool success;
       GameMap* newMap;
       
-      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch }; 
+      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch, PBEMServerSetup }; 
       Pages page;
      
-      enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP };
+      enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP, PBEMServer };
       int mode;
       
       static const char* buttonLabels[];
@@ -170,13 +170,14 @@ class StartMultiplayerGame: public ConfigurableWindow {
    
 };
 
-const char* StartMultiplayerGame::buttonLabels[7] = {
+const char* StartMultiplayerGame::buttonLabels[8] = {
    "NewCampaign",
    "ContinueCampaign",
    "SinglePlayer",
    "Hotseat",
    "PBEM",
    "PBP",
+   "PBEMServer",
    NULL
 };
 
@@ -357,17 +358,27 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
             break;
       case PlayerSetup: 
             if ( Apply() )
-               if ( mode == PBEM || mode == PBP )
+               if ( mode == PBEM || mode == PBP || mode == PBEMServer )
                   page = EmailSetup;
                else
                   page = AllianceSetup;
                   
             break;       
       case EmailSetup: 
-            if ( Apply() )
-               page = AllianceSetup;
+            if ( Apply() ) {
+               if ( mode == PBEMServer )
+                  page = PBEMServerSetup;
+               else
+                  page = AllianceSetup;
+            }
             break;
               
+      case PBEMServerSetup:
+            if ( Apply() ) {
+               page = AllianceSetup;
+            }
+            break;
+
       case AllianceSetup: 
             if ( Apply() )
                page = MapParameterEditor;
