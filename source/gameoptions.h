@@ -199,6 +199,9 @@ class CGameOptions
 
       bool replayMovieMode;
 
+      vector<ASCString> visibleMapLayer;
+
+
       struct PanelData {
          int x;
          int y;
@@ -220,6 +223,7 @@ class CGameOptions
       ASCString defaultSuperVisorPassword;
       Password getDefaultPassword ( );
       Password getDefaultSupervisorPassword ( );
+
 
       static const int maxSearchPathNum;
       int searchPathNum;

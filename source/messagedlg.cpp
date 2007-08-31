@@ -497,7 +497,9 @@ void viewjournal ( void )
       vat.init ( "journal", actmap->gameJournal.c_str() );
       vat.run();
       vat.done();
-   }
+   } else
+      infoMessage("no entries to journal yet");
+
 }
 
 void editjournal ( void )

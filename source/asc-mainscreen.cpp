@@ -549,6 +549,11 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
 
    mapDisplay->addMapLayer( new VisibilityLayer(), "visibilityvalue" );
 
+   mapDisplay->layerChanged.connect( SigC::slot( *this, &ASC_MainScreenWidget :: mapLayerChanged));
+   
+   for ( vector<ASCString>::iterator i = CGameOptions::Instance()->visibleMapLayer.begin(); i != CGameOptions::Instance()->visibleMapLayer.end(); ++i )
+      mapDisplay->activateMapLayer(*i,true);
+
 
    int counter = 0;
    for ( CGameOptions::PanelDataContainer::iterator i = CGameOptions::Instance()->panelData.begin(); i != CGameOptions::Instance()->panelData.end(); ++i ) {
@@ -567,6 +572,13 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    // to persuade the linker to really link that file
    uselessCallToTextRenderAddons();
 }
+
+void ASC_MainScreenWidget :: mapLayerChanged(bool b, const ASCString& name )
+{
+   mapDisplay->getActiveLayers( CGameOptions::Instance()->visibleMapLayer );
+   CGameOptions::Instance()->setChanged();
+}
+
 
 
 void ASC_MainScreenWidget :: lockStandardActions( int dir, int options )

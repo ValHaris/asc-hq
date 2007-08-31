@@ -71,6 +71,8 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       void lockStandardActions( int dir, int options);
       
       list<int> lockOptionStack;
+   private:
+      void mapLayerChanged(bool b, const ASCString& name );
       
       ~ASC_MainScreenWidget() { };
 };

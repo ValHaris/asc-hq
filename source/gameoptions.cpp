@@ -158,6 +158,9 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addBool("fillAmmo", unitProduction.fillAmmo, true );
    pc.closeBracket();
    
+   if ( !pc.isReading() || pc.find("VisibleMapLayer" ))
+      pc.addStringArray("VisibleMapLayer", visibleMapLayer );
+
    /*
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
    add(new IntProperty("BI3.interpolate.units"			,	&_pOptions->bi3.interpolate.units));

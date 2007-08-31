@@ -100,7 +100,7 @@ class MapRenderer {
       SigC::Signal2<void,Surface&,int> additionalItemDisplayHook;
       
       void addMapLayer( MapLayer* mapLayer ) { layerRenderer.push_back( mapLayer ); };
-      
+     
 };
 
 
@@ -291,6 +291,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void activateMapLayer( const ASCString& name, bool active );
       void toggleMapLayer( const ASCString& name );
       SigC::Signal2<void, bool, const ASCString&> layerChanged;
+      void getActiveLayers( vector<ASCString>& list );
 
 
    private:

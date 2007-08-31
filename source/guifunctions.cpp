@@ -2759,7 +2759,7 @@ class ReplayFaster : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == '+' );
+         return ( key->keysym.unicode == '+' || key->keysym.sym == SDLK_KP_PLUS);
       };
       
 };
@@ -2796,7 +2796,7 @@ class ReplaySlower : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == '-' );
+         return ( key->keysym.unicode == '-' || key->keysym.sym == SDLK_KP_MINUS);
       };
       
 };
