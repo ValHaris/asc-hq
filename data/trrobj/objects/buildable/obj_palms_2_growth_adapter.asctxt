@@ -1,0 +1,5 @@
+Techadapter {
+   Name = o2107
+   ;Bezeichnung der verknüpften Technologie: Palms 2 no Growth
+   TechnologiesRequired = 0
+} TechAdapter

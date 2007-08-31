@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Palms 2 no Growth
+   ID = 2107
+   Parent = 2106
+
+   TechAdapterRequired = o2107
+   Weather = dry
+   growthRate = 0.00
+   dry { 
+      UseGFXpics = false
+      picture = obj_Palms_1.png 1
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+} ObjectType

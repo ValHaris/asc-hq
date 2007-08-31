@@ -1,0 +1,19 @@
+TerrainType { 
+
+   Name = Block Terrain
+   Parent = 500
+   ID = 19030
+
+   Weather = dry
+
+   dry { 
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 255
+      MoveMalus = 255
+      TerrainProperties = 
+      UseGFXpics = false
+      Picture = trr_block_1.png
+   } dry
+
+} TerrainType

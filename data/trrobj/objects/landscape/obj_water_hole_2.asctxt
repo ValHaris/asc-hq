@@ -8,11 +8,11 @@ ObjectType {
 
    dry { 
       UseGFXpics = false
-      Picture = obj_crater_water_2.png 1
+      Picture = obj_water_hole_2.png 1
    } dry
    much_snow {
       UseGFXpics = false
-      picture = obj_crater_water_2.png 1
+      picture = obj_water_hole_2.png 1
       GraphicOperations = Snow
    } much_snow
 

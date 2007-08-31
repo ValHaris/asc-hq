@@ -1,0 +1,19 @@
+ObjectType { 
+
+   Weather = dry much_snow
+
+   Name = Water Hole 1
+   Parent = 507
+   ID = 2053
+
+   dry { 
+      UseGFXpics = false
+      Picture = obj_water_hole_1.png 1
+   } dry
+   much_snow {
+      UseGFXpics = false
+      picture = obj_water_hole_1.png 1
+      GraphicOperations = Snow
+   } much_snow
+
+} ObjectType

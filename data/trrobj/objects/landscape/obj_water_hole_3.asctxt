@@ -2,18 +2,18 @@ ObjectType {
 
    Weather = dry much_snow
 
-   Name = Water Crater 1
+   Name = Water Hole 3
    Parent = 507
-   ID = 2053
+   ID = 2056
 
    dry { 
       UseGFXpics = false
-      Picture = obj_crater_water_1.png 1
+      Picture = obj_water_hole_3.png 1
    } dry
    much_snow {
       UseGFXpics = false
-      picture = obj_crater_water_1.png 1
-      GraphicOperations = Snow
+      picture = obj_water_hole_3.png 1
+      GraphicOperations = Snow_const
    } much_snow
 
 } ObjectType
