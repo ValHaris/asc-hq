@@ -55,6 +55,7 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       void showMovementRange( GameMap* gamemap, const MapCoordinate& pos );
       void showWeaponRange( GameMap* gamemap, const MapCoordinate& pos );
       
+      ~ASC_MainScreenWidget() { };
    protected:
       NewGuiHost* guiHost;
       Menu* menu;
@@ -74,7 +75,6 @@ class ASC_MainScreenWidget : public MainScreenWidget {
    private:
       void mapLayerChanged(bool b, const ASCString& name );
       
-      ~ASC_MainScreenWidget() { };
 };
 
 //! displays a message in the status line of ASC
