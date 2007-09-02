@@ -20,7 +20,7 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 6
+      Number = 7
       Weapon0 ->* VehicleType.AmmoMG
       Weapon1 ->* VehicleType.AmmoBomb 
       Weapon1.Ammo = 20
