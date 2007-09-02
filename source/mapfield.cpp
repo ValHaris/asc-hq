@@ -282,6 +282,17 @@ void tfield :: setweather ( int weather )
      }
 }
 
+void tfield::setVisibility ( VisibilityStates valtoset, int actplayer ) 
+{
+      int newval = (valtoset ^ 3) << ( 2 * actplayer );
+      int oneval = 3 << ( 2 * actplayer );
+
+      visible |= oneval;
+      visible ^= newval;
+};
+
+
+
 bool compareObjectHeight ( const Object& o1, const Object& o2 )
 {
    return o1.typ->imageHeight < o2.typ->imageHeight;

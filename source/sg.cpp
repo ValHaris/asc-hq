@@ -1287,6 +1287,7 @@ void execuseraction2 ( tuseractions action )
                vft.Show();
                vft.RunModal();
                                };
+         break;
       case ua_showUnitEndurance: showUnitEndurance();
          break;
          

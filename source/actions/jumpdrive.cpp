@@ -87,13 +87,31 @@ bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination )
    fld->vehicle = NULL;
    subject->getResource( subject->typ->jumpDrive.consumption, false );
    subject->removeview();
-   subject->setnewposition ( destination.x, destination.y );
-   subject->setMovement(0, 1);
-   subject->addview();
-   subject->getMap()->getField(destination)->vehicle = subject;
-   evaluateviewcalculation( subject->getMap() );
-   
+
+   int nwid = subject->networkid;
+   GameMap* map  = subject->getMap();
+
+/*   tsearchreactionfireingunits srfu;
+   AStar3D::Path path;
+   path.push_back ( destination );
+   srfu.init( subject , path );
+*/
    SoundList::getInstance().playSound ( SoundList::jumpdrive, 0 );
+
+/*
+   if ( rf->checkfield ( to, vehicle, mapDisplay )) 
+      subject = map->getUnit ( networkID );
+*/
+
+   if ( subject ) {
+      subject->setnewposition ( destination.x, destination.y );
+      subject->setMovement(0, 1);
+      subject->addview();
+      subject->getMap()->getField(destination)->vehicle = subject;
+   }
+   evaluateviewcalculation( subject->getMap() );
+
+   
 
    logtoreplayinfo( rpl_jump , subject->networkid, destination.x, destination.y );
    

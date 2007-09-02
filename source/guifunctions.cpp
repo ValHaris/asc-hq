@@ -2877,7 +2877,8 @@ class InternalAmmoTransferDialog : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
 			if( subject && subject->getMap()->getPlayer(subject).diplomacy.isAllied( subject->getMap()->actplayer ))
- 				return internalAmmoTransferAvailable( subject );
+            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
+ 				   return internalAmmoTransferAvailable( subject );
          
          return false;
       };

@@ -283,9 +283,6 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
          jamming += fld->view[i].jamming;
    }
    if ( sight > (jamming + additionalEnemyJamming )   ||  direct  ) {
-      if ( fld->building && (fld->building->connection & cconnection_seen))
-         buildingSeen();
-
       if (( fld->vehicle  && ( fld->vehicle->getOwner() == player ) && false ) ||
             ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
             ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
@@ -316,6 +313,9 @@ int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int ad
 
    VisibilityStates view = calcvisibilityfield( gamemap, fld, player, add, initial, 0 );
    fld->setVisibility( view, player );
+   if ( view >= visible_now )
+      if ( fld->building && (fld->building->connection & cconnection_seen))
+         buildingSeen();
    return view != originalVisibility; 
 }
 

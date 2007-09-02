@@ -166,13 +166,7 @@ class  tfield {
       \param valtoset the value that is going to be written into the visibility variable
       \param actplayer the player for which the view is changed
    */
-   void setVisibility ( VisibilityStates valtoset, int actplayer ) {
-       int newval = (valtoset ^ 3) << ( 2 * actplayer );
-       int oneval = 3 << ( 2 * actplayer );
-
-       visible |= oneval;
-       visible ^= newval;
-   };
+   void setVisibility ( VisibilityStates valtoset, int actplayer );
 
    VisibilityStates getVisibility( int actplayer ) {
        return VisibilityStates((visible >> (2*actplayer)) & 3);

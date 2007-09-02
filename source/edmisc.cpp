@@ -1593,9 +1593,8 @@ void         tunit::init(  )
         weaponammo = new(char[25]);
         strcpy(weaponammo,"Wpn Ammo ");
         strcat(weaponammo,strrr(i+1));
-        strcat(weaponammo," (0-255)");
         addbutton(weaponammo,410,80+i*40,570,100+i*40,2,1,33+i,true);
-        addeingabe( 33+i, &unit->ammo[i], 0, 255 );
+        addeingabe( 33+i, &unit->ammo[i], 0, unit->typ->weapons.weapon[i].count );
    	} else
    	    showtext2("6 weapons max at the moment",x1+410,y1+80+maxeditable*40);
 
