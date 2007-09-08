@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.5 2007-09-08 13:08:50 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.6 2007-09-08 14:13:51 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -87,7 +87,8 @@ class BitMapEditor : public ASC_PG_Dialog {
    private:
       BitType& reference;
       PG_PropertyEditor* propertyEditor;
-      vector<bool> values;
+      bool values[64];
+      int bitCount;
 
       bool ok();
 

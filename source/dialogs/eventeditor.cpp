@@ -36,6 +36,9 @@
 
 class EventEditor : public ASC_PG_Dialog {
    private:
+      vector<ASCString> triggerNames;
+      vector<ASCString> actionNames;
+
       DropDownSelector* eventType;
       DropDownSelector* triggerConnection;
       PG_LineEdit* description;
@@ -53,7 +56,10 @@ class EventEditor : public ASC_PG_Dialog {
 
       void actionSelected( int i )
       {
-         EventActionID eai = EventActionID( i );
+         if ( i < 0 )
+            return;
+
+         EventActionID eai = actionFactory::Instance().getID( actionNames.at(i) );
 
          if ( !event->action )
             event->spawnAction( eai );
@@ -79,16 +85,18 @@ class EventEditor : public ASC_PG_Dialog {
       void triggerSelected( int type, int num )
       {
          if ( type>= 0 ) {
+            EventTriggerID triggerID = triggerFactory::Instance().getID(  actionNames.at(type) );
+
             if ( event->trigger.size() <= num ) {
                event->trigger.resize(num+1);
-               event->trigger[num] = event->spawnTrigger( type );
+               event->trigger[num] = event->spawnTrigger( triggerID );
                event->trigger[num]->setup();
             } else {
-               if ( event->trigger[num]->getTriggerID() == type )
+               if ( event->trigger[num]->getTriggerID() == triggerID )
                   event->trigger[num]->setup();
                else {
                   delete event->trigger[num];
-                  event->trigger[num] = event->spawnTrigger( type );
+                  event->trigger[num] = event->spawnTrigger( triggerID );
                   event->trigger[num]->setup();
                }
             }
@@ -153,9 +161,16 @@ class EventEditor : public ASC_PG_Dialog {
          int ypos = 30;
          
          new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25 ), "Action:" );
-         eventType = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), actionFactory::Instance().getNames() );
-         if ( event->action )
-            eventType->SelectItem ( event->action->getActionID() );
+
+         triggerNames = triggerFactory::Instance().getNames();
+         actionNames = actionFactory::Instance().getNames();
+
+         eventType = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), actionNames );
+         if ( event->action ) 
+            for ( int i = 0; i < actionNames.size(); ++i )
+               if ( event->action->getName() == actionNames[i] )
+                  eventType->SelectItem ( i );
+
          eventType->selectionSignal.connect( SigC::slot( *this, &EventEditor::actionSelected ));
          (new PG_Button( this, PG_Rect( labelWidth + 50 + 300, ypos, 100, 25 ), "setup"))->sigClick.connect( SigC::slot( *this, &EventEditor::setupEvent ));
          ypos += 40;
@@ -168,7 +183,7 @@ class EventEditor : public ASC_PG_Dialog {
          for ( int e = 0; e < 4; ++e ) {
             new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25), "Trigger " + ASCString::toString(e));
             
-            DropDownSelector* trigger = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 200,25 ), triggerFactory::Instance().getNames() );
+            DropDownSelector* trigger = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 200,25 ), triggerNames );
                  
             (new PG_Button( this, PG_Rect( labelWidth+50+200, ypos, 100, 25 ), "setup"))->sigClick.connect( SigC::bind( SigC::slot( *this, &EventEditor::setupTrigger ), e));
             
@@ -177,7 +192,10 @@ class EventEditor : public ASC_PG_Dialog {
             if ( event->trigger.size() > e ) {
                if ( event->trigger[e]->invert )
                   inv->SetPressed();
-               trigger->SelectItem ( int( event->trigger[e]->getTriggerID() ));
+
+               for ( int i = 0; i < triggerNames.size(); ++i )
+                  if ( event->trigger[e]->getName() == triggerNames[i] )
+                     trigger->SelectItem ( i );
             }
             trigger->selectionSignal.connect( SigC::bind( SigC::slot( *this, &EventEditor::triggerSelected), e ));
             ypos += 40;

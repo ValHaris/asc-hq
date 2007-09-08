@@ -731,13 +731,11 @@ bool ReinforcementSelector::mark()
 bool BitMapEditor::ok()
 {
    reference = 0;
-   int counter = 0;
-   for ( vector<bool>::iterator i = values.begin(); i != values.end(); ++i ) {
-      if ( *i )
-         reference |= 1 << counter;
+   propertyEditor->Apply();
+   for ( int i = 0; i < bitCount; ++i ) 
+      if ( values[i] )
+         reference |= 1 << i;
 
-      ++counter;
-   }
    QuitModal();
    return true;
 }
@@ -747,11 +745,12 @@ BitMapEditor::BitMapEditor( BitType& value, const ASCString& title, const vector
    propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
 
 
+   bitCount = names.size();
    int counter = 0;
-   values.resize( names.size() );
    for ( vector<ASCString>::const_iterator i = names.begin(); i != names.end(); ++i ) {
-      values.push_back( value & (1 << counter ));
-      new PG_PropertyField_Checkbox<bool>( propertyEditor, *i, &values[counter] );
+      bool v = value & (1 << counter );
+      values[counter] = v;
+      new PG_PropertyField_Checkbox<bool>( propertyEditor, *i, &(values[counter]) );
       ++counter;
    }
 

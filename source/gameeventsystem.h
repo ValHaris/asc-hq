@@ -165,13 +165,18 @@ template < class AbstractProduct, typename IdentifierType,typename NameType = AS
 class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
 {
    private:
-      map<IdentifierType,NameType> names;
+      map<NameType, IdentifierType> names;
    public:
-      vector<NameType> getNames(){
+      vector<ASCString> getNames(){
          vector<NameType> nameList;
-         for ( map<IdentifierType,NameType>::iterator i = names.begin(); i != names.end(); ++i )
-            nameList.push_back( i->second );
+         for ( map<NameType,IdentifierType>::iterator i = names.begin(); i != names.end(); ++i )
+            nameList.push_back( i->first );
          return nameList;
+      }
+
+      IdentifierType getID( const ASCString& name )
+      {
+         return names[name];
       }
 
       bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
@@ -182,7 +187,7 @@ class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
       bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn, NameType name )
       {
          if ( Factory<AbstractProduct, IdentifierType>::registerClass ( id, createFn )) {
-            names[id] = name;
+            names[name] = id;
             return true;
          } else
             return false;
