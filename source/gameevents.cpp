@@ -1802,8 +1802,6 @@ ASCString TriggerNameProvider() {
 };
 
 
-// #define registerTrigger(TriggerID, TriggerType) \
-//        triggerFactory::Instance().registerClass( TriggerType, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
 
 template <typename TriggerType > 
 bool registerTrigger( EventTrigger_ID id )

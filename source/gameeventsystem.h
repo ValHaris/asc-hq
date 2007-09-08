@@ -161,15 +161,17 @@ class VariableLocker {
 };
 
 
-template < class AbstractProduct, typename IdentifierType,typename NameType = ASCString >
+template < class AbstractProduct, typename IdentifierType, typename ObjectCreatorCallBack = AbstractProduct*(*)(), typename NameType = ASCString >
 class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
 {
    private:
-      map<NameType, IdentifierType> names;
+      typedef std::map<NameType, IdentifierType> NameMap;
+      NameMap names;
    public:
-      vector<ASCString> getNames(){
+      vector<NameType> getNames(){
          vector<NameType> nameList;
-         for ( map<NameType,IdentifierType>::iterator i = names.begin(); i != names.end(); ++i )
+         
+         for ( typename NameMap::iterator i = names.begin(); i != names.end(); ++i )
             nameList.push_back( i->first );
          return nameList;
       }
