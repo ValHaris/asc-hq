@@ -1,4 +1,4 @@
-; Zu �dern: unitpad_weapon_source und  unitpad_weapon_target
+; Zu ändern: unitpad_weapon_source und  unitpad_weapon_target
 ; weapon_target_submerged und weapon_source_submerged werden eingeschaltet
 ; weapon_notarget_submerged und weapon_nosource_submerged  werden ausgeschaltet
 ;
@@ -10,17 +10,17 @@
 ; bei entrance system: 
 ;   dockingheight fehlt !!
 ;   unitpad_transport_light_wheeled_vehicle & co besser durch eine Art LineWidget ersetzen und die Bilder fr die einzelnen Typen
-;      einzeln abspeichern. Dann sind wir flexibler, wenn wir unser Sortiment an Typen �dern. Au�rdem haben wir ja noch den Typ "Default"
-;      Ich wei�zwar nicht, was wir fr ein symbol dafr nehmen sollen, aber den Typ haben wir nunmal ...
-;   au�rdem wrde ich eine Trennung der Parameter, die bei der Einheit festgelegt werden (anzahl stellpl�ze, gewichte) sowie der des EntranceSystems
+;      einzeln abspeichern. Dann sind wir flexibler, wenn wir unser Sortiment an Typen ändern. Außerdem haben wir ja noch den Typ "Default"
+;      Ich weiß zwar nicht, was wir für ein Symbol dafür nehmen sollen, aber den Typ haben wir nunmal...
+;   außerdem würde ich eine Trennung der Parameter, die bei der Einheit festgelegt werden (Anzahl Stellplätze, Gewichte) sowie der des Entrance-Systems
 ;      gut finden
 ;
-; Bei LineWidgets bitte immer die Gr�e eines einzelnen Elements angeben, nicht die des gesamten Bereichs!
+; Bei LineWidgets bitte immer die Größe eines einzelnen Elements angeben, nicht die des gesamten Bereichs!
 ;
-; Das "picture" widget sollte vom Typ Image sein und das NO PICTURE berdecken
+; Das "picture" widget sollte vom Typ Image sein und das NO PICTURE überdecken
 ;
-; Fr die Paragui-Objekte ScrollWidget, Multilinetextedit und Scrollbar msstest Du noch den Style anpassen. Versuch' bitte, ohne
-; vollst�dig transparentes Hintergrundbild auszukommen und benutz' stattdessen lieber 
+; Für die Paragui-Objekte ScrollWidget, Multilinetextedit und Scrollbar müsstest Du noch den Style anpassen. Versuch' bitte, ohne
+; vollständig transparentes Hintergrundbild auszukommen und benutz' stattdessen lieber 
 
 
 
@@ -194,12 +194,13 @@ panel {
        widget1 {
          type = Statictext
          text = movement
-         x = 80
+         x = 78
          y = 7
          FontColor = 0x87a674
          FontSize = 11
          TextAlign = CENTER
          height = 14
+         width = 68
       } widget1
        widget2 {
          type = Statictext
@@ -232,7 +233,7 @@ panel {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 67
+         width = 68
        } widget4
      } widget0
  
@@ -496,8 +497,8 @@ panel {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 70
-      } widget0
+         width = 68
+       } widget0
        widget1 {
          type = image
          Filename = light_padbutton.png
@@ -509,12 +510,13 @@ panel {
          widget0 {
            type = Statictext
            text = movement
-           x = 3
+           x = 1
            y = 7
            FontColor = 0xc9f4ae
            FontSize = 11
            TextAlign = CENTER
            height = 14
+           width = 68
          } widget0
        } widget1 
 
@@ -549,7 +551,7 @@ panel {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 67
+         width = 68
        } widget4
      } widget0
  
@@ -868,8 +870,6 @@ panel {
            y = 25
            widgetnum = 8
            widget0 {
-             TextAlign = CENTER
-             FontSize = 11
              type = StaticText
              text = starting
              x = 3
@@ -961,7 +961,7 @@ panel {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 70
+         width = 68
       } widget0
        widget1 {
          type = image
@@ -986,7 +986,7 @@ panel {
        widget2 {
          type = Statictext
          text = movement
-         x = 80
+         x = 78
          y = 7
          FontColor = 0x87a674
          FontSize = 11
@@ -1014,7 +1014,7 @@ panel {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 67
+         width = 68
        } widget4
      } widget0
  
@@ -1570,7 +1570,7 @@ widget5 {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 70
+         width = 68
       } widget0
        widget1 {
          type = image
@@ -1595,7 +1595,7 @@ widget5 {
        widget2 {
          type = Statictext
          text = movement
-         x = 80
+         x = 78
          y = 7
          FontColor = 0x87a674
          FontSize = 11
@@ -1623,7 +1623,7 @@ widget5 {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 67
+         width = 68
        } widget4
      } widget0
  
@@ -2258,7 +2258,7 @@ widget5 {
           } widget1
         } widget7
         widget8 {
-           TextAlign = RIGHT
+           TextAlign = LEFT
            Fontsize = 11
            type = StaticText
            text = unit needs special functions: 
@@ -2363,7 +2363,7 @@ widget5 {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 70
+         width = 68
       } widget0
        widget1 {
          type = image
@@ -2376,19 +2376,20 @@ widget5 {
          widget0 {
            type = Statictext
            text = description
-           x = 3
+           x = 2
            y = 7
            FontColor = 0xc9f4ae
            FontSize = 11
            TextAlign = CENTER
            height = 14
+           width = 68
          } widget0
        } widget1 
 
        widget2 {
          type = Statictext
          text = movement
-         x = 80
+         x = 78
          y = 7
          FontColor = 0x87a674
          FontSize = 11
@@ -2416,7 +2417,7 @@ widget5 {
          FontSize = 11
          TextAlign = CENTER
          height = 14
-         width = 67
+         width = 68
        } widget4
      } widget0
  
@@ -2513,3 +2514,4 @@ widget5 {
     } widget3
   } widget7
 } panel
+
