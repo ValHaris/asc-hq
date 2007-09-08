@@ -179,11 +179,6 @@ class MemoryStreamCopy : public tnstream {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  #ifndef pmemorystreambuf_defined
-   #define pmemorystreambuf_defined
-   typedef class tmemorystreambuf* pmemorystreambuf;
-   typedef class tmemorystream* pmemorystream;
-  #endif
 
 class tmemorystreambuf {
            friend class tmemorystream;
@@ -200,6 +195,10 @@ class tmemorystreambuf {
            void readfromstream ( pnstream stram );
            void clear() { used= 0; };
            int getMemoryFootprint() const { return allocated; };
+           
+           const char* getBuffer() const { return buf; };
+           int getSize() const { return used; };
+           
            ~tmemorystreambuf ( );
       };
 
@@ -210,10 +209,10 @@ class tmemorystream : public tnstream {
            char* zeiger;
            IOMode _mode;
            int   actmempos;
-           pmemorystreambuf buf;
+           tmemorystreambuf* buf;
 
         public:
-           tmemorystream ( pmemorystreambuf lbuf, IOMode mode );
+           tmemorystream ( tmemorystreambuf* lbuf, IOMode mode );
            virtual void writedata ( const void* nbuf, int size );
            virtual int  readdata  ( void* nbuf, int size, bool excpt = true );
            int dataavail ( void );

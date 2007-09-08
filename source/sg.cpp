@@ -133,7 +133,7 @@
 #include "sdl/sound.h"
 #include "soundList.h"
 #include "turncontrol.h"
-#include "network.h"
+#include "networksupervisor.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"

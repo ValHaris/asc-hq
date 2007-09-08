@@ -8,7 +8,7 @@ panel {
 
   Title = New Multiplayer Game
     
-  ChildWidgets = Next QuickStart Start Page1 Page2 Page3 Page4 Page5 Page6 Page7 Page8 Bottomline
+  ChildWidgets = Next QuickStart Start Page1 Page2 Page3 Page4 Page5 Page6 Page7 Page8 Bottomline Page9
   
   Bottomline {
      type = Area
@@ -62,7 +62,7 @@ panel {
       height = 400
       width = 450
       
-      ChildWidgets = Label1 NewCampaign ContinueCampaign SinglePlayer Label2 Hotseat PBEM PBP 
+      ChildWidgets = Label1 NewCampaign ContinueCampaign SinglePlayer Label2 Hotseat PBEM PBP PBEMServer
       Label1 {
         x = 0
         y = 0
@@ -135,6 +135,15 @@ panel {
         type = RadioButton
         Text = Project Battle Planets
       } PBP
+
+      PBEMServer {
+        x = 0
+        y = 320
+        height = 30
+        width = -10
+        type = RadioButton
+        Text = PBEM through Server (experimental)
+      } PBEMServer
         
     } RadioGroup
   } Page1
@@ -302,6 +311,32 @@ panel {
     } MapPassword
   } Page8
       
-      
+  Page9 {
+    type = dummy
+    x = 20
+    y = 40
+    x2 = -20
+    y2 = -80
+          ; @PBEMSERVER
+          ; defining the wizarrd page into which the users enteres the starting information
+                
+    ChildWidgets = Server ServerText 
+    
+    ServerText {
+       type = StaticText
+       x = 40
+       y = 0
+       text = Server URL
+    } ServerText 
+    
+    Server {
+      x = 50
+      y = 20
+      type = LineEdit
+      height = 25
+      width = 300
+    } Server
+          
+  } Page9
         
 } panel

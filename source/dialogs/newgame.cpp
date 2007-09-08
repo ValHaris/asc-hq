@@ -33,12 +33,13 @@
 #include "../turncontrol.h"
 #include "../viewcalculation.h"
 #include "../networkinterface.h"
-#include "../network.h"
 #include "../spfst.h"
 #include "../windowing.h"
 #include "../controls.h"
 #include "../sg.h"
 #include "../gamedlg.h"
+#include "../network/simple_file_transfer.h"
+#include "../network/pbem-server.h"
 
 class GameParameterEditorWidget;
 
@@ -52,7 +53,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch, PBEMServerSetup }; 
       Pages page;
      
-      enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP, PBEMServer };
+      enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP, PBEM_Server };
       int mode;
       
       static const char* buttonLabels[];
@@ -82,6 +83,9 @@ class StartMultiplayerGame: public ConfigurableWindow {
       ASCString getDefaultPBEM_Filename();
       void setupNetwork();
       
+      PBEMServer* pbemserver;
+      
+      void loadPBEMServerDefaults();
       
       void fileNameSelected( const ASCString& filename )
       {
@@ -186,7 +190,8 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
    allianceSetup(NULL), allianceSetupParent(NULL),
    playerSetup(NULL), playerSetupParent(NULL),
-   emailSetup(NULL), emailSetupParent(NULL)
+   emailSetup(NULL), emailSetupParent(NULL),
+   pbemserver(NULL)
 {
     setup();
     sigClose.connect( SigC::slot( *this, &StartMultiplayerGame::QuitModal ));
@@ -231,6 +236,8 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
     
     showPage();
     showButtons(false,false,true);
+    
+    loadPBEMServerDefaults();
 }
 
 
@@ -238,6 +245,9 @@ StartMultiplayerGame::~StartMultiplayerGame()
 {
    if ( newMap )
       delete newMap;
+   
+   if ( pbemserver )
+      delete pbemserver;
 }      
 
 bool StartMultiplayerGame::Apply()
@@ -323,7 +333,21 @@ bool StartMultiplayerGame::Apply()
             return true;
          }      
          break;
-              
+      case PBEMServerSetup:
+          {
+            if ( !pbemserver )
+               pbemserver = new PBEMServer();
+            
+            // @PBEMSERVER
+            // transferring the data from the dialog to the class that will be associated with the game
+            
+            
+            PG_LineEdit* le = dynamic_cast<PG_LineEdit*>( FindChild( "Server", true ));
+            if ( le &&  !le->GetText().empty() ) 
+               pbemserver->setServerAddress ( le->GetText());
+            
+         }
+         return true;
       default: 
            break;
    }
@@ -358,7 +382,7 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
             break;
       case PlayerSetup: 
             if ( Apply() )
-               if ( mode == PBEM || mode == PBP || mode == PBEMServer )
+               if ( mode == PBEM || mode == PBP || mode == PBEM_Server )
                   page = EmailSetup;
                else
                   page = AllianceSetup;
@@ -366,7 +390,7 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
             break;       
       case EmailSetup: 
             if ( Apply() ) {
-               if ( mode == PBEMServer )
+               if ( mode == PBEM_Server )
                   page = PBEMServerSetup;
                else
                   page = AllianceSetup;
@@ -431,6 +455,21 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
    } else
       return false;
 }
+
+void StartMultiplayerGame::loadPBEMServerDefaults()
+{
+      if ( !pbemserver )
+         pbemserver = new PBEMServer();
+      
+      // @PBEMSERVER
+      // transferring the data from the dialog to the class that will be associated with the game
+   
+      PG_LineEdit* le = dynamic_cast<PG_LineEdit*>( FindChild( "Server", true ));
+      if ( le )
+         le->SetText( PBEMServer::getDefaultServerAddress() );
+   
+}
+
 
 void StartMultiplayerGame::showPage()
 {
@@ -566,7 +605,7 @@ bool StartMultiplayerGame::checkPlayerStat()
             if ( newMap->player[i].exist() )
                if ( newMap->player[i].stat == Player::computer || newMap->player[i].stat == Player::off ) {
                   newMap->player[i].stat = Player::human;
-                  msg += newMap->player[i].getName() + " has been switch to human\n";
+                  msg += newMap->player[i].getName() + " has been switched to human\n";
                   ++humanNum;
                }
             
@@ -591,7 +630,7 @@ bool StartMultiplayerGame::checkPlayerStat()
             if ( newMap->player[i].exist() )
                if ( newMap->player[i].stat == Player::computer || newMap->player[i].stat == Player::off ) {
                   newMap->player[i].stat = Player::human;
-                  msg += newMap->player[i].getName() + " has been switch to human\n";
+                  msg += newMap->player[i].getName() + " has been switched to human\n";
                   ++humanNum;
                }
    }
@@ -619,7 +658,10 @@ ASCString StartMultiplayerGame::getDefaultPBEM_Filename()
 void StartMultiplayerGame::setupNetwork()
 {
    if ( mode == PBP || mode == PBEM ) {
-      if ( newMap && !newMap->network ) {
+      if ( newMap && (!newMap->network || newMap->network->getMechanismID() != FileTransfer::mechanismID()) ) {
+         
+         delete newMap->network;
+         
          FileTransfer* ft = new FileTransfer();
          newMap->network = ft;
          
@@ -627,6 +669,14 @@ void StartMultiplayerGame::setupNetwork()
             ft->setup( PBEMfilename );
          else   
             ft->setup( getDefaultPBEM_Filename() );
+      }
+   } else
+   if ( mode == PBEM_Server ) {
+      if ( newMap ) {
+         delete newMap->network;
+         newMap->network = pbemserver;
+         
+         pbemserver = NULL;
       }
    }
 }

@@ -55,7 +55,6 @@
 #include "messagedlg.h"
 #include "gameevent_dialogs.h"
 #include "cannedmessages.h"
-#include "network.h"
 #include "mapdisplay.h"
 
 #include "dialogs/choosetech.h"

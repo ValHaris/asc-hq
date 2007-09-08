@@ -1358,7 +1358,7 @@ void  savereplay( GameMap* gamemap, int num )
    } /* endcatch */
 }
 
-GameMap*  loadreplay( pmemorystreambuf streambuf )
+GameMap*  loadreplay( tmemorystreambuf* streambuf )
 {
    GameMap* replaymap = NULL;
 

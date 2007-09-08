@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,1.99.93.107)
+AC_INIT(asc, )
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -132,6 +132,16 @@ dnl be compiled correctly
 SAVE_CXXFLAGS=$CXXFLAGS
 SAVE_CFLAGS=$CFLAGS
 SAVE_LIBS=$LIBS
+
+
+# LIBCURL_CHECK_CONFIG ([DEFAULT-ACTION], [MINIMUM-VERSION],
+#                       [ACTION-IF-YES], [ACTION-IF-NO])
+
+
+LIBCURL_CHECK_CONFIG(yes,7.10.0,,AC_LIB_MISSING( curl, http://curl.haxx.se/libcurl/ ))
+
+AC_SUBST(LIBCURL)
+AC_SUBST(LIBCURL_CPPFLAGS)
 
 
 dnl check for libSDL
@@ -577,6 +587,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/docs/Makefile \
        source/docs/en/Makefile \
        source/graphics/Makefile \
+       source/network/Makefile \
        source/dialogs/Makefile \
        source/widgets/Makefile \
        source/actions/Makefile \

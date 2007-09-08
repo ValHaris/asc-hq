@@ -20,7 +20,7 @@
     <general>
       <mainprogram>asc</mainprogram>
       <useconfiguration>default</useconfiguration>
-      <activetarget>source/unix/mapeditor/asc_mapedit</activetarget>
+      <activetarget>source/unix/asc/asc</activetarget>
     </general>
     <configure>
       <configargs/>
@@ -51,7 +51,7 @@
       <envvars/>
       <globaldebugarguments></globaldebugarguments>
       <globalcwd>/home/martin/asc/v2/amd64</globalcwd>
-      <useglobalprogram>true</useglobalprogram>
+      <useglobalprogram>false</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
     </run>

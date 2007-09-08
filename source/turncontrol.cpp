@@ -37,9 +37,9 @@
 #include "dialog.h"
 #include "strtmesg.h"
 #include "loaders.h"
-#include "network.h"
 #include "cannedmessages.h"
 #include "viewcalculation.h"
+#include "network/simple_file_transfer.h"
 
 bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
 {

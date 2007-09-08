@@ -20,30 +20,37 @@
 
 
 
-#ifndef network_h
-#define network_h
+#ifndef pbemserver_h
+#define pbemserver_h
 
-#include "networkinterface.h"
+#include "../networkinterface.h"
 
+class ASC_PBEM;
 
-class FileTransfer : public GameTransferMechanism {
+class PBEMServer : public GameTransferMechanism {
+      ASCString serverAddress;
       ASCString filename;
+      int gameID;
+      
    protected:   
       void readChildData ( tnstream& stream );
       void writeChildData ( tnstream& stream ) const;
-      bool enterfilename();
-      ASCString constructFileName( const GameMap* actmap, int lastPlayer, int lastturn ) const;
+      
+      ASC_PBEM* getSession();
    public:
+      
+      PBEMServer();
+      
       void setup();
-      void setup( const ASCString& filename );
       
       void send( const GameMap* map, int lastPlayer, int lastturn  );
       GameMap* receive();
-      GameMap* loadPBEMFile( const ASCString& filename );
       ASCString getMechanismID() const { return mechanismID(); };
-      static ASCString mechanismID() { return "FileTransfer"; };
+      static ASCString mechanismID() { return "PBEM-Server"; };
+      
+      
+      static ASCString getDefaultServerAddress();
+      void setServerAddress( const ASCString& address );
 };
-
-extern void networksupervisor ( void );
 
 #endif

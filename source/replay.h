@@ -96,7 +96,7 @@ class trunreplay {
             int movenum;
             void execnextreplaymove ( void );
             GameMap* orgmap;
-            pmemorystream stream;
+            tmemorystream* stream;
             void wait ( int t = ticker );
             void wait ( MapCoordinate pos, int t = ticker );
             void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ticker );

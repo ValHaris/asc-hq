@@ -2113,7 +2113,7 @@ int checkforvaliddirectory ( char* dir )
   }
 
 
-tmemorystream :: tmemorystream ( pmemorystreambuf lbuf, IOMode lmode )
+tmemorystream :: tmemorystream ( tmemorystreambuf* lbuf, IOMode lmode )
 {
 
    blocksize = 1024;

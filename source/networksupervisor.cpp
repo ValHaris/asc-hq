@@ -32,7 +32,7 @@
 #include "global.h"
 #include "misc.h"
 #include "typen.h"
-#include "network.h"
+#include "network/simple_file_transfer.h"
 #include "dlg_box.h"
 #include "dialog.h"
 #include "sgstream.h"

@@ -306,9 +306,9 @@ class GameMap {
       public:
           ReplayInfo ( void );
 
-          pmemorystreambuf guidata[8];
-          pmemorystreambuf map[8];
-          pmemorystream    actmemstream;
+          tmemorystreambuf* guidata[8];
+          tmemorystreambuf* map[8];
+          tmemorystream*    actmemstream;
 
           //! if stopRecordingActions > 0 then no actions will be recorded. \see LockReplayRecording
           int stopRecordingActions;
