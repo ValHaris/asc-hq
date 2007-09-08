@@ -68,9 +68,12 @@ class treactionfirereplay : public treactionfire {
 };
 
 class tsearchreactionfireingunits : public treactionfire {
-           protected:
+           private: 
+                void initLimits();
+                void findOffensiveUnits( Vehicle* vehicle, int height, int x1, int y1, int x2, int y2 );
 
-              int attack( Vehicle* attacker, Vehicle* target, MapDisplayInterface* md );
+           protected:
+                int attack( Vehicle* attacker, Vehicle* target, MapDisplayInterface* md );
 
                 static int maxshootdist[8];     // f?r jede Hhenstufe eine
                 void addunit ( Vehicle* vehicle );
@@ -83,6 +86,7 @@ class tsearchreactionfireingunits : public treactionfire {
 
                 tsearchreactionfireingunits( void );
                 void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
+                void init ( Vehicle* eht, const MapCoordinate3D& pos );
                 int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
                 virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer );
                 ~tsearchreactionfireingunits();

@@ -85,47 +85,6 @@ bool checkevents( MapDisplayInterface* md )
 
 
 
-const char* EventTriggerName[] = { "Nothing (always true)",
-                                 "Nothing (always false)",
-                                 "Turn Passed",
-                                 "Unit Lost",
-                                 "Unit Conquered",
-                                 "UnitDestroyed",
-                                 "All Buildings Lost",
-                                 "All Units Lost",
-                                 "Building Conquered",
-                                 "Building Lost",
-                                 "Building Destroyed",
-                                 "Building Detected",
-                                 "Event Triggered",
-                                 "All Enemy Units Destroyed",
-                                 "All Enemy Buildings Destroyed",
-                                 "Any unit reaches area",
-                                 "Specific unit reaches area",
-                                 "Resource Tribute" };
-
-const char* EventActionName[] = { "Nothing",
-                                 "Wind Change",
-                                 "Change Game Parameter",
-                                 "Display Message (from text file)",
-                                 "Weather Change",
-                                 "Map Change",
-                                 "Add Object",
-                                 "MapChange Completed",
-                                 "Change Building Damage",
-                                 "Next Map",
-                                 "Lose Map",
-                                 "Display Ellipse",
-                                 "Remove Ellipse",
-                                 "Change Building Owner",
-                                 "Remove all objects",
-                                 "Display Message (immediate text)",
-                                 "Add Production Capability",
-                                 "Change Diplomatic Status",
-                                 "Add Resources to Building",
-                                 "Reinforcements",
-                                 "Set View Sharing" };
-
 
 Event::Event ( GameMap& map_ ) : gamemap ( map_ ), playerBitmap(0xff), reArmNum(0), action(NULL)
 {

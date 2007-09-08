@@ -77,7 +77,8 @@ enum EventAction_ID { EventAction_Nothing,
                      EventAction_ChangeDiplomaticStatus,
                      EventAction_AddResources,
                      EventAction_Reinforcements,
-                     EventAction_SetViewSharing };
+                     EventAction_SetViewSharing,
+                     EventAction_ChangePlayerState };
 
 
 class EventTriggered;
@@ -126,7 +127,7 @@ class TriggerNothingTrue: public TriggerNothing {
       State getState( int player ) { return finally_fulfilled; };
    public:
       TriggerNothingTrue() : TriggerNothing( Trigger_NothingTrue ) {};
-      ASCString getName() const { return "Nothing (true)"; };
+      ASCString getName() const { return "Nothing (always true)"; };
 };
 
 class TriggerNothingFalse: public TriggerNothing {
@@ -134,7 +135,7 @@ class TriggerNothingFalse: public TriggerNothing {
       State getState( int player ) { return finally_failed; };
    public:
       TriggerNothingFalse() : TriggerNothing( Trigger_NothingFalse ) {};
-      ASCString getName() const { return "Nothing (false)"; };
+      ASCString getName() const { return "Nothing (always false)"; };
 };
 
 
@@ -349,10 +350,10 @@ class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, p
       void setup();
       void arm();
       void triggered();
+      ASCString getName() const;
 
     protected:
       void fieldOperator( const MapCoordinate& mc );
-      ASCString getName() const;
 };
 
 class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {
@@ -369,10 +370,10 @@ class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public
       void setup();
       void arm();
       void triggered();
+      ASCString getName() const;
 
     protected:
       void fieldOperator( const MapCoordinate& mc );
-      ASCString getName() const;
 };
 
 
@@ -406,6 +407,9 @@ class Action_Nothing: public EventAction {
 
       void execute( MapDisplayInterface* md ) {};
       void setup() {};
+
+      ASCString getName() const { return "-nothing-"; };
+
 };
 
 
@@ -426,6 +430,9 @@ class WindChange: public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Wind change"; };
+
 };
 
 class ChangeGameParameter: public EventAction {
@@ -447,6 +454,9 @@ class ChangeGameParameter: public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Change game parameter"; };
+
 };
 
 class DisplayMessage: public EventAction {
@@ -462,6 +472,8 @@ class DisplayMessage: public EventAction {
       void execute( MapDisplayInterface* md );
 
       void setup();
+
+      ASCString getName() const { return "Display Message (from text file)"; };
 };
 
 
@@ -483,6 +495,9 @@ class WeatherChange : public MapModificationEvent {
       void writeData ( tnstream& stream );
 
       void setup();
+
+      ASCString getName() const { return "Weather change"; };
+
 };
 
 class MapChange : public MapModificationEvent {
@@ -495,6 +510,8 @@ class MapChange : public MapModificationEvent {
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream );
       void setup();
+
+      ASCString getName() const { return "Map Change"; };
 };
 
 class AddObject : public MapModificationEvent {
@@ -509,6 +526,8 @@ class AddObject : public MapModificationEvent {
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream );
       void setup();
+
+      ASCString getName() const { return "Add object"; };
 };
 
 
@@ -521,6 +540,9 @@ class MapChangeCompleted : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup() {};
+
+      ASCString getName() const { return "map change completed"; };
+
 };
 
 
@@ -538,6 +560,8 @@ class ChangeBuildingDamage: public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Change building damage"; };
 };
 
 class NextMap : public EventAction {
@@ -551,6 +575,9 @@ class NextMap : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Next Map in Campaign"; };
+
 };
 
 class LoseMap : public EventAction {
@@ -562,6 +589,9 @@ class LoseMap : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup() {};
+
+      ASCString getName() const { return "Lose Map"; };
+
 };
 
 class DisplayEllipse : public EventAction {
@@ -581,6 +611,9 @@ class DisplayEllipse : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Display Ellipse (legacy event)"; };
+
 };
 
 class RemoveEllipse : public EventAction {
@@ -592,6 +625,9 @@ class RemoveEllipse : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup() {};
+
+      ASCString getName() const { return "Remove ellipse (legacy event)"; };
+
 };
 
 class RemoveAllObjects : public MapModificationEvent {
@@ -602,6 +638,9 @@ class RemoveAllObjects : public MapModificationEvent {
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream );
       void setup();
+
+      ASCString getName() const { return "Remove all objects"; };
+
 };
 
 class ChangeBuildingOwner : public EventAction {
@@ -615,18 +654,24 @@ class ChangeBuildingOwner : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Change Building Owner"; };
 };
 
 class DisplayImmediateMessage: public EventAction {
       ASCString message;
+      int recipients;
     public:
-      DisplayImmediateMessage(): EventAction( EventAction_DisplayImmediateMessage ) {};
+      DisplayImmediateMessage(): EventAction( EventAction_DisplayImmediateMessage ), recipients(0) {};
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream );
 
       void execute( MapDisplayInterface* md );
 
       void setup();
+
+      ASCString getName() const { return "Display Message (immediate text)"; };
+
 };
 
 class AddProductionCapability : public EventAction {
@@ -640,6 +685,9 @@ class AddProductionCapability : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Add Production Capability"; };
+
 };
 
 
@@ -655,6 +703,9 @@ class ChangeDiplomaticStatus : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Change Diplomatic Status"; };
+
 };
 
 class SetViewSharing : public EventAction {
@@ -669,6 +720,9 @@ class SetViewSharing : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Set view sharing"; };
+
 };
 
 
@@ -683,6 +737,8 @@ class AddResources : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Add Resources to Building"; };
 };
 
 class Reinforcements : public EventAction {
@@ -698,6 +754,9 @@ class Reinforcements : public EventAction {
 
       void execute( MapDisplayInterface* md );
       void setup();
+
+      ASCString getName() const { return "Reinforcements"; };
+
 };
 
 

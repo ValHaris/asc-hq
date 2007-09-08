@@ -26,6 +26,7 @@
 #include "../viewcalculation.h"
 #include "../replay.h"
 #include "../soundList.h"
+#include "../reactionfire.h"
 
 bool JumpDrive::available( const Vehicle* subject )
 {
@@ -72,7 +73,7 @@ bool JumpDrive::getFields( const Vehicle* subject )
    return destinations.size() > 0;
 }
 
-bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination )
+bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination, MapDisplayInterface* mapDisplay )
 {
    if ( !available(subject ))
       return false;
@@ -88,20 +89,23 @@ bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination )
    subject->getResource( subject->typ->jumpDrive.consumption, false );
    subject->removeview();
 
-   int nwid = subject->networkid;
+   int networkID = subject->networkid;
    GameMap* map  = subject->getMap();
 
-/*   tsearchreactionfireingunits srfu;
-   AStar3D::Path path;
-   path.push_back ( destination );
-   srfu.init( subject , path );
-*/
+
+   MapCoordinate3D dest3D (destination, subject->height );
+
+   tsearchreactionfireingunits srfu;
+   srfu.init( subject , dest3D );
+
    SoundList::getInstance().playSound ( SoundList::jumpdrive, 0 );
 
-/*
-   if ( rf->checkfield ( to, vehicle, mapDisplay )) 
-      subject = map->getUnit ( networkID );
-*/
+
+   srfu.checkfield( dest3D, subject, mapDisplay );
+   srfu.finalCheck( mapDisplay, subject->getOwner() );
+
+
+   subject = map->getUnit ( networkID );
 
    if ( subject ) {
       subject->setnewposition ( destination.x, destination.y );
@@ -109,11 +113,9 @@ bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination )
       subject->addview();
       subject->getMap()->getField(destination)->vehicle = subject;
    }
-   evaluateviewcalculation( subject->getMap() );
-
+   evaluateviewcalculation( map );
    
-
-   logtoreplayinfo( rpl_jump , subject->networkid, destination.x, destination.y );
+   logtoreplayinfo( rpl_jump , networkID, destination.x, destination.y );
    
    return true;
 }

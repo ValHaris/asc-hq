@@ -29,7 +29,7 @@ extern void viewmessages( char* title, const MessagePntrContainer& msgc, bool ed
 extern void viewmessage( const Message& message );
 extern void editmessage( Message& msg );
 extern void editjournal();
-extern void viewjournal();
+extern void viewjournal( bool showEmptyDialog );
 extern void viewunreadmessages( Player& player );
 extern void checkJournal( Player& player );
 

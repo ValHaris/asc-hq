@@ -153,7 +153,7 @@ class EventEditor : public ASC_PG_Dialog {
          int ypos = 30;
          
          new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25 ), "Action:" );
-         eventType = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), EventActionNum, EventActionName );
+         eventType = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), actionFactory::Instance().getNames() );
          if ( event->action )
             eventType->SelectItem ( event->action->getActionID() );
          eventType->selectionSignal.connect( SigC::slot( *this, &EventEditor::actionSelected ));
@@ -168,7 +168,7 @@ class EventEditor : public ASC_PG_Dialog {
          for ( int e = 0; e < 4; ++e ) {
             new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25), "Trigger " + ASCString::toString(e));
             
-            DropDownSelector* trigger = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 200,25 ), EventTriggerNum, EventTriggerName );
+            DropDownSelector* trigger = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 200,25 ), triggerFactory::Instance().getNames() );
                  
             (new PG_Button( this, PG_Rect( labelWidth+50+200, ypos, 100, 25 ), "setup"))->sigClick.connect( SigC::bind( SigC::slot( *this, &EventEditor::setupTrigger ), e));
             
@@ -319,7 +319,7 @@ class EventList : public ASC_PG_Dialog {
       {
          listbox->DeleteAll();
          for ( GameMap::Events::iterator i = actmap->events.begin(); i != actmap->events.end(); ++i ) {
-            ASCString text = EventActionName[(*i)->action->getActionID()];
+            ASCString text = (*i)->action->getName();
             text += " - " + (*i)->description;
             
             new PG_ListBoxItem( listbox, 20, text );

@@ -1109,7 +1109,7 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
          } else 
             if ( moveparams.movestatus == 140 ) {
                JumpDrive jd;
-               jd.jump ( moveparams.vehicletomove, pos );
+               jd.jump ( moveparams.vehicletomove, pos, &getDefaultMapDisplay() );
                actmap->cleartemps(7);
                repaintMap();
                mapChanged( actmap );

@@ -1971,7 +1971,8 @@ void trunreplay :: execnextreplaymove ( void )
                JumpDrive jd;
                if ( jd.available( veh )) {
                   displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
-                  if ( !jd.jump(veh, MapCoordinate(x,y) ))
+                  ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
+                  if ( !jd.jump(veh, MapCoordinate(x,y), &rmd ))
                      error(MapCoordinate(x,y), "Unit cannot jump to this position");
                   
                } else

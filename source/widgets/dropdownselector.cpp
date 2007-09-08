@@ -29,6 +29,18 @@ DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int ite
 }
 
 
+DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, const std::vector<ASCString>& names, const std::string &style )
+   : PG_DropDown( parent, r, -1, style ), first(true)
+{
+   SetEditable(false);
+   sigSelectItem.connect( SigC::slot( *this, &DropDownSelector::itemSelected ));
+
+   for ( std::vector<ASCString>::const_iterator i = names.begin(); i != names.end(); ++i )
+      AddItem( *i );
+}
+
+
+
 DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int id, const std::string &style) 
    : PG_DropDown( parent, r, id, style ), first(true)
 {

@@ -50,11 +50,6 @@ extern void  checktimedevents( MapDisplayInterface* md );
 
 extern void eventReady();
 
-extern const int EventActionNum;
-extern const int EventTriggerNum;
-extern const char* EventTriggerName[];
-extern const char* EventActionName[];
-
 typedef int EventTriggerID;
 typedef int EventActionID;
 
@@ -103,7 +98,7 @@ class EventAction {
 
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) = 0;
-      virtual ASCString getName();
+      virtual ASCString getName() const = 0;
 
       virtual void execute( MapDisplayInterface* md ) = 0;
       virtual void setup() = 0;
@@ -166,9 +161,41 @@ class VariableLocker {
 };
 
 
+template < class AbstractProduct, typename IdentifierType,typename NameType = ASCString >
+class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
+{
+   private:
+      map<IdentifierType,NameType> names;
+   public:
+      vector<NameType> getNames(){
+         vector<NameType> nameList;
+         for ( map<IdentifierType,NameType>::iterator i = names.begin(); i != names.end(); ++i )
+            nameList.push_back( i->second );
+         return nameList;
+      }
 
-typedef Loki::SingletonHolder< Factory< EventTrigger, EventTriggerID > > triggerFactory;
-typedef Loki::SingletonHolder< Factory< EventAction , EventActionID  > > actionFactory;
+      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
+      {
+         return registerClass( id, createFn, nameProvider(id) );
+      }
+
+      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn, NameType name )
+      {
+         if ( Factory<AbstractProduct, IdentifierType>::registerClass ( id, createFn )) {
+            names[id] = name;
+            return true;
+         } else
+            return false;
+      }
+
+      AbstractProduct* createObject( IdentifierType id ) {
+         return Factory<AbstractProduct, IdentifierType>::createObject( id );
+      }
+
+};
+
+typedef Loki::SingletonHolder< FactoryWithNames< EventTrigger, EventTriggerID > > triggerFactory;
+typedef Loki::SingletonHolder< FactoryWithNames< EventAction , EventActionID  > > actionFactory;
 
 
 

@@ -380,6 +380,7 @@ void ContainerBase :: addToCargo( Vehicle* veh )
 
    cargo.push_back( veh );
    veh->cargoParent = this;
+   veh->setnewposition(getPosition());
    cargoChanged();
 }
 

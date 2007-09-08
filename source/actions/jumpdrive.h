@@ -26,6 +26,7 @@
 
 #include "../containerbase.h"
 #include "../vehicletype.h"
+#include "../mapdisplayinterface.h"
 
 
 class GameMap;
@@ -40,7 +41,7 @@ class JumpDrive  {
       bool getFields( const Vehicle* subject );
       SigC::Signal2<void,GameMap*,const MapCoordinate&> fieldAvailable;
       
-      bool jump( Vehicle* subject, const MapCoordinate& destination );
+      bool jump( Vehicle* subject, const MapCoordinate& destination, MapDisplayInterface* mapDisplay );
       
 };
 

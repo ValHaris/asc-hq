@@ -152,14 +152,15 @@ tsearchreactionfireingunits :: tsearchreactionfireingunits ( void )
       unitlist[i] = NULL;
 }
 
-void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path& fieldlist )
+void tsearchreactionfireingunits :: init ( Vehicle* eht, const MapCoordinate3D& pos )
 {
-   int x1 = maxint;
-   int y1 = maxint;
-   int x2 = 0;
-   int y2 = 0;
-   int j, h;
+   initLimits();
+   findOffensiveUnits( eht, pos.getNumericalHeight(), pos.x, pos.y, pos.x, pos.y );
+}
 
+
+void tsearchreactionfireingunits :: initLimits()
+{
    if ( maxshootdist[0] == -1 ) {
       for (int i = 0; i < 8; i++ )
          maxshootdist[i] = 0;
@@ -167,28 +168,18 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
       for (int i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
          Vehicletype* fzt = vehicleTypeRepository.getObject_byPos ( i );
          if ( fzt )
-            for (j = 0; j < fzt->weapons.count; j++ )
+            for (int j = 0; j < fzt->weapons.count; j++ )
                if ( fzt->weapons.weapon[j].shootable() )
-                  for (h = 0; h < 8; h++ )
+                  for (int h = 0; h < 8; h++ )
                      if ( fzt->weapons.weapon[j].targ & ( 1 << h ) )
                         if ( fzt->weapons.weapon[j].maxdistance > maxshootdist[h] )
                            maxshootdist[h] = fzt->weapons.weapon[j].maxdistance;
       }
    }
+}
 
-   for ( AStar3D::Path::const_iterator i = fieldlist.begin(); i != fieldlist.end(); i++) {
-      if ( i->x > x2 )
-         x2 = i->x ;
-      if ( i->y > y2 )
-         y2 = i->y ;
-
-      if ( i->x < x1 )
-         x1 = i->x ;
-      if ( i->y < y1 )
-         y1 = i->y ;
-   }
-   int height = log2 ( vehicle->height );
-
+void tsearchreactionfireingunits :: findOffensiveUnits( Vehicle* vehicle, int height, int x1, int y1, int x2, int y2 )
+{
    x1 -= maxshootdist[height];
    y1 -= maxshootdist[height];
    x2 += maxshootdist[height];
@@ -247,6 +238,29 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
       }
    }
      
+
+}
+
+
+void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path& fieldlist )
+{
+   int x1 = maxint;
+   int y1 = maxint;
+   int x2 = 0;
+   int y2 = 0;
+
+   for ( AStar3D::Path::const_iterator i = fieldlist.begin(); i != fieldlist.end(); i++) {
+      if ( i->x > x2 )
+         x2 = i->x ;
+      if ( i->y > y2 )
+         y2 = i->y ;
+
+      if ( i->x < x1 )
+         x1 = i->x ;
+      if ( i->y < y1 )
+         y1 = i->y ;
+   }
+   findOffensiveUnits ( vehicle, log2 ( vehicle->height ), x1,y1,x2,y2);
           
 }
 

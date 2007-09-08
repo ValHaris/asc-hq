@@ -168,6 +168,7 @@ void Menu::setup()
    addbutton ( "Unit Summary\tctrl-f", ua_unitsummary );
    currentMenu->addSeparator();
    addbutton ( "Unit Production Analysis", ua_unitproductionanalysis );
+   addbutton ( "Mining Station Analysis", ua_showMiningPower );
    
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 

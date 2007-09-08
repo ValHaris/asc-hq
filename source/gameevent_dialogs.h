@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.4 2007-04-13 16:15:53 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.5 2007-09-08 13:08:50 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -78,6 +78,21 @@ class ReinforcementSelector : public SelectFromMap {
       bool mark();
    public:
       ReinforcementSelector( CoordinateList& list, GameMap* map, tmemorystreambuf& buffer, int& objNum ) : SelectFromMap( list, map ), buf( buffer), objectNum(objNum) {};
+};
+
+
+class BitMapEditor : public ASC_PG_Dialog {
+   public:
+      typedef int BitType;
+   private:
+      BitType& reference;
+      PG_PropertyEditor* propertyEditor;
+      vector<bool> values;
+
+      bool ok();
+
+   public:
+      BitMapEditor( BitType& value, const ASCString& title, const vector<ASCString>& names );
 };
 
 

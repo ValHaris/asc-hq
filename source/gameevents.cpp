@@ -22,6 +22,9 @@
     Boston, MA  02111-1307  USA
 */
 
+
+
+
 #include <stdio.h>
 
 #include <cstring>
@@ -50,9 +53,6 @@
 # include "resourcenet.h"
 # include "unitctrl.h"
 #endif
-
-const int EventActionNum = 21;
-const int EventTriggerNum = 18;
 
 
 void    viewtextmessage ( int id, int player )
@@ -360,10 +360,11 @@ void UnitTrigger::writeData ( tnstream& stream )
 ASCString UnitTrigger::getName() const
 {
    ASCString s = "unit ";
-   if ( gamemap->getUnit( unitID ))
-      s += gamemap->getUnit( unitID )->getName();
-   else
-      s += "<not found>";
+   if ( gamemap )
+      if ( gamemap->getUnit( unitID ))
+         s += gamemap->getUnit( unitID )->getName();
+      else
+         s += "<not found>";
    return s;
 }
 
@@ -480,9 +481,10 @@ void EventTriggered::writeData ( tnstream& stream )
 
 Event* EventTriggered::getTargetEventName() const
 {
-   for ( GameMap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i )
-      if ( (*i)->id == eventID )
-         return *i;
+   if ( gamemap )
+      for ( GameMap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i )
+         if ( (*i)->id == eventID )
+            return *i;
    return NULL;
 }
 
@@ -812,11 +814,6 @@ void Action_Nothing::writeData( tnstream& stream )
    stream.writeInt(1);
 }
 
-
-ASCString EventAction::getName()
-{
-  return EventActionName[actionID];
-}
 
 void WindChange::execute( MapDisplayInterface* md )
 {
@@ -1397,7 +1394,11 @@ void DisplayImmediateMessage::execute( MapDisplayInterface* md )
       return;
 
    if ( !message.empty() ) {
-      new Message ( message, gamemap, 1 << gamemap->actplayer, 0 );
+      if ( recipients == 0 )
+         new Message ( message, gamemap, 1 << gamemap->actplayer, 0 );
+      else
+         new Message ( message, gamemap, recipients, 0 );
+
       #ifdef sgmain
       viewunreadmessages ( gamemap->player[ gamemap->actplayer ] );
       #endif
@@ -1406,18 +1407,33 @@ void DisplayImmediateMessage::execute( MapDisplayInterface* md )
 
 void DisplayImmediateMessage::readData( tnstream& stream )
 {
-   versionTest(stream,1,1);
+   int version = versionTest(stream,1,2);
    message = stream.readString(true);
+   if ( version >= 2 )
+      recipients = stream.readInt();
+   else
+      recipients = 0;
 }
 
 void DisplayImmediateMessage::writeData( tnstream& stream )
 {
-   stream.writeInt(1);
+   stream.writeInt(2);
    stream.writeString( message );
+   stream.writeInt( recipients );
 }
 
 void DisplayImmediateMessage::setup()
 {
+
+   vector<ASCString> player;
+   for ( int p = 0; p < gamemap->getPlayerCount(); ++p )
+      player.push_back( gamemap->getPlayer(p).getName() );
+
+   BitMapEditor bme (recipients, "Select recieving players", player );
+   bme.Show();
+   bme.RunModal();
+
+
    while ( message.find ( "#CRT#" ) != ASCString::npos )
       message.replace ( message.find ( "#CRT#" ), 5, "\n" );
    while ( message.find ( "#crt#" ) != ASCString::npos )
@@ -1502,6 +1518,62 @@ void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
          gamemap->getPlayer(proposingPlayer).diplomacy.setState( targetPlayer, WAR );
       }
 }
+
+
+
+
+
+
+class ChangePlayerState : public EventAction {
+      int player;
+      Player::PlayerStatus state;
+    public:
+       ChangePlayerState(): EventAction( EventAction_ChangePlayerState), player(0), state (Player::off){};
+
+         void readData ( tnstream& stream )
+         {
+            versionTest(stream,1,1);
+            player = stream.readInt();
+            state = (Player::PlayerStatus) stream.readInt();
+         }
+
+
+         void writeData ( tnstream& stream )
+         {
+            stream.writeInt( 1 );
+            stream.writeInt ( player );
+            stream.writeInt ( state );
+         }
+
+      void execute( MapDisplayInterface* md )
+      {
+         gamemap->getPlayer(player).stat  = state;
+      }
+
+      void setup()
+      {
+         player = editInt("Player",player,0,7);
+
+         vector<ASCString> list;
+         list.push_back ( "human");
+         list.push_back ( "computer");
+         list.push_back ( "off");
+         list.push_back ( "supervisor");
+         list.push_back ( "suspended");
+
+         do {
+            state = Player::PlayerStatus( chooseString ( "State", list, state ));
+            if ( state == Player::supervisor )
+               warning("setting a player to supervisor is not allowed");
+         } while ( state == Player::supervisor );
+
+      }
+
+      ASCString getName() const { return "Change player state"; };
+      
+};
+
+
 
 
 
@@ -1626,6 +1698,8 @@ void Reinforcements :: setup ()
    ReinforcementSelector rs( fieldlist, gamemap, buf, objectNum );
    rs.Show();
    rs.RunModal();
+
+
 }
 
 class FindUnitPlacementPos : public SearchFields {
@@ -1721,48 +1795,72 @@ void Reinforcements :: execute( MapDisplayInterface* md )
    }
 }
 
+template<class T>
+ASCString TriggerNameProvider() {
+   T t;
+   return t.getName();
+};
+
+
+// #define registerTrigger(TriggerID, TriggerType) \
+//        triggerFactory::Instance().registerClass( TriggerType, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
+
+template <typename TriggerType > 
+bool registerTrigger( EventTrigger_ID id )
+{
+   return triggerFactory::Instance().registerClass( id, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
+}
+
+template <typename ActionType > 
+bool registerAction( EventAction_ID id )
+{
+   return actionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  TriggerNameProvider<ActionType>() );
+}
+
+
 
 
 namespace {
-   const bool r1 = triggerFactory::Instance().registerClass( Trigger_TurnPassed,       ObjectCreator<EventTrigger, TurnPassed> );
-   const bool r2 = triggerFactory::Instance().registerClass( Trigger_UnitLost,         ObjectCreator<EventTrigger, UnitLost> );
-   const bool r3 = triggerFactory::Instance().registerClass( Trigger_UnitConquered,    ObjectCreator<EventTrigger, UnitConquered> );
-   const bool r4 = triggerFactory::Instance().registerClass( Trigger_UnitDestroyed,    ObjectCreator<EventTrigger, UnitDestroyed> );
-   const bool r5 = triggerFactory::Instance().registerClass( Trigger_AllBuildingsLost, ObjectCreator<EventTrigger, AllBuildingsLost> );
-   const bool r6 = triggerFactory::Instance().registerClass( Trigger_AllUnitsLost,     ObjectCreator<EventTrigger, AllUnitsLost> );
-   const bool r7 = triggerFactory::Instance().registerClass( Trigger_NothingFalse,     ObjectCreator<EventTrigger, TriggerNothingFalse> );
-   const bool r8 = triggerFactory::Instance().registerClass( Trigger_NothingTrue ,     ObjectCreator<EventTrigger, TriggerNothingTrue> );
-   const bool r9 = triggerFactory::Instance().registerClass( Trigger_BuildingConquered,ObjectCreator<EventTrigger, BuildingConquered> );
-   const bool r10= triggerFactory::Instance().registerClass( Trigger_BuildingLost,     ObjectCreator<EventTrigger, BuildingLost> );
-   const bool r11= triggerFactory::Instance().registerClass( Trigger_BuildingDestroyed,ObjectCreator<EventTrigger, BuildingDestroyed> );
-   const bool r12= triggerFactory::Instance().registerClass( Trigger_BuildingSeen,     ObjectCreator<EventTrigger, BuildingSeen> );
-   const bool r13= triggerFactory::Instance().registerClass( Trigger_EventTriggered,   ObjectCreator<EventTrigger, EventTriggered> );
-   const bool r14= triggerFactory::Instance().registerClass( Trigger_AllEnemyBuildingsDestroyed, ObjectCreator<EventTrigger, AllEnemyBuildingsDestroyed> );
-   const bool r15= triggerFactory::Instance().registerClass( Trigger_AllEnemyUnitsDestroyed,     ObjectCreator<EventTrigger, AllEnemyUnitsDestroyed> );
-   const bool r16= triggerFactory::Instance().registerClass( Trigger_SpecificUnitEntersPolygon,ObjectCreator<EventTrigger, SpecificUnitEntersPolygon> );
-   const bool r17= triggerFactory::Instance().registerClass( Trigger_AnyUnitEntersPolygon,ObjectCreator<EventTrigger, AnyUnitEntersPolygon> );
-   const bool r18= triggerFactory::Instance().registerClass( Trigger_ResourceTribute,  ObjectCreator<EventTrigger, ResourceTribute> );
+   const bool r1 = registerTrigger<TurnPassed>                 ( Trigger_TurnPassed );
+   const bool r2 = registerTrigger<UnitLost>                   ( Trigger_UnitLost );
+   const bool r3 = registerTrigger<UnitConquered>              ( Trigger_UnitConquered );
+   const bool r4 = registerTrigger<UnitDestroyed>              ( Trigger_UnitDestroyed );
+   const bool r5 = registerTrigger<AllBuildingsLost>           ( Trigger_AllBuildingsLost );
+   const bool r6 = registerTrigger<AllUnitsLost>               ( Trigger_AllUnitsLost );
+   const bool r7 = registerTrigger<TriggerNothingFalse>        ( Trigger_NothingFalse );
+   const bool r8 = registerTrigger<TriggerNothingTrue>         ( Trigger_NothingTrue );
+   const bool r9 = registerTrigger<BuildingConquered>          ( Trigger_BuildingConquered );
+   const bool r10 = registerTrigger<BuildingLost>              ( Trigger_BuildingLost );
+   const bool r11 = registerTrigger<BuildingDestroyed>         ( Trigger_BuildingDestroyed );
+   const bool r12 = registerTrigger<BuildingSeen>              ( Trigger_BuildingSeen );
+   const bool r13 = registerTrigger<EventTriggered>            ( Trigger_EventTriggered );
+   const bool r14 = registerTrigger<AllEnemyBuildingsDestroyed>( Trigger_AllEnemyBuildingsDestroyed );
+   const bool r15 = registerTrigger<AllEnemyUnitsDestroyed>    ( Trigger_AllEnemyUnitsDestroyed );
+   const bool r16 = registerTrigger<SpecificUnitEntersPolygon> ( Trigger_SpecificUnitEntersPolygon );
+   const bool r17 = registerTrigger<AnyUnitEntersPolygon>      ( Trigger_AnyUnitEntersPolygon );
+   const bool r18 = registerTrigger<ResourceTribute>           ( Trigger_ResourceTribute );
 
-   const bool s0 = actionFactory::Instance().registerClass( EventAction_Nothing,         ObjectCreator<EventAction, Action_Nothing> );
-   const bool s1 = actionFactory::Instance().registerClass( EventAction_DisplayMessage,  ObjectCreator<EventAction, DisplayMessage> );
-   const bool s2 = actionFactory::Instance().registerClass( EventAction_WindChange,      ObjectCreator<EventAction, WindChange> );
-   const bool s3 = actionFactory::Instance().registerClass( EventAction_ChangeGameParameter, ObjectCreator<EventAction, ChangeGameParameter> );
-   const bool s4 = actionFactory::Instance().registerClass( EventAction_WeatherChange,   ObjectCreator<EventAction, WeatherChange> );
-   const bool s5 = actionFactory::Instance().registerClass( EventAction_MapChange,       ObjectCreator<EventAction, MapChange> );
-   const bool s6 = actionFactory::Instance().registerClass( EventAction_AddObject,       ObjectCreator<EventAction, AddObject> );
-   const bool s7 = actionFactory::Instance().registerClass( EventAction_MapChangeCompleted,   ObjectCreator<EventAction, MapChangeCompleted> );
-   const bool s8 = actionFactory::Instance().registerClass( EventAction_ChangeBuildingDamage, ObjectCreator<EventAction, ChangeBuildingDamage> );
-   const bool s9 = actionFactory::Instance().registerClass( EventAction_NextMap,         ObjectCreator<EventAction, NextMap> );
-   const bool s10 = actionFactory::Instance().registerClass( EventAction_LoseMap,        ObjectCreator<EventAction, LoseMap> );
-   const bool s11 = actionFactory::Instance().registerClass( EventAction_DisplayEllipse, ObjectCreator<EventAction, DisplayEllipse> );
-   const bool s12 = actionFactory::Instance().registerClass( EventAction_RemoveEllipse,  ObjectCreator<EventAction, RemoveEllipse> );
-   const bool s13 = actionFactory::Instance().registerClass( EventAction_ChangeBuildingOwner,     ObjectCreator<EventAction, ChangeBuildingOwner> );
-   const bool s14 = actionFactory::Instance().registerClass( EventAction_RemoveAllObjects,        ObjectCreator<EventAction, RemoveAllObjects> );
-   const bool s15 = actionFactory::Instance().registerClass( EventAction_DisplayImmediateMessage, ObjectCreator<EventAction, DisplayImmediateMessage> );
-   const bool s16 = actionFactory::Instance().registerClass( EventAction_AddProductionCapabiligy, ObjectCreator<EventAction, AddProductionCapability> );
-   const bool s17 = actionFactory::Instance().registerClass( EventAction_ChangeDiplomaticStatus,  ObjectCreator<EventAction, ChangeDiplomaticStatus> );
-   const bool s18 = actionFactory::Instance().registerClass( EventAction_AddResources,            ObjectCreator<EventAction, AddResources> );
-   const bool s19 = actionFactory::Instance().registerClass( EventAction_Reinforcements,          ObjectCreator<EventAction, Reinforcements> );
-   const bool s20 = actionFactory::Instance().registerClass( EventAction_SetViewSharing,          ObjectCreator<EventAction, SetViewSharing> );
+   const bool s0 = registerAction<Action_Nothing>( EventAction_Nothing );
+   const bool s1 = registerAction<DisplayMessage>( EventAction_DisplayMessage );
+   const bool s2 = registerAction<WindChange>( EventAction_WindChange );
+   const bool s3 = registerAction<ChangeGameParameter>( EventAction_ChangeGameParameter );
+   const bool s4 = registerAction<WeatherChange>( EventAction_WeatherChange );
+   const bool s5 = registerAction<MapChange>( EventAction_MapChange );
+   const bool s6 = registerAction<AddObject>( EventAction_AddObject );
+   const bool s7 = registerAction<MapChangeCompleted>( EventAction_MapChangeCompleted );
+   const bool s8 = registerAction<ChangeBuildingDamage>( EventAction_ChangeBuildingDamage );
+   const bool s9 = registerAction<NextMap>( EventAction_NextMap );
+   const bool s10 = registerAction<LoseMap>( EventAction_LoseMap );
+   const bool s11 = registerAction<DisplayEllipse>( EventAction_DisplayEllipse );
+   const bool s12 = registerAction<RemoveEllipse>( EventAction_RemoveEllipse );
+   const bool s13 = registerAction<ChangeBuildingOwner>( EventAction_ChangeBuildingOwner );
+   const bool s14 = registerAction<RemoveAllObjects>( EventAction_RemoveAllObjects );
+   const bool s15 = registerAction<DisplayImmediateMessage>( EventAction_DisplayImmediateMessage );
+   const bool s16 = registerAction<AddProductionCapability>( EventAction_AddProductionCapabiligy );
+   const bool s17 = registerAction<ChangeDiplomaticStatus>( EventAction_ChangeDiplomaticStatus );
+   const bool s18 = registerAction<AddResources>( EventAction_AddResources );
+   const bool s19 = registerAction<Reinforcements>( EventAction_Reinforcements );
+   const bool s20 = registerAction<SetViewSharing>( EventAction_SetViewSharing );
+   const bool s21 = registerAction<ChangePlayerState>( EventAction_ChangePlayerState );
 };
 

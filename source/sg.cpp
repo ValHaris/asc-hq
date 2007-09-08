@@ -734,7 +734,7 @@ void execuseraction ( tuseractions action )
          break;
 
       case ua_viewjournal:
-         viewjournal();
+         viewjournal( true );
          break;
 
       case ua_editjournal:
@@ -1128,6 +1128,35 @@ void showMemoryFootprint()
 }
 
 
+void viewMiningPower()
+{
+   typedef map<const ContainerBaseType*,ASCString> InfoMap;
+   InfoMap info;
+
+   for ( Player::BuildingList::iterator i = actmap->getCurrentPlayer().buildingList.begin(); i != actmap->getCurrentPlayer().buildingList.end(); ++i )
+      if ( (*i)->baseType->hasFunction( ContainerBaseType::MiningStation )) {
+         int power;
+         for ( int r = 0; r < 3; ++r )
+            if ( (*i)->maxplus.resource(r) ) {
+               power = 100 * (*i)->plus.resource(r) / (*i)->maxplus.resource(r) ;
+               break;
+            }
+         ASCString txt = ASCString::toString(power) + "% " + (*i)->getPosition().toString() + " " + (*i)->baseType->name + "\n";
+         info[(*i)->baseType] += txt;
+      }
+
+   ASCString fullText = "Mining Station Statistics\n\n";
+   for ( InfoMap::iterator i = info.begin(); i != info.end(); ++i )
+      fullText += i->second;
+
+
+   ViewFormattedText vft("Mining Stations", fullText, PG_Rect( -1, -1, 750, 550 ));
+   vft.Show();
+   vft.RunModal();
+
+}
+
+
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
 {
@@ -1292,6 +1321,9 @@ void execuseraction2 ( tuseractions action )
          break;
          
       case ua_getMemoryFootprint: showMemoryFootprint();
+         break;
+
+      case ua_showMiningPower: viewMiningPower();
          break;
 
       default:

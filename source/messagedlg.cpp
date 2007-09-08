@@ -487,10 +487,10 @@ void checkJournal( Player& player )
    if ( actmap->lastjournalchange.abstime )
       if ( (actmap->lastjournalchange.turn() == actmap->time.turn() ) ||
             (actmap->lastjournalchange.turn() == actmap->time.turn()-1  &&  actmap->lastjournalchange.move() > actmap->actplayer ) )
-               viewjournal();
+               viewjournal( false );
 }
 
-void viewjournal ( void )
+void viewjournal ( bool showEmptyDlg )
 {
    if ( !actmap->gameJournal.empty() ) {
       tviewanytext vat;
@@ -498,7 +498,8 @@ void viewjournal ( void )
       vat.run();
       vat.done();
    } else
-      infoMessage("no entries to journal yet");
+      if ( showEmptyDlg )
+         infoMessage("no entries to journal yet");
 
 }
 

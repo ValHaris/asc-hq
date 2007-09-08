@@ -49,8 +49,8 @@ class SelectFromMap : public ASC_PG_Dialog{
       bool ProcessEvent ( const SDL_Event *   event,bool   bModal = false  );
       virtual bool accept( const MapCoordinate& pos );
       virtual void showFieldMarking( const CoordinateList& coordinateList );
-      bool mark();
-      bool markField( const MapCoordinate& pos );
+      virtual bool mark();
+      virtual bool markField( const MapCoordinate& pos );
       bool eventKeyDown (const SDL_KeyboardEvent *key);
       void updateList();
       bool listItemClicked( PG_ListBoxBaseItem* item );

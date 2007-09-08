@@ -17,7 +17,9 @@
 #ifndef DROPDOWNSELECTOR_H
 #define DROPDOWNSELECTOR_H
 
+#include <vector>
 #include <pgdropdown.h>
+#include "../ascstring.h"
 
 class DropDownSelector: public PG_DropDown {
         bool first;
@@ -26,6 +28,7 @@ class DropDownSelector: public PG_DropDown {
    public:
       DropDownSelector( PG_Widget *parent, const PG_Rect &r=PG_Rect::null, int id=-1, const std::string &style="DropDown");
       DropDownSelector( PG_Widget *parent, const PG_Rect &r, int itemnum, const char** items, const std::string &style="DropDown" );
+      DropDownSelector( PG_Widget *parent, const PG_Rect &r, const std::vector<ASCString>& names,  const std::string &style="DropDown" );
       void AddItem (const std::string &text, void *userdata=NULL, Uint16 height=0);
       SigC::Signal1<void, int> selectionSignal;
 };
