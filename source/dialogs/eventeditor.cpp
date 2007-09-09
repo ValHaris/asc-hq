@@ -85,7 +85,7 @@ class EventEditor : public ASC_PG_Dialog {
       void triggerSelected( int type, int num )
       {
          if ( type>= 0 ) {
-            EventTriggerID triggerID = triggerFactory::Instance().getID(  actionNames.at(type) );
+            EventTriggerID triggerID = triggerFactory::Instance().getID(  triggerNames.at(type) );
 
             if ( event->trigger.size() <= num ) {
                event->trigger.resize(num+1);
@@ -196,7 +196,11 @@ class EventEditor : public ASC_PG_Dialog {
                for ( int i = 0; i < triggerNames.size(); ++i )
                   if ( event->trigger[e]->getName() == triggerNames[i] )
                      trigger->SelectItem ( i );
-            }
+            } else
+               for ( int i = 0; i < triggerNames.size(); ++i )
+                  if ( triggerNames[i] == "Nothing (always false)"  )
+                     trigger->SelectItem ( i );
+               
             trigger->selectionSignal.connect( SigC::bind( SigC::slot( *this, &EventEditor::triggerSelected), e ));
             ypos += 40;
          }

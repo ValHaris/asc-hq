@@ -142,9 +142,12 @@ void TurnPassed::setup()
 
 ASCString TurnPassed::getName() const
 {
-   ASCString s;
-   s.format( "turn %d , move %d passed ", turn, move );
-   return s; 
+   if ( turn >= 0 ) {
+      ASCString s;
+      s.format( "turn %d , move %d passed ", turn, move );
+      return s; 
+   } else
+      return "turn passed";
 }
 
 
@@ -155,7 +158,8 @@ ASCString BuildingPositionTrigger::getName() const
    if ( gamemap->getField(pos) && gamemap->getField(pos)->building )
       s += gamemap->getField(pos)->building->getName();
    else
-      s += " <not found> ";
+      if ( pos.valid() )
+         s += " <not found> ";
 
    return s;
 }
@@ -667,8 +671,6 @@ void SpecificUnitEntersPolygon::triggered()
       eventReady();
 }
 
-
-
 EventTrigger::State AnyUnitEntersPolygon::getState( int player )
 {
   found = false;
@@ -697,7 +699,6 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
      fld->connection |= cconnection_areaentered_anyunit;
    }
 }
-
 
 void AnyUnitEntersPolygon::readData ( tnstream& stream )
 {
@@ -774,9 +775,12 @@ void ResourceTribute::writeData ( tnstream& stream )
 
 ASCString ResourceTribute::getName() const
 {
-   ASCString s;
-   s.format ( "Resource tribute: %d E ; %d M ; %d F", demand.energy, demand.material, demand.fuel );
-   return s;
+   if ( payingPlayer >= 0 ) {
+      ASCString s;
+      s.format ( "Resource tribute: %d E ; %d M ; %d F", demand.energy, demand.material, demand.fuel );
+      return s;
+   } else
+      return "Resource tribute";
 }
 
 void ResourceTribute::setup()

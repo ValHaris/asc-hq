@@ -146,7 +146,7 @@ class TurnPassed : public EventTrigger {
     protected:
       virtual State getState( int player );
     public:
-      TurnPassed() : EventTrigger ( Trigger_TurnPassed ), turn( 0 ), move( 0 ) {};
+      TurnPassed() : EventTrigger ( Trigger_TurnPassed ), turn( -1 ), move( -1 ) {};
       TurnPassed( int turn_, int move_ ) : EventTrigger ( Trigger_TurnPassed ), turn( turn_ ), move( move_ ) {};
 
       virtual void readData ( tnstream& stream ) ;
