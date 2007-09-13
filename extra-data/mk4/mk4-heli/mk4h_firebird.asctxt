@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = FIREBIRD
+   parent = 380
+   ID = 1282
+
+   Description = Kampfhubschrauber
+   picture = mk4h_firebird.png
+   wreckageobject = 1282 14882
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+} VehicleType

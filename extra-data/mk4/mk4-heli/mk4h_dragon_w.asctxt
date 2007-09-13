@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 495
+
+   ID = 1245
+
+   Name = Dragon Wreck
+
+   Armor = 150
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1500
+      fuel = 150
+      Movement = 15
+   } RemovalCost
+
+   dry { 
+      picture = MK4h_dragon_w.png 1
+   } dry
+
+} ObjectType

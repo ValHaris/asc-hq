@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1282
+   ;Bezeichnung der verknüpften Technologie: Firebird
+   TechnologiesRequired = 1282
+} TechAdapter

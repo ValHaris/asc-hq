@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1252
+   ;Bezeichnung der verknüpften Technologie: Guppi
+   TechnologiesRequired = 1252
+} TechAdapter

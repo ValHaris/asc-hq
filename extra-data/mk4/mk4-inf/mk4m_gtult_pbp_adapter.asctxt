@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14009
+   ;Bezeichnung der verknüpften Technologie: Ultimate
+   TechnologiesRequired = 14009
+} TechAdapter

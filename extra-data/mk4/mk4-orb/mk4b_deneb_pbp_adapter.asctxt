@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1278
+   ;Bezeichnung der verknüpften Technologie: Deneb
+   TechnologiesRequired = 1278
+} TechAdapter

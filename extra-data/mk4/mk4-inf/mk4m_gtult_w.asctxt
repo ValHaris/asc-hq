@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14009
+
+   Name = Golem Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4m_gtult_w.png 1
+   } dry
+
+} ObjectType

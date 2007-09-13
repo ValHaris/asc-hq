@@ -1,0 +1,10 @@
+technology {
+   Name = Troll
+   infotext = Forschungsprojekt abgeschlossen! Troll verfügbar!
+   id = 1215
+   RelatedUnitID = 1215
+   parent = 100020
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 100020,100001,100101,1205 
+} Technology

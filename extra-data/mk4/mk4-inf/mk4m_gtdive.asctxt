@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = GT DIVE
+   ID = 1237
+   parent = 213
+   Description = Tauchroboter
+   Infotext = [ Diesem modifizierten Golem wurde eine komplette Tauchausruestung integriert. Anstatt der Panzerfaust verfuegt der DIVER ueber zeitgesteuerte Magnetsprengsaetze, welche gegen Schiffe und U-Boote eingesetzt werden.]
+   Picture = mk4m_gtdive.pcx
+   wreckageobject = 14237 14837
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 100
+} VehicleType

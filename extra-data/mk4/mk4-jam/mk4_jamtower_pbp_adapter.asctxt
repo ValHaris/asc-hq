@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B26
+   ;Bezeichnung der verknüpften Technologie: jammer
+   TechnologiesRequired = 14526
+} TechAdapter

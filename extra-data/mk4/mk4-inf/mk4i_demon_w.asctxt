@@ -1,0 +1,15 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 14205
+   SecondaryIDs = 1205
+
+   Name = Demon Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4i_demon_w.png 1
+   } dry
+
+} ObjectType

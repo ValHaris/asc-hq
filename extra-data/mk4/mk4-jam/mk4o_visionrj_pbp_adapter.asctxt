@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14019
+   ;Bezeichnung der verknüpften Technologie: Vision RJ
+   TechnologiesRequired = 14019
+} TechAdapter

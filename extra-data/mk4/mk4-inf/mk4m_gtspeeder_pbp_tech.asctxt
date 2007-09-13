@@ -1,0 +1,10 @@
+technology {
+   Name = GT Speeder
+   infotext = Forschungsprojekt abgeschlossen! GT Speeder verfügbar!
+   id = 14000
+   RelatedUnitID = 14000
+   parent = 100020
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 100020,100001,100021,100101,100304 
+} Technology

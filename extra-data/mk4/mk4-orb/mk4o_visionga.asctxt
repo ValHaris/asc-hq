@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = VISION GA
+   ID = 1253
+   parent = 234
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Description = Bodenangriffssatellit
+   Infotext = [ Dieser speziell zur Bodenzielbekaempfung entwickelte Waffentraeger ist mit mehreren hoch explosiven Raketen bestueckt. Das System ist nicht in der Lage eigenstaenig zu operieren und muss mittels eines geeigneten Transporters in den Orbit befoerdert werden. ]
+   Picture = mk4o_visionga.pcx
+   wreckageobject = 14253 14853
+} VehicleType

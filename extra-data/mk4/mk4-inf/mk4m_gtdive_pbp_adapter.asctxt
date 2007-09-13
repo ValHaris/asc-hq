@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1237
+   ;Bezeichnung der verknüpften Technologie: GT Dive
+   TechnologiesRequired = 1237
+} TechAdapter

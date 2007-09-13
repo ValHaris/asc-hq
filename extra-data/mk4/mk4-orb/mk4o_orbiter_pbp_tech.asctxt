@@ -1,0 +1,10 @@
+technology {
+   Name = Orbiter
+   infotext = Forschungsprojekt abgeschlossen! Orbiter verfügbar!
+   id = 1254
+   RelatedUnitID = 1254
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100003,100102,100302 
+} Technology

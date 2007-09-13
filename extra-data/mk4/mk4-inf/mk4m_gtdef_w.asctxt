@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14008
+
+   Name = GT Defender Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4m_golem_w.png 1
+   } dry
+
+} ObjectType

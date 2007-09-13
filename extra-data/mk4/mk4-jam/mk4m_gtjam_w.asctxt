@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14024
+
+   Name = GT Jam Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4m_golem_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1254
+   ;Bezeichnung der verknüpften Technologie: Orbiter
+   TechnologiesRequired = 1254
+} TechAdapter

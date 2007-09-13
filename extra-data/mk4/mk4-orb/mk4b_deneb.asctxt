@@ -1,0 +1,20 @@
+VehicleType { 
+
+   Name = DENEB
+   ID = 1278
+   parent = 237
+   Description = Orbitalabwehr
+   Infotext = [ Stationaeres Satellitenabwehrsystem mit grosser Reichweite und starker Panzerung. Gegenueber dem SKULL besitz der DENEB 3 zusaetzliche Raketen und keine Lademoeglichkeit fuer Roboter und leichte Fahrzeuge. Der DENEB besitzt nur unzureichende Radaranlagen. Die Feindaufklaerung muss durch andere Einheiten geschehen.]
+   Picture = mk4b_deneb.pcx
+   wreckageobject = 1278
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 40
+   WaitFortack = true
+
+   Weapons { 
+      Number = 3
+      Weapon2 ->* VehicleType.SAMH 
+   } Weapons
+
+} VehicleType

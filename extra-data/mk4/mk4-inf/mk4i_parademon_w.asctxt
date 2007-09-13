@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 14236
+
+   Name = Parademon Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4i_parademon_w.png 1
+   } dry
+
+} ObjectType

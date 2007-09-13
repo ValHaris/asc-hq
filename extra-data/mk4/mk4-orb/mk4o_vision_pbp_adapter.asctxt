@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1249
+   ;Bezeichnung der verknüpften Technologie: Vision
+   TechnologiesRequired = 1249
+} TechAdapter

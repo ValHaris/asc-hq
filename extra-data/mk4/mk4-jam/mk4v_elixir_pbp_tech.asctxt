@@ -1,0 +1,10 @@
+technology {
+   Name = Elixir
+   infotext = Forschungsprojekt abgeschlossen! Elixir verfügbar!
+   id = 1214
+   RelatedUnitID = 1214
+   parent = 100020
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100020,100002,100104,100306,14526 
+} Technology

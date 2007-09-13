@@ -1,0 +1,10 @@
+technology {
+   Name = Genni
+   infotext = Forschungsprojekt abgeschlossen! Genni verfügbar!
+   id = 14033
+   RelatedUnitID = 14033
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100003,100103,100207,1248
+} Technology

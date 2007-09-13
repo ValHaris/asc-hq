@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14033
+   ;Bezeichnung der verknüpften Technologie: Genni
+   TechnologiesRequired = 14033
+} TechAdapter

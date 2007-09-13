@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1281
+   ;Bezeichnung der verknüpften Technologie: Cromos
+   TechnologiesRequired = 1281
+} TechAdapter

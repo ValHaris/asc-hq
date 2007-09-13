@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 14253
+
+   Name = Vision GA Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4o_vision_w.png 1
+   } dry
+
+} ObjectType

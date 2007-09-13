@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1245
+   ;Bezeichnung der verknüpften Technologie: Dragon
+   TechnologiesRequired = 1245
+} TechAdapter

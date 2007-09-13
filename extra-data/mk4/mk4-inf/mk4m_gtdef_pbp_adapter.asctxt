@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14008
+   ;Bezeichnung der verknüpften Technologie: GT-Def
+   TechnologiesRequired = 14008
+} TechAdapter

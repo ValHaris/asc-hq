@@ -1,0 +1,67 @@
+VehicleType { 
+   Name = PIRATE
+   ID = 1287
+   Parent = 383
+
+   Description = Jet Helicopter
+   Infotext = [Der Pirat ist ein Spezialhelicopter. Durch seinen zusätzlichen Jetantrieb ist er in der Lage auch in hohen Luftschichten zu operieren und so Flackstellungen zu überfliegen. Durch die hohe Geschwindigkeit ist es ihm aber nicht möglich im Jetmodus Waffen abzufeuern.]
+   picture = mk4h_pirate.png
+   wreckageobject = 1287 14887
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 80
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank.fuel += 1000
+   Movement += 0 0 0 0 10 10 170 0 
+
+   Weapons { 
+
+      Weapon0 ->* VehicleType.lowBomb 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon3.Ammo = 4
+      Weapon3.Punch@MaxRange -= 5
+      Weapon3.Punch@MinRange -= 5
+
+   } Weapons
+
+   HeightChangeMethodNum = 5
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level low_level_flight
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 5
+      heightdelta = -1
+      dist = 0
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 15
+      heightdelta = -1
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 15
+      heightdelta = 1
+      dist = 1
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 10
+      heightdelta = -1
+      dist = 1
+      startheight = high_level_flight
+      canattack = true
+   } HeightChangeMethod4
+} VehicleType

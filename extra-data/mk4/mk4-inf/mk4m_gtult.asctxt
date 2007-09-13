@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = GT ULTIMATE
+   ID = 14009
+   parent = 210
+   
+   Description = Schwerer Kampfroboter
+   Infotext = [Diese schwere Einheit ist das Prachtstueck der Roboterindustrie. Mit weitreichenden Land- und Luftrakten ausgestattet ist er die Ideale Besetzung bei belagerungen oder Verteidigungen. Da er recht langsam ist, ist der offensive Einsatz nur bedingt zu empfehlen.]
+   Picture = mk4m_gtult.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 100
+   wreckageobject = 14009
+   Weapons { 
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+   } Weapons
+} VehicleType

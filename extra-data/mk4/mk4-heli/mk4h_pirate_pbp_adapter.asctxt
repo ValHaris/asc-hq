@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1287
+   ;Bezeichnung der verknüpften Technologie: Pirate
+   TechnologiesRequired = 1287
+} TechAdapter

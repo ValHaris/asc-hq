@@ -1,0 +1,10 @@
+technology {
+   Name = GT Dive
+   infotext = Forschungsprojekt abgeschlossen! GT Dive verfügbar!
+   id = 1237
+   RelatedUnitID = 1237
+   parent = 100020
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 100020,100001,100103,1215,1205 
+} Technology

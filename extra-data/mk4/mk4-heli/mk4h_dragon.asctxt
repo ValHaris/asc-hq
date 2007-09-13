@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = DRAGON
+   parent = 382
+   ID = 1245
+
+   Description = Kampfhubschrauber
+   Infotext = []
+   picture = mk4h_dragon.png
+   wreckageobject = 1245 14845
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 20
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange += 3
+      Weapon0.Punch@MinRange += 3
+
+      Weapon1 ->* VehicleType.ASM 
+      Weapon1.Ammo = 4
+
+      Weapon2.Punch@MaxRange = 42
+      Weapon2.Punch@MinRange = 42
+   } Weapons
+} VehicleType

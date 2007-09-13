@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14837
+
+   Name = GT Dive Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4m_golem_w.png 1
+   } dry
+
+} ObjectType

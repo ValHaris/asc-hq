@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 494
+
+   ID = 14833
+
+   Name = Genni Wreck
+
+   
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1100
+      fuel = 50
+      Movement = 15
+   } RemovalCost 
+
+   dry { 
+      picture = MK4h_genni_w.png 1
+   } dry
+
+} ObjectType

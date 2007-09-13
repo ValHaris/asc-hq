@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = GUPPI
+   parent = 384
+   ID = 1252
+   Description = Transporthubschrauber
+   Infotext = [Der Guppi Transporthubschrauber ist ein Drehflügelflugzeug, denn seine Tragflächen sind in Form eines horizontalen Rotors aufgebaut. Der Vorteil eines Hubschraubers aber liegt in der Fähigkeit, in der Luft stehen zu bleiben (Schwebeflug, auch Hover genannt), rückwärts oder seitwärts zu fliegen, sowie sich im langsamen Flug um die Hochachse (Gierachse) zu drehen. Weiterhin kann er senkrecht starten und landen und benötigt daher keine Start- oder Landebahn. Neben einem Hubschrauberlandeplatz reicht dazu bereits ein ebener Platz von ausreichendem Durchmesser. Der Betrieb eines modernen Hubschraubers ist im Vergleich zu einem Flächenflugzeug mit vergleichbarer Zuladung deutlich teurer. Dennoch ergeben sich aufgrund seiner Fähigkeit, auf unvorbereitetem Gelände starten und landen zu können, eine Reihe von zusätzlichen Einsatzgebieten. Einsätze im Hochgebirge, wie Lastentransport und Bergrettung, können wiederum durch die geringere Luftdichte und Abwinde den Antrieb an die Leistungsgrenze bringen. Verglichen mit Tragflächenflugzeugen weisen Hubschrauber eine deutlich höhere Unfallhäufigkeit auf.
+Aufgrund seiner soliden Bauweise, seiner ausgefeilten Technik, seiner geringen einfachen Bedienung gehört der "alte" Guppi zu den sichersten und beliebtesten Transporthubschraubern in der Armee. Er hat in den letzten Jahren unter den Piloten einen Kultstatus erreicht. 
+Die Technik kann als alt beschrieben werden und hat sich in den letzten Jahrzehnten kaum geändert, diese gilt unter Fachleuten als solide und absolut ausgereift.
+Ein direkter Kampfeinsatz, Einsätzen hinter der Front oder ein Fliegen in Zonen mit direkten feindlichen Beschuss sind durch die Armeeleitung ohne entsprechenden Begleitschutz und ohne ausdrückliche Genehmigung streng verboten ! 
+]
+   GuideSortHelp = 515 0 0 0 4 566 601 0 0 0
+   picture = mk4h_guppi.png
+   wreckageobject = 1252 14852
+
+   Armor += 50
+   Transportation.EntranceSystemNum = 5
+   Transportation.EntranceSystem4 ->* VehicleType.ParaDevice
+   Tank { 
+      Energy = 0
+      Material += 6000
+      fuel += 2000
+   } Tank
+   Abilities += fuel_transfer material_transfer 
+
+   Weapons { 
+      Initiative = 0
+      Number = 7
+      Weapon0.Ammo = 50
+
+      Weapon1 ->* VehicleType.ServiceGround 
+
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 20
+
+      Weapon3 ->* VehicleType.AmmoMine 
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleType.AmmoSM 
+      Weapon4.Ammo = 15
+
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 15
+
+      Weapon6 ->* VehicleType.AmmoBomb
+      Weapon6.Ammo = 10
+   } Weapons
+} VehicleType

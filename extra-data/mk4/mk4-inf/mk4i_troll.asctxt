@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = TROLL
+   ID = 1215
+   parent = 202
+
+   Description = Elite Kampfroboter
+   Infotext = [Der TROLL beschreibt den momentanen Stand in der Entwicklung mechanischer Kampfchassis. Zwar ungleich schwerer, dafuer aber weitaus kampfkraeftiger und mit staerkeren panzerbrechenden Waffen ausgestattet als der DEMON, entfalten schon wenige Einheiten dieses Typs starke Feindbindungsmoeglichkeiten.]
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Picture = mk4i_troll.pcx
+   wreckageobject = 14215
+   Armor += 20
+   Weapons { 
+      Weapon0.Punch@MaxRange += 6
+      Weapon0.Punch@MinRange += 6
+   } Weapons
+} VehicleType

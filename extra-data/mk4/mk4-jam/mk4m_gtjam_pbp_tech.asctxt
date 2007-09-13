@@ -1,0 +1,10 @@
+technology {
+   Name = GT JAM
+   infotext = Forschungsprojekt abgeschlossen! GT JAM verfuegbar!
+   id = 14024
+   RelatedUnitID = 14024
+   parent = 100020
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100000,100001,100021,100104,100304,100306
+} Technology

@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = GT DEFENDER
+   ID = 14008
+   parent = 211
+   
+   Description = defence battlerobot
+   Picture = mk4m_gtdef.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14008
+   Armor += 100
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Tank.Material = 200
+   Tank.Fuel += 100
+
+   Construction { 
+      Objects = 10 
+      ObjectGroupsRemovable = 5
+   } Construction
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

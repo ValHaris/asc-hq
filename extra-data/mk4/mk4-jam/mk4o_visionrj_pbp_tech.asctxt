@@ -1,0 +1,10 @@
+technology {
+   Name = Vision RJ
+   infotext = Forschungsprojekt abgeschlossen! Vision GA verfügbar!
+   id = 14019
+   RelatedUnitID = 14019
+   parent = 100020
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100020,100003,100105,100302,100306,1254,1272 
+} Technology

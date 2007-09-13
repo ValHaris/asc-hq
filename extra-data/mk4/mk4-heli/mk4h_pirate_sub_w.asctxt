@@ -1,0 +1,20 @@
+ObjectType { 
+   Parent = 498
+   ID = 14887
+
+   Name = Pirate Wreck
+   Armor = 150
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1300
+      fuel = 150
+      Movement = 15
+   } RemovalCost
+
+
+   dry { 
+      picture = MK4h_pirate_w.png 1
+   } dry
+
+} ObjectType

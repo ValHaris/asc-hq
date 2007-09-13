@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14000
+   ;Bezeichnung der verknüpften Technologie: GT Speeder
+   TechnologiesRequired = 14000
+} TechAdapter

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+   ID = 14854
+
+   Name = Orbiter Wreck
+
+   
+   dry { 
+      picture = MK4o_orbiter_w.png 1
+   } dry
+
+} ObjectType

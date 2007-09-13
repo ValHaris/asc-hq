@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = ORBITER
+   parent = 231
+   ID = 1254
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Description = Satellitentransporter
+   Infotext = [Diese umgebaute "Fliegende Festung" hat noch staerkere Motoren als das Basismodell. Um allerdings die Atmosphaere zu verlassen musste der Orbiter aller Bodenwaffen entledigt werden um leichter zu werden.]
+   Picture = mk4o_orbiter.png
+   wreckageobject = 1254 14854
+
+   Transportation.EntranceSystemNum = 3
+   Transportation.EntranceSystem2 ->* VehicleType.Drop
+
+   Abilities += repair_vehicle
+   Movement = 0 0 0 65 90 120 120 100 
+   Weight += 50
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.AAMH
+      Weapon0.type = air_missile shootable ammo_transfer
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.shotFrom = medium_level_flight high_level_flight orbit 
+      Weapon0.MaxRange = 30
+      Weapon0.MinRange = 10
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 75
+
+      Weapon1 ->* VehicleType.A2A_MG 
+      Weapon1.targets = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon1.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 40
+
+      Weapon3 ->* VehicleType.AmmoSM
+      Weapon3.Amo = 30
+
+      Weapon4 ->* VehicleType.AmmoCM
+      Weapon4.Amo = 5
+
+   } Weapons
+} VehicleType

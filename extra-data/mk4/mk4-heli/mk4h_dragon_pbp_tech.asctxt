@@ -1,0 +1,10 @@
+technology {
+   Name = Dragon
+   infotext = Forschungsprojekt abgeschlossen! Dragon verfügbar!
+   id = 1245
+   RelatedUnitID = 1245
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100003,100102,100207,1282,1252 
+} Technology

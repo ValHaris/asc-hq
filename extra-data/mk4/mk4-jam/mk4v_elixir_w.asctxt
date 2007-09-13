@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Elixir Wreckage
+   ID = 14214
+   parent = 499
+   dry { 
+      picture = mk4v_elixir_w.png 1
+   } dry
+} ObjectType

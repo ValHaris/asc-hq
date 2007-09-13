@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = GT-SPEEDER
+   ID = 14000
+   parent = 208
+
+   Description = light golem type
+   Infotext = [Auf Basis des Golem wurde diese schnellere Version entwickelt. Dabei wurde auf die Raketenbatterien verzichtet. (GT = golem type)]
+   Picture = mk4m_gtspeeder.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14000
+   Armor += 50
+   Movement += 0 0 0 5 0 0 0 0
+
+   Weapons { 
+   } Weapons
+} VehicleType

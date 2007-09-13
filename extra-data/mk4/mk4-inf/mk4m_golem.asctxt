@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = GOLEM
+   ID = 1213
+   parent = 209
+
+   Description = Schwerer Kampfroboter
+   Infotext = [Diese schwere Einheit ist das Prachtstueck der Roboterindustrie. Mit weitreichenden Land- und Luftrakten ausgestattet ist er die Ideale Besetzung bei belagerungen oder Verteidigungen. Da er recht langsam ist, ist der offensive Einsatz nur bedingt zu empfehlen.]
+   Picture = mk4m_golem.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 100
+   Movement += 0 0 0 10 0 0 0 0 
+   wreckageobject = 14213
+   Weapons { 
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

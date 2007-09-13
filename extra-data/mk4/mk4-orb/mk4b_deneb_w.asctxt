@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 499
+   ID = 1278
+
+   Name = Deneb Wreck
+
+   dry { 
+      picture = MK4b_deneb_w.png 1
+   } dry
+
+} ObjectType

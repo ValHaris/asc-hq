@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = CROMOS
+   ID = 1281
+   parent = 235
+
+   Description = space station
+   Picture = mk4o_cromos.png
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14281 14881
+   Armor += 20
+ 
+   Tank { 
+      Material += 4000
+      fuel += 4000
+   } Tank
+   FuelConsumption = 110
+
+   Weapons { 
+      Weapon3 ->* VehicleType.type_small_missile
+      Weapon3.Punch@MaxRange -> VehicleType.Weapons.Weapon3.Punch@MinRange 
+   } Weapons
+} VehicleType

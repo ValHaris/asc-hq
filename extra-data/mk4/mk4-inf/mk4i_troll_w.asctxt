@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 14215
+
+   Name = Troll Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4i_troll_w.png 1
+   } dry
+
+} ObjectType

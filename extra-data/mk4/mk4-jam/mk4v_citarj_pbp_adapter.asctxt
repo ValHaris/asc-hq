@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14025
+   ;Bezeichnung der verknüpften Technologie: Cita RJ
+   TechnologiesRequired = 14025
+} TechAdapter

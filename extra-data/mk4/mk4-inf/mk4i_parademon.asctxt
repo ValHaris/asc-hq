@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = PARADEMON I35
+   ID = 1236
+   parent = 207
+
+   Description = Fallschirmspringer
+   Infotext = [Der PARADEMON ist kann sich per Fallschirm von einem fliegenden Flugzeug aus in Richtung Boden absetzen. Die zusätzliche Ausrüstung ging zu Lasten der Kampfkraft.]
+   Picture = mk4i_parademon.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14236
+   Armor += 20
+   Movement -= 0 0 0 2 0 0 0 0 
+   Weapons { 
+   } Weapons
+} VehicleType

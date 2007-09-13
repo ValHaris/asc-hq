@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 14281
+
+   Name = Cromos Wreck
+
+   Armor = 600
+   RemovalCost { 
+      Energy = 0
+      Material = -4000
+      fuel = 200
+      Movement = 20
+   } RemovalCost
+
+
+   dry { 
+      picture = mk4o_cromos_w.png 1
+   } dry
+
+} ObjectType

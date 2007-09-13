@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = GT JAM
+   ID = 14024
+   parent = 306
+
+   Infotext = [GolemType Roboter mit Radarstöhrelektronik. ]
+   picture = mk4m_gtjam.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14024
+   Armor += 100
+} VehicleType

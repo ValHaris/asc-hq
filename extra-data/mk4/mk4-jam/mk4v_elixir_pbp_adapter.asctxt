@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1214
+   ;Bezeichnung der verknüpften Technologie: Elixir
+   TechnologiesRequired = 1214
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1236
+   ;Bezeichnung der verknüpften Technologie: Parademon
+   TechnologiesRequired = 1236
+} TechAdapter

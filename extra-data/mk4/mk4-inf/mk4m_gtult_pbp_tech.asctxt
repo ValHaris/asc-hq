@@ -1,0 +1,10 @@
+technology {
+   Name = GT Ultimate
+   infotext = Forschungsprojekt abgeschlossen! GT Ultimate verfügbar!
+   id = 14009
+   RelatedUnitID = 14009
+   parent = 100020
+   researchpoints *= 17
+   techlevel = 5
+   TechnologiesRequired = 100020,100001,100021,100105,14000,1213,14002,14008,100304 
+} Technology

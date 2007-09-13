@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 494
+   ID = 14882
+
+   Name = Firebird Wreck
+
+   Armor = 150
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1200
+      fuel = 50
+      Movement = 15
+   } RemovalCost
+
+
+   dry { 
+      picture = MK4h_firebird_w.png 1
+   } dry
+
+} ObjectType

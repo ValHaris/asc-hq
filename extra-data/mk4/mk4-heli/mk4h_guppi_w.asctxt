@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 1252
+
+   Name = Guppi Wreck
+
+   
+
+   RemovalCost { 
+      Energy = 0
+      Material = -1100
+      fuel = 50
+      Movement = 15
+   } RemovalCost 
+
+   dry { 
+      picture = MK4h_guppi_w.png 1
+   } dry
+
+} ObjectType

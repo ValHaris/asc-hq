@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = GENNI
+   parent = 409
+   ID = 14033
+   Description = Generatorhubschrauber
+   Infotext = [Um den Anforderungen eines Einsatzes tief in Feidesland gerecht zu werden wurde auf Basis des Guppi-Hubschrabubers eine Generator entwickelt.
+   Der Hubschrauber ist hoch mobil und versorg so abgelegene Auﬂenposten kurzzeitig mit Strom. Vorsicht: Durch den Umbau muﬂten Einschr‰nkungen bei der Panzerung hingenommen werden, sowie den Verlust der Bewaffnung.]
+   GuideSortHelp = 515 550 0 0 4 0 0 0 0 0
+   picture = mk4h_genni.png
+   wreckageobject = 14033 14833
+
+   Armor -= 50
+   Abilities += resource_converter 
+
+   Tank { 
+      Energy = 1500
+      Material = 0
+      fuel = 6000
+   } Tank
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

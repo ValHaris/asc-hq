@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = ELIXIR
+   ID = 1214
+   parent = 307
+
+   Description = Radarstoehreinheit
+   Infotext = [leichter schnell beweglicher Radarstöhrer]
+   picture = mk4v_elixir.pcx
+   wreckageobject = 14214
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 50
+   Jamming -= 2
+   Weight = 30
+
+   Movement += 0 0 0 10 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG35low 
+   } Weapons
+} VehicleType

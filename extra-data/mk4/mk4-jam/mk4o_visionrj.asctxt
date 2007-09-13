@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = VISION RJ
+   ID = 14019
+   parent = 313
+   
+   Description = Anti Spionage Satellite
+   Infotext = [ - geheim -]
+   picture = mk4o_visionrj.png
+   wreckageobject = 14019 14819
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+} VehicleType
