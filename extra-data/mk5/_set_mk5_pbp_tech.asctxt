@@ -1,5 +1,5 @@
  Technology {
-   name = "Set MK5 PBP-technology"
+   name = Set MK5 PBP-technology
    infotext = "base technology of the MK5 unit set"
    id = 1499
    researchpoints = 100
