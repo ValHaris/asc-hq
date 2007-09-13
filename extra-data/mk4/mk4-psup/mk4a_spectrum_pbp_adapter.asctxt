@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1248
+   ;Bezeichnung der verknüpften Technologie: Spectrum
+   TechnologiesRequired = 1248
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1286
+   ;Bezeichnung der verknüpften Technologie: Condor
+   TechnologiesRequired = 1286
+} TechAdapter

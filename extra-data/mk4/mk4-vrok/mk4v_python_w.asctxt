@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Python Wreckage
+   ID = 14227
+   parent = 499
+   dry { 
+      picture = mk4v_python_w.png 1
+   } dry
+} ObjectType

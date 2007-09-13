@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 14225
+
+   Name = Anaconda Wreck
+
+   
+
+   dry { 
+      picture = mk4t_anaconda_w.png 1
+   } dry
+
+} ObjectType

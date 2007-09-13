@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14017
+   ;Bezeichnung der verknüpften Technologie: Troller
+   TechnologiesRequired = 14017
+} TechAdapter

@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = THUNDER GX
+   parent = 425
+   ID = 1296
+   Description = Bodenangriffsdrohne
+   Infotext = [THUNDER GX
+
+Die THUNDER GX war die logische Weiterentwicklung des FX-Modells. Die GX-Reihe ist ausschließlich zum Angriff gegen Bodenziele konzipiert und auch nur mit diesen entsprechenden Bomben und Raketen bestückt. Auch sie ist bei Offensivschlägen ohne Trägerschiff oder Abwurfflugzeug nahezu nutzlos, eignet sich jedoch durchaus als Defensivwaffe gegen anrückende feindliche Bodentruppen.
+]
+
+   picture = mk4a_thundergx.png
+   wreckageobject = 1244 14844
+   GuideSortHelp += 0 0 0 0 4 280 0 0 0 0
+
+   Weapons { 
+      Initiative = 20
+      Number = 2
+      Weapon0 ->* VehicleType.ASM 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 76
+      Weapon0.Punch@MinRange = 76
+
+      Weapon1 ->* VehicleType.medBomb 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 85
+   } Weapons
+} VehicleType

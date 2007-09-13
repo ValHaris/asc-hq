@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1256
+   ;Bezeichnung der verknüpften Technologie: Rex
+   TechnologiesRequired = 1256
+} TechAdapter

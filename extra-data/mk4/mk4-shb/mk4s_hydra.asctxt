@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = HYDRA
+   parent = 352
+   ID = 1264
+
+   Description = Torpedokorvette
+   Infotext = []
+   picture = mk4s_hydra.pcx
+   wreckageobject = 14264
+   GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
+
+   Abilities += sonar
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Ship_gun 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 78
+
+      Weapon1 ->* VehicleType.Ship_Flak 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 8
+
+      Weapon2 ->* VehicleType.DCS
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 105
+      Weapon2.Punch@MinRange = 105
+
+      Weapon3 ->* VehicleType.STorp
+      Weapon3.Ammo = 4
+      Weapon3.Punch@MaxRange = 110
+      Weapon3.Punch@MinRange = 115
+   } Weapons
+} VehicleType

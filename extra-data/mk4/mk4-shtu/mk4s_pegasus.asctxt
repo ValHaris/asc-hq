@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = PEGASUS
+   ID = 1285
+   parent = 359
+   Description = Flugzeugtraeger
+   Infotext = [Die Pegasus ist ein Flugzeugträger älterer Bauart. Sie diehnt bist zu 10 Flugzeugen als Operationsbasis. Auf dem Träger können auch Reparaturen durchgeführt werden. Und die Besatzung ist in der Lage das Schiff selbst zu reparieren.]
+   picture = mk4s_pegasus.pcx
+   wreckageobject = 14285
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Initiative = 0
+      Number = 7
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 12
+
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 70
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 70
+
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.Ammo = 70
+
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 40
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 120
+
+      Weapon6 ->* VehicleType.AmmoBomb 
+      Weapon6.Ammo = 40
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1262
+   ;Bezeichnung der verknüpften Technologie: Polar
+   TechnologiesRequired = 1262
+} TechAdapter

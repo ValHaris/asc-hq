@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Regio Wreckage
+   ID = 14270
+   parent = 499
+   dry { 
+      picture = mk4v_regio_w.png 1
+   } dry
+} ObjectType

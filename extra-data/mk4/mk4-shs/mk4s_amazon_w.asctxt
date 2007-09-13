@@ -1,0 +1,20 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14283
+
+   Name = Amazon Wreck
+
+   Armor = 600
+   RemovalCost { 
+      Energy = 0
+      Material = -6000
+      fuel = 600
+      Movement = 50
+   } RemovalCost
+
+   dry { 
+      picture = mk4s_amazon_w.png 1
+   } dry
+
+} ObjectType

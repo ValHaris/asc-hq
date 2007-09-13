@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = MEDUSA 3
+   ID = 14004
+   parent = 225
+   
+   Description = missile air defence
+   Infotext = [Nur schwer bewegliches, in seiner Feuerkraft aber um so gewaltigeres Flugabwehraketen-Geschuetz. Die 
+   strahlgetriebenen Geschosse der Medusa jagen bis in die hoechsten Luftschichten mit unglaublicher Geschwindigkeit 
+   alles, was sich in Reichweite dieses Geschuetzes bewegt. Die Medusa3 ist als Ergaenzung zu den normalen 
+   Flugabwehrgeschuetzen entwickelt worden. Sie ist besonders geeignet für bergige Regionen, da kein Geschützsockel 
+   benötigt wird und ein neuartiger Radarstörsender integriert wurde. ]
+   Picture = mk4b_medusa3.pcx
+   wreckageobject = 14004
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Jamming = 50
+   Abilities = jam_only_own_field onlyTransMove
+   Category = building|turret|object
+   Weight = 150
+
+   Tank { 
+      fuel = 120
+   } Tank
+   FuelConsumption = 30
+   Movement = 0 0 0 17 0 0 0 0 
+   TerrainAccess ->* VehicleType.turret_all 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight 
+      Weapon0.MaxRange -= 20
+      Weapon0.MinRange -= 20
+      Weapon0.Ammo = 10
+      Weapon0.Reactionfireshots = 2
+   } Weapons
+} VehicleType

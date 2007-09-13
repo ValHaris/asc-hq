@@ -1,0 +1,10 @@
+technology {
+   Name = Dolter
+   infotext = Forschungsprojekt abgeschlossen! Dolter verfügbar!
+   id = 14031
+   RelatedUnitID = 14031
+   parent = 100020
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100020,100002,100103,100204 
+} Technology

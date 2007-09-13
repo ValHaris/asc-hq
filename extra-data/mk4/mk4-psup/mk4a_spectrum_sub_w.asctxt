@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 300
+   ID = 14848
+
+   Name = Spectrum Wreck
+
+   dry { 
+      picture = MK4a_spectrum_w.png 1
+   } dry
+
+} ObjectType

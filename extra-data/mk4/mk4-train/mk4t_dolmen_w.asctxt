@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 14224
+
+   Name = Dolmen Wreck
+
+   
+
+   dry { 
+      picture = mk4t_dolmen_w.png 1
+   } dry
+
+} ObjectType

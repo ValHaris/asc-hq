@@ -1,0 +1,307 @@
+History MK4-Set
+Grafiken: GAMER & Dr.Snuggels
+Spezifikationen: GAMER
+
+weitere History: siehe PBP.info
+
+_________________
+v17.06 10.09.2007
+- Anpassung aller Datei- und Verzeichnisnamen auf durchgängige Kleinschreibung, und auch die Verknüpfungen auf die Bilder innerhalb der asctxt kleingeschrieben (Vorbereitung auf CVS, welcher unter Unix-Dateisystem läuft)
+- Neue Flugzeuggrafiken (png) von Keyfinder integriert (alle entsprechenden pcx wurden gelöscht!!)
+
+
+_________________
+v17.05 22.07.2007
+-komplette überarbeitung der MK4 Wracks durch Ares und Prophet
+
+_________________
+v17.04 16.07.2007
+-Angel kann "vsw" befahren
+-Patrix, Mech Waffen an Bord
+-Hangar Adapter eingebaut
+-Dictator, Adapter Bugfix
+-Upgrade Bodenverteidigung
+Neu:
+-Wrackobjekte SAM3,Sinus,Snake,Wizard,Citadelle,paraplanum,Pulsar
+-Infotexte (by Excalibur) Crux,Archimedes,Anaconda,Rune,Comet,Teccno,Snake,Ranger,Guppi
+-Genni, Generator Hubschrauber
+
+_________________
+v17.03 16.05.2007
+-Wizzard kann Solarkraftwerk2 bauen und diverse Objekte abreissen
+-Gigant Gebäudebaufunktion für Jammer und Atomkraftwerk
+-Regio lavadefence Baufunktion
+
+_________________
+v17.02
+-Citadelle Adapter-Bugfix
+-Diver -> GT Dive
+-Hubschrauber standardisiert
+
+_________________
+v17.01
+-Umlaute entfernt in Techs
+-Flame Armor Bugfix
+-Gnome Minenwaffe 2 Felder
+-Atlas kann mud befahren
+
+_________________
+v17.00 04.03.2007
+-Release
+
+_________________
+v16.06beta
+-Atlas,AtlasDX Gewicht bugfix
+
+_________________
+v16.05beta
+-Standardisierung schiffsrümpfe/-RF, Fahrzeuge, Stätionäre Einheiten
+-MK4 "Imperator-Technik" aufgewertet
+-MK4 PTerano, kein Einladen von Drohnen mehr möglich
+-MK4 RockAD -> Cita AD
+-MK4 Anpassung für ASC2
+-MK4 Excalibur 9 Felder Reichweite/Tech 5
+-Mk4 Atlas DX nur noch Starter ! (Cita DX übernimmt Drohnenservice)
+-MK4 Wizard <-> Gigant (Namen und Optiktausch)
+-MK4 Spring jetzt GT Transporter, weniger Panzerung
+Neu:
+-Mk4 GT-JAM (JamRoboter)
+-MK4 Cita RJ (Jambunker)
+-MK4 DTERANO (mit Drohnenport)
+-MK4 KOLOSS (comando-Boot)
+-MK4 Python2 (defensiver Raketenpanzer)
+-KM4 CitaDX (Drohnenservice)
+-MK4 Orxer (Radarpanzer)
+-MK4 CitaGD (Grounddefence Bunker)
+
+___________
+2006
+-MK4 Raketenpanzer defaults
+-MK4 Snake etwas schneller
+-MK4 Skull +10 Punch Kanone
+-MK4 UX , höheres Gewicht
+-MK4 Hydra DX, Polar DX, Atlas DX + 1 Stellplatz
+-MK4 Polar OX Grafix Bugfix
+-MK4 Pluto 1x RF SAM weniger, Duke SAM anstatt Flak
+-MK4 Dictator, Tank Bugfix
+-MK4-Grafiken, Polar OX/DX, Hydra DX, Marauder, Fortress,Copra
+-MK4 Atlax und Orion mehr Fuel
+-MK4 Atlas DX repair Funktion für Drohnen
+-MK4 BI gebäude und Terrain in deposits.con abgetrennt
+-MK4 Gigant baut keine BI Gebäude mehr
+-MK4/MK3 Radar- und jammTower erforsch- und baubar
+-MK4 Gigant kann jetzt nördlichen Flugplatz bauen
+-MK4 Taros, kann wieder Hafen und Ölplatform bauen
+
+___________
+2005
+-MK4 default fighter (Copra,Genom)
+-MK4 Archimedes 1xRF
+-MK4 Ranger, Sitzplatz für Trooper, kann nicht mehr erobern
+-MK4 Amazon Waffentransporter
+-MK4 Bigger, Waffenvorrat verringert
+
+_________________
+v13.02 28.09.2005
+-MK4 Amazon Waffentransporter
+-MK4 Bigger, Waffenvorrat verringert
+-Anpassung an Lavamineral
+_________________
+v13.01 27.08.2005
+-Default Units: Ari
+-Funktion Virus = SonarMine
+-Ranger, kann nicht mehr erobern, aber einen Trooper transportieren.
+-Albatros + Guppi, Sonarbojenabwurf
+-Albatros kein Dronenabwerfer mehr !
+
+_________________
+v13.00
+-default units (view+sat+satdefence)
+-Umbau MG Waffen für Flugzeuge/Helicopter
+-very_big_ship(noriver)= Zenit,Titan,Fortress,Bigger,Pluto,Duke
+Neu:
+-GTSpy
+
+_________________
+v12.03
+- Anpassung Trooper + AD an default units
+- Anpassung Turret an neues Movementsystem
+- Drohnen nicht mehr selbständig auf High Air
+- Firebird 3. Waffe entfernt
+- Crux DX Höhenflieger
+- Bugfix Drohnenträger
+- Lurat kann beide Turrets bauen
+
+_________________
+v12.02 - ZV
+-Cromos nur noch Orbit, 2xRF Air
+Neu:
+-Polar OS
+
+_________________
+v12.01 - ZV
+-Gewichte und Transportsystem standardisiert
+-Firebird + Sniperwaffe
+Neu:
+-Crux DX
+
+_________________
+20.04.2005 v12.00
+- SX Schiffsklasse zu Air Defence aufgewertet
+- BI Terrain integriert
+Neu:
+-RockAD, (SAM-Bunker)
+
+_________________
+04.01.2005 v11.00
+-UX jetzt in gr. Fabrik baubar
+-Ammovorräte komplet überarbeitet
+-Waffenstärke Überarbeitung
+-Forschung komplett überarbeitet
+Neu:
+-Virus
+
+_________________
+26.11.2004 v10.05
+-Thunder FX Gewicht reduziert
+-Thunder GX/SX High_Level_flight
+-Hydra SX mit Reparaturfunktion+Ammo
+-Whale, Transportert Fahrzeuge
+-Guppi + ParaTrooper
+Neu:
+-Atlas SX
+_________________
+17.11.2004 v10.04
+-Shell EntranceBugfix
+-Usurius, Move Bugfix
+-Scorpion, Beschreibung
+-Crux,Albatros,PTeranno Bugfix Entrance.Drop
+-Rocky 2x2 RF
+-Torpedowaffen angepasst.
+-GolemTypen aufgewertet
+
+_________________
+25.10.2004 v10.03
+-Lurat Tank vergrößert
+-Citadelle, jetzt in Fabrik baubar
+-Magic, Transportsystem gefixt
+
+_________________
+24.10.2004 v10.02
+-Technologieblocking gefixt
+-Lurat Transportiert Rune+Ionstar
+-Turrets aufgewertet
+-Skull + Deneb transportierbar
+-HydraSX, kann nur noch 1 Drohne laden+landen
+
+_________________
+01.10.2004 v10.01
+-Rocky jetzt baubar
+-Hydra Panzerung verstärkt
+-Update Marauder
+
+________________
+v10.00
+-Überarbeitung Techstufe 4+5
+-Anpassung an multiple RF
+Neu:
+-Troller
+-Usurius
+-Vision RJ
+-Whale
+
+________________
+22.08.2004 v9.04
+-Überarbeitung Techstufe 3
+-Baufunktionen Taros aktualisiert
+-Archimedes +1 WaffenReichweite
+-Marauder Tech+Adapter ergänzt
+Neu:
+-MoeweII, Fast Attack
+-Magic, SAM Hoovercraft
+
+________________
+06.07.2004 v9.03
+Überarbeitung Tech2 komplett
+Änderungen:
+-Ionstar+Deneb Tech1
+-Setfilter korrigiert
+-Tech Medusa3 korrigiert
+-Snake 6 Stellplätze
+-Hydra+HydraSX merh Gewicht
+-Cromos 1800 Gewicht
+Neu:
+-Gnome: Minenleger
+-Angel: medium artillery
+-PolarSX: Dorhnenkreuzer
+
+
+________________
+13.06.2004 v9.02
+Überarbeitung AirCraft+Ship Tech0+1
+
+________________
+04.06.2004 v9.01
+Überarbeitung Vehicle+Turrets Tech0+1
+Neu:
+-Crusader
+-Rocky
+
+________________
+26.05.2004 v9.00
+Umstellung neues Forschungssystem
+Trooper überarbeitet
+Neu: 
+GT-Def
+GT-Ultimate
+
+________________
+06.05.2004 v8.01
+notwendige Änderungen wegen Umstellung small,large,cruise missile
+
+________________
+08.04.2004 v8.00
+Änderungen
+-Menhir, MdRF
+-Ghost, Orbital Waffe
+-alle BI Gebäude integriert
+
+__________
+17.03.2004
+Neu(v7): 
+-Medusa3
+-Wizzard
+-Hydra SX
+-Thunder SX
+Änderungen:
+-Genom Gewicht verringert
+-Stealt auf 70 erhöht
+-PTerrano Movement 109 Laderaum verkleinert
+-Alcor 4 CM
+-Altas max 4 Stellplätze
+-Ionstar, beweglich, mehr Ammo
+-Medusa, Angriff nach Bewegung
+-Medusa2, bessere Waffe
+-Planum, Kann Fuel und Material verladen, groessere Tanks 
+-Pulsar, Waffe 6 Felder
+-Python, Waffe 3 Felder
+-Regio, kann Ressourcen verladen
+-Rune, transportabel
+-Quasar, bessere Waffe
+-Sting, besserer Waffe
+-Vader, größere tanks
+-Vader DF, Waffe 1-3 Felder, besser
+-Hydra, MoveDuringReactionFire
+-Albatross, MAM
+-Patrix, Ladesystem Bugfix
+-Ghost bessere Waffen
+-Thunder FX/GX/OX, größerer Tank, mehr Waffen, billiger, weniger Panzerung 
+
+
+12.01.2004
+Neu: 
+-Dictator, imperatorbased Rocket-Tank
+Änderungen:
+-Bigger, kann kleine Schifffe transportieren.
+-UX,Flame,Pluto,Excalibur: kein Reaktiofire mehr
+-Zenit,Titan,Polar,Fortress,Pegasus: "MoveDuringReactionFire"

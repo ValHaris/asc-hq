@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = Excalibur Z3
+   ID = 1226
+   parent = 256
+   Description = Eisenbahngeschuetz
+   Infotext = [Maechtiges Bahngeschuetz mit weitreichender Artillerie und Nahkampfwaffen. Vermag Transporte ueber ungesicherte Gleisanlagen zu schuetzen. Aufgrund seiner Schnelligkeit ist es auch sinnvoll diese Art von Geschütz in Trassennahen Gegenden zur Hilfe zu rufen.<br>Die Hauptaufgabe des EXCALIBUR ist allerding die Zerstoerung von weit hinter der Frontlinie befindlichen Bruecken, Schienen und Strassen.]
+   Picture = mk4t_excalibur.pcx
+   wreckageobject = 14226
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Number = 2
+      Weapon1 ->* VehicleType.MG40low 
+   } Weapons
+} VehicleType

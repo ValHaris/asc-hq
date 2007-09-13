@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Cita Wreck
+   ID = 14235
+   parent = 499
+   Armor = 200
+   RemovalCost { 
+      Energy = 0
+      Material = 2000
+      fuel = 200
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = mk4v_citadelle_w.png 1
+   } dry
+} ObjectType

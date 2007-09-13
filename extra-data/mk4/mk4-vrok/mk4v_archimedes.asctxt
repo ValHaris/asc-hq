@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = ARCHIMEDES
+   ID = 1216
+   parent = 297
+
+   Description = Raketenwerfer
+   Infotext = [Dieser machtvolle Rakettenwerfer ist auf ein Kettenfahrgestell montiert. Die Schussweite ist enorm und durch die fehlende Panzerung ist auch die Beweglichkeit der Einheit hervorragend. Durch diese Einheit kann ein Sättigungsfeuer, d.h. die Abdeckung eines großen Zielgebiets, auf relativ unkomplizierte und preiswerte Weise erzielt werden. Die Feuerkraft bzw. Durchschlagskraft der Raketen ist zwar geringer als die bei Panzerfahrzeugen, jedoch kann der Gegner im Vorfeld vor seiner eigentlichen Attacke geschwächt bzw. zermürbt werden. Da das System nur über sechs Schuss Munition verfügt, ist eine Munitionsserviceeinheit im direkten Umfeld ratsam. Aufgrund der ganz speziellen Reichweite seiner Raketten muss der Standort dieser Einheit stets genaustes überprüft werden. Da diese Einheit meist aus der 3. Reihe operiert, müssen andere Einheiten die Sichtaufklärung und den direkten Schutz übernehmen.]
+   Picture = mk4v_archimedes.pcx
+   wreckageobject = 14216
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 30
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Number = 1
+      Weapon0.MaxRange += 10
+      Weapon0.MinRange += 10
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+   } Weapons
+} VehicleType

@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 14872
+
+   Name = Vision Spy Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4o_vision_w.png 1
+   } dry
+
+} ObjectType

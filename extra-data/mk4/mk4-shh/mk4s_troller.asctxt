@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = TROLLER
+   parent = 372
+   ID = 14017
+   
+   Description = Kampfluftkissenboot
+   Infotext = [Kleines und wendiges Kampfluftkissenboot mit ansprechender Panzerung und sehr guter Bewafffnung.]
+   picture = mk4s_troller.pcx
+   wreckageobject = 14017 14817
+   Abilities += move_after_attack
+   Movement += 0 0 0 10 0 0 0 0 
+   GuideSortHelp += 0 0 0 0 4 504 552 0 0 0
+
+   Weapons { 
+      Initiative = 20
+      Number = 3
+
+      Weapon1 ->* VehicleType.Tank_Gun 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 70
+
+      Weapon2 ->* VehicleType.SSM 
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 75
+   } Weapons
+} VehicleType

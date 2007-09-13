@@ -1,0 +1,10 @@
+technology {
+   Name = Teccno
+   infotext = Forschungsprojekt abgeschlossen! Teccno verfügbar!
+   id = 1207
+   RelatedUnitID = 1207
+   parent = 100020
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100020,100002,100101,100201 
+} Technology

@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14234
+
+   Name = Axis Wreck
+
+   
+
+   dry { 
+      picture = mk4v_axis_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = AMAZON
+   parent = 369
+   ID = 1283
+   
+   Description = Transportschiff
+   picture = mk4s_amazon.pcx
+   wreckageobject = 14283
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Snake
+   infotext = Forschungsprojekt abgeschlossen! Snake verfügbar!
+   id = 1208
+   RelatedUnitID = 1208
+   parent = 100020
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100020,100002,100101 
+} Technology

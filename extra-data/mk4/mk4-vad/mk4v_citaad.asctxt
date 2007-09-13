@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = CITA AD
+   ID = 14021
+   parent = 337 223
+
+   Description = air-defence bunker
+   Infotext = [ ]
+   Picture = mk4v_citaad.pcx
+   WreckageObject = 14021
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Number = 2
+      Weapon0.MaxRange -= 10
+      Weapon0.Reactionfireshots = 2
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+   } Weapons
+} VehicleType

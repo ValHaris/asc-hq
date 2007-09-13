@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = SPHINX
+   ID = 1292
+   parent = 224
+   Description = MidRange SAM
+   Infotext = [ Flugabwehrraketenpanzer mit guter Beweglichkeit und starker Bewaffnung. ]
+   Picture = mk4v_sphinx.pcx
+   wreckageobject = 14292
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Weapon0.Ammo = 6
+   } Weapons
+} VehicleType

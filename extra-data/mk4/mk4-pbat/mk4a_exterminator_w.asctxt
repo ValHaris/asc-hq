@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 400
+   ID = 1271
+
+   Name = Exterminator Wreck
+
+   dry { 
+      picture = MK4a_exterminator_w.png 1
+   } dry
+
+} ObjectType

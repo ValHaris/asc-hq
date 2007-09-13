@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1222
+   ;Bezeichnung der verknüpften Technologie: Ionstar
+   TechnologiesRequired = 1222
+} TechAdapter

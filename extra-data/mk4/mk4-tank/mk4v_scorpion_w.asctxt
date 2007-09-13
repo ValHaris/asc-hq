@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Scorpion Wreckage
+   ID = 14294
+   parent = 499
+   dry { 
+      picture = mk4v_scorpion_w.png 1
+   } dry
+} ObjectType

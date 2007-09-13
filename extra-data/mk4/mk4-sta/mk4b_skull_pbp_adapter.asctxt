@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1221
+   ;Bezeichnung der verknüpften Technologie: Skull
+   TechnologiesRequired = 1221
+} TechAdapter

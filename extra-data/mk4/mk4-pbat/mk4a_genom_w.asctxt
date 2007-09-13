@@ -1,0 +1,13 @@
+ObjectType { 
+   Parent = 400
+   ID = 1246
+
+   Name = Genom Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = MK4a_genom_w.png 1
+   } dry
+
+} ObjectType

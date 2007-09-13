@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = RANGER
+   ID = 1200
+   parent = 331
+   Description = Spaehtrupp
+   Infotext = [Der Ranger ist das "Auge" für die Artillerie.  Er prescht plötzlich vor und erfasst den Feind. 
+Die eigene Artillerie schießt und genau plötzlich wie der Ranger aus dem "Nichts" gekommen ist, ist er auch schon wieder verschwunden.
+Jedoch ist vorsichtiges taktieren vor der feindlichen Front absolut notwendig. Die Verluste durch rasante Fahrten ins Feindesland durch unbesonnene Fahrer sind schon legendär. 
+Die Rangerfahrer bzw. Rangerpiloten (wie sie sich diese unerschrockenen Draufgänger selber gerne nennen) wurden ausdrücklich nochmals angewiesen zukünftig die Wetternachrichten auch wirklich zu berücksichtigen. Ein liegen bleiben des Fahrzeuges im dicken Schnee beispielsweise, wird künftig ein Disziplinarverfahren nach sich ziehen.
+Deshalb wurde das Ausbildungsprogramm und das Auswahlverfahren für die Ranger-Fahrer nochmals verschärft. 
+]
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor = 250
+   View = 55
+   picture = mk4v_ranger.pcx
+   WreckageObject = 1200
+   Transportation ->* VehicleType.TransLowTrooper
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 400
+   } Tank
+   FuelConsumption = 8
+   Abilities += move_after_attack
+   Movement = 0 0 0 102 0 0 0 0 
+   Category = light_wheeled_vehicle
+   Weight = 2
+   TerrainAccess ->* VehicleType.offroad 
+   TerrainAccess.terrain_not = Swamp large_rocks deep_snow
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG_Tank 
+   } Weapons
+} VehicleType

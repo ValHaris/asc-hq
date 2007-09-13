@@ -1,0 +1,10 @@
+technology {
+   Name = Pterrano
+   infotext = Forschungsprojekt abgeschlossen! Pterrano verfügbar!
+   id = 1250
+   RelatedUnitID = 1250
+   parent = 100020
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100020,100003,100021,100105,100205,100206,1271,1247,1255,1242 
+} Technology

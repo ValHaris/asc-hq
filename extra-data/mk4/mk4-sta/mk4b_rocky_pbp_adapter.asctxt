@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1295
+   ;Bezeichnung der verknüpften Technologie: Rocky
+   TechnologiesRequired = 1295
+} TechAdapter

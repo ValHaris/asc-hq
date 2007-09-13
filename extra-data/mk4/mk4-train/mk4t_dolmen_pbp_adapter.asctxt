@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1224
+   ;Bezeichnung der verknüpften Technologie: Dolmen
+   TechnologiesRequired = 1224
+} TechAdapter

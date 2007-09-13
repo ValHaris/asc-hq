@@ -1,0 +1,10 @@
+technology {
+   Name = GIGANT
+   infotext = Forschungsprojekt abgeschlossen! GIGANT verfügbar!
+   id = 14005
+   RelatedUnitID = 14005
+   parent = 100020
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100020,100002,100103,1268
+} Technology

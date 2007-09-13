@@ -1,0 +1,20 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14269
+
+   Name = Taros Wreck
+
+   Armor = 800
+   RemovalCost { 
+      Energy = 0
+      Material = -8000
+      fuel = 800
+      Movement = 50
+   } RemovalCost
+
+   dry { 
+      picture = mk4s_taros_w.png 1
+   } dry
+
+} ObjectType

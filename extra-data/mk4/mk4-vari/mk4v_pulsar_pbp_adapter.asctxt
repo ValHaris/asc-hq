@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1211
+   ;Bezeichnung der verknüpften Technologie: Pulsar
+   TechnologiesRequired = 1211
+} TechAdapter

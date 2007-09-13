@@ -1,0 +1,46 @@
+VehicleType { 
+   Name = POLAR
+   parent = 355
+   ID = 1262
+   
+   Description = Kreuzer
+   picture = mk4s_polar.pcx
+   wreckageobject = 14262
+   Abilities += sonar
+   GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
+   
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 100
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.Ship_Flak 
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.HitAccuracy.0 = 100
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.DCS 
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 90
+
+      Weapon3 ->* VehicleType.SAMH
+      Weapon3.MaxRange = 40
+      Weapon3.Ammo = 10
+
+      Weapon4 ->* VehicleType.Ship_MG 
+      Weapon4.Ammo = 16
+
+      Weapon5 ->* VehicleType.AmmoGM
+      Weapon6 ->* VehicleTYpe.AmmoAM
+      Weapon7 ->* VehicleType.AmmoTorp
+      Weapon8 ->* VehicleType.AmmoBomb
+   } Weapons
+} VehicleType

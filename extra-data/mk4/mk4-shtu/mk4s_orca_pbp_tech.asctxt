@@ -1,0 +1,10 @@
+technology {
+   Name = Orca
+   infotext = Forschungsprojekt abgeschlossen! Orca verfügbar!
+   id = 1261
+   RelatedUnitID = 1261
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100004,100102,100208
+} Technology

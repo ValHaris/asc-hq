@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1206
+   ;Bezeichnung der verknüpften Technologie: Imperator
+   TechnologiesRequired = 1206
+} TechAdapter

@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = VADER DF
+   parent = 372
+   ID = 1266
+   
+   Description = Kampfluftkissenboot
+   Infotext = []
+   picture = mk4s_vaderdf.pcx
+   wreckageobject = 14266 14866
+   GuideSortHelp += 0 0 0 0 4 552 0 0 0 0
+
+   Armor += 100
+   Transportation ->* VehicleType.TransBigTrooper 
+
+   Weapons { 
+      Initiative = 20
+      Number = 2
+      Weapon0 ->* VehicleType.Tank_Gun
+      Weapon0.MaxRange = 20 
+      Weapon0.Punch@MaxRange = 65
+      Weapon0.Punch@MinRange = 70
+      Weapon0.Ammo = 8
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 6
+   } Weapons
+} VehicleType

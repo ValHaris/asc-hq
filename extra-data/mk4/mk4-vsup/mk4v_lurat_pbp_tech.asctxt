@@ -1,0 +1,10 @@
+technology {
+   Name = Lurat
+   infotext = Forschungsprojekt abgeschlossen! Lurat verfügbar!
+   id = 1240
+   RelatedUnitID = 1240
+   parent = 100020
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100020,100002,100101 
+} Technology

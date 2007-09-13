@@ -1,0 +1,10 @@
+technology {
+   Name = Pulsar
+   infotext = Forschungsprojekt abgeschlossen! Pulsar verfügbar!
+   id = 1211
+   RelatedUnitID = 1211
+   parent = 100020
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 100020,100002,100103,100203,1230,14012 
+} Technology

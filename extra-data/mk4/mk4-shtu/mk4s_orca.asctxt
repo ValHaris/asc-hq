@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = ORCA
+   parent = 364
+   ID = 1261
+
+   Description = Jagd-UBoot
+   picture = mk4s_orca.pcx
+   wreckageobject = 14261
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Initiative = 50
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+      
+      Weapon1 ->* VehicleType.Ship_MG
+      Weapon1.Ammo = 6
+
+      Weapon2 ->* VehicleType.Ship_gun
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 60
+      Weapon2.Punch@MinRange = 70
+   } Weapons
+} VehicleType

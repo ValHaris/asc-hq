@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14259
+
+   Name = Titan Wreck
+
+   Armor = 1200
+   RemovalCost { 
+      Energy = 0
+      Material = -12000
+      fuel = 1200
+      Movement = 50
+   } RemovalCost
+   
+
+   dry { 
+      picture = mk4s_titan_w.png 1
+   } dry
+
+} ObjectType

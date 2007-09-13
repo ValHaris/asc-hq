@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14284
+
+   Name = Fortress Wreck
+
+   RemovalCost { 
+      Energy = 0
+      Material = -5000
+      fuel = 500
+      Movement = 50
+   } RemovalCost
+
+   dry { 
+      picture = mk4s_fortress_w.png 1
+   } dry
+
+} ObjectType

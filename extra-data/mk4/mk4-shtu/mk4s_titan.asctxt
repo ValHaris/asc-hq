@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = TITAN
+   ID = 1259
+   parent = 361
+   
+   Description = Flugzeugtraeger
+   picture = mk4s_titan.pcx
+   wreckageobject = 14259
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 100
+
+   Weapons { 
+      Initiative = 0
+      Number = 7
+      Weapon0 ->* VehicleType.Ship_Flak 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight 
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Ammo = 90
+      Weapon0.HitAccuracy.0 = 100
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 60
+      Weapon1.Ammo = 14
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 90
+
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.Ammo = 90
+
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 150
+
+      Weapon6 ->* VehicleType.AmmoBomb 
+      Weapon6.Ammo = 90
+
+   } Weapons
+} VehicleType

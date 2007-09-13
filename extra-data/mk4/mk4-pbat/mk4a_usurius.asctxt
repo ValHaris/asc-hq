@@ -1,0 +1,38 @@
+VehicleType { 
+   parent = 280
+   ID = 14013
+
+   Name = USURIUS
+   Description = Tarnbomber
+   Infotext = [Informationen sind als -geheim- eingestuft.]
+   Picture = mk4a_usurius.png
+   wreckageobject = 14013 14813
+   GuideSortHelp = 511 279 0 0 4 0 0 0 0 0
+
+   Armor += 50
+   View += 5
+   Jamming = 80
+   Abilities += jam_only_own_field no_midair_refuel
+   Weight = 110
+
+   Tank.fuel += 2000
+   FuelConsumption += 2
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Movement = 0 0 0 60 220 220 220 0 
+   TerrainAccess ->* VehicleType.aircraft_terrain 
+
+   Weapons { 
+
+      Weapon1.MaxRange = 10
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange += 10
+      Weapon1.Punch@MinRange += 10
+
+      Weapon2.Punch@MaxRange += 10
+      Weapon2.Punch@MinRange += 10
+      Weapon2.Ammo = 2
+
+      Weapon3.Ammo = 2
+
+   } Weapons
+} VehicleType

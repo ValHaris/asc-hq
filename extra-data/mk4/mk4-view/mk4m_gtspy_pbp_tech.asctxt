@@ -1,0 +1,10 @@
+technology {
+   Name = GT-Spy
+   infotext = Forschungsprojekt abgeschlossen! GT-Spy verfügbar!
+   id = 1297
+   RelatedUnitID = 1297
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 2
+   TechnologiesRequired = 100020,100001,100021,100102,100210,14000,1213 
+} Technology

@@ -1,0 +1,58 @@
+VehicleType { 
+   Name = POLAR DX
+   parent = 355
+   ID = 14014
+   Description = Drohnen-Kreuzer
+   Infotext = [POLAR DX
+Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohen die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite waeren sie dort nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur Gebrauchswertsteigerung geprueft.
+Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des SX-Kampfwertsteigerungsprogrammes wurden die erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
+
+Die der Drohnenentwicklung angepasste Weiterentwicklung des POLAR ähnelt der DX-Variante der HYDRA-Reihe. Auch hier wurden 
+ Landeplätze für Drohnen der THUNDER-Reihe eingebaut. Zugunsten dieser Umbauten mußte jedoch auf einen Teil der 
+ursprünglichen Bewaffnung, das HeliDeck und das Sonarsystem verzichtet werden. Durch diesen Umstand, sowie durch den 
+Ausbau der Wasserbombenwerfer, ist er nunmehr wehrlos gegen feindliche U-Boote.]
+   picture = mk4s_polardx.pcx
+   wreckageobject = 14014
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor = 1350
+   View += 10
+   Transportation ->* VehicleType.TransDroneCruiser 
+   Abilities += repair_vehicle
+
+   Weapons { 
+      Initiative = 0
+      Number = 8
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* VehicleType.Ship_Flak 
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.HitAccuracy.0 = 100
+      Weapon1.ReactionFireShots = 1
+      
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.MaxRange = 50
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 20
+      
+      Weapon4 ->* VehicleType.AmmoMG
+      Weapon4.Ammo = 50
+
+      Weapon5 ->* VehicleType.AmmoSM
+      Weapon5.Ammo = 20
+
+      Weapon6 ->* VehicleTYpe.AmmoLM
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* VehicleType.AmmoTorp
+      Weapon7.Ammo = 20
+   } Weapons
+} VehicleType

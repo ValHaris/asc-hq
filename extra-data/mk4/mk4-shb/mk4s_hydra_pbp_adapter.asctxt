@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1264
+   ;Bezeichnung der verknüpften Technologie: Hydra
+   TechnologiesRequired = 1264
+} TechAdapter

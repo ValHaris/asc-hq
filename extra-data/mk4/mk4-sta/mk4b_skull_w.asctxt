@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 499
+   ID = 1221
+
+   Name = Skull Wreck
+   
+   dry { 
+      picture = MK4b_skull_w.png 1
+   } dry
+
+} ObjectType

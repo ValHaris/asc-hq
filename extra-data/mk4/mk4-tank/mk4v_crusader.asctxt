@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = CRUSADER
+   ID = 14011
+   parent = 292
+   Description = old heavy tank
+   Infotext = [
+Der CRUSADER ist ein mittelschwerer Panzer älterer Bauart. Er ist das Vorgängermodell der heutzutage üblichen SAM2. 
+Naturbedingt ist er deshalb zwar langsamer und schwächer gepanzert als diese, jedoch etwas billiger in der Herstellung 
+und mit vergleichbaren Waffensystemen ausgerüstet. Auch wenn der CRUSADER langsam in die Jahre kommt, so stellt er, 
+geschickt eingesetzt, noch immer ein schlagkräftiges Waffensystem dar, auch wenn er sich aufgrund der geringeren 
+Geschwindigkeit kaum noch zu schnellen Offensivaktionen eignet. Ein Relikt aus vergangenen Tagen ist ebenfalls das integrierte 
+Vernebelungssystem, welches in neueren Panzermodellen nicht mehr verwendet wird.  
+]
+   Picture = mk4v_crusader.pcx
+   wreckageobject = 14011
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 120
+   Weight -= 10
+   Jamming = 21
+
+   Tank.fuel -= 100
+   Movement -= 0 0 0 6 0 0 0 0 
+
+   Weapons { 
+      Number = 2
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+
+      Weapon1 ->* VehicleType.MG45med 
+      Weapon1.Ammo = 12
+   } Weapons
+} VehicleType

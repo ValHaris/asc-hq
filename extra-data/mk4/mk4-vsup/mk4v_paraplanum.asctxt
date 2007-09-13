@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = PLANUM LL
+   ID = 1239
+   parent = 336 
+   Description = Luftlandebaufahrzeug
+   Infotext = [ Das Planum A4 ist die Luftlandevariante des PLANUM 5. Ueber unerschlossenem Gebiet abgeworfen, es ist in 
+   der Lage innerhalb kuerzester Zeit Landebahnen, Bruecken und Landungsstege zu erstellen.]
+   picture = mk4v_paraplanum.pcx
+   WreckageObject = 14239
+
+   Armor -= 150
+   Abilities += paratrooper 
+   Weight = 30
+
+   Tank { 
+      Material = 4500
+      fuel = 3000
+   } Tank
+   TerrainAccess ->* VehicleType.offroad 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 45 1 1000 9 991
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8  
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

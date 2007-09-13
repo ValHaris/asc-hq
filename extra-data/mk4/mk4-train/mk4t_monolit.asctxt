@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = MONOLITH
+   parent = 400 401 402 412
+   ID = 1228
+
+   Description = Instandsetzungszug
+   Infotext = []
+   picture = mk4t_monolit.pcx
+   wreckageobject = 14228
+   GuideSortHelp = 553 556 0 0 4 0 0 0 0 0
+
+   Armor -= 50
+   WaitFortack = true
+   Transportation ->* VehicleType.TransLowTrooper 
+   Transportation.MaxLoadableUnits = 2
+   Abilities += repair_vehicle fuel_transfer material_transfer 
+
+   Tank { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } Tank
+   FuelConsumption = 16
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 2 999 995
+      ObjectsRemovable = 2 10 44 181
+      ObjectGroupsRemovable = 1 2 3 4 6 10 13
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MG_Tank 
+      Weapon0.Type = machinegun ammo_transfer shootable 
+      Weapon0.Ammo = 35
+      Weapon0.Punch@MaxRange = 41
+      Weapon0.Punch@MinRange = 41
+
+      Weapon1 ->* VehicleType.ServiceGround 
+
+   } Weapons
+} VehicleType

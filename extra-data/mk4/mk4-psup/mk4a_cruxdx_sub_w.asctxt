@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 14822
+
+   Name = CruxDX Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4a_cruxdx_w.png 1
+   } dry
+
+} ObjectType

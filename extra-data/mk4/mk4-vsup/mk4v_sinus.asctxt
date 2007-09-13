@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = SINUS
+   ID = 1202
+   parent = 336
+   
+   Description = InstandsetzungsFzg
+   Infotext = [Feld Reparaturfahrzeug]
+   picture = mk4v_sinus.pcx
+   WreckageObject = 14202
+   
+   Armor -= 50
+   Weight -= 5
+   Abilities += repair_vehicle self_repairing 
+   SelfRepairRate = 20
+   
+   Tank { 
+      Material = 8000
+      fuel = 10000
+   } Tank
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.ServiceGround 
+      Weapon1 ->* VehicleType.MG30low 
+   } Weapons
+} VehicleType

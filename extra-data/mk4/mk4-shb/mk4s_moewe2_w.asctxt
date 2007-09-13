@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14015
+
+   Name = Moewe 2 Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4s_moewe2_w.png 1
+   } dry
+
+} ObjectType

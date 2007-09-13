@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1270
+   ;Bezeichnung der verknüpften Technologie: Regio
+   TechnologiesRequired = 1270
+} TechAdapter

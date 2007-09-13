@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = ATLAS DX
+   parent = 335
+   ID = 14020
+   
+   Description = Drohnenstarter
+   Infotext = [ATLAS DX
+Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohen die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite waeren sie dort nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur Gebrauchswertsteigerung geprueft.
+Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des SX-Kampfwertsteigerungsprogrammes wurden die erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
+Der ATLAS SX baut auf dem leistungsfaehigen ATLAS - Transporter auf und dient als bodengestuetzer mobiler Drohnenstarter. Er ist in der Lage eine Drohne zuegig in ihr Einsatzgebiet zu befoerdern und sie mittels Startkatapult starten zu lassen. 
+]
+   picture = mk4v_atlasdx.pcx
+   wreckageobject = 14020
+   GuideSortHelp = 553 565 0 0 4 0 0 0 0 0
+
+   Armor -= 50
+   weight = 150
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 40
+      MaxLoadableMass = 80
+      CategoriesNOT -> VehicleType.Cargo_drop.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.carrier_ground
+      Entrancesystem1.Mode = out
+      EntranceSystem1.RequireUnitFunction = paratrooper
+   } Transportation
+
+   TerrainAccess ->* VehicleType.mud_wheeled 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

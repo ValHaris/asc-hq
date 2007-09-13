@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 14226
+
+   Name = Excalibur Wreck
+
+   
+
+   dry { 
+      picture = mk4t_excalibur_w.png 1
+   } dry
+
+} ObjectType

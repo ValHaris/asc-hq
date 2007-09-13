@@ -1,0 +1,10 @@
+ObjectType {
+   Name = Ranger Wreckage
+
+   ID = 1200
+   parent = 499
+
+   dry { 
+      picture = MK4v_ranger_w.png 1
+   } dry
+} ObjectType

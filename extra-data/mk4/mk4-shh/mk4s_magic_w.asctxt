@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14016
+
+   Name = Magic Wreck
+
+   
+
+   dry { 
+      picture = mk4s_magic_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,10 @@
+technology {
+   Name = Pluto
+   infotext = Forschungsprojekt abgeschlossen! Pluto verfügbar!
+   id = 1267
+   RelatedUnitID = 1267
+   parent = 100020
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100020,100004,100021,100105,100208,100301,1261,1290 
+} Technology

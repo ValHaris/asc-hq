@@ -1,0 +1,10 @@
+technology {
+   Name = Hydra SX
+   infotext = Forschungsprojekt abgeschlossen! Hydra DX verfügbar!
+   id = 14007
+   RelatedUnitID = 14007
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100020,100004,100101,100209
+} Technology

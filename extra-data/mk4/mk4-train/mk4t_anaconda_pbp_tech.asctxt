@@ -1,0 +1,10 @@
+technology {
+   Name = Anaconda
+   infotext = Forschungsprojekt abgeschlossen! Anaconda verfügbar!
+   id = 1225
+   RelatedUnitID = 1225
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100020,100002,100102,100204 
+} Technology

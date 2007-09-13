@@ -1,0 +1,10 @@
+technology {
+   Name = Axis
+   infotext = Forschungsprojekt abgeschlossen! Axis verfügbar!
+   id = 1234
+   RelatedUnitID = 1234
+   parent = 100020
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100020,100002,100104,100201,1207,1210,1231,100021 
+} Technology

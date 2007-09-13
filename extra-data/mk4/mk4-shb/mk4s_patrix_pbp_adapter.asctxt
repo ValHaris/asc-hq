@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1258
+   ;Bezeichnung der verknüpften Technologie: Patrix
+   TechnologiesRequired = 1258
+} TechAdapter

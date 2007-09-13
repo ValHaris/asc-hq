@@ -1,0 +1,10 @@
+technology {
+   Name = Atlas
+   infotext = Forschungsprojekt abgeschlossen! Atlas verfügbar!
+   id = 1223
+   RelatedUnitID = 1223
+   parent = 100020
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100020,100002,100101 
+} Technology

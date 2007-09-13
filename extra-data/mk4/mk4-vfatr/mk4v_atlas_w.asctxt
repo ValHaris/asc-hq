@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14223
+
+   Name = Atlas Wreck
+
+   
+
+   dry { 
+      picture = mk4v_atlas_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1203
+   ;Bezeichnung der verknüpften Technologie: Buggy
+   TechnologiesRequired = 1203
+} TechAdapter

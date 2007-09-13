@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14004
+   ;Bezeichnung der verknüpften Technologie: Medusa 3
+   TechnologiesRequired = 14004
+} TechAdapter

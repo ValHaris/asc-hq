@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14261
+
+   Name = Orca Wreck
+
+   Armor = 300
+   RemovalCost { 
+      Energy = 0
+      Material = -3000
+      fuel = 300
+      Movement = 30
+   } RemovalCost
+
+
+   dry { 
+      picture = mk4s_orca_w.png 1
+   } dry
+
+} ObjectType

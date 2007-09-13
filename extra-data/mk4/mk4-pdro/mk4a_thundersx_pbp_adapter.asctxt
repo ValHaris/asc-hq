@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14006
+   ;Bezeichnung der verknüpften Technologie: Thunder SX
+   TechnologiesRequired = 14006
+} TechAdapter

@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = PATRIX
+   parent = 350
+   ID = 1258
+
+   Description = Patrouillenboot
+   Infotext = [Das Patrix]
+   picture = mk4s_patrix.pcx
+   wreckageobject = 14258
+   GuideSortHelp += 517 0 0 0 4 552 559 0 0 0
+
+   Armor += 100
+   View += 11
+   Transportation ->* VehicleType.TransBigTrooper
+   Transportation.CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   Transportation.EntranceSystemNum = 3
+   Transportation.Entrancesystem1 ->* VehicleType.Fl2sub
+   Transportation.Entrancesystem2 ->* VehicleType.TurretOut
+
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.MiniGun 
+      Weapon0.shotFrom = floating 
+      Weapon0.Ammo = 30
+      Weapon0.HitAccuracy.u1 = 100
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 20
+      Weapon2 ->* VehicleType.AmmoTorp 
+      Weapon2.Ammo = 10
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.Ammo = 10
+      Weapon4 ->* VehicleType.AmmoMine 
+      Weapon4.Ammo = 10
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 10
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1238
+   ;Bezeichnung der verknüpften Technologie: Paratrax
+   TechnologiesRequired = 1238
+} TechAdapter

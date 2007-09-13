@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14013
+   ;Bezeichnung der verknüpften Technologie: Usurius
+   TechnologiesRequired = 14013
+} TechAdapter

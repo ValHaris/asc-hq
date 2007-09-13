@@ -1,0 +1,30 @@
+VehicleType { 
+   ID = 1206
+   parent = 294
+
+   Name = IMPERATOR
+   Description = Fahrende Festung
+   Infotext = [ Dieser riesige Belagerungspanzer ist ueberdurchschnittlich stark gepanzert, 
+   verfuegt ueber weitreichete Kanonen und ueber Luftverteidigung. Durch das hohe Gewicht kommt 
+   er allerdings nur langsam voran.]
+   Picture = mk4v_imperator.pcx
+   wreckageobject = 14206
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 150
+   View += 10
+
+   Movement -= 0 0 0 4 0 0 0 0 
+
+   Weapons { 
+      Number = 4
+
+      Weapon2 ->* VehicleType.MG45med 
+      Weapon2.Ammo = 20
+
+      Weapon3 ->* VehicleType.SAMH 
+      Weapon3.Ammo = 4
+      Weapon3.ReactionFireShots = 1
+
+   } Weapons
+} VehicleType

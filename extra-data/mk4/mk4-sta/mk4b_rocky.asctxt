@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = ROCKY
+   parent = 315
+   ID = 1295
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14295
+
+   Description = Bunker
+   Infotext = []
+   picture = mk4b_rocky.pcx
+
+   Weight = 190
+
+   Movement = 0 0 0 18 0 0 0 0 
+   Tank { 
+      fuel = 2100
+   } Tank
+   FuelConsumption = 300
+   Terrainaccess ->* VehicleType.Turret_only
+
+} VehicleType

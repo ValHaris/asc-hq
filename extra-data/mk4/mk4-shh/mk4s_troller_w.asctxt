@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14017
+
+   Name = Troller Wreck
+
+   
+
+   dry { 
+      picture = mk4s_troller_w.png 1
+   } dry
+
+} ObjectType

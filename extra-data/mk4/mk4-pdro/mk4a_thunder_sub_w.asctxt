@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 300
+   ID = 14844
+   Name = Thunder Wreck
+
+
+   dry { 
+      picture = mk4a_thunder_w.png 1
+   } dry
+
+} ObjectType

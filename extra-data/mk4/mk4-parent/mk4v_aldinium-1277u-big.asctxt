@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = do not use !
+   ID = 1277
+   Description = eleminate this unit
+   Infotext = []
+   Armor = 150
+   View = 0
+   picture = MK4v_ALDINIUM.pcx
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   Height = ground_level
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   FuelConsumption = 0
+   Abilities = 
+   Movement = 0 0 0 0 0 0 0 0 
+   Category = default
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 15
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lowland Road Runway hard_sand soft_sand hillside mountains high_mountains ditch turret_foundation installation Shallow_water Water Deep_water Lava 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

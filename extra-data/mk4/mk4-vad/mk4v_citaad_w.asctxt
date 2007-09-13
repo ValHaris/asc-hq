@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14021
+
+   Name = Cita AD Wreck
+
+   Armor = 200
+   RemovalCost { 
+      Energy = 0
+      Material = 2000
+      fuel = 200
+      Movement = 20
+   } RemovalCost
+   
+
+   dry { 
+      picture = mk4v_citaad_w.png 1
+   } dry
+
+} ObjectType

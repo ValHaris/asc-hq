@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1242
+   ;Bezeichnung der verknüpften Technologie: Ghost
+   TechnologiesRequired = 1242
+} TechAdapter

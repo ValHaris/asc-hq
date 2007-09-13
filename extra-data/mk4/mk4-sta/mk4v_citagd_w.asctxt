@@ -1,0 +1,15 @@
+ObjectType { 
+   Name = Cita GD Wreckage
+   ID = 14028
+   parent = 499
+   Armor = 200
+   RemovalCost { 
+      Energy = 0
+      Material = 2000
+      fuel = 200
+      Movement = 20
+   } RemovalCost
+   dry { 
+      picture = mk4v_citagd_w.png 1
+   } dry
+} ObjectType

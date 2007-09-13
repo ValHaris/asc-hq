@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 400
+   ID = 1242
+
+   Name = Ghost Wreck
+
+   dry { 
+      picture = MK4a_ghost_w.png 1
+   } dry
+
+} ObjectType

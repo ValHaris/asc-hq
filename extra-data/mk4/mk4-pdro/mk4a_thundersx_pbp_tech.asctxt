@@ -1,0 +1,10 @@
+technology {
+   Name = Thunder SX
+   infotext = Forschungsprojekt abgeschlossen! Thunder SX verfügbar!
+   id = 14006
+   RelatedUnitID = 14006
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100003,100102,100205,1296 
+} Technology

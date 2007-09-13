@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = STING
+   ID = 1209
+   parent = 296
+
+   Description = Raketenpanzer
+   Picture = mk4v_sting.pcx
+   wreckageobject = 14209
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 10
+
+   Movement += 0 0 0 10 0 0 0 0 
+} VehicleType

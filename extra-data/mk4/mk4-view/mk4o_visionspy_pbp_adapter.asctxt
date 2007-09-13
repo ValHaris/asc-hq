@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1272
+   ;Bezeichnung der verknüpften Technologie: Vision Spy
+   TechnologiesRequired = 1272
+} TechAdapter

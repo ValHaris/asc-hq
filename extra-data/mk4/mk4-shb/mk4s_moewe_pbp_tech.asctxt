@@ -1,0 +1,10 @@
+technology {
+   Name = Moewe
+   infotext = Forschungsprojekt abgeschlossen! Moewe verfügbar!
+   id = 1257
+   RelatedUnitID = 1257
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100020,100004,100101,100312 
+} Technology

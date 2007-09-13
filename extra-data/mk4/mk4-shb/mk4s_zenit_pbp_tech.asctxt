@@ -1,0 +1,10 @@
+technology {
+   Name = Zenit
+   infotext = Forschungsprojekt abgeschlossen! Zenit verfügbar!
+   id = 1263
+   RelatedUnitID = 1263
+   parent = 100020
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100020,100004,100104,100211,1258,1264,1262,1284 
+} Technology

@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = SPRING
+   parent = 336
+   ID = 1274
+   GuideSortHelp = 552 0 0 0 4 0 0 0 0 0
+   
+   Description = Transportpanzer
+   Infotext = [Stark gepanzerter Truppentransporter.]
+   picture = mk4v_spring.pcx
+   wreckageobject = 14274
+
+   Armor += 150
+   Transportation ->* VehicleType.TransBigTrooper 
+   Transportation.MaxLoadableMass = 15
+
+   FuelConsumption = 18
+   Weight += 15
+   Weapons { 
+      Initiative = -100
+      Number = 1
+      Weapon0 ->* VehicleType.MG35low 
+   } Weapons
+} VehicleType

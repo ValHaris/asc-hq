@@ -1,0 +1,10 @@
+technology {
+   Name = Copra
+   infotext = Forschungsprojekt abgeschlossen! Copra verfügbar!
+   id = 1279
+   RelatedUnitID = 1279
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100020,100003,100101,100206 
+} Technology

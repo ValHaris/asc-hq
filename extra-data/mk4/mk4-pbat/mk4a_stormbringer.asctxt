@@ -1,0 +1,21 @@
+VehicleType { 
+   parent = 278
+   ID = 1243
+
+   Name = STORMBRINGER
+   Description = Hoehenbomber
+   Infotext = [
+Speziell entwickelt zur Bombardierung von Bodenzielen, fliegt der STORMBRINGER sehr hoch und sehr weit. 
+In dieser Eigenschaft verfügt er über eine tödliche Präzision. Im Kampf gegen Abfangjager ist er allerdings auf 
+schwache Standartbordwaffen angewiesen. Im allgemeinen verfüght er ueber herausragende Faehigkeiten, schnelle 
+chirurgische Eingriffe am Feind vorzunehmen. ]
+   Picture = mk4a_stormbringer.png
+   wreckageobject = 1243 14843
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Number = 4
+
+      Weapon3 ->* VehicleType.AirH_MG 
+   } Weapons
+} VehicleType

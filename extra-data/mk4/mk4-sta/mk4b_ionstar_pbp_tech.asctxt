@@ -1,0 +1,10 @@
+technology {
+   Name = Ionstar
+   infotext = Forschungsprojekt abgeschlossen! Ionstar verfügbar!
+   id = 1222
+   RelatedUnitID = 1222
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100020,100002,100102,100203,100309,1295,1221 
+} Technology

@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14260
+
+   Name = Shell Wreck
+
+   Armor = 200
+   RemovalCost { 
+      Energy = 0
+      Material = -2000
+      fuel = 200
+      Movement = 30
+   } RemovalCost
+
+
+   dry { 
+      picture = mk4s_shell_w.png 1
+   } dry
+
+} ObjectType

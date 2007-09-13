@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14865
+
+   Name = Vader Wreck
+
+   Armor = 100
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 100
+      Movement = 20
+   } RemovalCost
+
+
+   dry { 
+      picture = mk4s_vader_w.png 1
+   } dry
+
+} ObjectType

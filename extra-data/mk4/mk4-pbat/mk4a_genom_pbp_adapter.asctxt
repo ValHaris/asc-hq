@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1246
+   ;Bezeichnung der verknüpften Technologie: Genom
+   TechnologiesRequired = 1246
+} TechAdapter

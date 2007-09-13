@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1251
+   ;Bezeichnung der verknüpften Technologie: Crux
+   TechnologiesRequired = 1251
+} TechAdapter

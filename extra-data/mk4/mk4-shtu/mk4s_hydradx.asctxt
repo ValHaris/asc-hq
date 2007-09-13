@@ -1,0 +1,56 @@
+VehicleType { 
+   Name = HYDRA DX
+   parent = 352
+   ID = 14007
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   
+   Description = Drohnen Traeger
+   Infotext = [Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und 
+   hochspezialisierten Drohen die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen 
+   Reichweite waeren sie dort nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite 
+   selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur 
+   Gebrauchswertsteigerung geprueft.
+Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder 
+mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des DX-Kampfwertsteigerungsprogrammes wurden die 
+erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde 
+dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden 
+bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
+Die HYDRA DX baut auf der HYDRA-Korvetten-Klasse auf und dient als seegestuetzter Drohnenstarter. Sie ist in der Lage 
+drei Drohne zuegig in ihr Einsatzgebiet auf See zu befoerdern und sie mittels Startkatapult starten zu lassen.
+]
+   picture = mk4s_hydradx.pcx
+   wreckageobject = 14007
+   Transportation ->* VehicleType.TransDroneDestroyer 
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 7000
+   } Tank
+   Abilities += repair_vehicle
+
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 79
+
+      Weapon1 ->* VehicleType.Ship_Flak 
+      Weapon1.MaxRange = 20
+
+      Weapon2 ->* VehicleType.SAMH 
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 15
+      
+      Weapon3 ->* VehicleType.AmmoLM
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleType.AmmoTorp
+      Weapon4.Ammo = 20
+
+      Weapon5 ->* VehicleType.AmmoBomb
+      Weapon5.Ammo = 20
+   } Weapons
+} VehicleType

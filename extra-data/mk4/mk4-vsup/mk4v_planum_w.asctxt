@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Planum Wreckage
+   ID = 14201
+   parent = 499
+   dry { 
+      picture = mk4v_planum_w.png 1
+   } dry
+} ObjectType

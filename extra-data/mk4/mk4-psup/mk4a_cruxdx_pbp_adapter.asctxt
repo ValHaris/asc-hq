@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14022
+   ;Bezeichnung der verknüpften Technologie: CruxDX
+   TechnologiesRequired = 14022
+} TechAdapter

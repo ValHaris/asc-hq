@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = MOEWE
+   ID = 1257
+   parent = 350 493
+
+   Description = Schnellboot
+   Infotext = []
+   picture = mk4s_moewe.pcx
+   wreckageobject = 14257
+   GuideSortHelp = 518 418 0 0 4 0 0 0 0 0
+
+   Jamming = 21
+   Abilities += move_after_attack jam_only_own_field 
+
+   Height = floating ground_level
+   Movement += 0 0 0 101 0 0 0 0 
+
+   TerrainAccess ->* VehicleType.nodeepwatership_terrain 
+   Weapons { 
+      Initiative = 50
+      Number = 3
+      Weapon0 ->* VehicleType.MG45low
+
+      Weapon1 ->* VehicleType.smSAM 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 68
+      Weapon1.Punch@MinRange = 68
+
+      Weapon2 ->* VehicleType.smSSM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 68
+      Weapon2.Punch@MinRange = 68
+   } Weapons
+} VehicleType

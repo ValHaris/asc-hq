@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14216
+
+   Name = Archimedes Wreck
+
+  
+
+   dry { 
+      picture = mk4v_archimedes_w.png 1
+   } dry
+
+} ObjectType

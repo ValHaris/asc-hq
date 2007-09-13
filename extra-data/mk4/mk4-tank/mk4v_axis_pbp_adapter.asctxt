@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1234
+   ;Bezeichnung der verknüpften Technologie: Axis
+   TechnologiesRequired = 1234
+} TechAdapter

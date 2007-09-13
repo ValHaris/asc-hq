@@ -1,0 +1,19 @@
+VehicleType { 
+   ID = 1234
+   parent = 293
+
+   Name = AXIS
+   Description = [Prätorianischer Kampfpanzer]
+   Picture = mk4v_axis.pcx
+   wreckageobject = 14234
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   
+   Armor += 200
+   Weight = 71
+   Movement -= 0 0 0 11 0 0 0 0
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+   } Weapons
+} VehicleType

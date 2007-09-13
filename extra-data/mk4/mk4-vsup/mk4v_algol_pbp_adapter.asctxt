@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1217
+   ;Bezeichnung der verknüpften Technologie: Algol
+   TechnologiesRequired = 1217
+} TechAdapter

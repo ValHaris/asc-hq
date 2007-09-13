@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1273
+   ;Bezeichnung der verknüpften Technologie: Bigger
+   TechnologiesRequired = 1273
+} TechAdapter

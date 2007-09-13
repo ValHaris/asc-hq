@@ -1,0 +1,10 @@
+technology {
+   Name = Sam 2
+   infotext = Forschungsprojekt abgeschlossen! Sam 2 verfügbar!
+   id = 1210
+   RelatedUnitID = 1210
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100020,100002,100102,100201,1207 
+} Technology

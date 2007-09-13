@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1288
+   ;Bezeichnung der verknüpften Technologie: Buccaneer
+   TechnologiesRequired = 1288
+} TechAdapter

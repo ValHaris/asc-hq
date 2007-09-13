@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = UX
+   ID = 1233
+   parent = 302
+
+   Description = Langstreckenrakete
+   Picture = mk4v_ux.pcx
+   wreckageobject = 1233
+   GuideSortHelp = 505 414 0 0 4 0 0 0 0 0
+
+} VehicleType

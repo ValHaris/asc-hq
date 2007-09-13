@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Pulsar Wreckage
+   ID = 14211
+   parent = 499
+   dry { 
+      picture = mk4v_pulsar_w.png 1
+   } dry
+} ObjectType

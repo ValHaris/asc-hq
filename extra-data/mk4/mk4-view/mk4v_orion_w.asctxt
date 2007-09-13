@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Orion Wreckage
+   ID = 14204
+   parent = 499
+   dry { 
+      picture = mk4v_orion_w.png 1
+   } dry
+} ObjectType

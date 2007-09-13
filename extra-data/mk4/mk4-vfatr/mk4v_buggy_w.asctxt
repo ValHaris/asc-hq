@@ -1,0 +1,9 @@
+ObjectType { 
+   Name = Buggy Wreck
+   ID = 1203
+   parent = 499
+
+   dry { 
+      picture = MK4v_buggy_w.png 1
+   } dry
+} ObjectType

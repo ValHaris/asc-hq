@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1208
+   ;Bezeichnung der verknüpften Technologie: Snake
+   TechnologiesRequired = 1208
+} TechAdapter

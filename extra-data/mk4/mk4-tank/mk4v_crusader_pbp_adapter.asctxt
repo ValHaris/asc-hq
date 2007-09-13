@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14011
+   ;Bezeichnung der verknüpften Technologie: Crusader
+   TechnologiesRequired = 14011
+} TechAdapter

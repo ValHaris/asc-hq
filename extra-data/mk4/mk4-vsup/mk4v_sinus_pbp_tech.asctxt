@@ -1,0 +1,10 @@
+technology {
+   Name = Sinus
+   infotext = Forschungsprojekt abgeschlossen! Sinus verfügbar!
+   id = 1202
+   RelatedUnitID = 1202
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100020,100002,100102 
+} Technology

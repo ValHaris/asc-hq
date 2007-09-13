@@ -1,0 +1,10 @@
+technology {
+   Name = Exterminator
+   infotext = Forschungsprojekt abgeschlossen! Exterminator verfügbar!
+   id = 1271
+   RelatedUnitID = 1271
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100020,100003,100101,100205,100206 
+} Technology

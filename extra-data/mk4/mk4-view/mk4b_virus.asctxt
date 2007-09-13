@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = VIRUS
+   ID = 1276
+   parent = 249
+   Description = Sonarmine
+   Infotext = [Die Funktion des VIRUS ist einfach und schnell umrissen. Diese unbewegliche Mine sperrt 
+               jede Art von Seeeinheit je nachdem wo sie sich befindet und ist somit defensiv zur weiteren Sicherung von Stellungen 
+               besonders geeingnet. Beim ersten Feindkontakt wird eine explosive Ladung gezündet, die über eine 
+               erhebliche Sprengkraft verfügt.] 
+   Picture = mk4b_virus.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Abilities += Kamikaze_only
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 { 
+         Type = bomb shootable 
+         targets = submerged floating ground_level low_level_flight
+         shotFrom = submerged floating 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 1
+         Punch@MaxRange = 120
+         Punch@MinRange = 120
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 90
+            0 = 100
+            u1 = 75
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+         cantHit = 
+      } Weapon0
+   } Weapons
+} VehicleType

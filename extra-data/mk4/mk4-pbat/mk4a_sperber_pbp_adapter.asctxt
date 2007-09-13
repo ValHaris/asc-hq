@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1247
+   ;Bezeichnung der verknüpften Technologie: Sperber
+   TechnologiesRequired = 1247
+} TechAdapter

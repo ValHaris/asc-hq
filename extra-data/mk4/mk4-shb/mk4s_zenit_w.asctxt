@@ -1,0 +1,13 @@
+ObjectType { 
+   Parent = 437
+
+   ID = 14263
+
+   Name = Zenit Wreck
+
+   
+   dry { 
+      picture = mk4s_zenit_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,10 @@
+technology {
+   Name = Pegasus
+   infotext = Forschungsprojekt abgeschlossen! Pegasus verfügbar!
+   id = 1285
+   RelatedUnitID = 1285
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100004,100103,100209,14007,14014 
+} Technology

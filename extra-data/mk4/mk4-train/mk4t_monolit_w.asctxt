@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 14228
+
+   Name = Monolit Wreck
+
+   
+
+   dry { 
+      picture = mk4t_monolit_w.png 1
+   } dry
+
+} ObjectType

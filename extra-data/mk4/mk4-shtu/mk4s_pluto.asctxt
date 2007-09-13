@@ -1,0 +1,73 @@
+VehicleType { 
+   Name = PLUTO
+   parent = 365
+   ID = 1267
+
+   Description = Raketen U-Boot
+   Infotext = [Das Pluto ist weiterer Vertreter aus der Reihe der Cromanischen Prätorianer. ]
+   picture = mk4s_pluto.pcx
+   wreckageobject = 14267
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 200
+   View += 10
+   Abilities += self_repairing repair_vehicle
+   SelfRepairRate = 5
+   Weight += 2000
+
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 30
+      MaxLoadableMass = 90
+      CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship 
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.SubIO
+   } Transportation
+   Tank { 
+      Material = 3000
+      fuel = 6000
+   } Tank
+   Movement -= 11 11 10 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.CMG 
+      Weapon1.MaxRange = 120
+      Weapon1.MinRange = 50
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 140
+
+      Weapon2 ->* VehicleType.ShM 
+      Weapon2.MaxRange = 70
+      Weapon2.MinRange = 30
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 96
+      Weapon2.ReactionFireShots = 0
+
+      Weapon3 ->* VehicleType.SAM 
+      Weapon3.shotFrom = submerged floating 
+      Weapon3.MaxRange = 20
+      Weapon3.Ammo = 6
+      Weapon3.HitAccuracy.u2 = 100
+      Weapon3.HitAccuracy.u3 = 90
+      Weapon3.ReactionFireShots = 1
+
+      Weapon4 ->* VehicleType.AmmoTorp
+      Weapon4.Ammo = 30
+      Weapon5 ->* VehicleType.AmmoMG
+      Weapon5.Ammo = 100
+      Weapon6 ->* VehicleType.AmmoBomb
+      Weapon6.Ammo = 30
+      Weapon7 ->* VehicleType.AmmoLM
+      Weapon7.Ammo = 30
+      Weapon8 ->* VehicleType.AmmoSM
+      Weapon8.Ammo = 30
+   } Weapons
+} VehicleType

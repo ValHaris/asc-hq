@@ -1,0 +1,10 @@
+technology {
+   Name = Albatros
+   infotext = Forschungsprojekt abgeschlossen! Albatros verfügbar!
+   id = 1255
+   RelatedUnitID = 1255
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100003,100103,100205,100206,1271,1247 
+} Technology

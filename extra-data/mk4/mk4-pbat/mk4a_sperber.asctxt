@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = SPERBER
+   parent = 326
+   ID = 1247
+
+   Description = Wasserflugzeug
+   picture = mk4a_sperber.png
+   Abilities += sonar 
+   
+   Movement += 0 0 0 10 0 0 0 0 
+   TerrainAccess ->* VehicleType.aircraft_water 
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Number = 4
+
+      Weapon3 ->* VehicleType.medBomb 
+      Weapon3.Ammo = 1
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14031
+   ;Bezeichnung der verknüpften Technologie: Dolter
+   TechnologiesRequired = 14031
+} TechAdapter

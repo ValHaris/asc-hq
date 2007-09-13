@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1228
+   ;Bezeichnung der verknüpften Technologie: Monolith
+   TechnologiesRequired = 1228
+} TechAdapter

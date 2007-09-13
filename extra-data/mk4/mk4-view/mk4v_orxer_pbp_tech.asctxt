@@ -1,0 +1,10 @@
+technology {
+   Name = Orxer
+   infotext = Forschungsprojekt abgeschlossen! Orxer verfügbar!
+   id = 14032
+   RelatedUnitID = 14032
+   parent = 100020
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100020,100002,100021,100104,100210,1204,1219,14507 
+} Technology

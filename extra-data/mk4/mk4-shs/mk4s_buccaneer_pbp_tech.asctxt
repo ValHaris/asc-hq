@@ -1,0 +1,10 @@
+technology {
+   Name = Buccaneer
+   infotext = Forschungsprojekt abgeschlossen! Buccaneer verfügbar!
+   id = 1288
+   RelatedUnitID = 1288
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100020,100004,100101 
+} Technology

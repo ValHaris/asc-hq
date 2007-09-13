@@ -1,0 +1,10 @@
+technology {
+   Name = Thunder FX
+   infotext = Forschungsprojekt abgeschlossen! Thunder FX verfügbar!
+   id = 1244
+   RelatedUnitID = 1244
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100003,100103,100206,1296,14006 
+} Technology

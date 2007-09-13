@@ -1,0 +1,10 @@
+technology {
+   Name = Crux DX
+   infotext = Forschungsprojekt abgeschlossen! Crux DX verfügbar!
+   id = 14022
+   RelatedUnitID = 14022
+   parent = 100020
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100020,100003,100104,1251 
+} Technology

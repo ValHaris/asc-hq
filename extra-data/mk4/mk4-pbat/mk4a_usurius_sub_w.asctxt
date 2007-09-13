@@ -1,0 +1,10 @@
+ObjectType { 
+   Parent = 300
+   ID = 14813
+   Name = Usurius Wreck
+
+   dry { 
+      picture = MK4a_usurius_w.png 1
+   } dry
+
+} ObjectType

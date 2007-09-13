@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14004
+
+   Name = Medusa 3 Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4b_medusa3_w.png 1
+   } dry
+
+} ObjectType

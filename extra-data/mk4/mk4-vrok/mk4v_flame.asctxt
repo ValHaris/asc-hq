@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = FLAME 
+   ID = 1280
+   parent = 301
+
+   Description = Rocket Launcher
+   Infotext = [mobiles Mittelstrecken Boden-Boden Raketensystem]
+   picture = mk4v_flame.pcx
+   wreckageobject = 14280
+   GuideSortHelp = 505 413 0 0 4 0 0 0 0 0
+
+   Armor += 20
+   WaitFortack = true
+   Abilities += no_reactionfire
+   Category = heavy_wheeled_vehicle
+   Weight = 125
+
+   FuelConsumption = 22
+   ;          deep  sub  flo grnd  low  med high  orb
+   Movement =    0    0    0   50    0    0    0    0
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand 
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks deep_snow swamp morass 
+      terrain_kill = Shallow_water Water Deep_water Very_shallow_water Lava river 
+   } TerrainAccess
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 110
+      Weapon0.MinRange = 50
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 130
+   } Weapons
+} VehicleType

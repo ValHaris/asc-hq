@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 1279
+
+   Name = Copra Wreck
+
+   dry { 
+      picture = MK4a_copra_w.png 1
+   } dry
+
+} ObjectType

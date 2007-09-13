@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = GHOST
+   parent = 390
+   ID = 1242
+
+   Description = Tarnkappenjaeger
+   Infotext = []
+   picture = mk4a_ghost.pcx
+   wreckageobject = 1242 14842
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor += 10
+   Jamming += 10
+
+   Movement += 0 0 0 0 10 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+
+      Weapon1.shotFrom = medium_level_flight high_level_flight 
+      Weapon1.Punch@MaxRange += 3
+      Weapon1.Punch@MinRange += 3
+
+      Weapon2 ->* vehicleType.AirH_MG 
+
+      Weapon3 ->* VehicleType.AAMH 
+      Weapon3.Ammo = 1
+      Weapon3.Punch@MaxRange = 80
+      Weapon3.Punch@MinRange = 80
+      
+      Weapon4 ->* VehicleType.AMO
+      Weapon4.Ammo = 1
+      Weapon4.MaxRange = 10
+   } Weapons
+} VehicleType

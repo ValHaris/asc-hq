@@ -1,0 +1,46 @@
+VehicleType { 
+   Name = ANACONDA
+   ID = 1225
+   parent = 400 401 402 412
+
+   Description = Kampfpanzerzug
+   Infotext = [Panzerzüge sind defensiv. Sie sichern das eigene Hinterland oder riegeln (im Fronteinsatz) durchgebrochene feindliche Truppen ab.
+Gegenüber den schweren Panzern z.B. dem Nashorn haben sie folgende Vorteile: 
+1.)	Sie bieten den transportierten Einheiten Schutz.
+2.)	Sie sind vor allen dingen sehr schnell. Man kann sie ganz schnell von einem Brennpunkt zum nächsten hin und her verlagern.
+3.)	Auch als gleichschneller Schutz der Eisenbahnverbindungen und Eskorte für (in Konvois zusammengefasste) Transportzüge
+Nachteile: Keine Offensivwaffe, abhängig von vorhandenen Schienen, Feuerkraft gegenüber z.B. Axis gering.
+]
+   picture = mk4t_anaconda.pcx
+   wreckageobject = 14225
+   GuideSortHelp = 503 0 0 0 4 0 0 0 0 0
+
+   Armor += 180
+   Transportation ->* VehicleType.TransLowTrooper2
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1700
+   } Tank
+   FuelConsumption = 16
+   Movement += 0 0 0 20 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Tank_Gun 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
+
+      Weapon1 ->* VehicleType.Flak
+      Weapon1.Ammo = 12
+      Weapon1.ReactionFireShots = 1
+      
+      Weapon2 ->* VehicleType.MiniGun 
+      Weapon2.Ammo = 18
+      Weapon2.ReactionFireShots = 1
+   } Weapons
+} VehicleType

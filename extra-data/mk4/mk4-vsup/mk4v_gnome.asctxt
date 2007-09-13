@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = GNOME
+   ID = 14010
+   parent = 335
+
+   Description = mine layer
+   Infotext = [Minenleger und -raeumer]
+   picture = mk4v_gnome.pcx
+   wreckageobject = 14010
+
+   Abilities += mine_layer view_mines 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Mine2Weapon 
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+   } Weapons
+} VehicleType

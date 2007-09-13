@@ -1,0 +1,10 @@
+technology {
+   Name = UHU
+   infotext = Forschungsprojekt abgeschlossen! UHU verfügbar!
+   id = 1241
+   RelatedUnitID = 1241
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100003,100103,100210 
+} Technology

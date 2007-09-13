@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = DOLTER
+   parent = 400 401 402 412
+   ID = 14031
+   
+   Description = Transportzug
+   Infotext = []
+   picture = mk4t_dolter.pcx
+   wreckageobject = 14031
+   GuideSortHelp = 551 558 0 0 4 0 0 0 0 0
+
+   Armor -= 50
+   Transportation ->* VehicleType.TransTrainBunker 
+   Abilities += fuel_transfer material_transfer 
+
+   Tank { 
+      fuel = 2000
+   } Tank
+   FuelConsumption = 30
+   Movement -= 0 0 0 20 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = CRUX DX
+   parent = 401 402 415 496 
+   ID = 14022
+
+   Description = DrohnenTransporter
+   Infotext = [ Die CRUX DX Einheiten sind speziell für den Drohnenabwurf ausgeruestet. Sie verfuegen ueber neuartige Abwurftechnicken, die die Reichweite der Drohnen nicht einschränkt. ]
+   picture = mk4a_cruxdx.png
+   wreckageobject = 14022 14822
+   GuideSortHelp = 551 0 0 0 4 0 0 0 0 0
+
+   Armor = 300
+   View = 30
+   Abilities = fuel_transfer
+   Transportation ->* VehicleType.TransDronePlane 
+   Weight = 198
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 7000
+   } Tank
+   FuelConsumption = 28
+   Movement = 0 0 0 65 150 160 130 0 
+   Height += high_level_flight 
+} VehicleType

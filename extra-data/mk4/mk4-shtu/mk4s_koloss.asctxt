@@ -1,0 +1,57 @@
+VehicleType { 
+   Name = KOLOSS
+   parent = 365
+   ID = 14027
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   
+   Description = Kommando Schlachtuboot
+   Infotext = [Unterseeboot mit Seeüberwachungssystemen. Dieses auf dem Pluto basierende U-Boot dient als 
+   	       seegestützte Kommandoeinheit. Neben dem großräumigen Überwachen gegnerischer Schiffs und 
+   	       U-Boot Bewegungen bietet es auch effektiven Schutz gegen U-Boote. Es sind dringend Jagtuboote als Begleitschutz abzustellen. ]
+   picture = mk4s_koloss.pcx
+   wreckageobject = 14027
+
+   Armor += 200
+   View = 91
+   Abilities += self_repairing moveduringreactionfire
+   Category = heavy_ship
+   SelfRepairRate = 5
+   Weight += 2000
+
+   Tank { 
+      Energy = 0
+      Material = 9000
+      fuel = 20000
+   } Tank
+   FuelConsumption = 50
+   TerrainAccess ->* VehicleType.very_bigship_terrain 
+   Movement = 55 55 52 0 0 0 0 0 
+
+   waitfortack = true
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 120
+      Weapon0.Ammo = 20
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.SAM 
+      Weapon1.shotFrom = submerged floating 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 6
+      Weapon1.HitAccuracy.u2 = 100
+      Weapon1.HitAccuracy.u3 = 90
+      Weapon1.ReactionfireShots = 1
+
+      Weapon2 ->* VehicleType.UTorp
+      Weapon2.targets = deep_submerged submerged 
+      Weapon2.Punch@MaxRange = 105
+      Weapon2.Punch@MinRange = 120
+      Weapon2.MaxRange = 40
+      Weapon2.Ammo = 6
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,77 @@
+VehicleType { 
+   Name = PTERRANO
+   parent = 400 401 402 415 496
+   ID = 1250
+
+   Description = fliegende Festung
+   Infotext = [PTERRANO
+
+Der PTERRANO sieht man bereits auf den ersten Blick an, dass sie zu den alten Prätorianereinheiten zählt! Sie vereint 
+auf Gigantismus abzielendes Design mit enormer Panzerung und vernichtender Feuerkraft. Sie ist vollgestopft mit 
+Bomben und schweren Raketen zum Einsatz gegen jegliche Ziele von der Wasseroberfläche bis hin zum Orbit. Zudem verfügt 
+sie über geringe Transportkapazitäten für Paraeinheiten und Drohnen. Die aus mehren Systemen bestehende 
+Aufklärungstechnik liefert den eigenen Streitkraeften ein umfassendes Bild vom planetaren und orbitalen Gefechtsraum. 
+Zusätzlich ist er mit einer Luftbetankungsvorrichtung versehen. Diese Einheit kann in ihrer strategischen Bedeutung 
+kaum unterschaetzt werden. Ihr einzigstes Manko ist die aus Masse und Design resultierende, vergleichsweise geringe 
+Geschwindigkeit.
+]
+   picture = mk4a_pterano.png
+   wreckageobject = 1250 14850
+   GuideSortHelp = 513 330 600 0 4 0 0 0 0 0
+
+   Armor = 560
+   View = 70
+   Abilities += satelliteview fuel_transfer
+   Weight = 275
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 70
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+      CargoMovementDivisor = 3
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Para
+      EntranceSystem1.CategoriesNOT -> VehicleType.cargo_noplane.CategoriesNOT
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+
+   Height = ground_level low_level_flight medium_level_flight 
+   FuelConsumption = 20
+   Movement = 0 0 0 65 149 149 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.AAM 
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 72
+      Weapon0.Punch@MinRange = 75
+
+      Weapon1 ->* VehicleType.medBomb 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 125
+      Weapon1.Punch@MinRange = 125
+
+      Weapon2 ->* VehicleType.ASM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 8
+      Weapon2.Punch@MaxRange = 83
+      Weapon2.Punch@MinRange = 83
+
+      Weapon3 ->* VehicleType.Air_MG 
+
+      Weapon4 ->* VehicleType.AMO 
+      Weapon4.shotFrom = medium_level_flight 
+      Weapon4.MaxRange = 30
+      Weapon4.MinRange = 20
+      Weapon4.Ammo = 2
+      Weapon4.HitAccuracy.u2 = 100
+   } Weapons
+} VehicleType

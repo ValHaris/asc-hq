@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1289
+   ;Bezeichnung der verknüpften Technologie: Marauder
+   TechnologiesRequired = 1289
+} TechAdapter

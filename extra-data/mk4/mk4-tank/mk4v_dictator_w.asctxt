@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Dictator Wreckage
+   ID = 14003
+   parent = 499
+   dry { 
+      picture = mk4v_dictator_w.png 1
+   } dry
+} ObjectType

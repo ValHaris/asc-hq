@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1280
+   ;Bezeichnung der verknüpften Technologie: Flame
+   TechnologiesRequired = 1280
+} TechAdapter

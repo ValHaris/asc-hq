@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14032
+   ;Bezeichnung der verknüpften Technologie: Orxer
+   TechnologiesRequired = 14032
+} TechAdapter

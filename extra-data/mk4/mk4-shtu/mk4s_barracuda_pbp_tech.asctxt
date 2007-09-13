@@ -1,0 +1,10 @@
+technology {
+   Name = Barracuda
+   infotext = Forschungsprojekt abgeschlossen! Barracuda verfügbar!
+   id = 1290
+   RelatedUnitID = 1290
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100004,100103,100208,1261 
+} Technology

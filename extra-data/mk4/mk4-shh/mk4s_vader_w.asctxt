@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14265
+
+   Name = Vader Wreck
+
+   
+
+   dry { 
+      picture = mk4s_vader_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,10 @@
+technology {
+   Name = Whale
+   infotext = Forschungsprojekt abgeschlossen! Whale verfügbar!
+   id = 14018
+   RelatedUnitID = 14018
+   parent = 100020
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100020,100004,100105,100212,1265,1266,14016,14017 
+} Technology

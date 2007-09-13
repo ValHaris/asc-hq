@@ -1,0 +1,10 @@
+technology {
+   Name = Vader DF
+   infotext = Forschungsprojekt abgeschlossen! Vader DF verfügbar!
+   id = 1266
+   RelatedUnitID = 1266
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100004,100102,100212,1265 
+} Technology

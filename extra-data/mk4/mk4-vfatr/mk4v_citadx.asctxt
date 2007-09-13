@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = CITA DX
+   parent = 337
+   ID = 14029
+   
+   Description = Drohnenservicebunker
+   Infotext = [CITA DX
+Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohen 
+die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite waeren sie dort nur 
+zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der 
+Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur Gebrauchswertsteigerung geprueft.
+Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere 
+Drohnen von ihnen aus starten koennen. Im Rahmen des DX-Kampfwertsteigerungsprogrammes wurden die erforderlichen 
+Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit 
+Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte 
+vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
+Der CITA SX baut auf dem leistungsfaehigen CITA - Mobilbunker auf und dient als bodengestuetze mobile Drohnenservicestation. 
+Er ist in der Lage mehere Drohne zuegig aufzutanken und aufzumunitionieren und sie mittels Startkatapult starten zu lassen. 
+]
+
+   picture = mk4v_citadx.pcx
+   WreckageObject = 14029
+   GuideSortHelp = 565 553 0 0 4 0 0 0 0 0
+
+   Transportation ->* VehicleType.TransDroneCruiser 
+   Abilities += repair_vehicle
+
+   Tank { 
+      Material = 10000
+      fuel = 10000
+   } Tank
+
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.Minigun
+      Weapon0.Ammo = 30
+      
+      Weapon1 ->* VehicleType.AmmoBomb
+      Weapon1.Ammo = 20
+      
+      Weapon2 ->* VehicleType.AmmoMG
+      Weapon2.Ammo = 50
+
+      Weapon3 ->* VehicleType.AmmoSM
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleTYpe.AmmoLM
+      Weapon4.Ammo = 20
+
+      Weapon5 ->* VehicleType.AmmoTorp
+      Weapon5.Ammo = 20
+
+   } Weapons
+} VehicleType

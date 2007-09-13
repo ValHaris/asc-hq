@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 1243
+
+   Name = Stormbringer Wreck
+
+   dry { 
+      picture = MK4a_stormbringer_w.png 1
+   } dry
+
+} ObjectType

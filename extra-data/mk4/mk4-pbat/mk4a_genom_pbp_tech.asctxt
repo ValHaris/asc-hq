@@ -1,0 +1,10 @@
+technology {
+   Name = Genom
+   infotext = Forschungsprojekt abgeschlossen! Genom verfügbar!
+   id = 1246
+   RelatedUnitID = 1246
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100003,100101,100206,1279 
+} Technology

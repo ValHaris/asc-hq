@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = IONSTAR
+   ID = 1222
+   parent = 320
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Description = Geschuetzturm
+   Infotext = []
+   picture = mk4b_ionstar.pcx
+   wreckageobject = 1222
+
+   Weapons { 
+      Weapon0.Ammo = 16
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange -= 10
+   } Weapons
+} VehicleType

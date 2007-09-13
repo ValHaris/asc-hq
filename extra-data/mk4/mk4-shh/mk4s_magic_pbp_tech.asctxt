@@ -1,0 +1,10 @@
+technology {
+   Name = Magic
+   infotext = Forschungsprojekt abgeschlossen! Magic verfügbar!
+   id = 14016
+   RelatedUnitID = 14016
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100004,100103,100202,100212,1265,1266 
+} Technology

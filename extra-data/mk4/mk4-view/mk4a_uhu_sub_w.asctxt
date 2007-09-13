@@ -1,0 +1,10 @@
+ObjectType { 
+   Parent = 300
+   ID = 14841
+   Name = UHU Wreck
+
+   dry { 
+      picture = MK4a_uhu_w.png 1
+   } dry
+
+} ObjectType

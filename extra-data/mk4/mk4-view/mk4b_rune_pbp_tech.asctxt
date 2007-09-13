@@ -1,0 +1,10 @@
+technology {
+   Name = Rune
+   infotext = Forschungsprojekt abgeschlossen! Rune verfügbar!
+   id = 1219
+   RelatedUnitID = 1219
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 1
+   TechnologiesRequired = 100020,100002,100102,100210,1204 
+} Technology

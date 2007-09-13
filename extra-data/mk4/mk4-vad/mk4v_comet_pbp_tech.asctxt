@@ -1,0 +1,10 @@
+technology {
+   Name = Comet
+   infotext = Forschungsprojekt abgeschlossen! Comet verfügbar!
+   id = 1229
+   RelatedUnitID = 1229
+   parent = 100020
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 100020,100002
+} Technology

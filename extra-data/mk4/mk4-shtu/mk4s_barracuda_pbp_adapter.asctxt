@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1290
+   ;Bezeichnung der verknüpften Technologie: Barracuda
+   TechnologiesRequired = 1290
+} TechAdapter

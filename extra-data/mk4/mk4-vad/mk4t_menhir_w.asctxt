@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 14275
+
+   Name = Menhir Wreck
+
+   
+
+   dry { 
+      picture = mk4t_menhir_w.png 1
+   } dry
+
+} ObjectType

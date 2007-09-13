@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 499
+   ID = 1233
+
+   Name = UX Wreck
+
+   dry { 
+      picture = MK4v_ux_w.png 1
+   } dry
+
+} ObjectType

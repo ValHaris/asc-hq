@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14256
+
+   Name = Rex Wreck
+
+   Armor = 800
+   RemovalCost { 
+      Energy = 0
+      Material = -8000
+      fuel = 800
+      Movement = 50
+   } RemovalCost
+
+
+   dry { 
+      picture = mk4s_rex_w.png 1
+   } dry
+
+} ObjectType

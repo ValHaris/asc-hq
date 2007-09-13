@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14258
+
+   Name = Patrix Wreck
+
+   
+
+   dry { 
+      picture = mk4s_patrix_w.png 1
+   } dry
+
+} ObjectType

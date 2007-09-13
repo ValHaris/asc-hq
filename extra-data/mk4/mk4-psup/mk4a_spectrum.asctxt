@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = SPECTRUM
+   parent = 325
+   ID = 1248
+
+   Description = Tankflugzeug
+   picture = mk4a_spectrum.png
+   wreckageobject = 1248 14848
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 40
+   FuelConsumption = 20
+   Movement -= 0 0 0 0 0 10 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon1 ->* vehicleType.Air_MG 
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 39
+      Weapon1.Punch@MinRange = 39
+   } Weapons
+} VehicleType

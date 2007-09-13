@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1201
+   ;Bezeichnung der verknüpften Technologie: Planum
+   TechnologiesRequired = 1201
+} TechAdapter

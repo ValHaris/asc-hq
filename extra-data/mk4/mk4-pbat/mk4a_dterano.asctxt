@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = DTERANO
+   parent = 327
+   ID = 14026
+
+   Description = fliegende Festung
+   picture = mk4a_dterano.png
+   wreckageobject = 14026 14826
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Category = heavy_aircraft
+   Armor += 150
+   Weight = 275
+   Transportation ->* VehicleType.TransDronePlane 
+   Transportation.MaxLoadableUnits = 2
+
+   FuelConsumption = 30
+   Movement = 0 0 0 65 149 149 0 0 
+
+   Weapons { 
+      Number = 3 
+      Weapon2 ->* VehicleType.Air_MG 
+   } Weapons
+} VehicleType

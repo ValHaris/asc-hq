@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = BIGGER
+   parent = 370
+   ID = 1273
+
+   Description = Tranportschiff
+   Infotext = [Trotz seiner Größe ist es ein schnelles und wendiges Schiff.
+              Die gewaltigen und hochmodernen Maschinen sind aber auch entsprechend
+              durstig. 
+              Es ist in der Lage alle Landeinheiten zu befördern, neben kleineren
+              Flugzeugen und Booten.<br>Weiterhin transportiert der BIGGER
+              eine große Menge an Treibstoff, Rohmaterial und Munition.]
+   picture = mk4s_bigger.pcx
+   wreckageobject = 14273
+   Armor -= 100
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   FuelConsumption = 45
+   Movement += 0 0 10 0 0 0 0 0 
+
+} VehicleType

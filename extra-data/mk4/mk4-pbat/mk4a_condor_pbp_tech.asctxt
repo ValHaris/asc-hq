@@ -1,0 +1,10 @@
+technology {
+   Name = Condor
+   infotext = Forschungsprojekt abgeschlossen! Condor verfügbar!
+   id = 1286
+   RelatedUnitID = 1286
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100003,100102,100205 
+} Technology

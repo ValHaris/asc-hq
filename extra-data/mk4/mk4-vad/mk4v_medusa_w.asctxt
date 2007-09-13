@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 1220
+
+   Name = Medusa Wreck
+
+   dry { 
+      picture = MK4v_medusa_w.png 1
+   } dry
+
+} ObjectType

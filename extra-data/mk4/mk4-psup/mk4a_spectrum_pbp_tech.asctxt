@@ -1,0 +1,10 @@
+technology {
+   Name = Spectrum
+   infotext = Forschungsprojekt abgeschlossen! Spectrum verfügbar!
+   id = 1248
+   RelatedUnitID = 1248
+   parent = 100020
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 100020,100003,100101 
+} Technology

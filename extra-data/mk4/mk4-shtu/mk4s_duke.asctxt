@@ -1,0 +1,63 @@
+VehicleType { 
+   Name = DUKE
+   parent = 365
+   ID = 1291
+   
+   Description = Heli-Trans U-Boot
+   Infotext = [Unterseeboot mit Helicopterbasis. Diese auf dem Pluto basierende U-Boot dient als 
+   		seegestützte Basis für eine Helicopterstaffel. Es bietet nicht nur Transportmöglichkeit
+   		und Schutz, sondern auch kompletten Service für die Hubschrauben. Die Raketenbatterien
+   		wurden dafürausgebaut und der Torpedovorrat verringert. Da sich das Träger-U-Boot öfter
+   		an die Wasseroberfläche begeben muß, damit die Hubschrauber starten können, wurden 
+   		Flakgeschütze montiert. Es sind dringend Jagtuboote als Begleitschutz abzustellen. ]
+   picture = mk4s_duke.pcx
+   wreckageobject = 14291
+
+   Armor += 200
+   View = 41
+   Jamming = 21
+   Transportation ->* VehicleType.TransHeliCarrier 
+   Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem3 ->* VehicleType.carrier
+   Transportation.EntranceSystem3.RequireUnitFunction = paratrooper
+   Abilities += fuel_transfer self_repairing jam_only_own_field repair_vehicle moveduringreactionfire
+   Category = heavy_ship
+   SelfRepairRate = 5
+   Weight += 2000
+
+   Tank { 
+      Energy = 0
+      Material = 9000
+      fuel = 20000
+   } Tank
+   FuelConsumption = 30
+   TerrainAccess ->* VehicleType.very_bigship_terrain 
+   Movement = 55 55 52 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 8
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.SAM 
+      Weapon1.shotFrom = submerged floating 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 6
+      Weapon1.HitAccuracy.u2 = 100
+      Weapon1.HitAccuracy.u3 = 90
+      Weapon1.ReactionfireShots = 1
+      Weapon2 ->* VehicleType.Ship_Flak
+      Weapon3 ->* VehicleType.AmmoSM
+      Weapon3.Ammo = 30
+      Weapon4 ->* VehicleType.AmmoTorp
+      Weapon4.Ammo = 40
+      Weapon5 ->* VehicleType.AmmoMG
+      Weapon5.Ammo = 100
+      Weapon6 ->* VehicleType.AmmoBomb
+      Weapon6.Ammo = 30
+      Weapon7 ->* VehicleType.AmmoLM
+      Weapon7.Ammo = 30
+
+   } Weapons
+} VehicleType

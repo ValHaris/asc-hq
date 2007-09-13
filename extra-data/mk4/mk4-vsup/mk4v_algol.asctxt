@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = ALGOL
+   ID = 1217
+   parent = 335
+
+   Description = Tankfahrzeug
+   Infotext = []
+   picture = mk4v_algol.pcx
+   wreckageobject = 14217
+
+   Armor -= 100
+   Tank { 
+      fuel = 20000
+   } Tank
+   Abilities += fuel_transfer 
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround 
+   } Weapons
+} VehicleType

@@ -1,0 +1,185 @@
+MK4 Set
+Grafiken: GAMER & Dr.Snuggels
+Spezifikationen: GAMER
+
+**************************
+
+--Infantrie--
+ID  1205/201 Demon          light attack trooper
+ID  1215/202 Troll          anti tank trooper
+ID  1236/207 Paratdemon     Fallschirmspringer
+ID  1237/206 Diver          tauchroboter
+
+-Mechwarrior
+ID  1213/209 Golem          medium battle robot /Prätorianer
+ID 14000/208 GT_Speeder     light battle robot /Prätorianer
+ID 14008/211 GT Defender    defence battle robot /Prätorianer
+ID 14009/210 Ultimate       heavy battle robot /Prätorianer
+
+--Tanks--
+ID  1206/294 Imperator      Belagerungspanzer /Prätorianer
+ID  1207/290 Teccno         leichter Panzer
+ID  1210/291 SAM 2          Mittlerer Panzer Typ 1
+ID  1212/295 Nashorn        Verteidigungspanzer
+ID  1231/292 SAM 3          Mittlerer Panzer Typ 2
+ID  1234/293 Axis           schwerer Kampfpanzer /Prätorianer
+ID  1238/290 PARATEC        Luftlandepanzer
+ID  1294/290 Scorpion       leichter Panzer
+ID 14003/294 Dictator       Raketen Belagerungspanzer /Prätorianer
+ID 14011/293 Crusader       old heavy tank
+
+--FastAttack & Transport--
+ID  1200/331 Ranger         fast recon vehicle
+ID  1203/332 Buggy          fast attack vehicle
+ID  1208/335 Snake          trooper transport
+ID  1223/335 Atlas          heavy transport
+ID 14020/335 Atlas DX       Drohnenstarter
+ID 14029/337 CITA DX        Drohnenservicestation /Prätorianer
+
+--View--
+ID  1204/242 Orion          Radarfahrzeug
+ID  1219/244 Rune           Radarstellung
+ID  1241/247 UHU            Radarflugzeug
+ID  1272/246 VisionSpy      Spionagesatellit
+ID  1276/249 Super Virus    Sonarmine
+ID  1297/241 GTSpy          Radarroboter/Prätorianer
+ID 14032/1234 Orxer         Radarpanzer/Prätorianer
+
+
+--Jamming--
+ID  1214/307 Elixier        jamming vehicle
+ID 14019/313 VisionRJ       jamming satellite
+ID 14024/305 GT-JAM         Jamming robot/Prätorianer
+ID 14025/337 CITA RJ        jamming Bunker/Prätorianer
+
+--Air Defence--
+ID  1220/219 Medusa         air defence
+ID  1229/217 Comet          Flakpanzer
+ID  1232/220 Medusa2        air defence tank
+ID  1275/221 Menhir         air defence train
+ID  1292/224 Sphinx         long range air defence tank
+ID 14002/216 GTAD           air defence robot /Prätorianer
+ID 14004/225 Medusa3        midrange air defence
+ID 14021/223 CITA AD        air defence bunker /Prärorianer
+
+--Artillery--
+ID  1211/252 Pulsar         schwere Artillerie
+ID  1226/256 Excalibur      Schienengeschütz
+ID  1230/250 Quasar         leichte Artillerie
+ID 14012/251 Angel          mittlere artillerie
+
+--Rocket Systems--
+ID  1209/296 Sting          leichter Raketenpanzer
+ID  1216/297 Archimedes     Raketenpanzer
+ID  1227/298 Python         Raketenpanzer /Prätorianer
+ID  1233/302 UX             langstrecken CM
+ID  1280/301 Flame          CM launcher vehicle
+ID 14030/1227 Python2       devensiver Raketenpanzer /Prätorianer
+
+--turrets & bunkers--
+ID  1221/317 Skull          defence bunker
+ID  1222/320 Ionstar        main defence gun
+ID  1235/337 Citadelle      mobile bunker /Prätorianer
+ID  1295/315 Rocky          light defence Gun
+ID 14028/332 CITA GD        ground defence Bunker/Prätorianer
+
+--SupportVehice--
+ID  1201/336 Planum         Baufahrzeug/Infrastuktur
+ID  1202/336 Sinus          Reparaturfahrzeug
+ID  1217/335 Algol          Tankfahrzeug
+ID  1218/336 Alcor          Munitionstransporter
+ID  1239/336 Planum LL      Luftlandebaufahrzeug
+ID  1240/336 Lurat          Baupanzer/Abwehranlagen
+ID  1268/335 Gigant         standart Baufahrzeug
+ID  1270/336 Regio          Baufahrzeug/Infrastruktur
+ID 14005/336 Wizard         Spezial Baufahrzeug
+ID 14010/335 Gnome          Minenleger
+
+
+--Orbital--
+ID  1249/233 Vision         air defence sattelite
+ID  1253/234 Vision GA      ground attack satellite
+ID  1254/231 Orbiter        Spaceshuttle /Prätorianer
+ID  1278/237 Deneb          Space/Air Defence Turret
+ID  1281/235 CHROMOS        Space Station
+
+
+--Aircraft--
+ID  1243/278 Stormbringer   heavy bomber
+ID  1246/271 Genom          light fighter
+ID  1247/326 Sperber        sea plane
+ID  1248/325 Spectrum       tankflugzeug
+ID  1279/270 Copra          Medium Fighter
+ID  1286/277 Condor         Medium Bomber
+ID 14013/280 Usurius        stealth bomber
+ID 14026/327 DTERANO        defence fighter /Prätorianer
+
+--Helicopter--
+ID 14033/409 Genni          Generator
+
+--Hoovercrafts--
+ID  1265/371 Vader          transport hoovercraft
+ID  1266/372 Vader DF       battle hoovercraft
+ID 14016/372 Magic          air defence hoovercraft
+ID 14017/372 Troller        fast attack hoovercraft
+ID 14018/371 Whale          heavy transport hoovercraft
+
+--Battleships--
+ID  1257/350 Möwe           Schnellboot
+ID  1258/350 Patrix         Truppentransportboot
+ID  1262/355 Polar          Kreuzer
+ID  1263 357 Zenit          Schlachtschiff
+ID  1264/352 Hydra          Torpedocorvette
+ID  1284/356 Fortress       heavy Cruiser
+ID  1289/367 Marauder       fast torpedo ship
+ID 14015/367 Möwe2          fast attack ship
+ID 14023/355 Polar OS       anti sat cruiser
+
+--Supportships--
+ID  1256/419 Rex            repairship
+ID  1269/419 Taros          buildship
+ID  1273/370 Bigger         heavy transportship
+ID  1283/369 Amazon         Transportschiff
+ID  1288/419 Buccaneer      minelayer-icebreacer
+
+--Carrier/Submarines
+ID  1259/361 Titan          heavy aircraft carier
+ID  1260/363 Shell          transport submarine
+ID  1261/364 Orca           hunter submarine
+ID  1267/365 Pluto          rocket submarine /Prätorianer
+ID  1285/395 Pegasus        light Carrier
+ID  1290/364 Barracuda      Submarine Hunter
+ID  1291/365 Duke           carrier submarine /Prätorianer
+ID 14007/352 Hydra DX       Drohnenträger
+ID 14014/355 Polar DX       Drohnenträger
+ID 14027/365 KOLOSS         command submarine /Prätorianer
+
+Ground Units
+ID  1277 Aldinium
+
+Aircraft
+ID  1242 Ghost
+ID  1244 Thunder FX
+ID  1245 Dragon       Kampfhubschrauber
+ID  1250 PTerrano
+ID  1251 Crux         Transportflugzeug
+ID  1252 Guppy
+ID  1255 Albatros
+ID  1271 Exterminator
+ID  1282 Firebird     Kampfhubschrauber
+ID  1287 Pirate       Jet Helicopter
+ID  1296 Thunder GX
+ID 14001 Thunder OX
+ID 14006 Thunder SX
+ID 14022 CRUX DX
+
+
+Trains
+ID  1224 Dolmen
+ID  1225 Anaconda
+ID  1228 Monolith
+ID 14031 DOLTER
+
+--
+ID  1298 
+ID  1299 

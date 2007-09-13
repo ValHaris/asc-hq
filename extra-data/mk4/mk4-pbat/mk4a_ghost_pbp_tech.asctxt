@@ -1,0 +1,10 @@
+technology {
+   Name = Ghost
+   infotext = Forschungsprojekt abgeschlossen! Ghost verfügbar!
+   id = 1242
+   RelatedUnitID = 1242
+   parent = 100020
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100020,100003,100104,100205,100206,100305,1271,1247,1255 
+} Technology

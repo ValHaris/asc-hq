@@ -1,0 +1,10 @@
+technology {
+   Name = Rex
+   infotext = Forschungsprojekt abgeschlossen! Rex verfügbar!
+   id = 1256
+   RelatedUnitID = 1256
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100004,100102 
+} Technology

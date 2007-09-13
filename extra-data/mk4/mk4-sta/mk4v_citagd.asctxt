@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = CITA GD
+   parent = 337 322
+   ID = 14028
+   Description = ground defence bunker
+   Infotext = [ Schwer gepanzerte langsam fahrende bunker, bestückt mit defensiven Mittelstreckenraketen.]
+   WreckageObject = 14028
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   View += 10
+   picture = mk4v_citagd.pcx
+   Transportation ->* VehicleType.TransLowTrooper3
+
+   waitfortack = true
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.type_large_missile 
+      Weapon0.MaxRange -= 10
+      Weapon0.MinRange -= 10
+      Weapon0.Punch@MaxRange -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.Tank_Gun 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 12
+      Weapon1.Punch@MaxRange = 65
+      Weapon1.Punch@MinRange = 75
+
+      Weapon2 ->* VehicleType.SAMH 
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 8
+      Weapon2.ReactionFireShots = 1
+
+      Weapon3 ->* VehicleType.Ship_MG 
+      Weapon3.Type = machinegun ammo_transfer shootable 
+      Weapon3.Ammo = 20
+      Weapon3.ReactionFireShots = 0
+
+   } Weapons
+} VehicleType

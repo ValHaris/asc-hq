@@ -1,0 +1,44 @@
+VehicleType { 
+   Name =  FORTRESS
+   ID = 1284
+   parent = 356
+   
+   Description = Schwerer Kreuzer
+   Infotext = []
+   picture = mk4s_fortress.pcx
+   wreckageobject = 14284
+   GuideSortHelp += 517 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 70
+      Weapon0.MinRange = 30
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 120
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Artillery 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 14
+      Weapon1.Punch@MaxRange = 78
+      Weapon1.Punch@MinRange = 98
+
+      Weapon2 ->* VehicleType.Artillery 
+      Weapon2.MaxRange = 40
+      Weapon2.Ammo = 14
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 90
+
+      Weapon3 ->* VehicleType.Ship_Flak 
+      Weapon3.Ammo = 12
+
+      Weapon4 ->* VehicleType.SAMH 
+      Weapon4.targets = medium_level_flight high_level_flight
+      Weapon4.MaxRange = 30
+      Weapon4.Ammo = 2
+      Weapon4.ReactionFireShots = 1
+   } Weapons
+} VehicleType

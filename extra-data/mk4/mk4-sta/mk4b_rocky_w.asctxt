@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14295
+
+   Name = Rocky Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4b_rocky_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,10 @@
+technology {
+   Name = Thunder OX
+   infotext = Forschungsprojekt abgeschlossen! Thunder OX verfügbar!
+   id = 14001
+   RelatedUnitID = 14001
+   parent = 100020
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100020,100003,100104,100206,1296,1244,14006 
+} Technology

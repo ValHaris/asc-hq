@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1243
+   ;Bezeichnung der verknüpften Technologie: Stormbringer
+   TechnologiesRequired = 1243
+} TechAdapter

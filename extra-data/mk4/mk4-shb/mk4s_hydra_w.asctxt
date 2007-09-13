@@ -1,0 +1,13 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14264
+
+   Name = Hydra Wreck
+
+   
+   dry { 
+      picture = mk4s_hydra_w.png 1
+   } dry
+
+} ObjectType

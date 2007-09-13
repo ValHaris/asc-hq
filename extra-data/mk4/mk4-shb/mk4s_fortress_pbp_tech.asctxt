@@ -1,0 +1,10 @@
+technology {
+   Name = Fortress
+   infotext = Forschungsprojekt abgeschlossen! Fortress verfügbar!
+   id = 1284
+   RelatedUnitID = 1284
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100004,100103,100211,1258,1264,1262
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = Vision Spy
+   infotext = Forschungsprojekt abgeschlossen! Vision Spy verfügbar!
+   id = 1272
+   RelatedUnitID = 1272
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100003,100103,100210,100302,1254 
+} Technology

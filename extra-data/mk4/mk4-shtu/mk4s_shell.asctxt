@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = SHELL
+   parent = 363
+   ID = 1260
+
+   Description = Transport UBoot
+   picture = mk4s_shell.pcx
+   wreckageobject = 14260
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Transportation ->* VehicleType.TransSubmarine 
+   Tank { 
+      Material = 10000
+      fuel = 20000
+   } Tank
+   Abilities += fuel_transfer material_transfer manual_resource_drilling 
+   ResourceDrillingRange = 3
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.ServiceGround 
+
+      Weapon1 ->* VehicleType.UTorp 
+      Weapon1.Type = torpedo ammo_transfer shootable 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.MG_Tank 
+      Weapon2.Type = machinegun ammo_transfer shootable 
+      Weapon2.Ammo = 50
+
+      Weapon3 ->* VehicleType.AmmoCM 
+      Weapon3.Ammo = 6
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 30
+   } Weapons
+} VehicleType

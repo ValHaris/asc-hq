@@ -1,0 +1,18 @@
+VehicleType { 
+   ID = 14032
+   parent = 1234
+
+   Name = ORXER
+   Description = [Prätorianischer Radarpanzer]
+   Infotext =
+   Picture = mk4v_orxer.pcx
+   wreckageobject = 14032
+   GuideSortHelp = 504 0 0 0 4 0 0 0 0 0
+
+   View = 70
+   
+   Weapons { 
+      Weapon0 ->* VehicleType.MG45low
+      Weapon0.Name = Maschinengewehr
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14026
+   ;Bezeichnung der verknüpften Technologie: DTerano
+   TechnologiesRequired = 14026
+} TechAdapter

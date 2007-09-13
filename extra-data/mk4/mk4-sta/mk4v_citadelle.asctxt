@@ -1,0 +1,57 @@
+VehicleType { 
+   Name = CITADELLE
+   parent = 337
+   ID = 1235
+   GuideSortHelp = 0 0 0 0 4 600 0 0 0 0
+
+   Description = Fahrender Bunker
+   Infotext = [ Schwer gepanzerte langsam fahrende Kommandoeinheit.]
+   picture = mk4v_citadelle.pcx
+   WreckageObject = 14235
+
+   Armor += 200
+   View += 10
+   Abilities += moveduringreactionfire satelliteview
+
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 40
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 50
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 15
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 105
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Tank_Gun 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 12
+      Weapon1.Punch@MaxRange = 65
+      Weapon1.Punch@MinRange = 75
+
+      Weapon2 ->* VehicleType.SAMH 
+      Weapon2.MaxRange = 50
+      Weapon2.Ammo = 8
+      Weapon2.Punch@MaxRange = 65
+      Weapon2.ReactionFireShots = 1
+
+      Weapon3 ->* VehicleType.Ship_MG 
+      Weapon3.Type = machinegun ammo_transfer shootable 
+      Weapon3.Ammo = 20
+      Weapon3.ReactionFireShots = 0
+
+      Weapon4 ->* VehicleType.SOM 
+      Weapon4.Ammo = 2
+
+   } Weapons
+} VehicleType

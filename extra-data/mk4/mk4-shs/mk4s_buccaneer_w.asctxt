@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 414
+
+   ID = 14288
+
+   Name = Buccaneer Wreck
+
+   dry { 
+      picture = mk4s_buccaneer_w.png 1
+   } dry
+
+} ObjectType

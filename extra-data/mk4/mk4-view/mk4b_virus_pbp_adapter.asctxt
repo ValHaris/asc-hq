@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1276
+   ;Bezeichnung der verknüpften Technologie: Virus
+   TechnologiesRequired = 1276
+} TechAdapter

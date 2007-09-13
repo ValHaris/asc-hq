@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = MEDUSA 2
+   ID = 1232
+   parent = 220
+   Description = FlaRak-Panzer
+   Infotext = [ Flugabwehrpanzer mit guter Beweglichkeit und starker Bewaffnung. Gegenueber der nur schwer beweglichen MEDUSA mussten Einschraenkungen bei Reichweite und Durchschlagskraft hingenommen werden. Da die Medusa nur Waffen gegen Luftziehe hat, ist sie ebenfalls besonders zu sichern.]
+   Picture = mk4v_medusaii.pcx
+   wreckageobject = 14232
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Movement -= 0 0 0 8 0 0 0 0 
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = PLANUM
+   ID = 1201
+   parent = 336
+
+   Description = Baufahrzeug Strasse/Schiene
+   Infotext = [Baufahrzeug für Straßen, Wege, Schienen und Brücken.]
+   picture = mk4v_planum.pcx
+   wreckageobject = 14201
+
+   Armor -= 50
+   Abilities += material_transfer fuel_transfer
+   Weight -= 5
+
+   Tank { 
+      Material = 3500
+      fuel = 4500
+   } Tank
+   TerrainAccess ->* VehicleType.offroad 
+
+   Construction { 
+      Objects = 9 1 2 45 1000 999 997 995
+      ObjectsRemovable =  
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 9 11 12 13 14
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

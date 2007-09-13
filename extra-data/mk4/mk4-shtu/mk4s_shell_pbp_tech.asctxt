@@ -1,0 +1,10 @@
+technology {
+   Name = Shell
+   infotext = Forschungsprojekt abgeschlossen! Shell verfügbar!
+   id = 1260
+   RelatedUnitID = 1260
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100004,100103,100208
+} Technology

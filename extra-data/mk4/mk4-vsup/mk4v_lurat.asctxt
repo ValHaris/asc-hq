@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = LURAT
+   ID = 1240
+   parent = 336
+   
+   Description = Baufzg.Abwehranlagen
+   Infotext = [ Das LURAT-System ist ein weiteres notwendiges Baufahrzeug. Es ist in der Lage 
+   auf vorhandene Turret-Sockel stationaere Verteidigungsanlagen zu errichten und kleinere Sockeleinheiten zu transportieren.]
+   picture = mk4v_lurat.pcx
+   wreckageobject = 14240
+   Armor -= 100
+   Transportation ->* VehicleType.TransTurretMed 
+   Abilities += construct_vehicles 
+
+   Tank { 
+      Material = 25000
+      fuel = 25000
+   } Tank
+   TerrainAccess ->* VehicleType.offroad 
+
+   Construction { 
+      Vehicles = 1221 1222 1219 1278 1295
+      Objects = 44 2098
+      ObjectGroupsRemovable = 7 11 13
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.AmmoMG 
+      Weapon0.Ammo = 50
+
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 50
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 30
+
+      Weapon3 ->* VehicleType.ServiceTurret
+
+   } Weapons
+} VehicleType

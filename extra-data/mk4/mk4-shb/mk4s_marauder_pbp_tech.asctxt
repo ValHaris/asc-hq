@@ -1,0 +1,10 @@
+technology {
+   Name = Marauder
+   infotext = Forschungsprojekt abgeschlossen! Marauder verfügbar!
+   id = 1289
+   RelatedUnitID = 1289
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100004,100102,100312,1257
+} Technology

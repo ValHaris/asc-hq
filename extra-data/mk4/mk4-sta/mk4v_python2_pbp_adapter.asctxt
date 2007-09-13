@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14030
+   ;Bezeichnung der verknüpften Technologie: Python 2
+   TechnologiesRequired = 14030
+} TechAdapter

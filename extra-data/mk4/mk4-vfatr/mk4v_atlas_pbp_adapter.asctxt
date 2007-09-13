@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1223
+   ;Bezeichnung der verknüpften Technologie: Atlas
+   TechnologiesRequired = 1223
+} TechAdapter

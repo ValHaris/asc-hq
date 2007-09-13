@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1263
+   ;Bezeichnung der verknüpften Technologie: Zenit
+   TechnologiesRequired = 1263
+} TechAdapter

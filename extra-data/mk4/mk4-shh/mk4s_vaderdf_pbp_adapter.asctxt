@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1266
+   ;Bezeichnung der verknüpften Technologie: Vader DF
+   TechnologiesRequired = 1266
+} TechAdapter

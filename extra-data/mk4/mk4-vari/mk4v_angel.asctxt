@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = ANGEL
+   ID = 14012
+   parent = 251
+   Description = medium artillerie
+   Infotext = []
+   Picture = mk4v_angel.pcx
+   wreckageobject = 14012
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 100
+   TerrainAccess { 
+      terrain_not = swamp morass deep_snow large_rocks
+   } TerrainAccess
+   Weapons { 
+   } Weapons
+} VehicleType

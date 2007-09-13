@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14018
+   ;Bezeichnung der verknüpften Technologie: Whale
+   TechnologiesRequired = 14018
+} TechAdapter

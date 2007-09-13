@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1218
+   ;Bezeichnung der verknüpften Technologie: Alcor
+   TechnologiesRequired = 1218
+} TechAdapter

@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Flame Wreckage
+   ID = 14280
+   parent = 499
+   dry { 
+      picture = mk4v_flame_w.png 1
+   } dry
+} ObjectType

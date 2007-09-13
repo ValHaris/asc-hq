@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = PARATEC
+   ID = 1238
+   parent = 290
+   Description = Luftlandepanzer
+   Infotext = [ 
+Diese abgespeckte Version des TECCNO ist mit einem Fallschirm ausgeruestet, welches ihm ermoeglicht, sich aus 
+Transportflugzeugen abwerfen zu lassen. Er dient vor allem dazu Fallschirmspringer und PARAPLAMUM in feindlichem 
+Gebiet zu unterstuetzen.]
+   Picture = mk4v_paratec.pcx
+   wreckageobject = 14238
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Armor -= 100
+   Abilities += paratrooper 
+
+   Tank.fuel -= 50
+   FuelConsumption -= 1
+   Movement -= 0 0 0 5 0 0 0 0 
+   Weight -= 10
+
+   Weapons { 
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+   } Weapons
+} VehicleType

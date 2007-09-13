@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1233
+   ;Bezeichnung der verknüpften Technologie: UX-2
+   TechnologiesRequired = 1233
+} TechAdapter

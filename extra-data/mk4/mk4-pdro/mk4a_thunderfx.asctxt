@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = THUNDER FX
+   parent = 425
+   ID = 1244
+   Description = AntiAir Jagddrohne
+   Infotext = [THUNDER FX
+
+Die THUNDER FX ist das Basismodell für alle anderen Ausführungen der THUNDER-Reihe. Dabei handelt es sich um unbemannte Kurzstreckenjagddrohnen mit hoher Triebwerksleistung. Das FX-Modell ist als reiner Abfangjäger zum Einsatz gegen feindliche Luftstreitkräfte konzipiert worden. Die vergleichsweise schwere Bewaffnung macht die THUNDER FX aber auch zu einer ausgezeichneten Offensivwaffe. Allerdings verfügt sie über einen relativ kleinen Tank, was ihren Aktionsradius zum Teil erheblich einschränkt. Da sie aufgrund ihrer hohen Minimalgeschwindigkeit nicht in der Luft betankt werden kann, benötigt sie für den effektiven Einsatz Trägerschiffe, bzw. Abwurfflugzeuge, welche die Drohne nahe an ihr Einsatzziel heran bringen. 
+Alle THUNDER-Modelle sind reine Spezialentwicklungen, die sich ausschließlich zur Bekämpfung der ihr zugedachten Ziele eigenen, da ihnen zum Feuern auf andere Feindeinheiten die entsprechenden Zusatzbewaffnungen fehlen.
+]
+
+   picture = mk4a_thunderfx.png
+   wreckageobject = 1244 14844
+   GuideSortHelp += 0 0 0 0 4 272 0 0 0 0
+
+   Movement += 0 0 0 0 10 20 10 0 
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.AAMH 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.AAMH 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 76
+      Weapon1.Punch@MinRange = 76
+   } Weapons
+
+} VehicleType

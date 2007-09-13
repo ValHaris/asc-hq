@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1212
+   ;Bezeichnung der verknüpften Technologie: Nashorn
+   TechnologiesRequired = 1212
+} TechAdapter

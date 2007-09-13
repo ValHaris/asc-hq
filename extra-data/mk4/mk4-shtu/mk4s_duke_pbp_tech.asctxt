@@ -1,0 +1,10 @@
+technology {
+   Name = Duke
+   infotext = Forschungsprojekt abgeschlossen! Duke verfügbar!
+   id = 1291
+   RelatedUnitID = 1291
+   parent = 100020
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100020,100004,100104,100208,100209,1260 
+} Technology

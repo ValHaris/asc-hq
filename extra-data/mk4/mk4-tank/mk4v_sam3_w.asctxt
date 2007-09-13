@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Sam3 Wreckage
+   ID = 14231
+   parent = 499
+   dry { 
+      picture = mk4v_sam3_w.png 1
+   } dry
+} ObjectType

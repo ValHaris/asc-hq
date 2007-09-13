@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = GIGANT
+   ID = 14005
+   parent = 336
+   
+   Description = Construction Vehicle
+   Infotext = [Der GIGANT uebernimmt Spezialaufgaben wie das Errichten der Medusa3 Stellungen und das Versetzen von größeren Geschuetztürmen und der Bunker Citadellen.]
+   picture = mk4v_gigant.pcx
+   wreckageobject = 14005
+   Armor -= 100
+   View = 20
+   Weight -= 10
+
+   Transportation ->* VehicleType.TransTurretBig
+   Transportation.MaxLoadableUnits = 1
+   Transportation.MaxLoadableUnitSize = 1100
+   Transportation.MaxLoadableMass = 1100
+   Transportation.CargoMovementDivisor = 1.5
+   Transportation.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft 
+   Transportation.EntranceSystem0.DisableAttack = true
+
+   Abilities += construct_vehicles construct_specific_buildings
+   TerrainAccess ->* VehicleType.offroad 
+
+   Tank { 
+      Material = 60000
+      fuel = 70000
+   } Tank
+
+   Construction { 
+      Buildings = 26 29
+      Vehicles = 1276 14004
+      Objects = 
+      ObjectsRemovable = 988
+      ObjectGroupsRemovable = 14
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

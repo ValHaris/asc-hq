@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Spring Wreckage
+   ID = 14274
+   parent = 499
+   dry { 
+      picture = mk4v_spring_w.png 1
+   } dry
+} ObjectType

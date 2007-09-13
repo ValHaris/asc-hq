@@ -1,0 +1,10 @@
+technology {
+   Name = Alcor
+   infotext = Forschungsprojekt abgeschlossen! Alcor verfügbar!
+   id = 1218
+   RelatedUnitID = 1218
+   parent = 100020
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 100020,100002,100101 
+} Technology

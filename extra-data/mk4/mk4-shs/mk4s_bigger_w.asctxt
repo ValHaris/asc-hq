@@ -1,0 +1,20 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14273
+
+   Name = Bigger Wreck
+
+   Armor = 800
+   RemovalCost { 
+      Energy = 0
+      Material = -8000
+      fuel = 800
+      Movement = 50
+   } RemovalCost
+
+   dry { 
+      picture = mk4s_bigger_w.png 1
+   } dry
+
+} ObjectType

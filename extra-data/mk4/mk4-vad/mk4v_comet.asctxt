@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = COMET
+   ID = 1229
+   parent = 217
+
+   Description = FlakPanzer
+   Infotext = [Ein Flakpanzer (kurz für Flugabwehrkanonenpanzer) ist ein leicht gepanzertes Fahrzeug. Sie bekämpft den Luftfeind im niedrigen und mittleren Flughöhenbereich, auf kurze und mittlere Distanz und schützt Truppen, deren Einrichtungen und Anlagen. Diese Flak  ist aufgrund Ihrer Beweglichkeit so eine Art "Feuerwehr". Sie führt Kampfunterstützungsaufgaben durch. Die Bewaffnung dieser Panzer besteht aus Maschinenkanonen, die für die Luftabwehr modifiziert oder entwickelt wurden. Neben dem leistungsfähigen Radar, kann diese Einheit auch gegen Landziele eingesetzt werden, was Ihre Einsetzmöglichkeiten noch weiter erhöht. Der Nachteil dieser Einheit ist ihre geringe Panzerung, Höhe und offener Aufbau. Das Hauptaufgabengebiet von Flakpanzern ist die schnelle Verteidigung der kämpfenden Bodentruppe und die Verteidigung von frontnahen Stützpunkten gegen Luftziele.
+Im Rudel eingesetzt können diese äusserst schnellen Comet Flakpanzer eine echte Bedrohung für angreifende Tiefflieger werden. Eigene empfindliche Verluste müssen aber bei dieser geringen Kampfdistanz stets einkalkuliert werden. 
+]
+   Picture = mk4v_comet.pcx
+   wreckageobject = 14229
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Movement += 0 0 0 12 0 0 0 0 
+   Weight = 38
+   Abilities += MoveDuringReactionFire
+   TerrainAccess ->* VehicleType.offroad 
+   Weapons { 
+      Weapon1 ->* VehicleType.Tank_Gun 
+      Weapon1.Ammo = 6
+      Weapon1.ReactionFireShots = 0
+      Weapon1.Punch@MaxRange = 55
+      Weapon1.Punch@MinRange = 55
+   } Weapons
+} VehicleType

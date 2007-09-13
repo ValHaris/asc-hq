@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1259
+   ;Bezeichnung der verknüpften Technologie: Titan
+   TechnologiesRequired = 1259
+} TechAdapter

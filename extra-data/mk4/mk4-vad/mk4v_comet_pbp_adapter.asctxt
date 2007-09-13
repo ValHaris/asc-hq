@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1229
+   ;Bezeichnung der verknüpften Technologie: Comet
+   TechnologiesRequired = 1229
+} TechAdapter

@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Snake Wreckage
+   ID = 14208
+   parent = 499
+   dry { 
+      picture = mk4v_snake_w.png 1
+   } dry
+} ObjectType

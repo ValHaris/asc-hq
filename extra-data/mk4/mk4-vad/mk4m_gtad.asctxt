@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = GT-AD
+   ID = 14002
+   parent = 216
+   Description = Air Defence Golem Type
+   Infotext = [AirDefence Mech auf Basis des Golem. ]
+   Picture = mk4m_gtad.pcx
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   wreckageobject = 14002
+   Armor += 100
+   Movement += 0 0 0 10 0 0 0 0 
+   
+   Weapons { 
+   } Weapons
+} VehicleType

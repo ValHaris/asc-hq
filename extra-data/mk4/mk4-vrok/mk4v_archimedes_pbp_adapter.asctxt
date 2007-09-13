@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1216
+   ;Bezeichnung der verknüpften Technologie: Archimedes
+   TechnologiesRequired = 1216
+} TechAdapter

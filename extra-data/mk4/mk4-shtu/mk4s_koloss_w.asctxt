@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14027
+
+   Name = Koloss Wreck
+
+   RemovalCost { 
+      Energy = 0
+      Material = -9000
+      fuel = 300
+      Movement = 40
+   } RemovalCost
+
+   dry { 
+      picture = mk4s_koloss_w.png 1
+   } dry
+
+} ObjectType

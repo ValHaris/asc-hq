@@ -1,0 +1,46 @@
+VehicleType { 
+   Name = POLAR OS
+   parent = 355
+   ID = 14023
+   
+   Description = Anti-Sat-Kreuzer
+   Infotext = [POLAR OS]
+   picture = mk4s_polaros.pcx
+   wreckageobject = 14023
+   GuideSortHelp += 517 0 0 0 4 600 0 0 0 0
+
+   Weapons { 
+      Initiative = 0
+      Number = 8
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1 ->* VehicleType.Ship_Flak 
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.HitAccuracy.0 = 100
+      
+      Weapon2 ->* VehicleType.SOM
+      Weapon2.MaxRange = 50
+      Weapon2.Ammo = 4
+
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 20
+      
+      Weapon4 ->* VehicleType.AmmoMG
+      Weapon4.Ammo = 50
+
+      Weapon5 ->* VehicleType.AmmoSM
+      Weapon5.Ammo = 20
+
+      Weapon6 ->* VehicleTYpe.AmmoLM
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* VehicleType.AmmoTorp
+      Weapon7.Ammo = 20
+   } Weapons
+} VehicleType

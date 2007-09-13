@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1239
+   ;Bezeichnung der verknüpften Technologie: Paraplanum
+   TechnologiesRequired = 1239
+} TechAdapter

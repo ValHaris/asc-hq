@@ -1,0 +1,10 @@
+technology {
+   Name = Paratrax
+   infotext = Forschungsprojekt abgeschlossen! Paratrax verfügbar!
+   id = 1238
+   RelatedUnitID = 1238
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100020,100002,100102,100201,100311,1207 
+} Technology

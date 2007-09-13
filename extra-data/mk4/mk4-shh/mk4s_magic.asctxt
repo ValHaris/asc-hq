@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = MAGIC
+   parent = 372 
+   ID = 14016
+   
+   Description = SAM Hoovercraft
+   Infotext = [
+Der MAGIC ist die Ausführung eines reinen SAM-Luftkissenbootes, welches zu gewissen Teilen auf den älteren VADER DF 
+basiert. Allerdings wurden hier die Waffensysteme rein zur Luftabwehr konzipiert und sind entsprechend schlagkräftig 
+ausgefallen. Zu diesem Zwecke wurde der ursprüngliche Laderaum extrem verkleinert, sodass der MAGIC jetzt nur noch 
+über einige wenige Stellplätze für Trooper-Einheiten verfügt. Zudem hat er, gegenüber seinem Vorgänger, etwas an 
+Topspeed eingebüßt, was auf das veränderte Design und die um ein Drittel verstärkte Panzerung zurückzuführen ist.
+ ]
+   picture = mk4s_magic.pcx
+   wreckageobject = 14016 14816
+   GuideSortHelp += 0 0 0 0 4 508 552 0 0 0
+
+   View += 10
+   Abilities += MoveDuringReactionFire
+
+   Weapons { 
+      Initiative = 20
+      Number = 2
+
+      Weapon0 ->* VehicleType.Def_MG 
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 10
+
+   } Weapons
+} VehicleType

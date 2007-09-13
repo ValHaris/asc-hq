@@ -1,0 +1,10 @@
+technology {
+   Name = Stormbringer
+   infotext = Forschungsprojekt abgeschlossen! Stormbringer verfügbar!
+   id = 1243
+   RelatedUnitID = 1243
+   parent = 100020
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100020,100003,100103,100205,1286 
+} Technology

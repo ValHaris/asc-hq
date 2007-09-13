@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 14028
+   ;Bezeichnung der verknüpften Technologie: CitaGD
+   TechnologiesRequired = 14028
+} TechAdapter

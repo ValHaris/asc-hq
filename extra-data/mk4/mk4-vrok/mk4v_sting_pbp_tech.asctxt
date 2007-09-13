@@ -1,0 +1,10 @@
+technology {
+   Name = Sting
+   infotext = Forschungsprojekt abgeschlossen! Sting verfügbar!
+   id = 1209
+   RelatedUnitID = 1209
+   parent = 100020
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 100020,100002,100102,100310 
+} Technology

@@ -1,0 +1,13 @@
+VehicleType { 
+   ID = 1212
+   parent = 295
+
+   Name = NASHORN
+   Description = Sturmgeschuetz
+   Picture = mk4v_nashorn.pcx
+   wreckageobject = 14212
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+   } Weapons
+} VehicleType

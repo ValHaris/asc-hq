@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = REGIO
+   ID = 1270
+   parent = 336
+   
+   Description = Baufzg.Befestigung/Turret
+   Infotext = [Baufahrzeug für Befestigungen, Pipelines und Turretsockel.] 
+   picture = mk4v_regio.pcx
+   wreckageobject = 14270
+   
+   Armor -= 100
+   Weight -= 10
+   Abilities += manual_resource_drilling material_transfer fuel_transfer
+   ResourceDrillingRange = 6
+
+   Tank { 
+      Material = 5000
+      fuel = 7000
+   } Tank
+   TerrainAccess ->* VehicleType.Offroad 
+
+   Construction { 
+      Objects = 10 3 30 181 996 998 2153 2097
+      ObjectsRemovable = 2097
+      ObjectGroupsRemovable = 2 3 4 5 6 8 9 10 11 13
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

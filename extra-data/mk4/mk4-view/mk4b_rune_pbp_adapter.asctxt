@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1219
+   ;Bezeichnung der verknüpften Technologie: Rune
+   TechnologiesRequired = 1219
+} TechAdapter

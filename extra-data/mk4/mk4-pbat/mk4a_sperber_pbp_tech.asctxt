@@ -1,0 +1,10 @@
+technology {
+   Name = Sperber
+   infotext = Forschungsprojekt abgeschlossen! Sperber verfügbar!
+   id = 1247
+   RelatedUnitID = 1247
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100003,100102,100205,100206,1271 
+} Technology

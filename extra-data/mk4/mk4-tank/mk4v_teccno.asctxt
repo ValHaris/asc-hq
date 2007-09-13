@@ -1,0 +1,13 @@
+VehicleType { 
+   ID = 1207
+   parent = 290
+
+   Name = TECCNO
+   Infotext = [Der Teccno ist ein motorisiertes, auf Gleisketten rollendes und mit einem Geschütz bestücktes Militärfahrzeug, welches durch seine Panzerung gegen Beschuss geschützt ist. Auf dem um 360 Grad drehbaren Turm ist als Hauptwaffe eine Kanone montiert. Als Sekundärwaffen ist dieser leichte Panzer zusätzlich mit einem Maschinengewehren ausgestattet. Die herausragenden Eigenschaften des Panzers ist seine Schnelligkeit. Der Treibstoffverbrauch liegt zwar höher und die Reichweite ist kleiner als beim vergleichbaren Scorpion, dafür ist dieser aber auch ein gutes Stück schneller und hat eine bessere Druchschlagskraft. Bis heute bildet dieser sehr preiswerte und schnelle Kampfpanzer das offensive Rückgrat jeder modernen Landstreitmacht, wenngleich deren taktischer Wert durch moderne Panzerabwehrwaffen zunehmend in Frage gestellt wird. Klassische Gegner eines Panzers sind Kampfflugzeuge, Panzer und Infanteristen mit kleinen, panzerbrechenden Waffen wie der Panzerfaust oder Panzerminen. Auf dem modernen Gefechtsfeld kommen Hubschrauber, Artillerie mit zielsuchender Munition, bewaffnete Drohnen und kleine, von Infanteristen verwendete Panzerabwehrraketen hinzu. Insbesondere die Verbreitung dieser Raketen führte zu einem radikalen Umbruch im Panzerbau, der in vielen neuen Panzermodellen mündete. ]
+   Picture = mk4v_teccno.pcx
+   wreckageobject = 14207
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 499
+   ID = 1219
+
+   Name = Rune Wreck
+
+   dry { 
+      picture = MK4b_rune_w.png 1
+   } dry
+
+} ObjectType

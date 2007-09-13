@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = SNAKE
+   parent = 335
+   ID = 1208
+   GuideSortHelp = 552 423 0 0 4 0 0 0 0 0
+
+   Description = Schuetzenpanzer
+   Infotext = [Das Konzept des Schützenpanzers Snake ist schon sehr alt. Diese leichten, gepanzerte Fahrzeuge wurden entwickelte um die Demoneinheiten vor dem Absitzen vor feindlichem Gewehrfeuer und Splittergranaten zu schützen und diese im Kampf mit ihren Bordmaschinengewehren zu unterstützen. Sie ermöglichen infanteristischen Kräften, mit der Geschwindigkeit und der Geländegängigkeit hochbeweglicher Panzerverbände Schritt zu halten. Die Snake hat im allgemeinen eine hohe Fahrleistungen und gehören zu den schnellsten Kettenfahrzeugen überhaupt. Jedoch klagen Mitfahrer bei Höchstgewindigkeit von einem Gefühl wie in einer Achterbahn.
+Diese frühen Schützenpanzer wurden sehr bald mit einer stärkeren Panzerung, die auch Schutz vor Maschinengewehrfeuer gewährleistete und zu einem kleinen Teil auch mit leichten Sturmgeschützen und Panzerabwehrkanonen ausgerüstet, um den Panzergrenadieren die Möglichkeit zu geben auch ohne Unterstützung von schweren Panzern feindliche Panzerangriffe abzuwehren und befestigte Stellungen anzugreifen. Dieser Schützenpanzerwagen dienten in erster Linie zum Transport infanteristischer Kräfte und zur Feuerunterstützung mit Maschinengewehren. Heute werden die Schützenpanzerwagen aufgrund ihrer gewöhnlich weniger starken Bewaffnung als Transportpanzer bezeichnet.
+]
+   picture = mk4v_snake.pcx
+   WreckageObject = 14208
+
+   Movement += 0 0 0 20 0 0 0 0 
+   Transportation ->* VehicleType.TransTrooper 
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG35low 
+   } Weapons
+} VehicleType

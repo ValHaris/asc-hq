@@ -1,0 +1,13 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14012
+
+   Name = Angel Wreck
+
+   
+   dry { 
+      picture = mk4v_angel_w.png 1
+   } dry
+
+} ObjectType

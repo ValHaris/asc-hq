@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1279
+   ;Bezeichnung der verknüpften Technologie: Copra
+   TechnologiesRequired = 1279
+} TechAdapter

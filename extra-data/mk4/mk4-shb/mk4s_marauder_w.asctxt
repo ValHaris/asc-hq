@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14289
+
+   Name = Marauder Wreck
+
+   Armor = 150
+
+   dry { 
+      picture = mk4s_marauder_w.png 1
+   } dry
+
+} ObjectType

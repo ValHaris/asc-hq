@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = WHALE
+   parent = 371
+   ID = 14018
+   Description = Transportluftkissenboot
+   Infotext = [WHALE
+
+Der WHALE ist der ganz große Bruder des VADER D-1. Aufgrund seiner gigantischen Bauweise vermag der WHALE jedoch 
+bedeutend mehr und auch größere Ladung aufzunehmen, bis hin zu schweren Panzern und sogar Schiffen. Weiterhin wurde 
+er mit einem extrem leistungsfähigen Antrieb ausgestattet, was es ihm sogar ermöglicht über lava zu schweben.  
+Auch der Tatsache, dass ein größeres Ziel auch eine lohnendere Beute für Feindeinheiten darstellt, wurde 
+Rechnung getragen und der WHALE, neben einem vergrößertem MG, auch mit einer leistungsfähigen Flak-Kanone ausgestattet.
+Der Whale kann sockelgebundene Einheiten auf die dafür vorgesehenen Sockel setzen.
+]
+   picture = mk4s_whale.pcx
+   wreckageobject = 14018 14818
+   GuideSortHelp += 0 0 0 0 4 558 0 0 0 0
+
+   Armor -= 50
+   Abilities += moveduringreactionfire
+   Weight = 300
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 300
+      CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft rail_vehicle Hoovercraft medium_ship heavy_ship
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      Entrancesystem1 ->* VehicleType.TurretOut
+   } Transportation
+
+   FuelConsumption += 10
+   Movement -= 0 0 0 10 0 0 0 0 
+   MaxSurvivableStorm = 190
+   TerrainAccess ->* VehicleType.hooverfull_terrain 
+   Terrainaccess.kill =
+
+   Weapons { 
+      Initiative = 20
+      Number = 2
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Flak 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 8
+   } Weapons
+} VehicleType

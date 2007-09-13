@@ -1,0 +1,10 @@
+technology {
+   Name = Polar DX
+   infotext = Forschungsprojekt abgeschlossen! Polar DX verfügbar!
+   id = 14014
+   RelatedUnitID = 14014
+   parent = 100020
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 100020,100004,100102,100209,14007 
+} Technology

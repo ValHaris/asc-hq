@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = ATLAS
+   parent = 335
+   ID = 1223
+   
+   Description = Transportfahrzeug
+   Infotext = []
+   GuideSortHelp = 550 551 0 0 4 0 0 0 0 0
+
+   Armor -= 50
+   picture = mk4v_atlas.pcx
+   wreckageobject = 14223
+   Transportation ->* VehicleType.TransVehicleHeavy
+   Abilities += material_transfer automatic_resource_searching
+   weight = 150
+   Tank { 
+      Material = 15000
+   } Tank
+   Movement = 0 0 0 75 0 0 0 0 
+   ResourceDrillingRange = 1
+   TerrainAccess ->* VehicleType.wheeled 
+
+   Construction { 
+      ObjectsRemovable = 1205
+      ObjectGroupsRemovable = 13
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleTYpe.ServiceGround 
+   } Weapons
+} VehicleType

@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14218
+
+   Name = Alcor Wreck
+
+   
+
+   dry { 
+      picture = mk4v_alcor_w.png 1
+   } dry
+
+} ObjectType

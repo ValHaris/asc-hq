@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = ALBATROS
+   parent = 400 401 402 414 498
+   ID = 1255
+
+   Description = Transport Wasserflugzeug
+   Infotext = [Umgebauter SPERBER, dessen Inneneinrichtung so weit wie möglich ausgebaut wurde um Platz fuer Bodentruppen zu schaffen. Der ALBATROS sollte nicht offensiv eingesetz werden, da er generell schwaechere Werte als der SPERBER hat. Er kann aber durch die Transportkapazitaet leichte Bodentruppen an der Kueste absetzen.]
+   picture = mk4a_albatros.png
+   wreckageobject = 1255 14855
+   GuideSortHelp = 551 601 0 0 4 0 0 0 0 0
+
+   Armor = 320
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 30
+      MaxLoadableMass = 60
+      CategoriesNOT -> VehicleType.cargo_allground.CategoriesNOT
+      EntranceSystemNum = 5
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.ParaVeh
+      EntranceSystem3 ->* VehicleType.ParaDevice
+      EntranceSystem4 ->* VehicleType.Fl2Sub
+   } Transportation
+
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 7000
+   } Tank
+   FuelConsumption = 24
+   Movement = 0 0 0 70 180 180 0 0 
+   TerrainAccess ->* VehicleType.Aircraft_water 
+   TerrainAccess.terrain_all = 
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.Air_MG
+
+      Weapon1 ->* VehicleType.DCA 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
+
+      Weapon2 ->* vehicleType.ASM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 72
+      Weapon2.Punch@MinRange = 75
+
+      Weapon3 ->* VehicleType.AmmoMG 
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 10
+
+   } Weapons
+} VehicleType

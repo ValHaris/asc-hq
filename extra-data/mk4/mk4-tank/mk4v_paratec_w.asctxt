@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Paratec Wreckage
+   ID = 14238
+   parent = 499
+   dry { 
+      picture = mk4v_paratec_w.png 1
+   } dry
+} ObjectType

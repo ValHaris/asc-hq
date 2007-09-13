@@ -1,0 +1,21 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 14262
+
+   Name = Polar Wreck
+
+   Armor = 500
+   RemovalCost { 
+      Energy = 0
+      Material = -5000
+      fuel = 500
+      Movement = 50
+   } RemovalCost
+
+
+   dry { 
+      picture = mk4s_polar_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1226
+   ;Bezeichnung der verknüpften Technologie: Excalibur
+   TechnologiesRequired = 1226
+} TechAdapter

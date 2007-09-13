@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1240
+   ;Bezeichnung der verknüpften Technologie: Lurat
+   TechnologiesRequired = 1240
+} TechAdapter

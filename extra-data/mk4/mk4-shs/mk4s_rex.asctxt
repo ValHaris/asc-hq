@@ -1,0 +1,57 @@
+VehicleType { 
+   Name = REX
+   ID = 1256
+   parent = 419
+   
+   Description = Reparaturschiff
+   Infotext = []
+   picture = mk4s_rex.pcx
+   wreckageobject = 14256
+   GuideSortHelp = 553 550 0 0 4 0 0 0 0 0
+
+   Transportation ->* VehicleType.TransTurretBig2 
+   Abilities = repair_vehicle fuel_transfer material_transfer self_repairing 
+   SelfRepairRate = 10
+
+   Tank { 
+      Material = 50000
+      fuel = 50000
+   } Tank
+
+   Construction { 
+      ObjectGroupsRemovable = 6 11 13 15
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.ServiceGround 
+
+      Weapon1 ->* VehicleType.Ship_MG 
+      Weapon1.Type = machinegun ammo_transfer shootable 
+      Weapon1.Ammo = 50
+      Weapon1.Punch@MaxRange = 50
+      Weapon1.Punch@MinRange = 50
+
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 70
+
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 30
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 50
+
+      Weapon6 ->* VehicleType.AmmoSM 
+      Weapon6.Ammo = 50
+
+      Weapon7 ->* VehicleType.AmmoCM 
+      Weapon7.Ammo = 10
+
+      Weapon8 ->* VehicleType.AmmoMine 
+      Weapon8.Ammo = 50
+   } Weapons
+} VehicleType

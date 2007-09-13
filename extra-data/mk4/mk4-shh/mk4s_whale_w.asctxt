@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 14018
+
+   Name = Whale Wreck
+
+   
+
+   dry { 
+      picture = mk4s_whale_w.png 1
+   } dry
+
+} ObjectType

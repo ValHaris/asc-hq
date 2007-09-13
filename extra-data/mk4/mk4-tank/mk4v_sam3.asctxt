@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = SAM 3
+   ID = 1231
+   parent = 292
+
+   Infotext = [der direkte nachfolger des SAM2 erfuhr grundlegende Verbesserungen vor allem 
+   in den Bereichen Kampfstaerke, Bewaffnung und Panzerung.]
+   Picture = mk4v_sam3.pcx
+   WreckageObject = 14231
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Weapons { 
+   } Weapons
+} VehicleType

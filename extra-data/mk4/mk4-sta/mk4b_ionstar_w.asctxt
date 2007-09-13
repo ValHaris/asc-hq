@@ -1,0 +1,11 @@
+ObjectType { 
+   Parent = 499
+   ID = 1222
+
+   Name = Ionstar Wreck
+
+   dry { 
+      picture = MK4b_Ionstar_w.png 1
+   } dry
+
+} ObjectType

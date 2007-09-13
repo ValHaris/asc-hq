@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Gigant Wreckage
+   ID = 14005
+   parent = 499
+   dry { 
+      picture = mk4v_gigant_w.png 1
+   } dry
+} ObjectType
