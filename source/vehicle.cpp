@@ -834,6 +834,7 @@ void Vehicle::convert ( int col )
 
    // emit signal
    conquered();
+   anyContainerConquered(this);
 }
 
 Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )

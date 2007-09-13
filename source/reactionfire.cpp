@@ -244,6 +244,8 @@ void tsearchreactionfireingunits :: findOffensiveUnits( Vehicle* vehicle, int he
 
 void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path& fieldlist )
 {
+   initLimits();
+
    int x1 = maxint;
    int y1 = maxint;
    int x2 = 0;

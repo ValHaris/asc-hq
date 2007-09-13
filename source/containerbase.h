@@ -231,6 +231,7 @@ class ContainerBase {
       SigC::Signal0<void> conquered;
       SigC::Signal0<void> destroyed;
       static SigC::Signal1<void,ContainerBase*> anyContainerDestroyed;
+      static SigC::Signal1<void,ContainerBase*> anyContainerConquered;
 
       static int calcShadowDist( int binaryHeight );
 

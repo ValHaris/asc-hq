@@ -40,6 +40,7 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
 }
 
 SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
+SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerConquered;
 
 
 Resources ContainerBase :: putResource ( const Resources& res, bool queryonly, int scope, int player)

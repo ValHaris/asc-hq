@@ -307,7 +307,7 @@ class EventTriggered : public EventTrigger, public SigC::Object {
 
 class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
    private:
-      void triggered( ContainerBase* c );
+      void triggered();
    protected:
       virtual State getState( int player );
     public:
@@ -323,7 +323,7 @@ class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
 
 class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
    private:
-      void triggered( ContainerBase* c );
+      void triggered();
    protected:
       virtual State getState( int player );
     public:

@@ -543,6 +543,7 @@ void EventTriggered::triggered()
 EventTrigger::State AllEnemyUnitsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
+      if ( gamemap->player[player].diplomacy.isHostile(i))
          if ( !gamemap->player[i].vehicleList.empty() )
             return unfulfilled;
 
@@ -556,10 +557,11 @@ ASCString AllEnemyUnitsDestroyed::getName() const
 
 void AllEnemyUnitsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered));
+   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered)));
 }
 
-void AllEnemyUnitsDestroyed::triggered( ContainerBase* c )
+void AllEnemyUnitsDestroyed::triggered()
 {
    if ( isFulfilled() )
       eventReady();
@@ -584,10 +586,11 @@ ASCString AllEnemyBuildingsDestroyed::getName() const
 
 void AllEnemyBuildingsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered));
+   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered)));
 }
 
-void AllEnemyBuildingsDestroyed::triggered( ContainerBase* c )
+void AllEnemyBuildingsDestroyed::triggered()
 {
    if ( isFulfilled() )
       eventReady();
