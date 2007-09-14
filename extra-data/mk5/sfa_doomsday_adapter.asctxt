@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1425
-   ;Bezeichnung der verknüpften Technologie: Doomsday
-   TechnologiesRequired = 1425
-} TechAdapter

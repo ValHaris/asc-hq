@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1427
-   ;Bezeichnung der verknüpften Technologie: Flussgeist
-   TechnologiesRequired = 1427
-} TechAdapter

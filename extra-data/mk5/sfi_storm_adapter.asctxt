@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1401
-   ;Bezeichnung der verknüpften Technologie: STORM
-   TechnologiesRequired = 1401
-} TechAdapter

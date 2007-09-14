@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1416
-   ;Bezeichnung der verknüpften Technologie: ADG
-   TechnologiesRequired = 1416
-} TechAdapter

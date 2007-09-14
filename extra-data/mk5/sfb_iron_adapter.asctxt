@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1405
-   ;Bezeichnung der verknüpften Technologie: IRON
-   TechnologiesRequired = 1405
-} TechAdapter

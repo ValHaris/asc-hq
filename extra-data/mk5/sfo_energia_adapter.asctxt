@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1411
-   ;Bezeichnung der verknüpften Technologie: Energia
-   TechnologiesRequired = 1411
-} TechAdapter

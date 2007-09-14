@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1415
-   ;Bezeichnung der verknüpften Technologie: Enduro
-   TechnologiesRequired = 1415
-} TechAdapter

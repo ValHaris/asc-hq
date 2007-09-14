@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1413
-   ;Bezeichnung der verknüpften Technologie: OCS
-   TechnologiesRequired = 1413
-} TechAdapter
