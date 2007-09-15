@@ -25,7 +25,7 @@
  class OverviewMapImage;
 
  //! the number of bits that specify the terrain of a field
- const int terrainPropertyNum = 37;
+ const int terrainPropertyNum = 38;
 
 
   //! the properties of a terrain describing which units can move onto this field and which can't
