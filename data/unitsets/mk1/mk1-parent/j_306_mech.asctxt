@@ -8,5 +8,5 @@ VehicleType {
    Infotext = [Gepanzerter Trooper mit Radarstöhrelektronik. ]
    GuideSortHelp = 502 306 0 0 0 0 0 0 0 0
 
-   Jamming = 41
+   Jamming = 38
 } VehicleType

@@ -237,6 +237,7 @@
         CategoriesNOT = default building|turret|object
         DockingHeightAbs = 
         DockingHeightRel = -100
+        MoveCost = 20
       } diver_out
 
 

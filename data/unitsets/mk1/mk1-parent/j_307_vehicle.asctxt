@@ -14,7 +14,7 @@ VehicleType {
 
 
    Armor = 350
-   Jamming = 45
+   Jamming = 37
    Weight = 40
    WreckageObject = 451
 
