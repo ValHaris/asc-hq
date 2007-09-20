@@ -2,6 +2,11 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 _________________
+20.09.07
+-Änderungen in Jammingwerten der mobilen jammer
+-Bugfix default Def-Mech, Deftank
+
+_________________
 v20.08 17.06.2007
 -Upgrade Bodenverteidigung
 -Tank Bugfixes Flugzeuge

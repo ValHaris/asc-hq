@@ -12,6 +12,7 @@ VehicleType {
    Armor = 850
    Weight = 80
 
+   Abilities += moveduringreactionfire
    Tank { 
       Energy = 0
       Material = 0
