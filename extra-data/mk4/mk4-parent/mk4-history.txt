@@ -4,6 +4,13 @@ Spezifikationen: GAMER
 
 weitere History: siehe PBP.info
 
+
+
+_________________
+v17.07 25.09.2007
+- GTJam ist jetzt baubar - bugfix
+
+
 _________________
 v17.06 10.09.2007
 - Anpassung aller Datei- und Verzeichnisnamen auf durchgängige Kleinschreibung, und auch die Verknüpfungen auf die Bilder innerhalb der asctxt kleingeschrieben (Vorbereitung auf CVS, welcher unter Unix-Dateisystem läuft)
