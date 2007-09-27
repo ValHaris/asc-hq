@@ -1,5 +1,5 @@
 Techadapter {
-   ; DepotMK4
+   ; DepotMK4 West Eingang
    Name = B2
    TechnologiesRequired = 100020
 } TechAdapter
