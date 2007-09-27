@@ -5,6 +5,9 @@ Spezifikationen: GAMER
 weitere History: siehe PBP.info
 
 
+v17.07a 27.09.2007
+- Wizard an mk1 und mk3 Baufahrzeuge angepasst dass es auch ID 14 bauen kann
+
 
 _________________
 v17.07 25.09.2007
