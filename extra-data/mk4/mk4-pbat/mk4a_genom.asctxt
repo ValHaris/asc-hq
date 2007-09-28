@@ -4,7 +4,7 @@ VehicleType {
    ID = 1246
 
    Description = Jagdflugzeug
-   Picture = mk4a_genom.pcx
+   Picture = mk4a_genom.png
    wreckageobject = 1246 14846
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 } VehicleType
