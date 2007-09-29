@@ -1,0 +1,10 @@
+technology {
+   Name = MRSM
+   infotext = Forschungsprojekt abgeschlossen! MRSM verfuegbar!
+   id = 124
+   RelatedUnitID = 124
+   parent = 100000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 100000,100004,100103,100208,36
+} Technology

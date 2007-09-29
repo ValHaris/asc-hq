@@ -2,6 +2,11 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 _________________
+29.09.07
+-mini rescue sub eingebaut.
+-kleinere Bugfixes
+
+_________________
 20.09.07
 -Änderungen in Jammingwerten der mobilen jammer
 -Bugfix default Def-Mech, Deftank

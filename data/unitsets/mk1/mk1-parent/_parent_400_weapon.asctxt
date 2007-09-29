@@ -674,6 +674,8 @@
             u6 = 
          } HitAccuracy
      	 WeaponEffectiveness {
+     	    default = 0
+     	    device = 0
 	    trooper = 25
          } WeaponEffectiveness
       } ASM

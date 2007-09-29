@@ -134,6 +134,7 @@ ID  35/365  Tsunami          nuclear submarine
 ID  36/363  Clam             transport Submarine
 ID  81/361  Reha             super carrier
 ID  91/363  Squid            espionage submarine
+ID 124/363  MRSM
 
 --Support Ships--
 ID   5/    HOOVERVRAFT   air cushion vehicle

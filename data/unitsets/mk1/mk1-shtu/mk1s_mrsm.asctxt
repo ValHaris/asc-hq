@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = MRSM
+   parent = 363
+   ID = 124
+
+   Description = mini rescue submarine
+   Infotext = []
+   picture = mk1s_mrsm.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor -= 500
+   Features = ExternalFuelTransfer
+   Category = light_ship
+   MaxSurvivableStorm = 100
+   Weight = 31
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5000
+   } Tank
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

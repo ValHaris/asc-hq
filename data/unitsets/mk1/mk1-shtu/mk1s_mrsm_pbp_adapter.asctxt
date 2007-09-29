@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 124
+   ;Bezeichnung der verknüpften Technologie: MRSM
+   TechnologiesRequired = 124
+} TechAdapter
