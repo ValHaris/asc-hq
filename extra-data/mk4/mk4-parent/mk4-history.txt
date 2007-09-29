@@ -4,6 +4,9 @@ Spezifikationen: GAMER
 
 weitere History: siehe PBP.info
 
+29.07.2007
+-Rocky kann überall gebaut werden
+
 
 v17.07a 27.09.2007
 - Wizard an mk1 und mk3 Baufahrzeuge angepasst dass es auch ID 14 bauen kann

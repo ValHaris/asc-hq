@@ -37,7 +37,7 @@ Geschwindigkeit.
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 4000
+      fuel = 10000
    } Tank
 
    Height = ground_level low_level_flight medium_level_flight 

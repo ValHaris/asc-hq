@@ -16,6 +16,6 @@ VehicleType {
       fuel = 2100
    } Tank
    FuelConsumption = 300
-   Terrainaccess ->* VehicleType.Turret_only
+   Terrainaccess ->* VehicleType.Turret_all
 
 } VehicleType
