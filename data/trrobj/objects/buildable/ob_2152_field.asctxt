@@ -1,13 +1,11 @@
 ObjectType { 
 
-
-
+   Name = Raps-Fields
    ID = 2152
-   GroupID = 11
+   GroupID = 10
 
    Weather = dry much_snow snow_and_ice
 
-   Name = Raps-Fields
    Height = 100 ;17-Aug 2003
    Armor = 0
 

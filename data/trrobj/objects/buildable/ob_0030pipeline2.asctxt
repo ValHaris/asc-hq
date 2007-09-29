@@ -31,10 +31,10 @@ ObjectType {
    } RemovalCost
    NetBehaviour = NetToSelf AutoBorder NetToBuilding
    TerrainAccess { 
-      terrain_any = road runway Lowland Hard_sand Soft_sand ditch Very_shallow_water Shallow_water 
+      terrain_any = road runway Lowland Hard_sand Soft_sand ditch Very_shallow_water Shallow_water mountains turret_foundation installation hillside river
       terrain_all = 
       terrain_not = pipeline
-      terrain_kill = water deep_water lava river
+      terrain_kill = water deep_water lava
    } TerrainAccess
    TerrainProperties_Filter =
    TerrainProperties_Add = pipeline 
