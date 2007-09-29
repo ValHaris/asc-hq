@@ -342,7 +342,7 @@
    TransBigTrooper { 
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 6
-      MaxLoadableMass = 36
+      MaxLoadableMass = 24
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
