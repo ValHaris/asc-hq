@@ -14,6 +14,12 @@
       fuel = 
    } ConstructionCost
 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
    HitAcc { 
       d6 = 0
       d5 = 0
