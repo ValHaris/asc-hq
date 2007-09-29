@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 501 206 601 0 0 0 0 0 0 0
 
    Armor = 200
-   Height = deep_submergedsubmerged ground_level 
+   Height = deep_submerged submerged ground_level 
    Abilities += sonar
    Movement = 0 33 0 40 0 0 0 0 
    MaxSurvivableStorm = 150
