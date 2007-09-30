@@ -20,7 +20,7 @@
     <general>
       <mainprogram>asc</mainprogram>
       <useconfiguration>default</useconfiguration>
-      <activetarget>source/unix/mapeditor/asc_mapedit</activetarget>
+      <activetarget>source/unix/asc/asc</activetarget>
     </general>
     <configure>
       <configargs/>
@@ -29,7 +29,7 @@
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <envvars>
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
@@ -44,13 +44,13 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/martin/asc/v2/amd64/source/unix/mapeditor/asc_mapedit</mainprogram>
+      <mainprogram>/home/martin/asc/v2.0/amd64/source/unix/asc/asc</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
       <globaldebugarguments></globaldebugarguments>
-      <globalcwd>/home/martin/asc/v2/amd64</globalcwd>
+      <globalcwd>/home/martin/asc/v2.0/amd64</globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>

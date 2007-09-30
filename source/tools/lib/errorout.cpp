@@ -17,7 +17,7 @@
 #endif
 
 #include "../../global.h"
-#include "ascstring.h"
+#include "../../ascstring.h"
 
 #if 0
 void fatalError ( const ASCString& text )
