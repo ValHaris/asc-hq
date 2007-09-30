@@ -1046,6 +1046,12 @@ int GameMap :: eventpassed( int id, int mapid )
 }
 
 
+int GameMap :: getNewNetworkID()
+{
+   ++unitnetworkid;
+   return unitnetworkid;
+}
+
 Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
 {
    if ( !eht )

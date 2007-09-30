@@ -252,7 +252,10 @@ class GameMap {
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
 
+private:
       int          unitnetworkid;
+public:
+      int getNewNetworkID();
       char         levelfinished;
 
       enum State { 

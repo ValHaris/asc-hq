@@ -286,10 +286,10 @@ void Event::check( MapDisplayInterface* md )
                   status = Untriggered;
 
                   if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getName() + ": false" );
+                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": false" );
                } else
                   if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getName() + ": true" );
+                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": true" );
             }
          } else {
             for ( Trigger::iterator i = trigger.begin(); i != trigger.end(); i++ ) {
@@ -298,10 +298,10 @@ void Event::check( MapDisplayInterface* md )
                   status = Triggered;
 
                   if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getName() + ": true" );
+                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": true" );
                } else
                   if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getName() + ": false" );
+                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": false" );
 
             }
          }

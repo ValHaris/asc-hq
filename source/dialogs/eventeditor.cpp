@@ -194,7 +194,7 @@ class EventEditor : public ASC_PG_Dialog {
                   inv->SetPressed();
 
                for ( int i = 0; i < triggerNames.size(); ++i )
-                  if ( event->trigger[e]->getName() == triggerNames[i] )
+                  if ( event->trigger[e]->getTypeName() == triggerNames[i] )
                      trigger->SelectItem ( i );
             } else
                for ( int i = 0; i < triggerNames.size(); ++i )

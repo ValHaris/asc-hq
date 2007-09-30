@@ -345,8 +345,7 @@ void checkForUniqueUnitIDs( GameMap* gamemap )
       for ( Player::VehicleList::iterator i = gamemap->getPlayer(p).vehicleList.begin(); i != gamemap->getPlayer(p).vehicleList.end(); ++i )
          if ( units[(*i)->networkid]++ > 0 ) {
             warning("unit with duplicate network ids: " + ASCString::toString( (*i)->networkid ) + "\nThis will lead to replay errors during the next turn." );
-            gamemap->unitnetworkid++;
-            (*i)->networkid = actmap->unitnetworkid;
+            (*i)->networkid = gamemap->getNewNetworkID();;
          }
 }
 

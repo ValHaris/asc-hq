@@ -127,7 +127,8 @@ class TriggerNothingTrue: public TriggerNothing {
       State getState( int player ) { return finally_fulfilled; };
    public:
       TriggerNothingTrue() : TriggerNothing( Trigger_NothingTrue ) {};
-      ASCString getName() const { return "Nothing (always true)"; };
+      ASCString getTypeName() const { return "Nothing (always true)"; };
+      ASCString getDetailledName() const { return getTypeName(); };
 };
 
 class TriggerNothingFalse: public TriggerNothing {
@@ -135,7 +136,8 @@ class TriggerNothingFalse: public TriggerNothing {
       State getState( int player ) { return finally_failed; };
    public:
       TriggerNothingFalse() : TriggerNothing( Trigger_NothingFalse ) {};
-      ASCString getName() const { return "Nothing (always false)"; };
+      ASCString getTypeName() const { return "Nothing (always false)"; };
+      ASCString getDetailledName() const { return getTypeName(); };
 };
 
 
@@ -151,7 +153,8 @@ class TurnPassed : public EventTrigger {
 
       virtual void readData ( tnstream& stream ) ;
       virtual void writeData ( tnstream& stream ) ;
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup();
       void arm();
 };
@@ -177,7 +180,8 @@ class UnitLost : public UnitTrigger {
     public:
       UnitLost() : UnitTrigger ( Trigger_UnitLost ) {};
       UnitLost( int unitID_) : UnitTrigger ( Trigger_UnitLost ) { unitID = unitID_;};
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void arm();
 };
 
@@ -187,7 +191,8 @@ class UnitConquered : public UnitTrigger {
     public:
       UnitConquered() : UnitTrigger ( Trigger_UnitConquered ) {};
       UnitConquered( int unitID_) : UnitTrigger ( Trigger_UnitConquered ) { unitID = unitID_;};
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void arm();
 };
 
@@ -197,7 +202,8 @@ class UnitDestroyed : public UnitTrigger {
     public:
       UnitDestroyed() : UnitTrigger ( Trigger_UnitDestroyed ) {};
       UnitDestroyed( int unitID_) : UnitTrigger ( Trigger_UnitDestroyed ) { unitID = unitID_;};
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void arm();
 };
 
@@ -211,7 +217,8 @@ class AllBuildingsLost : public EventTrigger {
 
       virtual void readData ( tnstream& stream ) { stream.readInt(); };
       virtual void writeData ( tnstream& stream ) { stream.writeInt(1); };
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup() {};
 };
 
@@ -223,7 +230,8 @@ class AllUnitsLost : public EventTrigger {
 
       virtual void readData ( tnstream& stream ) { stream.readInt(); };
       virtual void writeData ( tnstream& stream ) { stream.writeInt(1); };
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup() {};
 };
 
@@ -253,7 +261,8 @@ class BuildingConquered : public BuildingPositionTrigger, public SigC::Object {
     public:
       BuildingConquered() : BuildingPositionTrigger( Trigger_BuildingConquered ) {};
       BuildingConquered( const MapCoordinate& position) : BuildingPositionTrigger( Trigger_BuildingConquered ) { pos = position;};
-      ASCString getName() const { return BuildingPositionTrigger::getName() + " conquered"; };
+      ASCString getTypeName() const { return "Building conquered"; };
+      ASCString getDetailledName() const { return BuildingPositionTrigger::getName() + " conquered"; };
       void arm();
       void triggered();
 };
@@ -264,7 +273,8 @@ class BuildingLost: public BuildingConquered  {
    public:
       BuildingLost ( ) : BuildingConquered( Trigger_BuildingLost ) {};
       BuildingLost( const MapCoordinate& position) : BuildingConquered( position ) {};
-      ASCString getName() const { return BuildingPositionTrigger::getName() + " Lost"; };
+      ASCString getTypeName() const { return "Building lost"; };
+      ASCString getDetailledName() const { return BuildingPositionTrigger::getName() + " conquered"; };
       void arm();
 };
 
@@ -274,7 +284,8 @@ class BuildingDestroyed : public BuildingPositionTrigger {
     public:
       BuildingDestroyed() : BuildingPositionTrigger ( Trigger_BuildingDestroyed ) {};
       BuildingDestroyed( const MapCoordinate& position) : BuildingPositionTrigger( Trigger_BuildingDestroyed ) { pos = position;};
-      ASCString getName() const { return BuildingPositionTrigger::getName() + " destroyed"; };
+      ASCString getTypeName() const { return "Building destroyed"; };
+      ASCString getDetailledName() const { return BuildingPositionTrigger::getName() + " destroyed"; };
 };
 
 class BuildingSeen : public BuildingPositionTrigger, public SigC::Object {
@@ -283,7 +294,8 @@ class BuildingSeen : public BuildingPositionTrigger, public SigC::Object {
     public:
       BuildingSeen() : BuildingPositionTrigger ( Trigger_BuildingSeen ) {};
       BuildingSeen( const MapCoordinate& position) : BuildingPositionTrigger( Trigger_BuildingSeen ) { pos = position;};
-      ASCString getName() const { return BuildingPositionTrigger::getName() + " seen"; };
+      ASCString getTypeName() const { return "Building seen"; };
+      ASCString getDetailledName() const { return BuildingPositionTrigger::getName() + " seen"; };
       void arm();
       void triggered();
 };
@@ -299,7 +311,8 @@ class EventTriggered : public EventTrigger, public SigC::Object {
 
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream );
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup();
       void arm();
       void triggered();
@@ -316,7 +329,8 @@ class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
       virtual void readData ( tnstream& stream ) { stream.readInt(); };
       virtual void writeData ( tnstream& stream ) { stream.writeInt(1); };
 
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup() {};
       void arm();
 };
@@ -331,7 +345,8 @@ class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
 
       virtual void readData ( tnstream& stream ) { stream.readInt(); };
       virtual void writeData ( tnstream& stream ) { stream.writeInt(1); };
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup() {};
       void arm();
 };
@@ -350,7 +365,8 @@ class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, p
       void setup();
       void arm();
       void triggered();
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
 
     protected:
       void fieldOperator( const MapCoordinate& mc );
@@ -370,7 +386,8 @@ class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public
       void setup();
       void arm();
       void triggered();
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
 
     protected:
       void fieldOperator( const MapCoordinate& mc );
@@ -388,7 +405,8 @@ class ResourceTribute : public EventTrigger, public SigC::Object {
 
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream );
-      ASCString getName() const;
+      ASCString getTypeName() const;
+      ASCString getDetailledName() const;
       void setup();
       void arm();
       void triggered();

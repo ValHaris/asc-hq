@@ -77,7 +77,8 @@ class EventTrigger {
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) = 0;
       
-      virtual ASCString getName() const = 0;
+      virtual ASCString getDetailledName() const = 0;
+      virtual ASCString getTypeName() const = 0;
       virtual void setup() = 0;
       virtual void arm() {};
       void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };
