@@ -1,0 +1,168 @@
+VehicleType { 
+   Abstract = true
+   ID = 15000
+
+   TeccEMP { 
+         Type = Laser shootable 
+         targets =  submerged floating ground_level low_level_flight
+         shotFrom = submerged floating ground_level low_level_flight
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 1
+	 ReactionFireShots = 0
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 500
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 50
+            0 = 100
+            u1 = 50
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         default = 100
+         device = 100
+         trooper = 0
+         rail_vehicle = 100
+         building|turret|object = 50
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } TeccEMP
+
+Plasmabomb { 
+         Type = Laser shootable 
+         targets =   floating ground_level
+         shotFrom = low_level_flight medium_level_flight high_level_flight
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 1
+	      LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 200
+            fuel = 0
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 60
+            d2 = 80
+            d1 = 100
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } Plasmabomb
+
+LRHEPT { 
+         Type = Laser shootable 
+         targets =   floating ground_level
+         shotFrom = ground_level floating
+	 		ReactionFireShots = 0
+         MaxRange = 170
+         MinRange = 60
+         Ammo = 1
+	      LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 2000
+            fuel = 4000
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } LRHEPT
+
+} VehicleType

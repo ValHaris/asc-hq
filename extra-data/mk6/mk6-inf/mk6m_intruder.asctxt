@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = Intruder
+   ID = 15201
+   parent = 201
+
+   Description = Leichter Kampfroboter
+   Infotext = []
+   Picture = mk6m_intruder.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 100
+   Movement += 0 0 0 5 0 0 0 0
+   Features = mineview mine_layer conquer_buildings
+   Category = light_tracked_vehicle
+
+   Weapons {
+      Number = 3 
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+      Weapon2 ->* VehicleType.Weapons.Weapon0
+   } Weapons
+} VehicleType

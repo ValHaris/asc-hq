@@ -1,0 +1,10 @@
+technology {
+   Name = CillaTE
+   infotext = Forschungsprojekt abgeschlossen! CillaTE verfügbar!
+   id = 15290
+   RelatedUnitID = 15290
+   parent = 15000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 15000,100002,100101,100201 
+} Technology

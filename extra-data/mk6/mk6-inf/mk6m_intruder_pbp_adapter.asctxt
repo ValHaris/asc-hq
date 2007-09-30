@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15201
+   ;Bezeichnung der verknüpften Technologie: Intruder
+   TechnologiesRequired = 15201
+} TechAdapter

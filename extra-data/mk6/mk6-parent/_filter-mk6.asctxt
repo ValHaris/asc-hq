@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 15000-15999
+   Buildings = 15000-15999
+   Objects = 15000-15999
+   Terrain = 15000-15999
+   Technologies = 15000-15999
+   name = MK6 teccnols 
+   activated = true
+} itemfilter
+   

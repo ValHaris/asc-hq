@@ -1,0 +1,22 @@
+VehicleType { 
+   ID = 15290
+   parent = 290 15000
+
+   Name = CillaTE
+   Picture = mk6v_cillaTE.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   
+   Armor -= 50
+   Tank.Material = 1000
+
+   Weapons { 
+      Number = 3 
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+      Weapon2 ->* VehicleType.TeccEMP
+      Weapon2.Punch@MinRange = 120
+      Weapon2.Punch@MaxRange = 120
+      Weapon2.LaserRechargeCost.Fuel += 120
+      Weapon2.LaserRechargeCost.Material += 120
+   } Weapons
+} VehicleType
