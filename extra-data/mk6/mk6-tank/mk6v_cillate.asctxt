@@ -16,7 +16,7 @@ VehicleType {
       Weapon2 ->* VehicleType.TeccEMP
       Weapon2.Punch@MinRange = 120
       Weapon2.Punch@MaxRange = 120
-      Weapon2.LaserRechargeCost.Fuel += 120
-      Weapon2.LaserRechargeCost.Material += 120
+      Weapon2.LaserRechargeCost.Fuel = 620
+      Weapon2.LaserRechargeCost.Material = 120
    } Weapons
 } VehicleType
