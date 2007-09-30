@@ -2,7 +2,7 @@ TerrainType {
 
    Name = Block Terrain
    Parent = 500
-   ID = 19030
+   ID = 2010
 
    Weather = dry
 
