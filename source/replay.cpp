@@ -805,6 +805,13 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt( player );
       }
 
+      if ( action == rpl_reactionFireOn || action == rpl_reactionFireOff ) {
+         stream->writeChar( action );
+         stream->writeInt( 1 );
+         int nwid = va_arg( paramlist, int );
+         stream->writeInt( nwid );
+      }
+
       va_end ( paramlist );
    }
 }
@@ -2004,6 +2011,25 @@ void trunreplay :: execnextreplaymove ( void )
          transfer_all_outstanding_tribute( actmap->getPlayer( player ) );
                                 }
          break;
+
+      case rpl_reactionFireOn: 
+      case rpl_reactionFireOff: {
+            stream->readInt();
+            int nwid = stream->readInt();
+            readnextaction();
+            Vehicle* v = actmap->getUnit( nwid );
+            if ( v ) {
+               if ( actaction == rpl_reactionFireOn ) {
+                  int res = v->reactionfire.enable();
+                  if ( res < 0 )
+                     error("severe enabling reactionfire for unit !");
+               } else
+                  v->reactionfire.disable();
+            } else
+               error("severe replay inconsistency:\nno unit for reactionfire command !");
+         }
+         break;
+
 
 
       default:{

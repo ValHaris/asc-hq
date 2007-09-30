@@ -529,9 +529,9 @@ bool Vehicle::hasMoved ( void ) const
 }
 
 
-int Vehicle :: getMovement ( bool checkFuel ) const
+int Vehicle :: getMovement ( bool checkFuel, bool checkRF ) const
 {
-   if ( !reactionfire.canMove() )
+   if ( checkRF && !reactionfire.canMove() )
       return 0;
 
    if ( typ->fuelConsumption && checkFuel ) {
@@ -1799,7 +1799,7 @@ int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
       return 0;
 
    if ( veh->maxMovement() )
-      return veh->getMovement(false)  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
+      return veh->getMovement(false, false )  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
    else
       return (veh->getMap()->weather.windSpeed * maxwindspeed / 256 ) * veh->typ->fuelConsumption / ( minmalq * 64 );
 }
