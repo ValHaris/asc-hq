@@ -1596,6 +1596,16 @@ void MapDisplayPG::toggleMapLayer( const ASCString& name )
    }
 }
 
+bool MapDisplayPG::layerActive( const ASCString& name )
+{
+   LayerMap::iterator i = layerMap.find( name );
+   if ( i != layerMap.end() ) 
+      return i->second->isActive();
+   else
+      return false;
+}
+
+
 void MapDisplayPG::getActiveLayers( vector<ASCString>& list )
 {
    list.clear();

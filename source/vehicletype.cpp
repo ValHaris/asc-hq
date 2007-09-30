@@ -1405,7 +1405,7 @@ Resources Vehicletype :: calcProductionsCost()
 
       bool carrierCharge = false;
 
-      // Zuschlag fr Flugzeugtr�er / Start- und Landeeinrichtungen
+      // Zuschlag fr Flugzeugtraeger / Start- und Landeeinrichtungen
       for ( int T=0; T < entranceSystems.size(); ++T )
          if ( entranceSystems[T].container_height < chtieffliegend
                && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))
@@ -1631,7 +1631,7 @@ Resources Vehicletype :: calcProductionsCost()
    res.energy += typecoste + weaponcoste + specialcoste;
    res.material += typecostm + weaponcostm + specialcostm;
 
-   // Part VII Abschl�e
+   // Part VII Abschlaege
    // keine Luftbetankung
    if ( hasFunction( NoInairRefuelling )) {
       res.energy -= typecoste/6;

@@ -3103,7 +3103,10 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
                 if ( tt ) {
-                   fld->typ = tt->weather[fld->getweather()];
+                   TerrainType::Weather* tw = tt->weather[fld->getweather()];
+                   if ( !tw )
+                      tw = tt->weather[0];
+                   fld->typ = tw;
                    fld->setparams();
                 }
              }
@@ -3112,7 +3115,10 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terrainobjtranslation[i*3] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terrainobjtranslation[i*3+1] );
                 if ( tt ) {
-                   fld->typ = tt->weather[fld->getweather()];
+                   TerrainType::Weather* tw = tt->weather[fld->getweather()];
+                   if ( !tw )
+                      tw = tt->weather[0];
+                   fld->typ = tw;
                    fld->addobject ( objectTypeRepository.getObject_byID ( terrainobjtranslation[i*3+2] ), -1, true );
                    fld->setparams();
                 }

@@ -817,6 +817,9 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
    char* label[labelnum] = { "pipes", "container", "resources", "visibilityvalue"};
    for ( int i = 0; i < labelnum; ++i ) {
       PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label[i], true ) );
+      if ( mapDisplay->layerActive( label[i] )
+         )
+         layerChanged( true, label[i]);
       if ( cb ) 
          cb->sigClick.connect( SigC::bind( SigC::slot( *this, &MapInfoPanel::checkBox ), label[i] ));
    }      

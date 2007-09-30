@@ -1221,7 +1221,7 @@ void GameMap::endRound()
            getField(x,y)->endRound( time.turn() );
 
     for (int i = 0; i <= 7; i++)
-       if (player[i].exist() ) {
+       if (player[i].exist() && player[i].stat != Player::off ) {
 
           for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
              (*j)->endRound();
