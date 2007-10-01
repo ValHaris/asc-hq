@@ -147,8 +147,10 @@ bool makeDirectory ( const ASCString& path )
    if ( path.empty() )
       return false;
       
+   ASCString path2 = resolvePath( path );
+
    char tmp[10000];
-   constructFileName( tmp, 0, path.c_str(), NULL );
+   constructFileName( tmp, 0, path2.c_str(), NULL );
 
    int existence = directoryExist ( tmp );
 
@@ -537,6 +539,6 @@ void checkDataVersion( )
    checkFileVersion( "main.version", "main.ascdat", 4 );
 
    if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.ascdat", 21 );
+      checkFileVersion( "pbp.version", "pbp.ascdat", 22 );
 }
 

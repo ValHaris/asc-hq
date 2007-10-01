@@ -4082,6 +4082,7 @@ void locateItemByID()
          {
             int playerID = playerTranslation[ sourceField->vehicle->getOwner() ];
             targetField->vehicle = new Vehicle( sourceField->vehicle->typ, actmap, playerID );
+            targetField->vehicle->setnewposition( targetField->getx(), targetField->gety() );
             copyVehicleData( sourceField->vehicle, targetField->vehicle );
             targetField->vehicle->direction = directionTranslation[ sourceField->vehicle->direction ];
          }
