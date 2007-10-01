@@ -4,6 +4,10 @@ Spezifikationen: GAMER
 
 weitere History: siehe PBP.info
 
+01.10.2007
+- Grafiken .png UHU und VisionSpy nachträglich umgestellt. Bugfix.
+
+
 29.07.2007
 -Rocky kann überall gebaut werden
 
