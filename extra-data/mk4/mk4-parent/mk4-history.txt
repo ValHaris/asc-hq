@@ -6,6 +6,7 @@ weitere History: siehe PBP.info
 
 01.10.2007
 - Grafiken .png UHU und VisionSpy nachträglich umgestellt. Bugfix.
+- Spring loadable mass jetzt 30 statt früher 15
 
 
 29.07.2007

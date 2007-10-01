@@ -11,7 +11,7 @@ VehicleType {
 
    Armor += 150
    Transportation ->* VehicleType.TransBigTrooper 
-   Transportation.MaxLoadableMass = 15
+   Transportation.MaxLoadableMass = 30
 
    FuelConsumption = 18
    Weight += 15
