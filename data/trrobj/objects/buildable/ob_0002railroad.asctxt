@@ -8,7 +8,7 @@ ObjectType {
    LinkableObjects = 999 995 991 992
    Armor = 300
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
-   Movemalus_plus = 10  7   7   7   10  10  10  3   0   20  10  2   20  20  10  10  20  10
+   Movemalus_plus = 10  7   7   7   10  10  10  3   0   20  10  0   20  20  10  10  20  10
    Movemalus_abs =  
    AttackBonus_abs = -1
    AttackBonus_plus = 0

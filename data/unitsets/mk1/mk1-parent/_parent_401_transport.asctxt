@@ -78,7 +78,7 @@
    } cargo_bigcarrier
 
    Cargo_transplane {
-      CategoriesNOT = light_ship medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft rail_vehicle building|turret|object
+      CategoriesNOT = medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft rail_vehicle building|turret|object
    } cargo_transplane 
 
    cargo_drop {
@@ -237,6 +237,7 @@
         CategoriesNOT = default building|turret|object
         DockingHeightAbs = 
         DockingHeightRel = -100
+        MoveCost = 20
       } diver_out
 
 
@@ -341,7 +342,7 @@
    TransBigTrooper { 
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 6
-      MaxLoadableMass = 36
+      MaxLoadableMass = 24
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -537,7 +538,7 @@
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 60
       MaxLoadableMass = 100
-      CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship hoovercraft
+      CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship hoovercraft
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
@@ -546,9 +547,9 @@
 ;---------- Aircrafts ---------
 
    TransPlane { 
-      MaxLoadableUnits = 10
+      MaxLoadableUnits = 15
       MaxLoadableUnitSize = 200
-      MaxLoadableMass = 300
+      MaxLoadableMass = 350
       CargoMovementDivisor = 1.5
       CategoriesNOT -> VehicleType.cargo_transplane.CategoriesNOT
       EntranceSystemNum = 3

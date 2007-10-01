@@ -18,7 +18,7 @@ VehicleType {
    Abilities = Kamikaze_only jam_only_own_field no_midair_refuel
    Category = default
    Movement = 0 0 0 0 140 140 140 0 
-   Weight = 1
+   Weight = 3
    Weapons { 
       Initiative = 120
       Number = 1

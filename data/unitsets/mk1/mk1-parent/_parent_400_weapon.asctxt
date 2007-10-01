@@ -14,6 +14,12 @@
       fuel = 
    } ConstructionCost
 
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
    HitAcc { 
       d6 = 0
       d5 = 0
@@ -674,6 +680,8 @@
             u6 = 
          } HitAccuracy
      	 WeaponEffectiveness {
+     	    default = 0
+     	    device = 0
 	    trooper = 25
          } WeaponEffectiveness
       } ASM
@@ -1518,8 +1526,8 @@
 ;Diver
       C4 { 
          Type = bomb shootable 
-         targets = submerged floating ground_level 
-         shotFrom = submerged ground_level 
+         targets = deep_submerged submerged floating ground_level 
+         shotFrom = deep_submerged submerged ground_level 
          MaxRange = 10
          MinRange = 10
          Ammo = 2

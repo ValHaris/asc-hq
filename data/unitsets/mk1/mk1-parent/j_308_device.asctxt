@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 0 308 0 0 0 0 0 0 0 0
 
 
-   Jamming = 45
+   Jamming = 43
    Abilities = onlyTransMove
 
    TerrainAccess ->* VehicleType.Device_terrain

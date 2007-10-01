@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 501 206 601 0 0 0 0 0 0 0
 
    Armor = 200
-   Height = submerged ground_level 
+   Height = deep_submerged submerged ground_level 
    Abilities += sonar
    Movement = 0 33 0 40 0 0 0 0 
    MaxSurvivableStorm = 150
@@ -23,7 +23,8 @@ VehicleType {
       Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.MG_Trooper 
-      Weapon1 ->* VehicleType.C4 
+      Weapon1 ->* VehicleType.C4
+      Weapon1.Ammo = 4 
    } Weapons
    HeightChangeMethodNum = 4
    HeightChangeMethod0 {

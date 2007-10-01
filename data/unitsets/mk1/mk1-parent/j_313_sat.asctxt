@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 516 313 0 0 0 0 0 0 0 0
 
 
-   Jamming = 45
+   Jamming = 44
    Abilities = 
 
    TerrainAccess ->* Vehicletype.sat_terrain 

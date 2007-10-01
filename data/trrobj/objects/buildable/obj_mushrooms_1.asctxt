@@ -1,0 +1,24 @@
+ObjectType { 
+   Name = Mushrooms 1
+   ID = 2108
+   Parent = 2153
+         
+   secondaryIDs = 
+         
+   TechAdapterRequired = o2108
+   Weather = dry much_Snow
+   LinkableObjects = 
+   NetBehaviour = 
+   NoSelfChaining = true
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_mushrooms_1.png 1
+   } dry
+   much_Snow { 
+      UseGFXpics = false
+      picture = obj_mushrooms_1.png 1
+      GraphicOperations = Snow
+   } much_Snow
+
+} ObjectType
