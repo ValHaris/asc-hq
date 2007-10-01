@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Spionage Satellit
    Infotext = [ Um eine optimale Aufklaerung zu erreichen wurde bei diesem Satellit auf eine Bewaffnung verzichtet. Er ist deshalb darauf zu achten, dass er nicht in feindliches Gebiet abdriftet.]
-   Picture = mk4o_visionspy.pcx
+   Picture = mk4o_visionspy.png
    wreckageobject = 14272 14872
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 } VehicleType

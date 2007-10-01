@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Aufklaerer
    Infotext = [Der U.H.U. ist ein Aufklaerungsflugzeug mit guter Reichweite und grossartiger Feinderkennung. Der Flieger verfüght ueber die Moeglichkeit, sehr lange in der Luft zu bleiben. Fehlende Waffensysteme machen eine Eigenverteidigung jedoch unmöglich. Besonders ueber stark frequentiertem Feindgebiet muessen eigene Abfangjaeger den U.H.U. begleiten. ]
-   Picture = mk4a_uhu.pcx
+   Picture = mk4a_uhu.png
    wreckageobject = 1241 14841
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    
