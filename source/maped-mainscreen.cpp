@@ -161,6 +161,8 @@ void Menu::setup()
    addbutton ( "Show Pipeline Net\t9", act_showPipeNet );
    addbutton ( "Generate Tech Tree", act_generateTechTree );
    addbutton ( "Mirror Map", act_mirrorMap );
+   addbutton ( "Copy Area", act_copyArea );
+   addbutton ( "Paste Area", act_pasteArea );
    currentMenu->addSeparator();
    addbutton ( "PBP Player Statistics", act_pbpstatistics );
 

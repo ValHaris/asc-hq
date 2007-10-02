@@ -152,4 +152,6 @@ extern bool removeCurrentItem();
 
 extern void locateItemByID();
 extern void mirrorMap();
+extern void copyArea();
+extern void pasteArea();
 #endif

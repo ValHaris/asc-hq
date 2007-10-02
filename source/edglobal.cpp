@@ -164,7 +164,10 @@
         "Dump all vehicle definitions",
         "Clear Selection",
         "Dump all building definitions",
-        "Mirror map"};
+        "Mirror map",
+        "Copy Area",
+        "Paste Area"
+	 };
 
 
 
@@ -1056,6 +1059,10 @@ void execaction_pg(int code)
       case act_locateItemByID: locateItemByID();
          break;
       case act_mirrorMap: mirrorMap();
+         break;
+      case act_copyArea: copyArea();
+         break;
+      case act_pasteArea: pasteArea();
          break;
    };
 }
