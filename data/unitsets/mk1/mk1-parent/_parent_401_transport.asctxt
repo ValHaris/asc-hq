@@ -606,7 +606,7 @@
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 4
       MaxLoadableMass = 12
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 2
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
