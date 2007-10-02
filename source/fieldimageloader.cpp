@@ -220,7 +220,7 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
 
          return s;
       }
-   return Surface();
+   throw ASCexception();
 }
 
 
