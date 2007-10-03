@@ -5,7 +5,7 @@ VehicleType {
    GuideSortHelp = 552 0 0 0 4 0 0 0 0 0
    
    Description = Transportpanzer
-   Infotext = [Stark gepanzerter Truppentransporter.]
+   Infotext = [Dieses schwere Halbkettenfahrzeug wird auch in Militärkreisen liebevoll "Maultier" genannt. Der Spring ist ein stark gepanzerter Truppentransporter mit verstärkten Achsen, kraftvollem Motor und robusten Getriebe. Im Gegensatz zu vielen anderen Fahrzeugen besteht der Spring aus einer selbsttragenden Panzerstahlwanne und  verfügt über eine dicke Panzerverglasung mit speziellen Beschussblenden. Dies bietet optimalen Schutz gegenüber indirekten Beschuss durch Splittergranaten. Das Fahrzeug verfügt ausserdem über einen Allradantrieb und ist mit einem leichtem MG bewaffnet. Komplettiert wird diese Ausstattung durch eine perfekte Innenraumkühlanlage und weitere schwere Minenschutzplatten am Fahrzeugboden. Die Hauptaufgabe des Springs ist der Truppentransport leichter Infanterieeinheiten, die schnell und sicher durch das feindliches Feuer an Ihren Einsatzort gebracht werden müssen. Die Unterschiede zum Schützenpanzer Typ Snake ist leicht auszumachen. Der Spring ist schwerer und teurer in der Herstellung, da er besser gepanzert ist und auch grosse Kampfroboter transportieren kann. Der Treibstoffverbrauch ist höher, die Zuladung und die Geschwindigkeit ist etwas geringer als beim Snake Schützenpanzer. Jedoch ist dieser Transportpanzertyp viel geländegängiger. Beispielsweise Schützengräben und Schneefall sind für den Spring kein Hindernis. ]
    picture = mk4v_spring.pcx
    wreckageobject = 14274
 

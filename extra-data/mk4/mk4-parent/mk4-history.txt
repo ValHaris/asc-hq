@@ -4,34 +4,30 @@ Spezifikationen: GAMER
 
 weitere History: siehe PBP.info
 
-01.10.2007
+__________________
+03.10.2007 (GAMER)
+-Infotext neu (by Excalibur): Hydra,Rocky,Bigger,Amazon,Algol,Spring,Skull
+-Spring, separates loadable Mass entfernt (global 24)
+____________________
+01.10.2007 (Prophet)
 - Grafiken .png UHU und VisionSpy nachträglich umgestellt. Bugfix.
 - Spring loadable mass jetzt 30 statt früher 15
-
-
-29.07.2007
+__________________
+29.07.2007 (GAMER)
 -Rocky kann überall gebaut werden
-
-
+__________________
 v17.07a 27.09.2007
 - Wizard an mk1 und mk3 Baufahrzeuge angepasst dass es auch ID 14 bauen kann
-
-
 _________________
 v17.07 25.09.2007
 - GTJam ist jetzt baubar - bugfix
-
-
 _________________
 v17.06 10.09.2007
 - Anpassung aller Datei- und Verzeichnisnamen auf durchgängige Kleinschreibung, und auch die Verknüpfungen auf die Bilder innerhalb der asctxt kleingeschrieben (Vorbereitung auf CVS, welcher unter Unix-Dateisystem läuft)
 - Neue Flugzeuggrafiken (png) von Keyfinder integriert (alle entsprechenden pcx wurden gelöscht!!)
-
-
 _________________
 v17.05 22.07.2007
 -komplette überarbeitung der MK4 Wracks durch Ares und Prophet
-
 _________________
 v17.04 16.07.2007
 -Angel kann "vsw" befahren
