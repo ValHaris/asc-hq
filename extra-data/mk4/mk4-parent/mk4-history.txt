@@ -8,6 +8,8 @@ __________________
 03.10.2007 (GAMER)
 -Infotext neu (by Excalibur): Hydra,Rocky,Bigger,Amazon,Algol,Spring,Skull
 -Spring, separates loadable Mass entfernt (global 24)
+-Citadelle Wrack bugfix material
+-Koloss kann unter Wasser betanken
 ____________________
 01.10.2007 (Prophet)
 - Grafiken .png UHU und VisionSpy nachträglich umgestellt. Bugfix.
