@@ -7,7 +7,7 @@ VehicleType {
                Bekaempfung von Bodenzielen allerdings nur kurze Reichweiten haben. Dafuer ist der
                MENHIR mit weitreichenden Boden-Luft-Raketen ausgerüstet und kann somit angreifende 
                Tiefflieger schon im Vorfeld ihres Eintreffens wirksam bekämpfen.]
-   Picture = mk4t_menhir.pcx
+   Picture = mk4t_menhir.png
    wreckageobject = 14275
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 } VehicleType

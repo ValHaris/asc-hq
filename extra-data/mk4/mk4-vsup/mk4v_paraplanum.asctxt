@@ -5,7 +5,7 @@ VehicleType {
    Description = Luftlandebaufahrzeug
    Infotext = [ Das Planum A4 ist die Luftlandevariante des PLANUM 5. Ueber unerschlossenem Gebiet abgeworfen, es ist in 
    der Lage innerhalb kuerzester Zeit Landebahnen, Bruecken und Landungsstege zu erstellen.]
-   picture = mk4v_paraplanum.pcx
+   picture = mk4v_paraplanum.png
    WreckageObject = 14239
 
    Armor -= 150

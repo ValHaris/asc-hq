@@ -7,7 +7,7 @@ VehicleType {
               ins feindliche Territorium. Es ist als einziges Landfahrzeug
               in der Lage Gebäude zu errichten und so die Versorgung und eventuell
               Neuproduktion an die Front zu verlegen.]
-   picture = mk4v_wizard.pcx
+   picture = mk4v_wizard.png
    WreckageObject = 14268
 
    Abilities += construct_specific_buildings  

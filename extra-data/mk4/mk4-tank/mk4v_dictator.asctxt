@@ -11,7 +11,7 @@ VehicleType {
    Er ist damit im Vergleich zum IMPERATOR etwas besser als strategischer Durchbruchspanzer geeignet. Als Verteidiger 
    eingesetzt kann ihm allenfalls anhaltender schwerer Fernartilliebeschuss gefaehrlich werden. Aber selbst diese 
    Bedrohung kann er durch einen vorgetragenen Gegenangriff unter Einsatz seiner weitreichenden Geschuetze abwenden.]
-   Picture = mk4v_dictator.pcx
+   Picture = mk4v_dictator.png
    wreckageobject = 14003
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

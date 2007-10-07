@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Radarstoehreinheit
    Infotext = [leichter schnell beweglicher Radarstöhrer]
-   picture = mk4v_elixir.pcx
+   picture = mk4v_elixir.png
    wreckageobject = 14214
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

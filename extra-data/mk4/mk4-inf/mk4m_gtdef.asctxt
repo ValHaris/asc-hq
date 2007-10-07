@@ -4,7 +4,7 @@ VehicleType {
    parent = 211
    
    Description = defence battlerobot
-   Picture = mk4m_gtdef.pcx
+   Picture = mk4m_gtdef.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14008
    Armor += 100

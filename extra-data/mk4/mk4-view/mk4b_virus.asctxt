@@ -7,7 +7,7 @@ VehicleType {
                jede Art von Seeeinheit je nachdem wo sie sich befindet und ist somit defensiv zur weiteren Sicherung von Stellungen 
                besonders geeingnet. Beim ersten Feindkontakt wird eine explosive Ladung gezündet, die über eine 
                erhebliche Sprengkraft verfügt.] 
-   Picture = mk4b_virus.pcx
+   Picture = mk4b_virus.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Abilities += Kamikaze_only

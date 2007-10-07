@@ -7,7 +7,7 @@ VehicleType {
 
    Description = Bunker
    Infotext = [Diese Bunkeranlage dient dazu eigene Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Dieser ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Durch das sehr tiefe eingraben des Bunkers in den Boden ist die Panzerung hier größer als bei anderen Bunkertypen. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Allerdings sind diese Bunkeranlagen gegenüber Hoehenbomber aufgrund Ihrer preiswerten Kanonen-Bewaffnung wehrlos. ]
-   picture = mk4b_rocky.pcx
+   picture = mk4b_rocky.png
 
    Weight = 190
 

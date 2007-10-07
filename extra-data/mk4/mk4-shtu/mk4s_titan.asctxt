@@ -4,7 +4,7 @@ VehicleType {
    parent = 361
    
    Description = Flugzeugtraeger
-   picture = mk4s_titan.pcx
+   picture = mk4s_titan.png
    wreckageobject = 14259
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

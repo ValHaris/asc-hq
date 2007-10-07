@@ -4,7 +4,7 @@ VehicleType {
    parent = 296
 
    Description = Raketenpanzer
-   Picture = mk4v_sting.pcx
+   Picture = mk4v_sting.png
    wreckageobject = 14209
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

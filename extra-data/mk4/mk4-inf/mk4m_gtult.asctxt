@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Schwerer Kampfroboter
    Infotext = [Diese schwere Einheit ist das Prachtstueck der Roboterindustrie. Mit weitreichenden Land- und Luftrakten ausgestattet ist er die Ideale Besetzung bei belagerungen oder Verteidigungen. Da er recht langsam ist, ist der offensive Einsatz nur bedingt zu empfehlen.]
-   Picture = mk4m_gtult.pcx
+   Picture = mk4m_gtult.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor += 100

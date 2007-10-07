@@ -4,7 +4,7 @@ VehicleType {
    parent = 306
 
    Infotext = [GolemType Roboter mit Radarstöhrelektronik. ]
-   picture = mk4m_gtjam.pcx
+   picture = mk4m_gtjam.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14024
    Armor += 100

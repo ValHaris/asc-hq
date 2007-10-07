@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [ Dieser riesige Belagerungspanzer ist ueberdurchschnittlich stark gepanzert, 
    verfuegt ueber weitreichete Kanonen und ueber Luftverteidigung. Durch das hohe Gewicht kommt 
    er allerdings nur langsam voran.]
-   Picture = mk4v_imperator.pcx
+   Picture = mk4v_imperator.png
    wreckageobject = 14206
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

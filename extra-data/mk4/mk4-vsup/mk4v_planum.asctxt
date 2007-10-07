@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Baufahrzeug Strasse/Schiene
    Infotext = [Baufahrzeug für Straßen, Wege, Schienen und Brücken.]
-   picture = mk4v_planum.pcx
+   picture = mk4v_planum.png
    wreckageobject = 14201
 
    Armor -= 50

@@ -11,7 +11,7 @@ geschickt eingesetzt, noch immer ein schlagkräftiges Waffensystem dar, auch wenn
 Geschwindigkeit kaum noch zu schnellen Offensivaktionen eignet. Ein Relikt aus vergangenen Tagen ist ebenfalls das integrierte 
 Vernebelungssystem, welches in neueren Panzermodellen nicht mehr verwendet wird.  
 ]
-   Picture = mk4v_crusader.pcx
+   Picture = mk4v_crusader.png
    wreckageobject = 14011
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

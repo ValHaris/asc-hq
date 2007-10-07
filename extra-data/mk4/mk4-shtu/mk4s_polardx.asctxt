@@ -11,7 +11,7 @@ Die der Drohnenentwicklung angepasste Weiterentwicklung des POLAR ähnelt der DX-
  Landeplätze für Drohnen der THUNDER-Reihe eingebaut. Zugunsten dieser Umbauten mußte jedoch auf einen Teil der 
 ursprünglichen Bewaffnung, das HeliDeck und das Sonarsystem verzichtet werden. Durch diesen Umstand, sowie durch den 
 Ausbau der Wasserbombenwerfer, ist er nunmehr wehrlos gegen feindliche U-Boote.]
-   picture = mk4s_polardx.pcx
+   picture = mk4s_polardx.png
    wreckageobject = 14014
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

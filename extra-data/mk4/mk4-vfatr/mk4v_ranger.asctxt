@@ -13,7 +13,7 @@ Deshalb wurde das Ausbildungsprogramm und das Auswahlverfahren für die Ranger-Fa
 
    Armor = 250
    View = 55
-   picture = mk4v_ranger.pcx
+   picture = mk4v_ranger.png
    WreckageObject = 1200
    Transportation ->* VehicleType.TransLowTrooper
    Tank { 

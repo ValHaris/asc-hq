@@ -3,7 +3,7 @@ VehicleType {
    ID = 1210
    parent = 291
 
-   Picture = mk4v_sam2.pcx
+   Picture = mk4v_sam2.png
    wreckageobject = 14210
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Anti-Sat-Kreuzer
    Infotext = [POLAR OS]
-   picture = mk4s_polaros.pcx
+   picture = mk4s_polaros.png
    wreckageobject = 14023
    GuideSortHelp += 517 0 0 0 4 600 0 0 0 0
 

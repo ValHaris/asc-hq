@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Stark motorisiertes Unterstuetzungfahrzeug. Es raeumt fuer andere Flotteneinheiten Gewaesser von Minen 
    und legt selbst Minenfelder. Aufgrund seines stark verstaerkten Rumpfes kann er in vereisten Gewaessern auch als 
    Eisbrecher eingesetzt werden. ]
-   picture = mk4s_buccaneer.pcx
+   picture = mk4s_buccaneer.png
    wreckageobject = 14288
    GuideSortHelp = 562 0 0 0 4 0 0 0 0 0
 

@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Transportzug
    Infotext = []
-   picture = mk4t_dolter.pcx
+   picture = mk4t_dolter.png
    wreckageobject = 14031
    GuideSortHelp = 551 558 0 0 4 0 0 0 0 0
 

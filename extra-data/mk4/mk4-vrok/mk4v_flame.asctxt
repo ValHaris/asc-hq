@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Rocket Launcher
    Infotext = [mobiles Mittelstrecken Boden-Boden Raketensystem]
-   picture = mk4v_flame.pcx
+   picture = mk4v_flame.png
    wreckageobject = 14280
    GuideSortHelp = 505 413 0 0 4 0 0 0 0 0
 

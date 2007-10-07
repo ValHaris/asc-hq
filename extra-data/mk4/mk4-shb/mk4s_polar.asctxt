@@ -4,7 +4,7 @@ VehicleType {
    ID = 1262
    
    Description = Kreuzer
-   picture = mk4s_polar.pcx
+   picture = mk4s_polar.png
    wreckageobject = 14262
    Abilities += sonar
    GuideSortHelp += 517 0 0 0 4 601 0 0 0 0

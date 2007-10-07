@@ -5,7 +5,7 @@ VehicleType {
 
    Description = air-defence bunker
    Infotext = [ ]
-   Picture = mk4v_citaad.pcx
+   Picture = mk4v_citaad.png
    WreckageObject = 14021
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

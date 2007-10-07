@@ -11,7 +11,7 @@ ausgefallen. Zu diesem Zwecke wurde der ursprüngliche Laderaum extrem verkleiner
 über einige wenige Stellplätze für Trooper-Einheiten verfügt. Zudem hat er, gegenüber seinem Vorgänger, etwas an 
 Topspeed eingebüßt, was auf das veränderte Design und die um ein Drittel verstärkte Panzerung zurückzuführen ist.
  ]
-   picture = mk4s_magic.pcx
+   picture = mk4s_magic.png
    wreckageobject = 14016 14816
    GuideSortHelp += 0 0 0 0 4 508 552 0 0 0
 

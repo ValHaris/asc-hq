@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Raketen U-Boot
    Infotext = [Das Pluto ist weiterer Vertreter aus der Reihe der Cromanischen Prätorianer. ]
-   picture = mk4s_pluto.pcx
+   picture = mk4s_pluto.png
    wreckageobject = 14267
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

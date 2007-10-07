@@ -12,7 +12,7 @@ Auch der Tatsache, dass ein größeres Ziel auch eine lohnendere Beute für Feindei
 Rechnung getragen und der WHALE, neben einem vergrößertem MG, auch mit einer leistungsfähigen Flak-Kanone ausgestattet.
 Der Whale kann sockelgebundene Einheiten auf die dafür vorgesehenen Sockel setzen.
 ]
-   picture = mk4s_whale.pcx
+   picture = mk4s_whale.png
    wreckageobject = 14018 14818
    GuideSortHelp += 0 0 0 0 4 558 0 0 0 0
 

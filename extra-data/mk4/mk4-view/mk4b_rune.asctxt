@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Diese sehr leistungsfähige stationäre Radarüberwachung ist die Nutzung von Radarstrahlungen für die Erfassung von Bewegungen an Land, zu Wasser oder in der Luft.
 Die Radarüberwachung ist völlig unabhängig von jedweden Wetterbedingungen. Sie setzt eine Abdeckung des Kontrollgebiets durch "Abtastungen" voraus, also ein Netz von Antennen. Eine Nutzung ist nicht unter Wasser möglich, hier wird das Echolot-/Sonarsystem verwendet.
 ]
-   Picture = mk4b_rune.pcx
+   Picture = mk4b_rune.png
    wreckageobject = 1219
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

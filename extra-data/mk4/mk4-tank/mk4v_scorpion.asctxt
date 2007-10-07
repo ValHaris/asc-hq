@@ -8,7 +8,7 @@ VehicleType {
 Der Scorpion ist eine gut motorisierte Selbstfahrlafette (SFL), die im wesentlichen um das preiswerte MK-65-Geschuetz herum gebaut wurde. Auf einen Drehturm mit komplizierter Richtautomatik wurde ebenso wie auf ein zusaetzliches MG verzichtet. Der Scorpion ist somit insgesamt ein preiswertes Waffensystem, das aber bei der Bekaempfung von Infanterie und schnell beweglichen Fahrzeugen Schwaechen aufweist. Er sollte nur bei ausreichender Luftabschirmung eingesetzt werden. Werden mehrere Scorpion-Einheiten zusammengefasst, lassen sich dann auch schnelle empfindliche Schlaege gegen feindliche Bodeneinheiten durchfuehren.
 Bei der defensiven Verwendung des Scorpion sollte dieser wenn möglich immer eingegraben werden, um seine Überlebenschancen im Gefecht zu steigern. Es wird hierzu auf die im Ergebnis doch ermutigenden Berichte der Veteranin Brit Darburg aus dem Abschnitt Nord-7 im Krieg der Drulls gegen Skynet-Ttian auf Chromos verwiesen.
 ]
-   Picture = mk4v_scorpion.pcx
+   Picture = mk4v_scorpion.png
    wreckageobject = 14294
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

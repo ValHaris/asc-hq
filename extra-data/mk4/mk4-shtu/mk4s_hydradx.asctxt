@@ -18,7 +18,7 @@ bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren A
 Die HYDRA DX baut auf der HYDRA-Korvetten-Klasse auf und dient als seegestuetzter Drohnenstarter. Sie ist in der Lage 
 drei Drohne zuegig in ihr Einsatzgebiet auf See zu befoerdern und sie mittels Startkatapult starten zu lassen.
 ]
-   picture = mk4s_hydradx.pcx
+   picture = mk4s_hydradx.png
    wreckageobject = 14007
    Transportation ->* VehicleType.TransDroneDestroyer 
    Tank { 

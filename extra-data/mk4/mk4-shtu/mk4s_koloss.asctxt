@@ -8,7 +8,7 @@ VehicleType {
    Infotext = [Unterseeboot mit Seeüberwachungssystemen. Dieses auf dem Pluto basierende U-Boot dient als 
    	       seegestützte Kommandoeinheit. Neben dem großräumigen Überwachen gegnerischer Schiffs und 
    	       U-Boot Bewegungen bietet es auch effektiven Schutz gegen U-Boote. Es sind dringend erforderlich Jagt-Uboote als Begleitschutz abzustellen. ]
-   picture = mk4s_koloss.pcx
+   picture = mk4s_koloss.png
    wreckageobject = 14027
 
    Armor += 200

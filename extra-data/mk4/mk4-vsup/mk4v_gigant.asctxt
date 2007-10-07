@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Construction Vehicle
    Infotext = [Der GIGANT uebernimmt Spezialaufgaben wie das Errichten der Medusa3 Stellungen und das Versetzen von größeren Geschuetztürmen und der Bunker Citadellen.]
-   picture = mk4v_gigant.pcx
+   picture = mk4v_gigant.png
    wreckageobject = 14005
    Armor -= 100
    View = 20

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = jamming bunker
    Infotext = [ Schwer gepanzerte langsam fahrender Citadellenbunker mit Jammingausrüstung.]
-   picture = mk4v_citarj.pcx
+   picture = mk4v_citarj.png
    WreckageObject = 14025
    GuideSortHelp = 0 310 0 0 4 0 0 0 0 0
    Jamming = 45

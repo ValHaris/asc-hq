@@ -8,7 +8,7 @@ VehicleType {
 Dieses Fahrzeug an sich ist recht schnell, aber Vorsicht, diese Straßenfahrzeug mit Luftbereifung braucht einen festen Untergrund zum Fahren z.B. Straßen, Landebahnen, Eisflächen und fester Hartwüstenboden. Fahrten in den Tiefschnee, Morast, Schlamm und in Sumpfgebiete machen das Fahrzeug unbeweglich. Also Vorsicht - entweder immer grundsätzlich auf der Straße bleiben oder anderenfalls sind die Wetternachrichten überlebenswichtig.
 Das Fahrzeug ist nicht bewaffnet und muss ausreichend durch befreundete Einheiten abgeschirmt sein. Es darf nur mit entsprechendem Begleitschutz ins Kriegsgebiet vorrücken.   
 ]
-   picture = mk4v_algol.pcx
+   picture = mk4v_algol.png
    wreckageobject = 14217
 
    Armor -= 100

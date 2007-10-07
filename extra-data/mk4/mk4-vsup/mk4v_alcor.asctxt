@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Munitionstransporter
    Infotext = []
-   picture = mk4v_alcor.pcx
+   picture = mk4v_alcor.png
    wreckageobject = 14218
 
    Weapons { 

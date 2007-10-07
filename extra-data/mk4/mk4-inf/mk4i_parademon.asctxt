@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Fallschirmspringer
    Infotext = [Der PARADEMON ist kann sich per Fallschirm von einem fliegenden Flugzeug aus in Richtung Boden absetzen. Die zusätzliche Ausrüstung ging zu Lasten der Kampfkraft.]
-   Picture = mk4i_parademon.pcx
+   Picture = mk4i_parademon.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14236
    Armor += 20

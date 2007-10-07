@@ -8,7 +8,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    View += 10
-   picture = mk4v_citagd.pcx
+   picture = mk4v_citagd.png
    Transportation ->* VehicleType.TransLowTrooper3
 
    waitfortack = true

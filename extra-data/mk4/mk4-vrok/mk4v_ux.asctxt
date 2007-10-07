@@ -4,7 +4,7 @@ VehicleType {
    parent = 302
 
    Description = Langstreckenrakete
-   Picture = mk4v_ux.pcx
+   Picture = mk4v_ux.png
    wreckageobject = 1233
    GuideSortHelp = 505 414 0 0 4 0 0 0 0 0
 

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Patrouillenboot
    Infotext = [Das Patrix]
-   picture = mk4s_patrix.pcx
+   picture = mk4s_patrix.png
    wreckageobject = 14258
    GuideSortHelp += 517 0 0 0 4 552 559 0 0 0
 

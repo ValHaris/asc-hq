@@ -18,7 +18,7 @@ Der CITA SX baut auf dem leistungsfaehigen CITA - Mobilbunker auf und dient als 
 Er ist in der Lage mehere Drohne zuegig aufzutanken und aufzumunitionieren und sie mittels Startkatapult starten zu lassen. 
 ]
 
-   picture = mk4v_citadx.pcx
+   picture = mk4v_citadx.png
    WreckageObject = 14029
    GuideSortHelp = 565 553 0 0 4 0 0 0 0 0
 

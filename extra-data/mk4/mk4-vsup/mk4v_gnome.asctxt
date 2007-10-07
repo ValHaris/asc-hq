@@ -5,7 +5,7 @@ VehicleType {
 
    Description = mine layer
    Infotext = [Minenleger und -raeumer]
-   picture = mk4v_gnome.pcx
+   picture = mk4v_gnome.png
    wreckageobject = 14010
 
    Abilities += mine_layer view_mines 

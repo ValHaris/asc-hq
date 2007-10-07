@@ -5,7 +5,7 @@ VehicleType {
 
    Description = radar mechwarrior
    Infotext = [Auf Basis des Golem wurde dieser Radar-Golem entwickelt. Der Vorteil gegenüber herkömmlichen Radarfahrzeugen liegt in der Beweglichkeit im Gebirge.]
-   Picture = mk4m_gtspy.pcx
+   Picture = mk4m_gtspy.png
    wreckageobject = 14297
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 } VehicleType

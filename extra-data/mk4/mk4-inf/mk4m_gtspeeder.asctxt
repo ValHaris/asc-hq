@@ -5,7 +5,7 @@ VehicleType {
 
    Description = light golem type
    Infotext = [Auf Basis des Golem wurde diese schnellere Version entwickelt. Dabei wurde auf die Raketenbatterien verzichtet. (GT = golem type)]
-   Picture = mk4m_gtspeeder.pcx
+   Picture = mk4m_gtspeeder.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14000
    Armor += 50

@@ -6,7 +6,7 @@ VehicleType {
 
    Description = Spaehfahrzeug
    Infotext = []
-   picture = mk4v_buggy.pcx
+   picture = mk4v_buggy.png
    WreckageObject = 1203
 
    Armor -= 50

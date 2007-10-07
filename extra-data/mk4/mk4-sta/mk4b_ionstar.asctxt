@@ -6,7 +6,7 @@ VehicleType {
 
    Description = Geschuetzturm
    Infotext = []
-   picture = mk4b_ionstar.pcx
+   picture = mk4b_ionstar.png
    wreckageobject = 1222
 
    Weapons { 

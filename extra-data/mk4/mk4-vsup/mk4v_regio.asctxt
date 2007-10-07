@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Baufzg.Befestigung/Turret
    Infotext = [Baufahrzeug für Befestigungen, Pipelines und Turretsockel.] 
-   picture = mk4v_regio.pcx
+   picture = mk4v_regio.png
    wreckageobject = 14270
    
    Armor -= 100

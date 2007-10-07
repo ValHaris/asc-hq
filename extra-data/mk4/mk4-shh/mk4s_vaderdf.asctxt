@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Kampfluftkissenboot
    Infotext = []
-   picture = mk4s_vaderdf.pcx
+   picture = mk4s_vaderdf.png
    wreckageobject = 14266 14866
    GuideSortHelp += 0 0 0 0 4 552 0 0 0 0
 

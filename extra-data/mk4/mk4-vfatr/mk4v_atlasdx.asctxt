@@ -9,7 +9,7 @@ Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die ka
 Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des SX-Kampfwertsteigerungsprogrammes wurden die erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
 Der ATLAS SX baut auf dem leistungsfaehigen ATLAS - Transporter auf und dient als bodengestuetzer mobiler Drohnenstarter. Er ist in der Lage eine Drohne zuegig in ihr Einsatzgebiet zu befoerdern und sie mittels Startkatapult starten zu lassen. 
 ]
-   picture = mk4v_atlasdx.pcx
+   picture = mk4v_atlasdx.png
    wreckageobject = 14020
    GuideSortHelp = 553 565 0 0 4 0 0 0 0 0
 

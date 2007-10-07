@@ -4,7 +4,7 @@ VehicleType {
    ID = 1260
 
    Description = Transport UBoot
-   picture = mk4s_shell.pcx
+   picture = mk4s_shell.png
    wreckageobject = 14260
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    Transportation ->* VehicleType.TransSubmarine 

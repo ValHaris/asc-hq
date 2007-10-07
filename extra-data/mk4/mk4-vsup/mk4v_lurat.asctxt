@@ -6,7 +6,7 @@ VehicleType {
    Description = Baufzg.Abwehranlagen
    Infotext = [ Das LURAT-System ist ein weiteres notwendiges Baufahrzeug. Es ist in der Lage 
    auf vorhandene Turret-Sockel stationaere Verteidigungsanlagen zu errichten und kleinere Sockeleinheiten zu transportieren.]
-   picture = mk4v_lurat.pcx
+   picture = mk4v_lurat.png
    wreckageobject = 14240
    Armor -= 100
    Transportation ->* VehicleType.TransTurretMed 

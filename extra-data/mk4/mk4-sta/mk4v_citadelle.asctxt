@@ -6,7 +6,7 @@ VehicleType {
 
    Description = Fahrender Bunker
    Infotext = [ Schwer gepanzerte langsam fahrende Kommandoeinheit.]
-   picture = mk4v_citadelle.pcx
+   picture = mk4v_citadelle.png
    WreckageObject = 14235
 
    Armor += 200

@@ -9,7 +9,7 @@ VehicleType {
    alles, was sich in Reichweite dieses Geschuetzes bewegt. Die Medusa3 ist als Ergaenzung zu den normalen 
    Flugabwehrgeschuetzen entwickelt worden. Sie ist besonders geeignet für bergige Regionen, da kein Geschützsockel 
    benötigt wird und ein neuartiger Radarstörsender integriert wurde. ]
-   Picture = mk4b_medusa3.pcx
+   Picture = mk4b_medusa3.png
    wreckageobject = 14004
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

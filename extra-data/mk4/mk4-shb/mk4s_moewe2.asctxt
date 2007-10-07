@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Schnellboot
    Infotext = [Weiterentwicklung der Moewe. Die neue Konstruktion ist hochseetauglich. Die Kanone wurde zugunsten eines größeren Raketenwerfers entfernt.]
-   picture = mk4s_moewe2.pcx
+   picture = mk4s_moewe2.png
    wreckageobject = 14015
    GuideSortHelp = 518 419 0 0 4 0 0 0 0 0
 

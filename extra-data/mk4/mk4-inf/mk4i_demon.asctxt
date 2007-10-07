@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Leichter Kampfroboter
    Infotext = [Den Standartkampfroboter der Streitkraefte repraesentierend, findet der DEMON weitreichende Verwendung in fast allen Systemen und Fahrzeugen. Der DEMON ist moeglicherweise das am meisten modifizierte Element der Armee und ersetzt vollstaendig die alten modelle. Bedeutsam sind hier vor allem die Aenderungen, die die Widerstands- und Kampfkraft erheblich steigerten.]
-   Picture = mk4i_demon.pcx
+   Picture = mk4i_demon.png
    wreckageobject = 14205
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

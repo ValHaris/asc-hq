@@ -10,7 +10,7 @@ VehicleType {
    		wurden dafürausgebaut und der Torpedovorrat verringert. Da sich das Träger-U-Boot öfter
    		an die Wasseroberfläche begeben muß, damit die Hubschrauber starten können, wurden 
    		Flakgeschütze montiert. Es sind dringend Jagtuboote als Begleitschutz abzustellen. ]
-   picture = mk4s_duke.pcx
+   picture = mk4s_duke.png
    wreckageobject = 14291
 
    Armor += 200

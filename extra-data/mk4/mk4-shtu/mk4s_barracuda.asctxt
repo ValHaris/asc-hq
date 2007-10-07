@@ -10,7 +10,7 @@ verfügt er über leistungsfähige Maschinen und eine gut gepanzerte Hülle. Neben d
 Marineeinheiten, wurde der BARRACUDA zusätzlich mit einem speziellen Anti-Schiff-Torpedolauncher ausgestattet, der 
 weitreichender und etwas durchschlagskräftiger als die Standardausführung ist.
 ]
-   picture = mk4s_barracuda.pcx
+   picture = mk4s_barracuda.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14290
    Armor -= 100

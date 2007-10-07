@@ -9,7 +9,7 @@ VehicleType {
    versteht sich von selbst, dass die Wichtigkeit des Systems groesstmoeglichen Schutz bedingt. 
    Radareinheiten sind die Augen jeder Truppe und je weiter sie sehen koennen, desto eher sind 
    die Reaktionen des Feindes einzuschaetzen.] 
-   Picture = mk4v_orion.pcx
+   Picture = mk4v_orion.png
    wreckageobject = 14204
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = heavy Artillerie
    Infotext = [Dieses Artilleriegeschuetz ist das wichtigste Waffensystem wenn es darum geht, befestigte Stellungen des Gegners wirksam zu zerstoeren. Ebenfalls dient es als ueberlegene Unterstuetzung fuer eigene Sturmangriffe, aber auch zur "Abwehr im Vorfeld" von anrueckenden Einheiten. Seine Feuerkraft ist enorm. Allerdings nimmt die Treffergeneuigkeit bei groesser werdender Entfernung wie bei allen fernwaffen ab.]
-   Picture = mk4v_pulsar.pcx
+   Picture = mk4v_pulsar.png
    WreckageObject = 14211
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

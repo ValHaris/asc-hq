@@ -6,7 +6,7 @@ VehicleType {
 
    Description = Raketenpanzer
    Infotext = [ Defensiver Raketenpanzer]
-   Picture = mk4v_python2.pcx
+   Picture = mk4v_python2.png
    wreckageobject = 14030
 
    Abilities = leaves_tracks move_after_attack
