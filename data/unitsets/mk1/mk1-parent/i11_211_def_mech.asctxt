@@ -23,6 +23,7 @@ VehicleType {
       Weapon0.Punch@MinRange = 80
 
       Weapon1 ->* VehicleType.Flak 
+      Weapon1.MaxRange = 30
       Weapon1.Reactionfireshots = 1 
       Weapon1.Ammo = 10
 

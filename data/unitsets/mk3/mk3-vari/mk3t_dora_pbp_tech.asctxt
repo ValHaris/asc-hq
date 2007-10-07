@@ -1,0 +1,10 @@
+technology {
+   Name = Dora
+   infotext = Forschungsprojekt abgeschlossen! Dora verfuegbar!
+   id = 627
+   RelatedUnitID = 627
+   parent = 100000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 100000,100002,100104,100204,100309,599 
+} Technology

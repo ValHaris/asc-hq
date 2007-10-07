@@ -464,6 +464,7 @@
       CategoriesNOT = medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_ship heavy_ship heavy_aircraft rail_vehicle
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO_Carrier
+      EntranceSystem0.CategoriesNOT = medium_aircraft
       EntranceSystem1 ->* VehicleType.Cruiser
       EntranceSystem2 ->* VehicleType.fl2sub
    } TransHeliCarrier

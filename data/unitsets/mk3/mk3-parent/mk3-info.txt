@@ -41,8 +41,9 @@ ID 617/223 Rapier 2         lr air defence turret
 --Artillery--
 ID 597/250 FH 70            light artillery
 ID 598/251 FH 77            medium artillery
-ID 599/254 Railroadgun
+ID 599/254 K5
 ID 605/252 PzH2000          heavy Artillery
+ID 627/256 Dora
 
 --Rocket--
 ID 550/296 LARS             Light Artillery Rocket System (LARS)

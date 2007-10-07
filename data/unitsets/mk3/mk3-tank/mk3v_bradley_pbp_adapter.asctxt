@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 628
+   ;Bezeichnung der verknüpften Technologie: Bradley
+   TechnologiesRequired = 628
+} TechAdapter

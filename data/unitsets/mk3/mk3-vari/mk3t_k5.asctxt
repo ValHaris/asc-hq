@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = K5
+   ID = 599
+   parent = 254
+
+;   Description = railroad gun
+   Picture = mk3t_k5.pcx
+   WreckageObject = 458
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+} VehicleType
