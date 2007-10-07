@@ -3,6 +3,11 @@ Grafiken: GAMER & Dr.Snuggels
 Spezifikationen: GAMER
 
 weitere History: siehe PBP.info
+
+
+__________________
+07.10.2007 (Prophet)
+-Sämtliche Grafiken von PCX auf PNG umgestellt (außer sämtliche Flieger, da diese schon früher umgestellt wurden)
 __________________
 06.10.2007 (GAMER)
 -Duke, Bodeneingang für medium aircraft gesperrt
