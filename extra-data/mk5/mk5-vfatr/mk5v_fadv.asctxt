@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = FADV
+   ID = 1462
+   parent = 332
+   
+   Description = fast air defence vehicle 
+   Infotext = []
+   Picture = MK5v_FADV.pcx
+   WreckageObject = 1404
+
+   Armor += 50
+   Weight += 10
+   Jamming = 19
+
+   Abilities += jam_only_own_field moveduringreactionfire
+
+   Tank.fuel = 700
+   FuelConsumption = 10
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Def_MG 
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.Ammo = 4
+      Weapon1.maxRange = 40
+   } Weapons
+} VehicleType

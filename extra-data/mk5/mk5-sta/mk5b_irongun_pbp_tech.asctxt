@@ -1,0 +1,10 @@
+technology {
+   Name = IronGun
+   infotext = 
+   id = 1405
+   RelatedUnitID = 1405
+   parent = 1499
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1499,100004,100102,100208,1442 
+} Technology

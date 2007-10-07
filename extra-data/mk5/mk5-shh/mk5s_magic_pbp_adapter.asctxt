@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1469
+   ;Bezeichnung der verknüpften Technologie: Magic X
+   TechnologiesRequired = 1469
+} TechAdapter

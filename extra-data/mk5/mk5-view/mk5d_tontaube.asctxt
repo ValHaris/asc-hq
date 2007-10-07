@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = TONTAUBE
+   ID = 1473
+   parent = 497 247
+
+   Description = Radar Ballon
+   Infotext = [Fessel Ballon]
+   Picture = mk5d_tontaube.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Category = default
+   Armor -= 150
+   Abilities += no_midair_refuel
+   
+   TerrainAccess ->* VehicleType.heli_terrain 
+   Movement = 0 0 0 17 30 30 0 0 
+   FuelConsumption = 1
+   Tank.fuel = 1000
+   Weight = 10
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1405
+   ;Bezeichnung der verknüpften Technologie: IRONGUN
+   TechnologiesRequired = 1405
+} TechAdapter

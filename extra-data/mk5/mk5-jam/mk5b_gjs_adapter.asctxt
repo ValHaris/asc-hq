@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1414
+   ;Bezeichnung der verknüpften Technologie: GJS
+   TechnologiesRequired = 1414
+} TechAdapter

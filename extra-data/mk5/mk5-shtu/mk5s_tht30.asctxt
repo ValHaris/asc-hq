@@ -1,0 +1,76 @@
+VehicleType { 
+   Name = THT 30
+   parent = 400 401 402 493
+   ID = 1421
+   Description = Langstreckentorpedo
+   Infotext = [Neben Dem stationaeren Torpedolauncher wurde dieser Langstreckentorpedo entwickelt. 
+               Schnell, selbst zielsuchend und treffsicher stellt er eine Gefahr fuer jedes Schif dar. 
+               Der Torpedo fliegt in einer sich ständig erneuernden Luftblase durch das Wassser und 
+               erreicht so eine ueberdurchschnittlich hohe Geschwindigkeit. Er ist nur schwer zu 
+               erkennen und wenn man ihn entdeckt, ist es meist schon zu spaet.]
+   Picture = MK5s_THT30.pcx
+
+   Armor = 150
+   Weight = 10
+   View = 10
+   Jamming = 39
+   Abilities = sonar Kamikaze_only immune_to_mines jam_only_own_field
+   Category = default
+   MaxSurvivableStorm = 70
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+
+   Height = deep_submerged submerged floating
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 200
+   } Tank
+   FuelConsumption = 10
+
+   WaitFortack = false
+   Movement = 110 110 69 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Deep_water Very_shallow_water River swamp
+      terrain_all = 
+      terrain_not = pack_ice frozen_water
+      terrain_kill = Lowland Forest High_mountains Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation Pack_ice Frozen_water 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 120
+      Number = 1
+      Weapon0 { 
+         Type = torpedo shootable 
+         targets = deep_submerged submerged floating ground_level
+         shotFrom = deep_submerged submerged floating
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 1
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 90
+            0 = 100
+            u1 = 100
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+	 WeaponEffectiveness {
+    	    trooper = 25
+ 	 } WeaponEffectiveness 
+      } Weapon0
+   } Weapons
+} VehicleType

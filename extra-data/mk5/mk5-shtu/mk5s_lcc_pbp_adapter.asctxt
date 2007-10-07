@@ -1,0 +1,5 @@
+Techadapter {
+   ; LCC
+   Name = 1460
+   TechnologiesRequired = 1460
+} TechAdapter

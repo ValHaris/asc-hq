@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15293
+   ;Bezeichnung der verknüpften Technologie: Meta
+   TechnologiesRequired = 15293
+} TechAdapter

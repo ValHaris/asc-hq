@@ -1,0 +1,10 @@
+technology {
+   Name = Tontaube
+   infotext = Forschungsprojekt abgeschlossen! Tontaube verfuegbar!
+   id = 1473
+   RelatedUnitID = 1473
+   parent = 1499
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1499,100003,100103,100210 
+} Technology

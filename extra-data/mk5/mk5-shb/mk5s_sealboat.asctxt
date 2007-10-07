@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = SEALBOAT X
+   parent = 586
+   ID = 1455
+   
+   Description = stealth patrol boat
+   Infotext = [Beutetechnik von den Terranern, Antrieb wurde modifiziert um die Manoevrierfähigkeit zu erhoehen.]
+   picture = MK5s_sealboat.pcx
+   
+   Abilities += move_after_attack
+
+} VehicleType

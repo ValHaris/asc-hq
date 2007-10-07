@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1448
+   ;Bezeichnung der verknüpften Technologie: SUMMSE
+   TechnologiesRequired = 1448
+} TechAdapter

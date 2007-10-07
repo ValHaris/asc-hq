@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1462
+   ;Bezeichnung der verknüpften Technologie: FADV
+   TechnologiesRequired = 1462
+} TechAdapter

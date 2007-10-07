@@ -1,0 +1,17 @@
+VehicleType { 
+   Name =  FORTRESS
+   ID = 1458
+   parent = 1284
+   
+   picture = MK5s_fortress.pcx
+
+   Weapons {
+      Number = 4
+      Weapon0.Punch@MinRange = 110
+      Weapon3 ->* VehicleType.SAMH 
+      Weapon3.MaxRange = 40
+      Weapon3.Ammo = 10
+      Weapon3.ReactionFireShots = 3
+   } Weapons
+
+} VehicleType

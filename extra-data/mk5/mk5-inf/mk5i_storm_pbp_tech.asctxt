@@ -1,0 +1,10 @@
+technology {
+   Name = Storm
+   infotext = Forschungsprojekt abgeschlossen! Storm verfuegbar!
+   id = 1401
+   RelatedUnitID = 1401
+   parent = 1499
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 1499,100001,100101,1400 
+} Technology

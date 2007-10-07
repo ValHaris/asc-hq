@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1437
+   ;Bezeichnung der verknüpften Technologie: Speedser
+   TechnologiesRequired = 1437
+} TechAdapter

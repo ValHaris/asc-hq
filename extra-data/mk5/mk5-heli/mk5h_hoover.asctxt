@@ -1,0 +1,70 @@
+VehicleType { 
+   Name = HOOVER
+   parent = 400 401 402 409
+   ID = 1410
+   Description = Seekampfhubschrauber
+   Infotext = []
+   Picture = MK5h_HOOVER.pcx
+   WreckageObject = 1410
+   
+   Armor = 320
+   Weight = 45
+   Transportation ->* VehicleType.TransHeliTrooper 
+   Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
+   Abilities += sonar fuel_transfer material_transfer
+
+   Tank { 
+      Energy = 0
+      Material = 5000
+      fuel = 6000
+   } Tank
+   FuelConsumption = 20
+
+   TerrainAccess { 
+      terrain_any += Shallow_water Water Very_shallow_water 
+      terrain_all = 
+      terrain_not = deep_snow
+      terrain_kill = Lava deep_water
+   } TerrainAccess
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.targets = floating ground_level  
+      Weapon0.Ammo = 15
+      Weapon0.Punch@MaxRange = 45
+      Weapon0.Punch@MinRange = 65
+
+      Weapon1 ->* VehicleType.medBomb 
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 95
+      Weapon1.Punch@MinRange = 95
+      
+      Weapon2 ->* VehicleType.ATorp 
+      Weapon2.targets = submerged floating 
+      Weapon2.shotFrom = ground_level low_level_flight 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 100
+
+      Weapon3 ->* VehicleType.DCS 
+      Weapon3.Ammo = 4
+      Weapon3.Punch@MaxRange = 100
+      Weapon3.Punch@MinRange = 100
+      
+      Weapon4 ->* VehicleType.ServiceGround
+      
+      Weapon5 ->* VehicleType.AmmoMG
+      Weapon5.Ammo = 40 
+
+      Weapon6 ->* VehicleType.AmmoBomb
+      Weapon6.Ammo = 40 
+
+      Weapon7 ->* VehicleType.AmmoSM
+      Weapon7.Ammo = 40 
+
+
+   } Weapons
+} VehicleType

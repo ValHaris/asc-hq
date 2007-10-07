@@ -1,0 +1,5 @@
+Techadapter {
+   ; GUARD
+   Name = 1433
+   TechnologiesRequired = 1433
+} TechAdapter

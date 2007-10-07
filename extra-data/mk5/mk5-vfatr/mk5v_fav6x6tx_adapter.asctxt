@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1446
+   ;Bezeichnung der verknüpften Technologie: FAV 6x6 TX
+   TechnologiesRequired = 1446
+} TechAdapter

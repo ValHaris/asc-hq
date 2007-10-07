@@ -1,0 +1,5 @@
+Techadapter {
+   ; Scanner
+   Name = 1470
+   TechnologiesRequired = 1470
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; WindPowerMk4
+   Name = B5
+   TechnologiesRequired = 1499
+} TechAdapter

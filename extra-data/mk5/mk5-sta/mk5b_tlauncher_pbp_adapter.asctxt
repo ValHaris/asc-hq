@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1422
+   ;Bezeichnung der verknüpften Technologie: TorpLauncher
+   TechnologiesRequired = 1422
+} TechAdapter

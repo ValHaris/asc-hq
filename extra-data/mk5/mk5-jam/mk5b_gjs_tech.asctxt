@@ -1,0 +1,10 @@
+technology {
+   Name = GJS
+   infotext = 
+   id = 1414
+   RelatedUnitID = 1414
+   parent = 1499
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 1499,100002,100105,100306,1431,1497 
+} Technology

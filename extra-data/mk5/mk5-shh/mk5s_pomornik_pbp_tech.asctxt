@@ -1,0 +1,10 @@
+technology {
+   Name = Pomornik
+   infotext = 
+   id = 1459
+   RelatedUnitID = 1459
+   parent = 1499
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 1499,100004,100101,100212 
+} Technology

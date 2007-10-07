@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = ARMY RANGER	
+   ID = 1447
+   parent = 203
+
+   Description = Heavy Trooper
+   Infotext = []
+   picture = MK3i_ARMYRANGER.pcx
+
+   Abilities += paratrooper
+   Weapons { 
+   } Weapons
+} VehicleType

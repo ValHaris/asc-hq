@@ -1,0 +1,10 @@
+technology {
+   Name = Pickup
+   infotext = 
+   id = 1435
+   RelatedUnitID = 1435
+   parent = 1499
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 1499,100002,100103 
+} Technology

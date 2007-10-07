@@ -1,0 +1,10 @@
+technology {
+   Name = Doomsday
+   infotext = 
+   id = 1425
+   RelatedUnitID = 1425
+   parent = 100010
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 1499,100003,100105,100205,100206,1451
+} Technology

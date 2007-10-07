@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = MARINE
+   ID = 1416
+   parent = 206
+   Description = Taucher
+   Infotext = [ Dieser Spezialist wurde fuer besondere Unterwasseraufträge ausgerüstet und ausgebildet. 
+   Seine Kampfkraft ist enorm, besonders bei der Sabotage von Schiffen und Unterseebooten.]
+   Armor += 20
+   Picture = MK5i_MARINE.pcx
+   WreckageObject = 1416
+   Abilities += paratrooper
+   Movement += 0 10 0 2 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+
+      Weapon1 ->* VehicleType.C4 
+      Weapon1.Punch@MaxRange += 20
+      Weapon1.Punch@MinRange += 20
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1406
+   ;Bezeichnung der verknüpften Technologie: Tactics
+   TechnologiesRequired = 1406
+} TechAdapter

@@ -3,7 +3,9 @@ Grafiken: GAMER & Dr.Snuggels
 Spezifikationen: GAMER
 
 weitere History: siehe PBP.info
-
+__________________
+06.10.2007 (GAMER)
+-Duke, Bodeneingang für medium aircraft gesperrt
 __________________
 03.10.2007 (GAMER)
 -Infotext neu (by Excalibur): Hydra,Rocky,Bigger,Amazon,Algol,Spring,Skull

@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = DESTRUCTOR
+   ID = 15209
+   parent = 209 15000
+
+;   Description = Kampfroboter
+;   Infotext = []
+   Picture = mk6m_destructor.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 10
+;   Movement += 0 0 0 5 0 0 0 0
+   Tank.material = 1000
+
+   Weapons {
+      Weapon0 ->* VehicleType.TeccEMP
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+      Weapon0.LaserRechargeCost.Fuel = 600
+      Weapon0.LaserRechargeCost.Material = 100
+      Weapon1 ->* VehicleType.type_laser
+   } Weapons
+} VehicleType

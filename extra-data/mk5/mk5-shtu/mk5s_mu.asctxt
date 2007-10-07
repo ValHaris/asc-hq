@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = LR5
+   parent = 610 
+   ID = 1420
+   
+   Description = rescue submarine
+   Infotext = [Special rescue and support submarine]
+
+   picture = MK5s_mu.pcx
+} VehicleType

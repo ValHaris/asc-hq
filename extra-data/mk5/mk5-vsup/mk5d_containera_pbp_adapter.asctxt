@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1418
+   ;Bezeichnung der verknüpften Technologie: Container A
+   TechnologiesRequired = 1418
+} TechAdapter

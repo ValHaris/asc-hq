@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = Container A
+   ID = 1418
+   parent = 400 401 402 423
+
+   Description = Transport Container
+   Infotext = [Der Container des Typs A speichert Material und Treibstoff.]
+   Picture = MK5d_ContainerA.pcx
+
+   Armor = 400
+   Weight = 20
+   Abilities += fuel_transfer material_transfer
+
+   Tank { 
+      Energy = 0
+      Material = 50000
+      fuel = 50000
+   } Tank
+   FuelConsumption = 0
+   TerrainAccess ->* VehicleType.turret_lowland 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround 
+
+   } Weapons
+} VehicleType

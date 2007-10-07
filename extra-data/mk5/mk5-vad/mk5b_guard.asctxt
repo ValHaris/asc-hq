@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = GUARD
+   ID = 1433
+   parent = 222
+
+   Description = Raketenstellung
+   Infotext = []
+   Picture = MK5b_Guard.pcx
+   
+   Armor -= 200
+   Weight = 40
+   Jamming = 21
+   Abilities += jam_only_own_field
+   TerrainAccess ->* VehicleType.turret_ditch 
+
+   Weapons { 
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.MaxRange = 60
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 110
+      Weapon1.Reactionfireshots = 1
+   } Weapons
+} VehicleType

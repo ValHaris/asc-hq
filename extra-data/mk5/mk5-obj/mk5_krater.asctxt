@@ -1,0 +1,33 @@
+ObjectType { 
+   ID = 1414
+   parent = 1416
+   GroupID = 14
+   visible_in_fogOfWar = true
+   Armor = 0
+   Movemalus_abs = 15
+   AttackBonus_abs = -3
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -3
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 2
+   Height = 92
+   RemovalCost { 
+      Energy = 0
+      Material = 200
+      fuel = 50
+      Movement = 20
+   } RemovalCost
+   Name = lava krater
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand Mountains Hillside high_mountains ditch installation road runway 
+      terrain_all = 
+      terrain_not = very_shallow_water shallow_water water deep_water river 
+      terrain_kill = very_shallow_water shallow_water water Deep_water river   
+   } TerrainAccess
+   TerrainProperties_Filter = lowland hard_sand soft_sand mountains hillside high_mountains ditch installation road runway railroad
+   TerrainProperties_Add = lava
+   dry { 
+      picture = MK5_krater.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,44 @@
+ObjectType { 
+   ID = 1416
+   groupID = 13
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Armor = 100
+   Movemalus_plus = 1
+   Movemalus_abs = -1
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 0
+      Movement = 5
+   } RemovalCost
+   Name = trooper weapon
+   NoSelfChaining = false
+   TerrainAccess { 
+      terrain_any = road runway Lowland Hard_sand Soft_sand Mountains high_mountains Very_shallow_water Hillside turret_foundation ditch
+      terrain_all = 
+      terrain_not = shallow_water water deep_water river lava 
+      terrain_kill = shallow_water Water Deep_water river Lava  
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add =  
+   dry { 
+      UseGFXpics = false
+      picture = Mk5i_trooper_wreck.pcx 1
+      flippicture = -1
+   } dry
+} ObjectType

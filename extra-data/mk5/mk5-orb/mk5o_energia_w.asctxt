@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Energia Wreckage
+   ID = 1411
+   parent = 499
+   dry { 
+      picture = MK5o_energia_w.pcx 1
+   } dry
+} ObjectType

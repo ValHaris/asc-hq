@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = TL HT 401
+   ID = 1422
+   parent = 400 401 402 493
+   Description = Torpedolauncher
+   Infotext = [Stationaere Abschussvorrichtung fuer Torpedos. Da nur zwei Torpedos gelagert werden koennen, muss staendig fuer Nachschub gesorgt werden.]
+   Armor = 450
+   View = 50
+   Picture = MK5b_TLAUNCHER.pcx
+   Height = deep_submerged submerged floating 
+   Jamming = 0
+   WaitFortack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   FuelConsumption = 0
+   Abilities = sonar   
+   Movement = 10 10 19 0 0 0 0 0 
+   Category = building|turret|object
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 50
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Deep_water Very_shallow_water River 
+      terrain_all = 
+      terrain_not = Frozen_water 
+      terrain_kill = Lowland High_mountains Runway Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 120
+      Number = 1
+      Weapon0 ->* vehicleType.UTorp 
+      Weapon0.MaxRange = 50
+      Weapon0.Ammo = 6
+      Weapon0.ReacionfireShots = 3
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 110
+   } Weapons
+} VehicleType

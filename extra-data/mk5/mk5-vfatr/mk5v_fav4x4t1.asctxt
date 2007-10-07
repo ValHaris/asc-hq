@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = FAV 4x4 T1
+   ID = 1404
+   parent = 332
+   Description = Offroad Kampfbuggy
+   Infotext = [Ein vierädriges Offroadfahrzeug, welches mit 3 Boden-Boden Raketen
+              ausgestattes ist.]
+   Picture = MK5v_FAV4x4T1.pcx
+   WreckageObject = 1404
+   
+   Armor -= 50
+   View = 30
+
+   Movement -= 0 0 0 10 0 0 0 0 
+   TerrainAccess ->* VehicleType.offroad 
+   Weapons { 
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Airport2MK4
+   Name = B21
+   TechnologiesRequired = 1499
+} TechAdapter

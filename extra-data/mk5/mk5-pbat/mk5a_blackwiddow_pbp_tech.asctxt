@@ -1,0 +1,10 @@
+technology {
+   Name = Blackwiddow
+   infotext = 
+   id = 1451
+   RelatedUnitID = 1451
+   parent = 1499
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1499,100003,100102,100205,100206
+} Technology

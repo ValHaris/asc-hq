@@ -1,0 +1,10 @@
+technology {
+   Name = Flussgeist
+   infotext = 
+   id = 1427
+   RelatedUnitID = 1427
+   parent = 1499
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1499,100004,100103,100212,1459 
+} Technology

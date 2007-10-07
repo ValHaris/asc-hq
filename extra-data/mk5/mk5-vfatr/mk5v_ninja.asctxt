@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = Ninja
+   ID = 1434
+   parent = 400 401 402 411
+   Description = Strassenrennmaschine
+   Infotext = [Das Bike ist das schnellste Landfahrzeug. Durch seine Wendigkeit
+              ist es in der Lage sich nach einem Angriff sofort wieder zurückzuziehen.
+              Kleinere Anhöhen und schwieriges Gelände sind für das Motorrad
+              kein Problem. Auf einem Notsitz kann ein Spezialist platz finden.]
+   Picture = MK5v_Ninja.pcx
+   WreckageObject = 1402
+
+   Armor = 200
+   Jamming = 39
+   Transportation ->* VehicleType.TransLowTrooper 
+   Abilities += jam_only_own_field
+
+   Tank.fuel = 1000
+   FuelConsumption = 10
+   Movement = 0 0 0 150 0 0 0 0 
+   Category = light_wheeled_vehicle
+   Weight = 5
+   TerrainAccess ->* VehicleType.mud_wheeled 
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

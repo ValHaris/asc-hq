@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = FAV X3
+   ID = 1403
+   parent = 331
+   Description = KampfTrike
+
+   Infotext = [ Dieses wendige dreiraedrige Gelaendefahrzeug ist mit je zwei Boden-Boden und Boden-Luft Rakete ausgeruestet. Dadurch wird dieses Trike universell einsetzbar. Trotzdem sollte offensiver Einsatz moeglichst vermieden werden.]
+   Picture = MK5v_TRIKE.pcx
+   WreckageObject = 1403
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+
+      Weapon1 ->* VehicleType.smSAM 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 60
+
+      Weapon2 ->* VehicleType.smSSM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 65
+      Weapon2.Punch@MinRange = 65
+   } Weapons
+} VehicleType

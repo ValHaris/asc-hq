@@ -1,0 +1,52 @@
+VehicleType {
+   Name = FLUSSGEIST
+   parent = 400 401 402
+   ID = 1427
+
+   Description = Kampfluftkissenboot
+   Infotext = []
+   Picture = MK5s_flussgeist.pcx
+
+   Armor = 280
+   View = 51
+   Jamming = 21
+   Transportation ->* VehicleType.TransLowTrooper2 
+   Abilities = Jam_only_own_field 
+   Category = hoovercraft
+   MaxSurvivableStorm = 170
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 25
+
+   Height = ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1900
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 0 72 0 0 0 0 
+
+   WaitFortack = false
+
+   TerrainAccess ->* VehicleType.hoover_terrain
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   Weapons { 
+      Initiative = 20
+      Number = 2
+      Weapon0 ->* VehicleType.MG40low 
+      Weapon0.Ammo = 8
+
+      Weapon1 ->* VehicleType.SSM 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Flak
+   Name = 1445
+   TechnologiesRequired = 1445
+} TechAdapter

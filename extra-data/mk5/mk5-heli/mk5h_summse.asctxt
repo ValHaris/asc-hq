@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = SUMMSE
+   parent = 380
+   ID = 1448
+
+   Description = Kampfhubschrauber
+   picture = MK5h_Summse.pcx
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon2 ->* VehicleType.lowbomb 
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 100
+
+      Weapon3 ->* vehicleType.Napalm 
+      Weapon3.Ammo = 2
+      Weapon3.Punch@MaxRange = 100
+      Weapon3.Punch@MinRange = 100
+
+   } Weapons
+} VehicleType

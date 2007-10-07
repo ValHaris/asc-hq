@@ -1,0 +1,71 @@
+BuildingType { 
+   Name = subbase defence
+   ID = 1401
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = MK5_TORPBUNKER_dry.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   Armor = 800
+   View = 100
+   Jamming = 31
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 50
+      CategoriesNOT = trooper light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter 
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = submerged 
+        UnitHeightRel = -100
+        ContainerHeight = submerged
+        CategoriesNOT = 
+        DockingHeightAbs = submerged
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } Transportation
+   Functions = Vehicle_Production Sonar External_Loading ammo_production
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   DefaultResourceProduction { 
+      Energy = 500
+      Material = 500
+      fuel = 500
+   } DefaultResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 5000
+         Material = 5000
+         fuel = 5000
+      } BImode
+      ASCmode { 
+         Energy = 5000
+         Material = 5000
+         fuel = 5000
+      } ASCmode
+   } StorageCapacity
+   Height = submerged 
+   ExternalLoading = submerged 
+} BuildingType

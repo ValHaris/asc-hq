@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = MUCM
+   parent = 362 
+   ID = 1471
+   
+   Description = cruise missile submarine
+   Infotext = [Special cruise missile mini submarine]
+
+   picture = mk5s_mucm.pcx
+
+   transportation.MaxLoadableUnits = 2
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 110
+      Weapon0.MinRange = 50
+      Weapon0.Ammo = 1
+   } Weapons
+} VehicleType

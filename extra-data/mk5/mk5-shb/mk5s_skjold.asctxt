@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = SKJOLD X
+   parent = 590
+   ID = 1457
+   
+   Description = patrol boat
+   picture = MK5s_skjold.pcx
+   Infotext = [Beutetechnik von den Terranern, der Stauraumwurde optimiert und mehr Soldaten platz zu geben.]
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Transportation ->* VehicleType.TransTrooper 
+
+
+} VehicleType

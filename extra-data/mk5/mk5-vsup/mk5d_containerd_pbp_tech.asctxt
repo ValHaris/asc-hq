@@ -1,0 +1,10 @@
+technology {
+   Name = Container C
+   infotext = 
+   id = 1424
+   RelatedUnitID = 1424
+   parent = 1499
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 1499,100002,100102,1418,1423 
+} Technology

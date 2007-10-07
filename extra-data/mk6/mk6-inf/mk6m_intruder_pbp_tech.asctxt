@@ -1,5 +1,5 @@
 technology {
-   Name = intruder
+   Name = Intruder
    infotext = Forschungsprojekt abgeschlossen! Intruder verfügbar!
    id = 15201
    RelatedUnitID = 15201

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1473
+   ;Bezeichnung der verknüpften Technologie: Tontaube
+   TechnologiesRequired = 1473
+} TechAdapter

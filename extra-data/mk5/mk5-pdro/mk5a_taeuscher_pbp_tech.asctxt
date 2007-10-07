@@ -1,0 +1,10 @@
+technology {
+   Name = Taeuscher
+   infotext = 
+   id = 1452
+   RelatedUnitID = 1452
+   parent = 1499
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 1499,100003,100104 
+} Technology

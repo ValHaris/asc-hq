@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = Container B
+   ID = 1423
+   parent = 400 401 402 423
+
+   Description = Transport Container
+   Infotext = [Der Container des Typs B speichert alle Arten von Waffen.]
+   Picture = MK5d_ContainerB.pcx
+
+   Armor = 400
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1
+   } Tank
+   FuelConsumption = 0
+   Weight = 10
+   TerrainAccess ->* VehicleType.turret_lowland 
+   Weapons { 
+      Initiative = -50
+      Number = 8
+      Weapon0 ->* VehicleType.ServiceGround 
+
+      Weapon1 ->* VehicleType.AmmoCM 
+      Weapon2.Ammo = 4
+
+      Weapon2 ->* VehicleType.AmmoMG 
+      Weapon2.Ammo = 200
+
+      Weapon3 ->* VehicleType.AmmoCannon 
+      Weapon3.Ammo = 50
+
+      Weapon4 ->* VehicleType.AmmoMine 
+      Weapon4.Ammo = 50
+
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 50
+
+      Weapon6 ->* VehicleType.AmmoLM 
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* VehicleType.AmmoSM 
+      Weapon7.Ammo = 100
+   } Weapons
+} VehicleType

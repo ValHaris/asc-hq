@@ -1,0 +1,10 @@
+technology {
+   Name = Scanner
+   infotext = 
+   id = 1470
+   RelatedUnitID = 1470
+   parent = 1499
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1499,100003,100102,100210,1429 
+} Technology

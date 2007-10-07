@@ -1,0 +1,10 @@
+technology {
+   Name = Ninja
+   infotext = 
+   id = 1434
+   RelatedUnitID = 1434
+   parent = 1499
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 1499,100002,100104 
+} Technology

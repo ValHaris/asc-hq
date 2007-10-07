@@ -1,0 +1,5 @@
+Techadapter {
+   ; Hoover
+   Name = 1410
+   TechnologiesRequired = 1410
+} TechAdapter

@@ -1,0 +1,7 @@
+VehicleType { 
+   Name = NOTSTROMAGGREGAT
+   ID = 1466
+   parent = 593
+
+   picture = MK5b_notstrom.pcx
+} VehicleType

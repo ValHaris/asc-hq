@@ -1,0 +1,10 @@
+technology {
+   Name = JetStar
+   infotext = Forschungsprojekt abgeschlossen! JetStar verfuegbar!
+   id = 1407
+   RelatedUnitID = 1407
+   parent = 1499
+   researchpoints *= 12
+   techlevel = 4
+   TechnologiesRequired = 1499,100001,100104 
+} Technology

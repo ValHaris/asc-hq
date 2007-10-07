@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Trike Wreckage
+   ID = 1403
+   parent = 499
+   dry { 
+      picture = MK5v_trike_wreckage.pcx 1
+   } dry
+} ObjectType

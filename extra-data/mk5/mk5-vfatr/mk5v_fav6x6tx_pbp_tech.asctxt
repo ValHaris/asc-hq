@@ -1,0 +1,10 @@
+technology {
+   Name = FAV 6x6 TX
+   infotext = 
+   id = 1446
+   RelatedUnitID = 1446
+   parent = 1499
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 1499,100002,100105,100312,1404,1438,1439,1440,1441 
+} Technology

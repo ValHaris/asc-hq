@@ -1,0 +1,22 @@
+VehicleType { 
+   ID = 15292
+   parent = 292 15000
+
+   Name = DevoTE
+   Picture = mk6v_devoTE.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   
+   Armor -= 50
+   Tank.Material = 1000
+
+   Weapons { 
+      Number = 4 
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+      Weapon3 ->* VehicleType.TeccEMP
+      Weapon3.Punch@MinRange = 125
+      Weapon3.Punch@MaxRange = 125
+      Weapon3.LaserRechargeCost.Fuel = 625
+      Weapon3.LaserRechargeCost.Material = 125
+   } Weapons
+} VehicleType

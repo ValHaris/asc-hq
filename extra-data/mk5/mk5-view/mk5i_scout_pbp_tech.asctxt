@@ -1,0 +1,10 @@
+technology {
+   Name = Scout
+   infotext = 
+   id = 1429
+   RelatedUnitID = 1429
+   parent = 1499
+   researchpoints *= 5
+   techlevel = 2
+   TechnologiesRequired = 1499,100002,100102,100210 
+} Technology

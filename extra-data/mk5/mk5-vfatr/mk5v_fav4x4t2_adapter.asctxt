@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1438
+   ;Bezeichnung der verknüpften Technologie: FAV 4x4 T2
+   TechnologiesRequired = 1438
+} TechAdapter

@@ -1,0 +1,17 @@
+ObjectType { 
+   Name = Saenger Wreckage
+   ID = 1423
+   parent = 1416
+   Armor = 270
+   Movemalus_plus = 15
+   RemovalCost { 
+      Energy = 0
+      Material = -1900
+      fuel = 80
+      Movement = 20
+   } RemovalCost
+   TerrainProperties_Add = large_rocks 
+   dry { 
+      picture = sf_saenger_w.pcx 1
+   } dry
+} ObjectType

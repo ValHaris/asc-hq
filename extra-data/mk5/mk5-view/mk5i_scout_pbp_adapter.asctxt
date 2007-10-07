@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1429
+   ;Bezeichnung der verknüpften Technologie: Scout
+   TechnologiesRequired = 1429
+} TechAdapter

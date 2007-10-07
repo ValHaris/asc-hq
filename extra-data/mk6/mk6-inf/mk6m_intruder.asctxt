@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = Intruder
+   Name = INTRUDER
    ID = 15201
    parent = 201
 

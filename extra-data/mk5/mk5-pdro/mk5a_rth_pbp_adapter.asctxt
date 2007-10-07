@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1417
+   ;Bezeichnung der verknüpften Technologie: RTH 302
+   TechnologiesRequired = 1417
+} TechAdapter

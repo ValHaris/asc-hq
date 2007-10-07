@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = CrashCar
+   ID = 1436
+   parent = 335
+
+   Description = Pkw
+   Infotext = [Dieses Serien-Kfz ist mit einer hoch eplosiven Sprengladung aufgeruestet.]
+   Picture = MK5v_CrashCar.pcx
+
+   Armor -= 100
+   Weight -= 10
+   Category = default
+
+   Movement += 0 0 0 30 0 0 0 0
+   Tank.Fuel = 500
+    
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.C4 
+   } Weapons
+} VehicleType

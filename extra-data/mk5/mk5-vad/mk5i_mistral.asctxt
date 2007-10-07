@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = MISTRAL
+   ID = 1461
+   parent = 526
+   
+   Description = Air Defence Trooper
+   Picture = MK5i_MISTRAL.pcx
+
+   Abilities += Paratrooper
+
+   Weapons { 
+   } Weapons
+} VehicleType

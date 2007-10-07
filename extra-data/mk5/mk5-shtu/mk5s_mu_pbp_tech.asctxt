@@ -1,0 +1,10 @@
+technology {
+   Name = LR5
+   infotext = 
+   id = 1420
+   RelatedUnitID = 1420
+   parent = 1499
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 1499,100004,100101,100208 
+} Technology

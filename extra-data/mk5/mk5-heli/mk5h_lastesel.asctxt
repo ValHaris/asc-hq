@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = Lastesel
+   parent = 400 401 402 409 497
+   ID = 1450
+   Description = Containertransporter
+   Infotext = []
+   picture = MK5h_Lastesel.pcx
+   
+   Armor = 300
+   Transportation ->* VehicleType.TransTurretBig 
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } Tank
+   FuelConsumption = 20
+
+   Weight = 30
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

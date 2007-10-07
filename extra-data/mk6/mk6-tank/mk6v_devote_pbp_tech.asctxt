@@ -1,0 +1,10 @@
+technology {
+   Name = DevoTE
+   infotext = Forschungsprojekt abgeschlossen! DevoTE verfügbar!
+   id = 15292
+   RelatedUnitID = 15292
+   parent = 15000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 15000,100002,100101,100201,15290
+} Technology

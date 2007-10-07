@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1463
+   ;Bezeichnung der verknüpften Technologie: FGDV
+   TechnologiesRequired = 1463
+} TechAdapter

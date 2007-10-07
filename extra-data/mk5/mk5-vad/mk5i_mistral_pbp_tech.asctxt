@@ -1,0 +1,10 @@
+technology {
+   Name = Mistral
+   infotext = 
+   id = 1461
+   RelatedUnitID = 1461
+   parent = 1499
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 1499,100001,100101,100202 
+} Technology

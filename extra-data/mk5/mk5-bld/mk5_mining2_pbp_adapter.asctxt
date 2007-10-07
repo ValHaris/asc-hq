@@ -1,0 +1,5 @@
+Techadapter {
+   ; Mining2MK4
+   Name = B20
+   TechnologiesRequired = 1499
+} TechAdapter

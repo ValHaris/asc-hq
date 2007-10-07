@@ -1,0 +1,5 @@
+Techadapter {
+   ; ArmyRangers
+   Name = 1447
+   TechnologiesRequired = 1447
+} TechAdapter

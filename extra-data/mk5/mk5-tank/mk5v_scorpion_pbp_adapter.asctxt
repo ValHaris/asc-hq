@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1444
+   ;Bezeichnung der verknüpften Technologie: Scorpion
+   TechnologiesRequired = 1444
+} TechAdapter

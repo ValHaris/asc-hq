@@ -1,0 +1,10 @@
+technology {
+   Name = THT 30
+   infotext = 
+   id = 1421
+   RelatedUnitID = 1421
+   parent = 1499
+   researchpoints *= 18
+   techlevel = 4
+   TechnologiesRequired = 1499,100004,100104,100208 
+} Technology

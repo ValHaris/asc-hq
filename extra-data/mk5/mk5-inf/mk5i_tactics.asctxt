@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = TACTICS
+   ID = 1406
+   parent = 203 
+   Description = rocket trooper
+   Infotext = [Dieser Soldat trägt eine mobile Abschußvorrichtung für Raketen.
+              Durch eine modifizierte Zielvorrichtung kann diese sowohl Flugzeuge,
+              als auch Bodenfahrzeuge und Schiffe anvisieren.]
+   Armor += 10
+   Picture = MK5i_Tactics.pcx
+   Movement += 0 0 0 2 0 0 0 0 
+   Weapons { 
+      Weapon0 ->* VehicleType.type_small_missile 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 4
+      Weapon0.HitAccuracy.u1 = 90
+      Weapon0.HitAccuracy.u2 = 80
+      Weapon0.WeaponEffectiveness.Trooper = 0
+   } Weapons
+} VehicleType

@@ -1,0 +1,11 @@
+VehicleType { 
+   Name = CRUSADER
+   ID = 1443
+   parent = 14011
+   Description = Schwerer Kampfpanzer
+   Infotext = [Der Bauplaene des Crusader wurden in einem von den Cromonern vergessenen Bunker gefunden. Der Nebelgenerator wurder etwas verbessert.]
+   Picture = MK5v_crusader.pcx
+   
+   Jamming += 5
+
+} VehicleType

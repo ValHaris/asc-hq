@@ -1,0 +1,126 @@
+
+Trooper
+
+ID 1400 Legionaer
+ID 1401 Storm
+ID 1406 Taktics
+ID 1407 JetStar (Jettrooper)
+ID 1408 JamHT
+ID 1409 Mechanic
+ID 1415 Commander
+ID 1416 Marine
+ID 1447 Army Rangers
+ID 1453 Elite Mechanic
+ID 1454 Spaca
+ID 1461 Mistral
+
+Panzer
+ID 1443 Crusader
+ID 1444 Scorpion
+
+Schnellangriff
+ID 1402 Enduro
+ID 1403 FV X3 (Trike)
+ID 1404 FAV 4x4 T1
+ID 1437 Speedser
+ID 1438 FAV 4x4 T2
+ID 1439 FAV 4x4 T4
+ID 1440 FAV 4x4 T8
+ID 1441 FAV 4x4 T9
+ID 1446 FAV 6x6 Tx
+
+Rocket
+ID 1464 Lance
+ID 1465 Scud
+
+View
+ID 1429 Scout
+ID 1428 GCS
+ID 1430 PRD2
+ID 1473 Tontaube
+
+**Jamming**
+ID 1414 GJS DHT
+ID 1431 Kornuta2
+
+**Air Defence**
+ID 1419 ADG
+ID 1432 BigGuard
+ID 1433 Guard
+ID 1445 FLAK
+ID 1462 FADV
+
+Ground Defence
+ID 1405 IRONGUN
+ID 1442 GATELING
+ID 1463 FGDV
+ID 1422 TLHT (Torpedolauncher)
+
+Versorger
+
+ID 1412 FV 4x4 Trans (Support)
+ID 1418 Container A
+ID 1423 Container B
+ID 1424 Container C
+ID 1426 Container D
+ID 1466 Notstrom X
+ID 1467 Bulldozer X
+ID 1468 Elch X
+
+ID 1428 GCS DHT
+ID 1434 Ninja
+ID 1435 PickUp
+ID 1436 CrashCar
+
+Helicopter
+ID 1410 Hoover (Heli)
+ID 1448 Summse
+ID 1449 Stachel
+ID 1450 Lastesel
+
+Flugzeuge
+ID 1425 Doomsday
+ID 1451 Blackwiddow
+
+Dronen
+ID 1417 RTH 302 (Rakete)
+ID 1452 Taeuscher
+ID 1470 Scanner
+
+Orbital
+ID 1411 Energia
+ID 1413 OCS
+
+Schiffe
+ID 1455 Sealboat
+ID 1456 Visby
+ID 1457 Skjold X
+ID 1458 Fortress
+ID 1460 LCC
+
+UBoote
+ID 1420 MU (Mini TransportU-Boot)
+ID 1421 THT 30(langstreckentorpedo)
+ID 1471 MUCM
+
+Hoovercrafts
+ID 1427 Flussgeist
+ID 1459 Pomornik
+ID 1469 Magic X
+
+Sprengkörper
+ID 1472 Tankblocker
+
+-------------
+
+Object
+
+ID 1400 light turret
+ID 1401 Ponton
+
+Building
+
+ID    7 RadarTower          (Tech ID 1498)
+ID   26 JamTower            (Tech ID 1497)
+ID 1400 Raketenabschußrampe (Tech ID 1496)
+ID 1401 Subbase Defence     (Tech ID 1495)

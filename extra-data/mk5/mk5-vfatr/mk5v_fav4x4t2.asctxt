@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = FAV 4x4 T2
+   ID = 1438
+   parent = 332
+   Description = Offroad Kampfbuggy
+   Infotext = [Ein vierädriges Offroadfahrzeug, welches mit 3 Boden-Boden Raketen
+              ausgestattes ist.]
+   Picture = MK5v_FAV4x4T2.pcx
+   WreckageObject = 1404
+   
+   View = 30
+
+
+   Weapons { 
+      Weapon0 ->* vehicleType.MG40low 
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+   } Weapons
+} VehicleType

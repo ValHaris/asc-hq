@@ -1,0 +1,10 @@
+technology {
+   Name = FSV 4x4
+   infotext = 
+   id = 1412
+   RelatedUnitID = 1412
+   parent = 1499
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 1499,100002
+} Technology

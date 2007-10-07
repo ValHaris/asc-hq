@@ -1,0 +1,8 @@
+VehicleType { 
+   Name = BULLDOZER
+   ID = 1467
+   parent = 540
+   
+   picture = MK5v_bulldozer.pcx
+
+} VehicleType

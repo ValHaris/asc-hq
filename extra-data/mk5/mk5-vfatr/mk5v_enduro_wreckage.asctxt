@@ -1,0 +1,9 @@
+ObjectType { 
+   Name = Bike Wreckage
+   ID = 1402
+   parent = 499
+
+   dry { 
+      picture = MK5v_enduro_wreckage.pcx 1
+   } dry
+} ObjectType

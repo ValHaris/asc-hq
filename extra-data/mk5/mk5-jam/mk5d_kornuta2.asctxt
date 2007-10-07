@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = KORNUTA
+   ID = 1431
+   parent = 308
+
+   Description = radio frequence blocker
+   Infotext = []
+   picture = MK5d_kornuta2.pcx
+
+   Jamming += 10
+   Abilities += paratrooper
+
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; ResearchMK4
+   Name = B22
+   TechnologiesRequired = 1499
+} TechAdapter

@@ -1,0 +1,9 @@
+VehicleType { 
+   Name = VISBY
+   parent = 587
+   ID = 1456
+   
+   Description = stealth corvette
+   picture = MK5s_visby.pcx
+
+} VehicleType

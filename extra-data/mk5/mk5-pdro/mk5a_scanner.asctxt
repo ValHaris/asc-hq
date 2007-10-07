@@ -1,0 +1,55 @@
+VehicleType {
+   Name = SCANNER
+   parent = 400 402 
+   ID = 1470
+   
+   Description = mini scanner aircraft
+   Infotext = [ ]
+   Picture = MK5a_scanner.pcx
+
+   Armor = 100
+   View = 80
+   Category = default
+   Abilities = Kamikaze_only no_midair_refuel
+   Weight = 1
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 40
+   } Tank
+   FuelConsumption = 1
+   Movement = 0 0 0 0 80 80 0 0  
+   TerrainAccess ->* VehicleType.heli_terrain
+
+   waitforattack = true
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+   HeightChangeMethodNum = 3
+   HeightChangeMethod0 {
+      movecost = 25
+      heightdelta = 1
+      dist = 1
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 15
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 30
+      heightdelta = -1
+      dist = 1
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod2
+
+} VehicleType

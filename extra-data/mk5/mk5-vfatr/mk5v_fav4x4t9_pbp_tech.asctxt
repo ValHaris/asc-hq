@@ -1,0 +1,10 @@
+technology {
+   Name = FAV 4x4 T9
+   infotext = 
+   id = 1441
+   RelatedUnitID = 1441
+   parent = 1499
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 1499,100002,100104,100312,1404,1438,1439,1440 
+} Technology

@@ -1,0 +1,46 @@
+ObjectType { 
+   ID = 1401
+   groupid = 2
+
+   livetime = 15
+
+   Weather = dry  
+   visible_in_fogOfWar = false
+   LinkableObjects =  
+   Armor = 1200
+   Movemalus_plus = 
+   Movemalus_abs = 11 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 91
+   ConstructionCost { 
+      Energy = 0
+      Material = 120
+      fuel = 25
+      Movement = 10
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -60
+      fuel = 30
+      Movement = 20
+   } RemovalCost
+   Name = Bridge
+   NetBehaviour = NetToSelf Autoborder 
+   TerrainAccess { 
+      terrain_any = Shallow_water Swamp Very_shallow_water River  
+      terrain_all = 
+      terrain_not = Lowland Forest High_mountains runway Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation 
+      terrain_kill = Lava
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = Road bridge
+   dry { 
+      UseGFXpics = false
+      picture = MK5_PONTON.pcx  64
+   } dry
+} ObjectType

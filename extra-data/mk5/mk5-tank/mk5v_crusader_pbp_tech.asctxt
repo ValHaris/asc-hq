@@ -1,0 +1,10 @@
+technology {
+   Name = Crusader
+   infotext = Forschungsprojekt abgeschlossen! Crusader verfügbar!
+   id = 1443
+   RelatedUnitID = 1443
+   parent = 1499
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 1499,100002,100104,100201,1444 
+} Technology

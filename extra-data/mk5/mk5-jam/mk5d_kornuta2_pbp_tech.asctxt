@@ -1,0 +1,10 @@
+technology {
+   Name = Kornuta2
+   infotext = 
+   id = 1431
+   RelatedUnitID = 1431
+   parent = 1499
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 1499,100002,100103,100306 
+} Technology

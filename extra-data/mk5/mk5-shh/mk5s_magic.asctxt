@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = MAGIC X
+   parent = 14016 
+   ID = 1469
+   
+   Infotext = [Beutetechnik von den Cromonern]
+   picture = mk5s_magic.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+} VehicleType

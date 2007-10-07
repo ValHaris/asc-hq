@@ -1,0 +1,8 @@
+VehicleType { 
+   Name = POMORNIK
+   parent = 589
+   ID = 1459
+   
+   picture = MK5s_pomornik.pcx
+
+} VehicleType

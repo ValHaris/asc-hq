@@ -1,0 +1,5 @@
+Techadapter {
+   ; Oilplatform2MK4
+   Name = B14
+   TechnologiesRequired = 1499
+} TechAdapter

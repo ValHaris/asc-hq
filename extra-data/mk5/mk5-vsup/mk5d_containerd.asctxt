@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = Container D
+   ID = 1426
+   parent = 400 401 402 423
+
+   Description = Transport Container
+   Infotext = [Der Container des Typs C ist für den Transport von schwerem Gerät vorgesehen. Die Transportkapazität ist allerding begrenzt.]
+   Picture = MK5d_ContainerD.pcx
+
+   Armor = 400
+   Weight = 20
+   Abilities += repair_vehicle
+   Transportation ->* VehicleType.TransVehicleHeavy
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   FuelConsumption = 0
+   TerrainAccess ->* VehicleType.turret_lowland 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Spaca
+   infotext = 
+   id = 1454
+   RelatedUnitID = 1454
+   parent = 1499
+   researchpoints *= 17
+   techlevel = 5
+   TechnologiesRequired = 1499,100001,100105,100302 
+} Technology

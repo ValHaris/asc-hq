@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = SPACA
+   ID = 1454
+   parent = 236
+   Description = Spaceman
+   Infotext = [Trooper that can walk into Space and conquere Spacestations. Only armed with a high explosive bomb against satellites and Spacestations.]
+   Picture = MK5i_Spaca.pcx
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

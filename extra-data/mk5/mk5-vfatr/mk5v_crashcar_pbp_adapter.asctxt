@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1436
+   ;Bezeichnung der verknüpften Technologie: CrashCar
+   TechnologiesRequired = 1436
+} TechAdapter

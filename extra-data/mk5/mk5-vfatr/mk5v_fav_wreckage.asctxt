@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = FAV Wreckage
+   ID = 1404
+   parent = 499
+   dry { 
+      picture = MK5v_FAV_wreckage.pcx 1
+   } dry
+} ObjectType

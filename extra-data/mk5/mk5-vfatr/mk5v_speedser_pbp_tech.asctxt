@@ -1,0 +1,10 @@
+technology {
+   Name = Speedser
+   infotext = Forschungsprojekt abgeschlossen! Speedser verfügbar!
+   id = 1437
+   RelatedUnitID = 1437
+   parent = 1499
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 1499,100002,100103,100312,1402,1403 
+} Technology

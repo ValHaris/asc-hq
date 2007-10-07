@@ -1,0 +1,10 @@
+technology {
+   Name = Energia
+   infotext = 
+   id = 1411
+   RelatedUnitID = 1411
+   parent = 1499
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1499,100003,100102,100302 
+} Technology

@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = PickUp
+   ID = 1435
+   parent = 335
+
+   Description = schnelles Fahrzeug MG
+   Infotext = [Der Pickup ist ein aufgerüstetes Serien-Kfz. Durch sein fest montiertes grosskallibriges MG stellt es eine ernstzunehmende Gefahr fuer alle Fusstruppen dar.]
+   Picture = MK5v_PickUp.pcx
+
+   Armor -= 50
+   Weight -= 5
+
+   Transportation ->* VehicleType.TransLowTrooper 
+
+   Movement += 0 0 0 20 0 0 0 0 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.Minigun 
+   } Weapons
+} VehicleType

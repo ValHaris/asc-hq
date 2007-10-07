@@ -1,0 +1,10 @@
+technology {
+   Name = Elite Mechanic
+   infotext = Forschungsprojekt abgeschlossen! Elite Mechanic verfügbar!
+   id = 1453
+   RelatedUnitID = 1453
+   parent = 1499
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 1499,100001,100103,1409 
+} Technology

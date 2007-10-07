@@ -1,0 +1,10 @@
+technology {
+   Name = RTH 302
+   infotext = 
+   id = 1417
+   RelatedUnitID = 1417
+   parent = 1499
+   researchpoints *= 4
+   techlevel = 4
+   TechnologiesRequired = 1499,100003,100104,100310 
+} Technology

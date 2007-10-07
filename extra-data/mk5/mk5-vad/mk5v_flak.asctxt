@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = FLAK
+   ID = 1445
+   parent = 218
+   Description = 4lings-Flak
+   Infotext = [Ein typisches Fahrzeug aus der Not geboren. Da es den Outsidern nicht moeglich war, in großer Stueckzahl Kettenfahrgestelle herzustellen, wurden auf LKW große Flakgeschuetze montiert.]
+   Picture = MK5v_FLAK.pcx
+   
+   Armor -= 100
+   Category = medium_wheeled_vehicle
+   TerrainAccess ->* VehicleType.wheeled 
+   Weapons {
+      Weapon0.ReactionFireShots = 3
+   } Weapons
+} VehicleType

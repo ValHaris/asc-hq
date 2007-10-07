@@ -1,0 +1,23 @@
+VehicleType {
+   Name = Tauscher
+   parent = 400 401 402 413 498
+   ID = 1452
+   Description = Taeuschkoerper
+   Infotext = [ ]
+   Armor = 100
+   View = 10
+   Category = default
+   Picture = MK5a_taeuscher.pcx
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank { 
+      fuel = 40
+   } Tank
+   FuelConsumption = 2
+   Abilities = Kamikaze_only no_midair_refuel
+   Movement = 0 0 0 0 100 100 100 0  
+   Weight = 10
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

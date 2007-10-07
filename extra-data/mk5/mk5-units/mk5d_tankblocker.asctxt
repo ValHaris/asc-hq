@@ -1,0 +1,56 @@
+VehicleType { 
+   Name = Panzersperre
+   ID = 1472
+   parent = 400 402 423
+
+   Description = 
+   Infotext = []
+   Picture = mk5d_tankblocker.png
+;   WreckageObject = 1414
+
+   Armor = 250
+   Weight = 1
+   View = 20
+   Jamming = 11
+   Abilities = Kamikaze_only
+
+   TerrainAccess ->* VehicleType.Turret_lowland 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 { 
+         Type = laser shootable 
+         targets = ground_level floating 
+         shotFrom = ground_level
+         Punch@MaxRange = 150
+         Punch@MinRange = 150
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0 
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+	 WeaponEffectiveness {
+ 	 } WeaponEffectiveness
+      } Weapon0
+   } Weapons
+} VehicleType

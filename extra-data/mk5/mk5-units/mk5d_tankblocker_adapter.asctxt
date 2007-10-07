@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1472
+   ;Bezeichnung der verknüpften Technologie: Tankblocker
+   TechnologiesRequired = 1499 100101
+} TechAdapter

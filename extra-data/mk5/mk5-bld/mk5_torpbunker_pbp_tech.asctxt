@@ -1,0 +1,10 @@
+technology {
+   Name = Torp Bunker
+   infotext = Forschungsprojekt abgeschlossen! Torp Bunker verfuegbar!
+   id = 1495
+   RelatedUnitID = 
+   parent = 1499
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 1499,100004,100104,100208
+} Technology

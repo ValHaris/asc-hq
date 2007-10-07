@@ -1,0 +1,5 @@
+Techadapter {
+   ; PortSWMK4
+   Name = B19
+   TechnologiesRequired = 1499
+} TechAdapter
