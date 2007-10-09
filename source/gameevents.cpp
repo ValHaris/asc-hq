@@ -1121,14 +1121,8 @@ void WeatherChange :: writeData ( tnstream& stream )
 void WeatherChange :: fieldOperator( const MapCoordinate& mc )
 {
    tfield* field = gamemap->getField ( mc );
-   if ( field ) {
-     if ( field->typ->terraintype->weather[ weather ] )
-        field->typ = field->typ->terraintype->weather[ weather ];
-     else
-        field->typ = field->typ->terraintype->weather[ 0 ];
-
-     field->setparams();
-   }
+   if ( field ) 
+      field->setWeather( weather );
 }
 
 void WeatherChange :: setup ()
