@@ -116,7 +116,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addInteger( "MapZoomEditor", mapzoomeditor, mapzoomeditor );
    pc.addInteger( "AttackSpeed1", attackspeed1, 30 );
    pc.addInteger( "AttackSpeed2", attackspeed2, 50 );
-   pc.addInteger( "AttackSpeed3", attackspeed2, 30 );
+   pc.addInteger( "AttackSpeed3", attackspeed3, 30 );
 
    pc.addBool( "ForceWindowedMode", forceWindowedMode, forceWindowedMode );
    pc.addBool( "MapeditWindowedMode", mapeditWindowedMode, mapeditWindowedMode );

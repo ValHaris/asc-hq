@@ -1122,7 +1122,7 @@ void WeatherChange :: fieldOperator( const MapCoordinate& mc )
 {
    tfield* field = gamemap->getField ( mc );
    if ( field ) 
-      field->setWeather( weather );
+      field->setweather( weather );
 }
 
 void WeatherChange :: setup ()
