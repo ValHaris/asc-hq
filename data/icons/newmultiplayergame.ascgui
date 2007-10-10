@@ -294,7 +294,7 @@ panel {
     
     MapPassword {
       type = LineEdit
-      text = foo
+      text = 
       x = 40
       y = 60
       height = 30
