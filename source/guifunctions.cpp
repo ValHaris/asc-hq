@@ -1926,7 +1926,7 @@ class BuildObject : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "object ~c~onstruction";
+         return "~c~onstruct / remove objects";
       };
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {

@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:02 $
+    Update Date:      $Date: 2007-10-10 19:28:36 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgcheckbutton.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.2.2.1 $
     Status:           $State: Exp $
 */
 
@@ -40,14 +40,16 @@ PG_CheckButton::PG_CheckButton(PG_Widget* parent, const PG_Rect& r, const std::s
 PG_CheckButton::~PG_CheckButton() {}
 
 bool PG_CheckButton::eventMouseButtonUp(const SDL_MouseButtonEvent* my_widgetButton) {
+   if ( my_widgetButton->button == SDL_BUTTON_LEFT ) {
+	   if(my_isPressed) {
+		   SetUnpressed();
+	   } else {
+		   SetPressed();
+	   }
 
-	if(my_isPressed) {
-		SetUnpressed();
-	} else {
-		SetPressed();
-	}
-
-	return true;
+	   return true;
+   } else
+      return false;
 }
 
 void PG_CheckButton::SetUnpressed() {
