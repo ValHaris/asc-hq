@@ -312,6 +312,11 @@ void  readOldEventLists ( pnstream stream, bool passedEvents, GameMap* spfld )
 {
    #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 
+   if ( sizeof(int*) != 4 ) {
+      displaymessage ("Unable to load map in old file format on a non-32 bit machine\nPlease convert this file to the new file format on a 32 bit little endian machine and try again",1);
+      throw tfileerror();
+   }
+   
    map<int,int> eventTranslation;
    map<EventTriggered*,int> eventTriggerEvents;
 
