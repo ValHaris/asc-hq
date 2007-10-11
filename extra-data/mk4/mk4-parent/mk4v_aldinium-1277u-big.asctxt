@@ -5,7 +5,7 @@ VehicleType {
    Infotext = []
    Armor = 150
    View = 0
-   picture = MK4v_ALDINIUM.pcx
+   picture = MK4v_ALDINIUM.png
    ConstructionCost { 
       Energy = 0
       Material = 0
