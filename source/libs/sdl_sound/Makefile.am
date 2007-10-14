@@ -1,4 +1,4 @@
-
+EXTRA_DIST = $(srcdir)/*.h $(srcdir)/README.TXT
 
 INCLUDE = -I$(top_src_dir)
 

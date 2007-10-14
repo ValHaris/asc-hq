@@ -209,6 +209,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+EXTRA_DIST = $(srcdir)/*.h $(srcdir)/README.TXT
 INCLUDE = -I$(top_src_dir)
 noinst_LTLIBRARIES = libSDL_sound_int.la
 AM_CFLAGS = -DSOUND_SUPPORTS_OGG  $(SDL_CFLAGS) $(VORBIS_CFLAGS)

@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc, )
+AC_INIT(asc,1.99.93.110)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -615,6 +615,7 @@ AC_CONFIG_FILES( [ Makefile \
        
 AC_OUTPUT
 
+chmod +x getmusic
 
 
 AC_ARG_ENABLE( debug, AS_HELP_STRING([--enable-debug],[enables some debugging options and output]), ENABLEDEBUG=1 )
