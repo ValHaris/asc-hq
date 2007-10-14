@@ -44,7 +44,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libSDL_sound_int_la_DEPENDENCIES =
-am_libSDL_sound_int_la_OBJECTS = ogg.lo SDL_sound.lo audio_convert.lo
+am_libSDL_sound_int_la_OBJECTS = ogg.lo wav.lo SDL_sound.lo \
+	audio_convert.lo
 libSDL_sound_int_la_OBJECTS = $(am_libSDL_sound_int_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -212,8 +213,8 @@ top_srcdir = @top_srcdir@
 EXTRA_DIST = $(srcdir)/*.h $(srcdir)/README.TXT
 INCLUDE = -I$(top_src_dir)
 noinst_LTLIBRARIES = libSDL_sound_int.la
-AM_CFLAGS = -DSOUND_SUPPORTS_OGG  $(SDL_CFLAGS) $(VORBIS_CFLAGS)
-libSDL_sound_int_la_SOURCES = ogg.c SDL_sound.c audio_convert.c
+AM_CFLAGS = -DSOUND_SUPPORTS_OGG -DSOUND_SUPPORTS_WAV $(SDL_CFLAGS) $(VORBIS_CFLAGS)
+libSDL_sound_int_la_SOURCES = ogg.c wav.c SDL_sound.c audio_convert.c
 libSDL_sound_int_la_LIBADD = @VORBIS_LIBS@ @VORBISFILE_LIBS@ @VORBISENC_LIBS@
 all: all-am
 
@@ -269,6 +270,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SDL_sound.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/audio_convert.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ogg.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wav.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
