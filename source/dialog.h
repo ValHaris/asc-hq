@@ -40,7 +40,7 @@ extern void displaymessage2( const char* formatstring, ... );
    
 //! displays a message in the message line
 extern void  dispmessage2(int          id,
-                          char *       st = NULL );
+                          const char *       st = NULL );
    
   
   
@@ -67,7 +67,7 @@ extern char mix4colors ( int a, int b, int c, int d );
                    int                  textstart;
                    int                  rightspace;
 
-                   void                 init( char* title, const char* text , int xx1 = 50, int yy1 = 50 , int xxsize = 360, int yysize = 360 );
+                   void                 init( const char* title, const char* text , int xx1 = 50, int yy1 = 50 , int xxsize = 360, int yysize = 360 );
                    virtual void         run ( void );
                    virtual void         buttonpressed( int id);
                    void                 redraw ( void );

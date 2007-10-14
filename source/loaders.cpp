@@ -1182,7 +1182,7 @@ int          tnetworkloaders::savenwgame( pnstream strm, const GameMap* gamemap 
 
 GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 { 
-   char* name = "network game";
+   const char* name = "network game";
 
    stream = strm;
 
@@ -1362,7 +1362,7 @@ GameMap*  loadreplay( pmemorystreambuf streambuf )
    GameMap* replaymap = NULL;
 
    try {
-      char* name = "memorystream actmap->replayinfo";
+      const char* name = "memorystream actmap->replayinfo";
       tmemorystream memstream ( streambuf, tnstream::reading );
 
       int version = memstream.readInt();

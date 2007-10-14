@@ -1709,7 +1709,7 @@ void         tdialogbox::editfield(pbutton      pb)
 
 
 
-void         tdialogbox::rahmen3(char *       txt,
+void         tdialogbox::rahmen3(const char *       txt,
                      int      x1,
                      int      y1,
                      int      x2,
@@ -1746,7 +1746,7 @@ class tdisplaymessage : public tdialogbox {
                         char status;
                         int  mode;
                     public:
-                        void init ( tstringa a, int md, int linenum, char* buttonText = NULL );
+                        void init ( tstringa a, int md, int linenum, const char* buttonText = NULL );
                         virtual void buttonpressed ( int id );
                         virtual void run ( void );
                    };
@@ -1754,7 +1754,7 @@ class tdisplaymessage : public tdialogbox {
 extern tdisplaymessage* messagebox;
 
 
-void tdisplaymessage::init ( tstringa a, int md, int linenum, char* buttonText )
+void tdisplaymessage::init ( tstringa a, int md, int linenum, const char* buttonText )
 {
    if ( !buttonText )
       buttonText = "~O~K";
@@ -3149,7 +3149,7 @@ ASCString  readtextmessage( int id )
                    char                 action;
                    int                  textstart;
 
-                   void                 init( int id, char* titlet );
+                   void                 init( int id, const char* titlet );
                    virtual void         setup();
                    void                 buildgraphics ( void );
                    virtual void         run ( void );
@@ -3169,7 +3169,7 @@ void         thelpsystem::setup( void )
    addkey ( 5, ct_enter );
 }
 
-void         thelpsystem::init(int id, char* titlet )
+void         thelpsystem::init(int id, const char* titlet )
 { 
 
    // dialogbox initialisieren
@@ -3306,10 +3306,10 @@ void  viewtext2 ( int id)
 
 
 class  tviewtextquery : public thelpsystem {
-                      char* st1;
-                      char* st2;
+                      const char* st1;
+                      const char* st2;
                  public:
-                      void  init( int id, char* titel, char* s1, char* s2);
+                      void  init( int id, const char* titel, const char* s1, const char* s2);
                       virtual void buttonpressed( int id);
                       void         setup( void );
                    };
@@ -3328,7 +3328,7 @@ void         tviewtextquery::setup( void )
 }
 
 
-void         tviewtextquery::init( int id, char* titel, char* s1, char* s2 )
+void         tviewtextquery::init( int id, const char* titel, const char* s1, const char* s2 )
 { 
    st1 = s1;
    st2 = s2;
@@ -3350,9 +3350,9 @@ void         tviewtextquery::buttonpressed( int id)
 
 
 int         legacy_viewtextquery( int          id,
-                           char *       title,
-                           char *       s1,
-                           char *       s2)
+                           const char *       title,
+                           const char *       s1,
+                           const char *       s2)
 { 
   tviewtextquery vtq; 
   char result;
@@ -3391,9 +3391,9 @@ class ViewTextQuery : public ASC_PG_Dialog {
 
 
 int         viewtextquery( int          id,
-                           char *       title,
-                           char *       s1,
-                           char *       s2)
+                           const char *       title,
+                           const char *       s1,
+                           const char *       s2)
 { 
    if ( legacyEventSystemActive() ) 
       return legacy_viewtextquery( id, title, s1, s2 );

@@ -1812,6 +1812,10 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
    if ( searchPosition == DefaultDir )
       searchPosition = AllDirs;
 
+   
+   if ( searchDirNum == 0 )
+      searchPosition = CurrentDir;
+   
    found = 0;
    act = 0;
    if ( name.empty() )
@@ -1883,7 +1887,6 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
 
       wildcard.assign ( name, ppos+1, name.npos );
 
-
    } else {
       if ( searchDirNum ) {
          for (int i = 0; i < searchDirNum; i++ )
@@ -1907,7 +1910,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
              direntp = readdir( dirp );
              if ( direntp == NULL )
                 break;
-
+ 
              if ( patimat ( wildcard.c_str(), direntp->d_name )) {
                 int localfound = 0;
                 for ( int j = 0; j < found; j++ )

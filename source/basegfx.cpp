@@ -1133,7 +1133,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
 }
 #endif
 
-fatalgraphicserror :: fatalgraphicserror ( char* strng ) {
+fatalgraphicserror :: fatalgraphicserror ( const char* strng ) {
    strcpy ( st, strng );
 }
 

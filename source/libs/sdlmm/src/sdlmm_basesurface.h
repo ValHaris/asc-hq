@@ -1,6 +1,6 @@
 /*
  * SDmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -21,7 +21,6 @@
 
 #ifndef SDLMM_BASESURFACE_H
 #define SDLMM_BASESURFACE_H
-#include "sdlmm_config.h"
 #include "sdlmm_spoint.h"
 #include "sdlmm_srect.h"
 #include "sdlmm_color.h"
@@ -86,12 +85,12 @@ namespace SDLmm {
     }
     
     SDL_Surface *GetSurface() {
-      ASSERT(me);
+      // ASSERT(me);
       return me;
     }
 
     const SDL_Surface *GetSurface() const {
-      ASSERT(me);
+      // ASSERT(me);
       return me;
     }
 

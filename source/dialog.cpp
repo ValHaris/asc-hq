@@ -463,7 +463,7 @@ void         statisticbuildings(void)
 
 
 void         dispmessage2(int          id,
-                          char *       st)
+                          const char *       st)
 {
    char          *s2;
 
@@ -1730,7 +1730,7 @@ void         tviewanytext::run(void)
 
 
 
-void         tviewanytext:: init( char* _title, const char* text , int xx1 , int yy1  , int xxsize , int yysize  )
+void         tviewanytext:: init( const char* _title, const char* text , int xx1 , int yy1  , int xxsize , int yysize  )
 { 
 
    // dialogbox initialisieren
@@ -2400,7 +2400,7 @@ pparagraph tparagraph :: erasechar ( int c )
          if ( prev ) {
             pparagraph temp = prev;
             prev->join();
-            return temp;              //  !!!###!!!   gef„llt mir eigentlich ?berhauptnicht, wird aber wohl laufen. Sonst m?áte ich halt erasechar von auáen managen
+            return temp;              //  !!!###!!!   gefï¿½llt mir eigentlich ?berhauptnicht, wird aber wohl laufen. Sonst m?ï¿½te ich halt erasechar von auï¿½en managen
          }
 
    }

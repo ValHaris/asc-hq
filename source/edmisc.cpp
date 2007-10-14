@@ -1326,7 +1326,7 @@ class   StringSelector : public tstringselect {
                  const char** text;
            public :
                  int lastchoice;
-                 StringSelector ( char* title_, const char** text_, int itemNum_ ) : text ( text_ )  { lastchoice = 0; numberoflines = itemNum_; title = title_; };
+                 StringSelector ( const char* title_, const char** text_, int itemNum_ ) : text ( text_ )  { lastchoice = 0; numberoflines = itemNum_; title = title_; };
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
@@ -1377,7 +1377,7 @@ void         StringSelector ::run(void)
 }
 
 
-int selectString( int lc, char* title, const char** text, int itemNum )
+int selectString( int lc, const char* title, const char** text, int itemNum )
 {
    StringSelector  ss ( title, text, itemNum );
    ss.lastchoice = lc;

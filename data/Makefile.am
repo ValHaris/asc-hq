@@ -14,7 +14,10 @@ main.ascdat: main.d
 	cd $(srcdir) && @abs_top_builddir@/source/tools/linux/asc_mount \@files.txt @abs_builddir@/main.ascdat && touch main.d
 
 clean-local:
-	rm -f main.ascdat main.d main.mak
+	rm -f main.ascdat main.d 
+
+distclean-local:
+	rm -f main.mak
 
 
 dist-hook:
