@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = DORA
+   ID = 627
+   parent = 256
+
+;   Description = railroad gun
+   Picture = mk3t_dora.pcx
+   WreckageObject = 458
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Abilities += no_reactionfire
+   Weight += 100
+   Movement -= 0 0 0 20 0 0 0 0 
+
+   Weapons {
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MinRange += 10
+      Weapon0.Punch@MaxRange += 10 
+      Weapon0.MinRange += 10
+      Weapon0.MaxRange += 10 
+   } Weapons
+} VehicleType

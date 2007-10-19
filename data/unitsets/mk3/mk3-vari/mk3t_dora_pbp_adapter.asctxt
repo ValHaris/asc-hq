@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 627
+   ;Bezeichnung der verknüpften Technologie: Dora
+   TechnologiesRequired = 627
+} TechAdapter

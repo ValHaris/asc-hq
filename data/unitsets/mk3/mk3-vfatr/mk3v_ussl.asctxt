@@ -19,5 +19,7 @@ VehicleType {
    Weight = 140
 
    Movement += 0 0 0 10 0 0 0 0 
-   TerrainAccess ->* VehicleType.hvy_wheeled 
+   TerrainAccess ->* VehicleType.offroad 
+   TerrainAccess.terrain_any = road runway hard_sand lowland soft_sand very_shallow_water
+   TerrainAccess.terrain_not = swamp forest large_rocks
 } VehicleType

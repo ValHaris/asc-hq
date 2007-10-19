@@ -4,7 +4,7 @@ itemfilter {
    Objects = 
    Terrain = 
    Technologies = 500-899 100010
-   name = MKIII Unit Set
+   name = MK3 Terraner
    activated = true
 } itemfilter
    

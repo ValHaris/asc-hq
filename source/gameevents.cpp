@@ -1867,14 +1867,19 @@ void Reinforcements :: execute( MapDisplayInterface* md )
 
 template<class T>
 ASCString TriggerNameProvider() {
-   T t;
-   return t.getTypeName();
+   // dynamic allocation is to prevent a compiler bug in gcc 4.2.1
+   T* t = new T();
+   ASCString name = t->getTypeName();
+   delete t;
+   return name;
 };
 
 template<class T>
 ASCString ActionNameProvider() {
-   T t;
-   return t.getName();
+   T* t = new T();
+   ASCString name;
+   delete t;
+   return name;
 };
 
 

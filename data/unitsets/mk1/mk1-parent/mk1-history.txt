@@ -1,36 +1,34 @@
 ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
+__________________
+04.10.2007 (GAMER)
+-Dive_mech_parent Height + deep_submerged, Torpedo schießt nur noch gleiche Höhe + 1 nach oben
+-def_mech_parent Flack Reichweite 3 Felder
 _________________
-29.09.07
+29.09.07 (GAMER)
 -mini rescue sub eingebaut.
 -kleinere Bugfixes
-
 _________________
 20.09.07
 -Änderungen in Jammingwerten der mobilen jammer
 -Bugfix default Def-Mech, Deftank
-
 _________________
 v20.08 17.06.2007
 -Upgrade Bodenverteidigung
 -Tank Bugfixes Flugzeuge
-
 _________________
 v20.07 19.05.2007
 -Boote nur noch 80 Gewicht
-
 _____________________
 v20.06 16.05.2007
 -vesuvius Solar2 baubar
 -Speedship default -> light ship
 -AU-Gun default , Waffenbugfix
-
 _____________________
 v20.05 09.5.2007
 -Vesuvius mittleres Turrettransportsystem
 -MBV 2. Stellplatz
-
 _____________________
 v20.04 beta
 -Guidesorthelp komplett integriert

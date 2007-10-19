@@ -1718,6 +1718,10 @@
       canthit = Trooper
    } ServiceGround
 
+   ServiceSpSub ->* VehicleType.ServiceGround
+   ServiceSpSub.targets = deep_submerged submerged floating ground_level 
+   ServiceSpSub.shotFrom = deep_submerged submerged floating ground_level 
+
    ServiceGroundTr ->* VehicleType.ServiceGround
    ServiceGroundTr.cantHit =
 

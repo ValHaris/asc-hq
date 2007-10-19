@@ -3,13 +3,17 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 _________________
+06.10.2007 (GAMER)
+-Tow , Grafikzuweisung korrigiert
+-Schienengeschütz umbenannt in K5
+NEU: Dora (schweres Schienengeschütz)
+Neu: Bradley 
+_________________
 v19.04 16.7.2007
 -Upgrade Bodenverteidigung
-
 _________________
 v19.04 15.06.2007
 -Tank Upgrade:Lynx,Hormone,Hawkeye,Falcon,Raytheon
-
 _________________
 v19.03 16.05.2007
 -Building Pio Tank auf 30000MF
@@ -18,13 +22,11 @@ v19.03 16.05.2007
 -Skjold Bewgungsbugfix
 Neu:
 -TOW
-
 _________________
 v19.02 beta
 -GuideSortHelp integriert
 -Flugzeuge + hubschrauber +1 Feld
 -Tanks Flugzeuge erhöht
-
 _________________
 v19.01 beta
 -Burke 2x RF gefixt
