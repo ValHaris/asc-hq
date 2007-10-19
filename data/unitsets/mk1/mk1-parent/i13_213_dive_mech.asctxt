@@ -11,7 +11,7 @@ VehicleType {
    Armor = 380
    Height = deep_submerged submerged ground_level 
    Abilities += sonar
-   Movement = 0 44 0 40 0 0 0 0 
+   Movement = 44 44 0 40 0 0 0 0 
    MaxSurvivableStorm = 170
    TerrainAccess { 
       terrain_any = deep_water Shallow_water Lowland Road Railroad Runway Water Hard_sand Soft_sand Very_shallow_water Ditch Hillside Turret_foundation River Frozen_water 
