@@ -1958,7 +1958,8 @@ void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, in
             NewGuiHost::pushIconHandler( &objectBuildingGui );
             repaintMap();
             updateFieldInfo();
-         }
+         } else
+            MessagingHub::Instance().statusInformation("can't build or remove any objects here");
    }
 }
 
