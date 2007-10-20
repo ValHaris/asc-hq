@@ -22026,7 +22026,7 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
    if test "x$no_vorbis" = "x" ; then
       AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/sdl_sound "
 
-      SDL_SOUND_LIB="\$(abs_top_srcdir)/source/libs/sdl_sound/libSDL_sound_int.la"
+      SDL_SOUND_LIB="\$(abs_top_builddir)/source/libs/sdl_sound/libSDL_sound_int.la"
 
       SdlSoundDir=sdl_sound
 
