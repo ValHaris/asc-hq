@@ -1,6 +1,6 @@
 EXTRA_DIST = $(srcdir)/*.h $(srcdir)/README.TXT
 
-INCLUDE = -I$(top_src_dir)
+INCLUDE = -I$(top_src_dir) -I$(top_builddir)
 
 noinst_LTLIBRARIES	= libSDL_sound_int.la
 
