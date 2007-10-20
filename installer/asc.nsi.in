@@ -8,7 +8,7 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "ASC for Project Battle Planets"
+Name "Advanced Strategic Command @asc_version@"
 
 ; The file to write
 OutFile "ASC-@asc_version@-Install.exe"
@@ -36,6 +36,8 @@ UninstPage instfiles
 
 LicenseData licdata.txt
 
+Icon "../source/win32/msvc/ASC/icon2.ico"
+UninstallIcon "../source/win32/msvc/ASC/icon2.ico"
 
 ; The stuff to install
 Section "ASC main program (required)"
@@ -80,7 +82,7 @@ Section "ASC main program (required)"
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command @asc_version@"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
@@ -117,6 +119,30 @@ Section "ASC main program (required)"
   
 SectionEnd
 
+Section "Music Download"
+   SetOutPath "$INSTDIR\music"
+   IfFileExists "$INSTDIR\music\frontiers.mp3" +6 0
+   IfFileExists "$INSTDIR\music\frontiers.ogg" +5 0
+   NSISdl::download http://www.asc-hq.org/music/frontiers.ogg frontiers.ogg
+   Pop $R0 ;Get the return value
+       StrCmp $R0 "success" +2
+          MessageBox MB_OK "Download failed: $R0"
+
+   IfFileExists "$INSTDIR\music\machine_wars.mp3" +6 0
+   IfFileExists "$INSTDIR\music\machine_wars.ogg" +5 0
+   NSISdl::download http://www.asc-hq.org/music/machine_wars.ogg machine_wars.ogg
+   Pop $R0 ;Get the return value
+       StrCmp $R0 "success" +2
+          MessageBox MB_OK "Download failed: $R0"
+
+   IfFileExists "$INSTDIR\music\time_to_strike.mp3" +6 0
+   IfFileExists "$INSTDIR\music\time_to_strike.ogg" +5 0
+   NSISdl::download http://www.asc-hq.org/music/time_to_strike.ogg time_to_strike.ogg
+   Pop $R0 ;Get the return value
+       StrCmp $R0 "success" +2
+          MessageBox MB_OK "Download failed: $R0"
+SectionEnd
+
 Section "Tools"
    SetOutPath "$INSTDIR\tools"
    File "data/building-template.png"
@@ -134,22 +160,30 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Example2"
-  DeleteRegKey HKLM SOFTWARE\NSIS_Example2
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Advanced Strategic Command"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\*.exe
   Delete $INSTDIR\*.dll
-  Delete $INSTDIR\*.con
+  Delete $INSTDIR\*.ascdat
   Delete $INSTDIR\*.cache
   Delete $INSTDIR\*.gfx
+  Delete $INSTDIR\tools\*.exe
+  Delete $INSTDIR\tools\building-template.png 
+  Delete $INSTDIR\tools\hexfield.png 
+  Delete $INSTDIR\music\*.ogg
+  Delete $INSTDIR\asc2_dlg.zip
+
+
 
   ; Remove shortcuts, if any
   Delete "$SMPROGRAMS\Advanced Strategic Command\*.*"
 
   ; Remove directories used
   RMDir "$SMPROGRAMS\Advanced Strategic Command"
-  ; RMDir "$INSTDIR"
+  RMDir "$INSTDIR\music"
+  RMDir "$INSTDIR\tools"
+  RMDir "$INSTDIR"
 
 
 !define Index "Line${__LINE__}"
