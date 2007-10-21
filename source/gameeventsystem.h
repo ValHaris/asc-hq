@@ -77,7 +77,8 @@ class EventTrigger {
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) = 0;
       
-      virtual ASCString getName() const = 0;
+      virtual ASCString getDetailledName() const = 0;
+      virtual ASCString getTypeName() const = 0;
       virtual void setup() = 0;
       virtual void arm() {};
       void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };
@@ -181,12 +182,12 @@ class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
          return names[name];
       }
 
-      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
+      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
       {
          return registerClass( id, createFn, nameProvider(id) );
       }
 
-      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn, NameType name )
+      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, NameType name )
       {
          if ( Factory<AbstractProduct, IdentifierType>::registerClass ( id, createFn )) {
             names[name] = id;

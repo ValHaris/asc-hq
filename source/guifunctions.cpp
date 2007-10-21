@@ -1006,6 +1006,8 @@ class EnableReactionfire : public GuiFunction
          int res = actmap->getField(pos)->vehicle->reactionfire.enable();
          if ( res < 0 )
             dispmessage2 ( -res, NULL );
+         else
+            logtoreplayinfo ( rpl_reactionFireOn, actmap->getField(pos)->vehicle->networkid );
          updateFieldInfo();
       }
 
@@ -1044,6 +1046,7 @@ class DisableReactionfire : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          actmap->getField(pos)->vehicle->reactionfire.disable();
+         logtoreplayinfo ( rpl_reactionFireOff, actmap->getField(pos)->vehicle->networkid );
          updateFieldInfo();
       }
 
@@ -1923,7 +1926,7 @@ class BuildObject : public GuiFunction
       };
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         return "object ~c~onstruction";
+         return "~c~onstruct / remove objects";
       };
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
@@ -1955,7 +1958,8 @@ void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, in
             NewGuiHost::pushIconHandler( &objectBuildingGui );
             repaintMap();
             updateFieldInfo();
-         }
+         } else
+            MessagingHub::Instance().statusInformation("can't build or remove any objects here");
    }
 }
 

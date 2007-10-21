@@ -345,8 +345,7 @@ void checkForUniqueUnitIDs( GameMap* gamemap )
       for ( Player::VehicleList::iterator i = gamemap->getPlayer(p).vehicleList.begin(); i != gamemap->getPlayer(p).vehicleList.end(); ++i )
          if ( units[(*i)->networkid]++ > 0 ) {
             warning("unit with duplicate network ids: " + ASCString::toString( (*i)->networkid ) + "\nThis will lead to replay errors during the next turn." );
-            gamemap->unitnetworkid++;
-            (*i)->networkid = actmap->unitnetworkid;
+            (*i)->networkid = gamemap->getNewNetworkID();;
          }
 }
 
@@ -1183,7 +1182,7 @@ int          tnetworkloaders::savenwgame( pnstream strm, const GameMap* gamemap 
 
 GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 { 
-   char* name = "network game";
+   const char* name = "network game";
 
    stream = strm;
 
@@ -1363,7 +1362,7 @@ GameMap*  loadreplay( tmemorystreambuf* streambuf )
    GameMap* replaymap = NULL;
 
    try {
-      char* name = "memorystream actmap->replayinfo";
+      const char* name = "memorystream actmap->replayinfo";
       tmemorystream memstream ( streambuf, tnstream::reading );
 
       int version = memstream.readInt();

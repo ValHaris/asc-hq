@@ -1328,7 +1328,7 @@ class   StringSelector : public tstringselect {
                  const char** text;
            public :
                  int lastchoice;
-                 StringSelector ( char* title_, const char** text_, int itemNum_ ) : text ( text_ )  { lastchoice = 0; numberoflines = itemNum_; title = title_; };
+                 StringSelector ( const char* title_, const char** text_, int itemNum_ ) : text ( text_ )  { lastchoice = 0; numberoflines = itemNum_; title = title_; };
                  virtual void setup(void);
                  virtual void buttonpressed(int id);
                  virtual void run(void);
@@ -1379,7 +1379,7 @@ void         StringSelector ::run(void)
 }
 
 
-int selectString( int lc, char* title, const char** text, int itemNum )
+int selectString( int lc, const char* title, const char** text, int itemNum )
 {
    StringSelector  ss ( title, text, itemNum );
    ss.lastchoice = lc;
@@ -3105,7 +3105,10 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
                 if ( tt ) {
-                   fld->typ = tt->weather[fld->getweather()];
+                   TerrainType::Weather* tw = tt->weather[fld->getweather()];
+                   if ( !tw )
+                      tw = tt->weather[0];
+                   fld->typ = tw;
                    fld->setparams();
                 }
              }
@@ -3114,7 +3117,10 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terrainobjtranslation[i*3] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terrainobjtranslation[i*3+1] );
                 if ( tt ) {
-                   fld->typ = tt->weather[fld->getweather()];
+                   TerrainType::Weather* tw = tt->weather[fld->getweather()];
+                   if ( !tw )
+                      tw = tt->weather[0];
+                   fld->typ = tw;
                    fld->addobject ( objectTypeRepository.getObject_byID ( terrainobjtranslation[i*3+2] ), -1, true );
                    fld->setparams();
                 }
@@ -3822,7 +3828,7 @@ void locateItemByID()
 
    void copyVehicleData( Vehicle* source, Vehicle* target, GameMap* targetMap, int* playerTranslation )
    {
-		 
+       
       target->height = source->height;
       target->tank = source->getTank();
       target->name = source->name;
@@ -3847,7 +3853,7 @@ void locateItemByID()
          copyVehicleData( sourceCargo[ i ], cargo, targetMap, playerTranslation );
          target->addToCargo( cargo );
       }
-			
+         
    }
    
    
@@ -3887,11 +3893,11 @@ void locateItemByID()
       while( targetField->objects.size() > 0 )
          targetField->removeobject( targetField->objects[ 0 ].typ, true );
       
-			if( mirrorTerrain )
-			{
-				targetField->typ = sourceField->typ; 
-				targetField->bdt = sourceField->bdt;
-			}
+         if( mirrorTerrain )
+         {
+            targetField->typ = sourceField->typ; 
+            targetField->bdt = sourceField->bdt;
+         }
       
       if( mirrorResources )
       {
@@ -4198,502 +4204,504 @@ void locateItemByID()
 
 class CopyMap : public FieldAddressing, public ASC_PG_Dialog
 {
-	private:
-		GameMap *map;
-		bool* fieldCopied;
+   private:
+      GameMap *map;
+      bool* fieldCopied;
 
-		int mapStartX, mapStartY, mapEndX, mapEndY, sizeX, sizeY;
-		int copyStep;
-		
-		int *directionTranslation; 
-		int *playerTranslation; 
+      int mapStartX, mapStartY, mapEndX, mapEndY, sizeX, sizeY;
+      int copyStep;
+      
+      int *directionTranslation; 
+      int *playerTranslation; 
 
-		PG_CheckButton* mirrorTerrain;
-		PG_CheckButton* mirrorResources;
-		PG_CheckButton* mirrorWeather;
-		PG_CheckButton* mirrorObjects;
-		PG_CheckButton* mirrorBuildings;
-		PG_CheckButton* mirrorUnits;
-		PG_CheckButton* mirrorMines;
+      PG_CheckButton* mirrorTerrain;
+      PG_CheckButton* mirrorResources;
+      PG_CheckButton* mirrorWeather;
+      PG_CheckButton* mirrorObjects;
+      PG_CheckButton* mirrorBuildings;
+      PG_CheckButton* mirrorUnits;
+      PG_CheckButton* mirrorMines;
 
-		PG_CheckButton* mirrorX;
-		PG_CheckButton* mirrorY;
-		
-		PG_CheckButton* autoIncreaseMapSize;
-		
-		PG_LineEdit* playerTranslation0;
-		PG_LineEdit* playerTranslation1;
-		PG_LineEdit* playerTranslation2;
-		PG_LineEdit* playerTranslation3;
-		PG_LineEdit* playerTranslation4;
-		PG_LineEdit* playerTranslation5;
-		PG_LineEdit* playerTranslation6;
-		PG_LineEdit* playerTranslation7;
-		PG_LineEdit* playerTranslation8;
-		
-		
-	public:
-		CopyMap();
-		~CopyMap();
-		bool paste();
-		void copy();
-		void selectArea();
-		
-	protected:
-		virtual void fieldOperator( const MapCoordinate& point );
+      PG_CheckButton* mirrorX;
+      PG_CheckButton* mirrorY;
+      
+      PG_CheckButton* autoIncreaseMapSize;
+      
+      PG_LineEdit* playerTranslation0;
+      PG_LineEdit* playerTranslation1;
+      PG_LineEdit* playerTranslation2;
+      PG_LineEdit* playerTranslation3;
+      PG_LineEdit* playerTranslation4;
+      PG_LineEdit* playerTranslation5;
+      PG_LineEdit* playerTranslation6;
+      PG_LineEdit* playerTranslation7;
+      PG_LineEdit* playerTranslation8;
+      
+      
+   public:
+      CopyMap();
+      ~CopyMap();
+      bool paste();
+      void copy();
+      void selectArea();
+      
+   protected:
+      virtual void fieldOperator( const MapCoordinate& point );
 };
 
 CopyMap::CopyMap() : FieldAddressing( actmap ), ASC_PG_Dialog( NULL, PG_Rect( 30, 30, 550, 400 ), "Paste Options" )
 {
-	addressingMode = poly;
-	mapStartX = -1;
-	mapStartY = -1;
-	mapEndX = -1;
-	mapEndY = -1;
-	map = NULL;
-	fieldCopied = NULL;
+   addressingMode = poly;
+   mapStartX = -1;
+   mapStartY = -1;
+   mapEndX = -1;
+   mapEndY = -1;
+   map = NULL;
+   fieldCopied = NULL;
 
-	directionTranslation = new int[ 6 ];
-	for( int i=0;i<6; i++ ) directionTranslation[ i ] = i;
-	playerTranslation = new int[ 9 ];
-	for( int i=0;i<9; i++ ) playerTranslation[ i ] = i;
-	
-	int dialogLine = 0;
-	int lineHeight = 20;
-	int lineSpacing = 10;
-	
-	int startX = 20;
-	int startY = 20;
-	int startX2 = 200;
-	int startX3 = 250;
-	int startX4 = 400;
-	int xSpacer = 20;
-	
-	PG_Label* label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Terrain" );
-	mirrorTerrain = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorTerrain->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Resources" );
-	mirrorResources = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorResources->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Weather" );
-	mirrorWeather = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorWeather->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Objects" );
-	mirrorObjects = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorObjects->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Buildings" );
-	mirrorBuildings = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorBuildings->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Units" );
-	mirrorUnits = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorUnits->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Mines" );
-	mirrorMines = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	mirrorMines->SetPressed();
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "X" );
-	mirrorX = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "Y" );
-	mirrorY = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) ,startX3 - xSpacer - startX2, lineHeight ) );
-	dialogLine++;
-	
-	label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "autoIncreaseMapSize" );
-	autoIncreaseMapSize = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
-	autoIncreaseMapSize->SetPressed();
-	dialogLine++;
-	
-	
-	PG_Button* ok = new PG_Button( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ), "Paste" );
-	ok->sigClick.connect( SigC::slot( *this, &CopyMap::paste ));
-	
-	dialogLine = 0;
-	
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation0" );
-	playerTranslation0 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation0->SetText( "0" );
-	dialogLine++;
+   directionTranslation = new int[ 6 ];
+   for( int i=0;i<6; i++ ) directionTranslation[ i ] = i;
+   playerTranslation = new int[ 9 ];
+   for( int i=0;i<9; i++ ) playerTranslation[ i ] = i;
+   
+   int dialogLine = 0;
+   int lineHeight = 20;
+   int lineSpacing = 10;
+   
+   int startX = 20;
+   int startY = 20;
+   int startX2 = 200;
+   int startX3 = 250;
+   int startX4 = 400;
+   int xSpacer = 20;
+   
+   PG_Label* label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Terrain" );
+   mirrorTerrain = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorTerrain->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Resources" );
+   mirrorResources = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorResources->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Weather" );
+   mirrorWeather = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorWeather->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Objects" );
+   mirrorObjects = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorObjects->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Buildings" );
+   mirrorBuildings = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorBuildings->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Units" );
+   mirrorUnits = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorUnits->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Mines" );
+   mirrorMines = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   mirrorMines->SetPressed();
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "X" );
+   mirrorX = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "Y" );
+   mirrorY = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) ,startX3 - xSpacer - startX2, lineHeight ) );
+   dialogLine++;
+   
+   label = new PG_Label ( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "autoIncreaseMapSize" );
+   autoIncreaseMapSize = new PG_CheckButton( this, PG_Rect( startX2, startY + dialogLine*(lineHeight+lineSpacing) , startX3 - xSpacer - startX2, lineHeight ) );
+   autoIncreaseMapSize->SetPressed();
+   dialogLine++;
+   
+   
+   PG_Button* ok = new PG_Button( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ), "Paste" );
+   ok->sigClick.connect( SigC::slot( *this, &CopyMap::paste ));
+   
+   dialogLine = 0;
+   
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation0" );
+   playerTranslation0 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation0->SetText( "0" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation1" );
-	playerTranslation1 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation1->SetText( "1" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation1" );
+   playerTranslation1 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation1->SetText( "1" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation2" );
-	playerTranslation2 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation2->SetText( "2" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation2" );
+   playerTranslation2 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation2->SetText( "2" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation3" );
-	playerTranslation3 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation3->SetText( "3" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation3" );
+   playerTranslation3 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation3->SetText( "3" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation4" );
-	playerTranslation4 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation4->SetText( "4" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation4" );
+   playerTranslation4 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation4->SetText( "4" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation5" );
-	playerTranslation5 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation5->SetText( "5" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation5" );
+   playerTranslation5 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation5->SetText( "5" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation6" );
-	playerTranslation6 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation6->SetText( "6" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation6" );
+   playerTranslation6 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation6->SetText( "6" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation7" );
-	playerTranslation7 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation7->SetText( "7" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation7" );
+   playerTranslation7 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation7->SetText( "7" );
+   dialogLine++;
 
-	label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
-	label->SetAlignment( PG_Label::LEFT );
-	label->SetText( "playerTranslation8" );
-	playerTranslation8 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
-	playerTranslation8->SetText( "8" );
-	dialogLine++;
+   label = new PG_Label ( this, PG_Rect( startX3, startY + dialogLine*(lineHeight+lineSpacing) , startX4 - xSpacer - startX, lineHeight ) );
+   label->SetAlignment( PG_Label::LEFT );
+   label->SetText( "playerTranslation8" );
+   playerTranslation8 = new PG_LineEdit( this, PG_Rect( startX4, startY + dialogLine*(lineHeight+lineSpacing) , this->Width() - xSpacer - startX4, lineHeight ) );
+   playerTranslation8->SetText( "8" );
+   dialogLine++;
 
 }
 
 CopyMap::~CopyMap()
 {
-	if( map != NULL )
-	{
-		delete map;
-		delete fieldCopied;
-	}
-	delete directionTranslation;
-	delete playerTranslation;
+   if( map != NULL )
+   {
+      delete map;
+      delete fieldCopied;
+   }
+   delete directionTranslation;
+   delete playerTranslation;
 }
 
 void CopyMap::selectArea()
 {
-	polygons.clear();
-	
-	Poly_gon area;
-	editpolygon( area );
-	setPolygon( area );
+   polygons.clear();
+   
+   Poly_gon area;
+   editpolygon( area );
+   setPolygon( area );
 }
 
 void CopyMap::copy()
 {
-	if( map != NULL )
-	{
-		delete map;
-		delete fieldCopied;
-	}
-	
-	mapStartX = -1;
-	mapStartY = -1;
-	mapEndX = -1;
-	mapEndY = -1;
-	copyStep = 0;
-	operate();
-	
-	sizeX = mapEndX-mapStartX + 1;
-	sizeY = mapEndY-mapStartY + 1;
-	
-	map = new GameMap;
-	map->allocateFields( sizeX, sizeY, terrainTypeRepository.getObject_byID(30)->weather[0] );
+   if( map != NULL )
+   {
+      delete map;
+      delete fieldCopied;
+   }
+   
+   mapStartX = -1;
+   mapStartY = -1;
+   mapEndX = -1;
+   mapEndY = -1;
+   copyStep = 0;
+   operate();
+   
+   sizeX = mapEndX-mapStartX + 1;
+   sizeY = mapEndY-mapStartY + 1;
+   
+   map = new GameMap;
+   map->allocateFields( sizeX, sizeY, terrainTypeRepository.getObject_byID(30)->weather[0] );
 
-	int* oldDirectoyTranslation = directionTranslation;
-	int* oldPlayerTranslation = playerTranslation;
-	
-	directionTranslation = new int[ 6 ];
-	for( int i=0;i<6; i++ ) directionTranslation[ i ] = i;
-	playerTranslation = new int[ 9 ];
-	for( int i=0;i<9; i++ ) playerTranslation[ i ] = i;
-	
-	fieldCopied = new bool[ sizeY * sizeX ];
-	for( int i=0; i<sizeY * sizeX; i++ )
-		fieldCopied[ i ] = false;
-	
-	copyStep = 1;
-	operate();
-	copyStep = 2;
-	operate();
+   int* oldDirectoyTranslation = directionTranslation;
+   int* oldPlayerTranslation = playerTranslation;
+   
+   directionTranslation = new int[ 6 ];
+   for( int i=0;i<6; i++ ) directionTranslation[ i ] = i;
+   playerTranslation = new int[ 9 ];
+   for( int i=0;i<9; i++ ) playerTranslation[ i ] = i;
+   
+   fieldCopied = new bool[ sizeY * sizeX ];
+   for( int i=0; i<sizeY * sizeX; i++ )
+      fieldCopied[ i ] = false;
+   
+   copyStep = 1;
+   operate();
+   copyStep = 2;
+   operate();
 
-	delete directionTranslation;
-	delete playerTranslation;
-	directionTranslation = oldDirectoyTranslation;
-	playerTranslation = oldPlayerTranslation;
+   delete directionTranslation;
+   delete playerTranslation;
+   directionTranslation = oldDirectoyTranslation;
+   playerTranslation = oldPlayerTranslation;
 }
 
 bool CopyMap::paste()
 {
-	QuitModal();
-	Hide();
-	if( map == NULL ) return false;
-	
-	tfield *field = getactfield();
-	if( field == NULL ) return false;
-	
-	int pasteStartX = field->getx();
-	int pasteStartY = field->gety();
-	
-	if( autoIncreaseMapSize->GetPressed() )
-	{
-		int targetSizeX = pasteStartX + map->xsize;
-		int targetSizeY = pasteStartY + map->ysize;
+   QuitModal();
+   Hide();
+   if( map == NULL ) return false;
+   
+   tfield *field = getactfield();
+   if( field == NULL ) return false;
+   
+   int pasteStartX = field->getx();
+   int pasteStartY = field->gety();
+   
+   if( autoIncreaseMapSize->GetPressed() )
+   {
+      int targetSizeX = pasteStartX + map->xsize;
+      int targetSizeY = pasteStartY + map->ysize;
 
-		if( targetSizeY%2 == 1 )
-			targetSizeY++;
-		
-		if( targetSizeX > actmap->xsize )
-		{
-			actmap->resize( 0, 0, 0, targetSizeX - actmap->xsize );
-		}
-		
-		if( targetSizeY > actmap->ysize )
-		{
-			actmap->resize( 0, targetSizeY - actmap->ysize, 0, 0 );
-		}
-	}
-	
-	playerTranslation[ 0 ] = atoi( playerTranslation0->GetText() );
-	playerTranslation[ 1 ] = atoi( playerTranslation1->GetText() );
-	playerTranslation[ 2 ] = atoi( playerTranslation2->GetText() );
-	playerTranslation[ 3 ] = atoi( playerTranslation3->GetText() );
-	playerTranslation[ 4 ] = atoi( playerTranslation4->GetText() );
-	playerTranslation[ 5 ] = atoi( playerTranslation5->GetText() );
-	playerTranslation[ 6 ] = atoi( playerTranslation6->GetText() );
-	playerTranslation[ 7 ] = atoi( playerTranslation7->GetText() );
-	playerTranslation[ 8 ] = atoi( playerTranslation8->GetText() );
-	
-	int* oldDirectoyTranslation = directionTranslation;
-	
-	directionTranslation = new int[ 6 ];
-	for( int i=0;i<6; i++ ) directionTranslation[ i ] = i;
-	
-	if( mirrorY->GetPressed() )
-	{
-		int directionTranslationNew[ 6 ] = 
-		{ 
-			directionTranslation[ 3 ], 
-			directionTranslation[ 2 ],
-			directionTranslation[ 1 ], 
-			directionTranslation[ 0 ], 
-			directionTranslation[ 5 ], 
-			directionTranslation[ 4 ] 
-		};
-		
-		for( int i=0;i<6; i++ ) directionTranslation[ i ] = directionTranslationNew[ i ];
-	}
-	
-	if( mirrorX->GetPressed() )
-	{
-		int directionTranslationNew[ 6 ] = 
-		{ 
-			directionTranslation[ 0 ], 
-			directionTranslation[ 5 ],
-			directionTranslation[ 4 ], 
-			directionTranslation[ 3 ], 
-			directionTranslation[ 2 ], 
-			directionTranslation[ 1 ] 
-		};
-		
-		for( int i=0;i<6; i++ ) directionTranslation[ i ] = directionTranslationNew[ i ];
-	}
-	
-	
-	
-	
-	for( int x=0; x<map->xsize; x++ )
-	{
-		for( int y=0; y<map->ysize; y++ )
-		{
-			if( fieldCopied[ x + y * sizeX ] )
-			{
-				int fieldX = pasteStartX + x;
-				int fieldY = pasteStartY + y;
-				
-				if( pasteStartY%2 == 1 && fieldY%2 == 0 )
-						fieldX++;
-				
-				if( mirrorX->GetPressed() )
-				{
-					fieldX = pasteStartX + sizeX - x - 1;
-					
-					if( pasteStartY%2 == 0 && fieldY%2 == 1 )
-						fieldX--;
-				}
-				
-				if( mirrorY->GetPressed() )
-				{
-					fieldY = pasteStartY + sizeY - y - 1;
-				}
-				
-				if( fieldX >= actmap->xsize ) continue;
-				if( fieldY >= actmap->ysize ) continue;
-				
-				tfield* target = actmap->getField( fieldX, fieldY );
-				tfield* source = map->getField( x, y );
-				
-				copyFieldStep1( source, target, mirrorTerrain->GetPressed(), mirrorResources->GetPressed(), mirrorWeather->GetPressed() );
-			}
-		}
-	}
-	
-	for( int x=0; x<map->xsize; x++ )
-	{
-		for( int y=0; y<map->ysize; y++ )
-		{
-			if( fieldCopied[ x + y * sizeX ] )
-			{
-				int fieldX = pasteStartX + x;
-				int fieldY = pasteStartY + y;
-				
-				if( pasteStartY%2 == 1 && fieldY%2 == 0 )
-					fieldX++;
-				
-				if( mirrorX->GetPressed() )
-				{
-					fieldX = pasteStartX + sizeX - x - 1;
-					
-					if( pasteStartY%2 == 0 && fieldY%2 == 1 )
-						fieldX--;
-				}
-				
-				if( mirrorY->GetPressed() )
-				{
-					fieldY = pasteStartY + sizeY - y - 1;
-				}
-				
-				if( fieldX >= actmap->xsize ) continue;
-				if( fieldY >= actmap->ysize ) continue;
-				
-				tfield* target = actmap->getField( fieldX, fieldY );
-				tfield* source = map->getField( x, y );
-				
-				copyFieldStep2( source, target, actmap, directionTranslation, playerTranslation, mirrorObjects->GetPressed(), mirrorBuildings->GetPressed(), mirrorUnits->GetPressed(), mirrorMines->GetPressed() );
-			}
-		}
-	}
-	
-	delete directionTranslation;
-	directionTranslation = oldDirectoyTranslation;
-	
-	return true;
+      if( targetSizeY%2 == 1 )
+         targetSizeY++;
+      
+      if( targetSizeX > actmap->xsize )
+      {
+         actmap->resize( 0, 0, 0, targetSizeX - actmap->xsize );
+      }
+      
+      if( targetSizeY > actmap->ysize )
+      {
+         actmap->resize( 0, targetSizeY - actmap->ysize, 0, 0 );
+      }
+   }
+   
+   playerTranslation[ 0 ] = atoi( playerTranslation0->GetText() );
+   playerTranslation[ 1 ] = atoi( playerTranslation1->GetText() );
+   playerTranslation[ 2 ] = atoi( playerTranslation2->GetText() );
+   playerTranslation[ 3 ] = atoi( playerTranslation3->GetText() );
+   playerTranslation[ 4 ] = atoi( playerTranslation4->GetText() );
+   playerTranslation[ 5 ] = atoi( playerTranslation5->GetText() );
+   playerTranslation[ 6 ] = atoi( playerTranslation6->GetText() );
+   playerTranslation[ 7 ] = atoi( playerTranslation7->GetText() );
+   playerTranslation[ 8 ] = atoi( playerTranslation8->GetText() );
+   
+   int* oldDirectoyTranslation = directionTranslation;
+   
+   directionTranslation = new int[ 6 ];
+   for( int i=0;i<6; i++ ) directionTranslation[ i ] = i;
+   
+   if( mirrorY->GetPressed() )
+   {
+      int directionTranslationNew[ 6 ] = 
+      { 
+         directionTranslation[ 3 ], 
+         directionTranslation[ 2 ],
+         directionTranslation[ 1 ], 
+         directionTranslation[ 0 ], 
+         directionTranslation[ 5 ], 
+         directionTranslation[ 4 ] 
+      };
+      
+      for( int i=0;i<6; i++ ) directionTranslation[ i ] = directionTranslationNew[ i ];
+   }
+   
+   if( mirrorX->GetPressed() )
+   {
+      int directionTranslationNew[ 6 ] = 
+      { 
+         directionTranslation[ 0 ], 
+         directionTranslation[ 5 ],
+         directionTranslation[ 4 ], 
+         directionTranslation[ 3 ], 
+         directionTranslation[ 2 ], 
+         directionTranslation[ 1 ] 
+      };
+      
+      for( int i=0;i<6; i++ ) directionTranslation[ i ] = directionTranslationNew[ i ];
+   }
+   
+   
+   
+   
+   for( int x=0; x<map->xsize; x++ )
+   {
+      for( int y=0; y<map->ysize; y++ )
+      {
+         if( fieldCopied[ x + y * sizeX ] )
+         {
+            int fieldX = pasteStartX + x;
+            int fieldY = pasteStartY + y;
+            
+            if( pasteStartY%2 == 1 && fieldY%2 == 0 )
+                  fieldX++;
+            
+            if( mirrorX->GetPressed() )
+            {
+               fieldX = pasteStartX + sizeX - x - 1;
+               
+               if( pasteStartY%2 == 0 && fieldY%2 == 1 )
+                  fieldX--;
+            }
+            
+            if( mirrorY->GetPressed() )
+            {
+               fieldY = pasteStartY + sizeY - y - 1;
+            }
+            
+            if( fieldX >= actmap->xsize ) continue;
+            if( fieldY >= actmap->ysize ) continue;
+            
+            tfield* target = actmap->getField( fieldX, fieldY );
+            tfield* source = map->getField( x, y );
+            
+            copyFieldStep1( source, target, mirrorTerrain->GetPressed(), mirrorResources->GetPressed(), mirrorWeather->GetPressed() );
+         }
+      }
+   }
+   
+   for( int x=0; x<map->xsize; x++ )
+   {
+      for( int y=0; y<map->ysize; y++ )
+      {
+         if( fieldCopied[ x + y * sizeX ] )
+         {
+            int fieldX = pasteStartX + x;
+            int fieldY = pasteStartY + y;
+            
+            if( pasteStartY%2 == 1 && fieldY%2 == 0 )
+               fieldX++;
+            
+            if( mirrorX->GetPressed() )
+            {
+               fieldX = pasteStartX + sizeX - x - 1;
+               
+               if( pasteStartY%2 == 0 && fieldY%2 == 1 )
+                  fieldX--;
+            }
+            
+            if( mirrorY->GetPressed() )
+            {
+               fieldY = pasteStartY + sizeY - y - 1;
+            }
+            
+            if( fieldX >= actmap->xsize ) continue;
+            if( fieldY >= actmap->ysize ) continue;
+            
+            tfield* target = actmap->getField( fieldX, fieldY );
+            tfield* source = map->getField( x, y );
+            
+            copyFieldStep2( source, target, actmap, directionTranslation, playerTranslation, mirrorObjects->GetPressed(), mirrorBuildings->GetPressed(), mirrorUnits->GetPressed(), mirrorMines->GetPressed() );
+         }
+      }
+   }
+   
+   delete directionTranslation;
+   directionTranslation = oldDirectoyTranslation;
+   
+   return true;
 
 }
 
 void CopyMap::fieldOperator( const MapCoordinate& point )
 {
-	int mapX = point.x - mapStartX;
-	int mapY = point.y - mapStartY;
-	
-	if( copyStep == 0 )
-	{
-		if( mapStartX == -1 || point.x < mapStartX )
-			mapStartX = point.x;
-			
-		if( mapStartY == -1 || point.y < mapStartY )
-			mapStartY = point.y;
+   int mapX = point.x - mapStartX;
+   int mapY = point.y - mapStartY;
+   
+   if( copyStep == 0 )
+   {
+      if( mapStartX == -1 || point.x < mapStartX )
+         mapStartX = point.x;
+         
+      if( mapStartY == -1 || point.y < mapStartY )
+         mapStartY = point.y;
 
-		if( mapEndX == -1 || point.x > mapEndX )
-			mapEndX = point.x;
-			
-		if( mapEndY == -1 || point.y > mapEndY )
-			mapEndY = point.y;
-	}else if( copyStep == 1 )
-	{
-		fieldCopied[ mapX + mapY * sizeX ] = true;
+      if( mapEndX == -1 || point.x > mapEndX )
+         mapEndX = point.x;
+         
+      if( mapEndY == -1 || point.y > mapEndY )
+         mapEndY = point.y;
+   }else if( copyStep == 1 )
+   {
+      fieldCopied[ mapX + mapY * sizeX ] = true;
 
-		tfield* source = actmap->getField( point );
-		tfield* target = map->getField( mapX, mapY );
-		
-		
-		
-		copyFieldStep1( source, target, true, true, true );
+      tfield* source = actmap->getField( point );
+      tfield* target = map->getField( mapX, mapY );
+      
+      
+      
+      copyFieldStep1( source, target, true, true, true );
 
-	}else if( copyStep == 2 )
-	{
-		tfield* source = actmap->getField( point );
-		tfield* target = map->getField( mapX, mapY );
-		
-		copyFieldStep2( source, target, map, directionTranslation, playerTranslation, true, true, true, true );
+   }else if( copyStep == 2 )
+   {
+      tfield* source = actmap->getField( point );
+      tfield* target = map->getField( mapX, mapY );
+      
+      copyFieldStep2( source, target, map, directionTranslation, playerTranslation, true, true, true, true );
 
-	}
+   }
 }
 
 CopyMap *copyMap = NULL;
 
 void copyArea()
 {
-	if( copyMap == NULL )
-	{
-		copyMap = new CopyMap();
-	}
-	copyMap -> selectArea();
-	copyMap -> copy();
+   if( copyMap == NULL )
+   {
+      copyMap = new CopyMap();
+   }
+   copyMap -> selectArea();
+   copyMap -> copy();
 }
 
 void pasteArea()
 {
-	if( copyMap != NULL )
-	{
-		copyMap -> Show();
-		copyMap -> RunModal();
-		mapChanged( actmap );
-		displaymap();
-	}
+   if( copyMap != NULL )
+   {
+      copyMap -> Show();
+      copyMap -> RunModal();
+      mapChanged( actmap );
+      displaymap();
+   }
 }
+
 /********************************************************************/
 /********************************************************************/
 /****** copy area and utitity methods END                      ******/
 /********************************************************************/
 /********************************************************************/
+
 

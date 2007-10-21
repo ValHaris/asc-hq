@@ -140,8 +140,8 @@ void writePNG( const ASCString& filename, const Surface& s, int x1, int y1, int 
    
 
    png_text        text_ptr[1];
-   text_ptr[0].key = "Title";
-   text_ptr[0].text = "Advanced Strategic Command";
+   text_ptr[0].key = const_cast<char*>("Title");
+   text_ptr[0].text = const_cast<char*>("Advanced Strategic Command");
    text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
    png_set_text(png_ptr, info_ptr, text_ptr, 1);
    

@@ -1,6 +1,6 @@
 #include "paragui.h"
 #include "pglayout.h"
-
+ 
 #include "pgwidget.h"
 #include "pgbutton.h"
 #include "pgdropdown.h"
@@ -107,7 +107,7 @@ ParseUserData_t;
 
 static char Empty = 0;
 
-char *PG_Layout::GetParamStr(const char **Source, char *What) {
+char *PG_Layout::GetParamStr(const char **Source, const char *What) {
 	char		**c;
 
 	for (c = (char **)Source;*c; c += 2)
@@ -116,7 +116,7 @@ char *PG_Layout::GetParamStr(const char **Source, char *What) {
 	return(&Empty);
 }
 
-void PG_Layout::GetParamRect(const char **Source, char *What, PG_Rect& Rect, PG_Widget* parent) {
+void PG_Layout::GetParamRect(const char **Source, const char *What, PG_Rect& Rect, PG_Widget* parent) {
 	char *c = PG_Layout::GetParamStr(Source,What);
 
 	if(c == NULL) {
@@ -157,7 +157,7 @@ void PG_Layout::GetParamRect(const char **Source, char *What, PG_Rect& Rect, PG_
 	free(parm);
 }
 
-int PG_Layout::GetParamInt(const char **Source, char *What) {
+int PG_Layout::GetParamInt(const char **Source, const char *What) {
 	char* p = PG_Layout::GetParamStr(Source, What);
 
 	if(p[0] == 0) {
@@ -167,7 +167,7 @@ int PG_Layout::GetParamInt(const char **Source, char *What) {
 	return atoi(p);
 }
 
-PG_ScrollBar::ScrollDirection PG_Layout::GetParamScrollDirection(const char **Source, char *What) {
+PG_ScrollBar::ScrollDirection PG_Layout::GetParamScrollDirection(const char **Source, const char *What) {
 	char* p = PG_Layout::GetParamStr(Source, What);
 	PG_ScrollBar::ScrollDirection r = PG_ScrollBar::VERTICAL;
 
@@ -183,7 +183,7 @@ PG_ScrollBar::ScrollDirection PG_Layout::GetParamScrollDirection(const char **So
 
 	return r;
 }
-PG_Label::TextAlign PG_Layout::GetParamAlign(const char **Source, char *What) {
+PG_Label::TextAlign PG_Layout::GetParamAlign(const char **Source, const char *What) {
 	PG_Label::TextAlign ret = PG_Label::LEFT;
 	char *c = PG_Layout::GetParamStr(Source,What);
 
@@ -200,7 +200,7 @@ PG_Label::TextAlign PG_Layout::GetParamAlign(const char **Source, char *What) {
 	return ret;
 }
 
-PG_Draw::BkMode PG_Layout::GetParamIMode(const char **Source, char *What) {
+PG_Draw::BkMode PG_Layout::GetParamIMode(const char **Source, const char *What) {
 	PG_Draw::BkMode	ret = PG_Draw::TILE;
 	char *c = PG_Layout::GetParamStr(Source,What);
 
@@ -218,7 +218,7 @@ PG_Draw::BkMode PG_Layout::GetParamIMode(const char **Source, char *What) {
 	return(ret);
 }
 
-int PG_Layout::GetParamGrad(const char **Source, char *What, PG_Gradient *grad) {
+int PG_Layout::GetParamGrad(const char **Source, const char *What, PG_Gradient *grad) {
 	char	*c = PG_Layout::GetParamStr(Source,What);
 	int		r1,g1,b1,r2,g2,b2,r3,g3,b3,r4,g4,b4;
 

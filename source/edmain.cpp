@@ -55,7 +55,7 @@
 // #define MEMCHK
 #include "memorycheck.cpp"
 
-pfont load_font(char* name)
+pfont load_font(const char* name)
 {
    tnfilestream stream ( name, tnstream::reading );
    return loadfont ( &stream );
@@ -183,7 +183,7 @@ int main(int argc, char *argv[] )
    
    StdIoErrorHandler stdIoErrorHandler(false);
    
-   putenv("SDL_VIDEO_CENTERED=1") ;
+   putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
    Cmdline* cl = NULL;
    try {

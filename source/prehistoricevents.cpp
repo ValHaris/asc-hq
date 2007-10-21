@@ -312,6 +312,11 @@ void  readOldEventLists ( pnstream stream, bool passedEvents, GameMap* spfld )
 {
    #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 
+   if ( sizeof(int*) != 4 ) {
+      displaymessage ("Unable to load map in old file format on a non-32 bit machine\nPlease convert this file to the new file format on a 32 bit little endian machine and try again",1);
+      throw tfileerror();
+   }
+   
    map<int,int> eventTranslation;
    map<EventTriggered*,int> eventTriggerEvents;
 
@@ -458,9 +463,9 @@ PrehistoricEventStructure :: ~PrehistoricEventStructure ()
         trigger_data[i] = NULL;
       }
 
-   if ( intdata ) {
-      delete[]  intdata ;
-      intdata = NULL;
+   if ( rawdata ) {
+      asc_free( rawdata );
+      rawdata = NULL;
    }
 }
 
@@ -478,6 +483,8 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
 // only used for converting old maps and savegames
 /////////////////////////////////////////////////////
 
+     map<EventTriggered*,int> localEventTriggerEvents;
+
      Event* ev = new Event( *gamemap );
 
      PrehistoricEventStructure event1;
@@ -494,8 +501,6 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
         stream->readdata ( pi, 85 - sizeof ( int ));
         version = 0;
      }
-
-     eventTranslation[event1.id] = ev->id;
 
      if ( version > 2 )
         throw tinvalidversion ( "OldEvent", 2, version );
@@ -641,7 +646,7 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
                stream->readdata2 ( event1.trigger_data[m]->id );
                EventTriggered* ett = new EventTriggered();
                et = ett;
-               eventTriggerEvents[ett] = event1.trigger_data[m]->id;
+               localEventTriggerEvents[ett] = event1.trigger_data[m]->id;
            }
            
            if ( event1.trigger[m] == ceventt_technologyresearched ) {
@@ -739,6 +744,8 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
 
         ev->description = event1.description;
 
+        eventTranslation[event1.id] = ev->id;
+        eventTriggerEvents.insert( localEventTriggerEvents.begin(), localEventTriggerEvents.end() );
         return ev;
      } else {
         delete ev;

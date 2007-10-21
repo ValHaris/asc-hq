@@ -889,7 +889,7 @@ class ColorMerger_AlphaHandler<4>
       bool hasColorKey;
       int ckmask;
    protected:
-      ColorMerger_AlphaHandler() : amask ( -1 ), ashift(0), hasColorKey(false)
+      ColorMerger_AlphaHandler() : amask ( -1 ), ashift(0), colorKey(0), hasColorKey(false), ckmask(0)
       {}
       ;
 

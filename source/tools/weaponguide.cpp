@@ -96,7 +96,7 @@ int main(int argc, char *argv[] )
       printf(".");
         
 
-      char* wildcard;
+      const char* wildcard;
 
       if ( cl.next_param() < argc ) {
          wildcard = argv[cl.next_param()];

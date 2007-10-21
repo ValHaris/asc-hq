@@ -140,11 +140,19 @@ void TurnPassed::setup()
 }
 
 
-ASCString TurnPassed::getName() const
+ASCString TurnPassed::getTypeName() const
 {
-   ASCString s;
-   s.format( "turn %d , move %d passed ", turn, move );
-   return s; 
+   return "turn passed";
+}
+
+ASCString TurnPassed::getDetailledName() const
+{
+   if ( turn >= 0 ) {
+      ASCString s;
+      s.format( "turn %d , move %d passed ", turn, move );
+      return s; 
+   } else
+      return getTypeName();
 }
 
 
@@ -155,7 +163,8 @@ ASCString BuildingPositionTrigger::getName() const
    if ( gamemap->getField(pos) && gamemap->getField(pos)->building )
       s += gamemap->getField(pos)->building->getName();
    else
-      s += " <not found> ";
+      if ( pos.valid() )
+         s += " <not found> ";
 
    return s;
 }
@@ -324,9 +333,14 @@ EventTrigger::State AllBuildingsLost::getState( int player )
       return unfulfilled;
 }
 
-ASCString AllBuildingsLost::getName() const
+ASCString AllBuildingsLost::getTypeName() const
 {
    return "All Buildings Lost";
+}
+
+ASCString AllBuildingsLost::getDetailledName() const
+{
+   return getTypeName();
 }
 
 
@@ -338,11 +352,15 @@ EventTrigger::State AllUnitsLost::getState( int player )
       return unfulfilled;
 }
 
-ASCString AllUnitsLost::getName() const
+ASCString AllUnitsLost::getTypeName() const
 {
    return "All Units Lost";
 }
 
+ASCString AllUnitsLost::getDetailledName() const
+{
+   return getTypeName();
+}
 
 void UnitTrigger::readData ( tnstream& stream )
 {
@@ -400,7 +418,14 @@ EventTrigger::State UnitLost::getState( int player )
   return unfulfilled;
 }
 
-ASCString UnitLost::getName() const
+
+ASCString UnitLost::getTypeName() const
+{
+   return "unit lost";
+}
+
+
+ASCString UnitLost::getDetailledName() const
 {
    return UnitTrigger::getName() + " lost";
 }
@@ -420,7 +445,13 @@ EventTrigger::State UnitConquered::getState( int player )
 
 }
 
-ASCString UnitConquered::getName() const
+ASCString UnitConquered::getTypeName() const
+{
+   return "unit conquered";
+}
+
+
+ASCString UnitConquered::getDetailledName() const
 {
    return UnitTrigger::getName() + " conquered";
 }
@@ -443,7 +474,13 @@ EventTrigger::State UnitDestroyed::getState( int player )
   return unfulfilled;
 }
 
-ASCString UnitDestroyed::getName() const
+
+ASCString UnitDestroyed::getTypeName() const
+{
+   return "unit destroyed";
+}
+
+ASCString UnitDestroyed::getDetailledName() const
 {
    return UnitTrigger::getName() + " destroyed";
 }
@@ -488,7 +525,13 @@ Event* EventTriggered::getTargetEventName() const
    return NULL;
 }
 
-ASCString EventTriggered::getName() const
+
+ASCString EventTriggered::getTypeName() const
+{
+   return "Event triggered";
+}
+
+ASCString EventTriggered::getDetailledName() const
 {
    Event* e = getTargetEventName();
    if ( e ) {
@@ -500,7 +543,7 @@ ASCString EventTriggered::getName() const
       s += " triggered";
       return s;
    } else
-      return "Event triggered";
+      return getTypeName();
 }
 
 void EventTriggered::setup()
@@ -539,23 +582,31 @@ void EventTriggered::triggered()
 EventTrigger::State AllEnemyUnitsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
+      if ( gamemap->player[player].diplomacy.isHostile(i))
          if ( !gamemap->player[i].vehicleList.empty() )
             return unfulfilled;
 
     return fulfilled;
 }
 
-ASCString AllEnemyUnitsDestroyed::getName() const
+
+ASCString AllEnemyUnitsDestroyed::getDetailledName() const
+{
+   return getTypeName();
+}
+
+ASCString AllEnemyUnitsDestroyed::getTypeName() const
 {
    return "All enemy units destroyed";
 }
 
 void AllEnemyUnitsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered));
+   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered)));
 }
 
-void AllEnemyUnitsDestroyed::triggered( ContainerBase* c )
+void AllEnemyUnitsDestroyed::triggered()
 {
    if ( isFulfilled() )
       eventReady();
@@ -572,18 +623,25 @@ EventTrigger::State AllEnemyBuildingsDestroyed::getState( int player )
     return fulfilled;
 }
 
-ASCString AllEnemyBuildingsDestroyed::getName() const
+ASCString AllEnemyBuildingsDestroyed::getTypeName() const
 {
    return "All enemy buildings destroyed";
 }
 
+ASCString AllEnemyBuildingsDestroyed::getDetailledName() const
+{
+   return getTypeName();
+}
+
+
 
 void AllEnemyBuildingsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered));
+   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered)));
 }
 
-void AllEnemyBuildingsDestroyed::triggered( ContainerBase* c )
+void AllEnemyBuildingsDestroyed::triggered()
 {
    if ( isFulfilled() )
       eventReady();
@@ -630,14 +688,20 @@ void SpecificUnitEntersPolygon::writeData ( tnstream& stream )
   stream.writeInt( unitID );
 }
 
-ASCString SpecificUnitEntersPolygon::getName() const
+ASCString SpecificUnitEntersPolygon::getTypeName() const
+{
+   return "specific unit entered polygon";
+}
+
+
+ASCString SpecificUnitEntersPolygon::getDetailledName() const
 {
    ASCString s;
    if ( unitID > 0  && gamemap->getUnit( unitID )) {
       s = "unit ";
       s += gamemap->getUnit( unitID )->getName();
    } else
-      s = "any unit";
+      s = "specific unit";
    s += " enters polygon";
    return s;
 }
@@ -666,8 +730,6 @@ void SpecificUnitEntersPolygon::triggered()
    if ( isFulfilled() )
       eventReady();
 }
-
-
 
 EventTrigger::State AnyUnitEntersPolygon::getState( int player )
 {
@@ -698,7 +760,6 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
    }
 }
 
-
 void AnyUnitEntersPolygon::readData ( tnstream& stream )
 {
   versionTest(stream,1,1);
@@ -713,14 +774,22 @@ void AnyUnitEntersPolygon::writeData ( tnstream& stream )
   stream.writeInt( player );
 }
 
-ASCString AnyUnitEntersPolygon::getName() const
+ASCString AnyUnitEntersPolygon::getTypeName() const
 {
-   ASCString s = "any unit from ";
-   for ( int i = 0; i < 8; ++i )
-      if ( player & ( 1 << i)) {
-         s += gamemap->player[i].getName();
-         s += " ";
-      }
+   return "Any unit entered polygon";
+}
+
+ASCString AnyUnitEntersPolygon::getDetailledName() const
+{
+   ASCString s = "any unit ";
+   if ( player ) {
+      s += "from ";
+      for ( int i = 0; i < 8; ++i )
+         if ( player & ( 1 << i)) {
+            s += gamemap->player[i].getName();
+            s += " ";
+         }
+   }
    s += " enters polygon";
    return s;
 }
@@ -772,11 +841,19 @@ void ResourceTribute::writeData ( tnstream& stream )
 }
 
 
-ASCString ResourceTribute::getName() const
+ASCString ResourceTribute::getTypeName() const
 {
-   ASCString s;
-   s.format ( "Resource tribute: %d E ; %d M ; %d F", demand.energy, demand.material, demand.fuel );
-   return s;
+   return "Resource tribute";
+}
+
+ASCString ResourceTribute::getDetailledName() const
+{
+   if ( payingPlayer >= 0 ) {
+      ASCString s;
+      s.format ( "Resource tribute: %d E ; %d M ; %d F", demand.energy, demand.material, demand.fuel );
+      return s;
+   } else
+      return getTypeName();
 }
 
 void ResourceTribute::setup()
@@ -1044,14 +1121,8 @@ void WeatherChange :: writeData ( tnstream& stream )
 void WeatherChange :: fieldOperator( const MapCoordinate& mc )
 {
    tfield* field = gamemap->getField ( mc );
-   if ( field ) {
-     if ( field->typ->terraintype->weather[ weather ] )
-        field->typ = field->typ->terraintype->weather[ weather ];
-     else
-        field->typ = field->typ->terraintype->weather[ 0 ];
-
-     field->setparams();
-   }
+   if ( field ) 
+      field->setweather( weather );
 }
 
 void WeatherChange :: setup ()
@@ -1570,7 +1641,6 @@ class ChangePlayerState : public EventAction {
       }
 
       ASCString getName() const { return "Change player state"; };
-      
 };
 
 
@@ -1735,8 +1805,8 @@ void Reinforcements :: execute( MapDisplayInterface* md )
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {
          try {
-         Vehicle* veh = Vehicle::newFromStream( gamemap, stream, ++gamemap->unitnetworkid );
-         FindUnitPlacementPos fupp( gamemap, veh );
+            Vehicle* veh = Vehicle::newFromStream( gamemap, stream, gamemap->getNewNetworkID() );
+            FindUnitPlacementPos fupp( gamemap, veh );
          } 
          catch ( InvalidID err ) {
             displaymessage( "Error executing event 'Reinforcements'\n" +  err.getMessage(), 1);
@@ -1797,8 +1867,19 @@ void Reinforcements :: execute( MapDisplayInterface* md )
 
 template<class T>
 ASCString TriggerNameProvider() {
-   T t;
-   return t.getName();
+   // dynamic allocation is to prevent a compiler bug in gcc 4.2.1
+   T* t = new T();
+   ASCString name = t->getTypeName();
+   delete t;
+   return name;
+};
+
+template<class T>
+ASCString ActionNameProvider() {
+   T* t = new T();
+   ASCString name;
+   delete t;
+   return name;
 };
 
 
@@ -1812,7 +1893,7 @@ bool registerTrigger( EventTrigger_ID id )
 template <typename ActionType > 
 bool registerAction( EventAction_ID id )
 {
-   return actionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  TriggerNameProvider<ActionType>() );
+   return actionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  ActionNameProvider<ActionType>() );
 }
 
 

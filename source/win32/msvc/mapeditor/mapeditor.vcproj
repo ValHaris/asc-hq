@@ -42,6 +42,8 @@
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image).static/VisualC/$(ConfigurationName)/&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
+				GenerateMapFile="TRUE"
+				MapLines="TRUE"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool

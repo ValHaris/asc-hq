@@ -63,8 +63,8 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
    init();
 
    gamemap->player[player].vehicleList.push_back ( this );
-   gamemap->unitnetworkid++;
-   networkid = gamemap->unitnetworkid;
+   
+   networkid = gamemap->getNewNetworkID();
    gamemap->vehicleLookupCache[networkid] = this;
 }
 
@@ -80,8 +80,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int netw
 
    gamemap->player[player].vehicleList.push_back ( this );
    if ( networkID == -1 ) {
-      gamemap->unitnetworkid++;
-      networkid = gamemap->unitnetworkid;
+      networkid = gamemap->getNewNetworkID();
    } else
       if ( networkID >= 0 ) {
          networkid = networkID;
@@ -530,9 +529,9 @@ bool Vehicle::hasMoved ( void ) const
 }
 
 
-int Vehicle :: getMovement ( bool checkFuel ) const
+int Vehicle :: getMovement ( bool checkFuel, bool checkRF ) const
 {
-   if ( !reactionfire.canMove() )
+   if ( checkRF && !reactionfire.canMove() )
       return 0;
 
    if ( typ->fuelConsumption && checkFuel ) {
@@ -834,6 +833,7 @@ void Vehicle::convert ( int col )
 
    // emit signal
    conquered();
+   anyContainerConquered(this);
 }
 
 Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
@@ -1419,6 +1419,10 @@ void   Vehicle::readData ( tnstream& stream )
              Vehicle* v = Vehicle::newFromStream ( gamemap, stream );
              addToCargo(v);
              if ( v && v->reactionfire.getStatus() != Vehicle::ReactionFire::off && !v->baseType->hasFunction( ContainerBaseType::MoveWithReactionFire ))
+                /* there are two reasons that a unit with enabled RF is put into a transport, although the unit cannot move with RF:
+                   - the unitType was changed after the unit was moved into the transport
+                   - RF was enable with the mapeditor
+                   In order for the user to have any change to get the unit out again, we disable RF here */
                 v->reactionfire.disable();
           }
        }
@@ -1732,7 +1736,6 @@ int Vehicle::getMemoryFootprint() const
 }
 
 
-
 Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
@@ -1748,6 +1751,7 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
 
    int color = stream.readChar ();
 
+   // a forced networkID of -2 will prevent any ID from being assigned and the unit not being registered in the ID cache
    Vehicle* v = new Vehicle ( fzt, gamemap, color/8, -2 );
 
    v->readData ( stream );
@@ -1758,8 +1762,7 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
    GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
    if ( j != gamemap->vehicleLookupCache.end() ) {
       // warning("duplicate network id detected !");
-      gamemap->unitnetworkid++;
-      v->networkid = gamemap->unitnetworkid;
+      v->networkid = gamemap->getNewNetworkID();
    }
 
    gamemap->vehicleLookupCache[v->networkid] = v;
@@ -1796,7 +1799,7 @@ int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
       return 0;
 
    if ( veh->maxMovement() )
-      return veh->getMovement(false)  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
+      return veh->getMovement(false, false )  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
    else
       return (veh->getMap()->weather.windSpeed * maxwindspeed / 256 ) * veh->typ->fuelConsumption / ( minmalq * 64 );
 }

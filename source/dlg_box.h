@@ -44,14 +44,14 @@
                     struct tbutton {
                                int  art;                   /*  art:  0: normaler button
                                                                                   style:
-                                                                                    þ 1:   standard
-                                                                                    þ 2:   mit "dauerfeuer"  */
+                                                                                    ï¿½ 1:   standard
+                                                                                    ï¿½ 2:   mit "dauerfeuer"  */
 
                                int      x1, y1, x2, y2;              /*  1: texteingabefield  */
                                int id;                          /*  2: zahleingabefield  */
                                int style;                       /*  3: checkbox
                                                                                   style:
-                                                                                     þ 10 : nur einschaltbar */
+                                                                                     ï¿½ 10 : nur einschaltbar */
                                int status;                      /*  4: schieberegler    */
                                tbutton*      next;                        /*  5: scrollbar        */
                                const char*  text;
@@ -193,9 +193,9 @@ typedef class tdialogbox* pdialogbox;
 
                       virtual void setclipping ( void );
                       virtual void paint     ( void );    // komplettes zeichnen, mit framebuf, redraw und copy ...
-                      virtual void redrawall ( void );    // l„át die aktuelle und alle darunterliegenden Boxen sich neu zeichnen
-                      virtual void redrawall2 ( int xx1, int yy1, int xx2, int yy2 );    // l„át die aktuelle und bei Bedarf alle darunterliegenden Boxen sich neu zeichnen
-                      virtual int  getcapabilities ( void );  // Dann muá REDRAW ?berladen werden
+                      virtual void redrawall ( void );    // lï¿½ï¿½t die aktuelle und alle darunterliegenden Boxen sich neu zeichnen
+                      virtual void redrawall2 ( int xx1, int yy1, int xx2, int yy2 );    // lï¿½ï¿½t die aktuelle und bei Bedarf alle darunterliegenden Boxen sich neu zeichnen
+                      virtual int  getcapabilities ( void );  // Dann muï¿½ REDRAW ?berladen werden
                       void repaintdisplay( void );
               protected:
                       int virtualbufoffset;
@@ -203,7 +203,7 @@ typedef class tdialogbox* pdialogbox;
                       pdialogbox prev;
                       static pdialogbox first;
 
-                      int dlg_mode;           /*            Bit 1 :  redraw funktionalit„t 
+                      int dlg_mode;           /*            Bit 1 :  redraw funktionalitï¿½t 
                                                                 2 :  zugrunde liegende Dialogboxen unterst?tzen redraw  */
 
                       virtual void redraw ( void );       // Zeichner die dialogbox in den aktuellen Puffer
@@ -249,7 +249,7 @@ typedef class tdialogbox* pdialogbox;
                       void         rahmen(bool      invers,
                                           tmouserect   rect );
 
-                      void         rahmen3(char *       txt,
+                      void         rahmen3(const char *       txt,
                                            int      x1,
                                            int      y1,
                                            int      x2,
@@ -319,9 +319,9 @@ extern void  help( int id);
 extern void viewtext2 ( int id);
 
 extern int  viewtextquery( int        id,
-                           char *       title,
-                           char *       s1,
-                           char *       s2);
+                           const char *       title,
+                           const char *       s1,
+                           const char *       s2);
 
 
 class tviewtext {

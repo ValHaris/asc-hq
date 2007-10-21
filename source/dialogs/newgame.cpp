@@ -148,7 +148,10 @@ class StartMultiplayerGame: public ConfigurableWindow {
          else
             hide("start");   
       };
-            
+
+
+      GameMap* searchForMap( const ASCString& password );
+
    protected:   
       void userHandler( const ASCString& label, PropertyReadingContainer& pc, PG_Widget* parent, WidgetParameters widgetParams ); 
       bool start();
@@ -348,11 +351,54 @@ bool StartMultiplayerGame::Apply()
             
          }
          return true;
+      case PasswordSearch: {
+               PG_LineEdit* pw = dynamic_cast<PG_LineEdit*>( FindChild( "MapPassword", true ));
+               if ( pw ) {
+                  if ( pw->GetText().empty() ) {
+                     errorMessage("please enter a password");
+                     return false;
+                  }
+                  
+                  GameMap* map = searchForMap( pw->GetText() );
+                  if ( !map  ) {
+                     errorMessage("No map found");
+                     return false;
+                  }
+                  newMap = map;
+                  start();
+               }
+                           
+         }
+         break;
+
       default: 
            break;
    }
    
    return false;
+}
+
+GameMap* StartMultiplayerGame::searchForMap( const ASCString& password )
+{
+   StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "please wait, searching for map...");
+
+   tfindfile ff ( mapextension );
+   string filename = ff.getnextname();
+   while( !filename.empty() ) {
+       try {
+          tmaploaders loader;
+          GameMap* map = loader.loadmap( filename );
+          if ( map->codeWord == password )
+             return map;
+          else
+             delete map;
+      }
+      catch ( ASCexception ) {
+      } /* endcatch */
+
+      filename = ff.getnextname();
+   }
+   return NULL;
 }
 
 bool StartMultiplayerGame::nextPage(PG_Button* button)
@@ -499,6 +545,10 @@ void StartMultiplayerGame::showPage()
       case MultiPlayerOptions: 
          showButtons(true,false,false);
          break;
+      case PasswordSearch:
+         showButtons(true,false,false);
+         break;
+
       default:
          break;   
     }     

@@ -1283,7 +1283,7 @@ void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
                           Preiskalkulation  -  description
                              -------------------
     begin                : So Aug 15 2004
-    copyright            : (C) 2001 by Martin Bickel & Steffen Fr�lich
+    copyright            : (C) 2001 by Martin Bickel & Steffen Froelich
     email                : bickel@asc-hq.org
  
  vehicletype {
@@ -1300,8 +1300,8 @@ Part II  -beginn calculation
 Part III -typecost
 part IV  -weaponcost
 Part V   -specialcost
-Part VI  -addierung
-Part VII -Abschl�e
+Part VI  -addition
+Part VII -malus
  
  ***************************************************************************/
 
@@ -1331,54 +1331,81 @@ Resources Vehicletype :: calcProductionsCost()
       typecoste += armor*2;
       typecostm += armor*2;
    } else
-      if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_tracked_vehicle || movemalustyp == MoveMalusType::light_wheeled_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
+      if ( movemalustyp == MoveMalusType::light_wheeled_vehicle ) {
+         typecoste += armor*6;
+         typecostm += armor*6;
+   } else
+      if ( movemalustyp == MoveMalusType::light_tracked_vehicle || movemalustyp == MoveMalusType::medium_wheeled_vehicle ) {
+         typecoste += armor*7;
+         typecostm += armor*7;
+   } else
+      if ( movemalustyp == MoveMalusType::medium_tracked_vehicle || movemalustyp == MoveMalusType::heavy_wheeled_vehicle || movemalustyp == MoveMalusType::rail_vehicle || movemalustyp == MoveMalusType::structure) {
          typecoste += armor*8;
          typecostm += armor*8;
-      } else
-         if ( movemalustyp == MoveMalusType::hoovercraft) {
-            typecoste += armor*9;
-            typecostm += armor*9;
-         } else
-            if ( movemalustyp == MoveMalusType::light_ship || movemalustyp == MoveMalusType::medium_ship || movemalustyp == MoveMalusType::heavy_ship ) {
-               typecoste += armor*10;
-               typecostm += armor*10;
-            } else
-               if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft || movemalustyp == MoveMalusType::helicopter ) {
-                  typecoste += armor*20;
-                  typecostm += armor*20;
-               } else {
-                  typecoste += armor*6;
-                  typecostm += armor*6;
-               }
+   } else
+      if ( movemalustyp == MoveMalusType::heavy_tracked_vehicle ) {
+         typecoste += armor*9;
+         typecostm += armor*9;
 
-   // Zuschlag fr Eisbrecher
+   } else
+      if ( movemalustyp == MoveMalusType::hoovercraft) {
+         typecoste += armor*9;
+         typecostm += armor*9;
+   } else
+      if ( movemalustyp == MoveMalusType::light_ship ) {
+         typecoste += armor*8;
+         typecostm += armor*8;
+   } else
+      if ( movemalustyp == MoveMalusType::medium_ship ) {
+         typecoste += armor*10;
+         typecostm += armor*10;
+   } else
+      if ( movemalustyp == MoveMalusType::heavy_ship ) {
+         typecoste += armor*12;
+         typecostm += armor*12;
+
+   } else
+      if ( movemalustyp == MoveMalusType::light_aircraft || movemalustyp == MoveMalusType::helicopter ) {
+         typecoste += armor*18;
+         typecostm += armor*18;
+   } else
+      if ( movemalustyp == MoveMalusType::medium_aircraft || movemalustyp == MoveMalusType::heavy_aircraft ) {
+         typecoste += armor*20;
+         typecostm += armor*20;
+
+   } else {
+         typecoste += armor*6;
+         typecostm += armor*6;
+   }
+
+   // Zuschlag fuer Eisbrecher
    if ( hasFunction( IceBreaker ) ) {
       typecoste += armor *2;
       typecostm += armor *2;
    }
-   // Zuschlag fr U-Boote / Druckhlle
+   // Zuschlag fuer U-Boote / Druckhuelle
    if ( height & chgetaucht ) {
       typecoste += armor*2;
       typecostm += armor*2;
    }
-   // Zuschlag fr orbitalf�ige Einheiten / Druckhlle
+   // Zuschlag fuer orbitalfaehige Einheiten / Druckhlle
    if ( height & chsatellit ) {
       typecoste += armor*3;
       typecostm += armor*2;
    }
-   // Zuschlag fr hochfliegende Einheiten / Extra starke Triebwerke
+   // Zuschlag fuer hochfliegende Einheiten / Extra starke Triebwerke
    if ( height & chhochfliegend ) {
       typecoste += armor*2;
       typecostm += armor*2;
    }
-   // Zuschlag fr Transportkapazit�
+   // Zuschlag fuer Transportkapazitaet
    if ( entranceSystems.size() > 0 ) {
       typecoste += maxLoadableUnits*100;
       typecostm += maxLoadableUnits*100;
 
       bool carrierCharge = false;
 
-      // Zuschlag fr Flugzeugtr�er / Start- und Landeeinrichtungen
+      // Zuschlag fr Flugzeugtraeger / Start- und Landeeinrichtungen
       for ( int T=0; T < entranceSystems.size(); ++T )
          if ( entranceSystems[T].container_height < chtieffliegend
                && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))
@@ -1396,7 +1423,7 @@ Resources Vehicletype :: calcProductionsCost()
          movecostsize = movement[M];
       }
    }
-   // Zuschlag fr Triebwerke
+   // Zuschlag fuer Triebwerke
    if (movecostsize > 70 ) {
       typecoste += (movecostsize-70)*15;
       typecostm += (movecostsize-70)*5;
@@ -1421,6 +1448,7 @@ Resources Vehicletype :: calcProductionsCost()
 
 
    // Part IV - weaponcost
+
    if ( weapons.count > 0 ) {
       for ( int W=0; W < weapons.count; ++W ) {
          if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn && weapons.weapon[W].shootable() ) {
@@ -1494,15 +1522,30 @@ Resources Vehicletype :: calcProductionsCost()
 
    if ( jamming > 0 && hasFunction( JamsOnlyOwnField ) ) {
       if (jamming < 31 ) {
-         typecoste += jamming*20;  //  fr Trooper oder eigenschaftsbedingt (klein, schnell)
+         typecoste += jamming*20;  //  fuer Trooper oder eigenschaftsbedingt (klein, schnell)
          typecostm += jamming*10;
       } else {
-         typecoste += jamming*50;  //  fr alle h�erwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
+         typecoste += jamming*50;  //  fuer alle hoeherwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
          typecostm += jamming*30;
       }
-   } else {
-      specialcoste += jamming*170;
-      specialcostm += jamming*150;
+   } else { // JAMMING
+      specialcoste += jamming*200;
+      specialcostm += jamming*120;
+       // Armorzuschlag
+      specialcostm += jamming*armor/10;
+       // Bewegungszuschlag
+      if (movecostsize > 70 ) {
+        specialcostm += jamming*(movecostsize-70);
+      }
+      if (movecostsize > 120 ) {
+        specialcostm += jamming*(movecostsize-120);
+      }
+      if (movecostsize > 170 ) {
+        specialcostm += jamming*(movecostsize-170);
+      }
+      if (movecostsize > 200 ) {
+        specialcostm += jamming*(movecostsize-200);
+      }
    }
 
    // Baufunktionen
@@ -1588,7 +1631,7 @@ Resources Vehicletype :: calcProductionsCost()
    res.energy += typecoste + weaponcoste + specialcoste;
    res.material += typecostm + weaponcostm + specialcostm;
 
-   // Part VII Abschl�e
+   // Part VII Abschlaege
    // keine Luftbetankung
    if ( hasFunction( NoInairRefuelling )) {
       res.energy -= typecoste/6;

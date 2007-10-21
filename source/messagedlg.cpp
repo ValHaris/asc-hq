@@ -458,7 +458,7 @@ MessageSelectionWindow::MessageSelectionWindow( PG_Widget *parent, const PG_Rect
 
 
 
-void viewmessages ( char* title, const MessagePntrContainer& msg, bool editable  )    // mode : 0 verschickte ; 1 empfangene
+void viewmessages ( const char* title, const MessagePntrContainer& msg, bool editable  )    // mode : 0 verschickte ; 1 empfangene
 {
    int ww = min( PG_Application::GetScreenWidth()/2, 500 );
    PG_Rect r ( max(PG_Application::GetScreenWidth()/2,0) - ww, -1, ww, 500 );

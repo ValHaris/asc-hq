@@ -150,6 +150,7 @@ void Building :: convert ( int player )
          (*i)->convert( player );
 
    conquered();
+   anyContainerConquered(this);
 }
 
 

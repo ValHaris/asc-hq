@@ -286,7 +286,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 19;
+const int tmapversion = 20;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -1046,6 +1046,12 @@ int GameMap :: eventpassed( int id, int mapid )
 }
 
 
+int GameMap :: getNewNetworkID()
+{
+   ++unitnetworkid;
+   return unitnetworkid;
+}
+
 Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
 {
    if ( !eht )
@@ -1215,7 +1221,7 @@ void GameMap::endRound()
            getField(x,y)->endRound( time.turn() );
 
     for (int i = 0; i <= 7; i++)
-       if (player[i].exist() ) {
+       if (player[i].exist() && player[i].stat != Player::off ) {
 
           for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
              (*j)->endRound();

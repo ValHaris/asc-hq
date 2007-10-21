@@ -1612,7 +1612,7 @@ int main(int argc, char *argv[] )
 {
    // setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
-   putenv("SDL_VIDEO_CENTERED=1") ;
+   putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 

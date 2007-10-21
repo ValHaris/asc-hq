@@ -147,8 +147,10 @@ bool makeDirectory ( const ASCString& path )
    if ( path.empty() )
       return false;
       
+   ASCString path2 = resolvePath( path );
+
    char tmp[10000];
-   constructFileName( tmp, 0, path.c_str(), NULL );
+   constructFileName( tmp, 0, path2.c_str(), NULL );
 
    int existence = directoryExist ( tmp );
 
@@ -281,18 +283,23 @@ ASCString ConfigurationFileLocatorCore::getConfigFileName()
 {
    if ( cmdline.length() ) {
       configFileType = 1;
+      displayLogMessage( 7, "ConfigurationFileLocatorCore::getConfigFileName() returns cmdline: " + cmdline + "\n" );
       return cmdline;      
    }
 
    if ( getenv ( asc_EnvironmentName )) {
+      ASCString res = getenv ( asc_EnvironmentName );
       configFileType = 2;
-      return getenv ( asc_EnvironmentName );
+      displayLogMessage( 7, "ConfigurationFileLocatorCore::getConfigFileName() returns env dir: " + res + "\n" );
+      return res;
    }
 
    if ( !exePath.empty()) {
+      displayLogMessage( 5, "Exe path is " + exePath + "\n" );
       ASCString completeName = exePath + "/" + asc_configurationfile;
       if ( exist( completeName )) {
          configFileType = 3;
+         displayLogMessage( 7, "ConfigurationFileLocatorCore::getConfigFileName() returns exepath: " + completeName + "\n" );
          return completeName;
       }
    }
@@ -302,13 +309,18 @@ ASCString ConfigurationFileLocatorCore::getConfigFileName()
       configFileType = 4;
       for ( vector<ASCString>::iterator i = list.begin(); i != list.end(); ++i ) {
          ASCString p = resolvePath( *i ) + asc_configurationfile; 
-         if( exist( p ))
+         if( exist( p )) {
+            displayLogMessage( 7, "ConfigurationFileLocatorCore::getConfigFileName() returns default dir: " + p + "\n" );
             return p;
+         }
       }
-      return resolvePath( list[0] ) + asc_configurationfile;
+      ASCString res = resolvePath( list[0] ) + asc_configurationfile;
+      displayLogMessage( 7, "ConfigurationFileLocatorCore::getConfigFileName() returns list0: " + res + "\n" );
+      return res;
    }
 
    configFileType = 5;
+   displayLogMessage( 7, "ConfigurationFileLocatorCore::getConfigFileName() returns asc_configurationfile: " + ASCString(asc_configurationfile) + "\n" );
    return asc_configurationfile;
 
 }
@@ -534,9 +546,9 @@ void checkFileVersion( const ASCString& filename, const ASCString& containername
 void checkDataVersion( )
 {
    ASCString location;
-   checkFileVersion( "main.version", "main.ascdat", 4 );
+   checkFileVersion( "main.version", "main.ascdat", 5 );
 
    if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.ascdat", 21 );
+      checkFileVersion( "pbp.version", "pbp.ascdat", 23 );
 }
 

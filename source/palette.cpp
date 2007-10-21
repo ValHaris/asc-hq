@@ -41,7 +41,7 @@ char* colormixbufchar;
 
 bool asc_paletteloaded = 0;
 
-char* borland_c_sucks ( void )
+const char* borland_c_sucks ( void )
 {
    return "just some code";
 }

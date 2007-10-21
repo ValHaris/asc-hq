@@ -290,6 +290,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void addMapLayer( MapLayer* layer, const ASCString& name );
       void activateMapLayer( const ASCString& name, bool active );
       void toggleMapLayer( const ASCString& name );
+      bool layerActive( const ASCString& name );
       SigC::Signal2<void, bool, const ASCString&> layerChanged;
       void getActiveLayers( vector<ASCString>& list );
 

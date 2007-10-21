@@ -1,7 +1,7 @@
 /*! \file loadbi3.cpp
     \brief Importing maps from Battle Isle
 */
-
+ 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-2005 Martin Bickel  and  Marc Schellenberger
@@ -57,7 +57,7 @@ int battleisleversion = -1;
 const int LIBFilesAnz  = 11;
 
 struct  TLIBFiles {
-      char*  Name;
+      const char*  Name;
       int FirstRecO;
       int RecSize;
       int DataInRecOfs;
@@ -391,11 +391,11 @@ const int energyfactor = 390;
 
 
 
-      char* HeadID = "MSSN";
-      char* ACTNID = "ACTN";
-      char* SHOPID = "SHOP";
-      char* MAPID  = "MAP\0";
-      char* MISSID = "MISS";
+      const char* HeadID = "MSSN";
+      const char* ACTNID = "ACTN";
+      const char* SHOPID = "SHOP";
+      const char* MAPID  = "MAP\0";
+      const char* MISSID = "MISS";
 
 
 

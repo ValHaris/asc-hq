@@ -399,7 +399,7 @@ extern TrueColorImage* getimage(int x1, int y1, int x2, int y2 );
 class fatalgraphicserror { 
         char st[1000];
       public:
-        fatalgraphicserror ( char* strng );
+        fatalgraphicserror ( const char* strng );
         fatalgraphicserror ( void );
       };
 

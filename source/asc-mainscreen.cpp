@@ -551,9 +551,12 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    mapDisplay->addMapLayer( new VisibilityLayer(), "visibilityvalue" );
 
    mapDisplay->layerChanged.connect( SigC::slot( *this, &ASC_MainScreenWidget :: mapLayerChanged));
-   
-   for ( vector<ASCString>::iterator i = CGameOptions::Instance()->visibleMapLayer.begin(); i != CGameOptions::Instance()->visibleMapLayer.end(); ++i )
+
+   // making a copy, because the activateMapLayer will modify the visibleMapLayer object
+   vector<ASCString> layer = CGameOptions::Instance()->visibleMapLayer;
+   for ( vector<ASCString>::iterator i = layer.begin(); i != layer.end(); ++i ) 
       mapDisplay->activateMapLayer(*i,true);
+   
 
 
    int counter = 0;

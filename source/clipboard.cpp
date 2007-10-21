@@ -68,8 +68,7 @@ Vehicle* ClipBoardBase::pasteUnit( tnstream& stream )
 {
    Vehicle* veh = Vehicle::newFromStream( actmap, stream );
 
-   actmap->unitnetworkid++;
-   veh->networkid = actmap->unitnetworkid;
+   // veh->networkid = actmap->getNewNetworkID();
 
    return veh;
 }

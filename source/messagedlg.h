@@ -1,7 +1,7 @@
 /***************************************************************************
                           messagedlg.h  -  description
                              -------------------
-    begin                : Mon Mär 24 2003
+    begin                : Mon Mï¿½r 24 2003
     copyright            : (C) 2003 by Martin Bickel
     email                : bickel@asc-hq.org
  ***************************************************************************/
@@ -25,7 +25,7 @@ class Message;
 
 extern void editmessage( Message& msg );
 extern void newmessage();
-extern void viewmessages( char* title, const MessagePntrContainer& msgc, bool editable  ) ; 
+extern void viewmessages( const char* title, const MessagePntrContainer& msgc, bool editable  ) ; 
 extern void viewmessage( const Message& message );
 extern void editmessage( Message& msg );
 extern void editjournal();
