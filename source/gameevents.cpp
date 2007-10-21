@@ -1877,7 +1877,7 @@ ASCString TriggerNameProvider() {
 template<class T>
 ASCString ActionNameProvider() {
    T* t = new T();
-   ASCString name;
+   ASCString name = t->getName();
    delete t;
    return name;
 };
