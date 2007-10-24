@@ -13,7 +13,7 @@ VehicleType {
    Transportation { 
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 40
-      MaxLoadableMass = 40
+      MaxLoadableMass = 50
       CategoriesNOT = hoovercraft default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft light_ship heavy_ship helicopter 
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -41,7 +41,7 @@ VehicleType {
       Weapon0.Punch@MaxRange = 40
       Weapon0.Punch@MinRange = 40
 
-      Weapon1 ->* VehicleType.ServiceGround 
+      Weapon1 ->* VehicleType.ServiceGroundTr
 
       Weapon2 ->* VehicleType.AmmoMG 
       Weapon2.Ammo = 40
@@ -56,7 +56,7 @@ VehicleType {
       Weapon5.Ammo = 30
 
       Weapon6 ->* VehicleType.AmmoLM 
-      Weapon6.Ammo = 20
+      Weapon6.Ammo = 40
 
       Weapon7 ->* VehicleType.AmmoSM 
       Weapon7.Ammo = 30
