@@ -12,7 +12,7 @@ VehicleType {
    Armor = 350
    Transportation { 
       MaxLoadableUnits = 4
-      MaxLoadableUnitSize = 40
+      MaxLoadableUnitSize = 45
       MaxLoadableMass = 50
       CategoriesNOT = hoovercraft default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft light_ship heavy_ship helicopter 
       EntranceSystemNum = 2
