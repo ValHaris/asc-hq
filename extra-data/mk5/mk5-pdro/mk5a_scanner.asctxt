@@ -20,7 +20,7 @@ VehicleType {
       fuel = 40
    } Tank
    FuelConsumption = 1
-   Movement = 0 0 0 0 80 80 0 0  
+   Movement = 0 0 0 20 80 80 0 0  
    TerrainAccess ->* VehicleType.heli_terrain
 
    waitforattack = true

@@ -5,10 +5,22 @@ VehicleType {
    
    Description = patrol boat
    picture = MK5s_skjold.pcx
-   Infotext = [Beutetechnik von den Terranern, der Stauraumwurde optimiert und mehr Soldaten platz zu geben.]
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [Beutetechnik von den Terranern, der Stauraum wurde optimiert und mehr Soldaten und kleinen Fahrzeugen platz zu geben.]
+   GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
 
-   Transportation ->* VehicleType.TransTrooper 
+   Transportation ->* VehicleType.TransShipSmall 
+   Transportation.MaxLoadableMass = 25
+   Abilities += fuel_transfer material_transfer jam_only_own_field move_after_attack
 
+   Weapons {
+      Weapon0 ->* VehicleType.MiniGun
+      Weapon0.ReactionFireShots = 1
+
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.Ammo = 6
+      Weapon1.MaxRange = 30
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+   } Weapons
 
 } VehicleType

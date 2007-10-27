@@ -1,6 +1,16 @@
 MK5 Outsider
 GAMER
 
+__________
+24.10.2007
+-Lastesel Tech Bugfix
+-Hoover Wasserbombe Bugfix
+-Scanner, Movebugfix
+-fsv, 45 Einladbar
+-LCC Minigun
+-Skjold, Waffenumbau, Transportsystem erweitert
+Neu: Fesselballon
+
 ________________
 30.09.2007
 FSV mehr large_missile

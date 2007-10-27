@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = LR5
+   Name = MU
    parent = 610 
    ID = 1420
    
@@ -7,4 +7,8 @@ VehicleType {
    Infotext = [Special rescue and support submarine]
 
    picture = MK5s_mu.pcx
+
+
+      Weapons.Weapon7 ->* VehicleType.MineSea
+      Weapons.Weapon7.Ammo = 10
 } VehicleType

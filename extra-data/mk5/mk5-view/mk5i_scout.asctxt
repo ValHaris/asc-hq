@@ -16,7 +16,7 @@ VehicleType {
    Transportation.EntranceSystemNum = 2
    Transportation.EntranceSystem1.Mode = out
    Transportation.EntranceSystem1.UnitHeightAbs = low_level_flight
-   Transportation.EntranceSystem1.UnitHeightRel = 0
+   Transportation.EntranceSystem1.UnitHeightRel = -1
    Transportation.EntranceSystem1.ContainerHeight = ground_level
    Transportation.EntranceSystem1.CategoriesNOT = 
    Transportation.EntranceSystem1.DockingHeightAbs = 

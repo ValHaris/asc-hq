@@ -49,7 +49,7 @@ VehicleType {
       Weapon2.Punch@MaxRange = 100
       Weapon2.Punch@MinRange = 100
 
-      Weapon3 ->* VehicleType.DCS 
+      Weapon3 ->* VehicleType.DCA
       Weapon3.Ammo = 4
       Weapon3.Punch@MaxRange = 100
       Weapon3.Punch@MinRange = 100

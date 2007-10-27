@@ -5,5 +5,7 @@ VehicleType {
    
    Description = command carrier
    picture = MK5s_lcc.pcx
+   
+   Weapons.Weapon0 ->* VehicleType.MiniGun
 
 } VehicleType

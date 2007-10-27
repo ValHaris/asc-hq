@@ -18,9 +18,9 @@ VehicleType {
       Weapon1.MaxRange = 40
       Weapon1.Ammo = 6
 
-      Weapon2 ->* VehicleType.HGr 
-      Weapon2.Punch@MaxRange = 110
-      Weapon2.Punch@MinRange = 110
+      Weapon2 ->* VehicleType.Panzerfaust 
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
 
    } Weapons
 } VehicleType
