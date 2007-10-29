@@ -3,7 +3,7 @@ VehicleType {
    ID = 615
    parent = 295
    Description = [Main Battle Tank]
-   Picture = Mk3v_maus.pcx
+   Picture = Mk3v_maus.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor += 100

@@ -9,7 +9,7 @@ VehicleType {
               out of view) of most enemy units, it is ideally suited to monitor
               enemy operations. Its internal sensor array also allows it to
               spot enemy sattelites.]
-   Picture = MK3o_GALILEO.pcx
+   Picture = MK3o_GALILEO.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

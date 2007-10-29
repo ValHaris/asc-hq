@@ -8,7 +8,7 @@ VehicleType {
               infrastructure such as bridges railroads and pipelines.
               A very important unit if you aspire a well defended, smoothly
               operating base.]
-   picture = MK3v_elch.pcx
+   picture = MK3v_elch.png
    GuideSortHelp = 556 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

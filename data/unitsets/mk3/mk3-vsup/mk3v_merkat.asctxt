@@ -9,7 +9,7 @@ VehicleType {
               ground, inserts one of two types of mines, and refills the hole.
               This system allows for quickly creating mine fields. The procedure
               can be reversed, so minefields can be cleared as well.]
-   Picture = MK3v_Merkat.pcx
+   Picture = MK3v_Merkat.png
    GuideSortHelp = 563 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

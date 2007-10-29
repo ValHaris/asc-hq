@@ -5,7 +5,7 @@ VehicleType {
    
    Description = patrol boat
    Infotext = [The role of the Mirage fast patrol boat is to carry out protection of territorial waters and exclusive economic zones, and to provide support to police, coast guard and customs forces.]
-   picture = MK3s_mirage.pcx
+   picture = MK3s_mirage.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    Transportation ->* VehicleType.TransCruiserSmall 
 

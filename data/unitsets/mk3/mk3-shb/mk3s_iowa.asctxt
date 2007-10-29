@@ -4,7 +4,7 @@ VehicleType {
    parent = 357
 
    Description = battleship
-   picture = MK3s_iowa.pcx
+   picture = MK3s_iowa.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weapons { 

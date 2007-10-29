@@ -4,7 +4,7 @@ VehicleType {
    ID = 587
    
    Description = stealth corvette
-   picture = MK3s_visby.pcx
+   picture = MK3s_visby.png
    GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
 
    jamming = 61

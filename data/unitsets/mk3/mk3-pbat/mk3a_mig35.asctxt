@@ -5,7 +5,7 @@ VehicleType {
 
    Description = heavy fighter
    Infotext = []
-   Picture = MK3a_mig35.pcx
+   Picture = MK3a_mig35.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

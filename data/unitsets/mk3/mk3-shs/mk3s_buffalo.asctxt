@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [ 
 Schnelles Transportschiff mit hoher Ladekapazität. Begleitschutz ist dringens 
 erforderlich, da es nur schwach gepanzert ist.] 
-   picture = MK3s_buffalo.pcx
+   picture = MK3s_buffalo.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

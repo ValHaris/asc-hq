@@ -8,7 +8,7 @@ VehicleType {
 Das Hawkeye ist ein all Wetter, luftgestuetztes, Kontrollsystem. Tatsaechlich ist es ein fliegendes Radar. Als solches ist es zwar nuetzlich bei der Aufklaerung aber wehrlos gegen jede Form von Luftabwehr.
 
 Hawkeye is an all-weather airborne control system platform. It is essentially a flying radar dish. As such, it is totally defenceless against enemy fighters and AA-fire.]
-   picture = MK3a_hawkeye.pcx
+   picture = MK3a_hawkeye.png
    GuideSortHelp = 526 566 0 0 3 0 0 0 0 0
 
    Transportation ->* VehicleType.SonarSeaPlane

@@ -4,7 +4,7 @@ VehicleType {
    parent = 218
    Description = anti aircraft tank
    Infotext = [Air defense cannon tank Gepard]
-   Picture = Mk3v_gepard.pcx
+   Picture = Mk3v_gepard.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Armor -= 20

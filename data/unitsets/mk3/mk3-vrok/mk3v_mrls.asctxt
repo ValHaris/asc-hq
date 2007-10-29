@@ -4,7 +4,7 @@ VehicleType {
    parent = 297
 
    Description = Multiple Rocket Launch System
-   Picture = MK3v_mrls.pcx
+   Picture = MK3v_mrls.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

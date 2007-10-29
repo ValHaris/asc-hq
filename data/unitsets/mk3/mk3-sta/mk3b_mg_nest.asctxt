@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Verteidigungsstellung
    Infotext = [ Durch Sandsäcke geschützte MG Stellung]
-   picture = MK3b_mg_nest.pcx
+   picture = MK3b_mg_nest.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weapons { 

@@ -4,7 +4,7 @@ VehicleType {
    ID = 515
    Description = Radar Plane
    Armor -= 10
-   Picture = MK3a_RAYTHEON.pcx
+   Picture = MK3a_RAYTHEON.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Abilities = satelliteview

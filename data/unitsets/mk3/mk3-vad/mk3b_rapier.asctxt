@@ -6,7 +6,7 @@ VehicleType {
    Description = air-defence turret
    Infotext = [The Rapier system provides a Air Defence capability over the battlefield. It consists 
 of a launcher with 2 ready to fire missiles.]
-   Picture = MK3b_rapier.pcx
+   Picture = MK3b_rapier.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 200

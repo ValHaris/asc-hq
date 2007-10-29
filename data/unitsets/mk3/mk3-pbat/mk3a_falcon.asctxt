@@ -11,7 +11,7 @@ Trotz der guten Luft-Luft-Raketen wird er durch seine schwache Panzerung und die
 The Falcon is a nimble aircraft designed to combat defenceless aerial threats.
 While having good aa-firepower, its weak armor and low flight level determine it for hit and run attacks at enemy bombers, transports and support aircraft.
 ]
-   Picture = MK3a_FALCON.pcx
+   Picture = MK3a_FALCON.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

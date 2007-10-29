@@ -10,7 +10,7 @@ Der Hormone ist ein kleiner Transporthelikopter fuer Infanterie und wird hauptsa
 The Hormone is a small personell transport helicopter for use in naval battle groups.
 It is able to quickly insert personell into the battle when operating from cruiser platforms and its ability to fire torpedoes from a range at ships and submarines alike make is a fast and cheap choice for anti-naval combat.
 ]
-   picture = MK3h_hormone.pcx
+   picture = MK3h_hormone.png
    GuideSortHelp = 515 552 601 566 3 0 0 0 0 0
 
    Armor = 350

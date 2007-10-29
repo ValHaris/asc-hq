@@ -3,7 +3,7 @@ VehicleType {
    ID = 546
    parent = 293
    Description = [Main Battle Tank]
-   Picture = MK3v_leopard3.pcx
+   Picture = MK3v_leopard3.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

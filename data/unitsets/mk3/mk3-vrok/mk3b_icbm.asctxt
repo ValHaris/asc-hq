@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Raketensilo
    Infotext = [Atlas ICBM Silo]
-   Picture = mk3b_icbm.pcx
+   Picture = mk3b_icbm.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

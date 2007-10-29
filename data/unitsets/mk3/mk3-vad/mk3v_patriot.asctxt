@@ -5,7 +5,7 @@ VehicleType {
    
    Description = missile air defence
    Infotext = [The Patriot is an surface-to-air, mobile, air defense missile system.]
-   Picture = MK3v_patriot.pcx
+   Picture = MK3v_patriot.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Armor -= 20

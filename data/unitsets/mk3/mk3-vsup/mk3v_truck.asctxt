@@ -4,7 +4,7 @@ VehicleType {
    parent = 335
    
    Description = Munitionstransporter
-   Picture = MK3v_Truck.pcx
+   Picture = MK3v_Truck.png
    Movement += 0 0 0 10 0 0 0 0 
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 

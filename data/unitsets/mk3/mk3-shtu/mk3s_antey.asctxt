@@ -4,7 +4,7 @@ VehicleType {
    ID = 542
 
    Description = nuclear submarine
-   picture = MK3s_antey.pcx
+   picture = MK3s_antey.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming = 19

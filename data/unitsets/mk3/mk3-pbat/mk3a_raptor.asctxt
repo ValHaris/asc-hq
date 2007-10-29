@@ -4,7 +4,7 @@ VehicleType {
    ID = 505
 
    Description = Fighter-Bomber
-   picture = MK3a_RAPTOR.pcx
+   picture = MK3a_RAPTOR.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming = 39

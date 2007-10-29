@@ -4,7 +4,7 @@ VehicleType {
    parent = 225
 
    Description = SAM long range
-   Picture = MK3v_guideline.pcx
+   Picture = MK3v_guideline.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

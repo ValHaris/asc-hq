@@ -8,7 +8,7 @@ VehicleType {
               ground, inserts one of two types of mines, and refills the hole.
               This system allows for quickly creating mine fields. The procedure
               can be reversed, so minefields can be cleared as well.]
-   Picture = mk3v_volcano.pcx
+   Picture = mk3v_volcano.png
    GuideSortHelp = 562 0 0 0 3 0 0 0 0 0
 
    Abilities += mine_layer

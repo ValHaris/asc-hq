@@ -4,7 +4,7 @@ VehicleType {
    ID = 568
    
    Description = light aircraft carrier
-   picture = MK3s_cvn.pcx
+   picture = MK3s_cvn.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 150

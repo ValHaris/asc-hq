@@ -5,7 +5,7 @@ VehicleType {
 
    Description = inter city support express
    Infotext = []
-   picture = MK3t_icse.pcx
+   picture = MK3t_icse.png
    GuideSortHelp = 550 552 0 0 3 0 0 0 0 0
 
    Armor -= 50

@@ -10,7 +10,7 @@ Der Euro-Fighter ist auf die Bekämpfung von fliegenden Zielen aller Art ausgeleg
 The Euro-Fighter is used to eliminate aerial threats of all kinds. It has limited stealth capability, enableing it to approach enemy fighters unseen and deliver an enormous punsh with its high altitude missiles.
 Scince it can not fly in high alltitudes, and has virtually no ground-strike-weapons it is best to avoide AA-sites with this fighter.
 ]
-   Picture = MK3a_EF2000.pcx
+   Picture = MK3a_EF2000.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

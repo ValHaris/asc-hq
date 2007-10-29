@@ -3,7 +3,7 @@ VehicleType {
    parent = 280
    ID = 529
 
-   Picture = MK3a_THUNDERBOLT.pcx
+   Picture = MK3a_THUNDERBOLT.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 5

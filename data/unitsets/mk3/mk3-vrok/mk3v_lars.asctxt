@@ -4,7 +4,7 @@ VehicleType {
    parent = 296
 
    Description = Light Artillery Rocket System
-   Picture = Mk3v_lars.pcx
+   Picture = Mk3v_lars.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

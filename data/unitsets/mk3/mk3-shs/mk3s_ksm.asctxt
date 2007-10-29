@@ -24,7 +24,7 @@ generating lift. #crt#
 A WIG craft is especially designed to take advantage of the benefits of ground effect. 
 Therefore a WIG vehicle will always fly close to the surface. Although it is called ground 
 effect, most WIG vehicles only fly over water, but some are amphibious.]
-   picture = MK3s_ksm.pcx
+   picture = MK3s_ksm.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

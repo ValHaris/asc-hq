@@ -3,7 +3,7 @@ VehicleType {
    parent = 279
    ID = 513
 
-   Picture = MK3a_SPIRIT.pcx
+   Picture = MK3a_SPIRIT.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 5

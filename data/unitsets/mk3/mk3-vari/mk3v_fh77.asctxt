@@ -3,7 +3,7 @@ VehicleType {
    ID = 598
    parent = 251
 
-   Picture = MK3v_FH77.pcx
+   Picture = MK3v_FH77.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Category = medium_wheeled_vehicle

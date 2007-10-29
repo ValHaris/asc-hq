@@ -5,7 +5,7 @@ VehicleType {
 
    Description = destroyer
    Infotext = [Originally designed to defend against aircraft, cruise missiles, and nuclear attack submarines, this higher capability ship is to be used in high-threat areas to conduct antiair, antisubmarine, antisurface, and strike operations.]
-   picture = MK3s_burke.pcx
+   picture = MK3s_burke.png
    GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
 
    Armor -= 100

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = stealth rocket cruiser
    Infotext = []
-   picture = MK3s_arsenal.pcx
+   picture = MK3s_arsenal.png
    GuideSortHelp += 0 0 0 0 3 600 0 0 0 0
 
    Armor -= 100

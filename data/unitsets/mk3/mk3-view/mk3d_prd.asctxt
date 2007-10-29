@@ -4,7 +4,7 @@ VehicleType {
    ID = 544
 
    Description = light radar
-   Picture = MK3d_prd.pcx
+   Picture = MK3d_prd.png
    GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
 
    Jamming += 10

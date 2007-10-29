@@ -5,7 +5,7 @@ VehicleType {
    
    Description = mobile helicenter
    Infotext = [Diese mobile Helicopterreparaturwerkstatt ist schnell aufgebaut und einsatzbereit. Sie verfügt über leichte Verteidigungseinrichtungen und bietet schnellen Service für beschädigte oder treibstoffarme Helicopter und VTOs.]
-   picture = MK3b_helipad.pcx
+   picture = MK3b_helipad.png
    WreckageObject = 472
    GuideSortHelp = 550 553 565 0 3 0 0 0 0 0
 

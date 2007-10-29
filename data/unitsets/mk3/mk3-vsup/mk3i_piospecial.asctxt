@@ -6,7 +6,7 @@ VehicleType {
    Description = Bau- und Reparaturtrupp
    Infotext = [ Die Pioniere sind universelle Bau- und Reparaturtrups. Sie errichten kleine stationäre Radar, Radarstöranlagen und 
               MG Stellungen. Die mangelnde Bewaffnung macht einen Begleitschutz unverzichtbar.]
-   picture = MK3i_piospecial.pcx
+   picture = MK3i_piospecial.png
    GuideSortHelp = 553 0 0 0 3 559 0 0 0 0
 
    Armor = 250

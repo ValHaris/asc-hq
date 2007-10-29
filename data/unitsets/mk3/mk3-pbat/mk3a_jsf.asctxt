@@ -4,7 +4,7 @@ VehicleType {
    ID = 603
    Description = join strike fighter
 
-   picture = MK3a_JSF.pcx
+   picture = MK3a_JSF.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weapons { 

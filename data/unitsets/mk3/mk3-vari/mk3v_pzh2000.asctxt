@@ -5,7 +5,7 @@ VehicleType {
 
    Description = heavy artillery
    Infotext = []
-   Picture = mk3v_PzH2000.pcx
+   Picture = mk3v_PzH2000.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor += 20

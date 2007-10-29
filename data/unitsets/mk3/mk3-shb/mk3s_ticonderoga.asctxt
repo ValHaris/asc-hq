@@ -5,7 +5,7 @@ VehicleType {
    
    Armor -= 100
    Description = Lenkwaffenkreuzer
-   picture = MK3s_TICONDEROGA.pcx
+   picture = MK3s_TICONDEROGA.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Abilities += sonar 

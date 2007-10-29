@@ -3,7 +3,7 @@ VehicleType {
    ID = 555
    parent = 290
 
-   Picture = MK3v_leopard1.pcx
+   Picture = MK3v_leopard1.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Movement += 0 0 0 1 0 0 0 0 

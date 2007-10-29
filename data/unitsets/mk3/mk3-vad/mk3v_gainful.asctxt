@@ -4,7 +4,7 @@ VehicleType {
    parent = 224
 
    Description = SAM medium range
-   Picture = Mk3v_gainful.pcx
+   Picture = Mk3v_gainful.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

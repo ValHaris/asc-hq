@@ -4,7 +4,7 @@ VehicleType {
    ID = 589
    
    Description = air cushion vehicle
-   picture = MK3s_pomornik.pcx
+   picture = MK3s_pomornik.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    FuelConsumption = 32

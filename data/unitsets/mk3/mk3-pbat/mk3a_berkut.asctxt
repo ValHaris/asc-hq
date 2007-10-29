@@ -15,7 +15,7 @@ Its weapons are able of attacking all kinds of ground, air and even orbital targ
 The Berkut moves at very high speeds on all atmospheric altitudes.
 Its only downside is its high price and its inability to perform ranged attacks.
 ]
-   picture = MK3a_berkut.pcx
+   picture = MK3a_berkut.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight 

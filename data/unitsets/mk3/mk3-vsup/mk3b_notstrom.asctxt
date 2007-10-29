@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [In times of war, energy supplies can not always be distrubuted
               easily. If a factory is running out of energy, dispatch a Generator
               Vehicle. Its batteries can hold enough to build a modest army.]
-   picture = MK3b_notstrom.pcx
+   picture = MK3b_notstrom.png
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
    Abilities += resource_converter 

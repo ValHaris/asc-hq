@@ -9,7 +9,7 @@ VehicleType {
               The advantage in this is a cover for the movements of the army,
               along with protection against artillery. Jammers tend to get
               destroyed a lot, since their field of jamming is small.]
-   Picture = MK3v_COJOTE.pcx
+   Picture = MK3v_COJOTE.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Category = light_wheeled_vehicle

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = repair and build ship
    Infotext = [ repair an buildship ]
-   picture = MK3s_lst.pcx
+   picture = MK3s_lst.png
    GuideSortHelp = 553 554 0 0 3 0 0 0 0 0
 
    Abilities = construct_vehicles repair_vehicle self_repairing fuel_transfer material_transfer manual_resource_drilling construct_specific_buildings 

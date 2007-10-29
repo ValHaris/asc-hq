@@ -3,7 +3,7 @@ VehicleType {
    ID = 596
    parent = 291
    Description = medium tank
-   Picture = MK3v_tigerII.pcx
+   Picture = MK3v_tigerII.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 150

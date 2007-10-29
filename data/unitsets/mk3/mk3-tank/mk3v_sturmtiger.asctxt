@@ -4,7 +4,7 @@ VehicleType {
    parent = 292
    Description = Sturmgeschuetz
    Infotext = []
-   Picture = MK3v_STURMTIGER.PCX
+   Picture = MK3v_STURMTIGER.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

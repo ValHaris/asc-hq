@@ -3,7 +3,7 @@ VehicleType {
    ID = 595
    parent = 290
 
-   Picture = MK3v_tiger.pcx
+   Picture = MK3v_tiger.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

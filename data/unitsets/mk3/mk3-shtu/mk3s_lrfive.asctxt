@@ -8,7 +8,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 550 0 0 0 0
 
    Armor -= 50
-   picture = MK3s_lrfive.pcx
+   picture = MK3s_lrfive.png
 
    Weapons { 
       Initiative = 0

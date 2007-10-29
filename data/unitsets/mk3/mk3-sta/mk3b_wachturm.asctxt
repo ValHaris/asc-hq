@@ -5,6 +5,6 @@ VehicleType {
 
    Description = Verteidigungsturm
    Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Flackgeschütz.]
-   picture = MK3b_wachturm.pcx
+   picture = MK3b_wachturm.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 } VehicleType

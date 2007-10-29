@@ -3,7 +3,7 @@ VehicleType {
    parent = 294
    ID = 563
    Description = old prototype tank
-   Picture = MK3v_P1000.pcx
+   Picture = MK3v_P1000.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weight = 200

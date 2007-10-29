@@ -10,7 +10,7 @@ Der Chinook ist ein schwerer Transporthelikopter. Zwar ist er wehrlos wenn er an
 
 The Chinnok is a heavy transport and support helicopter. It is defenceless under enemy fire but nevertheless an invaluable unit when it comes to providing fuel and ammuniton to highly mobily ground forces. It can carry even the heaviest vehicles and trains, making it the first choice whenever you need to send frech troops to a frontline far away.
 ]
-   picture = MK3h_chinook.pcx
+   picture = MK3h_chinook.png
    GuideSortHelp = 515 550 551 0 3 0 0 0 0 0
 
    Armor = 360

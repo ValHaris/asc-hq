@@ -4,7 +4,7 @@ VehicleType {
    parent = 220
 
    Description = anti aircraft tank
-   Picture = MK3v_roland.pcx
+   Picture = MK3v_roland.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

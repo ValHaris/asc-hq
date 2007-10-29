@@ -4,7 +4,7 @@ VehicleType {
    parent = 232
    Description = Attack Satellite
    Infotext = [top secret]
-   Picture = MK3o_ASATX53.pcx
+   Picture = MK3o_ASATX53.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

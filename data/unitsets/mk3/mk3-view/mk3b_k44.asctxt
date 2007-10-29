@@ -4,7 +4,7 @@ VehicleType {
    parent = 244
 
    Description = ground radar
-   Picture = MK3B_k44.pcx
+   Picture = MK3B_k44.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

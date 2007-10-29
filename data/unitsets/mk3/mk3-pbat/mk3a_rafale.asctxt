@@ -2,7 +2,7 @@ VehicleType {
    Name = RAFALE
    ID = 623
    parent = 327
-   Picture = MK3a_RAFALE.pcx
+   Picture = MK3a_RAFALE.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

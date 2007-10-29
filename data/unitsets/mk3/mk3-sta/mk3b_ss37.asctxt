@@ -4,7 +4,7 @@ VehicleType {
    parent = 320
    Description = surface defence system
    Infotext = []
-   picture = MK3b_SS37.pcx
+   picture = MK3b_SS37.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

@@ -5,7 +5,7 @@ VehicleType {
    
    Description = anti tank unit
    Infotext = []
-   picture = mk3v_tow.pcx
+   picture = mk3v_tow.png
    WreckageObject = 406
    GuideSortHelp = 503 504 0 0 3 0 0 0 0 0
    

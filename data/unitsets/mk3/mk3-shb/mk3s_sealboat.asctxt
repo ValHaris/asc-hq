@@ -5,7 +5,7 @@ VehicleType {
    
    Description = stealth patrol boat
    Infotext = [Used for armed escort, command, control, and communications, transport, armed reconnaissance and pursuit.]
-   picture = MK3s_sealboat.pcx
+   picture = MK3s_sealboat.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming = 50

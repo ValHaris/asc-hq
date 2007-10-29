@@ -3,7 +3,7 @@ VehicleType {
    parent = 248
    ID = 518
    Description = espionage plane
-   Picture = MK3a_BLACKBIRD.pcx
+   Picture = MK3a_BLACKBIRD.png
    Infotext = [Blackbird
 
 Blackbird hat einen einzigen Zweck: Feindliche Einheiten zu suchen und zu finden. Blackbird ist in der Lage sogar Satteliten zu orten und kann dabei auf grund des hohen Stealthwertes unentdeckt bleiben. Es ist schnell und schwer gepanzert für seine Klasse. Das ideale Flugzeug für Aufklärungsmissionen über Feindgebiet.

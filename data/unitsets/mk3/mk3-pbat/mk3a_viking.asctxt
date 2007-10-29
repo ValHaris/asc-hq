@@ -4,7 +4,7 @@ VehicleType {
    ID = 514
 
    Description = anti ship plane
-   picture = MK3a_VIKING.pcx
+   picture = MK3a_VIKING.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 20

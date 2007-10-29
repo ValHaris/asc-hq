@@ -5,7 +5,7 @@ VehicleType {
 
    Description = mobile rocket laucher
    Infotext = [ bedingt mobile stationaere Boden-Orbital Raketenabschuﬂrampe. ]
-   Picture = MK3b_Anger.pcx
+   Picture = MK3b_Anger.png
    GuideSortHelp = 509 600 0 0 3 0 0 0 0 0
 
    Armor = 400

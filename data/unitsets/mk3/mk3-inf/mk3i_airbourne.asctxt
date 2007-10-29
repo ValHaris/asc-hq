@@ -9,7 +9,7 @@ VehicleType {
               it can exit an airborne plane. These Troopers are slower than
               Shock Troopers, due to the weight of the parachute.]
    Armor -= 10
-   picture = MK3i_airbourne.pcx
+   picture = MK3i_airbourne.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Movement += 0 0 0 1 0 0 0 0 

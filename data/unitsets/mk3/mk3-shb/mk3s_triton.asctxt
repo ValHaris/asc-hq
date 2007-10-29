@@ -5,7 +5,7 @@ VehicleType {
    
    Description = fregatte
    Infotext = [Triton is the world's largest motor powered trimaran (triple-hulled) vessel.]
-   picture = MK3s_triton.pcx
+   picture = MK3s_triton.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    jamming = 11

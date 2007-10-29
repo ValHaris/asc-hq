@@ -4,7 +4,7 @@ VehicleType {
    parent = 250
 
    Description = light artillery
-   Picture = mk3v_FH70.pcx
+   Picture = mk3v_FH70.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

@@ -4,7 +4,7 @@ VehicleType {
    ID = 588
 
    Description = stealth fregatte
-   picture = MK3s_meko.pcx
+   picture = MK3s_meko.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor += 50

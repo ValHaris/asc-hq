@@ -3,7 +3,7 @@ VehicleType {
    parent = 276
    ID = 500
 
-   Picture = mk3a_AMX.pcx
+   Picture = mk3a_AMX.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 5

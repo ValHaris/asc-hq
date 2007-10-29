@@ -5,7 +5,7 @@ VehicleType {
    
    Description = corvette
    Infotext = []
-   picture = MK3s_baynunah.pcx
+   picture = MK3s_baynunah.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    jamming += 11

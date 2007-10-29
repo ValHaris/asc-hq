@@ -5,7 +5,7 @@ VehicleType {
    
    Description = patrol boat
    Infotext = [The Skjold class of missile fast patrol boats is characterised by its speed, reduced signatures, small size with heavy weapon load and its littoral combat capability. The Skjold has an air-cushioned catamaran hull which, with waterjet propulsion, provides high speed and manoeuvrability.]
-   picture = MK3s_skjold.pcx
+   picture = MK3s_skjold.png
    GuideSortHelp = 518 418 0 0 3 0 0 0 0 0
 
    Armor -= 50

@@ -9,6 +9,6 @@ Der Booster ist ein Einweg Fahrzeug. Er transportiert Satelliten ins All, wenn k
 
 The Booster is a single-sortie unit, used to transport sattelites into space when no shuttle is available.
 ]
-   Picture = MK3o_booster.pcx
+   Picture = MK3o_booster.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 } VehicleType

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = special operations
    Infotext = []
-   picture = MK3i_SEK.pcx
+   picture = MK3i_SEK.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming = 39

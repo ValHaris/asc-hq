@@ -5,7 +5,7 @@ VehicleType {
 
    Description = inter city cargo express
    Infotext = []
-   picture = MK3t_icce.pcx
+   picture = MK3t_icce.png
    GuideSortHelp = 550 551 0 0 3 0 0 0 0 0
 
    Armor -= 50

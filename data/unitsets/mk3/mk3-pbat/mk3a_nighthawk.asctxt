@@ -4,7 +4,7 @@ VehicleType {
    ID = 516
    Description = Stealth fighter
    Infotext = []
-   picture = MK3a_NIGHTHAWK.pcx
+   picture = MK3a_NIGHTHAWK.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming += 20
