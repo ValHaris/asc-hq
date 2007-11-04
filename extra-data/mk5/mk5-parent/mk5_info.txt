@@ -79,8 +79,10 @@ ID 1449 Stachel
 ID 1450 Lastesel
 
 Flugzeuge
+ID 1476 Saenger
 ID 1425 Doomsday
 ID 1451 Blackwiddow
+ID 1475 Tenga
 
 Dronen
 ID 1417 RTH 302 (Rakete)
@@ -90,6 +92,7 @@ ID 1470 Scanner
 Orbital
 ID 1411 Energia
 ID 1413 OCS
+ID 1424 Horus
 
 Schiffe
 ID 1455 Sealboat
@@ -102,6 +105,7 @@ UBoote
 ID 1420 MU (Mini TransportU-Boot)
 ID 1421 THT 30(langstreckentorpedo)
 ID 1471 MUCM
+IF 1474 WATCHER
 
 Hoovercrafts
 ID 1427 Flussgeist

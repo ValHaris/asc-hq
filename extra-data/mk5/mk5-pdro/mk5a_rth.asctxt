@@ -12,7 +12,7 @@ VehicleType {
    Weapons {
       Number = 2 
       Weapon0 { 
-         targets = low_level_flight medium_level_flight high_level_flight
+         targets = low_level_flight medium_level_flight high_level_flight 
          shotFrom = low_level_flight medium_level_flight high_level_flight
          Punch@MaxRange = 85
          Punch@MinRange = 85

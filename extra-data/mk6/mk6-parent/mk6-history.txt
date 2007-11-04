@@ -1,5 +1,8 @@
 History MK6 teccnols unit set
 
+________________
+31.10.2007 Gamer
+-Destructor, Fuel Bugfix
 
 30.09.2007
 Set eröffnet mit den ersten panzern und Mechwarrior

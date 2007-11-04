@@ -11,6 +11,7 @@ VehicleType {
    Armor += 10
 ;   Movement += 0 0 0 5 0 0 0 0
    Tank.material = 1000
+   Tank.fuel = 1100
 
    Weapons {
       Weapon0 ->* VehicleType.TeccEMP

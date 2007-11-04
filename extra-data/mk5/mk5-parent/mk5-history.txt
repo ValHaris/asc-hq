@@ -1,6 +1,16 @@
 MK5 Outsider
 GAMER
 
+_________________
+31.10.2007 Gamer
+-Lastesel Kapazität erweitert
+-FSV kann default laden
+Neu:
+-Watcher
+-Tenga
+-Sänger
+-Horus
+
 __________
 24.10.2007
 -Lastesel Tech Bugfix

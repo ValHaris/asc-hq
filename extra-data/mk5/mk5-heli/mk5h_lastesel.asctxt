@@ -8,6 +8,9 @@ VehicleType {
    
    Armor = 300
    Transportation ->* VehicleType.TransTurretBig 
+   Transportation.CategoriesNOT = rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
+   Transportation.MaxLoadableUnitSize = 700
+   Transportation.MaxLoadableMass = 700
 
    Tank { 
       Energy = 0
