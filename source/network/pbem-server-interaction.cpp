@@ -159,7 +159,7 @@ ASC_PBEM::ASC_PBEM( ASCString serverBase )
    usable = true;
    statusCode = -1;
    loggedIn = false;
-   serverVersion = 0.0;
+   serverVersion = 0;
 
    request( "" );
    
@@ -213,8 +213,8 @@ bool ASC_PBEM::request( ASCString url, std::vector<ASCString> parameters )
   curl_easy_setopt( curl_handle, CURLOPT_WRITEDATA, &body );
 
   // post parameters
-   struct curl_httppost* post = NULL;
-   struct curl_httppost* last = NULL;
+   // struct curl_httppost* post = NULL;
+   // struct curl_httppost* last = NULL;
 
    ASCString encodedRequest; // lifetime considerations require this parameter to be _outside_ the loop
    if( parameters.size() > 0 )
@@ -356,7 +356,7 @@ void ASC_PBEM::parseHeaderLine( ASCString line )
    {
       if( line.find( "ASC_PBEM_Server/" ) != ASCString::npos )
       {
-         serverVersion = atof( line.substr( line.find( "ASC_PBEM_Server/" ) + 16 ).c_str() );
+         serverVersion = atoi( line.substr( line.find( "ASC_PBEM_Server/" ) + 16 ).c_str() );
       }else
       {
          serverVersion = -1;

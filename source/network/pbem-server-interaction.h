@@ -71,7 +71,7 @@ class ASC_PBEM_FileUploadControl // just a better struct so we can use const dat
       
       std::vector<ASCString> parameters;
       
-      ASC_PBEM_FileUploadControl( const char* dataParam, const int sizeParam ): data( dataParam ), size( sizeParam ){};
+      ASC_PBEM_FileUploadControl( const char* dataParam, const int sizeParam ): size( sizeParam ), data( dataParam ) {};
       
 };
 
