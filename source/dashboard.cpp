@@ -250,15 +250,17 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       if ( name == "unit_level" ) {
          int height1 = 0;
          int height2 = 0;
+         int player = actmap->actplayer;
          if ( veh ) {
             height1 = veh->height;
             height2 = veh->typ->height;
+            player = veh->getOwner();
          }
 
          for ( int i = 0; i < 8; ++i ) {
             if ( height1 & (1 << i )) {
                MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
-               blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+               blitter.setColor( actmap->player[player].getColor() );
                blitter.blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), screen, SPoint(dst.x, dst.y + (7-i) * 13));
             } else
                if ( height2 & (1 << i ))
