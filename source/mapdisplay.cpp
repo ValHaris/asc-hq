@@ -870,8 +870,16 @@ void filterQueuedZoomEvents()
 
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
+   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
+
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoomoutbutton ) {
       changeZoom( 10 );
+   
+      MapCoordinate newpos = screenPos2mapPos( SPoint(button->x, button->y));
+      MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
+      checkViewPosition( newOffset );
+      offset = newOffset;
+
       viewChanged();
       repaintMap();
       filterQueuedZoomEvents();
@@ -880,6 +888,12 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoominbutton ) {
       changeZoom( -10 );
+
+      MapCoordinate newpos = screenPos2mapPos( SPoint(button->x, button->y));
+      MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
+      checkViewPosition( newOffset );
+      offset = newOffset;
+
       viewChanged();
       repaintMap();
       filterQueuedZoomEvents();
@@ -887,7 +901,6 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
    }
 
 
-   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;
 
