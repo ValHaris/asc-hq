@@ -5,6 +5,7 @@ VehicleType {
 
    Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse gegen Soldatenansturm zu verteidigen .]
    picture = MK1b_fort.pcx
+InfoImage = fort.jpg
    GuideSortHelp = 507 315 0 0 1 0 0 0 0 0
 
    Armor += 100

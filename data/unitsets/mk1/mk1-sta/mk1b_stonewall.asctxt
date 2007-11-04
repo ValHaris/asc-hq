@@ -6,6 +6,7 @@ VehicleType {
    Description = heavy bunker
    Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse zu verteidigen.]
    picture = MK1b_stonewall.pcx
+InfoImage = stonewall.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
 } VehicleType

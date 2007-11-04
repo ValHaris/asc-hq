@@ -9,6 +9,7 @@ Dank des Maschinengewehrs kann dieser Turm sich sogar gegen tief fliegende Lufte
 Die gute Panzerung garantiert ausserdem das diese Anlage auch schwerem Beschuss stand hält.
 ]
    picture = MK1b_EXP49.pcx
+   InfoImage = exp49-v2.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Armor += 50

@@ -7,6 +7,7 @@ VehicleType {
    Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
    spaceships and spacestations.]
    Picture = MK1b_SDB.pcx
+InfoImage = sdb.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Weapons { 

@@ -7,6 +7,7 @@ VehicleType {
    Infotext = [ Gepanzerte stationaere Boden-Boden Raketenanlage. Aufgrund der groﬂe Treibstofftanks ist der Sprengkopf der 
    Rakete eher klein ausgefallen.]
    Picture = Mk1b_silo.pcx
+InfoImage = silo.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
 } VehicleType

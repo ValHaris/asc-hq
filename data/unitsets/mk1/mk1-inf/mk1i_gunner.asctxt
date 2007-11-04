@@ -9,6 +9,7 @@ Allerdings ist er wie sämtliche Trooper empfindlich gegen nahezu jeglichen Besch
 Halten sie ihn möglichst in Deckung und geben sie auf feindliche Scharfschützen acht!
 ]
    Picture = MK1i_gunner.pcx
+InfoImage = gunner.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10

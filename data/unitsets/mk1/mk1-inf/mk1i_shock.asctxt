@@ -23,6 +23,7 @@ VehicleType {
               - schnelle Bewegung für einen Trooper #CRT# 
               - wirkungsvoll gegen Infanterie #CRT# ]
    picture = MK1i_shock.pcx
+InfoImage = shock-trooper.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10
