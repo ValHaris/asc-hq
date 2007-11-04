@@ -30,10 +30,10 @@ ObjectType {
    Name = Wreck
    NoSelfChaining = false
    TerrainAccess { 
-      terrain_any = very_shallow_water very_shallow_water shallow_water water river
+      terrain_any = water river
       terrain_all = 
       terrain_not =  
-      terrain_kill = lava deep_water  
+      terrain_kill = lowland hard_sand soft_sand mountains high_mountains hillside lava deep_water  
    } TerrainAccess
    TerrainProperties_Filter =  
    TerrainProperties_Add =  

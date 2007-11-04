@@ -3,6 +3,11 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
+_________________
+v21.01 15.06.2007 
+Raps (Fields) GroupID korrigiert (10)
+
+________________
 v21.00
 - komplette Überarbeitung sowie Einbau von optionalen Terrain Übergängen die nur Verwendung bei freiem Arbeitsspeicher für ASC >500 MB verwendet werden sollten
 

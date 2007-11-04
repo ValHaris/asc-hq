@@ -33,7 +33,7 @@ ObjectType {
       terrain_any = water 
       terrain_all = 
       terrain_not = pipeline
-      terrain_kill = deep_water lava
+      terrain_kill = deep_water
    } TerrainAccess
    TerrainProperties_Filter =
    TerrainProperties_Add = pipeline 

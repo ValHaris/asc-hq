@@ -19,9 +19,9 @@ ObjectType {
    Height = 114
    ConstructionCost { 
       Energy = 0
-      Material = 150
+      Material = 120
       fuel = 80
-      Movement = 11
+      Movement = 9
    } ConstructionCost
    RemovalCost { 
       Energy = 0

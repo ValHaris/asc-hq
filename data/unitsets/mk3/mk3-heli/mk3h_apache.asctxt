@@ -15,7 +15,7 @@ Its great strength lies in its ability to strike at ground targets from a distan
 Avoid enemy troopers, the apache has only very limited weaponery when attacking infantry.
 
 ]
-   picture = MK3h_APACHE.png
+   picture = mk3h_apache.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Movement += 0 0 0 10 0 0 0 0 

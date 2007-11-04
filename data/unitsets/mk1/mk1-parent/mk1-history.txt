@@ -2,6 +2,9 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 __________________
+04.11.2007 (GAMER)
+-Ant verliert Baufähigkeit strong Pipeline
+__________________
 04.10.2007 (GAMER)
 -Dive_mech_parent Height + deep_submerged, Torpedo schießt nur noch gleiche Höhe + 1 nach oben
 -def_mech_parent Flack Reichweite 3 Felder

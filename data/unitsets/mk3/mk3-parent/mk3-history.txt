@@ -2,6 +2,10 @@ Mark3 Unit Set Advanced Strategic Command
 grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
+__________________
+03.11.2007 (GAMER)
+-Skjold, Abilities Bugfix
+-Elch, verliert strong_pipeline Baufähigkeit
 _________________
 06.10.2007 (GAMER)
 -Tow , Grafikzuweisung korrigiert

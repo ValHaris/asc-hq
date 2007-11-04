@@ -11,7 +11,7 @@ VehicleType {
    Armor -= 50
    jamming = 39
    Transportation ->* VehicleType.TransLowTrooper2
-   Abilities += move_after_attack 
+   Abilities += fuel_transfer material_transfer jam_only_own_field move_after_attack
 
    Tank { 
       Material = 1000
@@ -19,15 +19,14 @@ VehicleType {
    Height = floating ground_level 
    Movement += 0 0 0 100 0 0 0 0
    TerrainAccess ->* VehicleType.nodeepwatership_terrain
-   Abilities += fuel_transfer material_transfer jam_only_own_field
 
    Weapons { 
       Initiative = 0
       Number = 8
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 58
-      Weapon0.Punch@MinRange = 67
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
 
       Weapon1 ->* VehicleType.ShM
       Weapon1.Ammo = 6

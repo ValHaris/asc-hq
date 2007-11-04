@@ -12,6 +12,10 @@ ObjectType {
       fuel = 50
       Movement = 15
    } RemovalCost
+   TerrainAccess { 
+      terrain_any = water river
+      terrain_kill = lowland hard_sand soft_sand mountains high_mountains hillside very_shallow_water shallow_water lava deep_water  
+   } TerrainAccess
    dry { 
       picture = _wreck_400_aircraft.PCX 1
       DisplayMethod = shadow
