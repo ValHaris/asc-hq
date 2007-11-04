@@ -182,12 +182,12 @@ class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
          return names[name];
       }
 
-      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
+      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, typename ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
       {
          return registerClass( id, createFn, nameProvider(id) );
       }
 
-      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, NameType name )
+      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, typename ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, NameType name )
       {
          if ( Factory<AbstractProduct, IdentifierType>::registerClass ( id, createFn )) {
             names[name] = id;

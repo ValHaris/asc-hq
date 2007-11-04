@@ -2,6 +2,8 @@
 
 #include "pbem-server-interaction.h"
 
+
+
 /** file: ASC_PBEM.cpp
    * author: Jade Rogalski
    * license: GPL
@@ -24,7 +26,7 @@ size_t ASC_PBEM_writeInternal( void* inboundData, size_t size, size_t nmemb, voi
    {
       buffer[ i ] = ((char*) inboundData )[ i ];
    }
-   ( (std::vector<std::string> *) vector )->push_back( buffer );
+   ( (std::vector<ASCString> *) vector )->push_back( buffer );
    delete buffer;
    return nmemb;
 }
@@ -50,7 +52,7 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
    {
       case 0: // header of first part
       {
-         std::string header = "--" + control->boundary + "\n" +
+         ASCString header = ASCString("--") + control->boundary + "\n" +
             "Content-Disposition: form-data; name=\"file\"; filename=\"" +
             control->fileName + "\"\n" +
             "Content-Type: application/octet-stream\n \n";
@@ -86,7 +88,7 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
       case 2: // footer: "--" + boundary + "--"
       {
          // keine ahnung warum da 2x\n nÃ¶tig sind... wird aber sonst nicht korrekt geparsed
-         std::string header = "\n\n--" + control->boundary;
+         ASCString header = ASCString("\n\n--") + control->boundary;
          if( control->parameters.size() == 0 ) 
             header += "--\n";
          else
@@ -110,10 +112,10 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
          int parameterIndex = (control->step - 3) * 2;
          if( control->parameters.size() > parameterIndex )
          {
-            std::string name = control->parameters[ parameterIndex ];
-            std::string value = control->parameters[ parameterIndex + 1 ];
+            ASCString name = control->parameters[ parameterIndex ];
+            ASCString value = control->parameters[ parameterIndex + 1 ];
 
-            std::string data = "Content-Disposition: form-data; name=\"" + name + "\"\n\n" + value +
+            ASCString data = ASCString("Content-Disposition: form-data; name=\"") + name + "\"\n\n" + value +
                "\n\n--" + control->boundary;
                
             if( control->parameters.size() > parameterIndex + 2 )
@@ -145,7 +147,7 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
 }
 
 
-ASC_PBEM::ASC_PBEM( std::string serverBase )
+ASC_PBEM::ASC_PBEM( ASCString serverBase )
 {
    this->serverBase = serverBase;
    if( serverBase[ serverBase.size() - 1 ] != '/' )
@@ -190,13 +192,13 @@ bool ASC_PBEM::isLoggedIn()
    return loggedIn;
 }
 
-bool ASC_PBEM::request( std::string url )
+bool ASC_PBEM::request( ASCString url )
 {
-   std::vector<std::string> parameters;
+   std::vector<ASCString> parameters;
    return request( url, parameters );
 }
 
-bool ASC_PBEM::request( std::string url, std::vector<std::string> parameters )
+bool ASC_PBEM::request( ASCString url, std::vector<ASCString> parameters )
 {
    if( ! usable ) return false;
    
@@ -204,7 +206,7 @@ bool ASC_PBEM::request( std::string url, std::vector<std::string> parameters )
    header.clear();
    body.clear();
    curl_easy_reset( curl_handle );
-   std::string urlInternal = serverBase + url;
+   ASCString urlInternal = serverBase + url;
    curl_easy_setopt( curl_handle, CURLOPT_URL, urlInternal.c_str() );
    curl_easy_setopt( curl_handle, CURLOPT_WRITEFUNCTION, &ASC_PBEM_writeInternal );
   curl_easy_setopt( curl_handle, CURLOPT_WRITEHEADER, &header );
@@ -214,14 +216,14 @@ bool ASC_PBEM::request( std::string url, std::vector<std::string> parameters )
    struct curl_httppost* post = NULL;
    struct curl_httppost* last = NULL;
 
-   std::string encodedRequest; // lifetime considerations require this parameter to be _outside_ the loop
+   ASCString encodedRequest; // lifetime considerations require this parameter to be _outside_ the loop
    if( parameters.size() > 0 )
    {
       for( int i=0; i<parameters.size(); i++ ) 
       {
-         std::string name = parameters[ i ];
+         ASCString name = parameters[ i ];
          i++;
-         std::string value = parameters[ i ];
+         ASCString value = parameters[ i ];
          if( encodedRequest.length() > 0 ) encodedRequest += "&"; 
          encodedRequest += name + "=" + value;
       }
@@ -230,8 +232,8 @@ bool ASC_PBEM::request( std::string url, std::vector<std::string> parameters )
    
   // additional headers; currently only sessionid
    struct curl_slist *headers=NULL;
-   std::string cookieString = "cookie: JSESSIONID=" + sessionID + ";"; // lifetime considerations require this parameter to be _outside_ the loop
-   std::string acceptString = "Accept: text/plain"; // lifetime considerations require this parameter to be _outside_ the loop
+   ASCString cookieString = "cookie: JSESSIONID=" + sessionID + ";"; // lifetime considerations require this parameter to be _outside_ the loop
+   ASCString acceptString = "Accept: text/plain"; // lifetime considerations require this parameter to be _outside_ the loop
    if( sessionID.length() > 0 )
    {
       headers = curl_slist_append( headers, cookieString.c_str() );  
@@ -245,7 +247,7 @@ bool ASC_PBEM::request( std::string url, std::vector<std::string> parameters )
    // parse header for status code and session id
    if( usable )
    {
-      std::string headerString;
+      ASCString headerString;
       for( int i=0; i<header.size(); i++ ) headerString += header[ i ];
       parseHeader( headerString );
    }
@@ -257,7 +259,7 @@ bool ASC_PBEM::request( std::string url, std::vector<std::string> parameters )
 }
 
 
-bool ASC_PBEM::request( std::string url, ASC_PBEM_FileUploadControl *fileUploadControl )
+bool ASC_PBEM::request( ASCString url, ASC_PBEM_FileUploadControl *fileUploadControl )
 {
    if( ! usable ) return false;
    
@@ -265,7 +267,7 @@ bool ASC_PBEM::request( std::string url, ASC_PBEM_FileUploadControl *fileUploadC
    header.clear();
    body.clear();
    curl_easy_reset( curl_handle );
-   std::string urlInternal = serverBase + url;
+   ASCString urlInternal = serverBase + url;
    curl_easy_setopt( curl_handle, CURLOPT_URL, urlInternal.c_str() );
    curl_easy_setopt( curl_handle, CURLOPT_WRITEFUNCTION, &ASC_PBEM_writeInternal );
   curl_easy_setopt( curl_handle, CURLOPT_WRITEHEADER, &header );
@@ -277,9 +279,9 @@ bool ASC_PBEM::request( std::string url, ASC_PBEM_FileUploadControl *fileUploadC
 
   // additional headers; sessionid + content type
    struct curl_slist *headers=NULL;
-   std::string cookieString = "cookie: JSESSIONID=" + sessionID + ";"; // lifetime considerations require this parameter to be _outside_ the loop
-   std::string contentString = "content-type: multipart/form-data; boundary=" + fileUploadControl->boundary;
-   std::string acceptString = "Accept: text/plain"; // lifetime considerations require this parameter to be _outside_ the loop
+   ASCString cookieString = "cookie: JSESSIONID=" + sessionID + ";"; // lifetime considerations require this parameter to be _outside_ the loop
+   ASCString contentString = "content-type: multipart/form-data; boundary=" + fileUploadControl->boundary;
+   ASCString acceptString = "Accept: text/plain"; // lifetime considerations require this parameter to be _outside_ the loop
    if( sessionID.length() > 0 )
    {
       headers = curl_slist_append( headers, cookieString.c_str() );  
@@ -294,7 +296,7 @@ bool ASC_PBEM::request( std::string url, ASC_PBEM_FileUploadControl *fileUploadC
    // parse header for status code and session id
    if( usable )
    {
-      std::string headerString;
+      ASCString headerString;
       for( int i=0; i<header.size(); i++ ) headerString += header[ i ];
       parseHeader( headerString );
    }
@@ -305,14 +307,14 @@ bool ASC_PBEM::request( std::string url, ASC_PBEM_FileUploadControl *fileUploadC
    return usable;
 }
 
-void ASC_PBEM::parseHeader( std::string headerString )
+void ASC_PBEM::parseHeader( ASCString headerString )
 {
    int currentIndex = 0;
    while( currentIndex < headerString.size() )
    {
       int lineEnd = headerString.find( '\n', currentIndex );
-      std::string line;
-      if( lineEnd != std::string::npos )
+      ASCString line;
+      if( lineEnd != ASCString::npos )
       {
          line = headerString.substr( currentIndex, lineEnd-currentIndex );
          parseHeaderLine( line );
@@ -326,33 +328,33 @@ void ASC_PBEM::parseHeader( std::string headerString )
    }
 }
 
-void ASC_PBEM::parseHeaderLine( std::string line )
+void ASC_PBEM::parseHeaderLine( ASCString line )
 {
    if( line.find( "HTTP" ) == 0 )
    {
       // http status line... grab code
       int space = line.find( " " );
-      if( space == std::string::npos ) return;
+      if( space == ASCString::npos ) return;
       space++;
       int end = line.find( " ", space );
-      if( end == std::string::npos ) return;
+      if( end == ASCString::npos ) return;
       
-      std::string codeStr = line.substr( space, end-space );
+      ASCString codeStr = line.substr( space, end-space );
       statusCode = atoi( codeStr.c_str() );
    }else if( line.find( "Set-Cookie:" ) == 0 )
    {
-      if( line.find( "JSESSIONID" ) != std::string::npos )
+      if( line.find( "JSESSIONID" ) != ASCString::npos )
       {
-         std::string sessionID = line.substr( line.find( "JSESSIONID" ) );
-         if( sessionID.find( "=" ) == std::string::npos ) return;
+         ASCString sessionID = line.substr( line.find( "JSESSIONID" ) );
+         if( sessionID.find( "=" ) == ASCString::npos ) return;
          sessionID = sessionID.substr( sessionID.find( "=" ) + 1 );
-         if( sessionID.find( ";" ) == std::string::npos ) return;
+         if( sessionID.find( ";" ) == ASCString::npos ) return;
          sessionID = sessionID.substr( 0, sessionID.find( ";" ) );
          this->sessionID = sessionID;
       }
    }else if( line.find( "X-Servlet:" ) == 0 )
    {
-      if( line.find( "ASC_PBEM_Server/" ) != std::string::npos )
+      if( line.find( "ASC_PBEM_Server/" ) != ASCString::npos )
       {
          serverVersion = atof( line.substr( line.find( "ASC_PBEM_Server/" ) + 16 ).c_str() );
       }else
@@ -376,11 +378,11 @@ bool ASC_PBEM::logout()
    return statusCode == 200;
 }
 
-bool ASC_PBEM::login( std::string user, std::string passwd )
+bool ASC_PBEM::login( ASCString user, ASCString passwd )
 {
    if( loggedIn ) return false;
    
-   std::vector< std::string > parameters;
+   std::vector< ASCString > parameters;
    parameters.push_back( "name" );
    parameters.push_back( user );
    parameters.push_back( "passwd" );
@@ -393,11 +395,11 @@ bool ASC_PBEM::login( std::string user, std::string passwd )
    return loggedIn;
 }
 
-bool ASC_PBEM::createAccount( std::string user, std::string passwd, std::string email )
+bool ASC_PBEM::createAccount( ASCString user, ASCString passwd, ASCString email )
 {
    if( loggedIn ) return false;
    
-   std::vector< std::string > parameters;
+   std::vector< ASCString > parameters;
    parameters.push_back( "name" );
    parameters.push_back( user );
    parameters.push_back( "passwd" );
@@ -412,11 +414,11 @@ bool ASC_PBEM::createAccount( std::string user, std::string passwd, std::string 
    return statusCode == 201;
 }
 
-bool ASC_PBEM::activateAccount( std::string user, std::string code )
+bool ASC_PBEM::activateAccount( ASCString user, ASCString code )
 {
    if( loggedIn ) return false;
    
-   std::vector< std::string > parameters;
+   std::vector< ASCString > parameters;
    parameters.push_back( "name" );
    parameters.push_back( user );
    parameters.push_back( "code" );
@@ -427,7 +429,7 @@ bool ASC_PBEM::activateAccount( std::string user, std::string code )
    return statusCode == 202;
 }
 
-bool ASC_PBEM::uploadFile( std::string fileName, const char* data, const int size, const int gameID )
+bool ASC_PBEM::uploadFile( ASCString fileName, const char* data, const int size, const int gameID )
 {
    if( ! loggedIn ) return false;
    
@@ -450,7 +452,7 @@ bool ASC_PBEM::uploadFile( std::string fileName, const char* data, const int siz
    return statusCode == 201;
 }
 
-bool ASC_PBEM::createGame( std::string fileName, const char* data, const int size, std::string gameName, std::string fileNamePattern, char* roles, int* players, int projectID, int turn, int currentSlot )
+bool ASC_PBEM::createGame( ASCString fileName, const char* data, const int size, ASCString gameName, ASCString fileNamePattern, char* roles, int* players, int projectID, int turn, int currentSlot )
 {
    if( ! loggedIn ) return false;
    
@@ -512,7 +514,7 @@ std::vector<TGameInfo> ASC_PBEM::getCurrentGamesInfo( bool myTurnOnly )
    
    if( !loggedIn ) return games;
    
-   std::vector< std::string > parameters;
+   std::vector< ASCString > parameters;
    parameters.push_back( "myTurnOnly" );
    if( myTurnOnly )
       parameters.push_back( "1" );
@@ -524,12 +526,12 @@ std::vector<TGameInfo> ASC_PBEM::getCurrentGamesInfo( bool myTurnOnly )
       if( statusCode == 200 )
       {
          int currentIndex = 0;
-         std::string bodyString = getBody();
+         ASCString bodyString = getBody();
          while( currentIndex < bodyString.size() )
          {
             int lineEnd = bodyString.find( '\n', currentIndex );
-            std::string line;
-            if( lineEnd != std::string::npos )
+            ASCString line;
+            if( lineEnd != ASCString::npos )
             {
                line = bodyString.substr( currentIndex, lineEnd-currentIndex );
                games.push_back( parseGameInfoLine( line ) );
@@ -556,7 +558,7 @@ std::vector<TUserData> ASC_PBEM::getUserList( bool activeOnly )
    
    if( !loggedIn ) return users;
    
-   std::vector< std::string > parameters;
+   std::vector< ASCString > parameters;
    parameters.push_back( "activeOnly" );
    if( activeOnly )
       parameters.push_back( "1" );
@@ -568,12 +570,12 @@ std::vector<TUserData> ASC_PBEM::getUserList( bool activeOnly )
       if( statusCode == 200 )
       {
          int currentIndex = 0;
-         std::string bodyString = getBody();
+         ASCString bodyString = getBody();
          while( currentIndex < bodyString.size() )
          {
             int lineEnd = bodyString.find( '\n', currentIndex );
-            std::string line;
-            if( lineEnd != std::string::npos )
+            ASCString line;
+            if( lineEnd != ASCString::npos )
             {
                line = bodyString.substr( currentIndex, lineEnd-currentIndex );
                users.push_back( parseUserInfoLine( line ) );
@@ -596,7 +598,7 @@ TFileData* ASC_PBEM::downloadGame( TGameInfo game )
 {
    if( ! loggedIn ) return NULL;
    /*
-   std::vector< std::string > parameters;
+   std::vector< ASCString > parameters;
    
    parameters.push_back( "name" );
    parameters.push_back( user );
@@ -607,7 +609,7 @@ TFileData* ASC_PBEM::downloadGame( TGameInfo game )
    sprintf( gameIDString, "%i",  game.gameID );
    char* fileNameEscaped = curl_escape( game.currentSaveGameName.c_str(), 0 );
    
-   std::string requestString = "tools/download/";
+   ASCString requestString = "tools/download/";
    requestString += fileNameEscaped;
    requestString += "?gameID=";
    requestString += gameIDString; 
@@ -621,7 +623,7 @@ TFileData* ASC_PBEM::downloadGame( TGameInfo game )
    
    if( statusCode == 200 )
    {
-      std::string bodyString = getBody();
+      ASCString bodyString = getBody();
       
       TFileData *data = new TFileData;
       data->fileName = game.currentSaveGameName;
@@ -637,7 +639,7 @@ TFileData* ASC_PBEM::downloadGame( TGameInfo game )
 
 
 
-TUserData ASC_PBEM::parseUserInfoLine( std::string line )
+TUserData ASC_PBEM::parseUserInfoLine( ASCString line )
 {
    TUserData info;
    
@@ -648,7 +650,7 @@ TUserData ASC_PBEM::parseUserInfoLine( std::string line )
    return info;
 }
 
-TGameInfo ASC_PBEM::parseGameInfoLine( std::string line )
+TGameInfo ASC_PBEM::parseGameInfoLine( ASCString line )
 {
    TGameInfo info;
    
@@ -671,17 +673,17 @@ TGameInfo ASC_PBEM::parseGameInfoLine( std::string line )
    return info;
 }
 
-std::string ASC_PBEM::getHeader()
+ASCString ASC_PBEM::getHeader()
 {
-   std::string headerString;
+   ASCString headerString;
    for( int i=0; i<header.size(); i++ ) 
       headerString += header[ i ];
    return headerString;
 }
 
-std::string ASC_PBEM::getBody()
+ASCString ASC_PBEM::getBody()
 {
-   std::string bodyString;
+   ASCString bodyString;
    for( int i=0; i<body.size(); i++ ) 
       bodyString += body[ i ];
    return bodyString;
@@ -732,7 +734,7 @@ int nmain(int argc, char *argv[])
       
          char* daten = "miau";
          int size = strlen( "miau" ) * sizeof( char );
-         std::string fileName = "duell-A-1.ascpbm";
+         ASCString fileName = "duell-A-1.ascpbm";
          int gameID = 1;
          
          ASC_PBEM asc_pbem( "http://localhost:8080/ascServer/" );
@@ -803,7 +805,7 @@ int nmain(int argc, char *argv[])
          std::cout << "login failed" << std::endl;
       }
       /*
-      std::string uploadData = "a\ns\nd\nmiau\n";
+      ASCString uploadData = "a\ns\nd\nmiau\n";
       int gameID = 3;
       //std::cout << uploadData.size() << std::endl;
       if( asc_pbem.uploadFile( "some filename.ascpbm", uploadData.c_str(), uploadData.size(), gameID ) )
@@ -860,9 +862,9 @@ int nmain(int argc, char *argv[])
       int projectID = -1;
       int turn = 1;
       int currentSlot = 1;
-      std::string gameName = "evil isle";
-      std::string fileName = "evilisle-A-1.ascpbm";
-      std::string fileNamePattern = "evilisle-$p-$t.ascpbm";
+      ASCString gameName = "evil isle";
+      ASCString fileName = "evilisle-A-1.ascpbm";
+      ASCString fileNamePattern = "evilisle-$p-$t.ascpbm";
       
       if( asc_pbem.createGame( fileName, fileName.c_str(), fileName.size(), gameName, fileNamePattern, roles, players, projectID, turn, currentSlot ) )
       {
