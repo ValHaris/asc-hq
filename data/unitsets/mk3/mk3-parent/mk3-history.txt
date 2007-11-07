@@ -3,6 +3,10 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+05.11.2007 (GAMER)
+-Bradley techbugfix
+
+__________________
 03.11.2007 (GAMER)
 -Skjold, Abilities Bugfix
 -Elch, verliert strong_pipeline Baufähigkeit
