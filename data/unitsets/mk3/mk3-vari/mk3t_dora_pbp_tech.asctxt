@@ -6,5 +6,5 @@ technology {
    parent = 100000
    researchpoints *= 16
    techlevel = 4
-   TechnologiesRequired = 100000,100002,100104,100204,100309,599 
+   TechnologiesRequired = 100010,100002,100104,100204,100309,599 
 } Technology
