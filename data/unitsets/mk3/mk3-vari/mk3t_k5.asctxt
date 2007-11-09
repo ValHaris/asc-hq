@@ -4,7 +4,7 @@ VehicleType {
    parent = 254
 
 ;   Description = railroad gun
-   Picture = mk3t_k5.pcx
+   Picture = mk3t_k5.png
    WreckageObject = 458
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 

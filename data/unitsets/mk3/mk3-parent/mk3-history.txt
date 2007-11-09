@@ -3,6 +3,12 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+09.11.2007 (Ares)
+- Alle Einheitenbilder ersetzt so, dass Kontrast und Farben stimmen
+- Dora, Bradley und K5 auf PNG umgestellt
+- Bilder mit falschem Format auf 48x48 umgestellt:
+  kornuta, cojote, prd, ticonderoga, fh70, fh77, longtrack, merkat, pzh2000, tow, volcano
+__________________
 05.11.2007 (GAMER)
 -Bradley techbugfix
 
