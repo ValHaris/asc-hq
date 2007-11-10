@@ -1,7 +1,7 @@
 ObjectType { 
    name = strong pipeline
    ID = 996
-   groupID = 15
+   groupID = 9
    canExistBeneathBuildings = true
    Weather = dry
    visible_in_fogOfWar = false
