@@ -1,7 +1,7 @@
 TerrainType { 
 
    Name = Sand 6
-   Parent = 505
+   Parent = 521
    ID = 2968
 
    Weather -= snow_and_ice
