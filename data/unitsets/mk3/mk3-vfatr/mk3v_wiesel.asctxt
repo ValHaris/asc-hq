@@ -8,6 +8,7 @@ VehicleType {
    picture = MK3v_WIESEL.pcx
    WreckageObject = 406
    GuideSortHelp = 503 504 552 0 3 0 0 0 0 0
+   Category = light_wheeled_vehicle
    
    Armor -= 100
    Transportation ->* VehicleType.TransLowTrooper 
