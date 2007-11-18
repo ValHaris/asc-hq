@@ -8,9 +8,6 @@ VehicleType {
 
    picture = MK5s_mu.pcx
 
-Weapon0 ->* VehicleType.ServiceGround 
-      Weapon0.targets = submerged floating ground level
-      Weapon0.shotfrom = submerged floating ground level
       Weapons.Weapon7 ->* VehicleType.MineSea
       Weapons.Weapon7.Ammo = 10
 } VehicleType

@@ -1,6 +1,12 @@
 History MK6 teccnols unit set
 
 ________________
+10.11.2007 Gamer
+Neu:
+-Baltic (dive mech)
+-Meo (ad mech)
+-Asus (light fighter)
+________________
 31.10.2007 Gamer
 -Destructor, Fuel Bugfix
 

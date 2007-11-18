@@ -14,8 +14,8 @@ VehicleType {
       Initiative = 0
       Number = 8
       Weapon0 ->* VehicleType.ServiceGround 
-      Weapon0.targets = submerged floating
-      Weapon0.shotfrom = submerged floating
+      Weapon0.targets = deep_submerged submerged floating ground_level
+      Weapon0.shotfrom = deep_submerged submerged floating ground_level
 
       Weapon1 ->* VehicleType.AmmoCM 
       Weapon1.Ammo = 2

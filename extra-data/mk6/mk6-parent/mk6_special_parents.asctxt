@@ -3,6 +3,7 @@ VehicleType {
    ID = 15000
 
    TeccEMP { 
+         Name = EMP H
          Type = Laser shootable 
          targets =  submerged floating ground_level low_level_flight
          shotFrom = submerged floating ground_level low_level_flight
@@ -57,6 +58,17 @@ VehicleType {
          heavy_aircraft = 100
       } WeaponEffectiveness
    } TeccEMP
+
+   TeccEMP2Air ->* vehicleType.TeccEMP
+   TeccEMP2Air.Name = EMP V 
+   TeccEMP2Air.targets =  low_level_flight medium_level_flight
+   TeccEMP2Air.shotFrom = submerged floating ground_level low_level_flight medium_level_flight
+   TeccEMP2Air.HitAccuracy.d1 = 0
+   TeccEMP2Air.HitAccuracy.0 = 0
+   TeccEMP2Air.HitAccuracy.u1 = 100
+   TeccEMP2Air.HitAccuracy.u2 = 100
+   TeccEMP2Air.HitAccuracy.u3 = 50
+
 
 Plasmabomb { 
          Type = Laser shootable 

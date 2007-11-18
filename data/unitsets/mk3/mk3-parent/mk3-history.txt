@@ -3,6 +3,10 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+18.11.2007 (GAMER)
+-TOW, Wiesel Bugfix category
+-LR5, Sevice auch auf Boden und tief getaucht
+__________________
 09.11.2007 (Ares)
 - Alle Einheitenbilder ersetzt so, dass Kontrast und Farben stimmen
 - Dora, Bradley und K5 auf PNG umgestellt

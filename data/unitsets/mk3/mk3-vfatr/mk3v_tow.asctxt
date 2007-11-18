@@ -12,6 +12,7 @@ VehicleType {
    Armor -= 100
    Abilities += paratrooper move_after_attack
    Weight = 15
+   Category = light_tracked_vehicle
 
    Tank { 
       fuel = 1000

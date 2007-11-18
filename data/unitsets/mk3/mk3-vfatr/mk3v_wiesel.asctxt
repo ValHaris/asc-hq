@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Infiltrator Squad
    Infotext = []
-   picture = MK3v_WIESEL.png
+   picture = mk3v_wiesel.png
    WreckageObject = 406
    GuideSortHelp = 503 504 552 0 3 0 0 0 0 0
    
@@ -13,6 +13,7 @@ VehicleType {
    Transportation ->* VehicleType.TransLowTrooper 
    Abilities += paratrooper move_after_attack
    Weight = 15
+   Category = light_tracked_vehicle
 
    Tank { 
       fuel = 1000
