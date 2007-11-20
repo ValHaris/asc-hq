@@ -1,24 +1,27 @@
 TerrainType { 
-   Name = BI3 import
+   Name = Morass
    ID = 18
-   parent = 1206
+   parent = 503
+   Weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-10d1.png
    } dry
    light_rain { 
-      GFX_Picture = 804
+      UseGFXpics = false
+      picture = texture-10d1.png pfuetze-1b.png
    } light_rain
    heavy_rain { 
-      GFX_Picture = 823
+      UseGFXpics = false
+      picture = texture-10d1.png pfuetze-1c.png
    } heavy_rain
    few_snow { 
-      GFX_Picture = 598
+      UseGFXpics = false
+      picture = texture-10d1.png fewsnow1.png
    } few_snow
    much_snow { 
-      GFX_Picture = 709
+      UseGFXpics = false
+      picture = texture-10d1.png
+      GraphicOperations = snow
    } much_snow
-   snow_and_ice { 
-      GFX_Picture = 709
-   } snow_and_ice
 } TerrainType

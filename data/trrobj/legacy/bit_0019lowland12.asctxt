@@ -1,57 +1,27 @@
 TerrainType { 
-   Name = BI3 import
+   Name = Grassland
+   Parent = 501
    ID = 19
-Weather = dry few_snow much_snow snow_and_ice heavy_rain light_rain
+   Weather -= snow_and_ice
    dry { 
+      UseGFXpics = false
       picture = texture-10c.png
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 12  12  12  12  12  12  12  12  10  12  12  12  12  12  12  12  12  11
-      TerrainProperties = Lowland Track_possible 
    } dry
-light_rain { 
-UseGFXpics = false
+   light_rain { 
+      UseGFXpics = false
       picture = texture-10c.png pfuetze-1a.png
-DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 4
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 12  11  11  11  13  13  13  12  10  20  20  16  20  20  20  20  20  10
-      TerrainProperties = Lowland snow Track_possible 
    } light_rain
-
-heavy_rain { 
-UseGFXpics = false
+   heavy_rain { 
+	UseGFXpics = false
       picture = texture-10c.png pfuetze-1c.png
-DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 4
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 13  12  12  12  14  14  14  13  10  20  20  16  20  20  20  20  20  10
-      TerrainProperties = Lowland snow Track_possible 
    } heavy_rain
-
    few_snow { 
       UseGFXpics = false
       picture = texture-10c.png fewsnow4.png
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 4
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 14  14  14  14  14  14  14  13  10  14  14  14  14  14  14  14  14  11
-      TerrainProperties = Lowland snow Track_possible 
    } few_snow
-
-much_snow { 
-UseGFXpics = false
-picture = texture-10c.png
-      DefenseBonus = 0
-      AttackBonus = 0
-      BasicJamming = 0
-      MoveMalus = 11 
-      TerrainProperties = Lowland snow Track_possible
-GraphicOperations = snow
+   much_snow { 
+	UseGFXpics = false
+	picture = texture-10c.png
+      GraphicOperations = snow
    } much_snow
-
-snow_and_ice ->* TerrainType.much_snow
-
 } TerrainType

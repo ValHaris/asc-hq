@@ -1,24 +1,27 @@
 TerrainType { 
-   Name = BI3 import
+   Name = Flat Rock
    ID = 26
-   Parent = 1201
+   Parent = 505
+   Weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-n3b0a.png
    } dry
    light_rain { 
-      GFX_Picture = 1727
+      UseGFXpics = false
+      picture = texture-n3b0a.png pfuetze-1a.png
    } light_rain
    heavy_rain { 
-      GFX_Picture = 841
+      UseGFXpics = false
+      picture = texture-n3b0a.png pfuetze-1b.png
    } heavy_rain
    few_snow { 
-      GFX_Picture = 641
+      UseGFXpics = false
+      picture = texture-n3b0a.png fewsnow1.png
    } few_snow
    much_snow { 
-      GFX_Picture = 747
+      UseGFXpics = false
+      picture = texture-n3b0a.png
+      GraphicOperations = snow
    } much_snow
-   snow_and_ice { 
-      GFX_Picture = 747
-   } snow_and_ice
 } TerrainType

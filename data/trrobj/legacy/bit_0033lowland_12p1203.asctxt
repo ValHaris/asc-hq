@@ -1,7 +1,8 @@
 TerrainType { 
-   Name = Lowland12
+   Name = Grassland
    ID = 33
-   Parent = 1203
+   Parent = 501
+   Weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-12b.png
@@ -16,17 +17,12 @@ TerrainType {
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-picture = texture-12b.png fewsnow2.png
+	picture = texture-12b.png fewsnow2.png
    } few_snow
    much_snow { 
       UseGFXpics = false
-picture = texture-12b.png
-GraphicOperations = snow
+	picture = texture-12b.png
+	GraphicOperations = snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-picture = texture-12b.png
-GraphicOperations = snow
-   } snow_and_ice
 } TerrainType
 

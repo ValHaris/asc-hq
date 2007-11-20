@@ -1,8 +1,8 @@
 TerrainType { 
-   Name = dark hard sand
+   Name = Flat Rock
    ID = 34
-   Parent = 1201
-   weather = dry few_snow much_snow snow_and_ice light_rain heavy_rain
+   Parent = 505
+   weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-n3b0d3.png
@@ -11,28 +11,17 @@ TerrainType {
       UseGFXpics = false
       picture = texture-n3b0d3.png pfuetze-1a.png
    } light_rain
-
    heavy_rain { 
       UseGFXpics = false
       picture = texture-n3b0d3.png pfuetze-1b.png
    } heavy_rain
-
    few_snow { 
-
       UseGFXpics = false
-picture = texture-n3b0d3.png fewsnow2.png
-
+	picture = texture-n3b0d3.png fewsnow2.png
    } few_snow
-
    much_snow { 
       UseGFXpics = false
-picture = texture-n3b0d3.png
-GraphicOperations = snow
-         } much_snow
-
-   snow_and_ice { 
-      UseGFXpics = false
-picture = texture-n3b0d3.png
-GraphicOperations = snow
-         } snow_and_ice
+	picture = texture-n3b0d3.png
+	GraphicOperations = snow
+   } much_snow
 } TerrainType

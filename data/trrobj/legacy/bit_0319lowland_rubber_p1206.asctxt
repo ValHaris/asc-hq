@@ -1,24 +1,27 @@
 TerrainType { 
-   Name = lowland rubber
+   Name = Grassland
    ID = 319
-   Parent = 1206
+   Parent = 501
+   Weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-n7.png
    } dry
    light_rain { 
-      GFX_Picture = 839
+      UseGFXpics = false
+      picture = texture-n7.png pfuetze-1b.png
    } light_rain
    heavy_rain { 
-      GFX_Picture = 846
+      UseGFXpics = false
+      picture = texture-n7.png pfuetze-1c.png
    } heavy_rain
    few_snow { 
-      GFX_Picture = 612
+      UseGFXpics = false
+      picture = texture-n7.png fewsnow1.png
    } few_snow
    much_snow { 
-      GFX_Picture = 700
+      UseGFXpics = false
+      picture = texture-n7.png
+      GraphicOperations = snow
    } much_snow
-   snow_and_ice { 
-      GFX_Picture = 700
-   } snow_and_ice
 } TerrainType

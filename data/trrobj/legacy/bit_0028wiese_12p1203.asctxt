@@ -1,7 +1,8 @@
 TerrainType { 
-   Name = Wiese
+   Name = Grassland
    ID = 28
    Parent = 501
+   Weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-14_1.png
@@ -16,16 +17,11 @@ TerrainType {
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-picture = texture-14_1.png fewsnow2.png
+      picture = texture-14_1.png fewsnow2.png
    } few_snow
    much_snow { 
       UseGFXpics = false
-picture = texture-14_1.png
-GraphicOperations = snow
+      picture = texture-14_1.png
+      GraphicOperations = snow
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = false
-picture = texture-14_1.png
-GraphicOperations = snow
-   } snow_and_ice
 } TerrainType
