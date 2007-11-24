@@ -13,7 +13,7 @@ VehicleType {
    WreckageObject = 450
    GuideSortHelp = 562 0 0 0 1 0 0 0 0 0
 
-   Abilities += mine_layer
+   Abilities += mine_layer view_mines
 
    Weapons { 
       Initiative = 0
