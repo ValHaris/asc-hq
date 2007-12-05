@@ -14,8 +14,8 @@ VehicleType {
    TerrainAccess ->* VehicleType.turret_ditch 
 
    Weapons { 
-      Weapon1 ->* VehicleType.SSM
-      Weapon1.MaxRange = 60
+      Weapon1 ->* VehicleType.SOM
+      Weapon1.MaxRange = 70
       Weapon1.MinRange = 20
       Weapon1.Ammo = 10
       Weapon1.Punch@MaxRange = 110

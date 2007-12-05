@@ -4,7 +4,7 @@ VehicleType {
    ID = 1410
    Description = Seekampfhubschrauber
    Infotext = []
-   Picture = MK5h_HOOVER.pcx
+   Picture = mk5h_hoover.pcx
    WreckageObject = 1410
    
    Armor = 320

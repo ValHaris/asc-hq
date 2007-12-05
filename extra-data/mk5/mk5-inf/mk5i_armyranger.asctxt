@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Heavy Trooper
    Infotext = []
-   picture = MK3i_ARMYRANGER.pcx
+   picture = mk5i_armyranger.pcx
 
    Abilities += paratrooper
    Weapons { 

@@ -17,7 +17,7 @@ VehicleType {
       fuel = 50000
    } Tank
    FuelConsumption = 0
-   TerrainAccess ->* VehicleType.turret_lowland 
+   TerrainAccess ->* VehicleType.heli_terrain
 
    Weapons { 
       Number = 1

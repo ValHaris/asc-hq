@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1478
+   ;Bezeichnung der verknüpften Technologie: AOS
+   TechnologiesRequired = 1478
+} TechAdapter

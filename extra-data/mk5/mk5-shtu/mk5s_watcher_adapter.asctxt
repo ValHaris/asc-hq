@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1474
+   ;Bezeichnung der verknüpften Technologie: Watcher
+   TechnologiesRequired = 1474
+} TechAdapter

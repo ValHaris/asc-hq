@@ -11,8 +11,9 @@ VehicleType {
    Weight = 20
    Abilities += repair_vehicle
    Transportation ->* VehicleType.TransTrooper
-   Transportation.MaxLoadableUnits = 10
+   Transportation.MaxLoadableUnits = 16
    Transportation.MaxLoadableUnitSize = 6
+   Transportation.MaxLoadableMass = 32
 
    Tank { 
       Energy = 0
@@ -20,7 +21,7 @@ VehicleType {
       fuel = 5000
    } Tank
    FuelConsumption = 0
-   TerrainAccess ->* VehicleType.turret_lowland 
+   TerrainAccess ->* VehicleType.heli_terrain 
 
    Weapons { 
       Number = 0

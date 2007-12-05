@@ -1,0 +1,10 @@
+technology {
+   Name = watcher
+   infotext = 
+   id = 1474
+   RelatedUnitID = 1474
+   parent = 1499
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 1499,100004,100105,100209 
+} Technology

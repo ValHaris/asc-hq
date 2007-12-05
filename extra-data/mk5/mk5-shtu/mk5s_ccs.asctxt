@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = CCS
+   parent = 358 493
+   ID = 1460
+   
+   Description = command carrier
+   picture = mk5s_ccs.pcx
+
+   Armor -= 100
+   Abilities += satelliteview
+
+   Transportation.MaxLoadableUnits = 15
+   Transportation.CategoriesNOT = heavy_tracked_vehicle heavy_wheeled_vehicle medium_ship heavy_ship heavy_aircraft rail_vehicle
+   Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem3 ->* VehicleType.subIO
+
+   Height = submerged floating 
+   Movement += 0 10 0 0 0 0 0 0 
+   
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.MiniGun
+      Weapon1 ->* VehicleType.SAMH
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 20
+      Weapon4 ->* VehicleType.AmmoBomb
+      Weapon4.Ammo = 80
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 60
+      Weapon6 ->* VehicleType.AmmoSM 
+      Weapon6.Ammo = 60
+      Weapon7 ->* VehicleType.AmmoMine 
+      Weapon7.Ammo = 60
+      Weapon8 ->* VehicleType.AmmoMG 
+      Weapon8.Ammo = 200
+   } Weapons
+
+} VehicleType

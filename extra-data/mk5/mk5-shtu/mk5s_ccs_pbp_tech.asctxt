@@ -1,10 +1,10 @@
 technology {
-   Name = LCC
+   Name = CCS
    infotext = 
    id = 1460
    RelatedUnitID = 1460
    parent = 1499
    researchpoints *= 14
    techlevel = 3
-   TechnologiesRequired = 1499,100004,100103,100209 
+   TechnologiesRequired = 1499,100004,100103,100208,100209 
 } Technology

@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = MEO
+   ID = 15216
+   parent = 216 15000
+
+   Picture = mk6m_meo.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Tank.material = 1000
+   Tank.fuel = 1100
+   Armor += 10
+   Weapons { 
+      Weapon0 ->* VehicleType.TeccEMP2Air
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange += 20
+      Weapon0.Punch@MinRange += 20
+      Weapon1.MaxRange += 10
+      Weapon2 ->* VehicleType.type_laser
+      Weapon2.Punch@MaxRange += 50
+      Weapon2.Punch@MinRange += 50
+      Weapon2.LaserRechargeCost.material = 50
+      Weapon2.LaserRechargeCost.fuel = 10
+   } Weapons
+} VehicleType

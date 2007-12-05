@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1476
+   ;Bezeichnung der verknüpften Technologie: Saenger
+   TechnologiesRequired = 1476
+} TechAdapter

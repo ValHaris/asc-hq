@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Horus Wreckage
+   ID = 1477
+   parent = 499
+   dry { 
+      picture = mk5o_horus_w.pcx 1
+   } dry
+} ObjectType

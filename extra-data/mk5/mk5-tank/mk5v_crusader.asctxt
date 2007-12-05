@@ -6,6 +6,7 @@ VehicleType {
    Infotext = [Der Bauplaene des Crusader wurden in einem von den Cromonern vergessenen Bunker gefunden. Der Nebelgenerator wurder etwas verbessert.]
    Picture = MK5v_crusader.pcx
    
-   Jamming += 5
+   Jamming += 10
+   Abilities += Jam_only_own_field
 
 } VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15213
+   ;Bezeichnung der verknüpften Technologie: Drall
+   TechnologiesRequired = 15213
+} TechAdapter

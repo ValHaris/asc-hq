@@ -1,6 +1,22 @@
 MK5 Outsider
 GAMER
 
+__________________
+04.12.2007 (GAMER)
+-Lastesel, Transportbugfix
+Neu:
+-AOS, ANti Orbital/High AIr Bunker
+-AOV, Anti Sat Attack
+-WOAS, Long Range Anti Sat
+-Guard, nicht mehr SSM, sonder SOM
+-LCC -> CCS , Command Carrier Submarine, neue Definitionen/Eigenschaften
+-getarnte landebahn, Panzersperren und Stacheldraht baubar
+__________________
+18.11.2007 (GAMER)
+-durch grom verbugtes MU gefixt
+-Container C Stellfläche auf 16 erweitert.
+-Container D Stellfläche erweitert auf 8
+
 _________________
 31.10.2007 Gamer
 -Lastesel Kapazität erweitert

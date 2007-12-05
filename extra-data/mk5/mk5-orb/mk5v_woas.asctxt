@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = WOAS
+   ID = 1480
+   parent = 335
+
+   Description = anti orbital CM
+   Infotext = [ mobile Boden-Orbital Raketenabschußrampe. ]
+   Picture = mk5v_woas.pcx
+   GuideSortHelp = 0 0 0 0 5 0 0 0 0 0
+
+   Abilities = 
+
+   WaitFortack = true
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.CMO
+      Weapon0.MaxRange = 140
+      Weapon0.MinRange = 50
+   } Weapons
+} VehicleType

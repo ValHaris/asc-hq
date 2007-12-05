@@ -1,0 +1,10 @@
+technology {
+   Name = Baltic
+   infotext = Forschungsprojekt abgeschlossen! Drall verfuegbar!
+   id = 15213
+   RelatedUnitID = 15213
+   parent = 15000
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 15000,100001,100101,100102,100103
+} Technology

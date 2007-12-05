@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = BALTIC
+   ID = 15213
+   parent = 213 15000
+
+   Picture = mk6m_baltic.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 10
+   Tank.material = 1000
+   Tank.fuel = 1100
+   
+   Weapons { 
+      Number = 3
+      Weapon2 ->* VehicleType.TeccEMP2Air
+      Weapon2.Punch@MaxRange = 70
+      Weapon2.Punch@MinRange = 70
+   } Weapons
+} VehicleType

@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = AOS
+   ID = 1478
+   parent = 238
+
+   Description = SpaceDefenceBunker
+   Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
+   spaceships and spacestations.]
+   Picture = mk5b_aos.pcx
+   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+
+   Abilities += jam_only_own_field
+   Jamming = 78
+   TerrainAccess ->* VehicleType.turret_all
+
+   Weapons { 
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange -= 10
+      Weapon0.targets = high_level_flight orbit
+      Weapon0.HitAccuracy.u3 = 100
+   } Weapons
+} VehicleType

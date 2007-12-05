@@ -9,16 +9,17 @@ VehicleType {
 
    Armor = 400
    Weight = 20
-   Abilities += repair_vehicle
+;   Abilities += repair_vehicle
    Transportation ->* VehicleType.TransVehicleHeavy
+   Transportation.MaxLoadableUnits = 8
 
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 0
+      fuel = 1
    } Tank
    FuelConsumption = 0
-   TerrainAccess ->* VehicleType.turret_lowland 
+   TerrainAccess ->* VehicleType.heli_terrain 
 
    Weapons { 
       Initiative = 0

@@ -1,0 +1,48 @@
+VehicleType { 
+   Name = WATCHER
+   parent =  360 493
+   ID = 1474
+
+   Description =  aircraft carrier submarine
+   Infotext = []
+   Picture = mk5s_watcher.pcx
+   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+
+   Armor -= 500
+   Transportation.EntranceSystemNum = 3
+   Transportation.CategoriesNOT = heavy_aircraft building|turret|object medium_ship heavy_ship heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle
+   Transportation.EntranceSystem2 ->* VehicleType.SubIO
+   Abilities += sonar icebreaker
+
+   Height = deep_submerged submerged floating
+   Movement = 55 55 55 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.hooverfull_terrain 
+
+   Weapons { 
+      Number = 6
+      Weapon0 ->* vehicleType.UTorp
+      Weapon0.Ammo = 10
+
+      Weapon1 ->* vehicleType.SAMH 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* vehicleType.AmmoAM 
+      Weapon2.Ammo = 100
+
+      Weapon3 ->* VehicleType.AmmoGM 
+      Weapon3.Ammo = 100
+
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 100
+
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 100
+
+      Weapon6 ->* vehicleType.AmmoMG 
+      Weapon6.Ammo = 100
+
+      Weapon7 ->* vehicleType.AmmoCannon 
+      Weapon7.Ammo = 100
+      
+   } Weapons
+} VehicleType

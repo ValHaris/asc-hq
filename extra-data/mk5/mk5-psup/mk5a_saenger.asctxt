@@ -1,0 +1,72 @@
+VehicleType { 
+   Name = SAENGER PLANE
+   parent = 400 401 402 498
+   ID = 1476
+
+   Description = Saenger main plane
+   Infotext = [Der Raumgleiter Saenger sollte laut Konzept zwei Astronauten Platz bieten. 
+   Die technische Lösung geht auf ein Konzept des Wissenschaftlers Eugen Sänger zurück. Sie 
+   wurde von 1961 bis 1964 bei Junkers im Zuge einiger Studien weiterentwickelt. Sänger II 
+   sollte von einem Transportflugzeug in 30km Höhe gebracht und von dort aus gestartet werden 
+   (diese 2. Stufe heisst "HORUS" = Hypersonic Orbital Upper Stage). Wegen der hohen 
+   Geschwindigkeiten sind sowohl Transporter als auch Gleiter äußerst spitz und pfeilartig 
+   konzipiert. Der Raumgleiter sollte eine Länge von rund 80 Metern und eine Flügelspannweite 
+   von rund 40 Metern haben. ]
+   Picture = mk5a_saenger.pcx
+   WreckageObject = 1476 300
+
+   Armor = 350
+   View = 50
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Jamming = 0
+   Abilities = fuel_transfer  
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 250
+
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 200
+      MaxLoadableMass = 200
+      CategoriesNOT = hoovercraft default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle light_aircraft medium_aircraft medium_ship building|turret|object light_ship heavy_ship helicopter 
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 {
+        Mode = out
+        UnitHeightAbs = orbit
+        UnitHeightRel = -100
+        ContainerHeight = high_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+      } EntranceSystem1
+   } Transportation
+
+   Movement = 0 0 0 65 120 180 180
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 10000
+   } Tank
+   FuelConsumption = 35
+   TerrainAccess { 
+      terrain_any = Runway 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   WaitFortack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

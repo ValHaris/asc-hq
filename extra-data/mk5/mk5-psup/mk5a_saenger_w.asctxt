@@ -1,0 +1,8 @@
+ObjectType { 
+   Name = Saenger Wreckage
+   ID = 1476
+   parent = 499
+   dry { 
+      picture = mk5a_saenger_w.pcx 1
+   } dry
+} ObjectType

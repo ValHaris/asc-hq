@@ -50,6 +50,11 @@ ID 1433 Guard
 ID 1445 FLAK
 ID 1462 FADV
 
+**Orbital Defence**
+ID 1476 AOS
+ID 1477 AOV
+ID 1478 WOAS
+
 Ground Defence
 ID 1405 IRONGUN
 ID 1442 GATELING
@@ -79,10 +84,10 @@ ID 1449 Stachel
 ID 1450 Lastesel
 
 Flugzeuge
-ID 1476 Saenger
 ID 1425 Doomsday
 ID 1451 Blackwiddow
 ID 1475 Tenga
+ID 1476 Saenger
 
 Dronen
 ID 1417 RTH 302 (Rakete)
@@ -92,7 +97,7 @@ ID 1470 Scanner
 Orbital
 ID 1411 Energia
 ID 1413 OCS
-ID 1424 Horus
+ID 1477 Horus
 
 Schiffe
 ID 1455 Sealboat
@@ -121,6 +126,7 @@ Object
 
 ID 1400 light turret
 ID 1401 Ponton
+ID 1402 Runway
 
 Building
 

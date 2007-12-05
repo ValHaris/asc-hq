@@ -15,7 +15,7 @@ VehicleType {
    } Tank
    FuelConsumption = 0
    Weight = 10
-   TerrainAccess ->* VehicleType.turret_lowland 
+   TerrainAccess ->* VehicleType.heli_terrain 
    Weapons { 
       Initiative = -50
       Number = 8

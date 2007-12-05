@@ -4,13 +4,17 @@ VehicleType {
    ID = 1450
    Description = Containertransporter
    Infotext = []
-   picture = MK5h_Lastesel.pcx
+   picture = mk5h_lastesel.pcx
    
    Armor = 300
    Transportation ->* VehicleType.TransTurretBig 
    Transportation.CategoriesNOT = rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
    Transportation.MaxLoadableUnitSize = 700
    Transportation.MaxLoadableMass = 700
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem1  ->* VehicleType.diver_out
+   Transportation.EntranceSystem1.UnitHeightAbs = ground_level floating submerged
+   Transportation.EntranceSystem1.CategoriesNOT =
 
    Tank { 
       Energy = 0

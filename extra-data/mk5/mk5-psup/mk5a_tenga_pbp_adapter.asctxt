@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1475
+   ;Bezeichnung der verknüpften Technologie: Tenga
+   TechnologiesRequired = 1475
+} TechAdapter

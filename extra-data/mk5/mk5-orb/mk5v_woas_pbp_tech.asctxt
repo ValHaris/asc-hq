@@ -1,0 +1,10 @@
+technology {
+   Name = WOAS
+   infotext = 
+   id = 1480
+   RelatedUnitID = 1480
+   parent = 1499
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 1499,100002,100105,100202,100301,100310,1479 
+} Technology

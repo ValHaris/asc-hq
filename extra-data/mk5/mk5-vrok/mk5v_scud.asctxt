@@ -4,7 +4,7 @@ VehicleType {
    parent = 552
 
    Description = SSM Long Range
-   Picture = Mk3v_scud.pcx
+   Picture = mk5v_scud.pcx
 
    Weapons.Weapon0.MaxRange -=20
    Weapons.Weapon0.MinRange -=10

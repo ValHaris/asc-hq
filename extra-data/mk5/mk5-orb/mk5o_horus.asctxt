@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = HORUS
+   parent = 231
+   ID = 1477
+   
+   Description = Raumgleiter
+   Infotext = [Der Raumgleiter Saenger sollte laut Konzept zwei Astronauten Platz bieten. 
+   Die technische Lösung geht auf ein Konzept des Wissenschaftlers Eugen Sänger zurück. Sie 
+   wurde von 1961 bis 1964 bei Junkers im Zuge einiger Studien weiterentwickelt. Sänger II 
+   sollte von einem Transportflugzeug in 30km Höhe gebracht und von dort aus gestartet werden 
+   (diese 2. Stufe heisst "HORUS" = Hypersonic Orbital Upper Stage). Wegen der hohen 
+   Geschwindigkeiten sind sowohl Transporter als auch Gleiter äußerst spitz und pfeilartig 
+   konzipiert. Der Raumgleiter sollte eine Länge von rund 80 Metern und eine Flügelspannweite 
+   von rund 40 Metern haben. ]
+   Picture = mk5o_horus.pcx
+   WreckageObject = 1477 300
+
+   Armor += 100
+   Tank { 
+      Energy = 0
+      Material = 5000
+      fuel = 6000
+   } Tank
+   FuelConsumption = 15
+   Abilities = fuel_transfer material_transfer repair_vehicle 
+   Movement -= 0 0 0 0 10 10 10 0 
+   Weight = 120
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Orbit_Cannon 
+      
+      Weapon1 ->* VehicleType.AmmoSM 
+      Weapon1.Ammo = 10
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.AmmoCM 
+      Weapon3.Ammo = 5
+  } Weapons
+} VehicleType
