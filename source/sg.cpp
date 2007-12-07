@@ -147,6 +147,7 @@
 #include "stdio-errorhandler.h"
 #include "widgets/textrenderer.h"
 #include "dialogs/productionanalysis.h"
+#include "dialogs/fileselector.h"
 
 #include "memory-measurement.h"
 

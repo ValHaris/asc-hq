@@ -3,6 +3,7 @@
 
 #include <list>
 #include <SDL.h>
+#include <sigc++/sigc++.h>
 
  #include "../libs/loki/Functor.h"
 
@@ -67,5 +68,7 @@ class GraphicsQueueOperation {
       };
 
  extern void queueOperation( GraphicsQueueOperation* gqo, bool wait = false, bool forceAsync = false );
+
+ extern SigC::Signal1<void,const SDL_Surface*> postScreenUpdate;
 
 #endif

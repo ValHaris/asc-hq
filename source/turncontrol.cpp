@@ -40,6 +40,7 @@
 #include "cannedmessages.h"
 #include "viewcalculation.h"
 #include "network/simple_file_transfer.h"
+#include "dialogs/fileselector.h"
 
 bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
 {

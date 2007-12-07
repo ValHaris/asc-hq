@@ -144,6 +144,27 @@ AC_SUBST(LIBCURL)
 AC_SUBST(LIBCURL_CPPFLAGS)
 
 
+#XVID_VERSION=1.0.1
+#AM_PATH_XVID($XVID_VERSION,:, 
+
+#AC_SUBST(XVID_CFLAGS)
+#AC_SUBST(XVID_LIBS)
+
+AC_CHECK_LIB( xvidcore,
+              xvid_encore,,
+              AC_LIB_MISSING(XviD, http://www.xvid.org))
+
+
+
+AC_MSG_CHECKING(XviD usage)
+AC_TRY_COMPILE( [#include <stdio.h>
+                 #include <xvid.h> ], [
+   void *m_xvidEncoderHandle;
+   xvid_encore(m_xvidEncoderHandle, XVID_ENC_DESTROY, NULL, NULL);
+],, AC_LIB_MISSING(XviD, http://www.xvid.org))
+
+
+
 dnl check for libSDL
 SDL_VERSION=1.2.2
 AM_PATH_SDL($SDL_VERSION,:, AC_LIB_MISSING( SDL, http://www.libsdl.org/, [ (version >= $SDL_VERSION)])) 
@@ -591,6 +612,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/dialogs/Makefile \
        source/widgets/Makefile \
        source/actions/Makefile \
+       source/video/Makefile \
        source/doc/Makefile \
        source/libs/Makefile \
        source/libs/sdlmm/Makefile \
@@ -598,6 +620,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/libs/triangul/Makefile \
        source/libs/loki/Makefile \
        source/libs/sdl_sound/Makefile \
+       source/libs/revel/Makefile \
        source/libs/paragui/Makefile \
        source/libs/paragui/src/Makefile \
        source/libs/paragui/src/widgets/Makefile \

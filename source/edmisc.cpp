@@ -53,7 +53,7 @@
 #include "maped-mainscreen.h"
 #include "gameevents.h"
 #include "gameevent_dialogs.h"
-
+#include "dialogs/fileselector.h"
 #include "pgeventsupplier.h"
 
    bool       mapsaved;

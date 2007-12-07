@@ -206,7 +206,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = @GENCL@ docs libs sdl ai graphics network dialogs widgets actions unix tools doc win32 
+SUBDIRS = @GENCL@ docs libs sdl ai graphics network dialogs widgets actions video unix tools doc win32 
 EXTRA_DIST = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/clparser/*.cpp $(srcdir)/clparser/*.h $(srcdir)/clparser/Makefile.am $(srcdir)/clparser/Makefile.in
 all: all-recursive
 

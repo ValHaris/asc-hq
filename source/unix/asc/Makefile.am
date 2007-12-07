@@ -35,5 +35,6 @@ $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/li
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/sdl/libsdlsnd.la $(top_builddir)/source/network/libnetwork.la  \
+$(top_builddir)/source/video/libvideo.la $(top_builddir)/source/libs/revel/librevel.la \
 @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) 
 

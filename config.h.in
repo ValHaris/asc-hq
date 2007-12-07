@@ -49,6 +49,9 @@
 /* Define to 1 if you have the `SDL_sound' library (-lSDL_sound). */
 #undef HAVE_LIBSDL_SOUND
 
+/* Define to 1 if you have the `xvidcore' library (-lxvidcore). */
+#undef HAVE_LIBXVIDCORE
+
 /* Define to 1 if you have the <limits> header file. */
 #undef HAVE_LIMITS
 

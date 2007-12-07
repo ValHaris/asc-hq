@@ -31,13 +31,14 @@ class FileSelectionWindow : public ASC_PG_Dialog {
       ASCString filename;
       ASCString wildcard;
       bool saveFile;
+      bool overwriteMessage;
       FileSelectionItemFactory* factory;
 
    protected:
       void fileNameSelected( const ASCString& filename );
       void fileNameEntered( ASCString filename );
    public:
-      FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save );
+      FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save, bool overwriteMessage );
       ASCString getFilename() { return filename; };
 };
 
@@ -70,7 +71,7 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
       void itemSelected( const SelectionWidget* widget, bool mouse );
 };
 
-extern ASCString  selectFile( const ASCString& ext, bool load );
+extern ASCString  selectFile( const ASCString& ext, bool load, bool overwriteMessage = true );
 
 #endif
 

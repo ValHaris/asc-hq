@@ -1,0 +1,140 @@
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
+#include "videorecorder.h"
+#include "../libs/revel/revel.h"
+#include "../events.h"
+
+
+class VideoRecorderInternals {
+   public:
+     VideoRecorderInternals() : open(false){};
+     int encoderHandle; 
+     Revel_Params revParams;
+     bool open;
+     int framerate;
+     long lastTick;
+     ASCString filename;
+     
+};
+
+
+void checkErrors( const Revel_Error& err )
+{
+    if (err != REVEL_ERR_NONE)
+    {
+            printf("Revel Error : %d\n", err);
+    }   
+}
+
+
+VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate  )
+{
+    data = new VideoRecorderInternals();
+    data->framerate = framerate;
+    data->lastTick = ticker;
+    data->filename = filename;
+   
+    Revel_Error revError = Revel_CreateEncoder(&data->encoderHandle);
+    checkErrors( revError );
+   
+    Revel_InitializeParams(&data->revParams);
+    data->revParams.width = surf->w;
+    data->revParams.height = surf->h;
+    data->revParams.frameRate = data->framerate;
+    data->revParams.quality = 1.0f;
+    data->revParams.codec = REVEL_CD_XVID;
+
+    data->revParams.hasAudio = 0;
+
+    // Initiate encoding
+    revError = Revel_EncodeStart(data->encoderHandle, filename.c_str(), &data->revParams);
+    data->open = true;
+}
+
+void VideoRecorder::storeFrame( const SDL_Surface* surf )
+{
+   Revel_VideoFrame frame;
+   frame.width = surf->w;
+   frame.height = surf->h;
+   frame.bytesPerPixel = 4;
+   
+   bool directScreenRender = false;
+   
+   if ( surf->pitch == surf->w*4 && surf->format->BytesPerPixel == 4 ) {
+      if ( surf->format->Rshift == 0 && surf->format->Gshift == 8 && surf->format->Bshift == 16 ) {
+         frame.pixelFormat = REVEL_PF_RGBA;
+         directScreenRender = true;
+      }
+      
+      if ( surf->format->Rshift == 24 && surf->format->Gshift == 16 && surf->format->Bshift == 8 ) {
+         frame.pixelFormat = REVEL_PF_ABGR;
+         directScreenRender = true;
+      }
+   }
+   
+   
+   if ( directScreenRender ) {
+      int frameSize;
+      frame.pixels = surf->pixels;
+      Revel_Error revError = Revel_EncodeFrame(data->encoderHandle, &frame, &frameSize);
+      checkErrors( revError);
+   } else {
+      frame.pixelFormat = REVEL_PF_RGBA;
+      int* buf;
+      frame.pixels = buf = new int[frame.width*frame.height];   
+      
+      Uint32* pix = (Uint32*)frame.pixels;
+      
+      for ( int y = 0; y < surf->h; ++y ) {
+         Uint32* src = ((Uint32*) surf->pixels) + (surf->pitch/4*y);
+         for ( int x = 0 ; x < surf->w; ++x ) {
+            Uint8 r,g,b,a;
+            SDL_GetRGBA( *src, surf->format, &r,&g,&b,&a);
+            *pix = r + (g<<8) + (b<<16) + (a<<24);
+            ++pix;
+            ++src;
+         }
+      }
+      int frameSize;
+      Revel_Error revError = Revel_EncodeFrame(data->encoderHandle, &frame, &frameSize);
+      checkErrors( revError);
+      delete[] buf;
+   }
+   
+   // we are limited the video to our framerate
+   while ( ticker < data->lastTick + 100/data->framerate )
+      releasetimeslice();
+   
+   data->lastTick = ticker;
+}
+
+void VideoRecorder::close()
+{
+   if ( data->open ) {
+      int totalSize;
+      Revel_Error revError = Revel_EncodeEnd(data->encoderHandle, &totalSize);
+      checkErrors( revError );
+      Revel_DestroyEncoder(data->encoderHandle);      
+   }
+}
+
+const ASCString& VideoRecorder::getFilename()
+{
+   return data->filename;  
+}
+
+
+VideoRecorder::~VideoRecorder()
+{
+   close();
+   delete data;
+}
+

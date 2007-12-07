@@ -47,9 +47,437 @@
 #include "actions/jumpdrive.h"
 #include "reactionfire.h"
 #include "gameeventsystem.h"
+#include "sdl/graphicsqueue.h"
+#include "video/videorecorder.h"
+#include "iconrepository.h"
+#include "dialogs/replayrecorder.h"
+
 trunreplay runreplay;
 
 int startreplaylate = 0;
+
+
+class ReplayRecorder;
+
+class ReplayRecorderWatcherGlobal {
+      ReplayRecorder* recorder;
+   public:
+      ReplayRecorderWatcherGlobal()  : recorder( NULL ) {};
+      void set(  ReplayRecorder* rec  ) {
+         recorder = rec;
+      }
+      
+      ~ReplayRecorderWatcherGlobal() ;
+} replayRecorderWatcherGlobal;
+
+
+ class ReplayRecorder : public SigC::Object {
+   
+   VideoRecorder* rec;
+   SigC::Connection connection;
+   bool movieModeStorage;
+   ASCString lastFilename;
+   
+   public:
+      ReplayRecorder() : rec (NULL)
+      {
+         movieModeStorage = CGameOptions::Instance()->replayMovieMode;
+         replayRecorderWatcherGlobal.set( this );
+      }
+      
+      void start( const ASCString& filename, bool append )
+      {
+         lastFilename = filename;
+         movieModeStorage = CGameOptions::Instance()->replayMovieMode;
+         CGameOptions::Instance()->replayMovieMode = true;
+         ASCString newFilename = constructFileName( 0, "", filename );
+         if ( !rec || !append || newFilename != rec->getFilename()  ) {
+            delete rec;
+            rec = new VideoRecorder( newFilename, PG_Application::GetScreen());
+         }
+         
+         if ( !connection.connected() )
+            connection = postScreenUpdate.connect( SigC::slot( *this, &ReplayRecorder::screenUpdate ));
+      }
+      
+      void pause()
+      {
+         if ( connection.connected() )
+            connection.disconnect();
+         CGameOptions::Instance()->replayMovieMode = movieModeStorage;
+      }
+      
+      void close()
+      {
+         pause();
+         delete rec;
+         rec = NULL;
+      }
+      
+      bool isRunning()
+      {
+         return connection.connected() && rec;
+      }
+      
+      bool isOpen()
+      {
+         return rec != NULL;  
+      }
+      
+      ASCString getLastFilename()
+      {
+         return lastFilename;
+      }
+   
+   private:
+      void screenUpdate( const SDL_Surface* surf )
+      {
+         if ( rec )
+            rec->storeFrame( surf );
+      }
+};
+
+class ReplayRecorderWatcherLocal {
+      ReplayRecorder* recorder;
+   public:
+      ReplayRecorderWatcherLocal( ReplayRecorder* rec )  : recorder( rec ) {};
+      ~ReplayRecorderWatcherLocal() 
+      { 
+         if ( recorder ) 
+            recorder->pause();
+      }
+};
+
+
+ReplayRecorderWatcherGlobal::~ReplayRecorderWatcherGlobal() 
+{ 
+   if ( recorder ) 
+      recorder->pause();
+}
+
+
+ReplayRecorder* replayRecorder = NULL;
+
+ 
+
+namespace ReplayGuiFunctions {
+
+class ReplayPlay : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 1 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+        runreplay.status = 2;
+        updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-play.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "start re~p~lay";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'p' );
+      };
+      
+};
+
+
+class ReplayPause : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 2 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+        runreplay.status = 1;
+        updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-pause.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "~p~ause replay";
+      };
+      
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'p' );
+      };
+      
+};
+
+
+
+class ReplayFaster : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 2 )
+            if ( CGameOptions::Instance()->replayspeed > 0 )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( CGameOptions::Instance()->replayspeed > 20 )
+            CGameOptions::Instance()->replayspeed -= 20;
+         else
+            CGameOptions::Instance()->replayspeed = 0;
+
+         CGameOptions::Instance()->setChanged ( 1 );
+         displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-faster.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "increase replay speed (~+~)";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == '+' || key->keysym.sym == SDLK_KP_PLUS);
+      };
+      
+};
+
+
+class ReplaySlower : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 2 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         CGameOptions::Instance()->replayspeed += 20;
+         CGameOptions::Instance()->setChanged ( 1 );
+         displaymessage2 ( "delay set to %d / 100 sec", CGameOptions::Instance()->replayspeed );
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-slow.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "decrease replay speed (~-~)";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == '-' || key->keysym.sym == SDLK_KP_MINUS);
+      };
+      
+};
+
+
+class ReplayRewind : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 1  ||  runreplay.status == 10 )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         runreplay.status = 101;
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-back.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "~r~estart replay";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'r' );
+      };
+      
+};
+
+
+class ReplayExit : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 1 || runreplay.status == 10 || runreplay.status == 11 )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         runreplay.status = 100;
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-exit.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "e~x~it replay";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'x' );
+      };
+      
+};
+
+class ReplayRecord : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( runreplay.status == 1 )
+            return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+        ASCString filename;
+        if ( replayRecorder )
+           filename = replayRecorder->getLastFilename();
+        
+        ReplayRecorderDialog rrd( filename );
+        rrd.Show();
+        rrd.RunModal();
+        rrd.Hide();
+         
+        if ( !replayRecorder )
+           replayRecorder = new ReplayRecorder();
+        replayRecorder->start( rrd.getFilename(), rrd.getAppend() );
+        
+        runreplay.status = 2;
+        updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-record.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "record to ~v~ideo";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'v' );
+      };
+      
+};
+
+class ReplayRecordExit : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( replayRecorder && replayRecorder->isOpen() && (runreplay.status == 1 || runreplay.status == 10 || runreplay.status == 11) )
+              return true;
+
+         return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         replayRecorder->close();
+         runreplay.status = 100;
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("replay-record-stop.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "exit replay and ~c~lose recording";
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'c' );
+      };
+      
+};
+
+
+}
+
+void registerReplayGuiFunctions( GuiIconHandler& handler )
+{
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayPlay() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayRecord() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayPause() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayFaster() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplaySlower() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayRewind() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayRecordExit() );
+   handler.registerUserFunction( new ReplayGuiFunctions::ReplayExit() );
+}
+
 
 
 class ReplayGuiIconHandleHandler {
@@ -93,7 +521,7 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
        }
 
 #ifndef _DEBUG
-       catch ( ... ) {
+       catch ( ... ) {     // this will catch NullPointer-Exceptions and stuff like that, which we want to pass to the debugger  in debug mode
 #else
        catch ( GameMap ) {  // will never be thrown, but we need catch statement for the try block
 #endif
@@ -933,7 +1361,9 @@ void trunreplay :: execnextreplaymove ( void )
 {
    displayLogMessage( 8, "executing replay move %d\n", movenum );
 
-   displaymessage2("executing replay move %d\n", movenum );
+   if ( !replayRecorder || !replayRecorder->isRunning())
+      displaymessage2("executing replay move %d\n", movenum );
+   
    movenum++;
    int actaction = nextaction;
    if ( nextaction != rpl_finished ) {
@@ -1280,7 +1710,9 @@ void trunreplay :: execnextreplaymove ( void )
                                     error(MapCoordinate(x,y), "replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
 
+                              // if ( fieldvisiblenow ( fld, actmap->getPlayerView() ))
                               displaymap();
+                              
                               wait(MapCoordinate(x,y));
                               removeActionCursor();
                            } else
@@ -2084,8 +2516,11 @@ treactionfire_replayinfo* trunreplay::getnextreplayinfo ( void )
 }
 
 
+
 int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOperations )
 {
+   ReplayRecorderWatcherLocal rrw( replayRecorder );
+  
    if ( status < 0 )
       firstinit ( );
 
@@ -2157,11 +2592,14 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
        }
 
        if (nextaction == rpl_finished  || status != 2 ) {
-          if ( CGameOptions::Instance()->replayMovieMode && status != 1 ) 
+          if ( CGameOptions::Instance()->replayMovieMode && status != 1 && !(replayRecorder && replayRecorder->isRunning()) ) 
              status = 100;
           else {
             if ( nextaction == rpl_finished && !resourcesCompared ) {
 
+               if ( replayRecorder )
+                  replayRecorder->pause();
+               
                displaymessage2("running final comparison" );
 
                int replayedplayer  = actmap->actplayer; 

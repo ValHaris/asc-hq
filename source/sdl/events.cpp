@@ -421,6 +421,9 @@ int processEvents ( )
 
 bool syncGraphics = true;
 
+
+SigC::Signal1<void,const SDL_Surface*> postScreenUpdate;
+
 void queueOperation( GraphicsQueueOperation* gqo, bool wait, bool forceAsync )
 {
    if ( !eventThreadRunning ) {
@@ -454,6 +457,7 @@ void UpdateRectOp::execute()
       SDL_ShowCursor( 0 );
 
    SDL_UpdateRect( screen, x,y,w,h); 
+   postScreenUpdate( screen );
 
    if ( *mouseUpdateFlag )
       SDL_ShowCursor( 1 );
@@ -480,6 +484,7 @@ void UpdateRectsOp::execute()
       SDL_ShowCursor( 0 );
 
    SDL_UpdateRects( screen, numrects, rects); 
+   postScreenUpdate( screen );
 
    if ( *mouseUpdateFlag )
       SDL_ShowCursor( 1 );

@@ -176,7 +176,7 @@ void FileSelectionWindow::fileNameSelected( const ASCString& filename )
 
    if ( saveFile && factory ) {
       if ( factory->getLevel( this->filename ) == 0 )
-         if ( choice_dlg( "overwrite " + this->filename +" ?", "~y~es","~n~o") == 2) {
+         if ( !overwriteMessage || choice_dlg( "overwrite " + this->filename +" ?", "~y~es","~n~o") == 2) {
             // isw->resetNamesearch();
             this->filename = "";
             return;
@@ -193,12 +193,14 @@ void FileSelectionWindow::fileNameEntered( ASCString filename )
    fileNameSelected(filename);
 };
 
-FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save ) : ASC_PG_Dialog( parent, r, "" ), wildcard( fileWildcard), saveFile(save)
+FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save, bool overwriteMessage ) : ASC_PG_Dialog( parent, r, "" ), wildcard( fileWildcard), saveFile(save)
 {
    if ( save )
       SetTitle( "Enter Filename" );
    else
       SetTitle( "Choose File" );
+   
+   this->overwriteMessage = overwriteMessage;
    
    factory = new FileSelectionItemFactory( fileWildcard );
    factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
@@ -215,9 +217,9 @@ FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, c
 
 
 
-ASCString  selectFile( const ASCString& ext, bool load )
+ASCString  selectFile( const ASCString& ext, bool load, bool overwriteMessage )
 {
-   FileSelectionWindow fsw( NULL, PG_Rect( 10, 10, 700, 500 ), ext, !load );
+   FileSelectionWindow fsw( NULL, PG_Rect( 10, 10, 700, 500 ), ext, !load, overwriteMessage  );
    fsw.Show();
    fsw.RunModal();
    return fsw.getFilename();

@@ -41,7 +41,7 @@
 #include "loaders.h"
 #include "gamemap.h"
 #include "turncontrol.h"
-
+#include "dialogs/fileselector.h"
 #include "dialogs/admingame.h"
 
 

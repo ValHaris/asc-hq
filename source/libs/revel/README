@@ -1,0 +1,54 @@
+Revel - the Really Easy Video Encoding Library
+http://revel.sourceforge.net
+Copyright (C) 2004 Cort Stratton <cort at cortstratton dot org>
+
+
+ABOUT
+-----
+Revel is a C/C++ library designed to be the shortest, simplest path
+between your application and high-quality well-compressed video
+output.  Any program that generates a series of successive images can
+use Revel to output a compressed AVI video, without having to know
+hardly anything about the overwhelming esoterica of video encoding.
+
+Key features:
+ - The most straightforward video encoding library the author has ever seen.
+ - High-quality, high-compression MPEG-4 video encoding based on the
+   XviD codec (translation: Revel makes really pretty, really small videos
+   that most people can watch without downloading special software).
+ - Free!
+
+
+INSTALLATION
+------------
+0) Prerequisite: in order to compile Revel from source, you'll first need
+   to compile and install the XviD core libraries, available from
+   http://www.xvid.org/.
+1) Compile Revel.  If you're on a Unix system, run "./configure ;
+   make ; make check ; make install".  If you're on a Windows system,
+   you're probably better off downloading a binary installation of
+   the Revel libraries (available from the Revel download page).  As an
+   added bonus, the Windows binaries are statically linked against the
+   latest version of the XviD libraries, for true plug & play action!
+
+
+USAGE
+-----
+The reveltest.cpp file (located in Revel's src directory) provides a
+complete example of Revel in action.  For more details about the
+options available, consult the revel.h header file.  There's only like
+three enums, two structs and five functions in the whole API, so an
+additional tutorial seems like overkill at the moment.
+
+It's worth mentioning that the AVI files created by Revel are encoded
+with the XviD codec (a variant of DivX, itself a specific
+implementation of MPEG-4 -- but see this is exactly the sort of crap
+that Revel aims to help you avoid).  In order to view them, you need
+to have a video player capable of playing DivX video:
+
+ - Windows Media Player 10 apparently supports DivX right out of the
+   box.  Make sure your copy is up to date using Windows Update.
+ - DivX.com has players available for Windows and MacOS
+   (http://www.divx.com/divx/download/).
+ - I don't know about Unix options.  I only use Unix over a
+   command-line these days.  Google is your friend.

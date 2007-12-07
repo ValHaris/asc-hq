@@ -55,6 +55,7 @@
 #include "dialogs/terraininfo.h"
 #include "widgets/textrenderer.h"
 #include "dialogs/exchangegraphics.h"
+#include "dialogs/fileselector.h"
 #include "stack.h"
 
    

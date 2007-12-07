@@ -36,7 +36,7 @@
 #include "../dlg_box.h"
 #include "../dialog.h"
 #include "simple_file_transfer.h"
-
+#include "../dialogs/fileselector.h"
 
 void FileTransfer::readChildData ( tnstream& stream )
 {

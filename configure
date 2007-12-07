@@ -21376,6 +21376,162 @@ echo "$as_me: error:  ASC requires the curl library.
 
 
 
+#XVID_VERSION=1.0.1
+#AM_PATH_XVID($XVID_VERSION,:,
+
+#AC_SUBST(XVID_CFLAGS)
+#AC_SUBST(XVID_LIBS)
+
+
+{ echo "$as_me:$LINENO: checking for xvid_encore in -lxvidcore" >&5
+echo $ECHO_N "checking for xvid_encore in -lxvidcore... $ECHO_C" >&6; }
+if test "${ac_cv_lib_xvidcore_xvid_encore+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lxvidcore  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char xvid_encore ();
+int
+main ()
+{
+return xvid_encore ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_xvidcore_xvid_encore=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_xvidcore_xvid_encore=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_xvidcore_xvid_encore" >&5
+echo "${ECHO_T}$ac_cv_lib_xvidcore_xvid_encore" >&6; }
+if test $ac_cv_lib_xvidcore_xvid_encore = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBXVIDCORE 1
+_ACEOF
+
+  LIBS="-lxvidcore $LIBS"
+
+else
+
+   { { echo "$as_me:$LINENO: error:  ASC requires the XviD library.
+       If you have a distribution supplied XviD package installed,
+       perhaps the XviD-devel package is missing.
+       If your distribution does not include the XviD library, you can get it from
+       http://www.xvid.org " >&5
+echo "$as_me: error:  ASC requires the XviD library.
+       If you have a distribution supplied XviD package installed,
+       perhaps the XviD-devel package is missing.
+       If your distribution does not include the XviD library, you can get it from
+       http://www.xvid.org " >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+
+
+{ echo "$as_me:$LINENO: checking XviD usage" >&5
+echo $ECHO_N "checking XviD usage... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <stdio.h>
+                 #include <xvid.h>
+int
+main ()
+{
+
+   void *m_xvidEncoderHandle;
+   xvid_encore(m_xvidEncoderHandle, XVID_ENC_DESTROY, NULL, NULL);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  :
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+   { { echo "$as_me:$LINENO: error:  ASC requires the XviD library.
+       If you have a distribution supplied XviD package installed,
+       perhaps the XviD-devel package is missing.
+       If your distribution does not include the XviD library, you can get it from
+       http://www.xvid.org " >&5
+echo "$as_me: error:  ASC requires the XviD library.
+       If you have a distribution supplied XviD package installed,
+       perhaps the XviD-devel package is missing.
+       If your distribution does not include the XviD library, you can get it from
+       http://www.xvid.org " >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+
 SDL_VERSION=1.2.2
 
 # Check whether --with-sdl-prefix was given.
@@ -25538,7 +25694,7 @@ mkdir -p data
 perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", map ( $_ = "\$(srcdir)/" . $_ , @a )); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
 
 
-ac_config_files="$ac_config_files Makefile asc.spec getmusic doc/Makefile doc/manpages/Makefile doc/unitguide/Makefile doc/unitguide/output/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/network/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/doc/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile source/win32/Makefile source/win32/msvc/Makefile data/Makefile data/icons/Makefile data/sounds/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile installer/asc.nsi"
+ac_config_files="$ac_config_files Makefile asc.spec getmusic doc/Makefile doc/manpages/Makefile doc/unitguide/Makefile doc/unitguide/output/Makefile source/Makefile source/ai/Makefile source/clparser/Makefile source/docs/Makefile source/docs/en/Makefile source/graphics/Makefile source/network/Makefile source/dialogs/Makefile source/widgets/Makefile source/actions/Makefile source/video/Makefile source/doc/Makefile source/libs/Makefile source/libs/sdlmm/Makefile source/libs/sdlmm/src/Makefile source/libs/triangul/Makefile source/libs/loki/Makefile source/libs/sdl_sound/Makefile source/libs/revel/Makefile source/libs/paragui/Makefile source/libs/paragui/src/Makefile source/libs/paragui/src/widgets/Makefile source/libs/paragui/src/core/Makefile source/libs/paragui/src/draw/Makefile source/libs/paragui/src/font/Makefile source/libs/paragui/src/themes/Makefile source/libs/paragui/src/ystring/Makefile source/sdl/Makefile source/tools/Makefile source/tools/lib/Makefile source/tools/linux/Makefile source/unix/Makefile source/unix/mapeditor/Makefile source/unix/pbpedit/Makefile source/unix/asc/Makefile source/win32/Makefile source/win32/msvc/Makefile data/Makefile data/icons/Makefile data/sounds/Makefile data/dialog/Makefile data/music/Makefile installer/Makefile installer/asc.nsi"
 
 
 cat >confcache <<\_ACEOF
@@ -26165,6 +26321,7 @@ do
     "source/dialogs/Makefile") CONFIG_FILES="$CONFIG_FILES source/dialogs/Makefile" ;;
     "source/widgets/Makefile") CONFIG_FILES="$CONFIG_FILES source/widgets/Makefile" ;;
     "source/actions/Makefile") CONFIG_FILES="$CONFIG_FILES source/actions/Makefile" ;;
+    "source/video/Makefile") CONFIG_FILES="$CONFIG_FILES source/video/Makefile" ;;
     "source/doc/Makefile") CONFIG_FILES="$CONFIG_FILES source/doc/Makefile" ;;
     "source/libs/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/Makefile" ;;
     "source/libs/sdlmm/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdlmm/Makefile" ;;
@@ -26172,6 +26329,7 @@ do
     "source/libs/triangul/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/triangul/Makefile" ;;
     "source/libs/loki/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/loki/Makefile" ;;
     "source/libs/sdl_sound/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/sdl_sound/Makefile" ;;
+    "source/libs/revel/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/revel/Makefile" ;;
     "source/libs/paragui/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/Makefile" ;;
     "source/libs/paragui/src/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/Makefile" ;;
     "source/libs/paragui/src/widgets/Makefile") CONFIG_FILES="$CONFIG_FILES source/libs/paragui/src/widgets/Makefile" ;;

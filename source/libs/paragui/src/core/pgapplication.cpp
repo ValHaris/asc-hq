@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:59 $
+    Update Date:      $Date: 2007-12-07 17:38:50 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -438,9 +438,7 @@ PG_Application::CursorMode PG_Application::ShowCursor(CursorMode mode) {
 }
 
 
-#ifdef WIN32
 #include "../../../../sdl/graphicsqueue.h"
-#endif
 
 void PG_Application::UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
 {
@@ -448,6 +446,7 @@ void PG_Application::UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 
    queueOperation( new UpdateRectOp( screen, x, y, w, h ));
 #else
    SDL_UpdateRect( screen,x,y,w,h);
+   postScreenUpdate(screen);
 #endif
 }
 
@@ -457,6 +456,7 @@ void PG_Application::UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *re
    queueOperation( new UpdateRectsOp( screen, numrects, rects ));
 #else
    SDL_UpdateRects( screen, numrects, rects );
+   postScreenUpdate(screen);
 #endif
 }
 

@@ -54,6 +54,7 @@
 #include "cannedmessages.h"
 
 #include "dialogs/messagedialog.h"
+#include "dialogs/fileselector.h"
 #include "widgets/textrenderer.h"
 #include "unitset.h"
 

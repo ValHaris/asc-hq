@@ -34,7 +34,7 @@
 
 const int dbluedark = 248;
 
-ASCString  selectFile( const ASCString& ext, bool load );
+// ASCString  selectFile( const ASCString& ext, bool load );
 
 extern void displaymessage2( const char* formatstring, ... );
    
