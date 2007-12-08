@@ -5,6 +5,7 @@
 #include <cassert>
 #include <cstdarg>
 #include <cstdio>
+#include <cstring>
 #include <memory>
 #include <string>
 #include <wchar.h>

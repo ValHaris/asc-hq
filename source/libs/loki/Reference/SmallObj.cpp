@@ -19,6 +19,7 @@
 #include <cassert>
 #include <algorithm>
 #include <functional>
+#include <limits.h>
 
 using namespace Loki;
 

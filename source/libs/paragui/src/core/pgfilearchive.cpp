@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:00 $
+    Update Date:      $Date: 2007-12-08 13:19:02 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgfilearchive.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -35,6 +35,7 @@
 ///#include "SDL_loadso.h"
 #include "physfsrwops.h"
 #include <iostream>
+#include <cstring>
 #include "paragui.h"
 
 Uint32 PG_FileArchive::my_instance_count = 0;
