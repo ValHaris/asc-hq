@@ -35,4 +35,7 @@ ID 28 ASC Duellresearch
 ID 29 ASC Atomkraftwerk
 ID 30 ASC Hangar
 ID 31 ASC Solarkraftwerk2
+ID 32 ASC Depot 2
+ID 33 ASC Spaceport North
+ID 34 ASC Spaceport South
 

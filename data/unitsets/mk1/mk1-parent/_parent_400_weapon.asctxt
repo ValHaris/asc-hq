@@ -603,7 +603,7 @@
             d1 = 
             0 = 
             u1 = 100
-            u2 = 98
+            u2 = 100
             u3 = 
             u4 = 
             u5 = 
@@ -621,12 +621,11 @@
       smSAM.Type = ground_missile shootable
       smSAM.Punch@MaxRange = 65
       smSAM.Punch@MinRange = 65
-      smSAM.HitAccuracy.u2 = 94
 
 ; surface-highair misslie
       SAMH ->* VehicleType.SAM 
       SAMH.targets = low_level_flight medium_level_flight high_level_flight
-      SAMH.HitAccuracy.u3 = 92
+      SAMH.HitAccuracy.u3 = 100
 
 ; surface-highair misslie
       SAMT ->* VehicleType.SAMH 
@@ -646,7 +645,7 @@
       SAMHU ->* VehicleType.SAM 
       SAMHU.targets = low_level_flight medium_level_flight high_level_flight
       SAMHU.HitAccuracy.u1 = 80
-      SAMHU.HitAccuracy.u2 = 95
+      SAMHU.HitAccuracy.u2 = 100
       SAMHU.HitAccuracy.u3 = 100
 
 
@@ -930,7 +929,7 @@
       SOM.ReactionFireShots = 1
       SOM.MaxRange = 60
       SOM.MinRange = 10
-      SOM.Punch@MaxRange = 80
+      SOM.Punch@MaxRange = 90
       SOM.Punch@MinRange = 90
 
       SOMT ->* VehicleType.SOM
@@ -938,7 +937,7 @@
       SOMT.MaxRange = 90
       SOMT.MinRange = 10
       SOMT.Ammo = 10
-      SOMT.Punch@MaxRange = 90
+      SOMT.Punch@MaxRange = 100
       SOMT.Punch@MinRange = 100
 
       SOMB ->* VehicleType.SOM
@@ -946,7 +945,7 @@
       SOMB.MaxRange = 100
       SOMB.MinRange = 10
       SOMB.Ammo = 15
-      SOMB.Punch@MaxRange = 100
+      SOMB.Punch@MaxRange = 110
       SOMB.Punch@MinRange = 110
 
 ; air missle orbit

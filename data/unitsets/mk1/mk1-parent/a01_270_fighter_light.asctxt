@@ -29,7 +29,7 @@ VehicleType {
       Weapon1.Punch@MinRange = 40
 
       Weapon2 ->* VehicleType.smAAM2 
-      Weapon2.Ammo = 3
+      Weapon2.Ammo = 4
 
       Weapon3 ->* VehicleType.AAMH 
       Weapon3.Ammo = 2

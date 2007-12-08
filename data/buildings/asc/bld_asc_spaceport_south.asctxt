@@ -1,0 +1,10 @@
+BuildingType { 
+   Name = Spaceport south
+   ID = 34
+   parent  = 33
+   Pictures { 
+      dry = bld_asc_spaceport_south_dry.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

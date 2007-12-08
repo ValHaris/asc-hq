@@ -1,0 +1,43 @@
+BuildingType { 
+   Name = Spaceport north
+   ID = 33
+   InfoText = [Produktionsanlage für Orbitaltechnick. Die ANlage verfuegt uber eine direkte Abschussvorrichtung.]
+   Armor = 2000
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_spaceport_north_dry.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 4500
+      MaxLoadableMass = 4500
+      CategoriesNOT = default hoovercraft medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_ship medium_ship heavy_ship helicopter building|turret|object rail_vehicle
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = out 
+        UnitHeightAbs = orbit 
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = trooper
+        DockingHeightAbs =  
+        DockingHeightRel = -100 
+        DisableAttack = true
+      } EntranceSystem1
+   } Transportation
+   Functions = Vehicle_Production Ammo_Production 
+   CategoriesProduceable = light_aircraft medium_aircraft heavy_aircraft
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+} BuildingType

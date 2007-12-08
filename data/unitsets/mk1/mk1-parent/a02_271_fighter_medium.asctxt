@@ -28,13 +28,13 @@ VehicleType {
 
       Weapon1 ->* VehicleType.Air_MG 
 
-      Weapon2 ->* VehicleType.smAAM2 
+      Weapon2 ->* VehicleType.AAMH2 
       Weapon2.Ammo = 1
       Weapon2.Punch@MaxRange = 67
       Weapon2.Punch@MinRange = 67
 
       Weapon3 ->* VehicleType.AAMH 
-      Weapon3.Ammo = 3
+      Weapon3.Ammo = 4
 
       
    } Weapons

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B34
+   ;Bezeichnung der verknüpften Technologie: Spaceport South
+   TechnologiesRequired = 100000
+} TechAdapter
