@@ -115,7 +115,9 @@ unitsets/mk3/mk3-pbat/*.png
 unitsets/mk3/mk3-psup/*.png
 unitsets/mk3/mk3-shtu/*.png
 unitsets/mk3/mk3-tank/*.png
+unitsets/mk3/mk3-tank/*.pcx
 unitsets/mk3/mk3-vari/*.png
+unitsets/mk3/mk3-vari/*.pcx
 unitsets/mk3/mk3-view/*.png
 unitsets/mk3/mk3-vrok/*.png
 unitsets/mk3/mk3-vsup/*.png

@@ -39,7 +39,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib expat.lib sdl_sound_d.lib libpng13d.lib libcurl_imp.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetypeMT_D.lib expat.lib sdl_sound_d.lib libpng13d.lib libcurl_imp.lib revel.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC2-debug.exe"
 				LinkIncremental="2"
@@ -102,7 +102,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib expat.lib sdl_sound.lib libpng13.lib libcurl_imp.lib"
+				AdditionalDependencies="sdlevent.lib triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetypeMT.lib expat.lib sdl_sound.lib libpng13.lib libcurl_imp.lib revel.lib"
 				OutputFile="$(OutDir)/bin/ASC2.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image).static/VisualC/$(ConfigurationName)/&quot;;&quot;$(SDL_image)/lib&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
@@ -433,6 +433,9 @@
 				RelativePath="..\..\..\vehicletype.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\video\videorecorder.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\viewcalculation.cpp">
 			</File>
 			<File
@@ -566,6 +569,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\pwd_dlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\replayrecorder.cpp">
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\selectionwindow.cpp">
@@ -986,6 +992,9 @@
 				RelativePath=".\ASC.rc">
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\..\xvidcore-1.1.3\build\win32\bin\xvidcore.dll">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

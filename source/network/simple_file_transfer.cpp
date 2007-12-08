@@ -118,6 +118,8 @@ GameMap* FileTransfer::loadPBEMFile( const ASCString& filename )
       tnfilestream gamefile ( filename, tnstream::reading );
       tnetworkloaders nwl;
       map = nwl.loadnwgame( &gamefile );
+      if ( map->actplayer < 0 )
+         throw ASCmsgException("this map has not been properly started");
    } 
    catch ( tinvalidversion iv ) {
       throw iv;

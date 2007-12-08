@@ -544,7 +544,7 @@ int eventthread ( void* nothing )
       if ( !processEvents() )
          SDL_Delay(10);
       processGraphicsQueue();
-      ticker = SDL_GetTicks() / 10;
+      ticker = getTicker();
    }
 #ifdef FirstThreadEvents
    eventThreadRunning = false;
@@ -554,6 +554,11 @@ int eventthread ( void* nothing )
    return closeEventThread;
 }
 
+
+int getTicker()
+{
+   return SDL_GetTicks() / 10;
+}
 
 #ifdef FirstThreadEvents 
 int (*_gamethread)(void *);

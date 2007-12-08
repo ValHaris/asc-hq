@@ -39,7 +39,7 @@ VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf
 {
     data = new VideoRecorderInternals();
     data->framerate = framerate;
-    data->lastTick = ticker;
+    data->lastTick = getTicker();
     data->filename = filename;
    
     Revel_Error revError = Revel_CreateEncoder(&data->encoderHandle);
@@ -61,6 +61,12 @@ VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf
 
 void VideoRecorder::storeFrame( const SDL_Surface* surf )
 {
+   if ( !surf )
+      surf = SDL_GetVideoSurface();
+
+   if ( !surf )
+      return;
+
    Revel_VideoFrame frame;
    frame.width = surf->w;
    frame.height = surf->h;
@@ -110,10 +116,10 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
    }
    
    // we are limited the video to our framerate
-   while ( ticker < data->lastTick + 100/data->framerate )
+   while ( getTicker() < data->lastTick + 100/data->framerate )
       releasetimeslice();
    
-   data->lastTick = ticker;
+   data->lastTick = getTicker();
 }
 
 void VideoRecorder::close()

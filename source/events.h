@@ -147,6 +147,7 @@ extern volatile tmousesettings mouseparams;
     extern char time_elapsed(int time); //check if time msecs are elapsed, since starttimer
     extern int  releasetimeslice( void );
 
+    extern int getTicker();
 
     //! if the events are being queue, get one. \returns false if no event available
     extern bool getQueuedEvent ( SDL_Event& event );
