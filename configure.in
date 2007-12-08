@@ -594,8 +594,12 @@ AC_SUBST(MUSICDIR)
 if test "x$XVIDAVAIL" = x1; then 
    CXXFLAGS="$CXXFLAGS -DXVIDEXPORT"
    VIDEOCODER="-lxvidcore"
-   AC_SUBST(VIDEOCODER)
+   revellib=revel
+   revellibfile='$(top_builddir)/source/libs/revel/librevel.la'
 fi
+
+AC_SUBST(VIDEOCODER)
+AC_SUBST(revellib)
    
 
 AC_MSG_NOTICE( Creating Makefile for main.ascdat )
@@ -695,6 +699,13 @@ is just to inform you about the existence of the music.
 You can download the music files by calling the ./getmusic script and 
 run configure again, which will properly install them.
 Alternatively, you can download and install them manually anytime later.
+] )
+fi
+
+if test "x$XVIDAVAIL" = x0; then 
+AC_MSG_NOTICE( [ 
+XviD was not found. ASC will run fine without it, but you will not be
+able to export replays as MPEG4 movie. 
 ] )
 fi
 

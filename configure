@@ -916,6 +916,7 @@ asc_version
 maindatainclude
 MUSICDIR
 VIDEOCODER
+revellib
 LIBOBJS
 LTLIBOBJS
 PARAGUI_CFLAGS
@@ -4416,7 +4417,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4419 "configure"' > conftest.$ac_ext
+  echo '#line 4420 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7142,11 +7143,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7145: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7146: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7149: \$? = $ac_status" >&5
+   echo "$as_me:7150: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7410,11 +7411,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7413: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7414: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:7417: \$? = $ac_status" >&5
+   echo "$as_me:7418: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -7514,11 +7515,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:7517: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:7518: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:7521: \$? = $ac_status" >&5
+   echo "$as_me:7522: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -9811,7 +9812,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9814 "configure"
+#line 9815 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9911,7 +9912,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9914 "configure"
+#line 9915 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12247,11 +12248,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12250: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12251: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:12254: \$? = $ac_status" >&5
+   echo "$as_me:12255: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -12351,11 +12352,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:12354: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:12355: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:12358: \$? = $ac_status" >&5
+   echo "$as_me:12359: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -13912,11 +13913,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13915: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13916: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13919: \$? = $ac_status" >&5
+   echo "$as_me:13920: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -14016,11 +14017,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:14019: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:14020: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:14023: \$? = $ac_status" >&5
+   echo "$as_me:14024: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -16203,11 +16204,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16206: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16207: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16210: \$? = $ac_status" >&5
+   echo "$as_me:16211: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16471,11 +16472,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16474: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16475: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:16478: \$? = $ac_status" >&5
+   echo "$as_me:16479: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -16575,11 +16576,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:16578: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:16579: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16582: \$? = $ac_status" >&5
+   echo "$as_me:16583: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -25671,8 +25672,12 @@ fi
 if test "x$XVIDAVAIL" = x1; then
    CXXFLAGS="$CXXFLAGS -DXVIDEXPORT"
    VIDEOCODER="-lxvidcore"
-
+   revellib=revel
+   revellibfile='$(top_builddir)/source/libs/revel/librevel.la'
 fi
+
+
+
 
 
 { echo "$as_me:$LINENO: Creating Makefile for main.ascdat " >&5
@@ -26595,11 +26600,12 @@ asc_version!$asc_version$ac_delim
 maindatainclude!$maindatainclude$ac_delim
 MUSICDIR!$MUSICDIR$ac_delim
 VIDEOCODER!$VIDEOCODER$ac_delim
+revellib!$revellib$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 55; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 56; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -27428,6 +27434,17 @@ is just to inform you about the existence of the music.
 You can download the music files by calling the ./getmusic script and
 run configure again, which will properly install them.
 Alternatively, you can download and install them manually anytime later.
+ " >&6;}
+fi
+
+if test "x$XVIDAVAIL" = x0; then
+{ echo "$as_me:$LINENO:
+XviD was not found. ASC will run fine without it, but you will not be
+able to export replays as MPEG4 movie.
+ " >&5
+echo "$as_me:
+XviD was not found. ASC will run fine without it, but you will not be
+able to export replays as MPEG4 movie.
  " >&6;}
 fi
 
