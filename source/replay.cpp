@@ -469,12 +469,16 @@ class ReplayRecordExit : public GuiFunction
 void registerReplayGuiFunctions( GuiIconHandler& handler )
 {
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayPlay() );
+#ifdef XVIDEXPORT   
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayRecord() );
+#endif   
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayPause() );
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayFaster() );
    handler.registerUserFunction( new ReplayGuiFunctions::ReplaySlower() );
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayRewind() );
+#ifdef XVIDEXPORT   
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayRecordExit() );
+#endif
    handler.registerUserFunction( new ReplayGuiFunctions::ReplayExit() );
 }
 

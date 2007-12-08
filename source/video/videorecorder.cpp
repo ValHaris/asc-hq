@@ -9,6 +9,9 @@
 
 
 #include "videorecorder.h"
+
+#ifdef XVIDEXPORT
+
 #include "../libs/revel/revel.h"
 #include "../events.h"
 
@@ -144,3 +147,14 @@ VideoRecorder::~VideoRecorder()
    delete data;
 }
 
+#else
+
+VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate  ) {}
+const ASCString& VideoRecorder::getFilename() { return ""; }
+void VideoRecorder::storeFrame( const SDL_Surface* surf ) {}
+void VideoRecorder::close() {}
+VideoRecorder::~VideoRecorder() {}
+
+
+
+#endif

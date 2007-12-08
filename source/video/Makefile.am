@@ -6,6 +6,6 @@ AM_CXXFLAGS		= @SDL_CFLAGS@
 noinst_LTLIBRARIES 	= libvideo.la
 
 libvideo_la_SOURCES	= videorecorder.cpp
-libvideo_la_LIBADD		= @SDL_LIBS@ -lxvidcore 
+libvideo_la_LIBADD		= @SDL_LIBS@ @VIDEOCODER@  
 
 EXTRA_DIST=$(srcdir)/*.h  

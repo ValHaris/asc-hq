@@ -150,6 +150,7 @@ SIGC_LIBS = @SIGC_LIBS@
 STRIP = @STRIP@
 SdlSoundDir = @SdlSoundDir@
 VERSION = @VERSION@
+VIDEOCODER = @VIDEOCODER@
 VORBISENC_LIBS = @VORBISENC_LIBS@
 VORBISFILE_LIBS = @VORBISFILE_LIBS@
 VORBIS_CFLAGS = @VORBIS_CFLAGS@
@@ -216,7 +217,7 @@ MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = @SDL_CFLAGS@ 
 noinst_LTLIBRARIES = libvideo.la
 libvideo_la_SOURCES = videorecorder.cpp
-libvideo_la_LIBADD = @SDL_LIBS@ -lxvidcore 
+libvideo_la_LIBADD = @SDL_LIBS@ @VIDEOCODER@  
 EXTRA_DIST = $(srcdir)/*.h  
 all: all-am
 

@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.0.99.2)
+AC_INIT(asc,2.0.99.5)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -150,19 +150,19 @@ AC_SUBST(LIBCURL_CPPFLAGS)
 #AC_SUBST(XVID_CFLAGS)
 #AC_SUBST(XVID_LIBS)
 
-AC_CHECK_LIB( xvidcore,
-              xvid_encore,,
-              AC_LIB_MISSING(XviD, http://www.xvid.org))
+XVIDAVAIL=1
+
+AC_CHECK_LIB( xvidcore,xvid_encore,,XVIDAVAIL=0)
 
 
-
-AC_MSG_CHECKING(XviD usage)
-AC_TRY_COMPILE( [#include <stdio.h>
-                 #include <xvid.h> ], [
-   void *m_xvidEncoderHandle;
-   xvid_encore(m_xvidEncoderHandle, XVID_ENC_DESTROY, NULL, NULL);
-],, AC_LIB_MISSING(XviD, http://www.xvid.org))
-
+if test "x$XVIDAVAIL" = x1; then 
+   AC_MSG_CHECKING(XviD usage)
+   AC_TRY_COMPILE( [#include <stdio.h>
+                  #include <xvid.h> ], [
+      void *m_xvidEncoderHandle;
+      xvid_encore(m_xvidEncoderHandle, XVID_ENC_DESTROY, NULL, NULL);
+   ],, XVIDAVAIL=0)
+fi
 
 
 dnl check for libSDL
@@ -589,6 +589,14 @@ else
 fi
 
 AC_SUBST(MUSICDIR)
+
+
+if test "x$XVIDAVAIL" = x1; then 
+   CXXFLAGS="$CXXFLAGS -DXVIDEXPORT"
+   VIDEOCODER="-lxvidcore"
+   AC_SUBST(VIDEOCODER)
+fi
+   
 
 AC_MSG_NOTICE( Creating Makefile for main.ascdat )
 mkdir -p data
