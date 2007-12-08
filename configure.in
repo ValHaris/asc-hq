@@ -600,6 +600,7 @@ fi
 
 AC_SUBST(VIDEOCODER)
 AC_SUBST(revellib)
+AC_SUBST(revellibfile)
    
 
 AC_MSG_NOTICE( Creating Makefile for main.ascdat )

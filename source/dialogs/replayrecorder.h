@@ -28,12 +28,16 @@ class ReplayRecorderDialog : public ASC_PG_Dialog {
    private:
       PG_LineEdit* filename;
       PG_CheckButton* append;
+      PG_LineEdit* frameRate;
+      PG_LineEdit* quality;
       bool selectFilename();
       bool ok();
    public:
-      ReplayRecorderDialog( const ASCString& file  );
+      ReplayRecorderDialog( const ASCString& file, bool fileAlreadyOpen  );
       ASCString getFilename();
       bool getAppend();
+      int getQuality();
+      int getFramerate();
 };
 
 

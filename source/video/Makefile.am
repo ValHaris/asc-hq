@@ -1,7 +1,8 @@
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-AM_CXXFLAGS		= @SDL_CFLAGS@ 
+AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS) 
+
 
 noinst_LTLIBRARIES 	= libvideo.la
 

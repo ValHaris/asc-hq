@@ -224,6 +224,10 @@ class CGameOptions
       Password getDefaultPassword ( );
       Password getDefaultSupervisorPassword ( );
 
+      struct {
+         int framerate;
+         int quality;
+      } video;
 
       static const int maxSearchPathNum;
       int searchPathNum;

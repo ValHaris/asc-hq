@@ -158,6 +158,11 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addBool("fillAmmo", unitProduction.fillAmmo, true );
    pc.closeBracket();
    
+   pc.openBracket("replayVideo");
+   pc.addInteger("FrameRate", video.framerate, video.framerate );
+   pc.addInteger("Quality", video.quality, video.quality);
+   pc.closeBracket();
+   
    if ( !pc.isReading() || pc.find("VisibleMapLayer" ))
       pc.addStringArray("VisibleMapLayer", visibleMapLayer );
 
@@ -289,6 +294,9 @@ void CGameOptions::setDefaults ( void )
    unitProduction.fillAmmo = true;
    unitProduction.fillResources = true;
 
+   video.quality = 100;
+   video.framerate = 15;
+   
    panelColumns = 2;
 
    setChanged();

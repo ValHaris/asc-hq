@@ -85,7 +85,7 @@ class ReplayRecorderWatcherGlobal {
          replayRecorderWatcherGlobal.set( this );
       }
       
-      void start( const ASCString& filename, bool append )
+      void start( const ASCString& filename, bool append, int framerate, int quality )
       {
          lastFilename = filename;
          movieModeStorage = CGameOptions::Instance()->replayMovieMode;
@@ -93,7 +93,7 @@ class ReplayRecorderWatcherGlobal {
          ASCString newFilename = constructFileName( 0, "", filename );
          if ( !rec || !append || newFilename != rec->getFilename()  ) {
             delete rec;
-            rec = new VideoRecorder( newFilename, PG_Application::GetScreen());
+            rec = new VideoRecorder( newFilename, PG_Application::GetScreen(), framerate, quality );
          }
          
          if ( !connection.connected() )
@@ -395,17 +395,20 @@ class ReplayRecord : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
         ASCString filename;
-        if ( replayRecorder )
+        bool open = false;
+        if ( replayRecorder ) {
            filename = replayRecorder->getLastFilename();
+           open = replayRecorder->isOpen();
+        }
         
-        ReplayRecorderDialog rrd( filename );
+        ReplayRecorderDialog rrd( filename, open );
         rrd.Show();
         rrd.RunModal();
         rrd.Hide();
          
         if ( !replayRecorder )
            replayRecorder = new ReplayRecorder();
-        replayRecorder->start( rrd.getFilename(), rrd.getAppend() );
+        replayRecorder->start( rrd.getFilename(), rrd.getAppend(), rrd.getFramerate(), rrd.getQuality() );
         
         runreplay.status = 2;
         updateFieldInfo();
@@ -1714,8 +1717,8 @@ void trunreplay :: execnextreplaymove ( void )
                                     error(MapCoordinate(x,y), "replay inconsistency:\nCannot find Unit to build/remove Object !");
                               }
 
-                              // if ( fieldvisiblenow ( fld, actmap->getPlayerView() ))
-                              displaymap();
+                              if ( fieldvisiblenow ( fld, actmap->getPlayerView() ))
+                                 displaymap();
                               
                               wait(MapCoordinate(x,y));
                               removeActionCursor();

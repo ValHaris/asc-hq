@@ -24,8 +24,10 @@
 
 #include "replayrecorder.h"
 #include "../paradialog.h"
+#include "../dialog.h"
 
 #include "fileselector.h"
+#include "../gameoptions.h"
 
 
 bool ReplayRecorderDialog::selectFilename()
@@ -39,22 +41,49 @@ bool ReplayRecorderDialog::selectFilename()
 bool ReplayRecorderDialog::ok()
 {
    if ( !filename->GetText().empty() ) {
-      QuitModal();
-      return true;
+      tfindfile ff ( getFilename() );
+      tfindfile::FileInfo fi;
+      bool fileExists = false;
+      if ( ff.getnextname( fi ))
+         if ( fi.directoryLevel <= 0 )
+            fileExists = true;
+      
+      if ( !fileExists || getAppend() || choice_dlg( "overwrite " + getFilename() +" ?", "~y~es","~n~o") == 1 ) {
+         
+         CGameOptions::Instance()->video.framerate = getFramerate();
+         CGameOptions::Instance()->video.quality = getQuality();
+         CGameOptions::Instance()->setChanged(true);
+         
+         QuitModal();
+         return true;
+      }
    } else
       return false;
 }
       
-ReplayRecorderDialog::ReplayRecorderDialog( const ASCString& file ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 250 ), "Replay Recorder" )
+ReplayRecorderDialog::ReplayRecorderDialog( const ASCString& file, bool fileAlreadyOpen ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 250 ), "Replay Recorder" ), append(NULL)
 {
-   filename = new PG_LineEdit( this, PG_Rect( 20, 30, 150, 25 ));
+   new PG_Label(this, PG_Rect(20,30,80,25),"File:");
+   filename = new PG_LineEdit( this, PG_Rect( 120, 30, 150, 25 ));
    filename->SetText( file );
-   (new PG_Button(this, PG_Rect( 190, 30, 50, 25), "Browse"))->sigClick.connect( SigC::slot( *this, &ReplayRecorderDialog::selectFilename ));
+   (new PG_Button(this, PG_Rect( 290, 30, 90, 25), "Browse"))->sigClick.connect( SigC::slot( *this, &ReplayRecorderDialog::selectFilename ));
    
-   append = new PG_CheckButton( this, PG_Rect( 20, 70, 150, 25), "append to video");
-   append->SetPressed();
+   if ( !file.empty() && fileAlreadyOpen ) {
+      append = new PG_CheckButton( this, PG_Rect( 120, 70, 150, 25), "append to video");
+      append->SetPressed();
+   }
    
-   (new PG_Button( this, PG_Rect( 20, 110, 100, 30 ), "OK"))->sigClick.connect( SigC::slot(*this, &ReplayRecorderDialog::ok ));
+   new PG_Label(this, PG_Rect(20,100,80,25),"Framerate:");
+   frameRate = new PG_LineEdit( this, PG_Rect( 120, 100, 150, 25 ));
+   frameRate->SetText( ASCString::toString( CGameOptions::Instance()->video.framerate ));
+   
+   new PG_Label(this, PG_Rect(20,140,80,25),"Quality:");
+   quality   = new PG_LineEdit( this, PG_Rect( 120, 140, 150, 25 ));
+   quality->SetText( ASCString::toString( CGameOptions::Instance()->video.quality ));
+   
+   
+   
+   (new PG_Button( this, PG_Rect( 20, 200, 100, 30 ), "OK"))->sigClick.connect( SigC::slot(*this, &ReplayRecorderDialog::ok ));
    
 }
 
@@ -68,5 +97,30 @@ ASCString ReplayRecorderDialog::getFilename()
       
 bool ReplayRecorderDialog::getAppend()
 {
-   return append->GetPressed();  
+   if ( append )
+      return append->GetPressed();  
+   else
+      return false;
+}
+
+int ReplayRecorderDialog::getQuality()
+{
+   int res = atoi(quality->GetText().c_str() );
+   if ( res < 1 )
+      res = 1;
+   if ( res > 100 )
+      res = 100;
+   return res;
+}
+
+int ReplayRecorderDialog::getFramerate()
+{
+   int res = atoi(frameRate->GetText().c_str() );
+   
+   if ( res < 1 )
+      res = 1;
+   if ( res > 100 )
+      res = 100;
+   return res;
+   
 }

@@ -14,18 +14,21 @@
 
 #include "../libs/revel/revel.h"
 #include "../events.h"
-
+#include "../gameoptions.h"
 
 class VideoRecorderInternals {
    public:
-     VideoRecorderInternals() : open(false){};
+     VideoRecorderInternals() : open(false), frameCounterOut(0), frameCounterIn(0), lastFrame(NULL) {};
+     ~VideoRecorderInternals() { if ( lastFrame ) delete[] lastFrame; };
      int encoderHandle; 
      Revel_Params revParams;
      bool open;
      int framerate;
      long lastTick;
      ASCString filename;
-     
+     int frameCounterOut; //<! counts all frames that where send to the videorecorder
+     int frameCounterIn;  //<! counts all frames that where passed to the video encoder
+     int* lastFrame;
 };
 
 
@@ -38,7 +41,7 @@ void checkErrors( const Revel_Error& err )
 }
 
 
-VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate  )
+VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int quality  )
 {
     data = new VideoRecorderInternals();
     data->framerate = framerate;
@@ -52,7 +55,9 @@ VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf
     data->revParams.width = surf->w;
     data->revParams.height = surf->h;
     data->revParams.frameRate = data->framerate;
-    data->revParams.quality = 1.0f;
+    float q = quality;
+    q /= 100.0f;
+    data->revParams.quality = q;
     data->revParams.codec = REVEL_CD_XVID;
 
     data->revParams.hasAudio = 0;
@@ -76,7 +81,7 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
    frame.bytesPerPixel = 4;
    
    bool directScreenRender = false;
-   
+   /*
    if ( surf->pitch == surf->w*4 && surf->format->BytesPerPixel == 4 ) {
       if ( surf->format->Rshift == 0 && surf->format->Gshift == 8 && surf->format->Bshift == 16 ) {
          frame.pixelFormat = REVEL_PF_RGBA;
@@ -88,6 +93,7 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
          directScreenRender = true;
       }
    }
+   */
    
    
    if ( directScreenRender ) {
@@ -102,21 +108,38 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
       
       Uint32* pix = (Uint32*)frame.pixels;
       
+      bool diff = false;
+      int* lastBuf = data->lastFrame;
+      if ( !data->lastFrame )
+         diff = true;
+      
       for ( int y = 0; y < surf->h; ++y ) {
          Uint32* src = ((Uint32*) surf->pixels) + (surf->pitch/4*y);
          for ( int x = 0 ; x < surf->w; ++x ) {
             Uint8 r,g,b,a;
             SDL_GetRGBA( *src, surf->format, &r,&g,&b,&a);
             *pix = r + (g<<8) + (b<<16) + (a<<24);
+            if ( lastBuf ) {
+               if ( *pix != *lastBuf )
+                  diff = true;
+               ++lastBuf;
+            }
             ++pix;
             ++src;
          }
       }
-      int frameSize;
-      Revel_Error revError = Revel_EncodeFrame(data->encoderHandle, &frame, &frameSize);
-      checkErrors( revError);
-      delete[] buf;
+      if ( diff ) {
+         int frameSize;
+         Revel_Error revError = Revel_EncodeFrame(data->encoderHandle, &frame, &frameSize);
+         checkErrors( revError);
+         ++data->frameCounterIn;
+       }
+      if ( data->lastFrame )
+         delete[] data->lastFrame;
+      data->lastFrame = buf;
    }
+   
+   ++data->frameCounterOut;
    
    // we are limited the video to our framerate
    while ( getTicker() < data->lastTick + 100/data->framerate )
@@ -133,6 +156,7 @@ void VideoRecorder::close()
       checkErrors( revError );
       Revel_DestroyEncoder(data->encoderHandle);      
    }
+   printf("recorded %d / %d frames\n", data->frameCounterOut, data->frameCounterIn );
 }
 
 const ASCString& VideoRecorder::getFilename()
@@ -149,12 +173,10 @@ VideoRecorder::~VideoRecorder()
 
 #else
 
-VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate  ) {}
+VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int quality  ) {}
 const ASCString& VideoRecorder::getFilename() { return ""; }
 void VideoRecorder::storeFrame( const SDL_Surface* surf ) {}
 void VideoRecorder::close() {}
 VideoRecorder::~VideoRecorder() {}
-
-
 
 #endif

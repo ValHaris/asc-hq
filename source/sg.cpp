@@ -1611,7 +1611,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+  // setenv( "DISPLAY", "192.168.0.61:0", 1 );
 
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
