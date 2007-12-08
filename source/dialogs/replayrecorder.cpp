@@ -57,6 +57,7 @@ bool ReplayRecorderDialog::ok()
          QuitModal();
          return true;
       }
+      return false;
    } else
       return false;
 }
