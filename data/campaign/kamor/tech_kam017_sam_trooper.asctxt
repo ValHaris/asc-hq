@@ -1,0 +1,11 @@
+technology {
+   Name = SAM Trooper
+   infotext = Research project finished! SAM Trooper available!
+   id = 34103
+   RelatedUnitID = 98
+   parent = 34102
+   researchpoints *= 120
+   techlevel = 1
+   TechnologiesRequired = 34102
+RequireAllListedTechnologies = false
+} Technology

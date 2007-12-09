@@ -1,0 +1,31 @@
+ Technology {
+   name = "KAM Campain Base Level 17"
+   infotext = "base technology of KAM Campain Level 17"
+   id = 34102
+   researchpoints = 1
+   
+   techlevel = 0
+   ; the idea behind techlevel is that it makes it easier to start a multiplayer map by 
+   ; grouping technologies into techlevels. If you start a map with techlevel 3 all technologies
+   ; with a techlevel of 3 or less will be available to the players without any research
+   
+   requireEvent = false
+   ; this technology can only be researched after a specific event enabling this tech has been triggered
+   ; usually false
+   
+   TechnologiesRequired = -1
+   ; this technology depends on the technologies with ID 122 and 123   
+   
+   BlockingTechnologies = 
+   ; if technology 127 has been researched, this technology will not be researchable any more
+   
+   BlockingOtherTechnologies = 0-34099,35000-500000
+  
+   RequireAllListedTechnologies = true
+   ; if set to yes then this technology is only researchable after all requirements listed 
+   ; in TechnologiesRequired are availabe (in this example 122 AND 123); 
+   ; if set to no only one of the TechnologiesRequired (either 122 OR 123, or both) must be available   RelatedUnitID = 20
+   ; if  RelatedUnitID is specified, a "unit info" link will appear in the ChooseTechnology dialog
+   ; which opens the VehicleType Information dialog for the unit specified here. This is
+   ; useful if a technology is prerequisite for a specific unit (this wouldn't make much sense for a technology "laser weapons")
+} Technology 

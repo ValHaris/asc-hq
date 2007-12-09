@@ -1,0 +1,10 @@
+technology {
+   Name = ROTOS
+   infotext = Research project finished! ROTOS available!
+   id = 34105
+   RelatedUnitID = 109
+   parent = 34102
+   researchpoints *= 360
+   techlevel = 3
+   TechnologiesRequired = 34102
+} Technology

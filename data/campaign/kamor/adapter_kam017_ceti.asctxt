@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 11
+   ;Bezeichnung der verknüpften Technologie: CETI
+   TechnologiesRequired = 34106
+} TechAdapter

@@ -125,12 +125,6 @@
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
-			<File
-				RelativePath=".\events.cpp">
-			</File>
-			<File
-				RelativePath=".\graphics.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
