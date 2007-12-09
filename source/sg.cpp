@@ -148,7 +148,7 @@
 #include "widgets/textrenderer.h"
 #include "dialogs/productionanalysis.h"
 #include "dialogs/fileselector.h"
-
+#include "containerbase-functions.h"
 #include "memory-measurement.h"
 
 #ifdef WIN32
@@ -1138,12 +1138,19 @@ void viewMiningPower()
       if ( (*i)->baseType->hasFunction( ContainerBaseType::MiningStation )) {
          int power;
          int output;
+         MiningStation miningStation ( *i, true );
          for ( int r = 0; r < 3; ++r )
             if ( (*i)->maxplus.resource(r) ) {
                power = 100 * (*i)->plus.resource(r) / (*i)->maxplus.resource(r) ;
-               output = (*i)->plus.resource(r);
                break;
             }
+            
+         for ( int r = 0; r < 3; ++r )
+            if ( miningStation.getPlus().resource(r) ) {
+               output = miningStation.getPlus().resource(r);
+               break;
+            }
+            
          ASCString txt = ASCString::toString(output) + " (" + ASCString::toString(power) + "%) " + (*i)->getPosition().toString() + " " + (*i)->baseType->name + "\n";
          info[(*i)->baseType] += txt;
       }
