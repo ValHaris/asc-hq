@@ -131,3 +131,10 @@ unitsets/mk3/mk3-shh/*.png
 unitsets/mk3/mk3-shs/*.png
 unitsets/mk3/mk3-sta/*.png
 unitsets/mk3/mk3-vad/*.png
+unitsets/mk1/mk1-jam/*.jpg
+unitsets/mk1/mk1-inf/*.jpg
+unitsets/mk1/mk1-orb/*.jpg
+unitsets/mk1/mk1-parent/*.set
+unitsets/mk1/mk1-view/*.jpg
+unitsets/mk1/mk1-vrok/*.jpg
+

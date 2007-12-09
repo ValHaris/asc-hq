@@ -1,5 +1,5 @@
 BuildingType {
-   Name = Bunker-HQ
+   Name = Bunker
    ID = 1015
    parent = 1003
    Weather = dry heavy_rain much_snow snow_and_ice

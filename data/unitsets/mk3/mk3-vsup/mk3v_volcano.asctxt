@@ -11,7 +11,7 @@ VehicleType {
    Picture = mk3v_volcano.png
    GuideSortHelp = 562 0 0 0 3 0 0 0 0 0
 
-   Abilities += mine_layer
+   Abilities += mine_layer view_mines
 
    Weapons { 
       Initiative = 0

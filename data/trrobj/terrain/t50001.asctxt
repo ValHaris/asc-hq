@@ -1,0 +1,77 @@
+TerrainType { 
+   ID = 50001
+   Name = Water
+   Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
+dry {
+picture = t50001.png
+TerrainProperties = water 
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  20  20  20  20  20  20  20  20  10  20  10  11  20  20  10  10  20  10
+
+   } dry
+
+   light_rain {
+picture = t50001.png
+TerrainProperties = water
+      UseGFXpics = false
+      DefenseBonus = 1
+      AttackBonus = 0
+      BasicJamming = 1
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  20  20  20  20  20  20  20  20  10  20  10  11  20  20  10  10  20  15
+
+   } light_rain
+
+   heavy_rain {
+picture = t50001.png
+TerrainProperties = water
+      UseGFXpics = false
+      DefenseBonus = 2
+      AttackBonus = -1
+      BasicJamming = 3
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  25  25  25  25  25  25  25  25  11  25  14  11  25  25  16  12  25  25
+
+   } heavy_rain
+
+   few_snow {
+picture = t50001.png
+TerrainProperties = water
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 2
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  20  20  20  20  20  20  20  20  10  20  10  20  20  20  10  10  20  15
+
+   } few_snow
+
+   much_snow {
+picture = t50001.png
+TerrainProperties = water
+      UseGFXpics = false
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 4
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  25  25  25  25  25  25  25  25  11  25  14  12  25  25  16  12  25  25
+
+   } much_snow
+
+   snow_and_ice {
+picture = t50001.png
+TerrainProperties = water
+      UseGFXpics = false
+      DefenseBonus = 0
+      AttackBonus = 2
+      BasicJamming = 0
+      ;           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus =  13  13  13  13  14  14  14  12  12  14  22  16  14  14  22  22  14  12
+   } snow_and_ice
+
+
+} TerrainType

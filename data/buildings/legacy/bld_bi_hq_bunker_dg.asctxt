@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = Bunker-HQ
+   Name = Bunker
    ID = 1003
    Armor = 1000
    View = 50

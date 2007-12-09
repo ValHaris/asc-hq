@@ -8,6 +8,7 @@ VehicleType {
               the Turret on their radars. Its only drawback is that it cannot
               get a lock on very small targets.]
    picture = MK1b_BIGGUN.pcx
+InfoImage = biggun2.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 100

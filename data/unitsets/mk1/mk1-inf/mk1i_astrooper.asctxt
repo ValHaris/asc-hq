@@ -7,6 +7,7 @@ VehicleType {
               than other Troopers. Their main purpose is to take out squads
               of heavy vehicles.]
    Picture = MK1i_astrooper.pcx
+InfoImage = assault-trooper.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor +=10

@@ -12,6 +12,7 @@ Die geringe Sichtweite dieser Einheit macht zusätzliche Aufklärer
 wie den ORACLE, GRS erforderlich.
  ]
    Picture = MK1b_samturret.pcx
+InfoImage = samturret.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 50

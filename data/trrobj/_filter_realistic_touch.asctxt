@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 70000-79999
+   Buildings = 70000-79999
+   Objects = 60000-69999
+   Terrain = 50000-59999
+   Technologies = 70000-79999
+   name = realistic touch
+   activated = true
+} itemfilter
+   
