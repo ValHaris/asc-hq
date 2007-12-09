@@ -4,6 +4,10 @@ Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
 _________________
+09.122007 (GAMER)
+Strong Pipeline rekorrigiert auf GroupID 15
+
+_________________
 v21.01 15.06.2007 
 Raps (Fields) GroupID korrigiert (10)
 

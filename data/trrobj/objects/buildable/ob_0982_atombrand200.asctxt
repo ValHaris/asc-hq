@@ -1,0 +1,11 @@
+ObjectType { 
+   Name = Atombrand
+   ID = 0982
+   parent = 519
+   GroupID = 21
+
+   MaxChildSpawnNumber = 200
+   Livetime = 5
+   growthRate = 10.00
+
+} ObjectType
