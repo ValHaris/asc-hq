@@ -1137,12 +1137,14 @@ void viewMiningPower()
    for ( Player::BuildingList::iterator i = actmap->getCurrentPlayer().buildingList.begin(); i != actmap->getCurrentPlayer().buildingList.end(); ++i )
       if ( (*i)->baseType->hasFunction( ContainerBaseType::MiningStation )) {
          int power;
+         int output;
          for ( int r = 0; r < 3; ++r )
             if ( (*i)->maxplus.resource(r) ) {
                power = 100 * (*i)->plus.resource(r) / (*i)->maxplus.resource(r) ;
+               output = (*i)->plus.resource(r);
                break;
             }
-         ASCString txt = ASCString::toString(power) + "% " + (*i)->getPosition().toString() + " " + (*i)->baseType->name + "\n";
+         ASCString txt = ASCString::toString(output) + " (" + ASCString::toString(power) + "%) " + (*i)->getPosition().toString() + " " + (*i)->baseType->name + "\n";
          info[(*i)->baseType] += txt;
       }
 

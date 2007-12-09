@@ -12,6 +12,9 @@
 *.pcx
 *.ascmapxlat
 *.asctxt
+campaign/nos/*
+campaign/standard/*
+campaign/kamor/*
 buildings/*.txt
 buildings/*.asctxt
 buildings/*.version

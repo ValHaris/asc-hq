@@ -4,7 +4,7 @@ itemfilter {
    Objects = 
    Technologies = 101000-101999
    Terrain = 
-   name = Campain Technologies
+   name = Campaign Technologies
    activated = true
 } itemfilter
    

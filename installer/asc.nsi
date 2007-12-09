@@ -8,10 +8,10 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "Advanced Strategic Command 2.0.99.5"
+Name "Advanced Strategic Command 2.0.99.6"
 
 ; The file to write
-OutFile "ASC-2.0.99.5-Install.exe"
+OutFile "ASC-2.0.99.6-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -48,31 +48,31 @@ Section "ASC main program (required)"
   SetOutPath $INSTDIR
   
   ; Executables
-  File "/ASC2.exe"
-  File "/mapeditor2.exe"
+  File "/mnt/win2000/Programme/ascdev/asc-newgraph//ASC2.exe"
+  File "/mnt/win2000/Programme/ascdev/asc-newgraph//mapeditor2.exe"
   
   ; DLLs
-  File "/dbghelp.dll"
-  File "/jpeg.dll"
-  File "/msvcp71.dll"
-  File "/msvcr71.dll"
-  File "/ogg.dll"
-  File "/SDL_mixer.dll"
-  File "/smpeg.dll"
-  File "/zlib1.dll"
-  File "/expat.dll"
-  File "/libpng13.dll"
-  File "/sdl.dll"
-  File "/vorbis.dll"
-  File "/in_flac.dll"
-  File "/SDL_image.dll"
-  File "/sdl_sound.dll"
-  File "/vorbisfile.dll"
+  File "/mnt/win2000/Programme/libs//dbghelp.dll"
+  File "/mnt/win2000/Programme/libs//jpeg.dll"
+  File "/mnt/win2000/Programme/libs//msvcp71.dll"
+  File "/mnt/win2000/Programme/libs//msvcr71.dll"
+  File "/mnt/win2000/Programme/libs//ogg.dll"
+  File "/mnt/win2000/Programme/libs//SDL_mixer.dll"
+  File "/mnt/win2000/Programme/libs//smpeg.dll"
+  File "/mnt/win2000/Programme/libs//zlib1.dll"
+  File "/mnt/win2000/Programme/libs//expat.dll"
+  File "/mnt/win2000/Programme/libs//libpng13.dll"
+  File "/mnt/win2000/Programme/libs//sdl.dll"
+  File "/mnt/win2000/Programme/libs//vorbis.dll"
+  File "/mnt/win2000/Programme/libs//in_flac.dll"
+  File "/mnt/win2000/Programme/libs//SDL_image.dll"
+  File "/mnt/win2000/Programme/libs//sdl_sound.dll"
+  File "/mnt/win2000/Programme/libs//vorbisfile.dll"
   
   ; Debug DLLs
-  File "/sdl_sound_d.dll"
-  File "/msvcr71d.dll"
-  File "/msvcp71d.dll"
+  File "/mnt/win2000/Programme/libs//sdl_sound_d.dll"
+  File "/mnt/win2000/Programme/libs//msvcr71d.dll"
+  File "/mnt/win2000/Programme/libs//msvcp71d.dll"
 
   ; Data Files
   File "../data/dialog/asc2_dlg.zip"
@@ -82,7 +82,7 @@ Section "ASC main program (required)"
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.0.99.5"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.0.99.6"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
@@ -147,10 +147,10 @@ Section "Tools"
    SetOutPath "$INSTDIR\tools"
    File "data/building-template.png"
    File "data/hexfield.png"
-   File "/weaponguide.exe"
-   File "/demount.exe"
-   File "/mount.exe"
- ;  File "/makegfx.exe"
+   File "/mnt/win2000/Programme/ascdev/asc-newgraph//weaponguide.exe"
+   File "/mnt/win2000/Programme/ascdev/asc-newgraph//demount.exe"
+   File "/mnt/win2000/Programme/ascdev/asc-newgraph//mount.exe"
+ ;  File "/mnt/win2000/Programme/ascdev/asc-newgraph//makegfx.exe"
 SectionEnd
 
 ;--------------------------------
