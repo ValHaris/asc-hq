@@ -159,7 +159,7 @@ void VideoRecorder::close()
    printf("recorded %d / %d frames\n", data->frameCounterOut, data->frameCounterIn );
 }
 
-const ASCString& VideoRecorder::getFilename()
+const ASCString VideoRecorder::getFilename()
 {
    return data->filename;  
 }
@@ -174,7 +174,7 @@ VideoRecorder::~VideoRecorder()
 #else
 
 VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int quality  ) {}
-const ASCString& VideoRecorder::getFilename() { return ""; }
+const ASCString VideoRecorder::getFilename() { return ""; }
 void VideoRecorder::storeFrame( const SDL_Surface* surf ) {}
 void VideoRecorder::close() {}
 VideoRecorder::~VideoRecorder() {}

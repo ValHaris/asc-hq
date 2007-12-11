@@ -30,7 +30,7 @@ class VideoRecorder {
       VideoRecorderInternals* data;
    public:   
       VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate = 15, int quality = 100 );
-      const ASCString& getFilename();
+      const ASCString getFilename();
       void storeFrame( const SDL_Surface* surf );
       void close();
       ~VideoRecorder();
