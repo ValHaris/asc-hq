@@ -13,59 +13,195 @@
 #include "typen.h"
 #include "containercontrols.h"
 #include "resourcenet.h"
-
+#include <iostream>
 
 
 
 template <class T, ContainerBaseType::ContainerFunctions f>
-class GenericWorkerFactory : public ContainerBase::WorkClassFactory {
-   bool available( const ContainerBase* cnt )
-   {
-      return cnt->baseType->hasFunction( f );
-   };
-      
-   ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
-   {
-      return new T(cnt);
-   };
+class GenericWorkerFactory : public ContainerBase::WorkClassFactory
+{
+      bool available( const ContainerBase* cnt )
+      {
+         return cnt->baseType->hasFunction( f );
+      };
+
+      ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
+      {
+         return new T(cnt);
+      };
 };
 
 
-class BiResourceGenerationFactory : public ContainerBase::WorkClassFactory {
-   bool available( const ContainerBase* cnt )
-   {
-      return true;
-   };
-      
-   ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
-   {
-      return new BiResourceGeneration(cnt);
-   };
+class BiResourceGenerationFactory : public ContainerBase::WorkClassFactory
+{
+      bool available( const ContainerBase* cnt )
+      {
+         return true;
+      };
+
+      ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
+      {
+         return new BiResourceGeneration(cnt);
+      };
 };
 
-class MiningStationFactory : public ContainerBase::WorkClassFactory {
-   bool available( const ContainerBase* cnt )
-   {
-      return cnt->baseType->hasFunction( ContainerBaseType::MiningStation );
-   };
-      
-   ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
-   {
-      return new MiningStation(cnt, queryOnly);
-   };
+class MiningStationFactory : public ContainerBase::WorkClassFactory
+{
+      bool available( const ContainerBase* cnt )
+      {
+         return cnt->baseType->hasFunction( ContainerBaseType::MiningStation );
+      };
+
+      ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
+      {
+         return new MiningStation(cnt, queryOnly);
+      };
 };
 
+class AutoHarvestObjectsFactory : public ContainerBase::WorkClassFactory
+{
+      bool available( const ContainerBase* cnt )
+      {
+         return cnt->baseType->hasFunction( ContainerBaseType::AutoHarvestObjects );
+      };
 
-namespace {
-   
+      ContainerBase::Work* produce( ContainerBase* cnt, bool queryOnly )
+      {
+         return new AutoHarvestObjects(cnt, queryOnly);
+      };
+};
+
+namespace
+{
    const bool r5 = ContainerBase::registerWorkClassFactory( new BiResourceGenerationFactory, false );
    const bool r1 = ContainerBase::registerWorkClassFactory( new GenericWorkerFactory<MatterConverter, ContainerBaseType::MatterConverter>() );
    const bool r2 = ContainerBase::registerWorkClassFactory( new GenericWorkerFactory<ResourceSink, ContainerBaseType::ResourceSink> );
    const bool r3 = ContainerBase::registerWorkClassFactory( new GenericWorkerFactory<WindPowerplant, ContainerBaseType::WindPowerPlant> );
    const bool r4 = ContainerBase::registerWorkClassFactory( new GenericWorkerFactory<SolarPowerplant, ContainerBaseType::SolarPowerPlant> );
    const bool r6 = ContainerBase::registerWorkClassFactory( new MiningStationFactory );
+   const bool r7 = ContainerBase::registerWorkClassFactory( new AutoHarvestObjectsFactory );
 }
 
+AutoHarvestObjects::AutoHarvestObjects( ContainerBase* _bld, bool justQuery_ )
+{
+   base = _bld;
+   justQuery = justQuery_;
+   hasRun = false;
+   fieldCounter = 0;
+}
+
+bool AutoHarvestObjects::finished()
+{
+   return hasRun;
+}
+
+
+void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectType* obj )
+{
+   tfield* currentField = base->getMap()->getField(pos);
+   if ( !currentField )
+      return;
+
+   Object* object = currentField->checkforobject( obj );
+
+   if( object != NULL ) {
+      Resources removeValue = object->typ->removecost;
+      Resources removeCost;
+      Resources removeBenefit;
+
+      if( removeValue.energy < 0 )
+         removeBenefit.energy = -removeValue.energy;
+      else
+         removeCost.energy = removeValue.energy;
+
+      if( removeValue.material < 0 )
+         removeBenefit.material = -removeValue.material;
+      else
+         removeCost.material = removeValue.material;
+
+      if( removeValue.fuel < 0 )
+         removeBenefit.fuel = -removeValue.fuel;
+      else
+         removeCost.fuel = removeValue.fuel;
+
+      if( base->getResource( removeCost, true ) == removeCost ) {
+         cost += removeCost;
+         harvested += removeBenefit;
+         if( !justQuery ) {
+            base->getResource( removeCost, false );
+            base->putResource( removeBenefit, false );
+            currentField->removeobject( obj, true );
+         }
+         ++fieldCounter;
+      }
+   }
+}
+
+void AutoHarvestObjects::processField( const MapCoordinate& pos )
+{
+   tfield* currentField = base->getMap()->getField(pos);
+   if ( !currentField )
+      return;
+   
+   if ( currentField->building )
+      return;
+
+   if ( fieldCounter >= base->baseType->autoHarvest.maxFieldsPerTurn )
+      return;
+   
+   for ( vector<IntRange>::const_iterator i = base->baseType->autoHarvest.objectsHarvestable.begin(); i != base->baseType->autoHarvest.objectsHarvestable.end();  ++i )
+      for( int id=i->from; id <= i->to; ++id ) {
+         const ObjectType *obj = base->getMap()->getobjecttype_byid( id );
+         if ( obj )
+            harvestObject( pos, obj );
+      }
+
+   for ( vector<IntRange>::const_iterator i = base->baseType->autoHarvest.objectGroupsHarvestable.begin(); i != base->baseType->autoHarvest.objectGroupsHarvestable.end(); ++i )
+      for( int j = 0; j < base->getMap()->getObjectTypeNum(); ++j ) {
+         const ObjectType *obj = base->getMap()->getobjecttype_bypos( j );
+         if ( obj->groupID >= i->from && obj->groupID <= i->to )
+            harvestObject( pos, obj );
+      }
+
+}
+
+void AutoHarvestObjects::iterateField( const MapCoordinate& pos )
+{
+   if ( pos.y & 1 ) {
+      processField(pos);
+      return ;
+   } else {
+      if ( (((pos.y >> 1) & 1) && (pos.x & 1 )) || (((pos.y >> 1 ) & 1 )==0 && (pos.x & 1 )==0 )) {
+         processField(pos);
+         return;
+      }
+   }
+   
+}
+
+
+
+
+bool AutoHarvestObjects::run()
+{
+   hasRun = true;
+   if( base->getCarrier() != NULL )
+      return false;
+
+   circularFieldIterator( base->getMap(), base->getPosition(), 1, base->baseType->autoHarvest.range, FieldIterationFunctor( this, &AutoHarvestObjects::iterateField ));
+
+   return true;
+}
+
+Resources AutoHarvestObjects::getPlus()
+{
+   return harvested;
+}
+
+Resources AutoHarvestObjects::getUsage()
+{
+   return Resources();
+}
 
 
 float  getminingstationeficency ( int dist )
@@ -108,7 +244,7 @@ void GetMiningInfo :: testfield ( const MapCoordinate& mc )
    if ( miningInfo.nextMiningDistance == -1 ) {
       if ( miningStation->maxplus.fuel > 0 && fld->fuel > 0 )
          miningInfo.nextMiningDistance = dist;
-      
+
       if ( miningStation->maxplus.material > 0 && fld->material > 0 )
          miningInfo.nextMiningDistance = dist;
    }
@@ -497,7 +633,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
 
             if ( r==1) {
                // resourceFactor = resource_material_factor * double(bld->baseType->efficiencymaterial) / 1024;
-               resourceFactor = resource_material_factor; 
+               resourceFactor = resource_material_factor;
                fieldResource = &fld->material;
             } else {
                // resourceFactor = resource_fuel_factor * double(bld->baseType->efficiencyfuel) / 1024;

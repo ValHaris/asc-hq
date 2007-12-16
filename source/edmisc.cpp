@@ -4641,6 +4641,9 @@ void CopyMap::fieldOperator( const MapCoordinate& point )
    int mapX = point.x - mapStartX;
    int mapY = point.y - mapStartY;
    
+	 if( mapStartY%2 == 1 && mapY%2 == 1 )
+		 mapX--;
+	 
    if( copyStep == 0 )
    {
       if( mapStartX == -1 || point.x < mapStartX )

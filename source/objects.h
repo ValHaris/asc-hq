@@ -27,6 +27,8 @@
 
  #include "typen.h"
  #include "mapitemtype.h"
+ #include "overviewmapimage.h"
+ #include "graphics/surface.h"
  
  class ObjectType;
 

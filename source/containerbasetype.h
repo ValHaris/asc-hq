@@ -18,6 +18,7 @@
 #ifndef containerbasetypeH
  #define containerbasetypeH
 
+ #include "objects.h"
  #include "typen.h"
  #include "research.h"
  #include "mapitemtype.h"
@@ -68,10 +69,11 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
         ImmuneToMines,
         JamsOnlyOwnField,
         MoveWithReactionFire,
-        OnlyMoveToAndFromTransports };
+        OnlyMoveToAndFromTransports,
+        AutoHarvestObjects };
 
      
-     static const int functionNum = 40;
+     static const int functionNum = 41;
 
      bool hasFunction( ContainerFunctions function ) const;
      bool hasAnyFunction( std::bitset<64> functions ) const;
@@ -207,6 +209,18 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      Resources    asc_mode_tank;
      Resources    bi_mode_tank;
      
+   public:
+      struct {
+			int range;
+         
+         int maxFieldsPerTurn;
+         
+        //! the ids of objects this unit can construct
+        vector<IntRange> objectsHarvestable;
+
+        //! the group-ids of objects this unit can construct
+        vector<IntRange> objectGroupsHarvestable;
+      } autoHarvest;
      
  };
 

@@ -136,8 +136,10 @@
             protected:
               PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
               ASCString toString ( ) const;
+              bool required;
+              bool hasDefault() {return !required; };
             public:
-               IntegerArrayProperty ( vector<int>& property_ ) : PTIA ( property_ ) {};
+               IntegerArrayProperty ( vector<int>& property_, bool _required ) : PTIA ( property_ ), required(_required) {};
          };
 
          typedef ValArrayProperty<double> PTDA;
@@ -422,9 +424,9 @@ void PropertyContainer::addStringArray ( const ASCString& name, vector<ASCString
 }
 
 
-void PropertyContainer::addIntegerArray ( const ASCString& name, vector<int>& property )
+void PropertyContainer::addIntegerArray ( const ASCString& name, vector<int>& property, bool required )
 {
-   IntegerArrayProperty* ip = new IntegerArrayProperty ( property );
+   IntegerArrayProperty* ip = new IntegerArrayProperty ( property, required );
    setup ( ip, name );
 }
 

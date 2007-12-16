@@ -215,7 +215,8 @@ const char*  buildingFunctionTags[24]  =
    "immune_to_mines",
    "jam_only_own_field",
    "MoveDuringReactionFire",
-   "onlyTransMove" 
+   "onlyTransMove",
+	 "AutoHarvestObjects"
    };
    
    

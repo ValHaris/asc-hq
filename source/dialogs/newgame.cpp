@@ -267,7 +267,8 @@ bool StartMultiplayerGame::Apply()
                      else
                         replay = false;
 
-
+                     if ( mode == Skirmish )
+                        replay = false; 
 
                      if ( checkPlayerStat() )
                         return true;

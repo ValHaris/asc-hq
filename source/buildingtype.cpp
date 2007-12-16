@@ -602,12 +602,13 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addInteger( "Armor", _armor );
 
-      if ( pc.find( "Functions" )) {
+      if ( pc.find( "Features" ) )
+         pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
+      else {
          int special = 0;
          pc.addTagInteger ( "Functions", special, cbuildingfunctionnum, buildingFunctionTags );
          convertOldFunctions( special, pc.getFileName() );
-      } else
-         pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
+      } 
       pc.addInteger ( "Techlevel", technologylevel );
 
       pc.openBracket("TerrainAccess" );

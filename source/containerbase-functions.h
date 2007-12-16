@@ -18,6 +18,27 @@
  #include "mapalgorithms.h"
 
 
+class AutoHarvestObjects : public ContainerBase::Work
+{
+      ContainerBase* base;
+      Resources harvested;
+      Resources cost;
+			bool justQuery;
+			bool hasRun;
+         int fieldCounter;
+         
+      void harvestObject( const MapCoordinate& pos, const ObjectType* obj );
+      void processField( const MapCoordinate& pos );
+      void iterateField( const MapCoordinate& pos );
+
+   public:
+      AutoHarvestObjects( ContainerBase* _bld, bool justQuery_ ) ;
+      virtual bool finished();
+      virtual bool run();
+      virtual Resources getPlus();
+      virtual Resources getUsage();
+};
+
 class MatterConverter : public ContainerBase::Work
 {
       ContainerBase* bld;

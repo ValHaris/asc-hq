@@ -1327,7 +1327,7 @@ void execuseraction2 ( tuseractions action )
                vft.RunModal();
                                };
          break;
-      case ua_showUnitEndurance: showUnitEndurance();
+      case ua_showUnitEndurance:  showUnitEndurance(); 
          break;
          
       case ua_getMemoryFootprint: showMemoryFootprint();

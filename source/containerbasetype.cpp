@@ -63,6 +63,7 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "jams only own field",
                "move with reaction fire on",
                "only move to and from transports",
+               "AutoHarvestObjects",
               NULL };
 
 
@@ -82,6 +83,8 @@ ContainerBaseType :: ContainerBaseType ()
    defaultMaxResearchpoints = 0;
    nominalresearchpoints = 0;
    vehicleCategoriesProduceable = 0xfffffff;
+   autoHarvest.range = 0;
+   autoHarvest.maxFieldsPerTurn = maxint;
 }
 
 bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
@@ -221,6 +224,13 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.closeBracket();
 
    pc.addTagInteger( "CategoriesProduceable", vehicleCategoriesProduceable, cmovemalitypenum, unitCategoryTags, -1 );
+	 
+   pc.openBracket( "AutoHarvestObjects" );
+   pc.addIntRangeArray( "objects", autoHarvest.objectsHarvestable, false );
+   pc.addIntRangeArray( "objectGroups", autoHarvest.objectGroupsHarvestable, false );
+   pc.addInteger( "Range", autoHarvest.range, 0 );
+   pc.addInteger( "MaxFieldsPerTurn", autoHarvest.maxFieldsPerTurn, maxint);
+   pc.closeBracket();
 }
 
 
@@ -235,7 +245,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 5;
+const int containerBaseTypeVersion = 6;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -267,6 +277,12 @@ void ContainerBaseType :: read ( tnstream& stream )
    if ( version >= 5 )
       readClassContainer( secondaryIDs, stream );
 
+   if ( version >= 6 ) {
+		 autoHarvest.range = stream.readInt();
+       readClassContainer( autoHarvest.objectsHarvestable, stream );
+       readClassContainer( autoHarvest.objectGroupsHarvestable, stream );
+       autoHarvest.maxFieldsPerTurn = stream.readInt();
+	 }
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -284,6 +300,10 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    stream.writeInt( vehicleCategoriesProduceable );
    writeClassContainer( secondaryIDs, stream );
 
+   stream.writeInt( autoHarvest.range );
+   writeClassContainer( autoHarvest.objectsHarvestable, stream );
+   writeClassContainer( autoHarvest.objectGroupsHarvestable, stream );
+   stream.writeInt( autoHarvest.maxFieldsPerTurn );
 }
 
 const int containerBaseTypeTransportVersion = 3;
