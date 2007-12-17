@@ -20,7 +20,7 @@ TerrainType {
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-      Picture = trr_rock_flat_5_fs.png
+      Picture = trr_rock_flat_5.png fewsnow4.png
    } few_snow
    much_snow { 
       UseGFXpics = false

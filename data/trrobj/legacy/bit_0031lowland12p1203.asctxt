@@ -17,7 +17,7 @@ TerrainType {
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-	picture = texture-14b.png fewsnow2.png
+	picture = texture-14b.png fewsnow3.png
    } few_snow
    much_snow { 
       UseGFXpics = false
