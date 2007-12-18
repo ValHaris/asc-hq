@@ -64,6 +64,7 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "move with reaction fire on",
                "only move to and from transports",
                "AutoHarvestObjects",
+               "No customization of production",
               NULL };
 
 
@@ -231,6 +232,12 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.addInteger( "Range", autoHarvest.range, 0 );
    pc.addInteger( "MaxFieldsPerTurn", autoHarvest.maxFieldsPerTurn, maxint);
    pc.closeBracket();
+   
+   
+   pc.openBracket ( "Construction" );
+   pc.addIntRangeArray ( "VehiclesInternally", vehiclesInternallyProduceable, false );
+   productionEfficiency.runTextIO("ProductionEfficiency", pc, productionEfficiency );
+   pc.closeBracket();
 }
 
 
@@ -282,6 +289,9 @@ void ContainerBaseType :: read ( tnstream& stream )
        readClassContainer( autoHarvest.objectsHarvestable, stream );
        readClassContainer( autoHarvest.objectGroupsHarvestable, stream );
        autoHarvest.maxFieldsPerTurn = stream.readInt();
+       
+       readClassContainer( vehiclesInternallyProduceable, stream );
+       productionEfficiency.read( stream );
 	 }
 }
 
@@ -304,6 +314,9 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    writeClassContainer( autoHarvest.objectsHarvestable, stream );
    writeClassContainer( autoHarvest.objectGroupsHarvestable, stream );
    stream.writeInt( autoHarvest.maxFieldsPerTurn );
+   
+   writeClassContainer( vehiclesInternallyProduceable, stream );
+   productionEfficiency.write( stream );
 }
 
 const int containerBaseTypeTransportVersion = 3;

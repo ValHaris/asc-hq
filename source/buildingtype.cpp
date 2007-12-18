@@ -76,6 +76,13 @@ BuildingType :: BuildingType ( void )
       }
 
    buildingNotRemovable = false;
+   
+   static const float matrix[] = { 1, 0, 0,
+                                   0, 1, 0,
+                                   0, 0, 1 };
+   
+   productionEfficiency = ResourceMatrix( matrix );
+   
 }
 
 

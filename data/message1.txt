@@ -96,6 +96,8 @@ Unit type not found
 Production line already existent
 504
 Production does not exist
+505 
+Production can not be customized
 9999
 No error message found for this error
 10001

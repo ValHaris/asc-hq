@@ -52,9 +52,10 @@ bool ContainerControls::unitProductionAvailable()
 int  ContainerControls::unitProductionPrerequisites( const Vehicletype* type )
 {
    int l = 0;
+   Resources cost = container->getProductionCost( type );
    if ( getPlayer().research.vehicletypeavailable ( type ) ) {
       for ( int r = 0; r < resourceTypeNum; r++ )
-         if ( container->getResource( type->productionCost.resource(r), r, true ) < type->productionCost.resource(r) )
+         if ( container->getResource( cost.resource(r), r, true ) < cost.resource(r) )
             l |= 1 << r;
    } else
       l |= 1 << 10;
@@ -93,7 +94,7 @@ Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithA
          vehicle->experience = maxunitexperience;
    }
 
-   container->getResource( type->productionCost, false );
+   container->getResource( container->getProductionCost( type ), false );
 
    container->addToCargo( vehicle );
 
@@ -364,6 +365,9 @@ Resources ContainerControls :: buildProductionLineResourcesNeeded( const Vehicle
 
 int ContainerControls :: buildProductionLine ( const Vehicletype* veh  )
 {
+   if ( container->baseType->hasFunction(ContainerBaseType::NoProductionCustomization))
+      return -505;
+   
    if ( find( container->getProduction().begin(), container->getProduction().end(), veh ) != container->getProduction().end() )
       return -503;
    
@@ -387,6 +391,9 @@ Resources ContainerControls :: removeProductionLineResourcesNeeded( const Vehicl
 
 int ContainerControls :: removeProductionLine ( const Vehicletype* veh  )
 {
+   if ( container->baseType->hasFunction(ContainerBaseType::NoProductionCustomization))
+      return -505;
+   
    if ( find( container->getProduction().begin(), container->getProduction().end(), veh ) == container->getProduction().end() )
       return -502;
    
@@ -403,6 +410,9 @@ vector<const Vehicletype*> ContainerControls :: productionLinesBuyable()
 {
 
    vector<const Vehicletype*>  list;
+   
+   if ( container->baseType->hasFunction(ContainerBaseType::NoProductionCustomization))
+      return list;
 
    Resources r = container->getResource( Resources(maxint, maxint, maxint), 1 );
    

@@ -1768,7 +1768,7 @@ void trunreplay :: execnextreplaymove ( void )
                               if ( constx >= 0 && consty >= 0 ) {
                                  tfield* constructorField = getfield(constx, consty );
                                  if ( constructorField->vehicle ) {
-                                    Resources r ( 0, tnk->productionCost.material, tnk->productionCost.energy );
+                                    Resources r = constructorField->vehicle->getProductionCost(tnk );
                                     Resources rr = constructorField->getContainer()->getResource( r, 0 );
                                     if ( rr < r ) {
                                        displayActionCursor ( x, y );
@@ -1971,10 +1971,11 @@ void trunreplay :: execnextreplaymove ( void )
                                     eht->networkid = nwid;
 
                                     if ( fld->building ) {
-                                       Resources r = fld->building->getResource( tnk->productionCost, 0 );
-                                       if ( r < tnk->productionCost ) {
+                                       Resources cost  = fld->building->getProductionCost(tnk);
+                                       Resources r = fld->building->getResource( cost, 0 );
+                                       if ( r < cost ) {
                                           displayActionCursor ( x, y );
-                                          error(MapCoordinate(x,y), "severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", eht->typ->description.c_str(), tnk->productionCost.energy, tnk->productionCost.material, tnk->productionCost.fuel, r.energy, r.material, r.fuel);
+                                          error(MapCoordinate(x,y), "severe replay inconsistency: \nNot enough resources to produce unit %s !\nRequired: %d/%d/%d ; Available: %d/%d/%d", eht->typ->description.c_str(), cost.energy, cost.material, cost.fuel, r.energy, r.material, r.fuel);
                                        }
                                        fld->building->addToCargo( eht );
                                     } else {

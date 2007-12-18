@@ -64,6 +64,7 @@ class ContainerBase {
       typedef vector<const Vehicletype*> Production;
 
       const Production& getProduction() const;
+      Resources getProductionCost( const Vehicletype* unit ) const;
       void deleteProductionLine( const Vehicletype* type );
       void deleteAllProductionLines();
       void addProductionLine( const Vehicletype* type  );

@@ -137,8 +137,15 @@ extern Resources operator/ ( const Resources& res1, float a );
 class ResourceMatrix {
            float e[resourceTypeNum][resourceTypeNum];
         public:
+           ResourceMatrix (  );
            ResourceMatrix ( const float* f );
            Resources operator* ( const Resources& r ) const;
+           
+           void read ( tnstream& stream );
+           void write ( tnstream& stream ) const;
+           void runTextIO ( const ASCString& name, PropertyContainer& pc );
+           void runTextIO ( const ASCString& name, PropertyContainer& pc, const ResourceMatrix& defaultValue );
+           
 };
 
 

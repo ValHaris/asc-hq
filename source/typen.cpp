@@ -92,6 +92,15 @@ const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384,
 
 
 
+ResourceMatrix :: ResourceMatrix (  )
+{
+   for ( int i = 0; i < resourceTypeNum; i++ )
+      for ( int j = 0; j < resourceTypeNum; j++ )
+         if ( i == j )
+            e[i][j] = 1;
+         else
+            e[i][j] = 0;
+}
 
 ResourceMatrix :: ResourceMatrix ( const float* f )
 {
@@ -100,6 +109,7 @@ ResourceMatrix :: ResourceMatrix ( const float* f )
       for ( int j = 0; j < resourceTypeNum; j++ )
          e[i][j] = f[num++];
 }
+
 
 
 Resources ResourceMatrix :: operator* ( const Resources& r ) const
@@ -111,6 +121,57 @@ Resources ResourceMatrix :: operator* ( const Resources& r ) const
 
    return res;
 }
+
+void ResourceMatrix :: read ( tnstream& stream )
+{
+   stream.readInt(); // version
+   for ( int i = 0; i < resourceTypeNum; i++ )
+      for ( int j = 0; j < resourceTypeNum; j++ )
+         e[i][j] = stream.readFloat();
+}
+
+void ResourceMatrix :: write ( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   for ( int i = 0; i < resourceTypeNum; i++ )
+      for ( int j = 0; j < resourceTypeNum; j++ )
+         stream.writeFloat( e[i][j] );
+}
+
+void ResourceMatrix :: runTextIO ( const ASCString& name, PropertyContainer& pc )
+{
+   vector<double> values;
+   if ( !pc.isReading()) 
+      for ( int i = 0; i < resourceTypeNum; i++ )
+         for ( int j = 0; j < resourceTypeNum; j++ )
+            values.push_back( e[j][i] );
+      
+	pc.addDFloatArray(name, values);
+	if ( pc.isReading()) {
+	   if ( values.size() != 9 )
+	      pc.error("invalid element number of " + name);
+	   
+	   int pos = 0;
+      for ( int i = 0; i < resourceTypeNum; i++ )
+         for ( int j = 0; j < resourceTypeNum; j++ )
+            e[j][i] = values[pos++];
+	}
+}
+
+void ResourceMatrix :: runTextIO ( const ASCString& name, PropertyContainer& pc, const ResourceMatrix& defaultValue )
+{
+   if ( pc.isReading()) {
+      if ( pc.find(name))
+         runTextIO(name,pc);
+      else
+         for ( int i = 0; i < resourceTypeNum; i++ )
+            for ( int j = 0; j < resourceTypeNum; j++ )
+               e[i][j] = defaultValue.e[i][j];;
+         
+   } else
+      runTextIO(name,pc);
+}
+
 
 
 const char* Resources::name( int r )

@@ -216,7 +216,8 @@ const char*  buildingFunctionTags[24]  =
    "jam_only_own_field",
    "MoveDuringReactionFire",
    "onlyTransMove",
-	 "AutoHarvestObjects"
+   "AutoHarvestObjects",
+   "NoProductionCustomization"
    };
    
    

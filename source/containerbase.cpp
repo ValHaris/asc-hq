@@ -37,6 +37,14 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
    maxresearchpoints = baseType->defaultMaxResearchpoints;
    researchpoints = min ( maxresearchpoints, baseType->nominalresearchpoints );
    maxplus = baseType->maxplus;
+   
+   for ( int i = 0; i < map->getVehicleTypeNum(); ++i ) {
+      const Vehicletype* vt = map->getvehicletype_bypos(i);
+      if ( vt ) 
+         for ( int j = 0; j < bt->vehiclesInternallyProduceable.size(); ++j ) 
+            if ( vt->id >= bt->vehiclesInternallyProduceable[j].from  && vt->id <= bt->vehiclesInternallyProduceable[j].to )
+               internalUnitProduction.push_back ( vt ); 
+   }
 }
 
 SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
@@ -543,6 +551,12 @@ const ContainerBase::Production& ContainerBase::getProduction() const
 
    return productionCache;
 }
+
+Resources ContainerBase::getProductionCost( const Vehicletype* unit ) const
+{
+   return baseType->productionEfficiency * unit->productionCost;
+}
+
 
 void ContainerBase ::deleteProductionLine( const Vehicletype* type )
 {

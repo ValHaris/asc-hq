@@ -127,6 +127,13 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
+   
+   static const float matrix[] = { 1, 0, 0,
+                                 0, 1, 0,
+                                 0, 0, 1 };
+   
+   productionEfficiency = ResourceMatrix( matrix );
+   
 }
 
 
@@ -951,14 +958,17 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    else
       pc.addBool ( "WaitForAttack", wait );
 
-   pc.openBracket( "Tank" );
-   Resources tank;
-   tank.runTextIO ( pc );
-   pc.closeBracket();
-   bi_mode_tank = tank;
-   asc_mode_tank = tank;
+   if ( bi_mode_tank == Resources(0,0,0) && asc_mode_tank == Resources(0,0,0)) {
+	   pc.openBracket( "Tank" );
+	   Resources tank;
+	   tank.runTextIO ( pc );
+	   pc.closeBracket();
+	   bi_mode_tank = tank;
+	   asc_mode_tank = tank;
+   }
+   
    pc.addInteger( "FuelConsumption", fuelConsumption );
-   if ( pc.find("Abilities")) {
+   if ( !pc.find("Features")) {
       int abilities;
       pc.addTagInteger ( "Abilities", abilities, legacyVehicleFunctionNum, vehicleAbilities );
 

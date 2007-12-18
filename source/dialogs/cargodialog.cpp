@@ -630,7 +630,10 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
       bool getAmmoFilling()
       {
-         return fillAmmo;
+          if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction))
+             return fillAmmo;
+          else
+             return false;
       }
       
       bool setAmmoFilling( bool value )
@@ -655,7 +658,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
      
       Resources getCost( const Vehicletype* type )
       {
-         Resources cost = type->productionCost;
+         Resources cost = plant->getProductionCost( type );
          if ( fillResources )
             cost += Resources( 0, type->getStorageCapacity(actmap->_resourcemode).material, type->getStorageCapacity(actmap->_resourcemode).fuel );
 
@@ -789,22 +792,26 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
             fillRes->SetPressed();
          fillRes->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
          
-         PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
-         if ( factory->getAmmoFilling() ) 
-            fillAmmo->SetPressed();
-         fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
+         if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction)) {
+            PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
+            if ( factory->getAmmoFilling() ) 
+               fillAmmo->SetPressed();
+            fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
+         }
 
          PG_Rect rr ( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35);
          PG_Button* b  = new PG_Button( this, PG_Rect( rr.x + rr.h + 5, rr.y, rr.w - 40, rr.h ) , "Produce" );
          b->sigClick.connect( SigC::slot( *this,&VehicleProduction_SelectionWindow::produce ));
          
-         PG_Button* b2 = new PG_Button( this, PG_Rect( rr.x, rr.y, rr.h, rr.h ), "+" );
-         b2->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::addProductionLine ));
-         new PG_ToolTipHelp( b2, "Add production line");
-
-         PG_Button* b3 = new PG_Button( this, PG_Rect( rr.x - rr.h - 5, rr.y, rr.h, rr.h ), "-" );
-         b3->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::removeProductionLine ));
-         new PG_ToolTipHelp( b3, "Remove production line");
+         if ( !plant->baseType->hasFunction(ContainerBaseType::NoProductionCustomization)) {
+            PG_Button* b2 = new PG_Button( this, PG_Rect( rr.x, rr.y, rr.h, rr.h ), "+" );
+            b2->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::addProductionLine ));
+            new PG_ToolTipHelp( b2, "Add production line");
+   
+            PG_Button* b3 = new PG_Button( this, PG_Rect( rr.x - rr.h - 5, rr.y, rr.h, rr.h ), "-" );
+            b3->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::removeProductionLine ));
+            new PG_ToolTipHelp( b3, "Remove production line");
+         }
 
          
          SetTransparency(0);

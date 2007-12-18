@@ -70,10 +70,11 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
         JamsOnlyOwnField,
         MoveWithReactionFire,
         OnlyMoveToAndFromTransports,
-        AutoHarvestObjects };
+        AutoHarvestObjects,
+        NoProductionCustomization };
 
      
-     static const int functionNum = 41;
+     static const int functionNum = 42;
 
      bool hasFunction( ContainerFunctions function ) const;
      bool hasAnyFunction( std::bitset<64> functions ) const;
@@ -124,6 +125,9 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      //! bitmapped: vehicle categories that can be produced in the container
      int vehicleCategoriesProduceable;
 
+     /** the default production capabilities of this container.
+         Please be aware that a VehicleType has additional production for building units externally */
+     vector<IntRange> vehiclesInternallyProduceable;
 
      class TransportationIO {
          public:
@@ -210,6 +214,9 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      Resources    bi_mode_tank;
      
    public:
+
+      ResourceMatrix productionEfficiency;
+      
       struct {
 			int range;
          
