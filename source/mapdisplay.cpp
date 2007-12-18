@@ -73,6 +73,18 @@ class ContainerInfoLayer : public MapLayer {
                return true;
          return false;
       };
+      
+      bool hasOwnCargo( const ContainerBase* c, int viewingPlayer ) {
+         for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
+            if ( *i ) {
+               if ( (*i)->getOwner() == viewingPlayer )
+                  return true;
+               else
+                  if ( hasOwnCargo( *i, viewingPlayer ))
+                     return true;
+            }
+         return false;
+      };
     public: 
       ContainerInfoLayer() : marker( IconRepository::getIcon("fieldcontainermarker.png") ) {};
          
@@ -85,8 +97,12 @@ void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
    if ( fieldInfo.visibility >= visible_ago) {
       if ( fieldInfo.fld->vehicle || (fieldInfo.fld->building && fieldInfo.fld->bdt.test(cbbuildingentry) )) {
          ContainerBase* c = fieldInfo.fld->getContainer();
-         if ( c->getOwner() == fieldInfo.playerView && hasCargo(c) ) 
-            fieldInfo.surface.Blit( marker, pos );
+         if ( hasCargo(c) ) 
+            if ( c->getOwner() == fieldInfo.playerView  ) 
+               fieldInfo.surface.Blit( marker, pos );
+            else
+               if ( hasOwnCargo(c, fieldInfo.playerView  ))
+                  fieldInfo.surface.Blit( marker, pos );
          
       }
    }
