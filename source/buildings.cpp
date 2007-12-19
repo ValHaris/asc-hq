@@ -215,7 +215,7 @@ Surface Building::getImage() const
 
    Surface s = Surface::createSurface(maxx-minx+1,maxy-miny+1, 32,Surface::transparent << 24 );
 
-   typ->paint ( s, SPoint(-minx,-miny), getOwner() ); 
+   typ->paint ( s, SPoint(-minx,-miny), getOwningPlayer().getPlayerColor() ); 
    return s;
 }
 

@@ -44,7 +44,7 @@ int BuildingTypeBaseWidget :: getBuildingHeight( const BuildingType* type )
 }
 
 
-BuildingTypeBaseWidget :: BuildingTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* buildingType, int player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, getBuildingHeight(buildingType)+10 )), vt( buildingType ), actplayer(player)
+BuildingTypeBaseWidget :: BuildingTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* buildingType, const Player& player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, getBuildingHeight(buildingType)+10 )), vt( buildingType ), actplayer(player)
 {
 
    new PG_Label( this, PG_Rect( buildingWidth, 20, Width() - buildingWidth - 10, 25 ), vt->name );
@@ -78,7 +78,7 @@ void BuildingTypeBaseWidget::display( SDL_Surface * surface, const PG_Rect & src
    for ( int y = 0; y < 6; ++y )
       for ( int x = 0; x < 4; ++x )
          if ( vt->fieldExists( BuildingType::LocalCoordinate( x, y )))
-            vt->paintSingleField( getClippingSurface(), SPoint(5 - xoffs, 5 - yoffs), BuildingType::LocalCoordinate(x,y), actplayer );
+            vt->paintSingleField( getClippingSurface(), SPoint(5 - xoffs, 5 - yoffs), BuildingType::LocalCoordinate(x,y), actplayer.getPlayerColor() );
 
    // vt->paint( getClippingSurface(), SPoint(5,5), actplayer, 0 );
    PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
@@ -88,7 +88,7 @@ Surface BuildingTypeBaseWidget::clippingSurface;
 
 
 
-BuildingTypeResourceWidget::BuildingTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int lackingResources, const Resources& cost, int player )
+BuildingTypeResourceWidget::BuildingTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int lackingResources, const Resources& cost, const Player& player )
    : BuildingTypeBaseWidget( parent,pos, width, BuildingType, player )
 {
    int col1 = 50;
@@ -109,7 +109,7 @@ BuildingTypeResourceWidget::BuildingTypeResourceWidget( PG_Widget* parent, const
 }
       
 
-BuildingTypeCountWidget::BuildingTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int player, int number )
+BuildingTypeCountWidget::BuildingTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, const Player& player, int number )
    : BuildingTypeBaseWidget( parent,pos, width, BuildingType, player )
 {
    int col1 = 50;
@@ -127,7 +127,7 @@ BuildingTypeCountWidget::BuildingTypeCountWidget( PG_Widget* parent, const PG_Po
 
 
 
-BuildingTypeSelectionItemFactory :: BuildingTypeSelectionItemFactory( Resources plantResources, const Container& types, int player ) : actplayer(player), original_items( types )
+BuildingTypeSelectionItemFactory :: BuildingTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player ) : actplayer(player), original_items( types )
 {
    restart();
    setAvailableResource( plantResources );

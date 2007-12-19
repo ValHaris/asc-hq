@@ -2604,7 +2604,7 @@ class BuildingConstructionSelection : public BuildingTypeSelectionItemFactory {
    protected:
       void BuildingTypeSelected( const BuildingType* type ) { selectedType = type;  };
    public:
-      BuildingConstructionSelection ( Resources plantResources, const Container& types, int player ) : BuildingTypeSelectionItemFactory(plantResources, types, player ), selectedType(NULL) {};
+      BuildingConstructionSelection ( Resources plantResources, const Container& types, const Player& player ) : BuildingTypeSelectionItemFactory(plantResources, types, player ), selectedType(NULL) {};
       const BuildingType* getSelectedType() { return selectedType; };
 };
 
@@ -2629,7 +2629,7 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subje
             return;
          }
 
-         BuildingConstructionSelection* bcs = new BuildingConstructionSelection ( fld->vehicle->getResource( Resources(maxint, maxint, maxint), true ), buildings, fld->vehicle->getOwner() );
+         BuildingConstructionSelection* bcs = new BuildingConstructionSelection ( fld->vehicle->getResource( Resources(maxint, maxint, maxint), true ), buildings, fld->vehicle->getOwningPlayer() );
          ItemSelectorWindow isw ( NULL, PG_Rect( -1, -1, 550, 650), "Select Building", bcs);
          isw.Show();
          isw.RunModal();

@@ -32,9 +32,9 @@ class BuildingTypeBaseWidget: public SelectionWidget  {
       const BuildingType* vt;
       static Surface clippingSurface;
       Surface& getClippingSurface() { return clippingSurface; };
-      int actplayer;
+      const Player& actplayer;
    public:
-      BuildingTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int player );
+      BuildingTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, const Player& player );
       ASCString getName() const;
       const BuildingType* getBuildingType() const { return vt; };
    protected:
@@ -44,19 +44,19 @@ class BuildingTypeBaseWidget: public SelectionWidget  {
 
 class BuildingTypeResourceWidget: public BuildingTypeBaseWidget  {
    public:
-      BuildingTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int lackingResources, const Resources& cost, int player );
+      BuildingTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int lackingResources, const Resources& cost, const Player& player );
 };
 
 
 class BuildingTypeCountWidget: public BuildingTypeBaseWidget  {
    public:
-      BuildingTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, int player, int number );
+      BuildingTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const BuildingType* BuildingType, const Player& player, int number );
 };
 
 
 class BuildingTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
       Resources plantResources;
-      int actplayer;
+      const Player& actplayer;
    public:
       typedef vector<const BuildingType*> Container;
 
@@ -72,7 +72,7 @@ class BuildingTypeSelectionItemFactory: public SelectionItemFactory, public SigC
       const Container& original_items;
       
    public:
-      BuildingTypeSelectionItemFactory( Resources plantResources, const Container& types, int player );
+      BuildingTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player );
       
       SigC::Signal0<void> reloadAllItems;
 

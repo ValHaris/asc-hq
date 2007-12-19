@@ -26,6 +26,7 @@
 #include "vehicle.h"
 #include "spfst.h"
 #include "graphics/blitter.h"
+#include "graphics/ColorTransform_PlayerColor.h"
 #include "containercontrols.h"
 #include "resourcenet.h"
 
@@ -667,6 +668,10 @@ Resources ContainerBase ::netResourcePlus( ) const
 
 
 
+Player& ContainerBase :: getOwningPlayer() const 
+{ 
+   return getMap()->getPlayer(this); 
+}
 
 
 

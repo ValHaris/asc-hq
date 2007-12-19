@@ -24,7 +24,8 @@
  #include "baseaiinterface.h"
  #include "terraintype.h"
  #include "research.h"
-
+ #include "playercolor.h"
+ 
 /*
 //! The number of 'special' vehicle functions
 extern const char*  cvehiclefunctions[];
@@ -170,6 +171,7 @@ extern const char*  cvehiclefunctions[];
      UnitWeapon ( void );
  };
 
+ class Player;
 
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
  class Vehicletype : public ContainerBaseType {
@@ -308,7 +310,8 @@ extern const char*  cvehiclefunctions[];
            
         
         
-        void  paint ( Surface& s, SPoint pos, int player, int direction = 0 ) const;
+        void  paint ( Surface& s, SPoint pos, const PlayerColor& player, int direction = 0 ) const;
+        void  paint ( Surface& s, SPoint pos ) const;
         const Surface&  getImage () const { return image;};
         Surface&  getImage () { return image;};
         

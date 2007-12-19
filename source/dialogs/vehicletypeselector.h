@@ -26,16 +26,16 @@
 
 
 
-
+class Player;
 
 class VehicleTypeBaseWidget: public SelectionWidget  {
       const Vehicletype* vt;
       static Surface clippingSurface;
       Surface& getClippingSurface() { return clippingSurface; };
-      int actplayer;
+      const Player& actplayer;
       bool info();
    public:
-      VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player );
+      VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player );
       ASCString getName() const;
       const Vehicletype* getVehicletype() const { return vt; };
    protected:
@@ -45,20 +45,20 @@ class VehicleTypeBaseWidget: public SelectionWidget  {
 
 class VehicleTypeResourceWidget: public VehicleTypeBaseWidget  {
    public:
-      VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources, const Resources& cost, int player );
+      VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources, const Resources& cost, const Player& player );
 };
 
 
 class VehicleTypeCountWidget: public VehicleTypeBaseWidget  {
    public:
-      VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player, int number );
+      VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player, int number );
 };
 
 class VehicleTypeCountLocateWidget: public VehicleTypeCountWidget  {
    private:
       bool locate();
    public:
-      VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int player, int number );
+      VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player, int number );
       
       SigC::Signal1<void,const Vehicletype*> locateVehicles;
 };
@@ -66,7 +66,7 @@ class VehicleTypeCountLocateWidget: public VehicleTypeCountWidget  {
 
 class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
       Resources plantResources;
-      int actplayer;
+      const Player& actplayer;
       bool showResourcesForUnit;
    public:
       typedef vector<const Vehicletype*> Container;
@@ -85,8 +85,8 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       const Container& original_items;
       
    public:
-      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, int player );
-      VehicleTypeSelectionItemFactory( const Container& types, int player );
+      VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player );
+      VehicleTypeSelectionItemFactory( const Container& types, const Player& player );
       
       SigC::Signal0<void> reloadAllItems;
 

@@ -623,7 +623,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
    public:
       VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant )
-         : VehicleTypeSelectionItemFactory( plantResources, productionplant->getProduction(), actmap->actplayer ), fillResources(true), fillAmmo(true), plant(productionplant)
+         : VehicleTypeSelectionItemFactory( plantResources, productionplant->getProduction(), actmap->getCurrentPlayer() ), fillResources(true), fillAmmo(true), plant(productionplant)
       {
       };
       
@@ -680,7 +680,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
       ContainerBase* plant;
    public:
-      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types, actmap->actplayer ), plant(my_plant)
+      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types, actmap->getCurrentPlayer() ), plant(my_plant)
       {
          
       };
@@ -2572,7 +2572,7 @@ namespace CargoGuiFunctions {
          Vehicle* veh;
       public:
          VehicleWidget( PG_Widget* parent, const PG_Point& pos, int width, Vehicle* unit )
-         : VehicleTypeBaseWidget( parent, pos, width, unit->typ, unit->getOwner() )
+         : VehicleTypeBaseWidget( parent, pos, width, unit->typ, unit->getMap()->getPlayer(unit) )
          {
             veh = unit;
          };

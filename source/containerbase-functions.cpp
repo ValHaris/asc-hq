@@ -167,6 +167,7 @@ void AutoHarvestObjects::processField( const MapCoordinate& pos )
 
 void AutoHarvestObjects::iterateField( const MapCoordinate& pos )
 {
+   /*
    if ( pos.y & 1 ) {
       processField(pos);
       return ;
@@ -176,6 +177,11 @@ void AutoHarvestObjects::iterateField( const MapCoordinate& pos )
          return;
       }
    }
+   */
+   if ( !((pos.y+1)%3))
+      // y+1 is to match the harvesting pattern of player Xyphagoroszh on PBP planet Lussx :)
+      
+      processField(pos);
    
 }
 
@@ -188,7 +194,7 @@ bool AutoHarvestObjects::run()
    if( base->getCarrier() != NULL )
       return false;
 
-   circularFieldIterator( base->getMap(), base->getPosition(), 1, base->baseType->autoHarvest.range, FieldIterationFunctor( this, &AutoHarvestObjects::iterateField ));
+   circularFieldIterator( base->getMap(), base->getPosition(), 0, base->baseType->autoHarvest.range, FieldIterationFunctor( this, &AutoHarvestObjects::iterateField ));
 
    return true;
 }

@@ -33,6 +33,7 @@
 #include "errors.h"
 #include "sgstream.h"
 #include "graphics/blitter.h"
+#include "graphics/ColorTransform_PlayerColor.h"
 
 
 /*
@@ -120,7 +121,7 @@ const Surface&   BuildingType :: getPicture ( const LocalCoordinate& localCoordi
    
 }
 
-void  BuildingType::paint ( Surface& s, SPoint pos, int player, int weather, int constructionStep ) const
+void  BuildingType::paint ( Surface& s, SPoint pos, const PlayerColor& player, int weather, int constructionStep ) const
 {
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) 
@@ -129,13 +130,23 @@ void  BuildingType::paint ( Surface& s, SPoint pos, int player, int weather, int
      
 }
 
-void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player, int weather, int constructionStep ) const
+void  BuildingType::paint ( Surface& s, SPoint pos  ) const
+{
+   for ( int x = 0; x < 4; x++ )
+      for ( int y = 0; y < 6; y++ ) 
+         if ( fieldExists(LocalCoordinate(x,y) ))
+            paintSingleField(s,pos,LocalCoordinate(x,y));
+     
+}
+
+
+void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, const PlayerColor& player, int weather, int constructionStep ) const
 {
    megaBlitter<ColorTransform_PlayerCol,
                ColorMerger_AlphaOverwrite,
                SourcePixelSelector_Plain,
                TargetPixelSelector_All>
-             ( getPicture(localCoordinate,weather,constructionStep), 
+            ( getPicture(localCoordinate,weather,constructionStep), 
                s, 
                SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty), 
                player, 
@@ -144,6 +155,19 @@ void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoord
    // s.Blit( getPicture(localCoordinate,weather,constructionStep),SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty));
 }
 
+void  BuildingType:: paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int weather, int constructionStep ) const
+{
+   megaBlitter<ColorTransform_None,
+               ColorMerger_AlphaOverwrite,
+               SourcePixelSelector_Plain,
+               TargetPixelSelector_All>
+            ( getPicture(localCoordinate,weather,constructionStep), 
+               s, 
+               SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty), 
+               nullParam, nullParam, nullParam, nullParam );
+   
+   // s.Blit( getPicture(localCoordinate,weather,constructionStep),SPoint( pos.x + localCoordinate.x * fielddistx + ( localCoordinate.y & 1 ) * fielddisthalfx, pos.y + localCoordinate.y * fielddisty));
+}
 
 
 

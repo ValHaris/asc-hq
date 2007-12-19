@@ -213,7 +213,10 @@ void BuildingItem::display( Surface& s, const SPoint& pos ) const
    if ( !fullSizeImage.valid() )
       fullSizeImage = Surface::createSurface( displayWidth()*2 + 10, displayHeight()*2 + 30, 32, 0 );
    fullSizeImage.FillTransparent();
-   bld->paint ( fullSizeImage, SPoint(0,0), selection.getPlayer() ); 
+   if ( actmap )
+      bld->paint ( fullSizeImage, SPoint(0,0), actmap->getPlayer( selection.getPlayer()).getPlayerColor() ); 
+   else
+      bld->paint ( fullSizeImage, SPoint(0,0) ); 
    
    MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Valid> blitter;
    blitter.setZoom( 0.5 );
@@ -428,7 +431,7 @@ class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::
       {
          if ( it != production.end() ) {
             const Vehicletype* v = *(it++);
-            return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actmap->actplayer );
+            return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actmap->getCurrentPlayer() );
          } else
             return NULL;
       };

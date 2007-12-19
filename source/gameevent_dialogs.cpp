@@ -65,7 +65,7 @@ void editpolygon (Poly_gon& poly) {};
 Vehicle* selectUnitFromMap() { return NULL; };
 #endif
 
-// õS GetXYSel
+// ï¿½S GetXYSel
 
 bool chooseWeather( int& weather )
 {
@@ -251,7 +251,7 @@ void selectFields( FieldAddressing::Fields& fields )
 }
 
 
-// õS GetXYUnitSel
+// ï¿½S GetXYUnitSel
 
 class  tgetxyunit : public tgetxy {
           public :
@@ -289,7 +289,7 @@ class  tgetxybuilding : public tgetxy {
               };
 
 
-// õS GetXYBuildingSel
+// ï¿½S GetXYBuildingSel
 
 int         tgetxybuilding::condition(void)
 {
@@ -525,7 +525,7 @@ void  tshownewtanks :: init ( bool*      buf2 )
          Vehicletype* tnk = vehicleTypeRepository.getObject_byPos ( i );
          if ( tnk ) {
             bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
-            tnk->paint( getActiveSurface(), SPoint (  x1 + 30, y1 + 50 + num * 50), actmap->actplayer );
+            tnk->paint( getActiveSurface(), SPoint (  x1 + 30, y1 + 50 + num * 50), actmap->getCurrentPlayer().getPlayerColor() );
             showtext2( tnk -> name, x1 + 70, y1 + 45 + num * 50 );
             showtext2( tnk -> description, x1 + 70, y1 + 45 + 40 + num * 50 - activefontsettings.font->height );
             num++;

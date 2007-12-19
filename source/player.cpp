@@ -331,7 +331,7 @@ void Player :: turnEnds( Player& p )
 
 
 
-DI_Color Player :: getColor()
+DI_Color Player :: getColor() const
 {
    if ( color == DI_Color(0)) {
       switch ( player ) {
@@ -349,6 +349,12 @@ DI_Color Player :: getColor()
    } else
       return color;
 }
+
+PlayerColor Player::getPlayerColor() const
+{
+   return PlayerColor(getPosition(), getColor() );
+}
+
 
 ASCString Player :: getName( ) const
 {

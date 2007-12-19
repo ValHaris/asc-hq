@@ -31,11 +31,8 @@
  
 
 
-//! The maximum number of units that are normally allowed in a building of transport. This limit is caused by the building dialog. There's an exception: if the building is conquered, the conquering unit will be still allowed in
-const int maxloadableunits = 18;
-
 class Vehicle;
-
+class Player;
 
 /** \brief The parent class of Vehicle and Building;
     The name Container originates from Battle Isle, where everything that could load units
@@ -148,6 +145,7 @@ class ContainerBase {
       int color;
       //! returns the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
+      Player& getOwningPlayer() const;;
       
       virtual void convert ( int player ) = 0;
       

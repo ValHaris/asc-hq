@@ -136,8 +136,10 @@ extern const char*  cbuildingfunctions[];
         int          externalloadheight;
 
         const Surface& getPicture ( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0 ) const;
-        void         paint ( Surface& s, SPoint pos, int player = 0, int weather = 0, int constructionStep = 0 ) const;
-        void         paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int player = 0, int weather = 0, int constructionStep = 0 ) const;
+        void         paint ( Surface& s, SPoint pos, const PlayerColor& player, int weather = 0, int constructionStep = 0 ) const;
+        void         paint ( Surface& s, SPoint pos ) const;
+        void         paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, const PlayerColor& player , int weather = 0, int constructionStep = 0 ) const;
+        void         paintSingleField ( Surface& s, SPoint pos, const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0 ) const;
 
         int          getBIPicture( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0) const;
         

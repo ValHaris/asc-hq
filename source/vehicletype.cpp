@@ -31,6 +31,7 @@
 #include "textfiletags.h"
 #include "textfile_evaluation.h"
 #include "graphics/blitter.h"
+#include "graphics/ColorTransform_PlayerColor.h"
 
 /*
 const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
@@ -1187,9 +1188,14 @@ BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& locatio
    return features;
 }
 
-void  Vehicletype::paint ( Surface& s, SPoint pos, int player, int direction ) const
+void  Vehicletype::paint ( Surface& s, SPoint pos, const PlayerColor& player, int direction ) const
 {
    megaBlitter<ColorTransform_PlayerCol,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_All>( getImage(), s, pos, player, nullParam, nullParam, nullParam );
+}
+
+void  Vehicletype::paint ( Surface& s, SPoint pos ) const
+{
+   megaBlitter<ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_All>( getImage(), s, pos, nullParam, nullParam, nullParam, nullParam );
 }
 
 

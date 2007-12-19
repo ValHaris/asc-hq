@@ -88,7 +88,12 @@ class VehicleItem : public BasicItem<Vehicletype> {
     public:
        VehicleItem( const Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
        virtual int place( const MapCoordinate& mc ) const ;
-       virtual void display( Surface& s, const SPoint& pos ) const { item->paint ( s, pos, getPlayer() ); };
+       virtual void display( Surface& s, const SPoint& pos ) const { 
+/*          if ( actmap )
+            item->paint ( s, pos, actmap->getPlayer( getPlayer() )); 
+          else*/
+            item->paint ( s, pos ); 
+       };
        virtual MapComponent* clone() const { return new VehicleItem( item ); };
 };
 template<> class ItemTypeSelector<Vehicletype> {

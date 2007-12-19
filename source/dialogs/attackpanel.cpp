@@ -34,7 +34,7 @@ class GetAttackerImage : public FightVisitor {
 
       void paint( UnitAttacksSomething& battle )
       {
-         battle.getAttackingUnit()->typ->paint( surf, SPoint( dst.x, dst.y ), battle.getAttackingUnit()->getOwner() );
+         battle.getAttackingUnit()->typ->paint( surf, SPoint( dst.x, dst.y ), battle.getAttackingUnit()->getOwningPlayer().getPlayerColor() );
       }
       
    public:
@@ -73,7 +73,7 @@ class GetTargetImage : public FightVisitor {
       
       void visit( tmineattacksunit& battle )
       {
-         battle.getTarget()->typ->paint( surf, SPoint( dst.x, dst.y ), battle.getTarget()->getOwner() );
+         battle.getTarget()->typ->paint( surf, SPoint( dst.x, dst.y ), battle.getTarget()->getOwningPlayer().getPlayerColor() );
       }
       
       void visit( tunitattacksbuilding& battle )
@@ -83,7 +83,7 @@ class GetTargetImage : public FightVisitor {
       
       void visit( tunitattacksunit& battle )
       {
-         battle.getTarget()->typ->paint( surf, SPoint( dst.x, dst.y ), battle.getTarget()->getOwner() );
+         battle.getTarget()->typ->paint( surf, SPoint( dst.x, dst.y ), battle.getTarget()->getOwningPlayer().getPlayerColor() );
       };
 };
 

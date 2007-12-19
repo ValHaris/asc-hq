@@ -29,6 +29,7 @@
  #include "password.h"
  #include "messages.h"
  #include "networkinterface.h"
+ #include "playercolor.h"
  
 
 class Player;
@@ -207,7 +208,8 @@ class Player : public SigC::Object {
       
       ASCString email;
                   
-      DI_Color getColor();
+      DI_Color getColor() const;
+      PlayerColor getPlayerColor() const;
       void setColor( const DI_Color& color ); 
 
    private:   

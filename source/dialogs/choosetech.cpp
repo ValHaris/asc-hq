@@ -98,7 +98,7 @@ void TechWidget::display( SDL_Surface * surface, const PG_Rect & src, const PG_R
    
          getClippingSurface().Fill(0);
    
-         vt->paint( getClippingSurface(), SPoint(5,5), actplayer, 0 );
+         vt->paint( getClippingSurface(), SPoint(5,5) );
          PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
       }
 }

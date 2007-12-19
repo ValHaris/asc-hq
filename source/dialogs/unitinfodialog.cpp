@@ -204,7 +204,10 @@ class UnitInfoDialog : public Panel {
 
             if ( name == "unitpad_unitsymbol" ) 
                if ( vt )
-                  vt->paint( screen, SPoint( dst.x, dst.y ), veh ? veh->getOwner() : 0 );
+                  if ( veh ) 
+                     vt->paint( screen, SPoint( dst.x, dst.y ), veh->getMap()->getPlayer(veh).getPlayerColor() );
+                  else
+                     vt->paint( screen, SPoint( dst.x, dst.y ));
 
             if ( name == "unitpad_weapon_diagram" ) {
                if ( vt && weaponGraph ) {

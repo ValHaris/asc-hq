@@ -153,7 +153,7 @@ ASCString ImageConverter::createPic(const BuildingType&  bt, ASCString filePath)
 
 ASCString ImageConverter::createPic(const VehicleType&  vt, ASCString filePath) {
    Surface s = Surface::createSurface(100, 100, 32, 0xf8f4f0);
-  vt.paint( s, SPoint(0,0), 0);
+  vt.paint( s, SPoint(0,0));
    
   convert(constructImgFileName(vt), s, filePath );
   return  (constructImgPath(vt, RELATIVEIMGPATH)) ;

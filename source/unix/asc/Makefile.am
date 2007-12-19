@@ -26,7 +26,8 @@ guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedial
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
 messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
-containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp 
+containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
+playercolor.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \

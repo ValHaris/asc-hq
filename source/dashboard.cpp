@@ -34,6 +34,7 @@
 #include "dialogs/unitinfodialog.h"
 #include "dialogs/vehicletypeselector.h"
 #include "gameoptions.h"
+#include "graphics/ColorTransform_PlayerColor.h"
 
 #include "sg.h"
 
@@ -271,7 +272,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
 
       if ( name == "unit_pic" ) {
          if ( veh )
-           veh->typ->paint( screen, SPoint( dst.x, dst.y ), veh->getOwner() );
+           veh->typ->paint( screen, SPoint( dst.x, dst.y ), veh->getOwningPlayer().getPlayerColor() );
       }
 
       if ( veh ) {

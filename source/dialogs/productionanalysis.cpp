@@ -161,7 +161,7 @@ void unitProductionAnalysis( GameMap* gamemap, bool checkResearch )
       }
    }
 
-   AvailableUnitWindow auw( NULL, PG_Rect( -1, -1, 400, 400), "Select Vehicle Type", new VehicleTypeSelectionItemFactory(c, gamemap->actplayer ));
+   AvailableUnitWindow auw( NULL, PG_Rect( -1, -1, 400, 400), "Select Vehicle Type", new VehicleTypeSelectionItemFactory(c, gamemap->getCurrentPlayer() ));
    auw.Show();
    auw.RunModal();
    auw.Hide();

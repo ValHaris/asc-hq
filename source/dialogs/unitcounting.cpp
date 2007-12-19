@@ -102,7 +102,7 @@ SelectionWidget* VehicleCounterFactory::spawnNextItem( PG_Widget* parent, const 
 {
    if ( it != items.end() ) {
       const Vehicletype* v = *(it++);
-      return new VehicleTypeCountWidget( parent, pos, parent->Width() - 15, v, gamemap->actplayer, counter[v] );
+      return new VehicleTypeCountWidget( parent, pos, parent->Width() - 15, v, gamemap->getCurrentPlayer(), counter[v] );
    } else
       return NULL;
 };
