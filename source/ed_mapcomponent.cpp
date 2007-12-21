@@ -20,6 +20,7 @@
 
 #include "ed_mapcomponent.h"
 #include "edglobal.h"
+#include "spfst.h"
 
 int MapComponent::currentPlayer = 0;
 bool MapComponent::initialized = false;
@@ -27,6 +28,16 @@ bool MapComponent::initialized = false;
 void MapComponent::setPlayer( int player )
 {
    currentPlayer = player;
+};
+
+void VehicleItem :: display( Surface& s, const SPoint& pos ) const { 
+   if ( actmap ) {
+      int player = selection.getPlayer();
+      if ( player > 7 || player < 0 )
+         player = 0;
+      item->paint ( s, pos, actmap->getPlayer( player ).getPlayerColor()); 
+   } else
+      item->paint ( s, pos ); 
 };
 
 
