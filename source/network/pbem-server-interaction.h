@@ -58,6 +58,7 @@
 #include <curl/easy.h>
 
 #include "../ascstring.h"
+#include "serverinterface.h"
 
 class ASC_PBEM_FileUploadControl // just a better struct so we can use const data
 {
@@ -100,7 +101,7 @@ class ASC_PBEM_FileUploadControl // just a better struct so we can use const dat
    ASCString currentPlayerName;
 };
 
-class ASC_PBEM
+ class ASC_PBEM: public ServerInterface
 {
    private:
       ASCString serverBase;
@@ -241,7 +242,11 @@ class ASC_PBEM
 
       // parse a singular game info line
       TUserData parseUserInfoLine( ASCString line );
-      
+
+
+   public:
+      std::vector<ASCString> listPlayers();
+
       
 };
 

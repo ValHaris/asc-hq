@@ -166,6 +166,13 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    if ( !pc.isReading() || pc.find("VisibleMapLayer" ))
       pc.addStringArray("VisibleMapLayer", visibleMapLayer );
 
+
+   pc.openBracket("PBEMServer");
+   pc.addString("hostname", pbemServer.hostname, pbemServer.hostname );
+   pc.addString("username", pbemServer.username, pbemServer.username );
+   pc.addInteger("port", pbemServer.port, pbemServer.port );
+   pc.closeBracket();
+
    /*
    add(new IntProperty("BI3.interpolate.terrain"		,	&_pOptions->bi3.interpolate.terrain));
    add(new IntProperty("BI3.interpolate.units"			,	&_pOptions->bi3.interpolate.units));
@@ -298,6 +305,10 @@ void CGameOptions::setDefaults ( void )
    video.framerate = 15;
    
    panelColumns = 2;
+
+   pbemServer.username="";
+   pbemServer.port = 8080;
+   pbemServer.hostname="terdon.asc-hq.org";
 
    setChanged();
 }

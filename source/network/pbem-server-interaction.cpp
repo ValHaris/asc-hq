@@ -594,6 +594,19 @@ std::vector<TUserData> ASC_PBEM::getUserList( bool activeOnly )
    return users;
 }
 
+std::vector<ASCString> ASC_PBEM::listPlayers()
+{
+   std::vector<ASCString> newList;
+   std::vector<TUserData> list = getUserList();
+
+   for ( std::vector<TUserData>::iterator i = list.begin(); i != list.end(); ++i )
+      newList.push_back( i->userName );
+
+   return newList;
+}
+
+
+
 TFileData* ASC_PBEM::downloadGame( TGameInfo game )
 {
    if( ! loggedIn ) return NULL;

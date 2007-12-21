@@ -256,8 +256,14 @@ class EditGameOptions : public ASC_PG_Dialog {
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: Cache GUI Definition (*.ascgui)", &o->cacheASCGUI );
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: View own replay", &o->debugReplay );
 
-         if ( mainApp ) 
+         if ( mainApp )  {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Replays as Movies (not saved)", &o->replayMovieMode );
+
+            new PG_PropertyField_String<ASCString>( propertyEditor, "PBEM server hostname", &o->pbemServer.hostname );
+            new PG_PropertyField_String<ASCString>( propertyEditor, "PBEM server username", &o->pbemServer.username );
+            new PG_PropertyField_Integer<int>( propertyEditor, "PBEM server port", &o->pbemServer.port);
+         }
+
 
         
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );

@@ -178,9 +178,8 @@ void AutoHarvestObjects::iterateField( const MapCoordinate& pos )
       }
    }
    */
-   if ( !((pos.y+1)%3))
+   if ( ((pos.y+1)%3))
       // y+1 is to match the harvesting pattern of player Xyphagoroszh on PBP planet Lussx :)
-      
       processField(pos);
    
 }

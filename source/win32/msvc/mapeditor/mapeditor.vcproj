@@ -328,6 +328,9 @@
 				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\playercolor.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\dialogs\playersetup.cpp">
 			</File>
 			<File

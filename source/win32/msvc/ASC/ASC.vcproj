@@ -349,6 +349,9 @@
 				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\playercolor.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\prehistoricevents.cpp">
 			</File>
 			<File

@@ -164,6 +164,9 @@
 				RelativePath="..\..\password.cpp">
 			</File>
 			<File
+				RelativePath="..\..\playercolor.cpp">
+			</File>
+			<File
 				RelativePath="..\..\stack.cpp">
 			</File>
 			<File

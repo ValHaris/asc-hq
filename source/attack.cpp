@@ -280,10 +280,10 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
-      if ( dist <= maxmalq )
+      // if ( dist <= maxmalq )
          av.attackbonus  = field->getattackbonus();
-      else
-         av.attackbonus = 0;
+      //else
+      //   av.attackbonus = 0;
       av.defensebonus = field->getdefensebonus();
    } else {
       av.attackbonus = 0;
@@ -454,10 +454,10 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field->getdefensebonus();
-      if ( dist <= maxmalq )
+      // if ( dist <= maxmalq )
          av.attackbonus  = field->getattackbonus();
-      else
-         av.attackbonus = 0;
+      //else
+      //   av.attackbonus = 0;
    } else {
       av.defensebonus = 0;
       av.attackbonus  = 0;
@@ -676,10 +676,10 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field2->getdefensebonus();
-      if ( dist <= maxmalq )
+      // if ( dist <= maxmalq )
          av.attackbonus  = field2->getattackbonus();
-      else
-         av.attackbonus = 0;
+      //else
+      //   av.attackbonus = 0;
    } else {
       av.defensebonus = 0;
       av.attackbonus  = 0;

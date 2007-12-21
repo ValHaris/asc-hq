@@ -216,6 +216,12 @@ class CGameOptions
       
       ASCString BI3directory;
 
+      struct {
+         ASCString hostname;
+         int port;
+         ASCString username;
+      } pbemServer;
+
       ASCString graphicsDriver;
 
       ASCString startupMap;
