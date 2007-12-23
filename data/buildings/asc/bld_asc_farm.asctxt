@@ -1,0 +1,58 @@
+BuildingType { 
+   Name = Farm
+   ID = 36
+   parent = 35
+
+   Infotext = []
+
+   Weather = dry
+   Fields = A1 A2 A3
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_farm.png
+   } Pictures
+   Entry = A3
+   RubbleObjects = false
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 12000
+      fuel = 12000
+   } ConstructionCost
+
+   Features = AutoHarvestObjects ResourceSink
+   
+   AutoHarvestObjects {
+      Objects = 
+      ObjectGroups = 21
+      Range = 10
+      MaxFieldsPerTurn = 10
+   } AutoHarvestObjects
+
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 15
+      MaxLoadableMass = 15
+      CategoriesNOT = 
+      EntranceSystemNum = 1
+   } Transportation
+
+   MaxResourceProduction { 
+      Energy = -200
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = 0
+      fuel = 0
+   } defaultProduction
+
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 10000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

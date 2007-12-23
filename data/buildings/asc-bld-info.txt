@@ -38,4 +38,5 @@ ID 31 ASC Solarkraftwerk2
 ID 32 ASC Depot 2
 ID 33 ASC Spaceport North
 ID 34 ASC Spaceport South
+ID 35 ASC CrystalProcessing
 

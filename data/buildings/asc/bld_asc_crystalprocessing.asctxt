@@ -1,0 +1,58 @@
+BuildingType { 
+   Name = CrystalProcessing
+   ID = 35
+   parent = 499
+
+   Infotext = []
+
+   Weather = dry
+   Fields = A2 A3 A4 B3
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_crystalprocessing.png
+   } Pictures
+   Entry = A2
+   RubbleObjects = false
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 12000
+      fuel = 12000
+   } ConstructionCost
+
+   Features = AutoHarvestObjects ResourceSink
+   
+   AutoHarvestObjects {
+      Objects = 
+      ObjectGroups = 11
+      Range = 10
+      MaxFieldsPerTurn = 10
+   } AutoHarvestObjects
+
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 15
+      MaxLoadableMass = 15
+      CategoriesNOT = 
+      EntranceSystemNum = 1
+   } Transportation
+
+   MaxResourceProduction { 
+      Energy = -200
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = 0
+      fuel = 0
+   } defaultProduction
+
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 5000
+         Material = 1000
+         fuel = 1000
+      } ASCmode
+   } StorageCapacity
+} BuildingType
