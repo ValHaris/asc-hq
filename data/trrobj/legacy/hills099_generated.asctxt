@@ -1,15 +1,19 @@
 TerrainType { 
    ID = 99
-   parent = 400
+   parent = 508
+
+   Weather = dry few_snow much_snow
    dry { 
+      UseGFXpics = false
       picture =  slope-ld0.png
    } dry
    few_snow { 
+      UseGFXpics = false
       picture =  slope-ld0.png fewsnow4.png
    } few_snow
    much_snow { 
+      UseGFXpics = false
       picture =  slope-ld0.png
+      GraphicOperations = snow
    } much_snow
-snow_and_ice ->* TerrainType.much_snow
-
 } TerrainType
