@@ -28,7 +28,7 @@ VehicleType {
       fuel = 15000
    } Tank
    FuelConsumption = 24
-   Movement = 0 0 0 20 170 170 0 0 
+   Movement = 0 0 0 50 170 170 0 0 
    TerrainAccess ->* VehicleType.Aircraft_water 
    TerrainAccess.terrain_all = 
 
