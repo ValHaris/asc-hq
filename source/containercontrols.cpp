@@ -402,6 +402,8 @@ int ContainerControls :: removeProductionLine ( const Vehicletype* veh  )
 
    container->getResource( removeProductionLineResourcesNeeded(veh), 0 );
    container->deleteProductionLine( veh );
+
+   logtoreplayinfo( rpl_removeProdLine, container->getIdentification(), veh->id );
    return 0;
 }
 
