@@ -119,6 +119,11 @@ Section "ASC main program (required)"
   
 SectionEnd
 
+Section "USB Stick Mode"
+  SetOutPath $INSTDIR
+  File "data/asc2.ini"
+SectionEnd
+
 Section "Music Download"
    SetOutPath "$INSTDIR\music"
    IfFileExists "$INSTDIR\music\frontiers.mp3" +6 0

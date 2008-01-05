@@ -1220,7 +1220,7 @@ void GameMap::endRound()
        for ( int x = 0; x < xsize; ++x )
            getField(x,y)->endRound( time.turn() );
 
-    for (int i = 0; i <= 7; i++)
+    for (int i = 0; i <= 7; i++) {
        if (player[i].exist() && player[i].stat != Player::off ) {
 
           for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ )
@@ -1257,6 +1257,7 @@ void GameMap::endRound()
           } while ( didSomething );
           doresearch( this, i );
        }
+    }
 
     if ( getgameparameter( cgp_objectGrowthMultiplier) > 0 )
        objectGrowth();

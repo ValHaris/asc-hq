@@ -212,6 +212,12 @@ class Player : public SigC::Object {
       PlayerColor getPlayerColor() const;
       void setColor( const DI_Color& color ); 
 
+
+      void resetView();
+      void resetResearch();
+      void resetTribute();
+      void resetPassword();
+
    private:   
       ASCString       name;
       DI_Color        color;

@@ -142,7 +142,7 @@ void Menu::setup()
    addbutton ( "Most recent network game\tShift-F3", ua_continuerecentnetworkgame);
    // addbutton ( "setup Net~w~ork", ua_setupnetwork );
    addbutton ( "Change Passw~o~rd", ua_changepassword );
-   addbutton ( "supervise network game", ua_networksupervisor );
+   addbutton ( "supervise network game\tF4", ua_networksupervisor );
    currentMenu->addSeparator();
    addbutton ( "~D~iplomacy", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
@@ -721,7 +721,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
 
             case SDLK_F4:
-               execUserAction_ev ( ua_computerturn );
+               execUserAction_ev ( ua_networksupervisor );
                return true;
 
             case SDLK_F8:

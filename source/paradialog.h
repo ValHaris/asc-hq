@@ -232,6 +232,10 @@ extern pair<int,int> new_chooseString ( const ASCString& title, const vector<ASC
 
 extern bool MultiLineEditor( const ASCString& title, ASCString& textToEdit );
 
+//! uses the new dialog engine
+extern ASCString editString2( const ASCString& title, const ASCString& defaultValue = "" );
+
+
 class BulkGraphicUpdates {
       PG_Widget* parent;
       bool bulk;

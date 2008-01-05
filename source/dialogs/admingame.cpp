@@ -103,40 +103,31 @@ class AdminGameWindow : public ASC_PG_Dialog {
 
       void resetView( int player )
       {
-         for ( int x = 0; x < gamemap->xsize; x++ )
-            for ( int y = 0; y < gamemap->ysize; y++ ) {
-               tfield* fld = gamemap->getField(x,y);
-               fld->setVisibility( visible_not, player );
-               if ( fld->resourceview )
-                  fld->resourceview->visible &= ~(1<<player);
-            }
-
+         gamemap->getPlayer(player).resetView();
       }
       void resetResearch( int player )
       {
-         gamemap->player[player].research.clear();
+         gamemap->getPlayer(player).resetResearch();
       }
       
       void resetTribute( int player )
       {
-         for ( int j = 0; j< gamemap->getPlayerCount(); ++j ) {
-            gamemap->tribute.avail[player][j] = Resources();
-            gamemap->tribute.avail[j][player]= Resources();
-            gamemap->tribute.paid[player][j] = Resources();
-            gamemap->tribute.paid[j][player]= Resources();
-            gamemap->tribute.payStatusLastTurn[player][j] = Resources();
-            gamemap->tribute.payStatusLastTurn[j][player]= Resources();
-         }
+         gamemap->getPlayer(player).resetTribute();
       }
       
       void resetPassword( int player )
       {
-         gamemap->player[player].passwordcrc.reset();
+         gamemap->getPlayer(player).resetPassword();
       }
 
       void newPassword( int player )
       {
          enterpassword( gamemap->player[player].passwordcrc, true, true, false);
+      }
+
+      void newEmail( int player )
+      {
+          gamemap->player[player].email = editString2( "Mail Address for " + gamemap->player[player].getName(), gamemap->player[player].email);
       }
 
 
@@ -302,6 +293,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "delete resources + ammo", PlayerActionFunctor( this, &AdminGameWindow::deleteResources));
          new ActionItem( actionlistbox, 20, "delete mines", PlayerActionFunctor( this, &AdminGameWindow::deleteMines));
          new ActionItem( actionlistbox, 20, "enter new password", PlayerActionFunctor( this, &AdminGameWindow::newPassword));
+         new ActionItem( actionlistbox, 20, "edit email", PlayerActionFunctor( this, &AdminGameWindow::newEmail));
          new ActionItem( actionlistbox, 20, "export technology", PlayerActionFunctor( this, &AdminGameWindow::exportTechs));
          new ActionItem( actionlistbox, 20, "import technology", PlayerActionFunctor( this, &AdminGameWindow::importTechs));
 

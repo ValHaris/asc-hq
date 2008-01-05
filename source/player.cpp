@@ -326,6 +326,16 @@ void Player :: turnEnds( Player& p )
 {
    if ( &p == this ) {
       sendQueuedMessages();
+
+      if ( !exist() && stat != off ) {
+         stat = off;
+         resetView();
+         resetResearch();
+         resetTribute();
+         resetPassword();
+         email = "";
+         name += " (removed)";
+      }
    }
 }
 
@@ -537,3 +547,36 @@ void Player::merge ( Player& secondPlayer )
 
 }
 
+
+void Player::resetView()
+{
+   for ( int x = 0; x < getParentMap()->xsize; x++ )
+      for ( int y = 0; y < getParentMap()->ysize; y++ ) {
+         tfield* fld = getParentMap()->getField(x,y);
+         fld->setVisibility( visible_not, player );
+         if ( fld->resourceview )
+            fld->resourceview->visible &= ~(1<<player);
+      }
+
+}
+void Player::resetResearch()
+{
+   research.clear();
+}
+
+void Player::resetTribute()
+{
+   for ( int j = 0; j< getParentMap()->getPlayerCount(); ++j ) {
+      getParentMap()->tribute.avail[player][j] = Resources();
+      getParentMap()->tribute.avail[j][player]= Resources();
+      getParentMap()->tribute.paid[player][j] = Resources();
+      getParentMap()->tribute.paid[j][player]= Resources();
+      getParentMap()->tribute.payStatusLastTurn[player][j] = Resources();
+      getParentMap()->tribute.payStatusLastTurn[j][player]= Resources();
+   }
+}
+
+void Player::resetPassword()
+{
+   passwordcrc.reset();
+}

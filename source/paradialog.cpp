@@ -721,3 +721,25 @@ void Emboss::eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect 
       rectangle<4> ( s, SPoint(dst.x, dst.y), dst.w, dst.h, ColorMerger_Brightness<4>( 1.4 ), ColorMerger_Brightness<4>( 0.7 ), clip);
 };
 
+
+class StringEditor  : public ASC_PG_Dialog {
+      PG_LineEdit* editor;
+
+   public:
+      StringEditor( const ASCString& title, const ASCString& textToEdit ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 200 ), title), editor(NULL) 
+      {
+         editor = new PG_LineEdit( this, PG_Rect( 10, 40, Width() - 20, 25 ) );
+         editor->SetText( textToEdit );
+         AddStandardButton( "OK" )->sigClick.connect( SigC::bind( SigC::slot( *this, &StringEditor::quitModalLoop ), 1 ));
+      }
+
+      ASCString GetEditedText() { return editor->GetText(); };
+};
+
+ASCString editString2( const ASCString& title, const ASCString& defaultValue )
+{
+   StringEditor se ( title, defaultValue );
+   se.Show();
+   se.RunModal();
+   return se.GetEditedText();
+}
