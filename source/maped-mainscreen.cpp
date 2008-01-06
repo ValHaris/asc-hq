@@ -681,7 +681,6 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
          case SDLK_F11: helperFunction();
                         return true;
-
          case SDLK_a:   execaction_ev(act_movebuilding);
                         return true;
          case SDLK_b:   execaction_ev(act_changeresources);

@@ -223,7 +223,7 @@ void BuildingType :: read ( tnstream& stream )
                    picsAvail[v][w][x][y] = stream.readInt( );
                    if ( picsAvail[v][w][x][y] ) {
                       field_Exists[x][y] = true;
-                      weatherBits.set(w);
+                      weatherBits.set(v);
                    }   
                }    
                    
@@ -236,7 +236,7 @@ void BuildingType :: read ( tnstream& stream )
                    bi_picture[v][w][x][y] = i;
                    if ( i > 0 ) {
                       field_Exists[x][y] = true;
-                      weatherBits.set(w);
+                      weatherBits.set(v);
                    }   
                }  
 
@@ -364,8 +364,10 @@ void BuildingType :: write ( tnstream& stream ) const
    for ( int v = 0; v < cwettertypennum; v++ )
       for ( int w = 0; w < maxbuildingpicnum; w++ )
          for ( int x = 0; x < 4; x++ )
-            for ( int y = 0; y < 6 ; y++ )
+            for ( int y = 0; y < 6 ; y++ ) {
+                printf("%d;%d;%d;%d;%d\n", v,w,x,y, w_picture[v][w][x][y].valid() );
                 stream.writeInt ( w_picture[v][w][x][y].valid() );
+            }
 
    for ( int v = 0; v < cwettertypennum; v++ )
       for ( int w = 0; w < maxbuildingpicnum; w++ )
@@ -633,7 +635,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
 
       pc.addInteger( "Armor", _armor );
 
-      if ( pc.find( "Features" ) )
+      if ( pc.find( "Features" ) || !pc.isReading())
          pc.addTagArray ( "Features", features, functionNum, containerFunctionTags );
       else {
          int special = 0;

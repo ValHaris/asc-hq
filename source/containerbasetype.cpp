@@ -65,6 +65,7 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "only move to and from transports",
                "AutoHarvestObjects",
                "No customization of production",
+               "Manual self-destruct",
               NULL };
 
 
@@ -90,7 +91,8 @@ ContainerBaseType :: ContainerBaseType ()
 
 bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
 {
-   return features.test( int(function) );
+   int f = int(function);
+   return features.test( f );
 }
 
 bool ContainerBaseType::hasAnyFunction( BitSet functions ) const

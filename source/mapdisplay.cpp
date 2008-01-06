@@ -45,6 +45,7 @@
 #include "loadpcx.h"
 #include "iconrepository.h"
 #include "mainscreenwidget.h"
+#include "sdl/sound.h"
 
 #ifndef karteneditor
  #include "dialogs/attackpanel.h"
@@ -1746,6 +1747,7 @@ class PG_MapDisplay : public MapDisplayInterface {
            void repaintDisplay ();
            void setTempView( bool view ) { tempsvisible = view; };
            void showBattle( tfight& battle );
+           void playPositionalSound( const MapCoordinate& pos, Sound* snd );
 };
 
 
@@ -1857,6 +1859,10 @@ void PG_MapDisplay :: repaintDisplay ()
    ::repaintDisplay();
 }
 
+void PG_MapDisplay :: playPositionalSound( const MapCoordinate& pos, Sound* snd )
+{
+   snd->play();
+}
     
 
 MapDisplayInterface& getDefaultMapDisplay()

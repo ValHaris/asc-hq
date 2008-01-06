@@ -71,10 +71,11 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
         MoveWithReactionFire,
         OnlyMoveToAndFromTransports,
         AutoHarvestObjects,
-        NoProductionCustomization };
+        NoProductionCustomization,
+        ManualSelfDestruct};
 
      
-     static const int functionNum = 42;
+     static const int functionNum = 43;
 
      bool hasFunction( ContainerFunctions function ) const;
      bool hasAnyFunction( std::bitset<64> functions ) const;

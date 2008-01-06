@@ -370,6 +370,9 @@
 				RelativePath="..\..\..\resourcenet.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\actions\selfdestruct.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\actions\servicing.cpp">
 			</File>
 			<File

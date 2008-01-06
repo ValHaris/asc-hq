@@ -217,7 +217,8 @@ const char*  buildingFunctionTags[24]  =
    "MoveDuringReactionFire",
    "onlyTransMove",
    "AutoHarvestObjects",
-   "NoProductionCustomization"
+   "NoProductionCustomization",
+   "ManualSelfDestruct"
    };
    
    

@@ -45,6 +45,7 @@
 #include "turncontrol.h"
 #include "widgets/textrenderer.h"
 #include "actions/jumpdrive.h"
+#include "actions/selfdestruct.h"
 #include "reactionfire.h"
 #include "gameeventsystem.h"
 #include "sdl/graphicsqueue.h"
@@ -1246,6 +1247,14 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          int nwid = va_arg( paramlist, int );
          stream->writeInt( nwid );
       }
+
+      if ( action == rpl_selfdestruct ) {
+         stream->writeChar( action );
+         stream->writeInt( 1 );
+         int nwid = va_arg( paramlist, int );
+         stream->writeInt( nwid );
+      }
+
 
       va_end ( paramlist );
    }
@@ -2469,8 +2478,18 @@ void trunreplay :: execnextreplaymove ( void )
                error("severe replay inconsistency:\nno unit for reactionfire command !");
          }
          break;
-
-
+      case rpl_selfdestruct: {
+             stream->readInt();
+             int nwid = stream->readInt();
+             readnextaction();
+             ContainerBase* c = actmap->getContainer( nwid );
+             SelfDestruct sd;
+             if ( c && sd.available(c)) {
+                sd.destruct(c);
+             } else
+                error("severe replay inconsistency:\nno container for selfdestruct command !");
+            }
+            break;
 
       default:{
                  int size = stream->readInt();

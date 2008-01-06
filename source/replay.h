@@ -86,7 +86,8 @@ enum trpl_actions { rpl_attack,
                     rpl_repairUnit3,
                     rpl_transferTribute,
                     rpl_reactionFireOn,
-                    rpl_reactionFireOff };
+                    rpl_reactionFireOff,
+                    rpl_selfdestruct };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

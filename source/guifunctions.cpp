@@ -49,6 +49,7 @@
 #include "dialogs/buildingtypeselector.h"
 #include "dialogs/internalAmmoTransferDialog.h"
 #include "actions/jumpdrive.h"
+#include "actions/selfdestruct.h"
 
 
 namespace GuiFunctions
@@ -2692,6 +2693,49 @@ class InternalAmmoTransferDialog : public GuiFunction
       };
 };
 
+class SelfDestructIcon : public GuiFunction
+{
+     static int containeractive;
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+        tfield* fld = actmap->getField(pos);
+        ContainerBase* c = fld->getContainer();
+        if ( fieldvisiblenow ( fld ) && c ) {
+           SelfDestruct sd;
+           return sd.available(c);
+        }
+        return false;
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+          tfield* fld = actmap->getField(pos);
+          if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
+            SelfDestruct sd;
+            sd.destruct( fld->getContainer());
+            updateFieldInfo();
+            repaintMap();
+          }
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("self-destruct.png");
+      };
+
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return false;
+      };
+      
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "self destruct";
+      };
+};
+
+
 
 GuiIconHandler primaryGuiIcons;
 
@@ -2740,6 +2784,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::InternalAmmoTransferDialog );
    
    handler.registerUserFunction( new GuiFunctions::EndTurn() );
+   handler.registerUserFunction( new GuiFunctions::SelfDestructIcon() );
    handler.registerUserFunction( new GuiFunctions::Cancel() );
    
 }

@@ -147,5 +147,11 @@ void ReplayMapDisplay :: wait ( int minTime )
       releasetimeslice();
 }
 
+void ReplayMapDisplay :: playPositionalSound( const MapCoordinate& pos, Sound* snd )
+{
+   if ( fieldvisiblenow ( actmap->getField ( pos ), actmap->getPlayerView() )) {
+      mapDisplay->playPositionalSound( pos, snd );
+   }
+}
 
 

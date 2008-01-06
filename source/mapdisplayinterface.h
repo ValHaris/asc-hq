@@ -14,10 +14,12 @@
 
  #include "libs/loki/Functor.h"
 
+class Sound;
  
 #include "typen.h"
 #include "vehicle.h"
 #include "attack.h"
+
 
 class MapDisplayInterface {
          public:
@@ -37,6 +39,7 @@ class MapDisplayInterface {
            virtual void repaintDisplay () = 0;
            virtual void setTempView( bool view ) = 0;
            virtual void showBattle( tfight& battle ) = 0;
+           virtual void playPositionalSound( const MapCoordinate& pos, Sound* snd ) = 0;
            virtual ~MapDisplayInterface () {};
        };
 

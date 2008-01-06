@@ -52,6 +52,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void repaintDisplay () { mapDisplay->repaintDisplay(); };
            void setTempView( bool view )  { mapDisplay->setTempView( view ); };
            void showBattle( tfight& battle ) { mapDisplay->showBattle( battle ); };
+           void playPositionalSound( const MapCoordinate& pos, Sound* snd );
 
     };
 
