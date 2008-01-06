@@ -119,7 +119,7 @@ Section "ASC main program (required)"
   
 SectionEnd
 
-Section "USB Stick Mode"
+Section /o "USB Stick Mode"
   SetOutPath $INSTDIR
   File "data/asc2.ini"
 SectionEnd
