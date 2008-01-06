@@ -969,7 +969,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    }
    
    pc.addInteger( "FuelConsumption", fuelConsumption );
-   if ( !pc.find("Features")) {
+   if ( !pc.find("Features") && pc.isReading() ) {
       int abilities;
       pc.addTagInteger ( "Abilities", abilities, legacyVehicleFunctionNum, vehicleAbilities );
 
