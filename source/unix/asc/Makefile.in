@@ -84,7 +84,7 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT) \
 	containercontrols.$(OBJEXT) containerbase-functions.$(OBJEXT) \
 	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT) \
-	playercolor.$(OBJEXT)
+	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -295,7 +295,7 @@ infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappa
 messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
-playercolor.cpp
+playercolor.cpp pg_mapdisplay.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -439,6 +439,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pg_mapdisplay.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/player.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playercolor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/prehistoricevents.Po@am__quote@

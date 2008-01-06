@@ -20,7 +20,7 @@ BuildingType {
       fuel = 12000
    } ConstructionCost
 
-   Features = AutoHarvestObjects ResourceSink
+   Features = AutoHarvestObjects 
    
    AutoHarvestObjects {
       Objects = 
