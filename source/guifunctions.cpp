@@ -2711,7 +2711,7 @@ class SelfDestructIcon : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
           tfield* fld = actmap->getField(pos);
-          if (choice_dlg("do you really want to start the AI?","~y~es","~n~o") == 1) {
+          if (choice_dlg("do you really want to destruct this unit?","~y~es","~n~o") == 1) {
             SelfDestruct sd;
             sd.destruct( fld->getContainer());
             updateFieldInfo();
