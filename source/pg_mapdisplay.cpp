@@ -39,7 +39,7 @@
 #include "sdl/sound.h"
 #include "dialogs/attackpanel.h"
 
-extern int tempsvisible;
+extern bool tempsvisible;
 extern MapDisplayPG* theGlobalMapDisplay;
 
 

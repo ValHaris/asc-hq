@@ -346,6 +346,9 @@
 				RelativePath="..\..\..\password.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\pg_mapdisplay.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\player.cpp">
 			</File>
 			<File
