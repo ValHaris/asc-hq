@@ -69,6 +69,8 @@ Section "ASC main program (required)"
   File "@inst_win32_DLL_dir@/sdl_sound.dll"
   File "@inst_win32_DLL_dir@/vorbisfile.dll"
   File "@inst_win32_DLL_dir@/libcurl.dll"
+  File "@inst_win32_DLL_dir@/libeay32.dll 
+  File "@inst_win32_DLL_dir@/ssleay32.dll 
   
   ; Debug DLLs
   File "@inst_win32_DLL_dir@/sdl_sound_d.dll"
