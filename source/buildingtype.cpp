@@ -365,7 +365,6 @@ void BuildingType :: write ( tnstream& stream ) const
       for ( int w = 0; w < maxbuildingpicnum; w++ )
          for ( int x = 0; x < 4; x++ )
             for ( int y = 0; y < 6 ; y++ ) {
-                printf("%d;%d;%d;%d;%d\n", v,w,x,y, w_picture[v][w][x][y].valid() );
                 stream.writeInt ( w_picture[v][w][x][y].valid() );
             }
 
