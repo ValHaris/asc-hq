@@ -294,7 +294,7 @@ ASCString ConfigurationFileLocatorCore::getConfigFileName()
       return res;
    }
 
-   if ( !exePath.empty()) {
+   if ( !exePath.empty() && !isPathRelative(exePath) ) {
       displayLogMessage( 5, "Exe path is " + exePath + "\n" );
       ASCString completeName = exePath + "/" + asc_configurationfile;
       if ( exist( completeName )) {
