@@ -93,6 +93,8 @@ class TextRenderer : public PG_ScrollWidget {
       TextRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null );
       void SetText( const std::string& text );
 
+      void saveText( bool stripFormatting );
+      
       PG_Widget* parsingError( const ASCString& errorMessage );
 
       class TagRenderer {

@@ -119,7 +119,7 @@ NewMessage :: NewMessage ( GameMap* gamemap, Message* msg ) : ASC_PG_Dialog( NUL
       
 
 class IngameMessageViewer : public ASC_PG_Dialog {
-      PG_Widget* textViewer;
+      TextRenderer* textViewer;
       const Message* message;
       PG_Label* from;
       PG_Label* to;
@@ -239,6 +239,13 @@ class IngameMessageViewer : public ASC_PG_Dialog {
             quitModalLoop(12);
             return true;
          }
+         
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+         if ( mod & KMOD_CTRL ) 
+            if ( key->keysym.sym == 's' )
+               textViewer->saveText( mod & KMOD_SHIFT );
+         
+         
          return ASC_PG_Dialog::eventKeyDown( key );
       };
 
@@ -417,6 +424,19 @@ class MessageSelectionWindow : public ASC_PG_Dialog {
          return false;
       };
 
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+         if ( mod & KMOD_CTRL ) 
+            if ( key->keysym.sym == 's' )
+               if ( viewer )
+                  return viewer->eventKeyDown( key );
+         
+         return ASC_PG_Dialog::eventKeyDown(key);
+      }
+
+      
 
    protected:
       void messageSelected( Message* msg );

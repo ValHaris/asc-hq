@@ -604,20 +604,22 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       bool fillAmmo;
       const ContainerBase* plant;
 
-      Container produceables;
-      const Container& filterVehicleTypes( const Container& vehicles, const ContainerBase* productionplant )
+      // is initialized by the constructor's call to filterVehicleTypes
+      Container* produceables;
+      
+      Container& filterVehicleTypes( const Container& vehicles, const ContainerBase* productionplant )
       {
-         produceables.clear();
+         produceables = new Container();
          for ( Container::const_iterator i = vehicles.begin(); i != vehicles.end(); ++i ) {
             if ( productionplant->getMap()->getgameparameter( cgp_produceOnlyResearchedStuff )) {
                ContainerConstControls cc ( productionplant );
                if ( !cc.unitProductionPrerequisites( *i ))
-                  produceables.push_back( *i );
+                  produceables->push_back( *i );
             } else
-               produceables.push_back( *i );
+               produceables->push_back( *i );
          }
 
-         return produceables;
+         return *produceables;
       }
 
    protected:
@@ -636,7 +638,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
          sigVehicleTypeMarked( fw->getVehicletype() );
       }
 
-      const Container& getOriginalItems() { return plant->getProduction(); };
+      const Container& getOriginalItems() { return *produceables; };
 
    public:
       VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant )
@@ -693,6 +695,11 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
       SigC::Signal2<void,const Vehicletype*, bool > sigVehicleTypeSelected;
       SigC::Signal1<void,const Vehicletype* > sigVehicleTypeMarked;
+      
+      ~VehicleProduction_SelectionItemFactory()
+      {
+         delete produceables;  
+      }
       
 };
 

@@ -969,7 +969,7 @@ bool GameMap :: isResourceGlobal ( int resource )
    }
 }
 
-int GameMap :: getgameparameter ( GameParameter num )
+int GameMap :: getgameparameter ( GameParameter num ) const
 {
   if ( game_parameter && num < gameparameter_num ) {
      return game_parameter[num];

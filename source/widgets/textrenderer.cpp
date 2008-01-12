@@ -453,21 +453,25 @@ void TextRenderer::SetText( const string& text )
    Update();
 }
 
+void TextRenderer :: saveText( bool stripFormatting )
+{
+   ASCString name = selectFile( "*.txt", false );
+   if ( !name.empty() ) {
+      tn_file_buf_stream s( name, tnstream::writing );
+      if ( stripFormatting ) {
+         static boost::regex tags( "#[^#]+#");
+         s.writeString( boost::regex_replace(my_text, tags, ""), true );
+      } else {
+         s.writeString( my_text, true );
+      }
+   }
+}
+
 bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
    if ( (mod & KMOD_CTRL) &&( key->keysym.sym == SDLK_s )) {
-      ASCString name = selectFile( "*.txt", false );
-      if ( !name.empty() ) {
-         tn_file_buf_stream s( name, tnstream::writing );
-         if ( mod & KMOD_SHIFT ) {
-            static boost::regex tags( "#[^#]+#");
-            s.writeString( boost::regex_replace(my_text, tags, ""), true );
-         } else {
-            s.writeString( my_text, true );
-         }
-      }
-      
+      saveText( mod & KMOD_SHIFT );
       return true;
    }
 

@@ -382,7 +382,7 @@ public:
       Vehicle* getUnit ( int x, int y, int nwid );
       Vehicle* getUnit ( int nwid );
       ContainerBase* getContainer ( int nwid );
-      int  getgameparameter ( GameParameter num );
+      int  getgameparameter ( GameParameter num ) const;
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
