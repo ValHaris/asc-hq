@@ -188,7 +188,7 @@ class TechAdapterDependency {
      //! the technology that is defined as long-term goal
      const Technology* goal;
 
-     bool vehicletypeavailable ( const Vehicletype* fztyp );
+     bool vehicletypeavailable ( const Vehicletype* fztyp ) const;
 
      void read ( tnstream& stream );
      void write ( tnstream& stream );

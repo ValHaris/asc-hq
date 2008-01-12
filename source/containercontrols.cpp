@@ -23,10 +23,22 @@
 #include "itemrepository.h"
 
 
+const GameMap* ContainerConstControls::getMap() const
+{
+   return container->getMap();
+}
+
+
 GameMap* ContainerControls::getMap()
 {
    return container->getMap();
 }
+
+const Player& ContainerConstControls::getPlayer() const
+{
+   return getMap()->player[ getMap()->actplayer ];
+}
+
 
 Player& ContainerControls::getPlayer()
 {
@@ -39,7 +51,7 @@ int ContainerControls::getPlayerNum()
 }
 
 
-bool ContainerControls::unitProductionAvailable()
+bool ContainerConstControls::unitProductionAvailable() const
 {
    if ( container->getOwner() == container->getMap()->actplayer )
       if ( container->vehiclesLoaded() < container->baseType->maxLoadableUnits )
@@ -49,13 +61,13 @@ bool ContainerControls::unitProductionAvailable()
    return false;
 }
 
-int  ContainerControls::unitProductionPrerequisites( const Vehicletype* type )
+int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* type ) const
 {
    int l = 0;
    Resources cost = container->getProductionCost( type );
    if ( getPlayer().research.vehicletypeavailable ( type ) ) {
       for ( int r = 0; r < resourceTypeNum; r++ )
-         if ( container->getResource( cost.resource(r), r, true ) < cost.resource(r) )
+         if ( container->getAvailableResource( cost.resource(r), r ) < cost.resource(r) )
             l |= 1 << r;
    } else
       l |= 1 << 10;

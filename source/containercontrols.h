@@ -24,7 +24,22 @@ class VehicleMovement;
 class Player;
 class GameMap;
 
-class ContainerControls {
+class ContainerConstControls {
+      const ContainerBase* container;
+
+      const Player& getPlayer() const;
+      const GameMap* getMap() const;
+   public:
+      ContainerConstControls( const ContainerBase* cb ) : container( cb ) {};
+
+      bool unitProductionAvailable() const;
+
+      //! returns 0 if the unit is producable and != 0 otherwise. THe bits in the result say why the unit is not producable
+      int unitProductionPrerequisites( const Vehicletype* type ) const;
+
+};
+
+class ContainerControls : public ContainerConstControls {
       ContainerBase* container;
 
       GameMap* getMap();
@@ -32,14 +47,10 @@ class ContainerControls {
       int getPlayerNum();
       
    public:
-      ContainerControls( ContainerBase* cb ) : container( cb ) {};
+      ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
       static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode = false);
 
-
-      bool unitProductionAvailable();
       
-      //! returns 0 if the unit is producable and != 0 otherwise. THe bits in the result say why the unit is not producable
-      int unitProductionPrerequisites( const Vehicletype* type );
       Vehicle* produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources );
 
       Resources calcDestructionOutput( Vehicle* veh );

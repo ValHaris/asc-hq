@@ -878,12 +878,13 @@ void Research :: settechlevel ( int techlevel )
 
 
 
-bool Research :: vehicletypeavailable ( const Vehicletype* fztyp )
+bool Research :: vehicletypeavailable ( const Vehicletype* fztyp ) const
 {
    if ( !fztyp )
       return false;
    else
-      return true; // vehicleclassavailable( fztyp, 0 );
+      return fztyp->techDependency.available( *this );
+      // return true; // vehicleclassavailable( fztyp, 0 );
 }
 
 /*

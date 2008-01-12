@@ -603,6 +603,23 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       bool fillResources;
       bool fillAmmo;
       const ContainerBase* plant;
+
+      Container produceables;
+      const Container& filterVehicleTypes( const Container& vehicles, const ContainerBase* productionplant )
+      {
+         produceables.clear();
+         for ( Container::const_iterator i = vehicles.begin(); i != vehicles.end(); ++i ) {
+            if ( productionplant->getMap()->getgameparameter( cgp_produceOnlyResearchedStuff )) {
+               ContainerConstControls cc ( productionplant );
+               if ( !cc.unitProductionPrerequisites( *i ))
+                  produceables.push_back( *i );
+            } else
+               produceables.push_back( *i );
+         }
+
+         return produceables;
+      }
+
    protected:
       void vehicleTypeSelected( const Vehicletype* type, bool mouse )
       {
@@ -623,7 +640,10 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
    public:
       VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant )
-         : VehicleTypeSelectionItemFactory( plantResources, productionplant->getProduction(), actmap->getCurrentPlayer() ), fillResources(true), fillAmmo(true), plant(productionplant)
+         : VehicleTypeSelectionItemFactory( plantResources, filterVehicleTypes( productionplant->getProduction(), productionplant), productionplant->getMap()->getCurrentPlayer() ), 
+           fillResources(true), 
+           fillAmmo(true), 
+           plant(productionplant)
       {
       };
       
@@ -660,7 +680,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       {
          Resources cost = plant->getProductionCost( type );
          if ( fillResources )
-            cost += Resources( 0, type->getStorageCapacity(actmap->_resourcemode).material, type->getStorageCapacity(actmap->_resourcemode).fuel );
+            cost += Resources( 0, type->getStorageCapacity(plant->getMap()->_resourcemode).material, type->getStorageCapacity(plant->getMap()->_resourcemode).fuel );
 
          if ( fillAmmo )
             for ( int w = 0; w < type->weapons.count; ++w )
@@ -680,7 +700,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFactory  {
       ContainerBase* plant;
    public:
-      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types, actmap->getCurrentPlayer() ), plant(my_plant)
+      AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types, my_plant->getMap()->getCurrentPlayer() ), plant(my_plant)
       {
          
       };
@@ -771,7 +791,6 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
       {
          factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), plant );
 
-         factory->setAmmoFilling( CGameOptions::Instance()->unitProduction.fillAmmo );
          factory->setResourceFilling ( CGameOptions::Instance()->unitProduction.fillResources );
 
 
@@ -793,11 +812,13 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog {
          fillRes->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
          
          if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction)) {
+            factory->setAmmoFilling( CGameOptions::Instance()->unitProduction.fillAmmo );
             PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
             if ( factory->getAmmoFilling() ) 
                fillAmmo->SetPressed();
             fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
-         }
+         } else
+            factory->setAmmoFilling( false );
 
          PG_Rect rr ( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35);
          PG_Button* b  = new PG_Button( this, PG_Rect( rr.x + rr.h + 5, rr.y, rr.w - 40, rr.h ) , "Produce" );

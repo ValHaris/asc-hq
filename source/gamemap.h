@@ -59,7 +59,7 @@ class WeatherSystem;
 #endif
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 33;
+const int gameparameternum = 34;
 
 enum GameParameter { cgp_fahrspur,
        cgp_eis,
@@ -93,7 +93,8 @@ enum GameParameter { cgp_fahrspur,
        cgp_debugEvents,
        cgp_objectGrowthMultiplier,
        cgp_objectGrowOnOtherObjects,
-       cgp_researchOutputMultiplier};
+       cgp_researchOutputMultiplier,
+       cgp_produceOnlyResearchedStuff };
 
 
 struct GameParameterSettings {
