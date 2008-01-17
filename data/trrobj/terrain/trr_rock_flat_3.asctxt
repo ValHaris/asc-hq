@@ -12,11 +12,11 @@ TerrainType {
    } dry
    light_rain { 
       UseGFXpics = false
-      Picture = trr_rock_flat_3_lr.png
+      Picture = trr_rock_flat_3.png pfuetze-1a.png
    } light_rain
    heavy_rain { 
       UseGFXpics = false
-      Picture = trr_rock_flat_3_hr.png
+      Picture = trr_rock_flat_3.png pfuetze-1c.png
    } heavy_rain
    few_snow { 
       UseGFXpics = false

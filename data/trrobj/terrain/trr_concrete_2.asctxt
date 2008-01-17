@@ -12,7 +12,7 @@ TerrainType {
    } dry
    few_snow { 
       UseGFXpics = false
-      Picture = trr_concrete_2_fs.png
+      Picture = trr_concrete_2.png fewsnow3.png
    } few_snow
    much_snow { 
       UseGFXpics = false

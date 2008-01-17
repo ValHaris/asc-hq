@@ -12,7 +12,8 @@ ObjectType {
    } dry
    much_snow {
       UseGFXpics = false
-      picture = obj_rocks_large_1_ms.png 1
+      picture = obj_rocks_large_1.png 1
+      GraphicOperations = Snow
    } much_snow
 
 } ObjectType

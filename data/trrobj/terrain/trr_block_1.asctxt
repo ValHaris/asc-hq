@@ -9,7 +9,7 @@ TerrainType {
    dry { 
       DefenseBonus = 0
       AttackBonus = 0
-      BasicJamming = 255
+      BasicJamming = 1000
       MoveMalus = 255
       TerrainProperties = 
       UseGFXpics = false

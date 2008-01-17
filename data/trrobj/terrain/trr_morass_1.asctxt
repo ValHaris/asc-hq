@@ -10,13 +10,13 @@ TerrainType {
       Picture = trr_morass_1.png
    } dry
    light_rain { 
-      Picture = trr_morass_1_lr.png
+      Picture = trr_morass_1.png pfuetze-1a.png
    } light_rain
    heavy_rain { 
-      Picture = trr_morass_1_hr.png
+      Picture = trr_morass_1.png pfuetze-1c.png
    } heavy_rain
    few_snow { 
-      Picture = trr_morass_1_fs.png
+      Picture = trr_morass_1.png fewsnow3.png
    } few_snow
    much_snow { 
       Picture = trr_morass_1.png
