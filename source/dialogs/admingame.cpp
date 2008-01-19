@@ -44,6 +44,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       GameMap* gamemap;
       PG_LineEdit* turn;
       PG_LineEdit* currentPlayer;
+      PG_LineEdit* filename;
 
       typedef Loki::Functor<void, TYPELIST_1(int) > PlayerActionFunctor;
       typedef PG_ListBoxDataItem<PlayerActionFunctor> ActionItem;
@@ -254,6 +255,13 @@ class AdminGameWindow : public ASC_PG_Dialog {
          return true;
       }
       
+      bool netSetup()
+      {
+         if ( gamemap && gamemap->network )
+            gamemap->network->setup();
+         return true;
+      }
+      
       
    public:
       AdminGameWindow( GameMap* actmap, PG_Widget *parent, TurnSkipper* turnSkipper ) : ASC_PG_Dialog( parent, PG_Rect( -1, -1, 600, min(1000, PG_Application::GetScreenHeight()) ), "Admin Game" ), gamemap( actmap ), successfullyClosed(false)
@@ -318,9 +326,14 @@ class AdminGameWindow : public ASC_PG_Dialog {
          currentPlayer->SetEditable( false );
 
 
-         ypos += 30;         
-         playerSetup = new PlayerSetupWidget( gamemap, PlayerSetupWidget::AllEditable, scrollwidget, PG_Rect(gap, ypos, Width() - 3*gap, PlayerSetupWidget::guessHeight(gamemap) ) );
          
+         if ( actmap->network ) {
+            ypos += 30;         
+            (new PG_Button( scrollwidget, PG_Rect( 20, ypos, 200, 20 ), "Setup data transfer" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::netSetup )) ;
+         }
+         
+         ypos += 30;
+         playerSetup = new PlayerSetupWidget( gamemap, PlayerSetupWidget::AllEditable, scrollwidget, PG_Rect(gap, ypos, Width() - 3*gap, PlayerSetupWidget::guessHeight(gamemap) ) );
 
          ypos += PlayerSetupWidget::guessHeight(gamemap) + gap;
 
