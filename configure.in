@@ -102,14 +102,6 @@ AC_DEFUN([AC_LIB_MISSING], [
 
 
 
-dnl here comes the special stuff - done on demand (developers only?)
-AC_ARG_ENABLE( docbook2man, AS_HELP_STRING([--enable-docbook2man],[will build the man pages from the sgml source files]), SGML2MAN=manpages )
-AC_SUBST([SGML2MAN])
-if test "X$SGML2MAN" = "Xmanpages"; then
-   AC_CHECK_PROGS(DOCBOOK2MAN, docbook-to-man docbook2man )
-fi
-AC_SUBST(DOCBOOK2MAN)
-
 dnl mikem: sure this is one is only interesting for martin bickel ;)
 AC_ARG_ENABLE( genparse, AS_HELP_STRING([--enable-genparse],[enables recreation of the command line parsers]), ENABLEGENPARSE=1 )
 if test "X$ENABLEGENPARSE" = "X1"; then

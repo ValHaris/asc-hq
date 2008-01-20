@@ -1023,7 +1023,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.closeBracket();
 
    pc.openBracket ( "Weapons");
-   pc.addInteger("Initiative", initiative );
+   // pc.addInteger("Initiative", initiative );
    pc.addInteger("Number", weapons.count );
    for ( int i = 0; i < weapons.count; i++ ) {
       pc.openBracket ( ASCString("Weapon")+strrr(i) );

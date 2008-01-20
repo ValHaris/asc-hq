@@ -172,14 +172,20 @@ void tfight :: calc ( void )
       else
          av.weapcount = 0;
 
-      if ( dv.damage >= 100 ) {
-         av.experience += 2;
-         if ( av.experience > maxunitexperience )
-            av.experience = maxunitexperience;
 
-      } else
-        if ( av.experience < maxunitexperience )
-           av.experience++;
+      av.experience++;
+
+      if ( dist <= 10 )
+         av.experience += 1;
+
+      if ( dv.damage >= 100 ) 
+         av.experience += 1;
+
+
+
+      if ( av.experience > maxunitexperience )
+         av.experience = maxunitexperience;
+
    } 
 
    if ( dv.strength ) { 
@@ -237,7 +243,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    _pattackingunit = &attackingunit;
    _pattackedunit  = &attackedunit;
 
-   int dist = beeline ( attackingunit->xpos, attackingunit->ypos, attackedunit->xpos, attackedunit->ypos );
+   dist = beeline ( attackingunit->xpos, attackingunit->ypos, attackedunit->xpos, attackedunit->ypos );
    int _weapon;
 
    if ( weapon == -1 ) {
@@ -411,7 +417,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    _y = y;
    _attackedbuilding  = getfield ( x, y ) -> building;
 
-   int dist = beeline ( attackingunit->xpos, attackingunit->ypos, x, y );
+   dist = beeline ( attackingunit->xpos, attackingunit->ypos, x, y );
    int _weapon;
 
    if ( weapon == -1 ) {
@@ -523,6 +529,7 @@ void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &at
    if ( attackedunit->height >= chtieffliegend )
       errorMessage(" tmineattacksunit :: setup \n mine attacks flying unit!\n" );
 
+   dist = 10;
 
    _mineposition = mineposition;
    _attackedunit = attackedunit;
@@ -630,7 +637,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    _attackingunit = attackingunit;
 
-   int dist = beeline ( attackingunit->xpos, attackingunit->ypos, obj_x, obj_y );
+   dist = beeline ( attackingunit->xpos, attackingunit->ypos, obj_x, obj_y );
 
    for ( tfield::ObjectContainer::reverse_iterator o = targetField->objects.rbegin(); o != targetField->objects.rend(); o++ )
       if ( o->typ->armor > 0 ) {

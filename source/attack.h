@@ -78,6 +78,7 @@ class tfight : public AttackFormula
 {
    protected:
       tfight ( void );
+      int dist;
 
    public:
       struct tavalues
