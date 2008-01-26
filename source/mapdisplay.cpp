@@ -1385,7 +1385,7 @@ void MapDisplayPG::displayAddons( Surface& surf, int pass)
    if( additionalUnit ) 
       if ( pass == bitmappedHeight2pass( additionalUnit->height ) )  {
          SPoint p = mapViewPos2internalPos( additionalUnit->getPosition() - offset );
-         if ( p.x >= 0 && p.y >= 0 && p.x + fieldsizex < surf.w() && p.y + fieldsizey < surf.h() )
+         if ( p.x >= 0 && p.y >= 0 && p.x + fieldsizex + ContainerBase::calcShadowDist(log2(chsatellit)) < surf.w() && p.y + fieldsizey  + ContainerBase::calcShadowDist(log2(chsatellit)) < surf.h() )
             additionalUnit->paint( surf, p, false, -1 );
       }
 
