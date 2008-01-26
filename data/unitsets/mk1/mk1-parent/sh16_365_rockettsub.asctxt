@@ -13,7 +13,7 @@ VehicleType {
    Armor = 1000
    View = 30
    Jamming = 0
-   WaitFortack = false
+   WaitForattack = false
    Abilities = sonar
    Category = heavy_ship
    MaxSurvivableStorm = 220

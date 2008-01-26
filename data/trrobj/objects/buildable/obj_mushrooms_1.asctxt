@@ -2,6 +2,7 @@ ObjectType {
    Name = Mushrooms 1
    ID = 2108
    Parent = 2153
+   GroupID = 21
          
    secondaryIDs = 
          
@@ -10,6 +11,15 @@ ObjectType {
    LinkableObjects = 
    NetBehaviour = 
    NoSelfChaining = true
+   growthRate = 0.15
+   TerrainAccess { 
+      terrain_any = mud morass swamp very_shallow_water
+      terrain_all = 
+      terrain_not = railroad runway bridge mountains high_mountains
+      terrain_kill = water deep_water river lava soft_sand
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = small_rocks
 
    dry { 
       UseGFXpics = false

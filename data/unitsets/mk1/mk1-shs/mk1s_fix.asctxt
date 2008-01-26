@@ -9,7 +9,7 @@ VehicleType {
    WreckageObject = 439
    GuideSortHelp = 0 0 0 0 1 553 554 0 0 0
 
-   Abilities = construct_vehicles repair_vehicle self_repairing fuel_transfer material_transfer manual_resource_drilling construct_specific_buildings 
+   Features = Vehicle_Production ExternalRepair self_repairing ExternalFuelTransfer ExternalMaterialTransfer automatic_resource_searching construct_specific_buildings NoProductionCustomization
    ResourceDrillingRange = 4
    SelfRepairRate = 10
    Transportation ->* VehicleType.TransTurretBig2
@@ -21,9 +21,12 @@ VehicleType {
 
    Construction { 
       Buildings = 13 14 16 17 18 19
-      Vehicles = 56 61 95 110
+      Vehiclesinternally = 56 61 76 95 110
       Objects = 995 996 997 998 999 1000 44 30 3
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 15
+      ProductionEfficiency = [   0   0   1
+                                 0   1   0
+                                 0   0   1 ]
    } Construction
 
    Weapons { 

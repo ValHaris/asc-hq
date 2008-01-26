@@ -4,6 +4,11 @@ Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
 _________________
+26.01.2008 (GAMER)
+-Wald korrigiert, wachstum, nicht mehr auf Hard_sand/Soft_sand
+-GroupID 21 für Oelpflanzen festgelegt, Raps, Pilze angepasst
+
+_________________
 09.122007 (GAMER)
 Strong Pipeline rekorrigiert auf GroupID 15
 

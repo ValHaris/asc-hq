@@ -2,7 +2,7 @@ ObjectType {
 
    Name = Raps-Fields
    ID = 2152
-   GroupID = 10
+   GroupID = 21
 
    Weather = dry much_snow snow_and_ice
 

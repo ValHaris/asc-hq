@@ -1,7 +1,7 @@
 ObjectType { 
    Name = Raps (growth)
    ID = 2153
-   GroupID = 10
+   GroupID = 21
    TechAdapterRequired = o2153
    growthRate = 0.10
 
@@ -30,15 +30,15 @@ ObjectType {
    RemovalCost { 
       Energy = 0
       Material = 0
-      fuel = -500
-      Movement = 10
+      fuel = -400
+      Movement = 20
    } RemovalCost
    NoSelfChaining = false
    TerrainAccess { 
       terrain_any = Lowland  
       terrain_all = 
       terrain_not = road forest small_rocks large_rocks snow deep_snow forest railroad swamp morass bridge
-      terrain_kill = road runway railroad lava river very_shallow_water shallow_water water deep_water installation forest turret_foundation
+      terrain_kill = road runway railroad lava river very_shallow_water shallow_water water deep_water installation forest turret_foundation soft_sand
    } TerrainAccess
    TerrainProperties_Filter =  
    TerrainProperties_Add = 
