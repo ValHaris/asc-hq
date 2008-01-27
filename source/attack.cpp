@@ -175,8 +175,8 @@ void tfight :: calc ( void )
 
       av.experience++;
 
-      if ( dist <= 10 )
-         av.experience += 1;
+//      if ( dist <= 10 && dv.strength > 0 )
+//         av.experience += 1;
 
       if ( dv.damage >= 100 ) 
          av.experience += 1;

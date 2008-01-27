@@ -1,0 +1,20 @@
+#!/usr/bin/perl -W
+use strict;
+
+my $argc= @ARGV;
+die "parameter missing, pass full qualified path to strtmesg.cpp" unless $argc;
+
+
+my $version;
+die "version file not found" unless -e $ARGV[0];
+open (F, $ARGV[0]) || die "error opening $ARGV[0]";
+while (<F>) {
+   if ( /asc_release\s*=\s*\"ASC(\d+\.\d+.\d+.\d+)\"/ ) {
+      $version = $1;
+   } 
+}
+close F;
+die "version not found in input file" unless $version;
+
+print $version . "\n";
+

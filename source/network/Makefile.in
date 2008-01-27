@@ -32,6 +32,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@CURLCLIENT_TRUE@am__append_1 = pbem-server.cpp pbem-server-interaction.cpp
+@CURLCLIENT_TRUE@am__append_2 = @LIBCURL@
+@CURLCLIENT_FALSE@am__append_3 = pbem-server-dummy.cpp
 subdir = source/network
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -43,13 +46,32 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libnetwork_la_DEPENDENCIES =
-am_libnetwork_la_OBJECTS = pbem-server.lo pbem-server-interaction.lo \
-	simple_file_transfer.lo
+am__DEPENDENCIES_1 =
+libnetwork_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+am__libnetwork_la_SOURCES_DIST = simple_file_transfer.cpp \
+	pbem-server.cpp pbem-server-interaction.cpp \
+	pbem-server-dummy.cpp
+@CURLCLIENT_TRUE@am__objects_1 = pbem-server.lo \
+@CURLCLIENT_TRUE@	pbem-server-interaction.lo
+@CURLCLIENT_FALSE@am__objects_2 = pbem-server-dummy.lo
+am_libnetwork_la_OBJECTS = simple_file_transfer.lo $(am__objects_1) \
+	$(am__objects_2)
 libnetwork_la_OBJECTS = $(am_libnetwork_la_OBJECTS)
+libnetworkcurl_la_LIBADD =
+libnetworkcurl_la_SOURCES = libnetworkcurl.c
+libnetworkcurl_la_OBJECTS = libnetworkcurl.lo
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -59,8 +81,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libnetwork_la_SOURCES)
-DIST_SOURCES = $(libnetwork_la_SOURCES)
+SOURCES = $(libnetwork_la_SOURCES) libnetworkcurl.c
+DIST_SOURCES = $(am__libnetwork_la_SOURCES_DIST) libnetworkcurl.c
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -122,6 +144,7 @@ MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
 MUSICDIR = @MUSICDIR@
+NETWORKLIB = @NETWORKLIB@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -144,7 +167,6 @@ SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 SDL_SOUND_LIB = @SDL_SOUND_LIB@
 SET_MAKE = @SET_MAKE@
-SGML2MAN = @SGML2MAN@
 SHELL = @SHELL@
 SIGC_CFLAGS = @SIGC_CFLAGS@
 SIGC_LIBS = @SIGC_LIBS@
@@ -219,14 +241,16 @@ top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
 AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ @LIBCURL_CPPFLAGS@ -Dsgmain 
-noinst_LTLIBRARIES = libnetwork.la
-libnetwork_la_SOURCES = pbem-server.cpp pbem-server-interaction.cpp simple_file_transfer.cpp
-libnetwork_la_LIBADD = @SDL_LIBS@ -lpng -lz @LIBCURL@
+EXTRA_LTLIBRARIES = libnetworkcurl.la
+noinst_LTLIBRARIES = libnetwork.la @NETWORKLIB@
+libnetwork_la_SOURCES = simple_file_transfer.cpp $(am__append_1) \
+	$(am__append_3)
+libnetwork_la_LIBADD = @SDL_LIBS@ -lpng -lz $(am__append_2)
 EXTRA_DIST = $(srcdir)/*.h  
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
+.SUFFIXES: .c .cpp .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -267,6 +291,8 @@ clean-noinstLTLIBRARIES:
 	done
 libnetwork.la: $(libnetwork_la_OBJECTS) $(libnetwork_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libnetwork_la_OBJECTS) $(libnetwork_la_LIBADD) $(LIBS)
+libnetworkcurl.la: $(libnetworkcurl_la_OBJECTS) $(libnetworkcurl_la_DEPENDENCIES) 
+	$(LINK)  $(libnetworkcurl_la_OBJECTS) $(libnetworkcurl_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -274,9 +300,32 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libnetworkcurl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pbem-server-dummy.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pbem-server-interaction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pbem-server.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simple_file_transfer.Plo@am__quote@
+
+.c.o:
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c $<
+
+.c.obj:
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
