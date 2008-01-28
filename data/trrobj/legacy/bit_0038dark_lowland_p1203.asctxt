@@ -1,7 +1,7 @@
 TerrainType { 
    Name = Flat Rock
    ID = 38
-   Parent = 505
+   Parent = 501
    weather -= snow_and_ice
    dry { 
       UseGFXpics = false
