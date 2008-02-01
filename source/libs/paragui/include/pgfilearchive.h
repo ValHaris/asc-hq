@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:56 $
+    Update Date:      $Date: 2008-02-01 22:15:09 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgfilearchive.h,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -52,6 +52,9 @@ typedef std::vector< std::string > PG_FileList;
 */
 
 class DECLSPEC PG_FileArchive {
+private:   
+   void init( const char* argv0 );
+   
 public:
 
 	//! File open mode
@@ -62,6 +65,8 @@ public:
 	};
 
 	PG_FileArchive();
+   PG_FileArchive( const char* argv0);
+   
 	~PG_FileArchive();
 
 	static void Deinit();

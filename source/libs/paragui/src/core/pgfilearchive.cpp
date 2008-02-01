@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-12-08 13:19:02 $
+    Update Date:      $Date: 2008-02-01 22:15:09 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgfilearchive.cpp,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -49,37 +49,51 @@ static void* SDL_image_obj = NULL;
 typedef SDL_Surface* (*IMG_Load_RW_FT)(SDL_RWops* src, int freesrc);
 static IMG_Load_RW_FT IMG_Load_RW_FUNC = NULL;
 
-PG_FileArchive::PG_FileArchive() {
-
-	// increment instance count
-	my_instance_count++;
-
-	// First instance ? -> initialize PhysFS
-	if(my_instance_count == 1) {
-		if(PHYSFS_init("paragui") == 0) {
-			std::cerr << "Unable to initialize PhysicsFS !" << std::endl;
-			return;
-		}
+void PG_FileArchive::init( const char* argv0 )
+{
+   // First instance ? -> initialize PhysFS
+   if(my_instance_count == 1) {
+      if(PHYSFS_init(argv0) == 0) {
+         std::cerr << "Unable to initialize PhysicsFS !" << std::endl;
+         const char* errstr = PHYSFS_getLastError();
+         if ( errstr )
+            std::cerr << errstr;
+         return;
+      }
 
 #ifdef PG_LOAD_SDL_IMAGE_DYNAMICALLY
-		// try different names to find SDL_image
-		SDL_image_obj = SDL_LoadObject(SDLIMAGE_LIB);
-		if(SDL_image_obj == NULL) {
-			PG_LogMSG("SDL_image not found! Only bmp images can be loaded!");
-		} else {
-			IMG_Load_RW_FUNC = (IMG_Load_RW_FT)SDL_LoadFunction(SDL_image_obj, "IMG_Load_RW");
-			if(IMG_Load_RW_FUNC == NULL) {
-				PG_LogERR("Unable to load IMG_Load_RW function. SDL_image disabled!");
-				SDL_UnloadObject(SDL_image_obj);
-				SDL_image_obj = NULL;
-			}
-		}
+      // try different names to find SDL_image
+      SDL_image_obj = SDL_LoadObject(SDLIMAGE_LIB);
+      if(SDL_image_obj == NULL) {
+         PG_LogMSG("SDL_image not found! Only bmp images can be loaded!");
+      } else {
+         IMG_Load_RW_FUNC = (IMG_Load_RW_FT)SDL_LoadFunction(SDL_image_obj, "IMG_Load_RW");
+         if(IMG_Load_RW_FUNC == NULL) {
+            PG_LogERR("Unable to load IMG_Load_RW function. SDL_image disabled!");
+            SDL_UnloadObject(SDL_image_obj);
+            SDL_image_obj = NULL;
+         }
+      }
 #else
          IMG_Load_RW_FUNC = IMG_Load_RW;
 #endif
-	}
-
+   }
 }
+
+PG_FileArchive::PG_FileArchive() {
+   // increment instance count
+   my_instance_count++;
+   
+   init( "paragui" );
+}
+
+PG_FileArchive::PG_FileArchive( const char* argv0 ) {
+   // increment instance count
+   my_instance_count++;
+   
+   init( argv0 );
+}
+
 
 PG_FileArchive::~PG_FileArchive() {
 

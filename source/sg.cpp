@@ -1705,6 +1705,7 @@ int main(int argc, char *argv[] )
    
    tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
 
+   PG_FileArchive archive( argv[0] );
    ASC_PG_App app ( "asc2_dlg" );
 
    app.sigAppIdle.connect ( SigC::slot( mainloopidle ));
