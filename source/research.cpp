@@ -413,7 +413,7 @@ TechAdapterDependency::TechAdapterDependency() : requireAllListedTechAdapter ( f
 
 bool TechAdapterDependency::available( const Research& research ) const
 {
-   if ( requiredTechAdapter.size() )
+   if ( requiredTechAdapter.size() ) {
       if ( requireAllListedTechAdapter ) {
           for ( RequiredTechAdapter::const_iterator j = requiredTechAdapter.begin(); j != requiredTechAdapter.end(); ++j )
              if ( !research.techAdapterAvail( *j ))
@@ -425,6 +425,7 @@ bool TechAdapterDependency::available( const Research& research ) const
                 return true;
          return false;
       }
+   }
 
    return true;
 }
@@ -951,12 +952,13 @@ Resources returnResourcenUseForResearch ( const ContainerBase* bld, int research
 
 
    for ( int r = 0; r < 3; ++r )
-      if ( bld->baseType->maxplus.resource(r) < 0 )
+      if ( bld->baseType->maxplus.resource(r) < 0 ) {
          if(  research > bld->baseType->nominalresearchpoints ) {
             float a = -bld->baseType->maxplus.resource(r) / pow(double(bld->baseType->nominalresearchpoints),2);
             res.resource(r) = int( pow(pow(double(research),2) * a, 0.98 + double(num)/50) );
          } else
             res.resource(r) = -bld->baseType->maxplus.resource(r) * research / bld->baseType->nominalresearchpoints;
+      }
 
    return res;
 }

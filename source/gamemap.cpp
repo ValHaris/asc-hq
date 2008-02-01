@@ -1061,7 +1061,7 @@ Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
          return eht;
       else
          for ( ContainerBase::Cargo::const_iterator i = eht->getCargo().begin(); i != eht->getCargo().end(); ++i )
-            if ( *i ) 
+            if ( *i )  {
                if ( (*i)->networkid == nwid )
                   return *i;
                else {
@@ -1069,6 +1069,7 @@ Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
                   if ( ld )
                      return ld;
                }
+            }
       return NULL;
    }
 }
@@ -1672,7 +1673,7 @@ void GameMap::processJournal()
      int fnd;
      do {
         fnd = 0;
-        if ( !add.empty() )
+        if ( !add.empty() ) {
            if ( add.find ( '\n', add.length()-1 ) != add.npos ) {
               add.erase ( add.length()-1 );
               fnd++;
@@ -1682,6 +1683,7 @@ void GameMap::processJournal()
                   add.erase ( add.length()-5 );
                   fnd++;
                 }
+        }
 
      } while ( fnd ); /* enddo */
 

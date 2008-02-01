@@ -1087,13 +1087,14 @@ void ContainerCollector :: addfile ( const char* filename, const pncontainerstre
 
    int i1 = toupper ( filename[0] );
    for ( int i = 0; i <= index[i1].getlength(); i++ )
-      if ( index[i1][i].name.compare_ci ( filename ) == 0 ) 
+      if ( index[i1][i].name.compare_ci ( filename ) == 0 )  {
          if ( index[i1][i].directoryLevel <= directoryLevel ) 
             return;
          else {
             cci = &(index[i1][i]);
             found = 1;
          }
+      }
 
    if ( !found )
       cci = &( index[i1][ index[i1].getlength()+1 ] );
@@ -1780,7 +1781,7 @@ bool patimat (const char *pat, const char *str, bool forceCaseInsensitivity )
          return !*str;
 
       case '*' :
-         return patimat(pat+1, str, forceCaseInsensitivity) || *str && patimat(pat, str+1, forceCaseInsensitivity);
+         return patimat(pat+1, str, forceCaseInsensitivity) || (*str && patimat(pat, str+1, forceCaseInsensitivity));
 
       case '?' :
          return *str && patimat(pat+1, str+1, forceCaseInsensitivity);
@@ -2174,11 +2175,12 @@ int  tmemorystream :: readdata ( void* nbuf, int size, bool excpt  )
    if (_mode != reading )
       throw  tinvalidmode ( "memorystream", _mode, reading );
       
-   if ( actmempos + size > buf->used )
+   if ( actmempos + size > buf->used ) {
       if ( excpt )
          throw treadafterend ( "memory stream" );
       else
          size = buf->used-actmempos;
+   }
 
    memcpy ( nbuf, &buf->buf[actmempos], size );
    actmempos += size;

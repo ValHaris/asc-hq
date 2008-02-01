@@ -43,11 +43,12 @@ MapCoordinate OverviewMapImage::surface2map( const SPoint& pos )
       case 2: {
                  if ( lx < 4 )
                     return MapCoordinate( pos.x / 6, pos.y / 2 );
-                 if ( lx >= 4 )
+                 if ( lx >= 4 ) {
                     if ( ly == 1 )
                        return MapCoordinate( pos.x / 6, pos.y / 2 - 1 );
                     else
                        return MapCoordinate( pos.x / 6, pos.y / 2 + 1 );
+                 }
               };
       case 3: {
                  if ( lx == 1 || lx == 2 )

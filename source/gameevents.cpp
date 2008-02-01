@@ -378,11 +378,12 @@ void UnitTrigger::writeData ( tnstream& stream )
 ASCString UnitTrigger::getName() const
 {
    ASCString s = "unit ";
-   if ( gamemap )
+   if ( gamemap ) {
       if ( gamemap->getUnit( unitID ))
          s += gamemap->getUnit( unitID )->getName();
       else
          s += "<not found>";
+   }
    return s;
 }
 

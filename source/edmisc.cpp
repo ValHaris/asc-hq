@@ -1370,11 +1370,12 @@ void         StringSelector ::run(void)
 {
    do {
       tstringselect::run();
-      if ( taste == ct_enter )
+      if ( taste == ct_enter ) {
          if ( redline >= 0 )
             action = 2;
          else
             action = 3;
+      }
    }  while ( action == 0 );
 }
 
@@ -3933,7 +3934,7 @@ void locateItemByID()
             targetField->vehicle = new Vehicle( sourceField->vehicle->typ, targetMap, playerID );
             copyVehicleData( sourceField->vehicle, targetField->vehicle, targetMap, playerTranslation );
             targetField->vehicle->setnewposition( targetField->getx(), targetField->gety() );
-            targetField->vehicle->direction = directionTranslation[ sourceField->vehicle->direction ];
+            targetField->vehicle->direction = directionTranslation[ int(sourceField->vehicle->direction) ];
          }
       }
       

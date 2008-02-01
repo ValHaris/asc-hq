@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:56 $
+    Update Date:      $Date: 2008-02-01 12:19:52 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/paragui.h,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -84,11 +84,12 @@
 //
 // STL map / hash_map
 //
-#if defined(HAVE_HASH_MAP)
+#if defined(HAVE_HASH_MAP) && 0 
+   // we are deactivating usage of HASH_MAP for compatibility reasons
 	#define HASH_MAP_INC <hash_map>
 	#define MAP_INC <hash_map>
 	#define STL_MAP std::hash_map
-#elif defined(HAVE_EXT_HASH_MAP)
+#elif defined(HAVE_EXT_HASH_MAP) && 0
 	#define HASH_MAP_INC <ext/hash_map>
 	#define MAP_INC <ext/hash_map>
 	#if PG_VERSIONNUM(__GNUC__, __GNUC_MINOR__, 0) >= PG_VERSIONNUM(3, 1, 0)

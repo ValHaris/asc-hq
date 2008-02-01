@@ -76,12 +76,12 @@ int          tnbufstream::readdata( void* buf, int size, bool excpt  )
    
 
    while (actpos2 < size) {
-      if (datasize == 0)
-          if ( excpt ) {
+      if (datasize == 0) {
+          if ( excpt ) 
              throw treadafterend ( getDeviceName() );
-			}
           else
              return actpos2;
+      }
        
       s = datasize - actmempos; 
       if (s > size - actpos2) 

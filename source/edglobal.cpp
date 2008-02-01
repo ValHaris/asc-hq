@@ -588,7 +588,7 @@ void execaction( int code)
                          tfield* pf2 = getactfield();
                          mapsaved = false;
                          if (pf2 != NULL) {
-                            if ( !removeCurrentItem() )
+                            if ( !removeCurrentItem() ) {
                               if (pf2->vehicle != NULL)
                                  delete pf2->vehicle;
                               else
@@ -599,6 +599,7 @@ void execaction( int code)
                                        pf2->removemine( -1 );
                                     else 
                                        pf2->removeobject( NULL );
+                            }
                                   
 
                             mapsaved = false;
@@ -806,7 +807,7 @@ void execaction( int code)
                                    displaymap();
                                 }
       break;
-   case act_copyToClipboard: if ( getactfield() )
+   case act_copyToClipboard: if ( getactfield() ) {
                                  if ( getactfield()->vehicle ) {
                                     ClipBoard::Instance().clear();
                                     ClipBoard::Instance().addUnit( getactfield()->vehicle );
@@ -815,8 +816,9 @@ void execaction( int code)
                                        ClipBoard::Instance().clear();
                                        ClipBoard::Instance().addBuilding( getactfield()->building );
                                     }
+                             }
       break;
-   case act_cutToClipboard: if ( getactfield() )
+   case act_cutToClipboard: if ( getactfield() ) {
                               if ( getactfield()->vehicle ) {
                                  ClipBoard::Instance().clear();
                                  ClipBoard::Instance().addUnit( getactfield()->vehicle );
@@ -829,6 +831,7 @@ void execaction( int code)
                                     execaction ( act_deletebuilding );
                                     mapsaved = false;
                                  }
+                            }
       break;
    case act_saveClipboard:  saveClipboard();
       break;

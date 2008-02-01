@@ -420,7 +420,7 @@ void processFiles( const char* files, const char* orgWorkingDir )
    strncpy( buf, files, 10000 );
 
    char* filename = buf;
-   char* dirname = ".";
+   const char* dirname = ".";
 
    while ( strchr( buf, foreignPathDelimitter ))
       *strchr( buf, foreignPathDelimitter ) = pathdelimitter;

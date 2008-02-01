@@ -166,12 +166,13 @@ int         fieldAccessible( const tfield*        field,
                   return 0;
          }
          else   ///////   keine eigene vehicle
-           if ( terrainaccessible ( field, vehicle, uheight ) )
+           if ( terrainaccessible ( field, vehicle, uheight ) ) {
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
                else 
                  if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
                     return 1;
+           }
       }
       else {   // building
         if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight, attacked ))

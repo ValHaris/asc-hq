@@ -98,13 +98,13 @@ void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
    if ( fieldInfo.visibility >= visible_ago) {
       if ( fieldInfo.fld->vehicle || (fieldInfo.fld->building && fieldInfo.fld->bdt.test(cbbuildingentry) )) {
          ContainerBase* c = fieldInfo.fld->getContainer();
-         if ( hasCargo(c) ) 
+         if ( hasCargo(c) ) {
             if ( c->getOwner() == fieldInfo.playerView  ) 
                fieldInfo.surface.Blit( marker, pos );
             else
                if ( hasOwnCargo(c, fieldInfo.playerView  ))
                   fieldInfo.surface.Blit( marker, pos );
-         
+         }
       }
    }
 }

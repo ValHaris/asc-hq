@@ -2604,7 +2604,7 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
    if ( cursorstat )
       displaycursor();
 
-   if ( dx == -1 )
+   if ( dx == -1 ) {
       if ( cursor > 0 )
          cursor--;
       else
@@ -2613,7 +2613,9 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
             newcursorpos = prev;
             prev->cursor = prev->size - 1;
          }
-   if ( dx == 1 )
+   }
+   
+   if ( dx == 1 ) {
       if ( cursor < size-1 )
          cursor++;
       else
@@ -2622,8 +2624,9 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
             next->cursor = 0;
             newcursorpos = next;
          }
+   }
 
-   if ( dy == 1 )
+   if ( dy == 1 ) {
       if ( cursory < linenum ) {
          cursory++;
          searchcursorpos++;
@@ -2637,8 +2640,9 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
            next->searchcursorpos = 1;
            newcursorpos = next;
         }
+   }
 
-   if ( dy == -1 )
+   if ( dy == -1 ) {
       if ( cursory > 0 ) {
          cursory--;
          searchcursorpos++;
@@ -2652,6 +2656,7 @@ pparagraph tparagraph :: movecursor ( int dx, int dy )
            prev->searchcursorpos = 1;
            newcursorpos = prev;
         }
+   }
 
    newcursorpos->reflow( 0 );
    newcursorpos->checkcursorpos();

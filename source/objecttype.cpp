@@ -133,11 +133,12 @@ const Surface& ObjectType :: getPicture ( int i, int w ) const
 {
    w = getWeather(w);
 
-   if ( weatherPicture[w].images.size() <= i )
+   if ( weatherPicture[w].images.size() <= i ) {
       if ( i >= 64 && weatherPicture[w].images.size() > 34 )
          i = 34;
       else
          i = 0;
+   }
 
    if ( weatherPicture[w].bi3pic[i] > 0 )
       return GraphicSetManager::Instance().getPic(weatherPicture[w].bi3pic[i]);

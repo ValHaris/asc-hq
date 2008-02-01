@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:57 $
+    Update Date:      $Date: 2008-02-01 12:19:52 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgpropertyfield_checkbox.h,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -96,11 +96,12 @@ public:
 		return true;
 	};
 	void Reload() {
-		if ( myProperty )
+		if ( myProperty ) {
 			if ( bool(*myProperty) ^ switchInverted )
 				checkbox->SetPressed();
 			else
 				checkbox->SetUnpressed();
+      }
 	};
 };
 

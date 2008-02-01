@@ -485,12 +485,14 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
       char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
          for ( int x = w[0]+1; x > 0; x-- ) {
-            if ( *c != 255 )
-               if ( ((PointerSizedInt)(buf+y)) & 1 )
+            if ( *c != 255 ) {
+               if ( ((PointerSizedInt)(buf+y)) & 1 ) {
                   if ( *c >= 16  && *c < 24 )
                      *buf = *c + rotation;
                   else
                      *buf = *c;
+               }
+            }
             buf++;
             c++;
          }
@@ -2070,17 +2072,18 @@ void showtext ( const char* text, int x, int y, int textcol )
           int cx;
           for ( cx = characterwidth[ps]; cx > 0 && x < length; cx--) {
              int pix = *(characterpointer[ps]++);
-             if ( pix )
+             if ( pix ) {
                 if ( textcol != -1 )
                    *fb = textcol;
                 else
                    *fb = pix;
-             else
-                if ( activefontsettings.background != 255 ) 
+             } else
+                if ( activefontsettings.background != 255 ) {
                    if ( suppressbkgr )
                       suppressbkgr--;
                    else
                      *fb = activefontsettings.background;
+                }
              fb++;
              x++;
           } /* endfor */

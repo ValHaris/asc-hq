@@ -231,11 +231,12 @@ void          tdialogbox::redrawall ( void )
 void           tdialogbox::redrawall2 ( int xx1, int yy1, int xx2, int yy2 )
 {
    paint ();
-   if ( x1 > xx1 || y1 > yy1 || x1+xsize < xx2 || y1+ysize < yy2 )
+   if ( x1 > xx1 || y1 > yy1 || x1+xsize < xx2 || y1+ysize < yy2 ) {
       if ( prev )
          prev->redrawall2 ( xx1, yy1, xx2, yy2 ); 
       else
          repaintDisplay();
+   }
 }
 
 
@@ -814,12 +815,13 @@ void         tdialogbox::setscrollspeed(char        id , int  speed)
 
    pb = firstbutton; 
    while (pb != NULL) { 
-      if (pb->id == id) 
+      if (pb->id == id)  {
          if (pb->art == 5) {
             setscrollspeed( id + 1, speed );
             setscrollspeed( id + 2, speed );
          } else
             pb->scrollspeed = speed;
+      }
 
       pb = pb->next; 
    } 
@@ -895,7 +897,7 @@ void         tdialogbox::enablebutton(int         id)
       rahmen(true,x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2); 
       paintsurface( pb->x1 + 1, pb->y1 + 1, pb->x2 - 1, pb->y2 - 1 ); 
       if ( pb->text )  
-         if (pb->text[0] )
+         if (pb->text[0] ) {
             if ( pb->style != 3 ) {
                showtext3(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
             } else {
@@ -906,6 +908,7 @@ void         tdialogbox::enablebutton(int         id)
                cgo.on();
                npop ( activefontsettings.length );
             }
+         }
 
       if (pb->art == 1)  
          showtext2((char*) pb->data , x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -1037,7 +1040,7 @@ void         tdialogbox::disablebutton(int         id)
    if ((pb->art == 1) || (pb->art == 2)) {
       rectangle(x1 + pb->x1,y1 + pb->y1,x1 + pb->x2,y1 + pb->y2,disablecolor); 
       if (pb->text != NULL)  
-        if (pb->text[0] != 0)
+        if (pb->text[0] != 0) {
            if ( pb->style != 3 )
 
               showtext2(pb->text,x1 + pb->x1,y1 + pb->y1 - activefontsettings.font->height);
@@ -1047,6 +1050,7 @@ void         tdialogbox::disablebutton(int         id)
               showtext2(pb->text,x1 + pb->x2 + 10,y1 + pb->y1 );
               npop ( activefontsettings );
            }
+        }
 
       if (pb->art == 1) { 
          showtext2( (char*)pb->data,x1 + pb->x1 + 5,y1 + pb->y1 + 2);
@@ -2616,7 +2620,7 @@ void tviewtext::nextline ( int einzug, const char* txtptr )
 void tviewtext::displaysingleline ( char* t)
 {
    int twdth = gettextwdth ( t , NULL );
-   if ( tvt_dispactive )
+   if ( tvt_dispactive ) {
       if ( tvt_yp  >= tvt_starty ) {
          if ( tvt_yp <  tvt_starty + tvt_y2 - tvt_y1) {
             if ( tvt_yp + activefontsettings.height  + 1 >  tvt_starty + tvt_y2 - tvt_y1)
@@ -2642,6 +2646,7 @@ void tviewtext::displaysingleline ( char* t)
               npop ( *agmp );
               putimageprt ( tvt_x1 + tvt_xp, tvt_y1, tvt_x1 + tvt_xp + twdth, tvt_y1 + activefontsettings.height + ( tvt_yp - tvt_starty ), tvt_firstlinebuf, tvt_xp, tvt_starty - tvt_yp );
           }
+   }
 
    tvt_xp += twdth ;
 }

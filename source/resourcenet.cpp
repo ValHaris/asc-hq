@@ -226,7 +226,7 @@ void MapNetwork :: start ( int x, int y )
       } else  
          if ( globalsearch() == 0 ) {
             tfield* fld = actmap->getField ( x, y );
-            if ( fld )
+            if ( fld ) {
                if ( fld->building ) {
                   if ( pass == 1 )
                      checkbuilding( fld->building );
@@ -235,6 +235,7 @@ void MapNetwork :: start ( int x, int y )
 
                      if ( pass == 2 )
                         checkvehicle ( fld->vehicle );
+            }
          }
 }
 
