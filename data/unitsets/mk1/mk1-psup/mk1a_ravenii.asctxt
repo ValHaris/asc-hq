@@ -9,18 +9,19 @@ VehicleType {
    GuideSortHelp = 551 560 0 0 1 0 0 0 0 0
 
    Armor = 460
+   Features = 
+   Weight = 300
+
    Height = ground_level low_level_flight medium_level_flight high_level_flight
    Transportation ->* VehicleType.Transplane 
    Transportation.MaxLoadableMass = 400
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 4000
+      fuel = 6500
    } Tank
    FuelConsumption = 35
-   Abilities = fuel_transfer
    Movement = 0 0 0 55 130 140 130 0 
-   Weight = 300
    TerrainAccess ->* VehicleType.aircraft_terrain_road 
    HeightChangeMethod0 {
       movecost = 40

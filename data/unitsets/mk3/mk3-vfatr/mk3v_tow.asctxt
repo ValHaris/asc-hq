@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 503 504 0 0 3 0 0 0 0 0
    
    Armor -= 100
-   Abilities += paratrooper move_after_attack
+   Features += paratrooper move_after_attack
    Weight = 15
    Category = light_tracked_vehicle
 

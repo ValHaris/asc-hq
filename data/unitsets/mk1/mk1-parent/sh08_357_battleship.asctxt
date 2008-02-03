@@ -22,7 +22,7 @@ VehicleType {
    View = 60
    Jamming = 0
    WaitFortack = false
-   Abilities = MoveDuringReactionFire sonar self_repairing
+   Features = MoveDuringReactionFire sonar self_repairing
    Category = heavy_ship
    MaxSurvivableStorm = 250
    ResourceDrillingRange = 0

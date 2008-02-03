@@ -10,7 +10,7 @@ VehicleType {
               and you can't wait for the artillery to arrive? Call in the
               Rocket Tanks.]
    Picture = mk1v_hornetII.pcx
-InfoImage = hornet-ii.jpg
+   InfoImage = mk1v_hornetII.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 20

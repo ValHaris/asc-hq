@@ -9,7 +9,7 @@ VehicleType {
    WreckageObject = 472
    GuideSortHelp = 553 565 0 0 1 0 0 0 0 0
 
-   Abilities = fuel_transfer material_transfer repair_vehicle
+   Features = Repair_Facility
    Transportation ->* VehicleType.TransHeliTrain 
 
    Tank { 

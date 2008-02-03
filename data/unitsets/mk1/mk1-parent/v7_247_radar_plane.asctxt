@@ -13,7 +13,7 @@ VehicleType {
    Armor = 350
    Weight = 180
    View = 100
-   Abilities = satelliteview
+   Features = satelliteview
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight
    Tank { 

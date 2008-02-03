@@ -13,18 +13,18 @@ VehicleType {
    GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
 
    Armor -= 100
-   Abilities += material_transfer fuel_transfer
+   Features += ExternalMaterialTransfer
 
    Tank { 
       Energy = 0
-      Material = 5000
+      Material = 8000
    } Tank
    Movement = 0 0 0 75 0 0 0 0 
    TerrainAccess ->* VehicleType.offroad 
 
    Construction { 
       Objects = 181 2153
-      ObjectGroupsRemovable = 8 10 11 13 
+      ObjectGroupsRemovable = 8 10 11 13 21
    } Construction
 
    Weapons { 

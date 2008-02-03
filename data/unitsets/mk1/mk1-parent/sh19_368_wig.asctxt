@@ -14,7 +14,7 @@ VehicleType {
    View = 30
    Jamming = 19
    WaitFortack = false
-   Abilities = move_after_attack jam_only_own_field
+   Features = move_after_attack jam_only_own_field
    Category = hoovercraft
    MaxSurvivableStorm = 160
    ResourceDrillingRange = 0

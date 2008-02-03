@@ -1,0 +1,5 @@
+Techadapter {
+   ; Panzerzug
+   Name = 600
+   TechnologiesRequired = 600
+} TechAdapter

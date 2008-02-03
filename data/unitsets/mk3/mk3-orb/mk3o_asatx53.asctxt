@@ -9,7 +9,7 @@ VehicleType {
 
    Armor -= 20
    Jamming = 11
-   Abilities += Jam_Only_Own_field
+   Features += Jam_Only_Own_field
 
    Tank { 
       Energy = 0

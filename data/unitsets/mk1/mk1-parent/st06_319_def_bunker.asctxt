@@ -19,7 +19,7 @@ VehicleType {
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
    } Transportation
-   Abilities = repair_vehicle material_transfer fuel_transfer
+   Features = Repair_Facility
    Weight = 11500
 
    Tank { 

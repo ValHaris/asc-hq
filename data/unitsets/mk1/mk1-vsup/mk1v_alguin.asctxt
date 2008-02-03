@@ -12,7 +12,7 @@ VehicleType {
    GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
 
    Armor -= 50
-   Abilities += fuel_transfer 
+   Features += ExternalFuelTransfer 
 
    Tank.fuel = 20000
 

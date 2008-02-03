@@ -11,7 +11,6 @@ VehicleType {
 
    Armor += 400
    Transportation ->* VehicleType.TransTrooperArmor 
-   Abilities += repair_vehicle
    Weight += 40
 
    Tank { 

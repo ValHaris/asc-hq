@@ -10,7 +10,7 @@ VehicleType {
 
    Armor = 380
    Height = deep_submerged submerged ground_level 
-   Abilities += sonar
+   Features += sonar
    Movement = 44 44 0 40 0 0 0 0 
    MaxSurvivableStorm = 170
    TerrainAccess { 

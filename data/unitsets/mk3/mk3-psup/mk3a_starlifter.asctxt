@@ -18,7 +18,7 @@ VehicleType {
       fuel = 7000
    } Tank
    FuelConsumption = 24
-   Abilities = material_transfer
+   Features = ExternalMaterialTransfer
    Movement = 0 0 0 65 160 160 0 0 
    Weight = 250
 } VehicleType

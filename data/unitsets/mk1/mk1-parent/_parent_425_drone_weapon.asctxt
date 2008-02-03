@@ -11,7 +11,7 @@ VehicleType {
    Armor = 220
    View = 30
    wreckageobject = 400 300
-   Abilities += paratrooper no_midair_refuel 
+   Features += paratrooper no_midair_refuel 
    Weight = 20
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight 

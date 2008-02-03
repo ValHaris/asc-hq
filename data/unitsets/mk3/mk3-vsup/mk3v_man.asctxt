@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
    Armor -= 100
-   Abilities += fuel_transfer 
+   Features += ExternalFuelTransfer 
 
    Tank { 
       Energy = 0

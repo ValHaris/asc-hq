@@ -13,7 +13,7 @@ VehicleType {
    View = 30
    Jamming = 0
    WaitFortack = false
-   Abilities = sonar
+   Features = sonar
    Category = medium_ship
    MaxSurvivableStorm = 210
    ResourceDrillingRange = 0

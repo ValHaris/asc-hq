@@ -8,5 +8,5 @@ VehicleType {
    picture = MK3b_kornuta.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Abilities += paratrooper
+   Features += paratrooper
 } VehicleType

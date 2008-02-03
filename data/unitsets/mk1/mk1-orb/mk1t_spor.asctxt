@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 509 600 0 0 1 0 0 0 0 0
 
    WaitFortack = true
-   Abilities += move_after_attack
+   Features += move_after_attack
    Weight = 250
 
    Tank { 

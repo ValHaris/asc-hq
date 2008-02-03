@@ -11,7 +11,7 @@ VehicleType {
    Armor = 290
    Weight = 160
    View = 50
-   abilities = move_after_attack no_midair_refuel
+   Features = move_after_attack no_midair_refuel
    Transportation ->* VehicleType.TransHeliTrooper 
 
    Tank { 

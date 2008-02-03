@@ -20,7 +20,7 @@
       fuel = 5000
    } Tank
    FuelConsumption = 25
-   Abilities = MoveDuringReactionFire
+   Features = MoveDuringReactionFire
    Movement = 0 0 50 0 0 0 0 0 
    TerrainAccess ->* VehicleType.bigship_terrain 
    Category = heavy_ship

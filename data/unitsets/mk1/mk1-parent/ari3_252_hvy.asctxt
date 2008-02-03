@@ -13,7 +13,7 @@ VehicleType {
    Armor = 380
    Weight = 45
    WaitFortack = true
-   Abilities += move_after_attack
+   Features += move_after_attack
    Tank { 
       Energy = 0
       Material = 0

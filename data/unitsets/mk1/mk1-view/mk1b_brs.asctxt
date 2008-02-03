@@ -8,8 +8,8 @@ VehicleType {
 Gegenüber dem mobilen ORACLE besitzt das BRS eine bessere Aufklärungsreichweite
 und aufgrund der weitaus besseren Panzerung eine höhere Lebenserwartung.
 ]
-   Picture = Mk1b_BRS.pcx
-InfoImage = brs-v2.jpg
+   Picture = mk1b_brs.pcx
+   InfoImage = mk1b_brs.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
 } VehicleType

@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 339 513 561 0 0 0 0 0 0 0
 
    Armor = 360
-   Abilities += cruiserlanding
+   Features += cruiserlanding
    Weight = 90
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight

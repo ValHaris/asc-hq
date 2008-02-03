@@ -10,7 +10,7 @@ VehicleType {
 
    jamming += 11
    Transportation ->* VehicleType.TransCruiserSmall 
-   Abilities += jam_only_own_field fuel_transfer material_transfer repair_vehicle
+   Features += jam_only_own_field Repair_Facility
 
    Weapons { 
       Initiative = 0

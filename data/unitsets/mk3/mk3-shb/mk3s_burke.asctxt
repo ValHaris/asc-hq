@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
 
    Armor -= 100
-   Abilities += sonar material_transfer
+   Features += sonar
    Transportation ->* VehicleType.TransCruiser 
 
    Weapons { 

@@ -17,7 +17,7 @@ VehicleType {
       fuel = 2733
    } Tank
    FuelConsumption = 17
-   Abilities = sonar
+   Features = sonar
    Movement = 70 70 70 0 0 0 0 0 
    Category = medium_ship
    MaxSurvivableStorm = 210

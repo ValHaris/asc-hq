@@ -15,7 +15,7 @@ VehicleType {
    View += 20
    Jamming = 11
    Transportation ->* VehicleType.TransLowTrooper 
-   Abilities += move_after_attack jam_only_own_field
+   Features += move_after_attack jam_only_own_field
    Category = light_wheeled_vehicle
 
    FuelConsumption = 10

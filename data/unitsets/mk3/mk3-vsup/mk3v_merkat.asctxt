@@ -14,7 +14,7 @@ VehicleType {
 
    Armor -= 100
    View = 40
-   Abilities += view_mines immune_to_mines
+   Features += mineview immune_to_mines
    Category = light_wheeled_vehicle
    Weight = 15
    waitfortack = true

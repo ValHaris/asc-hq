@@ -11,7 +11,7 @@ VehicleType {
    Armor -= 50
    Jamming = 90
    Transportation ->* VehicleType.TransShipSmall 
-   Abilities += fuel_transfer material_transfer jam_only_own_field
+   Features += ExternalFuelTransfer ExternalMaterialTransfer jam_only_own_field
 
    Tank { 
       Material = 5000

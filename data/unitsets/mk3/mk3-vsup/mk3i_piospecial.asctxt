@@ -11,7 +11,7 @@ VehicleType {
 
    Armor = 250
    Transportation ->* VehicleType.TransDevice 
-   Abilities = mine_layer view_mines construct_vehicles repair_vehicle conquer_buildings material_transfer fuel_transfer self_repairing automatic_resource_searching jam_only_own_field
+   Features = mine_layer mineview construct_vehicles ExternalRepair conquer_buildings self_repairing automatic_resource_searching jam_only_own_field
    ResourceDrillingRange = 1
    SelfRepairRate = 50
    Weight = 3

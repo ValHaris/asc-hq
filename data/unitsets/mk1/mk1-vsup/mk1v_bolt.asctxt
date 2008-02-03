@@ -11,7 +11,7 @@ VehicleType {
    WreckageObject = 430
    GuideSortHelp = 525 0 0 0 1 0 0 0 0 0
 
-   Abilities += resource_converter 
+   Features += Matter_Converter 
    Armor -= 100
    Category = heavy_wheeled_vehicle
 

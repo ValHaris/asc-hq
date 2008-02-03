@@ -22,7 +22,7 @@
       fuel = 2000
    } Tank
    FuelConsumption = 20
-   Abilities = move_after_attack no_reactionfire
+   Features = move_after_attack no_reactionfire
    Movement = 0 0 0 65 180 180 0 0 
    TerrainAccess ->* VehicleType.aircraft_terrain 
    Category = heavy_aircraft

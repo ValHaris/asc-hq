@@ -13,7 +13,7 @@ VehicleType {
       Material = 2000
       fuel = 6000
    } Tank
-   Abilities += fuel_transfer repair_vehicle
+   Features += Repair_Facility
 
    Weapons { 
       Initiative = 0

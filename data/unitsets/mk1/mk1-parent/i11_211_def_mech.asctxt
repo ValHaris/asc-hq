@@ -10,7 +10,7 @@ VehicleType {
 
    Armor = 440
    Weight += 1
-   Abilities += moveduringreactionfire
+   Features += moveduringreactionfire
    Movement -= 0 0 0 10 0 0 0 0 
    Waitfortack = true
    Weapons { 

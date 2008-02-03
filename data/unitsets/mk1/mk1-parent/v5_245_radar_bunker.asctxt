@@ -10,7 +10,7 @@ VehicleType {
 
    Armor -= 200
    View = 105
-   Abilities += satelliteview
+   Features += satelliteview ManualSelfDestruct
 
    TerrainAccess ->* VehicleType.turret_lowland 
 

@@ -10,7 +10,7 @@ VehicleType {
 
    Armor = 350
    Movement = 0 0 0 40 0 0 0 0 
-   Abilities += MoveDuringReactionFire
+   Features += MoveDuringReactionFire
 
    Weapons { 
       Initiative = 0

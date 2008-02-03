@@ -12,11 +12,12 @@ Die geringe Sichtweite dieser Einheit macht zusätzliche Aufklärer
 wie den ORACLE, GRS erforderlich.
  ]
    Picture = MK1b_samturret.pcx
-InfoImage = samturret.jpg
+   InfoImage = mk1b_samturret.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 50
    Weight = 290
+   Features += ManualSelfDestruct
 
    Movement = 0 0 0 15 0 0 0 0 
    TerrainAccess ->* VehicleType.Turret_only 

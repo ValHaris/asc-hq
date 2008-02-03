@@ -9,6 +9,8 @@ VehicleType {
 
    Armor -= 100
    TerrainAccess ->* VehicleType.Turret_ditch 
+   
+   Features += ManualSelfDestruct
 
 
    Weapons { 

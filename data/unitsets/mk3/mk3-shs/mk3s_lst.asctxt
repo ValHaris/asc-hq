@@ -8,7 +8,7 @@ VehicleType {
    picture = MK3s_lst.png
    GuideSortHelp = 553 554 0 0 3 0 0 0 0 0
 
-   Abilities = construct_vehicles repair_vehicle self_repairing fuel_transfer material_transfer manual_resource_drilling construct_specific_buildings 
+   Features = construct_vehicles ExternalRepair self_repairing automatic_resource_searching construct_specific_buildings 
    ResourceDrillingRange = 4
    SelfRepairRate = 10
    Transportation ->* VehicleType.TransTurretBig2

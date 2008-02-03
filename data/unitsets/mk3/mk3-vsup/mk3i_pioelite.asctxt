@@ -13,7 +13,7 @@ VehicleType {
 
    Armor = 250
    Transportation ->* VehicleType.TransTurretBig 
-   Abilities += construct_vehicles construct_specific_buildings  material_transfer fuel_transfer
+   Features += construct_vehicles construct_specific_buildings
    Weight = 5
 
    Tank { 
@@ -24,7 +24,7 @@ VehicleType {
    Movement = 0 0 0 49 0 0 0 0 
 
    Construction { 
-      Buildings = 26 29
+      Buildings = 26 29 35-37
       Vehicles = 574 579 617 622 625
       Objects = 10 2097
       ObjectsRemovable = 988 2097

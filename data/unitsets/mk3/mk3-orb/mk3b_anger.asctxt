@@ -16,7 +16,7 @@ VehicleType {
       fuel = 100
    } Tank
    FuelConsumption = 20
-   Abilities = moveduringreactionfire
+   Features = moveduringreactionfire
    Weight = 190
    TerrainAccess ->* VehicleType.turret_all
    Weapons { 

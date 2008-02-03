@@ -10,7 +10,7 @@ VehicleType {
 
 
    Jamming = 44
-   Abilities = 
+   Features = 
 
    TerrainAccess ->* Vehicletype.sat_terrain 
    Weapons { 

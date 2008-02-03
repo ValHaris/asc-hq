@@ -13,7 +13,7 @@ VehicleType {
    GuideSortHelp = 556 0 0 0 1 0 0 0 0 0
 
    Armor -= 100
-   Abilities += fuel_transfer material_transfer
+   Features += 
 
    Tank { 
       Material = 4000

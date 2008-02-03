@@ -18,7 +18,7 @@ VehicleType {
       fuel = 1
    } Tank
    FuelConsumption = 0
-   Abilities = jam_only_own_field onlyTransMove
+   Features = jam_only_own_field onlyTransMove
    Movement = 0 0 0 17 0 0 0 0 
    Category = default
    MaxSurvivableStorm = 200

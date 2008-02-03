@@ -8,6 +8,6 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
 
    Jamming += 10
-   Abilities += paratrooper
+   Features += paratrooper
 
 } VehicleType

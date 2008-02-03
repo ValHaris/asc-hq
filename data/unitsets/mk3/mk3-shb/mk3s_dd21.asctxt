@@ -10,7 +10,7 @@ VehicleType {
    Armor -= 50
    jamming = 65
 
-   Abilities += sonar jam_only_own_field
+   Features += sonar jam_only_own_field
 
    Weapons { 
       Initiative = 0

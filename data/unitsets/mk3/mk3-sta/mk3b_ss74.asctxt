@@ -8,6 +8,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100
+   Features += ManualSelfDestruct
 
    Weapons {
       Weapon0 ->* VehicleType.type_large_missile 

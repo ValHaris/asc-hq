@@ -12,7 +12,7 @@ VehicleType {
    Movement = 0 0 0 39 0 0 0 39
    Tank.Fuel = 7000
    Tank.Material = 5000 
-   Abilities += repair_vehicle
+   Features += ExternalRepair
 
    Weapons { 
       Initiative = 0

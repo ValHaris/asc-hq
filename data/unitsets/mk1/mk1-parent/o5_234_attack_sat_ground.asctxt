@@ -10,7 +10,7 @@ VehicleType {
 
 
    Armor += 50
-   Abilities += MoveDuringReactionFire Sonar
+   Features += MoveDuringReactionFire Sonar
 
    TerrainAccess ->* VehicleType.sat_terrain 
 

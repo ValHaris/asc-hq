@@ -15,7 +15,7 @@ VehicleType {
    GuideSortHelp = 525 0 0 0 1 0 0 0 0 0
 
    View += 10
-   Abilities += manual_resource_drilling 
+   Features += automatic_resource_searching 
    ResourceDrillingRange = 8
 
    TerrainAccess ->* VehicleType.offroad 

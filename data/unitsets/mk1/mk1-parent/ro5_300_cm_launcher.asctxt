@@ -13,7 +13,7 @@ VehicleType {
    View = 20
    Jamming = 30
    WaitFortack = true
-   Abilities += no_reactionfire jam_only_own_field
+   Features += no_reactionfire jam_only_own_field
    Category = light_wheeled_vehicle
    Weight = 30
 

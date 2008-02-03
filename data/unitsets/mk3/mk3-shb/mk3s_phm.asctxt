@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 518 419 0 0 3 0 0 0 0 0
 
    Armor -= 100
-   Abilities += move_after_attack
+   Features += move_after_attack
 
    Height = floating ground_level 
    Tank { 

@@ -14,7 +14,7 @@ VehicleType {
 
    Armor += 50
    Weight += 5
-   Abilities += repair_vehicle fuel_transfer
+   Features += ExternalRepair
 
    Transportation ->* VehicleType.TransLowTrooper3 
    Tank { 

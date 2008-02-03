@@ -14,7 +14,7 @@ VehicleType {
    View = 40
    Jamming = 0
    WaitFortack = false
-   Abilities = MoveDuringReactionFire
+   Features = MoveDuringReactionFire
    Category = medium_ship
    MaxSurvivableStorm = 210
    ResourceDrillingRange = 0

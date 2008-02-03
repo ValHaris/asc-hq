@@ -11,7 +11,7 @@ VehicleType {
    Armor = 450
    View = 30
    Jamming = 0
-   Abilities = leaves_tracks 
+   Features = leaves_tracks 
    Category = medium_tracked_vehicle
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0

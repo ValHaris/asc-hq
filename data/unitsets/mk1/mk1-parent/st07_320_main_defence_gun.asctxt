@@ -13,7 +13,7 @@ VehicleType {
 
 
    Weight = 430
-   Abilities += moveduringreactionfire
+   Features += moveduringreactionfire
 
    TerrainAccess ->* VehicleType.Turret_only 
 

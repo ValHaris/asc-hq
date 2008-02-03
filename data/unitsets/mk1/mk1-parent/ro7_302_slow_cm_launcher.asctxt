@@ -13,7 +13,7 @@ VehicleType {
    Weight = 210
    View = 20
    WaitFortack = true
-   Abilities = no_reactionfire
+   Features = no_reactionfire
 
    Tank { 
       Energy = 0

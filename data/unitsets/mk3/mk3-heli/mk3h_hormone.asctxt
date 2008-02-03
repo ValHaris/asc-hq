@@ -15,7 +15,7 @@ It is able to quickly insert personell into the battle when operating from cruis
 
    Armor = 350
    Weight = 30
-   Abilities += sonar 
+   Features += sonar 
 
    Transportation ->* VehicleType.TransHeliTrooper 
    Transportation.EntranceSystemNum = 4

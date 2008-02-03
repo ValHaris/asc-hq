@@ -2,9 +2,15 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 __________________
+02.02.2008 (GAMER)
+-Umbau Abilities -> Features
+-Rückbau Interner Turretbau Vesuvius/MBV
+-Forrester baut Oelpflanzen ab.
+-MBV baut Farm, Kristallfabrik, Holzfällerlager
+-default radfahrzeug +10 Movement
+__________________
 04.11.2007 (GAMER)
 -Ant verliert Baufähigkeit strong Pipeline
--
 __________________
 04.10.2007 (GAMER)
 -Dive_mech_parent Height + deep_submerged, Torpedo schießt nur noch gleiche Höhe + 1 nach oben

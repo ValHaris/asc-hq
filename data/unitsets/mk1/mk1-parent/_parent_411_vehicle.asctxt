@@ -17,7 +17,7 @@ VehicleType {
       fuel = 1000
    } Tank
    FuelConsumption = 12
-   Abilities = leaves_tracks 
+   Features = leaves_tracks 
    Movement = 0 0 0 70 0 0 0 0 
    TerrainAccess ->* VehicleType.wheeled 
    Category = medium_wheeled_vehicle

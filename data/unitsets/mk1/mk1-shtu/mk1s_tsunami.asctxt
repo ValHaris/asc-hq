@@ -13,7 +13,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Jamming = 15
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field
 
    Weapons { 
       Initiative = 40

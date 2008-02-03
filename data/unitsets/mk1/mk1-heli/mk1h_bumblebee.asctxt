@@ -14,7 +14,7 @@ VehicleType {
    Armor += 20
    Transportation.EntranceSystemNum = 5
    Transportation.EntranceSystem4 ->* VehicleType.ParaDevice
-   Abilities += sonar
+   Features += sonar
 
    Weapons { 
       Initiative = 0

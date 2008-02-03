@@ -18,7 +18,6 @@ VehicleType {
       EntranceSystem0 ->* VehicleType.GrIO
       CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
    } Transportation
-   Abilities += material_transfer fuel_transfer
    Weight = 11500
 
    Tank { 

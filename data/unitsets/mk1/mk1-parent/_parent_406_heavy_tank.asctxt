@@ -18,7 +18,7 @@ VehicleType {
       fuel = 1200
    } Tank
    FuelConsumption = 16
-   Abilities = leaves_tracks 
+   Features = leaves_tracks 
    Movement = 0 0 0 50 0 0 0 0 
    Category = heavy_tracked_vehicle
    MaxSurvivableStorm = 255

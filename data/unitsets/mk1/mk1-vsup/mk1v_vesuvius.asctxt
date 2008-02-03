@@ -13,8 +13,8 @@ VehicleType {
    GuideSortHelp = 554 0 0 0 1 0 0 0 0 0
 
    Armor -= 100
-   Abilities =
-   Features = Vehicle_Production construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization
+   Features =
+   Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization
 
    Transportation ->* VehicleType.TransTurretBig 
 
@@ -26,15 +26,11 @@ VehicleType {
 
    Construction { 
       Buildings = 1 2 4-7 10-23 30-32
-      Vehicles =  49 93
-      Vehiclesinternally = 61 56 76 95 104 110
+      Vehicles =  49 93 61 56 76 95 104 110
+      Vehiclesinternally =
       Objects = 44 2098 2097
       ObjectsRemovable = 2097
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 11 13
-      ProductionEfficiency = [   0   0   1
-                                 0   1   0
-                                 0   0   1 ]
-
    } Construction
    Weapons { 
       Initiative = 0

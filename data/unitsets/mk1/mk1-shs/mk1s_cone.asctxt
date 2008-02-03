@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 0 0 0 0 1 562 0 0 0 0
 
    Armor += 100
-   Abilities += icebreaker mine_layer view_mines
+   Features += icebreaker mine_layer mineview
    MaxSurvivableStorm = 255
 
    TerrainAccess ->* VehicleType.icebreaker_terrain 

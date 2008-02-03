@@ -15,7 +15,7 @@ VehicleType {
 
    Armor = 370
    View = 30
-   Abilities += sonar 
+   Features += sonar 
    Weight = 70
 
    Tank { 

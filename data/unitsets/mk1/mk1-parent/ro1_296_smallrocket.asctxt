@@ -17,7 +17,7 @@ VehicleType {
 
    Armor = 480
    Weight = 50
-   Abilities += no_reactionfire
+   Features += no_reactionfire
 
    Tank { 
       Energy = 0

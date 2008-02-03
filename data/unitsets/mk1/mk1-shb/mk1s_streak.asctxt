@@ -8,7 +8,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
 
    Armor += 100
-   Abilities += sonar
+   Features += sonar
 
    Weapons { 
       Initiative = 0

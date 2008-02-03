@@ -14,7 +14,7 @@ VehicleType {
    View = 30
    Jamming = 0
    WaitFortack = false
-   Abilities =
+   Features =
    Category = hoovercraft
    MaxSurvivableStorm = 160
    ResourceDrillingRange = 0

@@ -13,7 +13,7 @@ VehicleType {
 
    View = 120
    ResourceDrillingRange = 5
-   Abilities += automatic_resource_searching
+   Features += automatic_resource_searching ManualSelfDestruct
 
    TerrainAccess ->* Vehicletype.sat_terrain 
 

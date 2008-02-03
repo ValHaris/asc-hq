@@ -30,7 +30,7 @@ VehicleType {
       Weapon4 ->* VehicleType.AmmoMine 
       Weapon4.Ammo = 30
 
-      Weapon5 ->* VehicleType.ServiceGroundTr
+      Weapon5 ->* VehicleType.ServiceGround
       
       Weapon6 ->* VehicleType.AmmoCM 
       Weapon6.Ammo = 4

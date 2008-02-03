@@ -1714,20 +1714,17 @@
       HitAccuracy ->* VehicleType.HitAcc
       HitAccuracy.0 = 100
 
-      canthit = Trooper
    } ServiceGround
 
    ServiceSpSub ->* VehicleType.ServiceGround
    ServiceSpSub.targets = deep_submerged submerged floating ground_level 
    ServiceSpSub.shotFrom = deep_submerged submerged floating ground_level 
 
-   ServiceGroundTr ->* VehicleType.ServiceGround
-   ServiceGroundTr.cantHit =
-
    ServiceTurret ->* VehicleType.ServiceGround
    ServiceTurret.cantHit = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
 
    ServiceRepGr ->* VehicleType.ServiceGround
+   ServiceRepGr.canthit = Trooper
 
    ServiceAir ->* VehicleType.ServiceGround 
    ServiceAir.targets = floating ground_level medium_level_flight

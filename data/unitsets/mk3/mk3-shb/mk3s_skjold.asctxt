@@ -11,7 +11,7 @@ VehicleType {
    Armor -= 50
    jamming = 39
    Transportation ->* VehicleType.TransLowTrooper2
-   Abilities += fuel_transfer material_transfer jam_only_own_field move_after_attack
+   Features += jam_only_own_field move_after_attack
 
    Tank { 
       Material = 1000

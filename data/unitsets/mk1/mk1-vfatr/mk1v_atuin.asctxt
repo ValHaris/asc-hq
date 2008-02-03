@@ -21,7 +21,7 @@ VehicleType {
    Tank { 
       Material = 13000
    } Tank
-   Abilities += automatic_resource_searching material_transfer
+   Features += automatic_resource_searching ExternalMaterialTransfer
    Movement = 0 0 0 60 0 0 0 0 
    Category = medium_wheeled_vehicle
    ResourceDrillingRange = 1

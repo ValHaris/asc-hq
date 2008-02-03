@@ -15,7 +15,7 @@ The Chinnok is a heavy transport and support helicopter. It is defenceless under
 
    Armor = 360
    Transportation ->* VehicleType.TransHeliHvy 
-   Abilities += fuel_transfer material_transfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer
 
    Tank { 
       Energy = 0

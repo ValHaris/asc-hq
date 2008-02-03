@@ -14,7 +14,7 @@ VehicleType {
    View = 70
    Jamming = 0
    WaitFortack = false
-   Abilities = MoveDuringReactionFire repair_vehicle fuel_transfer material_transfer
+   Features = MoveDuringReactionFire Repair_Facility
    Category = heavy_ship
    MaxSurvivableStorm = 240
    ResourceDrillingRange = 0

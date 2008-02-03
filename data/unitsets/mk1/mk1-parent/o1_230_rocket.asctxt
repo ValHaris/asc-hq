@@ -36,7 +36,7 @@ VehicleType {
       fuel = 300
    } Tank
    FuelConsumption = 100
-   Abilities = no_midair_refuel  
+   Features = no_midair_refuel  
    Movement = 0 0 0 20 0 0 0  
    Category = heavy_aircraft
    MaxSurvivableStorm = 0

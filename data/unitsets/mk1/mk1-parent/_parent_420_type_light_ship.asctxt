@@ -18,7 +18,7 @@ VehicleType {
       fuel = 2733
    } Tank
    FuelConsumption = 17
-   Abilities = MoveDuringReactionFire
+   Features = MoveDuringReactionFire
    Movement = 0 0 81 0 0 0 0 0 
    Category = light_ship
    MaxSurvivableStorm = 180

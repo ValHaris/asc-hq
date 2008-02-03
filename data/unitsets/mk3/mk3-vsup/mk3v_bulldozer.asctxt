@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 556 0 0 0 3 0 0 0 0 0
 
    Armor = 380
-   Abilities += immune_to_mines view_mines mine_layer material_transfer
+   Features += immune_to_mines mineview mine_layer ExternalMaterialTransfer
    Weight = 53
 
    Tank { 
@@ -25,7 +25,7 @@ VehicleType {
       Buildings = 
       Vehicles = 
       Objects = 1 9 10 45
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
    } Construction
 
    Weapons { 

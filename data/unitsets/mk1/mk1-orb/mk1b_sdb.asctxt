@@ -7,8 +7,10 @@ VehicleType {
    Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
    spaceships and spacestations.]
    Picture = MK1b_SDB.pcx
-InfoImage = sdb.jpg
+   InfoImage = mk1b_sdb.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Features += ManualSelfDestruct
 
    Weapons { 
       Weapon0.Punch@MaxRange -= 5

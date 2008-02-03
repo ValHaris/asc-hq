@@ -17,7 +17,7 @@ VehicleType {
       fuel = 750
    } Tank
    FuelConsumption = 25
-   Abilities += MoveDuringReactionFire
+   Features += MoveDuringReactionFire
    Movement = 0 0 0 20 0 0 0 0 
    Category = Medium_wheeled_vehicle
    Weight = 20

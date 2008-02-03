@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 501 201 562 0 0 0 0 0 0 0
 
    Armor = 180
-   Abilities += mine_layer view_mines
+   Features += mine_layer mineview
    Movement = 0 0 0 48 0 0 0 0 
    Weapons { 
       Initiative = 0

@@ -12,7 +12,7 @@ of a launcher with 2 ready to fire missiles.]
    Armor -= 200
    Weight = 190
    Jamming = 21
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field ManualSelfDestruct
 
    TerrainAccess ->* VehicleType.turret_ditch 
 

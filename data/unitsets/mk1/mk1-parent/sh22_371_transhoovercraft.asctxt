@@ -13,7 +13,7 @@ VehicleType {
    View = 30
    Jamming = 0
    WaitFortack = false
-   Abilities = fuel_transfer material_transfer moveduringreactionfire
+   Features = moveduringreactionfire
    Category = hoovercraft
    MaxSurvivableStorm = 140
    ResourceDrillingRange = 0

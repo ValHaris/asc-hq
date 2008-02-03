@@ -13,7 +13,7 @@ VehicleType {
 
    Armor -= 50
    Transportation ->* VehicleType.TransLowTrooper3 
-   Abilities += manual_resource_drilling
+   Features += automatic_resource_searching
    MaxSurvivableStorm = 150
    ResourceDrillingRange = 5
 

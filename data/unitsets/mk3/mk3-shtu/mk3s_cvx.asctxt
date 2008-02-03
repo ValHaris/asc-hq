@@ -5,7 +5,7 @@ VehicleType {
    
    Description =  aircraft carrier
    picture = MK3s_cvx.png
-   Abilities += sonar
+   Features += sonar
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 150

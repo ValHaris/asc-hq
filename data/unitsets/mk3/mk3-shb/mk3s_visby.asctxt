@@ -9,7 +9,7 @@ VehicleType {
 
    jamming = 61
    Transportation ->* VehicleType.TransCruiserSmall 
-   Abilities += jam_only_own_field sonar
+   Features += jam_only_own_field sonar
 
    Tank { 
       Material = 2000

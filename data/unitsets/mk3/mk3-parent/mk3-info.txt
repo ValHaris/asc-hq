@@ -92,6 +92,10 @@ ID 593/422 Notstrom         Generator
 ID 619/335 Merkat           minensucher
 ID 620/335 Volcano          Minenleger
 
+--Train--
+ID 570/412 ICCE
+ID 571/412 ICSE
+ID 600/412 Panzerzug
 
 --orbital--
 ID 511/238 SDI              space defence system
@@ -173,8 +177,6 @@ Ground
 
 Trains
 
-ID 570 (   ) (   ) ICCE
-ID 571 (   ) (   ) ICSE
 
 unbesetzt
 ID 591 Ceti

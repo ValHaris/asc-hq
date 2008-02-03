@@ -11,7 +11,7 @@ VehicleType {
    Armor = 400
    View = 30
    Jamming = 0
-   Abilities = leaves_tracks 
+   Features = leaves_tracks 
    Category = medium_wheeled_vehicle
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
@@ -25,7 +25,7 @@ VehicleType {
       fuel = 2000
    } Tank
    FuelConsumption = 14
-   Movement = 0 0 0 80 0 0 0 0 
+   Movement = 0 0 0 90 0 0 0 0 
    TerrainAccess ->* VehicleType.wheeled 
 
    Construction { 

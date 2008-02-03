@@ -10,7 +10,7 @@ VehicleType {
 
    jamming = 11
    Transportation ->* VehicleType.TransCruiser 
-   Abilities += jam_only_own_field 
+   Features += jam_only_own_field 
 
    Movement += 0 0 10 0 0 0 0 0
 

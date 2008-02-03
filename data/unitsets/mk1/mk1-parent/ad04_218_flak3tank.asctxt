@@ -12,7 +12,7 @@ Im Rudel eingesetzt können diese äusserst schnellen Comet Flakpanzer eine echte 
 
 
    Armor = 400
-   Abilities += MoveDuringReactionFire
+   Features += MoveDuringReactionFire
    Weight = 35
 
    Movement = 0 0 0 72 0 0 0 0 

@@ -8,7 +8,7 @@ VehicleType {
    WreckageObject = 458
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Abilities += no_reactionfire
+   Features += no_reactionfire
    Weight += 100
    Movement -= 0 0 0 20 0 0 0 0 
 

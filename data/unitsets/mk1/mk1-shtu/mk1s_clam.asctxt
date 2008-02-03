@@ -11,7 +11,7 @@ VehicleType {
 
    Armor += 100
    Transportation ->* VehicleType.TransSubmarine 
-   Abilities += material_transfer fuel_transfer mine_layer view_mines
+   Features += ExternalMaterialTransfer ExternalFuelTransfer mine_layer mineview
 
    Tank { 
       Energy = 0

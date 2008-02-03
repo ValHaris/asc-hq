@@ -16,7 +16,7 @@ VehicleType {
    Category = light_tracked_vehicle
    Armor -= 100
    Transportation ->* VehicleType.TransLowTrooper
-   Abilities += paratrooper move_after_attack
+   Features += paratrooper move_after_attack
    Weight = 15
 
    Tank.fuel = 1000

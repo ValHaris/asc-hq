@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 221 508 0 0 0 0 0 0 0 0
 
    WaitFortack = true
-   Abilities += MoveDuringReactionFire
+   Features += MoveDuringReactionFire
    Tank { 
       Energy = 0
       Material = 0

@@ -10,7 +10,7 @@ VehicleType {
 
    Armor -= 50
    Transportation ->* VehicleType.TransBigTrooper 
-   Abilities += fuel_transfer material_transfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer
 
    Tank { 
       Energy = 0

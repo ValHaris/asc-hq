@@ -11,7 +11,7 @@
    View = 40
    Jamming = 0
    WaitFortack = true
-   Abilities = onlyTransMove
+   Features = onlyTransMove
 
    Height = ground_level 
    Tank { 

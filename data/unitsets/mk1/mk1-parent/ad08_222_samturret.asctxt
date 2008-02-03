@@ -8,7 +8,7 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 222 508 0 0 0 0 0 0 0 0
 
-   Abilities += MoveDuringReactionFire
+   Features += MoveDuringReactionFire
    view = 50
    Picture = b_samturret.pcx
    Weight = 290

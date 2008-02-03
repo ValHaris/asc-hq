@@ -21,7 +21,7 @@
       fuel = 2000
    } Tank
    FuelConsumption = 15
-   Abilities = 
+   Features = 
    Movement = 0 0 0 100 0 0 0 0 
    Category = rail_vehicle
    MaxSurvivableStorm = 200

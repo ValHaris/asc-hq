@@ -13,7 +13,7 @@ VehicleType {
    Weight = 320
    View = 10
    WaitFortack = true
-   Abilities += no_reactionfire
+   Features += no_reactionfire
    TerrainAccess ->* VehicleType.Turret_only 
 
    Weapons { 

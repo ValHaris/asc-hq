@@ -18,7 +18,7 @@
       fuel = 0
    } Tank
    FuelConsumption = 0
-   Abilities = 
+   Features = 
    Movement = 0 0 0 0 0 0 0 0 
    Category = building|turret|object
    MaxSurvivableStorm = 255

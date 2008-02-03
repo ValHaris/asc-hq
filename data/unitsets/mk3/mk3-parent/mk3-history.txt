@@ -3,6 +3,17 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+03.02.2008 (GAMER)
+Neu:
+-Panzerzug (Ersatz für Punch)
+__________________
+02.02.2008 (GAMER)
+Umbau Abilities -> Features
+-Bulldozer/Pio baut Oelplflanzen ab
+-Elite Pio baut Kristallfabrik/Farm/holzfällerlager
+-Techbugfix SS37,Rapier,Dora,Bradley
+
+__________________
 18.11.2007 (GAMER)
 -TOW, Wiesel Bugfix category
 -LR5, Sevice auch auf Boden und tief getaucht

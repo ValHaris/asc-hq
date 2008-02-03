@@ -12,7 +12,7 @@ VehicleType {
    Armor = 280
    View = 20
    WaitFortack = true
-   Abilities += no_reactionfire
+   Features += no_reactionfire
    Category = heavy_wheeled_vehicle
    Weight = 210
 

@@ -24,7 +24,7 @@ VehicleType {
       fuel = 2126
    } Tank
    FuelConsumption = 15
-   Abilities += move_after_attack
+   Features += move_after_attack
    Movement -= 0 0 0 10 0 0 0 0 
    Weight = 250
    Weapons { 

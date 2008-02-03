@@ -7,14 +7,14 @@ VehicleType {
    Infotext = [Building und turretunit constructors are perhaps the most important constructing
               vehicles. They are able to place new factories, weapon emplacements,
               power stations, mines, and so on. Without at least one building
-              bonstructor, expansion is impossible.]
+              constructor, expansion is impossible.]
    picture = MK1v_mbv.pcx
 
    Armor -= 100
    Transportation ->* VehicleType.TransTurretBig 
    Transportation.MaxLoadableUnits = 2
-   Abilities = 
-   Features = Vehicle_Production construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization
+   Features = 
+   Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization
 
    Tank { 
       Material = 60000
@@ -24,15 +24,12 @@ VehicleType {
    Weight = 90
 
    Construction { 
-      Buildings = 26 29
-      Vehicles = 84 93 94 111 112 117 122
-      Vehiclesinternally = 76 110
+      Buildings = 26 29 35-37
+      Vehicles = 84 93 94 111 112 117 122 76 110
+      Vehiclesinternally = 
       Objects = 9 44 2098 992 2097
       ObjectsRemovable = 992 988 2097
       ObjectGroupsRemovable = 1 2 3 4 8 14 21
-      ProductionEfficiency = [   0   0   1
-                                 0   1   0
-                                 0   0   1 ]
    } Construction
 
    Weapons { 

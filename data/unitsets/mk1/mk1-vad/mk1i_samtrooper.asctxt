@@ -12,7 +12,7 @@ Trooper-Typen begrenzt, weshalb der Nachschub gesichert sein muss.
 ]
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Picture = MK1i_SAMTROOPER.pcx
-InfoImage = sam-trooper2.jpg
+   InfoImage = mk1i_samtrooper2.jpg
 
    Armor += 10
    Weapons { 

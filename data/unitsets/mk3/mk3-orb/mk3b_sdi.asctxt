@@ -9,6 +9,8 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50
+   Features += ManualSelfDestruct
+   
    Weapons { 
       Weapon0.Punch@MaxRange += 4
       Weapon0.Punch@MinRange += 4

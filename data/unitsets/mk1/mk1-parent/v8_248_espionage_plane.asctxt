@@ -18,7 +18,7 @@ VehicleType {
    Weight = 115
    View = 60
    Jamming = 51
-   Abilities = jam_only_own_field satelliteview
+   Features = jam_only_own_field satelliteview
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight 
    Tank { 

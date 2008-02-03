@@ -10,7 +10,7 @@ VehicleType {
 
    Armor -= 100
    jamming = 65
-   Abilities += jam_only_own_field fuel_transfer
+   Features += jam_only_own_field
 
    TerrainAccess ->* VehicleType.very_bigship_terrain 
 

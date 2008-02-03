@@ -18,7 +18,7 @@ Hawkeye is an all-weather airborne control system platform. It is essentially a 
       fuel = 7500
    } Tank
    FuelConsumption = 18
-   Abilities = sonar
+   Features = sonar
    Movement = 0 0 0 60 170 170 0 0 
    Weight = 80
 } VehicleType

@@ -22,7 +22,7 @@
       fuel = 4000
    } Tank
    FuelConsumption = 20
-   Abilities = move_after_attack no_midair_refuel cruiserlanding
+   Features = move_after_attack no_midair_refuel cruiserlanding
    Movement = 0 0 0 35 130 130 0 0 
    TerrainAccess ->* VehicleType.heli_terrain 
    Category = helicopter

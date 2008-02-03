@@ -10,7 +10,7 @@ VehicleType {
 
 
    Jamming = 43
-   Abilities = onlyTransMove
+   Features = onlyTransMove
 
    TerrainAccess ->* VehicleType.Device_terrain
 

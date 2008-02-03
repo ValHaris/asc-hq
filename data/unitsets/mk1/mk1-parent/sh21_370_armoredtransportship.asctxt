@@ -14,7 +14,7 @@ VehicleType {
    View = 30
    Jamming = 0
    WaitFortack = false
-   Abilities = fuel_transfer material_transfer moveduringreactionfire icebreaker
+   Features = ExternalFuelTransfer ExternalMaterialTransfer moveduringreactionfire icebreaker
    Category = heavy_ship
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0

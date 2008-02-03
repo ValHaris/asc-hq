@@ -16,7 +16,7 @@ VehicleType {
       fuel = 18000
    } Tank
    FuelConsumption = 100
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field
 
    Weapons { 
       Number = 5

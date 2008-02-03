@@ -10,7 +10,7 @@ VehicleType {
 
    Armor -= 100
    Jamming = 80
-   Abilities += no_reactionfire jam_only_own_field
+   Features += no_reactionfire jam_only_own_field ManualSelfDestruct
 
    TerrainAccess.terrain_any = hard_sand soft_sand lowland hillside mountains 
 

@@ -10,7 +10,7 @@ VehicleType {
    picture = MK3b_notstrom.png
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
-   Abilities += resource_converter 
+   Features += Matter_Converter 
    Weight = 10
 
    Tank { 

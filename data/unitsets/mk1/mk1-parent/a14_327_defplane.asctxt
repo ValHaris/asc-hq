@@ -10,7 +10,7 @@ VehicleType {
 
    Armor = 400
    Weight = 80
-   Abilities = move_after_attack moveduringreactionfire jam_only_own_field
+   Features = move_after_attack moveduringreactionfire jam_only_own_field
    jamming = 39
    view = 50
 

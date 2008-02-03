@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
    Armor -= 50
-   Abilities += material_transfer
+   Features += ExternalMaterialTransfer
    Category = heavy_wheeled_vehicle
    Weight = 80
 

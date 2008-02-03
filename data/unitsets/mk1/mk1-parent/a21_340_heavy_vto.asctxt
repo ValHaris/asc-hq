@@ -14,7 +14,7 @@ VehicleType {
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight
    Transportation ->* VehicleType.TransPlaneLight 
-   Abilities = move_after_attack MoveDuringReactionFire
+   Features = move_after_attack MoveDuringReactionFire
 
    Tank { 
       Energy = 0

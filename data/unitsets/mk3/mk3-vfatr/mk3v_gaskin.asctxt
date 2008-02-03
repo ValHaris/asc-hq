@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 504 417 0 0 3 0 0 0 0 0
 
    Armor -= 50
-   Abilities += move_after_attack
+   Features += move_after_attack
    Category = light_wheeled_vehicle
    Weight = 22
 

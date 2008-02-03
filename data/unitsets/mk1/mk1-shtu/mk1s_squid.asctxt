@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    View = 90
-   Abilities += move_after_attack
+   Features += move_after_attack
 
    Tank.fuel = 8000
 

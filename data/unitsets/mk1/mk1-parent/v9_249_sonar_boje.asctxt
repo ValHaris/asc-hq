@@ -9,7 +9,7 @@ VehicleType {
 
    Jamming = 39
    View = 65
-   Abilities = sonar paratrooper jam_only_own_field
+   Features = sonar paratrooper jam_only_own_field
 
    Height = floating 
    TerrainAccess ->* VehicleType.verysmallship_terrain

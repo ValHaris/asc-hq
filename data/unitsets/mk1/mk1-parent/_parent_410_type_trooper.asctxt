@@ -21,7 +21,7 @@
       fuel = 300
    } Tank
    FuelConsumption = 0
-   Abilities = conquer_buildings self_repairing jam_only_own_field
+   Features = conquer_buildings self_repairing jam_only_own_field
    Movement = 0 0 0 46 0 0 0 0 
    Category = trooper
    MaxSurvivableStorm = 100

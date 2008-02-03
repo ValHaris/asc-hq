@@ -13,7 +13,7 @@ VehicleType {
    SelfRepairRate = 10
    Weight = 4000
    Category = heavy_aircraft
-   Abilities += self_repairing material_transfer fuel_transfer repair_vehicle automatic_resource_searching moveduringreactionfire
+   Features += self_repairing ExternalMaterialTransfer ExternalFuelTransfer Repair_Facility automatic_resource_searching moveduringreactionfire
 
    Transportation ->* VehicleType.TransSpSt 
    Tank { 

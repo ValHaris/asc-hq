@@ -11,7 +11,7 @@ VehicleType {
    Armor = 320
    Weight = 115
    Jamming = 70
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight 
    Tank { 

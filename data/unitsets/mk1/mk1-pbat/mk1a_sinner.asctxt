@@ -9,7 +9,7 @@ VehicleType {
 
    Armor += 100
    View += 10
-   Abilities += satelliteview
+   Features += satelliteview
 
    Weapons { 
       Number = 5

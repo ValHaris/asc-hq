@@ -11,6 +11,8 @@ VehicleType {
    Armor += 50
    Movement = 0 0 0 0 0 0 0 0 
    Weight = 2000
+   Features += ManualSelfDestruct
+   
    TerrainAccess ->* VehicleType.Turret_lowland 
    Weapons { 
       Weapon0.Punch@MaxRange -= 3

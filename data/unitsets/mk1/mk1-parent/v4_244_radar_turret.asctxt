@@ -9,7 +9,7 @@ VehicleType {
 
    Armor -= 100
    View = 105
-   Abilities += satelliteview
+   Features += satelliteview ManualSelfDestruct
 
    TerrainAccess ->* VehicleType.turret_only
    Weapons {
