@@ -9,7 +9,6 @@ VehicleType {
    wreckageobject = 14201
 
    Armor -= 50
-   Abilities += material_transfer fuel_transfer
    Weight -= 5
 
    Tank { 

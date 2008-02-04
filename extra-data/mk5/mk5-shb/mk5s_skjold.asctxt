@@ -10,7 +10,7 @@ VehicleType {
 
    Transportation ->* VehicleType.TransShipSmall 
    Transportation.MaxLoadableMass = 25
-   Abilities += fuel_transfer material_transfer jam_only_own_field move_after_attack
+   Features += jam_only_own_field move_after_attack
 
    Weapons {
       Weapon0 ->* VehicleType.MiniGun

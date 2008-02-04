@@ -10,7 +10,7 @@ VehicleType {
    Picture = mk4b_virus.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
-   Abilities += Kamikaze_only
+   Features += Kamikaze_only
    Weapons { 
       Initiative = 0
       Number = 1

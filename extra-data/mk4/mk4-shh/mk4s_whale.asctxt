@@ -17,7 +17,7 @@ Der Whale kann sockelgebundene Einheiten auf die dafür vorgesehenen Sockel setze
    GuideSortHelp += 0 0 0 0 4 558 0 0 0 0
 
    Armor -= 50
-   Abilities += moveduringreactionfire
+   Features += moveduringreactionfire
    Weight = 300
    Transportation { 
       MaxLoadableUnits = 10

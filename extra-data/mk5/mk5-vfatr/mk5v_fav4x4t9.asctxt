@@ -2,8 +2,8 @@ VehicleType {
    Name = FAV 4x4 T9
    ID = 1441
    parent = 332
-   Description = Offroad Kampfbuggy
-   Infotext = [Ein vierädriges Offroadfahrzeug, welches mit 3 Boden-Boden Raketen
+   Description = NahKampfbuggy
+   Infotext = [Ein vierrädriges Offroadfahrzeug, welches mit 6 starken Boden-Boden Raketen
               ausgestattes ist.]
    Picture = MK5v_FAV4x4T9.pcx
    WreckageObject = 1404
@@ -13,9 +13,11 @@ VehicleType {
    Movement -= 0 0 0 30 0 0 0 0 
 
    Weapons { 
-      Weapon0 ->* vehicleType.MG25low 
-      Weapon1.MinRange = 20
+      Weapon0 ->* vehicleType.MG45low 
+      Weapon1.type = air_missile shootable
+      Weapon1.MaxRange = 10
       Weapon1.Punch@MaxRange = 110
       Weapon1.Punch@MinRange = 110
+      Weapon1.Ammo = 6
    } Weapons
 } VehicleType

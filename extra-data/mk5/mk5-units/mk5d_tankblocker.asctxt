@@ -12,7 +12,7 @@ VehicleType {
    Weight = 1
    View = 20
    Jamming = 11
-   Abilities = Kamikaze_only
+   Features = Kamikaze_only
 
    TerrainAccess ->* VehicleType.Turret_lowland 
 

@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = ASUS
+   parent = 270 
+   ID = 15270
+
+   Picture = MK1a_ARROW.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Tank.Material = 1000
+
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+      Weapon1 ->* VehicleType.EMP
+      Weapon1.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon1.shotFrom = low_level_flight medium_level_flight high_level_flight
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+
+   } Weapons
+} VehicleType

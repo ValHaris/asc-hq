@@ -10,7 +10,7 @@ VehicleType {
 
    Armor = 170
    Jamming += 10
-   Abilities += mine_layer view_mines
+   Features += mine_layer mineview
 
    Weapons { 
       Initiative = 0

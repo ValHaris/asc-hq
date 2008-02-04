@@ -10,6 +10,7 @@ VehicleType {
    picture = mk4b_rocky.png
 
    Weight = 190
+   Features += ManualSelfDestruct
 
    Movement = 0 0 0 18 0 0 0 0 
    Tank { 

@@ -8,6 +8,8 @@ VehicleType {
    Infotext = []
    picture = mk4b_ionstar.png
    wreckageobject = 1222
+   
+   Features += ManualSelfDestruct
 
    Weapons { 
       Weapon0.Ammo = 16

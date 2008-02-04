@@ -7,7 +7,7 @@ VehicleType {
    Picture = MK5v_FGDV.pcx
    WreckageObject = 1404
 
-   Abilities += moveduringreactionfire   
+   Features += moveduringreactionfire   
    Movement -= 0 0 0 10 0 0 0 0 
 
    Waitfortack = true

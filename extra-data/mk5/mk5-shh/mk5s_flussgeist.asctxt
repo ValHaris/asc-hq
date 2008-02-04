@@ -11,7 +11,7 @@ VehicleType {
    View = 51
    Jamming = 21
    Transportation ->* VehicleType.TransLowTrooper2 
-   Abilities = Jam_only_own_field 
+   Features = Jam_only_own_field 
    Category = hoovercraft
    MaxSurvivableStorm = 170
    ResourceDrillingRange = 0

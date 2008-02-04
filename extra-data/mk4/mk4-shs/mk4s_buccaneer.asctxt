@@ -11,7 +11,7 @@ VehicleType {
    wreckageobject = 14288
    GuideSortHelp = 562 0 0 0 4 0 0 0 0 0
 
-   Abilities += icebreaker mine_layer view_mines
+   Features += icebreaker mine_layer mineview
    TerrainAccess ->* VehicleType.icebreaker_terrain 
 
    Weapons { 

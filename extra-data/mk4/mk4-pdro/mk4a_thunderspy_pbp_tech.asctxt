@@ -1,0 +1,10 @@
+technology {
+   Name = Thunder Syp
+   infotext = Forschungsprojekt abgeschlossen! Thunder Spy verfügbar!
+   id = 14035
+   RelatedUnitID = 14035
+   parent = 100020
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 100020,100003,100105,100210 
+} Technology

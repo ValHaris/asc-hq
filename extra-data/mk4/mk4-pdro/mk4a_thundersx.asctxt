@@ -11,6 +11,7 @@ Die THUNDER SX ist eine, zum Einsatz gegen Marineeinheiten umgebaute Jagddrohne,
    picture = mk4a_thundersx.png
    wreckageobject = 1244 14844
    GuideSortHelp += 0 0 0 0 4 326 601 0 0 0
+   Features += Sonar
 
    Weapons { 
       Initiative = 20

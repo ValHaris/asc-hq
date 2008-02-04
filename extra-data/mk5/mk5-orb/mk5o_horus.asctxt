@@ -18,13 +18,13 @@ VehicleType {
    Armor += 100
    Tank { 
       Energy = 0
-      Material = 5000
-      fuel = 6000
+      Material = 6000
+      fuel = 8000
    } Tank
    FuelConsumption = 15
-   Abilities = fuel_transfer material_transfer repair_vehicle 
+   Features = ExternalFuelTransfer ExternalMaterialTransfer Repair_Facility 
    Movement -= 0 0 0 0 10 10 10 0 
-   Weight = 120
+   Weight = 70
    Weapons { 
       Initiative = 0
       Number = 4

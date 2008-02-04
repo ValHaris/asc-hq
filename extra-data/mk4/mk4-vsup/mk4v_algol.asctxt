@@ -15,7 +15,7 @@ Das Fahrzeug ist nicht bewaffnet und muss ausreichend durch befreundete Einheite
    Tank { 
       fuel = 20000
    } Tank
-   Abilities += fuel_transfer 
+   Features += ExternalFuelTransfer 
    Movement += 0 0 0 10 0 0 0 0 
 
    Weapons { 

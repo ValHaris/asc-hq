@@ -13,7 +13,7 @@ VehicleType {
 
    Armor += 200
    View = 91
-   Abilities += self_repairing moveduringreactionfire fuel_transfer
+   Features += self_repairing moveduringreactionfire ExternalFuelTransfer
    Category = heavy_ship
    SelfRepairRate = 5
    Weight += 2000

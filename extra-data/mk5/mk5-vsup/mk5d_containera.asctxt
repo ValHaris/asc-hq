@@ -9,7 +9,7 @@ VehicleType {
 
    Armor = 400
    Weight = 20
-   Abilities += fuel_transfer material_transfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer
 
    Tank { 
       Energy = 0

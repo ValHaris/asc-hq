@@ -3,7 +3,7 @@ VehicleType {
    ID = 1439
    parent = 332
    Description = Offroad Kampfbuggy
-   Infotext = [Ein vierädriges Offroadfahrzeug, welches mit 3 Boden-Boden Raketen
+   Infotext = [Ein vierrädriges Offroadfahrzeug, welches mit 4 panzerbrechenden Boden-Boden Raketen
               ausgestattes ist.]
    Picture = MK5v_FAV4x4T4.pcx
    WreckageObject = 1404
@@ -13,9 +13,18 @@ VehicleType {
    Movement -= 0 0 0 10 0 0 0 0 
 
    Weapons { 
-      Weapon0 ->* vehicleType.MG35low 
+      Weapon0 ->* vehicleType.MG30low 
       Weapon1.MinRange = 20
-      Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 90
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 85
+      Weapon1.WeaponEffectiveness.Trooper = 0
+      Weapon1.WeaponEffectiveness.rail_vehicle = 120
+      Weapon1.WeaponEffectiveness.building|turret|object = 120
+      Weapon1.WeaponEffectiveness.light_wheeled_vehicle = 80
+      Weapon1.WeaponEffectiveness.light_tracked_vehicle = 80
+      Weapon1.WeaponEffectiveness.heavy_tracked_vehicle = 120
+      Weapon1.WeaponEffectiveness.heavy_wheeled_vehicle = 120
+      Weapon1.WeaponEffectiveness.medium_ship = 120
+      Weapon1.WeaponEffectiveness.heavy_ship = 120
    } Weapons
 } VehicleType

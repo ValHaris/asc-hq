@@ -12,7 +12,7 @@ VehicleType {
    Armor += 50
    View += 5
    Jamming = 80
-   Abilities += jam_only_own_field no_midair_refuel
+   Features += jam_only_own_field no_midair_refuel
    Weight = 110
 
    Tank.fuel += 2000

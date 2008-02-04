@@ -8,6 +8,6 @@ VehicleType {
    picture = MK5d_kornuta2.pcx
 
    Jamming += 10
-   Abilities += paratrooper
+   Features += paratrooper
 
 } VehicleType

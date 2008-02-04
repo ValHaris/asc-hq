@@ -11,7 +11,6 @@ VehicleType {
 
    Armor -= 50
    Transportation ->* VehicleType.TransTrainBunker 
-   Abilities += fuel_transfer material_transfer 
 
    Tank { 
       fuel = 2000

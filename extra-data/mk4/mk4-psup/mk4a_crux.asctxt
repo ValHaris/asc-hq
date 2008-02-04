@@ -13,7 +13,7 @@ VehicleType {
    View = 30
    wreckageobject = 1251 14851
    Transportation ->* VehicleType.TransPlane 
-   Abilities = fuel_transfer
+   Features = 
    Weight = 220
 
    Tank { 

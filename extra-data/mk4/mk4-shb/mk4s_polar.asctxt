@@ -6,7 +6,7 @@ VehicleType {
    Description = Kreuzer
    picture = mk4s_polar.png
    wreckageobject = 14262
-   Abilities += sonar
+   Features += sonar
    GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
    
    Weapons { 

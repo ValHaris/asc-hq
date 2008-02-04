@@ -16,5 +16,6 @@ VehicleType {
       Number = 1
       Weapon0 ->* VehicleType.SOM
       Weapon0.MaxRange = 70
+      Weapon0.ReactionFireShots = 2
    } Weapons
 } VehicleType

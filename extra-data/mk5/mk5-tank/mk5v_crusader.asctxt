@@ -7,6 +7,6 @@ VehicleType {
    Picture = MK5v_crusader.pcx
    
    Jamming += 10
-   Abilities += Jam_only_own_field
+   Features += Jam_only_own_field
 
 } VehicleType

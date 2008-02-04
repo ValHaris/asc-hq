@@ -12,7 +12,7 @@ VehicleType {
    Weight += 10
    Jamming = 19
 
-   Abilities += jam_only_own_field moveduringreactionfire
+   Features += jam_only_own_field moveduringreactionfire
 
    Tank.fuel = 700
    FuelConsumption = 10

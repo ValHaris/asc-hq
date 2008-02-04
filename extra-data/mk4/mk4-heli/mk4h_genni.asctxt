@@ -10,7 +10,7 @@ VehicleType {
    wreckageobject = 14033 14833
 
    Armor -= 50
-   Abilities += resource_converter 
+   Features += Matter_Converter 
 
    Tank { 
       Energy = 1500

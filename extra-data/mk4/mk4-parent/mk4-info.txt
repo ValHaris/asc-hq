@@ -172,6 +172,7 @@ ID  1296 Thunder GX
 ID 14001 Thunder OX
 ID 14006 Thunder SX
 ID 14022 CRUX DX
+ID 14034 Thunder Spy
 
 
 Trains

@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 554 558 0 0 4 0 0 0 0 0
    
    Transportation ->* VehicleType.TransTurretBig2
-   Abilities = construct_specific_buildings construct_vehicles fuel_transfer material_transfer self_repairing 
+   Features = construct_specific_buildings construct_vehicles self_repairing 
    SelfRepairRate = 10
 
    Tank { 

@@ -9,7 +9,7 @@ VehicleType {
    WreckageObject = 14239
 
    Armor -= 150
-   Abilities += paratrooper 
+   Features += paratrooper 
    Weight = 30
 
    Tank { 

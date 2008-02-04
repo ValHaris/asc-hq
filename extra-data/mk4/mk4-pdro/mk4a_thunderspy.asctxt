@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = THUNDER Spy
+   parent = 425
+   ID = 14034
+   Description = Aufklärungsdrohne
+   Infotext = [Diese Weitere Einheit der Thunder Serie wurde speziell für verdeckte Aufklärungsoperationen entwickelt. Durch hochmoderne Aufklärungssysteme die unter anderem auch zur Wärmebilderfassung fähig sind können unter anderem auch Uboote erkannt werden.]
+
+   picture = MK4a_THUNDERSPY.pcx
+   wreckageobject = 1244 300
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+
+   Movement += 0 0 0 0 10 20 10 0 
+
+   View = 60
+   Jamming = 51
+   Armor -= 70
+   Features += jam_only_own_field satelliteview
+
+   Weapons { 
+      Number = 0
+   } Weapons
+
+} VehicleType

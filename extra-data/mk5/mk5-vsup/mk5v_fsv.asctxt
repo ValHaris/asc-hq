@@ -26,7 +26,7 @@ VehicleType {
       fuel = 10000
    } Tank
    FuelConsumption = 16
-   Abilities += fuel_transfer material_transfer self_repairing automatic_resource_searching
+   Features += ExternalFuelTransfer ExternalMaterialTransfer self_repairing automatic_resource_searching
    Movement = 0 0 0 90 0 0 0 0 
    Category = light_wheeled_vehicle
    ResourceDrillingRange = 1
@@ -41,7 +41,7 @@ VehicleType {
       Weapon0.Punch@MaxRange = 40
       Weapon0.Punch@MinRange = 40
 
-      Weapon1 ->* VehicleType.ServiceGroundTr
+      Weapon1 ->* VehicleType.ServiceGround
 
       Weapon2 ->* VehicleType.AmmoMG 
       Weapon2.Ammo = 40

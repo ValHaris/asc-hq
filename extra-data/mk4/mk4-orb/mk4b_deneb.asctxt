@@ -11,6 +11,7 @@ VehicleType {
 
    Armor += 40
    WaitFortack = true
+   Features += ManualSelfDestruct
 
    Weapons { 
       Number = 3

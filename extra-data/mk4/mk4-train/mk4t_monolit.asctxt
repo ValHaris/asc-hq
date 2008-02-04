@@ -13,7 +13,7 @@ VehicleType {
    WaitFortack = true
    Transportation ->* VehicleType.TransLowTrooper 
    Transportation.MaxLoadableUnits = 2
-   Abilities += repair_vehicle fuel_transfer material_transfer 
+   Features += ExternalRepair
 
    Tank { 
       Energy = 0

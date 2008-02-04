@@ -18,7 +18,7 @@ Ausbau der Wasserbombenwerfer, ist er nunmehr wehrlos gegen feindliche U-Boote.]
    Armor = 1350
    View += 10
    Transportation ->* VehicleType.TransDroneCruiser 
-   Abilities += repair_vehicle
+   Features += Repair_Facility
 
    Weapons { 
       Initiative = 0

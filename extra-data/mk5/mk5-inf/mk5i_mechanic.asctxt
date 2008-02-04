@@ -13,7 +13,7 @@ VehicleType {
    WreckageObject = 1416
    Transportation ->* VehicleType.TransTurretmed 
    WaitFortack = true
-   Abilities += construct_specific_buildings construct_vehicles paratrooper mine_layer repair_vehicle view_mines material_transfer automatic_resource_searching fuel_transfer
+   Features += construct_specific_buildings construct_vehicles paratrooper mine_layer ExternalRepair mineview automatic_resource_searching
    ResourceDrillingRange = 2
    SelfRepairRate = 20
 
@@ -29,7 +29,7 @@ VehicleType {
       Vehicles = 1405 1419 1428 1430 1431 1433 1442 1478
       Objects = 9 10 181 998 1400 1489 2097 2099
       ObjectsRemovable = 1400
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
    } Construction
 
    Weapons { 

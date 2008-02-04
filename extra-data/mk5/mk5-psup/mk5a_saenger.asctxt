@@ -19,7 +19,7 @@ VehicleType {
    View = 50
    Height = ground_level low_level_flight medium_level_flight high_level_flight
    Jamming = 0
-   Abilities = fuel_transfer  
+   Features =   
    Category = heavy_aircraft
    MaxSurvivableStorm = 0
    ResourceDrillingRange = 0
@@ -28,8 +28,8 @@ VehicleType {
 
    Transportation { 
       MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 200
-      MaxLoadableMass = 200
+      MaxLoadableUnitSize = 149
+      MaxLoadableMass = 149
       CategoriesNOT = hoovercraft default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle light_aircraft medium_aircraft medium_ship building|turret|object light_ship heavy_ship helicopter 
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO

@@ -10,7 +10,7 @@ VehicleType {
    
    Armor -= 50
    Weight -= 5
-   Abilities += repair_vehicle self_repairing 
+   Features += ExternalRepair self_repairing 
    SelfRepairRate = 20
    
    Tank { 

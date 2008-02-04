@@ -2,7 +2,14 @@ History MK4-Set
 Grafiken: GAMER & Dr.Snuggels
 Spezifikationen: GAMER
 
-weitere History: siehe PBP.info
+
+__________________
+02.02.2008 (GAMER)
+-Umbau Ablities -> Features
+-Regio baut Oelpflanzen ab
+-Gigant baut Kristallfabrik,Farm,Holtfällerlager
+Neu:
+-Thunder Spy
 
 __________________
 18.11.2007 (GAMER)

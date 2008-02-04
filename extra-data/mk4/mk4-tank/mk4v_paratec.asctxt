@@ -12,7 +12,7 @@ Gebiet zu unterstuetzen.]
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor -= 100
-   Abilities += paratrooper 
+   Features += paratrooper 
 
    Tank.fuel -= 50
    FuelConsumption -= 1

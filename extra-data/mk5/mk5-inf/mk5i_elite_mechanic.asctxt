@@ -14,7 +14,7 @@ VehicleType {
 
    Transportation ->* VehicleType.TransTurretbig 
    WaitFortack = true
-   Abilities += construct_specific_buildings construct_vehicles paratrooper repair_vehicle material_transfer automatic_resource_searching
+   Features += construct_specific_buildings construct_vehicles paratrooper ExternalRepair automatic_resource_searching
    ResourceDrillingRange = 2
    SelfRepairRate = 20
 
@@ -27,7 +27,7 @@ VehicleType {
    Height = submerged ground_level 
 
    Construction { 
-      Buildings = 26 1400 1401
+      Buildings = 26 35-37 1400 1401
       Vehicles = 1414 1432
       Objects = 10 2099 
       ObjectsRemovable = 988

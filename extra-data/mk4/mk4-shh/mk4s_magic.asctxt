@@ -16,7 +16,7 @@ Topspeed eingebüßt, was auf das veränderte Design und die um ein Drittel verstär
    GuideSortHelp += 0 0 0 0 4 508 552 0 0 0
 
    View += 10
-   Abilities += MoveDuringReactionFire
+   Features += MoveDuringReactionFire
 
    Weapons { 
       Initiative = 20

@@ -12,7 +12,7 @@ VehicleType {
    Transportation.EntranceSystemNum = 3
    Transportation.CategoriesNOT = heavy_aircraft building|turret|object medium_ship heavy_ship heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle
    Transportation.EntranceSystem2 ->* VehicleType.SubIO
-   Abilities += sonar icebreaker
+   Features += sonar icebreaker
 
    Height = deep_submerged submerged floating
    Movement = 55 55 55 0 0 0 0 0 
@@ -25,6 +25,7 @@ VehicleType {
 
       Weapon1 ->* vehicleType.SAMH 
       Weapon1.Ammo = 20
+      Weapon1.ShotFrom = submerged floating
 
       Weapon2 ->* vehicleType.AmmoAM 
       Weapon2.Ammo = 100

@@ -9,7 +9,7 @@ VehicleType {
    wreckageobject = 14264
    GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
 
-   Abilities += sonar
+   Features += sonar
 
    Weapons { 
       Initiative = 0

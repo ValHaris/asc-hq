@@ -14,7 +14,7 @@ VehicleType {
    Weight = 10
    View = 10
    Jamming = 39
-   Abilities = sonar Kamikaze_only immune_to_mines jam_only_own_field
+   Features = sonar Kamikaze_only immune_to_mines jam_only_own_field
    Category = default
    MaxSurvivableStorm = 70
    ResourceDrillingRange = 0

@@ -8,7 +8,7 @@ VehicleType {
    picture = mk4v_gnome.png
    wreckageobject = 14010
 
-   Abilities += mine_layer view_mines 
+   Features += mine_layer mineview 
 
    Weapons { 
       Initiative = 0

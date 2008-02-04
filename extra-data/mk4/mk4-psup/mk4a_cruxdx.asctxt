@@ -11,7 +11,7 @@ VehicleType {
 
    Armor = 300
    View = 30
-   Abilities = fuel_transfer
+   Features = 
    Transportation ->* VehicleType.TransDronePlane 
    Weight = 198
 

@@ -20,7 +20,7 @@ Ein direkter Kampfeinsatz, Einsätzen hinter der Front oder ein Fliegen in Zonen 
       Material += 6000
       fuel += 2000
    } Tank
-   Abilities += fuel_transfer material_transfer 
+   Features += ExternalFuelTransfer ExternalMaterialTransfer 
 
    Weapons { 
       Initiative = 0

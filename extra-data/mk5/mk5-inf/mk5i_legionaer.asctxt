@@ -11,7 +11,7 @@ VehicleType {
    Picture = MK5i_LEGIONAER.pcx
    WreckageObject = 1416
 
-   Abilities += paratrooper
+   Features += paratrooper
 
    Weapons { 
       Initiative = 0

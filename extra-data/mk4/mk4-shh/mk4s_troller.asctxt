@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Kleines und wendiges Kampfluftkissenboot mit ansprechender Panzerung und sehr guter Bewafffnung.]
    picture = mk4s_troller.png
    wreckageobject = 14017 14817
-   Abilities += move_after_attack
+   Features += move_after_attack
    Movement += 0 0 0 10 0 0 0 0 
    GuideSortHelp += 0 0 0 0 4 504 552 0 0 0
 

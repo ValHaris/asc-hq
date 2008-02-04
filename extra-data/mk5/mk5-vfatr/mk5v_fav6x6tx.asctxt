@@ -3,22 +3,25 @@ VehicleType {
    ID = 1446
    parent = 332
    Description = Extrem Kampfbuggy
-   Infotext = [Ein vierädriges Offroadfahrzeug, welches mit 3 Boden-Boden Raketen
+   Infotext = [Ein sechsrädriges Offroadfahrzeug, welches mit 3 Boden-Boden Raketen
               ausgestattes ist.]
    Picture = MK5v_FAV6x6TX.pcx
    WreckageObject = 1404
    
    Armor += 200
-   View = 30
+   View = 40
    Movement -= 0 0 0 30 0 0 0 0 
 
    Terrainaccess.Terrain_any += mountains shallow_water
    Terrainaccess.Terrain_not =
 
    Weapons { 
-      Weapon0 ->* vehicleType.MG30low 
+      Weapon0 ->* vehicleType.MG40low 
+      Weapon1.type = air_missile shootable
       Weapon1.MinRange = 20
       Weapon1.Punch@MaxRange = 110
       Weapon1.Punch@MinRange = 110
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.Ammo = 1
    } Weapons
 } VehicleType

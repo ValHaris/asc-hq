@@ -10,7 +10,7 @@ VehicleType {
    wreckageobject = 14240
    Armor -= 100
    Transportation ->* VehicleType.TransTurretMed 
-   Abilities += construct_vehicles 
+   Features += construct_vehicles 
 
    Tank { 
       Material = 25000

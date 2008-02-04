@@ -9,7 +9,7 @@ VehicleType {
    Picture = mk5b_aos.pcx
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
 
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field ManualSelfDestruct
    Jamming = 78
    TerrainAccess ->* VehicleType.turret_all
 

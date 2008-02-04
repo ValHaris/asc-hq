@@ -7,7 +7,7 @@ VehicleType {
    Infotext = []
    picture = mk5i_armyranger.pcx
 
-   Abilities += paratrooper
+   Features += paratrooper
    Weapons { 
    } Weapons
 } VehicleType

@@ -9,7 +9,7 @@ VehicleType {
    View += 6
    Picture = MK5i_COMMANDER.pcx
    WreckageObject = 1416
-   Abilities += paratrooper view_mines move_after_attack
+   Features += paratrooper mineview move_after_attack
    Movement += 0 0 0 5 0 0 0 0 
    Weapons { 
       Number = 3

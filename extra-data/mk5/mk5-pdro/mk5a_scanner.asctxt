@@ -11,10 +11,10 @@ VehicleType {
    View = 80
    Jamming = 39
    Category = default
-   Abilities = Kamikaze_only no_midair_refuel jam_only_own_field
+   Features = Kamikaze_only no_midair_refuel jam_only_own_field
    Weight = 1
 
-   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Height = ground_level low_level_flight medium_level_flight
    Tank { 
       Energy = 0
       Material = 0

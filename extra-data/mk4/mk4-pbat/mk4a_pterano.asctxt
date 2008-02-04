@@ -21,7 +21,7 @@ Geschwindigkeit.
 
    Armor = 560
    View = 70
-   Abilities += satelliteview fuel_transfer
+   Features += satelliteview
    Weight = 275
    Transportation { 
       MaxLoadableUnits = 10

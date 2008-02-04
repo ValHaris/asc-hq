@@ -36,7 +36,7 @@ VehicleType {
       fuel = 20000
    } Tank
    FuelConsumption = 40
-   Abilities = fuel_transfer material_transfer no_midair_refuel 
+   Features = ExternalFuelTransfer ExternalMaterialTransfer no_midair_refuel 
    Movement = 0 0 0 21 80 90 100 100 
    Category = heavy_aircraft
    MaxSurvivableStorm = 0

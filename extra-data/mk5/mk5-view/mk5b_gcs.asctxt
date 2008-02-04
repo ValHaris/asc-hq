@@ -15,7 +15,7 @@ VehicleType {
    Weight = 15
    View -= 10
    Jamming = 39
-   Abilities += Kamikaze_only jam_only_own_field
+   Features += Kamikaze_only jam_only_own_field
 
    Tank { 
       Energy = 0

@@ -14,7 +14,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Jamming = 50
-   Abilities = jam_only_own_field onlyTransMove
+   Features = jam_only_own_field onlyTransMove ManualSelfDestruct
    Category = building|turret|object
    Weight = 150
 

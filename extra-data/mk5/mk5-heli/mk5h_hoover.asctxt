@@ -12,7 +12,7 @@ VehicleType {
    Transportation ->* VehicleType.TransHeliTrooper 
    Transportation.EntranceSystemNum = 4
    Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
-   Abilities += sonar fuel_transfer material_transfer
+   Features += sonar
 
    Tank { 
       Energy = 0

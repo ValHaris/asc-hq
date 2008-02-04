@@ -6,7 +6,7 @@ VehicleType {
    Description = Air Defence Trooper
    Picture = MK5i_MISTRAL.pcx
 
-   Abilities += Paratrooper
+   Features += Paratrooper
 
    Weapons { 
    } Weapons

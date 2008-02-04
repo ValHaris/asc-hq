@@ -4,13 +4,13 @@ VehicleType {
    parent = 336
    
    Description = Baufzg.Befestigung/Turret
-   Infotext = [Baufahrzeug für Befestigungen, Pipelines und Turretsockel.] 
+   Infotext = [Baufahrzeug für Befestigungen, Pipelines und Turretsockel. Erntefahrzeug.] 
    picture = mk4v_regio.png
    wreckageobject = 14270
    
    Armor -= 100
    Weight -= 10
-   Abilities += manual_resource_drilling material_transfer fuel_transfer
+   Features += automatic_resource_searching ExternalMaterialTransfer ExternalFuelTransfer
    ResourceDrillingRange = 6
 
    Tank { 
@@ -22,7 +22,7 @@ VehicleType {
    Construction { 
       Objects = 10 3 30 181 998 2153 2097
       ObjectsRemovable = 2097
-      ObjectGroupsRemovable = 2 3 4 5 6 8 9 10 11 13
+      ObjectGroupsRemovable = 2 3 4 5 6 8 9 10 11 13 21
    } Construction
 
    Weapons { 

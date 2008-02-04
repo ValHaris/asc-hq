@@ -8,7 +8,7 @@ VehicleType {
    Armor += 20
    Picture = MK5i_MARINE.pcx
    WreckageObject = 1416
-   Abilities += paratrooper
+   Features += paratrooper
    Movement += 0 10 0 2 0 0 0 0 
    Weapons { 
       Initiative = 0

@@ -20,7 +20,7 @@ VehicleType {
    Transportation.EntranceSystemNum = 4
    Transportation.EntranceSystem3 ->* VehicleType.carrier
    Transportation.EntranceSystem3.RequireUnitFunction = paratrooper
-   Abilities += fuel_transfer self_repairing jam_only_own_field repair_vehicle moveduringreactionfire
+   Features += self_repairing jam_only_own_field Repair_Facility moveduringreactionfire
    Category = heavy_ship
    SelfRepairRate = 5
    Weight += 2000

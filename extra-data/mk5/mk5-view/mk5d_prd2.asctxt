@@ -8,5 +8,5 @@ VehicleType {
 
    Jamming += 10
    View += 10
-   Abilities += paratrooper
+   Features += paratrooper
 } VehicleType

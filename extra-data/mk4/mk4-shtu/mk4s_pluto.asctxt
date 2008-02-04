@@ -11,7 +11,7 @@ VehicleType {
 
    Armor += 200
    View += 10
-   Abilities += self_repairing repair_vehicle
+   Features += self_repairing Repair_Facility
    SelfRepairRate = 5
    Weight += 2000
 

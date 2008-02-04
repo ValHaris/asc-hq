@@ -14,7 +14,7 @@ VehicleType {
       fuel = 450
    } Tank
    FuelConsumption = 4
-   Abilities += no_midair_refuel move_after_attack
+   Features += no_midair_refuel move_after_attack
    Movement = 0 0 0 33 71 0 0 0 
    Weapons { 
       Initiative = 30

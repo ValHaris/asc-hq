@@ -11,7 +11,7 @@ VehicleType {
    picture = mk4v_atlas.png
    wreckageobject = 14223
    Transportation ->* VehicleType.TransVehicleHeavy
-   Abilities += material_transfer automatic_resource_searching
+   Features += ExternalMaterialTransfer automatic_resource_searching
    weight = 150
    Tank { 
       Material = 15000

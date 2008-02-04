@@ -10,7 +10,7 @@ VehicleType {
    picture = mk4v_wizard.png
    WreckageObject = 14268
 
-   Abilities += construct_specific_buildings  
+   Features += construct_specific_buildings  
    Weight = 80
 
    Tank { 

@@ -7,6 +7,6 @@ VehicleType {
    Infotext = [Beutetechnik von den Terranern, Antrieb wurde modifiziert um die Manoevrierfähigkeit zu erhoehen.]
    picture = MK5s_sealboat.pcx
    
-   Abilities += move_after_attack
+   Features += move_after_attack
 
 } VehicleType

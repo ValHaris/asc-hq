@@ -13,7 +13,7 @@ VehicleType {
    Armor = 200
    Jamming = 39
    Transportation ->* VehicleType.TransLowTrooper 
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field
 
    Tank.fuel = 1000
    FuelConsumption = 10

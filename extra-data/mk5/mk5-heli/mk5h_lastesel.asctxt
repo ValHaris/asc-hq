@@ -7,6 +7,8 @@ VehicleType {
    picture = mk5h_lastesel.pcx
    
    Armor = 300
+   Features += ExternalFuelTransfer
+
    Transportation ->* VehicleType.TransTurretBig 
    Transportation.CategoriesNOT = rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
    Transportation.MaxLoadableUnitSize = 700
@@ -15,6 +17,7 @@ VehicleType {
    Transportation.EntranceSystem1  ->* VehicleType.diver_out
    Transportation.EntranceSystem1.UnitHeightAbs = ground_level floating submerged
    Transportation.EntranceSystem1.CategoriesNOT =
+   Transportation.EntranceSystem1.MoveCost = 10
 
    Tank { 
       Energy = 0
@@ -26,6 +29,7 @@ VehicleType {
    Weight = 30
    Weapons { 
       Initiative = 0
-      Number = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceAir
    } Weapons
 } VehicleType

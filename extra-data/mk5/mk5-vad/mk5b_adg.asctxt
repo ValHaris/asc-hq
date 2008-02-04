@@ -11,7 +11,7 @@ VehicleType {
    Armor = 400
    Weight = 40
    jamming = 11
-   Abilities += jam_only_own_field
+   Features += jam_only_own_field ManualSelfDestruct
    WaitFortack = true
    Tank { 
       Energy = 0

@@ -12,7 +12,7 @@ VehicleType {
       Material = 10000
       fuel = 20000
    } Tank
-   Abilities += fuel_transfer material_transfer manual_resource_drilling 
+   Features += ExternalFuelTransfer ExternalMaterialTransfer automatic_resource_searching 
    ResourceDrillingRange = 3
 
    Weapons { 

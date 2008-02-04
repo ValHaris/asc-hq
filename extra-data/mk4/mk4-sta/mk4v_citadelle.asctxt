@@ -11,7 +11,7 @@ VehicleType {
 
    Armor += 200
    View += 10
-   Abilities += moveduringreactionfire satelliteview
+   Features += moveduringreactionfire satelliteview
 
    Transportation { 
       MaxLoadableUnits = 4

@@ -10,6 +10,7 @@ VehicleType {
 
    Armor -= 200
    Weight = 40
+   Features += ManualSelfDestruct
 
    Weapons { 
       Initiative = 50
