@@ -39,4 +39,5 @@ ID 32 ASC Depot 2
 ID 33 ASC Spaceport North
 ID 34 ASC Spaceport South
 ID 35 ASC CrystalProcessing
-
+ID 36 ASC Farm
+ID 37 ASC Lumbercamp

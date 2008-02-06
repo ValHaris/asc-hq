@@ -2,6 +2,10 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 __________________
+04.02.2008 (GAMER)
+-Oracle tracked
+-default radar vehicle 66 movement/tracked -- 80 movement/wheeled
+__________________
 02.02.2008 (GAMER)
 -Umbau Abilities -> Features
 -Rückbau Interner Turretbau Vesuvius/MBV

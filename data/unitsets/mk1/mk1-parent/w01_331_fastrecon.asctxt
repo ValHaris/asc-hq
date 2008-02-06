@@ -19,7 +19,7 @@ VehicleType {
    Category = light_wheeled_vehicle
 
    FuelConsumption = 10
-   Movement = 0 0 0 110 0 0 0 0 
+   Movement = 0 0 0 120 0 0 0 0 
    Weight = 2
    TerrainAccess ->* VehicleType.offroad 
 

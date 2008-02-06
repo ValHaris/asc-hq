@@ -27,7 +27,7 @@ VehicleType {
    } Tank
    FuelConsumption = 8
    Features = conquer_buildings move_after_attack leaves_tracks
-   Movement = 0 0 0 100 0 0 0 0 
+   Movement = 0 0 0 110 0 0 0 0 
    Category = light_wheeled_vehicle
    MaxSurvivableStorm = 150
    ResourceDrillingRange = 0

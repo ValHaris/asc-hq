@@ -3,6 +3,10 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 
+__________________
+02.02.2008 (GAMER)
+-Trainingslager kapazität auf 1000 erhöht
+
 ______________
 v21.01
 -Sonnenkraftwerk2 eingebaut, eingang oben

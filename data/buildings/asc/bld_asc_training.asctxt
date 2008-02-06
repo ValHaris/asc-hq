@@ -16,7 +16,7 @@ BuildingType {
    Transportation { 
       MaxLoadableUnits = 18
       MaxLoadableUnitSize = 200
-      MaxLoadableMass = 500
+      MaxLoadableMass = 1000
       CategoriesNOT = default building|turret|object rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter
    } Transportation
    Functions = Training_Facility ResourceSink Ammo_Production 

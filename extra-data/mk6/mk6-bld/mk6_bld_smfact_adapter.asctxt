@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B15001
+   ;Bezeichnung der verknüpften Technologie: Small Factory
+   TechnologiesRequired = 15000
+} TechAdapter

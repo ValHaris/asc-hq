@@ -7,6 +7,9 @@ _________________
 26.01.2008 (GAMER)
 -Wald korrigiert, wachstum, nicht mehr auf Hard_sand/Soft_sand
 -GroupID 21 für Oelpflanzen festgelegt, Raps, Pilze angepasst
+-Crystals für hard_sand/mountains angepasst
+-Palmen angepasst
+-Pilze angepasst
 
 _________________
 09.122007 (GAMER)

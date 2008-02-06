@@ -6,6 +6,10 @@ VehicleType {
    Picture = MK3v_longtrack.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor -= 20
+   Armor -= 50
    View += 5
+   Category = medium_wheeled_vehicle
+   
+   TerrainAccess ->* VehicleType.wheeled
+   Movement += 0 0 0 13 0 0 0 0 
 } VehicleType

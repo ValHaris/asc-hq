@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B15004
+   ;Bezeichnung der verknüpften Technologie: Researc center
+   TechnologiesRequired = 15000
+} TechAdapter

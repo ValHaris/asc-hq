@@ -4,12 +4,27 @@ Spezifikationen: GAMER
 
 **************************
 
+Buildings
+ID 15001 small factory
+ID 15002 big factroy east
+ID 15003 big factory west
+ID 15004 lab north
+ID 15005 lab south
+
+
 --Infantrie--
 *not available*
 
 -Mechwarrior
+ID 15201 Intruder
+ID 15209 Destructor
+ID 15213 Baltic
+ID 15216 Meo
 
 --Tanks--
+ID 15290 CillaTE
+ID 15292 DevoTE
+ID 15293 Meta TE
 
 --FastAttack & Transport--
 
@@ -31,6 +46,7 @@ Spezifikationen: GAMER
 --Orbital--
 
 --Aircraft--
+IS 15270 Asus
 
 --Helicopter--
 

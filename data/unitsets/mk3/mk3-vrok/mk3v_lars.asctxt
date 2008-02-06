@@ -15,7 +15,7 @@ VehicleType {
    FuelConsumption = 12
    TerrainAccess ->* VehicleType.lt_wheeled 
    TerrainAccess.terrain_any = road runway hard_sand lowland Frozen_water ditch
-   Movement += 0 0 0 15 0 0 0 0 
+   Movement += 0 0 0 13 0 0 0 0 
 
    Weapons { 
       Weapon0.MaxRange = 30

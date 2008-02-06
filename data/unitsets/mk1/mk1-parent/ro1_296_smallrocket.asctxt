@@ -25,7 +25,7 @@ VehicleType {
       fuel = 1000
    } Tank
    FuelConsumption = 15
-   Movement = 0 0 0 72 0 0 0 0 
+   Movement = 0 0 0 77 0 0 0 0 
    TerrainAccess ->* VehicleType.lt_terrain 
 
    Weapons { 

@@ -127,6 +127,7 @@ unitsets/mk3/mk3-view/*.png
 unitsets/mk3/mk3-vrok/*.png
 unitsets/mk3/mk3-vsup/*.png
 unitsets/mk3/mk3-train/*.png
+unitsets/mk3/mk3-train/*.pcx
 unitsets/mk3/mk3-vfatr/*.png
 unitsets/mk3/mk3-jam/*.png
 unitsets/mk3/mk3-inf/*.png

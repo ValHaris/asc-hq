@@ -13,4 +13,8 @@ VehicleType {
    WreckageObject = 416
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
+   Armor += 50
+   Weight += 5
+   Movement -= 0 0 0 3 0 0 0 0 
+ 
 } VehicleType

@@ -1,0 +1,15 @@
+BuildingType { 
+   Name = small vehicle plant
+   ID = 15001
+   InfoText = [Produktionsanlage für Roboter und leichte Fahrzeuge, incl. Munition, Reparatur und Wiederverwertung.]
+   parent = 22
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1 A3 
+   UseGFXpics = false
+   Pictures { 
+      dry = mk6_bld_smfact.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A3
+} BuildingType

@@ -1,0 +1,15 @@
+BuildingType { 
+   Name = research institute
+   ID = 15005
+   parent = 22
+   Infotext = [Forschungszentrum]
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = mk6_bld_lab_s.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A4
+} BuildingType
