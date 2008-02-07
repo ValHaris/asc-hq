@@ -1,0 +1,9 @@
+itemfilter {
+   Vehicles = 34000-34999
+   Buildings = 34000-34999
+   Objects = 34000-34999
+   Terrain = 34000-34999
+   Technologies = 34000-34999
+   name = Bereich Kamor
+} itemfilter
+   
