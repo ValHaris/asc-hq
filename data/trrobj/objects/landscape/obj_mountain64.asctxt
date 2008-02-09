@@ -1,0 +1,20 @@
+ObjectType { 
+   Name = mountains
+   ID = 2600
+   parent = 509
+   LinkableObjects = 
+   NetBehaviour = NetToSelf AutoBorder
+
+   Weather = dry much_snow
+   dry { 
+      UseGFXpics = false
+      picture = obj_mountain64.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_mountain64.png 65
+      GraphicOperations = Snow_const
+   } much_snow
+} ObjectType
