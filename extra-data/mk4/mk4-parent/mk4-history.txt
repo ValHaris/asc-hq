@@ -2,7 +2,10 @@ History MK4-Set
 Grafiken: GAMER & Dr.Snuggels
 Spezifikationen: GAMER
 
-
+__________________
+10.02.2008 (GAMER)
+-Bugfix Monolith, kann nun Mineralien abbauen
+-PTerano, 30 Fuelverbrauch
 __________________
 02.02.2008 (GAMER)
 -Umbau Ablities -> Features

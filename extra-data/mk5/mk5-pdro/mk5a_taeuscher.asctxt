@@ -13,7 +13,7 @@ VehicleType {
       fuel = 40
    } Tank
    FuelConsumption = 2
-   Features = Kamikaze_only no_midair_refuel
+   Features = no_midair_refuel
    Movement = 0 0 0 0 100 100 100 0  
    Weight = 10
    Weapons { 

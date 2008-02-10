@@ -27,7 +27,7 @@ VehicleType {
       Vehicles = 
       Objects = 2 999 995
       ObjectsRemovable = 2 10 44 181
-      ObjectGroupsRemovable = 1 2 3 4 6 10 13
+      ObjectGroupsRemovable = 1 2 3 4 6 10 11 13
    } Construction
 
    Weapons { 
