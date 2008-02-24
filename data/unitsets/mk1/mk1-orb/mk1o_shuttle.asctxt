@@ -13,7 +13,7 @@ VehicleType {
    Movement -= 0 0 0 0 10 10 10 10 
    Weapons { 
       Initiative = 0
-      Number = 4
+      Number = 5
 
       Weapon0 ->* VehicleType.Orbit_Cannon 
       
@@ -25,5 +25,7 @@ VehicleType {
 
       Weapon3 ->* VehicleType.AmmoCM 
       Weapon3.Ammo = 5
+
+      Weapon4 ->* VehicleType.ServiceOrbit
    } Weapons
 } VehicleType

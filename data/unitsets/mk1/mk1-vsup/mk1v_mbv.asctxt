@@ -24,7 +24,7 @@ VehicleType {
    Weight = 90
 
    Construction { 
-      Buildings = 26 29 35-37
+      Buildings = 26 29 33-37
       Vehicles = 84 93 94 111 112 117 122 76 110
       Vehiclesinternally = 
       Objects = 9 44 2098 992 2097

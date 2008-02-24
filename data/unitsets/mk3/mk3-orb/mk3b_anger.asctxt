@@ -15,10 +15,13 @@ VehicleType {
       Material = 0
       fuel = 100
    } Tank
-   FuelConsumption = 20
    Features = moveduringreactionfire
    Weight = 190
+
    TerrainAccess ->* VehicleType.turret_all
+   Movement -= 0 0 0 3 0 0 0 0 
+   FuelConsumption = 20
+
    Weapons { 
       Initiative = 0
       Number = 1

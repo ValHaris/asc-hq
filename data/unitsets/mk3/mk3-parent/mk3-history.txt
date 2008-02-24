@@ -3,6 +3,13 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+-Booster 2 Stellplätze 410 Laderaum, kann Spacelab ins All schiessen
+-LR5 externalfueltransfer
+
+__________________
+10.02.2008 (GAMER)
+-Dora/K5 Techbugfix, HeavyGun muß erforscht werden
+__________________
 03.02.2008 (GAMER)
 Neu:
 -Panzerzug (Ersatz für Punch)

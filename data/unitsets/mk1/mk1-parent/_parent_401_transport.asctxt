@@ -147,7 +147,6 @@
    TurretOut ->* VehicleType.GrIO
    TurretOut.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
    TurretOut.MoveCost = 10 
-   TurretOut.DisableAttack = true
 
 
 ; ----------------------------------------------------------------------------------------------------------------

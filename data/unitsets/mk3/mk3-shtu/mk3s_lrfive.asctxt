@@ -9,6 +9,7 @@ VehicleType {
 
    Armor -= 50
    picture = MK3s_lrfive.png
+   Features += externalFuelTransfer
 
    Weapons { 
       Initiative = 0

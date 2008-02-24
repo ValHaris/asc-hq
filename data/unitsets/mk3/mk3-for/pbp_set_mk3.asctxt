@@ -3,5 +3,5 @@
    infotext = "base technology of the MK3 unit set"
    id = 100010
    parent = 100000
-   BlockingOtherTechnologies = 100304 100307 100308 100309 100314
+   BlockingOtherTechnologies = 100304 100307 100308 100314
 } Technology 

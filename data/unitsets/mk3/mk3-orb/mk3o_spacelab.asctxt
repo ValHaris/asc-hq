@@ -7,16 +7,19 @@ VehicleType {
    Picture = MK3o_spacelab.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
+   Features += jam_only_own_field
    Armor -= 50
    Jamming = 21
    Transportation ->* VehicleType.TransSpSt 
+
+   Height = ground_level orbit
    Tank { 
       Energy = 0
       Material = 18000
       fuel = 18000
    } Tank
    FuelConsumption = 100
-   Features += jam_only_own_field
+   Movement += 0 0 0 40 0 0 0 0
 
    Weapons { 
       Number = 5

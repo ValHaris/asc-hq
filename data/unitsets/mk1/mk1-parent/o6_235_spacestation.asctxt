@@ -11,10 +11,11 @@ VehicleType {
    View = 100
    ResourceDrillingRange = 6
    SelfRepairRate = 10
-   Weight = 4000
+   Weight = 400
    Category = heavy_aircraft
    Features += self_repairing ExternalMaterialTransfer ExternalFuelTransfer Repair_Facility automatic_resource_searching moveduringreactionfire
 
+   Height = orbit
    Transportation ->* VehicleType.TransSpSt 
    Tank { 
       Energy = 0

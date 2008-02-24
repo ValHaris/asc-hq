@@ -2,6 +2,18 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 __________________
+
+-Fix, kein externer FuelTransfer mehr
+-Shuttle, Service bugfix
+-MBV baut Spaceport (Satfabrik)
+Parents
+-Raumstation nur noch 400 Gewicht
+-Shuttle 310 Gewicht
+
+__________________
+10.02.2008 (GAMER)
+-Judy, Baubugfix, kann nun Mineralien abbauen
+__________________
 04.02.2008 (GAMER)
 -Oracle tracked
 -default radar vehicle 66 movement/tracked -- 80 movement/wheeled

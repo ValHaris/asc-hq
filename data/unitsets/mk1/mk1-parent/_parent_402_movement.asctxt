@@ -159,7 +159,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    Sat_Terrain {
-      terrain_any = runway
+      terrain_any =
       terrain_all =
       terrain_not =
       terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water Very_shallow_water river lava
