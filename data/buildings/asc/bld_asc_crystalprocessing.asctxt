@@ -50,8 +50,8 @@ BuildingType {
 
    StorageCapacity { 
       ASCmode { 
-         Energy = 5000
-         Material = 1000
+         Energy = 0
+         Material = 7000
          fuel = 1000
       } ASCmode
    } StorageCapacity
