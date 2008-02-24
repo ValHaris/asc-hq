@@ -17,7 +17,7 @@ VehicleType {
    Weight += 50
    Weapons { 
       Initiative = 0
-      Number = 5
+      Number = 6
       Weapon0 ->* VehicleType.AAMH
       Weapon0.type = air_missile shootable ammo_transfer
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit 
@@ -41,5 +41,6 @@ VehicleType {
       Weapon4 ->* VehicleType.AmmoCM
       Weapon4.Amo = 5
 
+      Weapon5 ->* VehicleType.ServiceOrbit
    } Weapons
 } VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = 14035
+   infotext = Forschungsprojekt abgeschlossen! - verfügbar!
+   id = 14035
+   RelatedUnitID = 14035
+   parent = 100020
+   researchpoints *= 1
+   techlevel = 5
+   TechnologiesRequired = -1
+} Technology
