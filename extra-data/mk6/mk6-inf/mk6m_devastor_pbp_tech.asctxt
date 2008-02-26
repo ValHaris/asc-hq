@@ -1,0 +1,10 @@
+technology {
+   Name = Devastor
+   infotext = Forschungsprojekt abgeschlossen! Devastor verfügbar!
+   id = 15210
+   RelatedUnitID = 15210
+   parent = 15000
+   researchpoints *= 18
+   techlevel = 5
+   TechnologiesRequired = 15000,100001,100105,15201 
+} Technology

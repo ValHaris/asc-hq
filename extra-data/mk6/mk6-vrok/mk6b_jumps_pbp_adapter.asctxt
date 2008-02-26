@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15303
+   ;Bezeichnung der verknüpften Technologie: Jumps
+   TechnologiesRequired = 15303
+} TechAdapter

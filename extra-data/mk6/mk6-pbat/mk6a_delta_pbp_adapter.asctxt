@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15327
+   ;Bezeichnung der verknüpften Technologie: Delta
+   TechnologiesRequired = 15327
+} TechAdapter

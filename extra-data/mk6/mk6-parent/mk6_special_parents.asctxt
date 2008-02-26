@@ -177,4 +177,47 @@ LRHEPT {
       } WeaponEffectiveness
    } LRHEPT
 
+   TeccnolsJump1 {
+      Height = ground_level
+      MaxDistance = 150
+      consumption {
+         Energie = 0
+         Material = 200
+         Fuel = 4000
+      } consumption
+      terrain_any = road runway lowland hard_sand soft_sand 
+      terrain_all = beacon
+      terrain_not = morass swamp forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } TeccnolsJump1
+
+   TeccnolsJump2 {
+      Height = ground_level
+      MaxDistance = 200
+      consumption {
+         Energie = 0
+         Material = 600
+         Fuel = 6000
+      } consumption
+      terrain_any = turret_foundation 
+      terrain_all = beacon
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } TeccnolsJump2
+
+   TeccnolsJump3 {
+      Height = ground_level
+      MaxDistance = 250
+      consumption {
+         Energie = 0
+         Material = 2000
+         Fuel = 10000
+      } consumption
+      terrain_any = lowland hard_sand soft_sand 
+      terrain_all = beacon
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } TeccnolsJump3
+
+
 } VehicleType

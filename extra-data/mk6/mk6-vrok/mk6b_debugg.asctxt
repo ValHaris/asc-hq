@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = SILO
+   ID = 15304
+   parent = 304 15000
+
+   Description = main rocket bunker
+;   Infotext = []
+   Picture = mk6b_debugg.pcx
+;   InfoImage = mk1b_silo.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   
+   View = 0
+   Features += ManualSelfDestruct
+   Jumpdrive ->* VehicleType.TeccnolsJump3
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = Evi
+   infotext = Forschungsprojekt abgeschlossen! Evi verfügbar!
+   id = 15241
+   RelatedUnitID = 15241
+   parent = 15000
+   researchpoints *= 5
+   techlevel = 2
+   TechnologiesRequired = 15000,100001,15201,100102,100210
+} Technology

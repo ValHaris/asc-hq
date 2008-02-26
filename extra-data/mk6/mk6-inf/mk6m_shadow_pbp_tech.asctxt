@@ -1,0 +1,10 @@
+technology {
+   Name = Shadow
+   infotext = Forschungsprojekt abgeschlossen! Shadow verfuegbar!
+   id = 15306
+   RelatedUnitID = 15306
+   parent = 15000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 15000,100001,15201,100104,100306
+} Technology

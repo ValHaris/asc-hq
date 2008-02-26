@@ -1,10 +1,10 @@
 technology {
-   Name = Ausu
+   Name = Asus
    infotext = Forschungsprojekt abgeschlossen! Asus verfuegbar!
-   id = 15270
-   RelatedUnitID = 15270
+   id = 15271
+   RelatedUnitID = 15271
    parent = 15000
-   researchpoints *= 5
-   techlevel = 1
-   TechnologiesRequired = 15000,100003,100101,100206 
+   researchpoints *= 8
+   techlevel = 2
+   TechnologiesRequired = 15000,100003,100102,100206 
 } Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15296
+   ;Bezeichnung der verknüpften Technologie: Small
+   TechnologiesRequired = 15296
+} TechAdapter

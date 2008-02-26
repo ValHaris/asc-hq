@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15210
+   ;Bezeichnung der verknüpften Technologie: Devastor
+   TechnologiesRequired = 15210
+} TechAdapter

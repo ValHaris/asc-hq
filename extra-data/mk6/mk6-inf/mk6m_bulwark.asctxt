@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = Bullwark
+   ID = 15211
+   parent = 211 15000
+
+;   Description = Robotverteidiger
+;   Infotext = []
+   Picture = mk6m_bullwark.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 50
+;   Movement += 0 0 0 5 0 0 0 0
+   Tank.material = 1000
+   Tank.fuel = 1100
+
+   Weapons {
+      Number = 4
+      Weapon1 ->* VehicleType.type_laser
+      Weapon1.Ammo = 2
+      Weapon3 ->* VehicleType.TeccEMP
+      Weapon3.Punch@MaxRange = 100
+      Weapon3.Punch@MinRange = 100
+      Weapon3.LaserRechargeCost.Fuel = 600
+      Weapon3.LaserRechargeCost.Material = 100
+   } Weapons
+} VehicleType

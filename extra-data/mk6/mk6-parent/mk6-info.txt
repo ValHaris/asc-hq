@@ -18,8 +18,11 @@ ID 15005 lab south
 -Mechwarrior
 ID 15201 Intruder
 ID 15209 Destructor
+ID 15210 Devastor
 ID 15213 Baltic
 ID 15216 Meo
+ ( 15241 Evi )
+ ( 15306 Shadow )
 
 --Tanks--
 ID 15290 CillaTE
@@ -29,15 +32,21 @@ ID 15293 Meta TE
 --FastAttack & Transport--
 
 --View--
-
+ID 15241 Evi
 
 --Jamming--
+ID 15306 Shadow
 
 --Air Defence--
 
 --Artillery--
+ID 15251 Baliste
+ID 15256 GB 137
 
 --Rocket Systems--
+ID 15296 Small
+ID 15303 Jumps
+ID 15304 Debugg
 
 --turrets & bunkers--
 
@@ -46,7 +55,10 @@ ID 15293 Meta TE
 --Orbital--
 
 --Aircraft--
-IS 15270 Asus
+ID 15271 Asus
+ID 15270 Deltafighter
+ID 15xxx Delta
+ID 15xxx Doomsday
 
 --Helicopter--
 

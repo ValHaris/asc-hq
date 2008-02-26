@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15211
+   ;Bezeichnung der verknüpften Technologie: Bullwark
+   TechnologiesRequired = 15211
+} TechAdapter

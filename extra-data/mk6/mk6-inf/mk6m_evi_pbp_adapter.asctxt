@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15241
+   ;Bezeichnung der verknüpften Technologie: Evi
+   TechnologiesRequired = 15241
+} TechAdapter

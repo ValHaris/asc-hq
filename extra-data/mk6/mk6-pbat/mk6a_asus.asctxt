@@ -1,9 +1,9 @@
 VehicleType { 
    Name = ASUS
-   parent = 270 
-   ID = 15270
+   parent = 271 
+   ID = 15271
 
-   Picture = MK1a_ARROW.pcx
+   Picture = mk6a_asus.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Tank.Material = 1000

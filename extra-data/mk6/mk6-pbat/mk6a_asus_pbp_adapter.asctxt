@@ -1,5 +1,5 @@
 Techadapter {
-   Name = 15270
+   Name = 15271
    ;Bezeichnung der verknüpften Technologie: Asus
-   TechnologiesRequired = 15270
+   TechnologiesRequired = 15271
 } TechAdapter

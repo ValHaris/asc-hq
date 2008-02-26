@@ -1,0 +1,10 @@
+technology {
+   Name = Jumps
+   infotext = Forschungsprojekt abgeschlossen! Jumps verfuegbar!
+   id = 15303
+   RelatedUnitID = 15303
+   parent = 15000
+   researchpoints *= 18
+   techlevel = 4
+   TechnologiesRequired = 15000,100002,100104,100301,100310 
+} Technology

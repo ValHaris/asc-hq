@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15256
+   ;Bezeichnung der verknüpften Technologie: GB 137
+   TechnologiesRequired = 15256
+} TechAdapter

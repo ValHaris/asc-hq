@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15251
+   ;Bezeichnung der verknüpften Technologie: Baliste
+   TechnologiesRequired = 15251
+} TechAdapter

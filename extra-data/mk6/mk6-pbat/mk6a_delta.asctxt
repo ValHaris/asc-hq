@@ -1,0 +1,56 @@
+VehicleType { 
+   Name = Delta
+   ID = 15327
+   parent = 327
+
+   Picture = mk6a_delta.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Category = heavy_aircraft
+   Weight = 300
+   Armor += 50
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 80
+      MaxLoadableMass = 160
+      CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out
+        UnitHeightAbs = medium_level_flight high_level_flight orbit
+        UnitHeightRel = -100
+        ContainerHeight = medium_level_flight high_level_flight orbit
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = 0 
+        RequiresUnitFeature = paratrooper
+      } EntranceSystem0
+   } Transportation
+
+
+   Tank.Material = 5000
+   Tank.Fuel = 20000
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+   movement += 0 0 0 0 -30 -20 180 90
+
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon0.shotFrom = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon0.Ammo = 3
+
+      Weapon1 ->* VehicleType.type_laser
+      Weapon1.targets = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon1.shotFrom = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon1.Ammo = 1
+
+      Weapon2 ->* VehicleType.EMP
+      Weapon2.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon2.shotFrom = low_level_flight medium_level_flight high_level_flight
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
+
+   } Weapons
+   
+} VehicleType

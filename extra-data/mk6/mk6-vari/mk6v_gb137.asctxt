@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = GB 137
+   ID = 15256
+   parent = 256 15000 497
+   
+   Description = jump gun
+   Infotext = []
+   Picture = mk6v_gb137.pcx
+   WreckageObject = 458
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Jumpdrive ->* VehicleType.TeccnolsJump1
+
+   Armor -= 150
+   View = 0
+
+   Height = ground_level low_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1400
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 10 50 0 0 0 
+   Category = building|turret|object
+   TerrainAccess ->* VehicleType.heli_terrain
+   HeightChangeMethod0.movecost = 1
+
+} VehicleType

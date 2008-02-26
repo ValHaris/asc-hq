@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = JUMPS
+   ID = 15303
+   parent = 303 15000
+
+   Description = turret rocket laucher
+   Infotext = [ bedingt mobile stationaere Boden-Boden Raketenabschußrampe. ]
+   Picture = mk6b_jumps.pcx
+;   InfoImage = mk1b_tml.jpg
+   GuideSortHelp = 505 414 0 0 6 0 0 0 0 0
+
+   Jumpdrive ->* VehicleType.TeccnolsJump2
+   View = 0
+   
+   Weapons {
+      Weapon0.MaxRange -= 20
+      Weapon0.MinRange -= 10
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+   } Weapons
+} VehicleType

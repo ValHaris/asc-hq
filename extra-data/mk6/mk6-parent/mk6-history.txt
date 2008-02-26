@@ -1,9 +1,24 @@
 History MK6 teccnols unit set
 
 __________________
+26.02.2008 (GAMER)
+-Asus -> med Fighter
+Neu:
+-Bullwark (def-mech)
+-Devastor (heavy mech)
+-Evi (radar mech)
+-Shadow (jam mech)
+-Baliste ( med ari)
+-GB137 (big ari)
+-Small (rocket tank)
+-Jumps (turret CM)
+-Debugg (bunker CM)
+-Deltefighter (light fighter)
+-Delta (def fighter/carrier)
+-Doomsday ( mixed fighter)
+__________________
 10.02.2008 (GAMER)
 -erste Gebäude eingefügt
-
 ________________
 10.11.2007 Gamer
 Neu:

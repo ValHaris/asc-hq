@@ -1,0 +1,10 @@
+technology {
+   Name = GB 137
+   infotext = Forschungsprojekt abgeschlossen! GB 137 verfuegbar!
+   id = 15256
+   RelatedUnitID = 15256
+   parent = 15000
+   researchpoints *= 17
+   techlevel = 4
+   TechnologiesRequired = 15000,100002,100104,100204 
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = Debugg
+   infotext = Forschungsprojekt abgeschlossen! Debugg verfuegbar!
+   id = 15304
+   RelatedUnitID = 15304
+   parent = 15000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 15000,100002,100105,100301,100310
+} Technology

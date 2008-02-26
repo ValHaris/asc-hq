@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15304
+   ;Bezeichnung der verknüpften Technologie: Debugg
+   TechnologiesRequired = 15304
+} TechAdapter

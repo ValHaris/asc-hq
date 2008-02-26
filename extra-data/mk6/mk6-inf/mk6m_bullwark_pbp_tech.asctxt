@@ -1,0 +1,10 @@
+technology {
+   Name = Bullwark
+   infotext = Forschungsprojekt abgeschlossen! Bullwark verfügbar!
+   id = 15211
+   RelatedUnitID = 15211
+   parent = 15000
+   researchpoints *= 12
+   techlevel = 4
+   TechnologiesRequired = 15000,100001,100104,15201 
+} Technology

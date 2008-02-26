@@ -1,0 +1,10 @@
+technology {
+   Name = Deltafighter
+   infotext = Forschungsprojekt abgeschlossen! Deltafighter verfuegbar!
+   id = 15270
+   RelatedUnitID = 15270
+   parent = 15000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 15000,100003,100101,100206 
+} Technology

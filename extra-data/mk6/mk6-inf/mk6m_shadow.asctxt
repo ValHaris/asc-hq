@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = SHADOW
+   ID = 15306
+   parent = 306 15000
+
+;   Infotext = [GolemType Roboter mit Radarstöhrelektronik. ]
+   picture = mk6m_shadow.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+;   wreckageobject = 14024
+
+   Tank.material = 1000
+   Tank.fuel = 1100
+
+   Weapons {
+      Number = 1
+      Weapon0 ->* VehicleType.TeccEMP
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+      Weapon0.LaserRechargeCost.Fuel = 580
+      Weapon0.LaserRechargeCost.Material = 80
+   } Weapons
+} VehicleType

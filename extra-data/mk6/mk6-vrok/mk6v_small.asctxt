@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = SMALL
+   ID = 15296
+   parent = 296 15000
+
+   Description = rocket tank
+;   Infotext = []
+   Picture = mk6v_small.pcx
+;   InfoImage = mk1v_hornet.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 30
+   
+   Weapons { 
+      Weapon1 ->* VehicleType.TeccEMP
+      Weapon1.Punch@MinRange = 100
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.LaserRechargeCost.Fuel = 600
+      Weapon1.LaserRechargeCost.Material = 100
+   } Weapons
+} VehicleType
