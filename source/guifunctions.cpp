@@ -1468,6 +1468,7 @@ class PutAntiTankMine : public PutGroundMine
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine(pos, cmantitankmine, 1 );
+         updateFieldInfo();
          displaymap();
       }
 
@@ -1488,6 +1489,7 @@ class PutAntiPersonalMine : public PutGroundMine
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine(pos, cmantipersonnelmine, 1);
+         updateFieldInfo();
          displaymap();
       }
 
@@ -1526,6 +1528,7 @@ class PutAntiShipMine : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, cmfloatmine, 1);
+         updateFieldInfo();
          displaymap();
       }
 
@@ -1559,6 +1562,7 @@ class PutAntiSubMine : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, cmmooredmine,1 );
+         updateFieldInfo();
          displaymap();
       }
 
