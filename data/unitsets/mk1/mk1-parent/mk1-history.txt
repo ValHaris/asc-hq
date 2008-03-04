@@ -2,7 +2,10 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 __________________
-
+04.03.2008 (GAMER)
+Sat selfdestruct entfernt
+__________________
+24.02.2008 (GAMER)
 -Fix, kein externer FuelTransfer mehr
 -Shuttle, Service bugfix
 -MBV baut Spaceport (Satfabrik)

@@ -51,9 +51,9 @@ ID 1445 FLAK
 ID 1462 FADV
 
 **Orbital Defence**
-ID 1476 AOS
-ID 1477 AOV
-ID 1478 WOAS
+ID 1478 AOS
+ID 1479 AOV
+ID 1480 WOAS
 
 Ground Defence
 ID 1405 IRONGUN
@@ -110,7 +110,11 @@ UBoote
 ID 1420 MU (Mini TransportU-Boot)
 ID 1421 THT 30(langstreckentorpedo)
 ID 1471 MUCM
-IF 1474 WATCHER
+ID 1474 WATCHER
+
+Schiff-Support
+ID 1481 MUHS
+ID 1482 Buffed
 
 Hoovercrafts
 ID 1427 Flussgeist

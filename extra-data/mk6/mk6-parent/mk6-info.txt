@@ -11,12 +11,16 @@ ID 15003 big factory west
 ID 15004 lab north
 ID 15005 lab south
 
+Objekte
+ID 15001 Leuchtfeuer (permanten)
+ID 15002 JumpField
 
 --Infantrie--
 *not available*
 
 -Mechwarrior
 ID 15201 Intruder
+ID 15208 Eneg
 ID 15209 Destructor
 ID 15210 Devastor
 ID 15213 Baltic
@@ -59,6 +63,9 @@ ID 15271 Asus
 ID 15270 Deltafighter
 ID 15xxx Delta
 ID 15xxx Doomsday
+
+Aircraft Support
+ID 15325 Tanker
 
 --Helicopter--
 

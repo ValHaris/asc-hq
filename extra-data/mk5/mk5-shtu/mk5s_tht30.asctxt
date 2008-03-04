@@ -4,7 +4,7 @@ VehicleType {
    ID = 1421
    Description = Langstreckentorpedo
    Infotext = [Neben Dem stationaeren Torpedolauncher wurde dieser Langstreckentorpedo entwickelt. 
-               Schnell, selbst zielsuchend und treffsicher stellt er eine Gefahr fuer jedes Schif dar. 
+               Schnell, selbst zielsuchend und treffsicher stellt er eine Gefahr fuer jedes Schiff dar. 
                Der Torpedo fliegt in einer sich ständig erneuernden Luftblase durch das Wassser und 
                erreicht so eine ueberdurchschnittlich hohe Geschwindigkeit. Er ist nur schwer zu 
                erkennen und wenn man ihn entdeckt, ist es meist schon zu spaet.]
@@ -20,7 +20,7 @@ VehicleType {
    ResourceDrillingRange = 0
    SelfRepairRate = 0
 
-   Height = deep_submerged submerged floating
+   Height = floating
    Tank { 
       Energy = 0
       Material = 0

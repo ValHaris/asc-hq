@@ -3,7 +3,8 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
 Spezifikationen: GAMER
 
 __________________
--Thunder Spy neue Grafik
+24.02.2008 (GAMER)
+-Thunder Spy neue Grafik,Techbugfix
 -Orbiter externalFuelTransfer
 __________________
 10.02.2008 (GAMER)

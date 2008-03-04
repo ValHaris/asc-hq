@@ -219,5 +219,19 @@ LRHEPT {
       terrain_kill = 
    } TeccnolsJump3
 
+   TeccnolsJump4 {
+      Height = medium_level_flight
+      MaxDistance = 200
+      consumption {
+         Energie = 0
+         Material = 600
+         Fuel = 5000
+      } consumption
+      terrain_any = deep_water water river shallow_water very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside Mountains High_mountains Ditch Turret_foundation Installation small_rocks Large_rocks Railroad Frozen_water Forest
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TeccnolsJump4
+
 
 } VehicleType

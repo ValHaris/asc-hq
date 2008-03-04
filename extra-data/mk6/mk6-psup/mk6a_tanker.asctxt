@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = TANKER
+   ID = 15325
+   parent = 497 325 15000
+
+   Picture = mk6a_tanker.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Category = heavy_aircraft
+   Weight = 300
+   Armor += 50
+   View = 0
+   Features += ExternalMaterialTransfer ExternalAmmoTransfer
+   JumpDrive ->* VehicleType.TeccnolsJump4
+
+   Tank.Material = 30000
+   Tank.Fuel += 10000
+   movement -= 0 0 0 20 20 20 0 0
+   Terrainaccess ->* VehicleType.heli_terrain
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.ServiceGround
+      Weapon1 ->* VehicleType.AmmoTorp
+      Weapon1.Ammo = 50
+      Weapon2 ->* Vehicletype.AmmoLM
+      Weapon2.Ammo = 50
+      Weapon3 ->* VehicleType.AmmoCannon
+      Weapon3.Ammo = 100
+   } Weapons
+   
+} VehicleType

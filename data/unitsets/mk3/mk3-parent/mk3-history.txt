@@ -3,6 +3,7 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+24.02.2008 (GAMER)
 -Booster 2 Stellplätze 410 Laderaum, kann Spacelab ins All schiessen
 -LR5 externalfueltransfer
 

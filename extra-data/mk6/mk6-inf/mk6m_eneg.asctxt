@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = ENEG
+   ID = 15208
+   parent = 208
+
+   Description = schneller Kampfroboter
+   Infotext = []
+   Picture = mk6m_eneg.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Construction { 
+      Objects = 15002
+   } Construction
+   
+   Tank.Fuel = 5000
+   Tank.Material = 1000
+   
+   Weapons {
+      Weapon0 ->* VehicleType.type_Laser
+   } Weapons
+} VehicleType

@@ -3,6 +3,12 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
+__________________
+04.03.2008 (GAMER)
+-Lava, nicht mehr auf shallow_water
+-Lavadefence, weniger Movemalus
+-Berge filtern River
+
 _________________
 26.01.2008 (GAMER)
 -Wald korrigiert, wachstum, nicht mehr auf Hard_sand/Soft_sand

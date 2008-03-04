@@ -17,8 +17,8 @@ VehicleType {
    Height = ground_level low_level_flight 
    Tank { 
       Energy = 0
-      Material = 0
-      fuel = 1400
+      Material = 1000
+      fuel = 5000
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 10 50 0 0 0 

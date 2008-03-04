@@ -1,0 +1,10 @@
+technology {
+   Name = Eneg
+   infotext = Forschungsprojekt abgeschlossen! Eneg verfügbar!
+   id = 15208
+   RelatedUnitID = 15208
+   parent = 15000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 15000,100001,100101 
+} Technology

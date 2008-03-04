@@ -19,7 +19,7 @@ VehicleType {
    Transportation.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft 
    Transportation.EntranceSystem0.DisableAttack = true
 
-   Features = construct_specific_buildings Vehicle_Production
+   Features += construct_specific_buildings Vehicle_Production
    TerrainAccess ->* VehicleType.offroad 
 
    Tank { 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SILO
+   Name = DEBUGG
    ID = 15304
    parent = 304 15000
 
@@ -10,6 +10,8 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    
    View = 0
+   Tank.Fuel = 10000
+   Tank.Material = 2000
    Features += ManualSelfDestruct
    Jumpdrive ->* VehicleType.TeccnolsJump3
 } VehicleType

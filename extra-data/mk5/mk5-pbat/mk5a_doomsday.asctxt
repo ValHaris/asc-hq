@@ -11,7 +11,7 @@ VehicleType {
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
-      fuel = 5000
+      fuel = 8000
    } Tank
    Features += no_midair_refuel 
    FuelConsumption = 20

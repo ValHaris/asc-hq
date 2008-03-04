@@ -11,6 +11,8 @@ VehicleType {
 
    Jumpdrive ->* VehicleType.TeccnolsJump2
    View = 0
+   Tank.Fuel = 7000
+   Tank.Material = 1000
    
    Weapons {
       Weapon0.MaxRange -= 20

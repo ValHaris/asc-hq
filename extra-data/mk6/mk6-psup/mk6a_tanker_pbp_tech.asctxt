@@ -1,0 +1,10 @@
+technology {
+   Name = Tanker
+   infotext = Forschungsprojekt abgeschlossen! Tanker verfuegbar!
+   id = 15325
+   RelatedUnitID = 15325
+   parent = 15000
+   researchpoints *= 8
+   techlevel = 2
+   TechnologiesRequired = 15000,100003,100102 
+} Technology
