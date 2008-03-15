@@ -10,7 +10,7 @@ VehicleType {
    WreckageObject = 434
    Height = deep_submerged submerged floating 
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 0

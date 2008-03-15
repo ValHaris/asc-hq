@@ -6,7 +6,7 @@ VehicleType {
    
    Description = defence tank
    Infotext = []
-   WaitFortack = true
+   WaitForAttack = true
    GuideSortHelp = 503 295 507 0 0 0 0 0 0 0
 
    Armor = 850

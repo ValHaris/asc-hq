@@ -34,7 +34,7 @@ VehicleType {
       Objects = 
    } Construction
 
-   WaitFortack = false
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

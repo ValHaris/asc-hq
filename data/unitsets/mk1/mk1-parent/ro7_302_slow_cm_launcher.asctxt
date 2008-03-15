@@ -12,7 +12,7 @@ VehicleType {
    Armor = 250
    Weight = 210
    View = 20
-   WaitFortack = true
+   WaitForAttack = true
    Features = no_reactionfire
 
    Tank { 

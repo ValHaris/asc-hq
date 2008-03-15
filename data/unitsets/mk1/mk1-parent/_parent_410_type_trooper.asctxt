@@ -14,7 +14,7 @@
    View = 30
    Height = ground_level 
    Jamming = 11
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 300

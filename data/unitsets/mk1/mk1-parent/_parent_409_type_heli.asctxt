@@ -15,7 +15,7 @@
    WreckageObject = 495 496
    Height = ground_level low_level_flight medium_level_flight
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 0

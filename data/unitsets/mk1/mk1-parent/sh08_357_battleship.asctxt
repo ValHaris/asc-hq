@@ -21,7 +21,7 @@ VehicleType {
    Armor = 1800
    View = 60
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Features = MoveDuringReactionFire sonar self_repairing
    Category = heavy_ship
    MaxSurvivableStorm = 250

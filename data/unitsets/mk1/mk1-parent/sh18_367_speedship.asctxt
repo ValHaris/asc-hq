@@ -12,7 +12,7 @@ VehicleType {
    Armor = 700
    View = 30
    Jamming = 29
-   WaitFortack = false
+   WaitForAttack = false
    Features = move_after_attack jam_only_own_field
    Category = light_ship
    MaxSurvivableStorm = 170

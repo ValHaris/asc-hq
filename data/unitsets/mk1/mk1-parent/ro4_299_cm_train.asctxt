@@ -11,7 +11,7 @@ VehicleType {
 
 
    Armor = 350
-   WaitFortack = true
+   WaitForAttack = true
    Features = no_reactionfire
    Weight = 250
 

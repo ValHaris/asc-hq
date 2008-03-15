@@ -2,7 +2,7 @@ ObjectType {
    Name = armor railroad
    ID = 992
    canExistBeneathBuildings = true
-   Weather = dry 
+   Weather = dry much_snow
    visible_in_fogOfWar = false
    LinkableObjects = 999 995 2 991
    Armor = 500
@@ -38,8 +38,15 @@ ObjectType {
    TerrainProperties_Filter = forest small_rocks large_rocks
    TerrainProperties_Add = Railroad 
    dry { 
-      UseGFXpics = true
-      GFXpictures = 2400 2401 2402 2403 2404 2405 2406 2407 2408 2409 2410 2411 2412 2413 2414 2415 2416 2417 2418 2419 2420 2421 2422 2423 2424 2425 2426 2427 2428 2429 2430 2431 2432 2433 2434 2435 2436 2437 2438 2439 2440 2441 2442 2443 2444 2445 2446 2447 2448 2449 2450 2451 2452 2453 2454 2455 2456 2457 2458 2459 2460 2461 2462 2463 
-      FlipPictures = 0
+      UseGFXpics = false
+      picture = ob_railroad_armor_992.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
    } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_railroad_armor_992_snow.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } much_snow
 } ObjectType

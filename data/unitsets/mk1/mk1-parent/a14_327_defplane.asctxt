@@ -22,7 +22,7 @@ VehicleType {
    FuelConsumption = 26
    Movement = 0 0 0 60 190 190 0 0 
 
-   WaitFortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 2

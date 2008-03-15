@@ -13,7 +13,7 @@
    View = 40
    Height = floating
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 0

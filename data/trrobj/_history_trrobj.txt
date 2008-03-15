@@ -4,6 +4,10 @@ Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
 __________________
+15.03.2008 (GAMER)
+-Crystals Wachstumsrate erhöht auf 0.075
+-Neue Grafiken fuer alle Schienenarten
+__________________
 04.03.2008 (GAMER)
 -Lava, nicht mehr auf shallow_water
 -Lavadefence, weniger Movemalus

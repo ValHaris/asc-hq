@@ -17,7 +17,7 @@ VehicleType {
    Features += mineview immune_to_mines
    Category = light_wheeled_vehicle
    Weight = 15
-   waitfortack = true
+   WaitForAttack = true
 
    Weapons { 
       Initiative = 0

@@ -8,7 +8,7 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 221 508 0 0 0 0 0 0 0 0
 
-   WaitFortack = true
+   WaitForAttack = true
    Features += MoveDuringReactionFire
    Tank { 
       Energy = 0

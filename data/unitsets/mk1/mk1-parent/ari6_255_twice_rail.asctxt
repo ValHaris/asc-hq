@@ -17,7 +17,7 @@ VehicleType {
 
    Armor -= 100
    View = 30
-   WaitFortack = true
+   WaitForAttack = true
    Tank { 
       Energy = 0
       Material = 0

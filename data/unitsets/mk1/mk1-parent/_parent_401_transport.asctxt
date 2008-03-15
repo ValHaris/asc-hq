@@ -374,7 +374,6 @@
       EntranceSystem2 ->* VehicleType.GrIO
       EntranceSystem2.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystem2.MoveCost = 10 
-      EntranceSystem2.DisableAttack = true
    } TransVehicleHeavy
 
 ;---------- Hoovercraft ----------

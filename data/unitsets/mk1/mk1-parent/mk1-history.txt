@@ -2,6 +2,12 @@ ASC Standart Units
 Specifications by GAMER (gamer@ulrichshorst.de)
 
 __________________
+15.03.2008 (GAMER)
+-Booster-parent , Höhenstufenwechsel ohne Feldwechsel
+-alle Dateien umgestellt waitfortack auf waitforattack
+-FLugzeug Bodenkanone, D1 = 100%, D2 = 80%
+
+__________________
 04.03.2008 (GAMER)
 Sat selfdestruct entfernt
 __________________

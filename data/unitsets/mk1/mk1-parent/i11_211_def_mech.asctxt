@@ -12,7 +12,7 @@ VehicleType {
    Weight += 1
    Features += moveduringreactionfire
    Movement -= 0 0 0 10 0 0 0 0 
-   Waitfortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 3

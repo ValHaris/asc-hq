@@ -23,7 +23,7 @@ ObjectType {
       fuel = 50
       Movement = 20
    } RemovalCost
-   growthRate = 0.05
+   growthRate = 0.075
    TerrainAccess { 
       terrain_any = hard_sand soft_sand mountains high_mountains
       terrain_all = 

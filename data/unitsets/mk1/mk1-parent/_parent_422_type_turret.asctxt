@@ -10,7 +10,7 @@
    Armor = 800
    View = 40
    Jamming = 0
-   WaitFortack = true
+   WaitForAttack = true
    Features = onlyTransMove
 
    Height = ground_level 

@@ -23,4 +23,16 @@ ObjectType {
       terrain_kill = large_rocks very_shallow_water shallow_water Water Deep_water lava 
    } TerrainAccess
    TerrainProperties_Filter = forest small_rocks 
+   dry { 
+      UseGFXpics = false
+      picture = ob_railroad_small_991.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_railroad_2_snow.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } much_snow
 } ObjectType

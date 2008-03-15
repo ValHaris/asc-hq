@@ -1,9 +1,9 @@
 itemfilter {
    Vehicles =
    Buildings = 
-   Objects = 2000-3999
+   Objects = 2000-2096 2100-2104 2109-2151 2154-2499 2502-2505 2507 2509-3999
    Terrain = 2000-3999
-   name = asc2 grafic system
+   name = asc terrain 
    activated = false
 } itemfilter
    

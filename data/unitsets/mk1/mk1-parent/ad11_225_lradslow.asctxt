@@ -10,7 +10,7 @@ VehicleType {
 
    Armor = 250
    Picture = g_spike.pcx
-   WaitFortack = true
+   WaitForAttack = true
    Tank { 
       Energy = 0
       Material = 0

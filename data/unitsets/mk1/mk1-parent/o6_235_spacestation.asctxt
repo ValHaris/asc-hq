@@ -27,7 +27,7 @@ VehicleType {
    FuelConsumption = 100
    TerrainAccess ->* VehicleType.sat_terrain 
 
-   waitfortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 4

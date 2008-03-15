@@ -11,7 +11,7 @@ VehicleType {
    Armor = 500
    View = 20
    Jamming = 39
-   WaitFortack = false
+   WaitForAttack = false
    Features = jam_only_own_field sonar automatic_resource_searching mine_layer mineview
    Category = light_ship
    MaxSurvivableStorm = 210

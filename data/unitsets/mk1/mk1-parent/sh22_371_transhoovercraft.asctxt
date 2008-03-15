@@ -12,7 +12,7 @@ VehicleType {
    Armor = 550
    View = 30
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Features = moveduringreactionfire
    Category = hoovercraft
    MaxSurvivableStorm = 140

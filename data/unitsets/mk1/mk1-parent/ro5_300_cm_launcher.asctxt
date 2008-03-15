@@ -12,7 +12,7 @@ VehicleType {
    Armor = 300
    View = 20
    Jamming = 30
-   WaitFortack = true
+   WaitForAttack = true
    Features += no_reactionfire jam_only_own_field
    Category = light_wheeled_vehicle
    Weight = 30

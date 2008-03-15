@@ -10,7 +10,7 @@ VehicleType {
 
    
    View = 60
-   WaitFortack = true
+   WaitForAttack = true
    Transportation { 
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 25

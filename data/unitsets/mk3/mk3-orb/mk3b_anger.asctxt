@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 509 600 0 0 3 0 0 0 0 0
 
    Armor = 400
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 0

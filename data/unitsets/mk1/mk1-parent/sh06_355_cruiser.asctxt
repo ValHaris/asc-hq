@@ -18,7 +18,7 @@ VehicleType {
    Armor = 1400
    View = 50
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Features = MoveDuringReactionFire Repair_Facility
    Category = heavy_ship
    MaxSurvivableStorm = 230

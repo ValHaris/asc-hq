@@ -11,7 +11,7 @@ VehicleType {
 
    Height = ground_level 
    Jamming = 29
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 0

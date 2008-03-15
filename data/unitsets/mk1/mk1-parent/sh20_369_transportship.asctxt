@@ -19,7 +19,7 @@ VehicleType {
    Armor = 1000
    View = 30
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Features = ExternalFuelTransfer ExternalMaterialTransfer
    Category = heavy_ship
    MaxSurvivableStorm = 255

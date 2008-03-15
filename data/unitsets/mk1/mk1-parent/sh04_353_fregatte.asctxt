@@ -13,7 +13,7 @@ VehicleType {
    Armor = 1000
    View = 40
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Features = MoveDuringReactionFire
    Category = medium_ship
    MaxSurvivableStorm = 210

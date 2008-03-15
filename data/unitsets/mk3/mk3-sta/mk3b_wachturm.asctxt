@@ -9,4 +9,5 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Features += ManualSelfDestruct
+   Weight = 6000
 } VehicleType

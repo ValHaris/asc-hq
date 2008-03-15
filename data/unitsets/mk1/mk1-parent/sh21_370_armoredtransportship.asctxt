@@ -13,7 +13,7 @@ VehicleType {
    Armor = 1500
    View = 30
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Features = ExternalFuelTransfer ExternalMaterialTransfer moveduringreactionfire icebreaker
    Category = heavy_ship
    MaxSurvivableStorm = 255

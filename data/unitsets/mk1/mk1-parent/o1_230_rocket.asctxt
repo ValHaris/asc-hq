@@ -10,9 +10,14 @@ VehicleType {
 
    Armor = 80
    View = 10
-   Height = ground_level low_level_flight medium_level_flight high_level_flight 
    Jamming = 0
-   WaitFortack = false
+   Features = no_midair_refuel  
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 300
+
    Transportation { 
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 410
@@ -30,40 +35,41 @@ VehicleType {
         DockingHeightRel = -100 
       } EntranceSystem1
    } Transportation
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
    Tank { 
       Energy = 0
       Material = 0
       fuel = 300
    } Tank
    FuelConsumption = 100
-   Features = no_midair_refuel  
    Movement = 0 0 0 20 0 0 0 0  
-   Category = heavy_aircraft
-   MaxSurvivableStorm = 0
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 300
    TerrainAccess { 
       terrain_any = Runway 
       terrain_all = 
       terrain_not = 
       terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
    } TerrainAccess
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0
    } Weapons
+
    HeightChangeMethodNum = 1
    HeightChangeMethod0 {
       movecost = 10
       heightdelta = 3
-      dist = 1
+      dist = 0
       startheight = ground_level low_level_flight medium_level_flight high_level_flight
       canattack = true
    } HeightChangeMethod0
+
 } VehicleType

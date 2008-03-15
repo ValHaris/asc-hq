@@ -19,7 +19,7 @@ VehicleType {
    } HeightChangeMethod1
    HeightChangeMethod2 {
       movecost = 0
-      heightdelta = -1
+      heightdelta = -2
       dist = 0
       startheight = ground_level
       canattack = true
