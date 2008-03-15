@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Stationaere Abschussvorrichtung fuer Torpedos. Da nur wenige Torpedos gelagert werden koennen, muss staendig fuer Nachschub gesorgt werden.]
    Picture = MK5b_TLAUNCHER.pcx
 
-   Armor = 450
+   Armor = 500
    View = 50
    Height = deep_submerged submerged floating 
    Jamming = 0
@@ -38,14 +38,14 @@ VehicleType {
       Objects = 
    } Construction
 
-   WaitFortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 120
       Number = 1
       Weapon0 ->* vehicleType.UTorp 
       Weapon0.MaxRange = 50
       Weapon0.Ammo = 6
-      Weapon0.ReacionfireShots = 3
+      Weapon0.ReactionFireShots = 2
       Weapon0.Punch@MaxRange = 105
       Weapon0.Punch@MinRange = 110
    } Weapons

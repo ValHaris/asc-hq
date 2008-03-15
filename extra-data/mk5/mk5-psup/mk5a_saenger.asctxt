@@ -16,10 +16,10 @@ VehicleType {
    WreckageObject = 1476 300
 
    Armor = 350
-   View = 50
+   View = 60
    Height = ground_level low_level_flight medium_level_flight high_level_flight
-   Jamming = 0
-   Features =   
+   Jamming = 39
+   Features = jam_only_own_field
    Category = heavy_aircraft
    MaxSurvivableStorm = 0
    ResourceDrillingRange = 0
@@ -44,7 +44,7 @@ VehicleType {
       } EntranceSystem1
    } Transportation
 
-   Movement = 0 0 0 65 120 180 180
+   Movement = 0 0 0 65 120 180 180 0
    Tank { 
       Energy = 0
       Material = 0
@@ -64,7 +64,7 @@ VehicleType {
       Objects = 
    } Construction
 
-   WaitFortack = false
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

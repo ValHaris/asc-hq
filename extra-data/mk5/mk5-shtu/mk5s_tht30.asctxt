@@ -28,7 +28,7 @@ VehicleType {
    } Tank
    FuelConsumption = 10
 
-   WaitFortack = false
+   WaitForAttack = false
    Movement = 110 110 69 0 0 0 0 
    TerrainAccess { 
       terrain_any = Shallow_water Water Deep_water Very_shallow_water River swamp

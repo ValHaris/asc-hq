@@ -12,7 +12,7 @@ VehicleType {
    Picture = MK5i_Mechanic.pcx
    WreckageObject = 1416
    Transportation ->* VehicleType.TransTurretmed 
-   WaitFortack = true
+   WaitForAttack = true
    Features += construct_specific_buildings construct_vehicles paratrooper mine_layer ExternalRepair mineview automatic_resource_searching
    ResourceDrillingRange = 2
    SelfRepairRate = 20

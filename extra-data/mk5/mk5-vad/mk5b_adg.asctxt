@@ -12,7 +12,7 @@ VehicleType {
    Weight = 40
    jamming = 11
    Features += jam_only_own_field ManualSelfDestruct
-   WaitFortack = true
+   WaitForAttack = true
    Tank { 
       Energy = 0
       Material = 0

@@ -10,7 +10,7 @@ VehicleType {
 
    Features = 
 
-   WaitFortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 1

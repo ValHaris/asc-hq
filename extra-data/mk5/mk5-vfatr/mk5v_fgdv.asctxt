@@ -10,7 +10,7 @@ VehicleType {
    Features += moveduringreactionfire   
    Movement -= 0 0 0 10 0 0 0 0 
 
-   Waitfortack = true
+   WaitForAttack = true
    Weapons { 
       Weapon0 ->* vehicleType.Def_MG 
       Weapon1.MaxRange = 40

@@ -13,16 +13,16 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 3
 
       Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange += 3
-      Weapon0.Punch@MinRange += 3
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
 
-      Weapon1 ->* VehicleType.ASM 
       Weapon1.Ammo = 4
 
       Weapon2.Punch@MaxRange = 42
       Weapon2.Punch@MinRange = 42
+
+      Weapon3.Ammo = 1
    } Weapons
 } VehicleType

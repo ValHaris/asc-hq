@@ -27,7 +27,7 @@ VehicleType {
    FuelConsumption = 18
    Movement = 0 0 0 72 0 0 0 0 
 
-   WaitFortack = false
+   WaitForAttack = false
 
    TerrainAccess ->* VehicleType.hoover_terrain
 

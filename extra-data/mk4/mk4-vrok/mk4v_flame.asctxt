@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 505 413 0 0 4 0 0 0 0 0
 
    Armor += 20
-   WaitFortack = true
+   WaitForAttack = true
    Features += no_reactionfire
    Category = heavy_wheeled_vehicle
    Weight = 125

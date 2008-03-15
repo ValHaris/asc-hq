@@ -1,0 +1,5 @@
+Techadapter {
+   ; Flyer
+   Name = 1485
+   TechnologiesRequired = 1485
+} TechAdapter

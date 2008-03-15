@@ -1,0 +1,10 @@
+technology {
+   Name = Deltabomber
+   infotext = Forschungsprojekt abgeschlossen! Deltabomber verfuegbar!
+   id = 15276
+   RelatedUnitID = 15276
+   parent = 15000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 15000,100003,100101,100205 
+} Technology

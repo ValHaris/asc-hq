@@ -15,7 +15,7 @@ VehicleType {
    Transportation.EntranceSystem3 ->* VehicleType.subIO
 
    Height = submerged floating 
-   Movement += 0 10 0 0 0 0 0 0 
+   Movement += 0 15 0 0 0 0 0 0 
    
    Weapons { 
       Number = 7

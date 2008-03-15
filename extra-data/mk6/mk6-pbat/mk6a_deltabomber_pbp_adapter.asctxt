@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15276
+   ;Bezeichnung der verknüpften Technologie: Deltabomber
+   TechnologiesRequired = 15276
+} TechAdapter

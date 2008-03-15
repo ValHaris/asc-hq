@@ -2,6 +2,19 @@ MK5 Outsider
 GAMER
 
 __________________
+15.03.2008 (GAMER)
+-Bulldozer, baut eigene landebahn
+-MUHS, Rohstoffsuche Reichweite 4 (vorher 0), Servicewaffe eingebaut (Reparatur), Gebäudebau aktiviert, Unterwaserausgang
+-MUCM, FP 2700
+-TLauchner, RF 2
+-CCS, submerged 15 Movement
+-buffed +200 Armor
+-Sänger 60 View, low_stealth
+Neu:
+-Beep, Sonarboje
+-MJU, Mini-Jagt-Uboot
+-Flyer, schlauchboot
+__________________
 04.03.2008 (GAMER)
 -Tenga , external Fuel
 -THT 30 nicht mehr erforschbar (PBP), nur noch für Missionskarten vorgesehen
@@ -30,7 +43,7 @@ Neu:
 -AOS, ANti Orbital/High AIr Bunker
 -AOV, Anti Sat Attack
 -WOAS, Long Range Anti Sat
--Guard, nicht mehr SSM, sonder SOM
+-Guard, nicht mehr SSM, sondern SOM
 -LCC -> CCS , Command Carrier Submarine, neue Definitionen/Eigenschaften
 -getarnte landebahn, Panzersperren und Stacheldraht baubar
 __________________

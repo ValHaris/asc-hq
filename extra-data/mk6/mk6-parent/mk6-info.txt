@@ -61,10 +61,12 @@ ID 15304 Debugg
 --Aircraft--
 ID 15271 Asus
 ID 15270 Deltafighter
+ID 15276 Deltabomber
 ID 15xxx Delta
 ID 15xxx Doomsday
 
 Aircraft Support
+ID 15247 Viewer
 ID 15325 Tanker
 
 --Helicopter--
@@ -75,7 +77,9 @@ ID 15325 Tanker
 
 --Supportships--
 
+
 --Carrier/Submarines
+ID 15360 Carrier
 
 Trains
 *not available*

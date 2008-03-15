@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = Flyer
+   parent = 350
+   ID = 1485
+   Description = Schlauchboot
+   Infotext = [Der Flyer besteht aus 2 mit Luft gefüllten Schläuchen, die durch ein Metallgestell verbunden sind. Als Antrieb dienen 2 120PS 
+               Aussenbordmotoren. Am Metallgestell ist ein Torpedo verankert, der kurz vor dem Ziel ausgeklinkt wird. Da es praktisch keinen 
+               Tiefgang hat, sehr klein ist und auch kaum elektromagnetisch zu erfassen ist, können Seeminen dem kleinen Boot nichts anhaben. 
+               Da es oft sein Ziel nicht erreicht, wurde auf eine Besatzung verzichtet und vergesteuert.]
+   Picture = mk5s_flyer.pcx
+
+   Armor -= 100
+   Weight = 10
+   View = 10
+   Features = immune_to_mines move_after_attack
+   Category = default
+   MaxSurvivableStorm = 90
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+
+   Height = ground_level
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 500
+   } Tank
+   FuelConsumption = 15
+   Movement = 0 0 0 100 0 0 0 0 
+   
+   Weapons { 
+      Initiative = 120
+      Number = 1
+      Weapon0 ->* Vehicletype.STorp 
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+   } Weapons
+} VehicleType

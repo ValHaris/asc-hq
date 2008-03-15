@@ -13,7 +13,7 @@ VehicleType {
    } ConstructionCost
    Height = ground_level
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Tank { 
       Energy = 0
       Material = 0

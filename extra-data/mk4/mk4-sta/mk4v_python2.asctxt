@@ -10,7 +10,7 @@ VehicleType {
    wreckageobject = 14030
 
    Features = leaves_tracks move_after_attack
-   Waitfortack = true
+   WaitForAttack = true
    
    Movement -= 0 0 0 10 0 0 0 0 
    Weapons { 

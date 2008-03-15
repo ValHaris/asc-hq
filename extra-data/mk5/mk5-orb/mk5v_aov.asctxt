@@ -10,7 +10,7 @@ VehicleType {
 
    Movement -= 0 0 0 10 0 0 0 0
 
-   WaitFortack = false
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 1

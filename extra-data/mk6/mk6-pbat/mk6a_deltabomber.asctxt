@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = DELTABOMBER
+   parent = 276 
+   ID = 15276
+   
+   Description = light bomber
+   Infotext = []
+   Picture = mk6a_deltabomber.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor -= 50
+   Tank.Material = 500 
+   Features += paratrooper
+
+   Height = low_level_flight medium_level_flight high_level_flight orbit
+   movement += 0 0 0 0 0 0 170 60
+
+   Weapons {
+      Number = 1
+      Weapon0 ->* VehicleType.medbomb
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+      Weapon0.Ammo = 6
+   } Weapons
+} VehicleType

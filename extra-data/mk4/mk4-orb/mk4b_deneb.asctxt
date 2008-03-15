@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor += 40
-   WaitFortack = true
+   WaitForAttack = true
    Features += ManualSelfDestruct
 
    Weapons { 

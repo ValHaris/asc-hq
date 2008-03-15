@@ -13,7 +13,7 @@ VehicleType {
    WreckageObject = 1416
 
    Transportation ->* VehicleType.TransTurretbig 
-   WaitFortack = true
+   WaitForAttack = true
    Features += construct_specific_buildings construct_vehicles paratrooper ExternalRepair automatic_resource_searching
    ResourceDrillingRange = 2
    SelfRepairRate = 20

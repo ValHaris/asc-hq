@@ -2,6 +2,9 @@ VehicleType {
    Abstract = true
    ID = 15000
 
+
+
+;--- Waffen ---
    TeccEMP { 
          Name = EMP H
          Type = Laser shootable 
@@ -69,6 +72,13 @@ VehicleType {
    TeccEMP2Air.HitAccuracy.u2 = 100
    TeccEMP2Air.HitAccuracy.u3 = 50
 
+   TeccEMPAir ->* vehicleType.TeccEMP
+   TeccEMPAir.Name = EMP D 
+   TeccEMPAir.targets = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+   TeccEMPAir.shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+   TeccEMPAir.HitAccuracy.d1 = 90
+   TeccEMPAir.HitAccuracy.0 = 100
+   TeccEMPAir.HitAccuracy.u1 = 90
 
 Plasmabomb { 
          Type = Laser shootable 

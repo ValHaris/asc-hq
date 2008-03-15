@@ -24,7 +24,7 @@ VehicleType {
    } Tank
    FuelConsumption = 30
 
-   WaitFortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 120
       Number = 1

@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = VIEWER
+   parent = 497 247 15000
+   ID = 15247
+
+   Picture = mk6a_viewer.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Features += MoveDuringReactionFire sonar
+   Armor += 150
+
+   Tank.Material = 1000
+   TerrainAccess.Any = runway shallow_water water deep_water river
+      
+   WaitForAttack = true
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.TeccEMPAir
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+
+   } Weapons
+} VehicleType

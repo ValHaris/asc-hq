@@ -38,6 +38,7 @@ ID 1429 Scout
 ID 1428 GCS
 ID 1430 PRD2
 ID 1473 Tontaube
+ID 1481
 
 **Jamming**
 ID 1414 GJS DHT
@@ -105,12 +106,14 @@ ID 1456 Visby
 ID 1457 Skjold X
 ID 1458 Fortress
 ID 1460 LCC
+ID 1481 Buffed
 
 UBoote
 ID 1420 MU (Mini TransportU-Boot)
 ID 1421 THT 30(langstreckentorpedo)
 ID 1471 MUCM
 ID 1474 WATCHER
+ID 1482 MUHS
 
 Schiff-Support
 ID 1481 MUHS

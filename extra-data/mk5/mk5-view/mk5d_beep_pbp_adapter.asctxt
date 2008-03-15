@@ -1,0 +1,5 @@
+Techadapter {
+   ; Beep
+   Name = 1483
+   TechnologiesRequired = 1483
+} TechAdapter

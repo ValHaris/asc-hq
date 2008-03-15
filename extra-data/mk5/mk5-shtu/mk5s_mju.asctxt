@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = MJU
+   parent = 364
+   ID = 1484
+   
+   picture = mk5s_mju.pcx
+   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+
+   Armor -= 500
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+   } Weapons
+} VehicleType

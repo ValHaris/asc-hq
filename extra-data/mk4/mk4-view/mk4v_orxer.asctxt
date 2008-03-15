@@ -12,6 +12,7 @@ VehicleType {
    View = 70
    
    Weapons { 
+      Number = 1
       Weapon0 ->* VehicleType.MG45low
       Weapon0.Name = Maschinengewehr
    } Weapons

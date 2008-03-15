@@ -11,7 +11,7 @@ VehicleType {
    picture = mk4v_citagd.png
    Transportation ->* VehicleType.TransLowTrooper3
 
-   waitfortack = true
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 4

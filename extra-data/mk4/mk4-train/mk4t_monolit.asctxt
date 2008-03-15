@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 553 556 0 0 4 0 0 0 0 0
 
    Armor -= 50
-   WaitFortack = true
+   WaitForAttack = true
    Transportation ->* VehicleType.TransLowTrooper 
    Transportation.MaxLoadableUnits = 2
    Features += ExternalRepair

@@ -19,7 +19,7 @@ VehicleType {
    } ConstructionCost
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Jamming = 0
-   WaitFortack = false
+   WaitForAttack = false
    Transportation { 
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 200
