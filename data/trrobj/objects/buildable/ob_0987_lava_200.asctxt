@@ -1,12 +1,11 @@
 ObjectType { 
-   Name = Lavafluss
+   Name = Lava 200
    ID = 0987
    parent = 519
-   GroupID = 21
+   GroupID = 14
 
    MaxChildSpawnNumber = 200
    Livetime = 100
-   NetBehaviour = NetToSelf NetToBorder AutoBorder
    growthRate = 0.30
 
    dry { 

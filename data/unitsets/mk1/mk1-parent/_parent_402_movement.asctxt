@@ -42,28 +42,28 @@
    aircraft_terrain {
       terrain_any = Runway
       terrain_all = Runway
-      terrain_not = small_rocks large_rocks forest railroad bridge swamp
+      terrain_not = small_rocks large_rocks hillside forest railroad bridge swamp morass
       terrain_kill = very_shallow_water Shallow_water Water Deep_water River lava swamp
    } aircraft_terrain
 
    aircraft_terrain_road {
       terrain_any = Road Runway
       terrain_all =
-      terrain_not = small_rocks large_rocks forest railroad bridge swamp
+      terrain_not = small_rocks large_rocks forest hillside railroad bridge swamp morass
       terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water River lava
    } aircraft_terrain_road
 
    heli_terrain {
       terrain_any = Road Runway Lowland hard_sand soft_sand frozen_water
       terrain_all =
-      terrain_not = forest large_rocks swamp
+      terrain_not = forest large_rocks swamp hillside 
       terrain_kill = very_shallow_water Shallow_water Water Deep_water lava river
    } heli_Terrain
 
    aircraft_water {
       terrain_any = Runway very_shallow_water shallow_water water
       terrain_all = 
-      terrain_not = small_rocks large_rocks forest railroad bridge swamp
+      terrain_not = small_rocks large_rocks forest railroad bridge swamp morass hillside
       terrain_kill = Deep_water lava swamp
    } aircraft_water
 
@@ -142,14 +142,14 @@
    hooverfull_terrain {
       terrain_any = road runway hard_sand soft_sand lowland very_shallow_water shallow_water water deep_water river
       terrain_all =
-      terrain_not = forest large_rocks
+      terrain_not = forest large_rocks hillside
       terrain_kill = lava
    } hooverfull_terrain
 
    hoover_terrain {
       terrain_any = road runway hard_sand soft_sand lowland very_shallow_water shallow_water water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks
+      terrain_not = forest small_rocks large_rocks hillside
       terrain_kill = lava
    } hoover_terrain
 
@@ -170,23 +170,23 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    lt_terrain {
-      terrain_any = very_shallow_water road runway hard_sand lowland soft_sand ditch hillside Frozen_water
+      terrain_any = road runway hard_sand lowland soft_sand ditch Frozen_water
       terrain_all =
       terrain_not = large_rocks swamp
       terrain_kill = shallow_water water deep_water river lava
    } lt_terrain
 
    med_terrain {
-      terrain_any = very_shallow_water road runway hard_sand lowland soft_sand ditch Frozen_water
+      terrain_any = road runway hard_sand lowland soft_sand ditch Frozen_water
       terrain_all =
-      terrain_not = large_rocks swamp
+      terrain_not = large_rocks swamp hillside
       terrain_kill = shallow_water water deep_water river lava
    } med_terrain
 
    hvy_terrain {
-      terrain_any = very_shallow_water road runway hard_sand lowland soft_sand ditch
+      terrain_any = road runway hard_sand lowland soft_sand ditch
       terrain_all =
-      terrain_not = large_rocks swamp
+      terrain_not = large_rocks swamp hillside
       terrain_kill = shallow_water water deep_water river lava
    } hvy_terrain
 
@@ -195,7 +195,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    offroad {
-      terrain_any = road runway hard_sand lowland soft_sand ditch hillside Frozen_water very_shallow_water
+      terrain_any = road runway hard_sand lowland soft_sand ditch Frozen_water
       terrain_all =
       terrain_not = swamp
       terrain_kill = shallow_water water deep_water river lava
@@ -204,35 +204,35 @@
    lt_wheeled {
       terrain_any = road runway hard_sand lowland Frozen_water
       terrain_all =
-      terrain_not = large_rocks morass swamp deep_snow
+      terrain_not = large_rocks morass swamp deep_snow hillside
       terrain_kill = Shallow_water Water Deep_water River lava
    } lt_wheeled
 
    wheeled {
       terrain_any = road runway hard_sand lowland Frozen_water
       terrain_all =
-      terrain_not = forest small_rocks large_rocks morass swamp deep_snow
+      terrain_not = forest small_rocks large_rocks morass swamp deep_snow hillside
       terrain_kill = Shallow_water Water Deep_water River lava
    } wheeled
 
    mud_wheeled {
       terrain_any = road runway hard_sand lowland Frozen_water
       terrain_all =
-      terrain_not = forest small_rocks large_rocks mud morass swamp deep_snow
+      terrain_not = forest small_rocks large_rocks mud morass swamp deep_snow hillside
       terrain_kill = very_shallow_water Shallow_water Water Deep_water River lava
    } mud_wheeled
 
    hvy_wheeled {
       terrain_any = road runway hard_sand lowland soft_sand
       terrain_all =
-      terrain_not = forest large_rocks swamp deep_snow
+      terrain_not = forest large_rocks swamp deep_snow hillside
       terrain_kill = Shallow_water Water Deep_water River lava
    } hvy_wheeled
 
    amphibian { 
       terrain_any = Lowland Road Runway Hard_sand Soft_sand very_shallow_water shallow_water river Frozen_water 
       terrain_all = 
-      terrain_not = swamp deep_snow large_rocks
+      terrain_not = swamp deep_snow large_rocks hillside
       terrain_kill = Water Deep_water Lava 
    } amphibian
 
@@ -250,26 +250,26 @@
    Turret_lowland {
       terrain_any = lowland hard_sand soft_sand
       terrain_all =
-      terrain_not = railroad forest large_rocks swamp
+      terrain_not = railroad forest large_rocks swamp hillside
       terrain_kill = shallow_water Water Deep_water lava river
    } Turret_lowland
 
    Turret_all {
-      terrain_any = lowland hard_sand soft_sand hillside mountains turret_foundation
+      terrain_any = lowland hard_sand soft_sand mountains turret_foundation
       terrain_all =
       terrain_not = railroad forest
       terrain_kill = shallow_water Water Deep_water lava river
    } Turret_all
 
    Turret_ditch {
-      terrain_any = lowland hard_sand soft_sand hillside mountains turret_foundation ditch
+      terrain_any = lowland hard_sand soft_sand mountains turret_foundation ditch
       terrain_all =
       terrain_not = railroad forest
       terrain_kill = shallow_water Water Deep_water lava river
    } Turret_ditch
 
    Device_terrain {
-      terrain_any = road runway hard_sand lowland soft_sand hillside ditch mountains high_mountains installation turret_foundation large_rocks frozen_water
+      terrain_any = road runway hard_sand lowland soft_sand ditch mountains high_mountains installation turret_foundation large_rocks frozen_water
       terrain_all =
       terrain_not = swamp
       terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water river lava

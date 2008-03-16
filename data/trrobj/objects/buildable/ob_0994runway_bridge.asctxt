@@ -12,5 +12,5 @@ ObjectType {
       terrain_all = 
       terrain_kill = deep_water lava
    } TerrainAccess
-   TerrainProperties_Filter = swamp morass mud snow deep_snow very_shallow_water shallow_water water river small_rocks large_rocks lowland hard_sand soft_sand forest
+   TerrainProperties_Filter = swamp morass mud snow deep_snow very_shallow_water shallow_water water river small_rocks large_rocks lowland hard_sand soft_sand forest hillside
 } ObjectType

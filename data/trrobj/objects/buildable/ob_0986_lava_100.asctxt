@@ -1,8 +1,8 @@
 ObjectType { 
-   Name = Lavafluss
+   Name = Lava 100
    ID = 0986
    parent = 519
-   GroupID = 21
+   GroupID = 14
 
    MaxChildSpawnNumber = 100
    growthRate = 0.30

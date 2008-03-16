@@ -12,10 +12,10 @@ ObjectType {
 
 
    visible_in_fogOfWar = false
-   LinkableObjects = 983 984 985 986 987 988 2096 2500 2501 2502 2503 2504 2505 2506 2507 2508
-   LinkableTerrain = 2000 2001 2002 2003
+   LinkableObjects = 983-988 2501 2506
+   LinkableTerrain = 
 
-   NetBehaviour = AutoBorder NetToBorder
+   NetBehaviour = 
 
    ;               def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    Movemalus_abs = -1
@@ -43,8 +43,8 @@ ObjectType {
    TerrainAccess { 
       terrain_any = lowland hard_sand soft_sand road runway very_shallow_water shallow_water
       terrain_all = 
-      terrain_not = 
-      terrain_kill = Water Deep_water Very_shallow_water 
+      terrain_not = lava
+      terrain_kill = Water Deep_water Very_shallow_water lava
    } TerrainAccess
    TerrainProperties_Filter = 
    TerrainProperties_Add = lava_barrier

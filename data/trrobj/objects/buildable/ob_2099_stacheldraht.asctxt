@@ -1,7 +1,4 @@
 ObjectType { 
-
-
-
    ID = 2099
    GroupID = 8
 
@@ -41,14 +38,13 @@ ObjectType {
    } RemovalCost
 
    TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand hillside frozen_water very_shallow_water river
+      terrain_any = Lowland Hard_sand Soft_sand hillside frozen_water very_shallow_water Installation
       terrain_all = 
-      terrain_not = [Lava Morass Swamp Shallow_water Water Deep_water Pack_ice Ditch Pipeline Small_rocks
-                     Large_rocks Forest Turret_foundation Installation Mountains High_mountains]
+      terrain_not = Lava Swamp Shallow_water Water Deep_water Pack_ice
       terrain_kill = Shallow_water Water Deep_water Lava Pack_ice
    } TerrainAccess
    TerrainProperties_Filter = 
-   TerrainProperties_Add = installation
+   TerrainProperties_Add =
 
    dry { 
       UseGFXpics = false

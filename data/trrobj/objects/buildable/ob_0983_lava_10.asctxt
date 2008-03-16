@@ -2,7 +2,7 @@ ObjectType {
    Name = Hitzewelle
    ID = 0983
    parent = 519
-   GroupID = 21
+   GroupID = 14
 
    MaxChildSpawnNumber = 10
    Livetime = 20

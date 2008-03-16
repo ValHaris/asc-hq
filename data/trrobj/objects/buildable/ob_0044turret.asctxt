@@ -32,7 +32,7 @@ ObjectType {
    } RemovalCost
    NoSelfChaining = true
    TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand hillside very_shallow_water shallow_water  
+      terrain_any = Lowland Hard_sand Soft_sand very_shallow_water shallow_water  
       terrain_all = 
       terrain_not =  Forest Railroad Ditch bridge
       terrain_kill = Water Deep_water River lava

@@ -2,7 +2,7 @@ ObjectType {
    Name = Atombrand
    ID = 0982
    parent = 519
-   GroupID = 21
+   GroupID = 14
 
    MaxChildSpawnNumber = 200
    Livetime = 5

@@ -2,10 +2,7 @@ ObjectType {
    Name = Floating Lava
    Parent = 519
    ID = 0988
-   GroupID = 21
-
-   LinkableObjects = 983 984 985 986 987 2097 2500 2501 2502 2503 2504 2505 2506 2507 2508
-   LinkableTerrain = 2000 2001 2002 2003
+   GroupID = 14
 
    growthRate = 0.10
 

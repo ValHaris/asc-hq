@@ -45,7 +45,7 @@ ObjectType {
       terrain_kill = mountains High_mountains
    } TerrainAccess
 
-   TerrainProperties_Filter = Lowland Swamp Hard_sand Soft_sand 
+   TerrainProperties_Filter = Swamp 
    TerrainProperties_Add = hillside 
 
    dry {

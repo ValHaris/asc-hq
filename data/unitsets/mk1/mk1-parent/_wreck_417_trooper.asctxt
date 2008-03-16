@@ -31,7 +31,7 @@ ObjectType {
    Name = trooper weapon
    NoSelfChaining = false
    TerrainAccess { 
-      terrain_any = road runway Lowland Hard_sand Soft_sand Mountains high_mountains Very_shallow_water Hillside turret_foundation ditch
+      terrain_any = road runway Lowland Hard_sand Soft_sand Mountains high_mountains Very_shallow_water turret_foundation ditch
       terrain_all = 
       terrain_not =  
       terrain_kill = shallow_water Water Deep_water river Lava  

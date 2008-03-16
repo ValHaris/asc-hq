@@ -6,7 +6,7 @@ __________________
 -Booster-parent , Höhenstufenwechsel ohne Feldwechsel
 -alle Dateien umgestellt waitfortack auf waitforattack
 -FLugzeug Bodenkanone, D1 = 100%, D2 = 80%
-
+-Fahrzeuge nicht mehr vsw
 __________________
 04.03.2008 (GAMER)
 Sat selfdestruct entfernt
