@@ -30,6 +30,7 @@ class AutoHarvestObjects : public ContainerBase::Work
       void harvestObject( const MapCoordinate& pos, const ObjectType* obj );
       void processField( const MapCoordinate& pos );
       void iterateField( const MapCoordinate& pos );
+      bool harvestOnPosition( const MapCoordinate& pos );
 
    public:
       AutoHarvestObjects( ContainerBase* _bld, bool justQuery_ ) ;

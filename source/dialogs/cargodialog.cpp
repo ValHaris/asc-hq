@@ -638,7 +638,11 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
          sigVehicleTypeMarked( fw->getVehicletype() );
       }
 
-      const Container& getOriginalItems() { return *produceables; };
+      const Container& getOriginalItems() { 
+         delete produceables;
+         filterVehicleTypes( plant->getProduction(), plant );
+         return *produceables; 
+      };
 
    public:
       VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant )

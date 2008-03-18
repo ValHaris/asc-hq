@@ -102,6 +102,19 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
    if ( !currentField )
       return;
 
+   // we are only harvesting on fields who have non-harvestable neighbouring field, 
+   // to prevent clearing of areas where the 'island' fields that are supposed to remain
+   // are not covered by the oject
+    for ( int i = 0; i < 6; ++i ) {
+      MapCoordinate nextField = getNeighbouringFieldCoordinate( pos, i );
+      if ( !harvestOnPosition(nextField)) {
+         tfield* fld = base->getMap()->getField( nextField);
+         if ( fld && !fld->checkforobject(obj))
+            return ;
+      }
+   }
+
+
    Object* object = currentField->checkforobject( obj );
 
    if( object != NULL ) {
@@ -124,12 +137,12 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
       else
          removeCost.fuel = removeValue.fuel;
 
-      if( base->getResource( removeCost, true ) == removeCost ) {
+      if( base->getResource( removeCost, true, 1, base->getOwner() ) == removeCost ) {
          cost += removeCost;
          harvested += removeBenefit;
          if( !justQuery ) {
-            base->getResource( removeCost, false );
-            base->putResource( removeBenefit, false );
+            base->getResource( removeCost, false,  1, base->getOwner());
+            base->putResource( removeBenefit, false,  1, base->getOwner() );
             currentField->removeobject( obj, true );
          }
          ++fieldCounter;
@@ -165,6 +178,16 @@ void AutoHarvestObjects::processField( const MapCoordinate& pos )
 
 }
 
+
+
+bool AutoHarvestObjects::harvestOnPosition( const MapCoordinate& pos )
+{
+   if ((pos.y+1)%3) 
+      return true;
+   else
+      return false;
+}
+
 void AutoHarvestObjects::iterateField( const MapCoordinate& pos )
 {
    /*
@@ -178,7 +201,7 @@ void AutoHarvestObjects::iterateField( const MapCoordinate& pos )
       }
    }
    */
-   if ( ((pos.y+1)%3))
+   if ( harvestOnPosition(pos ) ) 
       // y+1 is to match the harvesting pattern of player Xyphagoroszh on PBP planet Lussx :)
       processField(pos);
    
