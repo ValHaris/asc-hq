@@ -42,7 +42,8 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
          for ( ContainerBase::Cargo::const_iterator i = cb->getCargo().begin(); i != cb->getCargo().end(); ++i )
             if ( *i ) {
                calcCargoSummary( *i, summary );
-               summary[ (*i)->typ] += 1;
+               if ( (*i)->getOwner() == cb->getMap()->actplayer )
+                  summary[ (*i)->typ] += 1;
             }
       }
 
@@ -63,11 +64,12 @@ VehicleCounterFactory :: VehicleCounterFactory( GameMap* actmap ) : gamemap ( ac
       for ( int x = 0; x < actmap->xsize; ++x ) {
          tfield* fld = actmap->getField(x,y);
          if ( fld ) {
-            if ( fld->vehicle && fld->vehicle->getOwner() == actmap->actplayer ) {
+            if ( fld->vehicle ) {
                calcCargoSummary( fld->vehicle, counter );
-               counter[ fld->vehicle->typ] += 1;
+               if ( fld->vehicle->getOwner() == actmap->actplayer )
+                  counter[ fld->vehicle->typ] += 1;
             }
-            if ( fld->building && fld->building->getOwner() == actmap->actplayer && (fld->bdt & getTerrainBitType(cbbuildingentry)).any() )
+            if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry)).any() )
                calcCargoSummary( fld->getContainer(), counter );
           }
       }
