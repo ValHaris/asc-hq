@@ -1,342 +1,699 @@
 
+
 panel {
+
   x = 50
+
   y = 50
+
   width = 700
+
   height = 500
+
   name = MainWidget
 
+
+
   Title = New Multiplayer Game
+
     
+
   ChildWidgets = Next QuickStart Start Page1 Page2 Page3 Page4 Page5 Page6 Page7 Page8 Bottomline Page9
+
   
+
   Bottomline {
+
      type = Area
+
      x = 20
+
      y = -60
+
      x2 = -20
+
      y2 = -58
+
   } Bottomline
+
   
+
   Next {
+
     type = button
+
     text = Next >
+
     name = next
+
     x = -30
+
     y = -20
+
     height  = 30
+
     width = 90
+
   } Next
 
+
+
   QuickStart {
+
     type = button
+
     text = QuickStart
+
     name = quickstart
+
     x = -130
+
     y = -20
+
     height  = 30
+
     width = 90
+
   } QuickStart
 
+
+
   Start {
+
     type = button
+
     text = Start
+
     name = start
+
     x = -30
+
     y = -20
+
     height  = 30
+
     width = 90
+
   } Start
+
   
+
   
+
   Page1 {
+
     type = dummy
+
     x = 0
+
     y = 0
+
     ChildWidgets = RadioGroup
+
     
+
     RadioGroup {
+
       type = dummy
+
       x = 40
+
       y = 40
+
       height = 400
+
       width = 450
+
       
+
       ChildWidgets = Label1 NewCampaign ContinueCampaign SinglePlayer Label2 Hotseat PBEM PBP PBEMServer
+
       Label1 {
+
         x = 0
+
         y = 0
+
         height = 30
+
         width = -10
+
         type = StaticText
+
         Text = Single Player
+
       } Label1
+
       
+
       NewCampaign {
+
         x = 0
+
         y = 40
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = Start New Campaign
+
       } NewCampaign
+
       
+
       ContinueCampaign {
+
         x = 0
+
         y = 80
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = Continue Campaign with Password
+
       } ContinueCampaign
 
+
+
       SinglePlayer {
+
         x = 0
+
         y = 120
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = Skirmish
+
       } SinglePlayer
+
       
+
       Label2 {
+
         x = 0
+
         y = 160
+
         height = 30
+
         width = -10
+
         type = StaticText
+
         Text = Multi Player
+
       } Label2
+
       
+
             
+
       HotSeat {
+
         x = 0
+
         y = 200
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = Hotseat
+
       } HotSeat
+
   
+
       PBEM {
+
         x = 0
+
         y = 240
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = Play By Email
+
       } PBEM
+
   
+
       PBP {
+
         x = 0
+
         y = 280
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = Project Battle Planets
+
       } PBP
 
+
+
       PBEMServer {
+
         x = 0
+
         y = 320
+
         height = 30
+
         width = -10
+
         type = RadioButton
+
         Text = PBEM through Server (experimental)
+
       } PBEMServer
+
         
+
     } RadioGroup
+
   } Page1
 
+
+
   Page2 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
+
     Userhandler = FileList
+
   } Page2    
 
+
+
   Page3 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
+
     Userhandler = PlayerSetup
+
   } Page3
 
+
+
   Page4 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
+
     Userhandler = EmailSetup
+
   } Page4
+
   
+
   Page5 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
+
     Userhandler = AllianceSetup
+
   } Page5
+
   
+
   Page6 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
+
     Userhandler = GameParameters
+
   } Page6
 
+
+
   Page7 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
+
+
 
     ChildWidgets = Replay SupervisorOn Filename FilenameLabel SuperVisor
+
     
+
     Replay {
+
       type = Checkbox
+
       text = Replays
+
       x = 40
+
       y = 20
+
       height = 25
+
       width = 300
+
     } Replay
 
+
+
     SupervisorOn {
+
       type = Checkbox
+
       text = Non-participating supervisor
+
       x = 40
+
       y = 60
+
       height = 25
+
       width = 300
+
     } SupervisorOn
+
           
+
+
 
     SuperVisor {
+
       x = 70
+
       y = 90
+
       x2 = -1
+
       height = 100
+
       ChildWidgets = SupervisorPlain SupervisorEnc SVLabel1 OR SVLabel2      
+
       type = dummy
 
+
+
       SVLabel1 {
+
          x = 10
+
          y = 00
+
          height = 25
+
          width = 150
+
          type = StaticText
+
          Text = Unencoded password:
+
       } SVLabel1
 
+
+
       SupervisorPlain {
+
          type = LineEdit
+
          x = 170
+
          y = 00
+
          height = 25
+
          width = 280
+
       } SupervisorPlain
+
    
+
       OR {
+
          x = 0
+
          y = 20
+
          height = 25
+
          width = 100
+
          type = StaticText
+
          Text = OR
+
          Fontsize = 16
+
       } OR
+
    
+
       SVLabel2 {
+
          x = 10
+
          y = 40
+
          height = 25
+
          width = 150
+
          type = StaticText
+
          Text = Encoded password:
+
       } SVLabel2
+
       
+
       SupervisorEnc {
+
          type = LineEdit
+
          x = 170
+
          y = 40
+
          height = 25
+
          width = 280
+
       } SupervisorEnc
+
    } SuperVisor
 
+
+
     
+
     FilenameLabel {
+
       x = 40
+
       y = 170
+
       height = 25
+
       width = 120
+
       type = StaticText
+
       Text = Filename schema:
+
     } FilenameLabel
+
         
+
     Filename {
+
       type = LineEdit
+
       x = 180
+
       y = 170
+
       height = 25
+
       width = 300
+
     } Filename
+
   } Page7
 
+
+
   Page8 {
+
     type = dummy
+
     x = 20
+
     y = 40
+
     x2 = -20
+
     y2 = -80
-    ChildWidgets = MapPassword
+
+    ChildWidgets = MapPassword PwdLabel
+
     
-    MapPassword {
-      type = LineEdit
-      text = foo
+    PwdLabel {
+
       x = 40
-      y = 60
-      height = 30
-      width = 200
-    } MapPassword
-  } Page8
-      
-  Page9 {
-    type = dummy
-    x = 20
-    y = 40
-    x2 = -20
-    y2 = -80
-          ; @PBEMSERVER
-          ; defining the wizarrd page into which the users enteres the starting information
-                
-    ChildWidgets = Server ServerText 
-    
-    ServerText {
-       type = StaticText
-       x = 40
-       y = 0
-       text = Server URL
-    } ServerText 
-    
-    Server {
-      x = 50
-      y = 20
-      type = LineEdit
+
+      y = 30
+
       height = 25
+
+      width = 120
+
+      type = StaticText
+
+      Text = Enter Password:
+
+    } PwdLabel
+
+    MapPassword {
+
+      type = LineEdit
+
+      text = 
+
+      x = 40
+
+      y = 60
+
+      height = 30
+
+      width = 200
+
+    } MapPassword
+
+  } Page8
+
+      
+
+  Page9 {
+
+    type = dummy
+
+    x = 20
+
+    y = 40
+
+    x2 = -20
+
+    y2 = -80
+
+          ; @PBEMSERVER
+
+          ; defining the wizarrd page into which the users enteres the starting information
+
+                
+
+    ChildWidgets = Server ServerText 
+
+    
+
+    ServerText {
+
+       type = StaticText
+
+       x = 40
+
+       y = 0
+
+       text = Server URL
+
+    } ServerText 
+
+    
+
+    Server {
+
+      x = 50
+
+      y = 20
+
+      type = LineEdit
+
+      height = 25
+
       width = 300
+
     } Server
+
           
+
   } Page9
+
         
+
 } panel
+

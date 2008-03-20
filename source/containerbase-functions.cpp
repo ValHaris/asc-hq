@@ -105,14 +105,24 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
    // we are only harvesting on fields who have non-harvestable neighbouring field, 
    // to prevent clearing of areas where the 'island' fields that are supposed to remain
    // are not covered by the oject
+   int regrowFields = 0;
+   int spreadingFields = 0;
     for ( int i = 0; i < 6; ++i ) {
       MapCoordinate nextField = getNeighbouringFieldCoordinate( pos, i );
       if ( !harvestOnPosition(nextField)) {
          tfield* fld = base->getMap()->getField( nextField);
-         if ( fld && !fld->checkforobject(obj))
-            return ;
+         if ( fld ) {
+            if ( fld->checkforobject(obj))
+               ++regrowFields ;
+            else {
+               if ( obj->buildable(fld))
+                  ++spreadingFields;
+            }
+         }
       }
    }
+   if ( regrowFields <= 0 || spreadingFields > 0 )
+      return;
 
 
    Object* object = currentField->checkforobject( obj );

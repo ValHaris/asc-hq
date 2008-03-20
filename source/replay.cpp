@@ -1777,7 +1777,7 @@ void trunreplay :: execnextreplaymove ( void )
                               if ( constx >= 0 && consty >= 0 ) {
                                  tfield* constructorField = getfield(constx, consty );
                                  if ( constructorField->vehicle ) {
-                                    Resources r = constructorField->vehicle->getProductionCost(tnk );
+                                    Resources r ( 0, tnk->productionCost.material, tnk->productionCost.energy ); //  = constructorField->vehicle->getProductionCost(tnk );
                                     Resources rr = constructorField->getContainer()->getResource( r, 0 );
                                     if ( rr < r ) {
                                        displayActionCursor ( x, y );
