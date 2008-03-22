@@ -173,7 +173,6 @@ void Menu::setup()
    // addbutton ( "~R~esearch status", ua_showResearchStatus );
 
    // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);
-   // addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
 
 
    // addfield ( "~S~tatistics" );
@@ -229,6 +228,7 @@ void Menu::setup()
    addbutton ( "resource analysis", ua_resourceAnalysis );
    addbutton ( "show techadapter", ua_showTechAdapter );
    addbutton ( "calc airplane endurance", ua_showUnitEndurance );
+   addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
    currentMenu->addSeparator();
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
