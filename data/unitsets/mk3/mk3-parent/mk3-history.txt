@@ -3,6 +3,11 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+22.03.2008 (GAMER)
+-Merkat, Waffenbugfix
+-Elite Pio baut alle Sockel
+-CM Anpassungen Antey, ICBM, Lance (bto !), Scud
+__________________
 15.03.2008 (GAMER)
 -Wachturm 6000 Gewicht
 __________________

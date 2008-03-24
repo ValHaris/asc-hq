@@ -1,6 +1,11 @@
 ASC Standart Units
-Specifications by GAMER (gamer@ulrichshorst.de)
+-by GAMER (gamer@ulrichshorst.de)
 
+__________________
+22.03.2008 (GAMER)
+-MBV baut Stealth Sockel
+-Fort self_destruct
+-CM Anpassungen CM-parent, Follow, TML, Silo, Tsumami
 __________________
 15.03.2008 (GAMER)
 -Booster-parent , Höhenstufenwechsel ohne Feldwechsel

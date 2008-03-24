@@ -12,7 +12,6 @@ VehicleType {
    Armor = 250
    Weight = 210
    View = 20
-   WaitForAttack = true
    Features = no_reactionfire
 
    Tank { 
@@ -29,12 +28,9 @@ VehicleType {
       terrain_kill = swamp Shallow_water Water Deep_water Very_shallow_water River Lava 
    } TerrainAccess
 
+   WaitForAttack = true
    Weapons { 
-      Initiative = 127
       Number = 1
-      Weapon0 ->* VehicleType.CMGS 
-      Weapon0.MaxRange = 170
-      Weapon0.MinRange = 80
-      Weapon0.Ammo = 1
+      Weapon0 ->* VehicleType.CML 
    } Weapons
 } VehicleType

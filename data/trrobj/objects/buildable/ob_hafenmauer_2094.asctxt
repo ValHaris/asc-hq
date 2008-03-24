@@ -1,0 +1,33 @@
+ObjectType { 
+   ID = 2094
+   parent = 3500
+   Weather = dry much_snow 
+   Name = Beton 
+
+   LinkableObjects = 2095
+   NetBehaviour = 
+   TerrainAccess.terrain_any = Very_shallow_water shallow_water water river  
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 3000
+      fuel = 3000
+      Movement = 60
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -200
+      fuel = 500
+      Movement = 50
+   } RemovalCost
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_hafenmauer_2094.png 65
+   } dry
+   much_Snow { 
+      UseGFXpics = false
+      picture = ob_hafenmauer_2094.png 65
+      GraphicOperations = Snow
+   } much_Snow
+} ObjectType

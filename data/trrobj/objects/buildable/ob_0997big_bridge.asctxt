@@ -35,7 +35,7 @@ ObjectType {
       terrain_not = road bridge
       terrain_kill = deep_water lava
    } TerrainAccess
-   TerrainProperties_Filter = forest swamp snow deep_snow morass mud small_rocks large_rocks
+   TerrainProperties_Filter = forest swamp snow deep_snow morass mud small_rocks large_rocks hillside
    TerrainProperties_Add = Road bridge
    dry { 
       UseGFXpics = true

@@ -876,50 +876,51 @@
 ; -----   C R U I S E  M I S S I L E  -   S Y S T E M S   -------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
 
-; Cruise missile Vehicle
+; cruise missile from ground
       CMG { 
          Type = cruise_missile shootable 
-         targets =  ground_level 
+         targets =  floating ground_level 
          shotFrom = submerged floating ground_level 
          MaxRange = 100
-         MinRange = 40
+         MinRange = 50
          Ammo = 1
          ReactionFireShots = 0
          Punch@MaxRange = 110
          Punch@MinRange = 110
          HitAccuracy { 
-            d6 = 
-            d5 = 
-            d4 = 
-            d3 = 
-            d2 = 
-            d1 = 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
             0 = 100
-            u1 = 100
-            u2 = 
-            u3 = 
-            u4 = 
-            u5 = 
-            u6 = 
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
          } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 25
+      WeaponEffectiveness {
+         default = 20      
+         trooper = 20
          rail_vehicle = 75
          building|turret|object = 100
-         hoovercraft = 75
+         hoovercraft = 80
          helicopter = 100
 
-         light_tracked_vehicle = 55
-         medium_tracked_vehicle = 65
-         heavy_tracked_vehicle = 75
+         light_tracked_vehicle = 45
+         medium_tracked_vehicle = 60
+         heavy_tracked_vehicle = 85
 
-         light_wheeled_vehicle = 60
-         medium_wheeled_vehicle = 70
-         heavy_wheeled_vehicle = 80
+         light_wheeled_vehicle = 50
+         medium_wheeled_vehicle = 65
+         heavy_wheeled_vehicle = 90
          
-         light_ship = 80
-         medium_ship  = 90
-         heavy_ship = 100
+         light_ship = 50
+         medium_ship  = 70
+         heavy_ship = 90
 
          light_aircraft = 100
          medium_aircraft  = 100
@@ -927,13 +928,42 @@
       } WeaponEffectiveness
       } CMG
 
-; Cruise Missile Ship      
-      CMS ->* VehicleType.CMG
-      CMS.targets = floating
+      CMU ->* VehicleType.CMG
+      CMU.MaxRange = 110
+      CMU.MinRange = 60
+      CMU.Punch@MaxRange = 125
+      CMU.Punch@MinRange = 125
+      CMU.HitAccuracy.u1 = 80
 
-; Cruise Missile multi Ground
+      CMK ->* VehicleType.CMG
+      CMK.MaxRange = 120
+      CMK.MinRange = 60
+      CMK.Punch@MaxRange = 125
+      CMK.Punch@MinRange = 125
+
+      CMM ->* VehicleType.CMG
+      CMM.MaxRange = 150
+      CMM.MinRange = 70
+      CMM.Punch@MaxRange = 120
+      CMM.Punch@MinRange = 120
+
+      CML ->* VehicleType.CMG
+      CML.MaxRange = 180
+      CML.MinRange = 90
+      CML.Punch@MaxRange = 110
+      CML.Punch@MinRange = 110
+
+      CMB ->* VehicleType.CMG
+      CMB.targets = submerged floating ground_level
+      CMB.HitAccuracy.d1 = 60
+      CMB.MaxRange = 200
+      CMB.MinRange = 90
+      CMB.Punch@MaxRange = 125
+      CMB.Punch@MinRange = 125
+
+; alt      
+      CMS ->* VehicleType.CMG
       CMGS ->* VehicleType.CMG
-      CMGS.targets = floating ground_level
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   A N T I   O R B I T   M I S S I L E  -   S Y S T E M S   -----------------------------------------------

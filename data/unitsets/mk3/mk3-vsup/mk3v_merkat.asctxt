@@ -21,8 +21,9 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 1
+      Number = 2
       Weapon0 ->* VehicleType.Def_MG
       Weapon1 ->* VehicleType.AntiMine
+      Weapon1.MaxRange = 20
    } Weapons
 } VehicleType

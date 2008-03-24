@@ -8,19 +8,22 @@ VehicleType {
               they can fire have a small nuclear warhead, thus reserving more
               room for fuel. A nuclear submarine can scuttle a fleet without
               ever seeing a ship.]
-   picture = MK1s_TSUNAMI.pcx
+   picture = mk1s_tsunami.pcx
    WreckageObject = 435
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Jamming = 15
    Features += jam_only_own_field
+   Armor -= 100
+   Weight -= 1000
 
+   Movement += 0 11 0 0 0 0 0 0
+
+   WaitForAttack = true
    Weapons { 
       Initiative = 40
       Number = 3
-      Weapon0 ->* VehicleType.CMGS 
-      Weapon0.MaxRange = 110
-      Weapon0.MinRange = 50
+      Weapon0 ->* VehicleType.CMU 
       Weapon0.Ammo = 4
       
       Weapon1 ->* VehicleType.UTorp 
@@ -29,9 +32,8 @@ VehicleType {
       Weapon2 ->* VehicleType.SSM 
       Weapon2.MaxRange = 60
       Weapon2.MinRange = 20
-      Weapon2.ReactionFireShots = 0
       Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MaxRange = 100
       Weapon2.Punch@MinRange = 100
    } Weapons
 } VehicleType

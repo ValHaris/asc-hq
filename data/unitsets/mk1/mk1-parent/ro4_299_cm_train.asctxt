@@ -25,11 +25,6 @@ VehicleType {
    Weapons { 
       Initiative = 0
       Number = 1
-      Weapon0 ->* VehicleType.CMGS 
-      Weapon0.MaxRange = 120
-      Weapon0.MinRange = 50
-      Weapon0.Ammo = 1
-      Weapon0.Punch@MaxRange = 130
-      Weapon0.Punch@MinRange = 140
+      Weapon0 ->* VehicleType.CMK 
    } Weapons
 } VehicleType

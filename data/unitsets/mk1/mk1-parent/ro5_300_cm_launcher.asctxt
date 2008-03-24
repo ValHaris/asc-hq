@@ -4,7 +4,7 @@ VehicleType {
    abstract = true
    parent = 400 401 402 411
 
-   Description = CM medium range
+   Description = CM short range
    Infotext = []
    GuideSortHelp = 505 300 0 0 0 0 0 0 0 0
 
@@ -14,8 +14,8 @@ VehicleType {
    Jamming = 30
    WaitForAttack = true
    Features += no_reactionfire jam_only_own_field
-   Category = light_wheeled_vehicle
-   Weight = 30
+   Category = building|turret|object
+   Weight = 50
 
    Tank { 
       Energy = 0
@@ -29,11 +29,6 @@ VehicleType {
    Weapons { 
       Initiative = 0
       Number = 1
-      Weapon0 ->* VehicleType.CMGS 
-      Weapon0.MaxRange = 130
-      Weapon0.MinRange = 50
-      Weapon0.Ammo = 1
-      Weapon0.Punch@MaxRange = 130
-      Weapon0.Punch@MinRange = 140
+      Weapon0 ->* VehicleType.CMK 
    } Weapons
 } VehicleType

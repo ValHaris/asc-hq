@@ -4,7 +4,7 @@ ObjectType {
    ID = 2508
    GroupID = 17
 
-   LinkableObjects = 2500 2502-2504 2507 2509
+   LinkableObjects = 2500 2502 2503 2504 2507 2509
 
    Name = Channel
 

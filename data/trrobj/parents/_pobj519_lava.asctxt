@@ -5,7 +5,7 @@ ObjectType {
 
    canExistBeneathBuildings = true
    visible_in_fogOfWar = true
-   LinkableObjects = 982-988 2097 2501 2506
+   LinkableObjects = 982 983 984 985 986 987 988 2097 2501 2506
    LinkableTerrain = 
    GrowOnUnits = true
  

@@ -1,0 +1,33 @@
+ObjectType { 
+   ID = 2095
+   parent = 500
+   Weather = dry much_snow 
+   Name = Beton 
+
+   LinkableObjects = 2094
+   NetBehaviour = NetToSelf AutoBorder NetToBorder
+   TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water  
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 6000
+      fuel = 6000
+      Movement = 60
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -300
+      fuel = 60
+      Movement = 50
+   } RemovalCost
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_hafenbeton_2095.png 65
+   } dry
+   much_Snow { 
+      UseGFXpics = false
+      picture = ob_hafenbeton_2095.png 65
+      GraphicOperations = Snow
+   } much_Snow
+} ObjectType

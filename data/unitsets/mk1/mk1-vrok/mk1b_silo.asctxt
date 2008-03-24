@@ -11,5 +11,6 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Features += ManualSelfDestruct
-
+   Armor += 200
+   
 } VehicleType

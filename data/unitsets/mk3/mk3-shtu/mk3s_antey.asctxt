@@ -4,7 +4,7 @@ VehicleType {
    ID = 542
 
    Description = nuclear submarine
-   picture = MK3s_antey.png
+   picture = mk3s_antey.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming = 19
@@ -13,28 +13,23 @@ VehicleType {
    Weapons { 
       Initiative = 40
       Number = 4
-      Weapon0 ->* VehicleType.CMGS 
-      Weapon0.MaxRange = 110
-      Weapon0.MinRange = 50
+      Weapon0 ->* VehicleType.CMU
       Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 130
 
       Weapon1 ->* VehicleType.UTorp 
       Weapon1.Ammo = 10
 
       Weapon2 ->* VehicleType.ShM 
-      Weapon2.MaxRange = 50
+      Weapon2.MaxRange = 60
       Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MaxRange = 100
       Weapon2.Punch@MinRange = 100
-      Weapon2.ReactionFireShots = 0
 
       Weapon3 ->* VehicleType.SgM 
-      Weapon3.MaxRange = 50
+      Weapon3.MaxRange = 70
       Weapon3.MinRange = 10
       Weapon3.Ammo = 4
-      Weapon3.Punch@MaxRange = 90
-      Weapon3.Punch@MinRange = 93
+      Weapon3.Punch@MaxRange = 100
+      Weapon3.Punch@MinRange = 100
    } Weapons
 } VehicleType

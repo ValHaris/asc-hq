@@ -3,10 +3,10 @@ ObjectType {
    ID = 2098
    GroupID = 7
 
-   Weather = dry 
+   Weather = dry much_snow
 
    Name = defensive turret foundation
-   Armor = 500
+   Armor = 750
    Height = 118
 
    visible_in_fogOfWar = false
@@ -17,11 +17,12 @@ ObjectType {
    Movemalus_plus = 0
    Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
    AttackBonus_abs = -1
-   AttackBonus_plus = 0
+   AttackBonus_plus = -1
    DefenseBonus_abs = -1
    DefenseBonus_plus = 3
    Jamming_abs = -1
-   Jammming_plus = 5
+   Jamming_plus = 5
+   ViewBonus_plus = -5
 
    ConstructionCost { 
       Energy = 0
@@ -31,9 +32,9 @@ ObjectType {
    } ConstructionCost
    RemovalCost { 
       Energy = 0
-      Material = -250
+      Material = -500
       fuel = 100
-      Movement = 12
+      Movement = 25
    } RemovalCost
 
    TerrainAccess { 
@@ -51,6 +52,11 @@ ObjectType {
    TerrainProperties_Add = turret_foundation 
    dry { 
       UseGFXpics = false
-      picture = ob_2098_turret.png 1
+      picture = ob_turret_defence_2098.png 1
    } dry
+   much_Snow { 
+      UseGFXpics = false
+      picture = ob_turret_defence_2098.png 1
+      GraphicOperations = Snow
+   } much_Snow
 } ObjectType

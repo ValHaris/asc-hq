@@ -40,8 +40,7 @@ ObjectType {
       terrain_any = Lowland Hard_sand
       terrain_all = 
       terrain_not = forest snow deep_snow morass swamp
-      terrain_kill = [lava river Shallow_water Water Deep_water Very_shallow_water Pack_ice Frozen_water
-                      installation forest turret_foundation]
+      terrain_kill = lava river Shallow_water Water Deep_water Very_shallow_water Pack_ice Frozen_water installation forest turret_foundation]
    } TerrainAccess
    TerrainProperties_Filter = 
    TerrainProperties_Add = 
