@@ -1,0 +1,5 @@
+Techadapter {
+   ; WindPower.
+   Name = B5
+   TechnologiesRequired = 15000
+} TechAdapter

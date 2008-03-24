@@ -7,6 +7,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
 
    Armor -= 500
+   Weight = 650
 
    Weapons { 
       Initiative = 0

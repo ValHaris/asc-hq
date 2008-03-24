@@ -19,7 +19,7 @@ VehicleType {
       Weapon0 ->* VehicleType.MG45low 
       Weapon0.Ammo = 10
 
-      Weapon1 ->* VehicleType.HGr 
+      Weapon1 ->* VehicleType.C4 
       Weapon1.Punch@MaxRange = 120
       Weapon1.Punch@MinRange = 120
 

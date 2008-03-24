@@ -8,10 +8,11 @@ VehicleType {
    Picture = MK5v_FAV4x4T2.pcx
    WreckageObject = 1404
    
+   Transportation ->* VehicleType.TransLowTrooper 
    View = 30
    Jamming = 22
 
-   Movement += 0 0 0 10 0 0 0 0 
+   Movement += 0 0 0 15 0 0 0 0 
 
    Weapons { 
       Weapon0 ->* vehicleType.MG40low 

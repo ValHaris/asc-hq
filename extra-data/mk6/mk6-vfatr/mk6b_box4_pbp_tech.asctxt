@@ -1,0 +1,10 @@
+technology {
+   Name = Box 4
+   infotext = Forschungsprojekt abgeschlossen! Box 4 verfügbar!
+   id = 15338
+   RelatedUnitID = 15338
+   parent = 15000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 15000,100002,100101 
+} Technology

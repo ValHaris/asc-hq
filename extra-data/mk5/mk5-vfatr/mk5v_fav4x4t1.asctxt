@@ -9,6 +9,8 @@ VehicleType {
    WreckageObject = 1404
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
    
+   Transportation ->* VehicleType.TransLowTrooper 
+
    Armor -= 50
    View += 10
 

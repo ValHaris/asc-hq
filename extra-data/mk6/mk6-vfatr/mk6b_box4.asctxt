@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = BOX 4
+   parent = 400 401 402 403 15000
+;  Troopertransport Armor parent 338
+   ID = 15338
+   GuideSortHelp = 338 0 0 0 6 0 0 0 0 0
+
+   Description = Mech Jump Box
+   Infotext = []
+   picture = mk6b_box4.pcx
+;   WreckageObject = 14235
+
+   JumpDrive ->* VehicleType.TeccnolsJump1
+   Jumpdrive.MaxDistance = 50
+   Jumpdrive.consumption.Material = 80
+   Jumpdrive.comsumption.Fuel = 800
+
+   Armor -= 200
+   View = 0
+   Features = MoveDuringReactionFire
+
+
+   Transportation ->* VehicleType.TransBigTrooper 
+   Transportation.MaxLoadableUnits = 10
+
+   Movement = 0 0 0 10 0 0 0 0 
+   Tank.Material = 400
+   Tank.Fuel = 2000
+   TerrainAccess ->* VehicleType.heli_terrain 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.DLS 
+   } Weapons
+} VehicleType

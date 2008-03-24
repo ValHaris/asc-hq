@@ -3,6 +3,12 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
 Spezifikationen: GAMER
 
 __________________
+20.03.2008 (GAMER)
+-Namenkorrektur Gebäudeadapter
+-Lurat baut Stealth Sockel
+-Gigant, bau Unit bugfix
+-CM Anpassungen Pluto, UX, Flame (+100 gewicht)
+__________________
 15.03.2008 (GAMER)
 -Orxer, nur noch 1 MG
 -Waffenumstellung Dragon

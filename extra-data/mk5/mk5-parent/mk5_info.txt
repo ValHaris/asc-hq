@@ -38,7 +38,7 @@ ID 1429 Scout
 ID 1428 GCS
 ID 1430 PRD2
 ID 1473 Tontaube
-ID 1481
+ID 1483 Beep
 
 **Jamming**
 ID 1414 GJS DHT
@@ -61,6 +61,7 @@ ID 1405 IRONGUN
 ID 1442 GATELING
 ID 1463 FGDV
 ID 1422 TLHT (Torpedolauncher)
+ID 1486 Wachturm
 
 Versorger
 
@@ -99,6 +100,7 @@ Orbital
 ID 1411 Energia
 ID 1413 OCS
 ID 1477 Horus
+ID 1480 WOAS
 
 Schiffe
 ID 1455 Sealboat
@@ -107,6 +109,7 @@ ID 1457 Skjold X
 ID 1458 Fortress
 ID 1460 LCC
 ID 1481 Buffed
+ID 1485 Flyer
 
 UBoote
 ID 1420 MU (Mini TransportU-Boot)
@@ -114,6 +117,7 @@ ID 1421 THT 30(langstreckentorpedo)
 ID 1471 MUCM
 ID 1474 WATCHER
 ID 1482 MUHS
+ID 1484 MJU
 
 Schiff-Support
 ID 1481 MUHS

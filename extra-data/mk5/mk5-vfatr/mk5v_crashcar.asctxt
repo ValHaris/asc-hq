@@ -4,19 +4,44 @@ VehicleType {
    parent = 335
 
    Description = Pkw
-   Infotext = [Dieses Serien-Kfz ist mit einer hoch eplosiven Sprengladung aufgeruestet.]
-   Picture = MK5v_CrashCar.pcx
+   Infotext = [Dieses Serien-Kfz ist mit einer hoch explosiven Sprengladung ausgeruestet.]
+   Picture = mk5v_crashcar.pcx
 
    Armor -= 100
    Weight -= 10
    Category = default
 
+   Features += kamikaze_only
+
    Movement += 0 0 0 30 0 0 0 0
    Tank.Fuel = 500
-    
 
    Weapons { 
       Number = 1
       Weapon0 ->* VehicleType.C4 
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+      Weapon0.WeaponEffectiveness.default = 100      
+      Weapon0.WeaponEffectiveness.trooper = 100
+      Weapon0.WeaponEffectiveness.rail_vehicle = 100
+      Weapon0.WeaponEffectiveness.building|turret|object = 100
+      Weapon0.WeaponEffectiveness.hoovercraft = 100
+
+      Weapon0.WeaponEffectiveness.light_tracked_vehicle = 100
+      Weapon0.WeaponEffectiveness.medium_tracked_vehicle = 100
+      Weapon0.WeaponEffectiveness.heavy_tracked_vehicle = 100
+
+      Weapon0.WeaponEffectiveness.light_wheeled_vehicle = 100
+      Weapon0.WeaponEffectiveness.medium_wheeled_vehicle = 100
+      Weapon0.WeaponEffectiveness.heavy_wheeled_vehicle = 100
+         
+      Weapon0.WeaponEffectiveness.light_ship = 100
+      Weapon0.WeaponEffectiveness.medium_ship  = 100
+      Weapon0.WeaponEffectiveness.heavy_ship = 100
+
+      Weapon0.WeaponEffectiveness.light_aircraft = 100
+      Weapon0.WeaponEffectiveness.medium_aircraft  = 100
+      Weapon0.WeaponEffectiveness.heavy_aircraft = 100
+      Weapon0.WeaponEffectiveness.helicopter = 100
    } Weapons
 } VehicleType

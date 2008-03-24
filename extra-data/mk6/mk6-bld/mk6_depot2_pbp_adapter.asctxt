@@ -1,0 +1,5 @@
+Techadapter {
+   ; Depot. Ost Eingang
+   Name = B32
+   TechnologiesRequired = 15000
+} TechAdapter

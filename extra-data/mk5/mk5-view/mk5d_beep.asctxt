@@ -1,11 +1,12 @@
 VehicleType { 
    Name = Beep
-   parent = 249
+   parent = 493 249
    ID = 1483
    
    Picture = MK5d_beep.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    View += 5
-   Height = submerged 
+   Height = submerged floating 
+   Movement += 0 11 0 0 0 0 0 0
 } VehicleType

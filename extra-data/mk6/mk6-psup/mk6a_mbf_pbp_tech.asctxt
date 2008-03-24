@@ -1,0 +1,10 @@
+technology {
+   Name = MBF
+   infotext = Forschungsprojekt abgeschlossen! MBF verfuegbar!
+   id = 15342
+   RelatedUnitID = 15341
+   parent = 15000
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 15000,100003,100103 
+} Technology

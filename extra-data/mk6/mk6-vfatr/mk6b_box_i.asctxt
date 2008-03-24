@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = BOX I
+   parent = 400 401 402 403 15000
+;  fasttransport parent 340
+   ID = 15340
+   GuideSortHelp = 340 0 0 0 6 0 0 0 0 0
+
+   Description = Vehicle Jump Box
+   Infotext = []
+   picture = mk6b_box_i.pcx
+;   WreckageObject = 14235
+
+   JumpDrive ->* VehicleType.TeccnolsJump3
+
+   Armor -= 400
+   View = 0
+   Features = MoveDuringReactionFire
+
+   Transportation ->* VehicleType.TransTrooper 
+
+   Movement = 0 0 0 10 0 0 0 0 
+   Tank.Material = 4000
+   Tank.Fuel = 10000
+   TerrainAccess ->* VehicleType.heli_terrain 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.DLS 
+   } Weapons
+} VehicleType

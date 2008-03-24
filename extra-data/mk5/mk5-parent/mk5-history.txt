@@ -2,9 +2,23 @@ MK5 Outsider
 GAMER
 
 __________________
+24.03.2008 (GAMER)
+-Elite Mechanic baut alle Sockel
+-Buggies Movement +10
+-T1,T2,TX  Trooperstellplatz
+-T7 mdrf
+-Legionär, C4 anstelle von Handgranate
+-FAdv weight = 10 
+-Lance -> Kracher
+-Scud -> Relic
+-CM Anpassungen, Kracher, Relic, MUCM
+-Skjold, + deep_water
+Neu:
+-Wachturm
+__________________
 15.03.2008 (GAMER)
 -Bulldozer, baut eigene landebahn
--MUHS, Rohstoffsuche Reichweite 4 (vorher 0), Servicewaffe eingebaut (Reparatur), Gebäudebau aktiviert, Unterwaserausgang
+-MUHS, Rohstoffsuche Reichweite 4 (vorher 0), Servicewaffe eingebaut (Reparatur), Gebäudebau aktiviert, Unterwasserausgang
 -MUCM, FP 2700
 -TLauchner, RF 2
 -CCS, submerged 15 Movement

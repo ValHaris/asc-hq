@@ -4,6 +4,7 @@ VehicleType {
    parent = 1284
    
    picture = MK5s_fortress.pcx
+   Features = MoveDuringReactionFire
 
    Weapons {
       Number = 4

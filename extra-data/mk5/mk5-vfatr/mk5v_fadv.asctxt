@@ -9,7 +9,6 @@ VehicleType {
    WreckageObject = 1404
 
    Armor += 50
-   Weight += 10
    Jamming = 19
 
    Features += jam_only_own_field moveduringreactionfire

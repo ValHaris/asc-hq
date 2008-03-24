@@ -1,0 +1,5 @@
+Techadapter {
+   ; Training.
+   Name = B23
+   TechnologiesRequired = 15000
+} TechAdapter

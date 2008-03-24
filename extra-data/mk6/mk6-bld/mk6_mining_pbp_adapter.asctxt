@@ -1,0 +1,5 @@
+Techadapter {
+   ; Mining.
+   Name = B1
+   TechnologiesRequired = 15000
+} TechAdapter

@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = MBF
+   parent = 401 497 415 15000
+;  normal buider 341   
+   ID = 15341
+
+   Description = builder
+   Infotext = 
+   Picture = mk6a_mbf.pcx
+   GuideSortHelp = 341 0 0 0 6 0 0 0 0 0
+
+   Features = construct_vehicles construct_specific_buildings NoProductionCustomization
+   Armor += 150
+   Transportation ->* VehicleType.TransTurretBig 
+
+   Tank.Fuel = 30000
+   Tank.Material = 30000
+   TerrainAccess ->* VehicleType.hoover_terrain
+      
+   Construction { 
+      Buildings = 1 2 4-7 10 13-21 23 30-32 15001-15005
+      Vehicles =  
+      Vehiclesinternally =
+      Objects = 44 
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 11 13
+   } Construction
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.TeccEMPAir
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+
+   } Weapons
+} VehicleType

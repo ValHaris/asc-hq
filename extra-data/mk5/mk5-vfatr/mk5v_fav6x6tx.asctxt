@@ -8,9 +8,10 @@ VehicleType {
    Picture = MK5v_FAV6x6TX.pcx
    WreckageObject = 1404
    
+   Transportation ->* VehicleType.TransLowTrooper 
    Armor += 200
    View = 40
-   Movement -= 0 0 0 30 0 0 0 0 
+   Movement -= 0 0 0 20 0 0 0 0 
 
    Terrainaccess.Terrain_any += mountains shallow_water
    Terrainaccess.Terrain_not =

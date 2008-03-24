@@ -13,7 +13,7 @@ VehicleType {
    WaitForAttack = true
    Features += no_reactionfire
    Category = heavy_wheeled_vehicle
-   Weight = 125
+   Weight = 205
 
    FuelConsumption = 22
    ;          deep  sub  flo grnd  low  med high  orb
@@ -28,11 +28,8 @@ VehicleType {
    Weapons { 
       Initiative = 0
       Number = 1
-      Weapon0 ->* VehicleType.CMGS 
-      Weapon0.MaxRange = 110
-      Weapon0.MinRange = 50
+      Weapon0 ->* VehicleType.CMK 
+      Weapon0.MaxRange -= 10
       Weapon0.Ammo = 2
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 130
    } Weapons
 } VehicleType

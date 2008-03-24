@@ -1,0 +1,5 @@
+Techadapter {
+   ; SolarPower.
+   Name = B15
+   TechnologiesRequired = 15000
+} TechAdapter

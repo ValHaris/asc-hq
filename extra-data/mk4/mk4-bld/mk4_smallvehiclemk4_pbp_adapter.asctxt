@@ -1,5 +1,0 @@
-Techadapter {
-   ; SmallVehicleMK4
-   Name = B12
-   TechnologiesRequired = 100020
-} TechAdapter

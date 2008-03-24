@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15339
+   ;Bezeichnung der verknüpften Technologie: Box 6
+   TechnologiesRequired = 15339
+} TechAdapter

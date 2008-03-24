@@ -20,7 +20,7 @@ VehicleType {
 
    Construction { 
       Vehicles = 1221 1222 1219 1278 1295
-      Objects = 44 2098
+      Objects = 44 2096 2098
       ObjectGroupsRemovable = 7 11 13
    } Construction
 

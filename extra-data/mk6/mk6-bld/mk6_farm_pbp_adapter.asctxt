@@ -1,0 +1,4 @@
+Techadapter {
+   Name = B36
+   TechnologiesRequired = 15000
+} TechAdapter

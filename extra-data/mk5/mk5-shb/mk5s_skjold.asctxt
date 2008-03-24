@@ -12,6 +12,7 @@ VehicleType {
    Transportation.MaxLoadableMass = 25
    Features += jam_only_own_field move_after_attack
 
+   TerrainAccess ->* VehicleType.verysmallship_terrain
    Weapons {
       Weapon0 ->* VehicleType.MiniGun
       Weapon0.ReactionFireShots = 1

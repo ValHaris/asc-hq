@@ -133,6 +133,63 @@ Plasmabomb {
       } WeaponEffectiveness
    } Plasmabomb
 
+   DLS { 
+         Name = Defence Laser System
+         Type = Laser shootable 
+         targets =   floating ground_level low_level_flight medium_level_flight
+         shotFrom = ground_level
+	 ReactionFireShots = 2
+         Punch@MaxRange = 70
+         Punch@MinRange = 90
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 4
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 20
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 100
+            u2 = 80
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } DLS
+
 LRHEPT { 
          Type = Laser shootable 
          targets =   floating ground_level

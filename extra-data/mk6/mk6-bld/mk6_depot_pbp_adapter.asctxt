@@ -1,0 +1,5 @@
+Techadapter {
+   ; Depot. West Eingang
+   Name = B2
+   TechnologiesRequired = 15000
+} TechAdapter
