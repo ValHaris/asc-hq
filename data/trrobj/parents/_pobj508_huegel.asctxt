@@ -1,5 +1,5 @@
 ObjectType { 
-; Objekt ersetzt das Feld durch "hillside" und modifiziert den Movemalus
+; Objekt ergänzt das Feld um "hillside" und modifiziert den Movemalus
 
    Name = Huegel
    ID = 508
