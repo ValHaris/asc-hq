@@ -1,17 +1,23 @@
 TerrainType { 
    Name = hs berg rechts
    ID = 90
-   parent = 1215
+   parent = 508
    dry { 
       GFX_Picture = 212
+      TerrainProperties += hard_Sand
+      UseGFXpics = true
    } dry
    light_rain ->* TerrainType.dry
    heavy_rain ->* TerrainType.dry
    few_snow { 
       GFX_Picture = 677
+      TerrainProperties += hard_Sand
+      UseGFXpics = true
    } few_snow
    much_snow { 
       GFX_Picture = 783
+      TerrainProperties += hard_Sand
+      UseGFXpics = true
    } much_snow
    snow_and_ice ->* TerrainType.much_snow
 } TerrainType

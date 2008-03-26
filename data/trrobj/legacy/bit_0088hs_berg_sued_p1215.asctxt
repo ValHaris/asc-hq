@@ -1,17 +1,23 @@
 TerrainType { 
    Name = berg süd
    ID = 88
-   parent = 1215
+   parent = 508
    dry { 
+      UseGFXpics = true
       GFX_Picture = 210
+      TerrainProperties += hard_Sand
    } dry
    light_rain ->* TerrainType.dry
    heavy_rain ->* TerrainType.dry
    few_snow { 
+      UseGFXpics = true
       GFX_Picture = 675
+      TerrainProperties += hard_Sand
    } few_snow
    much_snow { 
+      UseGFXpics = true
       GFX_Picture = 781
+      TerrainProperties += hard_Sand
    } much_snow
    snow_and_ice ->* TerrainType.much_snow
 } TerrainType

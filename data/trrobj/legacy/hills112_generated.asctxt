@@ -6,14 +6,17 @@ TerrainType {
    dry { 
       UseGFXpics = false
       picture =  slope-h3.png
+      TerrainProperties += Lowland
    } dry
    few_snow { 
       UseGFXpics = false
       picture =  slope-h3.png fewsnow4.png
+      TerrainProperties += Lowland
    } few_snow
    much_snow { 
       UseGFXpics = false
       picture =  slope-h3.png
       GraphicOperations = snow
+      TerrainProperties += Lowland
    } much_snow
 } TerrainType
