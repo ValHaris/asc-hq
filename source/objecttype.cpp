@@ -812,7 +812,7 @@ int ObjectType :: getMemoryFootprint() const
 
 
 
-const int object_version = 20;
+const int object_version = 21;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -834,9 +834,21 @@ void ObjectType :: read ( tnstream& stream )
 
        visibleago = stream.readInt();
 
-       readClassContainer( linkableObjects, stream );
-       readClassContainer( linkableTerrain, stream );
+       if ( version <= 20 ) {
+          vector<int> IDs;
+          readClassContainer( IDs, stream );
+          linkableObjects.clear();
+          for ( int i = 0; i < IDs.size(); ++i )
+             linkableObjects.push_back( IntRange(IDs[i]));
 
+          readClassContainer( IDs, stream );
+          linkableTerrain.clear();
+          for ( int i = 0; i < IDs.size(); ++i )
+             linkableTerrain.push_back( IntRange(IDs[i]));
+       } else {
+         readClassContainer( linkableObjects, stream );
+         readClassContainer( linkableTerrain, stream );
+       }
        armor = stream.readInt();
 
        for ( int i = 0; i < cwettertypennum; ++i ) {
@@ -1081,9 +1093,9 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
    pc.addInteger  ( "GroupID", groupID, -1 );
    pc.addTagArray ( "Weather", weather, cwettertypennum, weatherTags );
    pc.addBool     ( "visible_in_fogOfWar", visibleago );
-   pc.addIntegerArray ( "LinkableObjects", linkableObjects );
+   pc.addIntRangeArray ( "LinkableObjects", linkableObjects );
    if ( pc.find ( "LinkableTerrain" ) || !pc.isReading() )
-      pc.addIntegerArray ( "LinkableTerrain", linkableTerrain );
+      pc.addIntRangeArray ( "LinkableTerrain", linkableTerrain );
 
    pc.addBool ( "canExistBeneathBuildings", canExistBeneathBuildings, false );
 

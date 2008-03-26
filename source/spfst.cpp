@@ -592,24 +592,29 @@ void         calculateobject( int       x,
       tfield* fld2 = actmap->getField(a,b);
 
       if ( fld2 ) {
-         for ( int oj = -1; oj < int(obj->linkableObjects.size()); oj++ ) {
-            Object* oi = NULL;
-            if ( oj == -1 ) {
-               if ( obj->netBehaviour & ObjectType::NetToSelf )
-                  oi = fld2->checkforobject ( obj );
-            } else
-               oi = fld2->checkforobject ( actmap->getobjecttype_byid ( obj->linkableObjects[oj] ) );
-
-            if ( oi ) {
+         if ( obj->netBehaviour & ObjectType::NetToSelf )
+            if ( fld2->checkforobject ( obj )) {
                c |=  1 << dir ;
                if ( mof )
-                  calculateobject ( a, b, false, oi->typ, actmap );
+                  calculateobject ( a, b, false, obj, actmap );
+            }
 
+
+         for ( int oj = 0; oj < int(obj->linkableObjects.size()); oj++ ) {
+            for ( int id = obj->linkableObjects[oj].from; id <= obj->linkableObjects[oj].to; ++id ) {
+               Object* oi = fld2->checkforobject ( actmap->getobjecttype_byid ( id ) );
+               if ( oi ) {
+                  c |=  1 << dir ;
+                  if ( mof )
+                     calculateobject ( a, b, false, oi->typ, actmap );
+               }
             }
          }
+
          for ( unsigned int t = 0; t < obj->linkableTerrain.size(); t++ )
-            if ( fld2->typ->terraintype->id == obj->linkableTerrain[t] )
-               c |=  1 << dir ;
+            for ( int id = obj->linkableTerrain[t].from; id <= obj->linkableTerrain[t].to; ++id ) 
+               if ( fld2->typ->terraintype->id == id )
+                  c |=  1 << dir ;
 
          if ( fld2->building && !fld2->building->typ->hasFunction( ContainerBaseType::NoObjectChaining  ) ) {
             if ( (obj->netBehaviour & ObjectType::NetToBuildingEntry)  &&  (fld2->bdt & getTerrainBitType(cbbuildingentry) ).any() )

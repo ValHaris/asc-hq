@@ -48,10 +48,10 @@
      bool visibleago;
 
      //! some objects are graphically linked with others on neighbouring fields. \sa no_autonet linkableTerrain
-     vector<int> linkableObjects;
+     vector<IntRange> linkableObjects;
 
      //! objects can be graphically linked to terrain, as if the terrain was an object of the same type. \sa no_autonet linkableObjects
-     vector<int> linkableTerrain;
+     vector<IntRange> linkableTerrain;
 
      //! if an object should not be attackable, set armor to 0
      int armor;

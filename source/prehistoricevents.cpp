@@ -313,7 +313,7 @@ void  readOldEventLists ( pnstream stream, bool passedEvents, GameMap* spfld )
    #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 
    if ( sizeof(int*) != 4 ) {
-      displaymessage ("Unable to load map in old file format on a non-32 bit machine\nPlease convert this file to the new file format on a 32 bit little endian machine and try again",1);
+      displaymessage ("Unable to load map " + stream->getLocation() + " in old file format on a non-32 bit machine\nPlease convert this file to the new file format on a 32 bit little endian machine and try again",1);
       throw tfileerror();
    }
    
@@ -350,7 +350,7 @@ void  readOldEventLists ( pnstream stream, bool passedEvents, GameMap* spfld )
        i->first->setEventID ( e->second );
    }
    #else
-   displaymessage ("Unable to load map in old file format on a big endian machine\nPlease convert this file to the new file format on a little endian machine and try again",1);
+   displaymessage ("Unable to load map " + stream->getLocation() + " in old file format on a big endian machine\nPlease convert this file to the new file format on a little endian machine and try again",1);
    throw tfileerror();
    #endif
 }
