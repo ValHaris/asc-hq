@@ -10,22 +10,22 @@ TerrainType {
    light_rain { 
       UseGFXpics = false
       picture = slope-n1.png pfuetze-1a.png
-      TerrainProperties += hard_Sand
+      TerrainProperties += Lowland
    } light_rain
    heavy_rain { 
       UseGFXpics = false
       picture = slope-n1.png pfuetze-1b.png
-      TerrainProperties += hard_Sand
+      TerrainProperties += Lowland
    } heavy_rain
    few_snow { 
       UseGFXpics = false
       picture =  slope-n1.png fewsnow4.png
-      TerrainProperties += hard_Sand
+      TerrainProperties += Lowland
    } few_snow
    much_snow { 
       UseGFXpics = false
       picture = slope-n1.png
       GraphicOperations = snow
-      TerrainProperties += hard_Sand
+      TerrainProperties += Lowland
    } much_snow
 } TerrainType
