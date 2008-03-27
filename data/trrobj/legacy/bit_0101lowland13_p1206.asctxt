@@ -6,6 +6,7 @@ TerrainType {
    dry { 
       UseGFXpics = false
       picture = slope-n1.png
+      TerrainProperties += Lowland
    } dry
    light_rain { 
       UseGFXpics = false
