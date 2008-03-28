@@ -1,10 +1,12 @@
 ObjectType { 
    ID = 2094
-   parent = 3500
+   SecondaryIDs = 2009
+   parent = 524
    Weather = dry much_snow 
    Name = Beton 
 
    LinkableObjects = 2095
+   LinkableTerrain = 10
    NetBehaviour = 
    TerrainAccess.terrain_any = Very_shallow_water shallow_water water river  
 
