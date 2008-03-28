@@ -1,0 +1,7 @@
+ObjectType { 
+   Abstract = true
+
+   ID = 3500
+   Parent = 524
+
+} ObjectType
