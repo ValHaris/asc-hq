@@ -1,0 +1,27 @@
+TerrainType { 
+   Name = Morass 3
+   ID = 18
+   parent = 503
+   Weather -= snow_and_ice
+   dry { 
+      UseGFXpics = false
+      picture = texture-10d1.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = texture-10d1.png pfuetze-1b.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = texture-10d1.png pfuetze-1c.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      picture = texture-10d1.png fewsnow3b.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = texture-10d1.png
+      GraphicOperations = snow
+   } much_snow
+} TerrainType

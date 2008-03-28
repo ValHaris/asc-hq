@@ -1,0 +1,27 @@
+TerrainType { 
+   Name = Grassland 24
+   ID = 40
+   Weather -= snow_and_ice
+   Parent = 501
+   dry { 
+      UseGFXpics = false
+      picture = texture-n3b4.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = texture-n3b4.png pfuetze-1a.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = texture-n3b4.png pfuetze-1c.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      picture = texture-n3b4.png fewsnow3b.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = texture-n3b4.png
+      GraphicOperations = snow
+   } much_snow
+} TerrainType

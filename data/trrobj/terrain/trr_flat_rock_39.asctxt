@@ -1,0 +1,27 @@
+TerrainType { 
+   Name = Flat Rock 43
+   ID = 24
+   parent = 505
+   Weather -= snow_and_ice
+   dry { 
+      UseGFXpics = false
+      picture = texture-n4a.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = texture-n4a.png pfuetze-1a.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = texture-n4a.png pfuetze-1b.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      picture = texture-n4a.png fewsnow3.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = texture-n4a.png
+      GraphicOperations = snow
+   } much_snow
+} TerrainType

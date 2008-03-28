@@ -1,0 +1,27 @@
+TerrainType { 
+   Name = Rough Rock 2
+   ID = 167
+   parent = 505
+   Weather -= snow_and_ice
+   dry { 
+	UseGFXpics = false
+      picture = texture-n3b0d.png
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = texture-n3b0d.png pfuetze-1a.png
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = texture-n3b0d.png pfuetze-1c.png
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+	picture = texture-n3b0d.png fewsnow4.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+	picture = texture-n3b0d.png
+	GraphicOperations = snow
+   } much_snow
+} TerrainType

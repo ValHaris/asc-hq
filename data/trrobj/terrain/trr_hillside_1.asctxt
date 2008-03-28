@@ -1,0 +1,32 @@
+TerrainType { 
+   Name = Hillside 1
+   ID = 101
+   parent = 508
+   Weather -= snow_and_ice
+   dry { 
+      UseGFXpics = false
+      picture = slope-n1.png
+      TerrainProperties += Lowland
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = slope-n1.png pfuetze-1a.png
+      TerrainProperties += Lowland
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = slope-n1.png pfuetze-1b.png
+      TerrainProperties += Lowland
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      picture =  slope-n1.png fewsnow4.png
+      TerrainProperties += Lowland
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = slope-n1.png
+      GraphicOperations = snow
+      TerrainProperties += Lowland
+   } much_snow
+} TerrainType
