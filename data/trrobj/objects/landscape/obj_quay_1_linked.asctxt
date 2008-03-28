@@ -1,6 +1,6 @@
 ObjectType { 
    Name = Linked Quay 1
-   Parent = 3500
+   Parent = 524
    ID = 2009
 
    LinkableObjects = 

@@ -3,7 +3,7 @@ ObjectType {
    Weather = dry
 
    Name = Quay 26
-   Parent = 3500
+   Parent = 524
    ID = 2005
 
    dry { 
