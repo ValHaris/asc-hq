@@ -193,7 +193,7 @@ void Menu::setup()
    addfield ("~H~elp");
     addbutton ( "~U~nit Information\tctrl+U",    act_unitinfo );
     addbutton ( "unit~S~et Information",        act_unitSetInformation );
-    addbutton ( "~T~errain Information",        act_terraininfo );
+    addbutton ( "~T~errain Information\t7",        act_terraininfo );
    currentMenu->addSeparator();
     addbutton ( "~H~elp System\tF1",             act_help );
     addbutton ( "~A~bout",                      act_about );
@@ -727,6 +727,9 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_z:   execaction_ev(act_setzoom );
                         return true;
 
+         case SDLK_7 :  execaction_ev(act_terraininfo);
+                        return true;
+                        
          case SDLK_8 :  execaction_ev(act_placemine);
                         return true;
 
