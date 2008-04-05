@@ -164,25 +164,25 @@ class CargoEditor : public PG_Window {
             if ( key->keysym.sym == SDLK_RETURN )
                return ok();
                
-            if ( key->keysym.unicode == 'c' )
+            if ( key->keysym.sym == SDLK_c )
                return editUnitCargo();
             
-            if ( key->keysym.unicode == 'p' )
+            if ( key->keysym.sym == SDLK_p )
                return editUnit();
          
-            if ( key->keysym.unicode == '+' )
+            if ( key->keysym.sym == SDLK_PLUS || key->keysym.sym == SDLK_KP_PLUS)
                return addUnit();
 
-            if ( key->keysym.unicode == '-' || key->keysym.sym == SDLK_DELETE )
+            if ( key->keysym.sym == SDLK_MINUS || key->keysym.sym == SDLK_DELETE || key->keysym.sym == SDLK_KP_MINUS)
                return remove();
             
          }
          
          if ( mod & KMOD_CTRL ) {
-            if ( key->keysym.unicode == 'c' )
+            if ( key->keysym.sym == SDLK_c )
                return copyUnit();
             
-            if ( key->keysym.unicode == 'v' )
+            if ( key->keysym.sym == SDLK_v )
                return pasteUnit();
 
          }
