@@ -1,0 +1,12 @@
+VehicleType { 
+   Name = RELIC
+   ID = 1465
+   parent = 552
+
+   Description = CM medium Range
+   Picture = mk5v_relic.pcx
+
+   Weapons {
+      Weapon0 ->* VehicleType.CMM
+   } Weapons
+} VehicleType

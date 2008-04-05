@@ -296,7 +296,7 @@
 
       WeaponEffectiveness {      
          trooper = 90
-         rail_vehicle = 100
+         rail_vehicle = 90
          building|turret|object = 110
          hoovercraft = 90
          helicopter = 100
@@ -309,8 +309,8 @@
          medium_wheeled_vehicle = 90
          heavy_wheeled_vehicle = 100
          
-         light_ship = 90
-         medium_ship  = 100
+         light_ship = 80
+         medium_ship  = 90
          heavy_ship = 100
 
          light_aircraft = 100
@@ -929,7 +929,7 @@
       } CMG
 
       CMU ->* VehicleType.CMG
-      CMU.MaxRange = 110
+      CMU.MaxRange = 120
       CMU.MinRange = 60
       CMU.Punch@MaxRange = 125
       CMU.Punch@MinRange = 125

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15248
+   ;Bezeichnung der verknüpften Technologie: Damon
+   TechnologiesRequired = 15248
+} TechAdapter

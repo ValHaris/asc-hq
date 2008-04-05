@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = KRACHER
+   ID = 1464
+   parent = 565
+   Description = SSM medium range
+   Picture = mk5v_kracher.pcx
+   
+   Weight = 30
+   
+   Weapons.Weapon0.MaxRange -= 10
+   Weapons.Weapon0.Punch@MinRange -= 10
+   Weapons.Weapon0.Punch@MaxRange -= 10
+} VehicleType

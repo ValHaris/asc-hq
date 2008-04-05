@@ -4,7 +4,7 @@ VehicleType {
    ID = 47
    
    Description = cruiser
-   picture = MK1s_shark.pcx
+   picture = mk1s_shark.pcx
    WreckageObject = 447
 
    Armor += 100
@@ -14,7 +14,7 @@ VehicleType {
    Weapons { 
       Initiative = 20
       Number = 8
-      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 20
       Weapon0.Punch@MaxRange = 105

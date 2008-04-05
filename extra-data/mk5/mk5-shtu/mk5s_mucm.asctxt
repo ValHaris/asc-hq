@@ -5,11 +5,12 @@ VehicleType {
    
    Description = cruise missile submarine
    Infotext = [Special cruise missile mini submarine]
-
    picture = mk5s_mucm.pcx
 
    transportation.MaxLoadableUnits = 2
+   Features += move_after_attack
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 1

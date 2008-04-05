@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = DEFKIND
+   ID = 15100
+   parent = 497 327 15000
+
+   Picture = mk6a_defkind.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Category = heavy_aircraft
+   Weight = 300
+   Armor -= 50
+   View = 0
+   jamming = 0
+   Features -= Jam_Only_Own_Field
+   JumpDrive ->* VehicleType.TeccnolsJump4
+
+   Tank.Material = 2000
+   Tank.Fuel = 12000
+   movement -= 0 0 0 20 40 40 0 0
+   Terrainaccess ->* VehicleType.heli_terrain
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.AAMH
+      Weapon0.MaxRange = 50
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 75
+      Weapon0.ReactionFireShots = 2
+      Weapon1 ->* VehicleType.AMO
+      Weapon1.MaxRange = 70
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+      Weapon1.ReactionFireShots = 1
+      Weapon2 ->* Vehicletype.smASM
+      Weapon2.MaxRange = 60
+      Weapon2.Punch@MaxRange = 70
+      Weapon2.Punch@MinRange = 70
+      Weapon2.ReactionFireShots = 1
+   } Weapons
+   
+} VehicleType

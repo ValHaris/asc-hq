@@ -25,8 +25,8 @@ VehicleType {
       Number = 4
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 65
-      Weapon0.Punch@MinRange = 75
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 90
 
       Weapon1 ->* VehicleType.DCS 
       Weapon1.MaxRange = 20

@@ -12,23 +12,23 @@ VehicleType {
    Weapons { 
       Initiative = 20
       Number = 4
-      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 80
       Weapon0.MinRange = 40
       Weapon0.Ammo = 14
       Weapon0.ReactionFireShots = 0
-      Weapon0.Punch@MaxRange = 98
-      Weapon0.Punch@MinRange = 185
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 165
 
       Weapon1 ->* VehicleType.Ship_MG 
       Weapon1.Ammo = 20
 
       Weapon2 ->* VehicleType.Ship_Artillery
       Weapon2.MaxRange = 50
-      Weapon2.MinRange = 10
+      Weapon2.MinRange = 30
       Weapon2.Ammo = 16
-      Weapon2.Punch@MaxRange = 80
-      Weapon2.Punch@MinRange = 100
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 125
       Weapon2.ReactionFireShots = 2
 
       Weapon3 ->* VehicleType.Ship_Flak 

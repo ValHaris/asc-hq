@@ -1,0 +1,10 @@
+technology {
+   Name = Relic
+   infotext = 
+   id = 1465
+   RelatedUnitID = 1465
+   parent = 1499
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 1499,100002,100105,100301,100310,1464
+} Technology

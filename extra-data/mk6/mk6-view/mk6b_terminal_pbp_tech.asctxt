@@ -1,0 +1,10 @@
+technology {
+   Name = JumpTerminal
+   infotext = 
+   id = 15244
+   RelatedUnitID = 15244
+   parent = 15000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 15000,100002,100102,100210 
+} Technology

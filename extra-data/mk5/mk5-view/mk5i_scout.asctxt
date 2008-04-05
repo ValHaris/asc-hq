@@ -13,7 +13,7 @@ VehicleType {
    Features += paratrooper
 
    Transportation ->* VehicleType.TransDevice 
-   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystemNum = 3
    Transportation.EntranceSystem0.Mode = in docking
    Transportation.EntranceSystem1.Mode = out
    Transportation.EntranceSystem1.UnitHeightAbs = low_level_flight
@@ -23,6 +23,9 @@ VehicleType {
    Transportation.EntranceSystem1.DockingHeightAbs = 
    Transportation.EntranceSystem1.DockingHeightRel = 0
    Transportation.EntranceSystem1.DisableAttack = false
+   Transportation.EntranceSystem2 ->* VehicleType.TurretOut
+   Transportation.EntranceSystem2.MoveCost = 11 
+
 
    Weapons { 
       Number = 2

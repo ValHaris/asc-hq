@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = DAMON
+   parent = 248 
+   ID = 15248
+
+   Infotext = [#crt# Universeller Raum- und Luftjaeger mit ansprechender Panzerung und Bewaffnung.]
+   Picture = mk6a_damon.pcx
+
+   Transportation ->* VehicleType.SonarSeaPlane
+   Transportation.MaxLoadableUnits = 2
+   Transportation.MaxLoadableMass = 2
+
+   Armor += 50
+   Weight = 150
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Tank { 
+      fuel = 8000
+      Material = 500
+   } Tank
+   Features += no_midair_refuel 
+   FuelConsumption = 20
+   Movement += 0 0 0 0 0 -10 -20 70 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

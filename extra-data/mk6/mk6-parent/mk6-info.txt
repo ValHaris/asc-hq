@@ -12,7 +12,7 @@ ID 15004 lab north
 ID 15005 lab south
 
 Objekte
-ID 15001 Leuchtfeuer (permanten)
+ID 15001 Leuchtfeuer (permanent)
 ID 15002 JumpField
 
 --Infantrie--
@@ -37,6 +37,7 @@ ID 15293 Meta TE
 
 --View--
 ID 15241 Evi
+ID 15243 Signal
 
 --Jamming--
 ID 15306 Shadow
@@ -59,6 +60,7 @@ ID 15304 Debugg
 --Orbital--
 
 --Aircraft--
+ID 15100 Defkind
 ID 15271 Asus
 ID 15270 Deltafighter
 ID 15276 Deltabomber

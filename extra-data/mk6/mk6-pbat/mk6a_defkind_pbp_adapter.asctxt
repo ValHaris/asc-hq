@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15100
+   ;Bezeichnung der verknüpften Technologie: Defkind
+   TechnologiesRequired = 15100
+} TechAdapter

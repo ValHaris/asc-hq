@@ -18,8 +18,8 @@ VehicleType {
       Number = 9
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 72
-      Weapon0.Punch@MinRange = 80
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 85
 
       Weapon1 ->* VehicleType.SAM
       Weapon1.MaxRange = 60
@@ -32,8 +32,8 @@ VehicleType {
       Weapon3 ->* VehicleType.ShM
       Weapon3.Ammo = 2
       Weapon3.MaxRange = 30
-      Weapon3.Punch@MaxRange = 75
-      Weapon3.Punch@MinRange = 75
+      Weapon3.Punch@MaxRange = 90
+      Weapon3.Punch@MinRange = 90
       Weapon3.ReactionFireShots = 0
 
       Weapon4 ->* vehicleType.AmmoTorp 

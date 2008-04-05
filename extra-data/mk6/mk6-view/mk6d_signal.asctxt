@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = SIGNAL
+   parent = 243
+   ID = 15243
+
+   Description = light radar
+   Picture = mk6d_signal.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Features += paratrooper
+
+   Construction { 
+      Objects = 15002
+   } Construction
+   
+   Tank.Fuel = 4000
+   Tank.Material = 200
+
+} VehicleType

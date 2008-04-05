@@ -1,6 +1,19 @@
 History MK6 teccnols unit set
 
 __________________
+05.04.2008 (GAMER)
+Carrier Move Bugfix
+Obj.beacon=JumpTerminal
+Neu:
+-Defkind
+-Terminal
+
+__________________
+25.03.2008 (GAMER)
+Neu:
+-Damon
+-Signal
+__________________
 20.03.2008 (GAMER)
 Neu:
 -MBF Bauflieger

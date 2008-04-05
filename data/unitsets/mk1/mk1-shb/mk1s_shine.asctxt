@@ -4,7 +4,7 @@ VehicleType {
    ID = 115
    
    Description = heavy gun cruiser
-   picture = MK1s_shine.pcx
+   picture = mk1s_shine.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 100
@@ -12,19 +12,20 @@ VehicleType {
    Weapons { 
       Initiative = 20
       Number = 4
-      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 60
-      Weapon0.MinRange = 20
+      Weapon0.MinRange = 30
       Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 110
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 150
       Weapon0.ReactionFireShots = 0
 
       Weapon1 ->* VehicleType.Ship_Gun
       Weapon1.MaxRange = 40
+      Weapon1.MinRange = 20
       Weapon1.Ammo = 12
-      Weapon1.Punch@MaxRange = 120
-      Weapon1.Punch@MinRange = 140
+      Weapon1.Punch@MaxRange = 95
+      Weapon1.Punch@MinRange = 125
 
       Weapon2 ->* VehicleType.Ship_Flak 
       Weapon2.Ammo = 18

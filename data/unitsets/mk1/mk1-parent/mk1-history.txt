@@ -2,6 +2,10 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+05.04.2008 (GAMER)
+-parent CM-U-Waffe = 12 Felder Reichweite
+-Angleichung Schiffswaffen
+__________________
 22.03.2008 (GAMER)
 -MBV baut Stealth Sockel
 -Fort self_destruct

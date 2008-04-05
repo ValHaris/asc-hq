@@ -3,8 +3,8 @@ VehicleType {
    parent = 352
    ID = 1264
 
-   Description = Torpedokorvette
-   Infotext = [Wie das vielköpfige Meeresungeheuer aus der griechischen Mythologie ist auch dieser Zerstörer überaus giftig und beißt sozusagen nach allen Seiten. Seine vielseitige Bewaffnung und seine Schnelligkeit machten diesen Basistyp sehr beliebt. Dank modernster Sonartechnik kann man sich damit auch auf U-Boot-Jagd begeben. Es wurden zur Luftabwehr bewusst billigere Kanonen statt der teueren großen Raketten eingebaut. Dadurch können aber die feindlichen Flugobjekte in sehr hohen Luftschichten nicht bekämpft werden. Dieser Sachverhalt muss bei der Einsatzplanung stets berücksichtigt werden. Auch ist sein Wirkungsbereich in Küstennähe zum Einsatz gegen Bodentruppen zu klein. Durch seine sehr gute Torpedo Bewaffnung, daher auch der Name "Torpedokorvette" ist allgemein die Schiffbekämpfung sehr effektiv, besonders wenn diese im Rudel durchgeführt wird.  ]
+   Description = Torpedocorvette
+   Infotext = [Wie das vielköpfige Meeresungeheuer aus der griechischen Mythologie ist auch diese Corvette überaus giftig und beißt sozusagen nach allen Seiten. Seine vielseitige Bewaffnung und seine Schnelligkeit machten diesen Basistyp sehr beliebt. Dank modernster Sonartechnik kann man sich damit auch auf U-Boot-Jagd begeben. Es wurden zur Luftabwehr bewusst billigere Kanonen statt der teueren großen Raketten eingebaut. Dadurch können aber die feindlichen Flugobjekte in sehr hohen Luftschichten nicht bekämpft werden. Dieser Sachverhalt muss bei der Einsatzplanung stets berücksichtigt werden. Auch ist sein Wirkungsbereich in Küstennähe zum Einsatz gegen Bodentruppen zu klein. Durch seine sehr gute Torpedo Bewaffnung, daher auch der Name "Torpedokorvette" ist allgemein die Schiffbekämpfung sehr effektiv, besonders wenn diese im Rudel durchgeführt wird.  ]
    picture = mk4s_hydra.png
    wreckageobject = 14264
    GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
@@ -17,8 +17,8 @@ VehicleType {
       Weapon0 ->* VehicleType.Ship_gun 
       Weapon0.MaxRange = 20
       Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 78
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 100
 
       Weapon1 ->* VehicleType.Ship_Flak 
       Weapon1.MaxRange = 20
@@ -31,7 +31,7 @@ VehicleType {
 
       Weapon3 ->* VehicleType.STorp
       Weapon3.Ammo = 4
-      Weapon3.Punch@MaxRange = 110
+      Weapon3.Punch@MaxRange = 115
       Weapon3.Punch@MinRange = 115
    } Weapons
 } VehicleType

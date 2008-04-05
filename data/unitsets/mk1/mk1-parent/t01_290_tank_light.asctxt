@@ -15,6 +15,7 @@ VehicleType {
    WreckageObject = 465
 ;   Picture = g_termite.pcx
 
+   Category = medium_tracked_vehicle
    Armor = 550
    Weight = 50
 

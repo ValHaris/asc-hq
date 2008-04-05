@@ -8,6 +8,7 @@ VehicleType {
 
    Armor -= 500
    Weight = 650
+   Category = light_ship
 
    Weapons { 
       Initiative = 0

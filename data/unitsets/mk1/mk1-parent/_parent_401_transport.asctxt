@@ -25,6 +25,10 @@
 ; -----   N O T   D E F I N A T I O N S   ------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
 
+   nocargo {
+      CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   } nocargo
+
    cargo_trooper_only {
       CategoriesNOT = default light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
    } cargo_trooper_only
@@ -286,6 +290,16 @@
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   U N I T T Y P E S - C O M P L E T E   ----------------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
+
+   notrans { 
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 0
+      MaxLoadableMass = 0
+      CargoMovementDivisor = 2
+      CategoriesNOT -> VehicleType.nocargo.CategoriesNOT
+      EntranceSystemNum = 0
+   } notrans
+
 
 ; Transportzug
    TransTrain { 
@@ -735,6 +749,15 @@
    TransLowTrooper3.MaxLoadableUnits = 3
    TransLowTrooper3.MaxLoadableUnitSize = 4
    TransLowTrooper3.MaxLoadableMass = 6
+
+   TransBunkerSmall { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 10
+      CategoriesNOT -> VehicleType.cargo_vehicle_light.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransBunkerSmall
 
 
 ; ----------------------------------------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ VehicleType {
    Armor -= 300
    view = 0
 
+   Movement += 0 0 0 0 60 80 0 0
    Height = floating low_level_flight medium_level_flight
    Weapons { 
       Initiative = -30

@@ -29,7 +29,7 @@ VehicleType {
       Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.CMK 
-      Weapon0.MaxRange -= 10
+      Weapon0.MaxRange = 110
       Weapon0.Ammo = 2
    } Weapons
 } VehicleType

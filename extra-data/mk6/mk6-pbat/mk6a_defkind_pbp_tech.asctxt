@@ -1,0 +1,10 @@
+technology {
+   Name = Defkind
+   infotext = Forschungsprojekt abgeschlossen! Defkind verfuegbar!
+   id = 15100
+   RelatedUnitID = 15100
+   parent = 15000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 15000,100003,100104,100210,100206 
+} Technology

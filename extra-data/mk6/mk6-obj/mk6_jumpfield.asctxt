@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = JumpFeld
+   Name = JumpField
    ID = 15002
    groupID =
    visible_in_fogOfWar = false

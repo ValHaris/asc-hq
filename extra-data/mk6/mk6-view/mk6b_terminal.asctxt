@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = TERMINAL
+   ID = 15244
+   parent = 244
+
+   Description = JumpTerminal
+   Picture = mk6b_terminal.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   View = 20
+   Features += ExternalFuelTransfer ExternalMaterialTransfer
+   
+   Tank.Material = 20000
+   Tank.Fuel = 50000
+   
+   Construction {
+      Objects = 15001
+   } Construction
+
+   Weapons {
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

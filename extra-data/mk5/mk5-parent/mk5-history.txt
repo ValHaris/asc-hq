@@ -2,6 +2,12 @@ MK5 Outsider
 GAMER
 
 __________________
+05.04.2008 (GAMER)
+-MUCM MAM
+-Umbau Wachtum
+-Mju light_ship
+-Angleichugn Schiffswaffen
+__________________
 24.03.2008 (GAMER)
 -Elite Mechanic baut alle Sockel
 -Buggies Movement +10
@@ -13,6 +19,7 @@ __________________
 -Scud -> Relic
 -CM Anpassungen, Kracher, Relic, MUCM
 -Skjold, + deep_water
+-Crashcar, kamikaze + mehr effektivität
 Neu:
 -Wachturm
 __________________

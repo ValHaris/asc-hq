@@ -4,7 +4,7 @@ VehicleType {
    parent = 357
    
    Description = main artillery ship
-   picture = MK1s_Homer.pcx
+   picture = mk1s_homer.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor -= 100
@@ -18,27 +18,27 @@ VehicleType {
    Weapons { 
       Initiative = 20
       Number = 4
-      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 90
       Weapon0.MinRange = 40
       Weapon0.Ammo = 10
       Weapon0.ReactionFireShots = 0
       Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 160
+      Weapon0.Punch@MinRange = 155
 
-      Weapon1 ->* VehicleType.Ship_Artillery
+      Weapon1 ->* VehicleType.Artillery
       Weapon1.MaxRange = 50
-      Weapon1.MinRange = 10
+      Weapon1.MinRange = 30
       Weapon1.Ammo = 8
       Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 140
+      Weapon1.Punch@MinRange = 130
 
-      Weapon2 ->* VehicleType.Ship_Artillery
+      Weapon2 ->* VehicleType.Artillery
       Weapon2.MaxRange = 50
-      Weapon2.MinRange = 10
+      Weapon2.MinRange = 30
       Weapon2.Ammo = 8
       Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 140
+      Weapon2.Punch@MinRange = 130
 
       Weapon3 ->* VehicleType.Ship_Flak 
       Weapon3.Ammo = 20

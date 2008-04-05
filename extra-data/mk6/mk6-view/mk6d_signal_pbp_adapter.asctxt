@@ -1,0 +1,5 @@
+Techadapter {
+   ; Signal
+   Name = 15243
+   TechnologiesRequired = 15243
+} TechAdapter

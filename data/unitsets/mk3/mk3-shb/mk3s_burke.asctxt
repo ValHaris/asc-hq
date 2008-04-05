@@ -5,7 +5,7 @@ VehicleType {
 
    Description = destroyer
    Infotext = [Originally designed to defend against aircraft, cruise missiles, and nuclear attack submarines, this higher capability ship is to be used in high-threat areas to conduct antiair, antisubmarine, antisurface, and strike operations.]
-   picture = MK3s_burke.png
+   picture = mk3s_burke.png
    GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
 
    Armor -= 100
@@ -18,23 +18,24 @@ VehicleType {
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
       Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange = 68
-      Weapon0.Punch@MinRange = 80
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 115
       Weapon0.ReactionFireShots = 2
       
       Weapon1 ->* VehicleType.ShM
       Weapon1.Ammo = 4
       Weapon1.MaxRange = 50
-      Weapon1.Punch@MaxRange = 95
-      Weapon1.Punch@MinRange = 95
+      Weapon1.MinRange = 20
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
       Weapon1.ReactionFireShots = 0
 
       Weapon2 ->* VehicleType.SSM
       Weapon2.Ammo = 4
-      Weapon2.MinRange = 20
+      Weapon2.MinRange = 30
       Weapon2.MaxRange = 60
-      Weapon2.Punch@MaxRange = 80
-      Weapon2.Punch@MinRange = 80
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 90
       Weapon2.ReactionFireShots = 0
 
       Weapon3 ->* VehicleType.SAM
@@ -43,12 +44,12 @@ VehicleType {
       Weapon4 ->* VehicleType.STorp
       Weapon4.Ammo = 4
       Weapon4.Punch@MaxRange = 105
-      Weapon4.Punch@MinRange = 110
+      Weapon4.Punch@MinRange = 105
       Weapon4.ReactionFireShots = 0
 
       Weapon5 ->* VehicleType.SUTorp
       Weapon5.Ammo = 4
-      Weapon5.Punch@MaxRange = 95
+      Weapon5.Punch@MaxRange = 105
       Weapon5.Punch@MinRange = 105
 
 

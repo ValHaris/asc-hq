@@ -3,6 +3,14 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
 Spezifikationen: GAMER
 
 __________________
+05.04.2008 (GAMER)
+Angleichung Schiffswaffen
+__________________
+25.03.2008 (GAMER)
+-Bugfix Waffenreichweite Flame
+-Bugfix Pluto CM Art
+-Albatross, Waffenaktualisierung
+__________________
 20.03.2008 (GAMER)
 -Namenkorrektur Gebäudeadapter
 -Lurat baut Stealth Sockel

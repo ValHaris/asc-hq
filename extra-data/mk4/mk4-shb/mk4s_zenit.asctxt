@@ -16,15 +16,15 @@ VehicleType {
       Weapon0.MinRange = 40
       Weapon0.Ammo = 16
       Weapon0.ReactionFireShots = 0
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 140
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 160
 
       Weapon1 ->* VehicleType.Artillery 
       Weapon1.MaxRange = 50
       Weapon1.MinRange = 20
       Weapon1.Ammo = 14
       Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 110
+      Weapon1.Punch@MinRange = 120
 
       Weapon2 ->* VehicleType.Artillery 
       Weapon2.MaxRange = 50

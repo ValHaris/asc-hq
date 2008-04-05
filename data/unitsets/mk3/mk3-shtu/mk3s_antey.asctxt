@@ -10,6 +10,7 @@ VehicleType {
    Jamming = 19
    Features += jam_only_own_field
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 40
       Number = 4
