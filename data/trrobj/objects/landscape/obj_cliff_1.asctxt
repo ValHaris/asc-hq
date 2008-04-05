@@ -1,0 +1,27 @@
+ObjectType { 
+
+   Name = Cliff
+   Parent = 523
+   ID = 2401
+   Height = 1
+
+   LinkableObjects = 
+   LinkableTerrain = 2000 2001 2002 2003 2004
+   NetBehaviour = 
+
+   Weather = dry much_snow
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_cliff_1.png 65
+      ImageReference = -1
+      FlipPictures   = 0
+   } dry
+   much_snow {
+      UseGFXpics = false
+      picture = obj_cliff_1_ice.png 64
+      ImageReference = -1
+      FlipPictures   = 0
+   } much_snow
+
+} ObjectType
