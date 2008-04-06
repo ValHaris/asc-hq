@@ -1,14 +1,1028 @@
-2008-02-05 21:33 stratege
-    * data/campaign/standard/asc001.map
-	* data/campaign/standard/asc002.map
-	* data/campaign/standard/asc003.map
-	* data/campaign/standard/asc004.map
-	* data/campaign/standard/asc005.map
-	* data/campaign/standard/asc006.map
+2008-04-05 20:05  mbickel
 
-2008-02-05 21:33 grom
-     * data/campaign/standard/asc007.map fixed Fueldepot and +2k Fuel
+	* configure, configure.in, installer/asc.nsi:  Updated version
+	  numbers
 
+2008-04-05 19:44  mbickel
+
+	* data/main.version, source/sgstream.cpp:  Updated required data
+	  version numbers
+
+2008-04-05 16:00  xyph
+
+	* data/palette.map: Palette updated
+
+2008-04-05 15:53  xyph
+
+	* data/trrobj/objects/buildable/ob_hafenbeton_2095.png: [no log
+	  message]
+
+2008-04-05 15:49  xyph
+
+	* data/trrobj/objects/landscape/: obj_cliff_1.asctxt,
+	  obj_cliff_1.png, obj_cliff_1_ice.png: Cliff Object
+
+2008-04-05 15:43  xyph
+
+	* data/trrobj/objects/landscape/:
+	  obj_coast_1_very_shallow_water.asctxt,
+	  obj_coast_2_shallow_water.asctxt,
+	  obj_coast_3_medium_water.asctxt, obj_coast_4_deep_water.asctxt,
+	  obj_coast_5_ocean_water.asctxt: Added Linking to very shallow
+	  Water Terrain (ID 2004)
+
+2008-04-05 12:12  gamer
+
+	* data/: trrobj/_history_trrobj.txt,
+	  trrobj/objects/buildable/ob_turret_high_44.png,
+	  unitsets/mk1/mk1-parent/_parent_400_weapon.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_401_transport.asctxt,
+	  unitsets/mk1/mk1-parent/mk1-history.txt,
+	  unitsets/mk1/mk1-parent/t01_290_tank_light.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_apogee.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_gunboat.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_homer.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_jellyfish.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_shark.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_shine.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_streak.asctxt,
+	  unitsets/mk1/mk1-shb/mk1s_tide.asctxt,
+	  unitsets/mk3/mk3-parent/mk3-history.txt,
+	  unitsets/mk3/mk3-shb/mk3s_arsenal.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_baynunah.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_burke.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_daring.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_dd21.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_iowa.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_meko.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_mirage.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_skjold.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_ticonderoga.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_triton.asctxt,
+	  unitsets/mk3/mk3-shb/mk3s_visby.asctxt,
+	  unitsets/mk3/mk3-shtu/mk3s_antey.asctxt: [no log message]
+
+2008-04-05 11:45  mbickel
+
+	* source/: gamemap.cpp, strtmesg.cpp, dialogs/cargoeditor.cpp:	Set
+	  version to 2.1.0.0
+	   Updated map version
+	   Fixed hotkeys in mapeditor (cargo editor)
+
+2008-04-04 14:00  xyph
+
+	* data/trrobj/objects/landscape/: obj_quay_1_linked.asctxt,
+	  obj_quay_2_linked.asctxt: Replaced by ob_hafenmauer_2094.asctxt
+	  and ob_hafenbeton_2095.asctxt
+
+2008-04-03 16:24  xyph
+
+	* data/trrobj/terrain/: trr_water_1_very_shallow.asctxt,
+	  trr_water_2_shallow.asctxt: Wrong ID corrected
+
+2008-04-02 20:28  xyph
+
+	* data/trrobj/terrain/trr_water_1_very_shallow.asctxt: [no log
+	  message]
+
+2008-03-30 22:04  xyph
+
+	* data/trrobj/legacy/: bi-bi.asctxt: [no log message]
+
+2008-03-30 21:58  mbickel
+
+	* source/maped-mainscreen.cpp:	Bound 7 key to terrain-info in
+	  mapeditor
+
+2008-03-30 20:57  xyph
+
+	* data/trrobj/legacy/: bit_0008sand_uebergang_p1201.asctxt,
+	  bit_0009lowland_uebergang.asctxt, bit_0010kai_flat_p1200.asctxt,
+	  bit_0018lowland_p1206.asctxt, bit_0019lowland12.asctxt,
+	  bit_0020lowland12_p1203.asctxt, bit_0022lowland_mud_p1205.asctxt,
+	  bit_0023lowland_mud_p22.asctxt, bit_0024lowland13_p1206.asctxt,
+	  bit_0026hs11_p1201.asctxt, bit_0028wiese_12p1203.asctxt,
+	  bit_0029lowland12_p1203.asctxt, bit_0030lowland_12p1203.asctxt,
+	  bit_0031lowland12p1203.asctxt, bit_0033lowland_12p1203.asctxt,
+	  bit_0034dark_hs_p1201.asctxt, bit_0035dark_hadsand_p1201.asctxt,
+	  bit_0036dark_hs_p1201.asctxt, bit_0037dark_lowland_p1203.asctxt,
+	  bit_0038dark_lowland_p1203.asctxt,
+	  bit_0039darklowland_p1203.asctxt,
+	  bit_0041dark_lowland_p1203.asctxt,
+	  bit_0101lowland13_p1206.asctxt, bit_0167hs_rubber.asctxt,
+	  bit_0279swamp20p1202.asctxt, bit_0280swamp_15p1204.asctxt,
+	  bit_0285morass20_p1204.asctxt,
+	  bit_0319lowland_rubber_p1206.asctxt, bit_0320rubber_dark.asctxt,
+	  flat0040_generated.asctxt, flat0048_generated.asctxt,
+	  flat0077_generated.asctxt, flat0078_generated.asctxt: [no log
+	  message]
+
+2008-03-28 20:29  xyph
+
+	* data/trrobj/terrain/: trr_concrete_3.asctxt,
+	  trr_flat_rock_32.asctxt, trr_flat_rock_33.asctxt,
+	  trr_flat_rock_34.asctxt, trr_flat_rock_35.asctxt,
+	  trr_flat_rock_36.asctxt, trr_flat_rock_37.asctxt,
+	  trr_flat_rock_38.asctxt, trr_flat_rock_39.asctxt,
+	  trr_flat_rock_40.asctxt, trr_flat_rock_41.asctxt, trr_grassland
+	  29.asctxt, trr_grassland_18.asctxt, trr_grassland_19.asctxt,
+	  trr_grassland_20.asctxt, trr_grassland_21.asctxt,
+	  trr_grassland_22.asctxt, trr_grassland_23.asctxt,
+	  trr_grassland_24.asctxt, trr_grassland_25.asctxt,
+	  trr_grassland_26.asctxt, trr_grassland_27.asctxt,
+	  trr_grassland_28.asctxt, trr_hillside_1.asctxt,
+	  trr_morass_2.asctxt, trr_morass_3.asctxt, trr_mud_10.asctxt,
+	  trr_mud_11.asctxt, trr_rough_rock_2.asctxt,
+	  trr_rough_rock_3.asctxt, trr_sand_11.asctxt, trr_swamp_2.asctxt,
+	  trr_swamp_3.asctxt: Terrains moved from asc\data\trrobj\legacy to
+	  asc\data\trrobj\terrain and renamed
+
+2008-03-28 20:22  xyph
+
+	* data/trrobj/: _filter_asc_terrain.asctxt,
+	  legacy/_deposits_filter.asctxt: [no log message]
+
+2008-03-28 17:19  xyph
+
+	* data/trrobj/parents/o3500_harbour.asctxt: moved to
+	  asc\data\trrobj\legacy
+
+2008-03-28 17:18  xyph
+
+	* data/trrobj/objects/landscape/:
+	  obj_quay_1_l_short_north_short_east.asctxt,
+	  obj_quay_1_l_short_north_short_west.asctxt,
+	  obj_quay_1_l_short_south_short_east.asctxt,
+	  obj_quay_1_l_short_south_short_west.asctxt,
+	  obj_quay_1_linked.asctxt,
+	  obj_quay_1_long_north_short_east.asctxt,
+	  obj_quay_1_long_north_short_west.asctxt,
+	  obj_quay_1_long_south_short_east.asctxt,
+	  obj_quay_1_long_south_short_west.asctxt,
+	  obj_quay_1_short_east.asctxt, obj_quay_1_short_north.asctxt,
+	  obj_quay_1_short_north_short_east.asctxt,
+	  obj_quay_1_short_north_short_west.asctxt,
+	  obj_quay_1_short_south.asctxt,
+	  obj_quay_1_short_south_short_east.asctxt,
+	  obj_quay_1_short_south_short_west.asctxt,
+	  obj_quay_1_short_west.asctxt,
+	  obj_quay_1_special_north_south.asctxt,
+	  obj_quay_1_very_short_north.asctxt,
+	  obj_quay_1_very_short_south.asctxt, obj_quay_2_linked.asctxt:
+	  Reference changend to Harbour Parent ID 524
+
+2008-03-28 17:17  xyph
+
+	* data/trrobj/objects/buildable/: ob_hafenbeton_2095.asctxt,
+	  ob_hafenmauer_2094.asctxt: Added Linking to Concrete Terrain ID
+	  10
+
+2008-03-28 16:58  xyph
+
+	* data/trrobj/legacy/o3500_harbour.asctxt: Content replaced by
+	  Reference to Parent ID 524
+
+2008-03-28 16:48  xyph
+
+	* data/trrobj/: parents/_pobj524_harbour.asctxt,
+	  terrain/trr_water_1_very_shallow.asctxt,
+	  terrain/trr_water_1_very_shallow.png,
+	  terrain/trr_water_1_very_shallow_ms.png: [no log message]
+
+2008-03-28 16:41  gamer
+
+	* data/trrobj/parents/_pobj523_steilkueste.asctxt: [no log message]
+
+2008-03-28 16:33  gamer
+
+	* data/trrobj/parents/_pobj522_strand.asctxt: [no log message]
+
+2008-03-27 20:36  xyph
+
+	* data/trrobj/legacy/bit_0101lowland13_p1206.asctxt: Terrainbit
+	  (Lowland/hard Sand/soft Sand) added
+
+2008-03-27 20:30  xyph
+
+	* data/trrobj/legacy/bit_0101lowland13_p1206.asctxt: Terrainbit
+	  (Lowland/hard Sand/soft Sand) added
+
+2008-03-27 20:23  xyph
+
+	* data/trrobj/legacy/bit_0101lowland13_p1206.asctxt: Terrainbit
+	  (Lowland/hard Sand/soft Sand) added
+
+2008-03-26 17:41  xyph
+
+	* data/trrobj/parents/_pobj508_huegel.asctxt: Comment changed
+
+2008-03-26 17:40  xyph
+
+	* data/trrobj/legacy/: bit_0087hillside_berg_nord_p1215.asctxt,
+	  bit_0088hs_berg_sued_p1215.asctxt,
+	  bit_0089hillside_berg_links_p1215.asctxt,
+	  bit_0090hs_berg_rechts_p1215.asctxt,
+	  bit_0091hillside_north_p1215.asctxt,
+	  bit_0092hillside_south_1215.asctxt,
+	  bit_0093hillside_left_p1215.asctxt,
+	  bit_0094hs_hillside_west_p1215.asctxt,
+	  bit_0095hillside_northeast_p1215.asctxt,
+	  bit_0096hillside_southwest.asctxt,
+	  bit_0097hillside_southeast_p1215.asctxt,
+	  bit_0098hillside_northeast_p1215.asctxt,
+	  hills099_generated.asctxt, hills100_generated.asctxt,
+	  hills102_generated.asctxt, hills103_generated.asctxt,
+	  hills104_generated.asctxt, hills105_generated.asctxt,
+	  hills106_generated.asctxt, hills107_generated.asctxt,
+	  hills108_generated.asctxt, hills109_generated.asctxt,
+	  hills110_generated.asctxt, hills111_generated.asctxt,
+	  hills112_generated.asctxt, hills113_generated.asctxt,
+	  hills114_generated.asctxt, hills115_generated.asctxt,
+	  hills116_generated.asctxt, hills117_generated.asctxt,
+	  hills118_generated.asctxt, hills119_generated.asctxt,
+	  hills120_generated.asctxt, hills121_generated.asctxt,
+	  hills202_generated.asctxt: Terrainbit (Lowland/hard Sand/soft
+	  Sand) added
+
+2008-03-26 16:52  mbickel
+
+	* data/evilisle.map, data/palette-gfx.map, source/strtmesg.cpp:
+	  Converted some old maps to new file format
+
+2008-03-26 15:47  mbickel
+
+	* source/: objecttype.cpp, objecttype.h, prehistoricevents.cpp,
+	  spfst.cpp, strtmesg.cpp:  Improved error message about not being
+	  able to load legacy map files
+	   LinkableTerrain and LinkableObjects are now an IntRange
+
+2008-03-24 19:17  gamer
+
+	* data/: trrobj/_filter_asc_terrain.asctxt,
+	  trrobj/_filter_buildable_objects.asctxt,
+	  trrobj/_history_trrobj.txt,
+	  trrobj/legacy/_deposits_filter.asctxt,
+	  trrobj/objects/buildable/ob_0044turret.asctxt,
+	  trrobj/objects/buildable/ob_0997big_bridge.asctxt,
+	  trrobj/objects/buildable/ob_0998tankblocker.asctxt,
+	  trrobj/objects/buildable/ob_2097_lavadefense.asctxt,
+	  trrobj/objects/buildable/ob_2098_defensive_turret_foundation.asctxt,
+	  trrobj/objects/buildable/ob_2098_turret.png,
+	  trrobj/objects/buildable/ob_2152_field.asctxt,
+	  trrobj/objects/buildable/ob_2153_fields.asctxt,
+	  trrobj/objects/buildable/ob_2500_river.asctxt,
+	  trrobj/objects/buildable/ob_2508_channel.asctxt,
+	  trrobj/objects/buildable/ob_hafenbeton_2095.asctxt,
+	  trrobj/objects/buildable/ob_hafenbeton_2095.png,
+	  trrobj/objects/buildable/ob_hafenmauer_2094.asctxt,
+	  trrobj/objects/buildable/ob_hafenmauer_2094.png,
+	  trrobj/objects/buildable/ob_turret_defence_2098.asctxt,
+	  trrobj/objects/buildable/ob_turret_defence_2098.png,
+	  trrobj/objects/buildable/ob_turret_high_44.asctxt,
+	  trrobj/objects/buildable/ob_turret_high_44.png,
+	  trrobj/objects/buildable/ob_turret_stealth_2096.asctxt,
+	  trrobj/objects/buildable/ob_turret_stealth_2096.png,
+	  trrobj/parents/_pobj519_lava.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_400_weapon.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_493_hc_submarine.asctxt,
+	  unitsets/mk1/mk1-parent/mk1-history.txt,
+	  unitsets/mk1/mk1-parent/ro4_299_cm_train.asctxt,
+	  unitsets/mk1/mk1-parent/ro5_300_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro6_301_fast_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro7_302_slow_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro8_303_turret_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro9_304_bunker_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/sh16_365_rockettsub.asctxt,
+	  unitsets/mk1/mk1-shtu/mk1s_tsunami.asctxt,
+	  unitsets/mk1/mk1-sta/mk1b_fort.asctxt,
+	  unitsets/mk1/mk1-vrok/mk1b_silo.asctxt,
+	  unitsets/mk1/mk1-vrok/mk1b_tml.asctxt,
+	  unitsets/mk1/mk1-vsup/mk1v_mbv.asctxt,
+	  unitsets/mk1/mk1-vsup/mk1v_vesuvius.asctxt,
+	  unitsets/mk3/mk3-parent/mk3-history.txt,
+	  unitsets/mk3/mk3-shtu/mk3s_antey.asctxt,
+	  unitsets/mk3/mk3-vsup/mk3i_pioelite.asctxt,
+	  unitsets/mk3/mk3-vsup/mk3v_merkat.asctxt: [no log message]
+
+2008-03-22 13:22  mbickel
+
+	* source/: asc-mainscreen.cpp, strtmesg.cpp,
+	  dialogs/cargodialog.cpp:  Fixed: production unit didn't show
+	  units that couldn't be produced because
+		  of lacking resources if "only produce researched stuff"
+	  was enabled
+
+2008-03-20 23:00  mbickel
+
+	* data/icons/newmultiplayergame.ascgui,
+	  source/containerbase-functions.cpp, source/replay.cpp,
+	  source/strtmesg.cpp, source/dialogs/newgame.cpp:  Improved
+	  harvesting algorithm
+	   Fixed replay bug when constructing turrets
+	   Fixed endless loop when searching for map by password
+
+2008-03-18 21:18  mbickel
+
+	* source/dialogs/unitcounting.cpp:  Unit summary should now also
+	  count units in allied transports
+
+2008-03-18 21:07  mbickel
+
+	* source/unix/pbpedit/: Makefile.am, Makefile.in:  Fixed
+	  compilation problems of PBP-Editor
+
+2008-03-18 20:16  mbickel
+
+	* source/: containerbase-functions.cpp, containerbase-functions.h,
+	  dialogs/cargodialog.cpp:  Fixed: AutoHarvest only working for
+	  player 0
+	   Fixed: adding production lines didn't update the list of
+	  producable units
+	   AutoHarvest has improved logic for not harvesting fields that
+	  can't grow
+	    back
+
+2008-03-16 11:45  gamer
+
+	* data/: trrobj/_history_trrobj.txt,
+	  trrobj/objects/buildable/ob_0001road.asctxt,
+	  trrobj/objects/buildable/ob_0003pipeline.asctxt,
+	  trrobj/objects/buildable/ob_0009path.asctxt,
+	  trrobj/objects/buildable/ob_0010ditch.asctxt,
+	  trrobj/objects/buildable/ob_0044turret.asctxt,
+	  trrobj/objects/buildable/ob_0045runway.asctxt,
+	  trrobj/objects/buildable/ob_0181forest_growth.asctxt,
+	  trrobj/objects/buildable/ob_0982_atombrand200.asctxt,
+	  trrobj/objects/buildable/ob_0983_lava_10.asctxt,
+	  trrobj/objects/buildable/ob_0984_lava_25.asctxt,
+	  trrobj/objects/buildable/ob_0985_lava_50.asctxt,
+	  trrobj/objects/buildable/ob_0986_lava_100.asctxt,
+	  trrobj/objects/buildable/ob_0987_lava_200.asctxt,
+	  trrobj/objects/buildable/ob_0988_lava_growth.asctxt,
+	  trrobj/objects/buildable/ob_0994runway_bridge.asctxt,
+	  trrobj/objects/buildable/ob_2097_lavadefense.asctxt,
+	  trrobj/objects/buildable/ob_2099_stacheldraht.asctxt,
+	  trrobj/objects/buildable/ob_2152_field.asctxt,
+	  trrobj/objects/buildable/ob_2500_river.asctxt,
+	  trrobj/objects/buildable/ob_2508_channel.asctxt,
+	  trrobj/objects/buildable/ob_railroad_armor_992.asctxt,
+	  trrobj/objects/buildable/ob_railroad_bridge_999.asctxt,
+	  trrobj/objects/buildable/ob_railroad_small_991.asctxt,
+	  trrobj/objects/landscape/obj_bushes_1.asctxt,
+	  trrobj/parents/_pobj508_huegel.asctxt,
+	  trrobj/parents/_pobj519_lava.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_402_movement.asctxt,
+	  unitsets/mk1/mk1-parent/_wreck_417_trooper.asctxt,
+	  unitsets/mk1/mk1-parent/mk1-history.txt: [no log message]
+
+2008-03-15 18:02  gamer
+
+	* data/: campaign/kamor/_filter_kamor.asctxt,
+	  trrobj/_filter_asc_terrain.asctxt,
+	  trrobj/_filter_buildable_objects.asctxt,
+	  trrobj/_history_trrobj.txt, trrobj/asc2system.asctxt,
+	  trrobj/legacy/_deposits_filter.asctxt,
+	  trrobj/objects/buildable/ob_0002railroad.asctxt,
+	  trrobj/objects/buildable/ob_0991railroadsmall.asctxt,
+	  trrobj/objects/buildable/ob_0992armorrailroad.asctxt,
+	  trrobj/objects/buildable/ob_0995big_railroad_bridge.asctxt,
+	  trrobj/objects/buildable/ob_0999railroad_bridge.asctxt,
+	  trrobj/objects/buildable/ob_railroad_2.asctxt,
+	  trrobj/objects/buildable/ob_railroad_2.png,
+	  trrobj/objects/buildable/ob_railroad_2_snow.png,
+	  trrobj/objects/buildable/ob_railroad_armor_992.asctxt,
+	  trrobj/objects/buildable/ob_railroad_armor_992.png,
+	  trrobj/objects/buildable/ob_railroad_armor_992_snow.png,
+	  trrobj/objects/buildable/ob_railroad_bridge_999.asctxt,
+	  trrobj/objects/buildable/ob_railroad_bridge_999.png,
+	  trrobj/objects/buildable/ob_railroad_bridge_big_995.asctxt,
+	  trrobj/objects/buildable/ob_railroad_small_991.asctxt,
+	  trrobj/objects/buildable/ob_railroad_small_991.png,
+	  trrobj/objects/buildable/obj_crystals_1.asctxt,
+	  unitsets/mk1/mk1-orb/mk1t_spor.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_400_weapon.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_401_transport.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_403_type_bunker.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_404_light_tank.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_405_medium_tank.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_406_heavy_tank.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_407_type_sat.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_408_type_mech.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_409_type_heli.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_410_type_trooper.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_411_vehicle.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_412_type_railroad.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_413_type_lair.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_414_type_medium_air.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_415_type_heavy_air.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_416_bike_type.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_418_type_heavy_ship.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_419_type_medium_ship.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_420_type_light_ship.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_421_type_submarine.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_422_type_turret.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_423_small_device.asctxt,
+	  unitsets/mk1/mk1-parent/_parent_493_hc_submarine.asctxt,
+	  unitsets/mk1/mk1-parent/a14_327_defplane.asctxt,
+	  unitsets/mk1/mk1-parent/ad07_221_samtrain.asctxt,
+	  unitsets/mk1/mk1-parent/ad10_224_lradtank.asctxt,
+	  unitsets/mk1/mk1-parent/ad11_225_lradslow.asctxt,
+	  unitsets/mk1/mk1-parent/ari2_251_medium.asctxt,
+	  unitsets/mk1/mk1-parent/ari3_252_hvy.asctxt,
+	  unitsets/mk1/mk1-parent/ari4_253_twice.asctxt,
+	  unitsets/mk1/mk1-parent/ari5_254_med_rail.asctxt,
+	  unitsets/mk1/mk1-parent/ari6_255_twice_rail.asctxt,
+	  unitsets/mk1/mk1-parent/ari7_256_hvy_rail.asctxt,
+	  unitsets/mk1/mk1-parent/i11_211_def_mech.asctxt,
+	  unitsets/mk1/mk1-parent/mk1-history.txt,
+	  unitsets/mk1/mk1-parent/o1_230_rocket.asctxt,
+	  unitsets/mk1/mk1-parent/o6_235_spacestation.asctxt,
+	  unitsets/mk1/mk1-parent/ro4_299_cm_train.asctxt,
+	  unitsets/mk1/mk1-parent/ro5_300_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro6_301_fast_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro7_302_slow_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/ro8_303_turret_cm_launcher.asctxt,
+	  unitsets/mk1/mk1-parent/sh01_350_boat.asctxt,
+	  unitsets/mk1/mk1-parent/sh02_351_patrol.asctxt,
+	  unitsets/mk1/mk1-parent/sh03_352_corvette.asctxt,
+	  unitsets/mk1/mk1-parent/sh04_353_fregatte.asctxt,
+	  unitsets/mk1/mk1-parent/sh05_354_destroyer.asctxt,
+	  unitsets/mk1/mk1-parent/sh06_355_cruiser.asctxt,
+	  unitsets/mk1/mk1-parent/sh07_356_hvycruiser.asctxt,
+	  unitsets/mk1/mk1-parent/sh08_357_battleship.asctxt,
+	  unitsets/mk1/mk1-parent/sh09_358_helicarrier.asctxt,
+	  unitsets/mk1/mk1-parent/sh10_359_smallcarrier.asctxt,
+	  unitsets/mk1/mk1-parent/sh11_360_medcarrier.asctxt,
+	  unitsets/mk1/mk1-parent/sh12_361_bigcarrier.asctxt,
+	  unitsets/mk1/mk1-parent/sh13_362_smallsub.asctxt,
+	  unitsets/mk1/mk1-parent/sh14_363_supportsub.asctxt,
+	  unitsets/mk1/mk1-parent/sh15_364_fightsub.asctxt,
+	  unitsets/mk1/mk1-parent/sh17_366_speedboat.asctxt,
+	  unitsets/mk1/mk1-parent/sh18_367_speedship.asctxt,
+	  unitsets/mk1/mk1-parent/sh19_368_wig.asctxt,
+	  unitsets/mk1/mk1-parent/sh20_369_transportship.asctxt,
+	  unitsets/mk1/mk1-parent/sh21_370_armoredtransportship.asctxt,
+	  unitsets/mk1/mk1-parent/sh22_371_transhoovercraft.asctxt,
+	  unitsets/mk1/mk1-parent/sh23_372_battlehoovercraft.asctxt,
+	  unitsets/mk1/mk1-parent/st04_317_defence_turret.asctxt,
+	  unitsets/mk1/mk1-parent/t06_295_tank_defence.asctxt,
+	  unitsets/mk1/mk1-parent/w05_335_support_wheeled.asctxt,
+	  unitsets/mk1/mk1-parent/w06_336_support_tracked.asctxt,
+	  unitsets/mk3/mk3-orb/mk3b_anger.asctxt,
+	  unitsets/mk3/mk3-parent/mk3-history.txt,
+	  unitsets/mk3/mk3-sta/mk3b_wachturm.asctxt,
+	  unitsets/mk3/mk3-vsup/mk3v_merkat.asctxt: [no log message]
+
+2008-03-04 13:17  gamer
+
+	* data/: buildings/legacy/bld_bi_submarin.asctxt,
+	  trrobj/_history_trrobj.txt,
+	  trrobj/objects/buildable/ob_2097_lavadefense.asctxt,
+	  trrobj/parents/_pobj509_berge.asctxt,
+	  trrobj/parents/_pobj519_lava.asctxt,
+	  unitsets/mk1/mk1-parent/mk1-history.txt,
+	  unitsets/mk1/mk1-parent/v6_246_radarsat.asctxt,
+	  unitsets/mk3/mk3-parent/mk3-history.txt: [no log message]
+
+2008-02-28 21:22  mbickel
+
+	* source/guifunctions.cpp:  The gui buttons for mine placement are
+	  no longer visible when a mine has been layed.
+
+2008-02-24 17:35  gamer
+
+	* data/buildings/asc/: bld_asc_crystalprocessing.asctxt,
+	  bld_asc_lumbercamp.asctxt: [no log message]
+
+2008-02-24 17:29  gamer
+
+	* data/unitsets/: mk1/mk1-orb/mk1o_shuttle.asctxt,
+	  mk1/mk1-parent/_parent_400_weapon.asctxt,
+	  mk1/mk1-parent/_parent_401_transport.asctxt,
+	  mk1/mk1-parent/_parent_402_movement.asctxt,
+	  mk1/mk1-parent/mk1-history.txt,
+	  mk1/mk1-parent/o1_230_rocket.asctxt,
+	  mk1/mk1-parent/o6_235_spacestation.asctxt,
+	  mk1/mk1-shs/mk1s_fix.asctxt, mk1/mk1-vsup/mk1v_mbv.asctxt,
+	  mk3/mk3-for/pbp_set_mk3.asctxt, mk3/mk3-orb/mk3b_anger.asctxt,
+	  mk3/mk3-orb/mk3o_spacelab.asctxt, mk3/mk3-parent/mk3-history.txt,
+	  mk3/mk3-shtu/mk3s_lrfive.asctxt,
+	  mk3/mk3-vari/mk3t_k5_pbp_tech.asctxt: [no log message]
+
+2008-02-20 20:44  grom
+
+	* ChangeLog: [no log message]
+
+2008-02-20 20:41  grom
+
+	* data/campaign/standard/: asc001.map, asc002.map, asc003.map,
+	  asc004.map, asc005.map, asc006.map: Stratege hat jetzt Teil 1 bis
+	  6 der Kampagne gecheckt und einige Kleinigkeiten geändert:
+
+	  - kleinere Englisch-Fehler in den Meldungen - Herumfahrende Comas
+	  mit aktiviertem RF habe ich enttankt, damit sie vor Ort bleiben -
+	  Tankfüllungen von Fahrzeugen habe ich maximiert, aber nur bei
+	  Wiesel, Termite und Nova - in den Karten 4 bis 6 habe ich das
+	  Akku entfernt und dafür ein weiteres Windkraftwerk eingebaut; die
+	  Stromerzeugungsmenge hab ich reduziert, so dass das Gesamt-Niveau
+	  der E-Erzeugung ca. konstant blieb - bei einigen Computer-Turrets
+	  habe ich RF eingeschaltet; hatte bisher gefehlt
+
+2008-02-11 19:05  xyph
+
+	* data/palette.map: Linkable Mountains added
+
+2008-02-09 20:42  gamer
+
+	* data/: trrobj/objects/landscape/obj_mountain64.asctxt,
+	  trrobj/objects/landscape/obj_mountain64.png,
+	  unitsets/mk1/mk1-train/mk1t_judy.asctxt: [no log message]
+
+2008-02-07 10:51  gamer
+
+	* data/campaign/kamor/_filter_kamor.asctxt: Filter für kamor
+	  Campagne eingefügt
+
+2008-02-07 00:03  gamer
+
+	* data/: files.txt, main.version,
+	  buildings/_history_asc-buildings.txt, buildings/asc-bld-info.txt,
+	  buildings/asc/bld_asc_training.asctxt,
+	  trrobj/_history_trrobj.txt,
+	  unitsets/mk1/mk1-parent/_parent_416_bike_type.asctxt,
+	  unitsets/mk1/mk1-parent/mk1-history.txt,
+	  unitsets/mk1/mk1-parent/ro1_296_smallrocket.asctxt,
+	  unitsets/mk1/mk1-parent/v2_242_radar_vehicle.asctxt,
+	  unitsets/mk1/mk1-parent/w01_331_fastrecon.asctxt,
+	  unitsets/mk1/mk1-view/mk1v_oracle.asctxt,
+	  unitsets/mk1/mk1-vsup/mk1v_forest.asctxt,
+	  unitsets/mk3/mk3-vfatr/mk3v_gaskin.asctxt,
+	  unitsets/mk3/mk3-vfatr/mk3v_wiesel.asctxt,
+	  unitsets/mk3/mk3-view/mk3v_longtrack.asctxt,
+	  unitsets/mk3/mk3-vrok/mk3v_lars.asctxt: [no log message]
+
+2008-02-05 21:39  grom
+
+	* ChangeLog: Fixed asc007.map
+
+2008-02-05 21:35  grom
+
+	* data/campaign/standard/asc007.map: Fix  um Leerbuchen des Depots
+	  zu umgehen bei Eroberung.
+
+2008-02-03 13:37  gamer
+
+	* data/unitsets/mk3/: mk3-train/mk3t_mk1punch_pbp_adapter.asctxt,
+	  mk3-train/mk3t_mk1punch_pbp_tech.asctxt,
+	  mk3-vfatr/mk3v_fuchstrans.asctxt, mk3-vfatr/mk3v_fuchstrans.png,
+	  mk3-vfatr/mk3v_fuchstrans_pbp_adapter.asctxt,
+	  mk3-vfatr/mk3v_fuchstrans_pbp_tech.asctxt: [no log message]
+
+2008-02-03 13:27  gamer
+
+	* data/unitsets/: mk1/mk1-heli/mk1h_bumblebee.asctxt,
+	  mk1/mk1-jam/mk1b_exp49.asctxt, mk1/mk1-orb/a-sat.jpg,
+	  mk1/mk1-orb/mk1b_sdb.asctxt, mk1/mk1-orb/mk1b_sdb.jpg,
+	  mk1/mk1-orb/mk1o_primerose.asctxt,
+	  mk1/mk1-orb/mk1o_primerose.jpg, mk1/mk1-orb/mk1o_shuttle.asctxt,
+	  mk1/mk1-orb/mk1t_spor.asctxt, mk1/mk1-orb/sdb.jpg,
+	  mk1/mk1-parent/_parent_400_weapon.asctxt,
+	  mk1/mk1-parent/_parent_403_type_bunker.asctxt,
+	  mk1/mk1-parent/_parent_404_light_tank.asctxt,
+	  mk1/mk1-parent/_parent_405_medium_tank.asctxt,
+	  mk1/mk1-parent/_parent_406_heavy_tank.asctxt,
+	  mk1/mk1-parent/_parent_407_type_sat.asctxt,
+	  mk1/mk1-parent/_parent_408_type_mech.asctxt,
+	  mk1/mk1-parent/_parent_409_type_heli.asctxt,
+	  mk1/mk1-parent/_parent_410_type_trooper.asctxt,
+	  mk1/mk1-parent/_parent_411_vehicle.asctxt,
+	  mk1/mk1-parent/_parent_412_type_railroad.asctxt,
+	  mk1/mk1-parent/_parent_413_type_lair.asctxt,
+	  mk1/mk1-parent/_parent_414_type_medium_air.asctxt,
+	  mk1/mk1-parent/_parent_415_type_heavy_air.asctxt,
+	  mk1/mk1-parent/_parent_416_bike_type.asctxt,
+	  mk1/mk1-parent/_parent_418_type_heavy_ship.asctxt,
+	  mk1/mk1-parent/_parent_419_type_medium_ship.asctxt,
+	  mk1/mk1-parent/_parent_420_type_light_ship.asctxt,
+	  mk1/mk1-parent/_parent_421_type_submarine.asctxt,
+	  mk1/mk1-parent/_parent_422_type_turret.asctxt,
+	  mk1/mk1-parent/_parent_423_small_device.asctxt,
+	  mk1/mk1-parent/_parent_424_rocket_weapon.asctxt,
+	  mk1/mk1-parent/_parent_425_drone_weapon.asctxt,
+	  mk1/mk1-parent/a04_273_dist_fighter.asctxt,
+	  mk1/mk1-parent/a05_275_zeppelin.asctxt,
+	  mk1/mk1-parent/a10_279_bomber_stealth.asctxt,
+	  mk1/mk1-parent/a12_325_tankerplane.asctxt,
+	  mk1/mk1-parent/a13_326_seaplane.asctxt,
+	  mk1/mk1-parent/a14_327_defplane.asctxt,
+	  mk1/mk1-parent/a18_390_stealth_mixed.asctxt,
+	  mk1/mk1-parent/a19_338_light_vto.asctxt,
+	  mk1/mk1-parent/a20_339_med_vto.asctxt,
+	  mk1/mk1-parent/a21_340_heavy_vto.asctxt,
+	  mk1/mk1-parent/ad01_215_samtrooper.asctxt,
+	  mk1/mk1-parent/ad02_216_sammech.asctxt,
+	  mk1/mk1-parent/ad03_217_flak2tank.asctxt,
+	  mk1/mk1-parent/ad04_218_flak3tank.asctxt,
+	  mk1/mk1-parent/ad05_219_samslow.asctxt,
+	  mk1/mk1-parent/ad06_220_samtank.asctxt,
+	  mk1/mk1-parent/ad07_221_samtrain.asctxt,
+	  mk1/mk1-parent/ad08_222_samturret.asctxt,
+	  mk1/mk1-parent/ad10_224_lradtank.asctxt,
+	  mk1/mk1-parent/ad11_225_lradslow.asctxt,
+	  mk1/mk1-parent/ari2_251_medium.asctxt,
+	  mk1/mk1-parent/ari3_252_hvy.asctxt,
+	  mk1/mk1-parent/ari5_254_med_rail.asctxt,
+	  mk1/mk1-parent/i01_201_light_attack_trooper.asctxt,
+	  mk1/mk1-parent/i04_204_specialist.asctxt,
+	  mk1/mk1-parent/i06_206_diver.asctxt,
+	  mk1/mk1-parent/i07_207_paratrooper.asctxt,
+	  mk1/mk1-parent/i11_211_def_mech.asctxt,
+	  mk1/mk1-parent/i13_213_dive_mech.asctxt,
+	  mk1/mk1-parent/j_305_trooper.asctxt,
+	  mk1/mk1-parent/j_308_device.asctxt,
+	  mk1/mk1-parent/j_313_sat.asctxt, mk1/mk1-parent/mk1-history.txt,
+	  mk1/mk1-parent/o1_230_rocket.asctxt,
+	  mk1/mk1-parent/o2_231_shuttle.asctxt,
+	  mk1/mk1-parent/o3_232_attack_sat_multi.asctxt,
+	  mk1/mk1-parent/o4_233_attack_sat_air.asctxt,
+	  mk1/mk1-parent/o5_234_attack_sat_ground.asctxt,
+	  mk1/mk1-parent/o6_235_spacestation.asctxt,
+	  mk1/mk1-parent/o7_236_spaceman.asctxt,
+	  mk1/mk1-parent/o8_237_spacedefenceturret.asctxt,
+	  mk1/mk1-parent/o9_238_spacedefencebunker.asctxt,
+	  mk1/mk1-parent/ro1_296_smallrocket.asctxt,
+	  mk1/mk1-parent/ro2_297_medrocket.asctxt,
+	  mk1/mk1-parent/ro3_298_hvyrocket.asctxt,
+	  mk1/mk1-parent/ro4_299_cm_train.asctxt,
+	  mk1/mk1-parent/ro5_300_cm_launcher.asctxt,
+	  mk1/mk1-parent/ro6_301_fast_cm_launcher.asctxt,
+	  mk1/mk1-parent/ro7_302_slow_cm_launcher.asctxt,
+	  mk1/mk1-parent/ro8_303_turret_cm_launcher.asctxt,
+	  mk1/mk1-parent/ro9_304_bunker_cm_launcher.asctxt,
+	  mk1/mk1-parent/sh01_350_boat.asctxt,
+	  mk1/mk1-parent/sh02_351_patrol.asctxt,
+	  mk1/mk1-parent/sh03_352_corvette.asctxt,
+	  mk1/mk1-parent/sh04_353_fregatte.asctxt,
+	  mk1/mk1-parent/sh05_354_destroyer.asctxt,
+	  mk1/mk1-parent/sh06_355_cruiser.asctxt,
+	  mk1/mk1-parent/sh07_356_hvycruiser.asctxt,
+	  mk1/mk1-parent/sh08_357_battleship.asctxt,
+	  mk1/mk1-parent/sh09_358_helicarrier.asctxt,
+	  mk1/mk1-parent/sh10_359_smallcarrier.asctxt,
+	  mk1/mk1-parent/sh11_360_medcarrier.asctxt,
+	  mk1/mk1-parent/sh12_361_bigcarrier.asctxt,
+	  mk1/mk1-parent/sh13_362_smallsub.asctxt,
+	  mk1/mk1-parent/sh14_363_supportsub.asctxt,
+	  mk1/mk1-parent/sh15_364_fightsub.asctxt,
+	  mk1/mk1-parent/sh16_365_rockettsub.asctxt,
+	  mk1/mk1-parent/sh17_366_speedboat.asctxt,
+	  mk1/mk1-parent/sh18_367_speedship.asctxt,
+	  mk1/mk1-parent/sh19_368_wig.asctxt,
+	  mk1/mk1-parent/sh20_369_transportship.asctxt,
+	  mk1/mk1-parent/sh21_370_armoredtransportship.asctxt,
+	  mk1/mk1-parent/sh22_371_transhoovercraft.asctxt,
+	  mk1/mk1-parent/sh23_372_battlehoovercraft.asctxt,
+	  mk1/mk1-parent/st01_314_mg_nest.asctxt,
+	  mk1/mk1-parent/st03_316_mgtower.asctxt,
+	  mk1/mk1-parent/st05_318_def_tower.asctxt,
+	  mk1/mk1-parent/st06_319_def_bunker.asctxt,
+	  mk1/mk1-parent/st07_320_main_defence_gun.asctxt,
+	  mk1/mk1-parent/t06_295_tank_defence.asctxt,
+	  mk1/mk1-parent/v4_244_radar_turret.asctxt,
+	  mk1/mk1-parent/v5_245_radar_bunker.asctxt,
+	  mk1/mk1-parent/v6_246_radarsat.asctxt,
+	  mk1/mk1-parent/v7_247_radar_plane.asctxt,
+	  mk1/mk1-parent/v8_248_espionage_plane.asctxt,
+	  mk1/mk1-parent/v9_249_sonar_boje.asctxt,
+	  mk1/mk1-parent/w01_331_fastrecon.asctxt,
+	  mk1/mk1-parent/w02_332_fastattack.asctxt,
+	  mk1/mk1-parent/w05_335_support_wheeled.asctxt,
+	  mk1/mk1-parent/w06_336_support_tracked.asctxt,
+	  mk1/mk1-pbat/mk1a_butterfly.asctxt,
+	  mk1/mk1-pbat/mk1a_predator.asctxt,
+	  mk1/mk1-pbat/mk1a_sinner.asctxt, mk1/mk1-psup/mk1a_raven.asctxt,
+	  mk1/mk1-psup/mk1a_ravenii.asctxt, mk1/mk1-shb/mk1s_homer.asctxt,
+	  mk1/mk1-shb/mk1s_jellyfish.asctxt, mk1/mk1-shb/mk1s_shark.asctxt,
+	  mk1/mk1-shb/mk1s_streak.asctxt, mk1/mk1-shs/mk1s_cone.asctxt,
+	  mk1/mk1-shs/mk1s_fix.asctxt, mk1/mk1-shtu/mk1s_clam.asctxt,
+	  mk1/mk1-shtu/mk1s_squid.asctxt, mk1/mk1-shtu/mk1s_tsunami.asctxt,
+	  mk1/mk1-sta/mk1b_biggun.asctxt, mk1/mk1-sta/mk1b_fort.asctxt,
+	  mk1/mk1-sta/mk1b_heavygun.asctxt, mk1/mk1-sta/biggun2.jpg,
+	  mk1/mk1-sta/fort.jpg, mk1/mk1-sta/heavygun.jpg,
+	  mk1/mk1-sta/mk1b_biggun.jpg, mk1/mk1-sta/mk1b_fort.jpg,
+	  mk1/mk1-sta/mk1b_heavygun.jpg, mk1/mk1-sta/mk1b_stonewall.asctxt,
+	  mk1/mk1-sta/mk1b_stonewall.jpg, mk1/mk1-sta/mk1b_tora.asctxt,
+	  mk1/mk1-sta/stonewall.jpg, mk1/mk1-train/mk1t_burro.asctxt,
+	  mk1/mk1-train/mk1t_flux.asctxt, mk1/mk1-train/mk1t_judy.asctxt,
+	  mk1/mk1-vad/mk1b_sambunker.asctxt,
+	  mk1/mk1-vad/mk1b_samturret.asctxt,
+	  mk1/mk1-vad/mk1b_samturret.jpg,
+	  mk1/mk1-vad/mk1i_samtrooper.asctxt,
+	  mk1/mk1-vad/mk1i_samtrooper.jpg,
+	  mk1/mk1-vad/mk1v_swatterii.asctxt, mk1/mk1-vad/sam-trooper2.jpg,
+	  mk1/mk1-vad/samturret.jpg, mk1/mk1-vfatr/mk1v_atuin.asctxt,
+	  mk1/mk1-vfatr/mk1v_privater.asctxt,
+	  mk1/mk1-vfatr/mk1v_weasel.asctxt, mk1/mk1-view/brs-v2.jpg,
+	  mk1/mk1-view/mk1b_brs.asctxt, mk1/mk1-view/mk1b_brs.jpg,
+	  mk1/mk1-view/mk1b_grs.asctxt, mk1/mk1-view/mk1b_grs.jpg,
+	  mk1/mk1-view/mk1o_vast.asctxt, mk1/mk1-view/mk1o_vast.jpg,
+	  mk1/mk1-view/com-sat.jpg, mk1/mk1-view/grs.jpg,
+	  mk1/mk1-vrok/hornet-ii.jpg, mk1/mk1-vrok/hornet.jpg,
+	  mk1/mk1-vrok/mk1b_silo.asctxt, mk1/mk1-vrok/mk1b_silo.jpg,
+	  mk1/mk1-vrok/mk1b_tml.asctxt, mk1/mk1-vrok/mk1b_tml.jpg,
+	  mk1/mk1-vrok/mk1v_hornet.asctxt, mk1/mk1-vrok/mk1v_hornet.jpg,
+	  mk1/mk1-vrok/mk1v_hornetII.jpg,
+	  mk1/mk1-vrok/mk1v_hornetii.asctxt, mk1/mk1-vrok/silo.jpg,
+	  mk1/mk1-vrok/tml.jpg, mk1/mk1-vsup/mk1v_adder.asctxt,
+	  mk1/mk1-vsup/mk1v_alguin.asctxt, mk1/mk1-vsup/mk1v_ant.asctxt,
+	  mk1/mk1-vsup/mk1v_bolt.asctxt, mk1/mk1-vsup/mk1v_ceti.asctxt,
+	  mk1/mk1-vsup/mk1v_cosinus.asctxt,
+	  mk1/mk1-vsup/mk1v_forest.asctxt, mk1/mk1-vsup/mk1v_mbv.asctxt,
+	  mk1/mk1-vsup/mk1v_surveyor.asctxt,
+	  mk1/mk1-vsup/mk1v_vesuvius.asctxt,
+	  mk3/mk3-heli/mk3h_chinook.asctxt,
+	  mk3/mk3-heli/mk3h_hormone.asctxt, mk3/mk3-heli/mk3h_lynx.asctxt,
+	  mk3/mk3-inf/mk3i_sek.asctxt, mk3/mk3-jam/mk3b_kornuta.asctxt,
+	  mk3/mk3-orb/mk3b_anger.asctxt, mk3/mk3-orb/mk3b_sdi.asctxt,
+	  mk3/mk3-orb/mk3o_asatx53.asctxt,
+	  mk3/mk3-orb/mk3o_spacelab.asctxt, mk3/mk3-parent/mk3-history.txt,
+	  mk3/mk3-parent/mk3-info.txt, mk3/mk3-pbat/mk3a_berkut.asctxt,
+	  mk3/mk3-pbat/mk3a_ef2000.asctxt,
+	  mk3/mk3-pbat/mk3a_hawkeye.asctxt, mk3/mk3-pbat/mk3a_mig35.asctxt,
+	  mk3/mk3-pbat/mk3a_raptor.asctxt, mk3/mk3-pbat/mk3a_tomcat.asctxt,
+	  mk3/mk3-psup/mk3a_starlifter.asctxt,
+	  mk3/mk3-shb/mk3s_arsenal.asctxt,
+	  mk3/mk3-shb/mk3s_baynunah.asctxt, mk3/mk3-shb/mk3s_burke.asctxt,
+	  mk3/mk3-shb/mk3s_daring.asctxt, mk3/mk3-shb/mk3s_dd21.asctxt,
+	  mk3/mk3-shb/mk3s_meko.asctxt, mk3/mk3-shb/mk3s_mirage.asctxt,
+	  mk3/mk3-shb/mk3s_phm.asctxt, mk3/mk3-shb/mk3s_sealboat.asctxt,
+	  mk3/mk3-shb/mk3s_skjold.asctxt,
+	  mk3/mk3-shb/mk3s_ticonderoga.asctxt,
+	  mk3/mk3-shb/mk3s_triton.asctxt, mk3/mk3-shb/mk3s_visby.asctxt,
+	  mk3/mk3-shs/mk3s_lst.asctxt, mk3/mk3-shs/mk3s_seashadow.asctxt,
+	  mk3/mk3-shtu/mk3s_antey.asctxt, mk3/mk3-shtu/mk3s_cvx.asctxt,
+	  mk3/mk3-shtu/mk3s_lcc.asctxt, mk3/mk3-sta/mk3b_helipad.asctxt,
+	  mk3/mk3-sta/mk3b_ss37.asctxt,
+	  mk3/mk3-sta/mk3b_ss37_pbp_tech.asctxt,
+	  mk3/mk3-sta/mk3b_ss74.asctxt,
+	  mk3/mk3-sta/mk3b_ss74_pbp_tech.asctxt,
+	  mk3/mk3-sta/mk3b_wachturm.asctxt, mk3/mk3-train/mk3t_icce.asctxt,
+	  mk3/mk3-train/mk3t_icse.asctxt,
+	  mk3/mk3-train/mk3t_panzerzug.asctxt,
+	  mk3/mk3-train/mk3t_panzerzug.pcx,
+	  mk3/mk3-train/mk3t_panzerzug_pbp_adapter.asctxt,
+	  mk3/mk3-train/mk3t_panzerzug_pbp_tech.asctxt,
+	  mk3/mk3-vad/mk3b_rapier.asctxt, mk3/mk3-vad/mk3b_rapier2.asctxt,
+	  mk3/mk3-vad/mk3b_rapier_pbp_tech.asctxt,
+	  mk3/mk3-vari/mk3t_dora.asctxt,
+	  mk3/mk3-vari/mk3t_dora_pbp_tech.asctxt,
+	  mk3/mk3-vfatr/mk3v_fuchs.asctxt,
+	  mk3/mk3-vfatr/mk3v_gaskin.asctxt,
+	  mk3/mk3-vfatr/mk3v_luchs.asctxt, mk3/mk3-vfatr/mk3v_luchs.png,
+	  mk3/mk3-vfatr/mk3v_luchs_pbp_adapter.asctxt,
+	  mk3/mk3-vfatr/mk3v_luchs_pbp_tech.asctxt,
+	  mk3/mk3-vfatr/mk3v_tow.asctxt, mk3/mk3-vfatr/mk3v_wiesel.asctxt,
+	  mk3/mk3-view/mk3a_raytheon.asctxt,
+	  mk1/mk1-bld/mk1_crystalprocessing_pbp_adapter.asctxt,
+	  mk1/mk1-bld/mk1_farm_pbp_adapter.asctxt,
+	  mk1/mk1-bld/mk1_lumbercamp_pbp_adapter.asctxt,
+	  mk3/mk3-bld/mk3_crystalprocessing_pbp_adapter.asctxt,
+	  mk3/mk3-bld/mk3_farm_pbp_adapter.asctxt,
+	  mk3/mk3-bld/mk3_lumbercamp_pbp_adapter.asctxt,
+	  mk3/mk3-view/mk3d_prd.asctxt, mk3/mk3-view/mk3o_galileo.asctxt,
+	  mk3/mk3-vrok/mk3b_icbm.asctxt, mk3/mk3-vsup/mk3b_notstrom.asctxt,
+	  mk3/mk3-vsup/mk3i_piobuild.asctxt,
+	  mk3/mk3-vsup/mk3i_pioelite.asctxt,
+	  mk3/mk3-vsup/mk3i_piospecial.asctxt,
+	  mk3/mk3-vsup/mk3v_bulldozer.asctxt,
+	  mk3/mk3-vsup/mk3v_dumper.asctxt, mk3/mk3-vsup/mk3v_elch.asctxt,
+	  mk3/mk3-vsup/mk3v_man.asctxt, mk3/mk3-vsup/mk3v_merkat.asctxt,
+	  mk3/mk3-vsup/mk3v_truck.asctxt, mk3/mk3-vsup/mk3v_volcano.asctxt:
+	  [no log message]
+
+2008-02-01 23:15  mbickel
+
+	* source/: sg.cpp, libs/paragui/include/pgfilearchive.h,
+	  libs/paragui/src/core/pgfilearchive.cpp:  Changed initialization
+	  of Physfs, hopefully fixing crashes
+
+2008-02-01 13:19  mbickel
+
+	* source/: basegfx.cpp, basestrm.cpp, dialog.cpp, dlg_box.cpp,
+	  edglobal.cpp, edmisc.cpp, gameevents.cpp, gamemap.cpp,
+	  mapdisplay.cpp, objecttype.cpp, overviewmapimage.cpp,
+	  research.cpp, resourcenet.cpp, simplestream.cpp, spfst.cpp,
+	  libs/paragui/include/paragui.h,
+	  libs/paragui/include/pgpropertyfield_checkbox.h,
+	  libs/revel/BaseEncoder.cpp, tools/mount.cpp:	Fixed compilation
+	  errors and warnings with gcc 4.3
+
+2008-01-28 20:06  xyph
+
+	* data/trrobj/legacy/: bit_0034dark_hs_p1201.asctxt,
+	  bit_0038dark_lowland_p1203.asctxt: Adapted Definition to its Look
+
+2008-01-27 20:01  mbickel
+
+	* source/network/: Makefile.am, Makefile.in:  Yet another fix to
+	  build system
+
+2008-01-27 19:50  mbickel
+
+	* source/network/Makefile.in:  Updated build system
+
+2008-01-27 19:40  mbickel
+
+	* source/network/Makefile.am:  Fixed build problems
+
+2008-01-27 13:31  mbickel
+
+	* Makefile.in, bootstrap, bootstrap.versionmerge, configure,
+	  configure.in, data/Makefile.in, data/dialog/Makefile.in,
+	  data/icons/Makefile.in, data/music/Makefile.in,
+	  data/sounds/Makefile.in, doc/Makefile.in,
+	  doc/manpages/Makefile.in, doc/unitguide/Makefile.in,
+	  doc/unitguide/output/Makefile.in, installer/Makefile.in,
+	  installer/asc.nsi, scripts/bootstrap.versionmerge,
+	  scripts/getversion, source/Makefile.in, source/attack.cpp,
+	  source/attack.h, source/strtmesg.cpp, source/actions/Makefile.in,
+	  source/ai/Makefile.in, source/clparser/Makefile.in,
+	  source/dialogs/Makefile.in, source/doc/Makefile.in,
+	  source/docs/Makefile.in, source/docs/en/Makefile.in,
+	  source/graphics/Makefile.in, source/libs/Makefile.in,
+	  source/libs/loki/Makefile.in, source/libs/paragui/Makefile.in,
+	  source/libs/paragui/src/Makefile.in,
+	  source/libs/paragui/src/core/Makefile.in,
+	  source/libs/paragui/src/draw/Makefile.in,
+	  source/libs/paragui/src/font/Makefile.in,
+	  source/libs/paragui/src/themes/Makefile.in,
+	  source/libs/paragui/src/widgets/Makefile.in,
+	  source/libs/paragui/src/ystring/Makefile.in,
+	  source/libs/revel/Makefile.in, source/libs/sdl_sound/Makefile.in,
+	  source/libs/sdlmm/Makefile.in, source/libs/sdlmm/src/Makefile.in,
+	  source/libs/triangul/Makefile.in, source/network/Makefile.am,
+	  source/network/Makefile.in, source/network/pbem-server-dummy.cpp,
+	  source/sdl/Makefile.in, source/tools/Makefile.in,
+	  source/tools/lib/Makefile.in, source/tools/linux/Makefile.in,
+	  source/unix/Makefile.in, source/unix/asc/Makefile.in,
+	  source/unix/mapeditor/Makefile.in,
+	  source/unix/pbpedit/Makefile.in, source/video/Makefile.in,
+	  source/widgets/Makefile.in, source/win32/Makefile.in,
+	  source/win32/msvc/Makefile.in:  Made PBEM server configurable
+
+2008-01-26 23:18  mbickel
+
+	* source/mapdisplay.cpp:  Fixed crash when moving satellites into
+	  screen
+
+2008-01-26 17:57  gamer
+
+	* data/: trrobj/_history_trrobj.txt,
+	  trrobj/objects/buildable/ob_0181forest_growth.asctxt,
+	  trrobj/objects/buildable/ob_2152_field.asctxt,
+	  trrobj/objects/buildable/ob_2153_fields.asctxt,
+	  trrobj/objects/buildable/obj_Palms_1_growth.asctxt,
+	  trrobj/objects/buildable/obj_crystals_1.asctxt,
+	  trrobj/objects/buildable/obj_mushrooms_1.asctxt,
+	  unitsets/mk1/mk1-parent/sh16_365_rockettsub.asctxt,
+	  unitsets/mk1/mk1-shs/mk1s_fix.asctxt,
+	  unitsets/mk1/mk1-vsup/mk1v_mbv.asctxt,
+	  unitsets/mk1/mk1-vsup/mk1v_vesuvius.asctxt: [no log message]
+
+2008-01-20 15:45  mbickel
+
+	* Makefile.am, configure.in, source/attack.cpp, source/attack.h,
+	  source/strtmesg.cpp, source/vehicletype.cpp:	Increased
+	  experience gain in close combat
+	   Removing temp files from make dist
+	   clean up of configure.in
+
+2008-01-19 16:39  mbickel
+
+	* data/trrobj/sources/hillside.xcf:  Added hillside source image
+
+2008-01-19 13:41  mbickel
+
+	* source/dialogs/admingame.cpp:  Added network setup in admingame
+	  dialog
+
+2008-01-19 12:19  mbickel
+
+	* configure, configure.in, installer/asc.nsi:  Updated version in
+	  Makefile
+
+2008-01-17 17:46  xyph
+
+	* data/trrobj/: objects/landscape/obj_rocks_large_1.asctxt,
+	  objects/landscape/obj_rocks_large_2.asctxt,
+	  objects/landscape/obj_rocks_large_3.asctxt,
+	  objects/landscape/obj_rocks_small_1.asctxt,
+	  objects/landscape/obj_rocks_small_2.asctxt,
+	  objects/landscape/obj_rocks_small_3.asctxt,
+	  objects/landscape/trr_block_1.asctxt,
+	  objects/landscape/trr_block_1.png, terrain/trr_block_1.asctxt,
+	  terrain/trr_block_1.png, terrain/trr_concrete_1.asctxt,
+	  terrain/trr_concrete_2.asctxt, terrain/trr_grassland_1.asctxt,
+	  terrain/trr_grassland_10.asctxt, terrain/trr_grassland_11.asctxt,
+	  terrain/trr_grassland_12.asctxt, terrain/trr_grassland_13.asctxt,
+	  terrain/trr_grassland_14.asctxt, terrain/trr_grassland_15.asctxt,
+	  terrain/trr_grassland_16.asctxt, terrain/trr_grassland_17.asctxt,
+	  terrain/trr_grassland_2.asctxt, terrain/trr_grassland_3.asctxt,
+	  terrain/trr_grassland_4.asctxt, terrain/trr_grassland_5.asctxt,
+	  terrain/trr_grassland_6.asctxt, terrain/trr_grassland_7.asctxt,
+	  terrain/trr_grassland_8.asctxt, terrain/trr_grassland_9.asctxt,
+	  terrain/trr_morass_1.asctxt, terrain/trr_mud_1.asctxt,
+	  terrain/trr_mud_2.asctxt, terrain/trr_mud_3.asctxt,
+	  terrain/trr_mud_4.asctxt, terrain/trr_mud_5.asctxt,
+	  terrain/trr_mud_6.asctxt, terrain/trr_mud_7.asctxt,
+	  terrain/trr_mud_8.asctxt, terrain/trr_mud_9.asctxt,
+	  terrain/trr_rock_flat_1.asctxt, terrain/trr_rock_flat_10.asctxt,
+	  terrain/trr_rock_flat_11.asctxt, terrain/trr_rock_flat_12.asctxt,
+	  terrain/trr_rock_flat_13.asctxt, terrain/trr_rock_flat_14.asctxt,
+	  terrain/trr_rock_flat_15.asctxt, terrain/trr_rock_flat_16.asctxt,
+	  terrain/trr_rock_flat_17.asctxt, terrain/trr_rock_flat_18.asctxt,
+	  terrain/trr_rock_flat_19.asctxt, terrain/trr_rock_flat_2.asctxt,
+	  terrain/trr_rock_flat_20.asctxt, terrain/trr_rock_flat_21.asctxt,
+	  terrain/trr_rock_flat_22.asctxt, terrain/trr_rock_flat_23.asctxt,
+	  terrain/trr_rock_flat_24.asctxt, terrain/trr_rock_flat_25.asctxt,
+	  terrain/trr_rock_flat_26.asctxt, terrain/trr_rock_flat_27.asctxt,
+	  terrain/trr_rock_flat_28.asctxt, terrain/trr_rock_flat_29.asctxt,
+	  terrain/trr_rock_flat_3.asctxt, terrain/trr_rock_flat_30.asctxt,
+	  terrain/trr_rock_flat_31.asctxt, terrain/trr_rock_flat_4.asctxt,
+	  terrain/trr_rock_flat_5.asctxt, terrain/trr_rock_flat_6.asctxt,
+	  terrain/trr_rock_flat_7.asctxt, terrain/trr_rock_flat_8.asctxt,
+	  terrain/trr_rock_flat_9.asctxt, terrain/trr_rock_rough_1.asctxt,
+	  terrain/trr_sand_1.asctxt, terrain/trr_sand_10.asctxt,
+	  terrain/trr_sand_2.asctxt, terrain/trr_sand_3.asctxt,
+	  terrain/trr_sand_4.asctxt, terrain/trr_sand_5.asctxt,
+	  terrain/trr_sand_6.asctxt, terrain/trr_sand_7.asctxt,
+	  terrain/trr_sand_8.asctxt, terrain/trr_sand_9.asctxt,
+	  terrain/trr_swamp_1.asctxt: Changed Reference from specific
+	  Weather Images to standard Images plus Overlay Image
+
+2008-01-12 18:12  mbickel
+
+	* installer/asc.nsi, source/containercontrols.cpp,
+	  source/gamemap.cpp, source/gamemap.h, source/messagedlg.cpp,
+	  source/strtmesg.cpp, source/dialogs/cargodialog.cpp,
+	  source/widgets/textrenderer.cpp, source/widgets/textrenderer.h:
+	  Fixed unit production selection
+	   Messages can now be saved with ctrl-s
+
+2008-01-12 15:32  mbickel
+
+	* source/: containercontrols.cpp, containercontrols.h, gamemap.cpp,
+	  gamemap.h, research.cpp, research.h, sg.cpp,
+	  dialogs/cargodialog.cpp:  New gameparameter: only produrce
+	  researched stuff
+	   Fixed problem with ammo production during unit production when
+	  containere
+	      didn't have ammo production capabilities
+
+2008-01-11 23:13  mbickel
+
+	* source/: sgstream.cpp, strtmesg.cpp:	Fixed: asc2rc was created
+	  in home dir under certain conditions
+
+2008-01-10 20:36  mbickel
+
+	* installer/asc.nsi, source/buildingtype.cpp:  Removed debug output
+
+2008-01-08 19:59  mbickel
+
+	* installer/asc.nsi.in:  Fixed installer
+
+2008-01-07 18:58  mbickel
+
+	* installer/asc.nsi.in:  Updated installer to have all libcurl dlls
+
+2008-01-06 19:25  mbickel
+
+	* source/vehicletype.cpp:  Fixed: dump vehicle now gives correct
+	  output with features/abilities
+
+2008-01-06 19:13  mbickel
+
+	* source/guifunctions.cpp:  Fixed self-destruct question dialog
+	  text
+
+2008-01-06 16:31  mbickel
+
+	* installer/asc.nsi.in:  Updated installer to carry libcurl
+
+2008-01-06 16:25  mbickel
+
+	* installer/asc.nsi.in:  Updated installer: USB stick mode is now
+	  disabled by default
+
+2008-01-06 16:15  mbickel
+
+	* data/icons/self-destruct.png, source/pg_mapdisplay.cpp,
+	  source/win32/msvc/ASC/ASC.vcproj:  Updated windows build
+
+2008-01-06 15:44  mbickel
+
+	* ChangeLog:  Update changelog
 
 2008-01-06 15:40  mbickel
 
@@ -2280,8 +3294,7 @@
 
 2007-07-08 17:30  mbickel
 
-	* data/trrobj/: legacy/o3500_harbour.asctxt,
-	  objects/buildable/ob_0988_lava_growth.asctxt,
+	* data/trrobj/: objects/buildable/ob_0988_lava_growth.asctxt,
 	  objects/buildable/ob_2501_lava.asctxt,
 	  objects/buildable/ob_2506_lava.asctxt,
 	  objects/buildable/ob_icebreak.asctxt,
@@ -2415,6 +3428,11 @@
 	  terrain/trr_sand_8.asctxt, terrain/trr_sand_9.asctxt,
 	  terrain/trr_swamp_1.asctxt:  Updated terrain and objects from
 	  Xyphagorash
+
+2007-07-08 17:30  mbickel
+
+	* data/trrobj/legacy/o3500_harbour.asctxt:  Updated terrain and
+	  objects from Xyphagoroszh
 
 2007-07-08 17:25  mbickel
 
