@@ -17,11 +17,11 @@ TerrainType {
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-      picture = trr_Sand_12.png fewsnow1.png
+      picture = trr_Sand_12.png fewsnow3.png
    } few_snow
    much_snow { 
       UseGFXpics = false
       picture = trr_Sand_12.png
-      GraphicOperations = snow
+      GraphicOperations = Snow_const
    } much_snow
 } TerrainType
