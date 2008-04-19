@@ -886,12 +886,12 @@ NETWORKLIB
 SDL_CONFIG
 SDL_CFLAGS
 SDL_LIBS
+OGG_CFLAGS
+OGG_LIBS
 VORBIS_CFLAGS
 VORBIS_LIBS
 VORBISFILE_LIBS
 VORBISENC_LIBS
-OGG_CFLAGS
-OGG_LIBS
 SdlSoundDir
 SDL_SOUND_LIB
 BOOST_LIBS
@@ -1541,8 +1541,8 @@ Optional Features:
   --disable-sdltest       Do not try to compile and run a test SDL program
   --enable-internal_SDL_sound
                           Don't use the system SDL_sound lib
-  --disable-vorbistest       Do not try to compile and run a test Vorbis program
   --disable-oggtest       Do not try to compile and run a test Ogg program
+  --disable-vorbistest       Do not try to compile and run a test Vorbis program
   --disable-ft2test       disable the freetype check
   --enable-debug          enables some debugging options and output
 
@@ -1556,12 +1556,12 @@ Optional Packages:
   --with-libcurl=DIR      look for the curl library in DIR
   --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)
   --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)
-  --with-vorbis=PFX   Prefix where libvorbis is installed (optional)
-  --with-vorbis-libraries=DIR   Directory where libvorbis library is installed (optional)
-  --with-vorbis-includes=DIR   Directory where libvorbis header files are installed (optional)
   --with-ogg=PFX   Prefix where libogg is installed (optional)
   --with-ogg-libraries=DIR   Directory where libogg library is installed (optional)
   --with-ogg-includes=DIR   Directory where libogg header files are installed (optional)
+  --with-vorbis=PFX   Prefix where libvorbis is installed (optional)
+  --with-vorbis-libraries=DIR   Directory where libvorbis library is installed (optional)
+  --with-vorbis-includes=DIR   Directory where libvorbis header files are installed (optional)
   --with-win32-build-path=dir
                           Path to the win32 build dir (for installer target
                           only)
@@ -22440,6 +22440,224 @@ if test "X$SDLsoundmissing" = "Xy" ; then
 echo "$as_me: WARNING: SDL_sound not found. Using stripped down sound support" >&2;}
 
 
+# Check whether --with-ogg was given.
+if test "${with_ogg+set}" = set; then
+  withval=$with_ogg; ogg_prefix="$withval"
+else
+  ogg_prefix=""
+fi
+
+
+# Check whether --with-ogg-libraries was given.
+if test "${with_ogg_libraries+set}" = set; then
+  withval=$with_ogg_libraries; ogg_libraries="$withval"
+else
+  ogg_libraries=""
+fi
+
+
+# Check whether --with-ogg-includes was given.
+if test "${with_ogg_includes+set}" = set; then
+  withval=$with_ogg_includes; ogg_includes="$withval"
+else
+  ogg_includes=""
+fi
+
+# Check whether --enable-oggtest was given.
+if test "${enable_oggtest+set}" = set; then
+  enableval=$enable_oggtest;
+else
+  enable_oggtest=yes
+fi
+
+
+  if test "x$ogg_libraries" != "x" ; then
+    OGG_LIBS="-L$ogg_libraries"
+  elif test "x$ogg_prefix" != "x" ; then
+    OGG_LIBS="-L$ogg_prefix/lib"
+  elif test "x$prefix" != "xNONE" ; then
+    OGG_LIBS="-L$prefix/lib"
+  fi
+
+  OGG_LIBS="$OGG_LIBS -logg"
+
+  if test "x$ogg_includes" != "x" ; then
+    OGG_CFLAGS="-I$ogg_includes"
+  elif test "x$ogg_prefix" != "x" ; then
+    OGG_CFLAGS="-I$ogg_prefix/include"
+  elif test "x$prefix" != "xNONE"; then
+    OGG_CFLAGS="-I$prefix/include"
+  fi
+
+  { echo "$as_me:$LINENO: checking for Ogg" >&5
+echo $ECHO_N "checking for Ogg... $ECHO_C" >&6; }
+  no_ogg=""
+
+
+  if test "x$enable_oggtest" = "xyes" ; then
+    ac_save_CFLAGS="$CFLAGS"
+    ac_save_LIBS="$LIBS"
+    CFLAGS="$CFLAGS $OGG_CFLAGS"
+    LIBS="$LIBS $OGG_LIBS"
+      rm -f conf.oggtest
+      if test "$cross_compiling" = yes; then
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ogg/ogg.h>
+
+int main ()
+{
+  system("touch conf.oggtest");
+  return 0;
+}
+
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  :
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+no_ogg=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+  fi
+
+  if test "x$no_ogg" = "x" ; then
+     { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+     OGGFOUND=Y
+  else
+     { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+     if test -f conf.oggtest ; then
+       :
+     else
+       echo "*** Could not run Ogg test program, checking why..."
+       CFLAGS="$CFLAGS $OGG_CFLAGS"
+       LIBS="$LIBS $OGG_LIBS"
+       cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <ogg/ogg.h>
+
+int
+main ()
+{
+ return 0;
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+   echo "*** The test program compiled, but did not run. This usually means"
+       echo "*** that the run-time linker is not finding Ogg or finding the wrong"
+       echo "*** version of Ogg. If it is not finding Ogg, you'll need to set your"
+       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+       echo "*** is required on your system"
+       echo "***"
+       echo "*** If you have an old version installed, it is best to remove it, although"
+       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	 echo "*** The test program failed to compile or link. See the file config.log for the"
+       echo "*** exact error that occured. This usually means Ogg was incorrectly installed"
+       echo "*** or that you have moved Ogg since it was installed."
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+     OGG_CFLAGS=""
+     OGG_LIBS=""
+     :
+  fi
+
+
+  rm -f conf.oggtest
+
+   if test "x$OGGFOUND" = "x" ; then
+
+   { { echo "$as_me:$LINENO: error:  ASC requires the Ogg library.
+       If you have a distribution supplied Ogg package installed,
+       perhaps the Ogg-devel package is missing.
+       If your distribution does not include the Ogg library, you can get it from
+       http://xiph.org/ogg/  " >&5
+echo "$as_me: error:  ASC requires the Ogg library.
+       If you have a distribution supplied Ogg package installed,
+       perhaps the Ogg-devel package is missing.
+       If your distribution does not include the Ogg library, you can get it from
+       http://xiph.org/ogg/  " >&2;}
+   { (exit 1); exit 1; }; }
+
+   fi
+
+
+
 # Check whether --with-vorbis was given.
 if test "${with_vorbis+set}" = set; then
   withval=$with_vorbis; vorbis_prefix="$withval"
@@ -22660,231 +22878,12 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
   rm -f conf.vorbistest
 
    if test "x$no_vorbis" = "x" ; then
+      AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/sdl_sound "
 
+      SDL_SOUND_LIB="\$(abs_top_builddir)/source/libs/sdl_sound/libSDL_sound_int.la"
 
-# Check whether --with-ogg was given.
-if test "${with_ogg+set}" = set; then
-  withval=$with_ogg; ogg_prefix="$withval"
-else
-  ogg_prefix=""
-fi
+      SdlSoundDir=sdl_sound
 
-
-# Check whether --with-ogg-libraries was given.
-if test "${with_ogg_libraries+set}" = set; then
-  withval=$with_ogg_libraries; ogg_libraries="$withval"
-else
-  ogg_libraries=""
-fi
-
-
-# Check whether --with-ogg-includes was given.
-if test "${with_ogg_includes+set}" = set; then
-  withval=$with_ogg_includes; ogg_includes="$withval"
-else
-  ogg_includes=""
-fi
-
-# Check whether --enable-oggtest was given.
-if test "${enable_oggtest+set}" = set; then
-  enableval=$enable_oggtest;
-else
-  enable_oggtest=yes
-fi
-
-
-  if test "x$ogg_libraries" != "x" ; then
-    OGG_LIBS="-L$ogg_libraries"
-  elif test "x$ogg_prefix" != "x" ; then
-    OGG_LIBS="-L$ogg_prefix/lib"
-  elif test "x$prefix" != "xNONE" ; then
-    OGG_LIBS="-L$prefix/lib"
-  fi
-
-  OGG_LIBS="$OGG_LIBS -logg"
-
-  if test "x$ogg_includes" != "x" ; then
-    OGG_CFLAGS="-I$ogg_includes"
-  elif test "x$ogg_prefix" != "x" ; then
-    OGG_CFLAGS="-I$ogg_prefix/include"
-  elif test "x$prefix" != "xNONE"; then
-    OGG_CFLAGS="-I$prefix/include"
-  fi
-
-  { echo "$as_me:$LINENO: checking for Ogg" >&5
-echo $ECHO_N "checking for Ogg... $ECHO_C" >&6; }
-  no_ogg=""
-
-
-  if test "x$enable_oggtest" = "xyes" ; then
-    ac_save_CFLAGS="$CFLAGS"
-    ac_save_LIBS="$LIBS"
-    CFLAGS="$CFLAGS $OGG_CFLAGS"
-    LIBS="$LIBS $OGG_LIBS"
-      rm -f conf.oggtest
-      if test "$cross_compiling" = yes; then
-  echo $ac_n "cross compiling; assumed OK... $ac_c"
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ogg/ogg.h>
-
-int main ()
-{
-  system("touch conf.oggtest");
-  return 0;
-}
-
-
-_ACEOF
-rm -f conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  :
-else
-  echo "$as_me: program exited with status $ac_status" >&5
-echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-( exit $ac_status )
-no_ogg=yes
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
-fi
-
-
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-  fi
-
-  if test "x$no_ogg" = "x" ; then
-     { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-     OGGFOUND=Y
-  else
-     { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-     if test -f conf.oggtest ; then
-       :
-     else
-       echo "*** Could not run Ogg test program, checking why..."
-       CFLAGS="$CFLAGS $OGG_CFLAGS"
-       LIBS="$LIBS $OGG_LIBS"
-       cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-#include <stdio.h>
-#include <ogg/ogg.h>
-
-int
-main ()
-{
- return 0;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-   echo "*** The test program compiled, but did not run. This usually means"
-       echo "*** that the run-time linker is not finding Ogg or finding the wrong"
-       echo "*** version of Ogg. If it is not finding Ogg, you'll need to set your"
-       echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
-       echo "*** to the installed location  Also, make sure you have run ldconfig if that"
-       echo "*** is required on your system"
-       echo "***"
-       echo "*** If you have an old version installed, it is best to remove it, although"
-       echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	 echo "*** The test program failed to compile or link. See the file config.log for the"
-       echo "*** exact error that occured. This usually means Ogg was incorrectly installed"
-       echo "*** or that you have moved Ogg since it was installed."
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-       CFLAGS="$ac_save_CFLAGS"
-       LIBS="$ac_save_LIBS"
-     fi
-     OGG_CFLAGS=""
-     OGG_LIBS=""
-     :
-  fi
-
-
-  rm -f conf.oggtest
-
-      if test "x$OGGFOUND" = "xY" ; then
-
-         AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/sdl_sound "
-
-         SDL_SOUND_LIB="\$(abs_top_builddir)/source/libs/sdl_sound/libSDL_sound_int.la"
-
-         SdlSoundDir=sdl_sound
-
-      else
-
-   { { echo "$as_me:$LINENO: error:  ASC requires the Ogg library.
-       If you have a distribution supplied Ogg package installed,
-       perhaps the Ogg-devel package is missing.
-       If your distribution does not include the Ogg library, you can get it from
-       http://xiph.org/ogg/  " >&5
-echo "$as_me: error:  ASC requires the Ogg library.
-       If you have a distribution supplied Ogg package installed,
-       perhaps the Ogg-devel package is missing.
-       If your distribution does not include the Ogg library, you can get it from
-       http://xiph.org/ogg/  " >&2;}
-   { (exit 1); exit 1; }; }
-
-      fi
    else
 
    { { echo "$as_me:$LINENO: error:  ASC requires the Vorbis library.
@@ -26772,12 +26771,12 @@ NETWORKLIB!$NETWORKLIB$ac_delim
 SDL_CONFIG!$SDL_CONFIG$ac_delim
 SDL_CFLAGS!$SDL_CFLAGS$ac_delim
 SDL_LIBS!$SDL_LIBS$ac_delim
+OGG_CFLAGS!$OGG_CFLAGS$ac_delim
+OGG_LIBS!$OGG_LIBS$ac_delim
 VORBIS_CFLAGS!$VORBIS_CFLAGS$ac_delim
 VORBIS_LIBS!$VORBIS_LIBS$ac_delim
 VORBISFILE_LIBS!$VORBISFILE_LIBS$ac_delim
 VORBISENC_LIBS!$VORBISENC_LIBS$ac_delim
-OGG_CFLAGS!$OGG_CFLAGS$ac_delim
-OGG_LIBS!$OGG_LIBS$ac_delim
 SdlSoundDir!$SdlSoundDir$ac_delim
 SDL_SOUND_LIB!$SDL_SOUND_LIB$ac_delim
 BOOST_LIBS!$BOOST_LIBS$ac_delim

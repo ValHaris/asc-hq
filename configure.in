@@ -229,22 +229,21 @@ fi
 if test "X$SDLsoundmissing" = "Xy" ; then
    AC_MSG_WARN( SDL_sound not found. Using stripped down sound support, which only supports OGG )
 
+   XIPH_PATH_OGG([OGGFOUND=Y])
+   if test "x$OGGFOUND" = "x" ; then 
+      AC_LIB_MISSING( Ogg, http://xiph.org/ogg/ )
+   fi
+
+
    dnl Check for ogg
    XIPH_PATH_VORBIS
    if test "x$no_vorbis" = "x" ; then
-   
-      XIPH_PATH_OGG([OGGFOUND=Y])
-      if test "x$OGGFOUND" = "xY" ; then 
-   
-         AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/sdl_sound "
-         
-         SDL_SOUND_LIB="\$(abs_top_builddir)/source/libs/sdl_sound/libSDL_sound_int.la"
-         
-         SdlSoundDir=sdl_sound
-         AC_SUBST(SdlSoundDir)
-      else
-         AC_LIB_MISSING( Ogg, http://xiph.org/ogg/ )
-      fi
+      AdditionalIncludeDir="$AdditionalIncludeDir -I\$(abs_top_srcdir)/source/libs/sdl_sound "
+      
+      SDL_SOUND_LIB="\$(abs_top_builddir)/source/libs/sdl_sound/libSDL_sound_int.la"
+      
+      SdlSoundDir=sdl_sound
+      AC_SUBST(SdlSoundDir)
    else
       AC_LIB_MISSING( Vorbis, http://xiph.org/vorbis/ )
    fi
