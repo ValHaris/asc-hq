@@ -133,6 +133,8 @@ MKDIR_P = @MKDIR_P@
 MUSICDIR = @MUSICDIR@
 NETWORKLIB = @NETWORKLIB@
 OBJEXT = @OBJEXT@
+OGG_CFLAGS = @OGG_CFLAGS@
+OGG_LIBS = @OGG_LIBS@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
 PACKAGE_NAME = @PACKAGE_NAME@
@@ -681,7 +683,7 @@ uninstall-am:
 	tags tags-recursive uninstall uninstall-am
 
 
-.PHONY: htmldoc installer tarball pbpinstaller unitguide
+.PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag
 
 htmldoc:
 	cd source && make htmldoc
@@ -697,6 +699,12 @@ pbpinstaller:
 
 unitguide:
 	cd doc && make unitguide
+
+cvstag:
+	cvs tag ASC`scripts/getversion source/strtmesg.cpp | sed s/\\\\./-/g`
+
+cvspbptag:
+	scripts/pbptag
 
 dist-hook:
 	rm -rf `find $(distdir) -name CVS -o -name "*.ascdat" -o -name asc2_dlg.zip -o -name "*~" -o -name .cvsignore -o -name ".#*"`

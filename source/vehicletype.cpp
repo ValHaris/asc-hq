@@ -954,10 +954,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    image.assignDefaultPalette();
 
    pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
-   if ( pc.isReading() && pc.find( "WaitFortack" ))
-      pc.addBool ( "WaitFortack", wait );
-   else
-      pc.addBool ( "WaitForAttack", wait );
+   pc.addBool ( "WaitForAttack", wait );
 
    if ( bi_mode_tank == Resources(0,0,0) && asc_mode_tank == Resources(0,0,0)) {
 	   pc.openBracket( "Tank" );
