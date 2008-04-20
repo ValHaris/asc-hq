@@ -172,6 +172,8 @@ class  tfield {
        return VisibilityStates((visible >> (2*actplayer)) & 3);
    };
 
+   static void resetView( GameMap* gamemap, int playersToReset );
+
     int getx();
     int gety();
 

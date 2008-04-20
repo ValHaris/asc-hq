@@ -1260,6 +1260,12 @@ void GameMap::endRound()
        }
     }
 
+    int playerMask = 0;
+    for ( int i = 0; i < getPlayerCount(); ++i )
+       if ( !getPlayer(i).exist() )
+          playerMask |= 1 << i;
+    tfield::resetView(this,playerMask);
+
     if ( getgameparameter( cgp_objectGrowthMultiplier) > 0 )
        objectGrowth();
 }

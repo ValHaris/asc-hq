@@ -167,7 +167,9 @@
         "Dump all building definitions",
         "Mirror map",
         "Copy Area",
-        "Paste Area"
+        "Paste Area",
+        "Crash mapeditor",
+        "Test Debug Function"
 	 };
 
 
@@ -1068,6 +1070,12 @@ void execaction_pg(int code)
          break;
       case act_pasteArea: pasteArea();
          break;
+      case asc_nullPointerCrash: {
+            char* p = NULL;
+            *p = 1;
+         }
+         break;
+      case asc_testFunction: testDebugFunction(); break;
    };
 }
 

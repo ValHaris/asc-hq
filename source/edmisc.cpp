@@ -4709,3 +4709,20 @@ void pasteArea()
 /********************************************************************/
 
 
+
+
+void testDebugFunction()
+{
+  // tempsvisible = true;
+   actmap->cleartemps(7);
+   for ( int x = 0; x < actmap->xsize; ++x )
+      for ( int y = 0; y < actmap->ysize; ++y ) {
+         tfield* fld = actmap->getField(x,y);
+         if ( fld->getVisibility(5) >= visible_now )
+            fld->a.temp = 1;
+         else
+            fld->a.temp = 0;
+      }
+
+   repaintMap();
+}

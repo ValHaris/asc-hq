@@ -291,6 +291,22 @@ void tfield::setVisibility ( VisibilityStates valtoset, int actplayer )
       visible ^= newval;
 };
 
+void tfield::resetView( GameMap* gamemap, int playersToReset )
+{
+   int mask = 0;
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
+      if ( !(playersToReset & (1 << i)))
+         mask |= 3 << (2*i);
+
+   int l = 0;
+   for ( int y = 0; y < gamemap->ysize; ++y )
+      for ( int x = 0; x < gamemap->xsize; ++x ) {
+         tfield& fld = gamemap->field[l++];
+         fld.visible &= mask;
+      }
+        
+}
+
 
 
 bool compareObjectHeight ( const Object& o1, const Object& o2 )

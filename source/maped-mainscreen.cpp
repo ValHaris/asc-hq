@@ -188,8 +188,11 @@ void Menu::setup()
     addbutton ( "Locate Item by ~I~D",    act_locateItemByID );
    currentMenu->addSeparator();
     addbutton ( "Exchange ~G~raphics",          act_exchangeGraphics );
-
-
+/*
+   addfield("Debug");
+    addbutton ( "Crash map editor", asc_nullPointerCrash );
+    addbutton ( "TestFunctionHolder", asc_testFunction );
+*/
    addfield ("~H~elp");
     addbutton ( "~U~nit Information\tctrl+U",    act_unitinfo );
     addbutton ( "unit~S~et Information",        act_unitSetInformation );

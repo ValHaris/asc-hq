@@ -1065,10 +1065,10 @@ float WeapDist::getWeaponStrength ( const SingleWeapon* weap, int weather, int d
 
       if ( attacker_height >= chtieffliegend && weather != 0 && defender_height != -1) {
          int weatherRelevantHeightDelta = min( abs( getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ))), 3);
-         if ( weather == 1 || weather == 3 || weather == 5 )
+         if ( weather == 1 || weather == 3  )
             weatherFactor = 1 - 0.07*weatherRelevantHeightDelta;
          else
-            if ( weather == 2 || weather == 4 )
+            if ( weather == 2 || weather == 4 || weather == 5 )
                weatherFactor = 1 - 0.2 * weatherRelevantHeightDelta;
       }
 
