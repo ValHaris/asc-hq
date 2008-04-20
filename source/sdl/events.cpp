@@ -415,7 +415,7 @@ int processEvents ( )
    return result;
 }
 
-#if defined(_WIN32_) | defined(__APPLE__)
+#if defined(_WIN32_) || defined(__APPLE__)
 #define FirstThreadEvents 1
 #endif
 

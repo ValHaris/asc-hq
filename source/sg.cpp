@@ -1594,6 +1594,10 @@ int gamethread ( void* data )
          }
       }
    } while ( !gtp->exitMainloop );
+   
+   delete actmap;
+   actmap = NULL;
+   
    return 0;
 }
 
@@ -1620,7 +1624,7 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-  // setenv( "DISPLAY", "192.168.0.61:0", 1 );
+   setenv( "DISPLAY", "192.168.0.21:0", 1 );
 
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
@@ -1750,9 +1754,6 @@ int main(int argc, char *argv[] )
       fatalError ("Out of memory");
    }
 
-   delete actmap;
-   actmap = NULL;
-   
    writegameoptions ( );
 
    return( returncode );
