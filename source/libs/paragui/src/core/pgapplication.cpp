@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-12-07 17:38:50 $
+    Update Date:      $Date: 2008-04-20 16:44:33 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -1295,6 +1295,26 @@ void PG_Application::SetUpdateOverlappingSiblings(bool update) {
 bool PG_Application::GetUpdateOverlappingSiblings() {
 	return defaultUpdateOverlappingSiblings;
 }
+
+volatile int lockCount = 0;
+/*
+bool PG_Application::LockScreen() {
+   
+   int res = SDL_mutexP(mutexScreen);
+   ++lockCount;
+   printf("Lock screen %d\n", lockCount);
+   fflush(stdout);
+   return (res == 0);
+}
+
+bool PG_Application::UnlockScreen() {
+   printf("UnLock screen %d\n", lockCount);
+   --lockCount;
+   fflush(stdout);
+   
+   return (SDL_mutexV(mutexScreen) == 0);
+}
+*/
 
 
 void PG_Application::SetHighlightingTag( PG_Char c )

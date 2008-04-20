@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:56 $
+    Update Date:      $Date: 2008-04-20 16:44:33 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -186,16 +186,17 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	@return	true - the lock was established successfully
 	*/
 	inline static bool LockScreen() {
-		return (SDL_mutexP(mutexScreen) == 0);
+	   return SDL_mutexP(mutexScreen) == 0;
 	}
-
+	
+	
 	/**
 	Unlock the screen surface
 
 	@return	true - the unlock operation was successful
 	*/
 	inline static bool UnlockScreen() {
-		return (SDL_mutexV(mutexScreen) == 0);
+	   return (SDL_mutexV(mutexScreen) == 0);	   
 	}
 
 	/**
@@ -601,6 +602,35 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
          disable();
       };
    };
+
+   class ScreenLocker {
+      bool active;
+   public:
+      ScreenLocker() {
+         active = false;
+      };
+      ScreenLocker( bool doLock) {
+         active = false;
+         if ( doLock )
+            lock();
+      };
+      void lock() {
+         if ( !active ) {
+            LockScreen();
+            active = true;
+         }
+      }
+      void unlock() {
+         if ( active ) {
+            UnlockScreen();
+            active = false;
+         }
+      }
+      ~ScreenLocker() {
+         unlock();
+      };
+   };
+   
 
 
 protected:

@@ -805,6 +805,7 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlargemissilen ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwsmallmissilen ||
+                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwtorpedon ||
                           angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
                         if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
                               if (fieldvisiblenow(efield, angreifer->color/8)) {

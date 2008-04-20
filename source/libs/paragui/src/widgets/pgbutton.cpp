@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:02 $
+    Update Date:      $Date: 2008-04-20 16:44:33 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgbutton.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -543,7 +543,7 @@ void PG_Button::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	srf = (*_mid)[_mid->state].srf;
 
 	// blit it
-	PG_Application::LockScreen();
+	PG_Application::ScreenLocker locker(true);
 
 	if(t != 255) {
 		SDL_SetAlpha(srf, SDL_SRCALPHA, 255-t);
@@ -616,8 +616,6 @@ void PG_Button::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	}
 
 	DrawBorder(PG_Rect(0, 0, Width(), Height()), (*_mid)[_mid->state].bordersize, i1);
-
-	PG_Application::UnlockScreen();
 }
 
 void PG_Button::SetBlendLevel(STATE mode, Uint8 blend) {

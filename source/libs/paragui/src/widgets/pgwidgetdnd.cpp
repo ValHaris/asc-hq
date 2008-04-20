@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:04 $
+    Update Date:      $Date: 2008-04-20 16:44:34 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidgetdnd.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -310,7 +310,7 @@ void PG_WidgetDnD::cacheDragArea(PG_Point p) {
 	if(!dragimagecache || !dragimage)
 		return;
 
-	PG_Application::LockScreen();
+   PG_Application::ScreenLocker locker(true);
 
 	srcrect.x = p.x;
 	srcrect.y = p.y;
@@ -323,8 +323,6 @@ void PG_WidgetDnD::cacheDragArea(PG_Point p) {
 	dstrect.h = dragimagecache->h;
 
 	PG_Draw::BlitSurface(PG_Application::GetScreen(), srcrect, dragimagecache, dstrect);
-
-	PG_Application::UnlockScreen();
 }
 
 /**  */
@@ -335,7 +333,7 @@ void PG_WidgetDnD::restoreDragArea(PG_Point p) {
 	if((dragimagecache == NULL) || (dragimage == NULL))
 		return;
 
-	PG_Application::LockScreen();
+   PG_Application::ScreenLocker locker(true);
 
 	srcrect.x = 0;
 	srcrect.y = 0;
@@ -348,8 +346,6 @@ void PG_WidgetDnD::restoreDragArea(PG_Point p) {
 	dstrect.h = dragimagecache->h;
 
 	PG_Draw::BlitSurface(dragimagecache, srcrect, PG_Application::GetScreen(), dstrect);
-
-	PG_Application::UnlockScreen();
 }
 /**  */
 void PG_WidgetDnD::CheckCursorPos(int& x, int& y) {
@@ -391,9 +387,8 @@ void PG_WidgetDnD::drawDragArea(PG_Point pt, SDL_Surface* image) {
 	dstrect.w = image->w;
 	dstrect.h = image->h;
 
-	PG_Application::LockScreen();
+   PG_Application::ScreenLocker locker(true);
 	PG_Draw::BlitSurface(image, srcrect, PG_Application::GetScreen(), dstrect);
-	PG_Application::UnlockScreen();
 
 }
 /**  */

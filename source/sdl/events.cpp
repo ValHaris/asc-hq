@@ -45,7 +45,7 @@ queue<SDL_Event> eventQueue;
 bool _queueEvents = true;
 bool _fillLegacyEventStructures = false;
 
-bool eventThreadRunning = false;
+volatile bool eventThreadRunning = false;
 
 
 std::list<GraphicsQueueOperation*> graphicsQueue;
@@ -311,7 +311,7 @@ char time_elapsed(int time)
 
 #include <iostream>
 
-int closeEventThread = 0;
+volatile int closeEventThread = 0;
 
 const int keyTranslationNum = 7;
 int keyTranslation[keyTranslationNum][2] = { { 228, 132 }, //   "a
