@@ -209,7 +209,7 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 #color004##fontsize=18#
 ADVANCED STRATEGIC COMMAND
 #color000##fontsize=14#
-(C) 1994 - 2006 by Martin Bickel, Steffen Fröhlich and Daniel Korbely
+(C) 1994 - 2008 by Martin Bickel, Steffen Fröhlich and Daniel Korbely
 
 Contributions:
 

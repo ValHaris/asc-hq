@@ -195,7 +195,7 @@ void Menu::setup()
    addbutton ( "save ~S~creen as PCX", ua_writescreentopcx );
    addbutton ( "select graphic set", ua_selectgraphicset );
    currentMenu->addSeparator();
-   addbutton ( "~G~oto coorindate\tctrl-g", ua_gotoPosition );
+   addbutton ( "~G~oto coordinate\tctrl-g", ua_gotoPosition );
 
    addfield ( "~V~iew" );
    addbutton ( "toggle ~R~esourceview\t1", ua_changeresourceview );
