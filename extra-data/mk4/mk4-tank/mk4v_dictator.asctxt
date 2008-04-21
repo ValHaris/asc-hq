@@ -1,7 +1,7 @@
 VehicleType {
    parent = 294
    ID = 14003
-   SecondID = 14403
+   SecondaryIDs = 14403
 
    Name = DICTATOR 
    Description = Fahrende Festung
