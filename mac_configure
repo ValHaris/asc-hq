@@ -2,8 +2,8 @@
 
 echo Setting up the build directories for using FINK on MacOS X
 
-export "CXXFLAGS=-I/sw/include/ -L/sw/lib/"
-export   "CFLAGS=-I/sw/include/ -L/sw/lib/"
+export "CXXFLAGS=-I/sw/include/ -L/sw/lib/ $CXXFLAGS"
+export   "CFLAGS=-I/sw/include/ -L/sw/lib/ $CFLAGS"
 export "PATH=$PATH:/sw/bin/"
 if test -e /sw/lib/freetype2/bin/freetype-config; then
   export "PATH=$PATH:/sw/lib/freetype2/bin/"
