@@ -9,6 +9,7 @@ VehicleType {
    GuideSortHelp = 515 381 0 0 0 0 0 0 0 0
 
    Armor = 330
+   Weight = 35
 
    Tank { 
       Energy = 0
@@ -16,7 +17,8 @@ VehicleType {
       fuel = 4000
    } Tank
    FuelConsumption = 22
-   Weight = 35
+   MovementSound = heli_h_s.ogg
+
    Weapons { 
       Initiative = 0
       Number = 3

@@ -977,8 +977,8 @@
          MaxRange = 130
          MinRange = 10
          Ammo = 1
-         Punch@MaxRange = 120
-         Punch@MinRange = 130
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
          ReactionFireShots = 0
          HitAccuracy { 
             d6 = 

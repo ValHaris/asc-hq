@@ -7,9 +7,11 @@ VehicleType {
    Description = leichter Kampfhubschrauber
    Infotext = []
    GuideSortHelp = 515 380 0 0 0 0 0 0 0 0
+   wreckageobject = 495 494
 
    Armor = 280
-   wreckageobject = 495 494
+   Weight = 25
+
    Tank { 
       Energy = 0
       Material = 0
@@ -17,7 +19,8 @@ VehicleType {
    } Tank
    FuelConsumption = 20
    Movement = 0 0 0 30 140 140 0 0 
-   Weight = 25
+   MovementSound = heli_h_s.ogg
+
    Weapons { 
       Initiative = 0
       Number = 2

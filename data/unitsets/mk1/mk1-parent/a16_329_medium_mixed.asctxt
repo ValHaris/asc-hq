@@ -22,6 +22,7 @@ VehicleType {
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 60 180 180 0 0 
+   MovementSound = aircraft_l_g.ogg
 
    Weapons { 
       Initiative = 0

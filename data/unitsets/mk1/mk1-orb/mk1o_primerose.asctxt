@@ -11,6 +11,7 @@ VehicleType {
 
    Armor += 20
 
+   MovementSound = satellite_s.ogg
    Weapons { 
       Weapon0.Punch@MaxRange -= 2
       Weapon0.Punch@MinRange -= 2

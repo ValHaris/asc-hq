@@ -1,6 +1,6 @@
 VehicleType { 
    abstract = true 
-   parent = 400 401 402 493
+   parent = 400 401 402 491
    ID = 368
 
    Name = wig
@@ -15,7 +15,7 @@ VehicleType {
    Jamming = 19
    WaitForAttack = false
    Features = move_after_attack jam_only_own_field
-   Category = hoovercraft
+   Category = light_ship
    MaxSurvivableStorm = 160
    ResourceDrillingRange = 0
    SelfRepairRate = 0

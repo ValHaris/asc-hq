@@ -23,8 +23,9 @@ VehicleType {
    } Tank
    FuelConsumption = 30
    Movement = 0 0 0 30 60 80 70 0 
-
    TerrainAccess ->* VehicleType.Heli_terrain 
+   MovementSound = aircraft_l_g.ogg
+
    Weapons { 
       Initiative = 0
       Number = 5

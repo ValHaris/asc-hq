@@ -18,6 +18,7 @@ VehicleType {
    } Tank
    FuelConsumption = 100
    Movement = 0 0 0 20 0 0 0 0 
+   MovementSound = tankmove_s.ogg
 
    TerrainAccess {
       terrain_any = Lowland Road Runway Hard_sand soft_sand very_shallow_water  

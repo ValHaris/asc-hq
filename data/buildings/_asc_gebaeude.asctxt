@@ -1,6 +1,6 @@
 itemfilter {
    Vehicles =
-   Buildings = 0-7 10-49
+   Buildings = 0-7 10-49 23000-23999
    Objects = 
    Terrain = 
    name = ASC buidlings

@@ -23,6 +23,7 @@ VehicleType {
    FuelConsumption = 30
    Movement = 0 0 0 60 140 160 150 0 
    Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   MovementSound = aircraft_l_g.ogg
 
    Weapons { 
       Initiative = 0

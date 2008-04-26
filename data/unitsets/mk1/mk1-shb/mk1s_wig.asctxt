@@ -65,6 +65,7 @@ certification rules and build up operational experience. Time will tell if small
 (commercially) attractive enough to be developed as the predecessors for the ocean liners of the 
 future.]
    picture = MK1s_wig.pcx
+   InfoImage = mk1s_wig.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Weapons { 
@@ -75,6 +76,6 @@ future.]
       Weapon0.MinRange = 20
       Weapon0.Ammo = 4
       Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MinRange = 110
    } Weapons
 } VehicleType

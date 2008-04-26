@@ -27,6 +27,7 @@ VehicleType {
    FuelConsumption = 14
    Movement = 0 0 0 77 0 0 0 0 
    TerrainAccess ->* VehicleType.med_terrain 
+   MovementSound = tracked_s.ogg
 
    Construction { 
       Buildings = 

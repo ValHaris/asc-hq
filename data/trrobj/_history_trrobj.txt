@@ -5,6 +5,7 @@ Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
 __________________
 Turret high neue Grafik
+Bergobjekt , vernetzt mit Kartenrand
 __________________
 24.03.2008 (GAMER)
 -Brücke über Hillside befahrbar

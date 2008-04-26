@@ -8,6 +8,7 @@ VehicleType {
 
    Armor += 20
    
+   MovementSound = diver_s.ogg
    Weapons { 
    } Weapons
 } VehicleType

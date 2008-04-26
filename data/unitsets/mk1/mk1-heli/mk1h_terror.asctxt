@@ -10,14 +10,16 @@ VehicleType {
    GuideSortHelp = 515 432 552 380 1 0 0 0 0 0
 
    Armor = 300
+   Weight = 30
    Transportation ->* vehicleType.TransHeliTrooper 
+
    Tank { 
       Energy = 0
       Material = 0
       fuel = 2000
    } Tank
    FuelConsumption = 18
-   Weight = 30
+
    Weapons { 
       Initiative = 0
       Number = 2

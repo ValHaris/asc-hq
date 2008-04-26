@@ -13,6 +13,8 @@ VehicleType {
    Features = 
 
    TerrainAccess ->* Vehicletype.sat_terrain 
+   MovementSound = satellite_s.ogg
+
    Weapons { 
       Initiative = 0
       Number = 0

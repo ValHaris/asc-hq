@@ -12,4 +12,5 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10
+   MovementSound = aircraft_h_s.ogg
 } VehicleType

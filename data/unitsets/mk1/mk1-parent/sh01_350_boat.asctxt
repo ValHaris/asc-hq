@@ -30,6 +30,7 @@ VehicleType {
    FuelConsumption = 18
    Movement = 0 0 81 0 0 0 0 0 
    TerrainAccess ->* VehicleType.verysmallship_terrain
+   MovementSound = med_ship_a_s.ogg
 
    Construction { 
       Buildings = 

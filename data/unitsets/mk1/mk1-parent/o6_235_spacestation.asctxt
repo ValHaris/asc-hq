@@ -26,6 +26,7 @@ VehicleType {
    Movement = 0 0 0 0 0 0 0 20 
    FuelConsumption = 100
    TerrainAccess ->* VehicleType.sat_terrain 
+   MovementSound = move_air_jet_s.ogg
 
    WaitForAttack = true
    Weapons { 

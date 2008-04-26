@@ -19,7 +19,7 @@ VehicleType {
       Weapon0.MaxRange = 40
       Weapon0.MinRange = 10
       Weapon0.Ammo = 80
-      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 75
 
       Weapon1 ->* VehicleType.AmmoCannon 

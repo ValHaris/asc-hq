@@ -2,6 +2,15 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+19.04.2008 (GAMER)
+-GASP -1RF SAM
+-MovementSound: terror
+
+__________________
+13.04.2008 (GAMER)
+-WIG = light_ship, neues Hight Change system
+-Monster WIg neue Grafik
+__________________
 05.04.2008 (GAMER)
 -parent CM-U-Waffe = 12 Felder Reichweite
 -Angleichung Schiffswaffen

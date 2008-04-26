@@ -27,6 +27,7 @@ VehicleType {
    FuelConsumption = 14
    Movement = 0 0 0 90 0 0 0 0 
    TerrainAccess ->* VehicleType.wheeled 
+   MovementSound = wheeled_l_g.ogg
 
    Construction { 
       Buildings = 

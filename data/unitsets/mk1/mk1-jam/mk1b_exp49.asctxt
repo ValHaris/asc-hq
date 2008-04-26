@@ -8,8 +8,8 @@ VehicleType {
 Dank des Maschinengewehrs kann dieser Turm sich sogar gegen tief fliegende Lufteinheiten verteidigen.
 Die gute Panzerung garantiert ausserdem das diese Anlage auch schwerem Beschuss stand hält.
 ]
-   picture = MK1b_EXP49.pcx
-   InfoImage = exp49-v2.jpg
+   picture = mk1b_exp49.pcx
+   InfoImage = mk1b_exp49.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Armor += 50

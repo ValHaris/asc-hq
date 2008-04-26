@@ -6,8 +6,8 @@ VehicleType {
    Infotext = [Assault Troopers are specially trained to use a more robust arsenal
               than other Troopers. Their main purpose is to take out squads
               of heavy vehicles.]
-   Picture = MK1i_astrooper.pcx
-InfoImage = assault-trooper.jpg
+   Picture = mk1i_astrooper.pcx
+   InfoImage = mk1i_assaulttrooper.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor +=10

@@ -8,24 +8,29 @@
 
 
    Infotext = []
+
+   Features = 
+   Category = light_aircraft
    Armor = 350
    View = 50
-   Height = ground_level orbit 
    Jamming = 0
-   WaitForAttack = false
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 25
+
+   Height = ground_level orbit 
    Tank { 
       Energy = 0
       Material = 0
       fuel = 500
    } Tank
    FuelConsumption = 5
-   Features = 
    Movement = 0 0 0 20 0 0 0 30 
-   Category = light_aircraft
-   MaxSurvivableStorm = 0
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 25
+   MovementSound = satellite_s.ogg
+
+   WaitForAttack = false
+
    Construction { 
       Buildings = 
       Vehicles = 

@@ -22,8 +22,8 @@ VehicleType {
               - kann das meiste Terrain #crt# 
               - schnelle Bewegung für einen Trooper #CRT# 
               - wirkungsvoll gegen Infanterie #CRT# ]
-   picture = MK1i_shock.pcx
-InfoImage = shock-trooper.jpg
+   picture = mk1i_shock.pcx
+   InfoImage = mk1i_shock.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10

@@ -7,12 +7,13 @@ VehicleType {
    Infotext = [Trooper that can walk into Space and conquere Spacestations. Only armed with a high explosive bomb against satellites and Spacestations.]
    GuideSortHelp = 516 236 553 600 0 0 0 0 0 0
 
+   Features += ExternalRepair
 
    Height = ground_level orbit 
    Movement = 0 0 0 39 0 0 0 39
    Tank.Fuel = 7000
    Tank.Material = 5000 
-   Features += ExternalRepair
+   MovementSound = move_air_jet_s.ogg
 
    Weapons { 
       Initiative = 0

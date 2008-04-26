@@ -26,7 +26,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    nocargo {
-      CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+      CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
    } nocargo
 
    cargo_trooper_only {
@@ -541,7 +541,7 @@
       MaxLoadableUnits = 5
       MaxLoadableUnitSize = 3
       MaxLoadableMass = 12
-      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO

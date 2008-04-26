@@ -8,8 +8,8 @@ und mit mehr Muniotn ausgestattet ist.
 Allerdings ist er wie sämtliche Trooper empfindlich gegen nahezu jeglichen Beschuss.
 Halten sie ihn möglichst in Deckung und geben sie auf feindliche Scharfschützen acht!
 ]
-   Picture = MK1i_gunner.pcx
-InfoImage = gunner.jpg
+   Picture = mk1i_gunner.pcx
+   InfoImage = mk1i_gunner.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10

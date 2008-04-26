@@ -9,16 +9,20 @@ VehicleType {
    picture = Mk1a_RAVEN.pcx
    GuideSortHelp = 551 560 0 0 1 0 0 0 0 0
 
-   Armor = 410
-   Height = ground_level low_level_flight medium_level_flight high_level_flight
    Transportation ->* VehicleType.TransPlane 
+
+   Features = 
+   Armor = 410
+   Weight = 250
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
    Tank { 
       Energy = 0
       Material = 0
       fuel = 7000
    } Tank
    FuelConsumption = 30
-   Features = 
    Movement = 0 0 0 65 140 150 140 0 
-   Weight = 250
+   MovementSound = aircraft_l_g.ogg
+
 } VehicleType

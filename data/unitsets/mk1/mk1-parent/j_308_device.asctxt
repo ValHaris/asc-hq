@@ -13,6 +13,7 @@ VehicleType {
    Features = onlyTransMove
 
    TerrainAccess ->* VehicleType.Device_terrain
+   MovementSound = interface_click_s.ogg
 
    Weapons { 
       Initiative = 0

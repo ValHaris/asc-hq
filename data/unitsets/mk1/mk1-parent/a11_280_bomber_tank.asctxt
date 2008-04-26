@@ -19,6 +19,7 @@ VehicleType {
    FuelConsumption = 25
    Movement = 0 0 0 60 170 170 0 0 
    TerrainAccess ->* VehicleType.Aircraft_terrain_road 
+   MovementSound = aircraft_l_g.ogg
 
    Weapons { 
       Initiative = 0

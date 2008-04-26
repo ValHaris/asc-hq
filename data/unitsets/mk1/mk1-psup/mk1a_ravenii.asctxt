@@ -8,13 +8,14 @@ VehicleType {
    picture = Mk1a_RAVENII.pcx
    GuideSortHelp = 551 560 0 0 1 0 0 0 0 0
 
-   Armor = 460
+   Transportation ->* VehicleType.Transplane 
+   Transportation.MaxLoadableMass = 400
+
    Features = 
+   Armor = 460
    Weight = 300
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight
-   Transportation ->* VehicleType.Transplane 
-   Transportation.MaxLoadableMass = 400
    Tank { 
       Energy = 0
       Material = 0
@@ -23,6 +24,8 @@ VehicleType {
    FuelConsumption = 35
    Movement = 0 0 0 55 130 140 130 0 
    TerrainAccess ->* VehicleType.aircraft_terrain_road 
+   MovementSound = aircraft_l_g.ogg
+
    HeightChangeMethod0 {
       movecost = 40
       heightdelta = 1

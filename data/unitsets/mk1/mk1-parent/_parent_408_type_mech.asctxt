@@ -8,30 +8,35 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    Infotext = []
+
+   Features = conquer_buildings 
+   Category = light_tracked_vehicle
    Armor = 350
    View = 30
-   Height = ground_level 
    Jamming = 0
-   WaitForAttack = false
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 5
+
+   Height = ground_level 
    Tank { 
       Energy = 0
       Material = 0
       fuel = 250
    } Tank
    FuelConsumption = 5
-   Features = conquer_buildings 
    Movement = 0 0 0 50 0 0 0 0 
-   Category = light_tracked_vehicle
-   MaxSurvivableStorm = 150
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 5
    TerrainAccess ->* Vehicletype.mech_trooper_terrain 
+   MovementSound = trooper_marching_3_s.ogg
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

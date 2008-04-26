@@ -9,11 +9,13 @@ VehicleType {
    WreckageObject = 447
    GuideSortHelp = 355 312 565 0 0 0 0 0 0 0
 
+   Transportation ->* VehicleType.TransCruiser 
 
    Armor = 1400
+   Weight = 5000
    View = 30
-   Transportation ->* VehicleType.TransCruiser 
    Jamming = 41
+
    Tank { 
       Energy = 0
       Material = 0
@@ -21,7 +23,8 @@ VehicleType {
    } Tank
    FuelConsumption = 40
    Movement = 0 0 60 0 0 0 0 0 
-   Weight = 5000
+   MovementSound = med_ship_a_s.ogg
+
    Weapons { 
       Initiative = 20
       Number = 1

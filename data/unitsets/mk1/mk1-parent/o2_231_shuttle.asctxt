@@ -8,18 +8,22 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 516 231 551 550 0 0 0 0 0 0
 
-   Armor = 300
-   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Transportation ->* VehicleType.TransShuttle 
+
+   Features = ExternalMaterialTransfer ExternalFuelTransfer
+   Armor = 300
+   Weight = 200
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
       Energy = 0
       Material = 9000
       fuel = 15000
    } Tank
    FuelConsumption = 25
-   Features = ExternalMaterialTransfer ExternalFuelTransfer
    Movement = 0 0 0 65 110 110 120 120 
-   Weight = 200
+   MovementSound = aircraft_l_g.ogg
+
    Weapons { 
       Initiative = 0
       Number = 0

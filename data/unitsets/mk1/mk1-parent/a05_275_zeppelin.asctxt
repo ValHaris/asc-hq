@@ -22,6 +22,7 @@ VehicleType {
    FuelConsumption = 10
    Movement = 0 0 0 30 110 110 0 0 
    TerrainAccess ->* VehicleType.heli_Terrain 
+   MovementSound = aircraft_m_g.ogg
 
    Weapons { 
       Initiative = 0
