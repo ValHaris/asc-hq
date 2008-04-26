@@ -251,6 +251,9 @@ extern const char*  cvehiclefunctions[];
         //! the damage this unit can repair itself automatically each turn.
         int          autorepairrate;
 
+        //! if this unit constructs another unit externally (for example a turrt), it costs this much movement points
+        int  unitConstructionMoveCostPercentage;
+        
         //! if the unit is destroyed, it can leave an wreckage object behind ( < 0 to disable )
         vector<int> wreckageObject;
 

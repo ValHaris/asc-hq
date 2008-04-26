@@ -135,6 +135,7 @@ Vehicletype :: Vehicletype ( void )
    
    productionEfficiency = ResourceMatrix( matrix );
    
+   unitConstructionMoveCostPercentage = 50;
 }
 
 
@@ -144,7 +145,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 28;
+const int vehicle_version = 29;
 
 
 
@@ -567,6 +568,9 @@ void Vehicletype :: read ( tnstream& stream )
          objectLayedByMovement.push_back ( IntRange ( from, to ));
       }
    }
+   
+   if ( version >= 29 )
+      unitConstructionMoveCostPercentage = stream.readInt();
 }
 
 
@@ -740,6 +744,8 @@ void Vehicletype:: write ( tnstream& stream ) const
       stream.writeInt ( objectLayedByMovement[i].from );
       stream.writeInt ( objectLayedByMovement[i].to );
    }
+   
+   stream.writeInt( unitConstructionMoveCostPercentage );
 }
 
 
@@ -1017,6 +1023,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
    pc.addIntRangeArray ( "ObjectGroupsBuildable", objectGroupsBuildable, false );
    pc.addIntRangeArray ( "ObjectGroupsRemovable", objectGroupsRemovable, false );
+   pc.addInteger("UnitConstructionMoveCostPercentage", unitConstructionMoveCostPercentage, 50);
    pc.closeBracket();
 
    pc.openBracket ( "Weapons");
@@ -1117,6 +1124,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    if ( hasFunction( ContainerBaseType::MakesTracks ))
       objectLayedByMovement.push_back ( 7 );
 
+   
 }
 
 BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& location )

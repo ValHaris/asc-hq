@@ -863,6 +863,7 @@ Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
       tank.material -= tnk->productionCost.material;
       tank.fuel -= tnk->productionCost.energy;
 
+      decreaseMovement( maxMovement() * typ->unitConstructionMoveCostPercentage/100);
       /*
       int refuel = 0;
       for ( int i = 0; i < typ->weapons.count; i++ )
@@ -882,7 +883,11 @@ Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
 
 bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
 {
-   if ( !tnk->techDependency.available ( gamemap->player[getOwner()].research))
+   if ( gamemap->getgameparameter(cgp_produceOnlyResearchedStuffExternally) && 
+       !tnk->techDependency.available ( gamemap->player[getOwner()].research))
+      return 0;
+   
+   if ( getMovement() < maxMovement() * typ->unitConstructionMoveCostPercentage / 100 )
       return 0;
 
 //              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )

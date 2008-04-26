@@ -611,7 +611,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       {
          produceables = new Container();
          for ( Container::const_iterator i = vehicles.begin(); i != vehicles.end(); ++i ) {
-            if ( productionplant->getMap()->getgameparameter( cgp_produceOnlyResearchedStuff )) {
+            if ( productionplant->getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally )) {
                ContainerConstControls cc ( productionplant );
                if ( !(cc.unitProductionPrerequisites( *i ) & ~(1+2+4)))  // we are filtering out the bits for lack of resource
                   produceables->push_back( *i );

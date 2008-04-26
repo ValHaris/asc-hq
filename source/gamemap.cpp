@@ -2081,6 +2081,7 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ObjectGrowthRate",                   0,                    0,   maxint,             true,   false,   "Object growth rate (percentage)" },  //       cgp_objectGrowthMultiplier
       {  "ObjectsGrowOnOtherObjects",          1,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  },  //       cgp_objectGrowOnOtherObjects
       {  "ResearchOutputMultiplier",           1,                    1,   maxint,             false,  false,   "Multiplies the research output of all labs"  },  //       cgp_researchOutputMultiplier
-      {  "ProduceOnlyResearchedStuff",         0,                    0,   1,                  true,   false,   "Produce only researched stuff" }
+      {  "ProduceOnlyResearchedStuffInternally", 0,                  0,   1,                  true,   false,   "Produce only researched stuff internally" },
+      {  "ProduceOnlyResearchedStuffExternally", 0,                  0,   1,                  true,   false,   "Produce only researched stuff externally" }
 };
 
