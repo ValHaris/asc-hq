@@ -1,6 +1,5 @@
 ObjectType { 
    ID = 2094
-   SecondaryIDs = 2009
    parent = 524
    Weather = dry much_snow 
    Name = Beton 
