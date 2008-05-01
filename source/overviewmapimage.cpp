@@ -66,6 +66,13 @@ MapCoordinate OverviewMapImage::surface2map( const SPoint& pos )
 
 void OverviewMapImage::create( const Surface& image )
 {
+   if ( !image.valid() ) {
+      for ( int y = 0; y < height; ++y )
+         for ( int x = 0; x < width; ++x )
+            segment[x][y] = SDLmm::ColorRGBA( 0, 0, 0, Surface::transparent );
+      return;
+   }
+   
    Surface fieldshape  = IconRepository::getIcon("hexinvis.raw");
 
    for ( int y = 0; y < height; ++y )

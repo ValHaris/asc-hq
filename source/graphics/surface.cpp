@@ -217,6 +217,14 @@ Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other ), pixelD
 
 void Surface::write ( tnstream& stream ) const
 {
+   if ( !valid() ) {
+      stream.writeWord( 16974 );
+      stream.writeWord ( 1 );
+      stream.writeChar ( 0 );
+      stream.writeWord ( 0 );
+      stream.writeWord ( 0 );
+      return;
+   } 
    stream.writeWord( 16974 );
    stream.writeWord ( 1 );
    stream.writeChar ( 0 );
@@ -263,6 +271,11 @@ void Surface::read ( tnstream& stream )
   hd.rle = stream.readChar();
   hd.x = stream.readWord();
   hd.y = stream.readWord();
+  
+  if ( hd.x == 0 && hd.y == 0 ) {
+      SetSurface( NULL );
+      return;  
+  }
 
    if (hd.id == 16973) {
       char *pnter = new char [ hd.size + sizeof(hd) ];

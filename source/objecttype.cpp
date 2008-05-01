@@ -204,7 +204,11 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
       megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, 0.7, flip, nullParam); 
    } else
       if ( displayMethod == 2 ) {  // translation
-         if ( getPicture( dir, weather).GetPixelFormat().BitsPerPixel() == 8 ) {
+         const Surface& s = getPicture( dir, weather);
+         if ( !s.valid() )
+            return;
+         
+         if ( s.GetPixelFormat().BitsPerPixel() == 8 ) {
             MegaBlitter< 1,4,
                         ColorTransform_None, 
                         ColorMerger_Alpha_XLAT_TableShifter, 
@@ -214,12 +218,15 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
                      >
                blitter;
             blitter.setFlipping( flip & 1, flip & 2 );
-            blitter.blit( getPicture( dir, weather), surface, pos );
+            blitter.blit( s, surface, pos );
          } // else
            // warning("objects with palette translation as display method may not have truecolor images");
       } else
          if ( displayMethod == 4 ) {
             const Surface& s = getPicture( dir, weather);
+            if ( !s.valid() )
+               return;
+   
             if ( dir != 0 && rotateImage ) {
                megaBlitter<ColorTransform_None, ColorMerger_AlphaMixer, SourcePixelSelector_CacheRotation ,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir%6]),nullParam); 
             } else {
@@ -233,9 +240,11 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
             #endif
             if ( disp ) {
                const Surface& s = getPicture( dir, weather);
+               if ( !s.valid() )
+                  return;
                if ( flip ) {
                   // if ( s.flags() & SDL_SRCALPHA )
-                     megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
+                     megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam, flip, nullParam); 
                   // else   
                   //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam, flip, nullParam); 
                } else {  
@@ -246,7 +255,7 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
                      //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,make_pair(&s,directionangle[dir]),nullParam); 
                   } else {
                      // if ( s.flags() & SDL_SRCALPHA )
-                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
+                        megaBlitter<ColorTransform_None, ColorMerger_AlphaMerge, SourcePixelSelector_Plain,TargetPixelSelector_All>(s, surface, pos, nullParam,nullParam,nullParam,nullParam); 
                      // else
                      //   megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam,nullParam,nullParam,nullParam); 
                   }

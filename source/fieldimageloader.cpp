@@ -37,6 +37,9 @@ const char* fileNameDelimitter = " =*/+<>,";
 
 void snowify( Surface& s, bool adaptive )
 {
+   if ( !s.valid() )
+      return;
+   
    if ( s.GetPixelFormat().BitsPerPixel() != 32 )
       return;
 
@@ -76,6 +79,28 @@ void snowify( Surface& s, bool adaptive )
 
       }
    }
+}
+
+bool imageEmpty( const Surface&  s ) 
+{
+   bool allWhite = true;
+   bool allTransparent = true;
+   for ( int y = 0; y < s.h(); ++y ) {
+      const char* c = (char*) s.pixels();
+      c += y * s.pitch();
+      for ( int x = 0; x < s.w(); ++x ) {
+         if(  c[3] != Surface::transparent )
+            allTransparent  = false;
+         else {
+            int* i = (int*) c;
+            if ( (*i & 0xffffff) != 0xffffff )
+               allWhite = false;
+         }
+      }
+      if ( !allWhite && !!allTransparent )
+         return false;
+   }
+   return allWhite || allTransparent;
 }
 
 vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
@@ -130,15 +155,21 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
          if ( colorKeyAllowed ) 
             s2.ColorKey2AlphaChannel();
          
+         s2.detectColorKey();
+         if ( imageEmpty(s2))
+            images.push_back( Surface() );
+         else
+            images.push_back ( s2 );
+         
        } else {
           // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
           MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle > blitter;
           blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
           blitter.blit( s, s2, SPoint(0,0)  );
           applyFieldMask(s2);
+          s2.detectColorKey();
+          images.push_back ( s2 );
        }
-       s2.detectColorKey();
-       images.push_back ( s2 );
    }
    return images;
 }
