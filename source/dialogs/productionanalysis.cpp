@@ -91,10 +91,13 @@ ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicle
       ASCString units = evaluatedFactory->getName() + ": ";
          
       for ( Player::VehicleList::const_iterator j = gamemap->getCurrentPlayer().vehicleList.begin(); j != gamemap->getCurrentPlayer().vehicleList.end(); ++j )
-         if ( (*j)->typ == evaluatedFactory ) {
-            units += (*j)->getPosition().toString();
-            ++count;
-         }
+         if ( (*j)->typ == evaluatedFactory ) 
+            for ( Vehicle::Production::const_iterator i = (*j)->getProduction().begin(); i != (*j)->getProduction().end(); ++i)
+               if ( *i == unitsToProduce ) {
+                  units += (*j)->getPosition().toString();
+                  ++count;
+               }
+         
       if ( count )
          instances += units + "\n";
 
@@ -112,14 +115,16 @@ ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicle
                      ++count;
                   }
             } else {
-               bool found = false;
-               for ( ContainerBase::Production::const_iterator k = (*j)->getProduction().begin(); k != (*j)->getProduction().end(); ++k )
-                  if ( *k == unitsToProduce ) 
-                     found = true;
-
-               if ( !found ) {
-                  units += (*j)->getPosition().toString();
-                  ++count;
+               if ( unitsToProduce->techDependency.available( gamemap->getCurrentPlayer().research ) ) {
+                  bool found = false;
+                  for ( ContainerBase::Production::const_iterator k = (*j)->getProduction().begin(); k != (*j)->getProduction().end(); ++k )
+                     if ( *k == unitsToProduce ) 
+                        found = true;
+   
+                  if ( !found ) {
+                     units += (*j)->getPosition().toString();
+                     ++count;
+                  }
                }
             }
       if ( count )
@@ -185,7 +190,7 @@ void unitProductionAnalysis( GameMap* gamemap, bool checkResearch )
       if ( lineAddable.empty() )
          lineAddable = "-nowhere-\n";
 
-      types = "\n#fontsize=18#Vehicle and Building types#fontsize=12#\n" + types;
+      types = "\n#fontsize=18#Vehicle and Building types#fontsize=10#\n(provided that the unit has been researched)\n#fontsize=12#" + types;
       instances = "\n#fontsize=18#Production available #fontsize=12#\n" + instances;
       lineAddable = "\n#fontsize=18#Production can be added #fontsize=12#\n" + lineAddable;
 
