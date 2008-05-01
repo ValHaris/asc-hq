@@ -30,7 +30,7 @@
 #include "graphics/drawing.h"
 #include "fieldimageloader.h"
 #include "memsize_interface.h"
-
+#include "iconrepository.h"
 
 
 #ifndef converter
@@ -142,8 +142,19 @@ const Surface& ObjectType :: getPicture ( int i, int w ) const
 
    if ( weatherPicture[w].bi3pic[i] > 0 )
       return GraphicSetManager::Instance().getPic(weatherPicture[w].bi3pic[i]);
-   else
-      return weatherPicture[w].images[i];
+   else {
+      const Surface& s = weatherPicture[w].images[i];
+      if ( s.valid() )
+         return s;
+      else {
+         if ( i < 64 && weatherPicture[w].images.size() >= 65 ) {
+            const Surface& s2 = weatherPicture[w].images[64];
+            if ( s2.valid())
+               return s2;
+         } 
+         return IconRepository::getIcon("red-x-field.png");
+      }
+   }
 }
 
 
