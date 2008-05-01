@@ -141,7 +141,7 @@ bool SelectFromMap::eventKeyDown (const SDL_KeyboardEvent *key)
          mark();
          return true;
       }
-      if ( key->keysym.sym == SDLK_RETURN ) {
+      if ( key->keysym.sym == SDLK_RETURN || key->keysym.sym == SDLK_KP_ENTER ) {
          if ( isOk() )
             QuitModal();
          return true;

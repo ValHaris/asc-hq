@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:03 $
+    Update Date:      $Date: 2008-05-01 16:18:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglineedit.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -287,6 +287,7 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 			SetCursorPos(++my_cursorPosition);
 			return true;
 
+		case SDLK_KP_ENTER:
 		case SDLK_RETURN:
 			if(!my_isEditable) {
 				return false;

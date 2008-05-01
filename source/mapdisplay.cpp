@@ -149,8 +149,13 @@ void ResourceGraphLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
             visible = true;
 
       if ( visible ) {
-         paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[max(fieldInfo.playerView,0)], Resources::materialColor );
-         paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[max(fieldInfo.playerView,0)], Resources::fuelColor );
+         if ( fieldInfo.playerView>=0 && fieldInfo.gamemap->getPlayer(fieldInfo.playerView).stat == Player::supervisor ) {
+            paintBar( fieldInfo, pos, 0, fieldInfo.fld->material, Resources::materialColor );
+            paintBar( fieldInfo, pos, 1, fieldInfo.fld->fuel,     Resources::fuelColor );
+         } else {
+            paintBar( fieldInfo, pos, 0, fieldInfo.fld->resourceview->materialvisible[max(fieldInfo.playerView,0)], Resources::materialColor );
+            paintBar( fieldInfo, pos, 1, fieldInfo.fld->resourceview->fuelvisible[max(fieldInfo.playerView,0)], Resources::fuelColor );
+         }
       }
    }
 #else

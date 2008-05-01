@@ -250,8 +250,8 @@ class EditGameOptions : public ASC_PG_Dialog {
          if ( mainApp ) 
             new PG_PropertyField_String<ASCString>( propertyEditor , "Startup Map", &o->startupMap );
 
-         if ( mainApp ) 
-            (new PG_PropertyField_String<ASCString>( propertyEditor , "Default Password", &defaultPassword ))->SetPassHidden('*');
+         //if ( mainApp ) 
+         (new PG_PropertyField_String<ASCString>( propertyEditor , "Default Password", &defaultPassword ))->SetPassHidden('*');
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: Cache GUI Definition (*.ascgui)", &o->cacheASCGUI );
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: View own replay", &o->debugReplay );

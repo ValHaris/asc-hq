@@ -69,7 +69,6 @@ BuildingType :: BuildingType ( void )
 {
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) {
-         destruction_objects [x][y] = 0;
          field_Exists[x][y] = false;
          for ( int w = 0; w < cwettertypennum; ++w )
             for ( int c = 0; c < maxbuildingpicnum; ++c )
@@ -206,7 +205,7 @@ BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordin
 
 
 
-const int building_version = 11;
+const int building_version = 12;
 
 
 void BuildingType :: read ( tnstream& stream )
@@ -312,16 +311,18 @@ void BuildingType :: read ( tnstream& stream )
 
 
       if ( version >= 2 ) {
-         for ( int x = 0; x < 4; x++ )
-            for ( int y = 0; y < 6; y++ )
-                destruction_objects[x][y] = stream.readInt( );
+         if ( version <= 11 ) {
+            for ( int x = 0; x < 4; x++ )
+               for ( int y = 0; y < 6; y++ ) {
+                  int id = stream.readInt();
+                  if ( id > 0 )
+                     destructionObjects.insert( make_pair(LocalCoordinate(x,y), id));
+               }
+         }
       } else {
          for ( int w = 0; w < 9; w++ )
-             stream.readInt( );     // dummy
-
-         for ( int x = 0; x < 4; x++ )
-            for ( int y = 0; y < 6; y++ )
-                destruction_objects[x][y] = 0;
+             stream.readInt( ); 
+         destructionObjects.clear();
       }
 
       if ( __loadName )
@@ -353,6 +354,17 @@ void BuildingType :: read ( tnstream& stream )
 
       if ( version >= 11 )
          buildingNotRemovable = stream.readInt();
+      
+      if ( version >= 12 ) {
+         int num = stream.readInt();
+         for ( int i = 0; i < num; ++i ) {
+            int x = stream.readInt();
+            int y = stream.readInt();
+            int id = stream.readInt();
+            destructionObjects.insert( make_pair( LocalCoordinate(x,y),id));
+         }
+      }
+      
    } else
       throw tinvalidversion  ( stream.getLocation(), building_version, version );
 }
@@ -431,10 +443,6 @@ void BuildingType :: write ( tnstream& stream ) const
 
    stream.writeInt ( 0 );
 
-   for ( int x = 0; x < 4; x++ )
-      for ( int y = 0; y < 6; y++ )
-          stream.writeInt ( destruction_objects[x][y] );
-
    if ( !name.empty() )
       stream.writeString ( name );
 
@@ -455,6 +463,14 @@ void BuildingType :: write ( tnstream& stream ) const
 
     stream.writeString ( infotext );
     stream.writeInt( buildingNotRemovable );
+    
+    stream.writeInt( destructionObjects.size());
+    for ( DestructionObjects::const_iterator i = destructionObjects.begin(); i != destructionObjects.end(); ++i) {
+       stream.writeInt( i->first.x);
+       stream.writeInt( i->first.y);
+       stream.writeInt( i->second);
+    }
+    
 }
 
 
@@ -610,17 +626,26 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          pc.closeBracket();
       }
 
-      bool rubble = false;
-      for ( int i = 0; i < 4; i++ )
-         for ( int j = 0; j < 6; j++ )
-            if ( destruction_objects[i][j] > 0 )
-               rubble = true;
-
+      bool rubble = destructionObjects.size() > 0;
       pc.addBool ( "RubbleObjects", rubble );
       if ( rubble ) {
+         if ( pc.isReading() ) 
+            destructionObjects.clear();
+         
          pc.openBracket ( "Rubble");
-         for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ )
-            pc.addInteger ( i->toString(), destruction_objects[i->x][i->y] );
+         for ( Fields::iterator i = fields.begin(); i != fields.end(); i++ ) {
+            vector<int> ids;
+            typedef DestructionObjects::const_iterator J;
+            pair<J,J> b = destructionObjects.equal_range(*i);
+            for ( J j = b.first; j != b.second; ++j)
+               ids.push_back(j->second);
+            pc.addIntegerArray ( i->toString(), ids );
+            
+            if ( pc.isReading() ) {
+               for ( vector<int>::iterator j = ids.begin(); j != ids.end(); ++j )
+                  destructionObjects.insert(make_pair(*i, *j));
+            }
+         }
          pc.closeBracket();
       }
 

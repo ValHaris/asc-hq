@@ -98,11 +98,13 @@ extern const char*  cbuildingfunctions[];
               LocalCoordinate ( const ASCString& s );
               bool valid() const  { return x>=0 && y>=0; };
               ASCString toString ( ) const;
+              bool operator<(const LocalCoordinate& a) const { return y < a.y || (y == a.y && x < a.x);};
         };
 
 
+        typedef multimap<LocalCoordinate,int> DestructionObjects;
         //! when the building is destroyed, it can leave rubble objects behind. If set to 0 no objects are being created
-        int          destruction_objects [4][6];
+        DestructionObjects destructionObjects;
 
         LocalCoordinate entry;
 

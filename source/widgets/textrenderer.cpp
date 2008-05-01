@@ -513,6 +513,7 @@ bool ViewFormattedText :: eventKeyDown(const SDL_KeyboardEvent* key)
    switch ( key->keysym.sym ) {
       case SDLK_ESCAPE:
       case SDLK_RETURN:
+      case SDLK_KP_ENTER:
       case SDLK_SPACE:
          QuitModal();
          return true;

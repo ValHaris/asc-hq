@@ -169,6 +169,14 @@ class AdminGameWindow : public ASC_PG_Dialog {
             delete *gamemap->player[player].buildingList.begin();
 
       }
+
+      void neutralBuildings( int player )
+      {
+         while ( gamemap->player[player].buildingList.begin() != gamemap->player[player].buildingList.end() )
+            gamemap->player[player].buildingList.front()->convert(8);
+
+      }
+      
       
       void deleteProduction( int player )
       {
@@ -235,6 +243,9 @@ class AdminGameWindow : public ASC_PG_Dialog {
          if ( playerSetup->Apply() ) {
             gamemap->network = NULL;
 
+            if ( gamemap->_resourcemode == 1)
+               warning("This map uses BI resource mode. Saving as map will delete all global resources of all players");
+               
             ASCString name = selectFile( mapextension, false);
             if ( !name.empty() ) {
                StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + name );
@@ -300,6 +311,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "delete production", PlayerActionFunctor( this, &AdminGameWindow::deleteProduction));
          new ActionItem( actionlistbox, 20, "delete resources + ammo", PlayerActionFunctor( this, &AdminGameWindow::deleteResources));
          new ActionItem( actionlistbox, 20, "delete mines", PlayerActionFunctor( this, &AdminGameWindow::deleteMines));
+         new ActionItem( actionlistbox, 20, "make buildings neutral", PlayerActionFunctor( this, &AdminGameWindow::neutralBuildings));
          new ActionItem( actionlistbox, 20, "enter new password", PlayerActionFunctor( this, &AdminGameWindow::newPassword));
          new ActionItem( actionlistbox, 20, "edit email", PlayerActionFunctor( this, &AdminGameWindow::newEmail));
          new ActionItem( actionlistbox, 20, "export technology", PlayerActionFunctor( this, &AdminGameWindow::exportTechs));

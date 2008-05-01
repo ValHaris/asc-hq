@@ -133,7 +133,7 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       return true;
    }
 
-   if ( key->keysym.sym == SDLK_RETURN ) {
+   if ( key->keysym.sym == SDLK_RETURN || key->keysym.sym == SDLK_KP_ENTER) {
       if ( namesConstrained ) {
          if ( selectedItem && (nameMatch( selectedItem, nameSearch->GetText()) || nameSearch->GetText().length() == 0) ) {
             itemSelected( selectedItem, false );

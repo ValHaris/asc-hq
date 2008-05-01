@@ -665,6 +665,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
    if ( !mod  ) {
       switch ( key->keysym.sym ) {
+         case SDLK_KP_ENTER:
          case SDLK_RETURN:
          case SDLK_SPACE: execaction_ev( act_primaryAction );
                         return true;

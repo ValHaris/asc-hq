@@ -497,6 +497,7 @@ bool PG_MultiLineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 				}
 				return true;
 
+			case SDLK_KP_ENTER:
 			case SDLK_RETURN:
 				c = '\n';
 				InsertChar(c);

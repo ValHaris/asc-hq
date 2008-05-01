@@ -145,6 +145,9 @@ int mapeditorMainThread ( void* _mapname )
    catch ( tfileerror err ) {
       displaymessage ( " error loading file %s ",2, err.getFileName().c_str() );
    } /* end catch */
+   catch ( ASCmsgException err ) {
+      displaymessage ( "Error loading file %s ",2, err.getMessage().c_str() );
+   }
 
    activefontsettings.font = schriften.arial8;
    activefontsettings.color =lightblue ;

@@ -161,7 +161,7 @@ class CargoEditor : public PG_Window {
             if ( key->keysym.sym == SDLK_ESCAPE )
                return cancel();
                
-            if ( key->keysym.sym == SDLK_RETURN )
+            if ( key->keysym.sym == SDLK_RETURN || key->keysym.sym == SDLK_KP_ENTER )
                return ok();
                
             if ( key->keysym.sym == SDLK_c )

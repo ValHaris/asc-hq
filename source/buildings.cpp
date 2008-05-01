@@ -313,9 +313,13 @@ int  Building :: unchainbuildingfromfield ( void )
                fld->bdt &= t;
 
                #ifdef sgmain
-               if ( gamemap->state != GameMap::Destruction )
-                   if ( typ->destruction_objects[i][j] )
-                      fld->addobject ( actmap->getobjecttype_byid ( typ->destruction_objects[i][j] ), -1, true );
+               if ( gamemap->state != GameMap::Destruction ) {
+                  typedef BuildingType::DestructionObjects::const_iterator J;
+                  pair<J,J> b = typ->destructionObjects.equal_range(BuildingType::LocalCoordinate(i,j));
+                  for ( J o = b.first; o != b.second; ++o)
+                     fld->addobject ( actmap->getobjecttype_byid ( o->second ), -1, true );
+                
+               }
                #endif
 
             }

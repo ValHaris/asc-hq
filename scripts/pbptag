@@ -1,11 +1,11 @@
 #!/bin/sh
 set -e
-set username=mbickel
+set cvsusername=mbickel
 set olddir=`pwd`
 
 mkdir /tmp/pbptag
 cd /tmp/pbptag
-cvs -d :pserver:$username@cvs.seul.org:/home/cvspsrv/cvsroot co -r PBP games/asc 
+cvs -d :pserver:$cvsusername@cvs.seul.org:/home/cvspsrv/cvsroot co -r PBP games/asc 
 cd games/asc
 cvs tag -d PBP
 cd $olddir
