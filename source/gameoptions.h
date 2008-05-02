@@ -222,6 +222,8 @@ class CGameOptions
          ASCString username;
       } pbemServer;
 
+      ASCString mailProgram;
+      
       ASCString graphicsDriver;
 
       ASCString startupMap;

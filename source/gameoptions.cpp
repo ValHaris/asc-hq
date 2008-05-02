@@ -220,6 +220,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
 
    pc.addInteger( "PanelColumns", panelColumns, 2 );
      
+   pc.addString("mailProgram", mailProgram, "");
      
 }
 

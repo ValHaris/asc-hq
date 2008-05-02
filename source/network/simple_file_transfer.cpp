@@ -37,6 +37,8 @@
 #include "../dialog.h"
 #include "simple_file_transfer.h"
 #include "../dialogs/fileselector.h"
+#include "../gameoptions.h"
+#include "../basestrm.h"
 
 void FileTransfer::readChildData ( tnstream& stream )
 {
@@ -96,10 +98,41 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
       if ( nextPlayer < 0 )
          nextPlayer = 0;
       
-      ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
-      if ( !map->player[nextPlayer].email.empty() )
-         msg += " (" + map->player[nextPlayer].email + ")";
-      infoMessage( msg );
+      if ( CGameOptions::Instance()->mailProgram.empty() ) {
+         
+         ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
+         if ( !map->player[nextPlayer].email.empty() )
+            msg += " (" + map->player[nextPlayer].email + ")";
+         infoMessage( msg );
+      } else {
+         ASCString fullFile = ::constructFileName(0, "", fname);
+         ASCString command = "\"" + CGameOptions::Instance()->mailProgram + "\"  \"" + fullFile +  "\" ";
+         if ( map->player[nextPlayer].email.empty() )
+            command += "unknown";
+         else
+            command += map->player[nextPlayer].email;
+         
+         int sv = -1;
+         for ( int i = 0; i < map->getPlayerCount(); ++i)
+            if ( map->getPlayer(i).stat == Player::supervisor ) {
+               sv = i;
+               break;
+            }
+           
+         if ( sv != -1 && sv != nextPlayer )
+            command += " " + map->player[sv].email;
+         
+         StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "Executing external mailer:\n" + command );
+         
+         int res = system(command.c_str());
+         if (res != 0 ) {
+            smw.close();
+            errorMessage("Program failed with exit code " + ASCString::toString(res));
+         } else {
+            smw.close();
+            infoMessage( "Mail submitted successfully" );
+         }
+      }
    } catch ( tfileerror ) {
       errorMessage ( "error writing file " + filename );
    }
