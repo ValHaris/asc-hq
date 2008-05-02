@@ -168,7 +168,7 @@ class ColorTransform_PlayerTrueColHSV
       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
       int player;
    protected:
-      ColorTransform_PlayerTrueColHSV() : refColor(0),refr(0),refg(0),refb(0)
+      ColorTransform_PlayerTrueColHSV() : player(0)
       {}
       ;
 
@@ -179,7 +179,7 @@ class ColorTransform_PlayerTrueColHSV
          int b = (col ) & 0xff;
 
          DI_Color d = colorSwitch.switchC( player,r,g,b);
-         return (d.r << 16) + (d.g << 8) + d.b ;
+         return (d.r << 16) + (d.g << 8) + d.b  + (col & 0xff000000);
 
       };
 

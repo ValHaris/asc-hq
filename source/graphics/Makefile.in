@@ -45,7 +45,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libgraphics_la_DEPENDENCIES =
 am_libgraphics_la_OBJECTS = surface.lo blitter.lo drawing.lo \
-	surface2png.lo
+	surface2png.lo colorizer.lo
 libgraphics_la_OBJECTS = $(am_libgraphics_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -221,7 +221,7 @@ top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ 
 noinst_LTLIBRARIES = libgraphics.la
-libgraphics_la_SOURCES = surface.cpp blitter.cpp drawing.cpp surface2png.cpp
+libgraphics_la_SOURCES = surface.cpp blitter.cpp drawing.cpp surface2png.cpp colorizer.cpp
 libgraphics_la_LIBADD = @SDL_LIBS@ -lpng -lz
 EXTRA_DIST = $(srcdir)/*.h  
 all: all-am
@@ -276,6 +276,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/blitter.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/colorizer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/drawing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/surface2png.Plo@am__quote@
