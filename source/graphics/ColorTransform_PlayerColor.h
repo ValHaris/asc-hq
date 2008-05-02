@@ -24,7 +24,7 @@
 
 
 #include "../playercolor.h"
-
+#include "colorizer.h"
 
 template<int pixelsize>
 class ColorTransform_PlayerCol
@@ -116,6 +116,7 @@ class ColorTransform_PlayerTrueCol
          int r = (col >> 16) & 0xff;
          int g = (col >> 8) & 0xff;
          int b = (col ) & 0xff;
+
          if ( g==0 && b==0) {
             return ((refr * r / 256) << 16) + ((refg * r / 256) << 8) + (refb * r / 256) + (col & 0xff000000);
          } else
@@ -161,12 +162,49 @@ class ColorTransform_PlayerTrueCol
       };
 };
 
+template<int pixelsize>
+class ColorTransform_PlayerTrueColHSV
+{
+      typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
+      int player;
+   protected:
+      ColorTransform_PlayerTrueColHSV() : refColor(0),refr(0),refg(0),refb(0)
+      {}
+      ;
+
+      PixelType transform( PixelType col)
+      {
+         int r = (col >> 16) & 0xff;
+         int g = (col >> 8) & 0xff;
+         int b = (col ) & 0xff;
+
+         DI_Color d = colorSwitch.switchC( player,r,g,b);
+         return (d.r << 16) + (d.g << 8) + d.b ;
+
+      };
+
+
+   public:
+      ColorTransform_PlayerTrueColHSV( int playerNum )  : player ( playerNum )
+      {
+      };
+      ColorTransform_PlayerTrueColHSV ( NullParamType npt ) : player(0)
+      {};
+
+      void init( const Surface& src )
+      {
+      }
+
+};
+
+
+
 
   template<>
-  class ColorTransform_PlayerCol<4> : public ColorTransform_PlayerTrueCol<4> {
+  class ColorTransform_PlayerCol<4> : public ColorTransform_PlayerTrueColHSV<4> {
      
      public:
-        ColorTransform_PlayerCol( const PlayerColor& player ) : ColorTransform_PlayerTrueCol<4>( player.getColor() )
+        ColorTransform_PlayerCol( const PlayerColor& player ) : ColorTransform_PlayerTrueColHSV<4>( player.getNum() )
         {
         };
 

@@ -494,6 +494,9 @@
 					RelativePath="..\..\..\graphics\blitter.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\graphics\colorizer.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\graphics\drawing.cpp">
 				</File>
 				<File

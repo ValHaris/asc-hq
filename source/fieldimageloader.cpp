@@ -91,13 +91,14 @@ bool imageEmpty( const Surface&  s )
       for ( int x = 0; x < s.w(); ++x ) {
          if(  c[3] != Surface::transparent )
             allTransparent  = false;
-         else {
-            int* i = (int*) c;
-            if ( (*i & 0xffffff) != 0xffffff )
-               allWhite = false;
-         }
+
+         int* i = (int*) c;
+         if ( (*i & 0xffffff) != 0xffffff )
+            allWhite = false;
+         
+         c += 4;
       }
-      if ( !allWhite && !!allTransparent )
+      if ( !allWhite && !allTransparent )
          return false;
    }
    return allWhite || allTransparent;
@@ -156,7 +157,7 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
             s2.ColorKey2AlphaChannel();
          
          s2.detectColorKey();
-         if ( imageEmpty(s2))
+         if ( depth != 32 || imageEmpty(s2))
             images.push_back( Surface() );
          else
             images.push_back ( s2 );

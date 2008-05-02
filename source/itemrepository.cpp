@@ -183,7 +183,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
-const int cacheVersion = 26;
+const int cacheVersion = 27;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;
