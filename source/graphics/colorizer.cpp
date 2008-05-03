@@ -3,7 +3,7 @@
 
 #include "colorizer.h"
 
-const int ColorSwitch::playerAngles[9] = { 0, 35, 67.5, 120, 170, 225, 270, 320, 0 };
+const int ColorSwitch::playerAngles[9] = { 0, 35, 67, 120, 170, 225, 270, 320, 0 };
 
 const bool ColorSwitch::sat[9] = { true, true, true, true, true, true, true, true, false };
    
