@@ -3,9 +3,11 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+03.05.2008 (GAMER)
+-Building Pio, Stealth
+__________________
 19.04.2008 (GAMER)
 -Daring +1RF ShipMissile
-
 __________________
 05.04.2008 (GAMER)
 Angleichung Schiffswaffen
