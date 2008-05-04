@@ -5,7 +5,7 @@ ObjectType {
    Armor = 200
    RemovalCost { 
       Energy = 0
-      Material = 2000
+      Material = -2000
       fuel = 200
       Movement = 20
    } RemovalCost

@@ -1,0 +1,5 @@
+Techadapter {
+   ; RDS
+   Name = 15222
+   TechnologiesRequired = 15222
+} TechAdapter

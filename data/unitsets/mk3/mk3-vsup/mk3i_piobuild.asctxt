@@ -13,7 +13,7 @@ VehicleType {
 
    Armor = 250
    Transportation ->* VehicleType.TransTurretMed 
-   Features = construct_vehicles construct_specific_buildings jam_only_onw_field
+   Features = construct_vehicles construct_specific_buildings jam_only_own_field
    Weight = 5
 
    Tank { 

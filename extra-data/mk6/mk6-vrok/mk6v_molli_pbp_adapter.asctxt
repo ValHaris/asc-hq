@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15297
+   ;Bezeichnung der verknüpften Technologie: Molli
+   TechnologiesRequired = 15297
+} TechAdapter

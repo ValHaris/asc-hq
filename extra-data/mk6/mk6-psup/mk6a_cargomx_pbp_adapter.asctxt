@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15102
+   ;Bezeichnung der verknüpften Technologie: Cargo MX
+   TechnologiesRequired = 15102
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; MBC 20
+   Name = 15356
+   TechnologiesRequired = 15356
+} TechAdapter

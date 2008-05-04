@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1488
+   ;Bezeichnung der verknüpften Technologie: Cluster
+   TechnologiesRequired = 1488
+} TechAdapter

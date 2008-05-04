@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15246
+   ;Bezeichnung der verknüpften Technologie: Global
+   TechnologiesRequired = 15246
+} TechAdapter

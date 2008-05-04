@@ -5,7 +5,7 @@ VehicleType {
    ID = 15340
    GuideSortHelp = 340 0 0 0 6 0 0 0 0 0
 
-   Description = Vehicle Jump Box
+   Description = Invasion Jump Box
    Infotext = []
    picture = mk6b_box_i.pcx
 ;   WreckageObject = 14235

@@ -2,6 +2,24 @@ MK5 Outsider
 GAMER
 
 __________________
+03.05.2008 (GAMER)
+-MovementSound: Hoover, Ninja
+Neu: 
+-Shiphunter
+__________________
+26.04.2008 (GAMER)
+-MovemendSound: Summse, Stachel, Lastesel, Hoover
+Neu:
+-Subhunter (Schnellboot)
+__________________
+13.04.2008 (GAMER)
+-Mechanic baut Wachturm
+-MJu, Gewicht 80
+NEu:
+-Accelerator (Wig)
+-Cluster (Wig)
+-Aracoa (Wig)
+__________________
 05.04.2008 (GAMER)
 -MUCM MAM
 -Umbau Wachtum

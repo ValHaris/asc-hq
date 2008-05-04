@@ -12,6 +12,21 @@ VehicleType {
    Jumpdrive ->* VehicleType.TeccnolsJump4
    Jumpdrive.consumption.Fuel = 8000
 
+   Transportation {
+      EntranceSystemNum = 3
+      EntranceSystem2 {
+        Mode = In out
+        UnitHeightAbs = medium_level_flight
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight
+        MoveCost = 40 
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+      } EntranceSystem2
+   } Transportation 
+
+
    Armor -= 300
    view = 0
 

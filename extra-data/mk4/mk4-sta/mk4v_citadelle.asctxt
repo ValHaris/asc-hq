@@ -42,7 +42,6 @@ VehicleType {
       Weapon2 ->* VehicleType.SAMH 
       Weapon2.MaxRange = 50
       Weapon2.Ammo = 8
-      Weapon2.Punch@MaxRange = 65
       Weapon2.ReactionFireShots = 1
 
       Weapon3 ->* VehicleType.Ship_MG 

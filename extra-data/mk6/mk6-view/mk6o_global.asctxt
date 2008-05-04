@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = GLOBAL
+   ID = 15246
+   parent = 246
+
+   Description = Comm. Satellite
+   Infotext = []
+   Picture = mk6o_global.pcx
+;   InfoImage = mk1o_vast.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Features += sonar
+   Armor += 100
+   View += 10
+   Movement -= 0 0 0 0 0 0 0 10
+} VehicleType

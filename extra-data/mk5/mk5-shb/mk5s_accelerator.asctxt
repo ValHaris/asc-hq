@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = ACCELERATOR
+   ID = 1487
+   parent = 368
+   
+   Description = WIG plane
+   Infotext = []
+   picture = mk5s_accelerator.pcx
+   InfoImage = mk5s_accelerator.jpg
+   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+
+   Movement += 0 0 0 20 0 0 0 0
+   Weapons { 
+      Initiative = 30
+      Number = 1
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 30
+      Weapon0.MinRange = 10
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+   } Weapons
+} VehicleType

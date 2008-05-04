@@ -1,12 +1,40 @@
 History MK6 teccnols unit set
 
 __________________
+-Jumpsockel, + beacon
+-RDS Tank bugfix
+Neu:
+-Devo R (Radarpanzer)
+-Global (Radar Sat)
+__________________
+26.04.2008 (GAMER)
+Neu:
+-RDS (multi defence system)
+-Innocence Kreuzer-Air-Bodenkampf
+-JumpTurret (Sockel incl. Leuchtfeuer)
+
+__________________
+13.04.2008 (GAMER)
+-Box 6 namen korrigiert
+-Carrier Eingangsystem erweitert
+-Box 4+6 update Jumpdrive
+-Kleine Fabrik bugfix
+-MBF Bauoptionen erweitert
+-Tanker, ServiceAir
+Neu:
+-Molli (medium rocket tank)
+-Suliban (fliegender Zerstörer)
+-Cargo MX (Transportflieger)
+-MBC 10 (Kreuzer)
+-MBC 20 (Großkreuzer)
+-Cilla SV  (baufahrzeug)
+__________________
 05.04.2008 (GAMER)
 Carrier Move Bugfix
 Obj.beacon=JumpTerminal
 Neu:
--Defkind
--Terminal
+-Defkind (air defend plane)
+-Terminal (central jump piont)
 
 __________________
 25.03.2008 (GAMER)

@@ -14,6 +14,7 @@ VehicleType {
    Height = ground_level low_level_flight medium_level_flight high_level_flight
    Tank.fuel += 1000
    Movement += 0 0 0 0 10 10 170 0 
+   MovementSound = aircraft_l_g.ogg
 
    Weapons { 
 

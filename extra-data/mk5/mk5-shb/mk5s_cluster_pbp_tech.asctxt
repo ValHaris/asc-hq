@@ -1,0 +1,10 @@
+technology {
+   Name = Cluster
+   infotext = Forschungsprojekt abgeschlossen! Monster WIG verfuegbar!
+   id = 1488
+   RelatedUnitID = 1488
+   parent = 1499
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 1499,100004,100104,100310,100312 
+} Technology

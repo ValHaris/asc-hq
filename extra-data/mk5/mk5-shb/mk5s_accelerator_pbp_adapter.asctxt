@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1487
+   ;Bezeichnung der verknüpften Technologie: ACCELERATOR
+   TechnologiesRequired = 1487
+} TechAdapter

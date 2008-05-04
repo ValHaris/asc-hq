@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = RDS
+   ID = 15222
+   parent = 222 15000
+
+   Description = Raketenstellung
+   Infotext = []
+   Picture = mk6b_rds.pcx
+   
+   Jumpdrive ->* VehicleType.TeccnolsJump2
+   View = 0
+   
+   Armor -= 200
+   Weight = 40
+   Features += ManualSelfDestruct
+   
+   Tank.Fuel = 13000
+   Tank.Material = 2000
+
+   Weapons { 
+      Number = 3
+      Weapon0.ReactionFireShots = 1
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.MaxRange = 60
+      Weapon1.Punch@MaxRange = 105
+      Weapon1.Punch@MinRange = 105
+      Weapon1.Reactionfireshots = 1
+      Weapon2 ->* VehicleType.TeccEMP2
+      Weapon2.MaxRange = 20
+      Weapon2.Reactionfireshots = 1
+      Weapon2.Punch@MaxRange = 140
+      Weapon2.Punch@MinRange = 160
+   } Weapons
+} VehicleType

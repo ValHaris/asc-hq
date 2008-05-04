@@ -6,9 +6,12 @@ VehicleType {
    picture = mk5s_mju.pcx
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
 
+   Transportation ->* VehicleType.TransSubTrooper 
+
    Armor -= 500
-   Weight = 650
+   Weight = 80
    Category = light_ship
+   Movement -= 11 11 20 0 0 0 0 0 
 
    Weapons { 
       Initiative = 0

@@ -1,0 +1,10 @@
+technology {
+   Name = MBC 20
+   infotext = 
+   id = 15356
+   RelatedUnitID = 15356
+   parent = 15000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 15000,100004,100103,100211,100305 
+} Technology

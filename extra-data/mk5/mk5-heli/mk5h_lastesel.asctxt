@@ -8,6 +8,7 @@ VehicleType {
    
    Armor = 300
    Features += ExternalFuelTransfer
+   Weight = 30
 
    Transportation ->* VehicleType.TransTurretBig 
    Transportation.CategoriesNOT = rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
@@ -25,8 +26,8 @@ VehicleType {
       fuel = 3000
    } Tank
    FuelConsumption = 20
+   MovementSound = heli_h_s.ogg
 
-   Weight = 30
    Weapons { 
       Initiative = 0
       Number = 1

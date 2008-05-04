@@ -52,7 +52,7 @@ Geschwindigkeit.
       Weapon0.MaxRange = 30
       Weapon0.Ammo = 8
       Weapon0.Punch@MaxRange = 72
-      Weapon0.Punch@MinRange = 75
+      Weapon0.Punch@MinRange = 72
 
       Weapon1 ->* VehicleType.medBomb 
       Weapon1.Ammo = 2

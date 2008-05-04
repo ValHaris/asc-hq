@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = DEVO R
+   ID = 15242
+   parent = 291
+
+   Description = radar tank
+   Infotext = []
+   Picture = MK6v_devor.pcx
+;   WreckageObject = 416
+   GuideSortHelp = 242 0 0 0 6 0 0 0 0 0
+
+   View = 80
+
+   Weapons {
+     Number = 0
+   } Weapons 
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = ACCELERATOR
+   infotext = Forschungsprojekt abgeschlossen! Accelerator verfuegbar!
+   id = 1487
+   RelatedUnitID = 1487
+   parent = 1499
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1499,100004,100103,100310,100312
+} Technology

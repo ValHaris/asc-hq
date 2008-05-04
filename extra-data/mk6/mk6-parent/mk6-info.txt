@@ -14,6 +14,7 @@ ID 15005 lab south
 Objekte
 ID 15001 Leuchtfeuer (permanent)
 ID 15002 JumpField
+ID 15003 Jumpturret
 
 --Infantrie--
 *not available*
@@ -38,6 +39,7 @@ ID 15293 Meta TE
 --View--
 ID 15241 Evi
 ID 15243 Signal
+ID 15242 Devo R
 
 --Jamming--
 ID 15306 Shadow
@@ -50,17 +52,21 @@ ID 15256 GB 137
 
 --Rocket Systems--
 ID 15296 Small
+ID 15297 Molli
 ID 15303 Jumps
 ID 15304 Debugg
 
 --turrets & bunkers--
 
 --SupportVehice--
+ID 15103 Cilla SV
 
 --Orbital--
+15246 Global
 
 --Aircraft--
 ID 15100 Defkind
+ID 15101 Suliban
 ID 15271 Asus
 ID 15270 Deltafighter
 ID 15276 Deltabomber
@@ -68,6 +74,7 @@ ID 15xxx Delta
 ID 15xxx Doomsday
 
 Aircraft Support
+ID 15102 Cargo MX
 ID 15247 Viewer
 ID 15325 Tanker
 
@@ -76,6 +83,8 @@ ID 15325 Tanker
 --Hoovercrafts--
 
 --Battleships--
+ID 15355 MBC 10
+ID 15355 MBC 20
 
 --Supportships--
 

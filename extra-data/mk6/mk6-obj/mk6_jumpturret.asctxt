@@ -1,0 +1,50 @@
+ObjectType { 
+   name = JumpTurret
+   ID = 15003
+   parent = 44
+
+   Weather = dry much_snow
+   LinkableObjects = 
+   Armor = 400
+   
+   AttackBonus_abs = -1
+   AttackBonus_plus = 1
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 1
+   ViewBonus_plus = 2
+   Jamming_abs = -1
+   Jamming_plus = -2
+   ConstructionCost { 
+      Energy = 0
+      Material = 1500
+      fuel = 800
+      Movement = 30
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -800
+      fuel = 300
+      Movement = 25
+   } RemovalCost
+
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand very_shallow_water  
+      terrain_all = 
+      terrain_not =  Forest Railroad Ditch bridge
+      terrain_kill = Water Deep_water River lava
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Ditch Morass Installation Frozen_water water deep_water
+   TerrainProperties_Add = Turret_foundation beacon
+
+   dry { 
+      UseGFXpics = false
+      picture = mk6_jumpturret.png 1
+   } dry
+   much_Snow { 
+      UseGFXpics = false
+      picture = mk6_jumpturret.png 1
+      GraphicOperations = Snow
+   } much_Snow
+
+} ObjectType

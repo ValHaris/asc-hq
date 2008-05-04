@@ -1,0 +1,10 @@
+technology {
+   Name = Suliban
+   infotext = Forschungsprojekt abgeschlossen! Suliban verfuegbar!
+   id = 15101
+   RelatedUnitID = 15101
+   parent = 15000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 15000,100003,100103,100205,100206,100313
+} Technology

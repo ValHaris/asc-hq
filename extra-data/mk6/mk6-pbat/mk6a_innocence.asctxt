@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = INNOCENCE
+   ID = 15104
+   parent = 340 15000
+
+   Picture = mk6a_innocence.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Category = heavy_aircraft
+   Weight = 400
+   Armor -= 10
+   View = 50
+   jamming = 0
+
+   Tank.Material = 2000
+   Tank.Fuel = 12000
+   movement += 0 0 0 0 10 20 10 0
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.AAMH
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+      Weapon0.ReactionFireShots = 1
+      Weapon1 ->* VehicleType.AGLS
+      Weapon1.MaxRange = 40
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 90
+      Weapon1.ReactionFireShots = 1
+      Weapon2 ->* Vehicletype.Plasmabomb
+      Weapon2.Punch@MaxRange = 120
+      Weapon2.Punch@MinRange = 140
+      Weapon2.ReactionFireShots = 0
+      Weapon3 ->* VehicleType.AGLS
+      Weapon3.Punch@MaxRange = 95
+      Weapon3.Punch@MinRange = 100
+      Weapon1.ReactionFireShots = 1
+   } Weapons
+   
+} VehicleType

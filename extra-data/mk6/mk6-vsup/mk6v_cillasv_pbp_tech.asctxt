@@ -1,0 +1,10 @@
+technology {
+   Name = Cilla SV
+   infotext = Forschungsprojekt abgeschlossen! Cilla SV verfuegbar!
+   id = 15103
+   RelatedUnitID = 15103
+   parent = 15000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 15000,100002 
+} Technology

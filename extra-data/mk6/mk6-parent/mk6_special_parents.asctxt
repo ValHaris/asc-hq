@@ -62,6 +62,15 @@ VehicleType {
       } WeaponEffectiveness
    } TeccEMP
 
+   TeccEMP2 ->* vehicleType.TeccEMP
+   TeccEMP2.Name = EMP II 
+   TeccEMP2.targets = submerged floating ground_level low_level_flight medium_level_flight
+   TeccEMP2.shotFrom = submerged floating ground_level
+   TeccEMP2.HitAccuracy.d1 = 80
+   TeccEMP2.HitAccuracy.0 = 100
+   TeccEMP2.HitAccuracy.u1 = 80
+   TeccEMP2.HitAccuracy.u2 = 60
+
    TeccEMP2Air ->* vehicleType.TeccEMP
    TeccEMP2Air.Name = EMP V 
    TeccEMP2Air.targets =  low_level_flight medium_level_flight
@@ -80,18 +89,18 @@ VehicleType {
    TeccEMPAir.HitAccuracy.0 = 100
    TeccEMPAir.HitAccuracy.u1 = 90
 
-Plasmabomb { 
+   AGLS { 
          Type = Laser shootable 
-         targets =   floating ground_level
-         shotFrom = low_level_flight medium_level_flight high_level_flight
-         MaxRange = 20
+         targets = floating ground_level
+         shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
+         MaxRange = 30
          MinRange = 10
-         Ammo = 1
-	      LaserRechargeRate = 1
+         Ammo = 2
+	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
-            material = 200
-            fuel = 0
+            material = 100
+            fuel = 50
          } LaserRechargeCost
          HitAccuracy { 
             d6 = 0
@@ -101,6 +110,113 @@ Plasmabomb {
             d2 = 80
             d1 = 100
             0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } AGLS
+
+   GGLS { 
+         Type = Laser shootable 
+         targets = floating ground_level
+         shotFrom = floating ground_level
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 1
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 50
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } GGLS
+
+
+Plasmabomb { 
+         Type = Laser shootable 
+         targets =   floating ground_level
+         shotFrom = low_level_flight medium_level_flight high_level_flight
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 1
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 200
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 60
+            d2 = 80
+            d1 = 100
+            0 = 0
             u1 = 0
             u2 = 0
             u3 = 0
@@ -194,11 +310,11 @@ LRHEPT {
          Type = Laser shootable 
          targets =   floating ground_level
          shotFrom = ground_level floating
-	 		ReactionFireShots = 0
+	 ReactionFireShots = 0
          MaxRange = 170
          MinRange = 60
          Ammo = 1
-	      LaserRechargeRate = 1
+	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
             material = 2000
@@ -254,7 +370,7 @@ LRHEPT {
       } consumption
       terrain_any = road runway lowland hard_sand soft_sand 
       terrain_all = beacon
-      terrain_not = morass swamp forest small_rocks large_rocks bridge
+      terrain_not = morass swamp forest small_rocks large_rocks bridge railroad
       terrain_kill = 
    } TeccnolsJump1
 
@@ -268,7 +384,7 @@ LRHEPT {
       } consumption
       terrain_any = turret_foundation 
       terrain_all = beacon
-      terrain_not = forest small_rocks large_rocks bridge
+      terrain_not = forest small_rocks large_rocks bridge railroad
       terrain_kill = 
    } TeccnolsJump2
 
@@ -280,9 +396,9 @@ LRHEPT {
          Material = 2000
          Fuel = 10000
       } consumption
-      terrain_any = lowland hard_sand soft_sand 
+      terrain_any = road runway lowland hard_sand soft_sand 
       terrain_all = beacon
-      terrain_not = forest small_rocks large_rocks bridge
+      terrain_not = forest small_rocks large_rocks bridge railroad
       terrain_kill = 
    } TeccnolsJump3
 

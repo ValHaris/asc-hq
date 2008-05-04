@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = CILLA SV
+   ID = 15103
+   parent = 336
+   
+   Description = construction vehicle
+   Infotext = [The Construction Vehicle is necessary for the construction of
+              infrastructure such as roads, ditches, bridges and the like.
+              A very important unit if you aspire a well defended, smoothly
+              operating base.]
+   picture = mk6v_cillaSV.pcx
+;   WreckageObject = 426
+   GuideSortHelp = 556 0 0 0 6 0 0 0 0 0
+
+   Transportation ->* VehicleType.TransTurretMed 
+   Armor += 100
+   Features += construct_vehicles construct_specific_buildings NoProductionCustomization
+
+   Tank { 
+      Material = 5000
+      fuel = 5000
+   } Tank
+   TerrainAccess ->* VehicleType.offroad 
+
+   Construction {
+      Vehicles = 15243 
+      Objects = 1 3 9 10 30 45 1000 998 997 995 2098 44 2099 15003
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 11 12 13 14
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

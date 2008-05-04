@@ -44,8 +44,8 @@ VehicleType {
       Weapon2.MaxRange = 70
       Weapon2.MinRange = 30
       Weapon2.Ammo = 6
-      Weapon2.Punch@MaxRange = 90
-      Weapon2.Punch@MinRange = 96
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 95
       Weapon2.ReactionFireShots = 0
 
       Weapon3 ->* VehicleType.SAM 

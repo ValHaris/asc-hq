@@ -1,0 +1,10 @@
+technology {
+   Name = Cargo MX
+   infotext = Forschungsprojekt abgeschlossen! Cargo MX verfuegbar!
+   id = 15102
+   RelatedUnitID = 15102
+   parent = 15000
+   researchpoints *= 8
+   techlevel = 2
+   TechnologiesRequired = 15000,100003,100102 
+} Technology

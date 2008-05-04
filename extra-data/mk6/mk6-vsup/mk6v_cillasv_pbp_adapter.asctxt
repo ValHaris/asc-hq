@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15103
+   ;Bezeichnung der verknüpften Technologie: Cilla SV
+   TechnologiesRequired = 15103
+} TechAdapter

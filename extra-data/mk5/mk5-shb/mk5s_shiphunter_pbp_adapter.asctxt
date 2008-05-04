@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1491
+   ;Bezeichnung der verknüpften Technologie: Ship Hunter
+   TechnologiesRequired = 1491
+} TechAdapter

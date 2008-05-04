@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = ARACOA
+   ID = 1489
+   parent = 368
+   
+   Description = WIG plane
+   Infotext = []
+   picture = mk5s_aracoa.pcx
+;   InfoImage = mk1s_wig.jpg
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Height = floating ground_level low_level_flight
+   Movement += 0 0 0 -10 60 0 0 0 
+   Weapons { 
+      Initiative = 30
+      Number = 1
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 50
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+   } Weapons
+} VehicleType

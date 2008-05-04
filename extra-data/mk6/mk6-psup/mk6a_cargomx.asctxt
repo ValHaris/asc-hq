@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = CARGO MX
+   ID = 15102
+   parent = 340 15000
+
+   Picture = mk6a_cargomx.pcx
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Transportation ->* VehicleType.TransPlane
+
+   Weight = 300
+   View = 40
+   Features = ExternalMaterialTransfer ExternalAmmoTransfer
+
+   Tank.Material = 10000
+   Tank.Fuel = 20000
+   movement += 0 0 0 0 20 20 20 0
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround
+   } Weapons
+   
+} VehicleType

@@ -16,8 +16,9 @@ VehicleType {
 
    Tank.Material = 2000
    Tank.Fuel = 12000
-   movement -= 0 0 0 20 40 40 0 0
+   movement += 0 0 0 -20 -40 -40 140 0
    Terrainaccess ->* VehicleType.heli_terrain
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
 
    WaitForAttack = true
    Weapons { 

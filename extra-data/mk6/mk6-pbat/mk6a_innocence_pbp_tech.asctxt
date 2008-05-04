@@ -1,0 +1,10 @@
+technology {
+   Name = Innocence
+   infotext = 
+   id = 15104
+   RelatedUnitID = 15104
+   parent = 15000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 15000,100003,100104,100205,100206,100313
+} Technology

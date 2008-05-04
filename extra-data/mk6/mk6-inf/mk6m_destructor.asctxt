@@ -20,5 +20,8 @@ VehicleType {
       Weapon0.LaserRechargeCost.Fuel = 600
       Weapon0.LaserRechargeCost.Material = 100
       Weapon1 ->* VehicleType.type_laser
+      Weapon2 ->* VehicleType.GGLS
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 70
    } Weapons
 } VehicleType

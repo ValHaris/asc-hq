@@ -6,6 +6,7 @@ VehicleType {
    Description = Kampfhubschrauber
    picture = MK5h_Summse.pcx
 
+   MovementSound = heli_h_s.ogg
    Weapons { 
       Initiative = 0
       Number = 4

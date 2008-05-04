@@ -21,6 +21,8 @@ VehicleType {
    Category = light_wheeled_vehicle
    Weight = 5
    TerrainAccess ->* VehicleType.mud_wheeled 
+   MovementSound = motorcycle.wav
+
    Weapons { 
       Initiative = 0
       Number = 0

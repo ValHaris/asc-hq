@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15101
+   ;Bezeichnung der verknüpften Technologie: Suliban
+   TechnologiesRequired = 15101
+} TechAdapter

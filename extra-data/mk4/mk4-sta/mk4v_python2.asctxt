@@ -9,10 +9,10 @@ VehicleType {
    Picture = mk4v_python2.png
    wreckageobject = 14030
 
-   Features = leaves_tracks move_after_attack
-   WaitForAttack = true
-   
+   Features = leaves_tracks
    Movement -= 0 0 0 10 0 0 0 0 
+
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 2

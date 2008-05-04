@@ -4,27 +4,30 @@ VehicleType {
    ID = 1486
 
    Description = Verteidigungsturm
-   Infotext = [ Gepanzerter Verteidigungsturm mit Raketen und EMP.]
+   Infotext = [ Gepanzerter Verteidigungsturm mit Raketen und EMP / Tarnanstrich.]
    picture = mk5b_wachturm.pcx
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
    
-   Features += ManualSelfDestruct
+   Features += ManualSelfDestruct jam_only_own_field
    Weight = 6000
    Transportation ->* VehicleType.TransBunkersmall
+   Jamming = 22
 
    Weapons {
       Weapon0 ->* VehicleType.EMP
-      Weapon0.Ammo = 1
+      Weapon0.Ammo = 2
       Weapon0.Punch@MaxRange = 100
       Weapon0.Punch@MinRange = 150
       Weapon0.WeaponEffectiveness.trooper = 0
       Weapon0.LaserRechargeCost.material = 300
       Weapon0.LaserRechargeCost.fuel = 300
+      Weapon0.ReactionFireShots = 1
             
       Weapon2 ->* VehicleType.MSM
       Weapon2.maxRange = 40
       Weapon2.Ammo = 8
       Weapon2.ReactionFireShots = 2
+      Weapon2.WeaponEffectiveness.trooper = 0
    } Weapons
 
 } VehicleType

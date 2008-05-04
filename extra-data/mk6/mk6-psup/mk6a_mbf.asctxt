@@ -18,10 +18,10 @@ VehicleType {
    TerrainAccess ->* VehicleType.hoover_terrain
       
    Construction { 
-      Buildings = 1 2 4-7 10 13-21 23 30-32 15001-15005
+      Buildings = 1 2 4-7 10 13-21 23 30-32 35-37 15001-15005
       Vehicles =  
       Vehiclesinternally =
-      Objects = 44 
+      Objects = 44 2098 2096 2097 996 997 15003
       ObjectsRemovable = 
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 11 13
    } Construction

@@ -110,6 +110,11 @@ ID 1458 Fortress
 ID 1460 LCC
 ID 1481 Buffed
 ID 1485 Flyer
+ID 1487 Accelerator
+ID 1488 Cluster
+ID 1489 Aracoa
+ID 1490 Subhunter
+ID 1491 Harpoon
 
 UBoote
 ID 1420 MU (Mini TransportU-Boot)

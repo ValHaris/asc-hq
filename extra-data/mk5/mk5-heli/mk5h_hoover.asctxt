@@ -27,6 +27,8 @@ VehicleType {
       terrain_not = deep_snow
       terrain_kill = Lava deep_water
    } TerrainAccess
+   MovementSound = jet_pass.ogg
+
    Weapons { 
       Initiative = 0
       Number = 5

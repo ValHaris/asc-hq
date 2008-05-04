@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = MOLLI
+   ID = 15297
+   parent = 297 15000
+
+   Description = rocket tank
+;   Infotext = []
+   Picture = mk6v_molli.pcx
+;   InfoImage = mk1v_hornet.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 200
+   
+   Weapons { 
+      Weapon0.Ammo = 8
+   } Weapons
+} VehicleType

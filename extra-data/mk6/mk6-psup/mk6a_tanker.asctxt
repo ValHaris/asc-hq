@@ -20,7 +20,7 @@ VehicleType {
 
    Weapons { 
       Number = 4
-      Weapon0 ->* VehicleType.ServiceGround
+      Weapon0 ->* VehicleType.ServiceAir
       Weapon1 ->* VehicleType.AmmoTorp
       Weapon1.Ammo = 50
       Weapon2 ->* Vehicletype.AmmoLM

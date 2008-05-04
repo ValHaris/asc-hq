@@ -1,0 +1,10 @@
+technology {
+   Name = Devo R
+   infotext = Forschungsprojekt abgeschlossen! Devo R verfuegbar!
+   id = 15242
+   RelatedUnitID = 15242
+   parent = 15000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 15000,100002,100102,100210
+} Technology

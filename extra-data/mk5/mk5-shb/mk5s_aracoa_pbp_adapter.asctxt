@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1489
+   ;Bezeichnung der verknüpften Technologie: Aracoa
+   TechnologiesRequired = 1489
+} TechAdapter

@@ -3,6 +3,11 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
 Spezifikationen: GAMER
 
 __________________
+26.04.2008 (GAMER)
+-MovementSound: Pirate, Firebird
+-Citadellenwracks bugfix material
+-Python2 kein MAM
+__________________
 05.04.2008 (GAMER)
 Angleichung Schiffswaffen
 __________________

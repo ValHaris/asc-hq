@@ -1,0 +1,10 @@
+technology {
+   Name = Molli
+   infotext = Forschungsprojekt abgeschlossen! Molli verfuegbar!
+   id = 15297
+   RelatedUnitID = 15297
+   parent = 15000
+   researchpoints *= 12
+   techlevel = 3
+   TechnologiesRequired = 15000,100002,100103,100310 
+} Technology

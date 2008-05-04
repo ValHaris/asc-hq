@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15104
+   ;Bezeichnung der verknüpften Technologie: innocence
+   TechnologiesRequired = 15104
+} TechAdapter
