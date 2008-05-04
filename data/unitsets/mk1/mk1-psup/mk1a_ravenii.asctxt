@@ -22,7 +22,7 @@ VehicleType {
       fuel = 6500
    } Tank
    FuelConsumption = 35
-   Movement = 0 0 0 55 130 140 130 0 
+   Movement = 0 0 0 55 130 130 130 0 
    TerrainAccess ->* VehicleType.aircraft_terrain_road 
    MovementSound = aircraft_l_g.ogg
 

@@ -2,10 +2,17 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+04.05.2008 (GAMER)
+-Grafiküberarbeitung: Nightcap, Hawk, Predator, Eagle
+-Movementsound: heavy fighter, medium fighter, mechs, vto, schnellboote, Wigs
+-Weaponsound: Flak, Minigun
+-Raven +10 Movement
+-Raven2 -10 Movement
+
+__________________
 19.04.2008 (GAMER)
 -GASP -1RF SAM
--MovementSound: terror
-
+-MovementSound Anpassungen
 __________________
 13.04.2008 (GAMER)
 -WIG = light_ship, neues Hight Change system

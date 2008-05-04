@@ -12,6 +12,8 @@ VehicleType {
    Weight += 1
    Features += moveduringreactionfire
    Movement -= 0 0 0 10 0 0 0 0 
+   MovementSound = mechstep2.ogg
+
    WaitForAttack = true
    Weapons { 
       Initiative = 0

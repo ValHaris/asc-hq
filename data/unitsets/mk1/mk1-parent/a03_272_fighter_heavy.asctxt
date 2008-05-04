@@ -12,6 +12,8 @@ VehicleType {
    GuideSortHelp = 272 512 600 0 0 0 0 0 0 0
 
    Armor = 400
+   Weight = 105
+
    Height = ground_level low_level_flight medium_level_flight high_level_flight 
    Tank { 
       Energy = 0
@@ -20,7 +22,8 @@ VehicleType {
    } Tank
    FuelConsumption = 28
    Movement = 0 0 0 60 180 200 200 0 
-   Weight = 105
+   MovementSound = aircraft_l_g.ogg
+
    Weapons { 
       Initiative = 0
       Number = 4

@@ -9,6 +9,8 @@ VehicleType {
    GuideSortHelp = 271 512 0 0 0 0 0 0 0 0
 
    Armor = 350
+   Weight = 80
+
    Tank { 
       Energy = 0
       Material = 0
@@ -16,7 +18,8 @@ VehicleType {
    } Tank
    FuelConsumption = 26
    Movement = 0 0 0 60 190 200 0 0 
-   Weight = 80
+   MovementSound = aircraft_l_g.ogg
+
    Weapons { 
       Initiative = 0
       Number = 4

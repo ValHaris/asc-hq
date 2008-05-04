@@ -30,6 +30,7 @@ VehicleType {
    FuelConsumption = 25
    Movement = 0 0 65 130 0 0 0 0 
    TerrainAccess ->* VehicleType.smallship_terrain 
+   MovementSound = jet_pass.ogg
 
    Construction { 
       Buildings = 

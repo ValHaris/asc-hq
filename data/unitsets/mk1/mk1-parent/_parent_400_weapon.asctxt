@@ -177,6 +177,7 @@
 
    MiniGun {
       Type = machinegun shootable 
+      Sound = minikanone.ogg
       targets = floating ground_level low_level_flight medium_level_flight
       shotFrom = floating ground_level 
       MaxRange = 20
@@ -217,6 +218,7 @@
    } MiniGun
 
    BigMiniGun ->* VehicleType.MiniGun
+   BigMiniGun.Sound = gateling.ogg
    BigMiniGun.Punch@MaxRange = 45
    BigMiniGun.Punch@MinRange = 55
 
@@ -370,6 +372,7 @@
    
    Flak {
       Type = cannon shootable 
+      Sound = flak.ogg
       targets = low_level_flight medium_level_flight 
       shotFrom = floating ground_level 
       MaxRange = 20

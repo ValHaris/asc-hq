@@ -30,6 +30,7 @@ VehicleType {
    FuelConsumption = 25
    Movement = 0 0 75 120 0 0 0 0  
    TerrainAccess ->* VehicleType.smallship_terrain 
+   MovementSound = hovercraft_s.ogg
 
    Construction { 
       Buildings = 
