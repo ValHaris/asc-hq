@@ -1497,7 +1497,7 @@ void         EditAiParam::buttonpressed(int         id)
 
 
 
-     class tunit: public tdialogbox {
+     class UnitPropertyEditor: public tdialogbox {
                 TemporaryContainerStorage tus;
                 int        dirx,diry;
                 int        action;
@@ -1508,14 +1508,14 @@ void         EditAiParam::buttonpressed(int         id)
                 int owner;
               public:
                // char     checkvalue( char id, char* p );
-                tunit ( Vehicle* v ) : tus ( v ), unit ( v ) {};
+                UnitPropertyEditor ( Vehicle* v ) : tus ( v ), unit ( v ) {};
                 void        init( void );
                 void        run( void );
                 void        buttonpressed( int id );
      };
 
 
-void         tunit::init(  )
+void         UnitPropertyEditor::init(  )
 {
    int         w;
    char *weaponammo;
@@ -1660,7 +1660,7 @@ void         tunit::init(  )
 }
 
 /*
-char      tunit::checkvalue( char id, void* p)
+char      UnitPropertyEditor::checkvalue( char id, void* p)
 {
    if ( id == 3 ) {
    }
@@ -1673,7 +1673,7 @@ char      tunit::checkvalue( char id, void* p)
 }
 */
 
-void         tunit::run(void)
+void         UnitPropertyEditor::run(void)
 {
    do {
       tdialogbox::run();
@@ -1681,7 +1681,7 @@ void         tunit::run(void)
 }
 
 
-void         tunit::buttonpressed(int         id)
+void         UnitPropertyEditor::buttonpressed(int         id)
 {
    int ht;
 
@@ -1736,9 +1736,9 @@ void         tunit::buttonpressed(int         id)
          mapsaved = false;
          action = 1;
          if ( reactionfire )  {
-            unit->reactionfire.enable();
+            unit->reactionfire.status = Vehicle::ReactionFire::ready;
          } else
-            unit->reactionfire.disable();
+            unit->reactionfire.status =  Vehicle::ReactionFire::off;
 
          unit->name = namebuffer;
          if ( owner != unit->getOwner() )
@@ -1767,7 +1767,7 @@ void         changeunitvalues(Vehicle* ae)
    if ( !ae )
       return;
 
-   tunit units ( ae );
+   UnitPropertyEditor units ( ae );
    units.init();
    units.run();
    units.done();

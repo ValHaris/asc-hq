@@ -119,6 +119,7 @@ class UnitHooveringLogic {
     //! The class that manages the reaction fire which causes a unit to attack approaching enemies even if it is not the unit's turn
     class  ReactionFire {
          friend class Vehicle;
+         friend class UnitPropertyEditor;
 
          Vehicle* unit;
        public:
