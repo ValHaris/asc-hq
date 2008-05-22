@@ -23,6 +23,7 @@
 #include "../containerbase.h"
 #include "../gamemap.h"
 #include "../unitset.h"
+#include "fileselector.h"
 
 
 
@@ -52,6 +53,7 @@ class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
       VehicleCounterFactory( GameMap* actmap );
       VehicleCounterFactory( const ContainerBase* container );
         
+      ASCString toString();
       
       void restart();
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
@@ -109,6 +111,17 @@ SelectionWidget* VehicleCounterFactory::spawnNextItem( PG_Widget* parent, const 
       return NULL;
 };
 
+ASCString VehicleCounterFactory::toString() 
+{
+   ASCString t;
+   for ( Counter::const_iterator i = counter.begin(); i != counter.end(); ++i ) {
+      const Vehicletype* v = i->first;
+      t += v->getName() + "\t" + ASCString::toString(i->second) + "\n";
+   }
+   return t;
+}
+
+
 /*
 void VehicleCounterFactory::itemSelected( const SelectionWidget* widget, bool mouse )
 {
@@ -131,7 +144,7 @@ void showAllUnitPositions( const Vehicletype* vt, GameMap* gamemap )
    for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i ) {
       if ( (*i)->typ == vt )
          if ( find ( coordinates.begin(), coordinates.end(),(*i)->getPosition() ) == coordinates.end() ) 
-         coordinates.push_back ( (*i)->getPosition() );
+            coordinates.push_back ( (*i)->getPosition() );
    }
    
    SelectFromMap sfm( coordinates, gamemap, false, true );
@@ -142,6 +155,7 @@ void showAllUnitPositions( const Vehicletype* vt, GameMap* gamemap )
 class UnitSummaryWindow : public ItemSelectorWindow {
    private:
       GameMap* gamemap;
+      VehicleCounterFactory* factory;
       
       virtual void itemSelected( const SelectionWidget* sw) {
          const VehicleTypeCountWidget* vtcw = dynamic_cast<const VehicleTypeCountWidget*>(sw);
@@ -152,11 +166,29 @@ class UnitSummaryWindow : public ItemSelectorWindow {
             showAllUnitPositions( vtcw->getVehicletype(), gamemap );
             Show();
          }
-         
-         
       };
+
+
+      void saveText()
+      {
+         ASCString name = selectFile( "*.txt", false );
+         if ( !name.empty() ) {
+            tn_file_buf_stream s( name, tnstream::writing );
+            s.writeString( factory->toString(), true );
+         }
+      }
+
+      bool eventKeyDown(const SDL_KeyboardEvent* key) {
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+         if ( mod & KMOD_CTRL ) 
+            if ( key->keysym.sym == SDLK_s )
+               saveText();
+
+         return ItemSelectorWindow::eventKeyDown( key );
+      }
+
    public:
-      UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ) {};
+      UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, VehicleCounterFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ), factory( itemFactory ) {};
 };      
       
 
