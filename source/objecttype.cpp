@@ -147,6 +147,11 @@ const Surface& ObjectType :: getPicture ( int i, int w ) const
       if ( s.valid() )
          return s;
       else {
+         if ( i < 65 && weatherPicture[w].images.size() >= 66 ) {
+            const Surface& s2 = weatherPicture[w].images[65];
+            if ( s2.valid())
+               return s2;
+         } 
          if ( i < 64 && weatherPicture[w].images.size() >= 65 ) {
             const Surface& s2 = weatherPicture[w].images[64];
             if ( s2.valid())
