@@ -363,7 +363,7 @@ class AllianceSetupWindow : public ASC_PG_Dialog {
 
 bool  setupalliances( GameMap* actmap, bool supervisor  )
 {
-   AllianceSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 600, 500 ));
+   AllianceSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 700, 500 ));
    asw.Show();
    asw.RunModal();
    return asw.isSomethingChanged();
