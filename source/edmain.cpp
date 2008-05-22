@@ -164,7 +164,11 @@ int mapeditorMainThread ( void* _mapname )
    mousevisible(true);
 
    getPGApplication().Run();
-   
+
+   if (mapsaved == false )
+      if (choice_dlg("You have unsaved changes! Save?","~y~es","~n~o") == 1)
+         k_savemap(false);
+  
    if ( actmap ) {
       delete actmap;
       actmap = NULL;

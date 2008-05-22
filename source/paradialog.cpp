@@ -394,10 +394,8 @@ void ASC_PG_App::processEvent( )
 int ASC_PG_App::Run ( )
 {
    enableLegacyEventHandling ( false );
-
    PG_Application::Run();
-   
-   enableLegacyEventHandling ( true );
+  
    return 0;
 }
 

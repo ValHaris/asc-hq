@@ -934,10 +934,6 @@ void execaction_pg(int code)
              execaction(act_switchmaps);
           else
              if (choice_dlg("Do you really want to quit ?","~y~es","~n~o") == 1) {
-                if (mapsaved == false )
-                   if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1)
-                      k_savemap(false);
-                   
                 getPGApplication().Quit();
              }
        }
