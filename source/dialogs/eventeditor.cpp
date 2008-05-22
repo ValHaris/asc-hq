@@ -30,6 +30,7 @@
 #include "../gamemap.h"
 #include "../spfst.h"
 #include "../gameeventsystem.h"
+#include "../gameevents.h"
 
 #include "../widgets/dropdownselector.h"
 #include "../widgets/multilistbox.h"
@@ -88,7 +89,12 @@ class EventEditor : public ASC_PG_Dialog {
             EventTriggerID triggerID = triggerFactory::Instance().getID(  triggerNames.at(type) );
 
             if ( event->trigger.size() <= num ) {
+               int oldSize = event->trigger.size();
                event->trigger.resize(num+1);
+               for ( int i = oldSize; i < event->trigger.size(); ++i )
+                  if ( i != num )
+                     event->trigger[i] = event->spawnTrigger( Trigger_NothingFalse );
+
                event->trigger[num] = event->spawnTrigger( triggerID );
                event->trigger[num]->setup();
             } else {
