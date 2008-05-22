@@ -355,7 +355,7 @@ class CargoDialog : public Panel
       void onUnitClick ( Vehicle* veh,SPoint pos, bool first )
       {
          // if ( veh )
-         if ( mainScreenWidget&& mainScreenWidget->getGuiHost() && !first ) { 
+         if ( mainScreenWidget&& mainScreenWidget->getGuiHost() && (!first || CGameOptions::Instance()->mouse.singleClickAction) ) { 
             SPoint iconPos = pos;
             if ( veh ) {
                iconPos.x -= smallGuiIconSizeX/2;
