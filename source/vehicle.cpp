@@ -135,14 +135,11 @@ Vehicle :: ~Vehicle (  )
    }
 
    tfield* fld = gamemap->getField( xpos, ypos);
-   if ( fld ) {
-      if ( fld->vehicle  == this )
-        fld->vehicle = NULL;
-      else {
-         if ( fld->getContainer() )
-            fld->getContainer()->removeUnitFromCargo( this, true );
-      }
-   }
+   if ( fld && fld->vehicle  == this )
+       fld->vehicle = NULL;
+   
+   if ( getCarrier() )
+      getCarrier()->removeUnitFromCargo( this, true );
 }
 
 
