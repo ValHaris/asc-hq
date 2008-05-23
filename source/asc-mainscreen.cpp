@@ -125,6 +125,7 @@ void Menu::setup()
    addfield ( "Glo~b~al" );
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~S~ound options", ua_soundDialog );
+   addbutton ( "~E~mail options", ua_emailOptions );
    currentMenu->addSeparator();
    addbutton ( "~M~ain menu\tESC", ua_mainmenu );
    currentMenu->addSeparator();

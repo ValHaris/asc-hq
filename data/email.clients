@@ -1,0 +1,3 @@
+Thunderbird (Win): "C:\Program Files\Mozilla Thunderbird\thunderbird.exe" -compose "to=$(to),subject=$(file),attachment='file:///$(fullfile)'"
+Thunderbird (others): thunderbird -compose "to=$(to),subject=$(file),attachment='file:///$(fullfile)'"
+Outlook: "C:\Program Files\Microsoft Office\Office\OUTLOOK.EXE" -c IPM.Note /m $(to) /A  "$(fullfile)"

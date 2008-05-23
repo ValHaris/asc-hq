@@ -77,6 +77,12 @@ public:
     //! converts the parameter to a String
     static ASCString toString( double d );
 
+    //! replaces all occurances of old with newString
+    ASCString& replaceAll( const ASCString& old, const ASCString& newString);
+
+    //! replaces all occurances of old with newString ; case insensitive
+    ASCString& replaceAll_ci( const ASCString& old, const ASCString& newString);
+    
     // Case-manipulation helpers
     ASCString&  toLower    ();
     ASCString&  toUpper    ();

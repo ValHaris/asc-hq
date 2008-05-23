@@ -105,12 +105,28 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
             msg += " (" + map->player[nextPlayer].email + ")";
          infoMessage( msg );
       } else {
+         
          ASCString fullFile = ::constructFileName(0, "", fname);
-         ASCString command = "\"" + CGameOptions::Instance()->mailProgram + "\"  \"" + fullFile +  "\" ";
-         if ( map->player[nextPlayer].email.empty() )
-            command += "unknown";
+         
+         ASCString command = CGameOptions::Instance()->mailProgram;
+         command.replaceAll_ci( "$(fullfile)", fullFile);
+         command.replaceAll_ci( "$(file)", fname );
+         
+         ASCString url = fullFile;
+         if ( pathdelimitterstring != "/")
+            url.replaceAll(pathdelimitterstring, "/");
+         
+         if ( url.find('/') == 0 )
+            url = "file://" + url;
          else
-            command += map->player[nextPlayer].email;
+            url = "file:///" + url;
+
+         command.replaceAll_ci( "$(url)", url );
+         
+         if ( map->player[nextPlayer].email.empty() )
+            command.replaceAll_ci( "$(to)", "unknown");
+         else
+            command.replaceAll_ci( "$(to)", map->player[nextPlayer].email );
          
          int sv = -1;
          for ( int i = 0; i < map->getPlayerCount(); ++i)
@@ -120,7 +136,9 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
             }
            
          if ( sv != -1 && sv != nextPlayer )
-            command += " " + map->player[sv].email;
+            command.replaceAll_ci( "$(sv)", map->player[sv].email );
+         else
+            command.replaceAll_ci( "$(sv)", "" );
          
          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "Executing external mailer:\n" + command );
          

@@ -150,6 +150,7 @@
 #include "dialogs/fileselector.h"
 #include "containerbase-functions.h"
 #include "memory-measurement.h"
+#include "dialogs/mailoptionseditor.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -1167,6 +1168,8 @@ void viewMiningPower()
 }
 
 
+
+
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
 {
@@ -1336,6 +1339,10 @@ void execuseraction2 ( tuseractions action )
       case ua_showMiningPower: viewMiningPower();
          break;
 
+      case ua_emailOptions: editEmailOptions();
+         break;
+      
+         
       default:
          break;
    }

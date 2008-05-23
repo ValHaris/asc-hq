@@ -1,65 +1,65 @@
 ; Kommentarzeilen beginnen mit einem Semikolon
-; Diese Datei kann (muß) Befehle enthalten, die die Anzeige des Hilfetextes
-; steuern. Jeder Befehl beginnt mit einem # und muß auch (mit Ausnahme des
-; Befehls Abschnittseinleitung ##) und muß auch mit einem # abgeschlossen
-; werden. Die Länge des Befehls ist egal, groß- und Kleinschreibung ebenfalls.
+; Diese Datei kann (muï¿½) Befehle enthalten, die die Anzeige des Hilfetextes
+; steuern. Jeder Befehl beginnt mit einem # und muï¿½ auch (mit Ausnahme des
+; Befehls Abschnittseinleitung ##) und muï¿½ auch mit einem # abgeschlossen
+; werden. Die Lï¿½nge des Befehls ist egal, groï¿½- und Kleinschreibung ebenfalls.
 ;
-; Folgende Befehle werden momentan unterstützt:
+; Folgende Befehle werden momentan unterstï¿½tzt:
 ;  ##XXXX   Mit diesem Befehl beginnt ein Hilfethema. xxxx stellt eine
 ;           Zahl im Bereich von 0000 bis 9999 dar und entspricht der ID,
-;           die der Prozedur HELP als Parameter übergeben wird. Das Hilfthema
-;           endet mit dem nächsten Auftreten von ## oder dem Ende der Datei
+;           die der Prozedur HELP als Parameter ï¿½bergeben wird. Das Hilfthema
+;           endet mit dem nï¿½chsten Auftreten von ## oder dem Ende der Datei
 ;           Leerzeilen am Anfang und am Ende werden auch angezeigt. Dieser
 ;           Befehl MUSS genau 6 Zeichen lang sein.
 ;
-;  #colorX#   Ändert die Textfarbe auf den Wert von x. Standardmäßig ist
-;           schwarz eingestellt. Gültige Werte von x sind 0 bis 255
+;  #colorX#   ï¿½ndert die Textfarbe auf den Wert von x. Standardmï¿½ï¿½ig ist
+;           schwarz eingestellt. Gï¿½ltige Werte von x sind 0 bis 255
 ;           Empfohlene Werte sind:
 ;           000: Schwarz   001: Blue         002: Green      003: Cyan
 ;           004: Red       005: Magenta      006: Brown      007: LightGray
 ;           008: DarkGray  009: LightBlue    010: LightGreen 011: LightCyan
 ;           012: LightRed  013: LightMagenta 014: Yellow     015: White
 ;           256: default
-;  #backgroundX#  Ändert die Hintergrundfarbe für die Textdarstellung. Die
+;  #backgroundX#  ï¿½ndert die Hintergrundfarbe fï¿½r die Textdarstellung. Die
 ;           Farbwerte sind die selben wie bei #color
 ;
-;  #fontX#   Änter die Schriftart. Standardwert ist 01. Gültige Werte von
+;  #fontX#   ï¿½nter die Schriftart. Standardwert ist 01. Gï¿½ltige Werte von
 ;           x sind:
 ;             01:  SmallArial
 ;             02:  Arial8
-;          Die Schriftartwechseln innerhalb einer Zeile ist zu beachten, daß
+;          Die Schriftartwechseln innerhalb einer Zeile ist zu beachten, daï¿½
 ;          die Schriften NICHT an der Grundlinie ausgerichtet werden, sondern an
 ;          der Textoberkannte. Aus diesem Grund sollte eine Zeile immer nur eine
 ;          Schriftart enthalten.
 ;
 ;  #tabX#  Setzt einen Tabulator der weite x. Damit wird die Xposition
-;          auf das nächste Vielfache von x gesetzt.
+;          auf das nï¿½chste Vielfache von x gesetzt.
 ;  #posX#  Setzt die Xposition auf den Wert xxx.
 ;
 ;  #aeinzugX#  Setzt den Absatzeinzug auf X Pixel. Die erste Zeile eines
 ;          Absatzes wird nicht mit diesem Befehl, sondern mit #eeinzug#
-;          eingerückt. aeinzug wirkt erst ab der nächsten Zeile.
+;          eingerï¿½ckt. aeinzug wirkt erst ab der nï¿½chsten Zeile.
 ;  #eeinzugX#  Wie #aeinzug, nur dass jeweils die erste Zeile eines Absatzes
-;          eingezogen wird. Auch #eeinzug wirkt erst ab dem nächsten Absatz.
+;          eingezogen wird. Auch #eeinzug wirkt erst ab dem nï¿½chsten Absatz.
 ;
-;  #crt#   führt einen Zeilenwechsel (=Absatzwechsel) durch. Hat die selbe
+;  #crt#   fï¿½hrt einen Zeilenwechsel (=Absatzwechsel) durch. Hat die selbe
 ;          Wirkung wie ein Zeilenwechsel in der Textdatei. Von #crt# gibt es
-;          noch eine Variante, die zusätzlich den Zeilenabstand der nächsten
-;          Zeile verändert:
+;          noch eine Variante, die zusï¿½tzlich den Zeilenabstand der nï¿½chsten
+;          Zeile verï¿½ndert:
 ;  #crtpX# Setzt den Zeilenabstand auf X Pixel mehr als ein normales #crt# dies
 ;          getan hat. 
 ;
-;  #pictrnnnnnnnnXXXYYY  Lädt das Bild, das als RAW-Datei unter dem Namen
-;          nnnnnnnn vorliegt (der Name MUß 8 Zeichen lang sein, als Endung
-;          wird automatisch .RAW angehängt) und zeigt es an der Position
+;  #pictrnnnnnnnnXXXYYY  Lï¿½dt das Bild, das als RAW-Datei unter dem Namen
+;          nnnnnnnn vorliegt (der Name MUï¿½ 8 Zeichen lang sein, als Endung
+;          wird automatisch .RAW angehï¿½ngt) und zeigt es an der Position
 ;          XXX / aktuelleYposition-YYY an.
-;          Es ist zu beachten, daß der untere Rand des Bildes nicht in die
-;          nächste Zeile ragt, da sonst dieser Teil überschrieben wird. Bei
-;          Bildern, die höher als die Zeilenhöhe sind, muß YYY ein Wert
-;          zugewiesen werden, der mindestetens BildHöhe-Zeilenhöhe beträgt.
+;          Es ist zu beachten, daï¿½ der untere Rand des Bildes nicht in die
+;          nï¿½chste Zeile ragt, da sonst dieser Teil ï¿½berschrieben wird. Bei
+;          Bildern, die hï¿½her als die Zeilenhï¿½he sind, muï¿½ YYY ein Wert
+;          zugewiesen werden, der mindestetens BildHï¿½he-Zeilenhï¿½he betrï¿½gt.
 ;          Sollte in der selben Zeile noch Text stehen, empfiehlt es sich, den
-;          Picture-Befehl an das Ende der Zeile zu schreiben, um mögliche
-;          Überschneidungen mit dem Text zu vermeiden.
+;          Picture-Befehl an das Ende der Zeile zu schreiben, um mï¿½gliche
+;          ï¿½berschneidungen mit dem Text zu vermeiden.
 ;
 ;
 
@@ -84,25 +84,25 @@ There are two display modes:
 
 ##0020
 ;
-;#font02##pos080# Oberfläche
+;#font02##pos080# Oberflï¿½che
 ;#font01#
 ;
-;Der Kasten rechts oben zeigt Informationen zu den Einheiten an. (Dafür muß der Cursor natürlich auf einer Einheit draufstehen).
-;Links oben das Bild, rechts daneben Name und Klasse (falls vorhanden) der Einheit sowie ganz rechts Symbole für die Erfahrung.
-;Der erste grüne Balken unter der Klasse gibt an, wieviel Treibstoff die Einheit noch hat.
-;Die Zahl rechts daneben gibt die übriggebliebene Bewegungsstrecke an, entweder für diese Runde, oder mit der Tankfüllung. Durch anklicken kann man's umschalten.
-;Darunter der Balken gibt den Schaden an, den die Einheit hat (ganz grün = kein Schaden). Rechts daneben die Panzerung der Einheit.
+;Der Kasten rechts oben zeigt Informationen zu den Einheiten an. (Dafï¿½r muï¿½ der Cursor natï¿½rlich auf einer Einheit draufstehen).
+;Links oben das Bild, rechts daneben Name und Klasse (falls vorhanden) der Einheit sowie ganz rechts Symbole fï¿½r die Erfahrung.
+;Der erste grï¿½ne Balken unter der Klasse gibt an, wieviel Treibstoff die Einheit noch hat.
+;Die Zahl rechts daneben gibt die ï¿½briggebliebene Bewegungsstrecke an, entweder fï¿½r diese Runde, oder mit der Tankfï¿½llung. Durch anklicken kann man's umschalten.
+;Darunter der Balken gibt den Schaden an, den die Einheit hat (ganz grï¿½n = kein Schaden). Rechts daneben die Panzerung der Einheit.
 ;
-;An der rechten Seite des Kasten kann man die Höhenstufen der Einheit ablesen,
+;An der rechten Seite des Kasten kann man die Hï¿½henstufen der Einheit ablesen,
 ;links sind weitere Info's zu den Waffensysteme der Einheit. Werden diese mit der Maus angeklickt, werden weitere Parameter der Waffen angezeigt.
 ;
 ;
-;Der Kasten darunter enthält #color004#KEINEN#color000# Kompass. Das Teil soll vielmehr die Windrichtung anzeigen (falls gerade Wind weht).
-;Die Stärke des Windes kann man auf der rechten Skala ablesen. Steht der Cursor auf einer Einheit und die Windskala verfärbt sich rot, wird es höchste Zeit, die Einheit in Sicherheit zu bringen. Denn nicht alle Einheiten (vorallem Flugzeuge und kleine Schiffe) halten jeden Wind aus.
+;Der Kasten darunter enthï¿½lt #color004#KEINEN#color000# Kompass. Das Teil soll vielmehr die Windrichtung anzeigen (falls gerade Wind weht).
+;Die Stï¿½rke des Windes kann man auf der rechten Skala ablesen. Steht der Cursor auf einer Einheit und die Windskala verfï¿½rbt sich rot, wird es hï¿½chste Zeit, die Einheit in Sicherheit zu bringen. Denn nicht alle Einheiten (vorallem Flugzeuge und kleine Schiffe) halten jeden Wind aus.
 ;
 ;Die Bedienung des Spieles sollte eigentlich problemlos sein (und erst recht, wenn man schon BI2 gespielt hat).
 ;
-;Die "Lämpchen" ganz unten zeigen den diplomatischen Status zu den anderen Spielern an. Ist aber im Augenblick eigentlich nicht von Interesse.
+;Die "Lï¿½mpchen" ganz unten zeigen den diplomatischen Status zu den anderen Spielern an. Ist aber im Augenblick eigentlich nicht von Interesse.
 ;
 ;
 ;
@@ -209,7 +209,7 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 #color004##fontsize=18#
 ADVANCED STRATEGIC COMMAND
 #color000##fontsize=14#
-(C) 1994 - 2008 by Martin Bickel, Steffen Fröhlich and Daniel Korbely
+(C) 1994 - 2008 by Martin Bickel, Steffen Frï¿½hlich and Daniel Korbely
 
 Contributions:
 
@@ -225,16 +225,16 @@ Tom Wilson, Simon Britnell (linux porting)
 Many thanks to:
 
 Marius Rickenbacher for debugging
-Alexander Schäfer for helping with the very first versions of ASC
+Alexander Schï¿½fer for helping with the very first versions of ASC
 Amit Patel for his pathfinding algorithm implementation
-Jörg Richter for giving us sources of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC.
+Jï¿½rg Richter for giving us sources of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC.
 Michael Moerz, Nicolas Raffenaud, Frank Landgraf, Bernhard Oemer and Shamada Diundra for contributing code and general help.
 Karel Voracek for the experience symbols.
 
 Advanced Strategic Command and its utility programs use code of The Independent JPEG Group .
 The data compression uses bzlib by Julian R Seward.
 The windows installer for this product was created using Installer VISE from MindVision Software.
-Some tutorial levels are based on Battle Isle maps by Steffen Fröhlich and Thomas Blaser.
+Some tutorial levels are based on Battle Isle maps by Steffen Frï¿½hlich and Thomas Blaser.
 
 
 
@@ -364,6 +364,16 @@ The alliances can be set in the lower table of the alliance dialogbox. If two pl
 You can toggle between these three states by clicking on the item.
 
 If you want to set up a Play by Email Game you must assign the players to different computers.
+
+##0080
+
+Variables that are expanded:
+$(to) the mail address of the next player. May be "unknown" if the email address is not available in ASC
+$(sv) the mail address of the supervisor. May be empty if no supervisor is available in this game
+$(file)  the filename that is being sent (without any path)
+$(fullfile) the filename that is being sent with full path. On windows this string will use \ as directory separator
+$(url)   the filename that is being sent in URL syntax, e.g. file:///c:/asc/filename.ascpbm
+
 
 ##0901
 There are 2 or more maps with the same ID and the same PrivID. 

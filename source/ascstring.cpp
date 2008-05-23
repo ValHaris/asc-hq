@@ -228,3 +228,29 @@ const ASCString operator+ ( const char* s1, const ASCString& s2 )
    return s;
 }
 
+ASCString& ASCString::replaceAll( const ASCString& old, const ASCString& newString)
+{
+   ASCString::size_type it;
+   while ( (it = find(old)) != ASCString::npos)
+      replace( it, old.length(), newString);
+   
+   return *this;
+}
+
+ASCString& ASCString::replaceAll_ci( const ASCString& old, const ASCString& newString)
+{
+   ASCString::size_type it ;
+   ASCString old2 = copytoLower(old);
+   do {
+      ASCString tmp = copytoLower( *this );
+
+      it = tmp.find( old2 );
+      if ( it != npos )
+         replace( it, old.length(), newString);
+      
+   }  while ( it != npos);
+   
+   return *this;
+}
+
+
