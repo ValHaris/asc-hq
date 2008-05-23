@@ -972,7 +972,18 @@ PendingVehicleActions :: ~PendingVehicleActions ( )
 }
 
 
-
+void PendingVehicleActions::reset() 
+{
+   delete action;
+   action = NULL;
+   move = NULL;
+   ascent = NULL;
+   descent = NULL;
+   attack = NULL;
+   service=NULL;
+   newservice=NULL;
+   actionType = 0 ;
+}
 
 
 

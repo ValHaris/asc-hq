@@ -446,6 +446,7 @@ class PendingVehicleActions {
             VehicleService* service;
             NewVehicleService* newservice;
             ~PendingVehicleActions ( );
+            void reset();
          };
 
 //! a structure to keep track of the vehicleActions that are currently running

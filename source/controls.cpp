@@ -61,14 +61,19 @@
 
 tmoveparams moveparams;
 
-
-class InitControls {
-  public:
-   InitControls ( void ) 
-   {
-      memset ( (void*) &moveparams, 0, sizeof ( moveparams ));
-   };
-} initControls;
+void tmoveparams::reset(){
+   movestatus = 0; 
+   movesx = 0;
+   movesy = 0; 
+   moveerr = 0; 
+   vehicletomove = NULL; 
+   newheight = 0; 
+   oldheight = 0; 
+   heightdir = 0; 
+   buildingtobuild = NULL;    
+   movespeed = 0;
+   uheight = 0;
+}
 
 
 /*

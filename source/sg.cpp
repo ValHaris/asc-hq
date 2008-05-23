@@ -1380,6 +1380,12 @@ pfont load_font ( const char* name )
 }
 
 
+void resetActions( GameMap& map )
+{
+   moveparams.reset();
+   pendingVehicleActions.reset();
+}
+
 
 void loaddata( int resolx, int resoly )
 {
@@ -1508,6 +1514,8 @@ int gamethread ( void* data )
    }
 #endif
 
+   GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
+
 
    displayLogMessage ( 5, "loaddata completed successfully.\n" );
    dataLoaderTicker();
@@ -1624,8 +1632,6 @@ void deployMapPlayingHooks ( GameMap* map )
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.21:0", 1 );
-
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));

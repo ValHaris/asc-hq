@@ -58,6 +58,8 @@
                         BuildingType* buildingtobuild;   /*  nur bei movestatus = 111  */ 
                         int          movespeed;
                         int          uheight;
+                        tmoveparams() { reset(); };
+                        void reset();
                      }; 
   //! see #tmoveparams
   extern tmoveparams moveparams; 
