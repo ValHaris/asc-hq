@@ -1255,6 +1255,11 @@ void logtoreplayinfo ( trpl_actions _action, ... )
          stream->writeInt( nwid );
       }
 
+      if ( action == rpl_cancelResearch ) {
+         stream->writeChar( action );
+         stream->writeInt( 0 );
+      }
+
 
       va_end ( paramlist );
    }
@@ -2490,6 +2495,14 @@ void trunreplay :: execnextreplaymove ( void )
                 error("severe replay inconsistency:\nno container for selfdestruct command !");
             }
             break;
+      case rpl_cancelResearch : 
+            {
+               stream->readInt();
+               readnextaction();
+               actmap->player[actmap->actplayer].research.cancel();
+            }
+            break;
+
 
       default:{
                  int size = stream->readInt();

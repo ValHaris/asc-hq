@@ -850,10 +850,10 @@ void execuseraction ( tuseractions action )
             // s += strrr ( actmap->player[actmap->actplayer].research.progress );
             // s += " research points will be lost.";
             if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
-               actmap->player[actmap->actplayer].research.progress = 0;
-               actmap->player[actmap->actplayer].research.activetechnology = NULL;
-               actmap->player[actmap->actplayer].research.goal = NULL;
+               actmap->player[actmap->actplayer].research.cancel();
+               logtoreplayinfo( rpl_cancelResearch );
             }
+            
          } else
             displaymessage("you are not researching anything", 3);
          break;

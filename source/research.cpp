@@ -873,7 +873,12 @@ void Research :: settechlevel ( int techlevel )
 }
 
 
-
+void Research :: cancel ()
+{
+   progress = 0;
+   activetechnology = NULL;
+   goal = NULL;
+}
 
 
 

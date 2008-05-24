@@ -87,7 +87,8 @@ enum trpl_actions { rpl_attack,
                     rpl_transferTribute,
                     rpl_reactionFireOn,
                     rpl_reactionFireOff,
-                    rpl_selfdestruct };
+                    rpl_selfdestruct,
+                    rpl_cancelResearch };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 

@@ -217,6 +217,11 @@ class TechAdapterDependency {
          beginning of each turn */
      bool techsAvail;
 
+
+     //! cancels the research on the current technology, losing all research points
+     void cancel();
+
+
      int getResearchPerTurn() const;
      int currentTechAvailableIn() const;
 
