@@ -565,6 +565,9 @@
 					RelativePath="..\..\..\dialogs\locatefile.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\mailoptionseditor.cpp">
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\messagedialog.cpp">
 				</File>
 				<File

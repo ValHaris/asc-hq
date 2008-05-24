@@ -1594,6 +1594,7 @@ class RemoveMine : public GuiFunction
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          putMine( pos, 0, -1);
+         updateFieldInfo();
          displaymap();
       }
 

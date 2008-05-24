@@ -142,10 +142,17 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
          
          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "Executing external mailer:\n" + command );
          
-         int res = system(command.c_str());
+#ifdef _WIN32_
+         // Windows sucks!
+         ASCString realCommand = "\"" + command + "\"";
+#else
+         ASCString& realCommand = command;
+#endif
+
+         int res = system(realCommand.c_str());
          if (res != 0 ) {
             smw.close();
-            errorMessage("Program failed with exit code " + ASCString::toString(res));
+            errorMessage("Program failed with exit code " + ASCString::toString(res) + "\nCommand was:\n" + command);
          } else {
             smw.close();
             infoMessage( "Mail submitted successfully" );
