@@ -184,6 +184,7 @@ void Menu::setup()
 
    addfield ( "~M~essage");
    addbutton ( "~n~ew message", ua_newmessage );
+   addbutton ( "new reminder\tctrl-r", ua_createReminder );
    addbutton ( "view ~q~ueued messages", ua_viewqueuedmessages );
    addbutton ( "view ~s~ent messages", ua_viewsentmessages );
    addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages);
@@ -850,6 +851,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev ( ua_loadgame );
                return true;
 
+            case SDLK_r:
+               execUserAction_ev( ua_createReminder );
+               return true;
+               
             case SDLK_s:
                execUserAction_ev ( ua_savegame );
                return true;

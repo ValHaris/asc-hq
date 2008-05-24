@@ -410,6 +410,30 @@ bool Player::exist() const
   return !(buildingList.empty() && vehicleList.empty());
 }
 
+
+const int playerVersion = 2; 
+
+void Player::read ( tnstream& stream )
+{
+   int version  = stream.readInt();
+   if ( version > playerVersion )
+      throw tinvalidversion ( "Player", playerVersion, version );
+   
+   // to be filled with future attributes
+}
+
+void Player::write ( tnstream& stream ) const
+{
+   stream.writeInt( playerVersion );
+   // to be filled with future attributes
+}
+
+
+
+
+
+
+
 template <typename T> void swapData( T& t1, T& t2 )
 {
    T temp = t1;

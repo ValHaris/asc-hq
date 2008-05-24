@@ -105,9 +105,10 @@ class Player : public SigC::Object {
       void userInteractionBegins( Player& p );
       void turnEnds( Player& p );
       
+      
    public:
       Player();
-      
+
       int getPosition() const { return player; };
       
       const GameMap* getParentMap() const { return parentMap; };
@@ -212,6 +213,8 @@ class Player : public SigC::Object {
       PlayerColor getPlayerColor() const;
       void setColor( const DI_Color& color ); 
 
+      void read ( tnstream& stream );
+      void write ( tnstream& stream ) const;
 
       void resetView();
       void resetResearch();

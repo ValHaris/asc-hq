@@ -182,7 +182,7 @@ void   tspfldloaders::writedissections ( void )
 /*        Messages  schreiben / lesen                         */
 /**************************************************************/
 
-const int messageVersion = 0xabcdf0;
+const int messageVersion = 0xabcdf1;
 const int messageMinVersion = 0xabcdef;
 
 void      tspfldloaders:: writemessages ( void )
@@ -202,9 +202,11 @@ void      tspfldloaders:: writemessages ( void )
       stream->writeInt ( (*mi)->id );
       stream->writeInt ( (*mi)->gametime.turn() );
       stream->writeInt ( (*mi)->gametime.move() );
+      stream->writeInt( (*mi)->reminder );
 
 
       ASCString& t = (*mi)->text;
+      
       mi++;
       stream->writeInt ( mi != spfld->messages.end() ? 1 : 0 );
 
@@ -226,7 +228,6 @@ void      tspfldloaders:: writemessages ( void )
 
    stream->writeString ( spfld->gameJournal );
    stream->writeString ( spfld->newJournal );
-
 }
 
 
@@ -287,11 +288,17 @@ void      tspfldloaders:: readmessages ( void )
       int t = stream->readInt();
       int m = stream->readInt();
       msg->gametime.set ( t, m );
+      
+      if ( magic >= 0xabcdf1 )
+         msg->reminder = stream->readInt();
+      else
+         msg->reminder = false;
 
       spfld->__loadmessages = stream->readInt();
 
       if ( msgtext )
          msg->text = stream->readString( true );
+      
    }
 
    for ( int i = 0; i < 8; i++ )

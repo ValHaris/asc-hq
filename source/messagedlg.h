@@ -25,8 +25,13 @@ class Message;
 
 extern void editmessage( Message& msg );
 extern void newmessage();
-extern void viewmessages( const char* title, const MessagePntrContainer& msgc, bool editable  ) ; 
-extern void viewmessage( const Message& message );
+extern void newreminder();
+extern void viewmessages( const char* title, const MessagePntrContainer& msgc, bool editable  ) ;
+
+/** Views the message. 
+    returns true if the user requested to keep the message in his inbox
+    */ 
+extern bool viewmessage( const Message& message );
 extern void editmessage( Message& msg );
 extern void editjournal();
 extern void viewjournal( bool showEmptyDialog );

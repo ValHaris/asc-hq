@@ -45,6 +45,7 @@ class  NewMessage : public ASC_PG_Dialog {
       PG_MultiLineEdit* editor;
       PlayerSelector* to;
       PlayerSelector* cc;
+      bool reminder;
       
       bool ok()
       {
@@ -53,10 +54,16 @@ class  NewMessage : public ASC_PG_Dialog {
             gamemap->unsentmessage.push_back ( message );
          } else {
             message->text = editor->GetText();
+         }
+
+         if ( reminder ) {
+            message->cc = 0;
+            message->to = 1 << actmap->actplayer;
+         } else {
+            message->cc = cc->getSelectedPlayers();
             message->to = to->getSelectedPlayers();
          }
-         message->cc = cc->getSelectedPlayers();
-         message->to = to->getSelectedPlayers();
+         message->reminder = reminder;
          
          QuitModal();
          return true;
@@ -87,28 +94,38 @@ class  NewMessage : public ASC_PG_Dialog {
          return true;
       }
    public:
-      NewMessage ( GameMap* gamemap, Message* msg = NULL ); 
+      NewMessage ( GameMap* gamemap, Message* msg = NULL, bool reminder = false ); 
 };
 
 
-NewMessage :: NewMessage ( GameMap* gamemap, Message* msg ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 500 ), "new message" )
+NewMessage :: NewMessage ( GameMap* gamemap, Message* msg, bool reminder ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 500 ), "new message" )
 {
    this->gamemap = gamemap;
    message = msg;
+   if ( message )
+      reminder = message->reminder;
+   this->reminder = reminder;
     
-   new PG_Label ( this, PG_Rect( 20, 30, 30, 20 ), "TO:");
-   to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
-   if ( msg )
-      to->setSelection( msg->to );
+   int startY = 30;
    
-   new PG_Label ( this, PG_Rect( 210, 30, 30, 20 ), "CC:" );
-   cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
-   if ( msg )
-      cc->setSelection( msg->cc );
+   if ( !reminder )  {
+      new PG_Label ( this, PG_Rect( 20, 30, 30, 20 ), "TO:");
+      to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+      if ( msg )
+         to->setSelection( msg->to );
+      
+      new PG_Label ( this, PG_Rect( 210, 30, 30, 20 ), "CC:" );
+      cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+      if ( msg )
+         cc->setSelection( msg->cc );
+      
+      startY += 170;
+   }
    
-   editor = new PG_MultiLineEdit( this, PG_Rect(20, 200, Width() - 140, Height() - 210 ));
+   editor = new PG_MultiLineEdit( this, PG_Rect(20, startY, Width() - 140, Height() - startY - 10 ));
    if ( message )
       editor->SetText( message->text );
+   editor->SetInputFocus();
     
    AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &NewMessage::ok ));
    AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &NewMessage::cancel ));
@@ -124,14 +141,24 @@ class IngameMessageViewer : public ASC_PG_Dialog {
       PG_Label* from;
       PG_Label* to;
       PG_Label* cc;
+      bool keepMessage;
 
       bool ok()
       {
+         keepMessage = false;
          Hide();
          QuitModal();
          return true;
       };
 
+      bool keep()
+      {
+         keepMessage = true;
+         Hide();
+         QuitModal();
+         return true;
+      };
+      
 
       PG_Label* addHeaderLine( int y, const ASCString& name )
       {
@@ -143,16 +170,25 @@ class IngameMessageViewer : public ASC_PG_Dialog {
       }
 
    public:
-      IngameMessageViewer ( const ASCString& title, const Message& msg, const ASCString& buttonText = "ok", PG_Rect rect = PG_Rect( 50, 50, 500, 400 ), bool autoHeader = true ) : ASC_PG_Dialog ( NULL, rect, title ), message(NULL), from(NULL), to(NULL), cc(NULL)
+      IngameMessageViewer ( const ASCString& title, const Message& msg, PG_Rect rect = PG_Rect( 50, 50, 500, 400 ), bool autoHeader = true ) : ASC_PG_Dialog ( NULL, rect, title ), message(NULL), from(NULL), to(NULL), cc(NULL)
       {
 
+         keepMessage = false;
          int footerHeight;
-         if ( !buttonText.empty() ) {
-            PG_Button* b = new PG_Button( this, PG_Rect( Width() - 110, Height() - 40, 100, 30), buttonText );
+         /* if ( !buttonText.empty() ) { */
+         if ( msg.reminder ) {
+            PG_Button* b = new PG_Button( this, PG_Rect( Width() - 70, Height() - 40, 60, 30), "Done" );
             b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::ok) );
+            
+            PG_Button* b2 = new PG_Button( this, PG_Rect( Width() - 140, Height() - 40, 60, 30), "Keep" );
+            b2->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::keep) );
+         } else {
+            PG_Button* b = new PG_Button( this, PG_Rect( Width() - 110, Height() - 40, 100, 30), "OK" );
+            b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::ok) );
+         }
             footerHeight = 50;
-         } else
-            footerHeight = 10;
+         /* } else
+            footerHeight = 10; */
 
          int y = 40;
          if ( !msg.getFromText( actmap ).empty()  ) {
@@ -249,6 +285,11 @@ class IngameMessageViewer : public ASC_PG_Dialog {
          return ASC_PG_Dialog::eventKeyDown( key );
       };
 
+      bool getKeepMessage() 
+      {
+         return keepMessage;
+      }
+      
       ~IngameMessageViewer()
       {
          displayLogMessage ( 9, "~IngameMessageViewer\n" );
@@ -259,7 +300,7 @@ class IngameMessageViewer : public ASC_PG_Dialog {
 
 
 
-void newmessage ( void )
+void newmessage()
 {
    if ( Player::getHumanPlayerNum( actmap ) < 2 ) {
       infoMessage( "nobody is listening to our transmissions");
@@ -269,6 +310,13 @@ void newmessage ( void )
    // PG_LineEdit::SetBlinkingTime(-1);
         
    NewMessage  nm ( actmap );
+   nm.Show();
+   nm.RunModal();
+}
+
+void newreminder()
+{
+   NewMessage  nm ( actmap, NULL, true );
    nm.Show();
    nm.RunModal();
 }
@@ -455,7 +503,7 @@ void MessageSelectionWindow::messageSelected(  Message* msg )
    } else {
       if ( !viewer ) {
          PG_Rect r ( my_xpos + Width(), my_ypos, min( PG_Application::GetScreenWidth()/2, 500), Height() );
-         viewer = new IngameMessageViewer( "Message", *msg, "ok", r );
+         viewer = new IngameMessageViewer( "Message", *msg, r );
          viewer->Show();
          viewer->sigDelete.connect( SigC::slot( *this, &MessageSelectionWindow::viewerDeleted ));
       } else 
@@ -489,13 +537,13 @@ void viewmessages ( const char* title, const MessagePntrContainer& msg, bool edi
 
 
 
-void viewmessage ( const Message& message )
+bool viewmessage ( const Message& message )
 {
    assert( !legacyEventSystemActive() );
    IngameMessageViewer igm( "incoming message...", message );
    igm.Show();
    igm.RunModal();
-   
+   return igm.getKeepMessage();
 }
 
 
@@ -551,9 +599,14 @@ void viewunreadmessages ( Player& player )
    MessagePntrContainer::iterator mi = player.unreadmessage.begin();
    while ( mi != player.unreadmessage.end()  ) {
       Message* msg = *mi;
-      player.oldmessage.push_back ( *mi );
-      player.unreadmessage.erase ( mi );
-      viewmessage ( *msg );
-      mi = player.unreadmessage.begin();
+      bool keep = viewmessage ( *msg );
+      
+      if ( keep )
+         ++mi;
+      else {
+         player.oldmessage.push_back ( *mi );
+         mi = player.unreadmessage.erase ( mi );
+      }
+         
    }
 }

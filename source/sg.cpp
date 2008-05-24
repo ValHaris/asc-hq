@@ -1342,6 +1342,8 @@ void execuseraction2 ( tuseractions action )
       case ua_emailOptions: editEmailOptions();
          break;
       
+      case ua_createReminder: newreminder(); 
+         break;
          
       default:
          break;

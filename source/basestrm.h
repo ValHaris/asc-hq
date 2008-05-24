@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <vector>
+#include <list>
 #include <queue>
 
 #ifdef _SDL_
@@ -655,6 +656,19 @@ template<typename C>
 
 template<typename BaseType>
       void readPointerContainer ( vector<BaseType*>& v, tnstream& stream  )
+{
+   stream.readInt(); // version
+   int num = stream.readInt();
+   v.clear();
+   for ( int i = 0; i < num; ++i ) {
+      BaseType* bt = new BaseType;
+      bt->read( stream );
+      v.push_back( bt );
+   }
+}
+
+template<typename BaseType>
+      void readPointerContainer ( list<BaseType*>& v, tnstream& stream  )
 {
    stream.readInt(); // version
    int num = stream.readInt();

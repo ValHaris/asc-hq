@@ -55,6 +55,9 @@ class  Message {
 
      //! the game time the messages was written
      GameTime gametime;
+     
+     //! reminders are special messages that the players sends to himself, to be read the next turn
+     bool reminder;
 
      Message ( GameMap* spfld );
 

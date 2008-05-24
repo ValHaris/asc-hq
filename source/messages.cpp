@@ -30,6 +30,7 @@ Message :: Message ( GameMap* spfld  )  : cc(0)
    to = 0;
    spfld->messageid++;
    id = spfld->messageid;
+   reminder = false;
 
    spfld->messages.push_back ( this );
 }
@@ -44,6 +45,7 @@ Message :: Message ( const ASCString& msg, GameMap* gamemap, int rec, int _from 
    text = msg;
    gamemap->messageid++;
    id = gamemap->messageid;
+   reminder = false;
 
    gamemap->messages.push_back ( this );
 

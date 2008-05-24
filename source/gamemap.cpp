@@ -286,7 +286,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 21;
+const int tmapversion = 22;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -393,6 +393,9 @@ void GameMap :: read ( tnstream& stream )
       
       if ( version >= 12 )
          player[i].email = stream.readString();
+      
+      if ( version >= 22 )
+         player[i].read( stream );
    }
    
    if ( version >= 11 ) 
@@ -714,6 +717,7 @@ void GameMap :: write ( tnstream& stream )
       player[i].cursorPos.write( stream );
       player[i].diplomacy.write( stream );
       stream.writeString ( player[i].email );
+      player[i].write(stream);
    }
 
    stream.writeInt( 0x12345678 );
