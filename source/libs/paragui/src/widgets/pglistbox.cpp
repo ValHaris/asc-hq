@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:03 $
+    Update Date:      $Date: 2008-05-24 18:21:04 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglistbox.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -64,7 +64,7 @@ bool PG_ListBox::GetMultiSelect() {
 	return my_multiselect;
 }
 
-void PG_ListBox::SelectItem(PG_ListBoxBaseItem* item, bool select) {
+void PG_ListBox::SelectItem(PG_ListBoxBaseItem* item, bool select, bool fireEvent ) {
 
 	if(item == NULL) {
 		if(my_selectedItem != NULL) {
@@ -87,8 +87,10 @@ void PG_ListBox::SelectItem(PG_ListBoxBaseItem* item, bool select) {
 	} else
       item->Update();
 
-	sigSelectItem(item);
-	eventSelectItem(item);
+	if ( fireEvent ) {
+	   sigSelectItem(item);
+	   eventSelectItem(item);
+	}
 }
 
 bool PG_ListBox::eventSelectItem(PG_ListBoxBaseItem* item) {
@@ -139,7 +141,7 @@ void PG_ListBox::SetIndent(Uint16 indent) {
 	Update();
 }
 
-void PG_ListBox::SelectFirstItem() {
+void PG_ListBox::SelectFirstItem( bool fireEvent ) {
 	my_selectindex = 0;
    PG_ListBoxBaseItem* item = dynamic_cast<PG_ListBoxBaseItem*>(FindWidget(0));
 
@@ -147,10 +149,10 @@ void PG_ListBox::SelectFirstItem() {
 		return;
 	}
 
-	item->Select();
+	item->Select(fireEvent);
 }
 
-void PG_ListBox::SelectNextItem() {
+void PG_ListBox::SelectNextItem( bool fireEvent ) {
    PG_ListBoxBaseItem* item = dynamic_cast<PG_ListBoxBaseItem*>(FindWidget(my_selectindex+1));
 
 	if(item == NULL) {
@@ -158,10 +160,10 @@ void PG_ListBox::SelectNextItem() {
 	}
 
 	my_selectindex++;
-	item->Select();
+	item->Select(fireEvent);
 }
 
-void PG_ListBox::SelectPrevItem() {
+void PG_ListBox::SelectPrevItem( bool fireEvent ) {
    PG_ListBoxBaseItem* item = dynamic_cast<PG_ListBoxBaseItem*>(FindWidget(my_selectindex-1));
 
 	if(item == NULL) {
@@ -169,7 +171,7 @@ void PG_ListBox::SelectPrevItem() {
 	}
 
 	my_selectindex--;
-	item->Select();
+	item->Select(fireEvent);
 }
 
 int PG_ListBox::GetSelectedIndex() {

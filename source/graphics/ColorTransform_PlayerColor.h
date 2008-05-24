@@ -167,6 +167,11 @@ class ColorTransform_PlayerTrueColHSV
 {
       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
       int player;
+      
+      int rshift;
+      int gshift;
+      int bshift;
+      int ashift;
    protected:
       ColorTransform_PlayerTrueColHSV() : player(0)
       {}
@@ -174,12 +179,15 @@ class ColorTransform_PlayerTrueColHSV
 
       PixelType transform( PixelType col)
       {
-         int r = (col >> 16) & 0xff;
-         int g = (col >> 8) & 0xff;
-         int b = (col ) & 0xff;
-
-         DI_Color d = colorSwitch.switchC( player,r,g,b);
-         return (d.r << 16) + (d.g << 8) + d.b  + (col & 0xff000000);
+         if ( (col >> ashift) != Surface::transparent ) {
+            int r = (col >> rshift) & 0xff;
+            int g = (col >> gshift) & 0xff;
+            int b = (col >> bshift) & 0xff;
+   
+            DI_Color d = colorSwitch.switchC( player,r,g,b);
+            return (d.r << rshift) + (d.g << gshift) + (d.b << bshift)  + (col & (0xff << ashift));
+         } else
+            return col;
 
       };
 
@@ -191,24 +199,30 @@ class ColorTransform_PlayerTrueColHSV
       ColorTransform_PlayerTrueColHSV ( NullParamType npt ) : player(0)
       {};
 
+      void setPlayer( int playerNum )
+      {
+         player = playerNum;
+      }
+      
       void init( const Surface& src )
       {
+         rshift = src.GetPixelFormat().Rshift();
+         gshift = src.GetPixelFormat().Gshift();
+         bshift = src.GetPixelFormat().Bshift();
+         ashift = src.GetPixelFormat().Ashift();
       }
 
 };
 
-
-
-
   template<>
-  class ColorTransform_PlayerCol<4> : public ColorTransform_PlayerTrueColHSV<4> {
+  class ColorTransform_PlayerCol<4> : public ColorTransform_PlayerTrueCol<4> {
      
      public:
-        ColorTransform_PlayerCol( const PlayerColor& player ) : ColorTransform_PlayerTrueColHSV<4>( player.getNum() )
+        ColorTransform_PlayerCol( const PlayerColor& player ) : ColorTransform_PlayerTrueCol<4>( player.getColor() )
         {
         };
+   };
 
- };
 
 
 #endif

@@ -209,6 +209,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    if( name == "showplayercolor0" || name == "showplayercolor1" ) {
       MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
       blitter.setColor( actmap->player[actmap->actplayer].getColor() );
+      // blitter.setPlayer(actmap->actplayer);
       blitter.blit( IconRepository::getIcon("show_playercolor.png"), screen, SPoint(dst.x, dst.y));
       return;
    }
@@ -262,6 +263,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
             if ( height1 & (1 << i )) {
                MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
                blitter.setColor( actmap->player[player].getColor() );
+               // blitter.setPlayer( player );
                blitter.blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), screen, SPoint(dst.x, dst.y + (7-i) * 13));
             } else
                if ( height2 & (1 << i ))

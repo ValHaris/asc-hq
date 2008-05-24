@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:56 $
+    Update Date:      $Date: 2008-05-24 18:21:04 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pglistbox.h,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -72,16 +72,16 @@ class SignalSelectItem : public PG_Signal1<PG_ListBoxBaseItem*, datatype> {}
 	PG_ListBoxBaseItem* GetSelectedItem();
 
 	/** */
-	void SelectItem(PG_ListBoxBaseItem* item, bool select = true);
+	void SelectItem(PG_ListBoxBaseItem* item, bool select = true, bool fireEvent = true);
 
 	/* */
-	void SelectFirstItem();
+	void SelectFirstItem( bool fireEvent = true );
 
 	/* */
-	void SelectNextItem();
+	void SelectNextItem( bool fireEvent = true );
 
 	/* */
-	void SelectPrevItem();
+	void SelectPrevItem( bool fireEvent = true );
 
 	/**
 	Remove all widgets from the list (without deletion)

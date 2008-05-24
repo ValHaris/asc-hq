@@ -3,7 +3,8 @@
 
 #include "colorizer.h"
 
-const int ColorSwitch::playerAngles[9] = { 0, 35, 67, 120, 170, 225, 270, 320, 0 };
+// const int ColorSwitch::playerAngles[9] = { 0, 35, 67, 120, 170, 225, 270, 320, 0 };
+const int ColorSwitch::playerAngles[9] = { 0, 240, 55, 120, 298, 225, 240, 36, 0 };
 
 const bool ColorSwitch::sat[9] = { true, true, true, true, true, true, true, true, false };
    
@@ -112,11 +113,11 @@ ColorSwitch::ColorSwitch() : cache(NULL) {
 
 DI_Color ColorSwitch::switchC( int player, int r, int g, int b)
 {
-   if ( !cache )
-      generate();
-
 	if( g == b && r > g)
 	{
+	   if ( !cache )
+	      generate();
+
 		return cache->col[player][r][g];
 	}
 	else
