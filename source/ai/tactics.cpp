@@ -612,6 +612,10 @@ AI::AiResult AI::tactics( void )
                checkKeys();
    
                int stat = changeVehicleHeight ( veh, NULL );
+               
+               if ( !getMap()->getUnit(*i) )
+                  continue;
+               
                if ( stat == -1 ) { // couldn't change height due to blocked way or something similar
                   veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
                   result.unitsWaiting++;
@@ -623,6 +627,9 @@ AI::AiResult AI::tactics( void )
                   TargetVector tv;
                   getAttacks ( ast, veh, tv, hemmingBonus );
    
+                  if ( !getMap()->getUnit(*i) )
+                     continue;
+                  
                   if ( tv.size() ) {
                      MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
    
