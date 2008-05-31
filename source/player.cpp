@@ -92,12 +92,21 @@ DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
       return WAR;
 }
 
+void DiplomaticStateVector::resize( int size )
+{
+   int oldsize  = states.size();
+   states.resize(size);
+   for ( int i = oldsize; i < size; ++i )
+      states[i] = WAR;
+}
+
+
 void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s, bool fireSignal )
 {
    assert( towardsPlayer >= 0 );
 
    if ( towardsPlayer >= states.size() ) 
-      states.resize(towardsPlayer+1);
+      resize(towardsPlayer+1);
       
    states[towardsPlayer] = s;
    
@@ -559,6 +568,8 @@ void DiplomaticStateVector::swap( int secondPlayer )
 
    swapData( states, secondDSV.states );
    swapData( queuedStateChanges, secondDSV.queuedStateChanges );
+
+   resize( max(player.getPosition(), secondPlayer));
 
    for ( int i= 0; i < player.getParentMap()->getPlayerCount(); ++i )
       swapData( player.getParentMap()->getPlayer(i).diplomacy.states[secondPlayer],  player.getParentMap()->getPlayer(i).diplomacy.states[player.getPosition()] );

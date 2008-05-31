@@ -67,6 +67,8 @@ class DiplomaticStateVector : public SigC::Object {
 
       void changeToState( int towardsPlayer, DiplomaticStates s, bool mail = true );
       
+      void resize( int size );
+
    public:
       DiplomaticStateVector( Player& _player );
       
