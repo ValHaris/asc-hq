@@ -354,7 +354,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
    for ( vector<Vehicle*>::const_iterator j = cb->getCargo().begin(); j != cb->getCargo().end(); ++j ) {
       Vehicle* veh = *j;
       if ( veh )
-         if ( veh->canMove() )
+         if ( veh->canMove() && veh->getOwner() == getPlayerNum() )
             if ( veh->aiparam[ getPlayerNum() ]->getTask() == AiParameter::tsk_nothing
                || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_script  )
             idleUnits.push_back ( veh );
