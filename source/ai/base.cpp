@@ -22,6 +22,7 @@
 #include "../widgets/textrenderer.h"
 #include "../mapdisplay.h"
 #include "../asc-mainscreen.h"
+#include "../gameeventsystem.h"
 
 AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
@@ -192,7 +193,14 @@ class AI_KeyboardWatcher : public SigC::Object {
       }
 };
 
+void AI :: checkGameEvents()
+{
+   while ( getMap()->player[ actmap->actplayer ].queuedEvents )
+      if ( !checkevents( mapDisplay ))
+         return ;
 
+   checktimedevents( mapDisplay );
+}
 
 void AI:: run ( bool benchMark )
 {
@@ -237,6 +245,9 @@ void AI:: run ( bool benchMark )
    int serviceTime = ticker;
    issueServices( );
    executeServices();
+
+   checkGameEvents();
+
    serviceTime = ticker-serviceTime;
 
    int conquerTime = ticker;
@@ -253,17 +264,22 @@ void AI:: run ( bool benchMark )
    int tacticsTime = ticker;
    do {
       res = tactics();
+      checkGameEvents();
    } while ( res.unitsMoved );
    tacticsTime = ticker - tacticsTime;
 
    int strategyTime = ticker;
    strategy();
+   checkGameEvents();
+
    strategyTime = ticker - strategyTime;
 
    buildings( 1 );
    transports ( 3 );
 
    production();
+
+   checkGameEvents();
 
    _isRunning = false;
    if ( !mapDisplay )

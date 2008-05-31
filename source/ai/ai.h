@@ -468,6 +468,7 @@
 
             void diplomacy ();
 
+            void checkGameEvents();
             
         public:
            AI ( GameMap* _map, int _player ) ;
