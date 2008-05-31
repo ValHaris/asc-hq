@@ -79,7 +79,7 @@ class ContainerBase {
       typedef vector<Vehicle*> Cargo;
    protected:  
       Cargo cargo;
-      const ContainerBase* findUnit ( const Vehicle* veh ) const;
+
    public:
       const Cargo& getCargo() const { return cargo; };
 
@@ -98,11 +98,6 @@ class ContainerBase {
       
       bool unitLoaded( int nwid );
       
-      //! if the unit is inside this container, returns the container which the unit is directly in (which may not be the current one as containers may be nested arbitrarily).
-      const ContainerBase* findParent ( const ContainerBase* veh ) const;
-      ContainerBase* findParent ( const ContainerBase* veh );
-      
-
       //! returns the number of loaded units
       int vehiclesLoaded ( void ) const;
       
@@ -110,7 +105,7 @@ class ContainerBase {
       ContainerBase* getCarrier() const;
 
       //! searches for a the unit in the whole stack
-      Vehicle* findUnit ( int nwid );
+      Vehicle* findUnit ( int nwid ) const;
       
       /** can the vehicle be loaded. If uheight is passed, it is assumed that vehicle is at
       the height 'uheight' and not the actual level of height
@@ -135,10 +130,13 @@ class ContainerBase {
 
       //! returns the nesting depth of the cargo. The unit standing on the field is 0, its cargo is 1, the cargo's cargo 2 ...
       int cargoNestingDepth();
-      
+
+   private:
+      //! checks if this vehicle can carry this additional weight and recursively checks all outer vehicle (in case of nested carriers)
+      bool canCarryWeight( int additionalWeight ) const;
     //@}
 
-      
+   public:
      
       int damage;
       

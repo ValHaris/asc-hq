@@ -176,54 +176,10 @@ int ContainerBase :: cargoNestingDepth()
 }
 
 
-const ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh ) const
-{
-   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) {
-         if ( *i == veh )
-            return this;
-         else {
-            const ContainerBase* cb = (*i)->findParent( veh );
-            if ( cb )
-               return cb;
-         }
-      }
-
-   return NULL;
-}
-
-ContainerBase* ContainerBase :: findParent ( const ContainerBase* veh )
-{
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) {
-         if ( *i == veh )
-            return this;
-         else {
-            ContainerBase* cb = (*i)->findParent( veh );
-            if ( cb )
-               return cb;
-         }
-      }
-
-   return NULL;
-}
 
 ContainerBase* ContainerBase :: getCarrier() const
 {
    return cargoParent;
-   /*
-   tfield* fld = getMap()->getField( getPosition() );
-   if ( fld->vehicle == this )
-      return NULL;
-   
-   if ( fld->building )
-      return fld->building->findParent( this );
-   
-   if ( fld->vehicle )
-      return fld->vehicle->findParent( this );
-
-   return NULL;
-   */
 }
 
 
@@ -243,7 +199,7 @@ bool ContainerBase::unitLoaded( int nwid )
 
 }
 
-Vehicle* ContainerBase :: findUnit ( int nwid )
+Vehicle* ContainerBase :: findUnit ( int nwid ) const
 {
    for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i ) {
@@ -426,13 +382,24 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
    return false;
 }
 
+bool ContainerBase :: canCarryWeight( int additionalWeight ) const
+{
+   if ( cargoWeight() + additionalWeight >= baseType->maxLoadableWeight )
+      return false;
+   else
+      if ( getCarrier() )
+         return getCarrier()->canCarryWeight( additionalWeight );
+      else
+         return true;
+}
+
 
 bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
 {
    bool isConquering = isBuilding() && getMap()->getPlayer(this).diplomacy.isHostile( vehicle) && vehicle->color != color;
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
       if ( vehiclesLoaded() < baseType->maxLoadableUnits || isConquering )
-         if ( cargoWeight() + vehicle->weight() <= baseType->maxLoadableWeight || findParent ( vehicle ) || isConquering) // if the unit is already  loaded, the container already bears its weight
+         if ( canCarryWeight( vehicle->weight() ) || findUnit ( vehicle->networkid ) || isConquering) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;
