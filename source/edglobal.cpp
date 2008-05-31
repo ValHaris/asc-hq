@@ -56,6 +56,7 @@
 #include "widgets/textrenderer.h"
 #include "dialogs/exchangegraphics.h"
 #include "dialogs/fileselector.h"
+#include "dialogs/importbi3map.h"
 #include "stack.h"
 
    
@@ -735,36 +736,6 @@ void execaction( int code)
             displaymap();
       }
       break;
-   case act_import_bi_map : {
-         ASCString path = getbipath();
-         if ( path.empty() )
-            break;
-
-         appendbackslash( path );
-
-         ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
-
-         ASCString filename = selectFile( wildcard, true );
-         if ( !filename.empty() ) {
-            importbattleislemap ( path.c_str(), filename.c_str(), terrainTypeRepository.getObject_byID(9999)->weather[0] );
-            displaymap();
-         }
-      }
-      break;
-   case act_insert_bi_map : {
-         ASCString path = getbipath();
-         if ( path.empty() )
-            break;
-
-         ASCString wildcard = path + "mis" + pathdelimitterstring + "*.dat" ;
-
-         ASCString filename = selectFile( wildcard, true );
-         if ( !filename.empty() ) {
-            insertbattleislemap ( actmap->getCursor().x, actmap->getCursor().y, path.c_str(), filename.c_str() );
-            displaymap();
-         }
-      }
-      break;
    case act_resizemap : resizemap();
       break;
    case act_movebuilding: movebuilding();
@@ -1071,7 +1042,19 @@ void execaction_pg(int code)
             *p = 1;
          }
          break;
-      case asc_testFunction: testDebugFunction(); break;
+      case asc_testFunction: testDebugFunction(); 
+         break;
+      case act_import_bi_map : 
+         if (mapsaved == false )
+            if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
+               k_savemap(false);
+         importBI3Map( actmap );
+         displaymap();
+         break;
+      case act_insert_bi_map : 
+         importBI3Map( actmap, true );
+         displaymap();
+         break;
    };
 }
 

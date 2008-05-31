@@ -355,6 +355,21 @@ void Bi3MapTranslationTable :: runTextIO ( PropertyContainer& pc )
 
 PointerVector<Bi3MapTranslationTable*> bi3ImportTables;
 
+Bi3MapTranslationTable* findTable( const ASCString& filename ) {
+   for ( PointerVector<Bi3MapTranslationTable*>::iterator i = bi3ImportTables.begin(); i != bi3ImportTables.end(); ++i )
+      if ( (*i)->filename == filename )
+         return *i;
+   return NULL;
+}
+
+vector<ASCString> getBI3ImportTables()
+{
+   vector<ASCString> list;
+   for ( PointerVector<Bi3MapTranslationTable*>::iterator i = bi3ImportTables.begin(); i != bi3ImportTables.end(); ++i )
+      list.push_back ( (*i)->filename );
+   return list;
+}
+
 
 void BI3TranslationTableLoader::read ( tnstream& stream )
 {
@@ -1628,48 +1643,17 @@ void setDefaultBI3ImportTranslationTable( const ASCString& filename )
 }
 
 
-Bi3MapTranslationTable* chooseImportTable ( )
-{
-  if ( bi3ImportTables.size() == 0)
-     fatalError ( "No BI3 map translation tables present!");
 
-  if ( bi3ImportTables.size() == 1)
-     return bi3ImportTables[0];
-
-  if ( defaultImportTranslationTable.empty() ) {
-     vector<ASCString> strings;
-     for ( int i = 0; i < bi3ImportTables.size(); i++ )
-        strings.push_back ( bi3ImportTables[i]->filename );
-
-     int t = chooseString ( "Select Import Table", strings );
-     if ( t != 255 )
-        return bi3ImportTables[ t ];
-     else
-        return bi3ImportTables[0];
-  } else {
-     for ( int i = 0; i < bi3ImportTables.size(); i++ )
-         if ( bi3ImportTables[i]->filename.compare_ci ( defaultImportTranslationTable ) == 0 )
-            return bi3ImportTables[i];
-
-     fatalError ( "default BI3 import Table " +defaultImportTranslationTable + " not found !");
-
-     // never executed...
-     return bi3ImportTables[0];
-  }
-}
-
-
-
-void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput, bool fakemap  )
+void importbattleislemap ( const ASCString& path, const ASCString& mapfilename, TerrainType::Weather* trrn, const ASCString& importTable, ASCString* errorOutput, bool fakemap  )
 {
     GameMap* oldmap = actmap;
     actmap = NULL;
     GraphicSetManager::Instance().setActive(1);
     try {
-       ImportBiMap lbim ( chooseImportTable ( ) );
+       ImportBiMap lbim ( findTable(importTable) );
        if ( fakemap )
           lbim.____fakeMap____();
-       lbim.LoadFromFile ( path, filename, trrn, errorOutput );
+       lbim.LoadFromFile ( path.c_str(), mapfilename.c_str(), trrn, errorOutput );
        actmap->_resourcemode = 1;
        actmap->cleartemps ( 7 );
     }
@@ -1682,11 +1666,11 @@ void importbattleislemap ( const char* path, const char* filename, TerrainType::
 }
 
 
-void insertbattleislemap ( int x, int y, const char* path, const char* filename  )
+void insertbattleislemap ( int x, int y, const ASCString& path, const ASCString& mapfilename, const ASCString& importTable  )
 {
     GraphicSetManager::Instance().setActive ( 1 );
-    InsertBiMap lbim ( x, y, chooseImportTable ( ) );
-    lbim.LoadFromFile ( path, filename, NULL, NULL );
+    InsertBiMap lbim ( x, y, findTable(importTable) );
+    lbim.LoadFromFile ( path.c_str(), mapfilename.c_str(), NULL, NULL );
     actmap->_resourcemode = 1;
     actmap->cleartemps ( 7 );
 }

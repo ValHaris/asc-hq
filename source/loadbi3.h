@@ -36,14 +36,14 @@
 
 /** Imports a Battle Isle map 
   \param path the path to the BI3 installation
-  \param filename The name of the map
+  \param mapfilename The name of the map
   \param trrn The terrain that is used for all fields which are unknown to ASC
   \param errorOutput Pointer to a string which will store all warning and error messages from the import. May be NULL.
   \param __fakeMap If true ASC tries to make the map look like the Battle Isle map, generating new ObjectType and TerrainType instances if necessary.
                    This must not be used by any program other than map2pcx, since the maps can not be played. This is only used to generate
                    the images of the Battle Isle Map Archive.   
 */
-extern void importbattleislemap ( const char* path, const char* filename, TerrainType::Weather* trrn, string* errorOutput = NULL, bool __fakeMap = false );
+extern void importbattleislemap ( const ASCString& path, const ASCString& mapfilename, TerrainType::Weather* trrn, const ASCString& importTable, ASCString* errorOutput = NULL, bool __fakeMap = false );
 
 /** Imports a Battle Isle map and inserts it into the current ASC map
   \param x The x coordinate of field where the upper left field of the BI map will be placed.
@@ -51,13 +51,16 @@ extern void importbattleislemap ( const char* path, const char* filename, Terrai
   \param path the path to the BI3 installation
   \param filename The name of the map
 */
-extern void insertbattleislemap ( int x, int y, const char* path, const char* filename  );
+extern void insertbattleislemap ( int x, int y, const ASCString& path, const ASCString& mapfilename, const ASCString& importTable );
 
 //! returns the path to the BI3 installation
 extern ASCString getbi3path();
 
 //! to prevent the appearnce of the dialog "choose import translation table" when running in batch mode, a default translation table can be specified
 extern void setDefaultBI3ImportTranslationTable( const ASCString& filename );
+
+//! returns the names of the import tables that are available
+extern vector<ASCString> getBI3ImportTables();
 
 extern int getterraintranslatenum ( void );
 extern int getobjectcontainertranslatenum ( void );
