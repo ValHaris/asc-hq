@@ -65,7 +65,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
    gamemap->player[player].vehicleList.push_back ( this );
    
    networkid = gamemap->getNewNetworkID();
-   gamemap->vehicleLookupCache[networkid] = this;
+   gamemap->registerUnitNetworkID( this );
 }
 
 Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID )
@@ -87,7 +87,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int netw
       }
 
    if ( networkID >= 0 )
-      gamemap->vehicleLookupCache[networkid] = this;
+      gamemap->registerUnitNetworkID( this );
 }
 
 
@@ -129,9 +129,7 @@ Vehicle :: ~Vehicle (  )
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
 
-      GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find(networkid);
-      if ( j != gamemap->vehicleLookupCache.end() )
-         gamemap->vehicleLookupCache.erase(j);
+      gamemap->unregisterUnitNetworkID(this);
    }
 
    tfield* fld = gamemap->getField( xpos, ypos);
@@ -1744,13 +1742,10 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
    if ( forceNetworkID > 0 )
       v->networkid = forceNetworkID;
 
-   GameMap::VehicleLookupCache::iterator j = gamemap->vehicleLookupCache.find( v->networkid);
-   if ( j != gamemap->vehicleLookupCache.end() ) {
-      // warning("duplicate network id detected !");
+   if( gamemap->getUnit( v->networkid, false ))
       v->networkid = gamemap->getNewNetworkID();
-   }
+   gamemap->registerUnitNetworkID(v);
 
-   gamemap->vehicleLookupCache[v->networkid] = v;
    return v;
 }
 

@@ -1050,6 +1050,21 @@ int GameMap :: eventpassed( int id, int mapid )
 }
 
 
+void GameMap::registerUnitNetworkID( Vehicle* veh )
+{
+   vehicleLookupCache[veh->networkid] = veh;
+   if ( unitnetworkid < veh->networkid )
+      unitnetworkid = veh->networkid;
+}
+
+void GameMap::unregisterUnitNetworkID( Vehicle* veh )
+{
+   VehicleLookupCache::iterator j = vehicleLookupCache.find(veh->networkid);
+   if ( j != vehicleLookupCache.end() )
+      vehicleLookupCache.erase(j);
+}
+
+
 int GameMap :: getNewNetworkID()
 {
    ++unitnetworkid;
@@ -1078,20 +1093,20 @@ Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
    }
 }
 
-Vehicle* GameMap :: getUnit ( int nwid )
+Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck )
 {
    VehicleLookupCache::iterator i = vehicleLookupCache.find( nwid );
    if ( i != vehicleLookupCache.end() )
       return i->second;
 
 
-   for ( int p = 0; p < 9; p++ )
-      for ( Player::VehicleList::iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
-         if ( (*i)->networkid == nwid ) {
-            displaymessage("warning: id not registered in VehicleLookupCache!",1);
-            return *i;
-
-         }
+   if ( consistencyCheck ) 
+      for ( int p = 0; p < 9; p++ )
+         for ( Player::VehicleList::iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
+            if ( (*i)->networkid == nwid ) {
+               displaymessage("warning: id not registered in VehicleLookupCache!",1);
+               return *i;
+            }
 
    return NULL;
 }

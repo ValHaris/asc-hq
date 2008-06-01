@@ -241,8 +241,6 @@ class GameMap {
       
       MapCoordinate& getCursor();
       
-      typedef map<int, Vehicle*> VehicleLookupCache;
-      VehicleLookupCache vehicleLookupCache; 
 
       int eventID;
 
@@ -256,8 +254,14 @@ class GameMap {
 
 private:
       int          unitnetworkid;
+      typedef map<int, Vehicle*> VehicleLookupCache;
+      VehicleLookupCache vehicleLookupCache; 
 public:
       int getNewNetworkID();
+      void registerUnitNetworkID( Vehicle* veh );
+      void unregisterUnitNetworkID( Vehicle* veh );
+
+
       char         levelfinished;
 
       enum State { 
@@ -381,7 +385,7 @@ public:
       GameMap ( void );
 
       Vehicle* getUnit ( int x, int y, int nwid );
-      Vehicle* getUnit ( int nwid );
+      Vehicle* getUnit ( int nwid, bool consistencyCheck = true );
       ContainerBase* getContainer ( int nwid );
       int  getgameparameter ( GameParameter num ) const;
       void setgameparameter ( GameParameter num, int value );
