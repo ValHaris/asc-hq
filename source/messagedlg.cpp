@@ -35,6 +35,7 @@
 #include "widgets/playerselector.h"
 #include "pgrichedit.h"
 #include "pgmultilineedit.h"
+#include "pgtooltiphelp.h"
 
 #include "dialogs/fieldmarker.h"
 #include "dialogs/selectionwindow.h"
@@ -74,7 +75,17 @@ class  NewMessage : public ASC_PG_Dialog {
          QuitModal();
          return true;
       }
-      
+
+      bool insertCursorCoordinates()
+      {
+         MapCoordinate pos = gamemap->getCursor();
+         if ( pos.valid() ) {
+            editor->InsertText( pos.toString() );
+            return true;
+         } else
+            return false;
+      }
+
       bool insertCoordinates()
       {
          SelectFromMap::CoordinateList coordinates;
@@ -93,6 +104,16 @@ class  NewMessage : public ASC_PG_Dialog {
          editor->InsertText( text );
          return true;
       }
+
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+         if ( (mod & KMOD_CTRL) &&( key->keysym.sym == SDLK_r )) 
+            return insertCursorCoordinates();
+
+         return ASC_PG_Dialog::eventKeyDown(key);
+      }
+
    public:
       NewMessage ( GameMap* gamemap, Message* msg = NULL, bool reminder = false ); 
 };
@@ -131,6 +152,9 @@ NewMessage :: NewMessage ( GameMap* gamemap, Message* msg, bool reminder ) : ASC
    AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &NewMessage::cancel ));
    AddStandardButton("");
    AddStandardButton("Coordinates")->sigClick.connect( SigC::slot( *this, &NewMessage::insertCoordinates ));
+   PG_Button* coord = AddStandardButton("Cursor Coord");
+   coord->sigClick.connect( SigC::slot( *this, &NewMessage::insertCursorCoordinates ));
+   new PG_ToolTipHelp ( coord, "ctrl-r");
   
 }
       
