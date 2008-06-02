@@ -50,8 +50,6 @@ class ImportBI3MapDialog : public ASC_PG_Dialog {
          filename += pathdelimitterstring;
          filename += "*.dat";
 
-         int cnt = 0;
-
          if ( exist( filename ))
             return true;
          else {
