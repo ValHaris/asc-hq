@@ -27,17 +27,17 @@
 #include "graphics/blitter.h"
 #include "fieldimageloader.h"
 
-const char*  terrainProperty[terrainPropertyNum+1]  = {"shallow water"       ,
+const char*  terrainProperty[terrainPropertyNum+1]  = {"shallow water"       ,  // 0
                                              "normal lowland",
                                              "swamp",
                                              "forest",
-                                             "high mountains",
+                                             "high mountains",                  // 4
                                              "road",
                                              "railroad",
                                              "entry of building (not to be used for terrain)" ,
                                              "harbour",
                                              "runway"  ,
-                                             "pipeline",
+                                             "pipeline",                        // 10
                                              "buried pipeline",
                                              "water",
                                              "deep water",
@@ -521,7 +521,12 @@ TerrainBits getTerrainBitType ( TerrainBitTypes tbt )
       case cbwater1 : tb.setInt( 1 );   break;
       case cbwater2 : tb.setInt( 4096 ); break;
       case cbwater3 : tb.setInt( 8192 ); break;
-      case cbwater  : tb.setInt ( 1<<22 | 1 | 4096 | 8192 | 1 << 31 ); break;
+      case cbwater  : tb.setInt (  (1<<22)  // very shallow water
+                                 | (1<< 0)  // shallow water
+                                 | (1<<12)  // water
+                                 | (1<<13)  // deep water
+                                 | (1<<31)  // river
+                                 ); break;
       case cbstreet : tb.setInt ( 32, 0 ); break;
       case cbrailroad : tb.setInt ( 64, 0 ); break;
       case cbbuildingentry : tb.setInt ( 128, 0 ); break;
@@ -540,6 +545,7 @@ TerrainBits getTerrainBitType ( TerrainBitTypes tbt )
       case cbicebreaking : tb |= getTerrainBitType( cbfrozenwater )
                               | getTerrainBitType( cbsnow1 )
                               | getTerrainBitType(cbsnow2 );
+      case cbriver       : tb.setInt(  1 << 24, 0 ); break;
 
    };
    return tb;

@@ -166,7 +166,8 @@
                      cbsmallrocks ,
                      cblargerocks ,
                      cbfrozenwater,
-                     cbicebreaking };
+                     cbicebreaking,
+                     cbriver };
 
  TerrainBits getTerrainBitType ( TerrainBitTypes tbt );
 

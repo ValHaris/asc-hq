@@ -1517,7 +1517,8 @@ class PutAntiShipMine : public GuiFunction
             if ( (fld->bdt & getTerrainBitType(cbwater0)).any()
                  || (fld->bdt & getTerrainBitType(cbwater1)).any()
                  || (fld->bdt & getTerrainBitType(cbwater2)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater3)).any() )
+                 || (fld->bdt & getTerrainBitType(cbwater3)).any() 
+                 || (fld->bdt & getTerrainBitType(cbriver)).any() )
                if (fld->a.temp & 1 )
                   if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
                      return true;
