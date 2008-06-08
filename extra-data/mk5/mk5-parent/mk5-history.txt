@@ -2,8 +2,31 @@ MK5 Outsider
 GAMER
 
 __________________
+07.06.2008 (GAMER)
+-T1, schnellstarter für Jetstar
+-T2, laderaum vergrößert
+-Enduro Movement erweitert
+-DevensivBuggiers, mehr Waffen, Trooperstellplatz
+-T4 Waffe 2-3 Felder
+-Mechaniker bauen "Panzersperre"
+-Beep submerge 14 movement
+-Buffed, Transportsystem erweitert, kann beep und Flyer bauen
+-Watcher, kann scanner/taeuscher bauen
+-CCS , kann prd, kornuta, beep bauen
+-Taeuscher, kein Wrack mehr
+-Magic/Flussgeist neues Transportsystem
+-Muhs kann Tlauncher bauen
+-Waffenbugfix Jet Trooper
+-Gateling, mdrf
+-Kracher umgebaut
+-ironGun, Waffenbugfix
+-Einheitenbeschreibungen: Ninja,Trike,Enduro
+-MovementSound = FAVs, Flak, Doomsday, Energia, Saenger
+__________________
 03.05.2008 (GAMER)
 -MovementSound: Hoover, Ninja
+-FSV, wrack entfernen
+-Flussgeist überarbeitet
 Neu: 
 -Shiphunter
 __________________

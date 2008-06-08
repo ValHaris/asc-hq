@@ -10,10 +10,13 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
    
    Transportation ->* VehicleType.TransLowTrooper 
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem1 ->* VehicleType.ejector
 
    Armor -= 50
    View += 10
 
    Movement -= 0 0 0 10 0 0 0 0 
+   MovementSound = buggy1.ogg
 
 } VehicleType

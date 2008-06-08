@@ -15,4 +15,5 @@ VehicleType {
       Weapon0.Punch@MaxRange += 3
       Weapon0.Punch@MinRange += 3
    } Weapons
+   MovementSound = wheeled_l_g.ogg
 } VehicleType

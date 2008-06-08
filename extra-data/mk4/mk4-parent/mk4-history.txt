@@ -3,6 +3,10 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
 Spezifikationen: GAMER
 
 __________________
+07.06.2008 (GAMER}
+-Einheitenbeschreibungen: Scorpion, Teccno, GT DIve, Crusader, Comet, Parademon, Golem, Demon, GTDef,Sam3,Sam2
+-Gigant, standart transportsystem
+__________________
 26.04.2008 (GAMER)
 -MovementSound: Pirate, Firebird
 -Citadellenwracks bugfix material

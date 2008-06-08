@@ -2,6 +2,15 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+08.06.2008 (GAMER)
+-JamTrooper Soundfix
+-device Soundfix
+-spacestation gewicht bugfix
+-BunkerCM, waitforattack
+-Diver-abwurf = waitforattack
+-MovementSound = Raven2
+-MovementSound-parent = Fregatte, Zerstörer, Kreuzer, Schlachtschiff, Helicarrier, smallcarrier, medcarrier, bigcarrier, transporship, armoredtransportship, DistanceFighter
+__________________
 04.05.2008 (GAMER)
 -Grafiküberarbeitung: Nightcap, Hawk, Predator, Eagle
 -Movementsound: heavy fighter, medium fighter, mechs, vto, schnellboote, Wigs

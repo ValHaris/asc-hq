@@ -1,10 +1,21 @@
 VehicleType { 
-   Name = PARADEMON I35
+   Name = PARADEMON
    ID = 1236
    parent = 207
 
    Description = Fallschirmspringer
-   Infotext = [Der PARADEMON ist kann sich per Fallschirm von einem fliegenden Flugzeug aus in Richtung Boden absetzen. Die zusätzliche Ausrüstung ging zu Lasten der Kampfkraft.]
+   Infotext = [Der Parademon – innerhalb der Truppen kurz: PD genannt – ist, wie der Name bereits vermuten lässt, eine Modifikation des älteren Demon-Chassis, welches mit einem Fallschirm ausgestattet wurde, um als Fallschirmjägereinheit hinter den feindlichen Linien abgesetzt werden zu können.
+
+Auch wenn derartige Einsätze verhältnismäßig gefährlich sind, so sind die PD-Chassis doch nur in der H-Variante verfügbar, sprich: es handelt sich um modifizierte Demon-Anzüge von der Sorte, die auch von Humanoiden bestiegen werden können. 
+Der Einsatz als Fallschirmjäger erfordert oftmals ein Höchstmaß an Reaktionsvermögen, menschlicher Intuition, sowie diverse Spezialfähigkeiten, zu denen kein heutzutage gängiger Roboter fähig ist. Daher wurde schon früh entschlossen, ausschließlich speziell ausgesuchte und ausgebildete freiwillige Soldaten in die PD-Kampfanzüge zu stecken. 
+
+Wie der Demon, so verfügt auch der PD-Anzug über ein Maschinengewehr, sowie eine kleine Anzahl von Minen. Zusätzlich wurde er mit vier hochwirksamen Sprengsätzen ausgestattet, die vor allem zur Vernichtung befestigter Bunkeranlagen geeignet sind. Damit kann der PD hinter den feindlichen Linien agieren, um z.B. Panzerwerke oder stationäre Flakstellungen von hinten zu packen und zu vernichten, um so den Weg für die Kameraden des Heeres und der Luftwaffe an der eigentlichen Frontlinie für einen erfolgreichen Durchbruch zu bereiten.
+
+Um den auserwählten Soldaten das Leben zu erleichtern und um die Fallgeschwindigkeit aus einem Flugzeug heraus soweit zu reduzieren, dass ein normal großer und damit unauffälligerer Fallschirm den besetzten PD-Anzug vernünftig abbremsen kann, wurde das Gesamtgewicht im Vergleich zu einem normalen Demon beibehalten. Damit dies trotz der zusätzlichen Sprengladungen möglich war, musste ein etwas leichteres MG als Standardbewaffnung eingebaut, sowie die Panzerung um 15% reduziert werden. Dass der PD in seinem Falle nun vier, statt der standardmäßig zwei Minen mit sich führt, spielt bei der Gewichtsfrage keine Rolle, denn hierbei handelt es sich um spezielle Fallschirmjägerminen, die zwar genauso wirkungsvoll sind, wie die ursprüngliche Standardversion, dafür jedoch nur halb soviel wiegen.
+
+Ausgesetzt werden kann der PD von jeder Flug-Einheit, die er selbst betreten kann und die dazu fähig ist, ihre Frachtluken in der Luft zu öffnen. Bei der chromonischen Luftwaffe dürfte dies vor allem das Transportflugzeug Crux, sowie den Transporthubschrauber Guppi betreffen, jedoch sind theoretisch auch der Drohnentransporter Crux DX, sowie die fliegende Festung vom Typ Pterrano dazu fähig. 
+
+]
    Picture = mk4i_parademon.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14236

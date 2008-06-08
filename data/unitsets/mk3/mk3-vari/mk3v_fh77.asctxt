@@ -14,6 +14,7 @@ VehicleType {
    } Tank
    FuelConsumption = 15
    Movement += 0 0 0 10 0 0 0 0 
+   MovementSound = wheeled_l_g.ogg
 
    Weapons { 
       Weapon0.Punch@MaxRange += 1

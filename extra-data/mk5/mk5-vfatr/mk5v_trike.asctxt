@@ -4,10 +4,16 @@ VehicleType {
    parent = 331
    Description = KampfTrike
 
-   Infotext = [ Dieses wendige dreiraedrige Gelaendefahrzeug ist mit je zwei Boden-Boden und Boden-Luft Rakete ausgeruestet. Dadurch wird dieses Trike universell einsetzbar. Trotzdem sollte offensiver Einsatz moeglichst vermieden werden.]
+   Infotext = [Typisches Outsidergefährt und darf bei keinem Waffengang zu Lande fehlen. Vom Prototyp ist nicht mehr viel zu erkennen. Der zu schwache 250ccm Motor mußte weichen und wurde durch die reichlich vorhandenen 1-Liter Maschinen der ausgemusterten Ducati Monster ersetzt. Genug Pferdestärken um Fahrer und Passagier ordentlich auf Trab zu bringen.
+
+Die Tri-Z hat alles, was ein Outlawherz höher schlagen läßt. Sie ist schnell, geländegängig, klingt zornig und besitzt Waffenhalterungen bis der Arzt kommt.
+Ihr Einsatzspektrum ist denkbar groß und reicht von Aufklärung über Spezialistentransport bis ernstzunehmender Kampfunterstützung gegen Infantrie, leichte Panzer & Flieger. 
+
+Ein FSV4x4 Servicefahrzeug nebst Mechaniker sollte jedoch immer in Reichweite sein, um die Trikes im Kampf zu halten und ihre knapp bemessenen Munitionsvorräte auffüllen zu können. ]
    Picture = MK5v_TRIKE.pcx
    WreckageObject = 1403
 
+   MovementSound = buggy2.ogg
    Weapons { 
       Initiative = 0
       Number = 3

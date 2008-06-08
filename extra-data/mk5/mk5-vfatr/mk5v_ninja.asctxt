@@ -3,10 +3,15 @@ VehicleType {
    ID = 1434
    parent = 400 401 402 411
    Description = Strassenrennmaschine
-   Infotext = [Das Bike ist das schnellste Landfahrzeug. Durch seine Wendigkeit
-              ist es in der Lage sich nach einem Angriff sofort wieder zurückzuziehen.
-              Kleinere Anhöhen und schwieriges Gelände sind für das Motorrad
-              kein Problem. Auf einem Notsitz kann ein Spezialist platz finden.]
+   Infotext = [Einen Spezialisten im Expresstempo von Punkt A nach B bringen? - Ein klarer Fall für die Ghostrider unter den Outsidern.
+Ihre Maschinen sind das Nonplusultra auf zwei Rädern: Hayabusa Turbo 
+
+506 PS aus 1300ccm katapultieren Fahrer & Sozius in 3 sec. auf 100km/h und in 14 sec. 300km/h. Der Untergrund sollte jedoch fest und trocken sein. Als schnellstes Fahrzeug über Land, kann sie ihre Spitzenwerte nur auf der Straße erreichen. Abseits davon muß sie das Feld der Enduro überlassen.
+
+Das Auftauchen dieser Rennmaschine, weit hinter der Frontlinie, sorgte schon des Öfteren für lähmendes Entsetzen. So sind viele überfallartige Einnahmen von Produktionsstätten, Depots und HQs zur Legende geworden, was ihnen den Namen Ghostrider einbrachte.
+
+Hayabusa Biker sind in Truppe hoch geachtet. Aufgrund der fehlenden Bewaffnung und Panzerung vermeidet es der gemeine Outlaw jedoch, während seines Höllenritts einem feindlichen Angriff ausgesetzt zu sein. 
+]
    Picture = MK5v_Ninja.pcx
    WreckageObject = 1402
 

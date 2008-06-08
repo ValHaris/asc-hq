@@ -13,11 +13,11 @@ VehicleType {
    Features += ManualSelfDestruct
 
    Weapons { 
-      Initiative = 50
       Number = 1
-      Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange -= 10
       Weapon0.MinRange = 10
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange = 100
       Weapon0.Ammo = 20
       Weapon0.ReactionFireShots = 3
    } Weapons

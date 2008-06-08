@@ -7,13 +7,18 @@ VehicleType {
    Picture = MK5v_FGDV.pcx
    WreckageObject = 1404
 
+   Transportation ->* VehicleType.TransLowTrooper2
+
+   Armor += 100
    Features += moveduringreactionfire   
    Movement -= 0 0 0 10 0 0 0 0 
+   MovementSound = buggy2.ogg
 
    WaitForAttack = true
    Weapons { 
-      Weapon0 ->* vehicleType.Def_MG 
+      Weapon0 ->* VehicleType.MG35low 
       Weapon1.MaxRange = 40
+      Weapon1.Ammo = 6
       Weapon1.Punch@MaxRange = 110
       Weapon1.Punch@MinRange = 110
       Weapon1.Reactionfireshots = 2

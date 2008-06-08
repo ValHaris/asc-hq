@@ -12,11 +12,18 @@ VehicleType {
    Transportation.EntranceSystemNum = 3
    Transportation.CategoriesNOT = heavy_aircraft building|turret|object medium_ship heavy_ship heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle
    Transportation.EntranceSystem2 ->* VehicleType.SubIO
-   Features += sonar icebreaker
+   Features += sonar icebreaker Vehicle_Production NoProductionCustomization
 
-   Height = deep_submerged submerged floating
-   Movement = 55 55 55 0 0 0 0 0 
+   Height = deep_submerged submerged floating ground_level
+   Movement = 55 55 55 50 0 0 0 0 
    TerrainAccess ->* VehicleType.hooverfull_terrain 
+
+   Construction {
+      VehiclesInternally = 1470 1452
+      ProductionEfficiency = [   0   0   2
+                                 0   1   0
+                                 0   0   1 ]
+   } Construction 
 
    Weapons { 
       Number = 6

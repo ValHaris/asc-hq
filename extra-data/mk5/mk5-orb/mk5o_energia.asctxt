@@ -2,24 +2,16 @@ VehicleType {
    Name = ENERGIA
    parent = 400 401 402 497
    ID = 1411
+   
    Description = Transport Rakete
    Infotext = [Diese Lastrakete wird benötigt um Satelliten
               ins All zu befördern. Sie ist veraltet, ist langsam und verbraucht
               große Mengen an Treibstoff. Es ist geplant die Rakete durch
               einen modernen Raumgleiter zu ersetzen.#crt#Entwicklungsstand:
               unbekannt]
-   Armor = 250
-   View = 31
    Picture = MK5o_ENERGIA.pcx
    WreckageObject = 1411
-   ConstructionCost { 
-      Energy = 
-      Material = 
-      fuel = 
-   } ConstructionCost
-   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
-   Jamming = 0
-   WaitForAttack = false
+
    Transportation { 
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 200
@@ -30,30 +22,40 @@ VehicleType {
       EntranceSystem1 ->* VehicleType.OrbIO
       Entrancesystem1.DisableAttack = true
    } Transportation
+
+   Armor = 250
+   View = 31
+   Jamming = 0
+   Features = ExternalFuelTransfer ExternalMaterialTransfer no_midair_refuel 
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 500
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Movement = 0 0 0 21 80 90 100 100 
    Tank { 
       Energy = 0
       Material = 20000
       fuel = 20000
    } Tank
    FuelConsumption = 40
-   Features = ExternalFuelTransfer ExternalMaterialTransfer no_midair_refuel 
-   Movement = 0 0 0 21 80 90 100 100 
-   Category = heavy_aircraft
-   MaxSurvivableStorm = 0
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 500
    TerrainAccess { 
       terrain_any = Runway 
       terrain_all = 
       terrain_not = 
       terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
    } TerrainAccess
+   MovementSound = aircraft_l_g.ogg
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 1

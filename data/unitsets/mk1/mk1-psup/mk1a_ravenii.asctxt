@@ -24,7 +24,7 @@ VehicleType {
    FuelConsumption = 35
    Movement = 0 0 0 55 130 130 130 0 
    TerrainAccess ->* VehicleType.aircraft_terrain_road 
-   MovementSound = aircraft_l_g.ogg
+   MovementSound = jet_pass.ogg
 
    HeightChangeMethod0 {
       movecost = 40

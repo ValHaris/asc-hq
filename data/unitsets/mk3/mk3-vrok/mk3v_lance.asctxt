@@ -7,4 +7,5 @@ VehicleType {
    Picture = Mk3v_lance.png
    GuideSortHelp = 505 413 0 0 3 0 0 0 0 0
 
+   MovementSound = wheeled_l_g.ogg
 } VehicleType

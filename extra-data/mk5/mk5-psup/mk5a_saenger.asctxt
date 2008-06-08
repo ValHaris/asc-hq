@@ -57,6 +57,7 @@ VehicleType {
       terrain_not = 
       terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
    } TerrainAccess
+   MovementSound = aircraft_l_g.ogg
 
    Construction { 
       Buildings = 

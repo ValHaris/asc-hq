@@ -4,7 +4,18 @@ VehicleType {
    parent = 202
 
    Description = Elite Kampfroboter
-   Infotext = [Der TROLL beschreibt den momentanen Stand in der Entwicklung mechanischer Kampfchassis. Zwar ungleich schwerer, dafuer aber weitaus kampfkraeftiger und mit staerkeren panzerbrechenden Waffen ausgestattet als der DEMON, entfalten schon wenige Einheiten dieses Typs starke Feindbindungsmoeglichkeiten.]
+   Infotext = [Der Troll ist eine Weiterentwicklung der Demon-R-Variante. Er dient vorrangig dazu, gepanzerte Ziele auch mit Infanteristen erfolgversprechend bekämpfen zu können. 
+
+Da die Einsätze, in die der Troll im Allgemeinen geschickt wird, recht gefährlich sind, wurde bereits zu Beginn des Konstruktionvorganges bewusst auf eine H-Version, wie es sie bei dem zu Grunde liegenden Demon-Modell gibt, verzichtet. 
+
+Trolle werden vor allem dort eingesetzt, wo andere panzerbrechende Einheiten nicht hinkommen, bzw. wo es darum geht, einem Gegner schnell eine kostengünstige Abwehr entgegenzuwerfen. 
+Troll-Kampfroboter wurden zu diesem Zwecke mit einer Panzerfaust ausgerüstet, welche einen Hohlladungsgefechtskopf verfeuern kann. Diese Panzerfaust mag zwar auf den ersten Blick verhältnismäßig klein und ungefährlich erscheinen, jedoch schweißt sich die Hohlladung beim Aufschlag durch fast jede gängige Panzerung hindurch, um im Inneren des getroffenen Fahrzeugs, eine nicht zu unterschätzende Explosion zu verursachen. 
+Da die rohrförmige Abschussvorrichtung mehrfach verwendbar ist, kann ein Troll bis zu sechs dieser kleinen Gefechtsköpfe mit sich führen. Damit er diese zu Transportzwecken direkt an seinem Torso einklinken kann, wurde beim Troll bewusst darauf verzichtet, ihn auch noch mit Minen auszurüsten. Da er – aufgrund des fest installierten Abschussrohres – in seiner Beweglichkeit ohnehin etwas schlechter dasteht, als der Demon-Typ, wurde die Minenräum- und Minensuchfähigkeit gestrichen. Außerdem wurde ihm – aus Gleichgewichtsgründen – ein etwas leichteres Maschinengewehr verpasst. Da die Infanterieabwehr jedoch ohnehin nicht zum Haupttätigkeitsfeld des Trolls gehört, kann diese leichte Reduzierung durchaus verschmerzt werden. 
+
+Trolle sind – auch wenn sie gelegentlich zur Eroberung feindlicher Gebäude eingesetzt werden – vorrangig dazu gedacht, eine effektive Abwehr gegen gepanzerte Feindkräfte zu bilden. Zwar kann man sie auch offensiv einsetzen, jedoch sollte man dabei nie vergessen, dass sie als Infanterieeinheiten sehr anfällig gegen Anti-Personen-Minen und Maschinengewehrfeuer sind. Will man seine Trolle also überhaupt in die Nähe des Feindes bekommen, sollte man sie dringend mit anderen Einheiten zusammenarbeiten lassen oder im Schutze geeigneter Transporter vor Ort bringen.
+
+Ein Troll benötigt über 160% des Material, welches für die Herstellung eines Demons notwendig wäre. Dabei sollte man jedoch nicht aus den Augen verlieren, dass er auch über eine gewisse Menge an Selbstreparatur-Naniten verfügt und dass er sich zudem, aufgrund seines geringen Gewichts, faktisch genauso gut transportieren lässt, wie sein kleinerer Verwandter. Dadurch eröffnet sich wiederum die Möglichkeit - mit Hilfe eines geeigneten Transportvehikels, versteht sich - überraschend vorzustoßen, um z.B. einen zu weit vorgeprellten gegnerischen Panzer flink umstellen und mittels Panzerfaustbeschuss ausschalten zu können.
+]
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    Picture = mk4i_troll.png
    wreckageobject = 14215

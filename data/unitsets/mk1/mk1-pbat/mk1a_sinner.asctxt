@@ -6,6 +6,11 @@ VehicleType {
    Description = flying fortress
    picture = Mk1a_sinner.pcx
    GuideSortHelp += 0 0 0 0 1 600 0 0 0 0
+   InfoText = [Der Sinner ist ein riesiger, hochmoderner Senkrechtstarter, der jedwedes Ziel vom All bis zur Wasseroberfläche bekämfen kann. Er wurde entwickelt, um die einmal gewonnene Lufthoheit zu sichern und Feindaktivitäten am Boden unmöglich zu machen.
+
+Neben dem Piloten und dem Co-Piloten ist jedes Waffensystem mit einer eigenen Besatzung versehen, die in der Lage ist unabhängig voneinander und zeitgleich eine vielzahl verschiedener Bedrohungen zu erkennen und zu bekämpfen. Die vielköpfige Besatzung dieser fliegenden Festung macht eine eher an ein Schiff erinnernde Kommandostruktur nötig, daher wird ein Sinner nicht von dem Piloten kommandiert, sondern von einem Kapitän.
+Durch die relativ geringe Geschwindigkeit des Sinner gegenüber spezialisierteren Flugzeugen ist es sinnvoll Sinner im Verbund mit anderen Flugzeugen einzusetzen. Im Verband können Sinner der gesamten Formation als Rückhalt gegen Gegenangriffe jeder Art dienen.
+]
 
    Armor += 100
    View += 10

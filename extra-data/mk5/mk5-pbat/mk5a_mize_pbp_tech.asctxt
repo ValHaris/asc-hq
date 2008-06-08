@@ -1,0 +1,10 @@
+technology {
+   Name = MiZe
+   infotext = Forschungsprojekt abgeschlossen! Zeppelin verfuegbar!
+   id = 1492
+   RelatedUnitID = 1492
+   parent = 1499
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1499,100003,100102 
+} Technology

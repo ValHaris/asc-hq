@@ -11,6 +11,7 @@ VehicleType {
    Armor += 250
    View = 30
    Movement -= 0 0 0 20 0 0 0 0 
+   MovementSound = buggy3.ogg
 
    Weapons { 
       Weapon0 ->* vehicleType.MG45low 

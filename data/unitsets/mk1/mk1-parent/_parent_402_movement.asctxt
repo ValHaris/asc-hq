@@ -201,6 +201,13 @@
       terrain_kill = shallow_water water deep_water river lava
    } offroad
 
+   offroad_mt {
+      terrain_any = road runway hard_sand lowland soft_sand ditch Frozen_water mountains
+      terrain_all =
+      terrain_not =
+      terrain_kill = shallow_water water deep_water river lava
+   } offroad_mt
+
    lt_wheeled {
       terrain_any = road runway hard_sand lowland Frozen_water
       terrain_all =

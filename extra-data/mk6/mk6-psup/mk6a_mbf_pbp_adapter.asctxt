@@ -1,5 +1,5 @@
 Techadapter {
-   Name = 15341
+   Name = 15342
    ;Bezeichnung der verknüpften Technologie: MBF
-   TechnologiesRequired = 15341
+   TechnologiesRequired = 15342
 } TechAdapter

@@ -4,12 +4,17 @@ VehicleType {
    parent = 251 497
 
    Description = medium artillery
-   Infotext = []
+   Infotext = [Die BALISTE ist die mittlere Artillerie der Technokraten.
+Sie verfügt über ein schlagkräftiges 90mm Geschütz mit hoher Reichweite, das sowohl zum ballistischen Beschuß von weit entfernten Zielen als auch zum direkten Beschuß von durchbrechenden Feinden eingesetzt werden kann, die die Artillerie direkt angreifen. Zur Selbstverteidigung verfügen die Geschützmannschaften auch über leichte Maschinenpistolen, doch ist stark davon abzuraten es darauf ankommen zu lassen.
+Die BALISTE ist im Unterschied zu den Artilleriesystemen anderer Rassen mit vier verstellbaren Rotoren als Antrieb ausgerüstet. Diese ermöglichen es ihr, sich in geringer Höhe über dem Boden mit hoher Geschwindigkeit fortzubewegen. Dies birgt jedoch die Gefahr, von der feindlichen Luftabwehr erfasst zu werden, was normalerweise die sofortige Zerstörung der BALISTE zur folge hat: Die Trägheit der BALISTE verhindert, das diese effektive Ausweichmanöver durchführen kann. In Frontnähe, wenn nur geringe Entfernungen überbrückt werden müssen, kann sich die BALISTE daher auch im sogenannten "Groundhugger" Modus in weniger als einem Meter Flughöhe fortbewegen. Dies ist jedoch aufgrund der nötigen Präzision nur mit sehr geringer Geschwindigkeit möglich. Sollten sich jedoch irgendwelche Hindernisse wie zum Beispiel Wracks im Weg befinden, so muß die BALISTE allerdings weiter aufsteigen, und ermöglicht dadurch Luftabwehrstellungen sie zu erfassen.
+
+Aufgrund des Rückstoßes des Geschützes ist die BALISTE nur in der Lage im gelandeten Zustand dies abzufeuern - mehr noch, nach der Landung muß sich die BALISTE erst verankern, um nicht unkontrolliert auf ihren Landekufen herumzuschlittern. ]
    Picture = mk6v_baliste.pcx
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor -= 50
+   Category = hoovercraft
 
    Height = ground_level low_level_flight 
    Tank { 
@@ -19,9 +24,10 @@ VehicleType {
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 10 70 0 0 0 
-   Category = building|turret|object
    TerrainAccess ->* VehicleType.heli_terrain
    HeightChangeMethod0.movecost = 1
+   MovementSound = jet_pass.ogg
+
    Weapons { 
       Initiative = 0
       Number = 2

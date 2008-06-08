@@ -5,6 +5,13 @@ VehicleType {
 
    Picture = mk6a_asus.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = [Der ASUS ist der mittlere Jäger der Technokraten, und ist eine der wenigen Eigenentwicklungen, die auf eine Landebahn angewiesen sind.
+Innerhalb der Teccnols Luftwaffe übernimmt er die Funktion eines Luftüberlegenheitsjägers. Seine unkonventionelle Bauform erlaubt ihm trotz seiner recht schweren Panzerung innerhalb dichter Luftschichten eine hervorragende Agilität, die sich sogar mit Abfangjägern messen kann. Allerdings musste dafür auf die Möglichkeit in hohen Luftschichten zu operieren verzichtet werden.
+Die Hauptwaffe der ASUS ist ein Zwillings-Laser der in den äußeren Flügeln integriert ist. Im Gegensatz zu konventionellen festmontierten Waffen ist es dem Laser durch seine hochentwickelte Architektur möglich, Ziele die um bis zu 15° ausserhalb des Flugvektors des ASUS liegen zu treffen. Kombiniert mit der automatisierten Zielerfassung ist es einem erfahrenen ASUS Piloten dadurch möglich, innerhalb der 5 sekunden Strahldauer mehrere Feindmaschinen zu erfassen und zu vernichten. Der einzige Nachteil dieses Lasers ist seine lange Nachladezeit.
+
+Für den Nahkampf verfügt der ASUS über vier Micro Pulslaser in den inneren Flügelspitzen. Auch wenn die Feuerkraft eines einzelnen Pulslasers nicht sonderlich hoch ist, gleichen sie dies durch ihre Anzahl und hohe Feuerrate mehr als nur aus. Durch ein System aus Hochleistungsrefraktoren und Reflektoren ist die Punktverteidigung des ASUS in der Lage, Ziele in bis zu sagenhaften 150° Abweichung des Flugvektors zu erfassen und zu bekämpfen, wodurch der ASUS eine Kampfleistung erbringt die keine Kampfmaschine anderer Rassen erreicht. Die Ladekapazität der Kondensatoren ist in der Lage, selbst bei längeren Kämpfen die Pulslaser zu betreiben, was den Nahkampf mit einem ASUS zu einer wenig erstrebenswerten Situation für alle macht, die nicht auf der gleichen Seite sind.
+
+Abgerundet wird die Bewaffnung des ASUS durch eine einzelne mittelstrecken Luft-Luft Rakete, die es ihm ermöglicht, Ziele anzugreifen die gegenüber Laserwaffen wenig verwundbar sind - oder ihm ermöglicht ein letztes Abschiedsgeschenk zu überreichen bevor er sich zurückziehen muß, sollten sie Kondensatoren tatsächlich einmal entladen sein. ]
 
    Tank.Material = 1000
 

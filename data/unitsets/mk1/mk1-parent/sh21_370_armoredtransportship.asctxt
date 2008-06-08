@@ -32,6 +32,7 @@ VehicleType {
    Movement = 0 0 60 0 0 0 0 0 
    TerrainAccess ->* VehicleType.very_bigship_terrain 
    TerrainAccess.terrain_not = forest small_rocks large_rocks
+   MovementSound = med_ship_a_s.ogg
 
    Construction { 
       Buildings = 

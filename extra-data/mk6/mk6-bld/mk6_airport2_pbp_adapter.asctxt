@@ -1,5 +1,0 @@
-Techadapter {
-   ; Airport2.
-   Name = B21
-   TechnologiesRequired = 15000
-} TechAdapter

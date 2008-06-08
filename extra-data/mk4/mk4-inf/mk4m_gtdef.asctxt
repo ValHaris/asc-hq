@@ -7,6 +7,8 @@ VehicleType {
    Picture = mk4m_gtdef.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14008
+   InfoText = [Als reine Defensiveinheit wurde der GT-Defender entwickelt. Waffen- und panzerungstechnisch fast so gut wie der GT Utlimate ausgerüstet, lag hierbei jedoch das Augenmerk darauf, den Rückzug anderer Einheiten zu decken. Aus diesem Grund wurde ein neuartiges Sensormodul eingebaut, welches eine genaue Erfassung und automatische Bekämpfung anrückender Feindeinheiten ermöglicht – und das in alle Richtungen. Das System arbeitet mit Vergleichsmessungen der gesamten gescannten Umgebung und erkennt so den nahenden Gegner. Der einzige Nachteil ist dabei, daß es nur im Stand eingesetzt werden kann.. Ein offensiver Einsatz dieses Modells ist deshalb nicht empfohlen, obwohl es in der zweiten Reihe zur Sicherung vorrückender Einheiten eingesetzt werden kann. ]
+
    Armor += 100
    Movement += 0 0 0 10 0 0 0 0 
 

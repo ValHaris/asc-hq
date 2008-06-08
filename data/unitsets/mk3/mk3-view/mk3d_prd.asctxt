@@ -6,6 +6,10 @@ VehicleType {
    Description = light radar
    Picture = MK3d_prd.png
    GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
+   InfoText = [Das PRD 12 ist ein leichtes, nichtautomobiles Radargerät.
+Es kann aus der Luft abgeworfen, oder von den Special Pioneers direkt im Feld produziert werden. 
+Eine Stealth-Beschichtung und die Möglichkeit bestimmte Frequenzen aktiv zu stören, sorgt für eine unauffällige Radarsignatur, und gleicht den Nachteil der geringen Panzerung und Mobilität teilweise aus.
+]
 
    Jamming += 10
    Features += paratrooper

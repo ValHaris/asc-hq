@@ -5,6 +5,9 @@ VehicleType {
 
    Picture = MK1a_RASAK.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   InfoText = [Der RASAK ist ein Stealth-Kampfflugzeug, dass wie viele Stealthflugzeuge ein Nurflüglerdesing ist. In den meisten Fällen wird diese Fähigkeit als passives Mittel zur Verhinderung eines Gegenangriffes verwendet. Beim RASAK hingegen ist es das Mittel um einen Angriff aus dem Hinterhalt zu ermöglichen. Nur allzuoft werden Luftgefechte über Niemandsland oder Ozeanen ausgetragen, hier fehlt dann die Möglichkeit, die nach einem Angriff zurückfliegenden Jagdflieger und Bomber vor einem Gegenangriff zu bewahren. Dafür hat man schließlich beschlossen einen spezialisierten Flugzeugtyp zu entwickeln, in dessen Schutz sich die offensiven Einheiten zurückziehen können. Das Ergebnis dieser Bemühungen war der RASAK, ein Flugzeug, dass effizient jedwedes anfliegende Feindflugzeug erfassen und bekämpfen kann. Trotz dieser Fähigkeit ist der RASAK ein Lauerjäger und nicht in der Lage selber wie ein Jagdflugzeug zu agieren.
+
+]
 
    Armor +=20
    

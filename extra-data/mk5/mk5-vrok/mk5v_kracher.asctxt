@@ -5,9 +5,22 @@ VehicleType {
    Description = SSM medium range
    Picture = mk5v_kracher.pcx
    
+   Category = light_wheeled_vehicle
    Weight = 30
+   Features = jam_only_own_field
+
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Ditch Frozen_water 
+      terrain_not = morass swamp large_rocks deep_snow
+   } TerrainAccess
+   Movement = 0 0 0 26 0 0 0 0 
    
-   Weapons.Weapon0.MaxRange -= 10
-   Weapons.Weapon0.Punch@MinRange -= 10
-   Weapons.Weapon0.Punch@MaxRange -= 10
+   Weapons {
+      Weapon0 ->* vehicleType.SSM
+      Weapon0.MaxRange = 90
+      Weapon0.Minrange = 50
+      Weapon0.Punch@MinRange = 95
+      Weapon0.Punch@MaxRange = 95
+      Weapon0.ReactionFireShots = 1
+   } Weapons
 } VehicleType

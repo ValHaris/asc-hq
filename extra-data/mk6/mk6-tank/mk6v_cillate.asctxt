@@ -5,6 +5,15 @@ VehicleType {
    Name = CillaTE
    Picture = mk6v_cillaTE.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = [Der CillaTE ist der leichteste Kampfpanzer der Technokraten.
+Er basiert auf dem Cilla Chassis, welches er mit dem Cilla SV teilt. Dieses Chassis wurde leicht modifiziert, und ein stärkerer Antrieb eingebaut, wodurch er trotz seines höheren Gewichtes schneller als andere Einheiten mit diesem Chassis ist. Die Panzerung wurde durch Kompositmaterialien ersetzt, die zwar einen leicht geringeren Schutz als die Standardpanzerung bietet, dafür aber es dem CillaTE ermöglicht, einen Unidirektionalen EMP Generator ins Feld zu führen.
+Die primäre Offensivwaffe des CillaTE ist ebendieser unidirektionale EMP Generator der Kategrie "H", der jegliche Elektronik im anvisierten Ziel überlädt und zu einem wertlosen Klumpen verschmoren lässt. Dies versetzt den CillaTE in die Lage, selbst Gegnern die seiner Klasse deutlich überlegen sind gefährlich zu werden. Der EMP Generator des Typs "H" ist auch imstande, gegen tieffliegende Angreifer gerichtet zu werden, und ist sogar gegen getauchte Ziele einsetzbar. In diesen Einsatzmodi ist die Effektivität zwar stark eingeschränkt, jedoch immernoch beträchtlich.
+Der EMP Generator hat zwei schwerwiegende Nachteile. Zum einen verfügt er über eine sehr hohe Ladezeit, und zum anderen ist der Energieverbrauch exorbitant. Dieser ermöglicht bei mobilen Geräten nur eine einzige Ladung in den Kondensatoren zu speichern, bevor diese Nachgeladen werden müssen. Das Nachladen, welches durch den mitgeführten Treibstoff ermöglicht wird, verschlingt über die Hälfte der Tankkapazität des CillaTE. Somit ist eine permanente überwachung des Treibstoffvorrates notwendig, und der Treibstoffnachschub muß sichergestellt werden.
+Der Elektromagnetische Impuls zeigt bei Lebewesen jedoch keine nennenswerte Wirkung, und Gebäude und stationäre Verteidigungsanlagen sind meist gegen EMP gehärtet.
+
+Neben dem EMP Generator verfügt der CillaTE über ein leichtes 70mm Geschütz, das über eine geringere Durchschlagskraft als die Geschütze vergleichbarer Kampfeinheiten anderer Rassen verfügt. Abgerundet wird die Bewaffnung durch ein schweres Maschinengewehr, das es dem CillaTE ermöglicht sich effektiv gegen Infanterieangriffe zu verteidigen, und auch gegen Tiefflieger eingesetzt werden kann.
+
+Die hohe flexibilität in den Einsatzmöglichkeiten, sowie die enorme Offensivkapazität schlagen sich jedoch beim Preis deutlich nieder: im Vergleich zu ähnlichen Einheiten der anderen Rassen ist der CillaTE ca. 30% teurer. Dies ist jedoch immernoch sehr günstig für dieses hochwertige Stück Technologie. ]
    
    Armor -= 50
    Tank.Material = 1000

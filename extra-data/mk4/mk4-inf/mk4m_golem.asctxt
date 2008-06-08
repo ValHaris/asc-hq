@@ -4,7 +4,9 @@ VehicleType {
    parent = 209
 
    Description = Schwerer Kampfroboter
-   Infotext = [Diese schwere Einheit ist das Prachtstueck der Roboterindustrie. Mit weitreichenden Land- und Luftrakten ausgestattet ist er die Ideale Besetzung bei belagerungen oder Verteidigungen. Da er recht langsam ist, ist der offensive Einsatz nur bedingt zu empfehlen.]
+   Infotext = [Die Kampfroboter der Golem-Serie wurden entwickelt, um auch in schwierigem Gelände, wo normale Panzer nicht operieren können, das ganze Arsenal bodengestützter Waffen einzusetzen. Ein weiterer Pluspunkt ist das geringe Gewicht, welches den Transport durch sehr viele Einheiten erlaubt und die geringere Geschwindigkeit gegenüber Panzern wieder wettmacht. Basierend auf dem Chassis des Golem gibt es eine ganze Reihe spezialisierter Einheiten. 
+Der Golem ist das Standardmodell. Mit Landraketen für gepanzerte Ziele und weitreichenden Luftraketen ausgestattet, bietet er die Kampfkraft eines leichten Panzers in nahezu jedem Gelände. Das weitreichende MG ist für die Bekämpfung von Infanterie und Flugzeugen geeignet. Aufgrund der geringen Größe ist auch die Besetzung feindlicher Gebäude möglich. So verfügt diese Einheit über keine gravierenden Schwächen, ist allerdings schweren Einheiten unterlegen. Der Golem sollte deshalb in offenem Gelände mit Bedacht eingesetzt werden.
+]
    Picture = mk4m_golem.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

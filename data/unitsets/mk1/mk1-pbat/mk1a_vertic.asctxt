@@ -6,6 +6,7 @@ VehicleType {
    Description = vertical take-off plane
    picture = Mk1a_vertic.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   InfoText = [Jede Konstruktion hat Vor- und Nachteile, doch immer versuchen Ingenieure die Vorteile zu maximieren und die Nachteile zu minimieren. In Bezug auf den Kampfflugzeugbau bedeutet das, dass man versucht Militärfluggeräte entweder zu spezialisieren oder für einen breiten Einsatzbereich erschafft. Der VERTIC ist ein Senkrechtstarter der viele Vorteile eines Flugzeuges mit denen eines Helikopters vereint. Er verfügt über eine hohe Geschwindigkeit und benötigt nur kleine Flächen zum Starten und Landen. Die Bewaffung lässt sowohl Luftkampf als auch den Angriff auf Bodenziele zu, doch eignen tut sie sich eher für den Angriff auf letztere, wenn sie nur eine geringe Luftabwehrkapazität haben. Der VERTIC ist jedoch relativ fragil und auch leichte Waffen können erstaunliche Schäden an ihm hervorrufen. Zusammenfassend bleibt zu sagen, dass der VERTIC sich dazu eignet, gegen schlecht verteidigte Stellungen eingesetzt zu werden, oder in größerer Stückzahl die Luftabwehr des Gegners zu überlasten, um dann schwere Schäden an den Bodentruppen herbeizuführen.   ]
    
    Armor += 30
 

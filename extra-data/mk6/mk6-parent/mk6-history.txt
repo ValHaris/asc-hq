@@ -1,8 +1,18 @@
 History MK6 teccnols unit set
 
 __________________
+07.06.2008 (GAMER)
+-Tecc Airport
+-MBF angepasst an neue Airports
+-Devo TE, Techbugfix
+-MBF techbugfix
+-Einheitenbeschreibungen: Cilla TE,Devo TE,Baliste, Asus
+-MovementSound = Intruder, Baliste, GB137
+__________________
+04.05.2008 (GAMER)
 -Jumpsockel, + beacon
 -RDS Tank bugfix
+-CargoMX +CM munition
 Neu:
 -Devo R (Radarpanzer)
 -Global (Radar Sat)

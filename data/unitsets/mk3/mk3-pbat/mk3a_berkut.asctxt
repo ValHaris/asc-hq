@@ -3,17 +3,9 @@ VehicleType {
    parent = 330
    ID = 560
    Description = heavy mixed fighter
-   Infotext = [Berkut
+   Infotext = [Bei der Berkut verlief der Entwicklungsprozess genau umgekehrt wie bei der MiG-35. Geplant ursprünglich als Luftüberlegenheitsjäger, ist sie im Laufe der Zeit zum Allzweck-Kampfflugzeug umgestaltet worden. Sie kann so Ziele auf allen Höhenstufen bekämpfen und ist das schnellste und am besten gepanzerte Kampfflugzeug der terranischen Armee. Nachteilig ist jedoch, dass sie keine Distanzwaffen mitführen kann. Auch ist es bisher noch nicht gelungen, mit der Berkut Bodenziele aus großer Höhe erfolgreich anzugreifen. Gut geeignet ist sie zum Bekämpfen von Aufklärungsfliegern und -Satelliten, Transportflugzeugen, Hubschraubern und ähnlichen Lufteinheiten, die sich nicht gegen hochfliegende Angreifer wehren können.
 
-Der Berkut Prototyp ist ein Multifunktions-Jäger. Seine Waffen sind fähig alle Arten von Boden-, 
-Luft- und sogar Orbitalzielen anzugreifen. Der Berkut erreicht auf allen atmosphärischen 
-Höhenstufen hohe Geschwindigkeiten. Die einzigen Nachteile sind sein hoher Preis und die 
-Unfähigkeit Distanzangriffe zu fliegen.
-
-The Berkut is a prototype fighter that is capable of performing multirole engagements.
-Its weapons are able of attacking all kinds of ground, air and even orbital targets.
-The Berkut moves at very high speeds on all atmospheric altitudes.
-Its only downside is its high price and its inability to perform ranged attacks.
+Obwohl die Berkut leicht genug ist, um noch auf Flugzeugträgern der CVX-Klasse landen zu können, ist sie wegen der genannten Einschränkungen auf dem Schlachtfeld eher selten anzutreffen.
 ]
    picture = MK3a_berkut.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

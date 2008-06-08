@@ -2,12 +2,9 @@ VehicleType {
    Name = AIRBOURNE
    ID = 613
    parent = 207
-   Description = Paratrooper
-   Infotext = [The Paratrooper is the ideal unit for surprise attacks. It has
-              the same armament as the regular Shock Trooper, excepting the
-              explosives. In addition, it is equipped with a parachute so
-              it can exit an airborne plane. These Troopers are slower than
-              Shock Troopers, due to the weight of the parachute.]
+   Description = Fallschirmspringer
+   Infotext = [Die Airborne ist eine Luftlande-Infantrieeinheit, welche meist weit hinter den feindlichen Linien operiert. Dort wird sie oft dazu eingesetzt, den Nachschub und die Infrastruktur des Gegners nachhaltig zu stören. Hierzu haben sie zusätzlich zur Standardbewaffnung des GI noch ein paar Ladungen Sprengstoff im Gepäck.
+Gleichzeitig bietet diese Spezialeinheit die Möglichkeit, mit ihrem überraschenden Auftreten tief im feindlichen Gebiet, die Kräfte des Gegners abzulenken und zu binden. Wurde eine gut ausgebildete Flugzeugladung Airborne-Infantrie erst einmal an ihr Ziel gebracht, kann sie dem Gegner leicht zum Verhängnis werden.]
    Armor -= 10
    picture = MK3i_airbourne.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

@@ -3,10 +3,20 @@ VehicleType {
    parent = 327
    ID = 14026
 
-   Description = fliegende Festung
+   Description = Luftraumverteidiger 
    picture = mk4a_dterano.png
    wreckageobject = 14026 14826
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Mit der Dterano haben die Flugzeugkonstrukteure völlig neue Wege beschritten. Sie ist ein absolutes Unikum innerhalb der chromonischen Luftwaffe. Basierend auf dem zugrunde liegenden Entwurf einer Pterrano, wurde hier ein Flugzeug geschaffen, welches nicht nur als mobile Absprungbasis für Drohnen der Thunder-Klassen dienen, sondern außerdem noch über ein leistungsfähiges MdRF-Gerät verfügen sollte. Mit diesem ist es möglich, den umgebenden Luftraum permanent zu überwachen, feindliche Flugzeuge aufzuspüren und automatisch Luft-Luft-Raketen zu deren Bekämpfung abzufeuern. Da ein derartig kompliziertes Gerät jedoch auch eine Menge Platz braucht, musste das hochauflösende Onboard-Aufklärungssystem der Pterrano wieder entfernt und durch eine kleinere, weniger leistungsfähige Standardvariante ersetzt werden. 
+
+Überhaupt erfuhr die Dterano eine Menge Verbesserungen und Veränderungen gegenüber ihrem Vorgängermodell. So wurde der wuchtige Rumpf etwas schlanker gestaltet und die Tragflächen etwas höher am Rumpf montiert. Die bullige Bugpartie wurde durch eine aerodynamischere Glaskanzel ersetzt, die dem Piloten nun auch einen uneingeschränkten Blick nach unten gestattet. Anschließend verwendete man für die Außenhaut ein gerade erst neu entwickeltes Material, welches nicht nur extrem widerstandsfähig ist, sondern zudem noch Stealth-Fähigkeiten besitzt, wodurch die Dterano selbst dort noch ungestört operieren kann, wo andere Flugzeuge bereits als lohnende Ziele auf den taktischen Displays der gegnerischen Flugabwehr aufleuchten. 
+Die Zuladungskapazität wurde enorm gesteigert – jedoch stehen jetzt nur noch ganze zwei Ladebuchten zur Verfügung. Deren Frachtluken wurden an der Unterseite des Rumpfes hintereinander installiert. Um gefährliche Turbulenzen zu vermeiden, wie sie beispielsweise früher bei der Pterrano entstanden, funktionieren die Ladeluken nun wie Schiebetüren, die beim Öffnen zuerst etwas nach innen gezogen werden und dann nach rechts und links im Rumpf verschwinden. Dadurch kann die Dterano nun auch die gängigen Drohnen-Modelle wieder direkt im Flug aussetzen. 
+
+Bei der Bewaffnung hingegen wurde ordentlich abgespeckt, da die Dterano nicht mehr als Angriffsbomber fungiert, sondern vielmehr als luftgestützte Flugabwehr-Einheit. Ihre Hauptaufgabe besteht darin, sich und andere Flugzeuge mittels ihres MdRF-Geräts vor gegnerischen Luftstreitkräften zu schützen. Dazu stehen ihr leichte und schwere Luft-Luft-Raketen zur Verfügung, wobei vor allem Letztere eine effektive Abwehr selbst vor hoch fliegenden Feindjägern darstellen. Die kleineren Raketen eignen sich zwar nur zur Bekämpfung von Flugzeugen auf normaler Höhe und auf Tieffliegerniveau, doch dafür haben sie eine enorm große Reichweite, welche besonders leichte Feindjäger effektiv auf Abstand halten können. 
+Als Zusatzwaffe wurde der Dterano ein leichtes MG verpasst, welches sich im unteren Teil der gläsernen Bugkanzel befindet. Damit lassen sich sowohl durchgebrochene feindliche Flugzeuge bekämpfen, als auch gegnerische Bodentruppen im Tiefflug beharken. 
+
+Aufgrund der Tatsachen, dass die Dterrano sich vom Gesamtgewicht her nicht von ihrem Basismodell unterscheidet und dazu noch für den Antrieb die gleiche Art von Turbinen verwendet wurde, war es leider nicht möglich, eine Vergrößerung der Höchstgeschwindigkeit zu erzielen. Aufgrund des veränderte Design war es jedoch möglich, die Steigfähigkeit der Dterrano etwas zu erhöhen, wodurch sie vor allem beim Start bedeutend besser vom Boden wegkommt, als die schwerfälligere Pterrano.
+]
 
    Category = heavy_aircraft
    Armor += 150

@@ -2,7 +2,8 @@ VehicleType {
    Name = MBF
    parent = 401 497 415 15000
 ;  normal buider 341   
-   ID = 15341
+   ID = 15342
+   SecondaryIDs = 15341
 
    Description = builder
    Infotext = 
@@ -16,9 +17,10 @@ VehicleType {
    Tank.Fuel = 30000
    Tank.Material = 30000
    TerrainAccess ->* VehicleType.hoover_terrain
+   MovementSound = jet_pass.ogg
       
    Construction { 
-      Buildings = 1 2 4-7 10 13-21 23 30-32 35-37 15001-15005
+      Buildings = 1 2 4-7 13-20 23 30-32 35-37 15001-15007
       Vehicles =  
       Vehiclesinternally =
       Objects = 44 2098 2096 2097 996 997 15003

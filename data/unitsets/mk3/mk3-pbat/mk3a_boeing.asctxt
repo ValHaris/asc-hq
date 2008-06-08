@@ -13,6 +13,7 @@ This experimental plane is able to attack all targets above the water-line and i
    GuideSortHelp = 522 600 0 0 3 0 0 0 0 0
 
    Armor = 350
+
    Tank { 
       Energy = 0
       Material = 1000
@@ -21,6 +22,8 @@ This experimental plane is able to attack all targets above the water-line and i
    FuelConsumption = 25
    Movement = 0 0 0 65 140 160 0 0 
    Weight = 300
+   MovementSound = aircraft_l_g.ogg
+
    Weapons { 
       Initiative = 0
       Number = 1

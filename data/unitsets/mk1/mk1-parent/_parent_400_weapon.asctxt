@@ -371,7 +371,7 @@
    TankSpGun.WeaponEffectiveness.heavy_aircraft = 120
    
    Flak {
-      Type = cannon shootable 
+      Type = cannon shootable
       Sound = flak.ogg
       targets = low_level_flight medium_level_flight 
       shotFrom = floating ground_level 
@@ -2115,12 +2115,13 @@
 
    EMP { 
          Type = Laser shootable 
+         Sound = jumpdrive_s.ogg
          targets =  submerged floating ground_level low_level_flight medium_level_flight
          shotFrom = floating ground_level 
          MaxRange = 20
          MinRange = 10
          Ammo = 1
-	      LaserRechargeRate = 1
+	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
             material = 0

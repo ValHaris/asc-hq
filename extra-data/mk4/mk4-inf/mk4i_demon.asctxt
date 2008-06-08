@@ -4,7 +4,20 @@ VehicleType {
    parent = 201
 
    Description = Leichter Kampfroboter
-   Infotext = [Den Standartkampfroboter der Streitkraefte repraesentierend, findet der DEMON weitreichende Verwendung in fast allen Systemen und Fahrzeugen. Der DEMON ist moeglicherweise das am meisten modifizierte Element der Armee und ersetzt vollstaendig die alten modelle. Bedeutsam sind hier vor allem die Aenderungen, die die Widerstands- und Kampfkraft erheblich steigerten.]
+   Infotext = [Der Demon ist ein Standardkampfroboter der chromonischen Streitkräfte. Genau genommen handelt es sich bei dem Demon um ein Chassis, welches in den Versionen H (Human) und R (Robot) vorliegt. Beide Modelle unterscheiden sich nicht im Preis und sind auch vom Äußeren her nicht auseinander zu halten.
+Bei der H-Version wurde der Innenraum so konzipiert, dass er von einem Humanoiden bestiegen werden kann, dessen Bewegungen durch die Servomotoren des Chassis umgesetzt und verstärkt werden können. Dieses Modell findet vor allem dort Anwendung, wo der humanoide Körper mit Hilfe des robusten Exoskeletts vor schädlichen Umwelteinflüssen geschützt werden muss, bzw. die Stärke des Anzugs dazu benötigt wird, gewisse Aufgaben schneller und effizienter zu erledigen. Der Demon-Anzug kann seinen Träger also zum Beispiel bei der Erfüllung von Aufgaben schützen, wie dem Eindringen in feindliche Gebäude, dem Erkunden unbekannter Höhlensysteme, oder dem Arbeiten in radioaktiver und/oder toxischer Umgebung.
+Die R-Variante hingegen ist ein reiner Roboter. Das Exoskelett, die Hydraulik, sowie sämtliche anderen Systeme, welche für die flüssigen Bewegungsabläufe und den Einsatz der integrierten Waffensysteme notwendig sind, sind identisch zur H-Version. Der einzige Unterschied ist die KI, welche zum Zwecke der Steuerung in den Anzug eingesetzt wurde. Dieses Modell wird vor allem dort eingesetzt, wo mit Totalausfällen zu rechnen ist und das Leben der eigenen Soldaten geschont werden soll, sprich: an vorderster Front, oder z.B. bei Minenräumeinsätzen.
+
+Der Demon ist ausgerüstet mit einem leichten Maschinengewehr, welches primär zur Bekämpfung ungepanzerter Ziele dient, im Notfalle jedoch auch als leichtes Fla-MG gegen Tiefflieger eingesetzt werden kann. Weiterhin verfügt der Demon über zwei Halterungen zur Mitnahme von Minen. Mit diesen kann er exponierte Positionen schnell und wirkungsvoll verminen und sie so gegen feindliche Infanterieeinheiten oder Fahrzeuge sichern.
+Aufgrund seiner hervorragenden sensorischen Systeme ist es außerdem möglich, mithilfe des Demons auch feindliche, bereits gelegte Minen aufzuspüren und sie mittels seiner ausgeklügelten Feinmotorik zu entschärfen.
+
+Beide Varianten verfügen eine Art Selbstheilungsmodul. Bei der H-Variante handelt es sich um ein Standard-Medi-Pack, mit welchem sich der verwundete Träger selbst versorgen kann. Die R-Variante verfügt über eine bestimmte Anzahl von Reparatur-Naniten, die eventuelle Beschädigungen mit Hilfe einer mitgeführten Material-Reserve zu reparieren vermögen.
+
+Weiterhin sei noch angemerkt, dass der Demon aufgrund seiner geringen Größe recht schwierig aufzuspüren ist. Vor allem, wenn er sich in unübersichtlichen Waldgebieten befindet, kann er sich durchaus längere Zeit vor feindlichen Sensoren verbergen.
+Seine geringe Größe und Gewicht prädestinieren ihn außerdem dafür, sich auch frei auf solchem Terrain zu bewegen, welches anderen, größeren Einheiten mitunter verwehrt bleibt, wie z.B. steile Hanglagen oder Hochgebirge. Sein taktischer Vorteil, aufgrund dieser Fähigkeit auch dort aufzutauchen, wo der Gegner aufgrund von topografischen Gegebenheiten nicht mit Feindeinheiten rechnet, ist demzufolge nicht zu unterschätzen.
+
+Durch die konstruktionsbedingte Zweibein-Fortbewegung ist der Demon natürlich nicht gerade schnell. Allerdings kompensiert er dieses Manko auch hier wieder durch sein Gewicht, denn durch seine geringe Masse gibt es eine Unmenge von Einheiten, die ihn über kürzere oder auch längere Strecken hinweg transportieren, und so sicher und schnell in die Nähe seines Einsatzzieles bringen können.
+]
    Picture = mk4i_demon.png
    wreckageobject = 14205
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0

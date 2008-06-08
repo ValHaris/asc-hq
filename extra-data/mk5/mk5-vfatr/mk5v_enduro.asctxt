@@ -4,16 +4,17 @@ VehicleType {
    parent = 400 401 402 411
    
    Description = Motorrad
-   Infotext = [Die Enduro ist eine sehr gelaendegaengiges Zweirad. Durch seine Wendigkeit
-              ist es in der Lage sich nach einem Angriff sofort wieder zurückzuziehen.
-              Kleinere Anhöhen und schwieriges Gelände sind für das Motorrad
-              kein Problem. Auf einem Notsitz kann ein Spezialist platz finden.]
-   Picture = MK5v_ENDURO.pcx
+   Infotext = [Straßen & sonstigen Verbindungswege liegen im deckenden Feuer feindlicher Artillerie, sind vermient und unpassierbar?! 
+Kein Problem die Enduro läßt querfeldein ihre Muskeln spielen und findet einen Weg. So gewährleistet sie dem Fußvolk der Outsider jederzeit die notwendige Mobilität. 
+
+Zudem ist sie nicht unbewaffnet! - Ein Satz Small Missle gegen Fahrzeuge und ein MG gegen Infantrie & Tiefflieger leisten, dort wo jede Kugel zählt, für die Trooper dankbare Feuerunterstützung. ]
+   Picture = mk5v_enduro.pcx
    WreckageObject = 1402
 
-   Armor = 260
-   Jamming = 19
    Transportation ->* VehicleType.TransLowTrooper 
+
+   Armor = 260
+   Jamming = 29
    Features += move_after_attack jam_only_own_field
    Category = light_wheeled_vehicle
    Weight = 5
@@ -21,7 +22,8 @@ VehicleType {
    Tank.fuel = 700
    FuelConsumption = 10
    Movement = 0 0 0 100 0 0 0 0 
-   TerrainAccess ->* VehicleType.offroad 
+   TerrainAccess ->* VehicleType.offroad_mt 
+
    Weapons { 
       Initiative = 0
       Number = 2

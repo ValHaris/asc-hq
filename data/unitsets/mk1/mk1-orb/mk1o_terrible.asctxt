@@ -6,6 +6,12 @@ VehicleType {
    Description = space station
    Picture = MK1o_terrible.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   InfoText = [Die Raumstation Klasse "TERRIBLE" wurde von rehanischen Wissenschaftlern und Ingenieuren ursprünglich unter dem Namen "Regus Maximus" entwickelt, um zivilen Anforderungen zu entsprechen. Bei der Entwicklung nahm jedoch auch das Militär teil, das von vornherein eine militärische Verwendung ins Auge gefasst hatte. In Planung und Entwicklung konnte sich das Militär jedoch erst durchsetzen, als es im Verlauf der Bauarbeiten im All zu einer Reihe von schweren Unfällen kam. Diese Unfälle kosteten insgesamt 97 Rehaner das Leben, und mit jedem zusätzlichen Unfall zogen sich mehr und mehr der zivilen Teilhaber aus dem Projekt zurück. Schließlich kam es zu einem Streik der Arbeiter, die nicht mehr an der "Terrible", oder der "Schrecklichen", wie sie die halbfertige Station nannten, arbeiten wollten, solange keine umfassenden Sicherheitsmaßnahmen ergriffen würden. Kaum hatte dieser Streik begonnen, übernahm das rehanische Militär den Bau und stellte die Station in kurzer Zeit in Dienst. Sie und alle Nachfolgenden dieses Types wurden vom Militär fortan als "TERRIBLE"-Raumstationen geführt.
+
+Nunmehr dienen "TERRIBLE"-Raumstationen zur Kontrolle des Luftraumes, sowie der Landfläche unter ihrem geostationären Orbit. Lediglich niedrigfliegende Luftfahrzeuge und abgetauchte UBoote sowie Infanterie können von Waffensystemen der Raumstation nicht erfasst und bekämpft werden.
+Zusätzlich dient sie als Heimatbasis der gesamten orbitalen Streitmacht der Rehaner, von Wartungsanlagen und einem Krankenhaus bis zur hydroponischen Farm, man findet alles auf dem Multitalent im All.
+
+]
 
    Armor += 20
 

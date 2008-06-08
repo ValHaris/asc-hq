@@ -6,6 +6,11 @@ VehicleType {
 
    picture = MK3a_JSF.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [Der F-35 Joint Strike Fighter (JSF) ist eine Weiterentwicklung der bewährten HARRIER-Senkrechtstarter und ebenfalls in der Lage, auf so gut wie jedem Gelände zu landen. Häufig findet man ihn auch auf amphibischen Kommandoschiffen der LCC-Klasse stationiert. Im Gegensatz zu seinem Vorgänger kann er auch in den hohen Luftbereich vorstoßen. 
+Seine wahre Stärke ist allerdings der Angriff aus mittleren und niederen Höhen auf feindliche Panzerverbände im Frontbereich. Je 2 Anti-Boden-Raketen für Distanzangriffe und Nahkampf stehen dem JSF hierfür zur Verfügung.
+
+Er besitzt keine Stealth-Fähigkeit und ist nur mäßig gepanzert, was ihn durchaus verwundbar macht. Jedoch ist seine hohe Geschwindigkeit ein großer Vorteil gegenüber deutlich billigeren Kampfhubschraubern. Die Bewaffnung ermöglicht zudem einen Kampf gegen andere Jäger auf allen Höhenstufen.
+]
 
    Weapons { 
       Weapon0.Punch@MaxRange += 2

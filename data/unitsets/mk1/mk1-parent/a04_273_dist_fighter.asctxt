@@ -8,7 +8,10 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 273 512 0 0 0 0 0 0 0 0
 
+   Features += jam_only_own_field
    Armor = 380
+   Weight = 105
+
    Height = ground_level low_level_flight medium_level_flight high_level_flight 
    Tank { 
       Energy = 0
@@ -16,9 +19,9 @@ VehicleType {
       fuel = 5000
    } Tank
    FuelConsumption = 28
-   Features += jam_only_own_field
    Movement = 0 0 0 60 180 200 200 0 
-   Weight = 105
+   MovementSound = aircraft_l_g.ogg
+
    Weapons { 
       Initiative = 0
       Number = 4

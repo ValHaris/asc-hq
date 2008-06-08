@@ -23,11 +23,13 @@ VehicleType {
       Weapon0.Ammo = 6
       Weapon0.Punch@MaxRange = 35
       Weapon0.Punch@MinRange = 35
+      Weapon0.ShotFrom = ground_level low_level_flight
       Weapon0.HitAccuracy.d1 = 80
 
       Weapon1 ->* VehicleType.lowBomb 
       Weapon1.Ammo = 4
       Weapon1.Punch@MaxRange = 75
       Weapon1.Punch@MinRange = 75
+      Weapon1.WeaponEffectiveness.trooper = 80
    } Weapons
 } VehicleType

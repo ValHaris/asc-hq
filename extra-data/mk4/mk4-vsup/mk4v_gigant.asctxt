@@ -12,12 +12,6 @@ VehicleType {
    Weight -= 10
 
    Transportation ->* VehicleType.TransTurretBig
-   Transportation.MaxLoadableUnits = 1
-   Transportation.MaxLoadableUnitSize = 1100
-   Transportation.MaxLoadableMass = 1100
-   Transportation.CargoMovementDivisor = 1.5
-   Transportation.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft 
-   Transportation.EntranceSystem0.DisableAttack = true
 
    Features += construct_specific_buildings construct_vehicles
    TerrainAccess ->* VehicleType.offroad 

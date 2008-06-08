@@ -11,7 +11,7 @@ VehicleType {
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
-      movecost = 0
+      movecost = 10
       heightdelta = 1
       dist = 0
       startheight = floating

@@ -4,7 +4,10 @@ VehicleType {
    ID = 92
 
    Description = medium fighter
-   Infotext = []
+   Infotext = [Der BOOMERANG wurde ursprünglich unter dem Codenamen "Ironside" im dritten PanRehanischen-Bürgerkrieg entwickelt. Er sollte als mittelschwerer Jäger dem Gegner den Luftraum abringen und insbesondere den leichteren Arrow Jägern Unterstützung liefern. Leider stellte sich heraus, dass die Ironsides stets zurückkehrten, die für die leichteren Arrows jedoch oft nicht. Sie waren wie ein "bad penny" sie waren immer wieder in der Geldbörse, erst wennn schon alle anderen Kampflugzeuge das Opfer der feindlichen Jäger geworden sind, wurden auch sie langsam abgeschossen.
+Da man die Flugzeuge im Truppendienst nicht länger sehen wollte, hat man das Flugzeug leicht verbessert und zumindest eine weichreichende Rakete eingebaut. Dann hat man noch die Panzerung verstärkt, um dem wendigen Jäger eine höhere Überlebenschance im DogFight zu geben. Nunmehr dient er unter dem neuem Namen BOOMERANG insbesondere zum Abfangen von Jagdbombern und Radarfliegern und um feindlichen Jägern den den letzten Schlag zu geben.
+
+]
    Picture = MK1a_BOOMERANG.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 

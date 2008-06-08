@@ -10,6 +10,8 @@ ID 15002 big factroy east
 ID 15003 big factory west
 ID 15004 lab north
 ID 15005 lab south
+ID 15006 airport
+ID 15007 airport2
 
 Objekte
 ID 15001 Leuchtfeuer (permanent)

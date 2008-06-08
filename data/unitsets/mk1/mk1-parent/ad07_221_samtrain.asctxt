@@ -8,15 +8,15 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 221 508 0 0 0 0 0 0 0 0
 
-   WaitForAttack = true
    Features += MoveDuringReactionFire
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 1100
+      fuel = 1500
    } Tank
-   FuelConsumption = 13
+   FuelConsumption = 20
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 20
       Number = 2

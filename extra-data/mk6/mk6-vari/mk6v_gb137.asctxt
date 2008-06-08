@@ -13,6 +13,7 @@ VehicleType {
 
    Armor -= 150
    View = 0
+   Category = building|turret|object
 
    Height = ground_level low_level_flight 
    Tank { 
@@ -22,8 +23,8 @@ VehicleType {
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 10 50 0 0 0 
-   Category = building|turret|object
    TerrainAccess ->* VehicleType.heli_terrain
    HeightChangeMethod0.movecost = 1
+   MovementSound = jet_pass.ogg
 
 } VehicleType

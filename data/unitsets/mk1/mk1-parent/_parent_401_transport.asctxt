@@ -130,6 +130,18 @@
    cruiser_ground ->* VehicleType.cruiser
    cruiser_ground.ContainerHeight = ground_level
 
+   ejector {
+        Mode = out
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        MoveCost = 20 
+        CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft helicopter light_ship medium_ship heavy_ship building|turret|object hoovercraft default
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+        RequireUnitFunction = 
+   } ejector
+
    
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   G R O U N D   I N & O U T   ----------------------------------------------------------------------------
@@ -241,6 +253,7 @@
         DockingHeightAbs = 
         DockingHeightRel = -100
         MoveCost = 20
+        DisableAttack = true
       } diver_out
 
 
@@ -759,6 +772,26 @@
       EntranceSystem0 ->* VehicleType.GrIO
    } TransBunkerSmall
 
+   TransNoMechTrooper { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 2
+      MaxLoadableMass = 2
+      CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransNoMechTrooper
+
+   TransNoMechTrooper2 { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 6
+      MaxLoadableMass = 6
+      CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } TransNoMechTrooper2
+
+   TransNoMechTrooper3 ->* VehicleType.TransNoMechTrooper2
+   TransNoMechTrooper3.MaxLoadableUnits = 3
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----      ----------------------------------------------------------------------------

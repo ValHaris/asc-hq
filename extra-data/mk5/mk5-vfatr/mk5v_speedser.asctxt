@@ -14,6 +14,7 @@ VehicleType {
    
    Movement += 0 0 0 28 0 0 0 0 
    TerrainAccess ->* VehicleType.mud_wheeled
+   MovementSound = motocycle.wav
    
    Weapons {
       Weapon0 ->* VehicleType.Def_MG 

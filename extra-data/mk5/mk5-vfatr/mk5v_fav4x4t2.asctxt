@@ -8,11 +8,14 @@ VehicleType {
    Picture = MK5v_FAV4x4T2.pcx
    WreckageObject = 1404
    
-   Transportation ->* VehicleType.TransLowTrooper 
+   Transportation ->* VehicleType.TransNoMechTrooper 
+   Transportation.MaxLoadableUnitSize = 3
+   Transportation.MaxLoadableMass = 3
    View = 30
    Jamming = 22
 
    Movement += 0 0 0 15 0 0 0 0 
+   MovementSound = buggy1.ogg
 
    Weapons { 
       Weapon0 ->* vehicleType.MG40low 

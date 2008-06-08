@@ -6,6 +6,13 @@ VehicleType {
    Picture = mk4v_sam2.png
    wreckageobject = 14210
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   InfoText = [Der Sam 2 ist der mittelschwere Standardpanzer des chromonischen Heeres. Sowohl bei Offensiv-, als auch bei Rückzugsgefechten bildet er das Herzstück der Heerestruppen.
+Im Vergleich zu leichteren Panzern ist er etwas langsamer, verfügt gleichzeitig jedoch über eine bedeutend stärkere Panzerung und Feuerkraft.
+Eine Besonderheit des Sam 2 stellt sein Hauptgeschütz dar, eine Langrohrkanone im Kaliber 90mm, das besonders effektiv gegen gepanzerte Ziele eingesetzt werden kann. Weiterhin verfügt er noch über ein kleineres MG, welches sich an der rechten Turmfront befindet und – im Gegensatz zu gängigen Koaxial-Waffen – nicht starr eingebaut ist, sondern sich sogar soweit nach oben schwenken lässt, dass die Besatzung auch Tiefflieger zu beharken vermag. Vorrangig ist es jedoch zur Abwehr von Infanterie gedacht.
+
+Insgesamt gesehen ist der Sam 2 ein preisgünstiges Stück Militärtechnik, welches in keinem Truppenkontingent des Heeres fehlen sollte – zumindest solange, wie man noch keine höherwertigen Einheiten erforscht hat.
+
+]
 
    Weapons { 
    } Weapons

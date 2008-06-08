@@ -4,9 +4,12 @@ VehicleType {
 
    Name = SCORPION
    Description = leichter Panzer
-   Infotext = [
-Der Scorpion ist eine gut motorisierte Selbstfahrlafette (SFL), die im wesentlichen um das preiswerte MK-65-Geschuetz herum gebaut wurde. Auf einen Drehturm mit komplizierter Richtautomatik wurde ebenso wie auf ein zusaetzliches MG verzichtet. Der Scorpion ist somit insgesamt ein preiswertes Waffensystem, das aber bei der Bekaempfung von Infanterie und schnell beweglichen Fahrzeugen Schwaechen aufweist. Er sollte nur bei ausreichender Luftabschirmung eingesetzt werden. Werden mehrere Scorpion-Einheiten zusammengefasst, lassen sich dann auch schnelle empfindliche Schlaege gegen feindliche Bodeneinheiten durchfuehren.
-Bei der defensiven Verwendung des Scorpion sollte dieser wenn möglich immer eingegraben werden, um seine Überlebenschancen im Gefecht zu steigern. Es wird hierzu auf die im Ergebnis doch ermutigenden Berichte der Veteranin Brit Darburg aus dem Abschnitt Nord-7 im Krieg der Drulls gegen Skynet-Ttian auf Chromos verwiesen.
+   Infotext = [Der Scorpion ist der Urvater aller chromonischen Panzer. Er entstand bereits zu einer Zeit, als Fahrzeuge, die für ihre Besatzungen einen wirksamen Schutz gegen feindliche Granaten und Infanteriewaffen darstellten, noch eine Seltenheit waren. 
+Der Scorpion an sich, entstand aus der Idee heraus, eine großkalibrige Waffe - montiert auf einem geländegängigen Untersatz - zur Feindbekämpfung einsetzen, und dabei gleichzeitig die Bedienmannschaft optimal schützen zu können. Seinerzeit als Durchbruch in der Waffentechnik gefeiert, ist der Scorpion heutzutage schon fast als hoffnungslos veraltet zu bezeichnen. Auf einer recht schwach gepanzerten Wanne befindet sich ein kleiner drehbarer Turm, welcher die einzige Waffe des Scorpion – eine 75mm-Kanone – beherbergt, wodurch es für ihn in der heutigen Zeit nur noch zur Einstufung als leichter Panzer reicht. Daher gilt er im Allgemeinen auch als direktes Vorbild des Teccno - auch wenn diese Annahme nicht vollkommen korrekt ist, da sich, wenn man sich die historische Entwicklung anschaut, zwischen diesen beiden Panzern noch diverse andere Modelle befinden.
+
+Die einzige Neuerung, die der Scorpion über all die Jahre hinweg erfuhr, war der Einbau eines neueren Antriebs. Dadurch kann der Scorpion auch im Gelände noch verhältnismäßig flink fahren. Verglichen mit dem aktuellen Stand der Technik, bewegt sich der Scorpion jedoch eher im Bereich der mittelschweren Panzermodelle, was seine Höchstgeschwindigkeit angeht. 
+Diese Tatsache, gepaart mit der nur schwachen Panzerung, sowie der verhältnismäßig kleinen Kanone, dürfte der Hauptgrund dafür sein, weswegen er heutzutage nur noch relativ selten zum Einsatz kommt. Der einzige Vorteil, den man mit viel gutem Willen noch aufzählen könnte, ist sein vergleichsweise geringer Herstellungspreis. Allerdings muss man sich selbst die Frage stellen, ob man nicht doch lieber etwas mehr investieren möchte, um dann zumindest eine Einheit zu bekommen, die dem heutigen Stand der Technik näher kommt.
+
 ]
    Picture = mk4v_scorpion.png
    wreckageobject = 14294

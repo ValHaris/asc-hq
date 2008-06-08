@@ -12,6 +12,7 @@ VehicleType {
    View = 30
    Features += MoveDuringReactionFire
    Movement -= 0 0 0 20 0 0 0 0 
+   MovementSound = buggy1.ogg
 
    Weapons {
       Number = 3 

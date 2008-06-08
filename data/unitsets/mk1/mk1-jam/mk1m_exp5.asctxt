@@ -9,5 +9,5 @@ VehicleType {
 
    Armor += 30
    Jamming +=5
-   MovementSound = mech_s.ogg
+;   MovementSound = mech_s.ogg
 } VehicleType

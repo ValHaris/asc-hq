@@ -3,6 +3,10 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+07.06.2008 (GAMER)
+-Einheitenbeschreibungen: Kornuta, PRD, Notstrom, AirBourne, ArmyRanger, MIG, Tomcat, JSF, Berkut,
+-MovementSound = Lars, lance, Patriot, FH77, NSA, Starlifter, Boeing
+__________________
 03.05.2008 (GAMER)
 -Building Pio, Stealth
 __________________

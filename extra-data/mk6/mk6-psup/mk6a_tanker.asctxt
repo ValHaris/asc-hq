@@ -17,16 +17,19 @@ VehicleType {
    Tank.Fuel += 10000
    movement -= 0 0 0 20 20 20 0 0
    Terrainaccess ->* VehicleType.heli_terrain
+   MovementSound = jet_pass.ogg
 
    Weapons { 
-      Number = 4
+      Number = 5
       Weapon0 ->* VehicleType.ServiceAir
       Weapon1 ->* VehicleType.AmmoTorp
       Weapon1.Ammo = 50
       Weapon2 ->* Vehicletype.AmmoLM
       Weapon2.Ammo = 50
-      Weapon3 ->* VehicleType.AmmoCannon
-      Weapon3.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoSM
+      Weapon3.Ammo = 50
+      Weapon4 ->* VehicleType.AmmoCannon
+      Weapon4.Ammo = 100
    } Weapons
    
 } VehicleType

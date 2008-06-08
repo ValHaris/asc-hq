@@ -12,6 +12,7 @@ VehicleType {
    Movement += 0 0 0 5 0 0 0 0
    Features = mineview mine_layer conquer_buildings
    Category = light_tracked_vehicle
+   MovementSound = mechstepfast.ogg
 
    Weapons {
       Number = 3 

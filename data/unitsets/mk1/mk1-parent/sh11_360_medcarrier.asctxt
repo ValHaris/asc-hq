@@ -21,6 +21,7 @@ VehicleType {
    SelfRepairRate = 5
    Weight = 10000
    Transportation ->* Vehicletype.TransMedCarrier 
+   MovementSound = med_ship_a_s.ogg
 
    Height = floating 
    Tank { 

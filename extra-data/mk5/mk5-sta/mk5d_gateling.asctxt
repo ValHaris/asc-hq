@@ -5,14 +5,16 @@ VehicleType {
    Description = Selbstschussanlage
 
    Infotext = []
-   Picture = MK5d_GATELING.pcx
+   Picture = mk5d_gateling.pcx
 
+   Features += MoveDuringReactionFire
+   
    Armor += 100
-   Weight = 3
+   Weight = 2
    View += 21
    TerrainAccess ->* VehicleType.Device_terrain 
 
-
+   WaitForAttack = true
    Weapons { 
       Initiative = 50
       Number = 1

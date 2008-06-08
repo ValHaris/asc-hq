@@ -7,7 +7,7 @@ VehicleType {
    picture = mk5s_ccs.pcx
 
    Armor -= 100
-   Features += satelliteview
+   Features += satelliteview Vehicle_Production NoProductionCustomization
 
    Transportation.MaxLoadableUnits = 15
    Transportation.CategoriesNOT = heavy_tracked_vehicle heavy_wheeled_vehicle medium_ship heavy_ship heavy_aircraft rail_vehicle
@@ -16,6 +16,13 @@ VehicleType {
 
    Height = submerged floating 
    Movement += 0 15 0 0 0 0 0 0 
+
+   Construction {
+      VehiclesInternally = 1483 1431 1430
+      ProductionEfficiency = [   0   0   2
+                                 0   1   0
+                                 0   0   1 ]
+   } Construction 
    
    Weapons { 
       Number = 7

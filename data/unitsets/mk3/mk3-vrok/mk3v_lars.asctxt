@@ -16,6 +16,7 @@ VehicleType {
    TerrainAccess ->* VehicleType.lt_wheeled 
    TerrainAccess.terrain_any = road runway hard_sand lowland Frozen_water ditch
    Movement += 0 0 0 13 0 0 0 0 
+   MovementSound = wheeled_l_g.ogg
 
    Weapons { 
       Weapon0.MaxRange = 30

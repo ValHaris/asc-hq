@@ -14,7 +14,7 @@ VehicleType {
    Jamming = 11
    Features = Kamikaze_only
 
-   TerrainAccess ->* VehicleType.Turret_lowland 
+   TerrainAccess ->* VehicleType.device_terrain 
 
    Weapons { 
       Initiative = 0

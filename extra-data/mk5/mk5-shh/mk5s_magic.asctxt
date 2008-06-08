@@ -6,5 +6,7 @@ VehicleType {
    Infotext = [Beutetechnik von den Cromonern]
    picture = mk5s_magic.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Transportation ->* VehicleType.TransNoMechTrooper3
 
 } VehicleType

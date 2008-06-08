@@ -12,6 +12,7 @@ VehicleType {
    Armor = 340
    Weight -= 1
    Movement += 0 0 0 10 0 0 0 0 
+   MovementSound = mechstepfast.ogg
 
    Weapons { 
       Initiative = 0

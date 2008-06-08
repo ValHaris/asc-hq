@@ -24,6 +24,7 @@ VehicleType {
    Movement = 0 0 0 0 0 0 0 0 
    TerrainAccess ->* VehicleType.turret_lowland 
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 2

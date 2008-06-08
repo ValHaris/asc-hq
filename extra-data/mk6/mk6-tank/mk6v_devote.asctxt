@@ -5,6 +5,10 @@ VehicleType {
    Name = DevoTE
    Picture = mk6v_devoTE.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   InfoText = [Der DevoTE ist ein auf dem Erfolgsmodell CillaTE aufbauender mittlerer Kampfpanzer.
+Das verstärkte Chassis ist in der Lage, eine deutlich stärkere Panzerung zu tragen. Dies geht jedoch zu Lasten der Geschwindigkeit und Geländegängigkeit.
+Der EMP Generator konnte etwas verstärkt werden, was sich aber glücklicherweise nicht in dem Energieverbrauch niederschlägt. Die Treibstoffversorgung ist jedoch weiterhin stets sicherzustellen, da der Tank nicht vergrößert wurde. 
+Das Hauptgeschütz wurde durch eine 85mm Kanone ersetzt, die von der Durchschlagskraft zwischen einem leichten und einem mittleren Kampfpanzer der meisten anderen Rassen liegt. Bei der Sekundärbewaffnung folgten die Ingenieure dem Trend, und montierten das schwere Maschinengewehr starr in den Gefechtsturm, womit es die Kapazität zur Luftabwehr verlor. Ebenfalls dem Trend folgend wurde dies durch das Hinzufügen einer 20mm FlaK ausgeglichen, die auch in normaler Höhe operierende Flugzeuge unter Beschuß nehmen kann - und dies auch auf eine größere Distanz als dies bei einem reinen Maschinengewehr möglich wäre. ]
    
    Armor -= 50
    Tank.Material = 1000

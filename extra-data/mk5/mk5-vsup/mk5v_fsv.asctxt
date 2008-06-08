@@ -33,6 +33,11 @@ VehicleType {
    SelfRepairRate = 20
    Weight = 20
    TerrainAccess ->* VehicleType.Offroad 
+
+   Construction { 
+      ObjectGroupsRemovable = 13
+   } Construction
+
    Weapons { 
       Initiative = -50
       Number = 8

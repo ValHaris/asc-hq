@@ -4,9 +4,7 @@ VehicleType {
    parent = 400 401 402 423
 
    Description = generator vehicle
-   Infotext = [In times of war, energy supplies can not always be distrubuted
-              easily. If a factory is running out of energy, dispatch a Generator
-              Vehicle. Its batteries can hold enough to build a modest army.]
+   Infotext = [Notstromaggregate ermöglichen die kurzfristige Überbrückung von Engpässen oder Ausfällen der Energieversorgung. Die kräftigen Dieselmotoren dieser Aggregate dienen ausschliesslich der Energieerzeugung und verbrauchen große Mengen Treibstoff, so dass längere Einsätze nur im Verband mit Tankfahrzeugen möglich sind. Nach der Positionierung in direkter Nachbarschaft der zu versorgenden Einrichtung, stellt die Besatzung sofort eine Verbindung zum Versorgungsnetzwerk her, und wartet auf den Aktivierungsbefehl.]
    picture = MK3b_notstrom.png
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 

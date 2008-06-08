@@ -8,7 +8,10 @@ VehicleType {
    
    Armor -= 100
    Category = medium_wheeled_vehicle
+
    TerrainAccess ->* VehicleType.wheeled 
+   MovementSound = wheeled_l_g.ogg
+
    Weapons {
       Weapon0.ReactionFireShots = 3
    } Weapons

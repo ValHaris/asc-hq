@@ -11,11 +11,13 @@ VehicleType {
    Armor += 50
    Jamming = 19
 
+   Transportation ->* VehicleType.TransLowTrooper2
    Features += jam_only_own_field moveduringreactionfire
 
    Tank.fuel = 700
    FuelConsumption = 10
    Movement -= 0 0 0 10 0 0 0 0 
+   MovementSound = buggy2.ogg
 
    Weapons { 
       Initiative = 0
@@ -23,7 +25,7 @@ VehicleType {
       Weapon0 ->* VehicleType.Def_MG 
 
       Weapon1 ->* VehicleType.SAMH 
-      Weapon1.Ammo = 4
+      Weapon1.Ammo = 6
       Weapon1.maxRange = 40
    } Weapons
 } VehicleType

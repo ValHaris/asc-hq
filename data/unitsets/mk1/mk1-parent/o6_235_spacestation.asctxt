@@ -11,7 +11,7 @@ VehicleType {
    View = 100
    ResourceDrillingRange = 6
    SelfRepairRate = 10
-   Weight = 400
+   Weight = 505
    Category = heavy_aircraft
    Features += self_repairing ExternalMaterialTransfer ExternalFuelTransfer Repair_Facility automatic_resource_searching moveduringreactionfire
 
