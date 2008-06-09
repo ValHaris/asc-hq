@@ -288,6 +288,40 @@
         MoveCost = 10
      } ParaDevice
 
+      container_in_out {
+        Mode = in out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        MoveCost = 20
+        DisableAttack = false
+      } container_in_out
+
+      ship_out {
+        Mode = out
+        UnitHeightAbs = floating submerged
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+        MoveCost = 20
+        DisableAttack = true
+      } ship_out
+
+      ship_in {
+        Mode = in
+        UnitHeightAbs = floating
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100
+      } ship_in
+
      Weapon_Air_out {
         Mode = out
         UnitHeightAbs = medium_level_flight high_level_flight
