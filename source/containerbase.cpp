@@ -384,7 +384,7 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
 
 bool ContainerBase :: canCarryWeight( int additionalWeight ) const
 {
-   if ( cargoWeight() + additionalWeight >= baseType->maxLoadableWeight )
+   if ( cargoWeight() + additionalWeight > baseType->maxLoadableWeight )
       return false;
    else
       if ( getCarrier() )
