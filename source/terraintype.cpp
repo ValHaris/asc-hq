@@ -545,7 +545,7 @@ TerrainBits getTerrainBitType ( TerrainBitTypes tbt )
       case cbicebreaking : tb |= getTerrainBitType( cbfrozenwater )
                               | getTerrainBitType( cbsnow1 )
                               | getTerrainBitType(cbsnow2 );
-      case cbriver       : tb.setInt(  1 << 24, 0 ); break;
+      case cbriver       : tb.setInt(  1 << 31, 0 ); break;
 
    };
    return tb;

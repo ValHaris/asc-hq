@@ -23,6 +23,7 @@
 #define messagedialogH
 
 #include "../paradialog.h"
+class TextRenderer;
 
 class PG_RichEdit;
 
@@ -72,7 +73,7 @@ class  MessageDialog : public ASC_PG_Dialog {
 
       void LoadThemeStyle(const std::string& widgettype);
 
-      PG_RichEdit* getTextBox() { return my_textbox; };
+      PG_Widget* getTextBox();
 
       void EnableDefaultKeys( bool enable );
 
@@ -93,7 +94,7 @@ class  MessageDialog : public ASC_PG_Dialog {
          
    private:
 
-      PG_RichEdit* my_textbox;
+      TextRenderer* my_textbox;
       int my_msgalign;
 
       void Init(const std::string& windowtext, int textalign, const std::string& style) ;

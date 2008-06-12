@@ -22,6 +22,7 @@
 #include <pgrichedit.h>
 
 #include "../global.h"
+#include "../widgets/textrenderer.h"
 
 
 
@@ -100,6 +101,10 @@ void MessageDialog::EnableDefaultKeys( bool enable )
    defaultKeysActive = enable;
 }
 
+PG_Widget* MessageDialog::getTextBox()
+{ 
+   return my_textbox; 
+}
 
 MessageDialog::~MessageDialog() {
    // delete my_btnok;
@@ -108,10 +113,12 @@ MessageDialog::~MessageDialog() {
 
 void MessageDialog::Init(const std::string& windowtext, int textalign, const std::string& style) {
 
-   my_textbox = new PG_RichEdit(this, PG_Rect(10, 40, my_width-20, my_height-50 - 40));
-   my_textbox->SendToBack();
-   my_textbox->SetTransparency(255);
+   my_textbox = new TextRenderer(this, PG_Rect(10, 40, my_width-20, my_height-50 - 40));
+   // my_textbox->SendToBack();
+   // my_textbox->SetTransparency(255);
    my_textbox->SetText(windowtext);
+
+
 
    my_msgalign = textalign;
 
