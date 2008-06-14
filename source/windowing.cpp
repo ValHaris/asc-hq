@@ -67,7 +67,7 @@
 #include "messaginghub.h"
 
 
-const int widgetTypeNum = 16;
+const int widgetTypeNum = 17;
 const char* widgetTypes[widgetTypeNum]
 =
    { "image",
@@ -85,7 +85,8 @@ const char* widgetTypes[widgetTypeNum]
      "checkbox",
      "lineedit",
      "slider",
-     "plain"
+     "plain",
+     "listbox"
    };
 
 enum  WidgetTypes  { Image,
@@ -103,7 +104,8 @@ enum  WidgetTypes  { Image,
                      CheckBox,
                      LineEdit,
                      Slider,
-                     Plain };
+                     Plain,
+                     ListBox };
 
 const int imageModeNum = 5;
 const char* imageModes[imageModeNum]
@@ -458,7 +460,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          bool mode;
          pc.addBool( "in", mode, true );
 
-         Emboss* tw = new Emboss ( parent, r );
+         Emboss* tw = new Emboss ( parent, r, mode );
          // PG_ThemeWidget* tw = new PG_ThemeWidget ( parent, r, style );
          widgetParams.assign ( tw );
          parsePanelASCTXT( pc, tw, widgetParams );
@@ -656,6 +658,16 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, w, widgetParams );
          newWidget = w;
+      }
+      
+      if ( type == ListBox) {
+         PG_ListBox* l = new PG_ListBox( parent, r );
+         
+         if ( !hasStyle )
+            widgetParams.assign ( l );
+            
+         parsePanelASCTXT( pc, l, widgetParams );
+         newWidget = l;
       }
             
       if ( newWidget && newWidget->GetName().empty() ) 

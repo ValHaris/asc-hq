@@ -20,6 +20,8 @@
 
 #include <sstream>
 #include <pgimage.h>
+#include <pglistbox.h>
+#include <pglistboxitem.h>
 
 #include "newgame.h"
 #include "editmapparam.h"
@@ -40,9 +42,26 @@
 #include "../gamedlg.h"
 #include "../network/simple_file_transfer.h"
 #include "../network/pbem-server.h"
+#include "../textfile_evaluation.h"
+#include "../textfileparser.h"
+#include "../widgets/textrenderer.h"
 
 class GameParameterEditorWidget;
 
+const int pageCount = 11;
+
+class Campaign {
+   public:
+      ASCString name;
+      ASCString description;
+      ASCString file;
+      
+      void runTextIO ( PropertyContainer& pc ) {
+         pc.addString ( "name", name);
+         pc.addString ( "description", description );
+         pc.addString ( "file", file );
+      }
+};
 
 class StartMultiplayerGame: public ConfigurableWindow {
    private:
@@ -50,10 +69,10 @@ class StartMultiplayerGame: public ConfigurableWindow {
       bool success;
       GameMap* newMap;
       
-      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch, PBEMServerSetup }; 
+      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch, PBEMServerSetup, CampaignChoser }; 
       Pages page;
      
-      enum Mode { NewCampagin, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP, PBEM_Server };
+      enum Mode { NewCampaign, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP, PBEM_Server };
       int mode;
       
       static const char* buttonLabels[];
@@ -86,6 +105,12 @@ class StartMultiplayerGame: public ConfigurableWindow {
       PBEMServer* pbemserver;
       
       void loadPBEMServerDefaults();
+
+      typedef deallocating_vector<Campaign*> Campaigns;
+      Campaigns campaigns;
+      void loadCampaigns();
+      Campaign* getSelectedCampaign();
+      bool campaignSelected();
       
       void fileNameSelected( const ASCString& filename )
       {
@@ -241,6 +266,7 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
     showButtons(false,false,true);
     
     loadPBEMServerDefaults();
+    loadCampaigns();
 }
 
 
@@ -253,6 +279,68 @@ StartMultiplayerGame::~StartMultiplayerGame()
       delete pbemserver;
 }      
 
+bool StartMultiplayerGame::campaignSelected()
+{
+   
+   TextRenderer* text = dynamic_cast<TextRenderer*>( FindChild( "CampaignDescription", true ));
+   if ( text ) {
+      Campaign* c = getSelectedCampaign();
+      if ( c )
+         text->SetText( c->description );
+   }
+   return true;
+}
+
+void StartMultiplayerGame::loadCampaigns()
+{
+   PG_ListBox* list = dynamic_cast<PG_ListBox*>( FindChild( "CampaignList", true ));
+   if ( !list ) 
+      return;
+   
+   list->sigSelectItem.connect( SigC::slot( *this, &StartMultiplayerGame::campaignSelected ));
+   
+   
+   tfindfile ff ( "*.asccampaign" );
+   tfindfile::FileInfo fi;
+   while ( ff.getnextname( fi) ) {
+      try {
+         tnfilestream f ( fi.name, tnstream::reading );
+         TextFormatParser parser(&f);
+         
+         PropertyReadingContainer prc ( "campaign", parser.run());
+         Campaign* c = new Campaign();
+         c->runTextIO(prc);
+   
+         campaigns.push_back ( c );
+         
+         if ( list )
+            new PG_ListBoxItem( list, 20, c->name );
+         
+      } catch ( ParsingError pe ) {
+         errorMessage( pe.getMessage( ));
+      }
+   }
+}
+
+
+Campaign* StartMultiplayerGame::getSelectedCampaign()
+{
+   PG_ListBox* list = dynamic_cast<PG_ListBox*>( FindChild( "CampaignList", true ));
+      
+   if ( list )
+      for ( int i = 0; i < list->GetWidgetCount(); ++i ) {
+         PG_ListBoxBaseItem* bi = dynamic_cast<PG_ListBoxBaseItem*>(list->FindWidget(i));
+         if ( bi && bi->IsSelected() )
+            for ( Campaigns::iterator i = campaigns.begin(); i != campaigns.end(); ++i )
+               if ( (*i)->name == bi->GetText() )
+                  return *i;
+      }
+
+   
+   return NULL;
+}
+
+
 bool StartMultiplayerGame::Apply()
 {
    switch ( page )  {
@@ -262,7 +350,7 @@ bool StartMultiplayerGame::Apply()
                   delete newMap;
                   newMap = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap ));
                   if ( newMap ) {
-                     if ( mode != NewCampagin && mode != ContinueCampaign )
+                     if ( mode != NewCampaign && mode != ContinueCampaign )
                         newMap->campaign.avail = false;
                      else
                         replay = false;
@@ -373,6 +461,31 @@ bool StartMultiplayerGame::Apply()
          }
          break;
 
+      case CampaignChoser: {
+         Campaign* c =getSelectedCampaign();
+         if ( c ) {
+            if ( c->file.empty() )
+               return false;
+            
+            tfindfile ff ( c->file );
+            if ( ff.getFoundFileNum() < 1 )
+               return false;
+            
+            if ( ff.getFoundFileNum() == 1 ) {
+               tfindfile::FileInfo fi;
+               if ( !ff.getnextname( fi) )
+                  return false;
+               
+               filename = fi.name;
+               return true;
+            } else {
+               filename =  selectFile( c->file, true );
+               return !filename.empty();
+            }
+         } else 
+            return false;
+      }
+         
       default: 
            break;
    }
@@ -420,7 +533,10 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
             if ( mode == ContinueCampaign )
                page = PasswordSearch;
             else
-               page = FilenameSelection;
+               if ( mode == NewCampaign )
+                  page = CampaignChoser;
+               else
+                  page = FilenameSelection;
          }
          break;
          
@@ -521,7 +637,7 @@ void StartMultiplayerGame::loadPBEMServerDefaults()
 
 void StartMultiplayerGame::showPage()
 {
-   for ( int i = 0; i < 10; ++i ) {
+   for ( int i = 0; i < pageCount; ++i ) {
       ASCString name = "Page" + ASCString::toString(i);
       if ( page == i )
          show( name );
@@ -531,8 +647,12 @@ void StartMultiplayerGame::showPage()
    showSupervisorWidgets();
    
    switch ( page ) {
+      case CampaignChoser:
+         showButtons(true,false,false);
+         break;
+   
       case FilenameSelection: 
-         if ( mode == NewCampagin || mode == ContinueCampaign )
+         if ( mode == NewCampaign || mode == ContinueCampaign )
             showButtons(true,false,false);
          else
             showButtons(false,true,true);
@@ -585,7 +705,7 @@ void StartMultiplayerGame::userHandler( const ASCString& label, PropertyReadingC
 bool StartMultiplayerGame::checkPlayerStat()
 {
    ASCString msg;
-   if ( mode == NewCampagin || mode == ContinueCampaign ) {
+   if ( mode == NewCampaign || mode == ContinueCampaign ) {
       bool humanFound = false;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
          if ( newMap->player[i].exist() )

@@ -564,6 +564,10 @@ class tfindfile {
         */
         ASCString getnextname ( int* loc = NULL, bool* inContainer = NULL, ASCString* location = NULL );
         bool getnextname ( FileInfo& fi );
+        
+        int getFoundFileNum() {
+           return found;
+        };
 
      };
 
