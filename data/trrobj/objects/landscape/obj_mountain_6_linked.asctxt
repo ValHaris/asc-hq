@@ -1,0 +1,25 @@
+ObjectType {
+
+   Weather = dry
+
+   Name = Mountain NE-SW
+   Parent = 509
+   ID = 2254
+   NetBehaviour = NetToSelf
+   LinkableObjects = 2254
+
+   dry {
+     UseGFXpics = false
+     picture = obj_mountain_5_linked.png 65
+     ImageReference = [-1 -1 -1 -1 -1  1 -1 -1 -1  2
+                        4  3 -1 12 -1 -1 -1  8 16  3
+                        0  1  6  7 -1 24 24 -1 -1 28
+                       62 -1  1 -1  2 -1  4 33  6 -1
+                        8 33 16 35 12 -1 14 -1 -1 -1
+                       48 52 48 49 -1 -1 -1 58 56 -1
+                       -1 -1 -1 -1 -1]
+     FlipPictures   =  0
+   } dry
+
+
+} ObjectType

@@ -1,0 +1,27 @@
+ObjectType {
+
+   Weather = dry
+
+   Name = Mountain West-East
+   Parent = 509
+   ID = 2253
+;   Secondary IDs = 2246-2252
+
+   NetBehaviour = NetToSelf
+   LinkableObjects = 2253
+
+   dry {
+     UseGFXpics = false
+     picture = obj_mountain_5_linked.png 67
+     ImageReference = [-1 -1 -1 -1 -1  1 -1 -1 -1  2
+                        4  3 -1 12 -1 17 -1  8 16  3
+                        0  1  6  7 -1 24 24 -1 -1 28
+                       -1 -1  1 -1  2 -1  4 33  6 40
+                        8 33 16 35 12 -1 14 -1 -1 -1
+                       48 -1 48 49 -1 -1 -1 58 56 -1
+                       65 -1 -1 -1 66 -1]
+     FlipPictures   =  0
+   } dry
+
+
+} ObjectType
