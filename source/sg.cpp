@@ -1375,7 +1375,7 @@ bool mainloopidle( PG_MessageObject* msgObj )
 
       checktimedevents( &getDefaultMapDisplay() );
 
-      checkforvictory();
+      checkforvictory( true );
    }
    return false;
 }

@@ -310,7 +310,7 @@ void AI:: run ( bool benchMark )
 
    displaymessage2("AI completed in %d second", duration/100);
 
-   checkforvictory();
+   checkforvictory( false );
 }
 
 

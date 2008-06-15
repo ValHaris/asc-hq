@@ -348,7 +348,7 @@ bool continuenetworkgame ( const ASCString& filename )
 
 
 
-void  checkforvictory ( )
+void  checkforvictory ( bool hasTurnControl )
 {
    if ( !actmap->continueplaying ) {
       int plnum = 0;
@@ -371,18 +371,22 @@ void  checkforvictory ( )
             actmap->player[i].existanceAtBeginOfTurn = false;
 
             if ( i == actmap->actplayer ) {
-               displaymessage ( getmessage ( 10011 ),1 );
+               if ( actmap->getPlayerView() == i && actmap->getPlayer(i).stat == Player::human )
+                  displaymessage ( getmessage ( 10011 ),1 );
 
                int humannum=0;
                for ( int j = 0; j < 8; j++ )
                   if (actmap->player[j].exist() && actmap->player[j].stat == Player::human )
                      humannum++;
-               if ( humannum )
-                  next_turn();
-               else {
-                  delete actmap;
-                  actmap = NULL;
-                  throw NoMapLoaded();
+
+               if ( hasTurnControl ) {
+                  if ( humannum )
+                     next_turn();
+                  else {
+                     delete actmap;
+                     actmap = NULL;
+                     throw NoMapLoaded();
+                  }
                }
             }
          } else

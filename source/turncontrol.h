@@ -44,7 +44,7 @@ class GameMap;
 extern void next_turn ( int playerView = -2 );
 
 //! checks if the current player has terminated another player or even won
-extern void  checkforvictory ( );
+extern void  checkforvictory ( bool hasTurnControl );
 
 
 //! continues a PBeM game; the current map is deleted
