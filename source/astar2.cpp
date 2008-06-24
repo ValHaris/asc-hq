@@ -23,17 +23,16 @@
 
 // mark -> temp3
 
-
-bool operator < ( const AStar::Node& a, const AStar::Node& b )
+bool AStar::Node::operator< ( const AStar::Node& a ) const
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
-    return (a.gval+a.hval) < (b.gval+b.hval);
+    return (gval+hval) < (a.gval+a.hval);
 }
 
-bool operator > ( const AStar::Node& a, const AStar::Node& b )
+bool AStar::Node::operator> ( const AStar::Node& a ) const
 {
-    return (a.gval+a.hval) > (b.gval+b.hval);
+    return (gval+hval) > (a.gval+a.hval);
 }
 
 

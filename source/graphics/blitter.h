@@ -23,7 +23,7 @@
 
 #include <cmath>
  #include <map>
- #include "../libs/loki/static_check.h"
+ #include <loki/static_check.h>
  #include "../libs/sdlmm/src/sdlmm.h"
  #include "surface.h"
 

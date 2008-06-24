@@ -27,9 +27,9 @@
 #define gameeventsystemH
 
 #include <sigc++/sigc++.h>
+#include <loki/Singleton.h>
 
 #include "typen.h"
-#include "libs/loki/Singleton.h"
 #include "factory.h"
 
 #include "mapdisplayinterface.h"
@@ -182,7 +182,7 @@ class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
          return names[name];
       }
 
-      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, typename FactoryWithNames::ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, Loki::Functor<NameType, TYPELIST_1(const IdentifierType&)> nameProvider )
+      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, typename FactoryWithNames::ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, Loki::Functor<NameType, LOKI_TYPELIST_1(const IdentifierType&)> nameProvider )
       {
          return registerClass( id, createFn, nameProvider(id) );
       }

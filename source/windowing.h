@@ -26,7 +26,7 @@
 
 #include <sigc++/sigc++.h>
 
-#include "libs/loki/SmartPtr.h"
+#include <loki/SmartPtr.h>
 
 #include "paradialog.h"
 #include "widgets/bargraphwidget.h"

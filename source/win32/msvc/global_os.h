@@ -34,7 +34,7 @@
   #define HAVE_STRICMP 
 
   #ifndef HAVE_ITOA
-  # define HAVE_ITOA
+  # define HAVE_ITOA 1
   #endif
 
   #define HAVE_DIRENT_H 

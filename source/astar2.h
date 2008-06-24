@@ -50,13 +50,14 @@
            int gval;        // g in A* represents how far we've already gone
            int hval;        // h in A* represents an estimate of how far is left
            Node(): h(0,0), gval(0), hval(0) {}
-           bool operator< ( const Node& a );
+           bool operator< ( const Node& a ) const;
+           bool operator> ( const Node& a ) const;
        };
 
        int dist( HexCoord a, HexCoord b );
 
        typedef std::vector<Node> Container;
-       greater<Node> comp;
+	   std::greater<Node> comp;
 
        inline void get_first( Container& v, Node& n );
 

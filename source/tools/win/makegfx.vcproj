@@ -1,36 +1,66 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9,00"
 	Name="makegfx"
-	ProjectGUID="{5EC07E44-BAB8-11D5-8156-00805F852A9B}"
-	Keyword="ManagedCProj">
+	ProjectGUID="{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}"
+	Keyword="ManagedCProj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SDL)/include&quot;;../..;../../tools;../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(SDL_image).static&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_SDL_"
-				MinimalRebuild="FALSE"
+				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DefaultCharIsUnsigned="TRUE"
+				DefaultCharIsUnsigned="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
@@ -38,56 +68,83 @@
 				OutputFile="$(OutDir)/bin/makegfx.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image).static/VisualC/$(ConfigurationName)/&quot;;&quot;../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/bin/makegfx.pdb"/>
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/bin/makegfx.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)\$(ConfigurationName)"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
+				OmitFramePointers="true"
 				AdditionalIncludeDirectories="&quot;$(SDL)/include&quot;;../..;../../tools;../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(SDL_image).static&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_SDL_"
-				StringPooling="FALSE"
-				MinimalRebuild="FALSE"
+				StringPooling="false"
+				MinimalRebuild="false"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				DefaultCharIsUnsigned="TRUE"
+				BufferSecurityCheck="false"
+				DefaultCharIsUnsigned="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
@@ -95,31 +152,35 @@
 				OutputFile="$(OutDir)/bin/makegfx.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SDL_mixer)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image).static/VisualC/$(ConfigurationName)/&quot;;&quot;../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libexpat)/libs&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/bin/makegfx.pdb"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				EntryPointSymbol=""/>
+				EntryPointSymbol=""
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -127,27 +188,34 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath="..\makegfx.cpp">
+				RelativePath="..\makegfx.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 			<File
-				RelativePath="..\..\itemrepository.h">
+				RelativePath="..\..\itemrepository.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\password.h">
+				RelativePath="..\..\password.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stack.h">
+				RelativePath="..\..\stack.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r">
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r"
+			>
 		</Filter>
 	</Files>
 	<Globals>

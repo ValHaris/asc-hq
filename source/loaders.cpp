@@ -1316,7 +1316,7 @@ void  savemap( const char * name, GameMap* gamemap )
    catch ( tfileerror err ) {
       displaymessage( "file error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
-   catch ( ASCexception err) {
+   catch ( ASCexception ) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 
@@ -1332,7 +1332,7 @@ void  savegame( const ASCString& name )
    catch ( tfileerror err) {
       displaymessage( "error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
-   catch ( ASCexception err) {
+   catch ( ASCexception ) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 }
@@ -1359,7 +1359,7 @@ void  savereplay( GameMap* gamemap, int num )
 
       memstream.writeInt ( actreplayversion );
    }
-   catch ( ASCexception err ) {
+   catch ( ASCexception ) {
       displaymessage( "error saving replay information", 1 );
    } /* endcatch */
 }

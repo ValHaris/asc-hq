@@ -24,7 +24,7 @@
 #define messaginghubH
 
  #include <sigc++/sigc++.h>
- #include "libs/loki/Singleton.h"
+ #include <loki/Singleton.h>
 
  #include "ascstring.h"
 

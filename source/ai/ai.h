@@ -22,6 +22,8 @@
     Boston, MA  02111-1307  USA
 */
 
+#ifndef aiH_included
+#define aiH_included
 
 
 #include <utility>
@@ -283,6 +285,8 @@
                   int moveDist;
                   bool neighbouringFieldsReachable[ sidenum ]; // used for the hemming tactic
                   float positionThreat;
+				  bool operator< ( const MoveVariant& a ) const;
+				  bool operator> ( const MoveVariant& a ) const;
             };
             static bool moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 );
          private:
@@ -500,3 +504,9 @@
            void write ( tnstream& stream ) const ;
            ~AI ( );
     };
+
+//extern bool operator> ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 );
+//extern bool operator< ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 );
+
+
+#endif

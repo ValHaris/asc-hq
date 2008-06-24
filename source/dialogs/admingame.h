@@ -22,11 +22,11 @@
 #ifndef admingameH
 #define admingameH
 
-#include "../libs/loki/Functor.h"
+#include <loki/Functor.h>
 
 class GameMap;
 
-typedef Loki::Functor<void, TYPELIST_1(GameMap*) > TurnSkipper;
+typedef Loki::Functor<void, LOKI_TYPELIST_1(GameMap*) > TurnSkipper;
 
 extern bool adminGame( GameMap* actmap, TurnSkipper* turnSkipper = NULL );
 

@@ -30,7 +30,7 @@
 
 #include <sigc++/sigc++.h>
 
-#include "libs/loki/Functor.h"
+#include <loki/Functor.h>
 
 #include "ascstring.h"
 #include "sgstream.h"
@@ -53,7 +53,7 @@ extern void  savemap( const char *       name, GameMap* gamemap );
 extern void  savegame( const ASCString& name );
 
 
-typedef Loki::Functor<GameMap*, TYPELIST_1(const ASCString&) > MapLoadingFunction;
+typedef Loki::Functor<GameMap*, LOKI_TYPELIST_1(const ASCString&) > MapLoadingFunction;
 extern GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFunction loader );
 
 

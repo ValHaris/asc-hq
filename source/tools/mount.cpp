@@ -20,11 +20,10 @@
 
 // #include <config.h>
 
+#include <fstream>
 #include <cstring>
 #include <cerrno>
 #include <cstdio>
-#include <iostream>
-#include <fstream>
 
 #include <SDL_types.h>
 #include <SDL_endian.h>

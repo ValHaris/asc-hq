@@ -1,37 +1,70 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9,00"
 	Name="mount"
 	ProjectGUID="{5EC07E44-BAB8-11D5-8156-00805F852A9B}"
 	RootNamespace="mount"
-	Keyword="ManagedCProj">
+	Keyword="ManagedCProj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt"
-				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER"
-				MinimalRebuild="FALSE"
+				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO"
+				GeneratePreprocessedFile="0"
+				KeepComments="false"
+				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DefaultCharIsUnsigned="TRUE"
+				DefaultCharIsUnsigned="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
+				ShowIncludes="false"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
@@ -39,56 +72,83 @@
 				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin\mount.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SDL)/VisualC/SDL/Debug&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../$(ConfigurationName)/lib/&quot;"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/bin/mount.pdb"/>
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/bin/mount.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
+				OmitFramePointers="true"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER"
-				StringPooling="FALSE"
-				MinimalRebuild="FALSE"
+				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO"
+				StringPooling="false"
+				MinimalRebuild="false"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				DefaultCharIsUnsigned="TRUE"
+				BufferSecurityCheck="false"
+				DefaultCharIsUnsigned="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
@@ -96,31 +156,35 @@
 				OutputFile="$(SolutionDir)\$(ConfigurationName)\bin/mount.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(OutDir)/lib&quot;;&quot;../../$(ConfigurationName)/lib/&quot;"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/bin/mount.pdb"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				EntryPointSymbol=""/>
+				EntryPointSymbol=""
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -128,18 +192,22 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath="..\mount.cpp">
+				RelativePath="..\mount.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r">
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r"
+			>
 		</Filter>
 	</Files>
 	<Globals>

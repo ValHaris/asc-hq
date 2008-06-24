@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.5 2007-04-22 13:56:58 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.6 2008-06-24 18:20:54 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -28,7 +28,8 @@
 #ifndef guiiconhandlerH
 #define guiiconhandlerH
 
-#include "libs/loki/Functor.h"
+#include <loki/Functor.h>
+#include <loki/Typelist.h>
 #include "graphics/surface.h"
 
 #include "paradialog.h"
@@ -56,8 +57,8 @@ class GenericGuiFunction : public GuiFunction {
         ASCString name;
         Surface icon;
      public:
-        typedef Loki::Functor<bool, TYPELIST_1(const MapCoordinate&)> Availability;
-        typedef Loki::Functor<void, TYPELIST_1(const MapCoordinate&)> Execution;
+        typedef Loki::Functor<bool, LOKI_TYPELIST_1(const MapCoordinate&)> Availability;
+        typedef Loki::Functor<void, LOKI_TYPELIST_1(const MapCoordinate&)> Execution;
      protected:
         Availability avail;
         Execution exec;

@@ -528,7 +528,7 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
          } while ( t ); /* enddo */
        }
 
-#ifndef _DEBUG
+#ifndef ASC_DEBUG
        catch ( ... ) {     // this will catch NullPointer-Exceptions and stuff like that, which we want to pass to the debugger  in debug mode
 #else
        catch ( GameMap ) {  // will never be thrown, but we need catch statement for the try block

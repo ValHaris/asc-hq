@@ -46,7 +46,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       PG_LineEdit* currentPlayer;
       PG_LineEdit* filename;
 
-      typedef Loki::Functor<void, TYPELIST_1(int) > PlayerActionFunctor;
+      typedef Loki::Functor<void, LOKI_TYPELIST_1(int) > PlayerActionFunctor;
       typedef PG_ListBoxDataItem<PlayerActionFunctor> ActionItem;
 
       PG_ScrollWidget* scrollwidget;

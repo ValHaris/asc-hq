@@ -20,7 +20,7 @@
 
 
 #include <sigc++/sigc++.h>
-#include "libs/loki/Functor.h"
+#include <loki/Functor.h>
 
  
 #include "typen.h"

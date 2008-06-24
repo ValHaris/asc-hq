@@ -4,8 +4,8 @@
 #include <list>
 #include <SDL.h>
 #include <sigc++/sigc++.h>
-
- #include "../libs/loki/Functor.h"
+#include <loki/Functor.h>
+#include <loki/Typelist.h>
 
 class GraphicsQueueOperation {
    public:
@@ -51,7 +51,7 @@ class GraphicsQueueOperation {
    class InitScreenOp : public GraphicsQueueOperation {
          int x,y,depth,flags;
       public:
-         typedef Loki::Functor<void, TYPELIST_1(SDL_Surface*) > ScreenRegistrationFunctor;
+         typedef Loki::Functor<void, LOKI_TYPELIST_1(SDL_Surface*) > ScreenRegistrationFunctor;
       private:
          ScreenRegistrationFunctor srf;
       public:

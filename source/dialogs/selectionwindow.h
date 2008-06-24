@@ -31,7 +31,7 @@
 #include <pgapplication.h>
 #include <pglineedit.h>
 
-#include "../libs/loki/Functor.h"
+#include <loki/Functor.h>
 
 #include "../paradialog.h"
 #include "../global.h"
@@ -43,7 +43,7 @@ class SelectionWidget : public PG_Widget {
       SelectionWidget ( PG_Widget *parent, const PG_Rect &rect ) : PG_Widget( parent, rect ), selectionCallBack(NULL ) {};
    
    public:
-      typedef Loki::Functor<bool, TYPELIST_1(const SelectionWidget*) > SelectionCallBack;
+      typedef Loki::Functor<bool, LOKI_TYPELIST_1(const SelectionWidget*) > SelectionCallBack;
 
    private:      
       SelectionCallBack* selectionCallBack;

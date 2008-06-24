@@ -27,7 +27,8 @@
  #include <cstring>
  #include <map>
 
- #include "libs/loki/Functor.h"
+ #include <loki/Functor.h>
+ #include <loki/Typelist.h>
 
  #include "basestreaminterface.h"
  #include "basictypes.h"
@@ -57,7 +58,7 @@ class TechDependency: public LoadableItemType {
      TechDependency(){ requireAllListedTechnologies = true; };
 
      bool available( const Research& research ) const;
-     typedef Loki::Functor<bool, TYPELIST_1(int) > CheckTechAvailabilityFunctor;
+     typedef Loki::Functor<bool, LOKI_TYPELIST_1(int) > CheckTechAvailabilityFunctor;
      ResearchAvailabilityStatus available( CheckTechAvailabilityFunctor checkTechAvailability ) const;
 
      /** this will recursively scan through the tech tree to check if this item will be available sometime.

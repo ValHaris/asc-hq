@@ -20,7 +20,8 @@
 
  #include "typen.h"
  #include "vehicle.h"
- #include "libs/loki/Functor.h"
+ #include <loki/Functor.h>
+ #include <loki/Typelist.h>
 
   /** searches fields in hexagonal "circles" around a field and calls testfield for each field
   */
@@ -39,7 +40,7 @@
                     virtual ~SearchFields() {};
                  };
 
-  typedef Loki::Functor<void, TYPELIST_1(const MapCoordinate&) > FieldIterationFunctor;
+  typedef Loki::Functor<void, LOKI_TYPELIST_1(const MapCoordinate&) > FieldIterationFunctor;
   extern void circularFieldIterator( GameMap* gamemap, const MapCoordinate& center, int startDist, int stopDist, FieldIterationFunctor functor ); 
 
                  

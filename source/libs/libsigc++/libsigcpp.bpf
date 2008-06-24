@@ -1,9 +1,0 @@
-//---------------------------------------------------------------------------
-
-#include <vcl.h>
-#pragma hdrstop
-#define Library
-
-// Um der Bibliothek eine Datei hinzuzufügen, wählen Sie im Menü 'Projekt' 'Zum Projekt hinzufügen'.
-
- 

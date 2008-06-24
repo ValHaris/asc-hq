@@ -1,110 +1,159 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9,00"
 	Name="tools"
 	ProjectGUID="{2D401A22-BAA4-11D5-8156-00805F852A9B}"
-	Keyword="ManagedCProj">
+	RootNamespace="tools"
+	Keyword="ManagedCProj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../../Debug"
 			IntermediateDirectory="Debug"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc"
+				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc;&quot;../../libs/loki-0.1.6/include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;_NOASM_;_SDL_"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DefaultCharIsUnsigned="TRUE"
+				DefaultCharIsUnsigned="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/lib/tools.lib"/>
+				OutputFile="$(OutDir)/lib/tools.lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="../../Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
-				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc"
+				OmitFramePointers="true"
+				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc;&quot;../../libs/loki-0.1.6/include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;_NOASM_;_SDL_"
-				StringPooling="TRUE"
-				MinimalRebuild="FALSE"
+				StringPooling="true"
+				MinimalRebuild="false"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				DefaultCharIsUnsigned="TRUE"
+				BufferSecurityCheck="false"
+				DefaultCharIsUnsigned="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/lib/tools.lib"/>
+				OutputFile="$(OutDir)/lib/tools.lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -112,220 +161,294 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath="..\..\ascstring.cpp">
+				RelativePath="..\..\ascstring.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\basegfx.cpp">
+				RelativePath="..\..\basegfx.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\basestrm.cpp">
+				RelativePath="..\..\basestrm.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\blitter.cpp">
+				RelativePath="..\..\graphics\blitter.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\buildingtype.cpp">
+				RelativePath="..\..\buildingtype.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\containerbasetype.cpp">
+				RelativePath="..\..\containerbasetype.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\drawing.cpp">
+				RelativePath="..\..\graphics\drawing.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\lib\errorout.cpp">
+				RelativePath="..\lib\errorout.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\fieldimageloader.cpp">
+				RelativePath="..\..\fieldimageloader.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\gameoptions.cpp">
+				RelativePath="..\..\gameoptions.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\libs\getopt\getopt.c">
+				RelativePath="..\..\libs\getopt\getopt.c"
+				>
 			</File>
 			<File
-				RelativePath="..\..\libs\getopt\getopt1.c">
+				RelativePath="..\..\libs\getopt\getopt1.c"
+				>
 			</File>
 			<File
-				RelativePath="..\..\sdl\graphics.cpp">
+				RelativePath="..\..\sdl\graphics.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphicset.cpp">
+				RelativePath="..\..\graphicset.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\iconrepository.cpp">
+				RelativePath="..\..\iconrepository.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\loadpcxc.cpp">
+				RelativePath="..\..\loadpcxc.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\messaginghub.cpp">
+				RelativePath="..\..\messaginghub.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\misc.cpp">
+				RelativePath="..\..\misc.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\win32\msvc\ndir.c">
+				RelativePath="..\..\win32\msvc\ndir.c"
+				>
 			</File>
 			<File
-				RelativePath="..\..\newfont.cpp">
+				RelativePath="..\..\newfont.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\objects.cpp">
+				RelativePath="..\..\objects.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\objecttype.cpp">
+				RelativePath="..\..\objecttype.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\overviewmapimage.cpp">
+				RelativePath="..\..\overviewmapimage.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\palette.cpp">
+				RelativePath="..\..\palette.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\password.cpp">
+				RelativePath="..\..\password.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\research.cpp">
+				RelativePath="..\..\research.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\sgstream.cpp">
+				RelativePath="..\..\sgstream.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\simplestream.cpp">
+				RelativePath="..\..\simplestream.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stack.cpp">
+				RelativePath="..\..\stack.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stdio-errorhandler.cpp">
+				RelativePath="..\..\stdio-errorhandler.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stringtokenizer.cpp">
+				RelativePath="..\..\stringtokenizer.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\strtmesg.cpp">
+				RelativePath="..\..\strtmesg.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\surface.cpp">
+				RelativePath="..\..\graphics\surface.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\surface2png.cpp">
+				RelativePath="..\..\graphics\surface2png.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\terraintype.cpp">
+				RelativePath="..\..\terraintype.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\textfile_evaluation.cpp">
+				RelativePath="..\..\textfile_evaluation.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\textfileparser.cpp">
+				RelativePath="..\..\textfileparser.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\textfiletags.cpp">
+				RelativePath="..\..\textfiletags.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\typen.cpp">
+				RelativePath="..\..\typen.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\vehicletype.cpp">
+				RelativePath="..\..\vehicletype.cpp"
+				>
 			</File>
 			<Filter
 				Name="loki"
-				Filter="">
+				>
 				<File
-					RelativePath="..\..\libs\loki\SmallObj.cpp">
+					RelativePath="..\..\libs\loki-0.1.6\src\Singleton.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\libs\loki-0.1.6\src\SmallObj.cpp"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 			<File
-				RelativePath="..\..\ascstring.h">
+				RelativePath="..\..\ascstring.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\basegfx.h">
+				RelativePath="..\..\basegfx.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\basestrm.h">
+				RelativePath="..\..\basestrm.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\buildingtype.h">
+				RelativePath="..\..\buildingtype.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\CLoadable.h">
+				RelativePath="..\..\CLoadable.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\gameoptions.h">
+				RelativePath="..\..\gameoptions.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\libs\getopt\getopt.h">
+				RelativePath="..\..\libs\getopt\getopt.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\sdl\graphics.h">
+				RelativePath="..\..\sdl\graphics.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphicselector.h">
+				RelativePath="..\..\graphicselector.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphicset.h">
+				RelativePath="..\..\graphicset.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\misc.h">
+				RelativePath="..\..\misc.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\Named.h">
+				RelativePath="..\..\Named.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\win32\msvc\ndir.h">
+				RelativePath="..\..\win32\msvc\ndir.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\newfont.h">
+				RelativePath="..\..\newfont.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\objecttype.h">
+				RelativePath="..\..\objecttype.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\palette.h">
+				RelativePath="..\..\palette.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\Property.h">
+				RelativePath="..\..\Property.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\PropertyGroup.h">
+				RelativePath="..\..\PropertyGroup.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\sgstream.h">
+				RelativePath="..\..\sgstream.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\strtmesg.h">
+				RelativePath="..\..\strtmesg.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\terraintype.h">
+				RelativePath="..\..\terraintype.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\textfileparser.h">
+				RelativePath="..\..\textfileparser.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\textfiletags.h">
+				RelativePath="..\..\textfiletags.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\typen.h">
+				RelativePath="..\..\typen.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\vehicletype.h">
+				RelativePath="..\..\vehicletype.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r">
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r"
+			>
 		</Filter>
 		<File
-			RelativePath="ReadMe.txt">
+			RelativePath="ReadMe.txt"
+			>
 		</File>
 	</Files>
 	<Globals>

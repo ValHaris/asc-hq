@@ -105,7 +105,7 @@ class ImportBI3MapDialog : public ASC_PG_Dialog {
                      y = 0;
                   insertbattleislemap ( x, y, bi3Path, filename, getImportTable() );
                }
-            } catch ( ASCexception err ) {
+            } catch ( ASCexception ) {
                errorMessage("importing the map failed");
             }
          }

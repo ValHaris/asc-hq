@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2008-04-20 16:44:33 $
+   Update Date:      $Date: 2008-06-24 18:20:57 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.3 $
+   CVS/RCS Revision: $Revision: 1.4 $
    Status:           $State: Exp $
  */
 
@@ -1969,7 +1969,7 @@ PG_Char PG_Widget::extractHotkey( const std::string& s )
       return 0;
    
    bool found = false;
-   for ( int i = 0; i < s.length(); ++i ) {
+   for ( unsigned int i = 0; i < s.length(); ++i ) {
       if ( found ) 
          return tolower(s[i]);
       

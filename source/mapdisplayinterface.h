@@ -12,7 +12,7 @@
  #define mapdisplayinterfaceH
 
 
- #include "libs/loki/Functor.h"
+ #include <loki/Functor.h>
 
 class Sound;
  
@@ -23,7 +23,7 @@ class Sound;
 
 class MapDisplayInterface {
          public:
-           typedef Loki::Functor<void, TYPELIST_1(int) > SoundStartCallback; 
+           typedef Loki::Functor<void, LOKI_TYPELIST_1(int) > SoundStartCallback; 
            virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound ) = 0;
            virtual void displayMap ( void ) = 0;
            virtual void displayMap ( Vehicle* additionalVehicle ) = 0;

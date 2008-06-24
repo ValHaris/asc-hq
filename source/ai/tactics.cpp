@@ -144,21 +144,37 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
       evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
 }
 
-bool operator > ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
+bool AI::MoveVariant::operator< ( const AI::MoveVariant& mv2 ) const
+{
+   return (     result > mv2.result
+            || (result == mv2.result && positionThreat < mv2.positionThreat  )
+            || (result == mv2.result && positionThreat == mv2.positionThreat && moveDist < mv2.moveDist) );  // mv1.moveDist < mv2.moveDist
+}
+
+
+bool AI::MoveVariant::operator> ( const AI::MoveVariant& mv2 ) const
+{
+   return (     result < mv2.result
+            || (result == mv2.result && positionThreat > mv2.positionThreat )
+            || (result == mv2.result && positionThreat == mv2.positionThreat && moveDist > mv2.moveDist) );  // mv1.moveDist < mv2.moveDist
+}
+
+/*
+bool operator> ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 ) 
 {
    return (     mv1.result > mv2.result
             || (mv1.result == mv2.result && mv1.positionThreat < mv2.positionThreat  )
             || (mv1.result == mv2.result && mv1.positionThreat == mv2.positionThreat && mv1.moveDist < mv2.moveDist) );  // mv1.moveDist < mv2.moveDist
 }
 
-bool operator < ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
+bool operator< ( const AI::MoveVariant& mv1, const AI::MoveVariant& mv2 )
 {
    return (     mv1.result < mv2.result
             || (mv1.result == mv2.result && mv1.positionThreat > mv2.positionThreat )
             || (mv1.result == mv2.result && mv1.positionThreat == mv2.positionThreat && mv1.moveDist > mv2.moveDist) );  // mv1.moveDist < mv2.moveDist
 }
 
-
+*/
 bool AI::moveVariantComp ( const AI::MoveVariant* mv1, const AI::MoveVariant* mv2 )
 {
    return *mv1 < *mv2;

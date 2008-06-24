@@ -605,7 +605,7 @@ void PG_MultiLineEdit::InsertText(const std::string& c) {
 	}
 
    PG_Application::BulkModeActivator bulk;
-   for ( int i = 0; i < c.length(); ++i )
+   for ( unsigned int i = 0; i < c.length(); ++i )
 	  PG_LineEdit::InsertChar(c[i]);
    bulk.disable();
 	my_mark = -1;

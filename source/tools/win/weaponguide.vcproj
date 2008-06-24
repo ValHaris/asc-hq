@@ -1,127 +1,188 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="9,00"
 	Name="weaponguide"
-	ProjectGUID="{5EC07E44-BAB8-11D5-8156-00805F852A9B}"
-	Keyword="ManagedCProj">
+	ProjectGUID="{D9D558FF-3BE4-4A75-BEB8-8C5FE515E891}"
+	Keyword="ManagedCProj"
+	TargetFrameworkVersion="131072"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(SDL_image).static&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER;_SDL_"
-				MinimalRebuild="FALSE"
+				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DefaultCharIsUnsigned="TRUE"
-				RuntimeTypeInfo="TRUE"
+				DefaultCharIsUnsigned="true"
+				RuntimeTypeInfo="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib SDLmain.lib sigc-1.2.debug.lib libpng13d.lib"
 				OutputFile="$(SolutionDir)\$(ConfigurationName)/bin/weaponguide.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(SDL_image).static/VisualC/$(ConfigurationName)&quot;;&quot;../../$(ConfigurationName)/lib&quot;;&quot;../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"/>
+				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/$(ConfigurationName)&quot;;&quot;../../$(ConfigurationName)/lib&quot;;&quot;../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(ProjectDir)\$(ConfigurationName)\bin"
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
-			ManagedExtensions="FALSE">
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
+				OmitFramePointers="true"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;$(SDL_image).static&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_NOASM_;_MSC_VER;_SDL_"
-				StringPooling="FALSE"
-				MinimalRebuild="FALSE"
+				StringPooling="false"
+				MinimalRebuild="false"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				DefaultCharIsUnsigned="TRUE"
-				RuntimeTypeInfo="TRUE"
+				BufferSecurityCheck="false"
+				DefaultCharIsUnsigned="true"
+				RuntimeTypeInfo="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786"/>
+				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/FORCE:MULTIPLE"
 				AdditionalDependencies="sdl.lib libbzip2.lib tools.lib SDLmm.lib SDL_image.lib triangulate.lib SDLmain.lib sigc-1.2.lib libpng13.lib"
 				OutputFile="$(SolutionDir)\$(ConfigurationName)/bin/weaponguide.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SDL_image).static/VisualC/$(ConfigurationName)&quot;;&quot;../../$(ConfigurationName)/lib&quot;;&quot;../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
-				GenerateDebugInformation="TRUE"
+				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/$(ConfigurationName)&quot;;&quot;../../$(ConfigurationName)/lib&quot;;&quot;../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/bin/weaponguide.pdb"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				EntryPointSymbol=""/>
+				EntryPointSymbol=""
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -129,78 +190,102 @@
 	<Files>
 		<Filter
 			Name="Source Files"
-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
+			>
 			<File
-				RelativePath="..\..\graphics\blitter.cpp">
+				RelativePath="..\..\graphics\blitter.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\colorizer.cpp">
+				RelativePath="..\..\graphics\colorizer.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\drawing.cpp">
+				RelativePath="..\..\graphics\drawing.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\explosivemines.cpp">
+				RelativePath="..\..\explosivemines.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\groupfile.cpp">
+				RelativePath="..\groupfile.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\guidegenerator.cpp">
+				RelativePath="..\guidegenerator.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\iconrepository.cpp">
+				RelativePath="..\..\iconrepository.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\infopage.cpp">
+				RelativePath="..\infopage.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\itemrepository.cpp">
+				RelativePath="..\..\itemrepository.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\objects.cpp">
+				RelativePath="..\..\objects.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\overviewmapimage.cpp">
+				RelativePath="..\..\overviewmapimage.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\password.cpp">
+				RelativePath="..\..\password.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\playercolor.cpp">
+				RelativePath="..\..\playercolor.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stack.cpp">
+				RelativePath="..\..\stack.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stdio-errorhandler.cpp">
+				RelativePath="..\..\stdio-errorhandler.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\graphics\surface2png.cpp">
+				RelativePath="..\..\graphics\surface2png.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\unitset.cpp">
+				RelativePath="..\..\unitset.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\weaponguide.cpp">
+				RelativePath="..\weaponguide.cpp"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
-			Filter="h;hpp;hxx;hm;inl;inc">
+			Filter="h;hpp;hxx;hm;inl;inc"
+			>
 			<File
-				RelativePath="..\..\itemrepository.h">
+				RelativePath="..\..\itemrepository.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\password.h">
+				RelativePath="..\..\password.h"
+				>
 			</File>
 			<File
-				RelativePath="..\..\stack.h">
+				RelativePath="..\..\stack.h"
+				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r">
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;r"
+			>
 		</Filter>
 	</Files>
 	<Globals>

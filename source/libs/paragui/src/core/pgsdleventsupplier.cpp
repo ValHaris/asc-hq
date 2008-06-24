@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:16:00 $
+    Update Date:      $Date: 2008-06-24 18:20:57 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgsdleventsupplier.cpp,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -49,12 +49,12 @@ void PG_SDLEventSupplier::CombineMouseMotionEvents(SDL_Event* event) {
 }
 
 bool PG_SDLEventSupplier::PeepEvent(SDL_Event* event) {
-	return SDL_PeepEvents( event, 1, SDL_PEEKEVENT, 0xffffffff );
+	return SDL_PeepEvents( event, 1, SDL_PEEKEVENT, 0xffffffff ) > 0;
 }
 
 
 bool PG_SDLEventSupplier::PollEvent(SDL_Event* event) {
-	bool eventAvail = SDL_PollEvent( event );
+	bool eventAvail = SDL_PollEvent( event ) > 0;
 	if ( eventAvail )
 		CombineMouseMotionEvents( event );
 	return eventAvail;
