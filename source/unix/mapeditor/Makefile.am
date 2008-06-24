@@ -34,6 +34,6 @@ $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \
-$(top_builddir)/source/libs/loki/libloki.la $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/libs/loki-0.1.6/libloki.la $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
 
 

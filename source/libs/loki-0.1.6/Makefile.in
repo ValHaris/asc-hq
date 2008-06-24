@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-######################################################################
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -34,10 +32,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = asc_demount$(EXEEXT) asc_mount$(EXEEXT) \
-	asc_weaponguide$(EXEEXT)
-subdir = source/tools/linux
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+subdir = source/libs/loki-0.1.6
+DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -46,46 +42,10 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
-nodist_asc_demount_OBJECTS = demount.$(OBJEXT) basestrm.$(OBJEXT) \
-	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
-	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
-asc_demount_OBJECTS = $(nodist_asc_demount_OBJECTS)
-am__DEPENDENCIES_1 =
-asc_demount_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(top_builddir)/source/tools/lib/libasc_cmd.la
-nodist_asc_mount_OBJECTS = mount.$(OBJEXT) basestrm.$(OBJEXT) \
-	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
-	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
-asc_mount_OBJECTS = $(nodist_asc_mount_OBJECTS)
-asc_mount_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(top_builddir)/source/tools/lib/libasc_cmd.la
-nodist_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) \
-	basestrm.$(OBJEXT) simplestream.$(OBJEXT) misc.$(OBJEXT) \
-	ascstring.$(OBJEXT) loadpcxc.$(OBJEXT) palette.$(OBJEXT) \
-	sgstream.$(OBJEXT) newfont.$(OBJEXT) basegfx.$(OBJEXT) \
-	graphicset.$(OBJEXT) gameoptions.$(OBJEXT) stack.$(OBJEXT) \
-	buildingtype.$(OBJEXT) typen.$(OBJEXT) vehicletype.$(OBJEXT) \
-	password.$(OBJEXT) strtmesg.$(OBJEXT) textfileparser.$(OBJEXT) \
-	containerbasetype.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	research.$(OBJEXT) itemrepository.$(OBJEXT) \
-	groupfile.$(OBJEXT) guidegenerator.$(OBJEXT) \
-	infopage.$(OBJEXT) overviewmapimage.$(OBJEXT) \
-	iconrepository.$(OBJEXT) messaginghub.$(OBJEXT) \
-	objects.$(OBJEXT) unitset.$(OBJEXT) fieldimageloader.$(OBJEXT) \
-	stdio-errorhandler.$(OBJEXT) playercolor.$(OBJEXT)
-asc_weaponguide_OBJECTS = $(nodist_asc_weaponguide_OBJECTS)
-asc_weaponguide_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-	$(top_builddir)/source/sdl/libsdl.la $(am__DEPENDENCIES_1) \
-	$(top_builddir)/source/tools/lib/libasc_cmd.la \
-	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-	$(top_builddir)/source/graphics/libgraphics.la \
-	$(top_builddir)/source/libs/loki-0.1.6/libloki.la \
-	$(am__DEPENDENCIES_1)
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libloki_la_LIBADD =
+am_libloki_la_OBJECTS = SmallObj.lo Singleton.lo SmartPtr.lo
+libloki_la_OBJECTS = $(am_libloki_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -98,9 +58,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(nodist_asc_demount_SOURCES) $(nodist_asc_mount_SOURCES) \
-	$(nodist_asc_weaponguide_SOURCES)
-DIST_SOURCES =
+SOURCES = $(libloki_la_SOURCES)
+DIST_SOURCES = $(libloki_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -259,25 +218,9 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I $(top_builddir) -I$(top_src_dir)/source
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)
-#			asc_makegfx \
-#			asc_viewid \
-#			asc_bin2text \
-#			asc_raw2pcx
-nodist_asc_demount_SOURCES = demount.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
-nodist_asc_mount_SOURCES = mount.cpp        basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp strtmesg.cpp stringtokenizer.cpp
-#asc_makegfx_SOURCES     = makegfx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp
-#asc_viewid_SOURCES      = viewid.cpp       basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-#asc_bin2text_SOURCES    = bin2text.cpp     basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-nodist_asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp  stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp overviewmapimage.cpp iconrepository.cpp messaginghub.cpp objects.cpp unitset.cpp fieldimageloader.cpp stdio-errorhandler.cpp playercolor.cpp 
-#asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
-asc_mount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_demount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-#asc_makegfx_LDADD     = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la 
-#asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-#asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/libs/loki-0.1.6/libloki.la $(BOOST_LIBS)
+noinst_LTLIBRARIES = libloki.la
+libloki_la_SOURCES = SmallObj.cpp Singleton.cpp SmartPtr.cpp 
+EXTRA_DIST = $(srcdir)include/loki/*.h $(srcdir)/src/*.cpp
 all: all-am
 
 .SUFFIXES:
@@ -291,9 +234,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  source/tools/linux/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  source/libs/loki-0.1.6/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  source/tools/linux/Makefile
+	  $(AUTOMAKE) --gnu  source/libs/loki-0.1.6/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -311,43 +254,17 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
-	  else :; fi; \
-	done
 
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
 	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-asc_demount$(EXEEXT): $(asc_demount_OBJECTS) $(asc_demount_DEPENDENCIES) 
-	@rm -f asc_demount$(EXEEXT)
-	$(CXXLINK) $(asc_demount_OBJECTS) $(asc_demount_LDADD) $(LIBS)
-asc_mount$(EXEEXT): $(asc_mount_OBJECTS) $(asc_mount_DEPENDENCIES) 
-	@rm -f asc_mount$(EXEEXT)
-	$(CXXLINK) $(asc_mount_OBJECTS) $(asc_mount_LDADD) $(LIBS)
-asc_weaponguide$(EXEEXT): $(asc_weaponguide_OBJECTS) $(asc_weaponguide_DEPENDENCIES) 
-	@rm -f asc_weaponguide$(EXEEXT)
-	$(CXXLINK) $(asc_weaponguide_OBJECTS) $(asc_weaponguide_LDADD) $(LIBS)
+libloki.la: $(libloki_la_OBJECTS) $(libloki_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libloki_la_OBJECTS) $(libloki_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -355,46 +272,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demount.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldimageloader.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/groupfile.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidegenerator.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/infopage.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mount.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/newfont.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objects.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmapimage.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playercolor.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/research.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sgstream.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-errorhandler.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraintype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfile_evaluation.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfileparser.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weaponguide.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Singleton.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SmallObj.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/SmartPtr.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -499,11 +379,8 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile $(LTLIBRARIES)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -531,7 +408,8 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -553,7 +431,7 @@ install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am: install-binPROGRAMS
+install-exec-am:
 
 install-html: install-html-am
 
@@ -585,29 +463,25 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am:
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-dvi \
+.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
+	clean-libtool clean-noinstLTLIBRARIES ctags distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS
+	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
 
-vpath %.cpp $(srcdir)/..:$(srcdir)/../..
-#asc_raw2pcx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-
-# vim: noexpandtab ai
+vpath %.cpp $(srcdir)/src
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -2,7 +2,7 @@ vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
+INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include -I$(top_srcdir)/source/libs/loki-0.1.6/include/
 
 AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) 
 
@@ -31,7 +31,7 @@ playercolor.cpp pg_mapdisplay.cpp
 
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki/libloki.la \
+$(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki-0.1.6/libloki.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \

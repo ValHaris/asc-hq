@@ -30,7 +30,7 @@ asc_demount_LDADD     = $(SDL_LIBS) $(SIGC_LIBS) @LDADDLIBBZ2@ $(top_builddir)/s
 #asc_makegfx_LDADD     = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la 
 #asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 #asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/libs/loki/libloki.la $(BOOST_LIBS)
+asc_weaponguide_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/libs/loki-0.1.6/libloki.la $(BOOST_LIBS)
 #asc_raw2pcx_LDADD     = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 
 # vim: noexpandtab ai
