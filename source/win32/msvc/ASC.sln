@@ -45,8 +45,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paragui_static", "..\..\lib
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbpeditor", "pbpeditor\pbpeditor.vcproj", "{1203BEF2-3F60-449A-9E7D-3BC0BF261D7C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDL_image", "..\..\..\..\SDL_image.static\VisualC\SDL_image.vcproj", "{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "makegfx", "..\..\tools\win\makegfx.vcproj", "{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}"
 	ProjectSection(ProjectDependencies) = postProject
 		{2D401A22-BAA4-11D5-8156-00805F852A9B} = {2D401A22-BAA4-11D5-8156-00805F852A9B}
@@ -88,10 +86,6 @@ Global
 		{269CF622-CA89-4BAB-A3EC-E2895969DCE3}.Release|Win32.Build.0 = Release|Win32
 		{1203BEF2-3F60-449A-9E7D-3BC0BF261D7C}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1203BEF2-3F60-449A-9E7D-3BC0BF261D7C}.Release|Win32.ActiveCfg = Release|Win32
-		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Debug|Win32.ActiveCfg = Debug|Win32
-		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Debug|Win32.Build.0 = Debug|Win32
-		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Release|Win32.ActiveCfg = Release|Win32
-		{A791C19C-AAB7-4FDE-B4E7-2FE98F2C8DB7}.Release|Win32.Build.0 = Release|Win32
 		{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}.Release|Win32.ActiveCfg = Release|Win32
 	EndGlobalSection
