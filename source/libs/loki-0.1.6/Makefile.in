@@ -44,8 +44,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libloki_la_LIBADD =
-am_libloki_la_OBJECTS = SmallObj.lo Singleton.lo SmartPtr.lo
-libloki_la_OBJECTS = $(am_libloki_la_OBJECTS)
+nodist_libloki_la_OBJECTS = SmallObj.lo Singleton.lo SmartPtr.lo
+libloki_la_OBJECTS = $(nodist_libloki_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -58,8 +58,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libloki_la_SOURCES)
-DIST_SOURCES = $(libloki_la_SOURCES)
+SOURCES = $(nodist_libloki_la_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -219,8 +219,12 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 noinst_LTLIBRARIES = libloki.la
-libloki_la_SOURCES = SmallObj.cpp Singleton.cpp SmartPtr.cpp 
-EXTRA_DIST = $(srcdir)include/loki/*.h $(srcdir)/src/*.cpp
+
+# as the sources are in a subdirectory, we are grabbing them seperately ...
+nodist_libloki_la_SOURCES = SmallObj.cpp Singleton.cpp SmartPtr.cpp 
+
+# ... which is here!
+EXTRA_DIST = $(srcdir)/include/loki/*.h $(srcdir)/src/*.cpp
 all: all-am
 
 .SUFFIXES:
