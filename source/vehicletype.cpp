@@ -611,6 +611,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeChar(0);
    stream.writeChar(0);
    stream.writeInt(id );
+   printf("%d - %d\n", id, movement.size() );
    stream.writeInt(fuelConsumption );
    for ( j = 0; j < 8; j++ )
       stream.writeInt( movement[j] );
@@ -983,6 +984,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
 
    pc.addIntegerArray ( "Movement", movement );
+   while ( movement.size() < 8 )
+	   movement.push_back(0);
    for ( vector<int>::iterator i = movement.begin(); i != movement.end(); i++ )
       if ( *i > 255 )
          *i = 255;
