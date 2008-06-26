@@ -1221,8 +1221,10 @@ class RepairUnit : public GuiFunction
             if ( !fieldCount ) {
                delete vs;
                dispmessage2 ( 211 );
-            } else
+            } else {
                repaintMap();
+               updateFieldInfo();
+            }
          } else {
             for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
                tfield* fld = actmap->getField(pos);

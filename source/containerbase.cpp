@@ -382,13 +382,18 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
    return false;
 }
 
-bool ContainerBase :: canCarryWeight( int additionalWeight ) const
+bool ContainerBase :: canCarryWeight( int additionalWeight, const Vehicle*  vehicle) const
 {
+   // if the unit already carries this unit, there is no additional weight to check
+   if ( vehicle && findUnit( vehicle->networkid ))
+      additionalWeight = 0;
+
+
    if ( cargoWeight() + additionalWeight > baseType->maxLoadableWeight )
       return false;
    else
       if ( getCarrier() )
-         return getCarrier()->canCarryWeight( additionalWeight );
+         return getCarrier()->canCarryWeight( additionalWeight, vehicle );
       else
          return true;
 }
@@ -399,7 +404,7 @@ bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
    bool isConquering = isBuilding() && getMap()->getPlayer(this).diplomacy.isHostile( vehicle) && vehicle->color != color;
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
       if ( vehiclesLoaded() < baseType->maxLoadableUnits || isConquering )
-         if ( canCarryWeight( vehicle->weight() ) || findUnit ( vehicle->networkid ) || isConquering) // if the unit is already  loaded, the container already bears its weight
+         if ( canCarryWeight( vehicle->weight(), vehicle ) || findUnit ( vehicle->networkid ) || isConquering) // if the unit is already  loaded, the container already bears its weight
             return true;
 
    return false;

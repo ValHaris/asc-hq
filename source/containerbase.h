@@ -133,7 +133,7 @@ class ContainerBase {
 
    private:
       //! checks if this vehicle can carry this additional weight and recursively checks all outer vehicle (in case of nested carriers)
-      bool canCarryWeight( int additionalWeight ) const;
+      bool canCarryWeight( int additionalWeight, const Vehicle* vehicle ) const;
     //@}
 
    public:
