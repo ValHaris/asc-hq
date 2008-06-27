@@ -17,7 +17,8 @@ libpgcore_la_SOURCES = \
 	pgtimerobject.cpp \
 	pgsigconvert.cpp \
 	pgcolor.cpp \
-	pgsdleventsupplier.cpp
+	pgsdleventsupplier.cpp \
+	pgsdlscreenupdater.cpp 
 
 libpgcore_la_LIBADD = \
 	$(SDL_LIBS) \

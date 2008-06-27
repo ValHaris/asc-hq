@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2008-04-20 16:44:33 $
+    Update Date:      $Date: 2008-06-27 19:22:12 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.4 $
+    CVS/RCS Revision: $Revision: 1.5 $
     Status:           $State: Exp $
 */
 
@@ -34,6 +34,7 @@
 #include "pgtheme.h"
 #include "pgeventsupplier.h"
 #include "pgsdleventsupplier.h"
+#include "pgsdlscreenupdater.h"
 
 #include <iostream>
 #include <cstring>
@@ -76,6 +77,8 @@ PG_EventSupplier* PG_Application::my_eventSupplier = NULL;
 PG_EventSupplier* PG_Application::my_defaultEventSupplier = NULL;
 bool PG_Application::defaultUpdateOverlappingSiblings = true;
 PG_Char PG_Application::highlightingTag = 0;
+PG_ScreenUpdater* PG_Application::my_ScreenUpdater = NULL;
+
 
 /**
 	new shutdown procedure (called at application termination
@@ -85,6 +88,8 @@ void PARAGUI_ShutDownCode() {
 	// shutdown SDL
 	SDL_Quit();
 }
+
+PG_SDLScreenUpdater defaultScreenUpdater;
 
 
 PG_Application::PG_Application()
@@ -438,27 +443,15 @@ PG_Application::CursorMode PG_Application::ShowCursor(CursorMode mode) {
 }
 
 
-#include "../../../../sdl/graphicsqueue.h"
 
-void PG_Application::UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
+void PG_Application::SetScreenUpdater( PG_ScreenUpdater* screenUpdater )
 {
-#ifdef WIN32
-   queueOperation( new UpdateRectOp( screen, x, y, w, h ));
-#else
-   SDL_UpdateRect( screen,x,y,w,h);
-   postScreenUpdate(screen);
-#endif
+   if ( screenUpdater != NULL )
+      my_ScreenUpdater = screenUpdater;
+   else
+      my_ScreenUpdater = &defaultScreenUpdater;
 }
 
-void PG_Application::UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects)
-{
-#ifdef WIN32
-   queueOperation( new UpdateRectsOp( screen, numrects, rects ));
-#else
-   SDL_UpdateRects( screen, numrects, rects );
-   postScreenUpdate(screen);
-#endif
-}
 
 
 /**  */

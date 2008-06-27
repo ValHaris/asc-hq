@@ -44,8 +44,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include;&quot;../../../libs/loki-0.1.6/include&quot;"
-				PreprocessorDefinitions="WIN32;ASC_DEBUG;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;_SDL_;NOMINMAX"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;../../../libs/sdlmm/src&quot;;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include;&quot;../../../libs/loki-0.1.6/include&quot;"
+				PreprocessorDefinitions="_WIN32_;WIN32;ASC_DEBUG;sgmain;FREEMAPZOOM;NEWKEYB;_SDL_;NOMINMAX"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				EnableFunctionLevelLinking="true"
@@ -133,6 +133,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
+				Optimization="3"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
@@ -147,7 +148,7 @@
 				BrowseInformation="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4290;4267;4290;4996"
+				DisableSpecificWarnings="4800;4244;4355;4305;4786;4290;4267;4996;4018"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

@@ -50,8 +50,8 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;;&quot;$(SDL_image)&quot;;&quot;../../loki-0.1.6/include&quot;"
-				PreprocessorDefinitions="ZLIB_DLL;WIN32;_DEBUG;_WINDOWS;_USRDLL;PARAGUI_DYNAMIC_EXPORTS;PHYSFS_SUPPORTS_ZIP"
+				AdditionalIncludeDirectories="&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;PARAGUI_DYNAMIC_EXPORTS;PHYSFS_SUPPORTS_ZIP;ZLIB_DLL"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				BufferSecurityCheck="true"
@@ -137,7 +137,7 @@
 				AdditionalOptions="/vmg /MP"
 				Optimization="1"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;;&quot;$(SDL_image)&quot;;&quot;../../loki-0.1.6/include&quot;"
+				AdditionalIncludeDirectories="&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;"
 				PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -766,6 +766,10 @@
 				</File>
 				<File
 					RelativePath="..\src\core\pgsdleventsupplier.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\core\pgsdlscreenupdater.cpp"
 					>
 				</File>
 				<File

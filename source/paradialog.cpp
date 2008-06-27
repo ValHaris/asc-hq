@@ -63,6 +63,8 @@
 #include "messaginghub.h"
 
 
+#include "sdl/graphicsqueue.h"
+
 class EventSupplier: public PG_SDLEventSupplier {
    public:
 
@@ -121,6 +123,30 @@ void signalQuit( int i )
 }
 
 
+class ASC_PG_ScreenUpdater : public PG_ScreenUpdater {
+   public:
+      void UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
+      {
+      #ifdef WIN32
+         queueOperation( new UpdateRectOp( screen, x, y, w, h ));
+      #else
+         SDL_UpdateRect( screen,x,y,w,h);
+         postScreenUpdate(screen);
+      #endif
+      };
+
+      void UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects)
+      {
+      #ifdef WIN32
+         queueOperation( new UpdateRectsOp( screen, numrects, rects ));
+      #else
+         SDL_UpdateRects( screen, numrects, rects );
+         postScreenUpdate(screen);
+      #endif
+      }
+} ascScreenUpdater;
+
+
 ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bitsperpixel(0)
 {
    this->themeName = themeName;
@@ -153,6 +179,7 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
 
    pgApp = this;
    SetEventSupplier ( &eventSupplier );
+   SetScreenUpdater ( &ascScreenUpdater );
    
    signal ( SIGINT, &signalQuit );
    

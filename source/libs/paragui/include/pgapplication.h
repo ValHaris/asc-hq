@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2008-04-20 16:44:33 $
+    Update Date:      $Date: 2008-06-27 19:22:11 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -35,6 +35,7 @@
 #define PG_APPLICATION_H
 
 #include "pgmessageobject.h"
+#include "pgscreenupdater.h"
 #include "pgfilearchive.h"
 #include "pgfont.h"
 #include "pgdraw.h"
@@ -551,6 +552,17 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	*/
 	static void SetEventSupplier( PG_EventSupplier* eventSupplier );
 
+
+	/**
+	Registers a new class for handling the screen updates. This source will
+	be used for all screen updates throughout Paragui.
+
+	@param screenUpdater the new updater. 
+	Paragui will not delete this object. If NULL is passed, Paragui will obtain 
+	its events directly from SDL 
+	*/
+	static void SetScreenUpdater( PG_ScreenUpdater* screenUpdater ) ;
+
 	/**
 	Returns the EventSupplier that's currently active. \see SetEventSupplier
 	       
@@ -578,8 +590,15 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
    
    static PG_Char GetHighlightingTag();
 
-   static void UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h);
-   static void UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects);
+   static void UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h) 
+   {
+	my_ScreenUpdater->UpdateRect( screen, x,y,w,h);   	
+   }
+
+   static void UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects)
+   {
+	my_ScreenUpdater->UpdateRects( screen, numrects, rects);   	
+   }
    
 	SignalXMLTag<> sigXMLTag;
 	SignalAppIdle<> sigAppIdle;
@@ -688,6 +707,8 @@ private:
 	bool enableAppIdleCalls;
 	static PG_EventSupplier* my_eventSupplier;
 	static PG_EventSupplier* my_defaultEventSupplier;
+
+	static PG_ScreenUpdater* my_ScreenUpdater;
 
 	static SDL_Surface* my_mouse_pointer;
 	static SDL_Surface* my_mouse_backingstore;
