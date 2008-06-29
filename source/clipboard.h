@@ -25,7 +25,7 @@
 #ifndef clipboardH
  #define clipboardH
 
- #include <loki/Singleton.h>
+ #include "loki/Singleton.h"
  #include "basestrm.h"
  #include "vehicletype.h"
  #include "buildingtype.h"

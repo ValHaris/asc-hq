@@ -175,6 +175,7 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
@@ -276,7 +277,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include -I$(top_srcdir)/source/libs/loki-0.1.6/include/
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) 
 nodist_asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp palette.cpp \

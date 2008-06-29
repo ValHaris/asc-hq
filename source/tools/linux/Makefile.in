@@ -158,6 +158,7 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
@@ -260,7 +261,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I $(top_builddir) -I$(top_src_dir)/source
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)  @LokiInclude@
 #			asc_makegfx \
 #			asc_viewid \
 #			asc_bin2text \

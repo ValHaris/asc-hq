@@ -128,6 +128,7 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
@@ -230,7 +231,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
-AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ @LIBCURL_CPPFLAGS@ -Dsgmain 
+AM_CXXFLAGS = @SDL_CFLAGS@ @SIGC_CFLAGS@ @LIBCURL_CPPFLAGS@  @LokiInclude@ -Dsgmain 
 noinst_LTLIBRARIES = libnetwork.la 
 libnetwork_la_SOURCES = simple_file_transfer.cpp $(am__append_1) \
 	$(am__append_3)

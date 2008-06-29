@@ -136,6 +136,7 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
@@ -238,7 +239,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
-AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS) 
+AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@
 noinst_LTLIBRARIES = libdialogs.la libgamedialogs.la libmapeddialogs.la
 libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fileselector.cpp playersetup.cpp alliancesetup.cpp newgame.cpp soundsettings.cpp \
                           emailsetup.cpp unitinfodialog.cpp  editgameoptions.cpp vehicletypeselector.cpp fieldmarker.cpp admingame.cpp pwd_dlg.cpp terraininfo.cpp \

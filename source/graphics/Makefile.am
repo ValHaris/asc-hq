@@ -1,7 +1,7 @@
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-AM_CXXFLAGS		= @SDL_CFLAGS@ @SIGC_CFLAGS@ 
+AM_CXXFLAGS		= @SDL_CFLAGS@ @SIGC_CFLAGS@  @LokiInclude@
 
 noinst_LTLIBRARIES 	= libgraphics.la
 

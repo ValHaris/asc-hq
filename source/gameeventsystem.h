@@ -27,7 +27,7 @@
 #define gameeventsystemH
 
 #include <sigc++/sigc++.h>
-#include <loki/Singleton.h>
+#include "loki/Singleton.h"
 
 #include "typen.h"
 #include "factory.h"

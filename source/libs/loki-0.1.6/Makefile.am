@@ -5,6 +5,8 @@ noinst_LTLIBRARIES 	= libloki.la
 
 vpath %.cpp $(srcdir)/src
 
+AM_CXXFLAGS   = @LokiInclude@
+
 # as the sources are in a subdirectory, we are grabbing them seperately ...
 nodist_libloki_la_SOURCES	= SmallObj.cpp Singleton.cpp SmartPtr.cpp 
 

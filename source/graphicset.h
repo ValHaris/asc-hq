@@ -23,7 +23,7 @@
  #define graphicsetH
 
 #include <map>
-#include <loki/Singleton.h>
+#include "loki/Singleton.h"
 
 #include "global.h" 
 #include "graphics/surface.h" 

@@ -31,7 +31,7 @@
 #include <pgapplication.h>
 #include <pglineedit.h>
 
-#include <loki/Functor.h>
+#include "loki/Functor.h"
 
 #include "../paradialog.h"
 #include "../global.h"

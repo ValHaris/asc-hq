@@ -20,8 +20,8 @@
 
  #include "typen.h"
  #include "vehicle.h"
- #include <loki/Functor.h>
- #include <loki/Typelist.h>
+ #include "loki/Functor.h"
+ #include "loki/Typelist.h"
 
   /** searches fields in hexagonal "circles" around a field and calls testfield for each field
   */

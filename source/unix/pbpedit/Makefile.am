@@ -2,7 +2,7 @@ vpath %.cpp $(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
+INCLUDES		= -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 
 AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS)
 

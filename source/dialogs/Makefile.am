@@ -3,7 +3,7 @@ MAINTAINERCLEANFILES    = Makefile.in
 
 INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
 
-AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS) 
+AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@
 
 noinst_LTLIBRARIES      = libdialogs.la libgamedialogs.la libmapeddialogs.la
 

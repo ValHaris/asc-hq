@@ -23,7 +23,7 @@
 #ifndef networkinterfaceH
 #define networkinterfaceH
 
-#include <loki/Singleton.h>
+#include "loki/Singleton.h"
 #include "factory.h"
 
 #include "basestrm.h"

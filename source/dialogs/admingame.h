@@ -22,7 +22,7 @@
 #ifndef admingameH
 #define admingameH
 
-#include <loki/Functor.h>
+#include "loki/Functor.h"
 
 class GameMap;
 

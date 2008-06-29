@@ -1,7 +1,7 @@
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS) -Dmaindialogs
+AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ -Dmaindialogs
 
 noinst_LTLIBRARIES 	= libactions.la
 

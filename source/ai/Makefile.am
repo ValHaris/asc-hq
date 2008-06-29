@@ -1,7 +1,7 @@
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-AM_CXXFLAGS		= @SDL_CFLAGS@ @SIGC_CFLAGS@ -Dsgmain
+AM_CXXFLAGS		= @SDL_CFLAGS@ @SIGC_CFLAGS@ -Dsgmain @LokiInclude@
 
 INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
 

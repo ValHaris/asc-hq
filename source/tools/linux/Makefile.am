@@ -7,7 +7,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 INCLUDES		= -I $(top_builddir) -I$(top_src_dir)/source
 
-AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)  @LokiInclude@
 
 bin_PROGRAMS 		= asc_demount \
 			asc_mount \

@@ -32,7 +32,7 @@
 #include "basestrm.h"
 // #include "graphics/surface.h"
 
-#include <loki/Singleton.h>
+#include "loki/Singleton.h"
 
 
 

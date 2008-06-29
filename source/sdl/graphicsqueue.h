@@ -4,8 +4,8 @@
 #include <list>
 #include <SDL.h>
 #include <sigc++/sigc++.h>
-#include <loki/Functor.h>
-#include <loki/Typelist.h>
+#include "loki/Functor.h"
+#include "loki/Typelist.h"
 
 class GraphicsQueueOperation {
    public:

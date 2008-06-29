@@ -12,7 +12,7 @@
  #define mapdisplayinterfaceH
 
 
- #include <loki/Functor.h>
+ #include "loki/Functor.h"
 
 class Sound;
  

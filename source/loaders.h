@@ -30,7 +30,7 @@
 
 #include <sigc++/sigc++.h>
 
-#include <loki/Functor.h>
+#include "loki/Functor.h"
 
 #include "ascstring.h"
 #include "sgstream.h"

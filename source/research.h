@@ -27,8 +27,8 @@
  #include <cstring>
  #include <map>
 
- #include <loki/Functor.h>
- #include <loki/Typelist.h>
+ #include "loki/Functor.h"
+ #include "loki/Typelist.h"
 
  #include "basestreaminterface.h"
  #include "basictypes.h"

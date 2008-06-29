@@ -8,6 +8,8 @@ AM_MAINTAINER_MODE
 
 
 dnl AC_MSG_NOTICE("srcdir is $srcdir ")
+dnl AC_MSG_NOTICE("abs_srcdir is $abs_srcdir ")
+dnl AC_MSG_NOTICE("ac_top_srcdir is $ac_top_srcdir ")
 
 if test -f $srcdir/source/strtmesg.cpp; then
    dnl extracting the version number from the source code
@@ -22,8 +24,8 @@ fi
 AC_MSG_NOTICE([ASC version is $asc_version]) 
 
 dnl the following would be better - if it was working...
-dnl Why is asc_top_srcdir not available here? Is there an alternative?
-dnl asc_version=`cat $(asc_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
+dnl Why is abs_top_srcdir not available here? Is there an alternative?
+dnl ac_version=`cat $(as_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_release=/{print \$2}' | sed 's/ASC//g'`
 
 
 AC_DISABLE_SHARED
@@ -593,6 +595,11 @@ else
 fi
 
 AC_SUBST(MUSICDIR)
+
+
+LokiDir="libs/loki-0.1.6/include/"
+LokiInclude="-I\${top_srcdir}/source/libs/loki-0.1.6/include/"
+AC_SUBST(LokiInclude)
 
 
 if test "x$XVIDAVAIL" = x1; then 

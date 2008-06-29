@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.6 2008-06-24 18:20:54 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.7 2008-06-29 11:25:40 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -28,8 +28,8 @@
 #ifndef guiiconhandlerH
 #define guiiconhandlerH
 
-#include <loki/Functor.h>
-#include <loki/Typelist.h>
+#include "loki/Functor.h"
+#include "loki/Typelist.h"
 #include "graphics/surface.h"
 
 #include "paradialog.h"
