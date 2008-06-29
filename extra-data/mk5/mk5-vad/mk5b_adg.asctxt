@@ -8,9 +8,9 @@ VehicleType {
    gegnerischen Maschienen betraechtlich. Fehlende Bodenverteidigung macht staendigen Schutz notwendig.]
    Picture = MK5b_ADG.pcx
 
-   Armor = 400
+   Armor = 500
    Weight = 40
-   jamming = 11
+   jamming = 31
    Features += jam_only_own_field ManualSelfDestruct
    WaitForAttack = true
    Tank { 
@@ -30,6 +30,11 @@ VehicleType {
       Weapon0.Ammo = 15
       Weapon0.Punch@MaxRange = 70
       Weapon0.Punch@MinRange = 90
-      Weapon0.HitAccuracy.u3 = 70
+      Weapon0.HitAccuracy.u1 = 90
+      Weapon0.HitAccuracy.u2 = 100
+      Weapon0.HitAccuracy.u3 = 85
+      Weapon0.ReactionFireShots = 3
+      Weapon0.WeaponEffectiveness.Helicopter = 120
+      Weapon0.WeaponEffectiveness.heavy_aircraft = 120
    } Weapons
 } VehicleType

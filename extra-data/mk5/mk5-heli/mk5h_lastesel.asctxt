@@ -14,11 +14,10 @@ VehicleType {
    Transportation.CategoriesNOT = rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
    Transportation.MaxLoadableUnitSize = 700
    Transportation.MaxLoadableMass = 700
-   Transportation.EntranceSystemNum = 2
-   Transportation.EntranceSystem1  ->* VehicleType.diver_out
-   Transportation.EntranceSystem1.UnitHeightAbs = ground_level floating submerged
-   Transportation.EntranceSystem1.CategoriesNOT =
-   Transportation.EntranceSystem1.MoveCost = 10
+   Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem1 ->* VehicleType.container_in_out
+   Transportation.EntranceSystem2 ->* VehicleType.ship_out
+   Transportation.EntranceSystem3 ->* VehicleType.ship_in
 
    Tank { 
       Energy = 0

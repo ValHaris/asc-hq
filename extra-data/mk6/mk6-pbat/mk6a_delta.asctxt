@@ -34,7 +34,7 @@ VehicleType {
    movement += 0 0 0 0 -30 -20 180 90
 
    Weapons { 
-      Number = 3
+      Number = 5
       Weapon0 ->* VehicleType.type_laser
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit
       Weapon0.shotFrom = low_level_flight medium_level_flight high_level_flight orbit
@@ -51,6 +51,11 @@ VehicleType {
       Weapon2.Punch@MaxRange = 80
       Weapon2.Punch@MinRange = 80
 
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 12
+
+      Weapon4 ->* VehicleType.AmmoTorp
+      Weapon4.Ammo = 6
    } Weapons
    
 } VehicleType

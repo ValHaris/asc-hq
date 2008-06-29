@@ -79,6 +79,7 @@ Aircraft Support
 ID 15102 Cargo MX
 ID 15247 Viewer
 ID 15325 Tanker
+ID 15413 MRF
 
 --Helicopter--
 

@@ -252,8 +252,8 @@ Plasmabomb {
    DLS { 
          Name = Defence Laser System
          Type = Laser shootable 
-         targets =   floating ground_level low_level_flight medium_level_flight
-         shotFrom = ground_level
+         targets = floating ground_level low_level_flight medium_level_flight
+         shotFrom = floating ground_level
 	 ReactionFireShots = 2
          Punch@MaxRange = 70
          Punch@MinRange = 90
@@ -390,7 +390,7 @@ LRHEPT {
 
    TeccnolsJump3 {
       Height = ground_level
-      MaxDistance = 250
+      MaxDistance = 1500
       consumption {
          Energie = 0
          Material = 2000

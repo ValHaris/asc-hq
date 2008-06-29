@@ -1,5 +1,5 @@
 VehicleType {
-   Name = Tauscher
+   Name = Taeuscher
    parent = 400 401 402 413 498
    ID = 1452
 
@@ -8,7 +8,7 @@ VehicleType {
    Picture = MK5a_taeuscher.pcx
    WreckageObject = 
 
-   Armor = 100
+   Armor = 150
    View = 10
    Category = default
    Features = no_midair_refuel
@@ -19,7 +19,7 @@ VehicleType {
       fuel = 40
    } Tank
    FuelConsumption = 2
-   Movement = 0 0 0 0 100 100 100 0  
+   Movement = 0 0 0 0 100 120 100 0  
 
    Weapons { 
       Initiative = 0

@@ -6,7 +6,10 @@ VehicleType {
    Picture = mk5a_mize.pcx
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
 
+   Category = default
+   Armor = 250
    Features += mine_layer
+   Weight = 40
 
    Weapons { 
       Initiative = 0

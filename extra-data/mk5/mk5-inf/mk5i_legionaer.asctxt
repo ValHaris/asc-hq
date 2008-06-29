@@ -12,6 +12,7 @@ VehicleType {
    WreckageObject = 1416
 
    Features += paratrooper
+   Jamming += 12
 
    Weapons { 
       Initiative = 0

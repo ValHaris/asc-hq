@@ -7,11 +7,15 @@ VehicleType {
    MovementSound = aircraft_m_g.ogg
 
    Transportation ->* VehicleType.TransWeaponPlane 
+   Movement -= 0 0 0 0 10 10 0 0 
 
    Weapons { 
       Weapon0.Punch@MaxRange += 10
       Weapon0.Punch@MinRange += 10
-
+      Weapon0.WeaponEffectiveness.trooper = 150
+      Weapon0.HitAccuracy.d1 = 100      
+      Weapon0.HitAccuracy.u1 = 0      
+      
       Weapon1.Punch@MaxRange -= 5
       Weapon1.Punch@MinRange -= 5
 

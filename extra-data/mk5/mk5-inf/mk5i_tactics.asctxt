@@ -6,8 +6,11 @@ VehicleType {
    Infotext = [Dieser Soldat trägt eine mobile Abschußvorrichtung für Raketen.
               Durch eine modifizierte Zielvorrichtung kann diese sowohl Flugzeuge,
               als auch Bodenfahrzeuge und Schiffe anvisieren.]
-   Armor += 10
    Picture = MK5i_Tactics.pcx
+
+   Armor += 10
+   Jamming += 12
+
    Movement += 0 0 0 2 0 0 0 0 
    Weapons { 
       Weapon0 ->* VehicleType.type_small_missile 

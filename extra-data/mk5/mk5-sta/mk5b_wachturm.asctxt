@@ -23,8 +23,14 @@ VehicleType {
       Weapon0.LaserRechargeCost.fuel = 300
       Weapon0.ReactionFireShots = 1
             
-      Weapon2 ->* VehicleType.MSM
+      Weapon1.Type = ground_missile shootable
+      Weapon1.Punch@MaxRange -= 5
+      Weapon1.Punch@MinRange -= 5
+      
+      Weapon2 ->* VehicleType.smMSM
       Weapon2.maxRange = 40
+      Weapon2.Punch@MaxRange = 78
+      Weapon2.Punch@MinRange = 78
       Weapon2.Ammo = 8
       Weapon2.ReactionFireShots = 2
       Weapon2.WeaponEffectiveness.trooper = 0

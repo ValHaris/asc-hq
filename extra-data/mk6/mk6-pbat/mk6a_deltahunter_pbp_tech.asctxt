@@ -1,0 +1,10 @@
+technology {
+   Name = Deltahunter
+   infotext =
+   ID = 15326
+   RelatedUnitID = 15326
+   parent = 15000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 15000,100003,100102,100205 
+} Technology

@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = DELTAHUNTER
+   parent = 276 
+   ID = 15326
+   
+   Description = U-Boot Jaeger
+   Infotext = []
+   Picture = mk6a_deltahunter.pcx
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Armor -= 50
+   Tank.Material = 0 
+   Features += paratrooper
+
+   Height = low_level_flight medium_level_flight high_level_flight orbit
+   movement += 0 0 0 0 0 0 170 60
+
+   Weapons {
+      Number = 2
+      Weapon0 ->* VehicleType.ATorp 
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 105
+
+      Weapon1 ->* VehicleType.DCA 
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 105
+      Weapon1.Punch@MinRange = 105
+   } Weapons
+} VehicleType

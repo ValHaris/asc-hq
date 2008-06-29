@@ -1,6 +1,26 @@
-MK5 Outsider
+MK5 Outlaw
 GAMER
 
+
+__________________
+Beta 3-06/08
+-Speedster, soundbugfix
+-Täuscher, etwas teurer
+Beta 2-06/08
+-Doomsday, betank- und reparierbar im orbit
+-Subhunter , sonar
+-MUHS, AmmoTorp
+-Visby, Waffenupgrade, leicht geänderte Grafik
+-Trooper mehr Stealth
+-ADG, mehr stealth, mehr panzerung, Anpassung Effektivität
+-IronGun, Stealth
+-Blackwiddow, MG effektiver gegen Trooper
+Beta 1-06/08
+-Namensänderung Outsider -> Outlaw
+-Transportsystem lastesel gefixt
+-Mize, Typumbau
+-Flak, auch auf Boden feuern
+-Wachturm , small missle
 __________________
 07.06.2008 (GAMER)
 -T1, schnellstarter für Jetstar

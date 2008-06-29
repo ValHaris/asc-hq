@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor -= 50
-   Tank.Material = 500 
+   Tank.Material = 0 
    Features += paratrooper
 
    Height = low_level_flight medium_level_flight high_level_flight orbit

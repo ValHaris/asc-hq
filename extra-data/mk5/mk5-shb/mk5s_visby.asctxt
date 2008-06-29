@@ -6,4 +6,25 @@ VehicleType {
    Description = stealth corvette
    picture = MK5s_visby.pcx
 
+   Armor += 100
+   Transportation ->* VehicleType.noTrans 
+   Tank.Material = 0
+
+   Weapons {
+      Number = 3
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 100
+      
+      Weapon1 ->* VehicleType.SAM
+      Weapon1.Ammo = 8
+      Weapon1.MaxRange = 30
+
+      Weapon2 ->* VehicleType.SUTorp
+      Weapon2.Ammo = 4
+      Weapon2.ReactionFireShots = 2
+   } Weapons
+
 } VehicleType

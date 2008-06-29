@@ -11,17 +11,18 @@ VehicleType {
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump1
-   JumpDrive.MaxDistance = 40
+   JumpDrive.MaxDistance = 400
    JumpDrive.consumption.Material = 100
    JumpDrive.consumption.Fuel = 1000
 
    Armor -= 200
    View = 0
    Features = MoveDuringReactionFire
-
+   Weight = 1000
 
    Transportation ->* VehicleType.TransVehicleHeavy 
    Transportation.MaxLoadableUnits = 8
+   Transportation.MaxLoadableMass = 240
 
    Movement = 0 0 0 10 0 0 0 0 
    Tank.Material = 500

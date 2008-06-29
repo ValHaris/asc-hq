@@ -1,0 +1,5 @@
+Techadapter {
+   ; AirPort.
+   Name = B15006
+   TechnologiesRequired = 15000
+} TechAdapter

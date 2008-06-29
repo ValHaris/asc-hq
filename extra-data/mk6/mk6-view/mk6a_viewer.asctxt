@@ -10,7 +10,7 @@ VehicleType {
    Armor += 150
 
    Tank.Material = 1000
-   TerrainAccess.Any = runway shallow_water water deep_water river
+   TerrainAccess ->* VehicleType.aircraft_water
    MovementSound = jet_pass.ogg
       
    WaitForAttack = true

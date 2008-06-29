@@ -10,6 +10,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 200
+   Weight += 20
    
    Weapons { 
       Weapon0.Ammo = 8

@@ -8,7 +8,8 @@ VehicleType {
    picture = mk5s_subhunter.pcx
    GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
-   Features += MoveDuringReactionFire
+   Features += MoveDuringReactionFire sonar
+   View = 30
 
    Weapons { 
       Initiative = 0

@@ -13,7 +13,7 @@ VehicleType {
    Tank { 
       fuel = 8000
    } Tank
-   Features += no_midair_refuel 
+;   Features += no_midair_refuel 
    FuelConsumption = 20
    Movement = 0 0 0 60 160 170 180 70 
    MovementSound = aircraft_l_g.ogg

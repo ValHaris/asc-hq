@@ -1,10 +1,11 @@
 ObjectType { 
    Name = JumpTerminal
    ID = 15001
+   parent = 45
    groupID =
    visible_in_fogOfWar = false
    LinkableObjects = 
-   Height = 118
+   Height = 98
    NoSelfChaining = false
 
    Armor = 500
@@ -23,18 +24,10 @@ ObjectType {
 
    Weather = dry much_snow
 
-   Movemalus_plus = 
-   Movemalus_abs = 10
-   AttackBonus_abs = -1
-   AttackBonus_plus = 0
-   DefenseBonus_abs = -1
-   DefenseBonus_plus = 0
-   Jamming_abs = -1
-   Jammming_plus = 0
    TerrainAccess { 
       terrain_any = lowland hard_sand soft_Sand
       terrain_all = 
-      terrain_not = swamp 
+      terrain_not = swamp forest large_rocks
       terrain_kill = swamp shallow_water water deep_water lava 
    } TerrainAccess
    TerrainProperties_Filter = lowland soft_sand hard_Sand

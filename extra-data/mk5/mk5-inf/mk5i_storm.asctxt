@@ -5,8 +5,11 @@ VehicleType {
    Description = heavy soldier
    Infotext = [Der STORM ist der Panzerschreck. Die Geschosse durchschlagen
               mühelos jede Panzerung und richten verheerende Schäden an.]
-   Armor += 30
    Picture = MK5i_STORM.pcx
+   
+   Armor += 30
+   Jamming += 12
+   
    Weapons { 
       Number = 2
       Weapon0.Ammo = 3

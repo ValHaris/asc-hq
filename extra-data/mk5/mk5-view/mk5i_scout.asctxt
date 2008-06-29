@@ -9,7 +9,7 @@ VehicleType {
 
    Armor += 10
    View += 30
-   Jamming += 11
+   Jamming = 39
    Features += paratrooper
 
    Transportation ->* VehicleType.TransDevice 

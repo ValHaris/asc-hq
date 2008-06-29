@@ -1,0 +1,80 @@
+VehicleType { 
+   Name = MBC-30 Vengance
+   ID = 15357
+   parent = 357 493 15000
+
+   picture = mk6s_mbc30.png
+   WreckageObject = 437
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   Features += sonar jam_only_own_field
+   Jamming = 50
+   View += 10
+   Height = floating submerged
+   Movement += 0 30 0 0 0 0 0 0 
+   Description = Schlachtschiff
+   InfoText = [ Schlachtschiffe der Vengance Klasse sind die Könige der See. Massiv gepanzert und schwerst bewaffnet
+			lehren sie jedes Schiff das in ihre Nähe kommt eine tödliche Lektion: mit Teccnols ist nicht zu spaßen.
+			
+			Im Gegensatz zu den meisten Schlachtschiffen ist die Vengance in der Lage, sich sogar gegen Uboote ein 
+			wenig zur Wehr setzen zu können - wenn auch nur mit dem EMP auf kurze Distanz.
+			Das Hauptgeschütz der Vengance Klasse ist ein Überschwerer Laser mit hoher Reichweite, der alle Ziele 
+			die sich in direkter Sicht befinden angreifen kann.
+			
+			Die Vengance verfügt weiterhin über 14 Startvorrichtungen für Lenkwaffen, die sowohl gegen Oberflächenziele
+			als auch fliegende Bedrohungen eingesetzt werden können. Diese Lenkwaffen sind teilweise auch in getauchtem Zustand
+			einsatzfähig.
+
+			Abgerundet wird die Bewaffnung durch ein leistungsfähiges Punktverteidigungssystem, das primär zur Abwehr
+			von Marschflugkörpern konzipiert wurde, jedoch auch gegen andere Ziele eingesetzt werden kann.
+			]
+
+
+   Armor += 100
+   Tank.fuel += 2000
+   Tank.material += 2000
+
+   Weapons { 
+      Number = 6
+
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 4
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.GGLS
+      Weapon1.MaxRange = 60
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 3
+      Weapon1.ReactionFireShots = 1
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 135
+      Weapon1.name = Long Range Laser
+
+      Weapon2 ->* VehicleType.DLS
+      Weapon2.Ammo = 4
+      Weapon2.LaserRechargeRate = 2
+      Weapon2.name = Point Defense
+
+      Weapon3 ->* VehicleType.SSM
+      Weapon3.Type = air_missile shootable
+      Weapon3.MaxRange = 80
+      Weapon3.MinRange = 40
+      Weapon3.Ammo = 10
+      Weapon3.Punch@MaxRange = 140
+      Weapon3.Punch@MinRange = 140
+      Weapon3.name = Missile Attack System
+      Weapon3.ReactionFireShots = 0
+
+      Weapon4 ->* VehicleType.SAMH
+      Weapon4.shotfrom = submerged floating
+      Weapon4.ReactionFireShots = 1
+
+      Weapon5 ->* VehicleType.TeccEMP
+      Weapon5.Punch@MaxRange = 150
+      Weapon5.Punch@MinRange = 150
+      Weapon5.LaserRechargeCost.Fuel = 600
+      Weapon5.LaserRechargeCost.Material = 100
+      Weapon5.targets = floating ground_level low_level_flight submerged deep_submerged
+   } Weapons
+} VehicleType
+

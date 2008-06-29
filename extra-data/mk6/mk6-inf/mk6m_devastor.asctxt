@@ -15,6 +15,7 @@ VehicleType {
 
    Weapons {
       Weapon0 ->* VehicleType.type_laser
+      Weapon0.MaxRange = 30
       Weapon0.Punch@MinRange = 90
       Weapon0.WeaponEffectiveness.Trooper = 80
       Weapon0.Ammo = 2

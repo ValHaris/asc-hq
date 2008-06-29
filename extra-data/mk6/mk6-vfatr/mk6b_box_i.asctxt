@@ -11,15 +11,19 @@ VehicleType {
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump3
+   JumpDrive.consumption.Material = 500
+   JumpDrive.consumption.Fuel = 5000
 
    Armor -= 400
    View = 0
    Features = MoveDuringReactionFire
+   Weight = 600
 
    Transportation ->* VehicleType.TransTrooper 
+   Transportation.MaxLoadableMass = 20
 
    Movement = 0 0 0 10 0 0 0 0 
-   Tank.Material = 4000
+   Tank.Material = 2000
    Tank.Fuel = 10000
    TerrainAccess ->* VehicleType.heli_terrain 
 

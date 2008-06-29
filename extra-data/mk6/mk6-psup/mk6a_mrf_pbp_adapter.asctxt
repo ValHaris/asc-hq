@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15413
+   ;Bezeichnung der verknüpften Technologie: MRF
+   TechnologiesRequired = 15413
+} TechAdapter
