@@ -28,7 +28,7 @@
    FuelConsumption = 5
    Movement = 0 0 0 50 0 0 0 0 
    TerrainAccess ->* Vehicletype.mech_trooper_terrain 
-   MovementSound = mechstep1.ogg
+   MovementSound = mechstepfast.ogg
 
    Construction { 
       Buildings = 

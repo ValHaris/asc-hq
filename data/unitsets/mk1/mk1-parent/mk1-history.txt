@@ -2,6 +2,13 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 3-06/08
+-Wasserflugzeuge auch auf "River" landefähig
+-zeppelin high_level_flight
+-Mechs anderer Sound
+-InfoImage = Wedge, MRSM
+-Picture = Reha, Wegde, MBV, Sinner
+__________________
 08.06.2008 (GAMER)
 -JamTrooper Soundfix
 -device Soundfix

@@ -3,9 +3,11 @@ VehicleType {
    parent = 275 
    ID = 48
 
-   Picture = MK1a_zeppelin.pcx
+   Picture = mk1a_zeppelin.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10
+   Height += high_level_flight
+   Movement = 0 0 0 30 110 110 100 0 
 
 } VehicleType

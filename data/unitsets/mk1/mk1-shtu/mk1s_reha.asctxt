@@ -10,7 +10,7 @@ VehicleType {
               repair and rearm any aircraft that can land on it. Due to their
               size, some large airplanes can not land on Carriers. The Carrier
               itself has some weapons, but they are not suited for heavy combat.]
-   picture = MK1s_reha.pcx
+   picture = mk1s_reha.png
    WreckageObject = 481
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
