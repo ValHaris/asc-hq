@@ -4,7 +4,8 @@ VehicleType {
    ID = 603
    Description = join strike fighter
 
-   picture = MK3a_JSF.png
+   picture = mk3a_jsf.png
+   infoImage = mk3a_jsf.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    InfoText = [Der F-35 Joint Strike Fighter (JSF) ist eine Weiterentwicklung der bewährten HARRIER-Senkrechtstarter und ebenfalls in der Lage, auf so gut wie jedem Gelände zu landen. Häufig findet man ihn auch auf amphibischen Kommandoschiffen der LCC-Klasse stationiert. Im Gegensatz zu seinem Vorgänger kann er auch in den hohen Luftbereich vorstoßen. 
 Seine wahre Stärke ist allerdings der Angriff aus mittleren und niederen Höhen auf feindliche Panzerverbände im Frontbereich. Je 2 Anti-Boden-Raketen für Distanzangriffe und Nahkampf stehen dem JSF hierfür zur Verfügung.

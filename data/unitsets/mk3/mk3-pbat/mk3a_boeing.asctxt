@@ -2,6 +2,7 @@ VehicleType {
    Name = BOEING
    parent = 400 401 402 415 496
    ID = 601
+
    Description = nuklear aircraft
    Infotext = [Boeing
 
@@ -10,6 +11,7 @@ Dieses experimentelle Flugzeug ist fähig alle Ziele, vom Schiff bis zum Satellit
 This experimental plane is able to attack all targets above the water-line and in orbit at a range and with good firepower. However, the Boeing is weak when under fire and unable to perform high-alltitude flight. Use it to strike unprepared enemy orbital craft.
 ]
    picture = MK3a_boeing.png
+   InfoImage = mk3a_boeing.jpg
    GuideSortHelp = 522 600 0 0 3 0 0 0 0 0
 
    Armor = 350

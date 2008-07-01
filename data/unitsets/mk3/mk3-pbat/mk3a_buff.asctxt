@@ -3,7 +3,8 @@ VehicleType {
    parent = 278
    ID = 508
 
-   Picture = MK3a_buff.png
+   Picture = mk3a_buff.png
+   infoImage = mk3a_buff.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 5

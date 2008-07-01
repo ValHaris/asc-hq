@@ -2,7 +2,9 @@ VehicleType {
    Name = NSA
    parent = 325
    ID = 517
-   picture = MK3a_NSA.png
+   
+   picture = mk3a_nsa.png
+   InfoImage = mk3a_nsa.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weight = 200

@@ -4,7 +4,8 @@ VehicleType {
    ID = 609
    
    Description = stealth cruiser
-   picture = MK3s_dd21.png
+   picture = mk3s_dd21.png
+   InfoImage = mk3s_dd21.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

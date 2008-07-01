@@ -4,7 +4,8 @@ VehicleType {
    ID = 569
    
    Description =  aircraft carrier
-   picture = MK3s_cvx.png
+   picture = mk3s_cvx.png
+   infoImage = mk3s_cvx.jpg
    Features += sonar
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 

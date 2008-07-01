@@ -5,6 +5,7 @@ VehicleType {
 
    Description = battleship
    picture = MK3s_iowa.png
+   InfoImage = mk3s_iowa.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weapons { 

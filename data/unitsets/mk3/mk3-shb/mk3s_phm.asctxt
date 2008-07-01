@@ -6,7 +6,8 @@ VehicleType {
    Description = hydrofoil boat
    Infotext = [PHM 1 Pegasus hydrofoil boats were designed to operate offensively against hostile surface combatants and 
    other surface craft; and conduct surveillance, screening and special operations. ]
-   picture = MK3s_phm.png
+   picture = mk3s_phm.png
+   InfoImage = mk3s_phm.jpg
    GuideSortHelp = 518 419 0 0 3 0 0 0 0 0
 
    Armor -= 100

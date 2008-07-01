@@ -6,7 +6,8 @@ VehicleType {
 
    Description = stealth ship
    Infotext = [] 
-   picture = MK3s_seashadow.png
+   picture = mk3s_seashadow.png
+   InfoImage = mk3s_seashadow.jpg
 
    Armor -= 50
    Jamming = 90

@@ -4,7 +4,8 @@ VehicleType {
    ID = 614
    
    Description = amphibious command ship
-   picture = MK3s_lcc.png
+   picture = mk3s_lcc.png
+   InfoImage = mk3s_lcc.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

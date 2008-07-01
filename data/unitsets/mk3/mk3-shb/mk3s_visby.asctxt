@@ -29,7 +29,7 @@ VehicleType {
       Weapon1.Punch@MaxRange = 95
       Weapon1.Punch@MinRange = 95
 
-      Weapon2 ->* VehicleType.UTorp
+      Weapon2 ->* VehicleType.SUTorp
       Weapon2.Ammo = 4
       Weapon2.ReactionFireShots = 2
 

@@ -6,7 +6,8 @@ VehicleType {
    Infotext = [The Seawolf does not have any external weapons. The submarine is armed with both the land-attack and anti-ship 
    missile. The anti-ship missile is equipped with an inertial guidance and an active radar and anti-radiation homing head. 
    ] 
-   picture = MK3s_SEAWOLF.png
+   picture = mk3s_seawolf.png
+   InfoImage = mk3s_seawolf.jpg
    GuideSortHelp += 0 0 0 0 3 600 0 0 0 0
 
    Armor -= 100

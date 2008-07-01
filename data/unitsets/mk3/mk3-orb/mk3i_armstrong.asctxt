@@ -3,7 +3,16 @@ VehicleType {
    ID = 522
    parent = 236
    Description = Spaceman
-   Infotext = [Trooper that can walk into Space and conquere Spacestations. Only armed with a high explosive bomb against satellites and Spacestations.]
+   Infotext = [Dem Gedenken an Neil Armstrong, welcher als erster Mensch extraterrestrischen Boden betrat, verdankt diese Spezialeinheit ihren Namen. Ein großer Teil der Ausrüstung besteht hierbei aus dem Equipment was die Bewegung im lebensfeindlichen freien Weltraum überhaupt erst einmal ermöglichen soll. Der dabei verwendete Raumanzug besteht aus einer Kombination eines Bio-Suit mit einem Exoskelett. Der Bio-Suit ist ein hautenger, elastischer Ganzkörperanzug, der den Körper des Trägers an der Expansion im Vakuum hindert und das Exoskelett besteht aus leichten aber bruchfesten Kunststoffteilen, welche den Träger vor Mikrometeoriten und ähnlichen Gefahren schützen soll. Die Lebenserhaltungssysteme der neusten Generation ermöglichen dem Träger im sogenannten nahen Orbitalbereich einen nahezu beliebig langen Aufenthalt. Ein eingebauter Kollektor sammelt die Gasmoleküle der obersten Athmosphärenschichten und wandelt diese so weit wie es geht in Atemluft um. 
+
+In erster Linie dient der Armstrong-Infantrist als Service-Einheit im Orbitalbereich. Hierzu führt eine beachtliche Menge Materialien und auch Spezialtreibstoff mit sich. Das nicht das Gewicht der Grund für die fehlende Bewaffnung der Armstrong-Einheiten ist, liegt angesichts der Schwerelosigkeit auf der Hand. Bei Projektilwaffen hat man das Problem des Rückstosses bisher nicht in den Griff bekommen und der Einsatz von Energiewaffen scheitert vor allem an einer leistungsfähigen und kompakten Energiequelle. Daher muss sich der Armstrong-Infantrist eher im Notfall mit 2 Sprengsätzen gegen Satelliten und andere Orbitaleinheiten zufrieden geben. Da er dafür natürlich sehr dicht an das Zielobjekt gelangen muss, ist der Einsatz des Sprengsatzes meist auf unbewaffnete Einheiten beschränkt.
+
+Die Einheit ist darüberhinaus die einzige Möglichkeit für die Terraner im Orbit platzierte Fabriken zu übernehmen.   
+ 
+ 
+ Berkut »»  
+ 
+]
    Picture = Mk3i_ARMSTRONG.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 

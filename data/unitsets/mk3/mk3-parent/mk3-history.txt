@@ -3,8 +3,14 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 3-06/08
+InfoImage = JSF, Boeing, Arsenal, Buff, Burke, CVN, CVX, DD21, Iowa, Raptor, LCC, NSA, PHM, Viking, SeaShadow, SeaWolf, Ticonderoga
+Einheitenbeschreibung = Armstrong
+Beta 2-06/08
+-Visby, Utorp->SUTorp
+__________________
 07.06.2008 (GAMER)
--Einheitenbeschreibungen: Kornuta, PRD, Notstrom, AirBourne, ArmyRanger, MIG, Tomcat, JSF, Berkut,
+-Einheitenbeschreibungen: Kornuta, PRD, Notstrom, AirBourne, ArmyRanger, MIG, Tomcat, JSF, Berkut
 -MovementSound = Lars, lance, Patriot, FH77, NSA, Starlifter, Boeing
 __________________
 03.05.2008 (GAMER)
