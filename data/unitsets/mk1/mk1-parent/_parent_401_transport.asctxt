@@ -526,6 +526,7 @@
       EntranceSystem0.CategoriesNOT = medium_aircraft
       EntranceSystem1 ->* VehicleType.Cruiser
       EntranceSystem2 ->* VehicleType.fl2sub
+      EntranceSystem2.MoveCost = 10
    } TransHeliCarrier
 
    TransLightCarrier { 

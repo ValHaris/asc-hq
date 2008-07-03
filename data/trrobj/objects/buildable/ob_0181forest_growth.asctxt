@@ -37,8 +37,8 @@ ObjectType {
    TerrainAccess { 
       terrain_any = Lowland
       terrain_all = 
-      terrain_not = swamp large_rocks railroad snow deep_snow road runway forest bridge
-      terrain_kill = water deep_water river lava
+      terrain_not = swamp large_rocks railroad deep_snow road runway forest bridge
+      terrain_kill = water deep_water river lava runway turret_foundation ditch
    } TerrainAccess
    TerrainProperties_Filter = 
    TerrainProperties_Add = Forest 

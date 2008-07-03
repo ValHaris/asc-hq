@@ -3,9 +3,11 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 1-07/08
+-Merkat Minenräumfunktion aktiviert
 Beta 3-06/08
-InfoImage = JSF, Boeing, Arsenal, Buff, Burke, CVN, CVX, DD21, Iowa, Raptor, LCC, NSA, PHM, Viking, SeaShadow, SeaWolf, Ticonderoga
-Einheitenbeschreibung = Armstrong
+-InfoImage = JSF, Boeing, Arsenal, Buff, Burke, CVN, CVX, DD21, Iowa, Raptor, LCC, NSA, PHM, Viking, SeaShadow, SeaWolf, Ticonderoga
+-Einheitenbeschreibung = Armstrong
 Beta 2-06/08
 -Visby, Utorp->SUTorp
 __________________

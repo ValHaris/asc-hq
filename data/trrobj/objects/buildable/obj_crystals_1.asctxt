@@ -28,7 +28,7 @@ ObjectType {
       terrain_any = hard_sand soft_sand mountains high_mountains
       terrain_all = 
       terrain_not = mud morass swamp large_rocks railroad road runway bridge
-      terrain_kill = shallow_water water deep_water river lava
+      terrain_kill = shallow_water water deep_water river lava turret_foundation
    } TerrainAccess
    TerrainProperties_Filter = 
    TerrainProperties_Add = large_rocks 

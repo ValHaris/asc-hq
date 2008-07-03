@@ -4,6 +4,12 @@ Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
 __________________
+-small railraod, lifetime 60
+
+Beta 1-06/08
+-Wald, wird über Runway zerstört.
+-kleine Anpassungen bei Objektzerstörung durch andere Objekte
+__________________
 Turret high neue Grafik
 Bergobjekt , vernetzt mit Kartenrand
 __________________

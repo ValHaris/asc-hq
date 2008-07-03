@@ -3,6 +3,7 @@ ObjectType {
    ID = 991
    parent = 2
    LinkableObjects = 999 995 2 992
+   Lifetime = 60
    Armor = 80
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 5   3   3   3   5   5   5   2   0   10  5   0   10  10  5   5   10  5
