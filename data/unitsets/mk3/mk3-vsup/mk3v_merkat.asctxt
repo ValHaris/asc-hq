@@ -10,6 +10,7 @@ VehicleType {
               This system allows for quickly creating mine fields. The procedure
               can be reversed, so minefields can be cleared as well.]
    Picture = MK3v_Merkat.png
+   InfoImage = mk3v_merkat.jpg
    GuideSortHelp = 563 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

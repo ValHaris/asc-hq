@@ -3,6 +3,9 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 2-07/08
+-Anger mehr Movement
+-ImfoImage = Airborne, MAN, Fuchs, SEK, Merkat, GI, Javelin, Armstrong, Luchs, Mistral, ArmyRanger, Notstrom, Truck, Volcano, Silencer
 Beta 1-07/08
 -Merkat Minenräumfunktion aktiviert
 Beta 3-06/08

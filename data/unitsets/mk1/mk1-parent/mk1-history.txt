@@ -2,6 +2,8 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 2-07/08
+- Floating to Submerged Ausgang Bugfix
 Beta 1-07/08
 -HeliCarrier, Anpassung Transportsystem
 Beta 3-06/08

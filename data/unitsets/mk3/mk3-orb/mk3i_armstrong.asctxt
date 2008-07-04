@@ -13,7 +13,8 @@ Die Einheit ist darüberhinaus die einzige Möglichkeit für die Terraner im Orbit 
  Berkut »»  
  
 ]
-   Picture = Mk3i_ARMSTRONG.png
+   Picture = mk3i_armstrong.png
+   ImfoImage = mk3i_armstrong.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Weapons { 

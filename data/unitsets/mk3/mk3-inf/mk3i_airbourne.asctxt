@@ -1,13 +1,16 @@
 VehicleType { 
-   Name = AIRBOURNE
+   Name = AIRBORNE
    ID = 613
    parent = 207
+
    Description = Fallschirmspringer
    Infotext = [Die Airborne ist eine Luftlande-Infantrieeinheit, welche meist weit hinter den feindlichen Linien operiert. Dort wird sie oft dazu eingesetzt, den Nachschub und die Infrastruktur des Gegners nachhaltig zu stören. Hierzu haben sie zusätzlich zur Standardbewaffnung des GI noch ein paar Ladungen Sprengstoff im Gepäck.
 Gleichzeitig bietet diese Spezialeinheit die Möglichkeit, mit ihrem überraschenden Auftreten tief im feindlichen Gebiet, die Kräfte des Gegners abzulenken und zu binden. Wurde eine gut ausgebildete Flugzeugladung Airborne-Infantrie erst einmal an ihr Ziel gebracht, kann sie dem Gegner leicht zum Verhängnis werden.]
-   Armor -= 10
-   picture = MK3i_airbourne.png
+   picture = mk3i_airbourne.png
+   InfoImage = mk3i_airborne.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Armor -= 10
 
    Movement += 0 0 0 1 0 0 0 0 
    Weapons { 

@@ -5,7 +5,8 @@ VehicleType {
 
    Description = Moerser
    Infotext = [Bei den Army Rangern handelt es sich um die schwere Infantrie der terranischen Truppen. Neben einem Sturmgewehr für den Nahkampf führen sie noch einen tragbaren Mörser mit sich. Aufgrund der Reichweite dieser Waffe können sie aus relativ sicherer Distanz auf deutlich schwerere Einheiten feuern ohne selber Schäden zu riskieren. Allein durch diese Eigenschaft ist eine Kontingent Army Ranger in Kombination mit einem schnelle Transporter oder Transporthubschrauber eine kostengünstige und damit sehr effektive Variante um anrückenden gepanzerte Fahrzeugverbänden schweren Schaden zuzufügen. Sie vereinen wie kaum eine andere Einheit hohe Durchschlagkraft mit niedrigen Unterhaltskosten. ]
-   picture = MK3i_ARMYRANGER.png
+   picture = mk3i_armyranger.png
+   ImfoImage = mk3i_armyranger.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

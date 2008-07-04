@@ -8,7 +8,8 @@ VehicleType {
    Seine technische Daten sind mit den Spezifikationen des Transportpanzers identisch, er 
    kann jedoch nur 3 Besatzungsmitglieder aufnehmen und besitzt eine umfangreiche Zusatzausstattung zum Aufspüren von 
    Bodenschätzen in seiner Umgebung.]
-   picture = MK3v_FUCHS.png
+   picture = mk3v_fuchs.png
+   InfoImage = mk3v_fuchs.jpg
    GuideSortHelp = 552 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

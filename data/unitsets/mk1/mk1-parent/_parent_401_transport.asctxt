@@ -182,7 +182,7 @@
       Fl2Sub {
         Mode = in out
         UnitHeightAbs =  submerged
-        UnitHeightRel = 1
+        UnitHeightRel = -1
         ContainerHeight = floating ground_level
         CategoriesNOT = 
         DockingHeightAbs = 

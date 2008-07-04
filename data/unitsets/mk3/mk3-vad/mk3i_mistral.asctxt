@@ -4,7 +4,8 @@ VehicleType {
    parent = 215
    
    Description = Air Defence Trooper
-   Picture = MK3i_MISTRAL.png
+   Picture = mk3i_mistral.png
+   ImfoImage = mk3i_mistral.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

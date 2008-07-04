@@ -5,7 +5,7 @@ VehicleType {
 
    Description = mobile rocket laucher
    Infotext = [ bedingt mobile stationaere Boden-Orbital Raketenabschußrampe. ]
-   Picture = MK3b_Anger.png
+   Picture = mk3b_anger.png
    GuideSortHelp = 509 600 0 0 3 0 0 0 0 0
 
    Armor = 400
@@ -19,7 +19,6 @@ VehicleType {
    Weight = 190
 
    TerrainAccess ->* VehicleType.turret_all
-   Movement -= 0 0 0 3 0 0 0 0 
    FuelConsumption = 20
 
    Weapons { 

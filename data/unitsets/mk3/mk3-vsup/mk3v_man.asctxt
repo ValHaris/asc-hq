@@ -5,7 +5,8 @@ VehicleType {
 
    Description = tanker vehicle
    Infotext = [Treibstoff transporter]
-   picture = MK3v_MAN.png
+   picture = mk3v_man.png
+   InfoImage = mk3v_man.jpg
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

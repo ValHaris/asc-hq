@@ -9,6 +9,7 @@ VehicleType {
               This system allows for quickly creating mine fields. The procedure
               can be reversed, so minefields can be cleared as well.]
    Picture = mk3v_volcano.png
+   Infoimage = mk3v_volcano.jpg
    GuideSortHelp = 562 0 0 0 3 0 0 0 0 0
 
    Features += mine_layer mineview

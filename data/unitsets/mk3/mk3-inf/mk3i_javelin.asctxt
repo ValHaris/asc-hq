@@ -5,7 +5,8 @@ VehicleType {
 
    Description = Anti Tank Trooper
    Infotext = [The Javelin is a manportable, fire-and-forget, antitank missile employed by dismounted infantry to defeat current and future threat armored combat vehicles.]
-   Picture = MK1i_astrooper.pcx
+   Picture = mk1i_astrooper.pcx
+   InfoImage = mk3i_javelin.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10
