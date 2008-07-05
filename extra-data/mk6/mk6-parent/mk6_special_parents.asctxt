@@ -306,6 +306,63 @@ Plasmabomb {
       } WeaponEffectiveness
    } DLS
 
+   ADLS { 
+         Name = Air Defence Laser System
+         Type = Laser shootable 
+         targets = low_level_flight medium_level_flight high_level_flight orbit
+         shotFrom = medium_level_flight high_level_flight
+	 ReactionFireShots = 2
+         Punch@MaxRange = 65
+         Punch@MinRange = 75
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 4
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 20
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 75
+            d1 = 90
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } ADLS
+
 LRHEPT { 
          Type = Laser shootable 
          targets =   floating ground_level
@@ -362,7 +419,7 @@ LRHEPT {
 
    TeccnolsJump1 {
       Height = ground_level
-      MaxDistance = 150
+      MaxDistance = 250
       consumption {
          Energie = 0
          Material = 200
@@ -376,7 +433,7 @@ LRHEPT {
 
    TeccnolsJump2 {
       Height = ground_level
-      MaxDistance = 200
+      MaxDistance = 350
       consumption {
          Energie = 0
          Material = 600
@@ -404,7 +461,7 @@ LRHEPT {
 
    TeccnolsJump4 {
       Height = medium_level_flight
-      MaxDistance = 200
+      MaxDistance = 300
       consumption {
          Energie = 0
          Material = 600

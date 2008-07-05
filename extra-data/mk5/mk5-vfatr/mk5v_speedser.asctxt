@@ -4,8 +4,30 @@ VehicleType {
    parent = 332
 
    Description = Rennwagen
-   Infotext = [ Der Speedser ist ein Hochgeschwindigkeitsfahrzeug. Dadurch ist er allerdings nicht gelaendetauglich.]
-   picture = MK5v_Speedser.pcx
+   Infotext = [Das Turbomonster ist ein Überbleibsel aus den Anfängen der Outlaws als es darum ging erbeuteten Raketen nach dem Hit&Run Prinzip einen möglichst schnellen Untersatz zu verpasssen. 
+
+Die Rennwagenentwickler lieferten sich in dieser Experimentalphase lange Zeit ein Privatduell mit den Buggyschraubern. Letztere setzten sich jedoch in dem finalen, richtungsweisenden Sehloher-Höhen-Rennen durch und decken nun mit einer breiten Palette verschiendenster Buggytypen fast alle Aufgabengebiete zu Lande ab.
+
+Nichtsdestotrotz hält der S1 zumindest auf der Straße immer noch den Geschwindigkeitsrekord vor den schnellsten Buggys. Die technischen Daten sprechen eigentlich für den Sport Quattro.
+
+Motor: Reihen - 5 -Zylinder Biturbo
+Leistung: 530 PS
+Drehmoment: 740 Nm
+Vmax: 220km/h
+Leergewicht: 1300kg
+Leistungsgewicht: 2,5kg/PS
+
+T2 Buggy
+Motor: 4-Zyl.- Reihenmotor (Hayabusa)
+Leistung: 175 PS bei 11.000 U/min
+Drehmoment: 136 Nm
+Vmax: 180 km/h
+Leergewicht: 480kg
+Leistungsgewicht: 2,7kg/PS
+
+Aber ein Rennen ist jedoch was anderes als ein Kartenquartett. Um dem Spezialbuggy überhaupt mithalten zu können, darf die Drehzahl des 530 PS Boliden nie unter 3500 U/min sinken, ansonsten verhungert der mit 3 bar zwangsbeatmete Motor kläglich im Turboloch. Bei den Buggys hingegen ist aufgrund der weiten Drehzahlspanne der Hayabusamotoren die Leistung immer abrufbar und wird brutalst möglich in Traktion umgesetzt. Die folgenden Kriegserfahrungen gaben den Buggychraubern recht. Unter Beschuß im Gelände ist größtmögliche Wendig- und Schnelligkeit überlebenswichtig. Durch Stillstand im Turboloch fängt man sich schnell ´ne Kugel ein.
+]
+   picture = mk5v_speedser.pcx
    WreckageObject = 1203
    GuideSortHelp = 504 417 0 0 5 0 0 0 0 0
 

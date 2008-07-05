@@ -13,6 +13,7 @@ VehicleType {
    jamming = 0
    Features -= Jam_Only_Own_Field
    JumpDrive ->* VehicleType.TeccnolsJump4
+   JumpDrive.MaxDistance = 300
 
    Tank.Material = 2000
    Tank.Fuel = 12000

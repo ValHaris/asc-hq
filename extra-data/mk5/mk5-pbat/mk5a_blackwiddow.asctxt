@@ -4,6 +4,7 @@ VehicleType {
    ID = 1451
    
    Picture = MK5a_Blackwiddow.pcx
+   InfoImage = mk5a_blackwidow.jpg
    MovementSound = aircraft_m_g.ogg
 
    Transportation ->* VehicleType.TransWeaponPlane 

@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = HSV
+   parent = 367
+   ID = 1493
+   
+   Description = hydro carrier
+   picture = mk5s_hsv.pcx
+   InfoImage = mk5s_hsv.jpg
+
+   Armor -= 100
+   Features = MoveDuringReactionFire
+
+   Transportation ->* VehicleType.TransHeliCarrier
+   Transportation.MaxLoadableUnits = 5
+   EntranceSystem0.ContainerHeight = floating
+   EntranceSystem1.ContainerHeight = floating
+   EntranceSystem2.ContainerHeight = floating
+   Transportation.CategoriesNOT = medium_tracked_vehicle heavy_tracked_vehicle heavy_wheeled_vehicle medium_ship heavy_ship medium_aircraft heavy_aircraft rail_vehicle
+
+   Movement -= 0 0 0 10 0 0 0 0 
+   
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.MiniGun
+      Weapon0.Type = machinegun shootable ammo_transfer
+      Weapon0.Ammo = 200
+   } Weapons
+
+} VehicleType

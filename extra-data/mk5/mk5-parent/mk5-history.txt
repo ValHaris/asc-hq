@@ -1,8 +1,14 @@
 MK5 Outlaw
 GAMER
 
-
 __________________
+Beta 2-07/08
+-Fortress, schneller, Waffen schwacher
+-Shiphunter = Harpoon
+-infoImage = Blackwidow, Commander, HSV, Sealboat, MU
+-InfoText = Speedser
+Neu:
+-HSV
 Beta 3-06/08
 -Speedster, soundbugfix
 -Täuscher, etwas teurer

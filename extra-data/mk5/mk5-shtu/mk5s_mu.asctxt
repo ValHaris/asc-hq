@@ -6,7 +6,8 @@ VehicleType {
    Description = rescue submarine
    Infotext = [Special rescue and support submarine]
 
-   picture = MK5s_mu.pcx
+   picture = mk5s_mu.pcx
+   InfoImage = mk5s_mu.jpg
 
       Weapons.Weapon7 ->* VehicleType.MineSea
       Weapons.Weapon7.Ammo = 10

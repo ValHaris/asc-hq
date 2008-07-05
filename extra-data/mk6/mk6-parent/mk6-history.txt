@@ -1,6 +1,11 @@
 History MK6 teccnols unit set
 
 __________________
+Beta 2-07/08
+-InfoImage = MBC-10
+-Energ +mineview
+Neu:
+-Stress
 Beta 3-06/08
 -Deltabomber/-hunter kein Materialtank mehr
 -CillaSV kann Raps und Wald anbauen

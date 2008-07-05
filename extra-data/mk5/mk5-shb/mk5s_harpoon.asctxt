@@ -1,11 +1,11 @@
 VehicleType {
    ID = 1491
-   Name = SHIPHUNTER
+   Name = HARPOON
    parent = 367
 
    Description = ship hunter
    Infotext = []
-   picture = mk5s_shiphunter.pcx
+   picture = mk5s_harpoon.pcx
    GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
    Features += MoveDuringReactionFire

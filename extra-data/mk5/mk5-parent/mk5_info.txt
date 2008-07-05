@@ -1,6 +1,7 @@
+Outlaw ID Übersicht
+Letzte ID 1493
 
 Trooper
-
 ID 1400 Legionaer
 ID 1401 Storm
 ID 1406 Taktics
@@ -56,15 +57,14 @@ ID 1478 AOS
 ID 1479 AOV
 ID 1480 WOAS
 
-Ground Defence
+**Ground Defence**
 ID 1405 IRONGUN
 ID 1442 GATELING
 ID 1463 FGDV
 ID 1422 TLHT (Torpedolauncher)
 ID 1486 Wachturm
 
-Versorger
-
+**Versorger**
 ID 1412 FV 4x4 Trans (Support)
 ID 1418 Container A
 ID 1423 Container B
@@ -79,36 +79,35 @@ ID 1434 Ninja
 ID 1435 PickUp
 ID 1436 CrashCar
 
-Helicopter
+**Helicopter**
 ID 1410 Hoover (Heli)
 ID 1448 Summse
 ID 1449 Stachel
 ID 1450 Lastesel
 
-Flugzeuge
+**Flugzeuge**
 ID 1425 Doomsday
 ID 1451 Blackwiddow
 ID 1475 Tenga
 ID 1476 Saenger
+ID 1491 mize
 
-Dronen
+**Dronen**
 ID 1417 RTH 302 (Rakete)
 ID 1452 Taeuscher
 ID 1470 Scanner
 
-Orbital
+**Orbital**
 ID 1411 Energia
 ID 1413 OCS
 ID 1477 Horus
 ID 1480 WOAS
 
-Schiffe
+**Schiffe**
 ID 1455 Sealboat
 ID 1456 Visby
 ID 1457 Skjold X
 ID 1458 Fortress
-ID 1460 LCC
-ID 1481 Buffed
 ID 1485 Flyer
 ID 1487 Accelerator
 ID 1488 Cluster
@@ -116,17 +115,20 @@ ID 1489 Aracoa
 ID 1490 Subhunter
 ID 1491 Harpoon
 
-UBoote
+**UBoote**
 ID 1420 MU (Mini TransportU-Boot)
 ID 1421 THT 30(langstreckentorpedo)
 ID 1471 MUCM
-ID 1474 WATCHER
-ID 1482 MUHS
 ID 1484 MJU
 
-Schiff-Support
-ID 1481 MUHS
-ID 1482 Buffed
+**Träger**
+ID 1460 CCS
+ID 1474 WATCHER
+ID 1493 HSV
+
+**Schiff-Support**
+ID 1481 Buffed
+ID 1482 MUHS
 
 Hoovercrafts
 ID 1427 Flussgeist

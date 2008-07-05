@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15450
+   ;Bezeichnung der verknüpften Technologie: Stress
+   TechnologiesRequired = 15450
+} TechAdapter

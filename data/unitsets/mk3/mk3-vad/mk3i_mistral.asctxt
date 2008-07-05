@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Air Defence Trooper
    Picture = mk3i_mistral.png
-   ImfoImage = mk3i_mistral.jpg
+   InfoImage = mk3i_mistral.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

@@ -3,7 +3,11 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
 Spezifikationen: GAMER
 
 __________________
-07.06.2008 (GAMER}
+Beta 2-07/08
+-Fortress, kein Laderaum mehr
+-InfoText: ThunderOX, ThunderSX, Patrix, Moewe, Sting, thunderFX, Troller, Scorpion, GT DIve, Crusader, Orbiter, DTerano, Parademon, Whale
+__________________
+07.06.2008 (GAMER)
 -Einheitenbeschreibungen: Scorpion, Teccno, GT DIve, Crusader, Comet, Parademon, Golem, Demon, GTDef,Sam3,Sam2
 -Gigant, standart transportsystem
 __________________

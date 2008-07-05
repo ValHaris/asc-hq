@@ -1,0 +1,10 @@
+technology {
+   Name = Stress
+   infotext = Forschungsprojekt abgeschlossen! Stress verfuegbar!
+   id = 15450
+   RelatedUnitID = 15450
+   parent = 15000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 15000,100003,100103
+} Technology

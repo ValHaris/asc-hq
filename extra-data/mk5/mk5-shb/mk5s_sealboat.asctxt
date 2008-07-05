@@ -6,6 +6,7 @@ VehicleType {
    Description = stealth patrol boat
    Infotext = [Beutetechnik von den Terranern, Antrieb wurde modifiziert um die Manoevrierfähigkeit zu erhoehen.]
    picture = MK5s_sealboat.pcx
+   InfoImage = mk5s_sealboat.jpg
    
    Features += move_after_attack
 

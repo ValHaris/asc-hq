@@ -2,13 +2,16 @@ VehicleType {
    Name = COMMANDER
    ID = 1415
    parent = 204
+
    Description = Scharfschuetze
    Infotext = [ Spezialist fuer die geziehlte Eliminierung gegnerischer Roboter und Soldaten. Er verwendet 
    Spezialmunition, die im Normalfall ausreicht um einen Gegner mit einem Schuss zu erledigen.]
+   Picture = mk5i_commander.pcx
+   InfoImage = mk5i_commander.jpg
+   WreckageObject = 1416
+
    Armor += 100
    View += 6
-   Picture = MK5i_COMMANDER.pcx
-   WreckageObject = 1416
    Features += paratrooper mineview move_after_attack
    Movement += 0 0 0 5 0 0 0 0 
    Weapons { 

@@ -6,9 +6,17 @@ VehicleType {
    picture = MK5s_fortress.pcx
    Features = MoveDuringReactionFire
 
+   Transportation ->* VehicleType.noTrans
+   Movement += 0 0 10 0 0 0 0 0
+
    Weapons {
       Number = 4
-      Weapon0.Punch@MinRange = 110
+      Weapon0.Punch@MinRange -= 20
+      Weapon0.Punch@MaxRange -= 10
+      Weapon1.Punch@MinRange -= 20
+      Weapon1.Punch@MaxRange -= 10
+      Weapon2 ->* VehicleType.MiniGun
+      Weapon2.ReactionFireShots = 1
       Weapon3 ->* VehicleType.SAMH 
       Weapon3.MaxRange = 40
       Weapon3.Ammo = 10

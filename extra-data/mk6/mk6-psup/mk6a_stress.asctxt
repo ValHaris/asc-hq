@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = STRESS
+   parent =  15101
+   ID = 15450
+   
+   Description = minensucher
+   Infotext = []
+   Picture = mk6a_stress.pcx
+
+   View = 0
+   Features += mine_layer
+   Jumpdrive ->* Vehicletype.TeccnolsJump4
+   Jumpdrive.MaxDistance = 300
+
+
+   Weapons {
+      Number = 2
+      Weapon0 ->* VehicleType.ADLS
+      Weapon1 ->* VehicleType.AntiMine 
+      Weapon1.shotFrom = low_level_flight
+   } Weapons
+} VehicleType

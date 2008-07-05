@@ -4,7 +4,7 @@ VehicleType {
    ID = 1258
 
    Description = Patrouillenboot
-   Infotext = [Das Patrix]
+   Infotext = [Das Patrix ist das kleinste Boot der Cromonischen Marine. Es ist recht schnell, sehr wendig, hochseetauglich und kann gleichzeitig sehr flache Gewässer im Küstenbereich befahren. Ausgerüstet mit mehreren Maschinenkanonen und verschiedenen Sensorsystemen eignet es sich hervorragend zur Überwachung von Küsten und Insellandschaften. Dabei ist es gleichzeitig noch billig zu produzieren. Aus größeren Seegefechten sollte es allerdings tunlichst herausgehalten werden, zur Unterstützung an Küsten kämpfender Landeinheiten ist es jedoch nützlich. Sein größter Pluspunkt ist aber der große Laderaum, der bis zu 6 Infanterieeinheiten oder Golems aufnehmen kann. Dies macht es speziell beim Kampf in Insel- oder Flußlandschaften zu einer wichtigen Einheit, da es diesen Landeinheiten dort die entsprechende Mobilität verleiht. Im Kampf gegen U-Boote können wiederum GT-Dive schnell zu den Brennpunkten gebracht werden. Sämtliche transportierten Einheiten können dabei mit Waffen und Treibstoff versorgt werden. Aufgrund der nur leichten Panzerung sollte das Patrix immer mit Vorsicht eingesetzt werden, ist dann aber in vielerlei Hinsicht nützlich. ]
    picture = mk4s_patrix.png
    wreckageobject = 14258
    GuideSortHelp += 517 0 0 0 4 552 559 0 0 0

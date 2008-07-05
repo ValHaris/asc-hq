@@ -6,7 +6,7 @@ VehicleType {
    Description = Trooper
    Infotext = [normal soldier]
    picture = mk3i_gi.png
-   ImfoImage = mk3i_gi.jpg
+   InfoImage = mk3i_gi.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

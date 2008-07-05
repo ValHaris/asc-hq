@@ -8,6 +8,9 @@ VehicleType {
    Picture = mk6m_eneg.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
+   Features += mineview
+   View = 45
+   
    Construction { 
       Objects = 15002
    } Construction
