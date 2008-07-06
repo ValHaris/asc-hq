@@ -5,7 +5,8 @@ VehicleType {
    
    Description = Bulldozer
    Infotext = [The Bulldozer is a fully tracked, low speed, medium drawbar pull bulldozer with a ripper or winch. It is used by engineer units.]
-   picture = MK3v_bulldozer.png
+   picture = mk3v_bulldozer.png
+   InfoImage = mk3v_bulldozer.jpg
    GuideSortHelp = 556 0 0 0 3 0 0 0 0 0
 
    Armor = 380

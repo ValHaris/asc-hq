@@ -10,7 +10,8 @@ VehicleType {
               is the key to efficiency in battle. Be aware that a Transport
               Vehicle, though slightly armoured, is defenseless in the face
               of any combat unit.]
-   picture = MK3v_ussl.png
+   picture = mk3v_ussl.png
+   infoImage = mk3v_ussl.jpg
    GuideSortHelp = 552 558 0 0 3 0 0 0 0 0
 
    Armor -= 50

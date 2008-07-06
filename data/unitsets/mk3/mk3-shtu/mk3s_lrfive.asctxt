@@ -8,7 +8,8 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 550 0 0 0 0
 
    Armor -= 50
-   picture = MK3s_lrfive.png
+   picture = mk3s_lrfive.png
+   infoImage = mk3s_lrfive.jpg
    Features += externalFuelTransfer
 
    Weapons { 

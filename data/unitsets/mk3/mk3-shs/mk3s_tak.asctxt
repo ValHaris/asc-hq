@@ -4,7 +4,8 @@ VehicleType {
    ID = 543
    
    Description = armored supply ship
-   picture = MK3s_tak.png
+   picture = mk3s_tak.png
+   InfoImage = mk3s_tak.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

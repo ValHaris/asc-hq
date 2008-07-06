@@ -6,6 +6,7 @@ VehicleType {
    Description = transport vehicle
    Infotext = [Material transpor unit]
    picture = MK3v_dumper.png
+   InfoImage = mk3v_dumper.jpg
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

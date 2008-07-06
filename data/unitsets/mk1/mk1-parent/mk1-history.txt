@@ -2,11 +2,9 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
-Beta 2-07/08
+06.07.2008 (GAMER)
 - Floating to Submerged Ausgang Bugfix
-Beta 1-07/08
 -HeliCarrier, Anpassung Transportsystem
-Beta 3-06/08
 -Wasserflugzeuge auch auf "River" landefähig
 -zeppelin high_level_flight
 -Mechs anderer Sound

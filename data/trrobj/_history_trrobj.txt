@@ -4,9 +4,8 @@ Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
 __________________
-Beta 2-07/08
+06.07.08 (GAMER
 -small railraod, lifetime 60
-Beta 1-06/08
 -Wald, wird über Runway zerstört.
 -kleine Anpassungen bei Objektzerstörung durch andere Objekte
 __________________

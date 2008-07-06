@@ -3,7 +3,8 @@ VehicleType {
    ID = 534
    parent = 292
    Description = medium tank
-   Picture = MK3v_patton.png
+   Picture = mk3v_patton.png
+   InfoImage = mk3v_patton.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 30

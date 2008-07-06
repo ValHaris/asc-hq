@@ -3,9 +3,9 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+06.07.2008 (GAMER)
 InfoImage = Seals, Bulldozer, Bradley, Leopard1, Elch, Leopard3, P1000
 InfoImage = Dumper, Tomcat, Gaskin, longtrack, Patton, Spaelab, USSL, Buffalo, LR5, Pomornik, TAK, victoria, 
-Beta 2-07/08
 -Anger mehr Movement
 -ImfoImage = Airborne, MAN, Fuchs, SEK, Merkat, GI, Javelin, Armstrong, Luchs, Mistral, ArmyRanger, Notstrom, Truck, Volcano, Silencer
 -Merkat Minenräumfunktion aktiviert

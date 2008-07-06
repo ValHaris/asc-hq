@@ -5,7 +5,8 @@ VehicleType {
    
    Description = Fast Attack Vehicle
    Infotext = []
-   picture = MK3v_gaskin.png
+   picture = mk3v_gaskin.png
+   InfoImage = mk3v_gaskin.jpg
    GuideSortHelp = 504 417 0 0 3 0 0 0 0 0
 
    Armor -= 50
