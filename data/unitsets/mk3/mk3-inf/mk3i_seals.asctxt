@@ -5,7 +5,8 @@ VehicleType {
  
    Description = diving trooper
    Infotext = [ ]
-   picture = MK3i_Seals.png
+   picture = mk3i_Seals.png
+   InfoImage = mk3i_seals.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 5

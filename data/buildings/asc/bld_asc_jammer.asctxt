@@ -29,9 +29,9 @@ BuildingType {
    } Transportation
    Functions = 
    TerrainAccess { 
-      terrain_any = Lowland road runway Hard_sand Soft_sand hillside mountains high_mountains
+      terrain_any = Lowland Hard_sand Soft_sand 
       terrain_all = 
-      terrain_not = 
+      terrain_not = forest large_rocks railroad
       terrain_kill = lava water deep_water river
    } TerrainAccess
    ConstructionCost { 

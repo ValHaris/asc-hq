@@ -127,6 +127,7 @@ unitsets/mk3/mk3-shb/*.png
 unitsets/mk3/mk3-shb/*.jpg
 unitsets/mk3/mk3-shh/*.asctxt
 unitsets/mk3/mk3-shh/*.png
+unitsets/mk3/mk3-shh/*.jpg
 unitsets/mk3/mk3-shs/*.asctxt
 unitsets/mk3/mk3-shs/*.png
 unitsets/mk3/mk3-shs/*.jpg
@@ -138,6 +139,7 @@ unitsets/mk3/mk3-sta/*.png
 unitsets/mk3/mk3-tank/*.asctxt
 unitsets/mk3/mk3-tank/*.pcx
 unitsets/mk3/mk3-tank/*.png
+unitsets/mk3/mk3-tank/*.jpg
 unitsets/mk3/mk3-train/*.asctxt
 unitsets/mk3/mk3-train/*.png
 unitsets/mk3/mk3-train/*.pcx
@@ -152,6 +154,7 @@ unitsets/mk3/mk3-vfatr/*.png
 unitsets/mk3/mk3-vfatr/*.jpg
 unitsets/mk3/mk3-view/*.asctxt
 unitsets/mk3/mk3-view/*.png
+unitsets/mk3/mk3-view/*.jpg
 unitsets/mk3/mk3-vrok/*.asctxt
 unitsets/mk3/mk3-vrok/*.png
 unitsets/mk3/mk3-vsup/*.asctxt

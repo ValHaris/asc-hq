@@ -2,9 +2,11 @@ VehicleType {
    Name = SPACELAB
    ID = 562
    parent = 235
+   
    Description = space station
    Infotext = []
-   Picture = MK3o_spacelab.png
+   Picture = mk3o_spacelab.png
+   infoImage = mk3o_spacelab.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Features += jam_only_own_field
