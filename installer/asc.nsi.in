@@ -186,7 +186,11 @@ Section "Uninstall"
   Delete $INSTDIR\tools\hexfield.png 
   Delete $INSTDIR\music\*.ogg
   Delete $INSTDIR\asc2_dlg.zip
+  Delete $INSTDIR\README-SDL
+  Delete $INSTDIR\Microsoft.VC90.CRT.manifest
 
+  Delete $DOCUMENTS\ASC\ASC2.cache
+  Delete $DOCUMENTS\ASC\progress.dat
 
 
   ; Remove shortcuts, if any
