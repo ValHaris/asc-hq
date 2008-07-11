@@ -793,7 +793,7 @@ class ColorMerger_AlphaMerge<4> : public ColorMerger_AlphaHandler<4>
                *dest = src;
          } else {
             PixelType alpha = PixelType((src & amask ) >> ashift);
-            if ( alpha == PixelType(Surface::opaque))
+            if ( alpha == PixelType(Surface::opaque) )
                *dest = src;
             else
                if ( alpha != PixelType(Surface::transparent)) {
@@ -805,13 +805,17 @@ class ColorMerger_AlphaMerge<4> : public ColorMerger_AlphaHandler<4>
                    */
                   PixelType d = *dest;
                   PixelType dalpha = d & 0xff000000;
-                  PixelType s1 = src & 0xff00ff;
-                  PixelType d1 = d & 0xff00ff;
-                  d1 = (d1 + ((s1 - d1) * alpha >> 8)) & 0xff00ff;
-                  src &= 0xff00;
-                  d &= 0xff00;
-                  d = (d + ((src - d) * alpha >> 8)) & 0xff00;
-                  *dest = d1 | d | dalpha;
+                  if ( dalpha == Surface::transparent ) {
+                     *dest = src;
+                  } else {
+                     PixelType s1 = src & 0xff00ff;
+                     PixelType d1 = d & 0xff00ff;
+                     d1 = (d1 + ((s1 - d1) * alpha >> 8)) & 0xff00ff;
+                     src &= 0xff00;
+                     d &= 0xff00;
+                     d = (d + ((src - d) * alpha >> 8)) & 0xff00;
+                     *dest = d1 | d | dalpha;
+                  }
                }
 
          }
