@@ -1888,13 +1888,13 @@ ASCString ActionNameProvider() {
 template <typename TriggerType > 
 bool registerTrigger( EventTrigger_ID id )
 {
-   return triggerFactory::Instance().registerClass( id, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
+   return eventTriggerFactory::Instance().registerClass( id, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
 }
 
 template <typename ActionType > 
 bool registerAction( EventAction_ID id )
 {
-   return actionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  ActionNameProvider<ActionType>() );
+   return eventActionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  ActionNameProvider<ActionType>() );
 }
 
 

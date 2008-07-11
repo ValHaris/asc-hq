@@ -49,7 +49,7 @@
 #include "ascstring.h"
 #include "textfile_evaluation.h"
 #include "graphics/drawing.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 class AutoProgressBar;
 

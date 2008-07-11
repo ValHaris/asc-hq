@@ -38,7 +38,6 @@
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
 #include "spfst.h"
-// #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
 #include "dialogs/ammotransferdialog.h"
 #include "mapdisplay.h"
@@ -60,7 +59,7 @@ namespace GuiFunctions
 class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
      VehicleAttack* attackEngine;
 
-     pair<pattackweap, int> getEntry( const MapCoordinate& pos, int num );
+     pair<AttackWeap*, int> getEntry( const MapCoordinate& pos, int num );
 
       void mapDeleted( GameMap& map )
       {
@@ -95,7 +94,7 @@ bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int n
 }
 
 
-pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
+pair<AttackWeap*, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
 {
    int counter = 0;
    
@@ -108,7 +107,7 @@ pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
       }
       
       if ( afl->isMember( pos )) {
-         pattackweap aw = &afl->getData(pos.x, pos.y);
+         AttackWeap* aw = &afl->getData(pos.x, pos.y);
          for ( int a = 0; a < aw->count; ++a ) {
             if ( counter == num )
                return make_pair( aw, a );
@@ -117,7 +116,7 @@ pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
          }
       }   
    }
-   return make_pair( pattackweap(NULL), 0 );
+   return make_pair( (AttackWeap*)(NULL), 0 );
 }
 
 
@@ -136,7 +135,7 @@ void AttackGui::execute( const MapCoordinate& pos, ContainerBase* subject, int n
 {
    if ( num != -1 ) {
    
-      pair<pattackweap, int> p = getEntry(pos,num);
+      pair<AttackWeap*, int> p = getEntry(pos,num);
       if ( p.first ) {
          int res = pendingVehicleActions.attack->execute ( NULL, pos.x, pos.y, 2, 0, p.first->num[p.second] );
          if ( res < 0 )
@@ -157,7 +156,7 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, ContainerBase* subject, 
    if ( num == -1 )
       return IconRepository::getIcon("cancel.png");
       
-   pair<pattackweap, int> p = getEntry(pos,num);
+   pair<AttackWeap*, int> p = getEntry(pos,num);
    switch ( p.first->typ[p.second] ) {
       case cwcruisemissileb: return IconRepository::getIcon("weap-cruisemissile.png");
       case cwbombb: return IconRepository::getIcon("weap-bomb.png");
@@ -179,7 +178,7 @@ ASCString AttackGui::getName( const MapCoordinate& pos, ContainerBase* subject, 
 
    tfight* battle = NULL;
 
-   pair<pattackweap, int> p = getEntry(pos,num);
+   pair<AttackWeap*, int> p = getEntry(pos,num);
    
 
    if ( p.first->target == AttackWeap::vehicle )

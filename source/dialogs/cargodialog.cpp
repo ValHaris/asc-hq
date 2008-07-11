@@ -23,7 +23,7 @@
 
 #include "../containerbase.h"
 #include "../paradialog.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 #include "../iconrepository.h"
 #include "../vehicle.h"
 #include "../gamemap.h"

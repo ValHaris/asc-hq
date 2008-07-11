@@ -8,10 +8,10 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "Advanced Strategic Command 2.1.4.3"
+Name "Advanced Strategic Command 2.1.5.0"
 
 ; The file to write
-OutFile "ASC-2.1.4.3-Install.exe"
+OutFile "ASC-2.1.5.0-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -54,28 +54,33 @@ Section "ASC main program (required)"
   ; DLLs
   File "/mnt/win2000/Programme/libs//dbghelp.dll"
   File "/mnt/win2000/Programme/libs//jpeg.dll"
-  File "/mnt/win2000/Programme/libs//msvcp71.dll"
-  File "/mnt/win2000/Programme/libs//msvcr71.dll"
+  File "/mnt/win2000/Programme/libs//msvcp90.dll"
+  File "/mnt/win2000/Programme/libs//msvcr90.dll"
   File "/mnt/win2000/Programme/libs//ogg.dll"
   File "/mnt/win2000/Programme/libs//SDL_mixer.dll"
   File "/mnt/win2000/Programme/libs//smpeg.dll"
   File "/mnt/win2000/Programme/libs//zlib1.dll"
-  File "/mnt/win2000/Programme/libs//expat.dll"
+  File "/mnt/win2000/Programme/libs//libexpat.dll"
   File "/mnt/win2000/Programme/libs//libpng13.dll"
+  File "/mnt/win2000/Programme/libs//libpng12-0.dll"
+  File "/mnt/win2000/Programme/libs//libtiff-3.dll"
   File "/mnt/win2000/Programme/libs//sdl.dll"
+  File "/mnt/win2000/Programme/libs//README-SDL.txt"
   File "/mnt/win2000/Programme/libs//vorbis.dll"
-  File "/mnt/win2000/Programme/libs//in_flac.dll"
+  File "/mnt/win2000/Programme/libs//libFLAC.dll"
   File "/mnt/win2000/Programme/libs//SDL_image.dll"
   File "/mnt/win2000/Programme/libs//sdl_sound.dll"
   File "/mnt/win2000/Programme/libs//vorbisfile.dll"
   File "/mnt/win2000/Programme/libs//libcurl.dll"
   File "/mnt/win2000/Programme/libs//libeay32.dll" 
   File "/mnt/win2000/Programme/libs//ssleay32.dll"
-  
+  File "/mnt/win2000/Programme/libs//Microsoft.VC90.CRT.manifest"
+
+
   ; Debug DLLs
-  File "/mnt/win2000/Programme/libs//sdl_sound_d.dll"
-  File "/mnt/win2000/Programme/libs//msvcr71d.dll"
-  File "/mnt/win2000/Programme/libs//msvcp71d.dll"
+  ; File "/mnt/win2000/Programme/libs//sdl_sound_d.dll"
+  ; File "/mnt/win2000/Programme/libs//msvcr71d.dll"
+  ; File "/mnt/win2000/Programme/libs//msvcp71d.dll"
 
   ; Data Files
   File "../data/dialog/asc2_dlg.zip"
@@ -85,7 +90,7 @@ Section "ASC main program (required)"
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.1.4.3"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.1.5.0"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
@@ -181,7 +186,11 @@ Section "Uninstall"
   Delete $INSTDIR\tools\hexfield.png 
   Delete $INSTDIR\music\*.ogg
   Delete $INSTDIR\asc2_dlg.zip
+  Delete $INSTDIR\README-SDL
+  Delete $INSTDIR\Microsoft.VC90.CRT.manifest
 
+  Delete $DOCUMENTS\ASC\ASC2.cache
+  Delete $DOCUMENTS\ASC\progress.dat
 
 
   ; Remove shortcuts, if any

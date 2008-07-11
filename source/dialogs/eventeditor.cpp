@@ -60,7 +60,7 @@ class EventEditor : public ASC_PG_Dialog {
          if ( i < 0 )
             return;
 
-         EventActionID eai = actionFactory::Instance().getID( actionNames.at(i) );
+         EventActionID eai = eventActionFactory::Instance().getID( actionNames.at(i) );
 
          if ( !event->action )
             event->spawnAction( eai );
@@ -86,7 +86,7 @@ class EventEditor : public ASC_PG_Dialog {
       void triggerSelected( int type, int num )
       {
          if ( type>= 0 ) {
-            EventTriggerID triggerID = triggerFactory::Instance().getID(  triggerNames.at(type) );
+            EventTriggerID triggerID = eventTriggerFactory::Instance().getID(  triggerNames.at(type) );
 
             if ( event->trigger.size() <= num ) {
                int oldSize = event->trigger.size();
@@ -168,8 +168,8 @@ class EventEditor : public ASC_PG_Dialog {
          
          new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25 ), "Action:" );
 
-         triggerNames = triggerFactory::Instance().getNames();
-         actionNames = actionFactory::Instance().getNames();
+         triggerNames = eventTriggerFactory::Instance().getNames();
+         actionNames = eventActionFactory::Instance().getNames();
 
          eventType = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 300, 25 ), actionNames );
          if ( event->action ) 
@@ -264,7 +264,7 @@ bool   createevent( Event* event )
    return ee.GetResult();
 }
 
-// õS EventSel
+// ï¿½S EventSel
 
 
 class EventList : public ASC_PG_Dialog {

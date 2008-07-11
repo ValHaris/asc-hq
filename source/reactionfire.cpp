@@ -29,7 +29,7 @@
 #include "viewcalculation.h"
 #include "replay.h"
 #include "attack.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 #include "mapdisplayinterface.h"
 #include "reactionfire.h"
 #include "spfst.h"
@@ -213,7 +213,7 @@ void tsearchreactionfireingunits :: findOffensiveUnits( Vehicle* vehicle, int he
             while ( ul ) {
                punitlist next = ul->next;
                
-               pattackweap atw = attackpossible ( ul->eht, vehicle->xpos, vehicle->ypos );
+               AttackWeap* atw = attackpossible ( ul->eht, vehicle->xpos, vehicle->ypos );
                for ( int j = 0; j < atw->count; ++j )
                   if ( ul->eht->reactionfire.weaponShots[atw->num[j]] ) {
                      removeunit ( ul->eht );
@@ -303,7 +303,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
    
    int result = 0;
    if ( attacker->reactionfire.canPerformAttack( target )) { 
-      pattackweap atw = attackpossible ( attacker, target->xpos, target->ypos );
+      AttackWeap* atw = attackpossible ( attacker, target->xpos, target->ypos );
       if ( atw->count ) { // && (attacker->reactionfire.enemiesAttackable & (1 << (target->color / 8)))) {
 
          int ad1, ad2, dd1, dd2;

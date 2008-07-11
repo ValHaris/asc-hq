@@ -77,14 +77,14 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	iconrepository.$(OBJEXT) gamedialog.$(OBJEXT) \
 	infopopup.$(OBJEXT) overviewmapimage.$(OBJEXT) \
 	asc-mainscreen.$(OBJEXT) mapfield.$(OBJEXT) \
-	overviewmappanel.$(OBJEXT) messaginghub.$(OBJEXT) \
-	explosivemines.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
-	networksupervisor.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
-	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
-	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT) \
-	containercontrols.$(OBJEXT) containerbase-functions.$(OBJEXT) \
-	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT) \
-	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT)
+	overviewmappanel.$(OBJEXT) explosivemines.$(OBJEXT) \
+	mainscreenwidget.$(OBJEXT) networksupervisor.$(OBJEXT) \
+	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
+	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
+	mapimageexport.$(OBJEXT) containercontrols.$(OBJEXT) \
+	containerbase-functions.$(OBJEXT) windowing.$(OBJEXT) \
+	turncontrol.$(OBJEXT) unitset.$(OBJEXT) playercolor.$(OBJEXT) \
+	pg_mapdisplay.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -93,6 +93,9 @@ asc_DEPENDENCIES =  \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 	$(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/loki-0.1.6/libloki.la \
+	$(top_builddir)/source/actions/libactions.la \
+	$(top_builddir)/source/util/libutil.la \
+	$(top_builddir)/source/tasks/libtasks.la \
 	$(top_builddir)/source/graphics/libgraphics.la \
 	$(top_builddir)/source/dialogs/libdialogs.la \
 	$(top_builddir)/source/dialogs/libgamedialogs.la \
@@ -295,7 +298,7 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-messaginghub.cpp explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp \
+explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp
@@ -303,6 +306,8 @@ playercolor.cpp pg_mapdisplay.cpp
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki-0.1.6/libloki.la \
+$(top_builddir)/source/actions/libactions.la  $(top_builddir)/source/util/libutil.la  \
+$(top_builddir)/source/tasks/libtasks.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
@@ -429,7 +434,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/memory-measurement.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messagedlg.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkinterface.Po@am__quote@

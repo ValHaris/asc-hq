@@ -26,7 +26,7 @@
 #endif
 
 #include "surface2png.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 
 void writePNG( const ASCString& filename, const Surface& s )
 {

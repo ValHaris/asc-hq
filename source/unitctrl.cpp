@@ -43,6 +43,9 @@
 #include "soundList.h"
 #include "reactionfire.h"
 
+#include "tasks/unitattack_generator.h"
+
+
 PendingVehicleActions pendingVehicleActions;
 
 SigC::Signal0<void> fieldCrossed;
@@ -1002,12 +1005,8 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 
 bool VehicleAttack :: avail ( Vehicle* eht )
 {
-   if ( eht )
-      if ( eht->attacked == false )
-         if ( eht->weapexist() )
-            if (eht->typ->wait == false  ||  !eht->hasMoved() )
-                  return true;
-   return false;
+   UnitAttackGenerator unitAttackGenerator; 
+   return unitAttackGenerator.available( eht );
 }
 
 
@@ -1057,7 +1056,7 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
       return status;
   } else
   if ( status == 2 ) {
-      pattackweap atw = NULL;
+      AttackWeap* atw = NULL;
       if ( attackableVehicles.isMember ( x, y ))
          atw = &attackableVehicles.getData ( x, y );
       else
@@ -1136,7 +1135,7 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordin
 { 
    if ( fieldvisiblenow( gamemap->getField(mc)) ) {
       if ( !kamikaze ) {
-         pattackweap atw = attackpossible( angreifer, mc.x, mc.y );
+         AttackWeap* atw = attackpossible( angreifer, mc.x, mc.y );
          if (atw->count > 0) { 
             switch ( atw->target ) {
                case AttackWeap::vehicle:  va->attackableVehicles.addField  ( mc, *atw );

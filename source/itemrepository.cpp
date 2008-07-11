@@ -26,7 +26,7 @@
 #include "textfileparser.h"
 #include "sgstream.h"
 #include "textfile_evaluation.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 
 SigC::Signal0<void> dataLoaderTicker;

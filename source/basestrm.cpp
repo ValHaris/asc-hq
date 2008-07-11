@@ -57,7 +57,7 @@
 #include <SDL_endian.h>
 
 
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 
  const int maxSearchDirNum = 30;

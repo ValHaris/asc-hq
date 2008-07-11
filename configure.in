@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.1.4.3)
+AC_INIT(asc,2.1.5.0)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -634,8 +634,10 @@ AC_CONFIG_FILES( [ Makefile \
        source/graphics/Makefile \
        source/network/Makefile \
        source/dialogs/Makefile \
+       source/util/Makefile \
        source/widgets/Makefile \
        source/actions/Makefile \
+       source/tasks/Makefile \
        source/video/Makefile \
        source/doc/Makefile \
        source/libs/Makefile \

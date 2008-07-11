@@ -35,7 +35,7 @@
 
 
 /** \file unitctrl.h
-   New system for actions performed by units
+   system for actions performed by units
    This design is considered a failure, it won't be used for any new code
 */
 

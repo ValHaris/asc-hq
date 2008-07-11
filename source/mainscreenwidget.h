@@ -23,7 +23,7 @@
  #define mainscreenwidgetH
 
 #include "paradialog.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 #include "overviewmappanel.h"
 
 // class Menu;

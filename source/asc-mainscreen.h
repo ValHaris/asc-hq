@@ -27,7 +27,7 @@
  #define ascmainscreenH 
 
 #include "paradialog.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 #include "mainscreenwidget.h"
 
 class Menu;

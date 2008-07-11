@@ -24,13 +24,14 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp \
+explosivemines.cpp legacynetworkloaders.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
 $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(top_builddir)/source/util/libutil.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \

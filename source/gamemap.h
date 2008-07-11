@@ -386,6 +386,7 @@ public:
 
       Vehicle* getUnit ( int x, int y, int nwid );
       Vehicle* getUnit ( int nwid, bool consistencyCheck = true );
+      const Vehicle* getUnit ( int nwid, bool consistencyCheck = true ) const;
       ContainerBase* getContainer ( int nwid );
       int  getgameparameter ( GameParameter num ) const;
       void setgameparameter ( GameParameter num, int value );
@@ -457,6 +458,7 @@ public:
       
       pterraintype getterraintype_byid ( int id );
       ObjectType* getobjecttype_byid ( int id );
+      const ObjectType* getobjecttype_byid ( int id ) const;
       Vehicletype* getvehicletype_byid ( int id );
       BuildingType* getbuildingtype_byid ( int id );
       const Technology* gettechnology_byid ( int id );

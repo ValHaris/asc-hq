@@ -60,7 +60,7 @@
 
 #include "graphics/drawing.h"
 
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 
 #include "sdl/graphicsqueue.h"

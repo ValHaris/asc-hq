@@ -45,7 +45,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
       for ( int g = 0; g < va.attackableVehicles.getFieldNum(); g++ ) {
          int xp, yp;
          va.attackableVehicles.getFieldCoordinates ( g, &xp, &yp );
-         pattackweap aw = &va.attackableVehicles.getData ( g );
+         AttackWeap* aw = &va.attackableVehicles.getData ( g );
 
          int bestweap = -1;
          int targdamage = -1;

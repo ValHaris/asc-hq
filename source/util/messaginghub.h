@@ -26,7 +26,7 @@
  #include <sigc++/sigc++.h>
  #include "loki/Singleton.h"
 
- #include "ascstring.h"
+ #include "../ascstring.h"
 
   //! A class that hols a MessageWindow. This class ensures that the window is removed if the last copy of the object is deleted
   class StatusMessageWindowHolder {

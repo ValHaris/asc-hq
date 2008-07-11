@@ -29,7 +29,7 @@
 #include "../global.h"
 // #include "keysymbols.h"
 #include "../errors.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 #include "graphicsqueue.h"
 
 volatile tmousesettings mouseparams;

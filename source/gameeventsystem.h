@@ -30,7 +30,7 @@
 #include "loki/Singleton.h"
 
 #include "typen.h"
-#include "factory.h"
+#include "util/factory.h"
 
 #include "mapdisplayinterface.h"
 
@@ -202,8 +202,8 @@ class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
 
 };
 
-typedef Loki::SingletonHolder< FactoryWithNames< EventTrigger, EventTriggerID > > triggerFactory;
-typedef Loki::SingletonHolder< FactoryWithNames< EventAction , EventActionID  > > actionFactory;
+typedef Loki::SingletonHolder< FactoryWithNames< EventTrigger, EventTriggerID > > eventTriggerFactory;
+typedef Loki::SingletonHolder< FactoryWithNames< EventAction , EventActionID  > > eventActionFactory;
 
 
 

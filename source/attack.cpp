@@ -247,7 +247,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    int _weapon;
 
    if ( weapon == -1 ) {
-      pattackweap atw = attackpossible( attackingunit, attackedunit->xpos, attackedunit->ypos );
+      AttackWeap* atw = attackpossible( attackingunit, attackedunit->xpos, attackedunit->ypos );
       int n = -1;
       int s = 0;
       for ( int i = 0; i < atw->count; i++ )
@@ -421,7 +421,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    int _weapon;
 
    if ( weapon == -1 ) {
-      pattackweap atw = attackpossible( attackingunit, x, y );
+      AttackWeap* atw = attackpossible( attackingunit, x, y );
       int n = -1;
       int s = 0;
       for ( int i = 0; i < atw->count; i++ )
@@ -649,7 +649,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    if ( weapon == -1 ) {
 
-      pattackweap atw = attackpossible( attackingunit, obj_x, obj_y );
+      AttackWeap* atw = attackpossible( attackingunit, obj_x, obj_y );
       int n = -1;
       int s = 0;
       for ( int i = 0; i < atw->count; i++ )
@@ -739,9 +739,9 @@ void tunitattacksobject :: setresult ( void )
 
 
 
-pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
+AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
 {
-  pattackweap atw = new AttackWeap;
+  AttackWeap* atw = new AttackWeap;
 
   memset(atw, 0, sizeof(*atw));
 
@@ -839,7 +839,7 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
 }
 
 
-bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetheight )
+bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw, int targetheight )
 {
    if ( targetheight == -1 )
       targetheight = target->height;
@@ -885,7 +885,7 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackwe
 
 
 
-bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetHeight )
+bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw, int targetHeight )
 {
    const Vehicle* angreifer = attacker;
    const Vehicle* verteidiger = target;
@@ -931,7 +931,7 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackwe
 }
 
 
-bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap atw )
+bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw )
 {
    const Vehicle* angreifer = attacker;
    const Vehicle* verteidiger = target;

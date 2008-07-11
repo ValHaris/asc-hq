@@ -24,7 +24,7 @@
 #define networkinterfaceH
 
 #include "loki/Singleton.h"
-#include "factory.h"
+#include "util/factory.h"
 
 #include "basestrm.h"
 

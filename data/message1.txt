@@ -194,4 +194,15 @@ Units have to be able to reach one of these heights to enter
 Units must NOT be able to reach this theight to enter
 20133
 Maximum weight of a single unit that can be loaded $/$ maximum weight of all loaded units
-
+21001
+Unit not found on map
+21002
+Invalid field coordinates
+21100
+Not enough Ammo
+21101
+Ammo doesn't fit into storage
+21102
+Ammo mismatch
+21201
+Damage mismatch

@@ -321,13 +321,13 @@ void Event::check( MapDisplayInterface* md )
 
 void Event::spawnAction( EventActionID eai )
 {
-   action = actionFactory::Instance().createObject( eai );
+   action = eventActionFactory::Instance().createObject( eai );
    action->setMap ( &gamemap );
 }
 
 EventTrigger* Event::spawnTrigger( EventTriggerID eti )
 {
-   EventTrigger* et = triggerFactory::Instance().createObject( eti );
+   EventTrigger* et = eventTriggerFactory::Instance().createObject( eti );
    et->setMap ( &gamemap );
    et->setEvent ( this );
    return et;

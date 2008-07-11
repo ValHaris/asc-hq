@@ -286,13 +286,12 @@ class AttackWeap
 
       enum Target { nothing, vehicle, building, object } target;
 };
-typedef class AttackWeap* pattackweap ;
 
 
 
 
 //! \brief Is attacker able to attack anything in field x/y ?
-extern pattackweap attackpossible( const Vehicle* attacker, int x, int y);
+extern AttackWeap* attackpossible( const Vehicle* attacker, int x, int y);
 
 
 
@@ -308,7 +307,7 @@ extern pattackweap attackpossible( const Vehicle* attacker, int x, int y);
                           the attack are written to attackweap
      \param targetHeight if != -1 , assume the target unit was on this height (bitmapped!)
  */
-extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int targetheight = -1);      // distance is not evaluated
+extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL, int targetheight = -1);      // distance is not evaluated
 
 
 /*! \brief Is attacker able to attack target ? Distance is assumed one field.
@@ -323,7 +322,7 @@ extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pa
                           the attack are written to attackweap
      \param targetHeight if != -1 , assume the target unit was on this height (bitmapped!)
 */
-extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int targetHeight = -1);       // distance is fixed as 1 field
+extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL, int targetHeight = -1);       // distance is fixed as 1 field
 
 
 /*! \brief Is attacker able to attack target ? Actual distance used.
@@ -333,7 +332,7 @@ extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pa
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap
 */
-extern bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL );
+extern bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL );
 
 //! Can the vehicle drive across the field and destroy any unit there by moving over them?
 extern bool vehicleplattfahrbar( const Vehicle* vehicle, const tfield* field );

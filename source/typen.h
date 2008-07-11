@@ -39,7 +39,7 @@
 #include "basictypes.h"
 
 #include "basestrm.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 
 //! the color depth of the gamemap

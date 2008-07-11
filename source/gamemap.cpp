@@ -1111,6 +1111,23 @@ Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck )
    return NULL;
 }
 
+const Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck ) const
+{
+   VehicleLookupCache::const_iterator i = vehicleLookupCache.find( nwid );
+   if ( i != vehicleLookupCache.end() )
+      return i->second;
+
+
+   if ( consistencyCheck ) 
+      for ( int p = 0; p < 9; p++ )
+         for ( Player::VehicleList::const_iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
+            if ( (*i)->networkid == nwid ) {
+               displaymessage("warning: id not registered in VehicleLookupCache!",1);
+               return *i;
+            }
+
+   return NULL;
+}
 
 Vehicle* GameMap :: getUnit ( int x, int y, int nwid )
 {
@@ -1618,6 +1635,12 @@ ObjectType* GameMap :: getobjecttype_byid ( int id )
 {
    return objectTypeRepository.getObject_byID ( id );
 }
+
+const ObjectType* GameMap :: getobjecttype_byid ( int id ) const
+{
+   return objectTypeRepository.getObject_byID ( id );
+}
+
 
 Vehicletype* GameMap :: getvehicletype_byid ( int id )
 {

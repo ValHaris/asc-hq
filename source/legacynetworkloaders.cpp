@@ -18,7 +18,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 #pragma pack(1)
 enum tnetworkchannel { TN_RECEIVE, TN_SEND };

@@ -122,7 +122,7 @@
 
 #include "asc-mainscreen.h"
 #include "dialogs/unitinfodialog.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 #include "cannedmessages.h"
 #include "memorycheck.cpp"
 #include "networkinterface.h"
