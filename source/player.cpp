@@ -569,10 +569,15 @@ void DiplomaticStateVector::swap( int secondPlayer )
    swapData( states, secondDSV.states );
    swapData( queuedStateChanges, secondDSV.queuedStateChanges );
 
-   resize( max(player.getPosition(), secondPlayer));
+   
 
-   for ( int i= 0; i < player.getParentMap()->getPlayerCount(); ++i )
-      swapData( player.getParentMap()->getPlayer(i).diplomacy.states[secondPlayer],  player.getParentMap()->getPlayer(i).diplomacy.states[player.getPosition()] );
+   for ( int i= 0; i < player.getParentMap()->getPlayerCount(); ++i ) {
+      DiplomaticStates sec = player.getParentMap()->getPlayer(i).diplomacy.getState(secondPlayer);
+      DiplomaticStates fir = player.getParentMap()->getPlayer(i).diplomacy.getState(player.getPosition());
+
+      player.getParentMap()->getPlayer(i).diplomacy.setState(secondPlayer, fir, false );
+      player.getParentMap()->getPlayer(i).diplomacy.setState(player.getPosition(), sec, false );
+   }
 
 }
 

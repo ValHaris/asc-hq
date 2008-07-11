@@ -475,6 +475,7 @@ void playerchange(void)
    sc.init();
    sc.run();
    sc.done();
+   mapChanged(actmap);
 }
 
 

@@ -180,6 +180,9 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
    StringTokenizer st ( file, fileNameDelimitter );
    FileName fn = st.getNextToken();
    fn.toLower();
+
+   displayLogMessage ( 6, "loading file " + file + "\n" );
+
    if ( fn.suffix() == "png" ) {
       SDLmm::Surface* s = NULL;
       do {
