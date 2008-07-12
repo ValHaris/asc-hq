@@ -19,34 +19,31 @@
 */
 
 
-#ifndef unitAttackH
-#define unitAttackH
+#ifndef actionContainerH
+#define actionContainerH
 
-#include "unittask.h"
+#include <list>
 
-#include "../typen.h"
-#include "../attack.h"
+#include "action.h"
 
-class UnitAttack : public UnitTask{
-      MapCoordinate target;
-      int targetUnit;
-      MapCoordinate targetBuilding;
+
+class ActionContainer {
+   
+      typedef list<GameAction*> Actions;
+      Actions actions;
       
-      bool untilDestruction;
-      bool kamikaze;
-      
-      void fieldChecker( const MapCoordinate& pos );
-      
-      map<MapCoordinate,AttackWeap > attackableUnits;
-      vector<MapCoordinate> attackableUnitsKamikaze;
-      map<MapCoordinate,AttackWeap > attackableBuildings;
-      map<MapCoordinate,AttackWeap > attackableObjects;
-      
+      Actions::iterator currentPos;
+   
    public:
-      UnitAttack ( Vehicle* unit );
-      ActionResult searchTargets();
-      void setTarget( const MapCoordinate& target );
-      ActionResult go ( Context& context ); 
+      ActionContainer();
+      void add( GameAction* action );
+      
+      void undo( const Context& context );
+      void redo( const Context& context );
+      
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      
 };
 
 #endif

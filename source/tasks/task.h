@@ -35,7 +35,7 @@ class Task {
    private:
       GameMap* gamemap;
    public:
-      enum State { Planned, SetUp, InWork, Completed };
+      enum State { Planned, Evaluated, SetUp, InWork, Completed, Failed };
    private:
       State state;
    public:

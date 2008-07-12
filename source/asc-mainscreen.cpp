@@ -859,6 +859,9 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev ( ua_savegame );
                return true;
 
+            case SDLK_z:
+               execUserAction_ev( ua_undo );
+               return true;
 
             case SDLK_n:
                execUserAction_ev ( ua_newGame );

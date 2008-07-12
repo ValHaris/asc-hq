@@ -78,7 +78,7 @@ GameActionID ConsumeAmmo::getID()
    return ActionRegistry::ConsumeAmmo;
 }
 
-ActionResult ConsumeAmmo::runAction( Context& context )
+ActionResult ConsumeAmmo::runAction( const Context& context )
 {
    Vehicle* veh = getMap()->getUnit( vehicleID );
    if ( veh == NULL )
@@ -93,7 +93,7 @@ ActionResult ConsumeAmmo::runAction( Context& context )
 }
 
 
-ActionResult ConsumeAmmo::undoAction( Context& context )
+ActionResult ConsumeAmmo::undoAction( const Context& context )
 {
    Vehicle* veh = getMap()->getUnit( vehicleID );
    if ( veh == NULL )
@@ -106,7 +106,7 @@ ActionResult ConsumeAmmo::undoAction( Context& context )
    return ActionResult(0);
 }
 
-ActionResult ConsumeAmmo::verify()
+ActionResult ConsumeAmmo::postCheck()
 {
    Vehicle* veh = getMap()->getUnit( vehicleID );
    if ( veh == NULL )

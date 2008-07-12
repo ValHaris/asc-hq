@@ -26,6 +26,7 @@ class GameMap;
 class Player;
 class GameAction;
 class MapDisplayInterface;
+class ActionContainer;
 
 class Context {
    public:
@@ -37,6 +38,7 @@ class Context {
       GameAction* parentAction;
       MapDisplayInterface* display;
       int viewingPlayer;
+      ActionContainer* actionContainer;
 };
 
 #endif

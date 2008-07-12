@@ -74,7 +74,7 @@ GameActionID SpawnObject::getID()
    return ActionRegistry::SpawnObject;
 }
 
-ActionResult SpawnObject::runAction( Context& context )
+ActionResult SpawnObject::runAction( const Context& context )
 {
    tfield* fld = getMap()->getField(pos);
    if ( !fld )
@@ -91,7 +91,7 @@ ActionResult SpawnObject::runAction( Context& context )
 }
 
 
-ActionResult SpawnObject::undoAction( Context& context )
+ActionResult SpawnObject::undoAction( const Context& context )
 {
    tfield* fld = getMap()->getField(pos);
    if ( !fld )

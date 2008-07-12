@@ -42,6 +42,8 @@
  #include "networkinterface.h"
  #include "player.h"
  
+ #include "actions/actioncontainer.h"
+ 
  class RandomGenerator{
    public:
 
@@ -327,8 +329,11 @@ public:
            //! Close the replay logging at the end of a players or the ai's turn.
           void closeLogging();
           ~ReplayInfo ( );
+          
         };
 
+      //! Records all action that have been done for undo/redo purposes
+      ActionContainer actions;
 
       ReplayInfo*  replayinfo;
 

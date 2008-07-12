@@ -19,34 +19,37 @@
 */
 
 
-#ifndef unitAttackH
-#define unitAttackH
+#ifndef changeUnitMovementH
+#define changeUnitMovementH
 
-#include "unittask.h"
 
-#include "../typen.h"
-#include "../attack.h"
+#include "unitaction.h"
 
-class UnitAttack : public UnitTask{
-      MapCoordinate target;
-      int targetUnit;
-      MapCoordinate targetBuilding;
+
+class ChangeUnitMovement : public UnitAction {
+      bool delta;
+      int movement;
       
-      bool untilDestruction;
-      bool kamikaze;
-      
-      void fieldChecker( const MapCoordinate& pos );
-      
-      map<MapCoordinate,AttackWeap > attackableUnits;
-      vector<MapCoordinate> attackableUnitsKamikaze;
-      map<MapCoordinate,AttackWeap > attackableBuildings;
-      map<MapCoordinate,AttackWeap > attackableObjects;
-      
+      int originalMovement;
+      int resultingMovement;
    public:
-      UnitAttack ( Vehicle* unit );
-      ActionResult searchTargets();
-      void setTarget( const MapCoordinate& target );
-      ActionResult go ( Context& context ); 
+      //! delta: true=movement is a relative value which will be subtracted
+      //!        false=movement is the new absolute value
+      ChangeUnitMovement( GameMap* gamemap, int vehicleID, int movement, bool delta = false );
+      
+      ASCString getDescription() const;
+      
+   protected:
+      virtual GameActionID getID();
+      
+      virtual ActionResult runAction( const Context& context );
+      virtual ActionResult undoAction( const Context& context );
+      virtual ActionResult preCheck();
+      virtual ActionResult postCheck();
+      
+      virtual void readData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream );
+      
 };
 
 #endif

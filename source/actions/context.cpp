@@ -26,7 +26,8 @@ Context::Context()
    actingPlayer(NULL),
    parentAction(NULL),
    display(NULL),
-   viewingPlayer(-1)
+   viewingPlayer(-1),
+   actionContainer(NULL)
 {
 }
 
@@ -37,4 +38,5 @@ Context::Context( const Context& context, GameAction* action )
    parentAction = action;
    display = context.display;
    viewingPlayer = context.viewingPlayer;
+   actionContainer = NULL;
 }

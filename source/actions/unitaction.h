@@ -19,34 +19,23 @@
 */
 
 
-#ifndef unitAttackH
-#define unitAttackH
+#ifndef unitActionH
+#define unitActionH
 
-#include "unittask.h"
 
-#include "../typen.h"
-#include "../attack.h"
+#include "action.h"
+#include "action-registry.h"
 
-class UnitAttack : public UnitTask{
-      MapCoordinate target;
-      int targetUnit;
-      MapCoordinate targetBuilding;
-      
-      bool untilDestruction;
-      bool kamikaze;
-      
-      void fieldChecker( const MapCoordinate& pos );
-      
-      map<MapCoordinate,AttackWeap > attackableUnits;
-      vector<MapCoordinate> attackableUnitsKamikaze;
-      map<MapCoordinate,AttackWeap > attackableBuildings;
-      map<MapCoordinate,AttackWeap > attackableObjects;
-      
+
+class UnitAction : public GameAction {
+      int vehicleID;
+   protected:
+      Vehicle* getUnit( bool dontThrow = false );
+      const Vehicle* getUnit( bool dontThrow = false ) const ;
+      void readData ( tnstream& stream );
+      void writeData ( tnstream& stream );
    public:
-      UnitAttack ( Vehicle* unit );
-      ActionResult searchTargets();
-      void setTarget( const MapCoordinate& target );
-      ActionResult go ( Context& context ); 
+      UnitAction( GameMap* gamemap, int vehicleID );
 };
 
 #endif

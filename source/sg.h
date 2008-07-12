@@ -40,14 +40,11 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mnt
                     ua_viewWindPanel, ua_clearImageCache, ua_viewUnitInfoPanel, ua_cargosummary, ua_viewUnitInfoDialog, ua_showsearchdirs, ua_viewOverviewMapPanel, ua_weathercast,
                     ua_newGame, ua_testMessages, ua_viewMapControlPanel, ua_unitsummary, ua_togglesound, ua_increase_zoom, ua_decrease_zoom, ua_editPlayerData,
                     ua_SDLinfo, ua_visibilityInfo, ua_locatefile, ua_viewfont, ua_resourceAnalysis, ua_unitproductionanalysis, ua_continuerecentnetworkgame, ua_gotoPosition, ua_loadrecentgame,
-                    ua_showTechAdapter, ua_showUnitEndurance, ua_getMemoryFootprint, ua_viewlayerhelp, ua_showCargoLayer, ua_showMiningPower, ua_emailOptions, ua_createReminder };
+                    ua_showTechAdapter, ua_showUnitEndurance, ua_getMemoryFootprint, ua_viewlayerhelp, ua_showCargoLayer, ua_showMiningPower, ua_emailOptions, ua_createReminder, ua_undo, ua_redo };
 
 extern void execuseraction ( tuseractions action );
 
 //! takes care of event system switching between old and new functions
-extern void execUserAction_ev( tuseractions action );
-
-//! switches the event handling between paragui and legacy depending on function called
 extern void execUserAction_ev( tuseractions action );
 
 class GameMap;

@@ -601,6 +601,27 @@ void helpAbout()
 }
 
 
+Context createContext( GameMap* gamemap = actmap )
+{
+   Context context;
+   
+   context.gamemap = gamemap;
+   context.actingPlayer = &gamemap->getPlayer( actmap->actplayer );
+   context.parentAction = NULL;
+   context.display = &getDefaultMapDisplay();
+   context.viewingPlayer = gamemap->getPlayerView(); 
+   context.actionContainer = &gamemap->actions;
+   return context;   
+}
+
+void undo()
+{
+   if ( actmap ) {
+      actmap->actions.undo( createContext() );  
+      mapChanged(actmap);
+   }
+}
+
 // user actions using the old event system
 void execuseraction ( tuseractions action )
 {
@@ -910,6 +931,9 @@ void execuseraction ( tuseractions action )
                }
             }
          }
+         break;
+      case ua_undo:
+         undo();
          break;
 
       default:;

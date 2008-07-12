@@ -74,7 +74,7 @@ GameActionID InflictUnitDamage::getID()
    return ActionRegistry::InflictUnitDamage;
 }
 
-ActionResult InflictUnitDamage::runAction( Context& context )
+ActionResult InflictUnitDamage::runAction( const Context& context )
 {
    Vehicle* veh = getMap()->getUnit( vehicleID );
    if ( veh == NULL )
@@ -96,7 +96,7 @@ ActionResult InflictUnitDamage::runAction( Context& context )
 }
 
 
-ActionResult InflictUnitDamage::undoAction( Context& context )
+ActionResult InflictUnitDamage::undoAction( const Context& context )
 {
    Vehicle* veh = getMap()->getUnit( vehicleID );
    if ( veh == NULL )
@@ -109,7 +109,7 @@ ActionResult InflictUnitDamage::undoAction( Context& context )
    return ActionResult(0);
 }
 
-ActionResult InflictUnitDamage::verify()
+ActionResult InflictUnitDamage::postCheck()
 {
    Vehicle* veh = getMap()->getUnit( vehicleID );
    if ( veh == NULL )

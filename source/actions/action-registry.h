@@ -27,7 +27,12 @@ namespace ActionRegistry {
                   ConsumeAmmo,
                   InflictUnitDamage,
                   SpawnObject,
-                  DestructUnit
+                  DestructUnit,
+                  VehicleAttack,
+                  ChangeUnitMovement,
+                  ChangeUnitAttackFlag,
+                  ChangeUnitProperty,
+                  RegisterUnitRFTarget
       
    };
 };

@@ -44,10 +44,25 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libactions_la_DEPENDENCIES =
-am_libactions_la_OBJECTS = servicing.lo jumpdrive.lo selfdestruct.lo \
-	action.lo context.lo actionresult.lo consumeammo.lo \
-	inflictunitdamage.lo spawnobject.lo destructunit.lo
+am_libactions_la_OBJECTS = action.lo context.lo actionresult.lo \
+	actioncontainer.lo
 libactions_la_OBJECTS = $(am_libactions_la_OBJECTS)
+libdirectunitactions_la_DEPENDENCIES =
+am_libdirectunitactions_la_OBJECTS = consumeammo.lo \
+	inflictunitdamage.lo destructunit.lo changeunitmovement.lo \
+	unitaction.lo changeunitproperty.lo registerunitrftarget.lo
+libdirectunitactions_la_OBJECTS =  \
+	$(am_libdirectunitactions_la_OBJECTS)
+libfullgameactions_la_DEPENDENCIES =
+am_libfullgameactions_la_OBJECTS = vehicleattack.lo
+libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
+libmapactions_la_DEPENDENCIES =
+am_libmapactions_la_OBJECTS = spawnobject.lo
+libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
+libmiscactions_la_DEPENDENCIES =
+am_libmiscactions_la_OBJECTS = servicing.lo jumpdrive.lo \
+	selfdestruct.lo
+libmiscactions_la_OBJECTS = $(am_libmiscactions_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -60,8 +75,13 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libactions_la_SOURCES)
-DIST_SOURCES = $(libactions_la_SOURCES)
+SOURCES = $(libactions_la_SOURCES) $(libdirectunitactions_la_SOURCES) \
+	$(libfullgameactions_la_SOURCES) $(libmapactions_la_SOURCES) \
+	$(libmiscactions_la_SOURCES)
+DIST_SOURCES = $(libactions_la_SOURCES) \
+	$(libdirectunitactions_la_SOURCES) \
+	$(libfullgameactions_la_SOURCES) $(libmapactions_la_SOURCES) \
+	$(libmiscactions_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -222,11 +242,19 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ 
-noinst_LTLIBRARIES = libactions.la
-libactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp action.cpp context.cpp actionresult.cpp \
-                          consumeammo.cpp inflictunitdamage.cpp spawnobject.cpp destructunit.cpp
-
+noinst_LTLIBRARIES = libactions.la libdirectunitactions.la libmiscactions.la libmapactions.la libfullgameactions.la
+libactions_la_SOURCES = action.cpp context.cpp actionresult.cpp actioncontainer.cpp
 libactions_la_LIBADD = @SDL_LIBS@
+libdirectunitactions_la_SOURCES = consumeammo.cpp inflictunitdamage.cpp destructunit.cpp  \
+                          changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp
+
+libdirectunitactions_la_LIBADD = @SDL_LIBS@
+libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp 
+libmiscactions_la_LIBADD = @SDL_LIBS@
+libmapactions_la_SOURCES = spawnobject.cpp 
+libmapactions_la_LIBADD = @SDL_LIBS@
+libfullgameactions_la_SOURCES = vehicleattack.cpp
+libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
 
@@ -272,6 +300,14 @@ clean-noinstLTLIBRARIES:
 	done
 libactions.la: $(libactions_la_OBJECTS) $(libactions_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libactions_la_OBJECTS) $(libactions_la_LIBADD) $(LIBS)
+libdirectunitactions.la: $(libdirectunitactions_la_OBJECTS) $(libdirectunitactions_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libdirectunitactions_la_OBJECTS) $(libdirectunitactions_la_LIBADD) $(LIBS)
+libfullgameactions.la: $(libfullgameactions_la_OBJECTS) $(libfullgameactions_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libfullgameactions_la_OBJECTS) $(libfullgameactions_la_LIBADD) $(LIBS)
+libmapactions.la: $(libmapactions_la_OBJECTS) $(libmapactions_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libmapactions_la_OBJECTS) $(libmapactions_la_LIBADD) $(LIBS)
+libmiscactions.la: $(libmiscactions_la_OBJECTS) $(libmiscactions_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libmiscactions_la_OBJECTS) $(libmiscactions_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -280,15 +316,21 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/action.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actioncontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitmovement.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeammo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictunitdamage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/registerunitrftarget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selfdestruct.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitaction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicleattack.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

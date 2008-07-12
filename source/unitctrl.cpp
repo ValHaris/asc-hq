@@ -45,6 +45,8 @@
 
 #include "tasks/unitattack_generator.h"
 
+#include "actions/vehicleattack.h"
+
 
 PendingVehicleActions pendingVehicleActions;
 
@@ -1003,10 +1005,14 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 }
 
 
-bool VehicleAttack :: avail ( Vehicle* eht )
+bool VehicleAttack :: avail ( Vehicle* unit )
 {
-   UnitAttackGenerator unitAttackGenerator; 
-   return unitAttackGenerator.available( eht );
+   if ( unit )
+      if ( unit->attacked == false )
+         if ( unit->weapexist() )
+            if (unit->typ->wait == false  ||  !unit->hasMoved() )
+                  return true;
+   return false;
 }
 
 
@@ -1070,50 +1076,18 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
          status = -1;
          return status;
       }
-      tfight* battle = NULL;
-      switch ( atw->target ) {
-         case AttackWeap::vehicle: battle = new tunitattacksunit ( vehicle, getfield(x,y)->vehicle, 1, weapnum );
-            break;
-         case AttackWeap::building: battle = new tunitattacksbuilding ( vehicle, x, y , weapnum );
-            break;
-         case AttackWeap::object: battle = new tunitattacksobject ( vehicle, x, y, weapnum );
-            break;
-         default : status = -1;
-                   return status;
-      } /* endswitch */
+      
+      Context context;
+      context.gamemap = vehicle->getMap();
+      context.actingPlayer = &vehicle->getMap()->getPlayer( context.gamemap->actplayer );
+      context.parentAction = NULL;
+      context.display = mapDisplay;
+      context.viewingPlayer = context.gamemap->getPlayerView(); 
+      context.actionContainer = &context.gamemap->actions;
 
-      int ad1 = battle->av.damage;
-      int dd1 = battle->dv.damage;
-
-      int xp1 = vehicle->xpos;
-      int yp1 = vehicle->ypos;
-
-      int shown;
-      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->getPlayerView()) ) {
-         mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
-         mapDisplay->showBattle( *battle );
-         mapDisplay->removeActionCursor ( );
-         shown = 1;
-      } else {
-         battle->calc();
-         shown = 0;
-      }
-
-      int ad2 = battle->av.damage;
-      int dd2 = battle->dv.damage;
-
-      if ( !vehicle->typ->hasFunction( ContainerBaseType::MoveAfterAttack )) 
-         vehicle->setMovement ( 0 );
-
-      battle->setresult ();
-
-      logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
-
-      evaluateviewcalculation( actmap );
-
-      if ( mapDisplay && shown )
-         mapDisplay->displayMap();
-
+      GameAction* a = new VehicleAttackAction( vehicle->getMap(), vehicle->networkid, MapCoordinate(x,y),weapnum );
+      a->execute( context );
+      
 
       status = 1000;
   }

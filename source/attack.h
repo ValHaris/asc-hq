@@ -35,6 +35,7 @@
 #include "objects.h"
 #include "explosivemines.h"
 
+#include "actions/context.h"
 
 
 
@@ -107,7 +108,8 @@ class tfight : public AttackFormula
       void calc ( void ) ;
 
       //! Writes the result of the attack calculation to the actual units.
-      virtual void setresult ( void ) = 0;
+      virtual void setresult () = 0;
+      virtual void setresult( const Context& context ) = 0;
 
       virtual void visit ( FightVisitor& visitor ) = 0;
 
@@ -150,7 +152,8 @@ class tunitattacksunit : public UnitAttacksSomething
       */
       tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond = true, int weapon = -1, bool reactionfire = false );
       void setup ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
 
       void visit ( FightVisitor& visitor )
       {
@@ -187,7 +190,8 @@ class tunitattacksbuilding : public UnitAttacksSomething
       */
       tunitattacksbuilding ( Vehicle* attackingunit, int x, int y, int weapon = -1);
       void setup ( Vehicle* attackingunit, int x, int y, int weapon );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
 
       void visit ( FightVisitor& visitor )
       {
@@ -225,7 +229,8 @@ class tmineattacksunit : public tfight
       */
       tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
       void setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
 
       Mine* getFirstMine();
 
@@ -264,7 +269,9 @@ class tunitattacksobject : public UnitAttacksSomething
       */
       tunitattacksobject ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon = -1 );
       void setup ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
+      
       Object* getTarget()
       {
          return _obji;

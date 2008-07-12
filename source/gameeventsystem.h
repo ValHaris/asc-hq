@@ -33,6 +33,7 @@
 #include "util/factory.h"
 
 #include "mapdisplayinterface.h"
+#include "util/factorywithnames.h"
 
 class MapDisplayInterface;
 
@@ -161,46 +162,6 @@ class VariableLocker {
       ~VariableLocker() { var = false; };
 };
 
-
-template < class AbstractProduct, typename IdentifierType, typename ObjectCreatorCallBack = AbstractProduct*(*)(), typename NameType = ASCString >
-class FactoryWithNames : protected Factory<AbstractProduct, IdentifierType>
-{
-   private:
-      typedef std::map<NameType, IdentifierType> NameMap;
-      NameMap names;
-   public:
-      vector<NameType> getNames(){
-         vector<NameType> nameList;
-         
-         for ( typename NameMap::iterator i = names.begin(); i != names.end(); ++i )
-            nameList.push_back( i->first );
-         return nameList;
-      }
-
-      IdentifierType getID( const ASCString& name )
-      {
-         return names[name];
-      }
-
-      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, typename FactoryWithNames::ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, Loki::Functor<NameType, LOKI_TYPELIST_1(const IdentifierType&)> nameProvider )
-      {
-         return registerClass( id, createFn, nameProvider(id) );
-      }
-
-      bool registerClass( IdentifierType id, typename FactoryWithNames<AbstractProduct, IdentifierType, typename FactoryWithNames::ObjectCreatorCallBack, NameType>::ObjectCreatorCallBack createFn, NameType name )
-      {
-         if ( Factory<AbstractProduct, IdentifierType>::registerClass ( id, createFn )) {
-            names[name] = id;
-            return true;
-         } else
-            return false;
-      }
-
-      AbstractProduct* createObject( IdentifierType id ) {
-         return Factory<AbstractProduct, IdentifierType>::createObject( id );
-      }
-
-};
 
 typedef Loki::SingletonHolder< FactoryWithNames< EventTrigger, EventTriggerID > > eventTriggerFactory;
 typedef Loki::SingletonHolder< FactoryWithNames< EventAction , EventActionID  > > eventActionFactory;

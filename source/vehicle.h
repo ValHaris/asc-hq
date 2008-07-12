@@ -25,6 +25,7 @@
 
 class BuildingType;
 
+class Context;
 
 class UnitHooveringLogic {
    //! the percentage of fuel that is required for a flying plane just hoovering in the air (unit: percentage)
@@ -290,6 +291,7 @@ class UnitHooveringLogic {
     bool getGeneratorStatus () const { return generatoractive; };
 
     //! callback that is called after the unit has attacked
+    void postAttack( bool reactionFire, const Context& context );
     void postAttack( bool reactionFire );
 
     /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)

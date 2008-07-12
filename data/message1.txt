@@ -66,6 +66,8 @@ No weapons to attack with
 This unit cannot attack after it has moved
 216
 This unit cannot do reaction fire.
+217
+Invalid target
 301
 No place to construct building
 302
@@ -198,11 +200,21 @@ Maximum weight of a single unit that can be loaded $/$ maximum weight of all loa
 Unit not found on map
 21002
 Invalid field coordinates
+21003
+Invalid invocation order
 21100
 Not enough Ammo
 21101
 Ammo doesn't fit into storage
 21102
 Ammo mismatch
+21103
+Movement mismatch
 21201
 Damage mismatch
+21202
+Attack flag mismatch
+21203
+Invalid unit property
+21204
+Property of unit doesn't match

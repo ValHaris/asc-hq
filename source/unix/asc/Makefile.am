@@ -32,8 +32,12 @@ playercolor.cpp pg_mapdisplay.cpp
 asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki-0.1.6/libloki.la \
-$(top_builddir)/source/actions/libactions.la  $(top_builddir)/source/util/libutil.la  \
-$(top_builddir)/source/tasks/libtasks.la \
+$(top_builddir)/source/actions/libactions.la  \
+$(top_builddir)/source/actions/libdirectunitactions.la  \
+$(top_builddir)/source/actions/libfullgameactions.la  \
+$(top_builddir)/source/actions/libmapactions.la  \
+$(top_builddir)/source/actions/libmiscactions.la  \
+$(top_builddir)/source/util/libutil.la  $(top_builddir)/source/tasks/libtasks.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \

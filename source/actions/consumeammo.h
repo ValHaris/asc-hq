@@ -42,9 +42,9 @@ class ConsumeAmmo : public GameAction {
    protected:
       virtual GameActionID getID();
       
-      virtual ActionResult runAction( Context& context );
-      virtual ActionResult undoAction( Context& context );
-      virtual ActionResult verify();
+      virtual ActionResult runAction( const Context& context );
+      virtual ActionResult undoAction( const Context& context );
+      virtual ActionResult postCheck();
       
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream );

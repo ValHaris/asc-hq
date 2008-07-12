@@ -34,6 +34,10 @@
 #include "attack.h"
 #include "spfst.h"
 
+#include "actions/changeunitproperty.h"
+#include "actions/consumeammo.h"
+#include "actions/registerunitrftarget.h"
+#include "actions/inflictunitdamage.h"
 
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
@@ -397,6 +401,48 @@ void tunitattacksunit :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
+void tunitattacksunit :: setresult( const Context& context )
+{
+   int nwid = _attackingunit->networkid;
+   int nwid_targ = _attackedunit->networkid;
+   GameMap* map = _attackingunit->getMap();
+   
+   GameAction* a = new ChangeUnitProperty( map, nwid, ChangeUnitProperty::Experience, av.experience );
+   a->execute ( context );
+   
+   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   b->execute ( context );
+   
+   _attackingunit->postAttack( reactionfire, context );
+   
+   GameAction* c = new RegisterUnitRFTarget( map, nwid, av.weapnum, _attackedunit->networkid  );
+   c->execute ( context );
+   
+   if ( _respond ) {
+      GameAction* d = new ChangeUnitProperty( map, nwid_targ, ChangeUnitProperty::Experience, dv.experience );
+      d->execute ( context );
+      
+      GameAction* e = new ConsumeAmmo( map, nwid_targ, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackingunit->ammo[ av.weapnum ] - dv.weapcount );
+      e->execute ( context );
+   }
+   
+   GameAction* f = new InflictUnitDamage( map, nwid, av.damage - _attackingunit->damage );
+   f->execute ( context );
+
+   GameAction* g = new InflictUnitDamage( map, nwid_targ, dv.damage - _attackedunit->damage  );
+   g->execute ( context );
+   
+   
+   /* If the attacking vehicle was destroyed, remove it */
+   if ( av.damage >= 100 ) {
+     *_pattackingunit = NULL;
+   }
+
+   /* If the attacked vehicle was destroyed, remove it */
+   if ( dv.damage >= 100 ) {
+     *_pattackedunit = NULL;
+   }
+}
 
 
 
@@ -514,6 +560,11 @@ void tunitattacksbuilding :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
+void tunitattacksbuilding :: setresult( const Context& context )
+{
+   
+}
+
 
 
 tmineattacksunit :: tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
@@ -609,6 +660,11 @@ void tmineattacksunit :: setresult ( void )
      *_pattackedunit = NULL;
    }
 
+}
+
+void tmineattacksunit :: setresult( const Context& context )
+{
+   
 }
 
 
@@ -734,6 +790,10 @@ void tunitattacksobject :: setresult ( void )
 
 }
 
+void tunitattacksobject :: setresult( const Context& context )
+{
+   
+}
 
 
 

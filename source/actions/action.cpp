@@ -23,29 +23,33 @@
 
 #include "../vehicle.h"
 #include "action-registry.h"
-
+#include "actioncontainer.h"
 
 void GameAction::addChild( GameAction* action )
 {
    children.push_back ( action );
 }
       
-ActionResult GameAction::execute( Context& context ) 
+ActionResult GameAction::execute( const Context& context ) 
 {
    if ( context.parentAction ) 
       context.parentAction->addChild( this );
    
    Context c ( context, this );
    
-   return runAction( c );
+   ActionResult result = runAction( c );
+   if ( context.actionContainer && result.successful() )
+      context.actionContainer->add( this );
+      
+   return result;
 }
 
-void GameAction::redo()
+void GameAction::redo( const Context& context )
 {
    
 }
 
-void GameAction::undo( Context& context ) 
+void GameAction::undo( const Context& context ) 
 {
    for ( Children::iterator i = children.begin(); i != children.end(); ++i )
       (*i)->undo( context );

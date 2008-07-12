@@ -28,7 +28,7 @@ ActionResult::ActionResult( int code )
    this->code = code;  
 }
 
-ActionResult::ActionResult( int code, ASCString message )
+ActionResult::ActionResult( int code, const ASCString& message )
 {
    this->code = code;
    userMessage = message;  
@@ -39,6 +39,13 @@ ActionResult::ActionResult( int code, const Vehicle* veh )
    this->code = code;
    userMessage = "Unit is " + veh->getName() + " (ID: " + ASCString::toString(code) + ")";  
 }
+
+ActionResult::ActionResult( int code, const Vehicle* veh, const ASCString& message )
+{
+   this->code = code;
+   userMessage = "Unit is " + veh->getName() + " (ID: " + ASCString::toString(code) + ")\n" + message;  
+}
+
 
 ActionResult::ActionResult( int code, const MapCoordinate& pos)
 {

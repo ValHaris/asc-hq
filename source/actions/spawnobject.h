@@ -41,8 +41,8 @@ class SpawnObject : public GameAction {
    protected:
       virtual GameActionID getID();
       
-      virtual ActionResult runAction( Context& context );
-      virtual ActionResult undoAction( Context& context );
+      virtual ActionResult runAction( const Context& context );
+      virtual ActionResult undoAction( const Context& context );
       virtual ActionResult verify();
       
       virtual void readData ( tnstream& stream );

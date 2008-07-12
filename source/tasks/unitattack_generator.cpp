@@ -46,6 +46,6 @@ ASCString UnitAttackGenerator::getID()
 
 Task* UnitAttackGenerator::generate( Vehicle* unit, const MapCoordinate& target )
 {
-   return new UnitAttack ( unit, target, false );
+   return new UnitAttack ( unit );
 }
 

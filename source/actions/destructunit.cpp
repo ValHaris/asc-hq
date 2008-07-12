@@ -69,7 +69,7 @@ GameActionID DestructUnit::getID()
    return ActionRegistry::DestructUnit;
 }
 
-ActionResult DestructUnit::runAction( Context& context )
+ActionResult DestructUnit::runAction( const Context& context )
 {
    Vehicle* veh = getMap()->getUnit(unitID);
    if ( !veh )
@@ -97,7 +97,7 @@ ActionResult DestructUnit::runAction( Context& context )
 }
 
 
-ActionResult DestructUnit::undoAction( Context& context )
+ActionResult DestructUnit::undoAction( const Context& context )
 {
    tmemorystream memstream( unitBuffer, tnstream::reading );
    Vehicle* veh = Vehicle::newFromStream( getMap(), memstream );
@@ -106,10 +106,4 @@ ActionResult DestructUnit::undoAction( Context& context )
    
    return ActionResult(0);
 }
-
-ActionResult DestructUnit::verify()
-{
-   return ActionResult(0);
-}
-
 

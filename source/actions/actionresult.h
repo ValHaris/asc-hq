@@ -34,8 +34,9 @@ class ActionResult {
       ASCString userMessage;
    public:
       ActionResult( int code );
-      ActionResult( int code, ASCString message );
+      ActionResult( int code, const ASCString& message );
       ActionResult( int code, const Vehicle* veh );
+      ActionResult( int code, const Vehicle* veh, const ASCString& message );
       ActionResult( int code, const MapCoordinate& pos );
       bool successful();
       ASCString getMessage() const;

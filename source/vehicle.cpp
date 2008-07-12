@@ -30,6 +30,10 @@
 #include "itemrepository.h"
 #include "graphics/blitter.h"
 
+#include "actions/context.h"
+#include "actions/changeunitmovement.h"
+#include "actions/changeunitproperty.h"
+
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
                                                                          0.5, 0,  1 };
@@ -987,6 +991,24 @@ void Vehicle :: removeview ()
    viewOnMap = false;
 }
 
+
+void Vehicle :: postAttack( bool reactionFire, const Context& context )
+{
+   if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) ) {
+      GameAction* a = new ChangeUnitMovement( getMap(), networkid, maxMovement() * attackmovecost / 100, true );
+      a->execute( context );
+   } else
+      if ( reactionfire.getStatus() == ReactionFire::off ) {
+         GameAction* a = new ChangeUnitMovement( getMap(), networkid, 0 );
+         a->execute( context );
+      }
+      
+   if ( !reactionFire ) {
+      GameAction* a = new ChangeUnitProperty( getMap(), networkid, ChangeUnitProperty::AttackedFlag, 1 );
+      a->execute( context );
+   }
+      
+}
 
 void Vehicle :: postAttack( bool reactionFire )
 {

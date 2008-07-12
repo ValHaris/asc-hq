@@ -55,9 +55,10 @@ class GameAction {
       //! adds a child action. Ownership of the child action is passed to THIS
       void addChild( GameAction* action );
       
-      virtual ActionResult runAction( Context& context ) = 0;
-      virtual ActionResult undoAction( Context& context ) = 0;
-      virtual ActionResult verify() = 0;
+      virtual ActionResult runAction( const Context& context ) = 0;
+      virtual ActionResult undoAction( const Context& context ) = 0;
+      virtual ActionResult preCheck()  {return ActionResult(0);};
+      virtual ActionResult postCheck() {return ActionResult(0);};
       
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) = 0;
@@ -69,9 +70,9 @@ class GameAction {
       
       
    public:
-      ActionResult execute( Context& context );
-      void redo();
-      void undo( Context& context );
+      ActionResult execute( const Context& context );
+      void redo( const Context& context );
+      void undo( const Context& context );
       
       void read ( tnstream& stream );
       void write ( tnstream& stream );

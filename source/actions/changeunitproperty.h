@@ -19,20 +19,32 @@
 */
 
 
-#ifndef destructUnitH
-#define destructUnitH
+#ifndef changeUnitPropertyH
+#define changeUnitPropertyH
 
 
-#include "action.h"
+#include "unitaction.h"
 #include "action-registry.h"
 
-#include "../typen.h"
 
-class DestructUnit : public GameAction {
-      int unitID;
-      tmemorystreambuf* unitBuffer;
+class ChangeUnitProperty : public UnitAction {
    public:
-      DestructUnit( GameMap* gamemap, int unitID );
+      enum Property { Experience, Movement, AttackedFlag };
+   private:
+     
+      static ASCString getPropertyName( Property property );
+      int getUnitProperty();
+      void setUnitProperty( int value );
+      
+      Property property;
+      
+      bool valueIsAbsolute;
+      int value;
+      
+      int originalValue;
+      int resultingValue;
+   public:
+      ChangeUnitProperty( GameMap* gamemap, int vehicleID, Property property, int value, bool valueIsAbsolute = true );
       
       ASCString getDescription() const;
       
@@ -41,6 +53,8 @@ class DestructUnit : public GameAction {
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
+      virtual ActionResult preCheck();
+      virtual ActionResult postCheck();
       
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream );
