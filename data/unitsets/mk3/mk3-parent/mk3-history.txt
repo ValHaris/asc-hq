@@ -3,6 +3,9 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 3-07/08
+-InfoImage = Wachturm, ICSE, Gepard, ss74, PZH2000, Guideline, Scud, Tiger(WW2), MRLS, Wiesel, K5, Dora, ICCE
+__________________
 06.07.2008 (GAMER)
 InfoImage = Seals, Bulldozer, Bradley, Leopard1, Elch, Leopard3, P1000
 InfoImage = Dumper, Tomcat, Gaskin, longtrack, Patton, Spaelab, USSL, Buffalo, LR5, Pomornik, TAK, victoria, 

@@ -4,8 +4,9 @@ VehicleType {
    ID = 592
    
    Description = Infiltrator Squad
-   Infotext = []
+   Infotext = [InfoImage = Wikipedia]
    picture = mk3v_wiesel.png
+   InfoImage = mk3v_wiesel.jpg
    WreckageObject = 406
    GuideSortHelp = 503 504 552 0 3 0 0 0 0 0
    

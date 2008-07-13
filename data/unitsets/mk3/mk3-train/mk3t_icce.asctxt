@@ -4,8 +4,9 @@ VehicleType {
    ID = 570
 
    Description = inter city cargo express
-   Infotext = []
-   picture = MK3t_icce.png
+   Infotext = [InfoImage = Wikipedia]
+   picture = mk3t_icce.png
+   InfoImage = mk3t_icce.jpg
    GuideSortHelp = 550 551 0 0 3 0 0 0 0 0
 
    Armor -= 50

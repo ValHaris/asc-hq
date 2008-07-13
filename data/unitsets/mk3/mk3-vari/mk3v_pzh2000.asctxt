@@ -4,8 +4,9 @@ VehicleType {
    parent = 252
 
    Description = heavy artillery
-   Infotext = []
-   Picture = mk3v_PzH2000.png
+   Infotext = [InfoImage = Wikipedia]
+   Picture = mk3v_pzh2000.png
+   InfoImage = mk3v_pzh2000.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor += 20

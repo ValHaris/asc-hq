@@ -4,7 +4,7 @@ VehicleType {
    parent = 242
    Description = radar vehicle
    Picture = mk3v_longtrack.png
-   InfoImage = mk3v_longtrack.png
+   InfoImage = mk3v_longtrack.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

@@ -3,7 +3,9 @@ VehicleType {
    ID = 595
    parent = 290
 
+   InfoText = [InfoImage = Wikipedia]
    Picture = MK3v_tiger.png
+   InfoImage = mk3v_tiger.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

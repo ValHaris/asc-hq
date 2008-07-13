@@ -4,8 +4,10 @@ VehicleType {
    ID = 572
 
    Description = Verteidigungsturm
-   Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Flackgeschütz.]
-   picture = MK3b_wachturm.png
+   Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Flackgeschütz.
+   InfoImage = Wikipedia]
+   picture = mk3b_wachturm.png
+   InfoImage = mk3b.wachturm.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Features += ManualSelfDestruct

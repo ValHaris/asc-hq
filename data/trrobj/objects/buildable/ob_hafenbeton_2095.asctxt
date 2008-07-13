@@ -3,12 +3,15 @@ ObjectType {
    parent = 500
    Weather = dry much_snow 
    Name = Beton 
+   TechAdapterRequired = o2095
 
    LinkableObjects = 2094
    LinkableTerrain = 10
    NetBehaviour = NetToSelf AutoBorder NetToBorder
-   TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water  
+   TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water shallow_water
+   TerrainAccess.terrain_not = harbour forest 
 
+   Armor = 2500
    ConstructionCost { 
       Energy = 0
       Material = 6000

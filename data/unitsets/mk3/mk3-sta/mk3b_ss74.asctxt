@@ -3,8 +3,9 @@ VehicleType {
    ID = 625
    parent = 322
    Description = lr surface defence system
-   Infotext = []
-   picture = MK3b_SS74.png
+   Infotext = [InfoImage = Wikipedia]
+   picture = mk3b_ss74.png
+   InfoImage = mk3b_ss74.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 100

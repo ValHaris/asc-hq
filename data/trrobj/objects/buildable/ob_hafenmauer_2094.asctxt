@@ -3,12 +3,15 @@ ObjectType {
    parent = 524
    Weather = dry much_snow 
    Name = Beton 
+   TechAdapterRequired = o2094
 
    LinkableObjects = 2095
    LinkableTerrain = 10
    NetBehaviour = 
    TerrainAccess.terrain_any = Very_shallow_water shallow_water water river  
 
+   
+  Armor = 1500
    ConstructionCost { 
       Energy = 0
       Material = 3000

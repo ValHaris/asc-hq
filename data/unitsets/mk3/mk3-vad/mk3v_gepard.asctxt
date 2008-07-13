@@ -3,8 +3,10 @@ VehicleType {
    ID = 533
    parent = 218
    Description = anti aircraft tank
-   Infotext = [Air defense cannon tank Gepard]
-   Picture = Mk3v_gepard.png
+   Infotext = [Air defense cannon tank Gepard
+   InfoImage = Wikipedia]
+   Picture = mk3v_gepard.png
+   InfoImage = mk3v_gepard.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Armor -= 20

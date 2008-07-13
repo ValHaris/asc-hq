@@ -3,8 +3,11 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
 
+________________
+Beta 3-07/08
+-Hafenbeton/-mauer zerstörbar, nur noch per separatem Adapter baubar
 __________________
-06.07.08 (GAMER
+06.07.08 (GAMER)
 -small railraod, lifetime 60
 -Wald, wird über Runway zerstört.
 -kleine Anpassungen bei Objektzerstörung durch andere Objekte
