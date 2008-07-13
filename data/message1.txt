@@ -218,3 +218,11 @@ Attack flag mismatch
 Invalid unit property
 21204
 Property of unit doesn't match
+21205
+This operation is not allowed
+21206
+Unit position mismatch
+21301
+The unit is not standing on this field
+21302
+The unit was not in this carrier

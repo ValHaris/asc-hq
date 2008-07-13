@@ -19,29 +19,25 @@
 */
 
 
-#ifndef actionResultH
-#define actionResultH
+#ifndef ContainerActionH
+#define ContainerActionH
 
 
-#include "../ascstring.h"
+#include "action.h"
+#include "action-registry.h"
 
-class ContainerBase;
-class GameMap;
-class MapCoordinate;
+#include "../containerbase.h"
 
-class ActionResult {
-      int code;
-      ASCString userMessage;
+class ContainerAction : public GameAction {
+      int containerID;
+   protected:
+      ContainerBase* getContainer( bool dontThrow = false );
+      const ContainerBase* getContainer( bool dontThrow = false ) const ;
+      void readData ( tnstream& stream );
+      void writeData ( tnstream& stream );
    public:
-      ActionResult( int code );
-      ActionResult( int code, const ASCString& message );
-      ActionResult( int code, const ContainerBase* veh );
-      ActionResult( int code, const ContainerBase* veh, const ASCString& message );
-      ActionResult( int code, const MapCoordinate& pos );
-      bool successful();
-      ASCString getMessage() const;
+      ContainerAction( ContainerBase* container );
 };
-
 
 #endif
 

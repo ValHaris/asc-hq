@@ -90,6 +90,7 @@ class UnitHooveringLogic {
 
     //! the the unit and all cargo to #attacked = true
     void setAttacked();
+    void setAttacked( const Context& context );
 
     //! the current level of height ( BITMAPPED ! )
     int          height;
@@ -191,7 +192,7 @@ class UnitHooveringLogic {
     /** add the objects like tracks or broken ice
         \returns true if any objects were created
     */
-    bool spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
+    bool spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest, const Context& context );
 
     //! @name Resource related functions
     //@{

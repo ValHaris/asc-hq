@@ -338,6 +338,9 @@ void ContainerBase :: clearCargo()
 
 void ContainerBase :: addToCargo( Vehicle* veh )
 {
+   if ( veh == this )
+      fatalError ("Trying to add unit to its own cargo");
+   
    for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( ! (*i) ) {
          *i = veh;

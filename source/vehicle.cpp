@@ -33,6 +33,7 @@
 #include "actions/context.h"
 #include "actions/changeunitmovement.h"
 #include "actions/changeunitproperty.h"
+#include "actions/spawnobject.h"
 
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
@@ -574,7 +575,7 @@ bool Vehicle :: canMove ( void ) const
    return false;
 }
 
-bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
+bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest, const Context& context )
 {
    if ( start == dest )
       return false;
@@ -590,9 +591,11 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
       for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
          for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
             ObjectType* object = objectTypeRepository.getObject_byID( id );
-            if ( object ) 
-               if ( startField->addobject ( object, 1 << dir ))
+            if ( object ) {
+               (new SpawnObject( getMap(), start, id, 1 << dir ))->execute( context );
+               if ( startField->checkforobject ( object ))
                   result = true;
+            }
          }
            
       dir = (dir + sidenum/2) % sidenum;
@@ -600,9 +603,11 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
       for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
          for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
             ObjectType* object = objectTypeRepository.getObject_byID( id );
-            if ( object ) 
-               if ( destField->addobject ( object, 1 << dir ))
+            if ( object ) {
+               (new SpawnObject( getMap(), dest, id, 1 << dir ))->execute( context );
+               if ( startField->checkforobject ( object ))
                   result = true;
+            }
          }
    }
    
@@ -1004,7 +1009,7 @@ void Vehicle :: postAttack( bool reactionFire, const Context& context )
       }
       
    if ( !reactionFire ) {
-      GameAction* a = new ChangeUnitProperty( getMap(), networkid, ChangeUnitProperty::AttackedFlag, 1 );
+      GameAction* a = new ChangeUnitProperty( this, ChangeUnitProperty::AttackedFlag, 1 );
       a->execute( context );
    }
       
@@ -1030,6 +1035,17 @@ void Vehicle::setAttacked()
       if ( *i ) 
          (*i)->setAttacked();
 }
+
+void Vehicle::setAttacked( const Context& context )
+{
+   GameAction* a = new ChangeUnitProperty( this, ChangeUnitProperty::AttackedFlag, 1 );
+   a->execute( context );
+   
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setAttacked( context );
+}
+
 
 
 class tsearchforminablefields: public SearchFields {

@@ -34,13 +34,13 @@ ActionResult::ActionResult( int code, const ASCString& message )
    userMessage = message;  
 }
 
-ActionResult::ActionResult( int code, const Vehicle* veh )
+ActionResult::ActionResult( int code, const ContainerBase* veh )
 {
    this->code = code;
    userMessage = "Unit is " + veh->getName() + " (ID: " + ASCString::toString(code) + ")";  
 }
 
-ActionResult::ActionResult( int code, const Vehicle* veh, const ASCString& message )
+ActionResult::ActionResult( int code, const ContainerBase* veh, const ASCString& message )
 {
    this->code = code;
    userMessage = "Unit is " + veh->getName() + " (ID: " + ASCString::toString(code) + ")\n" + message;  
@@ -61,7 +61,7 @@ bool ActionResult::successful()
 
 ASCString ActionResult::getMessage() const
 {
-   return "";
+   return "Code is " + ASCString::toString(0) + " : " + userMessage;
 }
 
 

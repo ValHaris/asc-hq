@@ -52,6 +52,7 @@
 #include "video/videorecorder.h"
 #include "iconrepository.h"
 #include "dialogs/replayrecorder.h"
+#include "sg.h"
 
 trunreplay runreplay;
 
@@ -2433,7 +2434,9 @@ void trunreplay :: execnextreplaymove ( void )
                if ( jd.available( veh )) {
                   displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
                   ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
-                  if ( !jd.jump(veh, MapCoordinate(x,y), &rmd ))
+                  Context context = createContext( actmap );
+                  context.display = &rmd;
+                  if ( !jd.jump(veh, MapCoordinate(x,y), context ))
                      error(MapCoordinate(x,y), "Unit cannot jump to this position");
                   
                } else

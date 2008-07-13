@@ -19,22 +19,22 @@
 */
 
 
-#ifndef changeUnitPropertyH
-#define changeUnitPropertyH
+#ifndef ChangeContainerPropertyH
+#define ChangeContainerPropertyH
 
 
-#include "unitaction.h"
+#include "containeraction.h"
 #include "action-registry.h"
 
 
-class ChangeUnitProperty : public UnitAction {
+class ChangeContainerProperty : public ContainerAction {
    public:
-      enum Property { Experience, Movement, AttackedFlag, Height, Direction };
+      enum Property { Owner };
    private:
      
       static ASCString getPropertyName( Property property );
       int getUnitProperty();
-      void setUnitProperty( Property property, int value, const Context& context);
+      void setUnitProperty( int value, const Context& context);
       
       Property property;
       
@@ -44,7 +44,7 @@ class ChangeUnitProperty : public UnitAction {
       int originalValue;
       int resultingValue;
    public:
-      ChangeUnitProperty( Vehicle* vehicle, Property property, int value, bool valueIsAbsolute = true );
+      ChangeContainerProperty( ContainerBase* container, Property property, int value, bool valueIsAbsolute = true );
       
       ASCString getDescription() const;
       

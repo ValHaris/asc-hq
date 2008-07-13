@@ -19,29 +19,34 @@
 */
 
 
-#ifndef actionResultH
-#define actionResultH
+#ifndef MoveUnitH
+#define MoveUnitH
 
 
-#include "../ascstring.h"
+#include "unitaction.h"
+#include "../astar2.h"
 
-class ContainerBase;
-class GameMap;
-class MapCoordinate;
-
-class ActionResult {
-      int code;
-      ASCString userMessage;
+class MoveUnit : public UnitAction {
+      AStar3D::Path pathToMove;
+      bool dontInterrupt;
+   
    public:
-      ActionResult( int code );
-      ActionResult( int code, const ASCString& message );
-      ActionResult( int code, const ContainerBase* veh );
-      ActionResult( int code, const ContainerBase* veh, const ASCString& message );
-      ActionResult( int code, const MapCoordinate& pos );
-      bool successful();
-      ASCString getMessage() const;
+      MoveUnit( Vehicle* veh, AStar3D::Path& pathToMove, bool dontInterrupt = false );
+      
+      ASCString getDescription() const;
+      
+   protected:
+      virtual GameActionID getID();
+      
+      virtual ActionResult runAction( const Context& context );
+      virtual ActionResult undoAction( const Context& context );
+      virtual ActionResult preCheck();
+      virtual ActionResult postCheck();
+      
+      virtual void readData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream );
+      
 };
-
 
 #endif
 

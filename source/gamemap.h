@@ -393,6 +393,7 @@ public:
       Vehicle* getUnit ( int nwid, bool consistencyCheck = true );
       const Vehicle* getUnit ( int nwid, bool consistencyCheck = true ) const;
       ContainerBase* getContainer ( int nwid );
+      const ContainerBase* getContainer ( int nwid ) const;
       int  getgameparameter ( GameParameter num ) const;
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );

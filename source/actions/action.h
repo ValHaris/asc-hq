@@ -48,9 +48,11 @@ class GameAction {
       
       GameAction() {};
       
+      int ID;
+      
    protected:
       
-      GameAction( GameMap* map ) : gamemap(map), done(false){};
+      GameAction( GameMap* map );
       
       //! adds a child action. Ownership of the child action is passed to THIS
       void addChild( GameAction* action );

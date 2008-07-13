@@ -19,34 +19,29 @@
 */
 
 
-#ifndef changeUnitPropertyH
-#define changeUnitPropertyH
+#ifndef UnitFieldRegistrationH
+#define UnitFieldRegistrationH
 
 
 #include "unitaction.h"
-#include "action-registry.h"
 
 
-class ChangeUnitProperty : public UnitAction {
+class UnitFieldRegistration : public UnitAction {
    public:
-      enum Property { Experience, Movement, AttackedFlag, Height, Direction };
-   private:
-     
-      static ASCString getPropertyName( Property property );
-      int getUnitProperty();
-      void setUnitProperty( Property property, int value, const Context& context);
+      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D };
       
-      Property property;
-      
-      bool valueIsAbsolute;
-      int value;
-      
-      int originalValue;
-      int resultingValue;
-   public:
-      ChangeUnitProperty( Vehicle* vehicle, Property property, int value, bool valueIsAbsolute = true );
+      UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation, bool evalView = false );
       
       ASCString getDescription() const;
+   private:
+      Operation operation;
+      MapCoordinate3D position;
+      bool evalView;
+      
+      int resultingViewChanges;
+      MapCoordinate3D previousPosition;
+      
+      ASCString getOpName() const;
       
    protected:
       virtual GameActionID getID();

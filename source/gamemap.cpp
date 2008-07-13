@@ -1160,6 +1160,21 @@ ContainerBase* GameMap::getContainer ( int nwid )
    }
 }
 
+const ContainerBase* GameMap::getContainer ( int nwid ) const 
+{
+   if ( nwid > 0 )
+      return getUnit(nwid);
+   else {
+      int x = (-nwid) & 0xffff;
+      int y = (-nwid) >> 16;
+      tfield* fld = getfield(x,y);
+      if ( !fld )
+         return NULL;
+
+      return fld->building;
+   }
+}
+
 
 
 void GameMap::beginTurn()

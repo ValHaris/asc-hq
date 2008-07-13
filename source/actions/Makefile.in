@@ -45,16 +45,19 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libactions_la_DEPENDENCIES =
 am_libactions_la_OBJECTS = action.lo context.lo actionresult.lo \
-	actioncontainer.lo
+	actioncontainer.lo containeraction.lo
 libactions_la_OBJECTS = $(am_libactions_la_OBJECTS)
 libdirectunitactions_la_DEPENDENCIES =
 am_libdirectunitactions_la_OBJECTS = consumeammo.lo \
 	inflictunitdamage.lo destructunit.lo changeunitmovement.lo \
-	unitaction.lo changeunitproperty.lo registerunitrftarget.lo
+	unitaction.lo changeunitproperty.lo registerunitrftarget.lo \
+	containeraction.lo changecontainerproperty.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libfullgameactions_la_DEPENDENCIES =
-am_libfullgameactions_la_OBJECTS = vehicleattack.lo
+am_libfullgameactions_la_OBJECTS = containeraction.lo \
+	consumeresource.lo unitfieldregistration.lo vehicleattack.lo \
+	moveunit.lo
 libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo
@@ -243,17 +246,18 @@ top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ 
 noinst_LTLIBRARIES = libactions.la libdirectunitactions.la libmiscactions.la libmapactions.la libfullgameactions.la
-libactions_la_SOURCES = action.cpp context.cpp actionresult.cpp actioncontainer.cpp
+libactions_la_SOURCES = action.cpp context.cpp actionresult.cpp actioncontainer.cpp containeraction.cpp
 libactions_la_LIBADD = @SDL_LIBS@
-libdirectunitactions_la_SOURCES = consumeammo.cpp inflictunitdamage.cpp destructunit.cpp  \
-                          changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp
+libdirectunitactions_la_SOURCES = consumeammo.cpp inflictunitdamage.cpp destructunit.cpp   \
+                          changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp \
+                          containeraction.cpp changecontainerproperty.cpp 
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp 
 libmiscactions_la_LIBADD = @SDL_LIBS@
 libmapactions_la_SOURCES = spawnobject.cpp 
 libmapactions_la_LIBADD = @SDL_LIBS@
-libfullgameactions_la_SOURCES = vehicleattack.cpp
+libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp 
 libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -318,18 +322,23 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/action.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actioncontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitmovement.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeammo.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeresource.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containeraction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictunitdamage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/registerunitrftarget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selfdestruct.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitaction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitfieldregistration.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicleattack.Plo@am__quote@
 
 .cpp.o:

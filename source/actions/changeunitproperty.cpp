@@ -24,8 +24,8 @@
 #include "../vehicle.h"
 #include "../gamemap.h"
      
-ChangeUnitProperty::ChangeUnitProperty( GameMap* gamemap, int vehicleID, Property property, int value, bool valueIsAbsolute )
-   : UnitAction( gamemap, vehicleID ), originalValue(-1), resultingValue(-1)
+ChangeUnitProperty::ChangeUnitProperty( Vehicle* vehicle, Property property, int value, bool valueIsAbsolute )
+   : UnitAction( vehicle->getMap(), vehicle->networkid ), originalValue(-1), resultingValue(-1)
 {
    this->property = property;
    this->value = value;
@@ -38,6 +38,8 @@ ASCString ChangeUnitProperty::getPropertyName( Property property )
       case Experience: return "Experience";
       case Movement: return "Movement";
       case AttackedFlag: return "AttackedFlag";
+      case Height: return "Height";
+      case Direction: return "Direction";
    };
    return "";
 }
@@ -96,11 +98,13 @@ int ChangeUnitProperty::getUnitProperty()
       case Experience: return getUnit()->experience;
       case Movement:   return getUnit()->getMovement( false, false );
       case AttackedFlag: return getUnit()->attacked;
+      case Height: return getUnit()->height;
+      case Direction: return getUnit()->direction;
    };
    throw ActionResult(21203, getUnit() );
 }
 
-void ChangeUnitProperty::setUnitProperty( int value )
+void ChangeUnitProperty::setUnitProperty( Property property, int value, const Context& context )
 {
    switch ( property ) {
       case Experience: 
@@ -111,6 +115,12 @@ void ChangeUnitProperty::setUnitProperty( int value )
          break;
       case AttackedFlag: 
          getUnit()->attacked = (value != 0) ;
+         break;
+      case Height:
+         getUnit()->height = value;
+         break;
+      case Direction:
+         getUnit()->direction = value;
          break;
       default:
          throw ActionResult(21203, getUnit() );
@@ -123,9 +133,9 @@ ActionResult ChangeUnitProperty::runAction( const Context& context )
    originalValue = getUnitProperty();
    
    if ( !valueIsAbsolute )
-      setUnitProperty( originalValue + value );
+      setUnitProperty( property, originalValue + value, context );
    else
-      setUnitProperty( value );
+      setUnitProperty( property, value, context );
    
    resultingValue = getUnitProperty();
    return ActionResult(0);
@@ -134,7 +144,8 @@ ActionResult ChangeUnitProperty::runAction( const Context& context )
 
 ActionResult ChangeUnitProperty::undoAction( const Context& context )
 {
-   setUnitProperty ( originalValue );
+   setUnitProperty ( property, originalValue, context );
+   
    return ActionResult(0);
 }
 

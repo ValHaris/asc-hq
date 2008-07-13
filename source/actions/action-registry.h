@@ -32,7 +32,11 @@ namespace ActionRegistry {
                   ChangeUnitMovement,
                   ChangeUnitAttackFlag,
                   ChangeUnitProperty,
-                  RegisterUnitRFTarget
+                  RegisterUnitRFTarget,
+                  MoveUnit,
+                  UnitFieldRegistration,
+                  ConsumeResource,
+                  ChangeContainerProperty
       
    };
 };

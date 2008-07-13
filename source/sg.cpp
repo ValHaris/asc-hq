@@ -601,7 +601,7 @@ void helpAbout()
 }
 
 
-Context createContext( GameMap* gamemap = actmap )
+Context createContext( GameMap* gamemap )
 {
    Context context;
    
@@ -617,7 +617,8 @@ Context createContext( GameMap* gamemap = actmap )
 void undo()
 {
    if ( actmap ) {
-      actmap->actions.undo( createContext() );  
+      actmap->actions.undo( createContext( actmap ) );  
+      displaymap();
       mapChanged(actmap);
    }
 }
@@ -1667,6 +1668,8 @@ int main(int argc, char *argv[] )
 {
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
+   // putenv(const_cast<char*>("DISPLAY=192.168.0.21:0")) ;
+   
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
    // we should think about replacing clparser with libpopt

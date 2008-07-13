@@ -57,7 +57,7 @@ void treactionfirereplay :: init ( Vehicle* eht, const AStar3D::Path& fieldlist 
    }
 }
 
-int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md )
+int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context )
 {
    int attacks = 0;
 
@@ -79,7 +79,7 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
              int attackvisible = fieldvisiblenow ( fld ) || fieldvisiblenow ( targ );
 
 
-             if ( md && attackvisible ) {
+             if ( context.display && attackvisible ) {
              /*
                // cursor.setcolor ( 8 );
 
@@ -102,8 +102,8 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
              tunitattacksunit battle ( fld->vehicle, targ->vehicle, 1, rpli->wpnum );
              battle.av.damage = rpli->ad1;
              battle.dv.damage = rpli->dd1;
-             if ( md && attackvisible  )
-                md->showBattle( battle ); // .calcdisplay ( rpli->ad2, rpli->dd2 );
+             if ( context.display && attackvisible  )
+                context.display->showBattle( battle ); // .calcdisplay ( rpli->ad2, rpli->dd2 );
              else {
                 battle.calc ();
                 battle.av.damage = rpli->ad2;
@@ -296,7 +296,7 @@ void tsearchreactionfireingunits :: removeunit ( Vehicle* vehicle )
 }
 
 
-int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, MapDisplayInterface* md )
+int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, const Context& context )
 {
    tfield* fld = target->getMap()->getField( target->getPosition() );
    
@@ -320,12 +320,12 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                if ( num >= 0 ) {
 
                   int visibility = 0;
-                  if ( md ) {
+                  if ( context.display ) {
                      MessagingHub::Instance().statusInformation( "attacking with weapon " + ASCString::toString( atw->num[num] ));
 
                      if ( fieldvisiblenow ( getfield (attacker->xpos, attacker->ypos ), actmap->getPlayerView())) {
                         ++visibility;
-                        md->cursor_goto( attacker->getPosition() );
+                        context.display->cursor_goto( attacker->getPosition() );
                         int t = ticker;
                         while ( t + 15 > ticker )
                            releasetimeslice();
@@ -333,7 +333,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
 
                      if ( fieldvisiblenow ( fld, actmap->getPlayerView())) {
                         ++visibility;
-                        md->cursor_goto( target->getPosition() );
+                        context.display->cursor_goto( target->getPosition() );
                         int t = ticker;
                         while ( t + 15 > ticker )
                            releasetimeslice();
@@ -346,8 +346,8 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                   ad1 = battle.av.damage;
                   dd1 = battle.dv.damage;
 
-                  if ( md && visibility)
-                     md->showBattle( battle ); 
+                  if ( context.display && visibility)
+                     context.display->showBattle( battle ); 
                   else
                      battle.calc();
 
@@ -359,7 +359,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
                   else
                      result = 1;
 
-                  battle.setresult();
+                  battle.setresult( context );
 
                   updateFieldInfo();
                }
@@ -371,7 +371,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, M
 }
 
 
-int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Vehicle* &vehicle, MapDisplayInterface* md )
+int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Vehicle* &vehicle, const Context& context )
 {
 
    int attacks = 0;
@@ -393,7 +393,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
          while ( ul  &&  !result ) {
             punitlist next = ul->next;
             
-            int r = attack( ul->eht, vehicle, md );
+            int r = attack( ul->eht, vehicle, context );
             if ( r > 0 )
                ++attacks;
             
@@ -417,7 +417,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
 }
 
 
-int  tsearchreactionfireingunits :: finalCheck ( MapDisplayInterface* md, int currentPlayer )
+int  tsearchreactionfireingunits :: finalCheck ( int currentPlayer, const Context& context )
 {
    int destroyedUnits = 0;
    for ( int player = 0; player < actmap->getPlayerCount(); ++player ) {
@@ -440,7 +440,7 @@ int  tsearchreactionfireingunits :: finalCheck ( MapDisplayInterface* md, int cu
                for ( Player::VehicleList::iterator enemyUnit = actmap->getPlayer(player).vehicleList.begin(); enemyUnit != actmap->getPlayer(player).vehicleList.end() && !destroyed; ++enemyUnit) {
                   if ( (*enemyUnit)->reactionfire.canPerformAttack( exposedTarget )) {
                      if ( beeline( *enemyUnit, exposedTarget ) <= maxshootdist[ exposedTarget->getPosition().getNumericalHeight()]) {
-                        int r = attack( *enemyUnit, exposedTarget, md );
+                        int r = attack( *enemyUnit, exposedTarget, context );
                         if ( r > 1 ) { 
                            destroyed = true;
                            ++destroyedUnits;

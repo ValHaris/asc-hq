@@ -44,8 +44,6 @@
 #endif
 
 
-extern SigC::Signal0<void> fieldCrossed;
-
 
 template<class T>
 class FieldList {
@@ -137,7 +135,7 @@ class BaseVehicleMovement : public VehicleAction {
             protected:
                Vehicle* vehicle;
 
-               int moveunitxy ( AStar3D::Path& pathToMove, int noInterrupt = -1 );
+               int moveunitxy ( AStar3D::Path& pathToMove, const Context& context, int noInterrupt = -1 );
 
                class PathFinder : public AStar3D {
                  public:

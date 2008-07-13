@@ -713,6 +713,22 @@ template<typename C>
    }
 }
 
+template<typename C>
+      void readClassContainerStaticConstructor ( C& c, tnstream& stream  )
+{
+   int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
+      
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i ) {
+      typedef typename C::value_type VT;
+      c.push_back( VT::newFromStream( stream ) );
+   }
+}
+
+
 template<>
       inline void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )
 {

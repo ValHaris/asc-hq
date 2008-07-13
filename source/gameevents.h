@@ -30,7 +30,7 @@
 #include "gameeventsystem.h"
 #include "mappolygons.h"
 
-
+#include "actions/context.h"
 
 // The new event system here is not yet functional
 
@@ -364,7 +364,7 @@ class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, p
       virtual void writeData ( tnstream& stream );
       void setup();
       void arm();
-      void triggered();
+      void triggered(const Context& context);
       ASCString getTypeName() const;
       ASCString getDetailledName() const;
 
@@ -385,7 +385,7 @@ class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public
       virtual void writeData ( tnstream& stream );
       void setup();
       void arm();
-      void triggered();
+      void triggered(const Context& context );
       ASCString getTypeName() const;
       ASCString getDetailledName() const;
 

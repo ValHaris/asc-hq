@@ -941,3 +941,31 @@ int& AStar3D::getFieldAccess ( const MapCoordinate& mc )
 {
    return fieldAccess[mc.x + mc.y * actmap->xsize];
 }
+
+             
+void AStar3D::PathPoint::write( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   MapCoordinate::write( stream );
+   stream.writeInt( dist );
+   stream.writeInt( enterHeight );
+   stream.writeInt( hasAttacked );
+}
+
+void AStar3D::PathPoint::read( tnstream& stream )
+{
+   stream.readInt(); // version  
+   MapCoordinate::read ( stream );
+   dist = stream.readInt();
+   enterHeight = stream.readInt(),
+   hasAttacked = stream.readInt();
+}
+
+
+AStar3D::PathPoint AStar3D::PathPoint::newFromStream( tnstream& stream )
+{
+   PathPoint pp;
+   pp.read(stream);
+   return pp;  
+}
+

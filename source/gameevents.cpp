@@ -726,7 +726,7 @@ void SpecificUnitEntersPolygon::arm ()
    #endif
 }
 
-void SpecificUnitEntersPolygon::triggered()
+void SpecificUnitEntersPolygon::triggered( const Context& context )
 {
    if ( isFulfilled() )
       eventReady();
@@ -811,7 +811,7 @@ void AnyUnitEntersPolygon::arm()
    #endif
 }
 
-void AnyUnitEntersPolygon::triggered()
+void AnyUnitEntersPolygon::triggered(const Context& context )
 {
    if ( isFulfilled() )
       eventReady();

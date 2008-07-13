@@ -119,7 +119,7 @@ class Resources {
      void runTextIO ( PropertyContainer& pc );
      void runTextIO ( PropertyContainer& pc, const Resources& defaultValue );
      static const char* name( int r );
-     ASCString toString();
+     ASCString toString() const;
      
      static const int materialColor = 0xff0000; // 0x8b3d1e;
      static const int fuelColor = 0x00ff00; // 0x8b7800;

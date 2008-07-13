@@ -25,6 +25,14 @@
 #include "action-registry.h"
 #include "actioncontainer.h"
 
+GameAction::GameAction( GameMap* map )
+ : gamemap(map), done(false)
+{
+   static int counter = 0;
+   ID = ++counter;
+}
+ 
+
 void GameAction::addChild( GameAction* action )
 {
    children.push_back ( action );
@@ -37,11 +45,15 @@ ActionResult GameAction::execute( const Context& context )
    
    Context c ( context, this );
    
-   ActionResult result = runAction( c );
-   if ( context.actionContainer && result.successful() )
-      context.actionContainer->add( this );
-      
-   return result;
+   try {
+      displayLogMessage(0, "executing " + getDescription() + "\n");
+      ActionResult result = runAction( c );
+      if ( context.actionContainer && result.successful() && !context.parentAction)
+         context.actionContainer->add( this );
+      return result;
+   } catch ( ActionResult res ) {
+      return res;
+   }
 }
 
 void GameAction::redo( const Context& context )
@@ -51,8 +63,11 @@ void GameAction::redo( const Context& context )
 
 void GameAction::undo( const Context& context ) 
 {
-   for ( Children::iterator i = children.begin(); i != children.end(); ++i )
+   for ( Children::reverse_iterator i = children.rbegin(); i != children.rend(); ++i ) {
+      // displayLogMessage(0, "undoing #" + ASCString::toString((*i)->ID) + " (child) " + (*i)->getDescription() + "\n");
       (*i)->undo( context );
+   }
+   displayLogMessage(0, "undoing #" + ASCString::toString(ID) + " " + getDescription() + "\n");
    undoAction( context );
 }
 

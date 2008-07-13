@@ -49,6 +49,7 @@ SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 SigC::Signal0<void> viewChanged;
 SigC::Signal1<void,GameMap*> mapChanged;
 SigC::Signal0<bool> idleEvent;
+SigC::Signal1<void, const Context&> fieldCrossed;
 
 
 

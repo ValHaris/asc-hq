@@ -246,7 +246,7 @@ void Resources::runTextIO ( PropertyContainer& pc, const Resources& defaultValue
    pc.addInteger  ( "fuel", fuel, defaultValue.fuel );
 }
 
-ASCString Resources::toString()
+ASCString Resources::toString() const
 {
    ASCString s;
    int cnt = 0;

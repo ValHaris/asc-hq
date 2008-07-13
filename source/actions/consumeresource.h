@@ -19,29 +19,34 @@
 */
 
 
-#ifndef actionResultH
-#define actionResultH
+#ifndef ConsumeResourceH
+#define ConsumeResourceH
 
 
-#include "../ascstring.h"
+#include "containeraction.h"
+#include "action-registry.h"
 
-class ContainerBase;
-class GameMap;
-class MapCoordinate;
+#include "../typen.h"
 
-class ActionResult {
-      int code;
-      ASCString userMessage;
+class ConsumeResource : public ContainerAction {
+      Resources toGet;
+      Resources got;
    public:
-      ActionResult( int code );
-      ActionResult( int code, const ASCString& message );
-      ActionResult( int code, const ContainerBase* veh );
-      ActionResult( int code, const ContainerBase* veh, const ASCString& message );
-      ActionResult( int code, const MapCoordinate& pos );
-      bool successful();
-      ASCString getMessage() const;
+      ConsumeResource( ContainerBase* container, const Resources& toGet );
+      
+      ASCString getDescription() const;
+      
+   protected:
+      virtual GameActionID getID();
+      
+      virtual ActionResult runAction( const Context& context );
+      virtual ActionResult undoAction( const Context& context );
+      virtual ActionResult postCheck();
+      
+      virtual void readData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream );
+      
 };
-
 
 #endif
 
