@@ -222,6 +222,8 @@ Property of unit doesn't match
 This operation is not allowed
 21206
 Unit position mismatch
+21207
+View doesn't match
 21301
 The unit is not standing on this field
 21302

@@ -60,7 +60,7 @@ am_libfullgameactions_la_OBJECTS = containeraction.lo \
 	moveunit.lo
 libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
-am_libmapactions_la_OBJECTS = spawnobject.lo
+am_libmapactions_la_OBJECTS = spawnobject.lo changeview.lo
 libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
 libmiscactions_la_DEPENDENCIES =
 am_libmiscactions_la_OBJECTS = servicing.lo jumpdrive.lo \
@@ -255,7 +255,7 @@ libdirectunitactions_la_SOURCES = consumeammo.cpp inflictunitdamage.cpp destruct
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp 
 libmiscactions_la_LIBADD = @SDL_LIBS@
-libmapactions_la_SOURCES = spawnobject.cpp 
+libmapactions_la_SOURCES = spawnobject.cpp changeview.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
 libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp 
 libfullgameactions_la_LIBADD = @SDL_LIBS@
@@ -325,6 +325,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitmovement.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitproperty.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeview.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeammo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeresource.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containeraction.Plo@am__quote@

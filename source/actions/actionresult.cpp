@@ -61,7 +61,7 @@ bool ActionResult::successful()
 
 ASCString ActionResult::getMessage() const
 {
-   return "Code is " + ASCString::toString(0) + " : " + userMessage;
+   return "Code is " + ASCString::toString(code) + " : " + userMessage;
 }
 
 

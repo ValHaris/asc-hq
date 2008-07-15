@@ -19,37 +19,31 @@
 */
 
 
-#ifndef UnitFieldRegistrationH
-#define UnitFieldRegistrationH
+#ifndef ChangeViewH
+#define ChangeViewH
 
 
-#include "unitaction.h"
+#include "action.h"
+#include "action-registry.h"
 
+#include "../typen.h"
 
-class UnitFieldRegistration : public UnitAction {
+class ChangeView : public GameAction {
    public:
-      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D };
+      typedef map<MapCoordinate,int> ViewState;
+      ChangeView( GameMap* gamemap, const ViewState& state );
       
-      UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation );
       
       ASCString getDescription() const;
    private:
-      Operation operation;
-      MapCoordinate3D position;
-      bool evalView;
-      
-      int resultingViewChanges;
-      MapCoordinate3D previousPosition;
-      
-      ASCString getOpName() const;
+      ViewState newState;
+      ViewState oldState;
       
    protected:
       virtual GameActionID getID();
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
-      virtual ActionResult preCheck();
-      virtual ActionResult postCheck();
       
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream );

@@ -36,7 +36,8 @@ namespace ActionRegistry {
                   MoveUnit,
                   UnitFieldRegistration,
                   ConsumeResource,
-                  ChangeContainerProperty
+                  ChangeContainerProperty,
+                  ChangeView
       
    };
 };

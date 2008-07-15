@@ -28,6 +28,8 @@
 #include "errors.h"
 #include "gameeventsystem.h"
 
+#include "actions/changeview.h"
+
 SigC::Signal0<void> buildingSeen;
 
 
@@ -320,8 +322,12 @@ int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int ad
 }
 
 
-int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView )
+int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView, const Context* context )
 {
+   ChangeView::ViewState* viewState = NULL;
+   if ( context )
+      viewState = new ChangeView::ViewState();
+   
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
    for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
@@ -331,18 +337,39 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
             add += getPlayersWithSharedViewMask( player, gamemap );
       
          int nm = gamemap->xsize * gamemap->ysize;
-         if ( player_fieldcount_mask & (1 << player ))
-            for ( int i = 0; i < nm; i++ )
-                fieldsChanged += evaluatevisibilityfield ( gamemap, &gamemap->field[i], player, add, initial );
-         else
-            for ( int i = 0; i < nm; i++ )
-                evaluatevisibilityfield ( gamemap, &gamemap->field[i], player, add, initial );
+         for ( int y = 0; y < gamemap->ysize; ++y )
+            for ( int x = 0; x < gamemap->xsize; ++x ) {
+               tfield* fld = gamemap->getField(x,y);
+               int oldview = fld->visible;
+               
+               if ( player_fieldcount_mask & (1 << player ))
+                  fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
+               else
+                  evaluatevisibilityfield ( gamemap, fld, player, add, initial );
+            
+               if ( (fld->visible != oldview) && viewState ) {
+                  // we are running under action control, the change shall be done by the action and not here,
+                  // so we are undoing our change for the moment
+                  (*viewState)[MapCoordinate(x,y)] = fld->visible;
+                  fld->visible = oldview;
+               }
+            }
+         
       }
+      
+   if ( viewState && viewState->size() ) 
+      (new ChangeView(gamemap,*viewState))->execute(*context);
+   
+   delete viewState;
    return fieldsChanged;
 }
 
-int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask, bool disableShareView )
+int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask, bool disableShareView, const Context* context   )
 {
+   ChangeView::ViewState* viewState = NULL;
+   if ( context )
+      viewState = new ChangeView::ViewState();
+   
    distance = (distance+maxmalq-1)/maxmalq;
    int x1 = pos.x - distance;
    if ( x1 < 0 )
@@ -362,23 +389,46 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
 
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
+   
+   int add[playerNum];
+   for ( int i = 0; i < playerNum; ++i )
+      add[i] = 0;
+   
    for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
       if ( gamemap->player[player].exist() ) {
-         int add = 0;
          if ( !disableShareView )
             for ( int i = 0; i < gamemap->getPlayerCount(); i++ )
                if ( gamemap->player[i].exist() && i != player )
                   if ( gamemap->player[i].diplomacy.sharesView( player) )
-                     add |= 1 << i;
+                     add[player] |= 1 << i;
+      }
 
-         for ( int yy = y1; yy <= y2; yy++ )
-            for ( int xx = x1; xx <= x2; xx++ ) {
-               tfield* fld = gamemap->getField ( xx, yy );
-               int result = evaluatevisibilityfield ( gamemap, fld, player, add, initial );
+
+   for ( int yy = y1; yy <= y2; yy++ )
+      for ( int xx = x1; xx <= x2; xx++ ) {
+         tfield* fld = gamemap->getField ( xx, yy );
+         int oldview = fld->visible;
+         for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
+            if ( gamemap->player[player].exist() ) {
+               int result = evaluatevisibilityfield ( gamemap, fld, player, add[player], initial );
                if ( player_fieldcount_mask & (1 << player ))
                   fieldsChanged += result;
+                  
             }
+            
+         if ( (fld->visible != oldview) && viewState ) {
+            // we are running under action control, the change shall be done by the action and not here,
+            // so we are undoing our change for the moment
+            (*viewState)[MapCoordinate(xx,yy)] = fld->visible;
+            fld->visible = oldview;
+         }
       }
+      
+      
+   if ( viewState && viewState->size() ) 
+      (new ChangeView(gamemap,*viewState))->execute(*context);
+            
+   delete viewState;
    return fieldsChanged;
 }
 

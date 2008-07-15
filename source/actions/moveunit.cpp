@@ -123,10 +123,10 @@ ActionResult MoveUnit::runAction( const Context& context )
    rf->init( vehicle, pathToMove );
 
    if ( oldfield->vehicle == vehicle) 
-      (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::RemoveView, false ))->execute( context );
+      (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::RemoveView ))->execute( context );
 
    
-   (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::UnregisterOnField, false ))->execute( context );
+   (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::UnregisterOnField ))->execute( context );
    
    int soundHeight = -1;
    if ( pos->getRealHeight() >= 0 )
@@ -228,15 +228,15 @@ ActionResult MoveUnit::runAction( const Context& context )
             if ( dest->vehicle )
                (new UnitFieldRegistration( dest->vehicle, to, UnitFieldRegistration::UnregisterOnField ))->execute( context );
             
-            (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::RegisterOnField, true ))->execute( context );
+            (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::RegisterOnField ))->execute( context );
             
             
             
             int fieldsWidthChangedVisibility; 
             if ( context.viewingPlayer >= 0 ) 
-               fieldsWidthChangedVisibility = evaluateviewcalculation ( getMap(), 1 << context.viewingPlayer );
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( getMap(), 1 << context.viewingPlayer, false, &context );
             else 
-               fieldsWidthChangedVisibility = evaluateviewcalculation ( getMap(), 0);
+               fieldsWidthChangedVisibility = evaluateviewcalculation ( getMap(), 0, false, &context );
             
             
             if ( fieldsWidthChangedVisibility )
@@ -426,9 +426,9 @@ ActionResult MoveUnit::runAction( const Context& context )
    if ( viewInputChanged ) {
       int fieldschanged;
       if ( context.viewingPlayer >= 0 )
-         fieldschanged = evaluateviewcalculation ( getMap(), 1 << context.viewingPlayer );
+         fieldschanged = evaluateviewcalculation ( getMap(), 1 << context.viewingPlayer, false, &context );
       else
-         fieldschanged = evaluateviewcalculation ( getMap(), 0 );
+         fieldschanged = evaluateviewcalculation ( getMap(), 0, false, &context );
       
       if ( fieldschanged )
          mapDisplayUpToDate = false;

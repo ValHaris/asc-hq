@@ -19,6 +19,7 @@
 #ifndef viewcalculationH
  #define viewcalculationH
 
+ #include "actions/context.h"
  #include "typen.h"
  #include "mapalgorithms.h"
  #include "gamemap.h"
@@ -80,7 +81,7 @@
       \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields which have a changed visibility status
   */
-  extern int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask = 0, bool disableShareView = false );
+  extern int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask = 0, bool disableShareView = false, const Context* context = NULL );
 
   /** evaluates the view on a part of the map.
       Radar and jamming values must have already been applied to the field! 
@@ -91,7 +92,7 @@
       \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields which have a changed visibility status
   */
-  extern int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0, bool disableShareView = false);
+  extern int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int distance, int player_fieldcount_mask = 0, bool disableShareView = false, const Context* context = NULL );
 
   /** calculates the view on a given field.
       Radar and jamming values must have already been applied to the field! 

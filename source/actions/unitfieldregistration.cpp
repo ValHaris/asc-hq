@@ -25,12 +25,11 @@
 #include "../gamemap.h"
 #include "../viewcalculation.h"
      
-UnitFieldRegistration::UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation, bool evalView )
+UnitFieldRegistration::UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation )
    : UnitAction( vehicle->getMap(), vehicle->networkid), resultingViewChanges(-1)
 {
    this->operation= operation;
    this->position = pos;
-   this->evalView = evalView;
 }
       
       
@@ -136,9 +135,6 @@ ActionResult UnitFieldRegistration::runAction( const Context& context )
          break;
    }
    
-   if ( evalView )
-      resultingViewChanges = evaluateviewcalculation( getMap(), 0xff );
-   
    return ActionResult(0);
 }
 
@@ -188,9 +184,6 @@ ActionResult UnitFieldRegistration::undoAction( const Context& context )
          break;
          
    }
-   
-   if ( evalView )
-      resultingViewChanges = evaluateviewcalculation( getMap(), 0xff );
    
    return ActionResult(0);
 }
