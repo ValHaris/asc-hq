@@ -30,13 +30,17 @@
 class RegisterUnitRFTarget : public UnitAction {
       int weapon;
       int targetUnitID;
+      
+      RegisterUnitRFTarget( GameMap* map ) : UnitAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    public:
       RegisterUnitRFTarget( GameMap* gamemap, int vehicleID, int weapon, int targetUnitID );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

@@ -64,7 +64,7 @@ void DestructUnit::writeData ( tnstream& stream )
 };
 
 
-GameActionID DestructUnit::getID()
+GameActionID DestructUnit::getID() const
 {
    return ActionRegistry::DestructUnit;
 }
@@ -107,3 +107,7 @@ ActionResult DestructUnit::undoAction( const Context& context )
    return ActionResult(0);
 }
 
+
+namespace {
+   const bool r1 = registerAction<DestructUnit> ( ActionRegistry::DestructUnit );
+}

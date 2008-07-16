@@ -34,13 +34,17 @@ class ConsumeAmmo : public GameAction {
       int count;
       
       int resultingAmmount;
+      
+      ConsumeAmmo( GameMap* map ) : GameAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+
    public:
       ConsumeAmmo( GameMap* gamemap, int vehicleID, int ammoType, int slot, int count );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

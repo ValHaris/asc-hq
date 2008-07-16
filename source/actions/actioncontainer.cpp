@@ -24,7 +24,8 @@
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
 
-ActionContainer::ActionContainer()
+ActionContainer::ActionContainer( GameMap* gamemap )
+   : map ( gamemap )
 {
    currentPos = actions.begin(); 
    
@@ -69,6 +70,14 @@ void ActionContainer::redo( const Context& context )
    }
 }
 
+void ActionContainer::breakUndo()
+{
+   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i )
+      delete *i;
+   actions.clear();
+   currentPos=actions.end();
+}
+
 const int actionContainerversion = 1;
 
 void ActionContainer::read ( tnstream& stream )
@@ -79,16 +88,31 @@ void ActionContainer::read ( tnstream& stream )
       
    int actionCount = stream.readInt();
    for ( int i = 0; i < actionCount; ++i ) {
-      GameAction* a = GameAction::readFromStream( stream );
+      GameAction* a = GameAction::readFromStream( stream, map );
       actions.push_back ( a );
    }
+   
+   int pos = stream.readInt();
+   currentPos = actions.begin();
+   while ( pos-- )
+      currentPos++;
 }
 
 
 void ActionContainer::write ( tnstream& stream )
 {
    stream.writeInt( actionContainerversion );
+   
    stream.writeInt( actions.size() );
    for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i )
       (*i)->write(stream );
+   
+   int counter = 0;
+   Actions::iterator i = actions.begin();
+   while ( i != currentPos ) {
+      ++counter;
+      ++i;
+   }
+   stream.writeInt( counter );
+   
 }

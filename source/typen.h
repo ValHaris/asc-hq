@@ -185,7 +185,7 @@ class MapCoordinate {
             };
             bool valid() const { return x >= 0 && y >= 0 ; } ;
 	         void move(int width, int height);
-            ASCString toString() const;
+            ASCString toString(bool coordinates = false) const;
       };
 
 inline MapCoordinate operator-( const MapCoordinate& a, const MapCoordinate& b )

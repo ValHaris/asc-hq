@@ -32,6 +32,10 @@ class ChangeUnitMovement : public UnitAction {
       
       int originalMovement;
       int resultingMovement;
+      
+       ChangeUnitMovement( GameMap* map ) : UnitAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    public:
       //! delta: true=movement is a relative value which will be subtracted
       //!        false=movement is the new absolute value
@@ -40,7 +44,7 @@ class ChangeUnitMovement : public UnitAction {
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

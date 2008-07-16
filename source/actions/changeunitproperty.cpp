@@ -78,16 +78,17 @@ void ChangeUnitProperty::readData ( tnstream& stream )
       
 void ChangeUnitProperty::writeData ( tnstream& stream )
 {
-   UnitAction::readData( stream );
+   UnitAction::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( property );
+   stream.writeInt( value );
    stream.writeInt( valueIsAbsolute );
    stream.writeInt( originalValue );
    stream.writeInt( resultingValue );
 };
 
 
-GameActionID ChangeUnitProperty::getID()
+GameActionID ChangeUnitProperty::getID() const
 {
    return ActionRegistry::ChangeUnitProperty;
 }
@@ -165,4 +166,8 @@ ActionResult ChangeUnitProperty::postCheck()
    return ActionResult(0);
 }
 
+
+namespace {
+   const bool r1 = registerAction<ChangeUnitProperty> ( ActionRegistry::ChangeUnitProperty );
+}
 

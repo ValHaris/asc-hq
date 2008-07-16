@@ -285,11 +285,11 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
          jamming += fld->view[i].jamming;
    }
    if ( sight > (jamming + additionalEnemyJamming )   ||  direct  ) {
-      if (( fld->vehicle  && ( fld->vehicle->getOwner() == player ) && false ) ||
-            ( fld->vehicle  && ( fld->vehicle->height  < chschwimmend ) && sonar ) ||
+      if (( fld->getVehicle() && ( fld->getVehicle()->getOwner() == player ) && false ) ||
+            ( fld->getVehicle()  && ( fld->getVehicle()->height  < chschwimmend ) && sonar ) ||
             ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
             ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
-            ( fld->vehicle  && ( fld->vehicle->height  >= chsatellit )  && satellite )) {
+            ( fld->getVehicle()  && ( fld->getVehicle()->height  >= chsatellit )  && satellite )) {
          return visible_all;
       } else {
          return visible_now;
@@ -336,7 +336,6 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
          if ( !disableShareView )
             add += getPlayersWithSharedViewMask( player, gamemap );
       
-         int nm = gamemap->xsize * gamemap->ysize;
          for ( int y = 0; y < gamemap->ysize; ++y )
             for ( int x = 0; x < gamemap->xsize; ++x ) {
                tfield* fld = gamemap->getField(x,y);

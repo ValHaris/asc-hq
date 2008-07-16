@@ -39,8 +39,12 @@ class ChangeView : public GameAction {
       ViewState newState;
       ViewState oldState;
       
+      
+      ChangeView( GameMap* map ) : GameAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

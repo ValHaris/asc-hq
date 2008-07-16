@@ -71,17 +71,20 @@ void GameAction::undo( const Context& context )
    undoAction( context );
 }
 
+/*
 GameActionID GameAction::getID() const
 {
    return ActionRegistry::Root;
 }
-
+*/
 
 const int currentGameActionVersion = 1;
 const int gameActionToken = 0x12003496;
       
 void GameAction::read ( tnstream& stream )
 {
+   displayLogMessage(0, "reading " + ASCString::toString(getID()) + "\n");
+   
    int version = stream.readInt();
    if ( version > currentGameActionVersion )
       throw tinvalidversion ( "GameAction", currentGameActionVersion, version );
@@ -94,7 +97,7 @@ void GameAction::read ( tnstream& stream )
    
    int childNum = stream.readInt();
    for ( int i = 0; i < childNum; i++ ) {
-      GameAction* child = readFromStream( stream );
+      GameAction* child = readFromStream( stream, getMap() );
       addChild( child );
    }
 }
@@ -106,16 +109,15 @@ void GameAction::write ( tnstream& stream )
    writeData( stream );
    stream.writeInt( gameActionToken );
    stream.writeInt( children.size() );
-   for ( int i = 0; i < children.size(); ++i ) {
-      stream.writeInt( children[i]->getID());
+   for ( int i = 0; i < children.size(); ++i ) 
       children[i]->write( stream );
-   }
+   
 }
 
-GameAction* GameAction::readFromStream( tnstream& stream )
+GameAction* GameAction::readFromStream( tnstream& stream, GameMap* map )
 {
    GameActionID id = GameActionID( stream.readInt() );
-   GameAction* action = gameActionFactory::Instance().createObject( id );
+   GameAction* action = gameActionFactory::Instance().createObject( id, map );
    action->read( stream );
    return action;
 }

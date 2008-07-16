@@ -43,8 +43,12 @@ class UnitFieldRegistration : public UnitAction {
       
       ASCString getOpName() const;
       
+      UnitFieldRegistration( GameMap* map ) : UnitAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+
+      
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

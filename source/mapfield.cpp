@@ -48,6 +48,7 @@ void tfield::init ()
    bdt.set ( 0 );
    typ = NULL;
    vehicle = NULL;
+   secondvehicle = NULL;
    building = NULL;
    a.temp = 0;
    a.temp2 = 0;
@@ -61,6 +62,7 @@ void tfield::init ()
    gamemap = NULL;
    viewbonus = 0;
 }
+
 
 
 void tfield::Resourceview::setview( int player, int material, int fuel )

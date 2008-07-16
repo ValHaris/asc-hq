@@ -24,6 +24,7 @@
 #include "unitfieldregistration.h"
 #include "changeunitproperty.h"
 #include "consumeresource.h"
+#include "changeview.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"
@@ -84,14 +85,14 @@ void MoveUnit::readData ( tnstream& stream )
       
 void MoveUnit::writeData ( tnstream& stream )
 {
-   UnitAction::readData( stream );
+   UnitAction::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( dontInterrupt );
    writeClassContainer( pathToMove, stream );
 };
 
 
-GameActionID MoveUnit::getID()
+GameActionID MoveUnit::getID() const
 {
    return ActionRegistry::MoveUnit;
 }
@@ -223,15 +224,7 @@ ActionResult MoveUnit::runAction( const Context& context )
          
          printTimer(5);
          {
-            Vehicle* temp = dest->vehicle;
-            
-            if ( dest->vehicle )
-               (new UnitFieldRegistration( dest->vehicle, to, UnitFieldRegistration::UnregisterOnField ))->execute( context );
-            
-            (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::RegisterOnField ))->execute( context );
-            
-            
-            
+            dest->secondvehicle = vehicle;
             int fieldsWidthChangedVisibility; 
             if ( context.viewingPlayer >= 0 ) 
                fieldsWidthChangedVisibility = evaluateviewcalculation ( getMap(), 1 << context.viewingPlayer, false, &context );
@@ -242,13 +235,7 @@ ActionResult MoveUnit::runAction( const Context& context )
             if ( fieldsWidthChangedVisibility )
                mapDisplayUpToDate = false;
             
-            // mapDisplayUpToDate = false;
-            
-            
-         (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::UnregisterOnField ))->execute( context );
-         if ( temp )
-               (new UnitFieldRegistration( temp, to, UnitFieldRegistration::RegisterOnField ))->execute( context );
-            
+            dest->secondvehicle = NULL;
             printTimer(6);
          }
 
@@ -271,11 +258,13 @@ ActionResult MoveUnit::runAction( const Context& context )
 
                vehicle->height = oldheight;
             }
-
+            
+            dest->secondvehicle = vehicle;
             if ( rf->checkfield ( to, vehicle, context )) {
                cancelmovement = 1;
                vehicle = getMap()->getUnit ( networkID );
             }
+            dest->secondvehicle = NULL;
 
 
             if ( !vehicle && context.display ) {
@@ -326,22 +315,13 @@ ActionResult MoveUnit::runAction( const Context& context )
                cancelmovement = 0;
 
          if ( vehicle ) {
-            Vehicle* temp = dest->vehicle;
-            if ( dest->vehicle )
-               (new UnitFieldRegistration( dest->vehicle, to, UnitFieldRegistration::UnregisterOnField ))->execute( context );
-            
-            (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::RegisterOnField ))->execute( context );
-         
+            dest->secondvehicle = vehicle;
             if ( dest->connection & cconnection_areaentered_anyunit )
                fieldCrossed( context );
 
             if ((dest->connection & cconnection_areaentered_specificunit ) && ( vehicle->connection & cconnection_areaentered_specificunit ))
                fieldCrossed( context );
-               
-            (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::UnregisterOnField ))->execute( context );
-            if ( temp )
-               (new UnitFieldRegistration( temp, to, UnitFieldRegistration::RegisterOnField ))->execute( context );
-                  
+            dest->secondvehicle = NULL;
          }
          printTimer(8);
       } while ( (to.x != next->x || to.y != next->y) && vehicle );
@@ -393,8 +373,16 @@ ActionResult MoveUnit::runAction( const Context& context )
 
             } else {
                (new UnitFieldRegistration( vehicle, *pos, UnitFieldRegistration::RegisterOnField ))->execute( context );
+               int orgVisibility = fld->visible;
                for ( int i = 0; i < getMap()->getPlayerCount(); ++i )
                   evaluatevisibilityfield ( getMap(), fld, i, -1, getMap()->getgameparameter ( cgp_initialMapVisibility ) );
+               
+               if ( fld->visible != orgVisibility ) {
+                  ChangeView::ViewState* viewState = new ChangeView::ViewState();
+                  (*viewState)[MapCoordinate(pos->x,pos->y)] = fld->visible;
+                  fld->visible = orgVisibility;
+                  (new ChangeView(getMap(),*viewState))->execute(context);
+               }
             }
 
          } else {
@@ -464,3 +452,7 @@ ActionResult MoveUnit::postCheck()
 }
 
 
+
+namespace {
+   const bool r1 = registerAction<MoveUnit> ( ActionRegistry::MoveUnit );
+}

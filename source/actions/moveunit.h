@@ -30,13 +30,17 @@ class MoveUnit : public UnitAction {
       AStar3D::Path pathToMove;
       bool dontInterrupt;
    
+      
+      MoveUnit( GameMap* map ) : UnitAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    public:
       MoveUnit( Vehicle* veh, AStar3D::Path& pathToMove, bool dontInterrupt = false );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

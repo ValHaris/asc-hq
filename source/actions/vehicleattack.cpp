@@ -72,7 +72,7 @@ void VehicleAttackAction::writeData ( tnstream& stream )
 };
 
 
-GameActionID VehicleAttackAction::getID()
+GameActionID VehicleAttackAction::getID() const
 {
    return ActionRegistry::VehicleAttack;
 }
@@ -132,3 +132,8 @@ ActionResult VehicleAttackAction::undoAction( const Context& context )
    return ActionResult(0);
 }
 
+
+
+namespace {
+   const bool r1 = registerAction<VehicleAttackAction> ( ActionRegistry::VehicleAttack );
+}

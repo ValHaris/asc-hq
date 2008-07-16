@@ -61,6 +61,18 @@ class  tfield {
     //@}
 
     Vehicle*     vehicle;
+    
+    //! two units and the same field are only allowed temporary during movement
+    Vehicle*     secondvehicle;
+    
+    inline Vehicle* getVehicle() const {
+         if ( secondvehicle )
+            return secondvehicle;
+         else
+            return vehicle;
+      }
+
+    
     Building*    building;
 
     struct Resourceview {

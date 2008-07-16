@@ -28,6 +28,7 @@
 UnitFieldRegistration::UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation )
    : UnitAction( vehicle->getMap(), vehicle->networkid), resultingViewChanges(-1)
 {
+   evalView = false;
    this->operation= operation;
    this->position = pos;
 }
@@ -73,7 +74,7 @@ void UnitFieldRegistration::readData ( tnstream& stream )
       
 void UnitFieldRegistration::writeData ( tnstream& stream )
 {
-   UnitAction::readData( stream );
+   UnitAction::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( (int) operation );
    position.write( stream );
@@ -83,7 +84,7 @@ void UnitFieldRegistration::writeData ( tnstream& stream )
 };
 
 
-GameActionID UnitFieldRegistration::getID()
+GameActionID UnitFieldRegistration::getID() const
 {
    return ActionRegistry::UnitFieldRegistration;
 }
@@ -202,4 +203,9 @@ ActionResult UnitFieldRegistration::postCheck()
    return ActionResult(0);
 }
 
+
+
+namespace {
+   const bool r1 = registerAction<UnitFieldRegistration> ( ActionRegistry::UnitFieldRegistration );
+}
 

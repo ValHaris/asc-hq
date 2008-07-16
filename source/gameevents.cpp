@@ -663,8 +663,8 @@ void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
    tfield* fld = gamemap->getField ( mc );
    if ( !arming ) {
-      if ( fld && fld->vehicle )
-         if ( fld->vehicle->networkid == unitID || unitID == -1 )
+      if ( fld && fld->getVehicle() )
+         if ( fld->getVehicle()->networkid == unitID || unitID == -1 )
             found = true;
 
       Vehicle* veh = gamemap->getUnit( unitID );
@@ -746,8 +746,8 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
    tfield* fld = gamemap->getField ( mc );
    if ( !arming ) {
-      if ( fld && fld->vehicle )
-         if ( (1 << fld->vehicle->getOwner()) & player )
+      if ( fld && fld->getVehicle() )
+         if ( (1 << fld->getVehicle()->getOwner()) & player )
             found = true;
 
       if ( fld && fld->building )

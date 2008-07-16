@@ -218,7 +218,7 @@ void OverviewMapHolder::clearmap( GameMap* actmap )
 
 
 GameMap :: GameMap ( void )
-      : overviewMapHolder( *this ), network(NULL)
+      : overviewMapHolder( *this ), network(NULL), actions(this)
 {
    randomSeed = rand();
    dialogsHooked = false;
@@ -286,7 +286,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 22;
+const int tmapversion = 25;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -660,6 +660,9 @@ void GameMap :: read ( tnstream& stream )
       if ( nw ) 
          network = GameTransferMechanism::read( stream );         
     }
+    
+    if ( version >= 25 )
+       actions.read( stream );
 }
 
 
@@ -849,6 +852,8 @@ void GameMap :: write ( tnstream& stream )
       network->write( stream );
     } else
       stream.writeInt( 0 );
+      
+    actions.write( stream );
 }
 
 
@@ -1198,6 +1203,8 @@ void GameMap::beginTurn()
 
 void GameMap::endTurn()
 {
+   actions.breakUndo();
+
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
    pt.turn = time.turn();

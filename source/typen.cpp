@@ -275,10 +275,13 @@ void MapCoordinate::move(int width, int height) {
    y +=height;
 }
 
-ASCString MapCoordinate::toString() const
+ASCString MapCoordinate::toString(bool coordinates) const
 {
    ASCString s;
-   s.format( "#coord(%d/%d)#", x, y);
+   if ( coordinates ) 
+      s.format( "%d/%d", x, y);
+   else
+      s.format( "#coord(%d/%d)#", x, y);
    return s;
 }
 

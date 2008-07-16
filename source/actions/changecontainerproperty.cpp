@@ -71,16 +71,17 @@ void ChangeContainerProperty::readData ( tnstream& stream )
       
 void ChangeContainerProperty::writeData ( tnstream& stream )
 {
-   ContainerAction::readData( stream );
+   ContainerAction::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( property );
+   stream.writeInt( value );
    stream.writeInt( valueIsAbsolute );
    stream.writeInt( originalValue );
    stream.writeInt( resultingValue );
 };
 
 
-GameActionID ChangeContainerProperty::getID()
+GameActionID ChangeContainerProperty::getID() const
 {
    return ActionRegistry::ChangeContainerProperty;
 }
@@ -142,3 +143,6 @@ ActionResult ChangeContainerProperty::postCheck()
 }
 
 
+namespace {
+   const bool r1 = registerAction<ChangeContainerProperty> ( ActionRegistry::ChangeContainerProperty );
+}

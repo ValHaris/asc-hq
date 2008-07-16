@@ -31,13 +31,17 @@
 class DestructUnit : public GameAction {
       int unitID;
       tmemorystreambuf* unitBuffer;
+      
+      DestructUnit( GameMap* map ) : GameAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+     
    public:
       DestructUnit( GameMap* gamemap, int unitID );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

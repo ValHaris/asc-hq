@@ -56,14 +56,14 @@ void RegisterUnitRFTarget::readData ( tnstream& stream )
       
 void RegisterUnitRFTarget::writeData ( tnstream& stream )
 {
-   UnitAction::readData( stream );
+   UnitAction::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( targetUnitID );
    stream.writeInt( weapon );
 };
 
 
-GameActionID RegisterUnitRFTarget::getID()
+GameActionID RegisterUnitRFTarget::getID() const
 {
    return ActionRegistry::RegisterUnitRFTarget;
 }
@@ -88,4 +88,8 @@ ActionResult RegisterUnitRFTarget::undoAction( const Context& context )
 }
 
 
+
+namespace {
+   const bool r1 = registerAction<RegisterUnitRFTarget> ( ActionRegistry::RegisterUnitRFTarget );
+}
 

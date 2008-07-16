@@ -63,7 +63,7 @@ void ConsumeResource::writeData ( tnstream& stream )
 };
 
 
-GameActionID ConsumeResource::getID()
+GameActionID ConsumeResource::getID() const
 {
    return ActionRegistry::ConsumeResource;
 }
@@ -87,3 +87,6 @@ ActionResult ConsumeResource::postCheck()
 }
 
 
+namespace {
+   const bool r1 = registerAction<ConsumeResource> ( ActionRegistry::ConsumeResource );
+}

@@ -43,13 +43,17 @@ class ChangeUnitProperty : public UnitAction {
       
       int originalValue;
       int resultingValue;
+      
+      ChangeUnitProperty( GameMap* map ) : UnitAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+     
    public:
       ChangeUnitProperty( Vehicle* vehicle, Property property, int value, bool valueIsAbsolute = true );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

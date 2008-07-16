@@ -34,13 +34,16 @@ class InflictUnitDamage : public GameAction {
       int originalDamage;
       int resultingDamage;
       
+       InflictUnitDamage( GameMap* map ) : GameAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+
    public:
       InflictUnitDamage( GameMap* gamemap, int vehicleID, int damage );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

@@ -24,6 +24,12 @@
 #include "../vehicle.h"
 #include "../gamemap.h"
      
+UnitAction::UnitAction( GameMap* gamemap )
+   : GameAction( gamemap )
+{
+   vehicleID = -1;
+}     
+     
 UnitAction::UnitAction( GameMap* gamemap, int vehicleID )
    : GameAction( gamemap )
 {

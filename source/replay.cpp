@@ -648,6 +648,8 @@ Resources getUnitResourceCargo ( Vehicle* veh )
 
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
+   actmap->actions.breakUndo();
+   
    char action = _action;
    if ( actmap->replayinfo && actmap->replayinfo->actmemstream && !actmap->replayinfo->stopRecordingActions) {
       pnstream stream = actmap->replayinfo->actmemstream;

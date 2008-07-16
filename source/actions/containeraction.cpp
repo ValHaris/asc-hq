@@ -29,6 +29,13 @@ ContainerAction::ContainerAction( ContainerBase* container )
 {
    this->containerID = container->getIdentification();
 }
+
+ContainerAction::ContainerAction( GameMap* map )
+   : GameAction( map )
+{
+   this->containerID = -1;
+}
+ 
       
       
 ContainerBase* ContainerAction::getContainer( bool dontThrow )

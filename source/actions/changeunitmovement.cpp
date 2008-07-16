@@ -64,7 +64,7 @@ void ChangeUnitMovement::readData ( tnstream& stream )
       
 void ChangeUnitMovement::writeData ( tnstream& stream )
 {
-   UnitAction::readData( stream );
+   UnitAction::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( movement );
    stream.writeInt( delta );
@@ -73,7 +73,7 @@ void ChangeUnitMovement::writeData ( tnstream& stream )
 };
 
 
-GameActionID ChangeUnitMovement::getID()
+GameActionID ChangeUnitMovement::getID() const
 {
    return ActionRegistry::ChangeUnitMovement;
 }
@@ -117,3 +117,6 @@ ActionResult ChangeUnitMovement::postCheck()
 }
 
 
+namespace {
+   const bool r1 = registerAction<ChangeUnitMovement> ( ActionRegistry::ChangeUnitMovement );
+}

@@ -378,16 +378,8 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
    int result = 0;
 
    tfield* fld = getfield( pos.x, pos.y );
-   npush ( fld->vehicle );
-   fld->vehicle = vehicle;
-   vehicle->xpos = pos.x;
-   vehicle->ypos = pos.y;
-   int oldheight = vehicle->height;
-   if ( pos.getNumericalHeight() >= 0 )
-      vehicle->height = pos.getBitmappedHeight();
 
    for ( int i = 0; i < 8; i++ ) {
-      evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
       if ( fieldvisiblenow ( fld, i )) {
          punitlist ul  = unitlist[i];
          while ( ul  &&  !result ) {
@@ -404,14 +396,9 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
          } /* endwhile */
       }
    }
-   npop ( fld->vehicle );
-   for ( int i = 0; i < 8; i++ )
-      evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
 
    if ( result )
       vehicle = NULL;
-   else
-      vehicle->height = oldheight;
 
    return attacks;
 }

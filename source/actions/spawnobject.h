@@ -33,13 +33,17 @@ class SpawnObject : public GameAction {
       int objectID;
       int direction;
       bool objectLaid;      
+      
+      SpawnObject( GameMap* map ) : GameAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+
    public:
       SpawnObject( GameMap* gamemap, const MapCoordinate& position, int objectID, int direction = -1 );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

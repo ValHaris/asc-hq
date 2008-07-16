@@ -73,7 +73,7 @@ void ConsumeAmmo::writeData ( tnstream& stream )
 };
 
 
-GameActionID ConsumeAmmo::getID()
+GameActionID ConsumeAmmo::getID() const
 {
    return ActionRegistry::ConsumeAmmo;
 }
@@ -119,3 +119,6 @@ ActionResult ConsumeAmmo::postCheck()
 }
 
 
+namespace {
+   const bool r1 = registerAction<ConsumeAmmo> ( ActionRegistry::ConsumeAmmo );
+}

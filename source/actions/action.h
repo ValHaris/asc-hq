@@ -46,7 +46,6 @@ class GameAction {
       
       bool done;
       
-      GameAction() {};
       
       int ID;
       
@@ -65,7 +64,7 @@ class GameAction {
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) = 0;
       
-      virtual GameActionID getID() const;
+      virtual GameActionID getID() const = 0;
       
       GameMap* getMap() { return gamemap; };
       const GameMap* getMap() const { return gamemap; } ;
@@ -83,11 +82,24 @@ class GameAction {
       
       virtual ~GameAction() {};
       
-      static GameAction* readFromStream( tnstream& stream );
+      static GameAction* readFromStream( tnstream& stream, GameMap* map );
 };
 
 
-typedef Loki::SingletonHolder< FactoryWithNames< GameAction , GameActionID  > > gameActionFactory;
+typedef Loki::SingletonHolder< Factory1< GameAction , GameActionID, GameMap*  > > gameActionFactory;
+
+template<class Derived>
+GameAction* GameActionCreator( GameMap* map )
+{
+   return new Derived( map );
+}
+
+template <typename ActionType > 
+bool registerAction( GameActionID id )
+{
+   return gameActionFactory::Instance().registerClass( id, GameActionCreator<ActionType> );
+}
+
 
 #endif
 

@@ -69,7 +69,7 @@ void SpawnObject::writeData ( tnstream& stream )
 };
 
 
-GameActionID SpawnObject::getID()
+GameActionID SpawnObject::getID() const
 {
    return ActionRegistry::SpawnObject;
 }
@@ -110,4 +110,8 @@ ActionResult SpawnObject::verify()
    return ActionResult(0);
 }
 
+
+namespace {
+   const bool r1 = registerAction<SpawnObject> ( ActionRegistry::SpawnObject );
+}
 

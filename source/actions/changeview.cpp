@@ -78,7 +78,7 @@ void ChangeView::writeData ( tnstream& stream )
 };
 
 
-GameActionID ChangeView::getID()
+GameActionID ChangeView::getID() const
 {
    return ActionRegistry::ChangeView;
 }
@@ -98,10 +98,17 @@ ActionResult ChangeView::undoAction( const Context& context )
 {
    for ( ViewState::iterator i = newState.begin(); i != newState.end(); ++i  ) {
       tfield* fld = getMap()->getField( i->first );
-      if ( fld->visible != newState[i->first] )
-         throw ActionResult(21207);
+      if ( fld->visible != newState[i->first] ) {
+         ASCString msg;
+         msg.format( "; expected: %x ; found %x" , newState[i->first], fld->visible );
+         throw ActionResult(21207, "Position is " + i->first.toString(true) + msg );
+      }
       fld->visible = oldState[i->first];
    }
    return ActionResult(0);
+}
+
+namespace {
+   const bool r1 = registerAction<ChangeView> ( ActionRegistry::ChangeView );
 }
 

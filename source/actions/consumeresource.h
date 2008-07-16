@@ -31,13 +31,17 @@
 class ConsumeResource : public ContainerAction {
       Resources toGet;
       Resources got;
+      
+      ConsumeResource( GameMap* map ) : ContainerAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    public:
       ConsumeResource( ContainerBase* container, const Resources& toGet );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

@@ -54,5 +54,28 @@ class Factory{
       };
 };
 
+template < class AbstractProduct,
+           typename IdentifierType, 
+           typename creatorParam >
+class Factory1{
+   public:
+      typedef AbstractProduct* (*ObjectCreatorCallBack)(creatorParam param);
+   private:
+      typedef std::map<IdentifierType, ObjectCreatorCallBack> CallbackMap;
+      CallbackMap callbackMap;
+   public:
+      bool registerClass( IdentifierType id, ObjectCreatorCallBack createFn ) { callbackMap[id] = createFn; return true; };
+      AbstractProduct* createObject( IdentifierType id, creatorParam param )
+      {
+         typename CallbackMap::const_iterator i = callbackMap.find(id);
+         if ( i != callbackMap.end() )
+            return (i->second)(param);
+         else {
+            fatalError("Factory: Object ID not found");
+            return NULL;
+         }
+      };
+};
+
 
 #endif

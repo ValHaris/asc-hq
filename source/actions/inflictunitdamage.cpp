@@ -69,7 +69,7 @@ void InflictUnitDamage::writeData ( tnstream& stream )
 };
 
 
-GameActionID InflictUnitDamage::getID()
+GameActionID InflictUnitDamage::getID() const
 {
    return ActionRegistry::InflictUnitDamage;
 }
@@ -122,3 +122,7 @@ ActionResult InflictUnitDamage::postCheck()
 }
 
 
+
+namespace {
+   const bool r1 = registerAction<InflictUnitDamage> ( ActionRegistry::InflictUnitDamage );
+}

@@ -31,13 +31,17 @@ class VehicleAttackAction : public UnitAction {
       int weapon;
       MapCoordinate target;
      
+      
+      VehicleAttackAction( GameMap* map ) : UnitAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator(GameMap* map);
+     
    public:
       VehicleAttackAction( GameMap* gamemap, int vehicleID, const MapCoordinate& target, int weapon = -1 );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );

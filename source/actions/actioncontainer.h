@@ -29,17 +29,22 @@
 
 class ActionContainer {
    
+      GameMap* map;
+   
       typedef list<GameAction*> Actions;
       Actions actions;
       
       Actions::iterator currentPos;
    
    public:
-      ActionContainer();
+      ActionContainer( GameMap* gamemap );
       void add( GameAction* action );
       
       void undo( const Context& context );
       void redo( const Context& context );
+      
+      // called when some modification to the map is taking place that is not recorded by undo
+      void breakUndo();
       
       void read ( tnstream& stream );
       void write ( tnstream& stream );

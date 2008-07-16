@@ -25,7 +25,7 @@
 
 #include "containeraction.h"
 #include "action-registry.h"
-
+#include "../util/factory.h"
 
 class ChangeContainerProperty : public ContainerAction {
    public:
@@ -43,13 +43,17 @@ class ChangeContainerProperty : public ContainerAction {
       
       int originalValue;
       int resultingValue;
+      
+      ChangeContainerProperty( GameMap* map ) : ContainerAction( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    public:
       ChangeContainerProperty( ContainerBase* container, Property property, int value, bool valueIsAbsolute = true );
       
       ASCString getDescription() const;
       
    protected:
-      virtual GameActionID getID();
+      virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
