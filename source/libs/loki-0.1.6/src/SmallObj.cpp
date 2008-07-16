@@ -13,7 +13,7 @@
 //     without express or implied warranty.
 ////////////////////////////////////////////////////////////////////////////////
 
-// $Id: SmallObj.cpp,v 1.1 2008-06-24 18:20:56 mbickel Exp $
+// $Id: SmallObj.cpp,v 1.2 2008-07-16 18:53:40 mbickel Exp $
 
 
 #include <loki/SmallObj.h>
@@ -21,6 +21,7 @@
 #include <cassert>
 #include <vector>
 #include <bitset>
+#include <limits.h>
 
 //#define DO_EXTRA_LOKI_TESTS
 //#define USE_NEW_TO_ALLOCATE
