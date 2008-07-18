@@ -289,7 +289,7 @@ ActionResult MoveUnit::runAction( const Context& context )
                (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::RemoveView ))->execute( context );
             
             if ( dest->mineattacks ( vehicle )) {
-               tmineattacksunit battle ( dest, -1, vehicle );
+               tmineattacksunit battle ( to, -1, vehicle );
 
                if ( context.display && (fieldvisiblenow ( dest, context.viewingPlayer) || dest->mineowner() == context.viewingPlayer ))
                   context.display->showBattle( battle );

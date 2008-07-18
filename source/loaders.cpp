@@ -448,7 +448,7 @@ void        tspfldloaders::readLegacyNetwork ( void )
 /*     fielder schreiben / lesen                              */
 /**************************************************************/
 
-const int objectstreamversion = 3;
+const int objectstreamversion = 4;
 
 void   tspfldloaders::writefields ( void )
 {
@@ -569,6 +569,7 @@ void   tspfldloaders::writefields ( void )
             stream->writeInt ( m->strength );
             stream->writeInt ( m->lifetimer );
             stream->writeInt ( m->player );
+            stream->writeInt ( m->identifier );
          }
 
          stream->writeInt ( fld->objects.size() );
@@ -740,7 +741,13 @@ void tspfldloaders::readfields ( void )
                assertOrThrow( strength >= 0 );
                assertOrThrow( type > 0 && type <= 4 );
 
-               Mine m ( type, strength, player, spfld );
+               int id;
+               if ( objectversion >= 4 )
+                  id = stream->readInt();
+               else
+                  id = spfld->getNewNetworkID();
+               
+               Mine m ( type, strength, player, spfld, id );
                if ( objectversion == 1 ) {
                   int endtime = minetime;
                   int lifetime = spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));

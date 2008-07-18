@@ -218,7 +218,7 @@ void OverviewMapHolder::clearmap( GameMap* actmap )
 
 
 GameMap :: GameMap ( void )
-      : overviewMapHolder( *this ), network(NULL), actions(this)
+      : actions(this), overviewMapHolder( *this ), network(NULL)
 {
    randomSeed = rand();
    dialogsHooked = false;

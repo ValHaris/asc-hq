@@ -38,6 +38,7 @@
 #include "actions/consumeammo.h"
 #include "actions/registerunitrftarget.h"
 #include "actions/inflictunitdamage.h"
+#include "actions/removemine.h"
 
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
@@ -567,13 +568,17 @@ void tunitattacksbuilding :: setresult( const Context& context )
 
 
 
-tmineattacksunit :: tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
+tmineattacksunit :: tmineattacksunit ( const MapCoordinate& mineposition, int minenum, Vehicle* &attackedunit )
 {
    setup ( mineposition, minenum, attackedunit );
 }
 
-void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
+void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Vehicle* &attackedunit )
 {
+   this->position = position;
+   
+   tfield* mineposition = attackedunit->getMap()->getField( position );
+   
    if ( mineposition->mines.empty() )
       errorMessage(" tmineattacksunit :: setup \n no mine to attack !\n" );
 
@@ -655,16 +660,36 @@ void tmineattacksunit :: setresult ( void )
    _attackedunit->damage = dv.damage;
 
    /* Remove the mined vehicle if it was destroyed */
-   if ( _attackedunit->damage >= 100 ) {
-     delete *_pattackedunit;
+   if ( dv.damage >= 100 ) 
      *_pattackedunit = NULL;
-   }
 
 }
 
 void tmineattacksunit :: setresult( const Context& context )
 {
+   vector<GameAction*> actions;
+   if ( _minenum == -1 ) {
+      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m)
+         if ( m->attacksunit ( _attackedunit ))
+            actions.push_back ( new RemoveMine(_attackedunit->getMap(), position, m->identifier));
+   } else {
+      int counter = 0;
+      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m, ++counter)
+         if ( counter == _minenum )
+            actions.push_back ( new RemoveMine(_attackedunit->getMap(), position, m->identifier));
+   }
+
+   for ( vector<GameAction*>::iterator i = actions.begin(); i != actions.end(); ++i )
+      (*i)->execute( context );
+      
    
+   (new InflictUnitDamage( _attackedunit->getMap(), _attackedunit->networkid, dv.damage - _attackedunit->damage  ))->execute ( context );
+   
+   /* Remove the mined vehicle if it was destroyed */
+   if ( _attackedunit->damage >= 100 ) {
+     delete *_pattackedunit;
+     *_pattackedunit = NULL;
+   }
 }
 
 
@@ -815,9 +840,9 @@ AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
 
    tfield* efield = getfield(x,y);
 
-   if ( efield->vehicle ) {
+   if ( efield->getVehicle() ) {
       if (fieldvisiblenow(efield, angreifer->color/8))
-         attackpossible2n ( angreifer, efield->vehicle, atw );
+         attackpossible2n ( angreifer, efield->getVehicle(), atw );
    }
    else
       if (efield->building != NULL) {

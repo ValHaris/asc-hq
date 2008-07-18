@@ -40,6 +40,8 @@ class DestructUnit : public GameAction {
       
       ASCString getDescription() const;
       
+      ~DestructUnit();
+      
    protected:
       virtual GameActionID getID() const;
       

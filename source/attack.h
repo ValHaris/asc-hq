@@ -211,6 +211,8 @@ class tmineattacksunit : public tfight
       int _minenum;
       Vehicle** _pattackedunit;
 
+      MapCoordinate position;
+      
    public:
       int getAttackingPlayer()
       {
@@ -227,8 +229,8 @@ class tmineattacksunit : public tfight
           \param minenum The number of a specific mine which explodes. If -1 , all mines on this field which are able to attack the unit will explode.
           \param attackedunit The unit which moved onto the minefield.
       */
-      tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
-      void setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
+      tmineattacksunit ( const MapCoordinate& mineposition, int minenum, Vehicle* &attackedunit );
+      void setup ( const MapCoordinate& position, int minenum, Vehicle* &attackedunit );
       void setresult();
       void setresult( const Context& context );
 

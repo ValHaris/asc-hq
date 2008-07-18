@@ -48,7 +48,8 @@ void DestructUnit::readData ( tnstream& stream )
    if ( stream.readInt() ) {
       unitBuffer = new tmemorystreambuf();
       unitBuffer->readfromstream( &stream );  
-   }
+   } else
+      unitBuffer = NULL;
 };
       
       
@@ -105,6 +106,11 @@ ActionResult DestructUnit::undoAction( const Context& context )
    veh->addview();
    
    return ActionResult(0);
+}
+
+DestructUnit::~DestructUnit()
+{
+   delete unitBuffer;  
 }
 
 

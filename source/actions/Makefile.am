@@ -16,7 +16,7 @@ libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 libmiscactions_la_SOURCES	= servicing.cpp jumpdrive.cpp selfdestruct.cpp 
 libmiscactions_la_LIBADD		= @SDL_LIBS@
 
-libmapactions_la_SOURCES	= spawnobject.cpp changeview.cpp
+libmapactions_la_SOURCES	= spawnobject.cpp changeview.cpp removemine.cpp
 libmapactions_la_LIBADD		= @SDL_LIBS@
 
 libfullgameactions_la_SOURCES	= containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp 

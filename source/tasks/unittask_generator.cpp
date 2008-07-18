@@ -19,29 +19,9 @@
 */
 
 
-#ifndef actionRegistryH
-#define actionRegistryH
+#include "unittask_generator.h"
 
-namespace ActionRegistry {
-   enum Actions { Root, 
-                  ConsumeAmmo,
-                  InflictUnitDamage,
-                  SpawnObject,
-                  DestructUnit,
-                  VehicleAttack,
-                  ChangeUnitMovement,
-                  ChangeUnitAttackFlag,
-                  ChangeUnitProperty,
-                  RegisterUnitRFTarget,
-                  MoveUnit,                  // 10
-                  UnitFieldRegistration,
-                  ConsumeResource,
-                  ChangeContainerProperty,
-                  ChangeView,
-                  RemoveMine
-      
-   };
-};
-
-#endif
-
+bool UnitTaskGenerator::available( Vehicle* unit )
+{
+   return false;
+}

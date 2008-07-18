@@ -259,6 +259,7 @@ private:
       typedef map<int, Vehicle*> VehicleLookupCache;
       VehicleLookupCache vehicleLookupCache; 
 public:
+      //! returns a new and unique ID 
       int getNewNetworkID();
       void registerUnitNetworkID( Vehicle* veh );
       void unregisterUnitNetworkID( Vehicle* veh );

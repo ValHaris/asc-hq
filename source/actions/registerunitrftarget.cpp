@@ -83,7 +83,7 @@ ActionResult RegisterUnitRFTarget::undoAction( const Context& context )
    Vehicle* veh = getUnit();
    veh->reactionfire.weaponShots[weapon]++;
    
-   remove( veh->reactionfire.nonattackableUnits.begin(), veh->reactionfire.nonattackableUnits.end(), targetUnitID );
+   veh->reactionfire.nonattackableUnits.erase ( find( veh->reactionfire.nonattackableUnits.begin(), veh->reactionfire.nonattackableUnits.end(), targetUnitID ));
    return ActionResult(0);
 }
 

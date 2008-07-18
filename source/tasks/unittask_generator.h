@@ -19,29 +19,19 @@
 */
 
 
-#ifndef actionRegistryH
-#define actionRegistryH
+#ifndef unitTaskGeneratorH
+#define unitTaskGeneratorH
 
-namespace ActionRegistry {
-   enum Actions { Root, 
-                  ConsumeAmmo,
-                  InflictUnitDamage,
-                  SpawnObject,
-                  DestructUnit,
-                  VehicleAttack,
-                  ChangeUnitMovement,
-                  ChangeUnitAttackFlag,
-                  ChangeUnitProperty,
-                  RegisterUnitRFTarget,
-                  MoveUnit,                  // 10
-                  UnitFieldRegistration,
-                  ConsumeResource,
-                  ChangeContainerProperty,
-                  ChangeView,
-                  RemoveMine
-      
-   };
+#include "task_generator.h"
+
+class Vehicle;
+
+class UnitTaskGenerator : public TaskGenerator {
+   
+   public:
+      bool available( Vehicle* unit );
 };
+
 
 #endif
 

@@ -22,15 +22,23 @@
 
 
  #include "objects.h"
+ #include "basestreaminterface.h"
  
 
 
 
 class Mine : public AgeableItem {
+      Mine();
    public:
       Mine( MineTypes type, int strength, int player, GameMap* gamemap );
 
+      Mine( MineTypes type, int strength, int player, GameMap* gamemap, int identifier );
 
+      static Mine newFromStream ( tnstream& stream );
+      
+      //! a unique identifier that allows the identification of a single mine
+      int identifier;
+      
       MineTypes type;
 
       //! the effective punch of the mine
@@ -45,6 +53,9 @@ class Mine : public AgeableItem {
       //! display the mine
       void paint( Surface& surf, SPoint pos );
 
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      
 };
 
 
