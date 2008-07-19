@@ -37,7 +37,7 @@ DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/config.h.in $(srcdir)/getmusic.in \
 	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL TODO \
 	config.guess config.sub depcomp install-sh ltmain.sh missing \
-	mkinstalldirs
+	mkinstalldirs ylwrap
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -117,6 +117,9 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LDFLAGS = @LDFLAGS@
+LEX = @LEX@
+LEXLIB = @LEXLIB@
+LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBBZ2 = @LIBBZ2@
 LIBCURL = @LIBCURL@
 LIBCURL_CPPFLAGS = @LIBCURL_CPPFLAGS@

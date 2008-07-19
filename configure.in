@@ -31,6 +31,7 @@ dnl ac_version=`cat $(as_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_releas
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
+AM_PROG_LEX
 
 dnl *************************************************************************
 dnl Checks for programs.
@@ -663,6 +664,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/unix/mapeditor/Makefile \
        source/unix/pbpedit/Makefile \
        source/unix/asc/Makefile \
+       source/tester/Makefile \
        source/win32/Makefile \
        source/win32/msvc/Makefile \
        data/Makefile \
