@@ -412,10 +412,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\messaginghub.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\misc.cpp"
 				>
 			</File>
@@ -714,6 +710,78 @@
 			<Filter
 				Name="sdl"
 				>
+			</Filter>
+			<Filter
+				Name="Util"
+				>
+				<File
+					RelativePath="..\..\..\util\messaginghub.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Actions"
+				>
+				<File
+					RelativePath="..\..\..\actions\action.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\actioncontainer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\actionresult.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\changeunitmovement.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\changeunitproperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\changeview.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\consumeammo.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\containeraction.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\context.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\destructunit.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\inflictunitdamage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\registerunitrftarget.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\removemine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\spawnobject.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\unitaction.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
