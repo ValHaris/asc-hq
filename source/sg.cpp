@@ -231,7 +231,7 @@ void hookGuiToMap( GameMap* map )
 }
 
 
-bool loadGame( const ASCString& filename )
+bool loadGameFromFile( const ASCString& filename )
 {
    GameMap* m = mapLoadingExceptionChecker( filename, MapLoadingFunction( tsavegameloaders::loadGameFromFile ));
    if ( !m )
@@ -279,7 +279,7 @@ bool loadGame( bool mostRecent )
    if ( !s1.empty() ) {
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
 
-      loadGame( s1 );
+      loadGameFromFile( s1 );
       
       updateFieldInfo();
       positionCursor( actmap->getCurrentPlayer() );
@@ -359,7 +359,7 @@ MapTypeLoaded loadStartupMap ( const char *gameToLoad=NULL )
                fatalError ( "The savegame %s is invalid. Aborting.", gameToLoad );
 
             try {
-               loadGame( gameToLoad );
+               loadGameFromFile( gameToLoad );
                computeview( actmap );
                return Savegame;
             } catch ( tfileerror ) {

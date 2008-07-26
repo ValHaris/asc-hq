@@ -44,6 +44,11 @@
 #include "dialog.h"
 #include "widgets/textrenderer-addons.h"
 
+#include "lua/luarunner.h"
+#include "lua/luastate.h"
+
+#include "dialogs/fileselector.h"
+
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
 
@@ -740,10 +745,13 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
                return true;
 
-               case SDLK_F11: {
-                  int sz = actmap->player[1].unreadmessage.size();
-                  printf(" %d \n", sz );
+            case SDLK_F11: {
+               ASCString file = selectFile( "*.lua", true );
+               if ( file.size() ) {
+                  LuaState state;
+                  executeFile( state, file );
                }
+            }
                return true;
                
             case SDLK_1:

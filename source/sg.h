@@ -27,6 +27,7 @@
 #define sgH
 
 #include "actions/context.h"
+class ASCString;
 
 enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mntnc_morefog,
                     ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
@@ -53,6 +54,7 @@ class GameMap;
 extern void hookGuiToMap( GameMap* map );
 
 extern bool loadGame( bool mostrecent );
+extern bool loadGameFromFile( const ASCString& filename );
 extern void saveGame( bool as );
 extern bool continueAndStartMultiplayerGame( bool mostRecent );
 extern void changePassword();

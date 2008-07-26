@@ -13,7 +13,7 @@ asctextfile  : blocks
 ;
       
 blocks       : block      
-             | block blocks
+             | blocks block
 ;
             
 block        : testblock      
@@ -23,10 +23,15 @@ testblock    : TESTCASE '{' commands '}' TESTCASE
 ;
 
 commands     : command ';'
-             | command commands 
+             | commands command  
 ;
       
 command      : MOVEUNIT 
-             | LOADMAP  
+             | loadmapcommand  
 ;
 
+loadmapcommand : LOADMAP '(' filename ')'
+;
+
+filename    : 
+;

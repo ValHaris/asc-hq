@@ -37,11 +37,12 @@ $(top_builddir)/source/actions/libdirectunitactions.la  \
 $(top_builddir)/source/actions/libfullgameactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/actions/libmiscactions.la  \
+$(top_builddir)/source/lua/libluainterface.la  \
 $(top_builddir)/source/util/libutil.la  $(top_builddir)/source/tasks/libtasks.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/sdl/libsdlsnd.la $(top_builddir)/source/network/libnetwork.la  \
 $(top_builddir)/source/video/libvideo.la  \
-@LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) 
+@LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(LUA_LIBS)
 
