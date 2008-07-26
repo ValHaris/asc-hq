@@ -1333,6 +1333,9 @@ void LoseMap::execute( MapDisplayInterface* md )
    if ( gamemap->state == GameMap::Replay )
       return;
 
+   if ( gamemap->getCurrentPlayer().stat != Player::human )
+      return;
+
    if ( !gamemap->continueplaying ) {
       displaymessage ( "You have been defeated !", 3 );
       delete gamemap;

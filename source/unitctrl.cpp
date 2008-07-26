@@ -1106,11 +1106,14 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
       if ( !vehicle->typ->hasFunction( ContainerBaseType::MoveAfterAttack )) 
          vehicle->setMovement ( 0 );
 
+      bool somethingDestroyed = battle->dv.damage >= 100 || battle->av.damage >= 100;
+
       battle->setresult ();
 
       logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
 
-      evaluateviewcalculation( actmap );
+      if ( somethingDestroyed )
+         computeview( actmap );
 
       if ( mapDisplay && shown )
          mapDisplay->displayMap();

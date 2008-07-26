@@ -1453,6 +1453,7 @@ void trunreplay :: execnextreplaymove ( void )
                            vm.execute ( NULL, x2, y2, 3, height, noInterrupt > 0 ? VehicleMovement::NoInterrupt : 0 );
 
                            if ( vm.getStatus() != 1000 ) {
+                              savegame("testrep.sav");
                               if ( CGameOptions::Instance()->replayMovieMode ) {
 
                                  tfield* fld = eht->getMap()->getField(x1,y1);
@@ -1466,6 +1467,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( eht->isViewing() )
                                     eht->removeview();
 
+                                 
                                  eht->setnewposition(x2,y2);
                                  if ( height >= 0 )
                                     eht->height = 1 << height;

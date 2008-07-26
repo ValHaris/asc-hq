@@ -494,6 +494,31 @@ void showPlayerPanel( bool open )
 }
 
 
+int countPlayersBinary( const ContainerBase* cont ) 
+{
+   int mask = 1 << cont->getOwner();
+   for ( ContainerBase::Cargo::const_iterator i = cont->getCargo().begin(); i != cont->getCargo().end(); ++i )
+      if ( *i )
+         mask |= countPlayersBinary( *i );
+   return mask;
+}
+
+int countPlayers( const ContainerBase* cont )
+{
+   int res = countPlayersBinary( cont );
+   int count = 0;
+   for ( int i = 0; i < cont->getMap()->getPlayerCount(); ++i )
+      if ( res & (1 << i ))
+         ++count;
+   return count;
+}
+
+void infoMessageClipboardPlayers(const ContainerBase* cont )
+{
+   if ( countPlayers( cont ) > 1 )
+      infoMessage("Info: this unit/building contains cargo from other players");
+}
+
 // � ExecAction
 
 
@@ -783,10 +808,12 @@ void execaction( int code)
    case act_copyToClipboard: if ( getactfield() ) {
                                  if ( getactfield()->vehicle ) {
                                     ClipBoard::Instance().clear();
+                                    infoMessageClipboardPlayers( getactfield()->vehicle );
                                     ClipBoard::Instance().addUnit( getactfield()->vehicle );
                                  } else
                                     if ( getactfield()->building ) {
                                        ClipBoard::Instance().clear();
+                                       infoMessageClipboardPlayers( getactfield()->building );
                                        ClipBoard::Instance().addBuilding( getactfield()->building );
                                     }
                              }
@@ -794,12 +821,14 @@ void execaction( int code)
    case act_cutToClipboard: if ( getactfield() ) {
                               if ( getactfield()->vehicle ) {
                                  ClipBoard::Instance().clear();
+                                 infoMessageClipboardPlayers( getactfield()->vehicle );
                                  ClipBoard::Instance().addUnit( getactfield()->vehicle );
                                  execaction ( act_deleteunit );
                                  mapsaved = false;
                               } else
                                  if ( getactfield()->building ) {
                                     ClipBoard::Instance().clear();
+                                    infoMessageClipboardPlayers( getactfield()->building );
                                     ClipBoard::Instance().addBuilding( getactfield()->building );
                                     execaction ( act_deletebuilding );
                                     mapsaved = false;

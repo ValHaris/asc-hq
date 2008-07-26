@@ -1344,6 +1344,11 @@ void execuseraction2 ( tuseractions action )
       
       case ua_createReminder: newreminder(); 
          break;
+
+      case ua_recompteview: 
+         computeview(actmap);
+         displaymap();
+         break;
          
       default:
          break;

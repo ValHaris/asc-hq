@@ -54,8 +54,6 @@ void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, 
    initsearch( MapCoordinate(sx, sy), md, 0 );
 }
 
-
-
 void         tcomputeview::testfield( const MapCoordinate& mc )
 {
    int f = beeline(startPos, mc);
@@ -91,7 +89,6 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
       else
          baseJammingMultiplier = 100;
       
-
      tdrawgettempline lne ( freefields, gamemap );
 
      if ( startPos.x == -1 || startPos.y == -1 )
@@ -101,6 +98,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
      str -= f;
      str -= lne.tempsum * baseJammingMultiplier / 100;
    }
+
 
    if ( str > 0 ) {
       efield->view[player].view += str * mode;

@@ -231,6 +231,7 @@ void Menu::setup()
    addbutton ( "show techadapter", ua_showTechAdapter );
    addbutton ( "calc airplane endurance", ua_showUnitEndurance );
    addbutton ( "show game ~P~arameters", ua_GameParameterInfo );
+   addbutton ( "Recompute View", ua_recompteview );
    currentMenu->addSeparator();
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
