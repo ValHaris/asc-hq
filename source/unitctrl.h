@@ -440,7 +440,6 @@ class PendingVehicleActions {
             VehicleMovement* move;
             IncreaseVehicleHeight* ascent;
             DecreaseVehicleHeight* descent;
-            VehicleAttack* attack;
             VehicleService* service;
             NewVehicleService* newservice;
             ~PendingVehicleActions ( );

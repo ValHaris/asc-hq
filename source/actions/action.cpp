@@ -29,7 +29,7 @@ GameAction::GameAction( GameMap* map )
  : gamemap(map), done(false)
 {
    static int counter = 0;
-   ID = ++counter;
+   sequenceNumber = ++counter;
 }
  
 
@@ -64,10 +64,10 @@ void GameAction::redo( const Context& context )
 void GameAction::undo( const Context& context ) 
 {
    for ( Children::reverse_iterator i = children.rbegin(); i != children.rend(); ++i ) {
-      // displayLogMessage(0, "undoing #" + ASCString::toString((*i)->ID) + " (child) " + (*i)->getDescription() + "\n");
+      // displayLogMessage(0, "undoing #" + ASCString::toString((*i)->sequenceNumber) + " (child) " + (*i)->getDescription() + "\n");
       (*i)->undo( context );
    }
-   displayLogMessage(0, "undoing #" + ASCString::toString(ID) + " " + getDescription() + "\n");
+   displayLogMessage(0, "undoing #" + ASCString::toString(sequenceNumber) + " " + getDescription() + "\n");
    undoAction( context );
 }
 

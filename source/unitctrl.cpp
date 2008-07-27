@@ -622,7 +622,6 @@ void PendingVehicleActions::reset()
    move = NULL;
    ascent = NULL;
    descent = NULL;
-   attack = NULL;
    service=NULL;
    newservice=NULL;
    actionType = 0 ;
@@ -638,8 +637,6 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 {
    status = 0;
    mapDisplay = md;
-   if ( pva )
-      pva->attack = this;
 }
 
 
@@ -821,15 +818,11 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
 void VehicleAttack :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
 {
    VehicleAction::registerPVA ( _actionType, _pva );
-   if ( pva )
-      pva->attack = this;
 }
 
 
 VehicleAttack :: ~VehicleAttack ( )
 {
-   if ( pva )
-      pva->attack = NULL;
 }
 
 

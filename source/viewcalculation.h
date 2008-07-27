@@ -62,7 +62,7 @@
       \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields that have a changed visibility for the given players. If nothing changes, the map must not be displayed again after the view calculation
   */
-  extern int computeview( GameMap* gamemap, int player_fieldcount_mask = 0, bool disableShareView = false );
+  extern int computeview( GameMap* gamemap, int player_fieldcount_mask = 0, bool disableShareView = false, const Context* context = NULL );
 
   /** evaluates the view on a given field and saves it for that field. Calls #calcvisibilityfield for the calculation
       Radar and jamming values must have already been applied to the field! 

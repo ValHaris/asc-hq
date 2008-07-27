@@ -32,6 +32,8 @@
 #include "password.h"
 #include "typen.h"
 
+#include "actions/actionresult.h"
+
 const int dbluedark = 248;
 
 // ASCString  selectFile( const ASCString& ext, bool load );
@@ -39,8 +41,8 @@ const int dbluedark = 248;
 extern void displaymessage2( const char* formatstring, ... );
    
 //! displays a message in the message line
-extern void  dispmessage2(int          id,
-                          const char *       st = NULL );
+extern void  dispmessage2(int id, const char * st = NULL );
+extern void  dispmessage2( const ActionResult& result );
    
   
   

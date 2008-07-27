@@ -49,6 +49,7 @@
 #include "dialogs/internalAmmoTransferDialog.h"
 #include "actions/jumpdrive.h"
 #include "actions/selfdestruct.h"
+#include "actions/attackcommand.h"
 
 
 namespace GuiFunctions
@@ -57,9 +58,7 @@ namespace GuiFunctions
 
 
 class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
-     VehicleAttack* attackEngine;
-
-     pair<AttackWeap*, int> getEntry( const MapCoordinate& pos, int num );
+     pair<const AttackWeap*, int> getEntry( const MapCoordinate& pos, int num );
 
       void mapDeleted( GameMap& map )
       {
@@ -75,11 +74,11 @@ class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
    public:
-      AttackGui() : attackEngine( NULL ) 
+      AttackGui() 
       {
          GameMap::sigMapDeletion.connect( SigC::slot( *this, &AttackGui::mapDeleted )); 
       };
-      void setupWeapons( VehicleAttack* va ) { attackEngine = va; };
+      void setupWeapons( AttackCommand* va ) { delete NewGuiHost::pendingCommand; NewGuiHost::pendingCommand = va; };
       void eval( const MapCoordinate& mc, ContainerBase* subject );
 
 };
@@ -94,27 +93,31 @@ bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int n
 }
 
 
-pair<AttackWeap*, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
+pair<const AttackWeap*, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
 {
    int counter = 0;
    
-   AttackFieldList* afl = NULL;
-   for ( int i = 0; i < 3; ++i ) {
-      switch ( i ) {
-         case 0: afl = &attackEngine->attackableVehicles; break;
-         case 1: afl = &attackEngine->attackableBuildings; break;
-         case 2: afl = &attackEngine->attackableObjects; break;
-      }
-      
-      if ( afl->isMember( pos )) {
-         AttackWeap* aw = &afl->getData(pos.x, pos.y);
-         for ( int a = 0; a < aw->count; ++a ) {
-            if ( counter == num )
-               return make_pair( aw, a );
-               
-            ++counter;
+   AttackCommand* attackEngine = dynamic_cast<AttackCommand*>(NewGuiHost::pendingCommand );
+   if ( attackEngine ) {
+      const AttackCommand::FieldList* afl = NULL;
+      for ( int i = 0; i < 3; ++i ) {
+         switch ( i ) {
+            case 0: afl = &attackEngine->getAttackableUnits(); break;
+            case 1: afl = &attackEngine->getAttackableBuildings(); break;
+            case 2: afl = &attackEngine->getAttackableObjects(); break;
          }
-      }   
+         
+         AttackCommand::FieldList::const_iterator it = afl->find( pos );
+         if ( it != afl->end() ) {
+            const AttackWeap* aw = &(it->second);
+            for ( int a = 0; a < aw->count; ++a ) {
+               if ( counter == num )
+                  return make_pair( aw, a );
+                  
+               ++counter;
+            }
+         }   
+      }
    }
    return make_pair( (AttackWeap*)(NULL), 0 );
 }
@@ -135,16 +138,22 @@ void AttackGui::execute( const MapCoordinate& pos, ContainerBase* subject, int n
 {
    if ( num != -1 ) {
    
-      pair<AttackWeap*, int> p = getEntry(pos,num);
+      pair<const AttackWeap*, int> p = getEntry(pos,num);
       if ( p.first ) {
-         int res = pendingVehicleActions.attack->execute ( NULL, pos.x, pos.y, 2, 0, p.first->num[p.second] );
-         if ( res < 0 )
-            dispmessage2 ( -res, NULL );
+         AttackCommand* attack = dynamic_cast<AttackCommand*>(NewGuiHost::pendingCommand);
+         if ( attack ) {
+            attack->setTarget ( pos, p.first->num[p.second] );
+            ActionResult res = attack->execute( createContext( actmap ));
+            if ( !res.successful()  ) {
+               dispmessage2 ( res );
+               delete NewGuiHost::pendingCommand;
+            }
+         }
 
       }
-   }   
-   setupWeapons( NULL );
-   delete pendingVehicleActions.attack;
+   }
+   NewGuiHost::pendingCommand = NULL;   
+   
    actmap->cleartemps();
    NewGuiHost::popIconHandler();
    repaintMap();
@@ -156,7 +165,7 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, ContainerBase* subject, 
    if ( num == -1 )
       return IconRepository::getIcon("cancel.png");
       
-   pair<AttackWeap*, int> p = getEntry(pos,num);
+   pair<const AttackWeap*, int> p = getEntry(pos,num);
    switch ( p.first->typ[p.second] ) {
       case cwcruisemissileb: return IconRepository::getIcon("weap-cruisemissile.png");
       case cwbombb: return IconRepository::getIcon("weap-bomb.png");
@@ -171,14 +180,17 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, ContainerBase* subject, 
 
 ASCString AttackGui::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( num == -1 )
+   
+   AttackCommand* attackEngine = dynamic_cast<AttackCommand*>(NewGuiHost::pendingCommand);
+   
+   if ( num == -1 || attackEngine == NULL )
       return "cancel";
 
    Vehicle* attacker = attackEngine->getAttacker();
 
    tfight* battle = NULL;
 
-   pair<AttackWeap*, int> p = getEntry(pos,num);
+   pair<const AttackWeap*, int> p = getEntry(pos,num);
    
 
    if ( p.first->target == AttackWeap::vehicle )
@@ -666,26 +678,24 @@ bool Attack::available( const MapCoordinate& pos, ContainerBase* subject, int nu
 void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new VehicleAttack ( &getDefaultMapDisplay(), &pendingVehicleActions );
-
-      int res;
-      res = pendingVehicleActions.attack->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, 0, -1 );
-      if ( res < 0 ) {
-         dispmessage2 ( -res, NULL );
-         delete pendingVehicleActions.action;
+      AttackCommand* attack = new AttackCommand( actmap->getField(pos)->vehicle );
+      
+      ActionResult result = attack->searchTargets();
+      if ( !result.successful() ) {
+         dispmessage2 ( result );
          return;
       }
 
-      int i;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableVehicles.getFieldNum(); i++ )
-         pendingVehicleActions.attack->attackableVehicles.getField( i ) ->a.temp = 1;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableBuildings.getFieldNum(); i++ )
-         pendingVehicleActions.attack->attackableBuildings.getField( i ) ->a.temp = 1;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableObjects.getFieldNum(); i++ )
-         pendingVehicleActions.attack->attackableObjects.getField( i ) ->a.temp = 1;
-
+      AttackCommand::FieldList::const_iterator i;
+      for ( i = attack->getAttackableUnits().begin(); i != attack->getAttackableUnits().end(); i++ )
+         actmap->getField( i->first )->a.temp = 1;
+      for ( i = attack->getAttackableBuildings().begin(); i != attack->getAttackableBuildings().end(); i++ )
+         actmap->getField( i->first )->a.temp = 1;
+      for ( i = attack->getAttackableObjects().begin(); i != attack->getAttackableObjects().end(); i++ )
+         actmap->getField( i->first )->a.temp = 1;
+      
       displaymap();
-      attackGui.setupWeapons( pendingVehicleActions.attack );
+      attackGui.setupWeapons( attack );
       NewGuiHost::pushIconHandler( &attackGui );
    }
 }

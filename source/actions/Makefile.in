@@ -57,7 +57,7 @@ libdirectunitactions_la_OBJECTS =  \
 libfullgameactions_la_DEPENDENCIES =
 am_libfullgameactions_la_OBJECTS = containeraction.lo \
 	consumeresource.lo unitfieldregistration.lo vehicleattack.lo \
-	moveunit.lo
+	moveunit.lo command.lo unitcommand.lo attackcommand.lo
 libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo changeview.lo \
@@ -263,7 +263,9 @@ libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp
 libmiscactions_la_LIBADD = @SDL_LIBS@
 libmapactions_la_SOURCES = spawnobject.cpp changeview.cpp removemine.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
-libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp 
+libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp \
+										command.cpp unitcommand.cpp attackcommand.cpp
+
 libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -328,10 +330,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/action.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actioncontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitmovement.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeview.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/command.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeammo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeresource.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containeraction.Plo@am__quote@
@@ -346,6 +350,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitaction.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitfieldregistration.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicleattack.Plo@am__quote@
 

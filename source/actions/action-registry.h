@@ -38,7 +38,8 @@ namespace ActionRegistry {
                   ConsumeResource,
                   ChangeContainerProperty,
                   ChangeView,
-                  RemoveMine
+                  RemoveMine,
+                  AttackCommand
       
    };
 };

@@ -19,45 +19,42 @@
 */
 
 
-#include "task.h"
+#include "command.h"
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
 
-Task::Task( GameMap* gamemap ) 
+Command::Command( GameMap* gamemap ) 
+   : GameAction( gamemap ), state ( Planned )
 {
-   state = Planned;
-   this->gamemap = gamemap;
 }
    
-GameMap* Task::getMap()
+void Command::readData ( tnstream& stream )
 {
-   return gamemap;
+   stream.readInt();
+   state = (State)stream.readInt();   
 }
 
-const int currentTaskVersion = 1;
-const int gameTaskToken = 0x9812a0c3;
 
-void Task::read ( tnstream& stream )
+void Command::writeData ( tnstream& stream )
 {
-   displayLogMessage(0, "reading " + ASCString::toString(getID()) + "\n");
-   
-   int version = stream.readInt();
-   if ( version > currentTaskVersion )
-      throw tinvalidversion ( "GameAction", currentTaskVersion, version );
-
-   readData( stream );
-   
-   int token = stream.readInt();
-   if ( token != gameTaskToken )
-      throw tinvalidversion ("GameActionToken", gameTaskToken, token );
-   
+   stream.writeInt(1);
+   stream.writeInt( (int) state );
 }
 
-void Task::write ( tnstream& stream )
+void Command::setState( State state )
 {
-   stream.writeInt( getID() );
-   stream.writeInt( currentTaskVersion );
-   writeData( stream );
-   stream.writeInt( gameTaskToken );
-  
+   this->state = state;  
 }
+
+
+ActionResult Command::runAction( const Context& context ) 
+{
+   return go ( context );  
+}
+
+
+ActionResult Command::undoAction( const Context& context )
+{
+   return ActionResult(0);
+}
+

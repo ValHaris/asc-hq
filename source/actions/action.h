@@ -46,8 +46,7 @@ class GameAction {
       
       bool done;
       
-      
-      int ID;
+      int sequenceNumber;
       
    protected:
       
@@ -68,7 +67,6 @@ class GameAction {
       
       GameMap* getMap() { return gamemap; };
       const GameMap* getMap() const { return gamemap; } ;
-      
       
    public:
       ActionResult execute( const Context& context );

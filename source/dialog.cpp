@@ -462,6 +462,11 @@ void         statisticbuildings(void)
 #define delayconst 10
 
 
+void  dispmessage2( const ActionResult& result )
+{
+   dispmessage2( result.getCode(), result.getMessage().c_str() );  
+}
+
 
 void         dispmessage2(int          id,
                           const char *       st)

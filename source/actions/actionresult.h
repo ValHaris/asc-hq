@@ -40,6 +40,7 @@ class ActionResult {
       ActionResult( int code, const MapCoordinate& pos );
       bool successful();
       ASCString getMessage() const;
+      int getCode() const { return code; };
 };
 
 

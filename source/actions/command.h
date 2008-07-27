@@ -19,26 +19,17 @@
 */
 
 
-#ifndef taskH
-#define taskH
+#ifndef CommandH
+#define CommandH
 
-#include "../actions/context.h"
-#include "../actions/actionresult.h"
+#include "action.h"
 
-#include "../basestreaminterface.h"
+/** A Command is an action that the user initiates. 
+    It contains all the logic about when the command is available .
+    Unlike the atomic actions, it is still be run in a changed environment compared 
+    to the time it was initially issued */
 
-typedef int TaskID;
-
-
-/** T task is a operation that the user (or the AI) initiates.
-    Tasks may take several turns to complete.
-    During Execution they will generate one or more GameAction objects,
-    which encapsulate the modifications that are done to the map and which 
-    serve as the foundation for doing undo / redo 
-*/
-class Task {
-   private:
-      GameMap* gamemap;
+class Command : public GameAction {
    public:
       enum State { Planned, Evaluated, SetUp, Completed, Failed };
    private:
@@ -46,24 +37,21 @@ class Task {
    public:
       State getState() const { return state; };
       
-      virtual TaskID getID() const = 0;
+      virtual ActionResult go ( const Context& context ) = 0; 
       
-      virtual ActionResult go ( Context& context ) = 0; 
-      
-      void read ( tnstream& stream );
-      void write ( tnstream& stream );
-      
-      virtual ~Task(){};
-      
-      ASCString getCommandString();
+      virtual ASCString getCommandString() const = 0;
       
    protected:
-      Task( GameMap* gamemap );
+      Command( GameMap* gamemap );
       
-      virtual void readData ( tnstream& stream ) = 0;
-      virtual void writeData ( tnstream& stream ) = 0;
+      void setState( State state );
       
-      GameMap* getMap();
+      
+      virtual ActionResult runAction( const Context& context ) ;
+      virtual ActionResult undoAction( const Context& context );
+      
+      virtual void readData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) ;
 };
 
 #endif

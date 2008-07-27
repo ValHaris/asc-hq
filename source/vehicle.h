@@ -302,6 +302,9 @@ class UnitHooveringLogic {
     /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
     void removeview();
+    
+    /** resets the internal view state, so that addview() can be executed again */
+    void resetview();
 
     /** returns true if the units view is currently added to the maps global visibility.
         \sa viewcalculation.cpp */

@@ -19,45 +19,26 @@
 */
 
 
-#include "task.h"
-#include "../util/messaginghub.h"
-#include "../basestrm.h"
+#ifndef UnitCommandH
+#define UnitCommandH
 
-Task::Task( GameMap* gamemap ) 
-{
-   state = Planned;
-   this->gamemap = gamemap;
-}
-   
-GameMap* Task::getMap()
-{
-   return gamemap;
-}
+#include "command.h"
 
-const int currentTaskVersion = 1;
-const int gameTaskToken = 0x9812a0c3;
+class Vehicle;
 
-void Task::read ( tnstream& stream )
-{
-   displayLogMessage(0, "reading " + ASCString::toString(getID()) + "\n");
-   
-   int version = stream.readInt();
-   if ( version > currentTaskVersion )
-      throw tinvalidversion ( "GameAction", currentTaskVersion, version );
+class UnitCommand : public Command {
+   private:
+      int unitNetworkID;
+   protected:
+      Vehicle* getUnit();
+      int getUnitID() const { return unitNetworkID; };
+      
+      UnitCommand( Vehicle* vehicle );
+      void readData ( tnstream& stream );
+      void writeData ( tnstream& stream );
+      
+};
 
-   readData( stream );
-   
-   int token = stream.readInt();
-   if ( token != gameTaskToken )
-      throw tinvalidversion ("GameActionToken", gameTaskToken, token );
-   
-}
 
-void Task::write ( tnstream& stream )
-{
-   stream.writeInt( getID() );
-   stream.writeInt( currentTaskVersion );
-   writeData( stream );
-   stream.writeInt( gameTaskToken );
-  
-}
+#endif
+

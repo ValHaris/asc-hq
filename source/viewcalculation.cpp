@@ -228,8 +228,7 @@ void         clearvisibility( GameMap* gamemap, int  reset )
 
    for ( int p = 0; p < gamemap->getPlayerCount() ; p++ )
       for ( Player::VehicleList::iterator i = gamemap->player[p].vehicleList.begin(); i != gamemap->player[p].vehicleList.end(); i++ )
-         if ( (*i)->isViewing())
-            (*i)->removeview();
+         (*i)->resetview();
 
    int l = 0;
    for ( int x = 0; x < gamemap->xsize ; x++)
@@ -433,7 +432,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
 
 
 
-int computeview( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView )
+int computeview( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView, const Context* context )
 {
    if ( !gamemap || (gamemap->xsize == 0) || (gamemap->ysize == 0))
       return 0;
@@ -453,8 +452,7 @@ int computeview( GameMap* gamemap, int player_fieldcount_mask, bool disableShare
             (*i)->addview();
       }
 
-
-   return evaluateviewcalculation ( gamemap, player_fieldcount_mask, disableShareView );
+   return evaluateviewcalculation ( gamemap, player_fieldcount_mask, disableShareView, context);
 }
 
 

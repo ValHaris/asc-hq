@@ -984,6 +984,11 @@ void Vehicle :: addview ()
    bes.startsearch();
 }
 
+void Vehicle :: resetview()
+{
+   viewOnMap = false;  
+}
+
 void Vehicle :: removeview ()
 {
    if ( !viewOnMap )
