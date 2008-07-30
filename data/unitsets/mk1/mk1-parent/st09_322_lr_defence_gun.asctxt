@@ -8,7 +8,7 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 507 322 0 0 0 0 0 0 0 0
 
-
+   Features += ManualSelfDestruct
    Weight = 20000
 
    TerrainAccess ->* VehicleType.Turret_lowland

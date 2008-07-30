@@ -4,7 +4,10 @@ VehicleType {
    ID = 48
 
    Picture = mk1a_zeppelin.pcx
+   InfoImage = mk1a_zeppelin.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   InfoText = [Der Zeppelin der rehanischen Streitkräfte ist, anders als historische Zeppeline, nicht in der Lage sein gesamtes Gewicht durch die Heliumfülling zu tragen. Hier ist es die Form des Auftriebskörpers und eine verstellbare Turbine die ihn in der Luft halten. Ürsprünglich war das anders gedacht, doch die notwendige Größe hätte den Zeppelin zu einem formidablen Ziel gemacht. Den Ruf eines formidablen Ziels haben Zeppline jedoch noch immer, doch die Vorteile des Geräts wiegen immer wieder die Nachteile auf, insbesondere, wenn eine Stellung schnell gesichert werden muß. Man setzt einfach einige Trupps Infantrie an dem zu sichernden Punkt ab und gibt dem Trupp dann gegen feindliche Panzer Luftunterstützung, wird der Feind zu stark, so ergreift man die Flucht. Insbesondere dann wenn feindliche Jägern auf der Bildfläche erscheinen. In dieser Rolle begleitet er das Militär der ärmeren rehanischen Völker schon seit Jahrunderten. 
+   InfoImage = Wikipedia Luftschiff]
 
    Armor += 10
    Height += high_level_flight

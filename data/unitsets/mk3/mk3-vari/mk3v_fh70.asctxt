@@ -4,8 +4,10 @@ VehicleType {
    parent = 250
 
    Description = light artillery
-   Picture = mk3v_FH70.png
+   Picture = mk3v_fh70.png
+   InfoImage = mk3v_fh70.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [InfoImage = Wikipedia M777]
 
    Armor -= 100
    Weight = 25

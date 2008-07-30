@@ -8,6 +8,7 @@ VehicleType {
    Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Luftabwehrraketen.]
    GuideSortHelp = 507 318 0 0 0 0 0 0 0 0
 
+   Features += ManualSelfDestruct
    Armor -= 400
    View = 60
    Transportation ->* VehicleType.TransLowTrooper3 

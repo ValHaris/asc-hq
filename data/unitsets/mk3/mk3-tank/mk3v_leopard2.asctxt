@@ -3,7 +3,9 @@ VehicleType {
    ID = 558
    parent = 291
    Description = Battle Tank
-   Picture = Mk3v_leopard2.png
+   InfoText = [InfoImage = Wikipedia Leopard2]
+   Picture = mk3v_leopard2.png
+   InfoImage = mk3v_leopard2.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

@@ -5,11 +5,12 @@ VehicleType {
    parent = 400 401 402 403
 
    Description = air-defence bunker
+   Picture = b_sambunker.pcx
    Infotext = [ ]
    GuideSortHelp = 223 508 0 0 0 0 0 0 0 0
 
+   Features += ManualSelfDestruct
    view = 60
-   Picture = b_sambunker.pcx
    Weight = 290
    TerrainAccess ->* VehicleType.Turret_lowland 
    Weapons { 

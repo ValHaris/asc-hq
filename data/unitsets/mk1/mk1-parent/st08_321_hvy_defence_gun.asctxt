@@ -11,7 +11,7 @@ VehicleType {
               get a lock on very small targets.]
    GuideSortHelp = 507 321 0 0 0 0 0 0 0 0
 
-
+   Features += ManualSelfDestruct
    Weight = 430
 
    TerrainAccess ->* VehicleType.Turret_only 

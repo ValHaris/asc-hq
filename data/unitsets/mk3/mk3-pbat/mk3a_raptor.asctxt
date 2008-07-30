@@ -7,6 +7,8 @@ VehicleType {
    picture = mk3a_raptor.png
    InfoImage = mk3a_raptor.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [InfoImage = Wikipedia Lockheed Martin F-22
+]
 
    Jamming = 39
    Features += jam_only_own_field 

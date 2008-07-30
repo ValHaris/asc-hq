@@ -324,7 +324,7 @@
    Tank_Gun {
       Type = cannon shootable 
       targets = floating ground_level 
-      shotFrom = ground_level 
+      shotFrom = floating ground_level 
       MaxRange = 10
       MinRange = 10
       Ammo = 10

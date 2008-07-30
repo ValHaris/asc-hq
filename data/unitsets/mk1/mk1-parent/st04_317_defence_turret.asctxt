@@ -8,9 +8,6 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 507 317 0 0 0 0 0 0 0 0
 
-   
-   View = 60
-   WaitForAttack = true
    Transportation { 
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 25
@@ -19,6 +16,9 @@ VehicleType {
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
    } Transportation
+   
+   Features += ManualSelfDestruct
+   View = 60
    FuelConsumption = 200
    Weight = 450
 
@@ -29,6 +29,7 @@ VehicleType {
    } Tank
    TerrainAccess ->* VehicleType.Turret_only 
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 7

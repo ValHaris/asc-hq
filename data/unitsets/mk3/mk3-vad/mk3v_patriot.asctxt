@@ -4,8 +4,10 @@ VehicleType {
    parent = 219
    
    Description = missile air defence
-   Infotext = [The Patriot is an surface-to-air, mobile, air defense missile system.]
+   Infotext = [The Patriot is an surface-to-air, mobile, air defense missile system.
+               InfoImage = Wikipedia MIM-104 Patriot]
    Picture = MK3v_patriot.png
+   InfoImage = mk3v_patriot.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Armor -= 20

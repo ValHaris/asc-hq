@@ -14,7 +14,7 @@ BuildingType {
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 500
       MaxLoadableMass = 1000
-      CategoriesNOT = default medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft
+      CategoriesNOT = medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft
       EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = In out docking

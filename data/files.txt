@@ -67,6 +67,7 @@ unitsets/mk1/mk1-parent/*.pcx
 unitsets/mk1/mk1-parent/*.set
 unitsets/mk1/mk1-pbat/*.asctxt
 unitsets/mk1/mk1-pbat/*.pcx
+unitsets/mk1/mk1-pbat/*.jpg
 unitsets/mk1/mk1-psup/*.asctxt
 unitsets/mk1/mk1-psup/*.pcx
 unitsets/mk1/mk1-shb/*.asctxt
@@ -113,6 +114,7 @@ unitsets/mk3/mk3-inf/*.png
 unitsets/mk3/mk3-inf/*.jpg
 unitsets/mk3/mk3-heli/*.asctxt
 unitsets/mk3/mk3-heli/*.png
+unitsets/mk3/mk3-heli/*.jpg
 unitsets/mk3/mk3-orb/*.asctxt
 unitsets/mk3/mk3-orb/*.png
 unitsets/mk3/mk3-orb/*.jpg
@@ -136,6 +138,7 @@ unitsets/mk3/mk3-shtu/*.png
 unitsets/mk3/mk3-shtu/*.jpg
 unitsets/mk3/mk3-sta/*.asctxt
 unitsets/mk3/mk3-sta/*.png
+unitsets/mk3/mk3-sta/*.jpg
 unitsets/mk3/mk3-tank/*.asctxt
 unitsets/mk3/mk3-tank/*.pcx
 unitsets/mk3/mk3-tank/*.png
@@ -143,12 +146,14 @@ unitsets/mk3/mk3-tank/*.jpg
 unitsets/mk3/mk3-train/*.asctxt
 unitsets/mk3/mk3-train/*.png
 unitsets/mk3/mk3-train/*.pcx
+unitsets/mk3/mk3-train/*.jpg
 unitsets/mk3/mk3-vad/*.asctxt
 unitsets/mk3/mk3-vad/*.png
 unitsets/mk3/mk3-vad/*.jpg
 unitsets/mk3/mk3-vari/*.asctxt
 unitsets/mk3/mk3-vari/*.pcx
 unitsets/mk3/mk3-vari/*.png
+unitsets/mk3/mk3-vari/*.jpg
 unitsets/mk3/mk3-vfatr/*.asctxt
 unitsets/mk3/mk3-vfatr/*.png
 unitsets/mk3/mk3-vfatr/*.jpg
@@ -157,6 +162,7 @@ unitsets/mk3/mk3-view/*.png
 unitsets/mk3/mk3-view/*.jpg
 unitsets/mk3/mk3-vrok/*.asctxt
 unitsets/mk3/mk3-vrok/*.png
+unitsets/mk3/mk3-vrok/*.jpg
 unitsets/mk3/mk3-vsup/*.asctxt
 unitsets/mk3/mk3-vsup/*.png
 unitsets/mk3/mk3-vsup/*.jpg

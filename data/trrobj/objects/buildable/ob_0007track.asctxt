@@ -3,8 +3,10 @@ ObjectType {
    Weather = dry 
    visible_in_fogOfWar = false
    LinkableObjects = 
+
    Armor = 0
-   Movemalus_plus = 
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = -2  -1  -1  -1  -1  -1  -1  -1  0   10  0   -4  10  10  0   0   -1  0
    Movemalus_abs = 
    AttackBonus_abs = -1
    AttackBonus_plus = 0
@@ -12,6 +14,7 @@ ObjectType {
    DefenseBonus_plus = 0
    Jamming_abs = -1
    Jammming_plus = 0
+
    Height = 3
    ConstructionCost { 
       Energy = 0
@@ -34,8 +37,8 @@ ObjectType {
       terrain_not = 
       terrain_kill = very_shallow_water shallow_water water deep_water river lava 
    } TerrainAccess
-   TerrainProperties_Filter = 
-   TerrainProperties_Add = 
+   TerrainProperties_Filter = deep_snow
+   TerrainProperties_Add = mud
    dry { 
       UseGFXpics = true
       GFXpictures = 1590 1591 1592 1593 1592 1594 1613 1595 1591 1596 1594 1597 1593 1597 1595 1598 1592 1594 1599 1600 1601 1602 1603 1604 1593 1597 1600 1605 1606 1607 1608 1609 1592 1593 1601 1606 1599 1600 1603 1608 1594 1597 1602 1607 1600 1605 1604 1609 1613 1595 1603 1608 1603 1604 1610 1611 1595 1598 1604 1609 1608 1609 1611 1612 

@@ -3,7 +3,9 @@ VehicleType {
    ID = 615
    parent = 295
    Description = [Main Battle Tank]
-   Picture = Mk3v_maus.png
+   InfoText = [InfoImage = Sebastian Nast nast-sonderfahrzeuge.de ]
+   Picture = mk3v_maus.png
+   InfoImage = mk3v_maus.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor += 100

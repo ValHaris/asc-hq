@@ -11,7 +11,7 @@ Die gute Panzerung garantiert ausserdem das diese Anlage auch schwerem Beschuss 
 ]
    GuideSortHelp = 0 310 0 0 0 0 0 0 0 0
 
-
+   Features += ManualSelfDestruct
    Armor -= 100
    View = 40
    Jamming = 55

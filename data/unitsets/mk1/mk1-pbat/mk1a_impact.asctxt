@@ -4,13 +4,15 @@ VehicleType {
    ID = 21
    
    Description = Fighter-Bomber
+   picture = mk1a_impact.pcx
+   InfoImage = mk1a_impact.jpg
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Fighter/Bombers combine ground assault with air defense. While
               a Fighter/Bomber cannot stand up to a Heavy Fighter, it has
               sufficient means of defending itself. If you need a convoy taken
               out, and cannot afford to wait for escorts, the Fighter/Bomber
-              is the ideal choice.]
-   picture = Mk1a_impact.pcx
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+              is the ideal choice.
+              InfoImage = Wikipedia Lockheed Martin F-22 ]
 
    Armor += 20
 

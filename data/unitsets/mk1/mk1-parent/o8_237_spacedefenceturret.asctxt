@@ -9,7 +9,7 @@ VehicleType {
 
    Armor += 50
    View = 60
-   Features += satelliteview 
+   Features += satelliteview  ManualSelfDestruct
    TerrainAccess ->* VehicleType.Turret_only 
    Weapons { 
       Initiative = 0

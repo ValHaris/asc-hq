@@ -3,6 +3,7 @@ VehicleType {
    ID = 557
    parent = 242
    Description = radar vehicle
+   InfoText = [InfoImage = Wikipedia P-40 (Long Track)]
    Picture = mk3v_longtrack.png
    InfoImage = mk3v_longtrack.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

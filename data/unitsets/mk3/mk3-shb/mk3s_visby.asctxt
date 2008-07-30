@@ -4,7 +4,9 @@ VehicleType {
    ID = 587
    
    Description = stealth corvette
-   picture = MK3s_visby.png
+   InfoText = [InfoImage = Wikipedia Visby-Klasse ]
+   picture = mk3s_visby.png
+   InfoImage = mk3s_visby.jpg
    GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
 
    jamming = 61

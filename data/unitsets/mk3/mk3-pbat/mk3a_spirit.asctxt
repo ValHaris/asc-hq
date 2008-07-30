@@ -6,6 +6,7 @@ VehicleType {
    Picture = mk3a_spirit.png
    InfoImage = mk3a_spirit.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [InfoImage = Wikipedia B-2]
 
    Armor -= 5
    Jamming += 20

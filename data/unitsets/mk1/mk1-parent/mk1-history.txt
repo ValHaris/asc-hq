@@ -2,6 +2,14 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 5-07/08
+-InfoText = zeppelin
+-InfoImage = Zeppelin, Butterfly, Hawk, Rasak, Impact
+-Containerladesystem bugfix
+- ManualSelfDestruct ergänzt bei diversen turret und Bunkerparents
+Beta 3-07/08
+-Oracle Grafik Bugfix
+__________________
 06.07.2008 (GAMER)
 - Floating to Submerged Ausgang Bugfix
 -HeliCarrier, Anpassung Transportsystem

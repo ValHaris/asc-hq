@@ -4,8 +4,10 @@ VehicleType {
    ID = 585
 
    Description = anti aircraft destroyer
-   Infotext = [The main mission of the Daring Type anti-air warfare destroyer is to provide local area fleet defence. ]
-   picture = MK3s_daring.png
+   Infotext = [The main mission of the Daring Type anti-air warfare destroyer is to provide local area fleet defence.
+               InfoImage = Wikipedia Daring-Klasse ]
+   picture = mk3s_daring.png
+   Infoimage = mk3s_daring.jpg
    GuideSortHelp += 0 0 0 0 3 508 422 0 0 0
 
    Armor -= 100

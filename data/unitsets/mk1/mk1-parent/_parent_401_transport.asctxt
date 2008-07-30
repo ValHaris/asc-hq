@@ -110,11 +110,24 @@
         CategoriesNOT = 
         DockingHeightAbs = 
         DockingHeightRel = -100 
+        RequireUnitFunction =
    } carrier
    
    carrier_ground ->* VehicleType.carrier
    carrier_ground.ContainerHeight = ground_level
 
+   carrier_air_high {
+        Mode = In out
+        UnitHeightAbs = medium_level_flight high_level_flight
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight
+        MoveCost = 40 
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+        RequireUnitFunction =
+   } carrier_air_high
+   
    cruiser {
         Mode = In out
         UnitHeightAbs = low_level_flight
@@ -293,10 +306,10 @@
         UnitHeightAbs = ground_level
         UnitHeightRel = -100
         ContainerHeight = low_level_flight
-        CategoriesNOT = 
+        CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
         DockingHeightAbs = 
         DockingHeightRel = -100
-        MoveCost = 20
+        MoveCost = 12
         DisableAttack = false
       } container_in_out
 

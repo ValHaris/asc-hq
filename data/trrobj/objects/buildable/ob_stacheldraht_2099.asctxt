@@ -1,0 +1,69 @@
+ObjectType { 
+   ID = 2099
+   GroupID = 8
+
+   Name = Razor Wire
+
+   Weather = dry much_snow snow_and_ice
+
+   visible_in_fogOfWar = false
+
+   Height = 119 ;17-Aug 2003
+   Armor = 600
+
+   LinkableObjects = 
+   NetBehaviour = NetToSelf NetToBorder AutoBorder
+
+   ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = -1
+   Movemalus_plus =  50  10   7   5 120 100  80  50  35  50  50  50  50  50  50  50  50 100
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 85
+      fuel = 30
+      Movement = 25
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -60
+      fuel = 30
+      Movement = 35
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand hillside frozen_water very_shallow_water Installation
+      terrain_all = 
+      terrain_not = Lava Swamp Shallow_water Water Deep_water Pack_ice
+      terrain_kill = Shallow_water Water Deep_water Lava Pack_ice
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add =
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_stacheldraht_2099.png 64
+      ImageReference =  -1
+      FlipPictures   =  0
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_stacheldraht_2099.png 64
+      ImageReference =  -1
+      FlipPictures   =  0
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = false
+      picture = ob_stacheldraht_2099.png 64
+      GraphicOperations = Snow
+      ImageReference =  -1
+      FlipPictures   =   0
+   } snow_and_ice
+
+} ObjectType

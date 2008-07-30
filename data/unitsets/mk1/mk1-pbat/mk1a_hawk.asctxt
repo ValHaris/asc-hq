@@ -3,8 +3,10 @@ VehicleType {
    ID = 68
    parent = 279
 
-   Picture = MK1a_HAWK.pcx
+   Picture = mk1a_hawk.pcx
+   InfoImage = mk1a_hawk.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   InfoText = [InfoImage = Wikipedia Northrop YB-49]
 
    Armor += 40
 

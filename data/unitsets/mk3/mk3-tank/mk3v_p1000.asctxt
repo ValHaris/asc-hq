@@ -2,10 +2,12 @@ VehicleType {
    Name = P1000
    parent = 294
    ID = 563
+
    Description = old prototype tank
    Picture = mk3v_p1000.png
    InfoImage = mk3v_p1000.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [InfoImage = Sebastian Nast nast-sonderfahrzeuge.de]
 
    Weight = 200
    Transportation ->* VehicleType.TransLowTrooper2 

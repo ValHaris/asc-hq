@@ -4,6 +4,7 @@ VehicleType {
    parent = 357
 
    Description = battleship
+   InfoText = [InfoImage = Wikipedia Schlachtschiff]
    picture = MK3s_iowa.png
    InfoImage = mk3s_iowa.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

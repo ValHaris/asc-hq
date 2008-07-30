@@ -2,8 +2,11 @@ VehicleType {
    Name = RAFALE
    ID = 623
    parent = 327
-   Picture = MK3a_RAFALE.png
+
+   Picture = mk3a_rafale.png
+   InfoImage = mk3a_rafale.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [InfoImage = Wikipedia Dassault Rafale]
 
    Armor -= 20
    Movement += 0 0 0 0 10 10 0 0 

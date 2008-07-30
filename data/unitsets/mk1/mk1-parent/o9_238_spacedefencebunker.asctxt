@@ -11,7 +11,7 @@ VehicleType {
 
    Armor -= 100
    Weight = 14300
-   Features += satelliteview
+   Features += satelliteview ManualSelfDestruct
 
    TerrainAccess ->* VehicleType.turret_Lowland 
 

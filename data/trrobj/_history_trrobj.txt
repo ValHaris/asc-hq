@@ -1,9 +1,15 @@
 Gfx terrain System
 Advanced Strategic Command
 Specifications by GAMER
-Grafics by GAMER,Snuggels,ValHaris,Xyphagoroszh und Grom
+Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
 
 ________________
+Beta 6-07/08
+-neue Stacheldrahtgrafik
+-neue Panzersperrengrafik
+-neue Rollbahngrafik
+Beta 5-07/08
+-Track modifiziert Movemalus des Feldes
 Beta 3-07/08
 -Hafenbeton/-mauer zerstörbar, nur noch per separatem Adapter baubar
 __________________

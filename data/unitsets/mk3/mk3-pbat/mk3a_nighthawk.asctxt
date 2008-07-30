@@ -2,10 +2,12 @@ VehicleType {
    Name = NIGHTHAWK
    parent = 390
    ID = 516
+
    Description = Stealth fighter
-   Infotext = []
-   picture = MK3a_NIGHTHAWK.png
+   picture = mk3a_nighthawk.png
+   InfoImage = mk3a_nighthawk.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Infoimage = Wikipedia Lockheed F-117]
 
    Jamming += 20
    Movement += 0 0 0 0 0 10 10 0 
