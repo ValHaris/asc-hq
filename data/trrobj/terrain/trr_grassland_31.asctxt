@@ -1,30 +1,30 @@
 TerrainType { 
 
-   Name = Mud 6
-   Parent = 502
+   Name = Grassland 31
+   Parent = 501
    ID = 2999
   
    Weather -= snow_and_ice
 
    dry { 
       UseGFXpics = false
-      Picture = trr_mud_6.png
+      Picture = trr_grassland_31.png
    } dry
    light_rain { 
       UseGFXpics = false
-      Picture = trr_mud_6.png pfuetze-1a.png
+      Picture = trr_grassland_31.png pfuetze-1a.png
    } light_rain
    heavy_rain { 
       UseGFXpics = false
-      Picture = trr_mud_6.png pfuetze-1c.png
+      Picture = trr_grassland_31.png pfuetze-1c.png
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-      Picture = trr_mud_6.png fewsnow3.png
+      Picture = trr_grassland_31.png fewsnow3.png
    } few_snow
    much_snow { 
       UseGFXpics = false
-      Picture = trr_mud_6.png
+      Picture = trr_grassland_31.png
       GraphicOperations = Snow
    } much_snow
 

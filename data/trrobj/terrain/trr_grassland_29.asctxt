@@ -1,30 +1,30 @@
 TerrainType { 
 
-   Name = Mud 4
-   Parent = 502
+   Name = Grassland 29
+   Parent = 501
    ID = 2997
 
    Weather -= snow_and_ice
 
    dry { 
       UseGFXpics = false
-      Picture = trr_mud_4.png
+      Picture = trr_grassland_29.png
    } dry
    light_rain { 
       UseGFXpics = false
-      Picture = trr_mud_4.png pfuetze-1a.png
+      Picture = trr_grassland_29.png pfuetze-1a.png
    } light_rain
    heavy_rain { 
       UseGFXpics = false
-      Picture = trr_mud_4.png pfuetze-1c.png
+      Picture = trr_grassland_29.png pfuetze-1c.png
    } heavy_rain
    few_snow { 
       UseGFXpics = false
-      Picture = trr_mud_4.png fewsnow3.png
+      Picture = trr_grassland_29.png fewsnow3.png
    } few_snow
    much_snow { 
       UseGFXpics = false
-      Picture = trr_mud_4.png
+      Picture = trr_grassland_29.png
       GraphicOperations = Snow
    } much_snow
 
