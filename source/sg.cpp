@@ -151,6 +151,7 @@
 #include "containerbase-functions.h"
 #include "memory-measurement.h"
 #include "dialogs/mailoptionseditor.h"
+#include "dialogs/unitguidedialog.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -1348,6 +1349,10 @@ void execuseraction2 ( tuseractions action )
       case ua_recompteview: 
          computeview(actmap);
          displaymap();
+         break;
+         
+      case ua_unitGuideDialog:
+         unitGuideWindow( 2);
          break;
          
       default:

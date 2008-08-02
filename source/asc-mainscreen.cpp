@@ -160,6 +160,7 @@ void Menu::setup()
    addbutton ( "Unit ~m~ovement range\t4", ua_viewunitmovementrange );
    addbutton ( "~G~ame Time", ua_GameStatus );
    addbutton ( "unit ~S~et information", ua_UnitSetInfo );
+   addbutton ( "unit guide dialog", ua_unitGuideDialog );
    addbutton ( "~T~errain\t7", ua_viewterraininfo );
    addbutton ( "~U~nit weight\t8", ua_unitweightinfo );
    currentMenu->addSeparator();

@@ -195,6 +195,7 @@ void Menu::setup()
 */
    addfield ("~H~elp");
     addbutton ( "~U~nit Information\tctrl+U",    act_unitinfo );
+    addbutton ( "unit guide dialog",             act_unitGuideDialog );
     addbutton ( "unit~S~et Information",        act_unitSetInformation );
     addbutton ( "~T~errain Information\t7",        act_terraininfo );
    currentMenu->addSeparator();

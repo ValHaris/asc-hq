@@ -27,7 +27,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 110;
+const int execactionscount = 111;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -141,7 +141,8 @@ enum tuseractions {
      act_copyArea,
      act_pasteArea,
      asc_nullPointerCrash,
-     asc_testFunction
+     asc_testFunction,
+     act_unitGuideDialog
 
  };
 

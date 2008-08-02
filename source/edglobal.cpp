@@ -57,6 +57,7 @@
 #include "dialogs/exchangegraphics.h"
 #include "dialogs/fileselector.h"
 #include "dialogs/importbi3map.h"
+#include "dialogs/unitguidedialog.h"
 #include "stack.h"
 
    
@@ -170,7 +171,8 @@
         "Copy Area",
         "Paste Area",
         "Crash mapeditor",
-        "Test Debug Function"
+        "Test Debug Function",
+        "Unit Guide Dialog"
 	 };
 
 
@@ -855,7 +857,9 @@ void execaction( int code)
       break;
    case act_playerStrengthSummary: pbpplayerstatistics( actmap );
       break;
-
+   case act_unitGuideDialog: unitGuideWindow(2);
+      break;
+      
     }
 }
 
