@@ -448,7 +448,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
          setLabelText( "unittypename", "" );
          setLabelText( "unitname", "" );
          bool objectFound = false;
-         if ( fld && fld->objects.size() ) {
+         if ( fld && fld->objects.size() && fieldvisiblenow( fld )) {
             for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
                if ( i->typ->armor > 0 ) {
                   setBargraphValue( "unitdamage", float(100-i->damage) / 100  );
