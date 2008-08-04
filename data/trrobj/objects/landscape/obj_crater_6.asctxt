@@ -1,0 +1,19 @@
+ObjectType { 
+
+   Weather = dry much_snow
+
+   Name = Crater 6
+   Parent = 507
+   ID = 2057
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_crater_6.png 1
+   } dry
+   much_snow {
+      UseGFXpics = false
+      picture = obj_crater_6.png 1
+      GraphicOperations = Snow
+   } much_snow
+
+} ObjectType
