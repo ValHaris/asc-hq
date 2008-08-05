@@ -3,6 +3,11 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+05.08.2008 (Ares)
+- Mk3 Wracks eingebaut
+
+
+__________________
 Beta 2-08/08
 -InfoText = GI, Nighthawk
 -USSL, -10 Movement
