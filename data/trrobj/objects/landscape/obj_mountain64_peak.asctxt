@@ -5,8 +5,9 @@ ObjectType {
    ID = 2610
    Height = 90
 
-   TerrainAccess.terrain_any += Mountains
-   TerrainProperties_Filter = Lowland mud morass swamp forest Mountains High_mountains Shallow_water Water deep_water Hard_sand Soft_sand Very_shallow_water lava Ditch Hillside Turret_foundation Frozen_water 
+   TerrainAccess.terrain_any = Mountains
+   TerrainProperties_Filter = road runway Lowland  Hard_sand Soft_sand mud morass swamp forest Mountains Shallow_water Water deep_waterVery_shallow_water lava Ditch Hillside Turret_foundation Frozen_water 
+   NetBehaviour = NetToSelf
 
    Weather = dry much_snow
 

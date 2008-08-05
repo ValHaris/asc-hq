@@ -7,7 +7,13 @@ VehicleType {
    picture = mk3a_nighthawk.png
    InfoImage = mk3a_nighthawk.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   Infotext = [Infoimage = Wikipedia Lockheed F-117]
+   Infotext = [Dieses Flugzeug ist eine der größten Errungenschaften der terranischen Waffentechnik. Die Lockheed F-117A, eher bekannt unter dem Namen "Nighthawk", ist ein Tarnkappenjagdbomber der auf Grund seiner Form und der verwendeten Materialien für Radar sehr schwer zu orten ist.
+Seine Bewaffnung besteht aus 2 schweren Luft-Boden-Raketen die aus relativ sicherer Entfernung abgeschossen werden können. Zusätzlich besitzt der Nighthawk 4 schwere Bomben die auch aus großer Höhe abgeworfen werden können und trotzdem ihre Ziele punktgenau treffen. Abgerundet wird die Bewaffnung durch 4 Luft-Luft-Raketen, weshalb der Nighthawk auch als Jäger eingesetzt werden kann. Dabei empfiehlt sich besonders der Einsatz gegen Flugzeuge die selbst nicht gegen hochfliegende Flugzeuge gerüstet sind. Einzelne Flugzeuge kann der Nighthawk beschiessen, ohne selbst gesehen zu werden.
+
+Nachteilig ist, dass die ursprünglich vorgesehene Trägertauglichkeit aufgrund von Rivalitäten zwischen Luftwaffe und Marine der terranischen Streitkräfte nicht realisiert wurde. Gerüchten zufolge sollen von rehanischen und chromonischen Superträger schon Nighthawks operiert haben. 
+
+Unter den Piloten ist die F-117A aufgrund ihres Aussehens und der unruhigen Flugeigenschaften während der Luftbetankung auch unter dem Namen "Wobblin' Goblin" bekannt.
+Infoimage = Wikipedia Lockheed F-117]
 
    Jamming += 20
    Movement += 0 0 0 0 0 10 10 0 

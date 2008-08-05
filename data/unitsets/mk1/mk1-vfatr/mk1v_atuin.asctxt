@@ -22,8 +22,8 @@ VehicleType {
       Material = 13000
    } Tank
    Features += automatic_resource_searching ExternalMaterialTransfer
-   Movement = 0 0 0 60 0 0 0 0 
-   Category = medium_wheeled_vehicle
+   Movement -= 0 0 0 10 0 0 0 0 
+   Category = heavy_wheeled_vehicle
    ResourceDrillingRange = 1
    Weight = 150
    TerrainAccess ->* VehicleType.Wheeled 

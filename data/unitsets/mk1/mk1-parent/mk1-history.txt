@@ -2,6 +2,10 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 2-08/08
+-Atuin +Movement,heavy_wheeled
+-Unterwasserausladesystem modifiziert
+-Tauchroboter, Torp feuert nur noch unter wasser
 Beta 5-07/08
 -InfoText = zeppelin
 -InfoImage = Zeppelin, Butterfly, Hawk, Rasak, Impact

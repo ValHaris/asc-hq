@@ -3,6 +3,9 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 2-08/08
+-InfoText = GI, Nighthawk
+-USSL, -10 Movement
 Beta 5-07/08
 -InfoImage = Dumper, FH70, Spirit, Rafale, Falcon, EF2000, KSM
 -InfoImage = Raptor, Nighthawk, Blackbird, Berkut, Chinook, Lynx

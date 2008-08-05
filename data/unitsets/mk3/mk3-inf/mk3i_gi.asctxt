@@ -4,10 +4,13 @@ VehicleType {
    parent = 201
 
    Description = Trooper
-   Infotext = [normal soldier]
    picture = mk3i_gi.png
    InfoImage = mk3i_gi.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Der GI ist die Grundlegende Infanterie Einheit der Terraner. Er ist mit einem Sturmgewehr bewaffnet das sich zur Bekämpfung von Infanterie eignet. Diese Waffe kann auch gegen Panzer und niedrige Flugzeuge eingesätzt werden, hier ist die Waffe alledings nicht sehr wirkungsvoll. Die Einheit führt zusätzlich 2 Minen mit.
+
+Sinnvoll ist der Einsatz des GI in Verbindung mit Truppentransporter um schnell Feinde zu umzingeln. 
+]
 
    Armor -= 10
    Movement += 0 0 0 1 0 0 0 0 

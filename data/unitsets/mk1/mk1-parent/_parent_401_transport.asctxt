@@ -603,9 +603,11 @@
       MaxLoadableUnitSize = 3
       MaxLoadableMass = 12
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+      CargoMovementDivisor = 1.5
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
+      EntranceSystem1.MoveCost = 20
    } TransSubTrooper
 
    TransSubmarine { 
@@ -613,9 +615,11 @@
       MaxLoadableUnitSize = 60
       MaxLoadableMass = 100
       CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship hoovercraft
+      CargoMovementDivisor = 1.5
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
+      EntranceSystem1.MoveCost = 20
    } TransSubmarine
 
 ;---------- Aircrafts ---------
