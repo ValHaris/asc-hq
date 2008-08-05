@@ -1,6 +1,7 @@
 VehicleType { 
    Name = LEOPARD3
    ID = 546
+   WreckageObject = 15546
    parent = 293
    Description = [Main Battle Tank]
    InfoText = [InfoImage = Sebastian Nast nast-sonderfahrzeuge.de]

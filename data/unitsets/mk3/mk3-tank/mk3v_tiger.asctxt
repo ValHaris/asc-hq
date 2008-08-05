@@ -1,6 +1,7 @@
 VehicleType { 
    Name = TIGER
    ID = 595
+   WreckageObject = 15595
    parent = 290
 
    InfoText = [InfoImage = Wikipedia]

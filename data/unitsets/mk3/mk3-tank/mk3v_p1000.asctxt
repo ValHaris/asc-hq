@@ -2,6 +2,7 @@ VehicleType {
    Name = P1000
    parent = 294
    ID = 563
+   WreckageObject = 15563
 
    Description = old prototype tank
    Picture = mk3v_p1000.png

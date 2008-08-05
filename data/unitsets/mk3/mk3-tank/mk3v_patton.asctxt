@@ -1,6 +1,7 @@
 VehicleType { 
    Name = PATTON
    ID = 534
+   WreckageObject = 15534
    parent = 292
    Description = medium tank
    Picture = mk3v_patton.png

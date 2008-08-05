@@ -1,6 +1,7 @@
 VehicleType { 
    Name = LEOPARD2
    ID = 558
+   WreckageObject = 15558
    parent = 291
    Description = Battle Tank
    InfoText = [InfoImage = Wikipedia Leopard2]

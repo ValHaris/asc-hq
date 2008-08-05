@@ -1,6 +1,7 @@
 VehicleType { 
    Name = STURMTIGER
    ID = 575
+   WreckageObject = 15575
    parent = 292
    Description = Sturmgeschuetz
    Infotext = []

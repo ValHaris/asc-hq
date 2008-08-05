@@ -1,6 +1,7 @@
 VehicleType { 
    Name = LEOPARD1
    ID = 555
+   WreckageObject = 15555
    parent = 290
 
    Picture = mk3v_leopard1.png

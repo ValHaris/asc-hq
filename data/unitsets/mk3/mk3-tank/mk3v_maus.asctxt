@@ -1,6 +1,7 @@
 VehicleType { 
    Name = MAUS
    ID = 615
+   WreckageObject = 15615
    parent = 295
    Description = [Main Battle Tank]
    InfoText = [InfoImage = Sebastian Nast nast-sonderfahrzeuge.de ]

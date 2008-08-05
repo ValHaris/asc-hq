@@ -1,6 +1,7 @@
 VehicleType { 
    Name = TIGER II
    ID = 596
+   WreckageObject = 15596
    parent = 291
    Description = medium tank
    Picture = MK3v_tigerII.png
