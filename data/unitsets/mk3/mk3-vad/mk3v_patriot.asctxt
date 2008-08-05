@@ -1,6 +1,7 @@
 VehicleType { 
    Name = PATRIOT
    ID = 556
+   WreckageObject = 15556
    parent = 219
    
    Description = missile air defence

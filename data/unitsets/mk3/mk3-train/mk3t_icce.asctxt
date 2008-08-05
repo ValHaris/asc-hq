@@ -2,6 +2,7 @@ VehicleType {
    Name = ICCE
    parent = 400 401 402 412
    ID = 570
+   WreckageObject = 15570
 
    Description = inter city cargo express
    Infotext = [InfoImage = Wikipedia]

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 472
+
+   ID = 15570
+
+   Name = ICCE Wreck
+
+   dry { 
+      picture = mk3t_icce_w.png 1
+   } dry
+
+} ObjectType

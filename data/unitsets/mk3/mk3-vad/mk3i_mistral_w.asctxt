@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15526
+
+   Name = Mistral Wreck
+
+   dry { 
+      picture = mk3i_mistral_w.png 1
+   } dry
+
+} ObjectType

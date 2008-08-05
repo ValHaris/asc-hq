@@ -1,6 +1,7 @@
 VehicleType { 
    Name = GEPARD
    ID = 533
+   WreckageObject = 15533
    parent = 218
    Description = anti aircraft tank
    Infotext = [Air defense cannon tank Gepard

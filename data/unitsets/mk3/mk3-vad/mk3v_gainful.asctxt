@@ -1,6 +1,7 @@
 VehicleType { 
    Name = GAINFUL
    ID = 553
+   WreckageObject = 15553
    parent = 224
 
    Description = SAM medium range

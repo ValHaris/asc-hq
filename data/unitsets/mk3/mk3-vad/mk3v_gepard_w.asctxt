@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15533
+
+   Name = Gepard Wreck
+
+   dry { 
+      picture = mk3v_gepard_w.png 1
+   } dry
+
+} ObjectType

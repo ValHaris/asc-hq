@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15553
+
+   Name = Gainful Wreck
+
+   dry { 
+      picture = mk3v_gainful_w.png 1
+   } dry
+
+} ObjectType

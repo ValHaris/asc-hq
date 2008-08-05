@@ -1,6 +1,7 @@
 VehicleType { 
    Name = GUIDELINE
    ID = 567
+   WreckageObject = 15567
    parent = 225
 
    Description = SAM long range

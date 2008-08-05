@@ -1,6 +1,7 @@
 VehicleType { 
    Name = MISTRAL
    ID = 526
+   WreckageObject = 15526
    parent = 215
    
    Description = Air Defence Trooper

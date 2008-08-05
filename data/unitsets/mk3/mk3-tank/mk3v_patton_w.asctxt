@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15534
+
+   Name = Patton Wreck
+
+   dry { 
+      picture = mk3v_patton_w.png 1
+   } dry
+
+} ObjectType

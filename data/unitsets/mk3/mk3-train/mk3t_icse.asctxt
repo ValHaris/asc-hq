@@ -2,6 +2,7 @@ VehicleType {
    Name = ICSE
    parent = 400 401 402 412
    ID = 571
+   WreckageObject = 15571
 
    Description = inter city support express
    Infotext = [InfoImage = Wikipedia]

@@ -1,6 +1,7 @@
 VehicleType { 
    Name = RAPIER2
    ID = 617
+   WreckageObject = 15617
    parent = 223
 
    Description = air-defence turret

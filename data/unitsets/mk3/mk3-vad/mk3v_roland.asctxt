@@ -1,6 +1,7 @@
 VehicleType { 
    Name = ROLAND
    ID = 532
+   WreckageObject = 15532
    parent = 220
 
    Description = anti aircraft tank
