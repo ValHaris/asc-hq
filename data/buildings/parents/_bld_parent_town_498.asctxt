@@ -55,4 +55,41 @@ BuildingType {
         DockingHeightRel = -100 
    } GrIO
    
+   Esmall { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 4
+      MaxLoadableMass = 4
+      CategoriesNOT -> BuildingType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = 0
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = 0 
+        DisableAttack = false
+      } EntranceSystem0
+   } Esmall
+
+   Ellf { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 4
+      MaxLoadableMass = 4
+      CategoriesNOT -> BuildingType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level low_level_flight 
+        UnitHeightRel = -1
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = low_level_flight 
+        DockingHeightRel = 0 
+        DisableAttack = false
+      } EntranceSystem0
+   } Ellf
+
+
 } BuildingType

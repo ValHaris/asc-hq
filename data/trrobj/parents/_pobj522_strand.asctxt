@@ -15,7 +15,7 @@ ObjectType {
    Height = 1
 
    ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   Movemalus_plus =   0   2   2   2   5   5   5   1   0   5   5   0   5   5   5   5   5   0
+   Movemalus_plus =   0   2   2   2   2   5   5   1   0   5   5   0   5   5   5   5   5   0
    Movemalus_abs = -1
    AttackBonus_abs = 0
    AttackBonus_plus = 0

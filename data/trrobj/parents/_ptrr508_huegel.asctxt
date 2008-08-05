@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 1
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      Movemalus = 20  20  20  20  24  24  24  20  15  24  24  16  24  24  24  24  24  24 
+      Movemalus = 20  20  20  20  22  24  24  20  15  24  24  16  24  24  24  24  24  24 
       TerrainProperties = hillside track_possible
    } dry
 
@@ -17,7 +17,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 2
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      Movemalus = 22  22  22  22  26  26  26  22  15  26  26  16  26  26  26  26  26  24 
+      Movemalus = 22  22  22  22  24  26  26  22  15  26  26  16  26  26  26  26  26  24 
       TerrainProperties = hillside mud track_possible
    } light_rain
 
@@ -26,7 +26,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 3
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      Movemalus = 24  24  24  24  28  28  28  24  15  28  28  16  28  28  28  28  28  24
+      Movemalus = 24  24  24  24  26  28  28  24  15  28  28  16  28  28  28  28  28  24
       TerrainProperties = hillside track_possible
    } heavy_rain
 

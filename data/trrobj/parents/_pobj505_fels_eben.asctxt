@@ -28,7 +28,7 @@ ObjectType {
 ; dry
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    Movemalus_plus =  
-   MoveMalus_abs = 10  10  10  10  11  11  11  10  10  20  20  16  20  20  20  20  20  10
+   MoveMalus_abs = 10  10  10  10  10  11  11  10  10  20  20  16  20  20  20  20  20  10
 
    AttackBonus_abs = -1
    AttackBonus_plus = 
@@ -49,7 +49,7 @@ ObjectType {
    dry {
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    Movemalus_plus =  
-   MoveMalus_abs = 10  10  10  10  11  11  11  10  10  20  20  16  20  20  20  20  20  10
+   MoveMalus_abs = 10  10  10  10  10  11  11  10  10  20  20  16  20  20  20  20  20  10
 
    AttackBonus_abs = -1
    AttackBonus_plus = 

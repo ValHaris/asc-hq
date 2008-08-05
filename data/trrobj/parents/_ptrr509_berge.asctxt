@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 1
       BasicJamming = 2
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      Movemalus = 22  22  22  22  26  26  26  22  15  26  26  16  26  26  26  26  26  26 
+      Movemalus = 22  22  22  22  24  26  26  22  15  26  26  16  26  26  26  26  26  26 
       TerrainProperties = Mountains 
    } dry
 

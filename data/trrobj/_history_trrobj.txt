@@ -4,6 +4,8 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
 
 ________________
+Beta 1-08/08
+-Movementanpassungen bei Light_wheeled_vehicle
 Beta 6-07/08
 -neue Stacheldrahtgrafik
 -neue Panzersperrengrafik

@@ -26,7 +26,7 @@ ObjectType {
    } RemovalCost
 
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  14  14  14  16  16  16  12  10  19  12  11  19  19  12  12  19  10
+   MoveMalus_abs = 12  14  14  14  15  16  16  12  10  19  12  11  19  19  12  12  19  10
    Movemalus_plus = 
 
    AttackBonus_abs = 0
@@ -49,7 +49,7 @@ ObjectType {
 
    dry {
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  14  14  14  16  16  16  12  10  19  12  11  19  19  12  12  19  10
+   MoveMalus_abs = 12  14  14  14  15  16  16  12  10  19  12  11  19  19  12  12  19  10
    Movemalus_plus = 
 
    AttackBonus_abs = 0
@@ -88,7 +88,7 @@ ObjectType {
 
    snow_and_ice ->* ObjectType.much_snow
    ;                           def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   snow_and_ice.MoveMalus_Abs = 13  13  13  13  14  14  14  12  12  14  22  16  14  14  22  22  14  10
+   snow_and_ice.MoveMalus_Abs = 13  13  13  13  13  14  14  12  12  14  22  16  14  14  22  22  14  10
    snow_and_ice.TerrainProperties_Add = shallow_water frozen_water track_possible snow
 
 } ObjectType

@@ -11,7 +11,7 @@ ObjectType {
    canExistBeneathBuildings = true
 
    ;               def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   Movemalus_plus =  0 -10 -10 -10 -10 -10 -10 -10   0   0   5   0   0   0   5   5   0   0
+   Movemalus_plus =  0 -4  -4  -4  -4  -4  -4  -4  0   0   5   0   0   0   5   5   0   0
    Movemalus_abs = -1
    AttackBonus_abs = -1
    AttackBonus_plus = 0

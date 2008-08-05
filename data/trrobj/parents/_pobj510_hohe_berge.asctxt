@@ -26,7 +26,7 @@ ObjectType {
    } RemovalCost
 
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   Movemalus_abs = 24  24  24  24  28  28  28  24  15  28  28  16  28  28  28  28  28  28 
+   Movemalus_abs = 24  24  24  24  26  28  28  24  15  28  28  16  28  28  28  28  28  28 
    Movemalus_plus = 
 
    AttackBonus_abs = 2
@@ -49,7 +49,7 @@ ObjectType {
 
    dry {
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   Movemalus_abs = 24  24  24  24  28  28  28  24  15  28  28  16  28  28  28  28  28  28 
+   Movemalus_abs = 24  24  24  24  26  28  28  24  15  28  28  16  28  28  28  28  28  28 
    Movemalus_plus = 
 
    AttackBonus_abs = 2

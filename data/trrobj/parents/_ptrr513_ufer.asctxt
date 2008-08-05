@@ -9,7 +9,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 0
   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 12  12  12  12  14  14  14  12  10  19  12  11  19  19  12  12  19  10
+      MoveMalus = 12  12  12  12  13  14  14  12  10  19  12  11  19  19  12  12  19  10
       TerrainProperties = Very_shallow_water 
    } dry
    
@@ -38,7 +38,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 2
   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 13  13  13  13  14  14  14  12  12  14  22  16  14  14  22  22  14  12
+      MoveMalus = 13  13  13  13  13  14  14  12  12  14  22  16  14  14  22  22  14  12
       TerrainProperties = Very_shallow_water frozen_water track_possible snow
    } snow_and_ice
 } TerrainType
