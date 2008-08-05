@@ -2,6 +2,7 @@ VehicleType {
    Name = WACHTURM
    parent = 318
    ID = 572
+   WreckageObject = 15572
 
    Description = Verteidigungsturm
    Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Flackgeschütz.

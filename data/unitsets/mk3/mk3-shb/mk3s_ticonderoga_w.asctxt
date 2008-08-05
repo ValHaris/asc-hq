@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 447
+
+   ID = 15566
+
+   Name = Ticonderoga Wreck
+
+   dry { 
+      picture = mk3s_ticonderoga_w.png 1
+   } dry
+
+} ObjectType

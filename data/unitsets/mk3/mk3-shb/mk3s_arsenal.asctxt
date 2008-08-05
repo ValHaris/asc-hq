@@ -2,6 +2,7 @@ VehicleType {
    Name = ARSENAL
    parent = 356
    ID = 616
+   WreckageObject = 15616
 
    Description = stealth rocket cruiser
    Infotext = []

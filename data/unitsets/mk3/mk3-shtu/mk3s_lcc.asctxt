@@ -2,6 +2,7 @@ VehicleType {
    Name = LCC BLUE RIDGE
    parent = 358
    ID = 614
+   WreckageObject = 15614
    
    Description = amphibious command ship
    picture = mk3s_lcc.png

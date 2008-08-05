@@ -1,0 +1,18 @@
+ObjectType { 
+   Parent = 434
+
+   ID = 15612
+
+   Name = Seawolf Wreck
+   RemovalCost { 
+      Energy = 0
+      Material = -5000
+      fuel = 300
+      Movement = 30
+   } RemovalCost
+
+   dry { 
+      picture = mk3s_seawolf_w.png 1
+   } dry
+
+} ObjectType

@@ -2,6 +2,7 @@ VehicleType {
    Name = POMORNIK
    parent = 371
    ID = 589
+   WreckageObject = 15589 15889
    
    Description = air cushion vehicle
    InfoText = [infoimage = Wikipedia]

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15624
+
+   Name = SS37 Wreck
+
+   dry { 
+      picture = mk3b_ss37_w.png 1
+   } dry
+
+} ObjectType

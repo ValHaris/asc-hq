@@ -2,6 +2,7 @@ VehicleType {
    Name = VISBY
    parent = 352
    ID = 587
+   WreckageObject = 15587
    
    Description = stealth corvette
    InfoText = [InfoImage = Wikipedia Visby-Klasse ]

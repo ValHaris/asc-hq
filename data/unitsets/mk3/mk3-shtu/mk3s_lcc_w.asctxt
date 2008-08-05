@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 443
+
+   ID = 15614
+
+   Name = LCC Wreck
+
+   dry { 
+      picture = mk3s_lcc_w.png 1
+   } dry
+
+} ObjectType

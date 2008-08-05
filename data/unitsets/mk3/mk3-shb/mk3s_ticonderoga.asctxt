@@ -2,6 +2,7 @@ VehicleType {
    Name = TICONDEROGA
    parent = 356
    ID = 566
+   WreckageObject = 15566
    
    Armor -= 100
    Description = Lenkwaffenkreuzer

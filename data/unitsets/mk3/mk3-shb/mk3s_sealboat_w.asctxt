@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 437
+
+   ID = 15586
+
+   Name = Seashadow Wreck
+
+   dry { 
+      picture = mk3s_seashadow_w.png 1
+   } dry
+
+} ObjectType

@@ -2,6 +2,7 @@ VehicleType {
    Name = VICTORIA
    parent = 364 
    ID = 611
+   WreckageObject = 15611
    
    picture = mk3s_victoria.png
    InfoImage = mk3s_victoria.jpg

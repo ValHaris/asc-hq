@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 437
+
+   ID = 15587
+
+   Name = Visby Wreck
+
+   dry { 
+      picture = mk3s_visby_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 437
+
+   ID = 15541
+
+   Name = Iowa Wreck
+
+   dry { 
+      picture = mk3s_iowa_w.png 1
+   } dry
+
+} ObjectType

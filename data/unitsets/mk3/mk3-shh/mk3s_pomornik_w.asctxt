@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 15589
+
+   Name = Pomornik Wreck
+
+   dry { 
+      picture = mk3s_pomornik_w.png 1
+   } dry
+
+} ObjectType

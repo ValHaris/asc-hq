@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SS37
    ID = 624
+   WreckageObject = 15624
    parent = 320
    Description = surface defence system
    Infotext = []

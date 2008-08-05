@@ -2,6 +2,7 @@ VehicleType {
    Name = MEKO A200
    parent = 353
    ID = 588
+   WreckageObject = 15588
 
    Description = stealth fregatte
    picture = mk3s_meko.png

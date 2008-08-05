@@ -2,6 +2,7 @@ VehicleType {
    Name = SEALBOAT
    parent = 350
    ID = 586
+   WreckageObject = 15586
    
    Description = stealth patrol boat
    Infotext = [Used for armed escort, command, control, and communications, transport, armed reconnaissance and pursuit.]

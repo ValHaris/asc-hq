@@ -2,6 +2,7 @@ VehicleType {
    Name = BUFFALO
    parent = 369
    ID = 537
+   WreckageObject = 15537
    
    Description = transport ship
    Infotext = [ 

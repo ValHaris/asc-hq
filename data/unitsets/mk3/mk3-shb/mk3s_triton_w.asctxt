@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 419
+
+   ID = 15583
+
+   Name = Triton Wreck
+
+   dry { 
+      picture = mk3s_triton_w.png 1
+   } dry
+
+} ObjectType

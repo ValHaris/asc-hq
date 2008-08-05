@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15573
+
+   Name = MG-Nest Wreck
+
+   dry { 
+      picture = mk3b_mg_nest_w.png 1
+   } dry
+
+} ObjectType

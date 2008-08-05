@@ -2,6 +2,7 @@ VehicleType {
    Name = DD21
    parent = 355
    ID = 609
+   WreckageObject = 15609
    
    Description = stealth cruiser
    picture = mk3s_dd21.png

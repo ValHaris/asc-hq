@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 419
+
+   ID = 15542
+
+   Name = Antey Wreck
+
+   dry { 
+      picture = mk3s_antey_w.png 1
+   } dry
+
+} ObjectType

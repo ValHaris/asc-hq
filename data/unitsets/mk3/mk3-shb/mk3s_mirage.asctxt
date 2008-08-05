@@ -2,6 +2,7 @@ VehicleType {
    Name = MIRAGE
    parent = 351
    ID = 581
+   WreckageObject = 15581
    
    Description = patrol boat
    Infotext = [The role of the Mirage fast patrol boat is to carry out protection of territorial waters and exclusive economic zones, and to provide support to police, coast guard and customs forces.]

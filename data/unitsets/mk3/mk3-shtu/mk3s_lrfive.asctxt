@@ -2,6 +2,7 @@ VehicleType {
    Name = LR5
    parent = 362 
    ID = 610
+   WreckageObject = 15610
    
    Description = rescue submarine
    Infotext = [Special rescue and support submarine]

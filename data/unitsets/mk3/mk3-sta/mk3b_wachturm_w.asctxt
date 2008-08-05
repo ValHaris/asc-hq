@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15572
+
+   Name = Wachturm Wreck
+
+   dry { 
+      picture = mk3b_wachturm_w.png 1
+   } dry
+
+} ObjectType

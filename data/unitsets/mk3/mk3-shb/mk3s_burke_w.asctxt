@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 419
+
+   ID = 15584
+
+   Name = Burke Wreck
+
+   dry { 
+      picture = mk3s_burke_w.png 1
+   } dry
+
+} ObjectType

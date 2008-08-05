@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SS74
    ID = 625
+   WreckageObject = 15625
    parent = 322
    Description = lr surface defence system
    Infotext = [InfoImage = Wikipedia]

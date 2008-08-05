@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 424
+
+   ID = 15543
+
+   Name = TAK Wreck
+
+   dry { 
+      picture = mk3s_tak_w.png 1
+   } dry
+
+} ObjectType

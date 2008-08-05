@@ -2,6 +2,7 @@ VehicleType {
    Name = CVX
    parent = 360
    ID = 569
+   WreckageObject = 15569
    
    Description =  aircraft carrier
    InfoText = [InfoImage = Wikipedia CVN]

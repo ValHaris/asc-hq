@@ -2,6 +2,7 @@ VehicleType {
    Name = TRITON
    parent = 353
    ID = 583
+   WreckageObject = 15583
    
    Description = fregatte
    picture = mk3s_triton.png

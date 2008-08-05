@@ -1,6 +1,7 @@
 VehicleType { 
    Name = IOWA
    ID = 541
+   WreckageObject = 15541
    parent = 357
 
    Description = battleship

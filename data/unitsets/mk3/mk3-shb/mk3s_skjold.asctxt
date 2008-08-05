@@ -2,6 +2,7 @@ VehicleType {
    Name = SKJOLD
    parent = 351 493
    ID = 590
+   WreckageObject = 15590
    
    Description = patrol boat
    Infotext = [The Skjold class of missile fast patrol boats is characterised by its speed, reduced signatures, small size with heavy weapon load and its littoral combat capability. The Skjold has an air-cushioned catamaran hull which, with waterjet propulsion, provides high speed and manoeuvrability.

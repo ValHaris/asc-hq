@@ -2,6 +2,7 @@ VehicleType {
    Name = Helipad
    parent = 400 401 402 422
    ID = 579
+   WreckageObject = 15579
    
    Description = mobile helicenter
    Infotext = [Diese mobile Helicopterreparaturwerkstatt ist schnell aufgebaut und einsatzbereit. Sie verfügt über leichte Verteidigungseinrichtungen und bietet schnellen Service für beschädigte oder treibstoffarme Helicopter und VTOs.]

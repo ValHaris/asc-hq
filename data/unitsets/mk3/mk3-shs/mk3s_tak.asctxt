@@ -2,6 +2,7 @@ VehicleType {
    Name = TAK 3015
    parent = 370
    ID = 543
+   WreckageObject = 15543
    
    Description = armored supply ship
    picture = mk3s_tak.png

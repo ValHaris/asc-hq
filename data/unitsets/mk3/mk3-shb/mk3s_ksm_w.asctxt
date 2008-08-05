@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 437
+
+   ID = 15559
+
+   Name = Kaspian Sea Monster Wreck
+
+   dry { 
+      picture = mk3s_ksm_w.png 1
+   } dry
+
+} ObjectType

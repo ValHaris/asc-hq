@@ -2,6 +2,7 @@ VehicleType {
    Name = DARING
    parent = 354
    ID = 585
+   WreckageObject = 15585
 
    Description = anti aircraft destroyer
    Infotext = [The main mission of the Daring Type anti-air warfare destroyer is to provide local area fleet defence.

@@ -1,6 +1,7 @@
 VehicleType { 
    Name = KASPIAN SM
    ID = 559
+   WreckageObject = 15559
    parent = 368
 
    Description = ekranoplane

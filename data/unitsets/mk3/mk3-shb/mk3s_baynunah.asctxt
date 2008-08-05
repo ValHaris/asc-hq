@@ -2,6 +2,7 @@ VehicleType {
    Name = BAYNUNAH
    parent = 352
    ID = 582
+   WreckageObject = 15582
    
    Description = corvette
    Infotext = []

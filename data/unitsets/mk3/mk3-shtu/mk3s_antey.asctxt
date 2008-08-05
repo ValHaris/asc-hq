@@ -2,6 +2,7 @@ VehicleType {
    Name = ANTEY
    parent = 365
    ID = 542
+   WreckageObject = 15542
 
    Description = nuclear submarine
    picture = mk3s_antey.png

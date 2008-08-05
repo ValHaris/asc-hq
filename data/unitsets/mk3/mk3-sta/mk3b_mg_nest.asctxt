@@ -2,6 +2,7 @@ VehicleType {
    Name = MG NEST
    parent = 314
    ID = 573
+   WreckageObject = 15573
    
    Description = Verteidigungsstellung
    Infotext = [ Durch Sandsäcke geschützte MG Stellung]

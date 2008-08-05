@@ -1,6 +1,7 @@
 VehicleType { 
    Name = PHM
    ID = 536
+   WreckageObject = 15536
    parent = 352 493
 
    Description = hydrofoil boat

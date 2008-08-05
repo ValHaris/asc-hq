@@ -2,6 +2,7 @@ VehicleType {
    Name = SEA SHADOW
    parent = 352
    ID = 561
+   WreckageObject = 15561
    GuideSortHelp = 551 550 0 0 3 0 0 0 0 0
 
    Description = stealth ship

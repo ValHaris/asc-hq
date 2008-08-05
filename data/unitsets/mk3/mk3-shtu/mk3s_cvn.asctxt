@@ -2,6 +2,7 @@ VehicleType {
    Name = CVN
    parent = 359
    ID = 568
+   WreckageObject = 15568
    
    Description = light aircraft carrier
    picture = mk3s_cvn.png

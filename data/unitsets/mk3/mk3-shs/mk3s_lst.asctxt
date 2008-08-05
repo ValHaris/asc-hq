@@ -1,6 +1,7 @@
 VehicleType { 
    Name = LST
    ID = 607
+   WreckageObject = 15607
    parent = 400 401 402 419
 
    Description = repair and build ship

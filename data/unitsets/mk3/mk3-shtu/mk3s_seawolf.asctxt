@@ -2,6 +2,7 @@ VehicleType {
    Name = SEAWOLF
    parent = 365
    ID = 612
+   WreckageObject = 15612
    Description = nuclear submarine
    Infotext = [The Seawolf does not have any external weapons. The submarine is armed with both the land-attack and anti-ship 
    missile. The anti-ship missile is equipped with an inertial guidance and an active radar and anti-radiation homing head. 

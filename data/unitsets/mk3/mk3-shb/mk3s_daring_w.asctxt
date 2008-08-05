@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 419
+
+   ID = 15585
+
+   Name = Daring Wreck
+
+   dry { 
+      picture = mk3s_daring_w.png 1
+   } dry
+
+} ObjectType
