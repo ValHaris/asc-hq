@@ -1,0 +1,10 @@
+technology {
+   Name = KSM
+   infotext = 
+   id = 559
+   RelatedUnitID = 559
+   parent = 100010
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 100010,100004,100104,100312,536,590 
+} Technology

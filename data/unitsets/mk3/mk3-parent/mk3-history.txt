@@ -3,19 +3,28 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 5-07/08
+-InfoImage = Dumper, FH70, Spirit, Rafale, Falcon, EF2000, KSM
+-InfoImage = Raptor, Nighthawk, Blackbird, Berkut, Chinook, Lynx
+=======
 24.07.2008 (Ares)
 -Raytheon neues Bild
 __________________
 Beta 3-07/08
--InfoImage = Wachturm, ICSE, Gepard, ss74, PZH2000, Guideline, Scud, Tiger(WW2), MRLS, Wiesel, K5, Dora, ICCE
+-InfoImage = Wachturm, ICSE, Gepard, ss74, PZH2000, Guideline, Scud, 
+-InfoImage = Tiger(WW2), MRLS, Wiesel, K5, Dora, ICCE, CVX, Daring, Iowa
+-InfoImage = Leopard3, Longtrack, Maus, Skjold, Visby
 __________________
 06.07.2008 (GAMER)
-InfoImage = Seals, Bulldozer, Bradley, Leopard1, Elch, Leopard3, P1000
-InfoImage = Dumper, Tomcat, Gaskin, longtrack, Patton, Spaelab, USSL, Buffalo, LR5, Pomornik, TAK, victoria, 
+-InfoImage = Seals, Bulldozer, Bradley, Leopard1, Elch, Leopard3, P1000
+-InfoImage = Dumper, Tomcat, Gaskin, longtrack, Patton, Spaelab, USSL, Buffalo
+-InfoImage = LR5, Pomornik, TAK, victoria, Airborne, MAN, Fuchs, SEK
+-ImfoImage = Merkat, GI, Javelin, Armstrong, Luchs, Mistral, ArmyRanger
+-InfoImage = Notstrom, Truck, Volcano, Silencer,JSF, Boeing, Arsenal
+-InfoImage = Buff, Burke, CVN, CVX, DD21, Iowa, Raptor, LCC
+-InfoImage = NSA, PHM, Viking, SeaShadow, SeaWolf, Ticonderoga
 -Anger mehr Movement
--ImfoImage = Airborne, MAN, Fuchs, SEK, Merkat, GI, Javelin, Armstrong, Luchs, Mistral, ArmyRanger, Notstrom, Truck, Volcano, Silencer
 -Merkat Minenräumfunktion aktiviert
--InfoImage = JSF, Boeing, Arsenal, Buff, Burke, CVN, CVX, DD21, Iowa, Raptor, LCC, NSA, PHM, Viking, SeaShadow, SeaWolf, Ticonderoga
 -Einheitenbeschreibung = Armstrong
 -Visby, Utorp->SUTorp
 __________________

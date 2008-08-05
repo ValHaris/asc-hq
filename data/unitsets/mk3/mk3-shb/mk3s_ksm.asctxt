@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = KASPIAN SM
+   ID = 559
+   parent = 368
+
+   Description = ekranoplane
+   picture = mk3s_ksm.png
+   InfoImage = mk3s_ksm.jpg
+   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [InfoImage = Wikipedia Bodeneffektfahrzeug]
+
+   Armor -= 50
+   Jamming = 39
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 30
+      Number = 1
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 40
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+   } Weapons
+} VehicleType
