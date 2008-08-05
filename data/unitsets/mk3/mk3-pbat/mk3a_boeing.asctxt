@@ -2,6 +2,7 @@ VehicleType {
    Name = BOEING
    parent = 400 401 402 415 496
    ID = 601
+   WreckageObject = 15601 15901
 
    Description = nuklear aircraft
    Infotext = [Boeing

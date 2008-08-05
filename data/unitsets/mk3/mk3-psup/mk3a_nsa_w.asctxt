@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15517
+
+   Name = NSA Wreck
+
+   dry { 
+      picture = mk3a_nsa_w.png 1
+   } dry
+
+} ObjectType

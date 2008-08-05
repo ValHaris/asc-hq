@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15514
+
+   Name = Viking Wreck
+
+   dry { 
+      picture = mk3a_viking_w.png 1
+   } dry
+
+} ObjectType

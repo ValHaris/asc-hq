@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15594
+
+   Name = Cojote Wreck
+
+   dry { 
+      picture = mk3v_cojote_w.png 1
+   } dry
+
+} ObjectType

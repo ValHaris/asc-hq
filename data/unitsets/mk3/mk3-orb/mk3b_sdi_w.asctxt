@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15511
+
+   Name = SDI Wreck
+
+   dry { 
+      picture = mk3b_sdi_w.png 1
+   } dry
+
+} ObjectType

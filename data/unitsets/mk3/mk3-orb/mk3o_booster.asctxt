@@ -2,6 +2,7 @@ VehicleType {
    Name = BOOSTER
    parent = 230
    ID = 520
+   WreckageObject = 15520 15820
    Description = Shuttle Booster
    Infotext = [Booster
 

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15564
+
+   Name = Tomcat Wreck
+
+   dry { 
+      picture = mk3a_tomcat_w.png 1
+   } dry
+
+} ObjectType

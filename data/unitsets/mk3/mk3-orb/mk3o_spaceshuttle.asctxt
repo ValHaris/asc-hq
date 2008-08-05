@@ -2,6 +2,7 @@ VehicleType {
    Name = SPACESHUTTLE
    parent = 231
    ID = 521
+   WreckageObject = 15521 15821
    Description = orbit transport
    Infotext = []
    Picture = MK3o_spaceshuttle.png

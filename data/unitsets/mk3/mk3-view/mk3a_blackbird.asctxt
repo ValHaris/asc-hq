@@ -2,7 +2,7 @@ VehicleType {
    Name = BLACKBIRD
    parent = 248
    ID = 518
-   WreckageObject = 15518
+   WreckageObject = 15518 15818
 
    Description = espionage plane
    Picture = mk3a_blackbird.png

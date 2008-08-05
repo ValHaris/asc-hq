@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15805
+
+   Name = Raptor Wreck
+
+   dry { 
+      picture = mk3a_raptor_w.png 1
+   } dry
+
+} ObjectType

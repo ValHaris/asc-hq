@@ -1,6 +1,7 @@
 VehicleType { 
    Name = KORNUTA
    ID = 545
+   WreckageObject = 15545
    parent = 308
 
    Description = radio frequence blocker

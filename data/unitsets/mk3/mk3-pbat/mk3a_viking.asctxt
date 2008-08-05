@@ -2,6 +2,7 @@ VehicleType {
    Name = VIKING
    parent = 326
    ID = 514
+   WreckageObject = 15514 15814
 
    Description = anti ship plane
    picture = mk3a_viking.png

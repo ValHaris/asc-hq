@@ -2,6 +2,7 @@ VehicleType {
    Name = NIGHTHAWK
    parent = 390
    ID = 516
+   WreckageObject = 15516 15816
 
    Description = Stealth fighter
    picture = mk3a_nighthawk.png

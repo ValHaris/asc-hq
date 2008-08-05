@@ -1,6 +1,7 @@
 VehicleType { 
    Name = ANGER
    ID = 622
+   WreckageObject = 15622
    parent = 400 401 402 422
 
    Description = mobile rocket laucher

@@ -1,7 +1,7 @@
 VehicleType { 
    Name = GALILEO
    Id = 527
-   WreckageObject = 15527
+   WreckageObject = 15527 15827
    parent = 246 
 
    Description = espionage satellite

@@ -2,6 +2,7 @@ VehicleType {
    Name = AMX
    parent = 276
    ID = 500
+   WreckageObject = 15500 15800
 
    Picture = mk3a_AMX.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

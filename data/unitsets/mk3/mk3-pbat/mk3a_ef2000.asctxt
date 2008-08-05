@@ -2,6 +2,7 @@ VehicleType {
    Name = EF2000
    parent = 271
    ID = 512
+   WreckageObject = 15512 15812
 
    Description = medium fighter
    Picture = mk3a_ef2000.png

@@ -1,0 +1,18 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15562
+
+   Name = Spacelab Wreck
+   RemovalCost { 
+      Energy = 0
+      Material = -4000
+      fuel = 200
+      Movement = 20
+   } RemovalCost
+
+   dry { 
+      picture = mk3o_spacelab_w.png 1
+   } dry
+
+} ObjectType

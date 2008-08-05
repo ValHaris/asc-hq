@@ -1,6 +1,7 @@
 VehicleType { 
    Name = COJOTE
    ID = 594
+   WreckageObject = 15594
    Parent = 307
 
    Description = smoke generator

@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SDI
    ID = 511
+   WreckageObject = 15511
    parent = 238
    Description = SpaceDefenceSystem
    Infotext = [Main space defence system - medium range rockets to fight against enemy satellites, 

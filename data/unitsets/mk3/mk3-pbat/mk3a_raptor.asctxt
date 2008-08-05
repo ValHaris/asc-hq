@@ -2,6 +2,7 @@ VehicleType {
    Name = RAPTOR
    parent = 329
    ID = 505
+   WreckageObject = 15505 15805
 
    Description = Fighter-Bomber
    picture = mk3a_raptor.png

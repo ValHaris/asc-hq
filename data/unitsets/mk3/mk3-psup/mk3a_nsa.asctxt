@@ -2,6 +2,7 @@ VehicleType {
    Name = NSA
    parent = 325
    ID = 517
+   WreckageObject = 15517 15817
    
    picture = mk3a_nsa.png
    InfoImage = mk3a_nsa.jpg

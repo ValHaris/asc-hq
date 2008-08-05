@@ -1,6 +1,7 @@
 VehicleType { 
    Name = GI
    ID = 535
+   WreckageObject = 15535
    parent = 201
 
    Description = Trooper

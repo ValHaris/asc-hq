@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15535
+
+   Name = GI Wreck
+
+   dry { 
+      picture = mk3i_gi_w.png 1
+   } dry
+
+} ObjectType

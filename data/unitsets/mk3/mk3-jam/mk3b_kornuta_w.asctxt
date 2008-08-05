@@ -1,0 +1,20 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 15545
+
+   Name = Kornuta Wreck
+
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 0
+      Movement = 5
+   } RemovalCost
+
+
+   dry { 
+      picture = mk3b_kornuta_w.png 1
+   } dry
+
+} ObjectType

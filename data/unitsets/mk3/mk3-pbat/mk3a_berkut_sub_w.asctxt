@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15860
+
+   Name = Berkut Wreck
+
+   dry { 
+      picture = mk3a_berkut_w.png 1
+   } dry
+
+} ObjectType

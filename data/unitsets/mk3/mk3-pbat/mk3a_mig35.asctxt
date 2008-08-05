@@ -2,6 +2,7 @@ VehicleType {
    Name = MIG-35
    parent = 272
    ID = 506
+   WreckageObject = 15506 15806
 
    Description = heavy fighter
    Infotext = [Ursprünglich hat das Konstruktionsbüro Mikojan-Gurewitsch die MiG-35 als schweres Kampfflugzeug konzipiert. Daher hatte sie auch Waffensysteme für den Luft- und Bodenkampf. Als jedoch die Bedrohung durch orbitale Waffensysteme immer größer wurde, suchte man nach einer Plattform, mit der die neuentwickelte Anti-Orbit-Rakete in eine gute Abschussposition gebracht werden kann. Durch Verzicht auf die Bodenangriffswaffen konnte die Gipfelhöhe, Reichweite und Geschwindigkeit der MiG-35 so verbessert werden, dass sie nunmehr auch Ziele im Orbit bekämpfen kann. Daneben ist sie weiterhin als schwerer Abfangjäger verwendbar, und zwar sowohl für die mittlere Distanz, als auch in Nahkampf.

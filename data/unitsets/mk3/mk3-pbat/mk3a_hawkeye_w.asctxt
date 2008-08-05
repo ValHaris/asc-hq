@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15501
+
+   Name = Hawkeye Wreck
+
+   dry { 
+      picture = mk3a_hawkeye_w.png 1
+   } dry
+
+} ObjectType

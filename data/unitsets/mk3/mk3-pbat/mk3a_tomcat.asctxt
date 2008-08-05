@@ -2,6 +2,7 @@ VehicleType {
    Name = TOMCAT
    parent = 273
    ID = 564
+   WreckageObject = 15564 15864
 
    Description = air strike fighter
    Infotext = [Die F-14 (Tomcat) ist als Luftüberlegensheitsjäger konzipiert und operiert häufig von Flugzeugträgern der CVX-Klasse. Für leichtere Träger ist sie leider zu schwer. Ihre Waffensysteme sind ausschließlich gegen Luftziele einsetzbar. Auf große Entfernungen kommt die spezielle für die Tomcat entwickelte AIM-54 Phoenix zum Einsatz. Für den Luftkampf über mittlere Distanzen ist die AIM-120 AMRAAM bestens geeignet. Im Nahkampf schließlich setzt man auf die bewährte AIM-9 Sidewinder R. Da von jedem Raketentyp nur 2 Exemplare mitgeführt werden können, kann es durchaus sinnvoll sein, unbewaffnete Flugziele auch mit der zusätzlich eingebauten Maschinenkanone Vulcan Mk20 zu bekämpfen.

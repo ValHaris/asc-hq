@@ -2,6 +2,7 @@ VehicleType {
    Name = FALCON
    parent = 270
    ID = 509
+   WreckageObject = 15509 15809
    Description = Light Fighter
    Picture = mk3a_falcon.png
    InfoImage = mk3a_falcon.jpg

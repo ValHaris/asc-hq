@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SEK
    ID = 602
+   WreckageObject = 15602
    parent = 204
 
    Description = special operations

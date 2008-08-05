@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15613
+
+   Name = Airbourne Wreck
+
+   dry { 
+      picture = mk3i_airbourne_w.png 1
+   } dry
+
+} ObjectType

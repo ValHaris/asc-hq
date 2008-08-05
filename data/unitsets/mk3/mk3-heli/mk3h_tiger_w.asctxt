@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15503
+
+   Name = Tiger Wreck
+
+   dry { 
+      picture = mk3h_tiger_w.png 1
+   } dry
+
+} ObjectType

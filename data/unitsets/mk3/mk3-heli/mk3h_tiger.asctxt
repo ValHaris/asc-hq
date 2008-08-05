@@ -2,6 +2,7 @@ VehicleType {
    Name = TIGER
    parent = 381
    ID = 503
+   WreckageObject = 15503 15803
    
    Description = battle helicopter
    Infotext = []          

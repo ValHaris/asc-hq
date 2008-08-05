@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15529
+
+   Name = Thunderbolt Wreck
+
+   dry { 
+      picture = mk3a_thunderbolt_w.png 1
+   } dry
+
+} ObjectType

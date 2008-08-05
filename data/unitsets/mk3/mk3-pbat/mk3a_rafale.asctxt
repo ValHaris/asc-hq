@@ -1,6 +1,7 @@
 VehicleType { 
    Name = RAFALE
    ID = 623
+   WreckageObject = 15623 15923
    parent = 327
 
    Picture = mk3a_rafale.png

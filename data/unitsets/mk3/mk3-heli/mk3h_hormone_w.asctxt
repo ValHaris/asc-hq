@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15507
+
+   Name = Hormone Wreck
+
+   dry { 
+      picture = mk3h_hormone_w.png 1
+   } dry
+
+} ObjectType

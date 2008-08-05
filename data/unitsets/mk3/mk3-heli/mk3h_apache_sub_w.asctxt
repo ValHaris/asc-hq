@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15804
+
+   Name = Apache Wreck
+
+   dry { 
+      picture = mk3h_apache_w.png 1
+   } dry
+
+} ObjectType

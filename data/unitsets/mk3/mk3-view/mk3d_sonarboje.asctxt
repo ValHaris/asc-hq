@@ -2,7 +2,7 @@ VehicleType {
    Name = SONARBOJE
    parent = 249
    ID = 621
-   WreckageObject = 15621
+   WreckageObject = 15621 15921
    Picture = MK3d_SonarBOJE.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 } VehicleType

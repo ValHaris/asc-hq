@@ -1,0 +1,19 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 15921
+
+   Name = Sonarboje Wreck
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 0
+      Movement = 5
+   } RemovalCost
+
+
+   dry { 
+      picture = mk3d_sonarboje_w.png 1
+   } dry
+
+} ObjectType

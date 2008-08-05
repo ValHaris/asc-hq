@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15525
+
+   Name = Silencer Wreck
+
+   dry { 
+      picture = mk3i_silencer_w.png 1
+   } dry
+
+} ObjectType

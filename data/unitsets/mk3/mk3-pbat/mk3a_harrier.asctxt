@@ -2,6 +2,7 @@ VehicleType {
    Name = HARRIER
    parent = 338
    ID = 530
+   WreckageObject = 15530 15830
    Description = vertical take-off plane
    Infotext = [Harrier
 

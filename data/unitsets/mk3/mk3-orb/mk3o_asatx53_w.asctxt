@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15528
+
+   Name = A-Sat Wreck
+
+   dry { 
+      picture = mk3o_asatx53_w.png 1
+   } dry
+
+} ObjectType

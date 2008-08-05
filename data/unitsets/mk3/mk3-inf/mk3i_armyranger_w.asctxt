@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15524
+
+   Name = Army Ranger Wreck
+
+   dry { 
+      picture = mk3i_armyranger_w.png 1
+   } dry
+
+} ObjectType

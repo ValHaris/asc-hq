@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15812
+
+   Name = EF2000 Wreck
+
+   dry { 
+      picture = mk3a_ef2000_w.png 1
+   } dry
+
+} ObjectType

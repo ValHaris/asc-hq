@@ -2,6 +2,7 @@ VehicleType {
    Name = LYNX
    parent = 400 401 402 409
    ID = 604
+   WreckageObject = 15604 15904
    Description = sea helicopter
    picture = mk3h_lynx.png
    InfoImage = mk3h_lynx.jpg

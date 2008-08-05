@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15809
+
+   Name = Falcon Wreck
+
+   dry { 
+      picture = mk3a_falcon_w.png 1
+   } dry
+
+} ObjectType

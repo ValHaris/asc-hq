@@ -2,6 +2,7 @@ VehicleType {
    Name = CHINOOK
    parent = 400 401 402 409 497
    ID = 502
+   WreckageObject = 15502 15802
 
    Description = heavy transport heli
    picture = mk3h_chinook.png

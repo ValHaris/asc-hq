@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15813
+
+   Name = Spirit Wreck
+
+   dry { 
+      picture = mk3a_spirit_w.png 1
+   } dry
+
+} ObjectType

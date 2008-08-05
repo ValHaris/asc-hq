@@ -1,0 +1,18 @@
+ObjectType { 
+   Parent = 498
+
+   ID = 15823
+
+   Name = Seals Wreck
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 0
+      Movement = 5
+   } RemovalCost
+
+   dry { 
+      picture = mk3i_seals_w.png 1
+   } dry
+
+} ObjectType

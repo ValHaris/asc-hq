@@ -1,6 +1,7 @@
 VehicleType { 
    Name = ARMY RANGER	
    ID = 524
+   WreckageObject = 15524
    parent = 203
 
    Description = Moerser

@@ -2,7 +2,8 @@ VehicleType {
    Name = JSF
    parent = 339
    ID = 603
-   Description = join strike fighter
+   WreckageObject = 15603 15903
+   Description = joint strike fighter
 
    picture = mk3a_jsf.png
    infoImage = mk3a_jsf.jpg

@@ -1,6 +1,7 @@
 VehicleType { 
    Name = NAVY SEALS
    ID = 523
+   WreckageObject = 15523
    parent = 206
  
    Description = diving trooper

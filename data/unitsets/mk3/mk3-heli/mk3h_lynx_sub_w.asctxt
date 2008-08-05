@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 300
+
+   ID = 15904
+
+   Name = Lynx Wreck
+
+   dry { 
+      picture = mk3h_lynx_w.png 1
+   } dry
+
+} ObjectType

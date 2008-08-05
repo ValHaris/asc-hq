@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SPACELAB
    ID = 562
+   WreckageObject = 15562 15862
    parent = 235
    
    Description = space station

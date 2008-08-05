@@ -1,6 +1,7 @@
 VehicleType { 
    Name = ARMSTRONG
    ID = 522
+   WreckageObject = 15522 15822
    parent = 236
    Description = Spaceman
    Infotext = [Dem Gedenken an Neil Armstrong, welcher als erster Mensch extraterrestrischen Boden betrat, verdankt diese Spezialeinheit ihren Namen. Ein großer Teil der Ausrüstung besteht hierbei aus dem Equipment was die Bewegung im lebensfeindlichen freien Weltraum überhaupt erst einmal ermöglichen soll. Der dabei verwendete Raumanzug besteht aus einer Kombination eines Bio-Suit mit einem Exoskelett. Der Bio-Suit ist ein hautenger, elastischer Ganzkörperanzug, der den Körper des Trägers an der Expansion im Vakuum hindert und das Exoskelett besteht aus leichten aber bruchfesten Kunststoffteilen, welche den Träger vor Mikrometeoriten und ähnlichen Gefahren schützen soll. Die Lebenserhaltungssysteme der neusten Generation ermöglichen dem Träger im sogenannten nahen Orbitalbereich einen nahezu beliebig langen Aufenthalt. Ein eingebauter Kollektor sammelt die Gasmoleküle der obersten Athmosphärenschichten und wandelt diese so weit wie es geht in Atemluft um. 

@@ -2,6 +2,7 @@ VehicleType {
    Name = BUFF
    parent = 278
    ID = 508
+   WreckageObject = 15508 15808
 
    Picture = mk3a_buff.png
    infoImage = mk3a_buff.jpg

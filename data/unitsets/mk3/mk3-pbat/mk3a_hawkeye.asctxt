@@ -2,6 +2,7 @@ VehicleType {
    Name = HAWKEYE
    parent = 400 401 402 414 498
    ID = 501
+   WreckageObject = 15501 15801
    Description = sensor plane
    Infotext = [Hawkeye
 

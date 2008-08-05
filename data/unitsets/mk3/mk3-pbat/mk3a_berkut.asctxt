@@ -2,6 +2,7 @@ VehicleType {
    Name = BERKUT
    parent = 330
    ID = 560
+   WreckageObject = 15560 15860
    Description = heavy mixed fighter
    picture = mk3a_berkut.png
    InfoImage = mk3a_berkut.jpg

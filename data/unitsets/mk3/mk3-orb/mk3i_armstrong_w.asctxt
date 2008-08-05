@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15522
+
+   Name = Armstrong Wreck
+
+   dry { 
+      picture = mk3i_armstrong_w.png 1
+   } dry
+
+} ObjectType

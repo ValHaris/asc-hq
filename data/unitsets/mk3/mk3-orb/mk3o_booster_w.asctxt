@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 400
+
+   ID = 15520
+
+   Name = Booster Wreck
+
+   dry { 
+      picture = mk3o_booster_w.png 1
+   } dry
+
+} ObjectType

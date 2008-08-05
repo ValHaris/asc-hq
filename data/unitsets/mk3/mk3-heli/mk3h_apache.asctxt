@@ -2,6 +2,7 @@ VehicleType {
    Name = APACHE
    parent = 382
    ID = 504
+   WreckageObject = 15504 15804
    Description = attack helicopter
    Infotext = [Apache
 

@@ -2,6 +2,7 @@ VehicleType {
    Name = HORMONE
    parent = 400 401 402 409
    ID = 507
+   WreckageObject = 15507 15807
    Description = transport helicopter
    Infotext = [Hormone 
 

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15602
+
+   Name = SEK Wreck
+
+   dry { 
+      picture = mk3i_sek_w.png 1
+   } dry
+
+} ObjectType
