@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15540
+
+   Name = Bulldozer Wreck
+
+   dry { 
+      picture = mk3v_bulldozer_w.png 1
+   } dry
+
+} ObjectType

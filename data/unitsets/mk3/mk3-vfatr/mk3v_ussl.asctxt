@@ -2,6 +2,7 @@ VehicleType {
    Name = USSL
    parent = 335
    ID = 578
+   WreckageObject = 15578
    Description = transport vehicle
    Infotext = [Transport Vehicles are large trucks in which a number of small
               vehicles or a couple of heavy vehicles can be stored for transport.

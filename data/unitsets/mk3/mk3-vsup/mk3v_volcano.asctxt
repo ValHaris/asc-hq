@@ -1,6 +1,7 @@
 VehicleType { 
    Name = VOLCANO
    ID = 620
+   WreckageObject = 15620
    parent = 335 
    Description = mine layer
    Infotext = [One of the most defensively centered vehicles is the Mine Layer.

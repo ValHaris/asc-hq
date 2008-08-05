@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15591
+
+   Name = Truck Wreck
+
+   dry { 
+      picture = mk3v_truck_w.png 1
+   } dry
+
+} ObjectType

@@ -2,6 +2,7 @@ VehicleType {
    Name = RAYTHEON
    parent = 247
    ID = 515
+   WreckageObject = 15515
    Description = Radar Plane
    Armor -= 10
    Picture = MK3a_RAYTHEON.png

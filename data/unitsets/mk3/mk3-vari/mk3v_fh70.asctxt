@@ -1,6 +1,7 @@
 VehicleType { 
    Name = FH 70
    ID = 597
+   WreckageObject = 15597
    parent = 250
 
    Description = light artillery

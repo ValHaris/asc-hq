@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SPECIAL PIONEERS
    ID = 549
+   WreckageObject = 15549
    parent = 400 401 402 410
 
    Description = Bau- und Reparaturtrupp

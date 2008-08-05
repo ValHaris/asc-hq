@@ -1,6 +1,7 @@
 VehicleType { 
    Name = LARS
    ID = 550
+   WreckageObject = 15550
    parent = 296
 
    Description = Light Artillery Rocket System

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15593
+
+   Name = Notstrom Wreck
+
+   dry { 
+      picture = mk3b_notstrom_w.png 1
+   } dry
+
+} ObjectType

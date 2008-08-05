@@ -1,0 +1,20 @@
+ObjectType { 
+   Parent = 499
+
+   ID = 15544
+
+   Name = PRD Wreck
+
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 0
+      Movement = 5
+   } RemovalCost
+
+
+   dry { 
+      picture = mk3d_prd_w.png 1
+   } dry
+
+} ObjectType

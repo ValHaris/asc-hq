@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15547
+
+   Name = Elch Wreck
+
+   dry { 
+      picture = mk3v_elch_w.png 1
+   } dry
+
+} ObjectType

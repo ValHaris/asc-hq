@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15551
+
+   Name = MRLS Wreck
+
+   dry { 
+      picture = mk3v_mrls_w.png 1
+   } dry
+
+} ObjectType

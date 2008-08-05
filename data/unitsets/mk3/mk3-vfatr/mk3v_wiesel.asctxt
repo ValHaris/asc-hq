@@ -2,6 +2,7 @@ VehicleType {
    Name = WIESEL
    parent = 336
    ID = 592
+   WreckageObject = 15592
    
    Description = Infiltrator Squad
    Infotext = [InfoImage = Wikipedia]

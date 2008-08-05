@@ -2,6 +2,7 @@ VehicleType {
    Name = DUMPER
    parent = 335
    ID = 577
+   WreckageObject = 15577
    
    Description = transport vehicle
    picture = mk3v_dumper.png

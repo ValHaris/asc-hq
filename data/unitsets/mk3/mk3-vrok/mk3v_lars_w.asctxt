@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15550
+
+   Name = Lars Wreck
+
+   dry { 
+      picture = mk3v_lars_w.png 1
+   } dry
+
+} ObjectType

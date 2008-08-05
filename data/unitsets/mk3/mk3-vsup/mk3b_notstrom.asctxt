@@ -1,6 +1,7 @@
 VehicleType { 
    Name = NOTSTROMAGGREGAT
    ID = 593
+   WreckageObject = 15593
    parent = 400 401 402 423
 
    Description = generator vehicle

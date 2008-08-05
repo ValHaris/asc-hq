@@ -2,6 +2,7 @@ VehicleType {
    Name = PRD 12
    parent = 243
    ID = 544
+   WreckageObject = 15544
 
    Description = light radar
    Picture = MK3d_prd.png

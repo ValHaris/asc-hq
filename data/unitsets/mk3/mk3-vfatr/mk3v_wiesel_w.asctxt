@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15592
+
+   Name = Wiesel Wreck
+
+   dry { 
+      picture = mk3v_wiesel_w.png 1
+   } dry
+
+} ObjectType

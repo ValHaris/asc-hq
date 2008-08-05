@@ -1,6 +1,7 @@
 VehicleType { 
    Name = K44
    ID = 510
+   WreckageObject = 15510
    parent = 244
 
    Description = ground radar

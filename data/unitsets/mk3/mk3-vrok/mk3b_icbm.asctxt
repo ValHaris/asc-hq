@@ -1,6 +1,7 @@
 VehicleType { 
    Name = ICBM
    ID = 574
+   WreckageObject = 15574
    parent = 304
 
    Description = Raketensilo

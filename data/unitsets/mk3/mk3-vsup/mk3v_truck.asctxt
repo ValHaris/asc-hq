@@ -1,6 +1,7 @@
 VehicleType { 
    Name = Truck
    ID = 591
+   WreckageObject = 15591
    parent = 335
    
    Description = Munitionstransporter

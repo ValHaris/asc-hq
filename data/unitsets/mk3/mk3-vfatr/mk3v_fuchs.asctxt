@@ -2,6 +2,7 @@ VehicleType {
    Name = FUCHS
    parent = 335
    ID = 538
+   WreckageObject = 15538
    
    Description = Spuerpanzer
    Infotext = [Der Spürpanzer "Fuchs" ist eine modifizierte Version des Transportpanzers "Fuchs".

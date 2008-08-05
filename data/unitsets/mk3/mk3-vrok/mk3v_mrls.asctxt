@@ -1,6 +1,7 @@
 VehicleType { 
    Name = MRLS
    ID = 551
+   WreckageObject = 15551
    parent = 297
 
    Description = Multiple Rocket Launch System

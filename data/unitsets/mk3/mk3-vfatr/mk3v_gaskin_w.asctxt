@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15554
+
+   Name = Gaskin Wreck
+
+   dry { 
+      picture = mk3v_gaskin_w.png 1
+   } dry
+
+} ObjectType

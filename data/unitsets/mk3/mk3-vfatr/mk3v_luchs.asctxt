@@ -2,6 +2,7 @@ VehicleType {
    Name = LUCHS
    parent = 335
    ID = 539
+   WreckageObject = 15539
    
    Description = Truppenpanzerwagen
    Infotext = [Der Transportpanzer ist ein geländegängiges, gepanzertes Radfahrzeug, das zwei 

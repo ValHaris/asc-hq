@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15552
+
+   Name = Scud Wreck
+
+   dry { 
+      picture = mk3v_scud_w.png 1
+   } dry
+
+} ObjectType

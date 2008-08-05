@@ -1,6 +1,7 @@
 VehicleType { 
    Name = ELCH
    ID = 547
+   WreckageObject = 15547
    parent = 336
 
    Description = construction vehicle

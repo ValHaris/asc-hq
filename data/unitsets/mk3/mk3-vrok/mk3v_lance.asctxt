@@ -1,6 +1,7 @@
 VehicleType { 
    Name = LANCE
    ID = 565
+   WreckageObject = 15565
    parent = 300
  
    Description = SSM medium range

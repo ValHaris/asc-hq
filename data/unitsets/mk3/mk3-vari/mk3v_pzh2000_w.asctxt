@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15605
+
+   Name = PzH 2000 Wreck
+
+   dry { 
+      picture = mk3v_pzh2000_w.png 1
+   } dry
+
+} ObjectType

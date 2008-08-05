@@ -1,6 +1,7 @@
 VehicleType { 
    Name = GASKIN
    ID = 554
+   WreckageObject = 15554
    parent = 335
    
    Description = Fast Attack Vehicle

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 417
+
+   ID = 15548
+
+   Name = Building Pioneer Wreck
+
+   dry { 
+      picture = mk3i_piobuild_w.png 1
+   } dry
+
+} ObjectType

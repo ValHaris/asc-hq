@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15619
+
+   Name = Merkat Wreck
+
+   dry { 
+      picture = mk3v_merkat_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15626
+
+   Name = Tow Wreck
+
+   dry { 
+      picture = mk3v_tow_w.png 1
+   } dry
+
+} ObjectType

@@ -1,6 +1,7 @@
 VehicleType { 
    Name = SCUD
    ID = 552
+   WreckageObject = 15552
    parent = 301
 
    Description = SSM Long Range

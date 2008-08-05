@@ -2,6 +2,7 @@ VehicleType {
    Name = PzH2000
    ID = 605
    parent = 252
+   WreckageObject = 15605
 
    Description = heavy artillery
    Infotext = [InfoImage = Wikipedia]

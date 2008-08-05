@@ -1,6 +1,7 @@
 VehicleType { 
    Name = MAN
    ID = 580
+   WreckageObject = 15580
    parent = 335
 
    Description = tanker vehicle

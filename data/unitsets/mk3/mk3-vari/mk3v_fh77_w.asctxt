@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15598
+
+   Name = Fh77 Wreck
+
+   dry { 
+      picture = mk3v_fh77_w.png 1
+   } dry
+
+} ObjectType

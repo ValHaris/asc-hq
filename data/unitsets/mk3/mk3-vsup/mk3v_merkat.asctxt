@@ -1,6 +1,7 @@
 VehicleType { 
    Name = MERKAT
    ID = 619
+   WreckageObject = 15619
    parent = 335
    
    Description = mine detector

@@ -2,6 +2,7 @@ VehicleType {
    Name = TOW
    parent = 336
    ID = 626
+   WreckageObject = 15626
    
    Description = anti tank unit
    Infotext = []

@@ -1,6 +1,7 @@
 VehicleType {
    Name = FH 77
    ID = 598
+   WreckageObject = 15598
    parent = 251
 
    Picture = mk3v_fh77.png

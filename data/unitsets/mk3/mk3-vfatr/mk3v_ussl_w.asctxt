@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15578
+
+   Name = USSL Wreck
+
+   dry { 
+      picture = mk3v_ussl_w.png 1
+   } dry
+
+} ObjectType

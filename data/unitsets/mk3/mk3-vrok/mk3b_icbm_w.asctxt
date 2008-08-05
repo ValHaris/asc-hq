@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15574
+
+   Name = ICBM Wreck
+
+   dry { 
+      picture = mk3b_icbm_w.png 1
+   } dry
+
+} ObjectType

@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 15538
+
+   Name = Fuchs Wreck
+
+   dry { 
+      picture = mk3v_fuchs_w.png 1
+   } dry
+
+} ObjectType
