@@ -12,6 +12,7 @@
 *.pcx
 *.ascmapxlat
 *.asctxt
+*.properties
 email.clients
 campaign/nos/*.map
 campaign/standard/*.asctxt
