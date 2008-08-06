@@ -4,10 +4,10 @@
 #include "unitguidedialog.h"
 
 #include "../typen.h"
-#include "../unitctrl.h"
-#include "../containercontrols.h"
+#include "../terraintype.h"
+#include "../vehicletype.h"
+#include "../spfst.h"
 #include "../gameoptions.h"
-#include "../actions/servicing.h"
 #include "../iconrepository.h"
 #include "../unitset.h"
 #include <iostream>

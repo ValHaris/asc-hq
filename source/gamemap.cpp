@@ -1339,6 +1339,8 @@ void GameMap::objectGrowth()
             o->remainingGrowthTime = remainingGrowthTime[i->first];
          }
       }
+
+   checkunitsforremoval();
 }
 
 SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;

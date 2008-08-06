@@ -654,6 +654,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\unitguidedialog.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\unitinfodialog.cpp"
 					>
 				</File>

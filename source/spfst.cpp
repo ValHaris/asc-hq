@@ -346,8 +346,19 @@ void checkobjectsforremoval ( void )
 
 void  checkunitsforremoval ( void )
 {
+   ASCString messages[playerNum];
+   for ( int y = 0; y < actmap->ysize; y++ )
+      for ( int x = 0; x < actmap->xsize; x++ ) {
+         tfield* fld = getfield ( x, y );
+         if ( fld->building && fld->building->typ->terrainaccess.accessible( fld->bdt ) < 0 ) {
+            messages[fld->building->getOwner()] += getBuildingReference( fld->building ) + " was destroyed \n\n";
+            delete fld->building;
+         }
+      }
+
+
    for ( int c=0; c<=8 ;c++ ) {
-      ASCString msg;
+      ASCString msg = messages[c];
       for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
 
           Vehicle* eht = *i;

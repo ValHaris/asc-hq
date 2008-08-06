@@ -185,5 +185,6 @@ class  Building : public ContainerBase {
 
 
 extern void doresearch ( GameMap* actmap, int player );
+extern ASCString getBuildingReference ( Building* bld );
 
 #endif

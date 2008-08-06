@@ -854,3 +854,10 @@ void doresearch ( GameMap* actmap, int player )
    }
 }
 
+ASCString getBuildingReference ( Building* bld )
+{
+   ASCString s = "The building " + bld->getName();
+   s += " (position: "+ bld->getPosition().toString() + ") ";
+   return s;
+}
+
