@@ -304,7 +304,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "reset view", PlayerActionFunctor( this, &AdminGameWindow::resetView) );
          new ActionItem( actionlistbox, 20, "reset research", PlayerActionFunctor( this, &AdminGameWindow::resetResearch));
          new ActionItem( actionlistbox, 20, "reset tribute", PlayerActionFunctor( this, &AdminGameWindow::resetTribute));
-         new ActionItem( actionlistbox, 20, "reset diplomacy (->truce)", PlayerActionFunctor( this, &AdminGameWindow::resetDiplomacy));
+         new ActionItem( actionlistbox, 20, "reset diplomacy (->war)", PlayerActionFunctor( this, &AdminGameWindow::resetDiplomacy));
          new ActionItem( actionlistbox, 20, "reset password", PlayerActionFunctor( this, &AdminGameWindow::resetPassword));
          new ActionItem( actionlistbox, 20, "delete units", PlayerActionFunctor( this, &AdminGameWindow::deleteUnits));
          new ActionItem( actionlistbox, 20, "delete buildings", PlayerActionFunctor( this, &AdminGameWindow::deleteBuildings));

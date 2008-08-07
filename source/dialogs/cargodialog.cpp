@@ -2353,7 +2353,7 @@ namespace CargoGuiFunctions {
 
    bool RepairUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
-      return ( key->keysym.sym == 'p' );
+      return ( key->keysym.sym == 'r' );
    };
 
    Surface& RepairUnit::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2584,7 +2584,7 @@ namespace CargoGuiFunctions {
 
    bool MoveUnitIntoInnerContainer::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
    {
-      return ( key->keysym.sym == 'i' );
+      return ( key->keysym.sym == 'u' );
    };
 
    Surface& MoveUnitIntoInnerContainer::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2594,7 +2594,7 @@ namespace CargoGuiFunctions {
    
    ASCString MoveUnitIntoInnerContainer::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      return "move unit into neighboring transport";
+      return "move ~u~nit into neighboring transport";
    };
 
 

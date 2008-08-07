@@ -26,7 +26,7 @@ public:
     
     static bool gameDialog();    
 protected:
-  bool handleEventKeyDown (const SDL_KeyboardEvent *key);
+  bool eventKeyDown (const SDL_KeyboardEvent *key);
 private:
   static const int xSize;
   static const int ySize;

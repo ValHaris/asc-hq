@@ -83,10 +83,59 @@ GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( -1, -1, xSize, ySize ), 
 
 GameDialog::~GameDialog() {
 }
-bool GameDialog::handleEventKeyDown (const SDL_KeyboardEvent *key) {    
+bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {    
+
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+
    if(key->keysym.sym == SDLK_ESCAPE) {
         closeWindow();
     }
+
+   if ( mod == 0 ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_F3:
+               execUserAction_ev ( ua_continuenetworkgame );
+               QuitModal();
+               return true;
+
+            case SDLK_F4:
+               execUserAction_ev ( ua_networksupervisor );
+               QuitModal();
+               return true;
+      }
+   }
+
+
+   if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
+      switch ( key->keysym.sym ) {
+            case SDLK_l:
+               execUserAction_ev ( ua_loadrecentgame );
+               QuitModal();
+               return true;
+      }
+   }
+
+
+
+   if ( mod & KMOD_CTRL ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_l:
+               execUserAction_ev ( ua_loadgame );
+               QuitModal();
+               return true;
+      }
+   }
+
+   if ( mod & KMOD_SHIFT ) {
+      switch ( key->keysym.sym ) {
+            case SDLK_F3:
+               execUserAction_ev ( ua_continuerecentnetworkgame );
+               QuitModal();
+               return true;
+      }
+   }
+
+   
     return true;
 }
 
