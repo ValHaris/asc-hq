@@ -102,6 +102,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
                execUserAction_ev ( ua_networksupervisor );
                QuitModal();
                return true;
+            default:;
       }
    }
 
@@ -112,6 +113,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
                execUserAction_ev ( ua_loadrecentgame );
                QuitModal();
                return true;
+            default:;
       }
    }
 
@@ -123,6 +125,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
                execUserAction_ev ( ua_loadgame );
                QuitModal();
                return true;
+            default:;
       }
    }
 
@@ -132,6 +135,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
                execUserAction_ev ( ua_continuerecentnetworkgame );
                QuitModal();
                return true;
+            default:;
       }
    }
 
