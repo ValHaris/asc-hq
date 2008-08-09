@@ -3,10 +3,12 @@ grafics and specifications by
 GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 3-08/08
+-Scud -10 MaxRange
+-Sonarboje Techbugfix
+__________________
 05.08.2008 (Ares)
 - Mk3 Wracks eingebaut
-
-
 __________________
 Beta 2-08/08
 -InfoText = GI, Nighthawk

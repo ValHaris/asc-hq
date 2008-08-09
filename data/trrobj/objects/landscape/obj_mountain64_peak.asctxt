@@ -3,21 +3,21 @@ ObjectType {
    Name = Peak
    Parent = 510
    ID = 2610
-   Height = 90
+   LinkableObjects = 
+   NetBehaviour = NetToSelf NetToBorder
 
    TerrainAccess.terrain_any = Mountains
    TerrainProperties_Filter = road runway Lowland Hard_sand Soft_sand mud morass swamp forest Mountains Shallow_water Water deep_water very_shallow_water lava Ditch Hillside Turret_foundation Frozen_water 
-   NetBehaviour = NetToSelf
 
    Weather = dry much_snow
 
    dry { 
       UseGFXpics = false
-      picture = obj_mountain64_peak.png 1
+      picture = obj_mountain64_peak.png 64
    } dry
    much_snow {
       UseGFXpics = false
-      picture = obj_mountain64_peak.png 1
+      picture = obj_mountain64_peak.png 64
       GraphicOperations = Snow_const
    } much_snow
 

@@ -22,7 +22,7 @@ BuildingType {
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 10000
       MaxLoadableMass = 10000
-      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Building|turret|object Rail_vehicle
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Rail_vehicle
       EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = In out docking

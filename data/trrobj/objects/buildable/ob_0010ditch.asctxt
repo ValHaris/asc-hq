@@ -40,8 +40,8 @@ ObjectType {
    dry { 
       UseGFXpics = false
       picture = ob_ditch2.png 64
-      ImageReference =  -1
-      FlipPictures   =  -1 
+      ImageReference =  0
+      FlipPictures   =  0 
    } dry
 ;   dry { 
 ;      UseGFXpics = true

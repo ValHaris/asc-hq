@@ -48,7 +48,7 @@ ObjectType {
    dry { 
       UseGFXpics = false
       picture = ob_runway_45.png 64
-      ImageReference =  -1 
+      ImageReference =  0 
       FlipPictures   =   0  
 
    } dry

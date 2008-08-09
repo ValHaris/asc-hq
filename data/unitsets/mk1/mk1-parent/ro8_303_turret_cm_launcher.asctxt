@@ -19,6 +19,6 @@ VehicleType {
    Weapons { 
       Initiative = 0
       Number = 1
-      Weapon0 ->* VehicleType.CML
+      Weapon0 ->* VehicleType.CMM
    } Weapons
 } VehicleType

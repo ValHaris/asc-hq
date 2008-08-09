@@ -43,7 +43,7 @@ BuildingType {
    TerrainAccess { 
       terrain_any = runway  
       terrain_all = 
-      terrain_not = 
+      terrain_not = railroad
       terrain_kill = lava river water deep_water
    } TerrainAccess
 } BuildingType

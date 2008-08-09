@@ -42,7 +42,7 @@ ObjectType {
       terrain_any = Road Lowland Hard_sand Soft_sand Ditch Turret_foundation Installation  
       terrain_all = 
       terrain_not = 
-      terrain_kill = mountains High_mountains
+      terrain_kill = High_mountains
    } TerrainAccess
 
    TerrainProperties_Filter = Swamp 

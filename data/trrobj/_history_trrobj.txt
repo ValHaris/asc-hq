@@ -6,6 +6,7 @@ Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
 ________________
 Beta 2-08/08
 -Hohe Berge(64) repariert
+-neue Ditch Grafik
 Beta 1-08/08
 -Movementanpassungen bei Light_wheeled_vehicle
 Beta 6-07/08

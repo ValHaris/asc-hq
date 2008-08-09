@@ -24,7 +24,7 @@ VehicleType {
    FuelConsumption = 17
    Movement = 0 0 0 50 0 0 0 0 
    TerrainAccess { 
-      terrain_any = Lowland Road Runway Hard_sand Ditch Frozen_water 
+      terrain_any = Lowland Road Runway Hard_sand Frozen_water 
       terrain_all = 
       terrain_not = morass swamp large_rocks 
       terrain_kill = Shallow_water Water Deep_water River lava 

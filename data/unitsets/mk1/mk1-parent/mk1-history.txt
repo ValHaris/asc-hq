@@ -2,6 +2,13 @@ ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
 
 __________________
+Beta 3-08/08
+-Fast CM Launcher nicht mehr in Befestigung
+-turret Missle launcher nur noch med Range
+-neue Grafik: Timber, Vertic, Bumblebee, Inca, Cone, Fix, Jellyfish, Tide, Wake, Oracle
+-Boje Techbugfix
+-InfoImage = Dominator , Boomerang
+__________________
 Beta 2-08/08
 -Atuin +Movement,heavy_wheeled
 -Unterwasserausladesystem modifiziert

@@ -17,7 +17,7 @@ BuildingType {
 ; ----------------------------------------------------------------------------------------------------------------
 
    cargo_trooper_only {
-      CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
+      CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
    } cargo_trooper_only
 
    cargo_trtrain {

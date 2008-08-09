@@ -19,7 +19,7 @@ VehicleType {
    WaitForAttack = true
    Weapons { 
       Initiative = 20
-      Number = 2
+      Number = 3
 
       Weapon0 ->* VehicleType.SAMH 
       Weapon0.MaxRange = 70
