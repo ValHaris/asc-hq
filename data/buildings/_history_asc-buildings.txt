@@ -3,8 +3,10 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 __________________
-Beta 03-07/08
+09.08.2008 (GAMER)
 -Stadt kann von default-Einheiten betreten werden
+-Hangar, anpasung Baubarkeit
+-neue Eingangsparents
 __________________
 06.07.2008 (GAMER)
 -Baubarkeit Radar/Jammer Gebäude eingeschränkt

@@ -4,18 +4,14 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
 
 ________________
-Beta 2-08/08
+09.08.2008 (GAMER)
 -Hohe Berge(64) repariert
 -neue Ditch Grafik
-Beta 1-08/08
 -Movementanpassungen bei Light_wheeled_vehicle
-Beta 6-07/08
 -neue Stacheldrahtgrafik
 -neue Panzersperrengrafik
 -neue Rollbahngrafik
-Beta 5-07/08
 -Track modifiziert Movemalus des Feldes
-Beta 3-07/08
 -Hafenbeton/-mauer zerstörbar, nur noch per separatem Adapter baubar
 __________________
 06.07.08 (GAMER)

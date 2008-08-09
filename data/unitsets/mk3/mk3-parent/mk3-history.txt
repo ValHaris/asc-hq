@@ -1,29 +1,26 @@
 Mark3 Unit Set Advanced Strategic Command
-grafics and specifications by
-GAMER (gamer@ulrichshorst.de)
+Grafik: GAMER , Ares
+InfoTexte:
+InfoImage: GAMER
+Spezifikationen: GAMER
 
 __________________
-Beta 3-08/08
+09.08.2008 (GAMER)
 -Scud -10 MaxRange
 -Sonarboje Techbugfix
+-InfoText = GI, Nighthawk
+-USSL, -10 Movement
+-InfoImage = Dumper, FH70, Spirit, Rafale, Falcon, EF2000, KSM
+-InfoImage = Raptor, Nighthawk, Blackbird, Berkut, Chinook, Lynx
+-InfoImage = Wachturm, ICSE, Gepard, ss74, PZH2000, Guideline, Scud, 
+-InfoImage = Tiger(WW2), MRLS, Wiesel, K5, Dora, ICCE, CVX, Daring, Iowa
+-InfoImage = Leopard3, Longtrack, Maus, Skjold, Visby
 __________________
 05.08.2008 (Ares)
 - Mk3 Wracks eingebaut
 __________________
-Beta 2-08/08
--InfoText = GI, Nighthawk
--USSL, -10 Movement
-Beta 5-07/08
--InfoImage = Dumper, FH70, Spirit, Rafale, Falcon, EF2000, KSM
--InfoImage = Raptor, Nighthawk, Blackbird, Berkut, Chinook, Lynx
-=======
 24.07.2008 (Ares)
 -Raytheon neues Bild
-__________________
-Beta 3-07/08
--InfoImage = Wachturm, ICSE, Gepard, ss74, PZH2000, Guideline, Scud, 
--InfoImage = Tiger(WW2), MRLS, Wiesel, K5, Dora, ICCE, CVX, Daring, Iowa
--InfoImage = Leopard3, Longtrack, Maus, Skjold, Visby
 __________________
 06.07.2008 (GAMER)
 -InfoImage = Seals, Bulldozer, Bradley, Leopard1, Elch, Leopard3, P1000

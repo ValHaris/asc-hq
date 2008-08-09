@@ -1,24 +1,23 @@
 ASC Standart Units
 -by GAMER (gamer@ulrichshorst.de)
+Grafiken: GAMER, Uranius
+InfoTexte: 
+InfoImages: GAMER
+Spezifikationen: GAMER
 
 __________________
-Beta 3-08/08
+09.08.2008 (GAMER)
 -Fast CM Launcher nicht mehr in Befestigung
 -turret Missle launcher nur noch med Range
 -neue Grafik: Timber, Vertic, Bumblebee, Inca, Cone, Fix, Jellyfish, Tide, Wake, Oracle
 -Boje Techbugfix
--InfoImage = Dominator , Boomerang
-__________________
-Beta 2-08/08
 -Atuin +Movement,heavy_wheeled
 -Unterwasserausladesystem modifiziert
 -Tauchroboter, Torp feuert nur noch unter wasser
-Beta 5-07/08
 -InfoText = zeppelin
--InfoImage = Zeppelin, Butterfly, Hawk, Rasak, Impact
+-InfoImage = Zeppelin, Butterfly, Hawk, Rasak, Impact, Dominator , Boomerang
 -Containerladesystem bugfix
-- ManualSelfDestruct ergänzt bei diversen turret und Bunkerparents
-Beta 3-07/08
+-ManualSelfDestruct ergänzt bei diversen turret und Bunkerparents
 -Oracle Grafik Bugfix
 __________________
 06.07.2008 (GAMER)
