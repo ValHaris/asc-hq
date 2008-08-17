@@ -426,8 +426,8 @@ const int submarineMovement = 11;
 #define lookintoenemytransports false
 #define lookintoenemybuildings false
 
-#define recyclingoutput 2    /*  Material div RecyclingOutput  */
-#define destructoutput 5
+#define recyclingoutput 90    /*  percentage of material claimed by recycling  */
+#define destructoutput 20
 #define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
   //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
 const int maxwindspeed = 60;          // Wind with a strength of 255 means that the air moves 6 fields / turn

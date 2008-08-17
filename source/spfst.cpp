@@ -350,7 +350,7 @@ void  checkunitsforremoval ( void )
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
          tfield* fld = getfield ( x, y );
-         if ( fld->building && fld->building->typ->terrainaccess.accessible( fld->bdt ) < 0 ) {
+         if ( (fld->building && fld->building->typ->terrainaccess.accessible( fld->bdt ) < 0) && (fld->building->typ->buildingheight <= chfahrend) ) {
             messages[fld->building->getOwner()] += getBuildingReference( fld->building ) + " was destroyed \n\n";
             delete fld->building;
          }

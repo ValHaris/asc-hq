@@ -305,7 +305,7 @@ Resources ContainerControls :: calcDestructionOutput( Vehicle* veh )
        if ( *i )
           res += calcDestructionOutput ( *i );
    
-    res.material += veh->typ->productionCost.material * (100 - veh->damage/2 ) / 100 / output;
+    res.material += veh->typ->productionCost.material * (100 - veh->damage/2 ) * output / (100*100);
     return res;
 }
 

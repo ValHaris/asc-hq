@@ -620,7 +620,7 @@ void viewunreadmessages ( Player& player )
 
    VariableLocker l( isRunning );
    
-   if( player.stat == Player::human && player.getParentMap()->getPlayerView() == player.getPosition() ) {
+   if( (player.stat == Player::human || player.stat == Player::supervisor) && player.getParentMap()->getPlayerView() == player.getPosition() ) {
       MessagePntrContainer::iterator mi = player.unreadmessage.begin();
       while ( mi != player.unreadmessage.end()  ) {
          Message* msg = *mi;
