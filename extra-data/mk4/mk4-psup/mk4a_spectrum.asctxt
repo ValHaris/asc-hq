@@ -5,6 +5,7 @@ VehicleType {
 
    Description = Tankflugzeug
    picture = mk4a_spectrum.png
+   InfoImage = mk4a_spectrum.jpg
    wreckageobject = 1248 14848
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

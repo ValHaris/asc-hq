@@ -13,6 +13,7 @@ Weiterhin besitzt die Crux die Möglichkeit, Luftlandetruppen jeglicher Art direk
 Ihre Panzerung entspricht dabei zwar in etwa der eines normalen Jagdfliegers der Genom-Reihe, jedoch sollte man sich damit auch nicht allzu sicher fühlen. Durch ihre geringere Geschwindigkeit, sowie durch das Fehlen jeglicher Bewaffnung, kann sie für gegnerische Abfangjäger sehr schnell zu einer leichten Beute werden. Ein lohnendes Ziel, vor allem voll bepackt, stellt sie jedenfalls immer dar, weswegen man sie niemals ohne ausreichenden Schutz in Frontnähe fliegen lassen sollte.
 ]
    picture = mk4a_crux.png
+   InfoImage = mk4a_crux.jpg
    GuideSortHelp = 551 0 0 0 4 0 0 0 0 0
 
    Armor = 350

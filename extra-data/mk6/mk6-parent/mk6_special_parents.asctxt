@@ -249,6 +249,19 @@ Plasmabomb {
       } WeaponEffectiveness
    } Plasmabomb
 
+   NLS { 
+         Name = Nadel Laser System
+         Type = Laser shootable 
+         Ammo = 3
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 5
+            fuel = 40
+         } LaserRechargeCost
+   } NLS
+
+
    DLS { 
          Name = Defence Laser System
          Type = Laser shootable 
@@ -305,6 +318,63 @@ Plasmabomb {
          heavy_aircraft = 100
       } WeaponEffectiveness
    } DLS
+
+   GALS { 
+         Name = Ground-Air Laser System
+         Type = Laser shootable 
+         targets = low_level_flight medium_level_flight high_level_flight
+         shotFrom = floating ground_level
+	 ReactionFireShots = 2
+         Punch@MaxRange = 75
+         Punch@MinRange = 80
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 6
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 30
+            fuel = 200
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 100
+            u2 = 95
+            u3 = 90
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 200
+         building|turret|object = 200
+         hoovercraft = 200
+         helicopter = 100
+
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 200
+         heavy_tracked_vehicle = 200
+
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 200
+         heavy_wheeled_vehicle = 200
+         
+         light_ship = 200
+         medium_ship  = 200
+         heavy_ship = 200
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } GALS
 
    ADLS { 
          Name = Air Defence Laser System
@@ -447,10 +517,10 @@ LRHEPT {
 
    TeccnolsJump3 {
       Height = ground_level
-      MaxDistance = 1500
+      MaxDistance = 250
       consumption {
          Energie = 0
-         Material = 2000
+         Material = 5000
          Fuel = 10000
       } consumption
       terrain_any = road runway lowland hard_sand soft_sand 
@@ -473,5 +543,25 @@ LRHEPT {
       terrain_kill = 
    } TeccnolsJump4
 
+   TeccnolsJump5 {
+      Height = ground_level
+      MaxDistance = 350
+      consumption {
+         Energie = 0
+         Material = 700
+         Fuel = 6000
+      } consumption
+      terrain_any = turret_foundation road runway lowland hard_sand soft_sand
+      terrain_all = beacon
+      terrain_not = forest small_rocks large_rocks bridge railroad
+      terrain_kill = 
+   } TeccnolsJump5
+
+   Turret_all_tecc {
+      terrain_any = road runway lowland hard_sand soft_sand turret_foundation
+      terrain_all =
+      terrain_not = railroad forest
+      terrain_kill = shallow_water Water Deep_water lava river
+   } Turret_all_tecc
 
 } VehicleType

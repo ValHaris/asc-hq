@@ -1,0 +1,51 @@
+VehicleType { 
+   Name = GSB
+   parent = 365 15000
+   ID = 15365
+   
+   Description = Schlacht UBoot
+   Infotext = [] 
+   picture = mk6s_gsb.png
+;   InfoImage = mk3s_seawolf.jpg
+   GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
+
+   Features += move_after_attack
+   Armor += 500
+   View += 20
+   
+   Movement -= 11 11 10 0 0 0 0 0 
+   Tank.Material = 3000
+   Tank.Fuel = 12000
+
+   Weapons { 
+      Initiative = 40
+      Number = 4
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 16
+      Weapon0.Punch@MaxRange = 135
+      Weapon0.Punch@MinRange = 135
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.UTorp 
+      Weapon1.ShotFrom = deep_submerged submerged
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 120
+
+      Weapon2 ->* VehicleType.STorp 
+      Weapon2.ShotFrom = floating
+      Weapon2.MaxRange = 50
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 110
+      Weapon2.Punch@MinRange = 110
+
+      Weapon3 ->* VehicleType.GALS
+
+      Weapon4 ->* VehicleType.GALS
+      Weapon4.MaxRange = 20
+      Weapon4.ShotFrom = submerged
+      Weapon4.ReactionFireShots = 1
+
+   } Weapons
+} VehicleType

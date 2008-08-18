@@ -3,6 +3,8 @@ VehicleType {
    ID = 15325
    parent = 497 325 15000
 
+   Description = Tankflieger
+   Infotext = [Der Tanker ist die primäre Logistikeinheit der Teccnols. Hochmobil und mit großen Tanks ausgestattet ist er unersetzlich wenn es darum geht, die Kampfverbände an der Front zu versorgen. Der Tanker verfügt nicht nur über Treibstoff- und Materialtanks, sondern fungiert auch als Munitionstransporter für Kanonen, Torpedos, sowie leichte und schwere Raketen. Seine hohe Geschwindigkeit ermöglicht es ihm auch, Kampfflugzeuge in der Luft zu betanken - und sogar mit neuer Munition zu bestücken. Dank seinem Sprungantrieb ist er auch in der Lage, zu einem Einsatzkommando hinter den feindlichen Linien zu springen und diese zu versorgen. Kombiniert man diese außerordentlichen Fähigkeiten noch mit seiner starken Panzerung und seinem günstigen Preis, ist es ganz klar das der Tanker in keinem Arsenal fehlen darf, und man definitiv ein paar mehr als unbedingt nötig in Bereitschaft haben sollte, für den Fall das der Feind den Wert dieser Einheit erkennt und ihn zu einem Primärziel erklärt. ]
    Picture = mk6a_tanker.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 

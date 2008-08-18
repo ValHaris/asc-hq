@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    View += 10
-   Tank.material = 1000
+   Tank.material = 500
    Tank.fuel = 1100
 
    Weapons {

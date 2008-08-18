@@ -7,7 +7,6 @@ VehicleType {
    Picture = mk6b_terminal.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   View = 20
    Features += ExternalFuelTransfer ExternalMaterialTransfer
    
    Tank.Material = 20000

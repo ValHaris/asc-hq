@@ -4,6 +4,7 @@ VehicleType {
    parent = 291
 
    Picture = mk4v_sam2.png
+   Infoimage = mk4v_sam2.jpg
    wreckageobject = 14210
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    InfoText = [Der Sam 2 ist der mittelschwere Standardpanzer des chromonischen Heeres. Sowohl bei Offensiv-, als auch bei Rückzugsgefechten bildet er das Herzstück der Heerestruppen.

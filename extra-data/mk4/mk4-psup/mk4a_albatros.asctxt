@@ -6,6 +6,7 @@ VehicleType {
    Description = Transport Wasserflugzeug
    Infotext = [Umgebauter SPERBER, dessen Inneneinrichtung so weit wie möglich ausgebaut wurde um Platz fuer Bodentruppen zu schaffen. Der ALBATROS sollte nicht offensiv eingesetz werden, da er generell schwaechere Werte als der SPERBER hat. Er kann aber durch die Transportkapazitaet leichte Bodentruppen an der Kueste absetzen.]
    picture = mk4a_albatros.png
+   InfoImage = mk4a_albatros.jpg
    wreckageobject = 1255 14855
    GuideSortHelp = 551 601 0 0 4 0 0 0 0 0
 

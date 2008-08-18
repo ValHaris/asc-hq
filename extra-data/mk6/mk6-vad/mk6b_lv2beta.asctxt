@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = LV2 beta
+   ID = 15106
+   parent = 222 15000
+
+   Description = air-defence turret
+   Picture = mk6b_lv2beta.png
+;   InfoImage = mk1b_samturret.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = []
+
+   Armor -= 50
+   Jumpdrive ->* VehicleType.TeccnolsJump5
+   View = 0
+   Tank.Fuel = 15000
+   Tank.Material = 2000
+   Terrainaccess ->* VehicleType.turret_all_tecc
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.GALS
+      Weapon0.MaxRange = 60
+      Weapon0.Punch@MaxRange += 2
+      Weapon0.Punch@MinRange += 10
+   } Weapons
+
+} VehicleType

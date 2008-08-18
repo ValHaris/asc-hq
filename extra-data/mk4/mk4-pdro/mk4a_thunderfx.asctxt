@@ -17,6 +17,7 @@ Wie schon eingangs erwähnt, hat die Einführung der Thunder FX und ihrer Modifika
   ]
 
    picture = mk4a_thunderfx.png
+   InfoImage = mk4a_thunder.jpg
    wreckageobject = 1244 14844
    GuideSortHelp += 0 0 0 0 4 272 0 0 0 0
 

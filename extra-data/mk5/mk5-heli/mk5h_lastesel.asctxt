@@ -2,19 +2,22 @@ VehicleType {
    Name = Lastesel
    parent = 400 401 402 409 497
    ID = 1450
+
    Description = Containertransporter
-   Infotext = []
    picture = mk5h_lastesel.pcx
+   InfoImage = mk5h_lastesel.jpg
+   Infotext = [InfoImage = Wikipedia Sikorsky S-64]
    
    Armor = 300
    Features += ExternalFuelTransfer
    Weight = 30
 
    Transportation ->* VehicleType.TransTurretBig 
-   Transportation.CategoriesNOT = rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
+   Transportation.CategoriesNOT = trooper rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
    Transportation.MaxLoadableUnitSize = 700
    Transportation.MaxLoadableMass = 700
    Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem0.DisableAttack = false
    Transportation.EntranceSystem1 ->* VehicleType.container_in_out
    Transportation.EntranceSystem2 ->* VehicleType.ship_out
    Transportation.EntranceSystem3 ->* VehicleType.ship_in
@@ -26,6 +29,7 @@ VehicleType {
    } Tank
    FuelConsumption = 20
    MovementSound = heli_h_s.ogg
+   Movement += 0 0 0 -10 -20 10 0 0 
 
    Weapons { 
       Initiative = 0

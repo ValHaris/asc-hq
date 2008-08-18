@@ -11,8 +11,10 @@ VehicleType {
 
    Armor += 200
    Weight += 20
+   Tank.Material = 100
    
    Weapons { 
       Weapon0.Ammo = 8
+      Weapon1 ->* VehicleType.NLS
    } Weapons
 } VehicleType

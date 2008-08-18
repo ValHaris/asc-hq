@@ -1,7 +1,7 @@
 VehicleType { 
    Name = INTRUDER
    ID = 15201
-   parent = 201
+   parent = 201 15000
 
    Description = Leichter Kampfroboter
    Infotext = []
@@ -9,6 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 100
+   Weight = 3
    Movement += 0 0 0 5 0 0 0 0
    Features = mineview mine_layer conquer_buildings
    Category = light_tracked_vehicle
@@ -16,6 +17,7 @@ VehicleType {
 
    Weapons {
       Number = 3 
+      Weapon0 ->* VehicleType.NLS
       Weapon0.Punch@MaxRange += 10
       Weapon0.Punch@MinRange += 10
       Weapon2 ->* VehicleType.Weapons.Weapon0

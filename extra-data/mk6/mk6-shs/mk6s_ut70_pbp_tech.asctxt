@@ -1,0 +1,10 @@
+technology {
+   Name = UT 70
+   infotext = Forschungsprojekt abgeschlossen! UT 70 verfuegbar!
+   id = 15370
+   RelatedUnitID = 15370
+   parent = 15000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 15000,100004,100102,100208
+} Technology

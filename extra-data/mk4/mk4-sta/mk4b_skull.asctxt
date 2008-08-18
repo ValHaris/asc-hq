@@ -7,6 +7,7 @@ VehicleType {
    Description = Bunker
    Infotext = [Bunkeranlagen werden gebaut um eigenen Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Dieser ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Da der Skull-Bunker auch wegen der besseren Sicht, höher über dem Boden errichtet wird, ist die Schutz-Panzerung hier etwas geringer als beim Bunkertyp Rocky. Sein großer Vorteil liegt jedoch in seiner sehr vielfältigen Bewaffnung und dem größeren Munitionsvorrat. Nicht nur Kanonen sondern ebenfalls große, teure Raketten stehen dieser Bunkeranlage zur Verfügung und können damit manchen feindlichen Fliegern auf sämtlichen Höhenstufen das Fürchten lernen. Des weiteren können mehr Einheiten in diesem Bunkertyp geschützt werden. Im Bunker sind Munition und Medikamente gelagert.]
    picture = mk4b_skull.png
+   InfoImage = mk4b_skull.jpg
    wreckageobject = 1221
    
    Features += ManualSelfDestruct

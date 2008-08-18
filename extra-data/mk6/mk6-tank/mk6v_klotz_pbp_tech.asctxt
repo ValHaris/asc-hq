@@ -1,0 +1,10 @@
+technology {
+   Name = Klotz
+   infotext = Forschungsprojekt abgeschlossen! Klotz verfügbar!
+   id = 15337
+   RelatedUnitID = 15337
+   parent = 15000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 15000,100002,100105,100208
+} Technology

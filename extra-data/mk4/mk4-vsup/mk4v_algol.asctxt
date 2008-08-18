@@ -9,6 +9,7 @@ Dieses Fahrzeug an sich ist recht schnell, aber Vorsicht, diese Straßenfahrzeug 
 Das Fahrzeug ist nicht bewaffnet und muss ausreichend durch befreundete Einheiten abgeschirmt sein. Es darf nur mit entsprechendem Begleitschutz ins Kriegsgebiet vorrücken.   
 ]
    picture = mk4v_algol.png
+   InfoImage = mk4v_algol.jpg
    wreckageobject = 14217
 
    Armor -= 100

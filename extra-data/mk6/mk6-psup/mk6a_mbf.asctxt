@@ -10,7 +10,7 @@ VehicleType {
    Picture = mk6a_mbf.pcx
    GuideSortHelp = 341 0 0 0 6 0 0 0 0 0
 
-   Features = construct_vehicles construct_specific_buildings NoProductionCustomization
+   Features = construct_vehicles construct_specific_buildings
    Armor += 150
    Transportation ->* VehicleType.TransTurretBig 
 

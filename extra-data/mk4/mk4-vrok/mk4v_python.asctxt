@@ -6,6 +6,7 @@ VehicleType {
    Description = Raketenpanzer
    Infotext = [ Leistungsstarker Boden-Boden-Raketenpanzer mit veraenderten Abschussvorrichtungen und staerkerer Panzerung als der STING. ]
    Picture = mk4v_python.png
+   InfoImage = mk4v_python.jpg
    wreckageobject = 14227
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

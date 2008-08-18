@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1494
+   ;Bezeichnung der verknüpften Technologie: Forest
+   TechnologiesRequired = 1494 100101
+} TechAdapter

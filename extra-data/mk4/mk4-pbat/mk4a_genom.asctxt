@@ -4,7 +4,10 @@ VehicleType {
    ID = 1246
 
    Description = Jagdflugzeug
+   InfoText = [Der Genom ist der Standardjäger schlechthin. Gut gepanzert, mit starken Triebwerken und zusätzlichen Steuerflügeln ausgerüstet und dadurch außerordentlich agil, ist er zur Bekämpfung von Luftzielen in allen Schichten der Atmosphäre ausgelegt, selbst wenn er selber nicht allzu hoch steigen kann. Seine größte Schwäche ist, daß er nur wenige weitreichende Raketen mitführt und sich deshalb Verluste im Luftkampf fast nie vermeiden lassen. Zusätzlich besitzt der Genom ein Zwillings-MG unter dem Rumpf zur Bekämpfung verschiedener Ziele. So ist er hervorragend zur Bekämpfung von Bombern, jedoch weniger von Jägern geeignet. Die Kommandeure sind daher angehalten, den Genom entsprechend einzusetzen!
+]
    Picture = mk4a_genom.png
+   InfoImage = mk4a_genom.jpg
    wreckageobject = 1246 14846
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 } VehicleType

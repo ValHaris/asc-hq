@@ -12,6 +12,7 @@ Gegenüber den schweren Panzern z.B. dem Nashorn haben sie folgende Vorteile:
 Nachteile: Keine Offensivwaffe, abhängig von vorhandenen Schienen, Feuerkraft gegenüber z.B. Axis gering.
 ]
    picture = mk4t_anaconda.png
+   Infoimage = mk4t_anaconda.jpg
    wreckageobject = 14225
    GuideSortHelp = 503 0 0 0 4 0 0 0 0 0
 

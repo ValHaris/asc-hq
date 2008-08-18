@@ -6,6 +6,7 @@ VehicleType {
    Description = Reparaturschiff
    Infotext = []
    picture = mk4s_rex.png
+   InfoImage = mk4s_rex.jpg
    wreckageobject = 14256
    GuideSortHelp = 553 550 0 0 4 0 0 0 0 0
 

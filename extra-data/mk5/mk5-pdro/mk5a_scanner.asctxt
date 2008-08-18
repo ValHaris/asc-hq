@@ -4,8 +4,10 @@ VehicleType {
    ID = 1470
    
    Description = mini scanner aircraft
-   Infotext = [ ]
-   Picture = MK5a_scanner.pcx
+   Picture = mk5a_scanner.pcx
+   InfoImage = mk5a_scanner.jpg
+   Infotext = [
+   InfoImage = Wikipedia Luna (Drohne) ]
 
    Armor = 100
    View = 80

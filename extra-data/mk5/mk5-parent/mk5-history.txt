@@ -1,18 +1,30 @@
 MK5 Outlaw
-GAMER
+Grafiken: GAMER
+InfoText: Hastrubal
+InfoImage: GAMER
 
 __________________
-Beta 2-07/08
+-Forest namen korrigiert
+
+__________________
+09.08.2008 (GAMER)
+-Sprengkörper MDRF
+-WOAS, mam, +high_level, -10 Range
+-Subbase baubar
+-WOAS nicht mehr trainierbar
+-diverse Anpassungen bei den Techeinstufungen
+-InfoImage = Lastesel, Visby, Skjold, Stachel, Container
+-InfoImage = Subhunter, Harpoon, Fortress, Summse
+-InfoImage = Relic (Scud), Tactics
+__________________
+06.07.2008 (GAMER)
+-InfoImage = Spaca
 -Fortress, schneller, Waffen schwacher
 -Shiphunter = Harpoon
 -infoImage = Blackwidow, Commander, HSV, Sealboat, MU
 -InfoText = Speedser
-Neu:
--HSV
-Beta 3-06/08
 -Speedster, soundbugfix
 -Täuscher, etwas teurer
-Beta 2-06/08
 -Doomsday, betank- und reparierbar im orbit
 -Subhunter , sonar
 -MUHS, AmmoTorp
@@ -21,12 +33,13 @@ Beta 2-06/08
 -ADG, mehr stealth, mehr panzerung, Anpassung Effektivität
 -IronGun, Stealth
 -Blackwiddow, MG effektiver gegen Trooper
-Beta 1-06/08
 -Namensänderung Outsider -> Outlaw
 -Transportsystem lastesel gefixt
 -Mize, Typumbau
 -Flak, auch auf Boden feuern
 -Wachturm , small missle
+Neu:
+-HSV
 __________________
 07.06.2008 (GAMER)
 -T1, schnellstarter für Jetstar

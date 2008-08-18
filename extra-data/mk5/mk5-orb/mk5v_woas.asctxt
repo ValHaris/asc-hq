@@ -8,14 +8,17 @@ VehicleType {
    Picture = mk5v_woas.pcx
    GuideSortHelp = 0 0 0 0 5 0 0 0 0 0
 
-   Features = 
+   Features += move_after_attack
+   Weight = 250
 
    WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.CMO
-      Weapon0.MaxRange = 140
+      Weapon0.targets = high_level_flight orbit
+      Weapon0.HitAccuracy.u3 = 75
+      Weapon0.MaxRange = 130
       Weapon0.MinRange = 50
    } Weapons
 } VehicleType

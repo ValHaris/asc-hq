@@ -4,8 +4,11 @@ VehicleType {
    ID = 1265
    
    Description = Landungsboot
-   Infotext = []
+   Infotext = [Luftkissenfahrzeugen stehen sowohl ebene Flächen als auch Flüsse und küstennahe Gewässer als Operationsgebiet offen. Da sie hierbei auch noch hohe Geschwindigkeiten erreichen, sind sie ideale Transporter für amphibische Operationen und Truppenverlegungen. Hinzu kommt eine mittlere Panzerung und leichte MG-Bewaffnung. Der Laderaum ist sehr groß und faßt bis zu 4 Einheiten der verschiedensten Klassen. Ebenso können erhebliche Mengen an Treibstoff und Material mitgeführt und benachbarte Einheiten im Kampfgebiet befüllt werden.
+Hinweis: Aufgrund ihrer Wichtigkeit sollten direkte Kampfhandlungen dieser Einheit unbedingt vermieden werden!   
+]
    picture = mk4s_vader.png
+   InfoImage = mk4s_vader.jpg
    wreckageobject = 14265 14865
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    Features = ExternalMaterialTransfer ExternalFuelTransfer

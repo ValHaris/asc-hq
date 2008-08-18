@@ -5,6 +5,7 @@ VehicleType {
 
    Description = Langstreckenrakete
    Picture = mk4v_ux.png
+   Infoimage = mk4v_ux.jpg
    wreckageobject = 1233
    GuideSortHelp = 505 414 0 0 4 0 0 0 0 0
 

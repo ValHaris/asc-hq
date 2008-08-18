@@ -22,6 +22,7 @@ Der ATLAS SX baut auf dem leistungsfaehigen ATLAS - Transporter auf und dient al
       CategoriesNOT -> VehicleType.Cargo_drop.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.RequireUnitFunction = paratrooper
       EntranceSystem1 ->* VehicleType.carrier_ground
       Entrancesystem1.Mode = out
       EntranceSystem1.RequireUnitFunction = paratrooper

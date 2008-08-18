@@ -1,5 +1,5 @@
 Techadapter {
    Name = 15360
-   ;Bezeichnung der verknüpften Technologie: Carrier
+   ;Bezeichnung der verknüpften Technologie: FT 90
    TechnologiesRequired = 15360
 } TechAdapter

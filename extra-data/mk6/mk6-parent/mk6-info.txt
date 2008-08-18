@@ -35,6 +35,7 @@ ID 15216 Meo
 ID 15290 CillaTE
 ID 15292 DevoTE
 ID 15293 Meta TE
+ID 15337 Klotz
 
 --FastAttack & Transport--
 
@@ -62,6 +63,7 @@ ID 15304 Debugg
 
 --SupportVehice--
 ID 15103 Cilla SV
+ID 15105 Meta SV
 
 --Orbital--
 15246 Global
@@ -69,6 +71,7 @@ ID 15103 Cilla SV
 --Aircraft--
 ID 15100 Defkind
 ID 15101 Suliban
+ID 15104 Innocence
 ID 15271 Asus
 ID 15270 Deltafighter
 ID 15276 Deltabomber
@@ -91,10 +94,17 @@ ID 15355 MBC 10
 ID 15355 MBC 20
 
 --Supportships--
+ID 15363 UTX
+ID 15369 UT100
+ID 15370 UT70 
 
+--Carrier
+ID 15359 DT 64
+ID 15360 FT 90
 
---Carrier/Submarines
-ID 15360 Carrier
+--Submarines
+ID 15364 KSB
+ID 15365 GSB
 
 Trains
 *not available*

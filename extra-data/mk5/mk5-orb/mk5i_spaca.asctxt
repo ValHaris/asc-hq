@@ -4,7 +4,8 @@ VehicleType {
    parent = 236
    Description = Spaceman
    Infotext = [Trooper that can walk into Space and conquere Spacestations. Only armed with a high explosive bomb against satellites and Spacestations.]
-   Picture = MK5i_Spaca.pcx
+   Picture = mk5i_spaca.pcx
+   InfoImage = mk5i_spaca.jpg
 
    Weapons { 
       Weapon0.Punch@MaxRange += 5

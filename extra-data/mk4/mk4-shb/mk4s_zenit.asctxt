@@ -5,8 +5,12 @@ VehicleType {
    
    Description = Schlachtschiff
    picture = mk4s_zenit.png
+   InfoImage = mk4s_zenit.jpg
    wreckageobject = 14263
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   InfoText = [Schlachtschiffe sind die stärksten jemals auf See eingesetzten Einheiten. Sie entstanden aus der Erkenntnis, daß im Seekampf ein starkes Schiff mit großer Reichweite viele kleinere Schiffe versenken kann, ohne überhaupt in Gefahr zu geraten. So wurden die Kanonen immer größer, damit die Schiffe immer schwerer und dann auch besser gepanzert. Die heutigen Schlachtschiffe beherrschen das Meer im Umkreis von mehreren Dutzend Kilometern und wären wohl der verbreitetste Schiffstyp, wenn nicht mittlerweile wirkungsvolle Strategien zu Ihrer Bekämpfung ausgearbeitet worden wären. Ein großer Nachteil aller Schlachtschiffe ist, daß Sie gegen U-Boote wehrlos sind. Dies liegt vor allem an ihrer riesigen Masse, die es aussichtslos macht, sich in eine vernünftige Angriffsposition gegen U-Boote zu bringen bzw. den Torpedos auszuweichen. Gemessen an Ihrer Wichtigkeit ist auch die Luftabwehr für größere Bomberverbände nicht ausreichend. Zeitweise schien es, daß die Flugzeugträger in der Lage waren, mit Ihren Torpedobombern Schlachtschiffe beliebig zu versenken. Durch den Kampf im Verband, verbesserte Aufklärung und auf eigenen Trägern mitgeführte Jäger ist dies aber heutzutage nicht mehr die Regel. Die Verbände umfassen meist schnelle Zerstörer zur U-Boot-Abwehr und Kreuzer gegen Luftangriffe, oft auch U-Boote. 
+Das Zenit ist ein typischer Vertreter dieser Klasse. Seine stärkste Waffe ist ein 40,6 cm Drillingsgeschütz großer Reichweite. Auf dem Vor- und Achterdeck befinden sich noch kleinere Geschütze Kaliber 30. Diese können auch angreifende Feindschiffe direkt unter Feuer nehmen. Flugabwehrgeschütze und –raketen vervollständigen die Bewaffnung. Da die großen Geschütze eine hohe Schiffsmasse und einen breiten Rumpf erfordern, um den Rückstoß auszugleichen, ist das Schiff recht langsam und muß sich vollständig auf seine dicke Panzerung verlassen. Es hält natürlich viel aus und kann auch von der Besatzung auf See repariert werden. Zwar sind die Baukosten recht hoch, allerdings ist diese Einheit, effizient eingesetzt, unersetzbar zum Angriff auf gegnerische Flotten und Küstenstellungen.   
+]
 
    Weapons { 
       Initiative = 0

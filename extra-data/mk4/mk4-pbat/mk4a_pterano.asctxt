@@ -16,6 +16,7 @@ kaum unterschaetzt werden. Ihr einzigstes Manko ist die aus Masse und Design res
 Geschwindigkeit.
 ]
    picture = mk4a_pterano.png
+   InfoImage = mk4a_pterano.jpg
    wreckageobject = 1250 14850
    GuideSortHelp = 513 330 600 0 4 0 0 0 0 0
 
@@ -28,11 +29,11 @@ Geschwindigkeit.
       MaxLoadableUnitSize = 50
       MaxLoadableMass = 70
       CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-      CargoMovementDivisor = 3
-      EntranceSystemNum = 2
+      CargoMovementDivisor = 1.5
+      EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem1 ->* VehicleType.Para
-      EntranceSystem1.CategoriesNOT -> VehicleType.cargo_noplane.CategoriesNOT
+      EntranceSystem1 ->* VehicleType.ParaTr
+      EntranceSystem2 ->* VehicleType.ParaVeh
    } Transportation
    Tank { 
       Energy = 0

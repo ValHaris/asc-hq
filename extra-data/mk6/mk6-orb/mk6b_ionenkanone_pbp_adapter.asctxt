@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15238
+   ;Bezeichnung der verknüpften Technologie: Ionenkanone
+   TechnologiesRequired = 15283
+} TechAdapter

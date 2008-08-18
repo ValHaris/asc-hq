@@ -8,6 +8,7 @@ VehicleType {
 Der Golem ist das Standardmodell. Mit Landraketen für gepanzerte Ziele und weitreichenden Luftraketen ausgestattet, bietet er die Kampfkraft eines leichten Panzers in nahezu jedem Gelände. Das weitreichende MG ist für die Bekämpfung von Infanterie und Flugzeugen geeignet. Aufgrund der geringen Größe ist auch die Besetzung feindlicher Gebäude möglich. So verfügt diese Einheit über keine gravierenden Schwächen, ist allerdings schweren Einheiten unterlegen. Der Golem sollte deshalb in offenem Gelände mit Bedacht eingesetzt werden.
 ]
    Picture = mk4m_golem.png
+   InfoImage = mk4m_golem.jpg
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor += 100

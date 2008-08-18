@@ -16,12 +16,13 @@ Neben dem EMP Generator verfügt der CillaTE über ein leichtes 70mm Geschütz, das
 Die hohe flexibilität in den Einsatzmöglichkeiten, sowie die enorme Offensivkapazität schlagen sich jedoch beim Preis deutlich nieder: im Vergleich zu ähnlichen Einheiten der anderen Rassen ist der CillaTE ca. 30% teurer. Dies ist jedoch immernoch sehr günstig für dieses hochwertige Stück Technologie. ]
    
    Armor -= 50
-   Tank.Material = 1000
+   Tank.Material = 500
 
    Weapons { 
       Number = 3 
       Weapon0.Punch@MaxRange -= 10
       Weapon0.Punch@MinRange -= 10
+      Weapon1 ->* VehicleType.NLS
       Weapon2 ->* VehicleType.TeccEMP
       Weapon2.Punch@MinRange = 120
       Weapon2.Punch@MaxRange = 120

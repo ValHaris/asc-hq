@@ -4,7 +4,9 @@ VehicleType {
    ID = 1448
 
    Description = Kampfhubschrauber
-   picture = MK5h_Summse.pcx
+   picture = mk5h_summse.pcx
+   InfoImage = mk5h_summse.jpg
+   InfoText = [InfoImage = Wikipedia Hughes OH-6]
 
    MovementSound = heli_h_s.ogg
    Weapons { 

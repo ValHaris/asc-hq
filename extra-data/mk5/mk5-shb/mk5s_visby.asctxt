@@ -4,7 +4,9 @@ VehicleType {
    ID = 1456
    
    Description = stealth corvette
-   picture = MK5s_visby.pcx
+   picture = mk5s_visby.pcx
+   InfoImage = mk5s_visby.jpg
+   InfoText = [InfoImage = Wikipedia Visby-Klasse]
 
    Armor += 100
    Transportation ->* VehicleType.noTrans 

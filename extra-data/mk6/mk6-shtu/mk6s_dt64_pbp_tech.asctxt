@@ -1,0 +1,10 @@
+technology {
+   Name = DT 64
+   infotext = Forschungsprojekt abgeschlossen! DT 46 verfuegbar!
+   id = 15359
+   RelatedUnitID = 15359
+   parent = 15000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 15000,100004,100103,100208,100209 
+} Technology

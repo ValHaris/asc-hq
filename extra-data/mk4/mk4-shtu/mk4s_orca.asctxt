@@ -5,8 +5,10 @@ VehicleType {
 
    Description = Jagd-UBoot
    picture = mk4s_orca.png
+   InfoImage = mk4s_orca.jpg
    wreckageobject = 14261
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   InfoText = [Das Jagd-U-Boot vom Typ Orca ist das Standard U-Boot schlechthin. Schnell, sehr gut gepanzert und mit tödlichen Torpedos ausgerüstet, kann es vielen größeren Schiffen sehr gefährlich werden. Da ein Abschuß der Torpedos aus der Bewegung heraus möglich ist und das Schiff dann sofort wieder verschwinden kann, ist es dabei für viele Einheiten kaum angreifbar. Zusätzlich besitzt es noch leichte Kanonen- und MG-Bewaffnung. Die größte Schwäche stellen die sogenannten U-Boot-Jäger dar. Diese Einheiten können das Orca versenken, ohne Gegenwehr befürchten zu müssen. Hier sind auf normaler Tauchstufe die Torpedobomber zu nennen, die durch ihre Wasserbomben große Schäden anrichten können. Falls das U-Boot deswegen tiefer taucht, kann es durch leichte Schiffe und Kreuzer mit Wasserbomben versenkt werden. Der erfahrene Kapitän plant deshalb immer den enstprechenden Schutz durch andere Einheiten ein und erhält so eine gefährliche Waffe für die Seekriegsführung. ]
 
    Weapons { 
       Initiative = 50

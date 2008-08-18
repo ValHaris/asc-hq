@@ -3,8 +3,10 @@ VehicleType {
    parent = 295
 
    Name = NASHORN
-   Description = Sturmgeschuetz
+   Description = Defensivpanzer
+   InfoText = [Der Defensivpanzer vom Typ Nashorn ist ein Klassiker der cromonischen Streitkräfte. Durch die erbitterten Panzerschlachten auf Cromos, wo die Panzermacht hauptsächlich aus Offensivpanzern bestand, wurde der Militärführung schnell klar, dass man auch einen Defensivpanzer benötigt, um eventuelle Rückzüge optimal abzusichern. Die hierfür neu entwickelte schwere Kanone war für die bereits für Testzwecke umgebauten Blade Panzer zu schwer, und so wurde schließlich ein völlig neues Geschütz mit dem Namen Nashorn entwickelt. Es verfügt über eine dicke Panzerung ohne größere Schwachstellen und eine schwere 110mm-Kanone. Mittels MG kann es sich auch gegen Flugzeuge und Infanterie verteidigen. Wenn das Nashorn Position bezogen hat, kann es den Feind schon aus der Distanz angreifen und ist im Nahkampf selbst für schwere Panzer ein würdiger Gegner. Anfangssorgen über die nach hinten gerichtete Kanone erwiesen sich als grundlos. Erstmalig wurde die Kanone am Chassis statt am Turm befestigt. Gezielt wurde, und dies war seinerzeit ein völlig neues Konzept, durch Drehen des Fahrzeuges und Heben oder Senken der Radaufhängung. Die niedrige Silhouette war ideal für Hinterhalte, und die nach hinten gerichtete Kanone ermöglichte es dem Fahrzeug, ohne Umzudrehen schnell wegzufahren und so Vergeltungsschläge vermeiden zu können. Der schnelle Rückzug mit eingeschaltetem RF auf beachtliche 2 Felder ist sein größter Vorteil gegenüber der schnelleren SAM Baureihe. Eine seiner Nachteile ist, dass er beim Fahren nicht aktiv schießen kann, was nicht weiter problematisch ist, da dieser Panzertyp hauptsächlich für defensive Kampfhandlungen und Rückzugsgefechte entwickelt wurde. Aufgrund seines zu kleinen Tankvolumens sollten sich allerdings stets Versorgungsfahrzeuge in seiner Nähe befinden. Die richtige Platzierung dieser Waffe kann den Unterschied zwischen Sieg und Niederlage in einer Panzerschlacht ausmachen. ]
    Picture = mk4v_nashorn.png
+   InfoImage = mk4v_nashorn.jpg
    wreckageobject = 14212
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

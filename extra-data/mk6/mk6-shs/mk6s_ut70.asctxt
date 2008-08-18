@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = UT 70
+   parent = 370 15000 493
+   ID = 15370
+
+   Description = Transport UBoot
+   Infotext = []
+   picture = mk6s_ut70.png
+   WreckageObject = 424
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Features -= moveduringreactionfire
+   Armor -= 300
+
+   Height = deep_submerged submerged floating
+   Movement += 77 77 10 0 0 0 0 0
+   TerrainAccess ->* VehicleType.mediumship_terrain 
+
+   Weapons {
+      Number = 7
+      Weapon1 ->* VehicleType.DLS
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 100
+   } Weapons
+} VehicleType

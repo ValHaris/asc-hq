@@ -6,7 +6,7 @@ VehicleType {
    Picture = mk6m_meo.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Tank.material = 1000
+   Tank.material = 500
    Tank.fuel = 1100
    Armor += 10
    Weapons { 

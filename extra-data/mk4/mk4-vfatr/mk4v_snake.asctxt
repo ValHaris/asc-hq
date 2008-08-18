@@ -9,6 +9,7 @@ VehicleType {
 Diese frühen Schützenpanzer wurden sehr bald mit einer stärkeren Panzerung, die auch Schutz vor Maschinengewehrfeuer gewährleistete und zu einem kleinen Teil auch mit leichten Sturmgeschützen und Panzerabwehrkanonen ausgerüstet, um den Panzergrenadieren die Möglichkeit zu geben auch ohne Unterstützung von schweren Panzern feindliche Panzerangriffe abzuwehren und befestigte Stellungen anzugreifen. Dieser Schützenpanzerwagen dienten in erster Linie zum Transport infanteristischer Kräfte und zur Feuerunterstützung mit Maschinengewehren. Heute werden die Schützenpanzerwagen aufgrund ihrer gewöhnlich weniger starken Bewaffnung als Transportpanzer bezeichnet.
 ]
    picture = mk4v_snake.png
+   InfoImage = mk4v_snake.jpg
    WreckageObject = 14208
 
    Movement += 0 0 0 20 0 0 0 0 

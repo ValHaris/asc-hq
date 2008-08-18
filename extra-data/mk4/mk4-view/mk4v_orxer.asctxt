@@ -6,6 +6,7 @@ VehicleType {
    Description = [Prätorianischer Radarpanzer]
    Infotext =
    Picture = mk4v_orxer.png
+   InfoImage = mk4v_orxer.jpg
    wreckageobject = 14032
    GuideSortHelp = 504 0 0 0 4 0 0 0 0 0
 

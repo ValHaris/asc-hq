@@ -10,6 +10,7 @@ In dieser Eigenschaft verfügt er über eine tödliche Präzision. Im Kampf gegen Ab
 schwache Standartbordwaffen angewiesen. Im allgemeinen verfüght er ueber herausragende Faehigkeiten, schnelle 
 chirurgische Eingriffe am Feind vorzunehmen. ]
    Picture = mk4a_stormbringer.png
+   InfoImage = mk4a_stormbringer.jpg
    wreckageobject = 1243 14843
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

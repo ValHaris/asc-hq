@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15359
+   ;Bezeichnung der verknüpften Technologie: DT 64
+   TechnologiesRequired = 15359
+} TechAdapter

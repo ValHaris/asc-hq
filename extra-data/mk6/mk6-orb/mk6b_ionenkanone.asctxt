@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = IONENKANONE
+   ID = 15238
+   parent = 238 15000
+
+   Description = Orbitalabwehr
+   Picture = mk6b_ionenkanone.png
+;   InfoImage = mk1b_sdb.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = []
+   
+   Jumpdrive ->* VehicleType.TeccnolsJump3
+   Features = 
+   View = 0
+   Tank.Fuel = 17000
+   Tank.Material = 8000
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.name = Ionenkanone
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 20
+      Weapon0.Ammo = 6
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.LaserRechargeCost.material = 200
+      Weapon0.LaserRechargeCost.fuel = 400
+   } Weapons
+} VehicleType

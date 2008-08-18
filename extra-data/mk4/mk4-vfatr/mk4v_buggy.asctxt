@@ -5,8 +5,10 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Description = Spaehfahrzeug
-   Infotext = []
+   Infotext = [Raketenwerfer sind aus der modernen Bodenkriegsführung nicht mehr wegzudenken. Sie sind sehr schnell und können gepanzerte Ziele aus der Distanz präzise bekämpfen. Um sie allerdings zu einer effektiven Waffe zu machen, waren verschiedene Kompromisse nötig. So brauchen Munition und Abschußrampen relativ viel Platz. Dadurch können diese Einheiten nicht allzulange im Feld bleiben. Die Munition ist recht teuer. Die Abschußrampen sind ziemlich groß und nur leicht gepanzert, die Raketen auf bestimmte Ziele spezialisiert, was sie anfällig für Infanterieangriffe macht. Deshalb müssen Raketenwerfer immer gut geschützt werden.
+Der leichteste Verteter dieser Waffengattung ist der Buggy. Es handelt sich um einen Zwitter zwischen Aufklärer und Raketenwerfer. Das Chassis ist nur leicht gepanzert und durch den Allradantrieb erreicht er auf ebenen Flächen und Straßen hohe Geschwindigkeiten. Gleichzeitig ist eine gewisse Geländegängigkeit gegeben. Die Wärmesuchraketen sind sehr wirkungsvoll gegen mechanische Ziele, aber gegen Infanterie leider vollkommen nutzlos. Aus diesem Grund wurde der Buggy noch mit einem leichten MG ausgestattet, doch sollte der Nahkampf tunlichst vermieden werden. Die dünne Panzerung wird selbst von schwerer Infanterie und leichten Panzern mühelos durchdrungen. So sind sein bester Schutz seine hohe Geschwindigkeit sowie die spezielle Raketenbewaffung, welche ihm ermöglichen, die feindliche Stellung aufzuklären, während der Fahrt zu feuern und wieder im Schutz der eigenen Stellung zu verschwinden. Die flache Silhouette erschwert zusätzlich seine Entdeckung und gibt ihm einen gewissen Schutz vor feindlichem Abwehrfeuer. Dies wird aber mit einem geringen Munitionsvorrat erkauft, so daß unbedingt entsprechende Servicefahrzeuge notwendig sind. Der Buggy ist als offensive Unterstützungseinheit im ebenen Gelände sehr nützlich, benötigt aber immer die Feuerkraft und den Schutz von Flakeinheiten und schwereren Panzern. ]
    picture = mk4v_buggy.png
+   InfoImage = mk4v_buggy.jpg
    WreckageObject = 1203
 
    Armor -= 50

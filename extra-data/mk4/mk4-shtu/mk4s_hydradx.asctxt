@@ -5,18 +5,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    
    Description = Drohnen Traeger
-   Infotext = [Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und 
-   hochspezialisierten Drohen die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen 
-   Reichweite waeren sie dort nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite 
-   selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur 
-   Gebrauchswertsteigerung geprueft.
-Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder 
-mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des DX-Kampfwertsteigerungsprogrammes wurden die 
-erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde 
-dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden 
-bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
-Die HYDRA DX baut auf der HYDRA-Korvetten-Klasse auf und dient als seegestuetzter Drohnenstarter. Sie ist in der Lage 
-drei Drohne zuegig in ihr Einsatzgebiet auf See zu befoerdern und sie mittels Startkatapult starten zu lassen.
+   Infotext = [Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohnen die Schwäche aufwiesen, nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite wären sie dadurch nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen ließ, wurden alternative Konzepte zur Gebrauchswertsteigerung geprüft. Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere Drohnen von ihnen aus starten können. Im Rahmen des DX-Kampfwertsteigerungsprogrammes wurden die erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestützten Abschußvorrichtungen wurde dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestützten Systemen wurden bestehende Bombenschächte vergrößert und mit einer nach aussen schwenkbaren Ausklinkvorrichtung versehen. Die HYDRA DX baut auf der HYDRA-Korvetten-Klasse auf und dient als seegestützter Drohnenstarter. Sie ist in der Lage, drei Drohnen zügig in ihr Einsatzgebiet auf See zu befördern und sie mittels Startkatapult starten zu lassen. In begrenztem Maße kann Sie die Drohnen auch versorgen und sogar reparieren. Um den entsprechenden Platz zu schaffen wurde die Torpedobewaffnung komplett entfernt. Ebenso ist eine U-Boot-Bekämpfung nun nicht mehr möglich. Um jedoch einen sicheren Luftraum für den Start der Drohnen gewährleisten zu können, wurden Boden-Luft-Raketen nachgerüstet. Die HYDRA DX kann so auch als Flak-/Flarakschiff verwendet werden, man sollte jedoch nie aus den Augen verlieren, daß ihr Hauptzweck im Einsatz der transportierten Drohnen besteht.   
 ]
    picture = mk4s_hydradx.png
    wreckageobject = 14007

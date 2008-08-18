@@ -137,6 +137,7 @@ ID 1469 Magic X
 
 Sprengkörper
 ID 1472 Tankblocker
+ID 1494 Forest
 
 -------------
 

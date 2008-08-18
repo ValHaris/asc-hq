@@ -5,9 +5,17 @@ VehicleType {
    
    Description = Kreuzer
    picture = mk4s_polar.png
+   InfoImage = mk4s_polar.jpg
    wreckageobject = 14262
-   Features += sonar
    GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
+   InfoText = [Kreuzer sind die häufigsten Kriegsschiffe in den Flotten aller Völker. Sie stellen dabei die effizientesten Schiffe dar. Gegenüber der Zerstörerklasse wesentlich verbessert, sind sie besonders stark gepanzert. Sie verfügen über starke Kanonen mittlerer Reichweite, die sowohl gegen See- und Landziele, als auch gegen Flugzeuge eingesetzt werden können. Außerdem führen sie auch Wasserbomben gegen U-Boote mit sich und stellen für diese eine ernste Bedrohung dar.
+Die Schiffe der Polarklasse sind die Standardkreuzerklasse der Cromonischen Marine. Es gibt mehrere verschiedene Typen. Die eigentliche Polar ist der Allrounder dieser Klasse. Sie ist recht gut gepanzert und verfügt als Hauptwaffe über zwei 30,5 cm Zwillingsgeschütze, welche schwere Schäden bei gegnerischen Einheiten anrichten können. Durch die relativ schnelle Ladeautomatik können bei eigenem Salventakt trotzdem noch angreifende gegnerische Schiffe unter Feuer genommen werden. Die 80-mm Geschütze können sowohl im Kampf auf kurze Distanz als auch gegen Flugzeuge eingesetzt werden. Speziell für die Flugabwehr verfügt die Polar noch über zwei Raketenbatterien mit weitreichenden Boden-Luft-Raketen. Um die Bewaffnung zu komplettieren, werden noch Wasserbomben gegen U-Booote mitgeführt. Kleinere Schäden können noch im Kampfgebiet mit Bordmitteln behoben werden. Weiterhin besteht die Möglichkeit, andere Schiffe in begrenztem Umfang mit Waffen zu versorgen. Zur Unterstützung der Flotte können auch noch 2 Helikopter mitgeführt werden. Alternativ können auch 2 Troopereinheiten sicher transportiert werden. Da die Polar recht beweglich ist, über Sonar verfügt, ein universelles Waffenarsenal an Bord hat und zusätzliche Unterstützungsfunktionen für die anderen Schiffe bietet, sollte sie in jeder Flotte einen signifikanten Anteil der Schiffe stellen.
+
+Sie hat jedoch auch zwei Nachteile:
+
+Natürlich kann ein solch großes Schiff nicht in Küstengewässern operieren. Das größere Problem ist jedoch das Fehlen eines sehr weitreichenden Hauptgeschützes, weshalb beim Angriff auf gegnerische Schlachtschiffe oft starker feindlicher Beschuß hingenommen werden muß. ]
+
+   Features += sonar
    
    Weapons { 
       Initiative = 0

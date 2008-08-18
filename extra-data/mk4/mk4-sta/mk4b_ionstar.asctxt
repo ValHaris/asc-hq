@@ -7,6 +7,7 @@ VehicleType {
    Description = Geschuetzturm
    Infotext = []
    picture = mk4b_ionstar.png
+   InfoImage = mk4b_ionstar.jpg
    wreckageobject = 1222
    
    Features += ManualSelfDestruct

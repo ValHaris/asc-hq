@@ -1,10 +1,10 @@
 technology {
    Name = Subhunter
-   infotext = Forschungsprojekt abgeschlossen! Marauder verfügbar!
+   infotext = Forschungsprojekt abgeschlossen! Subhunter verfügbar!
    id = 1490
    RelatedUnitID = 1490
    parent = 1499
-   researchpoints *= 9
-   techlevel = 2
-   TechnologiesRequired = 1499,100004,100102
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1499,100004,100103,100312
 } Technology

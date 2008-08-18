@@ -17,6 +17,7 @@ Einen weiteren gravierenden Vorteil hat der Orbiter jedoch noch: Wenn ein Raumsc
 
 ]
    Picture = mk4o_orbiter.png
+   InfoImage = mk4o_orbiter.jpg
    wreckageobject = 1254 14854
 
    Transportation.EntranceSystemNum = 3

@@ -5,6 +5,11 @@ VehicleType {
 
    Description = Wasserflugzeug
    picture = mk4a_sperber.png
+   InfoImage = mk4a_sperber.jpg
+   InfoText = [Der Sperber ist ein Torpedobomber, welcher speziell zur Bekämpfung von Schiffen und U-Booten entwickelt wurde. Deshalb gibt es deutliche Änderungen gegenüber normalen Bombern. So stellen Torpedos und nicht Bomben seine Hauptwaffe gegen Schiffe dar. Diese müssen zwar im Tiefflug abgeworfen werden, sind aber mit einem sehr schnellen Antrieb und einem Sonarortungssystem ausgerüstet. Deshalb können sie aus größerer Entfernung abgeworfen werden und treffen sicher ihr Ziel. Die Sprengkraft und die angerichteten Schäden sind enorm. Das Problem bei diesen Angriffen ist jedoch, daß die Luftabwehr selbst der kleinsten Schiffe stark verbessert worden ist, so daß immer mit Verlusten gerechnet werden muß. Am effektivsten sind die Sperber, wenn sie in großen Schwärmen angreifen. Dann können sie trotz starker Luftabwehr sogar Flugzeugträger und Schlachtschiffe versenken. Besonders gefährlich sind sie auch gegen U-Boote. Zwar erreichen sie tief getauchte Boote nicht, normal getauchte Boote sind jedoch leichte Beute für die mitgeführten Wasserbomben. Und bis auf wenige Spezialkonstruktionen können sich die U-Booote nicht dagegen wehren. Für den Kampf an Land führen sie noch eine Bombe mittlerer Sprengkraft mit. Ihre Heimat ist jedoch das Meer. Das zeigt sich auch darin, daß der Sperber und der Albatros die einzigen Flugzeuge sind, welche auf seichten und mitteltiefen Wasser starten und landen können. Sie können so auch von der Flotte in Abwesenheit eines Flugzeugträgers versorgt werden. Für den Luftkampf und den Bodenangriff sind noch 2 Maschinengewehre montiert. Diese sind jedoch nur gegen Infanterieeinheiten wirklich effektiv. Zum Schutz vor feindlichen Jägern ist deshalb dringend Jagdschutz anzuraten. Als einziges Flugzeug der Cromoner ist der Sperber zudem in der Lage, U-Booote zu orten. Ein Flugzeugträger voller Sperber ist eine tödliche Waffe selbst gegen die stärksten Schiffe.
+
+]
+   
    Features += sonar 
    
    Movement += 0 0 0 10 0 0 0 0 

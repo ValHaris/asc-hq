@@ -1,0 +1,85 @@
+VehicleType { 
+   Name = Klotz
+   parent = 337 15000
+   ID = 15337
+   GuideSortHelp = 0 0 0 0 6 600 0 0 0 0
+
+   Description = Amphibischer Bunker
+   Infotext = [ Schwer gepanzerte langsam fahrende Kommandoeinheit.]
+   picture = mk6v_klotz.png
+;   InfoImage = 
+;   WreckageObject = 14235
+
+   View -= 10
+   Features += moveduringreactionfire sonar
+
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 40
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+
+   Height = deep_submerged submerged floating ground_level
+   Movement = 55 44 50 30 0 0 0 0
+   TerrainAccess.Terrain_Any = runway road lowland hard_sand soft_sand very_shallow_water shallow_water water
+   TerrainAccess.Terrain_kill = lava
+
+   Weapons { 
+      Number = 5
+      Weapon0 ->* VehicleType.Tank_Gun 
+      Weapon0.MaxRange = 30
+      Weapon0.MinRange = 10
+      Weapon0.Ammo = 40
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 105
+      Weapon0.ReactionFireShots = 1
+
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.shotFrom = ground_level 
+      Weapon1.MaxRange = 50
+      Weapon1.Ammo = 12
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
+      Weapon2.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.shotFrom = ground_level 
+      Weapon2.MaxRange = 50
+      Weapon2.Ammo = 8
+      Weapon2.ReactionFireShots = 1
+
+      Weapon3 ->* VehicleType.Ship_MG 
+      Weapon3.Name = Nadel Laser System
+      Weapon3.Type = Laser shootable 
+      Weapon3.shotFrom = deep_submerged submerged floating ground_level
+      Weapon3.Ammo = 3
+      Weapon3.LaserRechargeRate = 1
+      Weapon3.LaserRechargeCost.material = 10
+      Weapon3.LaserRechargeCost.fuel = 40
+
+      Weapon4 ->* VehicleType.UTorp
+      Weapon4.shotFrom = deep_submerged submerged floating
+      Weapon4.MaxRange = 40 
+      Weapon4.Ammo = 20
+      Weapon4.ReactionFireShots = 2
+
+   } Weapons
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = deep_submerged submerged floating
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -1
+      dist = 0
+      startheight = ground_level floating submerged
+      canattack = true
+   } HeightChangeMethod1
+} VehicleType

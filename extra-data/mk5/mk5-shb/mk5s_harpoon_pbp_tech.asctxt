@@ -1,10 +1,10 @@
 technology {
-   Name = Ship Hunter
+   Name = Harpoon
    infotext = Forschungsprojekt abgeschlossen! Ship Hunter verfügbar!
    id = 1491
    RelatedUnitID = 1491
    parent = 1499
-   researchpoints *= 14
-   techlevel = 3
-   TechnologiesRequired = 1499,100004,100103,100312
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1499,100004,100102,100312
 } Technology

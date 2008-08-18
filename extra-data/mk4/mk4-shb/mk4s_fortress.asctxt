@@ -4,10 +4,11 @@ VehicleType {
    parent = 356
    
    Description = Schwerer Kreuzer
-   Infotext = []
    picture = mk4s_fortress.png
    wreckageobject = 14284
    GuideSortHelp += 517 0 0 0 4 0 0 0 0 0
+   Infotext = [Schlachtkreuzer bilden eine eigene Klasse kampfstarker Schiffe, die zwischen Kreuzern und Schlachtschiffen einzuordnen sind. Sie entstanden ursprünglich aus dem Bestreben kleinerer Völker, die Kampfkraft echter Schlachtschiffe zu erreichen, ohne die immensen Kosten solcher Einheiten zu verursachen. Deshalb sind sie jedoch auch immer ein Kompromiß. Ihr Hauptgeschütz erreicht zwar fast die Reichweite und Durchschlagskraft eines Schlachtschiffes. Allerdings ist die Panzerung meist deutlich geringer und sie verfügen in der Regel über schwächere Sekundärwaffen , welche speziell bei der Verteidigung gegen gegnerische Angreifer notwendig sind. So sind sie zwar normalen Kreuzern überlegen, werden aber auf sich allein gestellt doch schnell zur Beute gut organisierter Verbände kleinerer Schiffe.
+Die Fortress ist ein typisches Beispiel für diesen Schiffstyp. Ihre Hauptwaffe stellt ein gewaltiges 38 cm Zwillingsgeschütz dar, welches ebensogut auf einem Schlachtschiff eingesetzt werden könnte. Unterstützt wird dieses dabei von zwei Geschützen des Kalibers 30,5 cm, welche auch zur Abwehr gegnerischer Angriffe nützlich sind. Die Luftabwehr allerdings, speziell gegen hochfliegende Bomber, ist deutlich schwächer als beispielsweise bei Kreuzern. Entsprechender Schutz durch Polar oder Flugzeugträger ist deshalb angeraten. Erfreulicherweise ist die Panzerung der Fortress ziemlich stark, was ihr die Möglichkeit bietet, auch im stärksten Kampfgetümmel mitzuhalten. Die Besatzung ist dabei in der Lage, kleinere Schäden noch auf See zu beheben. Allerdings sind die Kosten für diese Schiffe nicht unerheblich und reichen nun doch an die der Zenith-Klasse heran. Problematisch ist dabei auch, daß die Fortress die Schwäche der Schlachtschiffe teilt, gegen U-Boot-Angriffe wehrlos zu sein. Sie muß deshalb unbedingt von Zerstörern und Kreuzern begleitet werden! Durch diese Nachteile konnten sich die Schlachtkreuzer auch nicht entscheidend durchsetzen und führen immer noch ein Schattendasein unter den echten Schlachtschiffen. ]
 
    Transportation ->* VehicleType.noTrans
 

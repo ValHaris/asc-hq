@@ -18,10 +18,11 @@ Seine besonderen Fähigkeiten, sprich: seine enorme Geschwindigkeit, sowie seine 
 Abschließend sein noch bemerkt, dass der Einbau des MdRF-Geräts noch ein weiteres Problem herauf beschwor: die Verkleinerung des Tanks. Obwohl prinzipiell für schnelle Vorstöße geeignet, sollte man beim Comet niemals die Tankanzeige aus den Augen lassen – sonst steht er bald als bewegungsunfähige Zielscheibe irgendwo mitten in der Pampa! Schon so mancher Comet musste von seiner Besatzung aufgegeben werden, oder fiel feindlichen Streitkräften zum Opfer, weil ihm in einem Gebiet der Sprit ausgegangen war, wo ihn aufgrund schwieriger Bodenverhältnisse kein Versorgungsfahrzeug mehr rechtzeitig erreichen konnte.
 ]
    Picture = mk4v_comet.png
+   Infoimage = mk4v_comet.jpg
    wreckageobject = 14229
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
-   Movement += 0 0 0 12 0 0 0 0 
+   Movement += 0 0 0 8 0 0 0 0 
    Weight = 38
    Features += MoveDuringReactionFire
    TerrainAccess ->* VehicleType.offroad 

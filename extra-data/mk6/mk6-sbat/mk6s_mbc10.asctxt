@@ -14,6 +14,7 @@ VehicleType {
    View += 10
 
    Features += sonar jam_only_own_field 
+   Trerrainaccess ->* VehicleType.mediumship_terrain
 
    Weapons { 
       Initiative = 0
@@ -31,6 +32,7 @@ VehicleType {
       Weapon1.ReactionFireShots = 0
       
       Weapon2 ->* VehicleType.ShM
+      Weapon2.shotFrom = floating
       Weapon2.Ammo = 4
       Weapon2.MaxRange = 40
       Weapon2.MinRange = 20
@@ -45,6 +47,7 @@ VehicleType {
       Weapon3.Punch@MinRange = 90
 
       Weapon4 ->* VehicleType.SAMH
+      Weapon4.shotFrom = floating
       Weapon4.Ammo = 8
 
    } Weapons

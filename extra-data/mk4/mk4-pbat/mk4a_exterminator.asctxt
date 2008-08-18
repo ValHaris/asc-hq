@@ -4,8 +4,9 @@ VehicleType {
    ID = 1271
 
    Description = Jagdbomber
-   Infotext = []
+   Infotext = [Der Exterminator ist ein Mehrzweckjagdbomber. Er ist für die Bekämpfung von Boden- und Seezielen entwickelt worden. Dafür führt er verschiedene Bomben und Raketen mit sich. Zusätzlich ist er mit einer Maschinenkanone ausgestattet. Er ist so in der Lage, vom Trooper bis zum größten Schiff jede Einheit effektiv zu bekämpfen. Er kann allerdings nicht in den höchsten Luftschichten operieren und da er seine Ziele nur auf kurze Distanz angreifen kann, ist er empfindlich gegen jede Art von Flak und Flarak. Selbst Einheiten mit nur leichten Luftabwehrwaffen können ihm empfindliche Verluste zufügen. Seine Unterlegenheit gegenüber reinen Jagdflugzeugen wird durch die etwas stärkere Panzerung teilweise ausgeglichen. Er ist zwar mit Raketen für den Luftkampf ausgerüstet, diese sind aber eher zur Verteidigung und zum Angriff auf nur leicht bewaffnete Einheiten gedacht. Besonders effektiv sind seine Bomben beim Angriff auf stationäre Ziele, die nicht durch Luftabwehr abgedeckt sind. Hier kann ein Rudel dieser Bomber verheerende Schäden verursachen. ]
    picture = mk4a_exterminator.png
+   InfoImage = mk4a_exterminator.jpg
    wreckageobject = 1271 14871
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

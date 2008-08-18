@@ -8,17 +8,21 @@ VehicleType {
    Picture = mk6m_eneg.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Features += mineview
+   Features += mineview automatic_resource_searching
    View = 45
+   ResourceDrillingRange = 3
    
    Construction { 
       Objects = 15002
    } Construction
    
    Tank.Fuel = 5000
-   Tank.Material = 1000
+   Tank.Material = 700
    
    Weapons {
       Weapon0 ->* VehicleType.type_Laser
+      Weapon0.Ammo = 2
+      Weapon0.LaserRechargeCost.Fuel = 50
+      Weapon0.LaserRechargeCost.Material = 10
    } Weapons
 } VehicleType

@@ -1,7 +1,7 @@
 VehicleType {
    Name = BALISTE
    ID = 15251
-   parent = 251 497
+   parent = 251 497 15000
 
    Description = medium artillery
    Infotext = [Die BALISTE ist die mittlere Artillerie der Technokraten.
@@ -19,18 +19,18 @@ Aufgrund des Rückstoßes des Geschützes ist die BALISTE nur in der Lage im geland
    Height = ground_level low_level_flight 
    Tank { 
       Energy = 0
-      Material = 0
+      Material = 100
       fuel = 1400
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 10 70 0 0 0 
    TerrainAccess ->* VehicleType.heli_terrain
-   HeightChangeMethod0.movecost = 1
    MovementSound = jet_pass.ogg
 
    Weapons { 
       Initiative = 0
       Number = 2
       Weapon0.Punch@MaxRange -= 4
+      Weapon1 ->* VehicleType.NLS
    } Weapons
 } VehicleType

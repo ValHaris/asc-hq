@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15337
+   ;Bezeichnung der verknüpften Technologie: Klotz
+   TechnologiesRequired = 15337
+} TechAdapter

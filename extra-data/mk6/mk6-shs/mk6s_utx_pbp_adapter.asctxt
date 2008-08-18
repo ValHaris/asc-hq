@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15363
+   ;Bezeichnung der verknüpften Technologie: UTX
+   TechnologiesRequired = 15363
+} TechAdapter

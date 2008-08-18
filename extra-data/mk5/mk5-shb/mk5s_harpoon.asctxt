@@ -4,8 +4,9 @@ VehicleType {
    parent = 367
 
    Description = ship hunter
-   Infotext = []
+   Infotext = [InfoImage = Wikipedia Schnellboot]
    picture = mk5s_harpoon.pcx
+   InfoImage = mk5s_harpoon.jpg
    GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
    Features += MoveDuringReactionFire

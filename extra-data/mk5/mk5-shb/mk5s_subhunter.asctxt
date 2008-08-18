@@ -4,8 +4,9 @@ VehicleType {
    parent = 367
 
    Description = submarine hunter
-   Infotext = []
+   Infotext = [INFOIMAGE = Wikipedia Sechste Flottille (Volksmarine)]
    picture = mk5s_subhunter.pcx
+   InfoImage = mk5s_subhunter.jpg
    GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
    Features += MoveDuringReactionFire sonar

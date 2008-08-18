@@ -6,6 +6,7 @@ VehicleType {
    Description = Raketenpanzer
    InfoText = [Der Raketenpanzer Sting ist ein sehr schnelles, geländetaugliches, mittleres Kettenfahrzeug. Die ersten Umwandlungen vorhandener Panzerchassis waren ziemlich schwerfällig, denn es fehlten den Entwürfen die nötigen Feinheiten. So wurde ein völlig neuer Unterbau entworfen. Beim Schießen wird das Fahrzeug vorn durch zwei ausfahrbare Stützen und hinten zum Auffangen des Rückstoßes durch einen Spaten unterstützt. Hier durch verlor der Sting seine Fähigkeit schnelles RF zu erwidern. Dieser Nachteil wird aber durch seine Schnelligkeit auf dem Schlachtfeld mehr als weggemacht. Meist wird der Raketenpanzer Sting, wie auch das kleine Kettenfahrzeug Quasar als Feuerwehr in der zweiten oder dritten Formationsreihe eingesetzt. Gegenüber diesem ist seine Panzerung jedoch besser, er ist sehr viel schneller und ausserdem ist seine Reichweite größer. Aufgrund seiner speziellen Eigenschaften ist daher der Raketenpanzer Sting, im Gegensatz zur Quasar eindeutig ein Fahrzeug welches bevorzugt bei Offensiven eingesetzt wird. ]
    Picture = mk4v_sting.png
+   InfoImage = mk4v_sting.jpg
    wreckageobject = 14209
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

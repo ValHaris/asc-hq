@@ -4,9 +4,16 @@ VehicleType {
    parent = 336
 
    Description = Munitionstransporter
-   Infotext = []
    picture = mk4v_alcor.png
+   InfoImage = mk4v_alcor.jpg
    wreckageobject = 14218
+   Infotext = [Vor allem bei länger andauernden Gefechten geraten die aktiven Kampfeinheiten schnell in die Situation, dass ihnen die Munition ausgeht. Um zu verhindern, dass sich Einheiten gerade in kritischen Momenten verschießen und damit nutzlos in der Gegend herumstehen, hat man mit dem Alcor ein Fahrzeug entwickelt, welches die benötigte Munition direkt vom Depot nach vorne an die Front bringen kann. 
+
+Der Alcor ist ein ähnliches Versorgungsfahrzeug, wie der Algol, jedoch ausschließlich für den Transport von Munition zuständig. Alles, was die kämpfende Truppe braucht, findet sich in den Laderäumen dieses Transporters. Von der einfachen MG-Munition, über Granaten und Bomben, bis hin zur Cruise Missile, hat er alles in seinem Bauch, was in einem wilden Feuergefecht Verwendung findet. Er verfügt sogar über einige Torpedos, die es ihm ermöglichen, aufgetauchte U-Boote mittels eines kleinen Kranauslegers, direkt von einer Brücke, oder einem Steg aus aufzumunitionieren. 
+
+Anders als der Algol ist dieser Munitionstransporter ein Kettenfahrzeug. Recht langgestreckt in seiner Form, vermittelt er damit den Eindruck einer großen, wehrhaften Raupe. Zwar verringert dies seine Höchstgeschwindigkeit um ein beträchtliches Maß, jedoch ist seine Geländegängigkeit im Vergleich zum Algol damit auch ungleich höher. Dies ermöglicht es ihm zwar, sich vor allem auch in unwegsamem Gelände etwas näher an die vorderste Kampflinie heranzubegeben - man darf dabei jedoch nie vergessen, dass er damit ebenfalls zu einem begehrten Ziel für feindliche Einheiten wird. Von einem Einsatz in vorderster Front ist daher nur dringendst abzuraten, da allein schon der Verlust eines voll beladenen Alcors ein herber Einschnitt in den finanziellen Militärhaushalt darstellen kann, wenn sich die ganze Munition in seinem Inneren mit einem Schlag in Rauch und Feuer auflöst. Von den anschließend auftretenden Versorgungsschwierigkeiten ganz zu schweigen! Selbst in der zweiten Reihe sollte man einen Alcor nur dann antreffen, wenn der Gegner über keinerlei weitreichende Geschütze verfügt und man ihn gegen Flieger oder schnelle Angriffseinheiten zu schützen vermag.
+
+Manchmal sind diese Munitionstransporter jedoch trotzdem dazu gezwungen, sich näher an das Kampfgebiet heranzuwagen, etwa wenn es darum geht, schnelle und leichte Einheiten im Gefecht zu versorgen. Beispiele hierfür sind unter anderem die Demon-Kampfroboter, die bei Rückzugsgefechten dazu genutzt werden können, den nachrückenden Gegner mit ausgelegten Minen zu bremsen ,dabei aber auf die Minenvorräte des Alcor angewiesen sind. Oder aber die Buggys, die mit ihren Raketenwerfern wirkungsvolle Unterstützung bei aller Art von Bodengefechten bieten, selbst jedoch nur über einen sehr geringen Munitionsvorrat verfügen. Um also zu verhindern, dass dringend benötigte Kampfeinheiten zu Versorgungszwecken aus der Front gezogen und nach hinten geschickt werden müssen, muss der Alcor sie direkt vor Ort versorgen können. Um dabei das Risiko für sich selbst etwas zu vermindern, wurde seine Panzerung entsprechend so gestaltet, dass sie inzwischen an die eines leichten Kampfpanzers heranreicht. Außerdem wurde er mit einem leichten MG zur Selbstverteidigung ausgestattet. ]
 
    Weapons { 
       Initiative = -50

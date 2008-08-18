@@ -1,0 +1,10 @@
+technology {
+   Name = KSB
+   infotext = 
+   id = 15364
+   RelatedUnitID = 15364
+   parent = 15000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 15000,100004,100102,100208 
+} Technology

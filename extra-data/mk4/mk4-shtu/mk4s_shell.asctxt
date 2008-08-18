@@ -5,8 +5,11 @@ VehicleType {
 
    Description = Transport UBoot
    picture = mk4s_shell.png
+   Infoimage = mk4s_shell.jpg
    wreckageobject = 14260
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   InfoText = [Speziell für die Unterstützung der U-Boot-Flotte auf See wurde das Shell entwickelt. Dieses U-Boot bietet die Möglichkeit, andere Schiffe zu betanken und auch begrenzt aufzumunitionieren. Als U-Boot ist es dabei für den Gegner nur schwer aufzuspüren. Ebenso verfügt es über einen großen Laderaum, womit der Transport bis zu sechs leichterer Einheiten möglich ist. So lassen sich beispielsweise auch GT-Dive aussetzen, um überraschende Angriffe durchzuführen. Das Shell kann auch selbst Torpedos abfeuern. Die Panzerung ist allerdings schwächer als bei den Kampf-U-Booten. Deshalb sollte immer ausreichender Schutz gewährleistet werden. ]
+   
    Transportation ->* VehicleType.TransSubmarine 
    Tank { 
       Material = 10000

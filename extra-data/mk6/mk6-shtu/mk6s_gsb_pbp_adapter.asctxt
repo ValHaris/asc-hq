@@ -1,0 +1,5 @@
+Techadapter {
+   ; GSB
+   Name = 15365
+   TechnologiesRequired = 15365
+} TechAdapter

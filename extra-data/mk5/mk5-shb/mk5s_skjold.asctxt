@@ -4,9 +4,11 @@ VehicleType {
    ID = 1457
    
    Description = patrol boat
-   picture = MK5s_skjold.pcx
-   Infotext = [Beutetechnik von den Terranern, der Stauraum wurde optimiert und mehr Soldaten und kleinen Fahrzeugen platz zu geben.]
+   picture = mk5s_skjold.pcx
+   InfoImage = mk5s_skjold.jpg
    GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
+   Infotext = [Beutetechnik von den Terranern, der Stauraum wurde optimiert und mehr Soldaten und kleinen Fahrzeugen platz zu geben.
+   InfoImage = Wikipedia Schnellboot]
 
    Transportation ->* VehicleType.TransShipSmall 
    Transportation.MaxLoadableMass = 25

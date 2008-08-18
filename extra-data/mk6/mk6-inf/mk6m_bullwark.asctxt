@@ -17,6 +17,7 @@ VehicleType {
       Number = 4
       Weapon1 ->* VehicleType.type_laser
       Weapon1.Ammo = 2
+      Weapon2 ->* VehicleType.NLS
       Weapon3 ->* VehicleType.TeccEMP
       Weapon3.Punch@MaxRange = 100
       Weapon3.Punch@MinRange = 100

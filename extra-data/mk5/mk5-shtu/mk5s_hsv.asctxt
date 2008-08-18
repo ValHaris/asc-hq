@@ -8,7 +8,7 @@ VehicleType {
    InfoImage = mk5s_hsv.jpg
 
    Armor -= 100
-   Features = MoveDuringReactionFire
+   Features = MoveDuringReactionFire Jam_only_own_field
 
    Transportation ->* VehicleType.TransHeliCarrier
    Transportation.MaxLoadableUnits = 5

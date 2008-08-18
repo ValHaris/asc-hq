@@ -3,15 +3,9 @@ VehicleType {
    Name = MARAUDER
    parent = 367
 
-   Description = Fast Attack Ship
+   Description = Torpedoschnellboot
    Infotext = [
-Der Marauder ist eines der schnellsten Schiffe. Er wurde entwickelt, um schnelle Schlaege aus der Distanz gegen 
-feindliche Marineeinheiten durchzuführen. Hierfuer wurde er mit vier weit reichenden Torpedos bestückt, die zudem 
-etwas durchschlagskraeftiger sind, als die Standardtorpedos. Zur Selbstverteidigung dient ihm lediglich ein kleineres 
-20mm-Zwillingsgeschütz. Da zugunsten der Hoechstgeschwindigkeit Einschnitte bei der Panzerung gemacht werden mußten, 
-ist er somit ein leichteres Ziel gegen schnell vorprellende Feindeinheiten und sollte deshalb niemals ohne den Schutz 
-von Großkampfschiffen operieren.
-]
+Der Marauder ist eines der schnellsten Schiffe. Sobald er auf seinen Tragflächen dahinschießt, können ihm nur noch Flugzeuge folgen. Er wurde entwickelt, um schnelle, harte Schläge aus der Distanz gegen feindliche Marineeinheiten durchzuführen. Hierfür wurde er mit vier weitreichenden Torpedos bestückt, die zudem etwas durchschlagskräftiger als die Standardtorpedos sind. Diese können aus voller Fahrt abgeschossen werden und ermöglichen so quasi den sofortigen Rückzug. Zur Selbstverteidigung dient ihm dabei lediglich ein kleineres 20mm-Zwillingsgeschütz. Er muß sich ansonsten auf seine Tarnung, welche auf einer optimierten Stealth-Form des Rumpfes beruht, verlassen. Da zugunsten der Höchstgeschwindigkeit Einschnitte bei der Panzerung gemacht werden mußten, ist er sonst ein leichtes Ziel für schnell vorrückende Feindeinheiten und sollte deshalb niemals ohne den Schutz von Großkampfschiffen operieren. Als zusätzlicher Bonus kann noch eine leichte Infanterieeinheit an Bord gehen, was sich besonders bei Operationen im Küstenbereich als nützlich erweisen kannn. ]
    picture = mk4s_marauder.png
    wreckageobject = 14289
    GuideSortHelp = 518 420 0 0 4 601 0 0 0 0

@@ -5,6 +5,7 @@ VehicleType {
    
    Description = Lenkwaffenkreuzer
    picture = mk6s_mbc20.pcx
+   InfoImage = mk6s_mbc20.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Features += sonar jam_only_own_field
@@ -20,6 +21,7 @@ VehicleType {
       Weapon0.ReactionFireShots = 0
 
       Weapon1 ->* VehicleType.SSM 
+      Weapon1.ShotFrom = floating
       Weapon1.MaxRange = 40
       Weapon1.MinRange = 20
       Weapon1.Ammo = 20
@@ -45,6 +47,7 @@ VehicleType {
       Weapon3.ReactionFireShots = 0
 
       Weapon4 ->* VehicleType.SAMH 
+      Weapon4.shotFrom = floating
       Weapon4.MaxRange = 40
 
       Weapon5 ->* VehicleType.smSSM

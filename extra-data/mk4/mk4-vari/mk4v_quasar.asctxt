@@ -6,6 +6,7 @@ VehicleType {
    Description = leichte Artillerie
    Infotext = [ Das Artilleriesystem QUASAR ist, generalogisch gesehen, eine Art "kleine Bruder" des PULSAR. Die Vorteile des QUASAR liegen vor allem darin, dass er in der Produktion wesentlich billiger ist. Dafuer nimmt seine Leistungsfaehigkeit gegen schwer gepanzerte Gegner ab. Leicher, schneller und sofort einsatzbereit ist er die ideale Unterstuetzung bei direkten Angriffen.]
    Picture = mk4v_quasar.png
+   InfoImage = mk4v_quasar.jpg
    wreckageobject = 14230
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

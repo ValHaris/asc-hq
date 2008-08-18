@@ -4,10 +4,18 @@ VehicleType {
    ID = 1266
    
    Description = Kampfluftkissenboot
-   Infotext = []
    picture = mk4s_vaderdf.png
+   InfoImage = mk4s_vaderdf.jpg
    wreckageobject = 14266 14866
    GuideSortHelp += 0 0 0 0 4 552 0 0 0 0
+   Infotext = [Als man erkannte, dass gleichzeitige Beweglichkeit auf Wasser und Land von enormer Wichtigkeit sein kann, griff man das Modell des normalen Vaders erneut auf. Schnell zeigten sich jedoch die begrenzten Kapazitäten dieser Einheit, sodass ein fast völliger Neuentwurf nötig wurde. Bereits vor geraumer Zeit entstand daher das Modell des Vader DF. Er sollte ein Luftkissenfahrzeug sein, mit dem sich kleinere Einheiten transportieren ließen, der aber gleichzeitig auch stark genug war, den bisher leeren Raum der Flachwasserregionen, sowie die Übergangsbereiche zum Land und zur See hin, ausfüllen zu können. 
+
+Der Vader DF bekam ein neues Triebwerk verpasst, wodurch er jedoch langsamer wurde, als die reine Transportvariante. Warum dies geschah, lässt sich heute nicht mehr recht nachvollziehen. Denkbar wäre es, dass es aufgrund von persönlichen Interessen innerhalb der chromonischen Führungsebene zu einem Wechsel des Zulieferers kam. Was jedoch genau dahinter steckte, wird man wohl nie erfahren. 
+
+Das Design des Chassis wurde deutlich abgeflacht und verbreitert, was zu einer deutlichen Reduzierung des Laderaumes führe, den jetzt nur noch Infanterieeinheiten, sowie Einheiten der GT-Serie betreten können. 
+
+Bei der Panzerung kam es zu keinen Veränderungen, was etwas verwunderlich erscheinen mag, wenn man bedenkt, dass der Vader DF zukünftig in Kampfeinsätze geschickt werden sollte. Lediglich bei der Bewaffnung wurde ordentlich zugelangt! Das alte MG des normalen Vaders flog raus und an seiner Statt wurden eine Kanone mittleren Kalibers gegen See- und Bodenziele, sowie eine Abschussvorrichtung für Boden-Luft-Raketen auf dem Deck installiert. Da vor allem Letztere eine Reichweite besitzt, die mit der von mittleren Fla-Rak-Stellungen vergleichbar ist, wurde der Vader DF sehr schnell zum Schrecken aller gegnerischen Flugzeuge innerhalb seines Einsatzgebietes.
+]
 
    Armor += 100
    Transportation ->* VehicleType.TransBigTrooper 

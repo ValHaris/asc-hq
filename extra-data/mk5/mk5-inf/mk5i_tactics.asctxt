@@ -5,8 +5,10 @@ VehicleType {
    Description = rocket trooper
    Infotext = [Dieser Soldat trägt eine mobile Abschußvorrichtung für Raketen.
               Durch eine modifizierte Zielvorrichtung kann diese sowohl Flugzeuge,
-              als auch Bodenfahrzeuge und Schiffe anvisieren.]
-   Picture = MK5i_Tactics.pcx
+              als auch Bodenfahrzeuge und Schiffe anvisieren.
+              InfoImage = Wikipedia FIM-Redeye]
+   Picture = mk5i_tactics.pcx
+   InfoImage = mk5i_tactics.jpg
 
    Armor += 10
    Jamming += 12

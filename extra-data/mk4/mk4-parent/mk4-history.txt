@@ -1,9 +1,27 @@
-History MK4-Set
-Grafiken: GAMER, Dr.Snuggels, Xyphagorosh
+History MK4-Set Cromoner
+Grafiken: GAMER, Dr.Snuggels, Xyphagorosh, Keyfinder
+InfoTexte: Rennreh, Redhorse
+InfoImages: GAMER
 Spezifikationen: GAMER
 
 __________________
-Beta 2-07/08
+Beta 4-08/08
+-Thunder SX, Waffenbugfix
+-Dterano tech4
+-Spectrum Tech2
+__________________
+09.08.2008 (GAMER)
+-InfoText = ranger, Pluto, Alcor, Sperber
+-InfoText = Zenit, PlarOS, Pluto, VaderDF
+-neue Grafiken: Magic, Angel
+-PTerrano, Para Bugfix
+-ParaTec = light_tracked_vehicle
+-InfoText = Exterminator, Nashorn, Ghost, Copra, Genom, Buggy, Vader
+-InfoText = Atlas, Dolter, Algol, Marauder, Moewe2, Hydra DX, Orca, Shell
+-Grafikbugfix Copra
+__________________
+06.07.2008 (GAMER)
+-infoText = ThunderGX, Thunder Spy
 -Fortress, kein Laderaum mehr
 -InfoText: ThunderOX, ThunderSX, Patrix, Moewe, Sting, thunderFX, Troller, Scorpion, GT DIve, Crusader, Orbiter, DTerano, Parademon, Whale
 __________________

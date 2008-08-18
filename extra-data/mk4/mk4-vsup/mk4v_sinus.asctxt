@@ -6,6 +6,7 @@ VehicleType {
    Description = InstandsetzungsFzg
    Infotext = [Feld Reparaturfahrzeug]
    picture = mk4v_sinus.png
+   InfoImage = mk4v_sinus.jpg
    WreckageObject = 14202
    
    Armor -= 50

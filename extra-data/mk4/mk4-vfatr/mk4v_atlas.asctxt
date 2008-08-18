@@ -4,11 +4,12 @@ VehicleType {
    ID = 1223
    
    Description = Transportfahrzeug
-   Infotext = []
+   Infotext = [Der Atlas ist der Standardtransporter des Cromonischen Heeres. Aufgrund der massiven Bauweise ist er in der Lage, auch schwerste Kettenfahrzeuge zu transportieren. Besonders wichtig ist er bei der Verlegung schwerer Artillerie und Luftabwehrstellungen. Außerdem können große Mengen Material befördert und verladen werden. Als Radfahrzeug ist er dabei auf ebene Untergründe oder Straßen angewiesen. Die Panzerung ist schwach und es ist keine Bewaffnung vorhanden. Die Einheit besitzt strategische Bedeutung und sollte deshalb gut geschützt werden.]
    GuideSortHelp = 550 551 0 0 4 0 0 0 0 0
 
    Armor -= 50
    picture = mk4v_atlas.png
+   InfoImage = mk4v_atlas.jpg
    wreckageobject = 14223
    Transportation ->* VehicleType.TransVehicleHeavy
    Features += ExternalMaterialTransfer automatic_resource_searching

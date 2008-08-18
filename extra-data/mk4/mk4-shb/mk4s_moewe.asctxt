@@ -6,6 +6,7 @@ VehicleType {
    Description = Schnellboot
    Infotext = [Die MOEWE ist ein kleines Tragflügelboot. Entwickelt speziell für den Patroulliendienst in Küstengewässern, ist sie nicht hochseetauglich. Dafür erreicht sie eine bemerkenswerte Höchstgeschwindigkeit. Aufgrund der Bauweise ist dieses Schiff dabei für feindliches Radar schwer zu entdecken. Bestückt ist sie mit einem leichten MG und Boden-Luft sowie Boden-Boden-Raketen. Diese sind mit Zielsuchsystemen ausgestattet und können auch aus voller Fahrt abgefeuert werden, wodurch ihr es möglich ist, sich sofort nach dem Abschuß wieder zurückzuziehen. Aufgrund der dürftigen Panzerung ist dies auch unbedingt notwendig, da sie sonst allzuleicht ein Opfer feindlicher Kanonen werden kann. Mittlerweile ist sie nur noch sehr selten im Einsatz, da ihr Nachfolger, die MOEWE 2, in fast allen Belangen deutlich verbessert wurde. Lediglich die Tatsache, daß sie auch sofort feuern kann, wenn sie angegriffen wird, gibt ihr eine gewisse Daseinsberechtigung. ]
    picture = mk4s_moewe.png
+   InfoImage = mk4s_moewe.jpg
    wreckageobject = 14257
    GuideSortHelp = 518 418 0 0 4 0 0 0 0 0
 

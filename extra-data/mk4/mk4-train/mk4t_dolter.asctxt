@@ -4,7 +4,7 @@ VehicleType {
    ID = 14031
    
    Description = Transportzug
-   Infotext = []
+   Infotext = [Mit der Entwicklung der Cita-Reihe stellte man schnell fest, dass die überschweren fahrenden Bunker nicht mit konventionellen Dolmens transportiert werden können. Daher wurde ein schwerer Transportzug im Auftrag gegeben und stand mit der Entwciklung Dolters zur Verfügung. Die hohe Zuladung würde jedoch durch solch massive Einbüßen bei der Geschwindigkeit und den Stellplätzen erkauft. Unerwartet gut wurde Dolter jedoch bei der Marine aufgenommen, weil er die Möglichkeit bietet, leichte Schiffe übers Land zu transportieren. ]
    picture = mk4t_dolter.png
    wreckageobject = 14031
    GuideSortHelp = 551 558 0 0 4 0 0 0 0 0

@@ -3,8 +3,8 @@ VehicleType {
    ID = 14000
    parent = 208
 
-   Description = light golem type
-   Infotext = [Auf Basis des Golem wurde diese schnellere Version entwickelt. Dabei wurde auf die Raketenbatterien verzichtet. (GT = golem type)]
+   Description = schneller Kampfroboter
+   Infotext = [Dies ist der „kleine Bruder“ des Golem. Er ist geringfügig schneller, allerdings wurde dies mit einer schwächeren Panzerung und dem Verzicht auf alle Raketenwaffen teuer erkauft. So ist diese Einheit nur als Antitrooper-Waffe, als Scout zur Eroberung von Gebäuden oder zur Unterstützung anderer Einheiten einsetzbar. Vorteilhaft sind allerdings die geringen Anschaffungskosten. ]
    Picture = mk4m_gtspeeder.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14000

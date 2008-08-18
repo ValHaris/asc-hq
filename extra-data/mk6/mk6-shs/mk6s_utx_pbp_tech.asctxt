@@ -1,0 +1,10 @@
+technology {
+   Name = UTX
+   infotext = Forschungsprojekt abgeschlossen! UTX verfuegbar!
+   id = 15363
+   RelatedUnitID = 15363
+   parent = 15000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 15000,100004,100103,100208
+} Technology

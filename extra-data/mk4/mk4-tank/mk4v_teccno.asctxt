@@ -11,6 +11,7 @@ Die Aufgabe des Teccno auf dem Schlachtfeld ist es, im Defensivfalle schnell an 
 Im Falle einer Offensive kann der Teccno schnelle, überraschende Vorstöße durchführen, als Bedeckung für Transporteinheiten fungieren, oder als Unterstützungswaffe für mittlere und schwere Panzerverbände fungieren. In letzterem Falle kann er beispielsweise durch eine Lücke hindurchbrechen, welche die schwereren Verbände zuvor in die Front des Gegners gerissen haben, um dann die feindlichen Linien aus der Flanke aufzurollen, verbliebene Feinde in die Zange zu nehmen, oder um gegnerische Unterstützungstruppen in der zweiten Reihe im Direktangriff anzugehen.
 ]
    Picture = mk4v_teccno.png
+   InfoImage = mk4v_teccno.jpg
    wreckageobject = 14207
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

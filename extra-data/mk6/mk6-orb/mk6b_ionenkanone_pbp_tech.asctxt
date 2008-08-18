@@ -1,0 +1,10 @@
+technology {
+   Name = Ionenkanone
+   infotext = 
+   id = 15238
+   RelatedUnitID = 15238
+   parent = 15000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 15000,100002,100101,100202,100313
+} Technology

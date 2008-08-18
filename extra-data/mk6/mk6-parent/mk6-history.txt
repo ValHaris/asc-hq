@@ -1,20 +1,40 @@
 History MK6 teccnols unit set
+Grafik: GAMER, Rhiow
+Infotext: Rhiow
+InfoImage: GAMER
+Spezifikationen: GAMER
 
 __________________
-Beta 2-07/08
+09.08.2008
+-Terminal, View Bugfix
+-MBF Baubugfix
+-eneg, Rohstoffsuche Bugfix
+-Meo, techbugfix
+-Klotz, Waffenanpassungen, langsamer
+-Materialtankanpassungen
+-MG Waffen auf Laser umgebaut
+-MBC Reihe weniger Angriff von submerged
+-Debug weniger Jumpreichweite, höhere Jumpkosten
+-Energ - Rohstoffe
+-GB137 Techbugfix
+-DevoR Techbugfix
+-Viewer Tech Level 2
+-InfoText = Defkind, Innocence, Tanker
+-Carrier -> FT 90
+-Airport Süd baubar
+Neu:
+-CillaLV, Ionenkanone, LV2beta
+-Meta SV, Klotz, DT 64, KSB, GSB, UT100, UT70, UTX
+__________________
+06.07.2008 (GAMER)
+-RGS Waffensound koorigiert
 -InfoImage = MBC-10
 -Energ +mineview
-Neu:
--Stress
-Beta 3-06/08
 -Deltabomber/-hunter kein Materialtank mehr
 -CillaSV kann Raps und Wald anbauen
 -MBF baut Terminal
 -JumpDrive BOX I angepasst
 -BOXI, Box 6 ladeGewicht angepasst
-Neu:
--MBC 30
-Beta 2-06/08
 -Jumpterminal, funktioniert nun wie Runway
 -JumpBoxen, Jumpentfernung gefixt, Gewicht verringert
 -CillaSV, baut keinen S-Draht mehr, dafür Waldabbau, Tank erhöht, baut RDS, Terminal
@@ -24,16 +44,17 @@ Beta 2-06/08
 -Delta, Ammovorrat Bomben, Torpedos
 -MBF langsamer
 -unnötige Basisforschungen deaktiviert
-Neu:
--MRF Reparaturtransportflieger
--DeltaHunter
-Beta 01-06/08
 -Airport namen-fix
 -Small, Mattank
 -Jumpterminal, Höhe geändert
 -Viewer, movebugfix
 -destructor Waffenbugfix
 -devastor maxRange 30
+Neu:
+-Stress
+-MBC 30
+-MRF Reparaturtransportflieger
+-DeltaHunter
 __________________
 07.06.2008 (GAMER)
 -Tecc Airport

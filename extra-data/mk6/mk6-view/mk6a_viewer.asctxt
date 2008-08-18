@@ -9,7 +9,7 @@ VehicleType {
    Features += MoveDuringReactionFire sonar
    Armor += 150
 
-   Tank.Material = 1000
+   Tank.Material = 300
    TerrainAccess ->* VehicleType.aircraft_water
    MovementSound = jet_pass.ogg
       
@@ -20,6 +20,7 @@ VehicleType {
       Weapon0.Punch@MaxRange = 90
       Weapon0.Punch@MinRange = 90
       Weapon0.ReactionFireShots = 1
+      Weapon0.LaserRechargeCost.Material = 50
 
    } Weapons
 } VehicleType

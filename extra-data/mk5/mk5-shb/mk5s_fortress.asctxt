@@ -3,7 +3,9 @@ VehicleType {
    ID = 1458
    parent = 1284
    
-   picture = MK5s_fortress.pcx
+   InfoText = [InfoImage = Wikipedia Leichter Kreuzer]
+   picture = mk5s_fortress.pcx
+   InfoImage = mk5s_fortress.jpg
    Features = MoveDuringReactionFire
 
    Transportation ->* VehicleType.noTrans

@@ -16,10 +16,9 @@ Ihr größter Vorteil, nämlich die Spezialisierung auf die Orbitalabwehr, ist jedo
  
  
  Thunder SX »»  
- 
 ]
-
    picture = mk4a_thunderox.png
+   InfoImage = mk4a_thunder.jpg
    wreckageobject = 1244 14844
    GuideSortHelp += 0 0 0 0 4 272 600 0 0 0
 

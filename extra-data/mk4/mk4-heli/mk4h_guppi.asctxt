@@ -10,6 +10,7 @@ Ein direkter Kampfeinsatz, Einsätzen hinter der Front oder ein Fliegen in Zonen 
 ]
    GuideSortHelp = 515 0 0 0 4 566 601 0 0 0
    picture = mk4h_guppi.png
+   InfoImage = mk4h_guppi.jpg
    wreckageobject = 1252 14852
 
    Armor += 50

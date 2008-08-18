@@ -4,7 +4,7 @@ itemfilter {
    Objects = 1400-1499
    Terrain = 
    Technologies = 1400-1499
-   name = MK5 Outsider 
+   name = MK5 Outlaws 
    activated = true
 } itemfilter
    

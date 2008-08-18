@@ -10,7 +10,7 @@ VehicleType {
 
    Armor += 10
 ;   Movement += 0 0 0 5 0 0 0 0
-   Tank.material = 1000
+   Tank.material = 600
    Tank.fuel = 1100
 
    Weapons {

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Subbase MK5
+   Name = B61
+   TechnologiesRequired = 1499
+} TechAdapter

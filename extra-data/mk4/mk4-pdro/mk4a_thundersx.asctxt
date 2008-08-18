@@ -11,13 +11,14 @@ Ansonsten ist die Thunder SX nahezu identisch zu ihrem Ursprungsmodell. Dadurch 
 ]
 
    picture = mk4a_thundersx.png
+   InfoImage = mk4a_thunder.jpg
    wreckageobject = 1244 14844
    GuideSortHelp += 0 0 0 0 4 326 601 0 0 0
    Features += Sonar
 
    Weapons { 
       Initiative = 20
-      Number = 2
+      Number = 3
       Weapon0 ->* VehicleType.ATorp 
       Weapon0.MaxRange = 20
       Weapon0.Ammo = 2

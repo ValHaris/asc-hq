@@ -8,6 +8,7 @@ VehicleType {
                besonders geeingnet. Beim ersten Feindkontakt wird eine explosive Ladung gezündet, die über eine 
                erhebliche Sprengkraft verfügt.] 
    Picture = mk4b_virus.png
+   Infoimage = mk4b_virus.jpg
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Features += Kamikaze_only

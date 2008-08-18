@@ -3,18 +3,26 @@ VehicleType {
    ID = 1200
    parent = 331
    Description = Spaehtrupp
-   Infotext = [Der Ranger ist das "Auge" für die Artillerie.  Er prescht plötzlich vor und erfasst den Feind. 
-Die eigene Artillerie schießt und genau plötzlich wie der Ranger aus dem "Nichts" gekommen ist, ist er auch schon wieder verschwunden.
-Jedoch ist vorsichtiges taktieren vor der feindlichen Front absolut notwendig. Die Verluste durch rasante Fahrten ins Feindesland durch unbesonnene Fahrer sind schon legendär. 
-Die Rangerfahrer bzw. Rangerpiloten (wie sie sich diese unerschrockenen Draufgänger selber gerne nennen) wurden ausdrücklich nochmals angewiesen zukünftig die Wetternachrichten auch wirklich zu berücksichtigen. Ein liegen bleiben des Fahrzeuges im dicken Schnee beispielsweise, wird künftig ein Disziplinarverfahren nach sich ziehen.
-Deshalb wurde das Ausbildungsprogramm und das Auswahlverfahren für die Ranger-Fahrer nochmals verschärft. 
+   Infotext = [Im Vorfeld eines Gefechts, sowie im Kampf selbst, ist die Aufklärung des gegnerischen Geländes, sowie das Wissen um Stärke und Position des Gegners mitunter das A und O. Sieht man von stationären Radarstellungen, den langsamen Radarfahrzeugen und den Spionageflugzeugen ab, so stellen Spähtruppeinheiten wie der Ranger ein wichtiges Glied in der Aufklärungskette dar. 
+
+Beim Ranger handelt es sich um ein kleines, leichtes und vor allem schnelles Bodenfahrzeug in Dreirad-Bauweise. Vor allem bei Angriffsoperationen auf fremden Planeten, vermag der Ranger schon zu Beginn wertvolle Aufklärungsarbeit zu leisten und bereits die ersten gegnerischen Gebäude zu besetzen, noch ehe es die schwerfälligen Aufklärungsflieger der UHU-Klasse geschafft haben, vom Boden abzuheben und ihre Diensthöhe zu erreichen. Ein Trupp von Rangern, der direkt nach der Landung in alle Richtungen ausschwärmt, vermag den Kommandanten mit überlebenswichtigen Informationen zu versorgen und damit effektiv zur Sicherung der Landezone beizutragen. Da er zudem über einen Stellplatz für eine Infanterieeinheit verfügt ist er auch als Eroberer feindlicher Gebäude und Anlagen nicht zu unterschätzen. Seine hohe Geschwindigkeit ist hierbei von entscheidendem Vorteil.
+
+Was seine Aufklärungsfähigkeiten angeht, so sind diese zwar etwas geringer ausgefallen, als zum Beispiel die eines GT-Spy - jedoch ist der Ranger etwa doppelt so schnell und kann sich ebenfalls auf schwer zugänglichem Gelände bewegen, was nicht zuletzt seiner leichten Bauweise zuzuschreiben ist. Aufgrund seiner geringen Größe vermag er es außerdem, sich recht lange vor gegnerischem Radar zu verbergen und kann somit aus dem Verborgenen heraus wichtige Daten liefern - vor allem dann, wenn er sich zusätzlich noch die örtlichen Gegebenheiten zunutze macht und sich zum Beispiel in einem dichten Waldgebiet verbirgt. 
+
+In festgefahrenen Gefechten mit starren Fronten wird der Ranger schnell zum "Auge" für die Artillerie: Er prescht plötzlich vor, erfasst den Feind und gibt die Zielkoordinaten an die eigene Artillerie weiter. Diese feuert - und genauso plötzlich, wie der Ranger scheinbar aus dem Nichts aufgetaucht ist, ist er auch schon wieder verschwunden.
+
+Als direkte Kampfeinheit taugt der Ranger hingegen überhaupt nicht! Die Verluste durch allzu rasante Fahrten ins Feindesland durch unbesonnene Fahrer, sind leider schon als legendär zu bezeichnen! Um die hohe Geschwindigkeit zu erreichen, mussten bei der Panzerung enorme Abstriche gemacht werden und auch die Bewaffnung reicht über ein leichtes Maschinengewehr nicht hinaus. Selbst gegen feindliche Infanterie sieht der Ranger daher ganz schnell alt aus - erst recht dann, wenn diese über panzerbrechende Waffen verfügt! Für gegnerische Panzerbesatzungen ist ein Ranger nichts anderes als eine risikofreie Ablenkung im harten Gefechtsalltag. Von offensiven Angriffsaktionen ist daher dringendst abzuraten - es sei denn, man nutzt den Ranger geschickt für Einkesselungsaktionen im Zusammenspiel mit richtigen Kampfverbänden, wenn es darum geht, schnell in den Rücken einer gegnerischen Einheit zu gelangen und dieser den Rückweg zu verbauen. 
+
+Das Gesamtgewicht eines Rangers liegt in etwa bei dem eines normalen Infanterie-Kampfroboters. Dies ermöglicht einerseits zwar den gleichzeitigen Transport vieler dieser Spähtrupps, hat jedoch auch seine Schattenseiten! Um das hohe Gewicht des leistungsfähigen Motors kompensieren zu können, wurde bei der Tankkapazität enorm gespart. Will man also verhindern, dass der Ranger irgendwo im Gelände als willkommenes Übungsziel für den Gegner liegen bleibt, sollte man immer auch ein Auge auf die Tankanzeige haben und übertrieben weite Ausflüge in gegnerisches Gebiet tunlichst vermeiden. Weiterhin darf man nicht vergessen, dass es sich bei dem Ranger, trotz aller Geländegängigkeit, immer noch um ein Fahrzeug mit Radantrieb handelt. Die Rangerfahrer (bzw. Rangerpiloten, wie sich diese unerschrockenen Draufgänger selbst gerne zu nennen pflegen) wurden ausdrücklich angewiesen, zukünftig die Wetternachrichten auch wirklich zu berücksichtigen. Ein liegengebliebenes Fahrzeuges im tiefen Schnee beispielsweise, wird künftig ein Disziplinarverfahren nach sich ziehen (sofern es der Fahrer zu Fuß bis zu den eigenen Linien zurück schafft). Deshalb wurde das Ausbildungsprogramm und das Auswahlverfahren für die Ranger-Fahrer in der Vergangenheit bereits mehrmals verschärft.
 ]
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor = 250
    View = 55
    picture = mk4v_ranger.png
+   InfoImage = mk4v_ranger.jpg
    WreckageObject = 1200
+   
    Transportation ->* VehicleType.TransLowTrooper
    Tank { 
       Energy = 0

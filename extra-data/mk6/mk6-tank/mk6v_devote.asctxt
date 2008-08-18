@@ -11,12 +11,14 @@ Der EMP Generator konnte etwas verstärkt werden, was sich aber glücklicherweise 
 Das Hauptgeschütz wurde durch eine 85mm Kanone ersetzt, die von der Durchschlagskraft zwischen einem leichten und einem mittleren Kampfpanzer der meisten anderen Rassen liegt. Bei der Sekundärbewaffnung folgten die Ingenieure dem Trend, und montierten das schwere Maschinengewehr starr in den Gefechtsturm, womit es die Kapazität zur Luftabwehr verlor. Ebenfalls dem Trend folgend wurde dies durch das Hinzufügen einer 20mm FlaK ausgeglichen, die auch in normaler Höhe operierende Flugzeuge unter Beschuß nehmen kann - und dies auch auf eine größere Distanz als dies bei einem reinen Maschinengewehr möglich wäre. ]
    
    Armor -= 50
-   Tank.Material = 1000
+   Tank.Material = 500
 
    Weapons { 
       Number = 4 
       Weapon0.Punch@MaxRange -= 10
       Weapon0.Punch@MinRange -= 10
+      Weapon1 ->* VehicleType.NLS
+      Weapon2 ->* VehicleType.NLS
       Weapon3 ->* VehicleType.TeccEMP
       Weapon3.Punch@MinRange = 125
       Weapon3.Punch@MaxRange = 125

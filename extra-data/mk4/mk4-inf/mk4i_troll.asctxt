@@ -18,6 +18,7 @@ Ein Troll benötigt über 160% des Material, welches für die Herstellung eines Dem
 ]
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    Picture = mk4i_troll.png
+   InfoImage = mk4i_troll.jpg
    wreckageobject = 14215
    Armor += 20
    Weapons { 

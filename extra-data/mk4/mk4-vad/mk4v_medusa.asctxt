@@ -5,6 +5,7 @@ VehicleType {
    Description = FlaRak-Geschuetz
    Infotext = [Nur schwer bewegliches, in seiner Feuerkraft aber um so gewaltigeres Flugabwehraketen-Geschuetz. Die strahlgetriebenen Geschosse der Medusa jagen bis in die hoechsten Luftschichten mit unglaublicher Geschwindigkeit alles, was sich in Reichweite dieses Geschuetzes bewegt. IST BESONDERS ZU SICHERN!!!]
    Picture = mk4v_medusa.png
+   Infoimage = mk4v_medusa.jpg
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Category = Medium_tracked_vehicle

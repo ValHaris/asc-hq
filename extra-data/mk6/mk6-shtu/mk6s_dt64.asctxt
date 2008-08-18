@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = DT 64
+   parent = 359 15000 493
+   ID = 15359
+
+   Description = Delta Traeger UBoot
+;   Infotext = []
+   picture = mk6s_dt64.png
+;   WreckageObject = 414
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   
+   Transportation.MaxLoadableUnits = 16
+   Transportation.MaxLoadableUnitSize = 70
+   Transportation.EntranceSystem1.Mode = out
+   Transportation.EntranceSystem1.MoveCost = 20 
+   Transportation.EntranceSystem1.RequireUnitFunction = paratrooper
+
+   Features += sonar
+   Armor -= 300
+   View -= 10
+
+   Movement += 66 66 0 0 0 0 0 0
+   Height = deep_submerged submerged floating
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp
+      Weapon0.Ammo = 200
+      
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 50
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.AmmoBomb 
+      Weapon2.Ammo = 200
+
+   } Weapons
+
+} VehicleType

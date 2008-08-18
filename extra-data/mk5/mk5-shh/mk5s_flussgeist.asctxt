@@ -10,8 +10,8 @@ VehicleType {
    Transportation ->* VehicleType.TransNoMechTrooper3
 
    View = 51
-   Jamming = 21
-   Features = Jam_only_own_field 
+   Jamming = 35
+   Features =  
    MaxSurvivableStorm = 170
    ResourceDrillingRange = 0
    SelfRepairRate = 0

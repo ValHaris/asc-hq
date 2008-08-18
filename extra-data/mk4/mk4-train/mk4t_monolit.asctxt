@@ -6,6 +6,7 @@ VehicleType {
    Description = Instandsetzungszug
    Infotext = []
    picture = mk4t_monolit.png
+   infoImage = mk4t_monolit.jpg
    wreckageobject = 14228
    GuideSortHelp = 553 556 0 0 4 0 0 0 0 0
 

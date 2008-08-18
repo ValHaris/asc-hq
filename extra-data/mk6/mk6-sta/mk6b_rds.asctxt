@@ -25,6 +25,7 @@ VehicleType {
       Weapon1.Punch@MaxRange = 105
       Weapon1.Punch@MinRange = 105
       Weapon1.Reactionfireshots = 1
+      Weapon1.Sound = groundmissile_g.ogg
       Weapon2 ->* VehicleType.TeccEMP2
       Weapon2.MaxRange = 20
       Weapon2.Reactionfireshots = 1

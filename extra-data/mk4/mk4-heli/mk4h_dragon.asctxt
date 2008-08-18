@@ -6,6 +6,7 @@ VehicleType {
    Description = Kampfhubschrauber
    Infotext = []
    picture = mk4h_dragon.png
+   InfoImage = mk4h_dragon.jpg
    wreckageobject = 1245 14845
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 

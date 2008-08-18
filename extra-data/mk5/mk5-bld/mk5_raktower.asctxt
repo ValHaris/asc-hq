@@ -32,7 +32,7 @@ BuildingType {
         DockingHeightRel = -100 
       } EntranceSystem0
    } transportation
-   Functions = Vehicle_Production Ammo_Production
+   Features = Vehicle_Production Ammo_Production selfdestruct_at_conquer NoObjectChaining Recycling
    Techlevel = 0
    TerrainAccess { 
       terrain_any = lowland hard_sand soft_sand 
@@ -43,8 +43,8 @@ BuildingType {
    MaxResearch = 0
    ConstructionCost { 
       Energy = 0
-      Material = 15000
-      fuel = 15000
+      Material = 8000
+      fuel = 8000
    } ConstructionCost
    MaxResourceProduction { 
       Energy = 0

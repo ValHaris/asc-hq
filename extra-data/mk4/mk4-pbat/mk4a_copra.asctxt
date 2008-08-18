@@ -3,7 +3,7 @@ VehicleType {
    parent = 270
    ID = 1279
 
-   Infotext = []
+   Infotext = [Der Copra ist der kleinste Jäger der Cromonischen Streitkräfte. Er ist sehr wendig und bietet schon zu recht geringen Kosten die Möglichkeit, um die Luftherrschaft zu kämpfen. Dazu verfügt er über verschiedene Raketen gegen Luftziele, darunter auch weitreichende Geschosse. So kann er den Gegner teilweise schon aus der Distanz bekämpfen und ist dabei durch seinen größeren Munitionsvorrat sogar dem Genom auf mittlerer Höhe überlegen. Zusätzlich besitzt er 2 fest eingebaute MGs in den Flügeln, mit welchen beispielsweise Infanterie am Boden bekämpft werden kann. Lediglich gegen Flugzeuge in den oberen Luftschichten ist er relativ ineffizient, da der Copra nur 2 Raketen kurzer Reichweite für diesen Zweck mit sich führt. Wegen der leichten Panzerung sollte der Nahkampf nur gegen Bomber oder schon stark geschwächte Jäger gesucht werden, sonst können die eigenen Verluste schnell höher als die des Gegners ausfallen. Der bevorzugte Verwendungszweck ist die Vernichtung feindlicher Jäger aus der Distanz, diese Aufgabe erfüllt er besser als alle anderen Flugzeuge der Cromoner. Insgesamt handelt es sich um ein ausgereiftes Jagdflugzeug, das in keiner Luftflotte fehlen sollte. ]
    Picture = mk4a_copra.png
    wreckageobject = 1279 14879
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
