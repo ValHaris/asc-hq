@@ -70,7 +70,7 @@ DataTab::DataTab( PG_Widget* parent, const PG_Rect& pos, bool showDescription ) 
 	int height = parentPos.Height() - 20;
 	int lineHeight = 12;
 	int labelHeight = 12;
-	int heightLevelWidth = 20;
+	//int heightLevelWidth = 20;
 	int fontSize = 10;
 	
 	iconGeneral = new PG_Label( this, PG_Rect( xPos, yPos, 48, 48 ) );
