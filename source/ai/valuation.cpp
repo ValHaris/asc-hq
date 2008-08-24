@@ -17,6 +17,7 @@
 
 
 #include "ai_common.h"
+#include "../actions/attackcommand.h"
 
 const int value_armorfactor = 100;
 const int value_weaponfactor = 3000;
@@ -729,10 +730,10 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                             veh->ypos = yp;
                             veh->height = h;
 
-                            VehicleAttack va ( NULL, NULL );
-                            if ( va.available ( veh )) {
-                               va.execute ( veh, -1, -1, 0, 0, -1 );
-                               targets += va.attackableVehicles.getFieldNum();
+                            if ( AttackCommand::avail( veh )) {
+                               AttackCommand attack ( veh ); 
+                               attack.searchTargets();
+                               targets += attack.getAttackableUnits().size();
                             }
                             ai->_vision = visible_ago;
                          } else

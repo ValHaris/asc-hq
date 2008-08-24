@@ -15,15 +15,40 @@ extern "C"
 
 #include "../sg.h"
 #include "../ascstring.h"
+#include "../vehicle.h"
+#include "../gamemap.h"
+#include "../spfst.h"
                
-               
+#include "../actions/attackcommand.h"               
 
 using namespace luabind;
 
 void loadGameLua( const std::string& filename )
 {
    loadGameFromFile( ASCString(filename) );  
+   repaintMap();
 }
+         
+         
+int attackCommandFunc( int veh, int x, int y )
+{
+   Vehicle* unit = actmap->getUnit( veh );
+   if ( !unit  )
+      return 120;
+   
+   if ( !AttackCommand::avail( unit ))   
+      return 202;
+   
+   AttackCommand ac( unit );
+   ac.setTarget( MapCoordinate(x,y),-1);
+   ActionResult res = ac.execute( createContext( actmap ) );
+   if ( res.successful() )
+      return 0;
+   else
+      return res.getCode();
+   
+}
+         
          
 void registerLuaFunctions( LuaState& state)
 {
@@ -33,4 +58,9 @@ void registerLuaFunctions( LuaState& state)
         def("loadgame", &loadGameLua )
     ]; 
    
+    module( state.get() )
+    [
+        def("attack", &attackCommandFunc )
+    ]; 
+    
 }

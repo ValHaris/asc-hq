@@ -29,6 +29,7 @@
  #include "containerbasetype.h"
  #include "graphics/surface.h"
  
+ #include "actions/context.h"
 
 
 class Vehicle;
@@ -145,7 +146,8 @@ class ContainerBase {
       int getOwner() const { return color >> 3; };
       Player& getOwningPlayer() const;;
       
-      virtual void convert ( int player ) = 0;
+      virtual void convert ( int player, bool recursive = true ) = 0;
+      virtual void convert( int player, Context& context );
       
 
 
@@ -154,7 +156,6 @@ class ContainerBase {
 
       virtual void addview ( void ) = 0;
       virtual void removeview ( void ) = 0;
-
 
       
 

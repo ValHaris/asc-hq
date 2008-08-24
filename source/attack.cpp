@@ -37,9 +37,10 @@
 #include "actions/changeunitproperty.h"
 #include "actions/consumeammo.h"
 #include "actions/registerunitrftarget.h"
-#include "actions/inflictunitdamage.h"
+#include "actions/inflictdamage.h"
 #include "actions/removemine.h"
-
+#include "actions/removeobject.h"
+#include "actions/changeobjectproperty.h"
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
 { 
@@ -427,10 +428,10 @@ void tunitattacksunit :: setresult( const Context& context )
       e->execute ( context );
    }
    
-   GameAction* f = new InflictUnitDamage( map, nwid, av.damage - _attackingunit->damage );
+   GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
    f->execute ( context );
 
-   GameAction* g = new InflictUnitDamage( map, nwid_targ, dv.damage - _attackedunit->damage  );
+   GameAction* g = new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  );
    g->execute ( context );
    
    
@@ -563,7 +564,17 @@ void tunitattacksbuilding :: setresult ( void )
 
 void tunitattacksbuilding :: setresult( const Context& context )
 {
+   int nwid = _attackingunit->networkid;
+   MapCoordinate target = _attackedbuilding->getPosition();
+   GameMap* map = _attackingunit->getMap();
    
+   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   b->execute ( context );
+   
+   _attackingunit->postAttack( false, context );
+   
+   GameAction* g = new InflictDamage( _attackedbuilding, dv.damage - _attackedbuilding->damage  );
+   g->execute ( context );
 }
 
 
@@ -683,7 +694,7 @@ void tmineattacksunit :: setresult( const Context& context )
       (*i)->execute( context );
       
    
-   (new InflictUnitDamage( _attackedunit->getMap(), _attackedunit->networkid, dv.damage - _attackedunit->damage  ))->execute ( context );
+   (new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  ))->execute ( context );
    
    /* Remove the mined vehicle if it was destroyed */
    if ( _attackedunit->damage >= 100 ) {
@@ -817,7 +828,22 @@ void tunitattacksobject :: setresult ( void )
 
 void tunitattacksobject :: setresult( const Context& context )
 {
+   int nwid = _attackingunit->networkid;
+   GameMap* map = _attackingunit->getMap();
    
+   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   b->execute ( context );
+   
+   _attackingunit->postAttack( false, context );
+   
+   MapCoordinate position( _x, _y );
+   
+   if ( dv.damage >= 100 ) {
+      (new RemoveObject(map, position, _obji->typ->id))->execute(context);
+   } else {
+      GameAction* g = new ChangeObjectProperty( map, position, _obji, ChangeObjectProperty::Damage, dv.damage );
+      g->execute ( context );
+   }
 }
 
 

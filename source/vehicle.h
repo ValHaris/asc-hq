@@ -282,10 +282,10 @@ class UnitHooveringLogic {
     void setnewposition ( const MapCoordinate& mc );
 
     /** converts the unit so it is owned by 'player'. Note that the player is passed
-        as parameter (values [0..8]), and not his color (which would be the values
-        [0,8,16,..,64] )
+        as parameter (values [0..8]) )
     */
-    void convert ( int player );
+    void convert ( int player, bool recursive = true );
+    void convert( int player, Context& context );
 
     //! sets the status of the unit's energy generator
     void setGeneratorStatus( bool status );

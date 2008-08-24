@@ -78,7 +78,10 @@ extern const char*  cbuildingfunctions[];
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
-        bool             field_Exists[4][6];
+    public:
+       static const int xdimension = 4;
+       static const int ydimension = 6;
+        bool             field_Exists[xdimension][ydimension];
         Surface          w_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
         int              bi_picture [ cwettertypennum ][ maxbuildingpicnum ][4][6];
 

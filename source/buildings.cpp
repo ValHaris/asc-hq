@@ -33,6 +33,8 @@
 #include "containercontrols.h"
 #include "misc.h"
 
+#include "actions/destructcontainer.h"
+
 #ifndef BUILDINGVERSIONLIMIT
 # define BUILDINGVERSIONLIMIT -1000000000
 #endif
@@ -100,7 +102,7 @@ int Building::getIdentification()
    return -(getPosition().x + (getPosition().y << 16));
 }
 
-void Building :: convert ( int player )
+void Building :: convert ( int player, bool recursive )
 {
    if (player > 8)
       fatalError("convertbuilding: \n color mu�im bereich 0..8 sein ");
@@ -110,6 +112,7 @@ void Building :: convert ( int player )
       delete this;
       return;
    }
+
 
    int oldnetcontrol = netcontrol;
    netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
@@ -145,9 +148,65 @@ void Building :: convert ( int player )
    if ( player < 8 )
       addview();
 
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) 
-         (*i)->convert( player );
+   if ( recursive )
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->convert( player );
+
+   conquered();
+   anyContainerConquered(this);
+}
+
+void Building :: convert( int player, Context& context )
+{
+   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
+      (new DestructContainer(this))->execute(context);
+      return;
+   }
+
+/*
+   int oldnetcontrol = netcontrol;
+   netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
+   Resources put = putResource( actstorage, false );
+   actstorage -= put;
+
+   netcontrol = oldnetcontrol;
+   */
+
+   /*
+   int oldcol = getOwner();
+
+   #ifdef sgmain
+   if ( oldcol == 8 )
+      for ( int r = 0; r < 3; r++ )
+         if ( gamemap->isResourceGlobal( r )) {
+            gamemap->bi_resource[player].resource(r) += actstorage.resource(r);
+            actstorage.resource(r) = 0;
+         }
+
+   #endif
+   
+   */
+   
+   int oldcol = getOwner();
+   
+   if ( getOwner() != 8 )
+      removeview();
+
+   Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
+   if ( i != gamemap->player[oldcol].buildingList.end())
+      gamemap->player[oldcol].buildingList.erase ( i );
+
+   gamemap->player[player].buildingList.push_back( this );
+
+   color = player * 8;
+
+   if ( player < 8 )
+      addview();
+
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->convert( player );
 
    conquered();
    anyContainerConquered(this);
@@ -311,17 +370,6 @@ int  Building :: unchainbuildingfromfield ( void )
                TerrainBits t = getTerrainBitType(cbbuildingentry);
                t.flip();
                fld->bdt &= t;
-
-               #ifdef sgmain
-               if ( gamemap->state != GameMap::Destruction ) {
-                  typedef BuildingType::DestructionObjects::const_iterator J;
-                  pair<J,J> b = typ->destructionObjects.equal_range(BuildingType::LocalCoordinate(i,j));
-                  for ( J o = b.first; o != b.second; ++o)
-                     fld->addobject ( actmap->getobjecttype_byid ( o->second ), -1, true );
-                
-               }
-               #endif
-
             }
          }
 

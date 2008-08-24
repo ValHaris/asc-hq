@@ -36,6 +36,8 @@ Movement interrupted
 You must be outside to change a units height
 119
 Not enough movement to put or remove mines
+120
+Not unit found with this ID
 201
 This # won't attack anything
 202
@@ -230,3 +232,10 @@ The unit is not standing on this field
 The unit was not in this carrier
 21401
 No matching mine was found this field
+21501
+Objecttype not available
+21502
+The given Objecttype does not reside on this field
+21503
+Invalid property specified
+

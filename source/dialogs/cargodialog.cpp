@@ -44,6 +44,8 @@
 #include "../containerbase-functions.h"
 #include "../gameoptions.h"
 
+#include "../actions/moveunitcommand.h"
+
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
 #include "unitinfodialog.h"
@@ -107,7 +109,7 @@ namespace CargoGuiFunctions {
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
          {
             GuiFunctions::Movement::execute( pos, subject, num );
-            if ( !pendingVehicleActions.move )
+            if ( !NewGuiHost::pendingCommand )
                parent.QuitModal();
          }
    };
@@ -2133,40 +2135,40 @@ namespace CargoGuiFunctions {
       if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
          simpleMode = true;
    
-      VehicleMovement* vehicleMovement = ContainerControls::movement ( unit, simpleMode );
-      if ( vehicleMovement ) {
-   
-         vehicleMovement->registerPVA ( vat_move, &pendingVehicleActions );
-         for ( int i = 0; i < vehicleMovement->reachableFields.getFieldNum(); i++ )
-            vehicleMovement->reachableFields.getField( i ) ->a.temp = 1;
-   
-            // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
-         for ( int j = 0; j < vehicleMovement->reachableFieldsIndirect.getFieldNum(); j++ )
-            vehicleMovement->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
-   
-         repaintMap();
-            
-         GuiIconHandler guiIconHandler;
-         guiIconHandler.registerUserFunction( new MovementDestination( *mainScreenWidget ) );
-         guiIconHandler.registerUserFunction( new CancelMovement( *mainScreenWidget ) );
-   
-         NewGuiHost::pushIconHandler( &guiIconHandler );
-   
-         parent.Hide();
-            
-         mainScreenWidget->Update();
-         mainScreenWidget->RunModal();
-         actmap->cleartemps(7);
-   
-         NewGuiHost::popIconHandler();
-         parent.cargoChanged();
-         parent.Show();
-            
-         if ( pendingVehicleActions.move )
-            delete pendingVehicleActions.move;
-   
-      } else
-         infoMessage( getmessage( 107 ) );
+      
+      MoveUnitCommand* move = new MoveUnitCommand( unit );
+      
+      ActionResult res = move->searchFields ();
+      if ( !res.successful() ) {
+         dispmessage2 ( res.getCode(), NULL );
+         delete move;
+         return;
+      }
+      
+      for ( set<MapCoordinate3D>::iterator i = move->getReachableFields().begin(); i != move->getReachableFields().end(); ++i )
+         unit->getMap()->getField( *i)->a.temp = 1;
+
+      for ( set<MapCoordinate3D>::iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
+         unit->getMap()->getField( *i)->a.temp = 2;
+      
+      repaintMap();
+      NewGuiHost::pendingCommand = move;
+         
+      GuiIconHandler guiIconHandler;
+      guiIconHandler.registerUserFunction( new MovementDestination( *mainScreenWidget ) );
+      guiIconHandler.registerUserFunction( new CancelMovement( *mainScreenWidget ) );
+
+      NewGuiHost::pushIconHandler( &guiIconHandler );
+
+      parent.Hide();
+         
+      mainScreenWidget->Update();
+      mainScreenWidget->RunModal();
+      actmap->cleartemps(7);
+
+      NewGuiHost::popIconHandler();
+      parent.cargoChanged();
+      parent.Show();
    
    }
 

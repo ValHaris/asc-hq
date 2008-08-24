@@ -34,6 +34,7 @@
 #include "actions/changeunitmovement.h"
 #include "actions/changeunitproperty.h"
 #include "actions/spawnobject.h"
+#include "actions/destructcontainer.h"
 
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
@@ -799,11 +800,19 @@ int Vehicle :: getstrongestweapon( int aheight, int distance)
 }
 */
 
-void Vehicle::convert ( int col )
+void Vehicle::convert ( int col, bool recursive )
 {
   if ( col > 8)
      fatalError("convertvehicle: \n color mu�im bereich 0..8 sein ",2);
 
+   #ifdef sgmain
+   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
+      delete this;
+      return;
+   }
+   #endif
+  
+  
    int oldcol = getOwner();
 
    Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
@@ -814,14 +823,26 @@ void Vehicle::convert ( int col )
 
    color = col << 3;
 
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) 
-         (*i)->convert( col );
+   if ( recursive )
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->convert( col );
 
    // emit signal
    conquered();
    anyContainerConquered(this);
 }
+
+void Vehicle::convert( int player, Context& context )
+{
+   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
+      (new DestructContainer(this))->execute(context);
+      return;
+   }
+   
+   
+}
+
 
 Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
 {

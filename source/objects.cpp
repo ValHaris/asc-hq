@@ -116,3 +116,26 @@ const OverviewMapImage* Object :: getOverviewMapImage( int weather )
    return typ->getOverviewMapImage( dir, weather );
 }
 
+const int objectVersion = 1;
+
+void Object::write ( tnstream& stream )
+{
+   stream.writeInt( objectVersion );
+   stream.writeInt( lifetimer );
+   stream.writeInt( damage );
+   stream.writeInt( dir );
+   stream.writeInt( remainingGrowthTime );
+}
+
+void Object::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version < 1 || version > objectVersion )
+      throw tinvalidversion ( "Object", 1, version );
+   
+   lifetimer = stream.readInt();
+   damage  = stream.readInt();
+   dir = stream.readInt();
+   remainingGrowthTime = stream.readInt();
+}
+

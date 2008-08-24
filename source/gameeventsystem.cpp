@@ -252,6 +252,9 @@ void Event::execute( MapDisplayInterface* md )
          status = Timed;
       }
       if ( status == Timed && gamemap.time.abstime >= triggerTime.abstime ) {
+         
+         gamemap.actions.breakUndo();
+         
          if ( action )
             action->execute( md );
          

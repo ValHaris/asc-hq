@@ -88,9 +88,14 @@ enum trpl_actions { rpl_attack,
                     rpl_reactionFireOn,
                     rpl_reactionFireOff,
                     rpl_selfdestruct,
-                    rpl_cancelResearch };
+                    rpl_cancelResearch,
+                    rpl_runCommandAction };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
+
+class Command;
+
+extern void logtoreplayinfo ( const Command& command  );
 
 struct treactionfire_replayinfo;
 

@@ -38,6 +38,7 @@
 #include "../unitctrl.h"
 #include "../buildingtype.h"
 #include "../astar2.h"
+#include "../actions/context.h"
 
 
     class AI : public BaseAI {
@@ -502,6 +503,8 @@
 
            void read ( tnstream& stream );
            void write ( tnstream& stream ) const ;
+           
+           Context getContext();
            ~AI ( );
     };
 

@@ -2067,7 +2067,6 @@ int checkforvaliddirectory ( char* dir )
 
   tmemorystreambuf :: tmemorystreambuf ( void )
   {
-     initialized = false;
      used = 0;
      allocated = 0;
      buf = 0;
@@ -2085,7 +2084,7 @@ int checkforvaliddirectory ( char* dir )
   void tmemorystreambuf :: writetostream ( pnstream stream )
   {
      if ( stream ) {
-        stream->writeInt ( initialized );
+        stream->writeInt ( 0 );
         stream->writeInt ( used );
         stream->writeInt ( allocated );
         for ( int i = 0; i < 10; i++ )
@@ -2098,7 +2097,7 @@ int checkforvaliddirectory ( char* dir )
   void tmemorystreambuf :: readfromstream ( pnstream stream )
   {
      if ( stream ) {
-        initialized = stream->readInt();
+        stream->readInt();
         used        = stream->readInt();
         allocated   = stream->readInt();
         for ( int i = 0; i< 10; i++ )
