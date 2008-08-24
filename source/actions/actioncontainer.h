@@ -23,22 +23,23 @@
 #define actionContainerH
 
 #include <list>
+#include <sigc++/sigc++.h>
 
-#include "action.h"
+#include "command.h"
 
 
 class ActionContainer {
    
       GameMap* map;
    
-      typedef list<GameAction*> Actions;
+      typedef list<Command*> Actions;
       Actions actions;
       
       Actions::iterator currentPos;
    
    public:
       ActionContainer( GameMap* gamemap );
-      void add( GameAction* action );
+      void add( Command* action );
       
       void undo( const Context& context );
       void redo( const Context& context );
@@ -50,6 +51,9 @@ class ActionContainer {
       void write ( tnstream& stream );
       
 };
+
+extern SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
+
 
 #endif
 

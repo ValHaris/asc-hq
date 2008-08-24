@@ -44,24 +44,24 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libactions_la_DEPENDENCIES =
-am_libactions_la_OBJECTS = action.lo context.lo actionresult.lo \
-	actioncontainer.lo containeraction.lo
+am_libactions_la_OBJECTS = action.lo command.lo context.lo \
+	actionresult.lo actioncontainer.lo containeraction.lo
 libactions_la_OBJECTS = $(am_libactions_la_OBJECTS)
 libdirectunitactions_la_DEPENDENCIES =
-am_libdirectunitactions_la_OBJECTS = consumeammo.lo \
-	inflictunitdamage.lo destructunit.lo changeunitmovement.lo \
-	unitaction.lo changeunitproperty.lo registerunitrftarget.lo \
+am_libdirectunitactions_la_OBJECTS = consumeammo.lo inflictdamage.lo \
+	destructcontainer.lo changeunitmovement.lo unitaction.lo \
+	changeunitproperty.lo registerunitrftarget.lo \
 	containeraction.lo changecontainerproperty.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libfullgameactions_la_DEPENDENCIES =
 am_libfullgameactions_la_OBJECTS = containeraction.lo \
 	consumeresource.lo unitfieldregistration.lo vehicleattack.lo \
-	moveunit.lo command.lo unitcommand.lo attackcommand.lo
+	moveunit.lo unitcommand.lo attackcommand.lo moveunitcommand.lo
 libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo changeview.lo \
-	removemine.lo
+	removemine.lo removeobject.lo changeobjectproperty.lo
 libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
 libmiscactions_la_DEPENDENCIES =
 am_libmiscactions_la_OBJECTS = servicing.lo jumpdrive.lo \
@@ -252,19 +252,19 @@ top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ 
 noinst_LTLIBRARIES = libactions.la libdirectunitactions.la libmiscactions.la libmapactions.la libfullgameactions.la
-libactions_la_SOURCES = action.cpp context.cpp actionresult.cpp actioncontainer.cpp containeraction.cpp
+libactions_la_SOURCES = action.cpp command.cpp context.cpp actionresult.cpp actioncontainer.cpp containeraction.cpp
 libactions_la_LIBADD = @SDL_LIBS@
-libdirectunitactions_la_SOURCES = consumeammo.cpp inflictunitdamage.cpp destructunit.cpp   \
+libdirectunitactions_la_SOURCES = consumeammo.cpp inflictdamage.cpp destructcontainer.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp \
                           containeraction.cpp changecontainerproperty.cpp 
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp 
 libmiscactions_la_LIBADD = @SDL_LIBS@
-libmapactions_la_SOURCES = spawnobject.cpp changeview.cpp removemine.cpp
+libmapactions_la_SOURCES = spawnobject.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
 libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp \
-										command.cpp unitcommand.cpp attackcommand.cpp
+										unitcommand.cpp attackcommand.cpp moveunitcommand.cpp 
 
 libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -332,6 +332,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeobjectproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitmovement.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeview.Plo@am__quote@
@@ -340,12 +341,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeresource.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containeraction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructunit.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictunitdamage.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructcontainer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictdamage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunit.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/registerunitrftarget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removemine.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removeobject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selfdestruct.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@

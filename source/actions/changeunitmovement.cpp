@@ -62,7 +62,7 @@ void ChangeUnitMovement::readData ( tnstream& stream )
 };
       
       
-void ChangeUnitMovement::writeData ( tnstream& stream )
+void ChangeUnitMovement::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
    stream.writeInt( 1 );

@@ -52,7 +52,7 @@ class ChangeUnitMovement : public UnitAction {
       virtual ActionResult postCheck();
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) const;
       
 };
 

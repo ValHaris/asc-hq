@@ -34,7 +34,7 @@ class ContainerAction : public GameAction {
       ContainerBase* getContainer( bool dontThrow = false );
       const ContainerBase* getContainer( bool dontThrow = false ) const ;
       void readData ( tnstream& stream );
-      void writeData ( tnstream& stream );
+      void writeData ( tnstream& stream ) const;
       ContainerAction( ContainerBase* container );
       ContainerAction( GameMap* map );
 };

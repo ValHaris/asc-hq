@@ -19,37 +19,55 @@
 */
 
 
-#ifndef destructUnitH
-#define destructUnitH
+#ifndef changeObjectPropertyH
+#define changeObjectPropertyH
 
 
-#include "action.h"
+#include "unitaction.h"
 #include "action-registry.h"
+#include "../objects.h"
 
-#include "../typen.h"
 
-class DestructUnit : public GameAction {
-      int unitID;
-      tmemorystreambuf* unitBuffer;
+class ChangeObjectProperty : public GameAction {
+   public:
+      enum Property { Damage };
+   private:
+     
+      MapCoordinate position;
+      int objectID;
       
-      DestructUnit( GameMap* map ) : GameAction( map ) {};
+      static ASCString getPropertyName( Property property );
+      int getProperty();
+      ActionResult setProperty( Property property, int value, const Context& context);
+      
+      Property property;
+      
+      bool valueIsAbsolute;
+      int value;
+      
+      int originalValue;
+      int resultingValue;
+      
+      ChangeObjectProperty( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
      
+      Object* getObject();
+      
    public:
-      DestructUnit( GameMap* gamemap, int unitID );
+      ChangeObjectProperty( GameMap* map, MapCoordinate& pos, Object* object, Property property, int value, bool valueIsAbsolute = true );
       
       ASCString getDescription() const;
-      
-      ~DestructUnit();
       
    protected:
       virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
+      virtual ActionResult preCheck();
+      virtual ActionResult postCheck();
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) const;
       
 };
 

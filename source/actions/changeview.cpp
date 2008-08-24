@@ -60,17 +60,17 @@ void ChangeView::readData ( tnstream& stream )
 };
       
       
-void ChangeView::writeData ( tnstream& stream )
+void ChangeView::writeData ( tnstream& stream ) const
 {
    stream.writeInt( 1 );
    stream.writeInt( newState.size() );
-   for ( ViewState::iterator i = newState.begin(); i != newState.end(); ++i  ) {
+   for ( ViewState::const_iterator i = newState.begin(); i != newState.end(); ++i  ) {
       i->first.write( stream );
       stream.writeInt( i->second );
    }
    
    stream.writeInt( oldState.size() );
-   for ( ViewState::iterator i = oldState.begin(); i != oldState.end(); ++i  ) {
+   for ( ViewState::const_iterator i = oldState.begin(); i != oldState.end(); ++i  ) {
       i->first.write( stream );
       stream.writeInt( i->second );
    }

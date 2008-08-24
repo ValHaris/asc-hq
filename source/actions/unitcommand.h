@@ -33,9 +33,11 @@ class UnitCommand : public Command {
       Vehicle* getUnit();
       int getUnitID() const { return unitNetworkID; };
       
+      UnitCommand( GameMap* map );
+      
       UnitCommand( Vehicle* vehicle );
       void readData ( tnstream& stream );
-      void writeData ( tnstream& stream );
+      void writeData ( tnstream& stream ) const;
       
 };
 

@@ -65,7 +65,7 @@ void UnitAction::readData ( tnstream& stream )
 };
       
       
-void UnitAction::writeData ( tnstream& stream )
+void UnitAction::writeData ( tnstream& stream )  const
 {
    stream.writeInt( 1 );
    stream.writeInt( vehicleID );

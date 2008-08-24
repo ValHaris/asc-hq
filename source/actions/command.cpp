@@ -35,7 +35,7 @@ void Command::readData ( tnstream& stream )
 }
 
 
-void Command::writeData ( tnstream& stream )
+void Command::writeData ( tnstream& stream ) const
 {
    stream.writeInt(1);
    stream.writeInt( (int) state );
@@ -56,5 +56,12 @@ ActionResult Command::runAction( const Context& context )
 ActionResult Command::undoAction( const Context& context )
 {
    return ActionResult(0);
+}
+
+ActionResult Command::redo( const Context& context )
+{
+   if ( getState() == Completed )
+      setState( SetUp );
+   return go(context);
 }
 

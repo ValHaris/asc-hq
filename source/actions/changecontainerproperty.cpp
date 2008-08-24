@@ -69,7 +69,7 @@ void ChangeContainerProperty::readData ( tnstream& stream )
 };
       
       
-void ChangeContainerProperty::writeData ( tnstream& stream )
+void ChangeContainerProperty::writeData ( tnstream& stream ) const
 {
    ContainerAction::writeData( stream );
    stream.writeInt( 1 );

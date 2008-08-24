@@ -47,7 +47,7 @@ class VehicleAttackAction : public UnitAction {
       virtual ActionResult undoAction( const Context& context );
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) const;
       
 };
 

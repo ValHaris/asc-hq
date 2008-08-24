@@ -76,7 +76,7 @@ void ChangeUnitProperty::readData ( tnstream& stream )
 };
       
       
-void ChangeUnitProperty::writeData ( tnstream& stream )
+void ChangeUnitProperty::writeData ( tnstream& stream )  const
 {
    UnitAction::writeData( stream );
    stream.writeInt( 1 );

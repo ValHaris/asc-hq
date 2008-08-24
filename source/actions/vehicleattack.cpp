@@ -27,9 +27,9 @@
 #include "../spfst.h"
 #include "../viewcalculation.h"
 
-#include "destructunit.h"
+#include "destructcontainer.h"
 #include "changeunitmovement.h"
-#include "inflictunitdamage.h"
+#include "inflictdamage.h"
 
 #include "../mapdisplayinterface.h"
 
@@ -63,7 +63,7 @@ void VehicleAttackAction::readData ( tnstream& stream )
 };
       
       
-void VehicleAttackAction::writeData ( tnstream& stream )
+void VehicleAttackAction::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
    stream.writeInt( 1 );

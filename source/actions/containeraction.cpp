@@ -66,7 +66,7 @@ void ContainerAction::readData ( tnstream& stream )
 };
       
       
-void ContainerAction::writeData ( tnstream& stream )
+void ContainerAction::writeData ( tnstream& stream ) const
 {
    stream.writeInt( 1 );
    stream.writeInt( containerID );

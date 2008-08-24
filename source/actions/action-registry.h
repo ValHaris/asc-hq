@@ -25,9 +25,9 @@
 namespace ActionRegistry {
    enum Actions { Root, 
                   ConsumeAmmo,
-                  InflictUnitDamage,
+                  InflictDamage,
                   SpawnObject,
-                  DestructUnit,
+                  DestructContainer,
                   VehicleAttack,
                   ChangeUnitMovement,
                   ChangeUnitAttackFlag,
@@ -39,7 +39,10 @@ namespace ActionRegistry {
                   ChangeContainerProperty,
                   ChangeView,
                   RemoveMine,
-                  AttackCommand
+                  AttackCommand,
+                  MoveUnitCommand,
+                  RemoveObject,
+                  ChangeObjectProperty
       
    };
 };

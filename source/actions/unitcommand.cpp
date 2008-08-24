@@ -33,6 +33,13 @@ UnitCommand::UnitCommand( Vehicle* vehicle )
 {
 };
 
+UnitCommand::UnitCommand( GameMap* map )
+   : Command( map ), unitNetworkID ( -1 )
+{
+     
+}
+
+
 void UnitCommand::readData ( tnstream& stream )
 {
    Command::readData( stream );
@@ -41,7 +48,7 @@ void UnitCommand::readData ( tnstream& stream )
 }
 
 
-void UnitCommand::writeData ( tnstream& stream )
+void UnitCommand::writeData ( tnstream& stream ) const
 {
    Command::writeData( stream );
    stream.writeInt( 1 );

@@ -24,6 +24,9 @@
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
 
+SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
+
+
 ActionContainer::ActionContainer( GameMap* gamemap )
    : map ( gamemap )
 {
@@ -31,7 +34,7 @@ ActionContainer::ActionContainer( GameMap* gamemap )
    
 }
 
-void ActionContainer::add( GameAction* action )
+void ActionContainer::add( Command* action )
 {
    for ( Actions::iterator i = currentPos; i != actions.end(); ++i )
       delete *i;
@@ -39,6 +42,8 @@ void ActionContainer::add( GameAction* action )
    
    actions.push_back( action );
    currentPos = actions.end();
+   
+   postActionExecution( map, *action );
 }
 
 void ActionContainer::undo( const Context& context )
@@ -88,7 +93,7 @@ void ActionContainer::read ( tnstream& stream )
       
    int actionCount = stream.readInt();
    for ( int i = 0; i < actionCount; ++i ) {
-      GameAction* a = GameAction::readFromStream( stream, map );
+      Command* a = dynamic_cast<Command*>( GameAction::readFromStream( stream, map ));
       actions.push_back ( a );
    }
    

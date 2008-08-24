@@ -57,7 +57,7 @@ void RemoveMine::readData ( tnstream& stream )
 };
       
       
-void RemoveMine::writeData ( tnstream& stream )
+void RemoveMine::writeData ( tnstream& stream ) const
 {
    stream.writeInt( 1 );
    stream.writeInt( mineID );

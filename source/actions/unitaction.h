@@ -33,7 +33,7 @@ class UnitAction : public GameAction {
       Vehicle* getUnit( bool dontThrow = false );
       const Vehicle* getUnit( bool dontThrow = false ) const ;
       void readData ( tnstream& stream );
-      void writeData ( tnstream& stream );
+      void writeData ( tnstream& stream ) const;
       UnitAction( GameMap* gamemap, int vehicleID );
       UnitAction( GameMap* gamemap );
 };

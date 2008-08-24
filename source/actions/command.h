@@ -37,21 +37,23 @@ class Command : public GameAction {
    public:
       State getState() const { return state; };
       
-      virtual ActionResult go ( const Context& context ) = 0; 
-      
       virtual ASCString getCommandString() const = 0;
+      
+      ActionResult redo( const Context& context );
       
    protected:
       Command( GameMap* gamemap );
       
       void setState( State state );
       
+      virtual ActionResult go ( const Context& context ) = 0; 
       
       virtual ActionResult runAction( const Context& context ) ;
       virtual ActionResult undoAction( const Context& context );
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream ) ;
+      virtual void writeData ( tnstream& stream ) const;
+            
 };
 
 #endif

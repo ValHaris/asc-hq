@@ -50,7 +50,7 @@ class ChangeView : public GameAction {
       virtual ActionResult undoAction( const Context& context );
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) const;
       
 };
 

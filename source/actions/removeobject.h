@@ -19,38 +19,40 @@
 */
 
 
-#ifndef inflictUnitDamageH
-#define inflictUnitDamageH
+#ifndef RemoveObjectH
+#define RemoveObjectH
 
 
 #include "action.h"
 #include "action-registry.h"
 
+#include "../typen.h"
 
-class InflictUnitDamage : public GameAction {
-      int vehicleID;
-      int damage;
+class RemoveObject : public GameAction {
+      MapCoordinate pos;
+      int objectID;
       
-      int originalDamage;
-      int resultingDamage;
-      
-       InflictUnitDamage( GameMap* map ) : GameAction( map ) {};
+      RemoveObject( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
+      tmemorystreambuf* objectBuffer;
 
    public:
-      InflictUnitDamage( GameMap* gamemap, int vehicleID, int damage );
+      RemoveObject( GameMap* gamemap, const MapCoordinate& position, int objectID );
       
       ASCString getDescription() const;
+      
+      ~RemoveObject();
       
    protected:
       virtual GameActionID getID() const;
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
-      virtual ActionResult postCheck();
+      virtual ActionResult verify();
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) const;
       
 };
 

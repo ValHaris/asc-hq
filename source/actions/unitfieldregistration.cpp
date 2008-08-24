@@ -72,7 +72,7 @@ void UnitFieldRegistration::readData ( tnstream& stream )
 };
       
       
-void UnitFieldRegistration::writeData ( tnstream& stream )
+void UnitFieldRegistration::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
    stream.writeInt( 1 );

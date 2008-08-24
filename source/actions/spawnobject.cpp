@@ -59,7 +59,7 @@ void SpawnObject::readData ( tnstream& stream )
 };
       
       
-void SpawnObject::writeData ( tnstream& stream )
+void SpawnObject::writeData ( tnstream& stream ) const
 {
    stream.writeInt( 1 );
    stream.writeInt( objectID );

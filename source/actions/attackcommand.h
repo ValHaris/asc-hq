@@ -30,7 +30,9 @@
 class AttackCommand : public UnitCommand {
    
    public:
+      static bool avail ( Vehicle* eht );
       typedef map<MapCoordinate,AttackWeap > FieldList;
+      
    private:
       MapCoordinate target;
       int targetUnitID;
@@ -46,9 +48,13 @@ class AttackCommand : public UnitCommand {
       FieldList attackableBuildings;
       FieldList attackableObjects;
       
+      
+      AttackCommand( GameMap* map ) : UnitCommand( map ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    protected:
       void readData ( tnstream& stream );
-      void writeData ( tnstream& stream );
+      void writeData ( tnstream& stream ) const;
       
       GameActionID getID() const;
       ASCString getDescription() const;

@@ -48,17 +48,13 @@ ActionResult GameAction::execute( const Context& context )
    try {
       displayLogMessage(0, "executing " + getDescription() + "\n");
       ActionResult result = runAction( c );
-      if ( context.actionContainer && result.successful() && !context.parentAction)
-         context.actionContainer->add( this );
+      Command* command = dynamic_cast<Command*>(this);
+      if ( context.actionContainer && result.successful() && !context.parentAction && command)
+         context.actionContainer->add( command );
       return result;
    } catch ( ActionResult res ) {
       return res;
    }
-}
-
-void GameAction::redo( const Context& context )
-{
-   
 }
 
 void GameAction::undo( const Context& context ) 
@@ -102,7 +98,7 @@ void GameAction::read ( tnstream& stream )
    }
 }
 
-void GameAction::write ( tnstream& stream )
+void GameAction::write ( tnstream& stream ) const
 {
    stream.writeInt( getID() );
    stream.writeInt( currentGameActionVersion );

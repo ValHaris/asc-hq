@@ -83,7 +83,7 @@ void MoveUnit::readData ( tnstream& stream )
 };
       
       
-void MoveUnit::writeData ( tnstream& stream )
+void MoveUnit::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
    stream.writeInt( 1 );
@@ -388,7 +388,7 @@ ActionResult MoveUnit::runAction( const Context& context )
          } else {
             ContainerBase* cn = fld->getContainer();
             if ( vehicle->isViewing() ) {
-               vehicle->removeview();
+               (new UnitFieldRegistration( vehicle, *pos, UnitFieldRegistration::RemoveView ))->execute( context );
                viewInputChanged = true;
             }
             

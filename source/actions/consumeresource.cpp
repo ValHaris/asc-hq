@@ -41,23 +41,25 @@ ASCString ConsumeResource::getDescription() const
 }
       
       
+const int consumeResourceVersion = 1;
+      
 void ConsumeResource::readData ( tnstream& stream ) 
 {
    ContainerAction::readData( stream );
    
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "ConsumeResource", 1, version );
+   if ( version < 1  || version > consumeResourceVersion)
+      throw tinvalidversion ( "ConsumeResource", consumeResourceVersion, version );
    
    toGet.read( stream );
    got.read( stream );
 };
       
       
-void ConsumeResource::writeData ( tnstream& stream )
+void ConsumeResource::writeData ( tnstream& stream ) const
 {
    ContainerAction::writeData( stream );
-   stream.writeInt( 1 );
+   stream.writeInt( consumeResourceVersion );
    toGet.write( stream );
    got.write( stream );
 };

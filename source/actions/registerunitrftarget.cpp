@@ -54,7 +54,7 @@ void RegisterUnitRFTarget::readData ( tnstream& stream )
 };
       
       
-void RegisterUnitRFTarget::writeData ( tnstream& stream )
+void RegisterUnitRFTarget::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
    stream.writeInt( 1 );

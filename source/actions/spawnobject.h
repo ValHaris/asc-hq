@@ -50,7 +50,7 @@ class SpawnObject : public GameAction {
       virtual ActionResult verify();
       
       virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream ) const;
       
 };
 

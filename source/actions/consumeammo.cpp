@@ -62,7 +62,7 @@ void ConsumeAmmo::readData ( tnstream& stream )
 };
       
       
-void ConsumeAmmo::writeData ( tnstream& stream )
+void ConsumeAmmo::writeData ( tnstream& stream ) const
 {
    stream.writeInt( 1 );
    stream.writeInt( vehicleID );

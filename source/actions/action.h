@@ -61,7 +61,7 @@ class GameAction {
       virtual ActionResult postCheck() {return ActionResult(0);};
       
       virtual void readData ( tnstream& stream ) = 0;
-      virtual void writeData ( tnstream& stream ) = 0;
+      virtual void writeData ( tnstream& stream ) const = 0;
       
       virtual GameActionID getID() const = 0;
       
@@ -70,11 +70,10 @@ class GameAction {
       
    public:
       ActionResult execute( const Context& context );
-      void redo( const Context& context );
       void undo( const Context& context );
       
       void read ( tnstream& stream );
-      void write ( tnstream& stream );
+      void write ( tnstream& stream ) const;
    
       virtual ASCString getDescription() const = 0;
       

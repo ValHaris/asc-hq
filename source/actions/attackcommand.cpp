@@ -30,6 +30,18 @@
 #include "vehicleattack.h"
 #include "action-registry.h"
 
+
+bool AttackCommand :: avail ( Vehicle* eht )
+{
+   if ( eht )
+      if ( eht->attacked == false )
+         if ( eht->weapexist() )
+            if (eht->typ->wait == false  ||  !eht->hasMoved() )
+                  return true;
+   return false;
+}
+
+
 AttackCommand :: AttackCommand ( Vehicle* unit )
    : UnitCommand ( unit ), targetUnitID(-1), weapon(-1), kamikaze(false)
 {
@@ -149,8 +161,7 @@ void AttackCommand :: setTarget( const MapCoordinate& target, int weapon )
       if ( fld->vehicle )
          targetUnitID = fld->vehicle->networkid;
       else
-         if ( fld->building )
-            targetBuilding = target;
+         targetBuilding = target;
       
       setState( SetUp );
    }
@@ -178,7 +189,7 @@ ActionResult AttackCommand::go ( const Context& context )
       
       atw = &attackableUnits[targetPosition];
    } else
-      if ( targetBuilding.valid() ) {
+      if ( targetBuilding.valid() && getMap()->getField(targetBuilding)->building ) {
          if ( attackableBuildings.find(targetBuilding) == attackableBuildings.end() )
             return ActionResult(217);
          atw = &attackableBuildings[targetBuilding];
@@ -194,7 +205,12 @@ ActionResult AttackCommand::go ( const Context& context )
    if ( !atw ) 
       return ActionResult(217);
    
-   return (new VehicleAttackAction(getMap(), getUnitID(), targetPosition, weapon ))->execute( context );
+   ActionResult res = (new VehicleAttackAction(getMap(), getUnitID(), targetPosition, weapon ))->execute( context );
+   if ( res.successful() )
+      setState( Completed );
+   else
+      setState( Failed );
+   return res;
     
 }
 
@@ -212,7 +228,7 @@ void AttackCommand :: readData ( tnstream& stream )
    weapon = stream.readInt();
 }
 
-void AttackCommand :: writeData ( tnstream& stream )
+void AttackCommand :: writeData ( tnstream& stream ) const
 {
    UnitCommand::writeData( stream );
    stream.writeInt( attackCommandVersion );
@@ -240,4 +256,7 @@ ASCString AttackCommand::getDescription() const
    return "Attack unit"; 
 }
 
+namespace {
+   const bool r1 = registerAction<AttackCommand> ( ActionRegistry::AttackCommand );
+}
 
