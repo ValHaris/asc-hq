@@ -902,7 +902,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\attackcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\changecontainerproperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\changeobjectproperty.cpp"
 					>
 				</File>
 				<File
@@ -915,6 +923,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\changeview.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\command.cpp"
 					>
 				</File>
 				<File
@@ -934,15 +946,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\actions\destructunit.cpp"
+					RelativePath="..\..\..\actions\destructcontainer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\actions\inflictunitdamage.cpp"
+					RelativePath="..\..\..\actions\inflictdamage.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\actions\moveunit.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\moveunitcommand.cpp"
 					>
 				</File>
 				<File
@@ -954,11 +970,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\removeobject.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\spawnobject.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\actions\unitaction.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\unitcommand.cpp"
 					>
 				</File>
 				<File

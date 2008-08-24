@@ -352,11 +352,11 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
          return;
       }
       
-      for ( set<MapCoordinate3D>::iterator i = move->getReachableFields().begin(); i != move->getReachableFields().end(); ++i )
+      for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFields().begin(); i != move->getReachableFields().end(); ++i )
          actmap->getField( *i)->a.temp = 1;
 
       // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
-      for ( set<MapCoordinate3D>::iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
+      for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
          actmap->getField( *i)->a.temp = 2;
       displaymap();
       NewGuiHost::pendingCommand = move;

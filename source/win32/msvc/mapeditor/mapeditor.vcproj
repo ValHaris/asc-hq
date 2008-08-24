@@ -714,6 +714,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\changeobjectproperty.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\changeunitmovement.cpp"
 					>
 				</File>
@@ -723,6 +727,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\changeview.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\command.cpp"
 					>
 				</File>
 				<File
@@ -738,11 +746,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\actions\destructunit.cpp"
+					RelativePath="..\..\..\actions\destructcontainer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\actions\inflictunitdamage.cpp"
+					RelativePath="..\..\..\actions\inflictdamage.cpp"
 					>
 				</File>
 				<File
@@ -751,6 +759,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\removemine.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\removeobject.cpp"
 					>
 				</File>
 				<File

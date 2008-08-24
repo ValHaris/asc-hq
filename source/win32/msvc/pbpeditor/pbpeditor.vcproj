@@ -759,14 +759,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\actions\destructunit.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\actions\inflictunitdamage.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\actions\registerunitrftarget.cpp"
 					>
 				</File>

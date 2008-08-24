@@ -1297,7 +1297,7 @@ void logtoreplayinfo ( const Command& command  )
 }
 
 
-void logtoreplayinfo ( GameMap* map, const Command& command  )
+void logActiontoreplayinfo ( GameMap* map, const Command& command  )
 {
    logtoreplayinfo( command );
 }
@@ -2774,5 +2774,5 @@ void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticState
 void hookReplayToSystem()
 {
    DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
-   postActionExecution.connect( SigC::slot( &logtoreplayinfo ));
+   postActionExecution.connect( SigC::slot( &logActiontoreplayinfo ));
 }

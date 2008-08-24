@@ -24,7 +24,7 @@
 #include "../vehicle.h"
 #include "../gamemap.h"
      
-ConsumeResource::ConsumeResource( ContainerBase* container, const Resources& toGet, bool globalStorage )
+ConsumeResource::ConsumeResource( ContainerBase* container, const Resources& toGet )
    : ContainerAction( container )
 {
    this->toGet = toGet;

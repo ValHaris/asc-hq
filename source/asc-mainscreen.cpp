@@ -44,8 +44,10 @@
 #include "dialog.h"
 #include "widgets/textrenderer-addons.h"
 
+#ifdef LUAINTERFACE
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
+#endif
 
 #include "dialogs/fileselector.h"
 
@@ -745,6 +747,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
                return true;
 
+#ifdef LUAINTERFACE
             case SDLK_F11: {
                ASCString file = selectFile( "*.lua", true );
                if ( file.size() ) {
@@ -753,7 +756,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
             }
                return true;
-               
+#endif               
             case SDLK_1:
                execUserAction_ev ( ua_changeresourceview );
                return true;
