@@ -39,12 +39,13 @@ int attackCommandFunc( int veh, int x, int y )
    if ( !AttackCommand::avail( unit ))   
       return 202;
    
-   AttackCommand ac( unit );
-   ac.setTarget( MapCoordinate(x,y),-1);
-   ActionResult res = ac.execute( createContext( actmap ) );
-   if ( res.successful() )
+   auto_ptr<AttackCommand> ac( new AttackCommand(unit) );
+   ac->setTarget( MapCoordinate(x,y),-1);
+   ActionResult res = ac->execute( createContext( actmap ) );
+   if ( res.successful() ) {
+      ac.release();
       return 0;
-   else
+   } else
       return res.getCode();
    
 }

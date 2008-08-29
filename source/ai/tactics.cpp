@@ -296,17 +296,19 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
    if ( veh->attacked )
       return result;
 
-   AttackCommand va ( veh );
-   ActionResult res = va.searchTargets();
+   auto_ptr<AttackCommand> va (new AttackCommand( veh ));
+   ActionResult res = va->searchTargets();
    if ( !res.successful() )
       displaymessage ( "AI :: executeMoveAttack \n error in attack step 2 with unit %d", 1, veh->networkid );
 
    VehicleTypeEfficiencyCalculator vtec( *this, veh, mv->enemy );
 
-   va.setTarget( MapCoordinate( mv->attackx, mv->attacky), mv->weapNum );
-   res = va.execute( getContext() );
+   va->setTarget( MapCoordinate( mv->attackx, mv->attacky), mv->weapNum );
+   res = va->execute( getContext() );
    if ( !res.successful() )
       displaymessage ( "AI :: executeMoveAttack \n error in attack step 3 with unit %d", 1, veh->networkid );
+   else
+      va.release();
 
    vtec.calc();
 
@@ -813,14 +815,18 @@ AI::AiResult AI::tactics( void )
                            if ( finalOrder[i] < 0 )
                               warning("!!!");
 
-                           AttackCommand va ( a );
-                           va.searchTargets();
+                           auto_ptr<AttackCommand> va ( new AttackCommand ( a ));
+                           va->searchTargets();
                            
                            VehicleTypeEfficiencyCalculator vtec (*this, finalPositions[finalOrder[i]], enemy );
-                           va.setTarget( enemy->getPosition() );
-                           ActionResult res = va.execute( getContext() );                           
+                           va->setTarget( enemy->getPosition() );
+                           ActionResult res = va->execute( getContext() );                           
                            if ( !res.successful() && strictChecks )
                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+                           
+                           if ( res.successful() )
+                              va.release();
+                             
 
                            vtec.calc();
 

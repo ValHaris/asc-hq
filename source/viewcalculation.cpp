@@ -323,9 +323,6 @@ int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int ad
 
 int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, bool disableShareView, const Context* context )
 {
-   ChangeView::ViewState* viewState = NULL;
-   if ( context )
-      viewState = new ChangeView::ViewState();
    
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
@@ -340,6 +337,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
                tfield* fld = gamemap->getField(x,y);
                
                if ( player == 0 )
+                  // first player in loop, so we save the current state as the 'original' state
                   fld->temp3 = fld->visible;
                
                if ( player_fieldcount_mask & (1 << player ))
@@ -350,22 +348,22 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
          
       }
       
-   if ( viewState && viewState->size() ) {
+   if ( context ) {
+      ChangeView::ViewState viewState;
       for ( int y = 0; y < gamemap->ysize; ++y )
          for ( int x = 0; x < gamemap->xsize; ++x ) {
             tfield* fld = gamemap->getField(x,y);
             if ( fld->visible != fld->temp3 ) {
                // we are running under action control, the change shall be done by the action and not here,
                // so we are undoing our change for the moment
-               (*viewState)[MapCoordinate(x,y)] = fld->visible;
+               viewState[MapCoordinate(x,y)] = fld->visible;
                fld->visible = fld->temp3;
             }
          }
       
-      (new ChangeView(gamemap,*viewState))->execute(*context);
+      (new ChangeView(gamemap,viewState))->execute(*context);
    }
    
-   delete viewState;
    return fieldsChanged;
 }
 

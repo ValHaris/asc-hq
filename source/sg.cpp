@@ -620,6 +620,7 @@ void undo()
       actmap->actions.undo( createContext( actmap ) );  
       displaymap();
       mapChanged(actmap);
+      updateFieldInfo();
    }
 }
 
