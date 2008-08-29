@@ -20,7 +20,7 @@ libmapactions_la_SOURCES	= spawnobject.cpp changeview.cpp removemine.cpp removeo
 libmapactions_la_LIBADD		= @SDL_LIBS@
 
 libfullgameactions_la_SOURCES	= containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp \
-										unitcommand.cpp attackcommand.cpp moveunitcommand.cpp 
+										unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp
 libfullgameactions_la_LIBADD		= @SDL_LIBS@
 
 

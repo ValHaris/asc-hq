@@ -726,27 +726,4 @@ ContainerBase ::Work* ContainerBase ::spawnWorkClasses( bool justQuery )
 }
 
 
-void ContainerBase :: convert( int player, Context& context )
-{
-   if ( getOwner() < 8 )
-      removeview();
-/*
-   Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
-   if ( i != gamemap->player[oldcol].buildingList.end())
-      gamemap->player[oldcol].buildingList.erase ( i );
-
-   gamemap->player[player].buildingList.push_back( this );
-*/
-   color = player * 8;
-
-   if ( player < 8 )
-      addview();
-
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) 
-            (*i)->convert( player );
-
-   conquered();
-   anyContainerConquered(this);
-}
 

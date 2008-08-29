@@ -106,8 +106,11 @@ class  Building : public ContainerBase {
     
     //! changes the building's owner. \param player range: 0 .. 8
     void convert ( int player, bool recursive = true );
-    void convert( int player, Context& context );
 
+    //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
+    void registerForNewOwner( int player );
+
+    
     //! Adds the view and jamming of the building to the player's global radar field
     void addview();
 

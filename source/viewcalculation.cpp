@@ -338,25 +338,32 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
          for ( int y = 0; y < gamemap->ysize; ++y )
             for ( int x = 0; x < gamemap->xsize; ++x ) {
                tfield* fld = gamemap->getField(x,y);
-               int oldview = fld->visible;
+               
+               if ( player == 0 )
+                  fld->temp3 = fld->visible;
                
                if ( player_fieldcount_mask & (1 << player ))
                   fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
                else
                   evaluatevisibilityfield ( gamemap, fld, player, add, initial );
-            
-               if ( (fld->visible != oldview) && viewState ) {
-                  // we are running under action control, the change shall be done by the action and not here,
-                  // so we are undoing our change for the moment
-                  (*viewState)[MapCoordinate(x,y)] = fld->visible;
-                  fld->visible = oldview;
-               }
             }
          
       }
       
-   if ( viewState && viewState->size() ) 
+   if ( viewState && viewState->size() ) {
+      for ( int y = 0; y < gamemap->ysize; ++y )
+         for ( int x = 0; x < gamemap->xsize; ++x ) {
+            tfield* fld = gamemap->getField(x,y);
+            if ( fld->visible != fld->temp3 ) {
+               // we are running under action control, the change shall be done by the action and not here,
+               // so we are undoing our change for the moment
+               (*viewState)[MapCoordinate(x,y)] = fld->visible;
+               fld->visible = fld->temp3;
+            }
+         }
+      
       (new ChangeView(gamemap,*viewState))->execute(*context);
+   }
    
    delete viewState;
    return fieldsChanged;

@@ -88,18 +88,16 @@ GameActionID ChangeContainerProperty::getID() const
 
 int ChangeContainerProperty::getUnitProperty()
 {
+   /*
    switch ( property ) {
       case Owner: return getContainer()->getOwner();
-   };
+   };*/
    throw ActionResult(21203, getContainer() );
 }
 
 void ChangeContainerProperty::setUnitProperty( int value, const Context& context )
 {
    switch ( property ) {
-      case Owner: 
-         getContainer()->convert( value );;
-         break;
       default:
          throw ActionResult(21203, getContainer() );
    };

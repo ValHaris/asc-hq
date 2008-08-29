@@ -285,7 +285,10 @@ class UnitHooveringLogic {
         as parameter (values [0..8]) )
     */
     void convert ( int player, bool recursive = true );
-    void convert( int player, Context& context );
+    
+    
+    //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
+    void registerForNewOwner( int player );
 
     //! sets the status of the unit's energy generator
     void setGeneratorStatus( bool status );

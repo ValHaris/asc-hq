@@ -821,7 +821,7 @@ void Vehicle::convert ( int col, bool recursive )
 
    gamemap->player[col].vehicleList.push_back( this );
 
-   color = col << 3;
+   color = col*8;
 
    if ( recursive )
       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
@@ -833,14 +833,18 @@ void Vehicle::convert ( int col, bool recursive )
    anyContainerConquered(this);
 }
 
-void Vehicle::convert( int player, Context& context )
+
+void Vehicle::registerForNewOwner( int player )
 {
-   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
-      (new DestructContainer(this))->execute(context);
-      return;
-   }
-   
-   
+   int oldcol = getOwner();
+
+   Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
+   if ( i != gamemap->player[oldcol].vehicleList.end())
+      gamemap->player[oldcol].vehicleList.erase ( i );
+
+   gamemap->player[player].vehicleList.push_back( this );
+
+   color = player*8;
 }
 
 

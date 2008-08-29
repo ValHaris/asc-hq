@@ -40,6 +40,7 @@ class Player;
     was a container
 */
 class ContainerBase {
+      friend class ConvertContainer; 
    protected:
       GameMap* gamemap;
       ContainerBase* cargoParent;
@@ -147,7 +148,9 @@ class ContainerBase {
       Player& getOwningPlayer() const;;
       
       virtual void convert ( int player, bool recursive = true ) = 0;
-      virtual void convert( int player, Context& context );
+      
+      //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
+      virtual void registerForNewOwner( int player ) = 0;
       
 
 

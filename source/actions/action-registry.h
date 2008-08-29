@@ -42,7 +42,8 @@ namespace ActionRegistry {
                   AttackCommand,
                   MoveUnitCommand,
                   RemoveObject,
-                  ChangeObjectProperty
+                  ChangeObjectProperty,
+                  ConvertContainer
       
    };
 };

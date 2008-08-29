@@ -25,6 +25,7 @@
 #include "changeunitproperty.h"
 #include "consumeresource.h"
 #include "changeview.h"
+#include "convertcontainer.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"
@@ -395,9 +396,10 @@ ActionResult MoveUnit::runAction( const Context& context )
             (new UnitFieldRegistration( vehicle, *pos, UnitFieldRegistration::RegisterOnField ))->execute( context );
             
             if (cn->getOwner() != vehicle->getOwner() && fld->building && getMap()->getPlayer(fld->building).diplomacy.isHostile( vehicle) ) {
-               fld->building->convert( vehicle->color / 8 );
+               (new ConvertContainer( fld->building, vehicle->getOwner()))->execute(context);
                if ( fieldvisiblenow ( fld, context.viewingPlayer ) || context.viewingPlayer  == vehicle->getOwner() )
                   SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
+               viewInputChanged = true;
            }
            mapDisplayUpToDate = false;
 

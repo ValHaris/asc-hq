@@ -57,7 +57,8 @@ libdirectunitactions_la_OBJECTS =  \
 libfullgameactions_la_DEPENDENCIES =
 am_libfullgameactions_la_OBJECTS = containeraction.lo \
 	consumeresource.lo unitfieldregistration.lo vehicleattack.lo \
-	moveunit.lo unitcommand.lo attackcommand.lo moveunitcommand.lo
+	moveunit.lo unitcommand.lo attackcommand.lo moveunitcommand.lo \
+	convertcontainer.lo
 libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo changeview.lo \
@@ -264,7 +265,7 @@ libmiscactions_la_LIBADD = @SDL_LIBS@
 libmapactions_la_SOURCES = spawnobject.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
 libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp unitfieldregistration.cpp vehicleattack.cpp moveunit.cpp \
-										unitcommand.cpp attackcommand.cpp moveunitcommand.cpp 
+										unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp
 
 libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -341,6 +342,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeresource.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containeraction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/convertcontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructcontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictdamage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@

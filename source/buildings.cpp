@@ -157,61 +157,28 @@ void Building :: convert ( int player, bool recursive )
    anyContainerConquered(this);
 }
 
-void Building :: convert( int player, Context& context )
+
+void Building :: registerForNewOwner( int player )
 {
-   if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {
-      (new DestructContainer(this))->execute(context);
-      return;
-   }
-
-/*
-   int oldnetcontrol = netcontrol;
-   netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
-   Resources put = putResource( actstorage, false );
-   actstorage -= put;
-
-   netcontrol = oldnetcontrol;
-   */
-
-   /*
-   int oldcol = getOwner();
-
-   #ifdef sgmain
-   if ( oldcol == 8 )
-      for ( int r = 0; r < 3; r++ )
-         if ( gamemap->isResourceGlobal( r )) {
-            gamemap->bi_resource[player].resource(r) += actstorage.resource(r);
-            actstorage.resource(r) = 0;
-         }
-
-   #endif
-   
-   */
-   
    int oldcol = getOwner();
    
-   if ( getOwner() != 8 )
+   if ( oldcol < 8 )
       removeview();
-
+   
    Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
    if ( i != gamemap->player[oldcol].buildingList.end())
       gamemap->player[oldcol].buildingList.erase ( i );
 
    gamemap->player[player].buildingList.push_back( this );
-
+   
    color = player * 8;
-
+  
    if ( player < 8 )
       addview();
-
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) 
-            (*i)->convert( player );
-
-   conquered();
-   anyContainerConquered(this);
+   
 }
 
+  
 
 
 const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const
