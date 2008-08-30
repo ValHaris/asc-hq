@@ -35,6 +35,7 @@
 #include "actions/changeunitproperty.h"
 #include "actions/spawnobject.h"
 #include "actions/destructcontainer.h"
+#include "actions/unitfieldregistration.h"
 
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
@@ -482,6 +483,54 @@ void Vehicle :: setNewHeight( int bitmappedheight )
 }
 
 
+void Vehicle::setMovement( int newmove, bool recursive, const Context& context )
+{
+   if ( newmove < 0 )
+      newmove = 0;
+
+   if ( recursive && typ)
+      if ( typ->movement[ log2 ( height ) ] ) {
+         double diff = _movement - newmove;
+         double perc = diff / typ->movement[ log2 ( height ) ] ;
+         if ( cargoNestingDepth() == 0 )
+            perc /= typ->cargoMovementDivisor;
+         for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+            if ( *i ) 
+               (*i)->decreaseMovement ( perc, true, context);
+   }
+   
+   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newmove ))->execute( context );
+}
+
+void Vehicle::decreaseMovement( float fraction, bool recursive, const Context& context )
+{
+   int newMovement = int(ceil(_movement * (1.0 - fraction)));
+   if ( newMovement < 0 )
+     newMovement = 0;
+  
+   if ( newMovement > maxMovement() )
+     newMovement = maxMovement();
+  
+   if ( recursive ) 
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->decreaseMovement ( fraction, true, context);
+   
+   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newMovement ))->execute( context );
+}
+
+void Vehicle::clearMovement( bool recursive, const Context& context )
+{
+   if ( recursive ) 
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->clearMovement ( true, context);
+   
+   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, 0))->execute( context );
+}
+
+
+
 void Vehicle :: setMovement ( int newmove, double cargoDivisor )
 {
 
@@ -777,6 +826,15 @@ void Vehicle :: setnewposition ( const MapCoordinate& mc )
    setnewposition ( mc.x, mc.y );
 }
 
+void Vehicle :: setnewposition ( const MapCoordinate& mc, const Context& context )
+{
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setnewposition ( mc, context );
+   (new UnitFieldRegistration( this, MapCoordinate3D(mc,0), UnitFieldRegistration::Position ))->execute( context );
+}
+
+
 /*
 int Vehicle :: getstrongestweapon( int aheight, int distance)
 {
@@ -1066,14 +1124,15 @@ void Vehicle::setAttacked()
          (*i)->setAttacked();
 }
 
-void Vehicle::setAttacked( const Context& context )
+void Vehicle::setAttacked( bool recursive, const Context& context )
 {
    GameAction* a = new ChangeUnitProperty( this, ChangeUnitProperty::AttackedFlag, 1 );
    a->execute( context );
    
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) 
-         (*i)->setAttacked( context );
+   if ( recursive )
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->setAttacked( true, context );
 }
 
 

@@ -26,7 +26,9 @@
 #include "unitaction.h"
 #include "action-registry.h"
 
-
+/** Changes the properties of a unit. 
+    This is done none-recursively, so the cargo of a unit is not affected
+*/
 class ChangeUnitProperty : public UnitAction {
    public:
       enum Property { Experience, Movement, AttackedFlag, Height, Direction };

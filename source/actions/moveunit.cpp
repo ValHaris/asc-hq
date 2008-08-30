@@ -164,7 +164,7 @@ ActionResult MoveUnit::runAction( const Context& context )
       fueldist += mm.second;
 
       if ( next->hasAttacked )
-         vehicle->setAttacked( context );
+         vehicle->setAttacked( true, context );
 
 
       if ( next->getRealHeight() != pos->getRealHeight() && next->getRealHeight() >= 0 )
@@ -187,7 +187,7 @@ ActionResult MoveUnit::runAction( const Context& context )
 
 
          if ( vehicle ) {
-            (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::Position ))->execute( context );
+            vehicle->setnewposition(to, context );            
             (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::AddView ))->execute( context );
          }
 
@@ -219,7 +219,7 @@ ActionResult MoveUnit::runAction( const Context& context )
             
             
             if ( inhibitAttack )
-               vehicle->setAttacked( context );
+               vehicle->setAttacked( true, context );
          }
 
          
@@ -336,15 +336,12 @@ ActionResult MoveUnit::runAction( const Context& context )
 
       int newMovement = orgMovement - pos->dist;
 
-      (new UnitFieldRegistration( vehicle, *pos, UnitFieldRegistration::Position ))->execute( context );
+      vehicle->setnewposition( *pos, context );
 
       if ( vehicle->typ->movement[log2(orgHeight)] ) {
          int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
-//         if ( nm < 0 )
-//            result = -1;
          
-         
-         (new ChangeUnitProperty( vehicle, ChangeUnitProperty::Movement, nm ))->execute( context );
+         vehicle->setMovement( nm, true, context );
          
          // the unit will be shaded if movement is exhausted
          if ( vehicle->getMovement() < 10 )
@@ -355,8 +352,8 @@ ActionResult MoveUnit::runAction( const Context& context )
       (new ConsumeResource( vehicle, Resources(0,0,fueldist * vehicle->typ->fuelConsumption / maxmalq )))->execute( context );
 
       if ( fld->vehicle || fld->building ) {
-         (new ChangeUnitProperty( vehicle, ChangeUnitProperty::Movement, 0 ))->execute( context );
-         (new ChangeUnitProperty( vehicle, ChangeUnitProperty::AttackedFlag, 1 ))->execute( context );
+         vehicle->clearMovement( true, context );
+         vehicle->setAttacked( true, context );
       }
 
       if ( vehicle ) {

@@ -112,7 +112,7 @@ void ChangeUnitProperty::setUnitProperty( Property property, int value, const Co
          getUnit()->experience = value;
          break;
       case Movement:
-         getUnit()->setMovement( value );
+         getUnit()->setMovement( value, 0 );
          break;
       case AttackedFlag: 
          getUnit()->attacked = (value != 0) ;

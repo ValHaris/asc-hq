@@ -90,7 +90,9 @@ class UnitHooveringLogic {
 
     //! the the unit and all cargo to #attacked = true
     void setAttacked();
-    void setAttacked( const Context& context );
+    
+    //! the the unit and (optionally) all cargo to #attacked = true
+    void setAttacked( bool recursive, const Context& context );
 
     //! the current level of height ( BITMAPPED ! )
     int          height;
@@ -169,6 +171,11 @@ class UnitHooveringLogic {
      */
     void setMovement ( int newmove, double cargoDivisor = -1 );
 
+    //! set the movement this unit and (optionally) all cargo to 0
+    void clearMovement( bool recursive, const Context& context );
+    void setMovement( int newmove, bool recursive, const Context& context );
+    void decreaseMovement( float fraction, bool recursive, const Context& context );
+    
     //! did the unit move this turn
     bool hasMoved ( void ) const;
 
@@ -280,6 +287,7 @@ class UnitHooveringLogic {
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
     void setnewposition ( const MapCoordinate& mc );
+    void setnewposition ( const MapCoordinate& mc, const Context& context );
 
     /** converts the unit so it is owned by 'player'. Note that the player is passed
         as parameter (values [0..8]) )
