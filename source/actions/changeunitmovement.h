@@ -40,6 +40,7 @@ class ChangeUnitMovement : public UnitAction {
       //! delta: true=movement is a relative value which will be subtracted
       //!        false=movement is the new absolute value
       ChangeUnitMovement( GameMap* gamemap, int vehicleID, int movement, bool delta = false );
+      ChangeUnitMovement( Vehicle* veh, int movement, bool delta = false );
       
       ASCString getDescription() const;
       

@@ -213,22 +213,22 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
 
 void MoveUnitCommand :: setDestination( const MapCoordinate3D& destination )
 {
-   if ( getState() == Evaluated ) {
+   // if ( getState() == Evaluated ) {
       this->destination = destination;
       setState( SetUp );
-   }
+   // }
 }
 
 void MoveUnitCommand :: setDestination( const MapCoordinate& destination )
 {
-   if ( getState() == Evaluated ) {
+   // if ( getState() == Evaluated ) {
       for ( set<MapCoordinate3D>::iterator i = reachableFields.begin(); i != reachableFields.end(); ++i )
          if ( destination.x == i->x && destination.y == i->y ) {
             this->destination = *i;
             break;
          }
       setState( SetUp );
-   }
+   // }
 }
 
 bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )

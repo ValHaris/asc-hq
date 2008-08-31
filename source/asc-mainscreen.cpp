@@ -44,11 +44,6 @@
 #include "dialog.h"
 #include "widgets/textrenderer-addons.h"
 
-#ifdef LUAINTERFACE
-#include "lua/luarunner.h"
-#include "lua/luastate.h"
-#endif
-
 #include "dialogs/fileselector.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
@@ -242,6 +237,11 @@ void Menu::setup()
    addbutton ( "benchmark without view calc", ua_benchgamewov );
    addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "compiler benchmark (AI)", ua_aibench );
+   currentMenu->addSeparator();
+#ifdef LUAINTERFACE
+   addbutton ( "Export command stack",ua_writeLuaCommands );
+   addbutton ( "Run Script", ua_runLuaCommands );
+#endif   
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );
@@ -747,16 +747,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                }
                return true;
 
-#ifdef LUAINTERFACE
-            case SDLK_F11: {
-               ASCString file = selectFile( "*.lua", true );
-               if ( file.size() ) {
-                  LuaState state;
-                  executeFile( state, file );
-               }
-            }
-               return true;
-#endif               
             case SDLK_1:
                execUserAction_ev ( ua_changeresourceview );
                return true;

@@ -152,6 +152,12 @@
 #include "memory-measurement.h"
 #include "dialogs/mailoptionseditor.h"
 
+#ifdef LUAINTERFACE
+# include "lua/luarunner.h"
+# include "lua/luastate.h"
+#endif
+
+
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
 # include  "win32/msvc/mdump.h"
@@ -1194,6 +1200,26 @@ void viewMiningPower()
 }
 
 
+void writeLuaCommands() 
+{
+   ASCString filename =  selectFile("*.lua", false );
+   if ( !filename.empty() ) {
+      tn_file_buf_stream stream ( filename, tnstream::writing );
+      stream.writeString( actmap->actions.getCommands() ); 
+   }
+}
+
+#ifdef LUAINTERFACE
+void selectAndRunLuaScript()
+{
+   ASCString file = selectFile( "*.lua", true );
+   if ( file.size() ) {
+      LuaState state;
+      executeFile( state, file );
+      updateFieldInfo();
+   }
+}
+#endif               
 
 
 // user actions using the new event system
@@ -1371,6 +1397,15 @@ void execuseraction2 ( tuseractions action )
       case ua_createReminder: newreminder(); 
          break;
          
+      case ua_writeLuaCommands: writeLuaCommands();
+         break;
+         
+#ifdef LUAINTERFACE 
+      case ua_runLuaCommands: selectAndRunLuaScript();
+         break;
+      
+#endif
+                  
       default:
          break;
    }

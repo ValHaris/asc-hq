@@ -51,7 +51,7 @@
 #include "actions/selfdestruct.h"
 #include "actions/attackcommand.h"
 #include "actions/moveunitcommand.h"
-
+#include "actions/putobjectcommand.h"
 
 bool commandPending()
 {
@@ -1481,7 +1481,6 @@ class RemoveMine : public GuiFunction
 
 class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
       Vehicle* veh;
-      bool buttonDone( std::map<int,bool>& map, int id ) { return map.find( id ) != map.end(); };
 
       void mapDeleted( GameMap& map )
       {
@@ -1496,9 +1495,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkObject( tfield* fld, ObjectType* objtype, Mode mode );
 
-      void search ( const MapCoordinate& pos, int& num, int pass );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
@@ -1518,12 +1515,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC
 bool ObjectBuildingGui::init( Vehicle* vehicle )
 {
    veh = vehicle;
-   int num = 0;
-
-   for ( int i = 0; i< 6; ++i)
-      search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
-
-   return num > 0;
+   return true;
 }
 
 
@@ -1545,8 +1537,12 @@ checkObject
 
 void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( num ) {
+   PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
+   if ( num && poc ) {
       tfield* fld = actmap->getField(pos);
+      
+      poc->setTarget( pos, abs(num) );
+      
       ObjectType* obj = objectTypeRepository.getObject_byID( abs(num) );
 
       RecalculateAreaView rav ( actmap, pos, maxViewRange / maxmalq + 1 );
@@ -1557,24 +1553,16 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
          rav.removeView();
       
 
-      if ( !fld->checkforobject ( obj ) ) {
-         assert(num>0);
-         fld-> addobject ( obj );
-         logtoreplayinfo ( rpl_buildobj2, pos.x, pos.y, obj->id, veh->networkid );
-      } else {
-         assert(num<0);
-         fld->removeobject ( obj );
-         logtoreplayinfo ( rpl_remobj2, pos.x, pos.y, obj->id, veh->networkid );
-      }
+      ActionResult res = poc->execute( createContext( actmap ));
 
       if ( objectAffectsVisibility )
          rav.addView();
 
-      veh->getResource( num > 0 ? obj->buildcost : obj->removecost, false );
-
-      veh->decreaseMovement ( num > 0 ? obj->build_movecost : obj->remove_movecost );
-   }
-   moveparams.movestatus = 0;
+   } else
+      delete NewGuiHost::pendingCommand;
+      
+   NewGuiHost::pendingCommand = NULL;
+   
    actmap->cleartemps();
    NewGuiHost::popIconHandler();
    repaintMap();
@@ -1655,35 +1643,6 @@ ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, ContainerBase* s
 }
 
 
-bool ObjectBuildingGui::checkObject( tfield* fld, ObjectType* objtype, Mode mode )
-{
-    if ( !objtype || !fld )
-       return false;
-
-    if ( mode == Build ) {
-       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0
-            &&  !fld->checkforobject ( objtype )
-            && objtype->techDependency.available(actmap->player[veh->getOwner()].research) ){
-//            && !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
-
-          if ( veh->getResource(objtype->buildcost, true) == objtype->buildcost && veh->getMovement() >= objtype->build_movecost )
-             return true;
-       }
-    } else {
-       if ( fld->checkforobject ( objtype ) ) {
-//          &&  !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
-          Resources r = objtype->removecost;
-          for ( int i = 0; i <3; ++i )
-             if ( r.resource(i) < 0 )
-                r.resource(i) = 0;
-
-          if ( veh->getResource(r, true) == r && veh->getMovement() >= objtype->remove_movecost )
-             return true;
-       }
-    }
-    return false;
-}
-
 
 void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id )
 {
@@ -1693,92 +1652,33 @@ void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerB
     ++num;
 }
 
-void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
-{
-   tfield* fld =  actmap->getField(pos);
-   if ( !fld )
-      return;
-
-   if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
-      return;
-
-   std::map<int,bool> buttons;
-   
-   for ( int i = 0; i < veh->typ->objectsBuildable.size(); i++ )
-     for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ )
-       if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Build ))
-          if ( pass==1 ) {
-            if ( !buttonDone( buttons, j ))
-               addButton(num, pos, veh, j);
-            buttons[j] = true;
-          } else {
-            ++num;
-            fld->a.temp = 1;
-          }
-
-
-   for ( int i = 0; i < veh->typ->objectGroupsBuildable.size(); i++ )
-     for ( int j = veh->typ->objectGroupsBuildable[i].from; j <= veh->typ->objectGroupsBuildable[i].to; j++ )
-       for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
-          ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
-          if ( objtype->groupID == j )
-             if ( checkObject( fld, objtype, Build ))
-                if ( pass==1 ) {
-                  if ( !buttonDone( buttons, objtype->id ))
-                     addButton(num, pos, veh, objtype->id);
-                  buttons[objtype->id] = true;
-                } else {
-                  ++num;
-                  fld->a.temp = 1;
-                }
-       }
-
-   for ( int i = 0; i < veh->typ->objectsRemovable.size(); i++ )
-     for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ )
-       if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Remove ))
-          if ( pass==1 ) {
-            if ( !buttonDone( buttons, -j ))
-               addButton(num, pos, veh, -j);
-            buttons[-j] = true;
-          } else {
-            ++num;
-            fld->a.temp = 1;
-          }
-
-
-   for ( int i = 0; i < veh->typ->objectGroupsRemovable.size(); i++ )
-     for ( int j = veh->typ->objectGroupsRemovable[i].from; j <= veh->typ->objectGroupsRemovable[i].to; j++ )
-       for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
-          ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
-          if ( objtype->groupID == j )
-             if ( checkObject( fld, objtype, Remove ))
-                if ( pass==1 ) {
-                  if ( !buttonDone( buttons, -objtype->id ))
-                     addButton(num, pos, veh, -objtype->id);
-                  buttons[-objtype->id] = true;
-                } else {
-                  ++num;
-                  fld->a.temp = 1;
-                }
-       }
-
-}
 
 
 void ObjectBuildingGui::eval( const MapCoordinate& mc, ContainerBase* subject )
 {
-   int num = 0;
-   if ( mc.x < actmap->xsize || mc.y < actmap->ysize )
-      if ( veh )
-         if ( beeline ( mc, veh->getPosition() ) == 10 )
-            search( mc, num, 1 );
+   PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
+   
+   if ( poc ) {
+      int num = 0;
+      const vector<int>& creatable = poc->getCreatableObjects( mc );
+      for ( vector<int>::const_iterator i = creatable.begin(); i != creatable.end(); ++i ) {
+         addButton(num, mc, veh, *i);
+      }
+      
+      
+      const vector<int>& removable = poc->getRemovableObjects( mc ); 
+      for ( vector<int>::const_iterator i = removable.begin(); i != removable.end(); ++i ) {
+         addButton(num, mc, veh, -(*i));
+      }
+      
+      GuiButton* b = host->getButton(num);
+      b->registerFunc( this, mc, subject, 0 );
+      b->Show();
+      ++num;
 
-   GuiButton* b = host->getButton(num);
-   b->registerFunc( this, mc, subject, 0 );
-   b->Show();
-   ++num;
+      host->disableButtons(num);
+   }
 
-   host->disableButtons(num);
 }
 
 
@@ -1809,28 +1709,32 @@ class BuildObject : public GuiFunction
 bool BuildObject::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    tfield* fld = actmap->getField(pos);
-   if ( fld && fld->vehicle )
-      if (fld->vehicle->color == actmap->actplayer * 8)
-         if ( fld->vehicle->typ->objectsBuildable.size() || fld->vehicle->typ->objectsRemovable.size() || fld->vehicle->typ->objectGroupsBuildable.size() || fld->vehicle->typ->objectGroupsRemovable.size())
-            if (!commandPending())
-               if ( !fld->vehicle->attacked )
-                  return true;
+   if (!commandPending())
+      if ( fld && fld->vehicle )
+         return PutObjectCommand::avail(fld->vehicle );
    return false;
 }
 
 void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( pendingVehicleActions.actionType == vat_nothing ) {
-
-      tfield* fld = actmap->getField(pos);
-      if ( fld->vehicle )
-         if ( objectBuildingGui.init( fld->vehicle )) {
-            moveparams.movestatus = 72;
-            NewGuiHost::pushIconHandler( &objectBuildingGui );
-            repaintMap();
-            updateFieldInfo();
-         } else
-            MessagingHub::Instance().statusInformation("can't build or remove any objects here");
+   tfield* fld = actmap->getField(pos);
+   if ( fld->vehicle ) {
+      auto_ptr<PutObjectCommand> poc ( new PutObjectCommand( actmap->getField(pos)->vehicle ));
+      ActionResult res =poc->searchFields(); 
+      if ( res.successful() ) {
+         vector<MapCoordinate> fields = poc->getFields();
+         for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
+             actmap->getField(*i)->a.temp = 1;
+         
+         NewGuiHost::pendingCommand = poc.get();
+         poc.release();
+         NewGuiHost::pushIconHandler( &objectBuildingGui );
+         
+         
+         repaintMap();
+         updateFieldInfo();
+      } else
+         MessagingHub::Instance().statusInformation("can't build or remove any objects here");
    }
 }
 

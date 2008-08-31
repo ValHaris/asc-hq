@@ -121,3 +121,11 @@ void ActionContainer::write ( tnstream& stream )
    stream.writeInt( counter );
    
 }
+
+ASCString ActionContainer::getCommands()
+{
+   ASCString cmd;  
+   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i )
+      cmd += (*i)->getCommandString() + "\n";
+   return cmd;
+}

@@ -66,7 +66,7 @@ am_libmapactions_la_OBJECTS = spawnobject.lo changeview.lo \
 libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
 libmiscactions_la_DEPENDENCIES =
 am_libmiscactions_la_OBJECTS = servicing.lo jumpdrive.lo \
-	selfdestruct.lo
+	selfdestruct.lo putobjectcommand.lo
 libmiscactions_la_OBJECTS = $(am_libmiscactions_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -260,7 +260,7 @@ libdirectunitactions_la_SOURCES = consumeammo.cpp inflictdamage.cpp destructcont
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp 
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
-libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp 
+libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp putobjectcommand.cpp
 libmiscactions_la_LIBADD = @SDL_LIBS@
 libmapactions_la_SOURCES = spawnobject.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
@@ -348,6 +348,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunitcommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/putobjectcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/registerunitrftarget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removemine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removeobject.Plo@am__quote@

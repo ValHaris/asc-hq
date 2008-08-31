@@ -50,6 +50,7 @@ class ActionContainer {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       
+      ASCString getCommands();
 };
 
 extern SigC::Signal2<void,GameMap*,const Command&> postActionExecution;

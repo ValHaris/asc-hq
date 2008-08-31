@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.1.90.2)
+AC_INIT(asc,2.1.90.3)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -190,9 +190,9 @@ AC_CHECK_LIB( SDL_image,
 #AC_MSG_RESULT("yes")
 
 
-AC_CHECK_LIB(lua5.1, 
+AC_CHECK_LIB(lua5.0, 
              lua_open,
-             AC_LIB_MISSING( Lua, http://www.lua.org/))
+             AC_LIB_MISSING( "Lua 5.0", http://www.lua.org/))
 
 
 LUA_FLAGS="-I/usr/include/lua50/"

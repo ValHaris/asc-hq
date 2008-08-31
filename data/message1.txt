@@ -238,4 +238,5 @@ Objecttype not available
 The given Objecttype does not reside on this field
 21503
 Invalid property specified
-
+21504
+No objects to create/remove

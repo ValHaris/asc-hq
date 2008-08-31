@@ -326,6 +326,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
    
    int initial = gamemap->getgameparameter ( cgp_initialMapVisibility );
    int fieldsChanged = 0;
+   bool firstLoop = true;
    for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
       if ( gamemap->player[player].exist() ) {
          int add = 0;
@@ -336,7 +337,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
             for ( int x = 0; x < gamemap->xsize; ++x ) {
                tfield* fld = gamemap->getField(x,y);
                
-               if ( player == 0 )
+               if ( firstLoop )
                   // first player in loop, so we save the current state as the 'original' state
                   fld->temp3 = fld->visible;
                
@@ -345,7 +346,8 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
                else
                   evaluatevisibilityfield ( gamemap, fld, player, add, initial );
             }
-         
+            
+         firstLoop = false;
       }
       
    if ( context ) {

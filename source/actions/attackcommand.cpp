@@ -154,7 +154,7 @@ void AttackCommand :: fieldChecker( const MapCoordinate& pos )
 void AttackCommand :: setTarget( const MapCoordinate& target, int weapon )
 {
    
-   if ( getState() == Evaluated ) {
+ //  if ( getState() == Evaluated ) {
       this->weapon = weapon;
       this->target  = target;
       tfield* fld = getMap()->getField( target );
@@ -164,7 +164,7 @@ void AttackCommand :: setTarget( const MapCoordinate& target, int weapon )
          targetBuilding = target;
       
       setState( SetUp );
-   }
+ //  }
 }
 
 ActionResult AttackCommand::go ( const Context& context )

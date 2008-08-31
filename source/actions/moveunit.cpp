@@ -352,8 +352,8 @@ ActionResult MoveUnit::runAction( const Context& context )
       (new ConsumeResource( vehicle, Resources(0,0,fueldist * vehicle->typ->fuelConsumption / maxmalq )))->execute( context );
 
       if ( fld->vehicle || fld->building ) {
-         vehicle->clearMovement( true, context );
-         vehicle->setAttacked( true, context );
+         vehicle->clearMovement( false, context );
+         vehicle->setAttacked( false, context );
       }
 
       if ( vehicle ) {

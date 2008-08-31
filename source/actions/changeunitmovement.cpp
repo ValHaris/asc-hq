@@ -31,6 +31,13 @@ ChangeUnitMovement::ChangeUnitMovement( GameMap* gamemap, int vehicleID, int mov
    this->delta = delta;
 }
       
+ChangeUnitMovement::ChangeUnitMovement( Vehicle* veh, int movement, bool delta )
+   : UnitAction( veh->getMap(), veh->networkid ), originalMovement(-1), resultingMovement(-1)
+{
+   this->movement = movement;
+   this->delta = delta;
+}
+      
       
 ASCString ChangeUnitMovement::getDescription() const
 {
