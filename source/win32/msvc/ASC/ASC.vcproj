@@ -946,6 +946,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\convertcontainer.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\destructcontainer.cpp"
 					>
 				</File>
@@ -959,6 +963,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\moveunitcommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\putobjectcommand.cpp"
 					>
 				</File>
 				<File
