@@ -1,0 +1,18 @@
+Gfx terrain System
+Advanced Strategic Command
+Specifications by GAMER
+Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club and Grom
+
+ID Bereiche ASC Terrain
+parent 500-599
+für neue Grafiken 2000-3999
+
+Frei ?
+
+belegt:
+
+2600-Berg64
+2601-2608 Vulkan
+2609-Berg-Plateau
+2610-Hoher Berg64
+2611-26xx Viewmodifikation

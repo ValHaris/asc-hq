@@ -12,18 +12,18 @@
    Features = conquer_buildings 
    Category = light_tracked_vehicle
    Armor = 350
+   Weight = 5
    View = 30
    Jamming = 0
    MaxSurvivableStorm = 150
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 5
 
    Height = ground_level 
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 250
+      fuel = 500
    } Tank
    FuelConsumption = 5
    Movement = 0 0 0 50 0 0 0 0 

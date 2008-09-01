@@ -5,12 +5,10 @@ VehicleType {
    parent = 400 401 402 410
    
    Description = constructing pioneers
-   Infotext = [Building und turretunit constructors are perhaps the most important constructing
-              vehicles. They are able to place new factories, weapon emplacements,
-              power stations, mines, and so on. Without at least one building
-              bonstructor, expansion is impossible.]
    picture = MK3i_piobuild.png
    GuideSortHelp = 554 558 0 0 3 0 0 0 0 0
+   Infotext = [Die Building Pioneers sind das Rückgrat des Basisaufbaus der Terraner. Sie errichten fst alle für die Grundversorung einer Basis notwendigen Gebäude, sowie elementare Turrets für die Basisverteidigung. Desweiteren sind sie in der Lage durch den Abbau von Wald, Steinen und Gebäuden Ressourcen aus ihrer Umgebung zu gewinnen. Ihre rudimentäre Bewaffung mit einem MG erfordert Schutz durch kampfstärkere Einheiten.
+]
 
    Armor = 250
    Transportation ->* VehicleType.TransTurretMed 

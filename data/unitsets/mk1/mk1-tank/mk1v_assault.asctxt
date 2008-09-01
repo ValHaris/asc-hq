@@ -2,16 +2,19 @@ VehicleType {
    Name = ASSAULT
    ID = 3
    parent = 291
+
    Description = assault tank
+   Picture = MK1v_assault.pcx
+   InfoImage = mk1v_assault.jpg
+   WreckageObject = 403
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Assault Tanks are less-than-subtle. They are fast, although not
               as fast ast the Light Tank, and they pack a punch, although
               not as much as the Heavy Combat Tank. An Assault Tank is made
               to run into enemy blockades, take the first beating while the
               backup arrives and still walk away in one piece. Perhaps the
-              best powerfull vehicle on the battlefield.]
-   Picture = MK1v_assault.pcx
-   WreckageObject = 403
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+              best powerfull vehicle on the battlefield.
+              InfoImage = BananaJoe]
 
    Armor -= 100
 

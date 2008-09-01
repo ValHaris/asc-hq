@@ -6,7 +6,8 @@ VehicleType {
    Infotext = [A Turret Emplacement is a fearsome structure. It is capable of
               demolishing tank platoons before the latter can even detect
               the Turret on their radars. Its only drawback is that it cannot
-              get a lock on very small targets.]
+              get a lock on very small targets.
+              InfoImage = BananaJoe]
    picture = MK1b_BIGGUN.pcx
    InfoImage = mk1b_biggun.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0

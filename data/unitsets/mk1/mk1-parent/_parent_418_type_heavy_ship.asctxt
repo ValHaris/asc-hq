@@ -17,7 +17,7 @@
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 5000
+      fuel = 2800
    } Tank
    FuelConsumption = 25
    Features = MoveDuringReactionFire
@@ -27,7 +27,7 @@
    MaxSurvivableStorm = 200
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 10000
+   Weight = 4000
    Construction { 
       Buildings = 
       Vehicles = 

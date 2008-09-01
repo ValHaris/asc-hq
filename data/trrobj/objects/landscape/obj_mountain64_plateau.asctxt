@@ -1,0 +1,21 @@
+ObjectType { 
+   Name = mountain plateau
+   ID = 2609
+   parent = 505
+   LinkableObjects = 2600
+   NetBehaviour = 
+
+   Weather = dry much_snow
+   dry { 
+      UseGFXpics = false
+      picture = obj_mountain64_plateau.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      Picture = obj_mountain64_plateau.png 65
+      GraphicOperations = Snow_const
+   } much_snow
+} ObjectType
+

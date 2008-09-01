@@ -19,7 +19,7 @@ VehicleType {
    MaxSurvivableStorm = 250
    ResourceDrillingRange = 0
    SelfRepairRate = 5
-   Weight = 10000
+   Weight = 3500
    Transportation ->* Vehicletype.TransMedCarrier 
    MovementSound = med_ship_a_s.ogg
 

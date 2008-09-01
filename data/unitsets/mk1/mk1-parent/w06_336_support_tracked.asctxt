@@ -9,6 +9,7 @@ VehicleType {
    WreckageObject = 497 496
 
    Armor = 450
+   Weight = 45
    View = 30
    Jamming = 0
    Features = leaves_tracks 
@@ -16,7 +17,6 @@ VehicleType {
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 45
 
    Height = ground_level 
    Tank { 

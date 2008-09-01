@@ -5,7 +5,7 @@ VehicleType {
    parent = 251
 
    Picture = mk3v_fh77.png
-   InfoImage = mk3v_fh77.png
+   InfoImage = mk3v_fh77.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Category = medium_wheeled_vehicle

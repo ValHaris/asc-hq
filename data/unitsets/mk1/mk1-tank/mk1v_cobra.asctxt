@@ -4,12 +4,14 @@ VehicleType {
    parent = 333
 
    Description = anti infantry tank
-   Infotext = [The Anti Infantry Tank is a special purpose vehicle. Armed with
-              a fast revolving, rapid firing chaingun, its only purpose is
-              to hunt down enemy infantrists.]
    picture = MK1v_COBRA.pcx
+   InfoImage = mk1v_cobra.jpg
    WreckageObject = 463
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [The Anti Infantry Tank is a special purpose vehicle. Armed with
+              a fast revolving, rapid firing chaingun, its only purpose is
+              to hunt down enemy infantrists.
+              InfoImage = BananaJoe]
 
    Armor += 50
    Weight += 5

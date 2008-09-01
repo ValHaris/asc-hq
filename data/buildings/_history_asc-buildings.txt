@@ -2,6 +2,10 @@ Grafiken: GAMER,Schicksal,AndreasK,Xyphagoroszh und Grom
 Spezifikationen: GAMER
 
 BUILDINGS HISTORY
+
+__________________
+Beta 06-08/08
+- Mine nicht mehr auf railroad baubar
 __________________
 09.08.2008 (GAMER)
 -Stadt kann von default-Einheiten betreten werden

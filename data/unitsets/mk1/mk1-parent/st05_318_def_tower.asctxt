@@ -12,7 +12,6 @@ VehicleType {
    Armor -= 400
    View = 60
    Transportation ->* VehicleType.TransLowTrooper3 
-   Weight = 1150
 
    Tank { 
       Energy = 0

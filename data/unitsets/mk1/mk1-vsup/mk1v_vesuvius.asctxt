@@ -4,13 +4,15 @@ VehicleType {
    parent = 336
    
    Description = constructor
+   picture = MK1v_vesuvius.pcx
+   InfoImage = mk1v_vesuvius.jpg
+   WreckageObject = 412
+   GuideSortHelp = 554 0 0 0 1 0 0 0 0 0
    Infotext = [Building und turretunit constructors are perhaps the most important constructing
               vehicles. They are able to place new factories, weapon emplacements,
               power stations, mines, and so on. Without at least one building
-              bonstructor, expansion is impossible.]
-   picture = MK1v_vesuvius.pcx
-   WreckageObject = 412
-   GuideSortHelp = 554 0 0 0 1 0 0 0 0 0
+              bonstructor, expansion is impossible.
+              InfoImage = BananaJoe]
 
    Armor -= 100
    Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization

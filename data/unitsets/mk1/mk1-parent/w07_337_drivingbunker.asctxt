@@ -9,7 +9,7 @@ VehicleType {
 
    Armor = 1000
    View = 40
-   Weight = 1000
+   Weight = 850
 
    Tank { 
       Energy = 0

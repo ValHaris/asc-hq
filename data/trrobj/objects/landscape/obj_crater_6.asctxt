@@ -6,6 +6,10 @@ ObjectType {
    Parent = 507
    ID = 2057
 
+   TerrainAccess { 
+      terrain_any = Lowland Road Railroad Runway Hard_sand Soft_sand ditch installation
+   } TerrainAccess { 
+
    dry { 
       UseGFXpics = false
       picture = obj_crater_6.png 1

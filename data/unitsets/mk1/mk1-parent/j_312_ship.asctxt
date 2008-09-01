@@ -12,7 +12,7 @@ VehicleType {
    Transportation ->* VehicleType.TransCruiser 
 
    Armor = 1400
-   Weight = 5000
+   Weight = 1400
    View = 30
    Jamming = 41
 

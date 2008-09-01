@@ -10,7 +10,7 @@ sowie zum anderen mit einem Maschinengewehr, das es ihm ermöglicht,
 sich auch gegen Bodeneinheiten zu verteidigen.
 Die geringe Sichtweite dieser Einheit macht zusätzliche Aufklärer
 wie den ORACLE, GRS erforderlich.
- ]
+InfoImage = BananaJoe ]
    Picture = MK1b_samturret.pcx
    InfoImage = mk1b_samturret.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0

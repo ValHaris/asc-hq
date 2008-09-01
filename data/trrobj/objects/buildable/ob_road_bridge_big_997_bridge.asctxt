@@ -32,7 +32,7 @@ ObjectType {
    TerrainAccess { 
       terrain_any = water river hillside railroad
       terrain_all = 
-      terrain_not = road bridge
+      terrain_not = road bridge lava
       terrain_kill = deep_water lava
    } TerrainAccess
    TerrainProperties_Filter = forest swamp snow deep_snow morass mud small_rocks large_rocks hillside

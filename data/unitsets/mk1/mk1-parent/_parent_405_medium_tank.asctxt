@@ -3,35 +3,38 @@ VehicleType {
    abstract = true
    ID = 405
    parent = 402
+
    Description = medium tank
    Infotext = 
-   RecommendedAIJob = fight
-   Armor = 650
-   View = 30
-   Picture = g_nova.pcx
    WreckageObject = 497 496
-   Height = ground_level 
+
+   Features = leaves_tracks 
+   Category = medium_tracked_vehicle
+   Armor = 650
+   Weight = 65
+   View = 30
    Jamming = 0
-   WaitForAttack = false
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+
    Tank { 
       Energy = 0
       Material = 0
       fuel = 1100
    } Tank
+   Height = ground_level 
    FuelConsumption = 14
-   Features = leaves_tracks 
    Movement = 0 0 0 65 0 0 0 0 
-   Category = medium_tracked_vehicle
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 60
    TerrainAccess ->* VehicleType.med_terrain 
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

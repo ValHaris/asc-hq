@@ -2,14 +2,17 @@ VehicleType {
    Name = SWATTER
    ID = 18
    parent = 217
+
    Description = anti aircraft tank
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Picture = MK1v_swatter.pcx
+   InfoImage = mk1v_swatter.jpg
+   WreckageObject = 418
    Infotext = [The Anti-Aircraft Tank may not be the nemesis for aircraft, but
               is is quite effective at short range. A commander sending an
               attack party would do well to include a few AA Tanks to provide
-              cover. ]
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Picture = MK1v_swatter.pcx
-   WreckageObject = 418
+              cover. 
+              InfoImage = BananaJoe]
 
    Armor += 20
    Weapons { 

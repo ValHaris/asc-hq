@@ -5,12 +5,11 @@ VehicleType {
    parent = 400 401 402 410
    
    Description = constructing pioneers
-   Infotext = [Building und turretunit constructors are perhaps the most important constructing
-              vehicles. They are able to place new factories, weapon emplacements,
-              power stations, mines, and so on. Without at least one building
-              constructor, expansion is impossible.]
    picture = MK3i_pioelite.png
    GuideSortHelp = 555 558 0 0 3 0 0 0 0 0
+   Infotext = [Die Elite der terranischen Pioniere errichtet neben High-Tech-Gebäuden und -Turrets auch die zur Gewinnung nachwachsender Rohstoffe notwendigen Gebäude. Sie sind in der Lage Große Mengen an Material und Sprit mitzuführen, und sind wegen ihrer schwachen Bewaffung auf Geleitschutz angewiesen.
+ 
+]
 
    Armor = 250
    Transportation ->* VehicleType.TransTurretBig 

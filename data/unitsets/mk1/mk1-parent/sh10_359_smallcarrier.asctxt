@@ -19,7 +19,7 @@ VehicleType {
    MaxSurvivableStorm = 245
    ResourceDrillingRange = 0
    SelfRepairRate = 5
-   Weight = 8000
+   Weight = 3000
    Transportation ->* Vehicletype.TransLightCarrier 
 
    Height = floating 

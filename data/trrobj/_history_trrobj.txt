@@ -1,7 +1,20 @@
-Gfx terrain System
+ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
+
+__________________
+-alte GebäudeWracks, Attackboni entfernt
+__________________
+Beta 05-08/08
+-Railroad nicht mehr auf hillside, durch swamp zerstörbar
+-small Railraod auf swamp und Morass zerstörbar, +1 Movemalus
+-track , kein mud mehr
+-road an neues hillside angepasst
+-neuer Krater nicht mehr im Wasser
+-Plateau eingebaut
+-Viewbonusobjecte eingebaut
+-Stealth-Sockel basejamming_abs = 25
 
 ________________
 09.08.2008 (GAMER)

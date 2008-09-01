@@ -12,12 +12,12 @@
    Features = 
    Category = light_aircraft
    Armor = 350
+   Weight = 25
    View = 50
    Jamming = 0
    MaxSurvivableStorm = 0
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 25
 
    Height = ground_level orbit 
    Tank { 

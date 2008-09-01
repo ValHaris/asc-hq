@@ -5,10 +5,12 @@ VehicleType {
    parent = 400 401 402 410
 
    Description = Bau- und Reparaturtrupp
-   Infotext = [ Die Pioniere sind universelle Bau- und Reparaturtrups. Sie errichten kleine stationäre Radar, Radarstöranlagen und 
-              MG Stellungen. Die mangelnde Bewaffnung macht einen Begleitschutz unverzichtbar.]
    picture = MK3i_piospecial.png
    GuideSortHelp = 553 0 0 0 3 559 0 0 0 0
+   Infotext = [Die Special Pioneers sind, wie der Name schon sagt, wahre Spezialisten: sie bauen Wege, Strassen, Landebahnen, Kornutas, PRDs, MG-Nester, Schützengräben, Stacheldraht, Panzersperren und Minenfelder. Sie sind in der Lage andere Einheiten im Feld zu reparieren, und transportieren leichtes Gerät. Sie sind leicht genug, um fast alle Transporter benutzen zu können. Nachteilig ist jedoch, dass ihnen selbst nur wenig Bewegungsmöglichkeiten zur Verfügung stehen und sie deshalb rechtzeitig an ihre Einsatzstelle gebracht werden müssen.
+
+Desweiteren pflanzen sie Wälder und Raps, und sind in der Lage selbige zur Gewinnung von Ressourcen zu nutzen. Durch ihren geringen Aktionsradius und die rudimentäre Bewaffnung mit MGs sollten sie nicht ohne Geleitschutz operieren.  
+]
 
    Armor = 250
    Transportation ->* VehicleType.TransDevice 

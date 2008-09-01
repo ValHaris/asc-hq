@@ -6,7 +6,7 @@ ObjectType {
    Lifetime = 60
    Armor = 80
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
-   Movemalus_plus = 5   3   3   3   5   5   5   2   0   10  5   0   10  10  5   5   10  5
+   Movemalus_plus = 5   3   3   3   5   5   5   2   1   10  5   0   10  10  5   5   10  5
    ConstructionCost { 
       Energy = 0
       Material = 100
@@ -20,8 +20,8 @@ ObjectType {
       Movement = 10
    } RemovalCost
    TerrainAccess { 
-      terrain_not = Forest railroad road Runway hillside Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp
-      terrain_kill = large_rocks very_shallow_water shallow_water Water Deep_water lava 
+      terrain_not = Forest railroad road Runway hillside Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp morass lava
+      terrain_kill = large_rocks very_shallow_water shallow_water Water Deep_water lava swamp morass 
    } TerrainAccess
    TerrainProperties_Filter = forest small_rocks 
    dry { 

@@ -4,12 +4,14 @@ VehicleType {
    parent = 336
    
    Description = tanker vehicle
-   Infotext = [Tanker Vehicles are seen around every army. As the fuel tanks
-              of the heavy units run dry, they need to be filled, or the army
-              will come to a halt, to be slaughtered by enemy artillery.]
    picture = MK1v_alguin.pcx
+   InfoImage = mk1v_alguin.jpg
    WreckageObject = 410
    GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
+   Infotext = [Tanker Vehicles are seen around every army. As the fuel tanks
+              of the heavy units run dry, they need to be filled, or the army
+              will come to a halt, to be slaughtered by enemy artillery.
+              InfoImage = BananaJoe]
 
    Armor -= 50
    Features += ExternalFuelTransfer 

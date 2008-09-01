@@ -3,34 +3,38 @@ VehicleType {
    abstract = true
    ID = 406
    parent = 402
+
    Description = medium tank
-   Infotext = 
-   RecommendedAIJob = fight
-   Armor = 900
-   View = 30
    WreckageObject = 497 496
-   Height = ground_level 
+   Infotext = 
+
+   Features = leaves_tracks 
+   Category = heavy_tracked_vehicle
+   Armor = 900
+   Weight = 90
+   View = 30
    Jamming = 0
-   WaitForAttack = false
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+
+   Height = ground_level 
    Tank { 
       Energy = 0
       Material = 0
       fuel = 1200
    } Tank
    FuelConsumption = 16
-   Features = leaves_tracks 
    Movement = 0 0 0 50 0 0 0 0 
-   Category = heavy_tracked_vehicle
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 60
    TerrainAccess ->* VehicleType.hvy_terrain 
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

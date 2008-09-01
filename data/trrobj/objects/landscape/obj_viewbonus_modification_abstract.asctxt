@@ -1,0 +1,61 @@
+ObjectType { 
+   Abstract = true
+
+   ID = 2611
+   GroupID = 
+
+   Height = 121
+
+   CanExistBeneathBuildings = true
+   visible_in_fogOfWar = false
+
+   Armor = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   DefenseBonus_abs = -1
+   Jamming_abs = -1
+   ViewBonus_abs = -1
+
+   Movemalus_plus = 0
+   AttackBonus_plus = 0
+   DefenseBonus_plus = 0
+   Jammming_plus = 0
+   ViewBonus_plus = 0
+
+   LinkableObjects = 
+   NoSelfChaining = true
+
+   TerrainAccess { 
+      terrain_any = [Lowland Hard_sand Soft_sand
+                     road railroad runway bridge
+                     hillside mountains high_mountains   turret_foundation   ditch   river   lava]
+      terrain_all = 
+      terrain_not = very_shallow_water shallow_water water deep_water
+      terrain_kill = very_shallow_water shallow_water Water Deep_water
+   } TerrainAccess
+
+   TerrainProperties_Filter =  
+   TerrainProperties_Add =  
+
+   Weather = dry 
+   dry { 
+      UseGFXpics = false
+      DisplayMethod = MapEditorOnly
+      flippicture = -1
+      imagereference = -1
+   } dry
+
+} ObjectType

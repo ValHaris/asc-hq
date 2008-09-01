@@ -5,10 +5,17 @@ VehicleType {
    WreckageObject = 15587
    
    Description = stealth corvette
-   InfoText = [InfoImage = Wikipedia Visby-Klasse ]
    picture = mk3s_visby.png
    InfoImage = mk3s_visby.jpg
    GuideSortHelp += 0 0 0 0 3 601 0 0 0 0
+   InfoText = [Die Visby ist das erste vollwertige Kriegsschiff, welches mit Tarnkappen-Technologie gebaut wurde. Die Hauptwaffe sind Anti-Schiffs-Raketen. Als Sekundärwaffe steht ein 57mm-Geschütz gegen See- und Landziele zur Verfügung. Gegen Flugzeuge werden Seasparrow-Raketen eingesetzt, die gegen alle Flieger in niedriger und mittlerer Höhe wirksam sind.
+
+Abgerundet wird das Arsenal durch Torpedos zur U-Boot-Abwehr. Als eines der wenigen Schiffe in der terranischen Flotte ist die Visby ausserdem mit Wasserbomben ausgerüstet, um auch tief getauchte U-Boote effektiv bekämpfen zu können. Um den Einsatzradius zu vergrößern, können auch leichte Hubschrauber auf der Visby stationiert werden. 
+
+Da bei der Visby alle Waffen unter Deck installiert wurden, ist leider kein Platz, um große Vorräte an Munition zu bunkern. Deswegen sollte bei größeren Gefechten ein Versorger nicht weit weg sein. Aufgrund ihrer schwächeren Panzerung sollte die Visby nach Möglichkeit ein Gefecht mit schweren Überwasserschiffen vermeiden.
+
+
+   InfoImage = Wikipedia Visby-Klasse ]
 
    jamming = 61
    Transportation ->* VehicleType.TransCruiserSmall 

@@ -17,7 +17,7 @@ VehicleType {
 
    Category = medium_tracked_vehicle
    Armor = 550
-   Weight = 50
+   Weight = 55
 
    Tank { 
       fuel = 1200

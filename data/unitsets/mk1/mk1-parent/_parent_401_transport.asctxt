@@ -366,7 +366,7 @@
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 800
       MaxLoadableMass = 800
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -379,9 +379,9 @@
 ; Transportzug
    TransTrainBunker { 
       MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 1100
-      MaxLoadableMass = 2100
-      CargoMovementDivisor = 1.5
+      MaxLoadableUnitSize = 900
+      MaxLoadableMass = 1800
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -437,7 +437,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 195
       MaxLoadableMass = 195
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
@@ -457,7 +457,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 100
       MaxLoadableMass = 170
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -479,7 +479,7 @@
       MaxLoadableUnits = 5
       MaxLoadableUnitSize = 10
       MaxLoadableMass = 50
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_vehicle_light.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.Fl2Sub
@@ -487,10 +487,10 @@
    } TransShipSmall
 
    TransShip {
-      MaxLoadableUnits = 18
-      MaxLoadableUnitSize = 1200
+      MaxLoadableUnits = 24
+      MaxLoadableUnitSize = 900
       MaxLoadableMass = 8000
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT = medium_ship heavy_ship 
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -501,10 +501,10 @@
    } TransShip
 
    TransShipArmor {
-      MaxLoadableUnits = 14
+      MaxLoadableUnits = 18
       MaxLoadableUnitSize = 600
       MaxLoadableMass = 4000
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT = light_ship medium_ship heavy_ship medium_aircraft heavy_aircraft
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -553,7 +553,7 @@
    } TransLightCarrier
 
    TransMedCarrier { 
-      MaxLoadableUnits = 17
+      MaxLoadableUnits = 18
       MaxLoadableUnitSize = 105
       MaxLoadableMass = 1500
       CategoriesNOT -> VehicleType.cargo_carrier.CategoriesNOT
@@ -600,10 +600,10 @@
 
    TransSubTrooper { 
       MaxLoadableUnits = 5
-      MaxLoadableUnitSize = 3
-      MaxLoadableMass = 12
-      CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
-      CargoMovementDivisor = 1.5
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 15
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      CargoMovementDivisor = 1.4
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
@@ -611,11 +611,11 @@
    } TransSubTrooper
 
    TransSubmarine { 
-      MaxLoadableUnits = 6
+      MaxLoadableUnits = 8
       MaxLoadableUnitSize = 60
       MaxLoadableMass = 100
       CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship hoovercraft
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
@@ -628,7 +628,7 @@
       MaxLoadableUnits = 15
       MaxLoadableUnitSize = 200
       MaxLoadableMass = 350
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_transplane.CategoriesNOT
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
@@ -696,7 +696,7 @@
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 70
       MaxLoadableMass = 70
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_allground.CategoriesNOT
       EntranceSystemNum = 4
       EntranceSystem0 ->* VehicleType.GrIO
@@ -709,7 +709,7 @@
       MaxLoadableUnits = 8
       MaxLoadableUnitSize = 120
       MaxLoadableMass = 120
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT = hoovercraft light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship
       EntranceSystemNum = 4
       EntranceSystem0 ->* VehicleType.GrIO
@@ -724,7 +724,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 40
       MaxLoadableMass = 110
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_shuttle.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO

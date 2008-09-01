@@ -2,7 +2,10 @@ VehicleType {
    Name = SONARBOJE
    parent = 249
    ID = 621
-   WreckageObject = 15621 15921
+   
    Picture = MK3d_SonarBOJE.png
+   WreckageObject = 15621 15921
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Die Sonarboje ist das PRD der Marine: sie liefert Aufklärungsdaten von Über- und Unterwassereinheiten, und ist zum Selbstschutz in der Lage feindliche Radarsignale zu stören. Ihre Luftlandefähigkeit ermöglicht die schnelle Verlegung durch Helikopter.
+]
 } VehicleType

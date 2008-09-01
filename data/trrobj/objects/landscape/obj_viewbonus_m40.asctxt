@@ -1,0 +1,14 @@
+ObjectType { 
+   Parent = 2611
+
+   ID = 2615
+
+   Name = Viewbonus-40
+
+   Viewbonus_plus = -40
+
+   dry { 
+      picture = obj_viewbonus_m40.png 1
+   } dry
+
+} ObjectType

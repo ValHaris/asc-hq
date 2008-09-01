@@ -4,9 +4,11 @@ VehicleType {
    parent = 216
 
    Description = Air Defence Mech
-   Infotext = [ Air Defence Mechwarrior auf Basis des Crazy.]
    Picture = MK1m_CAD.pcx
+   InfoImage = mk1m_cad.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [ Air Defence Mechwarrior auf Basis des Crazy.
+   		InfoImage = BananaJoe]
 
    Armor += 10
    Weapons { 

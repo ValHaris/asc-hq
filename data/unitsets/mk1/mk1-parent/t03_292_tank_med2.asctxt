@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 503 292 0 0 0 0 0 0 0 0
 
    Armor = 800
-   Weight = 75
+   Weight = 80
 
    Tank {
       Energy = 0

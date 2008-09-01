@@ -26,7 +26,7 @@ BuildingType {
    TerrainAccess { 
       terrain_any = Lowland road runway Hard_sand Soft_sand hillside mountains high_mountains very_shallow_water  
       terrain_all = 
-      terrain_not = 
+      terrain_not = railroad installation
       terrain_kill = lava river water deep_water
    } TerrainAccess
    ConstructionCost { 

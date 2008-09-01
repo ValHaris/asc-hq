@@ -2,7 +2,7 @@ VehicleType {
    Name = radar plane
    abstract = true
    ID = 247
-   parent = 400 401 402 414 496
+   parent = 400 401 402 415 496
    Description = Recce Plane
    Infotext = [The Recce plane can be vital to the success of a battle. It provides
               a commander with detailed data about a sizable area. The Recce
@@ -11,7 +11,7 @@ VehicleType {
 
 
    Armor = 350
-   Weight = 180
+   Weight = 250
    View = 100
    Features = satelliteview
 

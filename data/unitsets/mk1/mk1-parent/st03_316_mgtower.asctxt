@@ -19,7 +19,6 @@ VehicleType {
 
    Features += ManualSelfDestruct
    Armor -= 200
-   Weight = 11500
 
    Tank { 
       Energy = 0

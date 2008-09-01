@@ -23,7 +23,7 @@ VehicleType {
    MaxSurvivableStorm = 210
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 200
+   Weight = 1000
    TerrainAccess ->* VehicleType.mediumship_terrain
    Construction { 
       Buildings = 

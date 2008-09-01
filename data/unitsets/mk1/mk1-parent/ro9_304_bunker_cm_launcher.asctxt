@@ -13,7 +13,6 @@ VehicleType {
    Armor -= 500
    View = 30
    Features = no_reactionfire ManualSelfDestruct
-   Weight = 12000
 
    Tank { 
       Energy = 0

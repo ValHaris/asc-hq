@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 503 295 507 0 0 0 0 0 0 0
 
    Armor = 850
-   Weight = 80
+   Weight = 85
 
    Features += moveduringreactionfire
    Tank { 

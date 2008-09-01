@@ -11,7 +11,7 @@ VehicleType {
 
 
    Armor = 750
-   Weight = 70
+   Weight = 75
 
    Tank { 
       fuel = 1200

@@ -44,7 +44,7 @@ ObjectType {
       terrain_kill = Shallow_water Water Deep_water Lava Pack_ice
    } TerrainAccess
    TerrainProperties_Filter = 
-   TerrainProperties_Add =
+   TerrainProperties_Add = installation
 
    dry { 
       UseGFXpics = false

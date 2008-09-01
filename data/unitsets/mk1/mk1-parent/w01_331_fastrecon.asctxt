@@ -12,6 +12,7 @@ VehicleType {
 
 
    Armor -= 20
+   Weight = 7
    View += 20
    Jamming = 11
    Transportation ->* VehicleType.TransLowTrooper 
@@ -20,7 +21,6 @@ VehicleType {
 
    FuelConsumption = 10
    Movement = 0 0 0 120 0 0 0 0 
-   Weight = 2
    TerrainAccess ->* VehicleType.offroad 
 
    Weapons { 

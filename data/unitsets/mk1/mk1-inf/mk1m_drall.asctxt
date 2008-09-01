@@ -4,7 +4,9 @@ VehicleType {
    parent = 213
 
    Picture = MK1m_Drall.pcx
+   InfoImage = mk1m_drall.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [InfoImage = BananaJoe]
 
    Armor += 20
    

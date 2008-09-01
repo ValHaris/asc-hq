@@ -4,9 +4,10 @@ VehicleType {
    parent = 208
 
    Description = Mech Trooper
-   Infotext = [Schwer gepanzerter und bewaffneter Trooper. Dadurch relativ unbeweglich. ]
    Picture = MK1m_CRAZY.pcx
+   InfoImage = mk1m_crazy.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [InfoImage = BananaJoe]
 
    Armor += 10
    Weapons { 

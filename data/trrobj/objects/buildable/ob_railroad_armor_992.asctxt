@@ -32,7 +32,7 @@ ObjectType {
    TerrainAccess { 
       terrain_any = Lowland hard_sand soft_sand frozen_water 
       terrain_all = 
-      terrain_not = Forest railroad hillside road Runway Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp
+      terrain_not = Forest railroad hillside road Runway Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp lava
       terrain_kill = very_shallow_water shallow_water Water Deep_water lava 
    } TerrainAccess
    TerrainProperties_Filter = forest small_rocks large_rocks

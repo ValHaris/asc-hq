@@ -2,10 +2,14 @@ VehicleType {
    Name = NOVA
    ID = 66
    parent = 291
+   
    Description = medium tank
    Picture = MK1v_nova.pcx
+   InfoImage = mk1v_nova.jpg
    WreckageObject = 466
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [Mit dem Zurücktreten der Infanterie hinter die Panzer und der Fixion der rehanischen Militärs auf Panzerschlachten von stetig wachsenden Ausmaßen, war der Weg für den "Nova-Vollketten-Kampfwagen" bereitet. Mit seiner 75mm Glattrohrkanone bietet der Nova genügend Feuerkraft, bei noch guter Geschwindigkeit, um die meisten harten Ziele überwinden zu können. Lediglich das MG zur Infanterie.- und Fliegerabwehr taugt, aufgrund seines Einbaus in die Wanne, mehr zur notdürftigen Abwehr, als zum offensiven Vorgehen. Offiziell gilt der Nova zwar schon durch seinen angepassten Nachfolger als ersetzt, aber gerade in den weniger entwickelten Randprovinzen erfreut er sich dank seiner guten Verfügbarkeit nach wie vor großer Beliebtheit.
+InfoImage = BananaJoe]
 
    Armor += 10
 

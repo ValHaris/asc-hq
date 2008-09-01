@@ -1,7 +1,7 @@
 itemfilter {
    Vehicles = 0-499
    Buildings = 
-   Objects = 
+   Objects = 24000-24999
    Terrain = 
    Technologies = 0-499 100000
    name = MK1 Rehaner (standart asc)

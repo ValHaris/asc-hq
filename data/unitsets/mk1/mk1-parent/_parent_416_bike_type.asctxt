@@ -32,7 +32,7 @@ VehicleType {
    MaxSurvivableStorm = 150
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 2
+   Weight = 4
    TerrainAccess ->* VehicleType.offroad 
    Construction { 
       Buildings = 

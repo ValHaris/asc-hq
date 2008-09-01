@@ -20,7 +20,6 @@ VehicleType {
       EntranceSystem0 ->* VehicleType.GrIO
    } Transportation
    Features = Repair_Facility ManualSelfDestruct
-   Weight = 11500
 
    Tank { 
       Energy = 0

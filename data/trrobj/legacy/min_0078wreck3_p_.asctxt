@@ -9,11 +9,11 @@ ObjectType {
    Movemalus_abs = 30 30  30  30  30  30  30  25  25  30  30  30  30  30  30  30  30  30
    Movemalus_plus =  
    AttackBonus_abs = -1
-   AttackBonus_plus = 5
+   AttackBonus_plus = 0
    DefenseBonus_abs = -1
-   DefenseBonus_plus = 5
+   DefenseBonus_plus = -1
    Jamming_abs = -1
-   Jammming_plus = 10
+   Jammming_plus = 2
    Height = 110
    ConstructionCost { 
       Energy = 0

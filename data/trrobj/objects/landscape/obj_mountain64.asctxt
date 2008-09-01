@@ -2,7 +2,7 @@ ObjectType {
    Name = mountains
    ID = 2600
    parent = 509
-   LinkableObjects = 
+   LinkableObjects = 2609
    NetBehaviour = NetToSelf NetToBorder
 
    Weather = dry much_snow

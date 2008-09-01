@@ -6,7 +6,7 @@ VehicleType {
    Description = Battle Tank
    InfoText = [InfoImage = Wikipedia Leopard2]
    Picture = mk3v_leopard2.png
-   InfoImage = mk3v_leopard2.png
+   InfoImage = mk3v_leopard2.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 10

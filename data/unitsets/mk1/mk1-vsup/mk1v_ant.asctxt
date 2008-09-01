@@ -4,13 +4,15 @@ VehicleType {
    parent = 336
    
    Description = construction vehicle
+   picture = MK1v_ant.pcx
+   InfoImage = mk1v_ant.jpg
+   WreckageObject = 426
+   GuideSortHelp = 556 0 0 0 1 0 0 0 0 0
    Infotext = [The Construction Vehicle is necessary for the construction of
               infrastructure such as roads, ditches, bridges and the like.
               A very important unit if you aspire a well defended, smoothly
-              operating base.]
-   picture = MK1v_ant.pcx
-   WreckageObject = 426
-   GuideSortHelp = 556 0 0 0 1 0 0 0 0 0
+              operating base.
+              InfoImage = BananaJoe]
 
    Armor -= 100
    Features += 

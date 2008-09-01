@@ -1,4 +1,5 @@
 ObjectType { 
+   Name = fixRunway
    parent = 45
    ID = 994
    groupID = 1

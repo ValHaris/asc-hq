@@ -5,9 +5,9 @@ VehicleType {
    WreckageObject = 15586
    
    Description = stealth patrol boat
-   Infotext = [Used for armed escort, command, control, and communications, transport, armed reconnaissance and pursuit.]
    picture = MK3s_sealboat.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Das SEALBOAT ist ein kleines Schnellboot. Es wird vorallem eingesetzt, um Infanterie dort an Land zu bringen, wo größere Schiffe nicht hin kommen. Es kann auch in Flüssen eingesetzt werden. Es ist mit einem MG bewaffnet, mit dem es Ziele auf See und in der Luft auch auf Distanz bekämpfen kann, allerdings nur Offensiv (kein Move mit Rf). Das SEALBOAT verfügt auch über alle von der Infanterie verwendete Munition, und kann diese auch schnell versorgen. Es sollte für schnelle Überfälle oder zur Aufklärung eingesetzt werden, und kann auch Seal Truppen gegen feindliche Schiffe ins Zielgebiet bringen. Da es sich um ein kleines Boot handelt, ist es auch schwer zu Orten, was ihm einen gewissen Schutz gewährt. Leider ist die Einheit nicht hochseetauglich, kann aber in anderen Schiffen transportiert werden.]
 
    Jamming = 50
    Transportation ->* VehicleType.TransShipTrooper 

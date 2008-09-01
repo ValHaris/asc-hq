@@ -2263,6 +2263,7 @@
             material = 100
             fuel = 100
          } LaserRechargeCost
+         Sound = weapon10_s.ogg
       } type_laser
 
       type_animal { 

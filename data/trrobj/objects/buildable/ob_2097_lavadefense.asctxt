@@ -12,7 +12,8 @@ ObjectType {
 
 
    visible_in_fogOfWar = false
-   LinkableObjects = 983 984 985 986 987 988 2501 2506
+   ;                                                   SY   SY
+   LinkableObjects = 983 984 985 986 987 988 2501 2506 1315 1310
    LinkableTerrain = 
 
    NetBehaviour = 

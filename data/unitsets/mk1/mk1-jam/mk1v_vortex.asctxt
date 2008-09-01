@@ -4,14 +4,16 @@ VehicleType {
    Parent = 307
 
    Description = jammer
+   picture = MK1v_vortex.pcx
+   InfoImage = mk1v_vortex.jpg
+   WreckageObject = 451
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Jammer units are one of the more important vehicles an army should
               contain. As the name implies, Jammers can block enemy radars.
               The advantage in this is a cover for the movements of the army,
               along with protection against artillery. Jammers tend to get
-              destroyed a lot, since their field of jamming is small.]
-   picture = MK1v_vortex.pcx
-   WreckageObject = 451
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+              destroyed a lot, since their field of jamming is small.
+              InfoImage = BananaJoe]
 
    Armor += 20
    Jamming += 2

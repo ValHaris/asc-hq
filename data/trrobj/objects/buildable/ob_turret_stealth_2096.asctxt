@@ -20,8 +20,8 @@ ObjectType {
    AttackBonus_plus = 0
    DefenseBonus_abs = -1
    DefenseBonus_plus = -1
-   Jamming_abs = -1
-   Jamming_plus = 31
+   Jamming_abs = 25
+   Jamming_plus = 0
 
    ConstructionCost { 
       Energy = 0

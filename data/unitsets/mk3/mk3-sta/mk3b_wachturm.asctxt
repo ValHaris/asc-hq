@@ -8,7 +8,7 @@ VehicleType {
    Infotext = [ Gepanzerter Verteidigungsturm mit MG Stellung und Flackgeschütz.
    InfoImage = Wikipedia]
    picture = mk3b_wachturm.png
-   InfoImage = mk3b.wachturm.jpg
+   InfoImage = mk3b_wachturm.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    
    Features += ManualSelfDestruct

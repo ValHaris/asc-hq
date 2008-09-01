@@ -1,9 +1,17 @@
 Mark3 Unit Set Advanced Strategic Command
 Grafik: GAMER , Ares
-InfoTexte:
+InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
 
+__________________
+Beta 05-08/08
+-Kornuta Tech2
+-Leo2 Infoimage Bugfix
+-Cone Tech2
+-Blackbird tech4
+-NSA tech2
+-Infotext = Visby, SeaShadow, Sp.Pios, SealBoat, ElitePio, BuildingPio, Sonarboje
 __________________
 09.08.2008 (GAMER)
 -Scud -10 MaxRange

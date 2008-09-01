@@ -2,14 +2,17 @@ VehicleType {
    Name = TERMITE
    ID = 65
    parent = 290
+
    Description = light tank
+   Picture = MK1v_termite.pcx
+   InfoImage = mk1v_termite.jpg
+   WreckageObject = 465
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Light Tanks are economic tanks. While not being very heavily
               armed, they make a decent pace and aren't as expensive to build
               as Combat Tanks. Light tanks are well suited for strike force
-              support.]
-   Picture = MK1v_termite.pcx
-   WreckageObject = 465
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+              support.
+              InfoImage = BananaJoe]
 
    Armor += 10
    Tank { 

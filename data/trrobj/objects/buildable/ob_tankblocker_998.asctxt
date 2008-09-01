@@ -33,13 +33,13 @@ ObjectType {
    } RemovalCost
 
    TerrainAccess { 
-      terrain_any = road runway railroad Lowland Hard_sand Soft_sand Hillside mountains Frozen_water very_shallow_water shallow_water
+      terrain_any = road runway railroad Lowland Hard_sand Soft_sand mountains Frozen_water very_shallow_water shallow_water
       terrain_all = 
       terrain_not = 
       terrain_kill = Water Deep_water Lava River
    } TerrainAccess
    TerrainProperties_Filter = 
-   TerrainProperties_Add = bridge
+   TerrainProperties_Add = bridge installation
 
    Weather = dry much_snow snow_and_ice
    dry { 
