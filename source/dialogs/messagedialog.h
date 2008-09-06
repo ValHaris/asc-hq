@@ -22,10 +22,13 @@
 #ifndef messagedialogH
 #define messagedialogH
 
+#include <map>
+
 #include "../paradialog.h"
 class TextRenderer;
 
 class PG_RichEdit;
+class PG_CheckButton;
 
 class  MessageDialog : public ASC_PG_Dialog {
       bool defaultKeysActive;
@@ -41,8 +44,10 @@ class  MessageDialog : public ASC_PG_Dialog {
       @param btn2text Text to appear in Button 2
       @param textalign Alignment for windowtext
       @param style widgetstyle to use (default "MessageBox")
+      @param rememberCheckbox true if a "remember choice" checkbox shall be shown
     */
-      MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox");
+      MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, const std::string& btn2text, PG_Label::TextAlign textalign = PG_Label::CENTER, const std::string& style="MessageBox", bool rememberCheckbox = false );
+
 
    /**
       Creates a PopUp with 1 Button
@@ -77,6 +82,8 @@ class  MessageDialog : public ASC_PG_Dialog {
 
       void EnableDefaultKeys( bool enable );
 
+      bool remberChoice();
+
    protected:
 
    /**
@@ -88,6 +95,8 @@ class  MessageDialog : public ASC_PG_Dialog {
 
       PG_Button* my_btnok;
       PG_Button* my_btncancel;
+
+      PG_CheckButton* checkbox;
 
       bool eventKeyDown (const SDL_KeyboardEvent *key);
         
@@ -101,6 +110,7 @@ class  MessageDialog : public ASC_PG_Dialog {
 };
 
 extern int  new_choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton );
+extern int  new_choice_dlg(const ASCString& title, const ASCString& shortTitle, const ASCString& leftButton, const ASCString& rightButton, bool& saveResult );
 extern PG_Rect calcMessageBoxSize( const ASCString& message );
 
 #endif

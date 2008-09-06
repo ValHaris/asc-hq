@@ -76,6 +76,7 @@
 #include <ctype.h>
 #include <algorithm>
 #include <memory>
+#include <fstream>
 
 #include <boost/regex.hpp>
 
@@ -1079,6 +1080,12 @@ void resourceAnalysis()
          total.resource(r) = actmap->bi_resource[actmap->actplayer].resource(r);
    s += total.toString();
 
+   s += "\nIncluding units:\n";
+   for ( Player::VehicleList::iterator j = actmap->player[actmap->actplayer].vehicleList.begin(); j != actmap->player[actmap->actplayer].vehicleList.end() ; j++ ) 
+      total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0 );
+
+   s += total.toString();
+
    ViewFormattedText vft("Resource Analysis", s, PG_Rect( -1, -1, 600, 550 ));
    vft.Show();
    vft.RunModal();
@@ -1260,7 +1267,7 @@ void execuseraction2 ( tuseractions action )
          writemaptopcx ( actmap, choice_dlg("Include View ?","~y~es","~n~o")==1  );
          break;
       case ua_exitgame:
-         if (choice_dlg("do you really want to quit ?","~y~es","~n~o") == 1)
+         if (choiceDialog("do you really want to quit ?","~y~es","~n~o", "quitasc") == 1)
             getPGApplication().Quit();
          break;
       case ua_cargosummary: 
@@ -1649,6 +1656,27 @@ void deployMapPlayingHooks ( GameMap* map )
 #include "clparser/asc.cpp"
 
 
+class ResourceLogger: public SigC::Object {
+      ofstream s;
+   public:
+      ResourceLogger() {
+         s.open("resource-log", ios_base::out | ios_base::trunc );
+         MessagingHub::Instance().logCategorizedMessage.connect( SigC::slot( *this, &ResourceLogger::message ));
+         MessagingHub::Instance().setLoggingCategory("ResourceWork", true);
+      };
+
+      void message( const ASCString& category, const ASCString& msg )
+      {
+         if ( category == "ResourceWork" )
+            s << msg << "\n";
+      }
+
+      ~ResourceLogger() {
+         s.close();
+      }
+
+};
+
 int main(int argc, char *argv[] )
 {
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
@@ -1680,6 +1708,8 @@ int main(int argc, char *argv[] )
    MessagingHub::Instance().setVerbosity( cl->r() );
    StdIoErrorHandler stdIoErrorHandler(false);
    MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
+
+   ResourceLogger rl;
 
 #ifdef WIN32
    Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;

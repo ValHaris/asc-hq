@@ -768,3 +768,26 @@ ASCString editString2( const ASCString& title, const ASCString& defaultValue )
    se.RunModal();
    return se.GetEditedText();
 }
+
+int choiceDialog(const ASCString& text, const ASCString& button1, const ASCString& button2, const ASCString& shortLabel )
+{
+
+   map<ASCString,int>& answers = CGameOptions::Instance()->dialogAnswers;
+
+   map<ASCString,int>::iterator i = answers.find( shortLabel );
+   if ( i != answers.end() )
+      return i->second;
+
+   bool saveResult = false;
+   int result = new_choice_dlg(text, shortLabel, button1, button2, saveResult);
+
+   if ( saveResult ) {
+      answers[shortLabel] = result;
+      CGameOptions::Instance()->setChanged();
+   }
+
+   return  result;
+
+}
+
+

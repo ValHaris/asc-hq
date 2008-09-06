@@ -583,6 +583,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\tos.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\turncontrol.cpp"
 				>
 			</File>

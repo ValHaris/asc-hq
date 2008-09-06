@@ -218,6 +218,25 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
       pc.closeBracket();
    }
 
+
+   pc.openBracket("DialogMemory");
+   vector<ASCString> dialogMemory;
+   if ( pc.isReading() ) {
+      if ( pc.find( "dialogs"))
+         pc.addStringArray( "dialogs", dialogMemory );
+   } else {
+      for ( DialogAnswers::iterator i = dialogAnswers.begin(); i != dialogAnswers.end(); ++i )
+         dialogMemory.push_back( i->first );
+      pc.addStringArray( "dialogs", dialogMemory );
+   }
+
+   for ( vector<ASCString>::iterator i = dialogMemory.begin(); i != dialogMemory.end(); ++i ) {
+      int& value = dialogAnswers[*i];
+      pc.addInteger( *i, value );
+   }
+
+   pc.closeBracket();
+
    pc.addInteger( "PanelColumns", panelColumns, 2 );
      
    pc.addString("mailProgram", mailProgram, "");

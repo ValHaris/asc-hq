@@ -1253,27 +1253,34 @@ void GameMap::endRound()
           BuildingWork buildingWork;
 
           for ( Player::BuildingList::iterator j = player[i].buildingList.begin(); j != player[i].buildingList.end(); j++ ) {
+             if ( (*j)->getEntry().x == 19 && (*j)->getEntry().y == 72 )
+                logMessage("dummy", "dummy");
              ContainerBase::Work* w = (*j)->spawnWorkClasses( false );
-             if ( w )
+             if ( w ) {
                 buildingWork.push_back ( w );
+                logMessage("ResourceWork", "Building " + (*j)->getEntry().toString() + " has work to do");
+             } else
+                logMessage("ResourceWork", "Building " + (*j)->getEntry().toString() + " has no work to do");
           }
 
           for ( Player::VehicleList::iterator j = player[i].vehicleList.begin(); j != player[i].vehicleList.end(); j++ ) {
              ContainerBase::Work* w = (*j)->spawnWorkClasses( false );
-             if ( w )
+             if ( w ) {
                 buildingWork.push_back ( w );
+                // logMessage("ResourceWork", "Vehicle " + ASCString::toString((*j)->networkid ) + " has work to do");
+             } 
+                // logMessage("ResourceWork", "Vehicle " + ASCString::toString((*j)->networkid ) + " has no work to do");
           }
           
           
           bool didSomething;
           do {
              didSomething = false;
-             for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ )
+             for ( BuildingWork::iterator j = buildingWork.begin(); j != buildingWork.end(); j++ ) {
                 if ( ! (*j)->finished() ) 
-    //weatherSystem->update(time);
                    if ( (*j)->run() )
                       didSomething = true;
-
+             }
           } while ( didSomething );
           doresearch( this, i );
        }

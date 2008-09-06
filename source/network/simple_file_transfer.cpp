@@ -98,7 +98,15 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
       if ( nextPlayer < 0 )
          nextPlayer = 0;
       
-      if ( CGameOptions::Instance()->mailProgram.empty() ) {
+      bool mail = !CGameOptions::Instance()->mailProgram.empty();
+
+
+      if ( mail )
+         if (choiceDialog("Invoke the mail program to send the file?","~m~ail","~j~ust save", "sendpbem") == 2)
+            mail = false;
+
+
+      if ( !mail ) {
          
          ASCString msg = "Data written!\nPlease send " + fname + " to \n" + map->player[nextPlayer].getName();
          if ( !map->player[nextPlayer].email.empty() )

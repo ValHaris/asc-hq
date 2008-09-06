@@ -423,9 +423,6 @@ const int submarineMovement = 11;
 #define fusstruppenplattfahrgewichtsfaktor 2  
 #define mingebaeudeeroberungsbeschaedigung 80  
 
-#define lookintoenemytransports false
-#define lookintoenemybuildings false
-
 #define recyclingoutput 90    /*  percentage of material claimed by recycling  */
 #define destructoutput 20
 #define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder

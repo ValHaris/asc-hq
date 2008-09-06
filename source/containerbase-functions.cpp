@@ -15,6 +15,9 @@
 #include "resourcenet.h"
 #include <iostream>
 
+#include "tos.h"
+
+using namespace toString;
 
 
 template <class T, ContainerBaseType::ContainerFunctions f>
@@ -156,6 +159,9 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
             currentField->removeobject( obj, true );
          }
          ++fieldCounter;
+
+         logMessage("ResourceWork", "AutoHarvester " + tos( base->getPosition() ) + ": harvested object " + tos(obj->id) + " on field " + tos(pos) + " and got " + removeBenefit.toString() );
+
       }
    }
 }
@@ -171,7 +177,7 @@ void AutoHarvestObjects::processField( const MapCoordinate& pos )
 
    if ( fieldCounter >= base->baseType->autoHarvest.maxFieldsPerTurn )
       return;
-   
+
    for ( vector<IntRange>::const_iterator i = base->baseType->autoHarvest.objectsHarvestable.begin(); i != base->baseType->autoHarvest.objectsHarvestable.end();  ++i )
       for( int id=i->from; id <= i->to; ++id ) {
          const ObjectType *obj = base->getMap()->getobjecttype_byid( id );
@@ -305,6 +311,9 @@ bool MatterConverter :: run()
 {
    int perc = percentage;
 
+   logMessage("ResourceWork", "MatterConverter " + tos( bld->getPosition() ) + ": still needs to do " + tos(perc) + "% of work");
+
+
    int usageNum = 0;
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) < 0 )
@@ -322,6 +331,9 @@ bool MatterConverter :: run()
                perc = 100 * p / bld->plus.resource(r) ;
          }
    }
+
+   logMessage("ResourceWork", "MatterConverter " + tos(bld->getPosition()) + ": checked storage, limiting to " + tos(perc) + "% of work");
+
 
    Resources toGet = bld->plus * perc / 100  ;
    for ( int r = 0; r < 3; r++ )
@@ -341,21 +353,32 @@ bool MatterConverter :: run()
       }
    }
 
+   logMessage("ResourceWork", "MatterConverter " + tos( bld->getPosition() ) + ": checked required res, limiting to " + tos(perc) + "% of work");
 
    bool didSomething = false;
 
    for ( int r = 0; r < 3; r++ )
       if ( bld->plus.resource(r) > 0 ) {
-         bld->putResource( bld->plus.resource(r) * perc  / 100, r , false, 1, bld->getOwner() );
-         if ( bld->plus.resource(r) * perc / 100  > 0)
+         int toput = bld->plus.resource(r) * perc  / 100;
+         int didput = bld->putResource( toput, r , false, 1, bld->getOwner() );
+         if ( toput > 0)
             didSomething = true;
 
+         logMessage("ResourceWork", "MatterConverter " + tos( bld->getPosition()) + ": generated " + tos(toput) + " of " + Resources::name(r) + ", successfully stored " + tos(didput) + " of it");
+
       } else {
-         if ( bld->plus.resource(r) < 0 )
-            bld->getResource( -bld->plus.resource(r) * perc  / 100, r , false, 1, bld->getOwner());
+         if ( bld->plus.resource(r) < 0 ) {
+            int toget = -bld->plus.resource(r) * perc  / 100;
+            int got = bld->getResource( toget, r , false, 1, bld->getOwner());
+            logMessage("ResourceWork", "MatterConverter " + tos( bld->getPosition()) + ": needed " + tos(toget) + " of " + Resources::name(r) + ", successfully got " + tos(got) + " of it");
+         }
       }
 
+
    percentage -= perc;
+
+   logMessage("ResourceWork", "MatterConverter " + tos(bld->getPosition()) + ": did " + tos(perc) + "% of work, " + tos(percentage) + "% left");
+
    return didSomething;
 }
 

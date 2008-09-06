@@ -235,6 +235,8 @@ extern bool MultiLineEditor( const ASCString& title, ASCString& textToEdit );
 //! uses the new dialog engine
 extern ASCString editString2( const ASCString& title, const ASCString& defaultValue = "" );
 
+extern int choiceDialog(const ASCString& text, const ASCString& button1, const ASCString& button2, const ASCString& shortLabel );
+
 
 class BulkGraphicUpdates {
       PG_Widget* parent;

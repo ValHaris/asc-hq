@@ -84,6 +84,16 @@ void MessagingHubBase::message( MessageType type, const ASCString& message )
 
 }
 
+void MessagingHubBase::setLoggingCategory( const ASCString& category, bool enable )
+{
+   if ( enable ) {
+      if ( enabledLogCategories.find( category ) == enabledLogCategories.end())
+         enabledLogCategories.insert( category );
+   } else {
+      if ( enabledLogCategories.find( category ) != enabledLogCategories.end())
+         enabledLogCategories.erase( category );
+   }
+}
 
  
 void MessagingHubBase::message( MessageType type, const char* msg, ... )
@@ -119,7 +129,19 @@ void displayLogMessage ( int msgVerbosity, const ASCString& message )
       MessagingHub::Instance().logMessage( message, msgVerbosity );
 
 }
- 
+
+
+bool MessagingHubBase::logCategoryEnabled(const ASCString& category)
+{
+   return enabledLogCategories.find( category ) != enabledLogCategories.end();
+}
+
+void logMessage ( const ASCString& category, const ASCString& message )
+{
+   if ( MessagingHub::Instance().logCategoryEnabled( category ) )
+      MessagingHub::Instance().logCategorizedMessage( category, message );
+}
+
 void fatalError ( const ASCString& string )
 {
    MessagingHub::Instance().message( MessagingHubBase::FatalError, string );

@@ -241,6 +241,9 @@ class CGameOptions
       int searchPathNum;
       ASCString searchPath[30];
 
+      typedef map<ASCString,int> DialogAnswers;
+      DialogAnswers dialogAnswers;
+
    private:
       bool _changed;
 };

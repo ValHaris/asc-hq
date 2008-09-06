@@ -830,6 +830,14 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev ( ua_loadrecentgame );
                return true;
 
+            case SDLK_LEFT:
+               execUserAction_ev( ua_turnUnitLeft );
+               return true;
+
+            case SDLK_RIGHT:
+               execUserAction_ev( ua_turnUnitRight );
+               return true;
+
             default:;
       }
    }

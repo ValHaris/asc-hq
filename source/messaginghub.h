@@ -23,6 +23,8 @@
 #ifndef messaginghubH
 #define messaginghubH
 
+ #include <set>
+
  #include <sigc++/sigc++.h>
  #include "loki/Singleton.h"
 
@@ -55,6 +57,8 @@
 
 
  class MessagingHubBase {
+      std::set<ASCString> enabledLogCategories;
+
     protected:
        int verbosity;
     
@@ -63,6 +67,9 @@
        void setVerbosity( int v ) { verbosity = v; };
        int  getVerbosity() { return verbosity; };
        
+       void setLoggingCategory( const ASCString& category, bool enable );
+       bool logCategoryEnabled( const ASCString& category );
+   
        enum MessageType { FatalError, Error, Warning, InfoMessage, StatusInfo, LogMessage };
        
        //! displays an error message and aborts the game
@@ -85,7 +92,10 @@
        
        //! prints a message to the logging file
        SigC::Signal2<void, const ASCString&,int> logMessage;
-       
+
+       //! prints a message to the logging file
+       SigC::Signal2<void, const ASCString&,const ASCString&> logCategorizedMessage;
+
        //! displays any kind of message, as specified by parameter
        void message( MessageType type, const char* msg, ... );
 
@@ -122,7 +132,6 @@
        
  extern void displayLogMessage ( int msgVerbosity, const char* message, ... );
  extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
-
+ extern void logMessage ( const ASCString& category, const ASCString& message );
 
 #endif
-
