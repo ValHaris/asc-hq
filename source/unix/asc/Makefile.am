@@ -10,7 +10,7 @@ bin_PROGRAMS  = asc
 
 nodist_asc_SOURCES   = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp palette.cpp \
-newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp \
+newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp memory-measurement.cpp \
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp stdio-errorhandler.cpp \
