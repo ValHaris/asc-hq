@@ -755,24 +755,25 @@ AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicletype* vt )
 
 AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicle* veh )
 {
-   switch ( veh->aiparam[getPlayerNum()]->getJob() ) {
-      case AiParameter::job_supply : return UnitDistribution::service;
-      case AiParameter::job_recon  : return UnitDistribution::recon;
-      case AiParameter::job_conquer: return UnitDistribution::conquer;
-      case AiParameter::job_fight:
-      case AiParameter::job_guard: {
-                                      bool range = false;
-                                      for ( int w = 0; w < veh->typ->weapons.count; w++ )
-                                         if ( veh->typ->weapons.weapon[w].offensive() )
-                                            if ( veh->typ->weapons.weapon[w].maxdistance >= 2 * minmalq )
-                                               range = true;
-                                      if ( range )
-                                         return UnitDistribution::rangeattack;
-                                      else
-                                         return UnitDistribution::attack;
-                                    }
-      default:;
-    } //switch job
+   if ( veh->aiparam[getPlayerNum()] )
+      switch ( veh->aiparam[getPlayerNum()]->getJob() ) {
+         case AiParameter::job_supply : return UnitDistribution::service;
+         case AiParameter::job_recon  : return UnitDistribution::recon;
+         case AiParameter::job_conquer: return UnitDistribution::conquer;
+         case AiParameter::job_fight:
+         case AiParameter::job_guard: {
+                                         bool range = false;
+                                         for ( int w = 0; w < veh->typ->weapons.count; w++ )
+                                            if ( veh->typ->weapons.weapon[w].offensive() )
+                                               if ( veh->typ->weapons.weapon[w].maxdistance >= 2 * minmalq )
+                                                  range = true;
+                                         if ( range )
+                                            return UnitDistribution::rangeattack;
+                                         else
+                                            return UnitDistribution::attack;
+                                       }
+         default:;
+       } //switch job
     return UnitDistribution::other;
 }
 

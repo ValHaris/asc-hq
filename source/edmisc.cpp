@@ -3172,7 +3172,10 @@ void transformMap ( )
                      }
                   } while ( state == trying );
 
-               }
+               } /*else {
+                 // should be tested
+                  delete fld->building;
+               }*/
              }
 
    }

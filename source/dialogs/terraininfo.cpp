@@ -203,7 +203,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
          text += "\nremaining lifetime:";
          text += ASCString::toString( i->lifetimer ) + "\n";
 
-         text += "\nremaining child spwan counter:";
+         text += "\nremaining child spawn counter:";
          text += ASCString::toString( i->remainingGrowthTime ) + "\n";
 
       }
