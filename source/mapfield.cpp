@@ -321,16 +321,15 @@ void tfield :: sortobjects ( void )
    sort ( objects.begin(), objects.end(), compareObjectHeight );
 }
 
-bool  tfield :: putmine( int col, int typ, int strength )
+bool  tfield :: putmine( int owner, MineTypes typ, int strength )
 {
-   if ( mineowner() >= 0  && mineowner() != col )
+   if ( mineowner() >= 0  && mineowner() != owner )
       return false;
 
    if ( mines.size() >= gamemap->getgameparameter ( cgp_maxminesonfield ))
       return false;
 
-   MineTypes mt =  MineTypes(typ);
-   Mine mymine ( mt, strength, col, gamemap );
+   Mine mymine ( typ, strength, owner, gamemap );
    mines.push_back ( mymine );
    return true;
 }

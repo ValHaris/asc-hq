@@ -85,16 +85,25 @@ ActionResult RemoveMine::runAction( const Context& context )
    if ( !fld )
       return ActionResult( 21002, pos );
    
-   for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i, ++layer ) {
-      if ( i->identifier == mineID ) {
-         mineBuffer = new tmemorystreambuf();
-         tmemorystream memstream( mineBuffer, tnstream::writing );
-         i->write( memstream );
-         
-         fld->mines.erase( i );
-         return ActionResult(0);
+   if ( mineID > 0 ) {
+      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i, ++layer ) {
+         if ( i->identifier == mineID ) {
+            mineBuffer = new tmemorystreambuf();
+            tmemorystream memstream( mineBuffer, tnstream::writing );
+            i->write( memstream );
+            
+            fld->mines.erase( i );
+            return ActionResult(0);
+         }
+         ++layer;
       }
-      ++layer;
+   } else {
+      layer = fld->mines.size();
+      mineBuffer = new tmemorystreambuf();
+      tmemorystream memstream( mineBuffer, tnstream::writing );
+      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i, ++layer ) 
+         i->write( memstream );
+      fld->mines.clear();
    }
       
   return ActionResult( 21401 );
@@ -107,18 +116,23 @@ ActionResult RemoveMine::undoAction( const Context& context )
    if ( !fld )
       return ActionResult( 21002, pos );
    
-   
-   tfield::MineContainer::iterator i = fld->mines.begin();
    if ( layer < 0 )
       throw ActionResult( 21401 );
    
-   int l = layer;
-   while ( l-- )
-      ++i;
-   
-   tmemorystream memstream( mineBuffer, tnstream::reading );
-   fld->mines.insert( i, Mine::newFromStream( memstream ));
-   
+   if ( mineID > 0 ) {
+      tfield::MineContainer::iterator i = fld->mines.begin();
+      
+      int l = layer;
+      while ( l-- )
+         ++i;
+      
+      tmemorystream memstream( mineBuffer, tnstream::reading );
+      fld->mines.insert( i, Mine::newFromStream( memstream ));
+   } else {
+      tmemorystream memstream( mineBuffer, tnstream::reading );
+      for ( int i = 0; i < layer; ++i )
+         fld->mines.push_back( Mine::newFromStream( memstream ));
+   }
    return ActionResult(0);
 }
 

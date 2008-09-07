@@ -52,6 +52,7 @@
 #include "actions/attackcommand.h"
 #include "actions/moveunitcommand.h"
 #include "actions/putobjectcommand.h"
+#include "actions/putminecommand.h"
 
 bool commandPending()
 {
@@ -1240,37 +1241,6 @@ class RefuelUnitDialog : public GuiFunction
 
 
 
-
-#if 0
-class ViewMap : public GuiFunction
-{
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-            return true;
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-          // showmap ();
-          displaymap();
-      }
-
-      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return IconRepository::getIcon("worldmap.png");
-      };
-
-      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return "view survey map";
-      };
-};
-#endif
-
-
 class PutMine : public GuiFunction
 {
    public:
@@ -1279,12 +1249,10 @@ class PutMine : public GuiFunction
          tfield* fld = actmap->getField(pos);
          if ( !commandPending())
             if ( fld->vehicle )
-               if (fld->vehicle->color == actmap->actplayer * 8)
-                  if (fld->vehicle->typ->hasFunction( ContainerBaseType::PlaceMines ) )
-                     if ( !fld->vehicle->attacked )
-                        return true;
+               return PutMineCommand::avail(fld->vehicle);
          return false;
       };
+      
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'm' );
@@ -1292,9 +1260,23 @@ class PutMine : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         putMine( pos, 0, 0);
-         updateFieldInfo();
-         displaymap();
+         tfield* fld = actmap->getField(pos);
+         if ( fld->vehicle ) {
+            auto_ptr<PutMineCommand> poc ( new PutMineCommand( actmap->getField(pos)->vehicle ));
+            ActionResult res = poc->searchFields(); 
+            if ( res.successful() ) {
+               vector<MapCoordinate> fields = poc->getFields();
+               for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
+                  actmap->getField(*i)->a.temp = 1;
+               
+               NewGuiHost::pendingCommand = poc.get();
+               poc.release();
+               
+               repaintMap();
+               updateFieldInfo();
+            } else
+               MessagingHub::Instance().statusInformation("can't build or remove any objects here");
+         }
       }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1309,33 +1291,51 @@ class PutMine : public GuiFunction
 };
 
 
-
-class PutGroundMine : public GuiFunction
+class PutMineStage2 : public GuiFunction 
 {
+   private:
+      MineTypes type; 
+   protected:
+      PutMineStage2( MineTypes type ) 
+      {
+         this->type = type;
+      };
+      
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( (fld->bdt & (getTerrainBitType( cbwater ).flip())).any() )
-               if ( fld->a.temp & 1)
-                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-                     return true;
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) {
+            const vector<MineTypes>& mines = pmc->getCreatableMines( pos );
+            for ( vector<MineTypes>::const_iterator i = mines.begin(); i != mines.end(); ++i )
+               if ( *i == type )
+                  return true;
          }
          return false;
       };
-};
-
-class PutAntiTankMine : public PutGroundMine
-{
-   public:
+      
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         putMine(pos, cmantitankmine, 1 );
-         updateFieldInfo();
-         displaymap();
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) {
+            pmc->setCreationTarget( pos, type );
+            ActionResult res = pmc->execute( createContext( actmap ));
+            if ( !res.successful() )
+               delete NewGuiHost::pendingCommand;
+            NewGuiHost::pendingCommand = NULL;
+            actmap->cleartemps();
+            updateFieldInfo();
+            displaymap();
+         }
       }
+};
 
+class PutAntiTankMine : public PutMineStage2
+{
+   public:
+
+      PutAntiTankMine() : PutMineStage2( cmantitankmine ) {};
+      
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putantitankmine.png");
@@ -1347,15 +1347,11 @@ class PutAntiTankMine : public PutGroundMine
       };
 };
 
-class PutAntiPersonalMine : public PutGroundMine
+class PutAntiPersonalMine : public PutMineStage2
 {
    public:
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         putMine(pos, cmantipersonnelmine, 1);
-         updateFieldInfo();
-         displaymap();
-      }
+
+      PutAntiPersonalMine() : PutMineStage2( cmantipersonnelmine ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -1371,31 +1367,10 @@ class PutAntiPersonalMine : public PutGroundMine
 
 
 
-class PutAntiShipMine : public GuiFunction
+class PutAntiShipMine : public PutMineStage2
 {
    public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( (fld->bdt & getTerrainBitType(cbwater0)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater1)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater2)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater3)).any() 
-                 || (fld->bdt & getTerrainBitType(cbriver)).any() )
-               if (fld->a.temp & 1 )
-                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-                     return true;
-         }
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         putMine( pos, cmfloatmine, 1);
-         updateFieldInfo();
-         displaymap();
-      }
+      PutAntiShipMine() : PutMineStage2( cmfloatmine ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -1408,28 +1383,10 @@ class PutAntiShipMine : public GuiFunction
       };
 };
 
-class PutAntiSubMine : public GuiFunction
+class PutAntiSubMine : public PutMineStage2
 {
    public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( (fld->typ->art & getTerrainBitType(cbwater2)).any()
-                 || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
-               if (fld->a.temp & 1 )
-                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-                     return true;
-         }
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         putMine( pos, cmmooredmine,1 );
-         updateFieldInfo();
-         displaymap();
-      }
+      PutAntiSubMine() : PutMineStage2( cmmooredmine ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -1448,19 +1405,22 @@ class RemoveMine : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( fld->a.temp )
-               return !fld->mines.empty();
-         }
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) 
+            return pmc->getRemovableMines(pos);
+         
          return false;
       };
-
+      
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         putMine( pos, 0, -1);
-         updateFieldInfo();
-         displaymap();
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) {
+            pmc->setRemovalTarget( pos );
+            pmc->execute( createContext( actmap ));
+            updateFieldInfo();
+            displaymap();
+         }
       }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1539,8 +1499,6 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
 {
    PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
    if ( num && poc ) {
-      tfield* fld = actmap->getField(pos);
-      
       poc->setTarget( pos, abs(num) );
       
       ObjectType* obj = objectTypeRepository.getObject_byID( abs(num) );

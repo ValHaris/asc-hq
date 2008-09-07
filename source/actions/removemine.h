@@ -39,7 +39,8 @@ class RemoveMine : public GameAction {
       tmemorystreambuf* mineBuffer;
 
    public:
-      RemoveMine( GameMap* gamemap, const MapCoordinate& position, int mineID );
+      //! mineID = 0 will remove all mines on that field
+      RemoveMine( GameMap* gamemap, const MapCoordinate& position, int mineID = 0 );
       
       ASCString getDescription() const;
       

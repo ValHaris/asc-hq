@@ -157,8 +157,8 @@ class  tfield {
     //! returns a pointer to the #ContainerBase of the field or NULL if there is none
     ContainerBase* getContainer();
 
-    //! put a mine of type typ for player col (0..7) and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
-    bool  putmine ( int col, int typ, int strength );
+    //! put a mine of type typ for player owner and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
+    bool  putmine ( int owner, MineTypes typ, int strength );
 
     /** removes a mine
          \param num The position of the mine; if num is -1, the last mine is removed)

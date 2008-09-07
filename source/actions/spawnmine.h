@@ -19,28 +19,28 @@
 */
 
 
-#ifndef consumeAmmoH
-#define consumeAmmoH
+#ifndef spawnMineH
+#define spawnMineH
 
 
 #include "action.h"
 #include "action-registry.h"
 
+#include "../typen.h"
+#include "../objects.h"
 
-class ConsumeAmmo : public GameAction {
-      int vehicleID;
-      int ammoType;
-      int slot;
-      int count;
+class SpawnMine : public GameAction {
+      MapCoordinate pos;
+      MineTypes type;
+      int owner;
+      int strength;
+      int stackPosition;
       
-      int resultingAmmount;
-      
-      ConsumeAmmo( GameMap* map ) : GameAction( map ) {};
+      SpawnMine( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
 
    public:
-      ConsumeAmmo( GameMap* gamemap, int vehicleID, int ammoType, int slot, int count );
-      ConsumeAmmo( Vehicle* veh, int ammoType, int slot, int count );
+      SpawnMine( GameMap* gamemap, const MapCoordinate& position, MineTypes mineType, int owner, int strength );
       
       ASCString getDescription() const;
       
@@ -49,7 +49,7 @@ class ConsumeAmmo : public GameAction {
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
-      virtual ActionResult postCheck();
+      virtual ActionResult verify();
       
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream ) const;

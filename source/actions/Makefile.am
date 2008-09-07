@@ -13,10 +13,10 @@ libdirectunitactions_la_SOURCES	=  consumeammo.cpp inflictdamage.cpp destructcon
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp 
 libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 
-libmiscactions_la_SOURCES	= servicing.cpp jumpdrive.cpp selfdestruct.cpp putobjectcommand.cpp
+libmiscactions_la_SOURCES	= servicing.cpp jumpdrive.cpp selfdestruct.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
 libmiscactions_la_LIBADD		= @SDL_LIBS@
 
-libmapactions_la_SOURCES	= spawnobject.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
+libmapactions_la_SOURCES	= spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD		= @SDL_LIBS@
 
 libfullgameactions_la_SOURCES	= containeraction.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp \

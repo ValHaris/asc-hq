@@ -1904,7 +1904,7 @@ void trunreplay :: execnextreplaymove ( void )
                            tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
-                              fld -> putmine ( col, typ, strength );
+                              fld -> putmine ( col, MineTypes(typ), strength );
                               if ( nwid >= 0 ) {
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {

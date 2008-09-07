@@ -35,6 +35,17 @@ ConsumeAmmo::ConsumeAmmo( GameMap* gamemap, int vehicleID, int ammoType, int slo
    resultingAmmount = -1;
 }
       
+ConsumeAmmo::ConsumeAmmo( Vehicle* veh, int ammoType, int slot, int count )
+   : GameAction( veh->getMap() )
+{
+   this->vehicleID = veh->networkid;
+   this->ammoType = ammoType;
+   this->slot = slot;
+   this->count = count;
+   
+   resultingAmmount = -1;
+}
+
       
 ASCString ConsumeAmmo::getDescription() const
 {

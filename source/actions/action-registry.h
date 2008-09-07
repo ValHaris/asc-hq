@@ -23,6 +23,7 @@
 #define actionRegistryH
 
 namespace ActionRegistry {
+   //! Every action must have a unique ID. Adding the actions to this enum ensures it
    enum Actions { Root, 
                   ConsumeAmmo,
                   InflictDamage,
@@ -44,7 +45,9 @@ namespace ActionRegistry {
                   RemoveObject,
                   ChangeObjectProperty,
                   ConvertContainer,
-                  PutObjectCommand
+                  PutObjectCommand,
+                  PutMineCommand,
+                  SpawnMine
       
    };
 };
