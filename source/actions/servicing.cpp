@@ -386,7 +386,7 @@ class AmmoTransferrable : public Transferrable {
          int got = min ( toGet, gettable);
          int toProduce = toGet - got;
 
-         if ( allowAmmoProduction && toProduce > 0 && weaponAmmo[ammoType] ) {
+         if ( allowAmmoProduction && toProduce > 0 && weaponAmmo[ammoType] && c->baseType->hasFunction(ContainerBaseType::AmmoProduction) ) {
             for ( int r = 0; r < resourceTypeNum; ++r ) {
                if ( cwaffenproduktionskosten[ammoType][r] ) {
                   int produceable = getResourceWatch(c).avail().resource(r) / cwaffenproduktionskosten[ammoType][r];

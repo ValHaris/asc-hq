@@ -3172,15 +3172,31 @@ void transformMap ( )
                      }
                   } while ( state == trying );
 
-               } /*else {
-                 // should be tested
+               } else {
                   delete fld->building;
-               }*/
+               }
              }
 
    }
 
    for( int p = 0; p < actmap->getPlayerCount(); ++p ) {
+      Player::VehicleList::iterator di = actmap->getPlayer(p).vehicleList.begin();
+      while ( di != actmap->getPlayer(p).vehicleList.end() ) {
+         bool found = false;
+         for ( int i = 0; i < vehicletranslation.size()/2; ++i )
+            if ( (*di)->typ->id == vehicletranslation[i*2] && vehicletranslation[i*2+1] <= 0 ) {
+               delete *di;
+               found = true;
+               break;
+            }
+         if ( found )
+            di = actmap->getPlayer(p).vehicleList.begin();
+         else
+            ++di;
+      }
+         
+
+
       for ( Player::VehicleList::iterator i = actmap->getPlayer(p).vehicleList.begin(); i != actmap->getPlayer(p).vehicleList.end(); ++i) {
          (*i)->transform( transform( (*i)->typ->id, vehicletranslation));
          
