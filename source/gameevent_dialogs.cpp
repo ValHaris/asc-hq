@@ -698,10 +698,22 @@ bool ReinforcementSelector::mark()
    if ( i == coordinateList.end() )
       coordinateList.push_back ( pos );
 
+   cut( pos );
+
+   showFieldMarking( coordinateList );
+
+   updateList();
+   return true;
+}
+
+void ReinforcementSelector::cut( const MapCoordinate& pos )
+{
    tfield* fld = actmap->getField( pos );
    if (!fld )
-      return false;
+      return;
 
+   cutPositions.push_back( pos );
+   
    if ( fld->vehicle ) {
       tmemorystream stream ( &buf, tnstream::appending );
       stream.writeInt( Reinforcements::ReinfVehicle );
@@ -718,14 +730,16 @@ bool ReinforcementSelector::mark()
          delete fld->building;
          fld->building = NULL;
       }
-
-   showFieldMarking( coordinateList );
-
-   updateList();
-   return true;
 }
 
 
+bool ReinforcementSelector::isOk()
+{
+   for ( CoordinateList::const_iterator i = coordinateList.begin(); i !=  coordinateList.end(); ++i  ) 
+      if ( find( cutPositions.begin(), cutPositions.end(), *i ) == cutPositions.end() )
+         cut( *i );
+   return true;  
+}
 
 
 bool BitMapEditor::ok()
