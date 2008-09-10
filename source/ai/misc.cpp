@@ -840,8 +840,10 @@ void AI::production()
    for ( int p = 0; p < 8; p++ )
       if ( actmap->player[p].diplomacy.isHostile( getPlayerNum() ) )
           for ( Player::VehicleList::iterator vli = getMap()->player[p].vehicleList.begin(); vli != getMap()->player[p].vehicleList.end(); vli++ ) {
-              enemyThreat += (*vli)->aiparam[getPlayerNum()]->threat;
-              enemyValue[(*vli)->aiparam[getPlayerNum()]->valueType] += (*vli)->aiparam[getPlayerNum()]->getValue();
+             if ( (*vli)->aiparam[getPlayerNum()] ) {
+                enemyThreat += (*vli)->aiparam[getPlayerNum()]->threat;
+                enemyValue[(*vli)->aiparam[getPlayerNum()]->valueType] += (*vli)->aiparam[getPlayerNum()]->getValue();
+             }
           }
 
 
