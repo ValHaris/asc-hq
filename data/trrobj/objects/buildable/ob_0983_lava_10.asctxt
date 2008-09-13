@@ -5,7 +5,7 @@ ObjectType {
    GroupID = 14
 
    MaxChildSpawnNumber = 10
-   Lifetime = 20
+   Lifetime = 15
    growthRate = 2.00
 
 } ObjectType

@@ -1,16 +1,14 @@
 ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
-Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
+Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 
 __________________
+13.09.2008 (GAMER)
 -Lava Filtert Wetterbits
-__________________
 -alte GebäudeWracks, Attackboni entfernt
 -Plateau, Grafikbugfix
 -River und Steilküste verlinken
-__________________
-Beta 05-08/08
 -Railroad nicht mehr auf hillside, durch swamp zerstörbar
 -small Railraod auf swamp und Morass zerstörbar, +1 Movemalus
 -track , kein mud mehr
@@ -19,7 +17,7 @@ Beta 05-08/08
 -Plateau eingebaut
 -Viewbonusobjecte eingebaut
 -Stealth-Sockel basejamming_abs = 25
-
+-Kanal neue Grafik
 ________________
 09.08.2008 (GAMER)
 -Hohe Berge(64) repariert
