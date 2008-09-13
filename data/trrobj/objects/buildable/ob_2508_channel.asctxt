@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 2508
    GroupID = 17
-   TechAdapterRequired = o181
+   TechAdapterRequired = o2508
 
    LinkableObjects = 2500
 
