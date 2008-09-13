@@ -5,6 +5,12 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+-Antey, mdrf
+
+__________________
+-Spacelab am Boden 20 Move
+-Booster angepasst
+__________________
 Beta 05-08/08
 -Kornuta Tech2
 -Leo2 Infoimage Bugfix

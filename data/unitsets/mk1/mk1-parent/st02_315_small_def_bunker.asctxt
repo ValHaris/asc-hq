@@ -33,5 +33,6 @@ VehicleType {
 
       Weapon1 ->* VehicleType.MiniGun 
       Weapon1.Ammo = 30
+
    } Weapons
 } VehicleType

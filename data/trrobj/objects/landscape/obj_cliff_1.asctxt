@@ -5,7 +5,7 @@ ObjectType {
    ID = 2401
    Height = 1
 
-   LinkableObjects = 
+   LinkableObjects = 2500
    LinkableTerrain = 2000 2001 2002 2003 2004
    NetBehaviour = 
 

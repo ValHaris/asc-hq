@@ -17,7 +17,7 @@ VehicleType {
    MaxSurvivableStorm = 210
    ResourceDrillingRange = 5
    SelfRepairRate = 0
-   Weight = 80
+   Weight = 60
    Transportation ->* VehicleType.TransSubTrooper 
 
    Height = deep_submerged submerged floating 

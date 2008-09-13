@@ -613,6 +613,7 @@
 ; surface-air missile
       SAM { 
          Type = air_missile shootable 
+         Sound = weapon03_s.ogg
          targets = low_level_flight medium_level_flight 
          shotFrom = floating ground_level 
          MaxRange = 40
@@ -1427,6 +1428,7 @@
       ; Brandbombe
       napalm { 
          Type = bomb shootable 
+         sound = brandbombe.ogg
          targets = floating ground_level 
          shotFrom = low_level_flight 
          MaxRange = 10
@@ -1625,6 +1627,8 @@
 
 ;Diver
       C4 { 
+         name = explosive
+         sound = tnt.ogg
          Type = bomb shootable 
          targets = deep_submerged submerged floating ground_level 
          shotFrom = deep_submerged submerged ground_level 
@@ -2222,6 +2226,64 @@
          heavy_aircraft = 0
       } WeaponEffectiveness
    } Walker_Foot
+
+   Flame_Thrower   { 
+         Type = Laser shootable
+         Name = Flame Thrower
+         Sound = burning.ogg
+         targets =  floating ground_level
+         shotFrom = floating ground_level 
+         MaxRange = 20
+         MinRange = 10
+         Punch@MaxRange = 120
+         Punch@MinRange = 170
+         Ammo = 4
+         ReactionFireShots = 1
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 50
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } Flame_Thrower  
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   TYPE CHANGE WEAPONS   --------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@ ObjectType {
    groupID = 5
    Weather = dry 
    visible_in_fogOfWar = false
-   LinkableObjects = 
+   LinkableObjects = 1403
    Armor = 1000
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 
@@ -35,7 +35,7 @@ ObjectType {
       terrain_not = hillside Forest Large_rocks ditch deep_snow bridge railroad
       terrain_kill = very_shallow_water Shallow_water Water Deep_water River lava 
    } TerrainAccess
-   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest road railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Very_shallow_water Large_rocks Morass Frozen_water 
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest road railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Deep_snow Very_shallow_water Large_rocks Morass Frozen_water 
    TerrainProperties_Add = Ditch 
    dry { 
       UseGFXpics = false

@@ -28,7 +28,7 @@ BuildingType {
       DisableAttack = false
    } Transportation
    Functions = Vehicle_Production Ammo_Production Repair_Facility External_Loading recycling
-   CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft
+   CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft default
    TerrainAccess { 
       terrain_any = Shallow_water Water Very_shallow_water river lowland hard_sand
       terrain_all = 

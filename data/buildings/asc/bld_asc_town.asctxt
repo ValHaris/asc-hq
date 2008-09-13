@@ -18,6 +18,9 @@ BuildingType {
    Entry = A1
    Functions = matter_converter
    notRemovable = true
+   TerrainAccess { 
+      terrain_kill = water deep_water river
+   } TerrainAccess
    MaxResearch = 10
    NominalResearch = 10
    MaxResourceProduction { 

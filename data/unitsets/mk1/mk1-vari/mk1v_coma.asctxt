@@ -3,6 +3,11 @@ VehicleType {
    ID = 2
    parent = 251
    Description = medium artillery
+
+   Picture = mk1v_coma.pcx
+   InfoImage = mk1v_coma.jpg
+   WreckageObject = 402
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [#font2#Artillery#font1##crt##crt#Artillery is one of the three
               main branches of an ARMY, along with the INFANTRY and the CAVALRY.
                Artillery refers both to the personnel who transport and serve
@@ -110,10 +115,8 @@ VehicleType {
               ROCKETS AND MISSILES and cannon.  Most U.  S.  artillery weapons
               are protected by an armored, wheeled- or track-mounted chasis,
               and are self-propelled. Towed howitzers are gradually falling
-              into disuse.#crt##crt#]
-   Picture = mk1v_coma.pcx
-   WreckageObject = 402
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+              into disuse.#crt##crt#
+              InfoImage = BananaJoe]
 
    Armor += 20
    Weapons { 

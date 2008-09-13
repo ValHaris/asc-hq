@@ -13,6 +13,7 @@ VehicleType {
    Jamming = 55
 
    TerrainAccess ->* VehicleType.turret_only
+   MovementSound = thump.ogg
    Weapons {
       Initiative = 0
       Number = 0

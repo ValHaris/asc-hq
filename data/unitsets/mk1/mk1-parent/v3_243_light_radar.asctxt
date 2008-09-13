@@ -10,6 +10,7 @@ VehicleType {
 
    View = 75
    TerrainAccess ->* VehicleType.Device_terrain
+   MovementSound = thump.ogg
    Weapons { 
       Initiative = 0
       Number = 0

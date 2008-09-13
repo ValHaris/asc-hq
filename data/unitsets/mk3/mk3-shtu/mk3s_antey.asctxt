@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Jamming = 19
-   Features += jam_only_own_field
+   Features += jam_only_own_field moveduringreactionfire
 
    WaitForAttack = true
    Weapons { 
@@ -33,5 +33,6 @@ VehicleType {
       Weapon3.Ammo = 4
       Weapon3.Punch@MaxRange = 100
       Weapon3.Punch@MinRange = 100
+      Weapon3.Reactionfireshots = 0
    } Weapons
 } VehicleType

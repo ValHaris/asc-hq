@@ -2,7 +2,10 @@ Grafiken: GAMER,Schicksal,AndreasK,Xyphagoroszh und Grom
 Spezifikationen: GAMER
 
 BUILDINGS HISTORY
-
+__________________
+-Hafen kann kleine Geräte bauen
+-Bugfix Eingangsystem für fliegende Gebäude
+-Duell Lab10 kleiner EIngang
 __________________
 Beta 06-08/08
 - Mine nicht mehr auf railroad baubar

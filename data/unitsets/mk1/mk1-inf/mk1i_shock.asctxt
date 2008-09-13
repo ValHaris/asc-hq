@@ -33,6 +33,7 @@ VehicleType {
       Weapon0.Name = Maschinengewehr
       
       Weapon1.Name = Tellermine
+      Weapon1.Ammo = 4
    } Weapons
 } VehicleType
 

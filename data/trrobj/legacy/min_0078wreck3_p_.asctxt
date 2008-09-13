@@ -9,9 +9,9 @@ ObjectType {
    Movemalus_abs = 30 30  30  30  30  30  30  25  25  30  30  30  30  30  30  30  30  30
    Movemalus_plus =  
    AttackBonus_abs = -1
-   AttackBonus_plus = 0
+   AttackBonus_plus = 1
    DefenseBonus_abs = -1
-   DefenseBonus_plus = -1
+   DefenseBonus_plus = 1
    Jamming_abs = -1
    Jammming_plus = 2
    Height = 110
@@ -23,9 +23,9 @@ ObjectType {
    } ConstructionCost
    RemovalCost { 
       Energy = 0
-      Material = -1000
+      Material = -400
       fuel = 100
-      Movement = 20
+      Movement = 30
    } RemovalCost
    Name = wreckage
    NoSelfChaining = true

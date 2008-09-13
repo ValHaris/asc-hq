@@ -22,7 +22,7 @@ VehicleType {
       fuel = 18000
    } Tank
    FuelConsumption = 100
-   Movement += 0 0 0 40 0 0 0 0
+   Movement += 0 0 0 20 0 0 0 0
 
    Weapons { 
       Number = 5

@@ -4,7 +4,11 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club und Grom
 
 __________________
+-Lava Filtert Wetterbits
+__________________
 -alte GebäudeWracks, Attackboni entfernt
+-Plateau, Grafikbugfix
+-River und Steilküste verlinken
 __________________
 Beta 05-08/08
 -Railroad nicht mehr auf hillside, durch swamp zerstörbar

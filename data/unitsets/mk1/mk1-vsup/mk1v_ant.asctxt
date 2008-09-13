@@ -15,6 +15,7 @@ VehicleType {
               InfoImage = BananaJoe]
 
    Armor -= 100
+   Weight -=10
    Features += 
 
    Tank { 

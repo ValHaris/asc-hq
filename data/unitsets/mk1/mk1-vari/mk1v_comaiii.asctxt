@@ -4,10 +4,11 @@ VehicleType {
    parent = 253
 
    Description = twice gun artillery
-   Infotext = []
    Picture = MK1v_comaiii.pcx
+   InfoImage = mk1v_comaiii.jpg
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [InfoImage = BananaJoe]
 
    Armor += 10
    Weapons { 

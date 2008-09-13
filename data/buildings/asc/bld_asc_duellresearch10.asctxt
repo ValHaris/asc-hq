@@ -1,7 +1,7 @@
 BuildingType { 
    Name = LAB 10
    ID = 27
-   parent = 499
+   parent = 499 498
    Infotext = [Sonderforschungslab für Einzelmissionen]
    Armor = 10000
    ConstructionStages = 1
@@ -16,13 +16,8 @@ BuildingType {
    Functions = Research
    MaxResearch = 1000
    NominalResearch = 300
-   Transportation { 
-      MaxLoadableUnits = 0
-      MaxLoadableUnitSize = 0
-      MaxLoadableMass = 0
-      CategoriesNOT = Medium_aircraft Heavy_aircraft Medium_ship Heavy_Ship building|turret|object
-      EntranceSystemNum = 1
-   } Transportation
+   Transportation ->* BuildingType.Esmall 
+
    ConstructionCost { 
       Energy = 0
       Material = 0

@@ -4,16 +4,18 @@ VehicleType {
    parent = 335 
 
    Description = transport vehicle
+   picture = MK1v_atuin.pcx
+   InfoImage = mk1v_atuin.jpg
+   WreckageObject = 425
+   GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
    Infotext = [Transport Vehicles are large trucks in which a number of small
               vehicles or a couple of heavy vehicles can be stored for transport.
               Most vehicles, like tanks, don't benefit from transport very
               well. But for slower units like Heavy Artillery, transportation
               is the key to efficiency in battle. Be aware that a Transport
               Vehicle, though slightly armoured, is defenseless in the face
-              of any combat unit.]
-   picture = MK1v_atuin.pcx
-   WreckageObject = 425
-   GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
+              of any combat unit.
+              InfoImage = BananaJoe]
 
    Armor += 50
    Transportation ->* VehicleType.TransVehicleHeavy 

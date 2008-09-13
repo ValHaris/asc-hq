@@ -5,6 +5,11 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 __________________
+-Tsunami mdrf
+-SAM Waffensound
+__________________
+-Grafikbugfix: Inca, Bumblebee
+__________________
 Beta 06-08/08
 -InfoImage = Nova, Nova2, Oracle, Punch, CAD, HeavyGun, Assault
 -InfoImage = Crazy, Drall, EXP5, LAssault, Termite, Vortex, Weasel, Ant

@@ -12,4 +12,8 @@ The Booster is a single-sortie unit, used to transport sattelites into space whe
 ]
    Picture = MK3o_booster.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Transportation.CargoMovementDivisor = 3
+   Transportation.EntranceSystem1.MoveCost = 10 
+
 } VehicleType

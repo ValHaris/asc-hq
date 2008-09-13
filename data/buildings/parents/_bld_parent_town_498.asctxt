@@ -82,7 +82,7 @@ BuildingType {
       EntranceSystem0 {
         Mode = In out docking
         UnitHeightAbs = floating ground_level low_level_flight 
-        UnitHeightRel = -1
+        UnitHeightRel = -100
         ContainerHeight = low_level_flight
         CategoriesNOT = 
         DockingHeightAbs = low_level_flight 
