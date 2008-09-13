@@ -8,6 +8,7 @@ VehicleType {
    Infoimage = mk4s_titan.jpg
    wreckageobject = 14259
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   InfoText = [Die Titan wurde entwickelt, als sich zeigte, daß die Pegasus den Anforderungen der modernisierten Cromonischen Luftwaffe nicht mehr genügte. Das Hauptproblem war, daß nur die leichteren Flugzeuge und Helikopter landen konnten, und das ließ sich auch durch verschiedene getestete Modifikationen der Pegasus nicht lösen. So wurde ein völlig neuer Träger konstruiert, auf dem fast alle heutigen Flugzeuge landen können. Der Rumpf wurde verstärkt und die Ladekapazität deutlich erhöht. Dies ging allerdings zu Lasten der Geschwindigkeit, was die Titan zu einem der langsamsten cromonischen Schiffe macht. Die Defensivbewaffnung wurde zwar verbessert, kann aber einen starken Geleitschutz nicht ersetzen, insbesondere, da Sie ein äußerst lohnendes Ziel für U-Boote darstellt. Sie führt nämlich neben den Flugzeugen riesige Mengen an Treibstoff, Munition und Ersatzteilen mit sich, genug, um die mitgeführten Einheiten lange Zeit versorgen zu können. Dies hat natürlich seinen Preis. Wer allerdings einen massiven Angriff mehrerer Torpedobomberstaffeln auf Großkampfschiffe erlebt hat, weiß, daß eine voll belegte Titan eine lohnende Investition darstellt. ]
 
    Armor -= 100
 

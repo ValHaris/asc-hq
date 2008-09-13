@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = URAL
+   ID = 1495
+   parent = 335 
+
+   Description = container transport
+   picture = mk5v_ural.pcx
+;   WreckageObject = 425
+   GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
+   Infotext = []
+
+   Armor += 100
+   Transportation ->* VehicleType.TransTurretBig 
+   Transportation.CategoriesNOT = trooper rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
+   Transportation.MaxLoadableUnitSize = 700
+   Transportation.MaxLoadableMass = 700
+
+
+   Category = heavy_wheeled_vehicle
+   Weight = 150
+   TerrainAccess ->* VehicleType.hvy_wheeled
+   TerrainAccess.Terrain_any += very_shallow_water 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG_Tank 
+   } Weapons
+} VehicleType

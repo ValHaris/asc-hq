@@ -1,0 +1,10 @@
+technology {
+   Name = Deltasearcher
+   infotext =
+   ID = 15305
+   RelatedUnitID = 15305
+   parent = 15000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 15000,100003,100104,100210
+} Technology

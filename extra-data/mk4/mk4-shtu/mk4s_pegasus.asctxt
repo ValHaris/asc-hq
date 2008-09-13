@@ -3,7 +3,7 @@ VehicleType {
    ID = 1285
    parent = 359
    Description = Flugzeugtraeger
-   Infotext = [Die Pegasus ist ein Flugzeugträger älterer Bauart. Sie diehnt bist zu 10 Flugzeugen als Operationsbasis. Auf dem Träger können auch Reparaturen durchgeführt werden. Und die Besatzung ist in der Lage das Schiff selbst zu reparieren.]
+   Infotext = [Die Pegasus ist ein Flugzeugträger älterer Bauart. Sie dient bist zu 14 leichteren Flugzeugen oder Hubschraubern als Operationsbasis, kann diese komplett reparieren, aufmunitionieren und betanken. Sie ist zwar recht gut gepanzert, verfügt aber nur über eine schwache Luftverteidigung und ist Schiffen und U-Boooten völlig schutzlos ausgeliefert. Die Besatzung kann allerdings kleinere Schäden selbst beheben. So ist sie mittlerweile nur noch bei technologisch eher veralteten Streitkräften als Standardflugzeugträger mit mehreren Exemplaren im Einsatz. Bei modernen Armeen wird sie nur dann genutzt, wenn Operationen in seichten Gewässern durchgeführt werden müssen oder es auf Schnelligkeit ankommt. Hier kann sie Ihre einzigen Vorteile gegenüber der Titan, die höhere Geschwindigkeit und die Möglichkeit, flache Meere zu befahren, ausspielen. Sie stellt natürlich trotzdem eine wichtige und recht teure Einheit dar und sollte deshalb immer gut geschützt werden. ]
    picture = mk4s_pegasus.png
    wreckageobject = 14285
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0

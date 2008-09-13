@@ -5,6 +5,23 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+13.09.2008 (GAMER)
+-Grafikbugfix Debugg, Ionenkanone
+-Sprungbugfix Debugg
+-MBF kann Ionenkanone bauen
+-DeltaHunter neue Grafik
+-MBC10 TerrainBugfix
+-Asus Tech1
+-Deltaflieger Tech3
+-Delta Tech4
+-CargoMX tech1
+-Lasersound angepasst
+-Jumpterminal, Lifetime = 100
+Neu:
+-Deltasearcher (universal Sucher)
+-Meta TAG (hva EMP tank)
+-Inova (med bomber)
+__________________
 09.08.2008
 -Terminal, View Bugfix
 -MBF Baubugfix

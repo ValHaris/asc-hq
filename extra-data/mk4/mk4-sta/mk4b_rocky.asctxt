@@ -5,12 +5,12 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14295
 
-   Description = Bunker
-   Infotext = [Diese Bunkeranlage dient dazu eigene Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Dieser ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Durch das sehr tiefe eingraben des Bunkers in den Boden ist die Panzerung hier größer als bei anderen Bunkertypen. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Allerdings sind diese Bunkeranlagen gegenüber Hoehenbomber aufgrund Ihrer preiswerten Kanonen-Bewaffnung wehrlos. ]
+   Description = Geschützkuppel
+   Infotext = [Diese Geschützkuppel dient dazu eigene Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Sie ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Allerdings sind diese Bunkeranlagen gegenüber Hoehenbomber aufgrund Ihrer preiswerten Kanonen-Bewaffnung wehrlos. ]
    picture = mk4b_rocky.png
 
-   Weight = 190
-   Features += ManualSelfDestruct
+   Weight = 490
+   Features += ManualSelfDestruct onlyTransMove
 
    Movement = 0 0 0 18 0 0 0 0 
    Tank { 
@@ -18,5 +18,10 @@ VehicleType {
    } Tank
    FuelConsumption = 300
    Terrainaccess ->* VehicleType.Turret_all
+   
+   Weapons {
+      Number = 3
+      Weapon2 ->* VehicleType.Flame_Thrower
+   } Weapons
 
 } VehicleType

@@ -20,9 +20,9 @@ Aufgrund dieser Änderungen sind die Torpedos, sowie die Luftabwehrraketen daher 
 
    Armor += 200
    View += 10
-   Features += self_repairing Repair_Facility
+   Features += self_repairing Repair_Facility moveduringreactionfire
    SelfRepairRate = 5
-   Weight += 2000
+   Weight += 500
 
    Transportation { 
       MaxLoadableUnits = 5

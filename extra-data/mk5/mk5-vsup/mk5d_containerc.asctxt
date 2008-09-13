@@ -13,7 +13,7 @@ VehicleType {
    Weight = 20
    Features += Repair_Facility
    Transportation ->* VehicleType.TransTrooper
-   Transportation.CargoMovementDivisor = 4
+   Transportation.CargoMovementDivisor = 10
    Transportation.MaxLoadableUnits = 16
    Transportation.MaxLoadableUnitSize = 6
    Transportation.MaxLoadableMass = 32

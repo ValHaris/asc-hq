@@ -63,33 +63,19 @@ VehicleType {
       Weapon8 ->* VehicleType.ServiceGround
    } Weapons
 
-   HeightChangeMethodNum = 4
+   HeightChangeMethodNum = 2
    HeightChangeMethod0 {
-      movecost = 20
+      movecost = 25
       heightdelta = 1
-      dist = 0
-      startheight = ground_level
+      dist = 1
+      startheight = ground_level low_level_flight
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
-      movecost = 30
-      heightdelta = 1
-      dist = 1
-      startheight = low_level_flight medium_level_flight high_level_flight
-      canattack = true
-   } HeightChangeMethod1
-   HeightChangeMethod2 {
       movecost = 25
       heightdelta = -1
       dist = 1
-      startheight = medium_level_flight high_level_flight orbit
+      startheight = low_level_flight medium_level_flight
       canattack = true
-   } HeightChangeMethod2
-   HeightChangeMethod3 {
-      movecost = 20
-      heightdelta = -1
-      dist = 0
-      startheight = low_level_flight
-      canattack = true
-   } HeightChangeMethod3
+   } HeightChangeMethod1
 } VehicleType

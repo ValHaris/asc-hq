@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15277
+   ;Bezeichnung der verknüpften Technologie: Inova
+   TechnologiesRequired = 15277
+} TechAdapter

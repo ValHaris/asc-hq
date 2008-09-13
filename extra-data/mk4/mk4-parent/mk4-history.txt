@@ -5,7 +5,16 @@ InfoImages: GAMER
 Spezifikationen: GAMER
 
 __________________
-Beta 4-08/08
+13.09.2008 (GAMER)
+-Rocky +Flammenwerfer
+-Duke, Koloss, Pluto Gewichtsanpassung
+-Koloss Waffenbugfix
+-Pluto +mdrf (Torpedo/SAM)
+-Crux, CruxDX SundBugfix
+-InfoText = CruxDX, Cromos, Spectrum, Titan, Pegasus
+-PTerano, Sound
+-Rocky, Gewicht 490
+-Rex, Tech3, Buccaneer Tech2
 -Thunder SX, Waffenbugfix
 -Dterano tech4
 -Spectrum Tech2

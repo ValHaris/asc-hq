@@ -23,7 +23,7 @@ VehicleType {
    Features += self_repairing jam_only_own_field Repair_Facility moveduringreactionfire
    Category = heavy_ship
    SelfRepairRate = 5
-   Weight += 2000
+   Weight += 500
 
    Tank { 
       Energy = 0

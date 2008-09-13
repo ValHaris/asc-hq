@@ -16,7 +16,7 @@ VehicleType {
    Features += self_repairing moveduringreactionfire ExternalFuelTransfer
    Category = heavy_ship
    SelfRepairRate = 5
-   Weight += 2000
+   Weight += 500
 
    Tank { 
       Energy = 0
@@ -42,8 +42,6 @@ VehicleType {
       Weapon1.shotFrom = submerged floating 
       Weapon1.MaxRange = 20
       Weapon1.Ammo = 6
-      Weapon1.HitAccuracy.u2 = 100
-      Weapon1.HitAccuracy.u3 = 90
       Weapon1.ReactionfireShots = 1
 
       Weapon2 ->* VehicleType.UTorp
@@ -52,6 +50,7 @@ VehicleType {
       Weapon2.Punch@MinRange = 120
       Weapon2.MaxRange = 40
       Weapon2.Ammo = 6
+      Weapon2.ReactionFireShots = 0
       
       Weapon3 ->* VehicleType.ServiceGround
       Weapon3.targets = deep_submerged submerged floating

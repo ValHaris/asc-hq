@@ -4,8 +4,14 @@ InfoText: Hastrubal
 InfoImage: GAMER
 
 __________________
+13.09.2008 (GAMER)
+-Tenga, Movebugfix, kann MiniUboot(1) laden
+-Klotz + Tank/Hvy-Armor tech
 -Forest namen korrigiert
-
+-Tankblocker Grafikbugfix
+Neu:
+-Ural (Containertransporter)
+-Schützengraben mit Sperre (ElitePio)
 __________________
 09.08.2008 (GAMER)
 -Sprengkörper MDRF

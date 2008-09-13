@@ -44,6 +44,7 @@ Geschwindigkeit.
    Height = ground_level low_level_flight medium_level_flight 
    FuelConsumption = 30
    Movement = 0 0 0 65 149 149 0 0 
+   MovementSound = aircraft_l_g.ogg
 
    Weapons { 
       Initiative = 0

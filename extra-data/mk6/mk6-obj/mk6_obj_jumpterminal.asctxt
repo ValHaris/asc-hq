@@ -7,6 +7,7 @@ ObjectType {
    LinkableObjects = 
    Height = 98
    NoSelfChaining = false
+   lifetime = 100
 
    Armor = 500
    ConstructionCost { 
@@ -25,9 +26,9 @@ ObjectType {
    Weather = dry much_snow
 
    TerrainAccess { 
-      terrain_any = lowland hard_sand soft_Sand
+      terrain_any = lowland hard_sand soft_Sand road runway
       terrain_all = 
-      terrain_not = swamp forest large_rocks
+      terrain_not = swamp forest large_rocks railroad hillside installation bridge
       terrain_kill = swamp shallow_water water deep_water lava 
    } TerrainAccess
    TerrainProperties_Filter = lowland soft_sand hard_Sand

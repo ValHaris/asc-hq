@@ -1,0 +1,67 @@
+ObjectType {
+
+   Name = Graben mit Sperre
+   ID = 16901
+   groupid = 5
+   Weather = dry
+   
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   
+   LinkableObjects = 10
+   NetBehaviour = NetToSelf
+   
+   growthRate = 0
+   Armor = 1200
+   Height = 117
+   
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 255 255 255 255 255 255 255  40 255 255 255 255 255 255 255 255 255 255
+   Movemalus_abs =  255 255 255 255 255 255 255  40 255 255 255 255 255 255 255 255 255 255
+      
+   AttackBonus_abs = -1
+   AttackBonus_plus = 2
+   
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 4
+   
+   Jamming_abs = -1
+   Jammming_plus = 5
+   
+   ConstructionCost { 
+      Energy = 0
+      Material = 300
+      fuel = 60
+      Movement = 25
+   } ConstructionCost
+   
+   RemovalCost { 
+      Energy = 0
+      Material = -240
+      fuel = 60
+      Movement = 20
+   } RemovalCost
+   
+   ;River Very_shallow_water Shallow_water Water Deep_water Frozen_water Pack_ice 7
+   ;Lowland Hard_sand Soft_sand Mud Morass Swamp Snow Deep_snow Lava 9
+   ;Road Railroad Harbour Bridge Runway Pipeline Buried_pipeline 7
+   ;Forest Hillside Small_rocks Large_rocks Mountains High_mountains 6
+   ;Installation Ditch Turret_foundation lava_barrier spaceport beacon Track_possible 7 36
+   
+   TerrainAccess {
+      terrain_any = Lowland Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = Railroad Pipeline Swamp Forest Large_rocks Installation Ditch lava_barrier spaceport beacon 
+      terrain_kill = Very_shallow_water Shallow_water Water Deep_water Lava river
+   } TerrainAccess
+   
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest road railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Deep_snow Very_shallow_water Large_rocks Morass Frozen_water  beacon
+   TerrainProperties_Add = ditch
+   
+   dry { 
+      UseGFXpics = false
+      picture = mk5_graben_mit_sperre.pcx 64
+      ImageReference = -1
+      Flippictures = 0
+   } dry
+} ObjectType

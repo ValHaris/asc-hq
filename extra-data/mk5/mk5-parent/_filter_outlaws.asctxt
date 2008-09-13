@@ -1,9 +1,9 @@
 itemfilter {
-   Vehicles = 1400-1499
-   Buildings = 1400-1499
-   Objects = 1400-1499
-   Terrain = 
-   Technologies = 1400-1499
+   Vehicles = 1400-1499 16000-16999
+   Buildings = 1400-1499 16000-16999
+   Objects = 1400-1499 16000-16999
+   Terrain = 16000-16999
+   Technologies = 1400-1499 16000-16999
    name = MK5 Outlaws 
    activated = true
 } itemfilter

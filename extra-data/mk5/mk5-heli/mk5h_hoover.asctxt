@@ -2,14 +2,17 @@ VehicleType {
    Name = HOOVER
    parent = 400 401 402 409
    ID = 1410
+
    Description = Seekampfhubschrauber
-   Infotext = []
    Picture = mk5h_hoover.pcx
    WreckageObject = 1410
+   Infotext = []
    
    Armor = 320
    Weight = 45
    Transportation ->* VehicleType.TransHeliTrooper 
+   Transportation.MaxLoadableMass = 70
+   Transportation.CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship building|turret|object helicopter hoovercraft
    Transportation.EntranceSystemNum = 4
    Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
    Features += sonar

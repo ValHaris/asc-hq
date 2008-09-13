@@ -12,6 +12,7 @@ VehicleType {
    Weight -= 10
 
    Transportation ->* VehicleType.TransTurretBig
+   Transportation.MaxLoadableUnits = 2
 
    Features += construct_specific_buildings construct_vehicles
    TerrainAccess ->* VehicleType.offroad 

@@ -8,10 +8,15 @@ VehicleType {
 
    Transportation ->* VehicleType.SonarSeaPlane
    Transportation.MaxLoadableUnits = 2
-   Transportation.MaxLoadableMass = 2
+   Transportation.MaxLoadableUnitSize = 30
+   Transportation.MaxLoadableMass = 30
+   Transportation.CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   Transportation.EntranceSystemNum = 3
+   Transportation.EntranceSystem2 ->* VehicleType.OrbIO
 
    Armor += 50
    Weight = 150
+   Jamming += 10
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 

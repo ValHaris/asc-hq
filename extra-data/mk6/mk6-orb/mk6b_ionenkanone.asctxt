@@ -19,6 +19,7 @@ VehicleType {
       Number = 1
       Weapon0 ->* VehicleType.type_laser
       Weapon0.name = Ionenkanone
+      Weapon0.sound = lasercannon.ogg
       Weapon0.Punch@MaxRange += 10
       Weapon0.Punch@MinRange += 20
       Weapon0.Ammo = 6

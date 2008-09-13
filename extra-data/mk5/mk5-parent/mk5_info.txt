@@ -72,7 +72,8 @@ ID 1424 Container C
 ID 1426 Container D
 ID 1466 Notstrom X
 ID 1467 Bulldozer X
-ID 1468 Elch X
+ID 1468 FBV
+ID 1495 Ural
 
 ID 1428 GCS DHT
 ID 1434 Ninja
@@ -146,6 +147,7 @@ Object
 ID 1400 light turret
 ID 1401 Ponton
 ID 1402 Runway
+ID 1404 Schützengraben mit Sperre
 
 Building
 

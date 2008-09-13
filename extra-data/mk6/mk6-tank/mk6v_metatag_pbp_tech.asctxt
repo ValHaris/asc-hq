@@ -1,0 +1,10 @@
+technology {
+   Name = MetaTAG
+   infotext = Forschungsprojekt abgeschlossen! MetaTAG verfuegbar!
+   id = 15291
+   RelatedUnitID = 15291
+   parent = 15000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 15000,100002,100104,100201
+} Technology

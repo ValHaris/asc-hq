@@ -14,7 +14,7 @@ VehicleType {
    View += 10
 
    Features += sonar jam_only_own_field 
-   Trerrainaccess ->* VehicleType.mediumship_terrain
+   Terrainaccess ->* VehicleType.mediumship_terrain
 
    Weapons { 
       Initiative = 0

@@ -90,7 +90,8 @@ VehicleType {
    TeccEMPAir.HitAccuracy.u1 = 90
 
    AGLS { 
-         Type = Laser shootable 
+         Type = Laser shootable
+         Sound = weapon10_s.ogg 
          targets = floating ground_level
          shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
          MaxRange = 30
@@ -143,7 +144,8 @@ VehicleType {
    } AGLS
 
    GGLS { 
-         Type = Laser shootable 
+         Type = Laser shootable
+         Sound = lasergun.ogg 
          targets = floating ground_level
          shotFrom = floating ground_level
          MaxRange = 20
@@ -251,6 +253,7 @@ Plasmabomb {
 
    NLS { 
          Name = Nadel Laser System
+         Sound = weapon10_s.ogg
          Type = Laser shootable 
          Ammo = 3
 	 LaserRechargeRate = 1
@@ -264,6 +267,7 @@ Plasmabomb {
 
    DLS { 
          Name = Defence Laser System
+         Sound = weapon10_s.ogg
          Type = Laser shootable 
          targets = floating ground_level low_level_flight medium_level_flight
          shotFrom = floating ground_level
@@ -321,6 +325,7 @@ Plasmabomb {
 
    GALS { 
          Name = Ground-Air Laser System
+         Sound = weapon10_s.ogg
          Type = Laser shootable 
          targets = low_level_flight medium_level_flight high_level_flight
          shotFrom = floating ground_level
@@ -378,6 +383,7 @@ Plasmabomb {
 
    ADLS { 
          Name = Air Defence Laser System
+         Sound = weapon10_s.ogg
          Type = Laser shootable 
          targets = low_level_flight medium_level_flight high_level_flight orbit
          shotFrom = medium_level_flight high_level_flight
@@ -434,7 +440,8 @@ Plasmabomb {
    } ADLS
 
 LRHEPT { 
-         Type = Laser shootable 
+         Type = Laser shootable
+         Sound = weapon10_s.ogg 
          targets =   floating ground_level
          shotFrom = ground_level floating
 	 ReactionFireShots = 0

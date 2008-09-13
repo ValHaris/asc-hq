@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 1495
+   ;Bezeichnung der verknüpften Technologie: Ural
+   TechnologiesRequired = 1495
+} TechAdapter

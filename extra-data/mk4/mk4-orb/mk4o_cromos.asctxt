@@ -7,6 +7,11 @@ VehicleType {
    Picture = mk4o_cromos.png
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    wreckageobject = 14281 14881
+   InfoText = [Die Raumstation Cromos ist der Schlußpunkt in der Entwicklung orbitaler Streitkräfte der Cromoner. Sie wurde konstruiert, um den vielen Satelliten und Raumtransportern eine Basis zu schaffen. Es handelt sich hierbei um die größte cromonische Orbitaleinheit. Der Bau muß daher entweder im Orbit selbst erfolgen oder, falls er auf der Erde durchgeführt wird, wird ein Transport der Raumstation ins Orbit fällig. Der Bau im Orbit kann nur mit dem ISG-Builder erfolgen. Wenn dieser nicht vorhanden ist, müssen dafür auf der Erde Flughäfen genutzt werden und der Transport muß via Pathfinder bzw. SPS ins Orbit erfolgen. Mittels dieser Einheiten erlangt sie auch eine gewisse Mobilität, welche ihr sonst fast völlig abgeht.
+Mit Ihrer Defensivbewaffnung bietet sie gegen angreifende Luft- und Orbitaleinheiten einen sehr guten Schutz. Die großen Lager und Treibstofftanks haben genügend Kapazität, damit die Besatzung Reparaturen selbst ausführen kann. Zusätzlich können andere Einheiten hier andocken, ihre Vorräte auffüllen und Schäden ausbessern lassen. In begrenztem Maße kann sie auch offensiv eingesetzt werden. Dazu führt sie Marschflugkörper kurzer Reichweite mit. Durch die naturgemäß langsame Geschwindigkeit auf Ihrer Umlaufbahn im geostationären Orbit ist sie aber eher strategisch einzusetzen. Obwohl sie im Orbit für die meisten Einheiten unerreichbar ist, stellt sie aufgrund ihrer Langsamkeit ein bevorzugtes Ziel für dafür ausgerüstete Staffeln schwerer Jäger und Drohnen dar. Gegen solche massierten Angriffe benötigt sie unbedingt zusätzlichen Schutz.   
+ 
+]
+
    Armor += 20
  
    Tank { 

@@ -2,7 +2,7 @@ ObjectType {
    ID = 1401
    groupid = 2
 
-   livetime = 15
+   lifetime = 15
 
    Weather = dry  
    visible_in_fogOfWar = false

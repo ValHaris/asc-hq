@@ -8,6 +8,8 @@ VehicleType {
    InfoImage = mk4a_spectrum.jpg
    wreckageobject = 1248 14848
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   infoText = [Tankflieger sind für jede Luftwaffe unverzichtbar. Sie ermöglichen Kampf- und Transportflugzeugen eine wesentlich größere Reichweite und eine längere Verweildauer im Kampfgebiet. Die Spectrum ist zwar leicht bewaffnet, doch da ihr Verlust den Untergang ganzer Geschwader bedeuten kann, ist sie von strategischer Bedeutung und sollte unbedingt aus Kämpfen herausgehalten werden.
+]
 
    Armor -= 40
    FuelConsumption = 20

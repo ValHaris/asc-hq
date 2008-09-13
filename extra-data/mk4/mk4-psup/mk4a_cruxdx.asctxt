@@ -4,7 +4,14 @@ VehicleType {
    ID = 14022
 
    Description = DrohnenTransporter
-   Infotext = [ Die CRUX DX Einheiten sind speziell für den Drohnenabwurf ausgeruestet. Sie verfuegen ueber neuartige Abwurftechnicken, die die Reichweite der Drohnen nicht einschränkt. ]
+   Infotext = [ Nachdem es aufgrund technischer Schwierigkeiten faktisch unmöglich geworden war, die Laderäume der Pterranos auch weiterhin zum Transport und Aussetzen von Drohnen der Thunder-Klasse zu nutzen, brauchte die chromonische Luftwaffe dringend ein Flugzeug, welches diese Aufgabe übernehmen konnte. Nach vielem Hin und Her einigte man sich schließlich auf die Version einer umgebauten Transportmaschine vom Typ Crux, die sogenannte Crux DX. 
+
+Dieser ist es möglich, bis zu vier Drohnen gleichzeitig bis in Frontnähe zu bringen und sie vor Ort auszusetzen. Diese Kombination ermöglicht nebenbei auch noch eine Vergrößerung der effektiven Gesamtreichweite der jeweiligen Drohnen. Ebenso ist die Ersparnis an Treibstoff durchaus erwähnenswert. Nach ihrem Einsatz können die Drohnen dann selbständig zu einer Basis, bzw. zu einer land- oder seegestützten Serviceeinheit zurückkehren.
+
+Der Unterschied zu anderen fliegenden Drohnentransportern besteht darin, dass die Crux DX ihre Fracht auch in den obersten Luftschichten aussetzen kann, welche die meisten Drohnen aus eigener Kraft gar nicht erreichen könnten. Somit kann zum Beispiel die Tunder GX einfache Flakeinheiten überfliegen, um erst dahinter ihre tödliche Last abzuwerfen. Oder die Thunder FX kann Jäger in tieferen Luftschichten attackieren, ohne selbst getroffen zu werden. 
+
+Durch das veränderte Design, die Verkleinerung des Laderaums, sowie die Reduzierung der Panzerung, fliegt die DX-Variante jetzt sogar noch etwas schneller, als die ursprüngliche Version der normalen Crux.
+Aufgrund fehlender Waffensysteme, sowie der gerade schon angesprochenen verringerten Panzerung, verbietet es sich faktisch von allein, die Crux DX ohne Geleitschutz in Frontnähe fliegen zu lassen, da sie dadurch nur zu einer allzu leichten Beute für feindliche Jäger werden würde. Außerdem wäre der Komplettverlust einer beladenen Crux DX überaus ärgerlich, wenn man die Kosten für die ebenfalls verlustig gehenden Thunder-Drohnen bedenkt.  ]
    picture = mk4a_cruxdx.png
    wreckageobject = 14022 14822
    GuideSortHelp = 551 0 0 0 4 0 0 0 0 0
@@ -23,4 +30,5 @@ VehicleType {
    FuelConsumption = 28
    Movement = 0 0 0 65 150 160 130 0 
    Height += high_level_flight 
+   MovementSound = aircraft_l_g.ogg
 } VehicleType

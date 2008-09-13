@@ -3,7 +3,7 @@ VehicleType {
    parent = 293
 
    Name = AXIS
-   Description = [Prätorianischer Kampfpanzer]
+   Description = [Praetorianischer Kampfpanzer]
    Picture = mk4v_axis.png
    InfoImage = mk4v_axis.jpg
    wreckageobject = 14234
