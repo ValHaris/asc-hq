@@ -24,7 +24,7 @@
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 4000
+   Weight = 6000
    Construction { 
       Buildings = 
       Vehicles = 

@@ -8,10 +8,8 @@ VehicleType {
    InfoImage = mk1v_termite.jpg
    WreckageObject = 465
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Infotext = [Light Tanks are economic tanks. While not being very heavily
-              armed, they make a decent pace and aren't as expensive to build
-              as Combat Tanks. Light tanks are well suited for strike force
-              support.
+   Infotext = [Der leichte Kampfpanzer vom Typ „Termite“ vereint hohe Mobilität mit hoher Angriffseffizienz.
+Durch seine durchschnittliche Panzerung sind die Produktionskosten verhältnismäßig niedrig, weshalb sich die „Termite“ hervorragend dazu eignet, die eigenen Truppen schnell und kostengünstig mit schlagkräftiger Verstärkung zu versorgen. Durch seine 88-mm-Glattrohrkanone, die im Bedarfsfall auch spezielle panzerbrechende Munition verschießen kann, ist die „Termite“ in der Lage, es auch mit überlegenen, gegnerischen Panzerverbänden aufnehmen zu können.
               InfoImage = BananaJoe]
 
    Armor += 10

@@ -4,6 +4,7 @@ VehicleType {
    parent = 293
    Description = heavy combat tank
    Picture = MK1v_armadillo.pcx
+   InfoImage = mk1v_armadillo.jpg
    WreckageObject = 404
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 

@@ -1,0 +1,73 @@
+ObjectType { 
+
+   Weather = dry much_snow snow_and_ice
+
+   Name = BLUE Coast
+   Parent = 513
+   ID = 2652
+;   GroupID = 18
+   LinkableObjects = 2653
+   LinkableTerrain = 299 2006 303 304 305 306 274
+   NetBehaviour = 
+
+   Armor = 0
+   Height = 1
+
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   NoSelfChaining = true
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   MoveMalus_abs = -1 
+   MoveMalus_plus =  
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = 
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 
+   Jamming_abs = -1
+   Jamming_plus = 0
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand hillside mountains high_mountains  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Road Lowland Shallow_water Swamp Forest High_mountains Railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Hillside Turret_foundation Morass 
+   TerrainProperties_Add = soft_Sand track_possible
+
+   dry { 
+      UseGFXpics = false
+      picture = ob_coast_blue.png 65
+      ImageReference = 
+      FlipPictures   =  
+   } dry
+
+   much_snow {
+      UseGFXpics = false
+      picture = ob_coast_blue.png 65
+      GraphicOperations = Snow
+   } much_snow
+
+   snow_and_ice {
+      UseGFXpics = false
+      picture = ob_coast_blue.png 65
+      GraphicOperations = Snow
+   } snow_and_ice
+
+} ObjectType

@@ -7,5 +7,7 @@ ObjectType {
    MaxChildSpawnNumber = 200
    Lifetime = 8
    growthRate = 10.00
+   
+   Terrainaccess.Terrain_any += installation
 
 } ObjectType

@@ -1869,32 +1869,32 @@
    } AmmoMG
 
    AmmoCannon ->* VehicleType.AmmoMG
-   AmmoCannon.Type = Cannon ammo_transfer
+   AmmoCannon.Type = Cannon 
 
    AmmoBomb ->* VehicleType.AmmoMG
-   AmmoBomb.Type = bomb ammo_transfer
+   AmmoBomb.Type = bomb 
 
    AmmoSM ->* VehicleType.AmmoMG
-   AmmoSM.Type = ground_missile ammo_transfer
+   AmmoSM.Type = ground_missile 
 
    AmmoLM ->* VehicleType.AmmoMG
-   AmmoLM.Type = air_missile ammo_transfer
+   AmmoLM.Type = air_missile 
 
    AmmoCM ->* VehicleType.AmmoMG
-   AmmoCM.Type = Cruise_missile ammo_transfer
+   AmmoCM.Type = Cruise_missile 
 
    AmmoTorp ->* VehicleType.AmmoMG
-   AmmoTorp.Type = torpedo ammo_transfer
+   AmmoTorp.Type = torpedo 
 
    AmmoMine ->* VehicleType.AmmoMG
-   AmmoMine.Type = Mine ammo_transfer
+   AmmoMine.Type = Mine 
 
 ;alt
    AmmoGM ->* VehicleType.AmmoMG
-   AmmoGM.Type = ground_missile ammo_transfer
+   AmmoGM.Type = ground_missile 
 
    AmmoAM ->* VehicleType.AmmoMG
-   AmmoAM.Type = air_missile ammo_transfer
+   AmmoAM.Type = air_missile 
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   L A S E R   --------------------------------------------------------------------------------------------

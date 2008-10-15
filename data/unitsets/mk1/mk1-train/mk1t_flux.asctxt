@@ -4,14 +4,15 @@ VehicleType {
    parent = 400 401 402 412
 
    Description = transport train
+   picture = MK1t_flux.pcx
+   InfoImage = mk1t_flux.jpg
+   WreckageObject = 472
+   GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
    Infotext = [Transport Trains come into the picture when the battle runs in
               your favor. As the frontline moves away from the base, reinforcements
               take more time to get there. To get them there in time, the
               Transport Train is needed. It can load up a fair amount of units
               before it is full, and it moves faster than most ground units.]
-   picture = MK1t_flux.pcx
-   WreckageObject = 472
-   GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
 
    Armor += 50
    Weight += 5

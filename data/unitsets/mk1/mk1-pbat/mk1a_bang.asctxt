@@ -4,6 +4,7 @@ VehicleType {
    ID = 20
    
    Picture = mk1a_bang.pcx
+   InfoImage = mk1a_bang.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    InfoText = [Der Bang ist ein schwach gepanzertes Schlachtflugzeug, das speziell zur Panzerjagd entwickelt wurde. 
 Im allgemeinen versucht man wehrlose Feindsysteme mit den Bomben des Flugzeuges anzugreifen und wehrhafte Systeme mit den schweren Raketen. Gegen feindliche Fulgzeuge sollte ein Bang nur in wirklich verzweifelten Situationen oder bei günstigen Gelegenheiten zum Einsatz kommen, da ein Maschinengewehr kaum als wirkungsvolle Waffe im modernen Luftkampf bezeichent werden kann.

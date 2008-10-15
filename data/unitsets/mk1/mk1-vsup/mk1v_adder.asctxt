@@ -8,8 +8,10 @@ VehicleType {
               It has a mechanism in its base that swiftly digs a hole in the
               ground, inserts one of two types of mines, and refills the hole.
               This system allows for quickly creating mine fields. The procedure
-              can be reversed, so minefields can be cleared as well.]
+              can be reversed, so minefields can be cleared as well.
+              Infoimage = BananaJoe]
    picture = MK1v_adder.pcx
+   InfoImage = mk1v_adder.jpg
    WreckageObject = 450
    GuideSortHelp = 562 0 0 0 1 0 0 0 0 0
 

@@ -8,6 +8,8 @@ VehicleType {
    picture = mk3s_dd21.png
    InfoImage = mk3s_dd21.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [Der DD21 ist ein Tarnkappenschiff. Durch moderne Materialen und die besondere Bauweise gelingt es, dieses große Schiff fast unsichtbar zu machen. Seine Hauptwaffen bestehen aus weitreichenden Raketen, die Land- und Seeziele unter Feuer nehmen können. Eine weitere Waffe sind Geschütze für die Nahbereichsabwehr. Auch sind schlagkräftige AA Raketen für die Abwehr von Flugzeugen installiert.
+               Für die Abwehr von U-Booten fuerht der DD21 einfache Wasserbomben mit sich. Im Hangar unter Deck ist genug Platz für 2 Hubschrauber. In den Arsenalen ist auch Munition für Hubschrauber vorhanden und eine Werkstatt, um diese zu reparieren.]
 
    Armor -= 50
    jamming = 65
@@ -43,14 +45,14 @@ VehicleType {
       Weapon3 ->* VehicleType.SAMH
       Weapon3.Ammo = 8
 
-      Weapon4 ->* vehicleType.AmmoTorp 
+      Weapon4 ->* vehicleType.DCS 
       Weapon4.Ammo = 20
 
-      Weapon5 ->* VehicleType.AmmoMG 
-      Weapon5.Ammo = 40
+      Weapon5 ->* vehicleType.AmmoTorp 
+      Weapon5.Ammo = 20
 
-      Weapon6 ->* vehicleType.AmmoBomb 
-      Weapon6.Ammo = 20
+      Weapon6 ->* VehicleType.AmmoMG 
+      Weapon6.Ammo = 40
 
       Weapon7 ->* vehicleType.AmmoLM 
       Weapon7.Ammo = 20

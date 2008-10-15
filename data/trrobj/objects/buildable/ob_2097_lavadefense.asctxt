@@ -7,9 +7,9 @@ ObjectType {
    Weather = dry
 
    Name = Lava-Defense-Wall
-   Armor = 100
+   Armor = 250
    Height = 117 ;17-Aug 2003
-
+   lifetime = 90
 
    visible_in_fogOfWar = false
    ;                                                   SY   SY

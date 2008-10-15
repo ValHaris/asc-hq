@@ -4,9 +4,10 @@ VehicleType {
    parent = 299
 
    Description = railroad rocket
-   Infotext = [Railbased medium range surface-surface rocket system.]
    GuideSortHelp = 505 413 0 0 1 0 0 0 0 0
-
    Picture = MK1t_follow.pcx
+   InfoImage = mk1t_follow.jpg
    WreckageObject = 483
+   Infotext = [Railbased medium range surface-surface rocket system.]
+
 } VehicleType

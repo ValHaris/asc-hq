@@ -53,6 +53,7 @@ unitsets/mk1/mk1-bld/*.asctxt
 unitsets/mk1/mk1-for/*.asctxt
 unitsets/mk1/mk1-heli/*.asctxt
 unitsets/mk1/mk1-heli/*.pcx
+unitsets/mk1/mk1-heli/*.jpg
 unitsets/mk1/mk1-inf/*.asctxt
 unitsets/mk1/mk1-inf/*.pcx
 unitsets/mk1/mk1-inf/*.jpg
@@ -85,6 +86,7 @@ unitsets/mk1/mk1-shtu/*.jpg
 unitsets/mk1/mk1-sta/*.asctxt
 unitsets/mk1/mk1-sta/*.pcx
 unitsets/mk1/mk1-sta/*.jpg
+unitsets/mk1/mk1-sta/*.png
 unitsets/mk1/mk1-tank/*.asctxt
 unitsets/mk1/mk1-tank/*.pcx
 unitsets/mk1/mk1-tank/*.jpg

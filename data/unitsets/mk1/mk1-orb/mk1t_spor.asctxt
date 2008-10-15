@@ -4,10 +4,12 @@ VehicleType {
    parent = 400 401 402 412
 
    Description = anti orbital train
-   Infotext = [Railbased anti satellite rocket system.]
    Picture = MK1t_spor.pcx
+   InfoImage = mk1t_spor.jpg
    WreckageObject = 483
    GuideSortHelp = 509 600 0 0 1 0 0 0 0 0
+   Infotext = [Railbased anti satellite rocket system.
+   InfoImage = BananaJoe]
 
    WaitForAttack = true
    Features += move_after_attack

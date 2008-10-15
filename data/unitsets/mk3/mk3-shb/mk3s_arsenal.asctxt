@@ -5,10 +5,10 @@ VehicleType {
    WreckageObject = 15616
 
    Description = stealth rocket cruiser
-   Infotext = []
    picture = MK3s_arsenal.png
    infoImage = mk3s_arsenal.jpg
    GuideSortHelp += 0 0 0 0 3 600 0 0 0 0
+   Infotext = [Die getarnten Schlachtkreuzer der ARSENAL-Klasse sind die Krönung der terranischen Flotte. Nicht nur, daß diese großen Schiffe schwer aus der Entfernung zu orten sind, es überleben auch nur wenige, die näher herankommen die automatischen Waffensysteme, die sowohl Land- als auch Seeziele anvisieren. Sie sind zwar nicht so gut gepanzert wie Schlachtschiffe, dafür haben sie jedoch bessere Waffensysteme, die weitreichender sind und dadurch auch begleitende Schiffe schützen. Ihre ausschließlich mit großen Raketen bestückten Batterien können Ziele zu Lande, zu Wasser, in der Luft und sogar im Orbit beschiessen. Nur getauchten Einheiten gegenüber ist die ARSENAL wehrlos.]
 
    Armor -= 100
    jamming = 65

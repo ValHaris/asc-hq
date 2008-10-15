@@ -3,11 +3,13 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 __________________
+21.09.2008 (GAMER)
+-Stadt nicht mehr durch lava zerstörbar
+__________________
+13.09.2008 (GAMER)
 -Hafen kann kleine Geräte bauen
 -Bugfix Eingangsystem für fliegende Gebäude
 -Duell Lab10 kleiner EIngang
-__________________
-Beta 06-08/08
 - Mine nicht mehr auf railroad baubar
 __________________
 09.08.2008 (GAMER)

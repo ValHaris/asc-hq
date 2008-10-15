@@ -9,7 +9,8 @@ ObjectType {
    LinkableTerrain = 10
    NetBehaviour = NetToSelf AutoBorder NetToBorder
    TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water shallow_water
-   TerrainAccess.terrain_not = harbour forest 
+   TerrainAccess.terrain_not = harbour forest installation
+   TerrainAccess.terrain_kill = lava
 
    Armor = 2500
    ConstructionCost { 

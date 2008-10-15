@@ -4,13 +4,14 @@ VehicleType {
    ID = 55
    
    Description = Helicopter
+   picture = MK1h_TUPI.pcx
+   infoImage = mk1h_tupi.jpg
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [The Tupi helicopter is largely based on the successful Inca designs. It is suited with two gunner seats,
               each complemented by heavy machine guns. The Tupi is ideal for
               dealing with infantry from above. The gunners can also lob grenade
               shells onto enemy vehicles, but they are not very effective
               and the Tupi carries only a limited supply.]
-   picture = MK1h_TUPI.pcx
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Armor = 280
 

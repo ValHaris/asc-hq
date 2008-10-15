@@ -16,4 +16,8 @@ ObjectType {
       picture = obj_ruin_3.png 1
    } much_snow
 
+   TerrainAccess { 
+      terrain_not += lava
+      terrain_kill += lava
+   } TerrainAccess
 } ObjectType

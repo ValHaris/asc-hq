@@ -8,9 +8,7 @@ VehicleType {
    InfoImage = mk1v_blackout.jpg
    WreckageObject = 401
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Infotext = [The Light Artillery is a good support vehicle. It fires a light
-              shrapnel grenade that is effective against Troopers and vehicles.
-              With its ranged fire, it is an effective defense against ambushes.
+   Infotext = [Um feindliche Bodentruppen im Vorfeld zu bekämpfen, müssen die eigenen Truppen mit wirkungsvoller Artillerie ausgerüstet werden. Zu diesem Zweck wurde das, als Selbstfahrlafette konzipierte, „Blackout“-Artilleriesystem entwickelt. Ausgerüstet mit einer 105,5-mm-Haubitze, ist die „Blackout“ in der Lage, feindliche Infanterie als auch mechanisierte Einheiten auf kurze bis mittlere Distanz, wirkungsvoll zu bekämpfen. Die sofortige Feuerbereitschaft nach der Verlegung an den Einsatzort gleicht die geringe Mobilität zum Teil wieder aus. Wie alle Artilleriesysteme dieser Art, sollte die „Blackout“ nur in Extremsituationen an vorderste Front zu Einsatz kommen, da ihre Selbstverteidigungsmöglichkeiten eher als gering einzuschätzen sind.
               InfoImage = BananaJoe]
 
    Armor += 20

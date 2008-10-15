@@ -7,6 +7,10 @@ VehicleType {
    Description = stealth fregatte
    picture = mk3s_meko.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [Die MEKO A200 ist als Stealth Fregatte klassiviziert, ihre Hauptwaffen sind Raketen gegen See-und Landziele sowie ein Geschütz zur Selbstverteidigung. Das Schiff kann auch als effektive Luftabwehr eingestetzt werden da es Flugzeuge in allen höhen bekämpfen kann.
+Als zusätzliche Funktionen kann die Einheit zur Versorgung mit Munition oder zur Suche nach U-Booten eingesetzt werden. Allerdings fehlen Wasserbomben um diese auch zu bekämpfen.
+
+Das Schiff sollte zur Eskorte und Unterstützung von andern Schiffen oder U-Booten eingestezt werden.]
 
    Armor += 50
    jamming = 65

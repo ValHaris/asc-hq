@@ -4,12 +4,14 @@ VehicleType {
    parent = 335
    
    Description = generator vehicle
-   Infotext = [In times of war, energy supplies can not always be distrubuted
-              easily. If a factory is running out of energy, dispatch a Generator
-              Vehicle. Its batteries can hold enough to build a modest army.]
    picture = MK1v_bolt.pcx
+   infoImage = mk1v_bolt.jpg
    WreckageObject = 430
    GuideSortHelp = 525 0 0 0 1 0 0 0 0 0
+   Infotext = [In times of war, energy supplies can not always be distrubuted
+              easily. If a factory is running out of energy, dispatch a Generator
+              Vehicle. Its batteries can hold enough to build a modest army.
+              InfoImage = BananaJoe]
 
    Features += Matter_Converter 
    Armor -= 100

@@ -8,7 +8,10 @@ VehicleType {
    InfoImage = mk1v_comaii.jpg
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Infotext = [Zugunsten eines groesseren Geschuetzes wurde bei der Coma auf das obligatorische MG verzichtet.
+   Infotext = [Um den eigenen Bodentruppen eine effiziente Artillerieunterstützung zur Seite zu stellen und den an Modernität und Stärke wachsenden, feindlichen Kräften wirkungsvoll entgegen zu treten, wurde das „Coma“-Artilleriesystem durch rehanische Ingenieure einer grundlegenden Überarbeitung unterzogen.
+Die vorhandene 155,5-mm-Haubitze wurde gegen eine vom Kaliber 203,2-mm ausgetauscht, was eine Steigerung der Reichweite und Durchschlagskraft zur Folge hatte. Da das vorhandene Chassis nicht in der Lage war, das gesteigerte Gewicht der neuen Bewaffnung zu tragen, musste auch dieses komplett neu konstruiert werden.
+Der größte Nachteil der „Coma II“ ist, die mangelnde Mobilität sowie der große Zeitaufwand, den die Besatzung benötigt, um das System in Feuerbereitschaft zu versetzen.
+Da die „Coma II“ über keinerlei Selbstverteidigungswaffen verfügt, ist es zwingend notwendig für ausreichenden Schutz durch weiter Kampfeinheiten zu sorgen.
    InfoImage = BananaJoe]
 
    Armor += 10

@@ -4,13 +4,14 @@ VehicleType {
    parent = 335
    
    Description = forest ranger
+   picture = MK1v_forest.pcx
+   InfoImage = mk1v_forest.jpg
+   WreckageObject = 462
+   GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
    Infotext = [The Forest Ranger is a specialized industrial machine that can
               plant and remove patches of forest. Paths can be cleared through
               woods, or defensive layers of greenery can be thrown up by this
               unit. Nevertheless, it has no direct combat use.]
-   picture = MK1v_forest.pcx
-   WreckageObject = 462
-   GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
 
    Armor -= 100
    Features += ExternalMaterialTransfer

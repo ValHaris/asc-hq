@@ -4,13 +4,14 @@ VehicleType {
    parent = 336
    
    Description = repair vehicle
+   picture = MK1v_cosinus.pcx
+   InfoImage = mk1v_cosinus.jpg
+   WreckageObject = 413
+   GuideSortHelp = 553 0 0 0 1 0 0 0 0 0
    Infotext = [A Rapair Vehicle can make the difference between victory and
               defeat. It is capable of rapairing a damaged unit in the field,
               saving precious time. Don't put it in the front row, since a
               Repair vehicle can take very little abuse.]
-   picture = MK1v_cosinus.pcx
-   WreckageObject = 413
-   GuideSortHelp = 553 0 0 0 1 0 0 0 0 0
 
    Armor -= 100
    Features += ExternalRepair self_repairing

@@ -33,7 +33,7 @@ VehicleType {
    ResourceDrillingRange = 0
    SelfRepairRate = 0
    Weight = 4
-   TerrainAccess ->* VehicleType.offroad 
+   TerrainAccess ->* VehicleType.offroad_bike 
    Construction { 
       Buildings = 
       Vehicles = 

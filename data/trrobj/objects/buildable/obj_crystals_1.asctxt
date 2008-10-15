@@ -23,15 +23,15 @@ ObjectType {
       fuel = 50
       Movement = 20
    } RemovalCost
-   growthRate = 0.075
+   growthRate = 0.08
    TerrainAccess { 
       terrain_any = hard_sand soft_sand mountains high_mountains
       terrain_all = 
-      terrain_not = mud morass swamp large_rocks railroad road runway bridge
-      terrain_kill = shallow_water water deep_water river lava turret_foundation
+      terrain_not = mud morass swamp railroad road runway bridge turret_foundation
+      terrain_kill = very_shallow_water shallow_water water deep_water river lava turret_foundation road spaceport railroad ditch
    } TerrainAccess
    TerrainProperties_Filter = 
-   TerrainProperties_Add = large_rocks 
+   TerrainProperties_Add = small_rocks 
    dry { 
       UseGFXpics = false
       picture = obj_crystals_1.png 1

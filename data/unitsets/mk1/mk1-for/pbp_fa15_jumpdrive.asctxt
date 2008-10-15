@@ -1,0 +1,16 @@
+ Technology {
+   name = "jumpdrive technology"
+   infotext = "advanced technology"
+   id = 100315
+   researchpoints = 1000
+   
+   techlevel = 1
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 100101
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

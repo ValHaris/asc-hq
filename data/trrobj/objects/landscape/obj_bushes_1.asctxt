@@ -39,13 +39,13 @@ ObjectType {
    } RemovalCost
 
    TerrainAccess { 
-      terrain_any = lowland hard_sand mud
+      terrain_any = lowland hard_sand
       terrain_all = 
       terrain_not = lava soft_sand morass swamp very_shallow_water shallow_water water deep_water river ditch forest turret_foundation Installation mountains high_mountains
-      terrain_kill = lava
+      terrain_kill = lava water deep_water river
    } TerrainAccess
    TerrainProperties_Filter = 
-   TerrainProperties_Add = small_rocks
+   TerrainProperties_Add = mud
 
    dry { 
       UseGFXpics = false

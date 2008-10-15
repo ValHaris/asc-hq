@@ -16,3 +16,14 @@ belegt:
 2609-Berg-Plateau
 2610-Hoher Berg64
 2611-26xx Viewmodifikation
+2650 Hillside
+2651 Hillside
+2652 Coast Blue
+2653 River Blue
+
+Terrain
+
+299 Wasser blau
+301-302 Wasser blau
+2000-2005 ASC Wasser
+2006-2007 Wasser blau

@@ -4,9 +4,10 @@ VehicleType {
    ID = 41
 
    Description = patrol corvette
-;   Infotext = []
    picture = MK1s_tide.pcx
+   InfoImage = mk1s_tide.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+;   Infotext = []
 
    View += 20
    Transportation ->* VehicleType.TransLowTrooper2 

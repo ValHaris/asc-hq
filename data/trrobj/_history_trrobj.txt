@@ -4,6 +4,18 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 
 __________________
+Beta 1-10/08
+-Kritalle nur noch small_rocks
+-Überarbeitung altes Blauwasser + neue Küste, VSW, Ocean
+__________________
+21.09.2008 (GAMER)
+-normale Brücken über river baubar
+-Lavadefense Haltbarkeitsupgrade, Linkfehler behoben
+-Pfad, wird korrekt durch River erstört
+-Büsche jetzt mud anstatt small_rocks
+-Ruinen durch lava zerstörbar.
+-Installationen filtern nicht mehr Lava
+__________________
 13.09.2008 (GAMER)
 -Lava Filtert Wetterbits
 -alte GebäudeWracks, Attackboni entfernt

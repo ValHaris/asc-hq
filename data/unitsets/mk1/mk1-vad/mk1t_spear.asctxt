@@ -2,15 +2,19 @@ VehicleType {
    Name = SPEAR
    ID = 73
    parent = 221
+
    Description = Anti aircraft train
+   Picture = Mk1t_spear.pcx
+   InfoImage = mk1t_spear.jpg
+   WreckageObject = 473
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Consider the AA-Train to be a much more powerful version of the
               Anti-Air Artillery. The guns have been mounted on a heavy train
               chassis, which allows for more punch and ammo capacity. However,
               the power comes at a price: the train will be of little value
-              in an assault due to its limited mobility.]
-   Picture = Mk1t_spear.pcx
-   WreckageObject = 473
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+              in an assault due to its limited mobility.
+              
+              InfoImage = BananaJoe]
 
    Armor += 30
    Weapons { 

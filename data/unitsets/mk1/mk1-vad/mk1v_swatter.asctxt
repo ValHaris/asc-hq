@@ -8,10 +8,8 @@ VehicleType {
    Picture = MK1v_swatter.pcx
    InfoImage = mk1v_swatter.jpg
    WreckageObject = 418
-   Infotext = [The Anti-Aircraft Tank may not be the nemesis for aircraft, but
-              is is quite effective at short range. A commander sending an
-              attack party would do well to include a few AA Tanks to provide
-              cover. 
+   Infotext = [Um die Bodentruppen wirkungsvoll gegen den vermehrten Einsatz von Kampfhubschraubern und Jagdbombern zu schützen, wurde der leichte Luftabwehrpanzer „Swatter“ konstruiert. Als leichtes Kettenfahrzeug ist er schnell und wendig genug, um auch in schwierigem Gelände effektiv eingesetzt werden zu können. Mit seinen 57-mm-Kanonen ist er in der Lage, feindliche Lufteinheiten, die im Tiefflug sowie aus mittlerer Höhe angreifen, wirkungsvoll zu bekämpfen. Da der „Swatter“ angreifenden Bodentruppen nur wenig entgegen zusetzen hat, sollte er auf keinen Fall an vorderste Front eingesetzt werden.
+              
               InfoImage = BananaJoe]
 
    Armor += 20

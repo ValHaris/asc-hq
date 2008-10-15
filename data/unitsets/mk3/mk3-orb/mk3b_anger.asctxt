@@ -19,7 +19,7 @@ VehicleType {
    Features = moveduringreactionfire
    Weight = 190
 
-   TerrainAccess ->* VehicleType.turret_all
+   TerrainAccess ->* VehicleType.Device_terrain
    FuelConsumption = 20
 
    Weapons { 

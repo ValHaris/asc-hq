@@ -1,21 +1,39 @@
 ASC Standart Units
 Grafiken: GAMER, Uranius
-InfoTexte: 
+InfoTexte: BananaJoe
 InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 __________________
+-InfoImage = Streak
+__________________
+Beta 3-10/08
+-InfoImage = Rotos, Tide, Arrow, Flux, Wedge, ForestRanger, Cosinus
+__________________
+Beta 2-10/08
+-InfoImage = Bang, Follow
+-InfoText = Termite, Coma3, Coma2, Coma, Blackout, Swatter
+-separates Ammo_Transfer aus Waffen entfernt
+__________________
+Beta 1-10/08
+-Bunker Gewicht 6000
+-MG Nest neue Grafik
+-Offraod fahrzeuge mit mehr über large Rocks
+-InfoImage = Bolt, Spor, Adder, Swatter2, Coma, Tupi
+-InfoImage = Coma2, Coma3, Atuin, LTT, Spear, MBV, Armadillo
+__________________
+21.09.2008 (GAMER)
+-Scope Gewichtbugfix
+__________________
+13.09.2008 (GAMER)
 -Tsunami mdrf
 -SAM Waffensound
-__________________
 -Grafikbugfix: Inca, Bumblebee
-__________________
-Beta 06-08/08
 -InfoImage = Nova, Nova2, Oracle, Punch, CAD, HeavyGun, Assault
 -InfoImage = Crazy, Drall, EXP5, LAssault, Termite, Vortex, Weasel, Ant
+-InfoImage = BigGun, SAMTurret ,Alguin, Blackout
+-InfoImage = Cobra, Swatter, Ceti
 -Scope medium_Aircraft, -6 View
-__________________
-Beta 05-08/08
 -RadarPlane = heavy_aircraft
 -Gasp tech3
 -Cone tech2
@@ -24,8 +42,6 @@ Beta 05-08/08
 -Atuin Tech1
 -Argus tech4
 -Infotext = Nova,Nova2
--InfoImage = BigGun, SAMTurret ,Alguin, Blackout
--InfoImage = Cobra, Swatter, Ceti
 -Lavadefence Grafik repariert
 __________________
 09.08.2008 (GAMER)

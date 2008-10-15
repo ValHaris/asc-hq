@@ -4,9 +4,10 @@ VehicleType {
    parent = 101
 
    Description = trooper transport
-   Infotext = []
    Picture = MK1v_LTT.pcx
+   InfoImage = mk1v_ltt.jpg
    GuideSortHelp = 552 423 0 0 1 0 0 0 0 0
+   Infotext = []
 
    Transportation ->* VehicleType.TransTrooper
 
