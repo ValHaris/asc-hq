@@ -115,6 +115,7 @@ ID 1488 Cluster
 ID 1489 Aracoa
 ID 1490 Subhunter
 ID 1491 Harpoon
+ID 16001 Oilplatform
 
 **UBoote**
 ID 1420 MU (Mini TransportU-Boot)
@@ -155,3 +156,6 @@ ID    7 RadarTower          (Tech ID 1498)
 ID   26 JamTower            (Tech ID 1497)
 ID 1400 Raketenabschuﬂrampe (Tech ID 1496)
 ID 1401 Subbase Defence     (Tech ID 1495)
+ID 1496 (RTH Tech)
+ID 1497 (GJS tech)
+ID 1498 (RT TEch)

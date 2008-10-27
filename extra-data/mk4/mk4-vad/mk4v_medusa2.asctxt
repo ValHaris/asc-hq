@@ -4,11 +4,17 @@ VehicleType {
    parent = 220
    
    Description = FlaRak-Panzer
-   Infotext = [ Flugabwehrpanzer mit guter Beweglichkeit und starker Bewaffnung. Gegenueber der nur schwer beweglichen MEDUSA mussten Einschraenkungen bei Reichweite und Durchschlagskraft hingenommen werden. Da die Medusa nur Waffen gegen Luftziehe hat, ist sie ebenfalls besonders zu sichern.]
    Picture = mk4v_medusa2.png
    InfoImage = mk4v_medusa2.jpg
    wreckageobject = 14232
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Die Medusa 2 entstand aus dem Gedanken heraus, die Schlagkraft eines Fla-Rak-System mit der hohen Mobilität leichter Flugabwehrpanzer zu kombinieren. Der Einfachheit halber versuchte man daher, den Doppelraketenwerfer der herkömmlichen Medusa auf die Wanne eines Fla-Panzers vom Typ Comet zu montieren. Der Grundgedanke war zwar gut, doch leider zeigte sich bereits bei den ersten Feldtests, dass die Konstrukteure sich die Sache etwas zu einfach vorgestellt hatten: durch die Masse der Medusa geriet der Schwerpunkt des gesamten Systems völlig aus der Waage, was bei den Testversuchen vor allem in schwierigem Gelände zu mehreren fatalen Unfällen führte. Außerdem kam es durch die Schwerpunktänderungen beim Start der Boden-Luft-Raketen dazu, dass die gesamte Einheit aus ihrer Position geworfen wurde und die Raketen in die vollkommen falsche Richtung starteten. Dies wiederum machte aufwändige Korrekturen am Kurs der Raketen während des Zielanfluges notwendig und die Trefferquote ging rapide in den Keller.
+
+Umfangreiche Modifikationen an der Wanne und dem Waffensystem waren nötig, ehe die Konstruktion einen brauchbaren Zustand erreicht hatte. Dieser konnte sich dann jedoch durchaus sehen lassen! Durch die Änderungen am Raketenwerfer und den Einsatz leichterer Raketen waren Durchschlagskraft und Reichweite im Vergleich zur herkömmlichen Medusa zwar zum Teil recht deutlich abgesunken, jedoch kann man mit der Medusa 2 noch immer Flugzeuge bekämpfen, die sich in den obersten Luftschichten herumtreiben und die beispielsweise für den Comet auch weiterhin unerreichbar bleiben. Im Gegensatz zu diesem ist zwar wiederum die Höchstgeschwindigkeit deutlich herabgesetzt worden - trotz allem erreicht man auf Straßen mit der Medusa 2 fast die dreifache Geschwindigkeit im Vergleich zum ursprünglichen Modell. Im Gelände ist der Geschwindigkeitsvorteil sogar noch weitaus deutlicher zu sehen.
+
+Die im Vergleich zum Comet verringerte Geschwindigkeit resultiert aus dem etwas höheren Gewicht der Medusa 2, sowie der etwas stärkeren Panzerung. Um jedoch auch das leistungsfähige MdRF-Gerät der normalen Medusa uneingeschränkt übernehmen und unterbringen zu können, musste zusätzlich noch eine Verkleinerung des Tanks in Kauf genommen werden.
+
+Auch wenn die anfänglichen Visionen der beteiligten Konstrukteure nicht in vollem Maße umgesetzt werden konnten, so ist mit der Medusa 2 letztendlich doch ein wertvolles Waffensystem entstanden, welches die Lücke zwischen semimobilen Fla-Rak-Werfern und schnellen Fla-Panzern sinnvoll auszufüllen vermag. Es eignet sich für schnelle Vorstöße ebenso, wie für reine Defensivaufgaben.]
 
    Movement -= 0 0 0 8 0 0 0 0 
    Weapons { 

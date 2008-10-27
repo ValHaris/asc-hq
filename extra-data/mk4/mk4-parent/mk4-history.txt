@@ -5,6 +5,15 @@ InfoImages: GAMER
 Spezifikationen: GAMER
 
 __________________
+21.10.2008 (GAMER) Hotfix
+-Guppi External Ammo Transfer
+__________________
+18.10.2008 (GAMER)
+-UX im Atlas transportierbar
+-InfoText = Axis, Planum LL, Regio, Gnome, Medusa2, Medusa, Medusa3
+-InfoText = Sphinx, Skull, Angel, Pulsar, Pirate, Dragon, Shell, Firebird
+-InfoText = Dolmen, Monolith, Pluto, Whale, Planum, Sperber, Albatros
+__________________
 13.09.2008 (GAMER)
 -Rocky +Flammenwerfer
 -Duke, Koloss, Pluto Gewichtsanpassung

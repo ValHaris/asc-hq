@@ -3,11 +3,19 @@ VehicleType {
    parent = 293
 
    Name = AXIS
-   Description = [Praetorianischer Kampfpanzer]
    Picture = mk4v_axis.png
    InfoImage = mk4v_axis.jpg
    wreckageobject = 14234
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Description = [Der Axis ist einer der stärksten Panzer der Cromoner. Nach umfangreichen Modifikationen und diversen Anpassungen an die Anforderungen heutiger Gefechte, wird er nach einer längeren Pause nun wieder in vollem Umfang an der Front eingesetzt. Auch wenn seine ursprünglichen Konstruktionspläne schon recht alt sind, so zählt er inzwischen wieder zu einer der gefährlichsten Kampfeinheiten, denen man auf dem Schlachtfeld begegnen kann. Dies liegt nicht zuletzt an seiner extrem starken Panzerung, die auch gegen Angriffe von oben und unten keinerlei Schwachstellen aufweist. Dabei ist vor allem die Frontpartie nicht nur komplett abgeschrägt, was für ein Abprallen gegnerischer Granaten sorgen soll, sondern auch noch soweit verstärkt, dass selbst günstig auftreffende Geschosse diese kaum durchschlagen können.
+
+Durch die Verwendung moderner Materialen ist der Axis heutzutage nicht nur leichter, als das Ursprungsmodell längst vergangener Tage, sondern auch noch schneller. Seine Höchstgeschwindigkeit ist dabei in etwa zwischen der eines Sam-3 und eines Imperators angesiedelt. Dadurch wird der Axis zu einem Panzer, der den Gegner direkt angreift und ihm Nahkampf durch schiere Feuerkraft vernichtet. Vor allem dann, wenn er im Rudel eingesetzt wird, ist er dazu in der Lage, auch stärkere Verteidigungsstellungen aufzureißen, den Gegner zu werfen und so den Weg für mittlere und leichte Kampfpanzer freizumachen.
+
+Eine Besonderheit stellt beim Axis sein 115mm-Hauptgeschütz dar. Es ist, ähnlich wie bei einem Sturmgeschütz, nicht in einem Drehturm gelagert, sondern starr in der Frontpartie verankert. Da es dabei jedoch immer noch um einen verhältnismäßig großen Winkel schwenkbar ist und der Axis auch bei langsamer Fahrt über eine erstaunliche Beweglichkeit verfügt, ist es möglich, mit ihm direkt aus der Bewegung heraus zu feuern. Im Übrigen wirkt sein Geschütz größer, als es eigentlich ist. Dies beruht auf der Tatsache, dass der Axis zu früheren Zeiten auch als eine Art Rammbock verwendet wurde. Da er jedoch nicht, wie herkömmliche Panzer mit richtigem Turm, sein Geschütz nach hinten drehen konnte, wurde das Rohr mit einem extrem dicken Mantel versehen, um Beschädigungen bei Kollisionen zu vermeiden. Warum dies bei den heute verwendeten Modellen beibehalten wurde, in einer Zeit, in der eine derartige Vorgehensweise vollkommen aus der Mode gekommen ist, lässt sich leider nicht ganz nachvollziehen. Die einen behaupten, dass der zuständige Konstrukteur die Gesamtoptik nicht verderben wollte, anderen meinen, dass der jetzige Anblick eine höhere demoralisierende Wirkung auf gegnerische Verteidiger habe. Letzterer Umstand ist nicht ganz abzustreiten, denn wer schon mal eine Phalanx aus mehreren, nebeneinander fahrenden Axis-Panzern auf sich zurollen sah, der kann verstehen, dass man bei einem derartigen Anblick lieber schnell die eigene Stellung räumt, als sich mit diesen Monstren anzulegen.
+
+Als Sekundärbewaffnung dient ein 35mm-MG, welches sich in einem kleinen Drehturm auf dem Heck des Axis befindet. Dieses dient jedoch fast ausschließlich dazu, sich allzu vorwitzige Infanterie, oder Tiefflieger vom Hals zu halten. Für andere Einsätze ist es schlicht und ergreifend zu schwach und hat auch nur eine beschränkte Reichweite.
+
+Befindet sich ein Axis in einer befestigten Stellung, so ist schon massiver Artilleriebeschuss oder gar der Einsatz schwerer Bomber notwendig, um ihn vernichten zu können. Er steht daher oft zu Unrecht im Schatten des Imperators, dessen extrem langgezogene Geschützrohre zwar eine größere Reichweite besitzen, der jedoch deutlich langsamer und teurer in der Anschaffung ist. ]
    
    Armor += 200
    Weight = 71

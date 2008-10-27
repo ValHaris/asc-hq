@@ -4,10 +4,10 @@ VehicleType {
    Parent = 383
 
    Description = Jet Helicopter
-   Infotext = [Der Pirat ist ein Spezialhelicopter. Durch seinen zusätzlichen Jetantrieb ist er in der Lage auch in hohen Luftschichten zu operieren und so Flackstellungen zu überfliegen. Durch die hohe Geschwindigkeit ist es ihm aber nicht möglich im Jetmodus Waffen abzufeuern.]
    picture = mk4h_pirate.png
    wreckageobject = 1287 14887
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Der Pirate ist ein Spezialhelikopter. Durch seinen zusätzlichen Jetantrieb ist er in der Lage, auch in hohen Luftschichten zu operieren und so Flakstellungen zu überfliegen. Aufgrund der hohen Geschwindigkeit ist es ihm aber nicht möglich, im Jetmodus Waffen abzufeuern. Diese würden von den Turbinen angesaugt werden - mit verheerenden Konsequenzen. Deshalb wurde nach dem ersten Totalverlust bei Testflügen eine Sperre eingebaut. Ansonsten ist seine Bewaffnung aber sehr ordentlich. Die Bomben, welche allerdings im Tiefflug abgeworfen werden müssen, haben eine hohe Sprengkraft, sind dabei aber nicht zur Bekämpfung von Infantrie geeignet. Zusätzlich führt der Pirate einige Luft-Boden Raketen großer Reichweite mit sich. Diese prädestinieren ihn dafür, Luftabwehreinheiten anzugreifen, um Angriffen von Dragons den Boden zu bereiten. Raketen für den Luftkampf auf kurze Distanz sind ebenfalls an Bord. Die Maschinenkanonen hingegen können besonders gegen Infantrie gut eingesetzt werden. Aufgrund des Jetantriebs hat der Pirate des Gewicht eines Flugzeuges und kann deshalb nicht so eine hohe Waffenlast wie beispielsweise der Dragon transportieren. Auch die Panzerung ist etwas schwächer ausgefallen. Deshalb muß er regelmäßig nachmunitioniert werden und sollte mit Bedacht eingesetzt werden. ]
 
    Armor -= 80
 

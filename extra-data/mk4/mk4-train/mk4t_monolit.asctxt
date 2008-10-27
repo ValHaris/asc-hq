@@ -4,11 +4,11 @@ VehicleType {
    ID = 1228
 
    Description = Instandsetzungszug
-   Infotext = []
    picture = mk4t_monolit.png
    infoImage = mk4t_monolit.jpg
    wreckageobject = 14228
    GuideSortHelp = 553 556 0 0 4 0 0 0 0 0
+   Infotext = [Der Monolith ist eine ganz besondere Serviceeinheit. Er entstand aus der Erkenntnis, daß die Sinuseinheiten doch gewisse Schwächen bei größeren Gefechten aufweisen. So ist ihre Materialspeicher- und damit Reparaturfähigkeit begrenzt, was weitere Nachschubfahrzeuge in unmittelbarer Nähe voraussetzt. Desweiteren sind sie nicht allzu schnell und damit auf Transportfahrzeuge für Verlegungen über größere Strecken angewiesen. Diese Nachteile sind beim Monolith abgestellt worden. Da hier ein ganzer Zug umgerüstet wurde, um viele verschiedene Einheiten gleichzeitig reparieren zu können, ist er an diese Aufgabe optimal angepaßt. Dazu ist er mit einer Reparaturbesatzung von 62 Mann und mehreren hundert Robotern ausgerüstet. Es ist auch noch genügend Platz, eine Troopereinheit zu transportieren. Er führt ein riesiges Ersatzteillager und große Tankwaggons mit sich. Dies macht ihn unabhängiger von zusätzlichen Materiallieferungen. Große Aggregate ermöglichen die Erzeugung der für die Reparaturen benötigten Energie in nahezu beliebiger Menge. Als Schienenfahrzeug besitzt er eine relativ hohe Geschwindigkeit und kann damit schnell zu kritischen Kampfabschnitten gebracht werden. Dabei ist er auf ein funktionierendes Schienennetz angewiesen. Doch dieses kann natürlich beschädigt werden. So wurde noch ein Gleisbausystem integriert, welches Neuverlegung, Reparatur, aber auch die Demontage von Schienen ermöglicht. Die Besatzung ist darüberhinaus auch in der Lage, Straßen, Brücken, Wald und Geröllfelder zu entfernen. Aufgrund seiner Vielseitigkeit stellt der Monolith ein bevorzugtes Ziel dar. Da seine Panzerung eher schwach und seine Bewaffnung unzureichend ist, muß er deshalb gut geschützt werden. Es sollte bei allen Arbeiten immer darauf geachtet werden, diese Einheit wieder rechtzeitig in die hinteren Reihen zu bewegen, um sie feindlichen Angriffen zu entziehen. ]
 
    Armor -= 50
    WaitForAttack = true

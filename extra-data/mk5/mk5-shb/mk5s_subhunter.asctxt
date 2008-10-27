@@ -11,6 +11,7 @@ VehicleType {
 
    Features += MoveDuringReactionFire sonar
    View = 30
+   TerrainAccess ->* VehicleType.verysmallship_terrain
 
    Weapons { 
       Initiative = 0

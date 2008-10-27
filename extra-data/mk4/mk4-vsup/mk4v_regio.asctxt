@@ -4,10 +4,18 @@ VehicleType {
    parent = 336
    
    Description = Baufzg.Befestigung/Turret
-   Infotext = [Baufahrzeug für Befestigungen, Pipelines und Turretsockel. Erntefahrzeug.] 
    picture = mk4v_regio.png
    InfoImage = mk4v_regio.jpg
    wreckageobject = 14270
+   Infotext = [Neben dem Planum ist der Regio das zweite wichtige Standbein des chromonischen Militärs, wenn es um die Erfüllung von Bauaufträgen geht. Sein Einsatzgebiet reicht dabei von der Verlegung von Pipelines, über das Ausheben von Schützengräben, bis hin zum Ernten regenerativer Ressourcen. Da er auch Panzersperren errichten kann, ist es mit ihm möglich, eine ordentliche Verteidigungslinie zu installieren.
+
+Pipelines kann er auf zwei verschiedene Arten verlegen: ober- und unterirdisch. Die oberirdische Variante ist zwar preisgünstiger und ihr Bau geht auch schneller vonstatten, jedoch hat sie den Nachteil, dass sie Bodentruppen in der Bewegung behindert und zudem vom Gegner mittels Beschuss zerstört werden kann. Da eine Pipeline faktisch das Adernetz einer jeden Basis darstellt, welches alle Gebäude miteinander verknüpft, kann vor allem eine durch Feindeinwirkung entstandene Lücke in diesem Netz fatale Konsequenzen haben. Daher empfiehlt es sich, Pipelines in der Nähe von Hauptverkehrswegen und in ungesicherten Randbereichen grundsätzlich unterirdisch zu verlegen.
+
+Viele Regios versehen heutzutage ihren Dienst jedoch nicht nur in der Bauabteilung, sondern ziehen als Ressourcensammler durch die Gegend. Da es sehr einfach ist, mit ihnen z.B. Forstwirtschaft zu betreiben, benutzen viele Völker sie dafür, das eigene Materialeinkommen schnell und effektiv aufzustocken. Dabei kann der Regio jedoch nicht nur ernten, sondern auch Wald wieder aufforsten und Rapsfelder anlegen.
+
+Als letzte Fähigkeit des Regios sei hier noch erwähnt, dass er auch dazu in der Lage ist, Lavaschutzwälle zu errichten. Dies macht ihn außerdem noch zu einer wichtigen Schutzeinheit für Gebäude und Einheiten im Kampf gegen die Natur. Wenn man eine Basis auf einem Planeten mit vulkanischer Aktivität gründen möchte, darf eine Handvoll Regios bereits im ersten Kolonisations-Kontingent nicht fehlen.
+
+Im Übrigen gelten für Regios die gleichen militärischen Schutzvorschriften, wie für den Planum. Auch der Regio verfügt nur über eine geringe Panzerung und keinerlei Bewaffnung.] 
    
    Armor -= 100
    Weight -= 10

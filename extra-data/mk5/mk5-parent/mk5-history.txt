@@ -4,6 +4,17 @@ InfoText: Hastrubal
 InfoImage: GAMER
 
 __________________
+18.10.2008 (GAMER)
+-SChnellboote +vsw
+-MU +20 View
+-AOV abgewertet
+-Pickup = offroad
+Neu:
+-Oilplatform
+__________________
+21.09.2008 (GAMER)
+-BigGuard Techbugfix
+__________________
 13.09.2008 (GAMER)
 -Tenga, Movebugfix, kann MiniUboot(1) laden
 -Klotz + Tank/Hvy-Armor tech

@@ -4,14 +4,18 @@ VehicleType {
    parent = 225
    
    Description = missile air defence
-   Infotext = [Nur schwer bewegliches, in seiner Feuerkraft aber um so gewaltigeres Flugabwehraketen-Geschuetz. Die 
-   strahlgetriebenen Geschosse der Medusa jagen bis in die hoechsten Luftschichten mit unglaublicher Geschwindigkeit 
-   alles, was sich in Reichweite dieses Geschuetzes bewegt. Die Medusa3 ist als Ergaenzung zu den normalen 
-   Flugabwehrgeschuetzen entwickelt worden. Sie ist besonders geeignet für bergige Regionen, da kein Geschützsockel 
-   benötigt wird und ein neuartiger Radarstörsender integriert wurde. ]
    Picture = mk4b_medusa3.png
    wreckageobject = 14004
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Die Medusa 3 ist eine Weiterentwicklung der ursprünglichen Medusa. Sie entstand, chronologisch gesehen, nach der Sphinx und ist damit das neueste Modell bei der einfachen chromonischen Luftabwehr.
+
+Gegenüber vergleichbaren Waffensystemen hat sie mehrere Vorteile: Zum einen verfügt sie über ähnlich leistungsstarke Boden-Luft-Raketen wie die Sphinx, welche jedoch extra für die Medusa 3 noch einmal verbessert wurden. So wurde der tote Bereich, in welchem keine Zielerfassung möglich ist, etwas verkleinert und die Raketen wurden außerdem noch mit einem stärkeren Gefechtskopf ausgestattet. Zum zweiten wurde der Medusa 3 ein Störsender eingebaut, welcher sie nahezu unsichtbar für die gegnerische Zielerfassung macht. Nach den ersten Einsätzen der Sphinx und den recht ernüchternden Resultaten bei der erreichbaren Schussfrequenz, wurde bei der Medusa 3 auch wieder auf das ursprüngliche und leistungsstärkere MdRF-Gerät zurückgegriffen, welches bereits in den älteren Fla-Rak-Systemen verwendet worden war.
+
+Die Verkleinerung des toten Bereichs ist der neuartigen Konstruktion zu verdanken. Die Medusa 3 kann ihre Raketenabschussvorrichtung, die auf einer stabilen Sockelkonstruktion verankert ist, nahezu frei drehen. Um dabei eine entsprechende Stabilität zu gewährleisten, muss dieser Unterbau jedoch fest mit dem jeweiligen Untergrund verankert werden.
+
+Da die Medusa 3 über keinerlei Eigenantrieb verfügt, ist sie auf spezielle Transporteinheiten angewiesen, wie z.B. den Gigant. Dieser fungiert im übrigen nicht nur als Transporter, sondern hat außerdem noch die Möglichkeit, die Medusa 3 direkt an Ort und Stelle zu bauen. Die Medusa 3 lässt sich dabei auf allen festen Untergründen errichten und aussetzen, bis hin zu unwegsamen Gebirgszügen. Da vor allem Letztere für herkömmliche bodengestützte Fla-Einheiten bisher eher unzugänglich waren, stellt diese Fähigkeit einen weiteren bedeutenden Vorteil dar. Vor allem direkt nach der Einführung dieses Waffensystems sorgte diese Sonderfähigkeit für die ein oder andere böse Überraschung bei gegnerischen Piloten, die sich über unzugänglichen Hochgebirgszügen zu sicher fühlten.
+
+Da die Medusa 3 eher als beschränkt mobil anzusehen ist, fallen Aufgaben im offensiven Bereich faktisch komplett weg. Da sie jedoch nicht nur auf normalem Untergrund, sondern zusätzlich noch auf herkömmlichen Sockelkonstruktionen verankert werden kann, die auch herkömmlichen Geschütztürmen als Plattform dienen, eignet sie sich perfekt zum Schutz wichtiger Schlüsselstellungen.]
 
    Jamming = 50
    Features = jam_only_own_field onlyTransMove ManualSelfDestruct

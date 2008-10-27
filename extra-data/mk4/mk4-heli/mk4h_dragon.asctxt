@@ -4,11 +4,11 @@ VehicleType {
    ID = 1245
 
    Description = Kampfhubschrauber
-   Infotext = []
    picture = mk4h_dragon.png
    InfoImage = mk4h_dragon.jpg
    wreckageobject = 1245 14845
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Um die Helikopter wieder zu einer sinnvollen Alternative zum Kampf gegen Bodenziele werden zu lassen, waren grundlegende Neuentwicklungen gefragt. Der Firebird war zwar recht schnell, aufgrund seiner geringen Größe waren zusätzliche Ausrüstungen oder schwerere Waffen einfach nicht zu integrieren. So wurde ein völlig neuer Helikopter entwickelt. Dieser war wesentlich größer, wurde aber mit überaus leistungsstarken Turbinen versehen. Dadurch war er trotz des viel höheren Gewichts fast genauso schnell wie der Firebird. Alle anderen Parameter wurden jedoch wesentlich verbessert. Dies gilt sowohl für die Panzerung als auch für die Bewaffnung. Er trägt damit den Namen ‚Dragon’ zurecht. Die in großer Zahl mitgeführten schweren Luft-Boden-Raketen sind wesentlich durchschlagskräftiger geworden. Zusätzlich trägt jeder Dragon eine Salve weitreichender zielsuchender Raketen mit sich, was zum Beispiel den Angriff auf Luftabwehrstellungen erlaubt. Auch feindlichen Jägern ist der Dragon nicht mehr schutzlos ausgeliefert. Hier kommen moderne Luft-Luft Raketen mit Hitzesuchkopf zum Einsatz. Für alle möglichen anderen Einsatzzwecke sind die Maschinenkanonen die erste Wahl. Aufgrund seiner Einsatzparameter ist dieser Helikopter optimal für die Bekämpfung leichter und mittlerer, teilweise sogar schwerer Bodenziele geeignet. Besonders in Gebieten, wo mangels Landebahnen die Versorgung von Bombern schwierig ist, sollte der Dragon bevorzugt eingesetzt werden. ]
 
    Armor += 20
 

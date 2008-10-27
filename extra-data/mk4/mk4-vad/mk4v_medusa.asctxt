@@ -2,11 +2,18 @@ VehicleType {
    Name = MEDUSA
    ID = 1220
    parent = 219
+
    Description = FlaRak-Geschuetz
-   Infotext = [Nur schwer bewegliches, in seiner Feuerkraft aber um so gewaltigeres Flugabwehraketen-Geschuetz. Die strahlgetriebenen Geschosse der Medusa jagen bis in die hoechsten Luftschichten mit unglaublicher Geschwindigkeit alles, was sich in Reichweite dieses Geschuetzes bewegt. IST BESONDERS ZU SICHERN!!!]
    Picture = mk4v_medusa.png
    Infoimage = mk4v_medusa.jpg
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Die Medusa ist ein schon etwas älteres, jedoch auch umso schlagkräftigeres Waffensystem zur Luftraumverteidigung. Sie besteht aus einem Doppelraketenwerfer, welcher auf einer soliden Grundplatte montiert wurde, unter der sich wiederum ein schwacher Kettenantrieb befindet. Dieser Antrieb ermöglicht es ihr, sich im Schritttempo im Gelände fortbewegen, sowie eigenständig Transporter betreten und verlassen zu können.
+
+Ihre Boden-Luft-Raketen, die mit zu den stärksten innerhalb des chromonischen Militärs zählen, haben eine mittlere Reichweite. Durch die Eigenmobilität begünstigt, kann sie auch aus der Bewegung heraus feuern und stellt damit, neben vollmobilen Fla-Einheiten wie dem Comet, auch einen nicht zu unterschätzenden Faktor bei der offensiven Bekämpfung gegnerischer Luftwaffenverbände dar. Durch ihr leistungsfähiges MdRF-Gerät können im Defensivmodus beide Raketenwerfer abgefeuert werden, wodurch sie auch im Verteidigungsfalle einen effektiven Fla-Schutz vor die eigenen Stellungen zu legen vermag. Durch die verhältnismäßig große Reichweite ihrer Raketen begünstigt, kann sie so gegnerische Flieger schon frühzeitig unter Feuer nehmen, ohne sich allzu nahe am Brennpunkt des Geschehens befinden zu müssen. Dies ist umso wichtiger, da ihre eigene Panzerung als eher gering einzustufen ist und sie direktem Beschuss nicht lange standhalten würde. Außerdem verfügt sie über keinerlei Waffen, um sich gegen einen direkten Angriff durch gegnerische Bodeneinheiten zur Wehr setzen zu können. Deshalb sollte sie niemals allein in feindverseuchtem Gebiet operieren. Ansonsten würde sie recht schnell als wehrlose und willkommene Zielscheibe für jeden Gegner enden, der mit mehr als nur einer Steinschleuder ausgerüstet ist.
+
+Die Medusa kann nicht nur ihr integriertes MdRF-Gerät während der Fortbewegung im Onlinemodus betreiben, es ist ihr sogar möglich, direkt aus der Bewegung heraus zu feuern, was ihren Offensivwert deutlich anhebt. Dadurch kann man mit ihr langsame und - im Zusammenwirken mit geeigneten Transporteinheiten - auch mittelschnelle Vorstöße recht wirkungsvoll unterstützen und gegen feindliche Gegenschläge aus der Luft absichern.
+
+Durch ihr geringes Gewicht, welches aus der nur schwachen Panzerung und dem leichten Antriebssystem resultiert, lässt sie sich gut transportieren und passt in mehrere verschiedene Transporteinheiten hinein. Als weitere Besonderheit wäre ihr ausgefeiltes Aufklärungssystem zu nennen, welches weitaus leistungsfähiger ist, als das eines normalen Panzers. Sie ersetzt damit zwar noch keinen Aufklärer, kann jedoch trotz allem einen wertvollen Beitrag zur Gesamtaufklärung leisten und somit vor allem gegnerischen Stealth-Einheiten die heimliche Annäherung deutlich erschweren. ]
 
    Category = Medium_tracked_vehicle
    wreckageobject = 1220

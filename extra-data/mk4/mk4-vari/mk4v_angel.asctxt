@@ -2,11 +2,12 @@ VehicleType {
    Name = ANGEL
    ID = 14012
    parent = 251
+
    Description = medium artillerie
-   Infotext = []
    Picture = mk4v_angel.png
    wreckageobject = 14012
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Die Angel ist als rein defensives Artilleriesystem konzipiert. Es handelt sich hier um eine der heute üblichen Selbstfahrlafetten mittlerer Reichweite und Feuerkraft in ihrer reinsten Form. Zum Feuern muß der Lauf aufgerichtet und das gesamte Geschütz verankert werden. Dies dauert natürlich eine gewisse Zeit, so daß ein Angriff aus der Bewegung heraus nicht möglich ist. Andererseits lassen sich dann Ziele sehr schnell anvisieren und bekämpfen, so daß feindliche Einheiten beschossen werden können, bevor sie die eigenen Linien erreichen. Dies ist auch offensiv nutzbar, um eigene angreifende Einheiten vor Gegenangriffen zu schützen. Ein Nachteil ist ihre geringe Geschwindigkeit, was das eigenlich wünschenswerte Vor- oder Abrücken im Verband mit den eigenen Panzern zu einer schwierigen Angelegenheit macht. Hier ist der Einsatz einer großen Anzahl von Geschützen im Verbund mit Transportfahrzeugen anzuraten. Zwar ist die Angel auch mit einem MG zur Selbstverteidigung ausgerüstet, aufgrund ihrer dünnen Panzerung sollte sie aber unbedingt vor feindlichen Angriffen geschützt werden. ]
 
    Armor -= 100
    TerrainAccess { 

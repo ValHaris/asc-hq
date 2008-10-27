@@ -4,7 +4,16 @@ VehicleType {
    ID = 1255
 
    Description = Transport Wasserflugzeug
-   Infotext = [Umgebauter SPERBER, dessen Inneneinrichtung so weit wie möglich ausgebaut wurde um Platz fuer Bodentruppen zu schaffen. Der ALBATROS sollte nicht offensiv eingesetz werden, da er generell schwaechere Werte als der SPERBER hat. Er kann aber durch die Transportkapazitaet leichte Bodentruppen an der Kueste absetzen.]
+   Infotext = [Der Albatros basiert in groben Zügen auf dem Design des Sperbers. Die ursprüngliche Idee, die hinter dem Albatros steckt, war es, ein Transportflugzeug zu entwerfen, welches auch auf dem Wasser zu landen vermag. Da der Sperber seinerzeit bereits existierte und auch schon über diese Fähigkeit verfügte, wurde dessen Konzept einfach übernommen und entsprechend überarbeitet. Dazu wurden unter anderem die Tragflächen verändert und denen der Crux angepasst, da sich deren Form bei diesem Transportflugzeug bereits bewährt hatte.
+
+Leider war es nicht möglich, eine derart hohe Transportkapazität zu erreichen, wie bei der Crux. Daran sind vorrangig zwei Tatsachen schuld: zum einen musste der Rumpf des Albatros für Landungen und Starts auf der Wasseroberfläche stromlinienförmiger und damit schmaler gestaltet werden. Zum zweiten war man zu der Erkenntnis gelangt, dass man hier, über den Weiten der Meere und fernab jeder bodengestützten Flugabwehr, unmöglich auf Waffensysteme verzichten konnte.
+
+Zuerst wurde ein Maschinengewehr eingebaut, welches geringfügig stärker ausfiel, als das des Sperbers. Da recht schnell klar wurde, dass der Albatross trotz allem nicht dazu geeignet war, sich mit feindlichen Jägern im Luftkampf zu messen, verwarf man die Idee von Luft-Luft-Raketen wieder und ging statt dessen dazu über, ihn für offensive Aufgaben gegen Bodentruppen und Marineeinheiten auszurüsten. So wurden ihm zwei Wasserbomben verpasst, sowie zwei weitreichende Luft-Boden-Raketen.
+
+Die geringe Größe des Laderaums führte leider dazu, dass der Albatros nur verhältnismäßig leichte Einheiten transportieren kann. Panzer sind aufgrund ihres Gewichts nicht für den Transport geeignet. Trotz allem sind die Einsatzmöglichkeiten vielfältig. Der Albatros kann kleinere Fahrzeuge transportieren, Parademon in der Luft abspringen lassen, Sonarbojen über dem Wasser im Flug abwerfen und in gewassertem Zustand auch GT-Dive aussetzen. Außerdem verfügt er über vergrößerte Tanks für den Transport von Treibstoff, sowie über Lagerräume für Material. Als Krönung des Ganzen kann er MG-Munition und Torpedos transportieren, was ihn zur optimalen Unterstützungseinheit für Sperber macht, die fernab von Flugplätzen und Trägerschiffen operieren sollen. Doch auch kleinere U-Boot-Flottillen lassen sich mit ihm ausgezeichnet versorgen.
+
+Abschließend sei erwähnt, dass der Albatros - genau wie der Sperber - nicht auf hoher See landen kann, sondern nur in verhältnismäßig flachen Gewässern. Da die Wasseroberfläche fernab der Küsten im allgemeinen recht unruhig ist und zum Teil recht hohe Wellen aufweisen kann, was eine sichere Landung nahezu unmöglich macht, ist es den Piloten strikt untersagt, in diesen Gebieten zu wassern. Diverse Sicherheitssysteme sorgen dafür, dass kein Pilot dieses Verbot ignoriert. Wer es dennoch tut und die Sicherheitssysteme mutwillig deaktiviert, oder anderweitig umgeht, muss mit einem Prozess vor dem Kriegsgericht rechnen. ]
+
    picture = mk4a_albatros.png
    InfoImage = mk4a_albatros.jpg
    wreckageobject = 1255 14855

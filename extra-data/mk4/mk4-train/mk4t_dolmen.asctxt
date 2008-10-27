@@ -4,12 +4,12 @@ VehicleType {
    ID = 1224
    
    Description = Transportzug
-   Infotext = []
    picture = mk4t_dolmen.png
    infoimage = mk4t_dolmen.jpg
    wreckageobject = 14224
    GuideSortHelp = 550 556 0 0 4 0 0 0 0 0
-   
+   Infotext = [Der Dolmen ist das wohl strategisch wichtigste Schienenfahrzeug der Cromoner. Er ist auf vielerlei Weise nützlich. So vereint er die größte Ladekapazität aller Landeinheiten mit der höchsten durch Transportfahrzeuge zu erreichenden Geschwindigkeit. Dabei ist durch seinen großen Laderaum auch der Transport anderer Transporteinheiten möglich, welche wieder andere Einheiten geladen haben. So können mit einem Zug komplette Kampfverbände verlegt werden. Dies ist besonders wichtig, wenn Transportschiffe zu beladen sind. Sogar leichte Flugzeuge können mit dem Dolmen befördert werden. Zusätzlich zu den Einheiten kann er auch riesige Mengen Material, Treibstoff und Munition transportieren und dient so als Nachschublager hinter der Front. Die Panzerung ist allerdings bestenfalls als durchschnittlich zu bezeichnen und eine Bewaffnung fehlt völlig. Der kluge Kommandeur sollte allerdings feindliche Einheiten nicht einmal in die Nähe seiner Transportzüge lassen, so daß dies nicht ins Gewicht fallen sollte. Durch die Möglichkeit, überfallartig weit vorzustoßen und große Truppenteile kampfbereit ausschwärmen zu lassen sind Dolmen als sehr gefährlich eingestuft und stehen deshalb ganz oben auf der Abschußliste erfahrener Kommandeure. ]
+  
    Armor = 390
    Transportation ->* VehicleType.TransTrain 
    Features += ExternalFuelTransfer ExternalMaterialTransfer

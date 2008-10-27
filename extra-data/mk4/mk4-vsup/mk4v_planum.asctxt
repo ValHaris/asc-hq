@@ -4,10 +4,14 @@ VehicleType {
    parent = 336
 
    Description = Baufahrzeug Strasse/Schiene
-   Infotext = [Baufahrzeug für Straßen, Wege, Schienen und Brücken.]
    picture = mk4v_planum.png
    InfoImage = mk4v_planum.jpg
    wreckageobject = 14201
+   Infotext = [Der Planum ist eines der Standardbaufahrzeuge innerhalb des chromonischen Militärs. Seine Hauptaufgabe besteht darin, Verkehrswege anzulegen bzw. abzureißen. Egal ob unbefestigte Schotterpisten, Straßen, Landebahnen, oder Schienen - alles, was zur besseren Beweglichkeit der Truppe notwendig ist, lässt sich mit dem Planum bauen. Dazu gehören auch kleine, sowie große Straßen- und Eisenbahnbrücken. Zu diesem Zweck verfügt der Planum über einen ordentlichen Stauraum für Material und Treibstoff, welcher es ihm ermöglicht, auch weite Teile eines Straßennetzes zu errichten, ohne zwischendurch aufgetankt werden zu müssen.
+
+Der Planum ist verhältnismäßig leicht und lässt sich daher gut transportieren. Vor allem bei schnellen Vorstößen ist er nahezu unersetzlich, wenn es darum geht, unwegsames Gelände zu überwinden und Nachschubwege anzulegen. Mit mehreren Baufahrzeugen dieser Art lässt sich dabei innerhalb kurzer Zeit auch ein ordentliches Gleisnetz anlegen, damit sich auch schienengestützte Einheiten wirkungsvoll am Vorstoß beteiligen können. Weiterhin lässt sich mit einigen wenigen Planums sehr schnell eine komplette Start- und Landebahn für Flugzeuge errichten.
+
+Der Planum ist nur leicht gepanzert und stellt damit eine leichte Beute für feindliche Einheiten dar. Schon allein deswegen, sowie aufgrund seiner Bedeutung bei der Errichtung von infrastrukturellen Anlagen, ist es wenig ratsam, ihn ungeschützt herumfahren zu lassen, oder ihn gar in die erste Reihe zu stellen. Schon so mancher Angriff ist ins Stocken geraten, oder gar völlig zusammengebrochen, weil der Angreifer an zerstörten Brücken hängen blieb und kein geeignetes Baufahrzeug mehr für eine schnelle Reparatur zur Hand hatte.]
 
    Armor -= 50
    Weight -= 5

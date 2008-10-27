@@ -2,11 +2,16 @@ VehicleType {
    Name = SPHINX
    ID = 1292
    parent = 224
+
    Description = MidRange SAM
-   Infotext = [ Flugabwehrraketenpanzer mit guter Beweglichkeit und starker Bewaffnung. ]
    Picture = mk4v_sphinx.png
    wreckageobject = 14292
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Die Sphinx ist eine sehr spezielle Einheit und hat eine Art Sonderstatus innerhalb der chromonischen Luftabwehr. Es handelt sich bei ihr um einen recht mobilen und verhältnismäßig gut gepanzerten Fla-Rak-Panzer, dessen Raketen eine sehr hohe Geschwindigkeit aufweisen. Dies sorgt zwar einerseits dafür, dass sie über eine sehr hohe Reichweite verfügen, welche die der Medusa-Raketen noch um gut ein weiteres Drittel übersteigt - andererseits ist es mit ihnen unmöglich, Ziele in unmittelbarer Nähe der Sphinx zu bekämpfen. Dies liegt daran, dass der Raketenwerfer aus Gründen der Stabilität vollkommen starr auf dem Panzerchassis montiert ist und die Rakete nach dem Abfeuern eine gewisse Zeit benötigt (und dabei schon eine entsprechende Distanz zurücklegt) ehe die Ziel- und Steuersysteme sie richtig auf den entsprechenden Kurs gebracht haben.
+
+Größter Unterschied zu den anderen mobilen Flugabwehrsystemen der Chromoner ist jedoch, dass die Sphinx nach ihrer Ankunft im Einsatzgebiet erst schussfertig gemacht werden muss und daher nicht direkt aus der Bewegung heraus feuern kann. Auch die geringe Abschussfrequenz macht eine einzelne oder kleine Gruppe von Sphinxen zur Abwehr massiver Feindangriffe eher ungeeignet. Es handelt sich bei der Sphinx daher vielmehr um eine strategische Waffe, um große Gebiete vor vereinzelten feindlichen Kampffliegern und Bombern zu schützen und die eigene klassische Luftabwehr aus dem rückwärtigen Gebiet heraus zu unterstützen. Andererseits kann sie, direkt in zweiter Reihe eingesetzt, auch allzu neugierige Feindaufklärer erfolgreich auf Distanz halten - solange andere Einheiten den Nahschutz übernehmen.
+
+Mehrere erfahrenere Sphinxen können trotz allem auch allein ein recht hohes Anschreckungspotential entfalten, welches zusätzlich noch einmal gesteigert wird, wenn sie geschickt im Verbund mit den verschiedenen Medusa-Typen eingesetzt werden. Um den Wert der Sphinx noch weiter anzuheben, wurde sie noch mit einem einfachen MdRF-Gerät ausgestattet, wodurch ihr Defensivwert noch einmal ein Stück weit gesteigert und das Manko etwas ausgeglichen wurde, dass sie nicht aus der Bewegung heraus zu feuern vermag.]
 
    Weapons { 
       Weapon0.Ammo = 6

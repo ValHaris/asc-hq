@@ -10,10 +10,11 @@ VehicleType {
    Armor -= 50
    Weight -= 5
 
-   Transportation ->* VehicleType.TransLowTrooper 
+   Transportation ->* VehicleType.TransNoMechTrooper2 
 
    Movement += 0 0 0 20 0 0 0 0 
-
+   TerrainAccess ->* VehicleType.offroad
+   
    Weapons { 
       Number = 1
       Weapon0 ->* VehicleType.Minigun 
