@@ -5,17 +5,13 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 __________________
--InfoImage = Streak
-__________________
-Beta 3-10/08
+18.10.2008 (GAMER)
+-InfoImage = Streak, Boomerang
+-MG Nest Grafik repariert
 -InfoImage = Rotos, Tide, Arrow, Flux, Wedge, ForestRanger, Cosinus
-__________________
-Beta 2-10/08
 -InfoImage = Bang, Follow
 -InfoText = Termite, Coma3, Coma2, Coma, Blackout, Swatter
 -separates Ammo_Transfer aus Waffen entfernt
-__________________
-Beta 1-10/08
 -Bunker Gewicht 6000
 -MG Nest neue Grafik
 -Offraod fahrzeuge mit mehr über large Rocks

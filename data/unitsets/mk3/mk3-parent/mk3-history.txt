@@ -5,7 +5,7 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
-Beta 2-10/08
+18.10.2008 (GAMER)
 -InfoText = Meko, Arsenal, DD21
 -DD21 + Wasserbomben
 __________________

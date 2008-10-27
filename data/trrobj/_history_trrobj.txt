@@ -4,7 +4,8 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 
 __________________
-Beta 1-10/08
+18.10.2008 (GAMER)
+-Plateau kein Berg mehr
 -Kritalle nur noch small_rocks
 -Überarbeitung altes Blauwasser + neue Küste, VSW, Ocean
 __________________

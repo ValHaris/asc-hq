@@ -4,11 +4,11 @@
    id = 100313
    researchpoints = 1000
    
-   techlevel = 2
+   techlevel = 1
    
    requireEvent = false
    
-   TechnologiesRequired = 100102
+   TechnologiesRequired = 100101
    
    BlockingTechnologies = 
    

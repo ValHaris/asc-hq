@@ -1026,6 +1026,7 @@
 
 ; surface orbit missile
       SOM ->* VehicleType.CMO
+      SOM.Sound = groundmissile_s.ogg
       SOM.Type = air_missile shootable
       SOM.Ammo = 6
       SOM.ReactionFireShots = 1

@@ -10,7 +10,7 @@ VehicleType {
 
 
    Armor = 250
-   Weight = 210
+   Weight = 190
    View = 20
    Features = no_reactionfire
 
