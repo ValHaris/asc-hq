@@ -40,6 +40,8 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 
    if( rememberCheckbox ) 
       checkbox = new PG_CheckButton( this, PG_Rect( 10, r.Height() - 65, r.Width()-20, 20 ), "Remember choice" );
+   else
+      checkbox = NULL;
 
    my_btnok = new PG_Button(this, btn1, btn1text);
    my_btnok->SetID(1);
@@ -58,7 +60,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, const std::string& btn1text, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL), checkbox(NULL)
 {
 
    int buttonWidth = min( 120, r.Width() - 20 );
@@ -73,7 +75,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 }
 
 MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::string& windowtitle, const std::string& windowtext, PG_Label::TextAlign textalign, const std::string& style) :
-      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL)
+      ASC_PG_Dialog(parent, r, windowtitle, MODAL, style ), defaultKeysActive(true), my_btnok(NULL), my_btncancel(NULL), checkbox(NULL)
 {
 
    Init(windowtext, textalign, style);

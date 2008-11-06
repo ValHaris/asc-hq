@@ -689,43 +689,49 @@ void AI :: calcReconPositions()
 
 void AI ::  runReconUnits ( )
 {
+   
+   vector<int> reconUnits;
+   
    Player::VehicleList::iterator nvi;
-   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ) {
-      nvi = vi;
-      ++nvi;
-
+   for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi) {
       Vehicle* veh = *vi;
-
-      int maxUnitMovement = veh->typ->maxSpeed();
-
-      // the threat posed should be enemy units should be considered for position choosing too...
-      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon ) {
-         if ( reconPositions.find ( veh->getPosition()) == reconPositions.end()) {
-            // the unit is not standing on a reconposition
-            int mindist = maxint;
-            MapCoordinate mc;
-            for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
-               tfield* fld = getMap()->getField( i->first );
-               if ( !fld->vehicle && !fld->building ) {
-                  AStar ast ( getMap(), veh );
-                  ast.findAllAccessibleFields( maxUnitMovement );
-                  if ( fld->a.temp ) {
-                     int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
-                     if( vdist < mindist ) {
-                        mindist = vdist;
-                        mc = i->first;
+      if ( veh->aiparam[getPlayerNum()] && veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon ) 
+         reconUnits.push_back( veh->networkid );
+   }
+      
+   for ( vector<int>::iterator ru = reconUnits.begin(); ru != reconUnits.end(); ++ru ) {
+      Vehicle* veh = getMap()->getUnit(*ru);
+      if ( veh ) {
+         int maxUnitMovement = veh->typ->maxSpeed();
+   
+         // the threat posed should be enemy units should be considered for position choosing too...
+         if ( veh->aiparam[getPlayerNum()] && veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon ) {
+            if ( reconPositions.find ( veh->getPosition()) == reconPositions.end()) {
+               // the unit is not standing on a reconposition
+               int mindist = maxint;
+               MapCoordinate mc;
+               for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
+                  tfield* fld = getMap()->getField( i->first );
+                  if ( !fld->vehicle && !fld->building ) {
+                     AStar ast ( getMap(), veh );
+                     ast.findAllAccessibleFields( maxUnitMovement );
+                     if ( fld->a.temp ) {
+                        int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
+                        if( vdist < mindist ) {
+                           mindist = vdist;
+                           mc = i->first;
+                        }
                      }
                   }
                }
-            }
-            if( mindist < maxint ) {
-               veh->aiparam[getPlayerNum()]->dest = MapCoordinate3D(mc, veh->height);
-               veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_move );
-               runUnitTask ( veh );
+               if( mindist < maxint ) {
+                  veh->aiparam[getPlayerNum()]->dest = MapCoordinate3D(mc, veh->height);
+                  veh->aiparam[getPlayerNum()]->setTask( AiParameter::tsk_move );
+                  runUnitTask ( veh );
+               }
             }
          }
       }
-      vi = nvi;
    }
 }
 
