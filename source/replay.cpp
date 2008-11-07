@@ -1453,7 +1453,6 @@ void trunreplay :: execnextreplaymove ( void )
                            vm.execute ( NULL, x2, y2, 3, height, noInterrupt > 0 ? VehicleMovement::NoInterrupt : 0 );
 
                            if ( vm.getStatus() != 1000 ) {
-                              savegame("testrep.sav");
                               if ( CGameOptions::Instance()->replayMovieMode ) {
 
                                  tfield* fld = eht->getMap()->getField(x1,y1);
