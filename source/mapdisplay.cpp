@@ -292,7 +292,7 @@ void MapRenderer::readData()
    if ( !icons.mapBackground.valid() ) {
       icons.mapBackground = IconRepository::getIcon("mapbkgr.raw");
       icons.notVisible    = IconRepository::getIcon("hexinvis.raw");
-      icons.markField     = IconRepository::getIcon("markedfield.pcx");
+      icons.markField     = IconRepository::getIcon("markedfield.png");
       icons.markField.detectColorKey();
       icons.markFieldDark = IconRepository::getIcon("markedfielddark.png");
    }
@@ -584,7 +584,7 @@ MapDisplayPG::Icons MapDisplayPG::icons;
 void MapDisplayPG::readData()
 {
    if ( !icons.cursor.valid() ) {
-      icons.cursor = IconRepository::getIcon( "curshex.raw" );
+      icons.cursor = IconRepository::getIcon( "curshex.png" );
       icons.fieldShape = IconRepository::getIcon("hexinvis.raw");
    }
 }
@@ -739,7 +739,7 @@ void MapDisplayPG::displayCursor( const PG_Rect& dst )
    int y = cursor.pos().y  - offset.y;
    if( x >= field.viewPort.x1 && x < field.viewPort.x2 && y >= field.viewPort.y1 && y < field.viewPort.y2 && x >= 0 && y >= 0 && x < actmap->xsize && y < actmap->ysize ) {
       // surface->Blit( icons.cursor, getFieldPos(x,y));
-      MegaBlitter<1,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
+      MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
       blitter.setZoom( float(zoom) / 100.0 );
 
       PG_Rect clip= dst.IntersectRect( PG_Application::GetScreen()->clip_rect );
