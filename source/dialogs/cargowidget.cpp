@@ -345,6 +345,7 @@ void CargoWidget::click( int num, SPoint mousePos, bool first )
 
 void CargoWidget :: redrawAll()
 {
+   BulkGraphicUpdates bgu( this );
    unitHighLight.redrawAll();
 }
 

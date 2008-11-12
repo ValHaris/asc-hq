@@ -36,10 +36,22 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 
 
    int buttonWidth = min( 120, r.Width() / 2 - 20 );
-   PG_Rect btn1 = PG_Rect( r.Width() / 2 - buttonWidth - 10, r.Height() - 35, buttonWidth, 30 );
+   PG_Rect btn1;
+
+   int bttncount;
+
+   if ( btn2text.size() > 0 ) {
+      btn1 = PG_Rect( r.Width() / 2 - buttonWidth - 10, r.Height() - 35, buttonWidth, 30 );
+      bttncount = 2;
+   } else {
+      btn1 = PG_Rect( r.Width() / 2 - buttonWidth/2, r.Height() - 40, buttonWidth, 30 );
+      bttncount = 1;
+   }
+
+      
 
    if( rememberCheckbox ) 
-      checkbox = new PG_CheckButton( this, PG_Rect( 10, r.Height() - 65, r.Width()-20, 20 ), "Remember choice" );
+      checkbox = new PG_CheckButton( this, PG_Rect( 10, r.Height() - 65, r.Width()-20, 20 ), bttncount == 2 ? "Remember choice" : "don't show again" );
    else
       checkbox = NULL;
 
@@ -48,13 +60,15 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
    my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
    my_btnok->activateHotkey( 0 );
 
-   PG_Rect btn2 = btn1;
-   btn2.x = r.Width() / 2 + 10;
+   if ( bttncount == 2 ) {
+      PG_Rect btn2 = btn1;
+      btn2.x = r.Width() / 2 + 10;
 
-   my_btncancel = new PG_Button(this, btn2, btn2text);
-   my_btncancel->SetID(2);
-   my_btncancel->sigClick.connect(slot(*this, &MessageDialog::handleButton));
-   my_btncancel->activateHotkey( 0 );
+      my_btncancel = new PG_Button(this, btn2, btn2text);
+      my_btncancel->SetID(2);
+      my_btncancel->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+      my_btncancel->activateHotkey( 0 );
+   }
 
    Init(windowtext, textalign, style);
 }
@@ -223,7 +237,10 @@ int  new_choice_dlg(const ASCString& title, const ASCString& shortTitle, const A
 
    PG_Rect size = calcMessageBoxSize(title);
    MessageDialog msg( NULL, size,"", "", leftButton, rightButton, PG_Label::CENTER, "Window", true );
-   msg.getTextBox()->SetFontSize( msg.getTextBox()->GetFontSize() + 3 );
+   
+   if ( title.size() < 30 )
+      msg.getTextBox()->SetFontSize( msg.getTextBox()->GetFontSize() + 3 );
+
    msg.getTextBox()->SetText(title);
    msg.EnableDefaultKeys( false );
       

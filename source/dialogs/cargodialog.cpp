@@ -2672,7 +2672,7 @@ namespace CargoGuiFunctions {
 
       vector<Vehicle*> targets = parent.getControls().moveUnitDownTargets( veh );
 
-      infoMessage("You can also use Drag'n'Drop to move units in the Cargo Dialog\nMouse button: " + CGameOptions::Mouse::getButtonName( CGameOptions::Instance()->mouse.dragndropbutton ));
+      choiceDialog("You can also use Drag'n'Drop to move units in the Cargo Dialog\nMouse button: " + CGameOptions::Mouse::getButtonName( CGameOptions::Instance()->mouse.dragndropbutton ), "OK", "", "dragndropinfo");
 
       Vehicle* target = selectVehicle( targets );
       if ( target )
