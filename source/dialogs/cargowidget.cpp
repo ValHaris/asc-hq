@@ -137,10 +137,25 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
          setBargraphValue( "FuelBar", f );
       } else
          setBargraphValue( "FuelBar", 0 );
- 
+
+      if ( storage[num]->getStorageCapacity().material ) {
+         float f = float(storage[num]->getResource( maxint, 1, true, 0 )) / storage[num]->getStorageCapacity().material;
+         setBargraphValue( "MaterialBar", f );
+      } else
+         setBargraphValue( "MaterialBar", 0 );
+
+
+      if ( storage[num]->typ->maxLoadableWeight ) {
+         float f = float(storage[num]->cargoWeight()) / storage[num]->typ->maxLoadableWeight;
+         setBargraphValue( "CargoBar", f );
+      } else
+         setBargraphValue( "CargoBar", 0 );
+
    } else {
       setBargraphValue( "DamageBar", 0 );
       setBargraphValue( "FuelBar", 0 );
+      setBargraphValue( "MaterialBar", 0 );
+      setBargraphValue( "CargoBar", 0 );
    }
 
    PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
