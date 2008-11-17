@@ -4440,10 +4440,10 @@ CopyMap::~CopyMap()
    if( map != NULL )
    {
       delete map;
-      delete fieldCopied;
+      delete[] fieldCopied;
    }
-   delete directionTranslation;
-   delete playerTranslation;
+   delete[] directionTranslation;
+   delete[] playerTranslation;
 }
 
 void CopyMap::selectArea()
@@ -4460,7 +4460,7 @@ void CopyMap::copy()
    if( map != NULL )
    {
       delete map;
-      delete fieldCopied;
+      delete[] fieldCopied;
    }
    
    mapStartX = -1;
@@ -4493,8 +4493,8 @@ void CopyMap::copy()
    copyStep = 2;
    operate();
 
-   delete directionTranslation;
-   delete playerTranslation;
+   delete[] directionTranslation;
+   delete[] playerTranslation;
    directionTranslation = oldDirectoyTranslation;
    playerTranslation = oldPlayerTranslation;
 }
@@ -4650,7 +4650,7 @@ bool CopyMap::paste()
       }
    }
    
-   delete directionTranslation;
+   delete[] directionTranslation;
    directionTranslation = oldDirectoyTranslation;
    
    return true;
