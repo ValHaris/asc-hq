@@ -266,6 +266,14 @@ class ChooseTech : public ASC_PG_Dialog
          }
          return true;
       }
+      
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         if ( key->keysym.sym == SDLK_RETURN ) 
+            return ok();
+         
+         return false;
+      };
 
    
    public:

@@ -47,6 +47,8 @@
 
 #include "dialogs/fieldmarker.h"
 #include "widgets/textrenderer.h"
+#include "dialogs/selectionwindow.h"
+#include "dialogs/vehicletypeselector.h"
 #include <pgpropertyeditor.h>
 #include <pgpropertyfield_checkbox.h>
 
@@ -340,215 +342,103 @@ void selectFields( FieldAddressing::Fields& fields )
    sbfm.RunModal();
 }
 
+class UnitListFactory: public SelectionItemFactory, public SigC::Object  {
+   public:
+      typedef list<const Vehicletype*> UnitList;
+   private:
+      const UnitList& unitList;
+   protected:
+      UnitList::const_iterator it;
+      void itemSelected( const SelectionWidget* widget, bool mouse ) 
+      {
+      };
+   public:
+      UnitListFactory( const UnitList& units )  : unitList( units )
+      {
+         restart();
+      };
+      
+      void restart()
+      {
+         it = unitList.begin();
+      }
+      
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
+      {
+         if ( it != unitList.end() ) {
+            const Vehicletype* v = *(it++);
+            return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actmap->getCurrentPlayer() );
+         } else
+            return NULL;
+      };
+};
 
 
-NewVehicleTypeDetection::NewVehicleTypeDetection(  )
+
+NewVehicleTypeDetection::NewVehicleTypeDetection( GameMap* gamemap )
 {
-   buf = new bool[ vehicleTypeRepository.getNum() ];
+   this->gamemap = gamemap;
 
    for ( int i=0; i < vehicleTypeRepository.getNum() ; i++ )
-      buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) );
+      if ( !gamemap->player[ gamemap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) ))
+         buf.push_back( vehicleTypeRepository.getObject_byPos ( i ) );
 }
+
+class UnitAvailabilityWindow : public ItemSelectorWindow {
+   private:
+      bool eventKeyDown(const SDL_KeyboardEvent* key)
+      {
+         if ( key->keysym.sym == SDLK_RETURN ) {
+            QuitModal();
+            return true;
+         }
+         return ItemSelectorWindow::eventKeyDown( key );
+      };
+
+   public:
+      UnitAvailabilityWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, UnitListFactory* itemFactory ) 
+         : ItemSelectorWindow( parent, r, title, itemFactory ) 
+      {
+      };
+};      
+
 
 
 
 void    NewVehicleTypeDetection::evalbuffer( void )
 {
-   int num = 0;
-   for ( int i=0; i < vehicleTypeRepository.getNum() ;i++ ) {
-      if (buf[i] == 0) {
-          buf[i] = actmap->player[ actmap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) );
-          if ( buf[i] )
-             num++;
-      } else
-          buf[i] = 0;
+   for ( int i=0; i < vehicleTypeRepository.getNum() ;i++ ) 
+      if ( !gamemap->player[ gamemap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) ))
+         buf.remove( vehicleTypeRepository.getObject_byPos ( i ) );
 
+   if ( buf.size() )  {
+      UnitAvailabilityWindow snau( NULL, PG_Rect( -1, -1, 500, 700 ),  "new units available", new UnitListFactory( buf ));
+      snau.Show();
+      snau.RunModal();
    }
-
-   if ( num ) {
-      tshownewtanks snt;
-      snt.init ( buf );
-      snt.run  ();
-      snt.done ();
-   }
-
 }
-
-NewVehicleTypeDetection::~NewVehicleTypeDetection()
-{
-   delete[] buf ;
-}
-
-#if 0
-
- class   tshowtechnology : public tdialogbox {
-               public:
-                  const Technology*       tech;
-                  void              init( const Technology* acttech );
-                  virtual void      run ( void );
-                  void              showtec ( void );
-         };
-
-
-void         tshowtechnology::init(  const Technology* acttech  )
-{ 
-   tdialogbox::init();
-   title = "new technology";
-   buildgraphics();
-   tech = acttech;
-} 
-
-
-void         tshowtechnology::showtec(void)
-{ 
-   const char         *wort1, *wort2;
-   const char         *pc, *w2;
-   int          xp, yp, w;
-
-   activefontsettings.font = schriften.large; 
-   activefontsettings.justify = centertext;
-   activefontsettings.length = xsize - 40;
-   showtext2(tech->name,x1 + 20,y1 + starty + 10); 
-   activefontsettings.justify = lefttext; 
-
-   yp = 60; 
-
-   if (tech->icon) {
-      int xs,ys;
-      getpicsize ( (trleheader*) tech->icon, xs, ys );
-      putimage ( x1 + ( xsize - xs) / 2 , y1 + starty + 45 , tech->icon );
-      yp += ys + 10;
-   }
-
-
-
-   wort1 = new char[100];
-   wort2 = new char[100];
-   strcpy( wort1, "research points: " );
-   itoa ( tech->researchpoints, wort2, 10 );
-   strcat( wort1, wort2 );
-
-   activefontsettings.font = schriften.smallarial; 
-   showtext2(wort1, x1 + 30,y1 + yp);
-
-   if ( !tech->infotext.empty()) {
-      activefontsettings.color = black; 
-      xp = 0; 
-      pc = tech->infotext.c_str();
-      while (*pc ) {
-         w2 = wort1;
-         while ( *pc  && *pc != ' ' && *pc != '-' ) {
-            *w2 = *pc;
-            w2++;
-            pc++;
-         };
-         *w2 = *pc;
-         if (*pc) {
-            w2++;
-            pc++;
-         }
-         *w2=0;
-         
-         w = gettextwdth(wort1,NULL);
-         if (xp + w > xsize - 40) { 
-            yp = yp + 5 + activefontsettings.font->height; 
-            xp = 0; 
-         } 
-         showtext2(wort1,x1 + xp + 20,y1 + starty + yp);
-         xp += w;
-      }
-   }
-   delete[] wort1 ;
-   delete[] wort2 ;
-}
-
-
-
-void         tshowtechnology::run(void)
-{
-   showtec();
-   do {
-      tdialogbox::run();
-   }  while ( (taste != ct_esc) && (taste != ct_space) && (taste != ct_enter) );
-}
-
-#endif
 
 
 void         showtechnology(const Technology*  tech )
 {
    if ( tech ) {
-      ASCString text = "#fontsize=18#Research completed#fontsize=12#\n";
+      ASCString text = "#fontsize=18#Research completed#fontsize=12#\n\n";
 
-      text = "Our scientists have mastered a new technology:\n#fontsize=18#";
+      text = "Our scientists have mastered a new technology:\n\n#fontsize=18#";
 
-      text += tech->name + "#fontsize=12#\n";
+      text += tech->name + "#fontsize=12#\n\n";
 
       if ( tech->relatedUnitID > 0 )
          text += "#vehicletype=" + ASCString::toString(tech->relatedUnitID) + "#\n\n";
 
       text += tech->infotext;
 
-      ViewFormattedText tr ("Research", text, PG_Rect(-1,-1, 300,250) );
+      ViewFormattedText tr ("Research", text, PG_Rect(-1,-1, 400,250) );
       tr.Show();
       tr.RunModal();
    }
 }
 
-
-void  tshownewtanks :: init ( bool*      buf2 )
-{
-   tdialogbox::init();
-
-   title = "new units available";
-   xsize = 400;
-   x1 = 120;
-   y1 = 100;
-   ysize = 280;
-
-   addbutton("~o~k", 10, ysize - 35, xsize - 10, ysize - 10, 0, 1, 1 , true );
-   addkey(1, ct_enter);
-   addkey(1, ct_space);
-
-   buildgraphics();
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   activefontsettings.background = 255;
-   activefontsettings.justify = lefttext;
-   activefontsettings.length = xsize - 80;
-
-   buf = buf2;
-   int i, num = 0;
-   for (i=0; i < vehicleTypeRepository.getNum() ;i++ ) {
-      if ( buf[i] ) {
-         Vehicletype* tnk = vehicleTypeRepository.getObject_byPos ( i );
-         if ( tnk ) {
-            bar ( x1 + 25, y1 + 45 + num * 50, x1 + 65, y1 + 85 + num * 50, dblue );
-            tnk->paint( getActiveSurface(), SPoint (  x1 + 30, y1 + 50 + num * 50), actmap->getCurrentPlayer().getPlayerColor() );
-            showtext2( tnk -> name, x1 + 70, y1 + 45 + num * 50 );
-            showtext2( tnk -> description, x1 + 70, y1 + 45 + 40 + num * 50 - activefontsettings.font->height );
-            num++;
-         }
-      }
-
-   } /* endfor */
-}
-
-void  tshownewtanks :: run ( void )
-{
-   status = 0;
-   mousevisible(true);
-   do {
-      tdialogbox :: run ();
-   } while ( status == 0 ); /* enddo */
-}
-
-void  tshownewtanks :: buttonpressed ( int id )
-{
-   if (id == 1)
-      status = 1;
-}
 
 
 int selectunit ( int unitnetworkid )

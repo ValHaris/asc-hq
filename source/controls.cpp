@@ -676,7 +676,7 @@ void researchCheck( Player& player )
       if ( research.activetechnology )
          logtoreplayinfo ( rpl_techResearched, research.activetechnology->id, player.getPosition() );
 
-      NewVehicleTypeDetection pfzt;
+      NewVehicleTypeDetection pfzt ( player.getParentMap() );
 
       research.addtechnology();
 
