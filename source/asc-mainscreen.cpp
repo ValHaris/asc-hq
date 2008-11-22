@@ -155,6 +155,14 @@ void Menu::setup()
    addbutton ( "~E~dit Player Data", ua_editPlayerData);
 
 
+   addfield ( "~A~ction" );
+   addbutton ( "~U~ndo\tctrl-z", ua_undo );
+   // addbutton ( "~R~edo", ua_redo );
+#ifdef LUAINTERFACE
+   currentMenu->addSeparator();
+   addbutton ( "Save List", ua_writeLuaCommands );
+#endif   
+
 
    addfield ( "~I~nfo" );
    addbutton ( "~V~ehicle types", ua_vehicleinfo );
