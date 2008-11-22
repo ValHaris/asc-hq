@@ -486,10 +486,10 @@ void Player::swap ( Player& secondPlayer )
 
    BL bl2 = secondPlayer.buildingList;
    for ( BLI i = bl2.begin(); i != bl2.end(); ++i)
-      (*i)->convert( player );
+      (*i)->convert( player, false );
 
    for ( BLI i = bl.begin(); i != bl.end(); ++i)
-      (*i)->convert( secondPlayer.player );
+      (*i)->convert( secondPlayer.player, false );
 
    for (int i =0; i < parentMap->xsize * parentMap->ysize ;i++ ) {
       tfield* fld = &parentMap->field[i];

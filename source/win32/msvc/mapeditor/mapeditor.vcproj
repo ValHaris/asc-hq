@@ -773,6 +773,10 @@
 					RelativePath="..\..\..\actions\unitaction.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\actions\unitfieldregistration.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Utils"

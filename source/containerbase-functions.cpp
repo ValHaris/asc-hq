@@ -102,6 +102,10 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
    if ( !currentField )
       return;
 
+   Object* object = currentField->checkforobject( obj );
+   if ( !object )
+      return;
+
    // we are only harvesting on fields who have non-harvestable neighbouring field, 
    // to prevent clearing of areas where the 'island' fields that are supposed to remain
    // are not covered by the oject
@@ -125,7 +129,6 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
       return;
 
 
-   Object* object = currentField->checkforobject( obj );
 
    if( object != NULL ) {
       Resources removeValue = object->typ->removecost;

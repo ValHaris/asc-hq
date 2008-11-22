@@ -844,38 +844,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( mod & KMOD_CTRL ) {
       switch ( key->keysym.sym ) {
 
-            case SDLK_f:
-               execUserAction_ev ( ua_unitsummary );
-               return true;
-
-            case SDLK_c:
-               execUserAction_ev ( ua_cargosummary );
-               return true;
-
-            case SDLK_g:
-               execUserAction_ev( ua_gotoPosition );
-               return true;
-
-            case SDLK_l:
-               execUserAction_ev ( ua_loadgame );
-               return true;
-
-            case SDLK_r:
-               execUserAction_ev( ua_createReminder );
-               return true;
-               
-            case SDLK_s:
-               execUserAction_ev ( ua_savegame );
-               return true;
-
-            case SDLK_z:
-               execUserAction_ev( ua_undo );
-               return true;
-
-            case SDLK_n:
-               execUserAction_ev ( ua_newGame );
-               return true;
-
             case SDLK_0: execUserAction_ev( ua_writescreentopcx );
                return true;
 
@@ -891,15 +859,49 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                   i[x * s->pitch/4 + x] = 0xffffff;
                SDL_UnlockSurface( s );
                SDL_UpdateRect(s,0,0,0,0);
-                           }
+               return true;
+            }
 
-            return true;
             
+            default:;
+      }
+      switch ( key->keysym.unicode ) {
+            case 3: // C
+               execUserAction_ev ( ua_cargosummary );
+               return true;
 
-            case SDLK_q:
+            case 6: // F
+               execUserAction_ev ( ua_unitsummary );
+               return true;
+
+            case 7: // G
+               execUserAction_ev( ua_gotoPosition );
+               return true;
+
+            case 12: // L
+               execUserAction_ev ( ua_loadgame );
+               return true;
+
+            case 14: // N
+               execUserAction_ev ( ua_newGame );
+               return true;
+
+            case 17: // Q
                execUserAction_ev ( ua_exitgame );
                return true;
-            default:;
+
+            case 18: // R
+               execUserAction_ev( ua_createReminder );
+               return true;
+               
+            case 19: // S
+               execUserAction_ev ( ua_savegame );
+               return true;
+
+            case 26: // Z
+               execUserAction_ev( ua_undo );
+               return true;
+
       }
    }
 
