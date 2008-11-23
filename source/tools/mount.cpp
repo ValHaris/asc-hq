@@ -350,7 +350,7 @@ void testcompress ( const char* name, int size )
    }
    if ( comp ) {
       if ( verbose )
-         printf ( "is already compressed ! " );
+         printf ( " is already compressed ! " );
       copyfile ( name, extractFileName ( buf2, name ), filesize ( name ) );
    } else {
 
