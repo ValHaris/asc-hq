@@ -436,11 +436,13 @@ PG_Widget* TextRenderer :: render( const ASCString& token )
 
 void TextRenderer::clear()
 {
+   BulkGraphicUpdates bgu( this );
    for ( Widgets::iterator i = widgets.begin(); i != widgets.end(); ++i )
       delete *i;
      
    widgets.clear();
    attributes.clear();
+   bgu.release();
 }
 
 
