@@ -15,9 +15,12 @@
 *.properties
 email.clients
 campaign/nos/*.map
+campaign/nos/*.asccampaign 
 campaign/standard/*.asctxt
 campaign/standard/*.map
+campaign/standard/*.asccampaign 
 campaign/kamor/*.asctxt
+campaign/kamor/*.asccampaign 
 campaign/kamor/*.map
 buildings/*.txt
 buildings/*.asctxt

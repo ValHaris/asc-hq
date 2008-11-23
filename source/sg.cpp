@@ -1709,7 +1709,7 @@ int main(int argc, char *argv[] )
    StdIoErrorHandler stdIoErrorHandler(false);
    MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
 
-   ResourceLogger rl;
+   // ResourceLogger rl;
 
 #ifdef WIN32
    Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;

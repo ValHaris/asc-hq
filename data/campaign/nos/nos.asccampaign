@@ -1,0 +1,7 @@
+campaign {
+   name = NOS Campaign
+   description = The NOS Campaign
+
+   file = NOS001.map 
+
+} campaign 

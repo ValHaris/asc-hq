@@ -1,0 +1,7 @@
+campaign {
+   name = Standard Campaign
+   description = Join the Rebellion to fight against the evil, suppressing Imperium!
+
+   file = asc001.map 
+
+} campaign 
