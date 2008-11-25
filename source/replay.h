@@ -93,10 +93,6 @@ enum trpl_actions { rpl_attack,
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
-class Command;
-
-extern void logtoreplayinfo ( const Command& command  );
-
 struct treactionfire_replayinfo;
 
 class trunreplay {
@@ -155,6 +151,10 @@ extern void runSpecificReplay( int player, int viewingplayer, bool performEndTur
 
 //! runs the replay of the current player. This is used primarily for debugging the replay system
 extern void viewOwnReplay( Player& player );
+
+//! closes the replay recording for this players turn. It writes all pending actions to the replay
+extern void closePlayerReplayLogging( Player& player );
+
 
 //! initialized the replay system at program startup
 extern void hookReplayToSystem();

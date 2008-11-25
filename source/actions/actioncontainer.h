@@ -24,6 +24,8 @@
 
 #include <list>
 #include <sigc++/sigc++.h>
+#include "loki/Functor.h"
+#include "loki/Typelist.h"
 
 #include "command.h"
 
@@ -46,7 +48,14 @@ class ActionContainer {
       
       // called when some modification to the map is taking place that is not recorded by undo
       void breakUndo();
-      
+
+      class ReplayStorage {
+         public:
+            virtual void saveCommand( const Command& cmd ) = 0;
+      };
+
+      void saveActionsToReplay( ReplayStorage& replay );
+
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       

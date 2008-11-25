@@ -83,6 +83,13 @@ void ActionContainer::breakUndo()
    currentPos=actions.end();
 }
 
+void ActionContainer::saveActionsToReplay( ReplayStorage& replay )
+{
+   for ( Actions::iterator i = actions.begin(); i != currentPos; ++i )
+      replay.saveCommand( **i );
+}
+
+
 const int actionContainerversion = 1;
 
 void ActionContainer::read ( tnstream& stream )

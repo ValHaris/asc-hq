@@ -228,7 +228,9 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
-      
+
+      map->sigPlayerUserInteractionEnds.connect( SigC::slot( closePlayerReplayLogging ));
+
       map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
 
       

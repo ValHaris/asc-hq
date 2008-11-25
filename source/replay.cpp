@@ -647,8 +647,54 @@ Resources getUnitResourceCargo ( Vehicle* veh )
    return res;
 }
 
+class LogActionIntoReplayInfo : public ActionContainer::ReplayStorage {
+      GameMap* gamemap;
+   public:
+      LogActionIntoReplayInfo( GameMap* map ) : gamemap( map ) {
+
+      };
+
+      void saveCommand( const Command& cmd )
+      {
+         if ( gamemap->replayinfo && gamemap->replayinfo->actmemstream && !gamemap->replayinfo->stopRecordingActions) {
+            tnstream* stream = gamemap->replayinfo->actmemstream;
+         
+            stream->writeChar( rpl_runCommandAction );
+            
+            tmemorystreambuf buff;
+            {
+               tmemorystream stream2( &buff, tnstream::writing );
+               cmd.write( stream2 );
+            }
+            
+            // size is counted in 4 Byte chunks, so we need padding bytes
+            int size = (buff.getSize()+3)/4;
+            stream->writeInt( size + 1 );
+            
+            int padding = size*4 - buff.getSize();
+            stream->writeInt( padding );
+            
+            buff.writetostream( stream );
+            for ( int i = 0; i < padding;++i )
+               stream->writeChar( 255-i );
+         }
+      }
+};
+
+
+void closePlayerReplayLogging( Player& player )
+{
+   LogActionIntoReplayInfo lairi( player.getParentMap() );
+   player.getParentMap()->actions.saveActionsToReplay( lairi );
+}
+
+
+
+
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
+   LogActionIntoReplayInfo lairi( actmap );
+   actmap->actions.saveActionsToReplay( lairi );
    actmap->actions.breakUndo();
    
    char action = _action;
@@ -1267,39 +1313,6 @@ void logtoreplayinfo ( trpl_actions _action, ... )
 
       va_end ( paramlist );
    }
-}
-
-void logtoreplayinfo ( const Command& command  )
-{
-   if ( actmap->replayinfo && actmap->replayinfo->actmemstream && !actmap->replayinfo->stopRecordingActions) {
-      tnstream* stream = actmap->replayinfo->actmemstream;
-   
-      stream->writeChar( rpl_runCommandAction );
-      
-      
-      tmemorystreambuf buff;
-      {
-         tmemorystream stream2( &buff, tnstream::writing );
-         command.write( stream2 );
-      }
-      
-      // size is counted in 4 Byte chunks, so we need padding bytes
-      int size = (buff.getSize()+3)/4;
-      stream->writeInt( size + 1 );
-      
-      int padding = size*4 - buff.getSize();
-      stream->writeInt( padding );
-      
-      buff.writetostream( stream );
-      for ( int i = 0; i < padding;++i )
-         stream->writeChar( 255-i );
-   }
-}
-
-
-void logActiontoreplayinfo ( GameMap* map, const Command& command  )
-{
-   logtoreplayinfo( command );
 }
 
 
@@ -2774,5 +2787,5 @@ void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticState
 void hookReplayToSystem()
 {
    DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
-   postActionExecution.connect( SigC::slot( &logActiontoreplayinfo ));
+   // postActionExecution.connect( SigC::slot( &logActiontoreplayinfo ));
 }
