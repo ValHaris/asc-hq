@@ -326,6 +326,7 @@ class UnitHooveringLogic {
     /** searches for mineral resources.
         \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
     */
+    int searchForMineralResources( const Context& context ) const;
     int searchForMineralResources( ) const;
 
 //    bool searchForMineralResourcesAvailable();

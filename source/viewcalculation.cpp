@@ -153,8 +153,10 @@ void         tcomputevehicleview::init( const Vehicle* eht, int _mode  )   // mo
    if ( eht->typ->hasFunction( ContainerBaseType::JamsOnlyOwnField  ) )
       rangeJamming = false;
 
+   /*
    if ( eht->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) && _mode == 1 )
       eht->searchForMineralResources();
+      */
 
    int view = eht->typ->view+1;
    if ( eht->height <= chfahrend) {

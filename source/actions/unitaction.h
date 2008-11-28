@@ -35,6 +35,7 @@ class UnitAction : public GameAction {
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
       UnitAction( GameMap* gamemap, int vehicleID );
+      UnitAction( Vehicle* unit );
       UnitAction( GameMap* gamemap );
 };
 

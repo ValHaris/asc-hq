@@ -47,7 +47,8 @@ namespace ActionRegistry {
                   ConvertContainer,
                   PutObjectCommand,
                   PutMineCommand,
-                  SpawnMine
+                  SpawnMine,
+                  DiscoverResources
       
    };
 };

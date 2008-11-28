@@ -26,6 +26,7 @@
 #include "consumeresource.h"
 #include "changeview.h"
 #include "convertcontainer.h"
+#include "discoverresources.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"
@@ -189,6 +190,8 @@ ActionResult MoveUnit::runAction( const Context& context )
          if ( vehicle ) {
             vehicle->setnewposition(to, context );            
             (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::AddView ))->execute( context );
+            if ( vehicle->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) )
+               (new DiscoverResources(vehicle))->execute(context);
          }
 
          

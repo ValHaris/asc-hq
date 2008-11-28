@@ -954,6 +954,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\discoverresources.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\inflictdamage.cpp"
 					>
 				</File>

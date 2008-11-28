@@ -23,7 +23,14 @@
 
 #include "../vehicle.h"
 #include "../gamemap.h"
-     
+
+UnitAction::UnitAction( Vehicle* unit )
+   : GameAction( unit->getMap() )
+{
+   vehicleID = unit->networkid;
+}     
+
+
 UnitAction::UnitAction( GameMap* gamemap )
    : GameAction( gamemap )
 {

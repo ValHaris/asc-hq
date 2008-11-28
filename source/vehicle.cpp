@@ -1146,13 +1146,6 @@ class tsearchforminablefields: public SearchFields {
       tsearchforminablefields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
   };
 
-  /*
-bool Vehicle::searchForMineralResourcesAvailable()
-{
-   return tsearchforminablefields::available( this );
-}
-  */
-
 
 void         tsearchforminablefields::testfield( const MapCoordinate& mc )
 {
@@ -1207,7 +1200,13 @@ int Vehicle::maxMovement ( void ) const
    return typ->movement[log2(height)];
 }
 
-int Vehicle::searchForMineralResources ( void ) const
+int Vehicle::searchForMineralResources ( const Context& context ) const
+{
+    tsearchforminablefields sfmf ( gamemap );
+    return sfmf.run( this );
+}
+
+int Vehicle::searchForMineralResources ( ) const
 {
     tsearchforminablefields sfmf ( gamemap );
     return sfmf.run( this );

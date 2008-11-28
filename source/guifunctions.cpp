@@ -398,9 +398,6 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
 
 
 
-
-
-
 class Ascend : public MovementBase
 {
     protected:
@@ -420,6 +417,19 @@ class Ascend : public MovementBase
          return "a~s~cend";
       };
       int getVerticalDirection() { return 1; };
+
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) 
+      {
+         if ( !commandPending() ) {
+            Vehicle* eht = actmap->getField(pos)->vehicle;
+            if ( eht )
+               if ( eht->getOwner() == actmap->actplayer)
+                  return MoveUnitCommand::ascendAvail ( eht );
+            return false;
+         } else 
+            return MovementBase::available( pos, subject, num );
+      }
+
 };
 
 
@@ -444,6 +454,19 @@ class Descend : public MovementBase
       {
          return "~d~escend";
       };
+
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) 
+      {
+         if ( !commandPending() ) {
+            Vehicle* eht = actmap->getField(pos)->vehicle;
+            if ( eht )
+               if ( eht->getOwner() == actmap->actplayer)
+                  return MoveUnitCommand::descendAvail ( eht );
+            return false;
+         } else 
+            return MovementBase::available( pos, subject, num );
+      }
+
 };
 
 
