@@ -1136,80 +1136,9 @@ void Vehicle::setAttacked( bool recursive, const Context& context )
 }
 
 
-
-class tsearchforminablefields: public SearchFields {
-      int shareview;
-    public:
-      int numberoffields;
-      int run ( const Vehicle*     eht );
-      virtual void testfield ( const MapCoordinate& mc );
-      tsearchforminablefields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
-  };
-
-
-void         tsearchforminablefields::testfield( const MapCoordinate& mc )
-{
-    tfield* fld = gamemap->getField ( mc );
-    if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
-       if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
-          if ( !fld->resourceview )
-             fld->resourceview = new tfield::Resourceview;
-
-          for ( int c = 0; c < 8; c++ )
-             if ( shareview & (1 << c) ) {
-                fld->resourceview->visible |= ( 1 << c );
-                fld->resourceview->fuelvisible[c] = fld->fuel;
-                fld->resourceview->materialvisible[c] = fld->material;
-             }
-       }
-}
-
-
-
-
-int  tsearchforminablefields::run( const Vehicle* eht )
-{
-   if ( !eht->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) )
-      return -311;
-
-
-   shareview = 1 << ( eht->color / 8);
-   for ( int i = 0; i < 8; i++ )
-      if ( i*8 != eht->color )
-         if ( gamemap->player[i].exist() )
-            if ( gamemap->getPlayer(eht).diplomacy.sharesView(i) )
-               shareview += 1 << i;
-
-   numberoffields = 0;
-   initsearch( eht->getPosition(), eht->typ->digrange, 0 );
-   if ( eht->typ->digrange )
-      startsearch();
-
-//   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
-//      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
-
-//   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
-//      gamemap->mineralResourcesDisplayed = 1;
-
-   return 1;
-}
-
-
 int Vehicle::maxMovement ( void ) const
 {
    return typ->movement[log2(height)];
-}
-
-int Vehicle::searchForMineralResources ( const Context& context ) const
-{
-    tsearchforminablefields sfmf ( gamemap );
-    return sfmf.run( this );
-}
-
-int Vehicle::searchForMineralResources ( ) const
-{
-    tsearchforminablefields sfmf ( gamemap );
-    return sfmf.run( this );
 }
 
 

@@ -322,15 +322,6 @@ class UnitHooveringLogic {
     bool isViewing ( ) const { return viewOnMap; };
     const SingleWeapon *getWeapon( unsigned weaponNum );
 
-
-    /** searches for mineral resources.
-        \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
-    */
-    int searchForMineralResources( const Context& context ) const;
-    int searchForMineralResources( ) const;
-
-//    bool searchForMineralResourcesAvailable();
-
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;
 
