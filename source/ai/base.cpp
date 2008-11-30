@@ -35,10 +35,6 @@ AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
    fieldInformation = NULL;
 
    reset();
-   ReplayMapDisplay* r = new ReplayMapDisplay ( &getDefaultMapDisplay() );
-   r->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
-   rmd = r;
-   mapDisplay = rmd;
 }
 
 void AI :: reset ( void )
@@ -202,15 +198,19 @@ void AI :: checkGameEvents()
    checktimedevents( mapDisplay );
 }
 
-void AI:: run ( bool benchMark )
+void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 {
    AI_KeyboardWatcher kw ( CloseScreenCallback( this, &AI::removeDisplay )); 
 
    this->benchMark = benchMark;
 
-   if ( getMap()->getPlayerView() >= 0 && !benchMark)
-      mapDisplay = rmd;
-   else
+   auto_ptr<ReplayMapDisplay> rmd;
+   if ( getMap()->getPlayerView() >= 0 && !benchMark) {
+      rmd = auto_ptr<ReplayMapDisplay>( new ReplayMapDisplay ( myMapDisplay ) );
+      rmd.get()->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
+
+      mapDisplay = rmd.get();
+   } else 
       mapDisplay = NULL;
 
    int startTime = ticker;
@@ -311,6 +311,8 @@ void AI:: run ( bool benchMark )
    displaymessage2("AI completed in %d second", duration/100);
 
    checkforvictory( false );
+
+   mapDisplay = NULL;
 }
 
 
@@ -567,10 +569,6 @@ AI :: ~AI ( )
       delete[] fieldInformation;
       fieldInformation = NULL;
       fieldNum = 0;
-   }
-   if ( rmd ) {
-      delete rmd;
-      rmd = NULL;
    }
 }
 

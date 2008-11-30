@@ -200,6 +200,7 @@ class ChooseTech : public ASC_PG_Dialog
    TechnologySelectionItemFactory* factory;
    PG_MultiLineEdit* techList;
    Player& player;
+   PG_CheckButton* allTechsCheckButton;
 
    PG_Label* pointsLabel;
    PG_Label* availLabel;
@@ -213,6 +214,16 @@ class ChooseTech : public ASC_PG_Dialog
       
    }
    
+   void toggleAllTechButton() 
+   {
+      if ( allTechsCheckButton->GetPressed() )
+         allTechsCheckButton->SetUnpressed();
+      else
+         allTechsCheckButton->SetPressed();
+      // changeTechView( allTechsCheckButton->GetPressed() );
+   }         
+
+
    void techSelected( const Technology* tech )
    {
       ASCString s;
@@ -233,8 +244,12 @@ class ChooseTech : public ASC_PG_Dialog
 
       pointsLabel->SetText( ASCString("Sum: ") + ASCString::toString(points) + " Points" );
 
+      bool alreadyChoosen = (tech == player.research.goal);
+
       goal = player.research.goal = tech;
       player.research.activetechnology = *techs.begin();
+      if ( alreadyChoosen ) 
+         ok();
    };
 
    protected:
@@ -269,9 +284,21 @@ class ChooseTech : public ASC_PG_Dialog
       
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
-         if ( key->keysym.sym == SDLK_RETURN ) 
-            return ok();
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+
+         if ( !mod  ) 
+            if ( key->keysym.sym == SDLK_RETURN ) 
+               return ok();
          
+
+         if ( mod & KMOD_CTRL ) {
+            switch ( key->keysym.unicode ) {
+                  case 1: // A
+                     toggleAllTechButton();
+                     return true;
+            };
+         }
+
          return false;
       };
 
@@ -283,7 +310,7 @@ class ChooseTech : public ASC_PG_Dialog
          factory->techSelected.connect( SigC::slot( *this, &ChooseTech::techSelected ));
          itemSelector = new ItemSelectorWidget( this, PG_Rect( 10, 40, 400, Height() - 80 ), factory );
 
-         (new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show All Technologies"))->sigClick.connect( SigC::slot( *this, &ChooseTech::changeTechView));
+         (allTechsCheckButton = new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show ~A~ll Technologies"))->sigClick.connect( SigC::slot( *this, &ChooseTech::changeTechView));
          techList = new PG_MultiLineEdit( this, PG_Rect ( 450, 40, 300, 200 ));
          techList->SetEditable(false);
          pointsLabel = new PG_Label( this, PG_Rect( 450, 250, 300, 25 ));

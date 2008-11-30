@@ -26,6 +26,7 @@
 
  class Vehicle;
  class Building;
+ class MapDisplayInterface;
  
 //! how many different target types are there?
 const int aiValueTypeNum = 8;
@@ -124,7 +125,7 @@ class AiParameter : public AiValue {
 
 class BaseAI {
        public:
-         virtual void run ( void ) = 0;
+         virtual void run ( MapDisplayInterface* mapDisplay ) = 0;
          virtual bool isRunning ( void ) = 0;
          virtual VisibilityStates getVision ( void ) = 0;
          virtual void read ( tnstream& stream ) = 0;

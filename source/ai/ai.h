@@ -57,7 +57,6 @@
 
            GameMap* activemap;
            MapDisplayInterface* mapDisplay;
-           MapDisplayInterface* rmd;
 
            class ServiceOrder {
                   AI* ai;
@@ -477,9 +476,9 @@
         public:
            AI ( GameMap* _map, int _player ) ;
 
-           void run (  ) { run ( false );};
+           void run (  MapDisplayInterface* mapDisplay ) { run ( false, mapDisplay );};
            //! starts the Ai. If benchmark is true, the AI might take longer since it is not time limited, it won't display any graphics and will output the time it needed to run completely
-           void run ( bool benchmark );
+           void run ( bool benchmark, MapDisplayInterface* mapDisplay );
 
            //! returns the map this AI runson
            GameMap* getMap ( void ) { return activemap; };

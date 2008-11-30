@@ -787,7 +787,7 @@ void execuseraction ( tuseractions action )
                   actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
                savegame ( "aistart.sav" );
-               actmap->player[ actmap->actplayer ].ai->run();
+               actmap->player[ actmap->actplayer ].ai->run( &getDefaultMapDisplay() );
             }
          }
          break;
@@ -821,7 +821,7 @@ void execuseraction ( tuseractions action )
 
             if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
                savegame ( "ai-bench-start.sav" );
-               ai->run( true );
+               ai->run( true, &getDefaultMapDisplay() );
             }
          }
          break;

@@ -858,7 +858,7 @@ MapCoordinate& GameMap::getCursor()
 {
    #ifdef sgmain
    if ( actplayer >= 0 ) {
-      if ( !player[actplayer].cursorPos.valid() ) {
+      if ( !player[actplayer].cursorPos.valid() || player[actplayer].cursorPos.x >= xsize || player[actplayer].cursorPos.y >= ysize) {
          bool found = false;
          for ( int y = 0; y < ysize && !found; ++y )
             for ( int x = 0; x < xsize  && !found; ++x )

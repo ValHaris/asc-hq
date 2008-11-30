@@ -109,7 +109,7 @@ void runai( GameMap* actmap, int playerView )
    if ( !actmap->player[ actmap->actplayer ].ai )
       actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-   actmap->player[ actmap->actplayer ].ai->run();
+   actmap->player[ actmap->actplayer ].ai->run( &getDefaultMapDisplay() );
    updateFieldInfo();
 }
 
