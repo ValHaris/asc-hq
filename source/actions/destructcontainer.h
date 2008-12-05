@@ -31,6 +31,10 @@
 class DestructContainer : public ContainerAction {
    
       bool building;  
+
+      //! saves if the unit was registered on the field
+      enum FieldRegistration { NONE, FIRST, SECOND } fieldRegistration;
+
       tmemorystreambuf* unitBuffer;
       
       DestructContainer( GameMap* map ) : ContainerAction( map ) {};

@@ -26,7 +26,7 @@
 #include "../gamemap.h"
      
 DestructContainer::DestructContainer( ContainerBase* container )
-   : ContainerAction( container ), unitBuffer(NULL)
+   : ContainerAction( container ), unitBuffer(NULL), fieldRegistration( NONE )
 {
    building = container->isBuilding();
 }
@@ -37,11 +37,13 @@ ASCString DestructContainer::getDescription() const
    return "Destruct container"; // with ID " + ASCString::toString(unitID);
 }
       
+
+static const int destructContainerStreamVersion = 2;
       
 void DestructContainer::readData ( tnstream& stream ) 
 {
    int version = stream.readInt();
-   if ( version != 1 )
+   if ( version < 1 || version > destructContainerStreamVersion )
       throw tinvalidversion ( "DestructUnit", 1, version );
    
    ContainerAction::readData( stream );
@@ -52,12 +54,15 @@ void DestructContainer::readData ( tnstream& stream )
       unitBuffer->readfromstream( &stream );  
    } else
       unitBuffer = NULL;
+
+   if ( version >= 2 )
+      fieldRegistration = (FieldRegistration) stream.readInt();
 };
       
       
 void DestructContainer::writeData ( tnstream& stream ) const
 {
-   stream.writeInt( 1 );
+   stream.writeInt( destructContainerStreamVersion );
    
    ContainerAction::writeData( stream );
    stream.writeInt( building );
@@ -66,6 +71,9 @@ void DestructContainer::writeData ( tnstream& stream ) const
       unitBuffer->writetostream( &stream );
    } else
       stream.writeInt( 0 );
+
+   stream.writeInt( (int)fieldRegistration );
+
 };
 
 
@@ -86,7 +94,14 @@ ActionResult DestructContainer::runAction( const Context& context )
    if ( veh )
       if ( !veh->typ->wreckageObject.empty() && getMap()->state != GameMap::Destruction ) {
          tfield* fld = getMap()->getField(veh->getPosition());
-         if ( fld->vehicle == veh ) {
+
+         if ( fld->vehicle == veh )
+            fieldRegistration = FIRST;
+
+         if ( fld->secondvehicle == veh )
+            fieldRegistration = SECOND;
+
+         if ( fieldRegistration == FIRST || fieldRegistration == SECOND ) {
             for ( vector<int>::const_iterator i = veh->typ->wreckageObject.begin(); i != veh->typ->wreckageObject.end(); ++i ) {
                ObjectType* obj = getMap()->getobjecttype_byid( *i );
                if ( obj ) {
@@ -125,7 +140,17 @@ ActionResult DestructContainer::undoAction( const Context& context )
       bld->addview();
    } else {
       Vehicle* veh = Vehicle::newFromStream( getMap(), memstream );
-      getMap()->getField( veh->getPosition() )->vehicle = veh;
+
+      if ( fieldRegistration == FIRST )
+         getMap()->getField( veh->getPosition() )->vehicle = veh;
+
+      /*
+      SECOND is not a permanent registration, so we don't redo it
+      if ( fieldRegistration == SECOND )
+         getMap()->getField( veh->getPosition() )->vehicle = veh;
+      */
+        
+
       veh->addview();
    }
    

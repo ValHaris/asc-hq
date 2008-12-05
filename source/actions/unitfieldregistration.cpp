@@ -51,7 +51,10 @@ ASCString UnitFieldRegistration::getDescription() const
 {
    ASCString res = getOpName();
    if ( getUnit(false) ) 
-      res += getUnit(false)->getName();
+      res += " " + getUnit(false)->getName();
+
+   if ( position.valid() )
+      res += " " + position.toString();
    
    return  res;
 }

@@ -695,12 +695,7 @@ void tmineattacksunit :: setresult( const Context& context )
       
    
    (new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  ))->execute ( context );
-   
-   /* Remove the mined vehicle if it was destroyed */
-   if ( _attackedunit->damage >= 100 ) {
-     delete *_pattackedunit;
-     *_pattackedunit = NULL;
-   }
+ 
 }
 
 

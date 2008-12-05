@@ -358,7 +358,7 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
 
       // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
       for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
-         actmap->getField( *i)->a.temp = 2;
+         actmap->getField( *i)->a.temp2 = 2;
       displaymap();
       NewGuiHost::pendingCommand = move;
       updateFieldInfo();

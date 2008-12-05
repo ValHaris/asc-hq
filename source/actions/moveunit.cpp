@@ -268,7 +268,27 @@ ActionResult MoveUnit::runAction( const Context& context )
                cancelmovement = 1;
                vehicle = getMap()->getUnit ( networkID );
             }
-            dest->secondvehicle = NULL;
+
+            if ( vehicle && dest->mineattacks ( vehicle )) {
+               tmineattacksunit battle ( to, -1, vehicle );
+
+               if ( context.display && (fieldvisiblenow ( dest, context.viewingPlayer) || dest->mineowner() == context.viewingPlayer ))
+                  context.display->showBattle( battle );
+               else
+                  battle.calc();
+
+               battle.setresult ( context );
+               if ( battle.dv.damage >= 100 ) {
+                  vehicle = NULL;
+                  viewInputChanged = true;
+               }
+               
+               updateFieldInfo();
+               cancelmovement = 1;
+               mapDisplayUpToDate = false;
+           }
+           dest->secondvehicle = NULL;
+
 
 
             if ( !vehicle && context.display ) {
@@ -288,28 +308,11 @@ ActionResult MoveUnit::runAction( const Context& context )
          printTimer(7);
             
             
-         if ( vehicle ) {
+
+         if ( vehicle )
             if ( !(stop->x == to.x && stop->y == to.y && next == stop ))
                (new UnitFieldRegistration( vehicle, to, UnitFieldRegistration::RemoveView ))->execute( context );
-            
-            if ( dest->mineattacks ( vehicle )) {
-               tmineattacksunit battle ( to, -1, vehicle );
 
-               if ( context.display && (fieldvisiblenow ( dest, context.viewingPlayer) || dest->mineowner() == context.viewingPlayer ))
-                  context.display->showBattle( battle );
-               else
-                  battle.calc();
-
-               battle.setresult ( context );
-               if ( battle.dv.damage >= 100 ) {
-                  vehicle = NULL;
-                  viewInputChanged = true;
-               }
-               
-               updateFieldInfo();
-               cancelmovement = 1;
-           }
-         }
          if ( cancelmovement == 1 )
             if ( dest->vehicle || dest->building )
                cancelmovement++;

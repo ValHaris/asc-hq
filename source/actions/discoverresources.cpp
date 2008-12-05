@@ -125,20 +125,22 @@ void  DiscoverResources::testField( const MapCoordinate& mc )
           for ( int c = 0; c < 8; c++ )
              if ( shareview & (1 << c) ) {
 
-                ResourceViewState rvs( fld, c);
-                rvs.pos = mc;
-                oldState.push_back( rvs );
+                if ( !(fld->resourceview->visible & (1 << c)) || fld->resourceview->materialvisible[c] != fld->material || fld->resourceview->fuelvisible[c] != fld->fuel ) {
+                   ResourceViewState rvs( fld, c);
+                   rvs.pos = mc;
+                   oldState.push_back( rvs );
 
 
-                ResourceViewState newView;
-                newView.fuel = fld->fuel;
-                newView.material = fld->material;
-                newView.visible = true;
-                newView.player = c;
-                newView.pos = mc;
+                   ResourceViewState newView;
+                   newView.fuel = fld->fuel;
+                   newView.material = fld->material;
+                   newView.visible = true;
+                   newView.player = c;
+                   newView.pos = mc;
 
-                newState.push_back( newView );
-                newView.writeToField ( fld );
+                   newState.push_back( newView );
+                   newView.writeToField ( fld );
+                }
              }
        }
 }
