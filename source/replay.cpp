@@ -2574,7 +2574,11 @@ void trunreplay :: execnextreplaymove ( void )
             readnextaction();
             
             if ( a ) {
-               ActionResult res = a->redo( createContext( actmap ));
+               ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
+               Context c = createContext( actmap );
+               c.display = &rmd;
+
+               ActionResult res = a->redo( c );
                if ( !res.successful() )
                   error("action " + a->getDescription() + " failed");
             } else
