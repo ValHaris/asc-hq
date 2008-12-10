@@ -865,8 +865,7 @@ AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
       if (fieldvisiblenow(efield, angreifer->color/8))
          attackpossible2n ( angreifer, efield->getVehicle(), atw );
    }
-   else
-      if (efield->building != NULL) {
+   else if (efield->building != NULL) {
          if ( actmap->getPlayer(angreifer).diplomacy.isHostile( efield->building->getOwner() ) || efield->building->color == 8*8 )
             for (int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
@@ -892,9 +891,7 @@ AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
                            }
                         }
                      }
-      }
-
-   if ( efield->objects.size() ) {
+   } else if ( efield->objects.size() ) {
       int n = 0;
       for ( tfield::ObjectContainer::iterator j = efield->objects.begin(); j != efield->objects.end(); j++ )
          if ( j->typ->armor > 0 )

@@ -52,6 +52,7 @@ class ActionContainer {
       class ReplayStorage {
          public:
             virtual void saveCommand( const Command& cmd ) = 0;
+            virtual ~ReplayStorage() {};
       };
 
       void saveActionsToReplay( ReplayStorage& replay );
