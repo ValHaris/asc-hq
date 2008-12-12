@@ -345,6 +345,13 @@ ActionResult MoveUnit::runAction( const Context& context )
       vehicle->setnewposition( *pos, context );
 
       if ( vehicle->typ->movement[log2(orgHeight)] ) {
+         if ( orgHeight != vehicle->height )  {
+            // first we are converting the original movement to the new height
+            int move = int(floor(vehicle->maxMovement() * float(orgMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
+            vehicle->setMovement( move, false, context );
+         }
+         
+         
          int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
          
          vehicle->setMovement( nm, true, context );
