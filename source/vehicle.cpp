@@ -502,6 +502,12 @@ void Vehicle::setMovement( int newmove, bool recursive, const Context& context )
    (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newmove ))->execute( context );
 }
 
+void Vehicle::decreaseMovementAbs( int reduction, bool recursive, const Context& context )
+{
+   setMovement( _movement - reduction, recursive, context );
+}
+
+
 void Vehicle::decreaseMovement( float fraction, bool recursive, const Context& context )
 {
    int newMovement = int(ceil(_movement * (1.0 - fraction)));

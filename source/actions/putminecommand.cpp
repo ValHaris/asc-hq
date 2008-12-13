@@ -191,7 +191,7 @@ ActionResult PutMineCommand::go ( const Context& context )
       computeview( getMap(), 0, false, &context );
             
       if ( res.successful() ) 
-         res = (new ConsumeAmmo( getUnit(), weaponNum, getUnit()->typ->weapons.weapon[weaponNum].getScalarWeaponType(), 1 ))->execute(context);
+         res = (new ConsumeAmmo( getUnit(), getUnit()->typ->weapons.weapon[weaponNum].getScalarWeaponType(), weaponNum, 1 ))->execute(context);
    } else
       res = (new RemoveMine(getMap(), target, 0 ))->execute( context );
    

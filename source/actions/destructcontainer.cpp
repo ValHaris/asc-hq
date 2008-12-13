@@ -26,7 +26,7 @@
 #include "../gamemap.h"
      
 DestructContainer::DestructContainer( ContainerBase* container )
-   : ContainerAction( container ), unitBuffer(NULL), fieldRegistration( NONE )
+   : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL)
 {
    building = container->isBuilding();
 }

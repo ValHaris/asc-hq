@@ -387,10 +387,11 @@ bool CargoWidget :: eventKeyDown(const SDL_KeyboardEvent* key)
 
 void CargoWidget :: checkStoringPosition( int oldpos, int newpos )
 {
-   PG_ScrollWidget* unitScrollArea = dynamic_cast<PG_ScrollWidget*>(FindChild( "UnitScrollArea", true ));
-   if ( unitScrollArea )
+ //  PG_Widget* unitScrollAreaw = dynamic_cast<PG_Widget*>(FindChild( "UnitScrollArea", true ));
+ //  PG_ScrollWidget* unitScrollArea = dynamic_cast<PG_ScrollWidget*>(FindChild( "UnitScrollArea", true ));
+ //  if ( unitScrollArea )
       if ( newpos < storingPositionVector.size() && newpos >= 0 )
-         unitScrollArea->ScrollToWidget( storingPositionVector[newpos] );
+         ScrollToWidget( storingPositionVector[newpos] );
 
    unitMarked( getMarkedUnit() );
 }
