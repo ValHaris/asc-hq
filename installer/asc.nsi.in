@@ -74,6 +74,7 @@ Section "ASC main program (required)"
   File "@inst_win32_DLL_dir@/libcurl.dll"
   File "@inst_win32_DLL_dir@/libeay32.dll" 
   File "@inst_win32_DLL_dir@/ssleay32.dll"
+  File "@inst_win32_DLL_dir@/xvidcore.dll"
   File "@inst_win32_DLL_dir@/Microsoft.VC90.CRT.manifest"
 
 
