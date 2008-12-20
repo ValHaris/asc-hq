@@ -34,7 +34,13 @@
 #include "attack.h"
 #include "spfst.h"
 
-
+#include "actions/changeunitproperty.h"
+#include "actions/consumeammo.h"
+#include "actions/registerunitrftarget.h"
+#include "actions/inflictdamage.h"
+#include "actions/removemine.h"
+#include "actions/removeobject.h"
+#include "actions/changeobjectproperty.h"
 
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
 { 
@@ -247,7 +253,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    int _weapon;
 
    if ( weapon == -1 ) {
-      pattackweap atw = attackpossible( attackingunit, attackedunit->xpos, attackedunit->ypos );
+      AttackWeap* atw = attackpossible( attackingunit, attackedunit->xpos, attackedunit->ypos );
       int n = -1;
       int s = 0;
       for ( int i = 0; i < atw->count; i++ )
@@ -397,6 +403,48 @@ void tunitattacksunit :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
+void tunitattacksunit :: setresult( const Context& context )
+{
+   int nwid = _attackingunit->networkid;
+   int nwid_targ = _attackedunit->networkid;
+   GameMap* map = _attackingunit->getMap();
+   
+   GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::Experience, av.experience );
+   a->execute ( context );
+   
+   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   b->execute ( context );
+   
+   _attackingunit->postAttack( reactionfire, context );
+   
+   GameAction* c = new RegisterUnitRFTarget( map, nwid, av.weapnum, _attackedunit->networkid  );
+   c->execute ( context );
+   
+   if ( _respond ) {
+      GameAction* d = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::Experience, dv.experience );
+      d->execute ( context );
+      
+      GameAction* e = new ConsumeAmmo( map, nwid_targ, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackingunit->ammo[ av.weapnum ] - dv.weapcount );
+      e->execute ( context );
+   }
+   
+   GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
+   f->execute ( context );
+
+   GameAction* g = new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  );
+   g->execute ( context );
+   
+   
+   /* If the attacking vehicle was destroyed, remove it */
+   if ( av.damage >= 100 ) {
+     *_pattackingunit = NULL;
+   }
+
+   /* If the attacked vehicle was destroyed, remove it */
+   if ( dv.damage >= 100 ) {
+     *_pattackedunit = NULL;
+   }
+}
 
 
 
@@ -421,7 +469,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    int _weapon;
 
    if ( weapon == -1 ) {
-      pattackweap atw = attackpossible( attackingunit, x, y );
+      AttackWeap* atw = attackpossible( attackingunit, x, y );
       int n = -1;
       int s = 0;
       for ( int i = 0; i < atw->count; i++ )
@@ -514,15 +562,34 @@ void tunitattacksbuilding :: setresult ( void )
    actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
 }
 
+void tunitattacksbuilding :: setresult( const Context& context )
+{
+   int nwid = _attackingunit->networkid;
+   MapCoordinate target = _attackedbuilding->getPosition();
+   GameMap* map = _attackingunit->getMap();
+   
+   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   b->execute ( context );
+   
+   _attackingunit->postAttack( false, context );
+   
+   GameAction* g = new InflictDamage( _attackedbuilding, dv.damage - _attackedbuilding->damage  );
+   g->execute ( context );
+}
 
 
-tmineattacksunit :: tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
+
+tmineattacksunit :: tmineattacksunit ( const MapCoordinate& mineposition, int minenum, Vehicle* &attackedunit )
 {
    setup ( mineposition, minenum, attackedunit );
 }
 
-void tmineattacksunit :: setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit )
+void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Vehicle* &attackedunit )
 {
+   this->position = position;
+   
+   tfield* mineposition = attackedunit->getMap()->getField( position );
+   
    if ( mineposition->mines.empty() )
       errorMessage(" tmineattacksunit :: setup \n no mine to attack !\n" );
 
@@ -604,11 +671,31 @@ void tmineattacksunit :: setresult ( void )
    _attackedunit->damage = dv.damage;
 
    /* Remove the mined vehicle if it was destroyed */
-   if ( _attackedunit->damage >= 100 ) {
-     delete *_pattackedunit;
+   if ( dv.damage >= 100 ) 
      *_pattackedunit = NULL;
+
+}
+
+void tmineattacksunit :: setresult( const Context& context )
+{
+   vector<GameAction*> actions;
+   if ( _minenum == -1 ) {
+      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m)
+         if ( m->attacksunit ( _attackedunit ))
+            actions.push_back ( new RemoveMine(_attackedunit->getMap(), position, m->identifier));
+   } else {
+      int counter = 0;
+      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m, ++counter)
+         if ( counter == _minenum )
+            actions.push_back ( new RemoveMine(_attackedunit->getMap(), position, m->identifier));
    }
 
+   for ( vector<GameAction*>::iterator i = actions.begin(); i != actions.end(); ++i )
+      (*i)->execute( context );
+      
+   
+   (new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  ))->execute ( context );
+ 
 }
 
 
@@ -649,7 +736,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    if ( weapon == -1 ) {
 
-      pattackweap atw = attackpossible( attackingunit, obj_x, obj_y );
+      AttackWeap* atw = attackpossible( attackingunit, obj_x, obj_y );
       int n = -1;
       int s = 0;
       for ( int i = 0; i < atw->count; i++ )
@@ -734,14 +821,33 @@ void tunitattacksobject :: setresult ( void )
 
 }
 
-
-
-
-
-
-pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
+void tunitattacksobject :: setresult( const Context& context )
 {
-  pattackweap atw = new AttackWeap;
+   int nwid = _attackingunit->networkid;
+   GameMap* map = _attackingunit->getMap();
+   
+   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   b->execute ( context );
+   
+   _attackingunit->postAttack( false, context );
+   
+   MapCoordinate position( _x, _y );
+   
+   if ( dv.damage >= 100 ) {
+      (new RemoveObject(map, position, _obji->typ->id))->execute(context);
+   } else {
+      GameAction* g = new ChangeObjectProperty( map, position, _obji, ChangeObjectProperty::Damage, dv.damage );
+      g->execute ( context );
+   }
+}
+
+
+
+
+
+AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
+{
+  AttackWeap* atw = new AttackWeap;
 
   memset(atw, 0, sizeof(*atw));
 
@@ -755,12 +861,11 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
 
    tfield* efield = getfield(x,y);
 
-   if ( efield->vehicle ) {
+   if ( efield->getVehicle() ) {
       if (fieldvisiblenow(efield, angreifer->color/8))
-         attackpossible2n ( angreifer, efield->vehicle, atw );
+         attackpossible2n ( angreifer, efield->getVehicle(), atw );
    }
-   else
-      if (efield->building != NULL) {
+   else if (efield->building != NULL) {
          if ( actmap->getPlayer(angreifer).diplomacy.isHostile( efield->building->getOwner() ) || efield->building->color == 8*8 )
             for (int i = 0; i < angreifer->typ->weapons.count ; i++)
                if (angreifer->typ->weapons.weapon[i].shootable() )
@@ -786,9 +891,7 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
                            }
                         }
                      }
-      }
-
-   if ( efield->objects.size() ) {
+   } else if ( efield->objects.size() ) {
       int n = 0;
       for ( tfield::ObjectContainer::iterator j = efield->objects.begin(); j != efield->objects.end(); j++ )
          if ( j->typ->armor > 0 )
@@ -839,7 +942,7 @@ pattackweap  attackpossible( const Vehicle*     angreifer, int x, int y)
 }
 
 
-bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetheight )
+bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw, int targetheight )
 {
    if ( targetheight == -1 )
       targetheight = target->height;
@@ -885,7 +988,7 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackwe
 
 
 
-bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap atw, int targetHeight )
+bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw, int targetHeight )
 {
    const Vehicle* angreifer = attacker;
    const Vehicle* verteidiger = target;
@@ -931,7 +1034,7 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackwe
 }
 
 
-bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap atw )
+bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw )
 {
    const Vehicle* angreifer = attacker;
    const Vehicle* verteidiger = target;

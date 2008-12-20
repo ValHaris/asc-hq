@@ -110,6 +110,7 @@ class AStar3D {
 
 
        class PathPoint: public MapCoordinate3D {
+             PathPoint() {};
           public:
              PathPoint ( const MapCoordinate3D& mc, int dist_, int enterHeight_, bool hasAttacked_ ) : MapCoordinate3D(mc), dist(dist_), enterHeight(enterHeight_), hasAttacked(hasAttacked_) {};
              // PathPoint ( const MapCoordinate3D& mc ) : MapCoordinate3D(mc), dist(-1), enterHeight(-1), hasAttacked(false) {};
@@ -118,6 +119,9 @@ class AStar3D {
              int dist;
              int enterHeight;
              bool hasAttacked;
+             void write( tnstream& stream ) const;
+             void read( tnstream& stream );
+             static PathPoint newFromStream( tnstream& stream );
        };
 
        typedef vector<PathPoint> Path;

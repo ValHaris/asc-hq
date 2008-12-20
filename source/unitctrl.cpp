@@ -42,10 +42,15 @@
 #include "actions/servicing.h"
 #include "soundList.h"
 #include "reactionfire.h"
+#include "sg.h"
+
+#include "tasks/unitattack_generator.h"
+
+#include "actions/vehicleattack.h"
+#include "actions/moveunit.h"
 
 PendingVehicleActions pendingVehicleActions;
 
-SigC::Signal0<void> fieldCrossed;
 
 
 
@@ -213,374 +218,12 @@ class BackgroundViewCalculator {
       
 
 
-void printTimer( int i )
+     
+
+int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, const Context& context, int noInterrupt )
 {
-#if 0
-   static int lastTimer = 0;
-   if ( i == 1 )
-      lastTimer = SDL_GetTicks();
-   else {
-      printf("%d - %d : %d \n", i-1, i, SDL_GetTicks() - lastTimer);
-      lastTimer = SDL_GetTicks();
-   }
-#endif
-}
-      
-      
-
-int  BaseVehicleMovement :: moveunitxy(AStar3D::Path& pathToMove, int noInterrupt )
-{
-   WindMovement* wind;
-
-#ifdef WEATHERGENERATOR
-   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weatherSystem->getCurrentWindSpeed() ) {
-      wind = new WindMovement ( vehicle );
-   } else
-      wind = NULL;
-#else
-   if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
-      wind = new WindMovement ( vehicle );
-   } else
-      wind = NULL;
-#endif
-
-   tfield* oldfield = getfield( vehicle->xpos, vehicle->ypos );
-
-   AStar3D::Path::iterator pos = path.begin();
-   AStar3D::Path::iterator stop = path.end()-1;
-
-   tsearchreactionfireingunits srfu;
-   treactionfire* rf = &srfu;
-
-   int orgMovement = vehicle->getMovement( false );
-   int orgHeight = vehicle->height;
-
-   rf->init( vehicle, pathToMove );
-
-   if ( oldfield->vehicle == vehicle) {
-      vehicle->removeview();
-      oldfield->vehicle = NULL;
-   } else {
-      ContainerBase* cn = oldfield->getContainer();
-      cn->removeUnitFromCargo( vehicle );      
-   }
-
-   int soundHeight = -1;
-   if ( pos->getRealHeight() >= 0 )
-      soundHeight = pos->getRealHeight();
-   else
-      soundHeight = stop->getRealHeight();
-
-   SoundLoopManager slm ( SoundList::getInstance().getSound( SoundList::moving, vehicle->typ->movemalustyp, vehicle->typ->movementSoundLabel, soundHeight ), false );
-
-   int cancelmovement = 0;
-
-   int movedist = 0;
-   int fueldist = 0;
-   int networkID = vehicle->networkid;
-   int operatingPlayer = vehicle->getOwner();
-
-   bool viewInputChanged= false;
-   bool mapDisplayUpToDate = true;
-   bool finalRedrawNecessary = false;
-
-   bool inhibitAttack = false;
-   while ( pos != stop  && vehicle && cancelmovement!=1 ) {
-
-      if ( cancelmovement > 1 )
-         cancelmovement--;
-
-      AStar3D::Path::iterator next = pos+1;
-
-
-      bool container2container = pos->getNumericalHeight()==-1 && next->getNumericalHeight() == -1;
-      pair<int,int> mm = calcMoveMalus( *pos, next->getRealPos(), vehicle, wind, &inhibitAttack, container2container );
-      movedist += mm.first;
-      fueldist += mm.second;
-
-      if ( next->hasAttacked )
-         vehicle->setAttacked();
-
-
-      if ( next->getRealHeight() != pos->getRealHeight() && next->getRealHeight() >= 0 )
-         vehicle->setNewHeight ( 1 << next->getRealHeight() );
-
-      int pathStepNum = beeline ( *pos, *next ) / maxmalq;
-      int pathStep = 0;
-      if ( !pathStepNum )
-         pathStepNum = 1;
-
-      MapCoordinate3D to = *pos;
-      do {
-         MapCoordinate3D from;
-         from.setnum ( to.x, to.y, pos->getRealHeight() );
-         if ( next->x != from.x || next->y != from.y )
-            to = getNeighbouringFieldCoordinate ( to, getdirection ( to, *next ));
-         to.setnum ( to.x, to.y, next->getRealHeight() );
-
-         tfield* dest = getfield ( to.x, to.y );
-
-
-         if ( vehicle ) {
-            vehicle->xpos = to.x;
-            vehicle->ypos = to.y;
-            vehicle->addview();
-         }
-
-         
-         printTimer(1);
-         static BackgroundViewCalculator* bvc = NULL;
-         if ( multiThreadedViewCalculation ) {
-            
-            
-            if ( !bvc )
-               bvc = new BackgroundViewCalculator;
-
-            printTimer(2);
-            
-            int view;
-            if ( actmap->getPlayerView() >= 0 )
-               view = 1 << actmap->getPlayerView() ;
-            else
-               view = 0;
-               
-            
-            bvc->postData( BackgroundViewCalculator::Data( actmap, view ));
-            printTimer(3);
-         }
-
-         
-         if ( mapDisplay ) {
-
-            if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
-               slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
-            mapDisplay->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
-            finalRedrawNecessary = true;
-            mapDisplayUpToDate = false;
-         }
-         pathStep++;
-
-         printTimer(4);
-
-         if ( vehicle ) {
-            if ( vehicle->spawnMoveObjects( from, to ) )
-               mapDisplayUpToDate = false;
-            
-            int dir = getdirection( from, to );
-            if ( dir >= 0 && dir <= 5 )
-               vehicle->direction = dir;
-            if ( inhibitAttack )
-               vehicle->setAttacked();
-         }
-
-         
-         printTimer(5);
-         if ( multiThreadedViewCalculation ) {
-            if ( bvc->waitForCompletion())
-               mapDisplayUpToDate = false;
-               
-         } else {
-            Vehicle* temp = dest->vehicle;
-            
-            dest->vehicle = vehicle;
-            int fieldsWidthChangedVisibility; 
-            if ( actmap->getPlayerView() >= 0 ) 
-               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 1 << actmap->getPlayerView() );
-            else 
-               fieldsWidthChangedVisibility = evaluateviewcalculation ( actmap, 0);
-            
-            if ( fieldsWidthChangedVisibility )
-               mapDisplayUpToDate = false;
-            dest->vehicle = temp;
-         }
-         printTimer(6);
-
-         viewInputChanged = false;
-
-         if ( vehicle ) {
-
-            if ( mapDisplay && fieldvisiblenow ( dest, vehicle, actmap->getPlayerView() ) ) {
-               // here comes an ugly hack to get the shadow of starting / descending aircraft right
-
-               int oldheight = vehicle->height;
-               if ( next->getRealHeight() > pos->getRealHeight() && pathStep < pathStepNum )
-                  vehicle->height = 1 << pos->getRealHeight();
-               
-               if ( !mapDisplayUpToDate ) {
-                  mapDisplay->displayMap( vehicle );
-                  mapDisplayUpToDate = true;
-                  finalRedrawNecessary = false;
-               }
-
-               vehicle->height = oldheight;
-            }
-
-            if ( rf->checkfield ( to, vehicle, mapDisplay )) {
-               cancelmovement = 1;
-               attackedByReactionFire = true;
-               vehicle = actmap->getUnit ( networkID );
-            }
-
-
-            if ( !vehicle && mapDisplay ) {
-               mapDisplay->displayMap();
-               mapDisplayUpToDate = true;
-               finalRedrawNecessary = false;
-               
-               viewInputChanged = true;
-            }
-         } else
-            if ( mapDisplay ) {
-               mapDisplay->displayMap();
-               mapDisplayUpToDate = true;
-               finalRedrawNecessary = false;
-             }
-
-         printTimer(7);
-            
-            
-         if ( vehicle ) {
-            if ( !(stop->x == to.x && stop->y == to.y && next == stop ))
-               vehicle->removeview();
-            
-            if ( dest->mineattacks ( vehicle )) {
-               tmineattacksunit battle ( dest, -1, vehicle );
-
-               if ( mapDisplay && (fieldvisiblenow ( dest, actmap->getPlayerView()) || dest->mineowner() == actmap->getPlayerView() ))
-                  mapDisplay->showBattle( battle );
-               else
-                  battle.calc();
-
-               battle.setresult ();
-               if ( battle.dv.damage >= 100 ) {
-                  vehicle = NULL;
-                  viewInputChanged = true;
-               }
-               
-               updateFieldInfo();
-               cancelmovement = 1;
-           }
-         }
-         if ( cancelmovement == 1 )
-            if ( dest->vehicle || dest->building )
-               cancelmovement++;
-
-         if ( vehicle )
-            if ( noInterrupt > 0 )
-               cancelmovement = 0;
-
-         if ( vehicle ) {
-            npush ( dest->vehicle );
-            dest->vehicle = vehicle;
-            if ( dest->connection & cconnection_areaentered_anyunit )
-               fieldCrossed();
-
-            if ((dest->connection & cconnection_areaentered_specificunit ) && ( vehicle->connection & cconnection_areaentered_specificunit ))
-               fieldCrossed();
-               
-            npop ( dest->vehicle );
-         }
-         printTimer(8);
-      } while ( (to.x != next->x || to.y != next->y) && vehicle );
-
-      pos = next;
-   }
-
-   tfield* fld = getfield ( pos->x, pos->y );
-
-   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
-
-   int result = 0;
-
-   if ( vehicle ) {
-
-      int newMovement = orgMovement - pos->dist;
-
-      vehicle->setnewposition ( pos->x, pos->y );
-
-      if ( vehicle->typ->movement[log2(orgHeight)] ) {
-         int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
-//         if ( nm < 0 )
-//            result = -1;
-         vehicle->setMovement ( nm );
-         
-         // the unit will be shaded if movement is exhausted
-         if ( vehicle->getMovement() < 10 )
-            finalRedrawNecessary = true;
-      }
-
-
-      vehicle->getResource ( fueldist * vehicle->typ->fuelConsumption / maxmalq, Resources::Fuel, false );
-
-      if ( fld->vehicle || fld->building ) {
-         vehicle->setMovement ( 0 );
-         vehicle->attacked = true;
-      }
-
-      if ( vehicle ) {
-         if ((fld->vehicle == NULL) && (fld->building == NULL)) {
-            if ( !vehicle->isViewing() ) {
-               vehicle->addview();
-               viewInputChanged = true;
-
-               // do we really need this check?
-               if ( rf->checkfield ( *pos, vehicle, mapDisplay )) {
-                  attackedByReactionFire = true;
-                  vehicle = actmap->getUnit ( networkID );
-               }
-               fld->vehicle = vehicle;
-
-            } else {
-               fld->vehicle = vehicle;
-               for ( int i = 0; i < actmap->getPlayerCount(); ++i )
-                  evaluatevisibilityfield ( actmap, fld, i, -1, actmap->getgameparameter ( cgp_initialMapVisibility ) );
-            }
-
-         } else {
-            ContainerBase* cn = fld->getContainer();
-            if ( vehicle->isViewing() ) {
-               vehicle->removeview();
-               viewInputChanged = true;
-            }
-            cn->addToCargo( vehicle );
-            if (cn->getOwner() != vehicle->getOwner() && fld->building && actmap->getPlayer(fld->building).diplomacy.isHostile( vehicle) ) {
-               fld->building->convert( vehicle->color / 8 );
-               if ( fieldvisiblenow ( fld, actmap->getPlayerView() ) || actmap->getPlayerView()  == vehicle->getOwner() )
-                  SoundList::getInstance().playSound ( SoundList::conquer_building, 0 );
-           }
-           mapDisplayUpToDate = false;
-
-         }
-
-      }
-   }
-
-   if ( rf->finalCheck( mapDisplay, operatingPlayer ))
-      finalRedrawNecessary = true;
+   return (new MoveUnit(vehicle, pathToMove, noInterrupt))->execute(context).successful();
    
-   // finalRedrawNecessary = true;
-   
-   if ( viewInputChanged ) {
-      int fieldschanged;
-      if ( actmap->getPlayerView() >= 0 )
-         fieldschanged = evaluateviewcalculation ( actmap, 1 << actmap->getPlayerView() );
-      else
-         fieldschanged = evaluateviewcalculation ( actmap, 0 );
-      
-      if ( fieldschanged )
-         mapDisplayUpToDate = false;
-         
-   }
-
-   if ( mapDisplay ) {
-      mapDisplay->resetMovement();
-      // if ( fieldschanged > 0 )
-      if (finalRedrawNecessary || !mapDisplayUpToDate)
-         mapDisplay->displayMap();
-      // else
-      //   mapDisplay->displayPosition ( pos->x, pos->y );
-   }
-   return result;
 }
 
 
@@ -612,13 +255,15 @@ int BaseVehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int h
           return status;
        }
 
+       
+      Context context = createContext( vehicle->getMap() );
+      context.display = mapDisplay;
+
        int nwid = vehicle->networkid;
-       int xp = vehicle->xpos;
-       int yp = vehicle->ypos;
 
        if ( mapDisplay )
           mapDisplay->startAction();
-       int stat = moveunitxy( path, noInterrupt );
+       int stat = moveunitxy( path, context, noInterrupt);
        if ( mapDisplay )
           mapDisplay->stopAction();
 
@@ -628,8 +273,6 @@ int BaseVehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int h
           destDamage = vehicle->damage;
        else
           destDamage = 100;
-
-       logtoreplayinfo ( rpl_move5, xp, yp, x, y, nwid, path.rbegin()->getNumericalHeight(), noInterrupt, destDamage );
 
        if ( stat < 0 )
           status = stat;
@@ -979,7 +622,6 @@ void PendingVehicleActions::reset()
    move = NULL;
    ascent = NULL;
    descent = NULL;
-   attack = NULL;
    service=NULL;
    newservice=NULL;
    actionType = 0 ;
@@ -995,20 +637,19 @@ VehicleAttack :: VehicleAttack ( MapDisplayInterface* md, PPendingVehicleActions
 {
    status = 0;
    mapDisplay = md;
-   if ( pva )
-      pva->attack = this;
 }
 
 
-bool VehicleAttack :: avail ( Vehicle* eht )
+bool VehicleAttack :: avail ( Vehicle* unit )
 {
-   if ( eht )
-      if ( eht->attacked == false )
-         if ( eht->weapexist() )
-            if (eht->typ->wait == false  ||  !eht->hasMoved() )
+   if ( unit )
+      if ( unit->attacked == false )
+         if ( unit->weapexist() )
+            if (unit->typ->wait == false  ||  !unit->hasMoved() )
                   return true;
    return false;
 }
+
 
 
 int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamikaze, int weapnum )
@@ -1057,7 +698,7 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
       return status;
   } else
   if ( status == 2 ) {
-      pattackweap atw = NULL;
+      AttackWeap* atw = NULL;
       if ( attackableVehicles.isMember ( x, y ))
          atw = &attackableVehicles.getData ( x, y );
       else
@@ -1071,53 +712,13 @@ int VehicleAttack :: execute ( Vehicle* veh, int x, int y, int step, int _kamika
          status = -1;
          return status;
       }
-      tfight* battle = NULL;
-      switch ( atw->target ) {
-         case AttackWeap::vehicle: battle = new tunitattacksunit ( vehicle, getfield(x,y)->vehicle, 1, weapnum );
-            break;
-         case AttackWeap::building: battle = new tunitattacksbuilding ( vehicle, x, y , weapnum );
-            break;
-         case AttackWeap::object: battle = new tunitattacksobject ( vehicle, x, y, weapnum );
-            break;
-         default : status = -1;
-                   return status;
-      } /* endswitch */
+      
+      Context context = createContext( vehicle->getMap() );
+      context.display = mapDisplay;
 
-      int ad1 = battle->av.damage;
-      int dd1 = battle->dv.damage;
-
-      int xp1 = vehicle->xpos;
-      int yp1 = vehicle->ypos;
-
-      int shown;
-      if ( mapDisplay && fieldvisiblenow ( getfield ( x, y ), actmap->getPlayerView()) ) {
-         mapDisplay->displayActionCursor ( vehicle->xpos, vehicle->ypos, x, y );
-         mapDisplay->showBattle( *battle );
-         mapDisplay->removeActionCursor ( );
-         shown = 1;
-      } else {
-         battle->calc();
-         shown = 0;
-      }
-
-      int ad2 = battle->av.damage;
-      int dd2 = battle->dv.damage;
-
-      if ( !vehicle->typ->hasFunction( ContainerBaseType::MoveAfterAttack )) 
-         vehicle->setMovement ( 0 );
-
-      bool somethingDestroyed = battle->dv.damage >= 100 || battle->av.damage >= 100;
-
-      battle->setresult ();
-
-      logtoreplayinfo ( rpl_attack, xp1, yp1, x, y, ad1, ad2, dd1, dd2, weapnum );
-
-      if ( somethingDestroyed )
-         computeview( actmap );
-
-      if ( mapDisplay && shown )
-         mapDisplay->displayMap();
-
+      GameAction* a = new VehicleAttackAction( vehicle->getMap(), vehicle->networkid, MapCoordinate(x,y),weapnum );
+      a->execute( context );
+      
 
       status = 1000;
   }
@@ -1139,7 +740,7 @@ void     VehicleAttack :: tsearchattackablevehicles::testfield( const MapCoordin
 { 
    if ( fieldvisiblenow( gamemap->getField(mc)) ) {
       if ( !kamikaze ) {
-         pattackweap atw = attackpossible( angreifer, mc.x, mc.y );
+         AttackWeap* atw = attackpossible( angreifer, mc.x, mc.y );
          if (atw->count > 0) { 
             switch ( atw->target ) {
                case AttackWeap::vehicle:  va->attackableVehicles.addField  ( mc, *atw );
@@ -1217,15 +818,11 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
 void VehicleAttack :: registerPVA ( VehicleActionType _actionType, PPendingVehicleActions _pva )
 {
    VehicleAction::registerPVA ( _actionType, _pva );
-   if ( pva )
-      pva->attack = this;
 }
 
 
 VehicleAttack :: ~VehicleAttack ( )
 {
-   if ( pva )
-      pva->attack = NULL;
 }
 
 

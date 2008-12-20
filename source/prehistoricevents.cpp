@@ -464,7 +464,7 @@ PrehistoricEventStructure :: ~PrehistoricEventStructure ()
       }
 
    if ( rawdata ) {
-      asc_free( rawdata );
+      free( rawdata );
       rawdata = NULL;
    }
 }
@@ -506,7 +506,7 @@ Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTra
         throw tinvalidversion ( "OldEvent", 2, version );
 
      if ( event1.datasize && event1.rawdata ) {
-        event1.rawdata = asc_malloc ( event1.datasize );
+        event1.rawdata = malloc ( event1.datasize );
         stream->readdata ( event1.rawdata, event1.datasize );
      }  else {
         event1.datasize = 0;

@@ -47,6 +47,7 @@ const int smallGuiIconSpace = 2;
 const float smallGuiIconSizeFactor = 0.6;
 
 
+
 GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), id(-1)
 {
   sigClick.connect ( SigC::slot( *this, &GuiButton::exec ));
@@ -321,6 +322,7 @@ class SmallButtonHolder : public SpecialInputWidget {
 
 SmallButtonHolder* NewGuiHost :: smallButtonHolder = NULL;
 
+Command* NewGuiHost :: pendingCommand = NULL;
 
 void NewGuiHost::evalCursor()
 {
@@ -342,6 +344,7 @@ void NewGuiHost::evalCursor()
 
 void NewGuiHost::mapDeleted( GameMap& map )
 {
+   pendingCommand = NULL;
    /*
    while ( theGuiHost->iconHandlerStack.size() >= 1 )
       popIconHandler();

@@ -34,9 +34,7 @@
 #include <list>
 #include <queue>
 
-#ifdef _SDL_
- #include <SDL.h>
-#endif
+#include <SDL.h>
 
 
 #include "global.h"
@@ -55,8 +53,7 @@
  }
 #endif
 
-#ifdef _SDL_
- extern SDL_RWops *SDL_RWFromStream( pnstream stream );
+extern SDL_RWops *SDL_RWFromStream( pnstream stream );
 
 class RWOPS_Handler {
       SDL_RWops *rwo;
@@ -67,7 +64,6 @@ class RWOPS_Handler {
       ~RWOPS_Handler() { Close(); };
 };
 
-#endif
 
 
 
@@ -712,6 +708,22 @@ template<typename C>
       c.push_back( vt );
    }
 }
+
+template<typename C>
+      void readClassContainerStaticConstructor ( C& c, tnstream& stream  )
+{
+   int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion( stream.getLocation(), 1, version );
+      
+   int num = stream.readInt();
+   c.clear();
+   for ( int i = 0; i < num; ++i ) {
+      typedef typename C::value_type VT;
+      c.push_back( VT::newFromStream( stream ) );
+   }
+}
+
 
 template<>
       inline void writeClassContainer<> ( const vector<ASCString>& c, tnstream& stream  )

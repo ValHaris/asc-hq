@@ -38,7 +38,6 @@
 #include "graphics/blitter.h"
 #include "viewcalculation.h"
 #include "spfst.h"
-// #include "gamedlg.h"
 #include "dialogs/cargodialog.h"
 #include "dialogs/ammotransferdialog.h"
 #include "mapdisplay.h"
@@ -50,7 +49,15 @@
 #include "dialogs/internalAmmoTransferDialog.h"
 #include "actions/jumpdrive.h"
 #include "actions/selfdestruct.h"
+#include "actions/attackcommand.h"
+#include "actions/moveunitcommand.h"
+#include "actions/putobjectcommand.h"
+#include "actions/putminecommand.h"
 
+bool commandPending()
+{
+   return moveparams.movestatus || pendingVehicleActions.action || NewGuiHost::pendingCommand;
+}
 
 namespace GuiFunctions
 {
@@ -58,9 +65,7 @@ namespace GuiFunctions
 
 
 class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
-     VehicleAttack* attackEngine;
-
-     pair<pattackweap, int> getEntry( const MapCoordinate& pos, int num );
+     pair<const AttackWeap*, int> getEntry( const MapCoordinate& pos, int num );
 
       void mapDeleted( GameMap& map )
       {
@@ -76,11 +81,11 @@ class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
    public:
-      AttackGui() : attackEngine( NULL ) 
+      AttackGui() 
       {
          GameMap::sigMapDeletion.connect( SigC::slot( *this, &AttackGui::mapDeleted )); 
       };
-      void setupWeapons( VehicleAttack* va ) { attackEngine = va; };
+      void setupWeapons( AttackCommand* va ) { delete NewGuiHost::pendingCommand; NewGuiHost::pendingCommand = va; };
       void eval( const MapCoordinate& mc, ContainerBase* subject );
 
 };
@@ -95,29 +100,33 @@ bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int n
 }
 
 
-pair<pattackweap, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
+pair<const AttackWeap*, int> AttackGui::getEntry( const MapCoordinate& pos, int num )
 {
    int counter = 0;
    
-   AttackFieldList* afl = NULL;
-   for ( int i = 0; i < 3; ++i ) {
-      switch ( i ) {
-         case 0: afl = &attackEngine->attackableVehicles; break;
-         case 1: afl = &attackEngine->attackableBuildings; break;
-         case 2: afl = &attackEngine->attackableObjects; break;
-      }
-      
-      if ( afl->isMember( pos )) {
-         pattackweap aw = &afl->getData(pos.x, pos.y);
-         for ( int a = 0; a < aw->count; ++a ) {
-            if ( counter == num )
-               return make_pair( aw, a );
-               
-            ++counter;
+   AttackCommand* attackEngine = dynamic_cast<AttackCommand*>(NewGuiHost::pendingCommand );
+   if ( attackEngine ) {
+      const AttackCommand::FieldList* afl = NULL;
+      for ( int i = 0; i < 3; ++i ) {
+         switch ( i ) {
+            case 0: afl = &attackEngine->getAttackableUnits(); break;
+            case 1: afl = &attackEngine->getAttackableBuildings(); break;
+            case 2: afl = &attackEngine->getAttackableObjects(); break;
          }
-      }   
+         
+         AttackCommand::FieldList::const_iterator it = afl->find( pos );
+         if ( it != afl->end() ) {
+            const AttackWeap* aw = &(it->second);
+            for ( int a = 0; a < aw->count; ++a ) {
+               if ( counter == num )
+                  return make_pair( aw, a );
+                  
+               ++counter;
+            }
+         }   
+      }
    }
-   return make_pair( pattackweap(NULL), 0 );
+   return make_pair( (AttackWeap*)(NULL), 0 );
 }
 
 
@@ -136,16 +145,22 @@ void AttackGui::execute( const MapCoordinate& pos, ContainerBase* subject, int n
 {
    if ( num != -1 ) {
    
-      pair<pattackweap, int> p = getEntry(pos,num);
+      pair<const AttackWeap*, int> p = getEntry(pos,num);
       if ( p.first ) {
-         int res = pendingVehicleActions.attack->execute ( NULL, pos.x, pos.y, 2, 0, p.first->num[p.second] );
-         if ( res < 0 )
-            dispmessage2 ( -res, NULL );
+         AttackCommand* attack = dynamic_cast<AttackCommand*>(NewGuiHost::pendingCommand);
+         if ( attack ) {
+            attack->setTarget ( pos, p.first->num[p.second] );
+            ActionResult res = attack->execute( createContext( actmap ));
+            if ( !res.successful()  ) {
+               dispmessage2 ( res );
+               delete NewGuiHost::pendingCommand;
+            }
+         }
 
       }
-   }   
-   setupWeapons( NULL );
-   delete pendingVehicleActions.attack;
+   }
+   NewGuiHost::pendingCommand = NULL;   
+   
    actmap->cleartemps();
    NewGuiHost::popIconHandler();
    repaintMap();
@@ -157,7 +172,7 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, ContainerBase* subject, 
    if ( num == -1 )
       return IconRepository::getIcon("cancel.png");
       
-   pair<pattackweap, int> p = getEntry(pos,num);
+   pair<const AttackWeap*, int> p = getEntry(pos,num);
    switch ( p.first->typ[p.second] ) {
       case cwcruisemissileb: return IconRepository::getIcon("weap-cruisemissile.png");
       case cwbombb: return IconRepository::getIcon("weap-bomb.png");
@@ -172,14 +187,17 @@ Surface& AttackGui::getImage( const MapCoordinate& pos, ContainerBase* subject, 
 
 ASCString AttackGui::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( num == -1 )
+   
+   AttackCommand* attackEngine = dynamic_cast<AttackCommand*>(NewGuiHost::pendingCommand);
+   
+   if ( num == -1 || attackEngine == NULL )
       return "cancel";
 
    Vehicle* attacker = attackEngine->getAttacker();
 
    tfight* battle = NULL;
 
-   pair<pattackweap, int> p = getEntry(pos,num);
+   pair<const AttackWeap*, int> p = getEntry(pos,num);
    
 
    if ( p.first->target == AttackWeap::vehicle )
@@ -229,7 +247,7 @@ AttackGui attackGui;
 
 bool Cancel::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   return moveparams.movestatus || pendingVehicleActions.action;
+   return commandPending();
 };
 
 void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -238,11 +256,16 @@ void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num 
       moveparams.movestatus = 0;
       if ( pendingVehicleActions.action )
          delete pendingVehicleActions.action;
-
-      actmap->cleartemps(7);
-      updateFieldInfo();
-      displaymap();
    }
+   
+   if ( NewGuiHost::pendingCommand ) {
+      delete NewGuiHost::pendingCommand;
+      NewGuiHost::pendingCommand = NULL;
+   }
+   
+   actmap->cleartemps(7);
+   updateFieldInfo();
+   displaymap();
 };
 
 bool Cancel::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
@@ -279,93 +302,95 @@ ASCString Movement::getName( const MapCoordinate& pos, ContainerBase* subject, i
 };
 
 
-bool Movement::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+bool MovementBase::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+   if ( !commandPending() ) {
       Vehicle* eht = actmap->getField(pos)->vehicle;
       if ( eht )
-         if ( eht->color == actmap->actplayer * 8)
-            return VehicleMovement::avail ( eht );
-   } else
-      if ( pendingVehicleActions.actionType == vat_move ) {
-         switch ( pendingVehicleActions.move->getStatus() ) {
-            case 2:
-               return pendingVehicleActions.move->reachableFields.isMember ( pos.x, pos.y );
-            case 3:
-               return pendingVehicleActions.move->path.rbegin()->x == pos.x && pendingVehicleActions.move->path.rbegin()->y == pos.y;
-         } /* endswitch */
+         if ( eht->getOwner() == actmap->actplayer)
+            return MoveUnitCommand::avail ( eht );
+   } else {
+      if ( !NewGuiHost::pendingCommand )
+         return false;
+      
+      MoveUnitCommand* moveCommand = dynamic_cast<MoveUnitCommand*>(NewGuiHost::pendingCommand);
+      if ( moveCommand && moveCommand->getVerticalDirection() == getVerticalDirection() ) {
+         const AStar3D::Path& path = moveCommand->getPath();
+         if ( path.size() ==  0 ) 
+            return moveCommand->isFieldReachable(pos, true );
+         else
+            return path.rbegin()->x == pos.x && path.rbegin()->y == pos.y;
       }
-
+   }
    return false;
 }
 
-void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+void Movement::parametrizePathFinder( AStar3D& pathFinder )
 {
-   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new VehicleMovement ( &getDefaultMapDisplay(), &pendingVehicleActions );
+   
+}
 
+
+void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !commandPending() ) {
+      MoveUnitCommand* move = new MoveUnitCommand( actmap->getField(pos)->vehicle );
+
+      move->setVerticalDirection( getVerticalDirection() );
+      
       int mode = 0;
-      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
-         mode |= VehicleMovement::DisableHeightChange;
+      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift )) {
+         if ( getVerticalDirection() == 0 )
+            mode |= MoveUnitCommand::DisableHeightChange;
+         else
+            mode |= MoveUnitCommand::ShortestHeightChange;
+      }
 
-      int res = pendingVehicleActions.move->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, -1, mode );
-      if ( res < 0 ) {
-         dispmessage2 ( -res, NULL );
-         delete pendingVehicleActions.action;
+      ActionResult res = move->searchFields ( -1, mode );
+      if ( !res.successful() ) {
+         dispmessage2 ( res.getCode(), NULL );
+         delete move;
          return;
       }
-      for ( int i = 0; i < pendingVehicleActions.move->reachableFields.getFieldNum(); i++ )
-         pendingVehicleActions.move->reachableFields.getField( i ) ->a.temp = 1;
+      
+      for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFields().begin(); i != move->getReachableFields().end(); ++i )
+         actmap->getField( *i)->a.temp = 1;
 
       // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
-      for ( int j = 0; j < pendingVehicleActions.move->reachableFieldsIndirect.getFieldNum(); j++ )
-         pendingVehicleActions.move->reachableFieldsIndirect.getField( j ) ->a.temp2 = 2;
+      for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
+         actmap->getField( *i)->a.temp2 = 2;
       displaymap();
+      NewGuiHost::pendingCommand = move;
       updateFieldInfo();
+      
+      
    } else {
-      if ( !pendingVehicleActions.move )
+      MoveUnitCommand* move = dynamic_cast<MoveUnitCommand*>(NewGuiHost::pendingCommand);
+      if ( !move || move->getVerticalDirection() != getVerticalDirection() )
          return;
 
-      int ms = pendingVehicleActions.move->getStatus();
-      if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_move &&  (ms == 2 || ms == 3 )) {
-         int res;
-         res = pendingVehicleActions.move->execute ( NULL, pos.x, pos.y, pendingVehicleActions.move->getStatus(), -1, 0 );
-         if ( res >= 0 && CGameOptions::Instance()->fastmove && ms == 2 ) {
-            actmap->cleartemps(7);
-            displaymap();
-            MapDisplayPG::CursorHiding ch;
-            res = pendingVehicleActions.move->execute ( NULL, pos.x, pos.y, pendingVehicleActions.move->getStatus(), -1, 0 );
-         } else {
-            if ( ms == 2 ) {
-               actmap->cleartemps(7);
-               for ( int i = 0; i < pendingVehicleActions.move->path.size(); i++ )
-                  actmap->getField( pendingVehicleActions.move->path[i]) ->a.temp = 1;
-               displaymap();
-            } else {
-               actmap->cleartemps(7);
-               displaymap();
-            }
-         }
-
-
-         if ( res < 0 ) {
-            dispmessage2 ( -res, NULL );
-            delete pendingVehicleActions.action;
+      move->setDestination( pos );
+      
+      if ( CGameOptions::Instance()->fastmove || move->getPath().size() ) {
+         move->calcPath();
+         actmap->cleartemps(7);
+         displaymap();
+         MapDisplayPG::CursorHiding ch;
+         ActionResult res = move->execute( createContext(actmap));
+         NewGuiHost::pendingCommand = NULL;
+         if ( !res.successful() ) {
+            delete move;
+            dispmessage2(res);
             return;
          }
-
-         if ( pendingVehicleActions.move->getStatus() == 1000 ) {
-            delete pendingVehicleActions.move;
-/*
-            if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
-               actgui->painticons();
-               actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
-            }
-            */
-         }
-         updateFieldInfo();
-
+      } else {
+         move->calcPath();
+         actmap->cleartemps(7);
+         for ( AStar3D::Path::const_iterator i = move->getPath().begin(); i != move->getPath().end(); ++i )
+            actmap->getField( *i ) ->a.temp = 1;
+         displaymap();
       }
+      updateFieldInfo();
    }
 }
 
@@ -373,14 +398,12 @@ void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int nu
 
 
 
-
-
-
-class Ascend : public GuiFunction
+class Ascend : public MovementBase
 {
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+    protected:
+      virtual void parametrizePathFinder( AStar3D& pathFinder ){};
+  public:
+      // void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 's' );
@@ -393,94 +416,32 @@ class Ascend : public GuiFunction
       {
          return "a~s~cend";
       };
+      int getVerticalDirection() { return 1; };
+
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) 
+      {
+         if ( !commandPending() ) {
+            Vehicle* eht = actmap->getField(pos)->vehicle;
+            if ( eht )
+               if ( eht->getOwner() == actmap->actplayer)
+                  return MoveUnitCommand::ascendAvail ( eht );
+            return false;
+         } else 
+            return MovementBase::available( pos, subject, num );
+      }
+
 };
 
-bool Ascend::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+
+
+
+
+
+class Descend : public MovementBase
 {
-   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
-      Vehicle* eht = actmap->getField(pos)->vehicle;
-      if ( !eht )
-         return false;
-      if (eht->color == actmap->actplayer * 8)
-         return IncreaseVehicleHeight::avail ( eht );
-   } else
-      if ( pendingVehicleActions.actionType == vat_ascent ) {
-         switch ( pendingVehicleActions.ascent->getStatus() ) {
-           case 2: return pendingVehicleActions.ascent->reachableFields.isMember ( pos.x, pos.y );
-           case 3: return pendingVehicleActions.ascent->path.rbegin()->x == pos.x && pendingVehicleActions.ascent->path.rbegin()->y == pos.y;
-         } /* endswitch */
-      }
-   return false;
-}
-
-void Ascend::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new IncreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
-
-      bool simpleMode = false;
-      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
-         simpleMode = true;
-
-      int res = pendingVehicleActions.ascent->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, actmap->getField(pos)->vehicle->height << 1, simpleMode );
-      if ( res < 0 ) {
-         dispmessage2 ( -res, NULL );
-         delete pendingVehicleActions.action;
-         return;
-      }
-
-      if ( res == 1000 )
-         delete pendingVehicleActions.action;
-      else {
-         for ( int i = 0; i < pendingVehicleActions.ascent->reachableFields.getFieldNum(); i++ )
-            pendingVehicleActions.ascent->reachableFields.getField( i ) ->a.temp = 1;
-         displaymap();
-      }
-
-   } else
-     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_ascent &&  (pendingVehicleActions.ascent->getStatus() == 2 || pendingVehicleActions.ascent->getStatus() == 3 )) {
-        int xdst = pos.x;
-        int ydst = pos.y;
-        int res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
-        if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
-           actmap->cleartemps(7);
-           displaymap();
-           // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
-           if ( res < 1000 )
-              res = pendingVehicleActions.ascent->execute ( NULL, xdst, ydst, pendingVehicleActions.ascent->getStatus(), -1, 0 );
-        } else {
-           actmap->cleartemps(7);
-           if ( res < 1000 )
-              for ( int i = 0; i < pendingVehicleActions.ascent->path.size(); i++ )
-                 actmap->getField( pendingVehicleActions.ascent->path[i]) ->a.temp = 1;
-           displaymap();
-        }
-
-        if ( res < 0 ) {
-           dispmessage2 ( -res, NULL );
-           delete pendingVehicleActions.action;
-           updateFieldInfo();
-           return;
-        }
-
-        if ( pendingVehicleActions.ascent->getStatus() == 1000 ) {
-           delete pendingVehicleActions.ascent;
-
-        }
-     }
-
-   updateFieldInfo();
-}
-
-
-
-
-
-class Descend : public GuiFunction
-{
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+  protected:
+      int getVerticalDirection() { return -1; };
+  public:
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'd' );
@@ -493,93 +454,20 @@ class Descend : public GuiFunction
       {
          return "~d~escend";
       };
+
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) 
+      {
+         if ( !commandPending() ) {
+            Vehicle* eht = actmap->getField(pos)->vehicle;
+            if ( eht )
+               if ( eht->getOwner() == actmap->actplayer)
+                  return MoveUnitCommand::descendAvail ( eht );
+            return false;
+         } else 
+            return MovementBase::available( pos, subject, num );
+      }
+
 };
-
-bool Descend::available( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( moveparams.movestatus == 0 && !pendingVehicleActions.action ) {
-      Vehicle* eht = actmap->getField(pos)->vehicle;
-      if ( !eht )
-         return false;
-
-      if (eht->color == actmap->actplayer * 8)
-         return DecreaseVehicleHeight::avail ( eht );
-   } else
-      if ( pendingVehicleActions.actionType == vat_descent ) {
-         switch ( pendingVehicleActions.descent->getStatus() ) {
-           case 2: return pendingVehicleActions.descent->reachableFields.isMember ( pos.x, pos.y );
-           case 3: return pendingVehicleActions.descent->path.rbegin()->x == pos.x && pendingVehicleActions.descent->path.rbegin()->y == pos.y;
-         } /* endswitch */
-      }
-   return false;
-}
-
-void Descend::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new DecreaseVehicleHeight ( &getDefaultMapDisplay(), &pendingVehicleActions );
-
-
-      bool simpleMode = false;
-      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
-         simpleMode = true;
-
-      int res = pendingVehicleActions.descent->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, actmap->getField(pos)->vehicle->height >> 1, simpleMode );
-      if ( res < 0 ) {
-         dispmessage2 ( -res, NULL );
-         delete pendingVehicleActions.action;
-         return;
-      }
-
-      if ( res == 1000 )
-         delete pendingVehicleActions.action;
-      else {
-         for ( int i = 0; i < pendingVehicleActions.descent->reachableFields.getFieldNum(); i++ )
-            pendingVehicleActions.descent->reachableFields.getField( i ) ->a.temp = 1;
-         displaymap();
-      }
-
-   } else
-     if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_descent &&  (pendingVehicleActions.descent->getStatus() == 2 || pendingVehicleActions.descent->getStatus() == 3 )) {
-        int res = pendingVehicleActions.descent->execute ( NULL, pos.x, pos.y, pendingVehicleActions.descent->getStatus(), -1, 0 );
-        if ( res >= 0 && CGameOptions::Instance()->fastmove ) {
-           actmap->cleartemps(7);
-           displaymap();
-           // if the status is 1000 at this position, the unit has been shot down by reactionfire before initiating the height change
-           if ( res < 1000 )
-              res = pendingVehicleActions.descent->execute ( NULL, pos.x, pos.y, pendingVehicleActions.descent->getStatus(), -1, 0 );
-        } else {
-           actmap->cleartemps(7);
-           if ( res < 1000 )
-              for ( int i = 0; i < pendingVehicleActions.descent->path.size(); i++ )
-                 actmap->getField( pendingVehicleActions.descent->path[i]) ->a.temp = 1;
-           displaymap();
-        }
-
-
-        if ( res < 0 ) {
-           dispmessage2 ( -res, NULL );
-           delete pendingVehicleActions.action;
-           updateFieldInfo();
-           return;
-        }
-
-        if ( pendingVehicleActions.descent->getStatus() == 1000 ) {
-           delete pendingVehicleActions.descent;
-
-/*           if ( CGameOptions::Instance()->smallguiiconopenaftermove ) {
-              actgui->painticons();
-              actgui->paintsmallicons ( CGameOptions::Instance()->mouse.smallguibutton, 0 );
-           }
-           */
-        }
-     }
-   updateFieldInfo();
-}
-
-
-
-
 
 
 
@@ -606,7 +494,7 @@ class EndTurn : public GuiFunction
 
 bool EndTurn::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+   if (!commandPending() )
       if (actmap->levelfinished == false)
          return true;
    return false;
@@ -655,11 +543,11 @@ class Attack : public GuiFunction
 
 bool Attack::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+   if ( !commandPending() ) {
       Vehicle* eht = actmap->getField(pos)->vehicle;
       if ( eht )
          if ( eht->color == actmap->actplayer * 8)
-            return VehicleAttack::avail ( eht );
+            return AttackCommand::avail ( eht );
    }
    return false;
 }
@@ -667,26 +555,24 @@ bool Attack::available( const MapCoordinate& pos, ContainerBase* subject, int nu
 void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
-      new VehicleAttack ( &getDefaultMapDisplay(), &pendingVehicleActions );
-
-      int res;
-      res = pendingVehicleActions.attack->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, 0, -1 );
-      if ( res < 0 ) {
-         dispmessage2 ( -res, NULL );
-         delete pendingVehicleActions.action;
+      AttackCommand* attack = new AttackCommand( actmap->getField(pos)->vehicle );
+      
+      ActionResult result = attack->searchTargets();
+      if ( !result.successful() ) {
+         dispmessage2 ( result );
          return;
       }
 
-      int i;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableVehicles.getFieldNum(); i++ )
-         pendingVehicleActions.attack->attackableVehicles.getField( i ) ->a.temp = 1;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableBuildings.getFieldNum(); i++ )
-         pendingVehicleActions.attack->attackableBuildings.getField( i ) ->a.temp = 1;
-      for ( i = 0; i < pendingVehicleActions.attack->attackableObjects.getFieldNum(); i++ )
-         pendingVehicleActions.attack->attackableObjects.getField( i ) ->a.temp = 1;
-
+      AttackCommand::FieldList::const_iterator i;
+      for ( i = attack->getAttackableUnits().begin(); i != attack->getAttackableUnits().end(); i++ )
+         actmap->getField( i->first )->a.temp = 1;
+      for ( i = attack->getAttackableBuildings().begin(); i != attack->getAttackableBuildings().end(); i++ )
+         actmap->getField( i->first )->a.temp = 1;
+      for ( i = attack->getAttackableObjects().begin(); i != attack->getAttackableObjects().end(); i++ )
+         actmap->getField( i->first )->a.temp = 1;
+      
       displaymap();
-      attackGui.setupWeapons( pendingVehicleActions.attack );
+      attackGui.setupWeapons( attack );
       NewGuiHost::pushIconHandler( &attackGui );
    }
 }
@@ -700,7 +586,7 @@ class PowerOn : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )  {
+         if (!commandPending() )  {
             tfield* fld = actmap->getField ( pos );
             if ( fld->vehicle )
                if ( fld->vehicle->color == actmap->actplayer*8  &&
@@ -741,7 +627,7 @@ class PowerOff : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing )  {
+         if (!commandPending() )  {
             tfield* fld = actmap->getField ( pos );
             if ( fld->vehicle )
                if ( fld->vehicle->color == actmap->actplayer*8  &&
@@ -801,7 +687,7 @@ bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int 
 {
    tfield* fld = actmap->getField(pos);
    if ( fld && fld->vehicle )
-      if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+      if ( !commandPending() )
          if ( fld->vehicle != NULL)
             if (fieldvisiblenow( fld ))
                return true;
@@ -845,7 +731,7 @@ bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subje
        return true;
 
     tfield* fld = actmap->getField(pos);
-    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+    if (!commandPending()) {
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
              if (fld->vehicle->color == actmap->actplayer * 8)
@@ -934,7 +820,7 @@ class OpenContainer : public GuiFunction
       {
         tfield* fld = actmap->getField(pos);
         if ( fieldvisiblenow ( fld ) && fld->getContainer() ) {
-           if ( !containeractive && !moveparams.movestatus && pendingVehicleActions.actionType == vat_nothing && !pendingVehicleActions.action ) {
+           if ( !containeractive && !commandPending() ) {
               Player& player = fld->getContainer()->getMap()->player[fld->getContainer()->getOwner()];
               if ( fld->building && ( player.diplomacy.isAllied( actmap->actplayer) || actmap->getNeutralPlayerNum() == fld->building->getOwner() )) {
                  if ( fld->building->getCompletion() == fld->building->typ->construction_steps-1 )
@@ -989,7 +875,7 @@ class EnableReactionfire : public GuiFunction
             if ( eht->color == actmap->actplayer * 8)
                if ( !eht->baseType->hasFunction(ContainerBaseType::NoReactionfire ))
                   if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
-                     if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+                     if ( !commandPending() )
                         if ( eht->weapexist() )
                            for ( int i = 0; i < eht->typ->weapons.count; ++i )
                               if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
@@ -1032,7 +918,7 @@ class DisableReactionfire : public GuiFunction
          if ( eht )
             if ( eht->color == actmap->actplayer * 8)
                if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
-                  if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
+                  if ( !commandPending())
                      // for ( int i = 0; i < eht->typ->weapons.count; ++i )
                         // if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
                            return true;
@@ -1074,7 +960,7 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          JumpDrive jd;
-         if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing) {
+         if ( !commandPending() ) {
          
             Vehicle* eht = actmap->getField(pos)->vehicle;
             if ( eht )
@@ -1113,7 +999,7 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
          } else 
             if ( moveparams.movestatus == 140 ) {
                JumpDrive jd;
-               jd.jump ( moveparams.vehicletomove, pos, &getDefaultMapDisplay() );
+               jd.jump ( moveparams.vehicletomove, pos, createContext(actmap) );
                actmap->cleartemps(7);
                repaintMap();
                mapChanged( actmap );
@@ -1172,7 +1058,7 @@ class RepairUnit : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          tfield* fld = actmap->getField(pos);
-         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+         if (!commandPending()) {
             if ( fld->vehicle )
                if (fld->vehicle->color == actmap->actplayer * 8)
                   if ( VehicleService::avail ( fld->vehicle ))
@@ -1266,7 +1152,7 @@ class RefuelUnit : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          tfield* fld = actmap->getField(pos);
-         if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+         if (!commandPending()) {
             if ( fld && fld->getContainer() )
                if (fld->getContainer()->getOwner() == actmap->actplayer )
                   if ( NewVehicleService::avail ( fld->getContainer() ) )
@@ -1378,51 +1264,18 @@ class RefuelUnitDialog : public GuiFunction
 
 
 
-
-#if 0
-class ViewMap : public GuiFunction
-{
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if ( moveparams.movestatus == 0  && pendingVehicleActions.actionType == vat_nothing)
-            return true;
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-          // showmap ();
-          displaymap();
-      }
-
-      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return IconRepository::getIcon("worldmap.png");
-      };
-
-      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return "view survey map";
-      };
-};
-#endif
-
-
 class PutMine : public GuiFunction
 {
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          tfield* fld = actmap->getField(pos);
-         if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+         if ( !commandPending())
             if ( fld->vehicle )
-               if (fld->vehicle->color == actmap->actplayer * 8)
-                  if (fld->vehicle->typ->hasFunction( ContainerBaseType::PlaceMines ) )
-                     if ( !fld->vehicle->attacked )
-                        return true;
+               return PutMineCommand::avail(fld->vehicle);
          return false;
       };
+      
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
          return ( key->keysym.unicode == 'm' );
@@ -1430,9 +1283,23 @@ class PutMine : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         putMine( pos, 0, 0);
-         updateFieldInfo();
-         displaymap();
+         tfield* fld = actmap->getField(pos);
+         if ( fld->vehicle ) {
+            auto_ptr<PutMineCommand> poc ( new PutMineCommand( actmap->getField(pos)->vehicle ));
+            ActionResult res = poc->searchFields(); 
+            if ( res.successful() ) {
+               vector<MapCoordinate> fields = poc->getFields();
+               for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
+                  actmap->getField(*i)->a.temp = 1;
+               
+               NewGuiHost::pendingCommand = poc.get();
+               poc.release();
+               
+               repaintMap();
+               updateFieldInfo();
+            } else
+               MessagingHub::Instance().statusInformation("can't build or remove any objects here");
+         }
       }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1447,33 +1314,51 @@ class PutMine : public GuiFunction
 };
 
 
-
-class PutGroundMine : public GuiFunction
+class PutMineStage2 : public GuiFunction 
 {
+   private:
+      MineTypes type; 
+   protected:
+      PutMineStage2( MineTypes type ) 
+      {
+         this->type = type;
+      };
+      
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( (fld->bdt & (getTerrainBitType( cbwater ).flip())).any() )
-               if ( fld->a.temp & 1)
-                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-                     return true;
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) {
+            const vector<MineTypes>& mines = pmc->getCreatableMines( pos );
+            for ( vector<MineTypes>::const_iterator i = mines.begin(); i != mines.end(); ++i )
+               if ( *i == type )
+                  return true;
          }
          return false;
       };
-};
-
-class PutAntiTankMine : public PutGroundMine
-{
-   public:
+      
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         putMine(pos, cmantitankmine, 1 );
-         updateFieldInfo();
-         displaymap();
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) {
+            pmc->setCreationTarget( pos, type );
+            ActionResult res = pmc->execute( createContext( actmap ));
+            if ( !res.successful() )
+               delete NewGuiHost::pendingCommand;
+            NewGuiHost::pendingCommand = NULL;
+            actmap->cleartemps();
+            updateFieldInfo();
+            displaymap();
+         }
       }
+};
 
+class PutAntiTankMine : public PutMineStage2
+{
+   public:
+
+      PutAntiTankMine() : PutMineStage2( cmantitankmine ) {};
+      
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          return IconRepository::getIcon("putantitankmine.png");
@@ -1485,15 +1370,11 @@ class PutAntiTankMine : public PutGroundMine
       };
 };
 
-class PutAntiPersonalMine : public PutGroundMine
+class PutAntiPersonalMine : public PutMineStage2
 {
    public:
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         putMine(pos, cmantipersonnelmine, 1);
-         updateFieldInfo();
-         displaymap();
-      }
+
+      PutAntiPersonalMine() : PutMineStage2( cmantipersonnelmine ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -1509,31 +1390,10 @@ class PutAntiPersonalMine : public PutGroundMine
 
 
 
-class PutAntiShipMine : public GuiFunction
+class PutAntiShipMine : public PutMineStage2
 {
    public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( (fld->bdt & getTerrainBitType(cbwater0)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater1)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater2)).any()
-                 || (fld->bdt & getTerrainBitType(cbwater3)).any() 
-                 || (fld->bdt & getTerrainBitType(cbriver)).any() )
-               if (fld->a.temp & 1 )
-                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-                     return true;
-         }
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         putMine( pos, cmfloatmine, 1);
-         updateFieldInfo();
-         displaymap();
-      }
+      PutAntiShipMine() : PutMineStage2( cmfloatmine ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -1546,28 +1406,10 @@ class PutAntiShipMine : public GuiFunction
       };
 };
 
-class PutAntiSubMine : public GuiFunction
+class PutAntiSubMine : public PutMineStage2
 {
    public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( (fld->typ->art & getTerrainBitType(cbwater2)).any()
-                 || (fld->typ->art & getTerrainBitType(cbwater3)).any() )
-               if (fld->a.temp & 1 )
-                  if ( fld->mines.empty() || fld->mineowner() == actmap->actplayer )
-                     return true;
-         }
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         putMine( pos, cmmooredmine,1 );
-         updateFieldInfo();
-         displaymap();
-      }
+      PutAntiSubMine() : PutMineStage2( cmmooredmine ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
@@ -1586,19 +1428,22 @@ class RemoveMine : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if (moveparams.movestatus == 90) {
-            tfield* fld = actmap->getField(pos);
-            if ( fld->a.temp )
-               return !fld->mines.empty();
-         }
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) 
+            return pmc->getRemovableMines(pos);
+         
          return false;
       };
-
+      
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         putMine( pos, 0, -1);
-         updateFieldInfo();
-         displaymap();
+         PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
+         if ( pmc ) {
+            pmc->setRemovalTarget( pos );
+            pmc->execute( createContext( actmap ));
+            updateFieldInfo();
+            displaymap();
+         }
       }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1619,7 +1464,6 @@ class RemoveMine : public GuiFunction
 
 class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
       Vehicle* veh;
-      bool buttonDone( std::map<int,bool>& map, int id ) { return map.find( id ) != map.end(); };
 
       void mapDeleted( GameMap& map )
       {
@@ -1634,9 +1478,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
-      bool checkObject( tfield* fld, ObjectType* objtype, Mode mode );
 
-      void search ( const MapCoordinate& pos, int& num, int pass );
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
 
       void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
@@ -1656,12 +1498,7 @@ class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC
 bool ObjectBuildingGui::init( Vehicle* vehicle )
 {
    veh = vehicle;
-   int num = 0;
-
-   for ( int i = 0; i< 6; ++i)
-      search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
-
-   return num > 0;
+   return true;
 }
 
 
@@ -1683,8 +1520,10 @@ checkObject
 
 void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( num ) {
-      tfield* fld = actmap->getField(pos);
+   PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
+   if ( num && poc ) {
+      poc->setTarget( pos, abs(num) );
+      
       ObjectType* obj = objectTypeRepository.getObject_byID( abs(num) );
 
       RecalculateAreaView rav ( actmap, pos, maxViewRange / maxmalq + 1 );
@@ -1695,24 +1534,16 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
          rav.removeView();
       
 
-      if ( !fld->checkforobject ( obj ) ) {
-         assert(num>0);
-         fld-> addobject ( obj );
-         logtoreplayinfo ( rpl_buildobj2, pos.x, pos.y, obj->id, veh->networkid );
-      } else {
-         assert(num<0);
-         fld->removeobject ( obj );
-         logtoreplayinfo ( rpl_remobj2, pos.x, pos.y, obj->id, veh->networkid );
-      }
+      ActionResult res = poc->execute( createContext( actmap ));
 
       if ( objectAffectsVisibility )
          rav.addView();
 
-      veh->getResource( num > 0 ? obj->buildcost : obj->removecost, false );
-
-      veh->decreaseMovement ( num > 0 ? obj->build_movecost : obj->remove_movecost );
-   }
-   moveparams.movestatus = 0;
+   } else
+      delete NewGuiHost::pendingCommand;
+      
+   NewGuiHost::pendingCommand = NULL;
+   
    actmap->cleartemps();
    NewGuiHost::popIconHandler();
    repaintMap();
@@ -1793,35 +1624,6 @@ ASCString ObjectBuildingGui::getName( const MapCoordinate& pos, ContainerBase* s
 }
 
 
-bool ObjectBuildingGui::checkObject( tfield* fld, ObjectType* objtype, Mode mode )
-{
-    if ( !objtype || !fld )
-       return false;
-
-    if ( mode == Build ) {
-       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0
-            &&  !fld->checkforobject ( objtype )
-            && objtype->techDependency.available(actmap->player[veh->getOwner()].research) ){
-//            && !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
-
-          if ( veh->getResource(objtype->buildcost, true) == objtype->buildcost && veh->getMovement() >= objtype->build_movecost )
-             return true;
-       }
-    } else {
-       if ( fld->checkforobject ( objtype ) ) {
-//          &&  !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
-          Resources r = objtype->removecost;
-          for ( int i = 0; i <3; ++i )
-             if ( r.resource(i) < 0 )
-                r.resource(i) = 0;
-
-          if ( veh->getResource(r, true) == r && veh->getMovement() >= objtype->remove_movecost )
-             return true;
-       }
-    }
-    return false;
-}
-
 
 void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id )
 {
@@ -1831,92 +1633,33 @@ void ObjectBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerB
     ++num;
 }
 
-void ObjectBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
-{
-   tfield* fld =  actmap->getField(pos);
-   if ( !fld )
-      return;
-
-   if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
-      return;
-
-   std::map<int,bool> buttons;
-   
-   for ( int i = 0; i < veh->typ->objectsBuildable.size(); i++ )
-     for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ )
-       if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Build ))
-          if ( pass==1 ) {
-            if ( !buttonDone( buttons, j ))
-               addButton(num, pos, veh, j);
-            buttons[j] = true;
-          } else {
-            ++num;
-            fld->a.temp = 1;
-          }
-
-
-   for ( int i = 0; i < veh->typ->objectGroupsBuildable.size(); i++ )
-     for ( int j = veh->typ->objectGroupsBuildable[i].from; j <= veh->typ->objectGroupsBuildable[i].to; j++ )
-       for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
-          ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
-          if ( objtype->groupID == j )
-             if ( checkObject( fld, objtype, Build ))
-                if ( pass==1 ) {
-                  if ( !buttonDone( buttons, objtype->id ))
-                     addButton(num, pos, veh, objtype->id);
-                  buttons[objtype->id] = true;
-                } else {
-                  ++num;
-                  fld->a.temp = 1;
-                }
-       }
-
-   for ( int i = 0; i < veh->typ->objectsRemovable.size(); i++ )
-     for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ )
-       if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Remove ))
-          if ( pass==1 ) {
-            if ( !buttonDone( buttons, -j ))
-               addButton(num, pos, veh, -j);
-            buttons[-j] = true;
-          } else {
-            ++num;
-            fld->a.temp = 1;
-          }
-
-
-   for ( int i = 0; i < veh->typ->objectGroupsRemovable.size(); i++ )
-     for ( int j = veh->typ->objectGroupsRemovable[i].from; j <= veh->typ->objectGroupsRemovable[i].to; j++ )
-       for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
-          ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
-          if ( objtype->groupID == j )
-             if ( checkObject( fld, objtype, Remove ))
-                if ( pass==1 ) {
-                  if ( !buttonDone( buttons, -objtype->id ))
-                     addButton(num, pos, veh, -objtype->id);
-                  buttons[-objtype->id] = true;
-                } else {
-                  ++num;
-                  fld->a.temp = 1;
-                }
-       }
-
-}
 
 
 void ObjectBuildingGui::eval( const MapCoordinate& mc, ContainerBase* subject )
 {
-   int num = 0;
-   if ( mc.x < actmap->xsize || mc.y < actmap->ysize )
-      if ( veh )
-         if ( beeline ( mc, veh->getPosition() ) == 10 )
-            search( mc, num, 1 );
+   PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
+   
+   if ( poc ) {
+      int num = 0;
+      const vector<int>& creatable = poc->getCreatableObjects( mc );
+      for ( vector<int>::const_iterator i = creatable.begin(); i != creatable.end(); ++i ) {
+         addButton(num, mc, veh, *i);
+      }
+      
+      
+      const vector<int>& removable = poc->getRemovableObjects( mc ); 
+      for ( vector<int>::const_iterator i = removable.begin(); i != removable.end(); ++i ) {
+         addButton(num, mc, veh, -(*i));
+      }
+      
+      GuiButton* b = host->getButton(num);
+      b->registerFunc( this, mc, subject, 0 );
+      b->Show();
+      ++num;
 
-   GuiButton* b = host->getButton(num);
-   b->registerFunc( this, mc, subject, 0 );
-   b->Show();
-   ++num;
+      host->disableButtons(num);
+   }
 
-   host->disableButtons(num);
 }
 
 
@@ -1947,28 +1690,32 @@ class BuildObject : public GuiFunction
 bool BuildObject::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    tfield* fld = actmap->getField(pos);
-   if ( fld && fld->vehicle )
-      if (fld->vehicle->color == actmap->actplayer * 8)
-         if ( fld->vehicle->typ->objectsBuildable.size() || fld->vehicle->typ->objectsRemovable.size() || fld->vehicle->typ->objectGroupsBuildable.size() || fld->vehicle->typ->objectGroupsRemovable.size())
-            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-               if ( !fld->vehicle->attacked )
-                  return true;
+   if (!commandPending())
+      if ( fld && fld->vehicle )
+         return PutObjectCommand::avail(fld->vehicle );
    return false;
 }
 
 void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( pendingVehicleActions.actionType == vat_nothing ) {
-
-      tfield* fld = actmap->getField(pos);
-      if ( fld->vehicle )
-         if ( objectBuildingGui.init( fld->vehicle )) {
-            moveparams.movestatus = 72;
-            NewGuiHost::pushIconHandler( &objectBuildingGui );
-            repaintMap();
-            updateFieldInfo();
-         } else
-            MessagingHub::Instance().statusInformation("can't build or remove any objects here");
+   tfield* fld = actmap->getField(pos);
+   if ( fld->vehicle ) {
+      auto_ptr<PutObjectCommand> poc ( new PutObjectCommand( actmap->getField(pos)->vehicle ));
+      ActionResult res =poc->searchFields(); 
+      if ( res.successful() ) {
+         vector<MapCoordinate> fields = poc->getFields();
+         for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
+             actmap->getField(*i)->a.temp = 1;
+         
+         NewGuiHost::pendingCommand = poc.get();
+         poc.release();
+         NewGuiHost::pushIconHandler( &objectBuildingGui );
+         
+         
+         repaintMap();
+         updateFieldInfo();
+      } else
+         MessagingHub::Instance().statusInformation("can't build or remove any objects here");
    }
 }
 
@@ -2158,7 +1905,7 @@ bool BuildVehicle::available( const MapCoordinate& pos, ContainerBase* subject, 
    if ( fld && fld->vehicle )
       if (fld->vehicle->color == actmap->actplayer * 8)
          if ( fld->vehicle->typ->vehiclesBuildable.size() )
-            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
+            if (!commandPending())
                if ( !fld->vehicle->attacked )
                   return true;
    return false;
@@ -2586,7 +2333,7 @@ bool ConstructBuilding::available( const MapCoordinate& pos, ContainerBase* subj
       return false;
 
     tfield* fld = actmap->getField(pos);
-    if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
+    if (!commandPending()) {
        if ( fld->vehicle )
           if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
              if (fld->vehicle->color == actmap->actplayer * 8)
@@ -2671,7 +2418,7 @@ class InternalAmmoTransferDialog : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
 			if( subject && subject->getMap()->getPlayer(subject).diplomacy.isAllied( subject->getMap()->actplayer ))
-            if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) 
+            if (!commandPending()) 
  				   return internalAmmoTransferAvailable( subject );
          
          return false;
@@ -2709,7 +2456,7 @@ class SelfDestructIcon : public GuiFunction
       {
         tfield* fld = actmap->getField(pos);
         ContainerBase* c = fld->getContainer();
-        if ( fieldvisiblenow ( fld ) && c ) {
+        if ( fieldvisiblenow ( fld ) && c && !commandPending()) {
            SelfDestruct sd;
            return sd.available(c);
         }

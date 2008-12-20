@@ -67,8 +67,52 @@ Mine::Mine( MineTypes type, int strength, int player, GameMap* gamemap )
    this->type = type;
    this->strength = strength;
    this->player = player;
+   this->identifier = gamemap->getNewNetworkID();
    #ifndef converter
    lifetimer = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + type - 1));
    #endif
 }
 
+Mine::Mine( MineTypes type, int strength, int player, GameMap* gamemap, int identifier )
+{
+   this->type = type;
+   this->strength = strength;
+   this->player = player;
+   this->identifier = identifier;
+   #ifndef converter
+   lifetimer = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + type - 1));
+   #endif
+}
+
+const int mineVersion = 1;
+void Mine::read ( tnstream& stream )
+{
+   int version = stream.readInt();
+   if ( version < 1 || version > mineVersion ) 
+      throw tinvalidversion ( "Mine", mineVersion, version );
+      
+   identifier = stream.readInt();
+   type = MineTypes( stream.readInt() );
+   strength = stream.readInt();
+   player = stream.readInt();
+}
+
+void Mine::write ( tnstream& stream )
+{
+   stream.writeInt( mineVersion );
+   stream.writeInt( identifier );
+   stream.writeInt( type );
+   stream.writeInt( strength );
+   stream.writeInt( player );
+}
+
+Mine::Mine()
+{
+}
+
+Mine Mine::newFromStream ( tnstream& stream )
+{
+   Mine m;
+   m.read( stream );
+   return m;  
+}

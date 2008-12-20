@@ -17,8 +17,7 @@
 
 
 #include "ai_common.h"
-
-
+#include "../actions/attackcommand.h"
 
 bool AI :: runUnitTask ( Vehicle* veh )
 {
@@ -377,9 +376,8 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
          vm->registerMapDisplay ( mapDisplay );
          auto_ptr<VehicleMovement> avm ( vm );
 
-         VehicleAttack va ( NULL, NULL );
          int moved = 0;
-         if ( va.available ( *i )) {
+         if ( AttackCommand::avail ( *i )) {
             TargetVector tv;
 
             // AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );  ?? Why was maxMovement used here ??

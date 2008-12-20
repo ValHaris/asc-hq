@@ -1,4 +1,4 @@
-//     $Id: guifunctions-interface.h,v 1.3 2007-04-13 16:15:53 mbickel Exp $
+//     $Id: guifunctions-interface.h,v 1.4 2008-12-20 14:25:47 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -30,16 +30,28 @@
 
 #include "guiiconhandler.h"
 
+class AStar3D;
+
 namespace GuiFunctions {
 
-class Movement : public GuiFunction
-{
+class MovementBase : public GuiFunction {
+   protected:
+      virtual void parametrizePathFinder( AStar3D& pathFinder ) {};
+      virtual int getVerticalDirection() = 0;
    public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+};
+   
+class Movement : public MovementBase 
+{
+   protected:
+      virtual void parametrizePathFinder( AStar3D& pathFinder );
+   public:
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+      int getVerticalDirection() { return 0; };
 };
 
 

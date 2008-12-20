@@ -663,8 +663,8 @@ void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
    tfield* fld = gamemap->getField ( mc );
    if ( !arming ) {
-      if ( fld && fld->vehicle )
-         if ( fld->vehicle->networkid == unitID || unitID == -1 )
+      if ( fld && fld->getVehicle() )
+         if ( fld->getVehicle()->networkid == unitID || unitID == -1 )
             found = true;
 
       Vehicle* veh = gamemap->getUnit( unitID );
@@ -726,7 +726,7 @@ void SpecificUnitEntersPolygon::arm ()
    #endif
 }
 
-void SpecificUnitEntersPolygon::triggered()
+void SpecificUnitEntersPolygon::triggered( const Context& context )
 {
    if ( isFulfilled() )
       eventReady();
@@ -746,8 +746,8 @@ void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
    tfield* fld = gamemap->getField ( mc );
    if ( !arming ) {
-      if ( fld && fld->vehicle )
-         if ( (1 << fld->vehicle->getOwner()) & player )
+      if ( fld && fld->getVehicle() )
+         if ( (1 << fld->getVehicle()->getOwner()) & player )
             found = true;
 
       if ( fld && fld->building )
@@ -811,7 +811,7 @@ void AnyUnitEntersPolygon::arm()
    #endif
 }
 
-void AnyUnitEntersPolygon::triggered()
+void AnyUnitEntersPolygon::triggered(const Context& context )
 {
    if ( isFulfilled() )
       eventReady();
@@ -1891,13 +1891,13 @@ ASCString ActionNameProvider() {
 template <typename TriggerType > 
 bool registerTrigger( EventTrigger_ID id )
 {
-   return triggerFactory::Instance().registerClass( id, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
+   return eventTriggerFactory::Instance().registerClass( id, ObjectCreator<EventTrigger, TriggerType>,  TriggerNameProvider<TriggerType>() );
 }
 
 template <typename ActionType > 
 bool registerAction( EventAction_ID id )
 {
-   return actionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  ActionNameProvider<ActionType>() );
+   return eventActionFactory::Instance().registerClass( id, ObjectCreator<EventAction, ActionType>,  ActionNameProvider<ActionType>() );
 }
 
 

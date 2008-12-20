@@ -27,7 +27,7 @@
 #include "../basegfx.h"
 #include "../basestrm.h"
 #include "../misc.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 #include <iostream>
 
 DI_Color::DI_Color() {
@@ -694,7 +694,7 @@ Surface rotateSurface( Surface& s, int degrees )
 
 void* Surface::toBGI() const
 {
-   void* p = asc_malloc( imagesize(1,1,w(),h()) );
+   void* p = malloc( imagesize(1,1,w(),h()) );
    char* c = (char*) p;
    Uint16* ww = (Uint16*) p;
    ww[0] = w()-1;

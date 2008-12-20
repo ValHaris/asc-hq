@@ -16,7 +16,7 @@
  ***************************************************************************/
 
 #include "ai_common.h"
-
+#include "../actions/attackcommand.h"
 
 const int attack_unitdestroyed_bonus = 90;
 
@@ -39,19 +39,18 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
    int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
 
 
-   VehicleAttack va ( NULL, NULL );
-   if ( va.available ( veh )) {
-      va.execute ( veh, -1, -1, 0 , 0, -1 );
-      for ( int g = 0; g < va.attackableVehicles.getFieldNum(); g++ ) {
-         int xp, yp;
-         va.attackableVehicles.getFieldCoordinates ( g, &xp, &yp );
-         pattackweap aw = &va.attackableVehicles.getData ( g );
+   if ( AttackCommand::avail ( veh )) {
+      AttackCommand va ( veh );
+      va.searchTargets();
+      for ( AttackCommand::FieldList::const_iterator i = va.getAttackableUnits().begin(); i != va.getAttackableUnits().end(); ++i ) {
+         MapCoordinate targ = i->first;
+         const AttackWeap* aw = &(i->second);
 
          int bestweap = -1;
          int targdamage = -1;
          int weapstrength = -1;
          for ( int w = 0; w < aw->count; w++ ) {
-            tunitattacksunit uau ( veh, getfield ( xp, yp)->vehicle, 1, aw->num[w] );
+            tunitattacksunit uau ( veh, getMap()->getField (targ)->vehicle, 1, aw->num[w] );
             uau.calc();
             if ( uau.dv.damage > targdamage ) {
                bestweap = aw->num[w];
@@ -72,7 +71,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
 
          MoveVariant* mv = new MoveVariant;
 
-         tunitattacksunit uau ( veh, getfield ( xp, yp)->vehicle, 1, bestweap );
+         tunitattacksunit uau ( veh, getMap()->getField(targ)->vehicle, 1, bestweap );
          mv->orgDamage = uau.av.damage;
          mv->damageAfterMove = uau.av.damage;
          mv->enemyOrgDamage = uau.dv.damage;
@@ -81,10 +80,10 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
 
          mv->damageAfterAttack = uau.av.damage;
          mv->enemyDamage = uau.dv.damage;
-         mv->enemy = getfield ( xp, yp )->vehicle;
+         mv->enemy = getMap()->getField(targ)->vehicle;
          mv->movePos = pos;
-         mv->attackx = xp;
-         mv->attacky = yp;
+         mv->attackx = targ.x;
+         mv->attacky = targ.y;
          mv->weapNum = bestweap;
          mv->moveDist = moveDist;
          mv->attacker = veh;
@@ -102,7 +101,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
 
          }
 
-         int attackerDirection = getdirection ( xp, yp, pos.x, pos.y );
+         int attackerDirection = getdirection ( targ.x, targ.y, pos.x, pos.y );
          float hemmingFactor = 1;
          for ( int nf = 0; nf < sidenum-1 && nf < hemmingBonus; nf++ ) {
             // we are starting opposite the attacker, since this is the highest hemming bonus
@@ -297,16 +296,19 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
    if ( veh->attacked )
       return result;
 
-   VehicleAttack va ( mapDisplay, NULL );
-   va.execute ( veh, -1, -1, 0 , 0, -1 );
-   if ( va.getStatus() != 2 )
+   auto_ptr<AttackCommand> va (new AttackCommand( veh ));
+   ActionResult res = va->searchTargets();
+   if ( !res.successful() )
       displaymessage ( "AI :: executeMoveAttack \n error in attack step 2 with unit %d", 1, veh->networkid );
 
    VehicleTypeEfficiencyCalculator vtec( *this, veh, mv->enemy );
 
-   va.execute ( NULL, mv->attackx, mv->attacky, 2 , -1, mv->weapNum );
-   if ( va.getStatus() != 1000 )
+   va->setTarget( MapCoordinate( mv->attackx, mv->attacky), mv->weapNum );
+   res = va->execute( getContext() );
+   if ( !res.successful() )
       displaymessage ( "AI :: executeMoveAttack \n error in attack step 3 with unit %d", 1, veh->networkid );
+   else
+      va.release();
 
    vtec.calc();
 
@@ -810,18 +812,21 @@ AI::AiResult AI::tactics( void )
                         // if ( i+1 < finalAttackNum ) {
                         if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
                            Vehicle* a = finalPositions[finalOrder[i]];
-                           VehicleAttack va ( mapDisplay, NULL );
                            if ( finalOrder[i] < 0 )
                               warning("!!!");
 
-                           va.execute ( finalPositions[finalOrder[i]], -1, -1, 0, 0, -1 );
-                           if ( va.getStatus() != 2 && strictChecks )
-                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
-
+                           auto_ptr<AttackCommand> va ( new AttackCommand ( a ));
+                           va->searchTargets();
+                           
                            VehicleTypeEfficiencyCalculator vtec (*this, finalPositions[finalOrder[i]], enemy );
-                           va.execute ( NULL, enemy->xpos, enemy->ypos, 2, 0, -1 );
-                           if ( va.getStatus() != 1000 && strictChecks )
+                           va->setTarget( enemy->getPosition() );
+                           ActionResult res = va->execute( getContext() );                           
+                           if ( !res.successful() && strictChecks )
                              displaymessage("inconsistency #1 in AI::tactics attack", 1 );
+                           
+                           if ( res.successful() )
+                              va.release();
+                             
 
                            vtec.calc();
 

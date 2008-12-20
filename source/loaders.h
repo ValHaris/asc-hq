@@ -163,5 +163,7 @@ struct MapConinuationInfo {
 
 extern MapConinuationInfo findNextCampaignMap( int id = -1 );
 
+extern bool suppressMapTriggerExecution;
+
 
 #endif

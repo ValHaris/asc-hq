@@ -95,7 +95,7 @@ void loadpalette ( void )
       stream.readdata( &truecolor2pal_table,  sizeof ( truecolor2pal_table ));
       stream.readdata( &bi2asc_color_translation_table,  sizeof ( bi2asc_color_translation_table ));
 #endif
-      xlatpictgraytable = (ppixelxlattable) asc_malloc( sizeof(*xlatpictgraytable) );
+      xlatpictgraytable = (ppixelxlattable) malloc( sizeof(*xlatpictgraytable) );
       // xlatpictgraytable = new tpixelxlattable;
       generategrayxlattable(xlatpictgraytable,160,16,&pal);
 

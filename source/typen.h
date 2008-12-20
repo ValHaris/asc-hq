@@ -39,7 +39,7 @@
 #include "basictypes.h"
 
 #include "basestrm.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 
 //! the color depth of the gamemap
@@ -119,7 +119,7 @@ class Resources {
      void runTextIO ( PropertyContainer& pc );
      void runTextIO ( PropertyContainer& pc, const Resources& defaultValue );
      static const char* name( int r );
-     ASCString toString();
+     ASCString toString() const;
      
      static const int materialColor = 0xff0000; // 0x8b3d1e;
      static const int fuelColor = 0x00ff00; // 0x8b7800;
@@ -185,7 +185,7 @@ class MapCoordinate {
             };
             bool valid() const { return x >= 0 && y >= 0 ; } ;
 	         void move(int width, int height);
-            ASCString toString() const;
+            ASCString toString(bool coordinates = false) const;
       };
 
 inline MapCoordinate operator-( const MapCoordinate& a, const MapCoordinate& b )

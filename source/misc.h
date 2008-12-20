@@ -119,19 +119,4 @@ const T& max ( const T& a, const T& b, const T& c )
    extern char* itoa ( int a, char* b, int c);
   #endif
 
-   #if defined(MEMCHK) | defined(sgmain) | defined(karteneditor)
-    extern void* asc_malloc ( size_t size );
-    extern void asc_free ( void* p );
-   #else
-    #ifdef asc_malloc
-     #undef asc_malloc
-    #endif
-    #define asc_malloc malloc
-
-    #ifdef asc_free
-     #undef asc_free
-    #endif
-    #define asc_free   free
-   #endif
-
 #endif

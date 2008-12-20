@@ -123,7 +123,7 @@
 
 #include "asc-mainscreen.h"
 #include "dialogs/unitinfodialog.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 #include "cannedmessages.h"
 #include "memorycheck.cpp"
 #include "networkinterface.h"
@@ -153,6 +153,12 @@
 #include "memory-measurement.h"
 #include "dialogs/mailoptionseditor.h"
 #include "dialogs/unitguidedialog.h"
+
+#ifdef LUAINTERFACE
+# include "lua/luarunner.h"
+# include "lua/luastate.h"
+#endif
+
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -224,7 +230,9 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
-      
+
+      map->sigPlayerUserInteractionEnds.connect( SigC::slot( closePlayerReplayLogging ));
+
       map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
 
       
@@ -233,7 +241,7 @@ void hookGuiToMap( GameMap* map )
 }
 
 
-bool loadGame( const ASCString& filename )
+bool loadGameFromFile( const ASCString& filename )
 {
    GameMap* m = mapLoadingExceptionChecker( filename, MapLoadingFunction( tsavegameloaders::loadGameFromFile ));
    if ( !m )
@@ -281,7 +289,7 @@ bool loadGame( bool mostRecent )
    if ( !s1.empty() ) {
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
 
-      loadGame( s1 );
+      loadGameFromFile( s1 );
       
       updateFieldInfo();
       positionCursor( actmap->getCurrentPlayer() );
@@ -361,7 +369,7 @@ MapTypeLoaded loadStartupMap ( const char *gameToLoad=NULL )
                fatalError ( "The savegame %s is invalid. Aborting.", gameToLoad );
 
             try {
-               loadGame( gameToLoad );
+               loadGameFromFile( gameToLoad );
                computeview( actmap );
                return Savegame;
             } catch ( tfileerror ) {
@@ -517,7 +525,6 @@ void changePassword( GameMap* gamemap )
 
 void showSDLInfo()
 {
-#ifdef _SDL_
    ASCString s;
    s += "#fontsize=18#SDL versions#fontsize=14#\n";
    char buf[1000];
@@ -585,7 +592,6 @@ void showSDLInfo()
    ViewFormattedText vft( "SDL Settings", s, PG_Rect(-1,-1,450,550));
    vft.Show();
    vft.RunModal();
-#endif
 }
 
 void helpAbout()
@@ -602,6 +608,29 @@ void helpAbout()
    vft.RunModal();
 }
 
+
+Context createContext( GameMap* gamemap )
+{
+   Context context;
+   
+   context.gamemap = gamemap;
+   context.actingPlayer = &gamemap->getPlayer( actmap->actplayer );
+   context.parentAction = NULL;
+   context.display = &getDefaultMapDisplay();
+   context.viewingPlayer = gamemap->getPlayerView(); 
+   context.actionContainer = &gamemap->actions;
+   return context;   
+}
+
+void undo()
+{
+   if ( actmap ) {
+      actmap->actions.undo( createContext( actmap ) );  
+      displaymap();
+      mapChanged(actmap);
+      updateFieldInfo();
+   }
+}
 
 // user actions using the old event system
 void execuseraction ( tuseractions action )
@@ -913,6 +942,9 @@ void execuseraction ( tuseractions action )
             }
          }
          break;
+      case ua_undo:
+         undo();
+         break;
 
       default:;
       };
@@ -1176,6 +1208,26 @@ void viewMiningPower()
 }
 
 
+void writeLuaCommands() 
+{
+   ASCString filename =  selectFile("*.lua", false );
+   if ( !filename.empty() ) {
+      tn_file_buf_stream stream ( filename, tnstream::writing );
+      stream.writeString( actmap->actions.getCommands() ); 
+   }
+}
+
+#ifdef LUAINTERFACE
+void selectAndRunLuaScript()
+{
+   ASCString file = selectFile( "*.lua", true );
+   if ( file.size() ) {
+      LuaState state;
+      executeFile( state, file );
+      updateFieldInfo();
+   }
+}
+#endif               
 
 
 // user actions using the new event system
@@ -1362,6 +1414,15 @@ void execuseraction2 ( tuseractions action )
          unitGuideWindow( 2);
          break;
          
+      case ua_writeLuaCommands: writeLuaCommands();
+         break;
+         
+#ifdef LUAINTERFACE 
+      case ua_runLuaCommands: selectAndRunLuaScript();
+         break;
+      
+#endif
+                  
       default:
          break;
    }
@@ -1415,7 +1476,6 @@ void resetActions( GameMap& map )
 
 void loaddata( int resolx, int resoly )
 {
-
    schriften.smallarial = load_font("smalaril.fnt");
    schriften.large = load_font("usablack.fnt");
    schriften.arial8 = load_font("arial8.fnt");
@@ -1506,9 +1566,7 @@ int gamethread ( void* data )
    int resoly = agmp->resolutiony;
    virtualscreenbuf.init();
 
-
    std::auto_ptr<StartupScreen> startupScreen ( new StartupScreen( "title.jpg", dataLoaderTicker ));
-
 
    MapTypeLoaded mtl = None;
 
@@ -1542,6 +1600,8 @@ int gamethread ( void* data )
 
    GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
 
+   suppressMapTriggerExecution = false;
+   
 
    displayLogMessage ( 5, "loaddata completed successfully.\n" );
    dataLoaderTicker();
@@ -1681,6 +1741,8 @@ int main(int argc, char *argv[] )
 {
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
+   // putenv(const_cast<char*>("DISPLAY=192.168.0.21:0")) ;
+   
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
    // we should think about replacing clparser with libpopt

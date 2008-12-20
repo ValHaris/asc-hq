@@ -710,22 +710,24 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
             }
          }
       }
-      for ( Player::VehicleList::iterator v = currentMap->player[player].vehicleList.begin(); v != currentMap->player[player].vehicleList.end(); ++v ) {
-         Vehicle* v1 = *v;
-         Vehicle* v2 = replaymap->getUnit( v1->networkid );
-         if ( !v1 || !v2 ) {
+   }
+   for ( Player::VehicleList::iterator v = currentMap->player[player].vehicleList.begin(); v != currentMap->player[player].vehicleList.end(); ++v ) {
+      Vehicle* v1 = *v;
+      Vehicle* v2 = replaymap->getUnit( v1->networkid );
+      if ( !v1 || !v2 ) {
+         if ( log ) {
+            s.format ( "Vehicle missing! \n");
+            *log += s;
+         }
+      } else {
+         if ( v1->typ != v2->typ ) {
+            diff = true;
             if ( log ) {
-               s.format ( "Vehicle missing! \n");
+               s.format ( "Vehicles with NWID %d don't have matching type, probably production inconsistency. (%s <-> %s)\n", v1->networkid, v1->typ->getName().c_str(), v2->typ->getName().c_str() );
                *log += s;
             }
          } else {
-            if ( v1->typ != v2->typ ) {
-               diff = true;
-               if ( log ) {
-                  s.format ( "Vehicles with NWID %d don't have matching type, probably production inconsistency. (%s <-> %s)\n", v1->networkid, v1->typ->getName().c_str(), v2->typ->getName().c_str() );
-                  *log += s;
-               }
-            } else {
+            for ( int r = 0; r < 3; ++r ) {
                int av1 = v1->getResource( maxint, r, true, 1, player );
                int av2 = v2->getResource( maxint, r, true, 1, player );
                if ( av1 != av2 ) {
@@ -735,19 +737,27 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                      *log += s;
                   }
                }
-               
-               if ( v1->damage != v2->damage ) {
-                  diff = true;
-                  if ( log ) {
-                     s.format ( "Vehicle (%d,%d) damage mismatch: %d after replay, but %d in actual map\n", v1->getPosition().x, v1->getPosition().y, v2->damage, v1->damage );
-                     *log += s;
-                  }
+            }
+            
+            if ( v1->damage != v2->damage ) {
+               diff = true;
+               if ( log ) {
+                  s.format ( "Vehicle (%d,%d) damage mismatch: %d after replay, but %d in actual map\n", v1->getPosition().x, v1->getPosition().y, v2->damage, v1->damage );
+                  *log += s;
                }
             }
+            if ( v1->getPosition().x != v2->getPosition().x || v1->getPosition().y != v2->getPosition().y ) {
+               diff = true;
+               if ( log ) {
+                  s.format ( "Vehicle (%d,%d) position mismatch\n", v1->getPosition().x, v1->getPosition().y );
+                  *log += s;
+               }
+            }
+
          }
       }
-
    }
+
    if ( currentMap->player[player].vehicleList.size() != replaymap->player[player].vehicleList.size() ) {
       diff = true;
       if ( log ) {

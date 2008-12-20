@@ -35,6 +35,7 @@
 #include "objects.h"
 #include "explosivemines.h"
 
+#include "actions/context.h"
 
 
 
@@ -107,7 +108,8 @@ class tfight : public AttackFormula
       void calc ( void ) ;
 
       //! Writes the result of the attack calculation to the actual units.
-      virtual void setresult ( void ) = 0;
+      virtual void setresult () = 0;
+      virtual void setresult( const Context& context ) = 0;
 
       virtual void visit ( FightVisitor& visitor ) = 0;
 
@@ -150,7 +152,8 @@ class tunitattacksunit : public UnitAttacksSomething
       */
       tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond = true, int weapon = -1, bool reactionfire = false );
       void setup ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
 
       void visit ( FightVisitor& visitor )
       {
@@ -187,7 +190,8 @@ class tunitattacksbuilding : public UnitAttacksSomething
       */
       tunitattacksbuilding ( Vehicle* attackingunit, int x, int y, int weapon = -1);
       void setup ( Vehicle* attackingunit, int x, int y, int weapon );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
 
       void visit ( FightVisitor& visitor )
       {
@@ -207,6 +211,8 @@ class tmineattacksunit : public tfight
       int _minenum;
       Vehicle** _pattackedunit;
 
+      MapCoordinate position;
+      
    public:
       int getAttackingPlayer()
       {
@@ -223,9 +229,10 @@ class tmineattacksunit : public tfight
           \param minenum The number of a specific mine which explodes. If -1 , all mines on this field which are able to attack the unit will explode.
           \param attackedunit The unit which moved onto the minefield.
       */
-      tmineattacksunit ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
-      void setup ( tfield* mineposition, int minenum, Vehicle* &attackedunit );
-      void setresult ( void );
+      tmineattacksunit ( const MapCoordinate& mineposition, int minenum, Vehicle* &attackedunit );
+      void setup ( const MapCoordinate& position, int minenum, Vehicle* &attackedunit );
+      void setresult();
+      void setresult( const Context& context );
 
       Mine* getFirstMine();
 
@@ -264,7 +271,9 @@ class tunitattacksobject : public UnitAttacksSomething
       */
       tunitattacksobject ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon = -1 );
       void setup ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon );
-      void setresult ( void );
+      void setresult();
+      void setresult( const Context& context );
+      
       Object* getTarget()
       {
          return _obji;
@@ -286,13 +295,12 @@ class AttackWeap
 
       enum Target { nothing, vehicle, building, object } target;
 };
-typedef class AttackWeap* pattackweap ;
 
 
 
 
 //! \brief Is attacker able to attack anything in field x/y ?
-extern pattackweap attackpossible( const Vehicle* attacker, int x, int y);
+extern AttackWeap* attackpossible( const Vehicle* attacker, int x, int y);
 
 
 
@@ -308,7 +316,7 @@ extern pattackweap attackpossible( const Vehicle* attacker, int x, int y);
                           the attack are written to attackweap
      \param targetHeight if != -1 , assume the target unit was on this height (bitmapped!)
  */
-extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int targetheight = -1);      // distance is not evaluated
+extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL, int targetheight = -1);      // distance is not evaluated
 
 
 /*! \brief Is attacker able to attack target ? Distance is assumed one field.
@@ -323,7 +331,7 @@ extern bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, pa
                           the attack are written to attackweap
      \param targetHeight if != -1 , assume the target unit was on this height (bitmapped!)
 */
-extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL, int targetHeight = -1);       // distance is fixed as 1 field
+extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL, int targetHeight = -1);       // distance is fixed as 1 field
 
 
 /*! \brief Is attacker able to attack target ? Actual distance used.
@@ -333,7 +341,7 @@ extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, pa
      \param attackweap if != NULL, detailed information about the weapons which can perform
                           the attack are written to attackweap
 */
-extern bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, pattackweap attackweap = NULL );
+extern bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL );
 
 //! Can the vehicle drive across the field and destroy any unit there by moving over them?
 extern bool vehicleplattfahrbar( const Vehicle* vehicle, const tfield* field );

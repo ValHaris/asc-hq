@@ -218,7 +218,7 @@ void OverviewMapHolder::clearmap( GameMap* actmap )
 
 
 GameMap :: GameMap ( void )
-      : overviewMapHolder( *this ), network(NULL)
+      : actions(this), overviewMapHolder( *this ), network(NULL)
 {
    randomSeed = rand();
    dialogsHooked = false;
@@ -286,7 +286,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 22;
+const int tmapversion = 25;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -660,6 +660,9 @@ void GameMap :: read ( tnstream& stream )
       if ( nw ) 
          network = GameTransferMechanism::read( stream );         
     }
+    
+    if ( version >= 25 )
+       actions.read( stream );
 }
 
 
@@ -849,6 +852,8 @@ void GameMap :: write ( tnstream& stream )
       network->write( stream );
     } else
       stream.writeInt( 0 );
+      
+    actions.write( stream );
 }
 
 
@@ -1111,6 +1116,23 @@ Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck )
    return NULL;
 }
 
+const Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck ) const
+{
+   VehicleLookupCache::const_iterator i = vehicleLookupCache.find( nwid );
+   if ( i != vehicleLookupCache.end() )
+      return i->second;
+
+
+   if ( consistencyCheck ) 
+      for ( int p = 0; p < 9; p++ )
+         for ( Player::VehicleList::const_iterator i = player[p].vehicleList.begin(); i != player[p].vehicleList.end(); i++ )
+            if ( (*i)->networkid == nwid ) {
+               displaymessage("warning: id not registered in VehicleLookupCache!",1);
+               return *i;
+            }
+
+   return NULL;
+}
 
 Vehicle* GameMap :: getUnit ( int x, int y, int nwid )
 {
@@ -1129,6 +1151,21 @@ Vehicle* GameMap :: getUnit ( int x, int y, int nwid )
 }
 
 ContainerBase* GameMap::getContainer ( int nwid )
+{
+   if ( nwid > 0 )
+      return getUnit(nwid);
+   else {
+      int x = (-nwid) & 0xffff;
+      int y = (-nwid) >> 16;
+      tfield* fld = getfield(x,y);
+      if ( !fld )
+         return NULL;
+
+      return fld->building;
+   }
+}
+
+const ContainerBase* GameMap::getContainer ( int nwid ) const 
 {
    if ( nwid > 0 )
       return getUnit(nwid);
@@ -1166,6 +1203,8 @@ void GameMap::beginTurn()
 
 void GameMap::endTurn()
 {
+   actions.breakUndo();
+
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
    pt.turn = time.turn();
@@ -1628,6 +1667,12 @@ ObjectType* GameMap :: getobjecttype_byid ( int id )
 {
    return objectTypeRepository.getObject_byID ( id );
 }
+
+const ObjectType* GameMap :: getobjecttype_byid ( int id ) const
+{
+   return objectTypeRepository.getObject_byID ( id );
+}
+
 
 Vehicletype* GameMap :: getvehicletype_byid ( int id )
 {

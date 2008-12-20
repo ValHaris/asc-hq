@@ -42,6 +42,8 @@
  #include "networkinterface.h"
  #include "player.h"
  
+ #include "actions/actioncontainer.h"
+ 
  class RandomGenerator{
    public:
 
@@ -257,6 +259,7 @@ private:
       typedef map<int, Vehicle*> VehicleLookupCache;
       VehicleLookupCache vehicleLookupCache; 
 public:
+      //! returns a new and unique ID 
       int getNewNetworkID();
       void registerUnitNetworkID( Vehicle* veh );
       void unregisterUnitNetworkID( Vehicle* veh );
@@ -327,8 +330,11 @@ public:
            //! Close the replay logging at the end of a players or the ai's turn.
           void closeLogging();
           ~ReplayInfo ( );
+          
         };
 
+      //! Records all action that have been done for undo/redo purposes
+      ActionContainer actions;
 
       ReplayInfo*  replayinfo;
 
@@ -386,7 +392,9 @@ public:
 
       Vehicle* getUnit ( int x, int y, int nwid );
       Vehicle* getUnit ( int nwid, bool consistencyCheck = true );
+      const Vehicle* getUnit ( int nwid, bool consistencyCheck = true ) const;
       ContainerBase* getContainer ( int nwid );
+      const ContainerBase* getContainer ( int nwid ) const;
       int  getgameparameter ( GameParameter num ) const;
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
@@ -457,6 +465,7 @@ public:
       
       pterraintype getterraintype_byid ( int id );
       ObjectType* getobjecttype_byid ( int id );
+      const ObjectType* getobjecttype_byid ( int id ) const;
       Vehicletype* getvehicletype_byid ( int id );
       BuildingType* getbuildingtype_byid ( int id );
       const Technology* gettechnology_byid ( int id );

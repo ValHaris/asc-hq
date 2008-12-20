@@ -28,6 +28,7 @@
 
 #include "typen.h"
 #include "astar2.h"
+#include "actions/context.h"
 
 class MapDisplayInterface;
 
@@ -48,9 +49,9 @@ struct treactionfire_replayinfo {
 
 class treactionfire {
           public:
-             virtual int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md ) = 0;
+             virtual int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context ) = 0;
              virtual void init ( Vehicle* eht, const AStar3D::Path&  fieldlist ) = 0;
-             virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer ) = 0;
+             virtual int  finalCheck ( int currentPlayer, const Context& context ) = 0;
              virtual ~treactionfire() {};
         };
 
@@ -62,9 +63,9 @@ class treactionfirereplay : public treactionfire {
           public:
              treactionfirereplay ( void );
              ~treactionfirereplay ( );
-             virtual int checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
+             virtual int checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context );
              virtual void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
-             virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer ) { return 0; };
+             virtual int  finalCheck ( int currentPlayer, const Context& context ) { return 0; };
 };
 
 class tsearchreactionfireingunits : public treactionfire {
@@ -73,7 +74,7 @@ class tsearchreactionfireingunits : public treactionfire {
                 void findOffensiveUnits( Vehicle* vehicle, int height, int x1, int y1, int x2, int y2 );
 
            protected:
-                int attack( Vehicle* attacker, Vehicle* target, MapDisplayInterface* md );
+                int attack( Vehicle* attacker, Vehicle* target, const Context& context );
 
                 static int maxshootdist[8];     // f?r jede Hhenstufe eine
                 void addunit ( Vehicle* vehicle );
@@ -87,8 +88,8 @@ class tsearchreactionfireingunits : public treactionfire {
                 tsearchreactionfireingunits( void );
                 void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
                 void init ( Vehicle* eht, const MapCoordinate3D& pos );
-                int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, MapDisplayInterface* md );
-                virtual int  finalCheck ( MapDisplayInterface* md, int currentPlayer );
+                int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context  );
+                virtual int  finalCheck ( int currentPlayer, const Context& context );
                 ~tsearchreactionfireingunits();
       };
 

@@ -267,7 +267,7 @@ int TerrainItem::place( const MapCoordinate& mc ) const
 
 int MineItem::place( const MapCoordinate& mc ) const
 {
-   actmap->getField(mc)->putmine( selection.getPlayer(), item->id, MineBasePunch[item->id-1] );
+   actmap->getField(mc)->putmine( selection.getPlayer(), MineTypes(item->id), MineBasePunch[item->id-1] );
    return 0;
 }
 

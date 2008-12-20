@@ -1,4 +1,4 @@
-//     $Id: guiiconhandler.h,v 1.7 2008-06-29 11:25:40 mbickel Exp $
+//     $Id: guiiconhandler.h,v 1.8 2008-12-20 14:25:47 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -36,6 +36,8 @@
 #include "typen.h"
 #include "containerbase.h"
 #include "dashboard.h"
+
+#include "actions/command.h"
 
 extern const int smallGuiIconSizeX;
 extern const int smallGuiIconSizeY;
@@ -198,6 +200,7 @@ class NewGuiHost : public DashboardPanel {
 
         bool ProcessEvent (const SDL_Event *event, bool bModal);
 
+        static Command* pendingCommand;
         
         ~NewGuiHost();
 

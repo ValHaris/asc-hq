@@ -562,6 +562,18 @@ void AI :: write ( tnstream& stream ) const
    stream.writeInt ( version );
 }
 
+Context AI :: getContext()
+{
+   Context context;
+   
+   context.gamemap = getMap();
+   context.actingPlayer = &getPlayer();
+   context.parentAction = NULL;
+   context.display = mapDisplay;
+   context.viewingPlayer = getMap()->getPlayerView(); 
+   context.actionContainer = &getMap()->actions;
+   return context;   
+}
 
 AI :: ~AI ( )
 {

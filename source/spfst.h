@@ -202,6 +202,7 @@ extern SigC::Signal1<void,GameMap*> mapChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
 extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
 extern SigC::Signal0<bool> idleEvent;
+extern SigC::Signal1<void, const Context&> fieldCrossed;
 
 extern void displaymap();
 

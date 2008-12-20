@@ -208,10 +208,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\explosivemines.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\groupfile.cpp"
 				>
 			</File>

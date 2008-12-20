@@ -64,7 +64,7 @@
 #include "graphics/drawing.h"
 #include "widgets/textrenderer.h"
 
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 
 const int widgetTypeNum = 17;

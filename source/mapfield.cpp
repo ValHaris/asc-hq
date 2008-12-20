@@ -48,6 +48,7 @@ void tfield::init ()
    bdt.set ( 0 );
    typ = NULL;
    vehicle = NULL;
+   secondvehicle = NULL;
    building = NULL;
    a.temp = 0;
    a.temp2 = 0;
@@ -61,6 +62,7 @@ void tfield::init ()
    gamemap = NULL;
    viewbonus = 0;
 }
+
 
 
 void tfield::Resourceview::setview( int player, int material, int fuel )
@@ -319,16 +321,15 @@ void tfield :: sortobjects ( void )
    sort ( objects.begin(), objects.end(), compareObjectHeight );
 }
 
-bool  tfield :: putmine( int col, int typ, int strength )
+bool  tfield :: putmine( int owner, MineTypes typ, int strength )
 {
-   if ( mineowner() >= 0  && mineowner() != col )
+   if ( mineowner() >= 0  && mineowner() != owner )
       return false;
 
    if ( mines.size() >= gamemap->getgameparameter ( cgp_maxminesonfield ))
       return false;
 
-   MineTypes mt =  MineTypes(typ);
-   Mine mymine ( mt, strength, col, gamemap );
+   Mine mymine ( typ, strength, owner, gamemap );
    mines.push_back ( mymine );
    return true;
 }

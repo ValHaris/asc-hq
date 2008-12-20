@@ -26,6 +26,9 @@
 #ifndef sgH
 #define sgH
 
+#include "actions/context.h"
+class ASCString;
+
 enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mntnc_morefog,
                     ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
                     ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
@@ -40,24 +43,24 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mnt
                     ua_viewWindPanel, ua_clearImageCache, ua_viewUnitInfoPanel, ua_cargosummary, ua_viewUnitInfoDialog, ua_showsearchdirs, ua_viewOverviewMapPanel, ua_weathercast,
                     ua_newGame, ua_testMessages, ua_viewMapControlPanel, ua_unitsummary, ua_togglesound, ua_increase_zoom, ua_decrease_zoom, ua_editPlayerData,
                     ua_SDLinfo, ua_visibilityInfo, ua_locatefile, ua_viewfont, ua_resourceAnalysis, ua_unitproductionanalysis, ua_continuerecentnetworkgame, ua_gotoPosition, ua_loadrecentgame,
-                    ua_showTechAdapter, ua_showUnitEndurance, ua_getMemoryFootprint, ua_viewlayerhelp, ua_showCargoLayer, ua_showMiningPower, ua_emailOptions, ua_createReminder, ua_recompteview,
-                    ua_unitGuideDialog, ua_turnUnitLeft, ua_turnUnitRight };
+                    ua_showTechAdapter, ua_showUnitEndurance, ua_getMemoryFootprint, ua_viewlayerhelp, ua_showCargoLayer, ua_showMiningPower, ua_emailOptions, ua_createReminder, ua_undo, ua_redo,
+                    ua_writeLuaCommands, ua_runLuaCommands, ua_recompteview, ua_unitGuideDialog, ua_turnUnitLeft, ua_turnUnitRight };
 
 extern void execuseraction ( tuseractions action );
 
 //! takes care of event system switching between old and new functions
 extern void execUserAction_ev( tuseractions action );
 
-//! switches the event handling between paragui and legacy depending on function called
-extern void execUserAction_ev( tuseractions action );
-
 class GameMap;
 extern void hookGuiToMap( GameMap* map );
 
 extern bool loadGame( bool mostrecent );
+extern bool loadGameFromFile( const ASCString& filename );
 extern void saveGame( bool as );
 extern bool continueAndStartMultiplayerGame( bool mostRecent );
 extern void changePassword();
+
+extern Context createContext( GameMap* gamemap );
 
 
 #endif

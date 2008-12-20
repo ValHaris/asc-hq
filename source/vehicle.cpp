@@ -30,6 +30,13 @@
 #include "itemrepository.h"
 #include "graphics/blitter.h"
 
+#include "actions/context.h"
+#include "actions/changeunitmovement.h"
+#include "actions/changeunitproperty.h"
+#include "actions/spawnobject.h"
+#include "actions/destructcontainer.h"
+#include "actions/unitfieldregistration.h"
+
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
                                                                          0.5, 0,  1 };
@@ -93,23 +100,6 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int netw
 
 Vehicle :: ~Vehicle (  )
 {
-   #ifndef karteneditor
-   if ( !typ->wreckageObject.empty() && gamemap && gamemap->state != GameMap::Destruction && !cleanRemove) {
-      tfield* fld = getMap()->getField(getPosition());
-      if ( fld->vehicle ==  this ) {
-         for ( vector<int>::const_iterator i = typ->wreckageObject.begin(); i != typ->wreckageObject.end(); ++i ) {
-            ObjectType* obj = getMap()->getobjecttype_byid( *i );
-            if ( obj ) {
-               getMap()->getField(getPosition()) -> addobject ( obj );
-               Object* o = getMap()->getField(getPosition())->checkforobject(obj);
-               if ( o )
-                  o->setdir( direction );
-            }
-         }
-      }
-   }
-   #endif
-
    for ( int i = 0; i < 8; i++ ) {
       delete aiparam[i];
       aiparam[i] = NULL;
@@ -493,6 +483,60 @@ void Vehicle :: setNewHeight( int bitmappedheight )
 }
 
 
+void Vehicle::setMovement( int newmove, bool recursive, const Context& context )
+{
+   if ( newmove < 0 )
+      newmove = 0;
+
+   if ( recursive && typ)
+      if ( typ->movement[ log2 ( height ) ] ) {
+         double diff = _movement - newmove;
+         double perc = diff / typ->movement[ log2 ( height ) ] ;
+         if ( cargoNestingDepth() == 0 )
+            perc /= typ->cargoMovementDivisor;
+         for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+            if ( *i ) 
+               (*i)->decreaseMovement ( perc, true, context);
+   }
+   
+   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newmove ))->execute( context );
+}
+
+void Vehicle::decreaseMovementAbs( int reduction, bool recursive, const Context& context )
+{
+   setMovement( _movement - reduction, recursive, context );
+}
+
+
+void Vehicle::decreaseMovement( float fraction, bool recursive, const Context& context )
+{
+   int newMovement = int(ceil(_movement * (1.0 - fraction)));
+   if ( newMovement < 0 )
+     newMovement = 0;
+  
+   if ( newMovement > maxMovement() )
+     newMovement = maxMovement();
+  
+   if ( recursive ) 
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->decreaseMovement ( fraction, true, context);
+   
+   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newMovement ))->execute( context );
+}
+
+void Vehicle::clearMovement( bool recursive, const Context& context )
+{
+   if ( recursive ) 
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->clearMovement ( true, context);
+   
+   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, 0))->execute( context );
+}
+
+
+
 void Vehicle :: setMovement ( int newmove, double cargoDivisor )
 {
 
@@ -587,7 +631,7 @@ bool Vehicle :: canMove ( void ) const
    return false;
 }
 
-bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest )
+bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest, const Context& context )
 {
    if ( start == dest )
       return false;
@@ -603,9 +647,11 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
       for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
          for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
             ObjectType* object = objectTypeRepository.getObject_byID( id );
-            if ( object ) 
-               if ( startField->addobject ( object, 1 << dir ))
+            if ( object ) {
+               (new SpawnObject( getMap(), start, id, 1 << dir ))->execute( context );
+               if ( startField->checkforobject ( object ))
                   result = true;
+            }
          }
            
       dir = (dir + sidenum/2) % sidenum;
@@ -613,9 +659,11 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
       for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
          for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
             ObjectType* object = objectTypeRepository.getObject_byID( id );
-            if ( object ) 
-               if ( destField->addobject ( object, 1 << dir ))
+            if ( object ) {
+               (new SpawnObject( getMap(), dest, id, 1 << dir ))->execute( context );
+               if ( destField->checkforobject ( object ))
                   result = true;
+            }
          }
    }
    
@@ -784,33 +832,20 @@ void Vehicle :: setnewposition ( const MapCoordinate& mc )
    setnewposition ( mc.x, mc.y );
 }
 
-/*
-int Vehicle :: getstrongestweapon( int aheight, int distance)
+void Vehicle :: setnewposition ( const MapCoordinate& mc, const Context& context )
 {
-   int str = 0;
-   int hw = 255;   //  error-wert  ( keine waffe gefunden )
-   for ( int i = 0; i < typ->weapons.count; i++) {
-
-      if (( ammo[i]) &&
-          ( typ->weapons.weapon[i].mindistance <= distance) &&
-          ( typ->weapons.weapon[i].maxdistance >= distance) &&
-          ( typ->weapons.weapon[i].targ & aheight ) &&
-          ( typ->weapons.weapon[i].sourceheight & height )) {
-            int astr = int( weapstrength[i] * weapDist.getWeapStrength( &typ->weapons.weapon[i], distance, height, aheight));
-            if ( astr > str ) {
-               str = astr;
-               hw  = i;
-            }
-       }
-   }
-   return hw;
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+      if ( *i ) 
+         (*i)->setnewposition ( mc, context );
+   (new UnitFieldRegistration( this, MapCoordinate3D(mc,0), UnitFieldRegistration::Position ))->execute( context );
 }
-*/
 
-void Vehicle::convert ( int col )
+
+
+void Vehicle::convert ( int col, bool recursive )
 {
   if ( col > 8)
-     fatalError("convertvehicle: \n color mu�im bereich 0..8 sein ",2);
+     fatalError("convertvehicle: \n invalid target player ");
 
    int oldcol = getOwner();
 
@@ -820,16 +855,32 @@ void Vehicle::convert ( int col )
 
    gamemap->player[col].vehicleList.push_back( this );
 
-   color = col << 3;
+   color = col*8;
 
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) 
-         (*i)->convert( col );
+   if ( recursive )
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->convert( col );
 
    // emit signal
    conquered();
    anyContainerConquered(this);
 }
+
+
+void Vehicle::registerForNewOwner( int player )
+{
+   int oldcol = getOwner();
+
+   Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
+   if ( i != gamemap->player[oldcol].vehicleList.end())
+      gamemap->player[oldcol].vehicleList.erase ( i );
+
+   gamemap->player[player].vehicleList.push_back( this );
+
+   color = player*8;
+}
+
 
 Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
 {
@@ -992,6 +1043,11 @@ void Vehicle :: addview ()
    bes.startsearch();
 }
 
+void Vehicle :: resetview()
+{
+   viewOnMap = false;  
+}
+
 void Vehicle :: removeview ()
 {
    if ( !viewOnMap )
@@ -1004,6 +1060,24 @@ void Vehicle :: removeview ()
    viewOnMap = false;
 }
 
+
+void Vehicle :: postAttack( bool reactionFire, const Context& context )
+{
+   if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) ) {
+      GameAction* a = new ChangeUnitMovement( getMap(), networkid, maxMovement() * attackmovecost / 100, true );
+      a->execute( context );
+   } else
+      if ( reactionfire.getStatus() == ReactionFire::off ) {
+         GameAction* a = new ChangeUnitMovement( getMap(), networkid, 0 );
+         a->execute( context );
+      }
+      
+   if ( !reactionFire ) {
+      GameAction* a = new ChangeUnitProperty( this, ChangeUnitProperty::AttackedFlag, 1 );
+      a->execute( context );
+   }
+      
+}
 
 void Vehicle :: postAttack( bool reactionFire )
 {
@@ -1026,81 +1100,21 @@ void Vehicle::setAttacked()
          (*i)->setAttacked();
 }
 
-
-class tsearchforminablefields: public SearchFields {
-      int shareview;
-    public:
-      int numberoffields;
-      int run ( const Vehicle*     eht );
-      virtual void testfield ( const MapCoordinate& mc );
-      tsearchforminablefields ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
-  };
-
-  /*
-bool Vehicle::searchForMineralResourcesAvailable()
+void Vehicle::setAttacked( bool recursive, const Context& context )
 {
-   return tsearchforminablefields::available( this );
-}
-  */
-
-
-void         tsearchforminablefields::testfield( const MapCoordinate& mc )
-{
-    tfield* fld = gamemap->getField ( mc );
-    if ( !fld->building  ||  fld->building->color == gamemap->actplayer*8  ||  fld->building->color == 8*8)
-       if ( !fld->vehicle  ||  fld->vehicle->color == gamemap->actplayer*8 ||  fld->vehicle->color == 8*8) {
-          if ( !fld->resourceview )
-             fld->resourceview = new tfield::Resourceview;
-
-          for ( int c = 0; c < 8; c++ )
-             if ( shareview & (1 << c) ) {
-                fld->resourceview->visible |= ( 1 << c );
-                fld->resourceview->fuelvisible[c] = fld->fuel;
-                fld->resourceview->materialvisible[c] = fld->material;
-             }
-       }
-}
-
-
-
-
-int  tsearchforminablefields::run( const Vehicle* eht )
-{
-   if ( !eht->typ->hasFunction( ContainerBaseType::DetectsMineralResources  ) )
-      return -311;
-
-
-   shareview = 1 << ( eht->color / 8);
-   for ( int i = 0; i < 8; i++ )
-      if ( i*8 != eht->color )
-         if ( gamemap->player[i].exist() )
-            if ( gamemap->getPlayer(eht).diplomacy.sharesView(i) )
-               shareview += 1 << i;
-
-   numberoffields = 0;
-   initsearch( eht->getPosition(), eht->typ->digrange, 0 );
-   if ( eht->typ->digrange )
-      startsearch();
-
-//   if ( (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger) )
-//      eht->setMovement ( eht->getMovement() - searchforresorcesmovedecrease );
-
-//   if ( !gamemap->mineralResourcesDisplayed && (eht->typ->functions & cfmanualdigger) && !(eht->typ->functions & cfautodigger))
-//      gamemap->mineralResourcesDisplayed = 1;
-
-   return 1;
+   GameAction* a = new ChangeUnitProperty( this, ChangeUnitProperty::AttackedFlag, 1 );
+   a->execute( context );
+   
+   if ( recursive )
+      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+         if ( *i ) 
+            (*i)->setAttacked( true, context );
 }
 
 
 int Vehicle::maxMovement ( void ) const
 {
    return typ->movement[log2(height)];
-}
-
-int Vehicle::searchForMineralResources ( void ) const
-{
-    tsearchforminablefields sfmf ( gamemap );
-    return sfmf.run( this );
 }
 
 

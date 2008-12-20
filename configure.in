@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.2.0.0)
+AC_INIT(asc,2.2.100.0)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -31,6 +31,7 @@ dnl ac_version=`cat $(as_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_releas
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
+AM_PROG_LEX
 
 dnl *************************************************************************
 dnl Checks for programs.
@@ -188,6 +189,17 @@ AC_CHECK_LIB( SDL_image,
 #from http://www.libsdl.org/projects/SDL_image/ ]]) )
 #AC_MSG_RESULT("yes")
 
+
+AC_CHECK_LIB(lua5.0, 
+             lua_open,
+             AC_LIB_MISSING( "Lua 5.0", http://www.lua.org/))
+
+
+LUA_FLAGS="-I/usr/include/lua50/"
+AC_SUBST(LUA_FLAGS)
+
+LUA_LIBS="-llua50 -llualib50 -lluabind"
+AC_SUBST(LUA_LIBS)
 
 AC_CHECK_LIB(jpeg, 
              jpeg_CreateDecompress,,
@@ -634,9 +646,12 @@ AC_CONFIG_FILES( [ Makefile \
        source/graphics/Makefile \
        source/network/Makefile \
        source/dialogs/Makefile \
+       source/util/Makefile \
        source/widgets/Makefile \
        source/actions/Makefile \
+       source/tasks/Makefile \
        source/video/Makefile \
+       source/lua/Makefile \
        source/doc/Makefile \
        source/libs/Makefile \
        source/libs/sdlmm/Makefile \
@@ -661,6 +676,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/unix/mapeditor/Makefile \
        source/unix/pbpedit/Makefile \
        source/unix/asc/Makefile \
+       source/tester/Makefile \
        source/win32/Makefile \
        source/win32/msvc/Makefile \
        data/Makefile \

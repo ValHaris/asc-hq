@@ -29,6 +29,7 @@
  #include "containerbasetype.h"
  #include "graphics/surface.h"
  
+ #include "actions/context.h"
 
 
 class Vehicle;
@@ -39,6 +40,7 @@ class Player;
     was a container
 */
 class ContainerBase {
+      friend class ConvertContainer; 
    protected:
       GameMap* gamemap;
       ContainerBase* cargoParent;
@@ -145,7 +147,10 @@ class ContainerBase {
       int getOwner() const { return color >> 3; };
       Player& getOwningPlayer() const;;
       
-      virtual void convert ( int player ) = 0;
+      virtual void convert ( int player, bool recursive = true ) = 0;
+      
+      //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
+      virtual void registerForNewOwner( int player ) = 0;
       
 
 
@@ -154,7 +159,6 @@ class ContainerBase {
 
       virtual void addview ( void ) = 0;
       virtual void removeview ( void ) = 0;
-
 
       
 

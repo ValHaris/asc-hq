@@ -36,6 +36,8 @@ Movement interrupted
 You must be outside to change a units height
 119
 Not enough movement to put or remove mines
+120
+Not unit found with this ID
 201
 This # won't attack anything
 202
@@ -66,6 +68,8 @@ No weapons to attack with
 This unit cannot attack after it has moved
 216
 This unit cannot do reaction fire.
+217
+Invalid target
 301
 No place to construct building
 302
@@ -194,4 +198,49 @@ Units have to be able to reach one of these heights to enter
 Units must NOT be able to reach this theight to enter
 20133
 Maximum weight of a single unit that can be loaded $/$ maximum weight of all loaded units
-
+21001
+Unit not found on map
+21002
+Invalid field coordinates
+21003
+Invalid invocation order
+21100
+Not enough Ammo
+21101
+Ammo doesn't fit into storage
+21102
+Ammo mismatch
+21103
+Movement mismatch
+21201
+Damage mismatch
+21202
+Attack flag mismatch
+21203
+Invalid unit property
+21204
+Property of unit doesn't match
+21205
+This operation is not allowed
+21206
+Unit position mismatch
+21207
+View doesn't match
+21301
+The unit is not standing on this field
+21302
+The unit was not in this carrier
+21401
+No matching mine was found this field
+21501
+Objecttype not available
+21502
+The given Objecttype does not reside on this field
+21503
+Invalid property specified
+21504
+No objects to create/remove
+21600
+Could not create mine on this field
+21601
+Mines stack inconsistent

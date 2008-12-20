@@ -52,6 +52,8 @@
 #include "video/videorecorder.h"
 #include "iconrepository.h"
 #include "dialogs/replayrecorder.h"
+#include "sg.h"
+#include "actions/action.h"
 
 trunreplay runreplay;
 
@@ -645,8 +647,56 @@ Resources getUnitResourceCargo ( Vehicle* veh )
    return res;
 }
 
+class LogActionIntoReplayInfo : public ActionContainer::ReplayStorage {
+      GameMap* gamemap;
+   public:
+      LogActionIntoReplayInfo( GameMap* map ) : gamemap( map ) {
+
+      };
+
+      void saveCommand( const Command& cmd )
+      {
+         if ( gamemap->replayinfo && gamemap->replayinfo->actmemstream && !gamemap->replayinfo->stopRecordingActions) {
+            tnstream* stream = gamemap->replayinfo->actmemstream;
+         
+            stream->writeChar( rpl_runCommandAction );
+            
+            tmemorystreambuf buff;
+            {
+               tmemorystream stream2( &buff, tnstream::writing );
+               cmd.write( stream2 );
+            }
+            
+            // size is counted in 4 Byte chunks, so we need padding bytes
+            int size = (buff.getSize()+3)/4;
+            stream->writeInt( size + 1 );
+            
+            int padding = size*4 - buff.getSize();
+            stream->writeInt( padding );
+            
+            buff.writetostream( stream );
+            for ( int i = 0; i < padding;++i )
+               stream->writeChar( 255-i );
+         }
+      }
+};
+
+
+void closePlayerReplayLogging( Player& player )
+{
+   LogActionIntoReplayInfo lairi( player.getParentMap() );
+   player.getParentMap()->actions.saveActionsToReplay( lairi );
+}
+
+
+
+
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
+   LogActionIntoReplayInfo lairi( actmap );
+   actmap->actions.saveActionsToReplay( lairi );
+   actmap->actions.breakUndo();
+   
    char action = _action;
    if ( actmap->replayinfo && actmap->replayinfo->actmemstream && !actmap->replayinfo->stopRecordingActions) {
       pnstream stream = actmap->replayinfo->actmemstream;
@@ -1868,7 +1918,7 @@ void trunreplay :: execnextreplaymove ( void )
                            tfield* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
-                              fld -> putmine ( col, typ, strength );
+                              fld -> putmine ( col, MineTypes(typ), strength );
                               if ( nwid >= 0 ) {
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {
@@ -2434,7 +2484,9 @@ void trunreplay :: execnextreplaymove ( void )
                if ( jd.available( veh )) {
                   displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
                   ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
-                  if ( !jd.jump(veh, MapCoordinate(x,y), &rmd ))
+                  Context context = createContext( actmap );
+                  context.display = &rmd;
+                  if ( !jd.jump(veh, MapCoordinate(x,y), context ))
                      error(MapCoordinate(x,y), "Unit cannot jump to this position");
                   
                } else
@@ -2504,7 +2556,37 @@ void trunreplay :: execnextreplaymove ( void )
             }
             break;
 
+      case rpl_runCommandAction:
+         {
+            stream->readInt();
+            int padding = stream->readInt();
+            tmemorystreambuf buffer;
+            buffer.readfromstream( stream );
+            
+            tmemorystream memstream( &buffer, tnstream::reading );
+            
+            Command* a = dynamic_cast<Command*> ( GameAction::readFromStream( memstream, actmap ));
+            
+            for ( int i = 0; i < padding;++i ) {
+               char c = stream->readChar();
+               if ( c != 255-i )
+                  error("invalid padding bytese in command action storage buffer");
+            }
+            readnextaction();
+            
+            if ( a ) {
+               ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
+               Context c = createContext( actmap );
+               c.display = &rmd;
 
+               ActionResult res = a->redo( c );
+               if ( !res.successful() )
+                  error("action " + a->getDescription() + " failed");
+            } else
+               error("could not read Command action from replay stream" );
+         }
+         break;
+               
       default:{
                  int size = stream->readInt();
                  for ( int i = 0; i< size; i++ )
@@ -2710,4 +2792,5 @@ void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticState
 void hookReplayToSystem()
 {
    DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
+   // postActionExecution.connect( SigC::slot( &logActiontoreplayinfo ));
 }

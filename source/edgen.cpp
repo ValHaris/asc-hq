@@ -38,7 +38,7 @@
                int action;
                void init(void);
                void showmap(void);
-               void generatefinishmap(void); // Bodensch„tze werden nicht draufmontiert, damit keine Farbverf„lschung
+               void generatefinishmap(void); // Bodenschï¿½tze werden nicht draufmontiert, damit keine Farbverfï¿½lschung
                void montlayer(int layer);
                void showmontlayer( int sx, int sy, int barsize);
                void setpfield(int number);
@@ -286,7 +286,7 @@ void tmapgenerator::showmontlayer(int sx, int sy, int barsize)
    if (sx == centerlayer) sx = prevx;
    if (sy == centerlayer) sy = prevy;
 
-   /*byte *constlayer2 = new ( byte[plasma.maxx * plasma.maxy + 4]); // =blockcount + 2 * word fr x/y-size
+   /*byte *constlayer2 = new ( byte[plasma.maxx * plasma.maxy + 4]); // =blockcount + 2 * word fï¿½r x/y-size
    (word *) constlayer2[0] = plasma.maxx;
    (word *) constlayer2[1] = plasma.maxy;
 
@@ -358,9 +358,9 @@ void tmapgenerator::generatefinishmap(void)
    if ( (showdesert == true ) && (initialized[2] == true ) ) montlayer(2);
 }
 
-// Karte wird aufgrund von Farben bernommen !!!
-// Wenn bodensch„tze in der fertigen karte eingezeichnet werden, dann gibt das Fehler,
-// weil dann die Farben fr die terrain nicht mehr stimmen !!!
+// Karte wird aufgrund von Farben ï¿½bernommen !!!
+// Wenn bodenschï¿½tze in der fertigen karte eingezeichnet werden, dann gibt das Fehler,
+// weil dann die Farben fï¿½r die terrain nicht mehr stimmen !!!
 
 
 
@@ -609,8 +609,8 @@ void         tmapgenerator::run(void)
    if (action == 2) setmap();
    for (int i=0;i<layercount ;i++ ) {
       if (initialized[i]) { 
-         asc_free(mblocks[i]->mempointer);
-         asc_free(mblocks[i]);
+         free(mblocks[i]->mempointer);
+         free(mblocks[i]);
       }
    } /* endfor */
 } 
@@ -633,7 +633,7 @@ void         tmapgenerator::buttonpressed(int id)
                    plasma.memblock->color[3] = cshallowwater;
                    plasma.memblock->color[4] = cland;
                    plasma.memblock->color[5] = cmount;
-                   plasma.memblock->tilevalcount = 5; // {anzahl Values -1 ( immer h”chster Wert in der [-Klammer) Montlayer „ndern !!!}
+                   plasma.memblock->tilevalcount = 5; // {anzahl Values -1 ( immer hï¿½chster Wert in der [-Klammer) Montlayer ï¿½ndern !!!}
                    strcpy(plasma.memblock->bordername[0],"Deep-water");
                    strcpy(plasma.memblock->bordername[1],"Medium-water");
                    strcpy(plasma.memblock->bordername[2],"Shallow-water");

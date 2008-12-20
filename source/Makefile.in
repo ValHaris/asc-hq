@@ -100,6 +100,9 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LDFLAGS = @LDFLAGS@
+LEX = @LEX@
+LEXLIB = @LEXLIB@
+LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBBZ2 = @LIBBZ2@
 LIBCURL = @LIBCURL@
 LIBCURL_CPPFLAGS = @LIBCURL_CPPFLAGS@
@@ -110,6 +113,8 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LUA_FLAGS = @LUA_FLAGS@
+LUA_LIBS = @LUA_LIBS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -212,7 +217,7 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = @GENCL@ docs libs sdl ai graphics network dialogs widgets actions video unix tools doc win32 
+SUBDIRS = @GENCL@ docs libs sdl util ai graphics network dialogs widgets actions tasks lua video unix tools doc win32 
 EXTRA_DIST = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/clparser/*.cpp $(srcdir)/clparser/*.h $(srcdir)/clparser/Makefile.am $(srcdir)/clparser/Makefile.in
 all: all-recursive
 

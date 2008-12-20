@@ -88,7 +88,8 @@ enum trpl_actions { rpl_attack,
                     rpl_reactionFireOn,
                     rpl_reactionFireOff,
                     rpl_selfdestruct,
-                    rpl_cancelResearch };
+                    rpl_cancelResearch,
+                    rpl_runCommandAction };
 
 extern void logtoreplayinfo ( trpl_actions action, ... );
 
@@ -150,6 +151,10 @@ extern void runSpecificReplay( int player, int viewingplayer, bool performEndTur
 
 //! runs the replay of the current player. This is used primarily for debugging the replay system
 extern void viewOwnReplay( Player& player );
+
+//! closes the replay recording for this players turn. It writes all pending actions to the replay
+extern void closePlayerReplayLogging( Player& player );
+
 
 //! initialized the replay system at program startup
 extern void hookReplayToSystem();

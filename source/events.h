@@ -115,9 +115,7 @@ extern volatile tmousesettings mouseparams;
  ***************************************************************************/
 
 
- #ifdef _SDL_
   #include "sdl/keysymbols.h"
- #endif
 
  typedef int tkey;
 

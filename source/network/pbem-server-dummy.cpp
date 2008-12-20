@@ -26,7 +26,7 @@
 */
 
 #include "pbem-server.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 
 PBEMServer::PBEMServer() {};
 ASCString PBEMServer::getDefaultServerAddress() { return "not supported"; };

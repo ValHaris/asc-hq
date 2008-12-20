@@ -1653,7 +1653,7 @@ void         UnitPropertyEditor::init(  )
       int h,w;
       getpicsize ( pic, w, h );
       putspriteimage ( x1 + x - w/2, y1 + y - h/2, pic );
-      asc_free( pic );
+      free( pic );
   } /*Buttons 14 - 14 +sidenum*/
 
    // unit->paint( getActiveSurface(), SPoint( dirx + x1 - fieldsizex/2 ,diry + y1 - fieldsizey/2));

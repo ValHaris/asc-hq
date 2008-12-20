@@ -108,12 +108,12 @@ tvirtualscreenbuf :: tvirtualscreenbuf ( void )
 void tvirtualscreenbuf:: init ( void )
 {
    size = hgmp->bytesperscanline * hgmp->resolutiony;
-   buf = asc_malloc( size );
+   buf = malloc( size );
 }
 
 tvirtualscreenbuf:: ~tvirtualscreenbuf ()
 {
-   asc_free( buf );
+   free( buf );
    buf = NULL;
 }
 
@@ -1208,7 +1208,7 @@ void         tdialogbox::buildgraphics(void)
       mousevisible(false);
 
    if ( !(dlg_mode & 2) ) {
-      tp = asc_malloc ( imagesize (x1,y1,x1 + xsize,y1 + ysize ) );
+      tp = malloc ( imagesize (x1,y1,x1 + xsize,y1 + ysize ) );
       getimage(x1,y1,x1 + xsize,y1 + ysize,tp);
       imagesaved = true; 
    }
@@ -1251,7 +1251,7 @@ void         tdialogbox::done(void)
             ::repaintDisplay();
          else    
             putimage(x1,y1,tp);
-         asc_free ( tp );
+         free ( tp );
       }
       npop( activefontsettings );
       if (ms == 2)
@@ -1402,7 +1402,7 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
             activefontsettings.justify = lefttext;
             activefontsettings.length = (Uint16) (pb->x2 - pb->x1 - 20 );
 
-            void* buf = asc_malloc ( imagesize ( x1 + pb->x1, starty, x1 + pb->x2, starty + height ));
+            void* buf = malloc ( imagesize ( x1 + pb->x1, starty, x1 + pb->x2, starty + height ));
             getimage( x1 + pb->x1, starty, x1 + pb->x2, starty + height, buf );
 
             bar ( x1 + pb->x1, starty, x1 + pb->x2, starty + height, lightgray );
@@ -1437,7 +1437,7 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
             mousevisible(false);
 
             putimage ( x1 + pb->x1, starty, buf );
-            asc_free ( buf );
+            free ( buf );
             mousevisible(true);
             enablebutton( pb->id );
             if ( oldpos != *pos )
@@ -3279,7 +3279,7 @@ void         thelpsystem::done(void)
    while (firstpict != NULL) { 
       pic1 = firstpict; 
       firstpict = firstpict->next; 
-      asc_free ( pic1->pict );
+      free ( pic1->pict );
       delete ( pic1 );
    }
 }

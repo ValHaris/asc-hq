@@ -13,7 +13,7 @@
 #include <winuser.h>
 
 #include "win32-errormsg.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 
 
 void Win32IoErrorHandler::printError( const ASCString& msg )

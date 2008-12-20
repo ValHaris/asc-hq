@@ -73,7 +73,7 @@ bool JumpDrive::getFields( const Vehicle* subject )
    return destinations.size() > 0;
 }
 
-bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination, MapDisplayInterface* mapDisplay )
+bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination, const Context& context )
 {
    if ( !available(subject ))
       return false;
@@ -101,8 +101,8 @@ bool JumpDrive::jump( Vehicle* subject, const MapCoordinate& destination, MapDis
    SoundList::getInstance().playSound ( SoundList::jumpdrive, 0 );
 
 
-   srfu.checkfield( dest3D, subject, mapDisplay );
-   srfu.finalCheck( mapDisplay, subject->getOwner() );
+   srfu.checkfield( dest3D, subject, context );
+   srfu.finalCheck( subject->getOwner(), context );
 
 
    subject = map->getUnit ( networkID );

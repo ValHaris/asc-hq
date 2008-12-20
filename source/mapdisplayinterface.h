@@ -34,6 +34,7 @@ class MapDisplayInterface {
            virtual void stopAction ( void ) = 0;
            virtual void cursor_goto ( const MapCoordinate& pos ) = 0;
            virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) = 0;
+           virtual void displayActionCursor ( const MapCoordinate& pos1, const MapCoordinate& pos2 ) { displayActionCursor(pos1.x,pos1.y, pos2.x,pos2.y); };
            virtual void removeActionCursor ( void ) = 0;
            virtual void updateDashboard () = 0;
            virtual void repaintDisplay () = 0;

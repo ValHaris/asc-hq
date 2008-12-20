@@ -23,7 +23,7 @@
 #include "../basegfx.h"
 #include "../global.h"
 #include "../ascstring.h"
-#include "../messaginghub.h"
+#include "../util/messaginghub.h"
 
 
 #include "sdlstretch.cpp"

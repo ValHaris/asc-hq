@@ -57,6 +57,9 @@ class Object : public AgeableItem {
        void setdir ( int dir );
        int  getdir ( void );
 
+       void write ( tnstream& stream );
+       void read ( tnstream& stream );
+       
 };
 
 const int cminenum = 4;

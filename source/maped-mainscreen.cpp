@@ -767,70 +767,90 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
          case SDLK_F4 : execaction_ev(act_selobjectAll);
                         return true;
 
-         case SDLK_a:  execaction_ev(act_setupalliances);
-                        return true;
-   
-         case SDLK_b:  execaction_ev(act_toggleresourcemode);
-                        return true;
-   
-         case SDLK_c:  execaction_ev(act_copyToClipboard);
-                        return true;
-
-         case SDLK_f: execaction_ev(act_createresources);
-                        return true;
-   
-         case SDLK_g: execaction_ev(act_maptopcx);
-                        return true;
-   
-         case SDLK_h: execaction_ev(act_setunitfilter);
-                        return true;
-   
-         case SDLK_i: execaction_ev (act_import_bi_map );
-                        return true;
-   
-         case SDLK_l: execaction_ev(act_loadmap);
-                        return true;
-   
-         case SDLK_m: execaction_ev(act_changemapvals);
-                        return true;
-   
-         case SDLK_n: execaction_ev(act_newmap);
-                        return true;
-   
-         case SDLK_o: execaction_ev(act_polymode);
-                        return true;
-   
-         case SDLK_p: execaction_ev(act_changeproduction);
-                        return true;
-   
-         case SDLK_q: execaction_ev(act_end);
-                        return true;
-                        
-         case SDLK_r: execaction_ev(act_repaintdisplay);
-                        return true;
-   
-         case SDLK_s : execaction_ev(act_savemap);
-                        return true;
-
-         case SDLK_u: execaction_ev(act_unitinfo);
-                        return true;
-   
-         case SDLK_v: execaction_ev(act_pasteFromClipboard);
-                        return true;
-   
-         case SDLK_w: execaction_ev(act_setactweatherglobal);
-                        return true;
-
-         case SDLK_x: execaction_ev(act_cutToClipboard);
-                        return true;
-
          case SDLK_SPACE: execaction_ev( act_primaryAction );
                         return true;
                         
-                                                
          default:;
    
        } 
+      switch ( key->keysym.unicode ) {
+         case 1:  // A
+            execaction_ev(act_setupalliances);
+            return true;
+   
+         case 2:  // B
+            execaction_ev(act_toggleresourcemode);
+            return true;
+   
+         case 3:  // C
+            execaction_ev(act_copyToClipboard);
+            return true;
+
+         case 6: // F
+            execaction_ev(act_createresources);
+            return true;
+   
+         case 7: //G
+            execaction_ev(act_maptopcx);
+            return true;
+   
+         case 8:  // H
+            execaction_ev(act_setunitfilter);
+            return true;
+   
+         case 9:  // I
+            execaction_ev (act_import_bi_map );
+            return true;
+   
+         case 12:  // L
+            execaction_ev(act_loadmap);
+            return true;
+   
+         case 13:  // M
+            execaction_ev(act_changemapvals);
+            return true;
+   
+         case 14:  // N
+            execaction_ev(act_newmap);
+            return true;
+   
+         case 15:  // O
+            execaction_ev(act_polymode);
+            return true;
+   
+         case 16:  // P
+            execaction_ev(act_changeproduction);
+            return true;
+   
+         case 17:  // Q
+            execaction_ev(act_end);
+            return true;
+                        
+         case 18: // R
+            execaction_ev(act_repaintdisplay);
+            return true;
+   
+         case 19 :  // S
+            execaction_ev(act_savemap);
+            return true;
+
+         case 21: // U
+            execaction_ev(act_unitinfo);
+            return true;
+   
+         case 22:  // V
+            execaction_ev(act_pasteFromClipboard);
+            return true;
+   
+         case 23: // W
+            execaction_ev(act_setactweatherglobal);
+            return true;
+
+         case 24: // X
+            execaction_ev(act_cutToClipboard);
+            return true;
+
+      }
    }
 
    if ( mod & KMOD_SHIFT ) {

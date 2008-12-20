@@ -76,17 +76,20 @@ nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	fieldimageloader.$(OBJEXT) iconrepository.$(OBJEXT) \
 	overviewmapimage.$(OBJEXT) mapfield.$(OBJEXT) \
 	objects.$(OBJEXT) overviewmappanel.$(OBJEXT) \
-	messaginghub.$(OBJEXT) explosivemines.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT) playercolor.$(OBJEXT) \
-	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
-	mapimageexport.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
-	windowing.$(OBJEXT)
+	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
+	playercolor.$(OBJEXT) player.$(OBJEXT) \
+	cannedmessages.$(OBJEXT) mapimageexport.$(OBJEXT) \
+	mainscreenwidget.$(OBJEXT) windowing.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+	$(top_builddir)/source/util/libutil.la \
+	$(top_builddir)/source/actions/libactions.la \
+	$(top_builddir)/source/actions/libdirectunitactions.la \
+	$(top_builddir)/source/actions/libmapactions.la \
 	$(top_builddir)/source/graphics/libgraphics.la \
 	$(top_builddir)/source/dialogs/libdialogs.la \
 	$(top_builddir)/source/dialogs/libmapeddialogs.la \
@@ -157,6 +160,9 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDADDLIBBZ2 = @LDADDLIBBZ2@
 LDFLAGS = @LDFLAGS@
+LEX = @LEX@
+LEXLIB = @LEXLIB@
+LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBBZ2 = @LIBBZ2@
 LIBCURL = @LIBCURL@
 LIBCURL_CPPFLAGS = @LIBCURL_CPPFLAGS@
@@ -167,6 +173,8 @@ LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
+LUA_FLAGS = @LUA_FLAGS@
+LUA_LIBS = @LUA_LIBS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -287,12 +295,16 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-messaginghub.cpp explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp \
+explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
 $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
+$(top_builddir)/source/util/libutil.la  \
+$(top_builddir)/source/actions/libactions.la  \
+$(top_builddir)/source/actions/libdirectunitactions.la  \
+$(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/network/libnetwork.la \
@@ -411,7 +423,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapimageexport.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mappolygons.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messages.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/messaginghub.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/music.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/networkinterface.Po@am__quote@

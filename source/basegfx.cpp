@@ -1178,7 +1178,7 @@ void* uncompress_rlepict ( void* pict )
       getpicsize( pict, w, h );
       w++;
       h++;
-      void* newbuf = asc_malloc ( w * h + 4 );
+      void* newbuf = malloc ( w * h + 4 );
       Uint16* wp = (Uint16*) newbuf;
       char* dest = (char*) newbuf;
       wp[0] = w-1;
@@ -1258,7 +1258,7 @@ tinitgfxengine::tinitgfxengine ( void )
    hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparameters;
    agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
    activepalette256 = (dacpalette256*) &activepalette;
-   xlatbuffer = asc_malloc ( xlatbuffersize );
+   xlatbuffer = malloc ( xlatbuffersize );
 }
 
 
@@ -1266,7 +1266,7 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
 {
    agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
    oldparams = *agmp ;
-   char* cbuf = (char*) asc_malloc ( x * y * depth/8 );
+   char* cbuf = (char*) malloc ( x * y * depth/8 );
    if ( !cbuf )
       throw fatalgraphicserror ( "could not allocate memory !");
 
@@ -1318,7 +1318,7 @@ tvirtualdisplay :: tvirtualdisplay ( int x, int y, int color, int depth )
 tvirtualdisplay :: ~tvirtualdisplay ( )
 {
    delete agmp->surface;
-   asc_free (  buf ) ;
+   free (  buf ) ;
    *agmp = oldparams;
 }
 

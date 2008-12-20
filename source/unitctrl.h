@@ -35,7 +35,7 @@
 
 
 /** \file unitctrl.h
-   New system for actions performed by units
+   system for actions performed by units
    This design is considered a failure, it won't be used for any new code
 */
 
@@ -43,8 +43,6 @@
 #error The mapeditor does not need any pathfinding
 #endif
 
-
-extern SigC::Signal0<void> fieldCrossed;
 
 
 template<class T>
@@ -137,7 +135,7 @@ class BaseVehicleMovement : public VehicleAction {
             protected:
                Vehicle* vehicle;
 
-               int moveunitxy ( AStar3D::Path& pathToMove, int noInterrupt = -1 );
+               int moveunitxy ( AStar3D::Path& pathToMove, const Context& context, int noInterrupt = -1 );
 
                class PathFinder : public AStar3D {
                  public:
@@ -442,7 +440,6 @@ class PendingVehicleActions {
             VehicleMovement* move;
             IncreaseVehicleHeight* ascent;
             DecreaseVehicleHeight* descent;
-            VehicleAttack* attack;
             VehicleService* service;
             NewVehicleService* newservice;
             ~PendingVehicleActions ( );

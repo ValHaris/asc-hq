@@ -217,7 +217,12 @@ void ObjectType::realDisplay ( Surface& surface, const SPoint& pos, int dir, int
       flip = weatherPicture[weather].flip[dir];
 
    if ( displayMethod==1 ) { // SHADOW: buried pipeline, tracks, ...
-      megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(getPicture( dir, weather), surface, pos, nullParam, 0.7, flip, nullParam); 
+      const Surface& s = getPicture( dir, weather);
+      if ( dir != 0 && rotateImage ) {
+         megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_CacheRotation,TargetPixelSelector_All>(s, surface, pos, nullParam,0.7,make_pair(&s,directionangle[dir%6]),nullParam); 
+      } else {
+         megaBlitter<ColorTransform_None, ColorMerger_AlphaLighter, SourcePixelSelector_DirectFlip,TargetPixelSelector_All>(s, surface, pos, nullParam, 0.7, flip, nullParam); 
+      }
    } else
       if ( displayMethod == 2 ) {  // translation
          const Surface& s = getPicture( dir, weather);

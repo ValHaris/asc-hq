@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "stdio-errorhandler.h"
-#include "messaginghub.h"
+#include "util/messaginghub.h"
 
 void StdIoErrorHandler::printStdout( const ASCString& msg )
 {

@@ -25,6 +25,7 @@
 
 class BuildingType;
 
+class Context;
 
 class UnitHooveringLogic {
    //! the percentage of fuel that is required for a flying plane just hoovering in the air (unit: percentage)
@@ -89,6 +90,9 @@ class UnitHooveringLogic {
 
     //! the the unit and all cargo to #attacked = true
     void setAttacked();
+    
+    //! the the unit and (optionally) all cargo to #attacked = true
+    void setAttacked( bool recursive, const Context& context );
 
     //! the current level of height ( BITMAPPED ! )
     int          height;
@@ -167,6 +171,12 @@ class UnitHooveringLogic {
      */
     void setMovement ( int newmove, double cargoDivisor = -1 );
 
+    //! set the movement this unit and (optionally) all cargo to 0
+    void clearMovement( bool recursive, const Context& context );
+    void setMovement( int newmove, bool recursive, const Context& context );
+    void decreaseMovement( float fraction, bool recursive, const Context& context );
+    void decreaseMovementAbs( int reduction, bool recursive, const Context& context );
+    
     //! did the unit move this turn
     bool hasMoved ( void ) const;
 
@@ -190,7 +200,7 @@ class UnitHooveringLogic {
     /** add the objects like tracks or broken ice
         \returns true if any objects were created
     */
-    bool spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest );
+    bool spawnMoveObjects( const MapCoordinate& start, const MapCoordinate& dest, const Context& context );
 
     //! @name Resource related functions
     //@{
@@ -278,18 +288,23 @@ class UnitHooveringLogic {
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)
     void setnewposition ( int x, int y );
     void setnewposition ( const MapCoordinate& mc );
+    void setnewposition ( const MapCoordinate& mc, const Context& context );
 
     /** converts the unit so it is owned by 'player'. Note that the player is passed
-        as parameter (values [0..8]), and not his color (which would be the values
-        [0,8,16,..,64] )
+        as parameter (values [0..8]) )
     */
-    void convert ( int player );
+    void convert ( int player, bool recursive = true );
+    
+    
+    //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
+    void registerForNewOwner( int player );
 
     //! sets the status of the unit's energy generator
     void setGeneratorStatus( bool status );
     bool getGeneratorStatus () const { return generatoractive; };
 
     //! callback that is called after the unit has attacked
+    void postAttack( bool reactionFire, const Context& context );
     void postAttack( bool reactionFire );
 
     /** adds the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
@@ -299,19 +314,14 @@ class UnitHooveringLogic {
     /** removes the units view to the map. The view must then be evaluated by functions like #evaluateviewcalculation ( GameMap*, int)
         \sa viewcalculation.cpp */
     void removeview();
+    
+    /** resets the internal view state, so that addview() can be executed again */
+    void resetview();
 
     /** returns true if the units view is currently added to the maps global visibility.
         \sa viewcalculation.cpp */
     bool isViewing ( ) const { return viewOnMap; };
     const SingleWeapon *getWeapon( unsigned weaponNum );
-
-
-    /** searches for mineral resources.
-        \returns > 0 on success ; < 0 on failure (error number is returned => message.txt )
-    */
-    int searchForMineralResources( ) const;
-
-//    bool searchForMineralResourcesAvailable();
 
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;
