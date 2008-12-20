@@ -37,7 +37,7 @@ $(top_builddir)/source/actions/libdirectunitactions.la  \
 $(top_builddir)/source/actions/libfullgameactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/actions/libmiscactions.la  \
-$(top_builddir)/source/lua/libluainterface.la  \
+@LUA_LOCAL_LIB@  \
 $(top_builddir)/source/util/libutil.la  $(top_builddir)/source/tasks/libtasks.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \

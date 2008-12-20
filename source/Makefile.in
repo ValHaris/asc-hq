@@ -54,7 +54,6 @@ RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -115,6 +114,8 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LUA_FLAGS = @LUA_FLAGS@
 LUA_LIBS = @LUA_LIBS@
+LUA_LOCAL_LIB = @LUA_LOCAL_LIB@
+LUA_MAKEDIR = @LUA_MAKEDIR@
 LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
@@ -218,8 +219,9 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = @GENCL@ docs libs sdl util ai graphics network dialogs widgets actions tasks lua video unix tools doc win32 
+SUBDIRS = @GENCL@ docs libs sdl util ai graphics network dialogs widgets actions tasks @LUA_MAKEDIR@ video unix tools doc win32 
 EXTRA_DIST = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/clparser/*.cpp $(srcdir)/clparser/*.h $(srcdir)/clparser/Makefile.am $(srcdir)/clparser/Makefile.in
+DIST_SUBDIRS = lua
 all: all-recursive
 
 .SUFFIXES:

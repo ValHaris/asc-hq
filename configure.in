@@ -207,6 +207,11 @@ if test "x$LUAAVAIL" = x1; then
    LUA_TAGS="-DLUAINTERFACE"
    AC_SUBST( LUA_TAGS )
    
+   LUA_MAKEDIR=lua
+   AC_SUBST( LUA_MAKEDIR )
+   
+   LUA_LOCAL_LIB='$(top_builddir)/source/lua/libluainterface.la'
+   AC_SUBST( LUA_LOCAL_LIB )
 fi
 
 AC_CHECK_LIB(jpeg, 
