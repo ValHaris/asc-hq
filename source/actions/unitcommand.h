@@ -30,6 +30,7 @@ class UnitCommand : public Command {
    private:
       int unitNetworkID;
    protected:
+      const Vehicle* getUnit() const;
       Vehicle* getUnit();
       int getUnitID() const { return unitNetworkID; };
       

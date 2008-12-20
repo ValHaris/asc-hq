@@ -253,7 +253,12 @@ GameActionID AttackCommand::getID() const
 
 ASCString AttackCommand::getDescription() const
 {
-   return "Attack unit"; 
+   ASCString s = "Attacking "; 
+   s += " " + target.toString();
+   if ( getUnit() ) {
+      s += " with " + getUnit()->getName();
+   }
+   return s;
 }
 
 namespace {

@@ -36,6 +36,9 @@
 #include "gameoptions.h"
 #include "graphics/ColorTransform_PlayerColor.h"
 
+#include "actions/actioncontainer.h"
+#include "widgets/textrenderer.h"
+
 #include "sg.h"
 
 class WeaponInfoLine;
@@ -889,4 +892,24 @@ bool MapInfoPanel::checkBox( bool state, const char* name )
    return true;
 }
 
+
+ActionInfoPanel::ActionInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardPanel( parent, r, "ActionInfo" )
+{
+   ActionContainer::actionListChanged.connect( SigC::slot( *this, &ActionInfoPanel::update ));
+}
+
+void ActionInfoPanel::update( GameMap* map )
+{
+   TextRenderer* text = dynamic_cast<TextRenderer*>( FindChild( "ActionList", true ));
+   if ( text && map) {
+      vector<ASCString> list;
+      map->actions.getActionDescriptions( list );
+      
+      ASCString s;
+      for ( vector<ASCString>::const_iterator i = list.begin(); i != list.end(); ++i )
+         s += *i + "\n";
+      
+      text->SetText( s );
+   }
+}
 

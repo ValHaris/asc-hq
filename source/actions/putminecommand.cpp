@@ -255,7 +255,12 @@ GameActionID PutMineCommand::getID() const
 
 ASCString PutMineCommand::getDescription() const
 {
-   return "Put/remove Object";
+   ASCString s = "Put Mine"; 
+   if ( getUnit() ) {
+      s += " by " + getUnit()->getName();
+   }
+   s += " on " + target.toString();
+   return s;
 }
 
 namespace

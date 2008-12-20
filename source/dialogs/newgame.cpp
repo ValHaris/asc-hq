@@ -477,10 +477,16 @@ bool StartMultiplayerGame::Apply()
                   return false;
                
                filename = fi.name;
+               replay = false;
                return true;
             } else {
                filename =  selectFile( c->file, true );
-               return !filename.empty();
+               if ( filename.empty() ) {
+                  return false;
+               } else {
+                  replay = false;
+                  return true;
+               }
             }
          } else 
             return false;

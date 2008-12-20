@@ -100,4 +100,11 @@ class MapInfoPanel : public DashboardPanel {
 };
 
 
+class ActionInfoPanel : public DashboardPanel {
+   public:
+      ActionInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
+      
+      void update( GameMap* map );
+};
+
 #endif

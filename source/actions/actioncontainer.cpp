@@ -24,7 +24,8 @@
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
 
-SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
+SigC::Signal2<void,GameMap*,const Command&> ActionContainer::postActionExecution;
+SigC::Signal1<void,GameMap*> ActionContainer::actionListChanged;
 
 
 ActionContainer::ActionContainer( GameMap* gamemap )
@@ -44,6 +45,7 @@ void ActionContainer::add( Command* action )
    currentPos = actions.end();
    
    postActionExecution( map, *action );
+   actionListChanged(map);
 }
 
 void ActionContainer::undo( const Context& context )
@@ -59,6 +61,7 @@ void ActionContainer::undo( const Context& context )
    } catch ( ActionResult result ) {
       errorMessage(result.getMessage());
    }
+   actionListChanged(map);
 }
 
 
@@ -73,6 +76,7 @@ void ActionContainer::redo( const Context& context )
    } catch ( ActionResult result ) {
       errorMessage(result.getMessage());
    }
+   actionListChanged(map);
 }
 
 void ActionContainer::breakUndo()
@@ -81,6 +85,8 @@ void ActionContainer::breakUndo()
       delete *i;
    actions.clear();
    currentPos=actions.end();
+   
+   actionListChanged(map);
 }
 
 void ActionContainer::saveActionsToReplay( ReplayStorage& replay )
@@ -127,6 +133,14 @@ void ActionContainer::write ( tnstream& stream )
    }
    stream.writeInt( counter );
    
+}
+
+void ActionContainer::getActionDescriptions( vector<ASCString>& list )
+{
+   list.clear();  
+   for ( Actions::iterator i = actions.begin(); i != currentPos; ++i )
+      list.push_back( (*i)->getDescription() );
+
 }
 
 ASCString ActionContainer::getCommands()

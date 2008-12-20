@@ -40,12 +40,13 @@ class GameMap;
 class MapCoordinate;
 class WindInfoPanel;
 class MapInfoPanel;
+class ActionInfoPanel;
       
 class ASC_MainScreenWidget : public MainScreenWidget {
       int standardActionsLocked;
    public:
       ASC_MainScreenWidget( PG_Application& application );
-      enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl };
+      enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl, ActionInfo };
       void spawnPanel ( Panels panel );
       void spawnPanel ( const ASCString& panelName );
    
@@ -62,6 +63,7 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       DashboardPanel* unitInfoPanel;
       WindInfoPanel* windInfoPanel;
       MapInfoPanel* mapInfoPanel;
+      ActionInfoPanel* actionInfoPanel;
       
       UnitWeaponRangeLayer* weaponRangeLayer;
       UnitMovementRangeLayer* movementRangeLayer;

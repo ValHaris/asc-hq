@@ -157,7 +157,7 @@ void Menu::setup()
 
    addfield ( "~A~ction" );
    addbutton ( "~U~ndo\tctrl-z", ua_undo );
-   // addbutton ( "~R~edo", ua_redo );
+   addbutton ( "~R~edo\tctrl-shift-z", ua_redo );
 #ifdef LUAINTERFACE
    currentMenu->addSeparator();
    addbutton ( "Save List", ua_writeLuaCommands );
@@ -221,6 +221,8 @@ void Menu::setup()
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
    addbutton ( "Overview Map Panel", ua_viewOverviewMapPanel );
    addbutton ( "Map Control Panel", ua_viewMapControlPanel );
+   addbutton ( "Action Panel",    ua_viewActionPanel );
+
    // addbutton("Weathercast", ua_weathercast);
    currentMenu->addSeparator();
    addbutton ( "Increase Map Zoom\tKP+", ua_increase_zoom );
@@ -535,7 +537,7 @@ void VisibilityLayer::renderText( const MapRenderer::FieldRenderInfo& fieldInfo,
 
 
 ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
-   : MainScreenWidget( application ), standardActionsLocked(0), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL)
+   : MainScreenWidget( application ), standardActionsLocked(0), guiHost(NULL), menu(NULL), unitInfoPanel(NULL), windInfoPanel(NULL), mapInfoPanel(NULL), actionInfoPanel(NULL)
 {
 
    int mapWidth = Width() - 30;
@@ -665,6 +667,8 @@ void ASC_MainScreenWidget::spawnPanel ( const ASCString& panelName )
    if ( panelName == "MapInfo" )
       spawnPanel ( MapControl );
 
+   if ( panelName == "ActionInfo" )
+      spawnPanel ( ActionInfo );
 }
 
 void ASC_MainScreenWidget::spawnPanel ( Panels panel )
@@ -701,6 +705,15 @@ void ASC_MainScreenWidget::spawnPanel ( Panels panel )
          mapInfoPanel = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
       }
       mapInfoPanel->Show();
+   }
+   
+   if ( panel == ActionInfo ) {
+      if ( !actionInfoPanel || !CGameOptions::Instance()->cacheASCGUI ) {
+         delete actionInfoPanel;
+         actionInfoPanel = new ActionInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160) );
+      }
+      actionInfoPanel->Show();
+      actionInfoPanel->update( actmap );
    }
 }
 
@@ -847,6 +860,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev( ua_turnUnitRight );
                return true;
 
+            case SDLK_z:
+               execUserAction_ev( ua_redo );
+               return true;
+               
             default:;
       }
    }

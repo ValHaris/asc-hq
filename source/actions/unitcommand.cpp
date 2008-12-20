@@ -23,7 +23,12 @@
 
 #include "../gamemap.h"
 
-Vehicle* UnitCommand::getUnit()
+const Vehicle* UnitCommand::getUnit() const
+{
+   return getMap()->getUnit( unitNetworkID );
+}
+
+Vehicle* UnitCommand::getUnit() 
 {
    return getMap()->getUnit( unitNetworkID );
 }

@@ -61,9 +61,14 @@ class ActionContainer {
       void write ( tnstream& stream );
       
       ASCString getCommands();
+      
+      void getActionDescriptions( vector<ASCString>& list );
+      
+      static SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
+      
+      static SigC::Signal1<void,GameMap*> actionListChanged;
 };
 
-extern SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
 
 
 #endif

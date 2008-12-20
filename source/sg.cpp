@@ -632,6 +632,16 @@ void undo()
    }
 }
 
+void redo()
+{
+   if ( actmap ) {
+      actmap->actions.redo( createContext( actmap ) );  
+      displaymap();
+      mapChanged(actmap);
+      updateFieldInfo();
+   }
+}
+
 // user actions using the old event system
 void execuseraction ( tuseractions action )
 {
@@ -945,7 +955,11 @@ void execuseraction ( tuseractions action )
       case ua_undo:
          undo();
          break;
+      case ua_redo:
+         redo();
+         break;
 
+         
       default:;
       };
 }
@@ -1264,6 +1278,8 @@ void execuseraction2 ( tuseractions action )
       case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::OverviewMap );
          break;
       case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::MapControl );
+         break;
+      case ua_viewActionPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ActionInfo );
          break;
       case ua_vehicleinfo: unitInfoDialog();
          break;

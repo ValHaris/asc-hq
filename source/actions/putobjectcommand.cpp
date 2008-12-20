@@ -272,11 +272,28 @@ GameActionID PutObjectCommand::getID() const
 
 ASCString PutObjectCommand::getDescription() const
 {
-   return "Put/remove Object";
+   ASCString s;
+   
+   if ( mode == Build )
+      s = "Put ";
+   else
+      s = "Remove ";
+   
+   const ObjectType* obj = getMap()->getobjecttype_byid( object );
+   if ( obj )
+      s += obj->name;
+   else
+      s += "object";
+   
+   if ( getUnit() ) {
+      s += " with " + getUnit()->getName();
+   }
+   s += " at " + target.toString();
+   return s;
 }
 
 namespace
 {
-const bool r1 = registerAction<PutObjectCommand> ( ActionRegistry::PutObjectCommand );
+   const bool r1 = registerAction<PutObjectCommand> ( ActionRegistry::PutObjectCommand );
 }
 

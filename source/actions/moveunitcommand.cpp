@@ -349,7 +349,12 @@ GameActionID MoveUnitCommand::getID() const
 
 ASCString MoveUnitCommand::getDescription() const
 {
-   return "Move unit"; 
+   ASCString s = "Move unit"; 
+   if ( getUnit() ) {
+      s += " " + getUnit()->getName();
+   }
+   s += " to " + destination.toString();
+   return s;
 }
 
 namespace {
