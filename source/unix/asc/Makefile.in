@@ -189,6 +189,7 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 LUA_FLAGS = @LUA_FLAGS@
 LUA_LIBS = @LUA_LIBS@
+LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -292,7 +293,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) -DLUAINTERFACE
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
 nodist_asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp palette.cpp \
 newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
