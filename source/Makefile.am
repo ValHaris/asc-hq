@@ -4,7 +4,7 @@ SUBDIRS 		= @GENCL@ docs libs sdl util ai graphics network dialogs widgets actio
 
 EXTRA_DIST  = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/clparser/*.cpp $(srcdir)/clparser/*.h $(srcdir)/clparser/Makefile.am $(srcdir)/clparser/Makefile.in
 
-DIST_SUBDIRS = lua
+DIST_SUBDIRS = lua @GENCL@ docs libs sdl util ai graphics network dialogs widgets actions tasks video unix tools doc win32 
 
 htmldoc: doxygen.config
 	doxygen doxygen.config
