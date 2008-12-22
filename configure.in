@@ -132,7 +132,7 @@ SAVE_LIBS=$LIBS
 
 AC_ARG_ENABLE( serverinterface, AS_HELP_STRING([--enable-serverinterface],[enables usage of the server interface (experimental)]), SERVERINTERFACE=1 )
 if test "X$SERVERINTERFACE" = "X1"; then
- LIBCURL_CHECK_CONFIG(yes,7.10.0,,AC_LIB_MISSING( curl, http://curl.haxx.se/libcurl/ ))
+ LIBCURL_CHECK_CONFIG(yes,7.10.0,,AC_LIB_MISSING( curl, [http://curl.haxx.se/libcurl/] ))
 else
  LIBCURL=""
  LIBCURL_CPPFLAGS=""
@@ -689,7 +689,6 @@ AC_CONFIG_FILES( [ Makefile \
        source/unix/mapeditor/Makefile \
        source/unix/pbpedit/Makefile \
        source/unix/asc/Makefile \
-       source/tester/Makefile \
        source/win32/Makefile \
        source/win32/msvc/Makefile \
        data/Makefile \

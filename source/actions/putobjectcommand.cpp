@@ -223,10 +223,11 @@ ActionResult PutObjectCommand::go ( const Context& context )
    if ( res.successful() )
       res = (new ChangeUnitMovement( getUnit(), mode==Build ? obj->build_movecost : obj->remove_movecost, true ))->execute(context);
    
-   
-   if ( res.successful() )
+   if ( res.successful() ) {
+      if ( context.display )
+         context.display->repaintDisplay();
       setState( Completed );
-   else
+   } else
       setState( Failed );
    return res;
 
