@@ -1021,6 +1021,10 @@
 					RelativePath="..\..\..\actions\vehicleattack.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\actions\viewregistration.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="utils"

@@ -860,7 +860,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                execUserAction_ev( ua_turnUnitRight );
                return true;
 
-            case SDLK_z:
+            default:;
+      }
+      switch ( key->keysym.unicode ) {
+            case 26:
                execUserAction_ev( ua_redo );
                return true;
                

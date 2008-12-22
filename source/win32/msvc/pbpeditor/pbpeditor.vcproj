@@ -802,6 +802,10 @@
 					RelativePath="..\..\..\actions\unitfieldregistration.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\actions\viewregistration.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
