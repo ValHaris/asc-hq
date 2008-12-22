@@ -19,29 +19,29 @@
 */
 
 
-#ifndef UnitFieldRegistrationH
-#define UnitFieldRegistrationH
+#ifndef ViewRegistrationH
+#define ViewRegistrationH
 
 
-#include "unitaction.h"
+#include "containeraction.h"
 
 
-class UnitFieldRegistration : public UnitAction {
+class ViewRegistration : public ContainerAction {
    public:
-      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D };
+      enum Operation { AddView, RemoveView };
       
-      UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation );
+      ViewRegistration( ContainerBase* container, Operation operation );
       
       ASCString getDescription() const;
    private:
       Operation operation;
-      MapCoordinate3D position;
+      bool evalView;
       
-      MapCoordinate3D previousPosition;
+      int resultingViewChanges;
       
       ASCString getOpName() const;
       
-      UnitFieldRegistration( GameMap* map ) : UnitAction( map ) {};
+      ViewRegistration( GameMap* map ) : ContainerAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
 
       

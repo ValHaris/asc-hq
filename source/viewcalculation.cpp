@@ -29,6 +29,7 @@
 #include "gameeventsystem.h"
 
 #include "actions/changeview.h"
+#include "actions/viewregistration.h"
 
 SigC::Signal0<void> buildingSeen;
 
@@ -500,11 +501,12 @@ VisibilityStates fieldVisibility( tfield* pe, int player, GameMap* gamemap, int 
 #endif
 
 
-RecalculateAreaView :: RecalculateAreaView( GameMap* gamemap, const MapCoordinate& pos, int range ) : active(false)
+RecalculateAreaView :: RecalculateAreaView( GameMap* gamemap, const MapCoordinate& pos, int range, const Context* context ) : active(false)
 {
    position = pos;
    this->range = range;
    this->gamemap = gamemap;
+   this->context = context;
 }
 
 void RecalculateAreaView::removeView()
@@ -516,22 +518,37 @@ void RecalculateAreaView::removeView()
 void RecalculateAreaView::addView()
 {
    circularFieldIterator( gamemap, position, 0, range, FieldIterationFunctor( this, &RecalculateAreaView::addFieldView ));
-   evaluateviewcalculation( gamemap, position, range );
+   evaluateviewcalculation( gamemap, position, range, 0, false, context );
    active = false;
 }
 
 void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
 {
    tfield* fld = gamemap->getField(pos);
-   if ( fld && fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() )
-      fld->getContainer()->removeview();
+   if ( !fld )
+      return;
+   
+   if ( fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) {
+      if ( context ) 
+         (new ViewRegistration( fld->getContainer(), ViewRegistration::RemoveView ))->execute(*context);
+      else 
+         fld->getContainer()->removeview();
+   } 
 }
 
 void RecalculateAreaView::addFieldView( const MapCoordinate& pos )
 {
    tfield* fld = gamemap->getField(pos);
-   if ( fld && fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() )  //excluding neutral buildings here
-      fld->getContainer()->addview();
+   if ( !fld )
+      return;
+   
+   
+   if ( fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) { //excluding neutral buildings here
+      if ( context ) 
+         (new ViewRegistration( fld->getContainer(), ViewRegistration::AddView ))->execute(*context);
+      else
+         fld->getContainer()->addview();
+   }
 }
 
 RecalculateAreaView::~RecalculateAreaView()

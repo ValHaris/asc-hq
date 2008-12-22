@@ -119,8 +119,9 @@
 
      void removeFieldView( const MapCoordinate& pos );
      void addFieldView( const MapCoordinate& pos );
+     const Context* context;
    public:
-      RecalculateAreaView( GameMap* gamemap, const MapCoordinate& pos, int range );
+      RecalculateAreaView( GameMap* gamemap, const MapCoordinate& pos, int range, const Context* context );
       void removeView();
       void addView();
       ~RecalculateAreaView();

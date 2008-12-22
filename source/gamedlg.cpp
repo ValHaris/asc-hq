@@ -1030,11 +1030,13 @@ void         tgiveunitawaydlg :: init( tfield* fld )
 
 void         tgiveunitawaydlg :: buttonpressed ( int id )
 {
-   if ( id == 1 )
+   if ( id == 1 ) {
       if ( markedplayer >= 0 )
          status = 12;
       else
          displaymessage ( "please select the player you want to give your unit to",1);
+   }
+   
    if ( id == 2 )
       status = 10;
 }

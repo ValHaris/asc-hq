@@ -460,7 +460,7 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
-                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
+                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() ) {
                      if ( i->height_abs != 0 && i->height_rel != -100 ) {
                         int h = 0;
                         for ( int hh = 0; hh < 8; ++hh)
@@ -472,6 +472,7 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
                            height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
                         else
                            height |= i->height_abs ;
+                  }
    return height & vehicleType->height;
 }
 
@@ -482,7 +483,7 @@ const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( 
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
-                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
+                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() ) {
                      if ( i->height_abs != 0 && i->height_rel != -100 ) {
                         if ( height & ( i->height_abs & (1 << (getPosition().getNumericalHeight() + i->height_rel ))))
                            return &(*i);
@@ -493,6 +494,7 @@ const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( 
                         } else
                            if ( height & i->height_abs )
                               return &(*i);
+                  }
    return NULL;
 
 }
@@ -508,7 +510,7 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Docking )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
-               if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp))
+               if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {
                   if ( i->dockingHeight_abs != 0 && i->dockingHeight_rel != -100 )
                      height |= i->dockingHeight_abs & (1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel ));
                   else
@@ -516,6 +518,7 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
                         height |= 1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel) ;
                      else
                         height |= i->dockingHeight_abs ;
+               }
    return height;
 }
 

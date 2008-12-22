@@ -1746,7 +1746,7 @@ void trunreplay :: execnextreplaymove ( void )
                               Resources cost;
                               int movecost;
 
-                              RecalculateAreaView rav ( actmap, MapCoordinate(x,y), maxViewRange / maxmalq + 1 );
+                              RecalculateAreaView rav ( actmap, MapCoordinate(x,y), maxViewRange / maxmalq + 1, NULL );
                               
                               bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;
                               if ( objectAffectsVisibility )
@@ -2063,7 +2063,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int nwid = stream->readInt();
                                  readnextaction();
                                  tfield* fld = getfield(x,y);
-                                 if ( !fld->vehicle || fld->vehicle->networkid != nwid && fld->building ) {
+                                 if ( (!fld->vehicle || fld->vehicle->networkid != nwid) && fld->building ) {
                                     ContainerControls cc ( fld->building );
                                     cc.destructUnit( actmap->getUnit( nwid ) );
                                  } else

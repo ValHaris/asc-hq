@@ -43,50 +43,50 @@ AI::AiResult AI::strategy( void )
 
       for ( vector<int>::iterator vi = units.begin(); vi != units.end(); ++vi ) {
          Vehicle* veh = getMap()->getUnit(*vi);
-         if ( veh )
-           if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
-            if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics
-                                  && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat ) {
-               /*
-               int orgmovement = veh->getMovement();
-               int orgxpos = veh->xpos ;
-               int orgypos = veh->ypos ;
-               */
-
-               VehicleMovement vm ( mapDisplay, NULL );
-               if ( vm.available ( veh )) {
-                  MapCoordinate3D dest;
-
-                  AI::Section* sec = sections.getBest ( 0, veh, &dest, true );
-                  if ( sec ) {
-                     int nwid = veh->networkid;
-                     int movement = veh->getMovement();
-                     moveUnit ( veh, dest, false, false );
-
-                     if ( getMap()->getUnit(nwid)) {
-                        AiParameter& aip = *veh->aiparam[getPlayerNum()];
-
-                        aip.dest = dest;
-                        if ( getMap()->getUnit(nwid)->getMovement() < movement )
+         if ( veh ) {
+            if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
+               if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics
+                                    && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat ) {
+                  /*
+                  int orgmovement = veh->getMovement();
+                  int orgxpos = veh->xpos ;
+                  int orgypos = veh->ypos ;
+                  */
+   
+                  VehicleMovement vm ( mapDisplay, NULL );
+                  if ( vm.available ( veh )) {
+                     MapCoordinate3D dest;
+   
+                     AI::Section* sec = sections.getBest ( 0, veh, &dest, true );
+                     if ( sec ) {
+                        int nwid = veh->networkid;
+                        int movement = veh->getMovement();
+                        moveUnit ( veh, dest, false, false );
+   
+                        if ( getMap()->getUnit(nwid)) {
+                           AiParameter& aip = *veh->aiparam[getPlayerNum()];
+   
+                           aip.dest = dest;
+                           if ( getMap()->getUnit(nwid)->getMovement() < movement )
+                              localResult.unitsMoved++;
+                        } else
                            localResult.unitsMoved++;
-                     } else
-                        localResult.unitsMoved++;
+                     }
                   }
                }
+            } else {
+               int nwid = veh->networkid;
+               if ( runUnitTask ( veh ) )
+                  if ( getMap()->getUnit( nwid ) ) {  // the unit still lives
+                     if ( veh->aiparam[getPlayerNum()]->resetAfterJobCompletion )
+                        veh->aiparam[getPlayerNum()]->reset( veh );
+                  }
             }
-          } else {
-            int nwid = veh->networkid;
-            if ( runUnitTask ( veh ) )
-               if ( getMap()->getUnit( nwid ) ) {  // the unit still lives
-                  if ( veh->aiparam[getPlayerNum()]->resetAfterJobCompletion )
-                     veh->aiparam[getPlayerNum()]->reset( veh );
-               }
-          }
-
-         displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );
-
-         checkKeys();
-
+   
+            displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );
+   
+            checkKeys();
+         }
       }
       result += localResult;
    } while ( localResult.unitsMoved );

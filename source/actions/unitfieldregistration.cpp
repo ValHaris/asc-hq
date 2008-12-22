@@ -26,9 +26,8 @@
 #include "../viewcalculation.h"
      
 UnitFieldRegistration::UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation )
-   : UnitAction( vehicle->getMap(), vehicle->networkid), resultingViewChanges(-1)
+   : UnitAction( vehicle->getMap(), vehicle->networkid)
 {
-   evalView = false;
    this->operation= operation;
    this->position = pos;
 }
@@ -70,8 +69,8 @@ void UnitFieldRegistration::readData ( tnstream& stream )
    operation = (Operation) stream.readInt();
    position.read( stream );
    previousPosition.read( stream );
-   evalView = stream.readInt();
-   resultingViewChanges = stream.readInt();
+   stream.readInt();
+   stream.readInt();
 };
       
       
@@ -82,8 +81,8 @@ void UnitFieldRegistration::writeData ( tnstream& stream ) const
    stream.writeInt( (int) operation );
    position.write( stream );
    previousPosition.write( stream );
-   stream.writeInt( evalView );
-   stream.writeInt( resultingViewChanges );
+   stream.writeInt( 0 ); // dummy
+   stream.writeInt( 0 ); // dummy
 };
 
 

@@ -10,7 +10,7 @@ libactions_la_LIBADD		= @SDL_LIBS@
 
 libdirectunitactions_la_SOURCES	=  consumeammo.cpp inflictdamage.cpp destructcontainer.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp \
-                          containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp
+                          containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp
 libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 
 libmiscactions_la_SOURCES	= servicing.cpp jumpdrive.cpp selfdestruct.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp

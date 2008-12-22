@@ -211,11 +211,22 @@ ActionResult PutObjectCommand::go ( const Context& context )
 
    ObjectType* obj = getMap()->getobjecttype_byid( object );
    
+   RecalculateAreaView rav ( actmap, target, maxViewRange / maxmalq + 1, &context );
+      
+
+   bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;
+   if ( objectAffectsVisibility )
+      rav.removeView();
+   
    ActionResult res(0);
    if ( mode == Build ) 
       res = (new SpawnObject(getMap(), target, object ))->execute( context );
    else
       res = (new RemoveObject(getMap(), target, object ))->execute( context );
+   
+   
+   if ( objectAffectsVisibility )
+      rav.addView();
    
    if ( res.successful() ) 
       res = (new ConsumeResource( getUnit(), mode==Build ? obj->buildcost : obj->removecost ))->execute(context);

@@ -1523,22 +1523,7 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
    PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
    if ( num && poc ) {
       poc->setTarget( pos, abs(num) );
-      
-      ObjectType* obj = objectTypeRepository.getObject_byID( abs(num) );
-
-      RecalculateAreaView rav ( actmap, pos, maxViewRange / maxmalq + 1 );
-      
-
-      bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;
-      if ( objectAffectsVisibility )
-         rav.removeView();
-      
-
       ActionResult res = poc->execute( createContext( actmap ));
-
-      if ( objectAffectsVisibility )
-         rav.addView();
-
    } else
       delete NewGuiHost::pendingCommand;
       
@@ -1915,7 +1900,7 @@ void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, i
 {
    if ( pendingVehicleActions.actionType == vat_nothing ) {
       tfield* fld = actmap->getField(pos);
-      if ( fld->vehicle )
+      if ( fld->vehicle ) {
          if ( vehicleBuildingGui.init( fld->vehicle )) {
             moveparams.movestatus = 73;
             NewGuiHost::pushIconHandler( &vehicleBuildingGui );
@@ -1923,6 +1908,7 @@ void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, i
             updateFieldInfo();
          } else
             displaymessage2("no units produceable");
+      }
    }
 }
 

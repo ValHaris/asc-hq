@@ -94,12 +94,13 @@ int  AI :: getBestHeight (  Vehicle* veh )
             if ( threat && threat != 1 )
                value *= ( log ( minAvgFieldThreat ) / log ( threat ) );
          } else {
-            if ( secminAvgFieldThreat < maxfloat)
+            if ( secminAvgFieldThreat < maxfloat) {
                if ( threat && threat != 1 )
                   value *= ( log ( secminAvgFieldThreat ) / log ( threat ) );
                else
                   value *= 1.5; // no threat
             }
+         }
 
          if ( value > bestHeightValue ) {
             bestHeightValue = value;
@@ -661,11 +662,12 @@ int AI:: CheckFieldRecon :: run ( int x, int y)
 void AI::CheckFieldRecon :: testfield ( const MapCoordinate& mc )
 {
    FieldInformation& fi = ai->getFieldInformation ( mc.x, mc.y );
-   if( fi.control != -1 )
+   if( fi.control != -1 ) {
       if ( !actmap->player[player].diplomacy.isHostile( fi.control )  )
          ownFields[dist]++;
       else
          enemyFields[dist]++;
+   }
 }
 
 void AI :: calcReconPositions()

@@ -136,12 +136,12 @@ class StartMultiplayerGame: public ConfigurableWindow {
 
       void showSupervisorWidgets()
       {
-         if ( page == MultiPlayerOptions )
+         if ( page == MultiPlayerOptions ) {
             if ( supervisorEnabled )
                show( "SuperVisor" );
             else
                hide( "SuperVisor" );
-
+         }
       }
       
       bool togglesupervisor( bool on )
@@ -255,12 +255,12 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
     
     
     PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( "Replay", true ));
-    if ( cb )
+    if ( cb ) {
        if ( replay )
          cb->SetPressed( );
        else
          cb->SetUnpressed();
-
+    }
     
     showPage();
     showButtons(false,false,true);
@@ -551,12 +551,12 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
                page = PlayerSetup;
             break;
       case PlayerSetup: 
-            if ( Apply() )
+            if ( Apply() ) {
                if ( mode == PBEM || mode == PBP || mode == PBEM_Server )
                   page = EmailSetup;
                else
                   page = AllianceSetup;
-                  
+            }      
             break;       
       case EmailSetup: 
             if ( Apply() ) {
@@ -729,13 +729,13 @@ bool StartMultiplayerGame::checkPlayerStat()
       bool humanFound = false;
       for ( int i = 0; i < newMap->getPlayerCount(); ++i )
          if ( newMap->player[i].exist() )
-            if ( newMap->player[i].stat == Player::human || newMap->player[i].stat == Player::supervisor )
+            if ( newMap->player[i].stat == Player::human || newMap->player[i].stat == Player::supervisor ) {
                if ( humanFound ) {
                   newMap->player[i].stat = Player::computer;
                   msg += newMap->player[i].getName() + " has been switch to AI\n";
                } else
                   humanFound = true;   
-                  
+            }      
       if ( !humanFound )            
          for ( int i = 0; i < newMap->getPlayerCount(); ++i )
             if ( newMap->player[i].exist() )

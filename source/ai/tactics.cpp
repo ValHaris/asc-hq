@@ -842,7 +842,7 @@ AI::AiResult AI::tactics( void )
             bool processable = true;
             do {
                currentTarget++;
-               if ( currentTarget != targets.end() )
+               if ( currentTarget != targets.end() ) {
                   if ( hemmingBonus == currentTarget->second.size()-1 ) {
                      for ( AffectedFields::iterator i = affectedFields.begin(); i != affectedFields.end(); i++ )
                         for ( MoveVariantContainer::iterator j = currentTarget->second.begin(); j != currentTarget->second.end(); j++ ) {
@@ -854,6 +854,7 @@ AI::AiResult AI::tactics( void )
                         }
                   } else
                      processable = false;
+               }
             } while ( !processable && currentTarget != targets.end() );
 
          } while ( currentTarget != targets.end() );

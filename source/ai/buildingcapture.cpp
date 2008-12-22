@@ -67,7 +67,7 @@ class  SearchReconquerBuilding : public SearchFields {
                                 protected:
                                    AI& ai;
                                    Building* buildingToCapture;
-                                   int mode;        // (1): nur fusstruppen; (2): 1 und transporter; (3): 2 und geb„ude
+                                   int mode;        // (1): nur fusstruppen; (2): 1 und transporter; (3): 2 und gebï¿½ude
                                    vector<Vehicle*> enemyUnits; // that can conquer the building
                                    float getThreatValueOfUnit ( Vehicle* veh );
                                 public:
@@ -102,7 +102,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
       Vehicle* eht = gamemap->getField(mc)->vehicle;
       // Building* bld = getfield(xp,yp)->building;
       if ( eht )
-         if ( ai.getPlayer().diplomacy.isHostile( eht->getOwner() ) )
+         if ( ai.getPlayer().diplomacy.isHostile( eht->getOwner() ) ) {
             if ( canUnitCapture ( eht )) {
                VehicleMovement vm ( NULL );
                if ( vm.available ( eht )) {
@@ -120,7 +120,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
                               if (eht->maxMovement() + (*i)->maxMovement() >= beeline(mc, startPos))
                                  unitfound(eht);
 
-
+         }
 /*
       if ( bld )
          if ( mode >= 3 )
