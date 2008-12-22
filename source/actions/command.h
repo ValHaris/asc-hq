@@ -26,7 +26,7 @@
 
 /** A Command is an action that the user initiates. 
     It contains all the logic about when the command is available .
-    Unlike the atomic actions, it is still be run in a changed environment compared 
+    Unlike the atomic actions, it can still be run in a changed environment compared 
     to the time it was initially issued */
 
 class Command : public GameAction {
