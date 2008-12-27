@@ -77,7 +77,7 @@ void ViewRegistration::writeData ( tnstream& stream ) const
 
 GameActionID ViewRegistration::getID() const
 {
-   return ActionRegistry::UnitFieldRegistration;
+   return ActionRegistry::ViewRegistration;
 }
 
 ActionResult ViewRegistration::runAction( const Context& context )

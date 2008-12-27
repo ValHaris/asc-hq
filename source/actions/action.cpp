@@ -79,7 +79,7 @@ const int gameActionToken = 0x12003496;
       
 void GameAction::read ( tnstream& stream )
 {
-   displayLogMessage(0, "reading " + ASCString::toString(getID()) + "\n");
+   displayLogMessage(1, "reading " + ASCString::toString(getID()) + "\n");
    
    int version = stream.readInt();
    if ( version > currentGameActionVersion )
@@ -89,7 +89,7 @@ void GameAction::read ( tnstream& stream )
    
    int token = stream.readInt();
    if ( token != gameActionToken )
-      throw tinvalidversion ("GameActionToken", gameActionToken, token );
+      throw tinvalidversion ("GameActionToken for id " + ASCString::toString( getID() ), gameActionToken, token );
    
    int childNum = stream.readInt();
    for ( int i = 0; i < childNum; i++ ) {
