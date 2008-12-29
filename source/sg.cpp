@@ -1624,7 +1624,7 @@ int gamethread ( void* data )
    
    displayLogMessage ( 5, "starting music..." );
    startMusic();
-   displayLogMessage ( 5, " done \n" );
+   displayLogMessage ( 5, " done\n" );
    dataLoaderTicker();
    
    repaintDisplay.connect( repaintMap );

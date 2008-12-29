@@ -70,6 +70,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/VERBOSE:LIB "
 				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetype_D.lib libexpat.lib sdl_sound_d.lib libpng13d.lib libcurl_imp.lib revel.lib"
 				ShowProgress="0"
 				OutputFile="$(OutDir)/bin/ASC2-debug.exe"

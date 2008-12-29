@@ -98,7 +98,8 @@ ActionResult PutMineCommand::searchFields()
    objectsCreatable.clear();
    objectsRemovable.clear();
 
-   circularFieldIterator( getMap(), getUnit()->getPosition(), 1, 1, FieldIterationFunctor( this, &PutMineCommand::fieldChecker ));
+   if ( weaponNum >= 0 ) 
+      circularFieldIterator( getMap(), getUnit()->getPosition(), getUnit()->typ->weapons.weapon[weaponNum].maxdistance/10, getUnit()->typ->weapons.weapon[weaponNum].mindistance/10, FieldIterationFunctor( this, &PutMineCommand::fieldChecker ));
 
    if ( objectsRemovable.size() + objectsCreatable.size() ) {
       setState(Evaluated);
