@@ -623,6 +623,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\edittechadapter.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\eventeditor.cpp"
 					>
 				</File>
@@ -688,6 +692,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\widgets\targetcoordinatelocator.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\textrenderer-addons.cpp"
 					>
 				</File>
 				<File

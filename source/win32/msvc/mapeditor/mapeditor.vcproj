@@ -610,6 +610,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\edittechadapter.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\eventeditor.cpp"
 					>
 				</File>
