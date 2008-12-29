@@ -336,12 +336,12 @@ bool ContainerControls::unitTrainingAvailable( Vehicle* veh )
             int num = 0;
             int numsh = 0;
             for (int i = 0; i < veh->typ->weapons.count; i++ )
-               if ( veh->typ->weapons.weapon[i].shootable() )
+               if ( veh->typ->weapons.weapon[i].shootable() ) {
                   if ( veh->ammo[i] )
                      numsh++;
                   else
                      num++;
-
+               }
             if ( num == 0  &&  numsh > 0 )
                return true;
          }

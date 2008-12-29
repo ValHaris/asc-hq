@@ -46,7 +46,7 @@ ActionResult GameAction::execute( const Context& context )
    Context c ( context, this );
    
    try {
-      displayLogMessage(0, "executing " + getDescription() + "\n");
+      displayLogMessage(4, "executing " + getDescription() + "\n");
       ActionResult result = runAction( c );
       Command* command = dynamic_cast<Command*>(this);
       if ( context.actionContainer && result.successful() && !context.parentAction && command)
@@ -63,7 +63,7 @@ void GameAction::undo( const Context& context )
       // displayLogMessage(0, "undoing #" + ASCString::toString((*i)->sequenceNumber) + " (child) " + (*i)->getDescription() + "\n");
       (*i)->undo( context );
    }
-   displayLogMessage(0, "undoing #" + ASCString::toString(sequenceNumber) + " " + getDescription() + "\n");
+   displayLogMessage(4, "undoing #" + ASCString::toString(sequenceNumber) + " " + getDescription() + "\n");
    undoAction( context );
 }
 

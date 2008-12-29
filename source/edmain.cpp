@@ -43,6 +43,7 @@
 #include "cannedmessages.h"
 #include "stdio-errorhandler.h"
 #include "unitset.h"
+#include "widgets/textrenderer-addons.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -60,6 +61,7 @@ pfont load_font(const char* name)
    tnfilestream stream ( name, tnstream::reading );
    return loadfont ( &stream );
 }
+
 
 void loaddata( void ) 
 {
@@ -84,6 +86,7 @@ void loaddata( void )
    schriften.smallsystem = load_font("msystem.fnt");
    schriften.monogui = load_font("monogui.fnt");
 
+   uselessCallToTextRenderAddons();
 }
 
 void buildemptymap ( void )
@@ -186,8 +189,7 @@ void setSaveNotification()
 
 int main(int argc, char *argv[] )
 {
-   // setenv( "DISPLAY", "192.168.0.61:0", 1 );
-   
+ 
    StdIoErrorHandler stdIoErrorHandler(false);
    
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;

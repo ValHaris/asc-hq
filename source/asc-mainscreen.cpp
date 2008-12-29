@@ -621,11 +621,12 @@ void ASC_MainScreenWidget :: lockStandardActions( int dir, int options )
       lockOptionsChanged( lockOptions );
    }
    
-   if ( menu )
+   if ( menu ) {
       if ( standardActionsLocked <= 0 )
          menu->Show();
       else
          menu->Hide();
+   }
 }
 
 

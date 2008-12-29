@@ -847,11 +847,12 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
 void MapInfoPanel::layerChanged( bool state, const ASCString& label )
 {
    PG_CheckButton* cb = dynamic_cast<PG_CheckButton*>( FindChild( label, true ) );
-   if ( cb && ! changeActive ) 
+   if ( cb && ! changeActive ) {
       if ( state )
          cb->SetPressed();
       else
          cb->SetUnpressed();
+   }
 }
 
 bool MapInfoPanel::showWeaponRange()

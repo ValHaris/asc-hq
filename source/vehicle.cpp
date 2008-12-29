@@ -1063,20 +1063,19 @@ void Vehicle :: removeview ()
 
 void Vehicle :: postAttack( bool reactionFire, const Context& context )
 {
-   if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) ) {
-      GameAction* a = new ChangeUnitMovement( getMap(), networkid, maxMovement() * attackmovecost / 100, true );
-      a->execute( context );
-   } else
-      if ( reactionfire.getStatus() == ReactionFire::off ) {
+   if ( !reactionFire ) {
+      if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) ) {
+         int decrease = maxMovement() * attackmovecost / 100;
+         if ( decrease )
+            (new ChangeUnitMovement( getMap(), networkid, decrease, true ))->execute( context );
+      } else {
          GameAction* a = new ChangeUnitMovement( getMap(), networkid, 0 );
          a->execute( context );
       }
       
-   if ( !reactionFire ) {
       GameAction* a = new ChangeUnitProperty( this, ChangeUnitProperty::AttackedFlag, 1 );
       a->execute( context );
    }
-      
 }
 
 void Vehicle :: postAttack( bool reactionFire )

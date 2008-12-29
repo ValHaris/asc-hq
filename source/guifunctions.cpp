@@ -1341,14 +1341,13 @@ class PutMineStage2 : public GuiFunction
       {
          PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
          if ( pmc ) {
+            actmap->cleartemps();
             pmc->setCreationTarget( pos, type );
             ActionResult res = pmc->execute( createContext( actmap ));
             if ( !res.successful() )
                delete NewGuiHost::pendingCommand;
             NewGuiHost::pendingCommand = NULL;
-            actmap->cleartemps();
             updateFieldInfo();
-            displaymap();
          }
       }
 };
@@ -1440,9 +1439,12 @@ class RemoveMine : public GuiFunction
          PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
          if ( pmc ) {
             pmc->setRemovalTarget( pos );
-            pmc->execute( createContext( actmap ));
+            actmap->cleartemps();
+            ActionResult res = pmc->execute( createContext( actmap ));
+            if ( !res.successful() )
+               delete NewGuiHost::pendingCommand;
+            NewGuiHost::pendingCommand = NULL;
             updateFieldInfo();
-            displaymap();
          }
       }
 
@@ -1521,6 +1523,7 @@ checkObject
 void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    PutObjectCommand* poc = dynamic_cast<PutObjectCommand*>(NewGuiHost::pendingCommand);
+   actmap->cleartemps();
    if ( num && poc ) {
       poc->setTarget( pos, abs(num) );
       ActionResult res = poc->execute( createContext( actmap ));
@@ -1529,9 +1532,7 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
       
    NewGuiHost::pendingCommand = NULL;
    
-   actmap->cleartemps();
    NewGuiHost::popIconHandler();
-   repaintMap();
    updateFieldInfo();
 }
 
@@ -1695,7 +1696,6 @@ void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, in
          NewGuiHost::pendingCommand = poc.get();
          poc.release();
          NewGuiHost::pushIconHandler( &objectBuildingGui );
-         
          
          repaintMap();
          updateFieldInfo();

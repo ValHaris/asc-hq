@@ -424,7 +424,7 @@ void tunitattacksunit :: setresult( const Context& context )
       GameAction* d = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::Experience, dv.experience );
       d->execute ( context );
       
-      GameAction* e = new ConsumeAmmo( map, nwid_targ, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackingunit->ammo[ av.weapnum ] - dv.weapcount );
+      GameAction* e = new ConsumeAmmo( map, nwid_targ, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackedunit->ammo[ dv.weapnum ] - dv.weapcount );
       e->execute ( context );
    }
    

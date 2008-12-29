@@ -100,7 +100,9 @@ class TechAdapter: public LoadableItemType {
 };
 
 class TechAdapterDependency {
+   public:
      typedef vector<ASCString> RequiredTechAdapter;
+   private:  
      RequiredTechAdapter requiredTechAdapter;
      bool         requireAllListedTechAdapter;
    public:
@@ -113,6 +115,8 @@ class TechAdapterDependency {
      void runTextIO ( PropertyContainer& pc, const ASCString& defaultTechAdapter = "");
 
      void writeInvertTreeOutput ( const ASCString& tech, tnstream& stream, const vector<IntRange>* onlyWithBaseTechs = NULL ) const;
+     
+     const RequiredTechAdapter& listAdapters() const { return requiredTechAdapter; };
 };
 
 
@@ -169,7 +173,7 @@ class TechAdapterDependency {
    public:
    #endif   
 
-     typedef std::map<ASCString,bool> TriggeredTechAdapter;
+     typedef std::set<ASCString> TriggeredTechAdapter;
      TriggeredTechAdapter triggeredTechAdapter;
 
 
@@ -228,6 +232,10 @@ class TechAdapterDependency {
 
      void setMultiplier( int m ) { multiplier = m; };
      int getMultiplier() { return multiplier; };
+     
+     const vector<ASCString>& getPredefinedTechAdapter() { return predefinedTechAdapter; };
+     void setPredefinedTechAdapter( const set<ASCString>& adapter );
+
      
      Research ( );
      void clear();

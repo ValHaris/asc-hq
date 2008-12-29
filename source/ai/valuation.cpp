@@ -740,7 +740,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                             nac++;
                       }
 
-                   if ( xtogoSec >= 0 && ytogoSec >= 0 )
+                   if ( xtogoSec >= 0 && ytogoSec >= 0 ) {
                       if ( !rfc || rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ))) {
                          int notAccessible = 100 * nac / (nac+ac);
                          if ( notAccessible < 85  && targets ) {   // less than 85% of fields not accessible
@@ -758,7 +758,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                             if ( rfc && rfc->returnFromPositionPossible ( MapCoordinate3D( xtogoSec, ytogoSec, h ), veh->getStorageCapacity().fuel ))
                                sectionsPossibleWithMaxFuell++;
                          }
-
+                   }
                 }
             }
 

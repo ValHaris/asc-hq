@@ -104,6 +104,7 @@ ActionResult RemoveMine::runAction( const Context& context )
       for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i, ++layer ) 
          i->write( memstream );
       fld->mines.clear();
+      return ActionResult(0);
    }
       
   return ActionResult( 21401 );

@@ -55,6 +55,8 @@
 #include "gameevent_dialogs.h"
 #include "dialogs/fileselector.h"
 #include "pgeventsupplier.h"
+#include "dialogs/edittechadapter.h"
+
 
    bool       mapsaved;
 
@@ -3632,111 +3634,12 @@ void editTechAdapter()
       playerRes = chooseString ( "Choose Player", player, buttonsP );
       if ( playerRes.first == 0 && playerRes.second >= 0) {
          int player = playerRes.second;
-
-         pair<int,int> res;
-         do {
-
-            vector<ASCString>& ta = actmap->player[player].research.predefinedTechAdapter;
-            res = chooseString ( "Registered TechAdapter", ta, buttons );
-            if ( res.first == 0 ) {
-               ASCString s = editString( "enter TechAdapter" );
-               if ( !s.empty() ) {
-                  s.toLower();
-                  ta.push_back ( s );
-               }
-            } else
-               if ( res.first == 1 && res.second >= 0 )
-                  ta.erase ( ta.begin() + res.second );
-
-         } while ( res.first != 2 );
+         editTechAdapter(actmap->player[player] );
       }
    } while ( playerRes.first != 1 );
 }
 
-/*
-void resetPlayerData()
-{
-   
-   vector<ASCString> buttonsP;
-   buttonsP.push_back ( "~V~iew" );
-   buttonsP.push_back ( "r~E~search" );
-   buttonsP.push_back ( "~P~roduction" );
-   buttonsP.push_back ( "~U~nits" );
-   buttonsP.push_back ( "~B~uildings" );
-   buttonsP.push_back ( "~R~esource" );
-   buttonsP.push_back ( "~T~ribute" );
-   buttonsP.push_back ( "~c~lose" );
 
-   pair<int,int> playerRes;
-   playerRes.second = -1;
-   do {
-      vector<ASCString> player;
-      for ( int i = 0; i < 8; ++i ) {
-         ASCString s = strrr(i);
-         player.push_back ( s + " " + actmap->player[i].getName() );
-      }
-      player.push_back ( "all" );
-      player.push_back ( "all except " + actmap->player[0].getName() );
-
-      playerRes = chooseString ( "Choose Player", player, buttonsP, playerRes.second );
-
-      for ( int player = 0; player < 8; ++player )
-         if ( playerRes.second == player || playerRes.second == 8 || (playerRes.second == 9 && player != 0 )) {
-            if ( playerRes.first == 0 ) {
-                 for ( int x = 0; x < actmap->xsize; x++ )
-                    for ( int y = 0; y < actmap->ysize; y++ ) {
-                       tfield* fld = actmap->getField(x,y);
-                       fld->setVisibility( visible_not, player );
-                       if ( fld->resourceview )
-                          fld->resourceview->visible &= ~(1<<player);
-                    }
-            }
-            if ( playerRes.first == 1 ) {
-               actmap->player[player].research.progress = 0;
-               actmap->player[player].research.activetechnology = NULL;
-               actmap->player[player].research.developedTechnologies.clear();
-            }
-
-            if ( playerRes.first == 2 ) {
-               for ( Player::BuildingList::iterator i = actmap->player[player].buildingList.begin(); i != actmap->player[player].buildingList.end(); ++i )
-                  (*i)->unitProduction.clear();
-            }
-
-            if ( playerRes.first == 3 ) {
-               while ( actmap->player[player].vehicleList.begin() != actmap->player[player].vehicleList.end() )
-                  delete *actmap->player[player].vehicleList.begin();
-            }
-
-            if ( playerRes.first == 4 ) {
-               while ( actmap->player[player].buildingList.begin() != actmap->player[player].buildingList.end() )
-                  delete *actmap->player[player].buildingList.begin();
-            }
-
-            if ( playerRes.first == 5 ) {
-               for ( Player::BuildingList::iterator i = actmap->player[player].buildingList.begin(); i != actmap->player[player].buildingList.end(); ++i ) {
-                  for ( int j = 0; j < waffenanzahl; ++j )
-                     (*i)->ammo[j] = 0;
-
-                  (*i)->actstorage = Resources();
-               }
-               actmap->bi_resource[player] = Resources();
-            }
-
-            if ( playerRes.first == 5 || playerRes.first == 6 ) {
-               for ( int j = 0; j< 8; ++j ) {
-                  actmap->tribute.avail[player][j] = Resources();
-                  actmap->tribute.avail[j][player]= Resources();
-                  actmap->tribute.paid[player][j] = Resources();
-                  actmap->tribute.paid[j][player]= Resources();
-               }
-            }
-         }
-
-
-   } while ( playerRes.first != 7 );
-   
-}
-*/
 
 tfield*        getactfield(void)
 {

@@ -121,7 +121,7 @@ void FileTransfer::send( const GameMap* map, int lastPlayer, int lastturn )
          command.replaceAll_ci( "$(file)", fname );
          
          ASCString url = fullFile;
-         if ( pathdelimitterstring != "/")
+         if ( pathdelimitterstring != ASCString("/"))
             url.replaceAll(pathdelimitterstring, "/");
          
          if ( url.find('/') == 0 )

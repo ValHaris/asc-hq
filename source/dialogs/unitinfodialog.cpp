@@ -203,11 +203,12 @@ class UnitInfoDialog : public Panel {
             Surface screen = Surface::Wrap( PG_Application::GetScreen() );
 
             if ( name == "unitpad_unitsymbol" ) 
-               if ( vt )
+               if ( vt ) {
                   if ( veh ) 
                      vt->paint( screen, SPoint( dst.x, dst.y ), veh->getMap()->getPlayer(veh).getPlayerColor() );
                   else
                      vt->paint( screen, SPoint( dst.x, dst.y ));
+               }
 
             if ( name == "unitpad_weapon_diagram" ) {
                if ( vt && weaponGraph ) {

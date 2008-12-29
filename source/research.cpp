@@ -777,7 +777,7 @@ void Research::evalTechAdapter()
 {
    for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
       if ( (*i)->available ( *this ))
-         triggeredTechAdapter[(*i)->getName()] = true;
+         triggeredTechAdapter.insert((*i)->getName());
 }
 
 
@@ -786,11 +786,11 @@ ASCString Research::listTriggeredTechAdapter() const
    ASCString s;
    for ( TriggeredTechAdapter::const_iterator i = triggeredTechAdapter.begin(); i != triggeredTechAdapter.end(); ++i ) {
       s += "#fontsize=14# ";
-      s += i->first + "\n";
+      s += *i + "\n";
       s += "#fontsize=10#";
       int counter = 0;
       for ( TechAdapterContainer::iterator j = techAdapterContainer.begin(); j != techAdapterContainer.end(); ++j ) {
-         if ( (*j)->getName() == i->first ) {
+         if ( (*j)->getName() == *i ) {
             if ( counter )
                s += " ----\n";
             ++counter;
@@ -933,6 +933,13 @@ int Research :: currentTechAvailableIn() const
    } else
       return -1;
 }
+
+void Research::setPredefinedTechAdapter( const set<ASCString>& adapter )
+{
+   predefinedTechAdapter.clear();
+   predefinedTechAdapter.insert( predefinedTechAdapter.end(), adapter.begin(), adapter.end());
+}
+
 
 
 Research::~Research () {};
