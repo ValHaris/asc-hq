@@ -271,6 +271,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I $(top_builddir) -I$(top_src_dir)/source
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)  @LokiInclude@

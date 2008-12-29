@@ -232,6 +232,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 INCLUDE = -I$(top_src_dir) -I$(top_builddir)
 noinst_LTLIBRARIES = libSDLmm.la
 AM_CXXFLAGS = @SDL_CFLAGS@ 

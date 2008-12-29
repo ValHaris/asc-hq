@@ -220,6 +220,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 pkgdata_DATA = asc2_dlg.zip
 CLEANFILES = asc2_dlg.zip 
 EXTRA_DIST = $(srcdir)/asc2_dlg.theme $(srcdir)/asc/*

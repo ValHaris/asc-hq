@@ -210,6 +210,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 CLEANFILES = menu*.html noframes.inc 
 EXTRA_DIST = $(srcdir)/*.gif $(srcdir)/entries.txt $(srcdir)/empty.html $(srcdir)/index.html $(srcdir)/graphics/*.jpg

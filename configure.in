@@ -392,7 +392,10 @@ fi
 AC_CHECK_HEADER(expat.h,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
 AC_CHECK_LIB(expat, XML_ParserCreate,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
 
-
+AC_CHECK_PROG(zipfound,zip,yes,no)
+if test $zipfound != yes; then 
+   AC_MSG_ERROR( You need the zip program to build ASC. Please install it )
+fi
 
 EXPAT_INCLUDE=""
 EXPAT_LIB="-lexpat"

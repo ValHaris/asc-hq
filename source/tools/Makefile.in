@@ -224,6 +224,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 SUBDIRS = lib linux
 EXTRA_DIST = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/win/*.vcproj 

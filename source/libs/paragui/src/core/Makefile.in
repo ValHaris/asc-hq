@@ -236,6 +236,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 noinst_LTLIBRARIES = libpgcore.la
 libpgcore_la_SOURCES = \
 	physfsrwops.cpp \

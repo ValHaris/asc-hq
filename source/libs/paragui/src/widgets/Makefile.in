@@ -248,6 +248,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 noinst_LTLIBRARIES = libpgwidgets.la
 libpgwidgets_la_SOURCES = pgbutton.cpp 	pgcheckbutton.cpp 	pgcolumnitem.cpp \
 		pgdropdown.cpp 	pgimage.cpp 	pglabel.cpp 	pglayout.cpp 	pglineedit.cpp \

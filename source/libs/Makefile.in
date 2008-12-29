@@ -221,6 +221,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 SUBDIRS = triangul sdlmm paragui loki-0.1.6 @revellib@ @SdlSoundDir@ @LIBBZ2@ 
 DIST_SUBDIRS = triangul sdlmm paragui loki-0.1.6 revel sdl_sound 

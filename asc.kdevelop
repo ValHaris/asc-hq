@@ -20,7 +20,7 @@
     <general>
       <mainprogram>asc</mainprogram>
       <useconfiguration>default</useconfiguration>
-      <activetarget>source/unix/mapeditor/asc_mapedit</activetarget>
+      <activetarget>source/unix/asc/asc</activetarget>
     </general>
     <configure>
       <configargs/>
@@ -67,6 +67,8 @@
       <group pattern="*.cpp;*.c;*.cc;*.C;*.cxx;*.ec;*.ecpp;*.lxx;*.l++;*.ll;*.l" name="Quellen" />
       <group pattern="AUTHORS;COPYING;ChangeLog;INSTALL;README;TODO;NEWS" name="GNU" />
       <group pattern="*" name="Andere" />
+      <hidenonprojectfiles>false</hidenonprojectfiles>
+      <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
       <hidepatterns>*.o,*.lo,CVS</hidepatterns>
