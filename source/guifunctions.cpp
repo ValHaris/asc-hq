@@ -1527,8 +1527,10 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
    if ( num && poc ) {
       poc->setTarget( pos, abs(num) );
       ActionResult res = poc->execute( createContext( actmap ));
-   } else
+   } else {
       delete NewGuiHost::pendingCommand;
+      repaintMap();
+   }
       
    NewGuiHost::pendingCommand = NULL;
    
