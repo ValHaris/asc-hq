@@ -214,7 +214,7 @@ ActionResult AttackCommand::go ( const Context& context )
     
 }
 
-static const int attackCommandVersion = 1;
+static const int attackCommandVersion = 2;
 
 void AttackCommand :: readData ( tnstream& stream )
 {
@@ -226,6 +226,10 @@ void AttackCommand :: readData ( tnstream& stream )
    targetUnitID = stream.readInt();
    targetBuilding.read( stream );
    weapon = stream.readInt();
+   if ( version >= 2 )
+      kamikaze = stream.readInt();
+   else
+      kamikaze = false;
 }
 
 void AttackCommand :: writeData ( tnstream& stream ) const
@@ -236,7 +240,7 @@ void AttackCommand :: writeData ( tnstream& stream ) const
    stream.writeInt( targetUnitID );
    targetBuilding.write( stream );
    stream.writeInt( weapon );
-   
+   stream.writeInt( kamikaze );   
 }
 
 ASCString AttackCommand :: getCommandString() const {

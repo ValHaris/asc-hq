@@ -2244,7 +2244,7 @@ void BuildingConstruction::search ( const MapCoordinate& pos, int& num, int pass
                if (fld) {
                   if (fld->vehicle != NULL)
                      b = false;
-                  if ( bld->buildingheight <= chfahrend )
+                  if ( bld->height <= chfahrend )
                      if ( bld->terrainaccess.accessible ( fld->bdt ) <= 0 )
                         b = false;
                   if (fld->building != NULL) {

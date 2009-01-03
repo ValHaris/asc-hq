@@ -120,17 +120,11 @@ extern const char*  cbuildingfunctions[];
         //! not used at the moment
         int          technologylevel;
 
-        //! not used at the moment
-        int          researchid;
-
         //! the terrain properties which are necessary for the building to be constructed there
         TerrainAccess terrainaccess;
 
         //! the number of stages that are required to construct a building using a construction unit. Each stage has a separate picture. Range is 1 to 8
         int          construction_steps;
-
-        //! bitmapped: the level of height that this building will reside on.
-        int          buildingheight;
 
         int getMoveMalusType() const {
            return 11;

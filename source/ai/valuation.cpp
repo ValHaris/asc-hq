@@ -264,7 +264,7 @@ void  AI :: calculateThreat ( Building* bld )
 void  AI :: calculateThreat ( Building* bld, int player )
 {
    if ( !bld->aiparam[ player ] )
-      bld->aiparam[ player ] = new AiValue ( log2 ( bld->typ->buildingheight ) );
+      bld->aiparam[ player ] = new AiValue ( log2 ( bld->typ->height ) );
 
    int b;
 

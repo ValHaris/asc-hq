@@ -436,7 +436,7 @@ void BuildingTerrainPage::buildContent() {
   startTable(1, RELATIVE, 100, RELATIVE, 100);
   addConstructionCosts();
   addTREntry("Construction Steps", bt.construction_steps);
-  addTREntry("BuildingLevel", getHeightImgString(bt.buildingheight));
+  addTREntry("BuildingLevel", getHeightImgString(bt.height));
   endTable();
 
   addHeadline("Terrain access", 4);

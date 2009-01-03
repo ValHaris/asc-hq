@@ -285,7 +285,7 @@ EventTrigger::State BuildingSeen::getState( int player )
             tfield* fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
             if ( fld ) {
                int vis = (fld-> visible >> (player*2) ) & 3;
-               if ( bld->typ->buildingheight >= chschwimmend && bld->typ->buildingheight <= chhochfliegend ) {
+               if ( bld->typ->height >= chschwimmend && bld->typ->height <= chhochfliegend ) {
                   if ( vis >= visible_now )
                      cnt++;
                } else {

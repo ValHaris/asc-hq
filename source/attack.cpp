@@ -489,7 +489,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    int targetWeather = getfield(x,y)->getweather();
 
    av.strength  = int (ceil( attackingunit->weapstrength[_weapon]
-                        * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, _attackedbuilding->typ->buildingheight )
+                        * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, _attackedbuilding->typ->height )
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
 
    av.armor = attackingunit->getArmor();
@@ -532,7 +532,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    dv.color      = _attackedbuilding->getOwner();
    dv.initiative = 0;
    dv.kamikaze = 0;
-   dv.height = _attackedbuilding->typ->buildingheight;
+   dv.height = _attackedbuilding->typ->height;
 }
 
 
@@ -871,7 +871,7 @@ AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
                if (angreifer->typ->weapons.weapon[i].shootable() )
                   if (angreifer->typ->weapons.weapon[i].offensive() )
                      if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] > 0 ) {
-                        int tm = efield->building->typ->buildingheight;
+                        int tm = efield->building->typ->height;
                         if (tm & angreifer->typ->weapons.weapon[i].targ) {
                            if (fieldvisiblenow(efield, angreifer->color/8)) {
                               int d = beeline(angreifer->xpos,angreifer->ypos,x,y);

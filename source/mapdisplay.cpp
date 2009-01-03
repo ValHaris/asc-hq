@@ -345,8 +345,8 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
    if ( fieldInfo.visibility > visible_ago ) {
 
       /* display buildings */
-      if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) && fld->building->visible )
-         if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->getOwner() == fieldInfo.playerView ))
+      if ( fld->building  &&  (fld->building->typ->height & binaryUnitHeight) && fld->building->visible )
+         if ((fieldInfo.visibility == visible_all) || (fld->building->typ->height >= chschwimmend) || ( fld->building->getOwner() == fieldInfo.playerView ))
             fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
 
@@ -391,8 +391,8 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
 
    } else {
       if (fieldInfo.visibility == visible_ago ) {
-         if ( fld->building  &&  (fld->building->typ->buildingheight & binaryUnitHeight) && fld->building->visible )
-            if ((fieldInfo.visibility == visible_all) || (fld->building->typ->buildingheight >= chschwimmend) || ( fld->building->getOwner() == fieldInfo.playerView ))
+         if ( fld->building  &&  (fld->building->typ->height & binaryUnitHeight) && fld->building->visible )
+            if ((fieldInfo.visibility == visible_all) || (fld->building->typ->height >= chschwimmend) || ( fld->building->getOwner() == fieldInfo.playerView ))
                fld->building->paintSingleField( fieldInfo.surface, pos, fld->building->getLocalCoordinate( fieldInfo.pos ));
 
       }

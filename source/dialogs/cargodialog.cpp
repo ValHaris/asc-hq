@@ -2149,7 +2149,7 @@ namespace CargoGuiFunctions {
          unit->getMap()->getField( *i)->a.temp = 1;
 
       for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
-         unit->getMap()->getField( *i)->a.temp = 2;
+         unit->getMap()->getField( *i)->a.temp2 = 2;
       
       repaintMap();
       NewGuiHost::pendingCommand = move;

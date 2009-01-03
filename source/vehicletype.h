@@ -187,10 +187,6 @@ extern const char*  cvehiclefunctions[];
 
         int armor;
 
-        
-        //! the levels of height which this unit can enter
-        int          height;
-
         //! if a transport moves the movement for the units inside a transport is decreased by 1/n of the tranport's distance
         double     cargoMovementDivisor;
 

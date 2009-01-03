@@ -79,20 +79,20 @@ GameActionID VehicleAttackAction::getID() const
 
 ActionResult VehicleAttackAction::runAction( const Context& context )
 {
-   tfight* battle = NULL;
-   
+   auto_ptr<tfight> battle;
+      
    tfield* fld = getMap()->getField( target );
    
    Vehicle* attacker = getUnit();
    Vehicle* attackee = fld->vehicle;
    
    if ( fld->vehicle ) {
-      battle = new tunitattacksunit ( attacker, attackee, true, weapon );
+      battle.reset( new tunitattacksunit ( attacker, attackee, true, weapon ) );
    } else {
       if ( fld->building ) 
-         battle = new tunitattacksbuilding ( getUnit(), target.x, target.y , weapon );
+         battle.reset( new tunitattacksbuilding ( getUnit(), target.x, target.y , weapon ) );
       else
-         battle = new tunitattacksobject ( getUnit(), target.x, target.y, weapon );
+         battle.reset( new tunitattacksobject ( getUnit(), target.x, target.y, weapon ) );
    }
    
    bool shown;

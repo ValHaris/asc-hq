@@ -171,7 +171,7 @@ class  Building : public ContainerBase {
 
 
     //! returns the bitmapped level of height. Only one bit will be set, of course
-    int getHeight() const { return typ->buildingheight; };
+    int getHeight() const { return typ->height; };
     
     
     ~Building();

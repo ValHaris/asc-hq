@@ -114,7 +114,7 @@ void         tsearchdestructbuildingfields::initdestructbuilding( int x, int y )
 void         tsearchdestructbuildingfields::testfield(const MapCoordinate& mc)
 {
    startfield = gamemap->getField(mc);
-   if (startfield->building && getheightdelta(log2(vehicle->height), log2(startfield->building->typ->buildingheight)) == 0 && !startfield->building->typ->buildingNotRemovable ) {
+   if (startfield->building && getheightdelta(log2(vehicle->height), log2(startfield->building->typ->height)) == 0 && !startfield->building->typ->buildingNotRemovable ) {
       numberoffields++;
       startfield->a.temp = 20;
    }

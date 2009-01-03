@@ -274,7 +274,7 @@ void BuildingType :: read ( tnstream& stream )
       }
 
       technologylevel = stream.readChar( );
-      researchid = stream.readChar( );
+      stream.readChar( ); // was: researchid 
 
       terrainaccess.read ( stream );
 
@@ -302,7 +302,7 @@ void BuildingType :: read ( tnstream& stream )
       }
 
 
-      buildingheight = 1 << log2 ( stream.readInt() );
+      height = 1 << log2 ( stream.readInt() );
       stream.readInt( ); // was: unitheight_forbidden =
       externalloadheight = stream.readInt( );
 
@@ -411,7 +411,7 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( productionCost.material );
    stream.writeInt ( productionCost.fuel );
    stream.writeChar ( technologylevel );
-   stream.writeChar ( researchid );
+   stream.writeChar ( 0 );
 
    terrainaccess.write ( stream );
 
@@ -437,7 +437,7 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( defaultProduction.material );
    stream.writeInt ( defaultProduction.fuel );
 
-   stream.writeInt ( buildingheight );
+   stream.writeInt ( height );
    stream.writeInt ( 0 );
    stream.writeInt ( externalloadheight );
 
@@ -677,7 +677,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
        productionCost.runTextIO ( pc );
       pc.closeBracket ();
 
-      pc.addTagInteger( "Height", buildingheight, choehenstufennum, heightTags );
+      pc.addTagInteger( "Height", height, choehenstufennum, heightTags );
 
       pc.addTagInteger( "ExternalLoading", externalloadheight, choehenstufennum, heightTags );
 

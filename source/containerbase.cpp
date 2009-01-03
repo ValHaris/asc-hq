@@ -451,14 +451,19 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
    return false;
 }
 
-int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType ) const
+int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType, int carrierHeight ) const
 {
    int height = 0;
 
+   if ( carrierHeight == -1 )
+      carrierHeight = getPosition().getBitmappedHeight();
+   else
+      carrierHeight = 1 << carrierHeight;
+   
    if ( baseType->vehicleFit ( vehicleType ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Out )
-            if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
+            if ( (i->container_height & carrierHeight) || (i->container_height == 0))
                if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
                   if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() ) {
                      if ( i->height_abs != 0 && i->height_rel != -100 ) {
@@ -525,9 +530,12 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
 const ContainerBase::Production& ContainerBase::getProduction() const
 {
    if ( productionCache.empty() && !internalUnitProduction.empty() ) {
-      for ( Production::const_iterator i = internalUnitProduction.begin(); i != internalUnitProduction.end(); ++i )
-         if ( vehicleUnloadable( *i ) || baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ) )
-            productionCache.push_back ( *i );
+      for ( int height = 0; height <= 8; ++height )
+         if ( (1 << height) & baseType->height )
+            for ( Production::const_iterator i = internalUnitProduction.begin(); i != internalUnitProduction.end(); ++i )
+               if ( baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ) || vehicleUnloadable( *i, height ) )
+                  if( find ( productionCache.begin(), productionCache.end(), *i ) == productionCache.end() )
+                     productionCache.push_back ( *i );
    }
 
    return productionCache;

@@ -114,8 +114,12 @@ class ContainerBase {
        */
       bool vehicleLoadable ( const Vehicle* vehicle, int uheight = -1, const bool* attacked = NULL ) const;
 
-      //! returns the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
-      int  vehicleUnloadable ( const Vehicletype* vehicleType ) const;
+      /** checks the unloading of a unit type
+          \param vehicleType the vehicletype for which the unloading is checked
+          \param carrierHeight assume the carrier ( = this) was on this height (numerical: 0 - 7). If -1, use current height
+          \return the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
+      */
+      int  vehicleUnloadable ( const Vehicletype* vehicleType, int carrierHeight = -1 ) const;
 
       //! returns the unloading system
       const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicletype* vehicle, int height );

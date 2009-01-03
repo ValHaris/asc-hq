@@ -974,7 +974,7 @@ bool Vehicle :: buildingconstructable ( const BuildingType* building, bool check
    if ( !ff )
       ff = 100;
 
-   int hd = getheightdelta ( log2 ( height ), log2 ( building->buildingheight ));
+   int hd = getheightdelta ( log2 ( height ), log2 ( building->height ));
 
    if ( hd != 0 ) // && !(hd ==-1 && (height == chschwimmend || height == chfahrend)) ???  what was that ??
       return 0;

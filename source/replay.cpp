@@ -2565,7 +2565,9 @@ void trunreplay :: execnextreplaymove ( void )
             
             tmemorystream memstream( &buffer, tnstream::reading );
             
-            Command* a = dynamic_cast<Command*> ( GameAction::readFromStream( memstream, actmap ));
+            auto_ptr<GameAction> readaction ( GameAction::readFromStream( memstream, actmap ));
+            
+            Command* a = dynamic_cast<Command*> ( readaction.get() );
             
             for ( int i = 0; i < padding;++i ) {
                char c = stream->readChar();

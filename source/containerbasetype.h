@@ -107,6 +107,8 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      //! the visibility range
      int          view;
 
+     //! the levels of height which this unit can enter
+     int          height;
 
      Resources productionCost;
      virtual ~ContainerBaseType() {};

@@ -183,7 +183,7 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 
    if (bld->getCompletion() == bld->typ->construction_steps - 1) {
       c = bld->typ->view + 1;
-      if ( bld->typ->buildingheight <= chfahrend ) {
+      if ( bld->typ->height <= chfahrend ) {
          c += gamemap->getField ( bld->getEntry() )->viewbonus;
          if ( c < 1 )
             c = 1;
@@ -194,9 +194,9 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
       j = 0;
    }
 
-   initviewcalculation( c, j, bld->getEntry().x, bld->getEntry().y, _mode, bld->typ->buildingheight );
+   initviewcalculation( c, j, bld->getEntry().x, bld->getEntry().y, _mode, bld->typ->height );
    
-   if ( bld->typ->buildingheight == chsatellit )
+   if ( bld->typ->height == chsatellit )
       satellitenview = 1;
    else
       satellitenview = bld->typ->hasFunction( ContainerBaseType::SatelliteView  );
@@ -287,7 +287,7 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
    if ( sight > (jamming + additionalEnemyJamming )   ||  direct  ) {
       if (( fld->getVehicle() && ( fld->getVehicle()->getOwner() == player ) && false ) ||
             ( fld->getVehicle()  && ( fld->getVehicle()->height  < chschwimmend ) && sonar ) ||
-            ( fld->building && ( fld->building->typ->buildingheight < chschwimmend ) && sonar ) ||
+            ( fld->building && ( fld->building->typ->height < chschwimmend ) && sonar ) ||
             ( !fld->mines.empty() && ( mine  ||  fld->mineowner() == player)) ||
             ( fld->getVehicle()  && ( fld->getVehicle()->height  >= chsatellit )  && satellite )) {
          return visible_all;

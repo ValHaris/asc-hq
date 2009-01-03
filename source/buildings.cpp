@@ -387,7 +387,7 @@ tfield*        Building :: getEntryField( ) const
 
 MapCoordinate3D Building :: getEntry( ) const
 {
-  return MapCoordinate3D( entryPosition, typ->buildingheight);
+  return MapCoordinate3D( entryPosition, typ->height);
 }
 
 
@@ -623,7 +623,7 @@ void Building :: readData ( tnstream& stream, int version )
     maxresearchpoints = stream.readWord();
     researchpoints = stream.readWord();
 
-    if ( (researchpoints < typ->maxresearchpoints  &&  !(typ->hasFunction(ContainerBaseType::Research))) || (researchpoints > typ->maxresearchpoints))
+    if ( (researchpoints < typ->maxresearchpoints  &&  !typ->hasFunction(ContainerBaseType::Research)) || (researchpoints > typ->maxresearchpoints))
        researchpoints = typ->maxresearchpoints;
 
 

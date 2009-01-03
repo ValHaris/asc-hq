@@ -179,7 +179,7 @@ int         fieldAccessible( const tfield*        field,
         if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight, attacked ))
            return 2;
         else
-           if (uheight >= chtieffliegend || (field->building->typ->buildingheight <= chgetaucht && uheight >=  chschwimmend ))
+           if (uheight >= chtieffliegend || (field->building->typ->height <= chgetaucht && uheight >=  chschwimmend ))
               return 1;
            else
               return 0;
@@ -351,7 +351,7 @@ void  checkunitsforremoval ( void )
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
          tfield* fld = getfield ( x, y );
-         if ( (fld->building && fld->building->typ->terrainaccess.accessible( fld->bdt ) < 0) && (fld->building->typ->buildingheight <= chfahrend) ) {
+         if ( (fld->building && fld->building->typ->terrainaccess.accessible( fld->bdt ) < 0) && (fld->building->typ->height <= chfahrend) ) {
             messages[fld->building->getOwner()] += getBuildingReference( fld->building ) + " was destroyed \n\n";
             delete fld->building;
          }
@@ -524,7 +524,7 @@ bool fieldvisiblenow( const tfield* pe, int player, Vehicle* veh, GameMap* actma
          }
          else
             if (pe->building != NULL) {
-            if ((c == visible_all) || (pe->building->typ->buildingheight >= chschwimmend) || (pe->building->color == player*8))
+            if ((c == visible_all) || (pe->building->typ->height >= chschwimmend) || (pe->building->color == player*8))
                return true;
             }
             else
