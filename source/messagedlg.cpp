@@ -116,6 +116,12 @@ class  NewMessage : public ASC_PG_Dialog {
 
    public:
       NewMessage ( GameMap* gamemap, Message* msg = NULL, bool reminder = false ); 
+      
+      void Show(bool fade = false ) {
+         editor->EditBegin();
+         ASC_PG_Dialog::Show(fade);
+      }
+      
 };
 
 
