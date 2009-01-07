@@ -15,7 +15,7 @@ libdialogs_la_LIBADD    = @SDL_LIBS@
 
 libgamedialogs_la_SOURCES   = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp \
                               editplayerdata.cpp buildingtypeselector.cpp choosetech.cpp productionanalysis.cpp internalAmmoTransferDialog.cpp replayrecorder.cpp \
-                              mailoptionseditor.cpp 
+                              mailoptionseditor.cpp vehicleproductionselection.cpp
                               
 libgamedialogs_la_LIBADD    = @SDL_LIBS@ 
 

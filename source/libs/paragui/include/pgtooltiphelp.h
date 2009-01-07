@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2007-04-13 16:15:57 $
+    Update Date:      $Date: 2009-01-07 18:45:15 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgtooltiphelp.h,v $
-    CVS/RCS Revision: $Revision: 1.2 $
+    CVS/RCS Revision: $Revision: 1.3 $
     Status:           $State: Exp $
 */
 
@@ -33,7 +33,9 @@
 #ifndef PG_TOOLTIPHELP_H
 #define PG_TOOLTIPHELP_H
 
+#include "pgmessageobject.h"
 #include "pgtimerobject.h"
+#include "pgpoint.h"
 
 class PG_Widget;
 class PG_LineEdit;

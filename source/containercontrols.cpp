@@ -65,11 +65,11 @@ int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* typ
 {
    int l = 0;
    Resources cost = container->getProductionCost( type );
-   if ( getPlayer().research.vehicletypeavailable ( type ) || !getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) {
-      for ( int r = 0; r < resourceTypeNum; r++ )
-         if ( container->getAvailableResource( cost.resource(r), r ) < cost.resource(r) )
-            l |= 1 << r;
-   } else
+   for ( int r = 0; r < resourceTypeNum; r++ )
+      if ( container->getAvailableResource( cost.resource(r), r ) < cost.resource(r) )
+         l |= 1 << r;
+   
+   if ( !getPlayer().research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
       l |= 1 << 10;
 
    if ( !container->vehicleUnloadable( type ) && !container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))

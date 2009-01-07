@@ -268,7 +268,7 @@ class UnitHooveringLogic {
     //! hook that is called the next round begins ( active player switching from player8 to player1 )
     void endRound ( void );
 
-    int getIdentification() { return networkid; };
+    int getIdentification() const { return networkid; };
 
 
     //! @name Construction related functions

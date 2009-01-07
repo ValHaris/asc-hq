@@ -244,3 +244,7 @@ No objects to create/remove
 Could not create mine on this field
 21601
 Mines stack inconsistent
+21700
+No units producable
+21701
+VehicleType not available

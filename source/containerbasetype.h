@@ -221,7 +221,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
       ResourceMatrix productionEfficiency;
       
       struct {
-			int range;
+         int range;
          
          int maxFieldsPerTurn;
          

@@ -53,6 +53,7 @@
 #include "actions/moveunitcommand.h"
 #include "actions/putobjectcommand.h"
 #include "actions/putminecommand.h"
+#include "actions/constructunitcommand.h"
 
 bool commandPending()
 {
@@ -1917,6 +1918,48 @@ void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, i
 
 
 
+class BuildVehicleCommand : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("constructunit.png");
+      };
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "Unit construction Command";
+      };
+};
+
+
+bool BuildVehicleCommand::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   tfield* fld = actmap->getField(pos);
+   if ( fld && fld->vehicle )
+      if (fld->vehicle->getOwner() == actmap->actplayer )
+         if (!commandPending())
+            return ConstructUnitCommand::externalConstructionAvail( fld->vehicle );
+   return false;
+}
+
+void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( pendingVehicleActions.actionType == vat_nothing ) {
+      tfield* fld = actmap->getField(pos);
+      if ( fld->vehicle ) {
+         if ( vehicleBuildingGui.init( fld->vehicle )) {
+            moveparams.movestatus = 73;
+            NewGuiHost::pushIconHandler( &vehicleBuildingGui );
+            repaintMap();
+            updateFieldInfo();
+         } else
+            displaymessage2("no units produceable");
+      }
+   }
+}
+
 
 
 
@@ -2506,6 +2549,7 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::PowerOff() );
    handler.registerUserFunction( new GuiFunctions::BuildObject() );
    handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
+   handler.registerUserFunction( new GuiFunctions::BuildVehicleCommand() );
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
    handler.registerUserFunction( new GuiFunctions::DestructBuilding() );
 //   handler.registerUserFunction( new GuiFunctions::SearchForMineralResources() );

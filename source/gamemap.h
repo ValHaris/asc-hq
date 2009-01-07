@@ -467,6 +467,7 @@ public:
       ObjectType* getobjecttype_byid ( int id );
       const ObjectType* getobjecttype_byid ( int id ) const;
       Vehicletype* getvehicletype_byid ( int id );
+      const Vehicletype* getvehicletype_byid ( int id ) const;
       BuildingType* getbuildingtype_byid ( int id );
       const Technology* gettechnology_byid ( int id );
 

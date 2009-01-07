@@ -1679,6 +1679,12 @@ Vehicletype* GameMap :: getvehicletype_byid ( int id )
    return vehicleTypeRepository.getObject_byID ( id );
 }
 
+const Vehicletype* GameMap :: getvehicletype_byid ( int id ) const
+{
+   return vehicleTypeRepository.getObject_byID ( id );
+}
+
+
 BuildingType* GameMap :: getbuildingtype_byid ( int id )
 {
    return buildingTypeRepository.getObject_byID ( id );

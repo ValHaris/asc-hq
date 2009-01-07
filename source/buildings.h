@@ -90,7 +90,7 @@ class  Building : public ContainerBase {
     //! the current storage of Resources
     Resources   actstorage;
     
-    int getIdentification();
+    int getIdentification() const;
 
 
     //! returns the picture of the building. It may depend on the current weather of the fields the building is standing on

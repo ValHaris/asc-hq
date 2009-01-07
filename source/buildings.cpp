@@ -97,7 +97,7 @@ bool Building::canRepair ( const ContainerBase* item ) const
          (item == this  ) ;
 }
 
-int Building::getIdentification()
+int Building::getIdentification() const
 {
    return -(getPosition().x + (getPosition().y << 16));
 }

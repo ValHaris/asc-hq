@@ -250,6 +250,11 @@ extern const char*  cvehiclefunctions[];
         //! if this unit constructs another unit externally (for example a turrt), it costs this much movement points
         int  unitConstructionMoveCostPercentage;
         
+        //! the minimal distance (measured in number of fields) in which units can be externally constructed
+        int unitConstructionMinDistance;
+        //! the maximum distance (measured in number of fields) in which units can be externally constructed
+        int unitConstructionMaxDistance;
+        
         //! if the unit is destroyed, it can leave an wreckage object behind ( < 0 to disable )
         vector<int> wreckageObject;
 

@@ -128,14 +128,10 @@ Vehicletype :: Vehicletype ( void )
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
 
-   
-   static const float matrix[] = { 1, 0, 0,
-                                 0, 1, 0,
-                                 0, 0, 1 };
-   
-   productionEfficiency = ResourceMatrix( matrix );
-   
    unitConstructionMoveCostPercentage = 50;
+   
+   unitConstructionMinDistance = 1;
+   unitConstructionMaxDistance = 1;
 }
 
 
@@ -145,7 +141,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 29;
+const int vehicle_version = 30;
 
 
 
@@ -571,6 +567,11 @@ void Vehicletype :: read ( tnstream& stream )
    
    if ( version >= 29 )
       unitConstructionMoveCostPercentage = stream.readInt();
+   
+   if ( version >= 30 ) {
+      unitConstructionMinDistance = stream.readInt();
+      unitConstructionMaxDistance = stream.readInt();
+   }
 }
 
 
@@ -746,6 +747,8 @@ void Vehicletype:: write ( tnstream& stream ) const
    }
    
    stream.writeInt( unitConstructionMoveCostPercentage );
+   stream.writeInt( unitConstructionMinDistance );
+   stream.writeInt( unitConstructionMaxDistance );
 }
 
 
@@ -1026,6 +1029,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    pc.addIntRangeArray ( "ObjectGroupsBuildable", objectGroupsBuildable, false );
    pc.addIntRangeArray ( "ObjectGroupsRemovable", objectGroupsRemovable, false );
    pc.addInteger("UnitConstructionMoveCostPercentage", unitConstructionMoveCostPercentage, 50);
+   pc.addInteger("UnitConstructionMinDistance", unitConstructionMinDistance, 1 );
+   pc.addInteger("UnitConstructionMaxDistance", unitConstructionMaxDistance, 1 );
    pc.closeBracket();
 
    pc.openBracket ( "Weapons");

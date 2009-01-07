@@ -220,7 +220,7 @@ class ContainerBase {
 
       GameMap* getMap ( ) const { return gamemap; };
       
-      virtual int getIdentification() = 0;
+      virtual int getIdentification() const = 0;
 
       //! returns the bitmapped level of height. Only one bit will be set, of course
       virtual int getHeight() const = 0;

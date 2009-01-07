@@ -49,7 +49,8 @@ namespace ActionRegistry {
                   PutMineCommand,
                   SpawnMine,
                   DiscoverResources,
-                  ViewRegistration
+                  ViewRegistration,
+                  ConstructUnitCommand
       
    };
 };

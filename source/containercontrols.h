@@ -34,7 +34,11 @@ class ContainerConstControls {
 
       bool unitProductionAvailable() const;
 
-      //! returns 0 if the unit is producable and != 0 otherwise. THe bits in the result say why the unit is not producable
+      /** returns 0 if the unit is producable and != 0 otherwise. THe bits in the result say why the unit is not producable
+          Bit 1,2+3: energy, material and fuel
+          Bit 10: not researched yet
+          Bit 11: can not be unloaded
+      */
       int unitProductionPrerequisites( const Vehicletype* type ) const;
 
 };
