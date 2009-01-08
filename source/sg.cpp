@@ -978,7 +978,7 @@ bool continueAndStartMultiplayerGame( bool mostRecent = false )
 
 void ammoCounter( const ContainerBase* c, map<int,int>& amount )
 {
-   for ( int i = 0; i < cwaffentypennum; ++i )
+   for ( int i = 0; i < weaponTypeNum; ++i )
       if ( weaponAmmo[i] )
          amount[i] += c->getAmmo(i,maxint );
 
@@ -1003,7 +1003,7 @@ void showCargoSummary( tfield* fld )
       map<int,int> ammo;
       ammoCounter( fld->vehicle, ammo );
       ASCString s;
-      for ( int i = 0; i < cwaffentypennum; ++i )
+      for ( int i = 0; i < weaponTypeNum; ++i )
          if ( weaponAmmo[i] )
             s += ASCString(cwaffentypen[i]) + ": " + ASCString::toString( ammo[i] ) + "\n";
 

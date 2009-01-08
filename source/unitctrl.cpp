@@ -1082,7 +1082,7 @@ void             VehicleService :: FieldSearch :: checkBuilding2Vehicle ( Vehicl
                if ( (stillNeeded > 0) && (bld->typ->hasFunction( ContainerBaseType::AmmoProduction  ))) {
                   Resources res;
                   for( int j = 0; j< resourceTypeNum; j++ )
-                     res.resource(j) = cwaffenproduktionskosten[type][j] * stillNeeded;
+                     res.resource(j) = ammoProductionCost[type][j] * stillNeeded;
 
                   // ContainerBase* cb = bld;
                   // Resources res2 = cb->getResource ( res, 1 );

@@ -56,14 +56,14 @@ class InternalAmmoTransferWidget;
 class InternalAmmoTransferHandler
 {
 	
-	int serviceWeaponAmmoInTransfer[ cwaffentypennum ]; 
+	int serviceWeaponAmmoInTransfer[ weaponTypeNum ]; 
 	int weaponAmmo[ 16 ]; // weapon ammo when done; might need to have *AmmoInTransfer added
 	int weaponAmmoInTransfer[ 16 ];
 	int weaponAmmoTransferSlot[ 16 ];
 	std::vector<InternalAmmoTransferWidget*> widgets;
 	
 	bool weaponAmmoTransferable[ 16 ];
-	bool serviceweaponAmmoTransferable[ cwaffentypennum ];
+	bool serviceweaponAmmoTransferable[ weaponTypeNum ];
 	int equalWeaponsTypeCounter;
 	
 	Vehicle* _vehicle;
@@ -116,7 +116,7 @@ InternalAmmoTransferHandler::InternalAmmoTransferHandler(  Vehicle* vehicle )
 		weaponAmmoTransferable[ i ] = false;
 	}
 	
-	for( int i=0; i<cwaffentypennum; i++ )
+	for( int i=0; i<weaponTypeNum; i++ )
 	{
 		serviceWeaponAmmoInTransfer[ i ] = 0;
 		serviceweaponAmmoTransferable[ i ] = false;
@@ -236,7 +236,7 @@ void InternalAmmoTransferHandler::performTransfer()
 	}
 	
 	// dann die munition in transfer auf servicewaffen aufteilen
-	for( int i=0; i<cwaffentypennum; i++ )
+	for( int i=0; i<weaponTypeNum; i++ )
 	{
 		if( serviceWeaponAmmoInTransfer[ i ] > 0 )
 		{

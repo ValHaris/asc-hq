@@ -11,7 +11,9 @@
 #ifndef vehicleproductionselectionH
 #define vehicleproductionselectionH
 
+#include <map>
 #include "vehicletypeselector.h"
+#include "../actions/constructunitcommand.h"
 
 class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFactory
 {
@@ -19,18 +21,19 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       bool fillAmmo;
       const ContainerBase* plant;
 
-      // is initialized by the constructor's call to filterVehicleTypes
-      Container* produceables;
+      const ConstructUnitCommand::Producables& produceables;
 
-      Container& filterVehicleTypes( const Container& vehicles, const ContainerBase* productionplant );
-
+      Container* items; // will be initialized by the constructor's call to convertArrays
+      
+      static const Container& convertAndCreateArrays( const ConstructUnitCommand::Producables& from, Container** items );
+      static const Container& convertArrays( const ConstructUnitCommand::Producables& from, Container& items );
+      
    protected:
       void vehicleTypeSelected( const Vehicletype* type, bool mouse );
       void itemMarked( const SelectionWidget* widget, bool mouse );
-      const Container& getOriginalItems();
 
    public:
-      VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant );
+      VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant, const ConstructUnitCommand::Producables& produceableUnits  );
 
       bool getAmmoFilling();
 
@@ -44,8 +47,14 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
       SigC::Signal2<void,const Vehicletype*, bool > sigVehicleTypeSelected;
       SigC::Signal1<void,const Vehicletype* > sigVehicleTypeMarked;
-
-      ~VehicleProduction_SelectionItemFactory();
+      
+      void updateProducables();
+      
+      
+      ~VehicleProduction_SelectionItemFactory()
+      {
+         delete items;
+      }
 };
 
 
@@ -68,6 +77,8 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog
       ItemSelectorWidget* isw;
       VehicleProduction_SelectionItemFactory* factory;
       ContainerBase* my_plant;
+      
+      const ConstructUnitCommand::Producables& produceables;
    protected:
       void vtMarked( const Vehicletype* vt );
 
@@ -84,8 +95,12 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog
       bool eventKeyDown(const SDL_KeyboardEvent* key);
 
    public:
-      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant );
-
+      VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const ConstructUnitCommand::Producables& produceableUnits, bool internally );
+      
+      void updateProducables();
+      
+      SigC::Signal0<void> reloadProducebles;
+      
       bool addProductionLine();
 
       bool removeProductionLine();

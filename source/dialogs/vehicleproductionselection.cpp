@@ -17,17 +17,31 @@
 
 #include "vehicleproductionselection.h"
 
-VehicleProduction_SelectionItemFactory::Container& VehicleProduction_SelectionItemFactory::filterVehicleTypes( const Container& vehicles, const ContainerBase* productionplant )
+VehicleProduction_SelectionItemFactory::VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant, const ConstructUnitCommand::Producables& produceableUnits )
+   : VehicleTypeSelectionItemFactory( plantResources, convertAndCreateArrays( produceableUnits, &items ), productionplant->getMap()->getCurrentPlayer() ),
+                                      fillResources(true),
+                                      fillAmmo(true),
+                                      plant(productionplant), 
+                                      produceables( produceableUnits)
 {
-   produceables = new Container();
-   for ( Container::const_iterator i = vehicles.begin(); i != vehicles.end(); ++i ) {
-      ContainerConstControls cc ( productionplant );
-      if ( !( cc.unitProductionPrerequisites( *i ) & ~(1+2+4)))  // we are filtering out the bits for lack of resource, so that these units will still be displayed
-         produceables->push_back( *i );
-   }
-
-   return *produceables;
 }
+
+
+const VehicleProduction_SelectionItemFactory::Container& VehicleProduction_SelectionItemFactory::convertAndCreateArrays( const ConstructUnitCommand::Producables& from, Container** items )
+{
+   *items = new Container();
+   return convertArrays( from, **items );
+}
+
+const VehicleProduction_SelectionItemFactory::Container& VehicleProduction_SelectionItemFactory::convertArrays( const ConstructUnitCommand::Producables& from, Container& items )
+{
+   items.clear();
+   for( ConstructUnitCommand::Producables::const_iterator i = from.begin(); i != from.end(); ++i )
+      if ( !(i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Research | ConstructUnitCommand::Lack::Unloadability )))
+         items.push_back ( i->type );
+   return items;
+}
+
 
 void VehicleProduction_SelectionItemFactory::vehicleTypeSelected( const Vehicletype* type, bool mouse )
 {
@@ -43,21 +57,6 @@ void VehicleProduction_SelectionItemFactory::itemMarked( const SelectionWidget* 
    assert( fw );
    sigVehicleTypeMarked( fw->getVehicletype() );
 }
-
-const VehicleProduction_SelectionItemFactory::Container& VehicleProduction_SelectionItemFactory::getOriginalItems()
-{
-   delete produceables;
-   filterVehicleTypes( plant->getProduction(), plant );
-   return *produceables;
-};
-
-VehicleProduction_SelectionItemFactory::VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant )
-      : VehicleTypeSelectionItemFactory( plantResources, filterVehicleTypes( productionplant->getProduction(), productionplant), productionplant->getMap()->getCurrentPlayer() ),
-      fillResources(true),
-      fillAmmo(true),
-      plant(productionplant)
-{
-};
 
 
 bool VehicleProduction_SelectionItemFactory::getAmmoFilling()
@@ -87,26 +86,31 @@ bool VehicleProduction_SelectionItemFactory::setResourceFilling( bool value )
    return true;
 }
 
+void VehicleProduction_SelectionItemFactory::updateProducables()
+{
+   convertArrays( produceables, *items );
+}
+
 
 Resources VehicleProduction_SelectionItemFactory::getCost( const Vehicletype* type )
 {
-   Resources cost = plant->getProductionCost( type );
-   if ( fillResources )
-      cost += Resources( 0, type->getStorageCapacity(plant->getMap()->_resourcemode).material, type->getStorageCapacity(plant->getMap()->_resourcemode).fuel );
-
-   if ( fillAmmo )
-      for ( int w = 0; w < type->weapons.count; ++w )
-         if ( type->weapons.weapon[w].requiresAmmo() ) {
-            int wt = type->weapons.weapon[w].getScalarWeaponType();
-            cost += Resources( cwaffenproduktionskosten[wt][0], cwaffenproduktionskosten[wt][1], cwaffenproduktionskosten[wt][2] ) * type->weapons.weapon[w].count;
-         }
-   return cost;
+   for ( ConstructUnitCommand::Producables::const_iterator i = produceables.begin(); i != produceables.end(); ++i ) {
+      if ( i->type == type ) {
+         Resources cost = i->cost;
+         if ( fillResources )
+            cost += Resources( 0, type->getStorageCapacity(plant->getMap()->_resourcemode).material, type->getStorageCapacity(plant->getMap()->_resourcemode).fuel );
+      
+         if ( fillAmmo )
+            for ( int w = 0; w < type->weapons.count; ++w )
+               if ( type->weapons.weapon[w].requiresAmmo() ) {
+                  int wt = type->weapons.weapon[w].getScalarWeaponType();
+                  cost += Resources( ammoProductionCost[wt][0], ammoProductionCost[wt][1], ammoProductionCost[wt][2] ) * type->weapons.weapon[w].count;
+               }
+         return cost;
+      }
+   }
+   return Resources(0,0,0);
 };
-
-VehicleProduction_SelectionItemFactory::~VehicleProduction_SelectionItemFactory()
-{
-   delete produceables;
-}
 
 
 AddProductionLine_SelectionItemFactory::AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types ) : VehicleTypeSelectionItemFactory( my_plant->getResource(Resources(maxint,maxint,maxint), true), types, my_plant->getMap()->getCurrentPlayer() ), plant(my_plant)
@@ -168,7 +172,9 @@ bool VehicleProduction_SelectionWindow::quitSignalled()
 
 void VehicleProduction_SelectionWindow::reLoadAndUpdate()
 {
+   reloadProducebles();
    factory->setAvailableResource(my_plant->getResource(Resources(maxint,maxint,maxint)));
+   factory->updateProducables();
    isw->reLoad( true );
 }
 
@@ -187,12 +193,17 @@ bool VehicleProduction_SelectionWindow::eventKeyDown(const SDL_KeyboardEvent* ke
 }
 
 
-VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant ) : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), finallySelected(NULL), isw(NULL), factory(NULL), my_plant( plant )
+VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget *parent, const PG_Rect &r, ContainerBase* plant, const ConstructUnitCommand::Producables& produceableUnits, bool internally ) 
+   : ASC_PG_Dialog( parent, r, "Choose Vehicle Type" ), selected(NULL), finallySelected(NULL), isw(NULL), factory(NULL), my_plant( plant ), produceables( produceableUnits )
 {
-   factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), plant );
-
-   factory->setResourceFilling ( CGameOptions::Instance()->unitProduction.fillResources );
-
+   factory = new VehicleProduction_SelectionItemFactory( plant->getResource(Resources(maxint,maxint,maxint), true), plant, produceableUnits );
+   if ( internally ) {
+      factory->setAmmoFilling( CGameOptions::Instance()->unitProduction.fillAmmo );
+      factory->setResourceFilling ( CGameOptions::Instance()->unitProduction.fillResources );
+   } else {
+      factory->setAmmoFilling( false );
+      factory->setResourceFilling ( false );
+   }
 
    factory->sigVehicleTypeSelected.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtSelected ));
    factory->sigVehicleTypeMarked.connect ( SigC::slot( *this, &VehicleProduction_SelectionWindow::vtMarked ));
@@ -200,31 +211,32 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
    isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight() - 40), factory );
    isw->sigQuitModal.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::quitSignalled));
 
-   factory->reloadAllItems.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::reLoadAndUpdate ));
-
-
    int y = GetTitlebarHeight() + isw->Height();
-   PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 50, 20), "Fill with Resources" );
-
-
-   if ( factory->getResourceFilling() )
-      fillRes->SetPressed();
-   fillRes->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
-
-   if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction)) {
-      factory->setAmmoFilling( CGameOptions::Instance()->unitProduction.fillAmmo );
-      PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
-      if ( factory->getAmmoFilling() )
-         fillAmmo->SetPressed();
-      fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
-   } else
+   if ( internally ) {
+      PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 50, 20), "Fill with Resources" );
+      if ( factory->getResourceFilling() )
+         fillRes->SetPressed();
+      fillRes->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
+      if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction)) {
+         PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
+         if ( factory->getAmmoFilling() )
+            fillAmmo->SetPressed();
+         fillAmmo->sigClick.connect( SigC::slot( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
+      } else
+         factory->setAmmoFilling( false );
+         
+   } else {
       factory->setAmmoFilling( false );
+      factory->setResourceFilling ( false );
+   }
 
+   factory->reloadAllItems.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::reLoadAndUpdate ));
+   
    PG_Rect rr ( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35);
    PG_Button* b  = new PG_Button( this, PG_Rect( rr.x + rr.h + 5, rr.y, rr.w - 40, rr.h ) , "Produce" );
    b->sigClick.connect( SigC::slot( *this,&VehicleProduction_SelectionWindow::produce ));
 
-   if ( !plant->baseType->hasFunction(ContainerBaseType::NoProductionCustomization)) {
+   if ( !plant->baseType->hasFunction(ContainerBaseType::NoProductionCustomization) && internally ) {
       PG_Button* b2 = new PG_Button( this, PG_Rect( rr.x, rr.y, rr.h, rr.h ), "+" );
       b2->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::addProductionLine ));
       new PG_ToolTipHelp( b2, "Add production line");
@@ -233,9 +245,6 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
       b3->sigClick.connect( SigC::slot( *this, &VehicleProduction_SelectionWindow::removeProductionLine ));
       new PG_ToolTipHelp( b3, "Remove production line");
    }
-
-
-   SetTransparency(0);
 };
 
 bool VehicleProduction_SelectionWindow::addProductionLine()

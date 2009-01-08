@@ -477,7 +477,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                                                        if ( n > 0 ) {
                                                           if ( bld->typ->hasFunction( ContainerBaseType::AmmoProduction  )) {
                                                              for ( int r = 0; r < resourceTypeNum; r++ )
-                                                                needed.resource(r) += (n+4)/5 * cwaffenproduktionskosten[j][r];
+                                                                needed.resource(r) += (n+4)/5 * ammoProductionCost[j][r];
                                                           } else
                                                              missing++;
                                                        }

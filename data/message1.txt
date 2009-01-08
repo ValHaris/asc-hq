@@ -248,3 +248,14 @@ Mines stack inconsistent
 No units producable
 21701
 VehicleType not available
+21702
+Prerequisites not fulfilled
+21703
+Unit not constructable at this position
+21801
+Vehicletype not available
+21802
+Vehicle not found at position
+21803
+wrong vehicle found at position
+

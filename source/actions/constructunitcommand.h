@@ -35,7 +35,7 @@ class ConstructUnitCommand : public ContainerCommand {
       static bool externalConstructionAvail( const ContainerBase* eht );
       static bool internalConstructionAvail( const ContainerBase* eht );
       static bool avail ( const ContainerBase* eht );
-      enum Mode { undefined, internal, external } state;
+      enum Mode { undefined, internal, external } mode;
    private:
       MapCoordinate target;
       int vehicleTypeID;
@@ -44,7 +44,7 @@ class ConstructUnitCommand : public ContainerCommand {
       
       map<MapCoordinate,vector<int> > unitsConstructable;
       
-      ConstructUnitCommand( GameMap* map ) : ContainerCommand( map ), state( undefined ) {};
+      ConstructUnitCommand( GameMap* map ) : ContainerCommand( map ), mode( undefined ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
    protected:
@@ -56,31 +56,51 @@ class ConstructUnitCommand : public ContainerCommand {
       
    public:
       ConstructUnitCommand ( ContainerBase* unit );
-      ActionResult searchFields();
       
-      void setMode( Mode mode ) { state = mode; };
-      void setTarget( const MapCoordinate& target, int vehicleTypeID );
+      void setMode( Mode mode ) { this->mode = mode; };
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;
+      
       
       class Lack {
           int value;
          public:
             Lack() : value(0) {};
             Lack( int value ) { this->value = value; };
-            bool energyLacks() { return value & 1 ; };
-            bool materialLacks() { return value & 2 ; };
-            bool fuelLacks() { return value & 4 ; };
-            bool notResearched() { return value & 8; };
+            enum Prerequisites { Energy = 1, Material = 2, Fuel = 4, Research = 8 , Unloadability = 0x10, Movement = 0x20 };
+            bool ok() const { return value == 0 ; };
+            int getValue() const { return value; };
       };
+      
+      class ProductionEntry {
+         public:
+            const Vehicletype* type;
+            Resources cost;
+            ConstructUnitCommand::Lack prerequisites;
+            ProductionEntry() : type(NULL) {};
+            ProductionEntry(const Vehicletype* type, const Resources& cost, ConstructUnitCommand::Lack prerequisites ) {
+               this->type = type;
+               this->cost = cost;
+               this->prerequisites = prerequisites;
+            }
+      };
+      
+      typedef vector<ConstructUnitCommand::ProductionEntry> Producables;
+      
+      Lack unitProductionPrerequisites( const Vehicletype* type ) const;
+      
+      void setVehicleType( const Vehicletype* type );
       
       /**
          \param internally: true for internal production (inside cargo bay), false for outside production(neighbouring field)
          \return a collection of potentially producable units. Maybe some prerequisites are lacking, which is indicated by the Lack attribute
       */
-      map<const Vehicletype*,Lack> getProduceableVehicles(bool internally );
+      Producables getProduceableVehicles();
       
       vector<MapCoordinate> getFields();
+      bool isFieldUsable( const MapCoordinate& pos );
+      
+      void setTargetPosition( const MapCoordinate& pos );
 };
 
 #endif

@@ -882,7 +882,7 @@ void Vehicle::registerForNewOwner( int player )
 }
 
 
-Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
+Vehicle* Vehicle :: constructvehicle ( const Vehicletype* tnk, int x, int y )
 {
    if ( gamemap && vehicleconstructable( tnk, x, y )) {
       Vehicle* v = new Vehicle( tnk, gamemap, color/8 );
@@ -927,7 +927,7 @@ Vehicle* Vehicle :: constructvehicle ( Vehicletype* tnk, int x, int y )
       return NULL;
 }
 
-bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
+bool  Vehicle :: vehicleconstructable ( const Vehicletype* tnk, int x, int y )
 {
    if ( gamemap->getgameparameter(cgp_produceOnlyResearchedStuffExternally) && 
        !tnk->techDependency.available ( gamemap->player[getOwner()].research))
@@ -943,13 +943,21 @@ bool  Vehicle :: vehicleconstructable ( Vehicletype* tnk, int x, int y )
          hgt = 1 << log2(tnk->height);
       if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, hgt ) > 0 )
    //   tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
-         if ( tnk->productionCost.material <= tank.material &&
-              tnk->productionCost.energy   <= tank.fuel  )
-              if ( beeline (x, y, xpos, ypos) <= maxmalq )
-                 return 1;
+         if ( getResource( getExternalVehicleConstructionCost( tnk ), true ) == getExternalVehicleConstructionCost( tnk ) )
+            if ( beeline (x, y, xpos, ypos) <= maxmalq )
+               return 1;
 
    }
    return 0;
+}
+
+
+Resources Vehicle::getExternalVehicleConstructionCost( const Vehicletype* tnk ) const
+{
+   Resources r;
+   r.material = tnk->productionCost.material;
+   r.fuel = tnk->productionCost.energy;
+   return r;
 }
 
 

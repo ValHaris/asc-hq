@@ -37,7 +37,7 @@
 #include "krkr.h"
 
 
-char     richtung[2][11]  = {"0 ø", "45 ø"}; 
+char     richtung[2][11]  = {"0 ï¿½", "45 ï¿½"}; 
 char     mode50 = 1;
 #define  la   80
 
@@ -402,7 +402,7 @@ main (int argc, char *argv[] )
                clearscreen(); 
    
                printf ("\n    Select %i. weapon :\n", i+1);
-               bitselect (ft->weapons->weapon[i].typ, cwaffentypen, cwaffentypennum);
+               bitselect (ft->weapons->weapon[i].typ, cwaffentypen, weaponTypeNum);
    
                printf ("\n    aims :\n");
                bitselect (ft->weapons->weapon[i].targ, choehenstufen, choehenstufennum);

@@ -151,7 +151,7 @@ int main(int argc, char *argv[] )
                       "<frameset  rows=\"207,*\" border=0 >\n"
                       "<frame name=\"over\" src=\"%s\" marginheight=\"0\">\n"
                       "<frame name=\"under\" src=\"%s\" marginheight=\"2\">\n"
-                      "<noframes><body><p>Diese Seite verwendet Frames. Frames werden von Ihrem Browser aber nicht unterstützt.</p></body></noframes>\n"
+                      "<noframes><body><p>Diese Seite verwendet Frames. Frames werden von Ihrem Browser aber nicht unterstï¿½tzt.</p></body></noframes>\n"
                       "</frameset>\n"
                       "</html>\n", s1.c_str() , s6.c_str() );
 
@@ -398,7 +398,7 @@ int main(int argc, char *argv[] )
             // BEGIN WEAPONS
             // Waffen NR-AMMO-DISTANCE-STRENGS-SHOT FROM-ATTACK TO-TYP
             fprintf ( detailed3, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
-            // Überschriften
+            // ï¿½berschriften
             fprintf ( detailed3, "<tr><td colspan=\"2\"></td>"
                       "    <td bgcolor=\"#20483f\" colspan=\"4\" align=\"center\">Distance</td>"
                       "    <td bgcolor=\"#20483f\" colspan=\"8\" align=\"center\"> can shot from: </td>"
@@ -413,7 +413,7 @@ int main(int argc, char *argv[] )
                       "    <td><img src=\"../str1.gif\"</td>"
                       "    <td><img src=\"../dis2.gif\"</td>"
                       "    <td><img src=\"../str2.gif\"</td>" );
-            // Höhenstufenzeichen einfügen für shoot from und target
+            // Hï¿½henstufenzeichen einfï¿½gen fï¿½r shoot from und target
             for ( i = 0; i < 8; i++ )
                fprintf ( detailed3, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
             fprintf (detailed3, "<td></td> ");
@@ -430,7 +430,7 @@ int main(int argc, char *argv[] )
                fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].maxstrength );
                fprintf ( detailed3, "    <td align=\"center\">%d</td>", (ft->weapons.weapon[w].maxdistance)/10 );
                fprintf ( detailed3, "    <td align=\"center\">%d</td>", ft->weapons.weapon[w].minstrength );
-               // Höhenstufenzeichen einfügen für shoot from und target
+               // Hï¿½henstufenzeichen einfï¿½gen fï¿½r shoot from und target
                for ( i = 0; i < 8; i++ )
                   if ( ft->weapons.weapon[w].sourceheight & ( 1 << i ) )
                      fprintf ( detailed3, "<td><img src=\"../hacken.gif\"></td> " );
@@ -444,7 +444,7 @@ int main(int argc, char *argv[] )
                      fprintf ( detailed3, "<td></td>" );
 
                fprintf ( detailed3, "    <td nowrap>" );
-               for ( int i = 0; i < cwaffentypennum; i++ )
+               for ( int i = 0; i < weaponTypeNum; i++ )
                   if ( ft->weapons.weapon[w].typ & ( 1 << i ) )
                      fprintf ( detailed3, "%s.", cwaffentypen[i] );
                fprintf ( detailed3, "</td></tr>\n" );
@@ -454,7 +454,7 @@ int main(int argc, char *argv[] )
             fprintf ( detailed3, "<br>\n\n" );
             // Die entfernung wird durch 10 dividiert, um die Anzahl der Felder zu erhalten
             // Die normale Division rundet IMMER ab, also 1,9 / 2 = 0
-            // Aber die minimale Entfernung muß aufgerundet werden, deshalb benutze ich einen kleinen Trick: Ich addiere vor der Division 9 (also Quotient-1) dazu
+            // Aber die minimale Entfernung muï¿½ aufgerundet werden, deshalb benutze ich einen kleinen Trick: Ich addiere vor der Division 9 (also Quotient-1) dazu
 
             //Weapon can hit:
             fprintf ( detailed3, "<table id=\"H9\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
@@ -528,7 +528,7 @@ int main(int argc, char *argv[] )
             // Ueberschrift baubare Objekte
             fprintf ( detailed4, "<tr><td align=\"center\" bgcolor=\"#20483f\" colspan=\"2\">baubare OBJEKTE</td></tr>\n" );
             for ( unsigned int i = 0; i < ft->objectsBuildable.size(); i++ ) {
-//               fprintf( detailed4, "<tr><td>es können die Objekte mit ids von %d bis %d gebaut werden</td></tr>\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
+//               fprintf( detailed4, "<tr><td>es kï¿½nnen die Objekte mit ids von %d bis %d gebaut werden</td></tr>\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
                for ( int b = 0; b < objecttypenum; b++ ) {
                   Object*type obj = getobjecttype_forpos ( b );
                   if (     obj->id >= ft->objectsBuildable[i].from
@@ -600,18 +600,18 @@ int main(int argc, char *argv[] )
 			   
 			   // Ladbar von H&ouml;henstufen 
                fprintf ( detailed5, "<table id=\"H10\" border=\"1\" bordercolordark=\"#333333\" bordercolorlight=\"#408050\" cellpadding=\"1\" cellspacing=\"1\"> \n" );
-               // Überschriften
+               // ï¿½berschriften
                fprintf ( detailed5,
                       "    <td bgcolor=\"#20483f\" colspan=\"9\" align=\"center\"> Voraussetzungen f&uuml;r das Ein- und Ausladen </td>"
                       "</tr>\n" );
                // GFX
                fprintf ( detailed5, "<tr><td></td>\n");
-               // Höhenstufenzeichen einfügen für shoot from und target
+               // Hï¿½henstufenzeichen einfï¿½gen fï¿½r shoot from und target
                for ( i = 0; i < 8; i++ )
                   fprintf ( detailed5, " <TD><IMG src=\"../hoehe%d.gif\" ></TD>", i);
                fprintf ( detailed5, "</tr>\n" );
                
-			   // Höhenstufenzeichen einfügen für can load and unload from:
+			   // Hï¿½henstufenzeichen einfï¿½gen fï¿½r can load and unload from:
                fprintf ( detailed5, "<tr><td>UNIT muss auf dieser Stufe sein</td>" );
 			   for ( int h = 0; h < 8; h++ ) {
                   if ( ft->loadcapability & (1 << h))
@@ -621,7 +621,7 @@ int main(int argc, char *argv[] )
 			   }
 	           fprintf ( detailed5,	"</tr>\n" );	   
 			   
-			   // Höhenstufenzeichen einfügen für can load and unload from:
+			   // Hï¿½henstufenzeichen einfï¿½gen fï¿½r can load and unload from:
                fprintf ( detailed5, "<tr><td>UNIT muss diese Stufe selbst erreichen</td>" );
 			   for ( int h = 0; h < 8; h++ ) {
                   if ( ft->loadcapabilityreq & (1 << h))
@@ -631,7 +631,7 @@ int main(int argc, char *argv[] )
 			   }
 	           fprintf ( detailed5,	"</tr>\n" );
 	
-	           // Höhenstufenzeichen einfügen für can load and unload from:
+	           // Hï¿½henstufenzeichen einfï¿½gen fï¿½r can load and unload from:
                fprintf ( detailed5, "<tr><td>UNIT darf diese Stufe selbst nicht erreichen</td>" );
 			   for ( int h = 0; h < 8; h++ ) {
                   if ( ft->loadcapabilitynot & (1 << h))
@@ -692,33 +692,33 @@ int main(int argc, char *argv[] )
 /*           // NEU - noch anzupassen
             for ( int h = 0; h < 8; h++ ) {
                if ( ft->loadcapability & (1 << h))
-                  printf("H÷henstufe kann geladen werden" );
+                  printf("Hï¿½henstufe kann geladen werden" );
 
                if ( ft->loadcapabilityreq & (1 << h))
-                  printf("H÷henstufe mu¯ erreichbar sein, um geladen werden zu k÷nnen" );
+                  printf("Hï¿½henstufe muï¿½ erreichbar sein, um geladen werden zu kï¿½nnen" );
 
                if ( ft->loadcapability & (1 << h))
-                  printf("H÷henstufe darf nicht erreichbar sein" );
+                  printf("Hï¿½henstufe darf nicht erreichbar sein" );
             }
 
-            // ft->loadcapacity  ist maximale ladekapazitõt
+            // ft->loadcapacity  ist maximale ladekapazitï¿½t
             for ( int c = 0; c < cmovemalitypenum; c++ )
                if ( ft->vehicleCategoriesLoadable & (1 << c))
                   printf(" Kategorie %s kann geladen werden", cmovemalitypes[c] );
 
             for (  i = 0; i < ft->buildingsBuildable.size(); i++ ) {
-               printf("es können die gebäude mit ids von %d bis %d gebaut werden\n", ft->buildingsBuildable[i].from, ft->buildingsBuildable[i].to );
+               printf("es kï¿½nnen die gebï¿½ude mit ids von %d bis %d gebaut werden\n", ft->buildingsBuildable[i].from, ft->buildingsBuildable[i].to );
                for ( int b = 0; b < buildingtypenum; b++ ) {
                   BuildingType* bld = getbuildingtype_forpos ( b );
                   if (     bld->id >= ft->buildingsBuildable[i].from
                            && bld->id <= ft->buildingsBuildable[i].to ) {
-                     printf( "das gebõude mit id %d und dem Namen %s kann gebaut werden\n", bld->id, bld->name.c_str() );
+                     printf( "das gebï¿½ude mit id %d und dem Namen %s kann gebaut werden\n", bld->id, bld->name.c_str() );
                   }
                }
             }
 */
 /*            for ( int i = 0; i  < ft->vehiclesBuildable.size(); i++ ) {
-               printf("es können die einheiten mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
+               printf("es kï¿½nnen die einheiten mit ids von %d bis %d gebaut werden\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
                for ( int b = 0; b < vehicletypenum; b++ ) {
                   Vehicletype* veh = getvehicletype_forpos ( b );
                   if (     veh->id >= ft->vehiclesBuildable[i].from
@@ -729,7 +729,7 @@ int main(int argc, char *argv[] )
             }
 */
 /*            for ( int i = 0; i < ft->objectsBuildable.size(); i++ ) {
-               printf("es können die Objekte mit ids von %d bis %d gebaut werden\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
+               printf("es kï¿½nnen die Objekte mit ids von %d bis %d gebaut werden\n", ft->objectsBuildable[i].from, ft->objectsBuildable[i].to );
                for ( int b = 0; b < objecttypenum; b++ ) {
                   Object*type obj = getobjecttype_forpos ( b );
                   if (     obj->id >= ft->objectsBuildable[i].from
@@ -739,7 +739,7 @@ int main(int argc, char *argv[] )
                }
             }
 */
-            // ABSCHLU˜ DER DOKUMENTE
+            // ABSCHLUï¿½ DER DOKUMENTE
 
             fprintf ( detailed1, "</body></html>\n");
             fprintf ( detailed2, "</body></html>\n");
@@ -765,7 +765,7 @@ int main(int argc, char *argv[] )
 
       }
 
-      // Dokument Übersicht Ende
+      // Dokument ï¿½bersicht Ende
 
       fprintf( overview , "</table></body></html>\n" );
       fprintf ( overview1, "</body></html>\n" );

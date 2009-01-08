@@ -66,23 +66,20 @@ const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
                    "only move to and from transports",
                    NULL };
 */
-const char*  cwaffentypen[cwaffentypennum]  =
+const char*  cwaffentypen[weaponTypeNum]  =
    {"cruise missile", "mine",    "bomb",       "large missile", "small missile", "torpedo", "machine gun",
     "cannon",         "service", "ammunition refuel", "laser", "shootable", "object placement"
    };
 
-const int  cwaffenproduktionskosten[cwaffentypennum][3]    =
-   { {
-        1500,1500,1500
-     }
-     ,  // cruise missile
-     {10, 10, 10},     // mine
-     {40, 40, 40},     // bomb
-     {200, 200, 200},     // big missile
-     {50, 50, 50},     // small missile
-     {20, 30, 40},     // torpedo
-     {1, 1, 1},     // machine gun
-     {5, 5, 1},     // cannon
+const int  ammoProductionCost[weaponTypeNum][3]    =
+   { { 1500,1500,1500 }, // cruise missile
+     {10, 10, 10},       // mine
+     {40, 40, 40},       // bomb
+     {200, 200, 200},    // big missile
+     {50, 50, 50},       // small missile
+     {20, 30, 40},       // torpedo
+     {1, 1, 1},          // machine gun
+     {5, 5, 1},          // cannon
      {0, 0, 0},     // service
      {0, 0, 0},     // ammo refuel
      {0, 0, 0},     // laser
@@ -92,7 +89,7 @@ const int  cwaffenproduktionskosten[cwaffentypennum][3]    =
    ;    // objectPlacement
 
 
-   const bool  weaponAmmo[cwaffentypennum] = {
+   const bool  weaponAmmo[weaponTypeNum] = {
       true, true, true, true, true, true, true, true, false, false, false, false, false 
    };
    
@@ -865,7 +862,7 @@ ASCString SingleWeapon::getName ( void ) const
    ASCString s;
 
    int k = getScalarWeaponType();
-   if ( k < cwaffentypennum && k >= 0 )
+   if ( k < weaponTypeNum && k >= 0 )
       s = cwaffentypen[k];
    else
       if ( service() || placeObjects() )
@@ -1213,7 +1210,7 @@ void  Vehicletype::paint ( Surface& s, SPoint pos ) const
 
 void SingleWeapon::runTextIO ( PropertyContainer& pc )
 {
-   pc.addTagInteger( "Type", typ, cwaffentypennum, weaponTags );
+   pc.addTagInteger( "Type", typ, weaponTypeNum, weaponTags );
    pc.addTagInteger( "targets", targ, choehenstufennum, heightTags );
    pc.addTagInteger( "shotFrom", sourceheight, choehenstufennum, heightTags );
    pc.addInteger("MaxRange", maxdistance );

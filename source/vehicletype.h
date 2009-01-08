@@ -60,8 +60,8 @@ extern const char*  cvehiclefunctions[];
  #define cfvehiclefunctionsanzeige 0xFFFFFFFF
 */
 
-#define cwaffentypennum 13
- extern const char*  cwaffentypen[cwaffentypennum] ;
+#define weaponTypeNum 13
+ extern const char*  cwaffentypen[weaponTypeNum] ;
  #define cwcruisemissile 0
  #define cwcruisemissileb ( 1 << cwcruisemissile )
  #define cwminen 1
@@ -89,10 +89,10 @@ extern const char*  cvehiclefunctions[];
  #define cwserviceb ( 1 << cwservicen )
  #define cwobjectplacementn 12
  #define cwobjectplacementb ( 1 << cwobjectplacementn )
- extern const int cwaffenproduktionskosten[cwaffentypennum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
+ extern const int ammoProductionCost[weaponTypeNum][3];  /*  Angabe: Waffentyp; energy - Material - Sprit ; jeweils fuer 5er Pack */
 
 
- extern const bool weaponAmmo[cwaffentypennum];
+ extern const bool weaponAmmo[weaponTypeNum];
 
 
 
@@ -247,7 +247,7 @@ extern const char*  cvehiclefunctions[];
         //! the damage this unit can repair itself automatically each turn.
         int          autorepairrate;
 
-        //! if this unit constructs another unit externally (for example a turrt), it costs this much movement points
+        //! if this unit constructs another unit externally (for example a turret), it costs this much of its movement (in percent) 
         int  unitConstructionMoveCostPercentage;
         
         //! the minimal distance (measured in number of fields) in which units can be externally constructed

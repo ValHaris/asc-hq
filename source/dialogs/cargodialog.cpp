@@ -154,11 +154,14 @@ namespace CargoGuiFunctions {
    };
 
 
-   class UnitProduction : public GuiFunction
+   class UnitProduction : public GuiFunction, public SigC::Object
    {
          CargoDialog& parent;
+         ConstructUnitCommand::Producables producables; 
+         ConstructUnitCommand* constructUnitCommand;
+         void productionLinesChanged();
       public:
-         UnitProduction( CargoDialog& masterParent ) : parent( masterParent)  {};
+         UnitProduction( CargoDialog& masterParent ) : parent( masterParent), constructUnitCommand(NULL)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
          void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
          bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
@@ -1911,21 +1914,58 @@ namespace CargoGuiFunctions {
       return "produce unit";
    };
 
+   void UnitProduction::productionLinesChanged()
+   {
+      if (constructUnitCommand ) {
+         producables.clear();
+         ConstructUnitCommand::Producables temp = constructUnitCommand->getProduceableVehicles();
+         producables.insert( producables.end(), temp.begin(), temp.end () );
+      }
+   }
 
    void UnitProduction::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
       bool refillAmmo;
       bool refillResources;
+      
+      auto_ptr<ConstructUnitCommand> production ( new ConstructUnitCommand( parent.getContainer() ));
+      constructUnitCommand = production.get();
+      
       const Vehicletype* v;
       {
-         VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), parent.getContainer() );
+         production->setMode( ConstructUnitCommand::internal );
+         producables = production->getProduceableVehicles();
+         VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), parent.getContainer(), producables, true );
+         fsw.reloadProducebles.connect( SigC::slot( *this, &UnitProduction::productionLinesChanged ));
+         fsw.SetTransparency(0);
          fsw.Show();
          fsw.RunModal();
          v = fsw.getVehicletype();
          refillAmmo = fsw.fillWithAmmo();
          refillResources = fsw.fillWithResources();
       }
+      constructUnitCommand = NULL;
+      
       if ( v ) {
+         
+         for ( ConstructUnitCommand::Producables::const_iterator i = producables.begin(); i != producables.end(); ++i )
+            if ( i->type == v ) {
+               if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Energy  | ConstructUnitCommand::Lack::Material | ConstructUnitCommand::Lack::Fuel )) {
+                  warning("Not enough resources to build unit");
+                  return;
+               }
+               
+               if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Movement )) {
+                  warning("Not enough movement to build unit");
+                  return;
+               }
+                
+               if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Research )) {
+                  warning("This unit has not been researched yet");
+                  return;
+               }
+            }
+         
          ContainerControls cc( parent.getContainer() );
          cc.produceUnit( v, refillAmmo, refillResources );
 

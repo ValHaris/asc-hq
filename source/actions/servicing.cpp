@@ -350,7 +350,7 @@ class AmmoTransferrable : public Transferrable {
          if ( undoProduction > 0 ) {
             if ( !queryOnly ) {
                for ( int r = 0; r < resourceTypeNum; ++r )
-                  getResourceWatch( c ).putResource(  r, cwaffenproduktionskosten[ammoType][r] * undoProduction );
+                  getResourceWatch( c ).putResource(  r, ammoProductionCost[ammoType][r] * undoProduction );
                
                produced[c] -= undoProduction;
             }
@@ -388,8 +388,8 @@ class AmmoTransferrable : public Transferrable {
 
          if ( allowAmmoProduction && toProduce > 0 && weaponAmmo[ammoType] && c->baseType->hasFunction(ContainerBaseType::AmmoProduction) ) {
             for ( int r = 0; r < resourceTypeNum; ++r ) {
-               if ( cwaffenproduktionskosten[ammoType][r] ) {
-                  int produceable = getResourceWatch(c).avail().resource(r) / cwaffenproduktionskosten[ammoType][r];
+               if ( ammoProductionCost[ammoType][r] ) {
+                  int produceable = getResourceWatch(c).avail().resource(r) / ammoProductionCost[ammoType][r];
                   if ( produceable < toProduce )
                      toProduce = produceable;
                }
@@ -397,7 +397,7 @@ class AmmoTransferrable : public Transferrable {
             if ( !queryOnly ) {
                Resources res;
                for ( int r = 0; r < resourceTypeNum; ++r )
-                  res.resource(r) = cwaffenproduktionskosten[ammoType][r] * toProduce;
+                  res.resource(r) = ammoProductionCost[ammoType][r] * toProduce;
 
                getResourceWatch( c ).getResources( res );
                produced[c] += toProduce;
@@ -582,7 +582,7 @@ void ServiceChecker :: check( ContainerBase* dest )
    /* it is important that the ammo transfers are in front of the resource transfers, because ammo production affects resource amounts
       and their prelimarny commitment would cause inconsistencies */
 
-      for ( int a = 0; a < cwaffentypennum; ++a ) {
+      for ( int a = 0; a < weaponTypeNum; ++a ) {
          if ( source->maxAmmo( a ) && dest->maxAmmo( a )) {
             if ( weaponAmmo[a] ) {
                if ( externalTransfer ) {

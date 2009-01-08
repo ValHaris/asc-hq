@@ -133,13 +133,15 @@ bool VehicleTypeCountLocateWidget::locate()
 }
 
 
-VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player ) : actplayer(player), showResourcesForUnit(true), original_items( types )
+VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player ) 
+   : actplayer(player), showResourcesForUnit(true), original_items( types )
 {
    restart();
    setAvailableResource( plantResources );
 };
 
-VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( const Container& types, const Player& player ) : actplayer(player), showResourcesForUnit(false), original_items( types )
+VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( const Container& types, const Player& player ) 
+   : actplayer(player), showResourcesForUnit(false), original_items( types )
 {
    restart();
 };
@@ -148,7 +150,7 @@ VehicleTypeSelectionItemFactory :: VehicleTypeSelectionItemFactory( const Contai
 
 void VehicleTypeSelectionItemFactory::restart()
 {
-   items = getOriginalItems();
+   items = original_items;
    sort( items.begin(), items.end(), vehicleComp );
    it = items.begin();
 };

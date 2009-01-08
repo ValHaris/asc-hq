@@ -47,6 +47,7 @@
 #include "turncontrol.h"
 #include "dialogs/buildingtypeselector.h"
 #include "dialogs/internalAmmoTransferDialog.h"
+#include "dialogs/vehicleproductionselection.h"
 #include "actions/jumpdrive.h"
 #include "actions/selfdestruct.h"
 #include "actions/attackcommand.h"
@@ -1711,213 +1712,6 @@ void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, in
 
 
 
-
-
-
-
-
-class VehicleBuildingGui : public GuiIconHandler, public GuiFunction, public SigC::Object {
-      Vehicle* veh;
-
-      void mapDeleted( GameMap& map )
-      {
-         if ( NewGuiHost::getIconHandler() == this )
-            NewGuiHost::popIconHandler();
-      }
-
-   protected:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int id  );
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int id  );
-      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int id  );
-      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int id  );
-
-      void search ( const MapCoordinate& pos, int& num, int pass );
-
-      void addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id );
-
-   public:
-      VehicleBuildingGui() : veh( NULL ) 
-      { 
-         GameMap::sigMapDeletion.connect( SigC::slot( *this, &VehicleBuildingGui::mapDeleted )); 
-      };
-
-      bool init( Vehicle* vehicle );
-      void eval( const MapCoordinate& mc , ContainerBase* subject );
-
-};
-
-
-bool VehicleBuildingGui::init( Vehicle* vehicle )
-{
-   veh = vehicle;
-   int num = 0;
-
-   for ( int i = 0; i< 6; ++i)
-      search ( getNeighbouringFieldCoordinate(veh->getPosition(), i), num, 0 );
-
-   return num > 0;
-}
-
-
-bool VehicleBuildingGui::available( const MapCoordinate& pos, ContainerBase* subject, int id  )
-{
-   return true;
-}
-
-void VehicleBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subject, int id  )
-{
-   if ( id ) {
-      Vehicletype* vt = vehicleTypeRepository.getObject_byID( id );
-      Vehicle* v = veh->constructvehicle ( vt, pos.x, pos.y );
-      logtoreplayinfo ( rpl_buildtnk4, pos.x, pos.y, vt->id, veh->getOwner(), veh->getPosition().x, veh->getPosition().y, int(v->height) );
-      evaluateviewcalculation( actmap );
-   }
-   moveparams.movestatus = 0;
-   actmap->cleartemps();
-   NewGuiHost::popIconHandler();
-   repaintMap();
-   updateFieldInfo();
-}
-
-Surface& VehicleBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int id )
-{
-   if ( id == 0 )
-      return IconRepository::getIcon("cancel.png");
-
-   Vehicletype* vehtype = vehicleTypeRepository.getObject_byID( id );
-
-   if ( !vehtype )
-      return IconRepository::getIcon("cancel.png");
-
-   static map<int,Surface> removeIconRepository;
-
-   if ( removeIconRepository.find( id ) != removeIconRepository.end() )
-      return removeIconRepository[id];
-
-   removeIconRepository[id] = buildGuiIcon( vehtype->getImage() );
-
-   return removeIconRepository[id];
-}
-
-
-ASCString VehicleBuildingGui::getName( const MapCoordinate& pos, ContainerBase* subject, int id )
-{
-   if ( id == 0 )
-      return "cancel (~ESC~)";
-
-   Vehicletype* vehtype = vehicleTypeRepository.getObject_byID( id );
-   if ( !vehtype )
-      return "";
-
-   ASCString result;
-   result.format( "Build %s (%d Material, %d Fuel)", vehtype->name.c_str(), vehtype->productionCost.material, vehtype->productionCost.energy );
-
-   return result;
-}
-
-
-
-void VehicleBuildingGui::addButton( int &num, const MapCoordinate& mc, ContainerBase* subject, int id )
-{
-    GuiButton* b = host->getButton(num);
-    b->registerFunc( this, mc, subject, id );
-    b->Show();
-    ++num;
-}
-
-void VehicleBuildingGui::search ( const MapCoordinate& pos, int& num, int pass )
-{
-   tfield* fld =  actmap->getField(pos);
-   if ( !fld )
-      return;
-
-   if ( fld->building || fld->vehicle || !fieldvisiblenow(fld) )
-      return;
-
-     for ( int i = 0; i < veh->typ->vehiclesBuildable.size(); i++ )
-       for ( int j = veh->typ->vehiclesBuildable[i].from; j <= veh->typ->vehiclesBuildable[i].to; j++ )
-         if ( actmap->getgameparameter(cgp_forbid_unitunit_construction) == 0 || actmap->unitProduction.check(j) ) {
-            Vehicletype* v = actmap->getvehicletype_byid ( j );
-            if ( v && veh->vehicleconstructable ( v, pos.x, pos.y )) {
-               if ( pass==1 )
-                  addButton(num, pos, veh, v->id);
-               else {
-                  ++num;
-                  fld->a.temp = 1;
-               }   
-            }
-         }
-}
-
-
-void VehicleBuildingGui::eval( const MapCoordinate& mc , ContainerBase* subject )
-{
-   int num = 0;
-   if ( mc.x < actmap->xsize || mc.y < actmap->ysize )
-      if ( veh )
-         if ( beeline ( mc, veh->getPosition() ) == 10 )
-            search( mc, num, 1 );
-
-   GuiButton* b = host->getButton(num);
-   b->registerFunc( this, mc, subject, 0 );
-   b->Show();
-   ++num;
-
-   host->disableButtons(num);
-}
-
-
-
-VehicleBuildingGui vehicleBuildingGui;
-
-
-class BuildVehicle : public GuiFunction
-{
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return IconRepository::getIcon("constructunit.png");
-      };
-      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return "Unit construction";
-      };
-};
-
-
-bool BuildVehicle::available( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   tfield* fld = actmap->getField(pos);
-   if ( fld && fld->vehicle )
-      if (fld->vehicle->color == actmap->actplayer * 8)
-         if ( fld->vehicle->typ->vehiclesBuildable.size() )
-            if (!commandPending())
-               if ( !fld->vehicle->attacked )
-                  return true;
-   return false;
-}
-
-void BuildVehicle::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( pendingVehicleActions.actionType == vat_nothing ) {
-      tfield* fld = actmap->getField(pos);
-      if ( fld->vehicle ) {
-         if ( vehicleBuildingGui.init( fld->vehicle )) {
-            moveparams.movestatus = 73;
-            NewGuiHost::pushIconHandler( &vehicleBuildingGui );
-            repaintMap();
-            updateFieldInfo();
-         } else
-            displaymessage2("no units produceable");
-      }
-   }
-}
-
-
-
-
 class BuildVehicleCommand : public GuiFunction
 {
    public:
@@ -1937,27 +1731,80 @@ class BuildVehicleCommand : public GuiFunction
 bool BuildVehicleCommand::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    tfield* fld = actmap->getField(pos);
-   if ( fld && fld->vehicle )
-      if (fld->vehicle->getOwner() == actmap->actplayer )
-         if (!commandPending())
+   if (!commandPending())
+      if ( fld && fld->vehicle )
+         if (fld->vehicle->getOwner() == actmap->actplayer )
             return ConstructUnitCommand::externalConstructionAvail( fld->vehicle );
+   
+   ConstructUnitCommand* construct = dynamic_cast<ConstructUnitCommand*>(NewGuiHost::pendingCommand);
+   if ( construct ) {
+      return construct->isFieldUsable(pos); 
+   }
    return false;
 }
 
 void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( pendingVehicleActions.actionType == vat_nothing ) {
-      tfield* fld = actmap->getField(pos);
-      if ( fld->vehicle ) {
-         if ( vehicleBuildingGui.init( fld->vehicle )) {
-            moveparams.movestatus = 73;
-            NewGuiHost::pushIconHandler( &vehicleBuildingGui );
+   
+   ConstructUnitCommand* construct = dynamic_cast<ConstructUnitCommand*>(NewGuiHost::pendingCommand);
+   if ( !construct  ) {
+      delete construct;
+      auto_ptr<ConstructUnitCommand> constructCommand ( new ConstructUnitCommand( subject ));
+      constructCommand->setMode( ConstructUnitCommand::external);
+      ConstructUnitCommand::Producables buildables = constructCommand->getProduceableVehicles();
+      
+      VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), subject, buildables, false );
+      fsw.Show();
+      fsw.RunModal();
+      const Vehicletype* v = fsw.getVehicletype();
+      if ( v ) {
+         
+         for ( ConstructUnitCommand::Producables::const_iterator i = buildables.begin(); i != buildables.end(); ++i )
+            if ( i->type == v ) {
+               if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Energy  | ConstructUnitCommand::Lack::Material | ConstructUnitCommand::Lack::Fuel )) {
+                  warning("Not enough resources to build unit");
+                  return;
+               }
+               
+               if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Movement )) {
+                  warning("Not enough movement to build unit");
+                  return;
+               }
+                
+               if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Research )) {
+                  warning("This unit has not been researched yet");
+                  return;
+               }
+            }
+               
+         
+         constructCommand->setVehicleType( v );
+         vector<MapCoordinate> fields = constructCommand->getFields();
+         
+         if ( fields.size() ) {
+            for ( vector<MapCoordinate>::const_iterator i = fields.begin(); i != fields.end(); ++i )
+               subject->getMap()->getField( *i )->a.temp = 1;
+            
             repaintMap();
             updateFieldInfo();
-         } else
-            displaymessage2("no units produceable");
+            
+            NewGuiHost::pendingCommand = constructCommand.release();
+         } else {
+            warning("no fields to construct unit.\nInfo: some turrets need foundations be to constructed first");
+         }
       }
+   } else {
+      actmap->cleartemps();
+      construct->setTargetPosition( pos );
+      ActionResult res = construct->execute ( createContext( actmap ) );
+      if ( !res.successful() ) {
+         delete NewGuiHost::pendingCommand;
+         repaintMap();
+         dispmessage2( res );
+      }
+      NewGuiHost::pendingCommand = NULL;
    }
+   
 }
 
 
@@ -2548,7 +2395,6 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::PowerOn() );
    handler.registerUserFunction( new GuiFunctions::PowerOff() );
    handler.registerUserFunction( new GuiFunctions::BuildObject() );
-   handler.registerUserFunction( new GuiFunctions::BuildVehicle() );
    handler.registerUserFunction( new GuiFunctions::BuildVehicleCommand() );
    handler.registerUserFunction( new GuiFunctions::ConstructBuilding() );
    handler.registerUserFunction( new GuiFunctions::DestructBuilding() );

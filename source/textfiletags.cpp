@@ -112,7 +112,7 @@ const char*  terrainProperties[terrainPropertyNum]
         
 
         
-const char*  weaponTags[cwaffentypennum]
+const char*  weaponTags[weaponTypeNum]
    = {  "cruise_missile",
         "mine",
         "bomb",

@@ -61,7 +61,7 @@ bool ContainerConstControls::unitProductionAvailable() const
    return false;
 }
 
-int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* type ) const
+int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* type, bool internally ) const
 {
    int l = 0;
    Resources cost = container->getProductionCost( type );
@@ -69,11 +69,16 @@ int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* typ
       if ( container->getAvailableResource( cost.resource(r), r ) < cost.resource(r) )
          l |= 1 << r;
    
-   if ( !getPlayer().research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
-      l |= 1 << 10;
-
-   if ( !container->vehicleUnloadable( type ) && !container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
-      l |= 1 << 11;
+   if ( internally ) {
+      if ( !getPlayer().research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
+         l |= 1 << 10;
+   
+      if ( !container->vehicleUnloadable( type ) && !container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
+         l |= 1 << 11;
+   } else {
+      if ( !getPlayer().research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffExternally ) ) 
+         l |= 1 << 10;
+   }
       
    return l;
 }
@@ -84,7 +89,7 @@ Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithA
    if ( !unitProductionAvailable() )
       return NULL;
    
-   if ( unitProductionPrerequisites( type ))
+   if ( unitProductionPrerequisites( type, true ))
       return NULL;
 
    
@@ -128,7 +133,7 @@ Vehicle* ContainerControls::produceUnitHypothetically( const Vehicletype* type )
    if ( !unitProductionAvailable() )
       return NULL;
    
-   if ( unitProductionPrerequisites( type ))
+   if ( unitProductionPrerequisites( type, true ))
       return NULL;
 
    
@@ -174,7 +179,7 @@ VehicleMovement*   ContainerControls :: movement (  Vehicle* eht, bool simpleMod
 int  ContainerControls :: ammoProducable ( int weaptype, int num )
 {
    if ( container->baseType->hasFunction( ContainerBaseType::AmmoProduction ) ) {
-      Resources needed = Resources( cwaffenproduktionskosten[weaptype][0] * num, cwaffenproduktionskosten[weaptype][1] * num, cwaffenproduktionskosten[weaptype][2] * num );
+      Resources needed = Resources( ammoProductionCost[weaptype][0] * num, ammoProductionCost[weaptype][1] * num, ammoProductionCost[weaptype][2] * num );
       Resources avail = container->getResource( needed, true );
 
       int perc = 100;
@@ -195,7 +200,7 @@ int  ContainerControls :: ammoProducable ( int weaptype, int num )
 int ContainerControls ::  produceAmmo ( int weaptype, int num )
 {
    int n = ammoProducable( weaptype, num );
-   container->getResource ( Resources( cwaffenproduktionskosten[weaptype][0] * n, cwaffenproduktionskosten[weaptype][1] * n, cwaffenproduktionskosten[weaptype][2] * n ), false );
+   container->getResource ( Resources( ammoProductionCost[weaptype][0] * n, ammoProductionCost[weaptype][1] * n, ammoProductionCost[weaptype][2] * n ), false );
    container->putAmmo ( weaptype, n, false );
 
    logtoreplayinfo ( rpl_produceAmmo, container->getPosition().x, container->getPosition().y, weaptype, n );

@@ -19,30 +19,30 @@
 */
 
 
-#ifndef changeUnitMovementH
-#define changeUnitMovementH
+#ifndef SpawnUnitH
+#define SpawnUnitH
 
 
-#include "unitaction.h"
+#include "action.h"
+#include "action-registry.h"
 
+#include "../typen.h"
 
-class ChangeUnitMovement : public UnitAction {
-      bool delta;
-      int movement;
+class SpawnUnit : public GameAction {
+      MapCoordinate3D pos;
+      int vehicleTypeID;
+      int owner;
+      int networkid;
+      int carrierID;
       
-      int originalMovement;
-      int resultingMovement;
+      ContainerBase* getCarrier( bool dontThrow = false );
       
-       ChangeUnitMovement( GameMap* map ) : UnitAction( map ) {};
+      SpawnUnit( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
-      
+
    public:
-      /** cahnges a unit's movement
-      \param delta: true=movement is a relative value which will be subtracted
-                    false=movement is the new absolute value
-      */
-      ChangeUnitMovement( GameMap* gamemap, int vehicleID, int movement, bool delta = false );
-      ChangeUnitMovement( Vehicle* veh, int movement, bool delta = false );
+      SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner );
+      SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID );
       
       ASCString getDescription() const;
       
@@ -51,8 +51,7 @@ class ChangeUnitMovement : public UnitAction {
       
       virtual ActionResult runAction( const Context& context );
       virtual ActionResult undoAction( const Context& context );
-      virtual ActionResult preCheck();
-      virtual ActionResult postCheck();
+      virtual ActionResult verify();
       
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream ) const;
