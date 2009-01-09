@@ -230,6 +230,8 @@ View doesn't match
 The unit is not standing on this field
 21302
 The unit was not in this carrier
+21303
+Carrier not found
 21401
 No matching mine was found this field
 21501
@@ -258,4 +260,7 @@ Vehicletype not available
 Vehicle not found at position
 21803
 wrong vehicle found at position
+21804
+Failed to produce unit
+
 

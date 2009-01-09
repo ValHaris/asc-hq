@@ -58,6 +58,7 @@ const ContainerBase* ContainerCommand::getContainer( bool dontThrow ) const
 
 void ContainerCommand::readData ( tnstream& stream ) 
 {
+   Command::readData( stream );
    int version = stream.readInt();
    if ( version != 1 )
       throw tinvalidversion ( "containerID", 1, version );
@@ -68,6 +69,7 @@ void ContainerCommand::readData ( tnstream& stream )
       
 void ContainerCommand::writeData ( tnstream& stream ) const
 {
+   Command::writeData( stream );
    stream.writeInt( 1 );
    stream.writeInt( containerID );
 };

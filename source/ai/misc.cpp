@@ -926,7 +926,7 @@ void AI::production()
                          ContainerControls bc( pr.bld );
                          int lack = bc.unitProductionPrerequisites( pr.vt, true );
                          if  ( !lack && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
-                             Vehicle* veh = bc.produceUnit( pr.vt, true, true );
+                             Vehicle* veh = bc._produceUnit( pr.vt, true, true );
                              if ( veh ) {
                                  calculateThreat ( veh );
                                  container ( pr.bld );

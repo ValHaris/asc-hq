@@ -56,8 +56,8 @@ class ContainerControls : public ContainerConstControls {
       ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
       static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode = false);
 
-      
-      Vehicle* produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources );
+      //! \deprecated , use ConstructUnitCommand instead
+      Vehicle* _produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources );
 
       Resources calcDestructionOutput( Vehicle* veh );
       void destructUnit( Vehicle* veh );

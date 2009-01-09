@@ -60,7 +60,7 @@ GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent,
 bool GuiButton::exec()
 {
   if ( func ) {
-     func->execute( pos, subject, id );
+     callFunc( pos, subject, id );
      return true;
   }
   return false;
@@ -97,11 +97,21 @@ void GuiButton::eventMouseLeave()
    MessagingHub::Instance().statusInformation("");
 }
 
+void GuiButton::callFunc( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   try {
+      func->execute( pos, subject, id );
+   } catch ( ActionResult res ) {
+      errorMessage( res.getMessage() );
+   }
+}
+
+
 bool GuiButton::checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
    if ( func->available( pos, subject, id ))
       if ( func->checkForKey( key, modifier, id)) {
-         func->execute( pos, subject, id );
+         callFunc( pos, subject, id );
          return true;
       }
    return false;

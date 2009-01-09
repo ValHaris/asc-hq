@@ -34,6 +34,7 @@ class SpawnUnit : public GameAction {
       int owner;
       int networkid;
       int carrierID;
+      bool carrier;
       
       ContainerBase* getCarrier( bool dontThrow = false );
       
@@ -45,6 +46,8 @@ class SpawnUnit : public GameAction {
       SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID );
       
       ASCString getDescription() const;
+      
+      Vehicle* getUnit();
       
    protected:
       virtual GameActionID getID() const;

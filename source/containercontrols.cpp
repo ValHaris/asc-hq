@@ -84,7 +84,7 @@ int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* typ
 }
 
 
-Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources )
+Vehicle* ContainerControls::_produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources )
 {
    if ( !unitProductionAvailable() )
       return NULL;
@@ -115,14 +115,15 @@ Vehicle* ContainerControls::produceUnit( const Vehicletype* type, bool fillWithA
 
    container->addToCargo( vehicle );
 
+   vehicle->setMovement(0);
+   vehicle->setAttacked();
+   
    if ( fillWithAmmo ) 
       refillAmmo( vehicle );
    
    if( fillWithResources )
       refillResources( vehicle );
 
-   vehicle->setMovement(0);
-   vehicle->setAttacked();
 
    return vehicle;
 }

@@ -28,14 +28,16 @@
 
 class UnitFieldRegistration : public UnitAction {
    public:
-      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D };
+      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D, RegisterInCarrier };
       
-      UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation );
+      UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation, ContainerBase* carrier = 0 );
       
       ASCString getDescription() const;
    private:
       Operation operation;
       MapCoordinate3D position;
+      
+      int carrierID;
       
       MapCoordinate3D previousPosition;
       

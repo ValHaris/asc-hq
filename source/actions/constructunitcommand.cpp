@@ -67,7 +67,7 @@ bool ConstructUnitCommand :: avail ( const ContainerBase* eht )
 
 
 ConstructUnitCommand :: ConstructUnitCommand ( ContainerBase* container )
-   : ContainerCommand ( container ), mode( undefined ), vehicleTypeID(-1)
+   : ContainerCommand ( container ), mode( undefined ), vehicleTypeID(-1), newUnitID(-1)
 {
 
 }
@@ -210,9 +210,8 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
       return ActionResult( 21701 );
    
    
-   if ( !isFieldUsable( target ))
+   if ( mode == external && !isFieldUsable( target ))
       return ActionResult( 21703 );
-   
   
    
    int height;
@@ -230,23 +229,70 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
    }
    MapCoordinate3D position ( target, height );
 
-   ActionResult res = (new SpawnUnit(getMap(), position, vehicleTypeID, getContainer()->getOwner() ))->execute( context );
+   if ( mode == external ) {
+      SpawnUnit* spawnUnit = new SpawnUnit(getMap(), position, vehicleTypeID, getContainer()->getOwner() );
+      ActionResult res = spawnUnit->execute( context );
+      if ( !res.successful() )
+         return res;
       
-   if ( res.successful() ) {
+      newUnitID = spawnUnit->getUnit()->networkid;
+      
       Vehicle* veh = dynamic_cast<Vehicle*>(getContainer() );
-      if ( veh )      
+      if ( veh ) {      
          res = (new ChangeUnitMovement( veh, veh->maxMovement() * veh->typ->unitConstructionMoveCostPercentage/100, true ))->execute( context );
+         if ( !res.successful() )
+            return res;
+      }
+   } else {
+      SpawnUnit* spawnUnit  = new SpawnUnit(getMap(), getContainer(), vehicleTypeID );
+      ActionResult res = spawnUnit->execute( context );
+      if ( !res.successful() )
+         return res;
+      
+      newUnitID = spawnUnit->getUnit()->networkid;
+      
+      if ( getMap()->getgameparameter(cgp_bi3_training) >= 1 ) {
+         int cnt = 0;
+
+         for ( Player::BuildingList::iterator bi = getMap()->player[actmap->actplayer].buildingList.begin(); bi != getMap()->player[actmap->actplayer].buildingList.end(); bi++ )
+            if ( (*bi)->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
+               cnt++;
+
+         Vehicle* vehicle = spawnUnit->getUnit();
+         vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
+         if ( vehicle->experience > maxunitexperience )
+            vehicle->experience = maxunitexperience;
+      }
    }
    
-   if ( res.successful() ) 
-      res = (new ConsumeResource(getContainer(), cost ))->execute( context );
+   ActionResult res = (new ConsumeResource(getContainer(), cost ))->execute( context );
    
    if ( context.display )
       context.display->repaintDisplay();
    
+   if ( res.successful() )
+      setState( Completed );
+   else
+      setState( Failed );
+   
    return res;
-
 }
+
+Vehicle* ConstructUnitCommand :: getProducedUnit()
+{
+   if ( newUnitID > 0 )
+      return getMap()->getUnit( newUnitID );
+   else
+      return NULL;
+}
+
+void ConstructUnitCommand :: setMode( Mode mode ) 
+{ 
+   this->mode = mode; 
+   if ( mode == internal )
+      target = getContainer()->getPosition();
+};
+
 
 static const int ConstructUnitCommandVersion = 1;
 
@@ -259,6 +305,7 @@ void ConstructUnitCommand :: readData ( tnstream& stream )
    target.read( stream );
    vehicleTypeID = stream.readInt();
    mode = (Mode) stream.readInt();
+   newUnitID = stream.readInt();
 }
 
 void ConstructUnitCommand :: writeData ( tnstream& stream ) const
@@ -268,6 +315,7 @@ void ConstructUnitCommand :: writeData ( tnstream& stream ) const
    target.write( stream );
    stream.writeInt( vehicleTypeID );
    stream.writeInt( mode );
+   stream.writeInt( newUnitID );
 }
 
 void ConstructUnitCommand :: setVehicleType( const Vehicletype* type )
@@ -316,6 +364,6 @@ ASCString ConstructUnitCommand::getDescription() const
 
 namespace
 {
-//   const bool r1 = registerAction<ConstructUnitCommand> ( ActionRegistry::ConstructUnitCommand );
+   const bool r1 = registerAction<ConstructUnitCommand> ( ActionRegistry::ConstructUnitCommand );
 }
 

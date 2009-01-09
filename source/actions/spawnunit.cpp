@@ -28,7 +28,7 @@
 #include "../viewcalculation.h"
      
 SpawnUnit::SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner )
-   : GameAction( gamemap ), pos(position), networkid(-1), carrierID(-1)
+   : GameAction( gamemap ), pos(position), networkid(-1), carrierID(0), carrier( false )
 {
    this->vehicleTypeID = vehicleTypeID;
    this->owner = owner;
@@ -36,7 +36,7 @@ SpawnUnit::SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int veh
 }
             
 SpawnUnit::SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID )
-   : GameAction( gamemap ), pos( carrier->getPosition() ), networkid(-1), carrierID( carrier->getIdentification() )
+   : GameAction( gamemap ), pos( carrier->getPosition() ), networkid(-1), carrierID( carrier->getIdentification() ), carrier(true)
 {
    this->vehicleTypeID = vehicleTypeID;
    this->owner = carrier->getOwner();
@@ -77,6 +77,7 @@ void SpawnUnit::readData ( tnstream& stream )
    owner = stream.readInt();
    networkid = stream.readInt();
    carrierID = stream.readInt();
+   carrier = stream.readInt();
 };
       
       
@@ -88,6 +89,7 @@ void SpawnUnit::writeData ( tnstream& stream ) const
    stream.writeInt( owner );
    stream.writeInt( networkid );
    stream.writeInt( carrierID );
+   stream.writeInt( carrier );
 };
 
 
@@ -108,7 +110,7 @@ ActionResult SpawnUnit::runAction( const Context& context )
    
    Vehicle* v = new Vehicle( vehicleType, getMap(), owner );
    networkid= v->networkid;
-   if ( carrierID == -1 ) {
+   if ( !carrier ) {
       v->xpos = pos.x;
       v->ypos = pos.y;
       v->height = pos.getBitmappedHeight();
@@ -118,9 +120,21 @@ ActionResult SpawnUnit::runAction( const Context& context )
       if ( res.successful() )
          res = (new ViewRegistration( v, ViewRegistration::AddView ))->execute( context );
       return res;
+   } else {
+      ContainerBase* hostingCarrier = getMap()->getContainer( carrierID );
+      if ( !hostingCarrier )
+         return ActionResult( 21303 );
+      
+      ActionResult res = (new UnitFieldRegistration(v, pos, UnitFieldRegistration::RegisterInCarrier, hostingCarrier ))->execute( context );
+      return res;
    }
    
    return ActionResult(0);
+}
+
+Vehicle* SpawnUnit::getUnit()
+{
+   return getMap()->getUnit( networkid ); 
 }
 
 
@@ -134,7 +148,7 @@ ActionResult SpawnUnit::undoAction( const Context& context )
    if ( !vehicleType )
       return ActionResult( 21801, "Vehicle id is " + ASCString::toString(vehicleTypeID));
    
-   if ( carrierID == -1 ) {
+   if ( !carrier  ) {
       if ( !fld->vehicle )
          return ActionResult( 21802 );
       
@@ -145,7 +159,14 @@ ActionResult SpawnUnit::undoAction( const Context& context )
       fld->vehicle = NULL;
       return ActionResult(0);
    } else {
+      Vehicle* veh = getUnit();
+      if ( !veh )
+         return ActionResult( 21802 );
       
+      if ( veh->typ->id != vehicleTypeID  )
+         return ActionResult( 21803 );
+      
+      delete veh;
       return ActionResult(0);
    }
 }

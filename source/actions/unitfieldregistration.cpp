@@ -25,11 +25,15 @@
 #include "../gamemap.h"
 #include "../viewcalculation.h"
      
-UnitFieldRegistration::UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation )
+UnitFieldRegistration::UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation, ContainerBase* carrier )
    : UnitAction( vehicle->getMap(), vehicle->networkid)
 {
    this->operation= operation;
    this->position = pos;
+   if ( carrier )
+      carrierID = carrier->getIdentification();
+   else
+      carrierID = 0; 
 }
       
       
@@ -42,6 +46,7 @@ ASCString UnitFieldRegistration::getOpName() const
       case RemoveView: return "RemoveView"; 
       case Position: return "Position";
       case Position3D: return "Position3D";
+      case RegisterInCarrier: return "CarrierRegistration";
    }
    return "";
 }
@@ -58,31 +63,38 @@ ASCString UnitFieldRegistration::getDescription() const
    return  res;
 }
       
+static const int unitFieldRegistrationVersion = 2;
       
 void UnitFieldRegistration::readData ( tnstream& stream ) 
 {
    UnitAction::readData( stream );
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "UnitFieldRegistration", 1, version );
+   if ( version < 1 || version > unitFieldRegistrationVersion )
+      throw tinvalidversion ( "UnitFieldRegistration", unitFieldRegistrationVersion, version );
    
    operation = (Operation) stream.readInt();
    position.read( stream );
    previousPosition.read( stream );
    stream.readInt();
    stream.readInt();
+   
+   if ( version >= 2 )
+      carrierID = stream.readInt();
+   else
+      carrierID = 0;
 };
       
       
 void UnitFieldRegistration::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
-   stream.writeInt( 1 );
+   stream.writeInt( unitFieldRegistrationVersion );
    stream.writeInt( (int) operation );
    position.write( stream );
    previousPosition.write( stream );
    stream.writeInt( 0 ); // dummy
    stream.writeInt( 0 ); // dummy
+   stream.writeInt( carrierID );
 };
 
 
@@ -104,6 +116,15 @@ ActionResult UnitFieldRegistration::runAction( const Context& context )
          else 
             fld->vehicle = veh;
          break;
+         
+      case RegisterInCarrier:
+      {
+         ContainerBase* carrier = getMap()->getContainer( carrierID );
+         if ( !carrier )
+            throw ActionResult( 21303 );
+         carrier->addToCargo( veh );
+         break;
+      }
          
       case UnregisterOnField:
          if ( fld->getContainer() && fld->getContainer() != veh ) {
@@ -155,6 +176,18 @@ ActionResult UnitFieldRegistration::undoAction( const Context& context )
          else 
             fld->vehicle = veh;
          break;
+         
+      case RegisterInCarrier:
+      {
+         ContainerBase* carrier = getMap()->getContainer( carrierID );
+         if ( !carrier )
+            throw ActionResult( 21303 );
+         
+         if ( !carrier->removeUnitFromCargo( veh ))
+            throw ActionResult( 21302, veh );
+         
+         break;
+      }
          
       case RegisterOnField:
          if ( fld->getContainer() && fld->getContainer() != veh ) {

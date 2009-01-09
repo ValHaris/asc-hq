@@ -44,7 +44,7 @@ namespace ActionRegistry {
                   MoveUnitCommand,
                   RemoveObject,
                   ChangeObjectProperty,
-                  ConvertContainer,
+                  ConvertContainer,         // 20
                   PutObjectCommand,
                   PutMineCommand,
                   SpawnMine,

@@ -50,11 +50,11 @@
 #include "ammotransferdialog.h"
 #include "unitinfodialog.h"
 #include "vehicleproductionselection.h"
+#include "../sg.h"
 
 // #include "cargowidget.cpp"
 
 const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items );
-
 
 
 class CargoDialog;
@@ -1944,8 +1944,6 @@ namespace CargoGuiFunctions {
          refillAmmo = fsw.fillWithAmmo();
          refillResources = fsw.fillWithResources();
       }
-      constructUnitCommand = NULL;
-      
       if ( v ) {
          
          for ( ConstructUnitCommand::Producables::const_iterator i = producables.begin(); i != producables.end(); ++i )
@@ -1966,8 +1964,25 @@ namespace CargoGuiFunctions {
                }
             }
          
+         production->setVehicleType( v );
+         ActionResult res = production->execute ( createContext( parent.getContainer()->getMap() ) );
+         
+         if ( !res.successful() )
+            throw res;
+         
+         production.release();
+            
+         Vehicle* newUnit = constructUnitCommand->getProducedUnit();
+         if ( !newUnit )
+            throw ActionResult( 21804 );
+         
          ContainerControls cc( parent.getContainer() );
-         cc.produceUnit( v, refillAmmo, refillResources );
+         
+         if ( refillAmmo )
+            cc.refillAmmo( newUnit );
+         
+         if ( refillResources )
+            cc.refillResources( newUnit );
 
          if ( CGameOptions::Instance()->unitProduction.fillAmmo != refillAmmo ) {
             CGameOptions::Instance()->unitProduction.fillAmmo = refillAmmo;
@@ -1980,6 +1995,7 @@ namespace CargoGuiFunctions {
 
       }
       parent.cargoChanged(); // we need to update the resources because new production lines may have been build
+      constructUnitCommand = NULL;
    }
 
 

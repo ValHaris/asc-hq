@@ -39,6 +39,7 @@ class ConstructUnitCommand : public ContainerCommand {
    private:
       MapCoordinate target;
       int vehicleTypeID;
+      int newUnitID;
       
       void fieldChecker( const MapCoordinate& pos );
       
@@ -57,7 +58,7 @@ class ConstructUnitCommand : public ContainerCommand {
    public:
       ConstructUnitCommand ( ContainerBase* unit );
       
-      void setMode( Mode mode ) { this->mode = mode; };
+      void setMode( Mode mode );
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;
       
@@ -99,6 +100,8 @@ class ConstructUnitCommand : public ContainerCommand {
       
       vector<MapCoordinate> getFields();
       bool isFieldUsable( const MapCoordinate& pos );
+      
+      Vehicle* getProducedUnit();
       
       void setTargetPosition( const MapCoordinate& pos );
 };
