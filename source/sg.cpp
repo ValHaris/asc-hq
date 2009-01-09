@@ -30,7 +30,7 @@
    It is the anchor where nearly all elements of ASC are chained to. The global 
    variable #actmap is a pointer to the active map. There can be a maximum of
    8 #Player on a map, plus neutral units (which are handled like a 9th #Player).
-   Hence the array of 9 #tmap::player classes in #tmap.
+   Hence the array of 9 #GameMap::Player classes in #GameMap.
    
    Each player has units and buildings, which are stored in the lists 
    #Player::vehicleList and #Player::buildingList .
@@ -41,22 +41,27 @@
    Every building and unit is of a certain 'type': Vehicletype and BuildingType .
    These are stored in the data files which are loaded on startup and are globally 
    available. They are not modified during runtime in any way and are referenced
-   by the instances of Vehicle and Building. The Vehicletype has information that are shared
-   by all vehicles of this 'type', like speed, weapon systems, accessable
-   terrain etc, while the vehicle stores things like remaining movement for this
+   by the indiividual instances of Vehicle and Building. 
+   The Vehicletype has information that are shared  by all vehicles of this 'type', like speed, 
+   weapon systems, accessable terrain etc, while the vehicle stores things like remaining movement for this
    turn, ammo, fuel and cargo.
    
-   The primary contents of a map are its fields ( #tfield ). Each field has again a pointer 
+   The primary contents of a GameMap are its fields ( #tfield ). Each field has again a pointer 
    to a certain weather of a TerrainType. Each TerrainType has up to 5 
    different weathers ("dry (standard)","light rain", "heavy rain", "few snow",
-   "lot of snow"). If there is a unit or a building standing on a field, the field
+   "lot of snow"). If there is a #Vehicle or a #Building standing on a field, the field
    has a pointer to it: tfield::vehicle and tfield::building .
    
    On the field can be several instances of Object. Objects are another central class of 
    ASC. Roads, pipleines, trenches and woods are examples of objects. #Vehicle and #Building
-   are NOT objects.
+   are NOT objects. Objects modify the terrain for the field, like changing movement cost or adding
+   defense bonus. There is again a class #ObjectType containing immutable properties.
+   
+   \section Interacting Interacting with the game's artefacts
+   
+   \link gameinteraction See dedicated page \endlink
 
-   \section The basic design of ASC
+   \section The basic class structure of ASC
    
    <p><img src="ClassDiagram1.png">
 

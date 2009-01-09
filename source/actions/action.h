@@ -37,6 +37,11 @@ class GameMap;
 
 typedef int GameActionID;
 
+/** A #GameAction is an modification of something on a map
+        
+    \see gameinteraction for an exhaustive description how this works
+*/
+
 class GameAction {
    
       typedef deallocating_vector<GameAction*> Children;

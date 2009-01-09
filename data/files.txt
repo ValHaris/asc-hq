@@ -22,6 +22,8 @@ campaign/standard/*.asccampaign
 campaign/kamor/*.asctxt
 campaign/kamor/*.asccampaign
 campaign/kamor/*.map
+campaign/tutorial/*.asccampaign
+campaign/tutorial/*.map
 buildings/*.txt
 buildings/*.asctxt
 buildings/*.version

@@ -1,0 +1,14 @@
+campaign {
+
+name = Tutorial Kampagne
+description = [ This Campaign is in German only! 
+
+Einführung in die grundlegenden Konzepte und die Benutzerführung von ASC
+
+Erstellt von Kamor
+]
+file = tut000.map
+
+
+
+} campaign 
