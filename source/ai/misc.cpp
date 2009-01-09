@@ -18,6 +18,7 @@
 
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
+#include "../actions/constructunitcommand.h"
 
 bool AI :: runUnitTask ( Vehicle* veh )
 {
@@ -926,14 +927,24 @@ void AI::production()
                          ContainerControls bc( pr.bld );
                          int lack = bc.unitProductionPrerequisites( pr.vt, true );
                          if  ( !lack && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
-                             Vehicle* veh = bc._produceUnit( pr.vt, true, true );
-                             if ( veh ) {
-                                 calculateThreat ( veh );
-                                 container ( pr.bld );
-                                 // currentUnitDistribution.group[i] += inc;
-                                 produced = true;
-                                 break;  // exit produceable loop
-                             }
+                            try {
+                               ConstructUnitCommand* cuc = new ConstructUnitCommand( pr.bld );
+                               cuc->setMode(ConstructUnitCommand::internal );
+                               cuc->setVehicleType( pr.vt );
+                               cuc->execute( getContext() );
+                               Vehicle* veh = cuc->getProducedUnit();
+                               if ( veh ) {
+                                    bc.refillAmmo( veh );
+                                    bc.refillResources( veh );
+                                    calculateThreat ( veh );
+                                    container ( pr.bld );
+                                    // currentUnitDistribution.group[i] += inc;
+                                    produced = true;
+                                    break;  // exit produceable loop
+                              }
+                            } catch ( ActionResult res ) {
+                               // just ignore any errors 
+                            }
                          } else {
 
                             // the ai will save for move expensive units

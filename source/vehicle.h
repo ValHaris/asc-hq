@@ -273,9 +273,6 @@ class UnitHooveringLogic {
 
     //! @name Construction related functions
     //@{
-    //! constructs a vehicle at the given position.
-    Vehicle* constructvehicle ( const Vehicletype* tnk, int x, int y );
-
     //! checks whether the unit can construct a vehicle of the given type at the given position.
     bool vehicleconstructable ( const Vehicletype* tnk, int x, int y );
     

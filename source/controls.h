@@ -85,12 +85,6 @@ extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, 
 /////////////////////////////////////////////////////////////////////
 
 
-//! An old procedure for building vehicle (like turrets) with a unit.
-extern void  constructvehicle( Vehicletype* tnk );
-
-//! A helper function for #constructvehicle
-extern void build_vehicles_reset( void );
-
 //! An old procedure for removing a building with a vehicle
 extern void         destructbuildinglevel2( int xp, int yp);
 

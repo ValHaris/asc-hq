@@ -882,51 +882,6 @@ void Vehicle::registerForNewOwner( int player )
 }
 
 
-Vehicle* Vehicle :: constructvehicle ( const Vehicletype* tnk, int x, int y )
-{
-   if ( gamemap && vehicleconstructable( tnk, x, y )) {
-      Vehicle* v = new Vehicle( tnk, gamemap, color/8 );
-      v->xpos = x;
-      v->ypos = y;
-      v->addview();
-   
-      for ( int j = 0; j < 8; j++ ) {
-         int a = int(height) << j;
-         int b = int(height) >> j;
-         if ( v->typ->height & a ) {
-            v->height = a;
-            break;
-         }
-         if ( v->typ->height & b ) {
-            v->height = b;
-            break;
-         }
-      }
-      v->setMovement ( 0 );
-
-
-      gamemap->getField ( x, y )->vehicle = v;
-      tank.material -= tnk->productionCost.material;
-      tank.fuel -= tnk->productionCost.energy;
-
-      decreaseMovement( maxMovement() * typ->unitConstructionMoveCostPercentage/100);
-      /*
-      int refuel = 0;
-      for ( int i = 0; i < typ->weapons.count; i++ )
-         if ( typ->weapons.weapon[i].service()  )
-            for ( int j = 0; j < typ->weapons.count ; j++) {
-               if ( typ->weapons.weapon[j].canRefuel() )
-                  refuel = 1;
-               if ( typ->functions & (cffuelref | cfmaterialref) )
-                  refuel = 1;
-            }
-      */
-      v->attacked = 1;
-      return v;
-   } else
-      return NULL;
-}
-
 bool  Vehicle :: vehicleconstructable ( const Vehicletype* tnk, int x, int y )
 {
    if ( gamemap->getgameparameter(cgp_produceOnlyResearchedStuffExternally) && 
@@ -936,13 +891,11 @@ bool  Vehicle :: vehicleconstructable ( const Vehicletype* tnk, int x, int y )
    if ( getMovement() < maxMovement() * typ->unitConstructionMoveCostPercentage / 100 )
       return 0;
 
-//              if ( getheightdelta( log2(tnk->height), log2(height) ) == 0 )
    if( (tnk->height & height ) || (( tnk->height & (chfahrend | chschwimmend)) && (height & (chfahrend | chschwimmend)))) {
       int hgt = height;
       if ( !(tnk->height & height))
          hgt = 1 << log2(tnk->height);
       if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, hgt ) > 0 )
-   //   tnk->terrainaccess.accessible ( gamemap->getField(x,y)->bdt ) > 0 || height >= chtieffliegend)
          if ( getResource( getExternalVehicleConstructionCost( tnk ), true ) == getExternalVehicleConstructionCost( tnk ) )
             if ( beeline (x, y, xpos, ypos) <= maxmalq )
                return 1;

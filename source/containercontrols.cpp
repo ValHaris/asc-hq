@@ -84,50 +84,6 @@ int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* typ
 }
 
 
-Vehicle* ContainerControls::_produceUnit( const Vehicletype* type, bool fillWithAmmo, bool fillWithResources )
-{
-   if ( !unitProductionAvailable() )
-      return NULL;
-   
-   if ( unitProductionPrerequisites( type, true ))
-      return NULL;
-
-   
-   Vehicle* vehicle = new Vehicle ( type, getMap(), getPlayerNum() );
-  
-   logtoreplayinfo ( rpl_produceunit, type->id , getPlayerNum() * 8, container->getPosition().x, container->getPosition().y, 0, vehicle->networkid );
-
-   vehicle->setnewposition( container->getPosition() );
-
-   if ( getMap()->getgameparameter(cgp_bi3_training) >= 1 ) {
-      int cnt = 0;
-
-      for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
-         if ( (*bi)->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
-            cnt++;
-
-      vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
-      if ( vehicle->experience > maxunitexperience )
-         vehicle->experience = maxunitexperience;
-   }
-
-   container->getResource( container->getProductionCost( type ), false );
-
-   container->addToCargo( vehicle );
-
-   vehicle->setMovement(0);
-   vehicle->setAttacked();
-   
-   if ( fillWithAmmo ) 
-      refillAmmo( vehicle );
-   
-   if( fillWithResources )
-      refillResources( vehicle );
-
-
-   return vehicle;
-}
-
 
 Vehicle* ContainerControls::produceUnitHypothetically( const Vehicletype* type )
 {
