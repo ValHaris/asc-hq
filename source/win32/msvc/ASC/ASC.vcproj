@@ -819,6 +819,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\vehicleproductionselection.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\vehicletypeselector.cpp"
 					>
 				</File>
@@ -939,6 +943,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\constructunitcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\consumeammo.cpp"
 					>
 				</File>
@@ -948,6 +956,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\containeraction.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\containercommand.cpp"
 					>
 				</File>
 				<File
@@ -1004,6 +1016,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\spawnobject.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\spawnunit.cpp"
 					>
 				</File>
 				<File
