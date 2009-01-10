@@ -3,12 +3,10 @@ campaign {
 name = Tutorial Kampagne
 description = [ This Campaign is in German only! 
 
-EinfÃ¼hrung in die grundlegenden Konzepte und die BenutzerfÃ¼hrung von ASC
+Einführung in die grundlegenden Konzepte und die Benutzerführung von ASC
 
 Erstellt von Kamor
 ]
 file = tut000.map
-
-
 
 } campaign 
