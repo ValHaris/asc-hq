@@ -376,9 +376,11 @@ ActionResult MoveUnit::runAction( const Context& context )
                viewInputChanged = true;
 
                // do we really need this check?
+               /*
                if ( rf->checkfield ( *pos, vehicle, context )) {
                   vehicle = getMap()->getUnit ( networkID );
                }
+               */
                
                (new UnitFieldRegistration( vehicle, *pos, UnitFieldRegistration::RegisterOnField ))->execute( context );
 

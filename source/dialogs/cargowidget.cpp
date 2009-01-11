@@ -173,13 +173,14 @@ bool StoringPosition::eventMouseButtonDown(const SDL_MouseButtonEvent* button)
       highlight.setNew( num );
 
       highlight.clickOnMarkedUnit( num, SPoint(button->x, button->y), num != oldPos );
+      return true;
    }
 
 
-
+/*
    if ( num >= storage.size() || !storage[num] )
-      return true;
-
+      return false;
+*/
 
    int x,y;
    PG_Application::GetEventSupplier()->GetMouseState(x, y);
@@ -208,14 +209,15 @@ bool StoringPosition::eventMouseButtonDown(const SDL_MouseButtonEvent* button)
       }
 
       cacheDragArea(dragPointOld); */
+      return true;
    }
 
-   return true;
+   return false;
 }
 
 bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
 {
-   if ( dragState != Off ) {
+   if ( dragState != Off && (button->button != 4 && button->button != 5 )) {
       ReleaseCapture();
       dragState = Off;
 
