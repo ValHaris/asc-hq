@@ -73,7 +73,7 @@ PG_Rect StoringPosition :: CalcSize( const PG_Point& pos  )
 
 
 StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, CargoWidget* cargoWidget  )
-   : PG_Widget ( parent, CalcSize(pos)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos ), dragState( Off ), dragTarget( NoDragging )
+      : PG_Widget ( parent, CalcSize(pos)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos ), dragState( Off ), dragTarget( NoDragging )
 {
    highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
    highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
@@ -101,7 +101,7 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
 {
    clippingSurface.Fill(0);
 
-   ASCString background = "hexfield-bld-"; 
+   ASCString background = "hexfield-bld-";
    if ( dragTarget == NoDragging ) {
       background += regular ? "1" : "2";
       if (  num == highlight.getMark() )
@@ -122,10 +122,10 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
       if ( num != highlight.getMark() )
          ypos += 1;
 
-      
+
       storage[num]->direction = 0;
-      
-      if( storage[num]->getMovement() > 0  )
+
+      if ( storage[num]->getMovement() > 0  )
          storage[num]->paint( clippingSurface, SPoint(xpos,ypos), 0 ); // storage[num]->getOwner() );
       else
          storage[num]->paint( clippingSurface, SPoint(xpos,ypos), true, 0 ); // storage[num]->getMap()->getNeutralPlayerNum() );
@@ -162,63 +162,63 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
 }
 
 
-bool StoringPosition::eventMouseButtonDown(const SDL_MouseButtonEvent* button) 
+bool StoringPosition::eventMouseButtonDown(const SDL_MouseButtonEvent* button)
 {
-   if ( button->type != SDL_MOUSEBUTTONDOWN  ) 
+   if ( button->type != SDL_MOUSEBUTTONDOWN  )
       return false;
-   
-   if ( button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) { 
-  
+
+   if ( button->button == CGameOptions::Instance()->mouse.fieldmarkbutton ) {
+
       int oldPos = highlight.getMark();
       highlight.setNew( num );
-   
+
       highlight.clickOnMarkedUnit( num, SPoint(button->x, button->y), num != oldPos );
    }
-   
-   
-   
+
+
+
    if ( num >= storage.size() || !storage[num] )
       return true;
-   
-   
-	int x,y;
-	PG_Application::GetEventSupplier()->GetMouseState(x, y);
 
-   
+
+   int x,y;
+   PG_Application::GetEventSupplier()->GetMouseState(x, y);
+
+
    if ( button->button == CGameOptions::Instance()->mouse.dragndropbutton  && cargoWidget && cargoWidget->dragNdropEnabled() && getUnit() ) {
-      
-		SetCapture();
+
+      SetCapture();
       dragState = Pressed;
-      
+
       dragPointStart.x = x;
       dragPointStart.y = y;
-      
+
       /*
 
-		dragPointOld.x = x;
-		dragPointOld.y = y;
+      dragPointOld.x = x;
+      dragPointOld.y = y;
 
 
-		Draging = true;
-		eventDragStart();
-		dragimage = eventQueryDragImage();
+      Draging = true;
+      eventDragStart();
+      dragimage = eventQueryDragImage();
 
-		if(dragimage != NULL) {
-			dragimagecache = PG_Draw::CreateRGBSurface(dragimage->w, dragimage->h);
-		}
+      if(dragimage != NULL) {
+      dragimagecache = PG_Draw::CreateRGBSurface(dragimage->w, dragimage->h);
+      }
 
       cacheDragArea(dragPointOld); */
    }
 
-	return true;
+   return true;
 }
 
-bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
+bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
 {
    if ( dragState != Off ) {
       ReleaseCapture();
       dragState = Off;
-      
+
       if ( !cargoWidget )
          return false;
 
@@ -226,10 +226,10 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
 
       int x,y;
       PG_Application::GetEventSupplier()->GetMouseState(x, y);
-      
+
       // x += mouseCursorOffset.x;
       // y += mouseCursorOffset.y;
-      
+
       StoringPosition* s = dynamic_cast<StoringPosition*>( FindWidgetFromPos (x, y));
       if ( s )
          cargoWidget->releaseDrag( s->getUnit() );
@@ -237,8 +237,8 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
          cargoWidget->releaseDrag( x, y);
       }
 
-      
-      
+
+
       return true;
    } else
       return false;
@@ -248,32 +248,32 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
 
 bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
 {
-   if ( dragState != Off ) { 
+   if ( dragState != Off ) {
       if ( cargoWidget )
          cargoWidget->sigDragInProcess();
-      
+
       if ( dragState == Pressed ) {
          if ( square(motion->x - dragPointStart.x) + square(motion->y - dragPointStart.y) > 9 ) {
             cargoWidget->startDrag( storage[num] );
             dragState = Dragging;
-      
+
             static Surface surf;
             if ( !surf.valid() ) {
                surf = Surface::createSurface( fieldsizex+20, fieldsizey+20, 32 ); // somewhat larger because of potential shadow
                mouseCursorOffset = PG_Point( fieldsizex/2, fieldsizey/2);
             }
             surf.Fill( 0 );
-            
+
             MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
             blitter.blit( IconRepository::getIcon("mouse.png"), surf, SPoint(0,0));
-            
+
             getUnit()->paint( surf, SPoint(0,0), getUnit()->getOwner() );
             PG_Application::SetCursor( const_cast<SDL_Surface*>( surf.getBaseSurface() ));
             PG_Application::ShowCursor( PG_Application::SOFTWARE );
          }
       }
    }
-  
+
    return false;
 }
 
@@ -323,7 +323,7 @@ CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase
    this->container = container;
    SetTransparency( 255 );
 
-   if ( setup ) 
+   if ( setup )
       registerStoringPositions( StoringPosition::setup( this, container, unitHighLight, unitColumnCount ), unitColumnCount );
 
    if ( my_objVerticalScrollbar )
@@ -341,7 +341,7 @@ void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, const i
    unitHighLight.clickOnMarkedUnit.connect( SigC::slot( *this, &CargoWidget::click ));
 }
 
-bool 	CargoWidget::handleScrollTrack (PG_ScrollBar *widget, long data)
+bool  CargoWidget::handleScrollTrack (PG_ScrollBar *widget, long data)
 {
    sigScrollTrack();
    return true;
@@ -403,11 +403,11 @@ bool CargoWidget :: eventKeyDown(const SDL_KeyboardEvent* key)
 
 void CargoWidget :: checkStoringPosition( int oldpos, int newpos )
 {
- //  PG_Widget* unitScrollAreaw = dynamic_cast<PG_Widget*>(FindChild( "UnitScrollArea", true ));
- //  PG_ScrollWidget* unitScrollArea = dynamic_cast<PG_ScrollWidget*>(FindChild( "UnitScrollArea", true ));
- //  if ( unitScrollArea )
-      if ( newpos < storingPositionVector.size() && newpos >= 0 )
-         ScrollToWidget( storingPositionVector[newpos] );
+//  PG_Widget* unitScrollAreaw = dynamic_cast<PG_Widget*>(FindChild( "UnitScrollArea", true ));
+//  PG_ScrollWidget* unitScrollArea = dynamic_cast<PG_ScrollWidget*>(FindChild( "UnitScrollArea", true ));
+//  if ( unitScrollArea )
+   if ( newpos < storingPositionVector.size() && newpos >= 0 )
+      ScrollToWidget( storingPositionVector[newpos] );
 
    unitMarked( getMarkedUnit() );
 }
@@ -438,26 +438,26 @@ void CargoWidget :: startDrag( Vehicle* v )
 
 void CargoWidget :: releaseDrag( Vehicle* v)
 {
-   for ( StoringPositionVector::iterator i = storingPositionVector.begin(); i != storingPositionVector.end(); ++i ) 
+   for ( StoringPositionVector::iterator i = storingPositionVector.begin(); i != storingPositionVector.end(); ++i )
       (*i)->setDragTarget( StoringPosition::NoDragging );
-   
+
    if ( v )
       sigDragDone( draggedUnit, v );
    else
       sigDragAborted();
-   
+
    draggedUnit = NULL;
 }
 
 void CargoWidget :: releaseDrag( int x, int y )
 {
-   for ( StoringPositionVector::iterator i = storingPositionVector.begin(); i != storingPositionVector.end(); ++i ) 
+   for ( StoringPositionVector::iterator i = storingPositionVector.begin(); i != storingPositionVector.end(); ++i )
       (*i)->setDragTarget( StoringPosition::NoDragging );
-   
+
    if ( IsMouseInside() )
       sigDragAborted();
    else
       sigDragDone( draggedUnit, NULL );
-   
+
    draggedUnit = NULL;
 }
