@@ -342,14 +342,17 @@ void ContainerBase :: addToCargo( Vehicle* veh )
    if ( veh == this )
       fatalError ("Trying to add unit to its own cargo");
    
+   bool slotFound = false;
    for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( ! (*i) ) {
          *i = veh;
-         veh->cargoParent = this;
-         return;
+         slotFound = true;
+         break;
       }
 
-   cargo.push_back( veh );
+   if ( !slotFound )
+      cargo.push_back( veh );
+   
    veh->cargoParent = this;
    veh->setnewposition(getPosition());
    cargoChanged();

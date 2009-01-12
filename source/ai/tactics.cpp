@@ -780,7 +780,7 @@ AI::AiResult AI::tactics( void )
                         // the unit may have been shot down due to reaction fire
 
                         if ( !getMap()->getUnit ( nwid ) ) {
-                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), finalPositions[i]->networkid ) ;
+                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), nwid ) ;
                            tactVehicles.erase ( att );
                            finalPositions[i] = NULL;
                         }
