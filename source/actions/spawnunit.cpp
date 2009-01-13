@@ -110,11 +110,11 @@ ActionResult SpawnUnit::runAction( const Context& context )
    
    Vehicle* v = new Vehicle( vehicleType, getMap(), owner );
    networkid= v->networkid;
+   v->setMovement ( 0 );
    if ( !carrier ) {
       v->xpos = pos.x;
       v->ypos = pos.y;
       v->height = pos.getBitmappedHeight();
-      v->setMovement ( 0 );
       RecalculateAreaView rav( getMap(), pos, vehicleType->view/10, &context );
       ActionResult res = (new UnitFieldRegistration(v, pos, UnitFieldRegistration::RegisterOnField ))->execute( context );
       if ( res.successful() )

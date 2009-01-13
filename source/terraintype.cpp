@@ -100,6 +100,23 @@ void TerrainAccess::runTextIO ( PropertyContainer& pc )
    pc.addTagArray ( "terrain_kill", terrainkill, terrainPropertyNum, terrainProperties );
 }
 
+void TerrainBits::appendToString( ASCString& text ) const
+{
+   for (int i = 0; i < terrainPropertyNum ; i++) {
+      TerrainBits bts;
+      bts.set ( i );
+
+      if ( (*this & bts).any() ) {
+         text += "- " ;
+         text += terrainProperty[i];
+         text += "\n";
+      }
+   } /* endfor */
+}
+
+
+
+
 TerrainType::MoveMalus::MoveMalus()
 {
    resize( cmovemalitypenum);
@@ -424,6 +441,8 @@ void TerrainBits::write ( tnstream& stream ) const
 }
 
 
+
+
 void TerrainType :: runTextIO ( PropertyContainer& pc )
 {
    pc.addBreakpoint(); 
@@ -552,3 +571,27 @@ TerrainBits getTerrainBitType ( TerrainBitTypes tbt )
 }
 
 
+ASCString TerrainAccess :: toString( bool brief ) const
+{
+   ASCString text;
+
+   text += "Terrain properties of which one must be available:\n" ;
+   terrain.appendToString( text );
+
+   if ( !( brief && terrainreq.none() )) {
+      text += "\n\nTerrain properties that must all be set:\n" ;
+      terrainreq.appendToString( text );
+   }
+
+   if ( !( brief && terrainnot.none() )) {
+      text += "\n\nTerrain properties that must not be set:\n" ;
+      terrainnot.appendToString( text );
+   }
+
+   if ( !( brief && terrainkill.none() )) {
+      text += "\n\nTerrain properties that are fatal:\n" ;
+      terrainkill.appendToString( text );
+   }
+
+   return text;
+}

@@ -34,6 +34,8 @@
    void setInt ( int terrain1 = 0, int terrain2 = 0 );
    void read ( tnstream& stream );
    void write ( tnstream& stream ) const;
+   
+   void appendToString( ASCString& text ) const;
  };
 
  //! This class is used by buildings, vehicles and objects to specify which terrain it can move to / be built on
@@ -63,6 +65,7 @@
        void write ( tnstream& stream ) const;
        void runTextIO ( PropertyContainer& pc );
 
+       ASCString toString( bool brief  = true) const;
  };
 
 

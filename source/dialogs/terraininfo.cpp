@@ -29,19 +29,6 @@
 #include "../widgets/textrenderer.h"
 
 
-void appendTerrainBits ( ASCString& text, const TerrainBits* bdt )
-{
-   for (int i = 0; i < terrainPropertyNum ; i++) {
-      TerrainBits bts;
-      bts.set ( i );
-
-      if ( (*bdt & bts).any() ) {
-         text += "- " ;
-         text += terrainProperty[i];
-         text += "\n";
-      }
-   } /* endfor */
-}
 
 
 void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisibility )
@@ -76,8 +63,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    text += "terrain filename: " + fld->typ->terraintype->location  + "\n";
    
 
-   appendTerrainBits ( text, &fld->bdt );
-
+   fld->bdt.appendToString( text );
 
    text += "\n\n#eeinzug0##fontsize=14#Visibility#eeinzug20##fontsize=12#\n";
 
@@ -153,18 +139,8 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
       if ( !typ->filename.empty() )
          text += "File Name: " + typ->location + "\n";
 
-      text += "the unit can drive onto the following fields:\n" ;
-      appendTerrainBits ( text, &typ->terrainaccess.terrain );
-
-      text += "\n\nthese bits must be set:\n" ;
-      appendTerrainBits ( text, &typ->terrainaccess.terrainreq );
-
-      text += "\n\nthese bits must NOT be set:\n" ;
-      appendTerrainBits ( text, &typ->terrainaccess.terrainnot );
-
-      text += "\n\nthe unit ist killed by:\n";
-      appendTerrainBits ( text, &typ->terrainaccess.terrainkill );
-      text += "\n";
+      
+      text += "Terrain access:\n" + typ->terrainaccess.toString() + "\n";
    }
 
    if ( !fld->objects.empty() )
@@ -188,17 +164,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
          text += "#aeinzug30##eeinzug20##fontsize=12#\n";
          text += i->typ->name + "#aeinzug50##eeinzug40##fontsize=10#\n";
 
-         text += "the object can be placed onto the following fields:\n" ;
-         appendTerrainBits ( text, &ta->terrain );
-
-         text += "\nthese bits must be set:\n" ;
-         appendTerrainBits ( text, &ta->terrainreq );
-
-         text += "\nthese bits must NOT be set:\n" ;
-         appendTerrainBits ( text, &ta->terrainnot );
-
-         text += "\nthe object ist killed by:\n";
-         appendTerrainBits ( text, &ta->terrainkill );
+         text += "Terrain access:\n" + ta->toString() + "\n";
 
          text += "\nremaining lifetime:";
          text += ASCString::toString( i->lifetimer ) + "\n";

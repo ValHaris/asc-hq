@@ -1767,7 +1767,11 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
                }
                
                if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Movement )) {
-                  warning("Not enough movement to build unit");
+                  ASCString message = "Not enough movement to build unit";
+                  Vehicle* constructor = dynamic_cast<Vehicle*>(subject);
+                  if ( constructor )
+                     message += "\nRequired: " + ASCString::toString(constructor->typ->unitConstructionMoveCostPercentage * constructor->maxMovement() / 100 ) + " points";
+                  warning(message);
                   return;
                }
                 
@@ -1786,11 +1790,13 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
                subject->getMap()->getField( *i )->a.temp = 1;
             
             repaintMap();
-            updateFieldInfo();
             
             NewGuiHost::pendingCommand = constructCommand.release();
+            
+            updateFieldInfo();
+            
          } else {
-            warning("no fields to construct unit.\nInfo: some turrets need foundations be to constructed first");
+            warning("no fields to construct unit.\n" + v->terrainaccess.toString());
          }
       }
    } else {
