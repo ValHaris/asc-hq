@@ -48,7 +48,7 @@ class ActionContainer {
       
       // called when some modification to the map is taking place that is not recorded by undo
       void breakUndo();
-
+/*
       class ReplayStorage {
          public:
             virtual void saveCommand( const Command& cmd ) = 0;
@@ -56,7 +56,7 @@ class ActionContainer {
       };
 
       void saveActionsToReplay( ReplayStorage& replay );
-
+*/
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       
@@ -64,7 +64,12 @@ class ActionContainer {
       
       void getActionDescriptions( vector<ASCString>& list );
       
+      //! signales an executed Command. The command can still be undone after postActionExecution
       static SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
+      
+      /** The command, which has already been executed, is finally commited and will not be undone any more
+          This may be used to store it in the replay structure  */
+      static SigC::Signal2<void,GameMap*,const Command&> commitCommand;
       
       static SigC::Signal1<void,GameMap*> actionListChanged;
 };

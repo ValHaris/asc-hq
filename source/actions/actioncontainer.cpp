@@ -25,6 +25,7 @@
 #include "../basestrm.h"
 
 SigC::Signal2<void,GameMap*,const Command&> ActionContainer::postActionExecution;
+SigC::Signal2<void,GameMap*,const Command&> ActionContainer::commitCommand;
 SigC::Signal1<void,GameMap*> ActionContainer::actionListChanged;
 
 
@@ -81,20 +82,22 @@ void ActionContainer::redo( const Context& context )
 
 void ActionContainer::breakUndo()
 {
-   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i )
+   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
+      commitCommand( map, **i );
       delete *i;
+   }
    actions.clear();
    currentPos=actions.end();
    
    actionListChanged(map);
 }
-
+/*
 void ActionContainer::saveActionsToReplay( ReplayStorage& replay )
 {
    for ( Actions::iterator i = actions.begin(); i != currentPos; ++i )
       replay.saveCommand( **i );
 }
-
+*/
 
 const int actionContainerversion = 1;
 

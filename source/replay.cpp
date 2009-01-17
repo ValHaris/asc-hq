@@ -647,7 +647,7 @@ Resources getUnitResourceCargo ( Vehicle* veh )
    return res;
 }
 
-class LogActionIntoReplayInfo : public ActionContainer::ReplayStorage {
+class LogActionIntoReplayInfo  {
       GameMap* gamemap;
    public:
       LogActionIntoReplayInfo( GameMap* map ) : gamemap( map ) {
@@ -684,8 +684,13 @@ class LogActionIntoReplayInfo : public ActionContainer::ReplayStorage {
 
 void closePlayerReplayLogging( Player& player )
 {
-   LogActionIntoReplayInfo lairi( player.getParentMap() );
-   player.getParentMap()->actions.saveActionsToReplay( lairi );
+   player.getParentMap()->actions.breakUndo();
+}
+
+void logActionToReplay( GameMap* map, const Command& command)
+{
+   LogActionIntoReplayInfo lairi( map );
+   lairi.saveCommand( command );
 }
 
 
@@ -694,7 +699,6 @@ void closePlayerReplayLogging( Player& player )
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
    LogActionIntoReplayInfo lairi( actmap );
-   actmap->actions.saveActionsToReplay( lairi );
    actmap->actions.breakUndo();
    
    char action = _action;
@@ -2794,5 +2798,6 @@ void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticState
 void hookReplayToSystem()
 {
    DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
+   ActionContainer::commitCommand.connect( SigC::slot( &logActionToReplay ));
    // postActionExecution.connect( SigC::slot( &logActiontoreplayinfo ));
 }
