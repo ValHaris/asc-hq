@@ -1,0 +1,14 @@
+panel {
+   height = 120
+   ChildWidgets = ActionList
+   
+   ActionList {
+      type = MultiLineText
+      x = 3
+      y = 10
+      x2 = -3
+      y2 = -1
+      
+   } ActionList
+  
+} panel
