@@ -52,7 +52,8 @@ namespace ActionRegistry {
                   ViewRegistration,
                   ConstructUnitCommand,
                   SpawnUnit,
-                  CargoMoveCommand
+                  CargoMoveCommand,
+                  ServiceCommand
       
    };
 };

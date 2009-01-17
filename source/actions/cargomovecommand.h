@@ -24,10 +24,6 @@
 
 #include "unitcommand.h"
 
-#include "../typen.h"
-#include "../objects.h"
-#include "../mapfield.h"
-
 /** Cargo Move is moving a unit between different carriers that are nested */ 
 class CargoMoveCommand : public UnitCommand {
    

@@ -57,8 +57,7 @@ class treactionfire {
 
 class treactionfirereplay : public treactionfire {
           protected:
-             int num;
-             dynamic_array<treactionfire_replayinfo*> replay;
+             vector<treactionfire_replayinfo*> replay;
              Vehicle* unit;
           public:
              treactionfirereplay ( void );

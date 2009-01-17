@@ -22,18 +22,10 @@
 #include "cargomovecommand.h"
 
 #include "../vehicle.h"
-#include "../mapfield.h"
 #include "../gamemap.h"
-#include "../viewcalculation.h"
-#include "../spfst.h"
 #include "../mapdisplayinterface.h"
 #include "action-registry.h"
-#include "../itemrepository.h"
 #include "../containercontrols.h"
-#include "consumeresource.h"
-#include "spawnunit.h"
-#include "changeunitmovement.h"
-#include "consumeammo.h"
 #include "unitfieldregistration.h"
 
 

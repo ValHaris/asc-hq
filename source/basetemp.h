@@ -3,9 +3,12 @@
    STL. Should be scrapped and replaced by STL functions.
 */
 
-//     $Id: basetemp.h,v 1.9 2007-04-13 16:15:53 mbickel Exp $
+//     $Id: basetemp.h,v 1.10 2009-01-17 21:54:42 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.9  2007/04/13 16:15:53  mbickel
+//      Merged ASC2 branch
+//
 //     Revision 1.7.2.1  2006/02/11 21:46:17  mbickel
 //      Move cleanup
 //
@@ -182,23 +185,3 @@ template<class T> int dynamic_array<T> :: getlength( void )
    return maxaccessed;
 } 
 
-
-
-template<class T> void dynamic_initialized_array<T> :: resize ( int newsize )
-{
-   int oldsize = T::size;
-   dynamic_array<int> :: resize ( newsize );
-   for ( int i = oldsize; i < newsize; i++ )
-      T::buf[i] = initval;
-}
-
-template<class T> dynamic_initialized_array<T> :: dynamic_initialized_array ( T ival )
-{
-   initval = ival;
-}
-
-template<class T> dynamic_initialized_array<T> :: dynamic_initialized_array ( T ival, int sze )
-                                             : dynamic_array<T> ( sze )
-{
-   initval = ival;
-}

@@ -178,8 +178,7 @@ bool ResourceWatch::getResources( Resources res )
 
    bool Transferrable::setDestAmount( long amount )
    {
-      setAmount( getDstContainer(), amount );
-      return true;
+      return setAmount( getDstContainer(), amount ) == amount;
    }
 
    void Transferrable::showAll()
@@ -261,6 +260,11 @@ class ResourceTransferrable : public Transferrable {
       };
       ASCString getName() { return Resources::name( resourceType ); };
       
+      int getID()
+      {
+         return resourceType + 1000; 
+      };
+      
       int getMax( ContainerBase* c, bool avail )
       {
          if ( avail ) {
@@ -317,7 +321,6 @@ class ResourceTransferrable : public Transferrable {
          ContainerBase* target = dest.getContainer();
          executeTransfer( source.getContainer(), target, getAmount( target ) - target->getResource( maxint, resourceType, true ));
       }
-      
 };
 
 class AmmoTransferrable : public Transferrable {
@@ -444,6 +447,10 @@ class AmmoTransferrable : public Transferrable {
       
       ASCString getName() { return cwaffentypen[ ammoType ]; };
       
+      int getID()
+      {
+         return ammoType + 2000; 
+      };
       
       int getMax( ContainerBase* c, bool avail )
       {
@@ -725,12 +732,6 @@ bool TransferHandler::allowAmmoProduction( bool allow )
    } else
       return false;
 }
-
-bool TransferHandler::allowAmmoProductionAllowed()
-{
-   return allowProduction;
-}
-
 
 
 TransferHandler::~TransferHandler()

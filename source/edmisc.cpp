@@ -2729,6 +2729,7 @@ void selectunitsetfilter ( void )
 }
 
 
+
 class UnitTypeTransformation {
 
               class   UnitSetSelection : public tstringselect {
@@ -2753,8 +2754,7 @@ class UnitTypeTransformation {
 
                 Vehicletype* transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
                 void transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum );
-                dynamic_array<int> vehicleTypesNotTransformed;
-                int vehicleTypesNotTransformedNum ;
+                set<int> vehicleTypesNotTransformed;
              public:
                  void run ( void );
       } ;
@@ -2845,13 +2845,7 @@ Vehicletype* UnitTypeTransformation :: transformvehicletype ( const Vehicletype*
             return tp;
       }
 
-   int fnd = 0;
-   for ( int j = 0; j < vehicleTypesNotTransformedNum; j++ )
-       if ( vehicleTypesNotTransformed[j] == type->id )
-          fnd ++;
-
-   if ( !fnd ) 
-      vehicleTypesNotTransformed[vehicleTypesNotTransformedNum++] = type->id;
+   vehicleTypesNotTransformed.insert( type->id );
 
    return NULL;
 }
@@ -2875,8 +2869,6 @@ void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, 
 
 void UnitTypeTransformation :: run ( void )
 {
-   vehicleTypesNotTransformedNum = 0;
-
    UnitSetSelection uss;
    uss.init();
    uss.run();
@@ -2921,13 +2913,13 @@ void UnitTypeTransformation :: run ( void )
          }   
       }
 
-    if ( vehicleTypesNotTransformedNum ) {
+      if ( vehicleTypesNotTransformed.size() ) {
        ASCString s = "The following vehicles could not be transformed: ";
-       for ( int i = 0; i < vehicleTypesNotTransformedNum; i++ ) {
+       for ( set<int>::const_iterator i = vehicleTypesNotTransformed.begin(); i != vehicleTypesNotTransformed.end(); ++i ) {
           s += "\n ID ";
-          s += strrr ( vehicleTypesNotTransformed[i] );
+          s += ASCString::toString( *i );
           s += " : ";
-          Vehicletype* vt = vehicleTypeRepository.getObject_byID ( vehicleTypesNotTransformed[i] );
+          Vehicletype* vt = vehicleTypeRepository.getObject_byID ( *i );
           if ( !vt-> name.empty() )
              s += vt->name;
           else

@@ -38,7 +38,6 @@
 
 treactionfirereplay :: treactionfirereplay ( void )
 {
-   num = 0;
    unit = NULL;
 }
 
@@ -49,7 +48,7 @@ void treactionfirereplay :: init ( Vehicle* eht, const AStar3D::Path& fieldlist 
       do {
          rpli = runreplay.getnextreplayinfo ( );
          if ( rpli )
-            replay[num++] = rpli;
+            replay.push_back( rpli );
 
       } while ( rpli );
 
@@ -62,7 +61,7 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
    int attacks = 0;
 
    if ( eht == unit ) {
-      for ( int i = 0; i < num; i++ ) {
+      for ( int i = 0; i < replay.size(); i++ ) {
          treactionfire_replayinfo* rpli = replay[ i ];
          if ( eht && rpli->x2 == pos.x  && rpli->y2 == pos.y ) {
 
@@ -129,7 +128,7 @@ int  treactionfirereplay :: checkfield ( const MapCoordinate3D& pos, Vehicle* &e
 
 treactionfirereplay :: ~treactionfirereplay ( )
 {
-   for ( int i = 0; i < num; i++ )
+   for ( int i = 0; i < replay.size(); i++ )
       delete replay[i];
 }
 

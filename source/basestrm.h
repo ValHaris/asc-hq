@@ -140,17 +140,6 @@ class dynamic_array {
               void reset ( void );
 };
 
-template<class T>
-class dynamic_initialized_array : public dynamic_array<T> {
-              T initval;
-           protected:
-              virtual void resize ( int newsize );
-
-           public:
-              dynamic_initialized_array ( T ival );
-              dynamic_initialized_array ( T ival, int sze );
-         };
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        Streams

@@ -70,7 +70,9 @@ class Transferrable: public SigC::Object {
       virtual void commit() = 0;
       virtual bool isExchangable() const = 0;
 
-
+      //! the id is used to identify the transferrable when serializng to disk. In each service operation, the id must be unique through all transferrables
+      virtual int getID() = 0;
+      
       ContainerBase* getSrcContainer();
       ContainerBase* getDstContainer();
       bool setDestAmount( long amount );
@@ -157,7 +159,6 @@ class TransferHandler : public SigC::Object, protected ServiceChecker {
    public:
       TransferHandler( ContainerBase* src, ContainerBase* dst );
       bool allowAmmoProduction( bool allow );
-      bool allowAmmoProductionAllowed();
       bool ammoProductionPossible();
       Transfers& getTransfers();
       void fillDest();
