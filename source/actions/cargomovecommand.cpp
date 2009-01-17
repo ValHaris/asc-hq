@@ -102,7 +102,7 @@ ActionResult CargoMoveCommand::go ( const Context& context )
       if ( !targetContainer2 )
          return ActionResult( 21902 );
       
-      ActionResult res = (new UnitFieldRegistration( getUnit(), getUnit()->getPosition(), UnitFieldRegistration::UnregisterOnField ))->execute ( context );
+      ActionResult res = (new UnitFieldRegistration( getUnit(), getUnit()->getPosition(), UnitFieldRegistration::UnRegisterFromCarrier, getUnit()->getCarrier() ))->execute ( context );
       if ( !res.successful() )
          return res;
       
@@ -117,7 +117,7 @@ ActionResult CargoMoveCommand::go ( const Context& context )
       if ( !moveInAvail( getUnit(), targetContainer ) )
          return ActionResult( 21901 );
       
-      ActionResult res = (new UnitFieldRegistration( getUnit(), getUnit()->getPosition(), UnitFieldRegistration::UnregisterOnField ))->execute ( context );
+      ActionResult res = (new UnitFieldRegistration( getUnit(), getUnit()->getPosition(), UnitFieldRegistration::UnRegisterFromCarrier, getUnit()->getCarrier() ))->execute ( context );
       if ( !res.successful() )
          return res;
       
@@ -130,6 +130,8 @@ ActionResult CargoMoveCommand::go ( const Context& context )
 void CargoMoveCommand :: setMode( Mode mode ) 
 { 
    this->mode = mode; 
+   if ( mode == moveOutwards || targetCarrier > 0 )
+      setState( SetUp );
 };
 
 
@@ -177,7 +179,7 @@ ASCString CargoMoveCommand :: getCommandString() const
       c.format("MoveUnitInto ( %d, %d )", getUnit()->getIdentification(), targetCarrier );
       return c;
    }
-   
+   return "";
 }
 
 GameActionID CargoMoveCommand::getID() const

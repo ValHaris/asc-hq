@@ -28,7 +28,7 @@
 
 class UnitFieldRegistration : public UnitAction {
    public:
-      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D, RegisterInCarrier };
+      enum Operation { RegisterOnField, UnregisterOnField, AddView, RemoveView, Position, Position3D, RegisterInCarrier, UnRegisterFromCarrier };
       
       UnitFieldRegistration( Vehicle* vehicle, const MapCoordinate3D& pos, Operation operation, ContainerBase* carrier = 0 );
       

@@ -125,6 +125,16 @@ ActionResult UnitFieldRegistration::runAction( const Context& context )
          carrier->addToCargo( veh );
          break;
       }
+      
+      case UnRegisterFromCarrier:
+      {
+         ContainerBase* carrier = getMap()->getContainer( carrierID );
+         if ( !carrier )
+            throw ActionResult( 21303 );
+         if ( !carrier->removeUnitFromCargo( veh ))
+            throw ActionResult( 21302, veh );
+         break;
+      }
          
       case UnregisterOnField:
          if ( fld->getContainer() && fld->getContainer() != veh ) {
@@ -186,6 +196,16 @@ ActionResult UnitFieldRegistration::undoAction( const Context& context )
          if ( !carrier->removeUnitFromCargo( veh ))
             throw ActionResult( 21302, veh );
          
+         break;
+      }
+      
+      case UnRegisterFromCarrier:
+      {
+         ContainerBase* carrier = getMap()->getContainer( carrierID );
+         if ( !carrier )
+            throw ActionResult( 21303 );
+         
+         carrier->addToCargo( veh );
          break;
       }
          
