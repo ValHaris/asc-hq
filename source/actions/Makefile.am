@@ -21,7 +21,7 @@ libmapactions_la_LIBADD		= @SDL_LIBS@
 
 libfullgameactions_la_SOURCES	= containeraction.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                                   unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                                  constructunitcommand.cpp spawnunit.cpp
+                                  constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp
 libfullgameactions_la_LIBADD		= @SDL_LIBS@
 
 

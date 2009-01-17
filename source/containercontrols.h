@@ -83,14 +83,6 @@ class ContainerControls : public ContainerConstControls {
       bool  ammotypeavail ( int type );
       int  ammoProducable ( int weaptype, int num );
       int  produceAmmo ( int weaptype, int num );
-
-      bool moveUnitUpAvail( const Vehicle* veh );
-      bool moveUnitUp( Vehicle* veh );
-      
-      bool moveUnitDownAvail( const Vehicle* movingUnit );
-      bool moveUnitDownAvail( const Vehicle* movingUnit, const Vehicle* newTransport );
-      vector<Vehicle*> moveUnitDownTargets( const Vehicle* movingUnit );
-      bool moveUnitDown( Vehicle* veh, Vehicle* newTransport );
       
 };
 

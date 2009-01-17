@@ -45,6 +45,7 @@
 #include "../gameoptions.h"
 
 #include "../actions/moveunitcommand.h"
+#include "../actions/cargomovecommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -325,10 +326,33 @@ class CargoDialog : public Panel
       
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
-         if ( key->keysym.sym == SDLK_ESCAPE ) {
-            QuitModal();
-            return true;
+         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+
+         if ( !mod  ) {
+            if ( key->keysym.sym == SDLK_ESCAPE ) {
+               QuitModal();
+               return true;
+            }
          }
+         
+         if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
+            switch ( key->keysym.unicode ) {
+               case 26:
+                  getContainer()->getMap()->actions.undo( createContext( getContainer()->getMap() ) );  
+                  cargoChanged();
+                  return true;
+            }
+         }
+         
+         if ( mod & KMOD_CTRL ) {
+            switch ( key->keysym.unicode ) {
+               case 26: // Z
+                  getContainer()->getMap()->actions.undo( createContext( getContainer()->getMap() ) );  
+                  cargoChanged();
+                  return true;
+            }
+         }
+         
          return false;
       };
 
@@ -460,12 +484,21 @@ class CargoDialog : public Panel
             return;
          
          if ( draggedUnit != targetUnit ) {
-            if ( targetUnit ) {
-               containerControls.moveUnitDown( draggedUnit, targetUnit );
+            if ( targetUnit && CargoMoveCommand::moveInAvail(draggedUnit, targetUnit) ) {
+               auto_ptr<CargoMoveCommand> cargomove ( new CargoMoveCommand( draggedUnit ));
+               cargomove->setMode( CargoMoveCommand::moveInwards );
+               cargomove->setTargetCarrier( targetUnit );
+               ActionResult res = cargomove->execute ( createContext( getContainer()->getMap() ));
+               if ( res.successful() )
+                  cargomove.release();
             } else {
-               if ( container->getCarrier() )
-                  containerControls.moveUnitUp( draggedUnit );
-               else {
+               if ( container->getCarrier() ) {
+                  auto_ptr<CargoMoveCommand> cargomove ( new CargoMoveCommand( draggedUnit ));
+                  cargomove->setMode( CargoMoveCommand::moveOutwards );
+                  ActionResult res = cargomove->execute ( createContext( getContainer()->getMap() ));
+                  if ( res.successful() )
+                     cargomove.release();
+               } else {
                     
                }
             }
@@ -475,7 +508,7 @@ class CargoDialog : public Panel
       
       bool dragUnitToInnerContainerAvail( Vehicle* draggedUnit, Vehicle* targetUnit )
       {
-         return containerControls.moveUnitDownAvail( draggedUnit, targetUnit );
+         return CargoMoveCommand::moveInAvail( draggedUnit, targetUnit );
       }
       
       void dragInProcess()
@@ -2171,7 +2204,7 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return false;
       
-      return parent.getControls().moveUnitUpAvail( veh );
+      return CargoMoveCommand::moveOutAvail( veh );
    }
 
 
@@ -2201,7 +2234,12 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return;
       
-      parent.getControls().moveUnitUp( veh );
+      auto_ptr<CargoMoveCommand> cargomove ( new CargoMoveCommand( veh ));
+      cargomove->setMode( CargoMoveCommand::moveOutwards );
+      ActionResult res = cargomove->execute ( createContext( veh->getMap() ));
+      if ( res.successful() )
+         cargomove.release();
+      
       parent.cargoChanged();
    }
 
@@ -2348,7 +2386,8 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return false;
       
-      return parent.getControls().moveUnitDownAvail( veh );
+      CargoMoveCommand cmc( veh );
+      return cmc.getTargetCarriers().size() > 0 ;
    }
 
 
@@ -2440,14 +2479,20 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return;
 
-      vector<Vehicle*> targets = parent.getControls().moveUnitDownTargets( veh );
+      auto_ptr<CargoMoveCommand> cargomove ( new CargoMoveCommand( veh ));
+      cargomove->setMode( CargoMoveCommand::moveInwards );
+      
+      vector<Vehicle*> targets = cargomove->getTargetCarriers();
 
       choiceDialog("You can also use Drag'n'Drop to move units in the Cargo Dialog\nMouse button: " + CGameOptions::Mouse::getButtonName( CGameOptions::Instance()->mouse.dragndropbutton ), "OK", "", "dragndropinfo");
 
       Vehicle* target = selectVehicle( targets );
-      if ( target )
-         parent.getControls().moveUnitDown (  veh, target );
-      
+      if ( target ) {
+         cargomove->setTargetCarrier( target );
+         ActionResult res = cargomove->execute ( createContext( veh->getMap() ));
+         if ( res.successful() )
+            cargomove.release();
+      }      
       parent.cargoChanged();
    }
 

@@ -60,7 +60,7 @@ am_libfullgameactions_la_OBJECTS = containeraction.lo \
 	consumeresource.lo vehicleattack.lo moveunit.lo \
 	discoverresources.lo unitcommand.lo attackcommand.lo \
 	moveunitcommand.lo convertcontainer.lo containercommand.lo \
-	constructunitcommand.lo spawnunit.lo
+	constructunitcommand.lo spawnunit.lo cargomovecommand.lo
 libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo spawnmine.lo \
@@ -277,7 +277,7 @@ libmapactions_la_SOURCES = spawnobject.cpp spawnmine.cpp changeview.cpp removemi
 libmapactions_la_LIBADD = @SDL_LIBS@
 libfullgameactions_la_SOURCES = containeraction.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                                   unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                                  constructunitcommand.cpp spawnunit.cpp
+                                  constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp
 
 libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -344,6 +344,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actioncontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackcommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargomovecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeobjectproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitmovement.Plo@am__quote@

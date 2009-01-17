@@ -35,8 +35,9 @@ class ConstructUnitCommand : public ContainerCommand {
       static bool externalConstructionAvail( const ContainerBase* eht );
       static bool internalConstructionAvail( const ContainerBase* eht );
       static bool avail ( const ContainerBase* eht );
-      enum Mode { undefined, internal, external } mode;
+      enum Mode { undefined, internal, external } ;
    private:
+      Mode mode;
       MapCoordinate target;
       int vehicleTypeID;
       int newUnitID;

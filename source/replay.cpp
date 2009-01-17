@@ -54,6 +54,7 @@
 #include "dialogs/replayrecorder.h"
 #include "sg.h"
 #include "actions/action.h"
+#include "actions/cargomovecommand.h"
 
 trunreplay runreplay;
 
@@ -2240,9 +2241,10 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  Vehicle* eht = actmap->getUnit ( x, y, nwid );
                                  if ( eht ) {
-                                    ContainerBase* from = eht->getCarrier();
-                                    ContainerControls cc ( from );
-                                    if ( !cc.moveUnitUp( eht ))
+                                    CargoMoveCommand* cmc = new CargoMoveCommand( eht );
+                                    cmc->setMode( CargoMoveCommand::moveOutwards );
+                                    ActionResult res = cmc->execute( createContext( actmap ) );
+                                    if ( !res.successful())
                                        error(MapCoordinate(x,y), "severe replay inconsistency in MoveUnitUp !");
                                  } else
                                     error(MapCoordinate(x,y), "Unit not found for MoveUnitUp !");

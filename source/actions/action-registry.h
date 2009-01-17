@@ -51,7 +51,8 @@ namespace ActionRegistry {
                   DiscoverResources,
                   ViewRegistration,
                   ConstructUnitCommand,
-                  SpawnUnit
+                  SpawnUnit,
+                  CargoMoveCommand
       
    };
 };

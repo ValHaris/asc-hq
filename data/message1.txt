@@ -262,5 +262,12 @@ Vehicle not found at position
 wrong vehicle found at position
 21804
 Failed to produce unit
+21900
+No direction specified for cargomove
+21901 
+Precondition failed for cargomove
+21902
+Target carrier does not exist
+
 
 
