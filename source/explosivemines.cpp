@@ -67,7 +67,7 @@ Mine::Mine( MineTypes type, int strength, int player, GameMap* gamemap )
    this->type = type;
    this->strength = strength;
    this->player = player;
-   this->identifier = gamemap->getNewNetworkID();
+   this->identifier = gamemap->idManager.getNewNetworkID();
    #ifndef converter
    lifetimer = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + type - 1));
    #endif

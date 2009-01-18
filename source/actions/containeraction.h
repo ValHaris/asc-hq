@@ -31,6 +31,8 @@
 class ContainerAction : public GameAction {
       int containerID;
    protected:
+      //! should usually not be called, the ID should only be set through the constructor
+      void setID( int id );
       ContainerBase* getContainer( bool dontThrow = false );
       const ContainerBase* getContainer( bool dontThrow = false ) const ;
       void readData ( tnstream& stream );

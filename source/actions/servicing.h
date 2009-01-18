@@ -67,7 +67,10 @@ class Transferrable: public SigC::Object {
       virtual int getMin( ContainerBase* c, bool avail ) = 0;
       virtual int transfer( ContainerBase* target, int delta ) = 0;
       virtual int getAmount ( const ContainerBase* target ) = 0;
+      
+      //! \deprecated 
       virtual void commit() = 0;
+      virtual void commit( const Context& context ) = 0;
       virtual bool isExchangable() const = 0;
 
       //! the id is used to identify the transferrable when serializng to disk. In each service operation, the id must be unique through all transferrables
@@ -162,8 +165,11 @@ class TransferHandler : public SigC::Object, protected ServiceChecker {
       bool ammoProductionPossible();
       Transfers& getTransfers();
       void fillDest();
+      void fillDestAmmo();
+      void fillDestResource();
       void emptyDest();
       bool commit();
+      bool commit( const Context& context );
 
       SigC::Signal0<bool> updateRanges;
       ~TransferHandler();

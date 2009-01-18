@@ -116,10 +116,14 @@ ActionResult ServiceCommand::go ( const Context& context )
    for ( Values::iterator i = values.begin(); i != values.end(); ++i ) {
       TransferHandler::Transfers& transfers = handler.getTransfers();
       for ( TransferHandler::Transfers::iterator t = transfers.begin(); t != transfers.end(); ++t )
-         if ( (*t)->getID() == i->first )
+         if ( (*t)->getID() == i->first ) {
             if ( !(*t)->setDestAmount( i->second ) )
                return ActionResult( 22001, (*t)->getName() );
+            (*t)->commit( context );
+         }
    }
+   
+   setState( Completed );
       
 /*   
    ActionResult res = (new ConsumeResource(getContainer(), cost ))->execute( context );

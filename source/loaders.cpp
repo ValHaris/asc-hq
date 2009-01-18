@@ -350,7 +350,7 @@ void checkForUniqueUnitIDs( GameMap* gamemap )
       for ( Player::VehicleList::iterator i = gamemap->getPlayer(p).vehicleList.begin(); i != gamemap->getPlayer(p).vehicleList.end(); ++i )
          if ( units[(*i)->networkid]++ > 0 ) {
             warning("unit with duplicate network ids: " + ASCString::toString( (*i)->networkid ) + "\nThis will lead to replay errors during the next turn." );
-            (*i)->networkid = gamemap->getNewNetworkID();;
+            (*i)->networkid = gamemap->idManager.getNewNetworkID();;
          }
 }
 
@@ -743,7 +743,7 @@ void tspfldloaders::readfields ( void )
                if ( objectversion >= 4 )
                   id = stream->readInt();
                else
-                  id = spfld->getNewNetworkID();
+                  id = spfld->idManager.getNewNetworkID();
                
                Mine m ( type, strength, player, spfld, id );
                if ( objectversion == 1 ) {

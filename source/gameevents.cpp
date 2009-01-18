@@ -1809,7 +1809,7 @@ void Reinforcements :: execute( MapDisplayInterface* md )
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {
          try {
-            Vehicle* veh = Vehicle::newFromStream( gamemap, stream, gamemap->getNewNetworkID() );
+            Vehicle* veh = Vehicle::newFromStream( gamemap, stream, gamemap->idManager.getNewNetworkID() );
             FindUnitPlacementPos fupp( gamemap, veh );
          } 
          catch ( InvalidID err ) {

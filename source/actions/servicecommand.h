@@ -74,6 +74,8 @@ class ServiceCommand : public ContainerCommand {
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;
       
+      ContainerBase* getRefueller() { return ContainerCommand::getContainer(); };
+      
       ~ServiceCommand();
 };
 

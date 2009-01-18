@@ -199,6 +199,12 @@ Resources operator- ( const Resources& res1, const Resources& res2 )
    return res;
 }
 
+Resources operator- ( const Resources& res1 )
+{
+   return Resources ( -res1.energy, -res1.material, -res1.fuel );
+}
+
+
 Resources operator+ ( const Resources& res1, const Resources& res2 )
 {
    Resources res = res1;

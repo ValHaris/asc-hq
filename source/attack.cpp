@@ -406,13 +406,12 @@ void tunitattacksunit :: setresult ( void )
 void tunitattacksunit :: setresult( const Context& context )
 {
    int nwid = _attackingunit->networkid;
-   int nwid_targ = _attackedunit->networkid;
    GameMap* map = _attackingunit->getMap();
    
    GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::Experience, av.experience );
    a->execute ( context );
    
-   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   GameAction* b = new ConsumeAmmo( _attackingunit, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
    b->execute ( context );
    
    _attackingunit->postAttack( reactionfire, context );
@@ -424,7 +423,7 @@ void tunitattacksunit :: setresult( const Context& context )
       GameAction* d = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::Experience, dv.experience );
       d->execute ( context );
       
-      GameAction* e = new ConsumeAmmo( map, nwid_targ, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackedunit->ammo[ dv.weapnum ] - dv.weapcount );
+      GameAction* e = new ConsumeAmmo( _attackedunit, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackedunit->ammo[ dv.weapnum ] - dv.weapcount );
       e->execute ( context );
    }
    
@@ -564,11 +563,9 @@ void tunitattacksbuilding :: setresult ( void )
 
 void tunitattacksbuilding :: setresult( const Context& context )
 {
-   int nwid = _attackingunit->networkid;
    MapCoordinate target = _attackedbuilding->getPosition();
-   GameMap* map = _attackingunit->getMap();
    
-   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   GameAction* b = new ConsumeAmmo( _attackingunit, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
    b->execute ( context );
    
    _attackingunit->postAttack( false, context );
@@ -823,10 +820,9 @@ void tunitattacksobject :: setresult ( void )
 
 void tunitattacksobject :: setresult( const Context& context )
 {
-   int nwid = _attackingunit->networkid;
    GameMap* map = _attackingunit->getMap();
    
-   GameAction* b = new ConsumeAmmo( map, nwid, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
+   GameAction* b = new ConsumeAmmo( _attackingunit, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
    b->execute ( context );
    
    _attackingunit->postAttack( false, context );

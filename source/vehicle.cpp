@@ -71,8 +71,8 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
 
    gamemap->player[player].vehicleList.push_back ( this );
    
-   networkid = gamemap->getNewNetworkID();
-   gamemap->registerUnitNetworkID( this );
+   networkid = gamemap->idManager.getNewNetworkID();
+   gamemap->idManager.registerUnitNetworkID( this );
 }
 
 Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID )
@@ -87,14 +87,14 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int netw
 
    gamemap->player[player].vehicleList.push_back ( this );
    if ( networkID == -1 ) {
-      networkid = gamemap->getNewNetworkID();
+      networkid = gamemap->idManager.getNewNetworkID();
    } else
       if ( networkID >= 0 ) {
          networkid = networkID;
       }
 
    if ( networkID >= 0 )
-      gamemap->registerUnitNetworkID( this );
+      gamemap->idManager.registerUnitNetworkID( this );
 }
 
 
@@ -119,7 +119,7 @@ Vehicle :: ~Vehicle (  )
       if ( i != gamemap->player[c].vehicleList.end() )
          gamemap->player[c].vehicleList.erase ( i );
 
-      gamemap->unregisterUnitNetworkID(this);
+      gamemap->idManager.unregisterUnitNetworkID(this);
    }
 
    tfield* fld = gamemap->getField( xpos, ypos);
@@ -1717,8 +1717,8 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
       v->networkid = forceNetworkID;
 
    if( gamemap->getUnit( v->networkid, false ))
-      v->networkid = gamemap->getNewNetworkID();
-   gamemap->registerUnitNetworkID(v);
+      v->networkid = gamemap->idManager.getNewNetworkID();
+   gamemap->idManager.registerUnitNetworkID(v);
 
    return v;
 }

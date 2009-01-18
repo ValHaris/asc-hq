@@ -23,26 +23,37 @@
 #define consumeAmmoH
 
 
-#include "action.h"
+#include "containeraction.h"
 #include "action-registry.h"
 
 
-class ConsumeAmmo : public GameAction {
-      int vehicleID;
+class ConsumeAmmo : public ContainerAction {
       int ammoType;
       int slot;
       int count;
       
       int resultingAmmount;
       
-      ConsumeAmmo( GameMap* map ) : GameAction( map ) {};
+      bool produceAmmo;
+      int produced;
+      
+      ConsumeAmmo( GameMap* map ) : ContainerAction( map ), produceAmmo(false), produced(0) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
 
+      /** produces num pieces of ammoType
+          If not enough resources available, may return less than requested
+         \return number produce
+      */
+      int produce( int num, const Context& context, bool queryOnly );
+      
    public:
-      ConsumeAmmo( GameMap* gamemap, int vehicleID, int ammoType, int slot, int count );
-      ConsumeAmmo( Vehicle* veh, int ammoType, int slot, int count );
+      ConsumeAmmo( ContainerBase* veh, int ammoType, int slot, int count );
       
       ASCString getDescription() const;
+      
+      /** specifies if ammo shall be produced if there is not enough ammo available 
+          and the container has ammo production capabilities */
+      void setAmmoProduction( bool prod );
       
    protected:
       virtual GameActionID getID() const;

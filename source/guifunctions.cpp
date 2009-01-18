@@ -55,6 +55,7 @@
 #include "actions/putobjectcommand.h"
 #include "actions/putminecommand.h"
 #include "actions/constructunitcommand.h"
+#include "actions/servicecommand.h"
 
 bool commandPending()
 {
@@ -1245,7 +1246,7 @@ class RefuelUnitDialog : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         ammoTransferWindow( pendingVehicleActions.newservice->getContainer(), actmap->getField(pos)->getContainer() );
+         ammoTransferWindow( pendingVehicleActions.newservice->getContainer(), actmap->getField(pos)->getContainer(), NULL );
          delete pendingVehicleActions.newservice;
          actmap->cleartemps ( 7 );
          displaymap();
@@ -1263,6 +1264,140 @@ class RefuelUnitDialog : public GuiFunction
       };
 };
 
+
+
+
+class RefuelUnitCommand : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         tfield* fld = actmap->getField(pos);
+         if (!commandPending()) {
+            if ( fld && fld->getContainer() )
+               if (fld->getContainer()->getOwner() == actmap->actplayer )
+                  if ( ServiceCommand::avail ( fld->getContainer() ) )
+                     return true;
+         } else {
+            if ( NewGuiHost::pendingCommand ) {
+               ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);
+               if ( service && fld->getContainer() ) {
+                  const ServiceTargetSearcher::Targets& destinations = service->getDestinations();
+                  return find( destinations.begin(), destinations.end(), fld->getContainer() ) != destinations.end(); 
+               }
+            }
+         }
+         return false;
+         
+      };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'f' );
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( !NewGuiHost::pendingCommand ) {
+            auto_ptr<ServiceCommand> service ( new ServiceCommand( subject ));
+            
+            MapCoordinate srcPos = subject->getPosition();
+            int fieldCount = 0;
+            
+            const ServiceTargetSearcher::Targets& destinations = service->getDestinations();
+            for ( ServiceTargetSearcher::Targets::const_iterator i = destinations.begin(); i != destinations.end(); ++i ) {
+               MapCoordinate targetPos = (*i)->getPosition();
+               if ( targetPos != srcPos ) {
+                  tfield* fld = subject->getMap()->getField ( targetPos );
+                  fieldCount++;
+                  fld->a.temp = 1;
+               }
+            }
+            if ( !fieldCount ) {
+               dispmessage2 ( 211 );
+               return;
+            }
+            
+            displaymap();
+            updateFieldInfo();
+            NewGuiHost::pendingCommand = service.release();
+            
+         } else {
+            ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);
+               
+            service->setDestination( subject );
+            service->getTransferHandler().fillDest();
+            service->saveTransfers();
+            ActionResult res = service->execute( createContext( actmap ));
+            if ( !res.successful() ) {
+               dispmessage2( res );
+               delete NewGuiHost::pendingCommand;
+            }
+            
+            NewGuiHost::pendingCommand = NULL;
+            actmap->cleartemps ( 7 );
+            displaymap();
+            updateFieldInfo();
+         }
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("refuel.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "re~f~uel a unit";
+      };
+};
+
+
+class RefuelUnitDialogCommand : public GuiFunction
+{
+   public:
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( NewGuiHost::pendingCommand ) {
+            ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);
+            tfield* fld = actmap->getField(pos);
+            if ( service && fld->getContainer() ) {
+               const ServiceTargetSearcher::Targets& destinations = service->getDestinations();
+               return find( destinations.begin(), destinations.end(), fld->getContainer() ) != destinations.end(); 
+            }
+         }
+         return false;
+      };
+      bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+      {
+         return ( key->keysym.unicode == 'f' && (modifier & KMOD_SHIFT)  );
+      };
+
+      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);
+         tfield* fld = actmap->getField(pos);
+         service->setDestination( fld->getContainer() );
+         ammoTransferWindow( service->getRefueller(), actmap->getField(pos)->getContainer(), service );
+         
+         if ( service->getState() != Command::Completed )
+            delete NewGuiHost::pendingCommand;
+         
+         NewGuiHost::pendingCommand = NULL;
+         actmap->cleartemps ( 7 );
+         displaymap();
+         updateFieldInfo();
+      }
+
+      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return IconRepository::getIcon("refuel-dialog.png");
+      };
+
+      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         return "re~F~uel dialog ";
+      };
+};
 
 
 
@@ -1329,6 +1464,9 @@ class PutMineStage2 : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
+         if( !NewGuiHost::pendingCommand )
+            return false;
+         
          PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
          if ( pmc ) {
             const vector<MineTypes>& mines = pmc->getCreatableMines( pos );
@@ -1429,6 +1567,9 @@ class RemoveMine : public GuiFunction
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
+         if ( !NewGuiHost::pendingCommand )
+            return false;
+         
          PutMineCommand* pmc = dynamic_cast<PutMineCommand*>( NewGuiHost::pendingCommand );
          if ( pmc ) 
             return pmc->getRemovableMines(pos);
@@ -1736,9 +1877,11 @@ bool BuildVehicleCommand::available( const MapCoordinate& pos, ContainerBase* su
          if (fld->vehicle->getOwner() == actmap->actplayer )
             return ConstructUnitCommand::externalConstructionAvail( fld->vehicle );
    
-   ConstructUnitCommand* construct = dynamic_cast<ConstructUnitCommand*>(NewGuiHost::pendingCommand);
-   if ( construct ) {
-      return construct->isFieldUsable(pos); 
+   if ( NewGuiHost::pendingCommand ) {
+      ConstructUnitCommand* construct = dynamic_cast<ConstructUnitCommand*>(NewGuiHost::pendingCommand);
+      if ( construct ) 
+         return construct->isFieldUsable(pos); 
+      
    }
    return false;
 }
@@ -2411,8 +2554,8 @@ void registerGuiFunctions( GuiIconHandler& handler )
    handler.registerUserFunction( new GuiFunctions::Ascend );
    handler.registerUserFunction( new GuiFunctions::Descend );
    handler.registerUserFunction( new GuiFunctions::RepairUnit );
-   handler.registerUserFunction( new GuiFunctions::RefuelUnit );
-   handler.registerUserFunction( new GuiFunctions::RefuelUnitDialog );
+   handler.registerUserFunction( new GuiFunctions::RefuelUnitCommand );
+   handler.registerUserFunction( new GuiFunctions::RefuelUnitDialogCommand );
    // handler.registerUserFunction( new GuiFunctions::ViewMap );
    handler.registerUserFunction( new GuiFunctions::PutMine );
    handler.registerUserFunction( new GuiFunctions::PutAntiTankMine );

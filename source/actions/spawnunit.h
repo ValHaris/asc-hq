@@ -35,6 +35,8 @@ class SpawnUnit : public GameAction {
       int networkid;
       int carrierID;
       bool carrier;
+      int mapNetworkIdCounterBefore;
+      int mapNetworkIdCounterAfter;
       
       ContainerBase* getCarrier( bool dontThrow = false );
       

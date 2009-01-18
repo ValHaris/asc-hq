@@ -25,8 +25,9 @@
 #include "../containerbase.h"
 #include "../paradialog.h"
 
+class ServiceCommand;
 
-extern void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination );
+extern void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination, ServiceCommand* command );
 
 
 #endif

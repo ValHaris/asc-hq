@@ -248,4 +248,5 @@ class BulkGraphicUpdates {
       ~BulkGraphicUpdates();
 };
 
+
 #endif

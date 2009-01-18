@@ -26,7 +26,8 @@
 #include "../containercontrols.h"
 #include "../gameoptions.h"
 #include "../actions/servicing.h"
-
+#include "../sg.h"
+#include "../actions/servicecommand.h"
 
 class TransferWidget : public PG_Widget {
    private:
@@ -92,22 +93,28 @@ class AmmoTransferWindow : public ASC_PG_Dialog {
    private:
       ContainerBase* first;
       ContainerBase* second;
-      TransferHandler handler;
+      TransferHandler* handler;
 
+      ServiceCommand* command;
 
       Surface img1,img2;
 
       bool ok()
       {
-         handler.commit();
+         if( command ) {
+            command->saveTransfers();
+            command->execute( createContext( actmap ) );
+         } else {
+            handler->commit( );
+         }
          QuitModal();
          return true;
       }
       
    public:
-      AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent );
+      AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent, ServiceCommand* command );
 
-      bool somethingToTransfer() { return handler.getTransfers().size(); };
+      bool somethingToTransfer() { return handler->getTransfers().size(); };
       
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
@@ -118,11 +125,27 @@ class AmmoTransferWindow : public ASC_PG_Dialog {
          return false;
       }
       
+      ~AmmoTransferWindow()
+      {
+         if ( !command )
+            delete handler;
+      }
+      
 };
 
 
-AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent ) : ASC_PG_Dialog( NULL, PG_Rect( 30, 30, 400, 400 ), "Transfer" ), first (source), second( destination ), handler( source, destination )
+AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase* destination, PG_Widget* parent, ServiceCommand* command ) 
+     : ASC_PG_Dialog( NULL, PG_Rect( 30, 30, 400, 400 ), "Transfer" ), 
+       first (source), second( destination ), handler( NULL )
 {
+   
+   this->command = command;
+   if ( command ) {
+      handler = & command->getTransferHandler();
+   } else {
+      handler = new TransferHandler( source, destination );
+   }
+   
    int ypos = 30;
    int border = 10;
 
@@ -132,8 +155,8 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
 
    const int singleTransferHeight = 60;
 
-   int expectedHeight = handler.getTransfers().size() * singleTransferHeight;
-   if ( handler.ammoProductionPossible() )
+   int expectedHeight = handler->getTransfers().size() * singleTransferHeight;
+   if ( handler->ammoProductionPossible() )
       expectedHeight  += 30;
 
    int newHeight = min( PG_Application::GetScreen()->h - 60, expectedHeight + 130 );
@@ -148,16 +171,16 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
 
 
    ypos = fieldsizex + 5;
-   if ( handler.ammoProductionPossible() ) {
+   if ( handler->ammoProductionPossible() ) {
       PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 30, 20 ), "allow ammo production" );
       if ( CGameOptions::Instance()->autoproduceammunition )
          production->SetPressed(  );
-      production->sigClick.connect( SigC::slot( handler, &TransferHandler::allowAmmoProduction ));
+      production->sigClick.connect( SigC::slot( *handler, &TransferHandler::allowAmmoProduction ));
       ypos += 30;
    }
    
-   for ( TransferHandler::Transfers::iterator i = handler.getTransfers().begin(); i != handler.getTransfers().end(); ++i ) {
-      new TransferWidget( area, PG_Rect( 0, ypos, area->w - 30, 50 ), *i, handler );
+   for ( TransferHandler::Transfers::iterator i = handler->getTransfers().begin(); i != handler->getTransfers().end(); ++i ) {
+      new TransferWidget( area, PG_Rect( 0, ypos, area->w - 30, 50 ), *i, *handler );
       ypos += singleTransferHeight;
    }
 
@@ -165,20 +188,15 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
    PG_Button* b = new PG_Button( this, PG_Rect( w - buttonWidth - border, h - 30 - border, buttonWidth, 30), "OK" );
    b->sigClick.connect( SigC::slot( *this, &AmmoTransferWindow::ok ));
    
-   for ( TransferHandler::Transfers::iterator i = handler.getTransfers().begin(); i != handler.getTransfers().end(); ++i ) 
+   for ( TransferHandler::Transfers::iterator i = handler->getTransfers().begin(); i != handler->getTransfers().end(); ++i ) 
       (*i)->showAll();
 }
 
-void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination )
+void ammoTransferWindow ( ContainerBase* source, ContainerBase* destination, ServiceCommand* command )
 {
-   AmmoTransferWindow atw( source, destination, NULL );
+   AmmoTransferWindow atw( source, destination, NULL, command );
    if ( atw.somethingToTransfer() ) {
       atw.Show();
       atw.RunModal();
    }
-}
-
-void ammoTransferWindow ( VehicleService* serviceAction, ContainerBase* destination )
-{
-
 }

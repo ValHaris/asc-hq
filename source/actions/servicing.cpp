@@ -28,6 +28,8 @@
 #include "../gameoptions.h"
 #include "../replay.h"
 
+#include "consumeresource.h"
+#include "consumeammo.h"
 
 
 enum TransferLimitation { NONE, GET, ALL };
@@ -251,6 +253,29 @@ class ResourceTransferrable : public Transferrable {
          }
       }
          
+      void executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context )
+      {
+         if ( amount == 0 )
+            return;
+         
+         if ( amount < 0 )
+            executeTransfer( to, from, -amount, context );
+         else 
+            if ( amount > 0 ) {
+               Resources r;
+               r.resource(resourceType) = amount;
+               
+               ActionResult res = (new ConsumeResource( from, r ))->execute( context );
+               if ( !res.successful() )
+                  throw res;
+               
+               res = (new ConsumeResource( to, -r))->execute( context );
+               if ( !res.successful() )
+                  throw res;
+               
+            }
+      }
+      
       
    public:
       ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst, bool isExchangable = true ) : Transferrable( src, dst ), resourceType ( resource ), exchangable( isExchangable )
@@ -321,6 +346,13 @@ class ResourceTransferrable : public Transferrable {
          ContainerBase* target = dest.getContainer();
          executeTransfer( source.getContainer(), target, getAmount( target ) - target->getResource( maxint, resourceType, true ));
       }
+      
+      void commit(const Context& context)
+      {
+         ContainerBase* target = dest.getContainer();
+         executeTransfer( source.getContainer(), target, getAmount( target ) - target->getResource( maxint, resourceType, true ), context );
+      }
+      
 };
 
 class AmmoTransferrable : public Transferrable {
@@ -435,6 +467,30 @@ class AmmoTransferrable : public Transferrable {
          }
       }
       
+      void executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context )
+      {
+         if ( amount < 0 )
+            executeTransfer( to, from, -amount, context );
+         else 
+            if ( amount > 0 ) {
+               auto_ptr<ConsumeAmmo> ca1 ( new ConsumeAmmo( from, ammoType, -1, amount ));
+               ca1->setAmmoProduction( allowAmmoProduction );
+               
+               ActionResult res = ca1->execute( context );
+               if( res.successful() )
+                  ca1.release();
+               else
+                  throw res;
+               
+               auto_ptr<ConsumeAmmo> ca2 ( new ConsumeAmmo( to, ammoType, -1, -amount ));
+               res = ca2->execute( context );
+               if( res.successful() )
+                  ca2.release();
+               else
+                  throw res;
+            }
+      }
+      
    public:
       AmmoTransferrable( int ammo, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction ) : Transferrable( src, dst ), ammoType ( ammo ), allowAmmoProduction( allowProduction )
       {
@@ -497,6 +553,11 @@ class AmmoTransferrable : public Transferrable {
       void commit()
       {
          executeTransfer( source.getContainer(), dest.getContainer(), destAmmo - orgAmmo[dest.getContainer()] );
+      }
+      
+      void commit( const Context& context )
+      {
+         executeTransfer( source.getContainer(), dest.getContainer(), destAmmo - orgAmmo[dest.getContainer()], context );
       }
       
 };
@@ -759,6 +820,23 @@ void TransferHandler::fillDest()
          (*i)->fill( dest );
 }
 
+void TransferHandler::fillDestAmmo()
+{
+   for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
+      if ( (*i)->isExchangable())
+         if ( dynamic_cast<AmmoTransferrable*>(*i))
+            (*i)->fill( dest );
+}
+
+void TransferHandler::fillDestResource()
+{
+   for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
+      if ( (*i)->isExchangable())
+         if ( dynamic_cast<ResourceTransferrable*>(*i))
+            (*i)->fill( dest );
+}
+
+
 void TransferHandler::emptyDest()
 {
    for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
@@ -770,6 +848,14 @@ bool TransferHandler::commit()
 {
    for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
       (*i)->commit();
+
+   return true;
+}
+
+bool TransferHandler::commit( const Context& context )
+{
+   for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
+      (*i)->commit( context );
 
    return true;
 }

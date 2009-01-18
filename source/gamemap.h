@@ -254,15 +254,26 @@ class GameMap {
       int eventpassed ( int saveas, int action, int mapid );
       int eventpassed ( int id, int mapid );
 
-private:
-      int          unitnetworkid;
-      typedef map<int, Vehicle*> VehicleLookupCache;
-      VehicleLookupCache vehicleLookupCache; 
-public:
-      //! returns a new and unique ID 
-      int getNewNetworkID();
-      void registerUnitNetworkID( Vehicle* veh );
-      void unregisterUnitNetworkID( Vehicle* veh );
+      class IDManager {
+            int          unitnetworkid;
+            typedef map<int, Vehicle*> VehicleLookupCache;
+            VehicleLookupCache vehicleLookupCache; 
+            
+            friend class SpawnUnit;
+            friend class GameMap;
+                        
+            
+         public:
+            IDManager() : unitnetworkid(0) {};
+            
+            //! returns a new and unique ID 
+            int getNewNetworkID();
+            void registerUnitNetworkID( Vehicle* veh );
+            void unregisterUnitNetworkID( Vehicle* veh );
+            
+            void readData ( tnstream& stream );
+            void writeData ( tnstream& stream ) const;
+      } idManager;
 
 
       char         levelfinished;

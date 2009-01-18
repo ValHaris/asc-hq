@@ -127,6 +127,7 @@ class Resources {
 };
 
 extern Resources operator- ( const Resources& res1, const Resources& res2 );
+extern Resources operator- ( const Resources& res1 );
 extern Resources operator+ ( const Resources& res1, const Resources& res2 );
 extern Resources operator* ( const Resources& res1, float a );
 extern Resources operator/ ( const Resources& res1, float a );

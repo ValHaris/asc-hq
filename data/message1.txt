@@ -212,6 +212,8 @@ Ammo doesn't fit into storage
 Ammo mismatch
 21103
 Movement mismatch
+21104
+could not store ammo
 21201
 Damage mismatch
 21202
@@ -262,6 +264,8 @@ Vehicle not found at position
 wrong vehicle found at position
 21804
 Failed to produce unit
+21805
+Networkid was changed
 21900
 No direction specified for cargomove
 21901 
@@ -271,4 +275,4 @@ Target carrier does not exist
 22000
 Assertion failed: Sequencing error
 22001
-
+Failed to set transferable amount 

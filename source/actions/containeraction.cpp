@@ -72,4 +72,8 @@ void ContainerAction::writeData ( tnstream& stream ) const
    stream.writeInt( containerID );
 };
 
+void ContainerAction::setID( int id )
+{
+   containerID = id;  
+}
 

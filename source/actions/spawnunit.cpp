@@ -28,7 +28,7 @@
 #include "../viewcalculation.h"
      
 SpawnUnit::SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner )
-   : GameAction( gamemap ), pos(position), networkid(-1), carrierID(0), carrier( false )
+   : GameAction( gamemap ), pos(position), networkid(-1), carrierID(0), carrier( false ), mapNetworkIdCounterBefore(0), mapNetworkIdCounterAfter(0)
 {
    this->vehicleTypeID = vehicleTypeID;
    this->owner = owner;
@@ -36,7 +36,7 @@ SpawnUnit::SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int veh
 }
             
 SpawnUnit::SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID )
-   : GameAction( gamemap ), pos( carrier->getPosition() ), networkid(-1), carrierID( carrier->getIdentification() ), carrier(true)
+   : GameAction( gamemap ), pos( carrier->getPosition() ), networkid(-1), carrierID( carrier->getIdentification() ), carrier(true), mapNetworkIdCounterBefore(0), mapNetworkIdCounterAfter(0)
 {
    this->vehicleTypeID = vehicleTypeID;
    this->owner = carrier->getOwner();
@@ -66,11 +66,13 @@ ASCString SpawnUnit::getDescription() const
 }
       
       
+static const int spawnUnitStreamVersion = 2;
+      
 void SpawnUnit::readData ( tnstream& stream ) 
 {
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "SpawnUnit", 1, version );
+   if ( version < 1 || version > spawnUnitStreamVersion )
+      throw tinvalidversion ( "SpawnUnit", spawnUnitStreamVersion, version );
    
    vehicleTypeID = stream.readInt();
    pos.read( stream );
@@ -78,18 +80,25 @@ void SpawnUnit::readData ( tnstream& stream )
    networkid = stream.readInt();
    carrierID = stream.readInt();
    carrier = stream.readInt();
+   
+   if ( version >= 2 ) {
+      mapNetworkIdCounterAfter = stream.readInt();
+      mapNetworkIdCounterBefore = stream.readInt();
+   }
 };
       
       
 void SpawnUnit::writeData ( tnstream& stream ) const
 {
-   stream.writeInt( 1 );
+   stream.writeInt( spawnUnitStreamVersion );
    stream.writeInt( vehicleTypeID );
    pos.write( stream );
    stream.writeInt( owner );
    stream.writeInt( networkid );
    stream.writeInt( carrierID );
    stream.writeInt( carrier );
+   stream.writeInt( mapNetworkIdCounterAfter );
+   stream.writeInt( mapNetworkIdCounterBefore );
 };
 
 
@@ -108,9 +117,16 @@ ActionResult SpawnUnit::runAction( const Context& context )
    if ( !vehicleType )
       return ActionResult( 21801, "Vehicle id is " + ASCString::toString(vehicleTypeID));
    
+   mapNetworkIdCounterBefore = getMap()->idManager.unitnetworkid;
+
    Vehicle* v = new Vehicle( vehicleType, getMap(), owner );
    networkid= v->networkid;
+   
+   mapNetworkIdCounterAfter = getMap()->idManager.unitnetworkid;
+   
    v->setMovement ( 0 );
+   
+   
    if ( !carrier ) {
       v->xpos = pos.x;
       v->ypos = pos.y;
@@ -144,6 +160,11 @@ ActionResult SpawnUnit::undoAction( const Context& context )
    if ( !fld )
       return ActionResult( 21002, pos );
    
+   if ( getMap()->idManager.unitnetworkid != mapNetworkIdCounterAfter )
+      return ActionResult( 21805 );
+   
+   getMap()->idManager.unitnetworkid = mapNetworkIdCounterBefore;
+   
    const Vehicletype* vehicleType = getMap()->getvehicletype_byid( vehicleTypeID );
    if ( !vehicleType )
       return ActionResult( 21801, "Vehicle id is " + ASCString::toString(vehicleTypeID));
@@ -173,6 +194,9 @@ ActionResult SpawnUnit::undoAction( const Context& context )
 
 ActionResult SpawnUnit::verify()
 {
+   if ( getMap()->idManager.unitnetworkid != mapNetworkIdCounterAfter )
+      return ActionResult( 21805 );
+   
    return ActionResult(0);
 }
 

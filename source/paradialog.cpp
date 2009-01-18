@@ -790,4 +790,3 @@ int choiceDialog(const ASCString& text, const ASCString& button1, const ASCStrin
 
 }
 
-

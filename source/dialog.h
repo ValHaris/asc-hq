@@ -196,4 +196,7 @@ extern void selectgraphicset ( void );
 extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint );
 
 
+class ActionResult;
+extern void displayActionError( const ActionResult& result );
+
 #endif

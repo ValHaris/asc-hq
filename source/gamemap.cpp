@@ -248,8 +248,6 @@ GameMap :: GameMap ( void )
       player[i].research.chainToMap ( this, i );
    }
           
-   unitnetworkid = 0;
-
    levelfinished = 0;
 
    messageid = 0;
@@ -413,7 +411,8 @@ void GameMap :: read ( tnstream& stream )
    }
 
 
-   unitnetworkid = stream.readInt();
+   idManager.readData(stream );
+   
    levelfinished = stream.readChar();
    
    bool alliance_names_not_used_any_more[8];
@@ -725,7 +724,8 @@ void GameMap :: write ( tnstream& stream )
 
    stream.writeInt( 0x12345678 );
    
-   stream.writeInt( unitnetworkid );
+   idManager.writeData(stream);
+   
    stream.writeChar( levelfinished );
 
    stream.writeInt( 1 );
@@ -1055,14 +1055,14 @@ int GameMap :: eventpassed( int id, int mapid )
 }
 
 
-void GameMap::registerUnitNetworkID( Vehicle* veh )
+void GameMap:: IDManager :: registerUnitNetworkID( Vehicle* veh )
 {
    vehicleLookupCache[veh->networkid] = veh;
    if ( unitnetworkid < veh->networkid )
       unitnetworkid = veh->networkid;
 }
 
-void GameMap::unregisterUnitNetworkID( Vehicle* veh )
+void GameMap:: IDManager :: unregisterUnitNetworkID( Vehicle* veh )
 {
    VehicleLookupCache::iterator j = vehicleLookupCache.find(veh->networkid);
    if ( j != vehicleLookupCache.end() )
@@ -1070,10 +1070,20 @@ void GameMap::unregisterUnitNetworkID( Vehicle* veh )
 }
 
 
-int GameMap :: getNewNetworkID()
+int GameMap :: IDManager :: getNewNetworkID()
 {
    ++unitnetworkid;
    return unitnetworkid;
+}
+
+void GameMap :: IDManager :: readData ( tnstream& stream )
+{
+   unitnetworkid = stream.readInt();
+}
+
+void GameMap :: IDManager :: writeData ( tnstream& stream ) const
+{
+   stream.writeInt( unitnetworkid );
 }
 
 Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
@@ -1098,10 +1108,12 @@ Vehicle* GameMap :: getUnit ( Vehicle* eht, int nwid )
    }
 }
 
+
+
 Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck )
 {
-   VehicleLookupCache::iterator i = vehicleLookupCache.find( nwid );
-   if ( i != vehicleLookupCache.end() )
+   IDManager::VehicleLookupCache::iterator i = idManager.vehicleLookupCache.find( nwid );
+   if ( i != idManager.vehicleLookupCache.end() )
       return i->second;
 
 
@@ -1118,8 +1130,8 @@ Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck )
 
 const Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck ) const
 {
-   VehicleLookupCache::const_iterator i = vehicleLookupCache.find( nwid );
-   if ( i != vehicleLookupCache.end() )
+   IDManager::VehicleLookupCache::const_iterator i = idManager.vehicleLookupCache.find( nwid );
+   if ( i != idManager.vehicleLookupCache.end() )
       return i->second;
 
 
