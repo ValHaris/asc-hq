@@ -919,6 +919,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\cargomovecommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\changecontainerproperty.cpp"
 					>
 				</File>
@@ -1008,6 +1012,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\removeobject.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\servicecommand.cpp"
 					>
 				</File>
 				<File

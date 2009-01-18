@@ -746,6 +746,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\consumeresource.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\containeraction.cpp"
 					>
 				</File>
