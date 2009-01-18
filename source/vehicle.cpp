@@ -1753,7 +1753,7 @@ int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
       return 0;
 
    if ( veh->maxMovement() )
-      return veh->getMovement(false, false )  * FuelConsumption / (100 * minmalq ) * veh->typ->fuelConsumption;
+      return veh->getMovement(false, false )  * FuelConsumption * veh->typ->fuelConsumption / (100 * minmalq ) ;
    else
       return (veh->getMap()->weather.windSpeed * maxwindspeed / 256 ) * veh->typ->fuelConsumption / ( minmalq * 64 );
 }
