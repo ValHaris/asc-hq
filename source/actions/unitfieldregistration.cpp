@@ -47,6 +47,7 @@ ASCString UnitFieldRegistration::getOpName() const
       case Position: return "Position";
       case Position3D: return "Position3D";
       case RegisterInCarrier: return "CarrierRegistration";
+      case UnRegisterFromCarrier: return "CarrierUnregistration";
    }
    return "";
 }

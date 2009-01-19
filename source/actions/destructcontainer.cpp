@@ -91,16 +91,16 @@ ActionResult DestructContainer::runAction( const Context& context )
    container->write( memstream );
    
    Vehicle* veh = dynamic_cast<Vehicle*>(container);
-   if ( veh )
+   if ( veh ) {
+      tfield* fld = getMap()->getField(veh->getPosition());
+
+      if ( fld->vehicle == veh )
+         fieldRegistration = FIRST;
+   
+      if ( fld->secondvehicle == veh )
+         fieldRegistration = SECOND;
+      
       if ( !veh->typ->wreckageObject.empty() && getMap()->state != GameMap::Destruction ) {
-         tfield* fld = getMap()->getField(veh->getPosition());
-
-         if ( fld->vehicle == veh )
-            fieldRegistration = FIRST;
-
-         if ( fld->secondvehicle == veh )
-            fieldRegistration = SECOND;
-
          if ( fieldRegistration == FIRST || fieldRegistration == SECOND ) {
             for ( vector<int>::const_iterator i = veh->typ->wreckageObject.begin(); i != veh->typ->wreckageObject.end(); ++i ) {
                ObjectType* obj = getMap()->getobjecttype_byid( *i );
@@ -111,6 +111,7 @@ ActionResult DestructContainer::runAction( const Context& context )
             }
          }
       }
+   }
       
    Building* bld = dynamic_cast<Building*>(container);
    if ( bld ) {
