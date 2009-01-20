@@ -101,7 +101,7 @@ ActionResult RemoveMine::runAction( const Context& context )
       layer = fld->mines.size();
       mineBuffer = new tmemorystreambuf();
       tmemorystream memstream( mineBuffer, tnstream::writing );
-      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i, ++layer ) 
+      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) 
          i->write( memstream );
       fld->mines.clear();
       return ActionResult(0);
