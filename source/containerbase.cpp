@@ -176,6 +176,16 @@ int ContainerBase :: cargoNestingDepth()
       return 0;
 }
 
+void ContainerBase :: compactCargo()
+{
+   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ) {
+      if ( *i == NULL )
+         i = cargo.erase(i);
+      else
+         ++i;
+   }
+}
+
 
 
 ContainerBase* ContainerBase :: getCarrier() const
@@ -378,6 +388,13 @@ bool ContainerBase :: removeUnitFromCargo( int nwid, bool recursive )
          if ( (*i)->networkid == nwid ) {
             (*i)->cargoParent = NULL;
             *i = NULL;
+
+            if ( cargo.size() > baseType->maxLoadableUnits ) {
+               // we only compact the cargo when we have more slots than allowed (may happen when conquering fully occupied buildings).
+               // because else we would confuse the user if the position of units in the cargo dialog changes
+               compactCargo();
+            }
+
             cargoChanged();
             return true;
          }

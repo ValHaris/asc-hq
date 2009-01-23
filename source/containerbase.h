@@ -82,6 +82,9 @@ class ContainerBase {
    protected:  
       Cargo cargo;
 
+   private:
+       void compactCargo();
+
    public:
       const Cargo& getCargo() const { return cargo; };
 
