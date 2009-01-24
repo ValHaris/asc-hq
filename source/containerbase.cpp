@@ -194,32 +194,18 @@ ContainerBase* ContainerBase :: getCarrier() const
 }
 
 
-bool ContainerBase::unitLoaded( int nwid )
-{
-   for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( *i ) {
-         if ( (*i)->networkid == nwid )
-            return true;
-         else {
-            if ( (*i)->unitLoaded( nwid ) )
-               return true;
-         }
-      }
-
-   return false;
-
-}
-
-Vehicle* ContainerBase :: findUnit ( int nwid ) const
+Vehicle* ContainerBase :: findUnit ( int nwid, bool recursive ) const
 {
    for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
       if ( *i ) {
          if ( (*i)->networkid == nwid )
             return *i;
          else {
-            Vehicle* cb = (*i)->findUnit( nwid );
-            if ( cb )
-               return cb;
+            if ( recursive ) {
+               Vehicle* cb = (*i)->findUnit( nwid );
+               if ( cb )
+                  return cb;
+            }
          }
       }
 
@@ -347,14 +333,14 @@ void ContainerBase :: clearCargo()
 }
 
 
-void ContainerBase :: addToCargo( Vehicle* veh )
+void ContainerBase :: addToCargo( Vehicle* veh, int position )
 {
    if ( veh == this )
       fatalError ("Trying to add unit to its own cargo");
    
    bool slotFound = false;
    for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-      if ( ! (*i) ) {
+      if ( ! (*i) && (position == -1 || position == i - cargo.begin() )) {
          *i = veh;
          slotFound = true;
          break;

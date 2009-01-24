@@ -159,6 +159,7 @@
 #include "dialogs/mailoptionseditor.h"
 #include "dialogs/unitguidedialog.h"
 
+
 #ifdef LUAINTERFACE
 # include "lua/luarunner.h"
 # include "lua/luastate.h"
@@ -210,6 +211,7 @@ bool maintainencecheck( void )
    return false;
 #endif
 }
+
 
 void positionCursor( Player& player )
 {

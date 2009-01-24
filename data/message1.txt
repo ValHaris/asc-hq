@@ -276,3 +276,10 @@ Target carrier does not exist
 Assertion failed: Sequencing error
 22001
 Failed to set transferable amount 
+22100
+Unit for destruction not available
+22101
+Unit can not be destructed
+22200
+Inconsistent cargo setup
+

@@ -153,3 +153,11 @@ ASCString ActionContainer::getCommands()
       cmd += (*i)->getCommandString() + "\n";
    return cmd;
 }
+
+ActionContainer::~ActionContainer()
+{
+   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
+      delete *i;
+   }
+}
+

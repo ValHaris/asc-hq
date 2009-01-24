@@ -48,15 +48,7 @@ class ActionContainer {
       
       // called when some modification to the map is taking place that is not recorded by undo
       void breakUndo();
-/*
-      class ReplayStorage {
-         public:
-            virtual void saveCommand( const Command& cmd ) = 0;
-            virtual ~ReplayStorage() {};
-      };
-
-      void saveActionsToReplay( ReplayStorage& replay );
-*/
+      
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       
@@ -72,6 +64,8 @@ class ActionContainer {
       static SigC::Signal2<void,GameMap*,const Command&> commitCommand;
       
       static SigC::Signal1<void,GameMap*> actionListChanged;
+      
+      ~ActionContainer();
 };
 
 

@@ -10,7 +10,8 @@ libactions_la_LIBADD		= @SDL_LIBS@
 
 libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
-                          containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp
+                          containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
+                          recycleunitcommand.cpp
 libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 
 libmiscactions_la_SOURCES	= servicing.cpp jumpdrive.cpp selfdestruct.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
@@ -19,9 +20,9 @@ libmiscactions_la_LIBADD		= @SDL_LIBS@
 libmapactions_la_SOURCES	= spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD		= @SDL_LIBS@
 
-libfullgameactions_la_SOURCES	= containeraction.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
+libfullgameactions_la_SOURCES	= containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                                   unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                                  constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp servicecommand.cpp  
+                                  constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp servicecommand.cpp 
 libfullgameactions_la_LIBADD		= @SDL_LIBS@
 
 

@@ -95,13 +95,16 @@ class ContainerBase {
 
       virtual int  getArmor() const = 0;
       
-      void addToCargo( Vehicle* veh );
+      /** adds the unit to the cargo
+         \param veh the unit to add 
+         \param position specifies a specific cargo slot. 
+                         -1 assigns slot automatically. The automatic mode should be used in almost all cases */
+      void addToCargo( Vehicle* veh, int position = -1 );
       
       //! removes the given unit from the container. \Returns true of the unit was found, false otherwise
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
       bool removeUnitFromCargo( int nwid, bool recursive = false );
       
-      bool unitLoaded( int nwid );
       
       //! returns the number of loaded units
       int vehiclesLoaded ( void ) const;
@@ -109,8 +112,8 @@ class ContainerBase {
       //! if this is a unit and it is inside a building or transport, returns the transport. NULL otherwise.
       ContainerBase* getCarrier() const;
 
-      //! searches for a the unit in the whole stack
-      Vehicle* findUnit ( int nwid ) const;
+      //! searches for a the unit in carrier and optionally all inner carriers
+      Vehicle* findUnit ( int nwid, bool recursive = true ) const;
       
       /** can the vehicle be loaded. If uheight is passed, it is assumed that vehicle is at
       the height 'uheight' and not the actual level of height

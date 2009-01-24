@@ -26,7 +26,7 @@
 #include "../gamemap.h"
      
 DestructContainer::DestructContainer( ContainerBase* container )
-   : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL)
+   : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1)
 {
    building = container->isBuilding();
 }
@@ -38,7 +38,7 @@ ASCString DestructContainer::getDescription() const
 }
       
 
-static const int destructContainerStreamVersion = 2;
+static const int destructContainerStreamVersion = 3;
       
 void DestructContainer::readData ( tnstream& stream ) 
 {
@@ -57,6 +57,11 @@ void DestructContainer::readData ( tnstream& stream )
 
    if ( version >= 2 )
       fieldRegistration = (FieldRegistration) stream.readInt();
+   
+   if ( version >= 3 ) {
+      hostingCarrier = stream.readInt();
+      cargoSlot = stream.readInt();
+   }
 };
       
       
@@ -73,7 +78,8 @@ void DestructContainer::writeData ( tnstream& stream ) const
       stream.writeInt( 0 );
 
    stream.writeInt( (int)fieldRegistration );
-
+   stream.writeInt( hostingCarrier );
+   stream.writeInt( cargoSlot );
 };
 
 
@@ -96,9 +102,17 @@ ActionResult DestructContainer::runAction( const Context& context )
 
       if ( fld->vehicle == veh )
          fieldRegistration = FIRST;
-   
-      if ( fld->secondvehicle == veh )
+      else if ( fld->secondvehicle == veh )
          fieldRegistration = SECOND;
+      else if ( veh->getCarrier() ) {
+         fieldRegistration = CARRIER;
+         hostingCarrier = veh->getCarrier()->getIdentification();
+         const ContainerBase::Cargo& cargo = veh->getCarrier()->getCargo();
+         ContainerBase::Cargo::const_iterator pos = find( cargo.begin(), cargo.end(), veh );
+         if ( pos == cargo.end() )
+            throw ActionResult( 22200, veh->getCarrier() );
+         cargoSlot = pos - cargo.begin();
+      }
       
       if ( !veh->typ->wreckageObject.empty() && getMap()->state != GameMap::Destruction ) {
          if ( fieldRegistration == FIRST || fieldRegistration == SECOND ) {
@@ -144,6 +158,10 @@ ActionResult DestructContainer::undoAction( const Context& context )
 
       if ( fieldRegistration == FIRST )
          getMap()->getField( veh->getPosition() )->vehicle = veh;
+      else if ( fieldRegistration == CARRIER ) {
+         ContainerBase* carrier = getMap()->getContainer( hostingCarrier );  
+         carrier->addToCargo( veh, cargoSlot );
+      }
 
       /*
       SECOND is not a permanent registration, so we don't redo it

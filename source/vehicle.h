@@ -329,17 +329,13 @@ class UnitHooveringLogic {
     MapCoordinate3D getPosition3D ( ) const;
 
 
-    // Searches this and all nested transport for the unit. Returns the direct parent carrier.
-    // Vehicle* findCarrierUnit ( const Vehicle* veh );
-
-    
     /** can the unit repair anything? This does not necessarily mean that the unit can repair
         other units, because a service weapon is additionally needed for that. It may be the
         case that the unit can only repair itself.
     */
     bool canRepair( const ContainerBase* item ) const;
 
-    /** fills a unit with all resources it can carry and sets it class to "to be determined on map load".
+    /** fills a unit with all resources it can carry 
         This function should only be called in the mapeditor !
     */
     void fillMagically( bool ammo = true, bool resources = true );

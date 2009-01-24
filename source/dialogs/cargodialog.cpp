@@ -47,6 +47,7 @@
 #include "../actions/moveunitcommand.h"
 #include "../actions/cargomovecommand.h"
 #include "../actions/servicecommand.h"
+#include "../actions/recycleunitcommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -265,7 +266,20 @@ namespace CargoGuiFunctions {
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
+   
+   class RecycleUnitCommandButton : public GuiFunction
+   {
+      CargoDialog& parent;
+      public:
+         RecycleUnitCommandButton( CargoDialog& masterParent ) : parent( masterParent)  {};
+         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
+         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
+         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
+         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
+         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
+   };
 
+   
    class UnitInfo : public GuiFunction
    {
       CargoDialog& parent;
@@ -456,6 +470,7 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitIntoInnerContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
+         handler.registerUserFunction( new CargoGuiFunctions::RecycleUnitCommandButton( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitInfo( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::TransferUnitControl( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::CloseDialog( *this ));
@@ -2659,6 +2674,103 @@ ASCString RecycleUnit :: getName( const MapCoordinate& pos, ContainerBase* subje
    ContainerControls cc ( parent.getContainer() );
    
    ASCString s = "recycle unit - ";
+   Resources res = cc.calcDestructionOutput( veh );
+
+   bool cost = false;
+   for ( int r = 0; r < 3; ++r ) {
+      if ( res.resource(r) < 0 ) {
+         if ( !cost ) {
+            s += "Cost: ";
+            cost = true;
+         }
+         s += ASCString::toString( -res.resource( r ));
+         s += " ";
+         s += Resources::name( r );
+      }
+   }
+            
+   bool gain = false;
+   for ( int r = 0; r < 3; ++r ) {
+      if ( res.resource(r) > 0 ) {
+         if ( !gain ) {
+            s += "Gain: ";
+            cost = true;
+         }
+         s += ASCString::toString( res.resource( r ));
+         s += " ";
+         s += Resources::name( r );
+      }
+   }
+   
+   return s;
+         
+};
+   
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+   
+bool RecycleUnitCommandButton :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !subject )
+      return false;
+   
+   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+   if ( !veh )
+      return false;
+      
+   if ( !RecycleUnitCommand::avail( parent.getContainer(), veh)) 
+      return false;
+   
+   Player& player = veh->getMap()->player[veh->getOwner()];
+   if ( player.diplomacy.isAllied( veh->getMap()->actplayer)  )
+      return true;
+   else
+      return false;
+};
+
+void RecycleUnitCommandButton :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !subject )
+      return;
+      
+   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+   if ( !veh )
+      return;
+      
+   if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
+      auto_ptr<RecycleUnitCommand> command ( new RecycleUnitCommand( parent.getContainer() ));
+      command->setUnit( veh );
+      ActionResult res = command->execute( createContext( parent.getContainer()->getMap() ));
+      if ( res.successful() )
+         command.release();
+      else
+         displayActionError( res );
+      parent.cargoChanged();
+   }
+}
+
+Surface& RecycleUnitCommandButton :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   return IconRepository::getIcon("recycle.png");
+};
+
+bool RecycleUnitCommandButton :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
+{
+   return false;
+};
+
+ASCString RecycleUnitCommandButton :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !subject )
+      return "";
+      
+   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
+   if ( !veh )
+      return "";
+
+   ContainerControls cc ( parent.getContainer() );
+   
+   ASCString s = "COMMAND: recycle unit - ";
    Resources res = cc.calcDestructionOutput( veh );
 
    bool cost = false;

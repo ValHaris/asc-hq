@@ -19,46 +19,46 @@
 */
 
 
-#ifndef destructContainerH
-#define destructContainerH
+#ifndef RecycleUnitCommandH
+#define RecycleUnitCommandH
 
-
-#include "containeraction.h"
-#include "action-registry.h"
+#include "containercommand.h"
 
 #include "../typen.h"
+#include "../objects.h"
+#include "../mapfield.h"
 
-class DestructContainer : public ContainerAction {
+
+class RecycleUnitCommand : public ContainerCommand {
    
-      bool building;  
-
-      //! saves if the unit was registered on the field
-      enum FieldRegistration { NONE, FIRST, SECOND, CARRIER } fieldRegistration;
-
-      tmemorystreambuf* unitBuffer;
-      
-      int hostingCarrier;
-      int cargoSlot;
-      
-      DestructContainer( GameMap* map ) : ContainerAction( map ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1) {};
-      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
-     
    public:
-      DestructContainer( ContainerBase* container );
+      static bool avail ( const ContainerBase* carrier, const Vehicle* unit );
+   private:
+      int unitID;
       
-      ASCString getDescription() const;
-      
-      ~DestructContainer();
+      RecycleUnitCommand( GameMap* map ) : ContainerCommand( map ), unitID( -1 ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
    protected:
-      virtual GameActionID getID() const;
+      void readData ( tnstream& stream );
+      void writeData ( tnstream& stream ) const;
       
-      virtual ActionResult runAction( const Context& context );
-      virtual ActionResult undoAction( const Context& context );
+      GameActionID getID() const;
+      ASCString getDescription() const;
       
-      virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream ) const;
+   public:
+      RecycleUnitCommand ( ContainerBase* carrier );
       
+      ActionResult go ( const Context& context ); 
+      ASCString getCommandString() const;
+      
+      
+      void setUnit( Vehicle* unit );
+      
+      vector<MapCoordinate> getFields();
+      bool isFieldUsable( const MapCoordinate& pos );
+      
+      Vehicle* getProducedUnit();
 };
 
 #endif
