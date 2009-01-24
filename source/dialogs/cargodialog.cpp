@@ -55,9 +55,6 @@
 #include "../sg.h"
 
 
-#define SERVICEUNDO 1 
-
-
 const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items );
 
 
@@ -185,19 +182,6 @@ namespace CargoGuiFunctions {
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
 
-#if SERVICEUNDO == 0
-   class RefuelUnit : public GuiFunction
-   {
-         CargoDialog& parent;
-      public:
-         RefuelUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
-         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
-         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
-         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
-         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
-   };
-#else   
    class RefuelUnitCommand : public GuiFunction
    {
       CargoDialog& parent;
@@ -209,21 +193,6 @@ namespace CargoGuiFunctions {
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
-#endif
-      
-#if SERVICEUNDO == 0
-   class RefuelUnitDialog : public GuiFunction
-   {
-      CargoDialog& parent;
-      public:
-         RefuelUnitDialog( CargoDialog& masterParent ) : parent( masterParent)  {};
-         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
-         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
-         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
-         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
-   };
-#else
    class RefuelUnitDialogCommand : public GuiFunction
    {
       CargoDialog& parent;
@@ -235,7 +204,6 @@ namespace CargoGuiFunctions {
          Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
-#endif
    
    class RepairUnit : public GuiFunction
    {
@@ -479,13 +447,8 @@ class CargoDialog : public Panel
       {
          registerCargoGuiFunctions( handler );
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
-#if SERVICEUNDO == 0
-         handler.registerUserFunction( new CargoGuiFunctions::RefuelUnit( *this ) );
-         handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitDialog( *this ) );
-#else
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitCommand( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitDialogCommand( *this ) );
-#endif
          handler.registerUserFunction( new CargoGuiFunctions::RepairUnit( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::UnitProduction( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitTraining( *this ));
@@ -2046,15 +2009,6 @@ namespace CargoGuiFunctions {
             throw ActionResult( 21804 );
          
          
-#if SERVICEUNDO == 0 
-         ContainerControls cc( parent.getContainer() );
-         
-         if ( refillAmmo )
-            cc.refillAmmo( newUnit );
-         
-         if ( refillResources )
-            cc.refillResources( newUnit );
-#else
          if ( refillAmmo || refillResources ) {
             auto_ptr<ServiceCommand> ser ( new ServiceCommand( parent.getContainer() ));
             ser->setDestination( newUnit );
@@ -2073,7 +2027,6 @@ namespace CargoGuiFunctions {
                displayActionError(res);
               
          }
-#endif
          if ( CGameOptions::Instance()->unitProduction.fillAmmo != refillAmmo ) {
             CGameOptions::Instance()->unitProduction.fillAmmo = refillAmmo;
             CGameOptions::Instance()->setChanged();
@@ -2139,60 +2092,7 @@ namespace CargoGuiFunctions {
       parent.cargoChanged();
    }
    
-   //////////////////////////////////////////////////////////////////////////////////////////////
    
-#if SERVICEUNDO == 0 
-   bool RefuelUnit::available( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      if ( !subject )
-         return false;
-
-      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
-      if ( !veh )
-         return false;
-
-      for ( int r = 1; r < 3; ++r )
-         if ( veh->getTank().resource(r) < veh->getStorageCapacity().resource(r))
-            return true;
-
-      for ( int w = 0; w < veh->typ->weapons.count; ++w)
-         if ( veh->typ->weapons.weapon[w].requiresAmmo() )
-            if ( veh->typ->weapons.weapon[w].count > veh->ammo[w] )
-               return true;
-
-      return false;
-   }
-
-
-   bool RefuelUnit::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
-   {
-      return ( key->keysym.sym == 'f' );
-   };
-
-   Surface& RefuelUnit::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      return IconRepository::getIcon("refuel.png");
-   };
-   
-   ASCString RefuelUnit::getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      return "refuel unit";
-   };
-
-
-   void RefuelUnit::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      if ( !subject )
-         return;
-      
-      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
-      if ( !veh )
-         return;
-      
-      parent.getControls().refilleverything( veh );
-      parent.cargoChanged();
-   }
-#else
    //////////////////////////////////////////////////////////////////////////////////////////////
    //////////////////////////////////////////////////////////////////////////////////////////////
    
@@ -2249,7 +2149,6 @@ namespace CargoGuiFunctions {
          displayActionError(res);
       parent.cargoChanged();
    }
-#endif
    //////////////////////////////////////////////////////////////////////////////////////////////
    
    bool RepairUnit::available( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2611,55 +2510,7 @@ namespace CargoGuiFunctions {
    }
 
 
-   //////////////////////////////////////////////////////////////////////////////////////////////
    
-#if SERVICEUNDO == 0   
-   
-   bool RefuelUnitDialog :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      if ( !subject )
-         return false;
-
-      Vehicle* veh = dynamic_cast<Vehicle*>(subject);
-      if ( !veh )
-         return false;
-
-      for ( int r = 1; r < 3; ++r )
-         if ( veh->getStorageCapacity().resource(r) )
-            return true;
-
-      for ( int w = 0; w < veh->typ->weapons.count; ++w)
-         if ( veh->typ->weapons.weapon[w].requiresAmmo() )
-            return true;
-
-      return false;
-   };
-
-   void RefuelUnitDialog :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      if ( !subject )
-         return;
-      
-      ammoTransferWindow( parent.getContainer(), subject, NULL );
-      parent.cargoChanged();
-   }
-
-   Surface& RefuelUnitDialog :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      return IconRepository::getIcon("refuel-dialog.png");
-   };
-
-   bool RefuelUnitDialog :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
-   {
-      return ( key->keysym.unicode == 'd' );
-   };
-
-   ASCString RefuelUnitDialog :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-   {
-      return "Refuel Dialog";
-   };
-
-#else
    //////////////////////////////////////////////////////////////////////////////////////////////
    
    bool RefuelUnitDialogCommand :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2705,7 +2556,6 @@ namespace CargoGuiFunctions {
       return "Refuel Dialog";
    };
    
-#endif   
    //////////////////////////////////////////////////////////////////////////////////////////////
    
    bool OpenContainer :: available( const MapCoordinate& pos, ContainerBase* subject, int num )

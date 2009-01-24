@@ -105,7 +105,7 @@ class AmmoTransferWindow : public ASC_PG_Dialog {
             command->saveTransfers();
             command->execute( createContext( actmap ) );
          } else {
-            handler->commit( );
+            errorMessage("Assertion failed: no command object");
          }
          QuitModal();
          return true;

@@ -73,15 +73,34 @@ class ContainerControls : public ContainerConstControls {
       //! only to be used by the AI, this doesn't consume any resources, so the unit must be discarded
       Vehicle* produceUnitHypothetically( const Vehicletype* type );
 
+      //! \deprecated Use #ServiceCommand instead
       void  fillResource (Vehicle* eht, int resourcetype, int newamount);
+
+      //! \deprecated Use #ServiceCommand instead
       void  fillAmmo (Vehicle* eht, int weapon, int newa );
+      
+      //! \deprecated Use #ServiceCommand instead
       void refilleverything ( Vehicle* eht );
+      
+      //! \deprecated Use #ServiceCommand instead
       void refillAmmo ( Vehicle* veh );
+      
+      //! \deprecated Use #ServiceCommand instead
       void refillResources ( Vehicle* veh );
+      
+      //! \deprecated Use #ServiceCommand instead
       void emptyeverything ( Vehicle* eht );
+      
+      //! \deprecated Use #ServiceCommand instead
       int   getammunition ( int weapontype, int num, bool abbuchen, bool produceifrequired );
+      
+      //! \deprecated Use #ServiceCommand instead
       bool  ammotypeavail ( int type );
+      
+      //! \deprecated Use #ServiceCommand instead
       int  ammoProducable ( int weaptype, int num );
+      
+      //! \deprecated Use #ServiceCommand instead
       int  produceAmmo ( int weaptype, int num );
       
 };
