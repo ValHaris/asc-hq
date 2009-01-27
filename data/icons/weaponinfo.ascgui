@@ -299,7 +299,7 @@ panel {
          FontColor = 0xcfcfcf
          Fontsize = 9
          height = 10
-         text = unit can ahoot after moving
+         text = unit can shoot after moving
        } widget2
         widget3 {
          type = StaticText
