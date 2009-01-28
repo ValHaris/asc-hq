@@ -80,6 +80,10 @@ ActionResult ConvertContainer::runAction( const Context& context )
       if ( *i ) 
          (new ConvertContainer( *i, newOwner ))->execute(context);
    
+   
+   c->conquered();
+   ContainerBase::anyContainerConquered(c);
+   
    return ActionResult(0);
 }
 

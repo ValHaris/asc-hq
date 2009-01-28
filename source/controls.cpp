@@ -420,11 +420,16 @@ bool anyTechAvailable( const Player& player )
 
 void researchCheck( Player& player )
 {
-   // we have no research at all set up in the map
-   if ( !anyTechAvailable( player ) ) // && player.research.developedTechnologies.empty() )
-      return;
-
    Research& research = player.research;
+   
+   // we have no research at all set up in the map
+   if ( !anyTechAvailable( player ) ) { // && player.research.developedTechnologies.empty() )
+      if ( research.activetechnology && research.techResearched( research.activetechnology->id )) {
+         research.activetechnology = NULL;
+      }
+      return;
+   }
+
    if (research.activetechnology == NULL && research.progress ) 
       setupNextTech( player );
       
