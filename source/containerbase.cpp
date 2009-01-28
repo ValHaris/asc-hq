@@ -581,7 +581,12 @@ void ContainerBase :: setProductionLines( const Production& production  )
 
 ContainerBase :: ~ContainerBase ( )
 {
-   for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+   /* removing a unit from cargo (which is done when deleting) may cause a call to compactCargo, 
+      which in turn invalidates the iterators to cargo 
+      That's why we iterate through a copy of cargo */ 
+   Cargo toDelete = cargo;
+   
+   for ( Cargo::iterator i = toDelete.begin(); i != toDelete.end(); ++i )
       if ( *i )
          delete *i;
 

@@ -1941,7 +1941,7 @@ namespace CargoGuiFunctions {
    bool UnitProduction::available( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
       if ( parent.getContainer()->getOwner() == parent.getContainer()->getMap()->actplayer )
-         return parent.getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction );
+         return ConstructUnitCommand::internalConstructionAvail( parent.getContainer() );
 
       return false;
    }
