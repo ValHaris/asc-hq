@@ -883,7 +883,7 @@ void execaction_pg(int code)
        break;
     case act_selobject : mainScreenWidget->selectObject();
        break;
-    case act_selobjectAll: mainScreenWidget->selectTerrainList();
+    case act_selobjectAll: mainScreenWidget->selectObjectList();
        /* if ( mapSwitcher.getDefaultAction() == MapSwitcher::select ) 
                               execaction ( act_setactivefieldvals );
                            execaction( act_switchmaps);

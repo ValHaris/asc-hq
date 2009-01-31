@@ -426,6 +426,7 @@ void researchCheck( Player& player )
    if ( !anyTechAvailable( player ) ) { // && player.research.developedTechnologies.empty() )
       if ( research.activetechnology && research.techResearched( research.activetechnology->id )) {
          research.activetechnology = NULL;
+         research.progress = 0;
       }
       return;
    }
