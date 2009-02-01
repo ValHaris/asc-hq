@@ -169,8 +169,8 @@ ActionResult DestructContainer::undoAction( const Context& context )
          getMap()->getField( veh->getPosition() )->vehicle = veh;
       */
         
-
-      veh->addview();
+      if ( fieldRegistration != CARRIER )
+         veh->addview();
    }
    
    return ActionResult(0);
