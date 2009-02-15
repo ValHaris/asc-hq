@@ -255,18 +255,6 @@ namespace CargoGuiFunctions {
          ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
    };
    
-   class RecycleUnit : public GuiFunction
-   {
-      CargoDialog& parent;
-      public:
-         RecycleUnit( CargoDialog& masterParent ) : parent( masterParent)  {};
-         bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
-         void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
-         bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num );
-         Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
-         ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
-   };
-   
    class RecycleUnitCommandButton : public GuiFunction
    {
       CargoDialog& parent;
@@ -469,7 +457,6 @@ class CargoDialog : public Panel
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitUp( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::MoveUnitIntoInnerContainer( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::OpenContainer( *this ));
-         handler.registerUserFunction( new CargoGuiFunctions::RecycleUnit( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::RecycleUnitCommandButton( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::UnitInfo( *this ));
          handler.registerUserFunction( new CargoGuiFunctions::TransferUnitControl( *this ));
@@ -2615,96 +2602,6 @@ namespace CargoGuiFunctions {
    
 
 
-   //////////////////////////////////////////////////////////////////////////////////////////////
-   
-bool RecycleUnit :: available( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( !subject )
-      return false;
-
-   if ( !parent.getContainer()->isBuilding() )
-      return false;
-      
-   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
-   if ( !veh )
-      return false;
-      
-   Player& player = veh->getMap()->player[veh->getOwner()];
-   if ( player.diplomacy.isAllied( veh->getMap()->actplayer)  )
-      return true;
-   else
-      return false;
-};
-
-void RecycleUnit :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( !subject )
-      return;
-      
-   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
-   if ( !veh )
-      return;
-      
-   if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
-      ContainerControls cc ( parent.getContainer() );
-      cc.destructUnit( veh );
-      parent.cargoChanged();
-   }
-}
-
-Surface& RecycleUnit :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   return IconRepository::getIcon("recycle.png");
-};
-
-bool RecycleUnit :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
-{
-   return false;
-};
-
-ASCString RecycleUnit :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-{
-   if ( !subject )
-      return "";
-      
-   Vehicle* veh = dynamic_cast<Vehicle*>(subject);
-   if ( !veh )
-      return "";
-
-   ContainerControls cc ( parent.getContainer() );
-   
-   ASCString s = "recycle unit - ";
-   Resources res = cc.calcDestructionOutput( veh );
-
-   bool cost = false;
-   for ( int r = 0; r < 3; ++r ) {
-      if ( res.resource(r) < 0 ) {
-         if ( !cost ) {
-            s += "Cost: ";
-            cost = true;
-         }
-         s += ASCString::toString( -res.resource( r ));
-         s += " ";
-         s += Resources::name( r );
-      }
-   }
-            
-   bool gain = false;
-   for ( int r = 0; r < 3; ++r ) {
-      if ( res.resource(r) > 0 ) {
-         if ( !gain ) {
-            s += "Gain: ";
-            cost = true;
-         }
-         s += ASCString::toString( res.resource( r ));
-         s += " ";
-         s += Resources::name( r );
-      }
-   }
-   
-   return s;
-         
-};
    
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2770,7 +2667,12 @@ ASCString RecycleUnitCommandButton :: getName( const MapCoordinate& pos, Contain
 
    ContainerControls cc ( parent.getContainer() );
    
-   ASCString s = "COMMAND: recycle unit - ";
+   ASCString s;
+   if ( parent.getContainer()->baseType->hasFunction( ContainerBaseType::RecycleUnits ))
+      s = "recycle unit - ";
+   else
+      s = "destroy unit - ";
+   
    Resources res = cc.calcDestructionOutput( veh );
 
    bool cost = false;

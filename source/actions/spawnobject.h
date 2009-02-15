@@ -34,6 +34,9 @@ class SpawnObject : public GameAction {
       int direction;
       bool objectLaid;      
       
+      bool objectAvailableBeforehand;
+      int  oldObjectDirection;
+      
       SpawnObject( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
 

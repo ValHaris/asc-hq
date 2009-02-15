@@ -30,6 +30,9 @@ SpawnObject::SpawnObject( GameMap* gamemap, const MapCoordinate& position, int o
    this->objectID = objectID;
    this->direction = direction;
    objectLaid = false;
+   
+   objectAvailableBeforehand = false;
+   oldObjectDirection = 0;
 }
       
       
@@ -45,27 +48,34 @@ ASCString SpawnObject::getDescription() const
    return  res;
 }
       
+static const int spawnObjectStreamVersion = 2;      
       
 void SpawnObject::readData ( tnstream& stream ) 
 {
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "SpawnObject", 1, version );
+   if ( version < 1 || version > spawnObjectStreamVersion )
+      throw tinvalidversion ( "SpawnObject", spawnObjectStreamVersion, version );
    
    objectID = stream.readInt();
    pos.read( stream );
    direction = stream.readInt();
    objectLaid = stream.readInt();
+   if ( version >= 2 ) {
+      objectAvailableBeforehand = stream.readInt();
+      oldObjectDirection = stream.readInt();
+   }
 };
       
       
 void SpawnObject::writeData ( tnstream& stream ) const
 {
-   stream.writeInt( 1 );
+   stream.writeInt( spawnObjectStreamVersion );
    stream.writeInt( objectID );
    pos.write( stream );
    stream.writeInt( direction );
    stream.writeInt( objectLaid );
+   stream.writeInt( objectAvailableBeforehand );
+   stream.writeInt( oldObjectDirection );
 };
 
 
@@ -84,6 +94,14 @@ ActionResult SpawnObject::runAction( const Context& context )
    if ( !object )
       return ActionResult( 21201, "Object id is " + ASCString::toString(objectID));
    
+   Object* old = fld->checkforobject( object );
+   if ( old ) {
+      objectAvailableBeforehand = true;
+      oldObjectDirection = old->dir;
+   } else {
+      objectAvailableBeforehand = false;
+      oldObjectDirection = 0;
+   }
    
    objectLaid = fld->addobject( object, direction );
    
@@ -101,7 +119,14 @@ ActionResult SpawnObject::undoAction( const Context& context )
    if ( !object )
       return ActionResult( 21201, "Object id is " + ASCString::toString(objectID));
    
-   fld->removeobject( object );
+   if ( objectAvailableBeforehand ) {
+      Object* o = fld->checkforobject( object );
+      if ( !o )
+         return ActionResult( 21505 );
+      o->dir = oldObjectDirection;
+   } else
+      fld->removeobject( object );
+      
    return ActionResult(0);
 }
 
