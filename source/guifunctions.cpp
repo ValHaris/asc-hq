@@ -1836,6 +1836,7 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
          dispmessage2( res );
       }
       NewGuiHost::pendingCommand = NULL;
+      updateFieldInfo();
    }
    
 }
