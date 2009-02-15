@@ -330,7 +330,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
                            releasetimeslice();
                      }
 
-                     if ( fieldvisiblenow ( fld, actmap->getPlayerView())) {
+                     if ( fieldvisiblenow ( fld, target, actmap->getPlayerView() )) {
                         ++visibility;
                         context.display->cursor_goto( target->getPosition() );
                         int t = ticker;
