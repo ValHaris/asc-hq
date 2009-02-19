@@ -31,7 +31,7 @@ VehicleType {
       Vehiclesinternally = 
       Objects = 9 44 2096 2098 992 2097
       ObjectsRemovable = 992 988 2097
-      ObjectGroupsRemovable = 1 2 3 4 8 14 21
+      ObjectGroupsRemovable = 1 2 3 4 7 8 14 21
    } Construction
 
    Weapons { 

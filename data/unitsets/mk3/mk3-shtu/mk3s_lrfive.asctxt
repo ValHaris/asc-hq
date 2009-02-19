@@ -11,7 +11,7 @@ VehicleType {
    Armor -= 50
    picture = mk3s_lrfive.png
    infoImage = mk3s_lrfive.jpg
-   Features += externalFuelTransfer
+   Features += externalFuelTransfer externalAmmoTransfer
 
    Weapons { 
       Initiative = 0

@@ -11,6 +11,8 @@ VehicleType {
 Die Fortress ist ein typisches Beispiel für diesen Schiffstyp. Ihre Hauptwaffe stellt ein gewaltiges 38 cm Zwillingsgeschütz dar, welches ebensogut auf einem Schlachtschiff eingesetzt werden könnte. Unterstützt wird dieses dabei von zwei Geschützen des Kalibers 30,5 cm, welche auch zur Abwehr gegnerischer Angriffe nützlich sind. Die Luftabwehr allerdings, speziell gegen hochfliegende Bomber, ist deutlich schwächer als beispielsweise bei Kreuzern. Entsprechender Schutz durch Polar oder Flugzeugträger ist deshalb angeraten. Erfreulicherweise ist die Panzerung der Fortress ziemlich stark, was ihr die Möglichkeit bietet, auch im stärksten Kampfgetümmel mitzuhalten. Die Besatzung ist dabei in der Lage, kleinere Schäden noch auf See zu beheben. Allerdings sind die Kosten für diese Schiffe nicht unerheblich und reichen nun doch an die der Zenith-Klasse heran. Problematisch ist dabei auch, daß die Fortress die Schwäche der Schlachtschiffe teilt, gegen U-Boot-Angriffe wehrlos zu sein. Sie muß deshalb unbedingt von Zerstörern und Kreuzern begleitet werden! Durch diese Nachteile konnten sich die Schlachtkreuzer auch nicht entscheidend durchsetzen und führen immer noch ein Schattendasein unter den echten Schlachtschiffen. ]
 
    Transportation ->* VehicleType.noTrans
+   Features -= Repair_Facility
+   Tank.Material = 0
 
    Weapons { 
       Initiative = 0

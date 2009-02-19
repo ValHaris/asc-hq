@@ -19,5 +19,6 @@ VehicleType {
       Weapon1 ->* VehicleType.C4 
       Weapon1.Punch@MaxRange += 20
       Weapon1.Punch@MinRange += 20
+      Weapon1.Ammo = 4
    } Weapons
 } VehicleType

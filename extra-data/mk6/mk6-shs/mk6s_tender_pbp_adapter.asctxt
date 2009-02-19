@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15107
+   ;Bezeichnung der verknüpften Technologie: Tender
+   TechnologiesRequired = 15107
+} TechAdapter

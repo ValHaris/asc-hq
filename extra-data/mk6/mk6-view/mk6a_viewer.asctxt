@@ -6,7 +6,7 @@ VehicleType {
    Picture = mk6a_viewer.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Features += MoveDuringReactionFire sonar
+   Features += MoveDuringReactionFire
    Armor += 150
 
    Tank.Material = 300

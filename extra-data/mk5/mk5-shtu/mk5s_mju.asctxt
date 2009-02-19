@@ -17,7 +17,7 @@ VehicleType {
       Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 2
+      Weapon0.Ammo = 4
       Weapon0.Punch@MaxRange = 120
       Weapon0.Punch@MinRange = 120
    } Weapons

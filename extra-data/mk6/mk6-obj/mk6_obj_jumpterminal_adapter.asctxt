@@ -1,0 +1,6 @@
+Techadapter {
+   Name = o15001
+   ;Bezeichnung der verknüpften Technologie: 
+   TechnologiesRequired = 15000 206000
+   RequireAllListedTechnologies = false
+} TechAdapter

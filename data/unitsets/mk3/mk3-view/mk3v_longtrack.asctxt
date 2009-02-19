@@ -1,18 +1,17 @@
 VehicleType { 
    Name = LONGTRACK
    ID = 557
-   WreckageObject = 15557
    parent = 242
+
+   WreckageObject = 15557
    Description = radar vehicle
-   InfoText = [InfoImage = Wikipedia P-40 (Long Track)]
    Picture = mk3v_longtrack.png
    InfoImage = mk3v_longtrack.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [InfoImage = Wikipedia P-40 (Long Track)]
 
    Armor -= 50
    View += 5
-   Category = medium_wheeled_vehicle
    
-   TerrainAccess ->* VehicleType.wheeled
-   Movement += 0 0 0 13 0 0 0 0 
+   Movement += 0 0 0 11 0 0 0 0 
 } VehicleType

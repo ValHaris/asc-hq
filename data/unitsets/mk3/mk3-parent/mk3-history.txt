@@ -5,6 +5,12 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+Beta-09-01
+-LR5 extranalAmmoTransfer
+-Spacelab passt wieder in Booster
+-LongTrack wie auf Foto Kettenfahrzeug
+-Sealboat + mam
+__________________
 18.10.2008 (GAMER)
 -InfoText = Meko, Arsenal, DD21
 -DD21 + Wasserbomben

@@ -3,6 +3,8 @@ ObjectType {
    ID = 15001
    parent = 45
    groupID =
+   TechAdapterRequired = o15001
+
    visible_in_fogOfWar = false
    LinkableObjects = 
    Height = 98

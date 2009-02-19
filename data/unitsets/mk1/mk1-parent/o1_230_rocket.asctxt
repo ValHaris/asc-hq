@@ -20,8 +20,8 @@ VehicleType {
 
    Transportation { 
       MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 410
-      MaxLoadableMass = 410
+      MaxLoadableUnitSize = 510
+      MaxLoadableMass = 510
       CategoriesNOT = default Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO

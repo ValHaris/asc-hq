@@ -1,0 +1,92 @@
+VehicleType { 
+   Name = TENDER
+   ID = 15107
+   parent = 400 401 402 419 15000
+
+   Description = dock ship
+   picture = mk6s_tender.png
+;   WreckageObject = 439
+   GuideSortHelp = 0 0 0 0 6 553 554 0 0 0
+   Infotext = [ ]
+
+   Jumpdrive ->* VehicleType.TeccnolsJump4
+   Jumpdrive.Height = low_level_flight
+   Jumpdrive.terrain_any = deep_water water river shallow_water Spaceport
+   View = 0
+   
+   Features = MoveDuringReactionFire Repair_Facility self_repairing
+   Armor = 1600
+   Weight = 4000
+   SelfRepairRate = 10
+
+   Transportation { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 5000
+      MaxLoadableMass = 5000
+      CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft helicopter rail_vehicle default building|turret|object
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.SubIO
+   } Transportation
+
+   Height = submerged floating low_level_flight
+   Movement = 0 22 44 0 33 0 0 0 
+   TerrainAccess {
+      terrain_any = Spaceport shallow_water water deep_water river
+      terrain_all =
+      terrain_not = small_rocks large_rocks forest
+      terrain_kill = lava
+   } TerrainAccess
+   Tank { 
+      Material = 50000
+      fuel = 60000
+   } Tank
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 995 996 997 998 999 1000 44 30 3
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 15
+   } Construction
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.UTorp 
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.ShotFrom = submerged floating low_level_flight
+      Weapon1.HitAccuracy.0 = 100
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+
+   } Weapons
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 15
+      heightdelta = 2
+      dist = 0
+      startheight = floating
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 5
+      heightdelta = -1
+      dist = 0
+      startheight = floating
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 10
+      heightdelta = -2
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod3
+} VehicleType

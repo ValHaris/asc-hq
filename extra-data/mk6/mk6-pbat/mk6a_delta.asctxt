@@ -9,6 +9,8 @@ VehicleType {
    Category = heavy_aircraft
    Weight = 300
    Armor += 50
+   View += 20
+   
    Transportation { 
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 80
@@ -18,7 +20,7 @@ VehicleType {
       EntranceSystem0 {
         Mode = In out
         UnitHeightAbs = medium_level_flight high_level_flight orbit
-        UnitHeightRel = -100
+        UnitHeightRel = 0
         ContainerHeight = medium_level_flight high_level_flight orbit
         CategoriesNOT = 
         DockingHeightAbs = floating ground_level 
@@ -34,7 +36,7 @@ VehicleType {
    movement += 0 0 0 0 -30 -20 180 90
 
    Weapons { 
-      Number = 5
+      Number = 6
       Weapon0 ->* VehicleType.type_laser
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit
       Weapon0.shotFrom = low_level_flight medium_level_flight high_level_flight orbit
@@ -56,6 +58,9 @@ VehicleType {
 
       Weapon4 ->* VehicleType.AmmoTorp
       Weapon4.Ammo = 6
+
+      Weapon5 ->* VehicleType.AmmoLM
+      Weapon5.Ammo = 12
    } Weapons
    
 } VehicleType

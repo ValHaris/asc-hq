@@ -5,6 +5,46 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+Beta-09-01
+-Delta Tech4
+-Inova Mat.Tank
+-Viewer kein Sonar mehr (Deltasearcher übernimmt Aufgabe)
+-CillaSV, baut keine Schienenbrücke 
+__________________
+23.11.2008 (GAMER)
+-GB137 Moveanpassung
+-KSB Mat.Tank für Laser
+__________________
+21.10.2008 (GAMER) Hotfix
+-Sockelturretjumpsystem verkleinert
+-Innocence kein Laderaum, kein 3Feld AA Rf
+-Tender Transportbugfix
+__________________
+18.10.2008 (GAMER)
+-Tender Forschungsbuxfix
+-Ionenkanone Forschungsbugfix
+-FT90 Small AA missle
+-BOx Jumpdrive buxfix
+-LDS Waffenbugfix
+-Einheiten mit Jumpdrive benötigen Jumpdrivetechnologie
+Neu:
+-LDS (Verteidigungsturm)
+-EMO (Radargebäude)
+-ARC (Jammergebäude)
+-Tender (Dockschiff)
+__________________
+Beta1-10/08
+-TrainTech deaktiviert
+-JumpTurret/Jumpfield Adapter/TeccTech
+-Delta Transportbugfix
+-Box6 Erweiterung Transportsystem
+__________________
+21.09.2008 (GAMER)
+-DeltaFighter Waffenupgrade
+-Deltabomber Waffenupgrade
+-Baliste Movebugfix
+-Delta +RaketenAmmo
+__________________
 13.09.2008 (GAMER)
 -Grafikbugfix Debugg, Ionenkanone
 -Sprungbugfix Debugg

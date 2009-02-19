@@ -1,0 +1,10 @@
+technology {
+   Name = ARS (Anti Radar Station)
+   infotext = Forschungsprojekt abgeschlossen! Ars verfuegbar!
+   id = 15909
+   RelatedUnitID = 
+   parent = 15000
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 15000,100002,100103,100306 
+} Technology

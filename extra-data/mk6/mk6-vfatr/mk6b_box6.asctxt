@@ -22,7 +22,8 @@ VehicleType {
 
    Transportation ->* VehicleType.TransVehicleHeavy 
    Transportation.MaxLoadableUnits = 8
-   Transportation.MaxLoadableMass = 240
+   Transportation.CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
+   Transportation.MaxLoadableMass = 350
 
    Movement = 0 0 0 10 0 0 0 0 
    Tank.Material = 500

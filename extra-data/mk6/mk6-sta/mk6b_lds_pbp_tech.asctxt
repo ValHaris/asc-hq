@@ -1,0 +1,10 @@
+technology {
+   Name = LDS
+   infotext = 
+   id = 15318
+   RelatedUnitID = 15318
+   parent = 15000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 15000,100002,100101,100313 
+} Technology

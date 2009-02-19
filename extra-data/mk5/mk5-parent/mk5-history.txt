@@ -4,6 +4,16 @@ InfoText: Hastrubal
 InfoImage: GAMER
 
 __________________
+Beta-09-01
+-Oilplatform, Grafik bugfix
+-Guard,Bigguard Techbugfix
+-Harpoon +Torpedo auf 3 Felder
+-MU,Muhs, +Movement
+-SealboatX => Tramper, Komplettumbau
+-Marine 4 Bomben
+-MJU, Ammo +2
+-Lastesel , weniger Movementabschlag
+__________________
 18.10.2008 (GAMER)
 -SChnellboote +vsw
 -MU +20 View

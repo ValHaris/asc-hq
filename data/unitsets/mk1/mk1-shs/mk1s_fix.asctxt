@@ -16,7 +16,7 @@ VehicleType {
 
    Tank { 
       Material = 40000
-      fuel = 40000
+      fuel = 45000
    } Tank
 
    Construction { 

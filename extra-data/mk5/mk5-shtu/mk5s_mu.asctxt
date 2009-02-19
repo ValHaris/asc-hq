@@ -8,6 +8,8 @@ VehicleType {
 
    picture = mk5s_mu.pcx
    InfoImage = mk5s_mu.jpg
+   
+   Movement += 11 11 0 0 0 0 0 0
 
    View += 20
       Weapons.Weapon7 ->* VehicleType.MineSea

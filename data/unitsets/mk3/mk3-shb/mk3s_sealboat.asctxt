@@ -11,23 +11,24 @@ VehicleType {
 
    Jamming = 50
    Transportation ->* VehicleType.TransShipTrooper 
-   Features = jam_only_own_field
+   Features = jam_only_own_field move_after_attack
 
    Tank { 
       Material = 500
    } Tank
    TerrainAccess ->* VehicleType.nodeepwatership_terrain
+   Movement += 0 0 11 0 0 0 0 0
 
    Weapons { 
       Initiative = 0
-      Number = 5
+      Number = 4
       Weapon0 ->* VehicleType.MiniGun
-      Weapon0.Ammo = 10
+      Weapon0.Ammo = 50
       Weapon0.Punch@MaxRange = 39
       Weapon0.Punch@MinRange = 46
 
-      Weapon1 ->* VehicleType.AmmoMG 
-      Weapon1.Ammo = 40
+      Weapon1 ->* vehicleType.AmmoSM 
+      Weapon1.Ammo = 12
 
       Weapon2 ->* vehicleType.AmmoBomb 
       Weapon2.Ammo = 12
@@ -35,7 +36,5 @@ VehicleType {
       Weapon3 ->* vehicleType.AmmoMine 
       Weapon3.Ammo = 6
 
-      Weapon4 ->* vehicleType.AmmoSM 
-      Weapon4.Ammo = 12
    } Weapons
 } VehicleType

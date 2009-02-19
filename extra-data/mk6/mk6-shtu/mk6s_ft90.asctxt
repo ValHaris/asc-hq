@@ -33,26 +33,23 @@ VehicleType {
    Movement += 0 0 0 0 60 80 0 0
    Height = floating low_level_flight medium_level_flight
    Weapons { 
-      Initiative = -30
-      Number = 6
+      Number = 5
       Weapon0 ->* VehicleType.Ship_Flak 
       Weapon0.Ammo = 20
       
       Weapon1 ->* VehicleType.SAMH 
       Weapon1.MaxRange = 50
-      Weapon1.Ammo = 20
+      Weapon1.Ammo = 100
 
-      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2 ->* VehicleType.smAAM 
+      Weapon2.MaxRange = 30
       Weapon2.Ammo = 100
 
-      Weapon3 ->* VehicleType.AmmoLM 
-      Weapon3.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 50
 
-      Weapon4 ->* VehicleType.AmmoTorp 
-      Weapon4.Ammo = 50
-
-      Weapon5 ->* VehicleType.AmmoBomb 
-      Weapon5.Ammo = 100
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 100
 
    } Weapons
 

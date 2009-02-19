@@ -224,6 +224,9 @@
 
    AirMiniGun ->* Vehicletype.BigMiniGun
    AirMiniGun.targets = low_level_flight medium_level_flight
+   AirMiniGun.HitAccuracy.0 = 0
+   AirMiniGun.HitAccuracy.u1 = 100
+   AirMiniGun.HitAccuracy.u2 = 80
 
 
 ; ----------------------------------------------------------------------------------------------------------------

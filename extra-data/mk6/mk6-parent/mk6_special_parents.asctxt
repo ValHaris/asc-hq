@@ -256,7 +256,7 @@ Plasmabomb {
          Sound = weapon10_s.ogg
          Type = Laser shootable 
          Ammo = 3
-	 LaserRechargeRate = 1
+	 LaserRechargeRate = 2
          LaserRechargeCost {
             energy = 0
             material = 5
@@ -500,7 +500,7 @@ LRHEPT {
       consumption {
          Energie = 0
          Material = 200
-         Fuel = 4000
+         Fuel = 3000
       } consumption
       terrain_any = road runway lowland hard_sand soft_sand 
       terrain_all = beacon
@@ -510,11 +510,11 @@ LRHEPT {
 
    TeccnolsJump2 {
       Height = ground_level
-      MaxDistance = 350
+      MaxDistance = 250
       consumption {
          Energie = 0
-         Material = 600
-         Fuel = 6000
+         Material = 300
+         Fuel = 3000
       } consumption
       terrain_any = turret_foundation 
       terrain_all = beacon
@@ -524,7 +524,7 @@ LRHEPT {
 
    TeccnolsJump3 {
       Height = ground_level
-      MaxDistance = 250
+      MaxDistance = 350
       consumption {
          Energie = 0
          Material = 5000
@@ -552,11 +552,11 @@ LRHEPT {
 
    TeccnolsJump5 {
       Height = ground_level
-      MaxDistance = 350
+      MaxDistance = 250
       consumption {
          Energie = 0
-         Material = 700
-         Fuel = 6000
+         Material = 400
+         Fuel = 3000
       } consumption
       terrain_any = turret_foundation road runway lowland hard_sand soft_sand
       terrain_all = beacon

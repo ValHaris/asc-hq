@@ -4,7 +4,7 @@ VehicleType {
    ID = 1242
 
    Description = Tarnkappenjaeger
-   Infotext = [Der Ghost ist das fortschrittlichste Kampfflugzeug der Cromoner. Was zunächst auffällt, ist die ungewöhnliche Form des Rumpfes und der Flugel, welche gemeinsam mit der speziellen Beschichtung dazu führen, daß der Ghost auf nahezu jedem Radarschirm unsichtbar ist. Er ist zwar sehr schwer, allerdings erreicht er aufgrund seiner extrem starken Triebwerke fast die Geschwindigkeit der leichteren Jäger. Seine Wendigkeit ist aufgrund des hohen Gewichtes natürlich geringer, so daß er trotz der starken Panzerung verwundbarer als beispielsweise der Genom ist. Jedoch trägt ihn seine enorme Schubkraft auch in die höchsten Schichten der Atmosphäre, von wo er seine Gegner oft vernichten kann, ohne daß sie ihn überhaupt zu Gesicht bekommen. Dafür führt er eine ganze Reihe starker Luft-Luft-Raketen mit sich. Da er sich an seine Gegner anschleichen kann, wurde auf Reichweite zugunsten von Sprengkraft verzichtet. Problematisch wird es allerdings, wenn er in Gebieten mit starker Feindaufklärung eingesetzt wird. Sobald er seine stärkste Waffe, die Unsichtbarkeit, verliert, macht sich das Fehlen weitreichender Luft-Luft-Raketen sofort negativ bemerkbar. Aus mittlerer Höhe kann er weiterhin Bodenziele mit Raketen bekämpfen, was ihn durch seine Stealthbauweise prädestiniert, wichtige Luftverteidigungseinheiten des Gegners chirurgisch zu entfernen. So kann er den Angriff der eigenen Bomberflotte vorbereiten. Außerdem führt er sogar noch einen Sprengkopf zur Bekämpfung von Zielen im Orbit mit sich. Ein MG rundet die Bewaffnung ab. Dieses Stück Hi-Tec hat natürlich seinen Preis. Aufgrund der vielfältigen Einsatzmöglichkeiten auch gegen gut ausgerüstete Gegner ist dieser allerdings gerechtfertigt. ]
+   Infotext = [Der Ghost ist das fortschrittlichste Kampfflugzeug der Cromoner. Was zunächst auffällt, ist die ungewöhnliche Form des Rumpfes und der Flugel, welche gemeinsam mit der speziellen Beschichtung dazu führen, daß der Ghost auf nahezu jedem Radarschirm unsichtbar ist. Er ist zwar sehr schwer, allerdings erreicht er aufgrund seiner extrem starken Triebwerke fast die Geschwindigkeit der leichteren Jäger. Seine Wendigkeit ist aufgrund des hohen Gewichtes natürlich geringer, so daß er trotz der starken Panzerung verwundbarer als beispielsweise der Genom ist. Jedoch trägt ihn seine enorme Schubkraft auch in die höchsten Schichten der Atmosphäre, von wo er seine Gegner oft vernichten kann, ohne daß sie ihn überhaupt zu Gesicht bekommen. Dafür führt er eine ganze Reihe starker Luft-Luft-Raketen mit sich. Da er sich an seine Gegner anschleichen kann, wurde auf Reichweite zugunsten von Sprengkraft verzichtet. Problematisch wird es allerdings, wenn er in Gebieten mit starker Feindaufklärung eingesetzt wird. Sobald er seine stärkste Waffe, die Unsichtbarkeit, verliert, macht sich das Fehlen weitreichender Luft-Luft-Raketen sofort negativ bemerkbar. Aus mittleren und hohen Luftschichten kann er weiterhin Bodenziele mit Raketen bekämpfen, was ihn durch seine Stealthbauweise prädestiniert, wichtige Luftverteidigungseinheiten des Gegners chirurgisch zu entfernen. So kann er den Angriff der eigenen Bomberflotte vorbereiten. Außerdem führt er sogar noch einen Sprengkopf zur Bekämpfung von Zielen im Orbit mit sich. Ein MG rundet die Bewaffnung ab. Dieses Stück Hi-Tec hat natürlich seinen Preis. Aufgrund der vielfältigen Einsatzmöglichkeiten auch gegen gut ausgerüstete Gegner ist dieser allerdings gerechtfertigt. ]
    picture = mk4a_ghost.png
    InfoImage = mk4a_ghost.jpg
    wreckageobject = 1242 14842
@@ -20,8 +20,9 @@ VehicleType {
       Number = 5
 
       Weapon1.shotFrom = medium_level_flight high_level_flight 
-      Weapon1.Punch@MaxRange += 3
-      Weapon1.Punch@MinRange += 3
+      Weapon1.HitAccuracy.d1 = 0
+      Weapon1.HitAccuracy.d2 = 100
+      Weapon1.HitAccuracy.d3 = 95
 
       Weapon2 ->* vehicleType.AirH_MG 
 

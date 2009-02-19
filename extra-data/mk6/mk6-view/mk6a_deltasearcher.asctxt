@@ -1,6 +1,6 @@
 VehicleType { 
    Name = DELTASEARCHER
-   parent = 276 
+   parent = 15001 276 
    ID = 15305
    
    Description = Sucher
@@ -8,16 +8,10 @@ VehicleType {
    Picture = mk6a_deltasearcher.pcx
    GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
-   Armor -= 50
-   Tank.Material = 0 
-   Features += paratrooper sonar satelliteview mineview automatic_resource_searching
+   Features += sonar satelliteview mineview automatic_resource_searching
    ResourceDrillingRange = 4
    View = 60
    
-
-   Height = low_level_flight medium_level_flight high_level_flight orbit
-   movement += 0 0 0 0 0 0 170 60
-
    Weapons {
       Number = 0
    } Weapons

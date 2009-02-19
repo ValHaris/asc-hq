@@ -18,6 +18,7 @@ VehicleType {
    Transportation.CategoriesNOT = medium_tracked_vehicle heavy_tracked_vehicle heavy_wheeled_vehicle medium_ship heavy_ship medium_aircraft heavy_aircraft rail_vehicle
 
    Movement -= 0 0 0 10 0 0 0 0 
+   Tank.Fuel += 5000
    
    Weapons { 
       Number = 1

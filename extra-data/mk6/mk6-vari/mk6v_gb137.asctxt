@@ -22,9 +22,9 @@ VehicleType {
       fuel = 5000
    } Tank
    FuelConsumption = 25
-   Movement = 0 0 0 10 50 0 0 0 
+   Movement = 0 0 0 19 60 0 0 0 
    TerrainAccess ->* VehicleType.heli_terrain
-   HeightChangeMethod0.movecost = 1
+   HeightChangeMethod0.movecost = 10
    MovementSound = jet_pass.ogg
 
 } VehicleType

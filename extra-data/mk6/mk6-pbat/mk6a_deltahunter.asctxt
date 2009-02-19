@@ -1,19 +1,12 @@
 VehicleType { 
    Name = DELTAHUNTER
-   parent = 276 
+   parent = 15001 276 
    ID = 15326
    
    Description = U-Boot Jaeger
    Infotext = []
    Picture = mk6a_deltahunter.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-
-   Armor -= 50
-   Tank.Material = 0 
-   Features += paratrooper
-
-   Height = low_level_flight medium_level_flight high_level_flight orbit
-   movement += 0 0 0 0 0 0 170 60
 
    Weapons {
       Number = 2

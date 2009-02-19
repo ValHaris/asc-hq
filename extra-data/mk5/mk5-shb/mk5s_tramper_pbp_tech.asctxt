@@ -1,5 +1,5 @@
 technology {
-   Name = SealBoat
+   Name = Tramper
    infotext = 
    id = 1455
    RelatedUnitID = 1455

@@ -5,6 +5,17 @@ InfoImages: GAMER
 Spezifikationen: GAMER
 
 __________________
+Beta-09-01
+-Virus Tech0
+-GTAD Tech2
+-Sperber/Exterminator keine Fighter Tech mehr
+-Medusa3, Umabu auf Air/orbitalDefence Tech4
+-GT Def/Ultra Techbugfix
+__________________
+23.11.2008 (GAMER)
+-Ionstar per Lurat transportierbar
+-Fortress, überflüsige Funktionen entfernt
+__________________
 21.10.2008 (GAMER) Hotfix
 -Guppi External Ammo Transfer
 __________________

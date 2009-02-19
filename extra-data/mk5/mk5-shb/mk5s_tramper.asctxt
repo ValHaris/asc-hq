@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = TRAMPER
+   parent = 350
+   ID = 1455
+   
+   Description = stealth patrol boat
+   Infotext = []
+   picture = mk5s_tramper.pcx
+   InfoImage = mk5s_tramper.jpg
+   
+   Features += Move_after_attack jam_only_own_field
+   Armor += 100
+   Jamming = 39
+   Movement += 0 0 20 0 0 0 0 0
+   FuelConsumption = 30
+
+   Weapons {
+      Number = 4
+      Weapon0 ->* VehicleType.BigMiniGun
+      Weapon0.Ammo = 50
+
+      Weapon1 ->* vehicleType.AmmoSM 
+      Weapon1.Ammo = 12
+
+      Weapon2 ->* vehicleType.AmmoBomb 
+      Weapon2.Ammo = 12
+      
+      Weapon3 ->* vehicleType.AmmoMine 
+      Weapon3.Ammo = 6
+   } Weapons
+
+} VehicleType

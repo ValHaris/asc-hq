@@ -23,8 +23,8 @@ Aufgrund des Rückstoßes des Geschützes ist die BALISTE nur in der Lage im geland
       fuel = 1400
    } Tank
    FuelConsumption = 25
-   Movement = 0 0 0 10 70 0 0 0 
    TerrainAccess ->* VehicleType.heli_terrain
+   Movement = 0 0 0 19 70 0 0 0 
    MovementSound = jet_pass.ogg
 
    Weapons { 

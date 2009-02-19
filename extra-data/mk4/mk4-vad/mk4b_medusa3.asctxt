@@ -31,11 +31,14 @@ Da die Medusa 3 eher als beschränkt mobil anzusehen ist, fallen Aufgaben im offe
 
    Weapons { 
       Initiative = 0
-      Number = 1
+      Number = 2
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight 
       Weapon0.MaxRange -= 20
       Weapon0.MinRange -= 20
       Weapon0.Ammo = 10
-      Weapon0.Reactionfireshots = 2
+      Weapon0.Reactionfireshots = 1
+      Weapon1 ->* VehicleType.SOM
+      Weapon1.MaxRange = 80
+      Weapon1.Reactionfireshots = 1
    } Weapons
 } VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; LDS
+   Name = 15318
+   TechnologiesRequired = 15318
+} TechAdapter

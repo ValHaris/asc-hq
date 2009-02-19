@@ -2,6 +2,7 @@ ObjectType {
    name = JumpTurret
    ID = 15003
    parent = 44
+   TechAdapterRequired = o15003
 
    Weather = dry much_snow
    LinkableObjects = 

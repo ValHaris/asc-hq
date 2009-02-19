@@ -602,7 +602,7 @@
       MaxLoadableUnits = 5
       MaxLoadableUnitSize = 5
       MaxLoadableMass = 15
-      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       CargoMovementDivisor = 1.4
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO

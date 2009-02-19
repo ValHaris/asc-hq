@@ -1,0 +1,12 @@
+VehicleType { 
+   abstract = true
+   Name = Deltaflieger
+   ID = 15001
+   
+   Armor = 320
+   Features = move_after_attack no_reactionfire paratrooper
+
+   Height = low_level_flight medium_level_flight high_level_flight orbit
+   movement = 0 0 0 0 180 180 180 60
+
+} VehicleType

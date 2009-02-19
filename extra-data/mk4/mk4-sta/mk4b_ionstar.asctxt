@@ -11,6 +11,7 @@ VehicleType {
    wreckageobject = 1222
    
    Features += ManualSelfDestruct
+   Weight = 300
 
    Weapons { 
       Weapon0.Ammo = 16

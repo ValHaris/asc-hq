@@ -14,18 +14,26 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 2
+      Number = 3
       Weapon0 ->* VehicleType.storp 
       Weapon0.shotFrom = floating ground_level
       Weapon0.MaxRange = 20
-      Weapon0.Ammo = 2
+      Weapon0.Ammo = 4
       Weapon0.Punch@MaxRange = 125
       Weapon0.Punch@MinRange = 125
       Weapon0.ReactionFireShots = 0
 
-      Weapon1 ->* VehicleType.AirMiniGun
-      Weapon1.Ammo = 6
-      Weapon1.ReactionFireShots = 2
+      Weapon1 ->* VehicleType.storp 
+      Weapon1.shotFrom = floating ground_level
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 110
+      Weapon1.ReactionFireShots = 0
+
+      Weapon2 ->* VehicleType.AirMiniGun
+      Weapon2.Ammo = 6
+      Weapon2.ReactionFireShots = 2
 
    } Weapons
 } VehicleType

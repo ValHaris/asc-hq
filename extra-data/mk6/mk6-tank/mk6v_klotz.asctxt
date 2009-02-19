@@ -12,6 +12,7 @@ VehicleType {
 
    View -= 10
    Features += moveduringreactionfire sonar
+   Weight = 600
 
    Transportation { 
       MaxLoadableUnits = 4

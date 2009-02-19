@@ -1,6 +1,6 @@
 VehicleType { 
    Name = DELTAFIGHTER
-   parent = 270 
+   parent = 15001 270 
    ID = 15270
    
    Description = light fighter
@@ -8,15 +8,10 @@ VehicleType {
    Picture = mk6a_deltafighter.pcx
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
-   Armor -= 50
    Tank.Material = 500 
-   Features += paratrooper
-
-   Height = low_level_flight medium_level_flight high_level_flight orbit
-   movement += 0 0 0 0 0 0 170 60
-
-   Weapons {
-      Number = 1
+ 
+  Weapons {
+      Number = 2
       Weapon0 ->* VehicleType.type_laser 
       Weapon0.Punch@MaxRange += 5
       Weapon0.Punch@MinRange += 5
@@ -24,5 +19,8 @@ VehicleType {
       Weapon0.shotFrom = low_level_flight medium_level_flight high_level_flight orbit
       Weapon0.Ammo = 2
 
+      Weapon1 ->* VehicleType.AAMH 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
    } Weapons
 } VehicleType

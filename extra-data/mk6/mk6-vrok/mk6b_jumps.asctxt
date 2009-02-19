@@ -15,9 +15,7 @@ VehicleType {
    Tank.Material = 1000
    
    Weapons {
-      Weapon0.MaxRange -= 20
-      Weapon0.MinRange -= 10
-      Weapon0.Punch@MaxRange += 10
-      Weapon0.Punch@MinRange += 10
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange -= 5
    } Weapons
 } VehicleType

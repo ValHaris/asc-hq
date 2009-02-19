@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = LDS
+   ID = 15318
+   parent = 318 15000
+
+   Description = Laser-Defensiv-Stellung
+   Infotext = []
+   Picture = mk6b_lds.png
+   
+   View += 20
+   
+   Armor -= 200
+   Features += ManualSelfDestruct
+   
+   Tank.Fuel = 9000
+   Tank.Material = 4000
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.NLS
+      Weapon0.Reactionfireshots = 1
+      Weapon0.Ammo = 5
+      Weapon1 ->* VehicleType.GALS
+      Weapon1.Punch@MinRange += 5
+      Weapon1.Ammo = 3
+      Weapon2 ->* VehicleType.GGLS
+      Weapon2.MaxRange = 40 
+      Weapon2.Punch@MinRange += 20
+      Weapon2.Ammo = 3
+      Weapon3 ->* VehicleType.TeccEMP2
+      Weapon3.MaxRange = 20
+      Weapon3.Reactionfireshots = 1
+      Weapon3.Punch@MaxRange = 140
+      Weapon3.Punch@MinRange = 160
+      Weapon3.Ammo = 1
+   } Weapons
+} VehicleType

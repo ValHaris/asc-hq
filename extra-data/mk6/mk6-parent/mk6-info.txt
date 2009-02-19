@@ -12,6 +12,8 @@ ID 15004 lab north
 ID 15005 lab south
 ID 15006 airport
 ID 15007 airport2
+ID 15008 Radar
+ID 15009 Jamming
 
 Objekte
 ID 15001 Leuchtfeuer (permanent)
@@ -49,6 +51,7 @@ ID 15242 Devo R
 ID 15306 Shadow
 
 --Air Defence--
+ID 15006 LV2beta
 
 --Artillery--
 ID 15251 Baliste
@@ -95,12 +98,14 @@ ID 15305 Deltasearcher
 
 --Battleships--
 ID 15355 MBC 10
-ID 15355 MBC 20
+ID 15356 MBC 20
+ID 15357 MBC 30
 
 --Supportships--
 ID 15363 UTX
 ID 15369 UT100
-ID 15370 UT70 
+ID 15370 UT70
+ID 15107 Tender 
 
 --Carrier
 ID 15359 DT 64

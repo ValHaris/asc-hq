@@ -11,7 +11,7 @@ VehicleType {
 
    Armor += 100
    Transportation ->* VehicleType.TransSubmarine 
-   Features += ExternalMaterialTransfer ExternalFuelTransfer mine_layer mineview
+   Features += ExternalMaterialTransfer ExternalFuelTransfer mine_layer mineview ExternalAmmoTransfer
 
    Tank { 
       Energy = 0
@@ -21,17 +21,16 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 8
+      Number = 7
       Weapon0 ->* VehicleType.MineSea 
       Weapon0.Ammo = 4
       Weapon0.Punch@MaxRange = 140
       Weapon0.Punch@MinRange = 140
 
       Weapon1 ->* VehicleType.UTorp 
-      Weapon1.Ammo = 4
+      Weapon1.Ammo = 20
 
-      Weapon2 ->* VehicleType.AmmoTorp 
-      Weapon2.Ammo = 20
+      Weapon2 ->* VehicleType.ServiceGround 
 
       Weapon3 ->* VehicleType.AmmoCM 
       Weapon3.Ammo = 6
@@ -45,7 +44,6 @@ VehicleType {
       Weapon6 ->* VehicleType.AmmoBomb
       Weapon6.Ammo = 20
 
-      Weapon7 ->* VehicleType.ServiceGround 
 
    } Weapons
 } VehicleType

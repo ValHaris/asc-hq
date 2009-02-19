@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B15008
+   ;Bezeichnung der verknüpften Technologie: Radar Tower
+   TechnologiesRequired = 15908
+} TechAdapter

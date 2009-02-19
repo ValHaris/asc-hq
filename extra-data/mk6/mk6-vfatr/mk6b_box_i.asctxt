@@ -11,6 +11,7 @@ VehicleType {
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump3
+   Jumpdrive.MaxDistance = 1100
    JumpDrive.consumption.Material = 500
    JumpDrive.consumption.Fuel = 5000
 

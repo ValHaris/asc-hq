@@ -1,6 +1,6 @@
 VehicleType { 
    Name = INOVA
-   parent = 277 
+   parent = 277 15000
    ID = 15277
 
    Picture = mk6a_inova.pcx
@@ -8,14 +8,16 @@ VehicleType {
    Infotext = []
 
    Armor += 40
+   Tank.Material = 500
    Movement += 0 0 0 0 10 10 0 0
 
    Weapons { 
       Number = 3
       Weapon0.Ammo = 6
+      Weapon1 ->* VehicleType.NLS
       Weapon2 ->* VehicleType.ASM
-      Weapon2.Punch@MaxRange = 90
-      Weapon2.Punch@MinRange = 90
+      Weapon2.Punch@MaxRange = 85
+      Weapon2.Punch@MinRange = 85
       Weapon2.MaxRange = 20
       Weapon2.Ammo = 4
 

@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Stationaere Abschussvorrichtung fuer Torpedos. Da nur wenige Torpedos gelagert werden koennen, muss staendig fuer Nachschub gesorgt werden.]
    Picture = MK5b_TLAUNCHER.pcx
 
-   Armor = 500
+   Armor = 600
    View = 50
    Height = deep_submerged submerged floating 
    Jamming = 0
@@ -16,15 +16,15 @@ VehicleType {
    ResourceDrillingRange = 0
    SelfRepairRate = 0
    Weight = 50
-   Features = sonar ManualSelfDestruct
+   Features = sonar MoveDuringReactionFire
 
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 1
+      fuel = 200
    } Tank
-   FuelConsumption = 0
-   Movement = 11 11 11 0 0 0 0 0 
+   FuelConsumption = 20
+   Movement = 14 14 14 0 0 0 0 0 
    TerrainAccess { 
       terrain_any = Shallow_water Water Deep_water Very_shallow_water River 
       terrain_all = 
@@ -46,7 +46,7 @@ VehicleType {
       Weapon0.MaxRange = 50
       Weapon0.Ammo = 6
       Weapon0.ReactionFireShots = 2
-      Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 110
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
    } Weapons
 } VehicleType
