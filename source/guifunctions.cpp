@@ -49,7 +49,7 @@
 #include "dialogs/internalAmmoTransferDialog.h"
 #include "dialogs/vehicleproductionselection.h"
 #include "actions/jumpdrive.h"
-#include "actions/selfdestruct.h"
+#include "actions/destructunitcommand.h"
 #include "actions/attackcommand.h"
 #include "actions/moveunitcommand.h"
 #include "actions/putobjectcommand.h"
@@ -2368,19 +2368,22 @@ class SelfDestructIcon : public GuiFunction
       {
         tfield* fld = actmap->getField(pos);
         ContainerBase* c = fld->getContainer();
-        if ( fieldvisiblenow ( fld ) && c && !commandPending()) {
-           SelfDestruct sd;
-           return sd.available(c);
-        }
-        return false;
+        if ( fieldvisiblenow ( fld ) && c && !commandPending()) 
+           return DestructUnitCommand::avail( c );
+        else
+           return false;
       };
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
           tfield* fld = actmap->getField(pos);
           if (choice_dlg("do you really want to destruct this unit?","~y~es","~n~o") == 1) {
-            SelfDestruct sd;
-            sd.destruct( fld->getContainer());
+            auto_ptr<DestructUnitCommand> destructor ( new  DestructUnitCommand( fld->getContainer() ));
+            ActionResult res = destructor->execute( createContext( actmap ) );
+            if ( res.successful() )
+               destructor.release();
+            else
+               displayActionError( res );
             updateFieldInfo();
             repaintMap();
           }

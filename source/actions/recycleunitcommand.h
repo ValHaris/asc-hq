@@ -54,11 +54,6 @@ class RecycleUnitCommand : public ContainerCommand {
       
       
       void setUnit( Vehicle* unit );
-      
-      vector<MapCoordinate> getFields();
-      bool isFieldUsable( const MapCoordinate& pos );
-      
-      Vehicle* getProducedUnit();
 };
 
 #endif

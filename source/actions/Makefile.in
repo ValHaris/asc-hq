@@ -53,7 +53,8 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	changeunitproperty.lo registerunitrftarget.lo \
 	consumeresource.lo containeraction.lo \
 	changecontainerproperty.lo unitfieldregistration.lo \
-	viewregistration.lo consumeammo.lo recycleunitcommand.lo
+	viewregistration.lo consumeammo.lo recycleunitcommand.lo \
+	destructunitcommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libfullgameactions_la_DEPENDENCIES =
@@ -271,7 +272,7 @@ libactions_la_LIBADD = @SDL_LIBS@
 libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
-                          recycleunitcommand.cpp
+                          recycleunitcommand.cpp destructunitcommand.cpp
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
@@ -362,6 +363,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/context.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/convertcontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructcontainer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/discoverresources.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictdamage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@

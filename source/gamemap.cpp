@@ -1203,13 +1203,12 @@ void GameMap::beginTurn()
             replayinfo->guidata[actplayer] = NULL;
          }
             
-   if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) {
+   for ( Player::VehicleList::const_iterator i = player[actplayer].vehicleList.begin(); i != player[actplayer].vehicleList.end(); i++ )
+      (*i)->beginTurn();
+         
+   if ( player[actplayer].exist() && player[actplayer].stat != Player::off ) 
       sigPlayerTurnBegins( player[actplayer] );
       
-//      if ( player[actplayer].stat == Player::human || player[actplayer].stat == Player::supervisor )
-//         sigPlayerUserInteractionEnds( player[actplayer] );
-
-   }
 }
 
 

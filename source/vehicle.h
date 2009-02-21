@@ -193,10 +193,6 @@ class UnitHooveringLogic {
     //@}
     
     
-
-    //! changes a units height and adjusts the movement so that the percentage of used movepoints remains constant
-    void setNewHeight( int bitmappedheight );
-
     /** add the objects like tracks or broken ice
         \returns true if any objects were created
     */
@@ -258,12 +254,14 @@ class UnitHooveringLogic {
     //! Returns the size of a unit. A size is equal to the weight of the unit without any cargo or carried resources.
     int size ( void );
 
+    //! hook that called when the turn for a player starts
+    void beginTurn();
+    
     //! hook that is called when a player ends his turn
     void endOwnTurn( void );
 
     //! hook that is called when any player (including owner) ends turn
     void endAnyTurn( void );
-
 
     //! hook that is called the next round begins ( active player switching from player8 to player1 )
     void endRound ( void );

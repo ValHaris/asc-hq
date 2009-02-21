@@ -54,8 +54,8 @@ namespace ActionRegistry {
                   SpawnUnit,
                   CargoMoveCommand,
                   ServiceCommand,
-                  RecycleUnitCommand
-      
+                  RecycleUnitCommand,
+                  DestructUnitCommand
    };
 };
 

@@ -389,23 +389,8 @@ int VehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int heigh
          return status;
       }
 
-      int h;
-      if ( actmap->getField(veh->getPosition())->unitHere(veh) )
-         h = log2(veh->height); // != height-change: true
-      else {
-         h = -1; // height-change = false
+      int h = log2(veh->height); // != height-change: true
 
-         // resetting unit movement
-         int mx = -1;
-         int height = veh->height;
-         for ( int h = 0; h < 8; h++ )
-            if ( veh->typ->height & ( 1 << h))
-               if ( veh->typ->movement[h] > mx ) {
-                  mx = veh->typ->movement[h];
-                  height = 1 << h;
-               }
-         veh->setNewHeight( height );
-      }
       if ( height == -2 )
          h = -1;
 

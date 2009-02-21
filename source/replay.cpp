@@ -531,10 +531,17 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
          } while ( t ); /* enddo */
        }
 
+       catch ( ActionResult res ) {
+          displayActionError( res );
+          delete actmap;
+          actmap = NULL;
+          throw NoMapLoaded();
+       }
+       
 #ifndef ASC_DEBUG
        catch ( ... ) {     // this will catch NullPointer-Exceptions and stuff like that, which we want to pass to the debugger  in debug mode
 #else
-       catch ( GameMap ) {  // will never be thrown, but we need catch statement for the try block
+       catch ( GameMap m ) {  // will never be thrown, but we need catch statement for the try block
 #endif
           errorMessage("An unrecognized error occured during the replay");
           delete actmap;

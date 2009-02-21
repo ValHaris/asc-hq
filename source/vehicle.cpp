@@ -330,68 +330,28 @@ void Vehicle :: postRepair ( int oldDamage )
 }
 
 
-/*
-void Vehicle :: repairunit(Vehicle* vehicle, int maxrepair )
+void Vehicle :: beginTurn()
 {
-   if ( vehicle->damage  &&  tank.fuel  &&  tank.material ) {
-
-      int orgdam = vehicle->damage;
-
-      int dam;
-      if ( vehicle->damage > maxrepair )
-         dam = maxrepair;
-      else
-         dam = vehicle->damage;
-
-      int fkost = dam * vehicle->typ->productionCost.energy / (100 * repairefficiency_unit );
-      int mkost = dam * vehicle->typ->productionCost.material / (100 * repairefficiency_unit );
-      int w;
-
-      if (mkost <= material)
-         w = 10000;
-      else
-         w = 10000 * material / mkost;
-
-      if (fkost > fuel)
-         if (10000 * fuel / fkost < w)
-            w = 10000 * fuel / fkost;
-
-
-      vehicle->damage -= dam * w / 10000;
-
-      for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-         if ( orgdam > experienceDecreaseDamageBoundaries[i] && vehicle->damage < experienceDecreaseDamageBoundaries[i] )
-            if ( vehicle->experience > 0 )
-               vehicle->experience-=1;
-
-
-      if ( vehicle != this ) {
-         if ( vehicle->getMovement() > movement_cost_for_repaired_unit )
-            vehicle->setMovement ( vehicle->getMovement() -  movement_cost_for_repaired_unit );
-         else
-            vehicle->setMovement ( 0 );
-
-         if ( !attack_after_repair )
-            vehicle->attacked = 0;
-
-         int unitloaded = 0;
-         for ( int i = 0; i < 32; i++ )
-            if ( loading[i] == vehicle )
-               unitloaded = 1;
-
-         if ( !unitloaded )
-            if ( getMovement() > movement_cost_for_repairing_unit )
-               setMovement ( getMovement() - movement_cost_for_repairing_unit );
-            else
-               setMovement ( 0 );
-      }
-
-      material -= w * mkost / 10000;
-      fuel -= w * fkost / 10000;
-
+   // changing unit height to the height with the maximumem movement, to reduce the inaccuracies due to rounding
+   
+   if ( getCarrier() ) {
+      int mx = -1;
+      int newHeight = height;
+      for ( int h = 0; h < 8; h++ )
+         if ( typ->height & ( 1 << h))
+            if ( typ->movement[h] > mx ) {
+               mx = typ->movement[h];
+               newHeight = 1 << h;
+            }
+            
+      if ( newHeight != height ) {
+         height = newHeight;
+         resetMovement();
+      } 
    }
+   
 }
-*/
+
 
 void Vehicle :: endRound ( void )
 {
@@ -457,30 +417,9 @@ void Vehicle :: resetMovement ( void )
 {
     int move = typ->movement[log2(height)];
     setMovement ( move, 0 );
-    /*
-    if (actvehicle->typ->fuelconsumption == 0)
-       actvehicle->movement = 0;
-    else {
-       if ((actvehicle->fuel << 3) / actvehicle->typ->fuelconsumption < move)
-          actvehicle->movement = (actvehicle->fuel << 3) / actvehicle->typ->fuelconsumption ;
-       else
-          actvehicle->movement = move;
-    }
-    */
 }
 
 
-void Vehicle :: setNewHeight( int bitmappedheight )
-{
-  if ( maxMovement() ) {
-     float oldperc = float(getMovement ( false )) / float(maxMovement());
-     height = bitmappedheight;
-     setMovement ( int(floor(maxMovement() * oldperc + 0.5)) , 0 );
-  } else {
-     height = bitmappedheight;
-     warning("Internal error: unit has invalid height");
-  }
-}
 
 
 void Vehicle::setMovement( int newmove, bool recursive, const Context& context )
@@ -494,10 +433,11 @@ void Vehicle::setMovement( int newmove, bool recursive, const Context& context )
          double perc = diff / typ->movement[ log2 ( height ) ] ;
          if ( cargoNestingDepth() == 0 )
             perc /= typ->cargoMovementDivisor;
+         
          for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
             if ( *i ) 
                (*i)->decreaseMovement ( perc, true, context);
-   }
+      }
    
    (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newmove ))->execute( context );
 }
@@ -510,7 +450,7 @@ void Vehicle::decreaseMovementAbs( int reduction, bool recursive, const Context&
 
 void Vehicle::decreaseMovement( float fraction, bool recursive, const Context& context )
 {
-   int newMovement = int(ceil(_movement * (1.0 - fraction)));
+   int newMovement = int(floor(_movement * (1.0 - fraction)));
    if ( newMovement < 0 )
      newMovement = 0;
   
