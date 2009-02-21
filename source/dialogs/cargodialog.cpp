@@ -980,26 +980,30 @@ class ResourceInfoWindow : public SubWindow {
 
    int  getvalue ( int resourcetype, int y, int scope )
    {
+      int player = container()->getMap()->actplayer;
+      if ( container()->getMap()->getCurrentPlayer().stat == Player::supervisor )
+         player = container()->getOwner();
+      
       switch ( y ) {
          case 0:
          {  // avail
             GetResource gr ( container()->getMap() );
-            return gr.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, maxint, 1, container()->getMap()->actplayer, scope );
+            return gr.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, maxint, 1, player, scope );
          }
          case 1:
          {  // tank
             GetResourceCapacity grc ( container()->getMap() );
-            return grc.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, maxint, 1, container()->getMap()->actplayer, scope );
+            return grc.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, maxint, 1, player, scope );
          }
          case 2:
          {  // plus
             GetResourcePlus grp ( container()->getMap() );
-            return grp.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, container()->getMap()->actplayer, scope );
+            return grp.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, player, scope );
          }
          case 3:
          {  // usage
             GetResourceUsage gru( container()->getMap() );
-            return gru.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, container()->getMap()->actplayer, scope );
+            return gru.getresource ( container()->getPosition().x, container()->getPosition().y, resourcetype, player, scope );
          }
       } /* endswitch */
       return -1;
@@ -1008,7 +1012,7 @@ class ResourceInfoWindow : public SubWindow {
    public:
       bool available( CargoDialog* cd )
       {
-         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
+         if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ) && cd->getMap()->getCurrentPlayer().stat != Player::supervisor )
             return false;
          
          return dynamic_cast<Building*>( cd->getContainer() ) != NULL;

@@ -825,11 +825,11 @@ class OpenContainer : public GuiFunction
         if ( fieldvisiblenow ( fld ) && fld->getContainer() ) {
            if ( !containeractive && !commandPending() ) {
               Player& player = fld->getContainer()->getMap()->player[fld->getContainer()->getOwner()];
-              if ( fld->building && ( player.diplomacy.isAllied( actmap->actplayer) || actmap->getNeutralPlayerNum() == fld->building->getOwner() )) {
+              if ( fld->building && ( player.diplomacy.isAllied( actmap->actplayer) || actmap->getNeutralPlayerNum() == fld->building->getOwner() || actmap->getCurrentPlayer().stat==Player::supervisor )) {
                  if ( fld->building->getCompletion() == fld->building->typ->construction_steps-1 )
                     return true;
               }  else {
-                  if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  player.diplomacy.isAllied( actmap->actplayer)  )
+                 if ( fld->vehicle && fld->vehicle->typ->maxLoadableUnits  &&  (player.diplomacy.isAllied( actmap->actplayer)  || actmap->getCurrentPlayer().stat==Player::supervisor) )
                     return true;
               }
            }
