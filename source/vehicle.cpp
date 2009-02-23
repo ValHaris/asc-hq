@@ -746,7 +746,7 @@ const Vehicletype::HeightChangeMethod* Vehicle::getHeightChange( int dir, int he
 
 
 
-bool Vehicle :: weapexist( void )
+bool Vehicle :: weapexist() const
 {
    if ( typ->weapons.count > 0)
       for ( int b = 0; b < typ->weapons.count ; b++)

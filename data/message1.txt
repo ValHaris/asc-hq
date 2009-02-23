@@ -284,4 +284,6 @@ Unit for destruction not available
 Unit can not be destructed
 22200
 Inconsistent cargo setup
+22300
+New RF state not available
 

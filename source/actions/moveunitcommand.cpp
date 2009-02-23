@@ -171,7 +171,7 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
       } else {
          const Vehicletype::HeightChangeMethod* hcm = veh->getHeightChange( getVerticalDirection() );
          if ( !hcm )
-            fatalError ( "Inconsistend call to changeheight ");
+            fatalError ( "Inconsistent call to changeheight ");
    
          h = veh->getPosition().getNumericalHeight() + hcm->heightDelta;
          

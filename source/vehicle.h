@@ -124,6 +124,7 @@ class UnitHooveringLogic {
     class  ReactionFire {
          friend class Vehicle;
          friend class UnitPropertyEditor;
+         friend class ChangeUnitProperty;
 
          Vehicle* unit;
        public:
@@ -134,8 +135,12 @@ class UnitHooveringLogic {
          // int enemiesAttackable;
          Status getStatus() const { return status;};
 
-         //! enables the reaction fire or returns an error code ( result < 0 = -errorNr ) 
+         /** enables the reaction fire or returns an error code ( result < 0 = -errorNr ) 
+         \deprecated
+         */
          int enable();
+         
+         //! \deprecated 
          void disable();
 
          vector<int> weaponShots;
@@ -379,7 +384,7 @@ class UnitHooveringLogic {
     const Vehicletype::HeightChangeMethod* getHeightChange( int dir, int height = 0 ) const;
 
     //! Is the unit able to shoot ?
-    bool weapexist ( void );
+    bool weapexist() const;
     void prepareForCleanRemove() { cleanRemove = true; };
     ~Vehicle ( );
 

@@ -40,6 +40,7 @@ ASCString ChangeUnitProperty::getPropertyName( Property property )
       case AttackedFlag: return "AttackedFlag";
       case Height: return "Height";
       case Direction: return "Direction";
+      case ReactionFire: return "ReactionFire";
    };
    return "";
 }
@@ -65,7 +66,7 @@ void ChangeUnitProperty::readData ( tnstream& stream )
    UnitAction::readData( stream );
    int version = stream.readInt();
    if ( version != 1 )
-      throw tinvalidversion ( "ChangeUnitMovement", 1, version );
+      throw tinvalidversion ( "ChangeUnitProperty", 1, version );
    
    property = (Property) stream.readInt();
    value = stream.readInt();
@@ -101,6 +102,7 @@ int ChangeUnitProperty::getUnitProperty()
       case AttackedFlag: return getUnit()->attacked;
       case Height: return getUnit()->height;
       case Direction: return getUnit()->direction;
+      case ReactionFire: return getUnit()->reactionfire.status;
    };
    throw ActionResult(21203, getUnit() );
 }
@@ -122,6 +124,9 @@ void ChangeUnitProperty::setUnitProperty( Property property, int value, const Co
          break;
       case Direction:
          getUnit()->direction = value;
+         break;
+      case ReactionFire:
+         getUnit()->reactionfire.status = (Vehicle::ReactionFire::Status) value;
          break;
       default:
          throw ActionResult(21203, getUnit() );

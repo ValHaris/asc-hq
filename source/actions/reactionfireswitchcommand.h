@@ -19,26 +19,39 @@
 */
 
 
-#ifndef ContainerCommandH
-#define ContainerCommandH
+#ifndef ReactionFireSwitchCommandH
+#define ReactionFireSwitchCommandH
+
+#include "unitcommand.h"
+
+#include "../typen.h"
+#include "../objects.h"
+#include "../mapfield.h"
 
 
-#include "command.h"
-#include "action-registry.h"
-
-
-#include "../containerbase.h"
-
-class ContainerCommand : public Command {
-      int containerID;
+class ReactionFireSwitchCommand : public UnitCommand {
+      bool newRFstate;
+   public:
+      static bool avail ( const Vehicle* unit, bool newState );
+   private:
+      
+      ReactionFireSwitchCommand( GameMap* map ) : UnitCommand( map ), newRFstate( false ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
    protected:
-      ContainerBase* getContainer( bool dontThrow = false );
-      const ContainerBase* getContainer( bool dontThrow = false ) const ;
-      const int getContainerID() const { return containerID; };
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
-      ContainerCommand( ContainerBase* container );
-      ContainerCommand( GameMap* map );
+      
+      GameActionID getID() const;
+      ASCString getDescription() const;
+      
+   public:
+      ReactionFireSwitchCommand ( Vehicle* carrier );
+      
+      ActionResult go ( const Context& context ); 
+      ASCString getCommandString() const;
+      
+      void setNewState( bool enabled );
 };
 
 #endif

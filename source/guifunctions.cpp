@@ -56,6 +56,7 @@
 #include "actions/putminecommand.h"
 #include "actions/constructunitcommand.h"
 #include "actions/servicecommand.h"
+#include "actions/reactionfireswitchcommand.h"
 
 bool commandPending()
 {
@@ -874,15 +875,10 @@ class EnableReactionfire : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* eht = actmap->getField(pos)->vehicle;
-         if ( eht ) 
-            if ( eht->color == actmap->actplayer * 8)
-               if ( !eht->baseType->hasFunction(ContainerBaseType::NoReactionfire ))
-                  if ( eht->reactionfire.getStatus() == Vehicle::ReactionFire::off )
-                     if ( !commandPending() )
-                        if ( eht->weapexist() )
-                           for ( int i = 0; i < eht->typ->weapons.count; ++i )
-                              if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
-                                 return true;
+         if ( !commandPending() )
+            if ( eht ) 
+               if ( eht->getOwner() == actmap->actplayer )
+                  return ReactionFireSwitchCommand::avail( eht, true );
 
          return false;
       };
@@ -893,11 +889,15 @@ class EnableReactionfire : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         int res = actmap->getField(pos)->vehicle->reactionfire.enable();
-         if ( res < 0 )
-            dispmessage2 ( -res, NULL );
+         Vehicle* eht = actmap->getField(pos)->vehicle;
+         auto_ptr<ReactionFireSwitchCommand> rf ( new ReactionFireSwitchCommand( eht ));
+         rf->setNewState( true );
+         ActionResult res = rf->execute( createContext( actmap ));
+         if ( res.successful() )
+            rf.release();
          else
-            logtoreplayinfo ( rpl_reactionFireOn, actmap->getField(pos)->vehicle->networkid );
+            displayActionError( res );
+         
          updateFieldInfo();
       }
 
@@ -918,14 +918,11 @@ class DisableReactionfire : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          Vehicle* eht = actmap->getField(pos)->vehicle;
-         if ( eht )
-            if ( eht->color == actmap->actplayer * 8)
-               if ( eht->reactionfire.getStatus() != Vehicle::ReactionFire::off )
-                  if ( !commandPending())
-                     // for ( int i = 0; i < eht->typ->weapons.count; ++i )
-                        // if ( eht->typ->weapons.weapon[i].offensive() && eht->typ->weapons.weapon[i].reactionFireShots )
-                           return true;
-
+         if ( !commandPending() )
+            if ( eht ) 
+               if ( eht->getOwner() == actmap->actplayer )
+                  return ReactionFireSwitchCommand::avail( eht, false );
+         
          return false;
       };
 
@@ -935,8 +932,16 @@ class DisableReactionfire : public GuiFunction
       };
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         actmap->getField(pos)->vehicle->reactionfire.disable();
-         logtoreplayinfo ( rpl_reactionFireOff, actmap->getField(pos)->vehicle->networkid );
+         Vehicle* eht = actmap->getField(pos)->vehicle;
+         auto_ptr<ReactionFireSwitchCommand> rf ( new ReactionFireSwitchCommand( eht ));
+         rf->setNewState( false );
+         ActionResult res = rf->execute( createContext( actmap ));
+         if ( res.successful() )
+            rf.release();
+         else
+            displayActionError( res );
+         
+         repaintMap();
          updateFieldInfo();
       }
 

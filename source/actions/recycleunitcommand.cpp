@@ -134,7 +134,7 @@ void RecycleUnitCommand :: setUnit( Vehicle* unit )
 ASCString RecycleUnitCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("DestructUnit ( %d, %d )", getContainer()->getIdentification(), unitID );
+   c.format("DestructUnit ( %d, %d )", getContainerID(), unitID );
    return c;
 
 }

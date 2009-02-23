@@ -335,9 +335,8 @@ void ConstructUnitCommand :: setVehicleType( const Vehicletype* type )
 ASCString ConstructUnitCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("ConstructVehicle ( %d, %d, %d, %d )", getContainer()->getIdentification(), target.x, target.y, vehicleTypeID );
+   c.format("ConstructVehicle ( %d, %d, %d, %d )", getContainerID(), target.x, target.y, vehicleTypeID );
    return c;
-
 }
 
 GameActionID ConstructUnitCommand::getID() const
