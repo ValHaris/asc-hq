@@ -100,7 +100,7 @@ class ServiceChecker {
       const SingleWeapon* getServiceWeapon();
       virtual void ammo( ContainerBase* dest, int type ) = 0;
       virtual void resource( ContainerBase* dest, int type, bool active )  = 0;
-
+      virtual void repair( ContainerBase* dest ) = 0;
 
    private:
       bool serviceWeaponFits( ContainerBase* dest );
@@ -120,6 +120,7 @@ class ServiceTargetSearcher : protected ServiceChecker {
 
    private:
       GameMap* gamemap;
+      int checks;
 
       void fieldChecker( const MapCoordinate& pos );
       void addTarget( ContainerBase* target );
@@ -130,10 +131,15 @@ class ServiceTargetSearcher : protected ServiceChecker {
 
       void ammo( ContainerBase* dest, int type );
       void resource( ContainerBase* dest, int type, bool active );
+      void repair( ContainerBase* dest );
 
    public:
       bool available();
-      ServiceTargetSearcher( ContainerBase* src );
+      static const int checkAmmo = 1;
+      static const int checkResources = 2;
+      static const int checkRepair = 4;
+      
+      ServiceTargetSearcher( ContainerBase* src, int checkFlags );
       void startSearch();
       const Targets& getTargets() const { return targets; };
 };
@@ -158,6 +164,7 @@ class TransferHandler : public SigC::Object, protected ServiceChecker {
    protected:
       void ammo( ContainerBase* dest, int type );
       void resource( ContainerBase* dest, int type, bool active );
+      void repair( ContainerBase* dest ) {};
       
    public:
       TransferHandler( ContainerBase* src, ContainerBase* dst );

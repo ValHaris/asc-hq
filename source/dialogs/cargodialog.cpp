@@ -48,6 +48,7 @@
 #include "../actions/cargomovecommand.h"
 #include "../actions/servicecommand.h"
 #include "../actions/recycleunitcommand.h"
+#include "../actions/repairunitcommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -2162,13 +2163,14 @@ namespace CargoGuiFunctions {
       if ( !subject )
          return false;
 
+      if ( !RepairUnitCommand::availInternally( parent.getContainer() ) )
+         return false;
+      
       Vehicle* veh = dynamic_cast<Vehicle*>(subject);
       if ( !veh )
          return false;
 
-      if (!parent.getContainer()->baseType->hasFunction( ContainerBaseType::InternalUnitRepair ))
-         return false;
-
+      
       return veh->damage > 0;
    }
 
@@ -2205,9 +2207,15 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return;
       
-
-      parent.getContainer()->repairItem ( veh , 0 );
-      logtoreplayinfo ( rpl_repairUnit3, parent.getContainer()->getIdentification(), veh->networkid, 0 );
+      auto_ptr<RepairUnitCommand> rp ( new RepairUnitCommand( parent.getContainer() ));
+            
+      if ( !rp->validTarget( veh ) )
+         return;
+      
+      rp->setTarget( veh );
+      ActionResult res = rp->execute( createContext ( actmap ));
+      if ( res.successful() )
+         rp.release();
       
       parent.cargoChanged();
    }
@@ -2675,7 +2683,7 @@ ASCString RecycleUnitCommandButton :: getName( const MapCoordinate& pos, Contain
    if ( parent.getContainer()->baseType->hasFunction( ContainerBaseType::RecycleUnits ))
       s = "recycle unit - ";
    else
-      s = "destroy unit - ";
+      s = "salvage unit - ";
    
    Resources res = cc.calcDestructionOutput( veh );
 

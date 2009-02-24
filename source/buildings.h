@@ -176,13 +176,13 @@ class  Building : public ContainerBase {
     
     ~Building();
 
-    virtual int repairableDamage();
+    virtual int repairableDamage() const;
 
      int getMemoryFootprint() const;
 
   protected:
      ResourceMatrix repairEfficiency;
-     const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
+     const ResourceMatrix& getRepairEfficiency() const { return repairEfficiency; };
      virtual void postRepair ( int oldDamage );
      vector<MapCoordinate> getCoveredFields();
 };

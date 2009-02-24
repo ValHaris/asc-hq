@@ -76,7 +76,7 @@ class UnitHooveringLogic {
 
     Vehicle ( const Vehicletype* t, GameMap* actmap, int player );
 
-    int repairableDamage() { return damage; };
+    int repairableDamage() const { return damage; };
 
     bool isBuilding() const { return false; };
 
@@ -244,7 +244,7 @@ class UnitHooveringLogic {
     //@}
 
   protected:
-    const ResourceMatrix& getRepairEfficiency ( void ) { return repairEfficiency; };
+    const ResourceMatrix& getRepairEfficiency() const { return repairEfficiency; };
 
     virtual void postRepair ( int oldDamage );
 

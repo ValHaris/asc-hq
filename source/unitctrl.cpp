@@ -1390,7 +1390,7 @@ bool NewVehicleService :: targetAvail( const ContainerBase* target )
 
 int  NewVehicleService :: avail ( ContainerBase* veh  )
 {
-   ServiceTargetSearcher sts( veh );
+   ServiceTargetSearcher sts( veh, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
    return sts.available();
 }
 
@@ -1423,7 +1423,7 @@ int NewVehicleService :: executeContainer ( ContainerBase* veh, int x, int y, in
          return status;
       }
 
-      ServiceTargetSearcher sts( container );
+      ServiceTargetSearcher sts( container, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
       sts.startSearch();
       targets = sts.getTargets();
             

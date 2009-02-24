@@ -44,7 +44,7 @@ class ContainerBase {
    protected:
       GameMap* gamemap;
       ContainerBase* cargoParent;
-      virtual const ResourceMatrix& getRepairEfficiency ( void ) = 0;
+      virtual const ResourceMatrix& getRepairEfficiency() const = 0;
 
       //! is called after a repair is perfored. Vehicles use this to reduce their experience.
       virtual void postRepair ( int oldDamage ) = 0;
@@ -216,12 +216,12 @@ class ContainerBase {
       
       virtual bool canRepair( const ContainerBase* item ) const = 0;
 
-      int getMaxRepair ( const ContainerBase* item );
-      int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  );
+      int getMaxRepair ( const ContainerBase* item ) const;
+      int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  ) const;
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
       
       //! returns the amount of damate that can still be repaired this turn
-      virtual int repairableDamage() = 0;
+      virtual int repairableDamage() const = 0;
 
 
       GameMap* getMap ( ) const { return gamemap; };

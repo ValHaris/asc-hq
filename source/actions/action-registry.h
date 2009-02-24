@@ -54,9 +54,10 @@ namespace ActionRegistry {
                   SpawnUnit,
                   CargoMoveCommand,
                   ServiceCommand,
-                  RecycleUnitCommand,
+                  RecycleUnitCommand,      // 30
                   DestructUnitCommand,
-                  ReactionFireSwitchCommand
+                  ReactionFireSwitchCommand,
+                  RepairUnitCommand
    };
 };
 

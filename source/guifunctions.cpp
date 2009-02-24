@@ -57,6 +57,7 @@
 #include "actions/constructunitcommand.h"
 #include "actions/servicecommand.h"
 #include "actions/reactionfireswitchcommand.h"
+#include "actions/repairunitcommand.h"
 
 bool commandPending()
 {
@@ -1067,23 +1068,17 @@ class RepairUnit : public GuiFunction
       {
          tfield* fld = actmap->getField(pos);
          if (!commandPending()) {
-            if ( fld->vehicle )
-               if (fld->vehicle->color == actmap->actplayer * 8)
-                  if ( VehicleService::avail ( fld->vehicle ))
-                     if ( VehicleService::getServices( fld->vehicle) & (1 << VehicleService::srv_repair ))
-                        return true;
-         } else
-            if ( pendingVehicleActions.actionType == vat_service && pendingVehicleActions.service->guimode == 1 ) {
-               if ( fld->vehicle ) {
-                  // if ( pendingVehicleActions.service->getServices ( fld->vehicle) & ( 1 << VehicleService::srv_repair) ) {
-                  VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.find(fld->vehicle->networkid);
-                  if ( i != pendingVehicleActions.service->dest.end() )
-                     for ( int j = 0; j < i->second.service.size(); j++ )
-                        if ( i->second.service[j].type == VehicleService::srv_repair )
-                           return true;
-               }
+            if ( fld && fld->vehicle )
+               if (fld->vehicle->getOwner() == actmap->actplayer )
+                  if ( RepairUnitCommand::avail ( fld->vehicle ) )
+                     return true;
+         } else {
+            if ( NewGuiHost::pendingCommand ) {
+               RepairUnitCommand* service = dynamic_cast<RepairUnitCommand*>(NewGuiHost::pendingCommand);
+               if ( service && fld->vehicle ) 
+                  return service->validTarget( fld->vehicle );
             }
-
+         }
          return false;
       };
 
@@ -1093,46 +1088,41 @@ class RepairUnit : public GuiFunction
       };
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
-         if ( pendingVehicleActions.actionType == vat_nothing ) {
-            VehicleService* vs = new VehicleService ( &getDefaultMapDisplay(), &pendingVehicleActions );
-            vs->guimode = 1;
-            int res = vs->execute ( actmap->getField(pos)->vehicle, -1, -1, 0, -1, -1 );
-            if ( res < 0 ) {
-               dispmessage2 ( -res );
-               delete vs;
-               return;
-            }
+         if ( !commandPending()  ) {
+            auto_ptr<RepairUnitCommand> rp ( new RepairUnitCommand( actmap->getField(pos)->vehicle ));
+            
+            vector<Vehicle*> targets = rp->getExternalTargets();
+            
             int fieldCount = 0;
-            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
-               tfield* fld = getfield ( i->second.dest->xpos, i->second.dest->ypos );
-               if ( fld != actmap->getField(pos) )
-                  for ( int j = 0; j < i->second.service.size(); j++ )
-                     if ( i->second.service[j].type == VehicleService::srv_repair ) {
-                        fieldCount++;
-                        fld->a.temp = 1;
-                     }
+            for ( vector<Vehicle*>::iterator i = targets.begin(); i != targets.end(); ++i  ) {
+               actmap->getField ( (*i)->getPosition() )->a.temp = 1;
+               fieldCount++;
             }
             if ( !fieldCount ) {
-               delete vs;
                dispmessage2 ( 211 );
             } else {
+               NewGuiHost::pendingCommand = rp.release();
                repaintMap();
                updateFieldInfo();
             }
          } else {
-            for ( VehicleService::TargetContainer::iterator i = pendingVehicleActions.service->dest.begin(); i != pendingVehicleActions.service->dest.end(); i++ ) {
-               tfield* fld = actmap->getField(pos);
-               if ( i->second.dest == fld->vehicle )
-                  // for ( vector<VehicleService::Service>::iterator j = i->second->service.begin(); j != i->second->service.end(); j++ )
-                  for ( int j = 0; j < i->second.service.size(); j++ )
-                     if ( i->second.service[j].type == VehicleService::srv_repair )
-                        pendingVehicleActions.service->execute ( NULL, fld->vehicle->networkid, -1, 2, j, i->second.service[j].minAmount );
+            if ( NewGuiHost::pendingCommand ) {
+               RepairUnitCommand* service = dynamic_cast<RepairUnitCommand*>(NewGuiHost::pendingCommand);
+               if ( service ) {
+                  tfield* fld = actmap->getField(pos);
+                  if ( fld->vehicle ) {
+                     service->setTarget( fld->vehicle );
+                     ActionResult res = service->execute( createContext ( actmap ));
+                     if ( !res.successful() )
+                        delete NewGuiHost::pendingCommand;
+                     NewGuiHost::pendingCommand = NULL;
+                     
+                     actmap->cleartemps(7);
+                     repaintMap();
+                     updateFieldInfo();
+                  }
+               }
             }
-
-            delete pendingVehicleActions.service;
-            actmap->cleartemps(7);
-            repaintMap();
-            updateFieldInfo();
          }
       }
 
@@ -1144,10 +1134,13 @@ class RepairUnit : public GuiFunction
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
       {
          tfield* fld = actmap->getField(pos);
-         if ( fld && fld->vehicle && pendingVehicleActions.service ) {
-            Resources r;
-            pendingVehicleActions.service->getVehicle()->getMaxRepair ( fld->vehicle, 0, r);
-            return "~r~epair unit (cost: " + r.toString() + ")";
+         if ( fld && fld->vehicle && NewGuiHost::pendingCommand  ) {
+            RepairUnitCommand* service = dynamic_cast<RepairUnitCommand*>(NewGuiHost::pendingCommand);
+            if ( service ) {
+               Resources r; 
+               service->getRepairingUnit( )->getMaxRepair ( fld->vehicle, 0, r);
+               return "~r~epair unit (cost: " + r.toString() + ")";
+            }
          }
          return "~r~epair a unit";
       };

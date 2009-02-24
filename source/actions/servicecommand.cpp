@@ -38,13 +38,13 @@
 
 bool ServiceCommand :: avail ( ContainerBase* eht )
 {
-   ServiceTargetSearcher sts( eht );
+   ServiceTargetSearcher sts( eht, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
    return sts.available();
 }
 
 bool ServiceCommand :: avail ( ContainerBase* source, ContainerBase* target )
 {
-   ServiceTargetSearcher sts( source );
+   ServiceTargetSearcher sts( source, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
    if ( !sts.available())
       return false;
    
@@ -61,7 +61,7 @@ ServiceCommand :: ServiceCommand ( ContainerBase* container )
 const ServiceTargetSearcher::Targets& ServiceCommand::getDestinations()
 {
    delete targetSearcher;
-   targetSearcher = new ServiceTargetSearcher( getContainer());
+   targetSearcher = new ServiceTargetSearcher( getContainer(), ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
    targetSearcher->startSearch();
    return targetSearcher->getTargets();  
 }

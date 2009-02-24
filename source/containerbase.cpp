@@ -100,13 +100,13 @@ int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
    return newDamage;
 }
 
-int ContainerBase :: getMaxRepair ( const ContainerBase* item )
+int ContainerBase :: getMaxRepair ( const ContainerBase* item ) const
 {
    Resources res;
    return getMaxRepair ( item, 0, res );
 }
 
-int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost  )
+int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost  ) const
 {
    if ( !canRepair( item ) )
       return item->damage;
@@ -128,7 +128,7 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
       needed.resource(i) = maxNeeded.resource(i) * (item->damage-newDamage) / 100;
 
    if ( !ignoreCost ) {
-      Resources avail = getResource ( needed, 1 );
+      Resources avail = getResource ( needed );
    
       for ( i = 0; i < resourceTypeNum; i++ )
          if ( needed.resource(i) ) {

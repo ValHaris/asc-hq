@@ -29,7 +29,7 @@
 
 class ChangeContainerProperty : public ContainerAction {
    public:
-      enum Property { Owner };
+      enum Property { Owner, Damage };
    private:
      
       static ASCString getPropertyName( Property property );

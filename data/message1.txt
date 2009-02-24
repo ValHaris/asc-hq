@@ -286,4 +286,12 @@ Unit can not be destructed
 Inconsistent cargo setup
 22300
 New RF state not available
+22400
+Unit that is supposed to be repaired is not available
+22401
+This unit can not repair any other units 
+22402
+Target unit is can not be repaired by this unit
+
+
 

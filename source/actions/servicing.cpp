@@ -674,6 +674,24 @@ void ServiceChecker :: check( ContainerBase* dest )
          }
       }
 
+      
+      
+      if (  externalTransfer ) {
+         Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
+         if ( srcVehicle ) {// it's a unit
+            if ( srcVehicle->baseType->hasFunction( ContainerBaseType::ExternalRepair ))
+               if ( serviceWeaponFits( dest ) && dest->damage > 0 ) {
+                  repair( dest );
+               }
+         }
+
+      } else {
+         if ( source->baseType->hasFunction( ContainerBaseType::InternalUnitRepair ))
+            repair( dest );
+      }
+      
+      
+      
 }
 
 
@@ -693,16 +711,25 @@ void ServiceTargetSearcher::addTarget( ContainerBase* target )
 
 void ServiceTargetSearcher::ammo( ContainerBase* dest, int type )
 {
-   addTarget ( dest );
+   if ( checks & checkAmmo )
+      addTarget ( dest );
 }
 
 void ServiceTargetSearcher::resource( ContainerBase* dest, int type, bool active )
 {
-   if ( active )
+   if ( checks & checkResources )
+      if ( active )
+         addTarget ( dest );
+}
+      
+void ServiceTargetSearcher::repair( ContainerBase* dest)
+{
+   if ( checks & checkRepair )
       addTarget ( dest );
 }
       
-ServiceTargetSearcher::ServiceTargetSearcher( ContainerBase* src ) : ServiceChecker( src )
+      
+ServiceTargetSearcher::ServiceTargetSearcher( ContainerBase* src, int checkFlags ) : ServiceChecker( src ), checks ( checkFlags )
 {
    gamemap = src->getMap();
 }

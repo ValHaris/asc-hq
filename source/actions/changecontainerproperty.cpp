@@ -33,6 +33,7 @@ ASCString ChangeContainerProperty::getPropertyName( Property property )
 {
    switch ( property ) {
       case Owner: return "Owner";
+      case Damage: return "Damage";
    };
    return "";
 }
@@ -88,16 +89,19 @@ GameActionID ChangeContainerProperty::getID() const
 
 int ChangeContainerProperty::getUnitProperty()
 {
-   /*
+   
    switch ( property ) {
-      case Owner: return getContainer()->getOwner();
-   };*/
+      case Damage: return getContainer()->damage;
+   };
    throw ActionResult(21203, getContainer() );
 }
 
 void ChangeContainerProperty::setUnitProperty( int value, const Context& context )
 {
    switch ( property ) {
+      case Damage:
+         getContainer()->damage  = value;
+         break;
       default:
          throw ActionResult(21203, getContainer() );
    };

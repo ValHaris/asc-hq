@@ -75,7 +75,7 @@ Building :: Building ( GameMap* actmap, const MapCoordinate& _entryPosition, con
 }
 
 
-int Building::repairableDamage()
+int Building::repairableDamage() const
 {
    int d = getMap()->getgameparameter ( cgp_maxbuildingrepair ) - repairedThisTurn;
    if ( d < 0 )
