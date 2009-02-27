@@ -29,6 +29,7 @@
 #include "gamemap.h"
 #include "spfst.h"
 #include "dlg_box.h"
+#include "statistics.h"
 
 
 const char* clipboardFileExtension = "*.ascclipboard";
@@ -43,24 +44,35 @@ ClipBoardBase::ClipBoardBase()
 void ClipBoardBase::clear()
 {
    buf.clear();
+   properties.clear();
    objectNum = 0;
 }
 
 
-void ClipBoardBase::addUnit ( Vehicle* unit )
+void ClipBoardBase::addUnit ( const Vehicle* unit )
 {
   tmemorystream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipVehicle );
   unit->write ( stream );
   objectNum++;
+  
+  StatisticsCalculator sc( unit );
+  properties["strength"] = ASCString::toString( sc.strength() );
+  properties["resource"] = ASCString::toString( sc.resource().material / 1000 );
+  properties["name"] = unit->getName();
 }
 
-void ClipBoardBase::addBuilding ( Building* bld )
+void ClipBoardBase::addBuilding ( const Building* bld )
 {
   tmemorystream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipBuilding );
   bld->write ( stream );
   objectNum++;
+  
+  StatisticsCalculator sc( bld );
+  properties["strength"] = ASCString::toString( sc.strength() );
+  properties["resource"] = ASCString::toString( sc.resource().material / 1000 );
+  properties["name"] = bld->getName();
 }
 
 
@@ -159,5 +171,13 @@ void ClipBoardBase::read( tnstream& stream )
    stream.readInt(); // Version
    objectNum = stream.readInt();
    buf.readfromstream ( &stream );
+}
+
+void ClipBoardBase::writeProperties( PropertyContainer& pc ) const
+{
+   for ( map<ASCString,ASCString>::const_iterator i = properties.begin(); i != properties.end(); ++i ) {
+      ASCString temp = i->second;
+      pc.addString( i->first, temp );
+   }
 }
 

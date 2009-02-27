@@ -77,7 +77,7 @@ nodist_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	overviewmapimage.$(OBJEXT) mapfield.$(OBJEXT) \
 	objects.$(OBJEXT) overviewmappanel.$(OBJEXT) \
 	explosivemines.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
-	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
+	statistics.$(OBJEXT) player.$(OBJEXT) cannedmessages.$(OBJEXT) \
 	mapimageexport.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
 	windowing.$(OBJEXT) playercolor.$(OBJEXT)
 asc_mapedit_OBJECTS = $(nodist_asc_mapedit_OBJECTS)
@@ -301,7 +301,7 @@ mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp clipboard.cpp resourceplacement.cpp resourceplacementdialog.cpp \
 geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
-explosivemines.cpp legacynetworkloaders.cpp \
+explosivemines.cpp legacynetworkloaders.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp
 
@@ -452,6 +452,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/simplestream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-errorhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@

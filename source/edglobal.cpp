@@ -43,6 +43,7 @@
 #include "attack.h"
 #include "mapimageexport.h"
 #include "viewcalculation.h"
+#include "statistics.h"
 
 #include "dialogs/unitinfodialog.h"
 #include "dialogs/editmapparam.h"   
@@ -316,109 +317,6 @@ ASCString getbipath ( void )
    return getbi3path();
 }
 
-
-double unitStrengthValue( Vehicle* veh )
-{
-   double s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
-   AttackFormula af;
-   s *= (af.strength_experience( veh->experience) + af.defense_experience( veh->experience))/2 + 1.0 ;
-   s *= af.strength_damage( veh->damage );
-   return s;
-}
-
-
-ASCString getVisibilityStatistics( GameMap* actmap )
-{
-   ASCString msg;
-
-   computeview ( actmap, 0, true );
-
-   for ( int i = 0; i < actmap->getPlayerCount(); i++ ) {
-      if ( actmap->player[i].exist() ) {
-         msg += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
-         int notVisible = 0;
-         int fogOfWar = 0;
-         int visible = 0;
-         for ( int x = 0; x < actmap->xsize; x++ )
-            for ( int y = 0; y < actmap->ysize; y++ ) {
-                VisibilityStates vs = fieldVisibility  ( actmap->getField ( x, y ), i );
-                switch ( vs ) {
-                   case visible_not: ++notVisible;
-                   break;
-                   case visible_ago: ++fogOfWar;
-                   break;
-                   default: ++visible;
-                }
-            }
-         msg += ASCString("  not visible: ") + ASCString::toString(notVisible ) + " fields\n";
-         msg += ASCString("  fog of war: ")  + ASCString::toString(fogOfWar ) + " fields\n";
-         msg += ASCString("  visible: ")     + ASCString::toString(visible ) + " fields\n\n";
-      } 
-   }
-
-   computeview ( actmap, 0 , false );
-
-   return msg;
-}
-
-ASCString getPlayerStrength( GameMap* gamemap )
-{
-   ASCString message;
-   for ( int i = 0; i< gamemap->getPlayerCount(); ++i ) {
-      double strength = 0;
-      Resources r;
-      Resources total;
-      for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
-         strength += unitStrengthValue( *j );
-         r += (*j)->typ->productionCost;
-         total += (*j)->typ->productionCost;
-         total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
-      }
-
-      for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); ++j ) {
-         total += (*j)->getResource( Resources(maxint,maxint,maxint), true, 0, i );
-         total += (*j)->typ->productionCost;
-      }
-
-      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
-      message += "strength: ";
-      ASCString s;
-      s.format("%9.0f", ceil(strength/10000) );
-      message += s + "\n";
-      message += "Unit production cost ";
-      for ( int k = 1; k < 2; ++k ) { // just material
-         message += resourceNames[k];
-         message += ": " + ASCString::toString(r.resource(k)/1000 ) + "k\n";
-      }
-      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size())) + "\n";
-      message += "Material index: " + ASCString::toString( total.material/1000 ) + "k\n";
-      message += "\n\n";
-
-   }
-   return message;
-}
-
-
-
-void pbpplayerstatistics( GameMap* gamemap )
-{
-   ASCString msg;
-   { 
-      StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "calculating... " );
-
-      msg = "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n"; 
-      
-      msg += "#fontsize=16#Visibility#fontsize=12#\n";
-      msg += getVisibilityStatistics( gamemap );
-      
-      msg += "#fontsize=16#Strength#fontsize=12#\n";
-      msg += getPlayerStrength( gamemap );
-   }
-   
-   ViewFormattedText vft ( "Map Statistics", msg, PG_Rect(-1,-1,600,600));
-   vft.Show();
-   vft.RunModal();
-}
 
 
 class PlayerColorPanel : public PG_Widget {

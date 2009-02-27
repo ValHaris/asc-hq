@@ -25,13 +25,18 @@
 #ifndef clipboardH
  #define clipboardH
 
+ #include <map>
+
  #include "loki/Singleton.h"
  #include "basestrm.h"
  #include "vehicletype.h"
  #include "buildingtype.h"
  #include "typen.h"
+ #include "textfile_evaluation.h"
 
 class ClipBoardBase {
+      map<ASCString,ASCString> properties;
+   
       tmemorystreambuf buf;
       enum Type { ClipVehicle, ClipBuilding };
       int objectNum;
@@ -41,12 +46,14 @@ class ClipBoardBase {
       ~ClipBoardBase() {};
    public:
       void clear();
-      void addUnit ( Vehicle* unit );
-      void addBuilding ( Building* bld );
+      void addUnit ( const Vehicle* unit );
+      void addBuilding ( const Building* bld );
       Vehicle* pasteUnit();
       Vehicle* pasteUnit( tnstream& stream);
       void place ( const MapCoordinate& pos );
 
+      void writeProperties( PropertyContainer& pc ) const;
+      
       void write( tnstream& stream );
       void read( tnstream& stream );
 };

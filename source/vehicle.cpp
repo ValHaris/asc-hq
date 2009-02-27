@@ -1064,7 +1064,7 @@ void Vehicle :: fillMagically( bool ammunition, bool resources )
 
 const int vehicleVersion = 6;
 
-void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
+void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 {
     stream.writeWord ( 0 );
     stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT ) );
@@ -1092,7 +1092,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
        }
 
     if ( includeLoadedUnits )
-       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+       for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
              bm |= cem_loading;
 
@@ -1152,7 +1152,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
 
     if ( bm & cem_loading ) {
        int c=0;
-       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+       for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
              ++c;
 
@@ -1161,7 +1161,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits )
        else
          stream.writeChar ( c );
 
-       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+       for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
              (*i)->write ( stream );
     }

@@ -3388,6 +3388,10 @@ void saveClipboard()
    if ( !filename.empty() ) {
       tnfilestream stream ( filename, tnstream::writing );
       ClipBoard::Instance().write( stream );
+      
+      tn_file_buf_stream txtstream ( filename + ".txt", tnstream::writing );
+      PropertyWritingContainer pc ( "ClipboardInfo", txtstream );
+      ClipBoard::Instance().writeProperties( pc );
    }
 }
 

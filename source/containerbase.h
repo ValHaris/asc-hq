@@ -164,7 +164,7 @@ class ContainerBase {
       
 
 
-      virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) = 0;
+      virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) const = 0;
       virtual void read ( tnstream& stream ) = 0;
 
       virtual void addview ( void ) = 0;

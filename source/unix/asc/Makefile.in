@@ -79,12 +79,12 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	asc-mainscreen.$(OBJEXT) mapfield.$(OBJEXT) \
 	overviewmappanel.$(OBJEXT) explosivemines.$(OBJEXT) \
 	mainscreenwidget.$(OBJEXT) networksupervisor.$(OBJEXT) \
-	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
-	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
-	mapimageexport.$(OBJEXT) containercontrols.$(OBJEXT) \
-	containerbase-functions.$(OBJEXT) windowing.$(OBJEXT) \
-	turncontrol.$(OBJEXT) unitset.$(OBJEXT) playercolor.$(OBJEXT) \
-	pg_mapdisplay.$(OBJEXT)
+	statistics.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
+	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
+	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT) \
+	containercontrols.$(OBJEXT) containerbase-functions.$(OBJEXT) \
+	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT) \
+	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -315,7 +315,7 @@ simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameevents
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp \
 guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
 infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
-explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp \
+explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp
@@ -484,6 +484,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spfst.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stack.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statisticdialog.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/statistics.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stdio-errorhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stringtokenizer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strtmesg.Po@am__quote@

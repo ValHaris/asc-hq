@@ -70,7 +70,7 @@ class  Building : public ContainerBase {
     bool canRepair ( const ContainerBase* item ) const;
 
     static Building* newFromStream ( GameMap* gamemap, tnstream& stream, bool chainToField = true );
-    void write ( tnstream& stream, bool includeLoadedUnits = true );
+    void write ( tnstream& stream, bool includeLoadedUnits = true ) const;
     void read ( tnstream& stream );
   private:
     void readData ( tnstream& stream, int version );

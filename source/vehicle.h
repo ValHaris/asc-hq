@@ -354,7 +354,7 @@ class UnitHooveringLogic {
     */
     void read ( tnstream& stream );
 
-    void write ( tnstream& stream, bool includeLoadedUnits = true );
+    void write ( tnstream& stream, bool includeLoadedUnits = true ) const ;
 
     //! displays the unit at position spos on s
     void paint ( Surface& s, SPoint pos, int shadowDist = -1 ) const;

@@ -461,7 +461,7 @@ Building :: ~Building ()
 const int buildingstreamversion = -5;
 
 
-void Building :: write ( tnstream& stream, bool includeLoadedUnits )
+void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
 {
     stream.writeInt ( max( buildingstreamversion, BUILDINGVERSIONLIMIT ));
 
@@ -500,7 +500,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
     int c = 0;
 
     if ( includeLoadedUnits )
-       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+       for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
              ++c;
 
@@ -510,7 +510,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits )
        stream.writeInt ( c );
 
     if ( c )
-       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
+       for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
              (*i)->write ( stream );
 
