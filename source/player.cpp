@@ -323,6 +323,10 @@ void Player :: turnBegins( Player& p )
    if ( &p == this ) {
       diplomacy.turnBegins();
    }   
+   
+   if ( stat == supervisor ) {
+      parentMap->supervisorpasswordcrc = passwordcrc;  
+   }
 }
 
 void Player :: userInteractionBegins( Player& p )

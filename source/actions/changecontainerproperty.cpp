@@ -92,8 +92,9 @@ int ChangeContainerProperty::getUnitProperty()
    
    switch ( property ) {
       case Damage: return getContainer()->damage;
+      default:
+         throw ActionResult(21203, getContainer() );
    };
-   throw ActionResult(21203, getContainer() );
 }
 
 void ChangeContainerProperty::setUnitProperty( int value, const Context& context )
