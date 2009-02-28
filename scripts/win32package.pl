@@ -3,8 +3,14 @@ use strict;
 use Getopt::Long;
 
 my $testVersion = 0;
+my $cvsUpload = 0;
+my $pbpEditor = 0;
+my $mapedit = 0;
 
-GetOptions ("test" => \$testVersion );  
+GetOptions ("test" => \$testVersion,
+            "cvs" => \$cvsUpload,
+            "pbpeditor" => \$pbpEditor,
+            "mapeditor" => \$mapedit );  
 
 
 my $version = `perl getversion ../source/strtmesg.cpp`;
@@ -13,8 +19,10 @@ chomp $version;
 
 my $exepath = "../source/win32/msvc/Release/bin/";
 my $zipname = "asc-$version.zip";
-my @files = ("asc2.exe" ); #, "mapeditor2.exe");
+my @files = ("asc2.exe" ); 
+push( @files,  "mapeditor2.exe") if ( $mapedit );
 my @debugfiles = ("asc.pdb", "mapeditor.pdb");
+my $pbpzip = "pbpeditor.zip";
 
 my $ftpclient = "C:/Programme/NcFTP/ncftpput.exe";
 
@@ -54,3 +62,15 @@ die "error copying file" if $?;
 
 system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $zipname");
 die "error uploading file" if $?;
+
+if ( $cvsUpload ) {
+    system("Upload.cmd");
+}
+
+if ( $pbpEditor ) {
+    unlink($pbpzip) if -e $pbpzip;
+    system("zip -e $pbpzip pbpeditor.exe2");
+    system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $pbpzip");
+    die "error uploading file $pbpzip " if $?;
+  
+}

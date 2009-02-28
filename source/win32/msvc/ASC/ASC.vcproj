@@ -118,7 +118,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="echo Visual Studio sucks: see https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=309462&#x0D;&#x0A;rm -f $(ProjectDir)\debug\vc90.pdb&#x0D;&#x0A;rm -f $(ProjectDir)\release\vc90.pdb&#x0D;&#x0A;"
+				CommandLine="echo Visual Studio sucks: see https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=309462&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -552,6 +552,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\statistics.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\stdio-errorhandler.cpp"
 				>
 			</File>
@@ -979,6 +983,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\destructunitcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\discoverresources.cpp"
 					>
 				</File>
@@ -1003,6 +1011,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\reactionfireswitchcommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\recycleunitcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\registerunitrftarget.cpp"
 					>
 				</File>
@@ -1012,6 +1028,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\removeobject.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\repairunitcommand.cpp"
 					>
 				</File>
 				<File

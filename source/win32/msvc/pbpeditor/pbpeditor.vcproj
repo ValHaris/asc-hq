@@ -508,6 +508,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\statistics.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\stdio-errorhandler.cpp"
 				>
 			</File>
