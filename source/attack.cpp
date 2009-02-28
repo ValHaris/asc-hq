@@ -570,6 +570,9 @@ void tunitattacksbuilding :: setresult( const Context& context )
    
    _attackingunit->postAttack( false, context );
    
+   GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
+   f->execute ( context );
+   
    GameAction* g = new InflictDamage( _attackedbuilding, dv.damage - _attackedbuilding->damage  );
    g->execute ( context );
 }
@@ -826,6 +829,10 @@ void tunitattacksobject :: setresult( const Context& context )
    b->execute ( context );
    
    _attackingunit->postAttack( false, context );
+   
+   GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
+   f->execute ( context );
+   
    
    MapCoordinate position( _x, _y );
    

@@ -1636,12 +1636,17 @@ class ChangePlayerState : public EventAction {
          list.push_back ( "supervisor");
          list.push_back ( "suspended");
 
+#if 1
+         state = Player::PlayerStatus( chooseString ( "State", list, state ));
+#else
+         /* this is intended as security measure to prevent a player in a duell
+            from switching himself to supervisor and seeing the whole map */
          do {
             state = Player::PlayerStatus( chooseString ( "State", list, state ));
             if ( state == Player::supervisor )
                warning("setting a player to supervisor is not allowed");
          } while ( state == Player::supervisor );
-
+#endif
       }
 
       ASCString getName() const { return "Change player state"; };
