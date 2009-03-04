@@ -34,6 +34,8 @@
  #include "typen.h"
  #include "textfile_evaluation.h"
 
+class StatisticsCalculator;
+
 class ClipBoardBase {
       map<ASCString,ASCString> properties;
    
@@ -44,6 +46,9 @@ class ClipBoardBase {
       friend struct Loki::CreateUsingNew<ClipBoardBase>;
       ClipBoardBase();
       ~ClipBoardBase() {};
+      
+      void setProperties( const ContainerBase* unit, StatisticsCalculator& stat );
+      
    public:
       void clear();
       void addUnit ( const Vehicle* unit );

@@ -49,6 +49,16 @@ void ClipBoardBase::clear()
 }
 
 
+void ClipBoardBase::setProperties( const ContainerBase* unit, StatisticsCalculator& stat )
+{
+   properties["strength"] = ASCString::toString( stat.strength() );
+   properties["resource"] = ASCString::toString( stat.resource().material / 1000 );
+   properties["name"] = unit->getName();
+   properties["player"] = unit->getMap()->getPlayer( unit ).getName();
+   properties["turn"] = ASCString::toString( unit->getMap()->time.turn() );
+   properties["map"] = unit->getMap()->maptitle;
+}
+
 void ClipBoardBase::addUnit ( const Vehicle* unit )
 {
   tmemorystream stream ( &buf, tnstream::appending );
@@ -57,9 +67,7 @@ void ClipBoardBase::addUnit ( const Vehicle* unit )
   objectNum++;
   
   StatisticsCalculator sc( unit );
-  properties["strength"] = ASCString::toString( sc.strength() );
-  properties["resource"] = ASCString::toString( sc.resource().material / 1000 );
-  properties["name"] = unit->getName();
+  setProperties( unit, sc );
 }
 
 void ClipBoardBase::addBuilding ( const Building* bld )
@@ -70,9 +78,8 @@ void ClipBoardBase::addBuilding ( const Building* bld )
   objectNum++;
   
   StatisticsCalculator sc( bld );
-  properties["strength"] = ASCString::toString( sc.strength() );
-  properties["resource"] = ASCString::toString( sc.resource().material / 1000 );
-  properties["name"] = bld->getName();
+  setProperties( bld, sc );
+
 }
 
 
