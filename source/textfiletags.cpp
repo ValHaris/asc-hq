@@ -218,7 +218,8 @@ const char*  buildingFunctionTags[24]  =
    "onlyTransMove",
    "AutoHarvestObjects",
    "NoProductionCustomization",
-   "ManualSelfDestruct"
+   "ManualSelfDestruct",
+   "NoMineRemoval"
    };
    
    

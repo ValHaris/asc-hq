@@ -66,7 +66,8 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "AutoHarvestObjects",
                "No customization of production",
                "Manual self-destruct",
-              NULL };
+               "No removal of mines", 
+               NULL };
 
 
 ContainerBaseType :: ContainerBaseType ()

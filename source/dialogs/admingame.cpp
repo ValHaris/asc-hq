@@ -387,7 +387,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
 
 bool adminGame( GameMap* actmap, TurnSkipper* turnSkipper )
 {
-   AdminGameWindow agw( actmap, NULL, turnSkipper );
+   AdminGameWindow agw( actmap, NULL, turnSkipper);
    agw.Show();
    agw.RunModal();
    return agw.GetStatus();

@@ -58,9 +58,12 @@ PutMineCommand :: PutMineCommand ( Vehicle* unit )
 
    for ( int i = 0; i < unit->typ->weapons.count; i++)
       if ((unit->typ->weapons.weapon[i].getScalarWeaponType() == cwminen) && unit->typ->weapons.weapon[i].shootable() && (unit->typ->weapons.weapon[i].sourceheight & unit->height) ) {
-         removeMines = true;
+         if ( !unit->typ->hasFunction( ContainerBaseType::NoMineRemoval ))
+            removeMines = true;
+         
          if (unit->ammo[i] > 0)
             putMines = true;
+         
          weaponNum = i;
       }
 }

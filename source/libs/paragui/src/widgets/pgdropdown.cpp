@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2008-05-24 18:21:04 $
+    Update Date:      $Date: 2009-03-06 15:16:32 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgdropdown.cpp,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -218,7 +218,7 @@ void PG_DropDown::SelectPrevItem() {
 void PG_DropDown::SelectItem(const int n) {
 	int i;
 
-	my_DropList->SelectFirstItem(false);
+	my_DropList->SelectFirstItem( n == 0 );
 
 	for (i=0; i < n; i++)
 		my_DropList->SelectNextItem( i == (n-1));
