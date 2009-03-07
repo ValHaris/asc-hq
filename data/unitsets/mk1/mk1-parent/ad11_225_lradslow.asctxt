@@ -5,26 +5,27 @@ VehicleType {
    parent = 400 401 402 411
 
    Description = SAM long range
-   Infotext = []
    GuideSortHelp = 222 508 0 0 0 0 0 0 0 0
+   Infotext = []
 
+   Category = light_wheeled_vehicle
+   Features += MoveDuringReactionFire move_after_attack
    Armor = 250
-   Picture = g_spike.pcx
-   WaitForAttack = true
+   Weight = 20
+
    Tank { 
       Energy = 0
       Material = 0
       fuel = 500
    } Tank
    FuelConsumption = 10
-   Features += MoveDuringReactionFire move_after_attack
    Movement = 0 0 0 26 0 0 0 0 
-   Category = light_wheeled_vehicle
-   Weight = 20
    TerrainAccess { 
       terrain_any = Lowland Road Runway Hard_sand Ditch Frozen_water 
       terrain_not = morass swamp large_rocks deep_snow
    } TerrainAccess
+
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 1

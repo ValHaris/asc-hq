@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15232
+   ;Bezeichnung der verknüpften Technologie: Blaster
+   TechnologiesRequired = 15232
+} TechAdapter

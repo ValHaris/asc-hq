@@ -12,6 +12,7 @@ VehicleType {
    Weight = 80
    Category = light_ship
    Movement -= 11 11 20 0 0 0 0 0 
+   FuelConsumption = 15
 
    Weapons { 
       Initiative = 0

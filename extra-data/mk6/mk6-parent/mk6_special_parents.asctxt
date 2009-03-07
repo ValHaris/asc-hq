@@ -143,6 +143,60 @@ VehicleType {
       } WeaponEffectiveness
    } AGLS
 
+   OGLS { 
+         Type = Laser shootable
+         Sound = lasergun.ogg 
+         targets = floating ground_level
+         shotFrom = orbit
+         MaxRange = 30
+         MinRange = 10
+         Ammo = 1
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 100
+            fuel = 50
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } OGLS
+
    GGLS { 
          Type = Laser shootable
          Sound = lasergun.ogg 
@@ -504,7 +558,7 @@ LRHEPT {
       } consumption
       terrain_any = road runway lowland hard_sand soft_sand 
       terrain_all = beacon
-      terrain_not = morass swamp forest small_rocks large_rocks bridge railroad
+      terrain_not = swamp forest small_rocks large_rocks bridge railroad
       terrain_kill = 
    } TeccnolsJump1
 

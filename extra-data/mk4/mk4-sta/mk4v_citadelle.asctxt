@@ -5,10 +5,11 @@ VehicleType {
    GuideSortHelp = 0 0 0 0 4 600 0 0 0 0
 
    Description = Fahrender Bunker
-   Infotext = [ Schwer gepanzerte langsam fahrende Kommandoeinheit.]
    picture = mk4v_citadelle.png
    InfoImage = mk4v_citadelle.jpg
    WreckageObject = 14235
+   Infotext = [Die Einheiten der Cita-Reihe sind eine Spezialität der Cromonischen Streitkräfte. Es handelt sich dabei um fahrende Bunkerstellungen. Entsprechend stark ist die Panzerung. Es handelt sich um eine sogenannte kombinierte Panzerung, die speziell gegen Antitankgeschosse entwickelt worden ist. Sie besteht aus mehreren Schichten, die solchen Geschossen viel von ihrer Wirkung nehmen und ist darüberhinaus von einer solchen Stärke, daß sie normalen Gefechtsbeschuß ohne Probleme abwehrt. Problematisch ist allerdings, daß die Citas aufgrund der Größe trotzdem prinzipiell ein gutes Ziel für schwere Waffen darstellen. Auch die Geschwindigkeit ist durch das riesige Gewicht sehr gering. Das größte Problem bei den mobilen Bunkern stellt deshalb der schnelle Transport dar. Hierfür kommt nur eine spezielle Landeinheit infrage, der Dolter. Er kann diese Einheiten optimal verschieben. Wichtig für einen effizienten Einsatz der Bunker ist deshalb, so unwahrscheinlich es auch klingt, ein gut ausgebautes Schienennetz.
+Die Citadelle ist die Standardeinheit dieser Einheitenreihe. Sie ist mit einer vollständigen Kommunikationszentrale ausgestattet und wird daher gern als fahrende Kommandoeinheit verwendet. Dabei besitzt sie eine für Panzerfahrzeuge sehr gute Aufklärungsreichweite und kann auch den Orbit nach Satelliten scannen. Bestückt ist sie mit einer mittleren 110mm Artilleriekanone in einem flachen, drehbaren Turm, welche für dieses Kaliber über eine recht große Reichweite verfügt. Diese kann aber nicht gegen direkt angreifende Gegner eingesetzt werden. Hierfür ist eine 80mm Panzerabwehrkanone eingebaut. Gegen anrückende Infanterie sind mehrere Maschinenkanonen montiert. Zur Bekämpfung von Flugzeugen in allen Luftschichten dienen Luftabwehrraketen mit Wärmesensoren. Als eine von wenigen Landeinheiten ist es ihr weiterhin möglich, Orbitaleinheiten mit den mitgeführten schweren AO-Raketen zu bekämpfen. In Ihren Lagerräumen können bis zu 4 Golems oder andere leichte Einheiten mitgeführt werden und so das Angriffs- und Verteidigungspotential dieser Einheit deutlich erhöhen. Aufgrund dieser nahezu kompletten Ausstattung ist die Citadelle der Allrounder unter den mobilen Bunkern und, im Verband richtig eingesetzt, kaum zu zerstören. ]
 
    Armor += 200
    View += 10

@@ -82,7 +82,7 @@ ObjectType {
 
    much_snow ->* ObjectType.dry
    ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   much_snow.MoveMalus_abs = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  11
+   much_snow.MoveMalus_abs = 15  17  17  17  18  20  20  15  12  20  20  16  20  20  20  20  20  11
    much_snow.TerrainProperties_Add = lowland track_possible Deep_snow
    much_snow.Jamming_abs = 2
 

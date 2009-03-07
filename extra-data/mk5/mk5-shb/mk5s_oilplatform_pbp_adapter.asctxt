@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 16001
+   ;Bezeichnung der verknüpften Technologie: Oilplatform
+   TechnologiesRequired = 16001
+} TechAdapter

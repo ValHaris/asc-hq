@@ -4,10 +4,11 @@ VehicleType {
    parent = 340 15000
 
    Description = Kreuzer
-   Infotext = [Fliegende Kreuzer vom Typ "Innocence" sind die Krönung der Luft zu Boden Kriegsführung. Massivst Gepanzert und schwerst Bewaffnet gibt es nur wenig, was der Innocence vom Boden aus zu fürchten hätte.
-Der Innocence verfügt über mehrere schwere Lasersysteme zum Angriff auf Bodenziele, die er sogar noch aus großer Höhe abfeuern kann. Diese reichen von einem Langstreckenlaser, dessen Reichweite durchaus mit der von mobilen Luftabwehrstellungen mithalten kann - und dessen Zielaufschaltzeit weitaus geringer ist, so das er meist zuerst das Feuer eröffnen kann bevor diese ihre Raketen starten können - bis hin zu einem schweren Laser mit mittlerer Reichweite, dessen Wirkung auf kurze Distanz der Feuerkraft eines Schlachtschiffes gleicht. Zur Luftverteidigung führt der Innocence auch vier Langstreckenraketen mit kurzer Aufschaltzeit mit sich, die es ihm ermöglichen die meisten Jäger schon unter Beschuß zu nehmen, noch bevor diese selber in Feuerreichweite sind. 
+   Infotext = [Fliegende Zerstörer vom Typ "Innocence" sind die Krönung der Luft zu Boden Kriegsführung. Massiv Gepanzert und schwerst Bewaffnet gibt es nur wenig, was der Innocence vom Boden aus zu fürchten hätte.
+Der Innocence verfügt über mehrere schwere Lasersysteme zum Angriff auf Bodenziele, die er sogar noch aus großer Höhe abfeuern kann. Diese reichen von einem Langstreckenlaser, dessen Reichweite durchaus mit der von mobilen Luftabwehrstellungen mithalten kann - und dessen Zielaufschaltzeit weitaus geringer ist, so das er meist zuerst das Feuer eröffnen kann bevor diese ihre Raketen starten können - bis hin zu einem schweren Laser mit mittlerer Reichweite, dessen Wirkung auf kurze Distanz der Feuerkraft eines Schlachtschiffes gleicht. Zur Luftverteidigung führt der Innocence auch vier Langstreckenraketen mit kurzer Aufschaltzeit mit sich, die es ihm ermöglichen die meisten Jäger schon unter Beschuß zu nehmen, noch bevor diese selber in Feuerreichweite sind.
 Dank der Verwendung von "Cutting Edge" Technologien frisch aus den Tecc-Laboren ist der Innocence mit einer Panzerung ausgestattet, die sogar Widerstandsfähiger ist als die der meisten bekannten leichten Panzern.
-Diese ganzen Fähigkeiten haben jedoch einen Preis - und den nicht nur in den Konstruktionskosten: Der Innocence ist im Tiefflug nicht schneller als ein leichter Panzer, und selbst auf seiner Reiseflughöhe gerade mal 25% schneller. ]
+Diese ganzen Fähigkeiten haben jedoch einen Preis - und den nicht nur in den Konstruktionskosten: Der Innocence ist im Tiefflug nicht schneller als ein leichter Panzer, und selbst auf seiner Reiseflughöhe gerade mal 25% schneller.
+]
    Picture = mk6a_innocence.pcx
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 

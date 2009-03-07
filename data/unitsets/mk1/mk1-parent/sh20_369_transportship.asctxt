@@ -20,7 +20,7 @@ VehicleType {
    View = 30
    Jamming = 0
    WaitForAttack = false
-   Features = ExternalFuelTransfer ExternalMaterialTransfer
+   Features = ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
    Category = heavy_ship
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0

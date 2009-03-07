@@ -4,10 +4,11 @@ VehicleType {
    parent = 336
    
    Description = InstandsetzungsFzg
-   Infotext = [Feld Reparaturfahrzeug]
    picture = mk4v_sinus.png
    InfoImage = mk4v_sinus.jpg
    WreckageObject = 14202
+   Infotext = [Das Sinus ist wohl eines der wichtigsten Servicefahrzeuge der Cromonischen Landstreitkräfte. Es ist in der Lage, beschädigte Einheiten im Feld instandzusetzen. Dazu führt es ein großes Ersatzteillager und eine hochmobile Werkstatt mit sich. Die Besatzung besteht aus dem Fahrer, dem Kommandanten, 10 Reparaturrobotern sowie 6 qualifizierten Technikern, die auch im Notfall die zur Verteidigung vorhandenen Maschinengewehre bedienen. Ein Generator liefert die benötigte Energie. Aufgrund der großen Treibstofftanks kann diese Einheit lange Zeit autonom arbeiten. Sämtliche Land-, Luft- und Seeeinheiten, welche in der direkten Nachbarschaft des Sinus geparkt werden können, können repariert werden. Entsprechende Baupläne sind in den Bordcomputern gespeichert. Wenn ein Ersatzteil nicht vorhanden ist, kann es aus vorhandenen Rohmaterialien hergestellt werden. Die mitgeführten Werkzeuge ermöglichen sogar die Bearbeitung hochverdichteten Panzerstahls.
+Bewaffnet ist das Sinus mit nur einem leichten MG bei mäßiger Panzerung. Die Besatzung sollte daher vor Einsätzen mit Feindberührung unbedingt einige Übungseinheiten im Trainingslager absolvieren, um die Überlebenschancen im Feld zu verbessern. Aufgrund des Einsatzzwecks versteht es sich aber von selbst, daß das Sinus aus Kamphandlungen möglichst herauszuhalten ist und gut geschützt werden muß. ]
    
    Armor -= 50
    Weight -= 5

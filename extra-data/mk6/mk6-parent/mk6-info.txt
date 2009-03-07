@@ -14,6 +14,7 @@ ID 15006 airport
 ID 15007 airport2
 ID 15008 Radar
 ID 15009 Jamming
+ID 15015 Solarplant
 
 Objekte
 ID 15001 Leuchtfeuer (permanent)
@@ -72,6 +73,7 @@ ID 15105 Meta SV
 --Orbital--
 15238 Ionenkanone
 15246 Global
+15232 Blaster
 
 --Aircraft--
 ID 15100 Defkind

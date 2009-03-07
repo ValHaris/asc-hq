@@ -13,7 +13,7 @@ VehicleType {
    Movement += 0 0 0 10 70 60 0 0
 
    Weapons { 
-      Number = 2
+      Number = 3
       Weapon0 ->* VehicleType.SSM 
       Weapon0.MaxRange = 20
       Weapon0.MinRange = 10
@@ -21,13 +21,13 @@ VehicleType {
       Weapon0.Punch@MaxRange = 100
       Weapon0.Punch@MinRange = 100
       
-      Weapon1 ->* VehicleType.SAM
+      Weapon1 ->* VehicleType.SAMH
       Weapon1.MaxRange = 30
       Weapon1.MinRange = 10
-      Weapon1.Ammo = 2
+      Weapon1.Ammo = 4
 
-      Weapon2 ->* VehicleType.SAMH
-      Weapon2.MaxRange = 20
+      Weapon2 ->* VehicleType.DCS
+      Weapon2.MaxRange = 10
       Weapon2.MinRange = 10
       Weapon2.Ammo = 2
    } Weapons

@@ -1,5 +1,5 @@
 Techadapter {
    ; SolarPower.
-   Name = B15
+   Name = B15015
    TechnologiesRequired = 15000
 } TechAdapter

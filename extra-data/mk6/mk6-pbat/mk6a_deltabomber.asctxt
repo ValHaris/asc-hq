@@ -6,6 +6,7 @@ VehicleType {
    Description = light bomber
    Infotext = []
    Picture = mk6a_deltabomber.pcx
+   InfoImage = mk6a_deltabomber.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Weapons {

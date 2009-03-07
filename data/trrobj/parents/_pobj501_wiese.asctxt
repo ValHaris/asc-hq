@@ -70,12 +70,12 @@ ObjectType {
 
    light_rain ->* ObjectType.dry
    ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   light_rain.MoveMalus_abs = 12  11  11  11  12  13  13  12  10  20  20  16  20  20  20  20  20  10
+   light_rain.MoveMalus_abs = 12  11  11  11  11  13  13  12  10  20  20  16  20  20  20  20  20  10
    light_rain.Jamming_abs = 1
 
    heavy_rain ->* ObjectType.dry
    ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   heavy_rain.MoveMalus_abs = 13  12  12  12  13  14  14  13  10  20  20  16  20  20  20  20  20  10
+   heavy_rain.MoveMalus_abs = 13  12  12  12  12  14  14  13  10  20  20  16  20  20  20  20  20  10
    heavy_rain.TerrainProperties_Add = lowland mud track_possible
    heavy_rain.Jamming_abs = 2
 
@@ -87,7 +87,7 @@ ObjectType {
 
    much_snow ->* ObjectType.dry
    ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   much_snow.MoveMalus_abs = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  11
+   much_snow.MoveMalus_abs = 15  17  17  17  18  20  20  15  12  20  20  16  20  20  20  20  20  11
    much_snow.TerrainProperties_Add = lowland track_possible Deep_snow
    much_snow.Jamming_abs = 2
 

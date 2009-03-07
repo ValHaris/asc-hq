@@ -6,7 +6,7 @@ VehicleType {
    Description = 
    Infotext = []
    Picture = mk5d_tankblocker.png
-;   WreckageObject = 1414
+   WreckageObject = 998
 
    Armor = 250
    Weight = 1

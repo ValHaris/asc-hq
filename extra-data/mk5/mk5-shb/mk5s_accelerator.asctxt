@@ -8,6 +8,10 @@ VehicleType {
    picture = mk5s_accelerator.pcx
    InfoImage = mk5s_accelerator.jpg
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+   
+   Transportation ->* VehicleType.TransTrooper
+   Features += jam_only_own_field
+   Jamming = 29
 
    Movement += 0 0 0 20 0 0 0 0
    Weapons { 

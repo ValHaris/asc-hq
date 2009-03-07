@@ -1,10 +1,24 @@
 History MK6 teccnols unit set
-Grafik: GAMER, Rhiow
+Grafik: GAMER, Rhiow, ExarKun
 Infotext: Rhiow
 InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+-Asus, Waffendefiniton aktualisiert
+-CillaSV, kann Pipe abreissen
+-baliste, Flugsystem angepasst.
+-MBF baut neues Solarplant
+Neu:
+-Solarkraftwerk (by ExarKun)
+Beta-09-03
+Neu:
+-Blaster
+Beta-09-02
+-InfoImage = Baltic,Defkind,Deltafighter,Deltasearcher,Deltabomber
+-InfoImgae = Deltahunter,Destructor,Devastor,Eneg,Intruder
+-Defkind, Techbugfix
+-InfoText = Eneg,Innocence
 Beta-09-01
 -Delta Tech4
 -Inova Mat.Tank

@@ -116,6 +116,7 @@ ID 1489 Aracoa
 ID 1490 Subhunter
 ID 1491 Harpoon
 ID 16001 Oilplatform
+ID 16002 Stahlschwein
 
 **UBoote**
 ID 1420 MU (Mini TransportU-Boot)

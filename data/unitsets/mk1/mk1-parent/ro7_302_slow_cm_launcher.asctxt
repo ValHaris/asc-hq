@@ -10,7 +10,7 @@ VehicleType {
 
 
    Armor = 250
-   Weight = 190
+   Weight = 300
    View = 20
    Features = no_reactionfire
 
@@ -20,7 +20,7 @@ VehicleType {
       fuel = 400
    } Tank
    FuelConsumption = 40
-   Movement = 0 0 0 16 0 0 0 0 
+   Movement = 0 0 0 18 0 0 0 0 
    TerrainAccess { 
       terrain_any = Road Runway lowland Hard_sand Turret_foundation
       terrain_all = 

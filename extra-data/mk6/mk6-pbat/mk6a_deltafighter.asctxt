@@ -6,6 +6,7 @@ VehicleType {
    Description = light fighter
    Infotext = []
    Picture = mk6a_deltafighter.pcx
+   InfoImage = mk6a_deltafighter.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Tank.Material = 500 

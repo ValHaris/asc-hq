@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = BLASTER
+   ID = 15232
+   parent = 232 15000
+
+   Description = Attack Satellite
+   Infotext = []
+   Picture = mk6o_blaster.pcx
+;   InfoImage = mk1o_vast.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 100
+   View += 10
+   Movement -= 0 0 0 0 0 0 0 10
+   Tank.Material += 1000
+   Tank.Fuel += 2000
+
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 8
+      Weapon1 ->* VehicleTYpe.type_laser 
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange += 5
+      Weapon1.Punch@MinRange += 8
+
+      Weapon2 ->* VehicleType.OGLS
+      Weapon2.MaxRange = 50
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 110
+      Weapon2.ReactionFireShots = 0 
+   } Weapons
+} VehicleType

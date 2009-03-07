@@ -2,38 +2,35 @@ VehicleType {
    Name = THT 30
    parent = 400 401 402 493
    ID = 1421
+
    Description = Langstreckentorpedo
-   Infotext = [Neben Dem stationaeren Torpedolauncher wurde dieser Langstreckentorpedo entwickelt. 
-               Schnell, selbst zielsuchend und treffsicher stellt er eine Gefahr fuer jedes Schiff dar. 
-               Der Torpedo fliegt in einer sich ständig erneuernden Luftblase durch das Wassser und 
-               erreicht so eine ueberdurchschnittlich hohe Geschwindigkeit. Er ist nur schwer zu 
-               erkennen und wenn man ihn entdeckt, ist es meist schon zu spaet.]
+   Infotext = []
    Picture = MK5s_THT30.pcx
 
    Armor = 150
    Weight = 10
-   View = 10
-   Jamming = 39
-   Features = sonar Kamikaze_only immune_to_mines jam_only_own_field
+   View = 60
+   Jamming = 0
+   Features = sonar immune_to_mines kamikaze_only
    Category = default
-   MaxSurvivableStorm = 70
+   MaxSurvivableStorm = 100
    ResourceDrillingRange = 0
    SelfRepairRate = 0
 
-   Height = floating
+   Height = deep_submerged submerged floating
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 200
+      fuel = 500
    } Tank
    FuelConsumption = 10
 
    WaitForAttack = false
    Movement = 110 110 69 0 0 0 0 
    TerrainAccess { 
-      terrain_any = Shallow_water Water Deep_water Very_shallow_water River swamp
+      terrain_any = Shallow_water Water Deep_water River
       terrain_all = 
-      terrain_not = pack_ice frozen_water
+      terrain_not = large_rocks pack_ice frozen_water
       terrain_kill = Lowland Forest High_mountains Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation Pack_ice Frozen_water 
    } TerrainAccess
    Construction { 
@@ -45,14 +42,14 @@ VehicleType {
       Initiative = 120
       Number = 1
       Weapon0 { 
-         Type = torpedo shootable 
+         Type = machinegun shootable 
          targets = deep_submerged submerged floating ground_level
          shotFrom = deep_submerged submerged floating
          MaxRange = 10
          MinRange = 10
          Ammo = 1
-         Punch@MaxRange = 110
-         Punch@MinRange = 110
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
          HitAccuracy { 
             d6 = 
             d5 = 
@@ -61,16 +58,37 @@ VehicleType {
             d2 = 
             d1 = 90
             0 = 100
-            u1 = 100
+            u1 = 90
             u2 = 
             u3 = 
             u4 = 
             u5 = 
             u6 = 
          } HitAccuracy
-	 WeaponEffectiveness {
-    	    trooper = 25
- 	 } WeaponEffectiveness 
+      WeaponEffectiveness {      
+         default = 100
+         trooper = 150
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 0
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+      } WeaponEffectiveness
       } Weapon0
    } Weapons
 } VehicleType

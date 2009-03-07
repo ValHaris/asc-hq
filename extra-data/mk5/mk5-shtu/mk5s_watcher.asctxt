@@ -28,29 +28,23 @@ VehicleType {
    Weapons { 
       Number = 6
       Weapon0 ->* vehicleType.UTorp
-      Weapon0.Ammo = 10
+      Weapon0.Ammo = 100
 
       Weapon1 ->* vehicleType.SAMH 
-      Weapon1.Ammo = 20
-      Weapon1.ShotFrom = submerged floating
+      Weapon1.Ammo = 100
+      Weapon1.ShotFrom = submerged floating ground_level
 
-      Weapon2 ->* vehicleType.AmmoAM 
+      Weapon2 ->* vehicleType.AmmoCannon 
       Weapon2.Ammo = 100
 
       Weapon3 ->* VehicleType.AmmoGM 
       Weapon3.Ammo = 100
 
-      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4 ->* VehicleType.AmmoBomb 
       Weapon4.Ammo = 100
 
-      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5 ->* vehicleType.AmmoMG 
       Weapon5.Ammo = 100
-
-      Weapon6 ->* vehicleType.AmmoMG 
-      Weapon6.Ammo = 100
-
-      Weapon7 ->* vehicleType.AmmoCannon 
-      Weapon7.Ammo = 100
       
    } Weapons
 } VehicleType

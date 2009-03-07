@@ -604,10 +604,12 @@
       MaxLoadableMass = 15
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       CargoMovementDivisor = 1.4
-      EntranceSystemNum = 2
+      EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
-      EntranceSystem1.MoveCost = 20
+      EntranceSystem1.CategoriesNOT = Trooper
+      EntranceSystem2 ->* VehicleType.SubIO
+      EntranceSystem2.MoveCost = 20
    } TransSubTrooper
 
    TransSubmarine { 
@@ -800,17 +802,19 @@
       MaxLoadableUnits = 1
       MaxLoadableUnitSize = 2
       MaxLoadableMass = 2
-      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
    } TransLowTrooper
 
    TransLowTrooper2 ->* VehicleType.TransLowTrooper 
+   TransLowTrooper2.CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
    TransLowTrooper2.MaxLoadableUnits = 2
    TransLowTrooper2.MaxLoadableUnitSize = 3
    TransLowTrooper2.MaxLoadableMass = 4
 
    TransLowTrooper3 ->* VehicleType.TransLowTrooper 
+   TransLowTrooper3.CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
    TransLowTrooper3.MaxLoadableUnits = 3
    TransLowTrooper3.MaxLoadableUnitSize = 4
    TransLowTrooper3.MaxLoadableMass = 6

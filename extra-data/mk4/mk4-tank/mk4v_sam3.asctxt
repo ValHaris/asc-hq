@@ -3,12 +3,11 @@ VehicleType {
    ID = 1231
    parent = 292
 
-   Infotext = [Der Sam 3 ist eine äußerst gelungene Weiterentwicklung des Sam 2. So ziemlich alles an ihm – vom Fahrgestell einmal abgesehen – wurde verbessert. So erhielt der Sam 3 eine etwas stärkere Panzerung, bessere Bewaffnung und dazu noch einen stärkeren Antrieb. Letzterer ermöglicht es diesem mittleren Panzer, auch im Gelände nicht hinter seinem Vorgänger zurückzubleiben und das trotz der vielen Verbesserungen, die sich selbstverständlich auch auf das Gesamtgewicht niederschlagen.
+   Infotext = [Der Sam 3 ist eine äußerst gelungene Weiterentwicklung des Sam 2. So ziemlich alles an ihm - vom Fahrgestell einmal abgesehen - wurde verbessert. So erhielt der Sam 3 eine etwas stärkere Panzerung, bessere Bewaffnung und dazu noch einen stärkeren Antrieb. Letzterer ermöglicht es diesem mittleren Panzer, auch im Gelände nicht hinter seinem Vorgänger zurückzubleiben - und dies trotz der vielen Verbesserungen, die sich selbstverständlich auch auf das Gesamtgewicht niederschlugen.
 
-Im Gegensatz zur Langrohr-Variante seines Vorgängers, verfügt der Sam 3 über ein sogenanntes Stummelgeschütz im Kaliber 95mm. Das beweglich Maschinengewehr im Turm wurde ausgebaut und durch ein leistungsfähigeres, jedoch starres Koaxial-MG ersetzt, welches sich jetzt, effektiv gesehen, nur noch zur Bekämpfung von Infanterie eignet. Dafür wurde der Sam 3 jedoch noch zusätzlich mit einem schweren Flugabwehr-MG ausgestattet, welches sich auf einer Drehringlafette auf dem Turm befindet. Damit lassen sich sogar Flieger bekämpfen, die sich in mittlerer Höhe befinden - und dies sogar noch auf eine erhebliche Distanz hin. 
+Im Gegensatz zur Langrohr-Variante seines Vorgängers, verfügt der Sam 3 über ein sogenanntes Stummelgeschütz im Kaliber 95mm. Das bewegliche Maschinengewehr im Turm wurde ausgebaut und durch ein leistungsfähigeres, jedoch starres Koaxial-MG ersetzt. Dieses eignet sich faktisch nur noch zur Bekämpfung von Infanterie und wird direkt vom Richtschützen mitbedient. Dafür wurde der Sam 3 jedoch noch zusätzlich mit einem schweren Flugabwehr-MG ausgestattet, das sich auf einer Drehringlafette auf der Turmluke des Kommandanten befindet. Damit lassen sich nun auch Flugzeuge bekämpfen, die sich in mittlerer Flughöhe befinden - und dies sogar noch über eine erhebliche Distanz hinweg.
 
-Einmal erforscht, dürfte der Sam 3 innerhalb eines Truppenkontingents, seinen Vorgänger recht schnell ersetzen. Die Vorteile dafür liegen klar und deutlich auf der Hand, sodass man auch gerne die etwas höheren Anschaffungskosten in Kauf nimmt.
-]
+Einmal erforscht, dürfte der Sam 3 innerhalb der cromonischen Panzertruppe seinen Vorgänger recht schnell ersetzen. Die Vorteile dafür liegen klar und deutlich auf der Hand, sodass man auch gerne die etwas höheren Anschaffungskosten in Kauf nimmt.]
    Picture = mk4v_sam3.png
    InfoImage = mk4v_sam3.jpg
    WreckageObject = 14231

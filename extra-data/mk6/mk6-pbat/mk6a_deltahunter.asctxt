@@ -6,7 +6,8 @@ VehicleType {
    Description = U-Boot Jaeger
    Infotext = []
    Picture = mk6a_deltahunter.pcx
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   InfoImage = mk6a_deltahunter.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Weapons {
       Number = 2

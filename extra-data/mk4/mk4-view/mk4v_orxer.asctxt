@@ -4,11 +4,11 @@ VehicleType {
 
    Name = ORXER
    Description = [Prätorianischer Radarpanzer]
-   Infotext =
    Picture = mk4v_orxer.png
    InfoImage = mk4v_orxer.jpg
    wreckageobject = 14032
    GuideSortHelp = 504 0 0 0 4 0 0 0 0 0
+   Infotext = [Der Orxer ist eine Spezialeinheit der prätorianischen Garde. Sie wurde vor langer Zeit entwickelt, als die Radar- und Sensortechnik noch nicht die heutigen Miniaturisierung und Leistungsfähigkeit erreicht hatte. Er diente dazu, Bereiche aufzuklären, in welche kein Radarfahr- oder -flugzeug ohne feindlichen Beschuß gelangen konnte. Für solche stark verteidigten Bereiche wurde der Axis, ebenfalls ein schwerer Panzer der prätorianischen Garde, komplett umgebaut. Die Bewaffnung wurde bis auf die MGs komplett entfernt. Die extrem starke Panzerung und der Antrieb blieben jedoch erhalten und machen ihn sehr widerstandsfähig gegen feindlichen Beschuß. Der freiwerdende Platz wurde mit den leistungsfähigsten und robustesten Radaranlagen gefüllt, welche damals existierten. Das Problem war dabei, daß die Antennen nach außen geführt werden mußten, wo sie feindlichem Beschuß ausgesetzt sind. So wurde der Turm verbreitert und rundherum mit Luken versehen, hinter denen die Antennen sitzen. Diese Luken können im Bedarfsfall dann schnell geschlossen werden. Obwohl die Radartechnik stetig verbessert wurde, ist die Leistung aufgrund dieser Anordnung geringer als bei echten Aufklärern. Für die oben genannten Einsätze ist der Orxer nichtsdestotrotz eine sehr nützliche Einheit. ]
 
    View = 70
    

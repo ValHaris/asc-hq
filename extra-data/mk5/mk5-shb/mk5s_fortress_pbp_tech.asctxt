@@ -1,6 +1,6 @@
 technology {
-   Name = Fortress
-   infotext = Forschungsprojekt abgeschlossen! Fortress verfügbar!
+   Name = Fortra
+   infotext = Forschungsprojekt abgeschlossen! Fortrea verfügbar!
    id = 1458
    RelatedUnitID = 1458
    parent = 1499

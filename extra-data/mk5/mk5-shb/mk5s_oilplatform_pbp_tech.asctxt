@@ -1,0 +1,10 @@
+technology {
+   Name = Oilplatform
+   infotext = Forschungsprojekt abgeschlossen! oilplatform verfuegbar!
+   id = 16001
+   RelatedUnitID = 16001
+   parent = 1499
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 1499,100004,100105,100310
+} Technology

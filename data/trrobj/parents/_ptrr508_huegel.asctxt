@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 1
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      Movemalus = 20  20  20  20  22  24  24  20  15  24  24  16  24  24  24  24  24  24 
+      Movemalus = 20  20  20  20  20  24  24  20  15  24  24  16  24  24  24  24  24  24 
       TerrainProperties = hillside track_possible
    } dry
 

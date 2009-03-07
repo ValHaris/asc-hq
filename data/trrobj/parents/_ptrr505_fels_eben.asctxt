@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 0
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 10  10  10  10  11  11  11  10  10  20  20  16  20  20  20  20  20  10
+      MoveMalus = 10  10  10  10  10  11  11  10  10  20  20  16  20  20  20  20  20  10
       TerrainProperties = hard_sand
    } dry
    
@@ -31,7 +31,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 2
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  11
+      MoveMalus = 15  17  17  17  18  20  20  15  12  20  20  16  20  20  20  20  20  11
       TerrainProperties = hard_Sand snow deep_snow track_possible
    } much_snow
    snow_and_ice ->* TerrainType.much_snow

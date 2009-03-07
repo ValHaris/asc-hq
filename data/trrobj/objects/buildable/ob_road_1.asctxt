@@ -9,7 +9,7 @@ ObjectType {
    Armor = 1100
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 
-   Movemalus_abs =  10  10  10  10  10  10  10  10  12  17  20  10  17  17  20  20  17  10
+   Movemalus_abs =  10  10  10  10  10  10  10  10  12  19  20  10  19  19  20  20  19  10
    AttackBonus_abs = -1
    AttackBonus_plus = 0
    DefenseBonus_abs = -1

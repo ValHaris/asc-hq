@@ -664,7 +664,7 @@
             light_aircraft = 100
             medium_aircraft  = 100
             heavy_aircraft = 100
-            helicopter = 100
+            helicopter = 110
 	 } WeaponEffectiveness
       } SAM
 
@@ -687,13 +687,14 @@
       SAMT.Punch@MaxRange = 80
       SAMT.Punch@MinRange = 80
       SAMT.ReactionFireShots = 2
-
+      SAMT.WeaponEffectiveness.heavy_aircraft = 120
 ; surface-highair misslie
       SAMB ->* VehicleType.SAMH 
       SAMB.MaxRange = 90
       SAMB.Punch@MaxRange = 85
       SAMB.Punch@MinRange = 85
       SAMB.ReactionFireShots = 3
+      SAMB.WeaponEffectiveness.heavy_aircraft = 120
 
 ; surface-highair-ultra misslie
       SAMHU ->* VehicleType.SAM 
@@ -771,6 +772,7 @@
 ; surface-surface missile
       SSM { 
          Type = air_missile shootable 
+         Sound = groundmissile_s.ogg
          targets = floating ground_level 
          shotFrom = submerged floating ground_level 
          MaxRange = 10
@@ -1582,6 +1584,8 @@
 ;heavy attack trooper
    GrL { 
       Type = bomb shootable 
+      Name = Granatwerfer
+      sound = bomb_drop_s.ogg
       targets = floating ground_level 
       shotFrom = floating ground_level 
       MaxRange = 20
@@ -1972,6 +1976,7 @@
       } OGL
 
       ML { 
+         Name = Multi Target Missile
          Type = laser shootable 
          targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
          shotFrom = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
@@ -2031,6 +2036,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    Sword {
+      name = Schwert
       Type = laser shootable
       Sound = sword.wav     
 	   LaserRechargeRate = 3
@@ -2067,6 +2073,46 @@
          heavy_aircraft = 20
       } WeaponEffectiveness
    } Sword
+
+   Rampart {
+      Name = Rammsporn
+      Type = laser shootable
+      sound = tnt.ogg
+      LaserRechargeRate = 1
+      Ammo = 1
+      targets = floating ground_level 
+      shotFrom = floating ground_level 
+      MaxRange = 10
+      MinRange = 10
+
+      HitAccuracy ->* VehicleType.HitAcc
+      HitAccuracy.0 = 100
+
+      WeaponEffectiveness {      
+         default = 0
+         trooper = 0
+         rail_vehicle = 0
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 50
+         medium_ship  = 100
+         heavy_ship = 120
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+      } WeaponEffectiveness
+   } Rampart
 
    Laser_Gun { 
          Type = Laser shootable 
@@ -2122,6 +2168,7 @@
    } Laser_Gun
 
    EMP { 
+         Name = EMP
          Type = Laser shootable 
          Sound = jumpdrive_s.ogg
          targets =  submerged floating ground_level low_level_flight medium_level_flight
@@ -2151,7 +2198,7 @@
             u6 = 0
          } HitAccuracy
       WeaponEffectiveness {      
-         trooper = 100
+         trooper = 0
          rail_vehicle = 100
          building|turret|object = 50
          hoovercraft = 100
@@ -2175,7 +2222,8 @@
       } WeaponEffectiveness
    } EMP
 
-   Walker_Foot { 
+   Walker_Foot {
+         name = Stampfer 
          Type = Laser shootable 
          targets =  floating ground_level
          shotFrom = floating ground_level 

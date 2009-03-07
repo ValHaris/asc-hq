@@ -4,10 +4,10 @@ VehicleType {
    parent = 301
 
    Description = Rocket Launcher
-   Infotext = [mobiles Mittelstrecken Boden-Boden Raketensystem]
    picture = mk4v_flame.png
    wreckageobject = 14280
    GuideSortHelp = 505 413 0 0 4 0 0 0 0 0
+   Infotext = [Beim Flame handelt es sich um eine mobile Raketenabschußrampe für konventionelle Marschflugkörper. Von diesen transportiert er 2 Stück, welche schon nach kurzer Vorbereitungszeit feuerbereit sind. Der Abschuß während der Fahrt ist selbstverständlich nicht möglich. Die Reichweite und Sprengkraft sind wesentlich größer als bei normalen Kanonen. Allerdings sind natürlich nur bestimmte Einheitentypen sinnvoll anzugreifen. So stellen Infanterie und leichte, bewegliche Einheiten naturgemäß ein schwieriges Ziel dar. Bunker, große Schiffe und schwere Fahrzeuge sind hingegen wesentlich besser zu treffen. Aufgrund der hohen Beschaffungskosten für die Raketen ist es nicht so sehr ein Problem, ein Ziel zu finden, sondern eher, ob es sinnvoll ist, eine bestimmte Einheit anzugreifen. So werden CMs in der Regel eingesetzt, um Schlüsseleinheiten der gegnerischen Verteidigung zu zerstören und somit den eigenen Truppen einen durchschlagenden Angriff zu ermöglichen. Seine große Reichweite zusammen mit der schwachen Panzerung und fehlenden Waffen zur Selbstverteidigung machen ihn allerdings selbst zum bevorzugten Ziel von Angriffen mit schnellen Luft und Bodeneinheiten. Da der Flame keine billige Einheit ist, sollte er entsprechend gut geschützt werden. Aufgrund seines hohen Gewichtes kann er nur von wenigen Einheiten transportiert und aus Gefahrenzonen gebracht werden. Dies ist beim Einsatz im Feld immer zu beachten! Auch müssen Munitionstransporter für ausreichenden Nachschub an Raketen sorgen. Richtig eingesetzt, kann ein einzelner Flame allerdings den Unterschied zwischen einem erfolgreichen Angriff und totalem Fiasko ausmachen. ]
 
    Armor += 20
    WaitForAttack = true

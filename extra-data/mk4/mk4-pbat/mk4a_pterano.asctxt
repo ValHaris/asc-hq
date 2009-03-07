@@ -4,17 +4,16 @@ VehicleType {
    ID = 1250
 
    Description = fliegende Festung
-   Infotext = [PTERRANO
+   Infotext = [Die Pterrano ist ein überschwerer Bomber der cromonischen Luftwaffe. Sie basiert auf Konstruktionsplänen, welche schon sehr alt sind und die schon damals ihrer Zeit weit voraus waren. Bis heute erfuhr das ursprüngliche Design dieser Maschine, die auch als Fliegende Festung, oder Panzer der Lüfte bezeichnet wird, diverse Veränderungen und Modifikationen. Zwischenzeitlich bekam sie sogar die Möglichkeit, Drohnen der Thunder-Klasse aufnehmen und im Flug wieder aussetzen zu können. Allerdings störten die Turbulenzen, die beim Öffnen der Luken und den Drohnenstarts entstanden, die Flugstabilisierungselektronik der Pterrano derart massiv, dass diese Variante leider wieder verworfen werden musste.
 
-Der PTERRANO sieht man bereits auf den ersten Blick an, dass sie zu den alten Prätorianereinheiten zählt! Sie vereint 
-auf Gigantismus abzielendes Design mit enormer Panzerung und vernichtender Feuerkraft. Sie ist vollgestopft mit 
-Bomben und schweren Raketen zum Einsatz gegen jegliche Ziele von der Wasseroberfläche bis hin zum Orbit. Zudem verfügt 
-sie über geringe Transportkapazitäten für Paraeinheiten und Drohnen. Die aus mehren Systemen bestehende 
-Aufklärungstechnik liefert den eigenen Streitkraeften ein umfassendes Bild vom planetaren und orbitalen Gefechtsraum. 
-Zusätzlich ist er mit einer Luftbetankungsvorrichtung versehen. Diese Einheit kann in ihrer strategischen Bedeutung 
-kaum unterschaetzt werden. Ihr einzigstes Manko ist die aus Masse und Design resultierende, vergleichsweise geringe 
-Geschwindigkeit.
-]
+Die Pterrano ist zwar insgesamt gesehen recht teuer, jedoch macht sich jedes Stück verbautes Material auch bezahlt! Sie ist schwer gepanzert und mit umfangreichen Waffensystemen ausgestattet, die so ziemlich alles unter Feuer nehmen können, was sich zwischen der Wasseroberfläche und dem Orbit befindet. Vor allem ihre schweren Bomben können Schiffen hart zusetzen, doch auch ihre Luft-Luft- und Anti-Orbital-Raketen richten schwere Schäden an, zumal sie auch noch aus großer Distanz abgefeuert werden können.
+Weiterhin verfügt die Pterrano über ein ausgefeiltes Onboard-Aufklärungssystem, welches sogar den orbitalen Kampfraum mit ausleuchtet. Dieses System macht Einheiten wie den UHU zwar nicht vollkommen überflüssig, doch es erlaubt dem Kommandanten immerhin, selbst mit kleineren Pterrano-Verbänden einen effektiven Beitrag zur Gesamt-Aufklärung zu leisten.
+
+Um den durch die Abschaffung der Drohnenbuchten freigewordenen Transportraum auch weiterhin effektiv nutzen zu können, hat die Pterrano nun insgesamt zehn Stellplätze für Infanterie, sowie leichte Ketten- und Radfahrzeuge zur Verfügung. Dadurch wird dieser Bomber zusätzlich noch zu einer der bestgepanzerten Transportmaschinen, die man sich vorstellen kann, wenn man beispielsweise GT´s oder kleinere Panzer sicher zu einer Landebahn in umkämpften Gebieten transportieren will.
+Als weitere Zugabe lässt sich die Frachtrampe am Heck auch im Flug öffnen, wodurch es möglich ist, Fallschirmjäger in Frontnähe oder an anderen, strategisch günstigen Stellen abzusetzen.
+
+Selbstverständlich hat all dies seinen Preis! Aufgrund der massiven Panzerung, des vorhandenen Frachtraums, sowie der multiplen Waffensysteme, ist die Pterrano verhältnismäßig langsam und wird ihr Einsatzziel oft erst nach den normalen Jägern und Bombern erreichen, sofern diese ihre Geschwindigkeit nicht an die der Fliegenden Festungen anpassen. Im Endeffekt fliegt sie aber auch nicht viel langsamer als ein Tankflieger oder eine normale Transportmaschine.
+Weiterhin ist dieser Bomber so schwer, dass es ihm nicht möglich ist, auf gängigen Flugzeugträgern zu landen, wodurch er auf größere Flugfelder angewiesen ist.]
    picture = mk4a_pterano.png
    InfoImage = mk4a_pterano.jpg
    wreckageobject = 1250 14850

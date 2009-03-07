@@ -2,10 +2,12 @@ VehicleType {
    Name = FAV 4x4 T2
    ID = 1438
    parent = 332
+
    Description = Offroad Kampfbuggy
    Infotext = [Ein schnelles vierrädriges Offroadfahrzeug, welches mit 4 Boden-Boden Raketen
               ausgestattes ist.]
-   Picture = MK5v_FAV4x4T2.pcx
+   Picture = mk5v_fav4x4t2.pcx
+   InfoImage = mk5v_fav4x4t2.jpg
    WreckageObject = 1404
    
    Transportation ->* VehicleType.TransNoMechTrooper 

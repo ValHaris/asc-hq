@@ -13,7 +13,7 @@ VehicleType {
    Features += no_midair_refuel
    
    TerrainAccess ->* VehicleType.heli_terrain 
-   Movement = 0 0 0 17 30 30 0 0 
+   Movement = 0 0 0 17 39 39 0 0 
    FuelConsumption = 1
    Tank.fuel = 1000
    Weight = 10

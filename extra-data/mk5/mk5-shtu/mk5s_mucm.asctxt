@@ -8,7 +8,8 @@ VehicleType {
    picture = mk5s_mucm.pcx
 
    transportation.MaxLoadableUnits = 2
-   Features += move_after_attack
+   Features = move_after_attack jam_only_own_field sonar
+   FuelConsumption = 15
 
    WaitForAttack = true
    Weapons { 

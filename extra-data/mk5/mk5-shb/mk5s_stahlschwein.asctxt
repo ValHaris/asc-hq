@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = STAHLSCHWEIN
+   parent = 352
+   ID = 16002
+   
+   Description = Panzerschiff
+   picture = mk5s_stahlschwein.pcx
+   InfoImage = mk5s_stahlschwein.jpg
+   InfoText = []
+
+   Armor += 200
+   Transportation ->* VehicleType.noTrans 
+   Tank.Material = 0
+   Features += move_after_attack
+
+   WaitForAttack = true
+   Weapons {
+      Number = 4
+      Weapon0 ->* VehicleType.Rampart 
+      Weapon0.Punch@MinRange = 130
+      Weapon0.Punch@MaxRange = 130
+      
+      Weapon1 ->* VehicleType.DCS
+      Weapon1.Ammo = 8
+      Weapon1.MaxRange = 20
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.GrL
+      Weapon2.Ammo = 10
+      Weapon2.MinRange = 10
+      Weapon2.MaxRange = 40
+      Weapon2.ReactionFireShots = 1
+
+      Weapon3 ->* VehicleType.SAMH
+      Weapon3.Ammo = 4
+      Weapon3.MaxRange = 40
+      Weapon3.ReactionFireShots = 1
+      
+   } Weapons
+
+} VehicleType

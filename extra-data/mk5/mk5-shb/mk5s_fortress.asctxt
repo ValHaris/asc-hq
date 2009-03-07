@@ -1,5 +1,5 @@
 VehicleType { 
-   Name =  FORTRESS
+   Name =  FORTRA
    ID = 1458
    parent = 1284
    
@@ -12,17 +12,36 @@ VehicleType {
    Movement += 0 0 10 0 0 0 0 0
 
    Weapons {
-      Number = 4
+      Number = 6
       Weapon0.Punch@MinRange -= 20
       Weapon0.Punch@MaxRange -= 10
+      Weapon0.WeaponEffectiveness.Trooper = 25
+      Weapon0.WeaponEffectiveness.rail_vehicle = 120
+      Weapon0.WeaponEffectiveness.building|turret|object = 120
+      Weapon0.WeaponEffectiveness.medium_tracked_vehicle = 100
+      Weapon0.WeaponEffectiveness.heavy_tracked_vehicle = 120
+      Weapon0.WeaponEffectiveness.medium_wheeled_vehicle = 100
+      Weapon0.WeaponEffectiveness.heavy_wheeled_vehicle = 120
+      Weapon0.WeaponEffectiveness.medium_ship = 100
+      Weapon0.WeaponEffectiveness.heavy_ship = 120
+
       Weapon1.Punch@MinRange -= 20
       Weapon1.Punch@MaxRange -= 10
+      Weapon1.MaxRange = 50
+
       Weapon2 ->* VehicleType.MiniGun
       Weapon2.ReactionFireShots = 1
+
       Weapon3 ->* VehicleType.SAMH 
       Weapon3.MaxRange = 40
       Weapon3.Ammo = 10
-      Weapon3.ReactionFireShots = 3
+      Weapon3.ReactionFireShots = 2
+
+      Weapon4 ->* VehicleType.DCS
+
+      Weapon5 ->* VehicleType.Rampart
+      Weapon5.Punch@MinRange = 140
+      Weapon5.punch@MaxRange = 140
    } Weapons
 
 } VehicleType

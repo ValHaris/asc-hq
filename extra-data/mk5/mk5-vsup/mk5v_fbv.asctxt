@@ -13,6 +13,7 @@ VehicleType {
    GuideSortHelp = 556 0 0 0 5 0 0 0 0 0
 
    Armor -= 50
+   Transportation ->* VehicleType.TransTurretMed
 
    Tank { 
       Material = 6000
@@ -25,13 +26,14 @@ VehicleType {
    Construction { 
       Buildings = 
       Vehicles = 
-      Objects = 2 3 30 999 1000 998 997 996 995 1401
+      Objects = 2 3 30 999 1000 998 997 996 995 1400 1401
       ObjectsRemovable = 
       ObjectGroupsRemovable = 2 3 4 6 8 9 13 14
    } Construction
 
    Weapons { 
       Initiative = 0
-      Number = 0
+      Number = 1
+      Weapon0 ->* Vehicletype.Def_MG
    } Weapons
 } VehicleType

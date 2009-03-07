@@ -16,8 +16,8 @@ ObjectType {
    Height = 117
    
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
-   Movemalus_plus = 255 255 255 255 255 255 255  40 255 255 255 255 255 255 255 255 255 255
-   Movemalus_abs =  255 255 255 255 255 255 255  40 255 255 255 255 255 255 255 255 255 255
+   Movemalus_plus = 255 255 255 255 255 255 255  20 255 255 255 255 255 255 255 255 255 255
+   Movemalus_abs =  255 255 255 255 255 255 255  20 255 255 255 255 255 255 255 255 255 255
       
    AttackBonus_abs = -1
    AttackBonus_plus = 2

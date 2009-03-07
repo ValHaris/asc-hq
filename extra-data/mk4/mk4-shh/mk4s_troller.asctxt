@@ -4,14 +4,13 @@ VehicleType {
    ID = 14017
    
    Description = Kampfluftkissenboot
-   Infotext = [Wie schon zuvor der Magic, so entstammte auch der Troller aus der Idee, einen Vader DF auf ein gewisses Gebiet hin zu spezialisieren. Beim Troller lag nun das Hauptaugenmerk vor allem in der Bekämpfung von Boden- und Seezielen.
+   Infotext = [Wie schon zuvor der Magic, so entstand auch der Troller aus der Idee heraus, einen Vader DF auf einem gewissen Einsatzgebiet zu spezialisieren. Beim Troller lag nun das Hauptaugenmerk vor allem in der Bekämpfung von Boden- und Seezielen.
 
-Man merkt ihm deutlich an, dass er nach dem Magic konstruiert wurde, aus dessen Defiziten man gelernt zu haben schien. So wurde wieder auf das altbewährte und leistungsfähigere Triebwerk des normalen Transport-Vaders zurückgegriffen, welches dem Troller nun eine beachtliche Höchstgeschwindigkeit verleiht.
+Man merkt ihm deutlich an, dass er erst nach dem Magic konstruiert wurde, da man aus dessen Defiziten nun endlich gelernt zu haben schien. So wurde auf das altbewährte und leistungsfähige Triebwerk des normalen Transport-Vaders zurückgegriffen, welches dem Troller nun eine beachtliche Höchstgeschwindigkeit verleiht.
 
-Zwar mussten dabei auch hier wieder Einschnitte bei Panzerung und Transportkapazitäten hingenommen werden, dafür wurde dieses Mal bei der Bewaffnung nicht gespart: Der Troller erhielt das Maschinengewehr mittleren Kalibers, was sich bereits beim Vader bewährt hatte und die gleiche Kanone gegen Boden- und Seeeinheiten, die schon beim Vader DF verwendet wurde - wenn auch in leicht abgespeckter Form. Als Zusatz bekam er noch eine Halterung für zwei Boden-Boden-Raketen verpasst, deren Reichweite noch etwas größer ist, als die der Kanone. Zudem ist es ihm als einzigem Luftkissenboot der chromonischen Streitkräfte möglich, sich nach dem Angriff wieder zurückzuziehen und so eventuellen Gegenschlägen zu entkommen.
+Zwar mussten auch hier wieder Einschnitte bei Panzerung und Transportkapazitäten hingenommen werden, dafür wurde dieses Mal bei der Bewaffnung nicht gespart: Der Troller erhielt das Maschinengewehr mittleren Kalibers, was sich bereits beim Vader bewährt hatte und die gleiche Kanone gegen Boden- und Seeeinheiten, die schon beim Vader DF verwendet wurde - wenn auch in leicht abgespeckter Form. Als Zusatz bekam er außerdem noch eine Halterung für zwei Boden-Boden-Raketen verpasst, deren Reichweite sogar noch etwas größer ist, als die der ballistischen Kanone. Zudem ist es ihm als einzigem Luftkissenboot der cromonischen Streitkräfte möglich, sich nach dem Angriff wieder zurückzuziehen und so eventuellen Gegenschlägen zu entkommen.
 
-Insgesamt gesehen eignet sich der Troller daher besonders für Landungsoperationen von See her - sei es nun als Flankenschutz, oder als Begleitfahrzeug und Wegbereiter für Truppentransporter. Auch bei schweren Gefechten, bei denen der Frontverlauf senkrecht zur Küstenlinie verläuft, darf man seine Bedeutung nicht unterschätzen, da er es vermag, die Lücke zwischen Bodentruppen und der Marine im küstennahen Flachwasser effektiv zu schließen.
-]
+Insgesamt gesehen eignet sich der Troller daher besonders für Landungsoperationen von See her - sei es nun als Flankenschutz, oder als Begleitfahrzeug und Wegbereiter für Truppentransporter. Auch bei schweren Gefechten, bei denen der Frontverlauf senkrecht zur Küstenlinie verläuft, darf man seine Bedeutung nicht unterschätzen, da er es vermag, die Lücke zwischen Bodentruppen und Marine im küstennahen Flachwasser effektiv auszufüllen.]
    picture = mk4s_troller.png
    wreckageobject = 14017 14817
    Features += move_after_attack

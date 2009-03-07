@@ -4,6 +4,33 @@ InfoText: Hastrubal
 InfoImage: GAMER
 
 __________________
+Beta-09-04
+-MUCM, Feature Bugfix
+Beta-09-03
+-Watcher nur noch 1 Torpedo
+Neu:
+-Stahlschwein
+
+Beta-09-02
+-Tankblocker, + Wrack
+-THT30 aktiviert, Spionagetorpedo
+-TLauncher upgrade
+-Buffed, Bomben Ammo hinzugefügt
+-Fortress upgrade, Adapterbugfix => Fortra
+-Oilplatform, Armor/Waffenbugfix
+-Accellerator, +Troopertransport +lowStealth
+-Cluster, Waffenbugfix
+-Blackwiddow , nur noch 1 Drohnenslot
+-Tontaube, 39 Movement
+-FBV, +Turrettransport, Sockelbau
+-Hoover MG Bugfix, Wasserbombe Stärker
+-Horus +Ammo Bombe
+-Schützengraben, Troopermovemalus geringer
+-MJU,MUCH weniger Fuelverbrauch
+-Bojenaussetzen mit Miniubooten möglich
+-Mechanic, Depot2 baubar
+-ADG Techbugfix
+
 Beta-09-01
 -Oilplatform, Grafik bugfix
 -Guard,Bigguard Techbugfix

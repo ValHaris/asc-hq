@@ -11,9 +11,11 @@ VehicleType {
    Armor = 320
    Weight = 45
    Transportation ->* VehicleType.TransHeliTrooper 
-   Transportation.MaxLoadableMass = 70
-   Transportation.CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship building|turret|object helicopter hoovercraft
+   Transportation.MaxLoadableUnitSize = 65
+   Transportation.MaxLoadableMass = 65
+   Transportation.CategoriesNOT = default light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship building|turret|object helicopter hoovercraft
    Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem2.DisableAttack = false
    Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
    Features += sonar
 
@@ -36,7 +38,6 @@ VehicleType {
       Initiative = 0
       Number = 5
       Weapon0 ->* VehicleType.Air_MG 
-      Weapon0.targets = floating ground_level  
       Weapon0.Ammo = 15
       Weapon0.Punch@MaxRange = 45
       Weapon0.Punch@MinRange = 65
@@ -56,8 +57,8 @@ VehicleType {
 
       Weapon3 ->* VehicleType.DCA
       Weapon3.Ammo = 4
-      Weapon3.Punch@MaxRange = 100
-      Weapon3.Punch@MinRange = 100
+      Weapon3.Punch@MaxRange = 120
+      Weapon3.Punch@MinRange = 120
       
       Weapon4 ->* VehicleType.ServiceGround
       

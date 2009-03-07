@@ -27,7 +27,7 @@ ObjectType {
 
 ; dry
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   Movemalus_plus = 9   9   9   9  12  13  13   9   0   5   0   0   5   5   0   0   5   0 
+   Movemalus_plus = 9   9   9   9  11  13  13   9   0   5   0   0   5   5   0   0   5   0 
    Movemalus_abs = -1
 
    AttackBonus_abs = -1
@@ -48,7 +48,7 @@ ObjectType {
 
    dry {
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   Movemalus_plus = 9   9   9   9  12  13  13   9   0   5   0   0   5   5   0   0   5   0 
+   Movemalus_plus = 9   9   9   9  11  13  13   9   0   5   0   0   5   5   0   0   5   0 
    Movemalus_abs = -1
 
    AttackBonus_abs = -1
@@ -70,7 +70,7 @@ ObjectType {
 
    light_rain ->* ObjectType.dry
    ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   light_rain.MoveMalus_plus = 8   9   9   9  11  12  12   8   0   5   0   0   5   5   0   0   0   0
+   light_rain.MoveMalus_plus = 8   9   9   9  10  12  12   8   0   5   0   0   5   5   0   0   0   0
    light_rain.TerrainProperties_Add = mud morass swamp
 
    heavy_rain ->* ObjectType.dry
@@ -81,7 +81,7 @@ ObjectType {
 
    few_snow ->* ObjectType.dry
    ;                       def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   few_snow.MoveMalus_plus = 4   3   3   3   6   6   6   4   0   0   0   0   0   0   0   0   0   0
+   few_snow.MoveMalus_plus = 4   3   3   3   4   6   6   4   0   0   0   0   0   0   0   0   0   0
    few_snow.TerrainProperties_Add = mud morass
 
    much_snow ->* ObjectType.dry

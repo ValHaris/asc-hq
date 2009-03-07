@@ -1,0 +1,10 @@
+technology {
+   Name = Blaster
+   infotext = Forschungsprojekt abgeschlossen! Blaster verfuegbar!
+   id = 15232
+   RelatedUnitID = 15232
+   parent = 15000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 15000,100003,100104,100302,100313
+} Technology

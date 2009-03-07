@@ -1,5 +1,5 @@
 Techadapter {
-   Name = 1284
-   ;Bezeichnung der verknüpften Technologie: Fortress
-   TechnologiesRequired = 1284
+   Name = 1458
+   ;Bezeichnung der verknüpften Technologie: Fortra
+   TechnologiesRequired = 1458
 } TechAdapter

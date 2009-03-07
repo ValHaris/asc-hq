@@ -4,13 +4,13 @@ VehicleType {
    ID = 14016
    
    Description = SAM Hoovercraft
-   Infotext = [
-Der MAGIC ist die Ausführung eines reinen SAM-Luftkissenbootes, welches zu gewissen Teilen auf den älteren VADER DF 
-basiert. Allerdings wurden hier die Waffensysteme rein zur Luftabwehr konzipiert und sind entsprechend schlagkräftig 
-ausgefallen. Zu diesem Zwecke wurde der ursprüngliche Laderaum extrem verkleinert, sodass der MAGIC jetzt nur noch 
-über einige wenige Stellplätze für Trooper-Einheiten verfügt. Zudem hat er, gegenüber seinem Vorgänger, etwas an 
-Topspeed eingebüßt, was auf das veränderte Design und die um ein Drittel verstärkte Panzerung zurückzuführen ist.
- ]
+   Infotext = [Wie man es von den cromonischen Militärkonstrukteuren her nicht anders kennt, fiel ihnen und ihrem Spezialisierungswahn irgendwann auch der Vader DF zum Opfer. Ziel war es, ein reines Luftabwehr-Hoovercraft zu entwickeln. Dazu wurde der alte Vader DF etwas verlängert und die Munitions-Kapazität des Boden-Luft-Raketenwerfers auf dem Dach um 60% erhöht. Die Kanone wurde entfernt und durch ein leichtes Maschinengewehr ersetzt, welches jedoch allenfalls noch zur Bekämpfung von Infanterieeinheiten geeignet ist. Aufgrund des kleinen Kalibers dieser Spaß-Waffe, sollte man von Angriffen gegen gepanzerte Ziele tunlichst absehen.
+
+Da sich konstruktionsbedingt die Reichweite der Fla-Raketen nicht vergrößern ließ, baute man jedoch noch ein MdRF-Gerät mit ein, sodass der Magic noch mehr Ähnlichkeit mit einer mobilen, bodengestützten Fla-Rak-Einheit bekam.
+
+Um die Höchstgeschwindigkeit des ursprünglichen Vader DF halten und gleichzeitig die eben erwähnten Veränderungen gewichtsmäßig kompensieren zu können, musste der Magic zum einen leider eine Reduzierung der Panzerung hinnehmen und zum anderen musste der Laderaum noch einmal verkleinert werden. So ist er nun nur noch zum Transport von maximal drei Infanterieeinheiten fähig.
+
+Im Endeffekt ist der Magic jedoch trotz allem das Beste, was man als Fla-Einheit im küstennahen Bereich innerhalb der cromonischen Streitkräfte bekommen kann. Vor allem in ausgedehnten Flachwassergebieten, welche weder mit landgestützter Flugabwehr, noch mit den Fla-Raketen der Polar-Kreuzer abgesichert werden können, entpuppt sich der Magic als wert- und sinnvolle Ergänzungseinheit. In Verbindung mit anderen Hoovercrafts, oder mit leichten Schiffen geringeren Tiefgangs, die ihn gegen feindliche Bodentruppen und Marineeinheiten absichern, ist sein Wert daher für den jeweiligen Befehlshaber nicht hoch genug einzuschätzen.]
    picture = mk4s_magic.png
    wreckageobject = 14016 14816
    GuideSortHelp += 0 0 0 0 4 508 552 0 0 0

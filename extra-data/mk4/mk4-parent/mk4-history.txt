@@ -5,6 +5,12 @@ InfoImages: GAMER
 Spezifikationen: GAMER
 
 __________________
+Beta-09-03
+-InfoImage = Golem, GT-Defender
+Beta-09-02
+-InfoText = Citadelle,Sinus,Orxer,UX,Sperber,Flame,PTerano,Magic,Crux,Teccno,Demon
+-InfoText = GT Def,Troll,CitaGD,PolarOS,CitaAD,CitaRJ,Sam2,Sam3,Parademon,Orbiter,Crusader
+-Infotext = GT Dive,Scorpion,Troller,ThunderFX,ThunderSX
 Beta-09-01
 -Virus Tech0
 -GTAD Tech2

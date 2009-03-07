@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 1
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 14  14  14  14  17  17  17  14  10  20  20  16  20  20  20  20  20  17
+      MoveMalus = 14  14  14  14  15  17  17  14  10  20  20  16  20  20  20  20  20  17
       TerrainProperties = hard_sand large_rocks
    } dry
    light_rain ->* TerrainType.dry
@@ -18,7 +18,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 3
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 14  14  14  14  18  18  18  14  10  20  20  16  20  20  20  20  20  17
+      MoveMalus = 14  14  14  14  16  18  18  14  10  20  20  16  20  20  20  20  20  17
       TerrainProperties = hard_sand large_rocks mud track_possible
    } heavy_rain
    few_snow {
@@ -26,7 +26,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 2
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 14  14  14  14  17  17  17  14  10  20  20  16  20  20  20  20  20  17
+      MoveMalus = 14  14  14  14  15  17  17  14  10  20  20  16  20  20  20  20  20  17
       TerrainProperties = hard_sand large_rocks snow track_possible
    } few_snow
    much_snow {
@@ -34,7 +34,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 3
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 15  17  17  17  20  20  20  15  12  20  20  16  20  20  20  20  20  17
+      MoveMalus = 15  17  17  17  18  20  20  15  12  20  20  16  20  20  20  20  20  17
       TerrainProperties = hard_sand snow large_rocks deep_snow track_possible
    } much_snow
    snow_and_ice ->* TerrainType.much_snow

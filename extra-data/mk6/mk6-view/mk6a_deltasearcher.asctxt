@@ -6,6 +6,7 @@ VehicleType {
    Description = Sucher
    Infotext = []
    Picture = mk6a_deltasearcher.pcx
+   InfoImage = mk6a_deltasearcher.jpg
    GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
    Features += sonar satelliteview mineview automatic_resource_searching

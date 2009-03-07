@@ -1,0 +1,16 @@
+BuildingType { 
+   Name = solar powerplant
+   ID = 15015
+   parent = 15
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 B1 B3 B2 
+   UseGFXpics = false
+   Pictures { 
+      dry = mk6_bld_solar_tecc.png
+   } Pictures
+   RubbleObjects = false
+   Entry = B3
+
+} BuildingType

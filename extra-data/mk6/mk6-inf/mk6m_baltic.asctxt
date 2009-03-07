@@ -4,6 +4,7 @@ VehicleType {
    parent = 213 15000
 
    Picture = mk6m_baltic.pcx
+   InfoImage = mk6m_baltic.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 10

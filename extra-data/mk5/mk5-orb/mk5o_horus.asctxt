@@ -36,6 +36,9 @@ VehicleType {
       Weapon2 ->* VehicleType.AmmoLM 
       Weapon2.Ammo = 15
 
-      Weapon3 ->* VehicleType.ServiceOrbit 
+      Weapon3 ->* VehicleType.AmmoBomb 
+      Weapon3.Ammo = 15
+
+      Weapon4 ->* VehicleType.ServiceOrbit 
   } Weapons
 } VehicleType
