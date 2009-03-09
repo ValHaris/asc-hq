@@ -158,7 +158,12 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
    if ( !veh ) 
       return ActionResult(101);
 
-   int h = log2(veh->height); 
+   int h;
+   if ( getMap()->getField(veh->getPosition())->unitHere(veh) )
+      h = log2(veh->height); // != height-change: true
+   else 
+      h = -1; // height-change = false
+      
    if ( height == -2 )
       h = -1;
 

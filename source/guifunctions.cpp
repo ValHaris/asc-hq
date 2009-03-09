@@ -2366,7 +2366,7 @@ class SelfDestructIcon : public GuiFunction
       {
         tfield* fld = actmap->getField(pos);
         ContainerBase* c = fld->getContainer();
-        if ( fieldvisiblenow ( fld ) && c && !commandPending()) 
+        if ( fieldvisiblenow ( fld ) && c && !commandPending() && actmap->getPlayer(c).diplomacy.isAllied(actmap->actplayer)) 
            return DestructUnitCommand::avail( c );
         else
            return false;
