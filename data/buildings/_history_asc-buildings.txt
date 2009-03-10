@@ -2,13 +2,17 @@ Grafiken: GAMER,Schicksal,AndreasK,Xyphagoroszh und Grom
 Spezifikationen: GAMER
 
 BUILDINGS HISTORY
+
+__________________
+10.03.2009 (Martin)
+- Farm und Lumbercamp Bild angepasst (mehr Transparenz)
 __________________
 21.09.2008 (GAMER)
--Stadt nicht mehr durch lava zerstörbar
+-Stadt nicht mehr durch lava zerstï¿½rbar
 __________________
 13.09.2008 (GAMER)
--Hafen kann kleine Geräte bauen
--Bugfix Eingangsystem für fliegende Gebäude
+-Hafen kann kleine Gerï¿½te bauen
+-Bugfix Eingangsystem fï¿½r fliegende Gebï¿½ude
 -Duell Lab10 kleiner EIngang
 - Mine nicht mehr auf railroad baubar
 __________________
@@ -18,10 +22,10 @@ __________________
 -neue Eingangsparents
 __________________
 06.07.2008 (GAMER)
--Baubarkeit Radar/Jammer Gebäude eingeschränkt
+-Baubarkeit Radar/Jammer Gebï¿½ude eingeschrï¿½nkt
 __________________
 02.02.2008 (GAMER)
--Trainingslager Kapazität auf 1000 erhöht
+-Trainingslager Kapazitï¿½t auf 1000 erhï¿½ht
 ______________
 v21.01
 -Sonnenkraftwerk2 eingebaut, eingang oben
@@ -39,16 +43,16 @@ v13.00 04.03.2007
 -Release
 _________________
 v12.03 beta
--Armor erhöht groß/schwer= 2500 mittel=2000/1500 klein=1000
--Stadt und HQ nicht mehr abreißbar
--trooper und leichte EInheiten können generell jedes Gebäude betreten
+-Armor erhï¿½ht groï¿½/schwer= 2500 mittel=2000/1500 klein=1000
+-Stadt und HQ nicht mehr abreiï¿½bar
+-trooper und leichte EInheiten kï¿½nnen generell jedes Gebï¿½ude betreten
 -Baubarkeit von Einheiten in den Fabriken spezialisiert (trooper nur noch in kleiner fabrik)
 -Stadt keine Ammo Produktion mehr
 -Stadt = 10 FP+500EMF/Runde
 _________________
 v12.02 15.07.2006
 - "default" Einheiten (PRD, Kornuta, Sonarboje), jetzt in Airport baubar.
-- große Fabrik baut keine default und leichten Einheiten mehr, dafür aber "Turrets"
+- groï¿½e Fabrik baut keine default und leichten Einheiten mehr, dafï¿½r aber "Turrets"
 _________________
 v12.00
 -HQ funktion entfernt
@@ -56,16 +60,16 @@ v12.00
 _________________
 v11.00
 -kl.Habrik kann keine hoovercrafts mehr laden
--Eingang Trainingscenter auf 200 Erhöht, Gesamtzuladung von 1000 auf 500 verringert.
--Jammergebäude +10 Jamming 
+-Eingang Trainingscenter auf 200 Erhï¿½ht, Gesamtzuladung von 1000 auf 500 verringert.
+-Jammergebï¿½ude +10 Jamming 
 _________________
 v10.01 06.01.2005
 -gr. Fabrik kann keine Helicopter mehr laden
 -Werft kann keine leichten Fahrzeuge mehr herstellen
 _________________
 v10.01 26.11.2004
--Sonderforschungszentrum für Einzelmissionen hinzugefügt.
--Stadt, Eingang auf 500 vergrößert
+-Sonderforschungszentrum fï¿½r Einzelmissionen hinzugefï¿½gt.
+-Stadt, Eingang auf 500 vergrï¿½ï¿½ert
 
 v10.00 01.10.2004
 -Bugfix versteckte Stadt
@@ -74,38 +78,38 @@ v10.00 01.10.2004
 -Turrets nicht mehr in Fabrik baubar.
 
 v9.02 25.08.2004
--Produktion der Städte wiederhergestellt
+-Produktion der Stï¿½dte wiederhergestellt
 
 v9.01 20.08.2004
--Jammer und Radargebäude aktualisiert
+-Jammer und Radargebï¿½ude aktualisiert
 
 v9.00 04.06.2004
 -Umstellung auf neue ASC-v1.15 Funktionen
 -Energie-Speicher allg. verringert.
--Material+Fuel Speicherkapazität in allen Nicht-Depot Gebäuden verringert.
+-Material+Fuel Speicherkapazitï¿½t in allen Nicht-Depot Gebï¿½uden verringert.
 
 v7.01 13.06.2004
 -Bugfix HQ Big
 -Bugfix Mine2
 
 v7.0 06.04.2004
--Town Eingang vergrößert
+-Town Eingang vergrï¿½ï¿½ert
 -Produktions Bugfix Secret Town, Villa Deng
 -Heli-Landepad vor alle Bohrinseln
--Alle BI Wracks aus ASC Gebäuden entfernt
--neue BI Mine mit nördlichem Eingang
--neu Energiespeicher für Missionskarten
--TrainingCenter, Eingang auf 120 vergrößert, 18 Stellplätze, Helicopter freigegeben
--neues Jammergebäude für MK1
+-Alle BI Wracks aus ASC Gebï¿½uden entfernt
+-neue BI Mine mit nï¿½rdlichem Eingang
+-neu Energiespeicher fï¿½r Missionskarten
+-TrainingCenter, Eingang auf 120 vergrï¿½ï¿½ert, 18 Stellplï¿½tze, Helicopter freigegeben
+-neues Jammergebï¿½ude fï¿½r MK1
 
 v6.00 15.11.2003
-- 4 große ASC Häfen hinzugefügt.
+- 4 groï¿½e ASC Hï¿½fen hinzugefï¿½gt.
 
 v5.00 09.09.2003
--Für ASC SolarPowerplant, kleine Fabrik, 2x Oilplatform hinzugefügt.
+-Fï¿½r ASC SolarPowerplant, kleine Fabrik, 2x Oilplatform hinzugefï¿½gt.
 
 v4.00 17.08.2003
--Gebäude allg: können nicht mehr über railraod, road und runway gebaut werden. Nur noch auf freiem Untergrund.
--AirPorts: Stellplätze von 4 auf 6, alle orbitalen Einheiten können gebaut werden
--Depots: Panzerung von 1800 auf 1000, Energiespeicher auf 200 verringert, Auftanken von Schiffen möglich
+-Gebï¿½ude allg: kï¿½nnen nicht mehr ï¿½ber railraod, road und runway gebaut werden. Nur noch auf freiem Untergrund.
+-AirPorts: Stellplï¿½tze von 4 auf 6, alle orbitalen Einheiten kï¿½nnen gebaut werden
+-Depots: Panzerung von 1800 auf 1000, Energiespeicher auf 200 verringert, Auftanken von Schiffen mï¿½glich
 
