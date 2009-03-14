@@ -480,6 +480,7 @@ class GameMap {
       Vehicletype* getvehicletype_byid ( int id );
       const Vehicletype* getvehicletype_byid ( int id ) const;
       BuildingType* getbuildingtype_byid ( int id );
+      const BuildingType* getbuildingtype_byid ( int id ) const;
       const Technology* gettechnology_byid ( int id );
 
       pterraintype getterraintype_bypos ( int pos );

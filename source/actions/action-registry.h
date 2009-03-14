@@ -57,7 +57,9 @@ namespace ActionRegistry {
                   RecycleUnitCommand,      // 30
                   DestructUnitCommand,
                   ReactionFireSwitchCommand,
-                  RepairUnitCommand
+                  RepairUnitCommand,
+                  ConstructBuildingCommand,
+                  SpawnBuilding
    };
 };
 

@@ -853,7 +853,7 @@ Resources Vehicle::getExternalVehicleConstructionCost( const Vehicletype* tnk ) 
    return r;
 }
 
-
+/*
 bool Vehicle :: buildingconstructable ( const BuildingType* building, bool checkResources )
 {
    if ( !building )
@@ -891,6 +891,8 @@ bool Vehicle :: buildingconstructable ( const BuildingType* building, bool check
    
    return false;
 }
+
+*/
 
 int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
 {

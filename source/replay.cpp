@@ -55,6 +55,7 @@
 #include "sg.h"
 #include "actions/action.h"
 #include "actions/cargomovecommand.h"
+#include "actions/constructbuildingcommand.h"
 
 trunreplay runreplay;
 
@@ -1871,7 +1872,7 @@ void trunreplay :: execnextreplaymove ( void )
                                int x = stream->readInt();
                                int y = stream->readInt();
                                int id = stream->readInt();
-                               int color = stream->readInt();
+                               stream->readInt(); // color ; we are using the vehicle's color
                                int networkid = 0;
                                if ( size == 5 )
                                    networkid = stream->readInt();
@@ -1882,31 +1883,17 @@ void trunreplay :: execnextreplaymove ( void )
 
                                BuildingType* bld = buildingTypeRepository.getObject_byID ( id );
 
-                               if ( bld && fld ) {
+                               if ( bld && fld && networkid && actmap->getUnit( networkid ) ) {
                                   displayActionCursor ( x, y );
-                                  putbuilding2( MapCoordinate(x, y), color, bld );
-                                  computeview( actmap );
-                                  if ( networkid ) {
-                                     Vehicle* veh = actmap->getUnit( networkid );
-                                     if ( veh ) {
-                                       int mf = actmap->getgameparameter ( cgp_building_material_factor );
-                                       int ff = actmap->getgameparameter ( cgp_building_fuel_factor );
-                                       if ( mf <= 0 )
-                                          mf = 100;
-
-                                       if ( ff <= 0 )
-                                          ff = 100;
-
-                                       Resources res ( 0, bld->productionCost.material * mf / 100, bld->productionCost.fuel * ff / 100 );
-                                       Resources got = static_cast<ContainerBase*>(veh)->getResource( res, 0 );
-                                       if ( got < res )
-                                          error(MapCoordinate(x,y), "severe replay inconsistency:\nnot enough resources to build/remove building !");
-
-                                     } else
-                                        error(MapCoordinate(x,y), "severe replay inconsistency:\nCannot find vehicle to build/remove building !");
-                                  }
-
-                                  displaymap();
+                                  auto_ptr<ConstructBuildingCommand> cbc ( new ConstructBuildingCommand( actmap->getUnit( networkid ) ));
+                                  cbc->setBuildingType( bld );
+                                  cbc->setTargetPosition( MapCoordinate(x,y));
+                                  ActionResult res = cbc->execute( createContext( actmap ));
+                                  if ( res.successful() )
+                                     cbc.release();
+                                  else
+                                     error( MapCoordinate(x,y), "severe replay inconsistency, could not construct building; Code=" + ASCString::toString( res.getCode() ));
+                                  
                                   wait(MapCoordinate(x,y));
                                   removeActionCursor();
                                } else

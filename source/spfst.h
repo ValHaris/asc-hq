@@ -58,15 +58,13 @@ extern tfield* getfield(int x, int y);
 // ! returns the diplomatic status between the players with color c and b (note that the color is playernum*8 ) 
 // extern int getdiplomaticstatus2( int c, int b);
 
+
+//! puts a building onto the map. To be used by the map editor! For ingame usage, see ConstructBuildingCommand or SpawnBuilding
 extern void  putbuilding( const MapCoordinate& entryPosition,
                          int          color,
                          const BuildingType* buildingtyp,
                          int          completion,
-                         int          ignoreunits = 0 ); // f?r Kartened
-
-extern void  putbuilding2( const MapCoordinate& entryPosition,
-                          int color,
-                          BuildingType* buildingtyp);  // f?r Spiel
+                         int          ignoreunits = 0 ); 
 
 
 //! recalculates the connection (like road interconnections) of all objects on the map

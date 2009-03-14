@@ -284,7 +284,7 @@ class UnitHooveringLogic {
     /** checks whether the unit can construct a building of the given type.
     This method does not check if there is enough space around the unit to place
     the building */
-    bool buildingconstructable ( const BuildingType* bld, bool checkResources = true );
+    //bool buildingconstructable ( const BuildingType* bld, bool checkResources = true );
     //@}
     
     //! sets the unit (and its cargo) the a new position (the unit will not be chained to a field)

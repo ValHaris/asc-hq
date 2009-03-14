@@ -8,7 +8,7 @@ noinst_LTLIBRARIES 	= libactions.la libdirectunitactions.la libmiscactions.la li
 libactions_la_SOURCES	= action.cpp command.cpp context.cpp actionresult.cpp actioncontainer.cpp containeraction.cpp
 libactions_la_LIBADD		= @SDL_LIBS@
 
-libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp \
+libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp constructbuildingcommand.cpp spawnbuilding.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp

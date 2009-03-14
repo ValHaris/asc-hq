@@ -448,7 +448,6 @@ class CargoDialog : public Panel
 
       void registerGuiFunctions( GuiIconHandler& handler )
       {
-         registerCargoGuiFunctions( handler );
          handler.registerUserFunction( new CargoGuiFunctions::Movement( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitCommand( *this ) );
          handler.registerUserFunction( new CargoGuiFunctions::RefuelUnitDialogCommand( *this ) );

@@ -292,6 +292,13 @@ Unit that is supposed to be repaired is not available
 This unit can not repair any other units 
 22402
 Target unit is can not be repaired by this unit
+22500
+Attempting to spawn building of unknown type
+22501
+Attempting to create building outside of map
+22502
+Building not found
+
 
 
 

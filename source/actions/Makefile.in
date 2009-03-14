@@ -49,7 +49,8 @@ am_libactions_la_OBJECTS = action.lo command.lo context.lo \
 libactions_la_OBJECTS = $(am_libactions_la_OBJECTS)
 libdirectunitactions_la_DEPENDENCIES =
 am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
-	destructcontainer.lo changeunitmovement.lo unitaction.lo \
+	destructcontainer.lo constructbuildingcommand.lo \
+	spawnbuilding.lo changeunitmovement.lo unitaction.lo \
 	changeunitproperty.lo registerunitrftarget.lo \
 	consumeresource.lo containeraction.lo \
 	changecontainerproperty.lo unitfieldregistration.lo \
@@ -270,7 +271,7 @@ AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@
 noinst_LTLIBRARIES = libactions.la libdirectunitactions.la libmiscactions.la libmapactions.la libfullgameactions.la
 libactions_la_SOURCES = action.cpp command.cpp context.cpp actionresult.cpp actioncontainer.cpp containeraction.cpp
 libactions_la_LIBADD = @SDL_LIBS@
-libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp \
+libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constructbuildingcommand.cpp spawnbuilding.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp
@@ -356,6 +357,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeunitproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeview.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/command.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/constructbuildingcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/constructunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeammo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/consumeresource.Plo@am__quote@
@@ -381,6 +383,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selfdestruct.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnbuilding.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnmine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnunit.Plo@am__quote@

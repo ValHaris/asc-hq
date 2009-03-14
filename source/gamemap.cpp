@@ -1701,6 +1701,11 @@ BuildingType* GameMap :: getbuildingtype_byid ( int id )
    return buildingTypeRepository.getObject_byID ( id );
 }
 
+const BuildingType* GameMap :: getbuildingtype_byid ( int id ) const
+{
+   return buildingTypeRepository.getObject_byID ( id );
+}
+
 const Technology* GameMap :: gettechnology_byid ( int id )
 {
    return technologyRepository.getObject_byID ( id );

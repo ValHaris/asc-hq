@@ -86,6 +86,8 @@ class Resources {
      int material;
      int fuel;
 
+     static const int count = 3;
+     
      int& resource ( int type ) {
         switch ( type ) {
            case 0: return energy;

@@ -289,7 +289,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
                   i++;
             };
 
-            if ( field->vehicle ) {
+            if ( field->vehicle && field->vehicle->height < chfliegend ) {
                delete field->vehicle;
                field->vehicle = NULL;
             }
@@ -440,21 +440,6 @@ Building :: ~Building ()
 
 
    unchainbuildingfromfield();
-
-   /*
-   int set = unchainbuildingfromfield();
-   if ( set )
-      for ( int i = xpos - 6; i <= xpos + 6; i++)
-         for (j = ypos - 6; j <= ypos + 6; j++)
-            if ((i >= 0) && (i < gamemap->xsize))
-               if ((j >= 0) && (j < gamemap->ysize)) {
-                  calculateobject(i,j,0   , streetobjectcontainer );
-                  calculateobject(i,j,0   , railroadobject );
-                  // calculateobject(i,j,true, powerlineobject );
-                  // calculateobject(i,j,true, pipelineobject );
-               }
-   */
-
 }
 
 
