@@ -1097,6 +1097,9 @@ void FieldAddressing::writeMapModificationData ( tnstream& stream )
 void MapModificationEvent::execute( MapDisplayInterface* md )
 {
    operate();
+#ifdef sgmain
+   computeview( gamemap );
+#endif
    if ( md ) {
       md->displayMap();
       md->updateDashboard();
