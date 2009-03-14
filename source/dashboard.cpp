@@ -312,7 +312,7 @@ void DashboardPanel::eval()
 
    setLabelText( "windspeed", actmap->weather.windSpeed );
 
-   if ( mc.valid() && fieldvisiblenow( fld, actmap->getPlayerView() )) {
+   if ( fld && mc.valid() && fieldvisiblenow( fld, actmap->getPlayerView() )) {
       setLabelText( "terrain_harbour", fld->bdt.test(cbharbour) ? "YES" : "NO" );
       setLabelText( "terrain_pipe", fld->bdt.test(cbpipeline) || fld->building ? "YES" : "NO" );
 
