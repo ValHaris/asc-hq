@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+use strict;
+
+# this program uses cloc (http://cloc.sourceforge.net ) to count the lines of code that ASC consists of over time
+#
+# It will checkout a complete repository for every month, resulting in > 100 checkouts
+# This will take some time, and will place quite some load on the CVS server, so don't use it excessively...
+#
+
+
+sub execute {
+	my $command = shift;
+	my @result = `$command`;
+	die "error running $command\n" if $?;
+	return @result;
+}
+
+my $dir = "/tmp/asc-cvs-history"; 
+
+my $startYear = 1999;
+my $startMonth = 12;
+
+my @now = localtime;
+$now[5] += 1900;
+
+my %dates;
+
+my $year;
+for ( $year = $startYear; $year <= $now[5]; $year++ ) {
+	my $month;
+	for ( $month = 1; $month <= 12; ++$month ) {
+		next if ( $year == $startYear && $month < $startMonth );
+		next if ( $year == $now[5] && $month > ($now[4]+1) );
+
+		my $date = sprintf( "%04d-%02d-%02d", $year,$month,1);
+		print "checking out $date .... \n";
+		mkdir($dir);
+		chdir($dir);
+		execute ("cvs -q -d :pserver:anoncvs\@cvs.seul.org:/home/cvspsrv/cvsroot co -D $date games/asc");
+		my @result = execute('cloc.pl --csv --exclude-dir=libs . ');
+		foreach ( @result ) {
+			if ( /,C\+\+/ ) {
+				my @entries = split(/,/,$_);
+				$dates{$date} = $entries[4];
+			}
+		}
+		chdir("/");
+		execute("rm -rf $dir");
+	}
+}
+
+foreach ( sort keys %dates) {
+	print("$_;$dates{$_}\n");
+}
