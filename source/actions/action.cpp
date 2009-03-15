@@ -64,7 +64,9 @@ void GameAction::undo( const Context& context )
       (*i)->undo( context );
    }
    displayLogMessage(4, "undoing #" + ASCString::toString(sequenceNumber) + " " + getDescription() + "\n");
-   undoAction( context );
+   ActionResult res = undoAction( context );
+   if ( !res.successful() )
+      warning("error undoing " + getDescription() + "\n" + res.getMessage() );
 }
 
 /*

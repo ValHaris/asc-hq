@@ -133,5 +133,5 @@
  extern void displayLogMessage ( int msgVerbosity, const char* message, ... );
  extern void displayLogMessage ( int msgVerbosity, const ASCString& message );
  extern void logMessage ( const ASCString& category, const ASCString& message );
-
+ 
 #endif

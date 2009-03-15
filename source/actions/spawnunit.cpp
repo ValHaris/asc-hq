@@ -169,27 +169,15 @@ ActionResult SpawnUnit::undoAction( const Context& context )
    if ( !vehicleType )
       return ActionResult( 21801, "Vehicle id is " + ASCString::toString(vehicleTypeID));
    
-   if ( !carrier  ) {
-      if ( !fld->vehicle )
-         return ActionResult( 21802 );
+   Vehicle* veh = getUnit();
+   if ( !veh )
+      return ActionResult( 21802 );
       
-      if ( fld->vehicle->typ->id != vehicleTypeID || fld->vehicle->networkid != networkid )
-         return ActionResult( 21803 );
-      
-      delete fld->vehicle;
-      fld->vehicle = NULL;
-      return ActionResult(0);
-   } else {
-      Vehicle* veh = getUnit();
-      if ( !veh )
-         return ActionResult( 21802 );
-      
-      if ( veh->typ->id != vehicleTypeID  )
-         return ActionResult( 21803 );
-      
-      delete veh;
-      return ActionResult(0);
-   }
+   if ( veh->typ->id != vehicleTypeID  )
+      return ActionResult( 21803 );
+   
+   delete veh;
+   return ActionResult(0);
 }
 
 ActionResult SpawnUnit::verify()
