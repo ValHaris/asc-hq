@@ -85,24 +85,8 @@ extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, 
 /////////////////////////////////////////////////////////////////////
 
 
-//! An old procedure for removing a building with a vehicle
-extern void         destructbuildinglevel2( int xp, int yp);
-
-//! An old procedure for removing a building with a vehicle
-extern void         destructbuildinglevel1( int xp, int yp);
-
-
-
 //! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
 extern void dissectvehicle ( Vehicle* eht );
-
-
-
-
-// extern int searchexternaltransferfields ( Building* bld );
-
-extern Resources getDestructionCost( Building* bld, Vehicle* veh );
-
 
 //! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs
 extern void researchCheck( Player& player );

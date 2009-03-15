@@ -56,6 +56,7 @@
 #include "actions/action.h"
 #include "actions/cargomovecommand.h"
 #include "actions/constructbuildingcommand.h"
+#include "actions/destructbuildingcommand.h"
 
 trunreplay runreplay;
 
@@ -1982,25 +1983,18 @@ void trunreplay :: execnextreplaymove ( void )
                            tfield* fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
-                              Building* bb = fld->building;
-                              if ( nwid >=  0 ) {
+                              if ( nwid >= 0 ) {
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {
-                                    Resources r = getDestructionCost ( bb, veh );
-                                    if ( !veh || veh->getResource(r,false) != res )
-                                       error(MapCoordinate(x,y), "severe replay inconsistency:\nfailed to obtain vehicle resources for removebuilding command !");
-
+                                    DestructBuildingCommand* dbc = new DestructBuildingCommand( veh );
+                                    dbc->setTargetPosition( MapCoordinate( x,y ));
+                                    dbc->execute( createContext( actmap ));
+                                    
                                  } else
                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nfailed to obtain vehicle for removebuilding command !");
-                              }
+                              } else
+                                 error(MapCoordinate(x,y), "no vehicle for removebuilding command !");
 
-                              if ( bb->getCompletion() ) {
-                                 bb->setCompletion( bb->getCompletion()-1);
-                              } else {
-                                 bb->netcontrol = cnet_stopenergyinput + (cnet_stopenergyinput << 1) + (cnet_stopenergyinput << 2);
-                                 Resources put = bb->putResource( bb->actstorage, false );
-                                 delete bb;
-                              }
                               computeview( actmap );
                               displaymap();
                               wait();

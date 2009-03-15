@@ -59,6 +59,7 @@
 #include "actions/reactionfireswitchcommand.h"
 #include "actions/repairunitcommand.h"
 #include "actions/constructbuildingcommand.h"
+#include "actions/destructbuildingcommand.h"
 
 bool commandPending()
 {
@@ -731,82 +732,51 @@ bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subje
    tfield* fld = actmap->getField(pos);
    if (!commandPending()) {
       if ( fld->vehicle )
-         if ( fld->vehicle->attacked == false && !fld->vehicle->hasMoved() )
-            if (fld->vehicle->color == actmap->actplayer * 8)
-               if ( fld->vehicle->typ->hasFunction( ContainerBaseType::ConstructBuildings  ) || !fld->vehicle->typ->buildingsBuildable.empty() )
-                  if ( fld->vehicle->getTank().fuel >= destruct_building_fuel_usage * fld->vehicle->typ->fuelConsumption )
-                     return true;
-   } else
-      if (moveparams.movestatus == 115) {
-         if (fld->a.temp == 20)
-            return true;
+         return DestructBuildingCommand::avail( fld->vehicle );
+   } else {
+      DestructBuildingCommand* dbc = dynamic_cast<DestructBuildingCommand*>( NewGuiHost::pendingCommand );
+      if ( dbc ) {
+         return dbc->isFieldUsable(pos);  
       }
-
+   }
    return false;
 }
 
 void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( cancel ) {
-      actmap->cleartemps(7);
-      moveparams.movestatus = 0;
-      cancel = false;
-      updateFieldInfo();
-      return;
-   }
-
-   if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing) {
-      destructbuildinglevel1( pos.x, pos.y );
-      displaymap();
-      updateFieldInfo();
-   } else
-      if (moveparams.movestatus == 115) {
-         destructbuildinglevel2( pos.x, pos.y );
-         updateFieldInfo();
-         displaymap();
+   DestructBuildingCommand* dbc = dynamic_cast<DestructBuildingCommand*>( NewGuiHost::pendingCommand );
+   if ( !dbc ) {
+      auto_ptr<DestructBuildingCommand> db ( new DestructBuildingCommand( actmap->getField(pos)->vehicle ));
+      
+      vector<MapCoordinate> fields = db->getFields();
+      
+      if ( fields.empty() ) {
+         dispmessage2( 306, NULL );
+         return;
       }
+      for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
+         actmap->getField(*i)->a.temp = 1;
+
+      repaintMap();
+
+      NewGuiHost::pendingCommand = db.release();
+         
+      updateFieldInfo();
+      
+   } else {
+      dbc->setTargetPosition( pos );
+      actmap->cleartemps();
+      
+      ActionResult res = dbc->execute( createContext( actmap ));
+      if ( !res.successful() )
+         delete NewGuiHost::pendingCommand;
+      NewGuiHost::pendingCommand = NULL;
+      
+      repaintMap();
+      updateFieldInfo();
+   }
 }
 
-
-/*
-class SearchForMineralResources : public GuiFunction
-{
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         tfield* fld = actmap->getField(pos);
-         if (fld->vehicle != NULL)
-            if (fld->vehicle->color == actmap->actplayer * 8)
-               if ( (fld->vehicle->typ->functions &  cfmanualdigger) && !(fld->vehicle->typ->functions &  cfautodigger) )
-                  if (moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing)
-                     if ( actmap->_resourcemode == 0 )
-                        return fld->vehicle->searchForMineralResourcesAvailable();
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-          actmap->getField(pos)->vehicle->searchForMineralResources( ) ;
-
-          MapDisplayPG* mapDisplay = dynamic_cast<MapDisplayPG*>( ASC_PG_App::GetWidgetById( ASC_PG_App::mapDisplayID ));
-          if ( mapDisplay )
-             mapDisplay->activateMapLayer("resources", true);
-
-          updateFieldInfo();
-          repaintMap();
-      }
-
-      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return IconRepository::getIcon("dig.png");
-      };
-
-      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return "search for mineral resources";
-      };
-};
-*/
 
 class OpenContainer : public GuiFunction
 {
