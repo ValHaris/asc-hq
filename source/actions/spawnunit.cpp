@@ -131,10 +131,12 @@ ActionResult SpawnUnit::runAction( const Context& context )
       v->xpos = pos.x;
       v->ypos = pos.y;
       v->height = pos.getBitmappedHeight();
-      RecalculateAreaView rav( getMap(), pos, vehicleType->view/10, &context );
+      // RecalculateAreaView rav( getMap(), pos, vehicleType->view/10, &context );
       ActionResult res = (new UnitFieldRegistration(v, pos, UnitFieldRegistration::RegisterOnField ))->execute( context );
       if ( res.successful() )
          res = (new ViewRegistration( v, ViewRegistration::AddView ))->execute( context );
+      
+      evaluateviewcalculation(getMap(), pos, vehicleType->view, 0, false, &context);
       return res;
    } else {
       ContainerBase* hostingCarrier = getMap()->getContainer( carrierID );

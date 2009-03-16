@@ -87,7 +87,9 @@
       Radar and jamming values must have already been applied to the field! 
       \param gamemap the map that the view is calculated of
       \param pos  the central position around which the view is calculated
-      \param distance the radius of the circle around pos in which the view is evaluated. The view is calculated in AT LEAST this circle, in reality it is a rectangle containing this circle.
+      \param distance the radius of the circle around pos in which the view is evaluated. 
+                      The view is calculated in AT LEAST this circle, in reality it is a rectangle containing this circle.
+                      This is not the number of fields, but the distance in points (with 10 points = 1 field) 
       \param player_fieldcount_mask determines, which players should be counted when the view has changed
       \param disableShareView sharing the view between different players is disabled. 
       \returns the number of fields which have a changed visibility status

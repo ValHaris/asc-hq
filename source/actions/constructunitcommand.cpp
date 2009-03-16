@@ -34,6 +34,8 @@
 #include "spawnunit.h"
 #include "changeunitmovement.h"
 #include "consumeammo.h"
+#include "changeunitproperty.h"
+#include "viewregistration.h"
 
 
 bool ConstructUnitCommand :: externalConstructionAvail ( const ContainerBase* eht )
@@ -230,12 +232,19 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
    MapCoordinate3D position ( target, height );
 
    if ( mode == external ) {
+      
       SpawnUnit* spawnUnit = new SpawnUnit(getMap(), position, vehicleTypeID, getContainer()->getOwner() );
       ActionResult res = spawnUnit->execute( context );
       if ( !res.successful() )
          return res;
       
+      spawnUnit->getUnit()->attacked = true;
+      
       newUnitID = spawnUnit->getUnit()->networkid;
+      
+      
+      if ( !res.successful() )
+         return res;
       
       Vehicle* veh = dynamic_cast<Vehicle*>(getContainer() );
       if ( veh ) {      
@@ -248,6 +257,8 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
       ActionResult res = spawnUnit->execute( context );
       if ( !res.successful() )
          return res;
+      
+      spawnUnit->getUnit()->attacked = true;
       
       newUnitID = spawnUnit->getUnit()->networkid;
       
@@ -266,6 +277,13 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
    }
    
    ActionResult res = (new ConsumeResource(getContainer(), cost ))->execute( context );
+   
+   if ( !res.successful() )
+      return res;
+   
+   Vehicle* veh = dynamic_cast<Vehicle*>(getContainer());
+   if ( veh )
+      res = (new ChangeUnitProperty( veh, ChangeUnitProperty::AttackedFlag, 1 ))->execute(context);
    
    if ( context.display )
       context.display->repaintDisplay();
