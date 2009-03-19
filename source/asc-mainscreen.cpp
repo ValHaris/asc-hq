@@ -817,6 +817,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_0: execUserAction_ev( ua_visibilityInfo );
                return true;
 
+            case SDLK_BACKSPACE:               
+               execUserAction_ev( ua_undo );
+               return true;
+
 
             case SDLK_PLUS:   
             case SDLK_KP_PLUS: execUserAction_ev( ua_increase_zoom );

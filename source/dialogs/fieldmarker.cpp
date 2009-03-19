@@ -163,8 +163,10 @@ bool SelectFromMap::listItemClicked( PG_ListBoxBaseItem* item )
 {
    if ( item ) {
       CoordinateItem* i = dynamic_cast<CoordinateItem*>(item);
-      if ( i )
+      if ( i ) {
          md->cursor.goTo( i->getPos() );
+         updateFieldInfo();
+      }
    }
    return true;
 }
