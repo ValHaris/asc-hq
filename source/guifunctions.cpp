@@ -48,7 +48,7 @@
 #include "dialogs/buildingtypeselector.h"
 #include "dialogs/internalAmmoTransferDialog.h"
 #include "dialogs/vehicleproductionselection.h"
-#include "actions/jumpdrive.h"
+#include "actions/jumpdrivecommand.h"
 #include "actions/destructunitcommand.h"
 #include "actions/attackcommand.h"
 #include "actions/moveunitcommand.h"
@@ -60,6 +60,7 @@
 #include "actions/repairunitcommand.h"
 #include "actions/constructbuildingcommand.h"
 #include "actions/destructbuildingcommand.h"
+#include "actions/powergenerationswitchcommand.h"
 
 bool commandPending()
 {
@@ -593,18 +594,19 @@ void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num
 
 
 
-
-class PowerOn : public GuiFunction
+class PowerSwitch : public GuiFunction
 {
+   private:
+      bool newState;
    public:
+      
+      PowerSwitch( bool state ) : newState( state ) {};
+      
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          if (!commandPending() )  {
             tfield* fld = actmap->getField ( pos );
             if ( fld->vehicle )
-               if ( fld->vehicle->color == actmap->actplayer*8  &&
-                     ( fld->vehicle->typ->hasFunction( ContainerBaseType::MatterConverter  )))
-                  if ( !fld->vehicle->getGeneratorStatus() )
-                     return true;
+               return PowerGenerationSwitchCommand::avail( fld->vehicle, newState );
 
          }
          return false;
@@ -614,11 +616,24 @@ class PowerOn : public GuiFunction
          return ( key->keysym.unicode == 'p' );
       };
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         Vehicle* veh = actmap->getField(pos)->vehicle;
-         veh->setGeneratorStatus ( true );
-         logtoreplayinfo ( rpl_setGeneratorStatus, veh->networkid, int(1) );
+         auto_ptr<PowerGenerationSwitchCommand> pgsc ( new PowerGenerationSwitchCommand( actmap->getField(pos)->vehicle));
+         pgsc->setNewState( newState );
+         ActionResult res = pgsc->execute( createContext( actmap ));
+         if ( !res.successful() ) 
+            displayActionError( res );
+         else
+            pgsc.release();
+         
          updateFieldInfo();
       }
+};
+
+
+
+class PowerOn : public PowerSwitch
+{
+   public:
+      PowerOn() : PowerSwitch( true ) {};
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          return IconRepository::getIcon("poweron.png");
@@ -630,31 +645,14 @@ class PowerOn : public GuiFunction
 };
 
 
-class PowerOff : public GuiFunction
+class PowerOff : public PowerSwitch
 {
    public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         if (!commandPending() )  {
-            tfield* fld = actmap->getField ( pos );
-            if ( fld->vehicle )
-               if ( fld->vehicle->color == actmap->actplayer*8  &&
-                     ( fld->vehicle->typ->hasFunction( ContainerBaseType::MatterConverter)))
-                  if ( fld->vehicle->getGeneratorStatus() )
-                     return true;
-
-         }
-         return false;
-      };
+      PowerOff() : PowerSwitch( false ) {};
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
          return ( key->keysym.unicode == 'p' );
       };
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         Vehicle* veh = actmap->getField(pos)->vehicle;
-         veh->setGeneratorStatus ( false );
-         logtoreplayinfo ( rpl_setGeneratorStatus, veh->networkid, int(0) );
-         updateFieldInfo();
-      }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          return IconRepository::getIcon("poweroff.png");
@@ -906,24 +904,19 @@ class DisableReactionfire : public GuiFunction
 
 class JumpDriveIcon : public GuiFunction, public SigC::Object
 {
-      void fieldMarker( GameMap* gamemap, const MapCoordinate& pos ) {
-         gamemap->getField(pos)->a.temp = 1;
-      };
-
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         JumpDrive jd;
          if ( !commandPending() ) {
 
             Vehicle* eht = actmap->getField(pos)->vehicle;
             if ( eht )
                if ( eht->getOwner() == actmap->actplayer )
-                  return jd.available(eht);
+                  return JumpDriveCommand::avail(eht);
          } else {
-            if ( moveparams.movestatus == 140 ) {
-               if ( jd.available(moveparams.vehicletomove) )
-                  if ( jd.fieldReachable( moveparams.vehicletomove, pos ))
-                     return true;
+            JumpDriveCommand* jdc = dynamic_cast<JumpDriveCommand*>(NewGuiHost::pendingCommand);
+            if ( jdc ) {
+               if ( jdc->fieldReachable( pos ))
+                  return true;
             }
          }
 
@@ -935,28 +928,37 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
       };
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         if ( moveparams.movestatus == 0 ) {
+         if ( !commandPending() ) {
             Vehicle* eht = actmap->getField(pos)->vehicle;
             if ( !eht )
                return;
 
-            JumpDrive jd;
-            jd.fieldAvailable.connect (SigC::slot( *this, &JumpDriveIcon::fieldMarker ));
-            if ( jd.getFields( eht )) {
+            auto_ptr<JumpDriveCommand> jdc ( new JumpDriveCommand( eht ));
+            
+            vector<MapCoordinate> fields = jdc->getDestinations();
+            for ( vector<MapCoordinate>::const_iterator i = fields.begin(); i != fields.end(); ++i )
+               actmap->getField(*i)->a.temp = 1;
+            
+            if ( fields.size() ) {
                repaintMap();
-               moveparams.movestatus = 140;
-               moveparams.vehicletomove = eht;
+               NewGuiHost::pendingCommand = jdc.release();
             }
-         } else
-            if ( moveparams.movestatus == 140 ) {
-               JumpDrive jd;
-               jd.jump ( moveparams.vehicletomove, pos, createContext(actmap) );
+         } else {
+            JumpDriveCommand* jdc = dynamic_cast<JumpDriveCommand*>(NewGuiHost::pendingCommand);
+            if ( jdc ) {
+               jdc->setDestination( pos );
                actmap->cleartemps(7);
-               repaintMap();
+               ActionResult res = jdc->execute( createContext( actmap ));;
                mapChanged( actmap );
-               moveparams.movestatus = 0;
-               moveparams.vehicletomove = NULL;
+               
+               if ( !res.successful() ) {
+                  delete NewGuiHost::pendingCommand;
+                  displayActionError( res );
+               }
+               NewGuiHost::pendingCommand = NULL;
+               updateFieldInfo();
             }
+         }
       }
 
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {

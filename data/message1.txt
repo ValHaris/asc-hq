@@ -298,7 +298,9 @@ Attempting to spawn building of unknown type
 Attempting to create building outside of map
 22502
 Building not found
-
-
+22600
+Unit can not jump now
+22601
+invalid destination for jump
 
 

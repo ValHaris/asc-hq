@@ -44,8 +44,7 @@
 #include "loaders.h"
 #include "turncontrol.h"
 #include "widgets/textrenderer.h"
-#include "actions/jumpdrive.h"
-#include "actions/selfdestruct.h"
+#include "actions/jumpdrivecommand.h"
 #include "reactionfire.h"
 #include "gameeventsystem.h"
 #include "sdl/graphicsqueue.h"
@@ -57,6 +56,7 @@
 #include "actions/cargomovecommand.h"
 #include "actions/constructbuildingcommand.h"
 #include "actions/destructbuildingcommand.h"
+#include "actions/destructunitcommand.h"
 
 trunreplay runreplay;
 
@@ -2474,14 +2474,20 @@ void trunreplay :: execnextreplaymove ( void )
 
             Vehicle* veh = actmap->getUnit(nwid);
             if ( veh ) {
-               JumpDrive jd;
-               if ( jd.available( veh )) {
+               if ( JumpDriveCommand::avail( veh )) {
+                  auto_ptr<JumpDriveCommand> jd( new JumpDriveCommand(veh) );
                   displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
+                  jd->setDestination( MapCoordinate(x,y));
+                  
                   ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
                   Context context = createContext( actmap );
                   context.display = &rmd;
-                  if ( !jd.jump(veh, MapCoordinate(x,y), context ))
+                  
+                  ActionResult res = jd->execute( context );
+                  if ( !res.successful() )
                      error(MapCoordinate(x,y), "Unit cannot jump to this position");
+                  else
+                     jd.release();
                   
                } else
                   error(MapCoordinate(x,y), "Unit cannot jump");
@@ -2535,9 +2541,13 @@ void trunreplay :: execnextreplaymove ( void )
              int nwid = stream->readInt();
              readnextaction();
              ContainerBase* c = actmap->getContainer( nwid );
-             SelfDestruct sd;
-             if ( c && sd.available(c)) {
-                sd.destruct(c);
+             if ( DestructUnitCommand::avail( c )) {
+                auto_ptr<DestructUnitCommand> duc ( new DestructUnitCommand( c ));
+                ActionResult res = duc->execute( createContext( actmap ));
+                if ( !res.successful() )
+                   error("severe replay inconsistency:\nno container for selfdestruct command !");
+                else
+                   duc.release();
              } else
                 error("severe replay inconsistency:\nno container for selfdestruct command !");
             }

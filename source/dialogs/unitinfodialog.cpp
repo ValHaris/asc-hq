@@ -9,6 +9,7 @@
  ***************************************************************************/
 
 #include <pgimage.h>
+#include <pgeventsupplier.h>
 #include "../paradialog.h"
 #include "../typen.h"
 #include "../vehicletype.h"
@@ -87,8 +88,10 @@ class UnitInfoDialog : public Panel {
          void registerSpecialInput( const ASCString& name )
          {
             SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( name, true ) );
-            if ( siw )
+            if ( siw ) {
                siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoDialog::onClick ));
+               siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoDialog::onRelease ));
+            }
          };
 
          bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event ) {
@@ -100,6 +103,16 @@ class UnitInfoDialog : public Panel {
             return false;
          };
 
+         bool onRelease ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event ) {
+            PG_Widget* w = dynamic_cast<PG_Widget*>(obj);
+            if ( w ) {
+               release( w->GetName() );
+               return true;
+            } 
+            return false;
+         };
+         
+         
          bool onEntranceClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event, int entranceNum ) {
             if ( vt ) {
                PG_Widget* swi = FindChild( "single_weapon_info", true );
@@ -280,12 +293,17 @@ class UnitInfoDialog : public Panel {
                    show( paneName[i] );
          };
 
+         void release( const ASCString& name ) {
+            if ( name == "padclick_exit" ) {
+               QuitModal();
+            }
+            
+         }
+         
          void click( const ASCString& name ) {
             for ( int i = 0; i < paneNum; ++i)
                if ( name == ASCString("padclick_") + paneName[i] ) 
                   activate(paneName[i]);
-            if ( name == "padclick_exit" )
-               QuitModal();
          };
 
      public:

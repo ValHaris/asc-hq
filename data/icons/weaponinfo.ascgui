@@ -46,7 +46,7 @@ panel {
            type = statictext
            x = 163
            y = 0
-           text = strenght
+           text = strength
          } widget4
          widget5 {
            type = statictext

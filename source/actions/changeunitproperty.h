@@ -31,7 +31,7 @@
 */
 class ChangeUnitProperty : public UnitAction {
    public:
-      enum Property { Experience, Movement, AttackedFlag, Height, Direction, ReactionFire };
+      enum Property { Experience, Movement, AttackedFlag, Height, Direction, ReactionFire, PowerGeneration };
    private:
      
       static ASCString getPropertyName( Property property );

@@ -1044,8 +1044,13 @@ void         BuildingValues::init(void)
    addbutton("~S~et Values",10,ysize - 40, xsize/3-5,ysize - 10,0,1,7,true);
    addkey(7,ct_enter);
 
+   /*
+   
+   
+   
    addbutton("Help (~F1~)", xsize/3+5, ysize - 40, xsize/3*2-5, ysize-10, 0, 1, 110, true );
    addkey(110, ct_f1 );
+   */
 
    addbutton("~C~ancel",xsize/3*2+5,ysize - 40,xsize-10,ysize - 10,0,1,8,true);
    addkey(8, ct_esc );

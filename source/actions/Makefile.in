@@ -56,7 +56,8 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	changecontainerproperty.lo unitfieldregistration.lo \
 	viewregistration.lo consumeammo.lo recycleunitcommand.lo \
 	destructunitcommand.lo reactionfireswitchcommand.lo \
-	repairunitcommand.lo
+	repairunitcommand.lo jumpdrivecommand.lo \
+	powergenerationswitchcommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libfullgameactions_la_DEPENDENCIES =
@@ -73,9 +74,8 @@ am_libmapactions_la_OBJECTS = spawnobject.lo spawnmine.lo \
 	changeobjectproperty.lo
 libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
 libmiscactions_la_DEPENDENCIES =
-am_libmiscactions_la_OBJECTS = servicing.lo jumpdrive.lo \
-	selfdestruct.lo spawnmine.lo putobjectcommand.lo \
-	putminecommand.lo
+am_libmiscactions_la_OBJECTS = servicing.lo spawnmine.lo \
+	putobjectcommand.lo putminecommand.lo
 libmiscactions_la_OBJECTS = $(am_libmiscactions_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -274,10 +274,11 @@ libactions_la_LIBADD = @SDL_LIBS@
 libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constructbuildingcommand.cpp spawnbuilding.cpp destructbuildingcommand.cpp \
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
-                          recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp
+                          recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
+                          powergenerationswitchcommand.cpp
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
-libmiscactions_la_SOURCES = servicing.cpp jumpdrive.cpp selfdestruct.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
+libmiscactions_la_SOURCES = servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
 libmiscactions_la_LIBADD = @SDL_LIBS@
 libmapactions_la_SOURCES = spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
@@ -370,9 +371,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/discoverresources.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictdamage.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrive.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrivecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunitcommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/powergenerationswitchcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/putminecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/putobjectcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/reactionfireswitchcommand.Plo@am__quote@
@@ -381,7 +383,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removemine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removeobject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/repairunitcommand.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selfdestruct.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnbuilding.Plo@am__quote@

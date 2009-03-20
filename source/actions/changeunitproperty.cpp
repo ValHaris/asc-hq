@@ -41,6 +41,7 @@ ASCString ChangeUnitProperty::getPropertyName( Property property )
       case Height: return "Height";
       case Direction: return "Direction";
       case ReactionFire: return "ReactionFire";
+      case PowerGeneration: return "PowerGeneration";
    };
    return "";
 }
@@ -103,6 +104,7 @@ int ChangeUnitProperty::getUnitProperty()
       case Height: return getUnit()->height;
       case Direction: return getUnit()->direction;
       case ReactionFire: return getUnit()->reactionfire.status;
+      case PowerGeneration: return getUnit()->getGeneratorStatus();
    };
    throw ActionResult(21203, getUnit() );
 }
@@ -127,6 +129,9 @@ void ChangeUnitProperty::setUnitProperty( Property property, int value, const Co
          break;
       case ReactionFire:
          getUnit()->reactionfire.status = (Vehicle::ReactionFire::Status) value;
+         break;
+      case PowerGeneration:
+         getUnit()->setGeneratorStatus( value );
          break;
       default:
          throw ActionResult(21203, getUnit() );
