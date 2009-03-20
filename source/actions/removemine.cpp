@@ -86,7 +86,7 @@ ActionResult RemoveMine::runAction( const Context& context )
       return ActionResult( 21002, pos );
    
    if ( mineID > 0 ) {
-      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i, ++layer ) {
+      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) {
          if ( i->identifier == mineID ) {
             mineBuffer = new tmemorystreambuf();
             tmemorystream memstream( mineBuffer, tnstream::writing );
