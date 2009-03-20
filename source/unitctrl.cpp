@@ -764,8 +764,6 @@ int      VehicleAttack :: tsearchattackablevehicles::run( void )
    if (angreifer == NULL) 
       return -201;
 
-   moveparams.movesx = angreifer->xpos;  // this is currently still needed for wepselguihost
-   moveparams.movesy = angreifer->ypos;
    if (fieldvisiblenow(getfield(angreifer->xpos,angreifer->ypos)) == false)
       return -1;
 

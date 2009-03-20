@@ -64,7 +64,7 @@
 
 bool commandPending()
 {
-   return moveparams.movestatus || pendingVehicleActions.action || NewGuiHost::pendingCommand;
+   return pendingVehicleActions.action || NewGuiHost::pendingCommand;
 }
 
 namespace GuiFunctions
@@ -276,11 +276,8 @@ bool Cancel::available( const MapCoordinate& pos, ContainerBase* subject, int nu
 
 void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( moveparams.movestatus || pendingVehicleActions.action ) {
-      moveparams.movestatus = 0;
-      if ( pendingVehicleActions.action )
-         delete pendingVehicleActions.action;
-   }
+   if ( pendingVehicleActions.action ) 
+      delete pendingVehicleActions.action;
 
    if ( NewGuiHost::pendingCommand ) {
       delete NewGuiHost::pendingCommand;
@@ -568,7 +565,7 @@ bool Attack::available( const MapCoordinate& pos, ContainerBase* subject, int nu
 
 void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( moveparams.movestatus == 0 && pendingVehicleActions.actionType == vat_nothing ) {
+   if ( pendingVehicleActions.actionType == vat_nothing ) {
       AttackCommand* attack = new AttackCommand( actmap->getField(pos)->vehicle );
 
       ActionResult result = attack->searchTargets();
@@ -969,37 +966,6 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
          return "activate jump drive (~j~)";
       };
 };
-
-
-
-/*
-class ExternalLoading : public GuiFunction
-{
-   public:
-      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         if (moveparams.movestatus == 130)
-            if ( actmap->getField(pos)->a.temp == 123 )
-               return true;
-         return false;
-      };
-
-      void execute( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         moveparams.movestatus++;
-      }
-
-      Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return IconRepository::getIcon("disable-reactionfire.png");
-      };
-
-      ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num )
-      {
-         return "disable reaction fire";
-      };
-};
-*/
 
 
 

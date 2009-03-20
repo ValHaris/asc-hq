@@ -303,7 +303,6 @@ bool loadGame( bool mostRecent )
       getDefaultMapDisplay().displayPosition( actmap->getCursor() );
       displaymap();
 
-      moveparams.movestatus = 0;
       return true;
    } else
       return false;
@@ -1492,8 +1491,11 @@ pfont load_font ( const char* name )
 
 void resetActions( GameMap& map )
 {
-   moveparams.reset();
    pendingVehicleActions.reset();
+   if ( NewGuiHost::pendingCommand ) {
+      delete NewGuiHost::pendingCommand;
+      NewGuiHost::pendingCommand = NULL;
+   }
 }
 
 
@@ -1662,8 +1664,6 @@ int gamethread ( void* data )
                next_turn();
                displayLogMessage ( 8, "done.\n" );
             } 
-
-            moveparams.movestatus = 0;
 
             updateFieldInfo();
 

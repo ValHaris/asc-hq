@@ -899,7 +899,6 @@ bool StartMultiplayerGame::start()
    next_turn();
    displaymap();
    updateFieldInfo();
-   moveparams.movestatus = 0;
    success = true;
 
    if ( mode == PBP || mode == PBEM ) 

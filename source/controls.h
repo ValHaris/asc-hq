@@ -35,37 +35,6 @@
 #include "astar2.h"
 
 
-
-   //! some old system for keeping track which unit action is currently running. As units actions are moved to unitctrl.cpp , this structure is beeing replaced by #pendingVehicleActions
-   struct tmoveparams { 
-                        unsigned char         movestatus;       /*  Folgende Modi sind definiert : 
-                                                                             0:  garnichts, standard
-                                                                             72: putstreet
-                                                                             90: putmine
-                                                                             111: putbuilding l1
-                                                                             112: putbuilding l2
-                                                                             115: removebuilding
-                                                                             120: construct vehicle
-                                                                             130: external loading
-                                                                             140: jumpdrive
-                                                                   */
-
-                        int           movesx, movesy, moveerr; 
-                        Vehicle*     vehicletomove;
-                        int          newheight; 
-                        int          oldheight; 
-                        char         heightdir; 
-                        BuildingType* buildingtobuild;   /*  nur bei movestatus = 111  */ 
-                        int          movespeed;
-                        int          uheight;
-                        tmoveparams() { reset(); };
-                        void reset();
-                     }; 
-  //! see #tmoveparams
-  extern tmoveparams moveparams; 
-
-
-
 /*! calculates the movement cost for moving vehicle from start to dest.
     \returns : first: movement ; second: fuel consumption
 */

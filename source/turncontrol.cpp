@@ -88,8 +88,6 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
    } else
       actmap->overviewMapHolder.clear( true );
 
-   moveparams.movestatus = 0;
-
    actmap->setPlayerView ( actmap->actplayer );
 
    return true;

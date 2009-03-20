@@ -30,7 +30,7 @@
 
 StatisticsCalculator::StatisticsCalculator( const ContainerBase* unit )
 {
-   this->unit = unit;  
+   this->unit = unit;
 }
 
 double StatisticsCalculator::strength()
@@ -69,21 +69,36 @@ ASCString getVisibilityStatistics( GameMap* actmap )
          int notVisible = 0;
          int fogOfWar = 0;
          int visible = 0;
+         int viewDominance = 0;
          for ( int x = 0; x < actmap->xsize; x++ )
             for ( int y = 0; y < actmap->ysize; y++ ) {
-                VisibilityStates vs = fieldVisibility  ( actmap->getField ( x, y ), i );
-                switch ( vs ) {
-                   case visible_not: ++notVisible;
-                   break;
-                   case visible_ago: ++fogOfWar;
-                   break;
-                   default: ++visible;
-                }
+               tfield* fld = actmap->getField ( x, y );
+               VisibilityStates vs = fieldVisibility  ( fld, i );
+               switch ( vs ) {
+                  case visible_not:
+                     ++notVisible;
+                     break;
+                  case visible_ago:
+                     ++fogOfWar;
+                     break;
+                  default:
+                     ++visible;
+               }
+
+               int maxView = -1;
+               for ( int p = 0; p < actmap->getPlayerCount(); ++p )
+                  if ( fld->view[p].view > maxView ) 
+                     maxView = fld->view[p].view;
+
+               if ( fld->view[i].view == maxView )
+                  ++viewDominance;
+
             }
-         msg += ASCString("  not visible: ") + ASCString::toString(notVisible ) + " fields\n";
-         msg += ASCString("  fog of war: ")  + ASCString::toString(fogOfWar ) + " fields\n";
-         msg += ASCString("  visible: ")     + ASCString::toString(visible ) + " fields\n\n";
-      } 
+         msg += ASCString("  not visible: ")   + ASCString::toString(notVisible )    + " fields\n";
+         msg += ASCString("  fog of war: ")    + ASCString::toString(fogOfWar )      + " fields\n";
+         msg += ASCString("  visible: ")       + ASCString::toString(visible )       + " fields\n";
+         msg += ASCString("  view dominant: ") + ASCString::toString(viewDominance ) + " fields\n\n";
+      }
    }
 
    computeview ( actmap, 0 , false );
@@ -133,18 +148,18 @@ ASCString getPlayerStrength( GameMap* gamemap )
 void pbpplayerstatistics( GameMap* gamemap )
 {
    ASCString msg;
-   { 
+   {
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "calculating... " );
 
-      msg = "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n"; 
-      
+      msg = "#fontsize=18#Map Statistics for " + gamemap->maptitle + "#fontsize=12#\n\n";
+
       msg += "#fontsize=16#Visibility#fontsize=12#\n";
       msg += getVisibilityStatistics( gamemap );
-      
+
       msg += "#fontsize=16#Strength#fontsize=12#\n";
       msg += getPlayerStrength( gamemap );
    }
-   
+
    ViewFormattedText vft ( "Map Statistics", msg, PG_Rect(-1,-1,600,600));
    vft.Show();
    vft.RunModal();
