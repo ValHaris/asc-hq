@@ -69,7 +69,7 @@ if ( $cvsUpload ) {
 
 if ( $pbpEditor ) {
     unlink($pbpzip) if -e $pbpzip;
-    system("zip -e $pbpzip pbpeditor.exe2");
+    system("zip -e $pbpzip pbpeditor2.exe");
     system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $pbpzip");
     die "error uploading file $pbpzip " if $?;
   

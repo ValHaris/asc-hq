@@ -364,10 +364,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\actions\jumpdrive.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\legacynetworkloaders.cpp"
 				>
 			</File>
@@ -509,10 +505,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\resourcenet.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\actions\selfdestruct.cpp"
 				>
 			</File>
 			<File
@@ -951,6 +943,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\constructbuildingcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\constructunitcommand.cpp"
 					>
 				</File>
@@ -979,6 +975,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\destructbuildingcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\destructcontainer.cpp"
 					>
 				</File>
@@ -995,11 +995,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\jumpdrivecommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\moveunit.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\actions\moveunitcommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\powergenerationswitchcommand.cpp"
 					>
 				</File>
 				<File
@@ -1036,6 +1044,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\servicecommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\spawnbuilding.cpp"
 					>
 				</File>
 				<File
