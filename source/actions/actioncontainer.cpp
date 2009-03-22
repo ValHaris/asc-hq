@@ -82,7 +82,7 @@ void ActionContainer::redo( const Context& context )
 
 void ActionContainer::breakUndo()
 {
-   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
+   for ( Actions::iterator i = actions.begin(); i != currentPos; ++i ) {
       commitCommand( map, **i );
       delete *i;
    }

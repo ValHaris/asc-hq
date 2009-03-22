@@ -252,40 +252,6 @@ void  ContainerControls :: emptyeverything ( Vehicle* eht )
 }
 
 
-
-Resources ContainerControls :: calcDestructionOutput( Vehicle* veh )
-{
-    int   output;
-    if ( container->baseType->hasFunction( ContainerBaseType::RecycleUnits ) )
-       output = recyclingoutput;
-    else
-       output = destructoutput;
-   
-    Resources res;
-
-    for ( ContainerBase::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); i++)
-       if ( *i )
-          res += calcDestructionOutput ( *i );
-   
-    res.material += veh->typ->productionCost.material * (100 - veh->damage/2 ) * output / (100*100);
-    return res;
-}
-
-
-void ContainerControls :: destructUnit( Vehicle* veh )
-{
-   Resources res = calcDestructionOutput ( veh );
-   emptyeverything ( veh );
-
-   logtoreplayinfo ( rpl_recycleUnit, container->getIdentification(), veh->networkid );
-
-   container->putResource ( res.material, Resources::Material, false );
-   container->removeUnitFromCargo( veh );
-   delete veh;
-}
-
-
-
 bool ContainerControls::unitTrainingAvailable( Vehicle* veh )
 {
    GameMap* actmap = container->getMap();

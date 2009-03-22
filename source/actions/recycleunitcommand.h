@@ -33,6 +33,7 @@ class RecycleUnitCommand : public ContainerCommand {
    
    public:
       static bool avail ( const ContainerBase* carrier, const Vehicle* unit );
+      static Resources getOutput( const ContainerBase* carrier, const Vehicle* unit );
    private:
       int unitID;
       

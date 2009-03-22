@@ -57,6 +57,7 @@
 #include "actions/constructbuildingcommand.h"
 #include "actions/destructbuildingcommand.h"
 #include "actions/destructunitcommand.h"
+#include "actions/recycleunitcommand.h"
 
 trunreplay runreplay;
 
@@ -2057,8 +2058,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  readnextaction();
                                  tfield* fld = getfield(x,y);
                                  if ( (!fld->vehicle || fld->vehicle->networkid != nwid) && fld->building ) {
-                                    ContainerControls cc ( fld->building );
-                                    cc.destructUnit( actmap->getUnit( nwid ) );
+                                    auto_ptr<RecycleUnitCommand> ruc ( new RecycleUnitCommand( fld->building ));
+                                    ruc->setUnit( actmap->getUnit( nwid ) );
+                                    ActionResult res = ruc->execute( createContext( actmap ));
+                                    if ( res.successful() )
+                                       ruc.release();
+                                    else
+                                       displayActionError(res);
                                  } else
                                     if ( !fld->getContainer() || !fld->getContainer()->removeUnitFromCargo ( nwid, true ))
                                        displaymessage ( "severe replay inconsistency:\nCould not remove unit %d!", 1, nwid );
@@ -2505,8 +2511,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
                                  Vehicle* veh = actmap->getUnit ( vehicleid );
                                  if ( bld && veh ) {
-                                    ContainerControls cc ( bld );
-                                    cc.destructUnit( veh );
+                                    auto_ptr<RecycleUnitCommand> ruc ( new RecycleUnitCommand( bld ));
+                                    ruc->setUnit( veh  );
+                                    ActionResult res = ruc->execute( createContext( actmap ));
+                                    if ( res.successful() )
+                                       ruc.release();
+                                    else
+                                       displayActionError(res);
                                  } else
                                     error("severe replay inconsistency:\nno unit for recycle command !");
                               }

@@ -49,6 +49,29 @@ bool RecycleUnitCommand :: avail ( const ContainerBase* carrier, const Vehicle* 
 }
 
 
+Resources RecycleUnitCommand::getOutput( const ContainerBase* carrier, const Vehicle* unit )
+{
+   if ( !avail( carrier, unit ))
+      return Resources();
+   
+   int   output;
+   if ( carrier->baseType->hasFunction( ContainerBaseType::RecycleUnits ) )
+      output = recyclingoutput;
+   else
+      output = destructoutput;
+   
+   Resources res;
+
+   for ( ContainerBase::Cargo::const_iterator i = unit->getCargo().begin(); i != unit->getCargo().end(); i++)
+      if ( *i )
+         res += getOutput ( carrier, *i );
+   
+   res.material += unit->typ->productionCost.material * (100 - unit->damage/2 ) * output / (100*100);
+   return res;
+   
+}
+
+
 RecycleUnitCommand :: RecycleUnitCommand ( ContainerBase* container )
    : ContainerCommand ( container ), unitID(-1)
 {
@@ -86,8 +109,7 @@ ActionResult RecycleUnitCommand::go ( const Context& context )
          return res;
    }
    
-   ContainerControls cc ( getContainer() );
-   Resources resource = cc.calcDestructionOutput ( unit );
+   Resources resource = getOutput ( getContainer(), unit );
 
    resource = getContainer()->putResource( resource, true, 1, context.actingPlayer->getPosition() );
    

@@ -56,9 +56,6 @@ class ContainerControls : public ContainerConstControls {
       ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
       static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode = false);
 
-      Resources calcDestructionOutput( Vehicle* veh );
-      void destructUnit( Vehicle* veh );
-
       bool unitTrainingAvailable( Vehicle* veh );
       void trainUnit( Vehicle* veh );
 

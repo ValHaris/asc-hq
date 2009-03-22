@@ -258,7 +258,8 @@ namespace CargoGuiFunctions {
    
    class RecycleUnitCommandButton : public GuiFunction
    {
-      CargoDialog& parent;
+         ASCString getCommandName( const ContainerBase* carrier );
+         CargoDialog& parent;
       public:
          RecycleUnitCommandButton( CargoDialog& masterParent ) : parent( masterParent)  {};
          bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
@@ -2636,6 +2637,15 @@ bool RecycleUnitCommandButton :: available( const MapCoordinate& pos, ContainerB
       return false;
 };
 
+ASCString RecycleUnitCommandButton :: getCommandName( const ContainerBase* carrier )
+{
+   if ( carrier->baseType->hasFunction( ContainerBaseType::RecycleUnits ))
+      return "recycle";
+   else
+      return "salvage";
+}
+
+
 void RecycleUnitCommandButton :: execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( !subject )
@@ -2645,7 +2655,9 @@ void RecycleUnitCommandButton :: execute( const MapCoordinate& pos, ContainerBas
    if ( !veh )
       return;
       
-   if (choice_dlg("do you really want to recycle this unit ?","~y~es","~n~o") == 1) {
+   ASCString msg = "do you really want to " + getCommandName( parent.getContainer() ) + " this unit ?";
+   
+   if (choice_dlg( msg ,"~y~es","~n~o") == 1) {
       auto_ptr<RecycleUnitCommand> command ( new RecycleUnitCommand( parent.getContainer() ));
       command->setUnit( veh );
       ActionResult res = command->execute( createContext( parent.getContainer()->getMap() ));
@@ -2656,6 +2668,7 @@ void RecycleUnitCommandButton :: execute( const MapCoordinate& pos, ContainerBas
       parent.cargoChanged();
    }
 }
+
 
 Surface& RecycleUnitCommandButton :: getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
@@ -2678,13 +2691,9 @@ ASCString RecycleUnitCommandButton :: getName( const MapCoordinate& pos, Contain
 
    ContainerControls cc ( parent.getContainer() );
    
-   ASCString s;
-   if ( parent.getContainer()->baseType->hasFunction( ContainerBaseType::RecycleUnits ))
-      s = "recycle unit - ";
-   else
-      s = "salvage unit - ";
+   ASCString s = getCommandName( parent.getContainer() ) + " unit - ";
    
-   Resources res = cc.calcDestructionOutput( veh );
+   Resources res = RecycleUnitCommand::getOutput( parent.getContainer(), veh );
 
    bool cost = false;
    for ( int r = 0; r < 3; ++r ) {
