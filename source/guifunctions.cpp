@@ -763,8 +763,10 @@ void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subjec
       actmap->cleartemps();
       
       ActionResult res = dbc->execute( createContext( actmap ));
-      if ( !res.successful() )
+      if ( !res.successful() ) {
+         displayActionError(res);
          delete NewGuiHost::pendingCommand;
+      }
       NewGuiHost::pendingCommand = NULL;
       
       repaintMap();
@@ -1018,8 +1020,10 @@ class RepairUnit : public GuiFunction
                   if ( fld->vehicle ) {
                      service->setTarget( fld->vehicle );
                      ActionResult res = service->execute( createContext ( actmap ));
-                     if ( !res.successful() )
+                     if ( !res.successful() ) {
+                        displayActionError(res);
                         delete NewGuiHost::pendingCommand;
+                     }
                      NewGuiHost::pendingCommand = NULL;
 
                      actmap->cleartemps(7);
@@ -1251,8 +1255,10 @@ class PutMineStage2 : public GuiFunction
             actmap->cleartemps();
             pmc->setCreationTarget( pos, type );
             ActionResult res = pmc->execute( createContext( actmap ));
-            if ( !res.successful() )
+            if ( !res.successful() ) {
+               displayActionError(res);
                delete NewGuiHost::pendingCommand;
+            }
             NewGuiHost::pendingCommand = NULL;
             updateFieldInfo();
          }
@@ -1341,8 +1347,10 @@ class RemoveMine : public GuiFunction
             pmc->setRemovalTarget( pos );
             actmap->cleartemps();
             ActionResult res = pmc->execute( createContext( actmap ));
-            if ( !res.successful() )
+            if ( !res.successful() ) {
+               displayActionError(res);
                delete NewGuiHost::pendingCommand;
+            }
             NewGuiHost::pendingCommand = NULL;
             updateFieldInfo();
          }
@@ -1424,10 +1432,14 @@ void ObjectBuildingGui::execute( const MapCoordinate& pos, ContainerBase* subjec
    if ( num && poc ) {
       poc->setTarget( pos, abs(num) );
       ActionResult res = poc->execute( createContext( actmap ));
+      if ( !res.successful()) {
+         displayActionError(res);
+         delete NewGuiHost::pendingCommand;
+      }
    } else {
       delete NewGuiHost::pendingCommand;
-      repaintMap();
    }
+   repaintMap();
 
    NewGuiHost::pendingCommand = NULL;
 
@@ -1869,8 +1881,10 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subje
       build->setTargetPosition( pos );
       ActionResult res = build->execute( createContext( actmap ));
       
-      if ( !res.successful() )
+      if ( !res.successful() ) {
+         displayActionError(res);
          delete NewGuiHost::pendingCommand;
+      }
       
       NewGuiHost::pendingCommand = NULL;
       

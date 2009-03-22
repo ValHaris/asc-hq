@@ -246,6 +246,10 @@ Invalid property specified
 No objects to create/remove
 21505
 trying to remove nonexistent object
+21506
+construction command not available
+21507
+object construction/removal not available on this field
 21600
 Could not create mine on this field
 21601

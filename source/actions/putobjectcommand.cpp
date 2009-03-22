@@ -207,8 +207,22 @@ ActionResult PutObjectCommand::go ( const Context& context )
    if ( getState() != SetUp )
       return ActionResult(21002);
 
+   if ( !avail( getUnit() ) )
+      return ActionResult(21506);
+   
    searchFields();
 
+   vector<int>* objects;
+   if ( mode == Build ) {
+      objects = &objectsCreatable[target];
+   } else {
+      objects = &objectsRemovable[target];
+   }
+   
+   if ( find( objects->begin(), objects->end(), object ) == objects->end() )
+      return ActionResult( 21507 );
+   
+   
    ObjectType* obj = getMap()->getobjecttype_byid( object );
    
    RecalculateAreaView rav ( actmap, target, maxViewRange / maxmalq + 1, &context );
