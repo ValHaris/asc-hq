@@ -215,8 +215,23 @@ ActionResult ConstructBuildingCommand::go ( const Context& context )
    if ( getState() != SetUp )
       return ActionResult(21002);
    
+   if ( !avail( getUnit() ))
+      return ActionResult(22506);
+   
    BuildingType* bld = buildingTypeRepository.getObject_byID( buildingTypeID );
 
+   if ( !bld )
+      return ActionResult( 22504 );
+   
+   Lack l = buildingProductionPrerequisites( bld );
+   if ( !l.ok() )
+      return ActionResult(22505);
+   
+   if ( !isFieldUsable( target ))
+      return ActionResult(22503);
+   
+   
+   
    auto_ptr<SpawnBuilding> sb ( new SpawnBuilding( getMap(), target, buildingTypeID, getUnit()->getOwner() ));
    ActionResult res = sb->execute( context );
    if ( res.successful() )

@@ -302,6 +302,14 @@ Attempting to spawn building of unknown type
 Attempting to create building outside of map
 22502
 Building not found
+22503
+Field not available for building construction
+22504
+Building not found
+22505
+Preconditions not met
+22506
+Unit can not perfom building construction
 22600
 Unit can not jump now
 22601
