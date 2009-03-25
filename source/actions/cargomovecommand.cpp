@@ -31,6 +31,9 @@
 
 bool CargoMoveCommand :: moveOutAvail( const Vehicle* movingUnit  )
 {
+   if ( !movingUnit )
+      return false;
+   
    ContainerBase* carr = movingUnit ->getCarrier();
    if ( carr ) {
       ContainerBase* carr2 = carr->getCarrier();
@@ -43,7 +46,10 @@ bool CargoMoveCommand :: moveOutAvail( const Vehicle* movingUnit  )
 
 bool CargoMoveCommand :: moveInAvail( const Vehicle* movingUnit , Vehicle* newCarrier )
 {
-   return newCarrier->vehicleFit( movingUnit );  
+   if ( movingUnit && newCarrier )
+      return newCarrier->vehicleFit( movingUnit );  
+   else
+      return false;
 }
 
 
@@ -181,14 +187,20 @@ GameActionID CargoMoveCommand::getID() const
 
 ASCString CargoMoveCommand::getDescription() const
 {
-   ASCString s = "Move " + getUnit()->getName() ;
+   ASCString s = "Move ";
+   if ( getUnit() )
+      s += getUnit()->getName() ;
+   else 
+      s += "unit nwid " + ASCString::toString(getUnitID() );
    
    if ( mode == moveOutwards )
       s += " into outer carrier ";
    else
-      s += " into inner carrier with ID " + targetCarrier;
+      s += " into inner carrier with ID " + ASCString::toString( targetCarrier );
    
-   s += " at " + getUnit()->getPosition().toString();
+   if ( getUnit() )
+      s += " at " + getUnit()->getPosition().toString();
+   
    return s;
 }
 

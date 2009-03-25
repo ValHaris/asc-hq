@@ -52,7 +52,7 @@ void ClipBoardBase::clear()
 void ClipBoardBase::setProperties( const ContainerBase* unit, StatisticsCalculator& stat )
 {
    properties["strength"] = ASCString::toString( stat.strength() );
-   properties["resource"] = ASCString::toString( stat.resource().material / 1000 );
+   properties["materialindex"] = ASCString::toString( stat.resource().material / 1000 );
    properties["name"] = unit->getName();
    properties["player"] = unit->getMap()->getPlayer( unit ).getName();
    properties["turn"] = ASCString::toString( unit->getMap()->time.turn() );
