@@ -27,11 +27,11 @@
 #include "typen.h"
 
 class StatisticsCalculator {
-      const ContainerBase* unit;
    public:
-      StatisticsCalculator( const ContainerBase* unit );
-      double strength();
-      Resources resource();
+      static int unitCount( const ContainerBase* c, bool recurse  );
+      static int unitCost( const ContainerBase* c, bool recurse );
+      static Resources resource( const ContainerBase* c, bool recurse );
+      static double strength( const ContainerBase* c, bool recurse );
 };
 
 extern void pbpplayerstatistics( GameMap* gamemap );

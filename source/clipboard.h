@@ -34,8 +34,6 @@
  #include "typen.h"
  #include "textfile_evaluation.h"
 
-class StatisticsCalculator;
-
 class ClipBoardBase {
       map<ASCString,ASCString> properties;
    
@@ -47,7 +45,7 @@ class ClipBoardBase {
       ClipBoardBase();
       ~ClipBoardBase() {};
       
-      void setProperties( const ContainerBase* unit, StatisticsCalculator& stat );
+      void setProperties( const ContainerBase* unit );
       
    public:
       void clear();

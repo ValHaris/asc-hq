@@ -28,33 +28,63 @@
 #include "spfst.h"
 #include "widgets/textrenderer.h"
 
-StatisticsCalculator::StatisticsCalculator( const ContainerBase* unit )
-{
-   this->unit = unit;
-}
 
-double StatisticsCalculator::strength()
+double StatisticsCalculator::strength( const ContainerBase* c, bool recurse )
 {
-   const Vehicle* veh = dynamic_cast<const Vehicle*>(unit);
+   double s = 0;
+   const Vehicle* veh = dynamic_cast<const Vehicle*>(c);
    if ( veh ) {
-      double s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
+      s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
       AttackFormula af;
       s *= (af.strength_experience( veh->experience) + af.defense_experience( veh->experience))/2 + 1.0 ;
       s *= af.strength_damage( veh->damage );
-      return s/10000;
-   } else {
-      return 0;
+      s/=10000;
    }
+   
+   if ( recurse )
+      for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
+         if ( *i )
+            s += strength( c, recurse );
+   
+   return s;
 }
 
-Resources StatisticsCalculator::resource()
+int StatisticsCalculator::unitCount( const ContainerBase* c, bool recurse )
 {
-   Resources res = unit->baseType->productionCost;
+   int counter = 1;
+   if ( recurse )
+      for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
+      if ( *i )
+         counter += unitCount( *i, recurse );
+   return counter;  
+}
+
+
+Resources StatisticsCalculator::resource(const ContainerBase* c, bool recurse )
+{
+   Resources res = c->baseType->productionCost;
    for ( int r = 0; r < 3; ++r )
-      res.resource(r) += unit->getAvailableResource( maxint, r, 0 );
+      res.resource(r) += c->getAvailableResource( maxint, r, 0 );
+   
+   if ( recurse )
+   for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
+      if ( *i )
+         res += resource(*i, recurse);
+      
    return res;
 }
 
+int StatisticsCalculator::unitCost( const ContainerBase* c, bool recurse )
+{
+   Resources res = c->baseType->productionCost;
+   
+   if ( recurse )
+      for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
+      if ( *i )
+         res.material += unitCost(*i, recurse);
+      
+   return res.material;
+}
 
 
 ASCString getVisibilityStatistics( GameMap* actmap )
@@ -114,15 +144,13 @@ ASCString getPlayerStrength( GameMap* gamemap )
       Resources r;
       Resources total;
       for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
-         StatisticsCalculator sc ( *j );
-         strength += sc.strength();
+         strength += StatisticsCalculator::strength( *j, false );
          r += (*j)->typ->productionCost;
-         total += sc.resource();
+         total += StatisticsCalculator::resource( *j, false );
       }
 
       for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); ++j ) {
-         StatisticsCalculator sc ( *j );
-         total += sc.resource();
+         total += StatisticsCalculator::resource( *j, false );
       }
 
       message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;

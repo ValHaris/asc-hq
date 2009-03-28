@@ -49,10 +49,12 @@ void ClipBoardBase::clear()
 }
 
 
-void ClipBoardBase::setProperties( const ContainerBase* unit, StatisticsCalculator& stat )
+void ClipBoardBase::setProperties( const ContainerBase* unit )
 {
-   properties["strength"] = ASCString::toString( stat.strength() );
-   properties["materialindex"] = ASCString::toString( stat.resource().material / 1000 );
+   properties["strength"] = ASCString::toString( StatisticsCalculator::strength( unit, true ) );
+   properties["materialindex"] = ASCString::toString( StatisticsCalculator::resource( unit, true ).material / 1000 );
+   properties["productioncost"] = ASCString::toString( StatisticsCalculator::unitCost( unit, true ));
+   properties["unitcount"] = ASCString::toString( StatisticsCalculator::unitCount( unit, true ));
    properties["name"] = unit->getName();
    properties["player"] = unit->getMap()->getPlayer( unit ).getName();
    properties["turn"] = ASCString::toString( unit->getMap()->time.turn() );
@@ -66,8 +68,7 @@ void ClipBoardBase::addUnit ( const Vehicle* unit )
   unit->write ( stream );
   objectNum++;
   
-  StatisticsCalculator sc( unit );
-  setProperties( unit, sc );
+  setProperties( unit );
 }
 
 void ClipBoardBase::addBuilding ( const Building* bld )
@@ -77,8 +78,7 @@ void ClipBoardBase::addBuilding ( const Building* bld )
   bld->write ( stream );
   objectNum++;
   
-  StatisticsCalculator sc( bld );
-  setProperties( bld, sc );
+  setProperties( bld );
 
 }
 
