@@ -36,19 +36,27 @@
 #include "consumeammo.h"
 
 
-bool ServiceCommand :: avail ( ContainerBase* eht )
+bool ServiceCommand :: availExternally ( ContainerBase* eht )
 {
    ServiceTargetSearcher sts( eht, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
-   return sts.available();
+   return sts.externallyAvailable();
 }
 
 bool ServiceCommand :: avail ( ContainerBase* source, ContainerBase* target )
 {
-   ServiceTargetSearcher sts( source, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
-   if ( !sts.available())
-      return false;
-   
-   return find( sts.getTargets().begin(), sts.getTargets().end(), target ) != sts.getTargets().end();
+   if ( target->getCarrier() == source ) {
+      ServiceCommand sc( source );
+      const ServiceTargetSearcher::Targets& dest  = sc.getDestinations();
+      
+      return find( dest.begin(), dest.end(), target )  != dest.end();
+      
+   } else {
+      ServiceTargetSearcher sts( source, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
+      if ( !sts.externallyAvailable())
+         return false;
+      
+      return find( sts.getTargets().begin(), sts.getTargets().end(), target ) != sts.getTargets().end();
+   }
 }
 
 

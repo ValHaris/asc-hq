@@ -252,50 +252,6 @@ void  ContainerControls :: emptyeverything ( Vehicle* eht )
 }
 
 
-bool ContainerControls::unitTrainingAvailable( Vehicle* veh )
-{
-   GameMap* actmap = container->getMap();
-   if ( actmap->getgameparameter( cgp_bi3_training ) )
-      return false;
-
-   if ( veh->experience < actmap->getgameparameter ( cgp_maxtrainingexperience ) )
-      if ( !veh->attacked ) 
-         if (  container->baseType->hasFunction( ContainerBaseType::TrainingCenter )) {
-            int num = 0;
-            int numsh = 0;
-            for (int i = 0; i < veh->typ->weapons.count; i++ )
-               if ( veh->typ->weapons.weapon[i].shootable() ) {
-                  if ( veh->ammo[i] )
-                     numsh++;
-                  else
-                     num++;
-               }
-            if ( num == 0  &&  numsh > 0 )
-               return true;
-         }
-         
-   return false;
-}
-
-
-void ContainerControls::trainUnit( Vehicle* veh )
-{
-   GameMap* actmap = container->getMap();
-   if ( unitTrainingAvailable ( veh ) ) {
-      veh->experience+= actmap->getgameparameter( cgp_trainingIncrement );
-      for (int i = 0; i < veh->typ->weapons.count; i++ )
-         if ( veh->typ->weapons.weapon[i].shootable() )
-            veh->ammo[i]--;
-
-      if ( veh->experience > actmap->getgameparameter ( cgp_maxtrainingexperience ) )
-         veh->experience = actmap->getgameparameter ( cgp_maxtrainingexperience );
-
-      veh->attacked = 1;
-      veh->setMovement ( 0 );
-      logtoreplayinfo ( rpl_trainunit, container->getPosition().x, container->getPosition().y, veh->experience, veh->networkid );
-   }
-};
-
 
 Resources ContainerControls :: buildProductionLineResourcesNeeded( const Vehicletype* veh )
 {

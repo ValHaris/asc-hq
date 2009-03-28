@@ -31,6 +31,7 @@
 #include "consumeresource.h"
 #include "consumeammo.h"
 
+#include "context.h"
 
 enum TransferLimitation { NONE, GET, ALL };
 
@@ -735,7 +736,7 @@ ServiceTargetSearcher::ServiceTargetSearcher( ContainerBase* src, int checkFlags
 }
 
 
-bool ServiceTargetSearcher::available()
+bool ServiceTargetSearcher::externallyAvailable()
 {
    Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
    if ( srcVehicle ) {

@@ -25,6 +25,7 @@
 #include "../containerbase.h"
 #include "../vehicletype.h"
 
+class Context;
 
 class ResourceWatch {
       ContainerBase* container;
@@ -134,7 +135,7 @@ class ServiceTargetSearcher : protected ServiceChecker {
       void repair( ContainerBase* dest );
 
    public:
-      bool available();
+      bool externallyAvailable();
       static const int checkAmmo = 1;
       static const int checkResources = 2;
       static const int checkRepair = 4;

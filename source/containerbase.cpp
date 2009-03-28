@@ -30,7 +30,6 @@
 #include "containercontrols.h"
 #include "resourcenet.h"
 
-#include "actions/destructcontainer.h"
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player ) : gamemap ( map ), cargoParent(NULL), baseType (bt)
 {
@@ -622,27 +621,6 @@ void TemporaryContainerStorage :: restore (  )
 
 void ContainerBase::endOwnTurn( void )
 {
-#ifndef karteneditor
-   if ( baseType->hasFunction( ContainerBaseType::TrainingCenter  ) ) {
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) {
-            /*
-            bool ammoFull = true;
-            for ( int w = 0; w < (*i)->typ->weapons.count; ++w )
-               if ( (*i)->ammo[w] < (*i)->typ->weapons.weapon[w].count )
-                  ammoFull = false;
-
-            if ( ammoFull ) {
-            */
-               ContainerControls cc ( this );
-               if ( cc.unitTrainingAvailable( *i )) {
-                  cc.trainUnit( *i );
-                  cc.refillAmmo ( *i );
-               }
-            // }
-         }
-   }
-#endif
 }
 
 void ContainerBase::endAnyTurn( void )

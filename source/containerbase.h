@@ -29,8 +29,6 @@
  #include "containerbasetype.h"
  #include "graphics/surface.h"
  
- #include "actions/context.h"
-
 
 class Vehicle;
 class Player;

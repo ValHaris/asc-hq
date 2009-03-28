@@ -49,6 +49,7 @@
 #include "../actions/servicecommand.h"
 #include "../actions/recycleunitcommand.h"
 #include "../actions/repairunitcommand.h"
+#include "../actions/trainunitcommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -2064,7 +2065,7 @@ namespace CargoGuiFunctions {
       GameMap* map = parent.getContainer()->getMap();
       if ( map->actplayer == veh->getOwner() || map->actplayer == parent.getContainer()->getOwner() )
          if ( map->player[map->actplayer].diplomacy.isAllied( veh->getOwner() ))
-            return parent.getContainer()->baseType->hasFunction( ContainerBaseType::TrainingCenter ) && parent.getControls().unitTrainingAvailable( veh );
+            return TrainUnitCommand::avail( parent.getContainer(), veh);
       
       return false;
    }
@@ -2095,8 +2096,14 @@ namespace CargoGuiFunctions {
       if ( !veh )
          return;
       
-      parent.getControls().trainUnit( veh );
-      parent.cargoChanged();
+      auto_ptr<TrainUnitCommand> tuc ( new TrainUnitCommand( parent.getContainer() ));
+      tuc->setUnit( veh );
+      ActionResult res = tuc->execute( createContext( veh->getMap()));
+      if ( res.successful() ) {
+         tuc.release();
+         parent.cargoChanged();
+      } else
+         displayActionError( res );
    }
    
    

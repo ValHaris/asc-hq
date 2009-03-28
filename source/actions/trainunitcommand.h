@@ -19,37 +19,25 @@
 */
 
 
-#ifndef ServiceCommandH
-#define ServiceCommandH
+#ifndef TrainUnitCommandH
+#define TrainUnitCommandH
 
 #include "containercommand.h"
 
 #include "../typen.h"
 #include "../objects.h"
 #include "../mapfield.h"
-#include "servicing.h"
 
-class ServiceCommand : public ContainerCommand {
+
+class TrainUnitCommand : public ContainerCommand {
    
    public:
-      static bool availExternally ( ContainerBase* source );
-      static bool avail ( ContainerBase* source, ContainerBase* target );
+      static bool avail ( const ContainerBase* carrier, const Vehicle* unit );
    private:
+      int unitID;
       
-      ServiceCommand( GameMap* map ) : ContainerCommand( map ), targetSearcher(NULL), transferHandler(NULL), destinationSpecified(false),destinationContainerID(0) {};
+      TrainUnitCommand( GameMap* map ) : ContainerCommand( map ), unitID( -1 ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
-      
-      ServiceTargetSearcher* targetSearcher;
-      TransferHandler* transferHandler;
-      
-      //! key is the id of the transferrable, value is the destination amount
-      typedef map<int,int> Values;
-      Values values;
-      
-      bool destinationSpecified;
-      int destinationContainerID;
-      
-      ContainerBase* getDestination();
       
    protected:
       void readData ( tnstream& stream );
@@ -59,24 +47,13 @@ class ServiceCommand : public ContainerCommand {
       ASCString getDescription() const;
       
    public:
-      ServiceCommand ( ContainerBase* unit );
-      
-      /** each call to getTransferHandler will deallocate the previous handler and create a new one
-          Make sure to not have any pointers to the old one around when calling this another time */
-      TransferHandler& getTransferHandler( );
-            
-      const ServiceTargetSearcher::Targets& getDestinations();
-      
-      void setDestination( ContainerBase* destination );
-      
-      void saveTransfers();
+      TrainUnitCommand ( ContainerBase* carrier );
       
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;
       
-      ContainerBase* getRefueller() { return ContainerCommand::getContainer(); };
       
-      ~ServiceCommand();
+      void setUnit( Vehicle* unit );
 };
 
 #endif

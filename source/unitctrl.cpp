@@ -1389,7 +1389,7 @@ bool NewVehicleService :: targetAvail( const ContainerBase* target )
 int  NewVehicleService :: avail ( ContainerBase* veh  )
 {
    ServiceTargetSearcher sts( veh, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
-   return sts.available();
+   return sts.externallyAvailable();
 }
 
 int NewVehicleService :: available (  ContainerBase* veh ) const

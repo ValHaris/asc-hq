@@ -84,7 +84,8 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT) \
 	containercontrols.$(OBJEXT) containerbase-functions.$(OBJEXT) \
 	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT) \
-	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT)
+	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT) \
+	autotraining.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_DEPENDENCIES =  \
@@ -318,7 +319,7 @@ infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappa
 explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
-playercolor.cpp pg_mapdisplay.cpp
+playercolor.cpp pg_mapdisplay.cpp autotraining.cpp
 
 asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -412,6 +413,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/astar2.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/autotraining.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@

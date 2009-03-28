@@ -159,6 +159,7 @@
 #include "dialogs/mailoptionseditor.h"
 #include "dialogs/unitguidedialog.h"
 
+#include "autotraining.h"
 
 #ifdef LUAINTERFACE
 # include "lua/luarunner.h"
@@ -242,6 +243,7 @@ void hookGuiToMap( GameMap* map )
 
       map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
 
+      map->sigPlayerTurnEnds.connect( SigC::slot( automaticTrainig ));
       
       map->guiHooked();
    }

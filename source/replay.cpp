@@ -58,6 +58,7 @@
 #include "actions/destructbuildingcommand.h"
 #include "actions/destructunitcommand.h"
 #include "actions/recycleunitcommand.h"
+#include "actions/trainunitcommand.h"
 
 trunreplay runreplay;
 
@@ -2081,11 +2082,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicle* eht = actmap->getUnit ( x, y, nwid );
                                  Building* bld = actmap->getField ( x, y )->building;
                                  if ( eht && bld ) {
-                                    ContainerControls cc( bld );
-                                    if ( cc.unitTrainingAvailable(eht) )
-                                       cc.trainUnit( eht );
+                                    auto_ptr<TrainUnitCommand> tuc ( new TrainUnitCommand( bld ));
+                                    tuc->setUnit( eht );
+                                    ActionResult res = tuc->execute( createContext( actmap ));
+                                    if ( res.successful())
+                                       tuc.release();
                                     else
-                                       error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for trainunit command !");
+                                       displayActionError(res);
                                  } else
                                     error(MapCoordinate(x,y), "severe replay inconsistency:\nno vehicle for trainunit command !");
 

@@ -56,9 +56,6 @@ class ContainerControls : public ContainerConstControls {
       ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
       static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode = false);
 
-      bool unitTrainingAvailable( Vehicle* veh );
-      void trainUnit( Vehicle* veh );
-
       vector<const Vehicletype*> productionLinesBuyable();
       
       Resources buildProductionLineResourcesNeeded( const Vehicletype* veh );

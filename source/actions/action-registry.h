@@ -62,7 +62,9 @@ namespace ActionRegistry {
                   SpawnBuilding,
                   DestructBuildingCommand,
                   JumpDriveCommand,
-                  PowerGenerationSwitchCommand
+                  PowerGenerationSwitchCommand,
+                  TrainUnitCommand
+                        
    };
 };
 

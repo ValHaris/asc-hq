@@ -1064,7 +1064,7 @@ class RefuelUnitCommand : public GuiFunction
          if (!commandPending()) {
             if ( fld && fld->getContainer() )
                if (fld->getContainer()->getOwner() == actmap->actplayer )
-                  if ( ServiceCommand::avail ( fld->getContainer() ) )
+                  if ( ServiceCommand::availExternally ( fld->getContainer() ) )
                      return true;
          } else {
             if ( NewGuiHost::pendingCommand ) {
