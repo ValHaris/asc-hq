@@ -59,7 +59,7 @@ static void autoTrainer( ContainerBase* container )
    }
 }
 
-void automaticTrainig( Player& player )
+void automaticTrainig( GameMap* gamemap, Player& player )
 {
    for ( Player::BuildingList::iterator b = player.buildingList.begin(); b != player.buildingList.end(); ++b ) 
       autoTrainer( *b );

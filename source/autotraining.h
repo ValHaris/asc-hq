@@ -19,5 +19,6 @@
 #ifndef autotrainingH
 #define autotrainingH
  class Player;
- extern void automaticTrainig( Player& player );
+ class GameMap;
+ extern void automaticTrainig( GameMap* gameMap, Player& player );
 #endif

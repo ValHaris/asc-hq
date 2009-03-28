@@ -1223,7 +1223,8 @@ void GameMap::endTurn()
    player[actplayer].playTime.push_back ( pt );
    
    sigPlayerTurnEnds( player[actplayer] );
-
+   sigPlayerTurnEndsStatic( this, player[actplayer] );
+         
    for ( int i = 0; i < 9; ++i )
      for ( Player::BuildingList::iterator v = player[i].buildingList.begin(); v != player[i].buildingList.end(); ++v ) {
          if ( i == actplayer )
@@ -1248,9 +1249,7 @@ void GameMap::endTurn()
             if (j < 0) {
                new Message ( getUnitReference( *v ) + " crashed due to lack of fuel", this, 1<<(*v)->getOwner());
                toRemove.push_back ( *v );
-               // logtoreplayinfo( rpl_removeunit, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid );
             } else {
-               // logtoreplayinfo( rpl_refuel2, actvehicle->getPosition().x, actvehicle->getPosition().y, actvehicle->networkid, 1002, j, actvehicle->tank.fuel );
                actvehicle->getResource( actvehicle->getTank().fuel - j, Resources::Fuel, false);
             }
          }
@@ -1402,6 +1401,7 @@ void GameMap::objectGrowth()
 }
 
 SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
+SigC::Signal2<void,GameMap*,Player&> GameMap::sigPlayerTurnEndsStatic;
 
 GameMap :: ~GameMap ()
 {

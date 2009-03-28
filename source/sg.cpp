@@ -242,9 +242,6 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionEnds.connect( SigC::slot( closePlayerReplayLogging ));
 
       map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
-
-      map->sigPlayerTurnEnds.connect( SigC::slot( automaticTrainig ));
-      
       map->guiHooked();
    }
 }
@@ -1626,6 +1623,7 @@ int gamethread ( void* data )
 #endif
 
    GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
+   GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
 
    suppressMapTriggerExecution = false;
    

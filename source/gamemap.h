@@ -440,6 +440,7 @@ class GameMap {
       SigC::Signal1<void,Player&> sigPlayerTurnHasEnded;
 
       static SigC::Signal1<void,GameMap&> sigMapDeletion;
+      static SigC::Signal2<void,GameMap*,Player&> sigPlayerTurnEndsStatic;
       
       //! called when a new round starts (after switching from player 7 to player 0 )
       SigC::Signal0<void> newRound;
