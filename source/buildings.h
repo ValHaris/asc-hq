@@ -37,10 +37,6 @@ class  Building : public ContainerBase {
     char         _completion;
 
     friend class tprocessminingfields;
-  protected:
-
-    //! the percantage that this build has already been repaired this turn. The maximum percentage may be limited by a gameparameter
-    int           repairedThisTurn;
     
    public:
     const BuildingType* typ;

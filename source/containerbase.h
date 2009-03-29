@@ -39,7 +39,15 @@ class Player;
 */
 class ContainerBase {
       friend class ConvertContainer; 
+      friend class ChangeContainerProperty;
    protected:
+
+     /** the percantage that this container has already been repaired this turn. 
+        Currently only used for Buildings - and only buildings serialize this property to disk!
+        The maximum percentage may be limited by a gameparameter
+      */
+      int           repairedThisTurn;
+      
       GameMap* gamemap;
       ContainerBase* cargoParent;
       virtual const ResourceMatrix& getRepairEfficiency() const = 0;

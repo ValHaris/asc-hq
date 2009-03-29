@@ -32,7 +32,7 @@ ChangeContainerProperty::ChangeContainerProperty( ContainerBase* container, Prop
 ASCString ChangeContainerProperty::getPropertyName( Property property )
 {
    switch ( property ) {
-      case Owner: return "Owner";
+      case RepairedThisTurn: return "RepairedThisTurn";
       case Damage: return "Damage";
    };
    return "";
@@ -92,6 +92,7 @@ int ChangeContainerProperty::getUnitProperty()
    
    switch ( property ) {
       case Damage: return getContainer()->damage;
+      case RepairedThisTurn: return getContainer()->repairedThisTurn;
       default:
          throw ActionResult(21203, getContainer() );
    };
@@ -102,6 +103,9 @@ void ChangeContainerProperty::setUnitProperty( int value, const Context& context
    switch ( property ) {
       case Damage:
          getContainer()->damage  = value;
+         break;
+      case RepairedThisTurn:
+         getContainer()->repairedThisTurn = value;
          break;
       default:
          throw ActionResult(21203, getContainer() );

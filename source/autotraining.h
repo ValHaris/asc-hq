@@ -22,3 +22,4 @@
  class GameMap;
  extern void automaticTrainig( GameMap* gameMap, Player& player );
 #endif
+ 

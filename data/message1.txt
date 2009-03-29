@@ -314,5 +314,6 @@ Unit can not perfom building construction
 Unit can not jump now
 22601
 invalid destination for jump
-
+22700
+invalid building for repair operation
 

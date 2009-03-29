@@ -50,6 +50,7 @@
 #include "../actions/recycleunitcommand.h"
 #include "../actions/repairunitcommand.h"
 #include "../actions/trainunitcommand.h"
+#include "../actions/repairbuildingcommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -353,6 +354,8 @@ class CargoDialog : public Panel
                case 26: // Z
                   getContainer()->getMap()->actions.undo( createContext( getContainer()->getMap() ) );  
                   cargoChanged();
+                  for ( Activesubwindows::iterator i =  activesubwindows.begin(); i != activesubwindows.end(); ++i )
+                     (*i)->update();
                   return true;
             }
          }
@@ -928,8 +931,17 @@ class BuildingControlWindow : public SubWindow {
 
       bool repair()
       {
-         logtoreplayinfo( rpl_repairBuilding, container()->getPosition().x, container()->getPosition().y, container()->getIdentification(), 0 );
-         container()->repairItem(container(), 0 );
+         Building* bld = dynamic_cast<Building*>(container() );
+         if ( !RepairBuildingCommand::avail( bld ))
+            return false;
+         
+         auto_ptr<RepairBuildingCommand> rbc ( new RepairBuildingCommand( bld ));
+         ActionResult res = rbc->execute( createContext( container()->getMap() ));
+         if  ( res.successful() )
+            rbc.release();
+         else
+            displayActionError( res );
+         
          cargoDialog->updateResourceDisplay();
          
          damageChanged();
@@ -947,7 +959,7 @@ class BuildingControlWindow : public SubWindow {
          if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
             return false;
          
-         return dynamic_cast<Building*>(cd->getContainer() );
+         return RepairBuildingCommand::avail( dynamic_cast<Building*>(cd->getContainer() ));
       };
       
       ASCString getASCTXTname()
@@ -963,17 +975,30 @@ class BuildingControlWindow : public SubWindow {
 
       void update()
       {
-         Resources res;
-         container()->getMaxRepair ( container(), 0, res  );
-
-         cargoDialog->setLabelText( "RepairCostLabel", "Cost for repairing " + ASCString::toString( container()->repairableDamage() ) + "%", widget );
+         Building* bld = dynamic_cast<Building*>( container() );
+         if ( bld ) {
+            if ( RepairBuildingCommand::avail( bld )) {
+               RepairBuildingCommand rbc( bld );
+               RepairBuildingCommand::RepairData repairData = rbc.getCost();
+               cargoDialog->setLabelText( "RepairCostLabel", "Cost for repairing " + ASCString::toString( repairData.damageDelta ) + "%", widget );
          
-         cargoDialog->setLabelText( "EnergyCost", res.energy, widget );
-         cargoDialog->setLabelText( "MaterialCost", res.material, widget );
-         cargoDialog->setLabelText( "FuelCost", res.fuel, widget );
+               cargoDialog->setLabelText( "EnergyCost", repairData.cost.energy, widget );
+               cargoDialog->setLabelText( "MaterialCost", repairData.cost.material, widget );
+               cargoDialog->setLabelText( "FuelCost", repairData.cost.fuel, widget );
+               
+            } else {
+               cargoDialog->setLabelText( "RepairCostLabel", "No repair possible", widget );
+               
+               cargoDialog->setLabelText( "EnergyCost", "-", widget );
+               cargoDialog->setLabelText( "MaterialCost", "-", widget );
+               cargoDialog->setLabelText( "FuelCost", "-", widget );
+            }
+         }
          cargoDialog->setLabelText( "Jamming", container()->baseType->jamming , widget );
          cargoDialog->setLabelText( "View", container()->baseType->view, widget );
          cargoDialog->setLabelText( "Armor", container()->getArmor(), widget );
+         
+         damageChanged(); // it didn't really change, but we are triggering a redraw
       }
 };
 

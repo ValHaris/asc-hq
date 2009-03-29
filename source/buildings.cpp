@@ -61,7 +61,6 @@ Building :: Building ( GameMap* actmap, const MapCoordinate& _entryPosition, con
 
    netcontrol = 0;
 
-   repairedThisTurn = 0;
    visible = 1;
    damage = 0;
 

@@ -38,7 +38,8 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
    maxresearchpoints = baseType->defaultMaxResearchpoints;
    researchpoints = min ( maxresearchpoints, baseType->nominalresearchpoints );
    maxplus = baseType->maxplus;
-   
+   repairedThisTurn = 0;
+  
    for ( int i = 0; i < map->getVehicleTypeNum(); ++i ) {
       const Vehicletype* vt = map->getvehicletype_bypos(i);
       if ( vt ) 
