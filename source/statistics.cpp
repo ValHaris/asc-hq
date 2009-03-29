@@ -44,7 +44,7 @@ double StatisticsCalculator::strength( const ContainerBase* c, bool recurse )
    if ( recurse )
       for ( ContainerBase::Cargo::const_iterator i = c->getCargo().begin(); i != c->getCargo().end(); ++i )
          if ( *i )
-            s += strength( c, recurse );
+            s += strength( *i, recurse );
    
    return s;
 }
