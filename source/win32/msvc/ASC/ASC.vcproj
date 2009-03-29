@@ -224,6 +224,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\autotraining.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\basegfx.cpp"
 				>
 			</File>
@@ -1039,6 +1043,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\repairbuildingcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\repairunitcommand.cpp"
 					>
 				</File>
@@ -1060,6 +1068,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\spawnunit.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\trainunitcommand.cpp"
 					>
 				</File>
 				<File
