@@ -1760,6 +1760,20 @@ class ResourceLogger: public SigC::Object {
 
 };
 
+
+void createUnitCostList()
+{
+   cout << "name;id;new cost E;new cost M;old cost E;old cost M\n";
+   for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
+      Vehicletype* v = vehicleTypeRepository.getObject_byPos(i);
+      Resources oldc = v->calcProductionsCost2();
+      Resources newc = v->calcProductionsCost();
+      
+      cout <<  v->getName() << ";" << v->id << ";" << newc.energy << ";" << newc.material << ";" << oldc.energy << ";" << oldc.material << "\n";
+   }
+}
+
+
 int main(int argc, char *argv[] )
 {
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
@@ -1896,5 +1910,6 @@ int main(int argc, char *argv[] )
 
    writegameoptions ( );
 
+   createUnitCostList();
    return( returncode );
 }

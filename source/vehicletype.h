@@ -298,6 +298,7 @@ extern const char*  cvehiclefunctions[];
         void runTextIO ( PropertyContainer& pc );
         ~Vehicletype ( );
         Resources calcProductionsCost();
+        Resources calcProductionsCost2();
 
         int getMoveMalusType() const {
            return movemalustyp;
