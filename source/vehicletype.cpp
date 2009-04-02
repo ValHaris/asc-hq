@@ -1758,7 +1758,7 @@ Resources Vehicletype :: calcProductionsCost()
                               typecoste += armor*12;
                               typecostm += armor*12;
                            } else
-                              if ( movemalustyp == MoveMalusType:: MoveMalusType::helicopter ) {
+                              if ( movemalustyp == MoveMalusType::helicopter ) {
                                  typecoste += armor*14;
                                  typecostm += armor*14;
                               } else
