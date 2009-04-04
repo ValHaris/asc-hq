@@ -125,7 +125,7 @@ ActionResult SpawnObject::undoAction( const Context& context )
          return ActionResult( 21505 );
       o->dir = oldObjectDirection;
    } else
-      fld->removeobject( object );
+      fld->removeobject( object, true );
       
    return ActionResult(0);
 }

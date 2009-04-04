@@ -115,13 +115,15 @@ ASCString getVisibilityStatistics( GameMap* actmap )
                      ++visible;
                }
 
-               int maxView = -1;
-               for ( int p = 0; p < actmap->getPlayerCount(); ++p )
-                  if ( fld->view[p].view > maxView ) 
-                     maxView = fld->view[p].view;
-
-               if ( fld->view[i].view == maxView )
-                  ++viewDominance;
+               if ( vs == visible_all || vs == visible_now ) {
+                  int maxView = -1;
+                  for ( int p = 0; p < actmap->getPlayerCount(); ++p )
+                     if ( fld->view[p].view > maxView ) 
+                        maxView = fld->view[p].view;
+   
+                  if ( fld->view[i].view == maxView )
+                     ++viewDominance;
+               }
 
             }
          msg += ASCString("  not visible: ")   + ASCString::toString(notVisible )    + " fields\n";

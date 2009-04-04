@@ -450,7 +450,7 @@ void Vehicle::decreaseMovementAbs( int reduction, bool recursive, const Context&
 
 void Vehicle::decreaseMovement( float fraction, bool recursive, const Context& context )
 {
-   int newMovement = int(floor(_movement * (1.0 - fraction)));
+   int newMovement = _movement - int(floor( float(maxMovement()) * fraction));
    if ( newMovement < 0 )
      newMovement = 0;
   
