@@ -619,7 +619,7 @@ Context createContext( GameMap* gamemap )
    Context context;
    
    context.gamemap = gamemap;
-   context.actingPlayer = &gamemap->getPlayer( actmap->actplayer );
+   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
    context.parentAction = NULL;
    context.display = &getDefaultMapDisplay();
    context.viewingPlayer = gamemap->getPlayerView(); 
@@ -1646,7 +1646,7 @@ int gamethread ( void* data )
    //! we are performing this the first time here while the startup logo is still active
    if ( actmap && actmap->actplayer == -1 ) {
       displayLogMessage ( 8, "Startup :: performing first next_turn..." );
-      next_turn();
+      next_turn( actmap, NextTurnStrategy_AskUser() );
       displayLogMessage ( 8, "done.\n" );
    }
 
@@ -1661,7 +1661,7 @@ int gamethread ( void* data )
          } else {
             if ( actmap->actplayer == -1 ) {
                displayLogMessage ( 8, "gamethread :: performing next_turn..." );
-               next_turn();
+               next_turn( actmap, NextTurnStrategy_AskUser() );
                displayLogMessage ( 8, "done.\n" );
             } 
 

@@ -346,9 +346,9 @@ void Vehicle :: beginTurn()
             
       if ( newHeight != height ) {
          height = newHeight;
-         resetMovement();
       } 
    }
+   resetMovement();
    
 }
 
@@ -970,9 +970,9 @@ void Vehicle :: postAttack( bool reactionFire, const Context& context )
       if ( typ->hasFunction( ContainerBaseType::MoveAfterAttack  ) ) {
          int decrease = maxMovement() * attackmovecost / 100;
          if ( decrease )
-            (new ChangeUnitMovement( getMap(), networkid, decrease, true ))->execute( context );
+            (new ChangeUnitMovement( this, decrease, true ))->execute( context );
       } else {
-         GameAction* a = new ChangeUnitMovement( getMap(), networkid, 0 );
+         GameAction* a = new ChangeUnitMovement( this, 0 );
          a->execute( context );
       }
       

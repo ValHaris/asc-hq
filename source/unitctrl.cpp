@@ -399,7 +399,7 @@ int VehicleMovement :: execute ( Vehicle* veh, int x, int y, int step, int heigh
         heightChange = false;
       HeightChangeLimitation hcl ( heightChange );
 
-      PathFinder pf ( actmap, vehicle, veh->getMovement() );
+      PathFinder pf ( vehicle, veh->getMovement() );
       pf.registerOperationLimiter ( &hcl );
       pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
 
@@ -490,7 +490,7 @@ int ChangeVehicleHeight :: execute ( Vehicle* veh, int x, int y, int step, int n
 
 
 
-      PathFinder pf ( actmap, vehicle, vehicle->getMovement() );
+      PathFinder pf ( vehicle, vehicle->getMovement() );
       MovementLimitation ml ( disableMovement );
       pf.registerOperationLimiter ( &ml );
 

@@ -37,11 +37,23 @@
 class Player;
 class GameMap;
 
+/** describes the behavier that next_turn() shall do when it finds out that the current player is the last one available */
+class NextTurnStrategy {
+   public:
+      virtual bool continueWhenLastPlayer() const = 0;  
+      virtual ~NextTurnStrategy() {};
+};
+
+class NextTurnStrategy_AskUser : public NextTurnStrategy {
+   public:
+      bool continueWhenLastPlayer() const;  
+} ;
+
 
 /*! Ends the turn of the current player and runs AI until a player is human again
     \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
 */
-extern void next_turn ( int playerView = -2 );
+extern void next_turn ( GameMap* gameMap, const NextTurnStrategy& nextTurnStrategy, int playerView = -2 );
 
 //! checks if the current player has terminated another player or even won
 extern void  checkforvictory ( bool hasTurnControl );

@@ -28,21 +28,23 @@
 
 class ChangeUnitMovement : public UnitAction {
       bool delta;
+      bool recursive;
       int movement;
       
       int originalMovement;
       int resultingMovement;
       
+      void decreaseMovement( Vehicle* veh, float fraction, const Context& context );
+      
        ChangeUnitMovement( GameMap* map ) : UnitAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
    public:
-      /** cahnges a unit's movement
+      /** changes a unit's movement
       \param delta: true=movement is a relative value which will be subtracted
                     false=movement is the new absolute value
       */
-      ChangeUnitMovement( GameMap* gamemap, int vehicleID, int movement, bool delta = false );
-      ChangeUnitMovement( Vehicle* veh, int movement, bool delta = false );
+      ChangeUnitMovement( Vehicle* veh, int movement, bool delta = false, bool recursive = true );
       
       ASCString getDescription() const;
       

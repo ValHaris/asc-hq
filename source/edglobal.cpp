@@ -914,7 +914,7 @@ void execaction_pg(int code)
                actmap->getvehicletype_byid(getactfield()->vehicle->typ->id)->runTextIO( pc );
             }
          } else
-            errorMessage("no building selected");
+            errorMessage("no vehicle selected");
          break;
       case act_dumpObject: 
          if ( getactfield() && !getactfield()->objects.empty() ) {
@@ -925,7 +925,7 @@ void execaction_pg(int code)
                actmap->getobjecttype_byid( getactfield()->objects.front().typ->id)->runTextIO( pc );
             }
          } else
-            errorMessage("no building selected");
+            errorMessage("no object selected");
          break;
     case act_help : help(1000);
        break;

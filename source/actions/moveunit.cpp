@@ -27,6 +27,7 @@
 #include "changeview.h"
 #include "convertcontainer.h"
 #include "discoverresources.h"
+#include "changeunitmovement.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"
@@ -117,7 +118,7 @@ ActionResult MoveUnit::runAction( const Context& context )
    AStar3D::Path::iterator pos = pathToMove.begin();
    AStar3D::Path::iterator stop = pathToMove.end()-1;
 
-   tsearchreactionfireingunits srfu;
+   tsearchreactionfireingunits srfu( getMap() );
    treactionfire* rf = &srfu;
 
    int orgMovement = vehicle->getMovement( false );
@@ -336,7 +337,7 @@ ActionResult MoveUnit::runAction( const Context& context )
       pos = next;
    }
 
-   tfield* fld = getfield ( pos->x, pos->y );
+   tfield* fld = getMap()->getField ( pos->x, pos->y );
 
    if ( vehicle ) {
 
@@ -348,13 +349,13 @@ ActionResult MoveUnit::runAction( const Context& context )
          if ( orgHeight != vehicle->height )  {
             // first we are converting the original movement to the new height
             int move = int(floor(vehicle->maxMovement() * float(orgMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
-            vehicle->setMovement( move, false, context );
+            (new ChangeUnitMovement( vehicle, move, false, false))->execute(context);
          }
          
          
          int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
          
-         vehicle->setMovement( nm, true, context );
+         (new ChangeUnitMovement( vehicle, nm, false, true))->execute(context);
          
          // the unit will be shaded if movement is exhausted
          if ( vehicle->getMovement() < 10 )
@@ -365,7 +366,7 @@ ActionResult MoveUnit::runAction( const Context& context )
       (new ConsumeResource( vehicle, Resources(0,0,fueldist * vehicle->typ->fuelConsumption / maxmalq )))->execute( context );
 
       if ( fld->vehicle || fld->building ) {
-         vehicle->clearMovement( false, context );
+         (new ChangeUnitMovement( vehicle, 0, false, false))->execute(context);
          vehicle->setAttacked( false, context );
       }
 

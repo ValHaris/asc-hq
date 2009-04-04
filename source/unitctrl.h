@@ -139,7 +139,7 @@ class BaseVehicleMovement : public VehicleAction {
 
                class PathFinder : public AStar3D {
                  public:
-                   PathFinder ( GameMap* actmap, Vehicle* veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
+                   PathFinder ( Vehicle* veh, int maxDistance ) : AStar3D(veh->getMap(), veh, false, maxDistance ) {};
 
                    /** searches for all fields that are within the range of maxDist and marks them.
                        On each field one bit for each level of height will be set.

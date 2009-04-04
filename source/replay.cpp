@@ -710,6 +710,9 @@ void logActionToReplay( GameMap* map, const Command& command)
 
 void logtoreplayinfo ( trpl_actions _action, ... )
 {
+   if ( !actmap )
+      return;
+   
    LogActionIntoReplayInfo lairi( actmap );
    actmap->actions.breakUndo();
    

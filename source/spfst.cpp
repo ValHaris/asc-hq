@@ -132,7 +132,7 @@ int         fieldAccessible( const tfield*        field,
       uheight = vehicle->height;
 
    if ( !ignoreVisibility ) {
-      int c = fieldVisibility ( field, vehicle->color/8 );
+      int c = fieldVisibility ( field, vehicle->color/8, vehicle->getMap() );
 
       if (field == NULL)
         return 0;

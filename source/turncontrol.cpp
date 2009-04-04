@@ -205,58 +205,70 @@ void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int
 
 }
 
-void next_turn ( int playerView )
+bool NextTurnStrategy_AskUser::continueWhenLastPlayer() const
 {
-   int lastPlayer = actmap->actplayer;
-   int lastTurn = actmap->time.turn();
+   viewtext2(904);
+   if ( choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) 
+      return false;
+   else
+      return true;
+}
+
+
+
+void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, int playerView )
+{
+   int lastPlayer = gamemap->actplayer;
+   int lastTurn = gamemap->time.turn();
 
    if  ( lastPlayer >= 0 )
-      actmap->endTurn();
+      gamemap->endTurn();
    
    int pv;
    if ( playerView == -2 ) {
-      if ( actmap->time.turn() <= 0 || actmap->actplayer < 0 )
+      if ( gamemap->time.turn() <= 0 || gamemap->actplayer < 0 )
          pv = -1;
       else
-         if ( actmap->player[actmap->actplayer].stat != Player::human )
+         if ( gamemap->player[gamemap->actplayer].stat != Player::human )
             pv = -1;
          else
-            pv = actmap->actplayer;
+            pv = gamemap->actplayer;
    } else
       pv = playerView;
 
       
-   if ( findNextPlayer( actmap ) == lastPlayer ) {
-      if ( !actmap->continueplaying ) {
-         viewtext2(904);
-         if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
-            delete actmap;
-            actmap = NULL;
+   if ( findNextPlayer( gamemap ) == lastPlayer ) {
+      if ( !gamemap->continueplaying ) {
+         
+         
+         if ( !nextTurnStrategy.continueWhenLastPlayer() ) {
+            delete gamemap;
+            gamemap = NULL;
             throw NoMapLoaded();
          } else {
-            actmap->continueplaying = true;
-            if ( actmap->replayinfo ) {
-               delete actmap->replayinfo;
-               actmap->replayinfo = NULL;
+            gamemap->continueplaying = true;
+            if ( gamemap->replayinfo ) {
+               delete gamemap->replayinfo;
+               gamemap->replayinfo = NULL;
             }
          }
       }   
    }
       
  
-   iterateToNextPlayer( actmap, true, lastPlayer, lastTurn );
+   iterateToNextPlayer( gamemap, true, lastPlayer, lastTurn );
    
-   actmap->setPlayerView ( -1 );
+   gamemap->setPlayerView ( -1 );
    
-   if ( !authenticateUser( actmap, 0, false, true, true )) {
-      delete actmap;
+   if ( !authenticateUser( gamemap, 0, false, true, true )) {
+      delete gamemap;
       throw NoMapLoaded();
    }
    
-   actmap->beginTurn();
-   actmap->setPlayerView ( actmap->actplayer );
-   actmap->overviewMapHolder.clear();
-   actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
+   gamemap->beginTurn();
+   gamemap->setPlayerView ( gamemap->actplayer );
+   gamemap->overviewMapHolder.clear();
+   gamemap->sigPlayerUserInteractionBegins( gamemap->player[gamemap->actplayer] );
 }
 
 
@@ -379,7 +391,7 @@ void  checkforvictory ( bool hasTurnControl )
 
                if ( hasTurnControl ) {
                   if ( humannum )
-                     next_turn();
+                     next_turn(actmap, NextTurnStrategy_AskUser() );
                   else {
                      delete actmap;
                      actmap = NULL;

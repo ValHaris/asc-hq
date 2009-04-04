@@ -896,7 +896,7 @@ bool StartMultiplayerGame::start()
    computeview( actmap );
    hookGuiToMap(actmap);
   
-   next_turn();
+   next_turn( actmap, NextTurnStrategy_AskUser() );
    displaymap();
    updateFieldInfo();
    success = true;

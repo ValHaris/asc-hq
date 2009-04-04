@@ -71,7 +71,8 @@ void SoundList::init( )
    if ( instance )
       fatalError("SoundList::init() - Soundlist already initialized");
 
-   instance = new SoundList;
+   static SoundList myList;
+   instance = &myList;
    displayLogMessage ( 4, "  SoundList::init() : starting initialize ..." );
    instance->initialize ( );
    displayLogMessage ( 4, "  completed\n" );

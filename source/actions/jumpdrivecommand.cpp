@@ -133,7 +133,7 @@ ActionResult JumpDriveCommand::go ( const Context& context )
    
    MapCoordinate3D dest3D (destination, unit->height );
 
-   tsearchreactionfireingunits srfu;
+   tsearchreactionfireingunits srfu( getMap() );
    srfu.init( unit , dest3D );
 
    if ( context.display )

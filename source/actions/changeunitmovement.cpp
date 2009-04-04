@@ -19,23 +19,21 @@
 */
 
 
+#include <cmath>
+
 #include "changeunitmovement.h"
+#include "changeunitproperty.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"
      
-ChangeUnitMovement::ChangeUnitMovement( GameMap* gamemap, int vehicleID, int movement, bool delta )
-   : UnitAction( gamemap, vehicleID ), originalMovement(-1), resultingMovement(-1)
-{
-   this->movement = movement;
-   this->delta = delta;
-}
       
-ChangeUnitMovement::ChangeUnitMovement( Vehicle* veh, int movement, bool delta )
+ChangeUnitMovement::ChangeUnitMovement( Vehicle* veh, int movement, bool delta, bool recursive )
    : UnitAction( veh->getMap(), veh->networkid ), originalMovement(-1), resultingMovement(-1)
 {
    this->movement = movement;
    this->delta = delta;
+   this->recursive = recursive;
 }
       
       
@@ -53,30 +51,35 @@ ASCString ChangeUnitMovement::getDescription() const
    return  res;
 }
       
+static const int changeUnitMovementStreamVersion = 2;      
       
 void ChangeUnitMovement::readData ( tnstream& stream ) 
 {
    UnitAction::readData( stream );
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "ChangeUnitMovement", 1, version );
+   if ( version < 1 || version > changeUnitMovementStreamVersion )
+      throw tinvalidversion ( "ChangeUnitMovement", changeUnitMovementStreamVersion, version );
    
    movement = stream.readInt();
    delta = stream.readInt();
    originalMovement = stream.readInt();
    resultingMovement = stream.readInt();
-   
+   if ( version >= 2 )
+      recursive = stream.readInt();
+   else
+      recursive = true;
 };
       
       
 void ChangeUnitMovement::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
-   stream.writeInt( 1 );
+   stream.writeInt( changeUnitMovementStreamVersion );
    stream.writeInt( movement );
    stream.writeInt( delta );
    stream.writeInt( originalMovement );
    stream.writeInt( resultingMovement );
+   stream.writeInt( recursive );
 };
 
 
@@ -85,16 +88,40 @@ GameActionID ChangeUnitMovement::getID() const
    return ActionRegistry::ChangeUnitMovement;
 }
 
+void ChangeUnitMovement::decreaseMovement( Vehicle* veh, float fraction, const Context& context )
+{
+   if ( recursive )
+      if ( veh->typ->movement[ log2 ( veh->height ) ] ) {
+         float cargoFraction = fraction;
+         if ( veh->cargoNestingDepth() == 0 && veh->typ->cargoMovementDivisor != 0)
+            cargoFraction /= veh->typ->cargoMovementDivisor;
+            
+         for ( Vehicle::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+            if ( *i ) 
+               decreaseMovement( *i, cargoFraction, context );
+      }
+      
+      
+   int newMovement = veh->getMovement(false,false) - int(ceil( float(veh->maxMovement()) * fraction));
+   
+   (new ChangeUnitProperty(veh, ChangeUnitProperty::Movement, newMovement ))->execute( context );
+}
+
+
 ActionResult ChangeUnitMovement::runAction( const Context& context )
 {
    Vehicle* veh = getUnit();
    
    originalMovement = veh->getMovement( false, false );
    
-   if ( delta )
-      veh->decreaseMovement( movement );
-   else
-      veh->setMovement( movement );
+   float fraction;
+   if ( delta ) {
+      fraction = float(movement) / float( veh->maxMovement());
+   } else {
+      fraction = float(originalMovement - movement) / float( veh->maxMovement());
+   }
+   
+   decreaseMovement( veh, fraction, context );
    
    resultingMovement = veh->getMovement( false, false );
    return ActionResult(0);
@@ -103,7 +130,6 @@ ActionResult ChangeUnitMovement::runAction( const Context& context )
 
 ActionResult ChangeUnitMovement::undoAction( const Context& context )
 {
-   getUnit()->setMovement ( originalMovement );
    return ActionResult(0);
 }
 

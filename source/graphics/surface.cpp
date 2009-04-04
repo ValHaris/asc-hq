@@ -290,7 +290,14 @@ void Surface::read ( tnstream& stream )
       // TODO fix memory leak: uncomp will not be deleted
       delete[] pnter;
 
-      SetSurface( SDL_CreateRGBSurfaceFrom(uncomp+4, hd.x+1, hd.y+1, 8, hd.x+1, 0, 0, 0, 0 ));
+      SDL_Surface* surface = SDL_CreateRGBSurface( SDL_SWSURFACE, hd.x+1, hd.y+1, 8,  0, 0, 0, 0 );
+      for ( int y = 0; y <= hd.y; ++y ) {
+         char* dest = ((char*)surface->pixels) + y * surface->pitch;
+         memcpy( dest, uncomp+4 + y * (hd.x+1), hd.x+1);
+      } 
+      free ( uncomp );
+      
+      SetSurface( surface );
       SetColorKey( SDL_SRCCOLORKEY, 255 );
       assignDefaultPalette();
    }

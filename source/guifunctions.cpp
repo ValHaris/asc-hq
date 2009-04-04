@@ -80,7 +80,7 @@ class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object
          if ( NewGuiHost::getIconHandler() == this )
             NewGuiHost::popIconHandler();
       }
-
+      
    protected:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
@@ -528,7 +528,7 @@ void EndTurn::execute( const MapCoordinate& pos, ContainerBase* subject, int num
 
       actmap->sigPlayerUserInteractionEnds( actmap->player[actmap->actplayer] );
 
-      next_turn();
+      next_turn( actmap, NextTurnStrategy_AskUser() );
 
       displaymap();
    }

@@ -1855,7 +1855,7 @@ Resources Vehicletype :: calcProductionsCost()
          int weaponsinglecoste = 0;
          int weaponsinglecostm = 0;
          if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn || weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen || weapons.weapon[W].getScalarWeaponType() == cwbombn || weapons.weapon[W].getScalarWeaponType() == cwminen) {
-            if (weapons.weapon[W].getScalarWeaponType() == weapons.weapon[W].shootable() ) {
+            if ( weapons.weapon[W].shootable() ) {
                weaponsinglecoste += weapons.weapon[W].maxstrength*5;
                weaponsinglecostm += weapons.weapon[W].maxstrength*5;
             } else {
@@ -1864,7 +1864,7 @@ Resources Vehicletype :: calcProductionsCost()
             }
          }
          if (weapons.weapon[W].getScalarWeaponType() == cwlargemissilen || weapons.weapon[W].getScalarWeaponType() == cwtorpedon) {
-            if (weapons.weapon[W].getScalarWeaponType() == weapons.weapon[W].shootable() ) {
+            if ( weapons.weapon[W].shootable() ) {
                weaponsinglecoste += weapons.weapon[W].maxstrength*10;
                weaponsinglecostm += weapons.weapon[W].maxstrength*10;
             } else {
@@ -1873,7 +1873,7 @@ Resources Vehicletype :: calcProductionsCost()
             }
          }
          if (weapons.weapon[W].getScalarWeaponType() == cwcannonn || weapons.weapon[W].getScalarWeaponType() == cwcruisemissile) {
-            if (weapons.weapon[W].getScalarWeaponType() == weapons.weapon[W].shootable() ) {
+            if ( weapons.weapon[W].shootable() ) {
                weaponsinglecoste += weapons.weapon[W].maxstrength*15;
                weaponsinglecostm += weapons.weapon[W].maxstrength*15;
             } else {
@@ -1894,22 +1894,22 @@ Resources Vehicletype :: calcProductionsCost()
             weaponsinglecostm += 50;
          }
          // Waffenreichweitenzuschlag Kurzstrecke
-         if (maxweaponrange > 19 ) {
+         if (weapons.weapon[W].maxdistance > 19 ) {
             weaponsinglecoste += (weapons.weapon[W].maxdistance)*80;
             weaponsinglecostm += (weapons.weapon[W].maxdistance)*80;
          }
          // Waffenreichweitenzuschlag Mittelstrecke
-         if (maxweaponrange > 69 ) {
+         if (weapons.weapon[W].maxdistance > 69 ) {
             weaponsinglecoste += (weapons.weapon[W].maxdistance-60)*150;
             weaponsinglecostm += (weapons.weapon[W].maxdistance-60)*140;
          }
          // Waffenreichweitenzuschlag Langstrecke
-         if (maxweaponrange > 99 ) {
+         if (weapons.weapon[W].maxdistance > 99 ) {
             weaponsinglecoste += (weapons.weapon[W].maxdistance-90)*220;
             weaponsinglecostm += (weapons.weapon[W].maxdistance-90)*200;
          }
          // Waffenreichweitenzuschlag Interkontinental
-         if (maxweaponrange > 129 ) {
+         if (weapons.weapon[W].maxdistance > 129 ) {
             weaponsinglecoste += (weapons.weapon[W].maxdistance-120)*250;
             weaponsinglecostm += (weapons.weapon[W].maxdistance-120)*250;
          }

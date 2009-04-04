@@ -29,6 +29,7 @@
 #include "../mapdisplayinterface.h"
 #include "action-registry.h"
 #include "changeunitproperty.h"
+#include "changeunitmovement.h"
 
 
 bool ReactionFireSwitchCommand :: avail ( const Vehicle* unit, bool newState )
@@ -92,7 +93,7 @@ ActionResult ReactionFireSwitchCommand::go ( const Context& context )
             && unit->reactionfire.getStatus() != Vehicle::ReactionFire::init2 
             && !unit->typ->hasFunction(ContainerBaseType::MoveWithReactionFire)  ) {
          
-         auto_ptr<ChangeUnitProperty> propChange ( new ChangeUnitProperty( getUnit(), ChangeUnitProperty::Movement, 0 ));
+         auto_ptr<ChangeUnitMovement> propChange ( new ChangeUnitMovement( getUnit(), 0 ));
          ActionResult res = propChange->execute( context );
       
          if ( res.successful() ) 

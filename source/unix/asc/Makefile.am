@@ -1,4 +1,4 @@
-vpath %.cpp $(srcdir)/../..
+vpath %.cpp $(srcdir)/../.. $(srcdir)/../../unittests 
 
 MAINTAINERCLEANFILES	= Makefile.in
 
@@ -6,10 +6,14 @@ INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/li
 
 AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
 
-bin_PROGRAMS  = asc
+bin_PROGRAMS  = asc 
+noinst_bin_PROGRAMS = unittester
 
-nodist_asc_SOURCES   = unitctrl.cpp soundList.cpp typen.cpp \
-strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp palette.cpp \
+noinst_bindir = $(top_builddir)/source/unix/asc/
+
+
+commonSources   = unitctrl.cpp soundList.cpp typen.cpp \
+strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp palette.cpp \
 newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp memory-measurement.cpp \
@@ -29,7 +33,7 @@ legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimage
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp
 
-asc_LDADD   		= $(top_builddir)/source/libs/triangul/libtriangul.la \
+commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki-0.1.6/libloki.la \
 @LUA_LOCAL_LIB@  \
@@ -45,4 +49,11 @@ $(top_builddir)/source/actions/libfullgameactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/actions/libmiscactions.la  \
 @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(LUA_LIBS)
+
+nodist_asc_SOURCES = $(commonSources) sg.cpp
+asc_LDADD = $(commonLibs)
+
+nodist_unittester_SOURCES  =  $(commonSources) main.cpp
+unittester_LDADD = $(commonLibs) $(top_builddir)/source/unittests/libunittests.la  
+
 

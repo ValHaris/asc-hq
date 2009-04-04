@@ -92,7 +92,7 @@ class MovementLimitation: public AStar3D::OperationLimiter {
       
 class PathFinder : public AStar3D {
    public:
-      PathFinder ( GameMap* actmap, Vehicle* veh, int maxDistance ) : AStar3D(actmap, veh, false, maxDistance ) {};
+      PathFinder ( Vehicle* veh, int maxDistance ) : AStar3D(veh->getMap(), veh, false, maxDistance ) {};
 
       /** searches for all fields that are within the range of maxDist and marks them.
          On each field one bit for each level of height will be set.
@@ -108,7 +108,7 @@ void PathFinder :: getMovementFields ( set<MapCoordinate3D>& reachableFields, se
    findPath ( dummy, MapCoordinate3D(-1, -1, veh->height) );  //this field does not exist...
 
    int unitHeight = veh->getPosition().getNumericalHeight();
-   if ( !actmap->getField ( veh->getPosition())->unitHere ( veh ))
+   if ( !this->actmap->getField ( veh->getPosition())->unitHere ( veh ))
       unitHeight = -1;
 
    // there are different entries for the same x/y coordinate but different height.
@@ -170,7 +170,7 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
    if ( (capabilities | flags) & LimitVerticalDirection ) {
       if ( getVerticalDirection() == 0 ) {
          HeightChangeLimitation hcl ( !(capabilities & DisableHeightChange) );
-         PathFinder pf ( actmap, veh, veh->getMovement() );
+         PathFinder pf ( veh, veh->getMovement() );
          pf.registerOperationLimiter( &hcl );
          pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
       } else {
@@ -181,12 +181,12 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
          h = veh->getPosition().getNumericalHeight() + hcm->heightDelta;
          
          MovementLimitation ml ( capabilities & ShortestHeightChange );
-         PathFinder pf ( actmap, veh, veh->getMovement() );
+         PathFinder pf ( veh, veh->getMovement() );
          pf.registerOperationLimiter( &ml );
          pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
       }
    } else {
-      PathFinder pf ( actmap, veh, veh->getMovement() );
+      PathFinder pf ( veh, veh->getMovement() );
       pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
    }
 
@@ -202,22 +202,21 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
 
 void MoveUnitCommand :: setDestination( const MapCoordinate3D& destination )
 {
-   // if ( getState() == Evaluated ) {
-      this->destination = destination;
-      setState( SetUp );
-   // }
+   this->destination = destination;
+   setState( SetUp );
 }
 
 void MoveUnitCommand :: setDestination( const MapCoordinate& destination )
 {
-   // if ( getState() == Evaluated ) {
-      for ( set<MapCoordinate3D>::iterator i = reachableFields.begin(); i != reachableFields.end(); ++i )
-         if ( destination.x == i->x && destination.y == i->y ) {
-            this->destination = *i;
-            break;
-         }
-      setState( SetUp );
-   // }
+   if ( getState() != Evaluated )
+      searchFields();
+   
+   for ( set<MapCoordinate3D>::iterator i = reachableFields.begin(); i != reachableFields.end(); ++i )
+      if ( destination.x == i->x && destination.y == i->y ) {
+         this->destination = *i;
+         break;
+      }
+   setState( SetUp );
 }
 
 bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )
@@ -281,7 +280,7 @@ ActionResult MoveUnitCommand::go ( const Context& context )
 
 
    int destDamage;
-   if ( actmap->getUnit( nwid ))
+   if ( getMap()->getUnit( nwid ))
       destDamage = getUnit()->damage;
    else
       destDamage = 100;

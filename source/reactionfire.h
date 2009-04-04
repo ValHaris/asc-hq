@@ -72,6 +72,7 @@ class tsearchreactionfireingunits : public treactionfire {
                 void initLimits();
                 void findOffensiveUnits( Vehicle* vehicle, int height, int x1, int y1, int x2, int y2 );
 
+                GameMap* gamemap;
            protected:
                 int attack( Vehicle* attacker, Vehicle* target, const Context& context );
 
@@ -84,7 +85,7 @@ class tsearchreactionfireingunits : public treactionfire {
                 
            public:
 
-                tsearchreactionfireingunits( void );
+                tsearchreactionfireingunits( GameMap* gamemap );
                 void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
                 void init ( Vehicle* eht, const MapCoordinate3D& pos );
                 int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context  );

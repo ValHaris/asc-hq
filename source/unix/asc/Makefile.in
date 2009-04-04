@@ -33,6 +33,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = asc$(EXEEXT)
+noinst_bin_PROGRAMS = unittester$(EXEEXT)
 subdir = source/unix/asc
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -43,23 +44,24 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(noinst_bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
-nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
-	typen.$(OBJEXT) strtmesg.$(OBJEXT) stack.$(OBJEXT) \
-	spfst.$(OBJEXT) sgstream.$(OBJEXT) sg.$(OBJEXT) \
-	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
-	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) tos.$(OBJEXT) \
-	loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) dlg_box.$(OBJEXT) \
-	dialog.$(OBJEXT) controls.$(OBJEXT) basestrm.$(OBJEXT) \
-	basegfx.$(OBJEXT) attack.$(OBJEXT) replaymapdisplay.$(OBJEXT) \
-	memory-measurement.$(OBJEXT) gameoptions.$(OBJEXT) \
-	astar2.$(OBJEXT) vehicletype.$(OBJEXT) objects.$(OBJEXT) \
-	stdio-errorhandler.$(OBJEXT) buildingtype.$(OBJEXT) \
-	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
-	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
-	replay.$(OBJEXT) research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
+noinst_binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
+PROGRAMS = $(bin_PROGRAMS) $(noinst_bin_PROGRAMS)
+am__objects_1 = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
+	strtmesg.$(OBJEXT) stack.$(OBJEXT) spfst.$(OBJEXT) \
+	sgstream.$(OBJEXT) palette.$(OBJEXT) newfont.$(OBJEXT) \
+	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
+	tos.$(OBJEXT) loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) \
+	dlg_box.$(OBJEXT) dialog.$(OBJEXT) controls.$(OBJEXT) \
+	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
+	replaymapdisplay.$(OBJEXT) memory-measurement.$(OBJEXT) \
+	gameoptions.$(OBJEXT) astar2.$(OBJEXT) vehicletype.$(OBJEXT) \
+	objects.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
+	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
+	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
+	gamemap.$(OBJEXT) password.$(OBJEXT) replay.$(OBJEXT) \
+	research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
 	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
 	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
 	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
@@ -86,9 +88,10 @@ nodist_asc_OBJECTS = unitctrl.$(OBJEXT) soundList.$(OBJEXT) \
 	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT) \
 	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT) \
 	autotraining.$(OBJEXT)
+nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
-asc_DEPENDENCIES =  \
+am__DEPENDENCIES_2 =  \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(top_builddir)/source/ai/libai.la \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -113,6 +116,11 @@ asc_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+asc_DEPENDENCIES = $(am__DEPENDENCIES_2)
+nodist_unittester_OBJECTS = $(am__objects_1) main.$(OBJEXT)
+unittester_OBJECTS = $(nodist_unittester_OBJECTS)
+unittester_DEPENDENCIES = $(am__DEPENDENCIES_2) \
+	$(top_builddir)/source/unittests/libunittests.la
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -125,7 +133,7 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(nodist_asc_SOURCES)
+SOURCES = $(nodist_asc_SOURCES) $(nodist_unittester_SOURCES)
 DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
@@ -300,8 +308,9 @@ zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
-nodist_asc_SOURCES = unitctrl.cpp soundList.cpp typen.cpp \
-strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp sg.cpp palette.cpp \
+noinst_bindir = $(top_builddir)/source/unix/asc/
+commonSources = unitctrl.cpp soundList.cpp typen.cpp \
+strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp palette.cpp \
 newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
 basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp memory-measurement.cpp \
@@ -321,7 +330,7 @@ legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimage
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp
 
-asc_LDADD = $(top_builddir)/source/libs/triangul/libtriangul.la \
+commonLibs = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/sdl/libsdl.la  $(top_builddir)/source/libs/loki-0.1.6/libloki.la \
 @LUA_LOCAL_LIB@  \
@@ -338,6 +347,10 @@ $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/actions/libmiscactions.la  \
 @LDADDLIBBZ2@  $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(LUA_LIBS)
 
+nodist_asc_SOURCES = $(commonSources) sg.cpp
+asc_LDADD = $(commonLibs)
+nodist_unittester_SOURCES = $(commonSources) main.cpp
+unittester_LDADD = $(commonLibs) $(top_builddir)/source/unittests/libunittests.la  
 all: all-am
 
 .SUFFIXES:
@@ -399,9 +412,40 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+install-noinst_binPROGRAMS: $(noinst_bin_PROGRAMS)
+	@$(NORMAL_INSTALL)
+	test -z "$(noinst_bindir)" || $(MKDIR_P) "$(DESTDIR)$(noinst_bindir)"
+	@list='$(noinst_bin_PROGRAMS)'; for p in $$list; do \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	     || test -f $$p1 \
+	  ; then \
+	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
+	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(noinst_binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(noinst_bindir)/$$f'"; \
+	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=install $(noinst_binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(noinst_bindir)/$$f" || exit 1; \
+	  else :; fi; \
+	done
+
+uninstall-noinst_binPROGRAMS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(noinst_bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  echo " rm -f '$(DESTDIR)$(noinst_bindir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(noinst_bindir)/$$f"; \
+	done
+
+clean-noinst_binPROGRAMS:
+	@list='$(noinst_bin_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
 asc$(EXEEXT): $(asc_OBJECTS) $(asc_DEPENDENCIES) 
 	@rm -f asc$(EXEEXT)
 	$(CXXLINK) $(asc_OBJECTS) $(asc_LDADD) $(LIBS)
+unittester$(EXEEXT): $(unittester_OBJECTS) $(unittester_DEPENDENCIES) 
+	@rm -f unittester$(EXEEXT)
+	$(CXXLINK) $(unittester_OBJECTS) $(unittester_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -449,6 +493,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainscreenwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@
@@ -608,7 +653,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(PROGRAMS)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(noinst_bindir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -638,7 +683,8 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinst_binPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 	-rm -rf ./$(DEPDIR)
@@ -656,7 +702,7 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-noinst_binPROGRAMS
 
 install-dvi: install-dvi-am
 
@@ -692,25 +738,27 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am: uninstall-binPROGRAMS uninstall-noinst_binPROGRAMS
 
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS
+	clean-generic clean-libtool clean-noinst_binPROGRAMS ctags \
+	distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man \
+	install-noinst_binPROGRAMS install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags uninstall uninstall-am uninstall-binPROGRAMS \
+	uninstall-noinst_binPROGRAMS
 
-vpath %.cpp $(srcdir)/../..
+vpath %.cpp $(srcdir)/../.. $(srcdir)/../../unittests 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -197,7 +197,7 @@ void tfield :: removeobject( const ObjectType* obj, bool force)
    #ifndef karteneditor
    if ( !force )
       if ( vehicle )
-         if ( vehicle->color != gamemap->actplayer << 3)
+         if ( vehicle->getOwner() != gamemap->actplayer )
            return;
    #endif
 
@@ -215,7 +215,7 @@ void tfield :: removeobject( const ObjectType* obj, bool force)
 
    setparams();
    if ( obj )
-      calculateobject( getx(), gety(), true, obj );
+      calculateobject( getx(), gety(), true, obj, gamemap );
 }
 
 void tfield :: deleteeverything ( void )
