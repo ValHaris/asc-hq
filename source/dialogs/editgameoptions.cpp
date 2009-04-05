@@ -38,93 +38,126 @@
 #include "../textfileparser.h"
 #include "../textfile_evaluation.h"
 
+#include "editgameoptions.h"
 
 
-class GetVideoModes {
-   public:
-      typedef vector<ASCString> VList;
-   private:
-      SDL_Rect **modes;
-      VList list;
-
-      vector <pair<int,int> > listedmodes;
-     
-   public:
-      GetVideoModes() {
-         int i;
-
-
-         SDL_PixelFormat format;
-         format.palette = NULL;
-         format.BitsPerPixel = 32;
-         format.BytesPerPixel = 4;
-         format.Rloss = format.Gloss = format.Bloss = format.Aloss = 0;
-         format.Rshift = 0;
-         format.Gshift = 8;
-         format.Bshift = 16;
-         format.Ashift = 24;
-         format.Rmask = 0xff;
-         format.Gmask = 0xff00;
-         format.Bmask = 0xff0000;
-         format.Amask = 0xff000000;
-         format.colorkey = 0;
-         format.alpha = 0;
-         
-         
-         /* Get available fullscreen/hardware modes */
-         modes=SDL_ListModes(&format, SDL_FULLSCREEN);
-
-
-         list.push_back( "graphic mode not listed");
-         listedmodes.push_back( make_pair( 0, 0));
-         
-         /* Check is there are any modes available */
-         if(modes == (SDL_Rect **)0){
-            return;
+bool GetVideoModes::comparator( const ModeRes& a, const ModeRes& b )
+{
+   if ( a.first > b.first ) {
+      return true;
+   } else {
+      if ( a.first < b.first )
+         return false;
+      else {
+         if ( a.second > b.second )
+            return true;
+         else {
+            return false;
          }
-         
-         /* Check if our resolution is restricted */
-         if(modes == (SDL_Rect **)-1){
-            warning("All resolutions available.\n");
-            return;
-         }
-         else{
-            for(i=0;modes[i];++i) {
-
-               if ( find ( listedmodes.begin(), listedmodes.end(), make_pair( int(modes[i]->w), int(modes[i]->h ))) != listedmodes.end() )
-                  continue;
-               
-               if ( modes[i]->w >= 800 && modes[i]->h >= 600 ) {
-                  ASCString s;
-                  s.format( "%d*%d", modes[i]->w, modes[i]->h );
-                  list.push_back ( s );
-                  listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
-               }
-            }
-            
-         }
-         return;
-      };
-
-      VList& getList() { return list; };
-
-      int getx( int index ) {
-         return listedmodes.at(index).first;
-      };
-      
-      int gety( int index ) {
-         return listedmodes.at(index).second;
-      };
-
-      int findmodenum( int x, int y ) {
-         for ( int j = 0; j < listedmodes.size(); ++j )
-            if ( listedmodes[j].first == x && listedmodes[j].second == y )
-               return j;
-         return 0;
       }
-      
+
+   }
+}
+
+/*
+bool GetVideoModes::comparator( const ModeRes& a, const ModeRes& b )
+{
+   if ( a.first > b.first ) {
+      return 1;
+   } else {
+      if ( a.first < b.first )
+         return -1;
+      else {
+         if ( a.second > b.second )
+            return 1;
+         else {
+            if ( a.second < b.second )
+               return -1;
+            else
+               return 0;
+         }
+      }
+
+   }
+}
+*/
+
+GetVideoModes::GetVideoModes() 
+{
+   int i;
+
+
+   SDL_PixelFormat format;
+   format.palette = NULL;
+   format.BitsPerPixel = 32;
+   format.BytesPerPixel = 4;
+   format.Rloss = format.Gloss = format.Bloss = format.Aloss = 0;
+   format.Rshift = 0;
+   format.Gshift = 8;
+   format.Bshift = 16;
+   format.Ashift = 24;
+   format.Rmask = 0xff;
+   format.Gmask = 0xff00;
+   format.Bmask = 0xff0000;
+   format.Amask = 0xff000000;
+   format.colorkey = 0;
+   format.alpha = 0;
+   
+   
+   /* Get available fullscreen/hardware modes */
+   modes=SDL_ListModes(&format, SDL_FULLSCREEN);
+
+
+   list.push_back( "graphic mode not listed");
+   listedmodes.push_back( make_pair( 0, 0));
+   
+   /* Check is there are any modes available */
+   if(modes == (SDL_Rect **)0){
+      return;
+   }
+   
+   /* Check if our resolution is restricted */
+   if(modes == (SDL_Rect **)-1){
+      warning("All resolutions available.\n");
+      return;
+   }
+   else{
+      for(i=0;modes[i];++i) {
+
+         if ( find ( listedmodes.begin(), listedmodes.end(), make_pair( int(modes[i]->w), int(modes[i]->h ))) != listedmodes.end() )
+            continue;
+         
+         if ( modes[i]->w >= 800 && modes[i]->h >= 600 ) {
+            listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
+         }
+      }
+      sort ( listedmodes.begin(), listedmodes.end(), &GetVideoModes::comparator );
+
+      for ( vector <ModeRes > ::iterator i = listedmodes.begin(); i != listedmodes.end(); ++i ) {
+         ASCString s;
+         s.format( "%d*%d", i->first, i->second );
+         list.push_back ( s );
+      }
+
+   }
+   return;
 };
 
+int GetVideoModes::getx( int index ) {
+   return listedmodes.at(index).first;
+};
+
+int GetVideoModes::gety( int index ) {
+   return listedmodes.at(index).second;
+};
+
+int GetVideoModes::findmodenum( int x, int y ) {
+   for ( int j = 0; j < listedmodes.size(); ++j )
+      if ( listedmodes[j].first == x && listedmodes[j].second == y )
+         return j;
+   return 0;
+}
+      
 
 
 

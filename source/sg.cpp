@@ -1881,9 +1881,24 @@ int main(int argc, char *argv[] )
       flags |= SDL_FULLSCREEN;
 
    app.setIcon( "program-icon.png" );
-   if ( !app.InitScreen( xr, yr, 32, flags))
-      fatalError( "Could not initialize video mode");
-  
+   bool initialized = false;
+   if ( !app.InitScreen( xr, yr, 32, flags)) {
+      if ( flags & SDL_FULLSCREEN ) {
+         GetVideoModes gvm;
+         if ( gvm.getList().size() > 0 ) {
+            xr = gvm.getx(0);
+            yr = gvm.gety(0);
+            if ( app.InitScreen( xr, yr, 32, flags)) 
+               initialized = true;
+         }
+      }
+   } else
+      initialized = true;
+
+   if ( !initialized )
+     fatalError( "Could not initialize video mode");
+
+
 #ifdef WIN32
    delete win32ErrorDialogGenerator;
 #endif
