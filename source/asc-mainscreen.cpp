@@ -491,7 +491,7 @@ class VisibilityLayer : public MapLayer {
 
 void VisibilityLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo, int layer, const SPoint& pos )
 {
-   if ( fieldVisibility( fieldInfo.fld, fieldInfo.gamemap->getPlayerView(), fieldInfo.gamemap ) >= visible_now ) {
+   if ( fieldVisibility( fieldInfo.fld, fieldInfo.gamemap->getPlayerView() ) >= visible_now ) {
 
       int view = 0;
       int jamming = 0;

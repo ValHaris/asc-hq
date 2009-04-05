@@ -2065,6 +2065,15 @@ Resources Vehicletype :: calcProductionsCost()
 //      specialcostm += maxmoverange*5;
 //   }
 
+   if ( jumpDrive.height ) {
+      int distance = jumpDrive.maxDistance;
+      if ( distance > 1000 )
+         distance = 1000;
+      
+      specialcoste += distance * 7;
+      specialcostm += distance * 5;
+   }
+   
    // Part VI - Addition
    res.energy += typecoste + weaponcoste + specialcoste;
    res.material += typecostm + weaponcostm + specialcostm;

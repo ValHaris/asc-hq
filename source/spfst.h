@@ -174,18 +174,20 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
     \param player the player who is 'looking'
   */
 //! {@ 
-  extern bool fieldvisiblenow( const tfield* pe, int player = actmap->actplayer, GameMap* map = actmap );
-  extern bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player = actmap->actplayer  );
+  extern bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player   );
+  inline bool fieldvisiblenow( const tfield* pe, int player ) { return fieldvisiblenow( pe, NULL, pe->getMap()->actplayer); };
+  inline bool fieldvisiblenow( const tfield* pe, Vehicle* veh  ) { return fieldvisiblenow( pe, veh, pe->getMap()->actplayer); };
+  inline bool fieldvisiblenow( const tfield* pe ) { return fieldvisiblenow( pe, pe->getMap()->actplayer);};
 //! }@
 
   /*!
     evaluates the visibility of a field
     \param pe the field to be evaluated
-    \param player the player who is 'looking'
+    \param player the player who is 'looking'; without player the active player will be used
    */
 //! {@ 
-  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player = actmap->actplayer );
-  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player, GameMap* gamemap );
+  extern VisibilityStates fieldVisibility  ( const tfield* pe );
+  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player );
 //! }@
 
 

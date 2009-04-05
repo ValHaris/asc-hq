@@ -230,7 +230,7 @@ void tsearchreactionfireingunits :: findOffensiveUnits( Vehicle* vehicle, int he
    for ( int player = 0; player < gamemap->getPlayerCount(); ++player ) {
       if ( gamemap->getPlayer(vehicle).diplomacy.isHostile( player )) {
          for ( Player::VehicleList::iterator i = gamemap->getPlayer(vehicle).vehicleList.begin(); i != gamemap->getPlayer(vehicle).vehicleList.end(); ++i) {
-            if ( fieldvisiblenow( gamemap->getField( (*i)->getPosition() ), player, gamemap )) {
+            if ( fieldvisiblenow( gamemap->getField( (*i)->getPosition() ), player )) {
                if ( visibleUnits.find( *i ) == visibleUnits.end() )
                   visibleUnits[*i] = 1 << player;
                else
@@ -413,7 +413,7 @@ int  tsearchreactionfireingunits :: finalCheck ( int currentPlayer, const Contex
       if ( gamemap->getPlayer(currentPlayer).diplomacy.isHostile( player )) {
          list<int> exposedTargets;
          for ( Player::VehicleList::iterator exposedTarget = gamemap->getPlayer(currentPlayer).vehicleList.begin(); exposedTarget != gamemap->getPlayer(currentPlayer).vehicleList.end(); ++exposedTarget) {
-            if ( fieldvisiblenow( gamemap->getField( (*exposedTarget)->getPosition() ), player, gamemap )) {
+            if ( fieldvisiblenow( gamemap->getField( (*exposedTarget)->getPosition() ), player )) {
                if ( visibleUnits.find( *exposedTarget ) == visibleUnits.end() || !(visibleUnits[*exposedTarget] & (1 << player)) ) { 
                   if ( (*exposedTarget)->getMap()->getField( (*exposedTarget)->getPosition() )->unitHere( *exposedTarget ))
                      exposedTargets.push_back( (*exposedTarget )->networkid );

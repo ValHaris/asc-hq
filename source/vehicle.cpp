@@ -422,61 +422,6 @@ void Vehicle :: resetMovement ( void )
 
 
 
-void Vehicle::setMovement( int newmove, bool recursive, const Context& context )
-{
-   if ( newmove < 0 )
-      newmove = 0;
-
-   if ( recursive && typ)
-      if ( typ->movement[ log2 ( height ) ] ) {
-         double diff = _movement - newmove;
-         double perc = diff / typ->movement[ log2 ( height ) ] ;
-         if ( cargoNestingDepth() == 0 )
-            perc /= typ->cargoMovementDivisor;
-         
-         for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-            if ( *i ) 
-               (*i)->decreaseMovement ( perc, true, context);
-      }
-   
-   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newmove ))->execute( context );
-}
-
-void Vehicle::decreaseMovementAbs( int reduction, bool recursive, const Context& context )
-{
-   setMovement( _movement - reduction, recursive, context );
-}
-
-
-void Vehicle::decreaseMovement( float fraction, bool recursive, const Context& context )
-{
-   int newMovement = _movement - int(floor( float(maxMovement()) * fraction));
-   if ( newMovement < 0 )
-     newMovement = 0;
-  
-   if ( newMovement > maxMovement() )
-     newMovement = maxMovement();
-  
-   if ( recursive ) 
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) 
-            (*i)->decreaseMovement ( fraction, true, context);
-   
-   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, newMovement ))->execute( context );
-}
-
-void Vehicle::clearMovement( bool recursive, const Context& context )
-{
-   if ( recursive ) 
-      for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
-         if ( *i ) 
-            (*i)->clearMovement ( true, context);
-   
-   (new ChangeUnitProperty(this, ChangeUnitProperty::Movement, 0))->execute( context );
-}
-
-
-
 void Vehicle :: setMovement ( int newmove, double cargoDivisor )
 {
 

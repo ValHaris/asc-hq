@@ -72,7 +72,7 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
    tfield* fld2 = actmap->getField ( dest );
    
    if ( actmap->player[actmap->getPlayerView()].diplomacy.sharesView( vehicle->getOwner() )) 
-      view2 = fieldVisibility ( fld2, actmap->getPlayerView(), actmap );
+      view2 = fieldVisibility ( fld2, actmap->getPlayerView() );
    else {
       // This is a workaround to estimate if the target field will be visible or not once the units is there 
       view2 = calcvisibilityfield ( actmap, fld2, actmap->getPlayerView(), -1, actmap->getgameparameter ( cgp_initialMapVisibility ), vehicle->typ->jamming );

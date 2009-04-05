@@ -462,9 +462,10 @@ void Sound::playLoop()
 
 void Sound::stop()
 {
-   for ( int i = 0; i < MIX_CHANNELS; i++ )
-      if ( SoundSystem::instance->internalData->channel[ i ] == this  && Mix_Playing(i)  )
-          Mix_HaltChannel( i );
+   if ( SoundSystem::instance )
+      for ( int i = 0; i < MIX_CHANNELS; i++ )
+         if ( SoundSystem::instance->internalData->channel[ i ] == this  && Mix_Playing(i)  )
+            Mix_HaltChannel( i );
 }
 
 

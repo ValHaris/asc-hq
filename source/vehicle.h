@@ -176,14 +176,6 @@ class UnitHooveringLogic {
      */
     void setMovement ( int newmove, double cargoDivisor = -1 );
 
-    private:   
-    //! set the movement this unit and (optionally) all cargo to 0
-       void clearMovement( bool recursive, const Context& context );
-       void setMovement( int newmove, bool recursive, const Context& context );
-    void decreaseMovement( float fraction, bool recursive, const Context& context );
-    void decreaseMovementAbs( int reduction, bool recursive, const Context& context );
-    public:
-    
     //! did the unit move this turn
     bool hasMoved ( void ) const;
 

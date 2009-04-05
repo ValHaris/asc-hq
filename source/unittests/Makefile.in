@@ -44,7 +44,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libunittests_la_DEPENDENCIES =
-am_libunittests_la_OBJECTS = movementtest.lo unittestutil.lo
+am_libunittests_la_OBJECTS = movementtest.lo attacktest.lo \
+	unittestutil.lo main.lo
 libunittests_la_OBJECTS = $(am_libunittests_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -231,9 +232,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
-AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ -I.. -I$(top_srcdir)/source/libs/paragui/include
+AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
 noinst_LTLIBRARIES = libunittests.la
-libunittests_la_SOURCES = movementtest.cpp unittestutil.cpp
+libunittests_la_SOURCES = movementtest.cpp attacktest.cpp unittestutil.cpp main.cpp
 libunittests_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -287,6 +288,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attacktest.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/movementtest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unittestutil.Plo@am__quote@
 

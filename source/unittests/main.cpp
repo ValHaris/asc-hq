@@ -1,110 +1,37 @@
 
-#include "global.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <new>
-#include <cstdlib>
-#include <ctype.h>
-#include <algorithm>
-#include <memory>
-#include <fstream>
-
-#include <boost/regex.hpp>
-
-#include "paradialog.h"
-
-#include "vehicletype.h"
-#include "buildingtype.h"
 #include "ai/ai.h"
-#include "misc.h"
-#include "events.h"
-#include "typen.h"
-#include "spfst.h"
 #include "loaders.h"
 #include "dlg_box.h"
 #include "controls.h"
 #include "dlg_box.h"
-#include "dialog.h"
 #include "strtmesg.h"
-#include "gamedlg.h"
 #include "sg.h"
-#include "gameoptions.h"
-#include "loadimage.h"
-#include "astar2.h"
-#include "errors.h"
-#include "dialogs/pwd_dlg.h"
 #include "viewcalculation.h"
 #include "replay.h"
 #include "graphicset.h"
 #include "loadbi3.h"
-#include "itemrepository.h"
-#include "music.h"
 #include "messagedlg.h"
-#include "statisticdialog.h"
-#include "clipboard.h"
 #include "guifunctions.h"
-#include "iconrepository.h"
-#include "dashboard.h"
-#include "gamedialog.h"
 #include "unitset.h"
 
-#ifdef WEATHERGENERATOR
-# include "weathercast.h"
-#endif
-
-#include "asc-mainscreen.h"
-#include "dialogs/unitinfodialog.h"
-#include "util/messaginghub.h"
 #include "cannedmessages.h"
-#include "memorycheck.cpp"
-#include "networkinterface.h"
 #include "resourcenet.h"
 #include "mapimageexport.h"
-#include "loadpcx.h"
-#include "gameeventsystem.h"
-#include "sdl/sound.h"
 #include "soundList.h"
 #include "turncontrol.h"
-#include "networksupervisor.h"
 
-#include "dialogs/newgame.h"
-#include "dialogs/soundsettings.h"
-#include "dialogs/alliancesetup.h"
-#include "dialogs/unitcounting.h"
-#include "dialogs/editgameoptions.h"
-#include "dialogs/nextcampaignmap.h"
-#include "dialogs/terraininfo.h"
-#include "dialogs/editplayerdata.h"
-#include "dialogs/locatefile.h"
 #include "stdio-errorhandler.h"
-#include "widgets/textrenderer.h"
-#include "dialogs/productionanalysis.h"
-#include "dialogs/fileselector.h"
-#include "containerbase-functions.h"
-#include "memory-measurement.h"
-#include "dialogs/mailoptionseditor.h"
-#include "dialogs/unitguidedialog.h"
 
 #include "autotraining.h"
 
-#ifdef LUAINTERFACE
-# include "lua/luarunner.h"
-# include "lua/luastate.h"
-#endif
-
 
 #ifdef WIN32
-# include "win32/win32-errormsg.h"
-# include  "win32/msvc/mdump.h"
  MiniDumper miniDumper( "main" );
-# include <direct.h>
-# include <stdlib.h>
-# include <stdio.h>
 #endif
 
-#include "movementtest.h"                
-                
+#include "movementtest.h"
+#include "attacktest.h"
                 
 tfield*        getSelectedField(void)
 {
@@ -310,6 +237,7 @@ int runTester ( )
    
 
    testMovement();   
+   testAttack();
    
    return 0;
 }

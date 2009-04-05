@@ -132,7 +132,7 @@ int         fieldAccessible( const tfield*        field,
       uheight = vehicle->height;
 
    if ( !ignoreVisibility ) {
-      int c = fieldVisibility ( field, vehicle->color/8, vehicle->getMap() );
+      int c = fieldVisibility ( field, vehicle->getOwner() );
 
       if (field == NULL)
         return 0;
@@ -406,22 +406,23 @@ int getheightdelta ( int height1, int height2 )
    return hd;
 }
 
-bool fieldvisiblenow( const tfield* pe, int player, Vehicle* veh, GameMap* actmap )
+bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player )
 {
+   GameMap* gamemap = pe->getMap();
    if ( player == -1 )
       return true;
 
    if ( player < -1 )
       return false;
 
-   if ( !actmap )
+   if ( !gamemap )
       return false;
   
    if ( pe ) {
       int c = (pe->visible >> ( player * 2)) & 3;
 
-      if ( c < actmap->getInitialMapVisibility( player ) )
-         c = actmap->getInitialMapVisibility( player );
+      if ( c < gamemap->getInitialMapVisibility( player ) )
+         c = gamemap->getInitialMapVisibility( player );
 
       if (c > visible_ago) {
          if ( !veh )
@@ -444,27 +445,17 @@ bool fieldvisiblenow( const tfield* pe, int player, Vehicle* veh, GameMap* actma
 }
 
 
-bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player  )
+
+
+VisibilityStates fieldVisibility( const tfield* pe )
 {
-   return fieldvisiblenow( pe, player, veh, veh->getMap());
+   return fieldVisibility( pe, pe->getMap()->actplayer );
 }
-
-bool fieldvisiblenow( const tfield* pe, int player, GameMap* actmap )
-{
-   return fieldvisiblenow( pe, player, NULL, actmap );
-
-}
-
-
-
 
 VisibilityStates fieldVisibility( const tfield* pe, int player )
 {
-   return fieldVisibility( pe, player, actmap );
-}
-
-VisibilityStates fieldVisibility( const tfield* pe, int player, GameMap* gamemap )
-{
+   GameMap* gamemap = pe->getMap();
+   
    if ( player < 0 )
       return visible_all;
 

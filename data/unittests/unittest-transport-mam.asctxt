@@ -1,0 +1,309 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 5
+      EntranceSystem0 { 
+         Mode = In Out Docking 
+         UnitHeightAbs = floating ground_level 
+         UnitHeightRel = -100
+         ContainerHeight = floating ground_level 
+         CategoriesNOT = 
+         DockingHeightAbs = floating ground_level 
+         DockingHeightRel = -100
+         RequiresUnitFeature = 
+         DisableAttack = false
+         MoveCost = -1
+      } EntranceSystem0
+      EntranceSystem1 { 
+         Mode = Out 
+         UnitHeightAbs = ground_level 
+         UnitHeightRel = -100
+         ContainerHeight = low_level_flight medium_level_flight 
+         CategoriesNOT = default medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+         DockingHeightAbs = 
+         DockingHeightRel = -100
+         RequiresUnitFeature = paratrooper 
+         DisableAttack = false
+         MoveCost = 20
+      } EntranceSystem1
+      EntranceSystem2 { 
+         Mode = Out 
+         UnitHeightAbs = ground_level 
+         UnitHeightRel = -100
+         ContainerHeight = medium_level_flight 
+         CategoriesNOT = default building|turret|object 
+         DockingHeightAbs = 
+         DockingHeightRel = -100
+         RequiresUnitFeature = paratrooper 
+         DisableAttack = false
+         MoveCost = 20
+      } EntranceSystem2
+      EntranceSystem3 { 
+         Mode = Out 
+         UnitHeightAbs = submerged floating 
+         UnitHeightRel = -100
+         ContainerHeight = low_level_flight 
+         CategoriesNOT = default building|turret|object 
+         DockingHeightAbs = 
+         DockingHeightRel = -100
+         RequiresUnitFeature = 
+         DisableAttack = true
+         MoveCost = 20
+      } EntranceSystem3
+      EntranceSystem4 { 
+         Mode = Out 
+         UnitHeightAbs = submerged floating ground_level 
+         UnitHeightRel = -100
+         ContainerHeight = low_level_flight 
+         CategoriesNOT = light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+         DockingHeightAbs = 
+         DockingHeightRel = -100
+         RequiresUnitFeature = paratrooper 
+         DisableAttack = true
+         MoveCost = 10
+      } EntranceSystem4
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 395
+      MaxLoadableMass = 395
+      CategoriesNOT = rail_vehicle medium_aircraft medium_ship heavy_aircraft heavy_ship hoovercraft 
+   } Transportation
+   Name = UnitTest MAM Transporter
+   Infotext = [If you have no Paratroopers available, but just NEED to take
+              that power plant, take out your Transport Helicopter. It can
+              carry a small amount of troops across a sizable area in little
+              time. Drawbacks are a lack of armament and a not-so-large fuel
+              tank.]
+   ID = 1000000023
+   SecondaryIDs = 
+   View = 30
+   Jamming = 0
+   InfoImage = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 7000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 7000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = Transport Helicopter
+   Armor = 320
+   Picture = unittest-transport-mam.png
+   Height = ground_level low_level_flight medium_level_flight 
+   WaitForAttack = false
+   FuelConsumption = 25
+   Features = Sonar cruiserlanding move_after_attack no_midair_refuel 
+   Movement = 0 0 0 35 100 100 0 0 
+   Category = helicopter
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 495 496 
+   Transportation { 
+      CargoMovementDivisor = 2
+   } Transportation
+   Weight = 50
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Frozen_water 
+      terrain_all = 
+      terrain_not = Swamp Forest Large_rocks Hillside Installation 
+      terrain_kill = Shallow_water Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 2
+      Weapon0 { 
+         Type = machinegun shootable 
+         targets = floating ground_level low_level_flight medium_level_flight 
+         shotFrom = ground_level low_level_flight medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 38
+         Punch@MinRange = 38
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 90
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            medium_tracked_vehicle = 65
+            heavy_tracked_vehicle = 50
+            medium_wheeled_vehicle = 90
+            heavy_wheeled_vehicle = 80
+            trooper = 130
+            rail_vehicle = 60
+            medium_aircraft = 90
+            medium_ship = 60
+            building|turret|object = 50
+            heavy_aircraft = 80
+            light_ship = 80
+            heavy_ship = 50
+            helicopter = 90
+            hoovercraft = 90
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+      Weapon1 { 
+         Type = torpedo shootable 
+         targets = submerged floating 
+         shotFrom = low_level_flight 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 2
+         Punch@MaxRange = 90
+         Punch@MinRange = 100
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 100
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 70
+            medium_tracked_vehicle = 85
+            light_wheeled_vehicle = 70
+            medium_wheeled_vehicle = 85
+            trooper = 25
+            medium_aircraft = 85
+            medium_ship = 90
+            light_aircraft = 70
+            light_ship = 80
+            hoovercraft = 80
+         } WeaponEffectiveness
+         name = 
+      } Weapon1
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 { 
+      StartHeight = ground_level 
+      HeightDelta = 1
+      MoveCost = 15
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod0
+   HeightChangeMethod1 { 
+      StartHeight = low_level_flight medium_level_flight high_level_flight 
+      HeightDelta = 1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod1
+   HeightChangeMethod2 { 
+      StartHeight = medium_level_flight high_level_flight orbit 
+      HeightDelta = -1
+      MoveCost = 5
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod2
+   HeightChangeMethod3 { 
+      StartHeight = low_level_flight 
+      HeightDelta = -1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod3
+   TechAdapterRequired = 23 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 10555
+      Material = 9963
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 515 384 551 0 1 601 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

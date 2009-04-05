@@ -53,12 +53,14 @@ ActionResult AttackCommand::searchTargets()
    if ( !getUnit() ) 
       return ActionResult(201);
 
+   Vehicle* unit = getUnit();
+   
    int weaponCount = 0;
    int shootableWeaponCount = 0;
    for ( int w = 0; w < getUnit()->typ->weapons.count; w++ )
-      if ( getUnit()->typ->weapons.weapon[w].shootable() ) {
+      if ( unit->typ->weapons.weapon[w].shootable() ) {
             weaponCount++;
-            if ( getUnit()->typ->weapons.weapon[w].sourceheight & getUnit()->height )
+            if ( unit->typ->weapons.weapon[w].sourceheight & unit->height )
                shootableWeaponCount++;
       }
 
@@ -69,22 +71,18 @@ ActionResult AttackCommand::searchTargets()
       return ActionResult(213);
    
    
-   /*
-   moveparams.movesx = angreifer->xpos;  // this is currently still needed for wepselguihost
-   moveparams.movesy = angreifer->ypos;
-   */
    
-   if (fieldvisiblenow( getMap()->getField( getUnit()->getPosition() )) == false)
+   if (fieldvisiblenow( getMap()->getField( unit->getPosition() ), getMap()->actplayer ) == false)
       return ActionResult(1);
 
-   if (getUnit()->attacked)
+   if (unit->attacked)
       return ActionResult(202);
    
 
-   if (getUnit()->typ->weapons.count == 0)
+   if ( unit->typ->weapons.count == 0)
       return ActionResult(204);
 
-   if ( getUnit()->typ->wait && getUnit()->hasMoved() && getUnit()->reactionfire.getStatus() != Vehicle::ReactionFire::ready )
+   if ( unit->typ->wait && getUnit()->hasMoved() && unit->reactionfire.getStatus() != Vehicle::ReactionFire::ready )
       return ActionResult(215);
 
 
@@ -97,18 +95,18 @@ ActionResult AttackCommand::searchTargets()
    int d = 0;
    int maxdist = 0;
    int mindist = 20000;
-   for ( int a = 0; a < getUnit()->typ->weapons.count; a++)
-      if ( getUnit()->ammo[a] > 0) {
+   for ( int a = 0; a < unit->typ->weapons.count; a++)
+      if ( unit->ammo[a] > 0) {
          d++;
-         maxdist = max( maxdist, getUnit()->typ->weapons.weapon[a].maxdistance / maxmalq );
-         mindist = min ( mindist, (getUnit()->typ->weapons.weapon[a].mindistance + maxmalq - 1) / maxmalq);
+         maxdist = max( maxdist, unit->typ->weapons.weapon[a].maxdistance / maxmalq );
+         mindist = min ( mindist, (unit->typ->weapons.weapon[a].mindistance + maxmalq - 1) / maxmalq);
       }
 
 
    if (d == 0)
       return ActionResult(204);
 
-   circularFieldIterator( getMap(), getUnit()->getPosition(), maxdist, mindist, FieldIterationFunctor( this, &AttackCommand::fieldChecker ));
+   circularFieldIterator( getMap(), unit->getPosition(), maxdist, mindist, FieldIterationFunctor( this, &AttackCommand::fieldChecker ));
          
    if ( attackableUnits.size() + attackableBuildings.size() + attackableObjects.size() + attackableUnitsKamikaze.size() ) {
       setState(Evaluated);

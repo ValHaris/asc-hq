@@ -208,7 +208,7 @@ ActionResult PutMineCommand::go ( const Context& context )
    } else
       setState( Failed );
       
-   if( context.display && fieldvisiblenow( getMap()->getField(target), context.viewingPlayer, getMap() ))
+   if( context.display && fieldvisiblenow( getMap()->getField(target), context.viewingPlayer ))
       context.display->displayMap();
    return res;
 

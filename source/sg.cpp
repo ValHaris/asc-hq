@@ -1763,13 +1763,13 @@ class ResourceLogger: public SigC::Object {
 
 void createUnitCostList()
 {
-   cout << "name;id;new cost E;new cost M;old cost E;old cost M\n";
+   cout << "name;id;unitset id;new cost E;new cost M;old cost E;old cost M\n";
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       Vehicletype* v = vehicleTypeRepository.getObject_byPos(i);
       Resources oldc = v->calcProductionsCost2();
       Resources newc = v->calcProductionsCost();
       
-      cout <<  v->getName() << ";" << v->id << ";" << newc.energy << ";" << newc.material << ";" << oldc.energy << ";" << oldc.material << "\n";
+      cout <<  v->getName() << ";" << v->id << ";" << getUnitSetID( v) << ";" << newc.energy << ";" << newc.material << ";" << oldc.energy << ";" << oldc.material << "\n";
    }
 }
 

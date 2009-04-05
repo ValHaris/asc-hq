@@ -53,7 +53,7 @@ $(top_builddir)/source/actions/libmiscactions.la  \
 nodist_asc_SOURCES = $(commonSources) sg.cpp
 asc_LDADD = $(commonLibs)
 
-nodist_unittester_SOURCES  =  $(commonSources) main.cpp
+nodist_unittester_SOURCES  =  $(commonSources) 
 unittester_LDADD = $(commonLibs) $(top_builddir)/source/unittests/libunittests.la  
 
 

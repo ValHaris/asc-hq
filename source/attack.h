@@ -42,7 +42,10 @@
 class AttackFormula
 {
       virtual bool checkHemming ( Vehicle* d_eht, int direc );
+   protected:
+      GameMap* gamemap;
    public:
+      AttackFormula( GameMap* gamemap );
       float strength_experience ( int experience );
       float strength_damage ( int damage );
       float strength_attackbonus ( int abonus );
@@ -78,7 +81,7 @@ class FightVisitor
 class tfight : public AttackFormula
 {
    protected:
-      tfight ( void );
+      tfight ( GameMap* gamemap) : AttackFormula( gamemap ) {};
       int dist;
 
    public:
@@ -121,6 +124,8 @@ class tfight : public AttackFormula
 class UnitAttacksSomething : public tfight
 {
    protected:
+      UnitAttacksSomething( GameMap* gamemap ) : tfight( gamemap ) {};
+      
       Vehicle* _attackingunit;
       int getAttackingPlayer()
       {

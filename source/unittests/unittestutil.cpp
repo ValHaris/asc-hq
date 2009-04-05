@@ -57,3 +57,33 @@ Context createTestingContext( GameMap* gamemap )
    context.actionContainer = &gamemap->actions;
    return context;   
 }
+
+void testCargoMovement( Vehicle* veh, int movement )
+{
+   for ( Vehicle::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+      if ( *i ) {
+         Vehicle* cargo1 = *i;
+         assertOrThrow( cargo1->getMovement() == movement );
+            
+         testCargoMovement( cargo1, movement );
+      }
+}
+
+void testCargoMovementMax( Vehicle* veh, int movement )
+{
+   for ( Vehicle::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+      if ( *i ) {
+         Vehicle* cargo1 = *i;
+         assertOrThrow( cargo1->getMovement() <= movement );
+               
+         testCargoMovementMax( cargo1, movement );
+      }
+}
+
+Vehicle* getFirstCargo( ContainerBase* carrier )
+{
+   for ( Vehicle::Cargo::const_iterator i = carrier->getCargo().begin(); i != carrier->getCargo().end(); ++i )
+      if ( *i ) 
+         return *i;
+   return NULL;
+}

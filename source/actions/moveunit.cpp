@@ -106,13 +106,12 @@ ActionResult MoveUnit::runAction( const Context& context )
    Vehicle* vehicle = getUnit();
    
    
-   WindMovement* wind;
+   auto_ptr<WindMovement> wind;
 
    if ( (vehicle->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && getMap()->weather.windSpeed ) {
-      wind = new WindMovement ( vehicle );
-   } else
-      wind = NULL;
-
+      wind.reset( new WindMovement ( vehicle ) );
+   } 
+   
    tfield* oldfield = getMap()->getField( vehicle->getPosition() );
 
    AStar3D::Path::iterator pos = pathToMove.begin();
@@ -161,7 +160,7 @@ ActionResult MoveUnit::runAction( const Context& context )
 
 
       bool container2container = pos->getNumericalHeight()==-1 && next->getNumericalHeight() == -1;
-      pair<int,int> mm = calcMoveMalus( *pos, next->getRealPos(), vehicle, wind, &inhibitAttack, container2container );
+      pair<int,int> mm = calcMoveMalus( *pos, next->getRealPos(), vehicle, wind.get(), &inhibitAttack, container2container );
       movedist += mm.first;
       fueldist += mm.second;
 

@@ -117,7 +117,7 @@ am__DEPENDENCIES_2 =  \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 asc_DEPENDENCIES = $(am__DEPENDENCIES_2)
-nodist_unittester_OBJECTS = $(am__objects_1) main.$(OBJEXT)
+nodist_unittester_OBJECTS = $(am__objects_1)
 unittester_OBJECTS = $(nodist_unittester_OBJECTS)
 unittester_DEPENDENCIES = $(am__DEPENDENCIES_2) \
 	$(top_builddir)/source/unittests/libunittests.la
@@ -349,7 +349,7 @@ $(top_builddir)/source/actions/libmiscactions.la  \
 
 nodist_asc_SOURCES = $(commonSources) sg.cpp
 asc_LDADD = $(commonLibs)
-nodist_unittester_SOURCES = $(commonSources) main.cpp
+nodist_unittester_SOURCES = $(commonSources) 
 unittester_LDADD = $(commonLibs) $(top_builddir)/source/unittests/libunittests.la  
 all: all-am
 
@@ -493,7 +493,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainscreenwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@

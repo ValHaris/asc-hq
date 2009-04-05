@@ -47,7 +47,7 @@ void WholeMapRenderer::renderVisibility()
    Surface& mask = IconRepository::getIcon("largehex.pcx");
    for ( int y = 0; y < gamemap->ysize; ++y )
       for ( int x = 0; x < gamemap->xsize; ++x ) 
-         if ( fieldvisiblenow( gamemap->getField(x,y), gamemap->getPlayerView(), gamemap )) {
+         if ( fieldvisiblenow( gamemap->getField(x,y), gamemap->getPlayerView() )) {
             int view = -1;
             int maxview = 0;
             for ( int i = 1; i < gamemap->getPlayerCount(); ++i )

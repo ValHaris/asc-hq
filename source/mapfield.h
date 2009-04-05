@@ -33,6 +33,7 @@ class  tfield {
     void operator= ( const tfield& f );
 
     void setMap ( GameMap* gamemap_ ) { gamemap = gamemap_; };
+    GameMap* getMap() const { return gamemap; };
 
     //! the terraintype of the field
     TerrainType::Weather* typ;

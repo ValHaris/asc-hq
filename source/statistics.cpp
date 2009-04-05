@@ -35,7 +35,7 @@ double StatisticsCalculator::strength( const ContainerBase* c, bool recurse )
    const Vehicle* veh = dynamic_cast<const Vehicle*>(c);
    if ( veh ) {
       s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
-      AttackFormula af;
+      AttackFormula af( c->getMap() );
       s *= (af.strength_experience( veh->experience) + af.defense_experience( veh->experience))/2 + 1.0 ;
       s *= af.strength_damage( veh->damage );
       s/=10000;

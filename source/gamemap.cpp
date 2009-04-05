@@ -96,11 +96,11 @@ bool OverviewMapHolder::updateField( const MapCoordinate& pos )
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
    tfield* fld = map.getField( pos );
-   VisibilityStates visi = fieldVisibility( fld, map.getPlayerView(), &map );
+   VisibilityStates visi = fieldVisibility( fld, map.getPlayerView() );
    if ( visi == visible_not ) {
       OverviewMapImage::fill ( overviewMapImage, imgpos, 0xff545454 );
    } else {
-      if ( fld->building && fieldvisiblenow( fld, map.getPlayerView(), &map) )
+      if ( fld->building && fieldvisiblenow( fld, map.getPlayerView()) )
          OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
       else {
 

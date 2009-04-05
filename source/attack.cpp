@@ -42,6 +42,12 @@
 #include "actions/removeobject.h"
 #include "actions/changeobjectproperty.h"
 
+
+AttackFormula::AttackFormula( GameMap* gamemap ) 
+{
+   this->gamemap = gamemap;
+}
+
 bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
 { 
    Vehicle*     s_eht;
@@ -49,7 +55,7 @@ bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
    int x = d_eht->xpos;
    int y = d_eht->ypos; 
    getnextfield(x, y, direc);
-   tfield* fld = getfield(x,y);
+   tfield* fld = d_eht->getMap()->getField(x,y);
 
    if ( fld )
       s_eht = fld->vehicle;
@@ -113,7 +119,7 @@ float AttackFormula :: strength_experience ( int experience )
 	float e =		(experience < 0)
 				?	0	
 				:	experience ;
-   return e/maxunitexperience * 2.875 / actmap->getgameparameter( cgp_experienceDivisorAttack );
+   return e/maxunitexperience * 2.875 / gamemap->getgameparameter( cgp_experienceDivisorAttack );
 }
 
 float AttackFormula :: defense_experience ( int experience )
@@ -122,7 +128,7 @@ float AttackFormula :: defense_experience ( int experience )
 				?	0
 				:	experience ;
 
-   return e/maxunitexperience * 1.15 / actmap->getgameparameter( cgp_experienceDivisorDefense );
+   return e/maxunitexperience * 1.15 / gamemap->getgameparameter( cgp_experienceDivisorDefense );
 }
 
 float AttackFormula :: strength_attackbonus ( int abonus )
@@ -140,14 +146,9 @@ float AttackFormula :: defense_defensebonus ( int defensebonus )
 
 
 
-tfight :: tfight ( void )
-{
-}
-
-
 void tfight :: calc ( void )
 {
-   int damagefactor = actmap->getgameparameter ( cgp_attackPower );
+   int damagefactor = gamemap->getgameparameter ( cgp_attackPower );
    const float armordivisor = 5;
 
 
@@ -236,6 +237,7 @@ void tfight :: calc ( void )
 
 
 tunitattacksunit :: tunitattacksunit ( Vehicle* &attackingunit, Vehicle* &attackedunit, bool respond, int weapon, bool reactionfire )
+   : UnitAttacksSomething( attackingunit->getMap() )
 {
    this->reactionfire = reactionfire;
    setup ( attackingunit, attackedunit, respond, weapon );
@@ -289,7 +291,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       // if ( dist <= maxmalq )
@@ -335,7 +337,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
       dv.strength  = int ( ceil( attackedunit->weapstrength[ dv.weapnum ]
                            * WeapDist::getWeaponStrength(weap, attackerWeather, dist, attackedunit->height, attackingunit->height )
                            * attackedunit->typ->weapons.weapon[ dv.weapnum ].targetingAccuracy[attackingunit->typ->movemalustyp] / 100 ));
-      field = getfield ( attackedunit->xpos, attackedunit->ypos );
+      field = attackingunit->getMap()->getField ( attackedunit->xpos, attackedunit->ypos );
       dv.attackbonus  = field->getattackbonus();
       _respond = 1;
 
@@ -359,7 +361,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
 
 
    if ( attackedunit->height <= chfahrend )
-      dv.defensebonus = getfield ( attackedunit->xpos, attackedunit->ypos ) -> getdefensebonus();
+      dv.defensebonus = attackedunit->getMap()->getField ( attackedunit->xpos, attackedunit->ypos ) -> getdefensebonus();
    else
       dv.defensebonus = 0;
 
@@ -400,7 +402,7 @@ void tunitattacksunit :: setresult ( void )
      delete *_pattackedunit;
      *_pattackedunit = NULL;
    }
-   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
+   gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
 }
 
 void tunitattacksunit :: setresult( const Context& context )
@@ -452,6 +454,7 @@ void tunitattacksunit :: setresult( const Context& context )
 
 
 tunitattacksbuilding :: tunitattacksbuilding ( Vehicle* attackingunit, int x, int y, int weapon )
+   : UnitAttacksSomething( attackingunit->getMap() )
 {
    setup ( attackingunit, x, y, weapon );
 }
@@ -462,7 +465,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    _attackingunit = attackingunit;
    _x = x;
    _y = y;
-   _attackedbuilding  = getfield ( x, y ) -> building;
+   _attackedbuilding  = attackingunit->getMap()->getField ( x, y ) -> building;
 
    dist = beeline ( attackingunit->xpos, attackingunit->ypos, x, y );
    int _weapon;
@@ -485,7 +488,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
 
-   int targetWeather = getfield(x,y)->getweather();
+   int targetWeather = attackingunit->getMap()->getField(x,y)->getweather();
 
    av.strength  = int (ceil( attackingunit->weapstrength[_weapon]
                         * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, _attackedbuilding->typ->height )
@@ -503,7 +506,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
    av.height = attackingunit->height;
 
-   tfield* field = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field->getdefensebonus();
@@ -558,7 +561,7 @@ void tunitattacksbuilding :: setresult ( void )
      _attackedbuilding = NULL;
    }
 
-   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
+   gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
 }
 
 void tunitattacksbuilding :: setresult( const Context& context )
@@ -580,6 +583,7 @@ void tunitattacksbuilding :: setresult( const Context& context )
 
 
 tmineattacksunit :: tmineattacksunit ( const MapCoordinate& mineposition, int minenum, Vehicle* &attackedunit )
+   : tfight( attackedunit->getMap() )
 {
    setup ( mineposition, minenum, attackedunit );
 }
@@ -710,6 +714,7 @@ Mine* tmineattacksunit :: getFirstMine()
 
 
 tunitattacksobject :: tunitattacksobject ( Vehicle* attackingunit, int obj_x, int obj_y, int weapon )
+   : UnitAttacksSomething( attackingunit->getMap() )
 {
    setup ( attackingunit, obj_x, obj_y, weapon );
 }
@@ -720,7 +725,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    _x = obj_x;
    _y = obj_y;
 
-   targetField = getfield ( obj_x, obj_y );
+   targetField = attackingunit->getMap()->getField ( obj_x, obj_y );
 
    _attackingunit = attackingunit;
 
@@ -766,7 +771,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   tfield* field2 = getfield ( attackingunit->xpos, attackingunit->ypos );
+   tfield* field2 = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field2->getdefensebonus();
@@ -807,7 +812,7 @@ void tunitattacksobject :: setresult ( void )
 
    /* Remove the object if it was destroyed */
    if ( _obji->damage >= 100 ) {
-     getfield ( _x, _y )-> removeobject ( _obji->typ );
+      _attackingunit->getMap()->getField ( _x, _y )-> removeobject ( _obji->typ );
    }
 
    /* Remove the attacking unit if it was destroyed */
@@ -817,7 +822,7 @@ void tunitattacksobject :: setresult ( void )
    }
 
 
-   actmap->time.set ( actmap->time.turn(), actmap->time.move()+1);
+   gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
 
 }
 
@@ -848,43 +853,43 @@ void tunitattacksobject :: setresult( const Context& context )
 
 
 
-AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
+AttackWeap*  attackpossible( const Vehicle*     attacker, int x, int y)
 {
   AttackWeap* atw = new AttackWeap;
 
   memset(atw, 0, sizeof(*atw));
 
 
-   if ((x < 0) || (y < 0) || (x >= actmap->xsize) || (y >= actmap->ysize))
+   if ((x < 0) || (y < 0) || (x >= attacker->getMap()->xsize) || (y >= attacker->getMap()->ysize))
       return atw;
-   if (angreifer == NULL)
+   if (attacker == NULL)
       return atw;
-   if (angreifer->typ->weapons.count == 0)
+   if (attacker->typ->weapons.count == 0)
       return atw;
 
-   tfield* efield = getfield(x,y);
+   tfield* efield = attacker->getMap()->getField(x,y);
 
    if ( efield->getVehicle() ) {
-      if (fieldvisiblenow(efield, angreifer->color/8))
-         attackpossible2n ( angreifer, efield->getVehicle(), atw );
+      if (fieldvisiblenow(efield, attacker->color/8))
+         attackpossible2n ( attacker, efield->getVehicle(), atw );
    }
    else if (efield->building != NULL) {
-         if ( actmap->getPlayer(angreifer).diplomacy.isHostile( efield->building->getOwner() ) || efield->building->color == 8*8 )
-            for (int i = 0; i < angreifer->typ->weapons.count ; i++)
-               if (angreifer->typ->weapons.weapon[i].shootable() )
-                  if (angreifer->typ->weapons.weapon[i].offensive() )
-                     if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] > 0 ) {
+         if ( attacker->getMap()->getPlayer(attacker).diplomacy.isHostile( efield->building->getOwner() ) || efield->building->color == 8*8 )
+            for (int i = 0; i < attacker->typ->weapons.count ; i++)
+               if (attacker->typ->weapons.weapon[i].shootable() )
+                  if (attacker->typ->weapons.weapon[i].offensive() )
+                     if ( attacker->typ->weapons.weapon[i].targetingAccuracy[cmm_building] > 0 ) {
                         int tm = efield->building->typ->height;
-                        if (tm & angreifer->typ->weapons.weapon[i].targ) {
-                           if (fieldvisiblenow(efield, angreifer->color/8)) {
-                              int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
-                              if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
-                                 if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
-                                    if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight)
-                                       if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(tm))] )
-                                          if (angreifer->ammo[i] > 0) {
-                                             atw->strength[atw->count ] = angreifer->weapstrength[i];
-                                             atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType() ;
+                        if (tm & attacker->typ->weapons.weapon[i].targ) {
+                           if (fieldvisiblenow(efield, attacker->color/8)) {
+                              int d = beeline(attacker->xpos,attacker->ypos,x,y);
+                              if (d <= attacker->typ->weapons.weapon[i].maxdistance)
+                                 if (d >= attacker->typ->weapons.weapon[i].mindistance) {
+                                    if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight)
+                                       if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(tm))] )
+                                          if (attacker->ammo[i] > 0) {
+                                             atw->strength[atw->count ] = attacker->weapstrength[i];
+                                             atw->typ[atw->count ] = 1 << attacker->typ->weapons.weapon[i].getScalarWeaponType() ;
                                              atw->num[atw->count ] = i;
                                              atw->target = AttackWeap::building;
                                              atw->count++;
@@ -904,27 +909,27 @@ AttackWeap*  attackpossible( const Vehicle*     angreifer, int x, int y)
          if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
             bool found = false;
             for ( tfield::ObjectContainer::reverse_iterator j = efield->objects.rbegin(); j != efield->objects.rend(); ++j ) {
-               for ( int i = 0; i <= angreifer->typ->weapons.count - 1; i++)
-                  if (angreifer->typ->weapons.weapon[i].shootable() )
-                     if ( angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwlargemissilen ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwsmallmissilen ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwtorpedon ||
-                          angreifer->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
-                        if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
-                              if (fieldvisiblenow(efield, angreifer->color/8)) {
-                                 int d = beeline(angreifer->xpos,angreifer->ypos,x,y);
-                                 if (d <= angreifer->typ->weapons.weapon[i].maxdistance)
-                                    if (d >= angreifer->typ->weapons.weapon[i].mindistance) {
-                                       if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                          if ( angreifer->typ->weapons.weapon[i].targ & j->typ->getEffectiveHeight() )
-                                             if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(j->typ->getEffectiveHeight()))] )
-                                                if (angreifer->ammo[i] > 0) {
-                                                   atw->strength[atw->count ] = angreifer->weapstrength[i];
+               for ( int i = 0; i <= attacker->typ->weapons.count - 1; i++)
+                  if (attacker->typ->weapons.weapon[i].shootable() )
+                     if ( attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwlargemissilen ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwsmallmissilen ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwtorpedon ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwbombn ) {
+                        if ( attacker->typ->weapons.weapon[i].targetingAccuracy[cmm_building] )
+                              if (fieldvisiblenow(efield, attacker->color/8)) {
+                                 int d = beeline(attacker->xpos,attacker->ypos,x,y);
+                                 if (d <= attacker->typ->weapons.weapon[i].maxdistance)
+                                    if (d >= attacker->typ->weapons.weapon[i].mindistance) {
+                                       if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
+                                          if ( attacker->typ->weapons.weapon[i].targ & j->typ->getEffectiveHeight() )
+                                             if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(j->typ->getEffectiveHeight()))] )
+                                                if (attacker->ammo[i] > 0) {
+                                                   atw->strength[atw->count ] = attacker->weapstrength[i];
                                                    atw->num[atw->count ] = i;
-                                                   atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                                   atw->typ[atw->count ] = 1 << attacker->typ->weapons.weapon[i].getScalarWeaponType();
                                                    atw->target = AttackWeap::object;
                                                    atw->count++;
                                                    found = true;
@@ -950,37 +955,35 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWea
    if ( targetheight == -1 )
       targetheight = target->height;
 
-   const Vehicle* angreifer = attacker;
-   const Vehicle* verteidiger = target;
    int result = false;
    if ( atw )
       atw->count = 0;
 
-   if ( !angreifer )
+   if ( !attacker )
      return false ;
 
-   if ( !verteidiger )
+   if ( !target )
      return false ;
 
-   if (angreifer->typ->weapons.count == 0)
+   if (attacker->typ->weapons.count == 0)
      return false ;
 
-   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
-      for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
+   if ( attacker->getMap()->player[attacker->getOwner()].diplomacy.isHostile( target->getOwner() )  )
+      for ( int i = 0; i < attacker->typ->weapons.count ; i++)
          for ( int h = 0; h < 8; h++ )
             if ( targetheight & (1<<h))
-               if (angreifer->typ->weapons.weapon[i].shootable() )
-                  if (angreifer->typ->weapons.weapon[i].offensive() )
-                     if ( (1<<h) & angreifer->typ->weapons.weapon[i].targ )
-                        if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                           if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] > 0 )
-                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), h)] )
-                                 if (angreifer->ammo[i] > 0) {
+               if (attacker->typ->weapons.weapon[i].shootable() )
+                  if (attacker->typ->weapons.weapon[i].offensive() )
+                     if ( (1<<h) & attacker->typ->weapons.weapon[i].targ )
+                        if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
+                           if ( attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp] > 0 )
+                              if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), h)] )
+                                 if (attacker->ammo[i] > 0) {
                                     result = true;
                                     if ( atw ) {
-                                       atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
+                                       atw->strength[atw->count] = attacker->weapstrength[i] * attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp] / 100;
                                        atw->num[atw->count ] = i;
-                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                       atw->typ[atw->count ] = 1 << attacker->typ->weapons.weapon[i].getScalarWeaponType();
                                        atw->target = AttackWeap::vehicle;
                                        atw->count++;
                                     }
@@ -993,9 +996,6 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWea
 
 bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw, int targetHeight )
 {
-   const Vehicle* angreifer = attacker;
-   const Vehicle* verteidiger = target;
-
    if ( targetHeight < 0 )
       targetHeight = target->height;
    
@@ -1003,31 +1003,31 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWea
    if ( atw )
       atw->count = 0;
 
-   if (angreifer == NULL)
+   if (attacker == NULL)
      return false ;
 
-   if (verteidiger == NULL)
+   if (target == NULL)
      return false ;
 
-   if (angreifer->typ->weapons.count == 0)
+   if (attacker->typ->weapons.count == 0)
      return false ;
 
-//   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() )  )
-      for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
-         if (angreifer->typ->weapons.weapon[i].shootable() )
-            if (angreifer->typ->weapons.weapon[i].offensive() )
-               if (targetHeight & angreifer->typ->weapons.weapon[i].targ )
-                  if (minmalq <= angreifer->typ->weapons.weapon[i].maxdistance)
-                     if (minmalq >= angreifer->typ->weapons.weapon[i].mindistance)
-                        if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                           if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
-                              if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(targetHeight))] )
-                                 if (angreifer->ammo[i] > 0) {
+//   if ( attacker->getMap()->player[attacker->getOwner()].diplomacy.isHostile( target->getOwner() )  )
+      for ( int i = 0; i < attacker->typ->weapons.count ; i++)
+         if (attacker->typ->weapons.weapon[i].shootable() )
+            if (attacker->typ->weapons.weapon[i].offensive() )
+               if (targetHeight & attacker->typ->weapons.weapon[i].targ )
+                  if (minmalq <= attacker->typ->weapons.weapon[i].maxdistance)
+                     if (minmalq >= attacker->typ->weapons.weapon[i].mindistance)
+                        if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
+                           if ( attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp ] > 0)
+                              if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(targetHeight))] )
+                                 if (attacker->ammo[i] > 0) {
                                     result =  true;
                                     if ( atw ) {
-                                       atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp] / 100;
+                                       atw->strength[atw->count] = attacker->weapstrength[i] * attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp] / 100;
                                        atw->num[atw->count ] = i;
-                                       atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                       atw->typ[atw->count ] = 1 << attacker->typ->weapons.weapon[i].getScalarWeaponType();
                                        atw->target = AttackWeap::vehicle;
                                        atw->count++;
                                     }
@@ -1039,41 +1039,38 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWea
 
 bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWeap* atw )
 {
-   const Vehicle* angreifer = attacker;
-   const Vehicle* verteidiger = target;
-
    int result = false;
    if ( atw )
       atw->count = 0;
 
-   if (angreifer == NULL)
+   if (attacker == NULL)
      return false ;
 
-   if (verteidiger == NULL)
+   if (target == NULL)
      return false ;
 
-   if (angreifer->typ->weapons.count == 0)
+   if (attacker->typ->weapons.count == 0)
      return false ;
 
-   int dist = beeline ( angreifer, verteidiger );
-   if ( actmap->player[angreifer->getOwner()].diplomacy.isHostile( verteidiger->getOwner() ) )
-      if ( !angreifer->attacked )
-         if ( !angreifer->typ->wait || !angreifer->hasMoved() || angreifer->reactionfire.getStatus() == Vehicle::ReactionFire::ready)
-            for ( int i = 0; i < angreifer->typ->weapons.count ; i++)
-               if (angreifer->typ->weapons.weapon[i].shootable() )
-                  if (angreifer->typ->weapons.weapon[i].offensive() )
-                     if (verteidiger->height & angreifer->typ->weapons.weapon[i].targ )
-                        if (dist <= angreifer->typ->weapons.weapon[i].maxdistance)
-                           if (dist >= angreifer->typ->weapons.weapon[i].mindistance)
-                              if (angreifer->height & angreifer->typ->weapons.weapon[i].sourceheight )
-                                 if ( angreifer->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( angreifer->height), log2(verteidiger->height))] )
-                                    if ( angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] > 0)
-                                       if (angreifer->ammo[i] > 0) {
+   int dist = beeline ( attacker, target );
+   if ( attacker->getMap()->player[attacker->getOwner()].diplomacy.isHostile( target->getOwner() ) )
+      if ( !attacker->attacked )
+         if ( !attacker->typ->wait || !attacker->hasMoved() || attacker->reactionfire.getStatus() == Vehicle::ReactionFire::ready)
+            for ( int i = 0; i < attacker->typ->weapons.count ; i++)
+               if (attacker->typ->weapons.weapon[i].shootable() )
+                  if (attacker->typ->weapons.weapon[i].offensive() )
+                     if (target->height & attacker->typ->weapons.weapon[i].targ )
+                        if (dist <= attacker->typ->weapons.weapon[i].maxdistance)
+                           if (dist >= attacker->typ->weapons.weapon[i].mindistance)
+                              if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
+                                 if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(target->height))] )
+                                    if ( attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp ] > 0)
+                                       if (attacker->ammo[i] > 0) {
                                           result = true;
                                           if ( atw ) {
-                                             atw->strength[atw->count] = angreifer->weapstrength[i] * angreifer->typ->weapons.weapon[i].targetingAccuracy[ verteidiger->typ->movemalustyp ] / 100;
+                                             atw->strength[atw->count] = attacker->weapstrength[i] * attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp ] / 100;
                                              atw->num[atw->count ] = i;
-                                             atw->typ[atw->count ] = 1 << angreifer->typ->weapons.weapon[i].getScalarWeaponType();
+                                             atw->typ[atw->count ] = 1 << attacker->typ->weapons.weapon[i].getScalarWeaponType();
                                              atw->target = AttackWeap::vehicle;
                                              atw->count++;
                                           }

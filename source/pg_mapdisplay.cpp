@@ -100,10 +100,10 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    }
    
    tfield* fld1 = actmap->getField ( start );
-   int view1 = fieldVisibility ( fld1, actmap->getPlayerView(), actmap );
+   int view1 = fieldVisibility ( fld1, actmap->getPlayerView() );
 
    tfield* fld2 = actmap->getField ( dest );
-   int view2 = fieldVisibility ( fld2, actmap->getPlayerView(), actmap );
+   int view2 = fieldVisibility ( fld2, actmap->getPlayerView() );
 
    bool shareView;
    if ( actmap->getPlayerView() >= 0)
