@@ -36,6 +36,31 @@
       u6 = 0
    } HitAcc
 
+   WeaponX.WeaponEffectiveness ->* VehicleType.AntiTankMissile
+   AntiTankMissile {      
+         trooper = 0
+         rail_vehicle = 120
+         building|turret|object = 120
+         hoovercraft = 120
+         helicopter = 120
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 120
+         heavy_tracked_vehicle = 120
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 120
+         heavy_wheeled_vehicle = 120
+         
+         light_ship = 120
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+   } AntiTankMissile
+
 ;      WeaponX.ReactionFireShots = 2
 
 
@@ -378,7 +403,7 @@
       Sound = flak.ogg
       targets = low_level_flight medium_level_flight 
       shotFrom = floating ground_level 
-      MaxRange = 20
+      MaxRange = 30
       MinRange = 10
       Ammo = 10
       ReactionFireShots = 2
@@ -462,18 +487,18 @@
       HitAccuracy.u1 = 100
 
       WeaponEffectiveness {
-         trooper = 25
+         trooper = 40
          rail_vehicle = 100
          building|turret|object = 100
          hoovercraft = 80
          helicopter = 100
 
-         light_tracked_vehicle = 70
-         medium_tracked_vehicle = 85
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
          heavy_tracked_vehicle = 100
 
-         light_wheeled_vehicle = 70
-         medium_wheeled_vehicle = 85
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
          heavy_wheeled_vehicle = 100
          
          light_ship = 80
@@ -615,7 +640,7 @@
 
 ; surface-air missile
       SAM { 
-         Type = air_missile shootable 
+         Type = ground_missile shootable
          Sound = weapon03_s.ogg
          targets = low_level_flight medium_level_flight 
          shotFrom = floating ground_level 
@@ -672,12 +697,12 @@
 ; small surface-air misslile
       smSAM ->* VehicleType.SAM
       smSAM.MAxRange = 30
-      smSAM.Type = ground_missile shootable
       smSAM.Punch@MaxRange = 65
       smSAM.Punch@MinRange = 65
 
 ; surface-highair misslie
       SAMH ->* VehicleType.SAM 
+      SAMH.Type = air_missile shootable 
       SAMH.targets = low_level_flight medium_level_flight high_level_flight
       SAMH.HitAccuracy.u3 = 100
 
@@ -879,6 +904,18 @@
       smMSM.Type = ground_missile shootable 
       smMSM.Punch@MaxRange = 60
       smMSM.Punch@MinRange = 60
+
+      HeliWeapon {
+            building|turret|object = 110
+            hoovercraft = 110
+            rail_vehicle = 110
+
+            medium_tracked_vehicle = 110
+            heavy_tracked_vehicle = 110
+
+            medium_wheeled_vehicle = 110
+            heavy_wheeled_vehicle = 110
+       } HeliWeapon
 
 
 ; ----------------------------------------------------------------------------------------------------------------
@@ -1753,6 +1790,7 @@
       HitAccuracy.0 = 100
       WeaponEffectiveness {
       } WeaponEffectiveness
+      ReactionFireShots = 0
    } MineWeapon
 
    Mine2Weapon ->* VehicleType.MineWeapon
@@ -1765,6 +1803,7 @@
       MaxRange = 10
       MinRange = 10
       Ammo = 2
+      ReactionFireShots = 0
       Punch@MaxRange = 120
       Punch@MinRange = 120
       HitAccuracy ->* VehicleType.HitAcc 
@@ -1780,6 +1819,7 @@
       MaxRange = 10
       MinRange = 10
       Ammo = 2
+      ReactionFireShots = 0
       Punch@MaxRange = 120
       Punch@MinRange = 120
       HitAccuracy ->* VehicleType.HitAcc 
@@ -1797,6 +1837,7 @@
       MaxRange = 10
       MinRange = 10
       Ammo = 0
+      ReactionFireShots = 0
       Punch@MaxRange = 0
       Punch@MinRange = 0
       HitAccuracy ->* VehicleType.HitAcc 
@@ -1821,6 +1862,7 @@
       MaxRange = 10
       MinRange = 10
       Ammo = 0
+      ReactionFireShots = 0
       Punch@MaxRange = 0
       Punch@MinRange = 0
 
@@ -1868,6 +1910,7 @@
       Ammo = 20
       Punch@MaxRange = 0
       Punch@MinRange = 0
+      ReactionFireShots = 0
 
       HitAccuracy ->* VehicleType.HitAcc
       HitAccuracy.0 = 100
