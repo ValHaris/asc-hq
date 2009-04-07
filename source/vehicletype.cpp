@@ -1220,6 +1220,8 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
    pc.closeBracket();
 
    pc.addInteger("ReactionFireShots", reactionFireShots, 1 );
+   if ( getScalarWeaponType() == cwminen && reactionFireShots > 0 )
+        warning(pc.getFileName() + " has a mine with Reactionfire. This doesn't make sense.");
 
    pc.openBracket("HitAccuracy" );
    {
@@ -1702,7 +1704,7 @@ Resources Vehicletype :: calcProductionsCost()
    for ( int T=0; T < entranceSystems.size(); ++T )
       if ((( entranceSystems[T].container_height < chtieffliegend && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))) ||
             (( entranceSystems[T].container_height & ( chfliegend | chhochfliegend | chsatellit)) && (entranceSystems[T].height_abs & ( chfliegend | chhochfliegend | chsatellit))))
-            && maxLoadableUnits > 3 )
+            && maxLoadableUnits > 6 )
          carrierCharge = true;
 
    // Check maximale Bewegungsreichweite
@@ -1723,8 +1725,8 @@ Resources Vehicletype :: calcProductionsCost()
 // Part III typecost
 
    if ( movemalustyp == MoveMalusType::trooper) {
-      typecoste += armor*2;
-      typecostm += armor*2;
+      typecoste += armor*3;
+      typecostm += armor*3;
    } else
       if ( movemalustyp == MoveMalusType::light_wheeled_vehicle ) {
          typecoste += armor*6;
@@ -1800,17 +1802,17 @@ Resources Vehicletype :: calcProductionsCost()
       typecoste += armor*3;
       typecostm += armor*2;
    }
-   // Zuschlag fuer hochfliegende Einheiten / Extra starke Triebwerke
+   // Zuschlag fuer hochfliegende Einheiten 
    if ( height & chhochfliegend ) {
-      typecoste += armor*2;
-      typecostm += armor*2;
+      typecoste += armor*4;
+      typecostm += armor*4;
    }
-   // Zuschlag fuer hochfliegende Einheiten / Extra starke Triebwerke
+   // Zuschlag fuer normal fliegende Einheiten 
    if ( height & chfliegend ) {
-      typecoste += armor*2;
-      typecostm += armor*2;
+      typecoste += armor*3;
+      typecostm += armor*3;
    }
-   // Zuschlag fuer hochfliegende Einheiten / Extra starke Triebwerke
+   // Zuschlag fuer teif fliegende Einheiten 
    if ( height & chtieffliegend ) {
       typecoste += armor*2;
       typecostm += armor*2;
@@ -1854,7 +1856,16 @@ Resources Vehicletype :: calcProductionsCost()
       for ( int W=0; W < weapons.count; ++W ) {
          int weaponsinglecoste = 0;
          int weaponsinglecostm = 0;
-         if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn || weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen || weapons.weapon[W].getScalarWeaponType() == cwbombn || weapons.weapon[W].getScalarWeaponType() == cwminen) {
+         if (weapons.weapon[W].getScalarWeaponType() == cwminen) {
+            if ( weapons.weapon[W].shootable() ) {
+               weaponsinglecoste += weapons.weapon[W].maxstrength;
+               weaponsinglecostm += weapons.weapon[W].maxstrength;
+            } else {
+               weaponsinglecoste += 100;
+               weaponsinglecostm += 50;
+            }
+         }
+         if (weapons.weapon[W].getScalarWeaponType() == cwmachinegunn || weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen || weapons.weapon[W].getScalarWeaponType() == cwbombn) {
             if ( weapons.weapon[W].shootable() ) {
                weaponsinglecoste += weapons.weapon[W].maxstrength*5;
                weaponsinglecostm += weapons.weapon[W].maxstrength*5;
@@ -1895,8 +1906,8 @@ Resources Vehicletype :: calcProductionsCost()
          }
          // Waffenreichweitenzuschlag Kurzstrecke
          if (weapons.weapon[W].maxdistance > 19 ) {
-            weaponsinglecoste += (weapons.weapon[W].maxdistance)*80;
-            weaponsinglecostm += (weapons.weapon[W].maxdistance)*80;
+            weaponsinglecoste += (weapons.weapon[W].maxdistance-10)*80;
+            weaponsinglecostm += (weapons.weapon[W].maxdistance-10)*80;
          }
          // Waffenreichweitenzuschlag Mittelstrecke
          if (weapons.weapon[W].maxdistance > 69 ) {
@@ -1917,35 +1928,37 @@ Resources Vehicletype :: calcProductionsCost()
          int weaponspecial = 0;
          int weaponRF = weapons.weapon[W].reactionFireShots*weaponsinglecostm/10;
          int weaponMAM = maxmoverange*weaponsinglecostm/500;
-         int weaponNAAM = weaponsinglecostm/5;
+         int weaponNAAM = weaponsinglecostm/4;
          int weaponMDRF = weapons.weapon[W].reactionFireShots*weaponsinglecostm*maxmoverange/400;
 
-         if ( hasFunction( MoveWithReactionFire ) && weapons.weapon[W].shootable()) {
-            if ( wait ) {
-               if ( hasFunction( MoveAfterAttack ) ) {  // MDRF+NAAM+MAM (Defkind,Spear,Stahlschwein)
-                  weaponspecial += weaponMDRF+weaponMAM-weaponNAAM;
-               } else {                                 // MDRF+NAAM     (Coma, CM-U-Boote, Def-Panzer,Turrets)
-                  weaponspecial += weaponMDRF-weaponNAAM;
+         if ( weapons.weapon[W].shootable() ) {
+            if ( hasFunction( MoveWithReactionFire ) ) {
+               if ( wait ) {
+                  if ( hasFunction( MoveAfterAttack ) ) {  // MDRF+NAAM+MAM (Defkind,Spear,Stahlschwein)
+                     weaponspecial += weaponMDRF+weaponMAM-weaponNAAM;
+                  } else {                                 // MDRF+NAAM     (Coma, CM-U-Boote, Def-Panzer,Turrets)
+                     weaponspecial += weaponMDRF-weaponNAAM;
+                  }
+               } else {
+                  if ( hasFunction( MoveAfterAttack ) ) {  // MDRF+MAM      (Druk, Innocence, Skjold, PHM, Jub-O)
+                     weaponspecial += weaponMDRF+weaponMAM;
+                  } else {                                 // MDRF          (Schiffe, fahrende Bunker, Luftabwehrpanzer/Trooper)
+                     weaponspecial += weaponMDRF;
+                  }
                }
             } else {
-               if ( hasFunction( MoveAfterAttack ) ) {  // MDRF+MAM      (Druk, Innocence, Skjold, PHM, Jub-O)
-                  weaponspecial += weaponMDRF+weaponMAM;
-               } else {                                 // MDRF          (Schiffe, fahrende Bunker, Luftabwehrpanzer/Trooper)
-                  weaponspecial += weaponMDRF;
-               }
-            }
-         } else {
-            if ( wait ) {
-               if ( hasFunction( MoveAfterAttack ) ) {  // NAAM+MAM      (Coma2, K5, PzH2000, Pulsar)
-                  weaponspecial += weaponRF+weaponMAM-weaponNAAM;
-               } else {                                 // NAAM          (Coma3, BodenCMs, Schienengesch�tze)
-                  weaponspecial += weaponRF-weaponNAAM;
-               }
-            } else {                                    // MAM           (FAV,Flugzeug,U-Boot,WIG)
-               if ( hasFunction( MoveAfterAttack ) ) {
-                  weaponspecial += weaponRF+weaponMAM;
-               } else {                                 // ohne alles    (Panzer/Trooper)
-                  weaponspecial += weaponRF;
+               if ( wait ) {
+                  if ( hasFunction( MoveAfterAttack ) ) {  // NAAM+MAM      (Coma2, K5, PzH2000, Pulsar)
+                     weaponspecial += weaponRF+weaponMAM-weaponNAAM;
+                  } else {                                 // NAAM          (Coma3, BodenCMs, Schienengesch�tze)
+                     weaponspecial += weaponRF-weaponNAAM;
+                  }
+               } else {                                    // MAM           (FAV,Flugzeug,U-Boot,WIG)
+                  if ( hasFunction( MoveAfterAttack ) ) {
+                     weaponspecial += weaponRF+weaponMAM;
+                  } else {                                 // ohne alles    (Panzer/Trooper)
+                     weaponspecial += weaponRF;
+                  }
                }
             }
          }

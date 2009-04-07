@@ -1925,6 +1925,6 @@ int main(int argc, char *argv[] )
 
    writegameoptions ( );
 
-   // createUnitCostList();
+   createUnitCostList();
    return( returncode );
 }
