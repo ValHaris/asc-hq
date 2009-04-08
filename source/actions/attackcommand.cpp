@@ -243,7 +243,7 @@ void AttackCommand :: writeData ( tnstream& stream ) const
 
 ASCString AttackCommand :: getCommandString() const {
    ASCString c;
-   c.format("attack ( %d, %d, %d )", getUnitID(), target.x, target.y );
+   c.format("attack ( %d, %d, %d, %d )", getUnitID(), target.x, target.y, weapon );
    return c;
    
 }

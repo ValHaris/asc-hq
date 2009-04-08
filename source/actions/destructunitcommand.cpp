@@ -121,7 +121,6 @@ ASCString DestructUnitCommand :: getCommandString() const
    ASCString c;
    c.format("DestructUnit ( %d  )", getContainerID() );
    return c;
-
 }
 
 GameActionID DestructUnitCommand::getID() const

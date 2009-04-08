@@ -169,7 +169,7 @@ ASCString CargoMoveCommand :: getCommandString() const
 {
    if ( mode == moveOutwards ) {
       ASCString c;
-      c.format("MoveUnitOut ( %d  )", getUnitID() );
+      c.format("MoveUnitOut ( %d )", getUnitID() );
       return c;
    }
    if ( mode == moveInwards ) {

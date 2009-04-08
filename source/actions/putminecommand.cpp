@@ -248,7 +248,7 @@ ASCString PutMineCommand :: getCommandString() const
 {
    ASCString c;
    if ( mode == Build )
-      c.format("putmine ( %d, %d, %d, %d )", getUnitID(), target.x, target.y, object );
+      c.format("putmine ( %d, %d, %d, %d )", getUnitID(), target.x, target.y, (int)object );
    else
       c.format("removemine ( %d, %d, %d )", getUnitID(), target.x, target.y );
    return c;

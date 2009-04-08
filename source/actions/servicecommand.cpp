@@ -190,7 +190,15 @@ void ServiceCommand :: writeData ( tnstream& stream ) const
 ASCString ServiceCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("ServiceCommand " );
+   for ( Values::const_iterator i = values.begin(); i != values.end(); ++i ) {
+      ASCString s;
+      s.format("ServiceCommand (%d, %d, %d, %d)", getContainerID(), destinationContainerID, i->first, i->second );
+      
+      if ( c.length() )
+         c += "\n";
+      
+      c += s;
+   }
    return c;
 }
 
