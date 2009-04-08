@@ -625,9 +625,22 @@ fi
 AC_SUBST(MUSICDIR)
 
 
-LokiDir="libs/loki-0.1.6/include/"
-LokiInclude="-I\${top_srcdir}/source/libs/loki-0.1.6/include/"
+AC_ARG_ENABLE( internal-loki, AS_HELP_STRING([--enable-internal-loki], [Don't use the system libloki]), forceinternallibloki=yes )
+AC_CHECK_HEADER(loki/Functor.h,lokifound=yes,lokifound=no) 
+
+AC_MSG_CHECKING(for Loki library to use)
+if test "x$lokifound" != xyes -o $forceinternallibloki = yes ; then 
+   AC_MSG_RESULT(internal)
+   LokiDir="libs/loki-0.1.6/include/"
+   LokiInclude="-I\${top_srcdir}/source/libs/loki-0.1.6/include/"
+   LOKI_LIBS=\${top_builddir}/source/libs/loki-0.1.6/libloki.la
+else   
+   AC_MSG_RESULT(system)
+   LokiInclude=
+   LOKI_LIBS="-lloki"
+fi
 AC_SUBST(LokiInclude)
+AC_SUBST(LOKI_LIBS)
 
 
 if test "x$XVIDAVAIL" = x1; then 
