@@ -35,6 +35,7 @@
 #include <queue>
 
 #include <SDL.h>
+#include <bzlib.h>
 
 
 #include "global.h"
@@ -45,13 +46,6 @@
 #include "simplestream.h"
 
 
-#ifdef USE_SYSTEM_BZ2
- #include <bzlib.h>
-#else
- extern "C" {
-  #include "libs/bzlib/bzlib.h"
- }
-#endif
 
 extern SDL_RWops *SDL_RWFromStream( pnstream stream );
 

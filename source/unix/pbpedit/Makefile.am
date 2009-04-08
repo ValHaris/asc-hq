@@ -28,7 +28,7 @@ explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp
 
 asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
-$(top_builddir)/source/libs/triangul/libtriangul.la @LDADDLIBBZ2@ \
+$(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
 $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/util/libutil.la  \
 $(top_builddir)/source/actions/libactions.la  \
