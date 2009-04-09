@@ -106,10 +106,10 @@ extern int fieldAccessible( const tfield*        field,
 
 /** removes all units that cannot exist any more, either due to invalid terrin
     (like tanks on melting ice) or too much wind (eg. hoovercrafts in a storm) */
-extern void  checkunitsforremoval ( GameMap* gamemap );
+extern void  checkunitsforremoval();
 
 //! removes all objects that cannot exist where they currently are (terrainaccess)
-extern void checkobjectsforremoval ( GameMap* gamemap );
+extern void checkobjectsforremoval();
 
 //! returns the maximum wind speed that the unit can endure
 extern int          getmaxwindspeedforunit ( const Vehicle* eht );
