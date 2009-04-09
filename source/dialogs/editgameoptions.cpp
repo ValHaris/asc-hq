@@ -43,6 +43,12 @@
 
 bool GetVideoModes::comparator( const ModeRes& a, const ModeRes& b )
 {
+   if ( a.first == 0 )
+      return true;
+   
+   if ( b.first == 0 )
+      return false;
+   
    if ( a.first > b.first ) {
       return true;
    } else {
@@ -108,7 +114,6 @@ GetVideoModes::GetVideoModes()
    modes=SDL_ListModes(&format, SDL_FULLSCREEN);
 
 
-   list.push_back( "graphic mode not listed");
    listedmodes.push_back( make_pair( 0, 0));
    
    /* Check is there are any modes available */
@@ -135,7 +140,11 @@ GetVideoModes::GetVideoModes()
 
       for ( vector <ModeRes > ::iterator i = listedmodes.begin(); i != listedmodes.end(); ++i ) {
          ASCString s;
-         s.format( "%d*%d", i->first, i->second );
+         if (  i->first )
+            s.format( "%d*%d", i->first, i->second );
+         else 
+            s = "graphic mode not listed"; 
+         
          list.push_back ( s );
       }
 
