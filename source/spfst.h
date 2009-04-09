@@ -106,10 +106,10 @@ extern int fieldAccessible( const tfield*        field,
 
 /** removes all units that cannot exist any more, either due to invalid terrin
     (like tanks on melting ice) or too much wind (eg. hoovercrafts in a storm) */
-extern void  checkunitsforremoval ( void );
+extern void  checkunitsforremoval ( GameMap* gamemap );
 
 //! removes all objects that cannot exist where they currently are (terrainaccess)
-extern void checkobjectsforremoval ( void );
+extern void checkobjectsforremoval ( GameMap* gamemap );
 
 //! returns the maximum wind speed that the unit can endure
 extern int          getmaxwindspeedforunit ( const Vehicle* eht );
@@ -175,7 +175,7 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
   */
 //! {@ 
   extern bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player   );
-  inline bool fieldvisiblenow( const tfield* pe, int player ) { return fieldvisiblenow( pe, NULL, pe->getMap()->actplayer); };
+  inline bool fieldvisiblenow( const tfield* pe, int player ) { return fieldvisiblenow( pe, NULL, player); };
   inline bool fieldvisiblenow( const tfield* pe, Vehicle* veh  ) { return fieldvisiblenow( pe, veh, pe->getMap()->actplayer); };
   inline bool fieldvisiblenow( const tfield* pe ) { return fieldvisiblenow( pe, pe->getMap()->actplayer);};
 //! }@
