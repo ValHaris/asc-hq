@@ -1,0 +1,171 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = UnitTest ASSAULT
+   Infotext = [Assault Tanks are less-than-subtle. They are fast, although not
+              as fast ast the Light Tank, and they pack a punch, although
+              not as much as the Heavy Combat Tank. An Assault Tank is made
+              to run into enemy blockades, take the first beating while the
+              backup arrives and still walk away in one piece. Perhaps the
+              best powerfull vehicle on the battlefield. InfoImage = BananaJoe]
+   ID = 1000000003
+   SecondaryIDs = 
+   View = 30
+   Jamming = 0
+   InfoImage = mk1v_assault.jpg
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 1200
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 1200
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = assault tank
+   Armor = 650
+   Picture = unittest-assaulttank.png
+   Height = ground_level 
+   WaitForAttack = false
+   FuelConsumption = 18
+   Features = leaves_tracks 
+   Movement = 0 0 0 79 0 0 0 0 
+   Category = medium_tracked_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 403 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 75
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Ditch Frozen_water 
+      terrain_all = 
+      terrain_not = Swamp Large_rocks 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 1
+      Weapon0 { 
+         Type = cannon shootable 
+         targets = floating ground_level 
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 12
+         Punch@MaxRange = 120
+         Punch@MinRange = 120
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            heavy_tracked_vehicle = 120
+            light_wheeled_vehicle = 80
+            heavy_wheeled_vehicle = 120
+            trooper = 25
+            rail_vehicle = 120
+            medium_ship = 120
+            building|turret|object = 120
+            heavy_aircraft = 120
+            heavy_ship = 120
+         } WeaponEffectiveness
+         name = Panzerabwehrkanone
+      } Weapon0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 3 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 7370
+      Material = 7275
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 503 291 0 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 7 
+} VehicleType
