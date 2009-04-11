@@ -14,7 +14,5 @@ VehicleType {
    Weapons { 
       Weapon0.Punch@MaxRange -= 2
       Weapon0.Punch@MinRange -= 2
-      Weapon1.Punch@MaxRange -= 2
-      Weapon1.Punch@MinRange -= 2
    } Weapons
 } VehicleType

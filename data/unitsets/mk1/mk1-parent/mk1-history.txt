@@ -7,7 +7,7 @@ Spezifikationen: GAMER
 __________________
 11.04.2009 (GAMER)
 -MBV an neue Preise angepasst
--Doppelwaffen entfernt, Armadillo,Armadillo2,GASP,Gunboat,Homer,Shark
+-Doppelwaffen entfernt, Armadillo,Armadillo2,GASP,Gunboat,Homer,Shark,CAD
 -Shine, Waffenbugfix
 -LTT, Waffenname korrigiert
 -InfoImage = Surveyor,Burro,Judy,Zeppelin,Ark,Gunboat,Jellyfish
