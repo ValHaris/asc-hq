@@ -21,7 +21,7 @@ VehicleType {
       fuel = 10000
    } Tank
    FuelConsumption = 30
-   Movement = 0 0 0 60 140 160 150 0 
+   Movement = 0 0 0 60 130 160 150 0 
    Height = ground_level low_level_flight medium_level_flight high_level_flight 
    MovementSound = aircraft_l_g.ogg
 

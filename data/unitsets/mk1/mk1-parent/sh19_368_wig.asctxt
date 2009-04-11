@@ -29,7 +29,8 @@ VehicleType {
    } Tank
    FuelConsumption = 25
    Movement = 0 0 65 130 0 0 0 0 
-   TerrainAccess ->* VehicleType.smallship_terrain 
+   TerrainAccess ->* VehicleType.verysmallship_terrain 
+   TerrainAccess.terrain_not = forest small_rocks large_rocks frozen_water
    MovementSound = jet_pass.ogg
 
    Construction { 

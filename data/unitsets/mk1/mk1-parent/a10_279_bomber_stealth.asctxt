@@ -19,7 +19,7 @@ VehicleType {
       fuel = 8000
    } Tank
    FuelConsumption = 29
-   Movement = 0 0 0 60 170 170 0 0 
+   Movement = 0 0 0 60 150 170 0 0 
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 

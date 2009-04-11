@@ -32,7 +32,7 @@ VehicleType {
    WaitForAttack = true
    Weapons { 
       Initiative = 0
-      Number = 7
+      Number = 5
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.ReactionFireShots = 2
       Weapon0.MaxRange = 40
@@ -45,18 +45,12 @@ VehicleType {
 
       Weapon2 ->* VehicleType.Ship_MG 
       Weapon2.MaxRange = 20
-      Weapon2.Ammo = 10
+      Weapon2.Ammo = 50
 
-      Weapon3 ->* VehicleType.AmmoLM 
-      Weapon3.Ammo = 10
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.Ammo = 50
 
-      Weapon4 ->* VehicleType.AmmoSM 
+      Weapon4 ->* vehicleType.AmmoMine 
       Weapon4.Ammo = 50
-
-      Weapon5 ->* vehicleType.AmmoMine 
-      Weapon5.Ammo = 50
-
-      Weapon6 ->* vehicleType.AmmoMG 
-      Weapon6.Ammo = 80
    } Weapons
 } VehicleType

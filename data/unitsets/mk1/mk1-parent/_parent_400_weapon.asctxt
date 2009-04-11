@@ -722,7 +722,7 @@
       SAMB.WeaponEffectiveness.heavy_aircraft = 120
 
 ; surface-highair-ultra misslie
-      SAMHU ->* VehicleType.SAM 
+      SAMHU ->* VehicleType.SAMH 
       SAMHU.targets = low_level_flight medium_level_flight high_level_flight
       SAMHU.HitAccuracy.u1 = 80
       SAMHU.HitAccuracy.u2 = 100
@@ -1391,8 +1391,8 @@
          MaxRange = 10
          MinRange = 10
          Ammo = 2
-         Punch@MaxRange = 90
-         Punch@MinRange = 90
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
          HitAccuracy { 
             d6 = 0
             d5 = 0

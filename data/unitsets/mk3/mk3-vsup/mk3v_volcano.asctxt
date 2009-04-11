@@ -13,7 +13,7 @@ VehicleType {
    Infoimage = mk3v_volcano.jpg
    GuideSortHelp = 562 0 0 0 3 0 0 0 0 0
 
-   Features += mine_layer mineview
+   Features += mine_layer NoMineRemoval
 
    Weapons { 
       Initiative = 0

@@ -11,6 +11,8 @@ VehicleType {
 
    Armor = 280
    Weight = 25
+   Jamming = 17
+   Features += jam_only_own_field
 
    Tank { 
       Energy = 0

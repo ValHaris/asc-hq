@@ -4,6 +4,7 @@ VehicleType {
    ID = 43
 
    picture = MK1s_Ark.pcx
+   InfoImage = mk1s_ark.jpg
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Weapons { 

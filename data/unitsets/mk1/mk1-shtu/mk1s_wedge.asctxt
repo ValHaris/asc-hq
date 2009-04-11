@@ -19,19 +19,19 @@ VehicleType {
 
    Weapons { 
       Initiative = -30
-      Number = 7
+      Number = 6
       Weapon0 ->* VehicleType.Ship_Flak 
       Weapon0.Ammo = 20
       
       Weapon1 ->* VehicleType.SAMH 
       Weapon1.MaxRange = 50
-      Weapon1.Ammo = 20
+      Weapon1.Ammo = 100
 
       Weapon2 ->* VehicleType.AmmoSM 
       Weapon2.Ammo = 100
 
-      Weapon3 ->* VehicleType.AmmoLM 
-      Weapon3.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoMG 
+      Weapon3.Ammo = 200
 
       Weapon4 ->* VehicleType.AmmoTorp 
       Weapon4.Ammo = 50
@@ -39,7 +39,5 @@ VehicleType {
       Weapon5 ->* VehicleType.AmmoBomb 
       Weapon5.Ammo = 100
 
-      Weapon6 ->* VehicleType.AmmoMG 
-      Weapon6.Ammo = 200
    } Weapons
 } VehicleType

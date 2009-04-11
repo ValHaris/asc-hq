@@ -17,13 +17,13 @@ ObjectType {
       Energy = 0
       Material = 6000
       fuel = 6000
-      Movement = 60
+      Movement = 50
    } ConstructionCost
    RemovalCost { 
       Energy = 0
       Material = -300
       fuel = 60
-      Movement = 50
+      Movement = 45
    } RemovalCost
 
    dry { 

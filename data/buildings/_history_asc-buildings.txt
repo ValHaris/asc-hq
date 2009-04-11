@@ -1,7 +1,11 @@
-Grafiken: GAMER,Schicksal,AndreasK,Xyphagoroszh und Grom
+﻿Grafiken: GAMER,Schicksal,AndreasK,Xyphagoroszh und Grom
 Spezifikationen: GAMER
 
 BUILDINGS HISTORY
+
+__________________
+Beta-09-04
+-Tiefseefabrik eingebaut
 
 __________________
 10.03.2009 (Martin)

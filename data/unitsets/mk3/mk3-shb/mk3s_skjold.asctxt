@@ -11,7 +11,7 @@ VehicleType {
    InfoImage = mk3s_skjold.jpg
    GuideSortHelp = 518 418 0 0 3 0 0 0 0 0
 
-   Armor -= 50
+   Armor += 50
    jamming = 39
    Transportation ->* VehicleType.TransLowTrooper2
    Features += jam_only_own_field move_after_attack
@@ -25,20 +25,20 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 8
+      Number = 6
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 90
 
       Weapon1 ->* VehicleType.ShM
-      Weapon1.Ammo = 6
+      Weapon1.Ammo = 10
       Weapon1.MaxRange = 30
       Weapon1.Punch@MaxRange = 95
       Weapon1.Punch@MinRange = 95
 
       Weapon2. ->* VehicleType.smSAM
-      Weapon2.Ammo = 4
+      Weapon2.Ammo = 10
 
       Weapon3 ->* VehicleTYpe.AmmoMine
       Weapon3.Ammo = 10
@@ -48,12 +48,6 @@ VehicleType {
 
       Weapon5 ->* vehicleType.AmmoBomb 
       Weapon5.Ammo = 10
-
-      Weapon6 ->* vehicleType.AmmoAM 
-      Weapon6.Ammo = 10
-
-      Weapon7 ->* vehicleType.AmmoGM 
-      Weapon7.Ammo = 10
 
    } Weapons
 } VehicleType

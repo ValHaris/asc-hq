@@ -5,7 +5,12 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
-Beta-09-01
+11.04.2009 (GAMER)
+-Elite/Special-Pio, an neue Kosten angepasst
+-Doppelwaffen entfernt: Arsenal, Baynunah, Burke, Daring, Iowa, Meko, Mirage, Skjold, Ticonderoga, P1000
+-Volcano, kein Minenräumen mehr
+__________________
+03.08.2009 (GAMER)
 -LR5 extranalAmmoTransfer
 -Spacelab passt wieder in Booster
 -LongTrack wie auf Foto Kettenfahrzeug

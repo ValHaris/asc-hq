@@ -22,14 +22,14 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 2
+      Number = 1
       Weapon0 ->* VehicleType.Tank_Gun 
       Weapon0.MaxRange = 30
       Weapon0.Ammo = 6
       Weapon0.Punch@MaxRange = 90
       Weapon0.Punch@MinRange = 115
       Weapon0.Name = Artilleriekanone
+      Weapon0.ReactionFireShots = 2
 
-      Weapon1 ->* VehicleType.Weapons.Weapon0 
    } Weapons
 } VehicleType

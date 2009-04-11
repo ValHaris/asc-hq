@@ -18,33 +18,27 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 8
+      Number = 6
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 90
 
       Weapon1 ->* VehicleType.MG45med
-      Weapon1.Ammo = 10
+      Weapon1.Ammo = 40
 
       Weapon2. ->* VehicleType.SAM
-      Weapon2.Ammo = 6
+      Weapon2.Ammo = 10
       Weapon2.MaxRange = 30
 
       Weapon3 ->* vehicleType.AmmoTorp 
       Weapon3.Ammo = 10
 
-      Weapon4 ->* VehicleType.AmmoMG 
-      Weapon4.Ammo = 40
+      Weapon4 ->* vehicleType.AmmoBomb 
+      Weapon4.Ammo = 20
 
-      Weapon5 ->* vehicleType.AmmoBomb 
+      Weapon5 ->* vehicleType.AmmoGM 
       Weapon5.Ammo = 20
-
-      Weapon6 ->* vehicleType.AmmoAM 
-      Weapon6.Ammo = 20
-
-      Weapon7 ->* vehicleType.AmmoGM 
-      Weapon7.Ammo = 20
 
    } Weapons
 } VehicleType

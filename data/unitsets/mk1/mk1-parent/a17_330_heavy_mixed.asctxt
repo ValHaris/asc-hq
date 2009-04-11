@@ -22,7 +22,7 @@ Its only downside is its high price and its inability to perform ranged attacks.
       fuel = 5000
    } Tank
    FuelConsumption = 26
-   Movement = 0 0 0 60 200 220 220 0 
+   Movement = 0 0 0 60 180 220 220 0 
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 

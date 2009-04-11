@@ -91,5 +91,15 @@ BuildingType {
       } EntranceSystem0
    } Ellf
 
+   OrbIOD {
+        Mode = In out docking
+        UnitHeightAbs = orbit 
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT = 
+        MoveCost = 20
+        DockingHeightAbs = orbit 
+        DockingHeightRel = -100 
+   } OrbIOD
 
 } BuildingType

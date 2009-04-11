@@ -4,6 +4,10 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 
 __________________
+Beta-09-04
+-Tiefseekristalle hinzugefügt
+-Kristalle 350 Armor
+__________________
 18.10.2008 (GAMER)
 -Plateau kein Berg mehr
 -Kritalle nur noch small_rocks

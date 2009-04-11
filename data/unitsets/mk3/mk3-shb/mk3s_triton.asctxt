@@ -18,7 +18,7 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 9
+      Number = 8
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10
       Weapon0.MaxRange = 30
@@ -51,11 +51,8 @@ VehicleType {
       Weapon6 ->* vehicleType.AmmoBomb 
       Weapon6.Ammo = 20
 
-      Weapon7 ->* vehicleType.AmmoAM 
+      Weapon7 ->* vehicleType.AmmoGM 
       Weapon7.Ammo = 20
-
-      Weapon8 ->* vehicleType.AmmoGM 
-      Weapon8.Ammo = 20
 
    } Weapons
 } VehicleType

@@ -27,15 +27,17 @@ available to protect your navy from enemy air raids.]
 
    Weapons { 
       Initiative = 10
-      Number = 5
-      Weapon0 ->* VehicleType.SAM 
-      Weapon0.MaxRange = 60
+      Number = 4
+
+      Weapon0 ->* VehicleType.Ship_Gun 
+      Weapon0.MaxRange = 20
       Weapon0.Ammo = 8
-      Weapon0.ReactionFireShots = 1
+      Weapon0.Punch@MaxRange = 60
 
       Weapon1 ->* VehicleType.SAMH 
       Weapon1.MaxRange = 50
       Weapon1.Ammo = 8
+      Weapon1.ReactionFireShots = 3
 
       Weapon2 ->* VehicleType.Ship_Flak 
       Weapon2.Ammo = 20
@@ -43,11 +45,6 @@ available to protect your navy from enemy air raids.]
 
       Weapon3 ->* VehicleType.SOM 
       Weapon3.Ammo = 2
-
-      Weapon4 ->* VehicleType.Ship_Gun 
-      Weapon4.MaxRange = 20
-      Weapon4.Ammo = 8
-      Weapon4.Punch@MaxRange = 60
 
    } Weapons
 } VehicleType

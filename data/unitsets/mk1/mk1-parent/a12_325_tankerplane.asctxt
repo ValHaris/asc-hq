@@ -19,7 +19,7 @@ VehicleType {
    } Tank
    FuelConsumption = 23
    Features += ExternalFuelTransfer 
-   Movement = 0 0 0 65 140 160 0 0 
+   Movement = 0 0 0 65 130 160 0 0 
    Weight = 250
    Weapons { 
       Initiative = 0

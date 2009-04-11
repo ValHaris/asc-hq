@@ -13,7 +13,7 @@ VehicleType {
 
    Weapons { 
       Initiative = 20
-      Number = 8
+      Number = 7
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 20
@@ -28,7 +28,7 @@ VehicleType {
       Weapon2.Ammo = 100
  
       Weapon3 ->* VehicleType.DCS 
-      Weapon3.Ammo = 3
+      Weapon3.Ammo = 10
 
       Weapon4 ->* VehicleType.SAMH
       Weapon4.MaxRange = 30
@@ -36,6 +36,5 @@ VehicleType {
 
       Weapon5 ->* VehicleTYpe.AmmoSM
       Weapon6 ->* VehicleType.AmmoTorp
-      Weapon7 ->* VehicleType.AmmoBomb
    } Weapons
 } VehicleType

@@ -19,14 +19,14 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 4
+      Number = 3
 
-      Weapon2 ->* VehicleType.MG45low 
-      Weapon2.Type = machinegun ammo_transfer shootable 
+      Weapon1 ->* VehicleType.MG45low 
+      Weapon1.Type = machinegun ammo_transfer shootable 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.AirMiniGun
       Weapon2.Ammo = 20
-
-      Weapon3 ->* VehicleType.AirMiniGun
-      Weapon3.Ammo = 20
 
    } Weapons
 } VehicleType

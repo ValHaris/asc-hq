@@ -25,7 +25,7 @@ VehicleType {
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 3000
+      fuel = 6000
    } Tank
    FuelConsumption = 30
    Movement = 88 88 80 0 0 0 0 0 

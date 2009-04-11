@@ -6,6 +6,7 @@ VehicleType {
    Description = helitrans train
    Infotext = []
    picture = MK1t_burro.pcx
+   InfoImage = mk1t_burro.jpg
    WreckageObject = 472
    GuideSortHelp = 553 565 0 0 1 0 0 0 0 0
 

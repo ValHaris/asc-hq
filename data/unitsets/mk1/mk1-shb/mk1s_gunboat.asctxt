@@ -5,29 +5,23 @@ VehicleType {
 
    Description = gunboat destroyer
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   picture = MK1s_gunboat.pcx
+   InfoImage = mk1s_gunboat.jpg
 
    Armor += 100
-   picture = MK1s_gunboat.pcx
 
    Weapons { 
-      Number = 4
+      Number = 3
       Weapon0 ->* VehicleType.Artillery
-      Weapon0.Ammo = 6
+      Weapon0.Ammo = 16
       Weapon0.MaxRange = 40
       Weapon0.MinRange = 20
       Weapon0.Punch@MaxRange = 100
       Weapon0.Punch@MinRange = 125
-      Weapon0.ReactionFireShots = 0
 
-      Weapon1 ->* VehicleType.Ship_Gun
-      Weapon1.Ammo = 10
-      Weapon1.MaxRange = 20
-      Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 120
+      Weapon1 ->* VehicleType.Ship_Flak
 
-      Weapon2 ->* VehicleType.Ship_Flak
-
-      Weapon3 ->* VehicleType.Ship_MG
-      Weapon3.Ammo = 16
+      Weapon2 ->* VehicleType.Ship_MG
+      Weapon2.Ammo = 16
    } Weapons
 } VehicleType

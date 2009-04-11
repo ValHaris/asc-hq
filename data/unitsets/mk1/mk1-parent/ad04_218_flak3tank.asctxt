@@ -21,6 +21,6 @@ Im Rudel eingesetzt können diese äusserst schnellen Comet Flakpanzer eine echte 
       Number = 1
       Weapon0 ->* VehicleType.Flak 
       Weapon0.Ammo = 10
-      Weapon0.maxRange = 30
+      Weapon0.maxRange = 40
    } Weapons
 } VehicleType

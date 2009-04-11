@@ -5,27 +5,40 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 __________________
-Beta-09-04
-default
--Granatwerfer anderer Sound
-Beta-09-03
-Default
--Waffenverladen bei Transportschiffen wieder möglich
--Transporter mit weniger als 3 Cargo können keine "light tracked" (Roboter) mehr laden.
-
-Beta-09-02
+11.04.2009 (GAMER)
+-MBV an neue Preise angepasst
+-Doppelwaffen entfernt, Armadillo,Armadillo2,GASP,Gunboat,Homer,Shark
+-Shine, Waffenbugfix
+-LTT, Waffenname korrigiert
+-InfoImage = Surveyor,Burro,Judy,Zeppelin,Ark,Gunboat,Jellyfish
+-Adder 1 Feld minenlegen/-räumen
+default:
+-Wigs +very_shallow_water
+-neues Feature NoMineRemoval
+*->Mixed minenleger nur noch ein Feld legen/räumen
+*->Spezial MinenLeger oder MinenRäumer 2 Felder
+-U-Boote mehr Fuel
+-Turrets auch auf ISG Sockel
+-Tauchroboter weniger Punch
+-Torpedo, kein Abschlag auf tracked,wheeled
+-Helicoper +LowStealth +10% Punch gegen Boden
+-SAM=small_missile SAMH large_missile
+-Flugzeuge -Move auf low_level_flight
+-Flackpanzer +10 Waffenreichweite
+__________________
+07.03.2009 (GAMER)
 -Spear Trooperslot
-Default
--Luftabwehrzug stärkere Waffen
--Luftabwehr ohne "Angriff nach Bewegung" + Move_after_attack
-
-Beta-09-01
 -Ant kann keine lava mehr abbauen
 -Vesuvius keine TML Baufunktion mehr
 -MBV kann Sockel abreissen
 -Clam, Ammo Transfer bugfix
 -Fix, größerer Fueltank
-Default:
+default
+-Granatwerfer anderer Sound
+-Waffenverladen bei Transportschiffen wieder möglich
+-Transporter mit weniger als 3 Cargo können keine "light tracked" (Roboter) mehr laden.
+-Luftabwehrzug stärkere Waffen
+-Luftabwehr ohne "Angriff nach Bewegung" + Move_after_attack
 -AirMiniGun, Bugfix Höhenabschlag
 -Boje in MiniU-booten transbortierbar
 __________________

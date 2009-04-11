@@ -21,8 +21,8 @@ Desweiteren pflanzen sie Wälder und Raps, und sind in der Lage selbige zur Gewin
 
    Tank { 
       Energy = 0
-      Material = 10000
-      fuel = 10000
+      Material = 15000
+      fuel = 15000
    } Tank
    Movement = 0 0 0 49 0 0 0 0 
 

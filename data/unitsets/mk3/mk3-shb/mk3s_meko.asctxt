@@ -19,7 +19,7 @@ Das Schiff sollte zur Eskorte und Unterstützung von andern Schiffen oder U-Boote
    
    Weapons { 
       Initiative = 0
-      Number = 9
+      Number = 7
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 12
       Weapon0.MaxRange = 30
@@ -29,23 +29,18 @@ Das Schiff sollte zur Eskorte und Unterstützung von andern Schiffen oder U-Boote
 
       Weapon1 ->* VehicleType.SSM
       Weapon1.targets = ground_level
-      Weapon1.Ammo = 6
+      Weapon1.Ammo = 10
       Weapon1.MaxRange = 40
       Weapon1.MinTange = 20
-      Weapon1.Punch@MaxRange = 85
-      Weapon1.Punch@MinRange = 85
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
       Weapon1.ReactionFireShots = 0
       
-      Weapon2 ->* VehicleType.ShM
-      Weapon2.Ammo = 6
-      Weapon2.MaxRange = 40
-      Weapon2.MinRange = 20
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
-      Weapon2.ReactionFireShots = 0
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.Ammo = 8
 
-      Weapon3 ->* VehicleType.SAMH
-      Weapon3.Ammo = 8
+      Weapon3 ->* vehicleType.AmmoGM 
+      Weapon3.Ammo = 20
 
       Weapon4 ->* vehicleType.AmmoTorp 
       Weapon4.Ammo = 20
@@ -55,12 +50,6 @@ Das Schiff sollte zur Eskorte und Unterstützung von andern Schiffen oder U-Boote
 
       Weapon6 ->* vehicleType.AmmoBomb 
       Weapon6.Ammo = 20
-
-      Weapon7 ->* vehicleType.AmmoAM 
-      Weapon7.Ammo = 20
-
-      Weapon8 ->* vehicleType.AmmoGM 
-      Weapon8.Ammo = 20
 
    } Weapons
 } VehicleType

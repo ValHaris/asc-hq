@@ -19,7 +19,7 @@ VehicleType {
       fuel = 500
    } Tank
    FuelConsumption = 10
-   Movement = 0 0 0 26 0 0 0 0 
+   Movement = 0 0 0 25 0 0 0 0 
    TerrainAccess { 
       terrain_any = Lowland Road Runway Hard_sand Ditch Frozen_water 
       terrain_not = morass swamp large_rocks deep_snow

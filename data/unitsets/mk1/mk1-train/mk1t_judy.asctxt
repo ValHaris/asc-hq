@@ -2,15 +2,17 @@ VehicleType {
    Name = JUDY
    parent = 400 401 402 412
    ID = 59
+   
    Description = repair train
+   picture = MK1t_judy.pcx
+   InfoImage = mk1t_judy.jpg
+   WreckageObject = 459
+   GuideSortHelp = 553 556 552 0 1 0 0 0 0 0
    Infotext = [Repari Trains combine the benefits of the Repair vehicle, the
               Ammunition Transport and the Tanker Vehicle into one unit. They
               can repair, refuel and rearm other vehicles in-field. The difference
               with the separate vehicles is that the Repair Train has a larger
               material storage and is limited to tracks in its movement.]
-   picture = MK1t_judy.pcx
-   WreckageObject = 459
-   GuideSortHelp = 553 556 552 0 1 0 0 0 0 0
 
    Armor += 50
    Weight += 5

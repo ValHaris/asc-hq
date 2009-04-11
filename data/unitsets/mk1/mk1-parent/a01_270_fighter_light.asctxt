@@ -15,7 +15,7 @@ VehicleType {
       fuel = 4500
    } Tank
    FuelConsumption = 24
-   Movement = 0 0 0 60 200 200 0 0 
+   Movement = 0 0 0 60 170 200 0 0 
    Weight = 60
    Weapons { 
       Initiative = 0

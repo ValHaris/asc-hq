@@ -607,8 +607,10 @@
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
-      EntranceSystem1.CategoriesNOT = Trooper
+      EntranceSystem1.CategoriesNOT = Trooper light_tracked_vehicle
+      EntranceSystem1.MoveCost = 10
       EntranceSystem2 ->* VehicleType.SubIO
+      EntranceSystem2.CategoriesNOT = default
       EntranceSystem2.MoveCost = 20
    } TransSubTrooper
 

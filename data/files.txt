@@ -29,6 +29,7 @@ buildings/*.asctxt
 buildings/*.version
 buildings/asc/*.asctxt
 buildings/asc/*.png
+buildings/asc/*.pcx
 buildings/legacy/*.asctxt
 buildings/legacy/*.png
 buildings/legacy/*.pcx

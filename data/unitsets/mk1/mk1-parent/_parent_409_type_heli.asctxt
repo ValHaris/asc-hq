@@ -11,7 +11,7 @@
    Infotext = []
    RecommendedAIJob = fight
    Armor = 300
-   View = 30
+   View = 40
    WreckageObject = 495 496
    Height = ground_level low_level_flight medium_level_flight
    Jamming = 0

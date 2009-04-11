@@ -257,7 +257,7 @@
    Turret_only {
       terrain_any = turret_foundation
       terrain_all =
-      terrain_not = installation
+      terrain_not = 
       terrain_kill = shallow_water Water Deep_water lava river
    } Turret_only
 
@@ -271,14 +271,14 @@
    Turret_all {
       terrain_any = lowland hard_sand soft_sand mountains turret_foundation
       terrain_all =
-      terrain_not = railroad forest installation
+      terrain_not = railroad forest
       terrain_kill = shallow_water Water Deep_water lava river
    } Turret_all
 
    Turret_ditch {
       terrain_any = lowland hard_sand soft_sand mountains turret_foundation ditch
       terrain_all =
-      terrain_not = railroad forest installation
+      terrain_not = railroad forest
       terrain_kill = shallow_water Water Deep_water lava river
    } Turret_ditch
 

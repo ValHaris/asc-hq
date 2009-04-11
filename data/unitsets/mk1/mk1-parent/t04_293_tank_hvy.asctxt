@@ -36,7 +36,5 @@ VehicleType {
       Weapon1.Ammo = 16
       Weapon1.Name = Maschinengewehr
 
-      Weapon2 ->* VehicleType.Weapons.Weapon0
-
    } Weapons
 } VehicleType

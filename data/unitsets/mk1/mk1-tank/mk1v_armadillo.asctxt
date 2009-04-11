@@ -11,12 +11,9 @@ VehicleType {
    Armor += 10
 
    Weapons { 
-      Number = 3
       Weapon0.Punch@MaxRange -= 2
       Weapon0.Punch@MinRange -= 2
-
-      Weapon2.Punch@MaxRange -= 2
-      Weapon2.Punch@MinRange -= 2
+      Weapon0.ReactionFireShots = 2
 
    } Weapons
 } VehicleType
