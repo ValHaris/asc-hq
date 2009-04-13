@@ -7,9 +7,9 @@ INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/li
 AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
 
 bin_PROGRAMS  = asc 
-noinst_bin_PROGRAMS = unittester
+noinst_PROGRAMS = unittester
 
-noinst_bindir = $(top_builddir)/source/unix/asc/
+noinst_bindir = $(abs_top_builddir)/source/unix/asc/
 
 
 commonSources   = unitctrl.cpp soundList.cpp typen.cpp \
