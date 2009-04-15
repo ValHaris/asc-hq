@@ -38,6 +38,8 @@
 
 #include <sys/stat.h>
 
+#include <bzlib.h>
+
 #include "global.h"
 #include "basestrm.h"
 
@@ -1156,17 +1158,27 @@ ContainerCollector :: ~ContainerCollector()
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+class PrivateCompressionData {
+   public:  
+      bz_stream bzs;
+      static const int outputbufsize = 100000;
+      char outputbuf[outputbufsize];
+      
+      PrivateCompressionData() {
+         bzs.bzalloc = NULL;
+         bzs.bzfree = NULL;
+         bzs.opaque = NULL;
+      };
+      
+      ~PrivateCompressionData() {
+         BZ2_bzCompressEnd ( &bzs );
+      }
+};
 
 libbzip_compression :: libbzip_compression ( p_compressor_stream_interface strm  )
 {
-   bzs.bzalloc = NULL;
-   bzs.bzfree = NULL;
-   bzs.opaque = NULL;
-
-   BZ2_bzCompressInit ( &bzs, 5, 0, 0 );
-
-   outputbufsize = 100000;
-   outputbuf = new char [ outputbufsize ];
+   data = new PrivateCompressionData();
+   BZ2_bzCompressInit ( &data->bzs, 5, 0, 0 );
 
    stream = strm;
 }
@@ -1176,26 +1188,26 @@ void libbzip_compression :: writedata ( const void* buf, int size )
 {
    char* cbuf = (char*) buf;
 
-   bzs.next_in = cbuf ;
-   bzs.avail_in = size ;
-   bzs.total_in_lo32 = 0 ;
-   bzs.total_in_hi32 = 0 ;
+   data->bzs.next_in = cbuf ;
+   data->bzs.avail_in = size ;
+   data->bzs.total_in_lo32 = 0 ;
+   data->bzs.total_in_hi32 = 0 ;
 
-   while ( bzs.total_in_lo32 < size ) {
+   while ( data->bzs.total_in_lo32 < size ) {
 
-     bzs.next_out = outputbuf;
-     bzs.avail_out = outputbufsize;
-     bzs.total_out_lo32 = 0;
-     bzs.total_out_hi32 = 0;
+     data->bzs.next_out = data->outputbuf;
+     data->bzs.avail_out = data->outputbufsize;
+     data->bzs.total_out_lo32 = 0;
+     data->bzs.total_out_hi32 = 0;
 
-     int res = BZ2_bzCompress ( &bzs, BZ_RUN );
+     int res = BZ2_bzCompress ( &data->bzs, BZ_RUN );
      if ( res < 0 )
         throw tcompressionerror ( "MBZLB2 compression :: writedata", res );
 
-     for ( int i = 0; i < bzs.total_out_lo32; i++ )
-        outputbuf[i] ^= bzip_xor_byte;
+     for ( int i = 0; i < data->bzs.total_out_lo32; i++ )
+        data->outputbuf[i] ^= bzip_xor_byte;
 
-     stream->writecmpdata ( outputbuf, bzs.total_out_lo32 );
+     stream->writecmpdata ( data->outputbuf, data->bzs.total_out_lo32 );
    }
 }
 
@@ -1204,52 +1216,63 @@ void libbzip_compression :: close_compression ( void )
 {
    int res;
    do {
-     bzs.next_in = outputbuf;
-     bzs.avail_in = 0;
+     data->bzs.next_in = data->outputbuf;
+     data->bzs.avail_in = 0;
 
-     bzs.next_out = outputbuf;
-     bzs.avail_out = outputbufsize;
-     bzs.total_out_lo32 = 0;
-     bzs.total_out_hi32 = 0;
+     data->bzs.next_out = data->outputbuf;
+     data->bzs.avail_out = data->outputbufsize;
+     data->bzs.total_out_lo32 = 0;
+     data->bzs.total_out_hi32 = 0;
 
-     res = BZ2_bzCompress ( &bzs, BZ_FINISH );
+     res = BZ2_bzCompress ( &data->bzs, BZ_FINISH );
      if ( res < 0 )
         throw tcompressionerror ( "MBZLB2 compression :: closecompression", res );
 
-     for ( int i = 0; i < bzs.total_out_lo32; i++ )
-        outputbuf[i] ^= bzip_xor_byte;
-     stream->writecmpdata ( outputbuf, bzs.total_out_lo32 );
+     for ( int i = 0; i < data->bzs.total_out_lo32; i++ )
+        data->outputbuf[i] ^= bzip_xor_byte;
+     stream->writecmpdata ( data->outputbuf, data->bzs.total_out_lo32 );
 
    } while ( res != BZ_STREAM_END );
 
 
-   BZ2_bzCompressEnd ( &bzs );
+   BZ2_bzCompressEnd ( &data->bzs );
 }
 
 libbzip_compression :: ~libbzip_compression ( )
 {
-   if ( outputbuf ) {
-      delete[] outputbuf;
-      outputbuf = NULL;
-   }
+   delete data;
 }
 
 
 
-
+class PrivateDecompressionData {
+   public: 
+      bz_stream bzs;
+      static const int inputbufsize = 100000;
+      char inputbuf[inputbufsize];
+      int inputbufused;
+      int inputbufread;
+      
+      PrivateDecompressionData() {
+         bzs.bzalloc = NULL;
+         bzs.bzfree = NULL;
+         bzs.opaque = NULL;
+         
+         inputbufused = 0;
+         inputbufread = 0;
+         
+      }
+      
+      ~PrivateDecompressionData() {
+         BZ2_bzDecompressEnd ( &bzs );
+      }
+      
+};
+      
 libbzip_decompression :: libbzip_decompression ( p_compressor_stream_interface strm  )
 {
-   bzs.bzalloc = NULL;
-   bzs.bzfree = NULL;
-   bzs.opaque = NULL;
-
-   BZ2_bzDecompressInit ( &bzs, 0, 0 );
-
-   inputbufsize = 100000;
-   inputbuf = new char [ inputbufsize ];
-   inputbufused = 0;
-   inputbufread = 0;
-
+   data = new PrivateDecompressionData();
+   BZ2_bzDecompressInit ( &data->bzs, 0, 0 );
    stream = strm;
 }
 
@@ -1259,39 +1282,39 @@ int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
    int decompressed = 0;
    char* cbuf = (char*) buf;
 
-   bzs.next_in = cbuf ;
-   bzs.avail_in = size ;
-   bzs.total_in_lo32 = 0 ;
-   bzs.total_in_hi32 = 0 ;
+   data->bzs.next_in = cbuf ;
+   data->bzs.avail_in = size ;
+   data->bzs.total_in_lo32 = 0 ;
+   data->bzs.total_in_hi32 = 0 ;
 
    int abrt = 0;
 
    while ( decompressed < size  && !abrt ) {
-     if ( inputbufread >= inputbufused ) {
-        inputbufused = stream->readcmpdata ( inputbuf, inputbufsize, 0 );
+     if ( data->inputbufread >= data->inputbufused ) {
+        data->inputbufused = stream->readcmpdata ( data->inputbuf, data->inputbufsize, 0 );
 
-        if ( !inputbufused && excpt )
+        if ( !data->inputbufused && excpt )
            throw tcompressionerror ( "Decompressor :: out of data", 0 );
 
 
-        for ( int i = 0; i < inputbufused; i++ )
-           inputbuf[i] ^= bzip_xor_byte;
+        for ( int i = 0; i < data->inputbufused; i++ )
+           data->inputbuf[i] ^= bzip_xor_byte;
 
-        inputbufread = 0;
+        data->inputbufread = 0;
      }
-     bzs.next_in = inputbuf + inputbufread;
-     bzs.avail_in = inputbufused - inputbufread;
-     bzs.total_in_lo32 = 0;
-     bzs.total_in_hi32 = 0;
+     data->bzs.next_in = data->inputbuf + data->inputbufread;
+     data->bzs.avail_in = data->inputbufused - data->inputbufread;
+     data->bzs.total_in_lo32 = 0;
+     data->bzs.total_in_hi32 = 0;
 
-     bzs.next_out = cbuf + decompressed;
-     bzs.avail_out = size - decompressed;
-     bzs.total_out_lo32 = 0;
-     bzs.total_out_hi32 = 0;
+     data->bzs.next_out = cbuf + decompressed;
+     data->bzs.avail_out = size - decompressed;
+     data->bzs.total_out_lo32 = 0;
+     data->bzs.total_out_hi32 = 0;
 
-     int res = BZ2_bzDecompress ( &bzs );
-     decompressed += bzs.total_out_lo32;
-     inputbufread += bzs.total_in_lo32;
+     int res = BZ2_bzDecompress ( &data->bzs );
+     decompressed += data->bzs.total_out_lo32;
+     data->inputbufread += data->bzs.total_in_lo32;
 
      if ( decompressed < size  ) {
         if ( res == BZ_STREAM_END ) {
@@ -1317,11 +1340,7 @@ int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
 
 libbzip_decompression :: ~libbzip_decompression ( )
 {
-   if ( inputbuf ) {
-      BZ2_bzDecompressEnd ( &bzs );
-      delete[] inputbuf;
-      inputbuf = NULL;
-   }
+   delete data;
 }
 
 

@@ -136,14 +136,6 @@ class tsavegameloaders : public tgameloaders {
            void            savegame ( const ASCString& name );
 };
 
-/*
-class treplayloaders : public tspfldloaders {
-           void            initmap ( void );
-         public:
-           void            loadreplay ( pmemorystreambuf streambuf );
-           void            savereplay ( int num );
-};
-*/
 
 //! checks, whether filename is a valid map file
 extern bool validatemapfile ( const ASCString& filename );

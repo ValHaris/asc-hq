@@ -1428,6 +1428,10 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
       displaymessage( err.getMessage().c_str(), 1 );
       return NULL;
    } /* endcatch */
+   catch ( tcompressionerror err ) {
+      displaymessage( "The file %s is corrupted.\nPlease obtain a new copy of that file", 1, filename.c_str() );
+      return NULL;
+   }
    catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       return NULL;

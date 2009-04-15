@@ -35,8 +35,6 @@
 #include <queue>
 
 #include <SDL.h>
-#include <bzlib.h>
-
 
 #include "global.h"
 #include "basestreaminterface.h"
@@ -317,11 +315,11 @@ class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
 
 typedef t_compressor_stream_interface *p_compressor_stream_interface;
 
+class PrivateCompressionData;
+
 class libbzip_compression {
-            bz_stream bzs;
-            char* outputbuf;
-            int outputbufsize;
             p_compressor_stream_interface stream;
+            PrivateCompressionData* data;
          public:
              void close_compression ( void );
              void writedata ( const void* buf, int size );
@@ -330,14 +328,11 @@ class libbzip_compression {
 
 };
 
-class libbzip_decompression {
-            bz_stream bzs;
-            char* inputbuf;
-            int inputbufsize;
-            int inputbufused;
-            int inputbufread;
-            p_compressor_stream_interface stream;
+class PrivateDecompressionData;
 
+class libbzip_decompression {
+            p_compressor_stream_interface stream;
+            PrivateDecompressionData* data;
          public:
              int  readdata  ( void* buf, int size, bool excpt = true  );
              libbzip_decompression ( p_compressor_stream_interface strm );
