@@ -242,6 +242,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       {
          apply();
          if ( playerSetup->Apply() ) {
+            GameTransferMechanism* gtm = gamemap->network;
             gamemap->network = NULL;
 
             if ( gamemap->_resourcemode == 1)
@@ -253,6 +254,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
                savemap( name.c_str(), gamemap );
             }
 
+            gamemap->network = gtm;
             QuitModal();
             return true;
          } else
