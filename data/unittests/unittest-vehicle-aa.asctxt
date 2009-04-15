@@ -1,0 +1,173 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = UnitTest SPIKE
+   Infotext = [The AA-artillery unit is one of the most dangerous anti-air weapons
+              on wheels. It's armed with ranged Surface to Air Missiles that
+              can be quickly fired after the unit has come to a halt. InfoImage
+              = BananaJoe]
+   ID = 1000000064
+   SecondaryIDs = 
+   View = 30
+   Jamming = 0
+   InfoImage = mk1v_spike.jpg
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 750
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 750
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = AA-rocket system
+   Armor = 500
+   Picture = unittest-vehicle-aa.png
+   Height = ground_level 
+   WaitForAttack = false
+   FuelConsumption = 15
+   Features = leaves_tracks MoveDuringReactionFire 
+   Movement = 0 0 0 55 0 0 0 0 
+   Category = light_tracked_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 464 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 43
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Ditch Frozen_water 
+      terrain_all = 
+      terrain_not = Swamp Large_rocks 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 1
+      Weapon0 { 
+         Type = air_missile shootable 
+         targets = low_level_flight medium_level_flight high_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 50
+         MinRange = 10
+         Ammo = 12
+         Punch@MaxRange = 67
+         Punch@MinRange = 67
+         Sound = weapon03_s.ogg
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 200
+            medium_tracked_vehicle = 200
+            heavy_tracked_vehicle = 200
+            light_wheeled_vehicle = 200
+            medium_wheeled_vehicle = 200
+            heavy_wheeled_vehicle = 200
+            trooper = 50
+            rail_vehicle = 200
+            medium_ship = 200
+            building|turret|object = 200
+            light_ship = 200
+            heavy_ship = 200
+            helicopter = 110
+            hoovercraft = 200
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 64 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 8434
+      Material = 8434
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 220 508 0 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 7 
+} VehicleType

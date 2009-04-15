@@ -1,0 +1,176 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = UnitTest VORTEX
+   Infotext = [Jammer units are one of the more important vehicles an army should
+              contain. As the name implies, Jammers can block enemy radars.
+              The advantage in this is a cover for the movements of the army,
+              along with protection against artillery. Jammers tend to get
+              destroyed a lot, since their field of jamming is small. InfoImage
+              = BananaJoe]
+   ID = 1000000051
+   SecondaryIDs = 
+   View = 30
+   Jamming = 39
+   InfoImage = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 1000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 1000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = jammer
+   Armor = 370
+   Picture = unittest-jammer.png
+   Height = ground_level 
+   WaitForAttack = false
+   FuelConsumption = 12
+   Features = leaves_tracks 
+   Movement = 0 0 0 70 0 0 0 0 
+   Category = light_tracked_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 451 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 40
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Ditch Frozen_water 
+      terrain_all = 
+      terrain_not = Swamp Large_rocks 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 1
+      Weapon0 { 
+         Type = machinegun shootable 
+         targets = floating ground_level 
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 20
+         Punch@MinRange = 20
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 0
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            medium_tracked_vehicle = 65
+            heavy_tracked_vehicle = 50
+            medium_wheeled_vehicle = 90
+            heavy_wheeled_vehicle = 80
+            trooper = 130
+            rail_vehicle = 60
+            medium_aircraft = 90
+            medium_ship = 60
+            building|turret|object = 50
+            heavy_aircraft = 80
+            light_ship = 80
+            heavy_ship = 50
+            helicopter = 90
+            hoovercraft = 90
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = tracked_ext_s.ogg
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 51 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 10590
+      Material = 8863
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 525 307 0 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 7 
+} VehicleType

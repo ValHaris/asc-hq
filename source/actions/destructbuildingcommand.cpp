@@ -113,6 +113,8 @@ ActionResult DestructBuildingCommand::go ( const Context& context )
    if ( !building )
       return ActionResult(22502);
    
+   const BuildingType* buildingType = building->typ;
+   
    Resources cost = getDestructionCost( building );
    
    auto_ptr<DestructContainer> dc ( new DestructContainer( building ));
@@ -142,6 +144,9 @@ ActionResult DestructBuildingCommand::go ( const Context& context )
       cup.release();
    else
       return res;
+   
+   evaluateviewcalculation( getMap(), target, buildingType->view, 0, false, &context );
+
    
    if ( context.display )
       context.display->repaintDisplay();

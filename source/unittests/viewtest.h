@@ -7,25 +7,10 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef movementtestH
-#define movementtestH
+#ifndef viewtestH
+#define viewtestH
 
-#include "../ascstring.h"
-#include "../errors.h"
-
-extern GameMap* startMap( const ASCString& filename );
-
-class TestFailure : public ASCmsgException {
-   public:
-      TestFailure( const ASCString& message ) : ASCmsgException (message ){
-      }
-};
-
-extern Context createTestingContext( GameMap* gamemap );
-extern void testCargoMovement( Vehicle* veh, int movement );
-extern void testCargoMovementMax( Vehicle* veh, int movement );
-extern Vehicle* getFirstCargo( ContainerBase* carrier );
-extern void move( Vehicle* veh, const MapCoordinate& dest );
+ extern void testView();
 
 
 #endif

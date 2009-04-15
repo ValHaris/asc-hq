@@ -34,7 +34,6 @@
 #include "actions/changeunitmovement.h"
 #include "actions/changeunitproperty.h"
 #include "actions/spawnobject.h"
-#include "actions/destructcontainer.h"
 #include "actions/unitfieldregistration.h"
 
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,

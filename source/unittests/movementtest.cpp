@@ -13,17 +13,6 @@
 #include "unittestutil.h"
 
 
-void move( Vehicle* veh, const MapCoordinate& dest )
-{
-   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
-   muc->setDestination( dest );
-   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
-   if ( res.successful() )
-      muc.release();
-   else
-      throw ActionResult(res);
-}
-
 void testMovement() 
 {
    auto_ptr<GameMap> game ( startMap("unittest-movement.map"));

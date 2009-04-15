@@ -27,7 +27,6 @@
 #include "../spfst.h"
 #include "../viewcalculation.h"
 
-#include "destructcontainer.h"
 #include "changeunitmovement.h"
 #include "inflictdamage.h"
 

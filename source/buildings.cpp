@@ -33,7 +33,6 @@
 #include "containercontrols.h"
 #include "misc.h"
 
-#include "actions/destructcontainer.h"
 
 #ifndef BUILDINGVERSIONLIMIT
 # define BUILDINGVERSIONLIMIT -1000000000

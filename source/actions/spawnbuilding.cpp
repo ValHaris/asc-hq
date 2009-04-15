@@ -140,10 +140,11 @@ ActionResult SpawnBuilding::runAction( const Context& context )
    }
 
    
-   
-   RecalculateAreaView rav( getMap(), pos, buildingType->view/10, &context );
-   
    ActionResult res = (new ViewRegistration( gbde , ViewRegistration::AddView ))->execute( context );
+   
+   evaluateviewcalculation( getMap(), gbde->getPosition(), gbde->typ->view, 0, false, &context );
+   
+   
    return res;
 }
 

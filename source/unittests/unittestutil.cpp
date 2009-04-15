@@ -23,6 +23,18 @@ class NextTurnStrategy_Abort : public NextTurnStrategy {
 } ;
 
 
+void move( Vehicle* veh, const MapCoordinate& dest )
+{
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   muc->setDestination( dest );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+}
+
+
 GameMap* startMap( const ASCString& filename )
 {
    GameMap* game = mapLoadingExceptionChecker( filename, MapLoadingFunction( tmaploaders::loadmap  ));

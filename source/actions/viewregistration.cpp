@@ -45,8 +45,8 @@ ASCString ViewRegistration::getOpName() const
 ASCString ViewRegistration::getDescription() const
 {
    ASCString res = getOpName();
-   if ( getContainer(false) ) 
-      res += " " + getContainer(false)->getName();
+   if ( getContainer(true) ) 
+      res += " " + getContainer(true)->getName();
 
    return  res;
 }

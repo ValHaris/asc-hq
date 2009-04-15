@@ -7,25 +7,23 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef movementtestH
-#define movementtestH
 
-#include "../ascstring.h"
-#include "../errors.h"
-
-extern GameMap* startMap( const ASCString& filename );
-
-class TestFailure : public ASCmsgException {
-   public:
-      TestFailure( const ASCString& message ) : ASCmsgException (message ){
-      }
-};
-
-extern Context createTestingContext( GameMap* gamemap );
-extern void testCargoMovement( Vehicle* veh, int movement );
-extern void testCargoMovementMax( Vehicle* veh, int movement );
-extern Vehicle* getFirstCargo( ContainerBase* carrier );
-extern void move( Vehicle* veh, const MapCoordinate& dest );
+#include "../actions/moveunitcommand.h"
+#include "../loaders.h"
+#include "unittestutil.h"
 
 
-#endif
+
+void testView() 
+{
+   auto_ptr<GameMap> game ( startMap("unittest-view1.map"));
+   
+   Vehicle* radar = game->getField(0,4)->vehicle;
+   assertOrThrow( veh->getMovement() == 100 );
+   
+   assertOrThrow( fieldvisiblenow(game->getField(3,5)));
+   
+   move( radar, MapCoordinate(5,10));
+  
+   
+}

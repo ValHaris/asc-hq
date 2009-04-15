@@ -24,6 +24,7 @@
 
 #include "../vehicle.h"
 #include "../gamemap.h"
+#include "../viewcalculation.h"
      
 DestructContainer::DestructContainer( ContainerBase* container )
    : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1)
@@ -141,7 +142,12 @@ ActionResult DestructContainer::runAction( const Context& context )
                }
             }
    }
+   
+   container->removeview();
+   evaluateviewcalculation( getMap(), container->getPosition(), container->baseType->view, 0, false, &context );
+   
    delete container;
+   
    return ActionResult(0);
 }
 
