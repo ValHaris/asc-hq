@@ -42,7 +42,8 @@ if ( $testVersion ) {
 	system ( "cp asc2.exe asc2-test.exe");
 	die "could not rename ASC2.exe" if $?;
 	
-	push ( @zipfiles, "asc2-test.exe" );
+	push( @zipfiles, "asc2-test.exe" );
+	push( @zipfiles,  "mapeditor2.exe") if ( $mapedit );
 } else {
    @zipfiles = @files;
 }
