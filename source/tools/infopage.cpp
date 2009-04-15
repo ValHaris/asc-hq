@@ -1343,12 +1343,12 @@ void UnitResearchPage::buildContent() {
   }
   ASCString techPicPath = RELATIVEIMGPATH + techedFileName + ".png";
   ASCString dotFile = tempTechFileName + ".dot";
-  ASCString sysCommand = "dot " + dotFile + "  -Tpng -o" + tempTechFileName + ".png";
+  ASCString sysCommand = "dot " + dotFile + "  -Tpng -Gcharset=latin1 -o" + tempTechFileName + ".png";
   int res = system ( sysCommand.c_str() );
   if ( res != 0 ) {
     cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
-  }
-  remove(dotFile.c_str());
+  } else
+    remove(dotFile.c_str());
 
   TechTreePage ttp(vt, techedFileName, filePath, generator, techPicPath);
   ttp.buildPage();
@@ -1391,13 +1391,12 @@ void BuildingResearchPage::buildContent() {
   }
   ASCString techPicPath = RELATIVEIMGPATH + techedFileName + ".png";
   ASCString dotFile = tempTechFileName + ".dot";
-  ASCString sysCommand = "dot " + dotFile + "  -Tpng -o" + tempTechFileName + ".png";
+  ASCString sysCommand = "dot " + dotFile + "  -Tpng -Gcharset=latin1 -o" + tempTechFileName + ".png";
   int res = system ( sysCommand.c_str() );
   if ( res != 0 ) {
     cerr << "ERROR encountered at: " << sysCommand.c_str() << endl;
-  }
-
-  remove(dotFile.c_str());
+  } else
+    remove(dotFile.c_str());
 
   TechTreePage ttp(bt, techedFileName, filePath, generator, techPicPath);
   ttp.buildPage();

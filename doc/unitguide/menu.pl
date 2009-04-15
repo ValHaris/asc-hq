@@ -29,6 +29,8 @@
 #  Both groups and links are entries.
 
 
+use Getopt::Long;
+
 
 # counts the number of leading dots 
 sub countdot {
@@ -116,33 +118,19 @@ sub printLine {
 # main program
 # parameters:
 #     0 (optional)           : prefix directory for menu files
-#     1 (even more optionaä) : prefix directory for the noframes menu
+#     1 (even more optionaï¿½) : prefix directory for the noframes menu
 
 
-$argl = @ARGV;
-
-if ( $argl >= 1 ) {
-   $prefix = $ARGV[0];
-} else {
-   $prefix = "";
-}   
-
-if ( $argl >= 2 ) {
-   $idxprefix = $ARGV[1];
-} else {
-   $idxprefix = $prefix;
-}   
+my $prefix = "";
+my $idxprefix = "";
+my $filename = "entries.txt";
 
 
-my $argcount = @ARGV >= 1;
-print $a;
+GetOptions ('prefix=s' => \$prefix, 
+            'idxprefix=s' => \$idxprefix,
+            'input=s' => \$filename );
 
-my $filename;
-if ( @ARGV >= 1 ) {
-   $filename = $ARGV[0];
-} else {
-   $filename = "entries.txt";
-}
+
 
 parsefile($filename, 0);
 
