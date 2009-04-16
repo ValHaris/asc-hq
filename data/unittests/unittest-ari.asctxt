@@ -94,7 +94,7 @@ VehicleType {
          targets = floating ground_level 
          shotFrom = floating ground_level 
          MaxRange = 60
-         MinRange = 30
+         MinRange = 20
          Ammo = 8
          Punch@MaxRange = 79
          Punch@MinRange = 100

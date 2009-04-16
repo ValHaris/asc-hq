@@ -1,0 +1,279 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest Tsunami
+   Infotext = [Nuclear Submarines are a captain's greatest fear. The missiles
+              they can fire have a small nuclear warhead, thus reserving more
+              room for fuel. A nuclear submarine can scuttle a fleet without
+              ever seeing a ship.]
+   ID = 1000000035
+   SecondaryIDs = 
+   View = 30
+   Jamming = 15
+   InfoImage = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 10000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 10000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = Nuclear Submarine
+   Armor = 900
+   Picture = unittest-submarine.png
+   Height = deep_submerged submerged floating 
+   WaitForAttack = true
+   FuelConsumption = 35
+   Features = Sonar jam_only_own_field MoveDuringReactionFire 
+   Movement = 66 77 60 0 0 0 0 0 
+   Category = heavy_ship
+   MaxSurvivableStorm = 220
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 435 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 2000
+   TerrainAccess { 
+      terrain_any = Water Deep_water 
+      terrain_all = 
+      terrain_not = Forest Small_rocks Large_rocks Frozen_water 
+      terrain_kill = Lava 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 3
+      Weapon0 { 
+         Type = cruise_missile shootable 
+         targets = floating ground_level 
+         shotFrom = submerged floating ground_level 
+         MaxRange = 120
+         MinRange = 60
+         Ammo = 4
+         Punch@MaxRange = 125
+         Punch@MinRange = 125
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 0
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            default = 20
+            light_tracked_vehicle = 45
+            medium_tracked_vehicle = 60
+            heavy_tracked_vehicle = 85
+            light_wheeled_vehicle = 50
+            medium_wheeled_vehicle = 65
+            heavy_wheeled_vehicle = 90
+            trooper = 20
+            rail_vehicle = 75
+            medium_ship = 70
+            light_ship = 50
+            heavy_ship = 90
+            hoovercraft = 80
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+      Weapon1 { 
+         Type = torpedo shootable 
+         targets = deep_submerged submerged floating 
+         shotFrom = deep_submerged submerged floating ground_level 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 85
+            0 = 100
+            u1 = 100
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            trooper = 40
+            medium_aircraft = 85
+            medium_ship = 90
+            light_aircraft = 70
+            light_ship = 80
+            hoovercraft = 80
+         } WeaponEffectiveness
+         name = 
+      } Weapon1
+      Weapon2 { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = submerged floating ground_level 
+         MaxRange = 60
+         MinRange = 20
+         Ammo = 4
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
+         Sound = groundmissile_s.ogg
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 95
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            trooper = 0
+         } WeaponEffectiveness
+         name = 
+      } Weapon2
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 { 
+      StartHeight = deep_submerged submerged 
+      HeightDelta = 1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod0
+   HeightChangeMethod1 { 
+      StartHeight = floating 
+      HeightDelta = 1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod1
+   HeightChangeMethod2 { 
+      StartHeight = floating ground_level 
+      HeightDelta = -1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod2
+   HeightChangeMethod3 { 
+      StartHeight = submerged 
+      HeightDelta = -1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod3
+   TechAdapterRequired = 35 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 40085
+      Material = 38350
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 519 365 0 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

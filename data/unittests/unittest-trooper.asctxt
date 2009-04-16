@@ -1,0 +1,239 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest SHOCK TROOPER
+   Infotext = [The Shock Trooper is a light infantry unit whose primary purpose
+              is to capture enemy installations and take out enemy infantry.
+              A Shock Trooper unit is armed with rifles and a packet of explosives
+              in case it comes up against a heavy obstacle. Keep in mind that
+              the explosives are not very effective. A Shock Trooper can get
+              to its target faster than any other Trooper. 
+               #color2# 
+               Pros:
+              
+               - Can capture buildings 
+               - Can enter most terrain 
+              - Fast
+              movement rate for a trooper 
+              - Effective against infantry 
+              
+              #color4# 
+               Cons: 
+               - Ineffective against most vehicles 
+               
+               Der
+              Shock Trooper ist eine leichte Infanterieeinheit deren Prim�rzweck
+              es ist,  feindliche Anlagen zu erobern und feindliche Infanterie
+              auszuschalten. Eine  Einheit ist mit Gewehren und einem Paket
+              Minen bewaffnet. Beachten Sie , dass  die nicht sehr wirkungsvoll
+              sind. Ein Shock Trooper kann schneller als alle  anderen Trooper
+              an sein Ziel gelangen. 
+                - kann Geb�ude erobern 
+                - kann das
+              meiste Terrain 
+                - schnelle Bewegung f�r einen Trooper 
+                -
+              wirkungsvoll gegen Infanterie 
+              ]
+   ID = 1000000017
+   SecondaryIDs = 
+   View = 30
+   Jamming = 11
+   InfoImage = mk1i_shock.jpg
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 300
+         fuel = 300
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 300
+         fuel = 300
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = Shock Trooper
+   Armor = 190
+   Picture = unittest-trooper.png
+   Height = ground_level 
+   WaitForAttack = false
+   FuelConsumption = 0
+   Features = mineview mine_layer conquer_buildings self_repairing jam_only_own_field 
+   Movement = 0 0 0 48 0 0 0 0 
+   Category = trooper
+   MaxSurvivableStorm = 100
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+   WreckageObject = 417 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 2
+   TerrainAccess { 
+      terrain_any = Lowland Forest High_mountains Road Railroad Runway Hard_sand Soft_sand Small_rocks Mountains Very_shallow_water Large_rocks Ditch Hillside Turret_foundation Installation Frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 2
+      Weapon0 { 
+         Type = machinegun shootable 
+         targets = floating ground_level low_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 32
+         Punch@MinRange = 32
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            medium_tracked_vehicle = 65
+            heavy_tracked_vehicle = 50
+            medium_wheeled_vehicle = 90
+            heavy_wheeled_vehicle = 80
+            trooper = 130
+            rail_vehicle = 60
+            medium_aircraft = 90
+            medium_ship = 60
+            building|turret|object = 50
+            heavy_aircraft = 80
+            light_ship = 80
+            heavy_ship = 50
+            helicopter = 90
+            hoovercraft = 90
+         } WeaponEffectiveness
+         name = Maschinengewehr
+      } Weapon0
+      Weapon1 { 
+         Type = mine shootable 
+         targets = floating ground_level 
+         shotFrom = ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 120
+         Punch@MinRange = 120
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 0
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+         } WeaponEffectiveness
+         name = Tellermine
+      } Weapon1
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 17 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 1149
+      Material = 1039
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 501 201 562 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Building_entry_dont_use_it Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType
