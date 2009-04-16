@@ -23,6 +23,7 @@
 #include "graphics/surface2png.h"
 #include "spfst.h"
 #include "iconrepository.h"
+#include "viewcalculation.h"
 
 WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 {
@@ -40,6 +41,7 @@ void WholeMapRenderer::render()
 
 void WholeMapRenderer::renderVisibility()
 {
+   computeview( gamemap );   
    ColorMerger_AlphaMerge<4> cmam;
 
    PutPixel<4, ColorMerger_AlphaMerge > pp(surface);
