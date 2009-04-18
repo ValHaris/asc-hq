@@ -35,6 +35,9 @@ dnl
 AC_PROG_CC
 AC_PROG_CXX
 
+if test x$CXX = x; then
+   AC_MSG_ERROR([No C++ compiler found! Please install it. The package is typcially 'g++' ])
+fi
 
 AC_CHECK_PROG(PERLFOUND,perl,yes,no)
 if test "$PERLFOUND" = no; then
