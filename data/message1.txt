@@ -322,4 +322,11 @@ invalid building for repair operation
 No players available that could receive this item
 22801
 This player is not allowed to receive from you
+22900
+A production line for this vehicletype can not be setup here
+22901
+Not enough resources for building this production line
+22902
+VehicleType not available
+
 

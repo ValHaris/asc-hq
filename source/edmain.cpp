@@ -212,7 +212,7 @@ int main(int argc, char *argv[] )
 
    if ( cl->v() ) {
       ASCString msg = kgetstartupmessage();
-      printf( msg.c_str() );
+      printf( "%s", msg.c_str() );
       exit(0);
    }
 

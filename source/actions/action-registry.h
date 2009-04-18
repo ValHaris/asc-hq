@@ -65,7 +65,9 @@ namespace ActionRegistry {
                   PowerGenerationSwitchCommand,
                   TrainUnitCommand,
                   RepairBuildingCommand, // 40
-                  TransferControlCommand
+                  TransferControlCommand,
+                  BuildProductionLineCommand,
+                  RemoveProductionLineCommand
    };
 };
 

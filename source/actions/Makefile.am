@@ -12,7 +12,8 @@ libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp const
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
-                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp
+                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
+                          buildproductionlinecommand.cpp removeproductionlinecommand.cpp
                           
 libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 

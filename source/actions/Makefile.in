@@ -58,7 +58,8 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	destructunitcommand.lo reactionfireswitchcommand.lo \
 	repairunitcommand.lo jumpdrivecommand.lo \
 	powergenerationswitchcommand.lo trainunitcommand.lo \
-	repairbuildingcommand.lo transfercontrolcommand.lo
+	repairbuildingcommand.lo transfercontrolcommand.lo \
+	buildproductionlinecommand.lo removeproductionlinecommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libfullgameactions_la_DEPENDENCIES =
@@ -275,7 +276,8 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
-                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp
+                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
+                          buildproductionlinecommand.cpp removeproductionlinecommand.cpp
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 libmiscactions_la_SOURCES = servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
@@ -351,6 +353,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actioncontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackcommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildproductionlinecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargomovecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeobjectproperty.Plo@am__quote@
@@ -382,6 +385,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/registerunitrftarget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removemine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removeobject.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/removeproductionlinecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/repairbuildingcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/repairunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicecommand.Plo@am__quote@

@@ -14,8 +14,12 @@
 #include "../cannedmessages.h"
 #include "../gameoptions.h"
 #include "../dialog.h"
+#include "../sg.h"
 
 #include "vehicleproductionselection.h"
+
+#include "../actions/buildproductionlinecommand.h"
+#include "../actions/removeproductionlinecommand.h"
 
 VehicleProduction_SelectionItemFactory::VehicleProduction_SelectionItemFactory( Resources plantResources, const ContainerBase* productionplant, const ConstructUnitCommand::Producables& produceableUnits )
    : VehicleTypeSelectionItemFactory( plantResources, convertAndCreateArrays( produceableUnits, &items ), productionplant->getMap()->getCurrentPlayer() ),
@@ -120,16 +124,18 @@ AddProductionLine_SelectionItemFactory::AddProductionLine_SelectionItemFactory( 
 
 void AddProductionLine_SelectionItemFactory::vehicleTypeSelected( const Vehicletype* type, bool mouse )
 {
-   ContainerControls cc( plant );
-   int res = cc.buildProductionLine( type );
-   if ( res < 0 )
-      errorMessage( getmessage ( -res ));
+   auto_ptr<BuildProductionLineCommand> bplc ( new BuildProductionLineCommand(plant ));
+   bplc->setProduction( type );
+   ActionResult res = bplc->execute ( createContext( plant->getMap() ));
+   if ( res.successful() )
+      bplc.release();
+   else
+      displayActionError( res );
 }
 
 Resources AddProductionLine_SelectionItemFactory::getCost( const Vehicletype* type )
 {
-   ContainerControls cc ( plant );
-   return cc.buildProductionLineResourcesNeeded( type );
+   return BuildProductionLineCommand::resourcesNeeded( type );
 };
 
 
@@ -249,9 +255,9 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
 
 bool VehicleProduction_SelectionWindow::addProductionLine()
 {
-   ContainerControls cc ( my_plant );
+   BuildProductionLineCommand bplc( my_plant );
    {
-      ItemSelectorWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "choose production line", new AddProductionLine_SelectionItemFactory( my_plant, cc.productionLinesBuyable() ));
+      ItemSelectorWindow isw( NULL, PG_Rect( 100, 150, 400, 400 ),  "choose production line", new AddProductionLine_SelectionItemFactory( my_plant, bplc.productionLinesBuyable() ));
       isw.Show();
       isw.RunModal();
    }
@@ -262,8 +268,13 @@ bool VehicleProduction_SelectionWindow::addProductionLine()
 bool VehicleProduction_SelectionWindow::removeProductionLine()
 {
    if ( selected && choice_dlg("do you really want to remove this production line ?","~y~es","~n~o") == 1) {
-      ContainerControls cc ( my_plant );
-      cc.removeProductionLine( selected );
+      auto_ptr<RemoveProductionLineCommand> rplc ( new RemoveProductionLineCommand( my_plant ));
+      rplc->setRemoval( selected );
+      ActionResult res = rplc->execute( createContext( my_plant->getMap() ));
+      if ( res.successful()) 
+         rplc.release();
+      else
+         displayActionError(res);
       reLoadAndUpdate();
    }
    return true;

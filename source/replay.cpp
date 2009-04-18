@@ -62,6 +62,8 @@
 #include "actions/moveunitcommand.h"
 #include "actions/consumeammo.h"
 #include "actions/consumeresource.h"
+#include "actions/buildproductionlinecommand.h"
+#include "actions/removeproductionlinecommand.h"
 
 trunreplay runreplay;
 
@@ -2387,10 +2389,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
                                     if ( veh->techDependency.available( actmap->player[ bld->getOwner()].research )) {
-                                       ContainerControls cc( bld );
-                                       int result = cc.buildProductionLine( veh );
-                                       if ( result < 0)
-                                          error("severe replay inconsistency:\ncould not build production line!\n%s !", getmessage(result));
+                                       auto_ptr<BuildProductionLineCommand> bplc ( new BuildProductionLineCommand( bld ));
+                                       bplc->setProduction( veh );
+                                       ActionResult res = bplc->execute( createReplayContext() );
+                                       if ( res.successful() )
+                                          bplc.release();
+                                       else
+                                          error("severe replay inconsistency:\ncould not build production line!");
                                     } else
                                        error("severe replay inconsistency:\ntechnology for building production line not available!");
 
@@ -2407,10 +2412,13 @@ void trunreplay :: execnextreplaymove ( void )
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
                                  Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
-                                    ContainerControls cc( bld );
-                                    int result = cc.removeProductionLine( veh );
-                                    if ( result < 0)
-                                       error("severe replay inconsistency:\ncould not remove production line!\n%s !", getmessage(result));
+                                    auto_ptr<RemoveProductionLineCommand> rplc ( new RemoveProductionLineCommand( bld ));
+                                    rplc->setRemoval( veh );
+                                    ActionResult res = rplc->execute( createReplayContext());
+                                    if ( res.successful()) 
+                                       rplc.release();
+                                    else
+                                       error("severe replay inconsistency:\ncould not remove production line!");
 
                                  } else
                                     error("severe replay inconsistency:\nno building for remove production line command !");

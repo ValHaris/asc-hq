@@ -114,7 +114,8 @@ void checkbi3dir ( void )
      if ( notfound ) {
             char bi3path[10000];
             printf("Enter Battle Isle directory:\n" );
-            scanf ( "%s", bi3path );
+            if ( !scanf ( "%s", bi3path ) )
+               bi3path[0] = 0;
 
             CGameOptions::Instance()->BI3directory = bi3path;
             appendbackslash ( CGameOptions::Instance()->BI3directory );
