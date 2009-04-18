@@ -1,0 +1,187 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = UnitTest NIGHTCAP
+   Infotext = [Tanker Planes are basically flying fuel transports. Their only
+              use is refuelling other airplanes. This ability can be a life-saver
+              if an aircraft is unable to reach the base with its remaining
+              fuel supply.]
+   ID = 1000000031
+   SecondaryIDs = 
+   View = 40
+   Jamming = 0
+   InfoImage = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 40000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 40000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = Tanker Plane
+   Armor = 350
+   Picture = unittest-airplane-tanker.png
+   Height = ground_level low_level_flight medium_level_flight 
+   WaitForAttack = false
+   FuelConsumption = 23
+   Features = ExternalFuelTransfer move_after_attack no_reactionfire 
+   Movement = 0 0 0 65 130 160 0 0 
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 190
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 400 300 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 250
+   TerrainAccess { 
+      terrain_any = Runway 
+      terrain_all = Runway 
+      terrain_not = Swamp Forest Small_rocks Large_rocks Hillside Morass Installation bridge 
+      terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 1
+      Weapon0 { 
+         Type = service 
+         targets = floating ground_level medium_level_flight 
+         shotFrom = ground_level medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 0
+         Punch@MaxRange = 0
+         Punch@MinRange = 0
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 0
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 { 
+      StartHeight = ground_level 
+      HeightDelta = 1
+      MoveCost = 45
+      CanAttack = true
+      Dist = 3
+   } HeightChangeMethod0
+   HeightChangeMethod1 { 
+      StartHeight = low_level_flight medium_level_flight high_level_flight 
+      HeightDelta = 1
+      MoveCost = 40
+      CanAttack = true
+      Dist = 2
+   } HeightChangeMethod1
+   HeightChangeMethod2 { 
+      StartHeight = medium_level_flight high_level_flight orbit 
+      HeightDelta = -1
+      MoveCost = 25
+      CanAttack = true
+      Dist = 2
+   } HeightChangeMethod2
+   HeightChangeMethod3 { 
+      StartHeight = low_level_flight 
+      HeightDelta = -1
+      MoveCost = 45
+      CanAttack = true
+      Dist = 3
+   } HeightChangeMethod3
+   TechAdapterRequired = 31 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 10550
+      Material = 9300
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 325 550 560 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType
