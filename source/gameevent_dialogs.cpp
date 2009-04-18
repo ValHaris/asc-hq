@@ -44,6 +44,7 @@
 #include "itemrepository.h"
 #include "gameevent_dialogs.h"
 #include "dialog.h"
+#include "spfst-legacy.h"
 
 #include "dialogs/fieldmarker.h"
 #include "widgets/textrenderer.h"

@@ -46,6 +46,7 @@
 #include "iconrepository.h"
 #include "mainscreenwidget.h"
 #include "sdl/sound.h"
+#include "spfst-legacy.h"
 
 #ifndef karteneditor
  #include "dialogs/attackpanel.h"

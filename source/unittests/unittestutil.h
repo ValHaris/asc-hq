@@ -7,11 +7,14 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef movementtestH
-#define movementtestH
+#ifndef unittestutilH
+#define unittestutilH
 
 #include "../ascstring.h"
 #include "../errors.h"
+#include "../actions/context.h"
+#include "../vehicle.h"
+#include "../turncontrol.h"
 
 extern GameMap* startMap( const ASCString& filename );
 
@@ -21,11 +24,18 @@ class TestFailure : public ASCmsgException {
       }
 };
 
+class NextTurnStrategy_Abort : public NextTurnStrategy {
+   public:
+      bool continueWhenLastPlayer() const;
+} ;
+
+
 extern Context createTestingContext( GameMap* gamemap );
 extern void testCargoMovement( Vehicle* veh, int movement );
 extern void testCargoMovementMax( Vehicle* veh, int movement );
 extern Vehicle* getFirstCargo( ContainerBase* carrier );
 extern void move( Vehicle* veh, const MapCoordinate& dest );
+extern void attack( Vehicle* veh, const MapCoordinate& target );
 
 
 #endif

@@ -104,7 +104,7 @@ bool PutObjectCommand::checkObject( tfield* fld, ObjectType* objtype, Mode mode 
     if ( mode == Build ) {
        if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0
             &&  !fld->checkforobject ( objtype )
-            && objtype->techDependency.available(actmap->player[veh->getOwner()].research) ){
+            && objtype->techDependency.available(getMap()->player[veh->getOwner()].research) ){
 //            && !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
 
           if ( veh->getResource(objtype->buildcost, true) == objtype->buildcost && veh->getMovement() >= objtype->build_movecost )
@@ -141,7 +141,7 @@ void PutObjectCommand :: fieldChecker( const MapCoordinate& pos )
       
       for ( int i = 0; i < veh->typ->objectsBuildable.size(); i++ )
          for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ )
-            if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Build ))
+            if ( checkObject( fld, getMap()->getobjecttype_byid ( j ), Build ))
                objectsCreatable[pos].push_back( j );
 
 
@@ -157,7 +157,7 @@ void PutObjectCommand :: fieldChecker( const MapCoordinate& pos )
 
       for ( int i = 0; i < veh->typ->objectsRemovable.size(); i++ )
          for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ )
-            if ( checkObject( fld, actmap->getobjecttype_byid ( j ), Remove ))
+            if ( checkObject( fld, getMap()->getobjecttype_byid ( j ), Remove ))
                objectsRemovable[pos].push_back( j );
 
 
@@ -225,7 +225,7 @@ ActionResult PutObjectCommand::go ( const Context& context )
    
    ObjectType* obj = getMap()->getobjecttype_byid( object );
    
-   RecalculateAreaView rav ( actmap, target, maxViewRange / maxmalq + 1, &context );
+   RecalculateAreaView rav ( getMap(), target, maxViewRange / maxmalq + 1, &context );
       
 
    bool objectAffectsVisibility = obj->basicjamming_plus || obj->viewbonus_plus || obj->viewbonus_abs != -1 || obj->basicjamming_abs != -1;

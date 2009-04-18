@@ -18,6 +18,7 @@ extern "C"
 #include "../vehicle.h"
 #include "../gamemap.h"
 #include "../spfst.h"
+#include "../spfst-legacy.h"
                
 #include "../actions/attackcommand.h"
 #include "../actions/moveunitcommand.h"

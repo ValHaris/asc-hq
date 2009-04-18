@@ -32,7 +32,6 @@
 #include "global.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
-#include "newfont.h"
 #include "typen.h"
 // #include "basegfx.h"
 
@@ -48,14 +47,12 @@
 #include "mapdisplayinterface.h"
 
 #ifdef sgmain
-// # include "gamedlg.h"
 # include "viewcalculation.h"
 # include "resourcenet.h"
-# include "unitctrl.h"
 #endif
 
 
-void    viewtextmessage ( int id, int player )
+void    viewtextmessage ( GameMap* actmap, int id, int player )
 {
    ASCString txt = readtextmessage( id );
    if ( !txt.empty() ) {
@@ -208,7 +205,7 @@ void BuildingConquered::arm()
 void BuildingConquered::triggered()
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 
@@ -321,7 +318,7 @@ void BuildingSeen::arm()
 void BuildingSeen::triggered()
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 
@@ -395,7 +392,7 @@ void UnitTrigger::setup()
 void UnitTrigger::triggered()
 {
    state( -1 );
-   eventReady();
+   eventReady( gamemap );
 }
 
 
@@ -576,7 +573,7 @@ void EventTriggered::arm()
 void EventTriggered::triggered()
 {
    state( -1 );
-   eventReady();
+   eventReady( gamemap );
 }
 
 
@@ -610,14 +607,14 @@ void AllEnemyUnitsDestroyed::arm()
 void AllEnemyUnitsDestroyed::triggered()
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 
 EventTrigger::State AllEnemyBuildingsDestroyed::getState( int player )
 {
    for ( int i = 0; i < 8; i++ )
-      if ( actmap->getPlayer(player).diplomacy.isHostile(i))
+      if ( gamemap->getPlayer(player).diplomacy.isHostile(i))
          if ( !gamemap->player[i].buildingList.empty() )
             return unfulfilled;
 
@@ -645,7 +642,7 @@ void AllEnemyBuildingsDestroyed::arm()
 void AllEnemyBuildingsDestroyed::triggered()
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 
@@ -729,7 +726,7 @@ void SpecificUnitEntersPolygon::arm ()
 void SpecificUnitEntersPolygon::triggered( const Context& context )
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 EventTrigger::State AnyUnitEntersPolygon::getState( int player )
@@ -814,7 +811,7 @@ void AnyUnitEntersPolygon::arm()
 void AnyUnitEntersPolygon::triggered(const Context& context )
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 
@@ -875,7 +872,7 @@ void ResourceTribute::arm()
 void ResourceTribute::triggered()
 {
    if ( isFulfilled() )
-      eventReady();
+      eventReady( gamemap );
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -979,7 +976,7 @@ void DisplayMessage::execute( MapDisplayInterface* md )
    if ( gamemap->state == GameMap::Replay )
       return;
 
-   viewtextmessage ( messageNum , gamemap->actplayer );
+   viewtextmessage ( gamemap, messageNum , gamemap->actplayer );
 }
 
 void DisplayMessage::readData( tnstream& stream )
@@ -1246,8 +1243,8 @@ void RemoveAllObjects :: setup ()
 
 void MapChangeCompleted :: execute( MapDisplayInterface* md )
 {
-   checkobjectsforremoval();
-   checkunitsforremoval ();
+   checkobjectsforremoval( gamemap );
+   checkunitsforremoval ( gamemap );
 
    if ( md ) {
       md->displayMap();
@@ -1320,7 +1317,7 @@ void NextMap::execute( MapDisplayInterface* md )
       name.erase( name.find('.') );
 
    
-   savegame( "map-" + name + "-completed" + (savegameextension + 1) );
+   savegame( "map-" + name + "-completed" + (savegameextension + 1), gamemap );
    throw  LoadNextMap(mapID);
 }
 

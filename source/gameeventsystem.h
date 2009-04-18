@@ -45,11 +45,11 @@ enum  EventConnections { cconnection_destroy = 1,
                          cconnection_areaentered_specificunit = 32 };
 
 
-extern bool  checkevents( MapDisplayInterface* md );
+extern bool  checkevents( GameMap* gamemap, MapDisplayInterface* md );
 
-extern void  checktimedevents( MapDisplayInterface* md );
+extern void  checktimedevents( GameMap* gamemap, MapDisplayInterface* md );
 
-extern void eventReady();
+extern void eventReady( GameMap* gamemap );
 
 typedef int EventTriggerID;
 typedef int EventActionID;

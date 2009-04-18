@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.1 2004-07-12 18:15:10 mbickel Exp $
+//     $Id: fileio.h,v 1.2 2009-04-18 13:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2004/07/12 18:15:10  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.7  2002/10/19 16:11:31  mbickel
 //      Made listing of directories more portable
 //

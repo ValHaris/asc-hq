@@ -922,7 +922,7 @@ void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
 
 void GameMap :: calculateAllObjects ( void )
 {
-   calculateallobjects();
+   calculateallobjects( this );
 }
 
 tfield*  GameMap :: getField(int x, int y)
@@ -932,6 +932,15 @@ tfield*  GameMap :: getField(int x, int y)
    else
       return (   &field[y * xsize + x] );
 }
+
+const tfield*  GameMap :: getField(int x, int y) const
+{
+   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
+      return NULL;
+   else
+      return (   &field[y * xsize + x] );
+}
+
 
 tfield*  GameMap :: getField(const MapCoordinate& pos )
 {
@@ -1169,7 +1178,7 @@ ContainerBase* GameMap::getContainer ( int nwid )
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      tfield* fld = getfield(x,y);
+      tfield* fld = getField(x,y);
       if ( !fld )
          return NULL;
 
@@ -1184,7 +1193,7 @@ const ContainerBase* GameMap::getContainer ( int nwid ) const
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      tfield* fld = getfield(x,y);
+      const tfield* fld = getField(x,y);
       if ( !fld )
          return NULL;
 
@@ -1239,7 +1248,7 @@ void GameMap::endTurn()
 
       // Bei Aenderungen hier auch die Windanzeige dashboard.PAINTWIND aktualisieren !!!
 
-      if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getfield(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
+      if (( actvehicle->height >= chtieffliegend )   &&  ( actvehicle->height <= chhochfliegend ) && ( getField(actvehicle->xpos,actvehicle->ypos)->vehicle == actvehicle)) {
          if ( getmaxwindspeedforunit ( actvehicle ) < weather.windSpeed*maxwindspeed ){
             new Message ( getUnitReference( *v ) + " crashed because of the strong wind", this, 1<<(*v)->getOwner());
             toRemove.push_back ( *v );
@@ -1263,7 +1272,7 @@ void GameMap::endTurn()
    for ( Player::VehicleList::iterator v = toRemove.begin(); v != toRemove.end(); v++ )
       delete *v;
 
-   checkunitsforremoval();
+   checkunitsforremoval( this );
 
   for ( int i = 0; i < 9; ++i ) 
      for ( Player::VehicleList::iterator v = player[i].vehicleList.begin(); v != player[i].vehicleList.end(); ++v ) 
@@ -1397,7 +1406,7 @@ void GameMap::objectGrowth()
          }
       }
 
-   checkunitsforremoval();
+   checkunitsforremoval( this );
 }
 
 SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
@@ -1453,9 +1462,6 @@ GameMap :: ~GameMap ()
       delete[] field;
       field = NULL;
    }
-
-   if ( actmap == this )
-      actmap = NULL;
 
 }
 
@@ -1631,7 +1637,7 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
      for ( int x = 0; x < newx; x++ )
         newfield[ x + y * newx ] = defaultfield;
 
-  calculateallobjects();
+  calculateallobjects( this );
 
   for ( int p = 0; p < newx*newy; p++ )
      newfield[p].setparams();

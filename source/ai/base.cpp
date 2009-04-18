@@ -113,7 +113,7 @@ void    AI :: setup (void)
    */
 
    for ( int p = 0; p < 8; p++ )
-      actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist();
+      getMap()->player[p].existanceAtBeginOfTurn = getMap()->player[p].exist();
 
 
    for ( Player::VehicleList::iterator i = getPlayer().vehicleList.begin(); i != getPlayer().vehicleList.end(); ++i)
@@ -131,8 +131,10 @@ void    AI :: setup (void)
 
 void AI::checkKeys ( void )
 {
-   for ( int i = 0; i < 5; ++i )
-      getPGApplication().processEvent();
+   ASC_PG_App* app = &getPGApplication();
+   if ( app )
+      for ( int i = 0; i < 5; ++i )
+         app->processEvent();
 }
 
 void AI::removeDisplay()
@@ -171,7 +173,8 @@ class AI_KeyboardWatcher : public SigC::Object {
          // w->SetCapture();
          this->callback = callback;
          // w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
-         PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         if ( PG_Application::GetApp() )
+            PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
          
       };
 
@@ -191,11 +194,11 @@ class AI_KeyboardWatcher : public SigC::Object {
 
 void AI :: checkGameEvents()
 {
-   while ( getMap()->player[ actmap->actplayer ].queuedEvents )
-      if ( !checkevents( mapDisplay ))
+   while ( getMap()->player[ getMap()->actplayer ].queuedEvents )
+      if ( !checkevents( getMap(), mapDisplay ))
          return ;
 
-   checktimedevents( mapDisplay );
+   checktimedevents( getMap(), mapDisplay );
 }
 
 void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
@@ -205,9 +208,9 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    this->benchMark = benchMark;
 
    auto_ptr<ReplayMapDisplay> rmd;
-   if ( getMap()->getPlayerView() >= 0 && !benchMark) {
-      rmd = auto_ptr<ReplayMapDisplay>( new ReplayMapDisplay ( myMapDisplay ) );
-      rmd.get()->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
+   if ( getMap()->getPlayerView() >= 0 && !benchMark && myMapDisplay ) {
+      rmd.reset( new ReplayMapDisplay ( myMapDisplay ) );
+      rmd->setCursorDelay (CGameOptions::Instance()->replayspeed + 30 );
 
       mapDisplay = rmd.get();
    } else 
@@ -310,7 +313,7 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 
    displaymessage2("AI completed in %d second", duration/100);
 
-   checkforvictory( false );
+   checkforvictory( getMap(), false );
 
    mapDisplay = NULL;
 }
@@ -365,7 +368,7 @@ void AI :: showFieldInformation ( int x, int y )
                                 threat.threat[4], threat.threat[3], threat.threat[2],
                                 threat.threat[1], threat.threat[0], getFieldInformation(x,y).control );
 
-   tfield* fld = getfield (x, y );
+   tfield* fld = getMap()->getField (x, y );
    if ( fld->vehicle && fieldvisiblenow ( fld ) && fld->vehicle->aiparam[getPlayerNum()] ) {
       char text2[1000];
       sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );
@@ -380,7 +383,7 @@ void AI :: showFieldInformation ( int x, int y )
 
       if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
          getMap()->cleartemps ( 1 );
-         getfield ( aip.dest.x, aip.dest.y )->a.temp = 1;
+         getMap()->getField ( aip.dest.x, aip.dest.y )->a.temp = 1;
       }
 
 

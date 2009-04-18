@@ -143,7 +143,7 @@ bool ConstructBuildingCommand::buildingFits( const MapCoordinate& entry )
       for ( int y1 = 0; y1 <= 5; y1++)
          for ( int x1 = 0; x1 <= 3; x1++)
             if ( bld->fieldExists ( BuildingType::LocalCoordinate(x1, y1)) ) {
-               tfield* fld = actmap->getField ( bld->getFieldCoordinate( entry, BuildingType::LocalCoordinate(x1,y1) ));
+               tfield* fld = getMap()->getField ( bld->getFieldCoordinate( entry, BuildingType::LocalCoordinate(x1,y1) ));
                if ( fld ) {
                   if ( fld->vehicle != NULL && fld->vehicle->height <= chfahrend )
                      b = false;

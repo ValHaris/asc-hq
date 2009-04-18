@@ -36,6 +36,7 @@
 
 class Player;
 class GameMap;
+class MapDisplayInterface;
 
 /** describes the behavier that next_turn() shall do when it finds out that the current player is the last one available */
 class NextTurnStrategy {
@@ -53,16 +54,16 @@ class NextTurnStrategy_AskUser : public NextTurnStrategy {
 /*! Ends the turn of the current player and runs AI until a player is human again
     \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
 */
-extern void next_turn ( GameMap* gameMap, const NextTurnStrategy& nextTurnStrategy, int playerView = -2 );
+extern void next_turn ( GameMap* gameMap, const NextTurnStrategy& nextTurnStrategy, MapDisplayInterface* display, int playerView = -2 );
 
 //! checks if the current player has terminated another player or even won
-extern void  checkforvictory ( bool hasTurnControl );
+extern void  checkforvictory ( GameMap* gamemap, bool hasTurnControl );
 
 
 //! continues a PBeM game; the current map is deleted
-extern bool continuenetworkgame ( bool mostRecent = false );
+extern GameMap* continueNetworkGame ( bool mostRecent = false );
 
-extern bool continuenetworkgame ( const ASCString& filename );
+extern GameMap* continueNetworkGame ( const ASCString& filename );
 
 
 //! this checks if one player has been using a new ASC version than the current player. If this is the case, the current player is notified and asked to upgrade

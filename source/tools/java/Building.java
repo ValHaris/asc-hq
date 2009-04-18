@@ -1,6 +1,12 @@
-//     $Id: Building.java,v 1.1 2000-11-07 16:19:39 schelli Exp $
+//     $Id: Building.java,v 1.2 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/11/07 16:19:39  schelli
+//     Minor Memory-Functions & Problems changed
+//     Picture Support partly enabled
+//     New Funktion partly implemented
+//     Buildings partly implemented
+//
 //     Revision 1.1  2000/10/17 17:28:26  schelli
 //     minor bugs fixed in lots of sources
 //     add & remove weapon works now

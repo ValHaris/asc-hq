@@ -33,7 +33,6 @@
 #include "../guiiconhandler.h"
 #include "../guifunctions.h"
 #include "../guifunctions-interface.h"
-#include "../unitctrl.h"
 #include "../cannedmessages.h"
 #include "../replay.h"
 #include "../dashboard.h"
@@ -51,13 +50,14 @@
 #include "../actions/repairunitcommand.h"
 #include "../actions/trainunitcommand.h"
 #include "../actions/repairbuildingcommand.h"
+#include "../actions/transfercontrolcommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
 #include "unitinfodialog.h"
 #include "vehicleproductionselection.h"
 #include "../sg.h"
-
+#include "../spfst.h"
 
 const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items );
 
@@ -1080,7 +1080,7 @@ class ResourceInfoWindow : public SubWindow {
                   ASCString label = "Res";
                   label += xx;
                   label += yy;
-                  if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !actmap->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
+                  if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !container()->getMap()->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
                      cargoDialog->setLabelText( label, value[c][x][y] );
                   else
                      cargoDialog->setLabelText( label, "-" );
@@ -1892,14 +1892,10 @@ namespace CargoGuiFunctions {
 
    bool Movement::available( const MapCoordinate& pos, ContainerBase* subject, int num )
    {
-      if ( pendingVehicleActions.actionType == vat_nothing ) {
-         Vehicle* unit = dynamic_cast<Vehicle*>(subject);
-         if ( unit && unit->getOwner() == unit->getMap()->actplayer )
-            return unit->canMove();
-
-      }
+      Vehicle* unit = dynamic_cast<Vehicle*>(subject);
+      if ( unit && unit->getOwner() == unit->getMap()->actplayer )
+         return unit->canMove();
       return false;
-      
    }
 
    void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1944,7 +1940,7 @@ namespace CargoGuiFunctions {
          
       mainScreenWidget->Update();
       mainScreenWidget->RunModal();
-      actmap->cleartemps(7);
+      parent.getMap()->cleartemps(7);
 
       NewGuiHost::popIconHandler();
       parent.cargoChanged();
@@ -2245,7 +2241,7 @@ namespace CargoGuiFunctions {
          return;
       
       rp->setTarget( veh );
-      ActionResult res = rp->execute( createContext ( actmap ));
+      ActionResult res = rp->execute( createContext ( veh->getMap() ));
       if ( res.successful() )
          rp.release();
       
@@ -2376,17 +2372,15 @@ namespace CargoGuiFunctions {
       if ( !subject )
          return false;
 
-      if ( !exist("transferunitcontrol.png"))
+      if ( subject->getOwner() != subject->getMap()->actplayer )
          return false;
-
-      if ( subject->getMap()->getgameparameter( cgp_disableUnitTransfer ) )
-         return false;
-
+      
       Vehicle* veh = dynamic_cast<Vehicle*>(subject);
       if ( !veh )
          return false;
 
-      return veh->getOwner() == veh->getMap()->actplayer;
+      return TransferControlCommand::avail( subject );
+      
    }
 
 
@@ -2406,14 +2400,12 @@ namespace CargoGuiFunctions {
       Vehicle* veh = dynamic_cast<Vehicle*>(subject);
       if ( veh ) {
 
-         std::map<int,int> playerIDs;
+         auto_ptr<TransferControlCommand> tcc ( new TransferControlCommand( subject ));
+         TransferControlCommand::Receivers rec = tcc->getReceivers();
+         
          vector<ASCString> entries;
-         for ( int p = 0; p < veh->getMap()->getPlayerCount(); ++p )
-            if ( p != veh->getOwner() )
-               if ( veh->getMap()->getPlayer(p).diplomacy.isAllied( veh->getOwner() )) {
-                  playerIDs[entries.size()] = p;
-                  entries.push_back( veh->getMap()->getPlayer(p).getName() );
-               }
+         for ( TransferControlCommand::Receivers::iterator i = rec.begin(); i != rec.end(); ++i )
+            entries.push_back ( (*i)->getName() );
 
          if ( !entries.size() ) {
             infoMessage("you don't have any allies!");
@@ -2422,10 +2414,13 @@ namespace CargoGuiFunctions {
 
          int result = chooseString ( "Choose player", entries );
          if ( result >= 0 ) {
-            int target = playerIDs[result];
-            veh->convert ( target );
-            logtoreplayinfo ( rpl_convert2, veh->getPosition().x, veh->getPosition().y, target, veh->networkid  );
-            parent.cargoChanged();
+            tcc->setReceiver( rec[result] );
+            ActionResult res = tcc->execute( createContext( subject->getMap() ));
+            if ( res.successful() ) {
+               tcc.release();
+               parent.cargoChanged();
+            } else
+               displayActionError( res );
          }
 
 
@@ -2614,7 +2609,7 @@ namespace CargoGuiFunctions {
          return false;
       
       Player& player = veh->getMap()->player[veh->getOwner()];
-      if ( veh->typ->maxLoadableUnits && player.diplomacy.isAllied( actmap->actplayer)  )
+      if ( veh->typ->maxLoadableUnits && player.diplomacy.isAllied( veh->getMap()->actplayer)  )
          return true;
       
       return false;

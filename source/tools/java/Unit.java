@@ -1,6 +1,12 @@
-//     $Id: Unit.java,v 1.6 2000-11-07 16:19:40 schelli Exp $
+//     $Id: Unit.java,v 1.7 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2000/11/07 16:19:40  schelli
+//     Minor Memory-Functions & Problems changed
+//     Picture Support partly enabled
+//     New Funktion partly implemented
+//     Buildings partly implemented
+//
 //     Revision 1.5  2000/10/31 10:41:20  mbickel
 //      Fixed crash when loading a unit that can "construct specific building"
 //

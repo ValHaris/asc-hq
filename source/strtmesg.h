@@ -1,6 +1,9 @@
-//     $Id: strtmesg.h,v 1.8 2007-04-13 16:15:54 mbickel Exp $
+//     $Id: strtmesg.h,v 1.9 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.8  2007/04/13 16:15:54  mbickel
+//      Merged ASC2 branch
+//
 //     Revision 1.6.2.1  2006/06/03 20:42:23  mbickel
 //      Improving cargo dialog
 //      General polishing

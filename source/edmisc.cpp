@@ -56,6 +56,7 @@
 #include "dialogs/fileselector.h"
 #include "pgeventsupplier.h"
 #include "dialogs/edittechadapter.h"
+#include "spfst-legacy.h"
 
 
    bool       mapsaved;
@@ -607,7 +608,7 @@ void         k_savemap(char saveas)
    if ( !filename.empty() ) {
       mapsaved = true;
       actmap->preferredFileNames.mapname[0] = filename;
-      savemap( filename.c_str(), actmap );
+      savemap( filename, actmap );
       displaymap();
    }
 }
@@ -3237,7 +3238,7 @@ void transformMap ( )
    }
       */
 
-   calculateallobjects();
+   calculateallobjects( actmap );
    displaymap();
 }
 

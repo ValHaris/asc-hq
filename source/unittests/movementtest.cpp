@@ -13,7 +13,7 @@
 #include "unittestutil.h"
 
 
-void testMovement() 
+void testMovement1() 
 {
    auto_ptr<GameMap> game ( startMap("unittest-movement.map"));
    
@@ -44,4 +44,28 @@ void testMovement()
    assertOrThrow( veh->getMovement() == 0 );
    testCargoMovement( veh, 50 );
    
+}
+
+void testMovementRF() 
+{
+   auto_ptr<GameMap> game ( startMap("unittest-reactionfire.map"));
+   
+   Vehicle* veh = game->getField(4,2)->vehicle;
+   assertOrThrow( veh != NULL );
+   
+   move( veh, MapCoordinate(4,3));
+   
+   assertOrThrow( veh->damage == 0 );
+   
+   move( veh, MapCoordinate(5,4));
+   
+   assertOrThrow( veh->damage > 50 );
+}
+
+
+
+void testMovement() 
+{
+   testMovement1();
+   testMovementRF();
 }

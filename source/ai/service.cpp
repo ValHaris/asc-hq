@@ -17,9 +17,12 @@
 
 #include "ai_common.h"
 
+#include "../actions/repairunitcommand.h"
+#include "../actions/servicing.h"
+#include "../actions/servicecommand.h"
 
 
-AI :: ServiceOrder :: ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos )
+AI :: ServiceOrder :: ServiceOrder ( AI* _ai, AI::ServiceOrder::Service _requiredService, int UnitID, int _pos )
 {
    active = false;
    failure = 0;
@@ -30,6 +33,7 @@ AI :: ServiceOrder :: ServiceOrder ( AI* _ai, VehicleService::Service _requiredS
    position = _pos;
    time = ai->getMap()->time;
 
+   nextServiceBuildingDistance = -1;
    nextServiceBuilding = NULL;
    if ( ai->getMap()->getUnit ( UnitID )->canMove()) {
       MapCoordinate3D sb = ai->findServiceBuilding ( *this, &nextServiceBuildingDistance );
@@ -74,7 +78,7 @@ void AI :: ServiceOrder :: read ( tnstream& stream )
         nextServiceBuilding = NULL;
 
      if ( version >= 10002 )
-        requiredService = VehicleService::Service( stream.readInt() );
+        requiredService = ServiceOrder::Service( stream.readInt() );
   }
 }
 
@@ -101,67 +105,39 @@ bool AI :: ServiceOrder :: completelyFailed ()
 }
 
 
+int AI::ServiceOrder::getServiceID() const
+{
+   if ( requiredService == srv_ammo )
+      return 2000+getTargetUnit()->typ->weapons.weapon[position].getScalarWeaponType();
+   
+   if ( requiredService == srv_resource )
+      return 1000+position;
+   
+   return -1;
+}
+
+
 int AI::ServiceOrder::possible ( Vehicle* supplier )
 {
    if ( !ai->getMap()->getField( getTargetUnit()->getPosition())->unitHere ( getTargetUnit() ))
      return 0;
-   bool result = false;
-
-   VehicleService vs ( NULL, NULL);
-   vs.fieldSearch.bypassChecks.distance = true;
-   vs.fieldSearch.bypassChecks.height   = true;
-   vs.fieldSearch.init ( supplier, NULL );
-   vs.fieldSearch.checkVehicle2Vehicle ( getTargetUnit(), getTargetUnit()->xpos, getTargetUnit()->ypos );
-
-   VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
-   if ( i != vs.dest.end() ) {
-      VehicleService::Target target = i->second;
-      int serviceAmount = 0;
-      for ( unsigned int j = 0; j < target.service.size(); j++ ) {
-         serviceAmount += target.service[j].maxPercentage;
-         if ( target.service[j].type == requiredService ) {
-            bool enoughResources = false;
-            if ( requiredService == VehicleService::srv_repair ) {
-                if ( target.service[j].minAmount <  target.service[j].curAmount - 5 )
-                  enoughResources = true;
-            } else
-               if ( target.service[j].targetPos == position ) {  // is this stuff the one we need
-                  int requiredAmount = target.service[j].maxAmount - target.service[j].curAmount;
-                  if ( requiredAmount >= 0 ) {
-                     if ( requiredService == VehicleService::srv_resource ) {
-                        if ( target.service[j].targetPos == Resources::Fuel ) { // fuel  ; 30 fields requiredForHome
-                            if ( requiredAmount < target.service[j].orgSourceAmount - supplier->typ->fuelConsumption * 30 )
-                               enoughResources = true;
-                        } else {
-                            if ( getTargetUnit()->aiparam[ai->getPlayerNum()]->getJob() == AiParameter::job_supply ) {
-                               if ( target.service[j].orgSourceAmount > requiredAmount )
-                                  enoughResources = true;
-                            } else
-                               if ( target.service[j].maxPercentage > 80 )
-                                  enoughResources = true;
-                        }
-                     }
-                     if ( requiredService == VehicleService::srv_ammo ) {
-                        if ( getTargetUnit()->aiparam[ai->getPlayerNum()]->getJob() == AiParameter::job_supply ) {
-                           if ( target.service[j].orgSourceAmount > requiredAmount )
-                              enoughResources = true;
-                        } else
-                           if ( target.service[j].maxPercentage > 80 )
-                              enoughResources = true;
-                     }
-                  }
-               }
-
-            if ( enoughResources )
-               result = true;
-
+   
+   TransferHandler transferHandler( supplier, getTargetUnit(), TransferHandler::ignoreHeight + TransferHandler::ignoreDistance );
+   
+   int serviceAmount = 0;
+   for ( TransferHandler::Transfers::const_iterator i = transferHandler.getTransfers().begin(); i != transferHandler.getTransfers().end(); ++i ) {
+      if (  (*i)->getID() == getServiceID() ) {
+         int now = (*i)->getAmount(getTargetUnit());
+         int poss = (*i)->getMax( getTargetUnit(), true); // the amound that the servicer can provide
+         int mx = (*i)->getMax( getTargetUnit(), false); // the maximum storage 
+         if ( poss > now && mx > now ) {
+            int percentage = 100 * (poss-now) / (mx - now );
+            serviceAmount += percentage;
          }
       }
-
-      if( result )
-         return serviceAmount;
+      
    }
-   return 0;
+   return serviceAmount;
 }
 
 
@@ -177,7 +153,7 @@ bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
              int x = targ->xpos;
              int y = targ->ypos;
              getnextfield ( x, y, i );
-             tfield* fld = getfield ( x, y );
+             tfield* fld = ai->getMap()->getField ( x, y );
              if ( fld && fieldAccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 bool result = false;
                 TemporaryContainerStorage tus ( supplier );
@@ -185,17 +161,12 @@ bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
                 supplier->ypos = y;
                 supplier->height = 1 << h;
 
-                VehicleService vs ( NULL, NULL);
-                vs.fieldSearch.init ( supplier, NULL );
-                vs.fieldSearch.checkVehicle2Vehicle ( targ, targ->xpos, targ->ypos );
-
-                VehicleService::TargetContainer::iterator i = vs.dest.find ( targetUnitID );
-                if ( i != vs.dest.end() ) {
-                   VehicleService::Target target = i->second;
-                   for ( unsigned int j = 0; j < target.service.size(); j++ )
-                      if ( target.service[j].type == requiredService )
-                         result = true;
-                }
+                
+                TransferHandler transferHandler( supplier, getTargetUnit() );
+   
+                for ( TransferHandler::Transfers::const_iterator i = transferHandler.getTransfers().begin(); i != transferHandler.getTransfers().end(); ++i ) 
+                   if (  (*i)->getID() == getServiceID() ) 
+                      result = true;
 
                 tus.restore();
 
@@ -260,10 +231,10 @@ bool AI::ServiceOrder::timeOut ( )
 
 bool AI::ServiceOrder::canWait( )
 {
-   if ( requiredService == VehicleService::srv_repair )
+   if ( requiredService == srv_repair )
       return false;
 
-   if ( requiredService == VehicleService::srv_ammo ) {
+   if ( requiredService == srv_ammo ) {
       if ( getTargetUnit()->ammo[position] )
          return true;
 
@@ -271,7 +242,7 @@ bool AI::ServiceOrder::canWait( )
          return true;
    }
 
-   bool fuelLack = requiredService == VehicleService::srv_resource && position == 2 ;
+   bool fuelLack = requiredService == srv_resource && position == 2 ;
    bool couldWait = fuelLack || !timeOut();
    if ( couldWait )
       return serviceUnitExists();
@@ -291,9 +262,9 @@ bool AI::ServiceOrder::serviceUnitExists()
 bool AI::ServiceOrder::valid (  ) const
 {
    switch ( requiredService ) {
-      case VehicleService::srv_repair     : return getTargetUnit()->damage > 0;
-      case VehicleService::srv_ammo       : return getTargetUnit()->ammo[position] < getTargetUnit()->typ->weapons.weapon[position].count;
-      case VehicleService::srv_resource   : return getTargetUnit()->getResource(getTargetUnit()->getStorageCapacity().resource(position), position, 1) < getTargetUnit()->getStorageCapacity().resource(position);
+      case srv_repair     : return getTargetUnit()->damage > 0;
+      case srv_ammo       : return getTargetUnit()->ammo[position] < getTargetUnit()->typ->weapons.weapon[position].count;
+      case srv_resource   : return getTargetUnit()->getResource(getTargetUnit()->getStorageCapacity().resource(position), position, 1) < getTargetUnit()->getStorageCapacity().resource(position);
       default: return false;
    }
 }
@@ -326,7 +297,7 @@ AI :: ServiceOrder :: ~ServiceOrder (  )
    }
 }
 
-AI::ServiceOrder& AI :: issueService ( VehicleService::Service requiredService, int UnitID, int pos )
+AI::ServiceOrder& AI :: issueService ( AI::ServiceOrder::Service requiredService, int UnitID, int pos )
 {
    ServiceOrder so ( this, requiredService, UnitID, pos );
    ServiceOrderContainer::iterator soi = find ( serviceOrders.begin(), serviceOrders.end(), so );
@@ -350,24 +321,24 @@ void AI :: issueServices ( )
       Vehicle* veh = *vi;
       if ( getMap()->getField( veh->getPosition() )->unitHere( veh )) {
          if ( veh->damage > config.damageLimit )
-            issueService ( VehicleService::srv_repair, veh->networkid ) ;
+            issueService ( ServiceOrder::srv_repair, veh->networkid ) ;
 
          for ( int i = 0; i< resourceTypeNum; i++ )
             if ( veh->maxMovement() ) // stationary units are ignored
                if ( veh->getResource(maxint, i, 1) < veh->getStorageCapacity().resource(i) * config.resourceLimit.resource(i) / 100 )
-                  issueService ( VehicleService::srv_resource, veh->networkid, i);
+                  issueService ( ServiceOrder::srv_resource, veh->networkid, i);
 
          for ( int w = 0; w< veh->typ->weapons.count; w++ )
             if ( veh->typ->weapons.weapon[w].count )
                if ( veh->ammo[w] <= veh->typ->weapons.weapon[w].count * config.ammoLimit / 100 )
-                  issueService ( VehicleService::srv_ammo, veh->networkid, w);
+                  issueService ( ServiceOrder::srv_ammo, veh->networkid, w);
       }
    }
 }
 
 AI::ServiceOrder& AI :: issueRefuelOrder ( Vehicle* veh, bool returnImmediately )
 {
-   ServiceOrder& so = issueService ( VehicleService::srv_resource, veh->networkid, Resources::Fuel);
+   ServiceOrder& so = issueService ( ServiceOrder::srv_resource, veh->networkid, Resources::Fuel);
    if ( returnImmediately ) {
       if ( RefuelConstraint::necessary ( veh, *this )) {
          RefuelConstraint apl ( *this, veh );
@@ -428,7 +399,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
             int fullfillableServices = 0;
             int partlyFullfillabelServices = 0;
             switch ( so.requiredService ) {
-               case VehicleService::srv_repair : if ( bld->canRepair( veh ) ) {
+               case ServiceOrder::srv_repair : if ( bld->canRepair( veh ) ) {
                                                     int mr =  bld->getMaxRepair( veh );
                                                     if ( mr == 0 )
                                                        fullfillableServices++;
@@ -438,7 +409,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
 
                                                  }
                                                  break;
-               case VehicleService::srv_resource:  {
+                  case ServiceOrder::srv_resource:  {
                                                      Resources needed =  veh->getStorageCapacity() - veh->getResource(Resources(maxint,maxint,maxint), true);
                                                      Resources avail = bld->getResource ( needed, 1 );
                                                      if ( avail < needed )
@@ -460,7 +431,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                                                        partlyFullfillabelServices++;
                                                  }
                                                  break;
-               case VehicleService::srv_ammo :  {
+                  case ServiceOrder::srv_ammo :  {
                                                    int missing = 0;
                                                    int pmissing = 0;
                                                    int ammoNeeded[waffenanzahl];
@@ -590,27 +561,27 @@ void AI :: runServiceUnit ( Vehicle* supplyUnit )
       }
    }
 
-   if ( destinationReached ) {
-      VehicleService vs ( mapDisplay, NULL );
-      if ( !vs.available ( supplyUnit ))
-         displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.availability",1 );
+   Vehicle* targetUnit = getMap()->getUnit(target);
+   if ( destinationReached && targetUnit ) {
+      
+      auto_ptr<ServiceCommand> sc ( new ServiceCommand( supplyUnit ));
+      sc->setDestination( targetUnit );
+      sc->getTransferHandler().fillDest();
+      sc->saveTransfers();
+      ActionResult res = sc->execute( getContext() );
+      if ( res.successful() )
+         sc.release();
+      else
+         displayActionError(res);
+     
+      
+      if ( targetUnit->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
+          targetUnit->aiparam[getPlayerNum()]->resetTask();
 
-      vs.execute ( supplyUnit, -1, -1, 0, -1, -1 );
-      VehicleService::TargetContainer::iterator i = vs.dest.find ( target );
-      if ( i != vs.dest.end() ) {
-         vs.fillEverything ( target, true );
-         Vehicle* targetUnit = getMap()->getUnit(target);
-         if ( targetUnit->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )
-             targetUnit->aiparam[getPlayerNum()]->resetTask();
+      removeServiceOrdersForUnit ( targetUnit );
 
-
-         removeServiceOrdersForUnit ( targetUnit );
-
-         // search for next unit to be serviced
-         runServiceUnit( supplyUnit );
-      } else
-         displaymessage ("AI :: runServiceUnit ; inconsistency in VehicleService.execution level 0 ; unit is %d",1, supplyUnit->networkid  );
-
+      // search for next unit to be serviced
+      runServiceUnit( supplyUnit );
    }
 }
 
@@ -695,23 +666,34 @@ AI::AiResult AI :: executeServices ( )
         moveUnit ( veh, veh->aiparam[ getPlayerNum() ]->dest, true );
 
         // the unit may have been shot down
-        if ( getMap()->getUnit ( nwid )) {
+        Vehicle* veh = getMap()->getUnit ( nwid );
+        if ( veh ) {
            if ( veh->getPosition3D() == veh->aiparam[ getPlayerNum() ]->dest ) {
-              tfield* fld = getfield ( veh->xpos, veh->ypos );
+              tfield* fld = getMap()->getField ( veh->xpos, veh->ypos );
               if ( fld->building ) {
-                 VehicleService vc ( mapDisplay, NULL );
-                 MapCoordinate mc = fld->building->getEntry();
-                 vc.execute ( NULL, mc.x, mc.y, 0, -1, -1 );
-
-                 if ( vc.getStatus () == 2 ) {
-                    if ( vc.dest.find ( veh->networkid ) != vc.dest.end() )
-                       vc.fillEverything ( veh->networkid, true );
-                    else
-                       displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (1) ", 1);
-                 } else
-//                    if ( vc.getStatus() != -210 )
-                    displaymessage ( "AI :: executeServices / Vehicle cannot be serviced (2) ", 1);
-
+                 auto_ptr<ServiceCommand> sc ( new ServiceCommand( fld->building ));
+                 sc->setDestination( veh );
+                 sc->getTransferHandler().fillDest();
+                 sc->saveTransfers();
+                 ActionResult res = sc->execute( getContext() );
+                 if ( res.successful() )
+                    sc.release();
+                 else
+                    displayActionError(res);
+                 
+                 
+                 if ( veh->damage ) {
+                    if( RepairUnitCommand::avail( fld->building )) {
+                       auto_ptr<RepairUnitCommand> ruc ( new RepairUnitCommand( fld->building ));
+                       if ( ruc->validTarget( veh )) {
+                          ruc->setTarget( veh );
+                          ActionResult res = ruc->execute( getContext() );
+                          if ( res.successful() )
+                             ruc.release();
+                       }
+                    }
+                 }
+                 
                  removeServiceOrdersForUnit ( veh );
 
                  if ( veh->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_serviceRetreat )

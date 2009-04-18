@@ -80,6 +80,7 @@ void ServiceCommand::setDestination( ContainerBase* destination )
    destinationContainerID = destination->getIdentification();
 }
  
+ 
 ContainerBase* ServiceCommand::getDestination()
 {
    if ( !destinationSpecified )  

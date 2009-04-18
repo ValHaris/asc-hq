@@ -411,6 +411,7 @@ class GameMap {
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
       tfield* getField ( int x, int y );
+      const tfield* getField ( int x, int y ) const;
       tfield* getField ( const MapCoordinate& pos );
       
       

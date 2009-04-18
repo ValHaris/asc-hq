@@ -42,6 +42,8 @@
 #include "paradialog.h"
 #include "widgets/textrenderer.h"
 
+#include "spfst-legacy.h"
+
 
 #ifdef _WIN32_
  #include <windows.h>

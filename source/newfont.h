@@ -1,6 +1,9 @@
-//     $Id: newfont.h,v 1.16 2007-04-13 16:15:53 mbickel Exp $
+//     $Id: newfont.h,v 1.17 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.16  2007/04/13 16:15:53  mbickel
+//      Merged ASC2 branch
+//
 //     Revision 1.14.2.1  2006/03/01 21:00:50  mbickel
 //      Clean up of source
 //      Fixed to construction icons

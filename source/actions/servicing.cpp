@@ -23,7 +23,7 @@
 #include "servicing.h"
 
 #include "../vehicle.h"
-#include "../unitctrl.h"
+#include "../spfst.h"
 #include "../containercontrols.h"
 #include "../gameoptions.h"
 #include "../replay.h"
@@ -209,52 +209,80 @@ bool ResourceWatch::getResources( Resources res )
 
 
 
+   class AmmoTransferrable : public Transferrable {
+      private:
+         int ammoType;
+         int sourceAmmo;
+         int destAmmo;
+         map<const ContainerBase*,int> produced;
+         map<const ContainerBase*,int> orgAmmo;
+         bool& allowAmmoProduction;
+
+
+         int& getAmmo( const ContainerBase* unit );
+         int put( ContainerBase* c, int toPut, bool queryOnly );
+         int get( ContainerBase* c, int toGet, bool queryOnly );
+         void executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context );
+      
+      public:
+         AmmoTransferrable( int ammo, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction );      
+         ASCString getName();
+      
+         int getID();
+         int getMax( ContainerBase* c, bool avail );
+         int getMin( ContainerBase* c, bool avail );
+         int getAmount ( const ContainerBase* target );
+         int transfer( ContainerBase* target, int delta );
+         bool isExchangable() const;
+         void commit( const Context& context );
+   };
+
+   class ResourceTransferrable : public Transferrable {
+      private:
+         int resourceType;
+         bool exchangable;
+         void warn();
+         void srcChanged( int res );
+         void dstChanged( int res );
+         void executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context );
+      public:
+         ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst, bool isExchangable = true );
+         ASCString getName();
+         int getID();
+         int getMax( ContainerBase* c, bool avail );
+         int getMin( ContainerBase* c, bool avail );
+         int getAmount ( const ContainerBase* target );
+         int getAvail ( const ContainerBase* target );
+         int transfer( ContainerBase* target, int delta );
+         bool isExchangable() const;
+         void commit(const Context& context);
+   };
+   
+   
       
 
 
-class ResourceTransferrable : public Transferrable {
-   private:
-      int resourceType;
-      bool exchangable;
-      
-      void warn()
+   void ResourceTransferrable::warn()
       {
          warning( "Inconsistency in ResourceTransfer");
       };
 
-      void srcChanged( int res )
+      void ResourceTransferrable::srcChanged( int res )
       {
          if ( res == resourceType ) {
             show( source.getContainer() );
          }
       }
       
-      void dstChanged( int res )
+      void ResourceTransferrable::dstChanged( int res )
       {
          if ( res == resourceType ) {
             show( dest.getContainer() );
          }
       }
             
-      void executeTransfer( ContainerBase* from, ContainerBase* to, int amount )
-      {
-         if ( amount == 0 )
-            return;
          
-         if ( amount < 0 )
-            executeTransfer( to, from, -amount );
-         else {
-            int got = from->getResource( amount, resourceType, false );
-            if ( got != amount )
-               warning( ASCString("did not succeed in transfering resource ") + Resources::name( resourceType ) );
-            to->putResource( got, resourceType, false );
-
-            logtoreplayinfo( rpl_refuel3, from->getIdentification(), 1000+resourceType, got );
-            logtoreplayinfo( rpl_refuel3, to->getIdentification(), 1000+resourceType, -got );
-         }
-      }
-         
-      void executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context )
+      void ResourceTransferrable::executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context )
       {
          if ( amount == 0 )
             return;
@@ -278,20 +306,24 @@ class ResourceTransferrable : public Transferrable {
       }
       
       
-   public:
-      ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst, bool isExchangable = true ) : Transferrable( src, dst ), resourceType ( resource ), exchangable( isExchangable )
+ResourceTransferrable::ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst, bool isExchangable  ) 
+   : Transferrable( src, dst ), resourceType ( resource ), exchangable( isExchangable )
       {
          source.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::srcChanged ));
          dest.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::dstChanged ));
       };
-      ASCString getName() { return Resources::name( resourceType ); };
       
-      int getID()
+      ASCString ResourceTransferrable::getName() 
+      { 
+         return Resources::name( resourceType ); 
+      }
+      
+      int ResourceTransferrable::getID()
       {
          return resourceType + 1000; 
       };
       
-      int getMax( ContainerBase* c, bool avail )
+      int ResourceTransferrable::getMax( ContainerBase* c, bool avail )
       {
          if ( avail ) {
             int needed = getResourceWatch( c ).limit().resource(resourceType) - getAvail( c );
@@ -302,7 +334,7 @@ class ResourceTransferrable : public Transferrable {
             return getResourceWatch( c ).limit().resource(resourceType);
       }
       
-      int getMin( ContainerBase* c, bool avail )
+      int ResourceTransferrable::getMin( ContainerBase* c, bool avail )
       {
          if ( avail ) {
             int space = getOpposingResourceWatch( c ).limit().resource(resourceType) - getOpposingResourceWatch( c ).avail().resource(resourceType);
@@ -314,17 +346,17 @@ class ResourceTransferrable : public Transferrable {
             return 0;
       }
       
-      int getAmount ( const ContainerBase* target )
+      int ResourceTransferrable::getAmount ( const ContainerBase* target )
       {
          return getResourceWatch( target ).amount().resource(resourceType);
       }
       
-      int getAvail ( const ContainerBase* target )
+      int ResourceTransferrable::getAvail ( const ContainerBase* target )
       {
          return getResourceWatch( target ).avail().resource(resourceType);
       }
       
-      int transfer( ContainerBase* target, int delta )
+      int ResourceTransferrable::transfer( ContainerBase* target, int delta )
       {
          if ( delta < 0 )
             return transfer( opposingContainer( target ), -delta );
@@ -337,36 +369,26 @@ class ResourceTransferrable : public Transferrable {
          }
       }
 
-      bool isExchangable() const
+      bool ResourceTransferrable::isExchangable() const
       {
          return exchangable;
       }
       
-      void commit()
-      {
-         ContainerBase* target = dest.getContainer();
-         executeTransfer( source.getContainer(), target, getAmount( target ) - target->getResource( maxint, resourceType, true ));
-      }
-      
-      void commit(const Context& context)
+      void ResourceTransferrable::commit(const Context& context)
       {
          ContainerBase* target = dest.getContainer();
          executeTransfer( source.getContainer(), target, getAmount( target ) - target->getResource( maxint, resourceType, true ), context );
       }
       
-};
-
-class AmmoTransferrable : public Transferrable {
-   private:
-      int ammoType;
-      int sourceAmmo;
-      int destAmmo;
-      map<const ContainerBase*,int> produced;
-      map<const ContainerBase*,int> orgAmmo;
-      bool& allowAmmoProduction;
+      
+      
+      
+      
+      
+      
 
 
-      int& getAmmo( const ContainerBase* unit )
+      int& AmmoTransferrable::getAmmo( const ContainerBase* unit )
       {
          assert( unit == source.getContainer() || unit == dest.getContainer() );
          if ( unit == source.getContainer() )
@@ -375,7 +397,7 @@ class AmmoTransferrable : public Transferrable {
             return destAmmo;
       }
       
-      int put( ContainerBase* c, int toPut, bool queryOnly )
+      int AmmoTransferrable::put( ContainerBase* c, int toPut, bool queryOnly )
       {
          TransferLimitation limit = getTransferLimitation( c );
 
@@ -403,7 +425,7 @@ class AmmoTransferrable : public Transferrable {
          return toPut + undoProduction;
       }
             
-      int get( ContainerBase* c, int toGet, bool queryOnly )
+      int AmmoTransferrable::get( ContainerBase* c, int toGet, bool queryOnly )
       {
          TransferLimitation limit = getTransferLimitation( c );
 
@@ -451,24 +473,8 @@ class AmmoTransferrable : public Transferrable {
          return got;
       }
 
-      void executeTransfer( ContainerBase* from, ContainerBase* to, int amount )
-      {
-         if ( amount < 0 )
-            executeTransfer( to, from, -amount );
-         else {
-            ContainerControls cc( from );
-            int got = cc.getammunition( ammoType, amount, true, allowAmmoProduction );
-            if ( got != amount )
-               warning( "did not succeed in transfering ammo" );
-            to->putAmmo( ammoType, got, false );
-
-            logtoreplayinfo( rpl_refuel3, from->getIdentification(), ammoType, got );
-            logtoreplayinfo( rpl_refuel3, to->getIdentification(), ammoType, -got );
-            
-         }
-      }
-      
-      void executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context )
+     
+      void AmmoTransferrable::executeTransfer( ContainerBase* from, ContainerBase* to, int amount, const Context& context )
       {
          if ( amount < 0 )
             executeTransfer( to, from, -amount, context );
@@ -492,8 +498,7 @@ class AmmoTransferrable : public Transferrable {
             }
       }
       
-   public:
-      AmmoTransferrable( int ammo, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction ) : Transferrable( src, dst ), ammoType ( ammo ), allowAmmoProduction( allowProduction )
+      AmmoTransferrable::AmmoTransferrable( int ammo, ResourceWatch& src, ResourceWatch& dst, bool& allowProduction ) : Transferrable( src, dst ), ammoType ( ammo ), allowAmmoProduction( allowProduction )
       {
          sourceAmmo = src.getContainer()->getAmmo( ammoType, maxint, true );
          destAmmo   = dst.getContainer()->getAmmo( ammoType, maxint, true );
@@ -502,14 +507,18 @@ class AmmoTransferrable : public Transferrable {
          orgAmmo[dst.getContainer()] = destAmmo;
       };
       
-      ASCString getName() { return cwaffentypen[ ammoType ]; };
+      ASCString AmmoTransferrable::getName() 
+      { 
+         return cwaffentypen[ ammoType ]; 
+      }
       
-      int getID()
+      int AmmoTransferrable::getID()
       {
+         // the AI depends on this value and ID scheme!
          return ammoType + 2000; 
       };
       
-      int getMax( ContainerBase* c, bool avail )
+      int AmmoTransferrable::getMax( ContainerBase* c, bool avail )
       {
          if ( avail ) {
             int needed = c->maxAmmo( ammoType ) - getAmount( c );
@@ -519,7 +528,7 @@ class AmmoTransferrable : public Transferrable {
             return c->maxAmmo( ammoType );
       }
       
-      int getMin( ContainerBase* c, bool avail )
+      int AmmoTransferrable::getMin( ContainerBase* c, bool avail )
       {
          if ( avail ) {
             int storable = opposingContainer(c)->maxAmmo(ammoType) - getAmmo( opposingContainer(c) );
@@ -529,12 +538,12 @@ class AmmoTransferrable : public Transferrable {
             return 0;
       }
       
-      int getAmount ( const ContainerBase* target )
+      int AmmoTransferrable::getAmount ( const ContainerBase* target )
       {
          return getAmmo( target );
       }
       
-      int transfer( ContainerBase* target, int delta )
+      int AmmoTransferrable::transfer( ContainerBase* target, int delta )
       {
          if ( delta < 0 )
             return transfer( opposingContainer( target ), -delta );
@@ -546,22 +555,15 @@ class AmmoTransferrable : public Transferrable {
          }
       }
       
-      bool isExchangable() const
+      bool AmmoTransferrable::isExchangable() const
       {
          return true;
       };
       
-      void commit()
-      {
-         executeTransfer( source.getContainer(), dest.getContainer(), destAmmo - orgAmmo[dest.getContainer()] );
-      }
-      
-      void commit( const Context& context )
+      void AmmoTransferrable::commit( const Context& context )
       {
          executeTransfer( source.getContainer(), dest.getContainer(), destAmmo - orgAmmo[dest.getContainer()], context );
       }
-      
-};
 
 
 
@@ -802,7 +804,7 @@ void TransferHandler::resource( ContainerBase* dest, int type, bool active )
    transfers.push_back(  new ResourceTransferrable( type, sourceRes, destRes, active ));
 }
 
-TransferHandler::TransferHandler( ContainerBase* src, ContainerBase* dst ) : ServiceChecker( src), sourceRes( src ), destRes( dst ), source(src), dest(dst)
+TransferHandler::TransferHandler( ContainerBase* src, ContainerBase* dst, int flags ) : ServiceChecker( src, flags ), sourceRes( src ), destRes( dst ), source(src), dest(dst)
 {
    allowProduction = CGameOptions::Instance()->autoproduceammunition ;
 
@@ -872,13 +874,6 @@ void TransferHandler::emptyDest()
 
 }
 
-bool TransferHandler::commit()
-{
-   for ( Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
-      (*i)->commit();
-
-   return true;
-}
 
 bool TransferHandler::commit( const Context& context )
 {

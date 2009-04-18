@@ -56,8 +56,10 @@
 #include "dlg_box.h"
 #include "spfst.h"
 #include "dialog.h"
-
+#include "actions/transfercontrolcommand.h"
 #include "widgets/textrenderer.h"
+#include "sg.h"
+#include "spfst-legacy.h"
 
 class   tchoosetechnology : public tdialogbox {
                            typedef vector<const Technology*> Techs;
@@ -756,9 +758,8 @@ class tgiveunitawaydlg : public tdialogbox {
              int status;
              void paintplayer ( int i );
              tfield* fld ;
-             int num;
-             int ply[8];
              int xs;
+             TransferControlCommand::Receivers receivers;
            public:
              void init ( tfield* fld );
              void run ( void );
@@ -772,7 +773,7 @@ void tgiveunitawaydlg :: paintplayer ( int i )
       return;
 
    if ( i == markedplayer ) {
-      bar ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40, 20 + ply[i] * 8 );
+      bar ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40, 20 + receivers[i]->getPosition() * 8 );
    } else {
       bar ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40, dblue );
    } /* endif */
@@ -781,8 +782,8 @@ void tgiveunitawaydlg :: paintplayer ( int i )
    activefontsettings.font = schriften.smallarial;
    activefontsettings.length = 0;
 
-   if ( ply[i] < 8 )
-      showtext2 ( actmap->player[ply[i]].getName().c_str(), x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
+   if ( receivers[i]->getPosition() < 8 )
+      showtext2 ( receivers[i]->getName().c_str(), x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
    else
       showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
 }
@@ -793,26 +794,15 @@ void         tgiveunitawaydlg :: init( tfield* fld )
 
    xs = 15;
 
-   num = 0;
-   for ( int i = 0; i < 8; i++ )
-      if ( actmap->player[i].exist() )
-         if ( i != actmap->actplayer &&  actmap->player[actmap->actplayer].diplomacy.getState( i) >= PEACE ) 
-            ply[num++] = i;
-
-   if ( fld->building )
-      ply[num++] = 8;
-
-
-   if ( !num ) {
-      displaymessage("You don't have any allies", 1 );
-      return;
-   }
-
-
+   
+   TransferControlCommand tcc( fld->getContainer() );
+         
+   receivers = tcc.getReceivers();
+   
    tdialogbox::init();
 
    xsize = 250;
-   ysize = 110 + num * 40;
+   ysize = 110 + receivers.size() * 40;
 
    if ( fld->vehicle )
       title = "give unit to";
@@ -825,7 +815,7 @@ void         tgiveunitawaydlg :: init( tfield* fld )
    addkey ( 2, ct_esc );
 
 
-   if ( num == 1 )
+   if ( receivers.size() == 1 )
       markedplayer = 0;
    else
       markedplayer = -1;
@@ -836,7 +826,7 @@ void         tgiveunitawaydlg :: init( tfield* fld )
    buildgraphics(); 
 
 
-   for ( int j = 0; j < num; j++ )
+   for ( int j = 0; j < receivers.size(); j++ )
       paintplayer( j );
 
 } 
@@ -857,7 +847,7 @@ void         tgiveunitawaydlg :: buttonpressed ( int id )
 
 void tgiveunitawaydlg :: run ( void )
 {
-   if ( !num ) 
+   if ( !receivers.size() ) 
       return;
 
    while ( mouseparams.taste )
@@ -871,11 +861,11 @@ void tgiveunitawaydlg :: run ( void )
       if ( taste == ct_up  && markedplayer > 0 ) 
          markedplayer --;
 
-      if ( taste == ct_down  && markedplayer < num-1 ) 
+      if ( taste == ct_down  && markedplayer < receivers.size()-1 ) 
          markedplayer ++;
       
       if ( mouseparams.taste == 1 )
-         for ( int i = 0; i < num; i++ )
+         for ( int i = 0; i < receivers.size(); i++ )
             if ( mouseinrect ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40 ) ) 
                markedplayer = i;
 
@@ -887,19 +877,31 @@ void tgiveunitawaydlg :: run ( void )
    } while ( status < 10 ); /* enddo */
 
    if ( status == 12 ) {
-      if ( fld->vehicle )
-         fld->vehicle->convert ( ply[markedplayer] );
-      else
-         if ( fld->building )
-            fld->building->convert ( ply[markedplayer] );
-      logtoreplayinfo ( rpl_convert, fld->getContainer()->getPosition().x, fld->getContainer()->getPosition().y, (int) ply[markedplayer] );
-      computeview( actmap );
+      auto_ptr<TransferControlCommand> tcc ( new TransferControlCommand( fld->getContainer() ));
+      tcc->setReceiver( receivers[markedplayer] );
+      ActionResult res = tcc->execute( createContext( fld->getContainer()->getMap() ));
+      if ( res.successful() )
+         tcc.release();
+      else {
+         displayActionError(res );
+      }
    }
 }
 
 void giveunitaway ( tfield* fld )
 {
-   if ( ( fld->vehicle && fld->vehicle->color==actmap->actplayer*8) ||  (fld->building && fld->building->color == actmap->actplayer * 8 )) {
+   ContainerBase* c = fld->getContainer();
+   if ( !c ) {
+      dispmessage2( 450, NULL );
+      return;
+   }
+   
+   if ( c->getOwner() != c->getMap()->actplayer ) {
+      dispmessage2( 451, NULL );
+      return;
+   }
+   
+   if ( TransferControlCommand::avail( c ) ) {
       tgiveunitawaydlg gua;
       gua.init ( fld );
       gua.run ();

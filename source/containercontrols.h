@@ -54,7 +54,6 @@ class ContainerControls : public ContainerConstControls {
       
    public:
       ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
-      static VehicleMovement*   movement (  Vehicle* eht, bool simpleMode = false);
 
       vector<const Vehicletype*> productionLinesBuyable();
       
@@ -67,6 +66,7 @@ class ContainerControls : public ContainerConstControls {
       //! only to be used by the AI, this doesn't consume any resources, so the unit must be discarded
       Vehicle* produceUnitHypothetically( const Vehicletype* type );
 
+   protected:
       //! \deprecated Use #ServiceCommand instead
       void  fillResource (Vehicle* eht, int resourcetype, int newamount);
 

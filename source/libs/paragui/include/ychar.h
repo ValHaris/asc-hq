@@ -1,5 +1,5 @@
 /************************************************************************
- * $Id: ychar.h,v 1.2 2007-04-13 16:15:57 mbickel Exp $
+ * $Id: ychar.h,v 1.3 2009-04-18 13:48:39 mbickel Exp $
  *
  * ------------
  * Description:
@@ -13,9 +13,9 @@
  * -----------------
  * Revision Details:    (Updated by Revision Control System)
  * -----------------
- *  $Date: 2007-04-13 16:15:57 $
+ *  $Date: 2009-04-18 13:48:39 $
  *  $Author: mbickel $
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *  $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/ychar.h,v $
  *
  *  (www.arabeyes.org - under GPL License)

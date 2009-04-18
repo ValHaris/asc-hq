@@ -2,9 +2,15 @@
     \brief Interface for a small general-purpose stack (not type safe)
 */
 
-//     $Id: stack.h,v 1.5 2001-01-28 14:04:20 mbickel Exp $
+//     $Id: stack.h,v 1.6 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2001/01/28 14:04:20  mbickel
+//      Some restructuring, documentation and cleanup
+//      The resource network functions are now it their own files, the dashboard
+//       as well
+//      Updated the TODO list
+//
 //     Revision 1.4  2001/01/21 12:48:36  mbickel
 //      Some cleanup and documentation
 //

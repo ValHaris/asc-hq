@@ -28,7 +28,6 @@
 
 #include "guifunctions.h"
 #include "guifunctions-interface.h"
-#include "unitctrl.h"
 #include "controls.h"
 #include "dialog.h"
 #include "gameoptions.h"
@@ -45,6 +44,7 @@
 #include "loaders.h"
 #include "itemrepository.h"
 #include "turncontrol.h"
+#include "spfst-legacy.h"
 #include "dialogs/buildingtypeselector.h"
 #include "dialogs/internalAmmoTransferDialog.h"
 #include "dialogs/vehicleproductionselection.h"
@@ -64,7 +64,7 @@
 
 bool commandPending()
 {
-   return pendingVehicleActions.action || NewGuiHost::pendingCommand;
+   return NewGuiHost::pendingCommand;
 }
 
 namespace GuiFunctions
@@ -276,9 +276,6 @@ bool Cancel::available( const MapCoordinate& pos, ContainerBase* subject, int nu
 
 void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( pendingVehicleActions.action ) 
-      delete pendingVehicleActions.action;
-
    if ( NewGuiHost::pendingCommand ) {
       delete NewGuiHost::pendingCommand;
       NewGuiHost::pendingCommand = NULL;
@@ -522,13 +519,13 @@ void EndTurn::execute( const MapCoordinate& pos, ContainerBase* subject, int num
       static int autosave = 0;
       ASCString name = ASCString("autosave") + strrr( autosave ) + &savegameextension[1];
 
-      savegame ( name );
+      savegame ( name, actmap );
 
       autosave = !autosave;
 
       actmap->sigPlayerUserInteractionEnds( actmap->player[actmap->actplayer] );
 
-      next_turn( actmap, NextTurnStrategy_AskUser() );
+      next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
 
       displaymap();
    }
@@ -565,27 +562,25 @@ bool Attack::available( const MapCoordinate& pos, ContainerBase* subject, int nu
 
 void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   if ( pendingVehicleActions.actionType == vat_nothing ) {
-      AttackCommand* attack = new AttackCommand( actmap->getField(pos)->vehicle );
+   AttackCommand* attack = new AttackCommand( actmap->getField(pos)->vehicle );
 
-      ActionResult result = attack->searchTargets();
-      if ( !result.successful() ) {
-         dispmessage2 ( result );
-         return;
-      }
-
-      AttackCommand::FieldList::const_iterator i;
-      for ( i = attack->getAttackableUnits().begin(); i != attack->getAttackableUnits().end(); i++ )
-         actmap->getField( i->first )->a.temp = 1;
-      for ( i = attack->getAttackableBuildings().begin(); i != attack->getAttackableBuildings().end(); i++ )
-         actmap->getField( i->first )->a.temp = 1;
-      for ( i = attack->getAttackableObjects().begin(); i != attack->getAttackableObjects().end(); i++ )
-         actmap->getField( i->first )->a.temp = 1;
-
-      displaymap();
-      attackGui.setupWeapons( attack );
-      NewGuiHost::pushIconHandler( &attackGui );
+   ActionResult result = attack->searchTargets();
+   if ( !result.successful() ) {
+      dispmessage2 ( result );
+      return;
    }
+
+   AttackCommand::FieldList::const_iterator i;
+   for ( i = attack->getAttackableUnits().begin(); i != attack->getAttackableUnits().end(); i++ )
+      actmap->getField( i->first )->a.temp = 1;
+   for ( i = attack->getAttackableBuildings().begin(); i != attack->getAttackableBuildings().end(); i++ )
+      actmap->getField( i->first )->a.temp = 1;
+   for ( i = attack->getAttackableObjects().begin(); i != attack->getAttackableObjects().end(); i++ )
+      actmap->getField( i->first )->a.temp = 1;
+
+   displaymap();
+   attackGui.setupWeapons( attack );
+   NewGuiHost::pushIconHandler( &attackGui );
 }
 
 

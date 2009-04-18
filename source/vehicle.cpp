@@ -501,7 +501,7 @@ bool Vehicle :: canMove ( void ) const
    if ( movementLeft() && reactionfire.canMove() ) {
       tfield* fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {
-         if ( terrainaccessible ( fld, this ) || actmap->getgameparameter( cgp_movefrominvalidfields))
+         if ( terrainaccessible ( fld, this ) || getMap()->getgameparameter(cgp_movefrominvalidfields))
             return true;
       } else {
          ContainerBase* cnt = fld->getContainer();
@@ -660,7 +660,7 @@ bool Vehicle::ReactionFire::canMove() const
 bool Vehicle::ReactionFire:: canPerformAttack( Vehicle* target )
 {
    if ( !unit->getCarrier() )
-      if ( unit->getMap()->getPlayer(unit).diplomacy.isHostile( actmap->actplayer))
+      if ( unit->getMap()->getPlayer(unit).diplomacy.isHostile( target->getOwner() ))
          if ( getStatus() >= ready )
             if ( find ( nonattackableUnits.begin(), nonattackableUnits.end(), target->networkid) == nonattackableUnits.end() ) 
                // if ( enemiesAttackable & ( 1 << target->getOwner() ))
@@ -1360,14 +1360,12 @@ void   Vehicle::readData ( tnstream& stream )
        if ( magic != 0x23451234 )
           throw ASCmsgException ( "Vehicle::read() - inconsistent data stream" );
        for ( int i = 0; i < 8; i++ ) {
-          bool b = stream.readInt ( );
-          if ( b )
+          if ( aiparam[i] ) {
+             delete aiparam[i];
+             aiparam[i] = NULL;
+          }
+          if ( stream.readInt() ) 
              aiparam[i] = new AiParameter ( this );
-          else
-             if ( aiparam[i] ) {
-               delete aiparam[i];
-               aiparam[i] = NULL;
-             }
        }
 
        for ( int i = 0; i < 8; i++ )

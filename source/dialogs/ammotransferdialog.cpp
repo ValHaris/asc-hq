@@ -22,12 +22,12 @@
 
 #include "ammotransferdialog.h"
 
-#include "../unitctrl.h"
 #include "../containercontrols.h"
 #include "../gameoptions.h"
 #include "../actions/servicing.h"
 #include "../sg.h"
 #include "../actions/servicecommand.h"
+#include "../spfst-legacy.h"
 
 class TransferWidget : public PG_Widget {
    private:

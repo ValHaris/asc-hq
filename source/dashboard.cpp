@@ -40,6 +40,7 @@
 #include "widgets/textrenderer.h"
 
 #include "sg.h"
+#include "spfst-legacy.h"
 
 class WeaponInfoLine;
 

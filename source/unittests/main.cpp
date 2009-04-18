@@ -26,19 +26,13 @@
 #include "autotraining.h"
 
 
-#ifdef WIN32
- MiniDumper miniDumper( "main" );
-#endif
-
 #include "movementtest.h"
 #include "attacktest.h"
+#include "ai-move1.h"
+#include "viewtest.h"
+#include "ai-service1.h"
+#include "transfercontroltest.h"
                 
-tfield*        getSelectedField(void)
-{
-   return actmap->getField( actmap->getCursor() ); 
-} 
-
-
 
 void positionCursor( Player& player )
 {
@@ -74,21 +68,6 @@ void hookGuiToMap( GameMap* map )
 
 
 
-
-void loadmap( const ASCString& name, bool campaign )
-{
-   GameMap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
-   delete actmap;
-   actmap = m;
-   computeview( actmap );
-   hookGuiToMap( actmap );
-   if ( !campaign )
-      actmap->campaign.avail = false;
-}
-
-
-
-
 Context createContext( GameMap* gamemap )
 {
    Context context;
@@ -102,32 +81,9 @@ Context createContext( GameMap* gamemap )
    return context;   
 }
 
-void undo()
-{
-   if ( actmap ) {
-      actmap->actions.undo( createContext( actmap ) );  
-      displaymap();
-      mapChanged(actmap);
-      updateFieldInfo();
-   }
-}
-
-void redo()
-{
-   if ( actmap ) {
-      actmap->actions.redo( createContext( actmap ) );  
-      displaymap();
-      mapChanged(actmap);
-      updateFieldInfo();
-   }
-}
-
-
-
 
 void resetActions( GameMap& map )
 {
-   pendingVehicleActions.reset();
    if ( NewGuiHost::pendingCommand ) {
       delete NewGuiHost::pendingCommand;
       NewGuiHost::pendingCommand = NULL;
@@ -148,12 +104,6 @@ void loaddata( int resolx, int resoly )
    
    loadAllData();
   
-   
-   activefontsettings.markfont = schriften.guicolfont;
-   shrinkfont ( schriften.guifont, -1 );
-   shrinkfont ( schriften.guicolfont, -1 );
-   shrinkfont ( schriften.monogui, -1 );
-
    dataLoaderTicker();
 
    SoundList::init();
@@ -190,6 +140,18 @@ void diplomaticChange( GameMap* gm,int p1,int p2)
       repaintMap();
    }
 }
+
+
+void runUnitTests()
+{
+   testTransferControl();
+   testAiService();
+   testMovement();   
+   testAttack();
+   testAiMovement();
+   testView();
+}     
+      
 
 
 int runTester ( )
@@ -236,8 +198,7 @@ int runTester ( )
    DiplomaticStateVector::shareViewChanged.connect( SigC::slot( &diplomaticChange ));
    
 
-   testMovement();   
-   testAttack();
+   runUnitTests();
    
    return 0;
 }

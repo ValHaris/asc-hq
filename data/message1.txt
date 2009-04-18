@@ -90,6 +90,8 @@ No space to construct unit
 There are no vehicles standing next to the entrance
 450
 No unit or building selected
+451
+You can only transfer control to your own units or buildings
 500
 Not enough resources
 501
@@ -316,4 +318,8 @@ Unit can not jump now
 invalid destination for jump
 22700
 invalid building for repair operation
+22800
+No players available that could receive this item
+22801
+This player is not allowed to receive from you
 

@@ -11,6 +11,7 @@
 #include "targetcoordinatelocator.h"
 #include "../dialogs/fieldmarker.h"
 #include "../spfst.h"
+#include "../spfst-legacy.h"
 #include "../mainscreenwidget.h"
 #include "../mapdisplay.h"
 #include "../iconrepository.h"

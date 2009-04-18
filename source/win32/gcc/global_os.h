@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.3 2007-04-13 16:16:19 mbickel Exp $
+//     $Id: global_os.h,v 1.4 2009-04-18 13:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2007/04/13 16:16:19  mbickel
+//      Merged ASC2 branch
+//
 //     Revision 1.1.2.1  2005/02/15 14:21:45  mbickel
 //      Merged changes of 1.15.3
 //

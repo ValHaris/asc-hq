@@ -1,6 +1,10 @@
-//     $Id: MainWindow.java,v 1.10 2000-11-08 19:50:25 mbickel Exp $
+//     $Id: MainWindow.java,v 1.11 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2000/11/08 19:50:25  mbickel
+//      Fixed Nullpointer exception when the last directory doesn't exist any
+//       more on startup.
+//
 //     Revision 1.9  2000/11/07 16:19:39  schelli
 //     Minor Memory-Functions & Problems changed
 //     Picture Support partly enabled

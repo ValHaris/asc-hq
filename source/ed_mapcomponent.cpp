@@ -21,6 +21,7 @@
 #include "ed_mapcomponent.h"
 #include "edglobal.h"
 #include "spfst.h"
+#include "spfst-legacy.h"
 
 int MapComponent::currentPlayer = 0;
 bool MapComponent::initialized = false;

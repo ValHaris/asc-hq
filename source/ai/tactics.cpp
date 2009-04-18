@@ -17,6 +17,7 @@
 
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
+#include "../actions/moveunitcommand.h"
 
 const int attack_unitdestroyed_bonus = 90;
 
@@ -225,7 +226,7 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
    int orgxpos = veh->xpos ;
    int orgypos = veh->ypos ;
 
-   if ( getfield ( veh->xpos, veh->ypos )->unitHere ( veh ) )  // unit not inside a building or transport
+   if ( getMap()->getField ( veh->xpos, veh->ypos )->unitHere ( veh ) )  // unit not inside a building or transport
       searchTargets ( veh, veh->getPosition3D(), tv, 0, vm, hemmingBonus );
 
    if ( tv.size() && justOne )
@@ -270,18 +271,17 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
    MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
 
    if ( mv->movePos != veh->getPosition3D() ) {
-      BaseVehicleMovement vm2 ( mapDisplay );
-
       VisibilityStates org_vision =  _vision ;
       _vision = visible_now;
-
-      vm2.execute ( veh, mv->movePos.x, mv->movePos.y, 0, mv->movePos.getNumericalHeight(), 1 );
-      if ( vm2.getStatus() != 3 )
-         displaymessage ( "AI :: executeMoveAttack \n error in movement step 0 with unit %d", 1, veh->networkid );
-
-      vm2.execute ( NULL, mv->movePos.x, mv->movePos.y, 3, mv->movePos.getNumericalHeight(), 1 );
-      if ( vm2.getStatus() != 1000 )
-         displaymessage ( "AI :: executeMoveAttack \n error in movement step 2 with unit %d", 1, veh->networkid );
+      
+      auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+      muc->setDestination( mv->movePos );
+      ActionResult res = muc->execute( getContext () );
+      if ( res.successful() )
+         muc.release();
+      else {
+         displaymessage ( "AI :: executeMoveAttack \n error in movement with unit %d", 1, veh->networkid );
+      }
 
       result.unitsMoved ++;
       _vision = org_vision;
@@ -321,9 +321,8 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
    }
 
 
-   VehicleMovement vm3 ( mapDisplay, NULL );
-   if ( vm3.available ( veh ))
-      result += moveToSavePlace ( veh, vm3 );
+   if ( MoveUnitCommand::avail( veh ))
+      result += moveToSavePlace ( veh );
 
    return result;
 }
@@ -377,57 +376,60 @@ MapCoordinate AI::getDestination ( Vehicle* veh )
 }
 
 
-AI::AiResult AI::moveToSavePlace ( Vehicle* veh, VehicleMovement& vm3, int preferredHeight )
+AI::AiResult AI::moveToSavePlace ( Vehicle* veh, int preferredHeight )
 {
    int unitNetworkID = veh->networkid;
 
    AiResult result;
 
-   if ( vm3.getStatus() == 0 )
-      vm3.execute ( veh, -1, -1, 0, -1, -1 );
+   auto_ptr<MoveUnitCommand> muc( new MoveUnitCommand( veh ));
 
-   // if there are no fields reachable
-   if ( vm3.getStatus() == -107 )
+   ActionResult res = muc->searchFields( preferredHeight );
+   if ( !res.successful() )
+      return result;
+   
+   const set<MapCoordinate3D>& fields = muc->getReachableFields();
+            
+   if ( fields.empty() )
       return result;
 
-   if ( vm3.getStatus() != 2 )
-      displaymessage ( "AI :: moveToSavePlace \n error in movement3 step 0 with unit %d", 1, veh->networkid );
 
    int xtogo = veh->xpos;
    int ytogo = veh->ypos;
    int threat = maxint;
    int dist = maxint;
 
-   if ( getfield ( veh->xpos, veh->ypos)->unitHere ( veh ) ) {  // vehicle not in building / transport
+   if ( getMap()->getField ( veh->xpos, veh->ypos)->unitHere ( veh ) ) {  // vehicle not in building / transport
       threat = int( getFieldThreat ( veh->xpos, veh->ypos).threat[ veh->aiparam[ getPlayerNum()]->valueType] * 1.5 + 1);
        // multiplying with 1.5 to make this field a bit unattractive, to allow other units (for example buggies) to attack from this field to, since it is probably quite a good position (else it would not have been chosen)
    }
 
-   for ( int f = 0; f < vm3.reachableFields.getFieldNum(); f++ )
-      if ( !vm3.reachableFields.getField( f )->vehicle && !vm3.reachableFields.getField( f )->building ) {
-         int x,y;
-         vm3.reachableFields.getFieldCoordinates ( f, &x, &y );
-         AiThreat& ait = getFieldThreat ( x, y );
-         int _dist = beeline ( x, y, veh->xpos, veh->ypos);
+   for ( set<MapCoordinate3D>::const_iterator i = fields.begin(); i != fields.end(); ++i ) {
+      tfield* fld = getMap()->getField( *i );
+      if ( !fld->vehicle && !fld->building ) {
+         AiThreat& ait = getFieldThreat ( i->x, i->y );
+         int _dist = beeline ( i->x, i->y, veh->xpos, veh->ypos);
 
             // make fields far away a bit unattractive; we don't want to move the whole distance back again next turn
          int t = int( ait.threat[ veh->aiparam[ getPlayerNum()]->valueType ] * log ( double(_dist) )/log(double(10)) );
 
          if ( t < threat || ( t == threat && _dist < dist )) {
             threat = t;
-            xtogo = x;
-            ytogo = y;
+            xtogo = i->x;
+            ytogo = i->y;
             dist = _dist;
          }
       }
+   }
 
    if ( veh->xpos != xtogo || veh->ypos != ytogo ) {
-      vm3.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
-      if ( vm3.getStatus() != 3 )
-         displaymessage ( "AI :: moveToSavePlace \n error in movement3 step 2 with unit %d", 1, veh->networkid );
-
-      vm3.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
-      if ( vm3.getStatus() != 1000 )
+      
+      muc->setDestination( MapCoordinate(xtogo, ytogo ));
+      
+      res = muc->execute( getContext() );
+      if ( res.successful() )
+         muc.release();
+      else
          displaymessage ( "AI :: moveToSavePlace \n error in movement3 step 3 with unit %d", 1, veh->networkid );
 
       result.unitsMoved++;
@@ -440,7 +442,7 @@ AI::AiResult AI::moveToSavePlace ( Vehicle* veh, VehicleMovement& vm3, int prefe
 }
 
 
-int AI::changeVehicleHeight ( Vehicle* veh, VehicleMovement* vm, int preferredDirection )
+int AI::changeVehicleHeight ( Vehicle* veh, int preferredDirection )
 {
 #if 0  // ####
    int bh = getBestHeight ( veh );
@@ -803,6 +805,7 @@ AI::AiResult AI::tactics( void )
                      int finalAttackNum = maxint;
                      tactics_findBestAttackOrder ( finalPositions, attackOrder, enemy, 0, enemy->damage, finalDamage, finalOrder, finalAttackNum );
 
+                     vector<Vehicle*> unitsToMoveAwayAfterAttacking;
 
                      tfield* enemyField = getMap()->getField(enemy->xpos, enemy->ypos);
                      for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy && finalAttackNum < maxint; i++ ) {
@@ -815,6 +818,8 @@ AI::AiResult AI::tactics( void )
                            if ( finalOrder[i] < 0 )
                               warning("!!!");
 
+                           
+                           int nwid = a->networkid;
                            auto_ptr<AttackCommand> va ( new AttackCommand ( a ));
                            va->searchTargets();
                            
@@ -830,11 +835,20 @@ AI::AiResult AI::tactics( void )
 
                            vtec.calc();
 
-                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), a->networkid ) ;
+                           TactVehicles::iterator att = find ( tactVehicles.begin(), tactVehicles.end(), nwid ) ;
                            tactVehicles.erase ( att );
+                           
+                           if ( getMap()->getUnit( nwid ) && a->typ->hasFunction( ContainerBaseType::MoveAfterAttack ))
+                              unitsToMoveAwayAfterAttacking.push_back( a );
                         }
                      }
+                     
+                     for ( vector<Vehicle*>::iterator i = unitsToMoveAwayAfterAttacking.begin(); i != unitsToMoveAwayAfterAttacking.end(); ++i )
+                        moveToSavePlace( *i );
+                     
                   } // unitcount > 0
+                  
+                  
                } // else { // if finalValue > 0
 
             } // if enemy

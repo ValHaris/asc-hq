@@ -21,6 +21,7 @@
 #include "fileselector.h"
 #include "../textfile_evaluation.h"
 #include "../spfst.h"
+#include "../spfst-legacy.h"
 #include "../graphicset.h"
 #include "../widgets/dropdownselector.h"
 #include "exchangegraphics.h"

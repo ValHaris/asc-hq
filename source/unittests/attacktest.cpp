@@ -23,13 +23,7 @@ void testAttack()
    assertOrThrow( veh != NULL );
    assertOrThrow( veh->getMovement() == 100 );
    
-   auto_ptr<AttackCommand> muc ( new AttackCommand( veh ));
-   muc->setTarget( MapCoordinate( 3,5) );
-   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
-   if ( res.successful() )
-      muc.release();
-   else
-      throw ActionResult(res);
+   attack( veh, MapCoordinate( 3,5) );
    
    assertOrThrow( veh->getMovement() == 0 );
    
@@ -45,13 +39,7 @@ void testAttack()
    assertOrThrow( mam != NULL );
    assertOrThrow( mam->getMovement() == 100 );
    
-   auto_ptr<AttackCommand> muc2 ( new AttackCommand( mam ));
-   muc2->setTarget( MapCoordinate( 3,5) );
-   res = muc2->execute( createTestingContext( veh->getMap() ));
-   if ( res.successful() )
-      muc2.release();
-   else
-      throw ActionResult(res);
+   attack( mam, MapCoordinate( 3,5) );
    
    assertOrThrow( mam->getMovement() == 100 );
    testCargoMovement( mam, 100 );

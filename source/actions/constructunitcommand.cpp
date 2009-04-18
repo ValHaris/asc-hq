@@ -265,12 +265,12 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
       if ( getMap()->getgameparameter(cgp_bi3_training) >= 1 ) {
          int cnt = 0;
 
-         for ( Player::BuildingList::iterator bi = getMap()->player[actmap->actplayer].buildingList.begin(); bi != getMap()->player[actmap->actplayer].buildingList.end(); bi++ )
+         for ( Player::BuildingList::iterator bi = getMap()->player[getMap()->actplayer].buildingList.begin(); bi != getMap()->player[getMap()->actplayer].buildingList.end(); bi++ )
             if ( (*bi)->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
                cnt++;
 
          Vehicle* vehicle = spawnUnit->getUnit();
-         vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
+         vehicle->experience += cnt * getMap()->getgameparameter(cgp_bi3_training);
          if ( vehicle->experience > maxunitexperience )
             vehicle->experience = maxunitexperience;
       }

@@ -55,6 +55,7 @@ class treactionfire {
              virtual ~treactionfire() {};
         };
 
+#if 0
 class treactionfirereplay : public treactionfire {
           protected:
              vector<treactionfire_replayinfo*> replay;
@@ -66,7 +67,8 @@ class treactionfirereplay : public treactionfire {
              virtual void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
              virtual int  finalCheck ( int currentPlayer, const Context& context ) { return 0; };
 };
-
+#endif
+        
 class tsearchreactionfireingunits : public treactionfire {
            private: 
                 void initLimits();

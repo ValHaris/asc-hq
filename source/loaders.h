@@ -47,10 +47,10 @@ extern const char* tournamentextension;
 
 
 //! saves the map located in #actmap to the map file name
-extern void  savemap( const char *       name, GameMap* gamemap );
+extern void  savemap( const ASCString& name, GameMap* gamemap );
 
 //! saves the game located in #actmap to the savegame file name
-extern void  savegame( const ASCString& name );
+extern void  savegame( const ASCString& name, GameMap* gamemap );
 
 
 typedef Loki::Functor<GameMap*, LOKI_TYPELIST_1(const ASCString&) > MapLoadingFunction;
@@ -133,7 +133,7 @@ class tsavegameloaders : public tgameloaders {
 
            void            savegame ( pnstream strm, GameMap* gamemap, bool writeReplays = true );
 
-           void            savegame ( const ASCString& name );
+           void            savegame ( GameMap* gamemap, const ASCString& name );
 };
 
 

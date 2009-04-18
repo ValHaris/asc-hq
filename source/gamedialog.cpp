@@ -31,7 +31,7 @@
 #include "sg.h"
 #include "loaders.h"
 #include "spfst.h"
-//#include "basestrm.h"
+#include "spfst-legacy.h"
 #include "networksupervisor.h"
 
 const int GameDialog::xSize = 450;
@@ -770,7 +770,7 @@ SaveGameDialog::SaveGameDialog(PG_MessageObject* c):SaveGameBaseDialog("Save Gam
 SaveGameDialog::~SaveGameDialog() {
 }
 bool SaveGameDialog::ok(PG_Button* button) {
-    savegame( fileNameValue->GetText().c_str());
+    savegame( fileNameValue->GetText(), actmap );
     quitModalLoop(1);
     return true;
 }

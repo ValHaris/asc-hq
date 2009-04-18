@@ -145,17 +145,17 @@ ASCString getPlayerStrength( GameMap* gamemap )
       double strength = 0;
       Resources r;
       Resources total;
-      for ( Player::VehicleList::iterator j = actmap->player[i].vehicleList.begin(); j != actmap->player[i].vehicleList.end(); ++j ) {
+      for ( Player::VehicleList::iterator j = gamemap->player[i].vehicleList.begin(); j != gamemap->player[i].vehicleList.end(); ++j ) {
          strength += StatisticsCalculator::strength( *j, false );
          r += (*j)->typ->productionCost;
          total += StatisticsCalculator::resource( *j, false );
       }
 
-      for ( Player::BuildingList::iterator j = actmap->player[i].buildingList.begin(); j != actmap->player[i].buildingList.end(); ++j ) {
+      for ( Player::BuildingList::iterator j = gamemap->player[i].buildingList.begin(); j != gamemap->player[i].buildingList.end(); ++j ) {
          total += StatisticsCalculator::resource( *j, false );
       }
 
-      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  actmap->player[i].getName() +  "#fontsize=12#\n" ;
+      message += ASCString("#fontsize=14#Player ") + ASCString::toString( i ) + ": "+  gamemap->player[i].getName() +  "#fontsize=12#\n" ;
       message += "strength: ";
       ASCString s;
       s.format("%9.0f", ceil(strength) );
@@ -165,7 +165,7 @@ ASCString getPlayerStrength( GameMap* gamemap )
          message += resourceNames[k];
          message += ": " + ASCString::toString(r.resource(k)/1000 ) + "k\n";
       }
-      message += "Unit count: " + ASCString::toString( int( actmap->player[i].vehicleList.size())) + "\n";
+      message += "Unit count: " + ASCString::toString( int( gamemap->player[i].vehicleList.size())) + "\n";
       message += "Material index: " + ASCString::toString( total.material/1000 ) + "k\n";
       message += "\n\n";
 

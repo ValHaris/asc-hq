@@ -29,7 +29,7 @@
        GameMap* tempsMarked;
        Path *_path;
        Vehicle* _veh;
-       GameMap* _actmap;
+       GameMap* gamemap;
 
 
        //! returns the movement cost for the unit to travel from x1/y1 to x2/y2

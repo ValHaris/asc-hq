@@ -1,0 +1,35 @@
+#!/usr/bin/perl
+use strict;
+
+my $sourcefile= $ARGV[0];
+my $binfile= $ARGV[1];
+
+system("cp $sourcefile /tmp/");
+
+open (F, $sourcefile) || die "could not open $sourcefile";
+
+my @contents = <F>;
+close F;
+
+my %includes;
+foreach ( @contents ) {
+	if ( /^\s*#\s*include/ ) {
+		$includes{$_} = 0;
+	}
+}
+
+foreach ( keys ( %includes )) {
+	$includes{$_} = 1;
+	open (F, ">$sourcefile") || die "could not open $sourcefile for writing";
+	foreach my $line ( @contents ) {
+		print F $line unless $includes{$line};
+	}
+	unlink $binfile;
+	system "make $binfile";
+	if ( $? ) {
+		$includes{$_} = 0;
+	} else {
+		$includes{$_} = 1;
+	}
+}
+

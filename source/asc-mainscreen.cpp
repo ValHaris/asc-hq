@@ -43,8 +43,11 @@
 #include "gameoptions.h"
 #include "dialog.h"
 #include "widgets/textrenderer-addons.h"
+#include "spfst-legacy.h"
 
 #include "dialogs/fileselector.h"
+
+#include "actions/moveunitcommand.h"
 
 ASC_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -387,30 +390,35 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
 
       if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
          int counter = 0;
-         VehicleMovement vm ( NULL, NULL );
+         
+         if ( MoveUnitCommand::avail ( veh )) {
+            
+            TemporaryContainerStorage tcs( veh );
+        
+            veh->setMovement( veh->maxMovement(), 0 );
+         
+            MoveUnitCommand muc ( veh );
+            muc.searchFields();
 
-
-         TemporaryContainerStorage tcs( veh );
-         veh->setMovement( veh->maxMovement(), 0 );
-         if ( vm.available ( veh )) {
-
-            vm.execute ( veh, -1, -1, 0, -1, -1 );
-            if ( vm.reachableFields.getFieldNum()) {
-               for  ( int i = 0; i < vm.reachableFields.getFieldNum(); i++ )
-                  if ( fieldvisiblenow ( vm.reachableFields.getField ( i ) )) {
+            const set<MapCoordinate3D>& fields =  muc.getReachableFields();
+            if ( fields.size() ) {
+               for ( set<MapCoordinate3D>::const_iterator i = fields.begin(); i != fields.end(); ++i )
+                  if ( fieldvisiblenow ( veh->getMap()->getField(*i) )) {
                      ++counter;
-                     markField( vm.reachableFields.getFieldCoordinates(i));
+                     markField( *i );
                   }
-               for  ( int j = 0; j < vm.reachableFieldsIndirect.getFieldNum(); j++ )
-                  if ( fieldvisiblenow ( vm.reachableFieldsIndirect.getField ( j ))) {
-                     markField( vm.reachableFieldsIndirect.getFieldCoordinates(j));
+                  
+               const set<MapCoordinate3D>& ifields  =  muc.getReachableFieldsIndirect();
+               for ( set<MapCoordinate3D>::const_iterator i = ifields.begin(); i != ifields.end(); ++i )
+                  if ( fieldvisiblenow ( veh->getMap()->getField(*i) )) {
                      ++counter;
+                     markField( *i );
                   }
    
             }
+            tcs.restore();
 
          }
-         tcs.restore();
       
          if ( counter )
             fields[veh->getPosition()] |= 2;

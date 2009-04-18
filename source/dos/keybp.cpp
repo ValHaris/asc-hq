@@ -1,6 +1,9 @@
-//     $Id: keybp.cpp,v 1.5 2000-10-18 17:09:43 mbickel Exp $
+//     $Id: keybp.cpp,v 1.6 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2000/10/18 17:09:43  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.4  2000/10/18 15:10:07  mbickel
 //      Fixed event handling for windows and dos
 //

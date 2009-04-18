@@ -2,7 +2,7 @@
     \brief The old event system that is still required to load old maps
 */
 
-//     $Id: prehistoricevents.h,v 1.3 2007-04-13 16:15:54 mbickel Exp $
+//     $Id: prehistoricevents.h,v 1.4 2009-04-18 13:48:38 mbickel Exp $
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger

@@ -95,8 +95,11 @@ extern void logtoreplayinfo ( trpl_actions action, ... );
 
 struct treactionfire_replayinfo;
 
+class ReplayMapDisplay;
+
 class trunreplay {
             ASCString lastErrorMessage;
+            ReplayMapDisplay* replayMapDisplay;
          protected:
             int movenum;
             void execnextreplaymove ( void );
@@ -114,6 +117,8 @@ class trunreplay {
 
             char nextaction;
 
+            Context createReplayContext();
+            
             void readnextaction ( void );
             void displayActionCursor ( int x1, int y1, int x2 = -1, int y2 = -1, int secondWait = 0 );
             void removeActionCursor( void );
@@ -122,10 +127,11 @@ class trunreplay {
 
             treactionfire_replayinfo* getnextreplayinfo ( void );
 
-            trunreplay ( void );
+            trunreplay();
             int status;
-            void firstinit ( void );
+            void firstinit();
             int  run ( int player, int viewingplayer, bool performEndTurnOperations );
+            ~trunreplay();
    };
 
 class LockReplayRecording {

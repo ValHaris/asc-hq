@@ -184,7 +184,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    if ( wm && checkWind && direc >= 0 && direc < 5 )
       if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
           start.getNumericalHeight() >= 4 && start.getNumericalHeight() <= 6 &&
-          actmap->weather.windSpeed  ) {
+          vehicle->getMap()->weather.windSpeed  ) {
          movecost -=  wm->getDist( direc ) * dist;
          fuelcost -=  wm->getDist ( direc ) * dist;
 
@@ -205,7 +205,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 void Building :: execnetcontrol ( void )
 {
    for ( int i = 0; i < 3; i++ )
-      if ( !actmap->isResourceGlobal(i) ) {
+      if ( !getMap()->isResourceGlobal(i) ) {
          if (  netcontrol & (cnet_moveenergyout << i )) {
             npush (  netcontrol );
             netcontrol |= (cnet_stopenergyinput << i );

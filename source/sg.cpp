@@ -160,6 +160,7 @@
 #include "dialogs/unitguidedialog.h"
 
 #include "autotraining.h"
+#include "spfst-legacy.h"
 
 #ifdef LUAINTERFACE
 # include "lua/luarunner.h"
@@ -328,7 +329,7 @@ void saveGame( bool as )
       actmap->preferredFileNames.savegame[actmap->actplayer] = s1;
 
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + s1 );
-      savegame( s1 );
+      savegame( s1, actmap );
    }
 }
 
@@ -361,9 +362,12 @@ MapTypeLoaded loadStartupMap ( const char *gameToLoad=NULL )
                fatalError( "Email gamefile %s is invalid. Aborting.", gameToLoad );
 
             try {
-
-               if ( continuenetworkgame( ASCString(gameToLoad) )) 
+               GameMap* map = continueNetworkGame( ASCString(gameToLoad) );
+               if ( map ) {
+                  delete actmap;
+                  actmap = map; 
                   hookGuiToMap(actmap);
+               }
 
                return Mailfile;
             } catch ( tfileerror ) {
@@ -830,7 +834,7 @@ void execuseraction ( tuseractions action )
                if ( !actmap->player[ actmap->actplayer ].ai )
                   actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-               savegame ( "aistart.sav" );
+               savegame ( "aistart.sav", actmap );
                actmap->player[ actmap->actplayer ].ai->run( &getDefaultMapDisplay() );
             }
          }
@@ -864,7 +868,7 @@ void execuseraction ( tuseractions action )
                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
             if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
-               savegame ( "ai-bench-start.sav" );
+               savegame ( "ai-bench-start.sav", actmap );
                ai->run( true, &getDefaultMapDisplay() );
             }
          }
@@ -971,7 +975,10 @@ void execuseraction ( tuseractions action )
 
 bool continueAndStartMultiplayerGame( bool mostRecent = false )
 {
-   if ( continuenetworkgame( mostRecent )) {
+   GameMap* map = continueNetworkGame( mostRecent );
+   if ( map ) {
+      delete actmap;
+      actmap = map;
       hookGuiToMap(actmap);
       actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
       displaymap();
@@ -1469,12 +1476,12 @@ bool mainloopidle( PG_MessageObject* msgObj )
 
    if ( actmap ) {
       while ( actmap->player[ actmap->actplayer ].queuedEvents )
-         if ( !checkevents( &getDefaultMapDisplay() ))
+         if ( !checkevents( actmap, &getDefaultMapDisplay() ))
             return false;
 
-      checktimedevents( &getDefaultMapDisplay() );
+      checktimedevents( actmap, &getDefaultMapDisplay() );
 
-      checkforvictory( true );
+      checkforvictory( actmap, true );
    }
    return false;
 }
@@ -1490,11 +1497,16 @@ pfont load_font ( const char* name )
 
 void resetActions( GameMap& map )
 {
-   pendingVehicleActions.reset();
    if ( NewGuiHost::pendingCommand ) {
       delete NewGuiHost::pendingCommand;
       NewGuiHost::pendingCommand = NULL;
    }
+}
+
+void resetActmap( GameMap& map )
+{
+   if ( &map == actmap ) 
+      actmap = NULL;  
 }
 
 
@@ -1623,6 +1635,7 @@ int gamethread ( void* data )
 #endif
 
    GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
+   GameMap::sigMapDeletion.connect( SigC::slot( &resetActmap ));
    GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
 
    suppressMapTriggerExecution = false;
@@ -1646,7 +1659,7 @@ int gamethread ( void* data )
    //! we are performing this the first time here while the startup logo is still active
    if ( actmap && actmap->actplayer == -1 ) {
       displayLogMessage ( 8, "Startup :: performing first next_turn..." );
-      next_turn( actmap, NextTurnStrategy_AskUser() );
+      next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
       displayLogMessage ( 8, "done.\n" );
    }
 
@@ -1661,7 +1674,7 @@ int gamethread ( void* data )
          } else {
             if ( actmap->actplayer == -1 ) {
                displayLogMessage ( 8, "gamethread :: performing next_turn..." );
-               next_turn( actmap, NextTurnStrategy_AskUser() );
+               next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
                displayLogMessage ( 8, "done.\n" );
             } 
 

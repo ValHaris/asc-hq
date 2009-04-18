@@ -35,10 +35,10 @@
 #include "../terraintype.h"
 #include "../objecttype.h"
 #include "../spfst.h"
-#include "../unitctrl.h"
 #include "../buildingtype.h"
 #include "../astar2.h"
 #include "../actions/context.h"
+#include "../attack.h"
 
 
     class AI : public BaseAI {
@@ -71,11 +71,16 @@
                   int nextServiceBuildingDistance;
                   bool active;
                public:
-                  VehicleService::Service requiredService;
+                  
+                  enum Service { srv_repair, srv_resource, srv_ammo };
+                  
+                  Service requiredService;
                   int position;
+                  
+                  int getServiceID() const;
 
                   ServiceOrder ( ) : ai ( NULL ), targetUnitID ( 0 ), serviceUnitID ( 0 ), failure ( 0 ), nextServiceBuilding ( 0 ), active ( false ) {};
-                  ServiceOrder ( AI* _ai, VehicleService::Service _requiredService, int UnitID, int _pos = -1 );
+                  ServiceOrder ( AI* _ai, Service _requiredService, int UnitID, int _pos = -1 );
                   ServiceOrder ( AI* _ai, tnstream& stream );
                   AStar3D::Path::iterator lastmatchServiceOrder ( AI* _ai, tnstream& stream );
                   Vehicle* getTargetUnit ( ) const { return ai->getMap()->getUnit ( targetUnitID );};
@@ -132,7 +137,7 @@
            void issueServices ( );
 
            //! issues a single service. If the same service-order already exists, it will not be issued a second time
-           ServiceOrder& issueService ( VehicleService::Service requiredService, int UnitID, int pos = -1 );
+           ServiceOrder& issueService ( ServiceOrder::Service requiredService, int UnitID, int pos = -1 );
 
            ServiceOrder& issueRefuelOrder ( Vehicle* veh, bool returnImmediately );
            void runServiceUnit ( Vehicle* supplyUnit );
@@ -333,7 +338,7 @@
             AiResult executeMoveAttack ( Vehicle* veh, TargetVector& tv );
             int getDirForBestTacticsMove ( const Vehicle* veh, TargetVector& tv );
             MapCoordinate getDestination ( Vehicle* veh );
-            AiResult moveToSavePlace ( Vehicle* veh, VehicleMovement& vm, int preferredHeight = -1 );
+            AiResult moveToSavePlace ( Vehicle* veh, int preferredHeight = -1 );
             int  getBestHeight (  Vehicle* veh );
             float getAttackValue ( const tfight& battle, const Vehicle* attackingUnit, const Vehicle* attackedUnit, float factor = 1 );
 
@@ -343,7 +348,7 @@
                          -1 = no space to change height
                          -2 = cannot change height here principially
             */
-            int changeVehicleHeight ( Vehicle* veh, VehicleMovement* vm, int preferredDirection = -1 );
+            int changeVehicleHeight ( Vehicle* veh, int preferredDirection = -1 );
 
             void  calculateThreat ( const Vehicletype* vt);
             void  calculateThreat ( Vehicle* eht );
@@ -463,7 +468,8 @@
                   // secondRun should only be used when this function calls itself recursively
                   Section* getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest = NULL, bool allowRefuellOrder = false, bool secondRun = false );
                   Sections ( AI* _ai );
-                  void reset( void );
+                  void reset();
+                  ~Sections();
             } sections;
             friend class Sections;
 

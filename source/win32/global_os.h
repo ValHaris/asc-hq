@@ -1,6 +1,9 @@
-//     $Id: global_os.h,v 1.5 2004-07-12 18:15:10 mbickel Exp $
+//     $Id: global_os.h,v 1.6 2009-04-18 13:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.5  2004/07/12 18:15:10  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.4  2000/11/26 14:39:04  mbickel
 //      Added Project Files for Borland C++
 //      Some modifications to compile source with BCC

@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 ######################################################################
-## $Id: Makefile.am,v 1.6 2007-04-13 16:16:09 mbickel Exp $
+## $Id: Makefile.am,v 1.7 2009-04-18 13:48:40 mbickel Exp $
 
 MAINTAINERCLEANFILES	= Makefile.in
 

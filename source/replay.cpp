@@ -38,7 +38,7 @@
 #include "guiiconhandler.h"
 #include "guifunctions.h"
 #include "cannedmessages.h"
-#include "unitctrl.h"
+#include "spfst-legacy.h"
 #include "replaymapdisplay.h"
 #include "asc-mainscreen.h"
 #include "loaders.h"
@@ -59,6 +59,9 @@
 #include "actions/destructunitcommand.h"
 #include "actions/recycleunitcommand.h"
 #include "actions/trainunitcommand.h"
+#include "actions/moveunitcommand.h"
+#include "actions/consumeammo.h"
+#include "actions/consumeresource.h"
 
 trunreplay runreplay;
 
@@ -706,6 +709,23 @@ void logActionToReplay( GameMap* map, const Command& command)
 }
 
 
+Context trunreplay::createReplayContext()
+{
+   Context context;
+   
+   context.gamemap = actmap;
+   context.actingPlayer = &actmap->getPlayer( actmap->actplayer );
+   context.parentAction = NULL;
+   
+   if ( !replayMapDisplay ) 
+      replayMapDisplay = new ReplayMapDisplay( &getDefaultMapDisplay() );
+   
+   context.display = replayMapDisplay;
+   context.viewingPlayer = actmap->getPlayerView(); 
+   context.actionContainer = &actmap->actions;
+   return context;   
+}
+
 
 
 void logtoreplayinfo ( trpl_actions _action, ... )
@@ -1335,10 +1355,16 @@ void logtoreplayinfo ( trpl_actions _action, ... )
 }
 
 
-trunreplay :: trunreplay ( void )  
+trunreplay :: trunreplay ()  
 {
+   replayMapDisplay = NULL;
    status = -1;
    movenum = 0;
+}
+
+trunreplay :: ~trunreplay()
+{
+   delete replayMapDisplay;  
 }
 
 void trunreplay::error( const MapCoordinate& pos, const ASCString& message )
@@ -1349,6 +1375,9 @@ void trunreplay::error( const MapCoordinate& pos, const ASCString& message )
 
 void trunreplay::error( const MapCoordinate& pos, const char* message, ... )
 {
+   if ( CGameOptions::Instance()->replayMovieMode )
+      return;
+   
    va_list paramlist;
    va_start ( paramlist, message );
    char tempbuf[1000];
@@ -1361,6 +1390,9 @@ void trunreplay::error( const MapCoordinate& pos, const char* message, ... )
 
 void trunreplay::error( const char* message, ... )
 {
+   if ( CGameOptions::Instance()->replayMovieMode )
+      return;
+   
    if ( message != lastErrorMessage ) {
       va_list paramlist;
       va_start ( paramlist, message );
@@ -1470,16 +1502,19 @@ void trunreplay :: execnextreplaymove ( void )
                         Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
-                           VehicleMovement vm ( &rmd, NULL );
-                           vm.execute ( eht, -1, -1, 0 , -1, -1 );
+                           
+                           
+                           auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
+                           muc->setDestination( MapCoordinate(x2,y2) );
 
                            int t = ticker;
-                           vm.execute ( NULL, x2, y2, 2, -1, -1 );
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
-                           vm.execute ( NULL, x2, y2, 3, -1, -1 );
-
-                           if ( vm.getStatus() != 1000 )
-                              eht = NULL;
+                           
+                           ActionResult res = muc->execute( createReplayContext() );
+                           if ( res.successful() )
+                              muc.release();
+                           else
+                              error("severe replay inconsistency:\nerror for move1 command at " + MapCoordinate(x1,y1).toString() );
                         }
 
                         if ( !eht )
@@ -1513,15 +1548,19 @@ void trunreplay :: execnextreplaymove ( void )
 
                         Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
-                           ReplayMapDisplay rmd( &getDefaultMapDisplay() );
-                           VehicleMovement vm ( &rmd );
+                           auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
+                           
                            int t = ticker;
-                           vm.execute ( eht, x2, y2, 0, -2, 0 );
-                           vm.execute ( eht, x2, y2, 2, height, -1 );
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
-                           vm.execute ( NULL, x2, y2, 3, height, noInterrupt > 0 ? VehicleMovement::NoInterrupt : 0 );
-
-                           if ( vm.getStatus() != 1000 ) {
+                           
+                           MapCoordinate3D dest ( x2,y2, 0 );
+                           dest.setNumericalHeight(height);
+                           muc->setDestination( dest );
+                           
+                           ActionResult res = muc->execute( createReplayContext());
+                           if ( res.successful() )
+                              muc.release();
+                           else {
                               if ( CGameOptions::Instance()->replayMovieMode ) {
 
                                  tfield* fld = eht->getMap()->getField(x1,y1);
@@ -1668,7 +1707,7 @@ void trunreplay :: execnextreplaymove ( void )
                         int x2 = stream->readInt();
                         int y2 = stream->readInt();
                         int nwid = stream->readInt();
-                        int oldheight = stream->readInt();
+                        stream->readInt(); // oldheight
                         int newheight = stream->readInt();
                         int noInterrupt = -1;
 
@@ -1681,23 +1720,19 @@ void trunreplay :: execnextreplaymove ( void )
                         Vehicle* eht = actmap->getUnit ( x1, y1, nwid );
                         if ( eht ) {
                            ReplayMapDisplay rmd( &getDefaultMapDisplay() );
-                           VehicleAction* va;
-                           if ( newheight > oldheight )
-                              va = new IncreaseVehicleHeight ( &rmd, NULL );
+                           
+                           auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
+                           muc->setDestination( MapCoordinate3D( x2,y2, newheight ));
+                           
+                           wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2) );
+                           
+                           ActionResult res = muc->execute( createReplayContext() );
+                           
+                           if ( res.successful() )
+                              muc.release();
                            else
-                              va = new DecreaseVehicleHeight ( &rmd, NULL );
-
-                           va->execute ( eht, -1, -1, 0 , newheight, -1 );
-
-                           int t = ticker;
-                           va->execute ( NULL, x2, y2, 2, -1, -1 );
-                           wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
-                           va->execute ( NULL, x2, y2, 3, -1, noInterrupt );
-
-                           if ( va->getStatus() != 1000 )
                               eht = NULL;
-
-                           delete va;
+                           
                         }
 
                         if ( !eht )
@@ -1894,7 +1929,7 @@ void trunreplay :: execnextreplaymove ( void )
                                   auto_ptr<ConstructBuildingCommand> cbc ( new ConstructBuildingCommand( actmap->getUnit( networkid ) ));
                                   cbc->setBuildingType( bld );
                                   cbc->setTargetPosition( MapCoordinate(x,y));
-                                  ActionResult res = cbc->execute( createContext( actmap ));
+                                  ActionResult res = cbc->execute( createReplayContext());
                                   if ( res.successful() )
                                      cbc.release();
                                   else
@@ -1927,8 +1962,9 @@ void trunreplay :: execnextreplaymove ( void )
                               if ( nwid >= 0 ) {
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {
-                                    ContainerControls cc( veh );
-                                    if ( cc.getammunition( cwminen, 1, true, true ) != 1 )
+                                    ConsumeAmmo ca ( veh, cwminen, -1, 1 );
+                                    ActionResult res = ca.execute( createContext( veh->getMap() ));
+                                    if ( !res.successful() )
                                        error(MapCoordinate(x,y), "could not obtain ammo for mine placement");
 
                                  } else 
@@ -1993,7 +2029,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( veh ) {
                                     DestructBuildingCommand* dbc = new DestructBuildingCommand( veh );
                                     dbc->setTargetPosition( MapCoordinate( x,y ));
-                                    dbc->execute( createContext( actmap ));
+                                    dbc->execute( createReplayContext());
                                     
                                  } else
                                    error(MapCoordinate(x,y), "severe replay inconsistency:\nfailed to obtain vehicle for removebuilding command !");
@@ -2064,7 +2100,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( (!fld->vehicle || fld->vehicle->networkid != nwid) && fld->building ) {
                                     auto_ptr<RecycleUnitCommand> ruc ( new RecycleUnitCommand( fld->building ));
                                     ruc->setUnit( actmap->getUnit( nwid ) );
-                                    ActionResult res = ruc->execute( createContext( actmap ));
+                                    ActionResult res = ruc->execute( createReplayContext());
                                     if ( res.successful() )
                                        ruc.release();
                                     else
@@ -2087,7 +2123,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( eht && bld ) {
                                     auto_ptr<TrainUnitCommand> tuc ( new TrainUnitCommand( bld ));
                                     tuc->setUnit( eht );
-                                    ActionResult res = tuc->execute( createContext( actmap ));
+                                    ActionResult res = tuc->execute( createReplayContext());
                                     if ( res.successful())
                                        tuc.release();
                                     else
@@ -2174,16 +2210,20 @@ void trunreplay :: execnextreplaymove ( void )
 
                                  ContainerBase* cb = actmap->getContainer ( id );
                                  if ( cb ) {
-                                    int got;
                                     if ( type >= 1000 ) {
-                                       got = cb->getResource(delta, type-1000, false);
+                                       Resources res;
+                                       res.resource(type-1000) = delta;
+                                       ConsumeResource cr ( cb, res );
+                                       ActionResult result = cr.execute( createContext( cb->getMap() ));
+                                       if ( !result.successful())
+                                          error("severe replay inconsistency:\nthe resources of container not matching. ");
+                                          
                                     } else {
-                                       ContainerControls cc( cb );
-                                       got = cc.getammunition( type, delta, true, true );
+                                       ConsumeAmmo ca ( cb, type, -1, delta );
+                                       ActionResult result = ca.execute( createContext( cb->getMap() ));
+                                       if ( !result.successful())
+                                          error("severe replay inconsistency:\nthe resources of container not matching. ");
                                     }
-                                    if ( got != delta )
-                                       error("severe replay inconsistency:\nthe resources of container not matching. \nrequired: %d , available: %d !", delta, got);
-                                       
                                  } else
                                     error("severe replay inconsistency:\nno vehicle for refuel3 command !");
                               }
@@ -2243,7 +2283,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( eht ) {
                                     CargoMoveCommand* cmc = new CargoMoveCommand( eht );
                                     cmc->setMode( CargoMoveCommand::moveOutwards );
-                                    ActionResult res = cmc->execute( createContext( actmap ) );
+                                    ActionResult res = cmc->execute( createReplayContext() );
                                     if ( !res.successful())
                                        error(MapCoordinate(x,y), "severe replay inconsistency in MoveUnitUp !");
                                  } else
@@ -2324,13 +2364,15 @@ void trunreplay :: execnextreplaymove ( void )
                                  stream->readInt();  // size
                                  int x = stream->readInt();
                                  int y = stream->readInt();
-                                 int type = stream->readInt();
-                                 int amount = stream->readInt();
+                                 int weaptype = stream->readInt();
+                                 int n = stream->readInt();
                                  readnextaction();
                                  Building* bld = getfield(x,y)->building;
                                  if ( bld ) {
-                                    ContainerControls cc( bld );
-                                    cc.produceAmmo( type, amount );
+                                    
+                                    bld->getResource ( Resources( ammoProductionCost[weaptype][0] * n, ammoProductionCost[weaptype][1] * n, ammoProductionCost[weaptype][2] * n ), false );
+                                    bld->putAmmo ( weaptype, n, false );
+                                    
                                  } else
                                     error(MapCoordinate(x,y), "severe replay inconsistency:\nno building for produce ammo command !");
 
@@ -2490,12 +2532,7 @@ void trunreplay :: execnextreplaymove ( void )
                   auto_ptr<JumpDriveCommand> jd( new JumpDriveCommand(veh) );
                   displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
                   jd->setDestination( MapCoordinate(x,y));
-                  
-                  ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
-                  Context context = createContext( actmap );
-                  context.display = &rmd;
-                  
-                  ActionResult res = jd->execute( context );
+                  ActionResult res = jd->execute( createReplayContext() );
                   if ( !res.successful() )
                      error(MapCoordinate(x,y), "Unit cannot jump to this position");
                   else
@@ -2519,7 +2556,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( bld && veh ) {
                                     auto_ptr<RecycleUnitCommand> ruc ( new RecycleUnitCommand( bld ));
                                     ruc->setUnit( veh  );
-                                    ActionResult res = ruc->execute( createContext( actmap ));
+                                    ActionResult res = ruc->execute( createReplayContext() );
                                     if ( res.successful() )
                                        ruc.release();
                                     else
@@ -2560,7 +2597,7 @@ void trunreplay :: execnextreplaymove ( void )
              ContainerBase* c = actmap->getContainer( nwid );
              if ( DestructUnitCommand::avail( c )) {
                 auto_ptr<DestructUnitCommand> duc ( new DestructUnitCommand( c ));
-                ActionResult res = duc->execute( createContext( actmap ));
+                ActionResult res = duc->execute( createReplayContext() );
                 if ( !res.successful() )
                    error("severe replay inconsistency:\nno container for selfdestruct command !");
                 else
@@ -2598,11 +2635,7 @@ void trunreplay :: execnextreplaymove ( void )
             readnextaction();
             
             if ( a ) {
-               ReplayMapDisplay rmd ( &getDefaultMapDisplay() );
-               Context c = createContext( actmap );
-               c.display = &rmd;
-
-               ActionResult res = a->redo( c );
+               ActionResult res = a->redo( createReplayContext() );
                if ( !res.successful() )
                   error("action " + a->getDescription() + " failed");
             } else
@@ -2727,7 +2760,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    do {
        if ( status == 2 ) {
           execnextreplaymove ( );
-          checktimedevents( &getDefaultMapDisplay() );
+          checktimedevents( actmap, &getDefaultMapDisplay() );
          /*
           if ( getxpos () != lastvisiblecursorpos.x || getypos () != lastvisiblecursorpos.y )
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );

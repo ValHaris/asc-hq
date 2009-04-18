@@ -44,6 +44,7 @@
 #include "stdio-errorhandler.h"
 #include "unitset.h"
 #include "widgets/textrenderer-addons.h"
+#include "spfst-legacy.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"

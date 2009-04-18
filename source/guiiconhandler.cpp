@@ -34,6 +34,7 @@
 #include "sigc++/retype_return.h"
 #include "asc-mainscreen.h"
 #include "gameoptions.h"
+#include "spfst-legacy.h"
 
 const int guiIconSizeX = 49;
 const int guiIconSizeY = 35;

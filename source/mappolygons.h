@@ -2,7 +2,7 @@
     \brief operating with polygons on tje map
 */
 
-//     $Id: mappolygons.h,v 1.3 2007-04-13 16:15:53 mbickel Exp $
+//     $Id: mappolygons.h,v 1.4 2009-04-18 13:48:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

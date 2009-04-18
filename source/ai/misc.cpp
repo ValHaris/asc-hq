@@ -19,6 +19,8 @@
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
 #include "../actions/constructunitcommand.h"
+#include "../actions/moveunitcommand.h"
+#include "../actions/servicecommand.h"
 
 bool AI :: runUnitTask ( Vehicle* veh )
 {
@@ -167,13 +169,13 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    int x1,y1,x2,y2;
    x1 = max(veh->xpos - fuel / veh->typ->fuelConsumption, 0 );
    y1 = max(veh->ypos - fuel / veh->typ->fuelConsumption, 0 );
-   x2 = min(veh->xpos + fuel / veh->typ->fuelConsumption, actmap->xsize );
-   y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, actmap->ysize );
+   x2 = min(veh->xpos + fuel / veh->typ->fuelConsumption, ai.getMap()->xsize );
+   y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, ai.getMap()->ysize );
 
    for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
       int dist = int(i->gval );
       if ( i->h.getNumericalHeight() == -1 ) {
-          tfield* fld = getfield( i->h.x, i->h.y );
+          tfield* fld = ai.getMap()->getField( i->h.x, i->h.y );
           if ( fld->building && fld->building->color == veh->color )
              reachableBuildings[ dist ] = fld->building;
       }
@@ -186,7 +188,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
        if ((veh->height > chfahrend) && (i->h.getNumericalHeight() == chfahrend) ) {
           // we don't want to land in hostile territory
           FieldInformation& fi = ai.getFieldInformation ( i->h.x, i->h.y );
-          if ( fi.control == -1 || !actmap->player[fi.control].diplomacy.isHostile( ai.getPlayerNum() ) )
+          if ( fi.control == -1 || !ai.getMap()->player[fi.control].diplomacy.isHostile( ai.getPlayerNum() ) )
               landingPositions[dist] = i->h;
        }
    }
@@ -303,7 +305,7 @@ bool AI::RefuelConstraint::necessary (const Vehicle* veh, AI& ai )
    if ( !veh->typ->fuelConsumption )
       return false;
    if ( !(veh->height & (chtieffliegend | chfliegend | chhochfliegend))) {
-      ServiceOrder so  ( &ai, VehicleService::srv_resource, veh->networkid, 2 );
+      ServiceOrder so  ( &ai, ServiceOrder::srv_resource, veh->networkid, 2 );
       if ( so.serviceUnitExists() )
          return false;
       else
@@ -372,17 +374,15 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
 
       int preferredHeight = getBestHeight ( *i );
 
-      VehicleMovement* vm = ContainerControls::movement ( *i );
-      // auto_ptr<VehicleMovement> vm ( cc.movement ( *i ) );
-      if ( vm ) {
-         vm->registerMapDisplay ( mapDisplay );
-         auto_ptr<VehicleMovement> avm ( vm );
-
+      auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( *i ));
+      muc->searchFields();
+      
+      if ( muc->getReachableFields().size() ) {
+         
          int moved = 0;
          if ( AttackCommand::avail ( *i )) {
             TargetVector tv;
 
-            // AStar3D ast ( getMap(), *i, false, (*i)->maxMovement() );  ?? Why was maxMovement used here ??
             AStar3D ast ( getMap(), *i, false, (*i)->getMovement() );
             ast.findAllAccessibleFields ();
 
@@ -410,7 +410,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
 
          }
          if ( !moved ) {
-            AiResult res =  moveToSavePlace ( *i, *vm, preferredHeight );
+            AiResult res =  moveToSavePlace ( *i, preferredHeight );
             result += res;
             if ( !res.unitsDestroyed )
                (*i)->aiparam[ getPlayerNum() ]->resetTask();
@@ -440,10 +440,19 @@ AI::AiResult AI::buildings( int process )
          if ( veh ) {
             ++unitCounter;
             displaymessage2("processing building %d (unit %d)", buildingCounter, unitCounter );
+            
+            auto_ptr<ServiceCommand> sc ( new ServiceCommand( *bi ));
+            sc->setDestination( veh );
             if ( veh->aiparam[ getPlayerNum() ]->getJob() != AiParameter::job_supply )
-               bc.fillResource( veh, Resources::Fuel, maxint );
+               sc->getTransferHandler().fillDestAmmo();
             else
-               bc.refilleverything( veh );
+               sc->getTransferHandler().fillDest();
+            
+            sc->saveTransfers();
+            ActionResult res = sc->execute( getContext() );
+            if ( res.successful() )
+               sc.release();
+            
          }
       }
 
@@ -487,7 +496,7 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
    #if 0
    if ( destination.getNumericalHeight() == -1 ) {
 
-      VehicleMovement vm ( mapDisplay, NULL );
+      Vehicle!!Movement vm ( mapDisplay, NULL );
       vm.execute ( veh, -1, -1, 0, -1, -1 );
 
       std::vector<MapCoordinate> path;
@@ -579,7 +588,7 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
 
    AStar3D::Path::const_iterator lastmatch = pi;
    while ( pi != path.end() ) {
-      tfield* fld = getfield ( pi->x, pi->y );
+      tfield* fld = getMap()->getField ( pi->x, pi->y );
       bool ok = true;
       if ( fld->getContainer() ) {
          if ( pi+1 !=path.end() )
@@ -600,27 +609,23 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
       ++pi;
    }
 
-   if ( getfield ( lastmatch->x, lastmatch->y )->building )
-      if ( checkReConquer ( getfield ( lastmatch->x, lastmatch->y )->building, veh ))
+   if ( getMap()->getField ( lastmatch->x, lastmatch->y )->building )
+      if ( checkReConquer ( getMap()->getField ( lastmatch->x, lastmatch->y )->building, veh ))
          return false;
 
    if ( lastmatch == path.begin() )
       return 0;
 
-   BaseVehicleMovement vm ( vat_move, NULL, mapDisplay );
-   vm.execute ( veh, lastmatch->x, lastmatch->y, 0, lastmatch->getNumericalHeight(), 1 );
-
-   if ( vm.getStatus() != 3 ) {
+   auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
+   mum->setDestination( *lastmatch );
+   
+   ActionResult res = mum->execute( getContext() );
+   if ( res.successful() )
+      mum.release();
+   else {
       displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
       return -1;
    }
-
-   vm.execute ( NULL, lastmatch->x, lastmatch->y, 3, -1,  1 );
-   if ( vm.getStatus() != 1000 ) {
-      displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
-      return -1;
-   }
-
 
    //! the unit may have been shot down
    if ( ! getMap()->getUnit ( nwid ))
@@ -664,7 +669,7 @@ void AI::CheckFieldRecon :: testfield ( const MapCoordinate& mc )
 {
    FieldInformation& fi = ai->getFieldInformation ( mc.x, mc.y );
    if( fi.control != -1 ) {
-      if ( !actmap->player[player].diplomacy.isHostile( fi.control )  )
+      if ( !ai->getMap()->player[player].diplomacy.isHostile( fi.control )  )
          ownFields[dist]++;
       else
          enemyFields[dist]++;
@@ -845,7 +850,7 @@ void AI::production()
       enemyValue[i] = 0;
 
    for ( int p = 0; p < 8; p++ )
-      if ( actmap->player[p].diplomacy.isHostile( getPlayerNum() ) )
+      if ( getMap()->player[p].diplomacy.isHostile( getPlayerNum() ) )
           for ( Player::VehicleList::iterator vli = getMap()->player[p].vehicleList.begin(); vli != getMap()->player[p].vehicleList.end(); vli++ ) {
              if ( (*vli)->aiparam[getPlayerNum()] ) {
                 enemyThreat += (*vli)->aiparam[getPlayerNum()]->threat;
@@ -934,13 +939,20 @@ void AI::production()
                                cuc->execute( getContext() );
                                Vehicle* veh = cuc->getProducedUnit();
                                if ( veh ) {
-                                    bc.refillAmmo( veh );
-                                    bc.refillResources( veh );
-                                    calculateThreat ( veh );
-                                    container ( pr.bld );
-                                    // currentUnitDistribution.group[i] += inc;
-                                    produced = true;
-                                    break;  // exit produceable loop
+                                  
+                                  auto_ptr<ServiceCommand> sc ( new ServiceCommand( pr.bld ));
+                                  sc->setDestination( veh );
+                                  sc->getTransferHandler().fillDest();
+                                  sc->saveTransfers();
+                                  ActionResult res = sc->execute( getContext() );
+                                  if ( res.successful() )
+                                     sc.release();
+                                  
+                                  calculateThreat ( veh );
+                                  container ( pr.bld );
+                                  // currentUnitDistribution.group[i] += inc;
+                                  produced = true;
+                                  break;  // exit produceable loop
                               }
                             } catch ( ActionResult res ) {
                                // just ignore any errors 

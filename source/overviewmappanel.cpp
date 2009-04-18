@@ -22,6 +22,7 @@
 #include "graphics/blitter.h"
 #include "graphics/drawing.h"
 #include "mapdisplay.h"
+#include "spfst-legacy.h"
 
 
 OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisplayPG* mapDisplay, const ASCString& widgetName )

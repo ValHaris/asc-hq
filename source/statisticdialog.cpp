@@ -1,4 +1,4 @@
-//     $Id: statisticdialog.cpp,v 1.4 2007-04-13 16:15:54 mbickel Exp $
+//     $Id: statisticdialog.cpp,v 1.5 2009-04-18 13:48:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

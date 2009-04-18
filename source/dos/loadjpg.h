@@ -1,6 +1,9 @@
-//     $Id: loadjpg.h,v 1.1 2000-08-05 20:18:04 mbickel Exp $
+//     $Id: loadjpg.h,v 1.2 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/08/05 20:18:04  mbickel
+//      Restructured Fullscreen Image loading
+//
 //     Revision 1.2  1999/11/16 03:42:01  tmwilson
 //     	Added CVS keywords to most of the files.
 //     	Started porting the code to Linux (ifdef'ing the DOS specific stuff)

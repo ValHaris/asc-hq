@@ -30,26 +30,9 @@
  #include <sigc++/sigc++.h>
   
   
-  #include "newfont.h"
   #include "typen.h"
   #include "gamemap.h"
-
-   struct Schriften {
-               pfont        smallarial;
-               pfont        smallsystem;
-               pfont        large;
-               pfont        arial8; 
-               pfont        guifont;
-               pfont        guicolfont;
-               pfont        monogui;
-            } ; 
-   extern Schriften schriften;
-
-
-  extern GameMap* actmap; 
-
-//! returns the field at the given coordinates
-extern tfield* getfield(int x, int y);
+  
 
 
 // ! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
@@ -68,7 +51,7 @@ extern void  putbuilding( const MapCoordinate& entryPosition,
 
 
 //! recalculates the connection (like road interconnections) of all objects on the map
-extern void  calculateallobjects( GameMap* m = actmap );
+extern void  calculateallobjects( GameMap* m );
 
 /** recalculates the connection (like road interconnections) of an object
       \param x The x coordinate of the field
@@ -81,12 +64,12 @@ extern void  calculateobject(int  x,
                              int  y,
                              bool mof,
                              const ObjectType* obj,
-                             GameMap* gamemap = actmap );
+                             GameMap* gamemap  );
 
 extern void  calculateobject( const MapCoordinate& pos, 
                              bool mof,
                              const ObjectType* obj,
-                             GameMap* gamemap = actmap );
+                             GameMap* gamemap  );
 
 
 
@@ -106,10 +89,10 @@ extern int fieldAccessible( const tfield*        field,
 
 /** removes all units that cannot exist any more, either due to invalid terrin
     (like tanks on melting ice) or too much wind (eg. hoovercrafts in a storm) */
-extern void  checkunitsforremoval();
+extern void  checkunitsforremoval( GameMap* gamemap );
 
 //! removes all objects that cannot exist where they currently are (terrainaccess)
-extern void checkobjectsforremoval();
+extern void checkobjectsforremoval( GameMap* gamemap );
 
 //! returns the maximum wind speed that the unit can endure
 extern int          getmaxwindspeedforunit ( const Vehicle* eht );

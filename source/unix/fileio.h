@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.10 2007-04-13 16:16:15 mbickel Exp $
+//     $Id: fileio.h,v 1.11 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.10  2007/04/13 16:16:15  mbickel
+//      Merged ASC2 branch
+//
 //     Revision 1.8.2.1  2006/07/08 17:00:14  mbickel
 //      Merged updates from trunk
 //      Fixed replay problems

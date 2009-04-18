@@ -72,10 +72,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
       bool skipPlayer()
       {
          if ( turnSkipper ) {
-            GameMap* temp = actmap;
-            actmap = gamemap;
             (*turnSkipper)(gamemap);
-            actmap = temp;
          }
 
          updateTurn();
@@ -251,7 +248,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
             ASCString name = selectFile( mapextension, false);
             if ( !name.empty() ) {
                StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + name );
-               savemap( name.c_str(), gamemap );
+               savemap( name, gamemap );
             }
 
             gamemap->network = gtm;

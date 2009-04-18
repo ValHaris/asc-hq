@@ -40,6 +40,8 @@
 #include "dialogs/fieldmarker.h"
 #include "dialogs/selectionwindow.h"
 
+#include "spfst-legacy.h"
+
 class  NewMessage : public ASC_PG_Dialog {
       GameMap* gamemap;
       Message* message;

@@ -1,6 +1,10 @@
-//     $Id: realint.h,v 1.1 2000-05-30 18:39:29 mbickel Exp $
+//     $Id: realint.h,v 1.2 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/05/30 18:39:29  mbickel
+//      Added support for multiple directories
+//      Moved DOS specific files to a separate directory
+//
 //     Revision 1.3  2000/05/23 20:40:48  mbickel
 //      Removed boolean type
 //

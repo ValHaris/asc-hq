@@ -58,7 +58,7 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	destructunitcommand.lo reactionfireswitchcommand.lo \
 	repairunitcommand.lo jumpdrivecommand.lo \
 	powergenerationswitchcommand.lo trainunitcommand.lo \
-	repairbuildingcommand.lo
+	repairbuildingcommand.lo transfercontrolcommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libfullgameactions_la_DEPENDENCIES =
@@ -275,7 +275,7 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
-                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp
+                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 libmiscactions_la_SOURCES = servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
@@ -391,6 +391,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/trainunitcommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/transfercontrolcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitaction.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitfieldregistration.Plo@am__quote@

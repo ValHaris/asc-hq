@@ -118,7 +118,7 @@ ActionResult VehicleAttackAction::runAction( const Context& context )
    battle->setresult ( context );
 
    if ( somethingDestroyed )
-      computeview( actmap, 0, false, &context );
+      computeview( getMap(), 0, false, &context );
 
    if ( context.display && shown )
       context.display->displayMap();

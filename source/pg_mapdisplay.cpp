@@ -38,6 +38,7 @@
 #include "mainscreenwidget.h"
 #include "sdl/sound.h"
 #include "dialogs/attackpanel.h"
+#include "spfst-legacy.h"
 
 extern bool tempsvisible;
 extern MapDisplayPG* theGlobalMapDisplay;

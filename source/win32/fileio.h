@@ -1,6 +1,9 @@
-//     $Id: fileio.h,v 1.4 2004-07-12 18:15:10 mbickel Exp $
+//     $Id: fileio.h,v 1.5 2009-04-18 13:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2004/07/12 18:15:10  mbickel
+//      Lots of tweaks and fixed for more portability and compilation with mingw
+//
 //     Revision 1.3  2003/11/21 19:25:44  mbickel
 //      Fixed: invisible own units when directview disabled
 //

@@ -1,6 +1,11 @@
-//     $Id: UnitEditor.java,v 1.12 2001-07-14 19:13:16 mbickel Exp $
+//     $Id: UnitEditor.java,v 1.13 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.12  2001/07/14 19:13:16  mbickel
+//      Rewrote sound system
+//      Moveing units make sounds
+//      Added sound files to data
+//
 //     Revision 1.11  2001/05/10 16:24:03  mbickel
 //      Fixed crash in Java-Uniteditor when palette not available
 //

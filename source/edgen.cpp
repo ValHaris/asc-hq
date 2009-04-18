@@ -28,6 +28,7 @@
 #include "vehicletype.h"
 #include "itemrepository.h"
 #include "paradialog.h"
+#include "spfst-legacy.h"
 
 #define layercount 5
 #define centerlayer 65000

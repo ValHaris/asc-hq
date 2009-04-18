@@ -1,6 +1,12 @@
-//     $Id: ImageProcess.java,v 1.1 2000-11-07 16:19:39 schelli Exp $
+//     $Id: ImageProcess.java,v 1.2 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.1  2000/11/07 16:19:39  schelli
+//     Minor Memory-Functions & Problems changed
+//     Picture Support partly enabled
+//     New Funktion partly implemented
+//     Buildings partly implemented
+//
 //     Revision 1.8  2000/11/01 11:41:04  mbickel
 //      Fixed: Selection in MainWindow-List not being evaluated, the first list
 //       entry was always edited.

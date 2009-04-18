@@ -36,6 +36,7 @@
 #include "../viewcalculation.h"
 #include "../networkinterface.h"
 #include "../spfst.h"
+#include "../spfst-legacy.h"
 #include "../windowing.h"
 #include "../controls.h"
 #include "../sg.h"
@@ -45,6 +46,7 @@
 #include "../textfile_evaluation.h"
 #include "../textfileparser.h"
 #include "../widgets/textrenderer.h"
+#include "../mapdisplayinterface.h"
 
 class GameParameterEditorWidget;
 
@@ -896,7 +898,7 @@ bool StartMultiplayerGame::start()
    computeview( actmap );
    hookGuiToMap(actmap);
   
-   next_turn( actmap, NextTurnStrategy_AskUser() );
+   next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
    displaymap();
    updateFieldInfo();
    success = true;

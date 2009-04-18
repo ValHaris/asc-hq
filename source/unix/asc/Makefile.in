@@ -47,20 +47,19 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
-am__objects_1 = unitctrl.$(OBJEXT) soundList.$(OBJEXT) typen.$(OBJEXT) \
-	strtmesg.$(OBJEXT) stack.$(OBJEXT) spfst.$(OBJEXT) \
-	sgstream.$(OBJEXT) palette.$(OBJEXT) newfont.$(OBJEXT) \
-	misc.$(OBJEXT) loadpcxc.$(OBJEXT) loaders.$(OBJEXT) \
-	tos.$(OBJEXT) loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) \
-	dlg_box.$(OBJEXT) dialog.$(OBJEXT) controls.$(OBJEXT) \
-	basestrm.$(OBJEXT) basegfx.$(OBJEXT) attack.$(OBJEXT) \
-	replaymapdisplay.$(OBJEXT) memory-measurement.$(OBJEXT) \
-	gameoptions.$(OBJEXT) astar2.$(OBJEXT) vehicletype.$(OBJEXT) \
-	objects.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
-	buildingtype.$(OBJEXT) containerbase.$(OBJEXT) \
-	mapalgorithms.$(OBJEXT) viewcalculation.$(OBJEXT) \
-	gamemap.$(OBJEXT) password.$(OBJEXT) replay.$(OBJEXT) \
-	research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
+am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
+	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
+	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
+	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) tos.$(OBJEXT) \
+	loadbi3.$(OBJEXT) gamedlg.$(OBJEXT) dlg_box.$(OBJEXT) \
+	dialog.$(OBJEXT) controls.$(OBJEXT) basestrm.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) replaymapdisplay.$(OBJEXT) \
+	memory-measurement.$(OBJEXT) gameoptions.$(OBJEXT) \
+	astar2.$(OBJEXT) vehicletype.$(OBJEXT) objects.$(OBJEXT) \
+	stdio-errorhandler.$(OBJEXT) buildingtype.$(OBJEXT) \
+	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
+	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
+	replay.$(OBJEXT) research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
 	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
 	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
 	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
@@ -118,8 +117,9 @@ am__DEPENDENCIES_2 =  \
 asc_DEPENDENCIES = $(am__DEPENDENCIES_2)
 nodist_unittester_OBJECTS = $(am__objects_1)
 unittester_OBJECTS = $(nodist_unittester_OBJECTS)
-unittester_DEPENDENCIES = $(am__DEPENDENCIES_2) \
-	$(top_builddir)/source/unittests/libunittests.la
+unittester_DEPENDENCIES =  \
+	$(top_builddir)/source/unittests/libunittests.la \
+	$(am__DEPENDENCIES_2)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -307,7 +307,7 @@ MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
 noinst_bindir = $(abs_top_builddir)/source/unix/asc/
-commonSources = unitctrl.cpp soundList.cpp typen.cpp \
+commonSources = soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp palette.cpp \
 newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
@@ -348,7 +348,7 @@ $(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUN
 nodist_asc_SOURCES = $(commonSources) sg.cpp
 asc_LDADD = $(commonLibs)
 nodist_unittester_SOURCES = $(commonSources) 
-unittester_LDADD = $(commonLibs) $(top_builddir)/source/unittests/libunittests.la  
+unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
 all: all-am
 
 .SUFFIXES:
@@ -518,7 +518,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tos.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/turncontrol.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitctrl.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@

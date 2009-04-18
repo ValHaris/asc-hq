@@ -7,6 +7,7 @@
 #include "../terraintype.h"
 #include "../vehicletype.h"
 #include "../spfst.h"
+#include "../spfst-legacy.h"
 #include "../gameoptions.h"
 #include "../iconrepository.h"
 #include "../unitset.h"

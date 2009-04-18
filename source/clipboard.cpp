@@ -30,6 +30,7 @@
 #include "spfst.h"
 #include "dlg_box.h"
 #include "statistics.h"
+#include "spfst-legacy.h"
 
 
 const char* clipboardFileExtension = "*.ascclipboard";

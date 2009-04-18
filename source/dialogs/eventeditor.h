@@ -22,7 +22,8 @@
 #ifndef eventeditorH
 #define eventeditorH
 
-extern void eventEditor();
+class GameMap;
+extern void eventEditor( GameMap* gamemap );
 
 
 #endif

@@ -9,24 +9,33 @@
 
 
 #include "../actions/moveunitcommand.h"
+#include "../actions/attackcommand.h"
 #include "../loaders.h"
 #include "../viewcalculation.h"
 #include "../turncontrol.h"
 
 #include "unittestutil.h"
 
-class NextTurnStrategy_Abort : public NextTurnStrategy {
-   public:
-      bool continueWhenLastPlayer() const { 
-         return false;
-      };  
-} ;
+bool NextTurnStrategy_Abort::continueWhenLastPlayer() const { 
+   return false;
+};  
 
 
 void move( Vehicle* veh, const MapCoordinate& dest )
 {
    auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
    muc->setDestination( dest );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+}
+
+void attack( Vehicle* veh, const MapCoordinate& target )
+{
+   auto_ptr<AttackCommand> muc ( new AttackCommand( veh ));
+   muc->setTarget( target );
    ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
    if ( res.successful() )
       muc.release();
@@ -51,7 +60,7 @@ GameMap* startMap( const ASCString& filename )
    computeview( game );
          
    if ( game && game->actplayer == -1 ) 
-      next_turn(game, NextTurnStrategy_Abort(), -1);
+      next_turn(game, NextTurnStrategy_Abort(), NULL, -1);
    
    return game;
    

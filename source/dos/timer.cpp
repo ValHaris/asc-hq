@@ -1,6 +1,9 @@
-//     $Id: timer.cpp,v 1.2 2000-10-18 15:10:07 mbickel Exp $
+//     $Id: timer.cpp,v 1.3 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/18 15:10:07  mbickel
+//      Fixed event handling for windows and dos
+//
 //     Revision 1.1  2000/05/30 18:39:29  mbickel
 //      Added support for multiple directories
 //      Moved DOS specific files to a separate directory

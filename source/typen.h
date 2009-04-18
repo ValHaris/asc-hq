@@ -212,6 +212,7 @@ class MapCoordinate3D : public MapCoordinate {
             // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
             MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( log2(bitmappedz) ) {};
+            bool operator< ( const MapCoordinate3D& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x ) || (y == mc.y && x == mc.x && z < mc.z);};
             // MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -2 ) {};
             MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( log2(bitmappedHeight) ) {};
             void setnum ( int _x, int _y, int numericalz ) { x = _x; y = _y; z = numericalz; };

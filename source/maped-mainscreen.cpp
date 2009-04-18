@@ -36,6 +36,7 @@
 #include "edglobal.h"
 #include "mapdisplay.h"
 #include "spfst.h"
+#include "spfst-legacy.h"
 #include "overviewmappanel.h"
 #include "edselfnt.h"
 #include "edmisc.h"

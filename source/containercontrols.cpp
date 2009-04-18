@@ -16,7 +16,6 @@
  ***************************************************************************/
 
 #include "containercontrols.h"
-#include "unitctrl.h"
 #include "gamemap.h"
 #include "replay.h"
 #include "mapdisplayinterface.h"
@@ -100,34 +99,15 @@ Vehicle* ContainerControls::produceUnitHypothetically( const Vehicletype* type )
    if ( getMap()->getgameparameter(cgp_bi3_training) >= 1 ) {
       int cnt = 0;
 
-      for ( Player::BuildingList::iterator bi = actmap->player[actmap->actplayer].buildingList.begin(); bi != actmap->player[actmap->actplayer].buildingList.end(); bi++ )
+      for ( Player::BuildingList::iterator bi = getMap()->player[getMap()->actplayer].buildingList.begin(); bi != getMap()->player[getMap()->actplayer].buildingList.end(); bi++ )
          if ( (*bi)->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
             cnt++;
 
-      vehicle->experience += cnt * actmap->getgameparameter(cgp_bi3_training);
+      vehicle->experience += cnt * getMap()->getgameparameter(cgp_bi3_training);
       if ( vehicle->experience > maxunitexperience )
          vehicle->experience = maxunitexperience;
    }
    return vehicle;
-}
-
-
-
-VehicleMovement*   ContainerControls :: movement (  Vehicle* eht, bool simpleMode )
-{
-   VehicleMovement* vehicleMovement = new VehicleMovement ( &getDefaultMapDisplay(), NULL );
-   int mode = 0;
-   if ( simpleMode )
-      mode |= VehicleMovement::DisableHeightChange;
-
-   int status = vehicleMovement->execute ( eht, -1, -1, 0, -1, mode );
-
-   if ( status > 0 )
-      return vehicleMovement;
-   else {
-      delete vehicleMovement;
-      return NULL;
-   }
 }
 
 
@@ -315,7 +295,7 @@ vector<const Vehicletype*> ContainerControls :: productionLinesBuyable()
    Resources r = container->getResource( Resources(maxint, maxint, maxint), 1 );
    
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
-      Vehicletype* veh = actmap->getvehicletype_bypos ( i );
+      Vehicletype* veh = getMap()->getvehicletype_bypos ( i );
       if ( veh ) {
          bool found = find( container->getProduction().begin(), container->getProduction().end(), veh ) != container->getProduction().end();
          if ( container->baseType->vehicleFit ( veh ) && !found )

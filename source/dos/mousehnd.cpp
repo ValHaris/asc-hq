@@ -1,6 +1,9 @@
-//     $Id: mousehnd.cpp,v 1.4 2000-10-18 15:10:07 mbickel Exp $
+//     $Id: mousehnd.cpp,v 1.5 2009-04-18 13:48:38 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2000/10/18 15:10:07  mbickel
+//      Fixed event handling for windows and dos
+//
 //     Revision 1.3  2000/09/07 16:42:29  mbickel
 //      Made some adjustments so that ASC compiles with Watcom again...
 //

@@ -38,30 +38,30 @@
 
 
 
-void         checktimedevents ( MapDisplayInterface* md )
+void         checktimedevents ( GameMap* gamemap, MapDisplayInterface* md )
 {
-   if ( actmap->eventTimes.empty() )
+   if ( gamemap->eventTimes.empty() )
       return;
                               
-   GameTime t = actmap->eventTimes.back();
-   if ( actmap->time.abstime >= t.abstime ) {
-      checkevents( md );
-      actmap->eventTimes.pop_back();
+   GameTime t = gamemap->eventTimes.back();
+   if ( gamemap->time.abstime >= t.abstime ) {
+      checkevents( gamemap, md );
+      gamemap->eventTimes.pop_back();
    }
    
 }
 
 
 
-void eventReady()
+void eventReady( GameMap* gamemap )
 {
    for ( int i = 0; i < 8; i++ )
-      actmap->player[i].queuedEvents++;
+      gamemap->player[i].queuedEvents++;
 }
 
 
 
-bool checkevents( MapDisplayInterface* md )
+bool checkevents( GameMap* gamemap, MapDisplayInterface* md )
 {
    // this is not for synchronizing between threads, but in the same threat inside the call stack 
    static bool isRunning = false;
@@ -70,12 +70,12 @@ bool checkevents( MapDisplayInterface* md )
 
    VariableLocker l( isRunning );
    
-   actmap->player[actmap->actplayer].queuedEvents++;
-   while ( actmap->player[actmap->actplayer].queuedEvents ) {
+   gamemap->player[gamemap->actplayer].queuedEvents++;
+   while ( gamemap->player[gamemap->actplayer].queuedEvents ) {
 
-      actmap->player[actmap->actplayer].queuedEvents = 0;
+      gamemap->player[gamemap->actplayer].queuedEvents = 0;
 
-      for ( GameMap::Events::iterator ev = actmap->events.begin(); ev != actmap->events.end(); ++ev )
+      for ( GameMap::Events::iterator ev = gamemap->events.begin(); ev != gamemap->events.end(); ++ev )
          (*ev)->check( md );
 
    }

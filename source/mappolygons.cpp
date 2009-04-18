@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include "typen.h"
 #include "misc.h"
-#include "newfont.h"
 #include "loaders.h"
 #include "spfst.h"
 #include "mappolygons.h"

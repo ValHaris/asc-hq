@@ -2,9 +2,13 @@
     \brief Originally planed to provide history functions for ASC, but was never finished. Long derelicted. 
 */
 
-//     $Id: history.cpp,v 1.4 2004-06-23 19:36:21 mbickel Exp $
+//     $Id: history.cpp,v 1.5 2009-04-18 13:48:37 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2004/06/23 19:36:21  mbickel
+//      Fixed: bug in detection of units that can fire on a moving unit
+//      Added: rename building
+//
 //     Revision 1.3  2001/02/11 11:39:37  mbickel
 //      Some cleanup and documentation
 //

@@ -13,6 +13,8 @@
 #include "viewcalculation.h"
 #include "events.h"
 
+#include "spfst-legacy.h"
+
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 {
    mapDisplay->displayPosition(x,y);

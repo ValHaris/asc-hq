@@ -40,6 +40,8 @@
 #include "buildings.h"
 #include "mapfield.h"
 
+#include "spfst-legacy.h"
+
 SigC::Signal0<void> repaintMap;
 SigC::Signal0<void> repaintDisplay;
 SigC::Signal0<void> updateFieldInfo;
@@ -171,7 +173,7 @@ int         fieldAccessible( const tfield*        field,
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
                else 
-                 if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) ||  actmap->player[actmap->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
+                  if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) ||  vehicle->getMap()->player[vehicle->getMap()->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
                     return 1;
            }
       }
@@ -240,10 +242,10 @@ void         putbuilding( const MapCoordinate& entryPosition,
 
 
 
-void checkobjectsforremoval ( void )
+void checkobjectsforremoval ( GameMap* gamemap )
 {
-   for ( int y = 0; y < actmap->ysize; y++ )
-      for ( int x = 0; x < actmap->xsize; x++ ) {
+   for ( int y = 0; y < gamemap->ysize; y++ )
+      for ( int x = 0; x < gamemap->xsize; x++ ) {
          tfield* fld = getfield ( x, y );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
             if ( i->typ->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
@@ -254,12 +256,12 @@ void checkobjectsforremoval ( void )
       }
 }
 
-void  checkunitsforremoval ( void )
+void  checkunitsforremoval ( GameMap* gamemap )
 {
    ASCString messages[playerNum];
-   for ( int y = 0; y < actmap->ysize; y++ )
-      for ( int x = 0; x < actmap->xsize; x++ ) {
-         tfield* fld = getfield ( x, y );
+   for ( int y = 0; y < gamemap->ysize; y++ )
+      for ( int x = 0; x < gamemap->xsize; x++ ) {
+         tfield* fld = gamemap->getField ( x, y );
          if ( (fld->building && fld->building->typ->terrainaccess.accessible( fld->bdt ) < 0) && (fld->building->typ->height <= chfahrend) ) {
             messages[fld->building->getOwner()] += getBuildingReference( fld->building ) + " was destroyed \n\n";
             delete fld->building;
@@ -269,10 +271,10 @@ void  checkunitsforremoval ( void )
 
    for ( int c=0; c<=8 ;c++ ) {
       ASCString msg = messages[c];
-      for ( Player::VehicleList::iterator i = actmap->player[c].vehicleList.begin(); i != actmap->player[c].vehicleList.end();  ) {
+      for ( Player::VehicleList::iterator i = gamemap->player[c].vehicleList.begin(); i != gamemap->player[c].vehicleList.end();  ) {
 
           Vehicle* eht = *i;
-          tfield* field = getfield(eht->xpos,eht->ypos);
+          tfield* field = gamemap->getField(eht->xpos,eht->ypos);
           bool erase = false;
 
           ASCString reason;
@@ -283,7 +285,7 @@ void  checkunitsforremoval ( void )
                    reason = "was swallowed by the ground";
                 }
              if ( eht )
-                if ( getmaxwindspeedforunit( eht ) < actmap->weather.windSpeed*maxwindspeed ) {
+                if ( getmaxwindspeedforunit( eht ) < gamemap->weather.windSpeed*maxwindspeed ) {
                    reason = "was blown away by the wind";
                    erase = true;
                 }
@@ -293,20 +295,20 @@ void  checkunitsforremoval ( void )
              msg += "\n\n";
 
              Vehicle* pv = *i;
-             actmap->player[c].vehicleList.erase ( i );
+             gamemap->player[c].vehicleList.erase ( i );
              delete pv;
 
 
 
              /* if the unit was a transport and had other units loaded, these units have been deleted as well.
                 We don't know which elements of the container are still valid, so we start from the beginning again. */
-             i = actmap->player[c].vehicleList.begin();
+             i = gamemap->player[c].vehicleList.begin();
           } else
              i++;
       }
 
       if ( !msg.empty() )
-         new Message ( msg, actmap, 1<<c);
+         new Message ( msg, gamemap, 1<<c);
    }
 }
 
@@ -327,7 +329,7 @@ int  getwindheightforunit ( const Vehicle* eht, int uheight )
 
 int  getmaxwindspeedforunit ( const Vehicle* eht )
 {
-   tfield* field = getfield(eht->xpos,eht->ypos);
+   tfield* field = eht->getMap()->getField(eht->xpos,eht->ypos);
    if ( field->vehicle == eht) {
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
          return eht->typ->movement[log2(eht->height)] * 256 ;

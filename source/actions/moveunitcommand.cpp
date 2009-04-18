@@ -18,6 +18,7 @@
      Boston, MA  02111-1307  USA
 */
 
+#include <iostream>
 
 #include "moveunitcommand.h"
 
@@ -237,7 +238,7 @@ bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )
 void MoveUnitCommand::calcPath()
 {
    path.clear();
-   AStar3D ast ( getMap(), getUnit(), false, maxint );
+   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
    ast.findPath ( path, destination );
 }
 
@@ -252,9 +253,13 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    if ( getState() != SetUp )
       return ActionResult(21002);
    
-   MapCoordinate targetPosition;
    
    searchFields();
+   
+   if ( getUnit()->networkid == 14329) {
+      for ( set<MapCoordinate3D>::const_iterator i = reachableFields.begin(); i != reachableFields.end(); ++i )
+         cout << i->x << ":" << i->y << ":" << i->getNumericalHeight() << "\n";
+   }
    
    if ( reachableFields.find( destination ) == reachableFields.end() ) 
       return ActionResult(105);

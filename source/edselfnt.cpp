@@ -37,6 +37,7 @@
 
 #include "dialogs/vehicletypeselector.h"
 #include "unitset.h"
+#include "spfst-legacy.h"
 
 SigC::Signal0<void> filtersChangedSignal;
 

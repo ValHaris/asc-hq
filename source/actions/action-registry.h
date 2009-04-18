@@ -64,8 +64,8 @@ namespace ActionRegistry {
                   JumpDriveCommand,
                   PowerGenerationSwitchCommand,
                   TrainUnitCommand,
-                  RepairBuildingCommand
-                        
+                  RepairBuildingCommand, // 40
+                  TransferControlCommand
    };
 };
 

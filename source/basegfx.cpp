@@ -27,8 +27,8 @@
 #include <math.h>
 #include "global.h"
 #include "basegfx.h"
-#include "newfont.h"
 #include "misc.h"
+#include "newfont.h"
 
 #ifdef _DOS_
  #include "dos/vesa.h"

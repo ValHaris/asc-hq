@@ -32,7 +32,6 @@
 
 #include "typen.h"
 #include "misc.h"
-#include "newfont.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
 #include "spfst.h"
@@ -1058,10 +1057,10 @@ void   tsavegameloaders::savegame( pnstream strm, GameMap* gamemap, bool writeRe
 }
 
 
-void         tsavegameloaders::savegame( const ASCString& name)
+void         tsavegameloaders::savegame( GameMap* gamemap, const ASCString& name)
 { 
    tnfilestream filestream ( name, tnstream::writing );
-   savegame ( &filestream, actmap, true );
+   savegame ( &filestream, gamemap, true );
 }
 
 
@@ -1306,7 +1305,7 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 
 
 
-void  savemap( const char * name, GameMap* gamemap )
+void  savemap( const ASCString& name, GameMap* gamemap )
 {
 
    #ifdef logging
@@ -1327,12 +1326,11 @@ void  savemap( const char * name, GameMap* gamemap )
 
 }
 
-
-void  savegame( const ASCString& name )
+void  savegame( const ASCString& name, GameMap* gamemap )
 {
    try {
       tsavegameloaders gl;
-      gl.savegame ( name );
+      gl.savegame ( gamemap, name );
    }
    catch ( tfileerror err) {
       displaymessage( "error writing map to filename %s ", 1, err.getFileName().c_str() );

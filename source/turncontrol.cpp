@@ -97,7 +97,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
 
 
 
-void runai( GameMap* actmap, int playerView )
+void runai( GameMap* actmap, int playerView, MapDisplayInterface* display )
 {
    MapDisplayPG::CursorHiding cusorHiding;
    actmap->setPlayerView ( playerView );
@@ -107,7 +107,7 @@ void runai( GameMap* actmap, int playerView )
    if ( !actmap->player[ actmap->actplayer ].ai )
       actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-   actmap->player[ actmap->actplayer ].ai->run( &getDefaultMapDisplay() );
+   actmap->player[ actmap->actplayer ].ai->run( display );
    updateFieldInfo();
 }
 
@@ -152,7 +152,7 @@ void clearReplays( GameMap* actmap )
 }
 
 
-void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int lastTurn  )
+void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int lastTurn, MapDisplayInterface* display  )
 {
    int loop = 0;
    bool closeLoop = false;
@@ -183,7 +183,7 @@ void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int
       
       if ( actmap->player[nextPlayer].stat == Player::computer ) {
          actmap->beginTurn();
-         runai( actmap, lastPlayer );
+         runai( actmap, lastPlayer, display );
          actmap->endTurn();
       }
       
@@ -216,7 +216,7 @@ bool NextTurnStrategy_AskUser::continueWhenLastPlayer() const
 
 
 
-void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, int playerView )
+void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, MapDisplayInterface* display, int playerView  )
 {
    int lastPlayer = gamemap->actplayer;
    int lastTurn = gamemap->time.turn();
@@ -256,7 +256,7 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, int
    }
       
  
-   iterateToNextPlayer( gamemap, true, lastPlayer, lastTurn );
+   iterateToNextPlayer( gamemap, true, lastPlayer, lastTurn, display );
    
    gamemap->setPlayerView ( -1 );
    
@@ -278,22 +278,22 @@ void skipTurn( GameMap* gamemap )
       gamemap->beginTurn();
       gamemap->endTurn();
    }
-   iterateToNextPlayer( gamemap, false, -1, -1 );
+   iterateToNextPlayer( gamemap, false, -1, -1, NULL );
 }
 
 void checkUsedASCVersions ( Player& currentPlayer )
 {
    for ( int i = 0; i < 8; i++ )
-      if  ( actmap->player[i].exist() )
-         if ( actmap->actplayer != i )
-            if ( actmap->player[i].ASCversion > 0 )
-               if ( (actmap->player[i].ASCversion & 0xffffff00) > getNumericVersion() ) {
-                  new Message ( ASCString("Player ") + actmap->player[i].getName()
+      if  ( currentPlayer.getParentMap()->player[i].exist() )
+         if ( currentPlayer.getParentMap()->actplayer != i )
+            if ( currentPlayer.getParentMap()->player[i].ASCversion > 0 )
+               if ( (currentPlayer.getParentMap()->player[i].ASCversion & 0xffffff00) > getNumericVersion() ) {
+                  new Message ( ASCString("Player ") + currentPlayer.getParentMap()->player[i].getName()
                            + " is using a newer version of ASC. \n"
                            "Please check www.asc-hq.org for updates.\n\n"
                            "Please do NOT report any problems with this version of ASC until "
                            "you have confirmed that they are also present in the latest "
-                           "version of ASC.", actmap, 1<<actmap->actplayer );
+                           "version of ASC.", currentPlayer.getParentMap(), 1<<currentPlayer.getParentMap()->actplayer );
                   return;
                }
 
@@ -302,7 +302,7 @@ void checkUsedASCVersions ( Player& currentPlayer )
 
 
 
-bool continuenetworkgame ( bool mostRecent )
+GameMap* continueNetworkGame ( bool mostRecent )
 {
    ASCString filename;
    if ( !mostRecent ) {
@@ -330,71 +330,68 @@ bool continuenetworkgame ( bool mostRecent )
    }
 
    if ( filename.empty() )
-      return false;
+      return NULL;
 
    StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + filename );
 
-   return continuenetworkgame( filename );
+   return continueNetworkGame( filename );
 }
 
-bool continuenetworkgame ( const ASCString& filename )
+GameMap* continueNetworkGame ( const ASCString& filename )
 {
    FileTransfer ft;
    auto_ptr<GameMap> newMap ( mapLoadingExceptionChecker( filename, MapLoadingFunction( &ft, &FileTransfer::loadPBEMFile )));
    if ( !newMap.get() )
-      return false;
+      return NULL;
 
    if ( !authenticateUser( newMap.get() , 0, true, false ))
-      return false;
+      return NULL;
    
-   delete actmap;
-   actmap = newMap.release();
-
-   computeview( actmap );
-   actmap->beginTurn();
-   actmap->setPlayerView ( actmap->actplayer );
-   return true;
+   computeview( newMap.get() );
+   newMap->beginTurn();
+   newMap->setPlayerView ( newMap->actplayer );
+   return newMap.release();
 }
 
 
 
-void  checkforvictory ( bool hasTurnControl )
+void  checkforvictory ( GameMap* gamemap, bool hasTurnControl )
 {
-   if ( !actmap->continueplaying ) {
+   if ( !gamemap->continueplaying ) {
       int plnum = 0;
       for ( int i = 0; i < 8; i++ )
-         if ( !actmap->player[i].exist() && actmap->player[i].existanceAtBeginOfTurn ) {
+         if ( !gamemap->player[i].exist() && gamemap->player[i].existanceAtBeginOfTurn ) {
             int to = 0;
             for ( int j = 0; j < 8; j++ )
                if ( j != i )
                   to |= 1 << j;
 
 
-            if ( !actmap->campaign.avail ) {
+            if ( !gamemap->campaign.avail ) {
                char txt[1000];
                const char* sp = getmessage( 10010 ); // Message "player has been terminated"
    
-               sprintf ( txt, sp, actmap->player[i].getName().c_str() );
-               new Message ( txt, actmap, to  );
+               sprintf ( txt, sp, gamemap->player[i].getName().c_str() );
+               new Message ( txt, gamemap, to  );
             } 
 
-            actmap->player[i].existanceAtBeginOfTurn = false;
+            gamemap->player[i].existanceAtBeginOfTurn = false;
 
-            if ( i == actmap->actplayer ) {
-               if ( actmap->getPlayerView() == i && actmap->getPlayer(i).stat == Player::human )
+            if ( i == gamemap->actplayer ) {
+               if ( gamemap->getPlayerView() == i && gamemap->getPlayer(i).stat == Player::human )
                   displaymessage ( getmessage ( 10011 ),1 );
 
                int humannum=0;
                for ( int j = 0; j < 8; j++ )
-                  if (actmap->player[j].exist() && actmap->player[j].stat == Player::human )
+                  if (gamemap->player[j].exist() && gamemap->player[j].stat == Player::human )
                      humannum++;
 
                if ( hasTurnControl ) {
                   if ( humannum )
-                     next_turn(actmap, NextTurnStrategy_AskUser() );
+                     next_turn(gamemap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
                   else {
-                     delete actmap;
-                     actmap = NULL;
+                     delete gamemap;
+                     gamemap = NULL;
                      throw NoMapLoaded();
                   }
                }
@@ -403,19 +400,19 @@ void  checkforvictory ( bool hasTurnControl )
             plnum++;
 
       if ( plnum <= 1 ) {
-         if ( actmap->player[actmap->actplayer].ai &&  actmap->player[actmap->actplayer].ai->isRunning() ) {
+         if ( gamemap->player[gamemap->actplayer].ai &&  gamemap->player[gamemap->actplayer].ai->isRunning() ) {
             displaymessage("You lost!",1);
          } else {
             displaymessage("Congratulations!\nYou won!",1);
             if (choice_dlg("Do you want to continue playing ?","~y~es","~n~o") == 2) {
-               delete actmap;
-               actmap = NULL;
+               delete gamemap;
+               gamemap = NULL;
                throw NoMapLoaded();
             } else {
-               actmap->continueplaying = 1;
-               if ( actmap->replayinfo ) {
-                  delete actmap->replayinfo;
-                  actmap->replayinfo = 0;
+               gamemap->continueplaying = 1;
+               if ( gamemap->replayinfo ) {
+                  delete gamemap->replayinfo;
+                  gamemap->replayinfo = 0;
                }
             }
          }

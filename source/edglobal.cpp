@@ -44,6 +44,7 @@
 #include "mapimageexport.h"
 #include "viewcalculation.h"
 #include "statistics.h"
+#include "spfst-legacy.h"
 
 #include "dialogs/unitinfodialog.h"
 #include "dialogs/editmapparam.h"   
@@ -570,7 +571,7 @@ void execaction( int code)
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->objects.clear( );
-                            calculateallobjects();
+                            calculateallobjects( actmap );
                             mapChanged( actmap );
                          }
                       }
@@ -878,7 +879,7 @@ void execaction_pg(int code)
          editGameOptions( false );
          break;
 
-      case act_events :   eventEditor();
+      case act_events :   eventEditor( actmap );
          break;
       case act_resetPlayerData: adminGame( actmap );
          break;

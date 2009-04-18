@@ -1,6 +1,11 @@
-//     $Id: global_os.h,v 1.6 2001-05-18 22:30:30 mbickel Exp $
+//     $Id: global_os.h,v 1.7 2009-04-18 13:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.6  2001/05/18 22:30:30  mbickel
+//      The data file is now installed in the correct directory
+//      If the installation directory is changed with configure, the new path
+//       will now be compiled directly into ASC
+//
 //     Revision 1.5  2000/10/31 18:08:28  mbickel
 //      Borland C now uses unsigned char ( tools/Makefile changed )
 //      Added header file for size_t to global_os.h

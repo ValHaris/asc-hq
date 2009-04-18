@@ -1,6 +1,12 @@
-//     $Id: Weapons.java,v 1.3 2000-11-07 16:19:41 schelli Exp $
+//     $Id: Weapons.java,v 1.4 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/11/07 16:19:41  schelli
+//     Minor Memory-Functions & Problems changed
+//     Picture Support partly enabled
+//     New Funktion partly implemented
+//     Buildings partly implemented
+//
 //     Revision 1.2  2000/10/13 13:15:48  schelli
 //     *** empty log message ***
 //

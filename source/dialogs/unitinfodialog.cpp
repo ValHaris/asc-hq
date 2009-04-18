@@ -16,6 +16,7 @@
 #include "../vehicle.h"
 #include "../iconrepository.h"
 #include "../spfst.h"
+#include "../spfst-legacy.h"
 #include "../dialog.h"
 
 #include "../textfiletags.h"

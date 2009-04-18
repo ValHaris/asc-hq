@@ -12,7 +12,7 @@ noinst_PROGRAMS = unittester
 noinst_bindir = $(abs_top_builddir)/source/unix/asc/
 
 
-commonSources   = unitctrl.cpp soundList.cpp typen.cpp \
+commonSources   = soundList.cpp typen.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp palette.cpp \
 newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
@@ -54,6 +54,6 @@ nodist_asc_SOURCES = $(commonSources) sg.cpp
 asc_LDADD = $(commonLibs)
 
 nodist_unittester_SOURCES  =  $(commonSources) 
-unittester_LDADD = $(commonLibs) $(top_builddir)/source/unittests/libunittests.la  
+unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
 
 

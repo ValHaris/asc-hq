@@ -23,7 +23,7 @@
 
 #include "internalAmmoTransferDialog.h"
 
-#include "../unitctrl.h"
+// #include "../unitctrl.h"
 #include "../containercontrols.h"
 #include "../gameoptions.h"
 #include "../actions/servicing.h"
@@ -464,8 +464,3 @@ void internalAmmoTransferWindow ( Vehicle* vehicle )
       iatw.RunModal();
    }
 }
-/*
-void ammoTransferWindow ( VehicleService* serviceAction, ContainerBase* destination )
-{
-
-}*/

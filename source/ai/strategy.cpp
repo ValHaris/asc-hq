@@ -18,6 +18,7 @@
 
 #include "ai_common.h"
 
+#include "../actions/moveunitcommand.h"
 
 
 void AI::findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x, int y )
@@ -53,8 +54,7 @@ AI::AiResult AI::strategy( void )
                   int orgypos = veh->ypos ;
                   */
    
-                  VehicleMovement vm ( mapDisplay, NULL );
-                  if ( vm.available ( veh )) {
+                  if ( MoveUnitCommand::avail ( veh )) {
                      MapCoordinate3D dest;
    
                      AI::Section* sec = sections.getBest ( 0, veh, &dest, true );

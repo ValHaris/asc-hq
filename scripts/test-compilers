@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+use strict;
+
+my %result;
+
+my @compilers=qw( 3.4 4.0 4.1 4.2 4.3 );
+
+my $output = "";  
+# $output = " > /dev/null";
+
+foreach my $compiler ( @compilers ) {
+   system("make clean");
+   print "Compiling with $compiler ... \n";
+   $ENV{CC}  = "gcc-$compiler";
+   $ENV{CXX} = "g++-$compiler";
+   my $fail = "";
+   system("./configure $output" ); 
+   if ( $? ) {
+      $fail = "failed: ";
+   } else {
+      system("make -j 4 $output");
+      if ( $? ) {
+         $fail = "failed: ";
+      } else {
+         $fail = "sucess: ";
+      }
+   }
+   
+   $fail .= `gcc-$compiler --version`;
+   $result{$compiler} = $fail ;
+}
+
+foreach ( sort keys ( %result )) {
+   print "$result{$_} \n";
+}

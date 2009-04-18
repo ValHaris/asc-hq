@@ -1,6 +1,10 @@
-//     $Id: fileio.h,v 1.4 2001-10-11 10:41:06 mbickel Exp $
+//     $Id: fileio.h,v 1.5 2009-04-18 13:48:41 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.4  2001/10/11 10:41:06  mbickel
+//      Restructured platform fileio handling
+//      Added map archival information to mapeditor
+//
 //     Revision 1.3  2001/05/18 22:30:30  mbickel
 //      The data file is now installed in the correct directory
 //      If the installation directory is changed with configure, the new path

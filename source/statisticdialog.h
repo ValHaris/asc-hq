@@ -1,4 +1,4 @@
-//     $Id: statisticdialog.h,v 1.1 2004-01-21 14:43:00 mbickel Exp $
+//     $Id: statisticdialog.h,v 1.2 2009-04-18 13:48:38 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de

@@ -27,7 +27,6 @@
 #include <cstring>
 
 #include "loadbi3.h"
-#include "newfont.h"
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
@@ -35,6 +34,7 @@
 #include "gameoptions.h"
 #include "graphicset.h"
 #include "spfst.h"
+#include "spfst-legacy.h"
 #include "loaders.h"
 #include "dialog.h"
 #include "itemrepository.h"
@@ -1620,7 +1620,7 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
     } /* endcatch */
 
     if ( !error )
-       calculateallobjects();
+       calculateallobjects( actmap );
     if ( missing[0] ) {
       if ( errorOutput )
          (*errorOutput)=missing;

@@ -58,6 +58,7 @@
 #include "widgets/textrenderer.h"
 #include "unitset.h"
 
+#include "spfst-legacy.h"
 
 
 #define markedlettercolor red

@@ -1,6 +1,9 @@
-//     $Id: ErrorMessage.java,v 1.2 2000-10-13 13:15:46 schelli Exp $
+//     $Id: ErrorMessage.java,v 1.3 2009-04-18 13:48:40 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2000/10/13 13:15:46  schelli
+//     *** empty log message ***
+//
 
 /*
  * ErrorMessage.java

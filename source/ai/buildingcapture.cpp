@@ -17,6 +17,7 @@
 
 #include "ai_common.h"
 
+#include "../actions/moveunitcommand.h"
 
 float AI :: getCaptureValue ( const Building* bld, Vehicle* veh  )
 {
@@ -100,16 +101,16 @@ bool SearchReconquerBuilding :: canUnitCapture( Vehicle* eht )
 void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
 {
       Vehicle* eht = gamemap->getField(mc)->vehicle;
-      // Building* bld = getfield(xp,yp)->building;
       if ( eht )
          if ( ai.getPlayer().diplomacy.isHostile( eht->getOwner() ) ) {
             if ( canUnitCapture ( eht )) {
-               VehicleMovement vm ( NULL );
-               if ( vm.available ( eht )) {
-                  vm.execute ( eht, -1, -1, 0 , -1, -1 );
-                  if ( vm.reachableFields.isMember ( startPos ))
+               if ( MoveUnitCommand::avail( eht )) {
+                  MoveUnitCommand muc ( eht );
+                  muc.searchFields();
+                  if( muc.isFieldReachable( startPos, false ))
                      unitfound(eht);
                }
+               
             }
             else
                if (mode >= 2)

@@ -18,6 +18,7 @@
 
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
+#include "../actions/moveunitcommand.h"
 
 const int value_armorfactor = 100;
 const int value_weaponfactor = 3000;
@@ -365,23 +366,18 @@ void AI :: calculateFieldInformation ( void )
 
                   fld->vehicle->setMovement ( fld->vehicle->maxMovement(), 0);
 
-                  VehicleMovement vm ( NULL, NULL );
-                  if ( vm.available ( fld->vehicle )) {
-                     vm.execute ( fld->vehicle, -1, -1, 0, -1, -1 );
+                  if ( MoveUnitCommand::avail ( fld->vehicle )) {
+                     MoveUnitCommand muc ( fld->vehicle );
+                     muc.searchFields();
 
-                     // Now we cycle through all fields that are reachable...
-                     for ( int f = 0; f < vm.reachableFields.getFieldNum(); f++ ) {
-                        int xp, yp;
-                        vm.reachableFields.getFieldCoordinates ( f, &xp, &yp );
-                        // ... and check for each which fields are threatened if the unit was standing there
-                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat );
-                     }
-
-                     for ( int g = 0; g < vm.reachableFieldsIndirect.getFieldNum(); g++ ) {
-                        int xp, yp;
-                        vm.reachableFieldsIndirect.getFieldCoordinates ( g, &xp, &yp );
-                        wr.run ( fld->vehicle, xp, yp, singleUnitThreat );
-                     }
+                     const set<MapCoordinate3D>& fields =  muc.getReachableFields();
+                     for ( set<MapCoordinate3D>::const_iterator i = fields.begin(); i != fields.end(); ++i )
+                        wr.run ( fld->vehicle, i->x, i->y, singleUnitThreat );
+                  
+                     const set<MapCoordinate3D>& ifields  =  muc.getReachableFieldsIndirect();
+                     for ( set<MapCoordinate3D>::const_iterator i = ifields.begin(); i != ifields.end(); ++i )
+                        wr.run ( fld->vehicle, i->x, i->y, singleUnitThreat );
+                     
                   }
                   tus.restore();
                } else
@@ -413,6 +409,7 @@ void AI :: calculateFieldInformation ( void )
          fi.control = c;
       }
    }
+   delete[] singleUnitThreat;
 }
 
 
@@ -580,12 +577,17 @@ AI :: Sections :: Sections ( AI* _ai ) : ai ( _ai ) , section ( NULL )
    numY = ai->activemap->ysize * 2 / sizeY + 1;
 }
 
-void AI :: Sections :: reset ( void )
+void AI :: Sections :: reset ()
 {
    if ( section ) {
       delete[] section;
       section = NULL;
    }
+}
+
+AI :: Sections :: ~Sections()
+{
+   reset();  
 }
 
 

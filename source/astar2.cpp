@@ -64,7 +64,7 @@ AStar :: AStar ( GameMap* actmap, Vehicle* veh )
    tempsMarked = NULL;
    _path = NULL;
    _veh = veh;
-   _actmap = actmap;
+   gamemap = actmap;
    MAXIMUM_PATH_LENGTH = maxint;
 }
 
@@ -103,7 +103,7 @@ int AStar::dist( HexCoord a, HexCoord b )
 
 int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
 {
-    if ( !fieldAccessible ( getfield ( x2, y2 ), vehicle ))
+    if ( !fieldAccessible ( gamemap->getField ( x2, y2 ), vehicle ))
        return MAXIMUM_PATH_LENGTH;
 
     return calcMoveMalus ( MapCoordinate3D(x1, y1, vehicle->height), MapCoordinate3D(x2, y2, vehicle->height), vehicle ).first;
@@ -139,14 +139,13 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 {
     _path = &path;
     Vehicle* veh = _veh;
-    GameMap* actmap = _actmap;
 
-    if ( actmap->getField(A.m, A.n)->unitHere(veh) )
+    if ( gamemap->getField(A.m, A.n)->unitHere(veh) )
        if ( !veh->canMove() )
           return;
 
-    for ( int y = actmap->xsize * actmap->ysize -1; y >= 0; y-- )
-       actmap->field[y].temp3 = DirNone;
+    for ( int y = gamemap->xsize * gamemap->ysize -1; y >= 0; y-- )
+       gamemap->field[y].temp3 = DirNone;
 
     Node N;
     Container open;
@@ -199,7 +198,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
             HexCoord hn = N.h;
             getnextfield ( hn.m, hn.n, d );
             // If it's off the end of the map, then don't keep scanning
-            if( hn.m < 0 || hn.n < 0 || hn.m >= actmap->xsize || hn.n >= actmap->ysize || !fieldAccessible ( getfield ( hn.m, hn.n ), veh ))
+            if( hn.m < 0 || hn.n < 0 || hn.m >= gamemap->xsize || hn.n >= gamemap->ysize || !fieldAccessible ( gamemap->getField ( hn.m, hn.n ), veh ))
                 continue;
 
             // cursor.gotoxy ( hn.m, hn.n );
@@ -217,12 +216,12 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 
             N2.hval = dist( hn, B );
             // If this spot (hn) hasn't been visited, its mark is DirNone
-            if( getfield (hn.m,hn.n)->temp3 == DirNone ) {
+            if( gamemap->getField (hn.m,hn.n)->temp3 == DirNone ) {
 
                 // The space is not marked
 
                 if ( N.gval < MAXIMUM_PATH_LENGTH ) {
-                   getfield (hn.m,hn.n)->temp3 = ReverseDirection(d);
+                   gamemap->getField (hn.m,hn.n)->temp3 = ReverseDirection(d);
                    open.push_back( N2 );
                    push_heap( open.begin(), open.end(), comp );
                 }
@@ -243,7 +242,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
                     Node N3 = *find1;
                     if( N3.gval > N2.gval )
                     {
-                        getfield (hn.m,hn.n)->temp3 = ReverseDirection(d);
+                        gamemap->getField (hn.m,hn.n)->temp3 = ReverseDirection(d);
                         // Replace N3 with N2 in the open list
                         Container::iterator last = open.end() - 1;
                         *find1 = *last;
@@ -263,7 +262,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
         HexCoord h = B;
         while( !(h == A) )
         {
-            HexDirection dir = HexDirection ( getfield (h.m, h.n)->temp3 );
+            HexDirection dir = HexDirection ( gamemap->getField (h.m, h.n)->temp3 );
             tempPath.push_back( int( ReverseDirection( dir ) ) );
             getnextfield ( h.m, h.n, dir );
         }
@@ -284,12 +283,12 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
         // No path
     }
 
-    actmap->cleartemps ( 4 ); 
+    gamemap->cleartemps ( 4 ); 
 }
 
 int AStar::getDistance ( )
 {
-   if ( !_path || !_veh || ! _actmap )
+   if ( !_path || !_veh || ! gamemap )
       return -1;
 
    if ( _path->size() <= 0 )
@@ -297,7 +296,7 @@ int AStar::getDistance ( )
 
    int dist = 0;
    for ( Path::iterator i = _path->begin(); i != _path->end(); i++ )
-      dist += _actmap->getField ( *i )->getmovemalus ( _veh->typ->movemalustyp );
+      dist += gamemap->getField ( *i )->getmovemalus ( _veh->typ->movemalustyp );
 
    return dist;
 }
@@ -323,16 +322,16 @@ bool AStar::fieldVisited ( int x, int y)
 
 void AStar::findAllAccessibleFields ( int maxDist )
 {
-   _actmap->cleartemps ( 1 );
+   gamemap->cleartemps ( 1 );
 
    MAXIMUM_PATH_LENGTH = maxDist;
 
    Path dummy;
-   findPath ( dummy, _actmap->xsize, _actmap->ysize );  //this field does not exist...
+   findPath ( dummy, gamemap->xsize, gamemap->ysize );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-      _actmap->getField ( (*i).h.m, (*i).h.n )->a.temp = 1;
+      gamemap->getField ( (*i).h.m, (*i).h.n )->a.temp = 1;
 
-   tempsMarked = _actmap;
+   tempsMarked = gamemap;
 }
 
 

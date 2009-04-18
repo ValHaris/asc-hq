@@ -35,7 +35,7 @@
 #include "spfst.h"
 #include "itemrepository.h"
 
-
+#if 0
 treactionfirereplay :: treactionfirereplay ( void )
 {
    unit = NULL;
@@ -133,6 +133,7 @@ treactionfirereplay :: ~treactionfirereplay ( )
 }
 
 
+#endif
 
                 typedef struct tunitlist* punitlist;
                 struct tunitlist {
@@ -325,7 +326,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
                   if ( context.display ) {
                      MessagingHub::Instance().statusInformation( "attacking with weapon " + ASCString::toString( atw->num[num] ));
 
-                     if ( fieldvisiblenow ( getfield (attacker->xpos, attacker->ypos ), gamemap->getPlayerView())) {
+                     if ( fieldvisiblenow ( gamemap->getField (attacker->xpos, attacker->ypos ), gamemap->getPlayerView())) {
                         ++visibility;
                         context.display->cursor_goto( attacker->getPosition() );
                         int t = ticker;

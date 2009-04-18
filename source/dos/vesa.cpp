@@ -1,6 +1,9 @@
-//     $Id: vesa.cpp,v 1.3 2000-10-18 17:09:43 mbickel Exp $
+//     $Id: vesa.cpp,v 1.4 2009-04-18 13:48:39 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.3  2000/10/18 17:09:43  mbickel
+//      Fixed eventhandling for DOS
+//
 //     Revision 1.2  2000/08/21 17:51:04  mbickel
 //      Fixed: crash when unit reaching max experience
 //      Fixed: crash when displaying research image

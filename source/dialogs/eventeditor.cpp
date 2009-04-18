@@ -48,6 +48,8 @@ class EventEditor : public ASC_PG_Dialog {
       PG_ListBox* playerlistbox;
       PG_PropertyEditor* properties;
 
+      GameMap* gamemap;
+      
       bool setupEvent()
       {
          if ( event->action )
@@ -159,7 +161,7 @@ class EventEditor : public ASC_PG_Dialog {
       }
       
    public:
-      EventEditor( Event* event ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 700, 500 ), "Edit Event" ), result(false)
+      EventEditor( GameMap* actmap, Event* event ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 700, 500 ), "Edit Event" ), result(false), gamemap(actmap)
       {
          this->event = event;
 
@@ -215,7 +217,7 @@ class EventEditor : public ASC_PG_Dialog {
          playerlistbox = (new MultiListBox( this, PG_Rect( labelWidth+30, ypos, 150, 160 )))->getListBox();
          for ( int i = 0; i < event->getMap()->getPlayerCount(); ++i ) {
             PG_ListBoxItem* item;
-            if ( actmap->player[i].exist() )
+            if ( gamemap->player[i].exist() )
                item = new PG_ListBoxItem( playerlistbox, 20, event->getMap()->player[i].getName() );
             else
                item = new PG_ListBoxItem( playerlistbox, 20, "inactive player " + ASCString::toString(i) );
@@ -256,9 +258,9 @@ class EventEditor : public ASC_PG_Dialog {
 
 
 
-bool   createevent( Event* event ) 
+bool   createevent( GameMap* gamemap, Event* event ) 
 {
-   EventEditor ee ( event );
+   EventEditor ee ( gamemap, event );
    ee.Show();
    ee.RunModal();
    return ee.GetResult();
@@ -269,15 +271,17 @@ bool   createevent( Event* event )
 
 class EventList : public ASC_PG_Dialog {
    private:
+      GameMap* gamemap;
+      
       bool ButtonNew()
       {
-         Event* ev = new Event(*actmap);
-         if ( !createevent( ev ) ) {
+         Event* ev = new Event(*gamemap);
+         if ( !createevent( gamemap, ev ) ) {
             delete ev;
             return true;
          }
 
-         actmap->events.push_back( ev );
+         gamemap->events.push_back( ev );
 
          updateListbox();
          return true;
@@ -289,13 +293,13 @@ class EventList : public ASC_PG_Dialog {
          if ( marked < 0 )
             return false;
          
-         GameMap::Events::iterator e = actmap->events.begin();
-         for ( int t = 0; t < marked && e != actmap->events.end(); t++ )
+         GameMap::Events::iterator e = gamemap->events.begin();
+         for ( int t = 0; t < marked && e != gamemap->events.end(); t++ )
             ++e;
 
-         if ( e != actmap->events.end() ) {
+         if ( e != gamemap->events.end() ) {
             delete *e;
-            actmap->events.erase ( e );
+            gamemap->events.erase ( e );
             updateListbox();
          }
          
@@ -304,7 +308,7 @@ class EventList : public ASC_PG_Dialog {
 
       bool ButtonEdit()
       {
-         if ( actmap->events.size() ) {
+         if ( gamemap->events.size() ) {
             tmemorystreambuf buf;
             
 
@@ -312,8 +316,8 @@ class EventList : public ASC_PG_Dialog {
             if ( marked < 0 )
                return false;
             
-            GameMap::Events::iterator e = actmap->events.begin();
-            for ( int t = 0; t < marked && e != actmap->events.end(); t++ )
+            GameMap::Events::iterator e = gamemap->events.begin();
+            for ( int t = 0; t < marked && e != gamemap->events.end(); t++ )
                ++e;
 
             {
@@ -321,7 +325,7 @@ class EventList : public ASC_PG_Dialog {
                (*e)->write ( stream );
             }
 
-            if ( ! createevent( *e ) ) {
+            if ( ! createevent( gamemap, *e ) ) {
                      // cancel pressed, we are restoring the original event
                tmemorystream stream ( &buf, tnstream::reading );
                (*e)->read ( stream );
@@ -346,7 +350,7 @@ class EventList : public ASC_PG_Dialog {
       void updateListbox()
       {
          listbox->DeleteAll();
-         for ( GameMap::Events::iterator i = actmap->events.begin(); i != actmap->events.end(); ++i ) {
+         for ( GameMap::Events::iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
             ASCString text = (*i)->action->getName();
             text += " - " + (*i)->description;
             
@@ -358,7 +362,7 @@ class EventList : public ASC_PG_Dialog {
       
       
    public:
-      EventList() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 400 ), "Edit Events" )
+      EventList( GameMap* gameMap) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 400 ), "Edit Events" ) , gamemap ( gameMap )
       {
          int w = 500;
          PG_Button* b = new PG_Button( this, PG_Rect ( w, 40, 90, 25 ), "~N~ew" );
@@ -382,9 +386,9 @@ class EventList : public ASC_PG_Dialog {
 };
 
 
-void    eventEditor(void)
+void    eventEditor( GameMap* gamemap )
 {
-   EventList    te;
+   EventList    te ( gamemap );
    te.Show();
    te.RunModal();
 }

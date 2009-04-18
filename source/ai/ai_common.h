@@ -40,7 +40,6 @@
 #include "../vehicletype.h"
 #include "../buildingtype.h"
 #include "../misc.h"
-#include "../newfont.h"
 #include "../events.h"
 #include "../spfst.h"
 #include "../dlg_box.h"
@@ -68,7 +67,7 @@ extern const int currentServiceOrderVersion;
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
        {
           int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
-          if ( getfield ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
+          if ( ai->getMap()->getField ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
              cost += 2;
           return cost;
        };
@@ -99,11 +98,11 @@ extern const int currentServiceOrderVersion;
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
        {
           int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
-          int visibility = getfield ( x2, y2 )->visible;
+          int visibility = ai->getMap()->getField ( x2, y2 )->visible;
           int visnum = 0;
           int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
-             if ( actmap->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
+             if ( ai->getMap()->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
                 enemynum++;
                 int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )
@@ -130,7 +129,7 @@ extern const int currentServiceOrderVersion;
           int visnum = 0;
           int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
-             if ( actmap->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
+             if ( ai->getMap()->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
                 enemynum++;
                 int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )
