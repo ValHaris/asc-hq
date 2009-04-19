@@ -631,7 +631,7 @@ AI::AiResult AI::tactics( void )
                displaymessage2("tact: processing operation %d", unitCounter );
                checkKeys();
    
-               int stat = changeVehicleHeight ( veh, NULL );
+               int stat = changeVehicleHeight ( veh, -1 );
                
                if ( !getMap()->getUnit(*i) )
                   continue;

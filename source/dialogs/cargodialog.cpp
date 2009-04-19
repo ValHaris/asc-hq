@@ -1364,6 +1364,16 @@ class MatterAndMiningBaseWindow : public SubWindow {
       virtual bool invertSlider() { return false; };
    private:
    
+      bool scrollPos( long pos )
+      {
+         if ( invertSlider() )
+            pos = 100 - pos;
+         setnewpower( pos );
+         update();
+         return true;
+      };
+      
+      
       bool scrollTrack( long pos )
       {
          if ( invertSlider() )
@@ -1428,7 +1438,7 @@ class MatterAndMiningBaseWindow : public SubWindow {
          if ( first && slider ) {
             first = false;
             slider->SetRange( 0, 100 );
-            slider->sigScrollPos.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollTrack ));
+            slider->sigScrollPos.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollPos ));
             slider->sigScrollTrack.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollTrack ));
 
             for ( int r = 0; r < 3; ++r )
