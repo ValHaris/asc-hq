@@ -35,7 +35,7 @@ available to protect your navy from enemy air raids.]
       Weapon0.Punch@MaxRange = 60
 
       Weapon1 ->* VehicleType.SAMH 
-      Weapon1.MaxRange = 50
+      Weapon1.MaxRange = 60
       Weapon1.Ammo = 8
       Weapon1.ReactionFireShots = 3
 

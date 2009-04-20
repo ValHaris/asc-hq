@@ -1,13 +1,13 @@
 VehicleType { 
    Name = PUNCH
-   parent = 400 401 402 412
+   parent = 289
    ID = 57
 
    Description = battle train
    picture = MK1t_punch.pcx
    InfoImage = mk1t_punch.jpg
    WreckageObject = 457
-   GuideSortHelp = 503 552 0 0 1 0 0 0 0 0
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Combat Train are excellent defensive trains. They are powerful,
               heavily armored and fast. In addition, they have machine gun
               turrets mounted on the sides that are designed to deal with
@@ -15,25 +15,16 @@ VehicleType {
               they are bound to tracks.
               InfoImage = BananaJoe]
 
-   Armor += 450
+   Armor += 150
    Transportation ->* VehicleType.TransLowTrooper2 
 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 2720
-   } Tank
-   FuelConsumption = 16
    Movement += 0 0 0 10 0 0 0 0 
-   Weight = 250
+
    Weapons { 
       Initiative = 0
       Number = 2
-      Weapon0 ->* VehicleType.Artillery 
-      Weapon0.MaxRange = 20
-      Weapon0.Ammo = 14
-      Weapon0.Punch@MaxRange = 85
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 10
+      Weapon0.Punch@MinRange = 10
 
       Weapon1 ->* VehicleType.MiniGun 
       Weapon1.Ammo = 20

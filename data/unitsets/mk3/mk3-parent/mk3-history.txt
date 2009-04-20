@@ -5,6 +5,13 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+19.04.2009 (GAMER)
+-BuildingPio erobert Gebäude
+-Visby Waffenupgrade
+-Ticonderoga, Waffenumbau
+-Arsenal, RF auch auf Bodeneinheiten
+-Panzerzug = default
+__________________
 11.04.2009 (GAMER)
 -Elite/Special-Pio, an neue Kosten angepasst
 -Doppelwaffen entfernt: Arsenal, Baynunah, Burke, Daring, Iowa, Meko, Mirage, Skjold, Ticonderoga, P1000

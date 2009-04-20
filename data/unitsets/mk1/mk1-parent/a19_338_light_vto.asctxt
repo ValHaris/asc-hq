@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 338 513 561 0 0 0 0 0 0 0
 
    Features += cruiserlanding
-   Weight = 75
+   Weight = 60
 
    Tank { 
       Energy = 0

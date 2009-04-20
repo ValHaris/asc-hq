@@ -5,7 +5,8 @@ ObjectType {
    Name = Beton 
    TechAdapterRequired = o2094
 
-   LinkableObjects = 2095
+;                         ISG-Beton 
+   LinkableObjects = 2095 12012
    LinkableTerrain = 10
    NetBehaviour = 
    TerrainAccess.terrain_any = Very_shallow_water shallow_water water river  

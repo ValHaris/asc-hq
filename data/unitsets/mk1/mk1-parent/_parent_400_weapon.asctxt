@@ -1200,7 +1200,7 @@
 ; orbit cruise missile      
       OCM { 
          Type = cruise_missile shootable 
-         targets = floating ground_level 
+         targets = submerged floating ground_level 
          shotFrom = orbit 
          MaxRange = 70
          MinRange = 10
@@ -1210,7 +1210,7 @@
          Reactionfireshots = 0
          HitAccuracy { 
             d6 = 0
-            d5 = 0
+            d5 = 60
             d4 = 100
             d3 = 0
             d2 = 0
@@ -1362,8 +1362,8 @@
          MaxRange = 10
          MinRange = 10
          Ammo = 2
-         Punch@MaxRange = 90
-         Punch@MinRange = 90
+         Punch@MaxRange = 110
+         Punch@MinRange = 110
          HitAccuracy { 
             d6 = 0
             d5 = 0
@@ -1391,14 +1391,14 @@
          MaxRange = 10
          MinRange = 10
          Ammo = 2
-         Punch@MaxRange = 100
-         Punch@MinRange = 100
+         Punch@MaxRange = 120
+         Punch@MinRange = 120
          HitAccuracy { 
             d6 = 0
             d5 = 0
             d4 = 0
             d3 = 0
-            d2 = 50
+            d2 = 80
             d1 = 100
             0 = 0
             u1 = 0
@@ -2019,14 +2019,14 @@
       } OGL
 
       ML { 
-         Name = Multi Target Missile
+         Name = Multi Target Laser
          Type = laser shootable 
          targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
          shotFrom = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
          MaxRange = 20
          MinRange = 10
          Ammo = 3
-	      LaserRechargeRate = 2
+	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
             material = 40

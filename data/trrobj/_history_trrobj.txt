@@ -4,7 +4,12 @@ Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 
 __________________
-Beta-09-04
+18.04.2009 (GAMER)
+-Adapter DeepSeaMinerals hinzugefügt
+-Hafenbton und Hafenkante verlinken zu ISG-Beton
+-Fluß jetzt unterhalb von Lava
+__________________
+11.04.2009 (GAMER)
 -Tiefseekristalle hinzugefügt
 -Kristalle 350 Armor
 __________________

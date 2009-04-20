@@ -17,8 +17,8 @@ VehicleType {
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 20
-      Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 125
       Weapon0.ReactionFireShots = 2
 
       Weapon1 ->* VehicleType.Ship_Flak 

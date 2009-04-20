@@ -12,7 +12,7 @@ ObjectType {
    NetBehaviour = 
 
    Armor = 0
-   Height = 87 ;17-Aug 2003
+   Height = 85 ;17-Aug 2003
 
 ;dry
    Movemalus_plus =   0

@@ -10,7 +10,11 @@ VehicleType {
 ;   Infotext = []
 
    View += 20
-   Transportation ->* VehicleType.TransLowTrooper2 
+   Transportation ->* VehicleType.TransLowTrooper2
+   Transportation.MaxLoadableUnitSize = 6
+   Transportation.MaxLoadableMass = 6
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem1 ->* VehicleType.Fl2Sub
 
    Weapons { 
       Initiative = 0
@@ -20,8 +24,9 @@ VehicleType {
       Weapon0.Punch@MaxRange = 85
       Weapon0.Punch@MinRange = 100
 
-      Weapon1 ->* VehicleType.Ship_MG
+      Weapon1 ->* VehicleType.BigMiniGun
       Weapon1.Ammo = 10
+      Weapon1.ReactionFireShots = 1
 
       Weapon2 ->* VehicleType.Flak
       Weapon2.Ammo = 10

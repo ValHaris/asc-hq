@@ -5,6 +5,18 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 __________________
+18.04.2009 (GAMER)
+-GASP SAM 6 Felder Reichweite
+-Shine 2x RF 4 Felder
+-Jellyfisch, Waffen/Armor upgrade
+-Streak, Torpedo auch auf U-Boote
+-Tide, kann 1 Roboter transportieren +MiniGun
+-Punch umgestellt auf Default Panzerzug
+default:
+-leichte Senkrechtstarter, 60 Gewicht, landet auf Zerstörerklasse
+-neue default unit: BattleTrain
+-CM Spacestation auch auf submerged
+__________________
 11.04.2009 (GAMER)
 -MBV an neue Preise angepasst
 -Doppelwaffen entfernt, Armadillo,Armadillo2,GASP,Gunboat,Homer,Shark,CAD
