@@ -14,7 +14,7 @@ Das Zenit ist ein typischer Vertreter dieser Klasse. Seine stärkste Waffe ist ei
 
    Weapons { 
       Initiative = 0
-      Number = 5
+      Number = 4
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 80
       Weapon0.MinRange = 40
@@ -29,18 +29,14 @@ Das Zenit ist ein typischer Vertreter dieser Klasse. Seine stärkste Waffe ist ei
       Weapon1.Ammo = 14
       Weapon1.Punch@MaxRange = 90
       Weapon1.Punch@MinRange = 120
+      Weapon1.ReactionfireShots = 2
 
-      Weapon2 ->* VehicleType.Artillery 
-      Weapon2.MaxRange = 50
-      Weapon2.Ammo = 14
-      Weapon2.Punch@MaxRange = 85
-      Weapon2.Punch@MinRange = 110
+      Weapon2 ->* VehicleType.Ship_Flak 
+      Weapon2.Ammo = 20
+      Weapon2.ReactionFireShots = 1
 
-      Weapon3 ->* VehicleType.Ship_Flak 
-      Weapon3.Ammo = 20
-
-      Weapon4 ->* VehicleType.SAMH 
-      Weapon4.ReactionFireShots = 1
-      Weapon4.Ammo = 4
+      Weapon3 ->* VehicleType.SAMH 
+      Weapon3.ReactionFireShots = 1
+      Weapon3.Ammo = 4
    } Weapons
 } VehicleType

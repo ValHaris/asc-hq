@@ -12,7 +12,7 @@ Der Marauder ist eines der schnellsten Schiffe. Sobald er auf seinen Tragflächen
 
    Weapons { 
       Initiative = 0
-      Number = 2
+      Number = 3
       Weapon0 ->* VehicleType.STorp 
       Weapon0.shotFrom = floating ground_level
       Weapon0.MaxRange = 30

@@ -8,7 +8,7 @@ VehicleType {
    InfoImage = mk5s_stahlschwein.jpg
    InfoText = []
 
-   Armor += 200
+   Armor += 700
    Transportation ->* VehicleType.noTrans 
    Tank.Material = 0
    Features += move_after_attack

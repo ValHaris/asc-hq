@@ -24,15 +24,12 @@ Aufgrund dieser Änderungen sind die Torpedos, sowie die Luftabwehrraketen daher 
    SelfRepairRate = 5
    Weight += 500
 
-   Transportation { 
-      MaxLoadableUnits = 5
-      MaxLoadableUnitSize = 30
-      MaxLoadableMass = 90
-      CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship 
-      EntranceSystemNum = 2
-      EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem1 ->* VehicleType.SubIO
-   } Transportation
+   Transportation ->* VehicleType.TransSubTrooper 
+   Transportation.MaxLoadableUnits = 3
+   Transportation.MaxLoadableUnitSize = 30
+   Transportation.MaxLoadableMass = 90
+   Transportation.CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship 
+
    Tank { 
       Material = 3000
       fuel = 6000
@@ -42,17 +39,17 @@ Aufgrund dieser Änderungen sind die Torpedos, sowie die Luftabwehrraketen daher 
    WaitForAttack = true
    Weapons { 
       Initiative = 0
-      Number = 9
+      Number = 6
       Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 6
+      Weapon0.Ammo = 30
 
       Weapon1 ->* VehicleType.CMU 
-      Weapon1.Ammo = 4
+      Weapon1.Ammo = 6
 
       Weapon2 ->* VehicleType.ShM 
       Weapon2.MaxRange = 70
       Weapon2.MinRange = 30
-      Weapon2.Ammo = 6
+      Weapon2.Ammo = 8
       Weapon2.Punch@MaxRange = 95
       Weapon2.Punch@MinRange = 95
       Weapon2.ReactionFireShots = 0
@@ -60,20 +57,14 @@ Aufgrund dieser Änderungen sind die Torpedos, sowie die Luftabwehrraketen daher 
       Weapon3 ->* VehicleType.SAM 
       Weapon3.shotFrom = submerged floating 
       Weapon3.MaxRange = 20
-      Weapon3.Ammo = 6
+      Weapon3.Ammo = 15
       Weapon3.HitAccuracy.u2 = 100
       Weapon3.HitAccuracy.u3 = 90
       Weapon3.ReactionFireShots = 1
 
-      Weapon4 ->* VehicleType.AmmoTorp
-      Weapon4.Ammo = 30
-      Weapon5 ->* VehicleType.AmmoMG
-      Weapon5.Ammo = 100
-      Weapon6 ->* VehicleType.AmmoBomb
-      Weapon6.Ammo = 30
-      Weapon7 ->* VehicleType.AmmoLM
-      Weapon7.Ammo = 30
-      Weapon8 ->* VehicleType.AmmoSM
-      Weapon8.Ammo = 30
+      Weapon4 ->* VehicleType.AmmoMG
+      Weapon4.Ammo = 100
+      Weapon5 ->* VehicleType.AmmoBomb
+      Weapon5.Ammo = 30
    } Weapons
 } VehicleType

@@ -19,7 +19,7 @@ Natürlich kann ein solch großes Schiff nicht in Küstengewässern operieren. Das g
    
    Weapons { 
       Initiative = 0
-      Number = 9
+      Number = 7
       Weapon0 ->* VehicleType.Ship_Artillery 
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 14
@@ -35,7 +35,7 @@ Natürlich kann ein solch großes Schiff nicht in Küstengewässern operieren. Das g
       Weapon1.ReactionFireShots = 1
 
       Weapon2 ->* VehicleType.DCS 
-      Weapon2.Ammo = 6
+      Weapon2.Ammo = 10
       Weapon2.Punch@MaxRange = 100
       Weapon2.Punch@MinRange = 100
 
@@ -47,8 +47,6 @@ Natürlich kann ein solch großes Schiff nicht in Küstengewässern operieren. Das g
       Weapon4.Ammo = 16
 
       Weapon5 ->* VehicleType.AmmoGM
-      Weapon6 ->* VehicleTYpe.AmmoAM
-      Weapon7 ->* VehicleType.AmmoTorp
-      Weapon8 ->* VehicleType.AmmoBomb
+      Weapon6 ->* VehicleType.AmmoTorp
    } Weapons
 } VehicleType

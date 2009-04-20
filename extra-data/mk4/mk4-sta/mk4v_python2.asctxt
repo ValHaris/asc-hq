@@ -5,7 +5,8 @@ VehicleType {
    GuideSortHelp = 0 0 0 0 4 0 0 0 0 0
 
    Description = Raketenpanzer
-   Infotext = [ Defensiver Raketenpanzer]
+   Infotext = [Der Python2 ist eine neue Variante des Python. Er verfügt über dieselben Panzerungswerte. Auch das Gewicht und die Motorisierung sind gleich. Durch diverseModifikationen verringerte sich allerdings die Höchstgeschwindigkeit. Diese Änderungen betreffen die Bewaffnung. Hier wurden statt der waagerechten Lafetten senkrechte Startvorrichtungen in den Geschützturm eingebaut. Die dadurch mögliche hohe Flugbahn erhöht die Reichweite der Raketen enorm und verschafft diesem Panzer ein sicheres Einsatzgebiet hinter der Front. Von dort kann er mit seinen überschweren Raketen Schlüsseleinheiten im Hinterland der feindlichen Kampfverbände zerstören. Die eingesetzten Geschosse sind dieselben wie beim Python und in der Lage, an allen Einheiten schwere Schäden anzurichten. Eine Bekämpfung von Infanterie ist aber natürlich nicht möglich Die geänderte Abschußvorrichtung hat natürlich einen gravierenden Nachteil: Die Bekämpfung von Einheiten im Nahkampf oder auch auf kurze Distanz kann mit dieser Waffe nicht erfolgen. Hierfür ist leidglich eine im drehbaren Außenkranz des Turmes integrierte Maschinenkanone eingebaut. Deshalb benötigt der Python2 auf jeden Fall zusätzlichen Schutz! Der Munitionsvorrat ist aufgrund der Konstruktion ebenfalls recht gering, eine Versorgung im Hinterland stellt aber, im Gegensatz zum Python, kein echtes Problem dar. Der gesamte Panzer muß zum Schießen auf Hydraulischen Stelzen leicht angehoben werden, um Beschädigungen durch den nach unten gerichteten Abgasstrahl der Raketen beim Abschuß zu vermeiden. Deshalb benötigt der Python2 einige Zeit bis zur Feuerbereitschaft. Aufgrund der großen Distanz zum Ziel ist dafür aber der automatische Beschuß anrückender Feindeinheiten möglich, bevor sie selbst in Schlagdistanz kommen. So ist der Python2 im Gegensatz zu seinem Vorgänger eine eher defensive Einheit, kann aber aufgrund seiner Reichweite offensiv sehr gut zur Zerstörung von feindlichen Turrets genutzt werden. 
+   ]
    Picture = mk4v_python2.png
    wreckageobject = 14030
 
@@ -17,7 +18,7 @@ VehicleType {
       Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.SSM 
-      Weapon0.MaxRange = 80
+      Weapon0.MaxRange = 70
       Weapon0.MinRange = 40
       Weapon0.Ammo = 3
       Weapon0.Punch@MaxRange = 90

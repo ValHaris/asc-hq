@@ -1,7 +1,7 @@
 VehicleType { 
    Name = ANACONDA
    ID = 1225
-   parent = 400 401 402 412
+   parent = 289
 
    Description = Kampfpanzerzug
    Infotext = [Panzerzüge sind defensiv. Sie sichern das eigene Hinterland oder riegeln (im Fronteinsatz) durchgebrochene feindliche Truppen ab.
@@ -14,30 +14,19 @@ Nachteile: Keine Offensivwaffe, abhängig von vorhandenen Schienen, Feuerkraft ge
    picture = mk4t_anaconda.png
    Infoimage = mk4t_anaconda.jpg
    wreckageobject = 14225
-   GuideSortHelp = 503 0 0 0 4 0 0 0 0 0
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
-   Armor += 180
-   Transportation ->* VehicleType.TransLowTrooper2
+   Armor -= 100
 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 1700
-   } Tank
-   FuelConsumption = 16
    Movement += 0 0 0 20 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
-      Number = 3
       Weapon0 ->* VehicleType.Tank_Gun 
-      Weapon0.MaxRange = 20
+      Weapon0.MaxRange = 30
       Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 75
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange -= 10
 
-      Weapon1 ->* VehicleType.Flak
-      Weapon1.Ammo = 12
       Weapon1.ReactionFireShots = 1
       
       Weapon2 ->* VehicleType.MiniGun 

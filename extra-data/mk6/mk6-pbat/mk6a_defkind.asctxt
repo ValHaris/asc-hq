@@ -21,7 +21,7 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
 
    Tank.Material = 2000
    Tank.Fuel = 12000
-   movement += 0 0 0 -20 -40 -40 140 0
+   movement += 0 0 0 -40 -50 -50 130 0
    Terrainaccess ->* VehicleType.heli_terrain
    Height = ground_level low_level_flight medium_level_flight high_level_flight
    MovementSound = jet_pass.ogg
@@ -35,12 +35,12 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
       Weapon0.Punch@MinRange = 75
       Weapon0.ReactionFireShots = 2
       Weapon1 ->* VehicleType.AMO
-      Weapon1.MaxRange = 70
+      Weapon1.MaxRange = 60
       Weapon1.Punch@MaxRange = 80
       Weapon1.Punch@MinRange = 80
       Weapon1.ReactionFireShots = 1
       Weapon2 ->* Vehicletype.smASM
-      Weapon2.MaxRange = 60
+      Weapon2.MaxRange = 50
       Weapon2.Punch@MaxRange = 70
       Weapon2.Punch@MinRange = 70
       Weapon2.ReactionFireShots = 1

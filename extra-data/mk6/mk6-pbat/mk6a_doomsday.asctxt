@@ -1,29 +1,37 @@
 VehicleType { 
    Name = DOOMSDAY
-   parent = 400 401 402 498 415 
+   parent = 400 401 402 498 415 15000
    ID = 15329
    Description = space fighter
    Infotext = [#crt# Universeller Raum- und Luftjaeger mit ansprechender Panzerung und Bewaffnung.]
    Picture = mk6a_doomsday.pcx
 
    Armor = 420
-   Weight = 150
+   Weight = 190
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
       fuel = 8000
       Material = 500
    } Tank
-   Features += no_midair_refuel 
    FuelConsumption = 20
    Movement = 0 0 0 60 160 170 180 70 
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 
       Initiative = 0
-      Number = 1
+      Number = 2
       Weapon0 ->* VehicleType.ML 
-      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 80
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.shotFrom = medium_level_flight high_level_flight orbit 
+
+      Weapon1 ->* VehicletYpe.TeccEMPAir
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+      Weapon1.HitAccuracy.d2 = 70
+      Weapon1.HitAccuracy.d1 = 100
+      Weapon1.HitAccuracy.u1 = 0
    } Weapons
 } VehicleType

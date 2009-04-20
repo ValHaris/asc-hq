@@ -15,7 +15,7 @@ VehicleType {
    Transportation ->* VehicleType.TransTurretBig 
 
    Tank.Fuel = 70000
-   Tank.Material = 58000
+   Tank.Material = 70000
    TerrainAccess ->* VehicleType.hoover_terrain
    MovementSound = jet_pass.ogg
    Movement -= 0 0 0 20 20 20 0 0 

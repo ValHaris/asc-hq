@@ -4,11 +4,54 @@ VehicleType {
 
    Name = STORMBRINGER
    Description = Hoehenbomber
-   Infotext = [
-Speziell entwickelt zur Bombardierung von Bodenzielen, fliegt der STORMBRINGER sehr hoch und sehr weit. 
-In dieser Eigenschaft verfügt er über eine tödliche Präzision. Im Kampf gegen Abfangjager ist er allerdings auf 
-schwache Standartbordwaffen angewiesen. Im allgemeinen verfüght er ueber herausragende Faehigkeiten, schnelle 
-chirurgische Eingriffe am Feind vorzunehmen. ]
+   Infotext = [Der Stormbringer ist eines der ältesten Flugzeuge der Cromoner.
+Er wurde während der Zeit der Kämpfe gegen Titan Net entwickelt
+und diente vornehmlich dazu, aus höheren Luftschichten Panzer
+mit seinen tödlichen Bomben anzugreifen. Das Operieren in hohen
+Luftschichten sorgte dafür, dass Stormbringer nur von wenigen
+Einheiten angegriffen werden konnten und ganze Panzerverbände
+vernichtet wurden, ohne dass der Stormbringer Gegenwehr hätte
+erwarten müssen. Sogar viele Flugzeuge war früher nicht in der
+Lage, sich gegen einen Angriff der Stormbringer-MGs aus oberen
+Luftschichten zur Wehr zu setzen.
+
+Das Wettrüsten in der Luft und die stetige Weiterentwicklung
+der Anti-Luft-Waffen sind für den Stormbringer zu einem
+Nachteil geworden. Viele Einheiten sind inzwischen in der Lage,
+ihm auch in den höchsten Luftschichten zuzusetzen. Gegen Jäger
+kann sich der Bomber mit seinem MG inzwischen auch nur auf der
+gleichen Höhenstufe zur Wehr setzen, da dieses mittlerweile in
+einer miniaturisierten Version eingebaut wird, um mehr Platz
+für Bomben zu haben.
+
+Nichts desto Trotz ist der Stormbringer ein ernst zu nehmender
+Gegner für seine Ziele an der Oberfläche. Die Stärke der
+Einheit werden im Kampf gegen Bodentruppen, aber insbesondere
+gegen Verteidigungsanlagen und Schiffen deutlich. Großen
+Schiffen kann der Stormbringer unglaublichen Schaden zufügen.
+
+Der Stormbringer verfügt über drei verschiedene Arten von
+Bomben, dabei 10 mittelschwere, 4 schwere und 4 sehr schwere,
+welche alle nur auf kurze Entfernung abgeworfen werden können.
+Ein Angriff ist nur aus normalen oder hohen Luftschichten
+möglich, wobei ein Bombenabwurf aus letzteren zu einer höheren
+Streuung und dadurch mit einer ungefähr um einen Fünftel
+reduzierten Schadwirkung einhergeht.
+
+Der Tank der Stormbringer-Klasse ist überaus großzügig
+dimensioniert und erlaubt eine nicht zu unterschätzende
+Operationsreichweite. In nicht wenigen Schlachten achteten
+besessene Verfolger nicht auf die Füllstandsanzeigen in ihrem
+Cockpit und mussten in feindlichem Gebiet notlanden oder
+stürzten ab.
+
+Auch wenn die Panzerung der Stormbringer der eines Bombers
+angemessen ist, ist zu beachten, dass er leicht eingeholt
+werden kann, da auf Grund der Bombenlast keine hohen
+Geschwindigkeiten erreicht werden. Ebenso ist die Steigleistung
+deutlich niedriger als die eines Jagdflugzeuges. Daher sollten
+unbedingt Begleitflugzeuge zum Schutz eingesetzt werden.
+]
    Picture = mk4a_stormbringer.png
    InfoImage = mk4a_stormbringer.jpg
    wreckageobject = 1243 14843

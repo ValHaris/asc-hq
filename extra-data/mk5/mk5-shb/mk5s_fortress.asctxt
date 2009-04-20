@@ -38,6 +38,7 @@ VehicleType {
       Weapon3.ReactionFireShots = 2
 
       Weapon4 ->* VehicleType.DCS
+      Weapon4.Ammo = 6
 
       Weapon5 ->* VehicleType.Rampart
       Weapon5.Punch@MinRange = 140

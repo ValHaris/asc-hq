@@ -12,8 +12,8 @@ VehicleType {
    wreckageobject = 14027
 
    Armor += 200
-   View = 91
-   Features += self_repairing moveduringreactionfire ExternalFuelTransfer
+   View = 80
+   Features += self_repairing moveduringreactionfire move_after_attack
    Category = heavy_ship
    SelfRepairRate = 5
    Weight += 500
@@ -36,7 +36,7 @@ VehicleType {
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 120
       Weapon0.Ammo = 20
-      Weapon0.ReactionFireShots = 2
+      Weapon0.ReactionFireShots = 1
 
       Weapon1 ->* VehicleType.SAM 
       Weapon1.shotFrom = submerged floating 

@@ -22,24 +22,21 @@ VehicleType {
    Movement -= 0 0 0 4 0 0 0 0 
 
    Weapons { 
-      Number = 4
+      Number = 3
       Weapon0.MaxRange = 20
       Weapon0.Ammo = 8
 
-      Weapon1.MaxRange = 20
-      Weapon1.Ammo = 8
-
-      Weapon2 ->* VehicleType.MGmed 
-      Weapon2.Ammo = 14
-      Weapon2.Punch@MaxRange = 50
-      Weapon2.Punch@MinRange = 50
+      Weapon1 ->* VehicleType.MGmed 
+      Weapon1.Ammo = 14
+      Weapon1.Punch@MaxRange = 50
+      Weapon1.Punch@MinRange = 50
       
-      Weapon3 ->* VehicleType.SSM 
-      Weapon3.MaxRange = 40
-      Weapon3.MinRange = 20
-      Weapon3.Ammo = 6
-      Weapon3.Punch@MaxRange = 85
-      Weapon3.Punch@MinRange = 85
+      Weapon2 ->* VehicleType.SSM 
+      Weapon2.MaxRange = 40
+      Weapon2.MinRange = 20
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 95
 
    } Weapons
 } VehicleType

@@ -30,5 +30,6 @@ VehicleType {
       Weapon2.MaxRange = 10
       Weapon2.MinRange = 10
       Weapon2.Ammo = 2
+      Weapon2.ShotFrom = floating ground_level
    } Weapons
 } VehicleType

@@ -9,7 +9,7 @@ VehicleType {
    Transportation ->* VehicleType.TransSubTrooper 
 
    Armor -= 500
-   Weight = 80
+   Weight = 65
    Category = light_ship
    Movement -= 11 11 20 0 0 0 0 0 
    FuelConsumption = 15

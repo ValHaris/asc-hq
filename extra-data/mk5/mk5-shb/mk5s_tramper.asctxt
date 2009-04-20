@@ -12,6 +12,15 @@ VehicleType {
    Transportation.MaxLoadableUnits = 6
    Transportation.MaxLoadableUnitSize = 6
    Transportation.MaxLoadableMass = 12
+   Transportation.EntranceSystemNum = 3
+   Transportation.EntranceSystem2.Mode = in out
+   Transportation.EntranceSystem2.UnitHeightAbs = low_level_flight
+   Transportation.EntranceSystem2.UnitHeightRel = 2
+   Transportation.EntranceSystem2.ContainerHeight = floating
+   Transportation.EntranceSystem2.CategoriesNOT = 
+   Transportation.EntranceSystem2.DockingHeightAbs = 
+   Transportation.EntranceSystem2.DockingHeightRel = 0
+   Transportation.EntranceSystem2.DisableAttack = false
    
    Features += Move_after_attack jam_only_own_field mine_layer mineview
    Armor += 100

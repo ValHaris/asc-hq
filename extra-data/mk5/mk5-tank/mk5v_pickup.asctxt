@@ -6,6 +6,7 @@ VehicleType {
    Description = schnelles Fahrzeug MG
    Infotext = [Der Pickup ist ein aufgerüstetes Serien-Kfz. Durch sein fest montiertes grosskallibriges MG stellt es eine ernstzunehmende Gefahr fuer alle Fusstruppen dar.]
    Picture = MK5v_PickUp.pcx
+   InfoImage = mk5v_pickup.jpg
 
    Armor -= 50
    Weight -= 5

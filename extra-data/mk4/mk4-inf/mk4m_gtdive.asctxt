@@ -2,7 +2,12 @@ VehicleType {
    Name = GT DIVE
    ID = 1237
    parent = 213
+
    Description = Tauchroboter
+   Picture = mk4m_gtdive.png
+   InfoImage = mk4m_gtdive.jpg
+   wreckageobject = 14237 14837
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    Infotext = [Mit fortschreitender Entwicklung der Waffentechnik, verlagerte sich der Seekrieg auch immer mehr in den Bereich unterhalb der Wasseroberfläche. Wo einstmals nur recht simple U-Boote einsam ihre Bahnen zogen, tummelten sich mit der Zeit immer mehr Unterwassereinheiten verschiedenster Bauart. Als andere Rassen damit begannen, Elite-Soldaten in Taucheranzüge zu stecken, um sie im Nahkampf gegen U-Boote und Schiffe einsetzen zu können, musste auch das cromonische Militär nachziehen. Anfangs gedachte man, die bewährten Demon-Kampfanzüge für den Einsatz unter Wasser umzurüsten und führte entsprechende Tests durch. Leider erwies sich diese Methode als nicht praktikabel und so stellte man die Versuche nach einigen tragisch verlaufenen Unfällen schnell wieder ein.
 
 Die Lösung des Problems hatte man dann, wie so oft, General Zufall zu verdanken: Während eines Tests mit einem GT-Speeder, der zu dieser Zeit ebenfalls noch in der Erprobungsphase steckte, kam es im Navigationssystem eines dieser leichten GT´s (Golem Type) zu einer Fehlfunktion. Ohne dass der Pilot hätte eingreifen können, wich der GT-Speeder von seinem vorprogrammierten Kurs ab und raste auf die Kai-Mauer zu, welche das GT-Testgelände zur See hin abgrenzte. Der Pilot musste hilflos mit ansehen, wie seine Kampfeinheit mit Höchstgeschwindigkeit über die Kai-Mauer hinwegraste und in den Fluten des Hafenbeckens versank, welches an dieser Stelle immerhin eine Tiefe von fast 20 Metern hatte. Als man es 39 Stunden später endlich geschafft hatte, den GT-Speeder mit Hilfe eines eiligst herbeibeorderten Schwimmkrans zu bergen, war zur Verwunderung aller nicht nur der GT selbst noch intakt - auch der Pilot erfreute sich noch immer bester Gesundheit! Aufgrund dieser Begebenheit begann man nun, einen eigenständigen Tauchroboter auf der Basis des GT-Speeder zu entwickeln.
@@ -11,12 +16,9 @@ Da es zukünftig möglich sein sollte, mit dem neuen GT Dive auch in tiefen Gewäss
 
 Der GT Dive bewegt sich an Land wie jeder andere Golem Type auch - nämlich mit Hilfe seiner Beine. Im Wasser eingetaucht, knickt er die unteren Hälften seiner Gliedmaßen um 90 Grad nach hinten und bewegt sich fortan durch den Rückstoß weiter, der durch kleine Schiffsschrauben erzeugt wird, welche sich in den Sohlen seiner Füße befinden. Durch diese Art der Fortbewegungsmöglichkeiten ist er zwar nicht der Schnellste, dafür kann er sich jedoch problemlos sowohl an Land und als auch im Wasser bewegen, wobei er unterhalb der Wasseroberfläche fast an die Geschwindigkeit eines schweren Kommando-U-Bootes heranreicht.
 
-Die GT Dive sind fast immer mit einem humanoiden Piloten besetzt. Damit sich diese Personen nicht nur auf ihre Auge verlassen müssen, wurde der GT Dive mit einem kleinen Sonargerät ausgestattet, mit welchem er auch noch in trüben Gewässern problemlos seine Ziele ausmachen und anpeilen kann.
+Da Radar unter Wasser nicht funktioniert, wurde der GT Dive mit einem kleinen Sonargerät ausgestattet, mit welchem er auch noch in trüben Gewässern problemlos seine Ziele ausmachen und anpeilen kann.
 
 Da der GT Dive, wie alle anderen Golem Types auch, verhältnismäßig leicht ist, kann er von vielen Transporteinheiten aufgenommen werden. So lässt sich nicht nur eine Handvoll von ihnen im Bauche eines Plutos transportieren - sie können z.B. auch von Guppi-Transporthubschraubern an ihren Einsatzort gebracht und dann direkt über dem Wasser abgeworfen werden. Aufgrund ihres recht geringen Preises, und der Möglichkeit, sie auf gefährlicheren Missionen auch völlig KI-gesteuert agieren zu lassen, eignen sich die GT Dive nicht nur zum Angriff, sondern bewährten sich auch schon hervorragend als Rückendeckung, wenn es darum ging, den Rückzug der eigenen Flotte gegen nachrückende, feindliche Marinestreitkräfte abzusichern.]
-   Picture = mk4m_gtdive.png
-   wreckageobject = 14237 14837
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor += 100
 } VehicleType

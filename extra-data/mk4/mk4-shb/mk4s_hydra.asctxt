@@ -22,17 +22,19 @@ VehicleType {
       Weapon0.Punch@MinRange = 100
 
       Weapon1 ->* VehicleType.Ship_Flak 
-      Weapon1.MaxRange = 20
+      Weapon1.MaxRange = 30
       Weapon1.Ammo = 8
 
       Weapon2 ->* VehicleType.DCS
       Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 105
-      Weapon2.Punch@MinRange = 105
+      Weapon2.Punch@MaxRange = 150
+      Weapon2.Punch@MinRange = 150
 
-      Weapon3 ->* VehicleType.STorp
+      Weapon3 ->* VehicleType.UTorp
+      Weapon3.MaxRange = 20
+      Weapon3.MinRange = 20
       Weapon3.Ammo = 4
-      Weapon3.Punch@MaxRange = 115
-      Weapon3.Punch@MinRange = 115
+      Weapon3.Punch@MaxRange = 120
+      Weapon3.Punch@MinRange = 120
    } Weapons
 } VehicleType

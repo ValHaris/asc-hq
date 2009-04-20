@@ -10,16 +10,16 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 7
+      Number = 6
       Weapon0 ->* VehicleType.SAMH 
       Weapon0.MaxRange = 40
-      Weapon0.Ammo = 12
+      Weapon0.Ammo = 80
 
       Weapon1 ->* VehicleType.AmmoCannon 
       Weapon1.Ammo = 70
 
-      Weapon2 ->* VehicleType.AmmoLM 
-      Weapon2.Ammo = 70
+      Weapon2 ->* VehicleType.AmmoBomb 
+      Weapon2.Ammo = 40
 
       Weapon3 ->* VehicleType.AmmoSM 
       Weapon3.Ammo = 70
@@ -30,7 +30,5 @@ VehicleType {
       Weapon5 ->* VehicleType.AmmoMG 
       Weapon5.Ammo = 120
 
-      Weapon6 ->* VehicleType.AmmoBomb 
-      Weapon6.Ammo = 40
    } Weapons
 } VehicleType

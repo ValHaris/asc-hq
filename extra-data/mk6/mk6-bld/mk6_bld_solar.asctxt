@@ -5,12 +5,12 @@ BuildingType {
 
    ConstructionStages = 1
    Weather = dry 
-   Fields = A2 B1 B3 B2 
+   Fields = A2 A3 A4 B3 
    UseGFXpics = false
    Pictures { 
       dry = mk6_bld_solar_tecc.png
    } Pictures
    RubbleObjects = false
-   Entry = B3
+   Entry = A4
 
 } BuildingType

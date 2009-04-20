@@ -7,13 +7,12 @@ VehicleType {
    Picture = MK5a_doomsday.pcx
 
    Armor = 420
-   Weight = 150
+   Weight = 190
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
       fuel = 8000
    } Tank
-;   Features += no_midair_refuel 
    FuelConsumption = 20
    Movement = 0 0 0 60 160 170 180 70 
    MovementSound = aircraft_l_g.ogg
@@ -30,14 +29,14 @@ VehicleType {
       Weapon1 ->* VehicleType.AAMO
       Weapon1.MaxRange = 20
       Weapon1.Ammo = 4
-      Weapon1.Punch@MaxRange = 85
-      Weapon1.Punch@MinRange = 85
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
 
       Weapon2 ->* VehicleType.ASM
       Weapon2.MaxRange = 20
       Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 80
-      Weapon2.Punch@MinRange = 80
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 75
 
    } Weapons
 } VehicleType

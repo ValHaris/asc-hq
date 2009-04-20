@@ -2,11 +2,13 @@ VehicleType {
    Name = FAV 4x4 T4
    ID = 1439
    parent = 332
+
    Description = Offroad Kampfbuggy
+   Picture = MK5v_FAV4x4T4.pcx
+   InfoImgae = mk5v_fav4x4t4.jpg
+   WreckageObject = 1404
    Infotext = [Ein vierrädriges Offroadfahrzeug, welches mit 4 panzerbrechenden Boden-Boden Raketen
               ausgestattes ist.]
-   Picture = MK5v_FAV4x4T4.pcx
-   WreckageObject = 1404
    
    Armor += 50
    View = 30

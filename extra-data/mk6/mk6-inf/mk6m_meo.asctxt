@@ -10,16 +10,7 @@ VehicleType {
    Tank.fuel = 1100
    Armor += 10
    Weapons { 
-      Weapon0 ->* VehicleType.TeccEMP2Air
-      Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange += 20
-      Weapon0.Punch@MinRange += 20
-      Weapon0.ReactionFireShots = 1
-      Weapon1.MaxRange += 10
-      Weapon2 ->* VehicleType.type_laser
-      Weapon2.Punch@MaxRange += 50
-      Weapon2.Punch@MinRange += 50
-      Weapon2.LaserRechargeCost.material = 50
-      Weapon2.LaserRechargeCost.fuel = 10
+      Weapon0.MaxRange += 10
+      Weapon1 ->* VehicleType.DLS
    } Weapons
 } VehicleType

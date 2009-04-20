@@ -13,7 +13,7 @@ VehicleType {
    Weapons { 
       Initiative = 0
       Number = 1
-      Weapon0 ->* VehicleType.Mine2Weapon 
+      Weapon0 ->* VehicleType.MineWeapon 
       Weapon0.Ammo = 20
       Weapon0.Punch@MaxRange = 120
       Weapon0.Punch@MinRange = 120

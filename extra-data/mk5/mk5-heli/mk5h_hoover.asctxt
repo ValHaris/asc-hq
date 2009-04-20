@@ -54,6 +54,7 @@ VehicleType {
       Weapon2.Ammo = 2
       Weapon2.Punch@MaxRange = 100
       Weapon2.Punch@MinRange = 100
+      Weapon2.HitAccuracy.d2 = 100
 
       Weapon3 ->* VehicleType.DCA
       Weapon3.Ammo = 4

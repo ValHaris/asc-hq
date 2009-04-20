@@ -26,7 +26,7 @@ VehicleType {
 
    Construction { 
       Buildings = 1 2 4-7 10-23 30-32
-      Vehicles = 1405 1419 1428 1430 1431 1433 1442 1472 1478 1486
+      Vehicles = 1405 1419 1428 1430 1431 1433 1442 1472 1478 1486 1494
       Objects = 9 10 181 998 1400 1489 2097 2099
       ObjectsRemovable = 1400
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21

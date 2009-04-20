@@ -18,14 +18,14 @@ VehicleType {
    Movement -= 0 0 0 4 0 0 0 0 
 
    Weapons { 
-      Number = 4
+      Number = 3
 
-      Weapon2 ->* VehicleType.MG45med 
-      Weapon2.Ammo = 20
+      Weapon1 ->* VehicleType.MG45med 
+      Weapon1.Ammo = 20
 
-      Weapon3 ->* VehicleType.SAMH 
-      Weapon3.Ammo = 4
-      Weapon3.ReactionFireShots = 1
+      Weapon2 ->* VehicleType.SAMH 
+      Weapon2.Ammo = 4
+      Weapon2.ReactionFireShots = 1
 
    } Weapons
 } VehicleType

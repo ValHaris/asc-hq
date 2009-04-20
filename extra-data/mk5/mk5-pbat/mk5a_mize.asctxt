@@ -8,7 +8,7 @@ VehicleType {
 
    Category = default
    Armor = 250
-   Features += mine_layer
+   Features += mine_layer NoMineRemoval
    Weight = 40
 
    Weapons { 

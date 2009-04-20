@@ -42,12 +42,20 @@ VehicleType {
       Initiative = 120
       Number = 1
       Weapon0 { 
-         Type = machinegun shootable 
+         Type = Laser shootable
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         Name = Rammsporn 
          targets = deep_submerged submerged floating ground_level
          shotFrom = deep_submerged submerged floating
          MaxRange = 10
          MinRange = 10
          Ammo = 1
+         ReactionFireShots = 0
          Punch@MaxRange = 100
          Punch@MinRange = 100
          HitAccuracy { 
@@ -56,9 +64,9 @@ VehicleType {
             d4 = 
             d3 = 
             d2 = 
-            d1 = 90
+            d1 = 100
             0 = 100
-            u1 = 90
+            u1 = 100
             u2 = 
             u3 = 
             u4 = 
@@ -73,7 +81,7 @@ VehicleType {
          hoovercraft = 0
          helicopter = 0
 
-         light_tracked_vehicle = 0
+         light_tracked_vehicle = 100
          medium_tracked_vehicle = 0
          heavy_tracked_vehicle = 0
 

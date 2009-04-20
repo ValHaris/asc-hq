@@ -5,25 +5,29 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 __________________
+11.04.2009 (GAMER)
+-Solarkraftwerk Grafikbugfix
+-Defkind -10Move, -10 Range auf Orbit/Boden
+-CillaSV,MBF an neue Preise angepasst
+-Doomsday, Waffenumbau
+-MEO Waffenumbau
+__________________
+07.09.2009 (GAMER)
 -Asus, Waffendefiniton aktualisiert
 -CillaSV, kann Pipe abreissen
 -baliste, Flugsystem angepasst.
 -MBF baut neues Solarplant
-Neu:
--Solarkraftwerk (by ExarKun)
-Beta-09-03
-Neu:
--Blaster
-Beta-09-02
 -InfoImage = Baltic,Defkind,Deltafighter,Deltasearcher,Deltabomber
 -InfoImgae = Deltahunter,Destructor,Devastor,Eneg,Intruder
 -Defkind, Techbugfix
 -InfoText = Eneg,Innocence
-Beta-09-01
 -Delta Tech4
 -Inova Mat.Tank
 -Viewer kein Sonar mehr (Deltasearcher übernimmt Aufgabe)
 -CillaSV, baut keine Schienenbrücke 
+Neu:
+-Solarkraftwerk (by ExarKun)
+-Blaster
 __________________
 23.11.2008 (GAMER)
 -GB137 Moveanpassung
