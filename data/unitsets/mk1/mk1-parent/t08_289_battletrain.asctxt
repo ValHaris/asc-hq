@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = Panzerzug
+   parent = 400 401 402 412
+   ID = 289
+   abstract = true
+
+   Description = battle train
+   Infotext = [Combat Train are excellent defensive trains. They are powerful,
+              heavily armored and fast. In addition, they have machine gun
+              turrets mounted on the sides that are designed to deal with
+              infantry. Platoons are not effective for assault, however, since
+              they are bound to tracks.]
+   WreckageObject = 457
+   GuideSortHelp = 503 552 0 0 0 0 0 0 0 0
+
+   Armor += 300
+   Weight = 250
+   Transportation ->* VehicleType.TransLowTrooper2 
+   Features += moveduringreactionfire
+
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 3000
+   } Tank
+   FuelConsumption = 18
+   Movement += 0 0 0 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 95
+
+      Weapon1 ->* VehicleType.Flak 
+      Weapon1.Ammo = 20
+
+      Weapon2 ->* VehicleType.MG45low
+   } Weapons
+} VehicleType
