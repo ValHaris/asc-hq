@@ -14,7 +14,7 @@ VehicleType {
 
    Weapons { 
       Initiative = 20
-      Number = V
+      Number = 8
       Weapon0 ->* vehicleType.Ship_Gun 
       Weapon0.Ammo = 16
       Weapon0.Punch@MaxRange = 85
