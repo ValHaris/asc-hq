@@ -39,5 +39,6 @@ ObjectType {
       picture = obj_crystals_1.png 1
       ImageReference =  -1 
       FlipPictures   =  0 
-   } dry
+       DisplayMethod = shadow
+  } dry
 } ObjectType
