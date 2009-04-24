@@ -64,12 +64,22 @@ public:
       return overviewMapPanel;
     };
 
+    /** Instanciating this class will disable the Controls for interacting with the map
+        or the main menu. Example use is for running the AI, during the player shouldn't be able
+        to do anything on his own. Instances are typically placed as local variable on the stack
+        and will release automatically when the function is left */
     class StandardActionLocker {
          MainScreenWidget* widget;
          bool locked;
          void operator=( StandardActionLocker& locker ) {};
          int options;
        public:
+          /** Disables certain controls on the game's screen
+              \param mainScreenWidget the widget of the main screen 
+                     (there is typically only one \see getMainScreenWidget()
+              \param the sum of all control items that are to be disabled. 
+                     \see MainScreenWidget::LockOptions
+	  */
           StandardActionLocker( MainScreenWidget* mainScreenWidget, int options );
           StandardActionLocker( const StandardActionLocker& locker );
           void lock();

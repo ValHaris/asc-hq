@@ -31,51 +31,6 @@
  #include "textfileparser.h"
  #include "research.h"
 
-/*
-const int cbuildingfunctionnum = 24;
-extern const char*  cbuildingfunctions[];
- #define cghqn 0
- #define cghqb ( 1 << cghqn  )
- #define cgtrainingn 1
- #define cgtrainingb ( 1 << cgtrainingn  )
- #define cgvehicleproductionn 3
- #define cgvehicleproductionb ( 1 << cgvehicleproductionn  )
- #define cgammunitionproductionn 4
- #define cgammunitionproductionb ( 1 << cgammunitionproductionn  )
- #define cgrepairfacilityn 8
- #define cgrepairfacilityb ( 1 << cgrepairfacilityn  )
- #define cgrecyclingplantn 9
- #define cgrecyclingplantb ( 1 << cgrecyclingplantn  )
- #define cgresearchn 10
- #define cgresearchb ( 1 << cgresearchn  )
- #define cgsonarn 11
- #define cgsonarb ( 1 << cgsonarn )
- #define cgwindkraftwerkn 12
- #define cgwindkraftwerkb ( 1 << cgwindkraftwerkn )
- #define cgsolarkraftwerkn 13
- #define cgsolarkraftwerkb ( 1 << cgsolarkraftwerkn )
- #define cgconventionelpowerplantn 14
- #define cgconventionelpowerplantb ( 1 << cgconventionelpowerplantn )
- #define cgminingstationn 15
- #define cgminingstationb ( 1 << cgminingstationn )
- #define cgexternalloadingn 16
- #define cgexternalloadingb ( 1 << cgexternalloadingn )
- #define cgproduceAllUnitsN 17
- #define cgproduceAllUnitsB ( 1 << cgproduceAllUnitsN )
- #define cgresourceSinkN 18
- #define cgresourceSinkB ( 1 << cgresourceSinkN )
- #define cgexternalresourceloadingn 19
- #define cgexternalresourceloadingb ( 1 << cgexternalresourceloadingn )
- #define cgexternalammoloadingn 20
- #define cgexternalammoloadingb ( 1 << cgexternalammoloadingn )
- #define cgnoobjectchainingn 21
- #define cgnoobjectchainingb ( 1 << cgnoobjectchainingn )
- #define cgselfdestruct_at_conquern 22
- #define cgselfdestruct_at_conquerb ( 1 << cgselfdestruct_at_conquern )
- #define cgsatviewn 23
- #define cgsatviewb ( 1 << cgsatviewn )
-*/
-
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
     public:
@@ -87,8 +42,13 @@ extern const char*  cbuildingfunctions[];
 
         BitSet weatherBits; // for which weather are images available
 
+        /** the method for specifying a building's abilility was change at some point in time.
+            This method converts an old legacy ability specification to the new one 
+            \see ContainerBaseType::ContainerFunctions
+        */
         void convertOldFunctions( int abilities, const ASCString& location );
         
+        //! the number of legacy abilities that a building could be equipped with
         static const int cbuildingfunctionnum = 24;
         
    public:
@@ -109,6 +69,7 @@ extern const char*  cbuildingfunctions[];
         //! when the building is destroyed, it can leave rubble objects behind. If set to 0 no objects are being created
         DestructionObjects destructionObjects;
 
+        //! the position of the entrance, which is the field of the building where units can enter and leave 
         LocalCoordinate entry;
 
         /** the armor of the buildingtype.
@@ -142,7 +103,7 @@ extern const char*  cbuildingfunctions[];
 
         int          getBIPicture( const LocalCoordinate& localCoordinate, int weather = 0, int constructionStep = 0) const;
         
-        
+        //! returns whether this building covers the given field 
         bool         fieldExists(const LocalCoordinate& localCoordinate) const { return field_Exists[localCoordinate.x][localCoordinate.y]; } ;
         
         BuildingType ( void );
@@ -160,6 +121,7 @@ extern const char*  cbuildingfunctions[];
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
 
+        //! if true, this building can not be removed by the player with his construction vehicles 
         bool buildingNotRemovable;
         
         int getMemoryFootprint() const;

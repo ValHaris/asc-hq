@@ -113,7 +113,10 @@ class tinvalidversion : public tfileerror {
 ////////////        dynamic data structures
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/** DEPRECATED
+    Use containers of the C++ Standard Template Library instead!    
+    Container for managing objects of type T
+*/    
 template<class T>
 class dynamic_array {
            protected:

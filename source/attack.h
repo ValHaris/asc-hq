@@ -38,7 +38,7 @@
 #include "actions/context.h"
 
 
-
+//! the core formula, which weighs the different factory that go into the calculation 
 class AttackFormula
 {
       virtual bool checkHemming ( Vehicle* d_eht, int direc );

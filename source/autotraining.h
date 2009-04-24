@@ -20,5 +20,7 @@
 #define autotrainingH
  class Player;
  class GameMap;
+ /** trains all units that are in training centers, which increases their experience at the cost
+     of time (units lose all movement) and ammo */
  extern void automaticTrainig( GameMap* gameMap, Player& player );
 #endif

@@ -30,7 +30,11 @@
 
 class tfield;
 
-//! An actual building on the map, which references a #BuildingType
+/** An actual building on the map, which references a #BuildingType
+    Buildings have an owner,
+
+    Unlike a #Vehicle, a Building can not move, can not shoot and may cover several
+    fields on the map */
 class  Building : public ContainerBase {
     MapCoordinate entryPosition;
 

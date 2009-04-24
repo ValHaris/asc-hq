@@ -41,7 +41,19 @@ class MapCoordinate;
 class WindInfoPanel;
 class MapInfoPanel;
 class ActionInfoPanel;
-      
+
+
+/** The widget that controls the main screen of ASC.
+    It covers the whole ASC window and will be the parent for all other elements, like
+    - map display (	#MapDisplayPG )
+	- the button for controlling units ( #NewGuiHost )
+    - main menu bar at the top ( #Menu )
+    - the various panels displaying information ( children of #DashboardPanel )
+	- dialog boxes (children of #ASC_PG_Dialog )
+   
+    The ASC_MainScreenWidget also controls all the global keyboard shortcuts ( \see ASC_MainScreenWidget::eventKeyDown)   
+*/
+
 class ASC_MainScreenWidget : public MainScreenWidget {
       int standardActionsLocked;
    public:
