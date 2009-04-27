@@ -103,7 +103,7 @@ int Building::getIdentification() const
 void Building :: convert ( int player, bool recursive )
 {
    if (player > 8)
-      fatalError("convertbuilding: \n color mu�im bereich 0..8 sein ");
+      fatalError("convertbuilding: \n player must be in range 0..8 sein ");
 
    #ifdef sgmain
    if ( typ->hasFunction( ContainerBaseType::SelfDestructOnConquer  ) ) {

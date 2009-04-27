@@ -47,14 +47,28 @@ class ContainerBase {
         The maximum percentage may be limited by a gameparameter
       */
       int           repairedThisTurn;
-      
+
+	  //! the map that this container is placed on
       GameMap* gamemap;
+	  
+	  /** if this container is transported inside a carrier, this is carrier
+	      \note Only vehicles can be transported, building can't */
       ContainerBase* cargoParent;
-      virtual const ResourceMatrix& getRepairEfficiency() const = 0;
+	  
 
-      //! is called after a repair is perfored. Vehicles use this to reduce their experience.
-      virtual void postRepair ( int oldDamage ) = 0;
-
+	  /** displays an image of this container on the surface. The different shaders 
+	      (like semi-transparency for submerged stuff) is processed here 
+		  \param src  The source surface, which is an image of the ContainerBase
+		  \param dest The destination surface, onto which the src image is painted
+		  \param pos  The position within dest at which src is painted
+		  \param dir  Rotation of the image. Valid range is 0..5, resuling in 0°, 60° 120°, etc
+		  \param shaded If true then the image will not be displayed in color, but in greyscale
+		  \param shadowDist The offset of the shadow of the unit in pixels. 
+                            Shadowdist will be added to the x and y coordinates if the position,
+                            resulting in the shadow being in the lower right of the image  							
+							0 = no shadow will be drawn
+							If -1, the shadowDist will be calculated depending on the container's 
+							    current height */
       void paintField ( const Surface& src, Surface& dest, SPoint pos, int dir, bool shaded, int shadowDist = -1 ) const;
       
       ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player );
@@ -62,8 +76,12 @@ class ContainerBase {
 
       virtual bool isBuilding() const = 0;
 
+	  //! the type descriping all non-instance specific properties of the container
       const ContainerBaseType*  baseType;
 
+	  /** returns an image for the Container. 
+          \note Buildings have a size of several fields. The image returned here is therefore not suited
+                to be painted on the map, as map-painting is done on a per-field basis */		  
       virtual Surface getImage() const = 0;
 
       typedef vector<const Vehicletype*> Production;
@@ -89,6 +107,7 @@ class ContainerBase {
       Cargo cargo;
 
    private:
+       //! removes all holes ( = NULL-Pointers) from the vector)
        void compactCargo();
 
    public:
@@ -107,7 +126,7 @@ class ContainerBase {
                          -1 assigns slot automatically. The automatic mode should be used in almost all cases */
       void addToCargo( Vehicle* veh, int position = -1 );
       
-      //! removes the given unit from the container. \Returns true of the unit was found, false otherwise
+      //! removes the given unit from the container. \return true if the unit was found, false otherwise
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
       bool removeUnitFromCargo( int nwid, bool recursive = false );
       
@@ -156,13 +175,22 @@ class ContainerBase {
 
    public:
      
+	  //! Damage. 0 is no damage, when damage reaches 100 the container is destroyed
       int damage;
       
+	  /** The owner of the container. For historical reasons, this is actually 8 times the player numer
+	      Use getOwner() instead of directly accesing this variable */
       int color;
-      //! returns the player this vehicle/building belongs to
+	  
+      //! returns the number of the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
-      Player& getOwningPlayer() const;;
       
+	  //! returns the player this vehicle/building belongs to
+      Player& getOwningPlayer() const;
+      
+	  /** changes the owner of this container
+	      \param player: the nubmer of the new player (range: 0 - 8)
+		  \param recursive: true if the cargo shall be converted too */
       virtual void convert ( int player, bool recursive = true ) = 0;
       
       //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
@@ -173,7 +201,10 @@ class ContainerBase {
       virtual void write ( tnstream& stream, bool includeLoadedUnits = true ) const = 0;
       virtual void read ( tnstream& stream ) = 0;
 
+	  //! registers the containers view (=radar) on the map
       virtual void addview ( void ) = 0;
+	  
+	  //! removes the containers view (=radar) on the map
       virtual void removeview ( void ) = 0;
 
       
@@ -218,10 +249,23 @@ class ContainerBase {
     //@}
       
 
+
+    //! @name Repairing related functions
+    //@{
       
+	  /** when a ContainerBase is repair by this ContainerBase, the default cost
+          can be customized with this matrix. 
+          \note This effects both reparing another ContainerBase as well as self-repsir */		  
+      virtual const ResourceMatrix& getRepairEfficiency() const = 0;
+
+      //! is called after a repair is performed. Vehicles use this to reduce their experience.
+      virtual void postRepair ( int oldDamage ) = 0;
       
+      //! checks whether the item can be repaired provided that it is in range
       virtual bool canRepair( const ContainerBase* item ) const = 0;
 
+	  /** returns the maximum amount of damage that the given item can be repaired
+	      \return a value in the range 0 .. item->damage */
       int getMaxRepair ( const ContainerBase* item ) const;
       int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  ) const;
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
@@ -229,6 +273,7 @@ class ContainerBase {
       //! returns the amount of damate that can still be repaired this turn
       virtual int repairableDamage() const = 0;
 
+    //@}
 
       GameMap* getMap ( ) const { return gamemap; };
       

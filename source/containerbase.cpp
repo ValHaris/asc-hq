@@ -7,7 +7,8 @@
  ***************************************************************************/
 
 /*! \file containerbase.cpp
-    \brief Implementation of methods that buildings and vehicles have in common
+    \brief Implementation of the common base class that that buildings and 
+	       vehicles share
 */
 
 /***************************************************************************
@@ -449,7 +450,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
                                  if ( getOwner() == 8 )
                                     return true;
                                  if ( gamemap->getPlayer(this).diplomacy.isHostile( vehicle->getOwner())  )
-                                    if (damage >= mingebaeudeeroberungsbeschaedigung  || vehicle->typ->hasFunction( ContainerBaseType::ConquerBuildings ) )
+                                    if (damage >= minimumBuildingDamageForConquering  || vehicle->typ->hasFunction( ContainerBaseType::ConquerBuildings ) )
                                        return true;
                               }
                            }

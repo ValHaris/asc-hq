@@ -45,7 +45,12 @@
 //! the color depth of the gamemap
 const int gamemapPixelSize = 4;
 
-//! the number of players that ASC can manage. This includes the neutral semi-played, which can't do anything
+/** the maximum number of players that ASC can manage. 
+    This includes the neutral semi-player (color: grey), who doesn't play, 
+	but who may own buildings on the map. The maximum number of active players is
+	playerNum-1
+	\see GameMap::getPlayerCount()
+*/
 const int playerNum = 9;
 
 
@@ -55,12 +60,8 @@ const int waffenanzahl = 8;
 //! The number of different weather
 const int cwettertypennum = 6;
 
-//! The number of vehicle categories; Each category has its own move malus
-const int cmovemalitypenum  = 18;
-
-//! The movemalus type for a building. It is used for #SingleWeapon::targetingAccuracy .
-const int cmm_building = 11;
-const int cmm_trooper = 7;
+//! the names of the different weather
+extern const char*  cwettertypen[cwettertypennum];
 
 //! The number of levels of height
 const int choehenstufennum =  8;
@@ -79,7 +80,20 @@ const int resourceNum = resourceTypeNum;
 
 class PropertyContainer;
 
-//! The Container for the three different Resources that ASC uses.
+/** Resources are basically the currency of ASC. You use resources to
+    buy units, to do research, to propulse your units and lots of other things.
+
+    ASC has 3 different kinds of Resources:
+     - Energy is a volatile resources that is produced by power plants
+       and which can not be stored
+     - Material is extracted from the ground by mining stations and mostly 
+	   used for all kinds of construction purposes
+     - Fuel is also typically extracted from the ground, for example by oil
+       platforms, and used to power units 	 
+
+	This class carries an amount for each type of resource. So a single
+	instance of this class represents a complete cost or value.
+ */
 class Resources {
   public:
      int energy;
@@ -134,9 +148,13 @@ extern Resources operator+ ( const Resources& res1, const Resources& res2 );
 extern Resources operator* ( const Resources& res1, float a );
 extern Resources operator/ ( const Resources& res1, float a );
 
+//! the names of the different resources. Redundent, as we already have #Resources::name
+extern const char*  resourceNames[3];
 
-/** A mathematical matrix that can be multiplied with a #Resources instance (which is mathematically a vector) 
-    to form a new #Resources vector. */
+
+
+/** A mathematical matrix for transforming #Resources instance (which is mathematically a vector) 
+    into a different #Resources . */
 class ResourceMatrix {
            float e[resourceTypeNum][resourceTypeNum];
         public:
@@ -228,22 +246,33 @@ class MapCoordinate3D : public MapCoordinate {
 
 
 
-//! An abstract base class that provides the interface for all loadable items
+/** An abstract base class that provides the interface for all kinds of items that
+    ASC loads from disk
+*/
 class LoadableItemType {
     public:
-       //! The filename of the item
+       //! The name of the file from which the item was loaded
        ASCString filename;
 
-       //! The filename and location on disk (including containerfiles) of the object. Can only be used for informational purposes
+       /** The filename and location on disk (including containerfiles) of the object. 
+	       Can only be used for informational purposes. 
+		   Example: "foo.wav located inside /usr/share/games/asc/main.ascdat" 
+		*/
        ASCString location;
 
+	   //! read the binary representation of this item from the given stream
        virtual void read ( tnstream& stream ) = 0;
+	   
+	   //! write the binary representation of this item to the given stream
        virtual void write ( tnstream& stream ) const = 0;
+	   
+	   //! registers the properties of this item for loading/writing into asctxt files
        virtual void runTextIO ( PropertyContainer& pc ) = 0;
        virtual ~LoadableItemType() {};
 };
 
 
+//! a container that stores pointers and deletes the pointed-to objects on destruction
 template< typename T> 
 class deallocating_vector : public vector<T> {
    public:
@@ -253,6 +282,7 @@ class deallocating_vector : public vector<T> {
       };      
 };
 
+//! a map that stores pointers as values and deletes the pointed-to objects on destruction
 template< typename T, typename U>
 class deallocating_map : public std::map<T,U> {
    public:
@@ -262,10 +292,14 @@ class deallocating_map : public std::map<T,U> {
       };
 };
 
-
+/** Represents a range of numbers, with a lower and upper boundary.
+    The boundaries themself are part of the range */
 class IntRange {
      public:
+	       //! the lower boundary. 
            int from;
+		   
+		   //! the upper boundary
            int to;
            IntRange(): from(-1), to(-1) {};
            IntRange( int oneValue ): from(oneValue), to(oneValue) {};
@@ -274,11 +308,19 @@ class IntRange {
            void write ( tnstream& stream ) const;
 };
 
+/** parses a string repesenting a number of int ranges 
+    Example input: "10-20; 25 ; 30-125"
+*/	
 extern vector<IntRange> String2IntRangeVector( const ASCString& t );
 
 
 
-
+/** The MoveMalusType categorizes the different units (#Vehicle)
+    Originally, these types were only used to determine the speed of
+	their movement on the ground, hence the name,
+	But now they are also used to specify production, weapon effectiveness,
+	cargo loading capabilities and things like that
+	*/
 class MoveMalusType {
    public:
       enum {  deflt,
@@ -301,26 +343,32 @@ class MoveMalusType {
               hoovercraft };
    };
 
+//! The number of vehicle categories; Each category has its own move malus \see MoveMalusType
+const int cmovemalitypenum  = 18;
+
+//! The movemalus type for a building. It is used for #SingleWeapon::targetingAccuracy . \see MoveMalusType
+const int cmm_building = 11;
+
+//! the movemalus type of a trooper. \see MoveMalusType
+const int cmm_trooper = 7;
+
+   
+//! the names of the different MoveMalusTypes \see MoveMalusType
+extern const char*  cmovemalitypes[cmovemalitypenum];
+
+//! filenames of icons representing the varios movemalus types \see MoveMalusType
+extern const char*  moveMaliTypeIcons[cmovemalitypenum];
 
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/// Structure field naming constants 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
 
-
-
-enum { capeace, cawar, cawarannounce, capeaceproposal, canewsetwar1, canewsetwar2, canewpeaceproposal, capeace_with_shareview };
+//! the different states that a player's view on a field can have
 enum VisibilityStates { visible_not, visible_ago, visible_now, visible_all };
 
 
-  extern const char*  cwettertypen[];
 
 
-
-
+//! the names of the different levels of height
 extern  const char*  choehenstufen[8] ;
  #define chtiefgetaucht 1  
  #define chgetaucht 2
@@ -333,16 +381,6 @@ extern  const char*  choehenstufen[8] ;
 
 
 
-
-
-
-
-
-extern const char*  resourceNames[3];
-
-
-extern const char*  cmovemalitypes[cmovemalitypenum];
-extern const char*  moveMaliTypeIcons[cmovemalitypenum];
 
 const int experienceDecreaseDamageBoundaryNum = 4;
 extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum];
@@ -370,13 +408,6 @@ extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoun
 #define fieldsizey fieldysize
 
   extern const int directionangle [ sidenum ];
-
-
-#define fieldsize (fieldxsize * fieldysize + 4 )
-#define unitsizex 30
-#define unitsizey 30
-#define tanksize (( unitsizex+1 ) * ( unitsizey+1 ) + 4 )
-#define unitsize tanksize
 
 
 #ifdef HAVE_LIMITS
@@ -417,26 +448,30 @@ const int attackmovecost = 0;
 //! the movemalus for all submerged units
 const int submarineMovement = 11;
 
-#define movement_cost_for_repaired_unit 24
-#define movement_cost_for_repairing_unit 12
-#define attack_after_repair 1       // Can the unit that is beeing repaired attack afterwards?
+//! the movement cost for putting mines on the map
+const int mineputmovedecrease = 10;
 
-#define mineputmovedecrease 10
-#define mineremovemovedecrease 10
+//! the movement cost for removing mines from the map
+const int mineremovemovedecrease = 10;
 
-#define fusstruppenplattfahrgewichtsfaktor 2  
-#define mingebaeudeeroberungsbeschaedigung 80  
+/** if a building has at least this amount of damage, then any unit can conquer the build
+    (and not only units having the '#conquer building' ability */
+const int minimumBuildingDamageForConquering = 80;
 
-#define recyclingoutput 90    /*  percentage of material claimed by recycling  */
-#define destructoutput 20
-#define nowindplanefuelusage 1      // herrscht kein Wind, braucht ein Flugzeug pro Runde soviel Sprit wie das fliegend dieser Anzahl fielder
-  //   #define maxwindplainfuelusage 32   // beim nextturn: tank -= fuelconsumption * (maxwindplainfuelusage*nowindplainfuelusage + windspeed) / maxwindplainfuelusage     
-const int maxwindspeed = 60;          // Wind with a strength of 255 means that the air moves 6 fields / turn
+//! the percentage of a units production cost that is reclaimed when the unit is recycled
+const int recyclingoutput = 90;  
 
+//! the percentage of a units production cost that is reclaimed when the unit is salvaged
+const int destructoutput = 20;
 
-#define generatortruckefficiency 2  // fuer jede vehicle Power wird soviel Sprit gebraucht !
+//! Wind with its maximum strength of 255 is moving this distance per turn
+const int maxwindspeed = 60;          
 
-#define mine_movemalus_increase 50   // percent
+//! the amount of fuel that a generator vehicle needs to produce one unit of energy
+const int generatortruckefficiency = 2;  
+
+//! every mine on a field increases the field's movemalus by this amount (percent)
+const int mine_movemalus_increase = 50; 
 
 #define cnet_storeenergy        0x001           // es wird garantiert,  dass material immer das 2 und fuel das 4 fache von energy ist
 #define cnet_storematerial      0x002
@@ -454,11 +489,14 @@ const int maxwindspeed = 60;          // Wind with a strength of 255 means that 
 #define cnet_stopmaterialoutput 0x400
 #define cnet_stopfueloutput     0x800
 
+/** the conversion factor between mineral resources in the  ground 
+    and the normal game #Resources at nominal mining station efficiency
+*/
+const int resource_fuel_factor = 80;         
+const int resource_material_factor = 80;     
 
-#define resource_fuel_factor 80         // die im boden liegenden Bodenschtzen ergeben effektiv soviel mal mehr ( bei Bergwerkseffizienz 1024 )
-#define resource_material_factor 80     // "
-
-#define destruct_building_material_get 2 // beim Abreissen erhlt man 1/2 des eingesetzten Materials zur?ck
+//! when pulling down a building, this fraction of the buildings construction cost is reclaimed
+const int destruct_building_material_get = 2; 
 #define destruct_building_fuel_usage 10  // beim Abreissen wird 10 * fuelconsumption Fuel fuelconsumptiont
 
 
