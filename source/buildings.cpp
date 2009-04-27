@@ -174,6 +174,9 @@ void Building :: registerForNewOwner( int player )
    if ( player < 8 )
       addview();
    
+   conquered();
+   anyContainerConquered(this);
+   
 }
 
   

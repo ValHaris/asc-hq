@@ -61,7 +61,7 @@ class ContainerBase {
 		  \param src  The source surface, which is an image of the ContainerBase
 		  \param dest The destination surface, onto which the src image is painted
 		  \param pos  The position within dest at which src is painted
-		  \param dir  Rotation of the image. Valid range is 0..5, resuling in 0°, 60° 120°, etc
+		  \param dir  Rotation of the image. Valid range is 0..5, resuling in 0ï¿½, 60ï¿½ 120ï¿½, etc
 		  \param shaded If true then the image will not be displayed in color, but in greyscale
 		  \param shadowDist The offset of the shadow of the unit in pixels. 
                             Shadowdist will be added to the x and y coordinates if the position,
@@ -185,13 +185,8 @@ class ContainerBase {
       //! returns the number of the player this vehicle/building belongs to
       int getOwner() const { return color >> 3; };
       
-	  //! returns the player this vehicle/building belongs to
+      //! returns the player this vehicle/building belongs to
       Player& getOwningPlayer() const;
-      
-	  /** changes the owner of this container
-	      \param player: the nubmer of the new player (range: 0 - 8)
-		  \param recursive: true if the cargo shall be converted too */
-      virtual void convert ( int player, bool recursive = true ) = 0;
       
       //! this is a low level functions that changes the registration in the map. It's called by convert(int,bool)
       virtual void registerForNewOwner( int player ) = 0;

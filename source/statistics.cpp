@@ -118,8 +118,9 @@ ASCString getVisibilityStatistics( GameMap* actmap )
                if ( vs == visible_all || vs == visible_now ) {
                   int maxView = -1;
                   for ( int p = 0; p < actmap->getPlayerCount(); ++p )
-                     if ( fld->view[p].view > maxView ) 
-                        maxView = fld->view[p].view;
+                     if ( actmap->getPlayer(p).stat != Player::supervisor )
+                        if ( fld->view[p].view > maxView ) 
+                           maxView = fld->view[p].view;
    
                   if ( fld->view[i].view == maxView )
                      ++viewDominance;

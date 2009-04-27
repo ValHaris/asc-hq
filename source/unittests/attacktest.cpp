@@ -44,4 +44,17 @@ void testAttack()
    assertOrThrow( mam->getMovement() == 100 );
    testCargoMovement( mam, 100 );
    
+   Vehicle* v2 = game->getField(9,14)->vehicle;
+   assertOrThrow( v2 != NULL );
+   
+   Vehicle* a2 = game->getField(9,17)->vehicle;
+   assertOrThrow( a2 != NULL );
+   
+   attack( a2, MapCoordinate( 9, 14 ) );
+    
+   assertOrThrow( game->getField(9,14)->vehicle == NULL );
+   game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( game->getField(9,14)->vehicle != NULL );
+   
+   
 }

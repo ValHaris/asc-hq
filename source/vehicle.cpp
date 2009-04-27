@@ -731,24 +731,12 @@ void Vehicle::convert ( int col, bool recursive )
   if ( col > 8)
      fatalError("convertvehicle: \n invalid target player ");
 
-   int oldcol = getOwner();
-
-   Player::VehicleList::iterator i = find ( gamemap->player[oldcol].vehicleList.begin(), gamemap->player[oldcol].vehicleList.end(), this );
-   if ( i != gamemap->player[oldcol].vehicleList.end())
-      gamemap->player[oldcol].vehicleList.erase ( i );
-
-   gamemap->player[col].vehicleList.push_back( this );
-
-   color = col*8;
-
+  registerForNewOwner( col );
+      
    if ( recursive )
       for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
          if ( *i ) 
             (*i)->convert( col );
-
-   // emit signal
-   conquered();
-   anyContainerConquered(this);
 }
 
 
@@ -763,6 +751,10 @@ void Vehicle::registerForNewOwner( int player )
    gamemap->player[player].vehicleList.push_back( this );
 
    color = player*8;
+   
+   // emit signal
+   conquered();
+   anyContainerConquered(this);
 }
 
 

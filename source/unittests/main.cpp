@@ -32,7 +32,7 @@
 #include "viewtest.h"
 #include "ai-service1.h"
 #include "transfercontroltest.h"
-                
+#include "recyclingtest.h"                
 
 void positionCursor( Player& player )
 {
@@ -144,6 +144,7 @@ void diplomaticChange( GameMap* gm,int p1,int p2)
 
 void runUnitTests()
 {
+   testRecycling();
    testTransferControl();
    testAiService();
    testMovement();   

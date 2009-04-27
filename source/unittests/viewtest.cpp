@@ -16,7 +16,7 @@
 #include "unittestutil.h"
 
 
-void testView() 
+void testView1() 
 {
    auto_ptr<GameMap> game ( startMap("unittest-view1.map"));
    
@@ -55,3 +55,29 @@ void testView()
    
    assertOrThrow( fieldvisiblenow(game->getField(0,15), 1) == true );
 }
+
+
+void testView2() 
+{
+   auto_ptr<GameMap> game ( startMap("unittest-view2.map"));
+   
+   Vehicle* spyplane = game->getField(5,2)->vehicle;
+   
+   assertOrThrow( spyplane != NULL );
+   assertOrThrow( spyplane->damage == 0 );
+   
+   assertOrThrow( fieldvisiblenow(game->getField(5,2),1 ) == false );
+   
+   move( spyplane, MapCoordinate(5,18));
+  
+   spyplane = game->getField(5,18)->vehicle;
+   assertOrThrow( spyplane != NULL );
+   assertOrThrow( spyplane->damage == 0 );
+}
+
+
+void testView()
+{
+   testView1();
+   testView2();
+} 

@@ -22861,7 +22861,7 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_lua50_lua_open" >&5
 echo "${ECHO_T}$ac_cv_lib_lua50_lua_open" >&6; }
 if test $ac_cv_lib_lua50_lua_open = yes; then
-  LUAAVAIL=1
+  LUAAVAIL=11
 fi
 
 

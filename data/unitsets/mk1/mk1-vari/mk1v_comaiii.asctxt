@@ -3,12 +3,12 @@ VehicleType {
    ID = 108
    parent = 253
 
-   Description = twice gun artillery
+   Description = twin gun artillery
    Picture = MK1v_comaiii.pcx
    InfoImage = mk1v_comaiii.jpg
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Infotext = [Bei der Überarbeitung der „Coma II“ zur „Coma III“ konnten weder die Reichweite erhöht, noch die Nachteile wie mangelnde Mobilität, Selbstverteidigungsfähigkeit oder zeit verzögerte Feuerbereitschaft beseitigt werden. Durch das Hinzufügen einer weiteren 203,2-mm-Haubitze kann die „Coma III“ schneller und häufiger auf Angriffe gegnerischer Bodentruppen reagieren und diese nieder halten. Das Hinzufügen der zweiten Geschützeinheit machte eine Verbreiterung des Chassis und des Turmes erforderlich, was wiederum eine erhebliche Gewichtszunahme zur Folge hat, welche bei größeren Truppentransporten zu leichten Problemen führen könnte.
+   Infotext = [Bei der ï¿½berarbeitung der ï¿½Coma IIï¿½ zur ï¿½Coma IIIï¿½ konnten weder die Reichweite erhï¿½ht, noch die Nachteile wie mangelnde Mobilitï¿½t, Selbstverteidigungsfï¿½higkeit oder zeit verzï¿½gerte Feuerbereitschaft beseitigt werden. Durch das Hinzufï¿½gen einer weiteren 203,2-mm-Haubitze kann die ï¿½Coma IIIï¿½ schneller und hï¿½ufiger auf Angriffe gegnerischer Bodentruppen reagieren und diese nieder halten. Das Hinzufï¿½gen der zweiten Geschï¿½tzeinheit machte eine Verbreiterung des Chassis und des Turmes erforderlich, was wiederum eine erhebliche Gewichtszunahme zur Folge hat, welche bei grï¿½ï¿½eren Truppentransporten zu leichten Problemen fï¿½hren kï¿½nnte.
    InfoImage = BananaJoe]
 
    Armor += 10

@@ -284,6 +284,10 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
       } else
          jamming += fld->view[i].jamming;
    }
+   
+   if ( fld->secondvehicle )
+      direct = false;
+   
    if ( sight > (jamming + additionalEnemyJamming )   ||  direct  ) {
       if (( fld->getVehicle() && ( fld->getVehicle()->getOwner() == player ) && false ) ||
             ( fld->getVehicle()  && ( fld->getVehicle()->height  < chschwimmend ) && sonar ) ||

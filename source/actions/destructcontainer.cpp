@@ -143,7 +143,9 @@ ActionResult DestructContainer::runAction( const Context& context )
             }
    }
    
-   container->removeview();
+   if( fieldRegistration != CARRIER )
+      container->removeview();
+   
    evaluateviewcalculation( getMap(), container->getPosition(), container->baseType->view, 0, false, &context );
    
    delete container;

@@ -2176,7 +2176,7 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ObjectsDestroyedByTerrain",          1,                    0,   1,                  true,   false,   "objects can be destroyed by terrain"},   //       cgp_objectsDestroyedByTerrain,      
       {  "TrainingIncrement",                  2,                    1,   maxunitexperience,  true,   false,   "training centers: training increment"},   //       cgp_trainingIncrement,              
       {  "ExperienceEffectDivisorAttack",      1,                    1,   10,                 false,  false,   "experience effect divisor for attack"},  //       gp_experienceDivisorAttack
-      {  "DisableDirectView",                  0,                    0,   1,                  false,  false,   "disable direct View"},  //       cgp_disableDirectView
+      {  "DisableDirectView",                  1,                    0,   1,                  false,  false,   "disable direct View"},  //       cgp_disableDirectView
       {  "DisableUnitTrade",                   0,                    0,   1,                  false,  false,   "disable transfering units/buildings to other players"},  //       cgp_disableUnitTransfer
       {  "ExperienceEffectDivisorDefense",     1,                    1,   10,                 false,  false,   "experience effect divisor for defense"},  //       cgp_experienceDivisorDefense
       {  "DebugGameEvents",                    0,                    0,   2,                  true,   false,   "debug game events"},  //       cgp_debugEvents
