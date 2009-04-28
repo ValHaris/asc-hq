@@ -327,6 +327,13 @@ class CargoDialog : public Panel
       SubWindow* matterWindow;
       BuildingControlWindow* buildingControlWindow;
 
+      bool shutdownImmediately;
+      
+      void containerDestroyed()
+      {
+         shutdownImmediately = true;
+      }
+      
       CargoInfoWindow* ciw;
       
       bool eventKeyDown(const SDL_KeyboardEvent* key)
@@ -353,6 +360,11 @@ class CargoDialog : public Panel
             switch ( key->keysym.unicode ) {
                case 26: // Z
                   getContainer()->getMap()->actions.undo( createContext( getContainer()->getMap() ) );  
+                  if ( shutdownImmediately ) {
+                     QuitModal();
+                     return true;
+                  }
+                  
                   cargoChanged();
                   for ( Activesubwindows::iterator i =  activesubwindows.begin(); i != activesubwindows.end(); ++i )
                      (*i)->update();
@@ -1650,11 +1662,13 @@ class DamageBarWidget : public PG_ThemeWidget {
 CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL ), matterWindow(NULL)
 {
+   shutdownImmediately = false;
+   
    sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
 
    registerGuiFunctions( guiIconHandler );
 
-
+   cb->destroyed.connect( SigC::slot( *this, &CargoDialog::containerDestroyed ));
 
    ciw = new CargoInfoWindow;
          

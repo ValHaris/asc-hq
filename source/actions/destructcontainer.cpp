@@ -160,7 +160,8 @@ ActionResult DestructContainer::undoAction( const Context& context )
    if ( building ) {
       Building* bld = Building::newFromStream( getMap(), memstream );
       bld->chainbuildingtofield( bld->getEntry() );
-      bld->addview();
+      if ( bld->getOwner() < bld->getMap()->getPlayerCount() )
+         bld->addview();
    } else {
       Vehicle* veh = Vehicle::newFromStream( getMap(), memstream );
 
