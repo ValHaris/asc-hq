@@ -64,6 +64,7 @@
 #include "actions/consumeresource.h"
 #include "actions/buildproductionlinecommand.h"
 #include "actions/removeproductionlinecommand.h"
+#include "actions/cancelresearchcommand.h"
 
 trunreplay runreplay;
 
@@ -1369,6 +1370,11 @@ trunreplay :: ~trunreplay()
    delete replayMapDisplay;  
 }
 
+void trunreplay::error( const ActionResult& res )
+{
+   error( ASCString(getmessage(res.getCode() )) + res.getMessage() );
+}
+
 void trunreplay::error( const MapCoordinate& pos, const ASCString& message )
 {
    error( message );
@@ -2618,7 +2624,14 @@ void trunreplay :: execnextreplaymove ( void )
             {
                stream->readInt();
                readnextaction();
-               actmap->player[actmap->actplayer].research.cancel();
+               
+               auto_ptr<CancelResearchCommand> crc ( new CancelResearchCommand( actmap ));
+               crc->setPlayer( actmap->player[actmap->actplayer] );
+               ActionResult res = crc->execute( createContext( actmap ));
+               if ( res.successful() )
+                  crc.release();
+               else
+                  error( res );
             }
             break;
 
@@ -2638,7 +2651,7 @@ void trunreplay :: execnextreplaymove ( void )
             for ( int i = 0; i < padding;++i ) {
                char c = stream->readChar();
                if ( c != 255-i )
-                  error("invalid padding bytese in command action storage buffer");
+                  error("invalid padding bytes in command action storage buffer");
             }
             readnextaction();
             

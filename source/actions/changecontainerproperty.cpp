@@ -20,6 +20,7 @@
 
 
 #include "changecontainerproperty.h"
+#include "action-registry.h"
 
 ChangeContainerProperty::ChangeContainerProperty( ContainerBase* container, Property property, int value, bool valueIsAbsolute )
    : ContainerAction( container ), originalValue(-1), resultingValue(-1)

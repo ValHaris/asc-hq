@@ -24,7 +24,6 @@
 
 
 #include "action.h"
-#include "action-registry.h"
 
 #include "../typen.h"
 #include "../objects.h"

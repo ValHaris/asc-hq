@@ -19,23 +19,44 @@
 */
 
 
-#ifndef unitActionH
-#define unitActionH
+#ifndef SetResourceProcessingRateCommandH
+#define SetResourceProcessingRateCommandH
+
+#include "containercommand.h"
+
+#include "../typen.h"
+#include "../objects.h"
+#include "../mapfield.h"
 
 
-#include "action.h"
-
-
-class UnitAction : public GameAction {
-      int vehicleID;
+class SetResourceProcessingRateCommand : public ContainerCommand {
+   
+   public:
+      static bool avail ( const ContainerBase* factory );
+      
+   private:
+      SetResourceProcessingRateCommand( GameMap* map ) : ContainerCommand( map ), newRate( -1 ) {};
+      template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
+      int newRate;
+      Resources oldRate;
+      
    protected:
-      Vehicle* getUnit( bool dontThrow = false );
-      const Vehicle* getUnit( bool dontThrow = false ) const ;
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
-      UnitAction( GameMap* gamemap, int vehicleID );
-      UnitAction( Vehicle* unit );
-      UnitAction( GameMap* gamemap );
+      
+      GameActionID getID() const;
+      ASCString getDescription() const;
+      
+      ActionResult undoAction( const Context& context );
+      
+   public:
+      SetResourceProcessingRateCommand ( ContainerBase* item, int rate );
+      
+      Resources getNewPlus();
+      
+      ActionResult go ( const Context& context ); 
+      ASCString getCommandString() const;
 };
 
 #endif

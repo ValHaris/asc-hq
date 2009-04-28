@@ -21,6 +21,7 @@
 
 #include "changeobjectproperty.h"
 #include "removeobject.h"
+#include "action-registry.h"
 
 #include "../gamemap.h"
      

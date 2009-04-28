@@ -19,24 +19,41 @@
 */
 
 
-#ifndef unitActionH
-#define unitActionH
+#ifndef CancelResearchCommandH
+#define CancelResearchCommandH
 
+#include "command.h"
 
-#include "action.h"
+class Player;
 
-
-class UnitAction : public GameAction {
-      int vehicleID;
+//! cancels the research on the current technology, losing all research points
+class CancelResearchCommand : public Command {
+   private:
+      int researchProgress;
+      int activeTechnologyID;
+      int targetTechnologyID;
+      int player;
    protected:
-      Vehicle* getUnit( bool dontThrow = false );
-      const Vehicle* getUnit( bool dontThrow = false ) const ;
+      
+      GameActionID getID() const;
+      ASCString getDescription() const;
+      
+      ActionResult go ( const Context& context ); 
+      
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
-      UnitAction( GameMap* gamemap, int vehicleID );
-      UnitAction( Vehicle* unit );
-      UnitAction( GameMap* gamemap );
+      
+      ActionResult undoAction( const Context& context );
+      
+   public:
+      CancelResearchCommand( GameMap* map );
+      ActionResult preCheck();
+      void setPlayer( const Player& player );
+      
+      ASCString getCommandString() const ;
+      
 };
+
 
 #endif
 

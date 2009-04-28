@@ -328,5 +328,7 @@ A production line for this vehicletype can not be setup here
 Not enough resources for building this production line
 22902
 VehicleType not available
-
-
+23000
+Research progress mismatch
+23001
+No technology with this ID found

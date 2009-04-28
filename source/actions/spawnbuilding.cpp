@@ -23,6 +23,7 @@
 #include "viewregistration.h"
 #include "unitfieldregistration.h"
 #include "removeobject.h"
+#include "action-registry.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"

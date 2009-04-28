@@ -67,7 +67,9 @@ namespace ActionRegistry {
                   RepairBuildingCommand, // 40
                   TransferControlCommand,
                   BuildProductionLineCommand,
-                  RemoveProductionLineCommand
+                  RemoveProductionLineCommand,
+                  CancelResearchCommand,
+                  SetResourceProcessingRateCommand
    };
 };
 

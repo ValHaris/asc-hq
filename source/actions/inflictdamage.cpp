@@ -20,6 +20,7 @@
 
 
 #include "inflictdamage.h"
+#include "action-registry.h"
 
 #include "../containerbase.h"
 #include "../gamemap.h"

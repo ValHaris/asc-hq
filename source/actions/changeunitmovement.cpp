@@ -23,6 +23,7 @@
 
 #include "changeunitmovement.h"
 #include "changeunitproperty.h"
+#include "action-registry.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"

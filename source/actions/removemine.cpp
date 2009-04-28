@@ -20,6 +20,7 @@
 
 
 #include "removemine.h"
+#include "action-registry.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"

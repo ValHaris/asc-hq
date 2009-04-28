@@ -59,26 +59,22 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	repairunitcommand.lo jumpdrivecommand.lo \
 	powergenerationswitchcommand.lo trainunitcommand.lo \
 	repairbuildingcommand.lo transfercontrolcommand.lo \
-	buildproductionlinecommand.lo removeproductionlinecommand.lo
+	buildproductionlinecommand.lo removeproductionlinecommand.lo \
+	cancelresearchcommand.lo setresourceprocessingratecommand.lo \
+	servicing.lo spawnmine.lo putobjectcommand.lo \
+	putminecommand.lo containeraction.lo recycleunitcommand.lo \
+	consumeresource.lo vehicleattack.lo moveunit.lo \
+	discoverresources.lo unitcommand.lo attackcommand.lo \
+	moveunitcommand.lo convertcontainer.lo containercommand.lo \
+	constructunitcommand.lo spawnunit.lo cargomovecommand.lo \
+	servicecommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
-libfullgameactions_la_DEPENDENCIES =
-am_libfullgameactions_la_OBJECTS = containeraction.lo \
-	recycleunitcommand.lo consumeresource.lo vehicleattack.lo \
-	moveunit.lo discoverresources.lo unitcommand.lo \
-	attackcommand.lo moveunitcommand.lo convertcontainer.lo \
-	containercommand.lo constructunitcommand.lo spawnunit.lo \
-	cargomovecommand.lo servicecommand.lo
-libfullgameactions_la_OBJECTS = $(am_libfullgameactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo spawnmine.lo \
 	changeview.lo removemine.lo removeobject.lo \
 	changeobjectproperty.lo
 libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
-libmiscactions_la_DEPENDENCIES =
-am_libmiscactions_la_OBJECTS = servicing.lo spawnmine.lo \
-	putobjectcommand.lo putminecommand.lo
-libmiscactions_la_OBJECTS = $(am_libmiscactions_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -92,12 +88,9 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libactions_la_SOURCES) $(libdirectunitactions_la_SOURCES) \
-	$(libfullgameactions_la_SOURCES) $(libmapactions_la_SOURCES) \
-	$(libmiscactions_la_SOURCES)
+	$(libmapactions_la_SOURCES)
 DIST_SOURCES = $(libactions_la_SOURCES) \
-	$(libdirectunitactions_la_SOURCES) \
-	$(libfullgameactions_la_SOURCES) $(libmapactions_la_SOURCES) \
-	$(libmiscactions_la_SOURCES)
+	$(libdirectunitactions_la_SOURCES) $(libmapactions_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -269,7 +262,7 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ 
-noinst_LTLIBRARIES = libactions.la libdirectunitactions.la libmiscactions.la libmapactions.la libfullgameactions.la
+noinst_LTLIBRARIES = libactions.la libdirectunitactions.la  libmapactions.la 
 libactions_la_SOURCES = action.cpp command.cpp context.cpp actionresult.cpp actioncontainer.cpp containeraction.cpp
 libactions_la_LIBADD = @SDL_LIBS@
 libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constructbuildingcommand.cpp spawnbuilding.cpp destructbuildingcommand.cpp \
@@ -277,18 +270,15 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
                           powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
-                          buildproductionlinecommand.cpp removeproductionlinecommand.cpp
+                          buildproductionlinecommand.cpp removeproductionlinecommand.cpp cancelresearchcommand.cpp setresourceprocessingratecommand.cpp \
+                          servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp \
+                          containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
+                          unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
+                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp servicecommand.cpp                           
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
-libmiscactions_la_SOURCES = servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp
-libmiscactions_la_LIBADD = @SDL_LIBS@
 libmapactions_la_SOURCES = spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
 libmapactions_la_LIBADD = @SDL_LIBS@
-libfullgameactions_la_SOURCES = containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
-                                  unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                                  constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp servicecommand.cpp 
-
-libfullgameactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
 
@@ -336,12 +326,8 @@ libactions.la: $(libactions_la_OBJECTS) $(libactions_la_DEPENDENCIES)
 	$(CXXLINK)  $(libactions_la_OBJECTS) $(libactions_la_LIBADD) $(LIBS)
 libdirectunitactions.la: $(libdirectunitactions_la_OBJECTS) $(libdirectunitactions_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libdirectunitactions_la_OBJECTS) $(libdirectunitactions_la_LIBADD) $(LIBS)
-libfullgameactions.la: $(libfullgameactions_la_OBJECTS) $(libfullgameactions_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libfullgameactions_la_OBJECTS) $(libfullgameactions_la_LIBADD) $(LIBS)
 libmapactions.la: $(libmapactions_la_OBJECTS) $(libmapactions_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libmapactions_la_OBJECTS) $(libmapactions_la_LIBADD) $(LIBS)
-libmiscactions.la: $(libmiscactions_la_OBJECTS) $(libmiscactions_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libmiscactions_la_OBJECTS) $(libmiscactions_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -354,6 +340,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildproductionlinecommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cancelresearchcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargomovecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changecontainerproperty.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/changeobjectproperty.Plo@am__quote@
@@ -390,6 +377,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/repairunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/servicing.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/setresourceprocessingratecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnbuilding.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnmine.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spawnobject.Plo@am__quote@

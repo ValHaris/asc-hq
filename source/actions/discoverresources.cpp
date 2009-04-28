@@ -20,7 +20,7 @@
 
 
 #include "discoverresources.h"
-
+#include "action-registry.h"
 
 #include "../gamemap.h"
      

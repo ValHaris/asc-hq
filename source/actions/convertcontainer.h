@@ -24,7 +24,6 @@
 
 
 #include "containeraction.h"
-#include "action-registry.h"
 #include "../util/factory.h"
 
 class ConvertContainer : public ContainerAction {

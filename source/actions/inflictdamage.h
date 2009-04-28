@@ -24,7 +24,6 @@
 
 
 #include "containeraction.h"
-#include "action-registry.h"
 
 
 class InflictDamage : public ContainerAction {

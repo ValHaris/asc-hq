@@ -45,9 +45,7 @@ $(top_builddir)/source/sdl/libsdlsnd.la $(top_builddir)/source/network/libnetwor
 $(top_builddir)/source/video/libvideo.la  \
 $(top_builddir)/source/actions/libactions.la  \
 $(top_builddir)/source/actions/libdirectunitactions.la  \
-$(top_builddir)/source/actions/libfullgameactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
-$(top_builddir)/source/actions/libmiscactions.la  \
 $(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(LUA_LIBS)
 
 nodist_asc_SOURCES = $(commonSources) sg.cpp

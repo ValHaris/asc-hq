@@ -256,22 +256,13 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    
    searchFields();
    
-   if ( getUnit()->networkid == 14329) {
-      for ( set<MapCoordinate3D>::const_iterator i = reachableFields.begin(); i != reachableFields.end(); ++i )
-         cout << i->x << ":" << i->y << ":" << i->getNumericalHeight() << "\n";
-   }
-   
    if ( reachableFields.find( destination ) == reachableFields.end() ) 
       return ActionResult(105);
 
    calcPath();
    
-   if ( path.empty() || path.rbegin()->x != destination.x || path.rbegin()->y != destination.y  ) {
-      for ( AStar3D::Path::const_iterator i = path.begin(); i != path.end(); ++i )
-         printf("%d / %d \n", i->x, i->y );
+   if ( path.empty() || path.rbegin()->x != destination.x || path.rbegin()->y != destination.y  ) 
       return ActionResult( 105 );
-   }
-       
    
    int nwid = getUnit()->networkid;
 

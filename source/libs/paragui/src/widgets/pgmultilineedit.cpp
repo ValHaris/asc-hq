@@ -157,7 +157,7 @@ void PG_MultiLineEdit::DrawTextCursor() {
 }
 
 void PG_MultiLineEdit::FindWordRight() {
-	unsigned int currentPos = my_cursorPosition;
+	int currentPos = my_cursorPosition;
 
 	// step off the initial space
 	++currentPos;
@@ -176,7 +176,7 @@ void PG_MultiLineEdit::FindWordRight() {
 }
 
 void PG_MultiLineEdit::FindWordLeft() {
-	unsigned int currentPos = my_cursorPosition;
+	int currentPos = my_cursorPosition;
 
 	// step off the initial space(s)
 	while (currentPos-1 >= 0 && (my_text[currentPos-1] == ' ' || my_text[currentPos-1] == '\n')) {

@@ -20,7 +20,7 @@
 
 
 #include "changeview.h"
-
+#include "action-registry.h"
 
 #include "../gamemap.h"
      

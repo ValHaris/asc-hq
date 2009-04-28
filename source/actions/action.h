@@ -62,7 +62,19 @@ class GameAction {
       
       virtual ActionResult runAction( const Context& context ) = 0;
       virtual ActionResult undoAction( const Context& context ) = 0;
+      
+      /** preCheck is called before an action is redone and should check the preconditions
+          for the action. The map should be in exactly the same state as it was when the action
+          was first run. This method should check various key indicators to insurce the unmodifiedness
+          of the map. 
+          The cheat detection of Replays heavily relies on this mechanism. 
+      */
       virtual ActionResult preCheck()  {return ActionResult(0);};
+      
+      /** postCheck is called after an action has been redone and should check that the state
+          of the map is exactly the same as it was after the action has been executed the first time.
+          The cheat detection of Replays heavily relies on this mechanism. 
+       */
       virtual ActionResult postCheck() {return ActionResult(0);};
       
       virtual void readData ( tnstream& stream ) = 0;

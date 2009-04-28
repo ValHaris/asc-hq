@@ -21,6 +21,7 @@
 
 #include "convertcontainer.h"
 #include "destructcontainer.h"
+#include "action-registry.h"
 
 #include "../vehicle.h"
 

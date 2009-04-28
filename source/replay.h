@@ -114,6 +114,7 @@ class trunreplay {
             void error( const MapCoordinate& pos, const char* message, ... );
             void error( const ASCString& message );
             void error( const MapCoordinate& pos, const ASCString& message );
+            void error( const ActionResult& res );
 
             char nextaction;
 

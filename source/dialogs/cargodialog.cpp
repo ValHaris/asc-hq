@@ -51,6 +51,7 @@
 #include "../actions/trainunitcommand.h"
 #include "../actions/repairbuildingcommand.h"
 #include "../actions/transfercontrolcommand.h"
+#include "../actions/setresourceprocessingratecommand.h"
 
 #include "selectionwindow.h"
 #include "ammotransferdialog.h"
@@ -1380,6 +1381,7 @@ class MatterAndMiningBaseWindow : public SubWindow {
       {
          if ( invertSlider() )
             pos = 100 - pos;
+         
          setnewpower( pos );
          update();
          return true;
@@ -1388,20 +1390,25 @@ class MatterAndMiningBaseWindow : public SubWindow {
       
       bool scrollTrack( long pos )
       {
+         
          if ( invertSlider() )
             pos = 100 - pos;
-         setnewpower( pos );
-         update();
+         
+         showResourceTable( getOutput( pos ));
+         
          return true;
       };
    
       void setnewpower ( ContainerBase* c, int power )
       {
          if ( hasFunction( c ) ) {
-            for ( int r = 0; r < 3; r++ )
-               c->plus.resource(r) = c->maxplus.resource(r) * power/100;
-         
-            logtoreplayinfo( rpl_setResourceProcessingAmount, c->getPosition().x, c->getPosition().y, c->plus.energy, c->plus.material, c->plus.fuel );
+            auto_ptr<SetResourceProcessingRateCommand> srprc ( new SetResourceProcessingRateCommand( c, power ));
+            
+            ActionResult res = srprc->execute( createContext( c->getMap() ));
+            if ( res.successful() )
+               srprc.release();
+            else
+               displayActionError( res );
          }
       }
          
@@ -1438,9 +1445,28 @@ class MatterAndMiningBaseWindow : public SubWindow {
       };
       
       virtual Resources getOutput() = 0;
+      virtual Resources getOutput( int rate ) = 0;
+      
+   private:
+      void showResourceTable( const Resources& res ) 
+      {
+         for ( int r = 0; r < 3; ++r ) {
+            ASCString s = Resources::name(r);
+            int amount = res.resource(r);
+            if ( container()->maxplus.resource(r) < 0 ) {
+               s += "In";
+               amount  = -amount;
+            } else {
+               s += "Out";
+            }
+            if ( container()->maxplus.resource(r) != 0 )
+               cargoDialog->setLabelText( s, amount, widget );
+         }
+      }
       
    public:
       MatterAndMiningBaseWindow () : slider(NULL), first(true) {};
+      
       
       void update()
       {
@@ -1452,26 +1478,15 @@ class MatterAndMiningBaseWindow : public SubWindow {
             slider->SetRange( 0, 100 );
             slider->sigScrollPos.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollPos ));
             slider->sigScrollTrack.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollTrack ));
-
-            for ( int r = 0; r < 3; ++r )
-               if ( container()->maxplus.resource(r) ) {
-                  slider->SetPosition( 100 * container()->plus.resource(r) / container()->maxplus.resource(r) );
-                  break;
-               }
          }
 
-         for ( int r = 0; r < 3; ++r ) {
-            ASCString s = Resources::name(r);
-            int amount = getOutput().resource(r);
-            if ( container()->maxplus.resource(r) < 0 ) {
-               s += "In";
-               amount  = -amount;
-            } else {
-               s += "Out";
+         for ( int r = 0; r < 3; ++r )
+            if ( container()->maxplus.resource(r) ) {
+               slider->SetPosition( 100 * container()->plus.resource(r) / container()->maxplus.resource(r) );
+               break;
             }
-            if ( container()->maxplus.resource(r) != 0 )
-               cargoDialog->setLabelText( s, amount, widget );
-         }
+
+         showResourceTable( getOutput() );
       }
 };
 
@@ -1487,6 +1502,15 @@ class MatterConversionWindow : public MatterAndMiningBaseWindow {
          return container()->plus;
       }
 
+      Resources getOutput( int rate )
+      {
+         Resources r;
+         for ( int i = 0; i < Resources::count; ++i )
+            r.resource(i) = rate * container()->maxplus.resource(i) / 100;
+         return r;
+      }
+      
+      
    public:
       
       ASCString getASCTXTname()
@@ -1568,8 +1592,35 @@ class MiningWindow : public MatterAndMiningBaseWindow {
                r.resource(i) = -usage.resource(i);
          }
          return r;
-
       }
+      
+      Resources getOutput( int rate )
+      {
+         ContainerBase* c = container();
+         Resources temp = c->plus;
+         
+         for ( int r = 0; r < Resources::count; r++ )
+            c->plus.resource(r) = c->maxplus.resource(r) * rate/100;
+         
+         
+         Resources r;
+         MiningStation miningStation ( container(), true );
+
+         for ( int i = 0; i <3; ++i ) {
+            Resources plus = miningStation.getPlus();
+            if ( plus.resource(i) > 0 )
+               r.resource(i) = plus.resource(i);
+
+            Resources usage = miningStation.getUsage();
+            if ( usage.resource(i) > 0 )
+               r.resource(i) = -usage.resource(i);
+         }
+         
+         c->plus = temp;
+               
+         return r;
+      }
+      
    public:
      
       ASCString getASCTXTname()

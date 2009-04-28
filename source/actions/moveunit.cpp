@@ -28,6 +28,7 @@
 #include "convertcontainer.h"
 #include "discoverresources.h"
 #include "changeunitmovement.h"
+#include "action-registry.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"

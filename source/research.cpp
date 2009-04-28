@@ -873,15 +873,6 @@ void Research :: settechlevel ( int techlevel )
 }
 
 
-void Research :: cancel ()
-{
-   progress = 0;
-   activetechnology = NULL;
-   goal = NULL;
-}
-
-
-
 
 
 bool Research :: vehicletypeavailable ( const Vehicletype* fztyp ) const

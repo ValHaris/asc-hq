@@ -21,6 +21,7 @@
 
 #include "destructcontainer.h"
 #include "spawnobject.h"
+#include "action-registry.h"
 
 #include "../vehicle.h"
 #include "../gamemap.h"

@@ -24,7 +24,6 @@
 
 
 #include "unitaction.h"
-#include "action-registry.h"
 
 #include "../typen.h"
 #include "../mapfield.h"

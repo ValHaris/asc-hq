@@ -158,6 +158,7 @@
 #include "memory-measurement.h"
 #include "dialogs/mailoptionseditor.h"
 #include "dialogs/unitguidedialog.h"
+#include "actions/cancelresearchcommand.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -900,8 +901,13 @@ void execuseraction ( tuseractions action )
             // s += strrr ( actmap->player[actmap->actplayer].research.progress );
             // s += " research points will be lost.";
             if (choice_dlg(s.c_str(),"~y~es","~n~o") == 1) {
-               actmap->player[actmap->actplayer].research.cancel();
-               logtoreplayinfo( rpl_cancelResearch );
+               auto_ptr<CancelResearchCommand> crc ( new CancelResearchCommand( actmap ));
+               crc->setPlayer( actmap->player[actmap->actplayer] );
+               ActionResult res = crc->execute( createContext( actmap ));
+               if ( res.successful() )
+                  crc.release();
+               else
+                  displayActionError( res );
             }
             
          } else
