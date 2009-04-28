@@ -101,8 +101,13 @@ void ChangeUnitMovement::decreaseMovement( Vehicle* veh, float fraction, const C
                decreaseMovement( *i, cargoFraction, context );
       }
       
-      
-   int newMovement = veh->getMovement(false,false) - int(ceil( float(veh->maxMovement()) * fraction));
+   float f = float(veh->maxMovement()) * fraction;
+   float f2 = ceil(f);
+   if ( fabs ( f-f2) > 0.999 )
+      f2 = round(f);
+   
+   int i = int( f2 );
+   int newMovement = veh->getMovement(false,false) - i;
    
    (new ChangeUnitProperty(veh, ChangeUnitProperty::Movement, newMovement ))->execute( context );
 }

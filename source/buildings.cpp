@@ -439,6 +439,10 @@ Building :: ~Building ()
          gamemap->player[c].buildingList.erase ( i );
    }
 
+   for ( int i = 0; i < 8; ++i ) {
+      delete aiparam[ i ] ;
+      aiparam[ i ] = NULL;
+   }
 
    unchainbuildingfromfield();
 }
