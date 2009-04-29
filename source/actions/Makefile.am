@@ -14,7 +14,7 @@ libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp const
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
                           powergenerationswitchcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
                           buildproductionlinecommand.cpp removeproductionlinecommand.cpp cancelresearchcommand.cpp setresourceprocessingratecommand.cpp \
-                          servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp \
+                          servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp trainunitcommand.cpp servicecommand.cpp \
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                           unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
                           constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp 
@@ -22,8 +22,8 @@ libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp const
 libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 
 # this are actions that are also needed by mapeditor
-libmapactions_la_SOURCES	= spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp \
-                                  trainunitcommand.cpp servicecommand.cpp
+libmapactions_la_SOURCES	= spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp 
+                                  
 libmapactions_la_LIBADD		= @SDL_LIBS@
 
 EXTRA_DIST=$(srcdir)/*.h
