@@ -26,7 +26,6 @@
 #include "../spfst.h"
 #include "../containercontrols.h"
 #include "../gameoptions.h"
-#include "../replay.h"
 
 #include "consumeresource.h"
 #include "consumeammo.h"

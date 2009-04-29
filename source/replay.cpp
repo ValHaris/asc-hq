@@ -699,12 +699,6 @@ class LogActionIntoReplayInfo  {
       }
 };
 
-
-void closePlayerReplayLogging( Player& player )
-{
-   player.getParentMap()->actions.breakUndo();
-}
-
 void logActionToReplay( GameMap* map, const Command& command)
 {
    LogActionIntoReplayInfo lairi( map );

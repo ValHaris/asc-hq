@@ -1223,7 +1223,6 @@ void GameMap::beginTurn()
 
 void GameMap::endTurn()
 {
-   actions.breakUndo();
 
    player[actplayer].ASCversion = getNumericVersion();
    Player::PlayTime pt;
@@ -1234,6 +1233,8 @@ void GameMap::endTurn()
    sigPlayerTurnEnds( player[actplayer] );
    sigPlayerTurnEndsStatic( this, player[actplayer] );
          
+   actions.breakUndo(); // commits all actions to the replay log
+   
    for ( int i = 0; i < 9; ++i )
      for ( Player::BuildingList::iterator v = player[i].buildingList.begin(); v != player[i].buildingList.end(); ++v ) {
          if ( i == actplayer )

@@ -57,23 +57,22 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	viewregistration.lo consumeammo.lo recycleunitcommand.lo \
 	destructunitcommand.lo reactionfireswitchcommand.lo \
 	repairunitcommand.lo jumpdrivecommand.lo \
-	powergenerationswitchcommand.lo trainunitcommand.lo \
-	repairbuildingcommand.lo transfercontrolcommand.lo \
-	buildproductionlinecommand.lo removeproductionlinecommand.lo \
-	cancelresearchcommand.lo setresourceprocessingratecommand.lo \
-	servicing.lo spawnmine.lo putobjectcommand.lo \
-	putminecommand.lo containeraction.lo recycleunitcommand.lo \
-	consumeresource.lo vehicleattack.lo moveunit.lo \
-	discoverresources.lo unitcommand.lo attackcommand.lo \
-	moveunitcommand.lo convertcontainer.lo containercommand.lo \
-	constructunitcommand.lo spawnunit.lo cargomovecommand.lo \
-	servicecommand.lo
+	powergenerationswitchcommand.lo repairbuildingcommand.lo \
+	transfercontrolcommand.lo buildproductionlinecommand.lo \
+	removeproductionlinecommand.lo cancelresearchcommand.lo \
+	setresourceprocessingratecommand.lo servicing.lo spawnmine.lo \
+	putobjectcommand.lo putminecommand.lo containeraction.lo \
+	recycleunitcommand.lo consumeresource.lo vehicleattack.lo \
+	moveunit.lo discoverresources.lo unitcommand.lo \
+	attackcommand.lo moveunitcommand.lo convertcontainer.lo \
+	containercommand.lo constructunitcommand.lo spawnunit.lo \
+	cargomovecommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
 am_libmapactions_la_OBJECTS = spawnobject.lo spawnmine.lo \
 	changeview.lo removemine.lo removeobject.lo \
-	changeobjectproperty.lo
+	changeobjectproperty.lo trainunitcommand.lo servicecommand.lo
 libmapactions_la_OBJECTS = $(am_libmapactions_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -269,15 +268,19 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
-                          powergenerationswitchcommand.cpp trainunitcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
+                          powergenerationswitchcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
                           buildproductionlinecommand.cpp removeproductionlinecommand.cpp cancelresearchcommand.cpp setresourceprocessingratecommand.cpp \
                           servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp \
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                           unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp servicecommand.cpp                           
+                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp 
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
-libmapactions_la_SOURCES = spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp
+
+# this are actions that are also needed by mapeditor
+libmapactions_la_SOURCES = spawnobject.cpp spawnmine.cpp changeview.cpp removemine.cpp removeobject.cpp changeobjectproperty.cpp \
+                                  trainunitcommand.cpp servicecommand.cpp
+
 libmapactions_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am

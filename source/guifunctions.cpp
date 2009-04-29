@@ -32,7 +32,6 @@
 #include "dialog.h"
 #include "gameoptions.h"
 #include "iconrepository.h"
-#include "replay.h"
 #include "attack.h"
 #include "graphics/blitter.h"
 #include "viewcalculation.h"

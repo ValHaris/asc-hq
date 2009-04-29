@@ -17,7 +17,6 @@
 
 #include "containercontrols.h"
 #include "gamemap.h"
-#include "replay.h"
 #include "mapdisplayinterface.h"
 #include "itemrepository.h"
 

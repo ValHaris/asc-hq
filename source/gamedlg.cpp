@@ -49,7 +49,6 @@
 #include "gameoptions.h"
 #include "errors.h"
 #include "viewcalculation.h"
-#include "replay.h"
 #include "itemrepository.h"
 #include "strtmesg.h"
 #include "dialogs/editmapparam.h"

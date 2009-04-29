@@ -34,7 +34,6 @@
 #include "../guifunctions.h"
 #include "../guifunctions-interface.h"
 #include "../cannedmessages.h"
-#include "../replay.h"
 #include "../dashboard.h"
 #include "../dialog.h"
 #include "../containerbase-functions.h"
