@@ -3,7 +3,13 @@ Grafik: GAMER, Rhiow, ExarKun
 Infotext: Rhiow
 InfoImage: GAMER
 Spezifikationen: GAMER
-
+__________________
+30.04.2009 (GAMER)
+-Tender , Bugfix Landung Spaceport
+__________________
+21.04.2009 (GAMER)
+-Asus, 2 Felder Waffenreichweite
+-Meo, Waffe2 1xRF
 __________________
 11.04.2009 (GAMER)
 -Solarkraftwerk Grafikbugfix

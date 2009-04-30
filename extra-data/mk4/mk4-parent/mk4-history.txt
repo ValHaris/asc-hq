@@ -3,7 +3,10 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh, Keyfinder
 InfoTexte: Rennreh, Redhorse
 InfoImages: GAMER
 Spezifikationen: GAMER
-
+__________________
+Beta-04-06
+-Ammo-Bugfix Imperator, Dictator
+-Hydra, Waffenbugfix
 __________________
 19.04.2009 (GAMER)
 -Anaconda, default upgrade

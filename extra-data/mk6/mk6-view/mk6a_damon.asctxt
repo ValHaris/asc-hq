@@ -3,7 +3,7 @@ VehicleType {
    parent = 248 
    ID = 15248
 
-   Infotext = [#crt# Universeller Raum- und Luftjaeger mit ansprechender Panzerung und Bewaffnung.]
+   Infotext = [Raumtaugliches Spionageflugzeug]
    Picture = mk6a_damon.pcx
 
    Transportation ->* VehicleType.SonarSeaPlane

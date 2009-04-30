@@ -18,7 +18,7 @@ Für den Nahkampf besitzt der Asus einen EMP der Klasse D.]
       Weapon0 ->* VehicleType.type_laser
       Weapon0.name = Lasergun
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight
-      Weapon0.Punch@MaxRange += 10
+      Weapon0.MaxRange = 20
       Weapon0.Punch@MinRange += 10
       Weapon1 ->* VehicleType.TeccEMPAir
       Weapon1.Punch@MaxRange = 75

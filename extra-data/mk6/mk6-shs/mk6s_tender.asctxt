@@ -29,8 +29,8 @@ VehicleType {
       EntranceSystem1 ->* VehicleType.SubIO
    } Transportation
 
-   Height = submerged floating low_level_flight
-   Movement = 0 22 44 0 33 0 0 0 
+   Height = submerged floating ground_level low_level_flight
+   Movement = 0 22 55 33 33 0 0 0 
    TerrainAccess {
       terrain_any = Spaceport shallow_water water deep_water river
       terrain_all =
@@ -83,10 +83,10 @@ VehicleType {
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
-      movecost = 10
-      heightdelta = -2
+      movecost = 5
+      heightdelta = -1
       dist = 0
-      startheight = low_level_flight
+      startheight = low_level_flight ground_level
       canattack = true
    } HeightChangeMethod3
 } VehicleType

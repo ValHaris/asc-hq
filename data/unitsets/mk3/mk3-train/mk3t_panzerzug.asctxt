@@ -1,6 +1,6 @@
 VehicleType { 
    Name = Panzerzug
-   parent = 298
+   parent = 289
    ID = 600
    
    Description = Panzerzug

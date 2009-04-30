@@ -1,0 +1,5 @@
+Techadapter {
+   Name = o2654
+   ;Bezeichnung der verknüpften Technologie: Deep Sea Minerals
+   TechnologiesRequired = 0
+} TechAdapter

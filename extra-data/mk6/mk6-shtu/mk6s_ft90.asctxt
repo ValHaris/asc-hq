@@ -55,7 +55,7 @@ VehicleType {
 
    HeightChangeMethodNum = 4
    HeightChangeMethod0 {
-      movecost = 30
+      movecost = 25
       heightdelta = 2
       dist = 0
       startheight = floating

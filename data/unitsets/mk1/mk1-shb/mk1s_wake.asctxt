@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Speed Boat
    picture = MK1s_wake.pcx
-   Transportation ->* VehicleType.TransTrooperArmor
+   Transportation ->* VehicleType.TransLowTrooper3
    GuideSortHelp = 518 418 0 0 1 0 0 0 0 0
 
    Weapons { 

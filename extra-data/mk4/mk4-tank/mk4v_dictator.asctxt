@@ -24,7 +24,6 @@ VehicleType {
    Weapons { 
       Number = 3
       Weapon0.MaxRange = 20
-      Weapon0.Ammo = 8
 
       Weapon1 ->* VehicleType.MGmed 
       Weapon1.Ammo = 14

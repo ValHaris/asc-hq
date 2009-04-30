@@ -12,5 +12,6 @@ VehicleType {
    Weapons { 
       Weapon0.MaxRange += 10
       Weapon1 ->* VehicleType.DLS
+      Weapon1.ReactionFireShots = 1
    } Weapons
 } VehicleType

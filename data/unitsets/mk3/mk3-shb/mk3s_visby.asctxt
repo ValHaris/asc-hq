@@ -48,8 +48,8 @@ Da bei der Visby alle Waffen unter Deck installiert wurden, ist leider kein Plat
       Weapon2.ReactionFireShots = 2
 
       Weapon3 ->* VehicleType.DCS
-      Weapon1.Punch@MaxRange = 150
-      Weapon1.Punch@MinRange = 150
+      Weapon3.Punch@MaxRange = 150
+      Weapon3.Punch@MinRange = 150
       Weapon3.Ammo = 10
 
       Weapon4 ->* VehicleType.SAM

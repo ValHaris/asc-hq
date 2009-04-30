@@ -3,7 +3,11 @@ Grafik: GAMER , Ares
 InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
-
+__________________
+30.04.2009 (GAMER)
+-Panzerzug, parent korrigiert
+-Visby, Waffenbugfix
+-USSL kein Hillside mehr
 __________________
 19.04.2009 (GAMER)
 -BuildingPio erobert Gebäude

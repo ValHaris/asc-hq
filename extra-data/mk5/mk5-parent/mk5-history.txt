@@ -2,12 +2,16 @@ MK5 Outlaw
 Grafiken: GAMER
 InfoText: Hastrubal
 InfoImage: GAMER
-
+__________________
+30.04.2009 (GAMER)
+-Scanner, Änderung Moveverbrauch Höhenwechsel/Bewegung
+-T7 Techbugfix
 __________________
 20.04.2009 (GAMER)
 -Tramper, Scanner Ausgang
 -AOV Techbugfix
 -IronGun Techbugfix
+-Cluster,Hoover Waffenbugfix
 __________________
 11.04.2009 (GAMER)
 -InfoImage = T4,T7,T9
