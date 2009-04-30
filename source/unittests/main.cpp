@@ -33,6 +33,7 @@
 #include "ai-service1.h"
 #include "transfercontroltest.h"
 #include "recyclingtest.h"                
+#include "diplomacytest.h"
 
 void positionCursor( Player& player )
 {
@@ -130,18 +131,10 @@ void loaddata( int resolx, int resoly )
 
 
 
-void diplomaticChange( GameMap* gm,int p1,int p2)
-{
-   if ( p1 == gm->getPlayerView() || p2 == gm->getPlayerView() ) {
-      computeview( gm );
-      mapChanged( gm );
-      repaintMap();
-   }
-}
-
 
 void runUnitTests()
 {
+   testDiplomacy();
    testRecycling();
    testTransferControl();
    testAiService();
@@ -193,9 +186,6 @@ int runTester ( )
    GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
 
    suppressMapTriggerExecution = false;
-
-   DiplomaticStateVector::shareViewChanged.connect( SigC::slot( &diplomaticChange ));
-   
 
    runUnitTests();
    

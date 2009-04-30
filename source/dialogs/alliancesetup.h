@@ -55,16 +55,33 @@ class AllianceSetupWidget : public PG_ScrollWidget {
       DiplomaticStates& getState( int actingPlayer, int secondPlayer );
 
    public:
-      AllianceSetupWidget( GameMap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
+      
+      class ApplyStrategy {
+         public:
+            virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer ) = 0;
+            virtual void setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState ) = 0;
+            ~ApplyStrategy(){};
+      };
+      
+      AllianceSetupWidget( GameMap* gamemap, ApplyStrategy* applyStrategy, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );
       void Apply();
       ~AllianceSetupWidget();
+      
+   private:
+      ApplyStrategy* strategy;
+
+};
+
+class DirectAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
+   virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer );
+   virtual void setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState );
 };
 
 
 /**  runs the Alliance-Setup dialog.
       \returns if the view should be recalculated
 */
-bool  setupalliances( GameMap* actmap, bool supervisor = false );
+bool  setupalliances( GameMap* actmap, AllianceSetupWidget::ApplyStrategy* strategy, bool supervisor = false );
 
 
 #endif

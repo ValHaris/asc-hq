@@ -33,10 +33,6 @@
 PlayerID::PlayerID( const Player& p ) : num( p.getPosition() ) {};
 
 
-SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> DiplomaticStateVector::anyStateChanged;
-SigC::Signal3<void,GameMap*,int,int> DiplomaticStateVector::shareViewChanged;
-
-
 const char* diplomaticStateNames[diplomaticStateNum+1] = 
 {
    "War",
@@ -78,16 +74,16 @@ void DiplomaticStateVector::turnBegins()
 
 
 
-DiplomaticStates DiplomaticStateVector::getState( int towardsPlayer ) const
+DiplomaticStates DiplomaticStateVector::getState( PlayerID towardsPlayer ) const
 {
-   if ( towardsPlayer < 0 )
+   if ( towardsPlayer.getID() < 0 )
       return WAR;
 
-   if ( player.getPosition() == towardsPlayer )
+   if ( player.getPosition() == towardsPlayer.getID() )
       return ALLIANCE;
       
-   if ( towardsPlayer < states.size() )
-      return states[towardsPlayer];
+   if ( towardsPlayer.getID() < states.size() )
+      return states[towardsPlayer.getID()];
    else
       return WAR;
 }
@@ -101,137 +97,17 @@ void DiplomaticStateVector::resize( int size )
 }
 
 
-void DiplomaticStateVector::setState( int towardsPlayer, DiplomaticStates s, bool fireSignal )
+void DiplomaticStateVector::setState( PlayerID towardsPlayer, DiplomaticStates s )
 {
-   assert( towardsPlayer >= 0 );
+   assert( towardsPlayer.getID() >= 0 );
 
-   if ( towardsPlayer >= states.size() ) 
-      resize(towardsPlayer+1);
+   if ( towardsPlayer.getID() >= states.size() ) 
+      resize(towardsPlayer.getID()+1);
       
-   states[towardsPlayer] = s;
-   
-   if ( fireSignal )
-      anyStateChanged( player.getParentMap(), player.getPosition(), towardsPlayer,s);
-}
-
-void DiplomaticStateVector::sneakAttack( int towardsPlayer )
-{
-   assert( towardsPlayer >= 0 );
-
-   setState( towardsPlayer, WAR );         
-   player.getParentMap()->player[ towardsPlayer ].diplomacy.setState( player.getPosition(), WAR );
-   
-   int to = 0;
-   for ( int j = 0; j < 8; j++ )
-      if ( j != player.getPosition() )
-         to |= 1 << j;
-
-   ASCString txt;
-   txt.format ( getmessage( 10001 ), player.getName().c_str(), player.getParentMap()->player[towardsPlayer].getName().c_str() );
-   new Message ( txt, player.getParentMap(), to );
+   states[towardsPlayer.getID()] = s;
 }
 
 
-void DiplomaticStateVector::changeToState( int towardsPlayer, DiplomaticStates s, bool mail )
-{
-   assert( towardsPlayer >= 0 );
-
-   int msgid;
-   if ( s > getState( towardsPlayer ))
-      msgid = 10003;  //  propose peace
-   else
-      msgid = 10002;  // declare war
-
-
-   bool oldShareView = sharesView(towardsPlayer);
-
-   setState( towardsPlayer, s );
-   
-   DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
-   targ.setState( player.getPosition(), s );
-
-   if( sharesView(towardsPlayer) != oldShareView )
-      shareViewChanged( player.getParentMap(), player.getPosition(), towardsPlayer );
-
-   if ( mail ) {
-      ASCString txt;
-      txt.format( getmessage( msgid ), player.getName().c_str(), diplomaticStateNames[s]  );
-      new Message ( txt, player.getParentMap(), 1 << towardsPlayer );
-   }
-/*
-   for ( int p = 0; p < player.getParentMap()->getPlayerCount(); ++p )
-      if ( p != player.getPosition() ) {
-         if ( getState( p ) == ALLIANCE ) {
-            // we have an allied player which must now react
-            DiplomaticStateVector& ally = player.getParentMap()->getPlayer( p ).diplomacy;
-            if ( ally.getState( towardsPlayer ) != s )
-               ally.changeToState( towardsPlayer, s );
-      
-         }
-         
-         if ( targ.getState( p ) == ALLIANCE ) {
-            // the opponent has an ally which must now react
-            if ( getState( p ) != s )
-               changeToState( p, s );
-      
-         }
-      }
-      */
-}
-
-
-void DiplomaticStateVector::propose( int towardsPlayer, DiplomaticStates s )
-{
-   assert( towardsPlayer >= 0 );
-
-   DiplomaticStateVector& targ = player.getParentMap()->player[ towardsPlayer ].diplomacy;
-
-   QueuedStateChanges::iterator i = targ.queuedStateChanges.find( player.getPosition() );
-         
-   DiplomaticStates currentState = getState( towardsPlayer ) ;
-
-   if ( i == targ.queuedStateChanges.end() || (s < currentState && i->second > currentState)) {
-      // we only send a message if this is an initial proposal OR
-      // if the other player proposed a more peaceful state, but we are setting a more hostile state
-      ASCString txt;
-      int msgid;
-      if ( s > getState( towardsPlayer )) 
-         msgid = 10003;  //  propose peace
-      else
-         msgid = 10002;  //  declare war
-            
-      txt.format( getmessage( msgid ), player.getName().c_str(), diplomaticStateNames[s]  ); 
-      new Message ( txt, player.getParentMap(), 1 << towardsPlayer );
-      
-      queuedStateChanges[towardsPlayer] = s;
-   }  else {
-      // we are answering a proposal by the other player
-      
-      if ( s > getState( towardsPlayer )) {
-         // our proposal is about going to a more peaceful state 
-
-         if ( s > i->second ) {
-            // we are proposing even more peace, but we'll only set the state he proposed and keep our proposal
-            changeToState( towardsPlayer, i->second );
-         } else {
-            // he proposes less or equal peace, but we'll set the state he proposed and delete his proposal, because it's fulfilled
-            changeToState( towardsPlayer, s, true );  // s < i->second would only send mail if the proposal differs
-            targ.queuedStateChanges.erase( i );
-         }
-      } else {
-         if ( s < i->second ) {
-            // we go to an even more hostile state 
-            changeToState( towardsPlayer, i->second );
-            targ.queuedStateChanges.erase( i );
-         } else {
-            // we are going to a state that is more hostile than the current one, but less hostile then the other players declaration
-            changeToState( towardsPlayer, s, false );
-         }
-
-      }
-   }
-   
-}
 
 bool DiplomaticStateVector::getProposal( int fromPlayer, DiplomaticStates* state )
 {
@@ -579,8 +455,8 @@ void DiplomaticStateVector::swap( int secondPlayer )
       DiplomaticStates sec = player.getParentMap()->getPlayer(i).diplomacy.getState(secondPlayer);
       DiplomaticStates fir = player.getParentMap()->getPlayer(i).diplomacy.getState(player.getPosition());
 
-      player.getParentMap()->getPlayer(i).diplomacy.setState(secondPlayer, fir, false );
-      player.getParentMap()->getPlayer(i).diplomacy.setState(player.getPosition(), sec, false );
+      player.getParentMap()->getPlayer(i).diplomacy.setState(secondPlayer, fir );
+      player.getParentMap()->getPlayer(i).diplomacy.setState(player.getPosition(), sec );
    }
 
 }

@@ -27,6 +27,7 @@ class TestFailure : public ASCmsgException {
 class NextTurnStrategy_Abort : public NextTurnStrategy {
    public:
       bool continueWhenLastPlayer() const;
+      bool authenticate( GameMap* actmap) const;
 } ;
 
 

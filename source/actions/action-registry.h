@@ -69,7 +69,9 @@ namespace ActionRegistry {
                   BuildProductionLineCommand,
                   RemoveProductionLineCommand,
                   CancelResearchCommand,
-                  SetResourceProcessingRateCommand
+                  SetResourceProcessingRateCommand,
+                  DiplomacyCommand,
+                  ChangeDiplomaticState
    };
 };
 

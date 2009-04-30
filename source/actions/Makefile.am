@@ -17,7 +17,7 @@ libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp const
                           servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp trainunitcommand.cpp servicecommand.cpp \
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                           unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp 
+                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp diplomacycommand.cpp changediplomaticstate.cpp
                           
 libdirectunitactions_la_LIBADD		= @SDL_LIBS@
 

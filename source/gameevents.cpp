@@ -46,9 +46,12 @@
 #include "messagedlg.h"
 #include "mapdisplayinterface.h"
 
+#include "actions/diplomacycommand.h"
+
 #ifdef sgmain
 # include "viewcalculation.h"
 # include "resourcenet.h"
+# include "sg.h"
 #endif
 
 
@@ -1584,14 +1587,21 @@ void ChangeDiplomaticStatus :: setup ()
 
 void ChangeDiplomaticStatus :: execute( MapDisplayInterface* md )
 {
-   if ( proposal == Peace )
-      gamemap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, PEACE );
-   else
-      if ( proposal == War )
-         gamemap->getPlayer(proposingPlayer).diplomacy.propose( targetPlayer, WAR );
-      else {
-         gamemap->getPlayer(proposingPlayer).diplomacy.setState( targetPlayer, WAR );
+#ifdef sgmain
+   auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( gamemap->getPlayer(proposingPlayer) ));  
+   if ( proposal == Peace ) {
+      dc->newstate( PEACE, gamemap->getPlayer(targetPlayer) );
+   } else
+      if ( proposal == War ) {
+         dc->newstate( WAR, gamemap->getPlayer(targetPlayer) );
+      } else {
+         dc->sneakAttack( gamemap->getPlayer(targetPlayer) );
       }
+      
+   ActionResult res = dc->execute( createContext(gamemap) );
+   if ( res.successful() )
+      dc.release();
+#endif   
 }
 
 

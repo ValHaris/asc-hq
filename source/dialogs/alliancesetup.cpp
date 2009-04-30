@@ -29,7 +29,8 @@
 #include "../paradialog.h"
 #include "playersetup.h"
 #include "alliancesetup.h"
-
+#include "../actions/diplomacycommand.h"
+#include "../dialog.h"
 
 const int diplomaticStateIconSize = 20;
 const int diplomaticStateIconSpace = 2;
@@ -167,7 +168,9 @@ class DiplomaticModeChooser : public PG_Widget {
 };      
  
 
-AllianceSetupWidget::AllianceSetupWidget( GameMap* gamemap, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap )
+AllianceSetupWidget::AllianceSetupWidget( GameMap* gamemap, ApplyStrategy* applyStrategy, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style ) 
+   : PG_ScrollWidget( parent, r, style ) , actmap ( gamemap ), strategy( applyStrategy )
+
 {
    this->allEditable = allEditable;
    int playerNum = 0;
@@ -304,7 +307,7 @@ void AllianceSetupWidget::Apply()
          } else {
             if ( acting == actmap->actplayer ) {
                if ( stateChanges[acting][second] == SNEAK_ATTACK ) {
-                  actmap->player[acting].diplomacy.sneakAttack( second );         
+                  strategy->sneakAttack( actmap, acting, second );
                } else {
                   DiplomaticStates s = DiplomaticStates( stateChanges[acting][second] - 1);
                   DiplomaticStates t;
@@ -314,8 +317,9 @@ void AllianceSetupWidget::Apply()
                   else
                      t = q->second;   
                      
-                  if ( t != s )
-                     actmap->player[acting].diplomacy.propose( second, s );         
+                  if ( t != s ) {
+                     strategy->setState( actmap, acting, second, s );
+                  }                     
                }   
             }
          }
@@ -340,9 +344,9 @@ class AllianceSetupWindow : public ASC_PG_Dialog {
       AllianceSetupWidget* asw;
       bool changed;
    public:
-      AllianceSetupWindow( GameMap* actmap, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" ), changed(false)
+      AllianceSetupWindow( GameMap* actmap, AllianceSetupWidget::ApplyStrategy* strategy, bool allEditable, PG_Widget *parent, const PG_Rect &r ) : ASC_PG_Dialog( parent, r, "Diplomacy" ), changed(false)
       {
-         asw = new AllianceSetupWidget( actmap, allEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
+         asw = new AllianceSetupWidget( actmap, strategy, allEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
          ok->sigClick.connect( SigC::slot( *this, &AllianceSetupWindow::Apply ));
          PG_Button* cancel = new PG_Button( this, PG_Rect( Width() - 100, Height() - 30, 90, 20 ), "Cancel" );
@@ -361,10 +365,21 @@ class AllianceSetupWindow : public ASC_PG_Dialog {
       
 };
 
-bool  setupalliances( GameMap* actmap, bool supervisor  )
+bool  setupalliances( GameMap* actmap, AllianceSetupWidget::ApplyStrategy* strategy, bool supervisor  )
 {
-   AllianceSetupWindow asw ( actmap, supervisor, NULL, PG_Rect( 100, 100, 700, 500 ));
+   AllianceSetupWindow asw ( actmap, strategy, supervisor, NULL, PG_Rect( 100, 100, 700, 500 ));
    asw.Show();
    asw.RunModal();
    return asw.isSomethingChanged();
+}
+
+void DirectAllianceSetupStrategy::sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
+{
+   map->getPlayer( actingPlayer ).diplomacy.setState( towardsPlayer, WAR );
+}
+
+
+void DirectAllianceSetupStrategy::setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState )
+{
+   map->getPlayer( actingPlayer ).diplomacy.setState( towardsPlayer, newState );
 }

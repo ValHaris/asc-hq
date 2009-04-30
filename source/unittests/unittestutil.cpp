@@ -20,6 +20,11 @@ bool NextTurnStrategy_Abort::continueWhenLastPlayer() const {
    return false;
 };  
 
+bool NextTurnStrategy_Abort::authenticate( GameMap* actmap) const
+{
+   return true;  
+}
+
 
 void move( Vehicle* veh, const MapCoordinate& dest )
 {

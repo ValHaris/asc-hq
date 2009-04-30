@@ -159,6 +159,7 @@
 #include "dialogs/mailoptionseditor.h"
 #include "dialogs/unitguidedialog.h"
 #include "actions/cancelresearchcommand.h"
+#include "actions/diplomacycommand.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -1259,6 +1260,39 @@ void selectAndRunLuaScript()
 }
 #endif               
 
+class CommandAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
+   virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
+   {
+      auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( map->player[actingPlayer]));  
+      dc->sneakAttack( map->getPlayer( towardsPlayer ));
+      ActionResult res = dc->execute( createContext(actmap) );
+      if ( res.successful() )
+         dc.release();
+      else
+         displayActionError( res );
+   }
+   
+   virtual void setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState )
+   {
+      auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( map->player[actingPlayer]));  
+      dc->newstate( newState, map->getPlayer( towardsPlayer ));
+      ActionResult res = dc->execute( createContext(actmap) );
+      if ( res.successful() )
+         dc.release();
+      else
+         displayActionError( res );
+   }
+};
+
+
+void editAlliances()
+{
+   CommandAllianceSetupStrategy cass;
+   if ( setupalliances( actmap, &cass, actmap->getCurrentPlayer().stat == Player::supervisor ) ) {
+      if ( computeview( actmap ))
+         displaymap();
+   }
+}
 
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
@@ -1321,10 +1355,7 @@ void execuseraction2 ( tuseractions action )
       case ua_savegame: saveGame( true );
          break;
       case ua_setupalliances:
-         if ( setupalliances( actmap, actmap->getCurrentPlayer().stat == Player::supervisor ) ) {
-            if ( computeview( actmap ))
-               displaymap();
-         }
+         editAlliances();
          updateFieldInfo();
          break;
       case ua_mainmenu:
@@ -1655,8 +1686,6 @@ int gamethread ( void* data )
    
    repaintDisplay.connect( repaintMap );
 
-   DiplomaticStateVector::shareViewChanged.connect( SigC::slot( &diplomaticChange ));
-   
    mainScreenWidget = new ASC_MainScreenWidget( getPGApplication());
    dataLoaderTicker();
 

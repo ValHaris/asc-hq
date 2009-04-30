@@ -56,26 +56,25 @@ extern const char* diplomaticStateNames[diplomaticStateNum+1];
 class DiplomaticStateVector : public SigC::Object {
 
       friend class AllianceSetupWidget;
+      friend class ChangeDiplomaticState;
+      friend class DiplomacyCommand;
 
       Player& player; 
       
       typedef vector<DiplomaticStates> States;
       States states;
       
+       
       typedef map<int,DiplomaticStates> QueuedStateChanges;
       QueuedStateChanges queuedStateChanges;
 
-      void changeToState( int towardsPlayer, DiplomaticStates s, bool mail = true );
-      
       void resize( int size );
-
+      
    public:
       DiplomaticStateVector( Player& _player );
       
-      DiplomaticStates getState( int towardsPlayer ) const;
-      void setState( int towardsPlayer, DiplomaticStates s, bool fireSignal = true );
-      void propose ( int towardsPlayer, DiplomaticStates s );
-      void sneakAttack( int towardsPlayer );
+      DiplomaticStates getState( PlayerID towardsPlayer ) const;
+      void setState( PlayerID towardsPlayer, DiplomaticStates s );
       
       bool isHostile( PlayerID towardsPlayer ) { return getState( towardsPlayer.getID() ) == WAR; };
       bool sharesView( PlayerID receivingPlayer ) { return getState( receivingPlayer.getID() ) >= PEACE_SV; };
@@ -85,9 +84,6 @@ class DiplomaticStateVector : public SigC::Object {
       
       void swap( int secondPlayer );
             
-      static SigC::Signal4<void,GameMap*,int,int,DiplomaticStates> anyStateChanged;
-      static SigC::Signal3<void,GameMap*,int,int> shareViewChanged;
-
       //! \returns true if there are any proposals
       bool getProposal( int fromPlayer, DiplomaticStates* state );
       

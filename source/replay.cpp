@@ -2652,7 +2652,7 @@ void trunreplay :: execnextreplaymove ( void )
             if ( a ) {
                ActionResult res = a->redo( createReplayContext() );
                if ( !res.successful() )
-                  error("action " + a->getDescription() + " failed");
+                  error("action " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
             } else
                error("could not read Command action from replay stream" );
          }
@@ -2854,15 +2854,8 @@ void trunreplay :: firstinit ( void )
 }
 
 
-void logAllianceChanges( GameMap* map, int player1, int player2, DiplomaticStates s)
-{
-   if ( map == actmap && actmap )
-      logtoreplayinfo ( rpl_alliancechange2, player1, player2, int(s) );
-}
-
 void hookReplayToSystem()
 {
-   DiplomaticStateVector::anyStateChanged.connect( SigC::slot( &logAllianceChanges ));
    ActionContainer::commitCommand.connect( SigC::slot( &logActionToReplay ));
    // postActionExecution.connect( SigC::slot( &logActiontoreplayinfo ));
 }

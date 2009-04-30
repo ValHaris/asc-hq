@@ -23,6 +23,7 @@
 #include "../mapdisplay.h"
 #include "../asc-mainscreen.h"
 #include "../gameeventsystem.h"
+#include "../actions/diplomacycommand.h"
 
 AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 {
@@ -325,10 +326,16 @@ void AI :: diplomacy ()
       if ( i != getPlayerNum() ) {
          DiplomaticStates proposal;
          if ( getPlayer().diplomacy.getProposal( i, &proposal )) {
+            // the AI will not accept peace
             if ( proposal > getPlayer().diplomacy.getState( i ))
                new Message( "Your diplomatic proposal is declined", getMap(), 1 << i, 1 << getPlayerNum() );
-            else
-               getPlayer().diplomacy.propose( i, proposal );
+            else {
+               auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( getPlayer()));  
+               dc->newstate( proposal, getMap()->getPlayer(i) );
+               ActionResult res = dc->execute( getContext() );
+               if ( res.successful() )
+                  dc.release();
+            }
          }
       }
    }

@@ -794,7 +794,10 @@ void execaction_pg(int code)
        break;
     case act_setmapparameters: setmapparameters( actmap );
        break;
-    case act_setupalliances :  setupalliances( actmap, true );
+    case act_setupalliances :  {
+            DirectAllianceSetupStrategy dass;
+            setupalliances( actmap, &dass, true );
+         }
        break;
     case act_setupplayers :  setupPlayers( actmap, true );
        break;

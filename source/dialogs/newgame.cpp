@@ -90,6 +90,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       
       AllianceSetupWidget* allianceSetup;
       PG_Widget* allianceSetupParent;
+      DirectAllianceSetupStrategy directAllianceSetupStrategy;
       
       PlayerSetupWidget* playerSetup;
       PG_Widget* playerSetupParent;
@@ -600,7 +601,7 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
       
       if ( page == AllianceSetup && allianceSetupParent ) {
          delete allianceSetup;
-         allianceSetup = new AllianceSetupWidget( newMap, true, allianceSetupParent, PG_Rect( 0, 0, allianceSetupParent->Width(), allianceSetupParent->Height() ));
+         allianceSetup = new AllianceSetupWidget( newMap, &directAllianceSetupStrategy, true, allianceSetupParent, PG_Rect( 0, 0, allianceSetupParent->Width(), allianceSetupParent->Height() ));
       }   
 
       if ( page == MapParameterEditor && mapParameterEditorParent ) {

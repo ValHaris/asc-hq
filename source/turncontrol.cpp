@@ -42,7 +42,7 @@
 #include "network/simple_file_transfer.h"
 #include "dialogs/fileselector.h"
 
-bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
+bool authenticateUser ( GameMap* actmap, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
 {
    for ( int p = 0; p < 8; p++ )
       actmap->player[p].existanceAtBeginOfTurn = actmap->player[p].exist() && actmap->player[p].stat != Player::off;
@@ -53,7 +53,7 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
          if ( actmap->player[i].isHuman() )
             humannum++;
 
-   if ( humannum > 1  ||  forcepasswordchecking > 0 ) {
+   if ( humannum > 1  ) {
       MapDisplayPG::LockDisplay ld ( !lockView );
 
       bool firstRound = actmap->time.turn() == 1;
@@ -62,24 +62,18 @@ bool authenticateUser ( GameMap* actmap, int forcepasswordchecking = 0, bool all
 
       if ( (!actmap->player[actmap->actplayer].passwordcrc.empty() && actmap->player[actmap->actplayer].passwordcrc != CGameOptions::Instance()->getDefaultPassword() )
          || firstRound  ) {
-            if ( forcepasswordchecking < 0 ) {
-               delete actmap;
-               actmap = NULL;
-               throw NoMapLoaded();
-            } else {
-               bool stat;
-               actmap->setPlayerView ( actmap->actplayer );  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
-               do {
-                  stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
-                  if ( !stat ) {
-                     if ( throwOnFailure ) {
-                        delete actmap;
-                        throw NoMapLoaded();
-                     } else
-                        return false;
-                  }
-               } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
-            }
+            bool stat;
+            actmap->setPlayerView ( actmap->actplayer );  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
+            do {
+               stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
+               if ( !stat ) {
+                  if ( throwOnFailure ) {
+                     delete actmap;
+                     throw NoMapLoaded();
+                  } else
+                     return false;
+               }
+            } while ( actmap->player[actmap->actplayer].passwordcrc.empty() && stat && viewtextquery ( 910, "warning", "~e~nter password", "~c~ontinue without password" ) == 0 ); /* enddo */
       } else {
          infoMessage("next player is " + actmap->player[actmap->actplayer].getName() );
          actmap->setPlayerView ( actmap->actplayer );
@@ -214,6 +208,10 @@ bool NextTurnStrategy_AskUser::continueWhenLastPlayer() const
       return true;
 }
 
+bool NextTurnStrategy_AskUser::authenticate( GameMap* actmap ) const
+{
+   return authenticateUser( actmap );
+}
 
 
 void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, MapDisplayInterface* display, int playerView  )
@@ -260,7 +258,7 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, Map
    
    gamemap->setPlayerView ( -1 );
    
-   if ( !authenticateUser( gamemap, 0, false, true, true )) {
+   if ( ! nextTurnStrategy.authenticate(gamemap) ) {
       delete gamemap;
       throw NoMapLoaded();
    }
@@ -344,7 +342,7 @@ GameMap* continueNetworkGame ( const ASCString& filename )
    if ( !newMap.get() )
       return NULL;
 
-   if ( !authenticateUser( newMap.get() , 0, true, false ))
+   if ( !authenticateUser( newMap.get(), true, false ))
       return NULL;
    
    computeview( newMap.get() );

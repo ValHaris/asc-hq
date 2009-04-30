@@ -42,12 +42,14 @@ class MapDisplayInterface;
 class NextTurnStrategy {
    public:
       virtual bool continueWhenLastPlayer() const = 0;  
+      virtual bool authenticate( GameMap* actmap ) const = 0;
       virtual ~NextTurnStrategy() {};
 };
 
 class NextTurnStrategy_AskUser : public NextTurnStrategy {
    public:
       bool continueWhenLastPlayer() const;  
+      bool authenticate( GameMap* actmap  ) const;  
 } ;
 
 

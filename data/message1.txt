@@ -332,3 +332,7 @@ VehicleType not available
 Research progress mismatch
 23001
 No technology with this ID found
+23100
+Selected Player does not exist
+23101
+invalid diplomatic state
