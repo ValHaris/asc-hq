@@ -284,7 +284,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 28;
+const int tmapversion = 29;
 
 void GameMap :: read ( tnstream& stream )
 {

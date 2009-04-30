@@ -41,12 +41,17 @@ class DiplomacyCommand : public Command {
       DiplomacyCommand( GameMap* map );
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
+      void deleteMessage( int id, MessagePntrContainer& list ) ;
+      void deleteMessage( int id );
+      
    protected:
       
       GameActionID getID() const;
       ASCString getDescription() const;
       
       ActionResult go ( const Context& context ); 
+      
+      ActionResult undoAction( const Context& context );
       
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;

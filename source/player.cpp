@@ -66,10 +66,25 @@ void DiplomaticStateVector::turnBegins()
             // this should have been handled when the other player set his proposal 
          } else {
             // he did not answer
+            // we are still doing nothing and deleting the request with the .clear below
          }
       }
    }
    queuedStateChanges.clear();
+   
+   // changes to war will be effective as soon as a new player is active,
+   // so that the other player will get reaction fire if he approaches the war-declaring player
+   for ( int p = 0; p < player.getParentMap()->getPlayerCount(); ++p ) {
+      Player& pl = player.getParentMap()->getPlayer(p);
+      if ( pl.exist() && p != player.getPosition() ) {
+         DiplomaticStates state;
+         if ( getProposal(p, &state ) )
+            if ( state < getState(p)) {
+               setState( p, state );
+               pl.diplomacy.setState( player.getPosition(), state );
+            }
+      }
+   }
 }
 
 

@@ -85,6 +85,34 @@ void DiplomacyCommand::newstate( DiplomaticStates state, Player& towards )
    setState( SetUp );
 }
 
+void DiplomacyCommand::deleteMessage( int id, MessagePntrContainer& list ) 
+{
+   for ( MessagePntrContainer::iterator i = list.begin(); i != list.end(); ) {
+       if ( (*i)->id == id )
+          i = list.erase( i );
+       else
+          ++i;
+   }
+}
+
+void DiplomacyCommand::deleteMessage( int id )
+{
+   for ( int p = 0; p < getMap()->getPlayerCount(); ++p ) {
+      deleteMessage( id, getMap()->getPlayer(p).unreadmessage );
+      deleteMessage( id, getMap()->getPlayer(p).oldmessage );
+      deleteMessage( id, getMap()->getPlayer(p).sentmessage );
+   }
+   
+   deleteMessage( id, getMap()->unsentmessage );
+   
+   for ( MessageContainer::iterator i = getMap()->messages.begin(); i != getMap()->messages.end(); ) {
+      if ( (*i)->id == id ) {
+         delete *i;
+         i = getMap()->messages.erase( i );
+      } else
+         ++i;
+   }
+}
 
 void DiplomacyCommand::sendMessage( int to, const ASCString& body )
 {
@@ -204,6 +232,16 @@ ActionResult DiplomacyCommand::go ( const Context& context )
                ActionResult res = (new ChangeDiplomaticState( towards, acting, -1, newState ))->execute(context);
                if ( !res.successful() )
                   return res;
+               
+               res = (new ChangeDiplomaticState( acting, towards, 1, newState ))->execute(context);
+               if ( !res.successful() )
+                  return res;
+               
+               ASCString txt;
+               // declare war 
+               txt.format( getmessage( 10002 ), acting.getName().c_str(), diplomaticStateNames[newState]  ); 
+               sendMessage(1 << towardsPlayer, txt );
+               
             } else {
               // we are going to a state that is more hostile than the current one, but less hostile then the other players declaration
                immediateTwoWayChange( newState, context);
@@ -224,6 +262,15 @@ ActionResult DiplomacyCommand::go ( const Context& context )
 }
 
 
+ActionResult DiplomacyCommand :: undoAction( const Context& context )
+{
+   for ( vector<int>::iterator i = generatedMessages.begin(); i != generatedMessages.end(); ++i )
+      deleteMessage( *i );
+   
+   return Command::undoAction(context );
+}
+
+
 ASCString DiplomacyCommand :: getCommandString() const 
 {
    ASCString c;
@@ -238,7 +285,7 @@ GameActionID DiplomacyCommand::getID() const
 
 ASCString DiplomacyCommand::getDescription() const
 {
-   ASCString s; // = "Cancel research for player " + ASCString::toString(player);
+   ASCString s;
    if ( sneak ) 
       s = getMap()->getPlayer( actingPlayer ).getName() + " sneak attacks " + getMap()->getPlayer( towardsPlayer ).getName() ;
    else {
