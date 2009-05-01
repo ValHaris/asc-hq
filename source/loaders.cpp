@@ -48,6 +48,8 @@
 #include "prehistoricevents.h"
 #include "gamemap.h"
 #include "gameeventsystem.h"
+#include "graphicset.h"
+
 
 #ifdef sgmain
 # include "ai/ai.h"
@@ -1602,8 +1604,5 @@ MapConinuationInfo findNextCampaignMap( int id  )
 
    return mi;
 }
-
-
-
 
 

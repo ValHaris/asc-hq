@@ -22,7 +22,11 @@
 #define choosetechH
 
 class Player;
-extern bool chooseTechnology( Player& player );
+
+//! lets the player choose an available technology
+extern bool chooseSingleTechnology( Player& player );
+
+
 
 #endif
 

@@ -16,36 +16,11 @@
     along with this program; see the file COPYING. If not, write to the
     Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
-
-*/
-#ifndef  gamedlgH
-#define  gamedlgH
-
-
-/*! \file gamedlg.h
-   A lot of dialog boxes that are only used by both ASC.
 */
 
-class GameMap;
+#ifndef applicationstarterH
+#define applicationstarterH
 
-extern void  settributepayments ( void );
+extern void loaddata();
 
-
-extern void researchinfo ( void );
-extern void choosetechlevel ( void );
-
-
-class tfield;
-
-extern void giveunitaway ( tfield* fld );
-
-extern void showGameParameters ( void );
-
-extern void showPlayerTime();
-extern void displaywindspeed();
-
-
-extern void sendGameParameterAsMail ( GameMap* actmap );
-
-#endif  // ifndef gamedlg_h
-
+#endif

@@ -91,10 +91,6 @@ enum trpl_actions { rpl_attack,
                     rpl_cancelResearch,
                     rpl_runCommandAction };
 
-extern void logtoreplayinfo ( trpl_actions action, ... );
-
-struct treactionfire_replayinfo;
-
 class ReplayMapDisplay;
 
 class trunreplay {

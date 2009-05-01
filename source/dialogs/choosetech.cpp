@@ -235,7 +235,6 @@ class ChooseTech : public ASC_PG_Dialog
 
       pointsLabel->SetText( ASCString("Sum: ") + ASCString::toString(points) + " Points" );
 
-      bool alreadyChoosen = (tech == goal);
       goal = tech;
    };
 
@@ -339,13 +338,12 @@ class ChooseTech : public ASC_PG_Dialog
 
 
 
-bool chooseTechnology( Player& player )
+bool chooseSingleTechnology( Player& player )
 {
    ChooseTech ct( player);
    ct.Show();
    ct.RunModal();
    return ct.selectionPerformed();
 }
-
 
 

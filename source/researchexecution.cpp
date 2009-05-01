@@ -184,7 +184,7 @@ void checkForNewResearch( Player& player )
    Research& research = player.research;
    
    while ( research.activetechnology == NULL && research.progress && anyTechAvailable( player ) ) 
-      if ( !chooseTechnology( player ))
+      if ( !chooseSingleTechnology( player ))
          return;
 }
       

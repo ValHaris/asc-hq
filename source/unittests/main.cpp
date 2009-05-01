@@ -3,20 +3,14 @@
 #include "ai/ai.h"
 #include "loaders.h"
 #include "dlg_box.h"
-#include "controls.h"
 #include "dlg_box.h"
 #include "strtmesg.h"
 #include "sg.h"
 #include "viewcalculation.h"
 #include "replay.h"
-#include "graphicset.h"
-#include "loadbi3.h"
 #include "messagedlg.h"
-#include "guifunctions.h"
-#include "unitset.h"
 
 #include "researchexecution.h"
-#include "cannedmessages.h"
 #include "resourcenet.h"
 #include "mapimageexport.h"
 #include "soundList.h"
@@ -34,13 +28,9 @@
 #include "ai-service1.h"
 #include "transfercontroltest.h"
 #include "recyclingtest.h"                
-#include "diplomacytest.h"
 #include "researchtest.h"
-
-void positionCursor( Player& player )
-{
-   getDefaultMapDisplay().displayPosition( player.getParentMap()->getCursor() );
-}
+#include "applicationstarter.h"
+#include "diplomacytest.h"
 
 void viewcomp( Player& player )
 {
@@ -54,7 +44,6 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewcomp ) );
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( repaintMap.slot() ));
       
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
@@ -82,56 +71,6 @@ Context createContext( GameMap* gamemap )
 }
 
 
-void resetActions( GameMap& map )
-{
-   if ( NewGuiHost::pendingCommand ) {
-      delete NewGuiHost::pendingCommand;
-      NewGuiHost::pendingCommand = NULL;
-   }
-}
-
-
-void loaddata( int resolx, int resoly )
-{
-   GraphicSetManager::Instance().loadData();
-
-   dataLoaderTicker();
-   
-   registerDataLoader ( new PlayListLoader() );
-   registerDataLoader ( new BI3TranslationTableLoader() );
-   
-   dataLoaderTicker();
-   
-   loadAllData();
-  
-   dataLoaderTicker();
-
-   SoundList::init();
-
-   dataLoaderTicker();
-   
-   loadpalette();
-   
-   dataLoaderTicker();
-   
-   loadmessages();
-
-   dataLoaderTicker();
-
-   loadUnitSets();
-
-   displayLogMessage ( 6, "done\n" );
-
-   dataLoaderTicker();
-
- 
-   registerGuiFunctions( GuiFunctions::primaryGuiIcons );
-
-   hookReplayToSystem();
-}
-
-
-
 
 void runUnitTests()
 {
@@ -152,12 +91,10 @@ int runTester ( )
 {
    loadpalette();
 
-   int resolx = 1000;
-   int resoly = 1000;
    virtualscreenbuf.init();
 
    try {
-      loaddata( resolx, resoly );
+      loaddata();
    }
    catch ( ParsingError err ) {
       errorMessage ( "Error parsing text file " + err.getMessage() );
@@ -184,7 +121,6 @@ int runTester ( )
    }
 #endif
 
-   GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
    GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
 
    suppressMapTriggerExecution = false;
@@ -216,9 +152,6 @@ void deployMapPlayingHooks ( GameMap* map )
 
 void execuseraction ( tuseractions action ) {};
 void execUserAction_ev ( tuseractions action ) {};
-bool continueAndStartMultiplayerGame( bool mostRecent = false ) { return true;};
-bool loadGame( bool mostRecent ) { return true;};
-void saveGame( bool mostRecent ) {};
 
 
 int main(int argc, char *argv[] )
@@ -254,9 +187,6 @@ int main(int argc, char *argv[] )
 #ifdef WIN32
    Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
 #endif
-
-
-   displayLogMessage( 1, getstartupmessage() );
 
    ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
    initFileIO( cl->c() );  // passing the filename from the command line options

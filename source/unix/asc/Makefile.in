@@ -47,7 +47,8 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
-am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
+am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
+	applicationstarter.$(OBJEXT) strtmesg.$(OBJEXT) \
 	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
 	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
 	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) tos.$(OBJEXT) \
@@ -60,33 +61,34 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
 	containerbase.$(OBJEXT) mapalgorithms.$(OBJEXT) \
 	viewcalculation.$(OBJEXT) gamemap.$(OBJEXT) password.$(OBJEXT) \
 	replay.$(OBJEXT) research.$(OBJEXT) fieldimageloader.$(OBJEXT) \
-	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) dashboard.$(OBJEXT) \
-	ascstring.$(OBJEXT) graphicset.$(OBJEXT) vehicle.$(OBJEXT) \
-	buildings.$(OBJEXT) networkinterface.$(OBJEXT) \
-	textfileparser.$(OBJEXT) terraintype.$(OBJEXT) \
-	objecttype.$(OBJEXT) textfiletags.$(OBJEXT) \
-	itemrepository.$(OBJEXT) stringtokenizer.$(OBJEXT) \
-	music.$(OBJEXT) messages.$(OBJEXT) paradialog.$(OBJEXT) \
-	textfile_evaluation.$(OBJEXT) containerbasetype.$(OBJEXT) \
-	messagedlg.$(OBJEXT) simplestream.$(OBJEXT) \
-	mappolygons.$(OBJEXT) prehistoricevents.$(OBJEXT) \
-	gameevents.$(OBJEXT) gameeventsystem.$(OBJEXT) \
-	gameevent_dialogs.$(OBJEXT) statisticdialog.$(OBJEXT) \
-	clipboard.$(OBJEXT) geometry.$(OBJEXT) guidimension.$(OBJEXT) \
+	mapdisplay.$(OBJEXT) resourcenet.$(OBJEXT) ascstring.$(OBJEXT) \
+	graphicset.$(OBJEXT) vehicle.$(OBJEXT) buildings.$(OBJEXT) \
+	networkinterface.$(OBJEXT) textfileparser.$(OBJEXT) \
+	terraintype.$(OBJEXT) objecttype.$(OBJEXT) \
+	textfiletags.$(OBJEXT) itemrepository.$(OBJEXT) \
+	stringtokenizer.$(OBJEXT) music.$(OBJEXT) messages.$(OBJEXT) \
+	paradialog.$(OBJEXT) textfile_evaluation.$(OBJEXT) \
+	containerbasetype.$(OBJEXT) messagedlg.$(OBJEXT) \
+	simplestream.$(OBJEXT) mappolygons.$(OBJEXT) \
+	prehistoricevents.$(OBJEXT) gameevents.$(OBJEXT) \
+	gameeventsystem.$(OBJEXT) gameevent_dialogs.$(OBJEXT) \
+	statisticdialog.$(OBJEXT) clipboard.$(OBJEXT) \
+	geometry.$(OBJEXT) guidimension.$(OBJEXT) \
 	guiiconhandler.$(OBJEXT) guifunctions.$(OBJEXT) \
-	iconrepository.$(OBJEXT) gamedialog.$(OBJEXT) \
-	infopopup.$(OBJEXT) overviewmapimage.$(OBJEXT) \
-	asc-mainscreen.$(OBJEXT) mapfield.$(OBJEXT) \
-	overviewmappanel.$(OBJEXT) explosivemines.$(OBJEXT) \
-	mainscreenwidget.$(OBJEXT) networksupervisor.$(OBJEXT) \
-	statistics.$(OBJEXT) legacynetworkloaders.$(OBJEXT) \
-	player.$(OBJEXT) cannedmessages.$(OBJEXT) \
-	reactionfire.$(OBJEXT) mapimageexport.$(OBJEXT) \
-	containercontrols.$(OBJEXT) containerbase-functions.$(OBJEXT) \
-	windowing.$(OBJEXT) turncontrol.$(OBJEXT) unitset.$(OBJEXT) \
-	playercolor.$(OBJEXT) pg_mapdisplay.$(OBJEXT) \
-	autotraining.$(OBJEXT) researchexecution.$(OBJEXT)
-nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT)
+	iconrepository.$(OBJEXT) overviewmapimage.$(OBJEXT) \
+	mapfield.$(OBJEXT) overviewmappanel.$(OBJEXT) \
+	dashboard.$(OBJEXT) asc-mainscreen.$(OBJEXT) \
+	explosivemines.$(OBJEXT) mainscreenwidget.$(OBJEXT) \
+	networksupervisor.$(OBJEXT) statistics.$(OBJEXT) \
+	legacynetworkloaders.$(OBJEXT) player.$(OBJEXT) \
+	cannedmessages.$(OBJEXT) reactionfire.$(OBJEXT) \
+	mapimageexport.$(OBJEXT) containercontrols.$(OBJEXT) \
+	containerbase-functions.$(OBJEXT) windowing.$(OBJEXT) \
+	turncontrol.$(OBJEXT) unitset.$(OBJEXT) playercolor.$(OBJEXT) \
+	pg_mapdisplay.$(OBJEXT) autotraining.$(OBJEXT) \
+	researchexecution.$(OBJEXT)
+nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
+	gamedialog.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 =  \
@@ -305,7 +307,7 @@ MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
 noinst_bindir = $(abs_top_builddir)/source/unix/asc/
-commonSources = soundList.cpp typen.cpp \
+commonSources = soundList.cpp typen.cpp applicationstarter.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp palette.cpp \
 newfont.cpp misc.cpp loadpcxc.cpp loaders.cpp tos.cpp \
 loadbi3.cpp gamedlg.cpp dlg_box.cpp dialog.cpp controls.cpp \
@@ -313,14 +315,14 @@ basestrm.cpp basegfx.cpp attack.cpp replaymapdisplay.cpp memory-measurement.cpp 
 gameoptions.cpp astar2.cpp vehicletype.cpp objects.cpp stdio-errorhandler.cpp \
 buildingtype.cpp containerbase.cpp mapalgorithms.cpp viewcalculation.cpp \
 gamemap.cpp password.cpp replay.cpp research.cpp fieldimageloader.cpp \
-mapdisplay.cpp resourcenet.cpp dashboard.cpp ascstring.cpp graphicset.cpp \
+mapdisplay.cpp resourcenet.cpp ascstring.cpp graphicset.cpp \
 vehicle.cpp buildings.cpp networkinterface.cpp textfileparser.cpp terraintype.cpp \
 objecttype.cpp textfiletags.cpp itemrepository.cpp stringtokenizer.cpp music.cpp \
 messages.cpp paradialog.cpp textfile_evaluation.cpp containerbasetype.cpp messagedlg.cpp \
 simplestream.cpp mappolygons.cpp prehistoricevents.cpp gameevents.cpp gameeventsystem.cpp \
 gameevent_dialogs.cpp statisticdialog.cpp clipboard.cpp geometry.cpp \
-guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp gamedialog.cpp \
-infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappanel.cpp \
+guidimension.cpp guiiconhandler.cpp guifunctions.cpp iconrepository.cpp \
+overviewmapimage.cpp mapfield.cpp overviewmappanel.cpp dashboard.cpp asc-mainscreen.cpp  \
 explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
@@ -341,7 +343,7 @@ $(top_builddir)/source/actions/libdirectunitactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(LUA_LIBS)
 
-nodist_asc_SOURCES = $(commonSources) sg.cpp
+nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp 
 asc_LDADD = $(commonLibs)
 nodist_unittester_SOURCES = $(commonSources) 
 unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
@@ -426,6 +428,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/applicationstarter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/asc-mainscreen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/astar2.Po@am__quote@
@@ -460,7 +463,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guiiconhandler.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/infopopup.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/legacynetworkloaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
