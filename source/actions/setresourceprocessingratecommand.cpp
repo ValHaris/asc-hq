@@ -39,7 +39,7 @@ bool SetResourceProcessingRateCommand :: avail ( const ContainerBase* container 
    if ( !container  )
       return false;
    
-   return container->baseType->hasFunction( ContainerBaseType::ContainerBaseType::MatterConverter ) 
+   return container->baseType->hasFunction( ContainerBaseType::MatterConverter ) 
          || container->baseType->hasFunction( ContainerBaseType::MiningStation ) ;
 }
 

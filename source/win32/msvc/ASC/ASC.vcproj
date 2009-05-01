@@ -208,6 +208,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath="..\..\..\applicationstarter.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\asc-mainscreen.cpp"
 				>
 			</File>
@@ -508,6 +512,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\researchexecution.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\resourcenet.cpp"
 				>
 			</File>
@@ -589,10 +597,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\typen.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\unitctrl.cpp"
 				>
 			</File>
 			<File
@@ -759,6 +763,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\infodialogs.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\internalAmmoTransferDialog.cpp"
 					>
 				</File>
@@ -919,11 +927,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\buildproductionlinecommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\cancelresearchcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\cargomovecommand.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\actions\changecontainerproperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\changediplomaticstate.cpp"
 					>
 				</File>
 				<File
@@ -991,11 +1011,23 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\diplomacycommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\directresearchcommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\discoverresources.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\actions\inflictdamage.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\internalammotransfercommand.cpp"
 					>
 				</File>
 				<File
@@ -1043,6 +1075,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\removeproductionlinecommand.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\repairbuildingcommand.cpp"
 					>
 				</File>
@@ -1052,6 +1088,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\servicecommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\setresourceprocessingratecommand.cpp"
 					>
 				</File>
 				<File
@@ -1072,6 +1112,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\trainunitcommand.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\actions\transfercontrolcommand.cpp"
 					>
 				</File>
 				<File

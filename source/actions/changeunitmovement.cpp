@@ -105,7 +105,7 @@ void ChangeUnitMovement::decreaseMovement( Vehicle* veh, float fraction, const C
    float f = float(veh->maxMovement()) * fraction;
    float f2 = ceil(f);
    if ( fabs ( f-f2) > 0.999 )
-      f2 = round(f);
+	   f2 -= 1;
    
    int i = int( f2 );
    int newMovement = veh->getMovement(false,false) - i;

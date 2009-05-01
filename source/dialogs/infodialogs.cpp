@@ -9,6 +9,10 @@
 
 #include <iostream>
 
+#ifdef WIN32
+# include<direct.h> 
+#endif
+
 #include "../loadbi3.h"
 #include "../unitset.h"
 
