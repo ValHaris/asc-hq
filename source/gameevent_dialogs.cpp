@@ -376,15 +376,6 @@ class UnitListFactory: public SelectionItemFactory, public SigC::Object  {
 
 
 
-NewVehicleTypeDetection::NewVehicleTypeDetection( GameMap* gamemap )
-{
-   this->gamemap = gamemap;
-
-   for ( int i=0; i < vehicleTypeRepository.getNum() ; i++ )
-      if ( !gamemap->player[ gamemap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) ))
-         buf.push_back( vehicleTypeRepository.getObject_byPos ( i ) );
-}
-
 class UnitAvailabilityWindow : public ItemSelectorWindow {
    private:
       bool eventKeyDown(const SDL_KeyboardEvent* key)
@@ -398,29 +389,14 @@ class UnitAvailabilityWindow : public ItemSelectorWindow {
 
    public:
       UnitAvailabilityWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, UnitListFactory* itemFactory ) 
-         : ItemSelectorWindow( parent, r, title, itemFactory ) 
+   : ItemSelectorWindow( parent, r, title, itemFactory ) 
       {
       };
 };      
 
 
 
-
-void    NewVehicleTypeDetection::evalbuffer( void )
-{
-   for ( int i=0; i < vehicleTypeRepository.getNum() ;i++ ) 
-      if ( !gamemap->player[ gamemap->actplayer ].research.vehicletypeavailable ( vehicleTypeRepository.getObject_byPos ( i ) ))
-         buf.remove( vehicleTypeRepository.getObject_byPos ( i ) );
-
-   if ( buf.size() )  {
-      UnitAvailabilityWindow snau( NULL, PG_Rect( -1, -1, 500, 700 ),  "new units available", new UnitListFactory( buf ));
-      snau.Show();
-      snau.RunModal();
-   }
-}
-
-
-void         showtechnology(const Technology*  tech )
+void ShowNewTechnology::showTechnology( const Technology* tech, const TechnologyPresenter::Gadgets& newGadgetsAvailable )
 {
    if ( tech ) {
       ASCString text = "#fontsize=18#Research completed#fontsize=12#\n\n";
@@ -434,6 +410,13 @@ void         showtechnology(const Technology*  tech )
 
       text += tech->infotext;
 
+      if ( newGadgetsAvailable.units.size() ) {
+         text += "\n#fontsize=14#The units available for production:#fontsize=12#\n";
+         
+         for ( std::list<const Vehicletype*>::const_iterator i = newGadgetsAvailable.units.begin(); i != newGadgetsAvailable.units.end(); ++i )
+            text += "#vehicletype=" + ASCString::toString((*i)->id) + "#\n";
+      }
+      
       ViewFormattedText tr ("Research", text, PG_Rect(-1,-1, 400,250) );
       tr.Show();
       tr.RunModal();

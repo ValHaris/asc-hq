@@ -15,6 +15,7 @@
 #include "guifunctions.h"
 #include "unitset.h"
 
+#include "researchexecution.h"
 #include "cannedmessages.h"
 #include "resourcenet.h"
 #include "mapimageexport.h"
@@ -34,6 +35,7 @@
 #include "transfercontroltest.h"
 #include "recyclingtest.h"                
 #include "diplomacytest.h"
+#include "researchtest.h"
 
 void positionCursor( Player& player )
 {
@@ -54,7 +56,6 @@ void hookGuiToMap( GameMap* map )
       
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
@@ -134,6 +135,7 @@ void loaddata( int resolx, int resoly )
 
 void runUnitTests()
 {
+   testResearch();
    testDiplomacy();
    testRecycling();
    testTransferControl();
@@ -200,10 +202,16 @@ void tributeTransfer( Player& player )
 }
 
 
+
+static void __runResearch( Player& player ){
+   runResearch( player, NULL, NULL );  
+}
+
 void deployMapPlayingHooks ( GameMap* map )
 {
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
    map->sigPlayerTurnBegins.connect( SigC::slot( tributeTransfer ));   
+   map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
 }
 
 

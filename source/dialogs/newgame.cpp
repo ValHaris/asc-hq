@@ -71,7 +71,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       bool success;
       GameMap* newMap;
       
-      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch, PBEMServerSetup, CampaignChoser }; 
+      enum Pages { ModeSelection = 1, FilenameSelection, PlayerSetup, EmailSetup, AllianceSetup, MapParameterEditor, MultiPlayerOptions, PasswordSearch, PBEMServerSetup, CampaignChooser }; 
       Pages page;
      
       enum Mode { NewCampaign, ContinueCampaign, Skirmish, Hotseat, PBEM, PBP, PBEM_Server };
@@ -464,7 +464,7 @@ bool StartMultiplayerGame::Apply()
          }
          break;
 
-      case CampaignChoser: {
+      case CampaignChooser: {
          Campaign* c =getSelectedCampaign();
          if ( c ) {
             if ( c->file.empty() )
@@ -543,7 +543,7 @@ bool StartMultiplayerGame::nextPage(PG_Button* button)
                page = PasswordSearch;
             else
                if ( mode == NewCampaign )
-                  page = CampaignChoser;
+                  page = CampaignChooser;
                else
                   page = FilenameSelection;
          }
@@ -656,7 +656,7 @@ void StartMultiplayerGame::showPage()
    showSupervisorWidgets();
    
    switch ( page ) {
-      case CampaignChoser:
+      case CampaignChooser:
          showButtons(true,false,false);
          break;
    

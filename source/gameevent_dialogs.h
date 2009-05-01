@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.8 2008-11-22 12:28:29 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.9 2009-05-01 12:24:45 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -34,24 +34,16 @@
 #include "gameevents.h"
 #include "dlg_box.h"
 #include "research.h"
-
+#include "researchexecution.h"
 
 #include "dialogs/fieldmarker.h"
 
 
-    //! checks, which vehicle types are newly available. 
-    class NewVehicleTypeDetection  {
-                    std::list<const Vehicletype*>  buf;
-                    GameMap* gamemap;
-                public:
-                    NewVehicleTypeDetection( GameMap* gamemap );
+class ShowNewTechnology : public TechnologyPresenter {
+   public:
+      virtual void showTechnology( const Technology* tech, const Gadgets& newGadgetsAvailable );
+};
 
-                    //! checks, which vehicle are now available that where not available when initbuffer was called. The new ones are displayed by calling #tshownewtanks
-                    void evalbuffer( void );
-               };
-
-
-extern void showtechnology( const Technology* t);
 extern void selectFields( FieldAddressing::Fields& fields );
 extern bool chooseWeather( int& weather );
 extern bool chooseTerrain( int& terrainID );

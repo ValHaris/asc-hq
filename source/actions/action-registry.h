@@ -71,7 +71,9 @@ namespace ActionRegistry {
                   CancelResearchCommand,
                   SetResourceProcessingRateCommand,
                   DiplomacyCommand,
-                  ChangeDiplomaticState
+                  ChangeDiplomaticState,
+                  DirectResearchCommand
+                        
    };
 };
 

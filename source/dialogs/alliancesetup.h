@@ -60,7 +60,7 @@ class AllianceSetupWidget : public PG_ScrollWidget {
          public:
             virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer ) = 0;
             virtual void setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState ) = 0;
-            ~ApplyStrategy(){};
+            virtual ~ApplyStrategy(){};
       };
       
       AllianceSetupWidget( GameMap* gamemap, ApplyStrategy* applyStrategy, bool allEditable, PG_Widget *parent, const PG_Rect &r, const std::string &style="ScrollWidget" );

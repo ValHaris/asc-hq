@@ -86,7 +86,7 @@ ConstructUnitCommand::Lack ConstructUnitCommand::unitProductionPrerequisites( co
          if ( getContainer()->getAvailableResource( cost.resource(r), r ) < cost.resource(r) )
             l |= 1 << r;
       
-      if ( !getMap()->getPlayer(getContainer()).research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
+      if ( !type->techDependency.available( getMap()->getPlayer(getContainer()).research ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
          l |= Lack::Research;
    
       if ( !getContainer()->vehicleUnloadable( type ) && !getContainer()->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
@@ -94,7 +94,7 @@ ConstructUnitCommand::Lack ConstructUnitCommand::unitProductionPrerequisites( co
    } else 
       if ( mode == external ) {
       
-         if ( !getMap()->getPlayer(getContainer()).research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffExternally ) ) 
+         if ( !type->techDependency.available( getMap()->getPlayer(getContainer()).research ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffExternally ) ) 
             l |= Lack::Research;
          
          const Vehicle* veh = dynamic_cast<const Vehicle*>(getContainer());

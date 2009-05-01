@@ -95,10 +95,8 @@ bool TechDependency::eventually_available_single( const Research& res, list<cons
    Technology* tech = technologyRepository.getObject_byID( id );
    if ( !tech )
       return false;
-
-
-   
-   return tech->eventually_available( res, dependencies, stack );
+   else
+      return tech->eventually_available( res, dependencies, stack );
 }
 
 bool TechDependency::eventually_available( const Research& res, list<const Technology*>* dependencies, list<int>& stack ) const
@@ -773,11 +771,19 @@ bool Research::techAdapterAvail( const ASCString& ta ) const
    return triggeredTechAdapter.find ( ta ) != triggeredTechAdapter.end();
 }
 
-void Research::evalTechAdapter()
+vector<ASCString> Research::evalTechAdapter()
 {
+   vector<ASCString> newTechadapters;
    for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
-      if ( (*i)->available ( *this ))
-         triggeredTechAdapter.insert((*i)->getName());
+      if ( (*i)->available ( *this )) {
+         ASCString techAdap = (*i)->getName();
+         if ( find( triggeredTechAdapter.begin(), triggeredTechAdapter.end(), techAdap ) == triggeredTechAdapter.end() ) {
+            triggeredTechAdapter.insert( techAdap );
+            newTechadapters.push_back ( techAdap );
+         }
+      }
+   
+   return newTechadapters;
 }
 
 
@@ -840,23 +846,17 @@ ResearchAvailabilityStatus Research::techAvailable ( const Technology* tech ) co
 }
 
 
-void Research :: addanytechnology ( const Technology* tech )
+vector<ASCString> Research :: addanytechnology ( const Technology* tech )
 {
    if ( tech ) {
       developedTechnologies.push_back ( tech->id );
 
       map->player[player].queuedEvents++;
-      evalTechAdapter();
-   }
+      return evalTechAdapter();
+   } else
+      return vector<ASCString>();
 }
 
-void Research :: addtechnology ( void )
-{
-   if ( activetechnology )
-      addanytechnology ( activetechnology );
-
-   activetechnology = 0;
-}
 
 void Research :: settechlevel ( int techlevel )
 {
@@ -875,14 +875,6 @@ void Research :: settechlevel ( int techlevel )
 
 
 
-bool Research :: vehicletypeavailable ( const Vehicletype* fztyp ) const
-{
-   if ( !fztyp )
-      return false;
-   else
-      return fztyp->techDependency.available( *this );
-      // return true; // vehicleclassavailable( fztyp, 0 );
-}
 
 /*
 void Research::initchoosentechnology()

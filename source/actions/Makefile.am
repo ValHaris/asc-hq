@@ -12,7 +12,7 @@ libdirectunitactions_la_SOURCES	=  inflictdamage.cpp destructcontainer.cpp const
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
-                          powergenerationswitchcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
+                          powergenerationswitchcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp directresearchcommand.cpp \
                           buildproductionlinecommand.cpp removeproductionlinecommand.cpp cancelresearchcommand.cpp setresourceprocessingratecommand.cpp \
                           servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp trainunitcommand.cpp servicecommand.cpp \
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \

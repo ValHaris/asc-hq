@@ -22,7 +22,7 @@
 #define choosetechH
 
 class Player;
-extern void chooseTechnology( Player& player );
+extern bool chooseTechnology( Player& player );
 
 #endif
 

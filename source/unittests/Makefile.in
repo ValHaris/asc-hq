@@ -46,7 +46,8 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libunittests_la_DEPENDENCIES =
 am_libunittests_la_OBJECTS = movementtest.lo attacktest.lo \
 	unittestutil.lo main.lo ai-move1.lo viewtest.lo ai-service1.lo \
-	transfercontroltest.lo recyclingtest.lo diplomacytest.lo
+	transfercontroltest.lo recyclingtest.lo diplomacytest.lo \
+	researchtest.lo
 libunittests_la_OBJECTS = $(am_libunittests_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -235,7 +236,7 @@ MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include
 noinst_LTLIBRARIES = libunittests.la
 libunittests_la_SOURCES = movementtest.cpp attacktest.cpp unittestutil.cpp main.cpp ai-move1.cpp viewtest.cpp ai-service1.cpp transfercontroltest.cpp \
-                          recyclingtest.cpp diplomacytest.cpp
+                          recyclingtest.cpp diplomacytest.cpp researchtest.cpp
 
 libunittests_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -297,6 +298,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/movementtest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/recyclingtest.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/researchtest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/transfercontroltest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unittestutil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewtest.Plo@am__quote@

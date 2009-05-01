@@ -125,9 +125,6 @@ class trunreplay {
             void removeActionCursor( void );
 
          public:
-
-            treactionfire_replayinfo* getnextreplayinfo ( void );
-
             trunreplay();
             int status;
             void firstinit();

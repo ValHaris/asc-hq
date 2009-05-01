@@ -31,7 +31,7 @@ infopopup.cpp overviewmapimage.cpp asc-mainscreen.cpp mapfield.cpp overviewmappa
 explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
-playercolor.cpp pg_mapdisplay.cpp autotraining.cpp
+playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp
 
 commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \

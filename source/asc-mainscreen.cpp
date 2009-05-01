@@ -153,6 +153,7 @@ void Menu::setup()
    addbutton ( "~D~iplomacy", ua_setupalliances);
    addbutton ( "transfer ~U~nit control", ua_giveunitaway );
    addbutton ( "~T~ransfer resources", ua_settribute);
+   addbutton ( "Choose Technology", ua_chooseTechnology );
    addbutton ( "~C~ancel Research", ua_cancelResearch );
    currentMenu->addSeparator();
    addbutton ( "~E~dit Player Data", ua_editPlayerData);
@@ -888,10 +889,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       switch ( key->keysym.sym ) {
 
             case SDLK_0: execUserAction_ev( ua_writescreentopcx );
-               return true;
-
-            case SDLK_F12:
-                  execUserAction_ev ( ua_exportUnitToFile );
                return true;
 
             case SDLK_F10: {

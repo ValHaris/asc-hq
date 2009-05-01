@@ -79,7 +79,7 @@ class NewMap: public ASC_PG_Dialog {
          if ( create ) {
             TerrainType::Weather* w = terrainTypeRepository.getObject_byID( terrainid)->weather[0];
             if ( !w ) {
-               warning( "please chose a terrain!" );
+               warning( "please choose a terrain!" );
                return false;
             }
             

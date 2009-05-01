@@ -33,20 +33,6 @@
 class MapDisplayInterface;
 
 
-struct treactionfire_replayinfo {
-         int x1 ;
-         int y1 ;
-         int x2 ;
-         int y2 ;
-         int ad1 ;
-         int ad2 ;
-         int dd1 ;
-         int dd2 ;
-         int wpnum;
-};
-
-
-
 class treactionfire {
           public:
              virtual int  checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context ) = 0;
@@ -55,19 +41,6 @@ class treactionfire {
              virtual ~treactionfire() {};
         };
 
-#if 0
-class treactionfirereplay : public treactionfire {
-          protected:
-             vector<treactionfire_replayinfo*> replay;
-             Vehicle* unit;
-          public:
-             treactionfirereplay ( void );
-             ~treactionfirereplay ( );
-             virtual int checkfield ( const MapCoordinate3D& pos, Vehicle* &eht, const Context& context );
-             virtual void init ( Vehicle* eht, const AStar3D::Path& fieldlist );
-             virtual int  finalCheck ( int currentPlayer, const Context& context ) { return 0; };
-};
-#endif
         
 class tsearchreactionfireingunits : public treactionfire {
            private: 

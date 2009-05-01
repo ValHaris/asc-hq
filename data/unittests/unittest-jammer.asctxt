@@ -150,7 +150,7 @@ VehicleType {
    MovementSound = tracked_ext_s.ogg
    KillSound = 
    HeightChangeMethodNum = 0
-   TechAdapterRequired = 51 
+   TechAdapterRequired = UnitTestVortex
    RequireAllListedTechAdapter = true
    ConstructionCost { 
       Energy = 10590

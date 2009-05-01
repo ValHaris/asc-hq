@@ -28,25 +28,6 @@
 #include "../attack.h"
 
 class UnitAttack : public UnitTask{
-      MapCoordinate target;
-      int targetUnit;
-      MapCoordinate targetBuilding;
-      
-      bool untilDestruction;
-      bool kamikaze;
-      
-      void fieldChecker( const MapCoordinate& pos );
-      
-      map<MapCoordinate,AttackWeap > attackableUnits;
-      vector<MapCoordinate> attackableUnitsKamikaze;
-      map<MapCoordinate,AttackWeap > attackableBuildings;
-      map<MapCoordinate,AttackWeap > attackableObjects;
-      
-   public:
-      UnitAttack ( Vehicle* unit );
-      ActionResult searchTargets();
-      void setTarget( const MapCoordinate& target );
-      ActionResult go ( Context& context ); 
 };
 
 #endif

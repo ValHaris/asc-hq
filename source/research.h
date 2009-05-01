@@ -160,7 +160,7 @@ class TechAdapterDependency {
 
 
  class Research {
-
+     friend class DirectResearchCommand;
      GameMap* map;
      int player;
 
@@ -193,32 +193,34 @@ class TechAdapterDependency {
      //! the technology that is defined as long-term goal
      const Technology* goal;
 
-     bool vehicletypeavailable ( const Vehicletype* fztyp ) const;
-
      void read ( tnstream& stream );
      void write ( tnstream& stream );
 
      void read_struct ( tnstream& stream, bool merge = false );
      void read_techs ( tnstream& stream, bool merge = false );
 
-     void evalTechAdapter();
+     /** checks for TechAdapters whose preconditions are now satisfied.
+         These TechAdapters will be activated.
+         \returns a list of TechAdapters that were activated 
+      */
+     vector<ASCString> evalTechAdapter();
      bool techAdapterAvail( const ASCString& ta ) const;
 
      void settechlevel ( int techlevel );
 
      void chainToMap ( GameMap* _map, int _player ) { map = _map; player = _player; };
 
-     //! Move the technology that is currently being reseached to the list of discovered technologies
-     void addtechnology();
-
-     void addanytechnology ( const Technology* tech );
+     /** adds the technology to the list of available technologies
+         \returns a list of TechAdapters that were activated due to this new technology 
+     */
+     vector<ASCString> addanytechnology ( const Technology* tech );
 
      ResearchAvailabilityStatus techAvailable ( const Technology* tech ) const;
 
      bool isBlocked( const Technology* tech ) const;
 
      /** is used by the chooseTechnology dialog: the first time no techs are available this variable is still true,
-         so the dialog shows "now techs avail". THen it sets techAvail to false, preventing the same message at the
+         so the dialog shows "no techs avail". THen it sets techAvail to false, preventing the same message at the
          beginning of each turn */
      bool techsAvail;
 

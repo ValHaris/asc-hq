@@ -160,6 +160,7 @@
 #include "dialogs/unitguidedialog.h"
 #include "actions/cancelresearchcommand.h"
 #include "actions/diplomacycommand.h"
+#include "gameevent_dialogs.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -227,6 +228,8 @@ void viewcomp( Player& player )
    computeview( player.getParentMap() );
 }
 
+
+
 void hookGuiToMap( GameMap* map )
 {
    if ( !map->getGuiHooked() ) {
@@ -236,7 +239,7 @@ void hookGuiToMap( GameMap* map )
       
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &researchCheck ));
+      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkForNewResearch ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
@@ -947,24 +950,7 @@ void execuseraction ( tuseractions action )
          }
          break;
       case ua_exportUnitToFile:
-         if ( getSelectedField()->vehicle && getSelectedField()->vehicle->getOwner() == actmap->actplayer ){
-            if (choice_dlg( "do you really want to cut this unit from the game?", "~y~es","~n~o") == 1) {
-               Vehicle* veh = getSelectedField()->vehicle;
-               ClipBoard::Instance().clear();
-               ClipBoard::Instance().addUnit( veh );
-
-               ASCString filename = selectFile( clipboardFileExtension, false );
-               if ( !filename.empty() ) {
-                  tnfilestream stream ( filename, tnstream::writing );
-                  ClipBoard::Instance().write( stream );
-                  logtoreplayinfo ( rpl_cutFromGame, veh->networkid );
-                  veh->prepareForCleanRemove();
-                  delete veh;
-                  computeview( actmap );
-                  displaymap();
-               }
-            }
-         }
+         warning("this function is not supported any longer");
          break;
       case ua_undo:
          undo();
@@ -1294,6 +1280,21 @@ void editAlliances()
    }
 }
 
+void chooseTechnology()
+{
+   Player& player = actmap->getCurrentPlayer();
+   
+   if ( player.research.activetechnology ) {
+      infoMessage("You are already researching " + player.research.activetechnology->name);
+   } else {
+      if ( !player.research.progress )
+         infoMessage("You don't have any research points to spend");
+      else {
+         checkForNewResearch( player );
+      }
+   }
+}
+
 // user actions using the new event system
 void execuseraction2 ( tuseractions action )
 {
@@ -1480,6 +1481,9 @@ void execuseraction2 ( tuseractions action )
       case ua_writeLuaCommands: writeLuaCommands();
          break;
          
+      case ua_chooseTechnology: chooseTechnology();
+         break;
+         
 #ifdef LUAINTERFACE 
       case ua_runLuaCommands: selectAndRunLuaScript();
          break;
@@ -1617,15 +1621,6 @@ class GameThreadParams: public SigC::Object
       };
 };
 
-void diplomaticChange( GameMap* gm,int p1,int p2)
-{
-   if ( p1 == gm->getPlayerView() || p2 == gm->getPlayerView() ) {
-      computeview( gm );
-      mapChanged( gm );
-      repaintMap();
-   }
-}
-
 
 int gamethread ( void* data )
 {
@@ -1675,6 +1670,8 @@ int gamethread ( void* data )
 
    suppressMapTriggerExecution = false;
    
+   static ShowNewTechnology showNewTechs;
+   setResearchPresenter( &showNewTechs );
 
    displayLogMessage ( 5, "loaddata completed successfully.\n" );
    dataLoaderTicker();
@@ -1771,11 +1768,15 @@ void tributeTransfer( Player& player )
    transfer_all_outstanding_tribute( player );
 }
 
+static void __runResearch( Player& player ){
+   runResearch( player, NULL, NULL );  
+}
 
 void deployMapPlayingHooks ( GameMap* map )
 {
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
    map->sigPlayerTurnBegins.connect( SigC::slot( tributeTransfer ));   
+   map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
 }
 
 

@@ -204,7 +204,7 @@ class MapItemTypeWidgetFactory_IDSelection : public BaseMapItemTypeWidgetFactory
 
 /** opens a window in which the user can select an item of the given type ( template parameter ItemType ).
     \param id The value of this variable will set the item that is selected when opening the window. The selected item will also be written back here.
-    \param itemRepository the repository of items from which the user can chose one
+    \param itemRepository the repository of items from which the user can choose one
 */
 template <class ItemType>
 bool selectItemID( int& id, const ItemRepository<ItemType>& itemRepository )
@@ -216,7 +216,7 @@ bool selectItemID( int& id, const ItemRepository<ItemType>& itemRepository )
 }
 
 
-//! Lets the user chose a unit and adds it to the cargo of container.
+//! Lets the user choose a unit and adds it to the cargo of container.
 extern void addCargo( ContainerBase* container );
 
 extern void editProduction( ContainerBase* container );

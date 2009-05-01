@@ -2685,31 +2685,6 @@ void trunreplay :: readnextaction ( void )
 }
 
 
-treactionfire_replayinfo* trunreplay::getnextreplayinfo ( void )
-{
-   if ( nextaction == rpl_reactionfire ) {
-      treactionfire_replayinfo* reac = new treactionfire_replayinfo;
-      stream->readInt(); // size
-
-      reac->x1 = stream->readInt();
-      reac->y1 = stream->readInt( );
-      reac->x2 = stream->readInt( );
-      reac->y2 = stream->readInt( );
-      reac->ad1 = stream->readInt( );
-      reac->ad2 = stream->readInt( );
-      reac->dd1 = stream->readInt( );
-      reac->dd2 = stream->readInt( );
-      reac->wpnum = stream->readInt( );
-
-      readnextaction();
-
-      return reac;
-   } else
-      return NULL;
-
-}
-
-
 
 int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOperations )
 {

@@ -34,6 +34,9 @@
 
 #include "pgmultilineedit.h"
 #include "../widgets/textrenderer.h"
+#include "../actions/directresearchcommand.h"
+#include "../sg.h"
+#include "../dialog.h"
 
 class TechWidget: public SelectionWidget  {
       const Technology* tech;
@@ -149,21 +152,8 @@ Surface TechWidget::clippingSurface;
    
    void TechnologySelectionItemFactory::restart()
    {
-      items.clear();
-      
-      for (int i = 0; i < technologyRepository.getNum(); i++) {
-         const Technology* tech = technologyRepository.getObject_byPos( i );
-         if ( tech ) {
-            if ( allTechs ) {
-               if ( tech->eventually_available( player.research, NULL ))
-                  items.push_back( tech );
-            } else {
-               ResearchAvailabilityStatus a = player.research.techAvailable ( tech );
-               if ( a == Available )
-                  items.push_back ( tech );
-            }
-         }
-      }
+      DirectResearchCommand drc( player );
+      items = drc.getAvailableTechnologies( allTechs );
       
       sort( items.begin(), items.end(), techComp );
       it = items.begin();
@@ -205,6 +195,7 @@ class ChooseTech : public ASC_PG_Dialog
    PG_Label* pointsLabel;
    PG_Label* availLabel;
    const Technology* goal;
+   bool okPressed;
 
    bool changeTechView( bool all )
    {
@@ -244,12 +235,8 @@ class ChooseTech : public ASC_PG_Dialog
 
       pointsLabel->SetText( ASCString("Sum: ") + ASCString::toString(points) + " Points" );
 
-      bool alreadyChoosen = (tech == player.research.goal);
-
-      goal = player.research.goal = tech;
-      player.research.activetechnology = *techs.begin();
-      if ( alreadyChoosen ) 
-         ok();
+      bool alreadyChoosen = (tech == goal);
+      goal = tech;
    };
 
    protected:
@@ -264,12 +251,32 @@ class ChooseTech : public ASC_PG_Dialog
       bool ok()
       {
          if ( goal || !itemSelector->getItemNum() ) {
-            QuitModal();
+            
+            if ( goal ) {
+               auto_ptr<DirectResearchCommand> drc ( new DirectResearchCommand( player ));
+               drc->setTechnology( goal );
+               ActionResult res = drc->execute( createContext( player.getParentMap() ));
+               if ( res.successful() ) {
+                  drc.release();
+                  okPressed = true;
+                  QuitModal();
+               } else
+                  displayActionError( res);
+            } else
+               QuitModal();
             return true;
          } else
             return false;
       }
 
+      bool cancel()
+      {
+         player.research.goal = NULL;
+         player.research.activetechnology = NULL;
+         QuitModal();
+         return true;
+      }
+      
       bool showPrerequisites()
       {
          if ( goal ) {
@@ -304,7 +311,7 @@ class ChooseTech : public ASC_PG_Dialog
 
    
    public:
-      ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 770, 600), "Choose Technology" ) , factory(NULL), player( my_player ), goal(NULL)
+      ChooseTech( Player& my_player ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 770, 600), "Choose Technology" ) , factory(NULL), player( my_player ), goal(NULL), okPressed(false)
       {
          factory = new TechnologySelectionItemFactory( player );
          factory->techSelected.connect( SigC::slot( *this, &ChooseTech::techSelected ));
@@ -318,24 +325,26 @@ class ChooseTech : public ASC_PG_Dialog
 
          (new PG_Button( this, PG_Rect( 450, 320, 300, 20), "List Prerequisites" ))->sigClick.connect( SigC::slot( *this, &ChooseTech::showPrerequisites ));
 
+         AddStandardButton("~C~ancel")->sigClick.connect( SigC::slot( *this, &ChooseTech::cancel ));
          AddStandardButton("~O~K")->sigClick.connect( SigC::slot( *this, &ChooseTech::ok ));
       };
+      
+      bool selectionPerformed()
+      {
+         return okPressed;
+      }
+      
 };
 
 
 
 
-void chooseTechnology( Player& player )
+bool chooseTechnology( Player& player )
 {
-#if 0
-   ItemSelectorWindow isw( NULL, );
-   isw.Show();
-   isw.RunModal();
-#else
    ChooseTech ct( player);
    ct.Show();
    ct.RunModal();
-#endif
+   return ct.selectionPerformed();
 }
 
 

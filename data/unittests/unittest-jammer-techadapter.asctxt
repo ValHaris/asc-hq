@@ -1,0 +1,4 @@
+TechAdapter {
+   Name = UnitTestVortex
+   TechnologiesRequired = 1000000051
+} TechAdapter

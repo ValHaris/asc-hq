@@ -789,6 +789,16 @@ void Building :: getresourceusage ( Resources* usage )
 
 void doresearch ( GameMap* actmap, int player )
 {
+   Research& research = actmap->getPlayer(player).research;
+   
+   if ( research.activetechnology == NULL && research.progress ) {
+      // we don't accumulate research if there is not technology to research
+      // this is to prevent player from accumulating lots of unused research points and then
+      // developing several technologies at once  
+      return;
+   }
+   
+   
    typedef vector<ResearchEfficiency> VRE;
    VRE vre;
 
@@ -810,7 +820,7 @@ void doresearch ( GameMap* actmap, int player )
          vre.push_back(re);
       } else
          if ( bld->researchpoints > 0 )
-            actmap->player[player].research.progress += bld->researchpoints *  actmap->player[player].research.getMultiplier();
+            research.progress += bld->researchpoints *  research.getMultiplier();
    }
    sort( vre.begin(), vre.end());
 
@@ -855,7 +865,7 @@ void doresearch ( GameMap* actmap, int player )
       if ( got < r )
          fatalError( "controls : doresearch : inconsistency in getting energy or material for building" );
 
-      actmap->player[player].research.progress += res * actmap->player[player].research.getMultiplier();
+      research.progress += res * research.getMultiplier();
    }
 }
 

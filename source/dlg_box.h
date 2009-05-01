@@ -438,7 +438,7 @@ extern ASCString editString( const ASCString& title, const ASCString& defaultVal
 
 
 
-/** displays a dialogbox which lets you chose one of a number of strings.
+/** displays a dialogbox which lets you choose one of a number of strings.
     \param title the title of the dialog box
     \param entries the list of strings
     \param defaultEntry the entry that is selected by default (-1 if none)
@@ -446,7 +446,7 @@ extern ASCString editString( const ASCString& title, const ASCString& defaultVal
  */
 extern int chooseString ( const ASCString& title, const vector<ASCString>& entries, int defaultEntry = -1 );
 
-/** displays a dialogbox which lets you chose one of a number of strings.
+/** displays a dialogbox which lets you choose one of a number of strings.
     \param title the title of the dialog box
     \param entries the list of strings
     \param buttons the names of the buttons that are going to be displayed

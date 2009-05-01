@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles =     1000000000-1000001000 
+   Buildings =    1000000000-1000001000  
+   Objects =      1000000000-1000001000 
+   Technologies = 1000000000-1000001000 
+   Terrain =      1000000000-1000001000 
+   name = UnitTest Objects
+   activated = false
+} itemfilter
+   

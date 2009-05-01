@@ -49,15 +49,4 @@ extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm );
 
 
-/////////////////////////////////////////////////////////////////////
-///// old vehicle actions
-/////////////////////////////////////////////////////////////////////
-
-
-//! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
-extern void dissectvehicle ( Vehicle* eht );
-
-//! checks if a new technology must be chosen by the current player. Runs the appropriate dialogs
-extern void researchCheck( Player& player );
-
 #endif

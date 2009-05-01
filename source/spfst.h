@@ -34,14 +34,6 @@
   #include "gamemap.h"
   
 
-
-// ! returns the diplomatic status between actmap->actplayer and the player with color b (note that the color is playernum*8 ) 
-//extern int getdiplomaticstatus( int b );
-
-// ! returns the diplomatic status between the players with color c and b (note that the color is playernum*8 ) 
-// extern int getdiplomaticstatus2( int c, int b);
-
-
 //! puts a building onto the map. To be used by the map editor! For ingame usage, see ConstructBuildingCommand or SpawnBuilding
 extern void  putbuilding( const MapCoordinate& entryPosition,
                          int          color,

@@ -68,13 +68,13 @@ int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* typ
          l |= 1 << r;
    
    if ( internally ) {
-      if ( !getPlayer().research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
+      if ( !type->techDependency.available( getPlayer().research ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffInternally ) ) 
          l |= 1 << 10;
    
       if ( !container->vehicleUnloadable( type ) && !container->baseType->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
          l |= 1 << 11;
    } else {
-      if ( !getPlayer().research.vehicletypeavailable ( type ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffExternally ) ) 
+      if ( !type->techDependency.available( getPlayer().research ) && getMap()->getgameparameter( cgp_produceOnlyResearchedStuffExternally ) ) 
          l |= 1 << 10;
    }
       

@@ -58,14 +58,15 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	destructunitcommand.lo reactionfireswitchcommand.lo \
 	repairunitcommand.lo jumpdrivecommand.lo \
 	powergenerationswitchcommand.lo repairbuildingcommand.lo \
-	transfercontrolcommand.lo buildproductionlinecommand.lo \
-	removeproductionlinecommand.lo cancelresearchcommand.lo \
-	setresourceprocessingratecommand.lo servicing.lo spawnmine.lo \
-	putobjectcommand.lo putminecommand.lo trainunitcommand.lo \
-	servicecommand.lo containeraction.lo recycleunitcommand.lo \
-	consumeresource.lo vehicleattack.lo moveunit.lo \
-	discoverresources.lo unitcommand.lo attackcommand.lo \
-	moveunitcommand.lo convertcontainer.lo containercommand.lo \
+	transfercontrolcommand.lo directresearchcommand.lo \
+	buildproductionlinecommand.lo removeproductionlinecommand.lo \
+	cancelresearchcommand.lo setresourceprocessingratecommand.lo \
+	servicing.lo spawnmine.lo putobjectcommand.lo \
+	putminecommand.lo trainunitcommand.lo servicecommand.lo \
+	containeraction.lo recycleunitcommand.lo consumeresource.lo \
+	vehicleattack.lo moveunit.lo discoverresources.lo \
+	unitcommand.lo attackcommand.lo moveunitcommand.lo \
+	convertcontainer.lo containercommand.lo \
 	constructunitcommand.lo spawnunit.lo cargomovecommand.lo \
 	diplomacycommand.lo changediplomaticstate.lo
 libdirectunitactions_la_OBJECTS =  \
@@ -269,7 +270,7 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           changeunitmovement.cpp unitaction.cpp changeunitproperty.cpp registerunitrftarget.cpp consumeresource.cpp \
                           containeraction.cpp changecontainerproperty.cpp unitfieldregistration.cpp viewregistration.cpp consumeammo.cpp \
                           recycleunitcommand.cpp destructunitcommand.cpp reactionfireswitchcommand.cpp repairunitcommand.cpp jumpdrivecommand.cpp \
-                          powergenerationswitchcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp \
+                          powergenerationswitchcommand.cpp repairbuildingcommand.cpp transfercontrolcommand.cpp directresearchcommand.cpp \
                           buildproductionlinecommand.cpp removeproductionlinecommand.cpp cancelresearchcommand.cpp setresourceprocessingratecommand.cpp \
                           servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp trainunitcommand.cpp servicecommand.cpp \
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
@@ -363,6 +364,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructcontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/destructunitcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diplomacycommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/directresearchcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/discoverresources.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictdamage.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrivecommand.Plo@am__quote@
