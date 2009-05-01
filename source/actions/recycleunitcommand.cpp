@@ -85,7 +85,7 @@ RecycleUnitCommand :: RecycleUnitCommand ( ContainerBase* container )
 ActionResult RecycleUnitCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    Vehicle* unit = getMap()->getUnit( unitID );
    if ( !unit )

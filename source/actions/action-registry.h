@@ -72,7 +72,8 @@ namespace ActionRegistry {
                   SetResourceProcessingRateCommand,
                   DiplomacyCommand,
                   ChangeDiplomaticState,
-                  DirectResearchCommand
+                  DirectResearchCommand,
+                  InternalAmmoTransferCommand
                         
    };
 };

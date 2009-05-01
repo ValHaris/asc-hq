@@ -83,7 +83,7 @@ CargoMoveCommand :: CargoMoveCommand ( Vehicle* unit )
 ActionResult CargoMoveCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    if( mode == undefined )
       return ActionResult(21900);

@@ -64,7 +64,7 @@ DestructUnitCommand :: DestructUnitCommand ( ContainerBase* container )
 ActionResult DestructUnitCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    ContainerBase* container = getContainer();
    if ( !avail( container ))

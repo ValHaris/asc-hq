@@ -62,7 +62,7 @@ void CancelResearchCommand::writeData ( tnstream& stream ) const
 ActionResult CancelResearchCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    Research& research = getMap()->getPlayer( player ).research;
    
@@ -116,7 +116,7 @@ ActionResult CancelResearchCommand::preCheck()
 ActionResult CancelResearchCommand::undoAction( const Context& context )
 {
    if ( getState() != Completed )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    Research& research = getMap()->getPlayer( player ).research;
    

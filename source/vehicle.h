@@ -317,7 +317,8 @@ class UnitHooveringLogic {
     /** returns true if the units view is currently added to the maps global visibility.
         \sa viewcalculation.cpp */
     bool isViewing ( ) const { return viewOnMap; };
-    const SingleWeapon *getWeapon( unsigned weaponNum );
+    
+    const SingleWeapon *getWeapon( unsigned weaponNum ) const;
 
     //! returns the units position
     MapCoordinate3D getPosition ( ) const;

@@ -27,7 +27,6 @@
 
 
 extern void internalAmmoTransferWindow ( Vehicle* source );
-extern bool internalAmmoTransferAvailable ( ContainerBase* source );
 
 
 #endif

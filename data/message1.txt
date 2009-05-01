@@ -348,3 +348,5 @@ TechAdapter not found
 Technology missing from available techs
 23205
 Technology not found
+23300
+invalid ammo transfer between slots

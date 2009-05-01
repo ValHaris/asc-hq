@@ -1602,7 +1602,7 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
 /** Returns the SingleWeapon corresponding to the weaponNum for this
  *  vehicle.
  */
-const SingleWeapon* Vehicle::getWeapon( unsigned weaponNum )
+const SingleWeapon* Vehicle::getWeapon( unsigned weaponNum ) const
 {
   if ( weaponNum <= typ->weapons.count )
      return &typ->weapons.weapon[weaponNum];

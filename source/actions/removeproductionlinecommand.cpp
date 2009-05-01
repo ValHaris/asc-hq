@@ -71,7 +71,7 @@ void RemoveProductionLineCommand::setRemoval( const Vehicletype* vehicleType )
 ActionResult RemoveProductionLineCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    if ( !avail( getContainer() ))
       return ActionResult(22800);

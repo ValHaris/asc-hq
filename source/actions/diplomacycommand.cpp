@@ -138,7 +138,7 @@ void DiplomacyCommand::immediateTwoWayChange( DiplomaticStates newState, const C
 ActionResult DiplomacyCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    if ( actingPlayer  < 0 || actingPlayer >= getMap()->getPlayerCount() )
       return ActionResult( 23100 );

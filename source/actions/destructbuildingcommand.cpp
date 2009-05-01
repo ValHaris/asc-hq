@@ -106,7 +106,7 @@ void DestructBuildingCommand :: setTargetPosition( const MapCoordinate& pos )
 ActionResult DestructBuildingCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    
    Building* building = getMap()->getField( target )->building;

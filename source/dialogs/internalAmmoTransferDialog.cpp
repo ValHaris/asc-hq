@@ -29,25 +29,10 @@
 #include "../actions/servicing.h"
 #include "../iconrepository.h"
 #include "../replay.h"
+#include "../actions/internalammotransfercommand.h"
+#include "../sg.h"
+#include "../dialog.h"
 
-bool internalAmmoTransferAvailable( ContainerBase* container )
-{
-	if( container == NULL ) return false;
-	if( container->isBuilding() ) return false;
-	
-	Vehicle* vehicle = (Vehicle*) container;
-	for( int i=0; i<vehicle->typ->weapons.count; i++ )
-	{
-		const SingleWeapon* weapon = vehicle->getWeapon( i );
-		if( weapon->canRefuel() ) return true;
-		for( int j=0; j<i; j++ )
-		{
-			const SingleWeapon* otherWeapon = vehicle->getWeapon( j );
-			if( weapon->equals( otherWeapon ) ) return true;
-		}
-	}
-	return false;
-}
 
 /** !!! wichtig: serviceweapon in dieser klasse bezieht sich auf das refuel-flag 
 	* der waffe, _nicht_ auf das servicewaffen flag.
@@ -288,11 +273,18 @@ void InternalAmmoTransferHandler::performTransfer()
 	// munition sollte jetzt im "legalen" bereich sein, 
 	// und alles was im transfer war den echten waffen zugewiesen,
 	// also jetzt dem fahrzeug zuweisen
-	for( int i=0; i<16; i++ )
-	{
-      logtoreplayinfo ( rpl_refuel2, _vehicle->xpos, _vehicle->ypos, _vehicle->networkid, i, weaponAmmo[ i ], _vehicle->ammo[ i ] );
-		_vehicle->ammo[ i ] = weaponAmmo[ i ];
-	}
+        vector<int> am;
+        for( int i=0; i<16; i++ )
+           am.push_back( weaponAmmo[i] );
+        
+        auto_ptr<InternalAmmoTransferCommand> iatc ( new InternalAmmoTransferCommand( _vehicle));
+        iatc->setAmmounts( am );
+        ActionResult res = iatc->execute( createContext( _vehicle->getMap() ));
+        if ( res.successful() )
+           iatc.release();
+        else
+           displayActionError( res );
+        
 }
 
 
@@ -397,7 +389,7 @@ class InternalAmmoTransferWindow : public ASC_PG_Dialog {
    public:
       InternalAmmoTransferWindow ( Vehicle* source, PG_Widget* parent );
 
-      bool somethingToTransfer() { return internalAmmoTransferAvailable( vehicle ); };
+      bool somethingToTransfer() { return InternalAmmoTransferCommand::avail( vehicle ); };
       
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {

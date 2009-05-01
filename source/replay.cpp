@@ -2711,6 +2711,8 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    actmap->setPlayerView ( viewingplayer );
    actmap->getCursor() = orgmap->getCursor();
 
+   actmap->sigPlayerTurnBegins( actmap->getPlayer( player ));
+   
    tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
    stream = &guidatastream;
 
@@ -2777,6 +2779,8 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
                if ( nextplayer < actmap->actplayer && performEndTurnOperations )
                   actmap->endRound();
                 
+               actmap->getCursor() = orgmap->getCursor();
+               
                resourcesCompared = true;
                ASCString resourceComparisonResult;
                GameMap* comparisonMap = NULL;

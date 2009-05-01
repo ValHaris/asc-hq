@@ -68,7 +68,8 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	unitcommand.lo attackcommand.lo moveunitcommand.lo \
 	convertcontainer.lo containercommand.lo \
 	constructunitcommand.lo spawnunit.lo cargomovecommand.lo \
-	diplomacycommand.lo changediplomaticstate.lo
+	diplomacycommand.lo changediplomaticstate.lo \
+	internalammotransfercommand.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
@@ -275,7 +276,8 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           servicing.cpp spawnmine.cpp putobjectcommand.cpp putminecommand.cpp trainunitcommand.cpp servicecommand.cpp \
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                           unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
-                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp diplomacycommand.cpp changediplomaticstate.cpp
+                          constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp diplomacycommand.cpp changediplomaticstate.cpp \
+                          internalammotransfercommand.cpp
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 
@@ -367,6 +369,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/directresearchcommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/discoverresources.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/inflictdamage.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/internalammotransfercommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumpdrivecommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunit.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunitcommand.Plo@am__quote@

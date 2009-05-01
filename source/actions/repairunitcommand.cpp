@@ -140,7 +140,7 @@ void RepairUnitCommand::setTarget( Vehicle* target )
 ActionResult RepairUnitCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    ContainerBase* servicer = getContainer();
    if ( !avail( servicer ))

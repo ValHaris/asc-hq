@@ -205,7 +205,7 @@ ActionResult PutObjectCommand::go ( const Context& context )
    MapCoordinate targetPosition;
 
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    if ( !avail( getUnit() ) )
       return ActionResult(21506);

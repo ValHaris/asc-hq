@@ -213,7 +213,7 @@ void ConstructBuildingCommand :: setTargetPosition( const MapCoordinate& pos )
 ActionResult ConstructBuildingCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    if ( !avail( getUnit() ))
       return ActionResult(22506);

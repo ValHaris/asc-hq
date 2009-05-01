@@ -195,13 +195,6 @@ int runTester ( )
 }
 
 
-void tributeTransfer( Player& player )
-{
-   logtoreplayinfo( rpl_transferTribute, player.getPosition() );
-   transfer_all_outstanding_tribute( player );
-}
-
-
 
 static void __runResearch( Player& player ){
    runResearch( player, NULL, NULL );  
@@ -210,7 +203,7 @@ static void __runResearch( Player& player ){
 void deployMapPlayingHooks ( GameMap* map )
 {
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
-   map->sigPlayerTurnBegins.connect( SigC::slot( tributeTransfer ));   
+   map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
    map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
 }
 

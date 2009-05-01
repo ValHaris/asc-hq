@@ -60,6 +60,7 @@
 #include "actions/constructbuildingcommand.h"
 #include "actions/destructbuildingcommand.h"
 #include "actions/powergenerationswitchcommand.h"
+#include "actions/internalammotransfercommand.h"
 
 bool commandPending()
 {
@@ -1897,9 +1898,16 @@ class InternalAmmoTransferDialog : public GuiFunction
 {
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
+         
+         // deactivated, because there shouldn't be any units left which need this function
+         return false;
+         
          if ( subject && subject->getMap()->getPlayer(subject).diplomacy.isAllied( subject->getMap()->actplayer ))
-            if (!commandPending())
-               return internalAmmoTransferAvailable( subject );
+            if (!commandPending()) {
+               Vehicle* v = dynamic_cast<Vehicle*>(subject);
+               if ( v )
+                  return InternalAmmoTransferCommand::avail( v );
+            }
 
          return false;
       };
@@ -1910,7 +1918,6 @@ class InternalAmmoTransferDialog : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          internalAmmoTransferWindow( (Vehicle*) subject );
-         actmap->cleartemps ( 7 );
          displaymap();
          updateFieldInfo();
       }

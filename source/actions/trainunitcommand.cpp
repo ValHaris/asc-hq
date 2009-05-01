@@ -88,7 +88,7 @@ TrainUnitCommand :: TrainUnitCommand ( ContainerBase* container )
 ActionResult TrainUnitCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    Vehicle* unit = getMap()->getUnit( unitID );
    if ( !unit )

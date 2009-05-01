@@ -104,7 +104,7 @@ void DirectResearchCommand::setTechnology( const Technology* tech )
 ActionResult DirectResearchCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    if ( !available( getMap()->getPlayer( player ) ))
       return ActionResult( 23201 );
@@ -145,7 +145,7 @@ ActionResult DirectResearchCommand::go ( const Context& context )
 ActionResult DirectResearchCommand::undoAction( const Context& context )
 {
    if ( getState() != Completed )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    Research& research = getMap()->getPlayer( player ).research;
    

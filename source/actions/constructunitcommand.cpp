@@ -192,7 +192,7 @@ void ConstructUnitCommand :: setTargetPosition( const MapCoordinate& pos )
 ActionResult ConstructUnitCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    
    Producables prods = getProduceableVehicles();

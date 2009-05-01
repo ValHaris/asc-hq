@@ -251,7 +251,7 @@ const AStar3D::Path& MoveUnitCommand::getPath()
 ActionResult MoveUnitCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    
    searchFields();

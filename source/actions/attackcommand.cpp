@@ -170,7 +170,7 @@ ActionResult AttackCommand::go ( const Context& context )
    MapCoordinate targetPosition;
    
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
    
    searchTargets();
    

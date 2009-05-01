@@ -72,7 +72,7 @@ void ReactionFireSwitchCommand :: setNewState( bool enabled )
 ActionResult ReactionFireSwitchCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    Vehicle* unit = getUnit();
    if ( !avail( unit, newRFstate ))

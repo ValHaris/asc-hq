@@ -67,7 +67,7 @@ Resources SetResourceProcessingRateCommand::getNewPlus()
 ActionResult SetResourceProcessingRateCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    ContainerBase* c = getContainer();
    if ( !avail( c ))

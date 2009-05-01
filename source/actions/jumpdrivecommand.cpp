@@ -98,7 +98,7 @@ void JumpDriveCommand::setDestination( const MapCoordinate& position )
 ActionResult JumpDriveCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    Vehicle* unit = getUnit();
    

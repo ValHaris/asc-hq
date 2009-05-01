@@ -63,7 +63,7 @@ void PowerGenerationSwitchCommand :: setNewState( bool enabled )
 ActionResult PowerGenerationSwitchCommand::go ( const Context& context )
 {
    if ( getState() != SetUp )
-      return ActionResult(21002);
+      return ActionResult(22000);
 
    Vehicle* unit = getUnit();
    if ( !avail( unit, newState ))
