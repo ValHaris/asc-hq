@@ -28,8 +28,8 @@
 #include "vehicletype.h"
 #include "buildingtype.h"
 #include "spfst.h"
-
-
+#include "actions/context.h"
+#include "actions/removeobject.h"
 
 tfield :: tfield ( GameMap* gamemap_ )
 {
@@ -148,7 +148,7 @@ Mine& tfield::getMine ( int n )
   return *i;
 }
 
-bool  tfield :: addobject( const ObjectType* obj, int dir, bool force )
+bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, const Context* context )
 {
    if ( !obj )
       return false;
@@ -173,7 +173,7 @@ bool  tfield :: addobject( const ObjectType* obj, int dir, bool force )
             calculateobject( getx(), gety(), true, obj, gamemap );
 
          sortobjects();
-         setparams();
+         setparams( context );
          return true;
      } else
         return false;
@@ -458,7 +458,13 @@ int tfield :: getmovemalus ( int type )
   return __movemalus.at(type);
 }
 
-void tfield :: setparams ( void )
+MapCoordinate tfield :: getPosition()
+{
+   return MapCoordinate( getx(), gety() );  
+}
+
+
+void tfield :: setparams ( const Context* context )
 {
    int i;
    bdt = typ->art;
@@ -474,8 +480,12 @@ void tfield :: setparams ( void )
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
          if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
-            objects.erase(o);
-            setparams();
+            if ( context ) 
+               ( new RemoveObject( getMap(), getPosition(), o->typ->id ))->execute( *context );
+            else
+               objects.erase(o);
+               
+            setparams( context );
             return;
          }
 

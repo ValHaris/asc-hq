@@ -34,12 +34,14 @@ void testView1()
    
    assertOrThrow( fieldvisiblenow(game->getField(4,3)) == true );
    
-   game->actions.undo( createTestingContext( game.get() ) );  
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
    
    assertOrThrow( fieldvisiblenow(game->getField(4,3)) == false );
    assertOrThrow( fieldvisiblenow(game->getField(3,5)) == true );
    
-   game->actions.undo( createTestingContext( game.get() ) );  
+   res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
    
    assertOrThrow( fieldvisiblenow(game->getField(3,5)) == false );
    
@@ -51,7 +53,8 @@ void testView1()
    
    assertOrThrow( fieldvisiblenow(game->getField(0,15), 1) == false );
    
-   game->actions.undo( createTestingContext( game.get() ) );  
+   res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
    
    assertOrThrow( fieldvisiblenow(game->getField(0,15), 1) == true );
 }

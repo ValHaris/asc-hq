@@ -43,7 +43,7 @@ class ActionContainer {
       ActionContainer( GameMap* gamemap );
       void add( Command* action );
       
-      void undo( const Context& context );
+      ActionResult undo( const Context& context );
       void redo( const Context& context );
       
       // called when some modification to the map is taking place that is not recorded by undo

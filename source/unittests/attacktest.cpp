@@ -29,7 +29,8 @@ void testAttack()
    
    testCargoMovement( veh, 50 );
    
-   game->actions.undo( createTestingContext( game.get() ) );  
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
    
    assertOrThrow( veh->getMovement() == 100 );
    testCargoMovement( veh, 100 );
@@ -53,7 +54,8 @@ void testAttack()
    attack( a2, MapCoordinate( 9, 14 ) );
     
    assertOrThrow( game->getField(9,14)->vehicle == NULL );
-   game->actions.undo( createTestingContext( game.get() ) );  
+   res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
    assertOrThrow( game->getField(9,14)->vehicle != NULL );
    
    

@@ -31,6 +31,7 @@
 #include "researchtest.h"
 #include "applicationstarter.h"
 #include "diplomacytest.h"
+#include "objectconstructiontest.h"
 
 void viewcomp( Player& player )
 {
@@ -74,6 +75,7 @@ Context createContext( GameMap* gamemap )
 
 void runUnitTests()
 {
+   testObjectConstruction();
    testResearch();
    testDiplomacy();
    testRecycling();

@@ -99,12 +99,16 @@ void testresearch1()
    
    bplc->setProduction( jam );
    res = bplc->execute( createTestingContext( game.get() ));
-   
    assertOrThrow( res.successful() );
    
-   game->actions.undo( createTestingContext( game.get() ) );  // build production line
-   game->actions.undo( createTestingContext( game.get() ) );  // research jammer 
-   game->actions.undo( createTestingContext( game.get() ) );  // research T level 2
+   res = game->actions.undo( createTestingContext( game.get() ) );  // build production line
+   assertOrThrow( res.successful() );
+   
+   res = game->actions.undo( createTestingContext( game.get() ) );  // research jammer 
+   assertOrThrow( res.successful() );
+   
+   res = game->actions.undo( createTestingContext( game.get() ) );  // research T level 2
+   assertOrThrow( res.successful() );
    
    assertOrThrow( r.activetechnology == NULL );
    assertOrThrow( r.progress == 20 );

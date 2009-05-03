@@ -25,7 +25,8 @@ void testMovement1()
    assertOrThrow( veh->getMovement() == 0 );
    testCargoMovement( veh, 50 );
       
-   game->actions.undo( createTestingContext( game.get() ) );  
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
       
    assertOrThrow( veh->getMovement() == 100 );
    testCargoMovement( veh, 100 );

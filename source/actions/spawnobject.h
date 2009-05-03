@@ -54,6 +54,7 @@ class SpawnObject : public GameAction {
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream ) const;
       
+      virtual bool undoOrderChildFirst() const { return false; };
 };
 
 #endif

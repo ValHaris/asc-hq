@@ -256,7 +256,8 @@ void testDiplomacy3()
    
    // ... and presses undo
    
-   game->actions.undo( createTestingContext( game.get() ) );
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );
+   assertOrThrow( res.successful() );
    
    next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
    assertOrThrow( game->actplayer == 1);

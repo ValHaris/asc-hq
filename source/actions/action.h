@@ -53,6 +53,8 @@ class GameAction {
       
       int sequenceNumber;
       
+      ActionResult undoChildren( const Context& context );
+      
    protected:
       
       GameAction( GameMap* map );
@@ -77,6 +79,11 @@ class GameAction {
        */
       virtual ActionResult postCheck() {return ActionResult(0);};
       
+      /** determines the order in which the child actions are undone. 
+          If true, then the children are undone first and then this action will be undone.
+          If false, then this action will be undone first and the children after that */
+      virtual bool undoOrderChildFirst() const { return true; };
+      
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) const = 0;
       
@@ -87,7 +94,7 @@ class GameAction {
       
    public:
       ActionResult execute( const Context& context );
-      void undo( const Context& context );
+      ActionResult undo( const Context& context );
       
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;

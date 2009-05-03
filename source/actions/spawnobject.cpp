@@ -104,7 +104,7 @@ ActionResult SpawnObject::runAction( const Context& context )
       oldObjectDirection = 0;
    }
    
-   objectLaid = fld->addobject( object, direction );
+   objectLaid = fld->addobject( object, direction, false, &context );
    
    return ActionResult(0);
 }

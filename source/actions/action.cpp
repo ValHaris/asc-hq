@@ -57,16 +57,44 @@ ActionResult GameAction::execute( const Context& context )
    }
 }
 
-void GameAction::undo( const Context& context ) 
+ActionResult GameAction::undoChildren( const Context& context )
 {
+   ActionResult res(0);
    for ( Children::reverse_iterator i = children.rbegin(); i != children.rend(); ++i ) {
-      // displayLogMessage(0, "undoing #" + ASCString::toString((*i)->sequenceNumber) + " (child) " + (*i)->getDescription() + "\n");
-      (*i)->undo( context );
+      ActionResult r = (*i)->undo( context );
+      if ( !r.successful() && res.successful() )
+         res =  r;
    }
+   return res;
+}
+
+static void mergeActionFailures( ActionResult& failure, const ActionResult& res )
+{
+   if ( failure.successful() && !res.successful())
+      failure = res;  
+}
+
+ActionResult GameAction::undo( const Context& context ) 
+{
+   // if there is one failuire, we'll preserve it
+   ActionResult failure(0);
+   if ( undoOrderChildFirst() )  {
+      ActionResult r = undoChildren(context);
+      mergeActionFailures( failure, r );
+   }
+   
    displayLogMessage(4, "undoing #" + ASCString::toString(sequenceNumber) + " " + getDescription() + "\n");
    ActionResult res = undoAction( context );
    if ( !res.successful() )
       warning("error undoing " + getDescription() + "\n" + res.getMessage() );
+   mergeActionFailures( failure, res );
+   
+   if ( !undoOrderChildFirst() ) {
+      ActionResult r = undoChildren(context);
+      mergeActionFailures( failure, r );
+   }
+   
+   return failure;
 }
 
 /*

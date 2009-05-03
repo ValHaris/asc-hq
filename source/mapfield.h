@@ -19,7 +19,8 @@
  #include "basestrm.h"
  #include "explosivemines.h"
  
-
+ 
+class Context;
 
 //! a single field of the map
 class  tfield {
@@ -104,7 +105,7 @@ class  tfield {
          \param force Put the object there even if it cannot normally be placed on this terrain
          \returns true on success, false if the object could not be build
     **/
-    bool addobject ( const ObjectType* obj, int dir = -1, bool force = false );
+    bool addobject ( const ObjectType* obj, int dir = -1, bool force = false, const Context* context = NULL );
 
     //! removes all objects of the given type from the field
     void removeobject ( const ObjectType* obj, bool force = false );
@@ -127,7 +128,7 @@ class  tfield {
     void deleteeverything ( void );
 
     //! recalculates the terrain properties, movemalus etc from the terraintype and the objects,
-    void setparams ( void );
+    void setparams ( const Context* context = NULL );
 
     //! the defense bonus that unit get when they are attacked
     int getdefensebonus ( void );
@@ -189,6 +190,7 @@ class  tfield {
 
     int getx();
     int gety();
+    MapCoordinate getPosition();
 
     int getMemoryFootprint() const;
 

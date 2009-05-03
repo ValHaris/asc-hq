@@ -510,7 +510,7 @@ class tgiveunitawaydlg : public tdialogbox {
              TransferControlCommand::Receivers receivers;
            public:
              void init ( tfield* fld );
-             void run ( void );
+             void run ( const Context& context );
              void buttonpressed ( int id );
        };
 
@@ -593,7 +593,7 @@ void         tgiveunitawaydlg :: buttonpressed ( int id )
 }
 
 
-void tgiveunitawaydlg :: run ( void )
+void tgiveunitawaydlg :: run ( const Context& context )
 {
    if ( !receivers.size() ) 
       return;
@@ -627,7 +627,7 @@ void tgiveunitawaydlg :: run ( void )
    if ( status == 12 ) {
       auto_ptr<TransferControlCommand> tcc ( new TransferControlCommand( fld->getContainer() ));
       tcc->setReceiver( receivers[markedplayer] );
-      ActionResult res = tcc->execute( createContext( fld->getContainer()->getMap() ));
+      ActionResult res = tcc->execute( context );
       if ( res.successful() )
          tcc.release();
       else {
@@ -636,7 +636,7 @@ void tgiveunitawaydlg :: run ( void )
    }
 }
 
-void giveunitaway ( tfield* fld )
+void giveunitaway ( tfield* fld, const Context& context )
 {
    ContainerBase* c = fld->getContainer();
    if ( !c ) {
@@ -652,7 +652,7 @@ void giveunitaway ( tfield* fld )
    if ( TransferControlCommand::avail( c ) ) {
       tgiveunitawaydlg gua;
       gua.init ( fld );
-      gua.run ();
+      gua.run ( context );
       gua.done ();
    } else {
       dispmessage2( 450, NULL );

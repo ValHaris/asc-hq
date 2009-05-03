@@ -350,3 +350,5 @@ Technology missing from available techs
 Technology not found
 23300
 invalid ammo transfer between slots
+23400
+No actions to undo

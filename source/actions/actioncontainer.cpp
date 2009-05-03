@@ -49,20 +49,23 @@ void ActionContainer::add( Command* action )
    actionListChanged(map);
 }
 
-void ActionContainer::undo( const Context& context )
+ActionResult ActionContainer::undo( const Context& context )
 {
+   ActionResult res(0);
    if ( currentPos == actions.begin() )
-      return;
+      return ActionResult(23400);
    
    try {
       Actions::iterator a = currentPos;
       --a;
-      (*a)->undo ( context );
+      res = (*a)->undo ( context );
       currentPos = a;
    } catch ( ActionResult result ) {
       errorMessage(result.getMessage());
+      return result;
    }
    actionListChanged(map);
+   return res;
 }
 
 

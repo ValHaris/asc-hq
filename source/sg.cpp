@@ -671,7 +671,7 @@ void execuseraction ( tuseractions action )
 
       case ua_giveunitaway:
          if ( actmap && actmap->getgameparameter( cgp_disableUnitTransfer ) == 0 )
-            giveunitaway ( actmap->getField( actmap->getCursor() ));
+            giveunitaway ( actmap->getField( actmap->getCursor() ), createContext( actmap ));
          else
             infoMessage("Sorry, this function has been disabled when starting the map!");
          break;

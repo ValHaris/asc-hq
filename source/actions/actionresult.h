@@ -38,7 +38,7 @@ class ActionResult {
       ActionResult( int code, const ContainerBase* veh );
       ActionResult( int code, const ContainerBase* veh, const ASCString& message );
       ActionResult( int code, const MapCoordinate& pos );
-      bool successful();
+      bool successful() const;
       ASCString getMessage() const;
       int getCode() const { return code; };
 };

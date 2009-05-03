@@ -54,7 +54,7 @@ ActionResult::ActionResult( int code, const MapCoordinate& pos)
 }
 
 
-bool ActionResult::successful()
+bool ActionResult::successful() const
 {
    return code == 0;
 }

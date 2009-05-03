@@ -36,8 +36,9 @@ extern void choosetechlevel ( void );
 
 
 class tfield;
+class Context;
 
-extern void giveunitaway ( tfield* fld );
+extern void giveunitaway ( tfield* fld, const Context& context );
 
 extern void showGameParameters ( void );
 

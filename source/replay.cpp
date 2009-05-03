@@ -1339,7 +1339,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  Vehicle* veh = actmap->getUnit( nwid );
                                  if ( veh ) {
                                     ConsumeAmmo ca ( veh, cwminen, -1, 1 );
-                                    ActionResult res = ca.execute( createContext( veh->getMap() ));
+                                    ActionResult res = ca.execute( createReplayContext());
                                     if ( !res.successful() )
                                        error(MapCoordinate(x,y), "could not obtain ammo for mine placement");
 
@@ -1590,13 +1590,13 @@ void trunreplay :: execnextreplaymove ( void )
                                        Resources res;
                                        res.resource(type-1000) = delta;
                                        ConsumeResource cr ( cb, res );
-                                       ActionResult result = cr.execute( createContext( cb->getMap() ));
+                                       ActionResult result = cr.execute( createReplayContext() );
                                        if ( !result.successful())
                                           error("severe replay inconsistency:\nthe resources of container not matching. ");
                                           
                                     } else {
                                        ConsumeAmmo ca ( cb, type, -1, delta );
-                                       ActionResult result = ca.execute( createContext( cb->getMap() ));
+                                       ActionResult result = ca.execute( createReplayContext() );
                                        if ( !result.successful())
                                           error("severe replay inconsistency:\nthe resources of container not matching. ");
                                     }
@@ -1995,7 +1995,7 @@ void trunreplay :: execnextreplaymove ( void )
                
                auto_ptr<CancelResearchCommand> crc ( new CancelResearchCommand( actmap ));
                crc->setPlayer( actmap->player[actmap->actplayer] );
-               ActionResult res = crc->execute( createContext( actmap ));
+               ActionResult res = crc->execute( createReplayContext() );
                if ( res.successful() )
                   crc.release();
                else

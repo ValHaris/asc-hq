@@ -38,7 +38,8 @@ void testTransferControl()
    assertOrThrow( !fieldvisiblenow(fld,0) );
    assertOrThrow(  fieldvisiblenow(fld,3) );
    
-   game->actions.undo( createTestingContext( game.get() ) );  
+   res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
    
    assertOrThrow( veh->getOwner() == 0 );
    assertOrThrow( fieldVisibility(fld,0) == visible_now );
