@@ -252,6 +252,8 @@ trying to remove nonexistent object
 construction command not available
 21507
 object construction/removal not available on this field
+21508
+object removal failed
 21600
 Could not create mine on this field
 21601

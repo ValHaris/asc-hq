@@ -75,8 +75,9 @@ vector<MapCoordinate> DestructBuildingCommand::getFields()
    for ( int d = 0; d < 6; ++d ) {
       MapCoordinate pos = getNeighbouringFieldCoordinate( veh->getPosition(), d );
       tfield* fld = getMap()->getField(pos);
-      if ( fld->building && getheightdelta( log2(veh->height), log2(fld->building->typ->height)) == 0 && !fld->building->typ->buildingNotRemovable ) 
-         fields.push_back( pos );
+      if ( fld )
+         if ( fld->building && getheightdelta( log2(veh->height), log2(fld->building->typ->height)) == 0 && !fld->building->typ->buildingNotRemovable ) 
+            fields.push_back( pos );
    }
 
    return fields;
@@ -117,7 +118,7 @@ ActionResult DestructBuildingCommand::go ( const Context& context )
    
    Resources cost = getDestructionCost( building );
    
-   auto_ptr<DestructContainer> dc ( new DestructContainer( building ));
+   auto_ptr<DestructContainer> dc ( new DestructContainer( building, true ));
    ActionResult res = dc->execute( context );
    if ( res.successful() )
       dc.release();

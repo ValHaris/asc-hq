@@ -27,10 +27,11 @@
 #include "../gamemap.h"
 #include "../viewcalculation.h"
      
-DestructContainer::DestructContainer( ContainerBase* container )
+DestructContainer::DestructContainer( ContainerBase* container, bool suppressWreckage )
    : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1)
 {
    building = container->isBuilding();
+   this->suppressWreckage = suppressWreckage;
 }
       
       
@@ -40,7 +41,7 @@ ASCString DestructContainer::getDescription() const
 }
       
 
-static const int destructContainerStreamVersion = 3;
+static const int destructContainerStreamVersion = 4;
       
 void DestructContainer::readData ( tnstream& stream ) 
 {
@@ -64,6 +65,11 @@ void DestructContainer::readData ( tnstream& stream )
       hostingCarrier = stream.readInt();
       cargoSlot = stream.readInt();
    }
+   
+   if ( version >= 4 )
+      suppressWreckage = stream.readInt();
+   else
+      suppressWreckage = false;
 };
       
       
@@ -82,6 +88,7 @@ void DestructContainer::writeData ( tnstream& stream ) const
    stream.writeInt( (int)fieldRegistration );
    stream.writeInt( hostingCarrier );
    stream.writeInt( cargoSlot );
+   stream.writeInt( suppressWreckage );
 };
 
 
@@ -116,7 +123,7 @@ ActionResult DestructContainer::runAction( const Context& context )
          cargoSlot = pos - cargo.begin();
       }
       
-      if ( !veh->typ->wreckageObject.empty() && getMap()->state != GameMap::Destruction ) {
+      if ( !veh->typ->wreckageObject.empty() && getMap()->state != GameMap::Destruction && !suppressWreckage ) {
          if ( fieldRegistration == FIRST || fieldRegistration == SECOND ) {
             for ( vector<int>::const_iterator i = veh->typ->wreckageObject.begin(); i != veh->typ->wreckageObject.end(); ++i ) {
                ObjectType* obj = getMap()->getobjecttype_byid( *i );
@@ -130,7 +137,7 @@ ActionResult DestructContainer::runAction( const Context& context )
    }
       
    Building* bld = dynamic_cast<Building*>(container);
-   if ( bld ) {
+   if ( bld && !suppressWreckage ) {
       for (int i = 0; i < BuildingType::xdimension; i++)
          for (int j = 0; j < BuildingType::ydimension; j++)
             if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {

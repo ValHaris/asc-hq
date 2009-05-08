@@ -189,33 +189,39 @@ bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, const Con
 }
 
 
-void tfield :: removeobject( const ObjectType* obj, bool force)
+bool tfield :: removeobject( const ObjectType* obj, bool force)
 {
    if ( !force && building )
-      return;
+      return false;
 
    #ifndef karteneditor
    if ( !force )
       if ( vehicle )
          if ( vehicle->getOwner() != gamemap->actplayer )
-           return;
+           return false;
    #endif
 
+   bool removed = false;
+   
    if ( !obj ) {
       if ( objects.size() ) {
          obj = objects.rbegin()->typ;
          objects.pop_back();
+         removed = true;
       }
    } else
       for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); )
-         if ( o->typ == obj )
+         if ( o->typ == obj ) {
             o = objects.erase( o );
-         else
+            removed = true;
+         } else
             o++;
 
    setparams();
    if ( obj )
       calculateobject( getx(), gety(), true, obj, gamemap );
+   
+   return removed;
 }
 
 void tfield :: deleteeverything ( void )

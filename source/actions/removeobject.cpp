@@ -95,8 +95,10 @@ ActionResult RemoveObject::runAction( const Context& context )
    tmemorystream memstream( objectBuffer, tnstream::writing );
    o->write( memstream );
    
-   fld->removeobject( ot );
-   return ActionResult(0);
+   if ( fld->removeobject( ot, true ) )
+      return ActionResult(0);
+   else
+      return ActionResult(21508);
 }
 
 

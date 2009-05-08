@@ -38,12 +38,13 @@ class DestructContainer : public ContainerAction {
       
       int hostingCarrier;
       int cargoSlot;
+      bool suppressWreckage;
       
-      DestructContainer( GameMap* map ) : ContainerAction( map ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1) {};
+      DestructContainer( GameMap* map ) : ContainerAction( map ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1), suppressWreckage(false) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
      
    public:
-      DestructContainer( ContainerBase* container );
+      DestructContainer( ContainerBase* container, bool suppressWreckage = false );
       
       ASCString getDescription() const;
       

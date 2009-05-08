@@ -107,8 +107,12 @@ class  tfield {
     **/
     bool addobject ( const ObjectType* obj, int dir = -1, bool force = false, const Context* context = NULL );
 
-    //! removes all objects of the given type from the field
-    void removeobject ( const ObjectType* obj, bool force = false );
+    /** removes all objects of the given type from the field
+        \param obj the object type to remove
+        \param force remove the object even if there are obstacles on the field (like a building standing on the object)
+        \returns if the removal was successful
+    */
+    bool removeobject ( const ObjectType* obj, bool force = false );
 
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
