@@ -33,6 +33,8 @@
 
  //! The class describing properties that are common to all buildings of a certain kind. \sa Building
  class  BuildingType : public ContainerBaseType {
+       ASCString originalImageFilename[cwettertypennum];
+   
     public:
        static const int xdimension = 4;
        static const int ydimension = 6;
@@ -51,7 +53,6 @@
         //! the number of legacy abilities that a building could be equipped with
         static const int cbuildingfunctionnum = 24;
         
-   public:
         //! A local coordinate referencing a single field that a building covers.
         class LocalCoordinate {
            public:

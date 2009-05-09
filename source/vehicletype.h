@@ -177,6 +177,10 @@ extern const char*  cvehiclefunctions[];
  class Vehicletype : public ContainerBaseType {
         //! the image of the unit.
         Surface  image;
+        
+        //! the filename from which the image was loaded
+        ASCString imageFilename;
+        
     public:
         static const int legacyVehicleFunctionNum = 29;
         

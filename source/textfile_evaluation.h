@@ -99,8 +99,7 @@ class PropertyContainer {
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
          void addBreakpoint();
         #ifdef ParserLoadImages
-         // void addImage ( const ASCString& name, void* &property, const ASCString& fileName );
-         void addImage ( const ASCString& name, Surface& property, const ASCString& fileName, bool applyFieldMask );
+         void addImage ( const ASCString& name, Surface& property, ASCString& fileName, bool applyFieldMask );
          // void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
          void addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& fileName );
         #endif

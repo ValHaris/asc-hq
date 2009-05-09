@@ -205,7 +205,7 @@ BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordin
 
 
 
-const int building_version = 12;
+const int building_version = 13;
 
 
 void BuildingType :: read ( tnstream& stream )
@@ -365,6 +365,10 @@ void BuildingType :: read ( tnstream& stream )
          }
       }
       
+      if ( version >= 13 )
+         for ( int w = 0; w < cwettertypennum; ++w )
+            originalImageFilename[w] = stream.readString();
+      
    } else
       throw tinvalidversion  ( stream.getLocation(), building_version, version );
 }
@@ -470,6 +474,9 @@ void BuildingType :: write ( tnstream& stream ) const
        stream.writeInt( i->first.y);
        stream.writeInt( i->second);
     }
+    
+    for ( int w = 0; w < cwettertypennum; ++w )
+       stream.writeString( originalImageFilename[w] );
     
 }
 
@@ -590,7 +597,9 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                                           s,
                                           SPoint( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty), 
                                           nullParam, nullParam, nullParam, nullParam );
-                  pc.addImage ( weatherTags[w], s, extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png", false  );
+                  ASCString file = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png";
+                  pc.addImage ( weatherTags[w], s, file, false  );
+                  pc.addString( ASCString(weatherTags[w]) + "_OriginalImageFilename", originalImageFilename[w] );
                }
          } else {
             for ( int w = 0; w < cwettertypennum; w++ )
@@ -598,6 +607,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                   ASCString fileName = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png";
                   Surface s;
                   pc.addImage ( weatherTags[w], s, fileName, false );
+                  originalImageFilename[w] = fileName;
 
 //                  if ( s.GetPixelFormat().BitsPerPixel() != 8 )
                      //fatalError("Building image " + filename + " does not have 8 Bit color depth!");

@@ -136,7 +136,7 @@ int Vehicletype::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 30;
+const int vehicle_version = 31;
 
 
 
@@ -567,6 +567,9 @@ void Vehicletype :: read ( tnstream& stream )
       unitConstructionMinDistance = stream.readInt();
       unitConstructionMaxDistance = stream.readInt();
    }
+   
+   if ( version >= 31 )
+      imageFilename = stream.readString();
 }
 
 
@@ -744,6 +747,7 @@ void Vehicletype:: write ( tnstream& stream ) const
    stream.writeInt( unitConstructionMoveCostPercentage );
    stream.writeInt( unitConstructionMinDistance );
    stream.writeInt( unitConstructionMaxDistance );
+   stream.writeString( imageFilename );
 }
 
 
@@ -949,6 +953,11 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
       fn = extractFileName_withoutSuffix( filename );
 
    pc.addImage( "Picture", image, fn, true );
+   if ( pc.isReading() ) 
+      imageFilename = fn;
+   else
+      pc.addString("OriginalImageFilename", imageFilename );
+   
    if ( image.w() < fieldsizex || image.h() < fieldsizey )
       image.strech( fieldsizex, fieldsizey );
 

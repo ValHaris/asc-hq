@@ -404,30 +404,6 @@ BuildingType::LocalCoordinate Building::getLocalCoordinate( const MapCoordinate&
   return typ->getLocalCoordinate( entryPosition, field );
 }
 
-#if 0
-void    Building :: produceAmmo ( int type, int num )
-{
-   Resources res;
-   for( int j = 0; j< resourceTypeNum; j++ )
-      res.resource(j) = ammoProductionCost[type][j] * num;
-
-   ContainerBase* cb = this;  // Really strange. Building is derived from Containerbase, but getResource doesn't work here
-   Resources res2 = cb->getResource ( res, 1 );
-   int perc = 100;
-   for ( int i = 0; i< resourceTypeNum; i++ )
-       if ( res.resource(i) )
-          perc = min ( perc, 100 * res2.resource(i) / res.resource(i) );
-   int produceable = num * perc / 100 ;
-   int produceablePackages = produceable;
-
-   for( int k = 0; k< resourceTypeNum; k++ )
-      res.resource(k) = ammoProductionCost[type][k] * produceablePackages;
-
-   cb->getResource ( res, 0 );
-
-   ammo[type] += produceablePackages;
-}
-#endif
 
 Building :: ~Building ()
 {

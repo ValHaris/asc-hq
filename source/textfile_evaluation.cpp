@@ -219,13 +219,13 @@
          typedef PropertyTemplate<Surface> PTIMG2;
          class ASCImageProperty : public PTIMG2 {
                typedef Surface PropertyType;
-               ASCString fileName;
+               ASCString& fileName;
                bool fieldMask;
             protected:
                PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
                ASCString toString ( ) const;
             public:
-               ASCImageProperty ( Surface &property_, const ASCString& fileName_, bool applyFieldMask ) : PTIMG2 ( property_ ), fileName ( fileName_ ), fieldMask( applyFieldMask ) {};
+               ASCImageProperty ( Surface &property_, ASCString& fileName_, bool applyFieldMask ) : PTIMG2 ( property_ ), fileName ( fileName_ ), fieldMask( applyFieldMask ) {};
          };
 /*
          typedef PropertyTemplate< vector<void*> > PTIMGA;
@@ -529,7 +529,7 @@ void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &
 }
 
 
-void PropertyContainer::addImage ( const ASCString& name, Surface &property, const ASCString& filename, bool applyFieldMask )
+void PropertyContainer::addImage ( const ASCString& name, Surface &property, ASCString& filename, bool applyFieldMask )
 {
    ASCImageProperty* ip = new ASCImageProperty ( property, filename, applyFieldMask );
    setup ( ip, name );
@@ -1179,6 +1179,7 @@ ASCString NamedIntProperty::toString() const
 ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) const
 {
    try {
+      fileName = entry.value;
       return loadASCFieldImage( entry.value, fieldMask );
    }
    catch ( ASCexception ){
