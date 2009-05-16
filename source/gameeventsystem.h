@@ -88,7 +88,6 @@ class EventTrigger {
 
       virtual ~EventTrigger(){};
 
-      // friend Event* readOldEvent( pnstream stream );
 };
 
 class EventAction {

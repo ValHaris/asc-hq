@@ -971,7 +971,13 @@ class BuildingControlWindow : public SubWindow {
          if ( !cd->getMap()->getCurrentPlayer().diplomacy.isAllied( cd->getContainer() ))
             return false;
          
-         return RepairBuildingCommand::avail( dynamic_cast<Building*>(cd->getContainer() ));
+         Building* bld = dynamic_cast<Building*>(cd->getContainer());
+         if ( !bld )
+            return false;
+         
+         return true;
+         
+         // return RepairBuildingCommand::avail(  ));
       };
       
       ASCString getASCTXTname()
