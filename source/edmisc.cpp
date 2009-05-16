@@ -57,7 +57,6 @@
 #include "pgeventsupplier.h"
 #include "dialogs/edittechadapter.h"
 #include "spfst-legacy.h"
-#include "actions/trainunitcommand.h"
 
    bool       mapsaved;
 
@@ -4638,7 +4637,6 @@ void pasteArea()
 
 void testDebugFunction()
 {
-   TrainUnitCommand tuc( (Vehicle*)NULL );
   // tempsvisible = true;
    actmap->cleartemps(7);
    for ( int x = 0; x < actmap->xsize; ++x )

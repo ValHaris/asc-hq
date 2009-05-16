@@ -546,9 +546,9 @@ void checkFileVersion( const ASCString& filename, const ASCString& containername
 void checkDataVersion( )
 {
    ASCString location;
-   checkFileVersion( "main.version", "main.ascdat", 14 );
+   checkFileVersion( "main.version", "main.ascdat", 15 );
 
    if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.ascdat", 35 );
+      checkFileVersion( "pbp.version", "pbp.ascdat", 36 );
 }
 
