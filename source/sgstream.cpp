@@ -190,6 +190,15 @@ void ConfigurationFileLocatorCore::setCommandLineParam( const ASCString& path )
 
 void ConfigurationFileLocatorCore::setExecutableLocation( const ASCString& path )
 {
+#ifdef WIN32
+   char buffer[_MAX_PATH];
+
+   if( _getcwd( buffer, _MAX_PATH ) ) {
+      if ( path == "."  || path == ".\\" )
+         path = buffer;
+   }
+#endif
+      
    exePath = getDirectory( path );
 }
 
