@@ -36,7 +36,7 @@
       u6 = 0
    } HitAcc
 
-   WeaponX.WeaponEffectiveness ->* VehicleType.AntiTankMissile
+;   WeaponX.WeaponEffectiveness ->* VehicleType.AntiTankMissile
    AntiTankMissile {      
          trooper = 0
          rail_vehicle = 120
@@ -61,6 +61,30 @@
          heavy_aircraft = 100
    } AntiTankMissile
 
+;   WeaponX.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
+   AntiAirWeapon {      
+         trooper = 50
+         rail_vehicle = 200
+         building|turret|object = 200
+         hoovercraft = 200
+         helicopter = 110
+
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 200
+         heavy_tracked_vehicle = 200
+
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 200
+         heavy_wheeled_vehicle = 200
+         
+         light_ship = 200
+         medium_ship  = 200
+         heavy_ship = 200
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+   } AntiAirWeapon
 ;      WeaponX.ReactionFireShots = 2
 
 
@@ -445,6 +469,7 @@
    AA_Gun.MaxRange = 20
    AA_Gun.Punch@MaxRange = 60
    AA_Gun.HitAccuracy.u1 = 80
+   AA_Gun.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
 
    AU_Gun ->* Vehicletype.Tank_Gun
    AU_Gun.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
@@ -515,6 +540,17 @@
    STorp ->* Vehicletype.UTorp
    STorp.targets = floating
 
+   SUSTorp ->* Vehicletype.STorp
+   SUSTorp.targets = floating submerged
+   SUSTorp.shotFrom = floating
+   SUSTorp.HitAccuracy.d1 = 100
+   SUSTorp.HitAccuracy.u1 = 0
+
+   SUTorp ->* Vehicletype.SUSTorp
+   SUTorp.targets = submerged deep_submerged
+   SUTorp.HitAccuracy.d2 = 70
+   SUTorp.HitAccuracy.0 = 0
+
    GTorp ->* Vehicletype.UTorp
    GTorp.targets = floating
    GTorp.shotFrom = ground_level
@@ -534,13 +570,6 @@
    AUTorp.HitAccuracy.0 = 0
    AUTorp.HitAccuracy.u1 = 0
 
-   SUTorp ->* Vehicletype.UTorp
-   SUTorp.targets = submerged deep_submerged
-   SUTorp.shotFrom = floating
-   SUTorp.HitAccuracy.d2 = 70
-   SUTorp.HitAccuracy.d1 = 100
-   SUTorp.HitAccuracy.0 = 0
-   SUTorp.HitAccuracy.u1 = 0
 
 
 ; ----------------------------------------------------------------------------------------------------------------
@@ -1527,8 +1556,8 @@
          MaxRange = 10
          MinRange = 10
          Ammo = 10
-         Punch@MaxRange = 70
-         Punch@MinRange = 70
+;         Punch@MaxRange = 70
+;         Punch@MinRange = 70
          HitAccuracy { 
             d6 = 
             d5 = 
@@ -1576,8 +1605,8 @@
          MaxRange = 10
          MinRange = 10
          Ammo = 10
-         Punch@MaxRange = 70
-         Punch@MinRange = 70
+;         Punch@MaxRange = 70
+;         Punch@MinRange = 70
          HitAccuracy { 
             d6 = 
             d5 = 
@@ -1804,8 +1833,8 @@
       MinRange = 10
       Ammo = 2
       ReactionFireShots = 0
-      Punch@MaxRange = 120
-      Punch@MinRange = 120
+      Punch@MaxRange = 110
+      Punch@MinRange = 110
       HitAccuracy ->* VehicleType.HitAcc 
       HitAccuracy.d1 = 100
       WeaponEffectiveness {

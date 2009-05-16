@@ -7,7 +7,7 @@ VehicleType {
       movecost = 15
       heightdelta = 1
       dist = 1
-      startheight = floating low_level_flight medium_level_flight high_level_flight
+      startheight = deep_submerged submerged floating low_level_flight medium_level_flight high_level_flight
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
@@ -21,7 +21,7 @@ VehicleType {
       movecost = 10
       heightdelta = -1
       dist = 1
-      startheight = ground_level medium_level_flight high_level_flight orbit
+      startheight = submerged floating ground_level medium_level_flight high_level_flight orbit
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {

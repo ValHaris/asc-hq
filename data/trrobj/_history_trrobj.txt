@@ -2,7 +2,9 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
-
+__________________
+Beta-09-06
+-DeepSeaMinerals Movemalus entfernt
 __________________
 18.04.2009 (GAMER)
 -Adapter DeepSeaMinerals hinzugefügt

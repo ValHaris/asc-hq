@@ -1,6 +1,6 @@
 VehicleType { 
    abstract = true 
-   parent = 400 401 402
+   parent = 400 401 402 491
    ID = 366
 
    Name = speed boat
@@ -30,14 +30,14 @@ VehicleType {
    Weight = 100
    Transportation ->* VehicleType.TransLowTrooper
 
-   Height = floating 
+   Height = floating ground_level
    Tank { 
       Energy = 0
       Material = 0
       fuel = 2000
    } Tank
    FuelConsumption = 18
-   Movement = 0 0 110 0 0 0 0 0 
+   Movement = 0 0 80 110 0 0 0 0 
    TerrainAccess ->* VehicleType.nodeepwatership_terrain 
    MovementSound = hovercraft_s.ogg
 

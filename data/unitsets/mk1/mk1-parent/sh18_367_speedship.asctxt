@@ -1,6 +1,6 @@
 VehicleType { 
    abstract = true 
-   parent = 400 401 402 493
+   parent = 400 401 402 491
    ID = 367
 
    Name = speedship
