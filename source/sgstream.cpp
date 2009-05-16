@@ -48,6 +48,7 @@
 #include "gameoptions.h"
 
 #ifdef _WIN32_
+ #include <direct.h>
  #include <windows.h>
  #include <winreg.h>
  #include <shlobj.h>
@@ -178,8 +179,9 @@ ASCString getDirectory( ASCString filename )
    if( boost::regex_match( filename, what, dir)) {
       directory.assign( what[1].first, what[1].second );
       return directory;
-   } else
+   } else {
       return ".";
+   }
 }
 
 
@@ -190,16 +192,17 @@ void ConfigurationFileLocatorCore::setCommandLineParam( const ASCString& path )
 
 void ConfigurationFileLocatorCore::setExecutableLocation( const ASCString& path )
 {
+    exePath = getDirectory( path );
+
 #ifdef WIN32
    char buffer[_MAX_PATH];
-
-   if( _getcwd( buffer, _MAX_PATH ) ) {
-      if ( path == "."  || path == ".\\" )
-         path = buffer;
-   }
+   if( _getcwd( buffer, _MAX_PATH ) ) 
+	  if ( exePath == "."  || exePath == ".\\" ) 
+         exePath = buffer;
+	  
+   
 #endif
-      
-   exePath = getDirectory( path );
+
 }
 
 

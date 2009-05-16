@@ -1539,7 +1539,8 @@ int main(int argc, char *argv[] )
 
    displayLogMessage( 1, getstartupmessage() );
 
-   ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
+   ConfigurationFileLocator::Instance().setExecutableLocation( "ASC2" );
+   // ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
    initFileIO( cl->c() );  // passing the filename from the command line options
 
    try {
