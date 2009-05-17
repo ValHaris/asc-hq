@@ -113,7 +113,7 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
 
    Surface& icon = IconRepository::getIcon( background );
 
-   MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
+   MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaMerge> blitter;
    blitter.blit( icon, clippingSurface, SPoint(0,0));
 
    if ( num < storage.size() && storage[num] ) {
