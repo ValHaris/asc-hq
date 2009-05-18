@@ -85,11 +85,27 @@ class SubWindow: public SigC::Object
 
 class SubWinButton : public PG_Button
 {
+   
+   static int calcWidth() {
+      if ( buttonwidth == -1 ) {
+         buttonwidth = IconRepository::getIcon("cargo-buttonpressed.png").w();
+      }
+      return buttonwidth;
+   }
+   
+   static int calcHeight() {
+      if ( buttonheight == -1 ) {
+         buttonheight = IconRepository::getIcon("cargo-buttonpressed.png").h();
+      }
+      return buttonheight;
+   }
+   
    public:
-      static const int buttonwidth = 47;
-      static const int buttonheight = 28;
+      static int buttonwidth;
+      static int buttonheight;
 
-      SubWinButton( PG_Widget *parent, const SPoint& pos, SubWindow* subWindow ) : PG_Button( parent, PG_Rect( pos.x, pos.y, buttonwidth, buttonheight ), "", -1, "SubWinButton")
+      
+      SubWinButton( PG_Widget *parent, const SPoint& pos, SubWindow* subWindow ) : PG_Button( parent, PG_Rect( pos.x, pos.y, calcWidth(), calcHeight() ), "", -1, "SubWinButton")
       {
          SetBackground( PRESSED, IconRepository::getIcon("cargo-buttonpressed.png").getBaseSurface() );
          SetBackground( HIGHLITED, IconRepository::getIcon("cargo-buttonhighlighted.png").getBaseSurface() );
@@ -104,7 +120,11 @@ class SubWinButton : public PG_Button
       };
 };
 
+int SubWinButton::buttonwidth = -1;
+int SubWinButton::buttonheight = -1;
 
+      
+      
 namespace CargoGuiFunctions {
    
    class MovementDestination : public GuiFunctions::Movement {
