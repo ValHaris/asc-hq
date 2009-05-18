@@ -28,7 +28,7 @@
 #include "loki/Typelist.h"
 
 #include "command.h"
-
+#include "commandwriter.h"
 
 class ActionContainer {
    
@@ -52,7 +52,7 @@ class ActionContainer {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       
-      ASCString getCommands();
+      void getCommands( AbstractCommandWriter& writer );
       
       void getActionDescriptions( vector<ASCString>& list );
       

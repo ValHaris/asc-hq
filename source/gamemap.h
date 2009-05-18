@@ -241,7 +241,12 @@ class GameMap {
 
       int getNeutralPlayerNum() const { return 8; };
       
+   private:
+      MapCoordinate findFirstContainer() const;
+   public:
+      
       MapCoordinate& getCursor();
+      MapCoordinate getCursor() const;
       
 
       int eventID;

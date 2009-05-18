@@ -857,28 +857,46 @@ void GameMap :: write ( tnstream& stream )
 }
 
 
+MapCoordinate GameMap::findFirstContainer() const
+{
+   for ( int y = 0; y < ysize; ++y )
+      for ( int x = 0; x < xsize; ++x )
+         if ( getField(x,y)->getContainer() )
+            if ( getField(x,y)->getContainer()->getOwner() == actplayer ) 
+               return MapCoordinate(x,y);
+   
+   return MapCoordinate(0,0);
+}
 
 
 MapCoordinate& GameMap::getCursor()
 {
    #ifdef sgmain
    if ( actplayer >= 0 ) {
-      if ( !player[actplayer].cursorPos.valid() || player[actplayer].cursorPos.x >= xsize || player[actplayer].cursorPos.y >= ysize) {
-         bool found = false;
-         for ( int y = 0; y < ysize && !found; ++y )
-            for ( int x = 0; x < xsize  && !found; ++x )
-               if ( getField(x,y)->getContainer() )
-                  if ( getField(x,y)->getContainer()->getOwner() == actplayer ) {
-                     player[actplayer].cursorPos = getField(x,y)->getContainer()->getPosition();
-                     found = true;
-                  }
-      }
+      if ( !player[actplayer].cursorPos.valid() || player[actplayer].cursorPos.x >= xsize || player[actplayer].cursorPos.y >= ysize) 
+         player[actplayer].cursorPos = findFirstContainer();
+      
       return player[actplayer].cursorPos;
    } else
       return player[0].cursorPos;
 #else
    return player[8].cursorPos;
    #endif
+}
+
+MapCoordinate GameMap::getCursor() const
+{
+#ifdef sgmain
+   if ( actplayer >= 0 ) {
+      if ( !player[actplayer].cursorPos.valid() || player[actplayer].cursorPos.x >= xsize || player[actplayer].cursorPos.y >= ysize) 
+         return findFirstContainer();
+      else
+         return player[actplayer].cursorPos;
+   } else
+      return player[0].cursorPos;
+#else
+      return player[8].cursorPos;
+#endif
 }
 
 

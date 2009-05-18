@@ -1,18 +1,5 @@
 
 
-extern "C"
-{
-    #include "lua.h"
-}
-
-#include <luabind/luabind.hpp>
-#include <luabind/function.hpp>
-#include <luabind/class.hpp>
-
-
-#include "binder.h"
-#include "luastate.h"
-
 #include "../sg.h"
 #include "../ascstring.h"
 #include "../vehicle.h"
@@ -23,16 +10,23 @@ extern "C"
 #include "../actions/attackcommand.h"
 #include "../actions/moveunitcommand.h"
 
-using namespace luabind;
 
-void loadGameLua( const std::string& filename )
+
+
+GameMap* loadGameLua( const char* filename )
 {
-   loadGameFromFile( ASCString(filename) );  
+   loadGameFromFile( filename );  
    repaintMap();
+   return actmap;
 }
          
          
-int attackCommandFunc( int veh, int x, int y )
+GameMap* getActiveMap()
+{
+   return actmap;
+}
+         
+int attackCommandFunc( GameMap* actmap, int veh, int x, int y )
 {
    Vehicle* unit = actmap->getUnit( veh );
    if ( !unit  )
@@ -52,7 +46,7 @@ int attackCommandFunc( int veh, int x, int y )
    
 }
          
-int moveCommandFunc( int veh, int x, int y, int height )
+int moveCommandFunc( GameMap* actmap, int veh, int x, int y, int height )
 {
    Vehicle* unit = actmap->getUnit( veh );
    if ( !unit )
@@ -74,23 +68,3 @@ int moveCommandFunc( int veh, int x, int y, int height )
    
 }
          
-         
-void registerLuaFunctions( LuaState& state)
-{
-
-    module( state.get() )
-    [
-        def("loadgame", &loadGameLua )
-    ]; 
-   
-    module( state.get() )
-    [
-        def("attack", &attackCommandFunc )
-    ]; 
-    
-    module( state.get() )
-    [
-        def("moveunit", &moveCommandFunc )
-    ]; 
-    
-}

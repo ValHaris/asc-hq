@@ -24,7 +24,6 @@
 
 #include "action.h"
 
-
 /*! \page gameinteraction Interacting with the game
   
   This chapter covers ASC game itself, the mapeditor is working differently in that it doesn't have any Commands or GameActions.

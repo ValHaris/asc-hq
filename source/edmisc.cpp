@@ -58,6 +58,11 @@
 #include "dialogs/edittechadapter.h"
 #include "spfst-legacy.h"
 
+#ifdef LUAINTERFACE
+# include "lua/luarunner.h"
+# include "lua/luastate.h"
+#endif
+
    bool       mapsaved;
 
 
@@ -4625,6 +4630,24 @@ void pasteArea()
       displaymap();
    }
 }
+
+#ifdef LUAINTERFACE
+void selectAndRunLuaScript()
+{
+   ASCString file = selectFile( "*.lua", true );
+   if ( file.size() ) {
+      LuaState state;
+      LuaRunner runner( state );
+      runner.runFile( file );
+      if ( !runner.getErrors().empty() )
+         errorMessage( runner.getErrors() );
+      updateFieldInfo();
+   }
+}
+#else
+void selectAndRunLuaScript() {}
+#endif               
+
 
 /********************************************************************/
 /********************************************************************/

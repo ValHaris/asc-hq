@@ -130,10 +130,11 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LOKI_LIBS = @LOKI_LIBS@
 LTLIBOBJS = @LTLIBOBJS@
+LUAMAKEDIR = @LUAMAKEDIR@
 LUA_FLAGS = @LUA_FLAGS@
+LUA_GAME_LIB = @LUA_GAME_LIB@
 LUA_LIBS = @LUA_LIBS@
-LUA_LOCAL_LIB = @LUA_LOCAL_LIB@
-LUA_MAKEDIR = @LUA_MAKEDIR@
+LUA_MAPED_LIB = @LUA_MAPED_LIB@
 LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
@@ -700,7 +701,7 @@ uninstall-am:
 	ps ps-am tags tags-recursive uninstall uninstall-am
 
 
-.PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag
+.PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag SWIG
 
 htmldoc:
 	cd source && make htmldoc
@@ -716,6 +717,9 @@ pbpinstaller:
 
 unitguide:
 	cd doc && make unitguide
+
+SWIG: 
+	cd source/lua && make SWIG	
 
 cvstag:
 	cvs tag ASC`scripts/getversion source/strtmesg.cpp | sed s/\\\\./-/g`

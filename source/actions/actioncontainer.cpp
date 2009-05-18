@@ -149,12 +149,12 @@ void ActionContainer::getActionDescriptions( vector<ASCString>& list )
 
 }
 
-ASCString ActionContainer::getCommands()
+void ActionContainer::getCommands( AbstractCommandWriter& writer)
 {
-   ASCString cmd;  
-   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i )
-      cmd += (*i)->getCommandString() + "\n";
-   return cmd;
+   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
+      writer.printComment( (*i)->getDescription() );
+      writer.printCommand( (*i)->getCommandString() );
+   }
 }
 
 ActionContainer::~ActionContainer()

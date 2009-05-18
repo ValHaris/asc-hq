@@ -1194,7 +1194,7 @@ void       tloadBImap :: ReadSHOPPart( void )
               actpos--;
 
               if ( found ) {
-                 putbuilding ( MapCoordinate(xoffset + newx, yoffset + newy), 0, bldlist[actpos].bld, bldlist[actpos].bld->construction_steps - 1, 1 );
+                 putbuilding ( actmap, MapCoordinate(xoffset + newx, yoffset + newy), 0, bldlist[actpos].bld, bldlist[actpos].bld->construction_steps - 1, 1 );
                  if ( fld->building ) {
                     
                     for ( int m = 0; m < 4; m++ )

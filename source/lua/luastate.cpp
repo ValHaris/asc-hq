@@ -3,10 +3,11 @@
 
 extern "C"
 {
-    #include "lua.h"
-}
+   #include "lua.h"
+   #include <lauxlib.h>
 
-#include <luabind/luabind.hpp>
+   int luaopen_asc(lua_State* L); // declare the wrapped module
+}
 
 #include "luastate.h"
 #include "binder.h"
@@ -22,9 +23,8 @@ class LuaStatePrivate {
 LuaState::LuaState()
 {
    myLuaState = lua_open();
-   // Connect LuaBind to this lua state
-   luabind::open( myLuaState );
-   registerLuaFunctions( *this );
+   
+   luaopen_asc(myLuaState); // declare the wrapped module   
 }
 
 

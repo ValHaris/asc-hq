@@ -43,9 +43,15 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
-libluainterface_la_DEPENDENCIES =
-am_libluainterface_la_OBJECTS = luastate.lo luarunner.lo binder.lo
-libluainterface_la_OBJECTS = $(am_libluainterface_la_OBJECTS)
+libluainterfacegame_la_DEPENDENCIES =
+am_libluainterfacegame_la_OBJECTS = commands.lo commands_wrap.lo \
+	luarunner.lo luastate.lo
+libluainterfacegame_la_OBJECTS = $(am_libluainterfacegame_la_OBJECTS)
+libluainterfacemaped_la_DEPENDENCIES =
+am_libluainterfacemaped_la_OBJECTS = mapedcommands.lo \
+	mapedcommands_wrap.lo luarunner.lo luastate.lo
+libluainterfacemaped_la_OBJECTS =  \
+	$(am_libluainterfacemaped_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -58,8 +64,10 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libluainterface_la_SOURCES)
-DIST_SOURCES = $(libluainterface_la_SOURCES)
+SOURCES = $(libluainterfacegame_la_SOURCES) \
+	$(libluainterfacemaped_la_SOURCES)
+DIST_SOURCES = $(libluainterfacegame_la_SOURCES) \
+	$(libluainterfacemaped_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -120,10 +128,11 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LOKI_LIBS = @LOKI_LIBS@
 LTLIBOBJS = @LTLIBOBJS@
+LUAMAKEDIR = @LUAMAKEDIR@
 LUA_FLAGS = @LUA_FLAGS@
+LUA_GAME_LIB = @LUA_GAME_LIB@
 LUA_LIBS = @LUA_LIBS@
-LUA_LOCAL_LIB = @LUA_LOCAL_LIB@
-LUA_MAKEDIR = @LUA_MAKEDIR@
+LUA_MAPED_LIB = @LUA_MAPED_LIB@
 LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
@@ -231,14 +240,16 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ @LUA_FLAGS@
-noinst_LTLIBRARIES = libluainterface.la 
-libluainterface_la_SOURCES = luastate.cpp luarunner.cpp binder.cpp
-libluainterface_la_LIBADD = @LUA_LIBS@
+noinst_LTLIBRARIES = libluainterfacegame.la libluainterfacemaped.la
+libluainterfacegame_la_SOURCES = commands.cpp commands_wrap.cxx luarunner.cpp luastate.cpp
+libluainterfacegame_la_LIBADD = @LUA_LIBS@
+libluainterfacemaped_la_SOURCES = mapedcommands.cpp mapedcommands_wrap.cxx luarunner.cpp luastate.cpp
+libluainterfacemaped_la_LIBADD = @LUA_LIBS@
 EXTRA_DIST = $(srcdir)/*.h 
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
+.SUFFIXES: .cpp .cxx .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -277,8 +288,10 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
-libluainterface.la: $(libluainterface_la_OBJECTS) $(libluainterface_la_DEPENDENCIES) 
-	$(CXXLINK)  $(libluainterface_la_OBJECTS) $(libluainterface_la_LIBADD) $(LIBS)
+libluainterfacegame.la: $(libluainterfacegame_la_OBJECTS) $(libluainterfacegame_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libluainterfacegame_la_OBJECTS) $(libluainterfacegame_la_LIBADD) $(LIBS)
+libluainterfacemaped.la: $(libluainterfacemaped_la_OBJECTS) $(libluainterfacemaped_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libluainterfacemaped_la_OBJECTS) $(libluainterfacemaped_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -286,9 +299,12 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/binder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/commands.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/commands_wrap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luarunner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luastate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapedcommands.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapedcommands_wrap.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -305,6 +321,27 @@ distclean-compile:
 @am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 .cpp.lo:
+@am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LTCXXCOMPILE) -c -o $@ $<
+
+.cxx.o:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ $<
+
+.cxx.obj:
+@am__fastdepCXX_TRUE@	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.cxx.lo:
 @am__fastdepCXX_TRUE@	$(LTCXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
 @am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
@@ -493,6 +530,12 @@ uninstall-am:
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
+
+.PHONY: SWIG
+
+SWIG:
+	swig -c++ -lua commands.i
+	swig -c++ -lua mapedcommands.i
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

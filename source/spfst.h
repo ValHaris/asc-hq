@@ -35,7 +35,8 @@
   
 
 //! puts a building onto the map. To be used by the map editor! For ingame usage, see ConstructBuildingCommand or SpawnBuilding
-extern void  putbuilding( const MapCoordinate& entryPosition,
+extern void  putbuilding( GameMap* gamemap,
+                          const MapCoordinate& entryPosition,
                          int          color,
                          const BuildingType* buildingtyp,
                          int          completion,

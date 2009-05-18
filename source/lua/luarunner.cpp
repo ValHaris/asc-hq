@@ -9,46 +9,57 @@ extern "C"
                    
 }
 
-
-
-#include <luabind/luabind.hpp>
-#include <luabind/function.hpp>
-#include <luabind/class.hpp>
                
 #include "luarunner.h"
 #include "luastate.h"
 #include "../ascstring.h"
 #include "../basestrm.h"
 
-void executeFile( LuaState& state, const ASCString& filename )
+              
+LuaRunner::LuaRunner( LuaState& luaState ) : state ( luaState )
+{
+     
+}
+               
+               
+void LuaRunner::runFile( const ASCString& filename )
 {
    try {
-   tnfilestream stream ( filename, tnstream::reading );
-   ASCString line = stream.readString(true);
-   while ( line.size() ) {
-      
-        int error = luaL_loadbuffer(state.get(), line.c_str(), line.size(), stream.getLocation().c_str());
-        if ( !error )
-           error = lua_pcall(state.get(), 0, 0, 0);
+      tnfilestream stream ( filename, tnstream::reading );
+      ASCString line = stream.readString(true);
+      while ( line.size() ) {
+         
+         int errorCode = luaL_loadbuffer(state.get(), line.c_str(), line.size(), stream.getLocation().c_str());
+         if ( !errorCode )
+            errorCode = lua_pcall(state.get(), 0, 0, 0);
         
-        if (error) {
-          fprintf(stderr, "Lua error: %s\n", lua_tostring(state.get(), -1));
-          lua_pop(state.get(), 1);  /* pop error message from the stack */
-        }
-        line = stream.readString(true);
-    }
+         if (errorCode) {
+            errors += lua_tostring(state.get(), -1);
+            errors += "\n";
+            lua_pop(state.get(), 1);  /* pop error message from the stack */
+         }
+         
+         line = stream.readString(true);
+      }
    } catch ( treadafterend err ) {
    }
-
 }
 
-void executeCommand( LuaState& state, const ASCString& command )
+void LuaRunner::runCommand( const ASCString& command )
 {
- 
- 
-   // Define a lua function that we can call
-   // luaL_dostring( state.get(), command.c_str() );
- 
+   int errorCode = luaL_loadbuffer(state.get(), command.c_str(), command.size(), command.c_str());
+   if ( !errorCode )
+      errorCode = lua_pcall(state.get(), 0, 0, 0);
+        
+   if (errorCode) {
+      errors += lua_tostring(state.get(), -1);
+      errors += "\n";
+      lua_pop(state.get(), 1);  /* pop error message from the stack */
+   }
 }
 
+const ASCString& LuaRunner::getErrors()
+{
+   return errors;
+}
 

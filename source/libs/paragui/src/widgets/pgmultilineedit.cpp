@@ -492,7 +492,11 @@ bool PG_MultiLineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 						my_mark = -1;
 					}
 					GetCursorTextPos(currentPos, line);
-					int cursorPos = my_textdata[line].size() - (my_textdata[line][my_textdata[line].size()-1] == '\n' ? 1 : 0);
+					int cursorPos;
+                                        if ( my_textdata.size() > line && my_textdata[line].size() > 0 ) 
+                                           cursorPos = my_textdata[line].size() - (my_textdata[line][my_textdata[line].size()-1] == '\n' ? 1 : 0);
+                                        else
+                                           cursorPos = 0;
 					SetCursorTextPos(cursorPos, line);
 				}
 				return true;

@@ -174,7 +174,8 @@
         "Paste Area",
         "Crash mapeditor",
         "Test Debug Function",
-        "Unit Guide Dialog"
+        "Unit Guide Dialog",
+        "Run Lua Script"
 	 };
 
 
@@ -990,6 +991,11 @@ void execaction_pg(int code)
          importBI3Map( actmap, true );
          displaymap();
          break;
+      case act_runLuaScript:
+         selectAndRunLuaScript();
+         repaintMap();
+         break;
+         
    };
 }
 

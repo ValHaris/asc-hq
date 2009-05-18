@@ -155,4 +155,7 @@ extern void mirrorMap();
 extern void copyArea();
 extern void pasteArea();
 extern void testDebugFunction();
+
+extern void selectAndRunLuaScript();
+
 #endif

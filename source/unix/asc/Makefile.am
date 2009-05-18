@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 
-AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) @LUA_TAGS@
+AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) $(LUA_TAGS)
 
 bin_PROGRAMS  = asc 
 noinst_PROGRAMS = unittester
@@ -35,8 +35,7 @@ playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp
 
 commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la  $(LOKI_LIBS) \
-@LUA_LOCAL_LIB@  \
+$(top_builddir)/source/sdl/libsdl.la  $(LOKI_LIBS) $(LUA_GAME_LIB) \
 $(top_builddir)/source/util/libutil.la  $(top_builddir)/source/tasks/libtasks.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \

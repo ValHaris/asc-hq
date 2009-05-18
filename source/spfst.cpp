@@ -206,7 +206,8 @@ tfield*        getfield(int          x,
 
 
 
-void         putbuilding( const MapCoordinate& entryPosition,
+void         putbuilding( GameMap* actmap,
+                          const MapCoordinate& entryPosition,
                          int          color,
                          const BuildingType* buildingtyp,
                          int          completion,

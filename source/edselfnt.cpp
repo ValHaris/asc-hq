@@ -205,7 +205,7 @@ int BuildingItem::place( const MapCoordinate& mc ) const
          return -1 ;
    }      
 
-   putbuilding( actmap->getCursor(), selection.getPlayer()  * 8, bld, bld->construction_steps );
+   putbuilding( actmap, actmap->getCursor(), selection.getPlayer()  * 8, bld, bld->construction_steps );
    return 0;
 }
 

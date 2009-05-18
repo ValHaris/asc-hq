@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 INCLUDES		= -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 
-AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
+AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS) $(LUA_TAGS)
 
 bin_PROGRAMS 		= asc_mapedit
 
@@ -38,6 +38,6 @@ $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \
-$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
 
 

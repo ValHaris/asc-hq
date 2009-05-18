@@ -277,23 +277,23 @@ void viewMiningPower()
 
    for ( Player::BuildingList::iterator i = actmap->getCurrentPlayer().buildingList.begin(); i != actmap->getCurrentPlayer().buildingList.end(); ++i )
       if ( (*i)->baseType->hasFunction( ContainerBaseType::MiningStation )) {
-      int power;
-      int output;
-      MiningStation miningStation ( *i, true );
-      for ( int r = 0; r < 3; ++r )
-         if ( (*i)->maxplus.resource(r) ) {
-         power = 100 * (*i)->plus.resource(r) / (*i)->maxplus.resource(r) ;
-         break;
-         }
-            
+         int power = 0;
+         int output = 0;
+         MiningStation miningStation ( *i, true );
+         for ( int r = 0; r < 3; ++r )
+            if ( (*i)->maxplus.resource(r) ) {
+               power = 100 * (*i)->plus.resource(r) / (*i)->maxplus.resource(r) ;
+               break;
+            }
+               
          for ( int r = 0; r < 3; ++r )
             if ( miningStation.getPlus().resource(r) ) {
-            output = miningStation.getPlus().resource(r);
-            break;
+               output = miningStation.getPlus().resource(r);
+               break;
             }
             
-            ASCString txt = ASCString::toString(output) + " (" + ASCString::toString(power) + "%) " + (*i)->getPosition().toString() + " " + (*i)->baseType->name + "\n";
-            info[(*i)->baseType] += txt;
+         ASCString txt = ASCString::toString(output) + " (" + ASCString::toString(power) + "%) " + (*i)->getPosition().toString() + " " + (*i)->baseType->name + "\n";
+         info[(*i)->baseType] += txt;
       }
 
       ASCString fullText = "Mining Station Statistics\n\n";

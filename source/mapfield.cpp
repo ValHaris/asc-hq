@@ -258,6 +258,14 @@ ContainerBase* tfield :: getContainer()
       return building;
 }
 
+const ContainerBase* tfield :: getContainer() const
+{
+   if ( vehicle )
+      return vehicle;
+   else
+      return building;
+}
+
 
 int tfield :: getweather ( void )
 {

@@ -4,7 +4,7 @@ SUBDIRS 		= source data doc installer
 EXTRA_DIST 		= asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap
 AUTOMAKE_OPTIONS 	= foreign
 
-.PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag
+.PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag SWIG
 
 htmldoc:
 	cd source && make htmldoc
@@ -20,6 +20,9 @@ pbpinstaller:
 
 unitguide:
 	cd doc && make unitguide
+	
+SWIG: 
+	cd source/lua && make SWIG	
 
 cvstag:
 	cvs tag ASC`scripts/getversion source/strtmesg.cpp | sed s/\\\\./-/g`

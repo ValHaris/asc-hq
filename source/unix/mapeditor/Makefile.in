@@ -95,6 +95,7 @@ asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/dialogs/libmapeddialogs.la \
 	$(top_builddir)/source/widgets/libwidgets.la \
 	$(top_builddir)/source/libs/paragui/src/libparagui.la \
+	$(top_builddir)/source/lua/libluainterfacemaped.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -171,10 +172,11 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LOKI_LIBS = @LOKI_LIBS@
 LTLIBOBJS = @LTLIBOBJS@
+LUAMAKEDIR = @LUAMAKEDIR@
 LUA_FLAGS = @LUA_FLAGS@
+LUA_GAME_LIB = @LUA_GAME_LIB@
 LUA_LIBS = @LUA_LIBS@
-LUA_LOCAL_LIB = @LUA_LOCAL_LIB@
-LUA_MAKEDIR = @LUA_MAKEDIR@
+LUA_MAPED_LIB = @LUA_MAPED_LIB@
 LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
@@ -282,7 +284,7 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS)
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor  $(SIGC_CFLAGS) $(LUA_TAGS)
 nodist_asc_mapedit_SOURCES = edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
@@ -313,7 +315,7 @@ $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \
-$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
 
 all: all-am
 

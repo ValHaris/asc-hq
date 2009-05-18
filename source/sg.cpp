@@ -163,6 +163,7 @@
 #include "actions/cancelresearchcommand.h"
 #include "actions/diplomacycommand.h"
 #include "gameevent_dialogs.h"
+#include "actions/commandwriter.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -948,6 +949,20 @@ bool continueAndStartMultiplayerGame( bool mostRecent = false )
    };
 
 
+   class LuaCommandWriter : public AbstractCommandWriter {
+      public:
+         tn_file_buf_stream stream;
+         LuaCommandWriter ( const ASCString& filename ) : stream ( filename, tnstream::writing ) {
+            
+         }
+         virtual void printCommand( const ASCString& command ) {
+            stream.writeString("asc." + command + "\n" );
+         };
+         virtual void printComment( const ASCString& comment ) {
+            stream.writeString("--" + comment + "\n" );
+         };
+      
+   };
 
 
 
@@ -955,8 +970,8 @@ void writeLuaCommands()
 {
    ASCString filename =  selectFile("*.lua", false );
    if ( !filename.empty() ) {
-      tn_file_buf_stream stream ( filename, tnstream::writing );
-      stream.writeString( actmap->actions.getCommands() ); 
+      LuaCommandWriter writer ( filename );
+      actmap->actions.getCommands( writer ); 
    }
 }
 
@@ -966,7 +981,10 @@ void selectAndRunLuaScript()
    ASCString file = selectFile( "*.lua", true );
    if ( file.size() ) {
       LuaState state;
-      executeFile( state, file );
+      LuaRunner runner( state );
+      runner.runFile( file );
+      if ( !runner.getErrors().empty() )
+         errorMessage( runner.getErrors() );
       updateFieldInfo();
    }
 }
