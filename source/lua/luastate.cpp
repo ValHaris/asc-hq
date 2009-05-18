@@ -10,7 +10,6 @@ extern "C"
 }
 
 #include "luastate.h"
-#include "binder.h"
 
 
 class LuaStatePrivate {
