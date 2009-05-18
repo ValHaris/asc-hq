@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetype_D.lib libexpat.lib libpng13d.lib libcurl_imp.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetype_D.lib libexpat.lib libpng13d.lib libcurl_imp.lib lua.lib"
 				OutputFile="$(OutDir)/bin/pbpeditor2.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image)/lib&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
@@ -158,7 +158,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetype.lib libexpat.lib libpng13.lib libcurl_imp.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetype.lib libexpat.lib libpng13.lib libcurl_imp.lib lua.lib"
 				OutputFile="$(OutDir)/bin/pbpeditor2.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SDL_image)/VisualC/$(ConfigurationName)&quot;;&quot;$(SDL_image)/lib&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
@@ -820,6 +820,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\actions\viewregistration.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="lua"
+				>
+				<File
+					RelativePath="..\..\..\lua\luarunner.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\lua\luastate.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\lua\mapedcommands.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\lua\mapedcommands_wrap.cxx"
 					>
 				</File>
 			</Filter>
