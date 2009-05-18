@@ -8,6 +8,27 @@
  * interface file instead. 
  * ----------------------------------------------------------------------------- */
 
+
+#ifdef __cplusplus
+template<typename T> class SwigValueWrapper {
+    T *tt;
+public:
+    SwigValueWrapper() : tt(0) { }
+    SwigValueWrapper(const SwigValueWrapper<T>& rhs) : tt(new T(*rhs.tt)) { }
+    SwigValueWrapper(const T& t) : tt(new T(t)) { }
+    ~SwigValueWrapper() { delete tt; } 
+    SwigValueWrapper& operator=(const T& t) { delete tt; tt = new T(t); return *this; }
+    operator T&() const { return *tt; }
+    T *operator&() { return tt; }
+private:
+    SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+};
+
+template <typename T> T SwigValueInit() {
+  return T();
+}
+#endif
+
 /* -----------------------------------------------------------------------------
  *  This section contains generic SWIG labels for method/variable
  *  declarations/attributes, and other compiler dependent labels.
@@ -1469,40 +1490,92 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-static swig_type_info *swig_types[1];
-static swig_module_info swig_module = {swig_types, 0, 0, 0, 0, 0};
+#define SWIGTYPE_p_GameMap swig_types[0]
+static swig_type_info *swig_types[2];
+static swig_module_info swig_module = {swig_types, 1, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
 /* -------- TYPES TABLE (END) -------- */
 
-#define SWIG_name      "asccommands"
-#define SWIG_init      luaopen_asccommands
-#define SWIG_init_user luaopen_asccommands_user
+#define SWIG_name      "asc"
+#define SWIG_init      luaopen_asc
+#define SWIG_init_user luaopen_asc_user
 
-#define SWIG_LUACODE   luaopen_asccommands_luacode
+#define SWIG_LUACODE   luaopen_asc_luacode
 
 
-#include "example.h"
+namespace swig {
+typedef struct{} LANGUAGE_OBJ;
+}
+
+
+#include <string>
+#include "commands.h"
+#include "../gamemap.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_attackCommandFunc(lua_State* L) {
+static int _wrap_getActiveMap(lua_State* L) {
   int SWIG_arg = 0;
-  int arg1 ;
+  GameMap *result = 0 ;
+  
+  SWIG_check_num_args("getActiveMap",0,0)
+  result = (GameMap *)getActiveMap();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_GameMap,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_loadGame(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  GameMap *result = 0 ;
+  
+  SWIG_check_num_args("loadGameLua",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("loadGameLua",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  result = (GameMap *)loadGameLua((char const *)arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_GameMap,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitAttack(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
   int arg2 ;
   int arg3 ;
+  int arg4 ;
   int result;
   
-  SWIG_check_num_args("attackCommandFunc",3,3)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("attackCommandFunc",1,"int");
+  SWIG_check_num_args("attackCommandFunc",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("attackCommandFunc",1,"GameMap *");
   if(!lua_isnumber(L,2)) SWIG_fail_arg("attackCommandFunc",2,"int");
   if(!lua_isnumber(L,3)) SWIG_fail_arg("attackCommandFunc",3,"int");
-  arg1 = (int)lua_tonumber(L, 1);
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("attackCommandFunc",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitAttack",1,SWIGTYPE_p_GameMap);
+  }
+  
   arg2 = (int)lua_tonumber(L, 2);
   arg3 = (int)lua_tonumber(L, 3);
-  result = (int)attackCommandFunc(arg1,arg2,arg3);
+  arg4 = (int)lua_tonumber(L, 4);
+  result = (int)attackCommandFunc(arg1,arg2,arg3,arg4);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
@@ -1514,24 +1587,31 @@ fail:
 }
 
 
-static int _wrap_moveCommandFunc(lua_State* L) {
+static int _wrap_unitMove(lua_State* L) {
   int SWIG_arg = 0;
-  int arg1 ;
+  GameMap *arg1 = (GameMap *) 0 ;
   int arg2 ;
   int arg3 ;
   int arg4 ;
+  int arg5 ;
   int result;
   
-  SWIG_check_num_args("moveCommandFunc",4,4)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("moveCommandFunc",1,"int");
+  SWIG_check_num_args("moveCommandFunc",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("moveCommandFunc",1,"GameMap *");
   if(!lua_isnumber(L,2)) SWIG_fail_arg("moveCommandFunc",2,"int");
   if(!lua_isnumber(L,3)) SWIG_fail_arg("moveCommandFunc",3,"int");
   if(!lua_isnumber(L,4)) SWIG_fail_arg("moveCommandFunc",4,"int");
-  arg1 = (int)lua_tonumber(L, 1);
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("moveCommandFunc",5,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitMove",1,SWIGTYPE_p_GameMap);
+  }
+  
   arg2 = (int)lua_tonumber(L, 2);
   arg3 = (int)lua_tonumber(L, 3);
   arg4 = (int)lua_tonumber(L, 4);
-  result = (int)moveCommandFunc(arg1,arg2,arg3,arg4);
+  arg5 = (int)lua_tonumber(L, 5);
+  result = (int)moveCommandFunc(arg1,arg2,arg3,arg4,arg5);
   lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
   return SWIG_arg;
   
@@ -1548,8 +1628,10 @@ fail:
 #endif
 
 static const struct luaL_reg swig_commands[] = {
-    { "attackCommandFunc", _wrap_attackCommandFunc},
-    { "moveCommandFunc", _wrap_moveCommandFunc},
+    { "getActiveMap", _wrap_getActiveMap},
+    { "loadGame", _wrap_loadGame},
+    { "unitAttack", _wrap_unitAttack},
+    { "unitMove", _wrap_unitMove},
     {0,0}
 };
 
@@ -1563,14 +1645,16 @@ static swig_lua_const_info swig_constants[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  NULL
+  &_swigt__p_GameMap,
 };
 
+static swig_cast_info _swigc__p_GameMap[] = {  {&_swigt__p_GameMap, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  NULL
+  _swigc__p_GameMap,
 };
 
 
