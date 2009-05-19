@@ -21,7 +21,7 @@ MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int dir
 bool placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force = false );
 bool placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner );
 bool placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner );
-void placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
+bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 
 int selectPlayer( GameMap* map );
 

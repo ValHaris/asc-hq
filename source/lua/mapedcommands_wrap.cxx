@@ -1963,6 +1963,7 @@ static int _wrap_placeTerrain__SWIG_0(lua_State* L) {
   MapCoordinate *arg2 = 0 ;
   TerrainType *arg3 = (TerrainType *) 0 ;
   int arg4 ;
+  bool result;
   
   SWIG_check_num_args("placeTerrain",4,4)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("placeTerrain",1,"GameMap *");
@@ -1985,8 +1986,8 @@ static int _wrap_placeTerrain__SWIG_0(lua_State* L) {
   }
   
   arg4 = (int)lua_tonumber(L, 4);
-  placeTerrain(arg1,(MapCoordinate const &)*arg2,(TerrainType const *)arg3,arg4);
-  
+  result = (bool)placeTerrain(arg1,(MapCoordinate const &)*arg2,(TerrainType const *)arg3,arg4);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -2002,6 +2003,7 @@ static int _wrap_placeTerrain__SWIG_1(lua_State* L) {
   GameMap *arg1 = (GameMap *) 0 ;
   MapCoordinate *arg2 = 0 ;
   TerrainType *arg3 = (TerrainType *) 0 ;
+  bool result;
   
   SWIG_check_num_args("placeTerrain",3,3)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("placeTerrain",1,"GameMap *");
@@ -2022,8 +2024,8 @@ static int _wrap_placeTerrain__SWIG_1(lua_State* L) {
     SWIG_fail_ptr("placeTerrain",3,SWIGTYPE_p_TerrainType);
   }
   
-  placeTerrain(arg1,(MapCoordinate const &)*arg2,(TerrainType const *)arg3);
-  
+  result = (bool)placeTerrain(arg1,(MapCoordinate const &)*arg2,(TerrainType const *)arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
