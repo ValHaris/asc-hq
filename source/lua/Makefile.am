@@ -10,7 +10,7 @@ libluainterfacegame_la_LIBADD		= @LUA_LIBS@
 libluainterfacemaped_la_SOURCES	= mapedcommands.cpp mapedcommands_wrap.cxx luarunner.cpp luastate.cpp
 libluainterfacemaped_la_LIBADD		= @LUA_LIBS@
 
-EXTRA_DIST=$(srcdir)/*.h 
+EXTRA_DIST=$(srcdir)/*.h $(srcdir)/*.i
 
 .PHONY: SWIG
 

@@ -45,7 +45,8 @@ $(top_builddir)/source/video/libvideo.la  \
 $(top_builddir)/source/actions/libactions.la  \
 $(top_builddir)/source/actions/libdirectunitactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
-$(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(LUA_LIBS)
+$(top_builddir)/source/lua/libluainterfacegame.la \
+$(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB)
 
 nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp 
 asc_LDADD = $(commonLibs)

@@ -128,11 +128,8 @@ LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 LOKI_LIBS = @LOKI_LIBS@
 LTLIBOBJS = @LTLIBOBJS@
-LUAMAKEDIR = @LUAMAKEDIR@
 LUA_FLAGS = @LUA_FLAGS@
-LUA_GAME_LIB = @LUA_GAME_LIB@
 LUA_LIBS = @LUA_LIBS@
-LUA_MAPED_LIB = @LUA_MAPED_LIB@
 LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
@@ -245,7 +242,7 @@ libluainterfacegame_la_SOURCES = commands.cpp commands_wrap.cxx luarunner.cpp lu
 libluainterfacegame_la_LIBADD = @LUA_LIBS@
 libluainterfacemaped_la_SOURCES = mapedcommands.cpp mapedcommands_wrap.cxx luarunner.cpp luastate.cpp
 libluainterfacemaped_la_LIBADD = @LUA_LIBS@
-EXTRA_DIST = $(srcdir)/*.h 
+EXTRA_DIST = $(srcdir)/*.h $(srcdir)/*.i
 all: all-am
 
 .SUFFIXES:

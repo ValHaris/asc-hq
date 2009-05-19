@@ -1494,9 +1494,10 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_GameMap swig_types[1]
 #define SWIGTYPE_p_MapCoordinate swig_types[2]
 #define SWIGTYPE_p_ObjectType swig_types[3]
-#define SWIGTYPE_p_Vehicletype swig_types[4]
-static swig_type_info *swig_types[6];
-static swig_module_info swig_module = {swig_types, 5, 0, 0, 0, 0};
+#define SWIGTYPE_p_TerrainType swig_types[4]
+#define SWIGTYPE_p_Vehicletype swig_types[5]
+static swig_type_info *swig_types[7];
+static swig_module_info swig_module = {swig_types, 6, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1646,6 +1647,26 @@ static int _wrap_getUnitType(lua_State* L) {
   arg1 = (int)lua_tonumber(L, 1);
   result = (Vehicletype *)getUnitType(arg1);
   SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicletype,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_getTerrainType(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  TerrainType *result = 0 ;
+  
+  SWIG_check_num_args("getTerrainType",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("getTerrainType",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  result = (TerrainType *)getTerrainType(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_TerrainType,0); SWIG_arg++; 
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -1936,6 +1957,253 @@ fail:
 }
 
 
+static int _wrap_placeTerrain__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  MapCoordinate *arg2 = 0 ;
+  TerrainType *arg3 = (TerrainType *) 0 ;
+  int arg4 ;
+  
+  SWIG_check_num_args("placeTerrain",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("placeTerrain",1,"GameMap *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("placeTerrain",2,"MapCoordinate const &");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("placeTerrain",3,"TerrainType const *");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("placeTerrain",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("placeTerrain",1,SWIGTYPE_p_GameMap);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("placeTerrain",2,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_TerrainType,0))){
+    SWIG_fail_ptr("placeTerrain",3,SWIGTYPE_p_TerrainType);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  placeTerrain(arg1,(MapCoordinate const &)*arg2,(TerrainType const *)arg3,arg4);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_placeTerrain__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  MapCoordinate *arg2 = 0 ;
+  TerrainType *arg3 = (TerrainType *) 0 ;
+  
+  SWIG_check_num_args("placeTerrain",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("placeTerrain",1,"GameMap *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("placeTerrain",2,"MapCoordinate const &");
+  if(!SWIG_isptrtype(L,3)) SWIG_fail_arg("placeTerrain",3,"TerrainType const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("placeTerrain",1,SWIGTYPE_p_GameMap);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("placeTerrain",2,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_TerrainType,0))){
+    SWIG_fail_ptr("placeTerrain",3,SWIGTYPE_p_TerrainType);
+  }
+  
+  placeTerrain(arg1,(MapCoordinate const &)*arg2,(TerrainType const *)arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_placeTerrain(lua_State* L) {
+  int argc;
+  int argv[5]={
+    1,2,3,4,5
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_GameMap, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_MapCoordinate, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_TerrainType, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          return _wrap_placeTerrain__SWIG_1(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_GameMap, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_MapCoordinate, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (SWIG_isptrtype(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_TerrainType, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_placeTerrain__SWIG_0(L);
+          }
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'placeTerrain'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    placeTerrain(GameMap *,MapCoordinate const &,TerrainType const *,int)\n"
+    "    placeTerrain(GameMap *,MapCoordinate const &,TerrainType const *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_selectPlayer(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("selectPlayer",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("selectPlayer",1,"GameMap *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("selectPlayer",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = (int)selectPlayer(arg1);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_errorMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  
+  SWIG_check_num_args("errorMessage",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("errorMessage",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  errorMessage((char const *)arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_warningMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  
+  SWIG_check_num_args("warningMessage",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("warningMessage",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  warningMessage((char const *)arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_infoMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  
+  SWIG_check_num_args("infoMessage",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("infoMessage",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  infoMessage((char const *)arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -1947,10 +2215,16 @@ static const struct luaL_reg swig_commands[] = {
     { "getObjectType", _wrap_getObjectType},
     { "getBuildingType", _wrap_getBuildingType},
     { "getUnitType", _wrap_getUnitType},
+    { "getTerrainType", _wrap_getTerrainType},
     { "getNeighbouringFieldCoordinate", _wrap_getNeighbouringFieldCoordinate},
     { "placeObject",_wrap_placeObject},
     { "placeBuilding", _wrap_placeBuilding},
     { "placeUnit", _wrap_placeUnit},
+    { "placeTerrain",_wrap_placeTerrain},
+    { "selectPlayer", _wrap_selectPlayer},
+    { "errorMessage", _wrap_errorMessage},
+    { "warningMessage", _wrap_warningMessage},
+    { "infoMessage", _wrap_infoMessage},
     {0,0}
 };
 
@@ -1968,6 +2242,7 @@ static swig_type_info _swigt__p_BuildingType = {"_p_BuildingType", "BuildingType
 static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_MapCoordinate = {"_p_MapCoordinate", "MapCoordinate *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ObjectType = {"_p_ObjectType", "ObjectType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_TerrainType = {"_p_TerrainType", "TerrainType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Vehicletype = {"_p_Vehicletype", "Vehicletype *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
@@ -1975,6 +2250,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_GameMap,
   &_swigt__p_MapCoordinate,
   &_swigt__p_ObjectType,
+  &_swigt__p_TerrainType,
   &_swigt__p_Vehicletype,
 };
 
@@ -1982,6 +2258,7 @@ static swig_cast_info _swigc__p_BuildingType[] = {  {&_swigt__p_BuildingType, 0,
 static swig_cast_info _swigc__p_GameMap[] = {  {&_swigt__p_GameMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MapCoordinate[] = {  {&_swigt__p_MapCoordinate, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ObjectType[] = {  {&_swigt__p_ObjectType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_TerrainType[] = {  {&_swigt__p_TerrainType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vehicletype[] = {  {&_swigt__p_Vehicletype, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
@@ -1989,6 +2266,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_GameMap,
   _swigc__p_MapCoordinate,
   _swigc__p_ObjectType,
+  _swigc__p_TerrainType,
   _swigc__p_Vehicletype,
 };
 

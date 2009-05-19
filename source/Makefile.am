@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= @GENCL@ docs libs sdl util ai graphics network dialogs widgets actions tasks @LUAMAKEDIR@ video unittests unix tools doc win32 
+SUBDIRS 		= @GENCL@ docs libs sdl util ai graphics network dialogs widgets actions tasks lua video unittests unix tools doc win32 
 
 EXTRA_DIST  = $(srcdir)/*.cpp $(srcdir)/*.h $(srcdir)/doxygen.config $(srcdir)/clparser/*.cpp $(srcdir)/clparser/*.h $(srcdir)/clparser/Makefile.am $(srcdir)/clparser/Makefile.in
 

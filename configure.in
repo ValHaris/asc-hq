@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.3.73.3)
+AC_INIT(asc,2.3.73.4)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -188,32 +188,21 @@ AC_CHECK_LIB( SDL_image,
 #AC_MSG_RESULT("yes")
 
 
-LUAAVAIL=1
 
-AC_CHECK_LIB(lua5.1,luaL_openlibs,,LUAAVAIL=0)
+AC_CHECK_LIB(lua5.1,
+             luaL_openlibs,,
+             AC_LIB_MISSING( LUA, http://www.lua.org/ ))
 
 
-if test "x$LUAAVAIL" = x1; then
+LUA_FLAGS="-I/usr/include/lua5.1/"
+AC_SUBST(LUA_FLAGS)
 
-   AC_MSG_NOTICE([Activating LUA support])
+LUA_LIBS="-llua5.1"
+AC_SUBST(LUA_LIBS)
 
-   LUA_FLAGS="-I/usr/include/lua5.1/"
-   AC_SUBST(LUA_FLAGS)
-   
-   LUA_LIBS="-llua5.1"
-   AC_SUBST(LUA_LIBS)
-   
-   LUA_TAGS="-DLUAINTERFACE"
-   AC_SUBST(LUA_TAGS)
-   
-   LUAMAKEDIR=lua
-   AC_SUBST(LUAMAKEDIR)
-   
-   LUA_GAME_LIB='$(top_builddir)/source/lua/libluainterfacegame.la'
-   LUA_MAPED_LIB='$(top_builddir)/source/lua/libluainterfacemaped.la'
-   AC_SUBST(LUA_GAME_LIB)
-   AC_SUBST(LUA_MAPED_LIB)
-fi
+LUA_TAGS="-DLUAINTERFACE"
+AC_SUBST(LUA_TAGS)
+
 
 AC_CHECK_LIB(jpeg, 
              jpeg_CreateDecompress,,
