@@ -148,7 +148,7 @@ Mine& tfield::getMine ( int n )
   return *i;
 }
 
-bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, const Context* context )
+bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, tfield::ObjectRemovalStrategy* objectRemovalStrategy )
 {
    if ( !obj )
       return false;
@@ -173,7 +173,10 @@ bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, const Con
             calculateobject( getx(), gety(), true, obj, gamemap );
 
          sortobjects();
-         setparams( context );
+         if ( objectRemovalStrategy )
+            setparams( objectRemovalStrategy );
+         else
+            setparams();
          return true;
      } else
         return false;
@@ -478,7 +481,28 @@ MapCoordinate tfield :: getPosition()
 }
 
 
-void tfield :: setparams ( const Context* context )
+class SimpleObjectRemoval : public tfield::ObjectRemovalStrategy {
+   public:
+      virtual void removeObject( tfield* fld, Object* obj )
+      {
+         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
+            if ( o->typ->id == obj->typ->id )
+               o = fld->objects.erase( o );
+            else
+               ++o ;
+         }
+      }
+};
+
+
+
+void tfield :: setparams (  )
+{
+   SimpleObjectRemoval sor;
+   setparams( &sor );     
+}
+
+void tfield :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
 {
    int i;
    bdt = typ->art;
@@ -494,12 +518,8 @@ void tfield :: setparams ( const Context* context )
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
          if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
-            if ( context ) 
-               ( new RemoveObject( getMap(), getPosition(), o->typ->id ))->execute( *context );
-            else
-               objects.erase(o);
-               
-            setparams( context );
+            objectRemovalStrategy->removeObject( this, &(*o) );
+            setparams( objectRemovalStrategy );
             return;
          }
 

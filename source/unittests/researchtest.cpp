@@ -114,8 +114,8 @@ void testresearch1()
    assertOrThrow( r.progress == 20 );
    
    
-   bplc = new BuildProductionLineCommand( bld );
-   prods = bplc->productionLinesBuyable();
+   BuildProductionLineCommand bplc2( bld );
+   prods = bplc2.productionLinesBuyable();
    assertOrThrow( find( prods.begin(), prods.end(), jam ) == prods.end() );
    
 }
@@ -182,9 +182,9 @@ void testresearch2()
    Vehicletype* jam = vehicleTypeRepository.getObject_byID( 1000000051 );
    assertOrThrow( jam != NULL );
    
-   BuildProductionLineCommand* bplc = new BuildProductionLineCommand( bld );
+   BuildProductionLineCommand  bplc ( bld );
    
-   vector<const Vehicletype*> prods = bplc->productionLinesBuyable();
+   vector<const Vehicletype*> prods = bplc.productionLinesBuyable();
    assertOrThrow( find( prods.begin(), prods.end(), jam ) != prods.end() );
    
 }

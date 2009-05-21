@@ -99,13 +99,21 @@ class  tfield {
     typedef vector< ::Object> ObjectContainer;
     ObjectContainer objects;
 
+    //! Interface for removing objects from a field when it turns out that they can no longer exist
+    class ObjectRemovalStrategy {
+       public:
+          virtual void removeObject( tfield* fld, Object* obj ) = 0;
+          virtual ~ObjectRemovalStrategy() {};
+    };
+    
+    
     /** add an object to the field
          \param obj The object type
          \param dir The direction of the object type; -1 to use default direction
          \param force Put the object there even if it cannot normally be placed on this terrain
          \returns true on success, false if the object could not be build
     **/
-    bool addobject ( const ObjectType* obj, int dir = -1, bool force = false, const Context* context = NULL );
+    bool addobject ( const ObjectType* obj, int dir = -1, bool force = false, ObjectRemovalStrategy* objectRemovalStrategy = NULL );
 
     /** removes all objects of the given type from the field
         \param obj the object type to remove
@@ -131,8 +139,12 @@ class  tfield {
     //! deletes everything placed on the field
     void deleteeverything ( void );
 
+   
     //! recalculates the terrain properties, movemalus etc from the terraintype and the objects,
-    void setparams ( const Context* context = NULL );
+    void setparams ( ObjectRemovalStrategy* objectRemovalStrategy );
+    
+    //! uses the SimpleObjectRemoval strategy
+    void setparams (  );
 
     //! the defense bonus that unit get when they are attacked
     int getdefensebonus ( void );

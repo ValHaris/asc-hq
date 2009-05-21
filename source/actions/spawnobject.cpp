@@ -22,6 +22,7 @@
 #include "spawnobject.h"
 #include "action-registry.h"
 
+#include "removeobject.h"
 #include "../vehicle.h"
 #include "../gamemap.h"
      
@@ -34,6 +35,7 @@ SpawnObject::SpawnObject( GameMap* gamemap, const MapCoordinate& position, int o
    
    objectAvailableBeforehand = false;
    oldObjectDirection = 0;
+   objectImmediatelyDisappearsAgain = false;
 }
       
       
@@ -64,7 +66,15 @@ void SpawnObject::readData ( tnstream& stream )
    if ( version >= 2 ) {
       objectAvailableBeforehand = stream.readInt();
       oldObjectDirection = stream.readInt();
+   } else {
+      objectAvailableBeforehand = false;
+      oldObjectDirection = 0;
    }
+   
+   if ( version >= 3 ) 
+      objectImmediatelyDisappearsAgain = stream.readInt();
+   else
+      objectImmediatelyDisappearsAgain = false;
 };
       
       
@@ -77,6 +87,7 @@ void SpawnObject::writeData ( tnstream& stream ) const
    stream.writeInt( objectLaid );
    stream.writeInt( objectAvailableBeforehand );
    stream.writeInt( oldObjectDirection );
+   stream.writeInt( objectImmediatelyDisappearsAgain );
 };
 
 
@@ -84,6 +95,36 @@ GameActionID SpawnObject::getID() const
 {
    return ActionRegistry::SpawnObject;
 }
+
+class ActionObjectRemovalStrategy : public tfield::ObjectRemovalStrategy {
+      const Context& context;
+      const ObjectType* originalObject;
+      bool immediateRemoval;
+   public:
+      ActionObjectRemovalStrategy( const Context& actionContext, const ObjectType* object ) 
+   : context( actionContext ), originalObject( object ), immediateRemoval(false)
+      {}
+      
+      virtual void removeObject( tfield* fld, Object* obj ) {
+         if ( obj->typ != originalObject )
+            (new RemoveObject( fld->getMap(), fld->getPosition(), obj->typ->id ))->execute( context );
+         else {
+            for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
+               if ( o->typ->id == obj->typ->id )
+                  o = fld->objects.erase( o );
+               else
+                  ++o ;
+            }
+            
+            immediateRemoval = true;
+         }
+      };
+   
+      bool getImmediateRemoval() 
+      {
+         return immediateRemoval;
+      }
+};
 
 ActionResult SpawnObject::runAction( const Context& context )
 {
@@ -104,8 +145,10 @@ ActionResult SpawnObject::runAction( const Context& context )
       oldObjectDirection = 0;
    }
    
-   objectLaid = fld->addobject( object, direction, false, &context );
+   ActionObjectRemovalStrategy aors( context, object );
+   objectLaid = fld->addobject( object, direction, false, &aors );
    
+   objectImmediatelyDisappearsAgain = aors.getImmediateRemoval();
    return ActionResult(0);
 }
 
@@ -126,7 +169,8 @@ ActionResult SpawnObject::undoAction( const Context& context )
          return ActionResult( 21505 );
       o->dir = oldObjectDirection;
    } else
-      fld->removeobject( object, true );
+      if ( !objectImmediatelyDisappearsAgain )
+         fld->removeobject( object, true );
       
    return ActionResult(0);
 }

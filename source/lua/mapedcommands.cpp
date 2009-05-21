@@ -102,7 +102,7 @@ bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* te
       tfield* fld = map->getField(pos);
       fld->typ = terrain->weather[0]; 
       fld->setweather( weather );
-      fld->setparams();
+      fld->setparams( );
       for ( int d = 0; d < 6; ++d ) {
          MapCoordinate pos2 = getNeighbouringFieldCoordinate( pos, d );
          tfield* fld = map->getField( pos2 );

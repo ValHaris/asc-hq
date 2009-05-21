@@ -35,6 +35,7 @@ class SpawnObject : public GameAction {
       
       bool objectAvailableBeforehand;
       int  oldObjectDirection;
+      bool objectImmediatelyDisappearsAgain;
       
       SpawnObject( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);

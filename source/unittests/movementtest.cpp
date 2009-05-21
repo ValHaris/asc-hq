@@ -10,6 +10,7 @@
 
 #include "../actions/moveunitcommand.h"
 #include "../loaders.h"
+#include "../itemrepository.h"
 #include "unittestutil.h"
 
 
@@ -63,10 +64,34 @@ void testMovementRF()
    assertOrThrow( veh->damage > 50 );
 }
 
+void testMovementTracks() 
+{
+   auto_ptr<GameMap> game ( startMap("unittest-objectgeneration.map"));
+   
+   Vehicle* veh = game->getField(4,9)->vehicle;
+   assertOrThrow( veh != NULL );
+   
+   move( veh, MapCoordinate(6,12));
+   
+   ObjectType* track = objectTypeRepository.getObject_byID( 7 );
+   
+   assertOrThrow( game->getField(4,9)->checkforobject( track) != NULL );
+   assertOrThrow( game->getField(5,10)->checkforobject( track) == NULL );
+   
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
+   
+   assertOrThrow( res.successful() );
+   
+   assertOrThrow( game->getField(4,9)->checkforobject( track) == NULL );
+   assertOrThrow( game->getField(5,10)->checkforobject( track) == NULL );
+  
+}
+
 
 
 void testMovement() 
 {
    testMovement1();
    testMovementRF();
+   testMovementTracks();
 }
