@@ -172,9 +172,10 @@ int         fieldAccessible( const tfield*        field,
            if ( terrainaccessible ( field, vehicle, uheight ) ) {
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
-               else 
-                  if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) ||  vehicle->getMap()->player[vehicle->getMap()->actplayer].diplomacy.getState( field->vehicle->getOwner()) >= PEACE )
+               else {
+                  if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) || ( vehicle->getMap()->getPlayer(vehicle).diplomacy.getState( field->vehicle->getOwner()) >= PEACE ))
                     return 1;
+               }
            }
       }
       else {   // building

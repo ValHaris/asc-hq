@@ -88,8 +88,27 @@ class MoveUnitCommand : public UnitCommand {
       void setDestination( const MapCoordinate3D& destination );
       ASCString getCommandString() const;
       
+      /** checks if the field can be reached by the unit this turn
+      Precondition: searchFields(int,int) was called
+      \note this function accepts a 2D position, so you can not check whether the
+            unit can reach a certain level of height
+            This is geared for usage by the GUI and less suited to AI, which should rather use isFieldReachable3D
+            
+      \param pos the destination field to check
+      \param direct if true then only return true of the unit can stop on the destination field 
+                    if false, then fields over which the unit can pass, but cannot stop (for example
+                              because another unit is standing there) will also return true
+      */
       bool isFieldReachable( const MapCoordinate& pos, bool direct );
       
+      bool isFieldReachable3D( const MapCoordinate3D& pos, bool direct );
+      
+      
+      /** this will return a 2D representation of the reachable fields.
+          That means, if the unit can go to different levels of height on the same field, this
+          set will only contain the level of height which can be reached with the least movement.
+      
+          These functions are geared towards the 2D user interface and are not well suited to AI usage */
       const set<MapCoordinate3D>& getReachableFields() { return reachableFields; };
       const set<MapCoordinate3D>& getReachableFieldsIndirect() { return reachableFieldsIndirect; };
 };

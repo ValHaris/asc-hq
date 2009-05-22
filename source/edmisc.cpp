@@ -3784,6 +3784,10 @@ void locateItemByID()
          target->addToCargo( cargo );
       }
          
+      target->deleteAllProductionLines();
+      for ( ContainerBase::Production::const_iterator i = source->getProduction().begin(); i != source->getProduction().end(); ++i )
+         target->addProductionLine( *i );
+      
    }
    
    
@@ -3814,6 +3818,10 @@ void locateItemByID()
             target->addToCargo( cargo );
          }
       }
+      
+      target->deleteAllProductionLines();
+      for ( ContainerBase::Production::const_iterator i = source->getProduction().begin(); i != source->getProduction().end(); ++i )
+         target->addProductionLine( *i );
       
    }
    

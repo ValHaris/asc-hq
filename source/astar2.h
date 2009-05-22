@@ -211,8 +211,9 @@ class AStar3D {
        /** searches for all fields that are within the range of maxDist and marks them.
            On each field one bit for each level of height will be set.
            The Destructor removes all marks.
+           \param path if non-null, all fields will be stored there
        */
-       void findAllAccessibleFields (  );
+       void findAllAccessibleFields ( vector<MapCoordinate3D>* path = NULL );
 
        //! returns the distance of the last found path, or -1 on any error
        int getDistance( );

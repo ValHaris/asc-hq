@@ -392,34 +392,15 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
       if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
          int counter = 0;
          
-         if ( MoveUnitCommand::avail ( veh )) {
-            
-            TemporaryContainerStorage tcs( veh );
-        
-            veh->setMovement( veh->maxMovement(), 0 );
+         AStar3D pathfinder( veh->getMap(), veh, false, veh->maxMovement() );
+         vector<MapCoordinate3D> fieldList;
+         pathfinder.findAllAccessibleFields( &fieldList );
          
-            MoveUnitCommand muc ( veh );
-            muc.searchFields();
-
-            const set<MapCoordinate3D>& fields =  muc.getReachableFields();
-            if ( fields.size() ) {
-               for ( set<MapCoordinate3D>::const_iterator i = fields.begin(); i != fields.end(); ++i )
-                  if ( fieldvisiblenow ( veh->getMap()->getField(*i) )) {
-                     ++counter;
-                     markField( *i );
-                  }
-                  
-               const set<MapCoordinate3D>& ifields  =  muc.getReachableFieldsIndirect();
-               for ( set<MapCoordinate3D>::const_iterator i = ifields.begin(); i != ifields.end(); ++i )
-                  if ( fieldvisiblenow ( veh->getMap()->getField(*i) )) {
-                     ++counter;
-                     markField( *i );
-                  }
-   
+         for ( vector<MapCoordinate3D>::iterator i = fieldList.begin(); i != fieldList.end(); ++i )
+            if ( fieldvisiblenow ( veh->getMap()->getField(*i) )) {
+               ++counter;
+               markField( *i );
             }
-            tcs.restore();
-
-         }
       
          if ( counter )
             fields[veh->getPosition()] |= 2;

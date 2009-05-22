@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 
+#include <iostream>
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
 #include "../actions/constructunitcommand.h"
@@ -602,7 +603,6 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
       }
 
       if ( ok )
-      // if ( !fld->building || getdiplomaticstatus2 ( fld->building->color, getPlayerNum()*8) == cawar || fld->building->getOwner() == veh->getOwner() )
          if ( pi->dist <= veh->getMovement() )
             lastmatch = pi;
 

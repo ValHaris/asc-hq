@@ -165,7 +165,7 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
    else 
       h = -1; // height-change = false
       
-   if ( height == -2 )
+   if ( height == -2  )
       h = -1;
 
    if ( (capabilities | flags) & LimitVerticalDirection ) {
@@ -188,7 +188,7 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
       }
    } else {
       PathFinder pf ( veh, veh->getMovement() );
-      pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
+      pf.getMovementFields ( reachableFields, reachableFieldsIndirect, -1 );
    }
 
    if ( reachableFields.size() == 0 ) 
@@ -234,6 +234,14 @@ bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )
    return false;  
 }
 
+bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direct )
+{
+   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
+   AStar3D::Path localPath;
+   ast.findPath ( localPath, pos );
+   return !localPath.empty();
+}
+
 
 void MoveUnitCommand::calcPath()
 {
@@ -253,12 +261,12 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    if ( getState() != SetUp )
       return ActionResult(22000);
    
-   
+   /*
    searchFields();
    
    if ( reachableFields.find( destination ) == reachableFields.end() ) 
       return ActionResult(105);
-
+*/
    calcPath();
    
    if ( path.empty() || path.rbegin()->x != destination.x || path.rbegin()->y != destination.y  ) 

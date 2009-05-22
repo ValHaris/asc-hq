@@ -87,6 +87,53 @@ void testMovementTracks()
   
 }
 
+void testHeightChangeAI()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-heightchange.map"));
+   Vehicle* veh = game->getField(4,17)->vehicle;
+   assertOrThrow( veh != NULL );
+   
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   
+   // this is the AI way of doing things, selecting a 3D coordinate as destination
+   
+   MapCoordinate3D dest( 6,10,1<<5 );
+   assertOrThrow( muc->isFieldReachable3D( dest, true ));
+   
+   muc->setDestination( dest );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+   
+   assertOrThrow( veh->height == 32 );
+}
+
+void testHeightChangeGUI()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-heightchange.map"));
+   Vehicle* veh = game->getField(4,17)->vehicle;
+   assertOrThrow( veh != NULL );
+   
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   
+   // this is the GUI way of doing things, selecting a 2D coordinate as destination
+   
+   MapCoordinate dest( 6,10 );
+   muc->searchFields();
+   assertOrThrow( muc->isFieldReachable( dest, true ));
+   
+   muc->setDestination( dest );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+   
+   assertOrThrow( veh->height == 16 ); // because low level flight can be reached with less movement consumption
+   
+}
 
 
 void testMovement() 
@@ -94,4 +141,6 @@ void testMovement()
    testMovement1();
    testMovementRF();
    testMovementTracks();
+   testHeightChangeAI();
+   testHeightChangeGUI();
 }

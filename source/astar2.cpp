@@ -618,8 +618,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     Node N;
     Container open;
 
+    /* this should be checked outside by giving the pathfinder the right movement
     if ( !veh->canMove() )
        return;
+    */
 
     if ( actmap->getField(A)->unitHere(veh) ) {
        // insert the original node
@@ -902,7 +904,7 @@ void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& dest )
 }
 
 
-void AStar3D::findAllAccessibleFields ( )
+void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
 {
    if ( markTemps )
       actmap->cleartemps ( 3 );
@@ -914,7 +916,11 @@ void AStar3D::findAllAccessibleFields ( )
       fa |= i->h.getBitmappedHeight();
       if ( markTemps )
          actmap->getField ( i->h )->a.temp  |= i->h.getBitmappedHeight();
+      
+      if ( path )
+         path->push_back( i->h );
    }
+   
    if ( markTemps )
       tempsMarked = actmap;
 }

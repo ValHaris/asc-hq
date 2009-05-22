@@ -999,7 +999,7 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWea
    if ( targetHeight < 0 )
       targetHeight = target->height;
    
-   int result = false;
+   bool result = false;
    if ( atw )
       atw->count = 0;
 
