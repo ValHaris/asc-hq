@@ -932,7 +932,7 @@ Research::~Research () {};
 Resources returnResourcenUseForResearch ( const ContainerBase* bld, int research )
 {
    Resources res;
-   if ( bld->baseType->nominalresearchpoints == 0 )
+   if ( (bld->baseType->nominalresearchpoints == 0) || !bld->baseType->hasFunction( ContainerBaseType::Research) )
       return res;
 
    int num = 0;

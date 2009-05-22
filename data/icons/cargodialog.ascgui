@@ -1326,7 +1326,7 @@ panel {
 
          ResPerTurnLabelGlobal {
             type = StaticText
-            text = Research - all labs
+            text = Research - total
             x = 48
             y = 90
             x2 = 268
