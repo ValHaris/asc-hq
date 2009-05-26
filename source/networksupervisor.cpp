@@ -65,8 +65,6 @@ void networksupervisor ()
          break;
       }
 
-      newMap->supervisorpasswordcrc.setUnencoded("sumpfgurke");
-
    if ( pwd.empty() )
       pwd = newMap->supervisorpasswordcrc;
 
