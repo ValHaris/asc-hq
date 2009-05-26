@@ -51,7 +51,7 @@ ASCString SpawnObject::getDescription() const
    return  res;
 }
       
-static const int spawnObjectStreamVersion = 2;      
+static const int spawnObjectStreamVersion = 3;      
       
 void SpawnObject::readData ( tnstream& stream ) 
 {
