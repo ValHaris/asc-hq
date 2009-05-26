@@ -81,6 +81,9 @@ class UnitHooveringLogic {
     bool isBuilding() const { return false; };
 
     const Vehicletype* typ;
+    
+    const Vehicletype* getType() const { return typ; };
+    
     int          ammo[16];
     int          weapstrength[16];
     int          experience;

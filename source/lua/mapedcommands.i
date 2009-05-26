@@ -25,8 +25,58 @@ bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* te
 
 int selectPlayer( GameMap* map );
 
-extern void errorMessage ( const char* string );
-extern void warningMessage ( const char* string );
-extern void infoMessage ( const char* string );
+void errorMessage ( const char* string );
+void warningMessage ( const char* string );
+void infoMessage ( const char* string );
 
+class ContainerBaseType {
+   public: 
+      int getID() const;
+   protected:
+      ContainerBaseType();
+};
 
+class BuildingType : public ContainerBaseType {
+};
+
+class Vehicletype : public ContainerBaseType {
+};
+
+class ContainerBase {
+   public:         
+      void deleteProductionLine( const Vehicletype* type );
+      void deleteAllProductionLines();
+      void addProductionLine( const Vehicletype* type  );
+   protected:
+      ContainerBase();
+};
+
+class Building : public ContainerBase {
+   protected:
+      Building();
+   public:
+      const BuildingType* getType();
+};
+
+class Vehicle : public ContainerBase {
+   protected:       
+      Vehicle();
+   public:
+      const Vehicletype* getType();
+};
+
+class tfield {
+   public:
+      Building* getBuildingEntrance();
+      Vehicle* getVehicle();
+   protected:
+      tfield();
+};
+
+class GameMap {
+   public:
+      tfield* getField( int x, int y );
+      int width() const;
+      int height() const;
+      
+};

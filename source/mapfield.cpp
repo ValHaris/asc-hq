@@ -253,6 +253,16 @@ bool tfield :: unitHere ( const Vehicle* veh )
    return false;
 }
 
+Building* tfield::getBuildingEntrance()
+{
+   if ( building &&  (bdt & getTerrainBitType(cbbuildingentry)).any() )
+      return building;
+   else
+      return NULL;
+}
+
+
+
 ContainerBase* tfield :: getContainer()
 {
    if ( vehicle )

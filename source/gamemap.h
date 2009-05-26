@@ -172,8 +172,8 @@ class GameMap {
       //! the size of the map
       int          xsize, ysize;
 
-      //! the coordinate of the map that is displayed on upper left corner of the screen
-      // int          xpos, ypos;
+      int width() const { return xsize; };
+      int height() const { return ysize; };
 
       //! the array of fields
       tfield*       field;

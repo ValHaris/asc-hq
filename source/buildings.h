@@ -44,6 +44,9 @@ class  Building : public ContainerBase {
     
    public:
     const BuildingType* typ;
+    
+    const BuildingType* getType() const { return typ; };
+    
 
     //! the ammo that is stored in the building
     int         ammo[waffenanzahl];
