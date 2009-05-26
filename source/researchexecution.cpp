@@ -56,6 +56,17 @@
 
 static TechnologyPresenter* techPresenter = NULL;
 
+SuppressTechPresentation::SuppressTechPresentation()
+{
+   presenter = techPresenter;
+   techPresenter = NULL;
+}
+
+SuppressTechPresentation::~SuppressTechPresentation()
+{
+   techPresenter = presenter;
+}
+
 void setResearchPresenter( TechnologyPresenter* presenter )
 {
    techPresenter = presenter;

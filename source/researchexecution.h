@@ -42,6 +42,13 @@ class TechnologyPresenter {
 //! registers the class that will present newly researched technologies to the user
 extern void setResearchPresenter( TechnologyPresenter* presenter ); 
 
+class SuppressTechPresentation {
+      TechnologyPresenter* presenter;
+   public: 
+      SuppressTechPresentation();
+      ~SuppressTechPresentation();
+};
+
 
 //! dissects a vehicle; if you haven't researched this vehicle type you will get some research points for it.
 extern void dissectvehicle ( Vehicle* eht );

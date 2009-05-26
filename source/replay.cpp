@@ -65,6 +65,7 @@
 #include "actions/buildproductionlinecommand.h"
 #include "actions/removeproductionlinecommand.h"
 #include "actions/cancelresearchcommand.h"
+#include "researchexecution.h"
 
 trunreplay runreplay;
 
@@ -2085,6 +2086,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    actmap->setPlayerView ( viewingplayer );
    actmap->getCursor() = orgmap->getCursor();
 
+   SuppressTechPresentation stp;
    actmap->sigPlayerTurnBegins( actmap->getPlayer( player ));
    
    tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );

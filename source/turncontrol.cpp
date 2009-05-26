@@ -41,6 +41,7 @@
 #include "viewcalculation.h"
 #include "network/simple_file_transfer.h"
 #include "dialogs/fileselector.h"
+#include "researchexecution.h"
 
 bool authenticateUser ( GameMap* actmap, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
 {
@@ -273,6 +274,8 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, Map
 void skipTurn( GameMap* gamemap )
 {
    if ( gamemap->actplayer >= 0 ) {
+      SuppressTechPresentation stp;
+            
       gamemap->beginTurn();
       gamemap->endTurn();
    }
