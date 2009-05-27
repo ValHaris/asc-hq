@@ -48,5 +48,7 @@ extern pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 //! return the distance between x1/y1 and x2/y2 using the power of the wind factors precalculated in #WindMovement
 extern int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm );
 
+extern bool checkUnitsForCrash( Player& player, ASCString& text );
+
 
 #endif

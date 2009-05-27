@@ -201,7 +201,9 @@ class CGameOptions
 
       vector<ASCString> visibleMapLayer;
 
-
+      //! the number of turns after which a unit will crash until the player is warned
+      int aircraftCrashWarningTime;
+      
       struct PanelData {
          int x;
          int y;

@@ -516,14 +516,26 @@ void EndTurn::execute( const MapCoordinate& pos, ContainerBase* subject, int num
 {
    if ( !CGameOptions::Instance()->endturnquestion || (choice_dlg("do you really want to end your turn ?","~y~es","~n~o") == 1)) {
 
+      Player& player = actmap->player[actmap->actplayer];
+      ASCString message = "The following units are about to crash\n\n";
+      bool crashWarning = checkUnitsForCrash( player, message );
+      if ( crashWarning ) {
+         if ( choiceDialog( message, "continue", "cancel", "Aircraft crash pending" ) == 2 )
+            return;
+
+      }
+      
+      
       static int autosave = 0;
       ASCString name = ASCString("autosave") + strrr( autosave ) + &savegameextension[1];
 
       savegame ( name, actmap );
 
+      
+      
       autosave = !autosave;
 
-      actmap->sigPlayerUserInteractionEnds( actmap->player[actmap->actplayer] );
+      actmap->sigPlayerUserInteractionEnds( player );
 
       next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
 

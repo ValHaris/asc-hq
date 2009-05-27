@@ -1663,6 +1663,8 @@ int UnitHooveringLogic::getEndurance ( const Vehicle* veh )
    if ( veh->height < chtieffliegend || veh->height > chhochfliegend || veh->typ->fuelConsumption <= 0)
       return -1;
 
+   if ( veh->getCarrier() )
+      return -1;
 
    int fuelUsage = calcFuelUsage( veh );
    if ( fuelUsage > veh->getTank().fuel )

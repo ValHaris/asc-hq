@@ -34,30 +34,33 @@
 #include "vehicletype.h"
 #include "typen.h"
 
-#include "newfont.h"
 #include "spfst.h"
 #include "loaders.h"
-#include "misc.h"
 #include "controls.h"
-#include "stack.h"
-#include "dlg_box.h"
-#include "dialog.h"
 #include "attack.h"
-#include "gamedlg.h"
 #include "gameoptions.h"
-#include "ai/ai.h"
 #include "errors.h"
 #include "viewcalculation.h"
 #include "replay.h"
 #include "resourcenet.h"
-#include "itemrepository.h"
-#include "strtmesg.h"
-#include "messagedlg.h"
-#include "gameevent_dialogs.h"
-#include "cannedmessages.h"
-#include "mapdisplay.h"
+#include "stack.h"
 
-#include "dialogs/choosetech.h"
+
+bool checkUnitsForCrash( Player& player, ASCString& text )
+{
+   bool endangeredUnits = false;
+   
+   for ( Player::VehicleList::const_iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i ) {
+      int endurance = UnitHooveringLogic::getEndurance( *i );
+      if ( endurance>= 0 && endurance <= CGameOptions::Instance()->aircraftCrashWarningTime ) {
+         endangeredUnits = true;
+         text += (*i)->getName() + " " + (*i)->getPosition().toString() + "\n";
+      }
+        
+   }
+   return endangeredUnits;
+}
+
 
 
 

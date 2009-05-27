@@ -241,6 +241,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
      
    pc.addString("mailProgram", mailProgram, "");
      
+   pc.addInteger( "AircraftCrashWarnTime", aircraftCrashWarningTime, 1 );
 }
 
 CGameOptions::CGameOptions()
@@ -330,6 +331,8 @@ void CGameOptions::setDefaults ( void )
    pbemServer.port = 8080;
    pbemServer.hostname="terdon.asc-hq.org";
 
+   aircraftCrashWarningTime = 1;
+   
    setChanged();
 }
 
