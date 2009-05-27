@@ -128,7 +128,13 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    } else
       if ( dest.getNumericalHeight() >= 0 ) {
         // moving out of container
-        int mm = vehicle->getMap()->getField( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() )->movecost;
+        int mm;
+        const ContainerBaseType::TransportationIO* unloadSystem = vehicle->getMap()->getField( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() );
+        if ( unloadSystem )
+            mm = unloadSystem->movecost;
+        else
+           mm = 0;
+        
         if ( mm > 0 )
             movecost = mm;
         else {
