@@ -34,9 +34,6 @@
 /* Define to 1 if you have the `jpeg' library (-ljpeg). */
 #undef HAVE_LIBJPEG
 
-/* Define to 1 if you have the `lua5.1' library (-llua5.1). */
-#undef HAVE_LIBLUA5_1
-
 /* Define to 1 if you have the `physfs' library (-lphysfs). */
 #undef HAVE_LIBPHYSFS
 

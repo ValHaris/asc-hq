@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.3.73.8)
+AC_INIT(asc,2.3.73.9)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -189,15 +189,24 @@ AC_CHECK_LIB( SDL_image,
 
 
 
-AC_CHECK_LIB(lua5.1,
-             luaL_openlibs,,
-             AC_LIB_MISSING( LUA, http://www.lua.org/ ))
+PKG_CHECK_MODULES(LUA, [lua >= 5.1 ],, LUA_MISSING=1 )
+
+if test "x$LUA_MISSING" = "x1"; then
+   PKG_CHECK_MODULES(LUA, [lua5.1 >= 5.1 ],, AC_LIB_MISSING( LUA, http://www.lua.org/ ) )
+
+fi
+
+LUA_FLAGS=$LUA_CFLAGS
+
+#AC_CHECK_LIB(lua5.1,
+#             luaL_openlibs,,
+#             AC_LIB_MISSING( LUA, http://www.lua.org/ ))
 
 
-LUA_FLAGS="-I/usr/include/lua5.1/"
+#LUA_FLAGS="-I/usr/include/lua5.1/"
 AC_SUBST(LUA_FLAGS)
 
-LUA_LIBS="-llua5.1"
+#LUA_LIBS="-llua5.1"
 AC_SUBST(LUA_LIBS)
 
 LUA_TAGS="-DLUAINTERFACE"
