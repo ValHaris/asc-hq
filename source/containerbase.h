@@ -113,6 +113,14 @@ class ContainerBase {
    public:
       const Cargo& getCargo() const { return cargo; };
 
+      int getCargoCount() const { return cargo.size(); };
+      
+      /** returns the cargo slot with index i
+          Warning: the cargo may contain NULL items. This was deliberately, to allow easier navigation
+                   when the user moves items successivly out of a carrier
+      */
+      Vehicle* getCargo( int i );
+      
       //! removes ALL units from cargo
       void clearCargo();
 

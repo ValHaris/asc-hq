@@ -188,6 +188,15 @@ void ContainerBase :: compactCargo()
 }
 
 
+Vehicle* ContainerBase :: getCargo( int i )
+{
+   if ( i < 0 || i >= cargo.size() )
+      return NULL;
+   else  
+      return cargo.at(i);
+}
+
+
 
 ContainerBase* ContainerBase :: getCarrier() const
 {

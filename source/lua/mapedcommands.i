@@ -47,6 +47,12 @@ class ContainerBase {
       void deleteProductionLine( const Vehicletype* type );
       void deleteAllProductionLines();
       void addProductionLine( const Vehicletype* type  );
+      
+      int getCargoCount();
+      
+      // warning: the cargo may have items which are NULL
+      Vehicle* getCargo( int i );
+      
    protected:
       ContainerBase();
 };

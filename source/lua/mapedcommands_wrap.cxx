@@ -2395,6 +2395,57 @@ fail:
 }
 
 
+static int _wrap_ContainerBase_getCargoCount(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getCargoCount",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getCargoCount",1,"ContainerBase *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getCargoCount",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = (int)(arg1)->getCargoCount();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getCargo(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int arg2 ;
+  Vehicle *result = 0 ;
+  
+  SWIG_check_num_args("getCargo",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getCargo",1,"ContainerBase *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("getCargo",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (Vehicle *)(arg1)->getCargo(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicle,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_ContainerBase(void *obj) {
 ContainerBase *arg1 = (ContainerBase *) obj;
 delete arg1;
@@ -2403,6 +2454,8 @@ static swig_lua_method swig_ContainerBase_methods[] = {
     {"deleteProductionLine", _wrap_ContainerBase_deleteProductionLine}, 
     {"deleteAllProductionLines", _wrap_ContainerBase_deleteAllProductionLines}, 
     {"addProductionLine", _wrap_ContainerBase_addProductionLine}, 
+    {"getCargoCount", _wrap_ContainerBase_getCargoCount}, 
+    {"getCargo", _wrap_ContainerBase_getCargo}, 
     {0,0}
 };
 static swig_lua_attribute swig_ContainerBase_attributes[] = {
@@ -2412,11 +2465,36 @@ static swig_lua_class *swig_ContainerBase_bases[] = {0};
 static const char *swig_ContainerBase_base_names[] = {0};
 static swig_lua_class _wrap_class_ContainerBase = { "ContainerBase", &SWIGTYPE_p_ContainerBase,0, swig_delete_ContainerBase, swig_ContainerBase_methods, swig_ContainerBase_attributes, swig_ContainerBase_bases, swig_ContainerBase_base_names };
 
+static int _wrap_Building_getType(lua_State* L) {
+  int SWIG_arg = 0;
+  Building *arg1 = (Building *) 0 ;
+  BuildingType *result = 0 ;
+  
+  SWIG_check_num_args("getType",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getType",1,"Building *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Building,0))){
+    SWIG_fail_ptr("Building_getType",1,SWIGTYPE_p_Building);
+  }
+  
+  result = (BuildingType *)(arg1)->getType();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_BuildingType,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Building(void *obj) {
 Building *arg1 = (Building *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Building_methods[] = {
+    {"getType", _wrap_Building_getType}, 
     {0,0}
 };
 static swig_lua_attribute swig_Building_attributes[] = {
@@ -2426,11 +2504,36 @@ static swig_lua_class *swig_Building_bases[] = {0,0};
 static const char *swig_Building_base_names[] = {"ContainerBase *",0};
 static swig_lua_class _wrap_class_Building = { "Building", &SWIGTYPE_p_Building,0, swig_delete_Building, swig_Building_methods, swig_Building_attributes, swig_Building_bases, swig_Building_base_names };
 
+static int _wrap_Vehicle_getType(lua_State* L) {
+  int SWIG_arg = 0;
+  Vehicle *arg1 = (Vehicle *) 0 ;
+  Vehicletype *result = 0 ;
+  
+  SWIG_check_num_args("getType",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getType",1,"Vehicle *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("Vehicle_getType",1,SWIGTYPE_p_Vehicle);
+  }
+  
+  result = (Vehicletype *)(arg1)->getType();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicletype,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Vehicle(void *obj) {
 Vehicle *arg1 = (Vehicle *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Vehicle_methods[] = {
+    {"getType", _wrap_Vehicle_getType}, 
     {0,0}
 };
 static swig_lua_attribute swig_Vehicle_attributes[] = {
