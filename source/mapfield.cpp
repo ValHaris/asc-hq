@@ -493,10 +493,10 @@ MapCoordinate tfield :: getPosition()
 
 class SimpleObjectRemoval : public tfield::ObjectRemovalStrategy {
    public:
-      virtual void removeObject( tfield* fld, Object* obj )
+      virtual void removeObject( tfield* fld, const ObjectType* obj )
       {
          for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
-            if ( o->typ->id == obj->typ->id )
+            if ( o->typ == obj )
                o = fld->objects.erase( o );
             else
                ++o ;
@@ -528,7 +528,7 @@ void tfield :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
          if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
-            objectRemovalStrategy->removeObject( this, &(*o) );
+            objectRemovalStrategy->removeObject( this, o->typ );
             setparams( objectRemovalStrategy );
             return;
          }

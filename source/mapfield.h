@@ -102,7 +102,7 @@ class  tfield {
     //! Interface for removing objects from a field when it turns out that they can no longer exist
     class ObjectRemovalStrategy {
        public:
-          virtual void removeObject( tfield* fld, Object* obj ) = 0;
+          virtual void removeObject( tfield* fld, const ObjectType* obj ) = 0;
           virtual ~ObjectRemovalStrategy() {};
     };
     

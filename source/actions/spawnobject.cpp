@@ -18,7 +18,6 @@
      Boston, MA  02111-1307  USA
 */
 
-
 #include "spawnobject.h"
 #include "action-registry.h"
 
@@ -105,14 +104,14 @@ class ActionObjectRemovalStrategy : public tfield::ObjectRemovalStrategy {
    : context( actionContext ), originalObject( object ), immediateRemoval(false)
       {}
       
-      virtual void removeObject( tfield* fld, Object* obj ) {
-         if ( obj->typ != originalObject )
-            (new RemoveObject( fld->getMap(), fld->getPosition(), obj->typ->id ))->execute( context );
+      virtual void removeObject( tfield* fld, const ObjectType* objectType ) {
+         if ( objectType != originalObject )
+            (new RemoveObject( fld->getMap(), fld->getPosition(), objectType->id ))->execute( context );
          else {
             for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
-               if ( o->typ->id == obj->typ->id )
+               if ( o->typ == objectType ) {
                   o = fld->objects.erase( o );
-               else
+               } else
                   ++o ;
             }
             
