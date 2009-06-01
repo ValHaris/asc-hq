@@ -711,6 +711,10 @@
 				Name="dialogs"
 				>
 				<File
+					RelativePath="..\..\..\dialogs\actionmanager.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\admingame.cpp"
 					>
 				</File>
@@ -872,6 +876,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\widgets\textrenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\widgets\vehicletypeimage.cpp"
 					>
 				</File>
 			</Filter>
