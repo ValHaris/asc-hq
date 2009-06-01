@@ -34,28 +34,60 @@ Vehicle* UnitCommand::getUnit()
 }
 
 UnitCommand::UnitCommand( Vehicle* vehicle )
-   : Command( vehicle->getMap() ), unitNetworkID ( vehicle->networkid )
+   : Command( vehicle->getMap() ), 
+     unitNetworkID ( vehicle->networkid ), 
+     startingPosition( vehicle->getPosition() ),
+     unitTypeID( vehicle->typ->id )
 {
 };
 
 UnitCommand::UnitCommand( GameMap* map )
-   : Command( map ), unitNetworkID ( -1 )
+   : Command( map ), unitNetworkID ( -1 ), unitTypeID( -1 )
 {
      
 }
 
+static const int unitCommandStreamVersion = 2;
 
 void UnitCommand::readData ( tnstream& stream )
 {
    Command::readData( stream );
-   stream.readInt();
+   int version = stream.readInt();
+   if ( version < 1 || version > unitCommandStreamVersion ) 
+      throw tinvalidversion ( "UnitCommand", unitCommandStreamVersion, version );
    unitNetworkID = stream.readInt();   
+   
+   if ( version >= 2 ) {
+      unitTypeID  = stream.readInt();
+      startingPosition.read( stream );
+   }
 }
 
 
 void UnitCommand::writeData ( tnstream& stream ) const
 {
    Command::writeData( stream );
-   stream.writeInt( 1 );
+   stream.writeInt( unitCommandStreamVersion );
    stream.writeInt( unitNetworkID );
+   stream.writeInt( unitTypeID );
+   startingPosition.write( stream );
 }
+
+vector<MapCoordinate> UnitCommand::getCoordinates() const
+{
+   vector<MapCoordinate> v = Command::getCoordinates();
+   if ( startingPosition.valid() )
+      v.push_back( startingPosition );
+   return v;
+}
+
+int UnitCommand::getUnitTypeID() const 
+{ 
+   if ( unitTypeID == -1 ) {
+      const Vehicle* veh = getMap()->getUnit( unitNetworkID );
+      if ( veh )
+         return veh->typ->id;
+   } 
+   
+   return unitTypeID; 
+}; 

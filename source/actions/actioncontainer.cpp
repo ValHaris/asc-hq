@@ -23,6 +23,7 @@
 
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
+#include "../util/messaginghub.h"
 
 SigC::Signal2<void,GameMap*,const Command&> ActionContainer::postActionExecution;
 SigC::Signal2<void,GameMap*,const Command&> ActionContainer::commitCommand;
@@ -45,6 +46,8 @@ void ActionContainer::add( Command* action )
    actions.push_back( action );
    currentPos = actions.end();
    
+   commandState_map[action] = true;
+   
    postActionExecution( map, *action );
    actionListChanged(map);
 }
@@ -58,7 +61,10 @@ ActionResult ActionContainer::undo( const Context& context )
    try {
       Actions::iterator a = currentPos;
       --a;
-      res = (*a)->undo ( context );
+      if( isActive_map( *a ) ) {
+         res = (*a)->undo ( context );
+         commandState_map[*a] = false;
+      }
       currentPos = a;
    } catch ( ActionResult result ) {
       errorMessage(result.getMessage());
@@ -69,18 +75,21 @@ ActionResult ActionContainer::undo( const Context& context )
 }
 
 
-void ActionContainer::redo( const Context& context )
+ActionResult ActionContainer::redo( const Context& context )
 {
+   ActionResult res(0);
    if ( currentPos == actions.end() )
-      return;
+      return res;
    
    try {
-      (*currentPos)->redo( context );
+      if ( isActive_map(*currentPos ))
+         res = (*currentPos)->redo( context );
       ++currentPos;
    } catch ( ActionResult result ) {
       errorMessage(result.getMessage());
    }
    actionListChanged(map);
+   return res;
 }
 
 void ActionContainer::breakUndo()
@@ -94,15 +103,8 @@ void ActionContainer::breakUndo()
    
    actionListChanged(map);
 }
-/*
-void ActionContainer::saveActionsToReplay( ReplayStorage& replay )
-{
-   for ( Actions::iterator i = actions.begin(); i != currentPos; ++i )
-      replay.saveCommand( **i );
-}
-*/
 
-const int actionContainerversion = 1;
+const int actionContainerversion = 2;
 
 void ActionContainer::read ( tnstream& stream )
 {
@@ -114,12 +116,24 @@ void ActionContainer::read ( tnstream& stream )
    for ( int i = 0; i < actionCount; ++i ) {
       Command* a = dynamic_cast<Command*>( GameAction::readFromStream( stream, map ));
       actions.push_back ( a );
+      
+      if ( version >= 2 ) {
+         commandState_map[a] = stream.readInt();
+         
+         int b = stream.readInt();
+         if ( b >= 0 )
+            commandState_map[a] = b;
+      }
    }
    
    int pos = stream.readInt();
    currentPos = actions.begin();
    while ( pos-- )
       currentPos++;
+   
+   if ( version <= 1 )
+      initCommandState( commandState_map );
+   
 }
 
 
@@ -128,8 +142,20 @@ void ActionContainer::write ( tnstream& stream )
    stream.writeInt( actionContainerversion );
    
    stream.writeInt( actions.size() );
-   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i )
+   for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
       (*i)->write(stream );
+      
+      if ( commandState_map.find( *i ) != commandState_map.end() )
+         stream.writeInt( commandState_map[*i] );
+      else
+         stream.writeInt( 1 );
+      
+      if ( commandState_request.find( *i ) != commandState_request.end() )
+         stream.writeInt( commandState_request[*i] );
+      else
+         stream.writeInt( -1 );
+
+   }
    
    int counter = 0;
    Actions::iterator i = actions.begin();
@@ -148,6 +174,82 @@ void ActionContainer::getActionDescriptions( vector<ASCString>& list )
       list.push_back( (*i)->getDescription() );
 
 }
+
+void ActionContainer::initCommandState( CommandState& commandState )
+{
+   commandState.clear();
+   for ( Actions::iterator i = actions.begin(); i != currentPos; ++i )
+      commandState[*i] = true;
+   for ( Actions::iterator i = currentPos; i != actions.end(); ++i )
+      commandState[*i] = false;
+}
+
+
+bool ActionContainer::isActive_map( const Command* action ) const
+{
+   if ( commandState_map.find( action ) != commandState_map.end() )
+      return commandState_map.find(action)->second;
+   else {
+      warning("ActionContainer::isActive_map - invalid parameter");
+      return false;
+   }
+}
+
+bool ActionContainer::isActive_req( const Command* action ) 
+{
+   if ( commandState_request.empty() )
+      commandState_request = commandState_map;
+   
+   if ( commandState_request.find( action ) != commandState_request.end() )
+      return commandState_request[action];
+   else {
+      warning("ActionContainer::isActive - invalid parameter");
+      return false;
+   }
+}
+
+
+ActionResult ActionContainer::rerun( const Context& context )
+{
+   
+   Actions::iterator currentCommand = currentPos;
+   Actions::iterator firstDelta = currentPos;
+   Actions::iterator i = currentPos;
+   while ( i != actions.begin() ) {
+      --i;
+      if ( commandState_map.find( *i ) == commandState_map.end() )
+         fatalError( "ActionContainer::rerun - inconsistent commandState_map ");
+           
+      if ( commandState_request.find( *i ) != commandState_request.end() ) {
+         if ( commandState_request[*i] != commandState_map[*i] )
+            firstDelta = i;
+      }
+   }
+   
+   while ( currentPos > firstDelta )
+      undo(context);
+   
+   commandState_map = commandState_request;
+   commandState_request.clear();
+   
+   while ( currentPos < actions.end() ) {
+      ActionResult res = redo(context);
+      if ( !res.successful()) 
+         return res;
+   }
+   
+   return ActionResult(0);
+}
+
+
+void ActionContainer::setActive( const Command* action, bool active )
+{
+   if ( commandState_request.empty() )
+      commandState_request = commandState_map;
+   
+   commandState_request[action] = active;
+}
+
 
 void ActionContainer::getCommands( AbstractCommandWriter& writer)
 {

@@ -23,6 +23,7 @@
 #define actionContainerH
 
 #include <list>
+#include <map>
 #include <sigc++/sigc++.h>
 #include "loki/Functor.h"
 #include "loki/Typelist.h"
@@ -34,19 +35,43 @@ class ActionContainer {
    
       GameMap* map;
    
-      typedef list<Command*> Actions;
+   public:
+      typedef vector<Command*> Actions;
+   private:
       Actions actions;
       
       Actions::iterator currentPos;
    
+      typedef std::map<const Command*,bool> CommandState;
+      CommandState commandState_request;
+      CommandState commandState_map;
+      
+      void initCommandState( CommandState& commandState );
+      
    public:
       ActionContainer( GameMap* gamemap );
       void add( Command* action );
       
-      ActionResult undo( const Context& context );
-      void redo( const Context& context );
+      //! returns if the command is active in the current map's state
+      bool isActive_map( const Command* action ) const ;
       
-      // called when some modification to the map is taking place that is not recorded by undo
+      //! returns if the command is active in the queued command list
+      bool isActive_req( const Command* action );
+      
+      void setActive( const Command* action, bool active );
+      
+      const Actions& getActions() const { return actions; };
+      
+      //! does a single undo step
+      ActionResult undo( const Context& context );
+      
+      //! does a single redo step
+      ActionResult redo( const Context& context );
+      
+      //! reruns the necessary commands to propage take the changes done by setActive to the map
+      ActionResult rerun( const Context& context );
+      
+      //! to be called when some modification to the map is taking place that is not recorded by undo
       void breakUndo();
       
       void read ( tnstream& stream );

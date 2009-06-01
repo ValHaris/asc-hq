@@ -65,3 +65,8 @@ ActionResult Command::redo( const Context& context )
    return go(context);
 }
 
+vector<MapCoordinate> Command::getCoordinates() const
+{
+   return vector<MapCoordinate>(); 
+}
+

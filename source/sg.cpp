@@ -164,6 +164,7 @@
 #include "actions/diplomacycommand.h"
 #include "gameevent_dialogs.h"
 #include "actions/commandwriter.h"
+#include "dialogs/actionmanager.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -1230,6 +1231,9 @@ void execuseraction2 ( tuseractions action )
          break;
          
       case ua_chooseTechnology: chooseTechnologyIfAvail( actmap->getCurrentPlayer() );
+         break;
+      
+      case ua_actionManager: actionManager( actmap );
          break;
          
 #ifdef LUAINTERFACE 

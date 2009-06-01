@@ -162,6 +162,7 @@ void Menu::setup()
    addfield ( "~A~ction" );
    addbutton ( "~U~ndo\tctrl-z", ua_undo );
    addbutton ( "~R~edo\tctrl-shift-z", ua_redo );
+   addbutton ( "~M~anage", ua_actionManager );
 #ifdef LUAINTERFACE
    currentMenu->addSeparator();
    addbutton ( "Save List", ua_writeLuaCommands );

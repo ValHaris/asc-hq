@@ -1,6 +1,6 @@
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
-     Copyright (C) 1994-2008  Martin Bickel  and  Marc Schellenberger
+     Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
  
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -19,33 +19,12 @@
 */
 
 
-#ifndef UnitCommandH
-#define UnitCommandH
+#ifndef actionmanagerH
+#define actionmanagerH
 
-#include "command.h"
+class GameMap;
 
-class Vehicle;
-
-class UnitCommand : public Command {
-   private:
-      int unitNetworkID;
-      MapCoordinate startingPosition;
-      int unitTypeID;
-   protected:
-      const Vehicle* getUnit() const;
-      Vehicle* getUnit();
-      int getUnitID() const { return unitNetworkID; };
-      
-      UnitCommand( GameMap* map );
-      
-      UnitCommand( Vehicle* vehicle );
-      void readData ( tnstream& stream );
-      void writeData ( tnstream& stream ) const;
-   public:
-      virtual vector<MapCoordinate> getCoordinates() const;
-      int getUnitTypeID() const; 
-      
-};
+extern void actionManager( GameMap* map );
 
 
 #endif

@@ -123,6 +123,9 @@ class Command : public GameAction {
       
       ActionResult redo( const Context& context );
       
+      //! this is for informational purposes, so the player can see where a Command has taken place when reviewing it
+      virtual vector<MapCoordinate> getCoordinates() const;
+      
    protected:
       Command( GameMap* gamemap );
       
