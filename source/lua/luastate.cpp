@@ -3,8 +3,9 @@
 
 extern "C"
 {
-   #include "lua.h"
+   #include <lua.h>
    #include <lauxlib.h>
+   #include <lualib.h>
 
    int luaopen_asc(lua_State* L); // declare the wrapped module
 }
@@ -24,6 +25,7 @@ LuaState::LuaState()
    myLuaState = lua_open();
    
    luaopen_asc(myLuaState); // declare the wrapped module   
+   luaL_openlibs(myLuaState); 
 }
 
 
