@@ -166,6 +166,7 @@ void Menu::setup()
 #ifdef LUAINTERFACE
    currentMenu->addSeparator();
    addbutton ( "Save List", ua_writeLuaCommands );
+   addbutton ( "Run Script", ua_runLuaCommands );
 #endif   
 
 
@@ -255,10 +256,6 @@ void Menu::setup()
    addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "compiler benchmark (AI)", ua_aibench );
    currentMenu->addSeparator();
-#ifdef LUAINTERFACE
-   addbutton ( "Export command stack",ua_writeLuaCommands );
-   addbutton ( "Run Script", ua_runLuaCommands );
-#endif   
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );

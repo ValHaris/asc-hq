@@ -79,7 +79,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
 
    if ( SDL_Init ( SDL_INIT_AUDIO ) < 0 ) {
       displayLogMessage(0,"failed, disabling sound\n");
-      warning("Couldn't initialize SDL audio interface !");
+      warningMessage("Couldn't initialize SDL audio interface !");
       off = true;
       sdl_initialized = false;
       return;
@@ -88,7 +88,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    displayLogMessage(0,"ok\nStep 2/3 (SDL_Sound Sound_Init)...");
    if (!Sound_Init()) {
       displayLogMessage(0,"failed, disabling sound\n");
-      warning("Couldn't initialize SDL_sound !");
+      warningMessage("Couldn't initialize SDL_sound !");
       off = true;
       sdl_initialized = false;
       return;
@@ -104,7 +104,7 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
    if ( Mix_OpenAudio ( audio_rate, audio_format, audio_channels, 2048 ) < 0 ) {
       displayLogMessage(0,"failed, disabling sound\n");
       mix_initialized = false;
-      warning("Couldn't initialize SDL_mixer !");
+      warningMessage("Couldn't initialize SDL_mixer !");
       off = true;
       return;
    } else {
@@ -344,14 +344,14 @@ pair<Sound_Sample*, Mix_Chunk*> loadWave ( const ASCString& name )
       }
    }
    catch ( tfileerror err ) {
-      warning(" Error loading sound file " + name );
+      warningMessage(" Error loading sound file " + name );
       sample = NULL;
       return make_pair(sample,chunk);
    }
 
    Uint32 size = Sound_DecodeAll ( sample );
    if ( sample->buffer_size <= 0 ) 
-      warning( "decoding of file " + name + " failed");
+      warningMessage( "decoding of file " + name + " failed");
 
    chunk = new Mix_Chunk;
    chunk->allocated = size;

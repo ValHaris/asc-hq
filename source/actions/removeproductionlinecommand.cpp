@@ -140,7 +140,7 @@ void RemoveProductionLineCommand :: writeData ( tnstream& stream ) const
 ASCString RemoveProductionLineCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("RemoveProductionLine ( %d, %d )", getContainerID(), vehicleTypeId );
+   c.format("removeProductionLine ( map, %d, %d )", getContainerID(), vehicleTypeId );
    return c;
 
 }
@@ -152,9 +152,13 @@ GameActionID RemoveProductionLineCommand::getID() const
 
 ASCString RemoveProductionLineCommand::getDescription() const
 {
-   ASCString s = "Remove production line ";
+   ASCString s = "Remove production line of type ";
    
-   s += "of type " + ASCString::toString(vehicleTypeId);
+   Vehicletype* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
+   if ( !vt )
+      s += ASCString::toString(vehicleTypeId);
+   else
+      s += vt->getName();
    
    if ( getContainer(true) ) {
       s += " from " + getContainer()->getName();

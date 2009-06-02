@@ -123,7 +123,7 @@ GetVideoModes::GetVideoModes()
    
    /* Check if our resolution is restricted */
    if(modes == (SDL_Rect **)-1){
-      warning("All resolutions available.\n");
+      warningMessage("All resolutions available.\n");
       return;
    }
    else{

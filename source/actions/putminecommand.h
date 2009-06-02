@@ -64,8 +64,6 @@ class PutMineCommand : public UnitCommand {
       PutMineCommand ( Vehicle* unit );
       ActionResult searchFields();
       
-      Vehicle* getAttacker() { return getUnit(); };
-      
       void setCreationTarget( const MapCoordinate& target, MineTypes mineType );
       void setRemovalTarget( const MapCoordinate& target );
       

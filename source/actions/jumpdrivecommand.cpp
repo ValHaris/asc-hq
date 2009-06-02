@@ -214,7 +214,7 @@ void JumpDriveCommand :: writeData ( tnstream& stream ) const
 ASCString JumpDriveCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("Jump ( %d, %d, %d )", getUnitID(), destination.x, destination.y );
+   c.format("unitJump ( map, %d, asc.MapCoordinate( %d, %d ) )", getUnitID(), destination.x, destination.y );
    return c;
 
 }

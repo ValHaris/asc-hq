@@ -82,7 +82,7 @@ float AttackFormula :: getHemmingFactor ( int relDir )
       relDir += sidenum;
 
    if ( relDir == 5 )
-      warning("float AttackFormula :: getHemmingFactor - invalid direction" );
+      warningMessage("float AttackFormula :: getHemmingFactor - invalid direction" );
       
    return hemming[relDir]*maxHemmingFactor/maxHemmingSum;
 }
@@ -164,7 +164,7 @@ void tfight :: calc ( void )
       int w = int( ceil(dv.damage + absstrength / absdefense * 1000 / damagefactor ));
 
       if (dv.damage > w ) 
-         warning("fatal error at attack: \ndecrease of damage d!");
+         warningMessage("fatal error at attack: \ndecrease of damage d!");
 
       if (dv.damage == w )
          w = dv.damage+1;
@@ -206,7 +206,7 @@ void tfight :: calc ( void )
       int w = int( ceil(av.damage + absstrength / absdefense * 1000 / damagefactor ));
 
       if (av.damage > w ) 
-         warning("fatal error at attack: \ndecrease of damage a!");
+         warningMessage("fatal error at attack: \ndecrease of damage a!");
 
       if (w > 100) 
          av.damage = 100; 
@@ -1137,7 +1137,7 @@ float WeapDist::getWeaponStrength ( const SingleWeapon* weap, int weather, int d
 
    if ( reldiff == -1) {
       if ( dist < weap->mindistance || dist > weap->maxdistance ) {
-         warning("tweapdist::getweapstrength: invalid range: \n min = " + ASCString::toString(weap->mindistance ) + " ; max = " + ASCString::toString( weap->maxdistance ) + " ; req = " + ASCString::toString( dist));
+         warningMessage("tweapdist::getweapstrength: invalid range: \n min = " + ASCString::toString(weap->mindistance ) + " ; max = " + ASCString::toString( weap->maxdistance ) + " ; req = " + ASCString::toString( dist));
          return 0;
       }
 

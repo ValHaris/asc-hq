@@ -330,7 +330,7 @@ void MoveUnitCommand :: writeData ( tnstream& stream ) const
 
 ASCString MoveUnitCommand :: getCommandString() const {
    ASCString c;
-   c.format("moveunit ( %d, %d, %d, %d )", getUnitID(), destination.x, destination.y, destination.getNumericalHeight() );
+   c.format("unitMovement ( map, %d, asc.MapCoordinate( %d, %d), %d )", getUnitID(), destination.x, destination.y, destination.getNumericalHeight() );
    return c;
 }
 
@@ -349,8 +349,11 @@ ASCString MoveUnitCommand::getDescription() const
    return s;
 }
 
+
 namespace {
    const bool r1 = registerAction<MoveUnitCommand> ( ActionRegistry::MoveUnitCommand );
 }
+
+
 
 

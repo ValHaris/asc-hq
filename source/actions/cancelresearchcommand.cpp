@@ -146,7 +146,7 @@ ActionResult CancelResearchCommand::undoAction( const Context& context )
 ASCString CancelResearchCommand :: getCommandString() const 
 {
    ASCString c;
-   c.format("cancelresearch ( %d  )", player );
+   c.format("cancelResearch ( map, %d )", player );
    return c;
 }
 

@@ -32,32 +32,32 @@ PBEMServer::PBEMServer() {};
 ASCString PBEMServer::getDefaultServerAddress() { return "not supported"; };
 void PBEMServer::setServerAddress( const ASCString& address ) 
 {
-   warning("This version of ASC was compiled without support PBEM Server");
+   warningMessage("This version of ASC was compiled without support PBEM Server");
 };
 
 void PBEMServer::readChildData ( tnstream& stream ) 
 {
-   warning("This version of ASC was compiled without support PBEM Server");
+   warningMessage("This version of ASC was compiled without support PBEM Server");
 };
 
 void PBEMServer::writeChildData ( tnstream& stream ) const 
 {
-   warning("This version of ASC was compiled without support PBEM Server");
+   warningMessage("This version of ASC was compiled without support PBEM Server");
 }
 
 void PBEMServer::setup()
 {
-   warning("This version of ASC was compiled without support PBEM Server");
+   warningMessage("This version of ASC was compiled without support PBEM Server");
 }
       
 void PBEMServer::send( const GameMap* map, int lastPlayer, int lastturn  )
 {
-   warning("This version of ASC was compiled without support PBEM Server");
+   warningMessage("This version of ASC was compiled without support PBEM Server");
 }
 
 
 GameMap* PBEMServer::receive()
 {
-   warning("This version of ASC was compiled without support PBEM Server");
+   warningMessage("This version of ASC was compiled without support PBEM Server");
    return NULL;  
 }

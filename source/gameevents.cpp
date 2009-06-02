@@ -1371,7 +1371,7 @@ void DisplayEllipse::writeData ( tnstream& stream )
 
 void DisplayEllipse::execute( MapDisplayInterface* md )
 {
-   warning("Ellipses are not supported any more!");
+   warningMessage("Ellipses are not supported any more!");
    /*
    if ( !gamemap->ellipse )
       gamemap->ellipse = new EllipseOnScreen;

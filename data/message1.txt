@@ -324,6 +324,10 @@ invalid building for repair operation
 No players available that could receive this item
 22801
 This player is not allowed to receive from you
+22850
+ResourceProcessingRate not available
+22851
+Invalid rate
 22900
 A production line for this vehicletype can not be setup here
 22901
@@ -354,3 +358,12 @@ Technology not found
 invalid ammo transfer between slots
 23400
 No actions to undo
+23410
+no container on field
+23411
+Action not available
+23500
+Invalid map 
+23501
+Invalid diplomatic state
+

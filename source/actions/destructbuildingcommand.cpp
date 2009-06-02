@@ -180,7 +180,7 @@ void DestructBuildingCommand :: writeData ( tnstream& stream ) const
 ASCString DestructBuildingCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("DestructBuilding ( %d, %d, %d )", getUnitID(), target.x, target.y );
+   c.format("unitDestructBuilding ( map, %d, asc.MapCoordinate(%d, %d) )", getUnitID(), target.x, target.y );
    return c;
 }
 

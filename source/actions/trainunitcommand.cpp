@@ -166,7 +166,7 @@ void TrainUnitCommand :: setUnit( Vehicle* unit )
 ASCString TrainUnitCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("TrainUnit ( %d, %d )", getContainerID(), unitID );
+   c.format("trainUnit ( map, %d, %d )", getContainerID(), unitID );
    return c;
 
 }

@@ -353,7 +353,7 @@ void ConstructUnitCommand :: setVehicleType( const Vehicletype* type )
 ASCString ConstructUnitCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("ConstructVehicle ( %d, %d, %d, %d )", getContainerID(), target.x, target.y, vehicleTypeID );
+   c.format("constructUnit ( map, %d, asc.MapCoordinate( %d, %d), %d )", getContainerID(), target.x, target.y, vehicleTypeID );
    return c;
 }
 

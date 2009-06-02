@@ -284,9 +284,9 @@ ASCString PutObjectCommand :: getCommandString() const
 {
    ASCString c;
    if ( mode == Build )
-      c.format("putobject ( %d, %d, %d, %d )", getUnitID(), target.x, target.y, object );
+      c.format("unitPutObject ( map, %d, asc.MapCoordinate( %d, %d), %d )", getUnitID(), target.x, target.y, object );
    else
-      c.format("removeobject ( %d, %d, %d, %d )", getUnitID(), target.x, target.y, object );
+      c.format("unitRemoveObject ( map, %d, asc.MapCoordinate( %d, %d), %d )", getUnitID(), target.x, target.y, object );
    return c;
 
 }

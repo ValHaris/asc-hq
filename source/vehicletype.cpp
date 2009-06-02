@@ -436,7 +436,7 @@ void Vehicletype :: read ( tnstream& stream )
          /*
          if ( weapons.weapon[j].getScalarWeaponType() == cwminen )
             if ( weapons.weapon[j].mindistance < 8 )
-               warning ( ASCString("unit with id ") + strrr ( id ) + " has invalid mine weapon range ");
+               warningMessage ( ASCString("unit with id ") + strrr ( id ) + " has invalid mine weapon range ");
          */
 
          for ( int k = 0; k < 13; k++ )
@@ -1230,7 +1230,7 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
 
    pc.addInteger("ReactionFireShots", reactionFireShots, 1 );
    if ( getScalarWeaponType() == cwminen && reactionFireShots > 0 )
-        warning(pc.getFileName() + " has a mine with Reactionfire. This doesn't make sense.");
+        warningMessage(pc.getFileName() + " has a mine with Reactionfire. This doesn't make sense.");
 
    pc.openBracket("HitAccuracy" );
    {

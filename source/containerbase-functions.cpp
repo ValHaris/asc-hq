@@ -640,7 +640,7 @@ bool MiningStation :: run()
       spaceAvail = bld->putResource( toExtract_thisTurn, true, 1, bld->getOwner() );
       for ( int r = 0; r <3; ++r )
          if ( spaceAvail.resource(r) < 0 ) {
-            warning( ASCString("map corruption detected; building space availability is negative! ") + resourceNames[r] );
+            warningMessage( ASCString("map corruption detected; building space availability is negative! ") + resourceNames[r] );
             spaceAvail.resource( r ) = 0;
          }
    } else
@@ -655,7 +655,7 @@ bool MiningStation :: run()
       powerAvail = bld->getResource( toConsume, true, 1, bld->getOwner() );
       for ( int r = 0; r <3; ++r )
          if ( powerAvail.resource(r) < 0 ) {
-            warning( ASCString("map corruption detected; available power for mining station is negative! ") + resourceNames[r] );
+            warningMessage( ASCString("map corruption detected; available power for mining station is negative! ") + resourceNames[r] );
             powerAvail.resource( r ) = 0;
          }
    } else
@@ -717,7 +717,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
                   perc = min  ( perc, float( double(powerAvail.resource(i)) / usageRatio[i] * toExtract_thisTurn.resource(r)));
 
             if ( perc < 0 ) {
-               warning("Warning: mining station inconsistency\n");
+               warningMessage("Warning: mining station inconsistency\n");
                perc = 0;
             }
 
@@ -729,7 +729,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
             spaceAvail.resource(r) -= ex;
             for ( int i = 0; i < 3; ++i) {
                if ( spaceAvail.resource(i) < -2 )  // we allow for small deviations due to rounding errors
-                  warning("Warning: mining station inconsistency 2!\n");
+                  warningMessage("Warning: mining station inconsistency 2!\n");
 
                if ( spaceAvail.resource(i) < 0 )
                   spaceAvail.resource(i) = 0;

@@ -166,6 +166,11 @@ void warning ( const ASCString& str )
    MessagingHub::Instance().message( MessagingHubBase::Warning, str );
 }
 
+void warningMessage ( const ASCString& str )
+{
+   MessagingHub::Instance().message( MessagingHubBase::Warning, str );
+}
+
 void errorMessage ( const ASCString& string )
 {
    MessagingHub::Instance().message( MessagingHubBase::Error, string );

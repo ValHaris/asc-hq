@@ -259,7 +259,7 @@ void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
             mi = mi2;
 
       if ( mi == spfld->messages.end())
-         warning( "message list corrupted !\nplease report this bug!\nthe game will continue, but some messages will probably be missing\nand other instabilities may occur.");
+         warningMessage( "message list corrupted !\nplease report this bug!\nthe game will continue, but some messages will probably be missing\nand other instabilities may occur.");
       lst.push_back ( *mi );
       i = stream->readInt();
    }
@@ -350,7 +350,7 @@ void checkForUniqueUnitIDs( GameMap* gamemap )
    for ( int p = 0; p < gamemap->getPlayerCount(); ++p )
       for ( Player::VehicleList::iterator i = gamemap->getPlayer(p).vehicleList.begin(); i != gamemap->getPlayer(p).vehicleList.end(); ++i )
          if ( units[(*i)->networkid]++ > 0 ) {
-            warning("unit with duplicate network ids: " + ASCString::toString( (*i)->networkid ) + "\nThis will lead to replay errors during the next turn." );
+            warningMessage("unit with duplicate network ids: " + ASCString::toString( (*i)->networkid ) + "\nThis will lead to replay errors during the next turn." );
             (*i)->networkid = gamemap->idManager.getNewNetworkID();;
          }
 }

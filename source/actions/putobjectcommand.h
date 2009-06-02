@@ -38,7 +38,7 @@ class PutObjectCommand : public UnitCommand {
       
       MapCoordinate target;
       int object;
-      Mode mode;;
+      Mode mode;
       
       void fieldChecker( const MapCoordinate& pos );
       

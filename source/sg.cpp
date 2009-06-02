@@ -84,6 +84,8 @@
 #include <fstream>
 
 #include <boost/regex.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 #include "paradialog.h"
 
@@ -856,7 +858,7 @@ void execuseraction ( tuseractions action )
          }
          break;
       case ua_exportUnitToFile:
-         warning("this function is not supported any longer");
+         warningMessage("this function is not supported any longer");
          break;
       case ua_undo:
          undo();
@@ -951,16 +953,34 @@ bool continueAndStartMultiplayerGame( bool mostRecent = false )
 
 
    class LuaCommandWriter : public AbstractCommandWriter {
+         void splitString( const ASCString& string ) {
+            
+            typedef vector< ASCString > Split_vector_type;
+    
+            Split_vector_type splitVec; // #2: Search for tokens
+            boost::algorithm::split( splitVec, string, boost::algorithm::is_any_of("\n") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
+            
+            for ( Split_vector_type::iterator i = splitVec.begin(); i != splitVec.end(); ++i ) {
+               printCommand( *i );  
+            }
+         }
+      
       public:
          tn_file_buf_stream stream;
          LuaCommandWriter ( const ASCString& filename ) : stream ( filename, tnstream::writing ) {
-            
+            stream.writeString("-- get handle to active map \n", false);
+            stream.writeString("map = asc.getActiveMap() \n", false);
          }
          virtual void printCommand( const ASCString& command ) {
-            stream.writeString("asc." + command + "\n" );
+            if ( command.find('\n') != ASCString::npos ) {
+               splitString(command);
+            } else {
+               stream.writeString("r = asc." + command + "\n", false );
+               stream.writeString("if r:successful()==false then asc.displayActionError(r) end \n", false );
+            }
          };
          virtual void printComment( const ASCString& comment ) {
-            stream.writeString("--" + comment + "\n" );
+            stream.writeString("\n--" + comment + "\n", false );
          };
       
    };

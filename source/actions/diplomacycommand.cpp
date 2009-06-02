@@ -274,7 +274,7 @@ ActionResult DiplomacyCommand :: undoAction( const Context& context )
 ASCString DiplomacyCommand :: getCommandString() const 
 {
    ASCString c;
-   c.format("SetDiplomacy( %d, %d, %d, %d  )", actingPlayer, towardsPlayer, sneak, newState );
+   c.format("setDiplomacy( map, %d, %d, %s, %d  )", actingPlayer, towardsPlayer, sneak?"true":"false", newState );
    return c;
 }
 

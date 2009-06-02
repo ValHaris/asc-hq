@@ -142,7 +142,7 @@ int TechDependency::findInheritanceLevel( int id, vector<int>& stack, const ASCS
                Technology* t = technologyRepository.getObject_byID( k );
                if ( t )
                   s += t->name + "\n";
-               warning ( s );
+               warningMessage ( s );
                return -1;
             }
 
@@ -921,6 +921,11 @@ void Research::setPredefinedTechAdapter( const set<ASCString>& adapter )
 {
    predefinedTechAdapter.clear();
    predefinedTechAdapter.insert( predefinedTechAdapter.end(), adapter.begin(), adapter.end());
+}
+
+void Research::addPredefinedTechAdapter( const ASCString& techAdapter )
+{
+   predefinedTechAdapter.push_back( techAdapter );
 }
 
 

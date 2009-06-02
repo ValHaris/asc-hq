@@ -233,7 +233,7 @@ class TechAdapterDependency {
      
      const vector<ASCString>& getPredefinedTechAdapter() { return predefinedTechAdapter; };
      void setPredefinedTechAdapter( const set<ASCString>& adapter );
-
+     void addPredefinedTechAdapter( const ASCString& techAdapter );
      
      Research ( );
      void clear();

@@ -243,7 +243,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
             gamemap->network = NULL;
 
             if ( gamemap->_resourcemode == 1)
-               warning("This map uses BI resource mode. Saving as map will delete all global resources of all players");
+               warningMessage("This map uses BI resource mode. Saving as map will delete all global resources of all players");
                
             ASCString name = selectFile( mapextension, false);
             if ( !name.empty() ) {

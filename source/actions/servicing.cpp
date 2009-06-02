@@ -263,7 +263,7 @@ bool ResourceWatch::getResources( Resources res )
 
    void ResourceTransferrable::warn()
       {
-         warning( "Inconsistency in ResourceTransfer");
+         warningMessage( "Inconsistency in ResourceTransfer");
       };
 
       void ResourceTransferrable::srcChanged( int res )

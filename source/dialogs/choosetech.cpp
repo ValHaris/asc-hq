@@ -220,7 +220,7 @@ class ChooseTech : public ASC_PG_Dialog
       ASCString s;
       list<const Technology*> techs;
       if ( !tech->eventually_available( player.research , &techs )) {
-         warning("Inconsistency in ChooseTech::techSelected");
+         warningMessage("Inconsistency in ChooseTech::techSelected");
          return;
       }
 

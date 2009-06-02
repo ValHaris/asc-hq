@@ -316,7 +316,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
             MapCoordinate p = getFieldCoordinates( BuildingType::LocalCoordinate(a,b));
             BuildingType::LocalCoordinate lc = getLocalCoordinate(p);
             if ( lc.x != a || lc.y!= b )
-               warning( "bug in building coordinate calculation");
+               warningMessage( "bug in building coordinate calculation");
          }
          
 

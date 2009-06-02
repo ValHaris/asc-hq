@@ -303,7 +303,7 @@ void ConstructBuildingCommand :: setBuildingType( const BuildingType* type )
 ASCString ConstructBuildingCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("ConstructBuilding ( %d, %d, %d, %d )", getUnitID(), target.x, target.y, buildingTypeID );
+   c.format("constructBuilding ( map, %d, asc.MapCoordinate(%d, %d), %d )", getUnitID(), target.x, target.y, buildingTypeID );
    return c;
 }
 

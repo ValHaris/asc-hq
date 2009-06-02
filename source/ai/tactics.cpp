@@ -811,12 +811,12 @@ AI::AiResult AI::tactics( void )
                      for ( int i = 0; i < finalAttackNum && enemyField->vehicle == enemy && finalAttackNum < maxint; i++ ) {
                         checkKeys();
                         if ( finalOrder[i] < 0 )
-                           warning("!!!");
+                           warningMessage("!!!");
                         // if ( i+1 < finalAttackNum ) {
                         if ( i < finalAttackNum && finalPositions[finalOrder[i]] ) {
                            Vehicle* a = finalPositions[finalOrder[i]];
                            if ( finalOrder[i] < 0 )
-                              warning("!!!");
+                              warningMessage("!!!");
 
                            
                            int nwid = a->networkid;

@@ -1487,12 +1487,44 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 
 /* ------------------------------ end luarun.swg  ------------------------------ */
 
+/*  Errors in SWIG */
+#define  SWIG_UnknownError    	   -1 
+#define  SWIG_IOError        	   -2 
+#define  SWIG_RuntimeError   	   -3 
+#define  SWIG_IndexError     	   -4 
+#define  SWIG_TypeError      	   -5 
+#define  SWIG_DivisionByZero 	   -6 
+#define  SWIG_OverflowError  	   -7 
+#define  SWIG_SyntaxError    	   -8 
+#define  SWIG_ValueError     	   -9 
+#define  SWIG_SystemError    	   -10
+#define  SWIG_AttributeError 	   -11
+#define  SWIG_MemoryError    	   -12 
+#define  SWIG_NullReferenceError   -13
+
+
+
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_GameMap swig_types[0]
-static swig_type_info *swig_types[2];
-static swig_module_info swig_module = {swig_types, 1, 0, 0, 0, 0};
+#define SWIGTYPE_p_ActionResult swig_types[0]
+#define SWIGTYPE_p_Building swig_types[1]
+#define SWIGTYPE_p_BuildingType swig_types[2]
+#define SWIGTYPE_p_ContainerBase swig_types[3]
+#define SWIGTYPE_p_ContainerBaseType swig_types[4]
+#define SWIGTYPE_p_GameMap swig_types[5]
+#define SWIGTYPE_p_MapCoordinate swig_types[6]
+#define SWIGTYPE_p_MapCoordinate3D swig_types[7]
+#define SWIGTYPE_p_ObjectType swig_types[8]
+#define SWIGTYPE_p_Player swig_types[9]
+#define SWIGTYPE_p_Research swig_types[10]
+#define SWIGTYPE_p_TerrainType swig_types[11]
+#define SWIGTYPE_p_Vehicle swig_types[12]
+#define SWIGTYPE_p_Vehicletype swig_types[13]
+#define SWIGTYPE_p_std__string swig_types[14]
+#define SWIGTYPE_p_tfield swig_types[15]
+static swig_type_info *swig_types[17];
+static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1513,10 +1545,406 @@ typedef struct{} LANGUAGE_OBJ;
 #include <string>
 #include "commands.h"
 #include "../gamemap.h"
+#include "../actions/actionresult.h"
+#include "../dialog.h"
+
+
+#include <vector>
+
+
+#include <stdexcept>
+
+
+#define SWIG_exception(a,b)\
+{ lua_pushfstring(L,"%s:%s",#a,b);SWIG_fail; }
+
+
+#include <stdexcept>
+
+
+	#include <string>
+
+
+#include <string>
+#include "../gamemap.h"
+#include "../mapalgorithms.h"
+#include "../util/messaginghub.h"
+#include "common.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+static int _wrap_new_string__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *result = 0 ;
+  
+  SWIG_check_num_args("std::string",0,0)
+  result = (std::string *)new std::string();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_std__string,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_string__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  char *arg1 = (char *) 0 ;
+  std::string *result = 0 ;
+  
+  SWIG_check_num_args("std::string",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("std::string",1,"char const *");
+  arg1 = (char *)lua_tostring(L, 1);
+  result = (std::string *)new std::string((char const *)arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_std__string,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_string(lua_State* L) {
+  int argc;
+  int argv[2]={
+    1,2
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 0) {
+    return _wrap_new_string__SWIG_0(L);
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      _v = lua_isstring(L,argv[0]);
+    }
+    if (_v) {
+      return _wrap_new_string__SWIG_1(L);
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'new_string'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    std::string()\n"
+    "    std::string(char const *)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_string_size(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = (std::string *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("size",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("size",1,"std::string const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_std__string,0))){
+    SWIG_fail_ptr("string_size",1,SWIGTYPE_p_std__string);
+  }
+  
+  result = (unsigned int)((std::string const *)arg1)->size();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_string_length(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = (std::string *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("length",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("length",1,"std::string const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_std__string,0))){
+    SWIG_fail_ptr("string_length",1,SWIGTYPE_p_std__string);
+  }
+  
+  result = (unsigned int)((std::string const *)arg1)->length();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_string_empty(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = (std::string *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("empty",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("empty",1,"std::string const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_std__string,0))){
+    SWIG_fail_ptr("string_empty",1,SWIGTYPE_p_std__string);
+  }
+  
+  result = (bool)((std::string const *)arg1)->empty();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_string_c_str(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = (std::string *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("c_str",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("c_str",1,"std::string const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_std__string,0))){
+    SWIG_fail_ptr("string_c_str",1,SWIGTYPE_p_std__string);
+  }
+  
+  result = (char *)((std::string const *)arg1)->c_str();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_string_data(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = (std::string *) 0 ;
+  char *result = 0 ;
+  
+  SWIG_check_num_args("data",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("data",1,"std::string const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_std__string,0))){
+    SWIG_fail_ptr("string_data",1,SWIGTYPE_p_std__string);
+  }
+  
+  result = (char *)((std::string const *)arg1)->data();
+  lua_pushstring(L,(const char*)result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_string_assign(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = (std::string *) 0 ;
+  char *arg2 = (char *) 0 ;
+  
+  SWIG_check_num_args("assign",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("assign",1,"std::string *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("assign",2,"char const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_std__string,0))){
+    SWIG_fail_ptr("string_assign",1,SWIGTYPE_p_std__string);
+  }
+  
+  arg2 = (char *)lua_tostring(L, 2);
+  (arg1)->assign((char const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_string(void *obj) {
+std::string *arg1 = (std::string *) obj;
+delete arg1;
+}
+static swig_lua_method swig_std_string_methods[] = {
+    {"size", _wrap_string_size}, 
+    {"length", _wrap_string_length}, 
+    {"empty", _wrap_string_empty}, 
+    {"c_str", _wrap_string_c_str}, 
+    {"data", _wrap_string_data}, 
+    {"assign", _wrap_string_assign}, 
+    {0,0}
+};
+static swig_lua_attribute swig_std_string_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_std_string_bases[] = {0};
+static const char *swig_std_string_base_names[] = {0};
+static swig_lua_class _wrap_class_std_string = { "string", &SWIGTYPE_p_std__string,_wrap_new_string, swig_delete_string, swig_std_string_methods, swig_std_string_attributes, swig_std_string_bases, swig_std_string_base_names };
+
+static int _wrap_new_MapCoordinate__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  int arg2 ;
+  MapCoordinate *result = 0 ;
+  
+  SWIG_check_num_args("MapCoordinate",2,2)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("MapCoordinate",1,"int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("MapCoordinate",2,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (MapCoordinate *)new MapCoordinate(arg1,arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_MapCoordinate,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_MapCoordinate(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      _v = lua_isnumber(L,argv[0]);
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_new_MapCoordinate__SWIG_1(L);
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'new_MapCoordinate'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    MapCoordinate(int,int)\n");
+  lua_error(L);return 0;
+}
+
+
+static void swig_delete_MapCoordinate(void *obj) {
+MapCoordinate *arg1 = (MapCoordinate *) obj;
+delete arg1;
+}
+static swig_lua_method swig_MapCoordinate_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_MapCoordinate_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_MapCoordinate_bases[] = {0};
+static const char *swig_MapCoordinate_base_names[] = {0};
+static swig_lua_class _wrap_class_MapCoordinate = { "MapCoordinate", &SWIGTYPE_p_MapCoordinate,_wrap_new_MapCoordinate, swig_delete_MapCoordinate, swig_MapCoordinate_methods, swig_MapCoordinate_attributes, swig_MapCoordinate_bases, swig_MapCoordinate_base_names };
+
+static int _wrap_new_MapCoordinate3D__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  int arg2 ;
+  int arg3 ;
+  MapCoordinate3D *result = 0 ;
+  
+  SWIG_check_num_args("MapCoordinate3D",3,3)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("MapCoordinate3D",1,"int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("MapCoordinate3D",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("MapCoordinate3D",3,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = (MapCoordinate3D *)new MapCoordinate3D(arg1,arg2,arg3);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_MapCoordinate3D,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_MapCoordinate3D(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 3) {
+    int _v;
+    {
+      _v = lua_isnumber(L,argv[0]);
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_new_MapCoordinate3D__SWIG_1(L);
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'new_MapCoordinate3D'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    MapCoordinate3D(int,int,int)\n");
+  lua_error(L);return 0;
+}
+
+
+static void swig_delete_MapCoordinate3D(void *obj) {
+MapCoordinate3D *arg1 = (MapCoordinate3D *) obj;
+delete arg1;
+}
+static swig_lua_method swig_MapCoordinate3D_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_MapCoordinate3D_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_MapCoordinate3D_bases[] = {0,0};
+static const char *swig_MapCoordinate3D_base_names[] = {"MapCoordinate *",0};
+static swig_lua_class _wrap_class_MapCoordinate3D = { "MapCoordinate3D", &SWIGTYPE_p_MapCoordinate3D,_wrap_new_MapCoordinate3D, swig_delete_MapCoordinate3D, swig_MapCoordinate3D_methods, swig_MapCoordinate3D_attributes, swig_MapCoordinate3D_bases, swig_MapCoordinate3D_base_names };
+
 static int _wrap_getActiveMap(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *result = 0 ;
@@ -1533,6 +1961,838 @@ fail:
   return SWIG_arg;
 }
 
+
+static int _wrap_getObjectType(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  ObjectType *result = 0 ;
+  
+  SWIG_check_num_args("getObjectType",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("getObjectType",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  result = (ObjectType *)getObjectType(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_ObjectType,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_getBuildingType(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  BuildingType *result = 0 ;
+  
+  SWIG_check_num_args("getBuildingType",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("getBuildingType",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  result = (BuildingType *)getBuildingType(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_BuildingType,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_getUnitType(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  Vehicletype *result = 0 ;
+  
+  SWIG_check_num_args("getUnitType",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("getUnitType",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  result = (Vehicletype *)getUnitType(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicletype,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_getTerrainType(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  TerrainType *result = 0 ;
+  
+  SWIG_check_num_args("getTerrainType",1,1)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("getTerrainType",1,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  result = (TerrainType *)getTerrainType(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_TerrainType,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_errorMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string arg1 ;
+  
+  SWIG_check_num_args("errorMessage",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("errorMessage",1,"std::string");
+  (&arg1)->assign(lua_tostring(L,1),lua_strlen(L,1));
+  errorMessage(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_warningMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string arg1 ;
+  
+  SWIG_check_num_args("warningMessage",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("warningMessage",1,"std::string");
+  (&arg1)->assign(lua_tostring(L,1),lua_strlen(L,1));
+  warningMessage(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_infoMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string arg1 ;
+  
+  SWIG_check_num_args("infoMessage",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("infoMessage",1,"std::string");
+  (&arg1)->assign(lua_tostring(L,1),lua_strlen(L,1));
+  infoMessage(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBaseType_getID(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBaseType *arg1 = (ContainerBaseType *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getID",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getID",1,"ContainerBaseType const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBaseType,0))){
+    SWIG_fail_ptr("ContainerBaseType_getID",1,SWIGTYPE_p_ContainerBaseType);
+  }
+  
+  result = (int)((ContainerBaseType const *)arg1)->getID();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ContainerBaseType(void *obj) {
+ContainerBaseType *arg1 = (ContainerBaseType *) obj;
+delete arg1;
+}
+static swig_lua_method swig_ContainerBaseType_methods[] = {
+    {"getID", _wrap_ContainerBaseType_getID}, 
+    {0,0}
+};
+static swig_lua_attribute swig_ContainerBaseType_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_ContainerBaseType_bases[] = {0};
+static const char *swig_ContainerBaseType_base_names[] = {0};
+static swig_lua_class _wrap_class_ContainerBaseType = { "ContainerBaseType", &SWIGTYPE_p_ContainerBaseType,0, swig_delete_ContainerBaseType, swig_ContainerBaseType_methods, swig_ContainerBaseType_attributes, swig_ContainerBaseType_bases, swig_ContainerBaseType_base_names };
+
+static int _wrap_new_BuildingType(lua_State* L) {
+  int SWIG_arg = 0;
+  BuildingType *result = 0 ;
+  
+  SWIG_check_num_args("BuildingType::BuildingType",0,0)
+  result = (BuildingType *)new BuildingType();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_BuildingType,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_BuildingType(void *obj) {
+BuildingType *arg1 = (BuildingType *) obj;
+delete arg1;
+}
+static swig_lua_method swig_BuildingType_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_BuildingType_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_BuildingType_bases[] = {0,0};
+static const char *swig_BuildingType_base_names[] = {"ContainerBaseType *",0};
+static swig_lua_class _wrap_class_BuildingType = { "BuildingType", &SWIGTYPE_p_BuildingType,_wrap_new_BuildingType, swig_delete_BuildingType, swig_BuildingType_methods, swig_BuildingType_attributes, swig_BuildingType_bases, swig_BuildingType_base_names };
+
+static int _wrap_new_Vehicletype(lua_State* L) {
+  int SWIG_arg = 0;
+  Vehicletype *result = 0 ;
+  
+  SWIG_check_num_args("Vehicletype::Vehicletype",0,0)
+  result = (Vehicletype *)new Vehicletype();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicletype,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Vehicletype(void *obj) {
+Vehicletype *arg1 = (Vehicletype *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Vehicletype_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_Vehicletype_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_Vehicletype_bases[] = {0,0};
+static const char *swig_Vehicletype_base_names[] = {"ContainerBaseType *",0};
+static swig_lua_class _wrap_class_Vehicletype = { "Vehicletype", &SWIGTYPE_p_Vehicletype,_wrap_new_Vehicletype, swig_delete_Vehicletype, swig_Vehicletype_methods, swig_Vehicletype_attributes, swig_Vehicletype_bases, swig_Vehicletype_base_names };
+
+static int _wrap_ContainerBase_deleteProductionLine(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicletype *arg2 = (Vehicletype *) 0 ;
+  
+  SWIG_check_num_args("deleteProductionLine",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("deleteProductionLine",1,"ContainerBase *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("deleteProductionLine",2,"Vehicletype const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_deleteProductionLine",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicletype,0))){
+    SWIG_fail_ptr("ContainerBase_deleteProductionLine",2,SWIGTYPE_p_Vehicletype);
+  }
+  
+  (arg1)->deleteProductionLine((Vehicletype const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_deleteAllProductionLines(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  
+  SWIG_check_num_args("deleteAllProductionLines",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("deleteAllProductionLines",1,"ContainerBase *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_deleteAllProductionLines",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  (arg1)->deleteAllProductionLines();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_addProductionLine(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicletype *arg2 = (Vehicletype *) 0 ;
+  
+  SWIG_check_num_args("addProductionLine",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addProductionLine",1,"ContainerBase *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("addProductionLine",2,"Vehicletype const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_addProductionLine",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicletype,0))){
+    SWIG_fail_ptr("ContainerBase_addProductionLine",2,SWIGTYPE_p_Vehicletype);
+  }
+  
+  (arg1)->addProductionLine((Vehicletype const *)arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getCargoCount(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getCargoCount",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getCargoCount",1,"ContainerBase *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getCargoCount",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = (int)(arg1)->getCargoCount();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getCargo(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int arg2 ;
+  Vehicle *result = 0 ;
+  
+  SWIG_check_num_args("getCargo",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getCargo",1,"ContainerBase *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("getCargo",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (Vehicle *)(arg1)->getCargo(arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicle,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getName(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  std::string result;
+  
+  SWIG_check_num_args("getName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getName",1,"ContainerBase *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getName",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = (arg1)->getName();
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_ContainerBase(void *obj) {
+ContainerBase *arg1 = (ContainerBase *) obj;
+delete arg1;
+}
+static swig_lua_method swig_ContainerBase_methods[] = {
+    {"deleteProductionLine", _wrap_ContainerBase_deleteProductionLine}, 
+    {"deleteAllProductionLines", _wrap_ContainerBase_deleteAllProductionLines}, 
+    {"addProductionLine", _wrap_ContainerBase_addProductionLine}, 
+    {"getCargoCount", _wrap_ContainerBase_getCargoCount}, 
+    {"getCargo", _wrap_ContainerBase_getCargo}, 
+    {"getName", _wrap_ContainerBase_getName}, 
+    {0,0}
+};
+static swig_lua_attribute swig_ContainerBase_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_ContainerBase_bases[] = {0};
+static const char *swig_ContainerBase_base_names[] = {0};
+static swig_lua_class _wrap_class_ContainerBase = { "ContainerBase", &SWIGTYPE_p_ContainerBase,0, swig_delete_ContainerBase, swig_ContainerBase_methods, swig_ContainerBase_attributes, swig_ContainerBase_bases, swig_ContainerBase_base_names };
+
+static int _wrap_Building_getType(lua_State* L) {
+  int SWIG_arg = 0;
+  Building *arg1 = (Building *) 0 ;
+  BuildingType *result = 0 ;
+  
+  SWIG_check_num_args("getType",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getType",1,"Building *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Building,0))){
+    SWIG_fail_ptr("Building_getType",1,SWIGTYPE_p_Building);
+  }
+  
+  result = (BuildingType *)(arg1)->getType();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_BuildingType,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Building(void *obj) {
+Building *arg1 = (Building *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Building_methods[] = {
+    {"getType", _wrap_Building_getType}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Building_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_Building_bases[] = {0,0};
+static const char *swig_Building_base_names[] = {"ContainerBase *",0};
+static swig_lua_class _wrap_class_Building = { "Building", &SWIGTYPE_p_Building,0, swig_delete_Building, swig_Building_methods, swig_Building_attributes, swig_Building_bases, swig_Building_base_names };
+
+static int _wrap_Vehicle_getType(lua_State* L) {
+  int SWIG_arg = 0;
+  Vehicle *arg1 = (Vehicle *) 0 ;
+  Vehicletype *result = 0 ;
+  
+  SWIG_check_num_args("getType",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getType",1,"Vehicle *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("Vehicle_getType",1,SWIGTYPE_p_Vehicle);
+  }
+  
+  result = (Vehicletype *)(arg1)->getType();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicletype,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Vehicle(void *obj) {
+Vehicle *arg1 = (Vehicle *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Vehicle_methods[] = {
+    {"getType", _wrap_Vehicle_getType}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Vehicle_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_Vehicle_bases[] = {0,0};
+static const char *swig_Vehicle_base_names[] = {"ContainerBase *",0};
+static swig_lua_class _wrap_class_Vehicle = { "Vehicle", &SWIGTYPE_p_Vehicle,0, swig_delete_Vehicle, swig_Vehicle_methods, swig_Vehicle_attributes, swig_Vehicle_bases, swig_Vehicle_base_names };
+
+static int _wrap_tfield_getBuildingEntrance(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  Building *result = 0 ;
+  
+  SWIG_check_num_args("getBuildingEntrance",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getBuildingEntrance",1,"tfield *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_getBuildingEntrance",1,SWIGTYPE_p_tfield);
+  }
+  
+  result = (Building *)(arg1)->getBuildingEntrance();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Building,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_tfield_getVehicle(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  Vehicle *result = 0 ;
+  
+  SWIG_check_num_args("getVehicle",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getVehicle",1,"tfield *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_getVehicle",1,SWIGTYPE_p_tfield);
+  }
+  
+  result = (Vehicle *)(arg1)->getVehicle();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicle,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_tfield(void *obj) {
+tfield *arg1 = (tfield *) obj;
+delete arg1;
+}
+static swig_lua_method swig_tfield_methods[] = {
+    {"getBuildingEntrance", _wrap_tfield_getBuildingEntrance}, 
+    {"getVehicle", _wrap_tfield_getVehicle}, 
+    {0,0}
+};
+static swig_lua_attribute swig_tfield_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_tfield_bases[] = {0};
+static const char *swig_tfield_base_names[] = {0};
+static swig_lua_class _wrap_class_tfield = { "tfield", &SWIGTYPE_p_tfield,0, swig_delete_tfield, swig_tfield_methods, swig_tfield_attributes, swig_tfield_bases, swig_tfield_base_names };
+
+static int _wrap_GameMap_getField(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  tfield *result = 0 ;
+  
+  SWIG_check_num_args("getField",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getField",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("getField",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("getField",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getField",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = (tfield *)(arg1)->getField(arg2,arg3);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_tfield,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_width(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("width",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("width",1,"GameMap const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_width",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = (int)((GameMap const *)arg1)->width();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_height(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("height",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("height",1,"GameMap const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_height",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = (int)((GameMap const *)arg1)->height();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_getPlayer(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  Player *result = 0 ;
+  
+  SWIG_check_num_args("getPlayer",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getPlayer",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("getPlayer",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getPlayer",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  {
+    Player &_result_ref = (arg1)->getPlayer(arg2);
+    result = (Player *) &_result_ref;
+  }
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Player,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_GameMap(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *result = 0 ;
+  
+  SWIG_check_num_args("GameMap::GameMap",0,0)
+  result = (GameMap *)new GameMap();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_GameMap,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_GameMap(void *obj) {
+GameMap *arg1 = (GameMap *) obj;
+delete arg1;
+}
+static swig_lua_method swig_GameMap_methods[] = {
+    {"getField", _wrap_GameMap_getField}, 
+    {"width", _wrap_GameMap_width}, 
+    {"height", _wrap_GameMap_height}, 
+    {"getPlayer", _wrap_GameMap_getPlayer}, 
+    {0,0}
+};
+static swig_lua_attribute swig_GameMap_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_GameMap_bases[] = {0};
+static const char *swig_GameMap_base_names[] = {0};
+static swig_lua_class _wrap_class_GameMap = { "GameMap", &SWIGTYPE_p_GameMap,_wrap_new_GameMap, swig_delete_GameMap, swig_GameMap_methods, swig_GameMap_attributes, swig_GameMap_bases, swig_GameMap_base_names };
+
+static int _wrap_Player_getPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getPosition",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getPosition",1,"Player *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_getPosition",1,SWIGTYPE_p_Player);
+  }
+  
+  result = (int)(arg1)->getPosition();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_exist(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("exist",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("exist",1,"Player const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_exist",1,SWIGTYPE_p_Player);
+  }
+  
+  result = (bool)((Player const *)arg1)->exist();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_isHuman(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("isHuman",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("isHuman",1,"Player const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_isHuman",1,SWIGTYPE_p_Player);
+  }
+  
+  result = (bool)((Player const *)arg1)->isHuman();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_getResearch(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  Research *result = 0 ;
+  
+  SWIG_check_num_args("getResearch",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getResearch",1,"Player *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_getResearch",1,SWIGTYPE_p_Player);
+  }
+  
+  {
+    Research &_result_ref = (arg1)->getResearch();
+    result = (Research *) &_result_ref;
+  }
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Research,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Player(void *obj) {
+Player *arg1 = (Player *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Player_methods[] = {
+    {"getPosition", _wrap_Player_getPosition}, 
+    {"exist", _wrap_Player_exist}, 
+    {"isHuman", _wrap_Player_isHuman}, 
+    {"getResearch", _wrap_Player_getResearch}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Player_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_Player_bases[] = {0};
+static const char *swig_Player_base_names[] = {0};
+static swig_lua_class _wrap_class_Player = { "Player", &SWIGTYPE_p_Player,0, swig_delete_Player, swig_Player_methods, swig_Player_attributes, swig_Player_bases, swig_Player_base_names };
+
+static void swig_delete_Research(void *obj) {
+Research *arg1 = (Research *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Research_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_Research_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_Research_bases[] = {0};
+static const char *swig_Research_base_names[] = {0};
+static swig_lua_class _wrap_class_Research = { "Research", &SWIGTYPE_p_Research,0, swig_delete_Research, swig_Research_methods, swig_Research_attributes, swig_Research_bases, swig_Research_base_names };
 
 static int _wrap_loadGame(lua_State* L) {
   int SWIG_arg = 0;
@@ -1554,29 +2814,20 @@ fail:
 }
 
 
-static int _wrap_unitAttack(lua_State* L) {
+static int _wrap_ActionResult_successful(lua_State* L) {
   int SWIG_arg = 0;
-  GameMap *arg1 = (GameMap *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  int arg4 ;
-  int result;
+  ActionResult *arg1 = (ActionResult *) 0 ;
+  bool result;
   
-  SWIG_check_num_args("attackCommandFunc",4,4)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("attackCommandFunc",1,"GameMap *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("attackCommandFunc",2,"int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("attackCommandFunc",3,"int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("attackCommandFunc",4,"int");
+  SWIG_check_num_args("successful",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("successful",1,"ActionResult *");
   
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
-    SWIG_fail_ptr("unitAttack",1,SWIGTYPE_p_GameMap);
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ActionResult,0))){
+    SWIG_fail_ptr("ActionResult_successful",1,SWIGTYPE_p_ActionResult);
   }
   
-  arg2 = (int)lua_tonumber(L, 2);
-  arg3 = (int)lua_tonumber(L, 3);
-  arg4 = (int)lua_tonumber(L, 4);
-  result = (int)attackCommandFunc(arg1,arg2,arg3,arg4);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  result = (bool)(arg1)->successful();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -1587,32 +2838,1188 @@ fail:
 }
 
 
-static int _wrap_unitMove(lua_State* L) {
+static void swig_delete_ActionResult(void *obj) {
+ActionResult *arg1 = (ActionResult *) obj;
+delete arg1;
+}
+static swig_lua_method swig_ActionResult_methods[] = {
+    {"successful", _wrap_ActionResult_successful}, 
+    {0,0}
+};
+static swig_lua_attribute swig_ActionResult_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_ActionResult_bases[] = {0};
+static const char *swig_ActionResult_base_names[] = {0};
+static swig_lua_class _wrap_class_ActionResult = { "ActionResult", &SWIGTYPE_p_ActionResult,0, swig_delete_ActionResult, swig_ActionResult_methods, swig_ActionResult_attributes, swig_ActionResult_bases, swig_ActionResult_base_names };
+
+static int _wrap_displayActionError(lua_State* L) {
+  int SWIG_arg = 0;
+  ActionResult *arg1 = 0 ;
+  
+  SWIG_check_num_args("displayActionError",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("displayActionError",1,"ActionResult const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ActionResult,0))){
+    SWIG_fail_ptr("displayActionError",1,SWIGTYPE_p_ActionResult);
+  }
+  
+  displayActionError((ActionResult const &)*arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitAttack__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitAttack",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitAttack",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitAttack",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitAttack",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("unitAttack",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitAttack",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitAttack",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = unitAttack(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitAttack__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitAttack",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitAttack",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitAttack",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitAttack",3,"MapCoordinate const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitAttack",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitAttack",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = unitAttack(arg1,arg2,(MapCoordinate const &)*arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitAttack(lua_State* L) {
+  int argc;
+  int argv[5]={
+    1,2,3,4,5
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_GameMap, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_MapCoordinate, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          return _wrap_unitAttack__SWIG_1(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_GameMap, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_MapCoordinate, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_unitAttack__SWIG_0(L);
+          }
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'unitAttack'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    unitAttack(GameMap *,int,MapCoordinate const &,int)\n"
+    "    unitAttack(GameMap *,int,MapCoordinate const &)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_unitMovement__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitMovement",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitMovement",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitMovement",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitMovement",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("unitMovement",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitMovement",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitMovement",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = unitMovement(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitMovement__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitMovement",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitMovement",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitMovement",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitMovement",3,"MapCoordinate const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitMovement",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitMovement",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = unitMovement(arg1,arg2,(MapCoordinate const &)*arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitMovement(lua_State* L) {
+  int argc;
+  int argv[5]={
+    1,2,3,4,5
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_GameMap, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_MapCoordinate, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          return _wrap_unitMovement__SWIG_1(L);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_GameMap, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          void *ptr;
+          if (lua_isuserdata(L,argv[2])==0 || SWIG_ConvertPtr(L,argv[2], (void **) &ptr, SWIGTYPE_p_MapCoordinate, 0)) {
+            _v = 0;
+          } else {
+            _v = 1;
+          }
+        }
+        if (_v) {
+          {
+            _v = lua_isnumber(L,argv[3]);
+          }
+          if (_v) {
+            return _wrap_unitMovement__SWIG_0(L);
+          }
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'unitMovement'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    unitMovement(GameMap *,int,MapCoordinate const &,int)\n"
+    "    unitMovement(GameMap *,int,MapCoordinate const &)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_unitPutMine(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("putMineFunc",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("putMineFunc",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("putMineFunc",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("putMineFunc",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("putMineFunc",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitPutMine",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitPutMine",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = putMineFunc(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitRemoveMine(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("removeMineFunc",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeMineFunc",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("removeMineFunc",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("removeMineFunc",3,"MapCoordinate const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitRemoveMine",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitRemoveMine",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = removeMineFunc(arg1,arg2,(MapCoordinate const &)*arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitPutObject(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitPutObject",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitPutObject",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitPutObject",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitPutObject",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("unitPutObject",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitPutObject",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitPutObject",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = unitPutObject(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitRemoveObject(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitRemoveObject",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitRemoveObject",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitRemoveObject",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitRemoveObject",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("unitRemoveObject",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitRemoveObject",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitRemoveObject",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = unitRemoveObject(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitDestructBuilding(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitDestructBuilding",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitDestructBuilding",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitDestructBuilding",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitDestructBuilding",3,"MapCoordinate const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitDestructBuilding",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitDestructBuilding",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = unitDestructBuilding(arg1,arg2,(MapCoordinate const &)*arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_transferControl(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("transferControl",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("transferControl",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("transferControl",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("transferControl",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("transferControl",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = transferControl(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_trainUnit(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("trainUnit",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("trainUnit",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("trainUnit",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("trainUnit",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("trainUnit",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = trainUnit(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_constructUnit(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("constructUnit",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("constructUnit",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("constructUnit",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("constructUnit",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("constructUnit",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("constructUnit",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("constructUnit",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = constructUnit(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_constructBuilding(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  int arg4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("constructBuilding",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("constructBuilding",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("constructBuilding",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("constructBuilding",3,"MapCoordinate const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("constructBuilding",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("constructBuilding",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("constructBuilding",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  result = constructBuilding(arg1,arg2,(MapCoordinate const &)*arg3,arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_serviceCommand(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
   int arg2 ;
   int arg3 ;
   int arg4 ;
   int arg5 ;
-  int result;
+  SwigValueWrapper< ActionResult > result;
   
-  SWIG_check_num_args("moveCommandFunc",5,5)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("moveCommandFunc",1,"GameMap *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("moveCommandFunc",2,"int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("moveCommandFunc",3,"int");
-  if(!lua_isnumber(L,4)) SWIG_fail_arg("moveCommandFunc",4,"int");
-  if(!lua_isnumber(L,5)) SWIG_fail_arg("moveCommandFunc",5,"int");
+  SWIG_check_num_args("serviceCommand",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("serviceCommand",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("serviceCommand",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("serviceCommand",3,"int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("serviceCommand",4,"int");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("serviceCommand",5,"int");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
-    SWIG_fail_ptr("unitMove",1,SWIGTYPE_p_GameMap);
+    SWIG_fail_ptr("serviceCommand",1,SWIGTYPE_p_GameMap);
   }
   
   arg2 = (int)lua_tonumber(L, 2);
   arg3 = (int)lua_tonumber(L, 3);
   arg4 = (int)lua_tonumber(L, 4);
   arg5 = (int)lua_tonumber(L, 5);
-  result = (int)moveCommandFunc(arg1,arg2,arg3,arg4,arg5);
-  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  result = serviceCommand(arg1,arg2,arg3,arg4,arg5);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_repairUnit(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("repairUnit",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("repairUnit",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("repairUnit",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("repairUnit",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("repairUnit",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = repairUnit(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitReactionFireEnable(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitReactionFireEnable",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitReactionFireEnable",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitReactionFireEnable",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("unitReactionFireEnable",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitReactionFireEnable",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = unitReactionFireEnable(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitPowerGenerationEnable(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitPowerGenerationEnable",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitPowerGenerationEnable",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitPowerGenerationEnable",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("unitPowerGenerationEnable",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitPowerGenerationEnable",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = unitPowerGenerationEnable(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_unitJump(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  MapCoordinate *arg3 = 0 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("unitJump",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("unitJump",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("unitJump",2,"int");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("unitJump",3,"MapCoordinate const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("unitJump",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("unitJump",3,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = unitJump(arg1,arg2,(MapCoordinate const &)*arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_selfDestruct(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("selfDestruct",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("selfDestruct",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("selfDestruct",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("selfDestruct",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = selfDestruct(arg1,arg2);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_recycleUnit(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("recycleUnit",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("recycleUnit",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("recycleUnit",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("recycleUnit",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("recycleUnit",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = recycleUnit(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_buildProductionLine(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("buildProductionLine",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("buildProductionLine",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("buildProductionLine",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("buildProductionLine",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("buildProductionLine",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = buildProductionLine(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_removeProductionLine(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("removeProductionLine",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeProductionLine",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("removeProductionLine",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("removeProductionLine",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("removeProductionLine",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = removeProductionLine(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_repairBuilding(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("repairBuilding",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("repairBuilding",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("repairBuilding",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("repairBuilding",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = repairBuilding(arg1,arg2);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_setResourceProcessingRate(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("setResourceProcessingRate",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setResourceProcessingRate",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setResourceProcessingRate",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("setResourceProcessingRate",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("setResourceProcessingRate",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = setResourceProcessingRate(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_cargoUnitMove(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("cargoUnitMove",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("cargoUnitMove",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("cargoUnitMove",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("cargoUnitMove",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("cargoUnitMove",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = cargoUnitMove(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_setDiplomacy(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  bool arg4 ;
+  int arg5 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("setDiplomacy",5,5)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setDiplomacy",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setDiplomacy",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("setDiplomacy",3,"int");
+  if(!lua_isboolean(L,4)) SWIG_fail_arg("setDiplomacy",4,"bool");
+  if(!lua_isnumber(L,5)) SWIG_fail_arg("setDiplomacy",5,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("setDiplomacy",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  arg4 = (lua_toboolean(L, 4)!=0);
+  arg5 = (int)lua_tonumber(L, 5);
+  result = setDiplomacy(arg1,arg2,arg3,arg4,arg5);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_cancelResearch(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("cancelResearch",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("cancelResearch",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("cancelResearch",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("cancelResearch",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = cancelResearch(arg1,arg2);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_setResearchGoal(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("setResearchGoal",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setResearchGoal",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setResearchGoal",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("setResearchGoal",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("setResearchGoal",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = setResearchGoal(arg1,arg2,arg3);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -1629,9 +4036,41 @@ fail:
 
 static const struct luaL_reg swig_commands[] = {
     { "getActiveMap", _wrap_getActiveMap},
+    { "getObjectType", _wrap_getObjectType},
+    { "getBuildingType", _wrap_getBuildingType},
+    { "getUnitType", _wrap_getUnitType},
+    { "getTerrainType", _wrap_getTerrainType},
+    { "errorMessage", _wrap_errorMessage},
+    { "warningMessage", _wrap_warningMessage},
+    { "infoMessage", _wrap_infoMessage},
     { "loadGame", _wrap_loadGame},
-    { "unitAttack", _wrap_unitAttack},
-    { "unitMove", _wrap_unitMove},
+    { "displayActionError", _wrap_displayActionError},
+    { "unitAttack",_wrap_unitAttack},
+    { "unitMovement",_wrap_unitMovement},
+    { "unitPutMine", _wrap_unitPutMine},
+    { "unitRemoveMine", _wrap_unitRemoveMine},
+    { "unitPutObject", _wrap_unitPutObject},
+    { "unitRemoveObject", _wrap_unitRemoveObject},
+    { "unitDestructBuilding", _wrap_unitDestructBuilding},
+    { "transferControl", _wrap_transferControl},
+    { "trainUnit", _wrap_trainUnit},
+    { "constructUnit", _wrap_constructUnit},
+    { "constructBuilding", _wrap_constructBuilding},
+    { "serviceCommand", _wrap_serviceCommand},
+    { "repairUnit", _wrap_repairUnit},
+    { "unitReactionFireEnable", _wrap_unitReactionFireEnable},
+    { "unitPowerGenerationEnable", _wrap_unitPowerGenerationEnable},
+    { "unitJump", _wrap_unitJump},
+    { "selfDestruct", _wrap_selfDestruct},
+    { "recycleUnit", _wrap_recycleUnit},
+    { "buildProductionLine", _wrap_buildProductionLine},
+    { "removeProductionLine", _wrap_removeProductionLine},
+    { "repairBuilding", _wrap_repairBuilding},
+    { "setResourceProcessingRate", _wrap_setResourceProcessingRate},
+    { "cargoUnitMove", _wrap_cargoUnitMove},
+    { "setDiplomacy", _wrap_setDiplomacy},
+    { "cancelResearch", _wrap_cancelResearch},
+    { "setResearchGoal", _wrap_setResearchGoal},
     {0,0}
 };
 
@@ -1645,16 +4084,91 @@ static swig_lua_const_info swig_constants[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)0, 0};
+static void *_p_VehicletypeTo_p_ContainerBaseType(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((ContainerBaseType *)  ((Vehicletype *) x));
+}
+static void *_p_BuildingTypeTo_p_ContainerBaseType(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((ContainerBaseType *)  ((BuildingType *) x));
+}
+static void *_p_MapCoordinate3DTo_p_MapCoordinate(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((MapCoordinate *)  ((MapCoordinate3D *) x));
+}
+static void *_p_BuildingTo_p_ContainerBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((ContainerBase *)  ((Building *) x));
+}
+static void *_p_VehicleTo_p_ContainerBase(void *x, int *SWIGUNUSEDPARM(newmemory)) {
+    return (void *)((ContainerBase *)  ((Vehicle *) x));
+}
+static swig_type_info _swigt__p_ActionResult = {"_p_ActionResult", "ActionResult *", 0, 0, (void*)&_wrap_class_ActionResult, 0};
+static swig_type_info _swigt__p_Building = {"_p_Building", "Building *", 0, 0, (void*)&_wrap_class_Building, 0};
+static swig_type_info _swigt__p_BuildingType = {"_p_BuildingType", "BuildingType *", 0, 0, (void*)&_wrap_class_BuildingType, 0};
+static swig_type_info _swigt__p_ContainerBase = {"_p_ContainerBase", "ContainerBase *", 0, 0, (void*)&_wrap_class_ContainerBase, 0};
+static swig_type_info _swigt__p_ContainerBaseType = {"_p_ContainerBaseType", "ContainerBaseType *", 0, 0, (void*)&_wrap_class_ContainerBaseType, 0};
+static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)&_wrap_class_GameMap, 0};
+static swig_type_info _swigt__p_MapCoordinate = {"_p_MapCoordinate", "MapCoordinate *", 0, 0, (void*)&_wrap_class_MapCoordinate, 0};
+static swig_type_info _swigt__p_MapCoordinate3D = {"_p_MapCoordinate3D", "MapCoordinate3D *", 0, 0, (void*)&_wrap_class_MapCoordinate3D, 0};
+static swig_type_info _swigt__p_ObjectType = {"_p_ObjectType", "ObjectType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Player = {"_p_Player", "Player *", 0, 0, (void*)&_wrap_class_Player, 0};
+static swig_type_info _swigt__p_Research = {"_p_Research", "Research *", 0, 0, (void*)&_wrap_class_Research, 0};
+static swig_type_info _swigt__p_TerrainType = {"_p_TerrainType", "TerrainType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Vehicle = {"_p_Vehicle", "Vehicle *", 0, 0, (void*)&_wrap_class_Vehicle, 0};
+static swig_type_info _swigt__p_Vehicletype = {"_p_Vehicletype", "Vehicletype *", 0, 0, (void*)&_wrap_class_Vehicletype, 0};
+static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)&_wrap_class_std_string, 0};
+static swig_type_info _swigt__p_tfield = {"_p_tfield", "tfield *", 0, 0, (void*)&_wrap_class_tfield, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_ActionResult,
+  &_swigt__p_Building,
+  &_swigt__p_BuildingType,
+  &_swigt__p_ContainerBase,
+  &_swigt__p_ContainerBaseType,
   &_swigt__p_GameMap,
+  &_swigt__p_MapCoordinate,
+  &_swigt__p_MapCoordinate3D,
+  &_swigt__p_ObjectType,
+  &_swigt__p_Player,
+  &_swigt__p_Research,
+  &_swigt__p_TerrainType,
+  &_swigt__p_Vehicle,
+  &_swigt__p_Vehicletype,
+  &_swigt__p_std__string,
+  &_swigt__p_tfield,
 };
 
+static swig_cast_info _swigc__p_ActionResult[] = {  {&_swigt__p_ActionResult, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Building[] = {  {&_swigt__p_Building, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_BuildingType[] = {  {&_swigt__p_BuildingType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ContainerBase[] = {  {&_swigt__p_ContainerBase, 0, 0, 0},  {&_swigt__p_Building, _p_BuildingTo_p_ContainerBase, 0, 0},  {&_swigt__p_Vehicle, _p_VehicleTo_p_ContainerBase, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ContainerBaseType[] = {  {&_swigt__p_ContainerBaseType, 0, 0, 0},  {&_swigt__p_Vehicletype, _p_VehicletypeTo_p_ContainerBaseType, 0, 0},  {&_swigt__p_BuildingType, _p_BuildingTypeTo_p_ContainerBaseType, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GameMap[] = {  {&_swigt__p_GameMap, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_MapCoordinate[] = {  {&_swigt__p_MapCoordinate, 0, 0, 0},  {&_swigt__p_MapCoordinate3D, _p_MapCoordinate3DTo_p_MapCoordinate, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_MapCoordinate3D[] = {  {&_swigt__p_MapCoordinate3D, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ObjectType[] = {  {&_swigt__p_ObjectType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Player[] = {  {&_swigt__p_Player, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Research[] = {  {&_swigt__p_Research, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_TerrainType[] = {  {&_swigt__p_TerrainType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Vehicle[] = {  {&_swigt__p_Vehicle, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Vehicletype[] = {  {&_swigt__p_Vehicletype, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__string[] = {  {&_swigt__p_std__string, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_tfield[] = {  {&_swigt__p_tfield, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_ActionResult,
+  _swigc__p_Building,
+  _swigc__p_BuildingType,
+  _swigc__p_ContainerBase,
+  _swigc__p_ContainerBaseType,
   _swigc__p_GameMap,
+  _swigc__p_MapCoordinate,
+  _swigc__p_MapCoordinate3D,
+  _swigc__p_ObjectType,
+  _swigc__p_Player,
+  _swigc__p_Research,
+  _swigc__p_TerrainType,
+  _swigc__p_Vehicle,
+  _swigc__p_Vehicletype,
+  _swigc__p_std__string,
+  _swigc__p_tfield,
 };
 
 

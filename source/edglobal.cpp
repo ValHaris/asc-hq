@@ -857,7 +857,7 @@ void execaction_pg(int code)
                                        if ( getactfield()->getContainer()->baseType->hasFunction( ContainerBaseType::InternalVehicleProduction  ))
                                           editProduction( getactfield()->getContainer() );
                                        else
-                                          warning("this unit/building has no production capabilities");
+                                          warningMessage("this unit/building has no production capabilities");
                                      }
        break;
        case act_selectgraphicset: selectgraphicset();

@@ -138,6 +138,8 @@ class Player : public SigC::Object {
 
       //! the status of the scientific research
       Research    research;
+      
+      Research& getResearch() { return research; };
 
       //! if the player is run by an AI, this is the pointer to it
       BaseAI*      ai;
@@ -155,6 +157,7 @@ class Player : public SigC::Object {
       ASCString getName( ) const;
       
       void setName( const ASCString& name ) { this->name = name; };
+      void setName( const char* name ) { setName( ASCString(name)); };
 
       //! the Password required for playing this player
       Password passwordcrc;

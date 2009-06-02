@@ -543,7 +543,7 @@ void PropertyContainer::warning ( const ASCString& errmsg )
    #ifdef converter
    fatalError ( errmsg );
    #else
-   ::warning( "file " + textPropertyGroup->fileName+ ": " + errmsg );
+   ::warningMessage( "file " + textPropertyGroup->fileName+ ": " + errmsg );
    #endif
 }
 

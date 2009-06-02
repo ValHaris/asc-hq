@@ -30,7 +30,6 @@
 
 
 class RemoveProductionLineCommand : public ContainerCommand {
-   
    public:
       static bool avail ( const ContainerBase* factory );
       

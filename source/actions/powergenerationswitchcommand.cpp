@@ -102,7 +102,7 @@ void PowerGenerationSwitchCommand :: writeData ( tnstream& stream ) const
 ASCString PowerGenerationSwitchCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("SetPowerGeneration ( %d, %d )", getUnitID(), newState );
+   c.format("unitPowerGenerationEnable ( map, %d, %d )", getUnitID(), newState );
    return c;
 
 }

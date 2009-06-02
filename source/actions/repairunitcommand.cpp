@@ -213,7 +213,7 @@ void RepairUnitCommand :: writeData ( tnstream& stream ) const
 ASCString RepairUnitCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("RepairUnit ( %d, %d )", getContainerID(), targetNWid );
+   c.format("repairUnit ( map, %d, %d )", getContainerID(), targetNWid );
    return c;
 
 }

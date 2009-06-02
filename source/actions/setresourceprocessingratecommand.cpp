@@ -71,7 +71,10 @@ ActionResult SetResourceProcessingRateCommand::go ( const Context& context )
 
    ContainerBase* c = getContainer();
    if ( !avail( c ))
-      return ActionResult(22800);
+      return ActionResult(22850);
+   
+   if ( newRate < 0 || newRate > 100 )
+      return ActionResult(22851);
    
    oldRate = c->plus;
    c->plus = getNewPlus();
@@ -112,7 +115,7 @@ void SetResourceProcessingRateCommand :: writeData ( tnstream& stream ) const
 ASCString SetResourceProcessingRateCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("SetResourceProcessingRate ( %d, %d )", getContainerID(), newRate );
+   c.format("setResourceProcessingRate ( map, %d, %d )", getContainerID(), newRate );
    return c;
 
 }

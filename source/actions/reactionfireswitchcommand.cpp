@@ -135,7 +135,7 @@ void ReactionFireSwitchCommand :: writeData ( tnstream& stream ) const
 ASCString ReactionFireSwitchCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("SetReactionFire ( %d, %d )", getUnitID(), newRFstate );
+   c.format("unitReactionFireEnable ( map, %d, %d )", getUnitID(), newRFstate );
    return c;
 
 }

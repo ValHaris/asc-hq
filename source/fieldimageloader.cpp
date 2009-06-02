@@ -141,7 +141,7 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
          static boost::regex pcx( ".*\\.pcx$");
          boost::smatch what;
          if( boost::regex_match( copytoLower(file) , what, pcx)) {
-            // warning("Truecolor PCX image detected: " + file);
+            // warningMessage("Truecolor PCX image detected: " + file);
             colorKeyAllowed = true;
          }
          
@@ -196,7 +196,7 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
          else {
             int res = s->Blit ( s2 );
             if ( res < 0 )
-               warning ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
+               warningMessage ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
          }
 
          fn = st.getNextToken();
@@ -243,7 +243,7 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
             rwo.Close();
             int res = s.Blit ( s2 );
             if ( res < 0 )
-               warning ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
+               warningMessage ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
 
             fn = st.getNextToken();
          }

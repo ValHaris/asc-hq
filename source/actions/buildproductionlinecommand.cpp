@@ -167,7 +167,7 @@ void BuildProductionLineCommand :: writeData ( tnstream& stream ) const
 ASCString BuildProductionLineCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("AddProductionLine ( %d, %d )", getContainerID(), vehicleTypeId );
+   c.format("buildProductionLine ( map, %d, %d )", getContainerID(), vehicleTypeId );
    return c;
 
 }
@@ -179,9 +179,13 @@ GameActionID BuildProductionLineCommand::getID() const
 
 ASCString BuildProductionLineCommand::getDescription() const
 {
-   ASCString s = "Add production line ";
+   ASCString s = "Add production line for type ";
    
-   s += "for type " + ASCString::toString(vehicleTypeId);
+   Vehicletype* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
+   if ( !vt )
+      s += ASCString::toString(vehicleTypeId);
+   else
+      s += vt->getName();
    
    if ( getContainer(true) ) {
       s += " to " + getContainer()->getName();

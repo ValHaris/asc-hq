@@ -698,7 +698,7 @@ void SubWindow::registerChilds( CargoDialog* cd )
 {
    widget = cd->FindChild( getASCTXTname(), true);
    if ( !widget )
-      warning( "Could not find widget with name " + getASCTXTname() );
+      warningMessage( "Could not find widget with name " + getASCTXTname() );
 }
 
 
@@ -2110,17 +2110,17 @@ namespace CargoGuiFunctions {
          for ( ConstructUnitCommand::Producables::const_iterator i = producables.begin(); i != producables.end(); ++i )
             if ( i->type == v ) {
                if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Energy  | ConstructUnitCommand::Lack::Material | ConstructUnitCommand::Lack::Fuel )) {
-                  warning("Not enough resources to build unit");
+                  warningMessage("Not enough resources to build unit");
                   return;
                }
                
                if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Movement )) {
-                  warning("Not enough movement to build unit");
+                  warningMessage("Not enough movement to build unit");
                   return;
                }
                 
                if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Research )) {
-                  warning("This unit has not been researched yet");
+                  warningMessage("This unit has not been researched yet");
                   return;
                }
             }

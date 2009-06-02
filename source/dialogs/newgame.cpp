@@ -414,7 +414,7 @@ bool StartMultiplayerGame::Apply()
                   Password pwd2;
                   pwd2.setEncoded( s2->GetText() );
                   if ( pwd != pwd2 ) {
-                     warning ( "Passwords don't match!");
+                     warningMessage ( "Passwords don't match!");
                      return false;
                   }
                }
@@ -722,7 +722,7 @@ bool StartMultiplayerGame::checkPlayerStat()
                humanFound = true;
 
       if ( !humanFound ) {
-         warning("no human players on map!");
+         warningMessage("no human players on map!");
          return false;
       }
       return true;
@@ -924,7 +924,7 @@ bool startMultiplayerGame()
     smg.Hide();
    }
    catch ( ShutDownMap sdm ) {
-      warning("No players found on map");
+      warningMessage("No players found on map");
       throw sdm;
    }
     /*

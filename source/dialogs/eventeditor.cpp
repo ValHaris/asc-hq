@@ -127,16 +127,16 @@ class EventEditor : public ASC_PG_Dialog {
             return false;
 
          if ( event->trigger.size() < 1 ) {
-            warning( "no trigger defined !" );
+            warningMessage( "no trigger defined !" );
             return false;
          }
          
          if ( !event->action ) {
-            warning ( "no action defined !" );
+            warningMessage ( "no action defined !" );
             return false;
          }
          if ( event->reArmNum && event->delayedexecution.turn < 1 ) {
-            warning ( "without delayed execution, reArming the event makes no sense !" );
+            warningMessage ( "without delayed execution, reArming the event makes no sense !" );
             return false;
          }
 

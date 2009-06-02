@@ -71,7 +71,7 @@ class NewMap: public ASC_PG_Dialog {
 
         
          if ( ysize & 1 ) {
-            warning( "Height must be an even number!" );
+            warningMessage( "Height must be an even number!" );
             return false;
          }
          
@@ -79,7 +79,7 @@ class NewMap: public ASC_PG_Dialog {
          if ( create ) {
             TerrainType::Weather* w = terrainTypeRepository.getObject_byID( terrainid)->weather[0];
             if ( !w ) {
-               warning( "please choose a terrain!" );
+               warningMessage( "please choose a terrain!" );
                return false;
             }
             

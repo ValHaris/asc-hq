@@ -65,7 +65,7 @@
                bool def()
                {
                   if ( CGameOptions::Instance()->getDefaultPassword().empty() ) {
-                     warning ( "no default password setup!" );
+                     warningMessage ( "no default password setup!" );
                      return false;
                   }
 

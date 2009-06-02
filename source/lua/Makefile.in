@@ -45,11 +45,11 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libluainterfacegame_la_DEPENDENCIES =
 am_libluainterfacegame_la_OBJECTS = commands.lo commands_wrap.lo \
-	luarunner.lo luastate.lo
+	luarunner.lo luastate.lo common.lo
 libluainterfacegame_la_OBJECTS = $(am_libluainterfacegame_la_OBJECTS)
 libluainterfacemaped_la_DEPENDENCIES =
 am_libluainterfacemaped_la_OBJECTS = mapedcommands.lo \
-	mapedcommands_wrap.lo luarunner.lo luastate.lo
+	mapedcommands_wrap.lo luarunner.lo luastate.lo common.lo
 libluainterfacemaped_la_OBJECTS =  \
 	$(am_libluainterfacemaped_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -239,9 +239,9 @@ zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ @LUA_FLAGS@
 noinst_LTLIBRARIES = libluainterfacegame.la libluainterfacemaped.la
-libluainterfacegame_la_SOURCES = commands.cpp commands_wrap.cxx luarunner.cpp luastate.cpp
+libluainterfacegame_la_SOURCES = commands.cpp commands_wrap.cxx luarunner.cpp luastate.cpp common.cpp
 libluainterfacegame_la_LIBADD = @LUA_LIBS@
-libluainterfacemaped_la_SOURCES = mapedcommands.cpp mapedcommands_wrap.cxx luarunner.cpp luastate.cpp
+libluainterfacemaped_la_SOURCES = mapedcommands.cpp mapedcommands_wrap.cxx luarunner.cpp luastate.cpp common.cpp
 libluainterfacemaped_la_LIBADD = @LUA_LIBS@
 EXTRA_DIST = $(srcdir)/*.h $(srcdir)/*.i
 all: all-am
@@ -299,6 +299,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/commands.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/commands_wrap.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/common.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luarunner.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luastate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapedcommands.Plo@am__quote@
@@ -533,7 +534,7 @@ uninstall-am:
 
 SWIG:
 	swig -c++ -lua commands.i
-	swig -c++ -lua mapedcommands.i
+	swig -c++ -lua -Dmapeditor mapedcommands.i
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

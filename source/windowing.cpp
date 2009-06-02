@@ -446,7 +446,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
                widgetParams.assign ( img );
                parsePanelASCTXT( pc, img, widgetParams );
             } catch ( tfileerror ) {
-               warning( "unable to load " + filename );
+               warningMessage( "unable to load " + filename );
             }
          } else {
             PG_Image* img = new PG_Image( parent, PG_Point(r.x, r.y ), NULL, false, PG_Draw::BkMode(imgMode) );
@@ -899,9 +899,9 @@ bool ASCGUI_Window::setup()
 
       return true;
    } catch ( ParsingError err ) {
-      warning( "parsing error: " + err.getMessage());
+      warningMessage( "parsing error: " + err.getMessage());
    } catch ( tfileerror err ) {
-      warning( "could not acces file: " + err.getFileName() );
+      warningMessage( "could not acces file: " + err.getFileName() );
    }
    return false;
 

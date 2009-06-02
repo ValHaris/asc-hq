@@ -1674,7 +1674,7 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
          for ( ConstructUnitCommand::Producables::const_iterator i = buildables.begin(); i != buildables.end(); ++i )
             if ( i->type == v ) {
                if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Energy  | ConstructUnitCommand::Lack::Material | ConstructUnitCommand::Lack::Fuel )) {
-                  warning("Not enough resources to build unit");
+                  warningMessage("Not enough resources to build unit");
                   return;
                }
 
@@ -1683,12 +1683,12 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
                   Vehicle* constructor = dynamic_cast<Vehicle*>(subject);
                   if ( constructor )
                      message += "\nRequired: " + ASCString::toString(constructor->typ->unitConstructionMoveCostPercentage * constructor->maxMovement() / 100 ) + " points";
-                  warning(message);
+                  warningMessage(message);
                   return;
                }
 
                if ( i->prerequisites.getValue() & ( ConstructUnitCommand::Lack::Research )) {
-                  warning("This unit has not been researched yet");
+                  warningMessage("This unit has not been researched yet");
                   return;
                }
             }
@@ -1708,7 +1708,7 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
             updateFieldInfo();
 
          } else {
-            warning("no fields to construct unit.\n" + v->terrainaccess.toString());
+            warningMessage("no fields to construct unit.\n" + v->terrainaccess.toString());
          }
       }
    } else {

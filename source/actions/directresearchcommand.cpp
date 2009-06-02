@@ -179,7 +179,7 @@ ActionResult DirectResearchCommand::undoAction( const Context& context )
 ASCString DirectResearchCommand :: getCommandString() const 
 {
    ASCString c;
-   c.format("choosetechnology ( %d, %d  )", player, targetTechnologyID );
+   c.format("setResearchGoal ( map, %d, %d  )", player, targetTechnologyID );
    return c;
 }
 

@@ -128,7 +128,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
                }
             }
             catch ( ... ) {
-               warning( "operation failed");
+               warningMessage( "operation failed");
             }
          }
          repaintMap();

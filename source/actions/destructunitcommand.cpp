@@ -78,11 +78,6 @@ ActionResult DestructUnitCommand::go ( const Context& context )
          SoundList::getInstance().playSound( SoundList::buildingCollapses );
    }
    
-   /*
-   ViewRegistration* vr = new ViewRegistration( container, ViewRegistration::RemoveView );
-   vr->execute( context );
-*/   
-   
    MapCoordinate pos = container->getPosition();
    int viewdist = container->baseType->view;
    
@@ -93,6 +88,9 @@ ActionResult DestructUnitCommand::go ( const Context& context )
       destructor.release();
    
    evaluateviewcalculation( getMap(), pos, viewdist, 0, false, &context );
+   
+   if ( context.display )
+      context.display->repaintDisplay();
    
    return res;
 }
@@ -119,7 +117,7 @@ void DestructUnitCommand :: writeData ( tnstream& stream ) const
 ASCString DestructUnitCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("DestructUnit ( %d  )", getContainerID() );
+   c.format("selfDestruct ( map, %d )", getContainerID() );
    return c;
 }
 

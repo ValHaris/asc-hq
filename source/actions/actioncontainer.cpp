@@ -190,7 +190,7 @@ bool ActionContainer::isActive_map( const Command* action ) const
    if ( commandState_map.find( action ) != commandState_map.end() )
       return commandState_map.find(action)->second;
    else {
-      warning("ActionContainer::isActive_map - invalid parameter");
+      warningMessage("ActionContainer::isActive_map - invalid parameter");
       return false;
    }
 }
@@ -203,7 +203,7 @@ bool ActionContainer::isActive_req( const Command* action )
    if ( commandState_request.find( action ) != commandState_request.end() )
       return commandState_request[action];
    else {
-      warning("ActionContainer::isActive - invalid parameter");
+      warningMessage("ActionContainer::isActive - invalid parameter");
       return false;
    }
 }

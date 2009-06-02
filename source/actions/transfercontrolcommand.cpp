@@ -111,6 +111,9 @@ ActionResult TransferControlCommand::go ( const Context& context )
       setState( Completed );
       
       computeview( getMap(), 0, false, &context );
+      
+      if ( context.display )
+         context.display->repaintDisplay();
    } else
       setState( Failed );
    
@@ -149,7 +152,7 @@ void TransferControlCommand :: setReceiver( const Player* receiver )
 ASCString TransferControlCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("TransferControl ( %d, %d )", getContainerID(), receivingPlayer );
+   c.format("transferControl ( map, %d, %d )", getContainerID(), receivingPlayer );
    return c;
 
 }

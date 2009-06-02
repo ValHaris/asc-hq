@@ -86,7 +86,7 @@ ActionResult GameAction::undo( const Context& context )
    displayLogMessage(4, "undoing #" + ASCString::toString(sequenceNumber) + " " + getDescription() + "\n");
    ActionResult res = undoAction( context );
    if ( !res.successful() )
-      warning("error undoing " + getDescription() + "\n" + res.getMessage() );
+      warningMessage("error undoing " + getDescription() + "\n" + res.getMessage() );
    mergeActionFailures( failure, res );
    
    if ( !undoOrderChildFirst() ) {

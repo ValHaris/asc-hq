@@ -12,10 +12,6 @@
 
          
          
-GameMap* getActiveMap()
-{
-   return actmap;
-}
          
 MapCoordinate getCursorPosition( const GameMap* gamemap )
 {
@@ -38,11 +34,6 @@ void clearField( GameMap* map, const MapCoordinate& pos )
    }  
 }
          
-const ObjectType* getObjectType( int id )
-{
-   return objectTypeRepository.getObject_byID( id );   
-}
-
 bool placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force )
 {
    tfield* fld = map->getField( pos );
@@ -50,11 +41,6 @@ bool placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj,
       return fld->addobject( obj, -1, force );
    else
       return false;
-}
-
-const BuildingType* getBuildingType( int id )
-{
-   return buildingTypeRepository.getObject_byID( id );   
 }
 
 bool placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner )
@@ -68,11 +54,6 @@ bool placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* 
       }
    }
    return false;
-}
-
-const Vehicletype* getUnitType( int id )
-{
-   return vehicleTypeRepository.getObject_byID( id );   
 }
 
 
@@ -90,11 +71,6 @@ bool placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, 
    return false;
 }
 
-
-const TerrainType* getTerrainType( int id )
-{
-   return terrainTypeRepository.getObject_byID( id );   
-}
 
 bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather )
 {
@@ -132,17 +108,4 @@ int selectPlayer( GameMap* map )
       return -1;
 }
 
-void errorMessage ( const char* string )
-{
-   errorMessage( ASCString( string ));
-}
 
-void warningMessage ( const char* string )
-{
-   warning( ASCString( string ) );
-}
-
-void infoMessage ( const char* string )
-{
-   infoMessage( ASCString( string ) );
-}

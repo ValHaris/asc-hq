@@ -2556,7 +2556,7 @@ bool isNull(const Vehicletype* v ) { return !v; };
 
 void movebuilding ( void )
 {
-   warning("sorry, not implemented yet in ASC2!");
+   warningMessage("sorry, not implemented yet in ASC2!");
 #if 0
    mapsaved = false;
    tfield* fld = getactfield();
@@ -2943,7 +2943,7 @@ void UnitTypeTransformation :: run ( void )
        s += " units were NOT transformed\n (production included)";
 
        tviewanytext vat;
-       vat.init ( "warning", s.c_str() );
+       vat.init ( "warningMessage", s.c_str() );
        vat.run();
        vat.done();
     } else 

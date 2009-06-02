@@ -126,7 +126,7 @@ void RepairBuildingCommand :: writeData ( tnstream& stream ) const
 ASCString RepairBuildingCommand :: getCommandString() const
 {
    ASCString c;
-   c.format("RepairBuilding ( %d )", getContainerID() );
+   c.format("repairBuilding ( map, %d )", getContainerID() );
    return c;
 
 }
@@ -138,7 +138,10 @@ GameActionID RepairBuildingCommand::getID() const
 
 ASCString RepairBuildingCommand::getDescription() const
 {
-   ASCString s = "Repair building " + ASCString::toString( getContainerID() );
+   ASCString s = "Repair building ";
+   if ( getContainer(true))
+      s += getContainer( true )->getName() + " at ";
+   s += ASCString::toString( getContainerID() );
    
    return s;
 }
