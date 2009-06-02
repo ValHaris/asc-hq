@@ -132,7 +132,7 @@ ASC_PBEM* PBEMServer::getSession()
          ad.RunModal();
          success = session->login( ad.getName(), ad.getPassword() );
          if( !success )
-            warning("login failed!");
+            warningMessage("login failed!");
          //TODO dialog: retry? Cancel?
       } while ( !success );
    }
@@ -166,7 +166,7 @@ void PBEMServer::send( const GameMap* map, int lastPlayer, int lastturn )
       ASC_PBEM* session = getSession();
       bool result = session->uploadFile( filename, buffer.getBuffer(), buffer.getSize(), gameID );
       if ( !result )
-         warning( "upload failed");
+         warningMessage( "upload failed");
       
    } else {
       // writing to file  

@@ -1167,6 +1167,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\lua\common.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\lua\luarunner.cpp"
 					>
 				</File>
