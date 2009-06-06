@@ -2358,6 +2358,30 @@ fail:
 }
 
 
+static int _wrap_ContainerBase_getOwner(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getOwner",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getOwner",1,"ContainerBase *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getOwner",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = (int)(arg1)->getOwner();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_ContainerBase(void *obj) {
 ContainerBase *arg1 = (ContainerBase *) obj;
 delete arg1;
@@ -2369,6 +2393,7 @@ static swig_lua_method swig_ContainerBase_methods[] = {
     {"getCargoCount", _wrap_ContainerBase_getCargoCount}, 
     {"getCargo", _wrap_ContainerBase_getCargo}, 
     {"getName", _wrap_ContainerBase_getName}, 
+    {"getOwner", _wrap_ContainerBase_getOwner}, 
     {0,0}
 };
 static swig_lua_attribute swig_ContainerBase_attributes[] = {
@@ -2520,36 +2545,6 @@ static swig_lua_class *swig_tfield_bases[] = {0};
 static const char *swig_tfield_base_names[] = {0};
 static swig_lua_class _wrap_class_tfield = { "tfield", &SWIGTYPE_p_tfield,0, swig_delete_tfield, swig_tfield_methods, swig_tfield_attributes, swig_tfield_bases, swig_tfield_base_names };
 
-static int _wrap_GameMap_getField(lua_State* L) {
-  int SWIG_arg = 0;
-  GameMap *arg1 = (GameMap *) 0 ;
-  int arg2 ;
-  int arg3 ;
-  tfield *result = 0 ;
-  
-  SWIG_check_num_args("getField",3,3)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getField",1,"GameMap *");
-  if(!lua_isnumber(L,2)) SWIG_fail_arg("getField",2,"int");
-  if(!lua_isnumber(L,3)) SWIG_fail_arg("getField",3,"int");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
-    SWIG_fail_ptr("GameMap_getField",1,SWIGTYPE_p_GameMap);
-  }
-  
-  arg2 = (int)lua_tonumber(L, 2);
-  arg3 = (int)lua_tonumber(L, 3);
-  result = (tfield *)(arg1)->getField(arg2,arg3);
-  SWIG_NewPointerObj(L,result,SWIGTYPE_p_tfield,0); SWIG_arg++; 
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_GameMap_width(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -2650,7 +2645,6 @@ GameMap *arg1 = (GameMap *) obj;
 delete arg1;
 }
 static swig_lua_method swig_GameMap_methods[] = {
-    {"getField", _wrap_GameMap_getField}, 
     {"width", _wrap_GameMap_width}, 
     {"height", _wrap_GameMap_height}, 
     {"getPlayer", _wrap_GameMap_getPlayer}, 

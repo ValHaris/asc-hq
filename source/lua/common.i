@@ -59,9 +59,11 @@ class ContainerBase {
       int getCargoCount();
       
       // warning: the cargo may have items which are NULL
-            Vehicle* getCargo( int i );
+      Vehicle* getCargo( int i );
       
       std::string getName();
+      
+      int getOwner();
       
    protected:
       ContainerBase();
@@ -91,7 +93,10 @@ class tfield {
 
 class GameMap {
    public:
+#ifdef mapeditor
+      // in ASC, the scripts are not able to access all fields, as they are running in a user context
       tfield* getField( int x, int y );
+#endif      
       int width() const;
       int height() const;
       Player& getPlayer( int p );

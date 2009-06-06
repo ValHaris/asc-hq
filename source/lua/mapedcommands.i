@@ -9,6 +9,9 @@
 #include "../util/messaginghub.h"
 %}
 
+%include "common.i"
+
+
 MapCoordinate getCursorPosition( const GameMap* gamemap );
       
 void clearField( GameMap* map, const MapCoordinate& pos );
