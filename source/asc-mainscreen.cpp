@@ -165,7 +165,7 @@ void Menu::setup()
    addbutton ( "~M~anage", ua_actionManager );
 #ifdef LUAINTERFACE
    currentMenu->addSeparator();
-   addbutton ( "Save List", ua_writeLuaCommands );
+   addbutton ( "Save Script", ua_writeLuaCommands );
    addbutton ( "Run Script", ua_runLuaCommands );
 #endif   
 

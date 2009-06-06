@@ -845,7 +845,10 @@ bool ASCGUI_Window::setup()
 
       PropertyReadingContainer pc ( "panel", textPropertyGroup );
 
-      int w, h;
+      
+     
+      int w = 0;
+      int h = 0;
       pc.addInteger( "width", w, 0 );
       pc.addInteger( "height", h, 0 );
 
@@ -882,6 +885,35 @@ bool ASCGUI_Window::setup()
          MoveWidget( x1, y1, false );
       }
 
+      int w2 = Width();
+      int h2 = Height();
+      
+      if ( w == 0 ) {
+         int x2 ;
+         pc.addInteger( "x2", x2, 0 );
+         
+         if ( x2 < 0 ) 
+            w2 = PG_Application::GetScreenWidth() - my_xpos + x2;
+         else
+            if ( x2 > 0 )
+               w2 = my_xpos + x2;
+      }
+      
+      if ( h == 0 ) {
+         int y2;
+         pc.addInteger( "y2", y2, 0 );
+         if ( y2 < 0 )
+            h2 = PG_Application::GetScreenHeight() - my_ypos + y2;
+         else
+            if ( y2 > 0 )
+               h2 = my_ypos + y2;
+      }
+      
+      if ( h2 != Height() || w2 != Width() )
+         SizeWidget( w2, h2, false );
+         
+      
+      
       int titlebarHeight;
       pc.addInteger("Titlebarheight", titlebarHeight, -1 );
       if ( titlebarHeight != -1 )

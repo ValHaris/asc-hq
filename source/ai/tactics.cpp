@@ -275,6 +275,7 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
       _vision = visible_now;
       
       auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+      muc->setFlags ( MoveUnitCommand::NoInterrupt );
       muc->setDestination( mv->movePos );
       ActionResult res = muc->execute( getContext () );
       if ( res.successful() )

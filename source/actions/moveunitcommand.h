@@ -74,6 +74,8 @@ class MoveUnitCommand : public UnitCommand {
                                 ShortestHeightChange  = 8  //! no horizontal movement, only a single height change 
                                };
       
+      void setFlags( int flags ) { this->flags = flags; };                               
+                               
       ActionResult searchFields(int height = -1, int capabilities = 0);
       
       //! defines whether we want to end up either at the same level of height (0), lower(<0), or heigher(>0)
