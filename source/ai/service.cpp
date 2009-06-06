@@ -538,7 +538,7 @@ void AI :: runServiceUnit ( Vehicle* supplyUnit )
    for ( ServiceOrderContainer::iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++ ) {
        if ( !i->getServiceUnit() && i->getTargetUnit() ) {
           int poss = i->possible( supplyUnit );
-          if ( poss ) {
+          if ( poss && beeline( i->getTargetUnit() ,supplyUnit ) ) {
              float f =  i->getTargetUnit()->aiparam[getPlayerNum()]->getValue() * poss/100 / beeline( i->getTargetUnit() ,supplyUnit );
              serviceMap.insert(make_pair(f,&(*i)));
           }
