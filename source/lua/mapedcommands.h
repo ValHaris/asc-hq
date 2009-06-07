@@ -22,5 +22,18 @@ extern Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicle
 extern Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force = false );
 extern bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 extern int selectPlayer( GameMap* map );
+
+
+class FieldVector : public vector<MapCoordinate> {
+   public:
+      FieldVector();
+      unsigned int size();
+   
+      MapCoordinate getItem( int i ); 
+};
+
+
+extern FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );
+
       
 #endif

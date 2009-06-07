@@ -9,6 +9,7 @@
                
 #include "../itemrepository.h"
 #include "../dlg_box.h"
+#include "mapedcommands.h"
 
          
          
@@ -111,4 +112,41 @@ int selectPlayer( GameMap* map )
       return -1;
 }
 
+FieldVector::FieldVector() 
+{
+}
+      
+unsigned int FieldVector::size() {
+  return vector<MapCoordinate>::size();
+}
+
+MapCoordinate FieldVector::getItem( int i ) {
+   return at(i);  
+}
+
+
+
+class LuaFieldSearcher : public SearchFields {
+   public:
+      FieldVector fields;
+      
+      LuaFieldSearcher ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {
+           
+      };
+       
+   protected:
+      void testfield ( const MapCoordinate& pos ) {
+         fields.push_back(pos); 
+      };
+      
+};
+      
+      
+FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance )
+{
+   LuaFieldSearcher lfs ( map );
+   lfs.initsearch( position, distance, distance );
+   lfs.startsearch();
+   return lfs.fields;
+}
 

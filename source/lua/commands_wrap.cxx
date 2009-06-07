@@ -1570,8 +1570,15 @@ typedef struct{} LANGUAGE_OBJ;
 #include "../gamemap.h"
 #include "../mapalgorithms.h"
 #include "../util/messaginghub.h"
+#include "../textfiletags.h"
 #include "common.h"
 
+SWIGINTERN bool tfield_hasProperty(tfield *self,std::string bitName){
+            for ( int i = 0; i < terrainPropertyNum; ++i )
+               if ( terrainProperties[i] == bitName )
+                  return self->bdt.test(i);
+            return false;
+         }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2863,6 +2870,33 @@ fail:
 }
 
 
+static int _wrap_tfield_hasProperty(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  std::string arg2 ;
+  bool result;
+  
+  SWIG_check_num_args("hasProperty",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("hasProperty",1,"tfield *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("hasProperty",2,"std::string");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_hasProperty",1,SWIGTYPE_p_tfield);
+  }
+  
+  (&arg2)->assign(lua_tostring(L,2),lua_strlen(L,2));
+  result = (bool)tfield_hasProperty(arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_tfield(void *obj) {
 tfield *arg1 = (tfield *) obj;
 delete arg1;
@@ -2875,6 +2909,7 @@ static swig_lua_method swig_tfield_methods[] = {
     {"getMineralFuel", _wrap_tfield_getMineralFuel}, 
     {"setMineralMaterial", _wrap_tfield_setMineralMaterial}, 
     {"setMineralFuel", _wrap_tfield_setMineralFuel}, 
+    {"hasProperty", _wrap_tfield_hasProperty}, 
     {0,0}
 };
 static swig_lua_attribute swig_tfield_attributes[] = {

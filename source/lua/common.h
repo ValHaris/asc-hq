@@ -37,5 +37,47 @@ extern const BuildingType* getBuildingType( int id );
 extern const Vehicletype* getUnitType( int id );
 extern const TerrainType* getTerrainType( int id );
 
+class TerrainBitNames {
+   public:
+      enum { Shallow_water,  
+         Lowland,      
+         Swamp,
+         Forest,
+         High_mountains,
+         Road,
+         Railroad,
+         Building_entry_dont_use_it ,
+         Harbour,
+         Runway  ,
+         Pipeline,
+         Buried_pipeline,
+         Water,
+         Deep_water,
+         Hard_sand,
+         Soft_sand,
+         Track_possible,
+         Small_rocks,
+         Mud,
+         Snow,
+         Deep_snow,
+         Mountains,
+         Very_shallow_water,
+         Large_rocks,
+         Lava,
+         Ditch,
+         Hillside,
+         Turret_foundation,
+         Morass,
+         Installation,
+         Pack_ice,
+         River,
+         Frozen_water,
+         bridge,
+         lava_barrier,
+         spaceport,
+         beacon,
+         fire  };
+};
+
       
 #endif

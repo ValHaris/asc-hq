@@ -26,3 +26,12 @@ bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* te
 int selectPlayer( GameMap* map );
 
 
+class FieldVector {
+   public:
+      FieldVector();
+      unsigned int size();
+   
+      MapCoordinate getItem( int i ); 
+};
+
+FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );

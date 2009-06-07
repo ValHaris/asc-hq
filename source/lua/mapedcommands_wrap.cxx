@@ -1511,21 +1511,22 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_BuildingType swig_types[1]
 #define SWIGTYPE_p_ContainerBase swig_types[2]
 #define SWIGTYPE_p_ContainerBaseType swig_types[3]
-#define SWIGTYPE_p_GameMap swig_types[4]
-#define SWIGTYPE_p_MapCoordinate swig_types[5]
-#define SWIGTYPE_p_MapCoordinate3D swig_types[6]
-#define SWIGTYPE_p_Object swig_types[7]
-#define SWIGTYPE_p_ObjectType swig_types[8]
-#define SWIGTYPE_p_Player swig_types[9]
-#define SWIGTYPE_p_Research swig_types[10]
-#define SWIGTYPE_p_Resources swig_types[11]
-#define SWIGTYPE_p_TerrainType swig_types[12]
-#define SWIGTYPE_p_Vehicle swig_types[13]
-#define SWIGTYPE_p_Vehicletype swig_types[14]
-#define SWIGTYPE_p_std__string swig_types[15]
-#define SWIGTYPE_p_tfield swig_types[16]
-static swig_type_info *swig_types[18];
-static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
+#define SWIGTYPE_p_FieldVector swig_types[4]
+#define SWIGTYPE_p_GameMap swig_types[5]
+#define SWIGTYPE_p_MapCoordinate swig_types[6]
+#define SWIGTYPE_p_MapCoordinate3D swig_types[7]
+#define SWIGTYPE_p_Object swig_types[8]
+#define SWIGTYPE_p_ObjectType swig_types[9]
+#define SWIGTYPE_p_Player swig_types[10]
+#define SWIGTYPE_p_Research swig_types[11]
+#define SWIGTYPE_p_Resources swig_types[12]
+#define SWIGTYPE_p_TerrainType swig_types[13]
+#define SWIGTYPE_p_Vehicle swig_types[14]
+#define SWIGTYPE_p_Vehicletype swig_types[15]
+#define SWIGTYPE_p_std__string swig_types[16]
+#define SWIGTYPE_p_tfield swig_types[17]
+static swig_type_info *swig_types[19];
+static swig_module_info swig_module = {swig_types, 18, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1570,8 +1571,15 @@ typedef struct{} LANGUAGE_OBJ;
 #include "../gamemap.h"
 #include "../mapalgorithms.h"
 #include "../util/messaginghub.h"
+#include "../textfiletags.h"
 #include "common.h"
 
+SWIGINTERN bool tfield_hasProperty(tfield *self,std::string bitName){
+            for ( int i = 0; i < terrainPropertyNum; ++i )
+               if ( terrainProperties[i] == bitName )
+                  return self->bdt.test(i);
+            return false;
+         }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2863,6 +2871,33 @@ fail:
 }
 
 
+static int _wrap_tfield_hasProperty(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  std::string arg2 ;
+  bool result;
+  
+  SWIG_check_num_args("hasProperty",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("hasProperty",1,"tfield *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("hasProperty",2,"std::string");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_hasProperty",1,SWIGTYPE_p_tfield);
+  }
+  
+  (&arg2)->assign(lua_tostring(L,2),lua_strlen(L,2));
+  result = (bool)tfield_hasProperty(arg1,arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_tfield_setWeather(lua_State* L) {
   int SWIG_arg = 0;
   tfield *arg1 = (tfield *) 0 ;
@@ -2901,6 +2936,7 @@ static swig_lua_method swig_tfield_methods[] = {
     {"getMineralFuel", _wrap_tfield_getMineralFuel}, 
     {"setMineralMaterial", _wrap_tfield_setMineralMaterial}, 
     {"setMineralFuel", _wrap_tfield_setMineralFuel}, 
+    {"hasProperty", _wrap_tfield_hasProperty}, 
     {"setWeather", _wrap_tfield_setWeather}, 
     {0,0}
 };
@@ -3864,6 +3900,130 @@ fail:
 }
 
 
+static int _wrap_new_FieldVector(lua_State* L) {
+  int SWIG_arg = 0;
+  FieldVector *result = 0 ;
+  
+  SWIG_check_num_args("FieldVector",0,0)
+  result = (FieldVector *)new FieldVector();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_FieldVector,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FieldVector_size(lua_State* L) {
+  int SWIG_arg = 0;
+  FieldVector *arg1 = (FieldVector *) 0 ;
+  unsigned int result;
+  
+  SWIG_check_num_args("size",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("size",1,"FieldVector *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_FieldVector,0))){
+    SWIG_fail_ptr("FieldVector_size",1,SWIGTYPE_p_FieldVector);
+  }
+  
+  result = (unsigned int)(arg1)->size();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_FieldVector_getItem(lua_State* L) {
+  int SWIG_arg = 0;
+  FieldVector *arg1 = (FieldVector *) 0 ;
+  int arg2 ;
+  SwigValueWrapper< MapCoordinate > result;
+  
+  SWIG_check_num_args("getItem",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getItem",1,"FieldVector *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("getItem",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_FieldVector,0))){
+    SWIG_fail_ptr("FieldVector_getItem",1,SWIGTYPE_p_FieldVector);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (arg1)->getItem(arg2);
+  {
+    MapCoordinate * resultptr = new MapCoordinate((const MapCoordinate &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_MapCoordinate,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_FieldVector(void *obj) {
+FieldVector *arg1 = (FieldVector *) obj;
+delete arg1;
+}
+static swig_lua_method swig_FieldVector_methods[] = {
+    {"size", _wrap_FieldVector_size}, 
+    {"getItem", _wrap_FieldVector_getItem}, 
+    {0,0}
+};
+static swig_lua_attribute swig_FieldVector_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_FieldVector_bases[] = {0};
+static const char *swig_FieldVector_base_names[] = {0};
+static swig_lua_class _wrap_class_FieldVector = { "FieldVector", &SWIGTYPE_p_FieldVector,_wrap_new_FieldVector, swig_delete_FieldVector, swig_FieldVector_methods, swig_FieldVector_attributes, swig_FieldVector_bases, swig_FieldVector_base_names };
+
+static int _wrap_getFieldsInDistance(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  MapCoordinate *arg2 = 0 ;
+  int arg3 ;
+  FieldVector result;
+  
+  SWIG_check_num_args("getFieldsInDistance",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getFieldsInDistance",1,"GameMap *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("getFieldsInDistance",2,"MapCoordinate const &");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("getFieldsInDistance",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("getFieldsInDistance",1,SWIGTYPE_p_GameMap);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("getFieldsInDistance",2,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  arg3 = (int)lua_tonumber(L, 3);
+  result = getFieldsInDistance(arg1,(MapCoordinate const &)*arg2,arg3);
+  {
+    FieldVector * resultptr = new FieldVector((const FieldVector &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_FieldVector,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -3885,6 +4045,7 @@ static const struct luaL_reg swig_commands[] = {
     { "placeUnit", _wrap_placeUnit},
     { "placeTerrain",_wrap_placeTerrain},
     { "selectPlayer", _wrap_selectPlayer},
+    { "getFieldsInDistance", _wrap_getFieldsInDistance},
     {0,0}
 };
 
@@ -3917,6 +4078,7 @@ static swig_type_info _swigt__p_Building = {"_p_Building", "Building *", 0, 0, (
 static swig_type_info _swigt__p_BuildingType = {"_p_BuildingType", "BuildingType *", 0, 0, (void*)&_wrap_class_BuildingType, 0};
 static swig_type_info _swigt__p_ContainerBase = {"_p_ContainerBase", "ContainerBase *", 0, 0, (void*)&_wrap_class_ContainerBase, 0};
 static swig_type_info _swigt__p_ContainerBaseType = {"_p_ContainerBaseType", "ContainerBaseType *", 0, 0, (void*)&_wrap_class_ContainerBaseType, 0};
+static swig_type_info _swigt__p_FieldVector = {"_p_FieldVector", "FieldVector *", 0, 0, (void*)&_wrap_class_FieldVector, 0};
 static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)&_wrap_class_GameMap, 0};
 static swig_type_info _swigt__p_MapCoordinate = {"_p_MapCoordinate", "MapCoordinate *", 0, 0, (void*)&_wrap_class_MapCoordinate, 0};
 static swig_type_info _swigt__p_MapCoordinate3D = {"_p_MapCoordinate3D", "MapCoordinate3D *", 0, 0, (void*)&_wrap_class_MapCoordinate3D, 0};
@@ -3936,6 +4098,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_BuildingType,
   &_swigt__p_ContainerBase,
   &_swigt__p_ContainerBaseType,
+  &_swigt__p_FieldVector,
   &_swigt__p_GameMap,
   &_swigt__p_MapCoordinate,
   &_swigt__p_MapCoordinate3D,
@@ -3955,6 +4118,7 @@ static swig_cast_info _swigc__p_Building[] = {  {&_swigt__p_Building, 0, 0, 0},{
 static swig_cast_info _swigc__p_BuildingType[] = {  {&_swigt__p_BuildingType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ContainerBase[] = {  {&_swigt__p_ContainerBase, 0, 0, 0},  {&_swigt__p_Building, _p_BuildingTo_p_ContainerBase, 0, 0},  {&_swigt__p_Vehicle, _p_VehicleTo_p_ContainerBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ContainerBaseType[] = {  {&_swigt__p_ContainerBaseType, 0, 0, 0},  {&_swigt__p_Vehicletype, _p_VehicletypeTo_p_ContainerBaseType, 0, 0},  {&_swigt__p_BuildingType, _p_BuildingTypeTo_p_ContainerBaseType, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_FieldVector[] = {  {&_swigt__p_FieldVector, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GameMap[] = {  {&_swigt__p_GameMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MapCoordinate[] = {  {&_swigt__p_MapCoordinate, 0, 0, 0},  {&_swigt__p_MapCoordinate3D, _p_MapCoordinate3DTo_p_MapCoordinate, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MapCoordinate3D[] = {  {&_swigt__p_MapCoordinate3D, 0, 0, 0},{0, 0, 0, 0}};
@@ -3974,6 +4138,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_BuildingType,
   _swigc__p_ContainerBase,
   _swigc__p_ContainerBaseType,
+  _swigc__p_FieldVector,
   _swigc__p_GameMap,
   _swigc__p_MapCoordinate,
   _swigc__p_MapCoordinate3D,

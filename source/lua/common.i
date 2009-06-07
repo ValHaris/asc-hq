@@ -6,6 +6,7 @@
 #include "../gamemap.h"
 #include "../mapalgorithms.h"
 #include "../util/messaginghub.h"
+#include "../textfiletags.h"
 #include "common.h"
 %}
 
@@ -104,6 +105,7 @@ class Vehicle : public ContainerBase {
       const Vehicletype* getType();
 };
 
+
 class tfield {
    public:
       Building* getBuildingEntrance();
@@ -116,6 +118,16 @@ class tfield {
       void setMineralMaterial( int material );
       void setMineralFuel( int material );
       
+      %extend 
+      {
+         bool hasProperty ( std::string bitName ) // see textfiletags.cpp for value
+         {
+            for ( int i = 0; i < terrainPropertyNum; ++i )
+               if ( terrainProperties[i] == bitName )
+                  return $self->bdt.test(i);
+            return false;
+         }
+      }
 #ifdef mapeditor
       void setWeather( int weather );
 #endif      
