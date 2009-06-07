@@ -18,9 +18,9 @@ void clearField( GameMap* map, const MapCoordinate& pos );
 
 MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc);
 
-bool placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force = false );
-bool placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner );
-bool placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner );
+Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force = false );
+Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner );
+Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner );
 bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 
 int selectPlayer( GameMap* map );

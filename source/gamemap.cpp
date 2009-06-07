@@ -104,7 +104,7 @@ bool OverviewMapHolder::updateField( const MapCoordinate& pos )
          OverviewMapImage::fill ( overviewMapImage, imgpos, map.player[fld->building->getOwner()].getColor() );
       else {
 
-         int w = fld->getweather();
+         int w = fld->getWeather();
          fld->typ->getQuickView()->blit( overviewMapImage, imgpos );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
             if ( visi > visible_ago || i->typ->visibleago )
@@ -1406,7 +1406,7 @@ void GameMap::objectGrowth()
                                  int p = static_cast<int>(std::ceil ( double(1) / d));
                                  if ( p > 1 )
                                     if ( random ( p ) == 1 )
-                                       if ( i->typ->fieldModification[fld2->getweather()].terrainaccess.accessible( fld2->bdt) > 0 ) {
+                                       if ( i->typ->fieldModification[fld2->getWeather()].terrainaccess.accessible( fld2->bdt) > 0 ) {
                                           newObjects.push_back( make_pair( fld2, i->typ->id ));
                                           i->remainingGrowthTime -= 1;
                                           remainingGrowthTime[fld2] = i->remainingGrowthTime;

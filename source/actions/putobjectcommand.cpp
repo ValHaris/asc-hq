@@ -102,7 +102,7 @@ bool PutObjectCommand::checkObject( tfield* fld, ObjectType* objtype, Mode mode 
     Vehicle* veh = getUnit();
     
     if ( mode == Build ) {
-       if ( objtype->getFieldModification(fld->getweather()).terrainaccess.accessible( fld->bdt ) > 0
+       if ( objtype->getFieldModification(fld->getWeather()).terrainaccess.accessible( fld->bdt ) > 0
             &&  !fld->checkforobject ( objtype )
             && objtype->techDependency.available(getMap()->player[veh->getOwner()].research) ){
 //            && !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {

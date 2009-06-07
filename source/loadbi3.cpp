@@ -946,7 +946,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                      ObjectType* obj = objectTypeRepository.getObject_byID ( translationTable->object2IDtranslate[i].second );
                      if ( obj ) {
                         tfield* fld = getfield ( newx, newy );
-                        if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
+                        if ( pass == 1 || obj->getFieldModification(fld->getWeather()).terrainaccess.accessible ( fld->bdt )) {
                            fld -> addobject ( obj, 0, true );
                            found |= 1;
                            if ( pass == 0 )
@@ -964,7 +964,7 @@ void        tloadBImap ::   ReadACTNPart(void)
                               for ( unsigned int j = 0; j < obj->weatherPicture[ww].images.size(); j++ )
                                  if ( obj->weatherPicture[ww].bi3pic[j] == xlt[m]  && !(found & 2)  && !( GraphicSetManager::Instance().getMode(xlt[m]) & 256) ) {
                                     tfield* fld = getfield ( newx, newy );
-                                    if ( pass == 1 || obj->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt )) {
+                                    if ( pass == 1 || obj->getFieldModification(fld->getWeather()).terrainaccess.accessible ( fld->bdt )) {
                                        fld -> addobject ( obj, 0, true );
                                        found |= 1;
                                        if ( pass == 0 )

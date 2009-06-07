@@ -9,6 +9,21 @@
 #include "common.h"
 %}
 
+class Resources {
+   public:
+      %immutable;
+      
+      int energy;
+      int material;
+      int fuel;
+      
+      %mutable;
+
+      Resources();
+      Resources( int energy, int material, int fuel );
+          
+};
+
 class MapCoordinate {
    protected:
       MapCoordinate();
@@ -49,6 +64,12 @@ class BuildingType : public ContainerBaseType {
 class Vehicletype : public ContainerBaseType {
 };
 
+class TerrainType {
+   protected:
+      TerrainType();
+   public:
+      int getID() const;
+};
 
 class ContainerBase {
    public:         
@@ -87,6 +108,17 @@ class tfield {
    public:
       Building* getBuildingEntrance();
       Vehicle* getVehicle();
+      int getWeather();
+      
+      int getMineralMaterial() const;
+      int getMineralFuel() const;
+    
+      void setMineralMaterial( int material );
+      void setMineralFuel( int material );
+      
+#ifdef mapeditor
+      void setWeather( int weather );
+#endif      
    protected:
       tfield();
 };
@@ -96,6 +128,7 @@ class GameMap {
 #ifdef mapeditor
       // in ASC, the scripts are not able to access all fields, as they are running in a user context
       tfield* getField( int x, int y );
+      tfield* getField( const MapCoordinate& pos );
 #endif      
       int width() const;
       int height() const;
@@ -122,6 +155,5 @@ class Research {
    public:
 #ifdef mapeditor
       void addPredefinedTechAdapter( const std::string& techAdapter );
-#endif      
-         
+#endif
 };

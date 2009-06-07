@@ -1125,7 +1125,7 @@ void WeatherChange :: fieldOperator( const MapCoordinate& mc )
 {
    tfield* field = gamemap->getField ( mc );
    if ( field ) 
-      field->setweather( weather );
+      field->setWeather( weather );
 }
 
 void WeatherChange :: setup ()
@@ -1158,7 +1158,7 @@ void MapChange :: fieldOperator( const MapCoordinate& mc )
 
    tfield* field = gamemap->getField ( mc );
    if ( field ) {
-      int w = field->getweather();
+      int w = field->getWeather();
       if (typ->weather[w] == NULL)
          w = 0;
 

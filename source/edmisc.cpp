@@ -3111,7 +3111,7 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
                 if ( tt ) {
-                   TerrainType::Weather* tw = tt->weather[fld->getweather()];
+                   TerrainType::Weather* tw = tt->weather[fld->getWeather()];
                    if ( !tw )
                       tw = tt->weather[0];
                    fld->typ = tw;
@@ -3123,7 +3123,7 @@ void transformMap ( )
              if ( fld->typ->terraintype->id == terrainobjtranslation[i*3] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terrainobjtranslation[i*3+1] );
                 if ( tt ) {
-                   TerrainType::Weather* tw = tt->weather[fld->getweather()];
+                   TerrainType::Weather* tw = tt->weather[fld->getWeather()];
                    if ( !tw )
                       tw = tt->weather[0];
                    fld->typ = tw;
@@ -3409,7 +3409,7 @@ void setweatherall ( int weather  )
 {
    for (int y=0; y < actmap->ysize; y++)
      for (int x=0; x < actmap->xsize; x++)
-        actmap->getField(x,y)->setweather( weather );
+        actmap->getField(x,y)->setWeather( weather );
 }
 
 
@@ -3842,7 +3842,7 @@ void locateItemByID()
          targetField->fuel = sourceField->fuel; 
          targetField->material = sourceField->material;
       }
-      if( mirrorWeather ) targetField->setweather( sourceField->getweather() ); 
+      if( mirrorWeather ) targetField->setWeather( sourceField->getWeather() ); 
    }
    
    void copyFieldStep2( tfield* sourceField, tfield* targetField, GameMap* targetMap, int *directionTranslation, int *playerTranslation, bool mirrorObjects, bool mirrorBuildings, bool mirrorUnits, bool mirrorMines )

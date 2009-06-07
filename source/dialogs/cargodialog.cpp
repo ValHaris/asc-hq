@@ -446,7 +446,7 @@ class CargoDialog : public Panel
          if ( name == "unitpad_unitsymbol" ) {
             Vehicle* v = dynamic_cast<Vehicle*>(container);
             if ( v )
-               v->paint( screen, SPoint( dst.x, dst.y ));
+               v->paint( screen, SPoint( dst.x, dst.y ), 0);
          }
       };
 
@@ -678,7 +678,7 @@ class CargoDialog : public Panel
             SolarPowerplant solarPowerPlant ( container );
             Resources plus = solarPowerPlant.getPlus();
             setLabelText( "CurrentPower", plus.energy );
-            setImage( "Weather", weathernames[ container->getMap()->getField( container->getPosition() )->getweather() ], widget );
+            setImage( "Weather", weathernames[ container->getMap()->getField( container->getPosition() )->getWeather() ], widget );
          }
 
          // from windpower

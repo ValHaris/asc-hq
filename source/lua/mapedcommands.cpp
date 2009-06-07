@@ -34,30 +34,33 @@ void clearField( GameMap* map, const MapCoordinate& pos )
    }  
 }
          
-bool placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force )
+Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force )
 {
    tfield* fld = map->getField( pos );
-   if ( fld )
-      return fld->addobject( obj, -1, force );
-   else
-      return false;
+   if ( fld ) {
+      if ( !fld->addobject( obj, -1, force ))
+         return NULL;
+      else
+         return fld->checkforobject(obj);
+   } else
+      return NULL;
 }
 
-bool placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner )
+Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner )
 {
    if ( map && bld && owner >= 0 && owner < 8 ) {
       tfield* fld = map->getField(pos);
       if ( fld ) {
          putbuilding( map, pos, owner*8, bld, bld->construction_steps );
          if ( fld->building->typ == bld )
-            return true;
+            return fld->building;
       }
    }
-   return false;
+   return NULL;
 }
 
 
-bool placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner )
+Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner )
 {
    if ( map && veh && owner >= 0 && owner < 8 ) {
       tfield* fld = map->getField(pos);
@@ -65,10 +68,10 @@ bool placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, 
          fld->vehicle = new Vehicle ( veh, map, owner );
          fld->vehicle->setnewposition ( pos );
          fld->vehicle->fillMagically();
-         return true;
+         return fld->vehicle;
       }
    }
-   return false;
+   return NULL;
 }
 
 
@@ -77,7 +80,7 @@ bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* te
    if ( map && terrain ) {
       tfield* fld = map->getField(pos);
       fld->typ = terrain->weather[0]; 
-      fld->setweather( weather );
+      fld->setWeather( weather );
       fld->setparams( );
       for ( int d = 0; d < 6; ++d ) {
          MapCoordinate pos2 = getNeighbouringFieldCoordinate( pos, d );

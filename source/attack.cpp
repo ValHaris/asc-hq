@@ -274,7 +274,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    const SingleWeapon* weap = attackingunit->getWeapon(_weapon);
 
 
-   int targetWeather = attackedunit->getMap()->getField( attackedunit->getPosition() )->getweather();
+   int targetWeather = attackedunit->getMap()->getField( attackedunit->getPosition() )->getWeather();
 
    av.strength = int ( ceil( attackingunit->weapstrength[_weapon]
                         * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, attackedunit->height )
@@ -332,7 +332,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
       weap = attackedunit->getWeapon( dv.weapnum );
 
 
-      int attackerWeather = attackingunit->getMap()->getField( attackingunit->getPosition() )->getweather();
+      int attackerWeather = attackingunit->getMap()->getField( attackingunit->getPosition() )->getWeather();
 
       dv.strength  = int ( ceil( attackedunit->weapstrength[ dv.weapnum ]
                            * WeapDist::getWeaponStrength(weap, attackerWeather, dist, attackedunit->height, attackingunit->height )
@@ -488,7 +488,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
 
-   int targetWeather = attackingunit->getMap()->getField(x,y)->getweather();
+   int targetWeather = attackingunit->getMap()->getField(x,y)->getWeather();
 
    av.strength  = int (ceil( attackingunit->weapstrength[_weapon]
                         * WeapDist::getWeaponStrength(weap, targetWeather, dist, attackingunit->height, _attackedbuilding->typ->height )
@@ -759,7 +759,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
    av.strength  = int ( ceil( attackingunit->weapstrength[weapon]
-                        * WeapDist::getWeaponStrength(weap, targetField->getweather(), dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
+                        * WeapDist::getWeaponStrength(weap, targetField->getWeather(), dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
 
    av.armor = attackingunit->getArmor();

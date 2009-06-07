@@ -1518,13 +1518,14 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_ObjectType swig_types[8]
 #define SWIGTYPE_p_Player swig_types[9]
 #define SWIGTYPE_p_Research swig_types[10]
-#define SWIGTYPE_p_TerrainType swig_types[11]
-#define SWIGTYPE_p_Vehicle swig_types[12]
-#define SWIGTYPE_p_Vehicletype swig_types[13]
-#define SWIGTYPE_p_std__string swig_types[14]
-#define SWIGTYPE_p_tfield swig_types[15]
-static swig_type_info *swig_types[17];
-static swig_module_info swig_module = {swig_types, 16, 0, 0, 0, 0};
+#define SWIGTYPE_p_Resources swig_types[11]
+#define SWIGTYPE_p_TerrainType swig_types[12]
+#define SWIGTYPE_p_Vehicle swig_types[13]
+#define SWIGTYPE_p_Vehicletype swig_types[14]
+#define SWIGTYPE_p_std__string swig_types[15]
+#define SWIGTYPE_p_tfield swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1804,6 +1805,176 @@ static swig_lua_attribute swig_std_string_attributes[] = {
 static swig_lua_class *swig_std_string_bases[] = {0};
 static const char *swig_std_string_base_names[] = {0};
 static swig_lua_class _wrap_class_std_string = { "string", &SWIGTYPE_p_std__string,_wrap_new_string, swig_delete_string, swig_std_string_methods, swig_std_string_attributes, swig_std_string_bases, swig_std_string_base_names };
+
+static int _wrap_Resources_energy_get(lua_State* L) {
+  int SWIG_arg = 0;
+  Resources *arg1 = (Resources *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("energy",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("energy",1,"Resources *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Resources,0))){
+    SWIG_fail_ptr("Resources_energy_get",1,SWIGTYPE_p_Resources);
+  }
+  
+  result = (int) ((arg1)->energy);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Resources_material_get(lua_State* L) {
+  int SWIG_arg = 0;
+  Resources *arg1 = (Resources *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("material",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("material",1,"Resources *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Resources,0))){
+    SWIG_fail_ptr("Resources_material_get",1,SWIGTYPE_p_Resources);
+  }
+  
+  result = (int) ((arg1)->material);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Resources_fuel_get(lua_State* L) {
+  int SWIG_arg = 0;
+  Resources *arg1 = (Resources *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("fuel",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("fuel",1,"Resources *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Resources,0))){
+    SWIG_fail_ptr("Resources_fuel_get",1,SWIGTYPE_p_Resources);
+  }
+  
+  result = (int) ((arg1)->fuel);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_Resources__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  Resources *result = 0 ;
+  
+  SWIG_check_num_args("Resources",0,0)
+  result = (Resources *)new Resources();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Resources,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_Resources__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  int arg2 ;
+  int arg3 ;
+  Resources *result = 0 ;
+  
+  SWIG_check_num_args("Resources",3,3)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("Resources",1,"int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("Resources",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("Resources",3,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  result = (Resources *)new Resources(arg1,arg2,arg3);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Resources,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_Resources(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 0) {
+    return _wrap_new_Resources__SWIG_0(L);
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      _v = lua_isnumber(L,argv[0]);
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_new_Resources__SWIG_1(L);
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'new_Resources'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    Resources()\n"
+    "    Resources(int,int,int)\n");
+  lua_error(L);return 0;
+}
+
+
+static void swig_delete_Resources(void *obj) {
+Resources *arg1 = (Resources *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Resources_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_Resources_attributes[] = {
+    { "energy", _wrap_Resources_energy_get, SWIG_Lua_set_immutable},
+    { "material", _wrap_Resources_material_get, SWIG_Lua_set_immutable},
+    { "fuel", _wrap_Resources_fuel_get, SWIG_Lua_set_immutable},
+    {0,0,0}
+};
+static swig_lua_class *swig_Resources_bases[] = {0};
+static const char *swig_Resources_base_names[] = {0};
+static swig_lua_class _wrap_class_Resources = { "Resources", &SWIGTYPE_p_Resources,_wrap_new_Resources, swig_delete_Resources, swig_Resources_methods, swig_Resources_attributes, swig_Resources_bases, swig_Resources_base_names };
 
 static int _wrap_new_MapCoordinate__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
@@ -2200,6 +2371,45 @@ static swig_lua_class *swig_Vehicletype_bases[] = {0,0};
 static const char *swig_Vehicletype_base_names[] = {"ContainerBaseType *",0};
 static swig_lua_class _wrap_class_Vehicletype = { "Vehicletype", &SWIGTYPE_p_Vehicletype,_wrap_new_Vehicletype, swig_delete_Vehicletype, swig_Vehicletype_methods, swig_Vehicletype_attributes, swig_Vehicletype_bases, swig_Vehicletype_base_names };
 
+static int _wrap_TerrainType_getID(lua_State* L) {
+  int SWIG_arg = 0;
+  TerrainType *arg1 = (TerrainType *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getID",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getID",1,"TerrainType const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_TerrainType,0))){
+    SWIG_fail_ptr("TerrainType_getID",1,SWIGTYPE_p_TerrainType);
+  }
+  
+  result = (int)((TerrainType const *)arg1)->getID();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_TerrainType(void *obj) {
+TerrainType *arg1 = (TerrainType *) obj;
+delete arg1;
+}
+static swig_lua_method swig_TerrainType_methods[] = {
+    {"getID", _wrap_TerrainType_getID}, 
+    {0,0}
+};
+static swig_lua_attribute swig_TerrainType_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_TerrainType_bases[] = {0};
+static const char *swig_TerrainType_base_names[] = {0};
+static swig_lua_class _wrap_class_TerrainType = { "TerrainType", &SWIGTYPE_p_TerrainType,0, swig_delete_TerrainType, swig_TerrainType_methods, swig_TerrainType_attributes, swig_TerrainType_bases, swig_TerrainType_base_names };
+
 static int _wrap_ContainerBase_deleteProductionLine(lua_State* L) {
   int SWIG_arg = 0;
   ContainerBase *arg1 = (ContainerBase *) 0 ;
@@ -2529,6 +2739,130 @@ fail:
 }
 
 
+static int _wrap_tfield_getWeather(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getWeather",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getWeather",1,"tfield *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_getWeather",1,SWIGTYPE_p_tfield);
+  }
+  
+  result = (int)(arg1)->getWeather();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_tfield_getMineralMaterial(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getMineralMaterial",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getMineralMaterial",1,"tfield const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_getMineralMaterial",1,SWIGTYPE_p_tfield);
+  }
+  
+  result = (int)((tfield const *)arg1)->getMineralMaterial();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_tfield_getMineralFuel(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getMineralFuel",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getMineralFuel",1,"tfield const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_getMineralFuel",1,SWIGTYPE_p_tfield);
+  }
+  
+  result = (int)((tfield const *)arg1)->getMineralFuel();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_tfield_setMineralMaterial(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("setMineralMaterial",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setMineralMaterial",1,"tfield *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setMineralMaterial",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_setMineralMaterial",1,SWIGTYPE_p_tfield);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  (arg1)->setMineralMaterial(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_tfield_setMineralFuel(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("setMineralFuel",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setMineralFuel",1,"tfield *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setMineralFuel",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_setMineralFuel",1,SWIGTYPE_p_tfield);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  (arg1)->setMineralFuel(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_tfield(void *obj) {
 tfield *arg1 = (tfield *) obj;
 delete arg1;
@@ -2536,6 +2870,11 @@ delete arg1;
 static swig_lua_method swig_tfield_methods[] = {
     {"getBuildingEntrance", _wrap_tfield_getBuildingEntrance}, 
     {"getVehicle", _wrap_tfield_getVehicle}, 
+    {"getWeather", _wrap_tfield_getWeather}, 
+    {"getMineralMaterial", _wrap_tfield_getMineralMaterial}, 
+    {"getMineralFuel", _wrap_tfield_getMineralFuel}, 
+    {"setMineralMaterial", _wrap_tfield_setMineralMaterial}, 
+    {"setMineralFuel", _wrap_tfield_setMineralFuel}, 
     {0,0}
 };
 static swig_lua_attribute swig_tfield_attributes[] = {
@@ -4104,7 +4443,8 @@ static swig_type_info _swigt__p_MapCoordinate3D = {"_p_MapCoordinate3D", "MapCoo
 static swig_type_info _swigt__p_ObjectType = {"_p_ObjectType", "ObjectType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Player = {"_p_Player", "Player *", 0, 0, (void*)&_wrap_class_Player, 0};
 static swig_type_info _swigt__p_Research = {"_p_Research", "Research *", 0, 0, (void*)&_wrap_class_Research, 0};
-static swig_type_info _swigt__p_TerrainType = {"_p_TerrainType", "TerrainType *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_Resources = {"_p_Resources", "Resources *", 0, 0, (void*)&_wrap_class_Resources, 0};
+static swig_type_info _swigt__p_TerrainType = {"_p_TerrainType", "TerrainType *", 0, 0, (void*)&_wrap_class_TerrainType, 0};
 static swig_type_info _swigt__p_Vehicle = {"_p_Vehicle", "Vehicle *", 0, 0, (void*)&_wrap_class_Vehicle, 0};
 static swig_type_info _swigt__p_Vehicletype = {"_p_Vehicletype", "Vehicletype *", 0, 0, (void*)&_wrap_class_Vehicletype, 0};
 static swig_type_info _swigt__p_std__string = {"_p_std__string", "std::string *", 0, 0, (void*)&_wrap_class_std_string, 0};
@@ -4122,6 +4462,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_ObjectType,
   &_swigt__p_Player,
   &_swigt__p_Research,
+  &_swigt__p_Resources,
   &_swigt__p_TerrainType,
   &_swigt__p_Vehicle,
   &_swigt__p_Vehicletype,
@@ -4140,6 +4481,7 @@ static swig_cast_info _swigc__p_MapCoordinate3D[] = {  {&_swigt__p_MapCoordinate
 static swig_cast_info _swigc__p_ObjectType[] = {  {&_swigt__p_ObjectType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Player[] = {  {&_swigt__p_Player, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Research[] = {  {&_swigt__p_Research, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Resources[] = {  {&_swigt__p_Resources, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TerrainType[] = {  {&_swigt__p_TerrainType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vehicle[] = {  {&_swigt__p_Vehicle, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vehicletype[] = {  {&_swigt__p_Vehicletype, 0, 0, 0},{0, 0, 0, 0}};
@@ -4158,6 +4500,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_ObjectType,
   _swigc__p_Player,
   _swigc__p_Research,
+  _swigc__p_Resources,
   _swigc__p_TerrainType,
   _swigc__p_Vehicle,
   _swigc__p_Vehicletype,

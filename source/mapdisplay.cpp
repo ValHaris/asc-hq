@@ -364,7 +364,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
          int h = o->typ->imageHeight;
          if ( fieldInfo.visibility > visible_ago || (o->typ->visibleago && fieldInfo.visibility >= visible_ago ))
             if (  h >= ((layer-1)/2)*30 && h < (layer-1)/2*30+30 )
-               o->display ( fieldInfo.surface, pos, fld->getweather() );
+               o->display ( fieldInfo.surface, pos, fld->getWeather() );
       }
 
 

@@ -231,7 +231,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
                                               "terrain_weather_heavysnow.png",
                                               "terrain_weather_ice.png" };
 
-         blitter.blit ( IconRepository::getIcon(weathernames[actmap->getField(mc)->getweather()]), screen, SPoint(dst.x, dst.y) );
+         blitter.blit ( IconRepository::getIcon(weathernames[actmap->getField(mc)->getWeather()]), screen, SPoint(dst.x, dst.y) );
       }
       return;
    }

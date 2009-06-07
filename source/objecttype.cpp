@@ -80,7 +80,7 @@ bool  ObjectType :: buildable ( tfield* fld ) const
    if ( fld->building && !growOnUnits )
       return false;
 
-   if ( getFieldModification( fld->getweather() ).terrainaccess.accessible ( fld->bdt ) <= 0 )
+   if ( getFieldModification( fld->getWeather() ).terrainaccess.accessible ( fld->bdt ) <= 0 )
        return false;
 
    #endif

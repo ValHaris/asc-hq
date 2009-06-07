@@ -250,7 +250,7 @@ void checkobjectsforremoval ( GameMap* gamemap )
       for ( int x = 0; x < gamemap->xsize; x++ ) {
          tfield* fld = getfield ( x, y );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
-            if ( i->typ->getFieldModification(fld->getweather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
+            if ( i->typ->getFieldModification(fld->getWeather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
                fld->removeobject ( i->typ, true );
                i = fld->objects.begin();
             } else

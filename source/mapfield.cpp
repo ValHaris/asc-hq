@@ -63,7 +63,36 @@ void tfield::init ()
    viewbonus = 0;
 }
 
+int tfield::getMineralMaterial() const
+{
+   return material;
+}
 
+int tfield::getMineralFuel() const
+{
+   return fuel;
+}
+   
+void tfield::setMineralMaterial( int material )
+{
+   if ( material < 0 )
+      this->material = 0;
+   else
+      if ( material > 255 )
+         this->material = 255;
+      else
+         this->material = material;
+}
+void tfield::setMineralFuel( int material )
+{
+   if ( fuel < 0 )
+      this->fuel = 0;
+   else
+      if ( fuel > 255 )
+         this->fuel = 255;
+   else
+      this->fuel = fuel;
+}
 
 void tfield::Resourceview::setview( int player, int material, int fuel )
 {
@@ -280,7 +309,7 @@ const ContainerBase* tfield :: getContainer() const
 }
 
 
-int tfield :: getweather ( void )
+int tfield :: getWeather ( void )
 {
    if ( !typ )
       return 0;
@@ -290,20 +319,20 @@ int tfield :: getweather ( void )
    return -1;
 }
 
-void tfield :: setweather ( int weather )
+void tfield :: setWeather ( int weather )
 {
      if (typ->terraintype->weather[ weather ] ) {
         typ = typ->terraintype->weather[ weather ];
         setparams();
      } else {
         if ( weather == 2 )
-           setweather(1);
+           setWeather(1);
         else
            if ( weather == 5 )
-              setweather(4);
+              setWeather(4);
            else
               if (weather==4)
-                 setweather(3);
+                 setWeather(3);
               else {
                  typ = typ->terraintype->weather[ 0 ];
                  setparams();
@@ -527,19 +556,19 @@ void tfield :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
 
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
       if ( gamemap->getgameparameter ( cgp_objectsDestroyedByTerrain ))
-         if ( o->typ->getFieldModification(getweather()).terrainaccess.accessible( bdt ) == -1 ) {
+         if ( o->typ->getFieldModification(getWeather()).terrainaccess.accessible( bdt ) == -1 ) {
             objectRemovalStrategy->removeObject( this, o->typ );
             setparams( objectRemovalStrategy );
             return;
          }
 
-      bdt  &=  o->typ->getFieldModification(getweather()).terrain_and;
-      bdt  |=  o->typ->getFieldModification(getweather()).terrain_or;
+      bdt  &=  o->typ->getFieldModification(getWeather()).terrain_and;
+      bdt  |=  o->typ->getFieldModification(getWeather()).terrain_or;
 
       for ( i = 0; i < cmovemalitypenum; i++ ) {
-         __movemalus[i] += o->typ->getFieldModification(getweather()).movemalus_plus[i];
-         if ( (o->typ->getFieldModification(getweather()).movemalus_abs[i] != 0) && (o->typ->getFieldModification(getweather()).movemalus_abs[i] != -1) )
-            __movemalus[i] = o->typ->getFieldModification(getweather()).movemalus_abs[i];
+         __movemalus[i] += o->typ->getFieldModification(getWeather()).movemalus_plus[i];
+         if ( (o->typ->getFieldModification(getWeather()).movemalus_abs[i] != 0) && (o->typ->getFieldModification(getWeather()).movemalus_abs[i] != -1) )
+            __movemalus[i] = o->typ->getFieldModification(getWeather()).movemalus_abs[i];
          if ( __movemalus[i] < minmalq )
             __movemalus[i] = minmalq;
       }

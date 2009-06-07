@@ -253,7 +253,7 @@ int TerrainItem::place( const MapCoordinate& mc ) const
 {
    tfield* fld = actmap->getField(mc);
    fld->typ = item->weather[0]; 
-   fld->setweather( selection.getWeather() );
+   fld->setWeather( selection.getWeather() );
    fld->setparams();
    for ( int d = 0; d < 6; ++d ) {
       MapCoordinate pos = getNeighbouringFieldCoordinate( mc, d );

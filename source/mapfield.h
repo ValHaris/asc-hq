@@ -39,9 +39,17 @@ class  tfield {
     //! the terraintype of the field
     TerrainType::Weather* typ;
 
-    //! mineral resources on this field (should be changed to #Resources sometime...)
+    /** mineral resources on this field. 
+        \note that mineral resources are different from #Resources , there is a factor of #resource_fuel_factor and #resource_material_factor in between
+    */
     char         fuel, material;
 
+    int getMineralMaterial() const;
+    int getMineralFuel() const;
+    
+    void setMineralMaterial( int material );
+    void setMineralFuel( int material );
+   
     //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
     Uint16       visible;
 
@@ -153,8 +161,8 @@ class  tfield {
     int getattackbonus  ( void );
 
     //! the weather that is on this field
-    int getweather ( void );
-    void setweather( int weather );
+    int getWeather();
+    void setWeather( int weather );
 
     ASCString getName();
     

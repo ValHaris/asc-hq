@@ -187,7 +187,7 @@ const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& loc
    static Surface emptySurface;
    tfield* fld = getField ( localCoordinate );
    if ( fld ) {
-      return typ->getPicture(localCoordinate, fld->getweather(), _completion);
+      return typ->getPicture(localCoordinate, fld->getWeather(), _completion);
    } else
       return emptySurface;
 }

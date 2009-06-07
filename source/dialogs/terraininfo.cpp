@@ -49,7 +49,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
 
    text += "ID: " + ASCString::toString( fld->typ->terraintype->id ) + "\n";
 
-   text += "Weather: " + ASCString(cwettertypen[fld->getweather() ]) + "\n";
+   text += "Weather: " + ASCString(cwettertypen[fld->getWeather() ]) + "\n";
 
 
    ASCString sub;
@@ -160,7 +160,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    if ( !fld->objects.empty() ) {
       text += "#aeinzug0##eeinzug0#\n#fontsize=14#Object Details:#aeinzug30##eeinzug20#";
       for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) {
-         const TerrainAccess* ta = &i->typ->getFieldModification( fld->getweather() ).terrainaccess;
+         const TerrainAccess* ta = &i->typ->getFieldModification( fld->getWeather() ).terrainaccess;
          text += "#aeinzug30##eeinzug20##fontsize=12#\n";
          text += i->typ->name + "#aeinzug50##eeinzug40##fontsize=10#\n";
          text += "Type ID: " + ASCString::toString(i->typ->id) + "\n";

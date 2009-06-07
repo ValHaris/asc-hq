@@ -319,7 +319,7 @@ void AI :: WeaponThreatRange :: testfield ( const MapCoordinate& mc )
    if ( dist*maxmalq <= veh->typ->weapons.weapon[weap].maxdistance )
       if ( dist*maxmalq >= veh->typ->weapons.weapon[weap].mindistance ) {
          AttackFormula af ( ai->getMap() );
-         int strength = int ( WeapDist::getWeaponStrength( &veh->typ->weapons.weapon[weap], ai->getMap()->getField(mc)->getweather(), dist*maxmalq, veh->height, 1 << height )
+         int strength = int ( WeapDist::getWeaponStrength( &veh->typ->weapons.weapon[weap], ai->getMap()->getField(mc)->getWeather(), dist*maxmalq, veh->height, 1 << height )
                               * veh->typ->weapons.weapon[weap].maxstrength
                               * (1 + af.strength_experience ( veh->experience ) + af.strength_attackbonus ( gamemap->getField(startPos)->getattackbonus() ))
                               * af.strength_damage ( veh->damage )

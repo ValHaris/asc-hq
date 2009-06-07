@@ -119,7 +119,7 @@ class Resources {
            default: throw OutOfRange();
         }
      };
-
+     
      Resources ( void ) : energy ( 0 ), material ( 0 ), fuel ( 0 ) {};
      Resources ( int e, int m, int f ) : energy ( e ), material ( m ), fuel ( f ) {};
      Resources& operator-= ( const Resources& res ) { energy-=res.energy; material-=res.material; fuel-=res.fuel; return *this;};
