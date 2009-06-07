@@ -24,12 +24,13 @@ extern bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainT
 extern int selectPlayer( GameMap* map );
 
 
+
 class FieldVector : public vector<MapCoordinate> {
    public:
       FieldVector();
       unsigned int size();
    
-      MapCoordinate getItem( int i ); 
+      MapCoordinate getItem( int i );  // i is 1..N in best LUA tradition...
 };
 
 

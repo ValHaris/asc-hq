@@ -1,5 +1,7 @@
 
 
+#include <iostream>
+
 #include "../sg.h"
 #include "../ascstring.h"
 #include "../vehicle.h"
@@ -121,7 +123,7 @@ unsigned int FieldVector::size() {
 }
 
 MapCoordinate FieldVector::getItem( int i ) {
-   return at(i);  
+   return at(i-1);  
 }
 
 

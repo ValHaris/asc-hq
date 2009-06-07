@@ -1,6 +1,7 @@
 %module asc
 %include "std_vector.i"
 %include "std_string.i"
+%include "typemaps.i"
 %{
 #include <string>
 #include "mapedcommands.h"
@@ -24,7 +25,6 @@ Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* v
 bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 
 int selectPlayer( GameMap* map );
-
 
 class FieldVector {
    public:

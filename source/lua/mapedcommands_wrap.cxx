@@ -1560,6 +1560,161 @@ typedef struct{} LANGUAGE_OBJ;
 	#include <string>
 
 
+#ifdef __cplusplus	/* generic alloc/dealloc fns*/
+#define SWIG_ALLOC_ARRAY(TYPE,LEN) 	new TYPE[LEN]
+#define SWIG_FREE_ARRAY(PTR)		delete[] PTR;
+#else
+#define SWIG_ALLOC_ARRAY(TYPE,LEN) 	(TYPE *)malloc(LEN*sizeof(TYPE))
+#define SWIG_FREE_ARRAY(PTR)		free(PTR);
+#endif
+/* counting the size of arrays:*/
+SWIGINTERN int SWIG_itable_size(lua_State* L, int index)
+{
+	int n=0;
+	while(1){
+		lua_rawgeti(L,index,n+1);
+		if (lua_isnil(L,-1))break;
+		++n;
+		lua_pop(L,1);
+	}
+	lua_pop(L,1);
+	return n;
+}
+
+SWIGINTERN int SWIG_table_size(lua_State* L, int index)
+{
+	int n=0;
+	lua_pushnil(L);  /* first key*/
+	while (lua_next(L, index) != 0) {
+		++n;
+		lua_pop(L, 1);  /* removes `value'; keeps `key' for next iteration*/
+	}
+	return n;
+}
+
+/* super macro to declare array typemap helper fns */
+#define SWIG_DECLARE_TYPEMAP_ARR_FN(NAME,TYPE)\
+	SWIGINTERN int SWIG_read_##NAME##_num_array(lua_State* L,int index,TYPE *array,int size){\
+		int i;\
+		for (i = 0; i < size; i++) {\
+			lua_rawgeti(L,index,i+1);\
+			if (lua_isnumber(L,-1)){\
+				array[i] = (TYPE)lua_tonumber(L,-1);\
+			} else {\
+				lua_pop(L,1);\
+				return 0;\
+			}\
+			lua_pop(L,1);\
+		}\
+		return 1;\
+	}\
+	SWIGINTERN TYPE* SWIG_get_##NAME##_num_array_fixed(lua_State* L, int index, int size){\
+		TYPE *array;\
+		if (!lua_istable(L,index) || SWIG_itable_size(L,index) != size) {\
+			lua_pushfstring(L,"expected a table of size %d",size);\
+			return 0;\
+		}\
+		array=SWIG_ALLOC_ARRAY(TYPE,size);\
+		if (!SWIG_read_##NAME##_num_array(L,index,array,size)){\
+			lua_pushstring(L,"table must contain numbers");\
+			SWIG_FREE_ARRAY(array);\
+			return 0;\
+		}\
+		return array;\
+	}\
+	SWIGINTERN TYPE* SWIG_get_##NAME##_num_array_var(lua_State* L, int index, int* size)\
+	{\
+		TYPE *array;\
+		if (!lua_istable(L,index)) {\
+			lua_pushstring(L,"expected a table");\
+			return 0;\
+		}\
+		*size=SWIG_itable_size(L,index);\
+		if (*size<1){\
+			lua_pushstring(L,"table appears to be empty");\
+			return 0;\
+		}\
+		array=SWIG_ALLOC_ARRAY(TYPE,*size);\
+		if (!SWIG_read_##NAME##_num_array(L,index,array,*size)){\
+			lua_pushstring(L,"table must contain numbers");\
+			SWIG_FREE_ARRAY(array);\
+			return 0;\
+		}\
+		return array;\
+	}\
+	SWIGINTERN void SWIG_write_##NAME##_num_array(lua_State* L,TYPE *array,int size){\
+		int i;\
+		lua_newtable(L);\
+		for (i = 0; i < size; i++){\
+			lua_pushnumber(L,(lua_Number)array[i]);\
+			lua_rawseti(L,-2,i+1);/* -1 is the number, -2 is the table*/ \
+		}\
+	}
+
+SWIG_DECLARE_TYPEMAP_ARR_FN(int,int);
+SWIG_DECLARE_TYPEMAP_ARR_FN(uint,unsigned int);
+SWIG_DECLARE_TYPEMAP_ARR_FN(short,short);
+SWIG_DECLARE_TYPEMAP_ARR_FN(ushort,unsigned short);
+SWIG_DECLARE_TYPEMAP_ARR_FN(long,long);
+SWIG_DECLARE_TYPEMAP_ARR_FN(ulong,unsigned long);
+SWIG_DECLARE_TYPEMAP_ARR_FN(float,float);
+SWIG_DECLARE_TYPEMAP_ARR_FN(double,double);
+
+SWIGINTERN int SWIG_read_ptr_array(lua_State* L,int index,void **array,int size,swig_type_info *type){
+	int i;
+	for (i = 0; i < size; i++) {
+		lua_rawgeti(L,index,i+1);
+		if (!lua_isuserdata(L,-1) || SWIG_ConvertPtr(L,-1,&array[i],type,0)==-1){
+			lua_pop(L,1);
+			return 0;
+		}
+		lua_pop(L,1);
+	}
+	return 1;
+}
+SWIGINTERN void** SWIG_get_ptr_array_fixed(lua_State* L, int index, int size,swig_type_info *type){
+	void **array;
+	if (!lua_istable(L,index) || SWIG_itable_size(L,index) != size) {
+		lua_pushfstring(L,"expected a table of size %d",size);
+		return 0;
+	}
+	array=SWIG_ALLOC_ARRAY(void*,size);
+	if (!SWIG_read_ptr_array(L,index,array,size,type)){
+		lua_pushfstring(L,"table must contain pointers of type %s",type->name);
+		SWIG_FREE_ARRAY(array);
+		return 0;
+	}
+	return array;
+}
+SWIGINTERN void** SWIG_get_ptr_array_var(lua_State* L, int index, int* size,swig_type_info *type){
+	void **array;
+	if (!lua_istable(L,index)) {
+		lua_pushstring(L,"expected a table");
+		return 0;
+	}
+	*size=SWIG_itable_size(L,index);
+	if (*size<1){
+		lua_pushstring(L,"table appears to be empty");
+		return 0;
+	}
+	array=SWIG_ALLOC_ARRAY(void*,*size);
+	if (!SWIG_read_ptr_array(L,index,array,*size,type)){
+		lua_pushfstring(L,"table must contain pointers of type %s",type->name);
+		SWIG_FREE_ARRAY(array);
+		return 0;
+	}
+	return array;
+}
+SWIGINTERN void SWIG_write_ptr_array(lua_State* L,void **array,int size,swig_type_info *type,int own){
+	int i;
+	lua_newtable(L);
+	for (i = 0; i < size; i++){
+		SWIG_NewPointerObj(L,array[i],type,own);
+		lua_rawseti(L,-2,i+1);/* -1 is the number, -2 is the table*/
+	}
+}
+
+
 #include <string>
 #include "mapedcommands.h"
 #include "../gamemap.h"
