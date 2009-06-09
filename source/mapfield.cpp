@@ -83,7 +83,7 @@ void tfield::setMineralMaterial( int material )
       else
          this->material = material;
 }
-void tfield::setMineralFuel( int material )
+void tfield::setMineralFuel( int fuel )
 {
    if ( fuel < 0 )
       this->fuel = 0;
