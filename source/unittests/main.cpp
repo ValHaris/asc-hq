@@ -32,6 +32,9 @@
 #include "applicationstarter.h"
 #include "diplomacytest.h"
 #include "objectconstructiontest.h"
+#include "eventtest.h"
+#include "gameeventsystem.h"
+
 
 void viewcomp( Player& player )
 {
@@ -75,6 +78,7 @@ Context createContext( GameMap* gamemap )
 
 void runUnitTests()
 {
+   testEvents();
    testActions();
    testObjectConstruction();
    testResearch();
@@ -88,6 +92,12 @@ void runUnitTests()
    testView();
 }     
       
+
+void checkGameEvents( GameMap* map,const Command& command )
+{
+   checktimedevents( map, NULL );
+   checkevents( map, NULL );
+}
 
 
 int runTester ( )
@@ -125,6 +135,7 @@ int runTester ( )
 #endif
 
    GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
+   //ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
 
    suppressMapTriggerExecution = false;
 

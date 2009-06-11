@@ -456,6 +456,10 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
       for ( int i = 0; i < 8; i++ )
           vehicleSpeedFactor[i] = float(veh->typ->movement[i]);
 
+   maxVehicleSpeedFactor = 0;
+   for ( int i = 0; i < 8; ++i )
+      maxVehicleSpeedFactor = max( maxVehicleSpeedFactor, vehicleSpeedFactor[i] );
+   
    int cnt = actmap->xsize*actmap->ysize*9;
    posDirs = new HexDirection[cnt];
    posHHops = new int[cnt];
@@ -512,6 +516,8 @@ AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<Map
    DistanceType d = longestPath;
    for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); i++ ) {
       DistanceType e = dist(a,*i);
+      if ( maxVehicleSpeedFactor )
+         e /= maxVehicleSpeedFactor;
       if ( d > e )
          d = e;
    }
@@ -558,8 +564,6 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // for details.)  I didn't use priority_queue because later on, I need
 // to traverse the entire data structure to update certain elements; the
 // abstraction layer on priority_queue wouldn't let me do that.
-
-
 
 
 void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& open, int prevHeight, int heightChangeDist )
@@ -643,7 +647,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
         N = open.getFirst();
-
+       
         visited.add( N );
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )

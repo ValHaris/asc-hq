@@ -145,6 +145,7 @@ class AStar3D {
        Vehicle* veh;
        GameMap* actmap;
        float vehicleSpeedFactor[8];
+       float maxVehicleSpeedFactor;
        bool markTemps;
        WindMovement* wind;
 

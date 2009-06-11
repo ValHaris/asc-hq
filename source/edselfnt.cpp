@@ -143,7 +143,7 @@ int VehicleItem::place( const MapCoordinate& mc ) const
    if ( !veh )
       return -2;
      
-   if ( selection.getPlayer()  == 8 )
+   if ( selection.getPlayer()  >= 8 )
       return -3;
 
    bool accessible = veh->terrainaccess.accessible ( fld->bdt );
@@ -189,6 +189,9 @@ Surface BuildingItem::clippingSurface;
 Surface BuildingItem::fullSizeImage;
 int BuildingItem::place( const MapCoordinate& mc ) const
 {
+   if ( selection.getPlayer()  > 8 )
+      return -3;
+   
    int f = 0;
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ )

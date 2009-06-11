@@ -279,7 +279,7 @@ void Event::execute( MapDisplayInterface* md )
 
 void Event::check( MapDisplayInterface* md )
 {
-   if ( playerBitmap & (1 << gamemap.actplayer ))
+    if ( playerBitmap & (1 << gamemap.actplayer ))
       if ( status == Untriggered ) {
          if ( triggerConnection == AND ) {
             status = Triggered;

@@ -1355,6 +1355,12 @@ class GameThreadParams: public SigC::Object
 };
 
 
+void checkGameEvents( GameMap* map,const Command& command )
+{
+   checktimedevents( map, &getDefaultMapDisplay() );
+   checkevents( map, &getDefaultMapDisplay() );
+}
+
 int gamethread ( void* data )
 {
    GameThreadParams* gtp = (GameThreadParams*) data;
@@ -1402,6 +1408,8 @@ int gamethread ( void* data )
    GameMap::sigMapDeletion.connect( SigC::slot( &resetActmap ));
    GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
 
+//   ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
+            
    suppressMapTriggerExecution = false;
    
    static ShowNewTechnology showNewTechs;
@@ -1420,12 +1428,14 @@ int gamethread ( void* data )
    mainScreenWidget = new ASC_MainScreenWidget( getPGApplication());
    dataLoaderTicker();
 
+   /*
    //! we are performing this the first time here while the startup logo is still active
    if ( actmap && actmap->actplayer == -1 ) {
       displayLogMessage ( 8, "Startup :: performing first next_turn..." );
       next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
       displayLogMessage ( 8, "done.\n" );
    }
+   */
 
    displayLogMessage ( 5, "entering outer main loop.\n" );
    do {
@@ -1436,6 +1446,9 @@ int gamethread ( void* data )
             GameDialog::gameDialog();
             mtl = None;
          } else {
+            mainScreenWidget->Show();
+            startupScreen.reset();
+            
             if ( actmap->actplayer == -1 ) {
                displayLogMessage ( 8, "gamethread :: performing next_turn..." );
                next_turn( actmap, NextTurnStrategy_AskUser(), &getDefaultMapDisplay() );
@@ -1446,8 +1459,6 @@ int gamethread ( void* data )
 
             displayLogMessage ( 4, "Spawning MainScreenWidget\n ");
 
-            mainScreenWidget->Show();
-            startupScreen.reset();
 
             displayLogMessage ( 7, "Entering main event loop\n");
    

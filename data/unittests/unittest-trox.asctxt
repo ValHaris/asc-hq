@@ -1,0 +1,179 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest TROX
+   Infotext = [Die SY leben stark zur�ckgezogen. Bisher konnten nur wenige Humanuide
+              in die N�he von dicht bebauten Komplexen vordringen und von
+              denen kehrte kaum jemand zur�ck. Teilweise paranoisch verteidigen
+              die SY ihr Gebiet. Selbst V�lker die mit den SY seit langen
+              Seite an Seite leben und sogar Gebiete gemeinsam nutzen, werden
+              gnadenlos gejagt, wenn sich einer zu dich an die Kernbasis heranwagt.
+              Obwohl alle SY durch ihre organische H�llenpanzerung eine erhebliche
+              Tarnkapazit�t besitzen, enwickelten die SY hochentwickelte St�rger�te,
+              um technische Langstreckenaufkl�rung zu erschweren. Neben dem
+              station�ren und dem bodengebundenen Modul, wurde auf Basis des
+              Tris ein hoch mobiles System geschaffen. Der Trox �hnelt den
+              Tris sehr stark und unterscheidet sich nur in der Anordnung
+              der Antennenspitzen. Die Sonde ist nicht am Boden landef�hig
+              und mu� in der Luft oder im orbit versorgt werden. Die St�rleistung
+              entspricht in etwa der von humanuiden Konstruktionen. In Kombination
+              verf�gen dei SY �ber eine effektive St�rwirkung, die die gegnerische
+              Zielerfassung erheblich erschwert.]
+   ID = 1000001333
+   SecondaryIDs = 
+   View = 40
+   Jamming = 35
+   InfoImage = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 2000
+         fuel = 4000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 2000
+         fuel = 4000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = jamming unit
+   Armor = 400
+   Picture = unittest-trox.png
+   OriginalImageFilename = 
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   WaitForAttack = false
+   FuelConsumption = 7
+   Features = self_repairing 
+   Movement = 0 0 0 0 150 150 150 30 
+   Category = light_aircraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 15
+   WreckageObject = 1307 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 6
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = sy_ground_s.ogg
+   KillSound = 
+   HeightChangeMethodNum = 6
+   HeightChangeMethod0 { 
+      StartHeight = deep_submerged ground_level 
+      HeightDelta = 1
+      MoveCost = 15
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod0
+   HeightChangeMethod1 { 
+      StartHeight = submerged 
+      HeightDelta = 2
+      MoveCost = 15
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod1
+   HeightChangeMethod2 { 
+      StartHeight = low_level_flight medium_level_flight high_level_flight 
+      HeightDelta = 1
+      MoveCost = 15
+      CanAttack = true
+      Dist = 1
+   } HeightChangeMethod2
+   HeightChangeMethod3 { 
+      StartHeight = submerged low_level_flight 
+      HeightDelta = -1
+      MoveCost = 15
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod3
+   HeightChangeMethod4 { 
+      StartHeight = ground_level 
+      HeightDelta = -2
+      MoveCost = 15
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod4
+   HeightChangeMethod5 { 
+      StartHeight = medium_level_flight high_level_flight orbit 
+      HeightDelta = -1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 1
+   } HeightChangeMethod5
+   TechAdapterRequired = 1333 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 19900
+      Material = 21300
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 0 311 0 0 20 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

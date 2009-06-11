@@ -42,6 +42,7 @@
 #include "network/simple_file_transfer.h"
 #include "dialogs/fileselector.h"
 #include "researchexecution.h"
+#include "gameeventsystem.h"
 
 bool authenticateUser ( GameMap* actmap, bool allowCancel = true, bool lockView = true, bool throwOnFailure = false  )
 {
@@ -267,7 +268,12 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, Map
    gamemap->beginTurn();
    gamemap->setPlayerView ( gamemap->actplayer );
    gamemap->overviewMapHolder.clear();
+   
    gamemap->sigPlayerUserInteractionBegins( gamemap->player[gamemap->actplayer] );
+   
+   checktimedevents( gamemap, display );
+   checkevents( gamemap, display );
+   
 }
 
 

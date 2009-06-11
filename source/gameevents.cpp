@@ -51,6 +51,7 @@
 # include "viewcalculation.h"
 # include "resourcenet.h"
 # include "sg.h"
+# include "turncontrol.h"
 #endif
 
 
@@ -1340,9 +1341,22 @@ void LoseMap::execute( MapDisplayInterface* md )
 
    if ( !gamemap->continueplaying ) {
       displaymessage ( "You have been defeated !", 3 );
-      delete gamemap;
-      gamemap = NULL;
-      throw NoMapLoaded();
+      gamemap->getCurrentPlayer().stat = Player::off;
+      
+#ifdef sgmain
+      int humanCount = 0;
+      for ( int p = 0; p < gamemap->getPlayerCount(); ++p )
+         if ( gamemap->getPlayer(p).isHuman() && gamemap->getPlayer(p).exist() )
+            humanCount++;
+      
+      if ( humanCount > 1 ) {
+         next_turn( gamemap, NextTurnStrategy_AskUser(), md, -1 );
+      } else {
+         delete gamemap;
+         gamemap = NULL;
+         throw NoMapLoaded();
+      }
+#endif
    }
 }
 

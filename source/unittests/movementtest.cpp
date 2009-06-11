@@ -7,6 +7,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream>
 
 #include "../actions/moveunitcommand.h"
 #include "../loaders.h"
@@ -136,8 +137,34 @@ void testHeightChangeGUI()
 }
 
 
+void testMovementFieldsReachable()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-moveback.map"));
+   Vehicle* veh = game->getField(15,31)->vehicle;
+   assertOrThrow( veh != NULL );
+   
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   
+   muc->searchFields();
+   const set<MapCoordinate3D>& fields = muc->getReachableFields();
+   
+   for ( set<MapCoordinate3D>::const_iterator i = fields.begin(); i != fields.end(); ++i ) {
+      std::cout << "!!!" << i->x << ":" << i->y << ":" << i->getNumericalHeight() << "\n";
+      auto_ptr<MoveUnitCommand> m2 ( new MoveUnitCommand( veh ));
+      m2->setDestination( *i );
+      ActionResult res = m2->execute( createTestingContext( veh->getMap() ));
+      assertOrThrow( res.successful() );
+      m2.release();
+      
+      res = game->actions.undo( createTestingContext( game.get() ));
+      assertOrThrow( res.successful() );
+   }
+}
+
+
 void testMovement() 
 {
+   testMovementFieldsReachable();
    testMovement1();
    testMovementRF();
    testMovementTracks();
