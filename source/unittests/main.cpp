@@ -20,7 +20,7 @@
 
 #include "autotraining.h"
 
-
+#include "actiontest.h"
 #include "movementtest.h"
 #include "attacktest.h"
 #include "ai-move1.h"
@@ -75,6 +75,7 @@ Context createContext( GameMap* gamemap )
 
 void runUnitTests()
 {
+   testActions();
    testObjectConstruction();
    testResearch();
    testDiplomacy();

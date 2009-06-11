@@ -34,6 +34,7 @@
 #include "../mapdisplay.h"
 #include "selectionwindow.h"
 #include "../mainscreenwidget.h"
+#include "../spfst.h"
 
 class ActionSelectionWidget: public SelectionWidget
 {
@@ -152,6 +153,7 @@ class ActionManager : public ASC_PG_Dialog {
             ActionResult res = gamemap->actions.rerun( createContext( gamemap ));
             if ( !res.successful() )
                displayActionError( res );
+            repaintMap();
          } catch ( ActionResult res ) {
             displayActionError( res );
          }

@@ -48,7 +48,7 @@ class  tfield {
     int getMineralFuel() const;
     
     void setMineralMaterial( int material );
-    void setMineralFuel( int material );
+    void setMineralFuel( int fuel );
    
     //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
     Uint16       visible;

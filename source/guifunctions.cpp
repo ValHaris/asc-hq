@@ -399,6 +399,7 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
          if ( !res.successful() ) {
             delete move;
             dispmessage2(res);
+            updateFieldInfo();
             return;
          }
       } else {

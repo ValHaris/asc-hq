@@ -148,3 +148,10 @@ GameAction* GameAction::readFromStream( tnstream& stream, GameMap* map )
    return action;
 }
 
+
+void GameAction::deleteChildren()
+{
+   for ( Children::iterator i = children.begin(); i != children.end(); ++i )
+      delete *i;
+   children.clear();
+}

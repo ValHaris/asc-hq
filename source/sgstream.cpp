@@ -401,8 +401,10 @@ int readgameoptions ( const ASCString& filename )
         CGameOptions::Instance()->setChanged();
         if ( writegameoptions( filename ))
            displayLogMessage ( 6, "A config file has been sucessfully written to " + filename + " ");
-        else
+        else {
+           warningMessage("Unable to write file " + filename );
            displayLogMessage ( 6, "Failed to write config file to " + filename + " ");
+        }
      }
    }
 

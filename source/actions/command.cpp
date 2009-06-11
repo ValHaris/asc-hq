@@ -62,7 +62,12 @@ ActionResult Command::redo( const Context& context )
 {
    if ( getState() == Completed )
       setState( SetUp );
-   return go(context);
+   
+   deleteChildren();
+   
+   Context c ( context, this );
+   
+   return go(c);
 }
 
 vector<MapCoordinate> Command::getCoordinates() const

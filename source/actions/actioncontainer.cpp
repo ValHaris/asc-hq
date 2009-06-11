@@ -82,8 +82,8 @@ ActionResult ActionContainer::redo( const Context& context )
       return res;
    
    try {
-      if ( isActive_map(*currentPos ))
-         res = (*currentPos)->redo( context );
+      res = (*currentPos)->redo( context );
+      commandState_map[*currentPos] = true;
       ++currentPos;
    } catch ( ActionResult result ) {
       errorMessage(result.getMessage());
@@ -226,17 +226,30 @@ ActionResult ActionContainer::rerun( const Context& context )
       }
    }
    
-   while ( currentPos > firstDelta )
-      undo(context);
+   while ( currentPos > firstDelta ) {
+      --currentPos;
+      if( isActive_map( *currentPos ) ) {
+         ActionResult res = (*currentPos)->undo ( context );
+         if ( !res.successful()) 
+            return res;
+      }
+   }
    
-   commandState_map = commandState_request;
+   for ( CommandState::iterator j = commandState_request.begin(); j != commandState_request.end(); ++j )
+      commandState_map[j->first] = j->second;
+   
    commandState_request.clear();
    
    while ( currentPos < actions.end() ) {
-      ActionResult res = redo(context);
-      if ( !res.successful()) 
-         return res;
+      if( isActive_map( *currentPos ) ) {
+         ActionResult res = (*currentPos)->redo ( context );
+         if ( !res.successful()) 
+            return res;
+      }
+      ++currentPos;
    }
+   
+   
    
    return ActionResult(0);
 }

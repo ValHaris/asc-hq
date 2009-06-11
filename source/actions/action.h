@@ -57,6 +57,8 @@ class GameAction {
       
    protected:
       
+      void deleteChildren();
+      
       GameAction( GameMap* map );
       
       //! adds a child action. Ownership of the child action is passed to THIS
