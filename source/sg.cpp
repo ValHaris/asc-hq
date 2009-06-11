@@ -1359,15 +1359,16 @@ int gamethread ( void* data )
 {
    GameThreadParams* gtp = (GameThreadParams*) data;
 
-   loadpalette();
-
-   virtualscreenbuf.init();
-
-   std::auto_ptr<StartupScreen> startupScreen ( new StartupScreen( "title.jpg", dataLoaderTicker ));
+   std::auto_ptr<StartupScreen> startupScreen;
 
    MapTypeLoaded mtl = None;
 
    try {
+	  loadpalette();
+
+	  virtualscreenbuf.init();
+
+      startupScreen.reset( new StartupScreen( "title.jpg", dataLoaderTicker ));
       loadLegacyFonts();
       loaddata();
       
@@ -1539,7 +1540,7 @@ class ResourceLogger: public SigC::Object {
 
 
 int main(int argc, char *argv[] )
-{
+{ 
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
    // putenv(const_cast<char*>("DISPLAY=192.168.0.21:0")) ;
@@ -1582,9 +1583,9 @@ int main(int argc, char *argv[] )
    displayLogMessage( 1, getstartupmessage() );
 
    ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
-   initFileIO( cl->c() );  // passing the filename from the command line options
 
    try {
+      initFileIO( cl->c() );  // passing the filename from the command line options
       checkDataVersion();
       // check_bi3_dir ();
    } catch ( tfileerror err ) {
@@ -1619,7 +1620,6 @@ int main(int argc, char *argv[] )
       putenv( buf );
    }
 
-
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
@@ -1628,6 +1628,7 @@ int main(int argc, char *argv[] )
    tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
 
    PG_FileArchive archive( argv[0] );
+
    ASC_PG_App app ( "asc2_dlg" );
 
    app.sigAppIdle.connect ( SigC::slot( mainloopidle ));
@@ -1666,7 +1667,6 @@ int main(int argc, char *argv[] )
 #ifdef WIN32
    delete win32ErrorDialogGenerator;
 #endif
-
 
    setWindowCaption ( "Advanced Strategic Command" );
       

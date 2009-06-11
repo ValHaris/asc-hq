@@ -224,6 +224,7 @@ void tn_file_buf_stream::seek( int newpos )
          actmempos = newpos - ( actfilepos - datasize );
       else {
          fseek( fp, newpos, SEEK_SET );
+
          if ( ferror ( fp ) )
             throw  tfileerror ( getDeviceName() );
       

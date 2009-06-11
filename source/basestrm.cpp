@@ -1613,10 +1613,10 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const ASCString& name, IOMode mode 
    } else {
       containerstream = fl.container;
       if ( containerstream ) {
+         inp = 2;
          containerstream->opencontainerfile ( name.c_str() );
          devicename = name;
          location = name + " located inside " + containerstream->getDeviceName();
-         inp = 2;
       } else
          throw tfileerror ( name );
    }
