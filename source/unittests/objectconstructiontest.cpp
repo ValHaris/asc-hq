@@ -30,18 +30,18 @@ void testObjectConstruction()
    tfield* fld = game->getField( pos );
    assertOrThrow( fld != NULL );
    
-   assertOrThrow( fld->checkforobject( crystals ) != NULL );
+   assertOrThrow( fld->checkForObject( crystals ) != NULL );
    
    SpawnObject so ( game.get(), pos, 1 );
    ActionResult res = so.execute( createTestingContext( game.get() ));
    assertOrThrow( res.successful() );
    
-   assertOrThrow( fld->checkforobject( crystals ) == NULL );
-   assertOrThrow( fld->checkforobject( road ) != NULL );
+   assertOrThrow( fld->checkForObject( crystals ) == NULL );
+   assertOrThrow( fld->checkForObject( road ) != NULL );
    
    res = so.undo( createTestingContext( game.get() ) );  
    assertOrThrow( res.successful() );
    
-   assertOrThrow( fld->checkforobject( crystals ) != NULL );
-   assertOrThrow( fld->checkforobject( road ) == NULL );
+   assertOrThrow( fld->checkForObject( crystals ) != NULL );
+   assertOrThrow( fld->checkForObject( road ) == NULL );
 }

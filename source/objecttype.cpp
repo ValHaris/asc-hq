@@ -449,7 +449,7 @@ class Smoothing {
                tfield* fld = getfield ( x1, y1 );
                if ( fld ) {
 
-                  Object* obj = fld->checkforobject ( o );
+                  Object* obj = fld->checkForObject ( o );
                   if ( obj )
                      if ( obj->typ->weather.test(0) )
                         if ( IsInSetOfWord ( obj->typ->weatherPicture[0].bi3pic[ obj->dir ], Arr ))
@@ -526,7 +526,7 @@ class Smoothing {
            for ( int Y = 0 ; Y < actmap->ysize; Y++ )
              for ( int X = 0; X < actmap->xsize; X++ ) {
                  if ( TerObj ) {
-                    Object* obj = getfield ( X, Y )-> checkforobject ( TerObj );
+                    Object* obj = getfield ( X, Y )-> checkForObject ( TerObj );
                     if ( obj  && obj->typ->weather.test(0) ) {
                        int Old = obj->dir; // bipicnum
                                            //    Old:= TRawArrEck(Mission.ACTN[Y, X])[TerObj];  // bisherige Form / oder Bildnummer ?
@@ -790,7 +790,7 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
                      tfield* fld2 = actmap->getField(a,b);
 
                      if ( fld2 ) {
-                        Object* oi = fld2->checkforobject ( o->typ );
+                        Object* oi = fld2->checkForObject ( o->typ );
                         if ( oi )
                            if ( oi->dir <= 20  ||  run == 0 )
                               c |=  1 << i ;

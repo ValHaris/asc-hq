@@ -533,7 +533,7 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
             ObjectType* object = objectTypeRepository.getObject_byID( id );
             if ( object ) {
                (new SpawnObject( getMap(), start, id, 1 << dir ))->execute( context );
-               if ( startField->checkforobject ( object ))
+               if ( startField->checkForObject ( object ))
                   result = true;
             }
          }
@@ -545,7 +545,7 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
             ObjectType* object = objectTypeRepository.getObject_byID( id );
             if ( object ) {
                (new SpawnObject( getMap(), dest, id, 1 << dir ))->execute( context );
-               if ( destField->checkforobject ( object ))
+               if ( destField->checkForObject ( object ))
                   result = true;
             }
          }

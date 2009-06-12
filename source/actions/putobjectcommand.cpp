@@ -103,7 +103,7 @@ bool PutObjectCommand::checkObject( tfield* fld, ObjectType* objtype, Mode mode 
     
     if ( mode == Build ) {
        if ( objtype->getFieldModification(fld->getWeather()).terrainaccess.accessible( fld->bdt ) > 0
-            &&  !fld->checkforobject ( objtype )
+            &&  !fld->checkForObject ( objtype )
             && objtype->techDependency.available(getMap()->player[veh->getOwner()].research) ){
 //            && !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
 
@@ -111,7 +111,7 @@ bool PutObjectCommand::checkObject( tfield* fld, ObjectType* objtype, Mode mode 
              return true;
        }
     } else {
-       if ( fld->checkforobject ( objtype ) ) {
+       if ( fld->checkForObject ( objtype ) ) {
 //          &&  !getheightdelta ( log2( actvehicle->height), log2(objtype->getEffectiveHeight())) ) {
           Resources r = objtype->removecost;
           for ( int i = 0; i <3; ++i )
@@ -191,7 +191,7 @@ void PutObjectCommand :: setTarget( const MapCoordinate& target, int objectID )
    if( !obj )
       throw ActionResult(21501);
       
-   if ( !fld->checkforobject( obj ))
+   if ( !fld->checkForObject( obj ))
       mode = Build;
    else
       mode = Remove;

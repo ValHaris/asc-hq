@@ -1515,17 +1515,19 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_GameMap swig_types[5]
 #define SWIGTYPE_p_MapCoordinate swig_types[6]
 #define SWIGTYPE_p_MapCoordinate3D swig_types[7]
-#define SWIGTYPE_p_ObjectType swig_types[8]
-#define SWIGTYPE_p_Player swig_types[9]
-#define SWIGTYPE_p_Research swig_types[10]
-#define SWIGTYPE_p_Resources swig_types[11]
-#define SWIGTYPE_p_TerrainType swig_types[12]
-#define SWIGTYPE_p_Vehicle swig_types[13]
-#define SWIGTYPE_p_Vehicletype swig_types[14]
-#define SWIGTYPE_p_std__string swig_types[15]
-#define SWIGTYPE_p_tfield swig_types[16]
-static swig_type_info *swig_types[18];
-static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
+#define SWIGTYPE_p_Object swig_types[8]
+#define SWIGTYPE_p_ObjectType swig_types[9]
+#define SWIGTYPE_p_Player swig_types[10]
+#define SWIGTYPE_p_PropertyDialog swig_types[11]
+#define SWIGTYPE_p_Research swig_types[12]
+#define SWIGTYPE_p_Resources swig_types[13]
+#define SWIGTYPE_p_TerrainType swig_types[14]
+#define SWIGTYPE_p_Vehicle swig_types[15]
+#define SWIGTYPE_p_Vehicletype swig_types[16]
+#define SWIGTYPE_p_std__string swig_types[17]
+#define SWIGTYPE_p_tfield swig_types[18]
+static swig_type_info *swig_types[20];
+static swig_module_info swig_module = {swig_types, 19, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2897,6 +2899,37 @@ fail:
 }
 
 
+static int _wrap_tfield_checkForObject(lua_State* L) {
+  int SWIG_arg = 0;
+  tfield *arg1 = (tfield *) 0 ;
+  ObjectType *arg2 = (ObjectType *) 0 ;
+  Object *result = 0 ;
+  
+  SWIG_check_num_args("checkForObject",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("checkForObject",1,"tfield *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("checkForObject",2,"ObjectType const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_tfield,0))){
+    SWIG_fail_ptr("tfield_checkForObject",1,SWIGTYPE_p_tfield);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_ObjectType,0))){
+    SWIG_fail_ptr("tfield_checkForObject",2,SWIGTYPE_p_ObjectType);
+  }
+  
+  result = (Object *)(arg1)->checkForObject((ObjectType const *)arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Object,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_tfield(void *obj) {
 tfield *arg1 = (tfield *) obj;
 delete arg1;
@@ -2910,6 +2943,7 @@ static swig_lua_method swig_tfield_methods[] = {
     {"setMineralMaterial", _wrap_tfield_setMineralMaterial}, 
     {"setMineralFuel", _wrap_tfield_setMineralFuel}, 
     {"hasProperty", _wrap_tfield_hasProperty}, 
+    {"checkForObject", _wrap_tfield_checkForObject}, 
     {0,0}
 };
 static swig_lua_attribute swig_tfield_attributes[] = {
@@ -3161,6 +3195,247 @@ static swig_lua_attribute swig_Research_attributes[] = {
 static swig_lua_class *swig_Research_bases[] = {0};
 static const char *swig_Research_base_names[] = {0};
 static swig_lua_class _wrap_class_Research = { "Research", &SWIGTYPE_p_Research,0, swig_delete_Research, swig_Research_methods, swig_Research_attributes, swig_Research_bases, swig_Research_base_names };
+
+static int _wrap_new_PropertyDialog(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = 0 ;
+  std::string temp1 ;
+  PropertyDialog *result = 0 ;
+  
+  SWIG_check_num_args("PropertyDialog",1,1)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("PropertyDialog",1,"std::string const &");
+  temp1.assign(lua_tostring(L,1),lua_strlen(L,1)); arg1=&temp1;
+  result = (PropertyDialog *)new PropertyDialog((std::string const &)*arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_PropertyDialog,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_addBool(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  bool arg3 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("addBool",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addBool",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("addBool",2,"std::string const &");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("addBool",3,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_addBool",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  arg3 = (lua_toboolean(L, 3)!=0);
+  (arg1)->addBool((std::string const &)*arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_addInteger(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  int arg3 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("addInteger",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addInteger",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("addInteger",2,"std::string const &");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("addInteger",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_addInteger",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  arg3 = (int)lua_tonumber(L, 3);
+  (arg1)->addInteger((std::string const &)*arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_addString(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string temp2 ;
+  std::string temp3 ;
+  
+  SWIG_check_num_args("addString",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addString",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("addString",2,"std::string const &");
+  if(!lua_isstring(L,3)) SWIG_fail_arg("addString",3,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_addString",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  temp3.assign(lua_tostring(L,3),lua_strlen(L,3)); arg3=&temp3;
+  (arg1)->addString((std::string const &)*arg2,(std::string const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_getString(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  std::string result;
+  
+  SWIG_check_num_args("getString",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getString",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("getString",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_getString",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  result = (arg1)->getString((std::string const &)*arg2);
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_getInteger(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  int result;
+  
+  SWIG_check_num_args("getInteger",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getInteger",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("getInteger",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_getInteger",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  result = (int)(arg1)->getInteger((std::string const &)*arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_getBool(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  bool result;
+  
+  SWIG_check_num_args("getBool",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getBool",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("getBool",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_getBool",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  result = (bool)(arg1)->getBool((std::string const &)*arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_run(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("run",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("run",1,"PropertyDialog *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_run",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  result = (bool)(arg1)->run();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_PropertyDialog(void *obj) {
+PropertyDialog *arg1 = (PropertyDialog *) obj;
+delete arg1;
+}
+static swig_lua_method swig_PropertyDialog_methods[] = {
+    {"addBool", _wrap_PropertyDialog_addBool}, 
+    {"addInteger", _wrap_PropertyDialog_addInteger}, 
+    {"addString", _wrap_PropertyDialog_addString}, 
+    {"getString", _wrap_PropertyDialog_getString}, 
+    {"getInteger", _wrap_PropertyDialog_getInteger}, 
+    {"getBool", _wrap_PropertyDialog_getBool}, 
+    {"run", _wrap_PropertyDialog_run}, 
+    {0,0}
+};
+static swig_lua_attribute swig_PropertyDialog_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_PropertyDialog_bases[] = {0};
+static const char *swig_PropertyDialog_base_names[] = {0};
+static swig_lua_class _wrap_class_PropertyDialog = { "PropertyDialog", &SWIGTYPE_p_PropertyDialog,_wrap_new_PropertyDialog, swig_delete_PropertyDialog, swig_PropertyDialog_methods, swig_PropertyDialog_attributes, swig_PropertyDialog_bases, swig_PropertyDialog_base_names };
 
 static int _wrap_loadGame(lua_State* L) {
   int SWIG_arg = 0;
@@ -4475,8 +4750,10 @@ static swig_type_info _swigt__p_ContainerBaseType = {"_p_ContainerBaseType", "Co
 static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)&_wrap_class_GameMap, 0};
 static swig_type_info _swigt__p_MapCoordinate = {"_p_MapCoordinate", "MapCoordinate *", 0, 0, (void*)&_wrap_class_MapCoordinate, 0};
 static swig_type_info _swigt__p_MapCoordinate3D = {"_p_MapCoordinate3D", "MapCoordinate3D *", 0, 0, (void*)&_wrap_class_MapCoordinate3D, 0};
+static swig_type_info _swigt__p_Object = {"_p_Object", "Object *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ObjectType = {"_p_ObjectType", "ObjectType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Player = {"_p_Player", "Player *", 0, 0, (void*)&_wrap_class_Player, 0};
+static swig_type_info _swigt__p_PropertyDialog = {"_p_PropertyDialog", "PropertyDialog *", 0, 0, (void*)&_wrap_class_PropertyDialog, 0};
 static swig_type_info _swigt__p_Research = {"_p_Research", "Research *", 0, 0, (void*)&_wrap_class_Research, 0};
 static swig_type_info _swigt__p_Resources = {"_p_Resources", "Resources *", 0, 0, (void*)&_wrap_class_Resources, 0};
 static swig_type_info _swigt__p_TerrainType = {"_p_TerrainType", "TerrainType *", 0, 0, (void*)&_wrap_class_TerrainType, 0};
@@ -4494,8 +4771,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_GameMap,
   &_swigt__p_MapCoordinate,
   &_swigt__p_MapCoordinate3D,
+  &_swigt__p_Object,
   &_swigt__p_ObjectType,
   &_swigt__p_Player,
+  &_swigt__p_PropertyDialog,
   &_swigt__p_Research,
   &_swigt__p_Resources,
   &_swigt__p_TerrainType,
@@ -4513,8 +4792,10 @@ static swig_cast_info _swigc__p_ContainerBaseType[] = {  {&_swigt__p_ContainerBa
 static swig_cast_info _swigc__p_GameMap[] = {  {&_swigt__p_GameMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MapCoordinate[] = {  {&_swigt__p_MapCoordinate, 0, 0, 0},  {&_swigt__p_MapCoordinate3D, _p_MapCoordinate3DTo_p_MapCoordinate, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MapCoordinate3D[] = {  {&_swigt__p_MapCoordinate3D, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Object[] = {  {&_swigt__p_Object, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ObjectType[] = {  {&_swigt__p_ObjectType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Player[] = {  {&_swigt__p_Player, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_PropertyDialog[] = {  {&_swigt__p_PropertyDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Research[] = {  {&_swigt__p_Research, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Resources[] = {  {&_swigt__p_Resources, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TerrainType[] = {  {&_swigt__p_TerrainType, 0, 0, 0},{0, 0, 0, 0}};
@@ -4532,8 +4813,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_GameMap,
   _swigc__p_MapCoordinate,
   _swigc__p_MapCoordinate3D,
+  _swigc__p_Object,
   _swigc__p_ObjectType,
   _swigc__p_Player,
+  _swigc__p_PropertyDialog,
   _swigc__p_Research,
   _swigc__p_Resources,
   _swigc__p_TerrainType,

@@ -60,6 +60,7 @@
 #include "dialogs/fileselector.h"
 #include "dialogs/importbi3map.h"
 #include "dialogs/unitguidedialog.h"
+#include "dialogs/fileselector.h"
 #include "stack.h"
 
    
@@ -182,7 +183,7 @@
 
 SelectionHolder selection;
 
-void SelectionHolder::setSelection( const MapComponent& component ) 
+void SelectionHolder::setSelection( const Placeable& component ) 
 {
    delete currentItem;
    currentItem = component.clone();
@@ -211,7 +212,7 @@ void SelectionHolder::setWeather( int weather )
 }
 
 
-const MapComponent* SelectionHolder::getSelection()
+const Placeable* SelectionHolder::getSelection()
 {
    return currentItem;
 }
@@ -528,7 +529,7 @@ void execaction( int code)
                                     if ( !pf2->mines.empty() )
                                        pf2->removemine( -1 );
                                     else 
-                                       pf2->removeobject( NULL );
+                                       pf2->removeObject( NULL );
                             }
                                   
 
@@ -562,7 +563,7 @@ void execaction( int code)
                          tfield* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
-                            pf2->removeobject( NULL );
+                            pf2->removeObject( NULL );
                             mapChanged( actmap );
                          }
                       }

@@ -87,7 +87,7 @@ ActionResult RemoveObject::runAction( const Context& context )
    if ( !ot )
       return ActionResult( 21501 );
    
-   Object* o = fld->checkforobject( ot );
+   Object* o = fld->checkForObject( ot );
    if ( !o )
       return ActionResult( 21502 );
    
@@ -95,7 +95,7 @@ ActionResult RemoveObject::runAction( const Context& context )
    tmemorystream memstream( objectBuffer, tnstream::writing );
    o->write( memstream );
    
-   if ( fld->removeobject( ot, true ) )
+   if ( fld->removeObject( ot, true ) )
       return ActionResult(0);
    else
       return ActionResult(21508);
@@ -114,7 +114,7 @@ ActionResult RemoveObject::undoAction( const Context& context )
       return ActionResult( 21501 );
    
    fld->addobject( ot, -1, true );
-   Object* o = fld->checkforobject( ot );
+   Object* o = fld->checkForObject( ot );
    if ( !o )
       return ActionResult( 21502 );
    

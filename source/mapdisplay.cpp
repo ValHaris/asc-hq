@@ -217,7 +217,7 @@ void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,
          pipeline->display( fieldInfo.surface, pos, 63, 0 );
       } else {
          if ( fieldInfo.fld->bdt.test( cbpipeline )) {
-            Object* o = fieldInfo.fld->checkforobject( buried_pipeline );
+            Object* o = fieldInfo.fld->checkForObject( buried_pipeline );
             if ( o )
                pipeline->display( fieldInfo.surface, pos, o->dir, 0 );
             else {

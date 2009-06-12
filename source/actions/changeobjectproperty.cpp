@@ -103,7 +103,7 @@ Object* ChangeObjectProperty::getObject()
    if ( !ot )
       throw ActionResult( 21501 );
    
-   Object* o = fld->checkforobject( ot );
+   Object* o = fld->checkForObject( ot );
    if ( !o )
       throw ActionResult ( 21502 );
    

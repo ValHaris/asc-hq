@@ -23,6 +23,9 @@
 #include "spfst.h"
 #include "spfst-legacy.h"
 
+#include "lua/luastate.h"
+#include "lua/luarunner.h"
+
 int MapComponent::currentPlayer = 0;
 bool MapComponent::initialized = false;
 
@@ -50,3 +53,29 @@ MapComponent::MapComponent( const MapItemType* item ) : mapItem( item )
          
    }
 }
+
+LuaBrush::LuaBrush( const ASCString& filename ) : script(filename)
+{
+   
+}
+
+int LuaBrush :: place( const MapCoordinate& mc ) const
+{
+   LuaState state;
+   LuaRunner runner( state );
+   runner.runFile( script );
+   if ( !runner.getErrors().empty() )
+      errorMessage( runner.getErrors() );
+   updateFieldInfo();
+   return 1;
+}
+
+LuaBrush* LuaBrush::clone() const
+{
+	return new LuaBrush( script );
+}
+
+
+
+
+      

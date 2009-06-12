@@ -28,8 +28,14 @@
                
 #include "../itemrepository.h"
 #include "../dlg_box.h"
-
+#include "../paradialog.h"
+#include <pgpropertyfield_integer.h>
+#include <pgpropertyfield_checkbox.h>
+#include <pgpropertyfield_string.h>
+#include <pgpropertyfield_button.h>
+#include <pgpropertyeditor.h>
          
+#include "common.h"
          
 GameMap* getActiveMap()
 {
@@ -55,3 +61,67 @@ const TerrainType* getTerrainType( int id )
 {
    return terrainTypeRepository.getObject_byID( id );   
 }
+
+
+      bool PropertyDialog :: ok() {
+         result = true;
+         propertyEditor->Apply();
+         QuitModal();
+         return true;  
+      }
+      
+      bool PropertyDialog :: cancel() {
+         result = false;
+         QuitModal();
+         return true;  
+      }
+      
+      PropertyDialog :: PropertyDialog( const ASCString& title ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 500 ), title ), propertyEditor(NULL), result(false)
+      {
+         propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight()+10, Width() - 20, Height() - GetTitlebarHeight() - 60 ), "PropertyEditor", 70 );
+         
+         StandardButtonDirection( Horizontal );
+         AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &PropertyDialog::ok ));
+         AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &PropertyDialog::cancel ));
+      }
+   
+      void PropertyDialog :: addBool( const ASCString& name, bool defaultValue )
+      {
+         boolValues[name] = defaultValue ; 
+         new PG_PropertyField_Checkbox<bool>( propertyEditor, name, &boolValues[name] );
+      }
+      
+      void PropertyDialog :: addInteger( const ASCString& name, int defaultValue )
+      {
+         intValues[name] = defaultValue; 
+         new PG_PropertyField_Integer<int>( propertyEditor, name, &intValues[name] );
+      }
+      
+      void PropertyDialog :: addString( const ASCString& name, const ASCString& defaultValue )
+      {
+         stringValues[name] = defaultValue ; 
+         new PG_PropertyField_String<ASCString>( propertyEditor, name, &stringValues[name] );
+      }
+      
+      std::string PropertyDialog :: getString( const ASCString& name )
+      {
+         return stringValues[name];  
+      }
+      
+      int PropertyDialog :: getInteger( const ASCString& name )
+      {
+         return intValues[name];  
+      }
+      
+      bool PropertyDialog :: getBool( const ASCString& name )
+      {
+         return boolValues[name];  
+      }
+
+      bool PropertyDialog :: run() {
+         Show();
+         RunModal();  
+         Hide();
+         return result;
+      }
+   

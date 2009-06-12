@@ -1417,9 +1417,9 @@ void GameMap::objectGrowth()
       }
 
    for ( NewObjects::iterator i = newObjects.begin(); i != newObjects.end(); ++i )
-      if ( !i->first->checkforobject( getobjecttype_byid( i->second ))) {
+      if ( !i->first->checkForObject( getobjecttype_byid( i->second ))) {
          if ( i->first->addobject ( getobjecttype_byid( i->second ))) {
-            Object* o = i->first->checkforobject( getobjecttype_byid( i->second ));
+            Object* o = i->first->checkForObject( getobjecttype_byid( i->second ));
             assert(o);
             o->remainingGrowthTime = remainingGrowthTime[i->first];
          }

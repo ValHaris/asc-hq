@@ -32,7 +32,7 @@ void clearField( GameMap* map, const MapCoordinate& pos )
          delete fld->vehicle;
       
       while ( !fld->objects.empty() )
-         fld->removeobject( fld->objects[0].typ );
+         fld->removeObject( fld->objects[0].typ );
                
    }  
 }
@@ -44,7 +44,7 @@ Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* o
       if ( !fld->addobject( obj, -1, force ))
          return NULL;
       else
-         return fld->checkforobject(obj);
+         return fld->checkForObject(obj);
    } else
       return NULL;
 }

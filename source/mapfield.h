@@ -128,13 +128,13 @@ class  tfield {
         \param force remove the object even if there are obstacles on the field (like a building standing on the object)
         \returns if the removal was successful
     */
-    bool removeobject ( const ObjectType* obj, bool force = false );
+    bool removeObject ( const ObjectType* obj, bool force = false );
 
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
 
     //! checks if there are objects from the given type on the field and returns them
-    Object* checkforobject ( const ObjectType*  o );
+    Object* checkForObject ( const ObjectType*  o );
 
 
     //! the terraintype properties. They determine which units can move over the field. This variable is recalculated from the terraintype and objects each time something on the field changes (#setparams)

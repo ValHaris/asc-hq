@@ -24,6 +24,8 @@
 
 #include "../typen.h"
 
+#include "../paradialog.h"
+
 class GameMap;
 class ObjectType;
 class BuildingType;
@@ -37,46 +39,28 @@ extern const BuildingType* getBuildingType( int id );
 extern const Vehicletype* getUnitType( int id );
 extern const TerrainType* getTerrainType( int id );
 
-class TerrainBitNames {
+class PropertyDialog : public ASC_PG_Dialog {
+   private:
+      PG_PropertyEditor* propertyEditor;
+      bool result;
+   
+      bool ok();
+      bool cancel();
+      
+      map<ASCString,bool> boolValues;
+      map<ASCString,int>  intValues;
+      map<ASCString,ASCString> stringValues;
+      
    public:
-      enum { Shallow_water,  
-         Lowland,      
-         Swamp,
-         Forest,
-         High_mountains,
-         Road,
-         Railroad,
-         Building_entry_dont_use_it ,
-         Harbour,
-         Runway  ,
-         Pipeline,
-         Buried_pipeline,
-         Water,
-         Deep_water,
-         Hard_sand,
-         Soft_sand,
-         Track_possible,
-         Small_rocks,
-         Mud,
-         Snow,
-         Deep_snow,
-         Mountains,
-         Very_shallow_water,
-         Large_rocks,
-         Lava,
-         Ditch,
-         Hillside,
-         Turret_foundation,
-         Morass,
-         Installation,
-         Pack_ice,
-         River,
-         Frozen_water,
-         bridge,
-         lava_barrier,
-         spaceport,
-         beacon,
-         fire  };
+      PropertyDialog( const ASCString& title );
+      void addBool( const ASCString& name, bool defaultValue );
+      void addInteger( const ASCString& name, int defaultValue );
+      void addString( const ASCString& name, const ASCString& defaultValue );
+      
+      std::string getString( const ASCString& name );
+      int getInteger( const ASCString& name );
+      bool getBool( const ASCString& name );
+      bool run();
 };
 
       

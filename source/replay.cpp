@@ -1186,7 +1186,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                               if ( actaction == rpl_remobj || actaction == rpl_remobj2 ) {
                                  cost = obj->removecost;
-                                 fld->removeobject ( obj );
+                                 fld->removeObject ( obj );
                                  movecost = obj->remove_movecost;
                               } else {
                                  cost = obj->buildcost;

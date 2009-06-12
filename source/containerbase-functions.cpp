@@ -105,7 +105,7 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
    if ( !currentField )
       return;
 
-   Object* object = currentField->checkforobject( obj );
+   Object* object = currentField->checkForObject( obj );
    if ( !object )
       return;
 
@@ -119,7 +119,7 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
       if ( !harvestOnPosition(nextField)) {
          tfield* fld = base->getMap()->getField( nextField);
          if ( fld ) {
-            if ( fld->checkforobject(obj))
+            if ( fld->checkForObject(obj))
                ++regrowFields ;
             else {
                if ( obj->buildable(fld))
@@ -159,7 +159,7 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
          if( !justQuery ) {
             base->getResource( removeCost, false,  1, base->getOwner());
             base->putResource( removeBenefit, false,  1, base->getOwner() );
-            currentField->removeobject( obj, true );
+            currentField->removeObject( obj, true );
          }
          ++fieldCounter;
 

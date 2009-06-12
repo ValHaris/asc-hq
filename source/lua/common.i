@@ -130,7 +130,9 @@ class tfield {
       }
 #ifdef mapeditor
       void setWeather( int weather );
+      bool removeObject ( const ObjectType* obj, bool force = false );
 #endif      
+     Object* checkForObject ( const ObjectType*  o );
    protected:
       tfield();
 };
@@ -169,3 +171,20 @@ class Research {
       void addPredefinedTechAdapter( const std::string& techAdapter );
 #endif
 };
+
+
+
+class PropertyDialog  {
+   public:
+      PropertyDialog( const std::string& title );
+      void addBool( const std::string& name, bool defaultValue );
+      void addInteger( const std::string& name, int defaultValue );
+      void addString( const std::string& name, const std::string& defaultValue );
+      
+      std::string getString( const std::string& name );
+      int getInteger( const std::string& name );
+      bool getBool( const std::string& name );
+      bool run();
+};
+
+

@@ -251,7 +251,7 @@ void checkobjectsforremoval ( GameMap* gamemap )
          tfield* fld = getfield ( x, y );
          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end();  )
             if ( i->typ->getFieldModification(fld->getWeather()).terrainaccess.accessible ( fld->bdt ) < 0 ) {
-               fld->removeobject ( i->typ, true );
+               fld->removeObject ( i->typ, true );
                i = fld->objects.begin();
             } else
                i++;
@@ -498,7 +498,7 @@ void         calculateobject( int       x,
    }
 
    tfield* fld = actmap->getField(x,y) ;
-   Object* oi2 = fld-> checkforobject (  obj  );
+   Object* oi2 = fld-> checkForObject (  obj  );
 
    int c = 0;
    for ( int dir = 0; dir < sidenum; dir++) {
@@ -509,7 +509,7 @@ void         calculateobject( int       x,
 
       if ( fld2 ) {
          if ( obj->netBehaviour & ObjectType::NetToSelf )
-            if ( fld2->checkforobject ( obj )) {
+            if ( fld2->checkForObject ( obj )) {
                c |=  1 << dir ;
                if ( mof )
                   calculateobject ( a, b, false, obj, actmap );
@@ -518,7 +518,7 @@ void         calculateobject( int       x,
 
          for ( int oj = 0; oj < int(obj->linkableObjects.size()); oj++ ) {
             for ( int id = obj->linkableObjects[oj].from; id <= obj->linkableObjects[oj].to; ++id ) {
-               Object* oi = fld2->checkforobject ( actmap->getobjecttype_byid ( id ) );
+               Object* oi = fld2->checkForObject ( actmap->getobjecttype_byid ( id ) );
                if ( oi ) {
                   c |=  1 << dir ;
                   if ( mof )

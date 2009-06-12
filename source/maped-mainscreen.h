@@ -37,22 +37,26 @@ class NewGuiHost;
 class MapDisplayPG;
 
 class SelectionItemWidget : public PG_Widget {
-      const MapComponent* it;
+      const Placeable* it;
       static const int labelHeight = 15;
    public:
       SelectionItemWidget( PG_Widget* parent, const PG_Rect& pos ) : PG_Widget( parent, pos, true ), it(NULL)
       {
       }
            
-      void set( const MapComponent* item) { it = item; Redraw(true); };
+      void set( const Placeable* item) { it = item; Redraw(true); };
    protected:
       void eventDraw (SDL_Surface *surface, const PG_Rect &rect) 
       {
          Surface s = Surface::Wrap( surface );
          s.Fill( s.GetPixelFormat().MapRGB( DI_Color( 0x73b16a ) ));
+         
          if ( it ) {
-            SPoint pos ( (Width() - it->displayWidth()) / 2, (Height() - it->displayHeight())/2 );
-            it->display( s, pos );
+            const MapComponent* mc = dynamic_cast<const MapComponent*>(it);
+            if ( mc ) {
+               SPoint pos ( (Width() - mc->displayWidth()) / 2, (Height() - mc->displayHeight())/2 );
+               mc->display( s, pos );
+            }
         }    
       };
 
@@ -93,6 +97,7 @@ public:
     bool selectTerrain();
     bool selectTerrainList();
     bool selectMine();
+    bool selectLuaBrush();
     void updateStatusBar();
 
     void addContextAction( ContextAction* contextAction );
@@ -105,7 +110,7 @@ protected:
     Menu* menu;
     
     void brushChanged( int i );
-    void selectionChanged( const MapComponent* item ); 
+    void selectionChanged( const Placeable* item ); 
     bool eventKeyUp(const SDL_KeyboardEvent* key);
     bool eventKeyDown(const SDL_KeyboardEvent* key);
     void setupStatusBar();

@@ -135,7 +135,7 @@ ActionResult SpawnObject::runAction( const Context& context )
    if ( !object )
       return ActionResult( 21201, "Object id is " + ASCString::toString(objectID));
    
-   Object* old = fld->checkforobject( object );
+   Object* old = fld->checkForObject( object );
    if ( old ) {
       objectAvailableBeforehand = true;
       oldObjectDirection = old->dir;
@@ -163,13 +163,13 @@ ActionResult SpawnObject::undoAction( const Context& context )
       return ActionResult( 21201, "Object id is " + ASCString::toString(objectID));
    
    if ( objectAvailableBeforehand ) {
-      Object* o = fld->checkforobject( object );
+      Object* o = fld->checkForObject( object );
       if ( !o )
          return ActionResult( 21505 );
       o->dir = oldObjectDirection;
    } else
       if ( !objectImmediatelyDisappearsAgain )
-         fld->removeobject( object, true );
+         fld->removeObject( object, true );
       
    return ActionResult(0);
 }

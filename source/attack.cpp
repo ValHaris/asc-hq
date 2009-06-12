@@ -812,7 +812,7 @@ void tunitattacksobject :: setresult ( void )
 
    /* Remove the object if it was destroyed */
    if ( _obji->damage >= 100 ) {
-      _attackingunit->getMap()->getField ( _x, _y )-> removeobject ( _obji->typ );
+      _attackingunit->getMap()->getField ( _x, _y )-> removeObject ( _obji->typ );
    }
 
    /* Remove the attacking unit if it was destroyed */

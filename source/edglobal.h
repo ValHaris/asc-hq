@@ -148,7 +148,7 @@ enum tuseractions {
  };
 
 class SelectionHolder : public SigC::Object {
-     const MapComponent* currentItem;
+     const Placeable* currentItem;
      int actplayer;
      int currentWeather;
      
@@ -163,11 +163,11 @@ class SelectionHolder : public SigC::Object {
      int getWeather() { return currentWeather; };
      
      int brushSize;
-     const MapComponent* getSelection();
-     void setSelection( const MapComponent& component ) ;
+     const Placeable* getSelection();
+     void setSelection( const Placeable& component ) ;
      void pickup ( tfield* fld );
      
-     SigC::Signal1<void,const MapComponent*> selectionChanged;
+     SigC::Signal1<void,const Placeable*> selectionChanged;
      void clear(); 
 };
  

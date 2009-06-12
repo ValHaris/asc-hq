@@ -182,7 +182,7 @@ bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, tfield::O
    if ( !obj )
       return false;
 
-   Object* i = checkforobject ( obj );
+   Object* i = checkForObject ( obj );
    if ( !i ) {
      int buildable = obj->buildable ( this );
      if ( !buildable )
@@ -221,7 +221,7 @@ bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, tfield::O
 }
 
 
-bool tfield :: removeobject( const ObjectType* obj, bool force)
+bool tfield :: removeObject( const ObjectType* obj, bool force)
 {
    if ( !force && building )
       return false;
@@ -584,7 +584,7 @@ void tfield :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
    
 }
 
-Object* tfield :: checkforobject ( const ObjectType*  o )
+Object* tfield :: checkForObject ( const ObjectType*  o )
 {
    for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); i++ )
       if ( i->typ == o )

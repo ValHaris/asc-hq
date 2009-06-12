@@ -3144,7 +3144,7 @@ void transformMap ( )
                       j = -1; // restarting the outer loop
                       break;
                    } else {
-                      fld->removeobject( fld->objects[j].typ, true );
+                      fld->removeObject( fld->objects[j].typ, true );
                       j = -1;
                       break;
                    }
@@ -3698,7 +3698,7 @@ class ItemLocator : public ASC_PG_Dialog {
                                  if ( findUnit( fld->building, id ))
                                     found = true;
                            break;
-                        case 3: if ( fld->checkforobject( objectTypeRepository.getObject_byID( id )) )
+                        case 3: if ( fld->checkForObject( objectTypeRepository.getObject_byID( id )) )
                                    found = true;
                            break;
                      }
@@ -3829,7 +3829,7 @@ void locateItemByID()
    {
       targetField->deleteeverything();
       while( targetField->objects.size() > 0 )
-         targetField->removeobject( targetField->objects[ 0 ].typ, true );
+         targetField->removeObject( targetField->objects[ 0 ].typ, true );
       
          if( mirrorTerrain )
          {

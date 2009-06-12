@@ -242,8 +242,8 @@ int ObjectItem::place( const MapCoordinate& mc ) const
 
 bool ObjectItem::remove ( const MapCoordinate& mc ) const
 {
-   if ( item && actmap->getField(mc)->checkforobject(item) ) {
-      actmap->getField(mc)->removeobject ( item );
+   if ( item && actmap->getField(mc)->checkForObject(item) ) {
+      actmap->getField(mc)->removeObject ( item );
       return true;
    }
    return false;

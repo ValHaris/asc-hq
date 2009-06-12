@@ -42,6 +42,7 @@
 #include "edmisc.h"
 #include "gameoptions.h"
 #include "widgets/dropdownselector.h"
+#include "dialogs/fileselector.h"
 
 Maped_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -443,6 +444,10 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    button5->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectMine ));
    ypos += 25;
     
+   PG_Button* button6 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Lua Brush" );
+   button6->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectLuaBrush ));
+   ypos += 25;
+   
    
    new PG_Label( this, PG_Rect( xpos, ypos, w/2 - 5, 20), "Brush:");
    brushSelector = new DropDownSelector( this, PG_Rect( xpos+w/2+5, ypos, w/2-5, 20));
@@ -539,11 +544,16 @@ void Maped_MainScreenWidget::updateStatusBar()
    coordinateDisplay->SetText( ASCString::toString( pos.x) + " / " + ASCString::toString( pos.y ));
 }
 
-void Maped_MainScreenWidget::selectionChanged( const MapComponent* item )
+void Maped_MainScreenWidget::selectionChanged( const Placeable* item )
 {
    if ( item ) {
-      selectionName->SetText( item->getItemType()->getName() );
-      selectionName2->SetText( "ID: " + ASCString::toString( item->getItemType()->getID() ) );
+      selectionName->SetText( item->getName() );
+      
+      const MapComponent* mc = dynamic_cast<const MapComponent*>(item);
+      if (  mc ) 
+         selectionName2->SetText( "ID: " + ASCString::toString( mc->getItemType()->getID() ) );
+      else
+         selectionName2->SetText( "" );
    } else {
       selectionName->SetText( "" );
       selectionName2->SetText( "" );
@@ -985,6 +995,19 @@ bool Maped_MainScreenWidget :: selectTerrainList()
 bool Maped_MainScreenWidget :: selectMine()
 {
    showSelectionWindow( this, mineSelector, mineTypeRepository );
+   return true;
+}
+
+bool Maped_MainScreenWidget :: selectLuaBrush()
+{
+   ASCString file = selectFile( "*.brush.lua", false );
+   if ( file.empty () )
+      return true;
+   
+   LuaBrush brush ( file );
+   selection.setSelection( brush );
+
+   
    return true;
 }
 

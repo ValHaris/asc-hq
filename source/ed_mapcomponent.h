@@ -36,12 +36,22 @@
 extern SigC::Signal0<void> filtersChangedSignal;
 
 
-
+class Placeable {
+   public:
+      virtual ~Placeable() {};
+      virtual bool supportMultiFieldPlacement() const = 0;
+      virtual int place( const MapCoordinate& mc ) const = 0;
+       //! just a wrapper so we have a function return void
+      void vPlace( const MapCoordinate& mc ) const { place( mc ); };
+      virtual Placeable* clone() const = 0;
+      virtual bool remove ( const MapCoordinate& mc ) const { return false; };
+      virtual ASCString getName() const = 0;
+};
 
 /** A MapComponent represents any kind of item that can be placed on the map by the user.
     It is the abstract class on which the Brush edit function operates
 */
-class MapComponent {
+class MapComponent : public Placeable {
        static int currentPlayer;
        static void setPlayer( int player );
        static bool initialized;
@@ -55,15 +65,10 @@ class MapComponent {
        const MapItemType* getItemType() const { return mapItem; };
        virtual int displayWidth() const = 0;
        virtual int displayHeight() const = 0;
-       virtual MapComponent* clone() const = 0;
-       virtual int place( const MapCoordinate& mc ) const = 0;
-       virtual bool remove ( const MapCoordinate& mc ) const { return false; };
-       //! just a wrapper so we have a function return void
-       void vPlace( const MapCoordinate& mc ) const { place( mc ); };
        virtual void display( Surface& s, const SPoint& pos ) const = 0;
        virtual bool supportMultiFieldPlacement() const { return true; };
        void displayClip( PG_Widget* parent, SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) const;
-       virtual ~MapComponent() {};
+       virtual ASCString getName() const  { return mapItem->getName(); };
 };
 
 
@@ -166,6 +171,18 @@ template<> class ItemTypeSelector<MineType> {
       typedef MineItem type;
 };
 
+
+
+class LuaBrush : public Placeable {
+   protected:
+      ASCString script;
+   public:
+      LuaBrush( const ASCString& filename );
+      bool supportMultiFieldPlacement() const { return false; };
+      int place( const MapCoordinate& mc ) const;
+      virtual LuaBrush* clone() const;
+      virtual ASCString getName() const { return script; };
+};
 
 
 #endif

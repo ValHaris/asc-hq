@@ -76,15 +76,15 @@ void testMovementTracks()
    
    ObjectType* track = objectTypeRepository.getObject_byID( 7 );
    
-   assertOrThrow( game->getField(4,9)->checkforobject( track) != NULL );
-   assertOrThrow( game->getField(5,10)->checkforobject( track) == NULL );
+   assertOrThrow( game->getField(4,9)->checkForObject( track) != NULL );
+   assertOrThrow( game->getField(5,10)->checkForObject( track) == NULL );
    
    ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
    
    assertOrThrow( res.successful() );
    
-   assertOrThrow( game->getField(4,9)->checkforobject( track) == NULL );
-   assertOrThrow( game->getField(5,10)->checkforobject( track) == NULL );
+   assertOrThrow( game->getField(4,9)->checkForObject( track) == NULL );
+   assertOrThrow( game->getField(5,10)->checkForObject( track) == NULL );
   
 }
 
