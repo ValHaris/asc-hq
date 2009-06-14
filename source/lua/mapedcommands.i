@@ -35,3 +35,5 @@ class FieldVector {
 };
 
 FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );
+MapCoordinate selectPosition();
+

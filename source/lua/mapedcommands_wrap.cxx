@@ -2192,11 +2192,36 @@ static int _wrap_new_MapCoordinate(lua_State* L) {
 }
 
 
+static int _wrap_MapCoordinate_valid(lua_State* L) {
+  int SWIG_arg = 0;
+  MapCoordinate *arg1 = (MapCoordinate *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("valid",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("valid",1,"MapCoordinate *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("MapCoordinate_valid",1,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = (bool)(arg1)->valid();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MapCoordinate(void *obj) {
 MapCoordinate *arg1 = (MapCoordinate *) obj;
 delete arg1;
 }
 static swig_lua_method swig_MapCoordinate_methods[] = {
+    {"valid", _wrap_MapCoordinate_valid}, 
     {0,0}
 };
 static swig_lua_attribute swig_MapCoordinate_attributes[] = {
@@ -2266,11 +2291,36 @@ static int _wrap_new_MapCoordinate3D(lua_State* L) {
 }
 
 
+static int _wrap_MapCoordinate3D_valid(lua_State* L) {
+  int SWIG_arg = 0;
+  MapCoordinate3D *arg1 = (MapCoordinate3D *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("valid",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("valid",1,"MapCoordinate3D *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapCoordinate3D,0))){
+    SWIG_fail_ptr("MapCoordinate3D_valid",1,SWIGTYPE_p_MapCoordinate3D);
+  }
+  
+  result = (bool)(arg1)->valid();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MapCoordinate3D(void *obj) {
 MapCoordinate3D *arg1 = (MapCoordinate3D *) obj;
 delete arg1;
 }
 static swig_lua_method swig_MapCoordinate3D_methods[] = {
+    {"valid", _wrap_MapCoordinate3D_valid}, 
     {0,0}
 };
 static swig_lua_attribute swig_MapCoordinate3D_attributes[] = {
@@ -4588,6 +4638,26 @@ fail:
 }
 
 
+static int _wrap_selectPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  SwigValueWrapper< MapCoordinate > result;
+  
+  SWIG_check_num_args("selectPosition",0,0)
+  result = selectPosition();
+  {
+    MapCoordinate * resultptr = new MapCoordinate((const MapCoordinate &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_MapCoordinate,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -4610,6 +4680,7 @@ static const struct luaL_reg swig_commands[] = {
     { "placeTerrain",_wrap_placeTerrain},
     { "selectPlayer", _wrap_selectPlayer},
     { "getFieldsInDistance", _wrap_getFieldsInDistance},
+    { "selectPosition", _wrap_selectPosition},
     {0,0}
 };
 

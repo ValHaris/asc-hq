@@ -30,6 +30,7 @@ class MapCoordinate {
       MapCoordinate();
    public:       
       MapCoordinate(int x, int y );
+      bool valid();
 };
 
 
@@ -38,6 +39,7 @@ class MapCoordinate3D : public MapCoordinate {
       MapCoordinate3D();
    public:       
       MapCoordinate3D(int x, int y, int bitmappedHeight );
+      bool valid();
 };
 
 GameMap* getActiveMap();

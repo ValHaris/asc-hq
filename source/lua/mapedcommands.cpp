@@ -12,6 +12,7 @@
 #include "../itemrepository.h"
 #include "../dlg_box.h"
 #include "mapedcommands.h"
+#include "../dialogs/fieldmarker.h"
 
          
          
@@ -150,5 +151,18 @@ FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, in
    lfs.initsearch( position, distance, distance );
    lfs.startsearch();
    return lfs.fields;
+}
+
+MapCoordinate selectPosition()
+{
+   SelectFromMap::CoordinateList list;
+   SelectFromMap sfm( list, actmap, true );
+   sfm.Show();
+   sfm.RunModal();
+   if ( list.size () )
+      return *list.begin();
+   else
+      return MapCoordinate(-1,-1);
+         
 }
 
