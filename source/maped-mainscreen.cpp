@@ -1000,7 +1000,7 @@ bool Maped_MainScreenWidget :: selectMine()
 
 bool Maped_MainScreenWidget :: selectLuaBrush()
 {
-   ASCString file = selectFile( "*.brush.lua", false );
+   ASCString file = selectFile( "*.brush.lua", true );
    if ( file.empty () )
       return true;
    

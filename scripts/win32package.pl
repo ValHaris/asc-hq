@@ -65,7 +65,7 @@ system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $zip
 die "error uploading file" if $?;
 
 if ( $cvsUpload ) {
-    system("Upload.cmd");
+    system("Upload.cmd  $version");
 }
 
 if ( $pbpEditor ) {
