@@ -1521,13 +1521,14 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_PropertyDialog swig_types[11]
 #define SWIGTYPE_p_Research swig_types[12]
 #define SWIGTYPE_p_Resources swig_types[13]
-#define SWIGTYPE_p_TerrainType swig_types[14]
-#define SWIGTYPE_p_Vehicle swig_types[15]
-#define SWIGTYPE_p_Vehicletype swig_types[16]
-#define SWIGTYPE_p_std__string swig_types[17]
-#define SWIGTYPE_p_tfield swig_types[18]
-static swig_type_info *swig_types[20];
-static swig_module_info swig_module = {swig_types, 19, 0, 0, 0, 0};
+#define SWIGTYPE_p_StringArray swig_types[14]
+#define SWIGTYPE_p_TerrainType swig_types[15]
+#define SWIGTYPE_p_Vehicle swig_types[16]
+#define SWIGTYPE_p_Vehicletype swig_types[17]
+#define SWIGTYPE_p_std__string swig_types[18]
+#define SWIGTYPE_p_tfield swig_types[19]
+static swig_type_info *swig_types[21];
+static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3744,6 +3745,118 @@ static swig_lua_class *swig_Research_bases[] = {0};
 static const char *swig_Research_base_names[] = {0};
 static swig_lua_class _wrap_class_Research = { "Research", &SWIGTYPE_p_Research,0, swig_delete_Research, swig_Research_methods, swig_Research_attributes, swig_Research_bases, swig_Research_base_names };
 
+static int _wrap_new_StringArray(lua_State* L) {
+  int SWIG_arg = 0;
+  StringArray *result = 0 ;
+  
+  SWIG_check_num_args("StringArray",0,0)
+  result = (StringArray *)new StringArray();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_StringArray,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_StringArray_add(lua_State* L) {
+  int SWIG_arg = 0;
+  StringArray *arg1 = (StringArray *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("add",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("add",1,"StringArray *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("add",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_StringArray,0))){
+    SWIG_fail_ptr("StringArray_add",1,SWIGTYPE_p_StringArray);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  (arg1)->add((std::string const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_StringArray_getItem(lua_State* L) {
+  int SWIG_arg = 0;
+  StringArray *arg1 = (StringArray *) 0 ;
+  int arg2 ;
+  std::string result;
+  
+  SWIG_check_num_args("getItem",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getItem",1,"StringArray *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("getItem",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_StringArray,0))){
+    SWIG_fail_ptr("StringArray_getItem",1,SWIGTYPE_p_StringArray);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (arg1)->getItem(arg2);
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_StringArray_size(lua_State* L) {
+  int SWIG_arg = 0;
+  StringArray *arg1 = (StringArray *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("size",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("size",1,"StringArray *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_StringArray,0))){
+    SWIG_fail_ptr("StringArray_size",1,SWIGTYPE_p_StringArray);
+  }
+  
+  result = (int)(arg1)->size();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_StringArray(void *obj) {
+StringArray *arg1 = (StringArray *) obj;
+delete arg1;
+}
+static swig_lua_method swig_StringArray_methods[] = {
+    {"add", _wrap_StringArray_add}, 
+    {"getItem", _wrap_StringArray_getItem}, 
+    {"size", _wrap_StringArray_size}, 
+    {0,0}
+};
+static swig_lua_attribute swig_StringArray_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_StringArray_bases[] = {0};
+static const char *swig_StringArray_base_names[] = {0};
+static swig_lua_class _wrap_class_StringArray = { "StringArray", &SWIGTYPE_p_StringArray,_wrap_new_StringArray, swig_delete_StringArray, swig_StringArray_methods, swig_StringArray_attributes, swig_StringArray_bases, swig_StringArray_base_names };
+
 static int _wrap_new_PropertyDialog(lua_State* L) {
   int SWIG_arg = 0;
   std::string *arg1 = 0 ;
@@ -3814,6 +3927,43 @@ static int _wrap_PropertyDialog_addInteger(lua_State* L) {
   temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
   arg3 = (int)lua_tonumber(L, 3);
   (arg1)->addInteger((std::string const &)*arg2,arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_PropertyDialog_addIntDropdown(lua_State* L) {
+  int SWIG_arg = 0;
+  PropertyDialog *arg1 = (PropertyDialog *) 0 ;
+  std::string *arg2 = 0 ;
+  StringArray *arg3 = 0 ;
+  int arg4 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("addIntDropdown",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addIntDropdown",1,"PropertyDialog *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("addIntDropdown",2,"std::string const &");
+  if(!lua_isuserdata(L,3)) SWIG_fail_arg("addIntDropdown",3,"StringArray const &");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("addIntDropdown",4,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_PropertyDialog,0))){
+    SWIG_fail_ptr("PropertyDialog_addIntDropdown",1,SWIGTYPE_p_PropertyDialog);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,3,(void**)&arg3,SWIGTYPE_p_StringArray,0))){
+    SWIG_fail_ptr("PropertyDialog_addIntDropdown",3,SWIGTYPE_p_StringArray);
+  }
+  
+  arg4 = (int)lua_tonumber(L, 4);
+  (arg1)->addIntDropdown((std::string const &)*arg2,(StringArray const &)*arg3,arg4);
   
   return SWIG_arg;
   
@@ -3971,6 +4121,7 @@ delete arg1;
 static swig_lua_method swig_PropertyDialog_methods[] = {
     {"addBool", _wrap_PropertyDialog_addBool}, 
     {"addInteger", _wrap_PropertyDialog_addInteger}, 
+    {"addIntDropdown", _wrap_PropertyDialog_addIntDropdown}, 
     {"addString", _wrap_PropertyDialog_addString}, 
     {"getString", _wrap_PropertyDialog_getString}, 
     {"getInteger", _wrap_PropertyDialog_getInteger}, 
@@ -3984,6 +4135,124 @@ static swig_lua_attribute swig_PropertyDialog_attributes[] = {
 static swig_lua_class *swig_PropertyDialog_bases[] = {0};
 static const char *swig_PropertyDialog_base_names[] = {0};
 static swig_lua_class _wrap_class_PropertyDialog = { "PropertyDialog", &SWIGTYPE_p_PropertyDialog,_wrap_new_PropertyDialog, swig_delete_PropertyDialog, swig_PropertyDialog_methods, swig_PropertyDialog_attributes, swig_PropertyDialog_bases, swig_PropertyDialog_base_names };
+
+static int _wrap_selectString__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = 0 ;
+  StringArray *arg2 = 0 ;
+  int arg3 ;
+  std::string temp1 ;
+  int result;
+  
+  SWIG_check_num_args("selectString",3,3)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("selectString",1,"std::string const &");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("selectString",2,"StringArray const &");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("selectString",3,"int");
+  temp1.assign(lua_tostring(L,1),lua_strlen(L,1)); arg1=&temp1;
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_StringArray,0))){
+    SWIG_fail_ptr("selectString",2,SWIGTYPE_p_StringArray);
+  }
+  
+  arg3 = (int)lua_tonumber(L, 3);
+  result = (int)selectString((std::string const &)*arg1,(StringArray const &)*arg2,arg3);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_selectString__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = 0 ;
+  StringArray *arg2 = 0 ;
+  std::string temp1 ;
+  int result;
+  
+  SWIG_check_num_args("selectString",2,2)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("selectString",1,"std::string const &");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("selectString",2,"StringArray const &");
+  temp1.assign(lua_tostring(L,1),lua_strlen(L,1)); arg1=&temp1;
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_StringArray,0))){
+    SWIG_fail_ptr("selectString",2,SWIGTYPE_p_StringArray);
+  }
+  
+  result = (int)selectString((std::string const &)*arg1,(StringArray const &)*arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_selectString(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      _v = lua_isstring(L,argv[0]);
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_StringArray, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_selectString__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      _v = lua_isstring(L,argv[0]);
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_StringArray, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_selectString__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'selectString'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    selectString(std::string const &,StringArray const &,int)\n"
+    "    selectString(std::string const &,StringArray const &)\n");
+  lua_error(L);return 0;
+}
+
 
 static int _wrap_getCursorPosition(lua_State* L) {
   int SWIG_arg = 0;
@@ -4671,6 +4940,7 @@ static const struct luaL_reg swig_commands[] = {
     { "errorMessage", _wrap_errorMessage},
     { "warningMessage", _wrap_warningMessage},
     { "infoMessage", _wrap_infoMessage},
+    { "selectString",_wrap_selectString},
     { "getCursorPosition", _wrap_getCursorPosition},
     { "clearField", _wrap_clearField},
     { "getNeighbouringFieldCoordinate", _wrap_getNeighbouringFieldCoordinate},
@@ -4723,6 +4993,7 @@ static swig_type_info _swigt__p_Player = {"_p_Player", "Player *", 0, 0, (void*)
 static swig_type_info _swigt__p_PropertyDialog = {"_p_PropertyDialog", "PropertyDialog *", 0, 0, (void*)&_wrap_class_PropertyDialog, 0};
 static swig_type_info _swigt__p_Research = {"_p_Research", "Research *", 0, 0, (void*)&_wrap_class_Research, 0};
 static swig_type_info _swigt__p_Resources = {"_p_Resources", "Resources *", 0, 0, (void*)&_wrap_class_Resources, 0};
+static swig_type_info _swigt__p_StringArray = {"_p_StringArray", "StringArray *", 0, 0, (void*)&_wrap_class_StringArray, 0};
 static swig_type_info _swigt__p_TerrainType = {"_p_TerrainType", "TerrainType *", 0, 0, (void*)&_wrap_class_TerrainType, 0};
 static swig_type_info _swigt__p_Vehicle = {"_p_Vehicle", "Vehicle *", 0, 0, (void*)&_wrap_class_Vehicle, 0};
 static swig_type_info _swigt__p_Vehicletype = {"_p_Vehicletype", "Vehicletype *", 0, 0, (void*)&_wrap_class_Vehicletype, 0};
@@ -4744,6 +5015,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_PropertyDialog,
   &_swigt__p_Research,
   &_swigt__p_Resources,
+  &_swigt__p_StringArray,
   &_swigt__p_TerrainType,
   &_swigt__p_Vehicle,
   &_swigt__p_Vehicletype,
@@ -4765,6 +5037,7 @@ static swig_cast_info _swigc__p_Player[] = {  {&_swigt__p_Player, 0, 0, 0},{0, 0
 static swig_cast_info _swigc__p_PropertyDialog[] = {  {&_swigt__p_PropertyDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Research[] = {  {&_swigt__p_Research, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Resources[] = {  {&_swigt__p_Resources, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_StringArray[] = {  {&_swigt__p_StringArray, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_TerrainType[] = {  {&_swigt__p_TerrainType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vehicle[] = {  {&_swigt__p_Vehicle, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Vehicletype[] = {  {&_swigt__p_Vehicletype, 0, 0, 0},{0, 0, 0, 0}};
@@ -4786,6 +5059,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_PropertyDialog,
   _swigc__p_Research,
   _swigc__p_Resources,
+  _swigc__p_StringArray,
   _swigc__p_TerrainType,
   _swigc__p_Vehicle,
   _swigc__p_Vehicletype,

@@ -30,6 +30,7 @@
 #include "../dlg_box.h"
 #include "../paradialog.h"
 #include <pgpropertyfield_integer.h>
+#include <pgpropertyfield_intdropdown.h>
 #include <pgpropertyfield_checkbox.h>
 #include <pgpropertyfield_string.h>
 #include <pgpropertyfield_button.h>
@@ -97,6 +98,12 @@ const TerrainType* getTerrainType( int id )
          new PG_PropertyField_Integer<int>( propertyEditor, name, &intValues[name] );
       }
       
+      void PropertyDialog :: addIntDropdown( const ASCString& name, const StringArray& names, int defaultValue )
+      {
+         intValues[name] = defaultValue; 
+         new PG_PropertyField_IntDropDown<int,vector<ASCString>::const_iterator>( propertyEditor, name, &intValues[name], names.values.begin(), names.values.end() );
+      }
+      
       void PropertyDialog :: addString( const ASCString& name, const ASCString& defaultValue )
       {
          stringValues[name] = defaultValue ; 
@@ -125,3 +132,19 @@ const TerrainType* getTerrainType( int id )
          return result;
       }
    
+      
+int selectString ( const ASCString& title, const StringArray& entries, int defaultEntry  )
+{
+   vector<ASCString> buttons;
+   buttons.push_back("OK" );
+   buttons.push_back("Cancel" );
+   
+   pair<int,int> r = new_chooseString ( title, entries.values, buttons, defaultEntry );
+   if ( r.first == 1 )
+      return -1;
+   else
+      return r.second;
+}
+
+      
+      

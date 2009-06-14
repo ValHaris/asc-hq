@@ -39,6 +39,18 @@ extern const BuildingType* getBuildingType( int id );
 extern const Vehicletype* getUnitType( int id );
 extern const TerrainType* getTerrainType( int id );
 
+class StringArray {
+   public:
+      vector<ASCString> values;
+      StringArray(){};
+      void add( const ASCString& s ) { values.push_back( s ); };
+      ASCString getItem( int n ) //!< 1 based, in best LUA tradition 
+      {
+         return (n> 0 && n <= values.size()) ? values[n-1] : ASCString();
+      }
+      int size() { return values.size(); }; //
+};
+
 class PropertyDialog : public ASC_PG_Dialog {
    private:
       PG_PropertyEditor* propertyEditor;
@@ -55,6 +67,7 @@ class PropertyDialog : public ASC_PG_Dialog {
       PropertyDialog( const ASCString& title );
       void addBool( const ASCString& name, bool defaultValue );
       void addInteger( const ASCString& name, int defaultValue );
+      void addIntDropdown ( const ASCString& name, const StringArray& names, int defaultValue );
       void addString( const ASCString& name, const ASCString& defaultValue );
       
       std::string getString( const ASCString& name );
@@ -62,6 +75,8 @@ class PropertyDialog : public ASC_PG_Dialog {
       bool getBool( const ASCString& name );
       bool run();
 };
+
+int selectString ( const ASCString& title, const StringArray& entries, int defaultEntry = -1 );
 
       
 #endif

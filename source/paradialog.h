@@ -227,7 +227,8 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
       ~PG_StatusWindowData() ;
 };
 
-
+/** \return ButtonPressed,SelectedItem
+*/
 extern pair<int,int> new_chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry = -1 );
 
 extern bool MultiLineEditor( const ASCString& title, ASCString& textToEdit );

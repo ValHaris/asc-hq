@@ -175,12 +175,24 @@ class Research {
 };
 
 
+class StringArray {
+   public:
+      StringArray();
+      void add( const std::string& s );
+      std::string getItem( int n ); //!< 1 based, in best LUA tradition 
+      int size(); //
+};
+
 
 class PropertyDialog  {
    public:
       PropertyDialog( const std::string& title );
       void addBool( const std::string& name, bool defaultValue );
       void addInteger( const std::string& name, int defaultValue );
+      
+      // returns and integer, so query result with getInteger
+      void addIntDropdown ( const std::string& name, const StringArray& names, int defaultValue );
+      
       void addString( const std::string& name, const std::string& defaultValue );
       
       std::string getString( const std::string& name );
@@ -189,4 +201,5 @@ class PropertyDialog  {
       bool run();
 };
 
+int selectString ( const std::string& title, const StringArray& entries, int defaultEntry = -1 );
 
