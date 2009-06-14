@@ -149,7 +149,6 @@ void testMovementFieldsReachable()
    const set<MapCoordinate3D>& fields = muc->getReachableFields();
    
    for ( set<MapCoordinate3D>::const_iterator i = fields.begin(); i != fields.end(); ++i ) {
-      std::cout << "!!!" << i->x << ":" << i->y << ":" << i->getNumericalHeight() << "\n";
       auto_ptr<MoveUnitCommand> m2 ( new MoveUnitCommand( veh ));
       m2->setDestination( *i );
       ActionResult res = m2->execute( createTestingContext( veh->getMap() ));

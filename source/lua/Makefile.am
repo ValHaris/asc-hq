@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ @LUA_FLAGS@ -I../libs/paragui/include
+AM_CXXFLAGS             = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ @LUA_FLAGS@ -I$(top_srcdir)/source/libs/paragui/include
 
 noinst_LTLIBRARIES 	= libluainterfacegame.la libluainterfacemaped.la
 
