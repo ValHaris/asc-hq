@@ -200,6 +200,7 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 
    pc.addInteger( "Jamming", jamming, 0 );
    pc.addString( "InfoImage", infoImageFilename, "" );
+   pc.addString( "InfoImageSmall", infoImageSmallFilename, "" );
 
    pc.openBracket ( "MaxResourceProduction" );
    maxplus.runTextIO ( pc, Resources(0,0,0) );

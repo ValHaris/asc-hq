@@ -176,6 +176,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
 
      //! the filename of an image that is shown in info dialogs
      ASCString infoImageFilename;
+     ASCString infoImageSmallFilename;
 
      void runTextIO ( PropertyContainer& pc );
 
