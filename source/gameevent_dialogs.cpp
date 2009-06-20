@@ -411,7 +411,7 @@ void ShowNewTechnology::showTechnology( const Technology* tech, const Technology
       text += tech->infotext;
 
       if ( newGadgetsAvailable.units.size() ) {
-         text += "\n#fontsize=New units available for production:#fontsize=12#\n";
+         text += "\n#fontsize=15#\nNew units available for production:#fontsize=12#\n";
          
          for ( std::list<const Vehicletype*>::const_iterator i = newGadgetsAvailable.units.begin(); i != newGadgetsAvailable.units.end(); ++i )
             text += "#vehicletype=" + ASCString::toString((*i)->id) + "#\n";
