@@ -1,5 +1,5 @@
 -- This script will count the number of red units on the map
--- It does not cound units that are loaded into transports or buildings
+-- It does not count units that are loaded into transports or buildings
 -- 
 -- Available in: mapeditor
 
