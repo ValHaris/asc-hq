@@ -1,0 +1,5 @@
+Techadapter {
+   ; Versorger
+   Name = 22753
+   TechnologiesRequired = 22753
+} TechAdapter

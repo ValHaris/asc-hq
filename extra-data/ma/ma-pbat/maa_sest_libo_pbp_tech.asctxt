@@ -1,0 +1,10 @@
+technology {
+   Name = SEST LiBo
+   infotext = 
+   id = 22507
+   RelatedUnitID = 22507
+   parent = 22000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 22000 22001 22013 22017
+} Technology

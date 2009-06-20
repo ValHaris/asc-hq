@@ -1,0 +1,9 @@
+VehicleType { 
+   Name = SAT SPY
+   ID = 22405
+   parent = 246
+   Description = Spionage Satellit
+   Infotext = [ Um eine optimale Aufklaerung zu erreichen wurde bei diesem Satellit auf eine Bewaffnung verzichtet. Er ist deshalb darauf zu achten, dass er nicht in feindliches Gebiet abdriftet.]
+   Picture = mao_sat_spy.pcx
+
+} VehicleType

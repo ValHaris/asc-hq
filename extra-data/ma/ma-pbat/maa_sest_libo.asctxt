@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = SEST LiBo
+   parent = 22998 276
+   ID = 22507
+
+   Infotext = [Dieser Senkrechtstarter ist fuer Bodeneinheitenbekaempfung, der kleinste seiner Art.]
+   Picture = maa_sest_libo.pcx
+
+
+   Armor += 30
+   Movement = 0 0 0 30 170 180 0 0 
+   FuelConsumption = 28
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.medBomb 
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 115
+   } Weapons
+} VehicleType

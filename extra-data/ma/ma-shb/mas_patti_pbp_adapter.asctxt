@@ -1,0 +1,5 @@
+Techadapter {
+   ; PatUBoot
+   Name = 22716
+   TechnologiesRequired = 22716
+} TechAdapter

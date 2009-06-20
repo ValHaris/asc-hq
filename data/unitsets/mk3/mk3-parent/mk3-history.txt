@@ -3,6 +3,10 @@ Grafik: GAMER , Ares
 InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
+
+_____________________________
+20.06.2009 [incl. Beta-09-07]
+-Boeing - MAM +Mdrf +satview
 __________________
 30.04.2009 (GAMER)
 -Panzerzug, parent korrigiert

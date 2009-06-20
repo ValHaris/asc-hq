@@ -1,0 +1,10 @@
+technology {
+   Name = ZS RoTT
+   infotext = 
+   id = 22823
+   RelatedUnitID = 22823
+   parent = 22000
+   researchpoints *= 12
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22011 22012
+} Technology

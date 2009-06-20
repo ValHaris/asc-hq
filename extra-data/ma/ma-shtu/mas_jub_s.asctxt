@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = JUB S
+   parent = 364
+   ID = 22710
+
+   Description = submarine
+   Infotext = [Das U-Boot zur Bekaempfung von schwimmenden Zielen]
+   Picture = mas_jub_s.pcx
+   WreckageObject = 434
+
+   Movement -= 11 11 10 0 0 0 0 0
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.STorp
+      Weapon1.Ammo = 4
+      Weapon1.MaxRange = 30
+      Weapon1.Punch@MaxRange = 115
+      Weapon1.Punch@MinRange = 125
+   } Weapons
+} VehicleType

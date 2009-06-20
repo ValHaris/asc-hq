@@ -1,0 +1,15 @@
+BuildingType { 
+   Name = MALAN SpacePort N
+   ID = 22033
+   InfoText = [Produktionsanlage für Orbitaltechnick. Die Anlage verfuegt uber eine direkte Abschussvorrichtung.]
+   parent = 33
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_spaceport_north_dry.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

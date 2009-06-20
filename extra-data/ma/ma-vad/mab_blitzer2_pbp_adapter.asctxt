@@ -1,0 +1,5 @@
+Techadapter {
+   ; MegaAA-Turm
+   Name = 22606
+   TechnologiesRequired = 22606
+} TechAdapter

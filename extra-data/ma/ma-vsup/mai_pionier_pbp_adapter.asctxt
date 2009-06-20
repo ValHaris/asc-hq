@@ -1,0 +1,5 @@
+Techadapter {
+   ; Pionier
+   Name = 22304
+   TechnologiesRequired = 22304
+} TechAdapter

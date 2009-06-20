@@ -1,0 +1,17 @@
+VehicleType { 
+   Name = SEST RJ
+   parent = 22998 311
+   ID = 22514
+   
+   Description = Stoer-Senkrechtstarter
+   Infotext = [fuer noetigen Sichtschutz bei offensiven Operationen]
+   Picture = maa_sest_rj.pcx
+   GuideSortHelp = 561 311 0 0 21 0 0 0 0 0
+
+   Armor += 50
+   Jamming = 39
+
+   FuelConsumption = 30
+   Movement += 0 0 0 0 0 10 0 0 
+} VehicleType
+

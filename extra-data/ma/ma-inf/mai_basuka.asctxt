@@ -1,0 +1,19 @@
+VehicleType { 
+   Name = BASUKA	
+   ID = 22302
+   parent = 203
+   Description = Heavy Trooper
+   Infotext = [Trooper zur Bekämpfung von feindlichen Fahrzeugen]
+   Armor += 20
+   Picture = mai_basuka.pcx
+   Movement -= 0 0 0 2 0 0 0 0 
+   Weapons { 
+      Number = 1
+      Weapon0 {
+         MinRange = 10
+         Ammo = 5
+         Punch@MaxRange -= 5
+         Punch@MinRange += 5
+      } Weapon0
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Radarbasis
+   Name = 22613
+   TechnologiesRequired = 22613
+} TechAdapter

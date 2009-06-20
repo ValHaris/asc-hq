@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = MARKIERER
+   parent = 201
+   ID = 22308
+
+   Description = Markierer
+   Infotext = []
+   picture = mai_markierer.pcx
+
+   Features += paratrooper
+   Tank { 
+      Material = 5000
+      fuel = 3000
+   } Tank
+
+   Construction {
+      Objects = 22152
+      ObjectsRemovable = 22152
+   } Construction
+
+   Weapons { 
+      Number = 1
+   } Weapons
+} VehicleType
+

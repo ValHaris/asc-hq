@@ -1,0 +1,10 @@
+technology {
+   Name = MSAT RJ
+   infotext = 
+   id = 22407
+   RelatedUnitID = 22407
+   parent = 22000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22013 22018 22024 22101 22405
+} Technology

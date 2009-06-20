@@ -1,0 +1,5 @@
+Techadapter {
+   ; mittlerer Panzer
+   Name = 22752
+   TechnologiesRequired = 22752
+} TechAdapter

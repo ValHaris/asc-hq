@@ -1,0 +1,10 @@
+technology {
+   Name = MAZU AO
+   infotext = 
+   id = 22801
+   RelatedUnitID = 22801
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22011 22012 22021 22800
+} Technology

@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = OAS UNI
+   ID = 22406
+   parent = 232
+   Description = Attack Satellite
+   Infotext = [universaler Kampfsatellit, aber Achtung, die Panzerung ist dafuer schwaecher]
+   Picture = mao_oas_uni.pcx
+
+   Armor -= 100
+   Tank { 
+      fuel = 9200
+   } Tank
+   Weapons { 
+      Number = 3
+
+      Weapon0 ->* VehicleType.type_laser 
+      Weapon0.Ammo = 6
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MinRange += 5
+      Weapon0.LaserRechargeCost.material = 0
+      Weapon0.LaserRechargeCost.fuel = 900
+
+      Weapon1 ->* VehicleType.type_bomb
+      Weapon1.Punch@MaxRange -= 20
+      Weapon1.Punch@MinRange -= 10
+
+      Weapon2 { 
+         Type = cannon shootable
+         targets = orbit
+         shotFrom = orbit 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 8
+         ReactionFireShots = 0
+         Punch@MaxRange = 55
+         Punch@MinRange = 85
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } Weapon2
+   } Weapons
+} VehicleType

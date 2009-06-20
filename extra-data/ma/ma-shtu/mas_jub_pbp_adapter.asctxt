@@ -1,0 +1,5 @@
+Techadapter {
+   ; Jagd-U-Boot
+   Name = 22705
+   TechnologiesRequired = 22705
+} TechAdapter

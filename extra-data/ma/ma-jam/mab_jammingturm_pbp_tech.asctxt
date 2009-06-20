@@ -1,0 +1,10 @@
+technology {
+   Name = MTU RJ
+   infotext = 
+   id = 22604
+   RelatedUnitID = 22604
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22011 22024
+} Technology

@@ -4,9 +4,11 @@ VehicleType {
    ID = 116
 
    Description = Transport Plane
-   Infotext = [Das Raven II Transportflugzeug benutzt einen neuartigen Antrieb, der auch im Sinner Verwendung findet. Dadurch sind sehr kurze Start und Landewege nötig und zum Landen kann auch eine normale Straße benutzt werden. ]
-   picture = Mk1a_RAVENII.pcx
+   picture = mk1a_raven2.pcx
+   InfoImage = mk1a_raven2.jpg
+   InfoImageSmall = mk1a_raven2_k.png
    GuideSortHelp = 551 560 0 0 1 0 0 0 0 0
+   Infotext = [Das Raven II Transportflugzeug benutzt einen neuartigen Antrieb, der auch im Sinner Verwendung findet. Dadurch sind sehr kurze Start und Landewege nötig und zum Landen kann auch eine normale Straße benutzt werden. ]
 
    Transportation ->* VehicleType.Transplane 
    Transportation.MaxLoadableMass = 400

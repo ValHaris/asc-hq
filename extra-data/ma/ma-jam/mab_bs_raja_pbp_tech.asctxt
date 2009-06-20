@@ -1,0 +1,10 @@
+technology {
+   Name = BS RaJa
+   infotext = 
+   id = 22610
+   RelatedUnitID = 22610
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22011 22023 22024 22026 22603 22604 
+} Technology

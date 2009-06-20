@@ -1,0 +1,50 @@
+VehicleType { 
+   Name = UBV Repa
+   parent = 363
+   ID = 22714
+
+   Description = repair submarine
+   Infotext = [Transport-U-Boot das primaer für die Versorgung der Einheiten zustaendig ist und selbst getauchte Kampfeinheiten versorgen kann, allerdings koennen dafuer deutlich weniger Einheiten geladen werden.]
+   Picture = mas_ubv_repa.pcx
+   WreckageObject = 436
+
+   Transportation ->* VehicleType.TransSubmarine 
+
+   Armor -= 100
+   Weight = 2000
+   Features += ExternalMaterialTransfer ExternalFuelTransfer ExternalRepair icebreaker
+
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 60000
+   } Tank
+   FuelConsumption = 29
+   Movement = 66 66 66 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.bigship_terrain 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 15
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Type = torpedo ammo_transfer shootable 
+      Weapon0.Ammo = 200
+      Weapon1 ->* vehicleType.AmmoMG 
+      Weapon1.Ammo = 150
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 200
+      Weapon3 ->* VehicleType.AmmoBomb 
+      Weapon3.Ammo = 150
+      Weapon4 ->* VehicleType.ServiceGround
+      Weapon4.targets = ground_level floating deep_submerged submerged 
+      Weapon4.shotFrom = floating deep_submerged submerged 
+   } Weapons
+} VehicleType

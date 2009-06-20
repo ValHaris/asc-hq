@@ -1,0 +1,5 @@
+Techadapter {
+   ; Spy-Sat
+   Name = 22405
+   TechnologiesRequired = 22405
+} TechAdapter

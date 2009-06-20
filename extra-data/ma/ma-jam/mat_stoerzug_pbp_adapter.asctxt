@@ -1,0 +1,5 @@
+Techadapter {
+   ; Störzug
+   Name = 22821
+   TechnologiesRequired = 22821
+} TechAdapter

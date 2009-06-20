@@ -1,0 +1,10 @@
+technology {
+   Name = Monstrator
+   infotext = 
+   id = 22804
+   RelatedUnitID = 22804
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22011 22012 22025 22026 22820
+} Technology

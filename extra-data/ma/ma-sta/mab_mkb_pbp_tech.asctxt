@@ -1,0 +1,10 @@
+technology {
+   Name = MKB
+   infotext = 
+   id = 22608
+   RelatedUnitID = 22608
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22011 22025 22605
+} Technology

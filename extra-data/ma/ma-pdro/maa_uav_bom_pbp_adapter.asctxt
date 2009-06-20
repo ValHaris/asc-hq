@@ -1,0 +1,5 @@
+Techadapter {
+   ; Bomberdrohne
+   Name = 22209
+   TechnologiesRequired = 22209
+} TechAdapter

@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = UAV UNI
+   parent = 425
+   ID = 22205
+
+   Description = Jagddrohne
+   Infotext = []
+   Picture = maa_uav_uni.pcx
+   wreckageobject =
+
+   TerrainAccess.terrain_any =
+   Tank.fuel = 500
+   Tank.material = 80
+   FuelConsumption = 10
+   Movement -= 0 0 0 0 -30 -30 -30 0 
+   Weight = 3
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.ML
+      Weapon0.shotFrom = medium_level_flight high_level_flight
+      Weapon0.MaxRange = 10
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+   } Weapons
+} VehicleType

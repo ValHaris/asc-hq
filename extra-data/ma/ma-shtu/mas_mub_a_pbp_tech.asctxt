@@ -1,0 +1,10 @@
+technology {
+   Name = MUB A
+   infotext = 
+   id = 22700
+   RelatedUnitID = 22700
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22014 22020 22021 
+} Technology

@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = DONNER
+   parent = 223
+   ID = 22617
+
+   Description = vollstationäre Luftabwehrlaserbatterie
+   Infotext = [ Flugabwehrlaser. Die Treffergenauigkeit ist enorm und die Schaeden an den 
+   gegnerischen Maschienen betraechtlich.]
+   Picture = mab_donner.pcx
+
+   Tank.fuel = 20000
+
+   Weapons { 
+     Weapon0 { 
+         Type = laser shootable
+         Ammo = 10
+         Punch@MaxRange -= 3
+         Punch@MinRange += 5
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 600
+         } LaserRechargeCost
+         HitAccuracy { 
+            u1 = 90
+            u2 = 100
+            u3 = 100
+         } HitAccuracy
+     } Weapon0
+   } Weapons
+} VehicleType

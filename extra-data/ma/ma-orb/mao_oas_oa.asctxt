@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = OAS OA
+   ID = 22402
+   parent = 233
+   Description = Attack Satellite
+   Infotext = [Orbitales Angriff System - Orbitalangriff]
+   Picture = mao_oas_oa.pcx
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.type_cannon 
+      Weapon0.targets = orbit
+      Weapon0.MaxRange += 10
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 20
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange += 5
+      Weapon0.ReactionFireShots = 1
+
+      Weapon1 ->* VehicleType.orbit_cannon 
+      Weapon1.targets = high_level_flight orbit
+      Weapon1.Ammo = 20
+      Weapon1.Punch@MaxRange = 65
+      Weapon1.Punch@MinRange = 75
+      Weapon1.ReactionFireShots = 2
+   } Weapons
+} VehicleType

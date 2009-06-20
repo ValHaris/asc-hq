@@ -1,0 +1,10 @@
+technology {
+   Name = STUB
+   infotext = 
+   id = 22704
+   RelatedUnitID = 22704
+   parent = 22000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22014 22022 22026 22703
+} Technology

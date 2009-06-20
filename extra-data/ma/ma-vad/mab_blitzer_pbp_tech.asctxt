@@ -1,0 +1,10 @@
+technology {
+   Name = Blitzer
+   infotext = 
+   id = 22600
+   RelatedUnitID = 22600
+   parent = 22000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22011 22020 22021
+} Technology

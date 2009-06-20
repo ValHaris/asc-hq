@@ -1,0 +1,10 @@
+technology {
+   Name = ZT Vehicle
+   infotext = 
+   id = 22825
+   RelatedUnitID = 22825
+   parent = 22000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 22000 22001 22011 22012
+} Technology

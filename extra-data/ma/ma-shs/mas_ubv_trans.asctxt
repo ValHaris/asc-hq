@@ -1,0 +1,39 @@
+VehicleType { 
+   Name = UBV Trans
+   parent = 363
+   ID = 22712
+
+   Description = transport submarine
+   Infotext = [Transport Submarines, if handled properly, can surprise the enemy in a nasty way. Since they travel below the waves, their chances of being intercepted are reduced. It will not be the first time if a submarine surfaces in a harbor and ejects a squad of troopers. Transport Submarines are also able to capture submerged bases.]
+   Picture = mas_ubv_trans.pcx
+   WreckageObject = 436
+
+   Transportation ->* VehicleType.TransShip
+   Transportation.CategoriesNOT = medium_ship heavy_ship building|turret|object
+
+   Features += ExternalMaterialTransfer ExternalFuelTransfer
+   Weight = 3000
+
+   Tank { 
+      Energy = 0
+      Material = 20000
+      fuel = 40000
+   } Tank
+   FuelConsumption = 29
+   TerrainAccess ->* VehicleType.bigship_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Type = torpedo ammo_transfer shootable 
+      Weapon0.Ammo = 80
+      Weapon1 ->* vehicleType.AmmoMG 
+      Weapon1.Ammo = 60
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 80
+      Weapon3 ->* VehicleType.AmmoBomb 
+      Weapon3.Ammo = 60
+      Weapon4 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

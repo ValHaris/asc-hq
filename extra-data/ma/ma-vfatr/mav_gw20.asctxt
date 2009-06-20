@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = GW 20
+   parent = 335
+   ID = 22750
+   
+   Description = Infiltrator Squad
+   Infotext = [Dieses leichte und schnelle Gelaendefahrzeug ist ideal für Ueberraschungsangriffe, da es auch 2 Trooper mitnehmen kann. Die Bewaffnung ist fuer einen richtigen Kampf ungeeignet.]
+   Picture = mav_gw20.pcx
+
+   Transportation ->* VehicleType.TransLowTrooper2 
+
+   Category = light_wheeled_vehicle
+   Features += move_after_attack
+   Armor -= 50
+   Weight = 22
+   TerrainAccess ->* VehicleType.offroad
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.MG_Tank
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 50
+      Weapon0.Punch@MinRange = 50
+   } Weapons
+} VehicleType

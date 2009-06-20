@@ -1,0 +1,5 @@
+Techadapter {
+   ; Raumstation
+   Name = 22404
+   TechnologiesRequired = 22404
+} TechAdapter

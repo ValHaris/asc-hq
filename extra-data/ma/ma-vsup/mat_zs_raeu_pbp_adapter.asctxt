@@ -1,0 +1,5 @@
+Techadapter {
+   ; Reparaturzug
+   Name = 22817
+   TechnologiesRequired = 22817
+} TechAdapter

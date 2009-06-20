@@ -1,0 +1,5 @@
+Techadapter {
+   ; Geländewagen
+   Name = 22750
+   TechnologiesRequired = 22750
+} TechAdapter

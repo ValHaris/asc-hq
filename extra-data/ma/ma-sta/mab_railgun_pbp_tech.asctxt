@@ -1,0 +1,10 @@
+technology {
+   Name = Railgun
+   infotext = 
+   id = 22618
+   RelatedUnitID = 22618
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22004 22011 22012 22025
+} Technology

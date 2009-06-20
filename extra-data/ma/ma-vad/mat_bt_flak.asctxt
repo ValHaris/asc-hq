@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = BT FLAK
+   parent = 22997 218
+   ID = 22809
+
+   Description = flak train
+   Infotext = [einfacher Flugabwehrzug auf reiner Kanonenbasis]
+   Picture = mat_bt_flak.pcx
+   
+   Transportation ->* VehicleType.TransLowTrooper2 
+
+   Features = MoveDuringReactionFire
+   Armor += 100
+   Movement = 0 0 0 100 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon1 ->* VehicleType.Tank_Gun
+      Weapon1.ReactionFireShots = 1
+      Weapon1.Punch@MinRange = 75
+      Weapon1.Punch@MaxRange = 75
+      Weapon2 ->* VehicleType.MiniGun
+      Weapon2.Ammo = 10
+      Weapon2.ReactionFireShots = 0
+   } Weapons
+} VehicleType

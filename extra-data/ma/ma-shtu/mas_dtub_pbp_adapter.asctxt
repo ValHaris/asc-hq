@@ -1,0 +1,5 @@
+Techadapter {
+   ; Drohnenträger
+   Name = 22702
+   TechnologiesRequired = 22702
+} TechAdapter

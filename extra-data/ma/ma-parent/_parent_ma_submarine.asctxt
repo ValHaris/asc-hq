@@ -1,0 +1,28 @@
+VehicleType {
+   abstract = true 
+   Name = Submarine
+   parent = 401 493
+   ID = 22996
+
+   WreckageObject = 436
+   Transportation ->* VehicleType.notrans
+   MaxSurvivableStorm = 250
+   Features = sonar MoveDuringReactionFire
+   Height = deep_submerged submerged floating 
+
+   HeightChangeMethod1 {
+      movecost = 20
+      heightdelta = 1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 20
+      heightdelta = -1
+      dist = 0
+      startheight = floating
+      canattack = true
+   } HeightChangeMethod2
+
+} VehicleType

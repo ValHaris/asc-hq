@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = RAST
+   ID = 22404
+   parent = 235
+   Description = space station
+   Infotext = [Raumstation zur Instandhaltung von Satelliten und zum Kampf gegen diverse Gegner]
+   Picture = mao_rast.pcx
+
+   Tank { 
+      Material += 10000
+      fuel += 35000
+   } Tank
+
+   Weapons { 
+      Weapon0 ->* VehicleType.type_laser 
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 10
+      Weapon0.LaserRechargeCost.material = 0
+      Weapon0.LaserRechargeCost.fuel = 960
+      Weapon0.HitAccuracy.d3 = 85
+
+      Weapon1 ->* VehicleType.type_bomb 
+      Weapon1.Punch@MaxRange -= 20
+      
+      Weapon2 ->* VehicleType.type_laser
+      Weapon2.Ammo = 1
+      Weapon2.Punch@MaxRange -= 5
+      Weapon2.Punch@MinRange += 10
+      Weapon2.LaserRechargeCost.material = 1000
+      Weapon2.LaserRechargeCost.fuel = 2000
+      
+   } Weapons
+} VehicleType

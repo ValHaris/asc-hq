@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = UBS SMR
+   parent = 22996 352
+   ID = 22717
+   Description = Minenraeum-U-Boot
+   Infotext = []
+   Picture = mas_ubs_smr.pcx
+
+   Armor -= 100
+   View -= 10
+   Tank.Material = 0
+
+   Features += mineview mine_layer
+   Movement += 77 77 0 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 2
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.AntiMine
+      Weapon2 ->* VehicleType.Flak
+   } Weapons
+} VehicleType

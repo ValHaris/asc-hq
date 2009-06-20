@@ -1,0 +1,10 @@
+technology {
+   Name = OSA LA
+   infotext = 
+   id = 22400
+   RelatedUnitID = 22400
+   parent = 22000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22013 22018 22020 22021 22405
+} Technology

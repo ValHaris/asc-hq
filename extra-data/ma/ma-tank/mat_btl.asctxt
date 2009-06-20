@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = BTL
+   parent = 22997 290
+   ID = 22812
+   
+   Description = leichter Kampfzug 
+   Infotext = [leichter Kampfzug fuer den offensiven Einsatz]
+   Picture = mat_btl.pcx
+
+   Transportation ->* VehicleType.TransLowTrooper
+
+   Armor += 50
+   Weight = 150
+   
+   Movement = 0 0 0 110 0 0 0 0
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.Ammo = 10
+      Weapon0.MaxRange = 20
+      Weapon0.Punch@MaxRange += 0
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

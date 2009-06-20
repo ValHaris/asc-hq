@@ -1,0 +1,10 @@
+technology {
+   Name = Kanonenturm
+   infotext = 
+   id = 22605
+   RelatedUnitID = 22605
+   parent = 22000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22011
+} Technology

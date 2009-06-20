@@ -1,0 +1,51 @@
+VehicleType { 
+   Name = OAS BA
+   ID = 22403
+   parent = 234
+   Description = Boden Angiff Sat
+   Infotext = [Satellit gegen Bodeneinheiten]
+   Picture = mao_oas_ba.pcx
+
+   Feature = MoveDuringReactioFire
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.type_bomb 
+      Weapon0.targets = floating ground_level 
+      Weapon0.Punch@MaxRange -= 10
+
+      Weapon1 ->* VehicleType.lowbomb 
+      Weapon1.shotFrom = orbit 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 140
+      Weapon1.ReactionFireShots = 0
+      Weapon1.HitAccuracy.d4 = 100
+      Weapon1 {
+      WeaponEffectiveness {      
+         trooper = 0
+         rail_vehicle = 50
+         building|turret|object = 120
+         hoovercraft = 50
+         helicopter = 100
+
+         light_tracked_vehicle = 20
+         medium_tracked_vehicle = 30
+         heavy_tracked_vehicle = 40
+
+         light_wheeled_vehicle = 20
+         medium_wheeled_vehicle = 30
+         heavy_wheeled_vehicle = 40
+         
+         light_ship = 20
+         medium_ship  = 60
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+     } Weapon1
+   } Weapons
+} VehicleType

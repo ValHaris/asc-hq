@@ -1,0 +1,10 @@
+technology {
+   Name = UWAAT
+   infotext = 
+   id = 22612
+   RelatedUnitID = 22612
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22014 22011 22020 22021 22600 22601
+} Technology

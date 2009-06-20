@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = ZT Universal
+   parent = 400 401 22997
+   ID = 22826
+
+   Description = Universaltransportzug
+   Infotext = [Die Wollmilchsau unter den Transportzuegen kann von allem etwas transportieren und ist zudem besser gepanzert, aber dafuer transportiert er weniger und ist deutlich langsamer.]
+   Picture = mat_zt_universal.pcx
+
+   Armor = 600
+   Weight = 250
+   Jamming = 0
+   view = 30
+   Features = ExternalFuelTransfer ExternalMaterialTransfer 
+
+   Transportation ->* VehicleType.TransVehicleHeavy 
+   Transportation.MaxLoadableUnits = 6
+   Transportation.MaxLoadableMass = 380
+
+   Tank { 
+      Energy = 0
+      Material = 12000
+      fuel = 20000
+   } Tank
+   Movement = 0 0 0 90 0 0 0 0 
+
+   Weapons { 
+      Number = 5
+      Weapon0 ->* VehicleType.MG_Tank
+      Weapon0.Type = machinegun ammo_transfer shootable 
+      Weapon0.Ammo = 50
+      Weapon0.Punch@MaxRange = 50
+      Weapon0.Punch@MinRange = 50
+      Weapon1 ->* VehicleType.ServiceGround
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 50
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 30
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 30
+    } Weapons
+} VehicleType

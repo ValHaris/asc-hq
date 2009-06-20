@@ -1,0 +1,10 @@
+technology {
+   Name = MegaFort
+   infotext = 
+   id = 22607
+   RelatedUnitID = 22607
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22005 22011 22026 22602
+} Technology

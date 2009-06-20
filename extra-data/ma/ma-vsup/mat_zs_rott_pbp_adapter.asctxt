@@ -1,0 +1,5 @@
+Techadapter {
+   ; Ress-Trans-Zug
+   Name = 22823
+   TechnologiesRequired = 22823
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; gepRadarturm
+   Name = 22609
+   TechnologiesRequired = 22609
+} TechAdapter

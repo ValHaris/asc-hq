@@ -1,0 +1,5 @@
+Techadapter {
+   ; Lo-AA-Zug
+   Name = 22813
+   TechnologiesRequired = 22813
+} TechAdapter

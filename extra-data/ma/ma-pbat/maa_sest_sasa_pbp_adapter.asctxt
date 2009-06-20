@@ -1,0 +1,5 @@
+Techadapter {
+   ; s-ASA-Senksta
+   Name = 22506
+   TechnologiesRequired = 22506
+} TechAdapter

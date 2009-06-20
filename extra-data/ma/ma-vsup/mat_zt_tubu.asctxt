@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = ZT Turret
+   parent = 400 401 22997
+   ID = 22831
+   
+   Description = Turretmontage
+   Infotext = [HitecTurretbauer]
+   Picture = mat_zt_tubu.pcx
+
+   Armor = 400
+   Weight = 200
+   Jamming = 0
+   view = 30
+   Features = construct_vehicles construct_specific_buildings
+
+   Tank { 
+      Material = 60000
+      fuel = 60000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 80 0 0 0 0 
+
+   Transportation ->* VehicleType.TransTurretMed 
+
+   Construction { 
+      Buildings = 26
+      Vehicles = 22618 22603 22606 22617 22608 22607 22615 22610
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 
+   } Construction
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon0.Type = machinegun ammo_transfer shootable 
+      Weapon0.Ammo = 40
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 100
+      Weapon2 ->* VehicleType.ServiceGround
+    } Weapons
+} VehicleType

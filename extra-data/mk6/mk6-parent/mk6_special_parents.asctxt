@@ -558,7 +558,7 @@ LRHEPT {
       } consumption
       terrain_any = road runway lowland hard_sand soft_sand 
       terrain_all = beacon
-      terrain_not = swamp forest small_rocks large_rocks bridge railroad
+      terrain_not = swamp forest small_rocks large_rocks bridge
       terrain_kill = 
    } TeccnolsJump1
 
@@ -572,7 +572,7 @@ LRHEPT {
       } consumption
       terrain_any = turret_foundation 
       terrain_all = beacon
-      terrain_not = forest small_rocks large_rocks bridge railroad
+      terrain_not = forest small_rocks large_rocks bridge
       terrain_kill = 
    } TeccnolsJump2
 
@@ -586,7 +586,7 @@ LRHEPT {
       } consumption
       terrain_any = road runway lowland hard_sand soft_sand 
       terrain_all = beacon
-      terrain_not = forest small_rocks large_rocks bridge railroad
+      terrain_not = forest small_rocks large_rocks bridge 
       terrain_kill = 
    } TeccnolsJump3
 

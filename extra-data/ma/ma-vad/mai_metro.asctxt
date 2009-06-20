@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = METRO
+   ID = 22300
+   parent = 215
+   
+   Description = Air Defence Trooper
+   Infotext = [Anti-Air-Trooper - zur Bekaempfung von Flugobjekten]
+   Picture = mai_metro.pcx
+   
+   Armor += 20
+   Weapons { 
+      Weapon0 ->* VehicleType.Flak
+      Weapon0.MaxRange += 0
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange += 5
+      Weapon0.Name = leichte Flugabwehrkanone
+   } Weapons
+} VehicleType

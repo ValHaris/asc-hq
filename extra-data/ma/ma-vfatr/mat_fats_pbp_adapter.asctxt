@@ -1,0 +1,5 @@
+Techadapter {
+   ; MAM-Zug
+   Name = 22814
+   TechnologiesRequired = 22814
+} TechAdapter

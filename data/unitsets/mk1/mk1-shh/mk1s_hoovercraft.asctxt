@@ -3,7 +3,9 @@ VehicleType {
    ID = 5
    parent = 371 
 
-   picture = MK1s_hoovercraft.pcx
+   picture = mk1s_hoovercraft.pcx
+   InfoImage = mk1s_hoovercraft.jpg
+   InfoImageSmall = mk1s_hoovercraft_k.png
    WreckageObject = 405
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 

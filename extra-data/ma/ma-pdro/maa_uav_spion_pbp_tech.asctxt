@@ -1,0 +1,10 @@
+technology {
+   Name = UAV Spion
+   infotext = 
+   id = 22208
+   RelatedUnitID = 22208
+   parent = 22000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22013 22016 22023
+} Technology

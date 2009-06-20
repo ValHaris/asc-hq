@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = UK 5
+   parent = 22996 357
+   ID = 22718
+   
+;   Description = Kannonen-U-Boot
+   Infotext = [Das maechtige Kanonen-U-Boot der malanischen Flotte.]
+   Picture = mas_uk5.pcx
+
+   Armor -= 100
+   View -= 10
+   Features +=  self_repairing
+
+   Movement += 55 55 0 0 0 0 0 0 
+
+    Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.Artillery
+      Weapon0.MaxRange = 80
+      Weapon0.MinRange = 40
+      Weapon0.Ammo = 16
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 165
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Artillery
+      Weapon1.MaxRange = 50
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 20
+      Weapon1.Punch@MaxRange = 95
+      Weapon1.Punch@MinRange = 120
+      Weapon1.ReactionFireShots = 2
+
+      Weapon2 ->* VehicleType.Ship_Flak
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 10
+      Weapon2.Punch@MaxRange = 60
+      Weapon2.Punch@MinRange = 80
+
+      Weapon3 ->* VehicleType.UTorp 
+      Weapon3.Ammo = 5
+      Weapon3.MaxRange = 20
+      Weapon3.ReactionFireShots = 0
+  
+ 
+   } Weapons
+} VehicleType

@@ -1,0 +1,52 @@
+VehicleType { 
+   Name = UWARS
+   ID = 22613
+   parent = 244
+   
+   Description = mariner Radarturm
+   Infotext = [Stationaere Vorrichtung für die Aufklaerung auf See. Achtung, die Anlage ist nur fuer den Unterwassereinsatz konstruiert.]
+   Picture = mab_uwars.pcx
+
+   View -= 10
+   Features = sonar ManualSelfDestruct onlyTransMove
+
+   Height = deep_submerged submerged 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 220
+   } Tank
+   FuelConsumption = 100
+   Movement = 12 12 0 0 0 0 0 0 
+
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Deep_water river
+      terrain_all = 
+      terrain_not = Frozen_water 
+      terrain_kill = Lowland High_mountains Runway Hard_sand Soft_sand Mountains Lava Ditch Hillside Turret_foundation Installation 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 120
+      Number = 0
+         } Weapons
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = submerged deep_submerged
+      canattack = false
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -1
+      dist = 0
+      startheight = floating submerged
+      canattack = false
+   } HeightChangeMethod1
+} VehicleType

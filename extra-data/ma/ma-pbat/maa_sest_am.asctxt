@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = SEST AM
+   parent = 22998 326
+   ID = 22504
+
+   Description = Seekampf SEST
+   Picture = maa_sest_am.pcx
+   Infotext = [Dieser Senkrechtstarter fuer die Schiffs- und U-Boot-bekaempfung.]
+
+   Armor += 20
+   Movement = 0 0 0 30 170 170 0 0 
+   FuelConsumption = 30
+
+    Weapons { 
+      Weapon0.Ammo = 2
+      Weapon0.MinRange = 20
+      Weapon0.MaxRange = 30
+
+      Weapon1 ->* VehicleType.AUTorp 
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
+
+      Weapon2.Punch@MaxRange += 20
+      Weapon2.Punch@MinRange += 20
+
+   } Weapons
+} VehicleType

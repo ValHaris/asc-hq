@@ -1,0 +1,90 @@
+VehicleType { 
+   Name = DSEST
+   parent = 22998 340
+   ID = 22516
+
+   Description = Abwehrschweber
+   Infotext = []
+   Picture = maa_dsest.pcx
+
+   Features += satelliteview no_midair_refuel MoveDuringReactionFire
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 20000
+   } Tank
+   FuelConsumption = 40
+   Movement = 0 0 0 30 60 70 0 0 
+
+   Weapons { 
+      Number = 3
+
+       Weapon0 { 
+         Type = laser shootable
+         targets = low_level_flight medium_level_flight high_level_flight
+         shotFrom = low_level_flight medium_level_flight
+         Ammo = 6
+         Punch@MaxRange = 70
+         LaserRechargeRate = 1
+         ReactionFireShots = 2
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 400
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 80
+            d1 = 90
+            0 = 100
+            u1 = 90
+            u2 = 80
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      } Weapon0
+
+      Weapon1 { 
+         Type = laser shootable
+         targets = orbit
+         shotFrom = medium_level_flight
+         MaxRange = 50
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 71
+         Punch@MinRange = 80
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 400
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 100
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } Weapon1
+      Weapon2 ->* VehicleType.MedBomb 
+      Weapon2.Ammo = 10
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 90
+   } Weapons
+} VehicleType

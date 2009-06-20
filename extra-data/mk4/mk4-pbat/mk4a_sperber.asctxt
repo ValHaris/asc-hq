@@ -28,5 +28,7 @@ Ihre eigentliche Heimat ist jedoch das Meer. Das zeigt sich vor allem darin, das
 
       Weapon3 ->* VehicleType.medBomb 
       Weapon3.Ammo = 1
+      Weapon3.Punch@MinRange = 80
+      Weapon3.Punch@MaxRange = 80
    } Weapons
 } VehicleType

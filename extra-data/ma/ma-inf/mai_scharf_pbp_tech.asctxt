@@ -1,0 +1,10 @@
+technology {
+   Name = Scharfschuetze
+   infotext = 
+   id = 22305
+   RelatedUnitID = 22305
+   parent = 22000
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22010 22303  
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Fort
+   Name = 22602
+   TechnologiesRequired = 22602
+} TechAdapter

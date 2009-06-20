@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = SEST AAL
+   parent = 22998 270
+   ID = 22500
+
+   Description = light anti air vto
+   Picture = maa_sest_aal.pcx
+   Infotext = [Dieser Senkrechtstarter ist die einfachste Ausfuehrung fuer den Luftkampf.]
+
+   Armor += 30
+   Movement = 0 0 0 30 170 190 0 0 
+   FuelConsumption = 28
+   
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.Type_Cannon 
+      Weapon0.targets = low_level_flight medium_level_flight
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MinRange += 5
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.HitAccuracy.d1 = 75
+      Weapon0.HitAccuracy.u1 = 75
+      
+      Weapon2 ->* VehicleType.Type_Cannon
+      Weapon2.Ammo = 10
+      Weapon2.MinRange = 10
+      Weapon2.MaxRange = 10
+      Weapon2.Punch@MinRange = 70
+      Weapon2.Punch@MaxRange = 70
+      Weapon2.HitAccuracy.d1 = 0
+      Weapon2.HitAccuracy.0 = 0
+      Weapon2.HitAccuracy.u1 = 100
+      Weapon2.HitAccuracy.u2 = 80
+   } Weapons
+} VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = BT RFLAK
+   infotext = 
+   id = 22828
+   RelatedUnitID = 22828
+   parent = 22000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 22000 22001 22012 22020 22809
+} Technology

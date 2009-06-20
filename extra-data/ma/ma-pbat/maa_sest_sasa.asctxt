@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = SEST SASA
+   parent = 22998 329
+   ID = 22506
+
+   Description = Senkrechtstarter
+   Picture = maa_sest_sasa.pcx
+   Infotext = [schwerer Senkrechtstarter, sowohl fuer den Luft- und Bodenkampf - wie beim kleinen Bruder gibts auch hier ordentlich Abstriche bei Panzerung, Feuerkraft und Geschwindigkeit]
+
+   FuelConsumption = 32
+   Movement = 0 0 0 40 150 160 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.AA_Gun 
+      Weapon0.Ammo = 5
+      Weapon0.Punch@MaxRange = 65
+      Weapon0.Punch@MinRange = 70
+      
+      Weapon1 ->* VehicleType.AU_Gun 
+      Weapon1.Ammo = 5
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 75
+
+      Weapon2 ->* VehicleType.ATorp 
+      Weapon2.Ammo = 1
+  } Weapons
+} VehicleType

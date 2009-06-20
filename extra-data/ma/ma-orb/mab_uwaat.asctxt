@@ -1,0 +1,115 @@
+VehicleType { 
+   Name = UWAAT
+   ID = 22612
+   parent = 400 403
+
+   Description = marine Flugkoerperabwehr
+   Infotext = [Flugkoerperabwehr gegen Flugzeuge und Satelliten. Die Anti-Sat Waffe muß aus dem Wasser ragen, damit sie abgefeuert werden kann. Aus technischen Gründen nur an der Wasseroberfläche einladbar.]
+   Picture = mab_uwaat.pcx
+
+   Features = ManualSelfDestruct MoveDuringReactionFire Move_After_Attack
+   MaxSurvivableStorm = 220
+   Weight = 500
+
+   Height = deep_submerged submerged floating 
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 15000
+   } Tank
+
+   Movement = 10 10 12 0 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Deep_water river
+      terrain_all = 
+      terrain_not = Frozen_water 
+      terrain_kill = Lowland High_mountains Runway Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation 
+   } TerrainAccess
+
+   Weapons { 
+      Initiative = 120
+      Number = 2
+
+      Weapon0 { 
+         Type = laser shootable
+         targets = orbit
+         shotFrom = floating 
+         MaxRange = 70
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 85
+         Punch@MinRange = 95
+         ReactionFireShots = 2
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 100
+            fuel = 600
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 100
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit = trooper 
+      } Weapon0
+     Weapon1 { 
+         Type = laser shootable
+         targets = low_level_flight medium_level_flight high_level_flight
+         shotFrom = floating submerged deep_submerged
+         MaxRange = 50
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 75
+         Punch@MinRange = 85
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 50
+            fuel = 400
+         } LaserRechargeCost
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 100
+            u2 = 96
+            u3 = 90
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } Weapon1
+   } Weapons
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = submerged deep_submerged
+      canattack = false
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -1
+      dist = 0
+      startheight = floating submerged
+      canattack = false
+   } HeightChangeMethod1
+} VehicleType

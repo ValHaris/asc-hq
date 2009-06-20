@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = MAZU RJ
+   parent = 400 402 412
+   ID = 22821
+   
+   Description = Radarstoerzug
+   Infotext = [der Zug, wenn was vor den feindlichen Augen versteckt werden muss]
+   GuideSortHelp = 307 0 0 0 21 0 0 0 0 0
+   Picture = mat_stoerzug.pcx
+
+   Armor -= 100
+   Jamming = 50
+   Weight -= 50
+
+ } VehicleType

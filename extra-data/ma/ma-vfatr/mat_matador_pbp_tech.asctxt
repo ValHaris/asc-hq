@@ -1,0 +1,10 @@
+technology {
+   Name = Matador
+   infotext = 
+   id = 22811
+   RelatedUnitID = 22811
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22011 22012 22022 22805
+} Technology

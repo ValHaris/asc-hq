@@ -1,0 +1,5 @@
+Techadapter {
+   ; Orbiralabwehr
+   Name = 22601
+   TechnologiesRequired = 22601
+} TechAdapter

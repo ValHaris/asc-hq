@@ -1,0 +1,18 @@
+ Technology {
+   name = "Malaner PBP-base-technology"
+   infotext = "base technology of the Malaner unit set"
+   id = 22000
+   researchpoints = 100
+   
+   techlevel = 10
+   
+   requireEvent = false
+   
+   TechnologiesRequired = -1
+   
+   BlockingTechnologies =
+
+   BlockingOtherTechnologies = 100000-150000
+  
+   RequireAllListedTechnologies = true
+} Technology 

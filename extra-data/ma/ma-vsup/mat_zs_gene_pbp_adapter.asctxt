@@ -1,0 +1,5 @@
+Techadapter {
+   ; Generatorzug
+   Name = 22810
+   TechnologiesRequired = 22810
+} TechAdapter

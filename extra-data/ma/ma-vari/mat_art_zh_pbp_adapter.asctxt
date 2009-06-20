@@ -1,0 +1,5 @@
+Techadapter {
+   ; E-Geschütz
+   Name = 22808
+   TechnologiesRequired = 22808
+} TechAdapter

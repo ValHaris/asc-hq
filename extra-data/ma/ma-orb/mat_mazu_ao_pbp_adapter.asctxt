@@ -1,0 +1,5 @@
+Techadapter {
+   ; AO-Zug
+   Name = 22801
+   TechnologiesRequired = 22801
+} TechAdapter

@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = FAT S
+   parent =  22997 331
+   ID = 22814
+   Description = small fast attack train
+   Infotext = [Bahntrasse versperrt und ein Schuss reicht nicht? Ein Fall für den MAM-Zug.]
+   Picture = mat_fats.pcx
+
+   Transportation ->* VehicleType.TransLowTrooper2 
+
+   Features = move_after_attack
+   Armor = 450
+   Weight = 50
+   Jamming = 0
+
+   Movement = 0 0 0 110 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Tank_Gun 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 80
+   } Weapons
+} VehicleType

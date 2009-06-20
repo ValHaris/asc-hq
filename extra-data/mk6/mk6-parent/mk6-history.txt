@@ -4,6 +4,20 @@ Infotext: Rhiow
 InfoImage: GAMER
 Spezifikationen: GAMER
 __________________
+20.06.2009 (GAMER) [incl. Beta-09-08]
+MBF baut Spacecenter
+Intruder + FuelVerbrauch beim laufen
+Executioner, +Sonar -Transport
+Klotz, 1xRF Torpedo, langsamer im Wasser
+Neu:
+-Spacecenter (Gebäude)
+__________________
+16.05.2007 (GAMEr) /incl.Beta-09-06
+-Jumpdrive Bugfix, auch auf ISG Beton
+-Speed Attack Tech für Tecc freigegeben
+Neu:
+-Executioner (Speedboat)
+__________________
 30.04.2009 (GAMER)
 -Tender , Bugfix Landung Spaceport
 __________________

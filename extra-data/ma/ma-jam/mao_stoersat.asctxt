@@ -1,0 +1,13 @@
+VehicleType { 
+   Name = MASA RJ
+   ID = 22407
+   parent = 313
+   
+   Description = Spionage Satellit
+   Infotext = [ Gute Stoereinheit, aber sehr langsam und damit nicht offensiv einsetzbar.]
+   Picture = mao_stoersat.pcx
+   GuideSortHelp += 0 0 0 0 21 0 0 0 0 0
+   
+   Jamming += 5
+
+} VehicleType

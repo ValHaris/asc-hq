@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = MAFA
+   ID = 22602
+   parent = 422 400 402
+
+   Description = Festungsanlage
+   Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse zu verteidigen.]
+   Picture = mab_mafa.pcx
+
+   TerrainAccess ->* VehicleType.Turret_only 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Tank_Gun
+      Weapon0.Ammo = 10
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 60
+      Weapon0.Punch@MinRange = 80
+      Weapon0.ReactionFireShots = 2
+      Weapon1 ->* VehicleType.Flak
+      Weapon1.targets =  low_level_flight medium_level_flight high_level_flight 
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 80
+      Weapon1.HitAccuracy.u3 = 75
+      Weapon2 ->* VehicleType.BigMiniGun
+    } Weapons
+} VehicleType

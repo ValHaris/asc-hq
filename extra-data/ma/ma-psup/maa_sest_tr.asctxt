@@ -1,0 +1,57 @@
+VehicleType { 
+   Name = Transportsenkrechstarter
+   parent = 22998 400 401 414
+   ID = 22515
+ 
+   Description = Transportsenkrechtstarter
+   Infotext = [der Senkrechtstarter für Lufttransporte]
+   Picture = maa_sest_tr.pcx
+ 
+   Armor = 300
+   Weight = 50
+   View = 40
+   Transportation ->* VehicleType.TransHeli
+   Transportation.MaxLoadableUnits = 6
+
+   Tank { 
+      Energy = 0
+      Material = 5000
+      fuel = 7500
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 40 120 120 0 0 
+
+   Waitforattack = false
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 { 
+         Type = cannon shootable
+         targets = floating ground_level low_level_flight medium_level_flight
+         shotFrom = ground_level low_level_flight medium_level_flight
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 50
+         Punch@MinRange = 50
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 50
+            0 = 100
+            u1 = 50
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+       WeaponEffectiveness {
+	    trooper = 50
+	 } WeaponEffectiveness
+      } Weapon0
+   } Weapons
+} VehicleType

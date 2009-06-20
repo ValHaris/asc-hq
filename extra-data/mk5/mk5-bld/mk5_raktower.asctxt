@@ -14,17 +14,17 @@ BuildingType {
 
    Armor = 600
    View = 51
-   Jaming = 0
+   Jamming = 0
 
    transportation { 
       MaxLoadableUnits = 3
-      MaxLoadableUnitSize = 10
-      MaxLoadableMass = 30
+      MaxLoadableUnitSize = 11
+      MaxLoadableMass = 33
       CategoriesNOT = trooper light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object heavy_aircraft light_ship heavy_ship helicopter 
       EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = out
-        UnitHeightAbs = low_level_flight 
+        UnitHeightAbs = medium_level_flight 
         UnitHeightRel = -100
         ContainerHeight = ground_level
         CategoriesNOT = trooper

@@ -1,0 +1,77 @@
+VehicleType { 
+   Name = UK 4
+   parent = 400 401 402 421
+   ID = 22715
+
+   Description = Artilleriekannonen-U-Boot
+   Infotext = [ Kanonen-U-Boot mit der mächstigsten Kanone an Bord]
+   Picture = mas_uk4.pcx
+
+   Armor = 900
+   Features = sonar move_after_attack
+   Weight = 3000
+
+    Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 6000
+   } Tank
+   FuelConsumption = 30
+   Movement = 55 55 55 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.very_bigship_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 5
+
+      Weapon1 ->* VehicleType.Artillery
+      Weapon1.shotFrom = floating
+      Weapon1.MaxRange = 90
+      Weapon1.MinRange = 50
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 130
+      Weapon1.ReactionFireShots = 0
+
+      Weapon2 ->* VehicleType.Artillery
+      Weapon2.shotFrom = submerged floating
+      Weapon2.HitAccuracy.u1 = 70
+      Weapon2.MaxRange = 50
+      Weapon2.MinRange = 30
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 130
+   } Weapons
+
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = deep_submerged
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 20
+      heightdelta = 1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 20
+      heightdelta = -1
+      dist = 0
+      startheight = floating
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 10
+      heightdelta = -1
+      dist = 0
+      startheight =  submerged 
+      canattack = true
+   } HeightChangeMethod3
+} VehicleType

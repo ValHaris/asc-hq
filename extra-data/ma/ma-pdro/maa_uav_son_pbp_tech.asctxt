@@ -1,0 +1,10 @@
+technology {
+   Name = UAV SON
+   infotext = 
+   id = 22201
+   RelatedUnitID = 22201
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22013 22016
+} Technology

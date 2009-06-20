@@ -1,0 +1,5 @@
+Techadapter {
+   ; ht-Radarturm
+   Name = 22603
+   TechnologiesRequired = 22603
+} TechAdapter

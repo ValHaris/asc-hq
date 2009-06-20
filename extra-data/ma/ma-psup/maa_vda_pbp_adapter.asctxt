@@ -1,0 +1,5 @@
+Techadapter {
+   ; D-Aussetzer1
+   Name = 22511
+   TechnologiesRequired = 22511
+} TechAdapter

@@ -1,0 +1,64 @@
+VehicleType { 
+   Name = MUB A
+   parent = 365
+   ID = 22700
+
+   Description = Anti-Air-U-Boot
+   Infotext = []
+   Picture = mas_mub_a.pcx
+   WreckageObject = 435
+
+   Features += MoveDuringReactionFire move_after_attack
+   Armor += 300
+   View = 40
+
+   Tank.fuel = 15000
+   FuelConsumption = 30
+   Movement += 11 11 10 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.bigship_terrain 
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 4
+      Weapon0.MaxRange = 30
+      Weapon0.ReactionFireShots = 0
+      
+      Weapon1 { 
+         Type = laser shootable
+         targets = low_level_flight medium_level_flight high_level_flight
+         shotFrom = floating submerged
+         MaxRange = 60
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 75
+         Punch@MinRange = 80
+         LaserRechargeRate = 2
+         ReactionFireShots = 3
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 500
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 100
+            u2 = 98
+            u3 = 95
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } Weapon1
+   } Weapons
+} VehicleType

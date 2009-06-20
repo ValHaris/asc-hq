@@ -1,0 +1,5 @@
+Techadapter {
+   ; AA-U-Boot
+   Name = 22700
+   TechnologiesRequired = 22700
+} TechAdapter

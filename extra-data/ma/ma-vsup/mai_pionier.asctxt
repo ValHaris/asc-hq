@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = Pionier
+   ID = 22304
+   parent = 400 401 402 410
+
+   Description = Bau- und Reparaturtrupp
+   Infotext = [ Die Pioniere sind universelle Bau- und Reparaturtrupps fuer Reparatur und Bau von Infrastrukturobjekten.]
+   Picture = mai_Pionier.pcx
+
+   Features = mine_layer mineview ExternalRepair self_repairing automatic_resource_searching
+   ResourceDrillingRange = 2
+   Armor = 220
+   Weight = 5
+
+   Tank { 
+      Energy = 0
+      Material = 6000
+      fuel = 6000
+   } Tank
+   Movement = 0 0 0 49 0 0 0 0 
+
+   Construction { 
+      Objects = 1 2 3 9 10 30 45 181 992 995 996 997 998 999 1000 2153 22151
+      ObjectsRemovable = 992 988 22151
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
+   } Construction
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.AntiMine 
+      Weapon1 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

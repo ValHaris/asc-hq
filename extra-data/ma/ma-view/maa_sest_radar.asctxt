@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = SEST RADAR
+   parent = 22998 247
+   ID = 22513
+   Description = Senkrechtstarter
+   Infotext = [schwerer Senkrechtstarter zur Gebietsueberwachung und Aufklaerung]
+   Picture = maa_sest_radar.pcx
+
+   Armor = 350
+   Features = satelliteview cruiserlanding
+
+   Tank.fuel = 3500
+   FuelConsumption = 30
+   Movement -= 0 0 0 20 0 10 150 0 
+   Weight = 80
+} VehicleType

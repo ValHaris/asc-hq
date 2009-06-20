@@ -1,0 +1,5 @@
+Techadapter {
+   ; AA-Drohne
+   Name = 22200
+   TechnologiesRequired = 22200
+} TechAdapter

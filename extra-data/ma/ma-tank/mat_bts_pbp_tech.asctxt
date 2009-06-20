@@ -1,0 +1,10 @@
+technology {
+   Name = BTS
+   infotext = 
+   id = 22820
+   RelatedUnitID = 22820
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22003 22011 22012 22812 
+} Technology

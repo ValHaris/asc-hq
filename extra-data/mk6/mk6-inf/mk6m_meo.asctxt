@@ -11,7 +11,8 @@ VehicleType {
    Armor += 10
    Weapons { 
       Weapon0.MaxRange += 10
-      Weapon1 ->* VehicleType.DLS
+      Weapon1 ->* VehicleType.MiniGun
+      Weapon1 ->* VehicleType.NLS
       Weapon1.ReactionFireShots = 1
    } Weapons
 } VehicleType

@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = TKT
+   ID = 22615
+   parent = 321
+
+   Description = main defence gun
+   Picture = mab_tkt.pcx
+   Infotext = [A Turret Emplacement is a fearsome structure. It is capable of
+              demolishing tank platoons before the latter can even detect
+              the Turret on their radars. Its only drawback is that it cannot
+              get a lock on very small targets.]
+
+   Weapons { 
+      Number = 3
+
+      Weapon1 ->* VehicleType.Artillery 
+      Weapon1.MaxRange = 50
+      Weapon1.MinRange = 10
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 120
+      Weapon1.ReactionFireShots = 1
+      Weapon2 ->* VehicleType.Artillery 
+      Weapon2.MaxRange = 50
+      Weapon2.MinRange = 10
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 120
+      Weapon2.ReactionFireShots = 1
+   } Weapons
+} VehicleType

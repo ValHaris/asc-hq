@@ -3,10 +3,16 @@ Grafiken: GAMER, Dr.Snuggels, Xyphagorosh, Keyfinder
 InfoTexte: Rennreh, Redhorse
 InfoImages: GAMER
 Spezifikationen: GAMER
+
 __________________
-Beta-04-06
+20.06.2009 (GAMER) [incl.Beta-09-08+07]
+-InfoImage = Nashorn
+-Polar, Wasserbombe aufgewertet
+__________________
+16.05.2009 (GAMER) /incl.Beta-09-06
 -Ammo-Bugfix Imperator, Dictator
 -Hydra, Waffenbugfix
+-Patrix +100 Armor, +punch , 60 view, -Subausgang
 __________________
 19.04.2009 (GAMER)
 -Anaconda, default upgrade

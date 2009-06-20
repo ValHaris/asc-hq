@@ -12,6 +12,7 @@ VehicleType {
    Armor += 100
    Weight = 3
    Movement += 0 0 0 5 0 0 0 0
+   FuelConsumption = 4
    Features = mineview mine_layer conquer_buildings
    Category = light_tracked_vehicle
    MovementSound = mechstepfast.ogg

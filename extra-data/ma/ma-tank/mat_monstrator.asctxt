@@ -1,0 +1,86 @@
+VehicleType { 
+   Name = MONSTRATOR
+   parent = 22997 337 294
+   ID = 22804
+
+   Description = Bunkerzug
+   Infotext = [Die Festung auf Schienen, langsam, aber exellent bewaffnet - die maechtigste Landkampfeinheit der Malaner]
+   Picture = mat_monstrator.pcx
+
+   Transportation ->* VehicleType.TransLowTrooper3
+
+   Armor = 1200
+   View = 50
+   Features = MoveDuringReactionFire
+   Weight = 450
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 12000
+   } Tank
+   FuelConsumption = 50
+   Movement += 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 50
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 120
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Artillery 
+      Weapon1.MaxRange = 30
+      Weapon1.MinRange = 10
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 100
+
+      Weapon2 ->* VehicleType.Flak
+      Weapon2.targets =  low_level_flight medium_level_flight high_level_flight 
+      Weapon2.MaxRange = 40
+      Weapon2.Ammo = 20
+      Weapon2.HitAccuracy.u3 = 75
+      Weapon2.ReactionFireShots = 1
+      
+      Weapon3 ->* VehicleType.MiniGun
+      Weapon3.ReactionFireShots = 1
+
+      Weapon4 { 
+         Type = laser shootable
+         targets = orbit
+         shotFrom = ground_level 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 90
+         Punch@MinRange = 100
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 1032
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 100
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } Weapon4
+   } Weapons
+} VehicleType

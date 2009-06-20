@@ -13,7 +13,7 @@ VehicleType {
    Weight = 20
 ;   Features += Repair_Facility
    Transportation ->* VehicleType.TransVehicleHeavy
-   Transportation.CargoMovementDivisor = 10
+   Transportation.CargoMovementDivisor = 8
    Transportation.MaxLoadableUnits = 8
 
    Tank { 

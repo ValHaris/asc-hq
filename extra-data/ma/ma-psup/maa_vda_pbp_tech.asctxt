@@ -1,0 +1,10 @@
+technology {
+   Name = VDA
+   infotext = 
+   id = 22511
+   RelatedUnitID = 22511
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22013 22016 22017
+} Technology

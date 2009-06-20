@@ -1,0 +1,10 @@
+technology {
+   Name = VZT
+   infotext = 
+   id = 22512
+   RelatedUnitID = 22512
+   parent = 22000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22013 22016 22017 22511
+} Technology

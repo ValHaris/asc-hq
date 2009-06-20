@@ -1,0 +1,13 @@
+VehicleType {
+   Name = SoS HiRAD
+   ID = 22603
+   parent = 244
+
+   Description = ground radar
+   Infotext = [hightech ground radar turret]
+   Picture = mab_sos_hirad.pcx
+
+   Armor -= 200
+   View += 12
+
+} VehicleType

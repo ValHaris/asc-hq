@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = BT SG
+   parent = 22997 291 
+   ID = 22803
+
+   Description = assault train
+   Infotext = [Schwere Kanone noetig? Der Sturmgeschuetzzug hat die staerkste Landkanone, aber dafuer nur maessige Panzerung.]
+   Picture = mat_bt_sg.pcx
+
+   Armor += 100
+   Movement = 0 0 0 100 0 0 0 0 
+   Weight = 150
+
+   Weapons { 
+      Number = 2
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 5
+      Weapon0.Punch@MinRange += 20
+
+      Weapon1 ->* VehicleType.Weapons.Weapon0 
+   } Weapons
+} VehicleType

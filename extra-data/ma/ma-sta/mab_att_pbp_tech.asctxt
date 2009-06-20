@@ -1,0 +1,10 @@
+technology {
+   Name = ATT
+   infotext = 
+   id = 22614
+   RelatedUnitID = 22614
+   parent = 22000
+   researchpoints *= 11
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22011 22602
+} Technology

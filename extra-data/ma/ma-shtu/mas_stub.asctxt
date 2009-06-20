@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = STUB
+   parent = 361 493
+   ID = 22704
+   
+   Description = carrier submarine
+   Infotext = [schweres Traegersystem für Senktrechtstarter auf See]
+   Picture = mas_stub.pcx
+   
+   Armor -= 200
+   View -= 20
+   Transportation.RequireUnitFunction = cruiserlanding
+   Height = deep_submerged submerged floating
+   Movement += 55 55 0 0 0 0 0 0 
+
+    Weapons { 
+      Initiative = 0
+      Number = 5
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Type = torpedo ammo_transfer shootable 
+      Weapon0.Ammo = 60
+
+      Weapon1 ->* VehicleType.Ship_Flak
+      Weapon1.Type = cannon ammo_transfer shootable 
+      Weapon1.targets =  low_level_flight medium_level_flight high_level_flight 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 100
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 70
+      Weapon1.HitAccuracy.u3 = 75
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.Ship_Flak
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 20
+      Weapon2.Punch@MaxRange = 60
+      Weapon2.Punch@MinRange = 80
+
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 50
+      Weapon4 ->* vehicleType.AmmoMG 
+      Weapon4.Ammo = 50
+   } Weapons
+} VehicleType

@@ -9,6 +9,7 @@ VehicleType {
 
    Transportation ->* VehicleType.TransWeaponPlane
    Transportation.MaxLoadableUnits = 1
+   Transportation.MaxLoadableMass = 10
 
    Movement -= 0 0 0 0 10 10 0 0 
 

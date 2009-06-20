@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = ZT Turret
+   parent = 400 401 22997
+   ID = 22827
+   
+   Description = Turrettransportzug
+   Infotext = [Dieser Zug ist primär für den Transport von teilstationären Sockelgeschützen zustaendig. Kleinere Anlagen kann er vor Ort errichten.]
+   Picture = mat_zt_turret.pcx
+
+   Armor = 400
+   Weight = 200
+   Jamming = 0
+   view = 30
+   Features = construct_vehicles
+
+   Tank { 
+      Material = 22000
+      fuel = 30000
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 0 80 0 0 0 0 
+
+   Transportation ->* VehicleType.TransTurretBig2 
+
+   Construction { 
+      Buildings =
+      Vehicles = 22600 22601 22602 22603 22604 22605 22606 22607 22608 22609 22610 22614 22615 22617
+      Objects = 44 2098 22151
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 
+   } Construction
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon0.Type = machinegun ammo_transfer shootable 
+      Weapon0.Ammo = 40
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 100
+      Weapon2 ->* VehicleType.ServiceGround
+    } Weapons
+} VehicleType

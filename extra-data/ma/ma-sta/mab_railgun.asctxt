@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = RAILGUN
+   ID = 22618
+   parent = 400 402 403
+
+   Description = super artillerie
+   Infotext = [Neuste HighTech Artillerie der Malaner. Die Anlage benötigt gigantische Menge an Energie. Deshalb wurde ein eigenes BioMasseKraftwerk mit KraftWärmeKopplung unter das Geschütz gebaut.]
+   Picture = mab_railgun.pcx
+
+   TerrainAccess ->* VehicleType.Turret_lowland
+   Tank.Fuel = 6000
+   Tank.material= 1000
+   Features += ManualSelfDestruct
+   
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.Artillery
+      Weapon0.Type = laser shootable
+      Weapon0.Sound = cannon_very_big_s.ogg
+      Weapon0.targets = submerged floating ground_level
+      Weapon0.HitAccuracy.d1 = 60
+      Weapon0.ReactionFireShots = 0
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.LaserRechargeCost.energy = 0
+      Weapon0.LaserRechargeCost.material = 500
+      Weapon0.LaserRechargeCost.fuel = 3000
+      Weapon0.MaxRange = 160
+      Weapon0.MinRange = 80
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 140
+   } Weapons
+} VehicleType

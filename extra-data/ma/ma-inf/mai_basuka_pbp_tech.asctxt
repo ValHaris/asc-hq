@@ -1,0 +1,10 @@
+technology {
+   Name = Basuka
+   infotext = 
+   id = 22302
+   RelatedUnitID = 22302
+   parent = 22000
+   researchpoints *= 5
+   techlevel = 2
+   TechnologiesRequired = 22000 22001 22010 22303 22307
+} Technology

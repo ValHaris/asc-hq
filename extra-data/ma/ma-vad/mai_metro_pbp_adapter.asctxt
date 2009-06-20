@@ -1,0 +1,5 @@
+Techadapter {
+   ; AA-Trooper
+   Name = 22300
+   TechnologiesRequired = 22300
+} TechAdapter

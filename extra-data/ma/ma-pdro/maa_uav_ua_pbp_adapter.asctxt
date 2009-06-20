@@ -1,0 +1,5 @@
+Techadapter {
+   ; K-AM-Drohne
+   Name = 22203
+   TechnologiesRequired = 22203
+} TechAdapter

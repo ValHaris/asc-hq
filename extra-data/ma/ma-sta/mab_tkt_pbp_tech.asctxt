@@ -1,0 +1,10 @@
+technology {
+   Name = TKT
+   infotext = 
+   id = 22615
+   RelatedUnitID = 22615
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22011 22605
+} Technology

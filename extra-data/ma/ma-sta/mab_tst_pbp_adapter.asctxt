@@ -1,0 +1,5 @@
+Techadapter {
+   ; Torpedoturm
+   Name = 22611
+   TechnologiesRequired = 22611
+} TechAdapter

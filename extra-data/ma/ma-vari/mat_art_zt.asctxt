@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = ART ZT
+   ID = 22829
+   parent = 255
+
+   Description = artillerie train
+   Infotext = [verbesserte Standard-Artillerie, ideal für Sperrfeuer]
+   Picture = mat_art_zt.pcx
+
+   Armor += 20
+
+   Weapons { 
+      Number = 3
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+      Weapon1.Punch@MaxRange += 5
+      Weapon1.Punch@MinRange += 5
+      Weapon2 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

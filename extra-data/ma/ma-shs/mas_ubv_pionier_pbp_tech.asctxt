@@ -1,0 +1,10 @@
+technology {
+   Name = Pionier-U-Boot
+   infotext = 
+   id = 22709
+   RelatedUnitID = 22709
+   parent = 22000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22014
+} Technology

@@ -1,0 +1,5 @@
+Techadapter {
+   ; SpacePort.
+   Name = B22033
+   TechnologiesRequired = 22000
+} TechAdapter

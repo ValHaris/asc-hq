@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = BLITZER2
+   parent = 222
+   ID = 22606
+   
+   Description = Mega AA-Turret
+   Infotext = [schwere Flugabwehrstellung; die Laser ermoeglichen mehr Reichweite und gute Trefferchancen]
+   Picture = mab_blitzer2.pcx
+
+   Tank.fuel = 10000
+
+   Weapons { 
+      Number = 2
+      Weapon0 { 
+         Type = laser shootable
+         MaxRange = 90
+         MinRange = 30
+         Ammo = 3
+         Punch@MaxRange -= 5
+         Reactionfireshots = 1
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 600
+         } LaserRechargeCost
+         HitAccuracy { 
+            u1 = 80
+            u2 = 100
+            u3 = 100
+         } HitAccuracy
+      } Weapon0
+
+      Weapon1 ->* VehicleType.Flak
+      Weapon1.targets = low_level_flight medium_level_flight high_level_flight 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.HitAccuracy.u3 = 75
+      Weapon1.ReactionFireShots = 1
+    } Weapons
+} VehicleType

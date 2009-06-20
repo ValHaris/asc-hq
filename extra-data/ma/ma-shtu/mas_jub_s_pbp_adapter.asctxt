@@ -1,0 +1,5 @@
+Techadapter {
+   ; Schiffsjäger
+   Name = 22710
+   TechnologiesRequired = 22710
+} TechAdapter

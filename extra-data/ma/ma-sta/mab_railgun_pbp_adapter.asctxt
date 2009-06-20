@@ -1,0 +1,5 @@
+Techadapter {
+   ; Railgun
+   Name = 22618
+   TechnologiesRequired = 22618
+} TechAdapter

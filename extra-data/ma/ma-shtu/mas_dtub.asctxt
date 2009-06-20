@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = DTUB
+   parent = 400 401 402 421
+   ID = 22702
+
+   Description = drone carrier submarine
+   Infotext = [Traegersystem für Drohnen auf See]
+   Picture = mas_dtub.pcx
+   WreckageObject = 436
+
+   Transportation ->* VehicleType.TransDroneCruiser 
+   Transportation.MaxLoadableUnits = 8
+
+   Features = sonar Repair_Facility MoveDuringReactionFire Move_After_attack
+   Armor = 1100
+   View = 30
+
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 20000
+   } Tank
+   FuelConsumption = 30
+   Movement = 77 77 80 0 0 0 0 0 
+   Weight = 3000
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Type = torpedo ammo_transfer shootable 
+      Weapon0.Ammo = 25
+      Weapon0.MaxRange = 10
+      Weapon1 ->* VehicleType.Ship_Flak
+      Weapon1.Type = cannon ammo_transfer shootable 
+      Weapon1.Ammo = 40
+      Weapon2 ->* VehicleType.AmmoBomb 
+      Weapon2.Ammo = 25
+   } Weapons
+} VehicleType

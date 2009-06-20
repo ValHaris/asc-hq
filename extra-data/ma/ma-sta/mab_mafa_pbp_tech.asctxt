@@ -1,0 +1,10 @@
+technology {
+   Name = MAFA
+   infotext = 
+   id = 22602
+   RelatedUnitID = 22602
+   parent = 22000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 22000 22011 22020
+} Technology

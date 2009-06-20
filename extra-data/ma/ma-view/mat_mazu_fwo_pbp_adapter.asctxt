@@ -1,0 +1,5 @@
+Techadapter {
+   ; Sichtzug
+   Name = 22819
+   TechnologiesRequired = 22819
+} TechAdapter

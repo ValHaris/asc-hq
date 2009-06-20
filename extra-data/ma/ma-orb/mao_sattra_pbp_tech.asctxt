@@ -1,0 +1,10 @@
+technology {
+   Name = Sattra
+   infotext = 
+   id = 22101
+   RelatedUnitID = 22101
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22013 22018
+} Technology

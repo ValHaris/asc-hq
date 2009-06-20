@@ -1,9 +1,11 @@
 VehicleType { 
    Name = SAENGER PLANE
-   parent = 400 401 402 498
+   parent = 248
    ID = 1476
 
    Description = Saenger main plane
+   Picture = mk5a_saenger.pcx
+   WreckageObject = 1476 300
    Infotext = [Der Raumgleiter Saenger sollte laut Konzept zwei Astronauten Platz bieten. 
    Die technische Lösung geht auf ein Konzept des Wissenschaftlers Eugen Sänger zurück. Sie 
    wurde von 1961 bis 1964 bei Junkers im Zuge einiger Studien weiterentwickelt. Sänger II 
@@ -12,18 +14,9 @@ VehicleType {
    Geschwindigkeiten sind sowohl Transporter als auch Gleiter äußerst spitz und pfeilartig 
    konzipiert. Der Raumgleiter sollte eine Länge von rund 80 Metern und eine Flügelspannweite 
    von rund 40 Metern haben. ]
-   Picture = mk5a_saenger.pcx
-   WreckageObject = 1476 300
 
-   Armor = 350
-   View = 60
-   Height = ground_level low_level_flight medium_level_flight high_level_flight
    Jamming = 39
-   Features = jam_only_own_field
    Category = heavy_aircraft
-   MaxSurvivableStorm = 0
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
    Weight = 250
 
    Transportation { 
@@ -44,30 +37,8 @@ VehicleType {
       } EntranceSystem1
    } Transportation
 
-   Movement = 0 0 0 65 120 180 180 0
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 10000
-   } Tank
+   Movement -= 0 0 0 0 10 10 10 0
+   Tank.fuel = 12000
    FuelConsumption = 35
-   TerrainAccess { 
-      terrain_any = Runway 
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
-   } TerrainAccess
-   MovementSound = aircraft_l_g.ogg
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   WaitForAttack = false
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
 } VehicleType

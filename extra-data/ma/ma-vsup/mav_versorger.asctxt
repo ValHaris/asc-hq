@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = VERSORGER
+   parent = 335
+   ID = 22753
+
+   Description = Offroad Versorger
+   Picture = mav_versorger.pcx
+   InfoImage = mav_versorger.jpg
+   Infotext = [Das Versorgungfahrzeug abseits der Schiene.
+   InfoImage = Wikipedia Lastkraftwagen]
+
+   Features += ExternalFuelTransfer ExternalMaterialTransfer
+
+   Tank { 
+      Energy = 0
+      Material = 8000
+      fuel = 10800
+   } Tank
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Number = 6
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon1 ->* vehicleType.AmmoMG 
+      Weapon1.Ammo = 25
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 30
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 20
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 20
+      Weapon5 ->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

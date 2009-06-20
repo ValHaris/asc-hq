@@ -1,0 +1,14 @@
+VehicleType { 
+   Name = MKB
+   ID = 22608
+   parent = 322
+
+   Picture = mab_mkb.png
+
+   Armor += 100
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+   } Weapons
+} VehicleType

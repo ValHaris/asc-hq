@@ -1,0 +1,5 @@
+Techadapter {
+   ; AA-Sat
+   Name = 22400
+   TechnologiesRequired = 22400
+} TechAdapter

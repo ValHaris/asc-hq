@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = SEST SNIPER
+   parent = 22998 270
+   ID = 22510
+
+   Description = trooper hunter
+   Picture = maa_sest_sniper.pcx
+   Infotext = [Dieser Senkrechtstarter ist die ultimative Waffe gegen heranrückende 
+   gegnerische Infantrieverbaende. Die sehr weitreichende Spezialkanone bekämft die Gegner aus der Distance, aber auch im Nahkampf.]
+
+   FuelConsumption = 28
+   Movement = 0 0 0 30 170 180 0 0 
+   Weight = 50
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.Ammo = 4
+      Weapon1 ->* VehicleType.sniper 
+      Weapon1.Type = machinegun shootable 
+      Weapon1.shotFrom = low_level_flight
+      Weapon1.MaxRange = 20
+      Weapon1.MinRange = 10
+      Weapon1.HitAccuracy.d1 = 100
+      Weapon1.HitAccuracy.u1 = 0
+   } Weapons
+} VehicleType

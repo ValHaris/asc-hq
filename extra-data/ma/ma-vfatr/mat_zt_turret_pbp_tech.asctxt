@@ -1,0 +1,10 @@
+technology {
+   Name = ZT Turret
+   infotext = 
+   id = 22827
+   RelatedUnitID = 22827
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22011 22012 22817
+} Technology

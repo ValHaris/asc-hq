@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = SEST ASA
+   parent = 22998 329
+   ID = 22505
+   
+   Description = Senkrechtstarter
+   Picture = maa_sest_asa.pcx
+   Infotext = [Senkrechtstarter sowohl fuer den Luft- und Bodenkampf - die vielen verschiedenen Waffen erzwingen Abstriche bei Panzerung, Feuerkraft der einzelnen Waffe und Geschwindigkeit]
+
+   Armor = 310
+   FuelConsumption = 30
+   Movement = 0 0 0 40 160 170 0 0 
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.AA_Gun 
+      Weapon0.targets = low_level_flight medium_level_flight
+      Weapon0.shotFrom = low_level_flight medium_level_flight
+      Weapon0.MaxRange = 10
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+      Weapon0.HitAccuracy.d1 = 80
+
+      Weapon1 ->* VehicleType.Napalm 
+      Weapon1.Ammo = 2
+
+      Weapon2 ->* VehicleType.medBomb 
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
+
+      Weapon3 ->* VehicleType.DCA 
+      Weapon3.Ammo = 2
+   } Weapons
+} VehicleType

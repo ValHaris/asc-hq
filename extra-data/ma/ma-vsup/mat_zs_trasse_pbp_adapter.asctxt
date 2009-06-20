@@ -1,0 +1,5 @@
+Techadapter {
+   ; Schienenleger
+   Name = 22818
+   TechnologiesRequired = 22818
+} TechAdapter

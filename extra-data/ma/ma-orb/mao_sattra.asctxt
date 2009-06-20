@@ -1,0 +1,56 @@
+VehicleType { 
+   Name = SATTRA
+   parent = 231
+   ID = 22101
+   Description = spaceship
+   Infotext = [Dient dem Transport von Satelliten vom Boden in den Orbit oder innerhalb des Orbits]
+   Picture = mao_sattra.pcx
+
+   Tank { 
+      Energy = 0
+      Material = 20000
+      fuel = 30000
+   } Tank
+   Features = construct_specific_buildings ExternalMaterialTransfer ExternalFuelTransfer no_midair_refuel 
+   Movement -= 0 0 0 0 30 20 20 10 
+  
+   Construction { 
+      Buildings = 22941
+   } Construction
+   
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Orbit_Cannon 
+      Weapon0.Type = cannon ammo_transfer shootable 
+      Weapon0.Ammo = 30
+
+      Weapon1 ->* VehicleType.AmmoBomb 
+      Weapon1.Ammo = 25
+      Weapon2 ->* VehicleType. ServiceOrbit
+
+    } Weapons
+  
+   HeightChangeMethodNum = 3
+   HeightChangeMethod0 {
+      movecost = 50
+      heightdelta = 4
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight high_level_flight orbit
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 40
+      heightdelta = -1
+      dist = 3
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod2
+} VehicleType

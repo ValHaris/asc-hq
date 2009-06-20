@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = SEST HEBO
+   parent = 22998 278
+   ID = 22509
+
+   Infotext = [Dieser schwere Senkrechtstarter ist für die Bodeneinheitenbekaempfung. Er hat staerkere Bomben.]
+   Picture = maa_sest_hebo.pcx
+
+   Weight = 100
+
+   Tank.fuel -= 3000
+   FuelConsumption = 35
+   Movement = 0 0 0 30 150 150 0 0 
+
+   Weapons { 
+      Weapon0 ->* VehicleType.AU_Gun 
+      Weapon0.targets = ground_level floating
+      Weapon0.shotFrom = low_level_flight medium_level_flight
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 100
+
+      Weapon1 ->* VehicleType.medBomb
+      Weapon1.Ammo = 3
+      Weapon1.Punch@MaxRange -= 10
+      Weapon1.Punch@MinRange -= 10
+
+      Weapon2 ->* VehicleType.medBomb
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange -= 10
+      Weapon2.Punch@MinRange -= 10
+   } Weapons
+} VehicleType

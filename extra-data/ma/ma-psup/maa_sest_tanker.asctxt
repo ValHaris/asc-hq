@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = SEST TANKER
+   parent = 22998 325
+   ID = 22517
+
+   Description = TankSenkrechtstarter
+   Infotext = []
+   Picture = maa_sest_tanker.pcx
+
+   Features += externalFuelTransfer
+   Armor = 300
+   Tank.fuel = 20000
+   FuelConsumption = 30
+
+   Movement -= 0 0 0 20 10 20 0 0 
+   Weight = 60
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceAir 
+   } Weapons
+} VehicleType

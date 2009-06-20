@@ -15,7 +15,8 @@ VehicleType {
 
    Movement += 0 0 0 2 0 0 0 0 
    Weapons { 
-      Weapon0 ->* VehicleType.type_small_missile 
+      Weapon0 ->* VehicleType.type_small_missile
+      Weapon0.Sound = airmissile_wo_g.ogg
       Weapon0.targets = floating ground_level low_level_flight medium_level_flight 
       Weapon0.MaxRange = 30
       Weapon0.Ammo = 4

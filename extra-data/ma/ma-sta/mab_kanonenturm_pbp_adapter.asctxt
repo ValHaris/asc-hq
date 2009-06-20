@@ -1,0 +1,5 @@
+Techadapter {
+   ; Kanonenturm
+   Name = 22605
+   TechnologiesRequired = 22605
+} TechAdapter

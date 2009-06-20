@@ -1,0 +1,5 @@
+Techadapter {
+   ; Sattransporter
+   Name = 22101
+   TechnologiesRequired = 22101
+} TechAdapter

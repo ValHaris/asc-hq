@@ -1,0 +1,5 @@
+Techadapter {
+   ; Versorgungs-U-B
+   Name = 22714
+   TechnologiesRequired = 22714
+} TechAdapter

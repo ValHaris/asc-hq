@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = UAV UA
+   parent = 425
+   ID = 22203
+
+   Description = Jagddrohne
+   Picture = maa_uav_ua.pcx
+  wreckageobject =
+   Infotext = [Unbemannte Kurzstreckenjagddrohne. Die aussgezeichnete Bewaffnung ermoeglicht sehr gute offensive 
+   Einsatzmöglichkeiten. Die Reichweite der Drohne ist stark eingeschraenkt und sie kann deshalb nicht ohne Traegerschiff oder 
+   Abwurfflugzeug operieren. Allerdings ist dies eh nur ein Einwegmodel, das der Bekaempfung von Marineeinheiten dient!!!]
+
+   TerrainAccess.terrain_any =
+   Tank.fuel = 500
+   FuelConsumption = 10
+   Movement -= 0 0 0 0 -20 -20 -20 0 
+   Weight = 3
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->*VehicleType.DCA 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 140
+      Weapon0.Punch@MinRange = 140
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; AT-Senksta
+   Name = 22510
+   TechnologiesRequired = 22510
+} TechAdapter

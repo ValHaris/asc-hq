@@ -1,0 +1,5 @@
+Techadapter {
+   ; Taucher
+   Name = 22306
+   TechnologiesRequired = 22306
+} TechAdapter

@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = Raumsprinter
+   parent = 12003 401 497
+   ID = 22102
+
+   Description = Spaceship double engine
+   Infotext = [#crt#Raumtransporter#crt# #crt#]
+   Picture = mao_RaumS.pcx
+
+  JumpDrive {
+      terrain_any = Spaceport runway
+      terrain_all = beacon
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } JumpDrive
+
+   Height = ground_level orbit 
+   Features = self_repairing no_midair_refuel
+   Movement = 0 0 0 60 0 0 0 150 
+   SelfRepairRate = 10
+   Weight = 90000
+HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 30
+      heightdelta = 4
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 50
+      heightdelta = -4
+      dist = 0
+      startheight = orbit
+      canattack = true
+   } HeightChangeMethod1
+} VehicleType

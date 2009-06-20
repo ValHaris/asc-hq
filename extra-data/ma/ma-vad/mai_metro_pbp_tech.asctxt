@@ -1,0 +1,10 @@
+technology {
+   Name = Metro
+   infotext = 
+   id = 22300
+   RelatedUnitID = 22300
+   parent = 22000
+   researchpoints *= 3
+   techlevel = 1
+   TechnologiesRequired = 22000 22001 22010 22020 22303
+} Technology

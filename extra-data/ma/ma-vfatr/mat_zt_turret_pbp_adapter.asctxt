@@ -1,0 +1,5 @@
+Techadapter {
+   ; Turret-Trans-Zug
+   Name = 22827
+   TechnologiesRequired = 22827
+} TechAdapter

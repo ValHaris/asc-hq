@@ -1,0 +1,46 @@
+ VehicleType { 
+   Abstract = true
+   ID = 22998
+   parent = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----  malanischer Senkrechtstarter    ---------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Jamming = 0
+   Features = move_after_attack cruiserlanding
+   TerrainAccess ->* VehicleType.heli_terrain 
+   MovementSound = jet_pass.ogg
+   Height = ground_level low_level_flight medium_level_flight
+
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 {
+      movecost = 15
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = low_level_flight medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 5
+      heightdelta = -1
+      dist = 0
+      startheight = medium_level_flight high_level_flight orbit
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 15
+      heightdelta = -1
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod3
+
+} VehicleType

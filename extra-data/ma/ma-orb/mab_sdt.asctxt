@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = SDT
+   parent = 237
+   ID = 22601
+   Description = SpaceDefenceTurret
+   Infotext = [Main space defence system - long range laser to fight against enemy satellites, 
+   spaceships and spacestations.]
+   Picture = mab_sdt.pcx
+
+   Transportation ->* VehicleType.TransLowTrooper3
+
+   Tank { 
+      fuel = 10560
+   } Tank
+
+   Weapons { 
+      Weapon0 ->* VehicleType.type_laser 
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange -= 10
+      Weapon0.Punch@MinRange += 5
+      Weapon0.LaserRechargeRate = 2
+      Weapon0.LaserRechargeCost.material = 0
+      Weapon0.LaserRechargeCost.fuel = 1056
+   } Weapons
+} VehicleType

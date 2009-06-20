@@ -1,0 +1,10 @@
+technology {
+   Name = SEST AM
+   infotext = 
+   id = 22504
+   RelatedUnitID = 22504
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22013 22017 22507 
+} Technology

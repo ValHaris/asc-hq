@@ -1,0 +1,5 @@
+Techadapter {
+   ; AMSenkrechtstarter
+   Name = 22504
+   TechnologiesRequired = 22504
+} TechAdapter

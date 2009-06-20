@@ -1,0 +1,5 @@
+Techadapter {
+   ; MegaKanone
+   Name = 22608
+   TechnologiesRequired = 22608
+} TechAdapter

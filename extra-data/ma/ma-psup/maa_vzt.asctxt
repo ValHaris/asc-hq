@@ -1,0 +1,67 @@
+VehicleType { 
+   Name = VZT
+   parent = 340
+   ID = 22512
+
+   Description = VTO Zugtransporter
+   Infotext = []
+   Picture = maa_vzt.pcx
+
+   Armor = 450
+   View = 40
+
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 500
+      MaxLoadableMass = 500
+      CategoriesNOT = default hoovercraft Trooper Light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship Building|turret|object
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } Transportation
+
+   Height = ground_level low_level_flight medium_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 12000
+   } Tank
+   FuelConsumption = 50
+   Movement = 0 0 0 40 140 140 0 0 
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 { 
+         Type = cannon shootable
+         targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+         Sound = aa_gun_s.ogg
+         shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
+         MaxRange = 30
+         MinRange = 10
+         Ammo = 10
+         ReactionFireShots = 2
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 80
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness {
+	    trooper = 50
+	 } WeaponEffectiveness
+      } Weapon0
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Spionage-Drohne
+   Name = 22208
+   TechnologiesRequired = 22208
+} TechAdapter

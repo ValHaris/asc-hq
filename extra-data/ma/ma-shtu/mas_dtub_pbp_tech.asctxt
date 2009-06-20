@@ -1,0 +1,10 @@
+technology {
+   Name = DrohnentraegerUBoot
+   infotext = 
+   id = 22702
+   RelatedUnitID = 22702
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22014 22022
+} Technology

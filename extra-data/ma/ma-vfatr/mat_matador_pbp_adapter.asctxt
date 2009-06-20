@@ -1,0 +1,5 @@
+Techadapter {
+   ; Trägerzug
+   Name = 22811
+   TechnologiesRequired = 22811
+} TechAdapter

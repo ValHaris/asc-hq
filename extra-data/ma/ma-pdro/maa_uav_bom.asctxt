@@ -1,0 +1,29 @@
+VehicleType { 
+   Name = UAV BOM
+   parent = 425
+   ID = 22209
+
+   Description = Jagddrohne
+   Picture = maa_uav_bom.pcx
+   wreckageobject =
+   Infotext = [Unbemannte Kurzstreckenjagddrohne. Die Drohne, die das Abwehrfeuer anzieht, macht diese Drohne in erster Linie zum Wegbereiter für die schlecht gepanzerten Kollegen, da ihr Kampfwert sehr gering ist, weil fuer die Panzerung nur eine sehr kleine Bombe eingebaut werden konnte. Die Reichweite der Drohne ist stark eingeschraenkt und sie kann deshalb nicht ohne Traegerschiff oder 
+   Abwurfflugzeug operieren. Sie macht die anderen Drohnen erst zur richtigen Gefahr.]
+
+   TerrainAccess.terrain_any =
+   Tank.fuel = 500
+   FuelConsumption = 10
+   Movement -= 0 0 0 0 30 30 30 0 
+   Weight = 3
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.HighBomb 
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
+      Weapon1 ->* VehicleType.HighBomb 
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 140
+      Weapon1.Punch@MinRange = 140
+   } Weapons
+} VehicleType

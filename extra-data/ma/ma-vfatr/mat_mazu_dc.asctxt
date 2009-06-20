@@ -1,0 +1,51 @@
+VehicleType {
+   Name = MAZU DC
+   parent = 400 401 402 412
+   ID = 22805
+   Description = drone carrier train
+   Infotext = [schienengebundenes Startsystem fuer Drohnen]
+
+   Picture = mat_mazu_dc.pcx
+
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 60
+      CategoriesNOT -> VehicleType.Cargo_drop.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.RequireUnitFunction = paratrooper
+      EntranceSystem1 ->* VehicleType.carrier_ground
+      EntranceSystem1.RequireUnitFunction = paratrooper
+   } Transportation
+
+   Features = Repair_Facility MoveDuringReactionFire
+   Armor = 450
+   Weight = 250
+
+   Tank { 
+      Energy = 0
+      Material = 7500
+      fuel = 15000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 90 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Flak
+      Weapon0.Type = cannon ammo_transfer shootable 
+      Weapon0.targets =  low_level_flight medium_level_flight high_level_flight 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 40
+      Weapon0.Punch@MaxRange = 60
+      Weapon0.Punch@MinRange = 70
+      Weapon0.HitAccuracy.u3 = 75
+      Weapon1 ->* VehicleType.Def_MG
+      Weapon2 ->* VehicleType.AmmoTorp 
+      Weapon2.Ammo = 20
+      Weapon3 ->* VehicleType.AmmoBomb 
+      Weapon3.Ammo = 20
+   } Weapons
+} VehicleType

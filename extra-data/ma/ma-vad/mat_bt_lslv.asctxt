@@ -1,0 +1,54 @@
+VehicleType { 
+   Name = BT LSLV
+   parent = 221
+   ID = 22813
+
+   Description = airdefence train
+   Infotext = [die mobile Langstreckenluftabwehr sollte vor Bomberangriffen geschuetzt werden, da die Praezisionslaser keine zusaetzlichen Flakkanonen erlaubt haben]
+   Picture = mat_bt_lslv.pcx
+
+   Armor += 50
+   Tank.fuel = 10000
+   Weight = 150
+
+   Weapons { 
+      Initiative = 0
+      Weapon0 { 
+         Type = laser shootable
+         MaxRange += 10
+         MinRange += 10
+         Ammo = 3
+         Punch@MaxRange -= 5
+         Punch@MinRange += 5
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 500
+         } LaserRechargeCost
+         HitAccuracy { 
+            u1 = 80
+            u2 = 100
+            u3 = 100
+         } HitAccuracy
+      } Weapon0
+      Weapon1 { 
+         Type = laser shootable
+         MaxRange += 10
+         Ammo = 3
+         Punch@MaxRange -= 5
+         Punch@MinRange += 5
+         LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 400
+         } LaserRechargeCost
+         HitAccuracy { 
+            u1 = 80
+            u2 = 100
+            u3 = 100
+         } HitAccuracy
+      } Weapon1
+   } Weapons
+} VehicleType

@@ -24,8 +24,8 @@ VehicleType {
    } Transportation
 
    Height = deep_submerged submerged floating ground_level
-   Movement = 55 44 50 30 0 0 0 0
-   TerrainAccess.Terrain_Any = runway road lowland hard_sand soft_sand very_shallow_water shallow_water water
+   Movement = 33 33 40 30 0 0 0 0
+   TerrainAccess.Terrain_Any = runway road lowland hard_sand soft_sand very_shallow_water shallow_water water river
    TerrainAccess.Terrain_kill = lava
 
    Weapons { 
@@ -65,7 +65,7 @@ VehicleType {
       Weapon4.shotFrom = deep_submerged submerged floating
       Weapon4.MaxRange = 40 
       Weapon4.Ammo = 20
-      Weapon4.ReactionFireShots = 2
+      Weapon4.ReactionFireShots = 1
 
    } Weapons
    HeightChangeMethodNum = 2

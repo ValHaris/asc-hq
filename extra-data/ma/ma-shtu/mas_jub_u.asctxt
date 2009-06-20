@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = JUB U
+   parent = 364
+   ID = 22713
+   Description = U-Boot Jaeger
+   Infotext = [Das U-Boot zur Bekaempfung getauchter Zieler]
+   Picture = mas_jub_u.pcx
+   WreckageObject = 434
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 4
+
+      Weapon1 ->* VehicleType.UTorp
+      Weapon1.Ammo = 6
+      Weapon1.targets = deep_submerged submerged
+      Weapon1.shotFrom = floating deep_submerged submerged
+      Weapon1.MaxRange = 30
+      Weapon1.Punch@MaxRange = 115
+      Weapon1.Punch@MinRange = 125
+      Weapon1.HitAccuracy.d1 = 85
+      Weapon1.HitAccuracy.0 = 100
+      Weapon1.HitAccuracy.u1 = 85
+   } Weapons
+} VehicleType

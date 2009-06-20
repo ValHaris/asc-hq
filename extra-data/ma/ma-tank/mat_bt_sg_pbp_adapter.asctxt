@@ -1,0 +1,5 @@
+Techadapter {
+   ; Assault-Zug
+   Name = 22803
+   TechnologiesRequired = 22803
+} TechAdapter

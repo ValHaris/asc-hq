@@ -1,0 +1,18 @@
+VehicleType { 
+   Name = ZS RADA
+   parent = 22997 242
+   ID = 22816
+
+   Description = Radarzug
+   Infotext = [die mobile Radarstellung der Malaner benoetigt wie so viele Einheiten der Malaner Gleise]
+   Picture = mat_zs_rada.pcx
+
+   Movement = 0 0 0 100 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.MG_Tank
+      Weapon0.Ammo = 10
+   } Weapons
+ } VehicleType

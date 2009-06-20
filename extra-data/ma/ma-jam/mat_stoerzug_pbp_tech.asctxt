@@ -1,0 +1,10 @@
+technology {
+   Name = MTRAIN RJ
+   infotext = 
+   id = 22821
+   RelatedUnitID = 22821
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22011 22012 22024
+} Technology

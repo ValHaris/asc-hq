@@ -25,7 +25,7 @@ VehicleType {
       Weapon0 ->* VehicleType.MG_Tank 
       Weapon0.Type = machinegun ammo_transfer shootable
       Weapon0.targets = floating ground_level 
-      Weapon0.Ammo = 50
+      Weapon0.Ammo = 200
 
       Weapon1 ->* VehicleType.AmmoCannon 
       Weapon1.Ammo = 70

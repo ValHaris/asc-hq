@@ -2,6 +2,19 @@ MK5 Outlaw
 Grafiken: GAMER
 InfoText: Hastrubal
 InfoImage: GAMER
+
+__________________
+20.06.2009 [incl. Beta-09-08+07]
+-InfoImage = Gateling
+-THT30 kein MovementSound
+-Scanner kein Movementsound
+-Gateling, anderer Movesound
+-Tactics, anderer Waffensound
+-Sänger an Spionageflugzeug angepasst
+__________________
+16.05.2009 (GAMER) /incl.Beta-09-06
+-Container, Interner Movementverbrauch erhöht
+-MuHS hat Stealth, anstatt jamming
 __________________
 30.04.2009 (GAMER)
 -Scanner, Änderung Moveverbrauch Höhenwechsel/Bewegung

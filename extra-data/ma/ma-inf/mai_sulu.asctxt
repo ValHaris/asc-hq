@@ -1,0 +1,10 @@
+VehicleType { 
+   Name = SULU
+   ID = 22307
+   parent = 202
+
+   Picture = mai_sulu.pcx
+
+   Weapons.Weapon0.Type = bomb shootable 
+
+} VehicleType

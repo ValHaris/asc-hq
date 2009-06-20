@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = MAZU FWO
+   parent = 22997 242 
+   ID = 22819
+
+   Description = Radarzug
+   Infotext = [Sehen und nicht gesehen werden ist eine der erfolgreichsten Strategien - diese Einheit bietet von beidem etwas]
+   Picture = mat_mazu_fwo.pcx
+
+   Transportation ->* VehicleType.translowtrooper3
+
+   Armor += 100
+   View -= 30
+   Jamming = 30
+
+   Movement = 0 0 0 110 0 0 0 0 
+
+   Weapons { 
+   } Weapons
+ } VehicleType

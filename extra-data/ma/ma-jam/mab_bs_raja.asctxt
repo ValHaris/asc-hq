@@ -1,0 +1,10 @@
+VehicleType {
+   Name = BS RAJA
+   parent = 245
+   ID = 22610
+
+   Picture = mab_bs_raja.pcx
+   View -= 10
+   Jamming = 55
+
+} VehicleType

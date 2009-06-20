@@ -1,0 +1,5 @@
+Techadapter {
+   ; Scharfschütze
+   Name = 22305
+   TechnologiesRequired = 22305
+} TechAdapter

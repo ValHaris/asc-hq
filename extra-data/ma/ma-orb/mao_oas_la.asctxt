@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = OAS LA
+   ID = 22400
+   parent = 233
+   Description = Attack Satellit
+   Infotext = [Orbitales Angriff System - Luftabwehr]
+   Picture = mao_oas_la.pcx
+
+   Tank { 
+      fuel = 9800
+   } Tank
+
+   Weapons { 
+
+      Weapon0 ->* VehicleType.type_laser 
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 10
+      Weapon0.MaxRange += 10 
+      Weapon0.LaserRechargeCost.material = 0
+      Weapon0.LaserRechargeCost.fuel = 960
+      Weapon0.HitAccuracy.d3 = 85
+   } Weapons
+} VehicleType

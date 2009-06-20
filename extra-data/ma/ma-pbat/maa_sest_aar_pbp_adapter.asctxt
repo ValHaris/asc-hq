@@ -1,0 +1,5 @@
+Techadapter {
+   ; AAR-Senksta
+   Name = 22503
+   TechnologiesRequired = 22503
+} TechAdapter

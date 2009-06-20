@@ -1,0 +1,10 @@
+technology {
+   Name = FAT S
+   infotext = 
+   id = 22814
+   RelatedUnitID = 22814
+   parent = 22000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22011 22012 22027
+} Technology

@@ -1,0 +1,10 @@
+technology {
+   Name = SAT Spy
+   infotext = 
+   id = 22405
+   RelatedUnitID = 22405
+   parent = 22000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22013 22018 22101
+} Technology

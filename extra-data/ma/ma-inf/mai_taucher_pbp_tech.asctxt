@@ -1,0 +1,10 @@
+technology {
+   Name = Taucher
+   infotext = 
+   id = 22306
+   RelatedUnitID = 22306
+   parent = 22000
+   researchpoints *= 8
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22010 
+} Technology

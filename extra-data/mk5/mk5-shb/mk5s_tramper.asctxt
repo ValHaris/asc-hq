@@ -12,6 +12,7 @@ VehicleType {
    Transportation.MaxLoadableUnits = 6
    Transportation.MaxLoadableUnitSize = 6
    Transportation.MaxLoadableMass = 12
+   Transportation.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
    Transportation.EntranceSystemNum = 3
    Transportation.EntranceSystem2.Mode = in out
    Transportation.EntranceSystem2.UnitHeightAbs = low_level_flight

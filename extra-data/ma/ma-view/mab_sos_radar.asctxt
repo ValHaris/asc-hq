@@ -1,0 +1,8 @@
+VehicleType {
+   Name = SoS RADAR
+   ID = 22609
+   parent = 244
+
+   Picture = mab_sos_radar.pcx
+
+} VehicleType

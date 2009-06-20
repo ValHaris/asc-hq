@@ -1,0 +1,10 @@
+technology {
+   Name = OAS OA
+   infotext = 
+   id = 22401
+   RelatedUnitID = 22401
+   parent = 22000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22013 22018 22405 
+} Technology

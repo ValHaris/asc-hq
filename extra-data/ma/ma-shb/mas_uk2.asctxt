@@ -1,0 +1,49 @@
+VehicleType { 
+   Name = U K2
+   parent = 22996 355
+   ID = 22707
+   
+;   Description = Kannonen-U-Boot
+   Infotext = [Der Kreuzer der malanischen Flotte, der seine Kanonen nur aufgetaucht einsetzen kann]
+   Picture = mas_uk2.pcx
+
+   Armor -= 100
+   View -= 10
+
+   Tank.Material = 0
+   Movement += 66 66 0 0 0 0 0 0 
+
+   Weapons { 
+      Number = 5
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 5
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Ship_Flak
+      Weapon1.targets =  low_level_flight medium_level_flight high_level_flight 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.HitAccuracy.u3 = 75
+      Weapon1.ReactionFireShots = 1
+
+      Weapon2 ->* VehicleType.Ship_Flak
+      Weapon2.MaxRange = 40
+      Weapon2.Ammo = 10
+      Weapon2.ReactionFireShots = 1
+
+      Weapon3 ->* VehicleType.Ship_Gun
+      Weapon3.MaxRange = 20
+      Weapon3.MinRange = 10
+      Weapon3.Ammo = 15
+      Weapon3.Punch@MaxRange = 95
+      Weapon3.Punch@MinRange = 110
+
+      Weapon4 ->* VehicleType.Ship_Artillery
+      Weapon4.MaxRange = 40
+      Weapon4.MinRange = 20
+      Weapon4.Ammo = 10
+      Weapon4.Punch@MaxRange = 105
+      Weapon4.Punch@MinRange = 135
+      Weapon4.ReactionFireShots = 2
+   } Weapons
+} VehicleType

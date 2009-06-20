@@ -1,0 +1,10 @@
+technology {
+   Name = SEST RADAR
+   infotext = 
+   id = 22513
+   RelatedUnitID = 22513
+   parent = 22000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22013 22017 22023
+} Technology

@@ -1,0 +1,20 @@
+VehicleType { 
+   Name = UAV SPION
+   parent = 425
+   ID = 22208
+   Description = Spionagedrohne
+   Infotext = [Unbemannte Kurzstreckenradardrohne. Dieses unbewaffnete Drohnenmodell dient ausschliesslich der Aufklaerung und kann etwas länger in der Luft bleiben als die anderen Modelle, aber wegen der schlechten Panzerung ist ein Aufenthalt in der Luft sehr riskant.]
+   Picture = maa_uav_spion.pcx
+
+   Armor += 30
+   View = 70
+   Weight = 3
+
+   Features += satelliteview
+
+   TerrainAccess.terrain_any =
+   Tank.fuel = 2000
+
+   Weapons { 
+   } Weapons
+} VehicleType

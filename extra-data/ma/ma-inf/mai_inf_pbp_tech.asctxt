@@ -1,0 +1,10 @@
+technology {
+   Name = Malaner
+   infotext = 
+   id = 22303
+   RelatedUnitID = 22303
+   parent = 22000
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 22000 22010 22029
+} Technology

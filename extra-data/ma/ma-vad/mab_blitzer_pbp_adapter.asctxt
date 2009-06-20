@@ -1,0 +1,5 @@
+Techadapter {
+   ; Blitzer
+   Name = 22600
+   TechnologiesRequired = 22600
+} TechAdapter

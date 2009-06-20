@@ -1,0 +1,5 @@
+Techadapter {
+   ; Muni-Trans-Zug
+   Name = 22822
+   TechnologiesRequired = 22822
+} TechAdapter

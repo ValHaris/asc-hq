@@ -1,0 +1,10 @@
+technology {
+   Name = Loewe
+   infotext = 
+   id = 22752
+   RelatedUnitID = 22752
+   parent = 22000
+   researchpoints *= 4
+   techlevel = 1
+   TechnologiesRequired = 22000 22001 22011 22751
+} Technology

@@ -1,0 +1,179 @@
+History Malaner Set PBP
+Grafik: Marla, GAMER
+InfoText: Marla
+InfoImage: GAMER
+Spezifikationen: GAMER, Marla
+
+__________________
+20.06.2009 (GAMER) [incl. Beta-09-08+07
+-MUB-A , -1 RF
+-Architekt baut Spaceport
+-MUB A +MAM
+-BT RFLAK, Waffenbugfix
+-MUB RS +MdRF -Flaschwasser +200 Armor
+-Bugfix SEST Tanker
+-Überarbeitung Orbitalsysteme
+-Überarbeitung Drohnen
+-Überarbeitung Artillerie 
+Neu:
+-SpacePort
+__________________
+16.05.2009 (GAMER) /incl.Beta-09-06
+-Überarbeitet: SEST Baureihe komplett
+-Infnatrist = Malaner, Beschreibung Korrigiert
+__________________
+19.04.2009 (GAMER)
+-Bugfix PU Marla
+-BT TuBu kann BS RaJa bauen
+-Pionier-Uboot, 30kM
+-Railgun, Selbstzerstöhrung
+__________________
+11.04.2009 (GAMER)
+-Architekt, ZT-Tubu Anpassung an neue Preise
+-Doppelwaffen entfernt, BTS
+-PU Marla, Anpassung an ISG Trader
+-Anpassung:MegaFort, Kanonenturm,SEST-TR
+-ATStellung = ATT
+-Fort = MAFA
+-MegaKanonenTurret = Bunker
+-ZS RAEU + Oelplfanzen+Befestigung+Turretsockel
+__________________
+07.03.2009 (GAMER)
+-Mazu DC, kann auch Dronen wieder einladen.
+-SEST MA überarbeitet
+-Infotext = Infantrist,Scharfschütze
+__________________
+18.10.2008 (GAMER)
+-Turret Adapter/MalanerTech
+-UK4 Waffenumbau
+__________________
+21.09.2008 (GAMER)
+-UK4 Waffenbugfix
+__________________
+13.09.2008 (GAMER)
+-Tubu baut weitere HighTech Turrets/Gebäude
+-Gewicht Schiffe angepasst
+-Spaceships angepasst
+-VDA Movementbugfix, Waffenbugfix
+-VZT FeatureBugfix, Waffenbugfix
+-TKT RF Bugfix
+-Pio-UBoot 20k mat
+-MubSR, Flachwasser
+-Railgun, feuert auch auf Submerged
+-Tubu, techbugfix
+__________________
+09.08.2008 (GAMER)
+-Railgun Tanks
+-Achtung Turretzug verliert im nächsten Update die hitech Bauoptionen
+-UK5 self_repair
+-VDA Distance 2 Waffe
+-UK1, Waffenbugfix
+-Rohstoff und Lagergebäude + Eingangssystem
+-DSEST MdRF
+-InfoImage = Versorger
+-überarbeitung TKT(tripplekanonenturm), UWAAT, TST (Torpedoturm)
+-BT RFLAK tech Bugfix
+-Sichtzug = reines Radar (Mazu FWO), Tech 1
+-Überarbeitung: Matador, MAZU DC(Drohnenzug), MAZU AO, STUB (schwererTräger)
+-Überarbeitung: TUBL(leichter träger), DTUB (Drohnenträger)
+-SoS Radar parent fix
+Neu:
+-Tubu = Hitech Turretbauer
+-Railgun
+__________________
+06.07.2008 (GAMER)
+-VZT/VDA = heavy vto
+-Pios, Gewicht angepasst
+-Land-Support Einheiten überarbeitet
+-Reparaturzug -> Universal Räumzug
+-Munitionstransportzug +Reparatur
+-Radareinheiten überarbeitet
+-Radar Tower (baut Architekt)
+-Bugfix VZT,BTD,SEST AAL,
+-Monstrator -50 Gewicht
+-SEST AA neue Waffen
+-Waffenbugfix AAH/AAR
+-VZT Move korrigiert
+-BTD, wie nashorn
+-ZT Ship 500 gewicht, 2 Stellplätze
+-SEST RJ, SEST Radar, sASA keine Höhenflieger
+-Jagt-Uboote überarbeitet
+-DSEST
+-Turret-objekt
+-Senkrechtstarter allg. kein high_air mehr (noch nicht vollständig)
+-Zugtransportflieger, Ausgang waitforattack
+-Monstrator, Gewicht reduziert
+Neu:
+-Radar Tower (baut Architekt)
+__________________
+07.06.2008 (GAMER)
+- Anpassung Luftverteidigung, parents + TechStufe
+- Anpassung U-Boote (JUB/MUB)
+- Blitzer 2 => Donner
+- Mega AA turm => Blitzer 2
+- AA-malaner => Metro
+- U-AO => JUB O
+- U-AA => MUB A
+- Fat S/M kein jamming
+- FAT ASG, 2 kanonen
+- BT SG Waffenbugfix
+
+__________________
+04.05.2008 (GAMER)
+-MovementSound: SEST
+-MAM -> FAT S
+-DMAM -> FAT M
+-ZT Universal + 100 Armor
+-UWARS 12 Movebugfix
+-Flakzüge überarbeitet
+__________________
+26.04.2008 (GAMER)
+-AAU WairForAttack
+-AOU 2x RF
+-Unterwasserturrets = onlyTransMove
+-Schienenleger kein Minenräumen mehr / +1 Trooper
+__________________
+05.04.2008 (GAMER)
+-Angleichung SChiffswaffen
+-Kanonen-Uboote -Überarbeitet
+-Drohnenaussetzer überarbeitet
+-großer Drohnenaussetzer = Zugtransporter
+Neu:
+- UK5
+- UBV-SMR
+__________________
+22.03.2008 (GAMER)
+-BunkerZug bugfix
+-UBV Repa, Pionier, Trans, UK 4 überarbeitet
+__________________
+15.03.2008 (GAMER)
+-Zug-Transporter = ZT
+-ZT Turret verliert Objektabbau, Minenräumerfunktion (transturretBig2)
+-ZT Universal, tech 3 (TransVehicleHeavy+)
+-ZT Vehicle (TransTrain+)
+-ZT Ship tech 4
+-K4 mehr Movementverbrauch beim Auf und abtauchen
+__________________
+02.02.2008 (GAMER)
+-Umbau abilities -> Features
+-Pio kann Oelpflanzen abbauen
+-Architekt baut Kristallfabrik, Farm, Holzfällerlager
+_________________
+v3.07 16.05.2007
+-Preis Peilsender 2000M/500F
+-Markierer ausreichender Tank eingebaut
+_________________
+v03.06 12.05.2007
+-Kettenfahrzeugbug behoben
+_________________
+v03.05 09.05.2007
+-Züge = MAZU
+-Sats = MASA
+-Turrets = MATU
+-Jammer standardisiert
+neu:
+-markierer
+-Jumpdrive für Raumschiffe
+_________________
+v03.04 04.03.2007
+-Senkrechtstarter = SEST , Fighter/Bomber standardisiert

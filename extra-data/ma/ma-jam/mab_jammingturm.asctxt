@@ -1,0 +1,14 @@
+VehicleType {
+   Name = MATU RJ
+   ID = 22604
+   parent = 309
+   
+   Infotext = [ ideal wenn Verteidigungeinrichtungen vor dem feindlichen Auge versteckt werden sollen]
+   GuideSortHelp += 0 0 0 0 21 0 0 0 0 0
+   Picture = mab_jammingturm.pcx
+
+   Armor -= 250
+   Jamming += 5
+   Features += satelliteview
+
+} VehicleType

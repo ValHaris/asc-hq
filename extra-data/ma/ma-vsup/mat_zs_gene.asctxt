@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = ZS GeZu
+   parent = 400 402 412
+   ID = 22810
+
+   Description = Generatorzug
+   Infotext = [Wenn Treibstoff da ist, dann sollte Strom mit diesem Generator kein Problem sein.]
+   Picture = mat_zs_gene.pcx
+
+   Armor -= 100
+   Tank { 
+      Energy = 3000
+      Material = 0
+      fuel = 12000
+   } Tank
+   Features = Matter_Converter
+
+  Weapons { 
+   } Weapons
+
+ } VehicleType

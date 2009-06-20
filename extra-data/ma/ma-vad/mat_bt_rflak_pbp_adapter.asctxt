@@ -1,0 +1,5 @@
+Techadapter {
+   ; Flakzug
+   Name = 22828
+   TechnologiesRequired = 22828
+} TechAdapter

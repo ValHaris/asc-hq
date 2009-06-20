@@ -1,0 +1,10 @@
+technology {
+   Name = BT LSLV
+   infotext = 
+   id = 22813
+   RelatedUnitID = 22813
+   parent = 22000
+   researchpoints *= 18
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22011 22012 22020 22021 22800
+} Technology

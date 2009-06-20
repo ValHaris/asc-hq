@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = ZS RoTT
+   parent = 400 402 412
+   ID = 22823
+
+   Description = Roh- und Treibstofftransport
+   Infotext = [Dieser Hochgeschwindigkeits-Transportzug befoerdert Baumaterialien und Treibstoff.]
+   Picture = mat_zs_rott.pcx
+
+   Features = ExternalFuelTransfer ExternalMaterialTransfer
+   Weight = 300
+   Armor -= 100
+
+   Tank.Material = 60000
+   Tank.fuel = 70000
+   FuelConsumption = 20
+   Movement = 0 0 0 150 0 0 0 0 
+
+  Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceGround
+    } Weapons
+
+} VehicleType

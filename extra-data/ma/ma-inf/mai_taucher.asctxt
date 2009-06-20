@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = Taucher
+   ID = 22306
+   parent = 206
+   Description = Special Taucher
+   Infotext = [Dieser Trooper ist in der Lage zu tauchen. Die Kanone ist nur fuer den Kampf gegen Trooper geeignet, die Bomb entwickelt erstaunlich Wirkung gegen Schiffe, ist aber auch gegen Landeinheiten bis auf Trooper einsetzbar.]
+   Armor += 20
+   Jamming = 0
+   Picture = MAi_Taucher.pcx
+   Weapons { 
+      Weapon0 ->* VehicleType.SniperSmall 
+      Weapon0.targets =  ground_level floating deep_submerged submerged 
+      Weapon0.shotFrom =  ground_level deep_submerged submerged 
+   } Weapons
+} VehicleType

@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = ZT Ship
+   parent = 400 401 22997
+   ID = 22824
+   
+   Description = Schiffstransportzug
+   Infotext = [Muessen U-Boote Land ueberbruecken oder zum Raumkreuzer transportiert werden, so ist diese Einheit dafuer zustaendig]
+   Picture = mat_zt_ship.pcx
+
+   Armor = 400
+   Weight = 500
+   View = 30
+   Jamming = 0
+
+   transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 12000
+      MaxLoadableMass = 12000
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft building|turret|object helicopter hoovercraft default
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } transportation
+
+   Tank { 
+      fuel = 10000
+   } Tank
+   FuelConsumption = 100
+   Movement = 0 0 0 70 0 0 0 0 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+  } VehicleType

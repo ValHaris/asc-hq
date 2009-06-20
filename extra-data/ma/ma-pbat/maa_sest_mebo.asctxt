@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = SEST MeBo
+   parent = 22998 277
+   ID = 22508
+
+   Infotext = [Dieser mittlere Senkrechtstarter ist fuer die Bodeneinheitenbekaempfung. Er verfuegt im Gegensatz zur kleineren Version auch ueber eine Kanone, um Panzer aus der Distanz anzugreifen.]
+   Picture = maa_sest_mebo.pcx
+
+   Armor += 30
+   Movement = 0 0 0 30 150 160 0 0 
+   FuelConsumption = 30
+
+   Weapons { 
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.AU_Gun 
+      Weapon1.targets = ground_level floating
+      Weapon1.shotFrom = low_level_flight medium_level_flight
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 100
+   } Weapons
+} VehicleType

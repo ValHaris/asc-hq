@@ -1,0 +1,10 @@
+technology {
+   Name = ART ZH
+   infotext = 
+   id = 22808
+   RelatedUnitID = 22808
+   parent = 22000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 22000 22004 22011 22012 22025 22802
+} Technology

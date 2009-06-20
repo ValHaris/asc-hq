@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = PATTY
+   parent = 22996 351
+   ID = 22716
+
+   Description = Patrollien-U-Boot
+   Infotext = [kleinstes U-Boot der Malaner - kann Trooper transportieren - mit einem leichten Torpedo und einer Minigun auch nur leicht bewaffnet.]
+   Picture = mas_patti.pcx
+
+   Transportation ->* VehicleType.TransShipSmall
+
+   Armor -= 100
+   View -= 10
+   Movement += 77 77 0 0 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.MiniGun
+
+      Weapon2 ->* VehicleType.Ship_MG
+      Weapon2.targets = deep_submerged submerged floating ground_level
+      Weapon2.ShotFrom = deep_submerged submerged
+      Weapon2.Punch@MaxRange = 60
+      Weapon2.Punch@MinRange = 60
+
+   } Weapons
+} VehicleType

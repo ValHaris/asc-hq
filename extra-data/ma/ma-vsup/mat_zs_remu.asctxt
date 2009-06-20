@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = ZS ReMu
+   parent = 400 402 412
+   ID = 22822
+
+   Description = Reparatur & Munitionszug
+   Infotext = []
+   Picture = mat_zs_ReMu.pcx
+
+
+   Features += ExternalRepair self_repairing
+   SelfRepairRate = 20
+   Armor -= 50
+   Weight = 150
+
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 12000
+   } Tank
+   Movement += 0 0 0 20 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon1 ->* VehicleType.ServiceGround
+      Weapon2 ->* vehicleType.AmmoMG 
+      Weapon2.Ammo = 120
+      Weapon3 ->* VehicleType.AmmoCannon 
+      Weapon3.Ammo = 150
+      Weapon4 ->* VehicleType.AmmoTorp 
+      Weapon4.Ammo = 90
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 90
+   } Weapons
+} VehicleType

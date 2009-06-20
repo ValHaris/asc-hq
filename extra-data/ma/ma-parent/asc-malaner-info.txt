@@ -1,0 +1,222 @@
+Einheiten ID-Liste				
+
+
+Objekte
+
+ID 22151    Turret foundation
+ID 22152    Railroad Malaner
+ID 22153    Railroadbridge Malaner
+ID 22154    big Railroadbridge Malaner
+
+
+Technologien
+
+ID 22000    Basistechnologie Malaner
+ID 22001    Tech1
+ID 22002    Tech2
+ID 22003    Tech3
+ID 22004    Tech4
+ID 22005    Tech5
+ID 22010    Trooper
+ID 22011    Vehicle
+ID 22012    Train
+ID 22013    aircraft
+ID 22014    submarine
+ID 22015    battleship
+ID 22016    Drohne
+ID 22017    Senkrechtstarter
+ID 22018    Orbit
+ID 22020    Airdefence
+ID 22021    Laser
+ID 22022    Carrier
+ID 22023    Radar
+ID 22024    Jamming
+ID 22025    Heavy Gun
+ID 22026    Heavy Armor
+ID 22027    Speed Attack
+ID 22028    LRAirdefence
+ID 22029    parachute
+
+UNIT parents
+22998 Senkrechtstarter
+22997 Zug
+22996 Submarine
+
+
+AIR
+
+ID 22100    Raumkreuzer				
+ID 22101    Satelittentransporter		
+ID 22102    Raumsprinter
+
+ID 22200    AA-Drohne             		
+ID 22201    Kamikaze-AA-Drohne
+ID 22202    AM-Drohne
+ID 22203    Kamikaze-AM-Drohne
+ID 22204    AO-Drohne
+ID 22205    Kamikaze-AO-Drohne
+ID 22206    AS-Drohne
+ID 22207    Kamikaze-AS-Drohne
+ID 22208    Spionagedrohne
+ID 22209    Kamikaze-Panzer-Drohne
+
+ID 22500    leichter AA-Senkrechtstarter
+ID 22501    mittlerer AA-S.
+ID 22502    AAO-S.
+ID 22503    schwerer AA-S.
+ID 22504    AM-S.
+ID 22505    ASA-S.
+ID 22506    schwerer ASA-S.
+ID 22507    leichter AS-S.
+ID 22508    mittlerer AS-S.
+ID 22509    schwerer AS-S.
+ID 22510    Anti-Trooper-S.
+ID 22511    leichter Drohnenaussetzer
+ID 22512    schwerer Drohnenaussetzer
+ID 22513    Radar-S.
+ID 22514    Stör-S.
+ID 22515    Transport-S.
+ID 22516    Abwehr-Senkrechtstarter
+ID 22517    Tank-S.
+
+
+Turrets (510)
+
+ID 22600    AA-Turret		Airdefenceturret
+ID 22601    AO-T.		Orbitalabwehr
+ID 22602    Fort		Bunker
+ID 22603    hightech Radar-T.   sehr guter Radarturret mit schwacher Panzerung
+ID 22604    Jamming-T.		Störerturm
+ID 22605    Kanonen-T.
+ID 22606    Mega-AA-T.
+ID 22607    Mega Fort
+ID 22608    Mega-Kanonen-T.
+ID 22609    Radar-T.		standard Radarstation
+ID 22610    Radarbunker         die Radarstation für die vorderste Front
+ID 22611    Torpedo-T.
+ID 22612    U-AAO-T.		Unterwasserflugkörperabwehrstellung
+ID 22613    U-Radarstation
+ID 22614    AT-Stellung
+ID 22615    Tripplekanonenturm
+ID 22616    Sonarboje
+ID 22617    AA-Bunker           vollstationäre Luftabwehr zur Basissicherung
+ID 22618    Railgun
+
+
+Trains
+
+ID 22800    AA-Zug
+ID 22801    AO-Z.
+ID 22802    Artillerie-Z.
+ID 22803    Assault-Z.
+ID 22804    Bunker-Z.
+ID 22805    Drohnenträgerz.
+ID 22806    Defence-Z.
+ID 22807    dMAM-Zug		MAM-Zug mit Reichweite (ähnlich Buggy und Gaskin)
+ID 22808    E-Geschütz
+ID 22809    Flakz.
+ID 22810    Generatorz.
+ID 22811    Senkrechtstarterträger (ursprünglich Heli-Träger)
+ID 22812    leichter Kampfpanzerz.
+ID 22813    LR-AA-Z.
+ID 22814    MAM-Zug		MAM-Zug mit Feuerreichweite 1 (zum Schienenfreischießen)
+ID 22815    Mega-Assault-Z.
+ID 22816    Radarz.
+ID 22817    Reparaturz.
+ID 22818    Schienenleger
+ID 22819    Sichtzug
+ID 22820    schwerer Kampfpanzerz.
+ID 22821    Störzug
+ID 22822    Munitionstransportz.
+ID 22823    Ressourcentransportz.
+ID 22824    Schiffstransportz.
+ID 22825    Einheitentransportz.
+ID 22826    universeller Transportz.
+ID 22827    Turret-Transportz.
+ID 22828    Flakzug2
+ID 22829    Artilleriezug2
+ID 22830    Artilleriezug3
+ID 22831    Tubu
+
+
+Trooper
+
+ID 22300    AA-Trooper
+ID 22301    Architekt
+ID 22302    Basuka
+ID 22303    Infantrist
+ID 22304    Pionier
+ID 22305    Scharfschütze
+ID 22306    Taucher
+ID 22307    Sulu
+ID 22308    Markierer
+
+
+Orital
+
+ID 22400    AA-Sat
+ID 22401    AM-Sat		Anti-Marine-Satelitt
+ID 22402    AO-Sat
+ID 22403    AS-Sat
+ID 22404    Raumstation
+ID 22405    Spy-Sat
+ID 22406    uni-Sat		vielseitiger Kampfsatelitt mit schlechter Panzerung
+ID 22407    Stör-Sat
+     
+
+Sea (530)
+
+ID 22700    AA-U-Boot
+ID 22701    AO-U-Boot
+ID 22702    Drohnenträger-U-Boot
+ID 22703    Senkrechtstarter-Träger-U-Boot (ursprünglich Heli-Träger)
+ID 22704    schwerer S.-Träger-U-Boot
+ID 22705    Jagd-U-Boot
+ID 22706    leichtes Kanonen-U-Boot (K1)
+ID 22707    mittleres Kanonen-U-Boot (K2)
+ID 22708    schweres Kanonen-U-Boot (K3)
+ID 22709    Pionier-U-Boot
+ID 22710    Schiffsjäger-U-Boot
+ID 22711    Spionage-U-Boot
+ID 22712    Transport-U-Boot
+ID 22713    U-Bootjäger-U-Boot
+ID 22714    Versorgungs-U-Boot
+ID 22715    Artilleriekanonen-U-Boot (K4)
+ID 22716    Patrollien-U-Boot
+
+
+Ground (540)
+
+ID 22750    Geländewagen
+ID 22751    leichter Panzer
+ID 22752    mittlerer Panzer
+ID 22753    Versorgungs
+
+
+Gebäude
+
+
+ID 22900    Hauptquatier
+ID 22901    Mine
+ID 22902    Ölförderturm
+ID 22903    Ölbohrinsel
+ID 22904    Windkraftwerk
+ID 22905    Solarkraftwerk
+(ID 22910    Ölkraftwerk)
+ID 22911    Hydrolysator
+ID 22912    Materieumwandler
+ID 22915    Forschunganlage
+ID 22920    Depot
+ID 22921    Tankstelle
+ID 22922    Öltank
+ID 22923    Lager
+ID 22925    kl. Fabrik
+ID 22926    gr. Fabrik
+ID 22928    Flughafen
+ID 22929    Drohnentower
+ID 22930    Hafen
+(ID 22931    U-Boot-Basis)
+ID 22932    Trainingslager
+ID 22940    Mobile Fabrik
+ID 22941    Solarsat
+ID(22942)   JamTower

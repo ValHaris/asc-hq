@@ -1,0 +1,5 @@
+Techadapter {
+   ; Radarsenksta
+   Name = 22513
+   TechnologiesRequired = 22513
+} TechAdapter

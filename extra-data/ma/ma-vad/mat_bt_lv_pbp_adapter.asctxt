@@ -1,0 +1,5 @@
+Techadapter {
+   ; AA-Zug
+   Name = 22800
+   TechnologiesRequired = 22800
+} TechAdapter

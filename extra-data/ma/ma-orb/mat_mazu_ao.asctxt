@@ -1,0 +1,60 @@
+VehicleType { 
+   Name = MAZU AO
+   parent = 400 402 412
+   ID = 22801
+
+   Description = orbitattack train
+   Infotext = [die mobile Satellitenabwehr]
+   Picture = mat_mazu_ao.pcx
+
+   Armor = 400
+   Weight = 200
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5000
+   } Tank
+   FuelConsumption = 11
+   Movement = 0 0 0 90 0 0 0 0 
+   TerrainAccess ->* VehicleType.rail_terrain 
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+        Weapon0 { 
+         Type = laser shootable
+         targets = orbit
+         shotFrom = ground_level 
+         MaxRange = 60
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 80
+         Punch@MinRange = 90
+         LaserRechargeRate = 1
+         ReactionFireShots = 2
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 600
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 100
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         cantHit =  
+      } Weapon0
+      Weapon1 ->* VehicleType.Def_MG
+   } Weapons
+} VehicleType

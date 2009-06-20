@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = FAT M
+   parent = 22997 332
+   ID = 22807
+   
+   Description = medium fast attack train
+   Infotext = [Der schnelle Zug fuer die Feindbekaempfung auf Distanz, sein Schutz ist seine Geschwindigkeit, da die Panzerung sehr schlecht ist.]
+   Picture = mat_fatm.pcx
+
+   Features = move_after_attack
+   Armor = 400
+   Weight = 40
+   Jamming = 0
+
+   Movement = 0 0 0 99 0 0 0 0 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.Ammo = 4
+      Weapon0.MinRange = 20
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 95
+      Weapon1 ->* VehicleType.MG_Tank
+      Weapon1.Ammo = 10
+   } Weapons
+} VehicleType

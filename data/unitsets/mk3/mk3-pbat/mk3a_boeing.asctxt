@@ -15,6 +15,7 @@ This experimental plane is able to attack all targets above the water-line and i
    InfoImage = mk3a_boeing.jpg
    GuideSortHelp = 522 600 0 0 3 0 0 0 0 0
 
+   Features = satelliteview MoveDuringReactionFire
    Armor = 350
 
    Tank { 
@@ -31,9 +32,10 @@ This experimental plane is able to attack all targets above the water-line and i
       Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.ML 
+      Weapon0.Ammo = 2
       Weapon0.MaxRange = 20
       Weapon0.LaserRechargeCost.Material = 100
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 80
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 85
    } Weapons
 } VehicleType

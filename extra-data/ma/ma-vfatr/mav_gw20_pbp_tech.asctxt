@@ -1,0 +1,10 @@
+technology {
+   Name = Gelaendewagen
+   infotext = 
+   id = 22750
+   RelatedUnitID = 22750
+   parent = 22000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22011 22029
+} Technology

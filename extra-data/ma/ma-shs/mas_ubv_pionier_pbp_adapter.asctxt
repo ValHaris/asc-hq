@@ -1,0 +1,5 @@
+Techadapter {
+   ; Pionier-U-Boot
+   Name = 22709
+   TechnologiesRequired = 22709
+} TechAdapter

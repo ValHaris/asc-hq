@@ -1,0 +1,5 @@
+Techadapter {
+   ; ATStellung
+   Name = 22614
+   TechnologiesRequired = 22614
+} TechAdapter

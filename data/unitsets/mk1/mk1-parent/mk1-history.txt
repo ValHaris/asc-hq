@@ -4,8 +4,14 @@ InfoTexte: BananaJoe
 InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
-__________________
-Beta-09-06
+_______________________________________
+20.06.2009 (GAMER) [incl. Beta-09-07+08
+-InfoImage = Hoovercraft, Raven2
+-MG Bunker 3 Felder Reichweite (Fort)
+-Schiffswracks kein Movemalus
+-Ceti 200 MG Ammo
+_____________________________________
+16.05.2009 (GAMER) [incl. Beta-09-06]
 -Wake = Flugboot
 default:
 -Speedboat/Speedship schnellerer Höhenstufenwechsel

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Radarbunker
+   Name = 22610
+   TechnologiesRequired = 22610
+} TechAdapter

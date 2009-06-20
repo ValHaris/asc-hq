@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 22000-22999
+   Buildings = 22000-22999
+   Objects = 22000-22999
+   Terrain = 22000-22999
+   technologies = 22000-22999
+   name = Malaner PBP
+   activated = true 
+} itemfilter
+   

@@ -1,0 +1,10 @@
+technology {
+   Name = SDT
+   infotext = 
+   id = 22601
+   RelatedUnitID = 22601
+   parent = 22000
+   researchpoints *= 7
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22011 22021
+} Technology

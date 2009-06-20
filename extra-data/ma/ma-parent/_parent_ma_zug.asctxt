@@ -1,0 +1,41 @@
+ VehicleType { 
+   Abstract = true
+   ID = 22997
+   parent = 402
+
+; ----------------------------------------------------------------------------------------------------------------
+; -----   T R A I N S    -----------------------------------------------------------------------------------------
+; ----------------------------------------------------------------------------------------------------------------
+
+   Infotext = []
+   WreckageObject = 497 496
+
+   Category = rail_vehicle
+   Features = 
+   MaxSurvivableStorm = 200
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+
+   Height = ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } Tank
+   FuelConsumption = 20
+
+   TerrainAccess ->* VehicleType.rail_terrain 
+   MovementSound = train.wav
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

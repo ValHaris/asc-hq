@@ -1,0 +1,5 @@
+Techadapter {
+   ; AM-Sat
+   Name = 22401
+   TechnologiesRequired = 22401
+} TechAdapter

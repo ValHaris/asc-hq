@@ -1,0 +1,23 @@
+VehicleType { 
+   Name = ATT
+   ID = 22614
+   parent = 422 400 402
+
+   Description = Sniperturm
+   Infotext = [ Anti-Trooper-Stellung mit einer Scharfschützenkanone und 2 MGs; die richtige Wahl, wenn feindliche Trooper erwartet werden.]
+   Picture = mab_att.pcx
+
+   TerrainAccess ->* VehicleType.Turret_only 
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.Sniper 
+      Weapon0.MaxRange = 50
+      Weapon0.MinRange = 20     
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 150
+      Weapon0.ReactionFireShots = 2
+      Weapon1 ->* VehicleType.BigMiniGun
+    } Weapons
+} VehicleType

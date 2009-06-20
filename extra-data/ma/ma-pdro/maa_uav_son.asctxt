@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = UAV SON
+   parent = 425
+   ID = 22201
+
+   Description = sonardrohne
+   Infotext = []
+   Picture = maa_uav_son.pcx
+   wreckageobject =
+
+   TerrainAccess.terrain_any =
+   Tank.fuel = 500
+   FuelConsumption = 10
+   Movement += 0 0 0 0 -40 -40 -40 0 
+
+   Features += sonar
+   View = 60
+   Weight = 3
+
+
+   Weapons { 
+      Number = 0
+   } Weapons
+} VehicleType

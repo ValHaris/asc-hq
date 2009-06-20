@@ -1,0 +1,10 @@
+technology {
+   Name = TUBL
+   infotext = 
+   id = 22703
+   RelatedUnitID = 22703
+   parent = 22000
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22014 22022 22702
+} Technology

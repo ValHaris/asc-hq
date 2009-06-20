@@ -1,0 +1,10 @@
+technology {
+   Name = SEST HEBO
+   infotext = 
+   id = 22509
+   RelatedUnitID = 22509
+   parent = 22000
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22013 22017 22508
+} Technology

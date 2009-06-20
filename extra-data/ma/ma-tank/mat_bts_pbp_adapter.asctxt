@@ -1,0 +1,5 @@
+Techadapter {
+   ; schw-Kampfzug
+   Name = 22820
+   TechnologiesRequired = 22820
+} TechAdapter

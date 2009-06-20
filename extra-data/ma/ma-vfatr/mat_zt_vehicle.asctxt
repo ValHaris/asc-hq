@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = ZT Vehicle
+   parent = 400 401 22997
+   ID = 22825
+   
+   Description = Transportzug
+   Infotext = [Dieser schnelle Transportzug ist fuer den Einheitentransport zustaendig und kann sowohl Trooper als auch Landfahrzeuge laden, aber keine anderen Zuege.]
+   Picture = mat_zt_vehicle.pcx
+   
+   Armor = 400
+   Weight = 200
+   Jamming = 0
+   View = 30
+
+   Transportation ->* VehicleType.TransTrain 
+   Transportation.MaxLoadableUnits = 14
+
+   Movement = 0 0 0 130 0 0 0 0 
+   TerrainAccess ->* VehicleType.rail_terrain 
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.Def_MG
+   } Weapons
+ } VehicleType

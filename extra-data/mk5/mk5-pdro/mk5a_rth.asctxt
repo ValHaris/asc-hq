@@ -9,6 +9,8 @@ VehicleType {
    Picture = mk5a_rth.pcx
 
    Movement = 0 0 0 0 140 140 140 0 
+   Weight = 11
+
    Weapons {
       Number = 2 
       Weapon0 { 

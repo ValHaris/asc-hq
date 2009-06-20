@@ -1,0 +1,10 @@
+technology {
+   Name = JUB
+   infotext = 
+   id = 22705
+   RelatedUnitID = 22705
+   parent = 22000
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 22000 22002 22014
+} Technology

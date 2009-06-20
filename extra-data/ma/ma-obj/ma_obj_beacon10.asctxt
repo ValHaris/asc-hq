@@ -1,0 +1,47 @@
+ObjectType { 
+   Name = Peilsender
+   ID = 22152
+   groupID =
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Height = 118
+   NoSelfChaining = true
+   lifetime = 10
+
+   Armor = 200
+   ConstructionCost { 
+      Energy = 0
+      Material = 2000
+      fuel = 500
+      Movement = 30
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -1000
+      fuel = 60
+      Movement = 30
+   } RemovalCost
+
+   Weather = dry 
+
+   Movemalus_plus = 0
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   TerrainAccess { 
+      terrain_any = runway spaceport
+      terrain_all = 
+      terrain_not = swamp 
+      terrain_kill = swamp shallow_water water deep_water lava 
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = beacon
+   dry { 
+      UseGFXpics = false
+      picture = ma_obj_beacon.pcx 1
+   } dry
+} ObjectType

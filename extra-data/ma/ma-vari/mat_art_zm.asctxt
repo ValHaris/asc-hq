@@ -1,0 +1,15 @@
+VehicleType { 
+   Name = ART ZM
+   ID = 22802
+   parent = 254
+
+   Description = artillerie train
+   Infotext = [die einfache Standard-Artillerie der Malaner]
+   Picture = mat_art_zm.pcx
+
+   Weapons { 
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+      Weapon1 ->* VehicleType.MG40low
+   } Weapons
+} VehicleType

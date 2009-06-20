@@ -1,0 +1,10 @@
+technology {
+   Name = Radarbasis
+   infotext = 
+   id = 22613
+   RelatedUnitID = 22613
+   parent = 22000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 22000 22004 22014 22011 22023
+} Technology

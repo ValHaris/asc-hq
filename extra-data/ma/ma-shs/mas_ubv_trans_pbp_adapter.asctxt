@@ -1,0 +1,5 @@
+Techadapter {
+   ; Transport-U-Boot
+   Name = 22712
+   TechnologiesRequired = 22712
+} TechAdapter

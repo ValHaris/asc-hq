@@ -1,0 +1,5 @@
+Techadapter {
+   ; Blitzer2
+   Name = 22617
+   TechnologiesRequired = 22617
+} TechAdapter

@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = ART ZD
+   ID = 22830
+   parent = 254
+   Description = artillerie train
+   Infotext = [verbesserte Standard-Artillerie, ideal für Sperrfeuer, da MDRF]
+   Picture = mat_art_zd.pcx
+
+   Armor = 330
+   Features = MoveDuringReactionFire
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2400
+   } Tank
+   FuelConsumption = 12
+   Movement -= 0 0 0 30 0 0 0 0 
+
+   Weapons { 
+      Number = 2
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 5
+   } Weapons
+} VehicleType

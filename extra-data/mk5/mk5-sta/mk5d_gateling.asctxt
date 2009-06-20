@@ -6,6 +6,8 @@ VehicleType {
 
    Infotext = []
    Picture = mk5d_gateling.pcx
+   InfoImage = mk5d_gateling.jpg
+   InfoImageSmall = mk5d_gateling_k.png
 
    Features += MoveDuringReactionFire
    
@@ -13,6 +15,7 @@ VehicleType {
    Weight = 2
    View += 21
    TerrainAccess ->* VehicleType.Device_terrain 
+   MovementSound = thump.ogg
 
    WaitForAttack = true
    Weapons { 
