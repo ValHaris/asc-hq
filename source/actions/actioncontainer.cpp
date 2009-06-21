@@ -96,7 +96,8 @@ ActionResult ActionContainer::redo( const Context& context )
 void ActionContainer::breakUndo()
 {
    for ( Actions::iterator i = actions.begin(); i != currentPos; ++i ) {
-      commitCommand( map, **i );
+      if( isActive_map( *i ) ) 
+         commitCommand( map, **i );
       delete *i;
    }
    actions.clear();
