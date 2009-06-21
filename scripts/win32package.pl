@@ -22,7 +22,6 @@ my $zipname = "asc-$version.zip";
 my @files = ("asc2.exe" ); 
 push( @files,  "mapeditor2.exe") if ( $mapedit );
 my @debugfiles = ("asc.pdb", "mapeditor.pdb");
-my $pbpzip = "pbpeditor.zip";
 
 my $ftpclient = "C:/Programme/NcFTP/ncftpput.exe";
 
@@ -59,6 +58,22 @@ system("cp " . join (" ", @files, @debugfiles) . " $archivedir");
 die "error copying file" if $?;
 
 
+sub randomString {
+   my $s = "";
+   for ( my $i = 0;  $i < 10; $i++ ) {
+      my $j = rand 36;
+      if ( $j < 26 ) {
+         if ( rand(2) < 1 ) {
+            $s .= chr($j + 97);
+         } else {
+            $s .= chr($j + 65);
+         }
+      } else {
+         $s .= chr($j + 48-26);
+      }
+   }
+   return $s;
+}
 
 
 system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $zipname");
@@ -69,9 +84,11 @@ if ( $cvsUpload ) {
 }
 
 if ( $pbpEditor ) {
+    my $id = randomString();
+    my $pbpzip = "pbpeditor-$id.zip";
     unlink($pbpzip) if -e $pbpzip;
-    system("zip -e $pbpzip pbpeditor2.exe");
+    system("zip $pbpzip pbpeditor2.exe");
     system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $pbpzip");
     die "error uploading file $pbpzip " if $?;
-  
+ 
 }

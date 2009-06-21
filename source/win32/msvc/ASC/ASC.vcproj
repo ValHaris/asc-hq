@@ -256,6 +256,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\campaignactionrecorder.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\cannedmessages.cpp"
 				>
 			</File>
@@ -385,6 +389,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\loadpcxc.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\luacommandwriter.cpp"
 				>
 			</File>
 			<File
@@ -764,6 +772,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\fileselector.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\gotoposition.cpp"
 					>
 				</File>
 				<File
