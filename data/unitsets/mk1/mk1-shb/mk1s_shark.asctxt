@@ -5,6 +5,8 @@ VehicleType {
    
    Description = cruiser
    picture = mk1s_shark.pcx
+   InfoImage = mk1s_shark.jpg
+   InfoImageSmall = mk1s_shark_k.png
    WreckageObject = 447
 
    Armor += 100
