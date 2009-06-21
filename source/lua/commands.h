@@ -57,4 +57,6 @@ extern ActionResult setDiplomacy( GameMap* actmap, int actingPlayer, int towards
 extern ActionResult cancelResearch( GameMap* actmap, int actingPlayer );
 extern ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int techID );
       
+extern void endTurn();
+
 #endif

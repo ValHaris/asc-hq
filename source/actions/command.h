@@ -139,6 +139,7 @@ class Command : public GameAction {
       virtual void readData ( tnstream& stream );
       virtual void writeData ( tnstream& stream ) const;
             
+      virtual ActionResult checkExecutionPrecondition() const;
 };
 
 #endif

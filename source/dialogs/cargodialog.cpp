@@ -544,6 +544,7 @@ class CargoDialog : public Panel
          cargoChanged();
       }
 
+   public:
       int  getResourceValue ( int resourcetype, int y, int scope ) {
          int player = container->getMap()->actplayer;
          if ( container->getMap()->getCurrentPlayer().stat == Player::supervisor )
@@ -777,72 +778,6 @@ class CargoDialog : public Panel
             setLabelText( "View", container->baseType->view, widget );
             setLabelText( "Armor", container->getArmor(), widget );
          }
-
-         // from resourceinfo
-         {
-            int value[3][3][4];
-            int mx = 0;
-
-            for ( int c = 0; c < 3; c++ )
-               for ( int x = 0; x < 3; x++ )
-                  for ( int y = 0; y < 4; y++ ) {
-                     value[c][x][y] = getResourceValue ( x, y, c );
-                     if ( y != 1 )
-                        if ( value[c][x][y] > mx )
-                           mx = value[c][x][y];
-                  }
-
-
-
-            for ( int c = 0; c < 3; c++ )
-               for ( int x = 0; x < 3; x++ )
-                  for ( int y = 0; y < 4; y++ ) {
-                     char xx = 'A' + (c * 3 + x);
-                     char yy = '1' + y;
-                     ASCString label = "Res";
-                     label += xx;
-                     label += yy;
-                     if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !container->getMap()->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
-                        setLabelText( label, value[c][x][y] );
-                     else
-                        setLabelText( label, "-" );
-                  }
-
-            // from researchwindow
-            Player& player = container->getMap()->player[ container->getOwner() ];
-
-            setLabelText( "ResPerTurnLocal", container->researchpoints *  player.research.getMultiplier(), widget );
-            setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
-
-            Resources cost = returnResourcenUseForResearch( container );
-            for ( int r = 0; r < 3; ++r)
-               setLabelText( "CostLocal" + ASCString::toString(r), cost.resource(r), widget );
-
-            Resources globalCost;
-            for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
-               globalCost += returnResourcenUseForResearch( *i );
-
-            for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
-               globalCost += returnResourcenUseForResearch( *i );
-
-            for ( int r = 0; r < 3; ++r)
-               setLabelText( "CostGlobal" + ASCString::toString(r), globalCost.resource(r), widget );
-
-            int availIn = player.research.currentTechAvailableIn();
-            if ( availIn >= 0 )
-               setLabelText( "AvailGlobal", availIn, widget );
-            else
-               setLabelText( "AvailGlobal", "-", widget );
-
-            if ( player.research.activetechnology )
-               setLabelText( "CurrentTech", player.research.activetechnology->name, widget );
-            else
-               setLabelText( "CurrentTech", "-", widget );
-
-         }
-
-
-
 
       }
 
@@ -1139,7 +1074,68 @@ class ResourceInfoWindow : public SubWindow
 
 
       void update() {
-         cargoDialog->updateVariables();
+
+         ContainerBase* activeContainer= container();
+
+         int value[3][3][4];
+         int mx = 0;
+
+         for ( int c = 0; c < 3; c++ )
+            for ( int x = 0; x < 3; x++ )
+               for ( int y = 0; y < 4; y++ ) {
+                  value[c][x][y] = cargoDialog->getResourceValue ( x, y, c );
+                  if ( y != 1 )
+                     if ( value[c][x][y] > mx )
+                        mx = value[c][x][y];
+               }
+
+
+
+         for ( int c = 0; c < 3; c++ )
+            for ( int x = 0; x < 3; x++ )
+               for ( int y = 0; y < 4; y++ ) {
+                  char xx = 'A' + (c * 3 + x);
+                  char yy = '1' + y;
+                  ASCString label = "Res";
+                  label += xx;
+                  label += yy;
+                  if ( (y != 1 || value[c][x][y] < mx*10 || value[c][x][y] < 1000000000 ) && ( !activeContainer->getMap()->isResourceGlobal(x) || y!=0 ||c ==2))   // don't show extremely high numbers
+                     cargoDialog->setLabelText( label, value[c][x][y] );
+                  else
+                     cargoDialog->setLabelText( label, "-" );
+               }
+
+         // from researchwindow
+         Player& player = activeContainer->getMap()->player[ activeContainer->getOwner() ];
+
+         cargoDialog->setLabelText( "ResPerTurnLocal", activeContainer->researchpoints *  player.research.getMultiplier(), widget );
+         cargoDialog->setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
+
+         Resources cost = returnResourcenUseForResearch( activeContainer );
+         for ( int r = 0; r < 3; ++r)
+            cargoDialog->setLabelText( "CostLocal" + ASCString::toString(r), cost.resource(r), widget );
+
+         Resources globalCost;
+         for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
+            globalCost += returnResourcenUseForResearch( *i );
+
+         for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
+            globalCost += returnResourcenUseForResearch( *i );
+
+         for ( int r = 0; r < 3; ++r)
+            cargoDialog->setLabelText( "CostGlobal" + ASCString::toString(r), globalCost.resource(r), widget );
+
+         int availIn = player.research.currentTechAvailableIn();
+         if ( availIn >= 0 )
+            cargoDialog->setLabelText( "AvailGlobal", availIn, widget );
+         else
+            cargoDialog->setLabelText( "AvailGlobal", "-", widget );
+
+         if ( player.research.activetechnology )
+            cargoDialog->setLabelText( "CurrentTech", player.research.activetechnology->name, widget );
+         else
+            cargoDialog->setLabelText( "CurrentTech", "-", widget );
+
       }
 
 };
@@ -1743,10 +1739,10 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
          return;
 
       // to not block the weapon info on 800*600 screens
-      
+
       if ( my_xpos + Width() > PG_Application::GetScreenWidth() - 100 )
          MoveWidget( 0, 0, false);
-      
+
 
    } catch ( ParsingError err ) {
       errorMessage( err.getMessage() );

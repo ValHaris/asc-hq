@@ -36,6 +36,7 @@ class ContainerCommand : public Command {
       void writeData ( tnstream& stream ) const;
       ContainerCommand( ContainerBase* container );
       ContainerCommand( GameMap* map );
+      ActionResult checkExecutionPrecondition() const;
 };
 
 #endif

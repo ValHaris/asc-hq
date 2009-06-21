@@ -12,8 +12,8 @@
 #include "../itemrepository.h"
 #include "../dlg_box.h"
 #include "mapedcommands.h"
+#include "../ed_mapcomponent.h"
 #include "../dialogs/fieldmarker.h"
-
          
          
          
@@ -69,10 +69,11 @@ Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* v
    if ( map && veh && owner >= 0 && owner < 8 ) {
       tfield* fld = map->getField(pos);
       if ( fld ) {
-         fld->vehicle = new Vehicle ( veh, map, owner );
-         fld->vehicle->setnewposition ( pos );
-         fld->vehicle->fillMagically();
-         return fld->vehicle;
+         int r = VehicleItem::place( map, pos, veh, owner );
+         if ( r < 0 )
+            return NULL;
+         else
+            return fld->vehicle;
       }
    }
    return NULL;

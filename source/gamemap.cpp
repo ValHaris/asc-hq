@@ -218,7 +218,7 @@ void OverviewMapHolder::clearmap( GameMap* actmap )
 
 
 GameMap :: GameMap ( void )
-      : actions(this), overviewMapHolder( *this ), network(NULL)
+   : actions(this), actionRecorder(NULL), overviewMapHolder( *this ), network(NULL)
 {
    randomSeed = rand();
    dialogsHooked = false;
@@ -1472,6 +1472,10 @@ GameMap :: ~GameMap ()
       network = NULL;
    }   
       
+   if ( actionRecorder ) {
+      delete actionRecorder;
+      actionRecorder = NULL;
+   }
 
 #ifdef WEATHERGENERATOR
    delete weatherSystem;

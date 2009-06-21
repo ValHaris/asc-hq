@@ -32,6 +32,9 @@
 #include "../spfst.h"
 #include "../spfst-legacy.h"
 #include "../itemrepository.h"
+
+#include "../turncontrol.h"
+#include "../pg_mapdisplay.h"
                
 #include "../actions/attackcommand.h"
 #include "../actions/moveunitcommand.h"
@@ -692,4 +695,26 @@ ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int techID )
    
    return res;
 
+}
+
+class NextTurnStrategy_OnlyCampaign : public NextTurnStrategy {
+   public:
+      bool continueWhenLastPlayer() const {
+         return false;     
+      }
+      
+      bool authenticate( GameMap* actmap  ) const {
+         int humanCount = 0;
+         for ( int p = 0; p < actmap->getPlayerCount(); ++p )
+            if ( actmap->getPlayer(p).isHuman() )
+               ++humanCount;
+         
+         return humanCount <= 1;
+      }
+} ;
+
+
+void endTurn()
+{
+   next_turn( actmap, NextTurnStrategy_OnlyCampaign(), &getDefaultMapDisplay() );
 }

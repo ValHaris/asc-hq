@@ -22,6 +22,7 @@
 #include "edglobal.h"
 #include "spfst.h"
 #include "spfst-legacy.h"
+#include "ed_mapcomponent.h"
 
 #include "lua/luastate.h"
 #include "lua/luarunner.h"

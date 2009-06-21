@@ -35,10 +35,11 @@
 
 bool MoveUnitCommand :: avail ( Vehicle* eht )
 {
-   if ( eht )
-     return eht->canMove();
-   else
-      return false;
+   
+   if ( eht ) 
+      return eht->canMove();
+   
+   return false;
 }
 
 
@@ -55,6 +56,7 @@ bool MoveUnitCommand :: descendAvail ( Vehicle* veh )
    if ( veh )
       if ( veh->getHeightChange( -1 ))
          return true;
+   
    return false;
 }
 

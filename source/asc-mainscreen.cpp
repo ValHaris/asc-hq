@@ -163,11 +163,9 @@ void Menu::setup()
    addbutton ( "~U~ndo\tctrl-z", ua_undo );
    addbutton ( "~R~edo\tctrl-shift-z", ua_redo );
    addbutton ( "~M~anage", ua_actionManager );
-#ifdef LUAINTERFACE
    currentMenu->addSeparator();
    addbutton ( "Save Script", ua_writeLuaCommands );
    addbutton ( "Run Script", ua_runLuaCommands );
-#endif   
 
 
    addfield ( "~I~nfo" );

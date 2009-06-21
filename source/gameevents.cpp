@@ -1321,6 +1321,7 @@ void NextMap::execute( MapDisplayInterface* md )
 
    
    savegame( "map-" + name + "-completed" + (savegameextension + 1), gamemap );
+   gamemap->sigMapWon( gamemap->getCurrentPlayer() );
    throw  LoadNextMap(mapID);
 }
 

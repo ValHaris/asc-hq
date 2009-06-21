@@ -198,6 +198,7 @@ class CGameOptions
       bool cacheASCGUI;
 
       bool replayMovieMode;
+      bool recordCampaignMaps;
 
       vector<ASCString> visibleMapLayer;
 

@@ -41,6 +41,10 @@ class UnitCommand : public Command {
       UnitCommand( Vehicle* vehicle );
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
+      
+      ActionResult checkExecutionPrecondition() const;
+      
+      
    public:
       virtual vector<MapCoordinate> getCoordinates() const;
       int getUnitTypeID() const; 

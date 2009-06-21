@@ -31,7 +31,6 @@
 #include "../paradialog.h"
 #include "../gameoptions.h"
 
-
 HighLightingManager::HighLightingManager() : marked(0) {};
 
 int HighLightingManager::getMark()

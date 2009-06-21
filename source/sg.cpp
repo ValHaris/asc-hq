@@ -167,15 +167,15 @@
 #include "gameevent_dialogs.h"
 #include "actions/commandwriter.h"
 #include "dialogs/actionmanager.h"
+#include "dialogs/gotoposition.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
 
-#ifdef LUAINTERFACE
-# include "lua/luarunner.h"
-# include "lua/luastate.h"
-#endif
-
+#include "lua/luarunner.h"
+#include "lua/luastate.h"
+#include "luacommandwriter.h"
+#include "campaignactionrecorder.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -467,6 +467,10 @@ void         startnextcampaignmap( int id)
       computeview( actmap );
       hookGuiToMap( actmap );
       repaintMap();
+      
+      if ( CGameOptions::Instance()->recordCampaignMaps ) 
+         actmap->actionRecorder = new  CampaignActionLogger( actmap );
+      
    }
 }
 
@@ -887,116 +891,17 @@ bool continueAndStartMultiplayerGame( bool mostRecent = false )
 }
 
 
- class GotoPosition: public ASC_PG_Dialog {
-      PG_LineEdit* xfield;
-      PG_LineEdit* yfield;
-      GameMap* gamemap;
-
-      bool ok()
-      {
-         static boost::regex numercial("\\d+");
-
-         if( boost::regex_match( xfield->GetText(), numercial)  &&
-             boost::regex_match( yfield->GetText(), numercial)) {
-               int xx = atoi( xfield->GetText() );
-               int yy = atoi( yfield->GetText() );
-               if ( xx >= 0 && yy >= 0 && xx < gamemap->xsize && yy < gamemap->ysize ) {
-                  Hide();
-                  MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
-                  md->cursor.goTo( MapCoordinate( xx, yy) );
-                  QuitModal();
-                  return true;
-               }
-         }
-         return false;
-      }
-      
-      bool cancel()
-      {
-         QuitModal();
-         return true;
-      }
-
-      static const int border  = 20;
-
-      bool line1completed()
-      {
-         if ( yfield ) {
-            yfield->EditBegin();
-            return true;
-         } else
-            return false;
-      }
-      
-   public:
-      GotoPosition ( GameMap* gamemap ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 300, 120), "Enter Coordinates")
-      {
-         this->gamemap = gamemap;
-         int fieldwidth = (Width()-3*border)/2;
-         xfield = new PG_LineEdit( this, PG_Rect( border, 40, fieldwidth, 20));
-         // xfield->SetText( ASCString::toString( gamemap->getCursor().x ));
-         xfield->sigEditReturn.connect( SigC::slot( *this, &GotoPosition::line1completed ));
-
-         yfield = new PG_LineEdit( this, PG_Rect( (Width()+border)/2, 40, fieldwidth, 20));
-         // yfield->SetText( ASCString::toString( gamemap->getCursor().y ));
-         yfield->sigEditReturn.connect( SigC::slot( *this, &GotoPosition::ok ));
-
-         AddStandardButton( "~O~k" )->sigClick.connect( SigC::slot( *this, &GotoPosition::ok ));
-      };
-
-      int RunModal()
-      {
-         xfield->EditBegin();
-         return ASC_PG_Dialog::RunModal();
-      }
-   };
-
-
-   class LuaCommandWriter : public AbstractCommandWriter {
-         void splitString( const ASCString& string ) {
-            
-            typedef vector< ASCString > Split_vector_type;
-    
-            Split_vector_type splitVec; // #2: Search for tokens
-            boost::algorithm::split( splitVec, string, boost::algorithm::is_any_of("\n") ); // SplitVec == { "hello abc","ABC","aBc goodbye" }
-            
-            for ( Split_vector_type::iterator i = splitVec.begin(); i != splitVec.end(); ++i ) {
-               printCommand( *i );  
-            }
-         }
-      
-      public:
-         tn_file_buf_stream stream;
-         LuaCommandWriter ( const ASCString& filename ) : stream ( filename, tnstream::writing ) {
-            stream.writeString("-- get handle to active map \n", false);
-            stream.writeString("map = asc.getActiveMap() \n", false);
-         }
-         virtual void printCommand( const ASCString& command ) {
-            if ( command.find('\n') != ASCString::npos ) {
-               splitString(command);
-            } else {
-               stream.writeString("r = asc." + command + "\n", false );
-               stream.writeString("if r:successful()==false then asc.displayActionError(r) end \n", false );
-            }
-         };
-         virtual void printComment( const ASCString& comment ) {
-            stream.writeString("\n--" + comment + "\n", false );
-         };
-      
-   };
-
-
+ 
 
 void writeLuaCommands() 
 {
    ASCString filename =  selectFile("*.lua", false );
    if ( !filename.empty() ) {
-      LuaCommandWriter writer ( filename );
+      LuaCommandFileWriter writer ( filename );
       actmap->actions.getCommands( writer ); 
    }
 }
 
-#ifdef LUAINTERFACE
 void selectAndRunLuaScript()
 {
    ASCString file = selectFile( "*.lua", true );
@@ -1009,7 +914,6 @@ void selectAndRunLuaScript()
       updateFieldInfo();
    }
 }
-#endif               
 
 class CommandAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
    virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
@@ -1256,11 +1160,8 @@ void execuseraction2 ( tuseractions action )
       case ua_actionManager: actionManager( actmap );
          break;
          
-#ifdef LUAINTERFACE 
       case ua_runLuaCommands: selectAndRunLuaScript();
          break;
-      
-#endif
                   
       default:
          break;
@@ -1518,6 +1419,9 @@ void deployMapPlayingHooks ( GameMap* map )
    map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
    map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
 }
+
+
+
 
 
 

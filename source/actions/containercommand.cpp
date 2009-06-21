@@ -74,4 +74,11 @@ void ContainerCommand::writeData ( tnstream& stream ) const
    stream.writeInt( containerID );
 };
 
+ActionResult ContainerCommand::checkExecutionPrecondition() const
+{
+   if ( getMap()->actplayer != getContainer()->getOwner() )
+      return ActionResult(101);
+   else
+      return ActionResult(0);
+}
 

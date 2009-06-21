@@ -37,7 +37,7 @@ You must be outside to change a units height
 119
 Not enough movement to put or remove mines
 120
-Not unit found with this ID
+No unit found with this ID
 201
 This # won't attack anything
 202

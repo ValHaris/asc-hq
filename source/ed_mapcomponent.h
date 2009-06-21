@@ -93,6 +93,7 @@ class VehicleItem : public BasicItem<Vehicletype> {
     public:
        VehicleItem( const Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
        virtual int place( const MapCoordinate& mc ) const ;
+       static int place( GameMap* gamemap, const MapCoordinate& mc, const Vehicletype* v, int owner );
        virtual void display( Surface& s, const SPoint& pos ) const;
        virtual MapComponent* clone() const { return new VehicleItem( item ); };
 };

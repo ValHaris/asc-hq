@@ -49,7 +49,11 @@ void Command::setState( State state )
 
 ActionResult Command::runAction( const Context& context ) 
 {
-   return go ( context );  
+   ActionResult res = checkExecutionPrecondition();
+   if ( !res.successful() )
+      return res;
+   else
+      return go ( context );  
 }
 
 
@@ -73,5 +77,10 @@ ActionResult Command::redo( const Context& context )
 vector<MapCoordinate> Command::getCoordinates() const
 {
    return vector<MapCoordinate>(); 
+}
+
+ActionResult Command::checkExecutionPrecondition() const
+{
+   return ActionResult(0);
 }
 

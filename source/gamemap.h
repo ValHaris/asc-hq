@@ -60,6 +60,15 @@
 class WeatherSystem;
 #endif
 
+
+class ActionRecorder {
+   public:
+      virtual void readData ( tnstream& stream ) = 0;
+      virtual void writeData ( tnstream& stream ) = 0;
+      virtual ~ActionRecorder() {};
+};
+
+
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 35;
 
@@ -351,7 +360,9 @@ class GameMap {
 
       //! Records all action that have been done for undo/redo purposes
       ActionContainer actions;
+      ActionRecorder* actionRecorder;
 
+      
       ReplayInfo*  replayinfo;
 
       //! a helper variable to store some information during the loading process. No usage outside.
@@ -444,6 +455,7 @@ class GameMap {
       SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
       SigC::Signal1<void,Player&> sigPlayerTurnEnds;
       SigC::Signal1<void,Player&> sigPlayerTurnHasEnded;
+      SigC::Signal1<void,Player&> sigMapWon;
 
       static SigC::Signal1<void,GameMap&> sigMapDeletion;
       static SigC::Signal2<void,GameMap*,Player&> sigPlayerTurnEndsStatic;

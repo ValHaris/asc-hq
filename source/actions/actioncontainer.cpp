@@ -20,6 +20,7 @@
 
 
 #include "actioncontainer.h"
+#include "../gamemap.h"
 
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
@@ -34,7 +35,7 @@ ActionContainer::ActionContainer( GameMap* gamemap )
    : map ( gamemap )
 {
    currentPos = actions.begin(); 
-   
+  
 }
 
 void ActionContainer::add( Command* action )
@@ -271,6 +272,7 @@ void ActionContainer::getCommands( AbstractCommandWriter& writer)
       writer.printCommand( (*i)->getCommandString() );
    }
 }
+
 
 ActionContainer::~ActionContainer()
 {

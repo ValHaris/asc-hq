@@ -4,7 +4,7 @@ MAINTAINERCLEANFILES	= Makefile.in
 
 INCLUDES      = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 
-AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) $(LUA_TAGS)
+AM_CXXFLAGS   = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
 
 bin_PROGRAMS  = asc 
 noinst_PROGRAMS = unittester
@@ -31,7 +31,8 @@ overviewmapimage.cpp mapfield.cpp overviewmappanel.cpp dashboard.cpp asc-mainscr
 explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
-playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp
+playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
+campaignactionrecorder.cpp
 
 commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -55,3 +56,4 @@ nodist_unittester_SOURCES  =  $(commonSources)
 unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
 
 
+asc_SOURCES = gotoposition.cpp

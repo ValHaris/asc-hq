@@ -47,6 +47,7 @@
 #include "../textfileparser.h"
 #include "../widgets/textrenderer.h"
 #include "../mapdisplayinterface.h"
+#include "../campaignactionrecorder.h"
 
 class GameParameterEditorWidget;
 
@@ -907,6 +908,9 @@ bool StartMultiplayerGame::start()
    if ( mode == PBP || mode == PBEM ) 
       sendGameParameterAsMail ( actmap );
 
+   if ( (mode == NewCampaign || mode == ContinueCampaign) && CGameOptions::Instance()->recordCampaignMaps ) 
+      actmap->actionRecorder = new  CampaignActionLogger( actmap );
+  
    
    return true;
 }

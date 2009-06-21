@@ -131,26 +131,25 @@ void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const 
 
 
 
-// template<class Vehicletype> Surface BasicItem<Vehicletype>::clippingSurface;
-int VehicleItem::place( const MapCoordinate& mc ) const
+int VehicleItem::place( GameMap* gamemap, const MapCoordinate& mc, const Vehicletype* v, int owner )
 {
-   tfield* fld = actmap->getField(mc);
+   tfield* fld = gamemap->getField(mc);
    if ( !fld )
       return -1;
 
-   const Vehicletype* veh = item;
+   const Vehicletype* veh = v;
    
    if ( !veh )
       return -2;
      
-   if ( selection.getPlayer()  >= 8 )
+   if ( owner  >= 8 )
       return -3;
 
    bool accessible = veh->terrainaccess.accessible ( fld->bdt );
    if ( veh->height >= chtieffliegend )
          accessible = true;
 
-   if ( fld->building  || ( !accessible && !actmap->getgameparameter( cgp_movefrominvalidfields)) ) 
+   if ( fld->building  || ( !accessible && !gamemap->getgameparameter( cgp_movefrominvalidfields)) ) 
       return -3;
    
    
@@ -159,18 +158,18 @@ int VehicleItem::place( const MapCoordinate& mc ) const
          delete fld->vehicle;
          fld->vehicle = NULL;
       } else {
-         fld->vehicle->convert( selection.getPlayer()  );
+         fld->vehicle->convert( owner  );
          return 1;
       }
    }
-   fld->vehicle = new Vehicle ( veh, actmap, selection.getPlayer()  );
+   fld->vehicle = new Vehicle ( v, gamemap, owner  );
    fld->vehicle->setnewposition ( mc );
    fld->vehicle->fillMagically();
    
    for ( int i = 0; i < 9; ++i ) {
       if ( fld->vehicle->typ->height & (1 << i )) {
          fld->vehicle->height = 1 << i;
-         if ( terrainaccessible( fld, fld->vehicle ) == 2 ) //  || actmap->getgameparameter( cgp_movefrominvalidfields)
+         if ( terrainaccessible( fld, fld->vehicle ) == 2 ) //  || gamemap->getgameparameter( cgp_movefrominvalidfields)
             break;
       }
       if ( i == 8 ) { // no height found
@@ -184,6 +183,10 @@ int VehicleItem::place( const MapCoordinate& mc ) const
    
 }
 
+int VehicleItem::place( const MapCoordinate& mc ) const
+{
+   return place( actmap, mc, item, selection.getPlayer() );
+}
 
 Surface BuildingItem::clippingSurface;
 Surface BuildingItem::fullSizeImage;

@@ -176,7 +176,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LUA_CFLAGS = @LUA_CFLAGS@
 LUA_FLAGS = @LUA_FLAGS@
 LUA_LIBS = @LUA_LIBS@
-LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -283,7 +282,7 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS) $(LUA_TAGS)
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS)
 nodist_asc_pbpedit_SOURCES = edgen.cpp edglobal.cpp edmain.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \

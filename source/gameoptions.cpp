@@ -150,6 +150,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    // add(new IntProperty("ShowUnitOwner"                ,  &_pOptions->showUnitOwner));
    pc.addString("StartupMap", startupMap, startupMap );
    pc.addBool("DebugReplay", debugReplay, debugReplay );
+   pc.addBool("RecordCampaignMaps", recordCampaignMaps, recordCampaignMaps );
 
    pc.addString("BI3.path", BI3directory, BI3directory );
 
@@ -332,6 +333,7 @@ void CGameOptions::setDefaults ( void )
    pbemServer.hostname="terdon.asc-hq.org";
 
    aircraftCrashWarningTime = 1;
+   recordCampaignMaps = false;
    
    setChanged();
 }

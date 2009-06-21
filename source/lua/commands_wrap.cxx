@@ -4992,6 +4992,22 @@ fail:
 }
 
 
+static int _wrap_endTurn(lua_State* L) {
+  int SWIG_arg = 0;
+  
+  SWIG_check_num_args("endTurn",0,0)
+  endTurn();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -5034,6 +5050,7 @@ static const struct luaL_reg swig_commands[] = {
     { "setDiplomacy", _wrap_setDiplomacy},
     { "cancelResearch", _wrap_cancelResearch},
     { "setResearchGoal", _wrap_setResearchGoal},
+    { "endTurn", _wrap_endTurn},
     {0,0}
 };
 

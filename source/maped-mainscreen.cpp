@@ -107,10 +107,8 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "Load Clipboard",     act_readClipBoard );
    addbutton ( "Save Clipboard",     act_saveClipboard );
-#ifdef LUAINTERFACE
    currentMenu->addSeparator();
    addbutton ( "Run Script",     act_runLuaScript );
-#endif   
    currentMenu->addSeparator();
    addbutton ( "~W~rite map to PNG-File\tctrl+G", act_maptopcx);
     addbutton ( "~I~mport BI map\tctrl-i", act_import_bi_map );

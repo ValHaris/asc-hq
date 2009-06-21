@@ -47,6 +47,7 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
+am_asc_OBJECTS = gotoposition.$(OBJEXT)
 am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	applicationstarter.$(OBJEXT) strtmesg.$(OBJEXT) \
 	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
@@ -86,10 +87,11 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	containerbase-functions.$(OBJEXT) windowing.$(OBJEXT) \
 	turncontrol.$(OBJEXT) unitset.$(OBJEXT) playercolor.$(OBJEXT) \
 	pg_mapdisplay.$(OBJEXT) autotraining.$(OBJEXT) \
-	researchexecution.$(OBJEXT)
+	researchexecution.$(OBJEXT) luacommandwriter.$(OBJEXT) \
+	campaignactionrecorder.$(OBJEXT)
 nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
 	gamedialog.$(OBJEXT)
-asc_OBJECTS = $(nodist_asc_OBJECTS)
+asc_OBJECTS = $(am_asc_OBJECTS) $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 =  \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -132,8 +134,9 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(nodist_asc_SOURCES) $(nodist_unittester_SOURCES)
-DIST_SOURCES =
+SOURCES = $(asc_SOURCES) $(nodist_asc_SOURCES) \
+	$(nodist_unittester_SOURCES)
+DIST_SOURCES = $(asc_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -197,7 +200,6 @@ LTLIBOBJS = @LTLIBOBJS@
 LUA_CFLAGS = @LUA_CFLAGS@
 LUA_FLAGS = @LUA_FLAGS@
 LUA_LIBS = @LUA_LIBS@
-LUA_TAGS = @LUA_TAGS@
 LokiInclude = @LokiInclude@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
@@ -304,7 +306,7 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
-AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS) $(LUA_TAGS)
+AM_CXXFLAGS = $(SDL_CFLAGS) -Dsgmain $(SIGC_CFLAGS)
 noinst_bindir = $(abs_top_builddir)/source/unix/asc/
 commonSources = soundList.cpp typen.cpp applicationstarter.cpp \
 strtmesg.cpp stack.cpp spfst.cpp sgstream.cpp palette.cpp \
@@ -325,7 +327,8 @@ overviewmapimage.cpp mapfield.cpp overviewmappanel.cpp dashboard.cpp asc-mainscr
 explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
-playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp
+playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
+campaignactionrecorder.cpp
 
 commonLibs = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -346,6 +349,7 @@ nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp
 asc_LDADD = $(commonLibs)
 nodist_unittester_SOURCES = $(commonSources) 
 unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
+asc_SOURCES = gotoposition.cpp
 all: all-am
 
 .SUFFIXES:
@@ -437,6 +441,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/campaignactionrecorder.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cannedmessages.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clipboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase-functions.Po@am__quote@
@@ -457,6 +462,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamemap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometry.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gotoposition.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@
@@ -467,6 +473,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadbi3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/loadpcxc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/luacommandwriter.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mainscreenwidget.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapalgorithms.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mapdisplay.Po@am__quote@

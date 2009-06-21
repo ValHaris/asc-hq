@@ -91,3 +91,11 @@ int UnitCommand::getUnitTypeID() const
    
    return unitTypeID; 
 }; 
+
+ActionResult UnitCommand::checkExecutionPrecondition() const
+{
+   if ( getMap()->actplayer != getUnit()->getOwner() )
+      return ActionResult(101);
+   else
+      return ActionResult(0);
+}
