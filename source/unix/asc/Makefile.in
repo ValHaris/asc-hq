@@ -47,7 +47,6 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
-am_asc_OBJECTS = gotoposition.$(OBJEXT)
 am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	applicationstarter.$(OBJEXT) strtmesg.$(OBJEXT) \
 	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
@@ -91,7 +90,7 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	campaignactionrecorder.$(OBJEXT)
 nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
 	gamedialog.$(OBJEXT)
-asc_OBJECTS = $(am_asc_OBJECTS) $(nodist_asc_OBJECTS)
+asc_OBJECTS = $(nodist_asc_OBJECTS)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 =  \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
@@ -134,9 +133,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(asc_SOURCES) $(nodist_asc_SOURCES) \
-	$(nodist_unittester_SOURCES)
-DIST_SOURCES = $(asc_SOURCES)
+SOURCES = $(nodist_asc_SOURCES) $(nodist_unittester_SOURCES)
+DIST_SOURCES =
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -349,7 +347,6 @@ nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp
 asc_LDADD = $(commonLibs)
 nodist_unittester_SOURCES = $(commonSources) 
 unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
-asc_SOURCES = gotoposition.cpp
 all: all-am
 
 .SUFFIXES:
@@ -462,7 +459,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gamemap.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gameoptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometry.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gotoposition.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@

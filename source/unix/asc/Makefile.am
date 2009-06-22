@@ -55,5 +55,3 @@ asc_LDADD = $(commonLibs)
 nodist_unittester_SOURCES  =  $(commonSources) 
 unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
 
-
-asc_SOURCES = gotoposition.cpp
