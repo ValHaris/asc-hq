@@ -665,7 +665,7 @@ class CargoDialog : public Panel
          PG_Widget* widget = this;
          // from solarpower
          {
-            setLabelText( "MaxPower", container->maxplus.energy );
+            setLabelText( "MaxSolarPower", container->maxplus.energy );
 
             static const char* weathernames[] = {"terrain_weather_dry.png",
                                                  "terrain_weather_lightrain.png",
@@ -678,7 +678,7 @@ class CargoDialog : public Panel
 
             SolarPowerplant solarPowerPlant ( container );
             Resources plus = solarPowerPlant.getPlus();
-            setLabelText( "CurrentPower", plus.energy );
+            setLabelText( "CurrentSolarPower", plus.energy );
             setImage( "Weather", weathernames[ container->getMap()->getField( container->getPosition() )->getWeather() ], widget );
          }
 
@@ -686,7 +686,7 @@ class CargoDialog : public Panel
          {
             WindPowerplant windPowerPlant ( container );
             Resources plus = windPowerPlant.getPlus();
-            setLabelText( "CurrentPower", plus.energy, widget );
+            setLabelText( "CurrentWindPower", plus.energy, widget );
 
 #ifdef WEATHERGENERATOR
             if ( container->getMap()->weatherSystem )
