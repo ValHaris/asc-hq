@@ -57,11 +57,29 @@ CampaignActionLogger::CampaignActionLogger ( GameMap* map ) : gamemap ( map ), c
    gamemap->actions.commitCommand.connect( SigC::slot( *this, &CampaignActionLogger::commitCommand ));
 }
 
+
 void CampaignActionLogger::readData ( tnstream& stream )
 {
+   stream.readInt();
+   int count = stream.readInt();
+   for ( int i = 0; i <count; ++i ) {
+      ASCString s;
+      stream.readTextString( s, true );
+      commands.push_back( s );
+   }
+   int check = stream.readInt();
+   if ( check != 0xbac0 )
+      throw ASCmsgException("marker not matched when loading CampaignActionLogger");
+      
 }
 
 void CampaignActionLogger::writeData ( tnstream& stream )
 {
+   stream.writeInt(1);
+   stream.writeInt( commands.size() );
+   for ( CommandList::const_iterator i = commands.begin(); i != commands.end(); ++i ) {
+      stream.writeString( *i );
+   }
+   stream.writeInt( 0xbac0 );
 };
 
