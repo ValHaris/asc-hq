@@ -29,6 +29,8 @@
 #include "../itemrepository.h"
 #include "../dlg_box.h"
 #include "../paradialog.h"
+#include "../gameeventsystem.h"
+#include "../loaders.h"
 #include <pgpropertyfield_integer.h>
 #include <pgpropertyfield_intdropdown.h>
 #include <pgpropertyfield_checkbox.h>
@@ -146,5 +148,16 @@ int selectString ( const ASCString& title, const StringArray& entries, int defau
       return r.second;
 }
 
+
+
+void setLocalizedEventMessage( int eventID, const ASCString& message )
+{
+   if ( !eventLocalizationMap )
+      return;
+   
+   for ( GameMap::Events::const_iterator i = eventLocalizationMap->events.begin(); i != eventLocalizationMap->events.end(); ++i ) 
+      if ( (*i)->id == eventID )
+         (*i)->action->setLocalizationString( message );
+}
       
       

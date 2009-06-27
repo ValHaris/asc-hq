@@ -36,6 +36,7 @@
 #include "overviewmapimage.h"
 #include "gameeventsystem.h"
 #include "spfst.h"
+#include "campaignactionrecorder.h"
 
 
 RandomGenerator::RandomGenerator(int seedValue){
@@ -269,6 +270,9 @@ GameMap :: GameMap ( void )
    weatherSystem  = new WeatherSystem(this, 1, 0.03);
 #endif
    setgameparameter( cgp_objectsDestroyedByTerrain, 1 );
+   
+   
+   nativeMessageLanguage = "en_US";
 }
 
 GameMap::Campaign::Campaign()
@@ -284,7 +288,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 29;
+const int tmapversion = 30;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -662,6 +666,16 @@ void GameMap :: read ( tnstream& stream )
     
     if ( version >= 25 )
        actions.read( stream );
+    
+    if ( version >= 30 ) {
+       nativeMessageLanguage = stream.readString();
+       int recorder  = stream.readInt();
+       if ( recorder == 1 ) {
+          actionRecorder = new CampaignActionLogger( this );
+          actionRecorder->readData( stream );
+       } else
+          actionRecorder = NULL;
+    }
 }
 
 
@@ -854,6 +868,15 @@ void GameMap :: write ( tnstream& stream )
       stream.writeInt( 0 );
       
     actions.write( stream );
+    
+    stream.writeString(nativeMessageLanguage);
+    
+    if ( actionRecorder != NULL ) {
+       stream.writeInt( 1 );
+       actionRecorder->writeData( stream );
+    } else
+       stream.writeInt( 0 );
+    
 }
 
 

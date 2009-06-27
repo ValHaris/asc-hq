@@ -144,6 +144,7 @@ class NewMap: public ASC_PG_Dialog {
          static const char* directionNames[7] = { "South", "SouthWest", "NorthWest", "North", "NorthEast", "SouthEast", NULL };
          
          new PG_PropertyField_IntDropDown<int>( properties, "Wind Direction", &gamemap->weather.windDirection, directionNames );
+         new PG_PropertyField_String<ASCString>( properties, "Native Event Language", &gamemap->nativeMessageLanguage );
          
          updateButton();
          

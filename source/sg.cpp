@@ -256,7 +256,6 @@ void hookGuiToMap( GameMap* map )
    }
 }
 
-
 bool loadGameFromFile( const ASCString& filename )
 {
    GameMap* m = mapLoadingExceptionChecker( filename, MapLoadingFunction( tsavegameloaders::loadGameFromFile ));
@@ -283,6 +282,8 @@ bool loadGameFromFile( const ASCString& filename )
    hookGuiToMap ( actmap );
    return true;
 }
+
+
 
 
 bool loadGame( bool mostRecent )

@@ -157,4 +157,9 @@ extern MapConinuationInfo findNextCampaignMap( int id = -1 );
 
 extern bool suppressMapTriggerExecution;
 
+/** used by setLocalizedEventMessage to get the map being loaded
+    It's not nice having a global variable for that, but we need to persist the data for the Lua callbacks */
+extern GameMap* eventLocalizationMap;
+
+
 #endif

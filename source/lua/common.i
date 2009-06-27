@@ -203,3 +203,5 @@ class PropertyDialog  {
 
 int selectString ( const std::string& title, const StringArray& entries, int defaultEntry = -1 );
 
+void setLocalizedEventMessage( int eventID, const std::string& message );
+

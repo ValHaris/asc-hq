@@ -76,7 +76,9 @@ class PropertyDialog : public ASC_PG_Dialog {
       bool run();
 };
 
-int selectString ( const ASCString& title, const StringArray& entries, int defaultEntry = -1 );
+extern int selectString ( const ASCString& title, const StringArray& entries, int defaultEntry = -1 );
+extern void setLocalizedEventMessage( int eventID, const ASCString& message );
 
-      
+
 #endif
+

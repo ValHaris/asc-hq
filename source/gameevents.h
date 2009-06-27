@@ -686,6 +686,10 @@ class DisplayImmediateMessage: public EventAction {
 
       void execute( MapDisplayInterface* md );
 
+      ASCString getLocalizationString() const;;
+      void setLocalizationString( const ASCString& s );
+      
+      
       void setup();
 
       ASCString getName() const { return "Display Message (immediate text)"; };

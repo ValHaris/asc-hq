@@ -49,6 +49,9 @@
 #include "gamemap.h"
 #include "gameeventsystem.h"
 #include "graphicset.h"
+#include "gameoptions.h"
+#include "lua/luarunner.h"
+#include "lua/luastate.h"
 
 
 #ifdef sgmain
@@ -1007,10 +1010,34 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
 } 
 
 
+GameMap* eventLocalizationMap = NULL;
+
+
+void loadLocalizedMessages( GameMap* map, const ASCString& name )
+{
+   if ( CGameOptions::Instance()->language != map->nativeMessageLanguage  && CGameOptions::Instance()->language.length() >= 2 ) {
+      ASCString filename = name + "." +   CGameOptions::Instance()->language;
+      if ( exist( filename )) {
+         
+         eventLocalizationMap = map;
+         
+         LuaState state;
+         LuaRunner runner( state );
+         runner.runFile( filename );
+         if ( !runner.getErrors().empty() )
+            errorMessage( runner.getErrors() );
+         
+         eventLocalizationMap = NULL;
+      }
+   }
+}
+
 GameMap* tmaploaders::loadmap ( const ASCString& name )
 {
      tmaploaders gl;
-     return gl._loadmap ( name );
+     GameMap* map = gl._loadmap ( name );
+   loadLocalizedMessages( map, name );     
+     return map;
 }     
    
 
@@ -1299,11 +1326,35 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
 
 
 
+ASCString getLuaQuote( bool open, int n ) 
+{
+   ASCString s =  open? "[[" : "]]";
+   for ( int i =0; i < n; ++i )
+      s.insert(1, "=" );
+   return s;
+}
 
+ASCString luaQuote( const ASCString& text )
+{
+   int count = 0;
+   while( text.find_first_of( getLuaQuote( true,  count )) != ASCString::npos ||
+          text.find_first_of( getLuaQuote( false, count )) != ASCString::npos )
+          ++count;
+   
+   return getLuaQuote( true, count) + text + getLuaQuote( false, count );
+}
 
-
-
-
+void writeMessageFile( GameMap* gamemap, tnstream& stream )
+{
+   for ( GameMap::Events::const_iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
+      ASCString s = (*i)->action->getLocalizationString();
+      if ( !s.empty() )  {
+         stream.writeString ( "--- ===== " + ASCString::toString((*i)->id) + "  ======= \n", false );
+         stream.writeString ( "message = " + luaQuote( s ) + "\n", false );
+         stream.writeString ( "asc.setLocalizedEventMessage( map, " + ASCString::toString((*i)->id) + ", message )\n\n", false);
+      }
+   }
+}
 
 
 
@@ -1317,6 +1368,13 @@ void  savemap( const ASCString& name, GameMap* gamemap )
    try {
      tmaploaders gl;
      gl.savemap ( name, gamemap );
+     
+     
+     if ( CGameOptions::Instance()->saveEventMessagesExternal && gamemap->nativeMessageLanguage.length() ) {
+        tn_file_buf_stream messages ( name + "." + gamemap->nativeMessageLanguage, tnstream::writing );
+        writeMessageFile( gamemap, messages );
+     }
+     
    } /* endtry */
 
    catch ( tfileerror err ) {

@@ -171,7 +171,7 @@ void Menu::setup()
    addbutton ( "PBP Player Statistics", act_pbpstatistics );
 
    addfield ("~O~ptions");
-    addbutton ( "~M~ap values\tctrl+M",          act_changemapvals );
+    addbutton ( "~M~ap properties\tctrl+M",          act_changemapvals );
     addbutton ( "~C~hange players\tO",           act_changeplayers);
     addbutton ( "~E~dit events\tE",              act_events );
 //    addbutton ( "unit production ~L~imitation", act_specifyunitproduction );

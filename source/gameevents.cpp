@@ -1534,6 +1534,17 @@ void DisplayImmediateMessage::setup()
 }
 
 
+ASCString DisplayImmediateMessage::getLocalizationString() const
+{
+   return message;
+}
+
+void DisplayImmediateMessage::setLocalizationString( const ASCString& s ) 
+{
+   message = s;
+}
+
+
 
 
 void AddProductionCapability :: readData ( tnstream& stream )

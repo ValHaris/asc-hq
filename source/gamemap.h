@@ -395,6 +395,12 @@ class GameMap {
       int           gameparameter_num;
       int*          game_parameter;
 
+      /** the language string that describes the messages which are saved in the game events
+          For example: en_US
+          All translations will be maintained in seperate files
+      */
+      ASCString     nativeMessageLanguage;
+      
       int           mineralResourcesDisplayed;
 
       class ArchivalInformation {

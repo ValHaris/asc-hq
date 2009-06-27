@@ -101,6 +101,9 @@ class EventAction {
       virtual void writeData ( tnstream& stream ) = 0;
       virtual ASCString getName() const = 0;
 
+      virtual ASCString getLocalizationString() const { return ""; };
+      virtual void setLocalizationString( const ASCString& s ) {};
+      
       virtual void execute( MapDisplayInterface* md ) = 0;
       virtual void setup() = 0;
       void setMap( GameMap* gamemap_ ) { gamemap = gamemap_; };

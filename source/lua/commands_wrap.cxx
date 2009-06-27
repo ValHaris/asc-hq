@@ -3756,6 +3756,29 @@ static int _wrap_selectString(lua_State* L) {
 }
 
 
+static int _wrap_setLocalizedEventMessage(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("setLocalizedEventMessage",2,2)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("setLocalizedEventMessage",1,"int");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("setLocalizedEventMessage",2,"std::string const &");
+  arg1 = (int)lua_tonumber(L, 1);
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  setLocalizedEventMessage(arg1,(std::string const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_loadGame(lua_State* L) {
   int SWIG_arg = 0;
   char *arg1 = (char *) 0 ;
@@ -5022,6 +5045,7 @@ static const struct luaL_reg swig_commands[] = {
     { "warningMessage", _wrap_warningMessage},
     { "infoMessage", _wrap_infoMessage},
     { "selectString",_wrap_selectString},
+    { "setLocalizedEventMessage", _wrap_setLocalizedEventMessage},
     { "loadGame", _wrap_loadGame},
     { "displayActionError", _wrap_displayActionError},
     { "unitAttack",_wrap_unitAttack},

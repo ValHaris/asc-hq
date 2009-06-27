@@ -59,6 +59,11 @@ void hookGuiToMap( GameMap* map )
    }
 }
 
+bool loadGameFromFile( const ASCString& filename )
+{
+   return false;
+}
+
 
 
 Context createContext( GameMap* gamemap )
