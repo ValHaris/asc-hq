@@ -239,6 +239,27 @@ void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,
 }
 
 
+
+class ReactionFireLayer : public MapLayer {
+      Surface& image;
+   public: 
+      ReactionFireLayer() : image ( IconRepository::getIcon("rf-icon.png")) {} ;
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+void ReactionFireLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+{
+   if ( fieldInfo.visibility > visible_ago) {
+      if ( fieldInfo.fld->vehicle && fieldInfo.fld->vehicle->reactionfire.getStatus() == Vehicle::ReactionFire::ready ) {
+         MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
+         blitter.blit( image, fieldInfo.surface, pos);
+      }   
+   }
+}
+
+
+
 class WeaponRange : public SearchFields
 {
    public:
@@ -546,6 +567,7 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
    addMapLayer( new ResourceGraphLayer(), "resources" );
    addMapLayer( new ContainerInfoLayer(), "container" );
    addMapLayer( new PipeLayer()         , "pipes" );
+   addMapLayer( new ReactionFireLayer() , "reactionfire" );
    
    parent->lockOptionsChanged.connect( SigC::slot( *this, &MapDisplayPG::lockOptionsChanged ));
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &MapDisplayPG::sigMapDeleted ));

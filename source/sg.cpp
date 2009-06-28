@@ -1096,6 +1096,10 @@ void execuseraction2 ( tuseractions action )
          mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
          repaintMap();
          break;
+      case ua_viewReactionfireOverlay:
+         mainScreenWidget->getMapDisplay()->toggleMapLayer("reactionfire");
+         repaintMap();
+         break;
       case ua_showsearchdirs: showSearchPath();
          break;
       case ua_changepassword:

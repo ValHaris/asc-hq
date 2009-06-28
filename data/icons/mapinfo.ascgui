@@ -1,5 +1,5 @@
 panel {
-   height = 120
+   height = 135
    WidgetNum = 1
    
    Widget0 {
@@ -9,7 +9,7 @@ panel {
       x2 = -3
       y2 = -1
       
-      WidgetNum = 7
+      WidgetNum = 8
    
       fontsize = 9
       fontcolor = 0xffffff
@@ -57,12 +57,22 @@ panel {
          ToolTipHelp = 0
       } Widget6
 
+      Widget7 {
+         name = reactionfire
+         type = checkbox
+         x = 0
+         y = 60
+         x2 = 0
+         height = 15
+         text = reaction fire
+      } Widget7
+      
       
       Widget3 {
          name = weaprange
          type = button
          x = 0
-         y = 61
+         y = 76
          x2 = 0
          height = 15
          text = show weapon range
@@ -73,7 +83,7 @@ panel {
          name = moverange
          type = button
          x = 0
-         y = 77
+         y = 92
          x2 = 0
          height = 15
          text = show movement range
@@ -84,7 +94,7 @@ panel {
          type = dummy
          widgetnum = 2
          x = 0
-         y = 93
+         y = 108
          ToolTipHelp = Hotkeys: Keypad + - 
    
          Widget0 {

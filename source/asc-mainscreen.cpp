@@ -219,6 +219,7 @@ void Menu::setup()
    addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
    addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
    addbutton ( "show ~V~isibility Range\t0", ua_visibilityInfo );
+   addbutton ( "show reaction~f~ire", ua_viewReactionfireOverlay );
    currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
