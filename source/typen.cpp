@@ -330,3 +330,36 @@ void IntRange::write ( tnstream& stream ) const
 ////////////////////////////////////////////////////////////////////
 
 
+ASCString Properties::getValue( const ASCString& key )
+{
+   return data[key];
+}
+
+void Properties::setValue( const ASCString& key, const ASCString& value )
+{
+   data[key] = value;
+}
+      
+void Properties::write( tnstream& stream ) const
+{
+   stream.writeInt(1);
+   stream.writeInt( data.size() );
+   for ( std::map<ASCString, ASCString>::const_iterator i = data.begin(); i != data.end(); ++i ) {
+      stream.writeString( i->first, true );
+      stream.writeString( i->second, true );
+   }
+}
+
+void Properties::read( tnstream& stream )
+{
+   stream.readInt();
+   int count = stream.readInt();
+   for ( int i = 0; i < count; ++i ) {
+      ASCString key, value;
+      stream.readTextString(key, true );
+      stream.readTextString(value, true );
+      data[key] = value;
+   }
+}
+
+

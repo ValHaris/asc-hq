@@ -1518,17 +1518,18 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_Object swig_types[8]
 #define SWIGTYPE_p_ObjectType swig_types[9]
 #define SWIGTYPE_p_Player swig_types[10]
-#define SWIGTYPE_p_PropertyDialog swig_types[11]
-#define SWIGTYPE_p_Research swig_types[12]
-#define SWIGTYPE_p_Resources swig_types[13]
-#define SWIGTYPE_p_StringArray swig_types[14]
-#define SWIGTYPE_p_TerrainType swig_types[15]
-#define SWIGTYPE_p_Vehicle swig_types[16]
-#define SWIGTYPE_p_Vehicletype swig_types[17]
-#define SWIGTYPE_p_std__string swig_types[18]
-#define SWIGTYPE_p_tfield swig_types[19]
-static swig_type_info *swig_types[21];
-static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
+#define SWIGTYPE_p_Properties swig_types[11]
+#define SWIGTYPE_p_PropertyDialog swig_types[12]
+#define SWIGTYPE_p_Research swig_types[13]
+#define SWIGTYPE_p_Resources swig_types[14]
+#define SWIGTYPE_p_StringArray swig_types[15]
+#define SWIGTYPE_p_TerrainType swig_types[16]
+#define SWIGTYPE_p_Vehicle swig_types[17]
+#define SWIGTYPE_p_Vehicletype swig_types[18]
+#define SWIGTYPE_p_std__string swig_types[19]
+#define SWIGTYPE_p_tfield swig_types[20]
+static swig_type_info *swig_types[22];
+static swig_module_info swig_module = {swig_types, 21, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3004,6 +3005,98 @@ static swig_lua_class *swig_tfield_bases[] = {0};
 static const char *swig_tfield_base_names[] = {0};
 static swig_lua_class _wrap_class_tfield = { "tfield", &SWIGTYPE_p_tfield,0, swig_delete_tfield, swig_tfield_methods, swig_tfield_attributes, swig_tfield_bases, swig_tfield_base_names };
 
+static int _wrap_Properties_getValue(lua_State* L) {
+  int SWIG_arg = 0;
+  Properties *arg1 = (Properties *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  std::string result;
+  
+  SWIG_check_num_args("getValue",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getValue",1,"Properties *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("getValue",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Properties,0))){
+    SWIG_fail_ptr("Properties_getValue",1,SWIGTYPE_p_Properties);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  result = (arg1)->getValue((std::string const &)*arg2);
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Properties_setValue(lua_State* L) {
+  int SWIG_arg = 0;
+  Properties *arg1 = (Properties *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string temp2 ;
+  std::string temp3 ;
+  
+  SWIG_check_num_args("setValue",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setValue",1,"Properties *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("setValue",2,"std::string const &");
+  if(!lua_isstring(L,3)) SWIG_fail_arg("setValue",3,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Properties,0))){
+    SWIG_fail_ptr("Properties_setValue",1,SWIGTYPE_p_Properties);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  temp3.assign(lua_tostring(L,3),lua_strlen(L,3)); arg3=&temp3;
+  (arg1)->setValue((std::string const &)*arg2,(std::string const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_Properties(lua_State* L) {
+  int SWIG_arg = 0;
+  Properties *result = 0 ;
+  
+  SWIG_check_num_args("Properties::Properties",0,0)
+  result = (Properties *)new Properties();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Properties,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_Properties(void *obj) {
+Properties *arg1 = (Properties *) obj;
+delete arg1;
+}
+static swig_lua_method swig_Properties_methods[] = {
+    {"getValue", _wrap_Properties_getValue}, 
+    {"setValue", _wrap_Properties_setValue}, 
+    {0,0}
+};
+static swig_lua_attribute swig_Properties_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_Properties_bases[] = {0};
+static const char *swig_Properties_base_names[] = {0};
+static swig_lua_class _wrap_class_Properties = { "Properties", &SWIGTYPE_p_Properties,_wrap_new_Properties, swig_delete_Properties, swig_Properties_methods, swig_Properties_attributes, swig_Properties_bases, swig_Properties_base_names };
+
 static int _wrap_GameMap_width(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -3082,6 +3175,33 @@ fail:
 }
 
 
+static int _wrap_GameMap_getProperties(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  Properties *result = 0 ;
+  
+  SWIG_check_num_args("getProperties",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getProperties",1,"GameMap *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getProperties",1,SWIGTYPE_p_GameMap);
+  }
+  
+  {
+    Properties &_result_ref = (arg1)->getProperties();
+    result = (Properties *) &_result_ref;
+  }
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Properties,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_new_GameMap(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *result = 0 ;
@@ -3107,6 +3227,7 @@ static swig_lua_method swig_GameMap_methods[] = {
     {"width", _wrap_GameMap_width}, 
     {"height", _wrap_GameMap_height}, 
     {"getPlayer", _wrap_GameMap_getPlayer}, 
+    {"getProperties", _wrap_GameMap_getProperties}, 
     {0,0}
 };
 static swig_lua_attribute swig_GameMap_attributes[] = {
@@ -3756,18 +3877,42 @@ static int _wrap_selectString(lua_State* L) {
 }
 
 
+static int _wrap_getLoadingMap(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *result = 0 ;
+  
+  SWIG_check_num_args("getLoadingMap",0,0)
+  result = (GameMap *)getLoadingMap();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_GameMap,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_setLocalizedEventMessage(lua_State* L) {
   int SWIG_arg = 0;
-  int arg1 ;
-  std::string *arg2 = 0 ;
-  std::string temp2 ;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  std::string *arg3 = 0 ;
+  std::string temp3 ;
   
-  SWIG_check_num_args("setLocalizedEventMessage",2,2)
-  if(!lua_isnumber(L,1)) SWIG_fail_arg("setLocalizedEventMessage",1,"int");
-  if(!lua_isstring(L,2)) SWIG_fail_arg("setLocalizedEventMessage",2,"std::string const &");
-  arg1 = (int)lua_tonumber(L, 1);
-  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
-  setLocalizedEventMessage(arg1,(std::string const &)*arg2);
+  SWIG_check_num_args("setLocalizedEventMessage",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setLocalizedEventMessage",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setLocalizedEventMessage",2,"int");
+  if(!lua_isstring(L,3)) SWIG_fail_arg("setLocalizedEventMessage",3,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("setLocalizedEventMessage",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  temp3.assign(lua_tostring(L,3),lua_strlen(L,3)); arg3=&temp3;
+  setLocalizedEventMessage(arg1,arg2,(std::string const &)*arg3);
   
   return SWIG_arg;
   
@@ -5045,6 +5190,7 @@ static const struct luaL_reg swig_commands[] = {
     { "warningMessage", _wrap_warningMessage},
     { "infoMessage", _wrap_infoMessage},
     { "selectString",_wrap_selectString},
+    { "getLoadingMap", _wrap_getLoadingMap},
     { "setLocalizedEventMessage", _wrap_setLocalizedEventMessage},
     { "loadGame", _wrap_loadGame},
     { "displayActionError", _wrap_displayActionError},
@@ -5114,6 +5260,7 @@ static swig_type_info _swigt__p_MapCoordinate3D = {"_p_MapCoordinate3D", "MapCoo
 static swig_type_info _swigt__p_Object = {"_p_Object", "Object *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_ObjectType = {"_p_ObjectType", "ObjectType *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_Player = {"_p_Player", "Player *", 0, 0, (void*)&_wrap_class_Player, 0};
+static swig_type_info _swigt__p_Properties = {"_p_Properties", "Properties *", 0, 0, (void*)&_wrap_class_Properties, 0};
 static swig_type_info _swigt__p_PropertyDialog = {"_p_PropertyDialog", "PropertyDialog *", 0, 0, (void*)&_wrap_class_PropertyDialog, 0};
 static swig_type_info _swigt__p_Research = {"_p_Research", "Research *", 0, 0, (void*)&_wrap_class_Research, 0};
 static swig_type_info _swigt__p_Resources = {"_p_Resources", "Resources *", 0, 0, (void*)&_wrap_class_Resources, 0};
@@ -5136,6 +5283,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Object,
   &_swigt__p_ObjectType,
   &_swigt__p_Player,
+  &_swigt__p_Properties,
   &_swigt__p_PropertyDialog,
   &_swigt__p_Research,
   &_swigt__p_Resources,
@@ -5158,6 +5306,7 @@ static swig_cast_info _swigc__p_MapCoordinate3D[] = {  {&_swigt__p_MapCoordinate
 static swig_cast_info _swigc__p_Object[] = {  {&_swigt__p_Object, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ObjectType[] = {  {&_swigt__p_ObjectType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Player[] = {  {&_swigt__p_Player, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_Properties[] = {  {&_swigt__p_Properties, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PropertyDialog[] = {  {&_swigt__p_PropertyDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Research[] = {  {&_swigt__p_Research, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Resources[] = {  {&_swigt__p_Resources, 0, 0, 0},{0, 0, 0, 0}};
@@ -5180,6 +5329,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Object,
   _swigc__p_ObjectType,
   _swigc__p_Player,
+  _swigc__p_Properties,
   _swigc__p_PropertyDialog,
   _swigc__p_Research,
   _swigc__p_Resources,

@@ -321,6 +321,9 @@ int tfield :: getWeather ( void )
 
 void tfield :: setWeather ( int weather )
 {
+   if ( weather < 0 || weather >= cwettertypennum )
+      return;
+   
      if (typ->terraintype->weather[ weather ] ) {
         typ = typ->terraintype->weather[ weather ];
         setparams();

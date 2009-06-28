@@ -148,9 +148,13 @@ int selectString ( const ASCString& title, const StringArray& entries, int defau
       return r.second;
 }
 
+GameMap* getLoadingMap()
+{
+   return eventLocalizationMap;  
+}
 
 
-void setLocalizedEventMessage( int eventID, const ASCString& message )
+void setLocalizedEventMessage( GameMap* eventLocalizationMap, int eventID, const ASCString& message )
 {
    if ( !eventLocalizationMap )
       return;

@@ -139,6 +139,14 @@ class tfield {
       tfield();
 };
 
+
+class Properties {      
+   public:
+      std::string getValue( const std::string& key );
+      void setValue( const std::string& key, const std::string& value );
+};
+
+
 class GameMap {
    public:
 #ifdef mapeditor
@@ -149,6 +157,8 @@ class GameMap {
       int width() const;
       int height() const;
       Player& getPlayer( int p );
+      
+      Properties& getProperties();
 };
 
 class Player {
@@ -203,5 +213,10 @@ class PropertyDialog  {
 
 int selectString ( const std::string& title, const StringArray& entries, int defaultEntry = -1 );
 
-void setLocalizedEventMessage( int eventID, const std::string& message );
+/* this is a very special function for usage in conjunction with setLocalizedEventMessage , to get the map that 
+   is being loaded before it is set active. Only for translation scripts */
+GameMap* getLoadingMap();
+
+void setLocalizedEventMessage( GameMap* map, int eventID, const std::string& message );
+
 

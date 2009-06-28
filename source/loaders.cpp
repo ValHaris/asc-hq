@@ -1346,6 +1346,7 @@ ASCString luaQuote( const ASCString& text )
 
 void writeMessageFile( GameMap* gamemap, tnstream& stream )
 {
+   stream.writeString( "map = asc.getLoadingMap() \n" );
    for ( GameMap::Events::const_iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
       ASCString s = (*i)->action->getLocalizationString();
       if ( !s.empty() )  {

@@ -533,6 +533,9 @@ class GameMap {
       void guiHooked();
       bool getGuiHooked() { return dialogsHooked; };
 
+      //! general key/value storage, primarily for Lua scripts
+      Properties properties;
+      Properties& getProperties() { return properties; };
       
       GameTransferMechanism* network;
 

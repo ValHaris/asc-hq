@@ -77,7 +77,10 @@ class PropertyDialog : public ASC_PG_Dialog {
 };
 
 extern int selectString ( const ASCString& title, const StringArray& entries, int defaultEntry = -1 );
-extern void setLocalizedEventMessage( int eventID, const ASCString& message );
+
+extern GameMap* getLoadingMap();
+
+extern void setLocalizedEventMessage( GameMap* map, int eventID, const ASCString& message );
 
 
 #endif

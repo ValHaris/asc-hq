@@ -288,7 +288,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 30;
+const int tmapversion = 31;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -676,6 +676,9 @@ void GameMap :: read ( tnstream& stream )
        } else
           actionRecorder = NULL;
     }
+    
+    if( version >= 31 )
+       properties.read( stream );
 }
 
 
@@ -877,6 +880,7 @@ void GameMap :: write ( tnstream& stream )
     } else
        stream.writeInt( 0 );
     
+    properties.write( stream );
 }
 
 

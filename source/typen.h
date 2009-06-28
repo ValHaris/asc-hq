@@ -244,6 +244,17 @@ class MapCoordinate3D : public MapCoordinate {
             };
       };
 
+      
+//! a class for storing general key/values pairs. Intended as a mechanism to persist data from Lua scripts      
+class Properties {      
+      std::map<ASCString, ASCString> data;
+   public:
+      ASCString getValue( const ASCString& key );
+      void setValue( const ASCString& key, const ASCString& value );
+      
+      void write( tnstream& stream ) const;
+      void read( tnstream& stream );
+};
 
 
 /** An abstract base class that provides the interface for all kinds of items that
