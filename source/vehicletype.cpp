@@ -990,8 +990,8 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
    while ( movement.size() < 8 )
       movement.push_back(0);
    for ( vector<int>::iterator i = movement.begin(); i != movement.end(); i++ )
-      if ( *i > 255 )
-         *i = 255;
+      if ( *i > 350 )
+         *i = 350;
 
    pc.addNamedInteger ( "Category", movemalustyp, cmovemalitypenum, unitCategoryTags );
    pc.addInteger("MaxSurvivableStorm", maxwindspeedonwater, 255 );
