@@ -1079,7 +1079,6 @@ void execuseraction2 ( tuseractions action )
          GameDialog::gameDialog();
          break;
       case ua_viewterraininfo:
-         actmap->setgameparameter( cgp_initialMapVisibility, 2 );
          if ( fieldvisiblenow( actmap->getField( actmap->getCursor())))
             viewterraininfo( actmap, actmap->getCursor(), fieldVisibility( actmap->getField( actmap->getCursor())) == visible_all );
          break;
