@@ -209,7 +209,7 @@ ActionResult MoveUnit::runAction( const Context& context )
             // displaymap();
             if ( next == stop && to.x==next->x && to.y==next->y) // the unit will reach its destination
                slm.fadeOut ( CGameOptions::Instance()->movespeed * 10 );
-            context.display->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ));
+            context.display->displayMovingUnit ( from, to, vehicle, pathStep, pathStepNum, MapDisplayInterface::SoundStartCallback( &slm, &SoundLoopManager::activate ), context.display->getUnitMovementDuration() );
             finalRedrawNecessary = true;
             mapDisplayUpToDate = false;
          }

@@ -61,6 +61,9 @@ class CGameOptions
 
       //! 1/100 sec for a unit to move from one field to the next
       int movespeed;
+      
+      //! how much faster are unit going to move in replays (percent)
+      int replayMoveSpeedFactor;
 
       //! question "do you want to end your turn"
       bool endturnquestion;

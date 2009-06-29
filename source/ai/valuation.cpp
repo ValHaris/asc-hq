@@ -15,7 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-
+#include <iostream>
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
 #include "../actions/moveunitcommand.h"
@@ -630,7 +630,35 @@ AI::Section& AI :: Sections :: getForPos ( int xn, int yn )
    return section[xn+yn*numX];
 }
 
-AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun )
+/*
+  This is like some ball rolling down from some high potential spike
+*/
+MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height )
+{
+   MapCoordinate result  = pos;
+   int potential = destinationCounter->operator[](pos);
+   for ( int d = 0; d< 6; ++d ) {
+      MapCoordinate m = getNeighbouringFieldCoordinate( pos, d );
+      tfield* fld = ai->getMap()->getField(m );
+      if ( fld && (fld->a.temp & height) ) {
+         if ( destinationCounter->find( m ) == destinationCounter->end() )
+            return m;
+         else {
+            if ( (destinationCounter->find(m)->second * 11 / 10) < potential ) {
+               result = m;
+               potential = destinationCounter->find(m)->second;
+            }
+         }
+      }
+   }
+   if ( result == pos )
+      return result;
+   else
+      return getAlternativeField( result , destinationCounter, height );
+}
+
+
+AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest, bool allowRefuellOrder, bool secondRun, map<MapCoordinate,int>* destinationCounter )
 {
    /*
       In the first pass wwe check were all the units would go if there wouldn't be
@@ -720,8 +748,19 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {
                                mindist = mandist;
-                               xtogoSec = xp;
-                               ytogoSec = yp;
+                               
+                               if ( destinationCounter && destinationCounter->find( MapCoordinate(xp,yp)) != destinationCounter->end() ) {
+                                  /* we are checking if there are too many units heading for this field already 
+                                     check how many are for neighbouringfields */
+                                  
+                                  
+                                  MapCoordinate alt = getAlternativeField( MapCoordinate(xp,yp), destinationCounter, h );
+                                  xtogoSec = alt.x;
+                                  ytogoSec = alt.y;
+                               } else {
+                                 xtogoSec = xp;
+                                 ytogoSec = yp;
+                               }
                             }
 
                             ai->_vision = visible_all;

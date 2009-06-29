@@ -152,13 +152,13 @@ void AI::RefuelConstraint::findPath()
          else
             dist = maxint;
 
-         dist = min( dist, veh->maxMovement() * 5);
+         dist = min( dist, 1000 );
       } else
          dist = maxMove;
 
       ast = new AStar3D ( ai.getMap(), veh, true, dist );
       ast->findAllAccessibleFields ( );
-      // tanker planes may have a very large range; that's why we top the distance at 5 times the turn-range
+      // tanker planes may have a very large range; that's why we top the distance at 100 fields
    }
 }
 
@@ -568,7 +568,7 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
          if ( beeline ( veh->getPosition(), destination) > veh->maxMovement() )
             ast = new StratAStar3D ( this, veh );
          else
-            ast = new AStar3D ( getMap(), veh );
+            ast = new AntiMineAStar3D ( this, veh );
 
       auto_ptr<AStar3D> ap ( ast );
 
@@ -618,6 +618,7 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
 
    auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
    mum->setDestination( *lastmatch );
+   mum->setFlags( MoveUnitCommand::NoInterrupt );
    
    ActionResult res = mum->execute( getContext() );
    if ( res.successful() )

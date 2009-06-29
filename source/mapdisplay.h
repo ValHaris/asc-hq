@@ -274,7 +274,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r );
 
-      void displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to );
+      void displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to, int duration );
 
       bool fieldInView(const MapCoordinate& mc );
       bool centerOnField( const MapCoordinate& mc );

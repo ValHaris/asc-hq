@@ -118,11 +118,11 @@ void OverviewMapPanel::unlockPanel()
    Redraw();
 }
 
-      
 bool OverviewMapPanel::mouseClick ( SPoint pos )
 {
    SPoint unscaledPos = SPoint(int( float(pos.x) / currentZoom), int(float(pos.y) / currentZoom ));
    MapCoordinate mc = OverviewMapImage::surface2map( unscaledPos );
+   
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;
 

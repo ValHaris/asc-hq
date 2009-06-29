@@ -34,7 +34,7 @@ ObjectType {
    dry { 
       DisplayMethod = MapEditorOnly
       UseGFXpics = false
-      picture = stop.png 1
+      picture = obj_stopper_4.png 1
       Movemalus_plus = 0
       Movemalus_abs = 250
       TerrainAccess { 

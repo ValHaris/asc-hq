@@ -24,7 +24,7 @@ class Sound;
 class MapDisplayInterface {
          public:
            typedef Loki::Functor<void, LOKI_TYPELIST_1(int) > SoundStartCallback; 
-           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound ) = 0;
+           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound, int duration ) = 0;
            virtual void displayMap ( void ) = 0;
            virtual void displayMap ( Vehicle* additionalVehicle ) = 0;
            virtual void displayPosition ( int x, int y ) = 0;
@@ -41,6 +41,7 @@ class MapDisplayInterface {
            virtual void setTempView( bool view ) = 0;
            virtual void showBattle( tfight& battle ) = 0;
            virtual void playPositionalSound( const MapCoordinate& pos, Sound* snd ) = 0;
+           virtual int getUnitMovementDuration() const = 0;
            virtual ~MapDisplayInterface () {};
        };
 

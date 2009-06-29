@@ -456,6 +456,7 @@
             class Sections {
                   AI* ai;
                   Section* section;
+                  MapCoordinate getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height );
                public:
                   int sizeX ;
                   int sizeY ;
@@ -466,7 +467,7 @@
                   Section& getForPos ( int xn, int yn );                //!< returns the xth and yth section
 
                   // secondRun should only be used when this function calls itself recursively
-                  Section* getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest = NULL, bool allowRefuellOrder = false, bool secondRun = false );
+                  Section* getBest ( int pass, Vehicle* veh, MapCoordinate3D* dest = NULL, bool allowRefuellOrder = false, bool secondRun = false, map<MapCoordinate,int>* destinationCounter = NULL);
                   Sections ( AI* _ai );
                   void reset();
                   ~Sections();

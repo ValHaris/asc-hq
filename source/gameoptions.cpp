@@ -110,6 +110,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
 
    pc.addBool("FastMove", fastmove, fastmove);
    pc.addInteger("MovementSpeed", movespeed, movespeed );
+   pc.addInteger("ReplayMoveSpeedFactor", replayMoveSpeedFactor, replayMoveSpeedFactor );
    pc.addBool("EndTurnPrompt", endturnquestion, endturnquestion );
    pc.addBool("UnitsGrayAfterMove", units_gray_after_move, units_gray_after_move );
    pc.addInteger( "MapZoom", mapzoom, mapzoom);
@@ -339,6 +340,8 @@ void CGameOptions::setDefaults ( void )
    
    language = "en_US";
    saveEventMessagesExternal = false;
+   
+   replayMoveSpeedFactor= 150;
    
    setChanged();
 }

@@ -34,7 +34,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void wait ( int minTime = 0 );
          public:
            ReplayMapDisplay ( MapDisplayInterface* md ) { mapDisplay = md; cursorDelay = 20; };
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound );
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound, int duration );
            void displayPosition ( int x, int y );
            void displayMap ( Vehicle* additionalVehicle ) { mapDisplay->displayMap( additionalVehicle ); };
            void displayMap ( void ) { mapDisplay->displayMap(); };
@@ -53,7 +53,7 @@ class ReplayMapDisplay : public MapDisplayInterface {
            void setTempView( bool view )  { mapDisplay->setTempView( view ); };
            void showBattle( tfight& battle ) { mapDisplay->showBattle( battle ); };
            void playPositionalSound( const MapCoordinate& pos, Sound* snd );
-
+           int getUnitMovementDuration() const;
     };
 
 #endif

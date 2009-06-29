@@ -251,7 +251,7 @@ class ReactionFireLayer : public MapLayer {
 void ReactionFireLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
    if ( fieldInfo.visibility > visible_ago) {
-      if ( fieldInfo.fld->vehicle && fieldInfo.fld->vehicle->reactionfire.getStatus() == Vehicle::ReactionFire::ready ) {
+      if ( fieldInfo.fld->vehicle && fieldInfo.fld->vehicle->reactionfire.getStatus() == Vehicle::ReactionFire::ready && fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) {
          MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
          blitter.blit( image, fieldInfo.surface, pos);
       }   
@@ -1282,7 +1282,7 @@ bool ccompare( const MapCoordinate& a, const MapCoordinate& b )
 }   
 
 
-void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to )
+void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const MapCoordinate3D& from, const MapCoordinate3D& to, int duration )
 {
    static int col = 0xff;
    
@@ -1302,11 +1302,6 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       return;
 
    int startTime = ticker;
-#ifdef debugmapdisplay
-   int duration = CGameOptions::Instance()->movespeed * 20;
-#else
-   int duration = CGameOptions::Instance()->movespeed;
-#endif
    int endTime = startTime + duration;
    
    // initialisation that is only executed the first time the code runs here

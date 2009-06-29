@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 
+#include <iostream>
 #include "ai_common.h"
 
 #include "../actions/moveunitcommand.h"
@@ -27,10 +28,16 @@ void AI::findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x, int y
   stratAStar.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
 }
 
+int aiDebugInterruptHelper = -1;
+
 AI::AiResult AI::strategy( void )
 {
    AiResult result;
 
+   /* to prevent that many units try to rush for the same spot, we are keeping track at how many units
+      are going to which destination */
+   map<MapCoordinate,int> destinationCounter;
+   
    int stratloop = 0;
    AiResult localResult;
    do {
@@ -53,12 +60,19 @@ AI::AiResult AI::strategy( void )
                   int orgxpos = veh->xpos ;
                   int orgypos = veh->ypos ;
                   */
+                  
+                  if ( veh->networkid == aiDebugInterruptHelper ) {
+                     cout << "debug point hit with unit " << aiDebugInterruptHelper << " \n";  
+                  }
    
                   if ( MoveUnitCommand::avail ( veh )) {
                      MapCoordinate3D dest;
    
-                     AI::Section* sec = sections.getBest ( 0, veh, &dest, true );
+                     AI::Section* sec = sections.getBest ( 0, veh, &dest, true, false, &destinationCounter );
                      if ( sec ) {
+                        if( stratloop < 3 )
+                           destinationCounter[dest]+=1;
+                        
                         int nwid = veh->networkid;
                         int movement = veh->getMovement();
                         moveUnit ( veh, dest, false, false );

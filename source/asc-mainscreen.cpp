@@ -255,6 +255,7 @@ void Menu::setup()
    addbutton ( "benchmark with view calc", ua_benchgamewv);
    addbutton ( "compiler benchmark (AI)", ua_aibench );
    currentMenu->addSeparator();
+   addbutton ( "unit AI properties", ua_unitAiOptions );
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );

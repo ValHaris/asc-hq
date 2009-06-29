@@ -176,6 +176,7 @@
 #include "lua/luastate.h"
 #include "luacommandwriter.h"
 #include "campaignactionrecorder.h"
+#include "textfiletags.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -916,6 +917,40 @@ void selectAndRunLuaScript()
    }
 }
 
+
+void showUnitAiProperties() 
+{
+   tfield* fld = getSelectedField();
+   if ( fld->vehicle && fieldvisiblenow(fld ) ) {
+      Vehicle* v = fld->vehicle;
+      ASCString s;
+      s += "Unit nwid = " + ASCString::toString( v->networkid ) + "\n";
+   
+      AiParameter* a = NULL;
+      
+      for ( int i = 0; i < 8; ++i )
+         if ( v->aiparam[i] ) {
+         a = v->aiparam[i];
+         break;
+         }
+         
+         s += "Task = " + ASCString(AItasks[(int)a->getTask() ]) + "\n";
+         s += "Job = " + ASCString(AIjobs[(int)a->getJob() ]) + "\n";
+      
+      
+         s += "Destination: ";
+         if ( a->dest.valid() )
+            s += a->dest.toString();
+         s += "\n";
+      
+         ViewFormattedText vat ( "AI properties", s, PG_Rect( 20, -1 , 450, 480 ));
+         vat.Show();
+         vat.RunModal();
+   }
+}
+   
+
+
 class CommandAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
    virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
    {
@@ -1044,6 +1079,7 @@ void execuseraction2 ( tuseractions action )
          GameDialog::gameDialog();
          break;
       case ua_viewterraininfo:
+         actmap->setgameparameter( cgp_initialMapVisibility, 2 );
          if ( fieldvisiblenow( actmap->getField( actmap->getCursor())))
             viewterraininfo( actmap, actmap->getCursor(), fieldVisibility( actmap->getField( actmap->getCursor())) == visible_all );
          break;
@@ -1168,12 +1204,14 @@ void execuseraction2 ( tuseractions action )
       case ua_runLuaCommands: selectAndRunLuaScript();
          break;
                   
+      case ua_unitAiOptions: showUnitAiProperties();
+         break;
+      
       default:
          break;
    }
 
 }
-
 
 
 

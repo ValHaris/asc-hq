@@ -90,6 +90,22 @@ extern const int currentServiceOrderVersion;
        StratAStar3D ( AI* _ai, Vehicle* veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
  };
 
+  //! A 3D path finding algorithm which avoids units to jam; used by the AI's strategy module.
+ class AntiMineAStar3D : public AStar3D {
+    AI* ai;
+    protected:
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
+       {
+          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
+          tfield* f = ai->getMap()->getField ( dest );
+          if ( f->mineattacks(vehicle) )
+             cost += 1;
+          return cost;
+       };
+    public:
+       AntiMineAStar3D ( AI* _ai, Vehicle* veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
+ };
+ 
 
   //! A path finding algorithm which tries to keep the units hidden from view.
  class HiddenAStar : public AStar {

@@ -135,7 +135,7 @@ class NewMap: public ASC_PG_Dialog {
          new PG_PropertyField_Checkbox<bool>( properties, "Campaign", &gamemap->campaign.avail );
          new PG_PropertyField_Integer<int>( properties, "Map ID", &gamemap->campaign.id );
          new PG_PropertyField_Checkbox<bool>( properties, "Direct Access", &gamemap->campaign.directaccess );
-         (new PG_PropertyField_String<ASCString>( properties, "Password", &gamemap->codeWord ))->SetPassHidden('*');
+         (new PG_PropertyField_String<ASCString>( properties, "Password", &gamemap->codeWord )); //->SetPassHidden('*');
          terrainButton = (new PG_PropertyField_Button( properties, "Terrain", "", 50 ))->GetButton();
          terrainButton->sigClick.connect( SigC::slot( *this, &NewMap::selectTerrain ));
 

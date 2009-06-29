@@ -39,6 +39,7 @@
 #include "sdl/sound.h"
 #include "dialogs/attackpanel.h"
 #include "spfst-legacy.h"
+#include "gameoptions.h"
 
 extern bool tempsvisible;
 extern MapDisplayPG* theGlobalMapDisplay;
@@ -54,7 +55,7 @@ class PG_MapDisplay : public MapDisplayInterface {
          public:
            PG_MapDisplay( MapDisplayPG* mapDisplayWidget_ ) : mapDisplayWidget( mapDisplayWidget_ ) {};
 
-           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart );
+           int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart, int duration );
            void deleteVehicle ( Vehicle* vehicle ) {};
            void displayMap ( void );
            void displayMap ( Vehicle* vehicle );
@@ -72,11 +73,12 @@ class PG_MapDisplay : public MapDisplayInterface {
            void setTempView( bool view ) { tempsvisible = view; };
            void showBattle( tfight& battle );
            void playPositionalSound( const MapCoordinate& pos, Sound* snd );
+           int getUnitMovementDuration() const { return CGameOptions::Instance()->movespeed; };
 };
 
 
 
-int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart )
+int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback soundStart, int duration )
 {
    if ( actmap->getPlayerView() == -2 )
       return 0;
@@ -115,7 +117,7 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
    if (  (view1 >= visible_now  ||  view2 >= visible_now ) || ( vehicle->getOwner() == actmap->getPlayerView() ) || shareView || actmap->getPlayerView() == -1 )
       if ( ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)) || (( view1 == visible_all) || ( view2 == visible_all )) || ( actmap->actplayer == actmap->getPlayerView() ) || shareView || actmap->getPlayerView() == -1 ) {
          soundStart( 1 );
-         mapDisplayWidget->displayUnitMovement( actmap, vehicle, newstart, newdest );
+         mapDisplayWidget->displayUnitMovement( actmap, vehicle, newstart, newdest, duration );
       }
 
 

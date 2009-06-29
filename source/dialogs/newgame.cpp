@@ -458,6 +458,7 @@ bool StartMultiplayerGame::Apply()
                      return false;
                   }
                   newMap = map;
+                  replay = false;
                   // start();
                   return true;
                }

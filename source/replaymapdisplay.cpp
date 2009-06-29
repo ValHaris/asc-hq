@@ -12,7 +12,7 @@
 #include "spfst.h"
 #include "viewcalculation.h"
 #include "events.h"
-
+#include "gameoptions.h"
 #include "spfst-legacy.h"
 
 int ReplayMapDisplay :: checkMapPosition ( int x, int y )
@@ -62,7 +62,7 @@ int ReplayMapDisplay :: checkMapPosition ( int x, int y )
 }
 
 
-int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound )
+int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound, int duration )
 {
    if ( actmap->getPlayerView() < 0 )
       return 0;
@@ -93,7 +93,7 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
       if ( checkMapPosition  ( start.x, start.y ))
          displayMap();
 
-      int fc = mapDisplay->displayMovingUnit ( start, dest, vehicle, fieldnum, totalmove, startSound );
+      int fc = mapDisplay->displayMovingUnit ( start, dest, vehicle, fieldnum, totalmove, startSound, duration );
       if ( fc == 1 ) {
          mapDisplay->resetMovement();
          mapDisplay->displayMap();
@@ -156,4 +156,11 @@ void ReplayMapDisplay :: playPositionalSound( const MapCoordinate& pos, Sound* s
    }
 }
 
+
+int ReplayMapDisplay :: getUnitMovementDuration() const 
+{ 
+   int speed = CGameOptions::Instance()->movespeed;
+   int factor = max( 10, CGameOptions::Instance()->replayMoveSpeedFactor );
+   return speed * 100 / factor;
+}
 
