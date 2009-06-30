@@ -1,0 +1,330 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = UnitTest RALAGO
+   Infotext = [Attack Helicopters are short range killing machines. They have
+              missiles to blow up both air and ground targets, making them
+              ideal and diverse. On top of that, they have a machine gun mounted
+              under the nose, giving it an edge over the faster and stronger
+              Fighter/Bomber. An Attack Helicopter still cannot hope to survive
+              a run-in with a squad of SAM Troopers, though.]
+   ID = 1000000078
+   SecondaryIDs = 
+   View = 40
+   Jamming = 11
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 4000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 4000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Description = Heavy Attack Helicopter
+   Armor = 450
+   Picture = unittest-ralago.png
+   Height = ground_level low_level_flight medium_level_flight 
+   WaitForAttack = false
+   FuelConsumption = 26
+   Features = cruiserlanding move_after_attack no_midair_refuel jam_only_own_field 
+   Movement = 0 0 0 35 130 130 0 0 
+   Category = helicopter
+   MaxSurvivableStorm = 150
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 495 496 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 85
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Frozen_water 
+      terrain_all = 
+      terrain_not = Swamp Forest Large_rocks Hillside Installation 
+      terrain_kill = Shallow_water Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 4
+      Weapon0 { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = low_level_flight medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 2
+         Punch@MaxRange = 90
+         Punch@MinRange = 90
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 100
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            default = 0
+            trooper = 25
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+      Weapon1 { 
+         Type = ground_missile shootable 
+         targets = low_level_flight medium_level_flight 
+         shotFrom = low_level_flight medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 2
+         Punch@MaxRange = 68
+         Punch@MinRange = 68
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 95
+            0 = 100
+            u1 = 95
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 200
+            medium_tracked_vehicle = 200
+            heavy_tracked_vehicle = 200
+            light_wheeled_vehicle = 200
+            medium_wheeled_vehicle = 200
+            heavy_wheeled_vehicle = 200
+            trooper = 50
+            rail_vehicle = 200
+            medium_ship = 200
+            building|turret|object = 200
+            light_ship = 200
+            heavy_ship = 200
+            hoovercraft = 200
+         } WeaponEffectiveness
+         name = 
+      } Weapon1
+      Weapon2 { 
+         Type = machinegun shootable 
+         targets = floating ground_level low_level_flight medium_level_flight 
+         shotFrom = ground_level low_level_flight medium_level_flight 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 38
+         Punch@MinRange = 38
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 90
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            medium_tracked_vehicle = 65
+            heavy_tracked_vehicle = 50
+            medium_wheeled_vehicle = 90
+            heavy_wheeled_vehicle = 80
+            trooper = 130
+            rail_vehicle = 60
+            medium_aircraft = 90
+            medium_ship = 60
+            building|turret|object = 50
+            heavy_aircraft = 80
+            light_ship = 80
+            heavy_ship = 50
+            helicopter = 90
+            hoovercraft = 90
+         } WeaponEffectiveness
+         name = 
+      } Weapon2
+      Weapon3 { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = low_level_flight medium_level_flight 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 6
+         Punch@MaxRange = 80
+         Punch@MinRange = 80
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 100
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            default = 0
+            trooper = 25
+         } WeaponEffectiveness
+         name = 
+      } Weapon3
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 4
+   HeightChangeMethod0 { 
+      StartHeight = ground_level 
+      HeightDelta = 1
+      MoveCost = 15
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod0
+   HeightChangeMethod1 { 
+      StartHeight = low_level_flight medium_level_flight high_level_flight 
+      HeightDelta = 1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod1
+   HeightChangeMethod2 { 
+      StartHeight = medium_level_flight high_level_flight orbit 
+      HeightDelta = -1
+      MoveCost = 5
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod2
+   HeightChangeMethod3 { 
+      StartHeight = low_level_flight 
+      HeightDelta = -1
+      MoveCost = 10
+      CanAttack = true
+      Dist = 0
+   } HeightChangeMethod3
+   TechAdapterRequired = 78 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 12179
+      Material = 11712
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 515 383 0 0 1 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType
