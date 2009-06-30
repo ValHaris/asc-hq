@@ -46,6 +46,7 @@ class AgeableItem {
 class Object : public AgeableItem {
     public:
        const ObjectType* typ;
+       const ObjectType* getType() const { return typ; };
        int damage;
        int dir;
        int remainingGrowthTime;
@@ -54,8 +55,8 @@ class Object : public AgeableItem {
        Object ( const ObjectType* o );
        void display ( Surface& surface, const SPoint& pos, int weather = 0 ) const;
        const OverviewMapImage* getOverviewMapImage( int weather );
-       void setdir ( int dir );
-       int  getdir ( void );
+       void setDir ( int dir );
+       int  getDir() const;
 
        void write ( tnstream& stream );
        void read ( tnstream& stream );

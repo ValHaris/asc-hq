@@ -96,12 +96,12 @@ Object :: Object ( const ObjectType* o )
 }
 
 
-void Object :: setdir ( int direc )
+void Object :: setDir ( int direc )
 {
    dir = direc;
 }
 
-int  Object :: getdir ( void )
+int  Object :: getDir() const
 {
    return dir;
 }

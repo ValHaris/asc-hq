@@ -581,6 +581,7 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
 
 int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
 {
+   int oldHeight = veh->getPosition3D().getNumericalHeight();
    AStar3D::Path::const_iterator pi = path.begin();
    if ( pi == path.end() )
       return 0;
@@ -621,9 +622,11 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
    mum->setFlags( MoveUnitCommand::NoInterrupt );
    
    ActionResult res = mum->execute( getContext() );
-   if ( res.successful() )
+   if ( res.successful() ) {
       mum.release();
-   else {
+      if ( getMap()->getUnit ( nwid ) && (oldHeight != veh->getPosition3D().getNumericalHeight()) )
+         veh->aiparam[ getPlayerNum()]->setNewHeight();
+   } else {
       displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
       return -1;
    }

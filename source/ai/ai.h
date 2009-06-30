@@ -127,6 +127,8 @@
            };
 
 
+           //! this stores units that have been exhaustively used in tactics and should be skipped from strategy section
+           set<Vehicle*> unitsWorkedInTactics;
 
            static bool vehicleValueComp ( const Vehicle* v1, const Vehicle* v2 );
            static bool buildingValueComp ( const Building* v1, const Building* v2 );

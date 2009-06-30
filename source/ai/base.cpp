@@ -72,6 +72,8 @@ void AI :: reset ( void )
 
 void    AI :: setup (void)
 {
+   unitsWorkedInTactics.clear();
+   
    displaymessage2("calculating all threats ... ");
    calculateAllThreats ();
 

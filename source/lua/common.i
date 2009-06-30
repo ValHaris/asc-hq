@@ -107,6 +107,19 @@ class Vehicle : public ContainerBase {
       const Vehicletype* getType();
 };
 
+class Object {
+   public:         
+      ObjectType* getType();
+      int getDir();
+      void setDir( int dir );
+};
+
+
+class ObjectType {
+   public:
+      int getID();
+      std::string getName();
+};
 
 class tfield {
    public:
@@ -135,6 +148,24 @@ class tfield {
       bool removeObject ( const ObjectType* obj, bool force = false );
 #endif      
      Object* checkForObject ( const ObjectType*  o );
+     
+     %extend
+     {   
+        int getObjectCount()
+        {
+           return $self->objects.size();
+        }
+        
+        Object* getObject( int num ) // zero based!
+        {
+           if ( num >= 0 && num < $self->objects.size() )
+               return &($self->objects[num]);
+            else
+               return NULL;  
+        }
+     }
+     
+     
    protected:
       tfield();
 };

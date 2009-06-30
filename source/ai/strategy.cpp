@@ -52,6 +52,10 @@ AI::AiResult AI::strategy( void )
       for ( vector<int>::iterator vi = units.begin(); vi != units.end(); ++vi ) {
          Vehicle* veh = getMap()->getUnit(*vi);
          if ( veh ) {
+            
+            if ( unitsWorkedInTactics.find( veh) != unitsWorkedInTactics.end() )
+               continue;
+            
             if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight ) {
                if ( veh->weapexist() && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_tactics
                                     && veh->aiparam[ getPlayerNum() ]->getTask() != AiParameter::tsk_serviceRetreat ) {

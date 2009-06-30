@@ -1105,37 +1105,6 @@ class ResourceInfoWindow : public SubWindow
                      cargoDialog->setLabelText( label, "-" );
                }
 
-         // from researchwindow
-         Player& player = activeContainer->getMap()->player[ activeContainer->getOwner() ];
-
-         cargoDialog->setLabelText( "ResPerTurnLocal", activeContainer->researchpoints *  player.research.getMultiplier(), widget );
-         cargoDialog->setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
-
-         Resources cost = returnResourcenUseForResearch( activeContainer );
-         for ( int r = 0; r < 3; ++r)
-            cargoDialog->setLabelText( "CostLocal" + ASCString::toString(r), cost.resource(r), widget );
-
-         Resources globalCost;
-         for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
-            globalCost += returnResourcenUseForResearch( *i );
-
-         for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
-            globalCost += returnResourcenUseForResearch( *i );
-
-         for ( int r = 0; r < 3; ++r)
-            cargoDialog->setLabelText( "CostGlobal" + ASCString::toString(r), globalCost.resource(r), widget );
-
-         int availIn = player.research.currentTechAvailableIn();
-         if ( availIn >= 0 )
-            cargoDialog->setLabelText( "AvailGlobal", availIn, widget );
-         else
-            cargoDialog->setLabelText( "AvailGlobal", "-", widget );
-
-         if ( player.research.activetechnology )
-            cargoDialog->setLabelText( "CurrentTech", player.research.activetechnology->name, widget );
-         else
-            cargoDialog->setLabelText( "CurrentTech", "-", widget );
-
       }
 
 };
@@ -1360,7 +1329,38 @@ class ResearchWindow : public SubWindow
 
 
       void update() {
-         cargoDialog->updateVariables();
+         ContainerBase* activeContainer= container();
+         
+         // from researchwindow
+         Player& player = activeContainer->getMap()->player[ activeContainer->getOwner() ];
+
+         cargoDialog->setLabelText( "ResPerTurnLocal", activeContainer->researchpoints *  player.research.getMultiplier(), widget );
+         cargoDialog->setLabelText( "ResPerTurnGlobal", player.research.getResearchPerTurn(), widget );
+
+         Resources cost = returnResourcenUseForResearch( activeContainer );
+         for ( int r = 0; r < 3; ++r)
+            cargoDialog->setLabelText( "CostLocal" + ASCString::toString(r), cost.resource(r), widget );
+
+         Resources globalCost;
+         for ( Player::BuildingList::iterator i = player.buildingList.begin(); i != player.buildingList.end(); ++i )
+            globalCost += returnResourcenUseForResearch( *i );
+
+         for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i )
+            globalCost += returnResourcenUseForResearch( *i );
+
+         for ( int r = 0; r < 3; ++r)
+            cargoDialog->setLabelText( "CostGlobal" + ASCString::toString(r), globalCost.resource(r), widget );
+
+         int availIn = player.research.currentTechAvailableIn();
+         if ( availIn >= 0 )
+            cargoDialog->setLabelText( "AvailGlobal", availIn, widget );
+         else
+            cargoDialog->setLabelText( "AvailGlobal", "-", widget );
+
+         if ( player.research.activetechnology )
+            cargoDialog->setLabelText( "CurrentTech", player.research.activetechnology->name, widget );
+         else
+            cargoDialog->setLabelText( "CurrentTech", "-", widget );
       }
 };
 

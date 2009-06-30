@@ -137,7 +137,6 @@ void testAiMovement6()
     of tte building are more worth than the lost unit*/
 void testAiMovement7() 
 {
-   
    auto_ptr<GameMap> game ( startMap("unittest-ai-conquer3.map"));
    
    Vehicle* veh = game->getField(3,5)->vehicle;
@@ -153,6 +152,25 @@ void testAiMovement7()
    assertOrThrow( bld->getOwner() == 1 );
 }
 
+/** the helicopter should attack from a height where the tank can't retaliate*/
+void testAiHeliMovement1()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-ai-heli.map"));
+   
+   Vehicle* heli = game->getField(7,10)->vehicle;
+   
+   assertOrThrow( heli != NULL );
+   
+   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+   
+   // at least one attack
+   assertOrThrow( heli->experience >= 1  );
+   
+   // attacked from flying level
+   assertOrThrow( heli->damage == 0  );
+  
+}
 
 void testAiMovement() 
 {
@@ -163,4 +181,5 @@ void testAiMovement()
    testAiMovement5();
    testAiMovement6();
    testAiMovement7();
+   testAiHeliMovement1();
 }

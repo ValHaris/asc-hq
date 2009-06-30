@@ -2044,6 +2044,7 @@ AiParameter :: AiParameter ( Vehicle* _unit ) : AiValue ( log2( _unit->height ))
    reset( _unit );
 }
 
+
 void AiParameter :: resetTask ( )
 {
    dest.setnum ( -1, -1, -1 );
@@ -2081,6 +2082,12 @@ bool AiParameter::hasJob ( AiParameter::Job j )
 {
    return find ( jobs.begin(), jobs.end(), j ) != jobs.end();
 }
+
+void AiParameter :: setNewHeight()
+{
+   AiValue::reset ( log2( unit->height ) );
+}
+
 
 void AiParameter :: reset ( Vehicle* _unit )
 {

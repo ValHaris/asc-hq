@@ -34,7 +34,6 @@
      //! the id of the object, used when referencing objects in files
      int id;
 
-
      //! when loading a file and these IDs are encountered, this object will be used.
      vector<int> secondaryIDs;
 

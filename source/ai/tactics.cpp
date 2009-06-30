@@ -144,7 +144,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
       evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
 }
 
-bool AI::MoveVariant::operator< ( const AI::MoveVariant& mv2 ) const
+bool AI::MoveVariant::operator> ( const AI::MoveVariant& mv2 ) const
 {
    return (     result > mv2.result
             || (result == mv2.result && positionThreat < mv2.positionThreat  )
@@ -152,7 +152,7 @@ bool AI::MoveVariant::operator< ( const AI::MoveVariant& mv2 ) const
 }
 
 
-bool AI::MoveVariant::operator> ( const AI::MoveVariant& mv2 ) const
+bool AI::MoveVariant::operator< ( const AI::MoveVariant& mv2 ) const
 {
    return (     result < mv2.result
             || (result == mv2.result && positionThreat > mv2.positionThreat )
@@ -414,7 +414,7 @@ AI::AiResult AI::moveToSavePlace ( Vehicle* veh, int preferredHeight )
             // make fields far away a bit unattractive; we don't want to move the whole distance back again next turn
          int t = int( ait.threat[ veh->aiparam[ getPlayerNum()]->valueType ] * log ( double(_dist) )/log(double(10)) );
 
-         if ( t < threat || ( t == threat && _dist < dist )) {
+         if ( t < threat || ( t == threat && (_dist < dist ))) {
             threat = t;
             xtogo = i->x;
             ytogo = i->y;
@@ -686,10 +686,14 @@ AI::AiResult AI::tactics( void )
                         AiResult res = executeMoveAttack ( veh, tv );
                         i = tactVehicles.erase ( i );
    
+                        if ( res.unitsMoved )
+                           unitsWorkedInTactics.insert(veh);
+                        
                         if ( !res.unitsDestroyed )
                            veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_tactics );
    
                         result += res;
+                        
                         directAttackNum++;
    
                         _vision = org_vision;
@@ -776,6 +780,7 @@ AI::AiResult AI::tactics( void )
                         MapCoordinate affected =  MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos);
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
                         dst.setnum ( dst.x, dst.y, -2 );
+                        
                         moveUnit ( finalPositions[i], dst );
                         _vision = visible_all;
 
@@ -819,6 +824,8 @@ AI::AiResult AI::tactics( void )
                            if ( finalOrder[i] < 0 )
                               warningMessage("!!!");
 
+                           unitsWorkedInTactics.insert(a);
+                           
                            
                            int nwid = a->networkid;
                            auto_ptr<AttackCommand> va ( new AttackCommand ( a ));

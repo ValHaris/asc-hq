@@ -112,6 +112,7 @@ class AiParameter : public AiValue {
            bool resetAfterJobCompletion;
 
            void reset ( Vehicle* _unit );
+           void setNewHeight();
            void resetTask ( );
            AiParameter ( Vehicle* _unit );
 
