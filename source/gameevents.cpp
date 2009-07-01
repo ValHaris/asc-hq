@@ -1354,7 +1354,6 @@ void LoseMap::execute( MapDisplayInterface* md )
          next_turn( gamemap, NextTurnStrategy_AskUser(), md, -1 );
       } else {
          delete gamemap;
-         gamemap = NULL;
          throw NoMapLoaded();
       }
 #endif

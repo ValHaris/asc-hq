@@ -121,8 +121,6 @@ extern volatile tmousesettings mouseparams;
 
  extern char  skeypress( tkey keynr);
  extern char *get_key(tkey keynr);
- extern tkey r_key(void);
- extern int  rp_key(void);
  extern int keypress(void);
  extern void wait(void);
  extern tkey char2key (int ch);

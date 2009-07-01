@@ -204,6 +204,21 @@ void AI :: checkGameEvents()
    checktimedevents( getMap(), mapDisplay );
 }
 
+class FieldMarkingSuppressor {
+   MapDisplayInterface* mdi;
+   public: 
+      FieldMarkingSuppressor( MapDisplayInterface* mdi  ) {
+         this->mdi = mdi;
+         if ( mdi )
+            mdi->setTempView( false );
+      }
+         
+         ~FieldMarkingSuppressor() {
+            if ( mdi )
+               mdi->setTempView( true );
+         }
+};
+
 void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 {
    AI_KeyboardWatcher kw ( CloseScreenCallback( this, &AI::removeDisplay )); 
@@ -227,8 +242,8 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    _vision = visible_ago;
 
    int setupTime = ticker;
-   if ( mapDisplay ) 
-      mapDisplay->setTempView( false );
+   
+   FieldMarkingSuppressor fms( mapDisplay );
    
    setup();
 
@@ -243,9 +258,6 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 
    calcReconPositions();
 
-   if ( mapDisplay )
-      mapDisplay->setTempView( true );
-   
    setupTime = ticker-setupTime;
 
    int serviceTime = ticker;
@@ -319,6 +331,7 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    checkforvictory( getMap(), false );
 
    mapDisplay = NULL;
+   
 }
 
 

@@ -33,6 +33,7 @@ Overview of the included libraries
     This contains a few bugfixes and minor enhancements compared to the latest
     release sdlmm 0.1.8
     website: http://sdlmm.sourceforge.net/
+    Using sdlmm 0.1.8 is not an option!
  
  sdl_sound
     used by: windows

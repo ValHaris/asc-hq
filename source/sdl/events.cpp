@@ -154,55 +154,6 @@ int keypress( void )
    return result;
 }
 
-
-tkey r_key(void)
-{
-   int found = 0;
-   tkey key;
-   do {
-      int r = SDL_mutexP ( keyboardmutex );
-      if ( !r ) {
-         if ( !keybuffer_sym.empty() ) {
-            key = keybuffer_sym.front();
-            keybuffer_sym.pop();
-            keybuffer_prnt.pop();
-            found++;
-         }
-         r = SDL_mutexV ( keyboardmutex );
-      }
-      if (!found ) {
-         int t = ticker;
-         while ( t + 5 > ticker )
-            releasetimeslice();
-      }
-   } while ( !found );
-   return key;
-}
-
-int rp_key(void)
-{
-   int found = 0;
-   tkey key;
-   do {
-      int r = SDL_mutexP ( keyboardmutex );
-      if ( !r ) {
-         if ( !keybuffer_prnt.empty() ) {
-            key = keybuffer_prnt.front();
-            keybuffer_sym.pop();
-            keybuffer_prnt.pop();
-            found++;
-         }
-         r = SDL_mutexV ( keyboardmutex );
-      }
-      if (!found ) {
-         int t = ticker;
-         while ( t + 5 > ticker )
-            releasetimeslice();
-      }
-   } while ( !found );
-   return key;
-}
-
 void getkeysyms ( tkey* keysym, int* keyprnt )
 {
    int found = 0;

@@ -371,15 +371,9 @@ class TrueColorImage {
 
    };
 
-//! changes an images size. The source image (in buf) is 8-bit with palette pal .
-extern TrueColorImage* zoomimage ( void* buf, int xsize, int ysize, dacpalette256 pal, int interpolate = 1, int proportional = 1 );
-
 /** the truecolor image img is reduced to 8 bit color using the palette pal. A new buffer is 
      allocated and returned. It must be freed after use.          */
 extern char* convertimage ( TrueColorImage* img, dacpalette256 pal );
-
-//! converts a 8-bit image to a truecolor image
-extern TrueColorImage* convertimage2tc ( void* buf, dacpalette256 pal );
 
 /** a table to speed up conversion from truecolor to 8bit palette. The 6 most significant bits
      of each color component (RGB) form the the index.       */
