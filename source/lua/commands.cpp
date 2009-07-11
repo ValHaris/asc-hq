@@ -718,3 +718,16 @@ void endTurn()
 {
    next_turn( actmap, NextTurnStrategy_OnlyCampaign(), &getDefaultMapDisplay() );
 }
+
+Vehicle* getSelectedUnit( GameMap* map )
+{
+   tfield* fld = map->getField( map->getCursor() );
+   if ( !fld )
+      return NULL;
+    
+   if ( fld->vehicle && fld->vehicle->getOwner() == map->actplayer )
+      return fld->vehicle;
+   else
+      return NULL;
+}
+

@@ -5427,6 +5427,30 @@ fail:
 }
 
 
+static int _wrap_getSelectedUnit(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  Vehicle *result = 0 ;
+  
+  SWIG_check_num_args("getSelectedUnit",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getSelectedUnit",1,"GameMap *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("getSelectedUnit",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = (Vehicle *)getSelectedUnit(arg1);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicle,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -5472,6 +5496,7 @@ static const struct luaL_reg swig_commands[] = {
     { "cancelResearch", _wrap_cancelResearch},
     { "setResearchGoal", _wrap_setResearchGoal},
     { "endTurn", _wrap_endTurn},
+    { "getSelectedUnit", _wrap_getSelectedUnit},
     {0,0}
 };
 

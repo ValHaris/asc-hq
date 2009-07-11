@@ -45,6 +45,8 @@ AI::AiResult AI::strategy( void )
       localResult.unitsWaiting = 0;
       stratloop++;
 
+      int counter = 0;
+      
       vector<int> units;
       for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); ++vi )
          units.push_back( (*vi)->networkid );
@@ -52,6 +54,7 @@ AI::AiResult AI::strategy( void )
       for ( vector<int>::iterator vi = units.begin(); vi != units.end(); ++vi ) {
          Vehicle* veh = getMap()->getUnit(*vi);
          if ( veh ) {
+            ++counter;
             
             if ( unitsWorkedInTactics.find( veh) != unitsWorkedInTactics.end() )
                continue;
@@ -101,7 +104,7 @@ AI::AiResult AI::strategy( void )
                   }
             }
    
-            displaymessage2("strategy loop %d ; moved unit %d ... ", stratloop, localResult.unitsMoved );
+            displaymessage2("strategy loop %d ; moved unit %d / %d ... ", stratloop, counter, localResult.unitsMoved );
    
             checkKeys();
          }

@@ -62,3 +62,7 @@ extern ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int tech
 
 extern void endTurn();
 
+/** returns the unit under the cursor, provided that there is a unit and it belongs to the active player
+    return NULL otherwise
+*/
+extern Vehicle* getSelectedUnit( GameMap* map );

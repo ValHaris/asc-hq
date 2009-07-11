@@ -24,6 +24,7 @@
 class GameMap;
 class MapCoordinate;
 class MapCoordinate3D;
+class Vehicle;
 
 #include "../actions/actionresult.h"
 
@@ -58,5 +59,7 @@ extern ActionResult cancelResearch( GameMap* actmap, int actingPlayer );
 extern ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int techID );
       
 extern void endTurn();
+
+extern Vehicle* getSelectedUnit( GameMap* map );
 
 #endif
