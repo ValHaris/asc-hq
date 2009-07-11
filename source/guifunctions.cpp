@@ -521,7 +521,7 @@ void EndTurn::execute( const MapCoordinate& pos, ContainerBase* subject, int num
       ASCString message = "The following units are about to crash\n\n";
       bool crashWarning = checkUnitsForCrash( player, message );
       if ( crashWarning ) {
-         if ( choiceDialog( message, "continue", "cancel", "Aircraft crash pending" ) == 2 )
+         if ( choiceDialog( message, "continue", "cancel", "AircraftCrashWarning" ) == 2 )
             return;
 
       }

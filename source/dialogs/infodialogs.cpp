@@ -313,7 +313,7 @@ void createUnitCostList()
    cout << "name;id;unitset id;new cost E;new cost M;old cost E;old cost M\n";
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       Vehicletype* v = vehicleTypeRepository.getObject_byPos(i);
-      Resources oldc = v->calcProductionsCost2();
+      Resources oldc = v->calcProductionsCost();
       Resources newc = v->calcProductionsCost();
       
       cout <<  v->getName() << ";" << v->id << ";" << getUnitSetID( v) << ";" << newc.energy << ";" << newc.material << ";" << oldc.energy << ";" << oldc.material << "\n";

@@ -251,7 +251,7 @@ class ReactionFireLayer : public MapLayer {
 void ReactionFireLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
    if ( fieldInfo.visibility > visible_ago) {
-      if ( fieldInfo.fld->vehicle && fieldInfo.fld->vehicle->reactionfire.getStatus() == Vehicle::ReactionFire::ready && fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) {
+      if ( fieldInfo.fld->vehicle && fieldInfo.fld->vehicle->reactionfire.getStatus() != Vehicle::ReactionFire::off && fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) {
          MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
          blitter.blit( image, fieldInfo.surface, pos);
       }   
