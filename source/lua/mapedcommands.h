@@ -12,8 +12,6 @@ class TerrainType;
 class Building;
 class Vehicle;
 class Object;
-
-extern MapCoordinate getCursorPosition( const GameMap* gamemap );
       
 extern void clearField( GameMap* map, const MapCoordinate& pos );
 

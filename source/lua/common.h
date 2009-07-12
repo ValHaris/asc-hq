@@ -82,6 +82,8 @@ extern GameMap* getLoadingMap();
 
 extern void setLocalizedEventMessage( GameMap* map, int eventID, const ASCString& message );
 
+extern MapCoordinate getCursorPosition( const GameMap* gamemap );
+
 
 #endif
 

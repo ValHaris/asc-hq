@@ -164,4 +164,8 @@ void setLocalizedEventMessage( GameMap* eventLocalizationMap, int eventID, const
          (*i)->action->setLocalizationString( message );
 }
       
+MapCoordinate getCursorPosition( const GameMap* gamemap )
+{
+   return gamemap->getCursor(); 
+}
       

@@ -12,9 +12,7 @@
 
 %include "common.i"
 
-
-MapCoordinate getCursorPosition( const GameMap* gamemap );
-      
+     
 void clearField( GameMap* map, const MapCoordinate& pos );
 
 MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc);

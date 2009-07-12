@@ -250,4 +250,5 @@ GameMap* getLoadingMap();
 
 void setLocalizedEventMessage( GameMap* map, int eventID, const std::string& message );
 
+MapCoordinate getCursorPosition( const GameMap* gamemap );
 

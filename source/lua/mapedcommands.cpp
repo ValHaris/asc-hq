@@ -17,10 +17,6 @@
          
          
          
-MapCoordinate getCursorPosition( const GameMap* gamemap )
-{
-   return gamemap->getCursor(); 
-}
          
 void clearField( GameMap* map, const MapCoordinate& pos )
 {
