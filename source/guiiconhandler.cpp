@@ -700,3 +700,12 @@ NewGuiHost::~NewGuiHost()
 
 }
 
+void resetActiveGuiAction( GameMap* map )
+{
+   if ( NewGuiHost::pendingCommand ) {
+      delete NewGuiHost::pendingCommand;
+      NewGuiHost::pendingCommand = NULL;
+      map->cleartemps();
+      repaintMap();
+   }
+}

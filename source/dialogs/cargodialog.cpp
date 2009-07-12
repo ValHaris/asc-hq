@@ -702,6 +702,15 @@ class CargoDialog : public Panel
             s.format( "%d / %d", container->cargoWeight(), container->baseType->maxLoadableWeight );
             setLabelText( "CargoUsage", s, widget );
 
+            int slots = 0;
+            for ( ContainerBase::Cargo::const_iterator i = container->getCargo().begin(); i != container->getCargo().end(); ++i )
+               if( *i )
+                  ++slots;
+            
+            if ( container->baseType->maxLoadableUnits )
+               setBargraphValue ( "LoadingMeter3", float( slots ) / float(container->baseType->maxLoadableUnits), widget );
+            else
+               setBargraphValue ( "LoadingMeter3", 0, widget );
 
             class MoveMalusType
             {

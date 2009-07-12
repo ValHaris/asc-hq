@@ -19,6 +19,7 @@
 #include <pgtooltiphelp.h>
 #include <pgapplication.h>
 #include <pgeventsupplier.h>
+#include <pgmultilineedit.h>
 
 #include "cargowidget.h"
 #include "../containerbase.h"
@@ -95,6 +96,26 @@ void StoringPosition::setBargraphValue( const ASCString& widgetName, float fract
       bgw->setFraction( fraction );
 }
 
+void StoringPosition::setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent )
+{
+   if ( !parent )
+      parent = this;
+
+   PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( widgetName, true ) );
+   if ( l )
+      l->SetText( text );
+   else {
+      PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( widgetName, true ) );
+      if ( l )
+         l->SetText( text );
+      else {
+         PG_MultiLineEdit* l = dynamic_cast<PG_MultiLineEdit*>( parent->FindChild( widgetName, true ) );
+         if ( l )
+            l->SetText( text );
+      }
+   }
+}
+
 
 void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
 {
@@ -150,11 +171,14 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
       } else
          setBargraphValue( "CargoBar", 0 );
 
+      setLabelText( "SlotUnitName", storage[num]->getName() );
+         
    } else {
       setBargraphValue( "DamageBar", 0 );
       setBargraphValue( "FuelBar", 0 );
       setBargraphValue( "MaterialBar", 0 );
       setBargraphValue( "CargoBar", 0 );
+      setLabelText( "SlotUnitName", "" );
    }
 
    PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);

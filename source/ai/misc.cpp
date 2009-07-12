@@ -581,6 +581,10 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
 
 int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
 {
+   auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
+   mum->searchFields();
+   
+   
    int oldHeight = veh->getPosition3D().getNumericalHeight();
    AStar3D::Path::const_iterator pi = path.begin();
    if ( pi == path.end() )
@@ -604,7 +608,7 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
       }
 
       if ( ok )
-         if ( pi->dist <= veh->getMovement() )
+         if ( mum->isFieldReachable3D(*pi, true) )
             lastmatch = pi;
 
       ++pi;
@@ -616,10 +620,10 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
 
    if ( lastmatch == path.begin() )
       return 0;
-
-   auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
+  
    mum->setDestination( *lastmatch );
    mum->setFlags( MoveUnitCommand::NoInterrupt );
+   
    
    ActionResult res = mum->execute( getContext() );
    if ( res.successful() ) {

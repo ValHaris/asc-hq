@@ -68,6 +68,7 @@ class StoringPosition : public PG_Widget
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
       
       void setBargraphValue( const ASCString& widgetName, float fraction);
+      void setLabelText ( const ASCString& widgetName, const ASCString& text, PG_Widget* parent = NULL );
       bool eventMouseButtonDown(const SDL_MouseButtonEvent* button);
       bool eventMouseButtonUp(const SDL_MouseButtonEvent* button);
       bool eventMouseMotion (const SDL_MouseMotionEvent *motion);

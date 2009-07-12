@@ -657,6 +657,7 @@ void tspfldloaders::readfields ( void )
          else 
             weather = 0;
 
+         assertOrThrow( weather >= 0 && weather < cwettertypennum );
 
          int k;
 

@@ -124,7 +124,17 @@ void    AI :: setup (void)
           if ( (*i)->reactionfire.getStatus() == Vehicle::ReactionFire::off )
              (*i)->reactionfire.enable();
 
-
+/*
+   // this is a cheat to speed up movement and improve Ai behaviour
+   // setting all fields to FogOfWar
+   for ( int y = 0; y < getMap()->ysize; ++y )
+      for ( int x = 0; x < getMap()->xsize; ++x ) {
+         tfield* fld = getMap()->getField(x,y);
+         if ( fieldVisibility(fld) == visible_not )
+            fld->setVisibility( visible_ago, getPlayerNum( ));
+      }
+  */       
+   
 
 
    // showthreats("init: threatvals generated");

@@ -551,6 +551,7 @@ Context createContext( GameMap* gamemap )
 void undo()
 {
    if ( actmap ) {
+      resetActiveGuiAction( actmap );
       actmap->actions.undo( createContext( actmap ) );  
       displaymap();
       mapChanged(actmap);
@@ -561,6 +562,7 @@ void undo()
 void redo()
 {
    if ( actmap ) {
+      resetActiveGuiAction( actmap );
       actmap->actions.redo( createContext( actmap ) );  
       displaymap();
       mapChanged(actmap);
