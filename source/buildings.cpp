@@ -290,7 +290,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
                   i++;
             };
 
-            if ( field->vehicle && field->vehicle->height < chfliegend ) {
+            if ( field->vehicle && (field->vehicle->height < chtieffliegend )) {
                delete field->vehicle;
                field->vehicle = NULL;
             }

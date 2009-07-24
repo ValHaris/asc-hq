@@ -424,7 +424,8 @@ ActionResult MoveUnit::runAction( const Context& context )
    if ( rf->finalCheck( operatingPlayer, context ))
       finalRedrawNecessary = true;
    
-   // finalRedrawNecessary = true;
+   // we do it anyway 
+   finalRedrawNecessary = true;
    
    if ( viewInputChanged ) {
       int fieldschanged;

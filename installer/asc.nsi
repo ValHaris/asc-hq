@@ -8,10 +8,10 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "Advanced Strategic Command 2.3.74.5"
+Name "Advanced Strategic Command 2.3.75.0"
 
 ; The file to write
-OutFile "ASC-2.3.74.5-Install.exe"
+OutFile "ASC-2.3.75.0-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -86,12 +86,13 @@ Section "ASC main program (required)"
   ; Data Files
   File "../data/dialog/asc2_dlg.zip"
   File "../data/main.ascdat"
+  File "../COPYING"
 
   ; Write the installation path into the registry - not used any more, since we store in AppData
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.3.74.5"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.3.75.0"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1

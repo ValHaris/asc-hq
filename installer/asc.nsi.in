@@ -86,6 +86,7 @@ Section "ASC main program (required)"
   ; Data Files
   File "../data/dialog/asc2_dlg.zip"
   File "../data/main.ascdat"
+  File "../COPYING"
 
   ; Write the installation path into the registry - not used any more, since we store in AppData
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
