@@ -80,6 +80,7 @@ unitsets/mk1/mk1-psup/*.asctxt
 unitsets/mk1/mk1-psup/*.pcx
 unitsets/mk1/mk1-shb/*.asctxt
 unitsets/mk1/mk1-shb/*.pcx
+unitsets/mk1/mk1-shb/*.png
 unitsets/mk1/mk1-shb/*.jpg
 unitsets/mk1/mk1-shh/*.asctxt
 unitsets/mk1/mk1-shh/*.pcx

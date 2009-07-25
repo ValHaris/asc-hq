@@ -1,0 +1,29 @@
+ObjectType { 
+   Name = Channel
+
+   Parent = 525
+   ID = 2508
+   TechAdapterRequired = o2508
+
+;                    river
+   LinkableObjects = 2500
+;  water blue        vsw  sw   w    dw   o      
+   LinkableTerrain = 2004 2002 2001 2003 2000
+   NetBehaviour = NetToSelf NetToBorder AutoBorder
+
+   Weather = dry much_snow snow_and_ice
+   dry { 
+      UseGFXpics = false
+      picture = ob_channel_blue.png 65
+      ImageReference = 
+      FlipPictures   =  
+   } dry
+   much_snow { 
+      UseGFXpics = false
+      picture = ob_channel_blue.png 65
+      GraphicOperations = Snow
+      ImageReference = 
+      FlipPictures   =  
+   } much_snow
+   snow_and_ice ->* ObjectType.much_snow
+} ObjectType

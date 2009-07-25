@@ -4,8 +4,9 @@ VehicleType {
    Parent = 307
 
    Description = jammer
-   picture = MK1v_vortex.pcx
+   picture = mk1v_vortex.pcx
    InfoImage = mk1v_vortex.jpg
+   InfoImageSmall = mk1v_vortex_k.png
    WreckageObject = 451
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Jammer units are one of the more important vehicles an army should

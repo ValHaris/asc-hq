@@ -11,7 +11,7 @@ ObjectType {
    Height = 117 ;17-Aug 2003
    lifetime = 90
 
-   visible_in_fogOfWar = false
+   visible_in_fogOfWar = true
    ;                                                   SY   SY
    LinkableObjects = 983 984 985 986 987 988 2501 2506 1315 1310
    LinkableTerrain = 

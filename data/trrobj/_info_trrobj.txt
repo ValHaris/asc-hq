@@ -21,10 +21,17 @@ belegt:
 2652 Coast Blue
 2653 River Blue
 2654 DeepSeaMinerals
+2655 Channel green
+2656 Channel turquoise
+2657 Sand  (Net)
 
 Terrain
 
-299 Wasser blau
-301-302 Wasser blau
+299 Wasser türkis
+301-302 Wasser türkis
+307-309 Wasser gruen
 2000-2005 ASC Wasser
-2006-2007 Wasser blau
+2006-2007 Wasser türkis
+2008-2009 Wasser gruen
+2012 Sand 13
+2011 Sand 14

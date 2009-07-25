@@ -1,0 +1,24 @@
+TerrainType { 
+   Name = green very shallow water
+   ID = 2008
+   parent = 513 
+   dry { 
+      UseGFXpics = false
+      Picture = trr_water_green_very_shallow.png
+;      GFX_Picture = 385
+      TerrainProperties = very_shallow_water
+   } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+   few_snow ->* TerrainType.dry 
+   much_snow { 
+      UseGFXpics = true
+      GFX_Picture = 968
+      TerrainProperties = Shallow_water Track_possible frozen_water 
+   } much_snow
+   snow_and_ice { 
+      UseGFXpics = true
+      GFX_Picture = 968
+      TerrainProperties = Shallow_water Track_possible frozen_water 
+   } snow_and_ice
+} TerrainType

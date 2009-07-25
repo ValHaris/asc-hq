@@ -14,14 +14,11 @@ BuildingType {
    } Pictures
    RubbleObjects = false
    Entry = A4
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 200
-      MaxLoadableMass = 1000
-      CategoriesNOT = default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-      EntranceSystemNum = 2
-      EntranceSystem1 ->* BuildingType.carrier
-   } Transportation
+   Transportation ->* BuildingType.helideck 
+   Transportation.MaxLoadableUnits = 3
+   Transportation.MaxLoadableUnitSize = 200
+   Transportation.MaxLoadableMass = 500
+
    Functions = Mining_Station External_Loading 
    TerrainAccess { 
       terrain_any = Water

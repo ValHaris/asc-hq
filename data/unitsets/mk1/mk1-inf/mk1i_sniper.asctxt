@@ -7,6 +7,7 @@ VehicleType {
    Infotext = [Scharfschuetze, sehr effektiv gegen Trooper nur bedingt einsatzfaehig gegen Fahrzeuge.]
    Picture = mk1i_sniper.pcx
    InfoImage = mk1i_sniper.jpg
+   InfoImageSmall = mk1i_sniper_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10

@@ -2,6 +2,13 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
+
+__________________
+beta-09-10
+-Panzerschiene nun Lavadefence und bietet Schutz ähnlich wie ditch
+-palette.map überarbeitet
+Beta-09-09
+-Lavadefence sichtbar im FoW
 __________________
 Beta-09-06
 -DeepSeaMinerals Movemalus entfernt

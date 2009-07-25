@@ -3,8 +3,9 @@ VehicleType {
    ID = 105
    parent = 306
 
-   picture = MK1m_EXP5.pcx
+   picture = mk1m_exp5.pcx
    InfoImage = mk1m_exp5.jpg
+   InfoImageSmall = mk1m_exp5_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Gepanzerter MechTrooper mit neuartiger Radarstöhrelektronik. 
    		InfoImage = BananaJoe]

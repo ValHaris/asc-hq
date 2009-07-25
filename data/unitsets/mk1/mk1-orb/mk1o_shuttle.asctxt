@@ -9,7 +9,6 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 20
-   Features += Repair_Facility
    Movement -= 0 0 0 0 10 10 10 10 
    Weapons { 
       Initiative = 0

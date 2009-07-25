@@ -5,8 +5,10 @@ ObjectType {
    Name = Ocean Coast 1
    Parent = 516
    ID = 2504
-   GroupID = 20
-   LinkableObjects = 2500 2502 2503 2507 2509
+;   GroupID = 20
+;                    riv  sw   mw   vsw  dw   cha
+   LinkableObjects = 2500 2502 2503 2507 2509 2508
+;                    oce  mw   sw   dw   vsw
    LinkableTerrain = 2000 2001 2002 2003 2004
    NetBehaviour = NetToSelf NetToBorder
 

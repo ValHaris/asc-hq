@@ -9,7 +9,7 @@ VehicleType {
    WreckageObject = 439
    GuideSortHelp = 0 0 0 0 1 553 554 0 0 0
 
-   Features = Vehicle_Production ExternalRepair self_repairing ExternalMaterialTransfer automatic_resource_searching construct_specific_buildings NoProductionCustomization
+   Features = Vehicle_Production ExternalRepair self_repairing ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer automatic_resource_searching construct_specific_buildings NoProductionCustomization
    ResourceDrillingRange = 4
    SelfRepairRate = 10
    Transportation ->* VehicleType.TransTurretBig2

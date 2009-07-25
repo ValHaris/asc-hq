@@ -4,9 +4,11 @@ VehicleType {
    ID = 77
    
    Description = Jamming Helicopter
-   Infotext = [ Der EXP 21 ist ein Nebenprodukt der aufwendigen Radarstörforschung. Das hohe Gewicht und die enorme Streustrahlung der Störsender verhinderte den Einbau von Waffensystemen und hochwertiger Technik. ]
-   picture = MK1h_EXP21.pcx
+   picture = mk1h_exp21.pcx
+   InfoImage = mk1h_exp21.jpg
+   InfoImageSmall = mk1h_exp21_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [ Der EXP 21 ist ein Nebenprodukt der aufwendigen Radarstörforschung. Das hohe Gewicht und die enorme Streustrahlung der Störsender verhinderte den Einbau von Waffensystemen und hochwertiger Technik. ]
 
    Armor += 30
 

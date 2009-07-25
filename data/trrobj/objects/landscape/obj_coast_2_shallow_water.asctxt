@@ -6,7 +6,9 @@ ObjectType {
    Parent = 514
    ID = 2502
    GroupID = 18
-   LinkableObjects = 2500 2503 2504 2507 2509
+;                    riv  mw   vsw  dw   oce
+   LinkableObjects = 2500 2503 2507 2509 2504
+;                    oce  mw   sw   dw   vsw
    LinkableTerrain = 2000 2001 2002 2003 2004
    NetBehaviour = NetToSelf NetToBorder
 

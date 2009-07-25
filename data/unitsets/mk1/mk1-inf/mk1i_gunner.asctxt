@@ -10,6 +10,7 @@ Halten sie ihn möglichst in Deckung und geben sie auf feindliche Scharfschützen 
 ]
    Picture = mk1i_gunner.pcx
    InfoImage = mk1i_gunner.jpg
+   InfoImageSmall = mk1i_gunner_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10

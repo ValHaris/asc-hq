@@ -1931,7 +1931,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    AmmoMG { 
-      Type = machinegun ammo_transfer 
+      Type = machinegun 
       targets = floating ground_level 
       shotFrom = floating ground_level 
       MaxRange = 10

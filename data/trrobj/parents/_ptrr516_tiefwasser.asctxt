@@ -4,7 +4,6 @@ TerrainType {
    Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
    abstract = true
    dry { 
-      UseGFXpics = true
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 0
@@ -26,7 +25,6 @@ TerrainType {
    much_snow.BasicJamming = 2
    
    snow_and_ice { 
-      UseGFXpics = true
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 2

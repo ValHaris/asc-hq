@@ -4,12 +4,11 @@ TerrainType {
    Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
    abstract = true
    dry { 
-      UseGFXpics = true
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 0
   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 12  12  12  12  13  14  14  12  10  19  12  11  19  19  12  12  19  10
+      MoveMalus = 12  12  12  12  13  14  14  12  10  19  12  11  19  19  11  13  19  10
       TerrainProperties = Very_shallow_water 
    } dry
    
@@ -23,7 +22,6 @@ TerrainType {
    few_snow.BasicJamming = 1
    
    much_snow { 
-      UseGFXpics = true
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 2
@@ -33,7 +31,6 @@ TerrainType {
    } much_snow
    
    snow_and_ice { 
-      UseGFXpics = true
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 2

@@ -4,8 +4,9 @@ VehicleType {
    ID = 19
 
    Description = light fighter
-   Picture = MK1a_ARROW.pcx
+   Picture = mk1a_arrow.pcx
    InfoImage = mk1a_arrow.jpg
+   InfoImageSmall = mk1a_arrow_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Der ARROW ist ein schneller Kurzstreckenabfangjaeger. Seine vergleichsweise geringen Herstellungskosten
                sind auch der maessigen Bewaffnung zu verdanken.]

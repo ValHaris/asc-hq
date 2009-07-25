@@ -3,7 +3,17 @@ Grafiken: GAMER, Uranius
 InfoTexte: BananaJoe
 InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
-
+__________________
+Beta-09-10
+-Roboter hinterlassen nun Wracks
+-InfoImage = Exp21,Tora
+-diverse kleine 3D Grafiken eingefügt
+Beta-09-09
+-Infoimage = BRS
+-Fix External Fuel+Ammo Transfer
+default:
+-Transportzug CargoMovementDivisor = 1.3
+-AmmoMG keine AmmoTransferFlag mehr
 _______________________________________
 20.06.2009 (GAMER) [incl. Beta-09-07+08
 -InfoImage = Hoovercraft, Raven2

@@ -41,6 +41,26 @@ BuildingType {
    carrier_ground ->* BuildingType.carrier
    carrier_ground.ContainerHeight = ground
    
+   helideck {
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 300
+      CategoriesNOT = Heavy_tracked_vehicle Heavy_wheeled_vehicle Heavy_aircraft Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = In out
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+        MoveCost = 30 
+        RequireUnitFunction = cruiserlanding
+      } EntranceSystem0
+      EntranceSystem1 ->* BuildingType.GrIO
+   } helideck
+   
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   G R O U N D   I N & O U T   ----------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------

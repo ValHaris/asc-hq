@@ -1,9 +1,11 @@
 TerrainType { 
-   Name = shallow water dark
+   Name = green shallow water
    ID = 307
-   parent = 1208 
+   parent = 514 
    dry { 
-      GFX_Picture = 385
+      UseGFXpics = false
+      Picture = trr_water_green_shallow.png
+;      GFX_Picture = 385
       TerrainProperties = Shallow_water
    } dry
    light_rain ->* TerrainType.dry
@@ -15,6 +17,7 @@ TerrainType {
       TerrainProperties = Shallow_water pack_ice 
    } much_snow
    snow_and_ice { 
+      UseGFXpics = true
       GFX_Picture = 968
       TerrainProperties = Shallow_water Track_possible frozen_water 
    } snow_and_ice

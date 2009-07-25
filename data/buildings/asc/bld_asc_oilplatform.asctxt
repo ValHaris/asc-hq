@@ -14,14 +14,8 @@ BuildingType {
    } Pictures
    RubbleObjects = false
    Entry = A1
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 150
-      MaxLoadableMass = 1000
-      CategoriesNOT = default Heavy_tracked_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-      EntranceSystemNum = 2
-      EntranceSystem1 ->* BuildingType.carrier
-   } Transportation
+   Transportation ->* BuildingType.helideck 
+
    Functions = Mining_Station 
    TerrainAccess { 
       terrain_any = Shallow_water Water Very_shallow_water river

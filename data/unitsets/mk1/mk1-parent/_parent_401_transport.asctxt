@@ -366,7 +366,7 @@
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 800
       MaxLoadableMass = 800
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -810,7 +810,7 @@
    } TransLowTrooper
 
    TransLowTrooper2 ->* VehicleType.TransLowTrooper 
-   TransLowTrooper2.CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+   TransLowTrooper2.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
    TransLowTrooper2.MaxLoadableUnits = 2
    TransLowTrooper2.MaxLoadableUnitSize = 3
    TransLowTrooper2.MaxLoadableMass = 4

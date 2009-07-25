@@ -2,12 +2,14 @@ VehicleType {
    Name = ASSAULT TROOPER
    ID = 99
    parent = 202
+
    Description = Assault Trooper
    Infotext = [Assault Troopers are specially trained to use a more robust arsenal
               than other Troopers. Their main purpose is to take out squads
               of heavy vehicles.]
    Picture = mk1i_astrooper.pcx
    InfoImage = mk1i_assaulttrooper.jpg
+   InfoImageSmall = mk1i_assaulttrooper_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor +=10

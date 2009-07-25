@@ -2,7 +2,7 @@ TerrainType {
    Name = Sand 12
    ID = 2908
    parent = 521
-   weather -= snow_and_ice
+
    dry { 
       UseGFXpics = false
       Picture = trr_Sand_12.png
@@ -24,4 +24,5 @@ TerrainType {
       picture = trr_Sand_12.png
       GraphicOperations = Snow_const
    } much_snow
+   snow_and_ice ->* TerrainType.much_snow
 } TerrainType

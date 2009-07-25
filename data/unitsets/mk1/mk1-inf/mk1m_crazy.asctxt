@@ -4,8 +4,9 @@ VehicleType {
    parent = 208
 
    Description = Mech Trooper
-   Picture = MK1m_CRAZY.pcx
+   Picture = mk1m_crazy.pcx
    InfoImage = mk1m_crazy.jpg
+   InfoImageSmall = mk1m_crazy_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [InfoImage = BananaJoe]
 

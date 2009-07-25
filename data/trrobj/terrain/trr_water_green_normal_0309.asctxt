@@ -1,17 +1,23 @@
 TerrainType { 
-   Name = normal water dark
+   Name = green normal water
    ID = 309
-   parent = 1208
+   parent = 515
    dry { 
-      GFX_Picture = 386
+      UseGFXpics = false
+      Picture = trr_water_green_normal.png
+;      GFX_Picture = 386
       TerrainProperties = water
    } dry
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
    few_snow ->* TerrainType.dry
    much_snow { 
+      UseGFXpics = true
       GFX_Picture = 1702
       TerrainProperties = water pack_ice 
    } much_snow
    snow_and_ice { 
+      UseGFXpics = true
       GFX_Picture = 970
       TerrainProperties = water Track_possible frozen_water 
    } snow_and_ice

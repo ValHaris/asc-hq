@@ -6,6 +6,7 @@ VehicleType {
    Description = twin gun artillery
    Picture = MK1v_comaiii.pcx
    InfoImage = mk1v_comaiii.jpg
+   InfoImageSmall = mk1v_comaiii_k.png
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Bei der �berarbeitung der �Coma II� zur �Coma III� konnten weder die Reichweite erh�ht, noch die Nachteile wie mangelnde Mobilit�t, Selbstverteidigungsf�higkeit oder zeit verz�gerte Feuerbereitschaft beseitigt werden. Durch das Hinzuf�gen einer weiteren 203,2-mm-Haubitze kann die �Coma III� schneller und h�ufiger auf Angriffe gegnerischer Bodentruppen reagieren und diese nieder halten. Das Hinzuf�gen der zweiten Gesch�tzeinheit machte eine Verbreiterung des Chassis und des Turmes erforderlich, was wiederum eine erhebliche Gewichtszunahme zur Folge hat, welche bei gr��eren Truppentransporten zu leichten Problemen f�hren k�nnte.

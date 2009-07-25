@@ -8,6 +8,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    Infotext = []
+   WreckageObject = 497
 
    Features = conquer_buildings 
    Category = light_tracked_vehicle

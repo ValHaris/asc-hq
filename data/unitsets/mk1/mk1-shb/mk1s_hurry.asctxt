@@ -4,7 +4,7 @@ VehicleType {
    parent = 368
 
    Description = torpedo WIG
-   picture = MK1s_hurry.pcx
+   picture = mk1s_hurry.png
    WreckageObject = 408
    GuideSortHelp = 518 420 0 0 1 0 0 0 0 0
 

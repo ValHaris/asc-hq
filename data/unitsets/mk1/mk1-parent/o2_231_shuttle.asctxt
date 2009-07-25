@@ -10,7 +10,7 @@ VehicleType {
 
    Transportation ->* VehicleType.TransShuttle 
 
-   Features = ExternalMaterialTransfer ExternalFuelTransfer
+   Features = ExternalMaterialTransfer ExternalFuelTransfer Repair_Facility
    Armor = 300
    Weight = 200
 

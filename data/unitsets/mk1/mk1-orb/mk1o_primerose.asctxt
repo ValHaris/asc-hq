@@ -5,8 +5,9 @@ VehicleType {
 
    Description = Attack Satellite
    Infotext = [top secret]
-   Picture = MK1o_PRIMEROSE.pcx
+   Picture = mk1o_primerose.pcx
    InfoImage = mk1o_primerose.jpg
+   InfoImageSmall = mk1o_primerose_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 20

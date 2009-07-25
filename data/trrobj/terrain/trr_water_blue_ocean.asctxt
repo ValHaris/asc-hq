@@ -11,6 +11,7 @@ TerrainType {
 ;      TerrainProperties = Deep_water 
    } dry
    snow_and_ice {
+      UseGFXpics = true
       GFX_Picture = 1885
 ;     TerrainProperties = Deep_water pack_ice 
    } snow_and_ice

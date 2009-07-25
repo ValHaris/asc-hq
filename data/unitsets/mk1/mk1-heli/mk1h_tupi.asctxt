@@ -4,8 +4,9 @@ VehicleType {
    ID = 55
    
    Description = Helicopter
-   picture = MK1h_TUPI.pcx
-   infoImage = mk1h_tupi.jpg
+   picture = mk1h_tupi.pcx
+   InfoImage = mk1h_tupi.jpg
+   InfoImageSmall = mk1h_tupi_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [The Tupi helicopter is largely based on the successful Inca designs. It is suited with two gunner seats,
               each complemented by heavy machine guns. The Tupi is ideal for

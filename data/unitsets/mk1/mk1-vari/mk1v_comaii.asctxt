@@ -6,6 +6,7 @@ VehicleType {
    Description = heavy artillery
    Picture = MK1v_comaii.pcx
    InfoImage = mk1v_comaii.jpg
+   InfoImageSmall = mk1v_comaii_k.png
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Um den eigenen Bodentruppen eine effiziente Artillerieunterstützung zur Seite zu stellen und den an Modernität und Stärke wachsenden, feindlichen Kräften wirkungsvoll entgegen zu treten, wurde das „Coma“-Artilleriesystem durch rehanische Ingenieure einer grundlegenden Überarbeitung unterzogen.
