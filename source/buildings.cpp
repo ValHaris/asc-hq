@@ -424,7 +424,7 @@ Building :: ~Building ()
 }
 
 
-const int buildingstreamversion = -5;
+const int buildingstreamversion = -6;
 
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
@@ -494,6 +494,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
     if ( BUILDINGVERSIONLIMIT >= -3 )
        stream.writeChar(0);
 
+    stream.writeInt( view );
 }
 
 
@@ -673,6 +674,11 @@ void Building :: readData ( tnstream& stream, int version )
             maxplus.resource(i) = typ->maxplus.resource(i);
        }
     }
+    
+    if ( version <= -6 )
+       view = stream.readInt();
+    else
+       view = typ->view;
 }
 
 ASCString Building::getName ( ) const

@@ -61,6 +61,7 @@ MoveUnit::MoveUnit( Vehicle* veh, AStar3D::Path& pathToMove, bool dontInterrupt 
 {
    this->pathToMove = pathToMove;
    this->dontInterrupt = dontInterrupt;
+   this->originalUnitMovement = veh->getMovement(false,false);
 }
       
       
@@ -74,25 +75,31 @@ ASCString MoveUnit::getDescription() const
 }
       
       
+static const int moveUnitStreamVersion = 2;      
+      
 void MoveUnit::readData ( tnstream& stream ) 
 {
    UnitAction::readData( stream );
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "ChangeUnitMovement", 1, version );
+   if ( version < 1 || version > moveUnitStreamVersion )
+      throw tinvalidversion ( "ChangeUnitMovement", moveUnitStreamVersion, version );
    
    dontInterrupt = stream.readInt();
    readClassContainerStaticConstructor( pathToMove, stream );   
-   
+   if ( version >= 2 )
+      originalUnitMovement = stream.readInt();
+   else
+      originalUnitMovement = -1;
 };
       
       
 void MoveUnit::writeData ( tnstream& stream ) const
 {
    UnitAction::writeData( stream );
-   stream.writeInt( 1 );
+   stream.writeInt( moveUnitStreamVersion );
    stream.writeInt( dontInterrupt );
    writeClassContainer( pathToMove, stream );
+   stream.writeInt( originalUnitMovement );
 };
 
 
@@ -454,6 +461,9 @@ ActionResult MoveUnit::runAction( const Context& context )
 
 ActionResult MoveUnit::undoAction( const Context& context )
 {
+   if ( originalUnitMovement != -1 )
+      getUnit()->setMovement( originalUnitMovement, 0 );
+   
    return ActionResult(0);
 }
 

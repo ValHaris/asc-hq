@@ -315,6 +315,7 @@ class ContainerBase {
     //! hook that is called the next round begins ( active player switching from player8 to player1 )
       virtual void endRound ( void );
       
+      int view;
 
       class Work {
          public:

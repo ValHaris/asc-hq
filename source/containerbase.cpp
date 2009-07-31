@@ -34,6 +34,7 @@
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player ) : gamemap ( map ), cargoParent(NULL), baseType (bt)
 {
+   view = bt->view;
    damage = 0;
    color = player*8;
    maxresearchpoints = baseType->defaultMaxResearchpoints;
@@ -640,6 +641,7 @@ void ContainerBase::endAnyTurn( void )
 
 void ContainerBase::endRound ( void )
 {
+   view = baseType->view;
 }
 
 

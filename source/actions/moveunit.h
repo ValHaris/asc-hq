@@ -29,6 +29,12 @@
 class MoveUnit : public UnitAction {
       AStar3D::Path pathToMove;
       bool dontInterrupt;
+      
+      /* this is a workaround 
+         The unit may have inconsistent combinations of height and movement during the operation
+         If the unit is destroyed while it is in such a state, we need to restore the movement manually
+      */
+      int originalUnitMovement;
    
       
       MoveUnit( GameMap* map ) : UnitAction( map ) {};

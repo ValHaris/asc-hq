@@ -143,7 +143,7 @@ ActionResult SpawnBuilding::runAction( const Context& context )
    
    ActionResult res = (new ViewRegistration( gbde , ViewRegistration::AddView ))->execute( context );
    
-   evaluateviewcalculation( getMap(), gbde->getPosition(), gbde->typ->view, 0, false, &context );
+   evaluateviewcalculation( getMap(), gbde->getPosition(), gbde->view, 0, false, &context );
    
    
    return res;

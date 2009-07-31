@@ -904,14 +904,15 @@ void ActionInfoPanel::update( GameMap* map )
 {
    TextRenderer* text = dynamic_cast<TextRenderer*>( FindChild( "ActionList", true ));
    if ( text && map) {
+      /*
       vector<ASCString> list;
       map->actions.getActionDescriptions( list );
       
       ASCString s;
       for ( vector<ASCString>::const_iterator i = list.begin(); i != list.end(); ++i )
          s += *i + "\n";
-      
-      text->SetText( s );
+      */
+      text->SetText( "Function removed, please use Action/Manage dialog" );
    }
 }
 

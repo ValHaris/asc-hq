@@ -37,7 +37,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
    veh->ypos = pos.y;
    veh->height = pos.getBitmappedHeight();
    veh->addview();
-   int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
+   int fieldsWithChangedVisibility = evaluateviewcalculation ( getMap(), veh->getPosition(), veh->view, 0xff );
 
 
    if ( AttackCommand::avail ( veh )) {
@@ -141,7 +141,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
       veh->addview();
 
    if ( fieldsWithChangedVisibility || 1 )  // viewbug.sav !!!!!
-      evaluateviewcalculation ( getMap(), veh->getPosition(), veh->typ->view, 0xff );
+      evaluateviewcalculation ( getMap(), veh->getPosition(), veh->view, 0xff );
 }
 
 bool AI::MoveVariant::operator> ( const AI::MoveVariant& mv2 ) const

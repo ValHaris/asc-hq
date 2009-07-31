@@ -226,7 +226,7 @@ void Menu::setup()
    addbutton ( "Unit Info Panel", ua_viewUnitInfoPanel );
    addbutton ( "Overview Map Panel", ua_viewOverviewMapPanel );
    addbutton ( "Map Control Panel", ua_viewMapControlPanel );
-   addbutton ( "Action Panel",    ua_viewActionPanel );
+//   addbutton ( "Action Panel",    ua_viewActionPanel );
 
    // addbutton("Weathercast", ua_weathercast);
    currentMenu->addSeparator();

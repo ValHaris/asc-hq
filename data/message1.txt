@@ -345,7 +345,7 @@ invalid diplomatic state
 23200
 The chosen technology is not available for research
 23201
-Choing a technology is not available right now
+Chosing a technology is not available right now
 23202
 Internal research inconsistency
 23203

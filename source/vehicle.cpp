@@ -1000,7 +1000,7 @@ void Vehicle :: fillMagically( bool ammunition, bool resources )
 
 
 
-const int vehicleVersion = 6;
+const int vehicleVersion = 7;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 {
@@ -1108,7 +1108,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
          stream.writeChar ( height );
 
     if ( bm & cem_movement )
-         stream.writeChar ( _movement );
+         stream.writeInt ( _movement );
 
     if ( bm & cem_direction )
          stream.writeChar ( direction );
@@ -1168,6 +1168,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
       // actstorage.write( stream );
       bi_resourceplus.write( stream );
     }
+    
+    stream.writeInt( view );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1272,7 +1274,12 @@ void   Vehicle::readData ( tnstream& stream )
        height = 1 << log2 ( typ->height );
 
     if ( bm & cem_movement ) {
-       int m = stream.readChar ( );
+       int m;
+       if ( version <= 6 )
+          m = stream.readChar();
+       else
+          m = stream.readInt();
+       
        setMovement ( min( m,typ->movement [ log2 ( height ) ]), 0 );
     } else
        setMovement ( typ->movement [ log2 ( height ) ], 0 );
@@ -1400,6 +1407,11 @@ void   Vehicle::readData ( tnstream& stream )
        maxplus.read( stream );
        bi_resourceplus.read( stream );
     } 
+    
+    if ( version >= 7 )
+       view = stream.readInt();
+    else
+       view = typ->view;
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

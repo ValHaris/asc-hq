@@ -1041,8 +1041,8 @@ void execuseraction2 ( tuseractions action )
          break;
       case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::MapControl );
          break;
-      case ua_viewActionPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ActionInfo );
-         break;
+//      case ua_viewActionPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ActionInfo );
+//         break;
       case ua_vehicleinfo: unitInfoDialog();
          break;
 #ifdef WEATHERGENERATOR

@@ -72,37 +72,37 @@ class ActionRecorder {
 //! The number of game paramters that can be specified for each map.
 const int gameparameternum = 35;
 
-enum GameParameter { cgp_fahrspur,
+enum GameParameter { cgp_fahrspur, // 0
        cgp_eis,
        cgp_movefrominvalidfields,
        cgp_building_material_factor,
        cgp_building_fuel_factor,
-       cgp_forbid_building_construction,
+       cgp_forbid_building_construction, // 5
        cgp_forbid_unitunit_construction,
        cgp_bi3_training,
        cgp_maxminesonfield,
        cgp_antipersonnelmine_lifetime,
-       cgp_antitankmine_lifetime,
+       cgp_antitankmine_lifetime,      // 10
        cgp_mooredmine_lifetime,
        cgp_floatingmine_lifetime,
        cgp_buildingarmor,
        cgp_maxbuildingrepair,
-       cgp_buildingrepairfactor,
+       cgp_buildingrepairfactor, // 15
        cgp_globalfuel,
        cgp_maxtrainingexperience,
        cgp_initialMapVisibility,
        cgp_attackPower,
-       cgp_jammingAmplifier,
+       cgp_jammingAmplifier,  // 20
        cgp_jammingSlope,
        cgp_superVisorCanSaveMap,
        cgp_objectsDestroyedByTerrain,
        cgp_trainingIncrement,
-       cgp_experienceDivisorAttack,
+       cgp_experienceDivisorAttack,  // 25
        cgp_disableDirectView,
        cgp_disableUnitTransfer,
        cgp_experienceDivisorDefense,
        cgp_debugEvents,
-       cgp_objectGrowthMultiplier,
+       cgp_objectGrowthMultiplier, // 30
        cgp_objectGrowOnOtherObjects,
        cgp_researchOutputMultiplier,
        cgp_produceOnlyResearchedStuffInternally,

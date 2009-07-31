@@ -84,8 +84,11 @@ ActionResult ReactionFireSwitchCommand::go ( const Context& context )
       auto_ptr<ChangeUnitProperty> propChange ( new ChangeUnitProperty( getUnit(), ChangeUnitProperty::ReactionFire, (int) Vehicle::ReactionFire::init2 ));
       ActionResult res = propChange->execute( context );
       
-      if ( res.successful() ) 
+      if ( res.successful() ) {
          propChange.release();
+         if ( context.display )
+            context.display->repaintDisplay();
+      }
       
       return res;
    } else {
@@ -104,8 +107,11 @@ ActionResult ReactionFireSwitchCommand::go ( const Context& context )
       auto_ptr<ChangeUnitProperty> propChange ( new ChangeUnitProperty( getUnit(), ChangeUnitProperty::ReactionFire, (int) Vehicle::ReactionFire::off ));
       ActionResult res = propChange->execute( context );
       
-      if ( res.successful() ) 
+      if ( res.successful() ) {
          propChange.release();
+         if ( context.display )
+            context.display->repaintDisplay();
+      }
       
       return res;
    }
