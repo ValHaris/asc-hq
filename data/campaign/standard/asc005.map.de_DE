@@ -1,0 +1,51 @@
+map = asc.getLoadingMap() 
+ --- ===== 94  ======= 
+message = [[Ihre Mission war ein Fehlschlag, Kommandant!
+
+Der Aufstand wird vom IMPERIUM gnadenlos zurückgeschlagen werden.
+
+Man wird uns nicht noch eine Chance geben. Alle unsere Hoffnungen sind verloren.
+
+Letzte Nachricht von
+Lenlin Grinson,
+Thunderlance Briefing Officer 
+]]
+asc.setLocalizedEventMessage( map, 94, message )
+
+--- ===== 93  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Gut gemacht Kommandant!
+Die Werft ist unser.
+Nun können wir damit beginnen einige Schiffe zu produzieren um die nächste Insel zu erreichen.
+
+Lenlin Grinson
+Thunderlance Briefing Officer
+]]
+asc.setLocalizedEventMessage( map, 93, message )
+
+--- ===== 2  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Bald wird diese Insel vollkommen in unseren Händen sein.
+Nur eine Werft im Südosten trennt uns von unserem ersten großen Sieg gegen das IMPERIUM.
+
+Wenn wir diese Werft erst besetzt haben, werden wir in der Lage sein unsere Reise zu anderen Inseln
+fortzusetzen.
+Wir brauchen dieses Gebäude.
+
+Der Zweite Teil ihrer Mission wird es sein weitere Ölfördertürme zu erobern.
+Die Förderleistung des von uns bereits eroberten ist nicht ausreichend.
+Wir werden mehr Treibstoff benötigen.
+Im Süden befindet sich ein großes Ölfeld.
+Erobern sie alle Ölfördertürme in dem Gebiet um unseren Nachschub an Treibstoff zu erhöhen.
+
+Lenlin Grinson,
+Thunderlance Briefing Officer
+
+Missionsziele:
+- Erobern sie die gegnerische Werft
+- Erobern sie die gegnerischen Ölfördertürme
+]]
+asc.setLocalizedEventMessage( map, 2, message )
+

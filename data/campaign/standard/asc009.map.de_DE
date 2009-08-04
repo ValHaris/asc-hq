@@ -1,0 +1,47 @@
+map = asc.getLoadingMap() 
+ --- ===== 639  ======= 
+message = [[Ihre Mission war ein Fehlschlag!
+
+Wir ziehen sie von ihrem Kommando ab!
+
+Letzte Nachricht von
+Lenlin Grinson,
+Thunderlance Briefing Officer
+]]
+asc.setLocalizedEventMessage( map, 639, message )
+
+--- ===== 440  ======= 
+message = [[+++ Geologische-Seismologische Nachricht +++#crt##crt#Der Vulkan Tycos hat aufgehört Lava auszuspucken. Wir erwarten, dass sich durch Erdrutsche eine riesige Flutwelle an der Südküste des Vulkans aufbauen und Südwärts laufen wird.#crt# #crt#Wir müssen umgehend die kleine Insel verlassen! Beeilen sie sich!!  #crt#]]
+asc.setLocalizedEventMessage( map, 440, message )
+
+--- ===== 372  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gute Arbeit, Kommandant.Sie haben das Hauptziel zerstört. Wir haben nun die Brücke zu unserem Nord-Östlichen Außenposten geöffnet. Gehen sie zu diesem Außenposten. Sie werden dort eine Werft und eine Fabrik finden. Wir können zwischen zwei verschiedenen Vorgehensweisen für die Zukunft wählen abhängig davon welches Gebäude wir erobern. #crt##crt#Betreten sie eines dieser beiden Gebäude um ihre Befehle zu empfangen.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#]]
+asc.setLocalizedEventMessage( map, 372, message )
+
+--- ===== 286  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gut gemacht, Kommandant. Schön ihre Stimme zu hören.#crt#Nehmen sie die Basis im Osten und produzieren sie eine große Streitmacht um ihre Aufgabe fortzusetzen. Das Wasser nördlich der Basis ist sehr niedrig, so dass es möglich ist eine Brücke zu bauen um in das gegnerische Gebiet vorzudringen. Im Westen der Basis vermuten wir einige Rohstoffe.
+Finden sie diese und bauen sie Material Minen und Ölfördertürme um sie zu fördern. In der Basis werden sie alle benötigten Einheiten zum Bau der Gebäude finden.#crt#Viel Erfolg!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt# #crt#]]
+asc.setLocalizedEventMessage( map, 286, message )
+
+--- ===== 20  ======= 
+message = [[+++ Geologische-Seismologische Nachricht +++#crt##crt#Alle Anzeichen deuten auf einen baldigen Ausbruch des Vulkan Tycos hin. Alle Einheiten in der Umgebung müssen evakuiert werden.#crt##crt#]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== 1  ======= 
+message = [[Thunderlance HQ, Rogul:
+
+Kommandant, wir sitzen in der Falle.
+Wir haben keine Informationen über das neue Waffensystem in der Fabrik gefunden. Wir konnten Gegnerische Kommunikation empfangen: Eine große Streitmacht nähern sich von Norden. Unser Aufklärungsfahrzeug, welches im Norden aktiv war wurde von gegnerischen Einheiten überrascht und wird und wird wahrscheinlich zerstört werden. Aber es konnte noch eine große Raketen Abschußanlage vom Typ SILO aufklären. Dieses SILO ist eine große Gefahr für unsere zukünftige Mission.
+Es muss unbedingt zerstört werden.
+
+Im Osten hat der Bau einer neuen Basis begonnen. Wir sollten zu dieser Basis vorstoßen um eine stärkere Streitmacht für einen Angriff auf das SILO aufzubauen.
+
+
+Lenlin Grinson,
+Thunderlance Briefing Officer
+
+Missionsziele:
+- Zerstören sie das feindliche SILO
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+

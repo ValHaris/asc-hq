@@ -1,0 +1,93 @@
+map = asc.getLoadingMap() 
+ --- ===== 108  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Exzellent!
+
+Mit dem Material von unserer Material Mine sind wir nun in der Lage mehr Einheiten zu produzieren.
+Benutzen sie unsere Alguins um die neuen Fahrzeuge zu befüllen und setzen sie ihre Aufgabe fort.
+Viel Erfolg!
+
+Thor Menser,
+Thunderlance Military Advisor
+]]
+asc.setLocalizedEventMessage( map, 108, message )
+
+--- ===== 145  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Kommandant! Der Gegner hat eine starke Streitmacht.
+Sie wollen die Kontrolle über die beiden Fabriken zurück erlangen.
+Es wird mit unseren Einheiten schwer werden sie daran zu hindern.
+Verlegen sie Minen an geeigneten Stellen.
+Dies würde unsere Verteidigung erheblich vereinfachen.
+
+Thor Menser
+Thunderlance, Military Advisor
+]]
+asc.setLocalizedEventMessage( map, 145, message )
+
+--- ===== 2  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Kommandant, wir haben nur noch zwei Tankfahrzeuge vom Typ Alguin.
+Dies sind unsere letzten Treibstoff Reserven. Verlieren sie nicht beide Alguins!
+Im Südosten befindet sich ein Ölförderturm. Wir benötigen ihn bevor wir keinen Treibstoff mehr haben.
+Das Gebäude wird vom IMPERIUM streng bewacht.
+Wir werden mit unseren wenigen Einheiten keine Chance haben diesen Ölförderturm zu besetzen.
+Aber im Norden unserer Fabriken haben wir eine Material Mine gefunden und einige Kraftwerke, welche streng bewacht werden.
+Versuchen sie diese Gebäude zu erobern um genug Truppen für die Eroberung des Ölförderturms im Südosten zu bauen.
+
+Lenlin Grinson,
+Thunderlance Briefing Officer
+
+Missionsziele:
+- Besetzen sie den gegnerischen Ölförderturm
+- Verlieren sie nicht alle Tankfahrzeuge vom Typ Alguin
+]]
+asc.setLocalizedEventMessage( map, 2, message )
+
+--- ===== 106  ======= 
+message = [[Kommandant, ihre Mission war ein Fehlschlag!
+
+Wir haben unser letztes Tankfahrzeug verloren.
+Ohne diese Fahrzeuge werden unsere Einheiten bald ohne Treibstoff liegen bleiben.
+Das Imperium wird unsere Rebellion ohne Gnade niederschlagen.
+
+Wir werden nicht noch eine Chance bekommen.
+All unsere Hoffnungen sind dahin.
+
+Letzte Nachricht von
+Lenlin Grinson,
+Thunderlance Briefing Officer
+
+
+]]
+asc.setLocalizedEventMessage( map, 106, message )
+
+--- ===== 107  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Gut gemacht Kommandant!
+
+Nun können wir alle unseren Einheiten betanken und unser weiteres Vorgehen gegen das IMPERIUM planen.
+
+Lenlin Grinson,
+Thunderlance Briefing Officer
+]]
+asc.setLocalizedEventMessage( map, 107, message )
+
+--- ===== 337  ======= 
+message = [[Thunderlance HQ, Tarplona
+
+Gute Arbeit Kommandant!
+Wir kontrollieren nun den gesamten nördlichen Komplex.
+Um den Ölförderturm einzunehmen benötigen sie einige zusätzliche Einheiten.
+Wir können sie leider nur mit etwas Material unterstützen, welches wir noch auf dem Schlachtfeld gefunden haben.
+
+Thor Menser
+Thunderlance, Military Advisor
+
+]]
+asc.setLocalizedEventMessage( map, 337, message )
+

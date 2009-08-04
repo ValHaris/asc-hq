@@ -1,0 +1,48 @@
+map = asc.getLoadingMap() 
+ --- ===== 98  ======= 
+message = [[Ihre Mission war ein Fehlschlag, Kommandant!
+
+Der Aufstand wird vom IMPERIUM gnadenlos zurückgeschlagen werden.
+
+Man wird uns nicht noch eine Chance geben. Alle unsere Hoffnungen sind verloren.
+
+Letzte Nachricht von
+Lenlin Grinson,
+Thunderlance Briefing Officer 
+]]
+asc.setLocalizedEventMessage( map, 98, message )
+
+--- ===== 97  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Großartig! Sie haben den Feind vollständig zurückgeschlagen.
+
+Wir haben gerade begonnen eine Flotte zu bauen um damit zur nahe gelegenen Insel Rogul zu gelangen.
+
+Sobald die Flotte Rogul erreicht werden wir sie benötigen.
+In der Zwischenzeit können sie sich bis zur nächsten Schlacht erholen.
+
+
+Lenlin Grinson,
+Thunderlance Briefing Officer
+]]
+asc.setLocalizedEventMessage( map, 97, message )
+
+--- ===== 2  ======= 
+message = [[Thunderlance HQ, Tarplona:
+
+Kommandant! Eine feindliche Flotte wurde an der östlichen Küste gesichtet.
+Die Schiffe eskortieren ein Transportschiff, welches wahrscheinlich eine Invasions Streitmacht trägt.
+
+Die feindlichen Schiffe und Boden Einheiten stellen eine große Gefahr für uns dar.
+Wir sind nicht sicher solange sich diese Einheiten in unserer Nähe befinden.
+Halten sie sie auf.
+
+Lenlin Grinson,
+Thunderlance Briefing Officer
+
+Missionsziele:
+Zerstören aller feindlichen Einheiten
+]]
+asc.setLocalizedEventMessage( map, 2, message )
+

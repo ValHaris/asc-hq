@@ -1,0 +1,52 @@
+map = asc.getLoadingMap() 
+ --- ===== 74  ======= 
+message = [[Kommandant die Mission war ein völliger Fehlschlag!#crt##crt#In Anbetracht dieses erschreckenden Ergebnisses entbinden wir sie von ihrem Kommando.
+Vielleicht wird sich ein anderer Befehlshaber der Aufgabe als würdig erweisen.#crt##crt#Letzte Nachricht von #crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer #crt#]]
+asc.setLocalizedEventMessage( map, 74, message )
+
+--- ===== 73  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Sie haben Gute Arbeit geleistet Kommandant.#crt##crt#Mit der Möglichkeit flugfähige Einheiten zu bauen werden wir in der Zukunft bessere Möglichkeiten haben.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
+asc.setLocalizedEventMessage( map, 73, message )
+
+--- ===== 6  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Das war Perfekt, Kommandant!#crt#Nun haben wir sämtliche Rohstoffe, welche wir zum Bau weiterer Einheiten benötigen.
+Vergessen sie nicht einige SHOCK TROOPER zu trainieren.
+Sie werden uns helfen das Minenfeld im Süden zu räumen.
+#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 8  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Der Verlust unserer Hovercrafts ist tragisch.
+Eine Landung an der Küste von Rogul ist damit unmöglich.
+Sie müssen einen anderen Weg finden die übrigen Bodentruppen auf Rogul zu landen.
+#crt#Verlieren sie nicht das Versorgungsschiff vom Typ CRAB!#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt##crt#Weitere Missionsziele:#crt#Verlieren sie nicht das Versorgungsschiff vom Typ CRAB #crt#]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== 9  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant. Ihre Zeit ist gekommen. 
+Unsere Flotte ist an der nördlichen Küste von Rogul angekommen.
+Die Eroberung des Flughafens hat oberste Priorität. Wir müssen den Flughafen im Hinterland der Insel suchen.#crt##crt#Unglücklicherweise sind unsere Hovercrafts in einem Treibminen Feld gefangen und befinden sich zusätzlich in Reichweite feindlicher Küstenbefestigungen.
+Wir hoffen sie können sie retten.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie den feindlichen Flughafen#crt#]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== 11  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Great!#crt#Die erbeuteten Einheiten werden nützlich sein um den Flughafen des IMPERIUMs zu erobern. Sie benötigen nur noch etwas Treibstoff.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== 12  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gute Arbeit!#crt#Beide Windgeneratoren produzieren genug Energie um unsere Fabrik zu betreiben.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 13  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gut gemacht, das Treibstoff Depot ist bereits über Pipelines mit unserer Fabrik verbunden. Das wird uns zu Gute kommen.
+#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 14  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Unserer Einheiten sind sicher auf Rogul gelandet.Wir haben bereits eine Fabrik eingenommen. Durch eine Befragung des Leiter der Fabrik, sind wir an Informationen über eine Minenfeld südlich der Fabrik gelangt.#crt#Es könnte sich für uns als Problem erweisen, dass wir unglücklicherweise unsere SHOCK TROOPER verloren haben, welche dieses Problem hätten lösen können. Nun müssen wir einen anderen Weg finden.#crt#Das Minenfeld ohne SHOCK TROOPER zu durchqueren ist nicht ratsam.#crt##crt#Die Hauptstromversorgung der Fabrik befindet sich im Osten. Wir haben Informationen, dass auf dem Weg dorthin ein Treibstoff und ein Material Depot liegen. Erobern sie diese Gebäude um die Produktion in der Fabrik zu beginnen. Wir benötigen dringend Verstärkungen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== 15  ======= 
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gut gemacht,#crt#diese Transporter haben viel Material geladen. Betanken sie diese und senden sie sie zur Fabrik! Das Material wird dort dringend benötigt werden.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 15, message )
+
