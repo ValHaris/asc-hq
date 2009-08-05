@@ -1,0 +1,42 @@
+map = asc.getLoadingMap() 
+ --- ===== 1889  ======= 
+message = [[Ihre Mission war ein Fehlschlag!#crt#Das IMPERIUM wird seine alte Stärke wieder erlangen und unsere Rebellion aufhalten. Wir werden alles Versuchen um das IMPERIUM zu bekämpfen aber wir sind wahrscheinlich ohne sie besser dran. Sie sind hiermit von ihrem Kommando entbunden. #crt##crt#Letzte Nachricht von#crt#Lenlin Grinson#crt#Thunderlance Briefing Officer #crt#]]
+asc.setLocalizedEventMessage( map, 1889, message )
+
+--- ===== 1859  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Gut gemacht,#crt#wir haben unsere Ziele erreicht. Das Oberkommando hat begonnen die Basis von KATANIMO als Zuflucht zu nutzen. Von dort werden wir weiter planen und die letzten Schritte zur Befreiung THUNDERLANCE unternehmen.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
+asc.setLocalizedEventMessage( map, 1859, message )
+
+--- ===== 1858  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Gut gemacht!#crt#Die Weiche wurde deaktiviert.#crt#Die Verstärkungen des IMPERIUMs stellen nicht länger eine Gefahr für uns dar.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 1858, message )
+
+--- ===== 1857  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Kommandant,#crt#die Hubschrauber in diesem Gebäude warten darauf repariert und befüllt zu werden. Wir sollten diese Aufgabe erledigen die das IMPERIUM nicht geschafft hat und die Hubschrauber in den Aktiven Dienst stellen, trotz der Sonnen Stürme. Benutzen sie den BURRO-Zug für diesen Zweck als Transportmittel.#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 1857, message )
+
+--- ===== 1856  ======= 
+message = [[Thunderlance, HQ, Montral:#crt##crt#Sehr gut,Kommandant,#crt#das Haupt-Schienen-Kontroll-Zentrum ist nun in unserer Hand. Wir waren in der Lage die Weichen so umzustellen, dass wir die Fabrik im Nord Osten mit dem Zug erreichen können. Wie auch immer, das IMPERIUM hat Truppen Verstärkungen erhalten. Wir erwarten die Ankunft gegnerischer Kampfzüge über die südlichen Gleise. Das Haupt-Schienen-Kontroll-Zentrum hat in diesem Gebiet keinen Einfluss aber es gibt einen kleines Weichen-Kontroll-Zentrum in der Nähe der Gleise im Süden, welches die Schienenverbindung unterbrechen könnte. Erobern sie es sofern sie es können.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing officer#crt##crt#zusätzliche Missionsziele:#crt#- erobern sie das im Süden gelegenen Weichen-Kontroll-Zentrum (small switch control center) um den Nachschub des IMPERIUMs abzuschneiden#crt#]]
+asc.setLocalizedEventMessage( map, 1856, message )
+
+--- ===== 1855  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Kommandant,#crt##crt#wirklich gut! Wir waren nicht in der Lage das Depot ausfindig zu machen. Ihre Fähigkeiten sind jedoch bemerkenswert.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 1855, message )
+
+--- ===== 1943  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Kommandant,#crt#die Landungstruppen werden von schweren Kreuzern begleitet. Es ist lebenswichtig, dass sie diese über Küstenbefestigungen und Kanonen auf Distanz halten bis wir eine Basis bei KATANIMO errichtet haben. In Zukunft sollten sie die Küstenlinie vermeiden, da feindliche Schlachtschiffe und Cruise Missile U-Boote auf dem Weg hierhin sind.#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 1943, message )
+
+--- ===== 1846  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Kommandant,#crt#einige neue Forschungs Projekte können gestartet werden. Wir benötigen jedoch noch Rohstoffe, bevor wir die Projekte angehen können.#crt##crt#Tara Brae#crt#Thunderlance Science Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 1846, message )
+
+--- ===== 1845  ======= 
+message = [[Thunderlance HQ, Montral#crt##crt#Kommandant,#crt#wir haben nicht viel Zeit um auf das Festland von KATANIMO zu gelangen. Das IMPERIUM hat einige Landungsboote zur Küstenlinie befohlen und versucht unser Vorangehen zu stoppen. Trotzdem sollten ihre Hauptaufgabe die Verteidigung von MONTRAL sein. Benutzen sie die BOLT-Fahrzeuge um eine knappe Energieversorgung aufzubauen und zu betreiben. Danach sollten sie den Bau der Brücke nach KATANIMO fertigstellen und einen Aussenposten nahe einiger Rohstoffe errichten. Der einzig sinnvolle Weg zum Schienen-Kontroll-Zentrum scheint die Schienenverbindung zu sein, welche gerade durch die Berge um KATANIMO führen. Eine Fabrik zum Bau von Schienenfahrzeugen befindet sich im Nord-Westen. Es muss erobert werden.#crt##crt#Unsere Metereologen warnen vor Sonnenstürmen, welche die Atmosphäre ionisieren könnten.
+Jeglicher Flugverkehr muss unterbrochen werden bis sie etwas anderes hören.#crt##crt#Viel Erfolg, Kommandant! Ich melde mich sobald ich wichtige Neuigkeiten für sie habe. #crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
+asc.setLocalizedEventMessage( map, 1845, message )
+
+--- ===== 1844  ======= 
+message = [[Thunderlance HQ, Montral:#crt##crt#Kommandant,#crt#MONTRAL ha den MBV-Prototypen zerlegt  und startet nun die Analyse der einzelnen Komponenten der Einheit. Es wird etwas länger dauern als wir erwartet haben um diese Technologie zu verstehen. Der Transfer nach MONTRAL und der Zusammenstoß mit der Hauptflotte des IMPERIUMs hat uns einen Schritt näher an unser Ziel gebracht: Die Befreiuung THUNDERLANCE #crt#Vor uns liegt KATANIMO. Früher wurde in seinen Bergen nach wertvollen Mineralien zur weiteren Bearbeitung geschürft. Das IMPERIUM basiert hauptsächlich auf den Erträgen von diesen Bergen. Unsere Aufgabe wird es sein den Material Nachschub des IMPERIUM aus KATANIMO zu unterbrechen. Um dies zu bewerkstelligen müssen wir Kontrolle über die Schienenverbindungen zu diesen seltenen Mineral und Material Minen erhalten. Daher müssen sie das Haupt-Schienen-Kontroll-Zentrum erobern. Wenn sie dies geschafft haben, müssen sie nach Nordosten vorstossen um die Mineral Verarbeitungs Fabrik von KETOS zu erobern. Danach werden wir weitersehen. #crt##crt#Viel Erfolg!#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie das Haupt-Schienen-Kontroll-Zentrum(main railway control center)#crt#- Erobern sie die Fabrik KETOS im Nordosten#crt#]]
+asc.setLocalizedEventMessage( map, 1844, message )
+

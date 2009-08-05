@@ -1,0 +1,13 @@
+map = asc.getLoadingMap() 
+ --- ===== 1  ======= 
+message = [[Herzlichen Glückwunsch. Sie haben alle momentan verfügbaren Karten der Kampagne absolviert. Dies ist nicht das Ende. In Zukunft wird es vielleicht mehr Karten geben?
+
+Lenlin Grinson
+Thunderlance Briefing Officer
+
+
+
+
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
