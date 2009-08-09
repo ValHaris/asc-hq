@@ -95,6 +95,9 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      //! a short name, for example B-52
      ASCString    name;
 
+     //! short description of the units role, for example "strategic bomber"
+     ASCString    description;
+     
      ASCString getName() const { return name; };
      int getID() const { return id; };
      

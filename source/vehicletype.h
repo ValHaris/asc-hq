@@ -184,9 +184,6 @@ extern const char*  cvehiclefunctions[];
     public:
         static const int legacyVehicleFunctionNum = 29;
         
-        //! short description of the units role, for example "strategic bomber"
-        ASCString    description;
-
         ASCString    getName() const;
 
         int armor;

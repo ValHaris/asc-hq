@@ -205,7 +205,7 @@ BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordin
 
 
 
-const int building_version = 13;
+const int building_version = 14;
 
 
 void BuildingType :: read ( tnstream& stream )
@@ -369,6 +369,8 @@ void BuildingType :: read ( tnstream& stream )
          for ( int w = 0; w < cwettertypennum; ++w )
             originalImageFilename[w] = stream.readString();
       
+      if ( version >= 14 )
+         description = stream.readString();
    } else
       throw tinvalidversion  ( stream.getLocation(), building_version, version );
 }
@@ -478,6 +480,7 @@ void BuildingType :: write ( tnstream& stream ) const
     for ( int w = 0; w < cwettertypennum; ++w )
        stream.writeString( originalImageFilename[w] );
     
+    stream.writeString( description );
 }
 
 

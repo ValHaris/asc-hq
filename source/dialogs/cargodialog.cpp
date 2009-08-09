@@ -448,6 +448,12 @@ class CargoDialog : public Panel
             if ( v )
                v->paint( screen, SPoint( dst.x, dst.y ), 0);
          }
+         
+         if ( name == "SelectedImage" ) {
+            if ( getMarkedUnit() )
+               getMarkedUnit()->typ->paint( screen, SPoint( dst.x, dst.y ), getMarkedUnit()->getOwningPlayer().getPlayerColor() );
+         }
+         
       };
 
       bool activate_i( int pane ) {
@@ -712,6 +718,8 @@ class CargoDialog : public Panel
             else
                setBargraphValue ( "LoadingMeter3", 0, widget );
 
+            setLabelText( "UsedCargoSlots", slots );
+            
             class MoveMalusType
             {
                public:
@@ -741,14 +749,28 @@ class CargoDialog : public Panel
                setLabelText( "CurrentCargo", getMarkedUnit()->weight(), widget );
                setImage( "TypeImage", moveMaliTypeIcons[getMarkedUnit()->typ->movemalustyp], widget );
                show( "TypeImage" );
+               
+               if ( getMarkedUnit()->baseType->infoImageSmallFilename.length() > 0 ) {
+                  setImage( "Selected3DImageK", getMarkedUnit()->baseType->infoImageSmallFilename, widget );
+                  show( "Selected3DImageK" );
+               } else
+                  hide( "Selected3DImageK" );
+                  
             } else {
                setLabelText( "CurrentCargo", "-" , widget );
                hide( "TypeImage" );
+               hide( "Selected3DImageK" );
             }
 
+            PG_Widget* w = FindChild( "SelectedImage", true );
+            if ( w )
+               w->Update();
+            
             if ( container->baseType->maxLoadableWeight > 0 )
                setBargraphValue ( "LoadingMeter2", float( container->cargoWeight()) / container->baseType->maxLoadableWeight, widget );
 
+            setLabelText("CargoWeight", container->cargoWeight() );
+            
             if ( container->baseType->maxLoadableWeight >= 1000000 ) {
                setLabelText ( "FreeWeight", "unlimited", widget );
                setLabelText ( "MaxWeight",  "unlimited", widget );
@@ -1762,6 +1784,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    }
 
    registerSpecialDisplay( "unitpad_unitsymbol" );
+   registerSpecialDisplay( "SelectedImage" );
 
 
    for ( Subwindows::iterator i = subwindows.begin(); i != subwindows.end(); ++i ) {
@@ -1789,12 +1812,19 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    }
 
+   if ( container->baseType->infoImageSmallFilename.length() > 0 )
+      setImage( "Container3DImageK", container->baseType->infoImageSmallFilename );
+   
 
 
    setLabelText( "UnitName", cb->getName() );
    if ( cb->getName() != cb->baseType->name )
       setLabelText( "UnitClass", cb->baseType->name );
 
+   setLabelText( "UserName", cb->name );
+   setLabelText( "UnitTypeName", cb->baseType->name );
+   setLabelText( "UnitTypeDescription", cb->baseType->description );
+   
 
    NewGuiHost::pushIconHandler( &guiIconHandler );
 

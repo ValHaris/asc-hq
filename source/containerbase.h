@@ -128,6 +128,10 @@ class ContainerBase {
 
       virtual int  getArmor() const = 0;
       
+      
+      //! a name given by the user or the map creator
+      ASCString    name;
+      
       /** adds the unit to the cargo
          \param veh the unit to add 
          \param position specifies a specific cargo slot. 

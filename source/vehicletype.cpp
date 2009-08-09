@@ -941,8 +941,6 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 {
    ContainerBaseType::runTextIO ( pc );
 
-   pc.addString( "Description", description);
-
    pc.addInteger( "Armor", armor );
 
    ASCString fn;

@@ -179,7 +179,7 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.closeBracket();
 
    pc.addString( "Name", name );
-
+   pc.addString( "Description", description, "" );
    pc.addString( "Infotext", infotext, "" );
 
    while ( infotext.find ( "#CRT#" ) != ASCString::npos )
@@ -256,7 +256,7 @@ bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
    return false;
 }
 
-const int containerBaseTypeVersion = 6;
+const int containerBaseTypeVersion = 7;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -297,6 +297,8 @@ void ContainerBaseType :: read ( tnstream& stream )
        readClassContainer( vehiclesInternallyProduceable, stream );
        productionEfficiency.read( stream );
 	 }
+   if ( version >= 7 ) 
+      infoImageSmallFilename = stream.readString();
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -321,6 +323,7 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    
    writeClassContainer( vehiclesInternallyProduceable, stream );
    productionEfficiency.write( stream );
+   stream.writeString( infoImageSmallFilename );
 }
 
 const int containerBaseTypeTransportVersion = 3;

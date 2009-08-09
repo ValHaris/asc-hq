@@ -121,7 +121,6 @@ class UnitHooveringLogic {
        (and not only the network protocols where is was first used, hence the name)
     */
     int          networkid;
-    ASCString    name;
 
     //! The class that manages the reaction fire which causes a unit to attack approaching enemies even if it is not the unit's turn
     class  ReactionFire {

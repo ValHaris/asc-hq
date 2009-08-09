@@ -51,9 +51,6 @@ class  Building : public ContainerBase {
     //! the ammo that is stored in the building
     int         ammo[waffenanzahl];
 
-    //! the building's name
-    ASCString    name;
-
     //! a bitmapped variable containing the status of the resource-net connection. \see execnetcontrol() \deprecated
     int          netcontrol;
 
