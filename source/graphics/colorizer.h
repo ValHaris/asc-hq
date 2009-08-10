@@ -5,15 +5,17 @@
 
 #include "surface.h"
 
-class ColorSwitch {
+class ColorSwitch
+{
 
-      class HSV {
-      public:
-         int h;
-         int s;
-         int v;
-         HSV( int hh, int ss, int vv ) : h(hh), s(ss), v(vv) {};
-         HSV() : h(0), s(0), v(0) {};
+      class HSV
+      {
+         public:
+            int h;
+            int s;
+            int v;
+            HSV( int hh, int ss, int vv ) : h(hh), s(ss), v(vv) {};
+            HSV() : h(0), s(0), v(0) {};
       };
 
       struct Cache {
@@ -25,15 +27,26 @@ class ColorSwitch {
       static const int playerAngles[9];
 
       static const bool sat[9];
-      
-      void generate(); 
-	   HSV rgb2hsv( int r, int g);	
-	   DI_Color hsv2rgb( HSV hsv);
+
+      void generate();
+
+      HSV rgb2hsv( int r, int g);
+      DI_Color hsv2rgb( HSV hsv);
 
 
    public:
       ColorSwitch();
-      DI_Color switchC( int player, int r, int g, int b);
+      
+      inline DI_Color switchC( int player, int r, int g, int b) {
+         if ( g == b && r > g) {
+            if ( !cache )
+               generate();
+
+            return cache->col[player][r][g];
+         } else {
+            return DI_Color(r,g,b);
+         }
+      }
 };
 
 extern ColorSwitch colorSwitch;

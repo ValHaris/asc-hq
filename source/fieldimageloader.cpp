@@ -52,7 +52,10 @@ void snowify( Surface& s, bool adaptive )
          const char* c = (char*) s.pixels();
          c += y * s.pitch();
          for ( int x = 0; x < s.w(); ++x ) {
-            avg += c[0] + c[1] + c[2];
+            uint32_t* i = (uint32_t*) c;
+            avg +=  ((*i >> s.GetPixelFormat().Rshift()) & 0xff ) 
+                  + ((*i >> s.GetPixelFormat().Gshift()) & 0xff ) 
+                  + ((*i >> s.GetPixelFormat().Bshift()) & 0xff ) ;
             c += 4;
          }
       }
@@ -65,18 +68,22 @@ void snowify( Surface& s, bool adaptive )
       char* c = (char*) s.pixels();
       c += y * s.pitch();
       for ( int x = 0; x < s.w(); ++x ) {
-         if ( c[3] != Surface::transparent ) {
-            int v = (c[0] + c[1] + c[2]) / 3;
-
+         uint32_t* i = (uint32_t*) c;
+         if ( ((*i >> s.GetPixelFormat().Ashift()) & 0xff ) != Surface::transparent ) {
+            int v =  ((*i >> s.GetPixelFormat().Rshift()) & 0xff ) 
+                  + ((*i >> s.GetPixelFormat().Gshift()) & 0xff ) 
+                  + ((*i >> s.GetPixelFormat().Bshift()) & 0xff ) ;
+            v /= 3;
+            
             int nv = targetWhite + ( v - int(avg)) * (255-targetWhite) / 64;
             if ( nv > 255)
                nv = 255;
             if ( nv < 0 )
                nv = 0;
-            c[0] = c[1] = c[2] = nv;
+            
+            *i = (nv << s.GetPixelFormat().Rshift()) | (nv << s.GetPixelFormat().Gshift() ) | (nv << s.GetPixelFormat().Bshift()) | (*i & s.GetPixelFormat().Amask() );
          }
          c += 4;
-
       }
    }
 }
@@ -85,15 +92,21 @@ bool imageEmpty( const Surface&  s )
 {
    bool allWhite = true;
    bool allTransparent = true;
+   int amask = s.GetPixelFormat().Amask();
+   int areference = Surface::transparent << s.GetPixelFormat().Ashift();
+   
+   int colmask = s.GetPixelFormat().Rmask() | s.GetPixelFormat().Gmask() | s.GetPixelFormat().Bmask();
+   int colref = (0xff << s.GetPixelFormat().Rshift()) | (0xff << s.GetPixelFormat().Gshift()) | (0xff << s.GetPixelFormat().Bshift());
+   
    for ( int y = 0; y < s.h(); ++y ) {
       const char* c = (char*) s.pixels();
       c += y * s.pitch();
       for ( int x = 0; x < s.w(); ++x ) {
-         if(  c[3] != Surface::transparent )
+         const uint32_t* i = (uint32_t*) c;
+         if( (*i & amask) != areference )
             allTransparent  = false;
 
-         int* i = (int*) c;
-         if ( (*i & 0xffffff) != 0xffffff )
+         if ( (*i & colmask) != colref )
             allWhite = false;
          
          c += 4;
