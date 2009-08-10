@@ -1,0 +1,263 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest DENEB
+   Description = Orbitalabwehr
+   Infotext = [Stationaeres Satellitenabwehrsystem mit grosser Reichweite und
+              starker Panzerung. Gegenueber dem SKULL besitz der DENEB 3 zusaetzliche
+              Raketen und keine Lademoeglichkeit fuer Roboter und leichte
+              Fahrzeuge. Der DENEB besitzt nur unzureichende Radaranlagen.
+              Die Feindaufklaerung muss durch andere Einheiten geschehen.]
+   ID = 1000001278
+   SecondaryIDs = 
+   View = 60
+   Jamming = 0
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 2100
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 2100
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Armor = 890
+   Picture = unittest-deneb.png
+   Height = ground_level 
+   WaitForAttack = true
+   FuelConsumption = 300
+   Features = satelliteview onlyTransMove ManualSelfDestruct 
+   Movement = 0 0 0 17 0 0 0 0 
+   Category = building|turret|object
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 1278 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 190
+   TerrainAccess { 
+      terrain_any = Turret_foundation 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 3
+      Weapon0 { 
+         Type = air_missile shootable 
+         targets = orbit 
+         shotFrom = submerged floating ground_level 
+         MaxRange = 90
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
+         Sound = groundmissile_s.ogg
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 100
+            u5 = 90
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            trooper = 50
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+      Weapon1 { 
+         Type = machinegun shootable 
+         targets = floating ground_level low_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 40
+         Punch@MinRange = 40
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            medium_tracked_vehicle = 65
+            heavy_tracked_vehicle = 50
+            medium_wheeled_vehicle = 90
+            heavy_wheeled_vehicle = 80
+            trooper = 130
+            rail_vehicle = 60
+            medium_aircraft = 90
+            medium_ship = 60
+            building|turret|object = 50
+            heavy_aircraft = 80
+            light_ship = 80
+            heavy_ship = 50
+            helicopter = 90
+            hoovercraft = 90
+         } WeaponEffectiveness
+         name = 
+      } Weapon1
+      Weapon2 { 
+         Type = air_missile shootable 
+         targets = low_level_flight medium_level_flight high_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         Sound = weapon03_s.ogg
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 200
+            medium_tracked_vehicle = 200
+            heavy_tracked_vehicle = 200
+            light_wheeled_vehicle = 200
+            medium_wheeled_vehicle = 200
+            heavy_wheeled_vehicle = 200
+            trooper = 50
+            rail_vehicle = 200
+            medium_ship = 200
+            building|turret|object = 200
+            light_ship = 200
+            heavy_ship = 200
+            helicopter = 110
+            hoovercraft = 200
+         } WeaponEffectiveness
+         name = 
+      } Weapon2
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 1278 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 21975
+      Material = 20355
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 509 237 600 0 4 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

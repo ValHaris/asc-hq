@@ -399,10 +399,10 @@ ActionResult MoveUnit::runAction( const Context& context )
                   evaluatevisibilityfield ( getMap(), fld, i, -1, getMap()->getgameparameter ( cgp_initialMapVisibility ) );
                
                if ( fld->visible != orgVisibility ) {
-                  ChangeView::ViewState* viewState = new ChangeView::ViewState();
-                  (*viewState)[MapCoordinate(pos->x,pos->y)] = fld->visible;
+                  ChangeView::ViewState viewState;
+                  viewState[MapCoordinate(pos->x,pos->y)] = fld->visible;
                   fld->visible = orgVisibility;
-                  (new ChangeView(getMap(),*viewState))->execute(context);
+                  (new ChangeView(getMap(),viewState))->execute(context);
                }
             }
 

@@ -1,0 +1,171 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest MARRIED
+   Description = Abwehrgeschuetz
+   Infotext = 
+   ID = 1000015223
+   SecondaryIDs = 
+   View = 0
+   Jamming = 0
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 8000
+         fuel = 17000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 8000
+         fuel = 17000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Armor = 500
+   Picture = unittest-married.png
+   Height = ground_level orbit 
+   WaitForAttack = false
+   FuelConsumption = 0
+   Features = onlyTransMove 
+   Movement = 0 0 0 20 0 0 0 20 
+   Category = building|turret|object
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 497 496 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 400
+   TerrainAccess { 
+      terrain_any = Runway Turret_foundation spaceport 
+      terrain_all = beacon 
+      terrain_not = Swamp Forest Railroad Large_rocks Hillside Installation 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 1
+      Weapon0 { 
+         Type = laser shootable 
+         targets = floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 90
+         MinRange = 40
+         Ammo = 4
+         Punch@MaxRange = 100
+         Punch@MinRange = 120
+         Sound = lasercannon.ogg
+         LaserRechargeRate = 1
+         laserRechargeCost { 
+            Energy = 0
+            Material = 200
+            fuel = 400
+         } laserRechargeCost
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 90
+            u2 = 85
+            u3 = 80
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+         } WeaponEffectiveness
+         name = Ionenkanone
+      } Weapon0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 { 
+      StartHeight = ground_level 
+      HeightDelta = 4
+      MoveCost = 20
+      CanAttack = false
+      Dist = 0
+   } HeightChangeMethod0
+   HeightChangeMethod1 { 
+      StartHeight = orbit 
+      HeightDelta = -4
+      MoveCost = 20
+      CanAttack = false
+      Dist = 0
+   } HeightChangeMethod1
+   TechAdapterRequired = 15223 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 20200
+      Material = 19160
+      fuel = 0
+      CalculationMethod = manual
+   } ConstructionCost
+   guideSortHelp = 223 508 0 0 6 0 0 0 0 0 
+   JumpDrive { 
+      Height = orbit 
+      consumption { 
+         Energy = 0
+         Material = 500
+         fuel = 3000
+      } consumption
+      terrain_any = Runway Turret_foundation spaceport 
+      terrain_all = beacon 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 300
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

@@ -751,15 +751,15 @@ class CargoDialog : public Panel
                show( "TypeImage" );
                
                if ( getMarkedUnit()->baseType->infoImageSmallFilename.length() > 0 ) {
-                  setImage( "Selected3DImageK", getMarkedUnit()->baseType->infoImageSmallFilename, widget );
-                  show( "Selected3DImageK" );
+                  setImage( "Selected3DImageSmall", getMarkedUnit()->baseType->infoImageSmallFilename, widget );
+                  show( "Selected3DImageSmall" );
                } else
-                  hide( "Selected3DImageK" );
+                  hide( "Selected3DImageSmall" );
                   
             } else {
                setLabelText( "CurrentCargo", "-" , widget );
                hide( "TypeImage" );
-               hide( "Selected3DImageK" );
+               hide( "Selected3DImageSmall" );
             }
 
             PG_Widget* w = FindChild( "SelectedImage", true );
@@ -1813,7 +1813,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    }
 
    if ( container->baseType->infoImageSmallFilename.length() > 0 )
-      setImage( "Container3DImageK", container->baseType->infoImageSmallFilename );
+      setImage( "Container3DImageSmall", container->baseType->infoImageSmallFilename );
    
 
 

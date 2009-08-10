@@ -34,6 +34,7 @@
 #include "objectconstructiontest.h"
 #include "eventtest.h"
 #include "gameeventsystem.h"
+#include "jumptest.h"
 
 
 void viewcomp( Player& player )
@@ -83,6 +84,7 @@ Context createContext( GameMap* gamemap )
 
 void runUnitTests()
 {
+   testJumpdrive();
    testEvents();
    testActions();
    testObjectConstruction();

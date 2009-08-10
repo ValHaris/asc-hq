@@ -34,6 +34,7 @@
 #include "consumeresource.h"
 #include "servicecommand.h"
 #include "unitfieldregistration.h"
+#include "changeunitproperty.h"
 
 bool JumpDriveCommand :: avail ( const Vehicle* unit )
 {
@@ -135,49 +136,54 @@ ActionResult JumpDriveCommand::go ( const Context& context )
 
    tsearchreactionfireingunits srfu( getMap() );
    srfu.init( unit , dest3D );
-
+   
+   
+   auto_ptr<UnitFieldRegistration> ufr3( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::Position ));
+   res = ufr3->execute( context );
+   if ( !res.successful() )
+      return res;
+   else
+      ufr3.release();
+   
+   auto_ptr<UnitFieldRegistration> ufr4 ( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::RegisterOnField ));
+   res = ufr4->execute( context );
+   if ( !res.successful() )
+      return res;
+   else
+      ufr4.release();
+   
+   
    if ( context.display )
       context.display->playPositionalSound( dest3D, SoundList::getInstance().getSound( SoundList::jumpdrive ));
 
+   auto_ptr<ChangeUnitMovement> cum ( new ChangeUnitMovement( unit, 0 ));
+   res = cum->execute( context );
+   if ( !res.successful() )
+      return res;
+   else
+      cum.release();
+      
+   auto_ptr<ChangeUnitProperty> cup ( new ChangeUnitProperty( unit, ChangeUnitProperty::AttackedFlag, 1 ));
+   res = cup->execute( context );
+   if ( !res.successful() )
+      return res;
+   else
+      cup.release();
+      
+      
+   auto_ptr<UnitFieldRegistration> ufr5( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::AddView ));
+   res = ufr5->execute( context );
+   if ( !res.successful() )
+      return res;
+   else
+      ufr5.release();
+   
+   computeview( getMap(), 0, false, &context );
+   
 
    srfu.checkfield( dest3D, unit, context );
    srfu.finalCheck( unit->getOwner(), context );
 
-
-   // the unit may have been shot down by RF, so we need to check if it still exists
-   Vehicle* subject = getUnit();
-
-   if ( subject ) {
-      auto_ptr<UnitFieldRegistration> ufr3( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::Position ));
-      res = ufr3->execute( context );
-      if ( !res.successful() )
-         return res;
-      else
-         ufr3.release();
-      
-      auto_ptr<UnitFieldRegistration> ufr4 ( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::RegisterOnField ));
-      res = ufr4->execute( context );
-      if ( !res.successful() )
-         return res;
-      else
-         ufr4.release();
-      
-      
-      auto_ptr<ChangeUnitMovement> cum ( new ChangeUnitMovement( unit, 0 ));
-      res = cum->execute( context );
-      if ( !res.successful() )
-         return res;
-      else
-         cum.release();
-      
-      auto_ptr<UnitFieldRegistration> ufr5( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::AddView ));
-      res = ufr5->execute( context );
-      if ( !res.successful() )
-         return res;
-      else
-         ufr5.release();
-   }
-   evaluateviewcalculation( getMap(), 0, false, &context );
    
    if ( context.display )
       context.display->repaintDisplay();
