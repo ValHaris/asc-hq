@@ -1,0 +1,19 @@
+#!/usr/bin/perl
+
+# removes 0x00 characters from the files passed as arguments
+
+use strict;
+
+foreach my $file ( @ARGV ) {
+	open (F, $file) || die "could not open $file";
+	my @a = <F>;
+	close F;
+
+	open F, ">$file";
+	foreach ( @a ) {
+		s/\000//g;
+		print F $_;
+	}
+	close F;
+
+}
