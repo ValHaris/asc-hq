@@ -582,7 +582,7 @@ clean-local:
 	rm -f main.ascdat main.d 
 
 dist-hook:
-	cp -pr $(srcdir)/buildings $(srcdir)/unitsets $(srcdir)/icons $(srcdir)/trrobj $(distdir)
+	cp -pr $(srcdir)/buildings $(srcdir)/unitsets $(srcdir)/icons $(srcdir)/trrobj $(srcdir)/campaign $(distdir)
 	cp -p `find $(srcdir) -maxdepth 1 -type f` $(distdir)
 	rm -f $(distdir)/main.ascdat
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

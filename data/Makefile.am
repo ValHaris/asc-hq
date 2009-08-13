@@ -18,7 +18,7 @@ clean-local:
 
 
 dist-hook:
-	cp -pr $(srcdir)/buildings $(srcdir)/unitsets $(srcdir)/icons $(srcdir)/trrobj $(distdir)
+	cp -pr $(srcdir)/buildings $(srcdir)/unitsets $(srcdir)/icons $(srcdir)/trrobj $(srcdir)/campaign $(distdir)
 	cp -p `find $(srcdir) -maxdepth 1 -type f` $(distdir)
 	rm -f $(distdir)/main.ascdat
 	
