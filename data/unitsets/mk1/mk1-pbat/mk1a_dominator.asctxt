@@ -6,6 +6,7 @@ VehicleType {
    Description = heavy fighter
    Picture = mk1a_dominator.pcx
    InfoImage = mk1a_dominator.jpg
+   InfoImageSmall = mk1a_dominator_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Heavy Fighters are the big boys in the air. In close combat,
               the Heavy Fighter is equalled by none. This makes the airplane

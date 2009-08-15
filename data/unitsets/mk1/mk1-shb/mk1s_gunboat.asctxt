@@ -5,8 +5,9 @@ VehicleType {
 
    Description = gunboat destroyer
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   picture = MK1s_gunboat.pcx
+   picture = mk1s_gunboat.pcx
    InfoImage = mk1s_gunboat.jpg
+   InfoImageSmall = mk1s_gunboat_k.png
 
    Armor += 100
 

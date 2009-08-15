@@ -4,6 +4,10 @@ VehicleType {
    parent = 368
    
    Description = WIG plane
+   picture = MK1s_wig.pcx
+   InfoImage = mk1s_wig.jpg
+   InfoImageSmall = mk1s_wig_k.png
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [ The WIG plane is a combat missile craft. Seaworthiness: 
 in-flight - without restriction, at take-off and landing - wave height up to 2.5 m. 
 Displacement 390 tons, speed 300 knots, range 1660 n.m. #crt#
@@ -64,9 +68,6 @@ Those smaller designs are not only important for proving technology, but will al
 certification rules and build up operational experience. Time will tell if small WIG craft are 
 (commercially) attractive enough to be developed as the predecessors for the ocean liners of the 
 future.]
-   picture = MK1s_wig.pcx
-   InfoImage = mk1s_wig.jpg
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Weapons { 
       Initiative = 30

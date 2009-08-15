@@ -6,6 +6,7 @@ VehicleType {
    Description = Fighter-Bomber
    picture = mk1a_impact.pcx
    InfoImage = mk1a_impact.jpg
+   InfoImageSmall = mk1a_impact_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Fighter/Bombers combine ground assault with air defense. While
               a Fighter/Bomber cannot stand up to a Heavy Fighter, it has

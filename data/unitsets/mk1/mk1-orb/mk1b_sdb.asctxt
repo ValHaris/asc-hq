@@ -4,11 +4,12 @@ VehicleType {
    parent = 238
 
    Description = SpaceDefenceBunker
+   Picture = mk1b_SDB.pcx
+   InfoImage = mk1b_sdb.jpg
+   InfoImageSmall = mk1b_sdb_k.png
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
    spaceships and spacestations.]
-   Picture = MK1b_SDB.pcx
-   InfoImage = mk1b_sdb.jpg
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Features += ManualSelfDestruct
 

@@ -4,16 +4,17 @@ VehicleType {
    ID = 14
 
    Description = aircraft carrier
+   picture = mk1s_wedge.png
+   InfoImage = mk1s_wedge.jpg
+   InfoImageSmall = mk1s_wedge_k.png
+   WreckageObject = 414
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Aircraft Carriers are very expensive floating airbases. It allows
               for an aerial campaign into enemy territory, by eliminating
               the need for aircraft to return to base. A Carrier may refuel,
               repair and rearm any aircraft that can land on it. Due to their
               size, some large airplanes can not land on Carriers. The Carrier
               itself has some weapons, but they are not suited for heavy combat.]
-   picture = mk1s_wedge.png
-   InfoImage = mk1s_wedge.jpg
-   WreckageObject = 414
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 100
 

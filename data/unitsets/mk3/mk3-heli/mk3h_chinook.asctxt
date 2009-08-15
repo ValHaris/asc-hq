@@ -15,7 +15,7 @@ InfoImage = Wikipedia CH-47 Chinook]
 
    Armor = 360
    Transportation ->* VehicleType.TransHeliHvy 
-   Features += ExternalFuelTransfer ExternalMaterialTransfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
 
    Tank { 
       Energy = 0

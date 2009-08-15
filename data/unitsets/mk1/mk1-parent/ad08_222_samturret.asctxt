@@ -10,9 +10,10 @@ VehicleType {
 
    Features += MoveDuringReactionFire ManualSelfDestruct
    view = 50
-   Picture = b_samturret.pcx
    Weight = 290
+
    TerrainAccess ->* VehicleType.turret_only
+
    Weapons { 
       Initiative = 0
       Number = 2

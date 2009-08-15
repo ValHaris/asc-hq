@@ -5,6 +5,7 @@ VehicleType {
 
    Picture = mk1a_hawk.pcx
    InfoImage = mk1a_hawk.jpg
+   InfoImageSmall = mk1a_hawk_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    InfoText = [InfoImage = Wikipedia Northrop YB-49]
 

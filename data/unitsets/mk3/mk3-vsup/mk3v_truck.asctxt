@@ -11,13 +11,12 @@ VehicleType {
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
    Transportation ->* VehicleType.TransLowTrooper2
+   Features += ExternalAmmoTransfer
 
    Weapons { 
       Initiative = 0
       Number = 9
       Weapon0 ->* VehicleType.Def_MG 
-      Weapon0.Type = machinegun ammo_transfer shootable
-      Weapon0.targets = floating ground_level 
       Weapon0.Ammo = 50
 
       Weapon1 ->* VehicleType.AmmoCannon 

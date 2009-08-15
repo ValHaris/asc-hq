@@ -6,12 +6,12 @@ VehicleType {
 
    Description = air-defence turret
    Infotext = []
-   Picture = MK3b_rapier2.png
+   Picture = mk3b_rapier2.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
   
    Armor -= 200
    Jamming = 21
-   Features += jam_only_own_field ManualSelfDestruct
+   Features += jam_only_own_field
 
    TerrainAccess ->* VehicleType.turret_ditch 
 

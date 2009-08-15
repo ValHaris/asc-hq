@@ -17,6 +17,7 @@ VehicleType {
               limited amounts of each ammo type.
               InfoImage = BananaJoe]
 
+   Features += ExternalAmmoTransfer
    Armor += 20
 
    Weapons { 

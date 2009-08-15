@@ -17,7 +17,7 @@ VehicleType {
    Armor += 50
    Weight += 5
    Transportation ->* VehicleType.TransTrain 
-   Features += ExternalFuelTransfer ExternalMaterialTransfer 
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
 
    Tank { 
       Energy = 0
@@ -32,8 +32,6 @@ VehicleType {
       Initiative = 0
       Number = 9
       Weapon0 ->* VehicleType.MG_Tank 
-      Weapon0.Type = machinegun shootable ammo_transfer
-      Weapon0.targets = ground_level low_level_flight
       Weapon0.Ammo = 100
       Weapon0.Punch@MaxRange = 44
       Weapon0.Punch@MinRange = 44

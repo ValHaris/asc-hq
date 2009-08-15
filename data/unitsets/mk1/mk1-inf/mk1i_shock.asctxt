@@ -2,7 +2,12 @@ VehicleType {
    Name = SHOCK TROOPER
    parent = 201
    ID = 17
+
    Description = Shock Trooper
+   picture = mk1i_shock.pcx
+   InfoImage = mk1i_shock.jpg
+   InfoImageSmall = mk1i_shock_k.png
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [The Shock Trooper is a light infantry unit whose primary purpose
               is to capture enemy installations and take out enemy infantry.
               A Shock Trooper unit is armed with rifles and a packet of explosives
@@ -22,9 +27,6 @@ VehicleType {
               - kann das meiste Terrain #crt# 
               - schnelle Bewegung für einen Trooper #CRT# 
               - wirkungsvoll gegen Infanterie #CRT# ]
-   picture = mk1i_shock.pcx
-   InfoImage = mk1i_shock.jpg
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 10
    Weapons { 

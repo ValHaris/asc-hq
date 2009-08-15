@@ -4,13 +4,14 @@ VehicleType {
    parent = 310
    
    Description = armored jammer system
+   picture = mk1b_exp49.pcx
+   InfoImage = mk1b_exp49.jpg
+   InfoImageSmall = mk1b_exp49_k.png
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Das EXP 49 ist eine stationäre Radarstöreinheit.
 Dank des Maschinengewehrs kann dieser Turm sich sogar gegen tief fliegende Lufteinheiten verteidigen.
 Die gute Panzerung garantiert ausserdem das diese Anlage auch schwerem Beschuss stand hält.
 ]
-   picture = mk1b_exp49.pcx
-   InfoImage = mk1b_exp49.jpg
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Armor += 50
    Features += ManualSelfDestruct

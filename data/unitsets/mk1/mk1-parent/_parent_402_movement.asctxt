@@ -85,54 +85,54 @@
    nodeepwatership_terrain {
       terrain_any = very_shallow_water shallow_water water river
       terrain_all =
-      terrain_not = large_rocks frozen_water
+      terrain_not = large_rocks frozen_water installation
       terrain_kill = lava
    } nodeepwatership_terrain
 
    verysmallship_allterrain {
       terrain_any = very_shallow_water shallow_water water deep_water river
       terrain_all =
-      terrain_not = large_rocks frozen_water
+      terrain_not = large_rocks frozen_water installation
       terrain_kill = lava
    } verysmallship_allterrain
 
    verysmallship_terrain {
       terrain_any = very_shallow_water shallow_water water deep_water river
       terrain_all =
-      terrain_not = small_rocks large_rocks frozen_water
+      terrain_not = small_rocks large_rocks frozen_water installation
       terrain_kill = lava
    } verysmallship_terrain
 
    smallship_terrain {
       terrain_any = shallow_water water deep_water river
       terrain_all =
-      terrain_not = small_rocks large_rocks frozen_water
+      terrain_not = small_rocks large_rocks frozen_water installation
       terrain_kill = lava
    } smallship_terrain
 
    mediumship_terrain {
       terrain_any = shallow_water water deep_water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water
+      terrain_not = forest small_rocks large_rocks frozen_water installation
       terrain_kill = lava
    } mediumship_terrain
 
    bigship_terrain {
       terrain_any = water deep_water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water
+      terrain_not = forest small_rocks large_rocks frozen_water installation
       terrain_kill = lava
    } bigship_terrain
 
    very_bigship_terrain {
       terrain_any = water deep_water
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water
+      terrain_not = forest small_rocks large_rocks frozen_water installation
       terrain_kill = lava
    } very_bigship_terrain
 
    icebreaker_terrain {
-      terrain_not = forest small_rocks large_rocks
+      terrain_not = forest small_rocks large_rocks installation
    } icebreaker_terrain
 
 ; ----------------------------------------------------------------------------------------------------------------
@@ -142,14 +142,14 @@
    hooverfull_terrain {
       terrain_any = road runway hard_sand soft_sand lowland very_shallow_water shallow_water water deep_water river
       terrain_all =
-      terrain_not = forest large_rocks hillside
+      terrain_not = forest large_rocks hillside installation
       terrain_kill = lava
    } hooverfull_terrain
 
    hoover_terrain {
       terrain_any = road runway hard_sand soft_sand lowland very_shallow_water shallow_water water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks hillside
+      terrain_not = forest small_rocks large_rocks hillside installation
       terrain_kill = lava
    } hoover_terrain
 

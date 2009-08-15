@@ -4,8 +4,9 @@ VehicleType {
    ID = 41
 
    Description = patrol corvette
-   picture = MK1s_tide.pcx
+   picture = mk1s_tide.pcx
    InfoImage = mk1s_tide.jpg
+   InfoImageSmall = mk1s_tide_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 ;   Infotext = []
 

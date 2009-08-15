@@ -15,7 +15,7 @@ VehicleType {
    WaitForAttack = false
    Features = moveduringreactionfire
    Category = hoovercraft
-   MaxSurvivableStorm = 140
+   MaxSurvivableStorm = 160
    ResourceDrillingRange = 0
    SelfRepairRate = 0
    Weight = 200

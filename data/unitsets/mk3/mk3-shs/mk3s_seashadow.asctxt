@@ -18,7 +18,7 @@ Im Gegensatz zu den großen Versorgungsschiffen kann die SEA SHADOW auch im Flach
    Armor -= 50
    Jamming = 90
    Transportation ->* VehicleType.TransShipSmall 
-   Features += ExternalFuelTransfer ExternalMaterialTransfer jam_only_own_field
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer jam_only_own_field
 
    Tank { 
       Material = 5000
@@ -30,7 +30,6 @@ Im Gegensatz zu den großen Versorgungsschiffen kann die SEA SHADOW auch im Flach
       Initiative = -100
       Number = 8
       Weapon0 ->* VehicleType.MiniGun 
-      Weapon0.Type = machinegun shootable ammo_transfer
       Weapon0.Ammo = 50
 
       Weapon1 ->* VehicleType.ServiceGround 

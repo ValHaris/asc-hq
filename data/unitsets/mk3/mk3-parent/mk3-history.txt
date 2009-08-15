@@ -3,7 +3,11 @@ Grafik: GAMER , Ares
 InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
-__________________
+________________________
+01.08.2008 z75-2 (GAMER)
+-ExternalAmmoTransfer Bugfix = Truck, SeaShadow, Chinook, ICSE
+______________________
+25.07.2009 Z75 (GAMER)
 Beta-09-09
 -Spaceshuttle interne Reparatur
 _____________________________
