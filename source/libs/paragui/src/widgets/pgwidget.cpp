@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2008-06-24 18:20:57 $
+   Update Date:      $Date: 2009-08-16 16:50:27 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgwidget.cpp,v $
-   CVS/RCS Revision: $Revision: 1.4 $
+   CVS/RCS Revision: $Revision: 1.5 $
    Status:           $State: Exp $
  */
 
@@ -86,6 +86,12 @@ public:
 
 };
 
+void PG_Widget::createMySurface( int w, int h )
+{
+   my_srfObject = PG_Draw::CreateRGBSurface(w, h);
+}
+
+
 PG_Widget::PG_Widget(PG_Widget* parent, const PG_Rect& rect, bool bObjectSurface) :
 PG_Rect(rect), my_srfObject(NULL), _mid(new PG_WidgetDataInternal) {
 
@@ -103,7 +109,7 @@ PG_Rect(rect), my_srfObject(NULL), _mid(new PG_WidgetDataInternal) {
 	//my_srfScreen = PG_Application::GetScreen();
 
 	if(_mid->havesurface) {
-		my_srfObject = PG_Draw::CreateRGBSurface(w, h);
+           createMySurface(w, h);
 	}
 
 	// ??? - How can i do this better - ???

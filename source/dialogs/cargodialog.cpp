@@ -667,6 +667,44 @@ class CargoDialog : public Panel
 
       SigC::Signal0<void>  sigCargoChanged;
 
+      void setUnitInfoWidgets( const ContainerBase* container, const ASCString& prefix ) {
+         if ( container ) {
+            ASCString s;
+            s.format( "%d / %d", container->cargoWeight(), container->baseType->maxLoadableWeight );
+            setLabelText( prefix + "CargoUsage", s );
+   
+            int slots = 0;
+            for ( ContainerBase::Cargo::const_iterator i = container->getCargo().begin(); i != container->getCargo().end(); ++i )
+               if( *i )
+                  ++slots;
+               
+            if ( container->baseType->maxLoadableUnits )
+               setBargraphValue ( prefix + "LoadingMeter3", float( slots ) / float(container->baseType->maxLoadableUnits) );
+            else
+               setBargraphValue ( prefix + "LoadingMeter3", 0 );
+   
+            setLabelText( prefix + "UsedCargoSlots", slots );
+            setLabelText( prefix + "CargoSlotCount", container->baseType->maxLoadableUnits );
+            setLabelText( prefix + "MaxLoadableWeight", container->baseType->maxLoadableWeight  );
+            
+            setLabelText( prefix + "UserName", container->name );
+            setLabelText( prefix + "UnitTypeName", container->baseType->name );
+            setLabelText( prefix + "UnitTypeDescription", container->baseType->description );
+            
+         } else {
+            setLabelText( prefix + "CargoUsage", "" );
+            setBargraphValue ( prefix + "LoadingMeter3", 0 );
+            setLabelText( prefix + "UsedCargoSlots", "" );
+            setLabelText( prefix + "CargoSlotCount", "" );
+            setLabelText( prefix + "MaxLoadableWeight", ""  );
+            
+            setLabelText( prefix + "UserName", "" );
+            setLabelText( prefix + "UnitTypeName", "" );
+            setLabelText( prefix + "UnitTypeDescription", "" );
+            
+         }
+      }
+      
       void updateVariables( ) {
          PG_Widget* widget = this;
          // from solarpower
@@ -704,21 +742,6 @@ class CargoDialog : public Panel
 
          // from cargo
          {
-            ASCString s;
-            s.format( "%d / %d", container->cargoWeight(), container->baseType->maxLoadableWeight );
-            setLabelText( "CargoUsage", s, widget );
-
-            int slots = 0;
-            for ( ContainerBase::Cargo::const_iterator i = container->getCargo().begin(); i != container->getCargo().end(); ++i )
-               if( *i )
-                  ++slots;
-            
-            if ( container->baseType->maxLoadableUnits )
-               setBargraphValue ( "LoadingMeter3", float( slots ) / float(container->baseType->maxLoadableUnits), widget );
-            else
-               setBargraphValue ( "LoadingMeter3", 0, widget );
-
-            setLabelText( "UsedCargoSlots", slots );
             
             class MoveMalusType
             {
@@ -744,7 +767,11 @@ class CargoDialog : public Panel
                     };
             };
 
+            setUnitInfoWidgets( container, "" );
 
+            
+            setUnitInfoWidgets( getMarkedUnit(), "Selected" );
+            
             if ( getMarkedUnit() ) {
                setLabelText( "CurrentCargo", getMarkedUnit()->weight(), widget );
                setImage( "TypeImage", moveMaliTypeIcons[getMarkedUnit()->typ->movemalustyp], widget );
@@ -1821,11 +1848,6 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    if ( cb->getName() != cb->baseType->name )
       setLabelText( "UnitClass", cb->baseType->name );
 
-   setLabelText( "UserName", cb->name );
-   setLabelText( "UnitTypeName", cb->baseType->name );
-   setLabelText( "UnitTypeDescription", cb->baseType->description );
-   
-
    NewGuiHost::pushIconHandler( &guiIconHandler );
 
    activate_i(0);
@@ -1945,14 +1967,19 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
          container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
       }
    }
-   if ( label == "UnitTypeList" ) {
+   if ( label == "UnitTypeList"  || label == "UnitTypeListHorizontal" )  {
       int y = 0;
+      int x = 0;
       parent->SetTransparency(255);
       for ( int i = 0; i < cmovemalitypenum; ++i ) {
          if ( container->baseType->vehicleCategoriesStorable & (1<<i)) {
-            PG_Image* img = new PG_Image( parent, PG_Point(0, y),IconRepository::getIcon(moveMaliTypeIcons[i] ).getBaseSurface(), false);
+            PG_Image* img = new PG_Image( parent, PG_Point(x, y),IconRepository::getIcon(moveMaliTypeIcons[i] ).getBaseSurface(), false);
             new PG_ToolTipHelp( img, cmovemalitypes[i] );
-            y += img->Height();
+            if ( label == "UnitTypeList" )
+               y += img->Height();
+            
+            if ( label == "UnitTypeListHorizontal" )
+               x += img->Width();
          }
       }
 

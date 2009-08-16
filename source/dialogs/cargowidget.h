@@ -43,7 +43,6 @@ class CargoWidget;
 
 class StoringPosition : public PG_Widget
 {
-      static Surface clippingSurface;
       HighLightingManager& highlight;
       const ContainerBase::Cargo& storage;
       int num;
@@ -61,10 +60,12 @@ class StoringPosition : public PG_Widget
       
       enum DragState { Off, Pressed, Dragging } dragState;
       
+      Surface clippingSurface;
       
    protected:
       void markChanged(int old, int mark);
 
+      void eventDraw (SDL_Surface *surface, const PG_Rect &src);
       void eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst);
       
       void setBargraphValue( const ASCString& widgetName, float fraction);

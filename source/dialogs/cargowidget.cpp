@@ -15,6 +15,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <iostream>
+
 #include <pgimage.h>
 #include <pgtooltiphelp.h>
 #include <pgapplication.h>
@@ -51,7 +53,7 @@ void HighLightingManager::setNew(int pos )
 void StoringPosition :: markChanged(int old, int mark)
 {
    if ( num == old || num == mark )
-      Update();
+      Redraw();
 }
 
 
@@ -73,7 +75,7 @@ PG_Rect StoringPosition :: CalcSize( const PG_Point& pos  )
 
 
 StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, CargoWidget* cargoWidget  )
-      : PG_Widget ( parent, CalcSize(pos)), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos ), dragState( Off ), dragTarget( NoDragging )
+      : PG_Widget ( parent, CalcSize(pos), true ), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos ), dragState( Off ), dragTarget( NoDragging )
 {
    highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
    highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
@@ -83,9 +85,9 @@ StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, cons
       unitPosition.y = (Height() - fieldsizey)/2;
    }
 
-   if ( !clippingSurface.valid() )
-      clippingSurface = Surface::createSurface( spWidth + 10, spHeight + 10, 32, 0 );
-
+   clippingSurface = Surface::createSurface( spWidth + 10, spHeight + 10, 32, 0 );
+   
+   
    this->cargoWidget = cargoWidget;
 }
 
@@ -117,10 +119,17 @@ void StoringPosition::setLabelText ( const ASCString& widgetName, const ASCStrin
 }
 
 
-void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst)
-{
-   clippingSurface.Fill(0);
+void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, const PG_Rect &dst){
+   
+   PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
+   
+}
 
+
+void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
+{
+   clippingSurface.FillTransparent();
+   
    ASCString background = "hexfield-bld-";
    if ( dragTarget == NoDragging ) {
       background += regular ? "1" : "2";
@@ -132,7 +141,7 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
    background += ".png";
 
    Surface& icon = IconRepository::getIcon( background );
-
+  
    MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaMerge> blitter;
    blitter.blit( icon, clippingSurface, SPoint(0,0));
 
@@ -171,17 +180,33 @@ void StoringPosition :: eventBlit (SDL_Surface *surface, const PG_Rect &src, con
       } else
          setBargraphValue( "CargoBar", 0 );
 
+         cout << num << ": " << storage[num]->getName() << "\n";
       setLabelText( "SlotUnitName", storage[num]->getName() );
          
+      ContainerBase* container = storage[num];
+      
+      int slots = 0;
+      for ( ContainerBase::Cargo::const_iterator i = container->getCargo().begin(); i != container->getCargo().end(); ++i )
+         if( *i )
+            ++slots;
+               
+      if ( container->baseType->maxLoadableUnits )
+         setBargraphValue ( "SlotBar", float( slots ) / float(container->baseType->maxLoadableUnits) );
+      else
+         setBargraphValue ( "SlotBar", 0 );
+      
+      
    } else {
       setBargraphValue( "DamageBar", 0 );
       setBargraphValue( "FuelBar", 0 );
       setBargraphValue( "MaterialBar", 0 );
       setBargraphValue( "CargoBar", 0 );
       setLabelText( "SlotUnitName", "" );
+      setBargraphValue ( "SlotBar", 0 );
    }
 
-   PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
+   // PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
+//    PG_Draw::DrawSurface( src, dst);
 }
 
 
@@ -338,10 +363,7 @@ vector<StoringPosition*> StoringPosition :: setup( PG_Widget* parent, ContainerB
 }
 
 
-Surface StoringPosition::clippingSurface;
-
-
-
+ 
 
 CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup ) : PG_ScrollWidget( parent, pos ), dragNdrop(true), unitColumnCount(0), draggedUnit(NULL)
 {

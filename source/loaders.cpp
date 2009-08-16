@@ -1014,21 +1014,29 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
 GameMap* eventLocalizationMap = NULL;
 
 
+
+void loadLocalizedMessageFile( GameMap* map, const ASCString& filename ) {
+   eventLocalizationMap = map;
+         
+   LuaState state;
+   LuaRunner runner( state );
+   runner.runFile( filename );
+   if ( !runner.getErrors().empty() )
+      errorMessage( runner.getErrors() );
+         
+   eventLocalizationMap = NULL;
+}
+
 void loadLocalizedMessages( GameMap* map, const ASCString& name )
 {
    if ( CGameOptions::Instance()->language != map->nativeMessageLanguage  && CGameOptions::Instance()->language.length() >= 2 ) {
       ASCString filename = name + "." +   CGameOptions::Instance()->language;
-      if ( exist( filename )) {
-         
-         eventLocalizationMap = map;
-         
-         LuaState state;
-         LuaRunner runner( state );
-         runner.runFile( filename );
-         if ( !runner.getErrors().empty() )
-            errorMessage( runner.getErrors() );
-         
-         eventLocalizationMap = NULL;
+      if ( exist( filename )) 
+         loadLocalizedMessageFile( map, filename );
+      else {
+         filename.toLower();
+         if ( exist( filename )) 
+            loadLocalizedMessageFile( map, filename );
       }
    }
 }
@@ -1347,7 +1355,7 @@ ASCString luaQuote( const ASCString& text )
 
 void writeMessageFile( GameMap* gamemap, tnstream& stream )
 {
-   stream.writeString( "map = asc.getLoadingMap() \n" );
+   stream.writeString( "map = asc.getLoadingMap() \n", false);
    for ( GameMap::Events::const_iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
       ASCString s = (*i)->action->getLocalizationString();
       if ( !s.empty() )  {

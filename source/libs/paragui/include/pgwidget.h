@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2009-04-18 13:48:39 $
+    Update Date:      $Date: 2009-08-16 16:50:27 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgwidget.h,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -885,6 +885,9 @@ protected:
 	pointer to the widgets drawing surface or NULL
 	*/
 	SDL_Surface* my_srfObject;
+
+	/** creates #my_srfObject */
+	virtual void createMySurface( int w, int h );
 
 	/**
 	text attached to the widget
