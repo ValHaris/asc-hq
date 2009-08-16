@@ -15,8 +15,6 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <iostream>
-
 #include <pgimage.h>
 #include <pgtooltiphelp.h>
 #include <pgapplication.h>
@@ -180,7 +178,6 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
       } else
          setBargraphValue( "CargoBar", 0 );
 
-         cout << num << ": " << storage[num]->getName() << "\n";
       setLabelText( "SlotUnitName", storage[num]->getName() );
          
       ContainerBase* container = storage[num];

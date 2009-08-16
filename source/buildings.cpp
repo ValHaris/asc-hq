@@ -282,13 +282,15 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
          if ( typ->fieldExists ( BuildingType::LocalCoordinate( a , b ) )) {
             tfield* field = getField( BuildingType::LocalCoordinate( a, b) );
 
-            tfield::ObjectContainer::iterator i = field->objects.begin();
-            while ( i != field->objects.end()) {
-               if ( !i->typ->canExistBeneathBuildings )
-                  i = field->objects.erase ( i );
-               else
-                  i++;
-            };
+            if ( visible ) {
+               tfield::ObjectContainer::iterator i = field->objects.begin();
+               while ( i != field->objects.end()) {
+                  if ( !i->typ->canExistBeneathBuildings )
+                     i = field->objects.erase ( i );
+                  else
+                     i++;
+               };
+            }
 
             if ( field->vehicle && (field->vehicle->height < chtieffliegend )) {
                delete field->vehicle;
