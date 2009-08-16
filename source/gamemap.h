@@ -248,6 +248,11 @@ class GameMap {
          return player[actplayer];
       }
 
+      const Player& getCurrentPlayer() const
+      {
+         return player[actplayer];
+      }
+      
       int getNeutralPlayerNum() const { return 8; };
       
    private:

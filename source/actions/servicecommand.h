@@ -75,6 +75,7 @@ class ServiceCommand : public ContainerCommand {
       ASCString getCommandString() const;
       
       ContainerBase* getRefueller() { return ContainerCommand::getContainer(); };
+      ActionResult checkExecutionPrecondition() const;
       
       ~ServiceCommand();
 };

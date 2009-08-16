@@ -218,6 +218,14 @@ ASCString ServiceCommand::getDescription() const
    return s;
 }
 
+ActionResult ServiceCommand::checkExecutionPrecondition() const
+{
+   if ( getMap()->getCurrentPlayer().diplomacy.isAllied( getContainer() ))
+      return ActionResult(0);
+   else
+      return ActionResult(101);
+}
+
 
 ServiceCommand::~ServiceCommand()
 {

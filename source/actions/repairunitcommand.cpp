@@ -233,6 +233,15 @@ ASCString RepairUnitCommand::getDescription() const
    return s;
 }
 
+ActionResult RepairUnitCommand::checkExecutionPrecondition() const
+{
+   if ( getMap()->getCurrentPlayer().diplomacy.isAllied( getContainer() ))
+      return ActionResult(0);
+   else
+      return ActionResult(101);
+}
+
+
 namespace
 {
    const bool r1 = registerAction<RepairUnitCommand> ( ActionRegistry::RepairUnitCommand );

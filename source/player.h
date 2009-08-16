@@ -76,9 +76,9 @@ class DiplomaticStateVector : public SigC::Object {
       DiplomaticStates getState( PlayerID towardsPlayer ) const;
       void setState( PlayerID towardsPlayer, DiplomaticStates s );
       
-      bool isHostile( PlayerID towardsPlayer ) { return getState( towardsPlayer.getID() ) == WAR; };
-      bool sharesView( PlayerID receivingPlayer ) { return getState( receivingPlayer.getID() ) >= PEACE_SV; };
-      bool isAllied( PlayerID towardsPlayer ) { return getState( towardsPlayer.getID() ) >= ALLIANCE; };
+      bool isHostile( PlayerID towardsPlayer ) const { return getState( towardsPlayer.getID() ) == WAR; };
+      bool sharesView( PlayerID receivingPlayer ) const { return getState( receivingPlayer.getID() ) >= PEACE_SV; };
+      bool isAllied( PlayerID towardsPlayer ) const { return getState( towardsPlayer.getID() ) >= ALLIANCE; };
 
       void turnBegins();
       

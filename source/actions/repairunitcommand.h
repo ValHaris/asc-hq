@@ -64,6 +64,7 @@ class RepairUnitCommand : public ContainerCommand {
       void setTarget( Vehicle* target );
       
       const ContainerBase* getRepairingUnit( ) const { return getContainer(); };
+      ActionResult checkExecutionPrecondition() const;
 };
 
 #endif
