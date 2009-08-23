@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2009-01-07 18:45:15 $
+    Update Date:      $Date: 2009-08-23 13:09:34 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgtooltiphelp.h,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -32,6 +32,8 @@
 
 #ifndef PG_TOOLTIPHELP_H
 #define PG_TOOLTIPHELP_H
+
+#include <map>
 
 #include "pgmessageobject.h"
 #include "pgtimerobject.h"
@@ -76,6 +78,8 @@ class Ticker: public PG_TimerObject {
 
 	void startTimer();
 
+        static std::map<const PG_Widget*,PG_ToolTipHelp*> tooltips;
+        
 protected:
 	PG_Widget* parentWidget;
 	PG_TimerObject::ID id;
@@ -127,6 +131,13 @@ public:
 	Hides the ToolTip Help
 	*/
 	void HideHelp( );
+        
+        ~PG_ToolTipHelp();
+        
+        /**
+        returns the Tooltip widget for the given widget, or NULL if none was created
+        */
+        static PG_ToolTipHelp* GetToolTip( const PG_Widget* widget );
 };
 
 

@@ -20,9 +20,9 @@
    pipelka@teleweb.at
  
    Last Update:      $Author: mbickel $
-   Update Date:      $Date: 2009-04-18 13:48:40 $
+   Update Date:      $Date: 2009-08-23 13:09:34 $
    Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pgtooltiphelp.cpp,v $
-   CVS/RCS Revision: $Revision: 1.3 $
+   CVS/RCS Revision: $Revision: 1.4 $
    Status:           $State: Exp $
  */
 
@@ -39,12 +39,15 @@
 PG_LineEdit* PG_ToolTipHelp::toolTipLabel = NULL;
 PG_ToolTipHelp::Ticker* PG_ToolTipHelp::ticker = NULL;
 
+std::map<const PG_Widget*,PG_ToolTipHelp*> PG_ToolTipHelp::tooltips;
 
 PG_ToolTipHelp :: PG_ToolTipHelp( PG_Widget* parent, const std::string& text, int delay, const std::string &style )
 		: parentWidget(parent), lastTick(0), status(off), labelStyle(style), my_delay(delay) {
 	if ( !parent )
 		return;
 
+        tooltips[parent] = this;
+        
 	parent->sigMouseEnter.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentEnter ), parent );
 	parent->sigMouseLeave.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentLeave ), parent );
 	parent->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
@@ -166,3 +169,15 @@ void PG_ToolTipHelp :: HideHelp( ) {
 	}
 }
 
+PG_ToolTipHelp* PG_ToolTipHelp :: GetToolTip( const PG_Widget* widget )
+{
+   if ( tooltips.find(widget ) != tooltips.end() )
+      return tooltips.find(widget )->second;
+   else
+      return NULL;
+}
+
+PG_ToolTipHelp:: ~PG_ToolTipHelp()
+{
+   tooltips.erase(parentWidget);
+}

@@ -1652,7 +1652,7 @@ panel {
 
             ; We don't really need a third line with "power storable" 
 
-            ChildWidgets = Description MaxWindPower CurrentWindPower MaxPower2 CurrentPower2 Weather Weather2
+            ChildWidgets = Description MaxWindPower CurrentWindPower MaxPower2 CurrentPower2 WindSpeed Weather2
             Description {
                type = StaticText
                text = Wind Power Plant
@@ -1672,14 +1672,14 @@ panel {
                height = 14
             } Weather2
 
-            Weather {
+            WindSpeed {
                type = TextOutput
                x = 167
                y = 38
                x2 = 226
                height = 14
                textalign = right
-            } Weather
+            } WindSpeed
 
 
             MaxPower2 {

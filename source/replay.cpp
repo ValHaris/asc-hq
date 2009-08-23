@@ -543,7 +543,7 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
        }
 
        catch ( ActionResult res ) {
-          displayActionError( res );
+          // displayActionError( res );
           delete actmap;
           actmap = NULL;
           throw NoMapLoaded();
@@ -2025,9 +2025,15 @@ void trunreplay :: execnextreplaymove ( void )
             readnextaction();
             
             if ( a ) {
+               try {
                ActionResult res = a->redo( createReplayContext() );
                if ( !res.successful() )
                   error("action " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
+               } catch ( ActionResult res ) {
+                  error("action " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
+                  throw res;
+               }
+
             } else
                error("could not read Command action from replay stream" );
          }

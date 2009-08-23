@@ -210,7 +210,7 @@ GameActionID ServiceCommand::getID() const
 
 ASCString ServiceCommand::getDescription() const
 {
-   ASCString s = "Service with ";
+   ASCString s = "Service ";
    
    if ( getContainer() ) {
       s += " by " + getContainer()->getName();

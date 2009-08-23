@@ -178,7 +178,7 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
       } else
          setBargraphValue( "CargoBar", 0 );
 
-      setLabelText( "SlotUnitName", storage[num]->getName() );
+      setLabelText( "SlotUnitName", storage[num]->name );
          
       ContainerBase* container = storage[num];
       
@@ -193,6 +193,16 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
          setBargraphValue ( "SlotBar", 0 );
       
       
+      setLabelText( "Weight",ASCString::toString( storage[num]->weight() ));
+      
+      
+      ASCString s;
+      s.format( "%d / %d", container->cargoWeight(), container->baseType->maxLoadableWeight );
+      setLabelText( "CargoUsage", s );
+   
+      s.format( "%d / %d", slots, container->baseType->maxLoadableUnits );
+      setLabelText( "SlotSummary", s );
+      
    } else {
       setBargraphValue( "DamageBar", 0 );
       setBargraphValue( "FuelBar", 0 );
@@ -200,6 +210,8 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
       setBargraphValue( "CargoBar", 0 );
       setLabelText( "SlotUnitName", "" );
       setBargraphValue ( "SlotBar", 0 );
+      setLabelText( "CargoUsage", "" );
+      setLabelText( "SlotSummary", "" );
    }
 
    // PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);

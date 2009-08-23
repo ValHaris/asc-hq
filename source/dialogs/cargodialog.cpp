@@ -683,9 +683,15 @@ class CargoDialog : public Panel
             else
                setBargraphValue ( prefix + "LoadingMeter3", 0 );
    
+            s.format( "%d / %d", slots, container->baseType->maxLoadableUnits );
+            setLabelText( prefix + "SlotSummary", s );
+            
             setLabelText( prefix + "UsedCargoSlots", slots );
             setLabelText( prefix + "CargoSlotCount", container->baseType->maxLoadableUnits );
-            setLabelText( prefix + "MaxLoadableWeight", container->baseType->maxLoadableWeight  );
+            if ( container->baseType->maxLoadableUnits )
+               setLabelText( prefix + "MaxLoadableWeight", container->baseType->maxLoadableWeight  );
+            else
+               setLabelText( prefix + "MaxLoadableWeight", "-"  );
             
             setLabelText( prefix + "UserName", container->name );
             setLabelText( prefix + "UnitTypeName", container->baseType->name );
@@ -734,9 +740,9 @@ class CargoDialog : public Panel
 
 #ifdef WEATHERGENERATOR
             if ( container->getMap()->weatherSystem )
-               setLabelText( "Weather", container->getMap()->weatherSystem->getCurrentWindSpeed(), widget );
+               setLabelText( "WindSpeed", container->getMap()->weatherSystem->getCurrentWindSpeed(), widget );
 #else
-            setLabelText( "Weather", container->getMap()->weather.windSpeed, widget );
+            setLabelText( "WindSpeed", container->getMap()->weather.windSpeed, widget );
 #endif
          }
 
@@ -772,10 +778,17 @@ class CargoDialog : public Panel
             
             setUnitInfoWidgets( getMarkedUnit(), "Selected" );
             
+            PG_Widget* typeImage = FindChild( "TypeImage", true );
+            PG_ToolTipHelp* typeImageTooltip= NULL; 
+            if ( typeImage ) 
+               typeImageTooltip = PG_ToolTipHelp::GetToolTip( typeImage );
+            
             if ( getMarkedUnit() ) {
                setLabelText( "CurrentCargo", getMarkedUnit()->weight(), widget );
                setImage( "TypeImage", moveMaliTypeIcons[getMarkedUnit()->typ->movemalustyp], widget );
                show( "TypeImage" );
+               if ( typeImageTooltip )
+                  typeImageTooltip->SetText( cmovemalitypes[getMarkedUnit()->typ->movemalustyp ] );
                
                if ( getMarkedUnit()->baseType->infoImageSmallFilename.length() > 0 ) {
                   setImage( "Selected3DImageSmall", getMarkedUnit()->baseType->infoImageSmallFilename, widget );
@@ -1765,7 +1778,6 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
    cb->destroyed.connect( SigC::slot( *this, &CargoDialog::containerDestroyed ));
 
    ciw = new CargoInfoWindow;
-
    subwindows.push_back( ciw );
    subwindows.push_back( new SolarPowerWindow );
    subwindows.push_back( new WindPowerWindow );
@@ -1958,7 +1970,10 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
          cargoWidget->sigScrollTrack.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
 
          cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
-         cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
+         
+         if ( ciw )
+            cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
+         
          if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
             cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *this, &CargoDialog::clearSmallIcons )));
 
