@@ -1,0 +1,3265 @@
+
+panel {
+; CargoDialog by GAMER
+
+; Colors
+; Damage 0xEE0000
+; Fuel 0xffd200
+; Mat 0x9d8351
+; Energy 0x00D2D2
+; CargoBar 0x109910
+; Slotbar 0x157715
+
+; Der Screen sollte Dynamisch sein, sich also der Groesse des Hauptfensters anpassen
+; Das Cargofenster befindet sich mit den derzeitigen Koordinaten genau oberhalb des DropDownMenue,
+; um einen Zugriff darauf auch optisch zu verhindern, da bei geoeffneten Cargofenster nicht moeglich.
+
+   x = 20
+   y = 8
+;   y = 32 alt innerhalb des Hexfensters
+
+   x2 = -195
+   y2 = -48
+
+   FontColor = 0xFFFFFF
+   FontSize = 9
+;   FontName = Verdana
+   name = MainWidget
+
+; ==>
+; BG-Image warum wird eins angezeigt, wenn ich "nichts" angebe? wenn ich eins angebe, dann hat das keine Transparenz
+   PanelBackgroundImage =
+   BackgroundImage =
+   Transparency = 50
+   TextAlign = left
+
+   ChildWidgets = GeneralInfo  LoadingTypeInfo BarArea UnitInfoArea UnitScrollAreaFalse SubWindowSelectorPane SubWindowPane
+; deaktivierte Widges = ButtonArea CargoDropArea
+
+; Informationen zum Basiscontainer
+   GeneralInfo {
+      type = area
+      in  = false
+      x = 3
+      y = 10
+;      x2 = -100 mit Cargodrop
+      x2 = -3
+      height = 68
+
+      ChildWidgets = ContainerImage Container3DImageSmall Container3DImage Names Resources MunitionsIMG CargoInfo 
+
+; Ingamegrafik der Einheit
+; ==> Hier könnte auch eine verkleinerte Grakik des gesamten gebäudes angezeigt werden
+      ContainerImage {
+         type = SpecialDisplay
+         x = 5
+         y = 10 
+         x2 = 48
+         y2 = 48
+         name = unitpad_unitsymbol
+      } ContainerImage
+
+; kleine 3D Grafik des Basiscontainer
+; ==> per Mounsover soll dann das große 3D Bild im Container3DImage angezeigt werden.
+      Container3DImageSmall {
+         type = image
+         x = 58
+         y = 10 
+         x2 = 140
+         y2 = 48
+         name = 
+      } Container3DImageSmall
+
+      Container3DImage {
+         type = dummy
+         ; Beginn Hoehe/Breite Slotfenster noch anpassen
+         x = 10
+         y = 80 
+         width = 640
+         height = 480
+      } Container3DImage
+
+; Namenbereich des Basiscontainers
+      Names { 
+         type = area
+   
+         x = 140
+         y = 5
+         width = 150
+         height = 58
+   
+         Childwidgets = UnitTypeName UnitTypeDescription UserName
+   
+	; Technischer Name der Einheit oder Gebaeudes
+         UnitTypeName {
+                  type = TextOutput
+                  x = 5
+                  y = 5
+                  x2 = -1
+                  height = 10
+         } UnitTypeName
+   
+	; Kurzbeschreibung (Description) der Einheit oder des Gebaeudes
+         UnitTypeDescription {
+                  type = TextOutput
+                  x = 5
+                  y = 16
+                  x2 = -1
+                  height = 10
+         } UnitTypeDescription
+
+	; vom User vergebener Name der Einheit oder des Gebaeudes
+         UserName {
+                  type = TextOutput
+                  x = 5
+                  y = 28
+                  x2 = -1
+                  height = 10
+         } UserName
+
+      } Names
+
+; Rohstoffbereich
+      Resources {
+         type = area
+         
+         x = 295
+         y = 5
+         width = 120
+         height = 58
+         
+         ChildWidgets = Energy Material Fuel Damage EnergyLabel MaterialLabel FuelLabel DamageLabel LDamage LEnergy LFuel LMaterial
+            
+         DamageLabel {
+            type = StaticText
+            x = 5
+            y = 5
+            x2 = -5
+            height = 10
+            Text = Damage
+         } DamageLabel
+
+         EnergyLabel {
+            type = StaticText
+            x = 5
+            y = 16
+            x2 = -5
+            height = 10
+            Text = Energy
+         } EnergyLabel
+
+         MaterialLabel {
+            type = StaticText
+            x = 5
+            y = 28
+            x2 = -5
+            height = 10
+            Text = Material
+         } MaterialLabel
+         
+         FuelLabel {
+            type = StaticText
+            x = 5
+            y = 40
+            x2 = -5
+            height = 10
+            Text = Fuel
+         } FuelLabel
+
+		 LDamage {
+			type = plain
+			BackgroundColor = 0xEE0000
+			x = 55
+			y = 8
+			width = 10
+			height = 4
+		} LDamage
+
+		LEnergy {
+			type = plain
+			BackgroundColor = 0x00D2D2
+			x = 55
+			y = 20
+			width = 10
+			height = 4
+		} LEnergy
+
+		 LMaterial {
+			type = plain
+			BackgroundColor = 0x9d8351
+			x = 55
+			y = 32
+			width = 10
+			height = 4
+		} LMaterial
+
+		 LFuel {
+			type = plain
+			BackgroundColor = 0xffd200
+			x = 55
+			y = 44
+			width = 10
+			height = 4
+		} LFuel
+
+         Damage {
+            type = TextOutput
+            x = 5
+            y = 5
+            x2 = -5
+            height = 10
+            name = numericaldamage
+            TextAlign = Right
+         } Damage
+
+         Energy {
+            type = TextOutput
+            x = 5
+            y = 16
+            x2 = -5
+            height = 10
+            name = energyavail
+            TextAlign = Right
+         } Energy
+
+         Material {
+            type = TextOutput
+            x = 5
+            y = 28
+            x2 = -5
+            height = 10
+            name = materialavail
+            TextAlign = Right
+         } Material
+         
+         Fuel {
+            type = TextOutput
+            x = 5
+            y = 40
+            x2 = -5
+            height = 10
+            name = fuelavail
+            TextAlign = Right
+         } Fuel
+
+      } Resources
+      
+; Munitionsbereich      
+      MunitionsIMG {
+         type = area
+
+         x = 420
+         y = 5
+         height = 58
+         width = 120
+         TextAlign = Right  
+
+         Childwidgets = Line CruiseMissile CruiseMissileTXT Mine MineTXT Bomb BombTXT LargeMissile LargeMissileTXT SmallMissile SmallMissileTXT MachineGun MachineGunTXT Cannon CannonTXT Torpedo TorpedoTXT
+   
+         Line {
+                           type = Area
+                           x = 55
+                           y = 2
+                           width = 2         
+                           Y2 = -2
+                           } Line
+
+         CruiseMissileTXT {
+                           type = TextOutput
+                           x = 2
+                           y = 5
+                           width = 25         
+                           height = 10
+                           name = cmmun
+                           ToolTipHelp = Cruise Missile
+                           } CruiseMissileTXT
+         CruiseMissile {
+                           type = image
+                           x = 30
+                           y = 5
+                           filename = weap-cruisemissile-small.png
+                           ToolTipHelp = Cruise Missile
+                           } CruiseMissile
+   
+         LargeMissileTXT  {
+                           type = TextOutput
+                           x = 2
+                           y = 16
+                           width = 25         
+                           height = 10
+                           name = lmmun
+                           ToolTipHelp = Large Missile
+                           } LargeMissileTXT
+         LargeMissile  {
+                           type = image
+                           x = 30
+                           y = 16
+                           filename = weap-bigmissile-small.png
+                           ToolTipHelp = Big Missile
+                           } LargeMissile
+
+         SmallMissileTXT  {
+                           type = TextOutput
+                           x = 2
+                           y = 28
+                           width = 25         
+                           height = 10
+                           name = smmun
+                           ToolTipHelp = Small Missile
+                           } SmallMissileTXT
+         SmallMissile  {
+                           type = image
+                           x = 30
+                           y = 28
+                           filename = weap-smallmissile-small.png
+                           ToolTipHelp = Small Missile
+                           } SmallMissile
+
+         TorpedoTXT {
+                           type = TextOutput
+                           x = 2
+                           y = 40
+                           width = 25         
+                           height = 10
+                           name = torpmun
+                           ToolTipHelp = Torpedo
+                           } TorpedoTXT      
+         Torpedo {
+                           type = image
+                           x = 30
+                           y = 40
+                           filename = weap-torpedo-small.png
+                           ToolTipHelp = Torpedo
+                           } Torpedo      
+
+; 2. Spalte
+         MineTXT {
+                           type = TextOutput
+                           x = 62
+                           y = 5
+                           width = 25         
+                           height = 10
+                           name = minemun
+                           ToolTipHelp = Mine
+                           } MineTXT   
+         Mine {
+                           type = image
+                           x = 90
+                           y = 5
+                           filename = weap-mine-small.png
+                           ToolTipHelp = Mine
+                           } Mine   
+         
+         BombTXT {
+                           type = TextOutput
+                           x = 62
+                           y = 16
+                           width = 25         
+                           height = 10
+                           name = bombmun
+                           ToolTipHelp = Bomb
+                           } BombTXT
+         Bomb {
+                           type = image
+                           x = 90
+                           y = 16
+                           filename = weap-bomb-small.png
+                           ToolTipHelp = Bomb
+                           } Bomb
+   
+         MachineGunTXT    {
+                           type = TextOutput
+                           x = 62
+                           y = 28
+                           width = 25         
+                           height = 10
+                           name = mgmun
+                           ToolTipHelp = Machine Gun
+                           } MachineGunTXT
+         MachineGun    {
+                           type = image
+                           x = 90
+                           y = 28
+                           filename = weap-machinegun-small.png
+                           ToolTipHelp = Machine Gun
+                           } MachineGun
+   
+         CannonTXT          {
+                           type = TextOutput
+                           x = 62
+                           y = 40
+                           width = 25         
+                           height = 10
+                           name = canmun
+                           ToolTipHelp = Cannon
+                           } CannonTXT
+         Cannon          {
+                           type = image
+                           x = 90
+                           y = 40
+                           filename = weap-cannon-small.png
+                           ToolTipHelp = Cannon
+                           } Cannon
+   
+      } MunitionsIMG
+
+      cargoinfo {
+         type = area
+         x = 545
+         y = 5
+         x2 = 730
+         y2 = -5
+         
+         ChildWidgets = Spalte1 Spalte2 Spalte3
+         Spalte1 {
+            type = dummy
+            x = 5
+            y = 5
+            x2 = 85
+            y2 = -5
+            ChildWidgets = InfoText WeightLabel SlotLabel MaxUnitSizeLabel
+            InfoText {
+               type = StaticText
+               text = Cargo Info
+               x = 1
+               y = 1
+               x2 = -1
+               height = 12 
+            } InfoText 
+            WeightLabel {
+               type = StaticText
+               text = Weight
+               x = 1
+               y = 12
+               x2 = -1
+               height = 12
+            } WeightLabel
+            SlotLabel {
+               type = StaticText
+               text = Slots
+               x = 1
+               y = 24
+               x2 = -1
+               height = 12
+            } SlotLabel
+            MaxUnitSizeLabel {
+               x = 1
+               y = 36
+               x2 = -1
+               height = 12
+               type = StaticText
+               Text = Max Unit Weight
+            } MaxUnitSizeLabel
+         } Spalte1
+
+         Spalte2 {
+            type = dummy
+            x = 61
+            y = 5
+            x2 = 110
+            y2 = -5
+            ChildWidgets = FreeLabel FreeWeight FreeSlots
+            FreeLabel {
+               textalign = right
+               type = StaticText
+               text = free
+                  x = 1
+                  y = 1
+                  x2 = -1
+                  height = 12 
+            } FreeLabel
+            FreeWeight {
+               textalign = right
+               type = TextOutput
+               x = 1
+               y = 12
+               x2 = -1
+               height = 12
+            } FreeWeight
+            FreeSlots {
+               textalign = right
+               type = TextOutput
+                  x = 1
+                  y = 24
+                  x2 = -1
+                  height = 12
+            } FreeSlots
+         } Spalte2
+
+         Spalte3 {
+            type = dummy
+            x = 111
+            y = 5
+            x2 = 160
+            y2 = -5
+            ChildWidgets = MaxLabel MaxWeight MaxSlots MaxUnitSize
+            MaxLabel {
+               textalign = right
+               type = StaticText
+               text = max
+               x = 1
+               y = 1
+               x2 = -1
+               height = 12 
+            } MaxLabel
+            MaxWeight {
+               textalign = right
+               type = TextOutput
+               x = 1
+               y = 12
+               x2 = -1
+               height = 12
+            } MaxWeight
+            MaxSlots {
+               textalign = right
+               type = TextOutput
+               x = 1
+               y = 24
+               x2 = -1
+               height = 12
+            } MaxSlots
+            MaxUnitSize {
+               x = 1
+               y = 36
+               x2 = -1
+               height = 12
+               type = TextOutput
+               textalign = right
+            } MaxUnitSize
+         } Spalte3
+
+      } cargoinfo
+
+   } GeneralInfo
+
+   LoadingTypeInfo {
+      type = area
+      in  = false
+      x = 3
+      y = 370
+      x2 = 90
+      y2 = -3
+
+      ChildWidgets = LoadingTypeArea
+      LoadingTypeArea {
+         type = area
+         in  = true
+         x = 5
+         y = 5
+         x2 = -5
+         y2 = -5
+         ChildWidgets = UnitTypeLabel UnitTypeList
+         UnitTypeLabel {
+            x = 2
+            y = 2
+            x2 = -2
+            y2 = 14
+            type = statictext
+            text = Loadable types
+         } UnitTypeLabel
+         UnitTypeList {
+            type = scrollarea
+            userhandler = UnitTypeList
+            x = 5
+            y = 16
+            x2 = -1
+            y2 = -1
+         } UnitTypeList
+      } LoadingTypeArea
+   } LoadingTypeInfo
+  
+   BarArea {
+      type = area
+      in = false
+      x = 3
+      y = 78
+      ;x2 = -100 mit CargoDropArea
+      x2 = -3
+      height = 36
+
+      ChildWidgets = SlotBar CargoBar
+      Cargobar {
+         type = area
+         in = true
+         x = 5
+         y = 5
+         x2 = -5
+         height = 12
+         ChildWidgets = LoadingMeter2 zero label CargoUsage 
+
+         LoadingMeter2 {
+            type = BarGraph
+            ; this graph shows how much of the transports max carrying weight is used up right now by its cargo
+            x = 1
+            y = 1
+            x2 = -1
+            y2 = -1
+            Direction = left2right
+            BackgroundColor = 0x109910
+         } LoadingMeter2
+
+         zero {
+            textalign = left
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+            type = Statictext
+            text = 0
+         } zero
+
+         hundret {
+            textalign = right
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+            type = Statictext
+            text = 100%
+         } hundret
+         
+         label {
+            textalign = center
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+            type = Statictext
+            text = used loading capacity
+         } label
+
+         CargoUsage {
+            textalign = right
+            type = TextOutput
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+         } CargoUsage
+      } Cargobar
+
+      SlotBar {
+         type = area
+         in = true
+         x = 5
+         y = 18
+         x2 = -5
+         height = 12
+         ChildWidgets = LoadingMeter3 zero label SlotSummary 
+
+         LoadingMeter3 {
+            type = BarGraph
+            ; this graph shows how much of the transports max cargo slots is used up right now by its cargo
+            x = 1
+            y = 1
+            x2 = -1
+            y2 = -1
+            Direction = left2right
+            BackgroundColor = 0x157715
+         } LoadingMeter3
+
+         zero {
+           textalign = left
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+           type = Statictext
+           text = 0
+         } zero
+
+         label {
+            textalign = center
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+            type = Statictext
+            text = used cargo slots
+         } label
+
+         SlotSummary {
+            textalign = right
+            type = TextOutput
+            x = 10
+            y = 1
+            x2 = -10
+            y2 = -1
+         } SlotSummary
+         
+      } Slotbar
+   } BarArea
+
+
+; ==> Im Moment nicht funktionsfähig, deshalb deaktiviert
+   ButtonArea {
+      type = area
+      in = false
+      x = 90
+      y = 119
+      x2 = -100
+      height = 50
+      Childwidgets = ButtonAreatrue   
+      
+      ButtonAreaTrue {
+         type = area
+         in = true
+         x = 5
+         y = 5
+         x2 = -5
+         y2 = -5
+         Childwidgets = ButtonLine   
+         ButtonLine {
+            type = image
+            filename = empty-high.png
+            x = 2
+            y = 2
+         } ButtonLine
+      } ButtonAreatrue
+   } ButtonArea
+
+; ------------------------------------------------------------------------------------------------------
+; Selected Unit
+; ------------------------------------------------------------------------------------------------------
+   UnitInfoArea {
+      type = Area
+      in = false
+      x = 3
+      y = 119
+      x2 = 90
+      y2 = 365
+      ChildWidgets = UnitInfoAreaTrue
+      UnitInfoAreaTrue {
+         type = Area
+         in = True
+         x = 5
+         y = 5
+         x2 = -5
+         y2 = -5
+         ChildWidgets = Area1 Area2 Area3 Area4 Area5 Selected1 Selected2 Selected3 Selected4 SelectedImage Selected3DImageSmall TypeImage SelectedUnitTypeName SelectedUnitTypeDescription SelectedUserName
+         Selected1 {
+            type = StaticText
+            text = Selected Unit:
+            textalign = center
+            Fontsize = 9
+            x = 1
+            y = 2
+            x2 = -1
+            height = 10
+         } Selected1
+
+         Area1 {
+            type = Area
+            in = True
+            x = 5
+            y = 12
+            x2 = -5
+            height = 2
+         } Area1
+
+        ; Bild der Selectierten Einheit
+         SelectedImage {
+            type = specialdisplay
+            textalign = center
+            x = 5
+            y = 15
+            x2 = -5
+            Height = 48 
+	    ToolTipHelp = Ingame Picture
+            ChildWidgets = CurrentCargo
+            CurrentCargo {
+               textalign = right
+               type = TextOutput
+               Fontsize = 8
+               x = 1
+               y = 38
+               x2 = -0
+               y2 = -0
+	       ToolTipHelp = weight of selected unit
+            } CurrentCargo
+         } SelectedImage
+
+         Area2 {
+            type = Area
+            in = True
+            x = 5
+            y = 64
+            x2 = -5
+            height = 2
+         } Area2
+
+         SelectedUnitTypeName {
+            type = TextOutput
+            textalign = center
+            Fontsize = 8
+            x = 1
+            y = 69
+            x2 = -1
+            height = 9
+            ToolTipHelp = Name of the UnitType
+         } SelectedUnitTypeName
+
+         SelectedUnitTypeDescription {
+            type = TextOutput
+            textalign = center
+            Fontsize = 7
+            x = 1
+            y = 79
+            x2 = -1
+            height = 8
+            ToolTipHelp = Description of the UnitType
+         } SelectedUnitTypeDescription
+
+         SelectedUserName {
+            type = TextOutput
+            textalign = center
+            Fontsize = 8
+            x = 1
+            y = 88
+            x2 = -1
+            height = 9
+            ToolTipHelp = Special Name of the Unit
+         } SelectedUserName
+
+         Area3 {
+            type = Area
+            in = True
+            x = 5
+            y = 97
+            x2 = -5
+            height = 2
+         } Area3
+
+        ; kleines 3D Bild der Einheit, per Mounsover soll dann das grosse 3D Bild im Container3DImage angezeigt werden.
+         Selected3DImageSmall {
+            textalign = center
+            type = image
+            textalign = center
+            x = 5
+            y = 99
+            x2 = -5
+            height = 48 
+            filename = 
+	    ToolTipHelp = little 3D Picture of the unit
+         } Selected3DImageSmall
+
+         Area4 {
+            type = Area
+            in = True
+            x = 5
+            y = 148
+            x2 = -5
+            height = 2
+         } Area4
+
+         Selected2 {
+            type = StaticText
+            textalign = left
+            Fontsize = 8
+            text = Cargo:
+            x = 5
+            y = 151
+            x2 = -5
+            height = 9
+         } Selected2 
+
+         Selected3 {
+            type = dummy
+            x = 5
+            y = 151
+            x2 = -5
+            height = 30
+            ChildWidgets = SelectedMaxLoadableWeight SelectedCargoUsage SelectedSlotSummary
+            SelectedMaxLoadableWeight {
+               textalign = right
+               type = TextOutput
+               Fontsize = 8
+               x = 1
+               y = 1
+               x2 = -1
+               height = 9
+	       ToolTipHelp = max loadable unitweight 
+            } SelectedMaxLoadableWeight
+            SelectedCargoUsage {
+               textalign = right
+               type = TextOutput
+               Fontsize = 8
+               x = 1
+               y = 11
+               x2 = -1
+               height = 9
+	       ToolTipHelp = Weight Usage of Cargo
+            } SelectedCargoUsage
+            SelectedSlotSummary {
+               textalign = right
+               type = TextOutput
+               Fontsize = 8
+               x = 1
+               y = 21
+               x2 = -1
+               height = 9
+	       ToolTipHelp = Slot Usage of Cargo 
+            } SelectedSlotSummary
+         } Selected3
+
+         Area5 {
+            type = Area
+            in = True
+            x = 5
+            y = -47
+            x2 = -5
+            height = 2
+         } Area5
+
+         Selected4 {
+            type = StaticText
+            text = Category:
+            textalign = left
+            FontSize = 8
+            x = 5
+            y = -36
+            x2 = -1
+            height = 9
+         } Selected4
+
+         TypeImage {
+               type = image
+               textalign = center
+               x = 16
+               y = -37
+               x2 = -1
+	       ToolTipHelp = type of selected unit
+         } TypeImage
+      } UnitInfoAreaTrue
+   } UnitInfoArea
+
+
+   UnitScrollAreaFalse {
+      type = Area
+      in = false
+      x = 95
+      y = 119
+      ;(mit ButtonArea) y = 174
+      ; (mit Cargo DropArea x2 = -100
+      x2 = -3
+      y2 = -205
+      ChildWidgets = UnitScrollArea
+   UnitScrollArea {
+      type = Area
+      in = true
+      x = 5
+      y = 5
+      x2 = -5
+      y2 = -5
+      userhandler = ScrollArea
+
+; ------------------------------------------------------------------------------------------------
+; Slot
+; ------------------------------------------------------------------------------------------------
+      UnitSlot {
+         type = Area
+;         type = SpecialDisplay
+         x = 0
+         y = 0
+         width = 74
+         height = 54
+         ChildWidgets = Weight SlotUnitName DamageBar FuelBar MaterialBar CargoBar Slotbar
+;         ChildWidgets = DamageBar FuelBar MaterialBar CargoBar
+		 
+         unitposx = 8
+         unitposy = 18
+		 
+         Weight {
+            textalign = right
+            FontSize = 7
+            type = TextOutput
+            x = 10
+            y = 61
+            x2 = -29
+            height = 8
+            ToolTipHelp = Weight of this Unit
+         } Weight
+
+         SlotUnitName {
+            textalign = center
+            FontSize = 8
+            type = TextOutput
+            x = 4
+            y = 6
+            x2 = -4
+            height = 9
+         } SlotUnitName
+
+	 DamageBar {
+            type = BarGraph
+            BackgroundColor = 0xEE0000
+            x = 61
+            y = 18
+            width = 3
+            height = 50
+            Direction = buttom2top
+            ToolTipHelp = Damage
+         } DamageBar
+		 
+	FuelBar {
+           type = BarGraph
+           BackgroundColor = 0xffd200
+           x = 68
+           y = 18
+           width = 3
+           height = 50
+           Direction = buttom2top
+           ToolTipHelp = Fuel in Unit
+        } FuelBar
+		 
+	MaterialBar {
+           type = BarGraph
+           BackgroundColor = 0x9d8351
+           x = 75 
+           y = 18
+           width = 3
+           height = 50
+           Direction = buttom2top
+           ToolTipHelp = Material in Unit
+        } MaterialBar		 
+
+	 CargoBar {
+            type = BarGraph
+            BackgroundColor = 0x109910
+            x = 7
+            y = 72
+            width = 71
+            height = 8
+            Direction = left2right
+            ToolTipHelp = Used Weight
+            ChildWidgets = CargoUsage
+               CargoUsage {
+                  type = TextOutput
+		  textalign = center
+                  FontSize = 7
+            	  x = 1
+            	  y = 1
+            	  x2 = -1
+            	  y2 = -1
+               } CargoUsage
+         } CargoBar
+
+	 SlotBar {
+            type = BarGraph
+            BackgroundColor = 0x157715
+            x = 7
+            y = 85
+            width = 71
+            height = 8
+            Direction = left2right
+            ToolTipHelp = Used Slots
+            ChildWidgets = SlotSummary
+               SlotSummary {
+                  type = TextOutput
+		  textalign = center
+                  FontSize = 7
+            	  x = 1
+            	  y = 1
+            	  x2 = -1
+            	  y2 = -1
+               } SlotSummary
+         } SlotBar
+		          
+      } UnitSlot
+
+   } UnitScrollArea
+   } UnitScrollAreaFalse
+
+; deaktiviert, da nicht funktionstuechtig
+   CargoDropArea {
+      type = Area
+      in = false
+      x = -95
+      y = 10
+      x2 = -3
+      y2 = -3
+      ChildWidgets = CargoDropAreaTrue
+      CargoDropAreaTrue {
+         type = Area
+         in = true
+         x = 5
+         y = 5
+         x2 = -5
+         y2 = -5
+         ChildWidgets = CargoDropText
+         CargoDropText {
+            type = StaticText
+            text = Cargo Drop Area
+            textalign = center
+            x = 2
+            y = 2
+            x2 = -2
+            height = 12
+         } CargoDropText
+      } CargoDropAreaTrue
+   } CargoDropArea
+
+
+
+
+
+
+
+
+
+
+
+
+; ---------------------------------------------------------------------------
+; Gebäudefunktionen
+; ---------------------------------------------------------------------------
+
+   SubWindowSelectorPane {
+      type = Area
+      in = false
+      x = 95
+      y = -200
+      width = 50
+      y2 = -5
+      ChildWidgets = Selector
+      Selector {
+         type = dummy
+         x = 2
+         y = 2
+         x2 = -2
+         y2 = -2
+         Userhandler = ButtonPanel
+      } Selector
+   } SubWindowSelectorPane
+
+   SubWindowPane {
+      type = area
+      in = false
+      x = 150
+      y = -200
+      x2 = -5
+      y2 = -5
+      ChildWidgets = cargoinfo conventionalpower mining research resourceinfo solarpower windpower damagecontrol 
+
+      damagecontrol {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+         
+         ChildWidgets = InfoText costarea RepairButton DamageArea BuildingInfo RepairCost
+		 
+		 Damagearea {
+		 type = area
+		 x = 5
+		 y = 40
+		 width = 290
+		 height = 55
+		 ChildWidgets = MeterLabel DamageBar
+         MeterLabel {
+            type= dummy
+            x = 5
+            y = 5
+            x2 = -5
+            height = 25 
+
+            ChildWidgets = zero label hundret 
+           
+            zero {
+              textalign = right
+              x = 0
+              y = 0
+              type = Statictext
+              text = 0%
+            } zero
+
+            hundret {
+              textalign = left
+              x = 0
+              y = 0
+              type = Statictext
+              text = 100%
+            } hundret
+           
+            label {
+              textalign = center
+              x = 0
+              y = 0
+              type = Statictext
+              text = Damage
+            } label
+         } MeterLabel
+         DamageBar {
+			type = area
+            x = 5
+            y = 35
+            x2 = -5
+            height = 15
+			childwidgets = bar
+			bar {
+            type = dummy
+            UserHandler = DamageBar
+            color = 0xFFDDDD
+            x = 1
+            y = 1
+            x2 = -1
+            y2 = -1
+			} bar
+         } DamageBar
+		 } Damagearea
+
+
+         InfoText {
+            type = StaticText
+            text = Building Status
+            x = 10
+            y = 5
+            x2 = 200
+            height = 15
+         } InfoText   
+
+         RepairButton {
+            type = button
+            x = 400
+            y = 120
+            width = 140
+            height = 30
+            text = Repair Building
+         } RepairButton
+
+         RepairCost {
+			type = area
+            x = 300
+            y = 65
+            x2 =  450
+            height = 25
+			childwidgets = RepairCostLabel
+			RepairCostLabel {
+            type = TextOutput
+            x = 5
+            y = 5
+            x2 =  0
+            height = 15
+			} RepairCostLabel
+         } RepairCost
+		 
+		 costarea {
+			   type = area
+               x = 450
+               y = 40
+               width = 190
+               height = 50
+			   childwidgets = line1 col1 col2 energy mat fuel lenergy lmat lfuel EnergyCost MaterialCost FuelCost
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   textalign = center
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 5
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   textalign = center
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 5
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 22
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   textalign = center
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 5
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lfuel
+         EnergyCost {
+            type = TextOutput
+            textalign = center
+            x = 1
+            y = 30
+            width = 62
+            height = 16
+         } EnergyCost
+         MaterialCost {
+            type = TextOutput
+            textalign = center
+            x = 64
+            y = 30
+            width = 63
+            height = 16
+         } MaterialCost
+         FuelCost {
+            type = TextOutput
+            textalign = center
+            x = 126
+            y = 30
+            width = 63
+            height = 16
+         } FuelCost
+		 } costarea
+
+         BuildingInfo {
+            type = area
+            x = 5
+            y = 115
+            x2 = 295
+            height = 75
+            ChildWidgets = ViewLabel View JammingLabel Jamming ArmorLabel Armor line1 line2
+
+            ViewLabel {
+               type = staticText
+               text = View
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } ViewLabel
+            JammingLabel {
+               type = staticText
+               text = Jamming
+               x = 5
+               y = 30
+               x2 = -5
+               height = 15
+            } JammingLabel
+            ArmorLabel {
+               type = staticText
+               text = Armor
+               x = 5
+               y = 55
+               x2 = -5
+               height = 15
+            } ArmorLabel
+
+            View {
+               textalign = right
+               type = textoutput
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } View
+            Jamming {
+               textalign = right
+               type = textoutput
+               x = 5
+               y = 30
+               x2 = -5
+               height = 15
+            } Jamming
+            Armor {
+               textalign = right
+               type = textoutput
+               x = 5
+               y = 55
+               x2 = -5
+               height = 15
+            } Armor
+			line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+
+         } BuildingInfo
+        
+      } damagecontrol
+    
+		; Bereich wird nicht mehr benötigt, cargoinfo wird im Hauptfenster angezeigt da Cargo immer sichtbar
+      cargoinfo {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+      } cargoinfo
+      cargoinfoalt {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+		 ChildWidgets = Description cargo UnitInfoArea
+		 
+		 Description {
+               type = StaticText
+               text = Cargo Information
+               x = 10
+               y = 5
+               x2 = 285
+               height = 15
+            } Description
+			
+	UnitInfoArea {
+      type = Area
+      x = 5
+      y = 40
+      x2 = 110
+      y2 = -5
+         ChildWidgets = Selected1 Selected2 Selected3 TypeImage SelectedImage
+		 SelectedImage {
+            type = specialdisplay
+            x = 30
+            y = 25
+            x2 = -5 
+         } SelectedImage
+         Selected1 {
+            type = StaticText
+            text = Selected Unit
+			textalign = center
+            x = 2
+            y = 5
+            x2 = -2
+            height = 15
+         } Selected1
+         Selected2 {
+            type = StaticText
+            text = Weight:
+            x = 5
+            y = 75
+            x2 = -5
+            height = 15
+            ChildWidgets = CurrentCargo
+            CurrentCargo {
+               textalign = right
+               type = TextOutput
+               x = 0
+               y = 0
+               x2 = 0
+               y2 = 0
+               height = 15
+            } CurrentCargo
+         } Selected2
+         Selected3 {
+            type = StaticText
+            text = Type:
+            textalign = left
+            x = 5
+            y = 95
+            x2 = -2
+            height = 15
+         } Selected3
+         TypeImage {
+            type = image
+            x = 30
+            y = 110
+            x2 = 0
+         } TypeImage
+   } UnitInfoArea
+			
+		 cargo {
+         type = dummy
+         x = 115
+         y = 40
+         x2 = 640
+         y2 = -5
+         
+         ChildWidgets = Spalte1 Spalte2 MaxUnitSizeArea Bars
+		 
+		 Bars {
+		 type = area
+		 x = 225
+		 y = 0
+		 x2 = 0
+		 height = 75
+		 childwidgets = cargobar slotbar zero hundret
+		 zero {
+           textalign = left
+            x = 5
+            y = 5
+            x2 = -5
+            height = 15
+           type = Statictext
+           text = 0%
+         } zero
+         hundret {
+            textalign = right
+            x = 5
+            y = 5
+            x2 = -5
+            height = 15
+            type = Statictext
+            text = 100%
+         } hundret
+		 Cargobar {
+         type = area
+         in = true
+         x = 5
+         y = 30
+         x2 = -5
+         height = 15
+         ChildWidgets = LoadingMeter2 CargoUsage
+         LoadingMeter2 {
+            type = BarGraph
+            ; this graph shows how much of the transports max carrying weight is used up right now by its cargo
+            x = 1
+            y = 1
+            x2 = -1
+            y2 = -1
+            Direction = left2right
+            BackgroundColor = 0x006600
+         } LoadingMeter2
+         CargoUsage {
+            type = TextOutput
+			textalign = center
+            x = 20
+            y = 1
+            x2 = -20
+            y2 = -1
+         } CargoUsage
+      } Cargobar
+      SlotBar {
+         type = area
+         in = true
+         x = 5
+         y = 55
+         x2 = -5
+         height = 15
+         ChildWidgets = LoadingMeter3
+         LoadingMeter3 {
+            type = BarGraph
+            ; this graph shows how much of the transports max cargo slots is used up right now by its cargo
+            x = 1
+            y = 1
+            x2 = -1
+            y2 = -1
+            Direction = left2right
+            BackgroundColor = 0x006600
+         } LoadingMeter3
+      } Slotbar
+	  } Bars
+	
+         Spalte1 {
+            type = area
+            x = 0
+            y = 0
+            x2 = 75
+            height = 75
+            ChildWidgets = InfoText WeightLabel SlotLabel line1 line2
+            InfoText {
+               type = StaticText
+               text = Capacity
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15 
+            } InfoText 
+            WeightLabel {
+               type = StaticText
+               text = Weight
+               x = 5
+               y = 30
+               x2 = -5
+               height = 15
+            } WeightLabel
+            SlotLabel {
+               type = StaticText
+               text = Slots
+               x = 5
+               y = 55
+               x2 = -5
+               height = 15
+            } SlotLabel
+			Line1 {
+				type = area
+				x = 1
+				x2 = -1
+				y = 24
+				height = 2
+			} Line1
+			Line2 {
+				type = area
+				x = 1
+				x2 = -1
+				y = 49
+				height = 2
+			} Line2
+         } Spalte1
+         Spalte2 {
+            type = Area
+            x = 75
+            y = 0
+            width = 150
+            y2 = 75
+            ChildWidgets = FreeLabel FreeWeight FreeSlots MaxLabel MaxWeight MaxSlots Line1 Line2 Col
+            FreeLabel {
+               textalign = right
+               type = StaticText
+               text = Free
+                  x = 5
+                  y = 5
+                  x2 = -80
+                  height = 15
+            } FreeLabel
+            FreeWeight {
+               textalign = right
+               type = TextOutput
+               x = 5
+               y = 30
+               x2 = -80
+               height = 15
+            } FreeWeight
+            FreeSlots {
+               textalign = right
+               type = TextOutput
+                  x = 5
+                  y = 55
+                  x2 = -80
+                  height = 15
+            } FreeSlots
+            MaxLabel {
+               textalign = right
+               type = StaticText
+               text = Max
+               x = 80
+               y = 5
+               x2 = -5
+               height = 15 
+            } MaxLabel
+            MaxWeight {
+               textalign = right
+               type = TextOutput
+               x = 80
+               y = 30
+               x2 = -5
+               height = 15
+            } MaxWeight
+            MaxSlots {
+               textalign = right
+               type = TextOutput
+               x = 80
+               y = 55
+               x2 = -5
+               height = 15
+            } MaxSlots
+			Line1 {
+				type = area
+				x = 1
+				x2 = -1
+				y = 24
+				height = 2
+			} Line1
+			Line2 {
+				type = area
+				x = 1
+				x2 = -1
+				y = 49
+				height = 2
+			} Line2
+			Col {
+				type = area
+				x = 74
+				width = 2
+				y = 1
+				y2 = -1
+			} Col
+         } Spalte2
+		 
+		 MaxUnitSizeArea {
+			x = 0
+			y = 80
+			x2 = 0
+			y2 = 105
+			type = area
+			childwidgets = MaxUnitSizeLabel MaxUnitSize
+         MaxUnitSizeLabel {
+            x = 5
+            y = 5
+            x2 = -5
+            height = 15
+            type = StaticText
+            Text = Max unit weight
+         } MaxUnitSizeLabel
+         MaxUnitSize {
+            x = 5
+            y = 5
+            x2 = -5
+            height = 15
+            type = TextOutput
+            textalign = right
+         } MaxUnitSize
+		 } MaxUnitSizeArea
+         
+      } cargo
+      } cargoinfoalt
+      
+      conventionalpower {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+         ChildWidgets = costarea Slider Beschr Description
+		 
+		 	Description {
+               type = StaticText
+               text = Conventional Power
+               x = 10
+               y = 5
+               x2 = 285
+               height = 15
+            } Description
+		 
+		 Slider {
+		 type = area
+		 x = 5
+		 y = 145
+		 x2 = 310
+		 height = 45
+		 childwidgets = meterlabel powerarea
+		 MeterLabel {
+            type= dummy
+            x = 5
+            y = 5
+            x2 = -5
+            height = 15 
+            ChildWidgets = zero label hundret 
+            zero {
+              textalign = left
+              x = 0
+              y = 0
+              type = Statictext
+              text = 0%
+            } zero
+            hundret {
+              textalign = right
+              x = 0
+              y = 0
+              type = Statictext
+              text = 100%
+            } hundret
+            label {
+              textalign = center
+              x = 0
+              y = 0
+              type = Statictext
+              text = Output
+            } label
+         } MeterLabel
+		 PowerArea {
+			type = area
+			x = 5
+			x2 = -5
+			y = 25
+			height = 15
+			childwidgets = PowerSlider
+         PowerSlider {
+            type = slider
+            style = slider
+            x = 1
+            y = 1
+            x2 = -1
+            y2  = -1
+            Orientation = horizontal
+         } PowerSlider
+		 } PowerArea
+		 } Slider
+		 
+		 costarea {
+			   type = area
+               x = 120
+               y = 40
+               width = 190
+               height = 75
+			   childwidgets = line1 line2 col1 col2 energy mat fuel lenergy lmat lfuel energyIn energyOut materialIn materialOut fuelIn fuelOut
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   textalign = center
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 5
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   textalign = center
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 5
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 22
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   textalign = center
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 5
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lfuel
+		 energyIn {
+            type = TextOutput
+            x = 1
+            y = 30
+            width = 62
+            height = 15
+            TextAlign = Center
+         } energyIn
+         energyOut {
+            type = TextOutput
+            text = Cost
+            x = 1
+            y = 55
+            width = 62
+            height = 15
+            TextAlign = Center
+         } energyOut
+         materialIn {
+            type = TextOutput
+            x = 64
+            y = 30
+            width = 63
+            height = 15
+            TextAlign = Center
+         } materialIn
+         materialOut {
+            type = TextOutput
+            text = Cost
+            x = 64
+            y = 55
+            width = 63
+            height = 15
+            TextAlign = Center
+         } materialOut
+         fuelIn {
+            type = TextOutput
+            x = 126
+            y = 30
+            width = 63
+            height = 15
+            TextAlign = Center
+         } fuelIn
+         fuelOut {
+            type = TextOutput
+            text = Cost
+            x = 126
+            y = 55
+            width = 63
+            height = 15
+            TextAlign = Center
+         } fuelOut
+		 } costarea
+		 
+         Beschr {
+            type = Area
+            x = 5
+            y = 65
+            x2 = 120
+            height = 50
+            ChildWidgets = LabelCons LabelOut Line
+            LabelCons {
+               type = StaticText
+               text = Consumption
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } LabelCons
+            LabelOut {
+               type = StaticText
+               text = Output
+               x = 5
+               y = 30
+               x2 = -5
+               height = 15
+            } LabelOut
+			Line {
+				type = area
+				x = 1
+				x2 = -1
+				y = 24
+				height = 2
+			} Line
+         } Beschr
+
+         GraphArea {
+            type = dummy
+            x = 275
+            y = 40
+            x2 = 509
+            y2 = 157
+            UserHandler = ResourceGraph
+         } GraphArea
+         
+      } conventionalpower
+      
+      mining {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+
+         ChildWidgets = CostArea CostLabel Slider GraphArea Description
+		 	Description {
+               type = StaticText
+               text = Mining Control
+               x = 10
+               y = 5
+               x2 = 285
+               height = 15
+            } Description
+		 
+		 GraphArea {
+		 type = area
+		 x = 300
+		 y = 40
+		 y2 = -5
+		 x2 = 640
+		 ChildWidgets = Graph
+         Graph {
+            type = dummy
+            x = 2
+            y = 2
+            x2 = -2
+            y2 = -2
+            UserHandler = MiningGraph
+         } Graph
+		 } GraphArea
+		 
+		 Slider {
+		 type = area
+		 x = 5
+		 y = 145
+		 x2 = 295
+		 height = 45
+		 childwidgets = meterlabel powerarea
+		 MeterLabel {
+            type= dummy
+            x = 5
+            y = 5
+            x2 = -5
+            height = 15 
+            ChildWidgets = zero label hundret 
+            zero {
+              textalign = left
+              x = 0
+              y = 0
+              type = Statictext
+              text = 0%
+            } zero
+            hundret {
+              textalign = right
+              x = 0
+              y = 0
+              type = Statictext
+              text = 100%
+            } hundret
+            label {
+              textalign = center
+              x = 0
+              y = 0
+              type = Statictext
+              text = Power usage
+            } label
+         } MeterLabel
+		 PowerArea {
+			type = area
+			x = 5
+			x2 = -5
+			y = 25
+			height = 15
+			childwidgets = PowerSlider
+         PowerSlider {
+            type = slider
+            style = slider
+            x = 1
+            y = 1
+            x2 = -1
+            y2  = -1
+            Orientation = horizontal
+         } PowerSlider
+		 } PowerArea
+		 } Slider
+		 
+		 CostLabel {
+			type = area
+			x = 5
+			y = 65
+			x2 = 105
+			height = 50
+			childwidgets = Constext Outtext Line
+			Constext {
+				type = statictext
+				x = 5
+				y = 5
+				height = 15
+				x2 = -5
+				text = Consumption
+			} Constext
+			Outtext {
+				type = statictext
+				x = 5
+				y = 30
+				height = 15
+				x2 = -5
+				text = Output
+			} Outtext
+			Line {
+				type = area
+				x = 1
+				x2 = -1
+				y = 24
+				height = 2
+			} Line
+		 } CostLabel
+		 
+		 costarea {
+			   type = area
+               x = 105
+               y = 40
+               width = 190
+               height = 75
+			   childwidgets = line1 line2 col1 col2 energy mat fuel lenergy lmat lfuel energyIn materialIn fuelIn energyOut materialOut fuelOut
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   textalign = center
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 5
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   textalign = center
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 5
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 22
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   textalign = center
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 5
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lfuel
+		 energyIn {
+            type = TextOutput
+            x = 1
+            y = 30
+            width = 62
+            height = 15
+            TextAlign = Center
+         } energyIn
+         energyOut {
+            type = TextOutput
+            text = Cost
+            x = 1
+            y = 55
+            width = 62
+            height = 15
+            TextAlign = Center
+         } energyOut
+         materialIn {
+            type = TextOutput
+            x = 64
+            y = 30
+            width = 63
+            height = 15
+            TextAlign = Center
+         } materialIn
+         materialOut {
+            type = TextOutput
+            text = Cost
+            x = 64
+            y = 55
+            width = 63
+            height = 15
+            TextAlign = Center
+         } materialOut
+         fuelIn {
+            type = TextOutput
+            x = 126
+            y = 30
+            width = 63
+            height = 15
+            TextAlign = Center
+         } fuelIn
+         fuelOut {
+            type = TextOutput
+            text = Cost
+            x = 126
+            y = 55
+            width = 63
+            height = 15
+            TextAlign = Center
+         } fuelOut
+		 } CostArea
+		  
+      } mining
+      
+      research {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+         ChildWidgets = Avail costarea ResPerTurn CostLabel GraphArea Description
+
+         Description {
+            type = StaticText
+            text = Research Lab
+            x = 10
+            y = 5
+            x2 = 285
+            height = 15
+         } Description
+		 
+		 Avail {
+		 type = area
+		 x = 5
+		 y = 30
+		 x2 = 310
+		 height = 40
+		 childwidgets = AvailLabel AvailGlobal CurrentTech Line
+         CurrentTech {
+            type = TextOutput
+            x = 5
+            y = 3
+            x2 = -5
+            height = 15
+         } CurrentTech
+		 Line {
+		 type = area
+		 x = 1
+		 x2 = -1
+		 y = 19
+		 height = 2
+		 } Line
+         AvailLabel {
+            type = StaticText
+            text = Turns till completion
+            x = 5
+            y = 23
+            x2 = 0
+            height = 15
+         } AvailLabel
+         AvailGlobal {
+            type = TextOutput
+            text = Cost
+            x = 5
+            y = 23
+            x2 = -5
+            height = 15
+            TextAlign = Right
+         } AvailGlobal
+		 } Avail
+		 
+		 ResPerTurn {
+		 type = area
+		 x = 5
+		 y = 70
+		 x2 = 310
+		 height = 40
+		 childwidgets = ResPerTurnLabel ResPerTurnLabelGlobal ResPerTurnLocal ResPerTurnGlobal Line
+         ResPerTurnLabel {
+            type = StaticText
+            text = Research - this lab
+            x = 5
+            y = 3
+            x2 = 0
+            height = 15
+         } ResPerTurnLabel
+         ResPerTurnLocal {
+            type = TextOutput
+            x = -100
+            y = 3
+            x2 = -5
+            height = 15
+            TextAlign = Right
+         } ResPerTurnLocal
+		 Line {
+		 type = area
+		 x = 1
+		 x2 = -1
+		 y = 19
+		 height = 2
+		 } Line
+         ResPerTurnLabelGlobal {
+            type = StaticText
+            text = Research - total
+            x = 5
+            y = 23
+            x2 = 0
+            height = 15
+         } ResPerTurnLabelGlobal
+         ResPerTurnGlobal {
+            type = TextOutput
+            x = -100
+            y = 23
+            x2 = -5
+            height = 15
+            TextAlign = Right
+         } ResPerTurnGlobal
+		 } ResPerTurn
+		 
+		 CostLabel {
+		 type = area
+		 x = 5
+		 y = -56
+		 x2 = 120
+		 y2 = -5
+		 childwidgets = CostLabelLocal CostLabelGlobal Line
+         CostLabelLocal {
+            type = StaticText
+            text = Cost - this lab
+            x = 5
+            y = 6
+            x2 = 0
+            height = 15
+         } CostLabelLocal
+         CostLabelGlobal {
+            type = StaticText
+            text = Cost - all labs
+            x = 5
+            y = 31
+            x2 = 0
+            height = 15
+         } CostLabelGlobal
+		 Line {
+			type = area
+			x = 1
+			x2 = -1
+			y = 25
+			height = 2
+		 } Line
+		 } CostLabel
+		 
+		 costarea {
+			   type = area
+               x = 120
+               y = 115
+               width = 190
+               height = 75
+			   childwidgets = line1 line2 col1 col2 energy mat fuel lenergy lmat lfuel CostLocal0 CostGlobal0 CostLocal1 CostGlobal1 CostLocal2 CostGlobal2
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 1
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   textalign = center
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 5
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   textalign = center
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 5
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 22
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   textalign = center
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 5
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lfuel
+		 CostLocal0 {
+            type = TextOutput
+            x = 1
+            y = 30
+            width = 62
+            height = 15
+            TextAlign = Center
+         } CostLocal0
+         CostGlobal0 {
+            type = TextOutput
+            text = Cost
+            x = 1
+            y = 55
+            width = 62
+            height = 15
+            TextAlign = Center
+         } CostGlobal0
+         CostLocal1 {
+            type = TextOutput
+            x = 64
+            y = 30
+            width = 63
+            height = 15
+            TextAlign = Center
+         } CostLocal1
+         CostGlobal1 {
+            type = TextOutput
+            text = Cost
+            x = 64
+            y = 55
+            width = 63
+            height = 15
+            TextAlign = Center
+         } CostGlobal1
+         CostLocal2 {
+            type = TextOutput
+            x = 126
+            y = 30
+            width = 63
+            height = 15
+            TextAlign = Center
+         } CostLocal2
+         CostGlobal2 {
+            type = TextOutput
+            text = Cost
+            x = 126
+            y = 55
+            width = 63
+            height = 15
+            TextAlign = Center
+         } CostGlobal2
+		 } costarea
+			   
+         GraphArea {
+            type = area
+            x = 315
+            y = 30
+            width = 325
+            height = 160
+			childwidgets = Graph
+			Graph {
+			type = dummy
+			x = 2
+			y = 2
+			x2 = -2
+			y2 = -2
+            UserHandler = ResearchGraph
+			} Graph
+         } GraphArea
+
+         
+      } research
+
+      resourceinfo {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+            ChildWidgets = LineLabels ColumnLabels Data Description
+            Data {
+               type = dummy
+               TextAlign = Right
+               x = 69
+               y = 91
+               width = 570
+               y2 = -3
+               UserHandler = ResourceTable
+            } Data
+			Description {
+               type = StaticText
+               text = Resource Network Information
+               x = 10
+               y = 5
+               x2 = 285
+               height = 15
+            } Description
+
+            LineLabels {
+               type = area
+               x = 5
+               y = 89
+               x2 = 68
+               y2 = -5
+               ChildWidgets = avail capacity plus usage line1 line2 line3
+               avail {
+                  type = StaticText
+                  text = Available
+                  x = 5
+                  y = 7
+                  x2 = 0 
+                  height = 15
+               } avail
+               capacity {
+                  type = StaticText
+                  text = Capacity
+                  x = 5
+                  y = 32
+                  x2 = 0 
+                  height = 15
+               } capacity
+               plus {
+                  type = StaticText
+                  text = Plus
+                  x = 5
+                  y = 57
+                  x2 = 0 
+                  height = 15
+               } plus
+               usage {
+                  type = StaticText
+                  text = Usage
+                  x = 5
+                  y = 82
+                  x2 = 0 
+                  height = 15
+               } usage
+			   line1 {
+				type = area
+				x = 1
+				y = 25
+				x2 = -1
+				height = 2
+				} line1 
+				line2 {
+				type = area
+				x = 1
+				y = 50
+				x2 = -1
+				height = 2
+				} line2
+				line3 {
+				type = area
+				x = 1
+				y = 75
+				x2 = -1
+				height = 2
+				} line3
+            } LineLabels
+
+            ColumnLabels {
+               type = dummy
+               x = 68
+               y = 40
+               width = 570
+               y2 = -5
+               TextAlign = Center
+               ChildWidgets = localarea netarea globalarea
+			   localarea {
+			      type = area
+                  x = 0
+                  y = 0
+                  width = 190
+                  y2 = 0
+				  childwidgets = local line1 line2 line3 line4 line5 col1 col2 energy mat fuel lenergy lmat lfuel
+               local {
+                  type = StaticText
+                  text = Local
+                  x = 0
+                  y = 5
+                  x2 = 0
+                  height = 15
+               } local 
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   line3 {
+			   type = area
+			   x = 1
+			   y = 74
+			   x2 = -1
+			   height = 2
+			   } line3
+			   line4 {
+			   type = area
+			   x = 1
+			   y = 99
+			   x2 = -1
+			   height = 2
+			   } line4
+			   line5 {
+			   type = area
+			   x = 1
+			   y = 124
+			   x2 = -1
+			   height = 2
+			   } line5
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 25
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 25
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 30
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 47
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 30
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 47
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 30
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 47
+			     height = 2
+			   } lfuel
+			   } localarea
+
+			   netarea {
+			      type = area
+                  x = 190
+                  y = 0
+                  width = 190
+                  y2 = 0
+				  childwidgets = net line1 line2 line3 line4 line5 col1 col2 energy mat fuel lenergy lmat lfuel
+               net {
+                  type = StaticText
+                  text = Network
+                  x = 0
+                  y = 5
+                  x2 = 0
+                  height = 15
+               } net 
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   line3 {
+			   type = area
+			   x = 1
+			   y = 74
+			   x2 = -1
+			   height = 2
+			   } line3
+			   line4 {
+			   type = area
+			   x = 1
+			   y = 99
+			   x2 = -1
+			   height = 2
+			   } line4
+			   line5 {
+			   type = area
+			   x = 1
+			   y = 124
+			   x2 = -1
+			   height = 2
+			   } line5
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 25
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 25
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 30
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 47
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 30
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 47
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 30
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 47
+			     height = 2
+			   } lfuel
+			   } netarea
+
+			   globalarea {
+			      type = area
+                  x = 380
+                  y = 0
+                  width = 190
+                  y2 = 0
+				  childwidgets = global line1 line2 line3 line4 line5 col1 col2 energy mat fuel lenergy lmat lfuel
+               global {
+                  type = StaticText
+                  text = Global
+                  x = 0
+                  y = 5
+                  x2 = 0
+                  height = 15
+               } global
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   line3 {
+			   type = area
+			   x = 1
+			   y = 74
+			   x2 = -1
+			   height = 2
+			   } line3
+			   line4 {
+			   type = area
+			   x = 1
+			   y = 99
+			   x2 = -1
+			   height = 2
+			   } line4
+			   line5 {
+			   type = area
+			   x = 1
+			   y = 124
+			   x2 = -1
+			   height = 2
+			   } line5
+			   col1 {
+			   type = area
+			   x = 62
+			   y = 25
+			   width = 2
+			   y2 = -1
+			   } col1
+			   col2 {
+			   type = area
+			   x = 125
+			   y = 25
+			   width = 2
+			   y2 = -1
+			   } col2
+			   energy {
+			   type = statictext
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 30
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 47
+			     height = 2
+			   } lenergy
+			   mat {
+			   type = statictext
+			   text = Material
+			   x = 64
+			   width = 63
+			   height = 15
+			   y = 30
+			   } mat
+			   lmat {
+				 type = plain
+				 BackgroundColor = 0xd83c00
+				 x = 64
+				 width = 61
+				 y = 47
+				 height = 2
+			   } lmat
+			   fuel {
+			   type = statictext
+			   text = Fuel
+			   x = 126
+			   width = 63
+			   height = 15
+			   y = 30
+			   } fuel
+			     lfuel {
+			     type = plain
+			     BackgroundColor = 0xffd200
+			     x = 127
+			     width = 61
+			     y = 47
+			     height = 2
+			   } lfuel
+				} globalarea
+            } ColumnLabels
+      } resourceinfo
+            
+      solarpower {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+         
+            ChildWidgets = Description tabelle Outputarea Weatherarea
+            Description {
+               type = StaticText
+               text = Solar Power Plant
+               x = 10
+               y = 5
+               x2 = 285
+               height = 15
+            } Description
+			
+			Weatherarea {
+				type = area
+				x = 5
+				x2 = 250
+				y = 40
+				height = 25
+				childwidgets = Weather Weather2
+				Weather2 {
+               type = StaticText
+               text = Current Weather
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } Weather2
+            Weather {
+               type = image
+               x = 210
+               y = 4
+               width = 20
+               height = 5
+               textalign = right
+            } Weather
+			} Weatherarea
+			
+			tabelle {
+			   type = area
+               x = 186
+               y = 100
+               width = 64
+               height = 75
+			   childwidgets = line1 line2 energy lenergy MaxSolarPower CurrentSolarPower
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   energy {
+			   type = statictext
+			   textalign = center
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 5
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lenergy
+		 CurrentSolarPower {
+            type = TextOutput
+            x = 1
+            y = 30
+            width = 62
+            height = 15
+            TextAlign = Center
+         } CurrentSolarPower
+         MaxSolarPower {
+            type = TextOutput
+            text = Cost
+            x = 1
+            y = 55
+            width = 62
+            height = 15
+            TextAlign = Center
+         } MaxSolarPower
+		 } tabelle
+		 
+		 Outputarea {
+			type = area
+			x = 5
+			y = 125
+			x2 = 186
+			height = 50
+			childwidgets = CurrentPower2 MaxPower2 Line
+		    CurrentPower2 {
+               type = StaticText
+               text = Current Output
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } CurrentPower2
+            MaxPower2 {
+               type = StaticText
+               text = Max Output
+               x = 5
+               y = 30
+               x2 = -5
+               height = 15
+            } MaxPower2
+			Line {
+				type = area
+				x = 1 
+				x2 = -1
+				y = 24
+				height = 2
+			} Line
+			} Outputarea
+         
+      } solarpower
+      
+      windpower {
+         type = dummy
+         x = 0
+         y = 0
+         x2 = 0
+         y2 = 0
+         ChildWidgets = Description tabelle Weatherarea Outputarea
+            Description {
+               type = StaticText
+               text = Wind Power Plant
+               x = 10
+               y = 5
+               x2 = 285
+               height = 15
+            } Description
+
+			Weatherarea {
+				type = area
+				x = 5
+				x2 = 250
+				y = 40
+				height = 25
+				childwidgets = Weather Weather2
+            Weather2 {
+               type = StaticText
+               text = Wind Speed
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } Weather2
+            Weather {
+               type = TextOutput
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+               textalign = right
+            } Weather
+			} Weatherarea
+			
+			tabelle {
+			   type = area
+               x = 186
+               y = 100
+               width = 64
+               height = 75
+			   childwidgets = line1 line2 energy lenergy MaxWindPower CurrentWindPower
+			   line1 {
+			   type = area
+			   x = 1
+			   y = 24
+			   x2 = -1
+			   height = 2
+			   } line1
+			   line2 {
+			   type = area
+			   x = 1
+			   y = 49
+			   x2 = -1
+			   height = 2
+			   } line2
+			   energy {
+			   type = statictext
+			   textalign = center
+			   text = Energy
+			   x = 1
+			   width = 62
+			   height = 15
+			   y = 5
+			   } energy
+			   lenergy {
+			     type = plain
+			     BackgroundColor = 0x00D2D2
+			     x = 1
+			     width = 61
+			     y = 22
+			     height = 2
+			   } lenergy
+		 CurrentWindPower {
+            type = TextOutput
+            x = 1
+            y = 30
+            width = 62
+            height = 15
+            TextAlign = Center
+         } CurrentWindPower
+         MaxWindPower {
+            type = TextOutput
+            x = 1
+            y = 55
+            width = 62
+            height = 15
+            TextAlign = Center
+         } MaxWindPower
+		 } tabelle
+		 
+		 Outputarea {
+			type = area
+			x = 5
+			y = 125
+			x2 = 186
+			height = 50
+			childwidgets = CurrentPower2 MaxPower2 Line
+		    CurrentPower2 {
+               type = StaticText
+               text = Current Output
+               x = 5
+               y = 5
+               x2 = -5
+               height = 15
+            } CurrentPower2
+            MaxPower2 {
+               type = StaticText
+               text = Max Output
+               x = 5
+               y = 30
+               x2 = -5
+               height = 15
+            } MaxPower2
+			Line {
+				type = area
+				x = 1 
+				x2 = -1
+				y = 24
+				height = 2
+			} Line
+			} Outputarea
+      } windpower
+      
+   } SubWindowPane
+  
+     
+        	
+} panel
+
