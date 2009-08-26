@@ -8,7 +8,7 @@ ObjectType {
 
    visible_in_fogOfWar = false
 
-   Height = 119 ;17-Aug 2003
+   Height = 117 
    Armor = 600
 
    LinkableObjects = 

@@ -7,7 +7,7 @@ ObjectType {
    LinkableObjects = 
    NoSelfChaining = false
    Armor = 2000
-   Height = 119
+   Height = 117
 
    ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    Movemalus_plus = 120 120 120 120 120 120 120  15 180 120 120 120 120 120 120 120 120 120

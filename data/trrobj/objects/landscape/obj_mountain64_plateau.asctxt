@@ -4,6 +4,7 @@ ObjectType {
    parent = 520
    LinkableObjects = 2600
    NetBehaviour = 
+   Height = 87
 
    Weather = dry much_snow
    dry { 

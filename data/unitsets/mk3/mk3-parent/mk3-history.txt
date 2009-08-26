@@ -3,6 +3,10 @@ Grafik: GAMER , Ares
 InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
+
+__________________
+Beta-09-11
+-ICCE External AmmoTransfer
 ________________________
 01.08.2008 z75-2 (GAMER)
 -ExternalAmmoTransfer Bugfix = Truck, SeaShadow, Chinook, ICSE

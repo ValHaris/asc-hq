@@ -2,9 +2,18 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
-
-__________________
-beta-09-10
+____________
+Beta-09-11
+-falsches parent bei "Waterhole" korrigiert, jetzt flachwasser anstatt stein
+-lila rand beim bergobjekt entfernt
+-Steilküste, fehlerhaftes Bild 0 ausgetauscht
+________________________
+01.08.2009 z75-2 (GAMER)
+-Wüste Grafikbugfix
+-Türkiswasserküste Filterbugfix
+______________________
+25.07.2009 Z75 (GAMER)
+Beta-09-10
 -Panzerschiene nun Lavadefence und bietet Schutz ähnlich wie ditch
 -palette.map überarbeitet
 Beta-09-09

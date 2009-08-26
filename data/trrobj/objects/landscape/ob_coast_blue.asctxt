@@ -33,7 +33,7 @@ ObjectType {
 
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    MoveMalus_abs = -1 
-   MoveMalus_plus =  
+   MoveMalus_plus = 2 
 
    AttackBonus_abs = -1
    AttackBonus_plus = 
@@ -48,8 +48,8 @@ ObjectType {
       terrain_not = 
       terrain_kill = 
    } TerrainAccess
-   TerrainProperties_Filter = Road Lowland Shallow_water Swamp Forest High_mountains Railroad Runway Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Hillside Turret_foundation Morass 
-   TerrainProperties_Add = soft_Sand track_possible
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = track_possible
 
    dry { 
       UseGFXpics = false

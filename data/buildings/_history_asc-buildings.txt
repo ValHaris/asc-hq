@@ -6,7 +6,6 @@ BUILDINGS HISTORY
 __________________
 Beta-09-04
 -Tiefseefabrik eingebaut
-
 __________________
 10.03.2009 (Martin)
 - Farm und Lumbercamp Bild angepasst (mehr Transparenz)

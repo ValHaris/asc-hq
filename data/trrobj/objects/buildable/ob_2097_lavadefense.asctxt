@@ -8,7 +8,7 @@ ObjectType {
 
    Name = Lava-Defense-Wall
    Armor = 250
-   Height = 117 ;17-Aug 2003
+   Height = 119 
    lifetime = 90
 
    visible_in_fogOfWar = true
