@@ -273,10 +273,22 @@ int keyTranslation[keyTranslationNum][2] = { { 228, 132 }, //   "a
                                              { 220, 154 }, //   "U
                                              { 223, 225 } }; // sz
 
-int processEvents ( )
+                                             
+EventHandlingMutex::EventHandlingMutex()
 {
    SDL_mutexP ( eventHandlingMutex );
+}
 
+EventHandlingMutex::~EventHandlingMutex()
+{
+   SDL_mutexV ( eventHandlingMutex );
+}
+                                             
+                                             
+int processEvents ( )
+{
+   EventHandlingMutex ehm();
+         
    SDL_Event event;
    int result;
    if ( SDL_PollEvent ( &event ) == 1) {
@@ -362,7 +374,6 @@ int processEvents ( )
    } else
       result = 0;
 
-   SDL_mutexV( eventHandlingMutex );
    return result;
 }
 

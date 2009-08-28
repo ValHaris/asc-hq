@@ -39,7 +39,13 @@ extern bool legacyEventSystemActive();
 
 extern int initializeEventHandling ( int (*fn)(void *) , void *data );
 
-extern SDL_mutex* eventHandlingMutex;
+
+class EventHandlingMutex {
+   public:
+      EventHandlingMutex();
+      ~EventHandlingMutex();
+};
+
 
 extern void exit_asc( int returnresult );
 

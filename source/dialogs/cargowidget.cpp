@@ -31,6 +31,7 @@
 #include "../widgets/bargraphwidget.h"
 #include "../paradialog.h"
 #include "../gameoptions.h"
+#include "../events.h"
 
 HighLightingManager::HighLightingManager() : marked(0) {};
 
@@ -76,7 +77,7 @@ StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, cons
       : PG_Widget ( parent, CalcSize(pos), true ), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos ), dragState( Off ), dragTarget( NoDragging )
 {
    highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
-   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Update), true));
+   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Redraw), true));
 
    if ( unitPosition.x < 0 ) {
       unitPosition.x = (Width() - fieldsizex)/2;
@@ -187,9 +188,10 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
          if( *i )
             ++slots;
                
-      if ( container->baseType->maxLoadableUnits )
-         setBargraphValue ( "SlotBar", float( slots ) / float(container->baseType->maxLoadableUnits) );
-      else
+      if ( container->baseType->maxLoadableUnits ) {
+         float f = float( slots ) / float(container->baseType->maxLoadableUnits);
+         setBargraphValue ( "SlotBar", f );
+      } else
          setBargraphValue ( "SlotBar", 0 );
       
       
@@ -197,7 +199,10 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
       
       
       ASCString s;
-      s.format( "%d / %d", container->cargoWeight(), container->baseType->maxLoadableWeight );
+      if ( container->baseType->maxLoadableUnits )
+         s.format( "%d / %d", container->cargoWeight(), container->baseType->maxLoadableWeight );
+      else
+         s = "-";
       setLabelText( "CargoUsage", s );
    
       s.format( "%d / %d", slots, container->baseType->maxLoadableUnits );
@@ -212,6 +217,7 @@ void StoringPosition :: eventDraw (SDL_Surface *surface, const PG_Rect &src)
       setBargraphValue ( "SlotBar", 0 );
       setLabelText( "CargoUsage", "" );
       setLabelText( "SlotSummary", "" );
+      setLabelText( "Weight", "" );
    }
 
    // PG_Draw::BlitSurface( clippingSurface.getBaseSurface(), src, PG_Application::GetScreen(), dst);
@@ -281,7 +287,13 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
       if ( !cargoWidget )
          return false;
 
-      PG_Application::ShowCursor( PG_Application::HARDWARE );
+      {
+         EventHandlingMutex ehm();
+         
+         PG_Application::ShowCursor( PG_Application::NONE );
+         PG_Application::SetCursor( NULL );
+         PG_Application::ShowCursor( PG_Application::HARDWARE );
+      }
 
       int x,y;
       PG_Application::GetEventSupplier()->GetMouseState(x, y);
@@ -326,9 +338,13 @@ bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
             MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
             blitter.blit( IconRepository::getIcon("mouse.png"), surf, SPoint(0,0));
 
+            EventHandlingMutex ehm();
+            
             getUnit()->paint( surf, SPoint(0,0), getUnit()->getOwner() );
+            PG_Application::ShowCursor( PG_Application::NONE );
             PG_Application::SetCursor( const_cast<SDL_Surface*>( surf.getBaseSurface() ));
             PG_Application::ShowCursor( PG_Application::SOFTWARE );
+            
          }
       }
    }
@@ -489,7 +505,7 @@ void CargoWidget :: startDrag( Vehicle* v )
       }
       draggedUnit = v;
    }
-   Update();
+   Redraw();
 }
 
 void CargoWidget :: releaseDrag( Vehicle* v)

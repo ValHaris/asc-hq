@@ -454,8 +454,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             widgetParams.assign ( img );
             parsePanelASCTXT( pc, img, widgetParams );
          }
-
-      }
+      }  else
       if ( type == Area ) {
          bool mode;
          pc.addBool( "in", mode, true );
@@ -465,8 +464,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          widgetParams.assign ( tw );
          parsePanelASCTXT( pc, tw, widgetParams );
          newWidget = tw;
-      }
-
+      } else
       if ( type == StaticLabel ) {
          ASCString text;
          pc.addString( "text", text );
@@ -476,7 +474,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
          newWidget = lb;
-      }
+      } else
       if ( type == TextOutput ) {
          PG_Label* lb = new PG_Label ( parent, r, PG_NULLSTR, style );
 
@@ -484,7 +482,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             widgetParams.assign ( lb );
          parsePanelASCTXT( pc, lb, widgetParams );
          newWidget = lb;
-      }
+      } else
       if ( type == MultiLineText ) {
          /*
          PG_MultiLineEdit* lb = new PG_MultiLineEdit ( parent, r, style );
@@ -502,8 +500,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          
          parsePanelASCTXT( pc, tr, widgetParams );
          newWidget = tr;
-      }
-
+      } else
       if ( type == BarGraph ) {
          int dir;
          pc.addNamedInteger( "direction", dir, barDirectionNum, barDirections, 0 );
@@ -526,29 +523,25 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
          widgetParams.assign ( bg );
          parsePanelASCTXT( pc, bg, widgetParams );
          newWidget = bg;
-      }
-
-
+      } else
       if ( type == SpecialDisplay ) {
          SpecialDisplayWidget* sw = new SpecialDisplayWidget ( parent, r );
          widgetParams.assign ( sw );
 
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-      }
-
+      } else
       if ( type == SpecialInput ) {
          SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
 
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-      }
-
+      } else
       if ( type == Dummy ) {
          SpecialInputWidget* sw = new SpecialInputWidget ( parent, r );
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-      }
+      } else
       if ( type == ScrollArea ) {
          PG_ScrollWidget* sw = new PG_ScrollWidget( parent, r, style );
          ASCString scrollbar;
@@ -565,8 +558,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-      }
-      
+      } else
       if ( type == Button ) {
          PG_Button* sw = new PG_Button( parent, r, style );
 
@@ -582,8 +574,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-      }
-
+      } else
       if ( type == RadioButton ) {
          PG_RadioButton* sw = new PG_RadioButton( parent, r, style );
          if ( radioButtonGroup )
@@ -602,8 +593,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-         
-      }
+      } else
       if ( type == CheckBox ) {
          PG_CheckButton* sw = new PG_CheckButton( parent, r, style );
 
@@ -618,8 +608,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-         
-      }
+      } else
       if ( type == LineEdit ) {
          PG_LineEdit* sw = new PG_LineEdit( parent, r, style );
          
@@ -634,7 +623,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sw, widgetParams );
          newWidget = sw;
-      }
+      } else
       if ( type == Slider ) {
          
          int direction = 0;
@@ -648,7 +637,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, sb, widgetParams );
          newWidget = sb;
-      }
+      } else
       if ( type == Plain ) {
          
          PG_ThemeWidget* w = new PG_ThemeWidget( parent, r );
@@ -658,8 +647,7 @@ void ASCGUI_Window::parsePanelASCTXT ( PropertyReadingContainer& pc, PG_Widget* 
             
          parsePanelASCTXT( pc, w, widgetParams );
          newWidget = w;
-      }
-      
+      } else
       if ( type == ListBox) {
          PG_ListBox* l = new PG_ListBox( parent, r );
          

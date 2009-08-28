@@ -34,7 +34,7 @@ class HighLightingManager
       int getMark();
       SigC::Signal2<void,int,int> markChanged;
       void setNew(int pos );
-      SigC::Signal0<void> redrawAll;
+      SigC::Signal0<bool> redrawAll;
       //! the bool param is set to true if this is the first click on a unit 
       SigC::Signal3<void,int, SPoint, bool> clickOnMarkedUnit;
 };
