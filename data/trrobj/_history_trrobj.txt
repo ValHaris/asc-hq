@@ -2,7 +2,8 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
-____________
+______________________
+29.08.2009 z76 (GAMER)
 -Deepseaminarals besser sichtbar
 -movemalus für default auf Wasser entfernt
 -neue Grafik Kristalle
@@ -11,9 +12,6 @@ Beta-09-11
 -falsches parent bei "Waterhole" korrigiert, jetzt flachwasser anstatt stein
 -lila rand beim bergobjekt entfernt
 -Steilküste, fehlerhaftes Bild 0 ausgetauscht
-Neu:
-PU Lord
-PU Tigerking2
 ________________________
 01.08.2009 z75-2 (GAMER)
 -Wüste Grafikbugfix

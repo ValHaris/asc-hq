@@ -10,7 +10,7 @@ VehicleType {
    InfoImage = mk3t_icce.jpg
    GuideSortHelp = 550 551 0 0 3 0 0 0 0 0
 
-   Feature += externalAmmoTransfer
+   Features += ExternalAmmoTransfer
    Armor -= 50
    Transportation ->* VehicleType.TransTrain 
 

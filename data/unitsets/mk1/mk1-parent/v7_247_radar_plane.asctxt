@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 0 247 0 0 0 0 0 0 0 0
 
 
-   Armor = 350
+   Armor = 300
    Weight = 250
    View = 100
    Features = satelliteview
