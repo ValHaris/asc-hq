@@ -26,7 +26,7 @@ ObjectType {
    } RemovalCost
 
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  14  14  14  15  16  16  12  10  19  12  11  19  19  12  12  19  10
+   MoveMalus_abs = 11  14  14  14  15  16  16  12  10  19  12  11  19  19  12  12  19  10
    Movemalus_plus = 
 
    AttackBonus_abs = 0

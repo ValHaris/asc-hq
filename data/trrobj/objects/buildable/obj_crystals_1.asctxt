@@ -11,7 +11,7 @@ ObjectType {
    Weather = dry
    visible_in_fogOfWar = true
    LinkableObjects = 
-   NetBehaviour = 
+   NetBehaviour = NetToSelf NetToBorder
    ConstructionCost { 
       Energy = 0
       Material = 2000
@@ -35,7 +35,7 @@ ObjectType {
    TerrainProperties_Add = small_rocks 
    dry { 
       UseGFXpics = false
-      picture = obj_crystals_1.png 1
+      picture = ob_crystal_field.png 65
       ImageReference =  -1 
       FlipPictures   =  0 
    } dry

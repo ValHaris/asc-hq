@@ -10,6 +10,7 @@ default:
 -Schnellboote und Wigs nicht mehr auf Tankblocker bewegbar
 -Trooper Wrack, keine Bewegungseinschränkung
 -Höheneinstufung geändert: Plateau, Lavadefence, Tankblocker, Stacheldraht
+-Kosten für Jamming, Stealth, Radar erhöht
 mk1:
 -diverse kleine 3D Grafiken eingefügt
 ________________________

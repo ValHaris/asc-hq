@@ -47,9 +47,9 @@ ObjectType {
    TerrainProperties_Add = 
    dry { 
       UseGFXpics = false
-      picture = obj_crystals_1.png 1
+      picture = obj_deepseaminerals.png 1
       ImageReference =  -1 
       FlipPictures   =  0 
-      DisplayMethod = shadow
+;      DisplayMethod = shadow
   } dry
 } ObjectType

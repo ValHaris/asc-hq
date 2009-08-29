@@ -697,7 +697,7 @@
      	 WeaponEffectiveness {
             default = 100
             device = 100
-            trooper = 50
+            trooper = 80
          ; erhoehter Schaden an Einheiten die nicht fuer das Fliegen bestimmt sind
             building|turret|object = 200
             hoovercraft = 200
