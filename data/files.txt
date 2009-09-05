@@ -121,8 +121,10 @@ unitsets/mk1/mk1-vad/*.jpg
 unitsets/mk1/mk1-vari/*.asctxt
 unitsets/mk1/mk1-vari/*.pcx
 unitsets/mk1/mk1-vari/*.jpg
+unitsets/mk1/mk1-vari/*.png
 unitsets/mk1/mk1-view/*.asctxt
 unitsets/mk1/mk1-view/*.pcx
+unitsets/mk1/mk1-view/*.png
 unitsets/mk1/mk1-view/*.jpg
 unitsets/mk1/mk1-vfatr/*.asctxt
 unitsets/mk1/mk1-vfatr/*.pcx

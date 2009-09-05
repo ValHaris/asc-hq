@@ -1,7 +1,7 @@
 BuildingType { 
    Name = Training Center
    ID = 23
-   Infotext = [Trainingszentrum fuer Trooper, Landfahrzeuge und Helicopter]
+   Infotext = [Trainingszentrum fuer Soldaten, kleine bis große Rad- und Kettenfahrzeuge sowie Luftkissenfahrzeuge. Einheiten mit einem Gewicht über 200 können das Gebäude nicht betreten.]
    Armor = 1500
    parent = 499
    ConstructionStages = 1
