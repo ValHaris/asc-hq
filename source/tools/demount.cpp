@@ -50,6 +50,10 @@ void fatalError ( const ASCString& s )
    exit(1);
 }
 
+void displayLogMessage( int verbosity, const ASCString& message )
+{}
+
+
 int readInt  ( FILE* f )
 {
    int i;

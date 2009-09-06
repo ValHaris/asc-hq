@@ -772,6 +772,7 @@ void tncontainerstream :: opencontainerfile ( const char* name )
    if ( i >= num )
       throw tfileerror ( name );
 
+   displayLogMessage( 9, ASCString("opencontainerfile ") + name );
    actfile = &index[i];
    containerfilepos = 0;
    seek ( actfile->start );
@@ -1682,13 +1683,22 @@ time_t tn_c_lzw_filestream :: get_time ( void )
 
 tn_c_lzw_filestream :: ~tn_c_lzw_filestream()
 {
-   close_compression ();
-   close();
-   if ( inp == 1 ) {
-      delete strm;
-      strm = NULL;
-   } else
-      containerstream->closecontainerfile();
+   try {
+      displayLogMessage( 9, "~tn_c_lzw_filestream " + getLocation() );
+      
+      close_compression ();
+      close();
+      if ( inp == 1 ) {
+         delete strm;
+         strm = NULL;
+      } else {
+         displayLogMessage( 9, ASCString("~tn_c_lzw_filestream -> closecontainerfile ") );
+         containerstream->closecontainerfile();
+      }
+   } catch ( ... ) {
+      displayLogMessage( 9, ASCString("~tn_c_lzw_filestream : caught exception") );
+      throw;
+   }
 }
 
 

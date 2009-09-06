@@ -59,6 +59,8 @@
 #define WriteCode(a,b,c) fprintf( outfile, "%c%c%c", a, b, c )
 
 
+void displayLogMessage( int verbosity, const ASCString& message )
+{}
 
 void fatalError ( const ASCString& s )
 {
