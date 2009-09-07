@@ -3,6 +3,10 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ______________________
+02.09.2009 z76-2 (GAMER)
+-Pilze+Raps weniger Movemalus beim Entfernen
+-Bugfix Kanal/River Terrainbits Winter
+______________________
 29.08.2009 z76 (GAMER)
 -Deepseaminarals besser sichtbar
 -movemalus für default auf Wasser entfernt

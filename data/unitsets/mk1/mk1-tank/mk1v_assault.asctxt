@@ -4,8 +4,9 @@ VehicleType {
    parent = 291
 
    Description = assault tank
-   Picture = MK1v_assault.pcx
+   Picture = mk1v_assault.pcx
    InfoImage = mk1v_assault.jpg
+   InfoImageSmall = mk1v_assault_k.png
    WreckageObject = 403
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Assault Tanks are less-than-subtle. They are fast, although not

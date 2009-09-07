@@ -6,6 +6,7 @@ VehicleType {
    Description = repair train
    picture = MK1t_judy.pcx
    InfoImage = mk1t_judy.jpg
+   InfoImageSmall = mk1t_judy_k.png
    WreckageObject = 459
    GuideSortHelp = 553 556 552 0 1 0 0 0 0 0
    Infotext = [Repari Trains combine the benefits of the Repair vehicle, the

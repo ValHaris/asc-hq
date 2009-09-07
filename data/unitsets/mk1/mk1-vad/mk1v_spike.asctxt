@@ -6,6 +6,7 @@ VehicleType {
    Description = AA-rocket system
    Picture = MK1v_spike.pcx
    InfoImage = mk1v_spike.jpg
+   InfoImageSmall = mk1v_spike_k.png
    WreckageObject = 464
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [The AA-artillery unit is one of the most dangerous anti-air weapons

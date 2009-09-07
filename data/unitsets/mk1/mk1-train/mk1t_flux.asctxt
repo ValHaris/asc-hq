@@ -6,6 +6,7 @@ VehicleType {
    Description = transport train
    picture = MK1t_flux.pcx
    InfoImage = mk1t_flux.jpg
+   InfoImageSmall = mk1t_flux_k.png
    WreckageObject = 472
    GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
    Infotext = [Transport Trains come into the picture when the battle runs in

@@ -112,12 +112,15 @@ unitsets/mk1/mk1-sta/*.png
 unitsets/mk1/mk1-tank/*.asctxt
 unitsets/mk1/mk1-tank/*.pcx
 unitsets/mk1/mk1-tank/*.jpg
+unitsets/mk1/mk1-tank/*.png
 unitsets/mk1/mk1-train/*.asctxt
 unitsets/mk1/mk1-train/*.pcx
 unitsets/mk1/mk1-train/*.jpg
+unitsets/mk1/mk1-train/*.png
 unitsets/mk1/mk1-vad/*.asctxt
 unitsets/mk1/mk1-vad/*.pcx
 unitsets/mk1/mk1-vad/*.jpg
+unitsets/mk1/mk1-vad/*.png
 unitsets/mk1/mk1-vari/*.asctxt
 unitsets/mk1/mk1-vari/*.pcx
 unitsets/mk1/mk1-vari/*.jpg

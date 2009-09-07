@@ -4,6 +4,10 @@ VehicleType {
    parent = 222
 
    Description = air-defence turret
+   Picture = mk1b_samturret.pcx
+   InfoImage = mk1b_samturret.jpg
+   InfoImageSmall = mk1b_samturret_k.png
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Der SAM TURRET ist eine gepanzerte stationäre Luftabwehreinheit.
 Bewaffnet ist dieser Turm zum einem mit schweren Raketen zur Luftabwehr,
 sowie zum anderen mit einem Maschinengewehr, das es ihm ermöglicht,
@@ -11,9 +15,6 @@ sich auch gegen Bodeneinheiten zu verteidigen.
 Die geringe Sichtweite dieser Einheit macht zusätzliche Aufklärer
 wie den ORACLE, GRS erforderlich.
 InfoImage = BananaJoe ]
-   Picture = MK1b_samturret.pcx
-   InfoImage = mk1b_samturret.jpg
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 50
    Weight = 290

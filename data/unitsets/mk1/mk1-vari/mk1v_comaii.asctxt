@@ -4,7 +4,7 @@ VehicleType {
    parent = 252
 
    Description = heavy artillery
-   Picture = MK1v_comaii.pcx
+   Picture = mk1v_comaii.pcx
    InfoImage = mk1v_comaii.jpg
    InfoImageSmall = mk1v_comaii_k.png
    WreckageObject = 402

@@ -6,7 +6,8 @@ VehicleType {
    Description = mini rescue submarine
    Infotext = []
    picture = mk1s_mrsm.pcx
-   InfoImage = mk1s_mrsm_jpg
+   InfoImage = mk1s_mrsm.jpg
+   InfoImageSmall = mk1s_mrsm.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor -= 500

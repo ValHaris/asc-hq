@@ -4,8 +4,9 @@ VehicleType {
    parent = 292
 
    Description = medium tank
-   Picture = MK1v_nova2.pcx
+   Picture = mk1v_nova2.pcx
    InfoImage = mk1v_nova2.jpg
+   InfoImageSmall = mk1v_nova2_k.png
    WreckageObject = 466
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    InfoText = [Mit dem Wiedererstarken der Infanterie, sowie dem Aufkommen effektiver Jagdbomber und Hubschrauber offenbarten sich die Fehler, welche durch die Vernachlässigung der leichten Nahverteidigung beim Nova(1) begangen wurden. Da jedoch das Chassis nicht schlecht war und sich bereits in schier unglaublichen Mengen im Einsatz befand, entschloß man sich lediglich eine zusätzliche Reaktivpanzerung und einen komplett überarbeiteten Turm zu montieren. Zu der neuen 90mm Kanone erhielt der Turm nun koaxial das MG aus der Wanne, sowie eine 20mm FlaK auf Lafette oben auf. Durch diesen recht einfachen Eingriff wurde der Nova nicht nur modernisiert, sondern zum ersten rehanischen 'Main battle tank' aufgewertet. Dank seiner universellen Einsatzfähigkeit ist der Nova 2 der neue Standardpanzer und muß, gerade im gemischten Verband, keinen Gegner fürchten.

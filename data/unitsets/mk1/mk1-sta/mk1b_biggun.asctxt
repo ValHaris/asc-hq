@@ -10,6 +10,7 @@ VehicleType {
               InfoImage = BananaJoe]
    picture = MK1b_BIGGUN.pcx
    InfoImage = mk1b_biggun.jpg
+   InfoImageSmall = mk1b_biggun_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 100

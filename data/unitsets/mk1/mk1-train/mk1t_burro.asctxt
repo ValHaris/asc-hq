@@ -7,6 +7,7 @@ VehicleType {
    Infotext = []
    picture = MK1t_burro.pcx
    InfoImage = mk1t_burro.jpg
+   InfoImageSmall = mk1t_burro_k.png
    WreckageObject = 472
    GuideSortHelp = 553 565 0 0 1 0 0 0 0 0
 

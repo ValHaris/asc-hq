@@ -4,8 +4,9 @@ VehicleType {
    ID = 57
 
    Description = battle train
-   picture = MK1t_punch.pcx
+   picture = mk1t_punch.pcx
    InfoImage = mk1t_punch.jpg
+   InfoImageSmall = mk1t_punch_k.png
    WreckageObject = 457
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Combat Train are excellent defensive trains. They are powerful,

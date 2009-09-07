@@ -4,8 +4,9 @@ VehicleType {
    parent = 321
    
    Description = main defence gun
-   picture = MK1b_HEAVYGUN.pcx
+   picture = mk1b_heavygun.pcx
    InfoImage = mk1b_heavygun.jpg
+   InfoImageSmall = mk1b_heavygun_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [A Turret Emplacement is a fearsome structure. It is capable of
               demolishing tank platoons before the latter can even detect

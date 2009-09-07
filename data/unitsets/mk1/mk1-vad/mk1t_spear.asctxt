@@ -4,8 +4,9 @@ VehicleType {
    parent = 221
 
    Description = Anti aircraft train
-   Picture = Mk1t_spear.pcx
+   Picture = mk1t_spear.pcx
    InfoImage = mk1t_spear.jpg
+   InfoImageSmall = mk1t_spear_k.png
    WreckageObject = 473
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Consider the AA-Train to be a much more powerful version of the

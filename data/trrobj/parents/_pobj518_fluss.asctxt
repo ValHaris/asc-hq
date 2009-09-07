@@ -94,7 +94,7 @@ ObjectType {
    much_snow ->* ObjectType.few_snow
    ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    much_snow.MoveMalus_Abs = 13  13  13  13  14  14  14  12  12  14  22  16  14  14  22  22  14  10
-   much_snow_.TerrainProperties_Add = river frozen_water track_possible snow
+   much_snow.TerrainProperties_Add = river frozen_water track_possible snow
    much_snow.Jamming_abs = 2
 
    snow_and_ice ->* ObjectType.much_snow

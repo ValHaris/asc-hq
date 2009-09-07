@@ -4,8 +4,9 @@ VehicleType {
    parent = 218
 
    Description = anti aircraft tank
-   Picture = MK1v_swatterii.pcx
+   Picture = mk1v_swatterii.pcx
    InfoImage = mk1v_swatterii.jpg
+   InfoImageSmall = mk1v_swatterii_k.png
    WreckageObject = 418
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Die anwachsende Bedrohung durch neue Kampfhubschraubertypen mit besserer Panzerung, machte eine Überarbeitung des „Swatter“ notwendig. Die 57-mm-Kanonen wurden durch solche vom Kaliber 76 mm ausgetauscht, was eine leichte Vergrößerung des Turmes erforderlich machte. Beim bewerten Chassis wurde lediglich die Panzerung etwas abgeschwächt, um das höhere Gewicht des neuen Turms zu kompensieren. Durch die Vergrößerung des Kalibers konnte die Reichweite und Durchschlagskraft des „Swatter2“ deutlich erhöht werden. Um noch mehr Gewicht einzusparen und die Beweglichkeit weiter zu erhöhen, wurde auf weitere Bewaffnung komplett verzichtet. Es ist deshalb zwingend notwendig, den „Swatter2“ einige Kampfeinheiten als Eskorte an die Seite zu stellen.

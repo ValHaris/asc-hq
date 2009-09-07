@@ -6,6 +6,7 @@ VehicleType {
    Description = light tank
    Picture = MK1v_termite.pcx
    InfoImage = mk1v_termite.jpg
+   InfoImageSmall = mk1v_termite_k.png
    WreckageObject = 465
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Der leichte Kampfpanzer vom Typ „Termite“ vereint hohe Mobilität mit hoher Angriffseffizienz.

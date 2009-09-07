@@ -4,8 +4,9 @@ VehicleType {
    parent = 256
 
    Description = railroad gun
-   Picture = MK1t_rotos.pcx
+   Picture = mk1t_rotos.pcx
    InfoImage = mk1t_rotos.jpg
+   InfoImageSmall = mk1t_rotos_k.png
    WreckageObject = 458
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Railroad Guns are the ultimate artillery on land. Its primary

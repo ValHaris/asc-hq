@@ -2,7 +2,7 @@ VehicleType {
    name = Parent HC Sub
    abstract = true
    ID = 493
-   HeightChangeMethodNum = 4
+   HeightChangeMethodNum = 5
    HeightChangeMethod0 {
       movecost = 10
       heightdelta = 1

@@ -24,14 +24,14 @@ ObjectType {
    ConstructionCost { 
       Energy = 0
       Material = 100
-      fuel = 1000
-      Movement = 10
+      fuel = 2000
+      Movement = 20
    } ConstructionCost
    RemovalCost { 
       Energy = 0
       Material = 0
       fuel = -400
-      Movement = 20
+      Movement = 15
    } RemovalCost
    NoSelfChaining = false
    TerrainAccess { 

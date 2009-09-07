@@ -4,8 +4,9 @@ VehicleType {
    parent = 290
    Description = light assault tank
 
-   Picture = MK1v_lassault.pcx
+   Picture = mk1v_lassault.pcx
    InfoImage = mk1v_lassault.jpg
+   InfoImageSmall = mk1v_lassault_k.png
    WreckageObject = 465
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Light Tanks are economic tanks. While not being very heavily

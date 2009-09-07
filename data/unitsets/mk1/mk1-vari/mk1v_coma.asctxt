@@ -6,6 +6,7 @@ VehicleType {
 
    Picture = mk1v_coma.pcx
    InfoImage = mk1v_coma.jpg
+   InfoImageSmall = mk1v_coma_k.png
    WreckageObject = 402
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 ;   Infotext = [#font2#Artillery#font1##crt##crt#Artillery is one of the three
