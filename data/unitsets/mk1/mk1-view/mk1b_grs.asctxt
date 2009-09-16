@@ -7,6 +7,7 @@ VehicleType {
    Infotext = [ground radar system]
    Picture = mk1b_grs.pcx
    InfoImage = mk1b_grs.jpg
+   InfoImageSmall = mk1b_grs_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
 } VehicleType

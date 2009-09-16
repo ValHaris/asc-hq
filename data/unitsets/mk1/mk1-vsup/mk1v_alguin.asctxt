@@ -6,6 +6,7 @@ VehicleType {
    Description = tanker vehicle
    picture = MK1v_alguin.pcx
    InfoImage = mk1v_alguin.jpg
+   InfoImageSmall = mk1v_alguin_k.png
    WreckageObject = 410
    GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
    Infotext = [Tanker Vehicles are seen around every army. As the fuel tanks

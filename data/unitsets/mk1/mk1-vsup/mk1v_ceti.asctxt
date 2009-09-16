@@ -6,6 +6,7 @@ VehicleType {
    Description = ammunition transport
    picture = MK1v_ceti.pcx
    InfoImage = mk1v_ceti.jpg
+   InfoImageSmall = mk1v_ceti_k.png
    WreckageObject = 411
    GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
    Infotext = [Ammunition Transport Vehicles are vital for the functioning of

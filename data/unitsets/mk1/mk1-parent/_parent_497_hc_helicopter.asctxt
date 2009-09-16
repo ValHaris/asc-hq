@@ -2,7 +2,7 @@ VehicleType {
    name = Parent Height Change Helicopter
    abstract = true
    ID = 497
-   HeightChangeMethodNum = 4
+   HeightChangeMethodNum = 6
    HeightChangeMethod0 {
       movecost = 15
       heightdelta = 1
@@ -14,21 +14,35 @@ VehicleType {
       movecost = 10
       heightdelta = 1
       dist = 0
-      startheight = low_level_flight medium_level_flight high_level_flight
+      startheight = low_level_flight medium_level_flight
       canattack = true
    } HeightChangeMethod1
    HeightChangeMethod2 {
-      movecost = 5
-      heightdelta = -1
+      movecost = 25
+      heightdelta = 1
       dist = 0
-      startheight = medium_level_flight high_level_flight orbit
+      startheight = high_level_flight
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
-      movecost = 10
+      movecost = 5
+      heightdelta = -1
+      dist = 0
+      startheight = medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 15
+      heightdelta = -1
+      dist = 0
+      startheight = orbit
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
+      movecost = 15
       heightdelta = -1
       dist = 0
       startheight = low_level_flight
       canattack = true
-   } HeightChangeMethod3
+   } HeightChangeMethod5
 } VehicleType

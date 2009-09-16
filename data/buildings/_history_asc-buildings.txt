@@ -2,7 +2,10 @@
 Spezifikationen: GAMER
 
 BUILDINGS HISTORY
-
+__________________
+Beta-09-12
+-Spaceport Nord, Spielerfarben gefixt
+-Spaceport Süd, Eingang korrigiert, Spielerfarben gefixt
 __________________
 Beta-09-04
 -Tiefseefabrik eingebaut

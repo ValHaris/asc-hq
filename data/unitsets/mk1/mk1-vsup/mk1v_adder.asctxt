@@ -12,6 +12,7 @@ VehicleType {
               Infoimage = BananaJoe]
    picture = MK1v_adder.pcx
    InfoImage = mk1v_adder.jpg
+   InfoImageSmall = mk1v_adder_k.png
    WreckageObject = 450
    GuideSortHelp = 562 0 0 0 1 0 0 0 0 0
 

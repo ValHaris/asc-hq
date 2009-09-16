@@ -9,4 +9,5 @@ VehicleType {
    GuideSortHelp = 502 306 0 0 0 0 0 0 0 0
 
    Jamming = 38
+   FuelConsumption = 20
 } VehicleType

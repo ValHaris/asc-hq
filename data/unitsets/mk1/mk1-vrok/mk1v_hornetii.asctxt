@@ -9,8 +9,9 @@ VehicleType {
               guns from a safe distance. Are you in need of quick support
               and you can't wait for the artillery to arrive? Call in the
               Rocket Tanks.]
-   Picture = mk1v_hornetII.pcx
-   InfoImage = mk1v_hornetII.jpg
+   Picture = mk1v_hornetii.pcx
+   InfoImage = mk1v_hornetii.jpg
+   InfoImageSmall = mk1v_hornetii.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 20

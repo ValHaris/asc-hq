@@ -4,8 +4,9 @@ VehicleType {
    parent = 101
 
    Description = trooper transport
-   Picture = MK1v_LTT.pcx
+   Picture = mk1v_ltt.pcx
    InfoImage = mk1v_ltt.jpg
+   InfoImageSmall = mk1v_ltt_k.png
    GuideSortHelp = 552 423 0 0 1 0 0 0 0 0
    Infotext = []
 

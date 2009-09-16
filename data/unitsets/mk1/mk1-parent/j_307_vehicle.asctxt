@@ -20,6 +20,7 @@ VehicleType {
 
    Movement = 0 0 0 70 0 0 0 0 
    MovementSound = tracked_ext_s.ogg
+   FuelConsumption = 25
    Weapons { 
       Initiative = 0
       Number = 1

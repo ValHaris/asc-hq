@@ -5,8 +5,9 @@ VehicleType {
 
    Description = railroad rocket
    GuideSortHelp = 505 413 0 0 1 0 0 0 0 0
-   Picture = MK1t_follow.pcx
+   Picture = mk1t_follow.pcx
    InfoImage = mk1t_follow.jpg
+   InfoImageSmall = mk1t_follow_k.png
    WreckageObject = 483
    Infotext = [Railbased medium range surface-surface rocket system.]
 

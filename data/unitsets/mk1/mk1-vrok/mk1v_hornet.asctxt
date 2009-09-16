@@ -12,6 +12,7 @@ VehicleType {
               Rocket Tanks.]
    Picture = MK1v_hornet.pcx
    InfoImage = mk1v_hornet.jpg
+   InfoImageSmall = mk1v_hornet_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 15

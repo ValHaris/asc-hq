@@ -6,6 +6,7 @@ VehicleType {
    Description = Main Builder Vehicle
    picture = MK1v_mbv.pcx
    InfoImage = mk1v_mbv.jpg
+   InfoImageSmall = mk1v_mbv_k.png
    Infotext = [Building und turretunit constructors are perhaps the most important constructing
               vehicles. They are able to place new factories, weapon emplacements,
               power stations, mines, and so on. Without at least one building

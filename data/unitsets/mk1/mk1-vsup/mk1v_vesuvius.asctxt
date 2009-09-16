@@ -4,8 +4,9 @@ VehicleType {
    parent = 336
    
    Description = constructor
-   picture = MK1v_vesuvius.pcx
+   picture = mk1v_vesuvius.pcx
    InfoImage = mk1v_vesuvius.jpg
+   InfoImageSmall = mk1v_vesuvius_k.png
    WreckageObject = 412
    GuideSortHelp = 554 0 0 0 1 0 0 0 0 0
    Infotext = [Building und turretunit constructors are perhaps the most important constructing

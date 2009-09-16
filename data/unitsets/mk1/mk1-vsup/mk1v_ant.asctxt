@@ -6,6 +6,7 @@ VehicleType {
    Description = construction vehicle
    picture = MK1v_ant.pcx
    InfoImage = mk1v_ant.jpg
+   InfoImageSmall = mk1v_ant_k.png
    WreckageObject = 426
    GuideSortHelp = 556 0 0 0 1 0 0 0 0 0
    Infotext = [The Construction Vehicle is necessary for the construction of

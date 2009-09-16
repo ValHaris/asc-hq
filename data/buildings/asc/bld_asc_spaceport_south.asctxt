@@ -6,5 +6,5 @@ BuildingType {
       dry = bld_asc_spaceport_south_dry.png
    } Pictures
    RubbleObjects = false
-   Entry = A2
+   Entry = A4
 } BuildingType

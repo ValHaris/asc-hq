@@ -132,12 +132,15 @@ unitsets/mk1/mk1-view/*.jpg
 unitsets/mk1/mk1-vfatr/*.asctxt
 unitsets/mk1/mk1-vfatr/*.pcx
 unitsets/mk1/mk1-vfatr/*.jpg
+unitsets/mk1/mk1-vfatr/*.png
 unitsets/mk1/mk1-vrok/*.asctxt
 unitsets/mk1/mk1-vrok/*.pcx
 unitsets/mk1/mk1-vrok/*.jpg
+unitsets/mk1/mk1-vrok/*.png
 unitsets/mk1/mk1-vsup/*.asctxt
 unitsets/mk1/mk1-vsup/*.pcx
 unitsets/mk1/mk1-vsup/*.jpg
+unitsets/mk1/mk1-vsup/*.png
 unitsets/mk3/mk3-parent/*.asctxt
 unitsets/mk3/mk3-parent/*.txt
 unitsets/mk3/mk3-parent/*.set

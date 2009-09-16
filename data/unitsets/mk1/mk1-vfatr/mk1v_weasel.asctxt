@@ -4,8 +4,9 @@ VehicleType {
    ID = 6
    
    Description = Infiltrator Squad
-   picture = MK1v_WEASEL.pcx
+   picture = mk1v_WEASEL.pcx
    InfoImage = mk1v_weasel.jpg
+   InfoImageSmall = mk1v_weasel_k.png
    WreckageObject = 406
    GuideSortHelp = 503 425 564 410 1 0 0 0 0 0
    Infotext = [Infiltrator Squads, often referred to as "Weasels", are very

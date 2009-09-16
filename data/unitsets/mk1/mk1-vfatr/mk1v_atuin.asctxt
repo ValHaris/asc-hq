@@ -4,8 +4,9 @@ VehicleType {
    parent = 335 
 
    Description = transport vehicle
-   picture = MK1v_atuin.pcx
+   picture = mk1v_atuin.pcx
    InfoImage = mk1v_atuin.jpg
+   InfoImageSmall = mk1v_atuin_k.png
    WreckageObject = 425
    GuideSortHelp = 550 551 0 0 1 0 0 0 0 0
    Infotext = [Transport Vehicles are large trucks in which a number of small

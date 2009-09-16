@@ -4,14 +4,15 @@ VehicleType {
    parent = 246
 
    Description = Comm. Satellite
+   Picture = mk1o_vast.pcx
+   InfoImage = mk1o_vast.jpg
+   InfoImageSmall = mk1o_vast_k.png
+   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [The Communications Sattelite is an orbital unit designed to discover
               surface activity. Since the Sattelite is out of range (and even
               out of view) of most enemy units, it is ideally suited to monitor
               enemy operations. Its internal sensor array also allows it to
               spot enemy sattelites.]
-   Picture = mk1o_vast.pcx
-   InfoImage = mk1o_vast.jpg
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
    Armor += 20
 } VehicleType

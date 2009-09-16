@@ -4,8 +4,9 @@ VehicleType {
    parent = 336
    
    Description = repair vehicle
-   picture = MK1v_cosinus.pcx
+   picture = mk1v_cosinus.pcx
    InfoImage = mk1v_cosinus.jpg
+   InfoImageSmall = mk1v_cosinus_k.png
    WreckageObject = 413
    GuideSortHelp = 553 0 0 0 1 0 0 0 0 0
    Infotext = [A Rapair Vehicle can make the difference between victory and

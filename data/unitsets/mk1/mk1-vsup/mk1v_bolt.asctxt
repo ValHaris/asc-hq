@@ -5,7 +5,8 @@ VehicleType {
    
    Description = generator vehicle
    picture = MK1v_bolt.pcx
-   infoImage = mk1v_bolt.jpg
+   InfoImage = mk1v_bolt.jpg
+   InfoImageSmall = mk1v_bolt_k.png
    WreckageObject = 430
    GuideSortHelp = 525 0 0 0 1 0 0 0 0 0
    Infotext = [In times of war, energy supplies can not always be distrubuted

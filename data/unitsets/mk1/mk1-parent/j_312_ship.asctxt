@@ -19,9 +19,9 @@ VehicleType {
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 4556
+      fuel = 6000
    } Tank
-   FuelConsumption = 40
+   FuelConsumption = 50
    Movement = 0 0 60 0 0 0 0 0 
    MovementSound = med_ship_a_s.ogg
 

@@ -4,8 +4,9 @@ VehicleType {
    parent = 242
 
    Description = radar vehicle
-   Picture = MK1v_oracle.pcx
+   Picture = mk1v_oracle.pcx
    InfoImage = mk1v_oracle.jpg
+   InfoImageSmall = mk1v_oracle_k.png
    WreckageObject = 416
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    Infotext = [Another common unit on any battlefield, the Radar Vehicle is

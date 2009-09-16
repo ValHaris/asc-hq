@@ -14,21 +14,35 @@ VehicleType {
       movecost = 40
       heightdelta = 1
       dist = 2
-      startheight = low_level_flight medium_level_flight high_level_flight
+      startheight = low_level_flight medium_level_flight
       canattack = true
    } HeightChangeMethod1
    HeightChangeMethod2 {
-      movecost = 25
-      heightdelta = -1
+      movecost = 45
+      heightdelta = 1
       dist = 2
-      startheight = medium_level_flight high_level_flight orbit
+      startheight = high_level_flight
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
+      movecost = 25
+      heightdelta = -1
+      dist = 2
+      startheight = medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 35
+      heightdelta = -1
+      dist = 2
+      startheight = orbit
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
       movecost = 45
       heightdelta = -1
       dist = 3
       startheight = low_level_flight
       canattack = true
-   } HeightChangeMethod3
+   } HeightChangeMethod5
 } VehicleType

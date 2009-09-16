@@ -2,7 +2,7 @@ VehicleType {
    abstract = true
    Name = sam tank
    ID = 220
-   parent = 400 401 404
+   parent = 400 401 405
 
    Description = anti aircraft system
    Infotext = []

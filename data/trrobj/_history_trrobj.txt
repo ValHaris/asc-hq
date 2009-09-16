@@ -2,6 +2,10 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
+________________________
+Beta-09-12
+-Blue, vsw object Ice Fix
+-ID 2004 Terrainbit Ice fix
 ______________________
 02.09.2009 z76-2 (GAMER)
 -Pilze+Raps weniger Movemalus beim Entfernen
