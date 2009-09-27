@@ -1905,7 +1905,24 @@
    ServiceSpSub.shotFrom = deep_submerged submerged floating ground_level 
 
    ServiceTurret ->* VehicleType.ServiceGround
-   ServiceTurret.cantHit = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
+   ServiceTurret.WeaponEffectiveness.default = 100
+   ServiceTurret.WeaponEffectiveness.trooper = 0
+   ServiceTurret.WeaponEffectiveness.rail_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.building|turret|object = 100
+   ServiceTurret.WeaponEffectiveness.hoovercraft = 0
+   ServiceTurret.WeaponEffectiveness.helicopter = 0
+   ServiceTurret.WeaponEffectiveness.light_tracked_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.medium_tracked_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.heavy_tracked_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.light_wheeled_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.medium_wheeled_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.heavy_wheeled_vehicle = 0
+   ServiceTurret.WeaponEffectiveness.light_ship = 0
+   ServiceTurret.WeaponEffectiveness.medium_ship = 0
+   ServiceTurret.WeaponEffectiveness.heavy_ship = 0
+   ServiceTurret.WeaponEffectiveness.light_aircraft = 0
+   ServiceTurret.WeaponEffectiveness.medium_aircraft = 0
+   ServiceTurret.WeaponEffectiveness.heavy_aircraft = 0
 
    ServiceRepGr ->* VehicleType.ServiceGround
    ServiceRepGr.canthit = Trooper

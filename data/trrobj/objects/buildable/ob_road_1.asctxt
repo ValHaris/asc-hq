@@ -5,7 +5,7 @@ ObjectType {
    canExistBeneathBuildings = true
    Weather = dry 
    visible_in_fogOfWar = false
-   LinkableObjects = 1000 997
+   LinkableObjects = 1000 997 981
    Armor = 1100
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 

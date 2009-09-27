@@ -1,0 +1,29 @@
+ObjectType { 
+   Name = Bridge (not removeable)
+   ID = 981
+   parent = 1000
+   GroupID = 
+
+   canExistBeneathBuildings = true
+   LinkableObjects = 1 997 1000
+   Armor = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   TerrainAccess { 
+      terrain_any = railroad Shallow_water Very_shallow_water water swamp river
+      terrain_all = 
+      terrain_not = Forest Road runway bridge hillside
+      terrain_kill = lava
+   } TerrainAccess
+} ObjectType

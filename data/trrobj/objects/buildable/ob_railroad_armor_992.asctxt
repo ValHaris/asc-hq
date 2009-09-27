@@ -4,7 +4,7 @@ ObjectType {
    canExistBeneathBuildings = true
    Weather = dry much_snow
    visible_in_fogOfWar = false
-   LinkableObjects = 999 995 2 991
+   LinkableObjects = 999 995 2 991 980
    Armor = 1000
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 10  10  10  10  13  13  13  5   1   20  13  0   20  20  13  13  20  13
@@ -18,7 +18,7 @@ ObjectType {
    Height = 99
    ConstructionCost { 
       Energy = 0
-      Material = 500
+      Material = 1000
       fuel = 100
       Movement = 30
    } ConstructionCost

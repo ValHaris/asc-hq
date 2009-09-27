@@ -2,7 +2,7 @@ ObjectType {
    Name = small railroad
    ID = 991
    parent = 2
-   LinkableObjects = 999 995 2 992
+   LinkableObjects = 999 995 2 992 980
    Lifetime = 60
    Armor = 80
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov

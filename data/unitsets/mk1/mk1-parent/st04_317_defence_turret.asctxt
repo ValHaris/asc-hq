@@ -19,7 +19,6 @@ VehicleType {
    
    Features += ManualSelfDestruct
    View = 60
-   FuelConsumption = 200
    Weight = 450
 
    Tank { 

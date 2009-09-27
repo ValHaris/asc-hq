@@ -5,7 +5,7 @@ ObjectType {
    groupID = 6
    Weather = dry
    visible_in_fogOfWar = false
-   LinkableObjects = 30 996
+   LinkableObjects = 30 996 979
    Armor = 200
    Movemalus_abs = -1
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov

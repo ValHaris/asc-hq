@@ -30,7 +30,7 @@ ObjectType {
 
    ConstructionCost { 
       Energy = 0
-      Material = 1000
+      Material = 800
       fuel = 100
       Movement = 25
    } ConstructionCost

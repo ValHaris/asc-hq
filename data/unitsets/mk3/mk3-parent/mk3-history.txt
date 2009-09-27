@@ -3,6 +3,9 @@ Grafik: GAMER , Ares
 InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
+______________________
+Beta-09-13
+-Bulldozer, Fueltank auf 10000 erhöht
 
 ______________________
 29.08.2009 z76 (GAMER)

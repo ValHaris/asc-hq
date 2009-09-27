@@ -15,7 +15,7 @@ VehicleType {
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 1
+      fuel = 0
    } Tank
    FuelConsumption = 0
    Features = jam_only_own_field onlyTransMove

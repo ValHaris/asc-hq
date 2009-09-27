@@ -1,0 +1,31 @@
+ObjectType { 
+   name = pipeline (not removeable)
+   ID = 979
+   groupID = 0
+   parent = 30
+
+   canExistBeneathBuildings = true
+   LinkableObjects = 3 996 30
+   Armor = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuilding
+
+   TerrainAccess { 
+      terrain_any = road runway Lowland Hard_sand Soft_sand ditch Very_shallow_water Shallow_water water mountains turret_foundation installation river
+      terrain_all = 
+      terrain_not = pipeline 
+      terrain_kill = 
+   } TerrainAccess
+} ObjectType

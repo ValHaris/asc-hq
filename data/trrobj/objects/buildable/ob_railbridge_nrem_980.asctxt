@@ -1,0 +1,29 @@
+ObjectType { 
+   Name = Railroad Bridge (not removeable)
+   ID = 980
+   GroupID = 0
+   parent = 999
+   
+   canExistBeneathBuildings = true
+   LinkableObjects = 2 995 991 992 999
+   Armor = 0
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   TerrainAccess { 
+      terrain_any = road Shallow_water Very_shallow_water water river swamp
+      terrain_all = 
+      terrain_not = Forest railroad Runway Mountains high_mountains Turret_foundation Installation bridge hillside lava
+      terrain_kill = lava 
+   } TerrainAccess
+} ObjectType

@@ -5,7 +5,7 @@ ObjectType {
    canExistBeneathBuildings = true
    Weather = dry
    visible_in_fogOfWar = false
-   LinkableObjects = 3 996
+   LinkableObjects = 3 996 979
    Armor = 0
 
    Movemalus_plus = 
