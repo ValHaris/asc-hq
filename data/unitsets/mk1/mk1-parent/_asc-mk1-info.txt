@@ -19,7 +19,7 @@ ID 121/206  Drall            dive mech
 ID   9/247  Scope            radar plane
 ID  16/242  Oracle           radar unit
 ID  32/248  Argus            espionage plane
-ID  87/246  COMSAT           communication satellite
+ID  87/246  Vast             communication satellite
 ID  95/244  GRS              turret radar system
 ID 111/245  BRS              bunker radar system
 ID 119/249  Boje             sonar boje                   
@@ -42,10 +42,7 @@ ID 101/290  LightAssault     special combat tank light
 ID 102/294  Armadillo2       siege tank
 
 --Air Defence--
-ID  18/217  Swatter          AA-Tank                    
-ID  61/222  SAM Turret       air defence turret        
-ID  64/220  Spike            air defence vehicle    
-ID  73/221  Spear            anti aircraft train
+ID  18/217  Swatter          AA-Tank              ID  61/222  SAM Turret       air defence turret   ID  64/220  Spike            air defence vehicle  ID  73/221  Spear            anti aircraft train
 ID  74/216  CAD              air defence Mech
 ID  98/215  SAM Trooper      air defence trooper
 ID 107/118  Swatter2         Anti Aircraft Tank
@@ -92,26 +89,29 @@ ID 104/314  MG-Nest          armored MG point
 ID 110/321  Heavy Gun        heavy defence Gun
 ID 122/322  Tora             lr defence gun
 
-
 --Orbital--
-ID  69/235  SPACELAB         support spacestation              
-ID  86/231  SHUTTLE          transport starship                   
+ID  69/235  SPACELAB         support spacestation 
+ID  86/231  SHUTTLE          transport starship   
 ID  88/232  Primerose        multi attack satellite
 ID  93/238  SDB              space defence system
 ID 118/-    Spor             anti orbital train
 
 --Plane--
-ID  19/270  ARROW            light fighter             
+ID  19/270  ARROW            light fighter        
 ID  20/280  Bang             tank hunter
 ID  22/272  DOMINATOR        heavy fighter
 ID  29/278  Timber           long range bomber
 ID  31/325  Nightcap         tanker plane
 ID  48/275  ZEPPELIN         zeppelin
 ID  52/326  EAGLE            seaplane
+ID  69/     Butterfly        light bomber
 ID  68/279  Hawk             stealth bomber
 ID  70/272  Predator         stealth fighter
 ID  92/271  BOOMERANG        medium fighter
 ID 123/327  Rasak            defence fighter
+
+--Helicopter--
+ID  55/     Tupi
 
 --Ballteship--              
 ID   8/268  Hurry            torpedo wig

@@ -4,6 +4,9 @@ InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
 ______________________
+Beta-09-14
+-Techbugfix: Rafale, Blackbird,Raytheon,NSA,Harrier
+-LST External Transfer, lavaabbau
 Beta-09-13
 -Bulldozer, Fueltank auf 10000 erhöht
 

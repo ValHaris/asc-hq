@@ -2,7 +2,7 @@ VehicleType {
    name = Parent Height Change Aircraft
    abstract = true
    ID = 496
-   HeightChangeMethodNum = 4
+   HeightChangeMethodNum = 6
    HeightChangeMethod0 {
       movecost = 45
       heightdelta = 1

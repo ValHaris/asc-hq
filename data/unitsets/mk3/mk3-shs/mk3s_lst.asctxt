@@ -9,7 +9,7 @@ VehicleType {
    picture = MK3s_lst.png
    GuideSortHelp = 553 554 0 0 3 0 0 0 0 0
 
-   Features = construct_vehicles ExternalRepair self_repairing automatic_resource_searching construct_specific_buildings 
+   Features = construct_vehicles ExternalRepair self_repairing automatic_resource_searching construct_specific_buildings externalAmmoTransfer ExternalMaterialTransfer ExternalFuelTransfer
    ResourceDrillingRange = 4
    SelfRepairRate = 10
    Transportation ->* VehicleType.TransTurretBig2
@@ -24,7 +24,7 @@ VehicleType {
       Buildings = 13 14 16 17 18 19
       Vehicles = 531 617 510 511
       Objects = 995 996 997 998 999 1000 44 30 3
-      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 15
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
    } Construction
 
    Weapons { 

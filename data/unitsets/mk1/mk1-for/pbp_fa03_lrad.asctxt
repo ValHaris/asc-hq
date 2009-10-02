@@ -8,7 +8,7 @@
    
    requireEvent = false
    
-   TechnologiesRequired = 100002,100202,100310,100104
+   TechnologiesRequired = 100002,100202,100310,100103
    
    BlockingTechnologies = 
    
