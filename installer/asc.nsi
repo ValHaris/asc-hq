@@ -8,10 +8,10 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "Advanced Strategic Command 2.3.76.0"
+Name "Advanced Strategic Command 2.3.76.1"
 
 ; The file to write
-OutFile "ASC-2.3.76.0-Install.exe"
+OutFile "ASC-2.3.76.1-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -92,7 +92,7 @@ Section "ASC main program (required)"
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
   ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.3.76.0"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.3.76.1"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
@@ -191,6 +191,7 @@ Section "Uninstall"
   Delete $INSTDIR\README-SDL
   Delete $INSTDIR\Microsoft.VC90.CRT.manifest
   Delete $INSTDIR\README-SDL.txt"
+  Delete $INSTDIR\COPYING"
 
   Delete $DOCUMENTS\ASC\ASC2.cache
   Delete $DOCUMENTS\ASC\progress.dat
