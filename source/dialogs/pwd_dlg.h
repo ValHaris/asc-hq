@@ -42,6 +42,7 @@
 */
   extern bool enterpassword ( Password& pwd, bool firstTime = false,
                                              bool cancelAllowed = false,
-                                             bool defaultAllowed = true );
+                                             bool defaultAllowed = true,
+                                             const ASCString& username = "" );
 
 #endif

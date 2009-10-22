@@ -100,15 +100,19 @@
                bool cancelAllowed;
                bool defaultAllowed;
             public:
-               PasswordDialog ( Password& crc, bool _firstTime, bool _cancelAllowed, bool _defaultAllowed ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 300, 180), "Enter Password"),
+               PasswordDialog ( Password& crc, bool _firstTime, bool _cancelAllowed, bool _defaultAllowed, const ASCString& username ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 300, 190), "Enter Password"),
                      password ( crc ), buttonNum(0), success(false), firstTime ( _firstTime ), cancelAllowed ( _cancelAllowed ), defaultAllowed ( _defaultAllowed )
                {
-                  line1 = new PG_LineEdit( this, PG_Rect( border, 40, Width() - 2 * border, 20));
+                  
+                  if ( username.length() )
+                     new PG_Label( this, PG_Rect( border, 25, Width() - 2 * border, 20 ), "Player: " + username );
+                  
+                  line1 = new PG_LineEdit( this, PG_Rect( border, 50, Width() - 2 * border, 20));
                   line1->SetPassHidden('*');
                   line1->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::line1completed ));
 
                   if ( firstTime ) {
-                     line2 = new PG_LineEdit( this, PG_Rect( border, 70, Width() - 2 * border, 20));
+                     line2 = new PG_LineEdit( this, PG_Rect( border, 80, Width() - 2 * border, 20));
                      line2->SetPassHidden('*');
                      line2->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::ok ));
                   } else {
@@ -151,14 +155,14 @@
            };
 
 
-bool enterpassword ( Password& pwd, bool firstTime, bool cancelAllowed, bool defaultAllowed )
+bool enterpassword ( Password& pwd, bool firstTime, bool cancelAllowed, bool defaultAllowed, const ASCString& username )
 {
    Password def = CGameOptions::Instance()->getDefaultPassword();
 
    if ( !pwd.empty() && !def.empty() && pwd==def && !firstTime )
       return true;
 
-   PasswordDialog pwod ( pwd, firstTime, cancelAllowed, defaultAllowed );
+   PasswordDialog pwod ( pwd, firstTime, cancelAllowed, defaultAllowed, username );
    pwod.Show();
    pwod.RunModal();
    return pwod.getSuccess();

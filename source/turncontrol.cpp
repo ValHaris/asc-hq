@@ -67,7 +67,7 @@ bool authenticateUser ( GameMap* actmap, bool allowCancel = true, bool lockView 
             bool stat;
             actmap->setPlayerView ( actmap->actplayer );  // the idle handler of enterpassword starts generating the overview map, so we need to have the correct view prior to enterpassword
             do {
-               stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel );
+               stat = enterpassword ( actmap->player[actmap->actplayer].passwordcrc, specifyPassword, allowCancel, true, actmap->player[actmap->actplayer].getName() );
                if ( !stat ) {
                   if ( throwOnFailure ) {
                      delete actmap;

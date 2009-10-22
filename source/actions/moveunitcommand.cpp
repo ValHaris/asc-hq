@@ -269,6 +269,9 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    if ( reachableFields.find( destination ) == reachableFields.end() ) 
       return ActionResult(105);
 */
+   if ( !getUnit() )
+      return ActionResult(21001);
+   
    calcPath();
    
    if ( path.empty() || path.rbegin()->x != destination.x || path.rbegin()->y != destination.y  ) 
