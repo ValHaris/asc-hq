@@ -168,6 +168,7 @@
 #include "actions/commandwriter.h"
 #include "dialogs/actionmanager.h"
 #include "dialogs/gotoposition.h"
+#include "loggingoutput.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -1554,6 +1555,8 @@ int main(int argc, char *argv[] )
       displaymessage ( "loading of game failed during pre graphic initializing", 2 );
    }
 
+   LoggingOutputHandler logger( getSearchPath( 0 ));
+   
    if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
       fullscreen = SDL_FALSE;
 
