@@ -336,6 +336,8 @@ StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ti
       float enw = float(PG_Application::GetScreenWidth() )/float(fullscreenImage.w());
       float enh = float(PG_Application::GetScreenHeight())/float(fullscreenImage.h());
 
+	  displayLogMessage(6, "Startupscreen : %f / %f", enw, enh ); 
+
       // we allow a asymetric stretch of 5% 
       if ( enw / enh < 0.95 || enw / enh > 1.05 ) 
          enh = enw = min( enw, enh );

@@ -392,6 +392,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\loggingoutput.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\luacommandwriter.cpp"
 				>
 			</File>

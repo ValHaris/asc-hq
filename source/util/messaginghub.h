@@ -119,7 +119,7 @@
               
    };
        
- typedef Loki::SingletonHolder<MessagingHubBase > MessagingHub;
+ typedef Loki::SingletonHolder<MessagingHubBase,Loki::CreateUsingNew,Loki::NoDestroy > MessagingHub;
 
 
  

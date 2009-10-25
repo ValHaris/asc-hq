@@ -287,7 +287,7 @@ EventHandlingMutex::~EventHandlingMutex()
                                              
 int processEvents ( )
 {
-   EventHandlingMutex ehm();
+   EventHandlingMutex ehm;
          
    SDL_Event event;
    int result;

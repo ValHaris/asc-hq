@@ -288,7 +288,7 @@ bool StoringPosition ::eventMouseButtonUp(const SDL_MouseButtonEvent* button)
          return false;
 
       {
-         EventHandlingMutex ehm();
+         EventHandlingMutex ehm;
          
          PG_Application::ShowCursor( PG_Application::NONE );
          PG_Application::SetCursor( NULL );
@@ -338,7 +338,7 @@ bool StoringPosition::eventMouseMotion (const SDL_MouseMotionEvent *motion)
             MegaBlitter<4,4,ColorTransform_None, ColorMerger_AlphaOverwrite> blitter;
             blitter.blit( IconRepository::getIcon("mouse.png"), surf, SPoint(0,0));
 
-            EventHandlingMutex ehm();
+            EventHandlingMutex ehm;
             
             getUnit()->paint( surf, SPoint(0,0), getUnit()->getOwner() );
             PG_Application::ShowCursor( PG_Application::NONE );

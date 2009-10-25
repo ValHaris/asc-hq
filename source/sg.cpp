@@ -1501,6 +1501,10 @@ class ResourceLogger: public SigC::Object {
 
 int main(int argc, char *argv[] )
 { 
+
+//    LoggingOutputHandler logger2( "c:/users/martin/my documents/");
+
+
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
    // putenv(const_cast<char*>("DISPLAY=192.168.0.21:0")) ;
