@@ -250,6 +250,7 @@ int main(int argc, char *argv[] )
    if ( cl->y() != 600 )
       yr = cl->y();
 
+   PG_FileArchive archive( argv[0] );
 
    ASC_PG_App app ( "asc2_dlg" );
    
