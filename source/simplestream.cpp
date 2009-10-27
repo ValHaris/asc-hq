@@ -202,8 +202,9 @@ tn_file_buf_stream::tn_file_buf_stream( const ASCString& _fileName, IOMode mode)
 
      devicename = s;
 
-   } else
-     throw tfileerror( s.c_str() );
+   } else {
+      throw tfileerror( s + " : " + _sys_errlist[errno] );
+   }
 
 }
 
@@ -226,7 +227,7 @@ void tn_file_buf_stream::seek( int newpos )
          fseek( fp, newpos, SEEK_SET );
 
          if ( ferror ( fp ) )
-            throw  tfileerror ( getDeviceName() );
+			 throw  tfileerror ( getDeviceName() + " : " + _sys_errlist[errno] );
       
          actmempos = 0; 
          actfilepos = newpos; 
@@ -267,8 +268,8 @@ tn_file_buf_stream::~tn_file_buf_stream()
       writebuffer();
 
    int res = fclose( fp );
-   if ( res != 0 )
-      throw  tfileerror ( getDeviceName() );
+   if ( res != 0 ) 
+      throw  tfileerror ( getDeviceName() + " : " + _sys_errlist[errno]);
       
    _mode = uninitialized;
 

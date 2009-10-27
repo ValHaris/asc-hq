@@ -773,9 +773,9 @@ void tncontainerstream :: opencontainerfile ( const char* name )
       throw tfileerror ( name );
 
    displayLogMessage( 9, ASCString("opencontainerfile ") + name );
-   actfile = &index[i];
    containerfilepos = 0;
-   seek ( actfile->start );
+   seek ( index[i].start );
+   actfile = &index[i];
 }
 
 int tncontainerstream :: readcontainerdata ( void* buf, int size, bool excpt  )
