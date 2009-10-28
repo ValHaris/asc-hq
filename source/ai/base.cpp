@@ -314,10 +314,11 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
       repaintMap();
    int duration = ticker-startTime;
 
-
+/*
    if ( getMap()->replayinfo )
       getMap()->replayinfo->closeLogging();
-
+*/
+   
 //   getMap()->weather = weatherBackup;
 
    if ( benchMark ) // (CGameOptions::Instance()->runAI == 2 && duration > 100*60) ||

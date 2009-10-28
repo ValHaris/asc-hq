@@ -1507,8 +1507,7 @@ int main(int argc, char *argv[] )
 
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
-   // putenv(const_cast<char*>("DISPLAY=192.168.0.21:0")) ;
-   
+  
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
    // we should think about replacing clparser with libpopt

@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include "simplestream.h"
 #include "errors.h"
 
@@ -203,7 +204,7 @@ tn_file_buf_stream::tn_file_buf_stream( const ASCString& _fileName, IOMode mode)
      devicename = s;
 
    } else {
-      throw tfileerror( s + " : " + _sys_errlist[errno] );
+      throw tfileerror( s + " : " + strerror(errno) );
    }
 
 }
@@ -227,7 +228,7 @@ void tn_file_buf_stream::seek( int newpos )
          fseek( fp, newpos, SEEK_SET );
 
          if ( ferror ( fp ) )
-			 throw  tfileerror ( getDeviceName() + " : " + _sys_errlist[errno] );
+            throw  tfileerror ( getDeviceName() + " : " + strerror(errno) );
       
          actmempos = 0; 
          actfilepos = newpos; 
@@ -269,7 +270,7 @@ tn_file_buf_stream::~tn_file_buf_stream()
 
    int res = fclose( fp );
    if ( res != 0 ) 
-      throw  tfileerror ( getDeviceName() + " : " + _sys_errlist[errno]);
+      throw  tfileerror ( getDeviceName() + " : " + strerror(errno));
       
    _mode = uninitialized;
 
