@@ -29,7 +29,7 @@
 #include "../gamemap.h"
      
       
-ChangeUnitMovement::ChangeUnitMovement( Vehicle* veh, int movement, bool delta, bool recursive )
+ChangeUnitMovement::ChangeUnitMovement( Vehicle* veh, int movement, bool delta, Recursivity recursive )
    : UnitAction( veh->getMap(), veh->networkid ), originalMovement(-1), resultingMovement(-1)
 {
    this->movement = movement;
@@ -66,9 +66,9 @@ void ChangeUnitMovement::readData ( tnstream& stream )
    originalMovement = stream.readInt();
    resultingMovement = stream.readInt();
    if ( version >= 2 )
-      recursive = stream.readInt();
+      recursive = (Recursivity) stream.readInt();
    else
-      recursive = true;
+      recursive = NORMAL;
 };
       
       
@@ -80,7 +80,7 @@ void ChangeUnitMovement::writeData ( tnstream& stream ) const
    stream.writeInt( delta );
    stream.writeInt( originalMovement );
    stream.writeInt( resultingMovement );
-   stream.writeInt( recursive );
+   stream.writeInt( (int) recursive );
 };
 
 
@@ -91,10 +91,10 @@ GameActionID ChangeUnitMovement::getID() const
 
 void ChangeUnitMovement::decreaseMovement( Vehicle* veh, float fraction, const Context& context )
 {
-   if ( recursive )
+   if ( recursive != NONE )
       if ( veh->typ->movement[ log2 ( veh->height ) ] ) {
          float cargoFraction = fraction;
-         if ( veh->cargoNestingDepth() == 0 && veh->typ->cargoMovementDivisor != 0)
+         if ( veh->cargoNestingDepth() == 0 && veh->typ->cargoMovementDivisor != 0 && recursive == NORMAL )
             cargoFraction /= veh->typ->cargoMovementDivisor;
             
          for ( Vehicle::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )

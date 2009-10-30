@@ -27,8 +27,17 @@
 
 
 class ChangeUnitMovement : public UnitAction {
+   
+   public:
+      enum Recursivity { NONE,    //!< only the unit itself gets its movement changed
+                         NORMAL,  //!< the loaded units get their movement changed too, by the normal fraction (loaded units less than carrier)
+                         ALLFULL  //!< loaded units get same change as carrier
+                       };
+      
+   private:
+      
       bool delta;
-      bool recursive;
+      Recursivity recursive;
       int movement;
       
       int originalMovement;
@@ -40,11 +49,12 @@ class ChangeUnitMovement : public UnitAction {
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
    public:
+      
       /** changes a unit's movement
       \param delta: true=movement is a relative value which will be subtracted
                     false=movement is the new absolute value
       */
-      ChangeUnitMovement( Vehicle* veh, int movement, bool delta = false, bool recursive = true );
+      ChangeUnitMovement( Vehicle* veh, int movement, bool delta = false, Recursivity recursive = NORMAL );
       
       ASCString getDescription() const;
       

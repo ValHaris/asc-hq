@@ -356,13 +356,13 @@ ActionResult MoveUnit::runAction( const Context& context )
          if ( orgHeight != vehicle->height )  {
             // first we are converting the original movement to the new height
             int move = int(floor(vehicle->maxMovement() * float(orgMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
-            (new ChangeUnitMovement( vehicle, move, false, false))->execute(context);
+            (new ChangeUnitMovement( vehicle, move, false, ChangeUnitMovement::NONE ))->execute(context);
          }
          
          
          int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
          
-         (new ChangeUnitMovement( vehicle, nm, false, true))->execute(context);
+         (new ChangeUnitMovement( vehicle, nm, false, ChangeUnitMovement::NORMAL))->execute(context);
          
          // the unit will be shaded if movement is exhausted
          if ( vehicle->getMovement() < 10 )
@@ -373,7 +373,7 @@ ActionResult MoveUnit::runAction( const Context& context )
       (new ConsumeResource( vehicle, Resources(0,0,fueldist * vehicle->typ->fuelConsumption / maxmalq )))->execute( context );
 
       if ( fld->vehicle || fld->building ) {
-         (new ChangeUnitMovement( vehicle, 0, false, false))->execute(context);
+         (new ChangeUnitMovement( vehicle, 0, false, ChangeUnitMovement::NONE))->execute(context);
          vehicle->setAttacked( false, context );
       }
 

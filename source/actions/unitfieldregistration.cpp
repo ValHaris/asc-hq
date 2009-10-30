@@ -171,6 +171,18 @@ ActionResult UnitFieldRegistration::runAction( const Context& context )
          break;
    }
    
+   if ( operation == Position3D || operation == Position ) {
+      for ( Vehicle::Cargo::const_iterator i = veh->getCargo().begin(); i != veh->getCargo().end(); ++i )
+         if ( *i ) {
+            auto_ptr<UnitFieldRegistration> ufr4 ( new UnitFieldRegistration( *i, position, Position ));
+            ActionResult res = ufr4->execute( context );
+            if ( !res.successful() )
+               return res;
+            else
+               ufr4.release();
+         }
+   }
+   
    return ActionResult(0);
 }
 

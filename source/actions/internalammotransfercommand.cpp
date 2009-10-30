@@ -33,7 +33,6 @@
 #include "../soundList.h"
 #include "consumeammo.h"
 #include "servicecommand.h"
-#include "unitfieldregistration.h"
 
 bool InternalAmmoTransferCommand :: avail ( const Vehicle* unit )
 {

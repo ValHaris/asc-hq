@@ -138,7 +138,7 @@ ActionResult JumpDriveCommand::go ( const Context& context )
    srfu.init( unit , dest3D );
    
    
-   auto_ptr<UnitFieldRegistration> ufr3( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::Position ));
+   auto_ptr<UnitFieldRegistration> ufr3( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::Position3D ));
    res = ufr3->execute( context );
    if ( !res.successful() )
       return res;
@@ -156,7 +156,7 @@ ActionResult JumpDriveCommand::go ( const Context& context )
    if ( context.display )
       context.display->playPositionalSound( dest3D, SoundList::getInstance().getSound( SoundList::jumpdrive ));
 
-   auto_ptr<ChangeUnitMovement> cum ( new ChangeUnitMovement( unit, 0 ));
+   auto_ptr<ChangeUnitMovement> cum ( new ChangeUnitMovement( unit, 0, false, ChangeUnitMovement::ALLFULL ));
    res = cum->execute( context );
    if ( !res.successful() )
       return res;
