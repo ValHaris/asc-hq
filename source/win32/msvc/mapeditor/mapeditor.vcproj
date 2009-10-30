@@ -160,7 +160,7 @@
 				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetype.lib libexpat.lib libpng13.lib lua.lib"
 				OutputFile="$(OutDir)/bin/mapeditor2.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/Release_NOSTDIO&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
 				ManifestFile="$(OutDir)\bin\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
