@@ -27,7 +27,6 @@ static const int packageStreamVersion  = 1;
 
 void Package::read ( tnstream& stream )
 {
-   
    int v = stream.readInt();
    if ( v != packageStreamVersion  )
       throw tinvalidversion ( "Package", packageStreamVersion, v );
@@ -39,8 +38,6 @@ void Package::read ( tnstream& stream )
    version.read( stream );
       
    readClassContainer( dependencies, stream );
-      
-   minVersionToLoadGame.read( stream );
       
    archive = stream.readString();
 }
@@ -57,10 +54,7 @@ void Package::write ( tnstream& stream ) const
       
    writeClassContainer( dependencies, stream );
       
-   minVersionToLoadGame.write( stream );
-   
    stream.writeString ( archive );
-      
 }
 
 void Package::runTextIO ( PropertyContainer& pc )
@@ -93,11 +87,6 @@ void Package::runTextIO ( PropertyContainer& pc )
       
       pc.closeBracket();
    }
-   
-   ASCString s2 = minVersionToLoadGame.toString();
-   pc.addString( "MinVersionToLoadGame", s2, "" );
-   if ( !s2.empty()  )
-      minVersionToLoadGame.fromString( s2 );
    
    archive = pc.getArchive();
 }

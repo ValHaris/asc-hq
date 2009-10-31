@@ -48,9 +48,6 @@ class Package {
       typedef vector<PackageDependency> Dependencies;
       Dependencies dependencies;
       
-      //! all players participating in a game that uses this Package must have at least THIS version of the package
-      VersionIdentifier minVersionToLoadGame;
-      
       //! the archive in which the package is stored
       ASCString archive;
       
