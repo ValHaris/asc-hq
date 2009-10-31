@@ -52,7 +52,7 @@
 #include "gameoptions.h"
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
-
+#include "packagemanager.h"
 
 #ifdef sgmain
 # include "ai/ai.h"
@@ -1066,6 +1066,8 @@ GameMap* tmaploaders::loadmap ( const ASCString& name )
 
 void   tsavegameloaders::savegame( pnstream strm, GameMap* gamemap, bool writeReplays )
 {
+   PackageManager::storeData( gamemap );
+   
    stream = strm;
    spfld = gamemap;
 
@@ -1177,6 +1179,7 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
 
    mapLoaded( spfld );
 
+   
    GameMap* s = spfld;
    spfld = NULL;  // to avoid that is is deleted by the destructor of tsavegameloaders
    return s;
@@ -1193,6 +1196,9 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
 
 int          tnetworkloaders::savenwgame( pnstream strm, const GameMap* gamemap )
 { 
+   
+   PackageManager::storeData( gamemap );
+   
    spfld = const_cast<GameMap*>(gamemap); // yes, this is bad, but spfld can't be made constant because it is also used for loading
    
    stream = strm;
@@ -1320,6 +1326,7 @@ GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
             }
 
    
+            
    GameMap* spfldcopy = spfld;
    spfld = NULL;
 

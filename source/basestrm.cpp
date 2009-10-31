@@ -276,14 +276,19 @@ void tnstream :: writeImage ( const void* buf, bool compress )
 }
 
 
-ASCString tnstream::getDeviceName ( void )
+ASCString tnstream::getDeviceName()
 {
    return devicename;
 }
 
-ASCString tnstream::getLocation ( void )
+ASCString tnstream::getLocation()
 {
    return devicename;
+}
+
+ASCString tnstream::getArchive()
+{
+   return "";
 }
 
 int  tnstream::readInt  ( void )
@@ -1625,6 +1630,15 @@ tn_c_lzw_filestream :: tn_c_lzw_filestream ( const ASCString& name, IOMode mode 
 
    tanycompression :: init (  );
 }
+
+ASCString tn_c_lzw_filestream::getArchive()
+{
+   if ( containerstream )
+      return containerstream->getDeviceName();
+   else
+      return "";
+}
+
 
 ASCString tn_c_lzw_filestream::getLocation()
 {

@@ -270,6 +270,8 @@ class LoadableItemType {
 		   Example: "foo.wav located inside /usr/share/games/asc/main.ascdat" 
 		*/
        ASCString location;
+       
+       ASCString archive;
 
 	   //! read the binary representation of this item from the given stream
        virtual void read ( tnstream& stream ) = 0;

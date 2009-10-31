@@ -423,6 +423,7 @@ class tn_c_lzw_filestream : public tnstream, protected tanycompression {
             virtual time_t get_time ( void );
             virtual int getSize( void );
             ASCString getLocation();
+            ASCString getArchive();
      };
 
 typedef tn_c_lzw_filestream tnfilestream ;

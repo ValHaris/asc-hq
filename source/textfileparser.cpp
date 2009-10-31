@@ -493,6 +493,7 @@ TextPropertyGroup* TextFormatParser::run (  )
    textPropertyGroup = new TextPropertyGroup ;
    textPropertyGroup->fileName = stream->getDeviceName();
    textPropertyGroup->location = stream->getLocation();
+   textPropertyGroup->archive = stream->getArchive();
    parseLine ( readLine() );
    return textPropertyGroup;
 }

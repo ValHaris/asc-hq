@@ -27,6 +27,8 @@
 #include "sgstream.h"
 #include "textfile_evaluation.h"
 #include "util/messaginghub.h"
+#include "packagemanager.h"
+#include "strtmesg.h"
 
 
 SigC::Signal0<void> dataLoaderTicker;
@@ -85,6 +87,7 @@ void ItemRepositoryLoader<T>::readTextFiles( PropertyReadingContainer& prc, cons
 
    t->filename = fileName;
    t->location = location;
+   t->archive = prc.getArchive();
    add ( t );
 }
 
@@ -104,6 +107,7 @@ void ItemRepositoryLoader<T>::read( tnstream& stream )
 
       t->filename = stream.readString();
       t->location = stream.readString();
+      t->archive = stream.readString();
       dataLoaderTicker();
 
       add ( t );
@@ -121,6 +125,7 @@ void ItemRepositoryLoader<T>::write( tnstream& stream )
        (*i)->write( stream );
        stream.writeString ( (*i)->filename );
        stream.writeString ( (*i)->location );
+       stream.writeString ( (*i)->archive ); 
    }
 }
 
@@ -183,7 +188,7 @@ class TechAdapterLoader : public TextFileDataLoader {
 
 void  loadalltextfiles ( );
 
-const int cacheVersion = 28;
+const int cacheVersion = 29;
 
 class FileCache {
       vector<tfindfile::FileInfo> actualFileInfo;
@@ -319,6 +324,7 @@ void  loadAllData( bool useCache )
    registerDataLoader( technologyRepository );
    registerDataLoader( new TechAdapterLoader() );
    registerDataLoader( new ItemFiltrationSystem::DataLoader() );
+   registerDataLoader( new PackageLoader() );
 
 
    if ( cache.isCurrent() && useCache ) {
@@ -364,6 +370,9 @@ void  loadAllData( bool useCache )
       textFileRepository.clear();
    }
 
+   PackageLoader::addProgramPackage();
+   
+   
 }
 
 
@@ -555,3 +564,35 @@ void ItemFiltrationSystem::DataLoader::write ( tnstream& stream )
    writePointerContainer( ItemFiltrationSystem::itemFilters, stream );
 }
 
+PackageRepository packageRepository;
+
+void PackageLoader ::addProgramPackage()
+{
+   Package* prog = new Package();
+   prog->name = "ASC";
+   prog->version.fromString( getVersionString() );
+   packageRepository.push_back( prog );
+}
+
+void PackageLoader ::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
+{
+   Package* p = new Package();
+   p->runTextIO( prc );
+   
+   // p->filename = fileName;
+   // p->location = location;
+   
+   packageRepository.push_back( p );
+}
+
+void PackageLoader :: read ( tnstream& stream )
+{
+   stream.readInt();
+   readPointerContainer( packageRepository, stream );
+}
+
+void PackageLoader :: write ( tnstream& stream )
+{
+   stream.writeInt( 1 );
+   writePointerContainer( packageRepository, stream );
+}

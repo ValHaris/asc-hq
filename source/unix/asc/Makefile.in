@@ -89,7 +89,9 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	turncontrol.$(OBJEXT) unitset.$(OBJEXT) playercolor.$(OBJEXT) \
 	pg_mapdisplay.$(OBJEXT) autotraining.$(OBJEXT) \
 	researchexecution.$(OBJEXT) luacommandwriter.$(OBJEXT) \
-	campaignactionrecorder.$(OBJEXT) loggingoutput.$(OBJEXT)
+	campaignactionrecorder.$(OBJEXT) loggingoutput.$(OBJEXT) \
+	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
+	packagemanager.$(OBJEXT)
 nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
 	gamedialog.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
@@ -331,7 +333,7 @@ explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
-campaignactionrecorder.cpp loggingoutput.cpp
+campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp
 
 commonLibs = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -512,6 +514,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmapimage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmappanel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/package.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagemanager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
@@ -546,6 +550,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/versionidentifier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 

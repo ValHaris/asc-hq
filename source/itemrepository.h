@@ -29,8 +29,12 @@
 #include "research.h"
 #include "textfile_evaluation.h"
 #include "objects.h"
+#include "package.h"
 
+/*!  TextFileDataLoader is the abstract interface that has to be implemented for every 
+     Class that is to be stored in the ASC cache.
 
+*/
 class TextFileDataLoader {
    public:
       virtual void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location ) = 0;
@@ -137,6 +141,18 @@ extern void  loadAllData( bool useCache = true );
 
 typedef  deallocating_vector<TechAdapter*> TechAdapterContainer;
 extern TechAdapterContainer techAdapterContainer;
+
+typedef deallocating_vector<Package*> PackageRepository;
+extern PackageRepository packageRepository;
+
+class PackageLoader : public TextFileDataLoader{
+   public:
+      void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      static void addProgramPackage();
+      ASCString getTypeName() { return "package"; };
+};
 
 
 class ItemFiltrationSystem {

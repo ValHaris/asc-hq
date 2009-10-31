@@ -35,6 +35,7 @@
 #include "eventtest.h"
 #include "gameeventsystem.h"
 #include "jumptest.h"
+#include "testversionidentifier.h"
 
 
 void viewcomp( Player& player )
@@ -84,6 +85,8 @@ Context createContext( GameMap* gamemap )
 
 void runUnitTests()
 {
+   
+   testVersionIdentifier();
    testJumpdrive();
    testEvents();
    testActions();

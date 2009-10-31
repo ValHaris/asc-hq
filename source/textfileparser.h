@@ -90,6 +90,7 @@ class TextPropertyGroup {
 
          ASCString fileName;
          ASCString location;
+         ASCString archive;
 
          //! the name of the structure. For example "VehicleType"
          ASCString typeName;

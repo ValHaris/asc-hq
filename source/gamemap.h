@@ -171,7 +171,7 @@ class OverviewMapHolder : public SigC::Object {
 
 
 class Event;
-
+class PackageData;
 
 //! The map. THE central structure of ASC, which holds everything not globally available together
 class GameMap {
@@ -546,6 +546,8 @@ class GameMap {
 
       int getMemoryFootprint() const;
 
+      mutable PackageData* packageData;
+      
    private:
       Vehicle* getUnit ( Vehicle* eht, int nwid );
 

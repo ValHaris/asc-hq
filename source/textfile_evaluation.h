@@ -115,6 +115,7 @@ class PropertyContainer {
          void error ( const ASCString& errmsg );
          bool find ( const ASCString& name );
          virtual ASCString getFileName (  ) = 0;
+         virtual ASCString getArchive (  ) = 0;
          virtual ~PropertyContainer ( ) { };
       protected:
          PropertyContainer ( const ASCString& baseName, TextPropertyGroup* tpg, bool reading_ ) : reading( reading_ ), levelDepth ( 0 ), textPropertyGroup( tpg ) { };
@@ -129,7 +130,8 @@ class PropertyReadingContainer : public PropertyContainer {
    protected:
          virtual ASCString getLocation() { return textPropertyGroup->location; };
    public:
-         virtual ASCString getFileName (  ) { return textPropertyGroup->fileName; };
+         virtual ASCString getFileName() { return textPropertyGroup->fileName; };
+         virtual ASCString getArchive() { return textPropertyGroup->archive; };
          PropertyReadingContainer ( const ASCString& baseName, TextPropertyGroup* tpg );
          ~PropertyReadingContainer (  );
          void writeProperty ( Property& p, const ASCString& value );
@@ -140,7 +142,8 @@ class PropertyWritingContainer : public PropertyContainer {
    protected:
          virtual ASCString getLocation() { return stream.getLocation(); };
    public:
-         virtual ASCString getFileName (  ) { return stream.getDeviceName(); };
+         virtual ASCString getFileName() { return stream.getDeviceName(); };
+         virtual ASCString getArchive() { return stream.getArchive(); };
          PropertyWritingContainer ( const ASCString& baseName, tnstream& stream );
          ~PropertyWritingContainer();
 

@@ -26,7 +26,8 @@ geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
-campaignactionrecorder.cpp luacommandwriter.cpp
+campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp package.cpp \
+packagemanager.cpp
 
 asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \

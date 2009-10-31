@@ -82,7 +82,9 @@ nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	playercolor.$(OBJEXT) statistics.$(OBJEXT) player.$(OBJEXT) \
 	cannedmessages.$(OBJEXT) mapimageexport.$(OBJEXT) \
 	mainscreenwidget.$(OBJEXT) windowing.$(OBJEXT) \
-	campaignactionrecorder.$(OBJEXT) luacommandwriter.$(OBJEXT)
+	campaignactionrecorder.$(OBJEXT) luacommandwriter.$(OBJEXT) \
+	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
+	packagemanager.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -307,7 +309,8 @@ geometry.cpp guidimension.cpp unitset.cpp fieldimageloader.cpp \
 iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappanel.cpp \
 explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
-campaignactionrecorder.cpp luacommandwriter.cpp
+campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp package.cpp \
+packagemanager.cpp
 
 asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
@@ -461,6 +464,8 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmapimage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmappanel.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/package.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagemanager.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
@@ -487,6 +492,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/versionidentifier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 

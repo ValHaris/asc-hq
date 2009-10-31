@@ -173,11 +173,14 @@
            virtual void readrlepict( void** pnter, bool allocated, int* size);
 
            //! returns the name of the stream.
-           virtual ASCString getDeviceName ( void );
+           virtual ASCString getDeviceName();
 
            /** returns the location of the stream. This may be a complete english sentence describing how the stream (usually a file) can be found. 
                Should only be used for informing the user. */
-           virtual ASCString getLocation   ( void );
+           virtual ASCString getLocation();
+           
+           //! returns the archive name if the stream is located inside an archive; or "" if not.
+           virtual ASCString getArchive();
 
            //! Sets the stream pointer to a new location. An exception is thrown if the stream does not support seeking.
            virtual void seek ( int newpos );

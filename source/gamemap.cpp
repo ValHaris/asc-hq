@@ -38,6 +38,8 @@
 #include "spfst.h"
 #include "campaignactionrecorder.h"
 
+#include "packagemanager.h"
+
 
 RandomGenerator::RandomGenerator(int seedValue){
 
@@ -219,7 +221,7 @@ void OverviewMapHolder::clearmap( GameMap* actmap )
 
 
 GameMap :: GameMap ( void )
-   : actions(this), actionRecorder(NULL), overviewMapHolder( *this ), network(NULL)
+   : actions(this), actionRecorder(NULL), overviewMapHolder( *this ), network(NULL), packageData(NULL)
 {
    randomSeed = rand();
    dialogsHooked = false;
@@ -288,7 +290,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 31;
+const int tmapversion = 32;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -327,6 +329,7 @@ void GameMap :: read ( tnstream& stream )
    else
       ___loadtitle = true;
 
+   
    bool loadCampaign = stream.readInt();
    actplayer = stream.readChar();
    time.abstime = stream.readInt();   
@@ -339,6 +342,19 @@ void GameMap :: read ( tnstream& stream )
    if ( version >= 11 ) 
       if ( stream.readInt() != 0x12345678 )
          throw ASCmsgException("marker not matched when loading GameMap");
+   
+   if ( version >= 32 ) {
+      int p = stream.readInt();
+      if ( p ) {
+         packageData = new PackageData();
+         packageData->read( stream );
+         
+         PackageManager::checkGame( this );
+         
+      } else
+         packageData = NULL;
+   } else 
+      packageData = NULL;
    
       
    for ( int j = 0; j < 4; j++ )
@@ -679,6 +695,7 @@ void GameMap :: read ( tnstream& stream )
     
     if( version >= 31 )
        properties.read( stream );
+    
 }
 
 
@@ -709,6 +726,11 @@ void GameMap :: write ( tnstream& stream )
    stream.writeChar( weather.windDirection );
    
    stream.writeInt( 0x12345678 );
+   
+   stream.writeInt( packageData != NULL );
+   if ( packageData ) 
+      packageData->write( stream );
+   
    
    for  ( i= 0; i < 4; i++ )
       stream.writeChar( 0 );
@@ -881,6 +903,8 @@ void GameMap :: write ( tnstream& stream )
        stream.writeInt( 0 );
     
     properties.write( stream );
+    
+   
 }
 
 
