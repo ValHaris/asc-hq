@@ -264,6 +264,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\dataversioncheck.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\dialog.cpp"
 				>
 			</File>
@@ -456,6 +460,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\package.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\packagemanager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\packagerepository.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\palette.cpp"
 				>
 			</File>
@@ -565,6 +581,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\dialogs\vehicletypeselector.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\versionidentifier.cpp"
 				>
 			</File>
 			<File

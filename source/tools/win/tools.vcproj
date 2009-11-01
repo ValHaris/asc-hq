@@ -256,6 +256,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\package.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\packagerepository.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\palette.cpp"
 				>
 			</File>
@@ -321,6 +329,10 @@
 			</File>
 			<File
 				RelativePath="..\..\vehicletype.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\versionidentifier.cpp"
 				>
 			</File>
 			<Filter
