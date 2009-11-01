@@ -178,6 +178,8 @@
 #include "luacommandwriter.h"
 #include "campaignactionrecorder.h"
 #include "textfiletags.h"
+#include "dataversioncheck.h"
+#include "packagemanager.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -953,6 +955,23 @@ void showUnitAiProperties()
 }
    
 
+void showUsedPackages()
+{
+   PackageManager::storeData( actmap );
+   if ( actmap->packageData ) {
+      ASCString s;
+      for ( PackageData::Packages::const_iterator i  = actmap->packageData->packages.begin(); i != actmap->packageData->packages.end(); ++i ) {
+         s += "#fontsize=14#" + i->second->name + "#fontsize=11#\n";
+         s += i->second->description;
+         s += "\n\n";
+      }
+      
+      ViewFormattedText vat ( "Used Packages", s, PG_Rect( 20, -1 , 450, 480 ));
+      vat.Show();
+      vat.RunModal();
+   }
+}
+
 
 class CommandAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
    virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
@@ -1209,6 +1228,9 @@ void execuseraction2 ( tuseractions action )
       case ua_unitAiOptions: showUnitAiProperties();
          break;
       
+      case ua_showUsedPackages: showUsedPackages();
+         break;
+         
       default:
          break;
    }
@@ -1316,9 +1338,8 @@ int gamethread ( void* data )
    MapTypeLoaded mtl = None;
 
    try {
-	  loadpalette();
-
-	  virtualscreenbuf.init();
+      loadpalette();
+      virtualscreenbuf.init();
 
       startupScreen.reset( new StartupScreen( "title.jpg", dataLoaderTicker ));
       loadLegacyFonts();
@@ -1332,6 +1353,10 @@ int gamethread ( void* data )
    }
    catch ( tfileerror err ) {
       errorMessage ( "Error loading file " + err.getFileName() );
+      return -1;
+   }
+   catch ( ASCmsgException msg ) {
+      errorMessage ( msg.getMessage() );
       return -1;
    }
    catch ( ASCexception ) {
@@ -1550,7 +1575,6 @@ int main(int argc, char *argv[] )
    try {
       initFileIO( cl->c() );  // passing the filename from the command line options
       checkDataVersion();
-      // check_bi3_dir ();
    } catch ( tfileerror err ) {
       displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }

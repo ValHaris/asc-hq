@@ -74,7 +74,4 @@ extern void checkFileLoadability ( const ASCString& filename );
 extern void initFileIO ( const ASCString& configFileName, int skipChecks = 0 );
 
 
-extern int dataVersion;
-extern void checkDataVersion( );
-
 #endif

@@ -28,7 +28,7 @@
 #include "textfile_evaluation.h"
 #include "util/messaginghub.h"
 #include "packagemanager.h"
-#include "strtmesg.h"
+#include "packagerepository.h"
 
 
 SigC::Signal0<void> dataLoaderTicker;
@@ -267,6 +267,7 @@ void FileCache::load()
    for ( DataLoaders::iterator i = dataLoaders.begin(); i != dataLoaders.end(); ++i) {
       displayLogMessage ( 5, "loading all of " + (*i)->getTypeName() + " from cache ... ");
       (*i)->read ( *stream );
+      (*i)->postChecks();
       displayLogMessage ( 5, "completed \n ");
    }
 }
@@ -317,6 +318,7 @@ void  loadAllData( bool useCache )
 {
    FileCache cache;
 
+   registerDataLoader( packageRepository );
    registerDataLoader( vehicleTypeRepository );
    registerDataLoader( terrainTypeRepository );
    registerDataLoader( objectTypeRepository );
@@ -324,7 +326,6 @@ void  loadAllData( bool useCache )
    registerDataLoader( technologyRepository );
    registerDataLoader( new TechAdapterLoader() );
    registerDataLoader( new ItemFiltrationSystem::DataLoader() );
-   registerDataLoader( new PackageLoader() );
 
 
    if ( cache.isCurrent() && useCache ) {
@@ -353,7 +354,7 @@ void  loadAllData( bool useCache )
                displayLogMessage ( 5, " done\n");
             }
          }
-
+         (*dl)->postChecks();
          displayLogMessage ( 4, "loading all of " + (*dl)->getTypeName() + "  completed\n");
 
       }
@@ -369,10 +370,6 @@ void  loadAllData( bool useCache )
 
       textFileRepository.clear();
    }
-
-   PackageLoader::addProgramPackage();
-   
-   
 }
 
 
@@ -562,37 +559,4 @@ void ItemFiltrationSystem::DataLoader::write ( tnstream& stream )
 {
    stream.writeInt ( 1 );
    writePointerContainer( ItemFiltrationSystem::itemFilters, stream );
-}
-
-PackageRepository packageRepository;
-
-void PackageLoader ::addProgramPackage()
-{
-   Package* prog = new Package();
-   prog->name = "ASC";
-   prog->version.fromString( getVersionString() );
-   packageRepository.push_back( prog );
-}
-
-void PackageLoader ::readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location )
-{
-   Package* p = new Package();
-   p->runTextIO( prc );
-   
-   // p->filename = fileName;
-   // p->location = location;
-   
-   packageRepository.push_back( p );
-}
-
-void PackageLoader :: read ( tnstream& stream )
-{
-   stream.readInt();
-   readPointerContainer( packageRepository, stream );
-}
-
-void PackageLoader :: write ( tnstream& stream )
-{
-   stream.writeInt( 1 );
-   writePointerContainer( packageRepository, stream );
 }

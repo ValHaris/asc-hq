@@ -91,7 +91,8 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	researchexecution.$(OBJEXT) luacommandwriter.$(OBJEXT) \
 	campaignactionrecorder.$(OBJEXT) loggingoutput.$(OBJEXT) \
 	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
-	packagemanager.$(OBJEXT)
+	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
+	dataversioncheck.$(OBJEXT)
 nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
 	gamedialog.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
@@ -333,7 +334,8 @@ explosivemines.cpp mainscreenwidget.cpp networksupervisor.cpp statistics.cpp \
 legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimageexport.cpp \
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
-campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp
+campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp \
+packagerepository.cpp dataversioncheck.cpp
 
 commonLibs = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -472,6 +474,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containercontrols.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/controls.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dashboard.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dataversioncheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/explosivemines.Po@am__quote@
@@ -516,6 +519,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmappanel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/package.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagemanager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagerepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@

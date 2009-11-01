@@ -256,6 +256,8 @@ void Menu::setup()
    addbutton ( "compiler benchmark (AI)", ua_aibench );
    currentMenu->addSeparator();
    addbutton ( "unit AI properties", ua_unitAiOptions );
+   currentMenu->addSeparator();
+   addbutton ( "show packages used by map", ua_showUsedPackages );
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );

@@ -41,6 +41,7 @@ class TextFileDataLoader {
       virtual void read ( tnstream& stream ) = 0;
       virtual void write ( tnstream& stream ) = 0;
       virtual ASCString getTypeName() = 0;
+      virtual void postChecks() {};
       virtual ~TextFileDataLoader() {};
 };
 
@@ -142,17 +143,6 @@ extern void  loadAllData( bool useCache = true );
 typedef  deallocating_vector<TechAdapter*> TechAdapterContainer;
 extern TechAdapterContainer techAdapterContainer;
 
-typedef deallocating_vector<Package*> PackageRepository;
-extern PackageRepository packageRepository;
-
-class PackageLoader : public TextFileDataLoader{
-   public:
-      void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
-      void read ( tnstream& stream );
-      void write ( tnstream& stream );
-      static void addProgramPackage();
-      ASCString getTypeName() { return "package"; };
-};
 
 
 class ItemFiltrationSystem {

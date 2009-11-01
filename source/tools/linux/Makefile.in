@@ -82,7 +82,7 @@ nodist_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) \
 	iconrepository.$(OBJEXT) objects.$(OBJEXT) unitset.$(OBJEXT) \
 	fieldimageloader.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
 	playercolor.$(OBJEXT) versionidentifier.$(OBJEXT) \
-	package.$(OBJEXT)
+	package.$(OBJEXT) packagerepository.$(OBJEXT)
 asc_weaponguide_OBJECTS = $(nodist_asc_weaponguide_OBJECTS)
 asc_weaponguide_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/sdl/libsdl.la \
@@ -294,7 +294,7 @@ nodist_asc_weaponguide_SOURCES = weaponguide.cpp  basestrm.cpp simplestream.cpp 
                                  textfileparser.cpp containerbasetype.cpp   terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp \
                                  stringtokenizer.cpp research.cpp itemrepository.cpp groupfile.cpp guidegenerator.cpp infopage.cpp overviewmapimage.cpp \
                                  iconrepository.cpp objects.cpp unitset.cpp fieldimageloader.cpp stdio-errorhandler.cpp playercolor.cpp versionidentifier.cpp \
-                                 package.cpp 
+                                 package.cpp packagerepository.cpp
 
 #asc_raw2pcx_SOURCES     = raw2pcx.cpp      basestrm.cpp simplestream.cpp misc.cpp ascstring.cpp loadpcxc.cpp palette.cpp sgstream.cpp newfont.cpp basegfx.cpp graphicset.cpp gameoptions.cpp stack.cpp buildingtype.cpp typen.cpp vehicletype.cpp password.cpp strtmesg.cpp textfileparser.cpp containerbasetype.cpp  terraintype.cpp objecttype.cpp textfiletags.cpp textfile_evaluation.cpp stringtokenizer.cpp research.cpp itemrepository.cpp
 asc_mount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) $(BZIP2_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la
@@ -418,6 +418,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objecttype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmapimage.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/package.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagerepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/playercolor.Po@am__quote@

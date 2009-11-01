@@ -20,6 +20,7 @@
 
 #include "packagemanager.h"
 #include "package.h"
+#include "packagerepository.h"
 
 
 static const int packageDataStreamVersion = 1;
@@ -53,29 +54,11 @@ void PackageData::write ( tnstream& stream ) const
 
 void PackageManager::checkGame( GameMap* game )
 {
-   if( game->packageData == NULL )
+   if( game == NULL || game->packageData == NULL )
       return;
    
-   for ( PackageData::Packages::const_iterator i = game->packageData->packages.begin(); i != game->packageData->packages.end(); ++i ) {
-      
-      Package* pack = i->second;
-      
-      for ( Package::Dependencies::const_iterator dep = pack->dependencies.begin(); dep != pack->dependencies.end(); ++dep ) {
-         bool found = false;
-         for ( PackageRepository::const_iterator p = packageRepository.begin(); p != packageRepository.end(); ++p ) {
-            if ( (*p)->name.compare_ci( dep->name ) == 0 ) {
-               if ( (*p)->version < dep->version ) {
-                  throw ASCmsgException( "The package " +  dep->name + " on your system is outdated.\nYou need at least " + dep->version.toString() 
-                        + "\n\nPackage Info:\n" + (*p)->description );
-               }
-               found = true;
-            }
-         }
-         if ( !found )
-            throw ASCmsgException( "The package " +  dep->name + " is missing on your system!"  );
-
-      }
-   }
+   for ( PackageData::Packages::const_iterator i = game->packageData->packages.begin(); i != game->packageData->packages.end(); ++i ) 
+      packageRepository.checkPackageDependency( i->second );
 }
 
 void PackageManager::storeData( const GameMap* game )

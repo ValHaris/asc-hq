@@ -216,16 +216,6 @@ int main(int argc, char *argv[] )
    initFileIO( cl->c() );  // passing the filename from the command line options
 
    SoundSystem soundSystem ( true, true, true );
-   
-   try {
-      checkDataVersion();
-      // check_bi3_dir ();
-   } catch ( tfileerror err ) {
-      displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
-   }
-   catch ( ... ) {
-      displaymessage ( "loading of game failed during pre graphic initializing", 2 );
-   }
 
    tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
 

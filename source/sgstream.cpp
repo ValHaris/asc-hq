@@ -512,22 +512,6 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
 
    if ( ! (skipChecks & 1 ))
       checkFileLoadability ( "palette.pal" );
-
-   if ( ! (skipChecks & 2 ))
-      checkFileLoadability ( "data.version" );
-
-   if ( ! (skipChecks & 8 ))
-      checkFileLoadability ( "trrobj.version" );
-
-   if ( ! (skipChecks & 0x10 ))
-      checkFileLoadability ( "trrobj2.version" );
-
-   if ( ! (skipChecks & 0x20 ))
-      checkFileLoadability ( "buildings.version" );
-
-   if ( ! (skipChecks & 0x40 ))
-      checkFileLoadability ( "markedfielddark.png" );
-   
 }
 
 void versionError( const ASCString& filename, const ASCString& location )
@@ -537,32 +521,3 @@ void versionError( const ASCString& filename, const ASCString& location )
    msg += "The old file is " + location;
    fatalError( msg );
 }
-
-void checkFileVersion( const ASCString& filename, const ASCString& containername, int version )
-{
-   ASCString location;
-   bool dataOk = true;
-   if ( exist ( filename )) {
-      tnfilestream s ( filename, tnstream::reading );
-      ASCString str = s.readString();
-      int v = atoi ( str.c_str() );
-      if ( v < version )
-         dataOk = false;
-      location = s.getLocation();
-   } else
-      dataOk = false;
-
-   if ( !dataOk )
-      versionError ( containername, location );
-
-}
-
-void checkDataVersion( )
-{
-   ASCString location;
-   checkFileVersion( "main.version", "main.ascdat", 17 );
-
-   if ( exist( "pbp.ascdat" ))
-      checkFileVersion( "pbp.version", "pbp.ascdat", 39 );
-}
-

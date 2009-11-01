@@ -84,7 +84,8 @@ nodist_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	windowing.$(OBJEXT) playercolor.$(OBJEXT) \
 	campaignactionrecorder.$(OBJEXT) luacommandwriter.$(OBJEXT) \
 	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
-	packagemanager.$(OBJEXT)
+	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
+	dataversioncheck.$(OBJEXT)
 asc_mapedit_OBJECTS = $(nodist_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -309,7 +310,7 @@ iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappane
 explosivemines.cpp legacynetworkloaders.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp \
-package.cpp packagemanager.cpp
+package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
@@ -421,6 +422,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/clipboard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbase.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/containerbasetype.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dataversioncheck.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/dlg_box.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ed_mapcomponent.Po@am__quote@
@@ -464,6 +466,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/overviewmappanel.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/package.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagemanager.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/packagerepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/palette.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/paradialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/password.Po@am__quote@
