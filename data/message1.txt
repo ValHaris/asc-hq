@@ -318,6 +318,8 @@ Unit can not perfom building construction
 Unit can not jump now
 22601
 invalid destination for jump
+22602
+There are no destinations to jump to
 22700
 invalid building for repair operation
 22800

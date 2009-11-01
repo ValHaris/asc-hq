@@ -950,7 +950,8 @@ class JumpDriveIcon : public GuiFunction, public SigC::Object
                repaintMap();
                NewGuiHost::pendingCommand = jdc.release();
                updateFieldInfo();
-            }
+            } else
+               dispmessage2( 22602 );
          } else {
             JumpDriveCommand* jdc = dynamic_cast<JumpDriveCommand*>(NewGuiHost::pendingCommand);
             if ( jdc ) {

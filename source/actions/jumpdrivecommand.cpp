@@ -40,9 +40,10 @@ bool JumpDriveCommand :: avail ( const Vehicle* unit )
 {
    if ( unit )
       if ( !unit->hasMoved() )
-         if ( unit->height & unit->typ->jumpDrive.height )
-            if ( unit->getResource( unit->typ->jumpDrive.consumption ) == unit->typ->jumpDrive.consumption ) 
-               return true;
+         if ( (unit->reactionfire.getStatus() == Vehicle::ReactionFire::off) || unit->typ->hasFunction(Vehicletype::MoveWithReactionFire ) )
+            if ( unit->height & unit->typ->jumpDrive.height )
+               if ( unit->getResource( unit->typ->jumpDrive.consumption ) == unit->typ->jumpDrive.consumption ) 
+                  return true;
 
    return false;
 }
