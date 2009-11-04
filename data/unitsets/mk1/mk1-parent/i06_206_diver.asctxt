@@ -28,28 +28,28 @@ VehicleType {
    } Weapons
    HeightChangeMethodNum = 4
    HeightChangeMethod0 {
-      movecost = 10
+      movecost = 15
       heightdelta = 1
       dist = 0
       startheight = deep_submerged
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
-      movecost = 10
+      movecost = 15
       heightdelta = 2
       dist = 0
       startheight = submerged
       canattack = true
    } HeightChangeMethod1
    HeightChangeMethod2 {
-      movecost = 10
+      movecost = 15
       heightdelta = -1
       dist = 0
       startheight = submerged
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
-      movecost = 10
+      movecost = 15
       heightdelta = -2
       dist = 0
       startheight = ground_level

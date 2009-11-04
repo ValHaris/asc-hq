@@ -30,7 +30,7 @@ ObjectType {
    } RemovalCost
    NetBehaviour = NetToSelf AutoBorder NetToBuildingEntry
    TerrainAccess { 
-      terrain_any = Shallow_water Very_shallow_water river swamp morass
+      terrain_any = Shallow_water Very_shallow_water swamp morass
       terrain_all = 
       terrain_not = Forest railroad Runway Mountains high_mountains Turret_foundation Installation bridge hillside lava
       terrain_kill = Water Deep_water lava 

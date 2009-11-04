@@ -10,4 +10,5 @@ VehicleType {
 
    Jamming = 38
    FuelConsumption = 20
+   Weight += 1
 } VehicleType

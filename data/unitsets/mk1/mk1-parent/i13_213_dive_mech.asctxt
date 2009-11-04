@@ -11,7 +11,7 @@ VehicleType {
    Armor = 380
    Height = deep_submerged submerged ground_level 
    Features += sonar
-   Movement = 44 44 0 40 0 0 0 0 
+   Movement = 33 33 0 40 0 0 0 0 
    MaxSurvivableStorm = 170
    TerrainAccess { 
       terrain_any = deep_water Shallow_water Lowland Road Railroad Runway Water Hard_sand Soft_sand Very_shallow_water Ditch Hillside Turret_foundation River Frozen_water 
@@ -31,28 +31,28 @@ VehicleType {
    } Weapons
    HeightChangeMethodNum = 4
    HeightChangeMethod0 {
-      movecost = 10
+      movecost = 15
       heightdelta = 1
       dist = 0
       startheight = deep_submerged
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
-      movecost = 10
+      movecost = 15
       heightdelta = 2
       dist = 0
       startheight = submerged
       canattack = true
    } HeightChangeMethod1
    HeightChangeMethod2 {
-      movecost = 10
+      movecost = 15
       heightdelta = -1
       dist = 0
       startheight = submerged
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
-      movecost = 10
+      movecost = 15
       heightdelta = -2
       dist = 0
       startheight = ground_level

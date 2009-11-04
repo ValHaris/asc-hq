@@ -20,7 +20,9 @@ VehicleType {
    Movement -= 0 0 0 20 0 0 0 0 
 
    Weapons { 
+      Weapon0.MaxRange = 40
       Weapon0.Punch@MaxRange += 2
       Weapon0.Punch@MinRange += 5
+      Weapon0.ReactionFireShots = 2
    } Weapons
 } VehicleType

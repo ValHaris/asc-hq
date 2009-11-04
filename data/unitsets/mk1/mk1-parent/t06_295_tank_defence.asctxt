@@ -6,7 +6,6 @@ VehicleType {
    
    Description = defence tank
    Infotext = []
-   WaitForAttack = true
    GuideSortHelp = 503 295 507 0 0 0 0 0 0 0
 
    Armor = 850
@@ -22,6 +21,7 @@ VehicleType {
    FuelConsumption = 17
    Movement = 0 0 0 66 0 0 0 0 
 
+   WaitForAttack = true
    Weapons { 
       Initiative = -50
       Number = 2
@@ -32,7 +32,7 @@ VehicleType {
       Weapon0.Punch@MinRange = 90
       Weapon0.ReactionFireShots = 2
 
-      Weapon1 ->* VehicleType.MG45med
+      Weapon1 ->* VehicleType.MiniGun
       Weapon1.Ammo = 10
    } Weapons
 } VehicleType

@@ -366,7 +366,7 @@
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 800
       MaxLoadableMass = 800
-      CargoMovementDivisor = 1.3
+      CargoMovementDivisor = 1.2
       CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -406,6 +406,7 @@
       MaxLoadableUnits = 8
       MaxLoadableUnitSize = 5
       MaxLoadableMass = 16
+      CargoMovementDivisor = 1.7
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -437,7 +438,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 195
       MaxLoadableMass = 195
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
@@ -457,7 +458,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 100
       MaxLoadableMass = 170
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -603,7 +604,7 @@
       MaxLoadableUnitSize = 5
       MaxLoadableMass = 15
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
@@ -619,7 +620,7 @@
       MaxLoadableUnitSize = 60
       MaxLoadableMass = 100
       CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship hoovercraft
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.SubIO
@@ -644,7 +645,7 @@
       MaxLoadableUnits = 5
       MaxLoadableUnitSize = 50
       MaxLoadableMass = 100
-      CargoMovementDivisor = 1.5
+      CargoMovementDivisor = 1.4
       CategoriesNOT -> VehicleType.cargo_vehicle_light.CategoriesNOT
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
@@ -688,7 +689,7 @@
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 4
       MaxLoadableMass = 12
-      CargoMovementDivisor = 2
+      CargoMovementDivisor = 1.8
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
@@ -700,7 +701,7 @@
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 70
       MaxLoadableMass = 70
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       CategoriesNOT -> VehicleType.cargo_allground.CategoriesNOT
       EntranceSystemNum = 4
       EntranceSystem0 ->* VehicleType.GrIO
@@ -713,7 +714,7 @@
       MaxLoadableUnits = 8
       MaxLoadableUnitSize = 120
       MaxLoadableMass = 120
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       CategoriesNOT = hoovercraft light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship
       EntranceSystemNum = 4
       EntranceSystem0 ->* VehicleType.GrIO
@@ -728,7 +729,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 40
       MaxLoadableMass = 110
-      CargoMovementDivisor = 1.4
+      CargoMovementDivisor = 1.3
       CategoriesNOT -> VehicleType.cargo_shuttle.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -751,7 +752,7 @@
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 4
       MaxLoadableMass = 4
-      CargoMovementDivisor = 3
+      CargoMovementDivisor = 2
       CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -763,7 +764,7 @@
       MaxLoadableUnits = 1
       MaxLoadableUnitSize = 300
       MaxLoadableMass = 300
-      CargoMovementDivisor = 3
+      CargoMovementDivisor = 2
       CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -775,7 +776,7 @@
       MaxLoadableUnits = 1
       MaxLoadableUnitSize = 500
       MaxLoadableMass = 500
-      CargoMovementDivisor = 3
+      CargoMovementDivisor = 2
       CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -787,7 +788,7 @@
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 500
       MaxLoadableMass = 1000
-      CargoMovementDivisor = 3
+      CargoMovementDivisor = 2
       CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -804,6 +805,7 @@
       MaxLoadableUnits = 1
       MaxLoadableUnitSize = 2
       MaxLoadableMass = 2
+      CargoMovementDivisor = 1.8
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -843,6 +845,7 @@
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 6
       MaxLoadableMass = 6
+      CargoMovementDivisor = 1.8
       CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO

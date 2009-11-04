@@ -3,6 +3,7 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+03.10.2009 z77 (GAMER)
 Beta-09-13
 -Lavadefence Kosten auf 800M reduziert
 -Panzerschiene Kosten auf 1000M erhöht

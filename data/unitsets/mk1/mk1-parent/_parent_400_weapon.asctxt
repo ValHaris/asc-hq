@@ -1929,7 +1929,7 @@
    ServiceTurret.WeaponEffectiveness.light_wheeled_vehicle = 0
    ServiceTurret.WeaponEffectiveness.medium_wheeled_vehicle = 0
    ServiceTurret.WeaponEffectiveness.heavy_wheeled_vehicle = 0
-   ServiceTurret.WeaponEffectiveness.light_ship = 0
+   ServiceTurret.WeaponEffectiveness.light_ship = 10
    ServiceTurret.WeaponEffectiveness.medium_ship = 0
    ServiceTurret.WeaponEffectiveness.heavy_ship = 0
    ServiceTurret.WeaponEffectiveness.light_aircraft = 0

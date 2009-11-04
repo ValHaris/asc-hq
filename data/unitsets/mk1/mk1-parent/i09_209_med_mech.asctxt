@@ -9,6 +9,7 @@ VehicleType {
    GuideSortHelp = 502 209 0 0 0 0 0 0 0 0
 
    Armor = 390
+   Weight += 1
    Weapons { 
       Initiative = 0
       Number = 3

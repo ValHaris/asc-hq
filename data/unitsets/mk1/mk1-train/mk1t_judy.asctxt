@@ -4,7 +4,7 @@ VehicleType {
    ID = 59
    
    Description = repair train
-   picture = MK1t_judy.pcx
+   picture = mk1t_judy.pcx
    InfoImage = mk1t_judy.jpg
    InfoImageSmall = mk1t_judy_k.png
    WreckageObject = 459
@@ -17,7 +17,7 @@ VehicleType {
 
    Armor += 50
    Weight += 5
-   Features += ExternalRepair
+   Features += ExternalRepair ExternalAmmoTransfer
 
    Transportation ->* VehicleType.TransLowTrooper3 
    Tank { 
@@ -30,7 +30,8 @@ VehicleType {
    Construction { 
       Buildings = 
       Vehicles = 
-      Objects = 2 999 995
+      Objects = 2 992 999 995
+      ObjectsRemovable = 992
       ObjectGroupsRemovable = 1 2 3 4 6 8 11 13
    } Construction
 

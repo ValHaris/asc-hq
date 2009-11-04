@@ -4,6 +4,11 @@ InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
 ______________________
+Beta-09-15
+-FH 70 +1 Range , +1RF
+-SEK, Device-Transport
+______________________
+03.10.2009 z77 (GAMER)
 Beta-09-14
 -Techbugfix: Rafale, Blackbird,Raytheon,NSA,Harrier
 -LST External Transfer, lavaabbau

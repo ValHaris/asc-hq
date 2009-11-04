@@ -37,5 +37,6 @@ VehicleType {
       Weapon2.Punch@MinRange = 80
       Weapon2.maxRange = 40
       Weapon2.Ammo = 8
+      Weapon2.ReactionFireShots = 2
    } Weapons
 } VehicleType

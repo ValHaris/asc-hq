@@ -12,6 +12,7 @@ VehicleType {
 
    Transportation ->* VehicleType.Transplane 
    Transportation.MaxLoadableMass = 400
+   Transportation.CargoMovementDivisor = 1.2
 
    Features = 
    Armor = 460

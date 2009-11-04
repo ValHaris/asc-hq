@@ -34,7 +34,7 @@ VehicleType {
       Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.Artillery 
-      Weapon0.MaxRange = 40
+      Weapon0.MaxRange = 50
       Weapon0.Ammo = 22
       Weapon0.Punch@MaxRange = 120
       Weapon0.Punch@MinRange = 140

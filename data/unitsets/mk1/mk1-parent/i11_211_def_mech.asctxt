@@ -16,13 +16,13 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.SSM 
       Weapon0.MaxRange = 20
-      Weapon0.Ammo = 4
+      Weapon0.Ammo = 6
       Weapon0.Punch@MaxRange = 80
       Weapon0.Punch@MinRange = 80
+      Weapon0.Reactionfireshots = 2 
 
       Weapon1 ->* VehicleType.Flak 
       Weapon1.MaxRange = 30
