@@ -20,6 +20,8 @@ InstallDir $PROGRAMFILES\ASC
 ; overwrite the old one automatically)
 InstallDirRegKey HKLM "Software\Advanced Strategic Command" "Orig_Install_Dir"
 
+!include "LogicLib.nsh"
+
 ;--------------------------------
 
 ; Pages
@@ -88,6 +90,15 @@ Section "ASC main program (required)"
   File "../data/main.ascdat"
   File "../COPYING"
 
+
+  SectionGetFlags ${USB} $0
+  IntOp $0 $0 & SF_SELECTED
+  ${If} $0 == SF_SELECTED
+    Abort "USB selected"
+  ${Else}
+    Abort "USB not selected"
+  ${EndIf}  
+
   ; Write the installation path into the registry - not used any more, since we store in AppData
   ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
   
@@ -129,7 +140,7 @@ Section "ASC main program (required)"
   
 SectionEnd
 
-Section /o "USB Stick Mode"
+Section /o "USB Stick Mode" USB
   SetOutPath $INSTDIR
   File "data/asc2.ini"
 SectionEnd
