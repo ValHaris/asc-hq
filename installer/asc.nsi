@@ -8,10 +8,10 @@
 ;--------------------------------
 
 ; The name of the installer
-Name "Advanced Strategic Command 2.3.76.3"
+Name "Advanced Strategic Command 2.3.78.0"
 
 ; The file to write
-OutFile "ASC-2.3.76.3-Install.exe"
+OutFile "ASC-2.3.78.0-Install.exe"
 
 ; The default installation directory
 InstallDir $PROGRAMFILES\ASC
@@ -21,6 +21,7 @@ InstallDir $PROGRAMFILES\ASC
 InstallDirRegKey HKLM "Software\Advanced Strategic Command" "Orig_Install_Dir"
 
 !include "LogicLib.nsh"
+!include "Sections.nsh"
 
 ;--------------------------------
 
@@ -49,6 +50,7 @@ Section "ASC main program (required)"
   ; Set output path to the installation directory.
   SetOutPath $INSTDIR
   
+ 
   ; Executables
   File "/mnt/win2000/Programme/ascdev/asc-newgraph//ASC2.exe"
   File "/mnt/win2000/Programme/ascdev/asc-newgraph//mapeditor2.exe"
@@ -90,53 +92,7 @@ Section "ASC main program (required)"
   File "../data/main.ascdat"
   File "../COPYING"
 
-
-  SectionGetFlags ${USB} $0
-  IntOp $0 $0 & SF_SELECTED
-  ${If} $0 == SF_SELECTED
-    Abort "USB selected"
-  ${Else}
-    Abort "USB not selected"
-  ${EndIf}  
-
-  ; Write the installation path into the registry - not used any more, since we store in AppData
-  ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
-  
-  ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.3.76.3"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoRepair" 1
-  WriteUninstaller "uninstall.exe"
-
- ; start menu entries
-
-
-  CreateDirectory "$SMPROGRAMS\Advanced Strategic Command"
-  ClearErrors
-  CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Advanced Strategic Command.lnk" "$INSTDIR\asc2.exe" 
-  CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Map Editor.lnk" "$INSTDIR\mapeditor2.exe" 
-  WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\ASC Website.url" "InternetShortcut" "URL" "http://www.asc-hq.org/"
-
-
- ; add file association
-
-!define Index "Line${__LINE__}"
-  ReadRegStr $1 HKCR ".ascpbm" ""
-  StrCmp $1 "" "${Index}-NoBackup"
-    StrCmp $1 "AdvancedStrategicCommand.PBEMfile" "${Index}-NoBackup"
-    WriteRegStr HKCR ".ascpbm" "backup_val" $1
-"${Index}-NoBackup:"
-  WriteRegStr HKCR ".ascpbm" "" "AdvancedStrategicCommand.PBEMfile"
-  ReadRegStr $0 HKCR "AdvancedStrategicCommand.PBEMfile" ""
-  StrCmp $0 "" 0 "${Index}-Skip"
-	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile" "" "ASC Mail Game"
-	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell" "" "open"
-	WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\DefaultIcon" "" "$INSTDIR\asc2.exe,0"
-"${Index}-Skip:"
-  WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell\open\command" "" '$INSTDIR\asc2.exe -l "%1"'
-!undef Index
+  call registerASC
   
 SectionEnd
 
@@ -144,6 +100,7 @@ Section /o "USB Stick Mode" USB
   SetOutPath $INSTDIR
   File "data/asc2.ini"
 SectionEnd
+
 
 Section "Music Download"
    SetOutPath "$INSTDIR\music"
@@ -186,7 +143,7 @@ SectionEnd
 Section "Uninstall"
   
   ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Advanced Strategic Command"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command"
 
   ; Remove files and uninstaller
   Delete $INSTDIR\*.exe
@@ -235,3 +192,55 @@ Section "Uninstall"
 !undef Index
 
 SectionEnd
+
+Function registerASC
+  SectionGetFlags ${USB} $0
+  IntOp $0 $0 & 1
+  ${If} $0 == ${SF_SELECTED}
+      MessageBox MB_OK 'USB Mode selected, ASC will not be registered in Windows'
+  ${Else}
+
+      ; Write the installation path into the registry - not used any more, since we store in AppData
+      ; WriteRegStr HKLM "SOFTWARE\Advanced Strategic Command" "InstallDir2" "$INSTDIR"
+      
+      ; Write the uninstall keys for Windows
+      WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "DisplayName" "Advanced Strategic Command 2.3.78.0"
+      WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "UninstallString" '"$INSTDIR\uninstall.exe"'
+      WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "URLInfoAbout" '"http://www.asc-hq.org"'
+      WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoModify" 1
+      WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Advanced Strategic Command" "NoRepair" 1
+      WriteUninstaller "uninstall.exe"
+      
+      ; start menu entries
+      
+      
+      CreateDirectory "$SMPROGRAMS\Advanced Strategic Command"
+      ClearErrors
+      CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Advanced Strategic Command.lnk" "$INSTDIR\asc2.exe" 
+      CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Map Editor.lnk" "$INSTDIR\mapeditor2.exe" 
+      WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\ASC Website.url" "InternetShortcut" "URL" "http://www.asc-hq.org/"
+      
+      
+      ; add file association
+      
+      !define Index "Line${__LINE__}"
+      ReadRegStr $1 HKCR ".ascpbm" ""
+      StrCmp $1 "" "${Index}-NoBackup"
+         StrCmp $1 "AdvancedStrategicCommand.PBEMfile" "${Index}-NoBackup"
+         WriteRegStr HKCR ".ascpbm" "backup_val" $1
+      "${Index}-NoBackup:"
+      WriteRegStr HKCR ".ascpbm" "" "AdvancedStrategicCommand.PBEMfile"
+      ReadRegStr $0 HKCR "AdvancedStrategicCommand.PBEMfile" ""
+      StrCmp $0 "" 0 "${Index}-Skip"
+            WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile" "" "ASC Mail Game"
+            WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell" "" "open"
+            WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\DefaultIcon" "" "$INSTDIR\asc2.exe,0"
+      "${Index}-Skip:"
+      WriteRegStr HKCR "AdvancedStrategicCommand.PBEMfile\shell\open\command" "" '$INSTDIR\asc2.exe -l "%1"'
+      !undef Index
+  ${EndIf}  
+
+
+
+
+FunctionEnd
