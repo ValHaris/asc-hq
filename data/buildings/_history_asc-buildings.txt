@@ -3,6 +3,9 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+Beta-09-15 z77.2
+-Neuberechnung Kosten radar/Störgebäude
+______________________
 03.10.2009 z77 (GAMER)
 Beta-09-12
 -Spaceport Nord, Spielerfarben gefixt

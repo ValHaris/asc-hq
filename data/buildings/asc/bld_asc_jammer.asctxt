@@ -36,7 +36,7 @@ BuildingType {
    } TerrainAccess
    ConstructionCost { 
       Energy = 0
-      Material = 10034
-      fuel = 10837
+      Material = 13000
+      fuel = 16000
    } ConstructionCost
 } BuildingType
