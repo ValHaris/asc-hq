@@ -51,6 +51,8 @@ class Package {
       //! the archive in which the package is stored
       ASCString archive;
       
+      ASCString location;
+      
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;
    

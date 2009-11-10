@@ -61,6 +61,18 @@ void PackageManager::checkGame( GameMap* game )
       packageRepository.checkPackageDependency( i->second );
 }
 
+void PackageManager::processContainer( const ContainerBase* container, std::set<ASCString>& archives )
+{
+   archives.insert( container->baseType->archive );
+   for ( ContainerBase::Production::const_iterator i = container->getProduction().begin(); i != container->getProduction().end(); ++i )
+      if ( *i ) {
+         archives.insert( (*i)->archive );
+         if ( (*i)->id ==22301 )
+            printf("Hello World");
+      }
+}
+
+
 void PackageManager::storeData( const GameMap* game )
 {
    if( game->packageData == NULL )
@@ -79,10 +91,10 @@ void PackageManager::storeData( const GameMap* game )
    for ( int p = 0; p <= 8; ++p ) {
       const Player& pl = game->getPlayer( p );
       for ( Player::VehicleList::const_iterator i = pl.vehicleList.begin(); i != pl.vehicleList.end(); ++i )
-         archives.insert( (*i)->typ->archive );
+         processContainer( *i , archives );
       
       for ( Player::BuildingList::const_iterator i = pl.buildingList.begin(); i != pl.buildingList.end(); ++i )
-         archives.insert( (*i)->typ->archive );
+         processContainer( *i , archives );
    }
    
    game->packageData->packages.clear();

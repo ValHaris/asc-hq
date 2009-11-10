@@ -89,6 +89,7 @@ void Package::runTextIO ( PropertyContainer& pc )
    }
    
    archive = pc.getArchive();
+   location = pc.getLocation();
 }
 
 

@@ -21,6 +21,7 @@
 #ifndef packageManagerH
 #define packageManagerH
 
+#include <set>
 #include "versionidentifier.h"
 #include "ascstring.h"
 #include "basestreaminterface.h"
@@ -29,6 +30,8 @@
 #include "package.h"
 
 class PackageManager {
+   private:
+      static void processContainer( const ContainerBase* container, std::set<ASCString>& archives );
    public:
        static void checkGame( GameMap* game );
        static void storeData( const GameMap* game );
