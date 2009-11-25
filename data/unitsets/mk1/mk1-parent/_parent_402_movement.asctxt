@@ -223,9 +223,9 @@
    } lt_wheeled
 
    wheeled {
-      terrain_any = road runway hard_sand lowland Frozen_water
+      terrain_any = road runway hard_sand soft_sand lowland Frozen_water
       terrain_all =
-      terrain_not = forest small_rocks large_rocks morass swamp deep_snow hillside
+      terrain_not = forest large_rocks morass swamp deep_snow hillside
       terrain_kill = Shallow_water Water Deep_water River lava
    } wheeled
 

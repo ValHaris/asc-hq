@@ -3,6 +3,10 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+Beta-09-16
+-Beton filtert River
+-Runway Bugfix: nicht mehr im Wasser, Sumpf baubar, wird im Wasser zerstört.
+________________________
 03.10.2009 z77 (GAMER)
 Beta-09-13
 -Lavadefence Kosten auf 800M reduziert

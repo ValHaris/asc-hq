@@ -4,6 +4,7 @@ InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
 ______________________
+08.11.2009 z78 (GAMER)
 Beta-09-15
 -FH 70 +1 Range , +1RF
 -SEK, Device-Transport

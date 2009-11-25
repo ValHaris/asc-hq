@@ -4,6 +4,15 @@ InfoTexte: BananaJoe
 InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 _______________________
+Beta-09-16
+-Stonwall, Änderungsrücknahme Waffenreichweite
+BASIS: Wheeled Terrain => +soft_sand +small_rocks
+--Auswirkung: auf diverse Einheiten, z.B. Buggy, MAN
+BASIS: Schwerer helicopter Gewicht 80
+--Auswirkung: in leichten Träger verladbar (Pirate,Ralago)
+BASIS: JAM_Mech +500Fuel
+_______________________
+08.11.2009 z78 (GAMER)
 Beta-09-15
 Basisdefinitionen
 -Neukalkulation CargoMovementDivisor

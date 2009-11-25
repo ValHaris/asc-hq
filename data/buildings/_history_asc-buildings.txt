@@ -3,6 +3,7 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+08.11.2009 z78 (GAMER)
 Beta-09-15 z77.2
 -Neuberechnung Kosten radar/Störgebäude
 ______________________

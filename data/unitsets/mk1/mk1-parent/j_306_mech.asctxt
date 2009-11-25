@@ -10,5 +10,6 @@ VehicleType {
 
    Jamming = 38
    FuelConsumption = 20
+   Tank.Fuel += 500
    Weight += 1
 } VehicleType

@@ -11,5 +11,8 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
    Features += ManualSelfDestruct
-
+   
+   Weapons {
+      Weapon0.MaxRange = 40
+   } Weapons
 } VehicleType
