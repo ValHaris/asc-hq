@@ -15,3 +15,9 @@ asc.setLocalizedEventMessage( map, 260, message )
 message = [[Thunderlance HQ, Hyxaria:#crt##crt#Commander, our task force has now landed on the entrance of the cave. The helicopters are not able to start, because they have run out of fuel. The captured radio station was destroyed by an enemy agent, who has sabotaged the main power supply of the building.#crt##crt#At the end of the cave lies a research laboratory. In this lab we suppose the secret weapons system, which we have been looking for.#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing Officer#crt##crt#Objectives:#crt#- Capture the research Laboratory#crt#]]
 asc.setLocalizedEventMessage( map, 259, message )
 
+--- ===== 397  ======= 
+message = [[Your attempts to refuel the helicopter were successful. But while trying to cross the high mountain range, severe wind shear grips the helicopter and crashes it into the mountain side, killing all on board.
+
+The column of smoke that rises from the burning wreckage alerts additional imperial troops nearby, against which your small group doesn't stand a chance. ]]
+asc.setLocalizedEventMessage( map, 397, message )
+
