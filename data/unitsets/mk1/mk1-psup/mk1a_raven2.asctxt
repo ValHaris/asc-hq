@@ -8,7 +8,7 @@ VehicleType {
    InfoImage = mk1a_raven2.jpg
    InfoImageSmall = mk1a_raven2_k.png
    GuideSortHelp = 551 560 0 0 1 0 0 0 0 0
-   Infotext = [Das Raven II Transportflugzeug benutzt einen neuartigen Antrieb, der auch im Sinner Verwendung findet. Dadurch sind sehr kurze Start und Landewege nötig und zum Landen kann auch eine normale Straße benutzt werden. ]
+   Infotext = [Das Raven II Transportflugzeug benutzt einen neuartigen Antrieb, der auch im Sinner Verwendung findet. Dadurch sind kurze Start und Landewege möglich und zum Landen kann auch eine normale Straße benutzt werden. ]
 
    Transportation ->* VehicleType.Transplane 
    Transportation.MaxLoadableMass = 400
@@ -30,17 +30,9 @@ VehicleType {
    MovementSound = jet_pass.ogg
 
    HeightChangeMethod0 {
-      movecost = 40
-      heightdelta = 1
-      dist = 1
-      startheight = ground_level
-      canattack = true
+      movecost = 45
    } HeightChangeMethod0
-   HeightChangeMethod3 {
-      movecost = 40
-      heightdelta = -1
-      dist = 1
-      startheight = low_level_flight
-      canattack = true
-   } HeightChangeMethod3
+   HeightChangeMethod5 {
+      movecost = 45
+   } HeightChangeMethod5
 } VehicleType
