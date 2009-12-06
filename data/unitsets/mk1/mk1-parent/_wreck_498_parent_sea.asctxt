@@ -8,9 +8,9 @@ ObjectType {
    Armor = 200
    Movemalus_plus = 0
    Movemalus_abs = -1
-   AttackBonus_abs = 0
+   AttackBonus_abs = -1
    AttackBonus_plus = 0
-   DefenseBonus_abs = 0
+   DefenseBonus_abs = -1
    DefenseBonus_plus = 0
    Jamming_abs = -1
    Jammming_plus = 
