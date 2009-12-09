@@ -30,7 +30,7 @@ asc.setLocalizedEventMessage( map, 20, message )
 message = [[Thunderlance HQ, Rogul:
 
 Commander, we are trapped.
-The factory has no data about a new weapons system. We have intercepted enemy communication: A large number of troops are approaching from the north. Our recon vehicle, which has ventured north has been surprised by enemy units and will probably be lost. But it has discovered a large missile site of type SILO. This SILO is a great danger to our further tasks. It must be destroyed.
+The factory had no data about a new weapons system. And we have intercepted enemy communication: A large number of troops are approaching. Our recon vehicle, which has ventured north, has been surprised by enemy units and will probably be lost. But it has discovered a large missile site of type SILO. This SILO is a great danger to our further tasks. It must be destroyed.
 
 In the east the construction of a new base has begun. We should head for this base to build up a stronger force for our assault on the SILO.
 
