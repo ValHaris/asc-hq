@@ -4,8 +4,12 @@ VehicleType {
    ID = 500
    WreckageObject = 15500 15800
 
-   Picture = mk3a_AMX.png
+   Picture = mk3a_amx.png
+   ImfoImage = mk3a_amx.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [Der AMX ist ein leichter Bomber, der von zwei terranischen Staaten, Italien und Brasilien ursprünglich entworfen und in Dienst gestellt wurde.
+Sie versuchten sich durch dieses Flugzeug von der militärischen Abhängigkeit von den USA und Frankreich, zwei weiteren terranischen Staaten freimachen. Auf Terra schon lange außer Dienstgestellt wurde der AMX für den Einsatz auf fremden Welten wieder ausgegraben, weil Testes ergaben, dass dieses Flugzeug leicht zu warten und extrem leicht auf fremde Umwelteinflüsse vorzubereiten ist. Zusammen mit den geringen Kosten und der leichten Produktion wurde es dann zum leichten standart Bomber der terranischen Kolonien.
+Dazu wurde der Kampfflieger noch trägertauglich gemacht und dank seines geringen Gewichtes von 13t kann er auf allen Trägertypen in großer Zahl mitgeführt werden.]
 
    Armor -= 5
 

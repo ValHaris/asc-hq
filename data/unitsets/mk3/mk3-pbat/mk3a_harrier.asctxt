@@ -2,19 +2,14 @@ VehicleType {
    Name = HARRIER
    parent = 338
    ID = 530
+
+   Description = Senkrechtstarter
+   picture = mk3a_harrier.png
+   InfoImage = mk3a_harrier.jpg
    WreckageObject = 15530 15830
-   Description = vertical take-off plane
-   Infotext = [Harrier
-
-Der Harrier ist ein Allzweckflugzeug das vertikale Starts und Landungen durchfuehren kann.
-Sein groesster Vorteil ist die Faehigkeit von Kreuzern und kurzen Landebahnen aus zu operieren. Die grosse Anzahl an Einsatzoptionen, die dem Harrier zur Verfuegung stehen machen ihm zum perfekten Marineflieger.
-
-The Harrier is a multirole aircraft able to start and land on the spot.
-Its great advantge lies in its ability to operate from cruisers and very short runways.
-This greatly widens the range of operations the Harrier can perform and makes it the perfect naval strike fighter.
-]
-   picture = MK3a_harrier.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Die Harrier ist ein leichter, relativ kleiner Allrounder. Er hat ein geringes Gewicht und kann durch sein spezielles Triebwerk nahezu überall Starten und Landen. Eine Betankung mit Waffen und Munition im offenen Gelände oder an schwer zugänglichen Stellen ist somit keine Seltenheit und kann Problemlos durchgeführt werden.
+Da man beim Harrier bestrebt war, die Produktionskosten sehr gering zu halten, wurde an der Panzerung gespart, was auch ein geringeres Gewicht zur Folge hatte. Die Waffenreichweite wurde ebenfalls sehr gering gehalten, was es dem Harrier sehr schwer macht einen Luftangriff durchzuführen, ohne das er dabei selber schaden nimmt.]
 
    Movement += 0 0 0 0 10 10 0 0 
 

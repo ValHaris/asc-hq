@@ -3,6 +3,11 @@ Grafik: GAMER , Ares
 InfoTexte: ZZ9Plural, Tigerking, Toby, Tarlisin
 InfoImage: GAMER
 Spezifikationen: GAMER
+
+______________________
+Beta-09-18
+InfoText: Harrier, AMX
+InfoImage: Harrier, AMX
 ______________________
 08.11.2009 z78 (GAMER)
 Beta-09-15

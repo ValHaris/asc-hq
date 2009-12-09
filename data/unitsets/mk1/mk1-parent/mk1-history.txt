@@ -4,7 +4,11 @@ InfoTexte: BananaJoe
 InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 _______________________
-Beta-09-16
+Beta-09-18
+BASIS: Tauchroboter -10 Punch
+BASIS: Wrackvorlagen, elimieren nicht mehr den Sockelbonus
+-Mk1: Raven, Bugfix HC , +1 Feld Landung/Start
+Beta-09-17
 -Stonwall, Änderungsrücknahme Waffenreichweite
 BASIS: Wheeled Terrain => +soft_sand +small_rocks
 --Auswirkung: auf diverse Einheiten, z.B. Buggy, MAN
