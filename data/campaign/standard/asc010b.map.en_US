@@ -12,7 +12,7 @@ message = [[Thunderlance HQ, Rogul:#crt##crt#Commander, you have passed the moun
 asc.setLocalizedEventMessage( map, 74, message )
 
 --- ===== 72  ======= 
-message = [[Mountain Scientists:#crt##crt#Well done. We have finished our project. Take the two prototypes of new helicopters. We hope they will be useful for you#crt##crt#Brain Claymore#crt#Leader Scientist#crt#]]
+message = [[Mountain Scientists:#crt##crt#Well done. We have finished our project. Take the two prototypes of new helicopters. We hope they will be useful for you#crt##crt#Brain Claymore#crt#Lead Scientist#crt#]]
 asc.setLocalizedEventMessage( map, 72, message )
 
 --- ===== 19  ======= 

@@ -135,6 +135,8 @@ extern volatile tmousesettings mouseparams;
  extern int exitprogram;
 
 
+ extern bool isKeyPressed(SDLKey key);
+
 /***************************************************************************
  *                                                                         *
  *   Timer routines                                                        *

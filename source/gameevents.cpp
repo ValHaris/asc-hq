@@ -55,28 +55,6 @@
 #endif
 
 
-void    viewtextmessage ( GameMap* actmap, int id, int player )
-{
-   ASCString txt = readtextmessage( id );
-   if ( !txt.empty() ) {
-
-      int to;
-      if ( player < 8 )
-         to = (1 << player);
-      else
-         to = 0xff;
-
-      new Message ( txt, actmap, to );
-      #ifdef sgmain
-      if ( player == actmap->actplayer )
-         viewunreadmessages ( actmap->player[ actmap->actplayer ] );
-      #endif
-   } else
-      displaymessage( "Message %d not found", 1, id );
-}
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 // Trigger
@@ -973,6 +951,26 @@ void ChangeGameParameter::setup()
 }
 
 
+void  DisplayMessage :: viewtextmessage ( GameMap* actmap, int id, int player )
+{
+   ASCString txt = readtextmessage( id );
+   if ( !txt.empty() ) {
+
+      int to;
+      if ( player < 8 )
+         to = (1 << player);
+      else
+         to = 0xff;
+
+      new Message ( txt, actmap, to );
+#ifdef sgmain
+      if ( player == actmap->actplayer )
+         viewunreadmessages ( actmap->player[ actmap->actplayer ] );
+#endif
+   } else
+      displaymessage( "Message %d not found", 1, id );
+}
+
 
 void DisplayMessage::execute( MapDisplayInterface* md )
 {
@@ -1250,8 +1248,13 @@ void MapChangeCompleted :: execute( MapDisplayInterface* md )
    checkunitsforremoval ( gamemap );
 
    if ( md ) {
-      md->displayMap();
-      md->updateDashboard();
+      mapChanged( gamemap );
+      
+#ifdef sgmain
+      if ( gamemap->getCurrentPlayer().isHuman() )
+         viewunreadmessages ( gamemap->player[ gamemap->actplayer ] );
+#endif
+      
    }
 
 }
@@ -1279,10 +1282,9 @@ void ChangeBuildingDamage::execute( MapDisplayInterface* md )
          delete fld->building;
          fld->building = NULL;
 
-         if ( md ) {
-           md->displayMap();
-           md->updateDashboard();
-         }
+         if ( md ) 
+            mapChanged( gamemap );
+      
       } else {
          fld->building->damage  = damage;
          if ( md )
@@ -1471,10 +1473,8 @@ void ChangeBuildingOwner :: execute( MapDisplayInterface* md )
       #ifdef sgmain
       evaluateviewcalculation ( gamemap );
       #endif
-      if ( md ) {
-         md->displayMap();
-         md->updateDashboard();
-      }
+      if ( md ) 
+         mapChanged( gamemap );
    }
 }
 
@@ -1902,10 +1902,8 @@ void Reinforcements :: execute( MapDisplayInterface* md )
 
    #endif
 
-   if ( md ) {
-      md->displayMap();
-      md->updateDashboard();
-   }
+   if ( md ) 
+      mapChanged( gamemap );
 }
 
 template<class T>

@@ -184,6 +184,11 @@ char  skeypress(tkey keynr)
    return keystate[ keynr ];
 }
 
+bool isKeyPressed(SDLKey key)
+{
+   Uint8 *keystate = SDL_GetKeyState ( NULL );
+   return keystate[ key ];
+}
 
 
 

@@ -37,7 +37,7 @@
 
 
 
-bool Mine :: attacksunit ( const Vehicle* veh )
+bool Mine :: attacksunit ( const Vehicle* veh ) const
 {
    #ifndef converter
    if  (!( ( veh->typ->hasFunction( ContainerBaseType::ImmuneToMines  ) ) ||
@@ -55,7 +55,7 @@ bool Mine :: attacksunit ( const Vehicle* veh )
 
 
 
-void Mine::paint( Surface& surf, SPoint pos )
+void Mine::paint( Surface& surf, SPoint pos ) const
 {
    MineType::paint( type, player, surf, pos );   
 }
@@ -97,7 +97,7 @@ void Mine::read ( tnstream& stream )
    player = stream.readInt();
 }
 
-void Mine::write ( tnstream& stream )
+void Mine::write ( tnstream& stream ) const
 {
    stream.writeInt( mineVersion );
    stream.writeInt( identifier );

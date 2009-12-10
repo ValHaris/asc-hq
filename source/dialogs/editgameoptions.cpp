@@ -309,7 +309,7 @@ class EditGameOptions : public ASC_PG_Dialog {
             new PG_PropertyField_Integer<int>( propertyEditor, "PBEM server port", &o->pbemServer.port);
          }
          
-         (new PG_PropertyField_String<ASCString>( propertyEditor , "Language", &o->language ));
+         (new PG_PropertyField_String<ASCString>( propertyEditor , "Language Override", &o->languageOverride ));
          
          if ( !mainApp )
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: Save event message seperately", &o->saveEventMessagesExternal );

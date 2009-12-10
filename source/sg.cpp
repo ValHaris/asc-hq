@@ -180,6 +180,7 @@
 #include "textfiletags.h"
 #include "dataversioncheck.h"
 #include "packagemanager.h"
+#include "i18n.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -1609,6 +1610,7 @@ int main(int argc, char *argv[] )
       putenv( buf );
    }
 
+   
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
    soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );

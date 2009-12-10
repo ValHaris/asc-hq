@@ -395,8 +395,10 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
       /* display mines */
       
       if ( fieldInfo.visibility == visible_all )
-         if ( !fld->mines.empty() && layer == 7 ) 
-            fld->mines.begin()->paint( fieldInfo.surface, pos );
+         if ( !fld->mines.empty() && layer == 7 ) {
+            for ( tfield::MineContainer::const_iterator i = fld->mines.begin(); i != fld->mines.end(); ++i )
+               i->paint( fieldInfo.surface, pos );
+         }
      
 
 

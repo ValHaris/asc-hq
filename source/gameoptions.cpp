@@ -246,6 +246,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addInteger( "AircraftCrashWarnTime", aircraftCrashWarningTime, 1 );
    
    pc.addBool("SaveEventMessagesExternal", saveEventMessagesExternal, false );
+   pc.addString("LanguageOverride", languageOverride, "" );
 }
 
 CGameOptions::CGameOptions()
@@ -338,7 +339,6 @@ void CGameOptions::setDefaults ( void )
    aircraftCrashWarningTime = 1;
    recordCampaignMaps = false;
    
-   language = "en_US";
    saveEventMessagesExternal = false;
    
    replayMoveSpeedFactor= 150;

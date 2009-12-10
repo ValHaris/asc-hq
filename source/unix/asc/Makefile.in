@@ -92,7 +92,7 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	campaignactionrecorder.$(OBJEXT) loggingoutput.$(OBJEXT) \
 	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
 	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
-	dataversioncheck.$(OBJEXT)
+	dataversioncheck.$(OBJEXT) i18n.$(OBJEXT)
 nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
 	gamedialog.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
@@ -119,7 +119,8 @@ am__DEPENDENCIES_2 =  \
 	$(top_builddir)/source/lua/libluainterfacegame.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 asc_DEPENDENCIES = $(am__DEPENDENCIES_2)
 nodist_unittester_OBJECTS = $(am__objects_1)
 unittester_OBJECTS = $(nodist_unittester_OBJECTS)
@@ -188,9 +189,6 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
-LEX = @LEX@
-LEXLIB = @LEXLIB@
-LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBCURL = @LIBCURL@
 LIBCURL_CPPFLAGS = @LIBCURL_CPPFLAGS@
 LIBEXPAT = @LIBEXPAT@
@@ -248,6 +246,15 @@ VORBISENC_LIBS = @VORBISENC_LIBS@
 VORBISFILE_LIBS = @VORBISFILE_LIBS@
 VORBIS_CFLAGS = @VORBIS_CFLAGS@
 VORBIS_LIBS = @VORBIS_LIBS@
+WX_CFLAGS = @WX_CFLAGS@
+WX_CFLAGS_ONLY = @WX_CFLAGS_ONLY@
+WX_CONFIG_PATH = @WX_CONFIG_PATH@
+WX_CPPFLAGS = @WX_CPPFLAGS@
+WX_CXXFLAGS = @WX_CXXFLAGS@
+WX_CXXFLAGS_ONLY = @WX_CXXFLAGS_ONLY@
+WX_LIBS = @WX_LIBS@
+WX_LIBS_STATIC = @WX_LIBS_STATIC@
+WX_VERSION = @WX_VERSION@
 _libcurl_config = @_libcurl_config@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -335,7 +342,7 @@ legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimage
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
 campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp \
-packagerepository.cpp dataversioncheck.cpp
+packagerepository.cpp dataversioncheck.cpp i18n.cpp
 
 commonLibs = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -350,7 +357,7 @@ $(top_builddir)/source/actions/libactions.la  \
 $(top_builddir)/source/actions/libdirectunitactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/lua/libluainterfacegame.la \
-$(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB)
+$(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(WX_LIBS)
 
 nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp 
 asc_LDADD = $(commonLibs)
@@ -491,6 +498,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guifunctions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guiiconhandler.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/i18n.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/legacynetworkloaders.Po@am__quote@

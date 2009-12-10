@@ -273,7 +273,6 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, Map
    
    checktimedevents( gamemap, display );
    checkevents( gamemap, display );
-   
 }
 
 

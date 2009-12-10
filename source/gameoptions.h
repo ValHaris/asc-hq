@@ -250,7 +250,7 @@ class CGameOptions
       typedef map<ASCString,int> DialogAnswers;
       DialogAnswers dialogAnswers;
 
-      ASCString language;
+      ASCString languageOverride;
       
       //! will save all Immediate Game Event messages into a seperate file for doing translations
       bool saveEventMessagesExternal;

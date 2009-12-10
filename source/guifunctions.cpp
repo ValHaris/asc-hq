@@ -357,7 +357,7 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
       move->setVerticalDirection( getVerticalDirection() );
 
       int mode = 0;
-      if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift )) {
+      if (  isKeyPressed( SDLK_LSHIFT ) ||  isKeyPressed( SDLK_RSHIFT )) {
          if ( getVerticalDirection() == 0 )
             mode |= MoveUnitCommand::DisableHeightChange;
          else
@@ -1113,9 +1113,9 @@ class RefuelUnitCommand : public GuiFunction
                return;
             }
 
+            NewGuiHost::pendingCommand = service.release();
             displaymap();
             updateFieldInfo();
-            NewGuiHost::pendingCommand = service.release();
 
          } else {
             ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);

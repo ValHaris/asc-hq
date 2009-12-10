@@ -27,7 +27,7 @@ iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappane
 explosivemines.cpp legacynetworkloaders.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp \
-package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp
+package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
@@ -39,6 +39,6 @@ $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \
-$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
 
 

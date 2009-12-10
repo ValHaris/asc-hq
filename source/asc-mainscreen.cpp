@@ -838,9 +838,12 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
       switch ( key->keysym.sym ) {
             case SDLK_F11: {
-               tfield* fld = actmap->getField(actmap->getCursor() );
-               if ( actmap && actmap->getCurrentPlayer().stat == Player::supervisor && fld && fld->vehicle )
-                  fld->vehicle->fillMagically( true, false );
+               /*
+               for ( Player::VehicleList::iterator v = actmap->getCurrentPlayer().vehicleList.begin(); v!= actmap->getCurrentPlayer().vehicleList.end(); ++v ) {
+                  (*v)->damage = 0;
+                  (*v)->experience = 23;
+               }
+               */
                return true;
             }
             case SDLK_l:

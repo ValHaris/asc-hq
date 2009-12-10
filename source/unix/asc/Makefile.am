@@ -33,7 +33,7 @@ legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimage
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
 campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp \
-packagerepository.cpp dataversioncheck.cpp
+packagerepository.cpp dataversioncheck.cpp i18n.cpp
 
 commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -48,7 +48,7 @@ $(top_builddir)/source/actions/libactions.la  \
 $(top_builddir)/source/actions/libdirectunitactions.la  \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/lua/libluainterfacegame.la \
-$(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB)
+$(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(WX_LIBS)
 
 nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp 
 asc_LDADD = $(commonLibs)

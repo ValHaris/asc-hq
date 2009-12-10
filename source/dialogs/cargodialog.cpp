@@ -2051,14 +2051,14 @@ void Movement::execute( const MapCoordinate& pos, ContainerBase* subject, int nu
    if ( !unit )
       return;
 
-   bool simpleMode = false;
-   if (  skeypress( ct_lshift ) ||  skeypress ( ct_rshift ))
-      simpleMode = true;
+   int mode = 0;
+   if ( isKeyPressed( SDLK_LSHIFT ) ||  isKeyPressed( SDLK_RSHIFT )) 
+      mode |= MoveUnitCommand::DisableHeightChange | MoveUnitCommand::LimitVerticalDirection;
 
 
    MoveUnitCommand* move = new MoveUnitCommand( unit );
 
-   ActionResult res = move->searchFields ();
+   ActionResult res = move->searchFields (-1, mode);
    if ( !res.successful() ) {
       dispmessage2 ( res.getCode(), NULL );
       delete move;

@@ -479,6 +479,9 @@ class ChangeGameParameter: public EventAction {
 
 class DisplayMessage: public EventAction {
       int messageNum;
+      
+      void  viewtextmessage ( GameMap* actmap, int id, int player );
+      
     public:
       DisplayMessage(): EventAction( EventAction_DisplayMessage ),
                         messageNum(-1) {};

@@ -85,7 +85,7 @@ nodist_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	campaignactionrecorder.$(OBJEXT) luacommandwriter.$(OBJEXT) \
 	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
 	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
-	dataversioncheck.$(OBJEXT)
+	dataversioncheck.$(OBJEXT) i18n.$(OBJEXT)
 asc_mapedit_OBJECTS = $(nodist_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -103,7 +103,8 @@ asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/paragui/src/libparagui.la \
 	$(top_builddir)/source/lua/libluainterfacemaped.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -166,9 +167,6 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
-LEX = @LEX@
-LEXLIB = @LEXLIB@
-LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
 LIBCURL = @LIBCURL@
 LIBCURL_CPPFLAGS = @LIBCURL_CPPFLAGS@
 LIBEXPAT = @LIBEXPAT@
@@ -226,6 +224,15 @@ VORBISENC_LIBS = @VORBISENC_LIBS@
 VORBISFILE_LIBS = @VORBISFILE_LIBS@
 VORBIS_CFLAGS = @VORBIS_CFLAGS@
 VORBIS_LIBS = @VORBIS_LIBS@
+WX_CFLAGS = @WX_CFLAGS@
+WX_CFLAGS_ONLY = @WX_CFLAGS_ONLY@
+WX_CONFIG_PATH = @WX_CONFIG_PATH@
+WX_CPPFLAGS = @WX_CPPFLAGS@
+WX_CXXFLAGS = @WX_CXXFLAGS@
+WX_CXXFLAGS_ONLY = @WX_CXXFLAGS_ONLY@
+WX_LIBS = @WX_LIBS@
+WX_LIBS_STATIC = @WX_LIBS_STATIC@
+WX_VERSION = @WX_VERSION@
 _libcurl_config = @_libcurl_config@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -310,7 +317,7 @@ iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappane
 explosivemines.cpp legacynetworkloaders.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp \
-package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp
+package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
@@ -322,7 +329,7 @@ $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \
-$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
+$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
 
 all: all-am
 
@@ -441,6 +448,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/geometry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/graphicset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/guidimension.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/i18n.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/iconrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itemrepository.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/legacynetworkloaders.Po@am__quote@

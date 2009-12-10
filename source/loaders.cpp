@@ -53,6 +53,7 @@
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
 #include "packagemanager.h"
+#include "i18n.h"
 
 #ifdef sgmain
 # include "ai/ai.h"
@@ -102,9 +103,7 @@ void         seteventtriggers( GameMap* actmap )
   #define csm_material 1     /*  b3  */
   #define csm_fuel 2         /*  b3  */
   #define csm_visible 4      /*  b3  */
-//  #define csm_mine 8         /*  b3  */
   #define csm_weather 16     /*  b3  */
-//  #define csm_fahrspur 32    /*  b3  */
   #define csm_object 64      /*  b3  */
   #define csm_b4 128         /* b3 */ 
 
@@ -1029,16 +1028,11 @@ void loadLocalizedMessageFile( GameMap* map, const ASCString& filename ) {
 
 void loadLocalizedMessages( GameMap* map, const ASCString& name )
 {
-   if ( CGameOptions::Instance()->language != map->nativeMessageLanguage  && CGameOptions::Instance()->language.length() >= 2 ) {
-      ASCString filename = name + "." +   CGameOptions::Instance()->language;
-      if ( exist( filename )) 
-         loadLocalizedMessageFile( map, filename );
-      else {
-         filename.toLower();
-         if ( exist( filename )) 
-            loadLocalizedMessageFile( map, filename );
-      }
-   }
+   Locale locale;
+   ASCString filename = locale.getLocalizedFile( name );
+   if( !filename.empty() && exist( filename ) )
+       loadLocalizedMessageFile( map, filename );
+  
 }
 
 GameMap* tmaploaders::loadmap ( const ASCString& name )

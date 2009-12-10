@@ -23,7 +23,7 @@
 #include "../memory-measurement.h"
 
 #include "../spfst-legacy.h"
-
+#include "../i18n.h"
 
 void showSearchPath()
 {
@@ -121,6 +121,10 @@ void showSDLInfo()
    s += "\nVideo memory: ";
    s += ASCString::toString( int(videoInfo->video_mem ));
 
+   s += "\n\nLanguage: ";
+   Locale locale;
+   s += locale.getLang();
+   
    ViewFormattedText vft( "SDL Settings", s, PG_Rect(-1,-1,450,550));
    vft.Show();
    vft.RunModal();

@@ -580,7 +580,7 @@ bool NewGuiHost::setNewButtonPressed( int i )
 
 bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
 {
-   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE | SDLK_LSHIFT | SDLK_RSHIFT);
    if ( mod )
       return false;
 

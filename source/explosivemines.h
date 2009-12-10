@@ -48,13 +48,13 @@ class Mine : public AgeableItem {
       int player;
 
       //! can the mine attack this unit
-      bool attacksunit ( const Vehicle* veh );
+      bool attacksunit ( const Vehicle* veh ) const;
       
       //! display the mine
-      void paint( Surface& surf, SPoint pos );
+      void paint( Surface& surf, SPoint pos ) const;
 
       void read ( tnstream& stream );
-      void write ( tnstream& stream );
+      void write ( tnstream& stream ) const;
       
 };
 

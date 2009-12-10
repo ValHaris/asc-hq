@@ -27,7 +27,6 @@ dnl ac_version=`cat $(as_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_releas
 AC_DISABLE_SHARED
 AC_PROG_LIBTOOL
 AM_PROG_LIBTOOL
-AM_PROG_LEX
 
 dnl *************************************************************************
 dnl Checks for programs.
@@ -210,6 +209,30 @@ AC_CHECK_LIB(SDL_mixer,
              AC_LIB_MISSING( SDL_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
 
 AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
+
+
+DNL checking for wxwidgets
+
+AM_OPTIONS_WXCONFIG
+reqwx=2.4.0
+AM_PATH_WXCONFIG($reqwx, wxWin=1)
+if test "$wxWin" != 1; then
+	AC_MSG_ERROR([
+		wxWidgets must be installed on your system.
+ 
+		Please check that wx-config is in path, the directory
+		where wxWidgets libraries are installed (returned by
+		'wx-config --libs' or 'wx-config --static --libs' command)
+		is in LD_LIBRARY_PATH or equivalent variable and
+		wxWidgets version is $reqwx or above.
+		])
+fi
+ 
+CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
+CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
+LIBS="$LIBS $WX_LIBS"
+AC_SUBST(WX_LIBS)
 
 
 OLDCPPFLAGS=$CPPFLAGS

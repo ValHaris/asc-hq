@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+use strict;
+
+
+sub printSection {
+	my @s = @_;
+	shift @s;
+	my $res = shift @s;
+	foreach ( @s ) {
+		$res .= '[' . $_ . ']';
+	}
+	return $res;
+}
+
+foreach my $file( glob ( "*.dump" )) {
+	open (IN, $file) || die "could not open $file";
+	open (OUT, ">$file.ini") || die "could not open $file.ini";
+	my $line;
+	my @sections;
+	while ( $line = <IN> ) {
+		# remove carriage return at end of line
+		chomp $line;
+		
+		# as long as the line contains more opening brackets [ than closing brackets ], add more lines
+		while (($line =~ tr/\[//) > ($line =~ tr/\]//)) {
+			$line .= <IN>;
+			chomp $line;
+		}
+
+		# remove all space characters at the beginning of the line
+		$line =~ s/^\s+//g;
+		
+		if ( $line =~ /(\w+) \{/ ) {
+			# line contains section open		
+			push @sections, $1;
+		} else {
+			if ( $line =~ /\} (\w+)/ ) {
+				# line contains section close		
+				pop @sections;
+			} else {
+				# line contains normal data, output it with the list of sections at the beginning		
+				if ( $line =~ /(\w+)\s*=\s*(.*)/ ) {
+					print OUT printSection( (@sections, $1) ) .  ' = "' . $2 . "\"\n";
+				}
+			}
+		}
+	}
+	close IN;	
+	close OUT;
+}
