@@ -1355,7 +1355,7 @@ Resources Vehicletype :: calcProductionsCost()
    int maxmoverange = 0;
    int maxweaponrange = 0;
 
-   // Check Flugzeugtraeger
+   // Check Flugzeugtr�ger
    bool carrierCharge = false;
    for ( int T=0; T < entranceSystems.size(); ++T )
       if ((( entranceSystems[T].container_height < chtieffliegend && (entranceSystems[T].height_abs & (chtieffliegend | chfliegend | chhochfliegend | chsatellit))) ||
@@ -1465,13 +1465,13 @@ Resources Vehicletype :: calcProductionsCost()
    }
    // Zuschlag fuer normal fliegende Einheiten 
    if ( height & chfliegend ) {
-      typecoste += armor*2;
-      typecostm += armor*2;
-   }
-   // Zuschlag fuer tief fliegende Einheiten 
-   if ( height & chtieffliegend ) {
       typecoste += armor*3;
       typecostm += armor*3;
+   }
+   // Zuschlag fuer teif fliegende Einheiten 
+   if ( height & chtieffliegend ) {
+      typecoste += armor*2;
+      typecostm += armor*2;
    }
    // Zuschlag fuer Transportkapazitaet
    if ( entranceSystems.size() > 0 ) {
@@ -1489,12 +1489,12 @@ Resources Vehicletype :: calcProductionsCost()
       typecostm += (maxmoverange-60)*5;
    }
    // Zuschlag fr Flugzeugtriebwerke
-   if (maxmoverange > 120 ) {
+   if (maxmoverange > 110 ) {
       typecoste += (maxmoverange-110)*10;
       typecostm += (maxmoverange-110)*5;
    }
    // Zuschlag fr Hochleistungsflugzeugtriebwerke
-   if (maxmoverange > 150 ) {
+   if (maxmoverange > 160 ) {
       typecoste += (maxmoverange-160)*10;
       typecostm += (maxmoverange-160)*5;
    }
@@ -1632,12 +1632,12 @@ Resources Vehicletype :: calcProductionsCost()
          typecoste += jamming*20;  //  fuer Trooper oder eigenschaftsbedingt (klein, schnell)
          typecostm += jamming*10;
       } else {
-         typecoste += jamming*60;  //  fuer alle hoeherwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
-         typecostm += jamming*50;
+         typecoste += jamming*50;  //  fuer alle hoeherwirkenden Stealthverfahren, Anstrich, besondere Konstruktion, tarnfeld usw.
+         typecostm += jamming*30;
       }
    } else { // JAMMING
       specialcoste += jamming*200;
-      specialcostm += jamming*150;
+      specialcostm += jamming*120;
       // Armorzuschlag
       specialcostm += jamming*armor/10;
       // Bewegungszuschlag
@@ -1695,16 +1695,12 @@ Resources Vehicletype :: calcProductionsCost()
    }
    // Radar
    if ( view > 40 ) {
-      specialcoste += (view-40)*60;
-      specialcostm += (view-40)*50;
+      specialcoste += (view-40)*50;
+      specialcostm += (view-40)*20;
    }
-   if (view > 60 ) {
-      specialcoste += (view-60)*80;
-      specialcostm += (view-60)*70;
-   }
-   if (view > 80 ) {
-      specialcoste += (view-80)*40;
-      specialcostm += (view-80)*30;
+   if (view > 90 ) {
+      specialcoste += (view-90)*100;
+      specialcostm += (view-90)*100;
    }
    // Satview
    if ( hasFunction( SatelliteView ) ) {
@@ -1742,13 +1738,9 @@ Resources Vehicletype :: calcProductionsCost()
       int distance = jumpDrive.maxDistance;
       if ( distance > 1000 )
          distance = 1000;
-      if ( hasFunction( MoveWithReactionFire ) && (maxmoverange < 30)){
-         specialcoste += distance * 14;
-         specialcostm += distance * 12;
-      } else {
-         specialcoste += distance * 7;
-         specialcostm += distance * 5;
-      }
+      
+      specialcoste += distance * 7;
+      specialcostm += distance * 5;
    }
    
    // Part VI - Addition
