@@ -33,7 +33,7 @@ class OpaqueLocaleData {
 Locale::Locale()
 {
    data = new OpaqueLocaleData();
-   data->locale.Init();
+   data->locale.Init(wxLANGUAGE_DEFAULT, 0);
 }
 
 

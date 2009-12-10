@@ -360,6 +360,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\i18n.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\iconrepository.cpp"
 				>
 			</File>
