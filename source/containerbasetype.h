@@ -113,6 +113,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
 
      //! the levels of height which this unit can enter
      int          height;
+     int getHeight() const { return height; };
 
      Resources productionCost;
      virtual ~ContainerBaseType() {};

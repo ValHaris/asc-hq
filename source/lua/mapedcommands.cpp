@@ -163,3 +163,15 @@ MapCoordinate selectPosition()
          
 }
 
+Resources putResources( ContainerBase* container, const Resources& resources )
+{
+   return container->putResource( resources, false, 0, container->getOwner() );
+}
+
+void setReactionFire( Vehicle* vehicle, bool state )
+{
+   if ( state )
+      vehicle->reactionfire.enable();
+   else
+      vehicle->reactionfire.disable();
+}

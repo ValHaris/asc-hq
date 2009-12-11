@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.3.78.1)
+AC_INIT(asc,2.3.78.100)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -211,7 +211,7 @@ AC_CHECK_LIB(SDL_mixer,
 AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
 
 
-DNL checking for wxwidgets
+dnl checking for wxwidgets
 
 AM_OPTIONS_WXCONFIG
 reqwx=2.4.0

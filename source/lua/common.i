@@ -57,6 +57,19 @@ void infoMessage ( std::string s );
 class ContainerBaseType {
    public: 
       int getID() const;
+      int getHeight() const;
+      
+      %extend 
+      {
+         bool hasProperty ( std::string bitName ) // see textfiletags.cpp for value
+         {
+            for ( int i = 0; i < ContainerBaseType::functionNum; ++i )
+               if ( containerFunctionTags[i] == bitName )
+                  return $self->hasFunction( (ContainerBaseType::ContainerFunctions) i);
+            return false;
+         }
+      }
+      
    protected:
       ContainerBaseType();
 };
@@ -88,6 +101,9 @@ class ContainerBase {
       std::string getName();
       
       int getOwner();
+      int getHeight();
+      
+      Resources getStorageCapacity() const;
       
    protected:
       ContainerBase();
@@ -105,6 +121,7 @@ class Vehicle : public ContainerBase {
       Vehicle();
    public:
       const Vehicletype* getType();
+      Resources getTank() const;
 };
 
 class Object {

@@ -34,4 +34,6 @@ class FieldVector {
 
 FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );
 MapCoordinate selectPosition();
+Resources putResources( ContainerBase* container, const Resources& resources );
+void setReactionFire( Vehicle* vehicle, bool state );
 

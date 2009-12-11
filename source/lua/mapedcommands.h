@@ -12,6 +12,8 @@ class TerrainType;
 class Building;
 class Vehicle;
 class Object;
+class Resources;
+class ContainerBase;
       
 extern void clearField( GameMap* map, const MapCoordinate& pos );
 
@@ -22,6 +24,7 @@ extern bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainT
 extern int selectPlayer( GameMap* map );
 extern MapCoordinate selectPosition();
 
+extern Resources putResources( ContainerBase* container, const Resources& resources );
 
 class FieldVector : public vector<MapCoordinate> {
    public:
@@ -33,6 +36,7 @@ class FieldVector : public vector<MapCoordinate> {
 
 
 extern FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );
+extern void setReactionFire( Vehicle* vehicle, bool state );
 
       
 #endif
