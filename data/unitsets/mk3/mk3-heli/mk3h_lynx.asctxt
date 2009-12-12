@@ -7,7 +7,32 @@ VehicleType {
    picture = mk3h_lynx.png
    InfoImage = mk3h_lynx.jpg
    GuideSortHelp = 515 602 0 0 3 0 0 0 0 0
-   Infotext = [
+   Infotext = [Der Kampfhubschrauber Lynx wurde speziell für die Bekämpfung feindlicher
+Seesteitkräfte entwickelt. Seine relativ kleine Größe in Verbindung mit
+einem recht geringen Gewicht erlauben die Stationierung auch auf Schiffen
+mittlerer Größe mit Hangardeck. In Kombination mit z.B. Fregatten oder Zerstörer
+können so auch große Seegebiete effektiv kontrolliert und gesichert werden.
+
+Für die Bekämpfung von Schiffen stehen weitreichende Seezielraketen sowie
+Torpedos zur Verfügung. Beide stellen aufgrund der verwendeten schweren
+Sprengköpfe eine ernste Gefahr auch für gut gepanzerte grössere Einheiten
+dar. Vor allem im Verband haben Lynx-Staffeln schon so manches
+stolzes Schlachtschiff dem Meeresboden nähergebracht!
+
+Zur Ortung getauchter U-Boote führt der Lynx ein leistungsstarkes
+Sonargerät mit hoher Reichweite mit sich. Ist eine Einheit als feindlich
+identifiziert, erfolgt die Bekämpfung durch Torpedos oder Wasserbomben.
+Leider beschränkt sich die Wirkungstiefe beider Waffen auf geringe Tiefen,
+so dass tief getauchte U-Boote vor dem Lynx sicher sind. Dies ist allerdings
+generell ein Schwachpunkt der terranischen Verbände, die für die Bekämpfung
+tieftauchender Einheiten nicht viele Waffensysteme besitzen.
+
+Zu beachten ist zudem, dass alle Waffen des Lynx lediglich Suchköpfe für maritime
+Ziele beinhalten. Für Angriffe auf Land- oder Lufteinheiten ist dieser somit
+denkbar ungeeignet. Beim Einsatz ist unbedingt auf ausreichende
+Sicherung gegen angreifende Jäger zu achten! Effektivste Möglichkeit ist
+hier meistens ein sofortiger Rückzug nach dem Angriff in den Wirkungsbereich
+der Flugabwehr der eigenen Flotte. 
    InfoImage = Wikipedia Westland Lynx]
 
    Armor = 350
