@@ -22101,10 +22101,19 @@ $as_echo "no (version $WX_VERSION is not new enough)" >&6; }
 
 if test "$wxWin" != 1; then
 	as_fn_error "
-		wxWidgets must be installed on your system.
+		wxWidgets $reqwx must be installed on your system.
 
-		Please check that wx-config is in path, the directory
-		where wxWidgets libraries are installed (returned by
+		If you have a distribution supplied wxWidgets package installed,
+		perhaps the wxWidgets-devel package is missing.
+
+		The wxWidgets packages are sometimes also called wxGTK, if you can't
+		find wxWidgets packages in your distribution, search for wxGTK
+
+		If your distribution really does not contain the wxWidgets library,
+		you can download it from www.wxwidgets.org
+
+		If you have it installed, but it isn't working, check that wx-config is in path,
+		the directory where wxWidgets libraries are installed (returned by
 		'wx-config --libs' or 'wx-config --static --libs' command)
 		is in LD_LIBRARY_PATH or equivalent variable and
 		wxWidgets version is $reqwx or above.
