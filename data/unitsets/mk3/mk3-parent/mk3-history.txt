@@ -5,6 +5,7 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+12.12.2009 z79 (GAMER)
 Beta-09-18
 InfoText: Harrier, AMX
 InfoImage: Harrier, AMX
