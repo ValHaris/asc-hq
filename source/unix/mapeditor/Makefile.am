@@ -27,7 +27,8 @@ iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappane
 explosivemines.cpp legacynetworkloaders.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp \
-package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp
+package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp \
+accessconstraints-editor.cpp
 
 asc_mapedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \

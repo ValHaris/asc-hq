@@ -30,6 +30,7 @@
 #include "graphics/ColorTransform_PlayerColor.h"
 #include "containercontrols.h"
 #include "resourcenet.h"
+#include "accessconstraints.h"
 
 
 ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int player ) : gamemap ( map ), cargoParent(NULL), baseType (bt)
@@ -587,6 +588,15 @@ void ContainerBase :: setProductionLines( const Production& production  )
 {
    internalUnitProduction = production;
    productionCache.clear();
+}
+
+
+void ContainerBase :: setName ( const ASCString& name )
+{
+   if ( !checkModificationConstraints( this ) )
+      return;
+   
+   this->name = name;
 }
 
 

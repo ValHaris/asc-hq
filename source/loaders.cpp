@@ -1360,9 +1360,23 @@ void writeMessageFile( GameMap* gamemap, tnstream& stream )
    for ( GameMap::Events::const_iterator i = gamemap->events.begin(); i != gamemap->events.end(); ++i ) {
       ASCString s = (*i)->action->getLocalizationString();
       if ( !s.empty() )  {
-         stream.writeString ( "--- ===== " + ASCString::toString((*i)->id) + "  ======= \n", false );
+         stream.writeString ( "--- ===== Event " + ASCString::toString((*i)->id) + "  ======= \n", false );
          stream.writeString ( "message = " + luaQuote( s ) + "\n", false );
          stream.writeString ( "asc.setLocalizedEventMessage( map, " + ASCString::toString((*i)->id) + ", message )\n\n", false);
+      }
+   }
+   
+   for ( int p = 0; p <= gamemap->getPlayerCount(); ++p ) {
+      Player& player = gamemap->getPlayer(p);
+      for ( Player::BuildingList::const_iterator b = player.buildingList.begin(); b != player.buildingList.end(); ++b ) {
+         if ( !(*b)->name.empty() ) {
+            stream.writeString ( "--- ===== Building " + ASCString::toString((*b)->getIdentification()) + "  ======= \n", false );
+            ASCString f;
+            f.format( "building = map:getField( asc.MapCoordinate( %d, %d )):getBuildingEntrance() \n", (*b)->getPosition().x, (*b)->getPosition().y );
+            stream.writeString (  f, false  );
+            stream.writeString ( "if building then \n", false );
+            stream.writeString ( "   building:setName( " +  luaQuote( (*b)->name )  + ") \nend\n\n", false );
+         }
       }
    }
 }

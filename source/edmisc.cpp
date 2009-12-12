@@ -4637,9 +4637,9 @@ void pasteArea()
    }
 }
 
-void selectAndRunLuaScript()
+void selectAndRunLuaScript( const ASCString& filenamewildcard  )
 {
-   ASCString file = selectFile( "*.lua", true );
+   ASCString file = selectFile( filenamewildcard, true );
    if ( file.size() ) {
       LuaState state;
       LuaRunner runner( state );

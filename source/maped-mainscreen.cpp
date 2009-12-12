@@ -109,6 +109,7 @@ void Menu::setup()
    addbutton ( "Save Clipboard",     act_saveClipboard );
    currentMenu->addSeparator();
    addbutton ( "Run Script",     act_runLuaScript );
+   addbutton ( "Run Translation Script", act_runTranslationScript );
    currentMenu->addSeparator();
    addbutton ( "~W~rite map to PNG-File\tctrl+G", act_maptopcx);
     addbutton ( "~I~mport BI map\tctrl-i", act_import_bi_map );

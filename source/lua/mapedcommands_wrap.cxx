@@ -2871,6 +2871,33 @@ fail:
 }
 
 
+static int _wrap_ContainerBase_setName(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("setName",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setName",1,"ContainerBase *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("setName",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_setName",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  (arg1)->setName((std::string const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_ContainerBase_getOwner(lua_State* L) {
   int SWIG_arg = 0;
   ContainerBase *arg1 = (ContainerBase *) 0 ;
@@ -2957,6 +2984,7 @@ static swig_lua_method swig_ContainerBase_methods[] = {
     {"getCargoCount", _wrap_ContainerBase_getCargoCount}, 
     {"getCargo", _wrap_ContainerBase_getCargo}, 
     {"getName", _wrap_ContainerBase_getName}, 
+    {"setName", _wrap_ContainerBase_setName}, 
     {"getOwner", _wrap_ContainerBase_getOwner}, 
     {"getHeight", _wrap_ContainerBase_getHeight}, 
     {"getStorageCapacity", _wrap_ContainerBase_getStorageCapacity}, 

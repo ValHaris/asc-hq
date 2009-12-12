@@ -290,6 +290,7 @@ class ContainerBase {
       virtual int getHeight() const = 0;
 
       virtual ASCString getName ( ) const = 0;
+      virtual void setName ( const ASCString& name );
 
       virtual int getAmmo( int type, int num, bool queryOnly )  = 0;
       virtual int getAmmo( int type, int num ) const  = 0;

@@ -143,7 +143,8 @@ enum tuseractions {
      asc_nullPointerCrash,
      asc_testFunction,
      act_unitGuideDialog,
-     act_runLuaScript
+     act_runLuaScript,
+     act_runTranslationScript
 
  };
 

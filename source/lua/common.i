@@ -99,6 +99,7 @@ class ContainerBase {
       Vehicle* getCargo( int i );
       
       std::string getName();
+      void setName( const std::string& name );
       
       int getOwner();
       int getHeight();

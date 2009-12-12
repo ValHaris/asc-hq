@@ -85,7 +85,8 @@ nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	campaignactionrecorder.$(OBJEXT) luacommandwriter.$(OBJEXT) \
 	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
 	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
-	dataversioncheck.$(OBJEXT) i18n.$(OBJEXT)
+	dataversioncheck.$(OBJEXT) i18n.$(OBJEXT) \
+	accessconstraints-editor.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -318,7 +319,8 @@ iconrepository.cpp overviewmapimage.cpp mapfield.cpp objects.cpp overviewmappane
 explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp package.cpp \
-packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp
+packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp \
+accessconstraints-editor.cpp
 
 asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
@@ -420,6 +422,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/accessconstraints-editor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@

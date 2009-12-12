@@ -993,7 +993,11 @@ void execaction_pg(int code)
          displaymap();
          break;
       case act_runLuaScript:
-         selectAndRunLuaScript();
+         selectAndRunLuaScript( "*.lua" );
+         repaintMap();
+         break;
+      case act_runTranslationScript:
+         selectAndRunLuaScript( "*.map.*" );
          repaintMap();
          break;
          

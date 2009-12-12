@@ -22,6 +22,7 @@ Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingT
 Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner );
 bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 
+//! opens a dialog and let the user select a player from the list of players on the map
 int selectPlayer( GameMap* map );
 
 class FieldVector {
@@ -33,7 +34,10 @@ class FieldVector {
 };
 
 FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );
+
+//! let the user select a field from the map
 MapCoordinate selectPosition();
+
 Resources putResources( ContainerBase* container, const Resources& resources );
 void setReactionFire( Vehicle* vehicle, bool state );
 

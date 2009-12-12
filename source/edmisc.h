@@ -156,6 +156,6 @@ extern void copyArea();
 extern void pasteArea();
 extern void testDebugFunction();
 
-extern void selectAndRunLuaScript();
+extern void selectAndRunLuaScript( const ASCString& filenamewildcard );
 
 #endif
