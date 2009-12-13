@@ -1372,10 +1372,8 @@ void writeMessageFile( GameMap* gamemap, tnstream& stream )
          if ( !(*b)->name.empty() ) {
             stream.writeString ( "--- ===== Building " + ASCString::toString((*b)->getIdentification()) + "  ======= \n", false );
             ASCString f;
-            f.format( "building = map:getField( asc.MapCoordinate( %d, %d )):getBuildingEntrance() \n", (*b)->getPosition().x, (*b)->getPosition().y );
+            f.format( "asc.setLocalizedContainerName( map, asc.MapCoordinate( %d, %d ), %s ) \n", (*b)->getPosition().x, (*b)->getPosition().y, +  luaQuote( (*b)->name ).c_str() );
             stream.writeString (  f, false  );
-            stream.writeString ( "if building then \n", false );
-            stream.writeString ( "   building:setName( " +  luaQuote( (*b)->name )  + ") \nend\n\n", false );
          }
       }
    }

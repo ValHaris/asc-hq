@@ -81,8 +81,10 @@ extern int selectString ( const ASCString& title, const StringArray& entries, in
 extern GameMap* getLoadingMap();
 
 extern void setLocalizedEventMessage( GameMap* map, int eventID, const ASCString& message );
+extern void setLocalizedContainerName( GameMap* map, const MapCoordinate& pos, const std::string& name );
 
 extern MapCoordinate getCursorPosition( const GameMap* gamemap );
+
 
 
 #endif

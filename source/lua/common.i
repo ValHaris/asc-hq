@@ -267,6 +267,7 @@ int selectString ( const std::string& title, const StringArray& entries, int def
 GameMap* getLoadingMap();
 
 void setLocalizedEventMessage( GameMap* map, int eventID, const std::string& message );
+void setLocalizedContainerName( GameMap* map, const MapCoordinate& pos, const std::string& name );
 
 MapCoordinate getCursorPosition( const GameMap* gamemap );
 

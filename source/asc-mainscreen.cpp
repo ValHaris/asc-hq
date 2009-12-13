@@ -838,15 +838,12 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
    if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
       switch ( key->keysym.sym ) {
             case SDLK_F11: {
-               /*
-               for ( Player::VehicleList::iterator v = actmap->getCurrentPlayer().vehicleList.begin(); v!= actmap->getCurrentPlayer().vehicleList.end(); ++v ) {
-                  (*v)->damage = 0;
-                  (*v)->experience = 23;
-               }
-               */
                return true;
             }
-            case SDLK_l:
+            case SDLK_F10: {
+               return true;
+            }
+         case SDLK_l:
                execUserAction_ev ( ua_loadrecentgame );
                return true;
 

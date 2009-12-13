@@ -4353,6 +4353,40 @@ fail:
 }
 
 
+static int _wrap_setLocalizedContainerName(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  MapCoordinate *arg2 = 0 ;
+  std::string *arg3 = 0 ;
+  std::string temp3 ;
+  
+  SWIG_check_num_args("setLocalizedContainerName",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setLocalizedContainerName",1,"GameMap *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("setLocalizedContainerName",2,"MapCoordinate const &");
+  if(!lua_isstring(L,3)) SWIG_fail_arg("setLocalizedContainerName",3,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("setLocalizedContainerName",1,SWIGTYPE_p_GameMap);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("setLocalizedContainerName",2,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  temp3.assign(lua_tostring(L,3),lua_strlen(L,3)); arg3=&temp3;
+  setLocalizedContainerName(arg1,(MapCoordinate const &)*arg2,(std::string const &)*arg3);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_getCursorPosition(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -5672,6 +5706,7 @@ static const struct luaL_reg swig_commands[] = {
     { "selectString",_wrap_selectString},
     { "getLoadingMap", _wrap_getLoadingMap},
     { "setLocalizedEventMessage", _wrap_setLocalizedEventMessage},
+    { "setLocalizedContainerName", _wrap_setLocalizedContainerName},
     { "getCursorPosition", _wrap_getCursorPosition},
     { "loadGame", _wrap_loadGame},
     { "displayActionError", _wrap_displayActionError},

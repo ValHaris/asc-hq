@@ -31,6 +31,8 @@
 #include "../paradialog.h"
 #include "../gameeventsystem.h"
 #include "../loaders.h"
+#include "../accessconstraints.h"
+
 #include <pgpropertyfield_integer.h>
 #include <pgpropertyfield_intdropdown.h>
 #include <pgpropertyfield_checkbox.h>
@@ -163,6 +165,27 @@ void setLocalizedEventMessage( GameMap* eventLocalizationMap, int eventID, const
       if ( (*i)->id == eventID )
          (*i)->action->setLocalizationString( message );
 }
+      
+void setLocalizedContainerName( GameMap* map, const MapCoordinate& pos, const std::string& name )
+{
+   if ( !map )
+      return;
+   
+   tfield* fld = map->getField( pos );
+   if ( !fld )
+      return;
+   
+   ContainerBase* c = fld->getContainer();
+   if ( !c )
+      return;
+   
+   if ( !checkModificationConstraints( c ))
+      return;
+   
+   c->setName( name );
+}
+      
+      
       
 MapCoordinate getCursorPosition( const GameMap* gamemap )
 {
