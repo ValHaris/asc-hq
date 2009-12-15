@@ -25,10 +25,6 @@ ObjectType {
       Movement = 0
    } RemovalCost
 
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 11  14  14  14  16  16  16  12  10  19  12  11  19  19  12  12  19  10
-   Movemalus_plus = 
-
    AttackBonus_abs = 0
    AttackBonus_plus = 
    DefenseBonus_abs = 0
@@ -37,38 +33,20 @@ ObjectType {
    Jammming_plus = 
    ViewBonus_abs = 0
    ViewBonus_plus = 
-
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand   
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = 
-   } TerrainAccess
-   TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Hard_sand Soft_sand Very_shallow_water water deep_water lava Ditch Hillside Turret_foundation 
-   TerrainProperties_Add = deep_water 
 
    dry {
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  14  14  14  16  16  16  12  10  19  10  11  19  19  10  10  19  10
-   Movemalus_plus = 
-
-   AttackBonus_abs = 0
-   AttackBonus_plus = 
-   DefenseBonus_abs = 0
-   DefenseBonus_plus = 
-   Jamming_abs = 0
-   Jammming_plus = 
-   ViewBonus_abs = 0
-   ViewBonus_plus = 
-
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand   
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = 
-   } TerrainAccess
-   TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Hard_sand Soft_sand Very_shallow_water water deep_water lava Ditch Hillside Turret_foundation 
-   TerrainProperties_Add = deep_water 
+      ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus_abs = 11  14  14  14  16  16  16  12  10  19  12  11  19  19  12  12  19  10
+      Movemalus_plus = 
+   
+      TerrainAccess { 
+         terrain_any = Lowland Hard_sand Soft_sand   
+         terrain_all = 
+         terrain_not = 
+         terrain_kill = 
+      } TerrainAccess
+      TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Hard_sand Soft_sand Very_shallow_water water deep_water lava Ditch Hillside Turret_foundation 
+      TerrainProperties_Add = deep_water 
    } dry
 
    light_rain ->* ObjectType.dry

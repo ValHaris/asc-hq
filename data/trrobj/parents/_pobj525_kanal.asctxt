@@ -28,7 +28,6 @@ ObjectType {
       Movement = 50
    } RemovalCost
 
-;dry
 ;   Movemalus_plus =   0
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
 ;   MoveMalus_abs = 12  12  12  12  14  14  14  12  10  19  12  11  19  19  11  14  19  10
@@ -71,27 +70,18 @@ ObjectType {
 ;   TerrainProperties_Add = River 
 
    dry {
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  12  12  12  14  14  14  12  10  19  12  11  19  19  11  14  19  10
-   Movemalus_plus = 
-
-   AttackBonus_abs = 0 
-   AttackBonus_plus = 
-   DefenseBonus_abs = 0
-   DefenseBonus_plus =  
-   Jamming_abs = 0
-   Jammming_plus = 
-   ViewBonus_abs = 0
-   ViewBonus_plus = 
-
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand very_shallow_water shallow_water  
-      terrain_all = 
-      terrain_not = forest large_rocks deep_snow pack_ice frozen_water lava hillside
-      terrain_kill = lava water deep_water
-   } TerrainAccess
-   TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Very_shallow_water Ditch Hillside Turret_foundation 
-   TerrainProperties_Add = river 
+      ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus_abs = 12  12  12  12  14  14  14  12  10  19  12  11  19  19  11  14  19  10
+      Movemalus_plus = 
+   
+      TerrainAccess { 
+         terrain_any = Lowland Hard_sand Soft_sand very_shallow_water shallow_water  
+         terrain_all = 
+         terrain_not = forest large_rocks deep_snow pack_ice frozen_water lava hillside
+         terrain_kill = lava water deep_water
+      } TerrainAccess
+      TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Very_shallow_water Ditch Hillside Turret_foundation 
+      TerrainProperties_Add = river 
    } dry
 
    light_rain ->* ObjectType.dry

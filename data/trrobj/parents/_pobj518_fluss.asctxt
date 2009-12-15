@@ -14,10 +14,6 @@ ObjectType {
    Armor = 0
    Height = 85 ;17-Aug 2003
 
-;dry
-   Movemalus_plus =   0
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  12  12  12  14  14  14  12  10  19  13  11  19  19  11  16  19  10
    AttackBonus_abs = -2
    AttackBonus_plus = 
    DefenseBonus_abs = -2
@@ -38,48 +34,19 @@ ObjectType {
       Movement = 0
    } RemovalCost
 
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand Hillside
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = 
-   } TerrainAccess
-   TerrainProperties_Filter = [very_shallow_water shallow_water water deep_water
-                               lowland hard_sand soft_sand
-                               hillside mountains high_mountains
-                               ditch
-                               road railroad runway
-                               turret_foundation
-
-                               track_possible
-                               small_rocks large_rocks forest
-
-                               mud morass swamp
-                               snow deep_snow]
-   TerrainProperties_Add = River 
-
    dry {
-   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   MoveMalus_abs = 12  12  12  12  14  14  14  12  10  19  13  11  19  19  11  16  19  10
-   Movemalus_plus = 
-
-   AttackBonus_abs = 0
-   AttackBonus_plus = 
-   DefenseBonus_abs = 0
-   DefenseBonus_plus = 
-   Jamming_abs = 0
-   Jammming_plus = 
-   ViewBonus_abs = 0
-   ViewBonus_plus = 
-
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand   
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = 
-   } TerrainAccess
-   TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Hard_sand Soft_sand Very_shallow_water water deep_water lava Ditch Hillside Turret_foundation 
-   TerrainProperties_Add = river 
+      ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      MoveMalus_abs = 12  12  12  12  14  14  14  12  10  19  13  11  19  19  11  16  19  10
+      Movemalus_plus = 
+   
+      TerrainAccess { 
+         terrain_any = Lowland Hard_sand Soft_sand   
+         terrain_all = 
+         terrain_not = 
+         terrain_kill = 
+      } TerrainAccess
+      TerrainProperties_Filter = Lowland Hard_sand soft_sand mud morass swamp forest mountains High_mountains Hard_sand Soft_sand Very_shallow_water water deep_water lava Ditch Hillside Turret_foundation 
+      TerrainProperties_Add = river 
    } dry
 
    light_rain ->* ObjectType.dry
