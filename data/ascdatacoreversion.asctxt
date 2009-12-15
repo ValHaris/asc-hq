@@ -2,7 +2,7 @@ package {
    Name = ASCdata
    Description = The main data package that comes with every ASC installation
 
-   Version = 2.3.79.0
+   Version = 2.3.79.3
 
    DependencyCount = 2
    Dependency0 {
