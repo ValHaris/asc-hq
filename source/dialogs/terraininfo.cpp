@@ -164,6 +164,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
          text += "#aeinzug30##eeinzug20##fontsize=12#\n";
          text += i->typ->name + "#aeinzug50##eeinzug40##fontsize=10#\n";
          text += "Type ID: " + ASCString::toString(i->typ->id) + "\n";
+         text += "Location: " + i->typ->location + "\n";
 
          text += "Terrain access:\n" + ta->toString() + "\n";
 

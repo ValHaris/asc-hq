@@ -187,6 +187,11 @@ AC_CHECK_LIB( SDL_image,
 #AC_MSG_RESULT("yes")
 
 
+AC_CHECK_PROG(pkgconfigfound,pkg-config,yes,no)
+if test $pkgconfigfound != yes; then 
+   AC_MSG_ERROR( You need pkg-config to build ASC. Please install it )
+fi
+
 
 PKG_CHECK_MODULES(LUA, [lua >= 5.1 ],, LUA_MISSING=1 )
 

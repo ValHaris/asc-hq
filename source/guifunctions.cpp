@@ -1301,7 +1301,7 @@ class PutAntiPersonalMine : public PutMineStage2
       };
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         return "put anti-personal mine";
+         return "put anti-personnel mine";
       };
 };
 
