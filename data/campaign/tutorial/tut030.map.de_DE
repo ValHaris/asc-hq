@@ -1,0 +1,47 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Das Kuriositätenmuseum
+
+Fragen sie nicht wieso, staunen sie einfach über diese kleine Wunder des Spieles. ;-)]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Hereinspaziert, hereinspaziert. Das habe sie noch nie gesehen. Bauen sie in dieser Fabrik einen Sambunker.
+
+Versuchen sie den Bunker dann auf den Vesuvius oder den MBV zu verladen, die beiden Fahrzeuge erster Wahl wenn es um den Geschützbau oder die geschützinstallation geht. Das geht nicht? Versuchen sie dochmal den Bunker auf den Flux zu bekommen, der kann noch mehr tragen. Was, das geht auch nicht?
+
+Sie fragen sich wieso kann man da einen Sambunker in einer Fabrik bauen, wenn man den nicht raustransportieren kann? Das verstehen sie sowieso nicht. Der Sinn läst sich nicht immer sofort erkennen. Denn auch Unsinn ist ein Sinn oder?]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 13  ======= 
+message = [[Kurioses Kurioses. Wie bekommen wir einen Bomber in eine Stadt?
+
+Das geht nicht? Okay, aber wir bekommen einen Bomber in einem Helitrain und den dann in eine Stadt. Dazu brauchen wir nur einen Supercarrier, wo der Bomber landen kann. Dann einen Hafen, wo der Bomber auf den Helitrain verladen werden kann, dann kann der Helitrain in die Stadt fahren. Wenn sie wollen können sie jetzt den Bomber aus der Stadt auch wieder starten lassen. :-)
+
+Was, das ist nicht verwunderlich? Der Helitrain kann halt den Bomber eben einfach auch nur transportieren. Dann frage ich sie, wieso kann der Helitrain dann kein Wiesel transportieren? :-)]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 18  ======= 
+message = [[Und weiter geht es, in der Welt der Wunder. Versuchen sie mit dem Schocktrooper auf den Supercarrior zu kommen. Was, das ist nicht möglich, weil sie dort nicht hochklettern können?
+
+Dann versuchen sie mal von einen der Carrier einen Trooper in einen anderen Carrier zu ziehen. Was das ist nicht möglich, weil ? Ja ? Weil, ähm die Flugzeugträger zu weit auseinander stehen und da Wasser zwischen ist. Infanterie kann nur im Hafen be- und entladen werden.
+
+Was hat die Infanterie dann für einen Sinn auf dem Träger, wenn sie noch nicht mal auf andere Boote kommt?
+
+Ja richtig, sie beschützt den Träger gegen Feindliche Flugzeuge, die landen wollen. :-)]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 54  ======= 
+message = [[Wie bauen wir uns einen Superflux.
+
+Sie brauchen einen Flux und 2 MBV. Für kleinere Geschützinstallationen reicht auch der Vesuvius.
+
+Aber wir wollen 4 CruiseMissiles in einer Runde aufbauen. Dafür brauchen wir aber 2 fertige Sockel.
+
+Ohne vorgegeben Sockel kommen wir aber zumindest noch auf 2 Geschütze, die wir die Runde aufbauen können. Und nächste Runde stehen dann halt 4. Viel Spass.
+
+Wo das Wunder ist? Müssen Wunder immer mit der Spaltung eines Meeres zu tun haben? Reicht es nicht aus, das dieser Flux in Kombination mit Baufahrzeugen bis zu 4 Cruise Missiles aufstellen kann? Und nebenbei gibt es noch ein "paar" MG-Nester gratis.
+
+Edit: Ok ich gebe zu, der Flux ist überladen, dies geht im begrenzten Umfang noch mit dem Editor, aber in Game wäre immer noch der Aufbau von 3 Cruise Missiles und evtl. eines kleineren Geschützes möglich.]]
+asc.setLocalizedEventMessage( map, 54, message )
+

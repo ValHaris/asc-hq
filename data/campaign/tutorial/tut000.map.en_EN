@@ -1,0 +1,202 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[ASC - Advanced Tutorial - The Base
+
+'You just learn what you want to'
+
+Use the building names to find the topics you are interested in. A description of the topic will be shown when entering the grey fields in front of the buildings with a unit.
+
+Entering a building with a unit will start the respective tutorial.
+
+Alternatively, you can start the tutorials through the "new game" menu and selecting 'skirmish' mode:
+
+tut000.map "The Base"
+tut001.map "Beginners Tutorial 1"
+tut002.map "Beginners Tutorial 2"
+tut003.map "Beginners Tutorial 3"
+tut004.map "Beginners Tutorial 4"
+tut005.map "Beginners Tutorial 5"
+tut006.map "Promotion"
+tut007.map "Shooting Range Demonstration"
+tut008.map "Shooting Range"
+tut009.map "Mineral Collection"
+tut010.map "Building Guide"
+tut011.map "Research"
+tut012.map "Production 1"
+tut013.map "Production 2"
+tut014.map "Production 3"
+tut015.map "Defense Facilities"
+tut016.map "Railroad museum"
+tut017.map "Tank Museum"
+tut018.map "Repairs and Servicing"
+tut019.map "Bulldozer School"
+tut020.map "Building Construction"
+tut021.map "Turret Construction"
+tut022.map "Storage"
+tut023.map "Energy Production"
+tut024.map "Material-und Oil Extraction"
+tut025.map "Turret Training"
+tut030.map "Exhibition of Curio"
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 20  ======= 
+message = [[Here you can start the Beginner's Tutorial]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 22  ======= 
+message = [[Do you want to see our collection of minerals?]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== Event 24  ======= 
+message = [[In the Shooting Range you can learn the usage of the different weapons for our infantery.]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== Event 83  ======= 
+message = [[Here you get to know the common types of buildings that you may encounter outside.]]
+asc.setLocalizedEventMessage( map, 83, message )
+
+--- ===== Event 118  ======= 
+message = [[Enter here to be taught how scientific progress is made. You can also discover the PBP technology tree first hand.]]
+asc.setLocalizedEventMessage( map, 118, message )
+
+--- ===== Event 165  ======= 
+message = [[Discover the means of production .]]
+asc.setLocalizedEventMessage( map, 165, message )
+
+--- ===== Event 184  ======= 
+message = [[In this advanced production tutorial you'll look at the economics that are need to keep everything going.]]
+asc.setLocalizedEventMessage( map, 184, message )
+
+--- ===== Event 205  ======= 
+message = [[See how you can setup and pull down production lines in a factory.]]
+asc.setLocalizedEventMessage( map, 205, message )
+
+--- ===== Event 312  ======= 
+message = [[Come and see the different defense systems.]]
+asc.setLocalizedEventMessage( map, 312, message )
+
+--- ===== Event 360  ======= 
+message = [[Railroad museum]]
+asc.setLocalizedEventMessage( map, 360, message )
+
+--- ===== Event 437  ======= 
+message = [[In our tank museum you can see a vast collection of vehicles]]
+asc.setLocalizedEventMessage( map, 437, message )
+
+--- ===== Event 466  ======= 
+message = [[Servicing and repairing of units]]
+asc.setLocalizedEventMessage( map, 466, message )
+
+--- ===== Event 468  ======= 
+message = [[Here you'll learn how to operate a bulldozer.]]
+asc.setLocalizedEventMessage( map, 468, message )
+
+--- ===== Event 532  ======= 
+message = [[Become a builder and learn how to construct buildings!]]
+asc.setLocalizedEventMessage( map, 532, message )
+
+--- ===== Event 600  ======= 
+message = [[Building turrets for defense]]
+asc.setLocalizedEventMessage( map, 600, message )
+
+--- ===== Event 637  ======= 
+message = [[Manage your storage, so you'll have everything at hand that you'll need.]]
+asc.setLocalizedEventMessage( map, 637, message )
+
+--- ===== Event 750  ======= 
+message = [[How to produce energy]]
+asc.setLocalizedEventMessage( map, 750, message )
+
+--- ===== Event 830  ======= 
+message = [[Mining mineral resources]]
+asc.setLocalizedEventMessage( map, 830, message )
+
+--- ===== Event 832  ======= 
+message = [[Turret Training]]
+asc.setLocalizedEventMessage( map, 832, message )
+
+--- ===== Event 877  ======= 
+message = [[Our museum has a special exhibition of curio! See things you would never have expected!]]
+asc.setLocalizedEventMessage( map, 877, message )
+
+--- ===== Building -983055  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 15, 15 ), [[Marine Museum]] ) 
+--- ===== Building -983057  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 17, 15 ), [[Harbour]] ) 
+--- ===== Building -983059  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 19, 15 ), [[Marine College]] ) 
+--- ===== Building -1245205  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 21, 19 ), [[empty]] ) 
+--- ===== Building -1507344  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 16, 23 ), [[Quarters]] ) 
+--- ===== Building -1507346  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 18, 23 ), [[Quarters]] ) 
+--- ===== Building -1507351  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 23, 23 ), [[Railroad Museum]] ) 
+--- ===== Building -1769486  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 14, 27 ), [[Material- and Oil Mining Corporation]] ) 
+--- ===== Building -1769492  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 20, 27 ), [[Museum of Curio]] ) 
+--- ===== Building -1835033  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 25, 28 ), [[Train to Beginners tutorial]] ) 
+--- ===== Building -1966108  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 28, 30 ), [[Fuelsupply]] ) 
+--- ===== Building -2031632  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 16, 31 ), [[Quarters]] ) 
+--- ===== Building -2031634  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 18, 31 ), [[Quarters]] ) 
+--- ===== Building -2031638  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 22, 31 ), [[Production 3]] ) 
+--- ===== Building -2228250  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 26, 34 ), [[Repairs and Supply]] ) 
+--- ===== Building -2293774  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 14, 35 ), [[Energy Production]] ) 
+--- ===== Building -2359320  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 24, 36 ), [[Production 2]] ) 
+--- ===== Building -2490384  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 16, 38 ), [[Research]] ) 
+--- ===== Building -2555916  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 12, 39 ), [[empty]] ) 
+--- ===== Building -2555922  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 18, 39 ), [[Headquarters]] ) 
+--- ===== Building -2555924  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 20, 39 ), [[Infantery Shooting Range]] ) 
+--- ===== Building -2555926  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 22, 39 ), [[Production 1]] ) 
+--- ===== Building -2752537  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 25, 42 ), [[Tank Museum]] ) 
+--- ===== Building -2818062  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 14, 43 ), [[Storage]] ) 
+--- ===== Building -3014677  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 21, 46 ), [[Defense Facilities]] ) 
+--- ===== Building -3080204  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 12, 47 ), [[empty]] ) 
+--- ===== Building -3080209  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 17, 47 ), [[Buildings]] ) 
+--- ===== Building -3145751  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 23, 48 ), [[Turret Training]] ) 
+--- ===== Building -3342351  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 15, 51 ), [[empty]] ) 
+--- ===== Building -3342355  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 19, 51 ), [[Bulldozer School]] ) 
+--- ===== Building -3604497  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 17, 55 ), [[Building Construction]] ) 
+--- ===== Building -3604501  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 21, 55 ), [[Terrain Lore]] ) 
+--- ===== Building -3670024  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 8, 56 ), [[Air Force Museum]] ) 
+--- ===== Building -3801093  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 58 ), [[Aircraft Tactics]] ) 
+--- ===== Building -3866643  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 19, 59 ), [[Building Construction]] ) 
+--- ===== Building -3866647  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 23, 59 ), [[Jamming]] ) 
+--- ===== Building -4128789  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 21, 63 ), [[Reconnaissance]] ) 
+--- ===== Building -4259844  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 4, 65 ), [[Aircraft Terminal]] ) 
+--- ===== Building -4259846  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 6, 65 ), [[Airport]] ) 
+--- ===== Building -4259848  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 8, 65 ), [[Helicopter Terminal]] ) 

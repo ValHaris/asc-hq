@@ -1,0 +1,44 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[ASC - Beginners Tutorial "Fighting and Experience"
+
+'Now it's time for some shooting practice, soldier! You have 10 shots in your assault rifle. To the south there are some dummies that you have to destroy.'  
+
+Tip: If you accidently switch your unit to defense mode (called 'reaction fire'), it won't move any more. After you deactivate it, you can move again in the following turn.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 545  ======= 
+message = [[To attack there is a button called, you won't guess it, "Attack".
+Pressed it and then select your target. It will take several rounds to destroy the dummy.
+
+Tip: After your unit has shot, it can't move any more for the remainder of the turn.]]
+asc.setLocalizedEventMessage( map, 545, message )
+
+--- ===== Event 625  ======= 
+message = [[Very well. You have destroyed this dummy. Now go and search the next one.]]
+asc.setLocalizedEventMessage( map, 625, message )
+
+--- ===== Event 656  ======= 
+message = [[Now destroy this one too!
+
+Tip: With every attack your unit will gain experience. For eliminating enemy units there is an extra poinnt if experience. Please pay attention to your soldier's experience symbol next to its image in the information frame on the right.]]
+asc.setLocalizedEventMessage( map, 656, message )
+
+--- ===== Event 674  ======= 
+message = [[Excellent. You have successfully terminated this dummy too! 
+
+Now there is just one left. Once you have destroyed it, you have succeeded in this tutorial.]]
+asc.setLocalizedEventMessage( map, 674, message )
+
+--- ===== Event 675  ======= 
+message = [[Now destroy it
+
+Tip: Please note the increased effectiveness in combat due to the increased experience]]
+asc.setLocalizedEventMessage( map, 675, message )
+
+--- ===== Event 676  ======= 
+message = [[Bravo! You have successfully completed the Tutorial "Fighting and Experience".
+
+Tip: Experience not only increases your offensive power, but also increases a unit's abilities to withstand enemy attacks.]]
+asc.setLocalizedEventMessage( map, 676, message )
+

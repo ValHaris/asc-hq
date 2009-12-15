@@ -1,0 +1,69 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[ASC - Beginners tutorial "placing and defusing mines"
+
+'Soldier, now it's time to learn how to place mines and defuse them. Go to your trainer outside, you'll get instructions from him.
+Dismissed.']]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 1128  ======= 
+message = [['Solder, before you start placing mines yourself, you have first to learn how to detect and defuse them. Enter the training area. Avoid or defuse all mines that you see. No worries, these are only training mines that cause little harm.'
+
+To defuse a mine, the unit must be standing on an adjacent field. Then press the "put/remove mines" button and select the field with the mine.]]
+asc.setLocalizedEventMessage( map, 1128, message )
+
+--- ===== Event 1133  ======= 
+message = [['Soldier, don't waste your time with defusing the anti-tank mines. Infantery will not trigger them. Believe me, you can just walk over them.
+Go to the mine depot.']]
+asc.setLocalizedEventMessage( map, 1133, message )
+
+--- ===== Event 1146  ======= 
+message = [[Take two mines from the depot and go to area 2, which has just opened. The destination has been marked.
+
+Tip: In the cargo dialog there are two buttons "refuel unit" and "refuel dialog". The first one fills everything to the max, while the second one opens a dialogs and lets you select individual amounts manually.]]
+asc.setLocalizedEventMessage( map, 1146, message )
+
+--- ===== Event 1222  ======= 
+message = [[Hostile unit sighted! An enemy Weasel! Place an anti-tank mine, to stop it!
+
+To place a mine, use the "put/remove mines" button again and select the field where you want to place the mine.]]
+asc.setLocalizedEventMessage( map, 1222, message )
+
+--- ===== Event 1236  ======= 
+message = [['Very well, soldier. Mines are not intended to be used in direct combat. They should rather block the enemy from entering areas of strategic significanse. But in an emergency you should know how to fight with mines.']]
+asc.setLocalizedEventMessage( map, 1236, message )
+
+--- ===== Event 1323  ======= 
+message = [['Solder, have your orders! Destroy the weasel! If necessary, get further mines in the depot and fulfill your task!]]
+asc.setLocalizedEventMessage( map, 1323, message )
+
+--- ===== Event 1376  ======= 
+message = [['Two more enemies are behind the fences. Your task is to eliminate them using anti-personnel mines. Check that you have at least two mines with you!
+
+As soon as you enter the destination field, the enemy soldiers will be released. You should take a rest, that is start a new turn, before entering this field.]]
+asc.setLocalizedEventMessage( map, 1376, message )
+
+--- ===== Event 1419  ======= 
+message = [[Soldier, please remember that you need anti-personell mines, not anti-tank mines!
+
+To place an anti-personnel mine, keep your left mouse button pressed when selecting the target field. In the menu that appears you can chose the type of mine. If you release the mouse button to early, the default type of mine will be placed - and that's an anti-tank mine.]]
+asc.setLocalizedEventMessage( map, 1419, message )
+
+--- ===== Event 1420  ======= 
+message = [['Congratulations, soldier, you are now a real Shock Trooper! It's the speciality of the Shock Trooper to know about and be able to handle mines!'
+
+You have now successfully completed this tutorial mission]]
+asc.setLocalizedEventMessage( map, 1420, message )
+
+--- ===== Event 1445  ======= 
+message = [[Beware! Here are more mines - and these are not training-mines, they are real ones!]]
+asc.setLocalizedEventMessage( map, 1445, message )
+
+--- ===== Building -262145  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 1, 4 ), [[Bunker]] ) 
+--- ===== Building -524294  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 6, 8 ), [[Mine depot]] ) 
+--- ===== Building -1245193  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 9, 19 ), [[Mine depot]] ) 
+--- ===== Building -1441795  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 3, 22 ), [[Mine depot]] ) 

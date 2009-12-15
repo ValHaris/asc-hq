@@ -1,0 +1,57 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[ASC - Beginners Tutorial "Transportation and Freight"
+
+"Enter the transport, soldier. We don't have time." 
+
+Enter the transport unit by moving the trooper into it and then drive south.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 1024  ======= 
+message = [[The journey will take a while.
+
+Use the time to look after your shock trooper. Open the cargo dialog of the weasel by pressing the "view loaded units" button. 
+You'll see your trooper there.]]
+asc.setLocalizedEventMessage( map, 1024, message )
+
+--- ===== Event 1029  ======= 
+message = [[Even though the trooper is not moving himself, he'll still lose some movement points when the transport moves. This simulates the loss of time that that the trooper is idly sitting around.
+
+
+Tip: If you want your units to be able to leave a transport in case of an emergency, you should sometimes not use all the movement of the transport. This depends on the speed of your loaded units and the type of transport.]]
+asc.setLocalizedEventMessage( map, 1029, message )
+
+--- ===== Event 1033  ======= 
+message = [['Damn, a rock slide! It hasn't been there on the outward journey. Our weasel can't continue. Soldier, you have to continue on foot'
+
+Open the cargo dialog and press the 'move' button for the trooper to leave the transport.]]
+asc.setLocalizedEventMessage( map, 1033, message )
+
+--- ===== Event 1038  ======= 
+message = [[A gas station. Take control of it!]]
+asc.setLocalizedEventMessage( map, 1038, message )
+
+--- ===== Event 1039  ======= 
+message = [[Inside this building there is another Weasel. Practice transferring the trooper into the transport inside the building.
+
+This is done most easily by using dragging the trooper with the RIGHT mouse button onto the transport. Alternatively, you can select the trooper, press the "move unit into neighboring transport" function and select the weasel as destination.
+
+Then continue south
+
+Tip: For loading and unloading of units INSIDE of buildings or other transports no extra movement points are consumed.]]
+asc.setLocalizedEventMessage( map, 1039, message )
+
+--- ===== Event 1052  ======= 
+message = [[You can also transfer ammo and resources between the cargo and the transport. To do that, the trooper must be inside the weasel. Open the cargo dialog and press the "Refuel Dialog" button.]]
+asc.setLocalizedEventMessage( map, 1052, message )
+
+--- ===== Event 1067  ======= 
+message = [['Soldat, we have arrived. Report to your new trainer inside the building. Where you'll go now, no vehicles are allowed for security reasons.']]
+asc.setLocalizedEventMessage( map, 1067, message )
+
+--- ===== Event 1076  ======= 
+message = [['There you are! If you are ready, we can continue your training!'.
+
+Congratulations, you have successfully completed this tutorial mission.]]
+asc.setLocalizedEventMessage( map, 1076, message )
+

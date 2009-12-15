@@ -1,0 +1,80 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[ASC - Beginners Tutorial "Movement and View"
+
+ASC ist a turn based games, so you have all the time you want to plan your actions.
+
+There is a button called "end turn" in the lower right. Close this message window by pressing OK and press the "end turn" button.
+
+Tip: You can move this window around the screen by dragging it at the title bar.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [[Now lets turn our attention to controlling units. You have been given a Shock Trooper, a simple infantery unit. Move your trooper 4 fields to the south east, to the field that has been marked.
+
+To move a unit, first select the field. Then press the button "move unit" at the lower right of the screen.
+
+You will then see all fields that the unit can reach this turn. Select the destination field, and the unit will move there.
+
+
+Tip: All messages that you get are being archived. You can reread them any time by going to "Message" / "view received messages" in the menu at the top.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 11  ======= 
+message = [[Very good. Now move further on to the south east. The destination field has again been marked.
+
+Since your unit has used up all movement points for this turn, you have to press "end turn" first to refresh all unit's movement points.
+
+Tip: Click on the trooper and hold your left mouse button pressed. That's a convenient way to access all action buttons. A single click will execute the primary action]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 35  ======= 
+message = [[Excellent. You can now see the beginning of a track. Please follow this track. And watch your changing view on the map.]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== Event 201  ======= 
+message = [[You have reached the beginning of the track. Now check the remaining movement of your trooper. Can he still go on?
+
+If yes then this is caused by the trooper having more movement than view. Hw can move 4 fields on level terrain, but only see 3 fields into the distance. 
+
+Tip: Before ending your turn, check that you don't waste any remaining movement points of your units.]]
+asc.setLocalizedEventMessage( map, 201, message )
+
+--- ===== Event 45  ======= 
+message = [[Your trooper now moves in unexplored territory and explores it while going.
+
+Continue on this track and pay attention how certain objects (like palms) can obstruct the view.]]
+asc.setLocalizedEventMessage( map, 45, message )
+
+--- ===== Event 56  ======= 
+message = [[Apart from unexplored territory there is the "fog of war". Do you see the areas that have been darked?
+
+You have explored these areas, but don't have any view coverage on them. You would not see enemy troops there.
+
+Please continue following the track.]]
+asc.setLocalizedEventMessage( map, 56, message )
+
+--- ===== Event 68  ======= 
+message = [[A small Oasis, how nice..
+
+Please go on and pay attention that the trooper will not be able to enter fields with water.]]
+asc.setLocalizedEventMessage( map, 68, message )
+
+--- ===== Event 69  ======= 
+message = [[A mountain range. Mountains restrict your view too.
+
+Please continue on the track]]
+asc.setLocalizedEventMessage( map, 69, message )
+
+--- ===== Event 71  ======= 
+message = [[If you haven't noticed until now, troopers are able to climb mountains (only few units can do that). 
+
+But please continue on the track, it's faster there.]]
+asc.setLocalizedEventMessage( map, 71, message )
+
+--- ===== Event 131  ======= 
+message = [[Finally. You have successfully completed this tutorial!
+
+Are you ready for the next lesson?]]
+asc.setLocalizedEventMessage( map, 131, message )
+

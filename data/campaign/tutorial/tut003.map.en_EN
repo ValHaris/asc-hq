@@ -1,0 +1,23 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[ASC - Beginners Tutorial "Defense and Damage"
+
+Soldier, we'll now simulate an emergency. Here you'll have a new magazine for your assault rifle. Additionally, you'll get 300 units of material and fuel. Troopers are able to regenerate themselfes in the field, but they need resources for that.
+
+Follow the road to the south. Be alert for enemy troops. Use your reaction fire, you won't stand a chance otherwise.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 892  ======= 
+message = [[You are hurt. Pay attention to your health bar in the information area. As long as fuel and material are available, you'll slowly regenerate yourself.]]
+asc.setLocalizedEventMessage( map, 892, message )
+
+--- ===== Event 897  ======= 
+message = [[Congratulations, you have mastered your first battle. A transport will now carry you south.
+
+You have successfully completed this tutorial.]]
+asc.setLocalizedEventMessage( map, 897, message )
+
+--- ===== Event 904  ======= 
+message = [['Soldier, you have failed. But try again. Use the reaction fire, so the enemy doesn't get the first shot.']]
+asc.setLocalizedEventMessage( map, 904, message )
+
