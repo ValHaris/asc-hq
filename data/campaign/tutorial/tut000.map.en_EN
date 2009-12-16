@@ -49,7 +49,7 @@ message = [[Do you want to see our collection of minerals?]]
 asc.setLocalizedEventMessage( map, 22, message )
 
 --- ===== Event 24  ======= 
-message = [[In the Shooting Range you can learn the usage of the different weapons for our infantery.]]
+message = [[In the Shooting Range you can learn the usage of the different weapons for our infantry.]]
 asc.setLocalizedEventMessage( map, 24, message )
 
 --- ===== Event 83  ======= 
@@ -161,7 +161,7 @@ asc.setLocalizedContainerName( map, asc.MapCoordinate( 12, 39 ), [[empty]] )
 --- ===== Building -2555922  ======= 
 asc.setLocalizedContainerName( map, asc.MapCoordinate( 18, 39 ), [[Headquarters]] ) 
 --- ===== Building -2555924  ======= 
-asc.setLocalizedContainerName( map, asc.MapCoordinate( 20, 39 ), [[Infantery Shooting Range]] ) 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 20, 39 ), [[Infantry Shooting Range]] ) 
 --- ===== Building -2555926  ======= 
 asc.setLocalizedContainerName( map, asc.MapCoordinate( 22, 39 ), [[Production 1]] ) 
 --- ===== Building -2752537  ======= 

@@ -10,7 +10,7 @@ Tip: You can move this window around the screen by dragging it at the title bar.
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 4  ======= 
-message = [[Now lets turn our attention to controlling units. You have been given a Shock Trooper, a simple infantery unit. Move your trooper 4 fields to the south east, to the field that has been marked.
+message = [[Now lets turn our attention to controlling units. You have been given a Shock Trooper, a simple infantry unit. Move your trooper 4 fields to the south east, to the field that has been marked.
 
 To move a unit, first select the field. Then press the button "move unit" at the lower right of the screen.
 

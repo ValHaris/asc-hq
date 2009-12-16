@@ -13,7 +13,7 @@ To defuse a mine, the unit must be standing on an adjacent field. Then press the
 asc.setLocalizedEventMessage( map, 1128, message )
 
 --- ===== Event 1133  ======= 
-message = [['Soldier, don't waste your time with defusing the anti-tank mines. Infantery will not trigger them. Believe me, you can just walk over them.
+message = [['Soldier, don't waste your time with defusing the anti-tank mines. Infantry will not trigger them. Believe me, you can just walk over them.
 Go to the mine depot.']]
 asc.setLocalizedEventMessage( map, 1133, message )
 

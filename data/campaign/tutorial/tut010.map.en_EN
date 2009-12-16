@@ -1,0 +1,121 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Buildings
+
+The purpose of the first two rows of buildings is providing some kind of resource. The lower two rows of buildings are used for production and other special purposes.
+
+Information about a specific building is presented when stepping onto the grey floor plates in front of them. For more insights please select the building and open the "view loaded units" dialog.
+
+Entering the green fields will lead you back to the base camp.
+
+All buildings can accomodate units, with the maximum number, size and type of unit varying with the different kinds of buildings. All buildings have the cargo dialog, available with the "view loaded units" button, to access the units parked inside. The cargo dialog also gives access to non-cargo related functions and information, like resource production. Inside any building units can be refuelled and equipped with ammo, if these supplies are available or can be produced by the buildings. You can also disband units in any building.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[The nuclear power plant generates energy. A lot of enrgy. It requires material and fuel to run, but not that much, as these resources are used for normal operation and maintenance, but not for the energy generation itself. The power can be adjusted.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[A wind power plant generates energy without consuming any other resource. But the generated power is dependent on the current wind and may therefore change in availability. ]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 5  ======= 
+message = [[The solar power plant generates energy from sunshine. Cloudy weather drastically reduces energy output.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 6  ======= 
+message = [[The farm will output oild from harvesting nearby rape or fungus fields.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== Event 7  ======= 
+message = [[The lumber camp generates material from forest or palms, but requires fuel to operate.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== Event 8  ======= 
+message = [[The Crystal Processing produces material from harvesting crystals and stachelgras. It needs fuel to run.]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== Event 9  ======= 
+message = [[The Headquarter can generate both fuel, material and energy. The actual amount is dependent on the map. 
+
+The objectives of many maps involve Headquarters to be conquered or to be defended..]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[A town creates a little bit of energy, material and fuel, the actual amount being map specific. Owning several towns can provide a steady base supply of resources. Additionaly, town do a little research.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 11  ======= 
+message = [[The mine extracts mineral resources from the ground. This of course requires the ground to contain mineral resources, so a geological survey is very recommended before constructing a mine at some spot. A mine requires energy to operate. The rate of extraction can be changed by the player. As the fields that are minded get further away from the building because of depletion of the nearer fields, the efficiency of the mine declines.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 12  ======= 
+message = [[The oil tower extracts fuel from the ground and needs energy to do so. Similar to the mine, it needs oil to be present in the ground, can be adjusted and the efficiency degrades as the oil in the ground is slowly depleted.]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[The Oil Platform works just like the oil tower in extracting oil from the ground. It is normally deployed in shallow waters and has only been placed on ground for demonstration purposes. Like the oil tower, it needs energy to run.]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 27  ======= 
+message = [[The great oil platform can extract significantly more oil from the ground as the small platform. It can be deployed in water up to medium depth and has only been placed on ground for demonstration purposes.  
+
+Since the great oil platform has its own energy generation, it can operate on its own and does not need any external supply. This makes it ideally suited to be placed far out in open waters. It then needs some oil tankers to fetch the oil and deliver it to the consumers]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== Event 28  ======= 
+message = [[The small vehicle plant can produce infantry, small tanks and supply vehicles. Precondition for production is the availability of a production line (which in turn needs a technology to be present) and resources. 
+
+The small vehicle plant can also repair units, refuel them and equip them with ammo (which is produced on the go)]]
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== Event 29  ======= 
+message = [[The great vehicle plant can produce almost all types of land based units, except for infantry and some small units for which the small vehicle plant is responsible for. The production program also covers rail units and hovercraft.
+
+Just like any factory, the great vehicle plant can also refuel, reload and repair units.]]
+asc.setLocalizedEventMessage( map, 29, message )
+
+--- ===== Event 30  ======= 
+message = [[The shipyard can produce and service ships of all kinds, including submarines. It's usually build at the coast, so that it's accessible from the land and sea. ]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== Event 31  ======= 
+message = [[The airport can produce and service aircraft. To be usable, a runway of sufficient length needs to be build in front of the airport, so that airplanes can land and take off.]]
+asc.setLocalizedEventMessage( map, 31, message )
+
+--- ===== Event 32  ======= 
+message = [[The spaceport is responsible for the production and maintenance of space stations, satellites, shuttles and other orbiting vehicles.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== Event 33  ======= 
+message = [[The gas station is used to refuel any kind of passing unit, so unlike most other buildings the units don't have to enter and don't waste any time for doing so.]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== Event 34  ======= 
+message = [[The Depot can store significant amounts of material, fuel and ammo. It can refuel and repair units and equip them with ammo.]]
+asc.setLocalizedEventMessage( map, 34, message )
+
+--- ===== Event 35  ======= 
+message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requirese ammo, the training center has its own production facilities for that and can therefor also reload units who that don't need any training.]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== Event 36  ======= 
+message = [[The research lib consumes resources to do research and discover new technology. The technologies are the prerequisites for the production of new types of units. 
+
+The amount of research that a training center can do is adjustable. If raising the amount research beyond a certain point, the resource consumption increases exponentially. So you can do a lot of research with a single lab, but it's usually more efficient to have several of them.]]
+asc.setLocalizedEventMessage( map, 36, message )
+
+--- ===== Event 37  ======= 
+message = [[The Hangar is used to park aircraft, since an airport has only limited space. It can also service the parked aircraft. 
+
+Hangars can only be build on fields that already have runway, and they need obviously some more runway for the planes to take off and land]]
+asc.setLocalizedEventMessage( map, 37, message )
+
+--- ===== Event 38  ======= 
+message = [[The radar station provides radar coverage and provides early detection of enemy units.]]
+asc.setLocalizedEventMessage( map, 38, message )
+
+--- ===== Event 39  ======= 
+message = [[The jamming  station jams enemy radar and make own units and buildings significantly more difficult for the enemy to detect.]]
+asc.setLocalizedEventMessage( map, 39, message )
+
