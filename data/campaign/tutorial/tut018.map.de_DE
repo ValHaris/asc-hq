@@ -63,7 +63,8 @@ asc.setLocalizedEventMessage( map, 25, message )
 --- ===== 26  ======= 
 message = [[Recylcen von Fahrzeugen
 
-Dieser Transporter hat Schaden abbekommen. Ausserdem hat er sein komplettes Arsenal an Munition verbraucht. Er sollte wohl besser in das Depot gefahren werden, damit er dort repariert werden kann. Ausserdem wird es sehr teuer ihn wieder komplett aufzumunitionieren, weshalb der refuel dialog wohl besser wäre. Vielleicht ist es auch sinnvoller, diesen Transporter einfach zu recylen? Recylen können sie in jedem Gebäude, dabei bekommen sie die Hälfte der ursprünglichen Produktionskosten eines Fahrzeuges erstattet.]]
+Dieser Transporter hat Schaden abbekommen. Ausserdem hat er sein komplettes Arsenal an Munition verbraucht. Er sollte wohl besser in das Depot gefahren werden, damit er dort repariert werden kann. Ausserdem wird es sehr teuer ihn wieder komplett aufzumunitionieren, weshalb der refuel dialog wohl besser wäre. Vielleicht ist es auch sinnvoller, diesen Transporter einfach zu recylen? Einheiten können in jedem Gebäude entsorgt werden. In vielen Gebäuden (z.B. der Radar Station) gibt es lediglich die 'salvage unit' Funktion, die nur einen kleinen Teil der Produktionskosten wieder gewinnt. Manche Gebäude (z.B. das Depot) haben eine spezielle Recycling-Funktion, mit der 90% des in die Produktion geflossenem Materials wieder gewonnen werden können, abzüglich eines Abschlags für beschädigte Einheiten.]]
+
 asc.setLocalizedEventMessage( map, 26, message )
 
 --- ===== 27  ======= 
