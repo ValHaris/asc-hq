@@ -1,0 +1,16 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Production 1 "Basics"
+
+To produce units you need the appropriate building. In this example, you have a small vehicle plant.
+
+The vehicle plant in this map has production capabilities for all kinds of infantry units.
+
+To produce a unit, open the cargo dialog (button "show loaded units"). Then press the button "produce unit".
+You will then be shown a window listing all types of units that are producible. Select the desired one and press the "produce" button.
+
+When entering the red field, you will go to the next Tutorial "Production 2".
+Through the green field, you will go back to base camp.]]
+
+asc.setLocalizedEventMessage( map, 1, message )
+
