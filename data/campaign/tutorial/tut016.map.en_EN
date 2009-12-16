@@ -1,0 +1,48 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Welcome to the railroad museum.
+
+The grey floor plates provide more information about the respective rail vehicles.
+
+You can also take a look at the ingame information that is available in the unit information:
+select a unit, press 'unit info' button and go to description.
+
+The green field leads back to base camp.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [[Our Judy is repair train, supply train and construction train in one unit. It can build railroad tracks and repairs and refuels everything that in the vicinity. It can also reload units with the smaller types of ammunition. ]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 5  ======= 
+message = [[The transport train is able to carry lots of units quickly over large distances. Additionally, it can store significant amounts of material and fuel, which it provides to other units. And it serves as store for all kinds of ammo.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 6  ======= 
+message = [[The heli trans train is a train specialized for transporting and servicing of helicopters, which can land directly on the train. This saves precious time compared to having them to land on the ground having supply units approaching them there.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== Event 7  ======= 
+message = [[This battle train is ideally suited to defend railroad tracks against enemy units. It can withstand significant enemy fire and can in return attack units over a distance of 2 fields. Its reaction fire capabilities make him a formidable foe against approaching enemies. The MG can even be used in an emergency to attack aircraft.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== Event 8  ======= 
+message = [[Double-barrel railroad gun]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== Event 9  ======= 
+message = [[Railroad gun]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[Cruise Missile Train]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 11  ======= 
+message = [[Air defense train]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 12  ======= 
+message = [[Orbital defense train]]
+asc.setLocalizedEventMessage( map, 12, message )
+
