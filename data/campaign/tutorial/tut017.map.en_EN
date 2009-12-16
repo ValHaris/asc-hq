@@ -1,0 +1,139 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Welcome to the tank museum. We have everything here, from tank and artillery to all kinds of supply vehicles. Take a look around. But don't anything, unless you want to polish the vehicles next week.
+
+Informationen about the vehicle can be read when stepping onto the grey floor plates. To leave the museum and return to base camp, enter one of the green fields.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 9  ======= 
+message = [[The generator vehicle can provide energy and runs with fuel. It can be very useful to kickstart your economy or as power supply when your regular power plants are not operating]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[The jamming vehicle prevents the enemy from seeing your units and buildings. It can provide essential protection for important units in the presense of enemy artillery.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 11  ======= 
+message = [[What would your artillery do without a radar vehicle? But generally every commander appreciates knowing the enemy positions. You can only fight an enemy that you actually see.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 12  ======= 
+message = [[The minelayer can quickly create large minefields and thus make whole areas inaccessible for the enemy. The minelayer can also clear the minefields of the enemy.]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[The COBRA anti infantry tank has been created to effectively fight hostile infantry. It can fire its guns from a distance of two fields, preventing any return fire. Many enemy aircraft have underestimated the COBRA's ability to attack aircraft. ]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 14  ======= 
+message = [[Thes Weasel ist a small armored personell caarrier. Its light armor and small machine gun don't make suitable for real battles. It strength is its speed with which it can transport infantry and the ability to be parachuted from aircraft.]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[Armored personell carrier is capable to transport 8 infantry units to and from the battle field]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[This transport with very heavy armor provides cover for units even in fierce fighting. It's also very useful to transport damaged units at front.]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 17  ======= 
+message = [[The light assault tank combines relatively high firepower with high speed, at the cost of having only thin armor. Because of that, it should not be used in the defense. Its flanks should be protected by more heavily armored units]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== Event 18  ======= 
+message = [[The assault tank has very high fire power and is quite mobile, but doesn't have the armor of the standard tanks. It's very useful to overrun enemy positions, but should leave defensive tasks to other tanks.]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 19  ======= 
+message = [[The Termite is the smallest member of the family of standard tanks. It's cheap while still delivering a considerable punch. It is also useful to hunt enemy supply units that are only equipped with a MG. And sometimes it's just better to have lots of tanks to having big tanks.]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== Event 20  ======= 
+message = [[The medium tank is the standard tank in many battles. It's slower than the light tank, but offers more armor and higher fire power. It can be used both offensively and defensively.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 21  ======= 
+message = [[The ARMADILLO is an upgraded version of the standard tank with still better armor, higher fire power and, most imporantly, a machine gun to protect itself from enemy aircraft.]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== Event 22  ======= 
+message = [[The heavy combat tank combines impressive armor with really big guns. It's twin guns make very good well suited for defending your positions against an enemy attack.]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== Event 23  ======= 
+message = [[The ultimate in tank technology, the siege tank is a further upgrade to the ARMADILLO. Its cannons have twice the range, making it possible to keep the enemy under fire without him being able to retaliate. The drawback of this impressive piece of technology is its lack of speed.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== Event 24  ======= 
+message = [[The rocket tank of type HORNET is best kept in the second row behind the main battle tanks, from where it can lauch its rockets at the enemy without being vulnerable to enemy tanks]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== Event 25  ======= 
+message = [[The HORNET II carries larger rockets than the HORNET does. These rockets have an impressive range, but are more expensive.]]
+asc.setLocalizedEventMessage( map, 25, message )
+
+--- ===== Event 26  ======= 
+message = [[The light artillery doesn't have the range nor the distance of the bigger cuisins, but its higher speed and the ability to shoot directly after having moved can be very useful against a mobile enemy.]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== Event 27  ======= 
+message = [[The smallest member of the COMA family has the special ability to move slowly without deactivating its reaction fire. This allows creaping up on the enemy without giving him the opportunity of a counterstrike. Unlike the light artillery BLACKOUT, no COMA can actively shoot after having moved.]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== Event 28  ======= 
+message = [[An improved version of the standard Coma, offering increased range. But after having moved, it needs a full turn until it is able to fire. ]]
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== Event 29  ======= 
+message = [[The Coma III has further increased range. Its twin guns can deliver twice the number of reaction fire shots than the single-barreled artilleries. This make the Coma III ideally suited to deliver a rain of fire over approaching enemy units.]]
+asc.setLocalizedEventMessage( map, 29, message )
+
+--- ===== Event 30  ======= 
+message = [[The fast and cheap answer to any enemy air force. Only SAM Infantry can fight aircraft cheaper than the SWATTER does. With its cannon can attack and defend against aircraft at a distance of up to 3 fields. Additionally it can defend itself against infantry and lightly armored units with its MG.]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== Event 31  ======= 
+message = [[In the development of the SWATTER II the MG was sacrificed to install more powerful cannons that also have higher range.]]
+asc.setLocalizedEventMessage( map, 31, message )
+
+--- ===== Event 32  ======= 
+message = [[The nightmare of enemy aircraft, the SPIKE combines high range and high firepower. It is even capable to attack aircraft flying at high altitude.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== Event 85  ======= 
+message = [[The Surveyor is a unit to make geological suveys. Its sensors can detect mineral resources and crude oil deposits that are suitable for being mined or drilled.]]
+asc.setLocalizedEventMessage( map, 85, message )
+
+--- ===== Event 86  ======= 
+message = [[The Main Builder Vehicle is specialized in constructing the biggest and most powerful turret installations. It is also able to carry those turrets that can be moved. ]]
+asc.setLocalizedEventMessage( map, 86, message )
+
+--- ===== Event 87  ======= 
+message = [[The Vesuvius ist the unit for constructing and destructing buildings. It can also build turrets up to standard size, together with their installations. Its function to completely tear down a building and claim some of its resources have as a nasty surprise to many enemy commander that failed to provide adequate defense for their infrastructure.]]
+asc.setLocalizedEventMessage( map, 87, message )
+
+--- ===== Event 88  ======= 
+message = [[The Bulldozer of type ANT can build roads, railroads, runway, pipeline, bridges, ditches and tank tranks. It can also dismantle all of them and claim the wreckages of destroyed tanks.]]
+asc.setLocalizedEventMessage( map, 88, message )
+
+--- ===== Event 89  ======= 
+message = [[The Forrester can cut down trees to provide material for construction.]]
+asc.setLocalizedEventMessage( map, 89, message )
+
+--- ===== Event 90  ======= 
+message = [[The big transport of type ATUIN can carry all kinds of stuff. Even big tanks can quickly be transported from A to B. It can also carry lots of material for production and collect wreckage for recycling. And as if that wasn't enough, it even carries a small sensor array to find mineral resources.]]
+asc.setLocalizedEventMessage( map, 90, message )
+
+--- ===== Event 91  ======= 
+message = [[The servicing vehicle can repair damaged units in the field. Even big repair task can handled by it, provided that a steady supply of fuel and material is provided.]]
+asc.setLocalizedEventMessage( map, 91, message )
+
+--- ===== Event 92  ======= 
+message = [[The ammo transport is vital to run engagements for an extended time. It provides ammo to units in the field. Its service is also required when building new gun emplacements to supply the initial ammo.]]
+asc.setLocalizedEventMessage( map, 92, message )
+
+--- ===== Event 93  ======= 
+message = [[The mobile tanker vehicles can refuel not only tanks, but also helicopter that have landed and even ships.]]
+asc.setLocalizedEventMessage( map, 93, message )
+

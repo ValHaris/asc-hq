@@ -68,11 +68,11 @@ message = [[Der schwere Panzer bekommt nochmal Reichweite. Damit stellt er Kampf
 asc.setLocalizedEventMessage( map, 23, message )
 
 --- ===== 24  ======= 
-message = [[Verbesserter Raketenpanzer]]
+message = [[Raketenpanzer]]
 asc.setLocalizedEventMessage( map, 24, message )
 
 --- ===== 25  ======= 
-message = [[Raketenpanzer]]
+message = [[Verbesserter Raketenpanzer]]
 asc.setLocalizedEventMessage( map, 25, message )
 
 --- ===== 26  ======= 
