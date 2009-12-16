@@ -14,6 +14,7 @@ Try to build a ammo transport in this map. The red cost values show that you don
 
 If you deactivate the "Fill with Ammo" option, you will be able to build the transport. You can then equip the unit with individual types and amounts of ammo through the "refuel dialog".
 
-To exit the tutorial, please enter the green field.]]
+To continue the tutorial, step onto the red field.
+The green field will lead back to base camp.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
