@@ -20,7 +20,7 @@ asc.setLocalizedEventMessage( map, 12, message )
 --- ===== Event 16  ======= 
 message = [[Standard building functions
 
-The Shocktrooper needs new mines. Normally, he would have to go to a building that can produce ammo, but we have deposited 10 mines in the radar station. The trooper could also replenish material and fuel, which will be used up for regeneration. And he can leave some bullets from his rifle there, which in turn could be used to reload the weasel. 
+The Shocktrooper needs new mines. Normally, he would have to go to a building that can produce ammo, but we have deposited 10 mines in the radar station. The trooper could also replenish material and fuel, which will be used up for regeneration. And he can leave some bullets from his rifle there, which in turn could be used to rearm the weasel. 
 
 Cargodialog: 'refuel' or 'refuel dialog' functions]]
 asc.setLocalizedEventMessage( map, 16, message )
@@ -47,7 +47,7 @@ This tank doesn't have even a scratch, it's just lacking ammo and fuel.
 
 It should go straight to the depot, but it doesn't need to enter the depot, it's sufficient to be on a field next to the entrance.
 
-The depot has the functions 'refuel' and 'refuel dialog' also from the outside. So the tank can be refuelled and reloaded and head straight back to battle. If the tank would drive into the depot, a whole turn would be lost.
+The depot has the functions 'refuel' and 'refuel dialog' also from the outside. So the tank can be refuelled and rearmed and head straight back to battle. If the tank would drive into the depot, a whole turn would be lost.
 
 Repairs can not be done externally, since it's much more effort to repair a unit it has to enter the building and spend the remaining turn there.]]
 asc.setLocalizedEventMessage( map, 18, message )
@@ -102,9 +102,9 @@ Both tanks are damaged. You can repair them with the COSINUS unit direcly on the
 asc.setLocalizedEventMessage( map, 31, message )
 
 --- ===== Event 32  ======= 
-message = [[Reloading units with ammo
+message = [[Rearming units with ammo
 
-None of these two tanks has any ammo left. Use the CETI to reload them.]]
+None of these two tanks has any ammo left. Use the CETI to rearm them.]]
 asc.setLocalizedEventMessage( map, 32, message )
 
 --- ===== Event 33  ======= 

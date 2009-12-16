@@ -11,7 +11,7 @@ The green field leads back to base camp.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 4  ======= 
-message = [[Our Judy is repair train, supply train and construction train in one unit. It can build railroad tracks and repairs and refuels everything that in the vicinity. It can also reload units with the smaller types of ammunition. ]]
+message = [[Our Judy is repair train, supply train and construction train in one unit. It can build railroad tracks and repairs and refuels everything that in the vicinity. It can also rearm units with the smaller types of ammunition. ]]
 asc.setLocalizedEventMessage( map, 4, message )
 
 --- ===== Event 5  ======= 

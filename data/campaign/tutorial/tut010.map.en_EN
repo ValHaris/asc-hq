@@ -72,7 +72,7 @@ asc.setLocalizedEventMessage( map, 28, message )
 --- ===== Event 29  ======= 
 message = [[The great vehicle plant can produce almost all types of land based units, except for infantry and some small units for which the small vehicle plant is responsible for. The production program also covers rail units and hovercraft.
 
-Just like any factory, the great vehicle plant can also refuel, reload and repair units.]]
+Just like any factory, the great vehicle plant can also refuel, rearm and repair units.]]
 asc.setLocalizedEventMessage( map, 29, message )
 
 --- ===== Event 30  ======= 
@@ -96,7 +96,7 @@ message = [[The Depot can store significant amounts of material, fuel and ammo. 
 asc.setLocalizedEventMessage( map, 34, message )
 
 --- ===== Event 35  ======= 
-message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requirese ammo, the training center has its own production facilities for that and can therefor also reload units who that don't need any training.]]
+message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requirese ammo, the training center has its own production facilities for that and can therefor also rearm units who that don't need any training.]]
 asc.setLocalizedEventMessage( map, 35, message )
 
 --- ===== Event 36  ======= 

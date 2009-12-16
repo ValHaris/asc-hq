@@ -1,0 +1,15 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Building Construction
+
+Constructing buildings is quite easy. You just a Vesuvius loaded with enough fuel and material. This unit can construct all player-buildable buildings, provided building construction has been enabled in the map.
+
+To build, the Vesuvius needs all of his movement points and therefor must not have done anything else this turn. Use the "Building construction" function, then select the desired building from the list. If there is a suitable place for the building, several fields will be marked, indicating the possible positions of the building's entrance. Select one of the marked fields, and the building will be placed. 
+
+The Vesuvius can also pull down buildings, reclaiming some of their material.
+
+Enter the green field to return to the base camp.
+
+Tip: The small and large oil platforms can only be build on water, while the hangar can only be build on a runway. ]]
+asc.setLocalizedEventMessage( map, 1, message )
+
