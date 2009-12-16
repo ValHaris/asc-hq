@@ -1,0 +1,17 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Turret Training
+
+You have control about all turrets in this facility. To show the range of the different guns the whole area has been covered with anti-tank obstacles.
+You can also experience first hand how the enemy units retaliate when being attacked at short range.
+
+To demonstrate the anti-air weaponry there are a bunch of low flying helicopter, zeppelins at medium height and high altitude reconnaissance planes, so you can see the different levels of height that the anti-air units can attack.
+
+Additionally there are some satellites to serve as targets for the orbital defense turrets.
+
+Ammo transports have been placed next to the cruise missile firing facilities.
+
+When you are finished, enter the green field to go back to base camp.
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
