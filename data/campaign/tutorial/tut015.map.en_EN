@@ -1,0 +1,101 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Defense Facilities
+
+We distinguish between active units that can shoot at the enemy, and passive objects that either hinder the enemy or give your units advantages when placed on them. For completeness, we have also included stationary radar and jamming facilities.
+
+You may also want to read the unit description ingame, by selecting the unit, pressing 'unit info' and go to 'description'.
+
+The green fields lead back to base camp.
+
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 11  ======= 
+message = [[Radarstation - This is a building and can be conquered by the enemy. But as an advantage it doesn't give any experience to enemies attacking it.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 12  ======= 
+message = [[Stationary Radar Unit (GRS)]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[Hardened Radar Unit]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 14  ======= 
+message = [[Jamming Station. This is a building and can be conquered by the enemy. But as an advantage it doesn't give any experience to enemies attacking it.]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[Hardened Jamming Unit]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[Anit-tank obstacle]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 17  ======= 
+message = [[Barbed wire. blocks infantry]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== Event 18  ======= 
+message = [[High turret foundating, give offensive bonus]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 19  ======= 
+message = [[Ditch - gives attack and defense bonus for units in there]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== Event 20  ======= 
+message = [[Standard turret foundation]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 21  ======= 
+message = [[Hidden turret foundation]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== Event 35  ======= 
+message = [[Fortification]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== Event 36  ======= 
+message = [[Machine Gun emplacement]]
+asc.setLocalizedEventMessage( map, 36, message )
+
+--- ===== Event 37  ======= 
+message = [[BIG GUN]]
+asc.setLocalizedEventMessage( map, 37, message )
+
+--- ===== Event 38  ======= 
+message = [[STONEWALL - a extraordinarily armored defense facility.]]
+asc.setLocalizedEventMessage( map, 38, message )
+
+--- ===== Event 39  ======= 
+message = [[Defensive gun system with impressive range ]]
+asc.setLocalizedEventMessage( map, 39, message )
+
+--- ===== Event 40  ======= 
+message = [[Defensive gun, able to fire 3 reaction fire shots on approaching enemies]]
+asc.setLocalizedEventMessage( map, 40, message )
+
+--- ===== Event 41  ======= 
+message = [[Cruise missile firing emplacement]]
+asc.setLocalizedEventMessage( map, 41, message )
+
+--- ===== Event 42  ======= 
+message = [[Silo housing cruise missiles]]
+asc.setLocalizedEventMessage( map, 42, message )
+
+--- ===== Event 43  ======= 
+message = [[Air defense turret]]
+asc.setLocalizedEventMessage( map, 43, message )
+
+--- ===== Event 44  ======= 
+message = [[Orbital defense system]]
+asc.setLocalizedEventMessage( map, 44, message )
+
+--- ===== Event 45  ======= 
+message = [[Air defense bunker]]
+asc.setLocalizedEventMessage( map, 45, message )
+
