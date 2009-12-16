@@ -1,0 +1,25 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Research
+
+Here you will get an introduction into research. For demonstration purposes, we'll be using the PBP technology tree. Other maps may use different technologies.
+
+This map has an operating research lab. When you end your turn, you will be presented with a dialog in which you can chose the technology that you want to research.
+
+For move information, step onto the grey areas.
+
+Enter the green field to go back to base camp.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 10  ======= 
+message = [[In the research lab, you can setup how much research shall be done. The affects the amount of resources that you need.
+
+This lab can produce between 0 and 100 research points. If you set the rate to a value above 40 then the cost of the research will increasingly more expensive.
+
+In this map you don't need to hesitate goeing to full power, we have enough resources to afford that. ]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 11  ======= 
+message = [[In this map there are 10 towns to supply the research lab with resources (energy, material and fuel). Additionally, they also provide another 100 research points.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
