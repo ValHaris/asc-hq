@@ -1,0 +1,150 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[In the bulldozer driving school you'll learn how to use bolldozer, which are very versatile units.
+
+The upper part of the map focuses on the different construction options of the bulldozer, which are from left to right:
+tracks, roads, runways, railroad, above ground pipelines, subsurface pipelines, ditches and anti-tank obstacles.
+
+Below that we are looking at bridges for roads and railroads as well as the possibility to continue subsurface pipelines underwater. The differences between small and large bridges will be pointed out, together between the effect that differing water depth has on your construction. Here you will be assisted by a construction train and a service ship, which also has construction capabilities.
+
+Finally, in the lower right corner, you can practice the usage of the bulldozer's dismantling abilities, that can provide noticable amounts of material.
+
+The control of the bulldozer is the same, regardless what you want to build or remove. You select the bulldozer, then chose the function "construct/remove objects". 
+The fields that the bulldozer can alter will be highlighted. Click on one of them and keep your left mouse button pressed! This is very important as the appearing menu will allow you to chose the exact object that you want to build or remove. During this selection phase you will also be able to see the required resources in the status line at the bottom of the screen. 
+
+Select a bulldozer and drive onto the adjacent concrete plate to get more information about the respective object.
+
+To leave this tutorial and return to base camp, step onto the green field.
+
+Tip: if the bulldozer cannot construct the desired object, that may have different causes. Either the bulldozer doesn't have enough movement points left, or he may lack some required resources. Another reason may be that the target field in unsuitable.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 12  ======= 
+message = [[Tracks
+
+Tracks (also called pathes= are a cheap way to increase the speed of your units, but degrade during bad weather. The command is "build path".]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[Roads
+
+Roads are the more elegant way to increase the range of your units. Especially during heavy rain or snow they prove to be very valuable. But they are more expensive to be build. The command is "build road".]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 14  ======= 
+message = [[Runway
+
+Runways are needed to allow airplanes to take off and land, as well as to allow planes to move on the ground.
+
+A full-size runway needs 4 fields of runway in a straight line. Be aware that you can never have a straight horizontal line due to the hexagonal nature of the fields. Even if the image of the runway may entrap you - horizontal runways don't work.
+
+Hangars can only be build on fields that already have a runway.
+
+The production cost and movement consumption for a runway are quite high - which is the most common reason for not being able to build a runway: not enough material or not enough movement points.]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[Railroads
+
+Without railroads you won't be able to use trains. And trains can be really useful...]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[Pipeline (above ground)
+
+The above ground pipelines is a quick and cheap way to connect your buildings. But just as quick as you can build it, the enemy can destroy it, particularly with airplanes. And an interrupted pipeline can cripple your economy quite badly.
+
+Additionally, this type of pipelines slows units that want to cross it.
+]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 17  ======= 
+message = [[Pipeline (below surface)
+
+Burying a pipelines is more expensive and more time consuming, but it has significant advantages: the enemy can't bombard it and needs to come with construction vehicles himself if he wants to interrupt it. Subterranean pipelines don't interfere with the movement of your ground units.
+
+The construction command is "build buried pipeline".]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== Event 18  ======= 
+message = [[Ditches
+
+The bulldozer can excavate ditches, which are an excellent way to improve your defensive lines. Units placed in ditches are much more difficult to damage and obtain a small offensive bonus. 
+
+Ditches are barriers to many wheeled vehicles.
+]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 19  ======= 
+message = [[Anti-tank obstacles
+
+Anti-tank obstacles can not be crossed by any vehicles, be they friend or foe. Only infantry can walk through them.
+
+The construction command is "build tankblocker"]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== Event 20  ======= 
+message = [[Road bridge
+
+The bulldozer can build bridges. There are two kinds of bridges, normal bridges for shallow water and big bridges for deeoper water. The big bridge is quite expensive, but allows major ships to pass below it. This river here requires the construction of a big bridge.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 21  ======= 
+message = [[Road bridge
+
+In shallow waters a normal bridge is sufficient. You can build these bridges in the first two levels of depth. The water with medium depth you need a big bridge, while the really deep ocean can not be bridged at all.
+
+Pay attention to your material storage when building several bridges!]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== Event 22  ======= 
+message = [[Railroad bridge.
+
+Big rivers and water of medium depth require a big railroad bridge, which is quite expensive.]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== Event 23  ======= 
+message = [[Railroad bridge
+
+Just like for roads, you can build normal railroad bridges over shallow water, but need a big bridge for water with medium depth. Ocean can not be bridged at all.
+
+The bulldozer can not drive across railroad bridges. So you need either a road bridge in parallel, or build the railroad bridge with either a construction train or a construction ship.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== Event 24  ======= 
+message = [[Pipelines crossing water
+
+The normal buried pipeline can be build across shall water, channels and rivers.]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== Event 25  ======= 
+message = [[Pipelines crossing water
+
+While the normal buried pipeline can be placed in shallow water, you need a strong pipeline for medium water. No pipeline can go across deep ocean.]]
+asc.setLocalizedEventMessage( map, 25, message )
+
+--- ===== Event 26  ======= 
+message = [[Deconstruction
+
+The bulldozer can remove everything that he can build. And even stuff that he can not build, like razor wire and turret foundation.
+
+Pay attention to the material storage of the bulldozer. Is the material storage filled then you can still remove further objects, but their material will be lost. You usually want to avoid that, as material is the most limited resource in most maps.]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== Event 27  ======= 
+message = [[Removal of rocks
+
+The bulldozer can even clear areas of rocks, which may be necessary for other units to cross that area or to prepare a field for construction.
+
+Since rocks also provide material, you should have material storage available to avoid wasting precious resources.]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== Event 28  ======= 
+message = [[Reclaim wreckage
+
+The bulldozer can reclaim the wreckage of destroyed units. To test that, attack the yellow dummy units. Afterwards, you can reclaim their wreckage.
+
+Look at your material storage while doing so: while the two infantry units leave only very little material behind, the big tank will provide a lot of metal!
+Collecting scrap metal can be a very lucrative business!]]
+asc.setLocalizedEventMessage( map, 28, message )
+
