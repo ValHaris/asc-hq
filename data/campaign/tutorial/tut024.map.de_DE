@@ -60,6 +60,7 @@ asc.setLocalizedEventMessage( map, 197, message )
 
 --- ===== 208  ======= 
 message = [[Die Ressourcenabbauanzeige im Gebäudemenü können sie wie folgt verstehen.
+#image=tut024-mining-bars.png#
 
 Anfangs sehen sie dort zwei Spalten, die erste Spalte entspricht im Prinzip den Ressourcen des Gebäudeeingangsfeldes, die zweite Spalte entspricht den Ressourcen der Felder darum.
 

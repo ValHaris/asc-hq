@@ -1,0 +1,71 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Energy production
+
+It has recommended that you have went through the "storage and resource distribution" tutorial before doing this one.
+
+Energy as a resource can not be stored in big amounts. That's why you should strive for a continuous supply of energy.
+
+Energy can be generated in different ways: through solar, wind or nuclear power, or by using emergency power generator units.
+
+More information about this will be presented when stepping onto the respective ground plates. Entering the green field will lead you back to base camp.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[The solar power plant delivers energy, but is dependent on sunshine. If the sky is cloudy, the energy output is reduced significantly. 
+
+To see the effects of weather, end the turn.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[The wind power plant is another source of renewable power, but relies on the wind. The wind speed can vary significantly and so does the output of the wind power plant. To see the effects of changing weather, end the turn.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 5  ======= 
+message = [[The nuclear power plant operates independently of the weather, but it requires resources to run: Material and Fuel. These are not use for the electricity generation itself, but for the maintenance of the power plant. 
+
+In the depot that is connected are enough resources to operate the nuclear power plant for quite some time. You can adjust the output of the nuclear power plant yourself by going to the cargo window ('show loaded units') and there to the power generation tab. There you have a control to change the power between 0% and 100%.
+]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 6  ======= 
+message = [[If you are short on energy, you can use emergy power generators to create energy. They have to placed adjacent to a building and need to be switched on. To operate, they need fuel - and quite a lot of it.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== Event 16  ======= 
+message = [[It has started to rain. The cloudy sky reduces the output of the solar plant. But the wind has picked up quite a bit, increasing the output of the wind power plant. 
+
+To view the current wind, go to "View -> Wind Panel" 
+
+End your turn for more changes to the weather.]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 30  ======= 
+message = [[What a storm! The output of the wind power plant is at maximum. 
+
+But the heavy rain reduces the solar output even more. 
+]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== Event 33  ======= 
+message = [[The storm has subided, affecting the output of the wind turbine. 
+
+But it got colder, while it's snowing a bit, the cloud cover is not as thick as before, so the solar plant generates more electricity than the turn before.]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== Event 51  ======= 
+message = [[Even more snow and clouds, but less wind. Both reneable power plants are operating and very little power.
+
+Please note that in ASC the wind is controlled independently from rain and snow. So it's just the map creators deliberation to change them both at the same time here.]]
+asc.setLocalizedEventMessage( map, 51, message )
+
+--- ===== Event 90  ======= 
+message = [[Now its even colder, but that doesn't change anything for the solar plant. It's still operating on lower power.
+
+And now, to make things worse, it is completely calm, no wind anywhere. So no output from the wind turbine.
+
+That's it for this tutorial, we don't have any more weather to offer.
+
+You can return to the base camp by entering the green field.]]
+asc.setLocalizedEventMessage( map, 90, message )
+

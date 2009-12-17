@@ -2,7 +2,7 @@ map = asc.getLoadingMap()
 --- ===== 1  ======= 
 message = [[Lagerwirtschaft
 
-Oeffnen sie das Frachtmenue eines beliebigen Gebäudes. Dort finden sie links den Schalter "Ressource Network Info". Versuchen sie sich das Bild ein wenig einzuprägen. Alle nachfolgenden Texte nehmen Bezug auf dieses Informationsfenster. Gehen sie dann eine Bodenplatte weiter.
+Oeffnen sie das Frachtmenue eines beliebigen Gebäudes. Dort finden sie links den Schalter "Ressource Network Info" #image=cargo-resourceinfo.png#. Versuchen sie sich das Bild ein wenig einzuprägen. Alle nachfolgenden Texte nehmen Bezug auf dieses Informationsfenster. Gehen sie dann eine Bodenplatte weiter.
 
 Die grünen Felder zum Verlassen dieses Tutorials.
 ]]

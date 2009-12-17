@@ -1,0 +1,103 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Material- and Fuel Extraction
+
+It has recommended that you have went through the "storage and resource distribution" tutorial before doing this one.
+
+Enter the plates on the ground to get specific information about the building nearby.
+
+End your turn to get general information about the buildings.
+
+The green field will lead you back to the base camp.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[The Mine extracts material, using energy in the process. You can adjust the extraction rate in the building's menu ('show loaded units' -> 'Mining Facility') and see some statistics about the availability of raw matarial in the ground.]]
+
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[The oil tower extracts oil from the ground and needs energy to operate. You can adjust the extraction rate in the building's menu ('show loaded units' -> 'Mining Facility') and see some statistics about the availability of raw matarial in the ground.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 5  ======= 
+message = [[The small oil platform extracts oil and relies on extern energy supply. It can be build shallow water and up to medium depth. ]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 6  ======= 
+message = [[The big oil platform also extracts oil, and significantly more of it than the other oil extraction facilities. It also has its own internal energy supply and can therefore operate completely self-sustaining. It features quite spacious storate facility for the extracted oil]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== Event 166  ======= 
+message = [[We distinguish between two ways retrieving material and fuel: subterranean mining and collection on the surface.
+Resources on a plant's surface can easily be seen: forrests, rape, wreckage, stones.  Subterranean resources can not be seen as easily. And these are the ones we are focussing on in this tutorial.
+
+ASC offers a special view for that which can be enabled and disabled through the menue "View -> Toggle Ressourceview" or by pressing the key '1'.
+
+The bars that appear will indicate 4 things:
+- red bars show the availability of mineral material
+- green bars show crude oil
+- black is used to show the absence of each.
+- and no bars at all indicate that the area hasn't been surveyed for minerals resources. 
+
+
+End the turn for more information]]
+asc.setLocalizedEventMessage( map, 166, message )
+
+--- ===== Event 188  ======= 
+message = [[Every building operates when a turn is ended. You can see that at the big oil platform which operates self-sustained. 
+
+You can see the extraction process by the increasing of the available fuel, as well as by the reduction of the available crude oil (green bars on map).
+Extraction starts at the buildings entrance and advanced in ever growing circles around it, up to a maximum distance of 10 fields.
+
+End the turn for more infomration.]]
+asc.setLocalizedEventMessage( map, 188, message )
+
+--- ===== Event 197  ======= 
+message = [[The buildings that don't have the necessary consumable don't operate right now. As don't buildings that have been switched of, that have exceeded their storate capacity or that have run out of ground resources.
+
+If you want to test this, you can do this with the 3 generator vehicles that will now placed on the map.
+
+For more information, end your turn.]]
+asc.setLocalizedEventMessage( map, 197, message )
+
+--- ===== Event 208  ======= 
+message = [[Die Ressourcenabbauanzeige im Gebäudemenü können sie wie folgt verstehen.
+#image=tut024-mining-bars.png#
+You see two columns right now. The first column show the amount of resources that are on the building entrance, the second column indicates the average resource availability on the fields with a distance of 1 field to the entrance.
+
+This image is from the oil tower. As the oiltower operates, the first green column will decrease as the crude oil is extracted from the ground. When it's zero, the fuel will be extracted from the neighbouring fields that the second column represents. At that point a third column will be shown about the fields that are further out.
+
+Each column consists of two sides: the left side (completely grey in this example, but may be red) shows the raw material, which the oil tower doesn't use up. The right side (green bar) shows the crude oil.
+
+The further away the fields are, the more ineffective the extraction process is. So for the given energy input, the oil tower will extract less and less fuel. Which means it will never stop extraction, but the extraction rate is just above 0 at the end. And because there are a lot of fields with a distance of 10 fields, it will operate for ages without delivering anything significant.
+
+To continue, end the turn again.]]
+asc.setLocalizedEventMessage( map, 208, message )
+
+--- ===== Event 240  ======= 
+message = [[You have now been given 5 depot buildings, so you have enough storage capacity. Additionaly, you have been given a surveyer unit which specialized in finding resource deposits in the ground. You should enable the resource view (key '1') and move the unit across the map to see the effects of its survey. 
+
+If you want to continue watching the mines operate, drive onto the floor plate to connect them with pipelines. The extended storage allows them to operate longer.
+
+Ending your turn will continue the tutorial ]]
+asc.setLocalizedEventMessage( map, 240, message )
+
+--- ===== Event 267  ======= 
+message = [[Material and fuel are resources that can be stored and transported easily. You just got an Atuin and an Alguin. 
+
+The Atuin has small survey capabilites, but only with a limited distance. You can use it to search for mineral resources in this area, or as material storage to keep the mine operating when the depots are filled. 
+
+The Alguin can refuel the generator vehicle to provide electricity. 
+
+Just one more turn, then we are finished. ]]
+asc.setLocalizedEventMessage( map, 267, message )
+
+--- ===== Event 269  ======= 
+message = [[And here we have two transport ships that can store even bigger amounts of fuel and material
+
+You should now know everything about mining in ASC. 
+
+As always, you can use the green field to go back to the base camp.]]
+asc.setLocalizedEventMessage( map, 269, message )
+

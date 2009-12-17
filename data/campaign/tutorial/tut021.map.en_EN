@@ -1,0 +1,40 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[In ASC you can find two different ways to create build turrets. You can build turrets right at their final destination, or build them in a factory and then transport them to their deployment site.
+
+For this task we have two units that manage both on-site construction as well as transport and deployment. These are the Vesuvius and the MBV, with the MBV being the one responsible for the more advanced and expensive turrets.
+
+More information will be presented when entering the floor plates, ideally from left to right.
+
+To exit this map and go back to base camp, please enter the green field.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Look into the factory to see which turrets can be produced there. 
+There are enough resources present to produce some.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[To deploy turrets, in most cases you need a turret foundation first. These foundations can be build by both Vesuvius and MBV.
+
+To do that, chose the action button "construct / remove objects". Then select the field and keep the left mouse button pressed in order to chose the type of foundation that you want to build. ]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 9  ======= 
+message = [[To construct a turret in the field, select the action button "unit construction". Then select the turret you want to build, and ASC will check for the necessary preconditions: available movement and suitable destination fields. If construction is possible, you will be presented with the possible fields of which you then have to chose one.]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 15  ======= 
+message = [[As mentioned, both the MBV and the Vesuvius can transport some turrets. These can be placed on turret foundations and also picked up from there again.
+
+Open the cargo dialog of the units here and deploy the rocket launcher onto the foundations. You can then move the rocket launcher that has already been standing on the map into one of the vehicles.]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[You can also transport turrets with the transport train FLUX, but the train doesn't have the necessary facility for deploying the turret onto its foundation. So you again need an Vesuvius or MBV for the final deployment. ]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 17  ======= 
+message = [[Even the Atuin is capable of carrying turrets, but its transportation capacity limits it to small ones. The GRS radar system, that you can find inside, is an example of such a small unit.]]
+asc.setLocalizedEventMessage( map, 17, message )
+

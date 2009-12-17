@@ -1,0 +1,140 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Storage and Resource Distribution
+
+If you open the cargo menu (button "view loaded units") of any building, you can find a tab called "Ressource Network Info" #image=cargo-resourceinfo.png#. 
+
+Memorize this icon, since this whole level centers around the information page behind that icon. Please go onto the next floor plate with the Weasel.
+
+To exit to base camp, drive onto one of the green fields.
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [["Resource Network Info" has three sections called Local, Network and Global.
+
+Local is always just the building that you are curently looking at.
+
+Global is the total of all buildings and you own
+
+Network is the set of buildings that are port of the same resource network. 
+Resource networks are formed by connecting buildings through pipelines. In this example all buildings on the right side of the channel are connected by pipelines and thus form one resource network. 
+
+The buildings on the left side of the channel are not connected with each other. So you can see them as 4 distinct networks of just one building each.
+Together, we have 5 resource networks on the map (4 small on the left and 1 big on the right).
+Depending on which building you have opened, you will the information about the network that it belongs to. 
+
+Take a look at the different buildings.
+The buildings on the right side all show the same information at network. While for the left buildings network and local are always identical.
+
+When you have seen that, go to the next floor plate.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 5  ======= 
+message = [[In ASC there are three different kinds of resources: 
+- Energy #image=energy.png#
+- Material #image=material.png#
+- Fuel #image=fuel.png#
+
+Open the Resource Network Info again. You will find three columns in each section, on for every resource. ASC always uses the order "Energy, Material, Fuel". Sometimes the resources are just abbreviated EMF, but that's more used in forum posts and mail, rather than in official ingame dialogs.
+
+Material and Fuel are transportable, while Energy is volatile. 
+
+To continue, drive onto the next plate.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 12  ======= 
+message = [[Finally you have the four values Avail, Capacity, Plus and Usage.
+
+Avail is the amount of resources that you have available right now.
+
+Capacity is the total storage capacity that you have, of which a part is used to house the Availble resources
+
+Plus is the income that you have every turn
+
+And Usage is the amount of resources that are consumed by automatic processes, like power plants. The resources that you use for constructing units or buildings are not recorded here.
+
+
+Take a look at the differnt buildings again - or head straight to the next floor plate.
+]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[Now its time to end the turn. We need resources. And only at end of a turn do the buildings produce some. 
+
+So you can take a look at the resources currently available (it's 0), then end your turn and after that look again at the available resources. Some will have been produced.
+]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 19  ======= 
+message = [[Lets first take at look at the right side of the channel. What has happend there? At first, you probably won't see much difference.
+
+But the solar power plant has produced energy. A part of this energy was used to power the mine (which outputs material) and the oil tower (outputting fuel).
+So you now have all three resources available in the network, and consume it in any of the 4 buildings connected to the network.
+
+And on the left side? The solar power plant also generated energy, but couldn't deliver it to any consumer. The mine and oil tower haven't done anything, since they need energy to run. 
+
+Please end this turn again.]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== Event 35  ======= 
+message = [[You can see the Avail value increasing every turn by the difference between plus and consumption.
+
+The solar plant generates energy. The mining station outputs material and the oil well outputs energy, provided they have energy. 
+
+The Depot increases the maximum storage capacity of both material and fuel.
+
+Please end this turn again.]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== Event 49  ======= 
+message = [[For demonstration purposes a pipeline between the depot and the solar power plant has been build on the left side. So both buildings now belong to the same network.
+
+You can see that the depot now has energy available, which you can see both in the top of the cargo dialog and in the resource network infomration.
+
+Please end your turn again.]]
+asc.setLocalizedEventMessage( map, 49, message )
+
+--- ===== Event 115  ======= 
+message = [[We have now connected the mining station with the depot. From next turn on, we will start getting material every turn. 
+
+Please end your turn again.]]
+asc.setLocalizedEventMessage( map, 115, message )
+
+--- ===== Event 135  ======= 
+message = [[Now the oil tower has also been connected, so that from next turn it, all resources will be available in the left network.
+
+This allows the depot to refuel units and repair them.
+
+Please end your turn another time.]]
+asc.setLocalizedEventMessage( map, 135, message )
+
+--- ===== Event 159  ======= 
+message = [[Now the two networks on the left and right side of the channel have been connected too. We only have a single resource network to which all buildings belong.
+
+If you now compare the 'global' and 'network' columns of the resource info screen, you will see that they are identical. All resources are available in every building.
+
+By comparing 'network' and global, you can quickly find out if you have any builings that are not connected to your network.
+
+In this map you can see the pipelines quite clearly. This will not always be the case, since vegetation, roads and other stuff may obstruct the view to the pipelines. To still analyze your network, you can highlight all pipelines by selecting "View -> show pipeline net" from the menu or just press the key '9'
+
+Please end your turn yet another time. ]]
+asc.setLocalizedEventMessage( map, 159, message )
+
+--- ===== Event 185  ======= 
+message = [[Two tanker vehicles have now been placed on the map. The tanker on the upper right is filled with fuel. The unit in the lower left is supposed to pick up fuel.
+
+While our oiltowers have been busy extracting oil, we still don't have enough oil in the network to completely fill our second tanker. So you can pump the oil of the filled tanker into the network at the upper right solar plant. After that you can immediately drive with the empty tanker to the mine, initiate the refuel through the tanker (since the mine doesn't have the refuel function) and suck the fuel out of the network. You need to use the 'refuel dialog', since the simple refuel function will only put resources from the initiating unit into the target, which is the wrong direction.
+
+So you can use the resource network to transfer resources from one part of the map to the other in no time. 
+
+
+Congratulation, you have survived this quite text-heavy tutorial and can from now on use the title "Senior Resource Network Analyst".
+
+You can still experiment around in this map. Once you are done, enter onter of the green fields to go back to base camp.]]
+asc.setLocalizedEventMessage( map, 185, message )
+
+--- ===== Building -1114114  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 2, 17 ), [[Oil]] ) 
+--- ===== Building -1114124  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 12, 17 ), [[Oil]] ) 
