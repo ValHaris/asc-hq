@@ -1039,7 +1039,9 @@ GameMap* tmaploaders::loadmap ( const ASCString& name )
 {
      tmaploaders gl;
      GameMap* map = gl._loadmap ( name );
+#ifdef sgmain
    loadLocalizedMessages( map, name );     
+#endif
      return map;
 }     
    
