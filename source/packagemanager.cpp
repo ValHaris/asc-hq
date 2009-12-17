@@ -58,7 +58,7 @@ void PackageManager::checkGame( GameMap* game )
       return;
    
    for ( PackageData::Packages::const_iterator i = game->packageData->packages.begin(); i != game->packageData->packages.end(); ++i ) 
-      packageRepository.checkPackageDependency( i->second );
+      packageRepository.checkPackageDependency( i->second, game->packageData );
 }
 
 void PackageManager::processContainer( const ContainerBase* container, std::set<ASCString>& archives )

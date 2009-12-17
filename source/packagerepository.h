@@ -24,6 +24,8 @@
 #include "typen.h"
 #include "itemrepository.h"
 
+class PackageData;
+
 class PackageRepository : public TextFileDataLoader, public deallocating_vector<Package*>  {
       void addProgramPackage();
       Package* _getPackage( const ASCString& name );
@@ -36,7 +38,7 @@ class PackageRepository : public TextFileDataLoader, public deallocating_vector<
       
       static SigC::Signal0<void> packgeDescriptionLoaded;
       
-      void checkPackageDependency( const Package* pack );
+      void checkPackageDependency( const Package* pack, const PackageData* packageData = NULL );
       
       const Package* getPackage( const ASCString& name ) const;
       

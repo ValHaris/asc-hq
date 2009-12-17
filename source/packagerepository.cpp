@@ -20,6 +20,7 @@
 
 #include "packagerepository.h"
 #include "strtmesg.h"
+#include "packagemanager.h"            
             
 
 PackageRepository packageRepository;
@@ -69,7 +70,7 @@ void PackageRepository :: postChecks()
    packgeDescriptionLoaded();
 }
 
-void PackageRepository::checkPackageDependency( const Package* pack )
+void PackageRepository::checkPackageDependency( const Package* pack, const PackageData* packageData )
 {
    for ( Package::Dependencies::const_iterator dep = pack->dependencies.begin(); dep != pack->dependencies.end(); ++dep ) {
       const Package* p = getPackage( dep->name );
@@ -82,8 +83,17 @@ void PackageRepository::checkPackageDependency( const Package* pack )
                 s += "\nPackage Info:\n" + p->description ;
             throw ASCmsgException( s);
          } 
-      } else
-         throw ASCmsgException( "The package " +  dep->name + " is missing on your system!"  );
+      } else {
+         ASCString s = "The package " +  dep->name + " is missing on your system!" ;
+         if ( packageData ) {
+            for ( PackageData::Packages::const_iterator ref = packageData->packages.begin(); ref != packageData->packages.end(); ++ref )
+               if ( ref->second->name == dep->name )
+                  if ( !ref->second->description.empty())
+                     s += "\nPackage Info:\n" + ref->second->description ;
+                        
+         }
+         throw ASCmsgException( s );
+      }
 
    }
 }
