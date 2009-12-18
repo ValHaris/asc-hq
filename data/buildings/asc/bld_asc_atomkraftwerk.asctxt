@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = Atomkraftwerk
+   Name = Nuclear Power Plant
    ID = 29
    Armor = 1000
    View = 30
