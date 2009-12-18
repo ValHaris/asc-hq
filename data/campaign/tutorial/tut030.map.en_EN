@@ -1,0 +1,47 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[The museum of curio!
+
+Don't ask why, just enjoy these small wonders of the game ;-)]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Come in, don't hesitate. You haven't seen such a thing. Build a Sam Bunker in this factory!
+
+Versuchen sie den Bunker dann auf den Vesuvius oder den MBV zu verladen, die beiden Fahrzeuge erster Wahl wenn es um den Geschützbau oder die geschützinstallation geht. Das geht nicht? Versuchen sie dochmal den Bunker auf den Flux zu bekommen, der kann noch mehr tragen. Was, das geht auch nicht?
+
+Sie fragen sich wieso kann man da einen Sambunker in einer Fabrik bauen, wenn man den nicht raustransportieren kann? Das verstehen sie sowieso nicht. Der Sinn läst sich nicht immer sofort erkennen. Denn auch Unsinn ist ein Sinn oder?]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 13  ======= 
+message = [[Surprise! How did we get the bomber into the towny?
+
+It doesn't work? Well, but we got a bomber into a heli train and the heli train could enter the town. To do that, we just need a super carrier, on which the bomber can land. Then a harbour, where the bomber can be loaded onto the heli train, which could then enter the town.
+
+What, this isn't amazing? The heli train can just transport the bomber? Then I ask you, why can't the helitrain transport is imple weasel too? :-)]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 18  ======= 
+message = [[Let's continue in our world of wonder! Try to get the shock trooper onto a super carrier! What, this isn't possible, because you can't climb up?
+
+Then try to transfer with a trooper from one carrier to another. This isn't possible. Because... well... because the carrier are to far apart and there is water between them. Infantry can only enter and leave in a harbour.
+
+But what is the point of having infantry on a carrier, if it can't even transfer to other ships?
+
+Yeah, right, it protects the carrier from enemy aircraft the try to land :-)]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 54  ======= 
+message = [[Let's build a super-flux!
+
+You need a Flux and 2 MBV. For smaller gun emplacements two Vesuvius would be sufficient.
+
+We want to setup 4 Rocket Launcher in a single turn. To do that, we need 4 pre-fabricated foundations.
+
+Without foundations available, we can just setup two launchers and another two next turn.
+
+Where the wonder is? Do wonders always have to divide the sea? Isn't enough that you can quickly deploy 4 launchers with this inconspicuous train? And, additionally, a bunch of MG Nests as well?
+
+Edit: Ok, I admit, the Flux is overloaded. This can be done to some degree with the map editor. But in the game it would still be possible to setup 3 launcher and maybe a smaller turret.]]
+asc.setLocalizedEventMessage( map, 54, message )
+

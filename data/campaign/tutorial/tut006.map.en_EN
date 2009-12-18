@@ -1,0 +1,40 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Congratulations, Soldier!
+
+You have successfully completed your basic training and may now call yourself a trained Shock Trooper.
+You have shown to demonstrated to have the necessary knowledge and endurance to master this complex game of strategy.
+
+We are a modern base and give you the opportunity to chose additional advanced trainings yourself. You will see it's not that difficult to master even the more advanced topics in the game. 
+
+But if you want to do some more recreational activities first, I welcome you to look at my collections of stones and mineral. 
+To go back to the base camp, step onto the green field.]]
+
+--- the german original contains some more paragraphs, which I feld unable to translate
+
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 2  ======= 
+message = [[Look at the scale of this rock. It's size is so phenomenal, I just love it!]]
+asc.setLocalizedEventMessage( map, 2, message )
+
+--- ===== Event 3  ======= 
+message = [[Aren't they beutiful? It looks almost as if the big stone hovers over the small ones. My own stonehenge. Please don't touch!]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[Look at this woman, ehm, I mean stone. These curves! If stones would have a sex, then this one would definitly be female.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 5  ======= 
+message = [[They are wonderful, aren't they? Just appreciate how these stone reflect the light]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 6  ======= 
+message = [[With these stones everything started. I had to guard a position in the mountains, and apart from the occasional radio message, there wasn't much to do. So I started playing with and examining these stones.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== Event 7  ======= 
+message = [[Have a look at this color. This slight shade of red, just marvelous.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
