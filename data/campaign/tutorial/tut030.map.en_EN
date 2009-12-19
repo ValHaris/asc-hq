@@ -8,9 +8,11 @@ asc.setLocalizedEventMessage( map, 1, message )
 --- ===== Event 3  ======= 
 message = [[Come in, don't hesitate. You haven't seen such a thing. Build a Sam Bunker in this factory!
 
-Versuchen sie den Bunker dann auf den Vesuvius oder den MBV zu verladen, die beiden Fahrzeuge erster Wahl wenn es um den Geschützbau oder die geschützinstallation geht. Das geht nicht? Versuchen sie dochmal den Bunker auf den Flux zu bekommen, der kann noch mehr tragen. Was, das geht auch nicht?
+Try to load the Bunker into the Vesuvius or MBV. Both vehicles will be first choice to build turrets, installations and buildings. Loading into theses vehicles is not working? Perhaps you should try to use the transport train Flux.
+Thats not working, too?
 
-Sie fragen sich wieso kann man da einen Sambunker in einer Fabrik bauen, wenn man den nicht raustransportieren kann? Das verstehen sie sowieso nicht. Der Sinn läst sich nicht immer sofort erkennen. Denn auch Unsinn ist ein Sinn oder?]]
+Perhaps you ask yourself, why should there be a production line for Sam Bunker in a factory but you can't transport them?
+There is an easy answer: Not allways the options make sense.]]
 asc.setLocalizedEventMessage( map, 3, message )
 
 --- ===== Event 13  ======= 
