@@ -1,0 +1,205 @@
+map = asc.getLoadingMap() 
+--- ===== Event 3778  ======= 
+message = [[Ces deux unités disposent des génératrices pour sauter.  Pathfinder (PF) #vehicletype=12003#  Spaceship (SPS) #vehicletype=12000#  La génératrice pour sauter du PF et du SPS permet de déplacer avec ces astronefs des grandes unités de troupes vite.  Pour cela, l'astronef doit disposer d'au moins 10000 unités de matériel et d'essence et il doit être en orbite. Au début de la nouvelle partie l'astronef pourra sauter sur une des zones d'atterrissage d'ISG (amicale interstellaire) si elles sont reconnues.  Dans le S, il y a surtout nos unités terrestres. En revanche, les  navires de guerre et les porte-avions se trouvent dans l'AN. Il serait une bonne idée si l'AN sautait sur une zone à la côte.  Mais vous pourriez aussi attendre encore un peu et produire et charger des autres unités avant de prendre la tête.
+]]
+asc.setLocalizedEventMessage( map, 3778, message )
+
+--- ===== Event 3864  ======= 
+message = [[Bonjour, Commandant.  Comme vous supposez sûrement on y arrive enfin. Le haut commandement a décidé d'expulser les Cromoner de cette zone.  Voilà vos ordres: - Conquérez le quartier général des Cromoner - Défendez notre quartier général #coord (4/4)#  Bonne chasse! 
+]]
+asc.setLocalizedEventMessage( map, 3864, message )
+
+--- ===== Event 3866  ======= 
+message = [[Excellent!  Les satellites de combat du modèle Primerose dans cette ville #coord(25/43)# peuvent soutenir nos troupes de l'orbite.   Chargez les satellites dans un de nos astronefs, afin que nous puissions les satelliser.  Des armes high tech comme ceux-ci sont capables de se déplacer avec du feu de réaction activé (RF). Faites-en usage! 
+]]
+asc.setLocalizedEventMessage( map, 3866, message )
+
+--- ===== Event 3867  ======= 
+message = [[Des Pterranos (un grand avion), le stratège!  Ce sont quatre Pterranos en état impeccable, ravitaillés et armés! Avec ces unités de Praetorianer nous pouvons causer des grands dommages.  - Conquérez le hangar #coord(53/80)# - Donnez à une unité de construction l'ordre de construire quatre champs de pistes d'atterrissage jusqu'au Hangar!  Veillez à transporter assez de ressources pour cette action.  Plus tôt ces machins seront dans l'air, mieux ce sera. 
+]]
+asc.setLocalizedEventMessage( map, 3867, message )
+
+--- ===== Event 3868  ======= 
+message = [[Trois Sinner (grand avion)!  Il y a des forteresses volantes dans ce hangar. Les appareils sont des avions à décollage vertical et quasiment prêts à décoller. C'est seulement l'essence qui leur manque encore.  - Conquérez le hangar #coord(18/82)# - Ravitaillez les forteresses volantes 
+]]
+asc.setLocalizedEventMessage( map, 3868, message )
+
+--- ===== Event 3925  ======= 
+message = [[Si vous cliquez ici #coord(5/15)# votre dépôt sera choisi. Si vous cliquez ici #coord(1/22)# votre pathfinder (PF) sera choisi.  Pour consulter les informations sur une unité appuyez sur  #fontsize=18#i#fontsize=14#  Vous pouvez voir le chargement d'une unité par #fontsize=18#L#fontsize=14#  Pour consulter les informations sur un champ appuyez sur #fontsize=18#7#fontsize=14#  Des autres raccourcis clavier sont affichés par #fontsize=18#F1#fontsize=14# 
+]]
+asc.setLocalizedEventMessage( map, 3925, message )
+
+--- ===== Event 4022  ======= 
+message = [[Commandant!  Si nous conquérons ces villes #coord(20/61;20/62;20/63)# elle nous offrirons des ressources supplémentaires.   Connectez les villes par un pipeline avec notre base pour rendre disponible les ressources pour nos usines. 
+]]
+asc.setLocalizedEventMessage( map, 4022, message )
+
+--- ===== Event 4052  ======= 
+message = [[Commandant!  Une bataille navale a été battue ici. Regardez tous les épaves de bateaux! Appelez un bateau de réparation ou de construction et remontez les épaves à la surface avant que les Cromoner le fassent. Mais pensez à l'escorte!  Nos usines peuvent produire des nouvelles unités avec ce matériel.  #modèle de véhicule=39# 
+]]
+asc.setLocalizedEventMessage( map, 4052, message )
+
+--- ===== Event 4053  ======= 
+message = [[Attention, Commandant!  Pour autant que nous sachons un peuple étranger a placé des mines antichar à la côte. Apportez nos propres mouilleurs de mines pour rendre visible et faire disparaître les mines. 
+]]
+asc.setLocalizedEventMessage( map, 4053, message )
+
+--- ===== Event 4055  ======= 
+message = [[Attention, Commandant!  #modèle de véhicule=14000# Ce GT-Speeder (véhicule chenillé) #coord(34/76)# a activé son feu de réaction (RF). Pour afficher les informations sur cette unité (unit info) focalisez l'unité et appuyez sur #fontsize=18i#fontsize=14#. Normalement, le RF est seulement activé pour les unités pour lesquelles est indiqué "move with reaction fire on" (se déplacer avec feu de réaction activé) sous "abilities" (capacités). Cette unité manque de l'essence. C'est pourquoi c'est le plus sensé que notre ennemi peut faire pour le moment.  Sans essence cette unité ne peut pas nous poursuivre.  
+]]
+asc.setLocalizedEventMessage( map, 4055, message )
+
+--- ===== Event 4076  ======= 
+message = [[Stratège!  Un GT-Speeder (véhicule chenillé) #modèle de véhicule=14000#  Ce  GT-Speeder #coord(34/76)# a reçu l'ordre d'activer le feu de réaction (RF). Ainsi sera fait feu sur des ennemis s'ils sont à portée de main. Cette option sera le plus efficace si l'unité en question peut se déplacer avec du RF activé. Le GT-Speeder n'a pas cette capacité, mais comme celui-ci n'a plus d'essence c'était l'action la plus sensée.   Si une unité (par exemple la plupart des bateaux) peut se déplacer avec du RF activé  "move with reactionfire on" (se déplacer avec feu de réaction activé) sera indiqué dans le champ "abilities" (capacités). 
+]]
+asc.setLocalizedEventMessage( map, 4076, message )
+
+--- ===== Event 4088  ======= 
+message = [[Stratège!  Il me semble que deux flottes ennemies se sont affrontées ici. Il y a des épaves des bateaux coulés partout. Si nous envoyons un Rex (bateau de réparation) ou un Taros (bateau de construction) dans cette région nous pourrons remonter les épaves à la surface et utiliser le matériel pour la production des autres armes.  #modèle de véhicule=1256##modèle de véhicule=1269# 
+]]
+asc.setLocalizedEventMessage( map, 4088, message )
+
+--- ===== Event 4089  ======= 
+message = [[Si vous cliquez ici #coord(76/3)# votre dépôt sera choisi. Si vous cliquez ici #coord(75/7)# votre pathfinder (PF) sera choisi.  Pour consulter les informations sur une unité appuyez sur  #fontsize=18#i#fontsize=14#  Vous pouvez voir le chargement d'une unité par #fontsize=18#L#fontsize=14#  Pour consulter les informations sur un champ appuyez sur #fontsize=18#7#fontsize=14#  Des autres raccourcis clavier sont affichés par #fontsize=18#F1#fontsize=14# 
+]]
+asc.setLocalizedEventMessage( map, 4089, message )
+
+--- ===== Event 4090  ======= 
+message = [[Stratège!  Nous avons passé des mois à former des troupes. Maintenant enfin il est temps d'attaquer.  Voilà vos ordres: - Conquérez le quartier général des Rehaner - Empêchez que notre propre quartier général #coord(78/4)# soit conquis. 
+]]
+asc.setLocalizedEventMessage( map, 4090, message )
+
+--- ===== Event 4105  ======= 
+message = [[Un stratège!  Ces deux astronefs disposent des génératrices pour sauter:  Pathfinder (PF) #modèle de véhicule=12003#  Spaceship (SPS) #modèle de véhicule=12000#  La génératrice de sauts permet à ces unités de se déplacer d'un bout de la carte à l'autre. L'AN a de la place pour des armées entières et ainsi, il permet de les déplacer vite dans des régions instables.   Pour sauter les conditions suivantes doivent être satisfaites:  -10000 unités de matériel dans le réservoir - 10000 unités d'essence dans le réservoir - l'astronef se trouve dans l'orbite. - l'astronef n'a pas bougé pendant une partie - au but il y a une zone d'atterrissage reconnue d'ISG (amicale interstellaire)  Comme des cuirassés pèsent plusieurs milliers de tonnes, ils ont été chargés dans l'AN, parce que celui est capable de déplacer plus de tonnage que le S.  C'est pourquoi nos forces terrestres se trouvent dans le PF.  Chargez des unités supplémentaires dans les deux astronefs autant que possible et puis, sautez sur une zone d'atterrissage d'ISG (amicale interstellaire) qui convient.  Mais faites attention! Si l'ennemi a mis en place de la défense antiaérienne ou des avions de chasse à proximité vous perdrez peut-être toute une armée!
+]]
+asc.setLocalizedEventMessage( map, 4105, message )
+
+--- ===== Event 4242  ======= 
+message = [[Des véhicules comme ces Ninjas ne sont pas aptes à traverser des forêts ou des terrains marécageux.  Si vous faites une tranchée dans la forêt vers l'est vous devrez être capable de mettre les véhicules en service.  Peut-être aussi des autres approches réussiraient.  Bonne chance, commandant! 
+]]
+asc.setLocalizedEventMessage( map, 4242, message )
+
+--- ===== Event 4259  ======= 
+message = [[Avec ces deux motos vous pouvez vous lancer dans la bataille avec chaque Trooper.   Ces machines sont même aptes à semer un hélicoptère de transport du modèle Ghuppi sur la route. 
+]]
+asc.setLocalizedEventMessage( map, 4259, message )
+
+--- ===== Event 4277  ======= 
+message = [[Il y a une Ninja (une moto) et un Scout dans cette ville. Les deux unités mobiles que le Scout porte doivent peut-être d'abord être chargées dans une autre camionnette et puis, ils seront placées par lui dans le champ. 
+]]
+asc.setLocalizedEventMessage( map, 4277, message )
+
+--- ===== Event 4512  ======= 
+message = [[Commandant!  Ce Vesuvius (machine de chantier à chenilles) transporte une tour de radar que vous pouvez décharger sur ce soubassement #coord(22/60)#.
+]]
+asc.setLocalizedEventMessage( map, 4512, message )
+
+--- ===== Event 4513  ======= 
+message = [[Commandant!  Avec ces laboratoires nous pourrions avancer de manière décisive dans la recherche d'armes.   - Occupez les laboratoires et tous les autres bâtiments qui vont avec. - Garantissez l'approvisionnement en énergie.  Bonne chance, commandant!
+]]
+asc.setLocalizedEventMessage( map, 4513, message )
+
+--- ===== Event 4514  ======= 
+message = [[Stratège!  Avec ces laboratoires nous pourrions avoir une avance décisive dans la recherche d'armes.  - Occupez les laboratoires. - Garantissez l'approvisionnement des laboratoires en énergie, en carburant et en matériel.  Bonne chance, stratège!
+]]
+asc.setLocalizedEventMessage( map, 4514, message )
+
+--- ===== Event 4515  ======= 
+message = [[Selon certains bruits il y a une usine d'avions à la montagne. Nous ne savons pas si elle est en parfait état ou si la production d'unités y est possible.  Mais comme les Cromoner ne s'intéressent pas à ce territoire il vaudrait la peine d'y aller voir.  Explorez les montagnes au sud de la ville de Hanklif.
+]]
+asc.setLocalizedEventMessage( map, 4515, message )
+
+--- ===== Event 4516  ======= 
+message = [[Stratège!  Les habitants de la ville prétendent qu'il y a une ancienne installation militaire au sud d'ici.  Selon les rapports des avions y étaient testés autrefois. Peut-être ces installations existent encore.  Explorez les montagnes au nord et conquérez les installations si elles existent encore.  Bonne chance!
+]]
+asc.setLocalizedEventMessage( map, 4516, message )
+
+--- ===== Event 4517  ======= 
+message = [[Ce Lurat (une camionnette) a chargé une tour de radar du modèle Rune.  Amenez cette unité de radar à ce soubassement #coord(51/65)# et déplacez-la vers lui. 
+]]
+asc.setLocalizedEventMessage( map, 4517, message )
+
+--- ===== Event 4566  ======= 
+message = [[Commandant!  La Ticonteroga (croiseur lance-missiles) était chargée de reconnaître le territoire ennemi, elle est tombée sur un tas de GT-Divers (robot plongeur) et elle était gravement endommagée.  Puis, le capitaine Mazian a ordonné la retraite et il a renvoyé les hélicoptères d'escorte aussi gravement endommagés à bord.  Maintenant, son bateau endommagé fuit devant des poursuivants éventuels.  Au sud de la Ticonteroga le bateau d'approvisionnement et de réparation Sinuswelle #coord(32/31)# mouille. Vous y pourrez laisser réparer votre bateau et vous y trouverez l'essence et les munitions dont Mazian a besoin.  Voilà vos ordres:  - défendez Ticonteroga contre toutes les attaques - aider Mazian à remplir son bateau de carburant  Bonne chance, commandant!
+]]
+asc.setLocalizedEventMessage( map, 4566, message )
+
+--- ===== Event 4619  ======= 
+message = [[Nos troupes sont arrivées à couler le bateau d'approvisionnement #coord(32/31)# que nous prenons pour le bateau de ravitaillement de la Ticonteroga (croiseur lance-missiles).  La Ticonteroga a pénétré sous l'ordre de capitaine Mazian dans notre territoire dans les derniers jours. Les Rehaner veulent probablement obtenir des informations sur nos ouvrages de défense et sur notre base. Si c'était le cas, nous avons déjoué cet essai. Mais la Ticonteroga pouvait échapper aux GT-Divers (robot plongeur), qui devaient l'intercepter.  Nous savons que les réserves de Mazian sont presque épuisées. C'est pourquoi il va bientôt faire escale au bateau de ravitaillement. Son bateau était aperçu ici pour la dernière fois #coord(47/22)#  Vous devriez être capable de le dépister avec les deux Patrix (petit bateau) #coord(52/31; 49/17)#. Si vous en êtes capables, votre mission sera de couler la Ticonteroga.  Faites attention!  Nous n'avons pas d'informations sur des autres unités dans cette zone, mais on ne peut jamais savoir.  Bonne chasse, stratège!
+]]
+asc.setLocalizedEventMessage( map, 4619, message )
+
+--- ===== Event 4805  ======= 
+message = [[Les Cromoner sont vaincus.  Félicitation, commandant!
+]]
+asc.setLocalizedEventMessage( map, 4805, message )
+
+--- ===== Event 4806  ======= 
+message = [[Vous êtes vainqueur, stratège!  Maintenant, nos soldats peuvent enfin rentrer. 
+]]
+asc.setLocalizedEventMessage( map, 4806, message )
+
+--- ===== Event 4958  ======= 
+message = [[Pour libérer l'énergie avec les véhicules de génératrice, déplacez-les sur un champs près du bâtiment que vous voulez approvisionner ou sur un champs près d'un bâtiment qui est relié avec le bâtiment cible par pipeline.  Pour libérer l'énergie, un véhicule de génératrice a besoin de carburant. Le carburant est "consommé" seulement au début de la partie qui vient.  Cela peut conduire à ce que votre véhicule manque tout à coup l'essence.  C'est le mieux de mettre les véhicules de génératrice près d'une station-service, d'un dépôt ou d'une plate-forme pétrolière, pour qu'ils puissent faire le plein à tout moment.
+]]
+asc.setLocalizedEventMessage( map, 4958, message )
+
+--- ===== Event 4960  ======= 
+message = [[Pour libérer l'énergie avec les véhicules de génératrice, déplacez-les sur un champs près du bâtiment que vous voulez approvisionner ou sur un champs près d'un bâtiment qui est relié avec le bâtiment cible par pipeline.  Pour libérer l'énergie, un véhicule de génératrice a besoin de carburant. Le carburant est "consommé" seulement au début de la partie qui vient.  Cela peut conduire à ce que votre véhicule manque tout à coup l'essence.  C'est le mieux de mettre les véhicules de génératrice près d'une station-service, d'un dépôt ou d'une plate-forme pétrolière, pour qu'ils puissent faire le plein à tout moment.
+]]
+asc.setLocalizedEventMessage( map, 4960, message )
+
+--- ===== Event 4961  ======= 
+message = [[Pour libérer l'énergie avec les hélicoptères de génératrice, déplacez-les sur un champs près du bâtiment que vous voulez approvisionner ou sur un champs près d'un bâtiment qui est relié avec le bâtiment cible par pipeline.  Pour libérer l'énergie, un hélicoptère de génératrice a besoin de carburant.  !! ATTENTION !!  Le carburant est "consommé" seulement dans la partie qui vient. Si vos hélicoptères montent dans l'air après leur travail, il sera possible qu'ils s'écrasent à cause d'un manque de carburant une partie plus tard.  Si les hélicoptères doivent changer leur position, garantissez qu'ils n'ont pas libéré d'énergie avant.
+]]
+asc.setLocalizedEventMessage( map, 4961, message )
+
+--- ===== Event 4963  ======= 
+message = [[Pour libérer l'énergie avec les hélicoptères de génératrice, déplacez-les sur un champs près du bâtiment que vous voulez approvisionner ou sur un champs près d'un bâtiment qui est relié avec le bâtiment cible par pipeline.  Pour libérer l'énergie, un hélicoptère de génératrice a besoin de carburant.  !! ATTENTION !!  Le carburant est "consommé" seulement dans la partie qui vient. Si vos hélicoptères montent dans l'air après leur travail, il sera possible qu'ils s'écrasent à cause d'un manque de carburant une partie plus tard.  Si les hélicoptères doivent changer leur position, garantissez qu'ils n'ont pas libéré d'énergie avant.
+]]
+asc.setLocalizedEventMessage( map, 4963, message )
+
+--- ===== Event 5066  ======= 
+message = [[Commandant!  Sinuswelle a été coulée!  Les Cormoner doivent avoir su que nous avions envoyé un bateau pour la reconnaissance dans leurs eaux.  On ne peut pas expliquer autrement pourquoi Mazian a été intercepté par des robots plongeurs tellement loin de votre côte.  Le tas de drones qui est apparu pour éliminer le bateau de ravitaillement est la preuve pour cela.  Peut-être il y a un espion dans nos propres rangs.  Bon, occupons-nous d'abord de Mazian et son bateau. La centrale d'opérations a l'information qu'un sous-marin d'approvisionnement mouille au chantier naval quitté au sud de Mazian. La position exacte de ce sous-marin est encore inconnue, mais pour le moment, c'est votre seule chance de libérer Mazian de cette situation.  Faites tout pour trouver et occuper ce chantier naval. S'il tombe aux mains des Cromoner avant, cela signifiera l'arrêt de mort de Mazian et son équipage!  - Trouvez et occupez le chantier naval - Approvisionnez la Ticonteroga le plus vite possible!
+]]
+asc.setLocalizedEventMessage( map, 5066, message )
+
+--- ===== Event 5067  ======= 
+message = [[Excellent!  Vite vite!
+]]
+asc.setLocalizedEventMessage( map, 5067, message )
+
+--- ===== Event 5716  ======= 
+message = [[Commander!
+
+Commander!
+
+Nos espions ont repéré un chemin à travers les marécages de l'ouest d'ici #coord(10/108)#. Peut-être qu'on peut arriver un peu rapproché de la position ennemie avant de nous découvrir.]]
+asc.setLocalizedEventMessage( map, 5716, message )
+
+--- ===== Event 6074  ======= 
+message = [[Excellent!
+
+
+Maintenant Mazian a pas d'espoir. Nous l'aurons bientôt.
+
+Kennits amante Cependant, presque pas de carburant et il ya encore beaucoup trop loin, hors de notre territoire. Je vous suggère de plonger si profond, et il va attendre que l'un de nos navires de ravitaillement. Donc, ce serait certainement au moins avant hydravions Kennit. Croiseurs ennemis sont en effet toujours une menace, mais jusqu'à présent ils se trouvent en dehors de notre connaissance, seule la Ticonteroga.
+
+Mazian qui ne représente aucune menace pour Kennit être sont responsables d'un stratège. Ils ne nous décevra pas!]]
+asc.setLocalizedEventMessage( map, 6074, message )
+
+--- ===== Event 6075  ======= 
+message = [[Excellent!
+
+Du bon travail est récompensé. Nous leur avons fourni ici #coord(28/0)# un navire de ravitaillement, qui est capable de les U-boats l'alimentation en carburant.
+
+Ils ne peuvent pas prendre leurs vacances comme l'a demandé l'an prochain.
+]]
+asc.setLocalizedEventMessage( map, 6075, message )
+
+--- ===== Building -4784163  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 35, 73 ), [[Krim]] ) 
+--- ===== Building -4980767  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 31, 76 ), [[Hanklif]] ) 
+--- ===== Building -6160418  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 34, 94 ), [[SPY-Lab]] ) 
