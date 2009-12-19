@@ -1,0 +1,69 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[production énergétique
+
+Vous devriez avoir les connaissances de base de la gestion des dépôts pour ces exercices.
+
+L'énergie comme ressource n'est pas facile à entreposer dans une grande quantité. C'est pourquoi vous devriez aspirer à l'approvisionnement en énergie continu.
+
+Il y a plusieurs possibilités pour produire l'énergie: l'énergie solaire, l'énergie éolienne, l'énergie nucléaire ou le groupe électrogène de secours. Vous recevrez des informations plus détailées sur les carreaux. Pour quitter le secteur d'énergie marchez sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 3  ======= 
+message = [[La centrale solaire fournit de l'énergie sans limites, mais elle dépend du soleil. Si le soleil est couvert la puissance de la centrale solaire sera réduite.
+
+Si vous voulez voir comment le temps peut influencer la puissance de la centrale solaire terminez cette partie.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[L'éolienne fournit de l'énergie sans limites, mais elle dépend de la force du vent. Si vous voulez voir comment la force du vent influence la puissance de l'éolienne terminez cette partie.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[La centrale nucléaire ne dépend pas du vent et du temps, alors elle peut toujours fournir de l'énergie.  Mais la production énergétique par la centrale nucléaire coûte des ressources. La centrale nucléaire a besoin du pétrole et du matériau pour son fonctionnement.
+
+Il y a assez de pétrole et de matériau au dépôt connecté pour fournir la centrale nucléaire pour quelque temps. Vous pouvez fixer la puissance de la centrale nucléaire que vous souhaitez. Vous pouvez régler la centrale nucléaire de 0% (arrêt) à 100% (puissance maximale) dans le menu du bâtiment.
+
+]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[Vous pouvez aussi utiliser le véhicule de groupe électrogène de secours pour des difficultés d'énergie. Placez-le près d'un bâtiment et activez le groupe électrogène de secours dans le menu du véhicule. Le véhicule a besoin du pétrole pour cette production électrique.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 16  ======= 
+message = [[Il a commencé à pleuvoir.  Le ciel couvert réduit la puissance de la centrale solaire.
+
+En outre, le vent est devenu plus fort. Cela augmente la puissance de l'éolienne.
+
+Appuyez sur "end turn" pour des autres changements de temps.
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 30  ======= 
+message = [[Quelle tempête! La puissance de l'éolienne est au maximum.
+
+Mais la pluie forte réduit la puissance de la centrale solaire encore. C'est un miracle qu'il y ait encore des rayons de soleil qui traversent le ciel couvert.]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== 33  ======= 
+message = [[La tempête s'est calmée, mais la conséquence est que la puissance de l'éolienne a baissé.
+
+En outre, il fait plus froid maintenant. Il neige un peu et le ciel n'est plus tellement couvert. La puissance de la centrale solaire a augmenté de nouveau.]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== 51  ======= 
+message = [[Encore plus de neige et de nuages. La puissance de la centrale solaire baisse.
+
+En outre, le vent s'est calmé, alors, l'éolienne produit moins d'énergie.]]
+asc.setLocalizedEventMessage( map, 51, message )
+
+--- ===== 90  ======= 
+message = [[Brr, il fait encore plus froid, mais le froid n'influence pas la centrale solaire.
+
+Et il n'y a plus de vent, alors, la puissance de l'éolienne est 0.
+
+Il n'y a plus de changements de temps dans cette démonstration.
+
+Terminez ces exercices en marchant sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 90, message )
+

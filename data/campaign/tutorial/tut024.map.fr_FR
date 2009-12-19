@@ -1,0 +1,94 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[extraction du matériau et du pétrole
+
+Vous devriez avoir les connaissances de base de la gestion des dépôts pour ces exercices.
+
+Marchez sur les carreaux pour recevoir des informations sur les bâtiments.
+
+Terminez ces exercices pour recevoir des informations générales sur les bâtiments.
+
+Pour quitter l'extraction du matériau et du pétrole marchez sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 3  ======= 
+message = [[La mine extrait du matériau. Elle a besoin d'énergie pour cela. Vous pouvez fixer la production minière souhaitée et vous pouvez vous faire une idée de la production minière maximale.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[Le derrick extrait du pétrole. Il a besoin d'énergie pour cela. Vous pouvez fixer la production minière souhaitée et vous pouvez vous faire une idée de la production minière maximale.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[La petite plateforme pétrolière extrait du pétrole. Elle a besoin d'énergie pour cela. Cette plateforme peut être construite dans des eaux très peu profondes, peu profondes et moyennes. Vous pouvez fixer la puissance de l'extraction et vous pouvez vous faire une idée de la puissance de l'extraction maximale.
+
+]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[La grande plateforme pétrolière extrait du pétrole. Elle a accès aux propres groupes électrogènes, à tel point qu'elle peut extraire du pétrole sans dépendre de l'énergie. Cette plateforme peut seulement être construite dans des eaux moyennes. Vous pouvez fixer la puissance de l'extraction et vous pouvez vous faire une idée de la puissance de l'extraction maximale.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 166  ======= 
+message = [[En parlant de l'exploitation des ressource de matériau et de pétrole nous faisons la différence entre l'exploitation des ressources souterraine et l'exploitation des ressources à la surface. Vous pouvez voir des ressources à la surface à l'oeil nu (ce sont par exemple des forêts, des champs de colza, des formations de pierres ou de la ferraille des véhicules). Mais ce n'est pas facile de trouver des ressources souterraines.
+
+Utilisez le menu "game" pour cela et activez ou désactivez la vue des ressources par "view - toggle ressourceview". Vous pouvez aussi appuyez sur 1. Il y a 4 affichages de champs différents:
+
+Le rouge signifie le gisement du matériau.
+Le vert signifie le gisement du pétrole.
+Le noir signifie des petits gisements.
+Et il n'y a pas d'affichage pour les champs où vous devez encore faire une analyse du sol.
+
+Terminez cette partie pour recevoir des autres informations.]]
+asc.setLocalizedEventMessage( map, 166, message )
+
+--- ===== 188  ======= 
+message = [[Chaque bâtiment reçoit des ressources du sol disponibles à la fin de la partie. Vous pouvez l'observer à la grande plateforme pétrolière qui peut extraire sans énergie.
+
+Vous pouvez le voir sur l'affichage des ressources et aussi dans le menu des bâtiments. Vous commencez à récolter au milieu du champ et puis, vous récoltez de plus en plus de cercles autour jusqu'à une portée de 10 champs.
+
+Terminez cette partie pour recevoir des autres informations.]]
+asc.setLocalizedEventMessage( map, 188, message )
+
+--- ===== 197  ======= 
+message = [[Des bâtiments qui n'ont pas d'approvisionnement en énergie, qui ont été arrêtés ou qui n'ont pas de ressources à proximité ne récoltent pas, bien sûr. Dès que la capacité d'entreposage maximale est atteinte les bâtiments s'arrêteront d'exploiter des ressources.
+
+Si vous voulez vous pouvez tester la mine, le derrick et la plateforme pétrolière. Vous recevrez 3 véhicules de génératrice pour cela.
+
+Terminez cette partie pour recevoir des autres informations.]]
+asc.setLocalizedEventMessage( map, 197, message )
+
+--- ===== 208  ======= 
+message = [[Vous pouvez comprendre l'affichage de l'exploitation des ressources dans le menu des bâtiments comme suit:
+
+Au début, il y a deux colonnes: la première colonne correspond aux ressources du champ de l'entrée du bâtiment, la deuxième colonne correspond aux ressources des champs autour.
+
+Si les ressources du champ de l'entrée sont exploitées le bâtiment commencera d'exploiter le deuxième cercle. En outre, un troisième cercle sera affiché dans l'affichage de l'exploitation des ressources dans le menu des bâtiments qui représente le prochain cercle d'exploitation. Cela continue jusqu'à une portée maximale de 10 champs et plus loin les champs sont plus difficile l'exploitation est. Cela veut dire que pour les mêmes coûts d'énergie moins de matériau ou de pétrole seront exploités pendant une partie.
+
+Terminez cette partie pour recevoir des autres informations.]]
+asc.setLocalizedEventMessage( map, 208, message )
+
+--- ===== 240  ======= 
+message = [[Vous recevrez 5 dépôts pour disposer de la capacité d'entreposage. En plus, vous avez reçu un Surveyor (véhicule de mesurage). Ce véhicule est un expert de l'analyse du sol et ses scanners à longue portée explorent le sol automatiquement, aussi à une plus grande distance. Vous devez simplement conduire dans des zones souhaitées et vous pouvez regarder le résultat de recherche par "ressourceview" (1).
+
+Si vous voulez continuer à observer l'exploitation des bâtiments vous devriez conduire sur le carreau gris avant. Puis, les bâtiments seront reliés par des pipelines à tel point que vous pouvez donner leurs quantités extraites aux dépôts.
+
+Terminez cette partie pour recevoir des autres informations. ]]
+asc.setLocalizedEventMessage( map, 240, message )
+
+--- ===== 267  ======= 
+message = [[Du matériau et du pétrole sont des ressources que vous pouvez stocker et aussi transporter sans problème. Vous recevrez un Antuin et un Alguin. Vous pouvez trouver des ressources avec Antuin en plus, mais sa portée est limitée à proximité de lui. Si vous voulez vous pouvez utiliser Antuin pour la recherche des ressources ou si vous voulez récolter tout le terrain ici vous pouvez l'utiliser aussi comme dépôt de matériel supplémentaire.
+
+Alguin peut remplir les véhicules de groupes électrogènes et il peut aussi être employé comme dépôt pétrolier supplémentaire.
+
+Encore une partie et on aura terminé. ]]
+asc.setLocalizedEventMessage( map, 267, message )
+
+--- ===== 269  ======= 
+message = [[Voilà deux bateaux de transport si vous voulez continuer d'étudier l'exploitation des ressources. Vous devriez avoir assez de capacité d'entreposage avec ces deux bateaux pour le matériau et le pétrole exploités.
+
+Maintenant, vous devriez avoir les connaissances de base nécessaires pour une exploitation des ressources couronnée de succès. Le sujet de l'exploitation des ressources à la surface sera traité dans des exercices supplémentaires.
+
+Marchez sur le champ vert pour terminer ces exercices.]]
+asc.setLocalizedEventMessage( map, 269, message )
+

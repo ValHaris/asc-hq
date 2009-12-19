@@ -1,0 +1,61 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Le stand de tir
+
+Vous recevrez des informations brèves sur les troopers différents sur les carreaux gris.
+
+Si vous voulez tirer vous-même marchez sur le champ rouge chez l'instructeur.
+
+Si vous voulez rentrer à la caserne marchez sur le champ vert.
+
+Vous pouvez aussi terminer la partie et regarder les troopers s'entraîner.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 2  ======= 
+message = [[En plus du fusil d'assaut le shock trooper a aussi la faculté de trouver, désamorcer et poser des mines.
+
+En outre, il est l'unité d'infanterie la plus vite et la plus avantageuse.
+
+Pour recevoir des autres informations sur le shock trooper regardez l'information d'unité en choisissant le trooper.
+asc.setLocalizedEventMessage( map, 2, message )
+
+--- ===== 3  ======= 
+message = [[En plus du fusil d'assaut le samtrooper a des missiles sol-air et ainsi, il est la seule unité d'infanterie qui peut avancer efficacement sur l'armée de l'air ennemie. Dans une situation d'urgence il peut aussi se battre contre des troopers.
+
+Par contre, il est plus lent que par exemple le shock trooper ou le sniper.
+
+Pour recevoir des autres informations sur le samtrooper regardez l'information d'unité en choisissant le trooper.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[Le paratrooper est une unité aux talents multiples. Il ne peut pas seulement faire du parachutisme, mais il peut aussi trouver, désamorcer et poser des mines, pilonner des cibles légèrement blindés avec ses "bombes" et il a aussi son fusil d'assaut bien sûr.
+
+Mais de ce fait, il est plus lent que par exemple le shock trooper ou le sniper.
+
+Pour recevoir des autres informations sur le paratrooper regardez l'information d'unité en choisissant le trooper.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[En plus de son fusil d'assaut, le gunner a un mortier. Il peut pointer avec le mortier sur l'infanterie ennemie ou sur des véhicules légèrement blindés à bonne distance.
+
+Mais à cause du mortier le gunner est plus lent que par exemple le shocktrooper ou le sniper.
+
+Pour recevoir des autres informations sur le gunner regardez l'information d'unité en choisissant le gunner.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[En plus de son fusil d'assaut, l'assaulttrooper a un lance-missiles. Il peut le pointer parfois sur des véhicules légèrement blindés.
+
+Par contre, il est plus lent que par exemple le shock trooper ou le sniper.
+
+Pour recevoir des autres informations sur l'assaulttrooper regardez l'information d'unité en choisissant le trooper.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 7  ======= 
+message = [[En plus du fusil d'assaut normal, le sniper a son fusil de précision et ainsi, il met l'infanterie ennemie en danger de mort, même en état inexpérimenté. Il utilise le fusil de précision toujours à distance et si l'ennemi s'approche trop il aura recours au fusil d'assaut éprouvé.
+
+Il est aussi une unité relativement vite, mais il est plus lent que le shock trooper.
+
+Pour recevoir des autres informations sur le sniper regardez l'information d'unité en choisissant le trooper.]]
+asc.setLocalizedEventMessage( map, 7, message )
+

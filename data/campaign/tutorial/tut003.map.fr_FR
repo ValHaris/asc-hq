@@ -1,0 +1,23 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[exercices ASC pour débutants "défense et dommages"
+
+Bon, soldat, nous simulons maintenant la situation de crise. Voilà un nouveau chargeur pour votre fusil d'assaut. En outre, vous recevez 300 unités de matériau et de carburant. Le trooper est une unité qui peut se régénérer soi-même dans le champ, mais pour cela, elle a besoin de ressources.
+
+Suivez la route vers le sud. Faites attention aux troupes ennemies. Utilisez votre mode de défense (reaction fire on), sinon, vous n'aurez pas de chance.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 892  ======= 
+message = [[Vous êtes blessé. Faites attention à votre affichage de vie. Tant que du matériau et du carburant seront encore disponibles votre soldat continuera de se régénérer soi-même.]]
+asc.setLocalizedEventMessage( map, 892, message )
+
+--- ===== 897  ======= 
+message = [[Bravo, vous venez de surmonter votre premier combat simulé dans des conditions de situation de crise. Un véhicule de transport vous conduira plus loin au sud maintenant.
+
+Vous êtes venu à bout de ces exercices avec succès.]]
+asc.setLocalizedEventMessage( map, 897, message )
+
+--- ===== 904  ======= 
+message = [[Soldat, c'était nul. Essayez-le de nouveau. Utilisez absolument votre mode de défense. Ne donnez pas la chance à votre ennemi d'être le premier à tirer.]]
+asc.setLocalizedEventMessage( map, 904, message )
+

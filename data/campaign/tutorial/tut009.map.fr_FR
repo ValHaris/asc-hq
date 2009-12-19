@@ -1,0 +1,31 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Salut, soldat. Vous voulez regarder ma collection de pierres encore une fois? Allez-y!
+
+Remarque: Pour regarder les pierres marchez sur les carreaux gris. Pour quitter la salle marchez sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 2  ======= 
+message = [[Regardez la taille de cette pierre. Elle est d'une grandeur extraordinaire. Je l'aime.]]
+asc.setLocalizedEventMessage( map, 2, message )
+
+--- ===== 3  ======= 
+message = [[Comment qu'elles sont belles, n'est-ce pas? Il me semble que la grande pierre flotte au-dessus des petites pierres. C'est mon propre Stonehenge. Ne pas toucher, s'il vous plaît.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[Regardez cette femme, euh, je veux dire cette pierre. Mais à cause de ces arrondis elle serait une femme s'il y avaient des hommes et femmes parmi des pierres.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[Elles sont belles, n'est-ce pas? Regardez commen ces pierres réfléchissent la lumière.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[Tout a commencé avec ces pierres. J'étais seul à devoir superviser une position à la montagne et sauf les messages radio courts il n'y avait pas beaucoup de changement. Alors, j'ai commencé à jouer avec ces pierres.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 7  ======= 
+message = [[Regardez ces couleurs. Cette teinte légèrement rougeâtre, c'est vraiment divin.]]
+asc.setLocalizedEventMessage( map, 7, message )
+

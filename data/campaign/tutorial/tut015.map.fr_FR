@@ -1,0 +1,102 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Ouvrages de défense
+
+Nous faisons la différence entre des ouvrages de défense passifs et actifs. Pour être complet, il y a aussi des stations radar et des installations pour perturber le radar.
+
+Pour quitter les ouvrages de défense marchez sur les champs verts.
+
+
+TODO: Bodenplattentexte, evtl. Zielattrappen einbauen?
+
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 11  ======= 
+message = [[station radar]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== 12  ======= 
+message = [[Radar à pénétration de sol (GRS)]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 13  ======= 
+message = [[Système radar blindé (bunker radar)]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 14  ======= 
+message = [[installations pour perturber le radar]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== 15  ======= 
+message = [[Installations blindées pour perturber le radar (bunker pour perturber le radar)]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== 16  ======= 
+message = [[Barrage antichar]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 17  ======= 
+message = [[barbelé (barrage contre l'infanterie)]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== 18  ======= 
+message = [[tour haute]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== 19  ======= 
+message = [[tranchée]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== 20  ======= 
+message = [[tour de défense]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== 21  ======= 
+message = [[tour de camouflage]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== 35  ======= 
+message = [[forteresse]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== 36  ======= 
+message = [[position MG]]
+asc.setLocalizedEventMessage( map, 36, message )
+
+--- ===== 37  ======= 
+message = [[grand canon]]
+asc.setLocalizedEventMessage( map, 37, message )
+
+--- ===== 38  ======= 
+message = [[bunker lourd]]
+asc.setLocalizedEventMessage( map, 38, message )
+
+--- ===== 39  ======= 
+message = [[canon lourd]]
+asc.setLocalizedEventMessage( map, 39, message )
+
+--- ===== 40  ======= 
+message = [[lr gun (fusil à longue portée)]]
+asc.setLocalizedEventMessage( map, 40, message )
+
+--- ===== 41  ======= 
+message = [[tour de missiles]]
+asc.setLocalizedEventMessage( map, 41, message )
+
+--- ===== 42  ======= 
+message = [[bunker de missiles]]
+asc.setLocalizedEventMessage( map, 42, message )
+
+--- ===== 43  ======= 
+message = [[tour de défense antiaérienne]]
+asc.setLocalizedEventMessage( map, 43, message )
+
+--- ===== 44  ======= 
+message = [[bunker de défense orbitale]]
+asc.setLocalizedEventMessage( map, 44, message )
+
+--- ===== 45  ======= 
+message = [[bunker de défense antiaérienne]]
+asc.setLocalizedEventMessage( map, 45, message )
+

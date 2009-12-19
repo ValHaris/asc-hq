@@ -1,0 +1,45 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Soldat, relaxez-vous.
+
+Vous avez réussi votre formation de base avec brio. Vous êtes appelé shock trooper qualifié maintenant. Vous avez maintenant des connaissances nécessaires et la force pour surmonter ce jeu de stratégie très complexe et basé sur des parties.
+
+Mais nous sommes une base militaire moderne qui vous permet de choisir ce que vous voulez apprendre maintenant. Vous allez voir que ce n'est pas tellement difficile d'apprendre les sujets les plus complexes même de ce jeu de stratégie.
+
+On va parler du formalisme maitenant, soldat.
+
+GARDE À VOUS!
+
+En vertu de mes fonctions comme commandant de la base militaire, je vous monte en grade du brigadier.
+
+REPOS!
+
+Je vous félicite et je suis heureux de pouvoir saluer un nouveau soldat capable dans ma compagnie. Ca y est, soldat, vous pouvez rompre. Mais si vous voulez vous pouvez encore regarder ma collection de pierres.
+
+Remarque: Pour regarder les pierres marchez sur les carreaux gris. Pour quitter la salle marchez sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 2  ======= 
+message = [[Regardez la taille de cette pierre. Elle est d'une grandeur extraordinaire. Je l'aime.]]
+asc.setLocalizedEventMessage( map, 2, message )
+
+--- ===== 3  ======= 
+message = [[Comment qu'elles sont belles, n'est-ce pas? Il me semble que la grande pierre flotte au-dessus des petites pierres. C'est mon propre Stonehenge. Ne pas toucher, s'il vous plaît.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[Regardez cette femme, euh, je veux dire cette pierre. Mais à cause de ces arrondis elle serait une femme s'il y avaient des hommes et femmes parmi des pierres.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[Elles sont belles, n'est-ce pas? Regardez commen ces pierres réfléchissent la lumière.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[Tout a commencé avec ces pierres. J'étais seul à devoir superviser une position à la montagne et sauf les messages radio courts il n'y avait pas beaucoup de changement. Alors, j'ai commencé à jouer avec ces pierres.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 7  ======= 
+message = [[Regardez ces couleurs. Cette teinte légèrement rougeâtre, c'est vraiment divin.]]
+asc.setLocalizedEventMessage( map, 7, message )
+

@@ -1,0 +1,122 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[ASC-exercice de niveau supérieur "base militaire"
+
+"Tout le monde apprend ce qu'il veut ici."
+
+Pour naviguer à travers les exercices regardez les noms des bâtiments qui représentent le sujet des exercices en gros. Si vous marchez sur les champs gris vous recevrez des informations plus précises sur les sujets.
+
+Dès que vous entrez dans le bâtiment vous serez transmis à l'exercice correspondante (s'il y a une exercice à faire dans ce bâtiment).
+
+Vous pouvez aussi lancer les exercices par le menu game.
+
+000.map "base militaire"
+001.map "exercices pour débutants 1"
+002.map "exercices pour débutants 2"
+003.map "exercices pour débutants 3"
+004.map "exercices pour débutants 4"
+005.map "exercices pour débutants 5"
+006.map "promotion"
+007.map "démonstration du stand de tir"
+008.map "stand de tir"
+009.map "collection des pierres"
+010.map "connaissance des bâtiments"
+011.map "recherche scientifique"
+012.map "production 1"
+013.map "production 2"
+014.map "production 3"
+015.map "ouvrage de défense"
+016.map "musée ferroviaire"
+017.map "musée des tanks"
+018.map "réparation et approvisionnement"
+019.map "école des bulldozers"
+020.map "construction des bâtiments"
+021.map "construction des pièces d'artillerie"
+022.map "gestion des dépôts"
+023.map "production énergétique"
+024.map "extraire du matériau et du pétrole"
+025.map "entraînement des pièces d'artillerie"
+030.map "musée des curiosités"
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 20  ======= 
+message = [[Vous pouvez lancer les exercices pour débutants encore une fois ici.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== 22  ======= 
+message = [[Voulez-vous voir la collection des pierres encore une fois?]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== 24  ======= 
+message = [[Au stand de tir vous pouvez apprendre à manier des autres modèles d'armes pour le domaine de l'infanterie.]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== 83  ======= 
+message = [[Vous recevrez un aperçu des bâtiments différents ici.]]
+asc.setLocalizedEventMessage( map, 83, message )
+
+--- ===== 118  ======= 
+message = [[vous pouvez acquérir des connaissances de base sur la recherche scientifique et en plus étudier l'arbre des technologies PBP ici.]]
+asc.setLocalizedEventMessage( map, 118, message )
+
+--- ===== 165  ======= 
+message = [[Vous acquerrez des connaissances de base sur la production ici.]]
+asc.setLocalizedEventMessage( map, 165, message )
+
+--- ===== 184  ======= 
+message = [[Vous pouvez approfondir vos connaissances de base sur la production ici.]] Ici, le sujet est la production économique.]]
+asc.setLocalizedEventMessage( map, 184, message )
+
+--- ===== 205  ======= 
+message = [[Vous apprenez ici comment vous pouvez ajouter et arrêter des secteurs de production.]]
+asc.setLocalizedEventMessage( map, 205, message )
+
+--- ===== 312  ======= 
+message = [[Vous recevrez un aperçu des ouvrages de défense actifs et passifs ici.]]
+asc.setLocalizedEventMessage( map, 312, message )
+
+--- ===== 360  ======= 
+message = [[musée ferroviaire]]
+asc.setLocalizedEventMessage( map, 360, message )
+
+--- ===== 437  ======= 
+message = [[Vous recevrez un aperçu de tous les véhicules destinés à la circulation ici.]]
+asc.setLocalizedEventMessage( map, 437, message )
+
+--- ===== 466  ======= 
+message = [[réparation et approvisionnement]]
+asc.setLocalizedEventMessage( map, 466, message )
+
+--- ===== 468  ======= 
+message = [[Ici vous apprendrez comment manier un bulldozer.]]
+asc.setLocalizedEventMessage( map, 468, message )
+
+--- ===== 532  ======= 
+message = [[Vous acquerrez des connaissances de base sur la construction des bâtiments ici.]]
+asc.setLocalizedEventMessage( map, 532, message )
+
+--- ===== 600  ======= 
+message = [[construction des pièces d'artillerie]]
+asc.setLocalizedEventMessage( map, 600, message )
+
+--- ===== 637  ======= 
+message = [[Vous acquerrez des connaissances de base sur la gestion des dépôts ici.]]
+asc.setLocalizedEventMessage( map, 637, message )
+
+--- ===== 750  ======= 
+message = [[production énergétique]]
+asc.setLocalizedEventMessage( map, 750, message )
+
+--- ===== 830  ======= 
+message = [[extraction du matériau et du pétrole]]
+asc.setLocalizedEventMessage( map, 830, message )
+
+--- ===== 832  ======= 
+message = [[eintraînement des pièces d'artillerie]]
+asc.setLocalizedEventMessage( map, 832, message )
+
+--- ===== 877  ======= 
+message = [[Le musée des curiosités]]
+asc.setLocalizedEventMessage( map, 877, message )
+

@@ -29,7 +29,7 @@ message = [[+++ Meldung vom HQ, Research +++
 
 Commander,
 
-es sieht so aus, alls gibt es schon einige Aktivitäten des Gegners. Es könnte interessant sein, was es mit diesen Gebäuden auf sich hat. Erobern sie die Baracke.
+es sieht so aus, als gibt es schon einige Aktivitäten des Gegners. Es könnte interessant sein, was es mit diesen Gebäuden auf sich hat. Erobern sie die Baracke.
 ]]
 asc.setLocalizedEventMessage( map, 6, message )
 
@@ -38,7 +38,7 @@ message = [[#+++ Meldung vom HQ +++
 
 Commander,
 
-es tut uns Leid sie aus Ihrem wohlverdienten Ruhestand abberufen zu müssen, aber wir haben ein Problem. Vor 2 Tagen haben wir festgestell, daß unsere Aufklärungsabteilung Daten unterdrückt und gelöscht hat. Die fraglichen sind isoliert und werden befragt. 
+es tut uns Leid sie aus Ihrem wohlverdienten Ruhestand abberufen zu müssen, aber wir haben ein Problem. Vor zwei Tagen haben wir festgestell, daß unsere Aufklärungsabteilung Daten unterdrückt und gelöscht hat. Die Verdächtigen sind isoliert und werden befragt. 
 
 Soweit wir bisher wissen ist durch vulkanische Aktivität eine neue Inselgruppe im Ozean entstanden ist. Den genauen Ort können wir nicht mehr feststellen, aber müssen davon ausgehen dass ein Verräter diese Daten an den Feind weitergegeben hat. Wir wissen auch nichts über etwaige feindliche Aktivitäten. Wir gehen allerdings davon aus, daß auch der Feind nicht viele Einheiten in diesem Bereich hat. 
 

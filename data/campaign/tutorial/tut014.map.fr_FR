@@ -1,0 +1,13 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Production 3 "secteurs de production"
+
+Vous apprenez ici comment vous pouvez ajouter et arrêter des secteurs de production.
+
+Vous pouvez installer deux nouveaux secteurs de production de manière exemplaire: un tank lourd et un train de combat. Cette fois, nous utilisons la grande usine d'armes pour la démonstration, mais cela ne fait pas de différence. Tous les bâtiments produits (la petite usine d'armes, la grande usine d'armes, le port, l'aéroport et le spatiodrome) ne diffèrent pas par leur utilisation, mais seulement par leur gamme de production.
+
+Ouvrez le menu de chargement et le menu de production après. Vous pouvez installer des nouveaux secteurs de production avec le bouton + ici, à condition que vous en ayez. Vous payez avec des ressources une fois pour installer un secteur de production. Après, vous pouvez produire vos unités aux conditions normales dans ce secteur. Vous pouvez arrêter un secteur par le bouton -. Mais cette action coûte aussi des ressources une fois et elle est seulement faite en cas d'exception.
+
+Marchez sur le champ vert pour quitter ces exercices.
+asc.setLocalizedEventMessage( map, 1, message )
+

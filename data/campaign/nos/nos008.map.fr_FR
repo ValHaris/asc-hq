@@ -1,0 +1,28 @@
+map = asc.getLoadingMap() 
+--- ===== 643  ======= 
+message = [[Très bien, commandant, #crt##crt# Nous démolirons l'usine. #crt##crt# Encore une fois, vous avez fait l'impossible. #crt##crt# Nous sommes contents que vous êtes avec nous. #crt##crt# Transmettez ces félicitations aussi à vos unités. #crt#
+]]
+asc.setLocalizedEventMessage( map, 643, message )
+
+--- ===== 99  ======= 
+message = [[+++ rapport du contrôle de barrage +++ #crt##crt# Commandant, #crt##crt# nous avons le barrage sous notre contrôle. Nous ouvrons les canaux pour que votre flotte puisse nous soutenir dans notre mission. #crt##crt##crt#
+
+]]
+asc.setLocalizedEventMessage( map, 99, message )
+
+--- ===== 65  ======= 
+message = [[+++ rapport du Paratrooper 2 (soldat avec un parachute) +++ #crt##crt# Commandant, nous sommes atterris en sécurité derrière les unités ennemies. Le chemin d'accès est fortifié beaucoup et un pont sur le petit affluent est rentré. #crt##crt# Nous sommes près de la maison du pont et nous attendons votre ordre de la prendre et de sortir le pont pour arriver au port. #crt#
+
+]]
+asc.setLocalizedEventMessage( map, 65, message )
+
+--- ===== 64  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# nous avons abordé et nous attendons votre ordre. #crt##crt# Le port se trouve au nord, le centre de recherches au nord-est. Conquérez les deux et transportez les documents et les informations. #crt##crt# Nous avons formé deux groupes qui avancent vers le port. Un des deux groupes se trouve dans la rue vers l'enceinte portuaire, l'autre essaie de trouver un chemin à travers le lit de la rivière longtemps asséché. #crt##crt# Une unité de Paratrooper (soldat avec un parachute) a volé devant pour surprendre l'ennemi, parce qu'il n'a pas encore remarqué notre présence. Elle doit espionner le port et le chemin. #crt##crt# La vallée de la rivière est sèche. Jusqu'à présent, nous ne savons pas si c'est naturel ou par des mesures techniques. Il faut savoir comment les bateaux peuvent partir du port à la mer. Mais probablement ce port de recherches a été planifié de cette façon pour ne pas sauter aux yeux. Peut-être vous trouvez une possibilité pour mettre nos propres bateaux en valeur. #crt##crt# Selon nos informations, ce centre de recherches ne semble pas mettre l'accent sur une nouvelle technologie d'armes, mais sur la technique de production. Je ne peux que vous mettre en garde! Il se pourrait que ne pas d'unités trop fortes mais une foule d'ennemis seront en face de vous. Nous devrions supposer que les dépôts du centre sont pleins, parce qu'il n'y avaient pas de transport depuis un certain temps. À l'aide des plans disponibles nos ingénieurs estiment une capacité de production qui augmentera du facteur 4-5. #crt##crt# Votre mission: Conquérez le centre de recherches et le port. #crt#
+]]
+asc.setLocalizedEventMessage( map, 64, message )
+
+--- ===== 63  ======= 
+message = [[+++ rapport du Paratrooper 1 (soldat avec un parachute) +++ #crt##crt# Commandant,#crt##crt# nous devons faire un atterrissage forcé. Nous avons atterri devant le bassin portuaire. Malheureusement, l'hélicoptère est gravement endommagé et le réservoir a été frappé. #crt##crt# Nous essayons de découvrir le plus possible. #crt##crt##crt#
+]]
+asc.setLocalizedEventMessage( map, 63, message )
+

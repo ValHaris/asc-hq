@@ -1,0 +1,38 @@
+map = asc.getLoadingMap() 
+--- ===== 297  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# l'armée de l'air y est arrivée de mettre quelques unités à la disposition. Elles détruiront les dernières unités. #crt##crt# Nous vous félicitons à l'occasion de votre victoire. Transmettez ces félicitations aussi à vos unités. #crt##crt#
+]]
+asc.setLocalizedEventMessage( map, 297, message )
+
+--- ===== 168  ======= 
+message = [[+++ rapport du quartier général, commandement des flottes +++ #crt##crt# Commandant, #crt##crt# La flotte de renforcement que vous avez demandée est arrivée et elle attend vos ordres. #crt##crt#
+
+]]
+asc.setLocalizedEventMessage( map, 168, message )
+
+--- ===== 86  ======= 
+message = [[+++ rapport du quartier général, recherche scientifique +++ #crt##crt# Commandant, #crt##crt# ce rapport a été envoyé par le système pendant la conquête. Nous ne savons pas qu'est-ce que cela veut dire. #crt##crt#----------------#crt#01#crt#54#crt#53#crt#55#crt#4E#crt#41#crt#4D#crt#6C#crt#10#crt#
+]]
+asc.setLocalizedEventMessage( map, 86, message )
+
+--- ===== 63  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# nos révélateurs ont fini le prototype du WIG et ils ont fait des tests essentiels. #crt##crt# L'épreuve du combat dépend de vous. Signalez des problèmes éventuels, s'il vous plaît #crt##crt# L'unité devrait arriver sous peu. #crt#
+]]
+asc.setLocalizedEventMessage( map, 63, message )
+
+--- ===== 151  ======= 
+message = [[+++ rapport du WIG +++ #crt##crt# Commandant, #crt##crt# nous sommes arrivés et nous attendons vos ordres. #crt##crt#
+]]
+asc.setLocalizedEventMessage( map, 151, message )
+
+--- ===== 64  ======= 
+message = [[+++ rapport du quartier général, recherche scientifique +++ #crt##crt# Commandant, #crt##crt# nos spécialistes d'ordinateurs ont trouvé un fragment d'un logiciel qui concerne le centre informatique. Nous ne savons pas qu'est-ce que cela veut dire. Il peut signifier que le réseau sera coupé. #crt##crt# Soyez prudent et préparez-vous pour tout. #crt#
+]]
+asc.setLocalizedEventMessage( map, 64, message )
+
+--- ===== 9  ======= 
+message = [[+++ message du quartier général +++ #crt##crt# Commandant, #crt##crt# nous nous trouvons devant l'île principale. Il faut que nous la prenions, parce c'est seulement là où on peut tenir des usines. Le volcan est encore actif, mais il devrait être calme et prévisible. #crt##crt# À cause de votre bonne avance sur les plus petites îles nous pensons que l'ennemi a changé sa tactique et qu'il a beaucoup fortifié l'île. Nous ne savons pas s'il a encore une flotte pour se défendre et si oui de quelle grandeur elle est. Nous avons aussi constaté par sonar qu'il a laissé beaucoup de petits objets "calmes" dans l'eau. Nous supposons que les plages de l'île, ou au moins les accès, sont minés. #crt##crt# Notre armée de l'air pouvait découvrir trois aires d'atterrissage possibles pour vos unités pour ouvrir un deuxième front. #crt##crt# Votre mission: #crt# Conquérez tous les sites de production et toutes les ressources de l'île. #crt#
+
+]]
+asc.setLocalizedEventMessage( map, 9, message )
+

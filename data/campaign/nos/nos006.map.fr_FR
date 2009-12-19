@@ -1,0 +1,32 @@
+map = asc.getLoadingMap() 
+--- ===== 196  ======= 
+message = [[+++ message du quartier général +++ #crt##crt# Commandant, #crt##crt# nous pouvions dévier quelques unités. #crt##crt# Il y a aussi un Armadillo (char de combat) pris avec. Soyez prudent avec cela, vous faites des essais de terrain. Puis, informez-nous des avantages et des possibilités de ce tank. #crt#
+]]
+asc.setLocalizedEventMessage( map, 196, message )
+
+--- ===== 216  ======= 
+message = [[+++ rapport de le reconnaissance +++ #crt##crt# Commandant, #crt##crt# cela semble être un ordre d'avance. Ne vous imaginez pas être en sécurité de ce fait. #crt##crt# Faites une bonne défense en fonctionnement le plus vite possible. #crt#
+
+]]
+asc.setLocalizedEventMessage( map, 216, message )
+
+--- ===== 386  ======= 
+message = [[Commandant, #crt##crt# très bien. Encore une fois, vous avez fait l'impossible et vous avez infligé une bonne défaite à l'ennemi. #crt##crt# Sans combinat et sans ressources perdues il devrait y avoir au moins une petite chance pour notre peuple. #crt##crt##crt#
+]]
+asc.setLocalizedEventMessage( map, 386, message )
+
+--- ===== 167  ======= 
+message = [[+++ rapport de le reconnaissance +++ #crt##crt# Commandant, #crt##crt# ils arrivent. Vous pouvez vous attendre à quelque chose... Cela semble être #crt# la force principales. #crt##crt# Bonne chance #crt#
+]]
+asc.setLocalizedEventMessage( map, 167, message )
+
+--- ===== 157  ======= 
+message = [[+++ rapport de la reconnaissance +++ #crt##crt# Commandant, #crt##crt# nous avons intercepté des messages radio qui laissent supposer qu'il y a un grand ouvrage de défense dans une partie de la forêt. #crt##crt# Soyez prudent pendant votre avance, parce que tout laisse augurer l'artillerie lourde ou des positions de missiles. #crt#
+]]
+asc.setLocalizedEventMessage( map, 157, message )
+
+--- ===== 156  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# vous avez rendu possible le largage et la tête de pont et vous l'avez fortifiée et défendue contre les ennemis. Mais vous ne pouvez pas vous pencher en arrière. #crt##crt# Notre détachement de reconnaissance et le système d'espionnage ont intercepté des messages d'une attaque imminente sur notre zone d'atterrissage. Nous ne savons pas vraiment quelle sorte de forces se dirigent vers nous. Les messages radio laissent augurer une très grande force. Comme cette armée a été établie soudainement vite, nos analystes pensent que nous nous trouvons près d'un grand centre de production et des grands centres logistiques qui vont avec. Ce centre devrait se situer à l'est. Il y a un petit canal qui pourrait arrêter l'ennemi. Regardez-le, mais ne vous laissez pas chopé en aucun cas, nous pensons que vous êtes encore en sécurité à la lisière de la forêt. #crt# De cette façon, vous pourriez éventuellement aussi trouver un point faible. #crt##crt# Malheureusement, comme convenu, nous avons retiré un grand nombre d'unités avec lesquelles vous avez conquis la tête de pont et nous les avons amenées à un autre théâtre. Heureusement, les deux usines sont intactes et la production fonctionne. Nous vous envoyons quelques camionnettes avec du matériau. Construisez les unités dont vous avez besoin et conquérez le centre de production, l'aéroport et le dépôt au bord de la mer et ne perdez pas le quartier général en aucun cas. #crt##crt# Votre mission: #crt# Conquérez le centre de production, l'aéroport et le dépôt de la mer. Ne perdez pas le quartier général. #crt#
+]]
+asc.setLocalizedEventMessage( map, 156, message )
+

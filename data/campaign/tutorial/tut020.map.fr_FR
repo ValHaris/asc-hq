@@ -1,0 +1,17 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[construction des bâtiments
+
+La construction des bâtiments est très facile. Vous n'avez besoin que d'un vesuvius chargé de matériau de construction (du matériau et du pétrole). Cette unité construira chaque bâtiment que vous souhaitez si la construction est permise sur la carte.
+
+Pour construire le vesuvius a besoin de tous ses points de déplacement et d'assez de terrains à bâtir. Le champ de construction que vous choisissez sera l'entrée du bâtiment plus tard. C'est pourquoi ce n'est pas toujours possible de construire des bâtiments dans n'importe quelle direction. Le vesuvius bloquerait le terrain à bâtir soi-même.
+
+Vous pouvez aussi raser des bâtiments pour regagner du matériau.
+
+Vous construisez avec le bouton "construct building" et vous rasez avec le bouton "destruct building".
+
+Pour quitter ces exercices marchez sur le champ vert.
+
+Tuyau: Vous ne pouvez que construire la petite et la grande plateforme pétrolière sur l'eau, et vous avez besoin d'une piste comme fond pour le hangar.]]
+asc.setLocalizedEventMessage( map, 1, message )
+

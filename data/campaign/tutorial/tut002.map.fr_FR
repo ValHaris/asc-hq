@@ -1,0 +1,40 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[exercices ASC pour débutants "combat et expérience"
+
+Il est temps pour faire quelques exercices de tir, soldat. Vous avez maintenant 10 balles pour votre fusil d'assault. Il y a quelques leurres au sud que vous devez détruire.
+
+
+Tuyau: Si vous activez votre mode de défense (Reaction Fire On) par erreur votre soldat ne pourra plus se déplacer. Vous devez d'abord désactiver le mode de défense pour pouvoir vous déplacer dans la prochaine partie.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 545  ======= 
+message = [[Pour tirer il y a le bouton "attack" en bas à droite qui sera aussi affiché en petit si vous montrez votre soldat. Maintenant, il faut encore choisir la cible.
+
+Tuyau: Si votre soldat tire il ne pourra plus se déplacer après.]]
+asc.setLocalizedEventMessage( map, 545, message )
+
+--- ===== 625  ======= 
+message = [[Très bien. Vous avez liquidé ce leurre avec succès. Cherchez et détruisez le prochain leurre.]]
+asc.setLocalizedEventMessage( map, 625, message )
+
+--- ===== 656  ======= 
+message = [[Détruisez aussi ce leurre.
+
+Tuyau: Avec chaque passe d'armes votre soldat gagne de l'expérience de combat. Pour l'élimination des ennemis il recevra même un bonus extra. Faites attention au petit symbole à gauche de l'image du soldat sur l'affichage des unités.]] 
+asc.setLocalizedEventMessage( map, 656, message )
+
+--- ===== 674  ======= 
+message = [[Très bien. Vous avez liquidé aussi ce leurre avec succès. Encore un leurre et vous serez arrivé à bout de ces exercices. Cherchez et détruisez le dernier leurre.]]
+asc.setLocalizedEventMessage( map, 674, message )
+
+--- ===== 675  ======= 
+message = [[Détruisez aussi ce troisième leurre.]]
+asc.setLocalizedEventMessage( map, 675, message )
+
+--- ===== 676  ======= 
+message = [[Bravo, vous avez terminé les exercices "combat et expérience" avec succès.
+
+Tuyau: L'expérience d'une unité ne se montre pas seulement dans l'attaque. Des unités expérimentées peuvent encaisser bien plus.]]
+asc.setLocalizedEventMessage( map, 676, message )
+

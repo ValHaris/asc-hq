@@ -1,0 +1,45 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Bienvenu au musée ferroviaire!
+
+Les carreaux gris vous donnent des informations sur des véhicules sur rails.
+
+Pour quitter le musée marchez sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 4  ======= 
+message = [[Notre Judy est en même temps un train de réparation, de ravitaillement et de construction. Elle pose des rails, elle répare et remplit tout de carburant et elle peut aussi fournir des autres véhicules des plus petites catégories de munition en munition sans problème. ]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[Le train de transport est capable de transporter beaucoup d'unités rapidement et à un prix avantageux sur des grandes étendues. Et sa capacité de transport est vraiment énorme. En plus du transport de véhicules il dispose des capacités de matériau et des capacités de carburant qu'il peut mettre à la disposition des autres véhicules. En outre, il dispose de plusieurs classes de munition qu'il peut aussi fournir aux autres véhicules.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[Le train de porte-hélicoptères est un porte-hélicoptères sur rails. Il permet aux hélicoptères d'atterrir directement sur ce train sans devoir atteindre le niveau du sol de façon compliquée avant. Par l'atterrissage à une plus grande hauteur les hélicoptères gagnent du temps précieux. En outre, le train de porte-hélicoptères dispose d'une installation de réparation, il peut fournir les hélicoptères en munition et il peut aussi les remplir de carburant sans problème. Aussi des avions à décollage vertical peuvent profiter du service de ce train de porte-hélicoptères.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 7  ======= 
+message = [[Ce train de combat est idéal pour défendre les rails contre des véhicules sur rails ennemis. Le Punch peut encaisser pas mal beaucoup et il dispose d'un canon d'une forte puissance de feu avec lequel il peut même attaquer à courte distance. En outre, il dispose d'un MG fort qui a la même portée. On peut aussi avoir recours à cet MG pour la défense antiaérienne en cas d'urgence.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== 8  ======= 
+message = [[double pièce d'artillerie sur rails]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== 9  ======= 
+message = [[pièce d'artillerie sur rails]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== 10  ======= 
+message = [[train de missiles]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== 11  ======= 
+message = [[train de défense antiaérienne]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== 12  ======= 
+message = [[train de défense orbitale]]
+asc.setLocalizedEventMessage( map, 12, message )
+

@@ -1,0 +1,16 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[entraînement des pièces d'artillerie
+
+Vous avez le contrôle de cette installation. Tout le terrain est plein de barrages antichar pour démontrer la portée. Il y a des leurres à proximité de vos pièces d'artillerie pour que vous puissiez aussi voir la portée des mitrailleuses. Acceptez un corps à corps et tirez sur ces leurres.
+
+En outre, il y a des hélicoptères volants bas, des dirigeables à un plus grand hauteur et  des avions d'espionnage à hauteur extrême pour vous montrer la défense aérienne. Alors, vous pouvez aussi tester les portées différentes des unités de la défense aérienne.
+
+À la fin, vous pouvez tirer sur des satellites avec vos pièces d'artillerie orbitales.
+
+Il y a aussi des transporteurs de munition près du dispositif de lancement de missiles longue portée.
+
+Pour quitter l'entraînement des pièces d'artillerie marchez sur le champ vert.
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+

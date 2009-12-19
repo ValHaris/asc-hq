@@ -1,0 +1,46 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[la construction des pièces d'artillerie est divisée en pièces d'artillerie qui ne peuvent qu'être construites sur place et en pièces d'artillerie qui ne peuvent pas seulement être construites sur place, mais aussi dans des usines et qui peuvent être transportées au but après.
+
+En premier lieu, il y a deux véhicules qui peuvent faire le transport et l'installation ou la construction directement.
+
+Ce sont le vesuvius et le MBV, mais le MBV peut construire des technologies d'armes plus développées.
+
+Pour recevoir des autres informations marchez sur les carreaux, le mieux de gauche à droite.
+
+Marchez sur le champ vert pour quitter ces exercices.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 3  ======= 
+message = [[Regardez dans l'usine si vous voulez voir quelle pièces d'artillerie vous pouvez produire dans des usines.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[Dans la plupart des cas vous avez besoin des soubassements de tours pour les pièces d'artillerie de l'usine. Ne pas seulement le vesuvius mais aussi le MBV peuvent construire des soubassements.
+
+Pour cela, choisissez "construct remove objects", maintenez sur le champ où vous souhaitez construire le soubassement et choisissez le modèle du soubassement souhaité à la fin.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 9  ======= 
+message = [[Pour construire une pièce d'artillerie sur place choisissez l'option "unit construction".
+
+Vous avez des différentes options de construction ici. Ca dépend si vous voulez utiliser le vesuvius ou le MBV et si vous voulez construire sur un champ libre ou sur un soubassement.
+
+Pour construire choisissez "unit construction", maintenez sur le champ cible (avec ou sans soubassement) et choisissez la pièce d'artillerie souhaitée.]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== 15  ======= 
+message = [[Le vesuvius et le MBV peuvent aussi transporter les pièces d'artilleries qui sont produites dans l'usine à la fin. Celles-ci peuvent être mises sur le soubassement ou au contraire, être allées chercher.
+
+Ouvrez le menu de chargement du vesuvius ou du MBV et installez le dispositif de lancement de missiles sur le soubassement libre. Si vous voulez vous pouvez toujours charger de nouveau le dispositif de lancement de missiles que vous avez déjà installé.]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== 16  ======= 
+message = [[Vous pouvez transporter des pièces d'artillerie aussi avec ce train de transport, mais ce train n'a pas de grue pour lever les pièces d'artillerie sur les soubassements.
+Mais des véhicules de construction qui assumeront cette tâche peuvent aussi être transportés par ce train.]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 17  ======= 
+message = [[Cet antuin est même capable de servir une unité sur un soubassement. Comme ses capacités de transport sont limitées aux plus petites unités il pourrait encore transporter et installer un GRS (radar à pénétration du sol), par exemple.]]
+asc.setLocalizedEventMessage( map, 17, message )
+

@@ -1,0 +1,62 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[exercices ASC pour débutants "transport et chargement"
+
+"Montez, soldat, il faut se dépêcher." 
+
+Montez dans le véhicule de transport et puis, allez au sud.
+
+Pour monter dans le véhicule de transport cliquez sur le véhicule pendant que le soldat est en mode de déplacement.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 1024  ======= 
+message = [[Le trajet va encore durer un peu.
+
+Profitez du temps pour voir comment vos soldats vont. Activez le menu de chargement du weasel (véhicule à chenilles) avec le bouton "view loaded units". Vous y verrez votre soldat. Pour fermer le menu de chargement chosissez simplement "close dialog".]]
+asc.setLocalizedEventMessage( map, 1024, message )
+
+--- ===== 1029  ======= 
+message = [[Bien que votre soldat ne se déplace pas soi-même il perd des points de déplacement pendant le transport. Cette perte de points doit représenter le temps où le soldat est assis pendant le transport.
+
+
+Tuyau: Si vous voulez faire descendre votre soldat du véhicule de transport dans une situation d'urgence, ne dépensez pas tous les points de déplacement du véhicule avant.]]
+asc.setLocalizedEventMessage( map, 1029, message )
+
+--- ===== 1033  ======= 
+message = [[Zut, une chute de pierres! Il n'y en avait pas à l'aller. Notre weasel n'arrive pas à traverser les pierres. Soldat, vous devez continuer à pied.
+
+Quittez le véhicule de transport et marchez plus loin au sud.
+
+Choisissez le bouton de déplacement pour le soldat dans le menu de chargement du véhicule.]]
+asc.setLocalizedEventMessage( map, 1033, message )
+
+--- ===== 1038  ======= 
+message = [[Une station-service. Reprenez ce bâtiment.]]
+asc.setLocalizedEventMessage( map, 1038, message )
+
+--- ===== 1039  ======= 
+message = [[Il y un autre weasel dans le bâtiment. Exercez-vous à charger votre soldat dans le véhicule de transport dirèctement dans le bâtiment.
+
+La façon la plus simple est de faire glisser le soldat avec le bouton DROIT de la souris sur le véhicule de transport. De façon alternative, vous pouvez aussi appuyer sur le bouton "move unit into neighboring transport" et choisir le weasel comme cible du processus de chargement.
+
+Continuez d'aller au sud après.
+
+Tuyau: Pour le déchargement/le chargement dans un bâtiment aucun point de déplacement n'est pas nécessaire.]]
+asc.setLocalizedEventMessage( map, 1039, message )
+
+--- ===== 1052  ======= 
+message = [[Votre soldat peut aussi échanger de la munition et des ressources avec le véhicule de transport. Pour cela, votre soldat doit se trouver dans le weasel. Puis, ouvrez le menu de chargement et choisissez le bouton "refuel dialog" pour votre soldat.
+
+Vous pouvez seulement échanger de la munition et des ressources qui sont permises pour les deux partenaires de l'échange.
+asc.setLocalizedEventMessage( map, 1052, message )
+
+--- ===== 1067  ======= 
+message = [[Soldat, nous avons atteint notre but. Prenez contact avec l'instructeur d'ici dans le bâtiment. Des véhicules ne sont pas permis là où vous vous rendez maintenant.
+asc.setLocalizedEventMessage( map, 1067, message )
+
+--- ===== 1076  ======= 
+message = [[Vous êtes déjà arrivé, c'est bien. Dès que vous êtes prêt nous pouvons continuer votre instruction.
+
+Félicitations, vous êtes venu à bout de ces exercices avec succès.]]
+asc.setLocalizedEventMessage( map, 1076, message )
+

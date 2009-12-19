@@ -1,0 +1,141 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Bienvenu au musée de tanks! Il y a tout: depuis les tanks en passant par l'artillerie jusqu'à tous les véhicules de ravitaillement. Vous pouvez bien jeter un coup d'oeil dans ce musée. Mais ne touchez rien, s'il vous plaît, parce que sinon, vous devrez briquer les véhicules la semaine prochaine ici.
+
+Vous trouvez des informations sur les véhicule sur les carreaux gris. Marchez sur les champs verts pour quitter le musée de tanks.
+
+TODO: Bodenplatten aktivieren und Texte]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 9  ======= 
+message = [[véhicule de génératrice]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== 10  ======= 
+message = [[Le véhicule à perturber le radar peut protéger des positions stables et des véhicules mobiles de radar ennemi.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== 11  ======= 
+message = [[Qu'est-ce qui serait l'artillerie sans véhicule de radar? Mais aussi les unités de tanks profitent de la reconnaissance radar. Seul celui qui voit son ennemi peut le combattre avec efficience.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== 12  ======= 
+message = [[Le mouilleur de mines peut rendre des territoires entiers impraticable pour l'ennemi.  Par contre, il peut aussi enfoncer les territoires piqués de mines ennemis bien sûr.]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 13  ======= 
+message = [[Le chasseur de chars pour réduire l'infanterie est un chasseur de chars spécial avec la portée pour combattre de l'infanterie ennemi. Ainsi, il peut combattre l'infanterie avec sa mitrailleuse de loin sans que l'ennemi puisse se défendre.  Il est idéal pour chasser une seule infanterie ou pour faire l'infanterie ennemi quitter leurs tranchées.
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 14  ======= 
+message = [[Le weasel est un petit engin blindé léger. Ce véhicule n'est pas apte au combat, parce qu'il est légèrement blindé et il est seulement armé d'une seule mitrailleuse. Son fort est de pouvoir transporter une unité d'infanterie et sa vitesse. En outre, le weasel est tellement petit qu'il peut aussi être déployé pour des attaques des parachutistes.]] 
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== 15  ======= 
+message = [[véhicule pour le transport de l'infanterie]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== 16  ======= 
+message = [[transport blindé]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 17  ======= 
+message = [[Le tank léger renonce au blindage au profit de puissance militaire et vitesse. Il devrait être déployé pour la défense seulement dans une situation d'urgence. C'est le mieux de protéger ses flancs avec les véhicules qui sont mieux blindés.]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== 18  ======= 
+message = [[Le tank lourd a une bonne puissance militaire et il est très maniable. Mais son blindage est beaucoup plus faible, plutôt comme celui des tanks standard. Il devrait être déployé pour la défense seulement dans une situation d'urgence. C'est le mieux de protéger ses flancs avec des véhicules qui sont mieux blindés dans un grand combat.]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== 19  ======= 
+message = [[Le tank léger est bien le tank le plus avantageux à cause de son grand canon. Il est bon pour couvir des véhicules ou pour chasser des véhicules ennemis qui disposent seulement d'un MG. Et parfois, il pourrait être mieux d'avoir beaucoup de tanks légers que seulement peu de tanks plus grands.]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== 20  ======= 
+message = [[Le tank moyen sera bien le tank standard dans la plupart des batailles de tanks. Il est plus lent que le tank léger, mais il est beaucoup plus fort en puissance militaire et blindage, et il peut être déployé pour l'offensive ainsi que pour la défensive.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== 21  ======= 
+message = [[Le tank moyen amélioré reçoit encore de la puissance militaire et du blindage. Comme le tank normal moyen, il est apte à l'offensive ainsi qu'à la défensive.]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== 22  ======= 
+message = [[Le tank lourd a du blindage et de la puissance militaire de haut niveau, mais par contre, il est très lent.]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== 23  ======= 
+message = [[Le tank lourd a encore plus de portée. Alors, il a beaucoup de puissance militaire, de blindage et la possibilité d'assiéger l'ennemi sans être opposé de résistance. Mais sa mobilité laisse à désirer.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== 24  ======= 
+message = [[tank de missiles amélioré]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== 25  ======= 
+message = [[tank de missiles]]
+asc.setLocalizedEventMessage( map, 25, message )
+
+--- ===== 26  ======= 
+message = [[L'artillerie légère n'a pas la puissance militaire et la portée de ses grands collègues. Mais elle est un peu plus vite et tout de suite opérationnelle.]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== 27  ======= 
+message = [[La plus petite des grandes unités d'artillerie. Une grande portée et de la puissance militaire distinguent la Coma. Mais son blindage et sa mobilité laissent à désirer. En outre, la Coma doit être postée pour un combat seulement après une phase de déplacement.]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== 28  ======= 
+message = [[La Coma améliorée Par cela, cette artillerie reçoit encore plus de puissance militaire et de portée. La Coma II doit aussi d'abord être postée pour le combat après une phase de déplacement.
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== 29  ======= 
+message = [[La Coma III a de la portée et une puissance militaire énorme à cause de son double pièce d'artillerie.  Comme les deux prédécesseurs, la Coma III doit d'abord être postée après une phase de déplacement.]]
+asc.setLocalizedEventMessage( map, 29, message )
+
+--- ===== 30  ======= 
+message = [[La réponse vite et avantageuse sur l'armée de l'air ennemie. Seule l'infanterie peut combattre l'armée de l'air ennemie encore plus avantageusement. Il peut combattre l'armée de l'air ennemie avec son canon aussi à courte distance. En outre, il dispose d'un MG avec lequel il peut se défendre contre l'infanterie et des plus petits engins blindés légers.]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== 31  ======= 
+message = [[Le modèle amélioré du tank de défense antiaérienne n'a plus de MG, mais comme son prédécesseur, il a un canon de défense antiaérienne plus fort et avec pus de portée.]]
+asc.setLocalizedEventMessage( map, 31, message )
+
+--- ===== 32  ======= 
+message = [[Le cauchemar pour des aviateurs ennemis. Ce tank de défense antiaérienne a une grande portée et ses missiles sol-air ont une grande force d'attaque.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== 85  ======= 
+message = [[Le surveyor est un véhicule pour distinguer des ressources. Il distingue des gisements pétrolifères et de matériau des environs et aussi dans les territoires d'eau voisins.]]
+asc.setLocalizedEventMessage( map, 85, message )
+
+--- ===== 86  ======= 
+message = [[Le Mainbuilder ne peut pas construire de maisons. Mais par contre, il construit des bunkers de pièces d'artillerie plus forts. Il peut aussi construire des soubassements de pièces d'artillerie, quelques parties des installations de pièces d'artillerie et il peut transporter des pièces d'artillerie. Il peut aussi construire des soubassements.]]
+asc.setLocalizedEventMessage( map, 86, message )
+
+--- ===== 87  ======= 
+message = [[Le Vesuvius est le véhicule avec lequel vous pouvez construire et démonter des bâtiments. En outre, le Vesuvius monte et démonte aussi des soubassements de pièces d'artillerie et quelques pièces d'artillerie soi-même. En plus, il peut être utilisé pour le transport des pièces d'artillerie.]]
+asc.setLocalizedEventMessage( map, 87, message )
+
+--- ===== 88  ======= 
+message = [[Le bulldozer peut construire et démonter des routes, des voies, des rails, des pistes, des pipelines, des ponts, des tranchées ainsi que des barrages antichar. En outre, il peut aussi enlever des soubassements de pièces d'artillerie et du barbelé pendant la démolition. Et il peut transformer des collections de pierres et de la ferraille en matériel.]]
+asc.setLocalizedEventMessage( map, 88, message )
+
+--- ===== 89  ======= 
+message = [[Le garde forestier peut extraire du matériel en enlevant de la forêt ou des palmiers. Il peut aussi recycler de la ferraille.]]
+asc.setLocalizedEventMessage( map, 89, message )
+
+--- ===== 90  ======= 
+message = [[Une camionnette lourde qui peut transporter beaucoup. Elle peut même transporter des gros tanks de l'endroit A à l'endroit B. Mais il peut aussi transporter du matériau et en plus de cela, il peut recycler de ferraille. En outre, il peut trouver des ressources de matériau et de pétrole dans la terre des environs.]]
+asc.setLocalizedEventMessage( map, 90, message )
+
+--- ===== 91  ======= 
+message = [[Ce véhicule de réparation peut réparer des unités endommagées sur place. Pour des grandes réparations, le véhicule de réparation devrait être fourni en matériau et en carburant suffisamment.]]
+asc.setLocalizedEventMessage( map, 91, message )
+
+--- ===== 92  ======= 
+message = [[La camionnette de munition fournit les véhicules en munition sur place. Une plus grande offensive sans camionnette de munition est difficile. Aussi des pièces d'artillerie fixes sont fournies par cette camionnette.]]
+asc.setLocalizedEventMessage( map, 92, message )
+
+--- ===== 93  ======= 
+message = [[Le camion-citerne s'occupe du ravitaillement en carburant et il peut fournir tous les bâtiments et véhicules (aussi des hélicoptères atterris ou des bateaux à proximité du littoral) en carburant.]]
+asc.setLocalizedEventMessage( map, 93, message )
+

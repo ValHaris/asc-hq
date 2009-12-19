@@ -1,0 +1,123 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Connaissance des bâtiments
+
+Vous trouvez des bâtiments pour produire des ressources dans les deux lignes en haut. Vous trouvez des bâtiments pour la production et des autres bâtiments spéciaux dans les deux lignes en bas.
+
+Vous trouvez des informations sur les bâtiments sur les carreaux gris. Pour en savoir plus choisissez les bâtiments directement.
+
+Vous pouvez quitter les exercices des connaissances des bâtiments par les champs verts.
+
+On peut mettre des unités dans tous les bâtiments, mais le nombre maximal et la sorte d'unité sont différents pour chaque bâtiment. Tous les bâtiments ont le menu de chargement, par lequel on a accès aux unités dans le bâtiment. Tous les bâtiments peuvent échanger des ressources et de la munition disponibles et compatibles avec ces unités. En outre, des unités peuvent être recyclées dans tous les bâtiments.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 3  ======= 
+message = [[La centrale nucléaire libère l'énergie. Mais pour cela, elle a besoin du matériau et du pétrole. Vous pouvez régler la puissance de la centrale nucléaire vous-même.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== 4  ======= 
+message = [[La centrale éolienne libère l'énergie. Mais elle dépend du vent et elle peut seulement libérer l'énergie qui est en relation avec la force du vent.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[La centrale solaire libère l'énergie de l'énergie solaire. Si le ciel se couvre elle ne peut pas libérer d'énergie.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 6  ======= 
+message = [[La ferme extrait du pétrole des champs de colza ou des champignons.]] 
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 7  ======= 
+message = [[Le bûcheron extrait du matériau de la forêt ou des palmiers. Mais pour cela, il a besoin du pétrole.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== 8  ======= 
+message = [[L'usine de cristal extrait du matériau des cristaux et des graminées. Mais pour cela, il a besoin du pétrole.]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== 9  ======= 
+message = [[Le quartier général peut libérer l'énergie et produire du matériel et du carburant chaque partie et ainsi, il représente une ressource importante. Mais cela dépend des paramètres de la carte. La conquête d'un quartier général est souvent une condition de victoire.]] 
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== 10  ======= 
+message = [[La ville peut libérer l'énergie et produire du matériel et du carburant chaque partie et ainsi, elle représente une ressource importante. Mais cela dépend des paramètres de la carte. En outre, une ville apporte une petite contribution à la recherche scientifique.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== 11  ======= 
+message = [[La mine exploite du matériau directement du sol, mais elle est dépendent des ressources de la terre.  Pour exploiter du matériau la mine a besoin de peu d'énergie. Le joueur peut régler la puissance de l'exploitation soi-même.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== 12  ======= 
+message = [[Le derrick extrait du pétrole et il le transporte par voie terrestre. Mais il peut aussi servir des territoires d'eau voisins. Le derrick a besoin d'énergie pour extraire du pétrole. L'utilisateur peut régler la puissance de l'extraction soi-même.]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 13  ======= 
+message = [[La plateforme pétrolière extrait du pétrole et elle le transporte par voie d'eau. Elle n'est qu'ici pour la démonstration par voie terrestre.  Mais elle peut aussi servir des territoires voisins. 
+
+On a besoin d'énergie pour l'extraction. L'utilisateur peut régler la puissance de l'extraction soi-même.]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 27  ======= 
+message = [[La grande plateforme pétrolière peut extraire encore plus de pétrole par partie que la plateforme normale. Pour vous montrer l'extraction du pétrole la plateforme se trouve maintenant sur la terre. Pendant le jeu elle extraira du pétrole de l'eau et des champs de terre voisins. La grande plateforme dispose d'un propre groupe d'énergie et ainsi, elle peut extraire du pétrole en haute mer sans problème.
+
+L'utilisateur peut régler la puissance de l'extraction soi-même ce qui sera sensé si les dépôts de pétrole de la plateforme sont pleins.
+
+En outre, la grande plateforme pétrolière peut remplir des grand bateaux de carburant au dehors du bâtiment.]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== 28  ======= 
+message = [[La petite usine de véhicules produit de l'infanterie, des petits tanks et des véhicules de ravitaillement. Pour cela, une certaine technologie doit être disponible et elle doit être valorisée.
+
+L'usine a besoin d'énergie, du matériau et du pétrole pour produire des unités. En outre, l'usine peut aussi faire des maintenances: des réparations, de la munition ou remplir des avions de carburant.]]
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== 29  ======= 
+message = [[La grande usine de véhicules produit presque tous les modèles de véhicules. Elle ne peut pas produire d'infanterie et quelques véhicules légèrement blindés et armés. Mais par contre, elle produit les calibres lourds. Elle peut aussi produire des véhicules sur rails ou des aéroglisseurs.
+
+Pour leur production elle a besoin de l'énergie, du matériau et du pétrole. En outre, la grande usine peut aussi faire des maintenances: des réparations, de la munition et remplir de carburant.]]
+asc.setLocalizedEventMessage( map, 29, message )
+
+--- ===== 30  ======= 
+message = [[Des bateaux peuvent aborder et être entretenus au port (la réparation, la munition, remplir de carburant). Mais la fonction du port de produire aussi des bateaux ou des sous-marins est encore plus importante. Pour vous montrer le port il est complètement sur la terre, mais généralement il a toujours accès à l'eau.]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== 31  ======= 
+message = [[Des hélicoptères et des avions peuvent être produits et entretenus à l'aéroport, alors ce n'est pas un problème de les remplir de carburant et de munition et de les réparer.
+
+Il est important que l'aéroport a une voie de départ assez longue pour des avions.]]
+asc.setLocalizedEventMessage( map, 31, message )
+
+--- ===== 32  ======= 
+message = [[Le spatiodrome peut produire des satellites, des astronefs et aussi des avions. Des maintenances comme des réparations ou remplir de munition et de carburant peuvent aussi être faites, bien sûr.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== 33  ======= 
+message = [[La station-service peut remplir des véhicules plus grands de carburant directement de l'extérieur.]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== 34  ======= 
+message = [[Le dépôt a la fonction principale du stockage. Du matériau et du pétrole ainsi que de la munition peuvent être stockés ici. En outre, des maintenances comme des réparations ou remplir de munition et de carburant peuvent aussi être faites.]]
+asc.setLocalizedEventMessage( map, 34, message )
+
+--- ===== 35  ======= 
+message = [[Des unités peuvent être entraînées dans le centre d'entraînement. Le centre d'entraînement a besoin d'énergie pour son fonctionnement. On a besoin de la munition pour entraîner des unités. Mais le centre d'entraînement peut produire cette munition soi-même et il peut aussi en remplir des unités.
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== 36  ======= 
+message = [[Le centre de recherches a besoin de beaucoup de ressources, mais par contre, des nouvelles technologies peuvent être recherchées qui pourront être installées dans des usines plus tard ou par lesquelles des véhicules de construction pourront être produits.
+
+L'utilisateur peut fixer combien de ressources doivent être utilisées pour les recherches.]]
+asc.setLocalizedEventMessage( map, 36, message )
+
+--- ===== 37  ======= 
+message = [[Des avions, mais aussi des autres véhicules, peuvent être entretenus au hangar. Normalement, le hangar se trouve toujours sur une piste solide et il devrait être près d'une voie de départ pour des avions.]]
+asc.setLocalizedEventMessage( map, 37, message )
+
+--- ===== 38  ======= 
+message = [[La station radar augmente le radius de la vue et elle permet d'apercevoir l'ennemi plus tôt.]]
+asc.setLocalizedEventMessage( map, 38, message )
+
+--- ===== 39  ======= 
+message = [[La station jamming perturbe le radar ennemi et elle complique à l'ennemi de repérer ses propres unités ou même ses bâtiments.]]
+asc.setLocalizedEventMessage( map, 39, message )
+

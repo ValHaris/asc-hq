@@ -1,0 +1,128 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[gestion des dépôts
+
+Ouvrez le menu de chargement d'un bâtiment que l'on veut. Vous y trouverez le bouton "ressource network info" à gauche. Essayez de retenir l'image un peu. Tous les textes suivants se réfèrent à cette fenêtre d'informations. Marchez sur le prochain carreau après.
+
+Pour quitter ces exercices marchez sur les champs verts.
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 4  ======= 
+message = [["resource network info" se compose de trois parties prinicipales qui s'appellent "local", "network" et "global".
+
+"Local" se réfère toujours au bâtiment choisi.
+
+"Global" se réfère toujours à tous les bâtiments que vous possédez.
+
+"Network" (réseau) se réfère aux secteurs qui sont reliés par un pipeline. Dans cet exemple tous les bâtiments à droite de la rivière seraient dans le même réseau.
+
+Les bâtiments à gauche de la rivière ne sont pas reliés l'un avec l'autre, mais chaqu'un des quatre bâtiments peut être considéré comme un seul réseau. Alors, il y a 5 réseaux dans cet exemple sur toute la carte: le grand réseau à droite de la rivière et les quatre bâtiments seuls. Vous recevrez des informations sur le réseau qui va avec le bâtiment. Ca dépend sur quel bâtiment vous cliquez.
+
+Si vous voulez vous pouvez regarder l'information "ressource network" encore.
+
+Pour continuer marchez sur le prochain carreau.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 5  ======= 
+message = [[Il y a trois sortes de ressources dans ASC: de l'énergie, du matériau et du pétrole.
+
+Ouvrez "ressource network info" encore. Vous y trouverez trois petits symbols sous les trois sections "local", "network" et "global" qui représentent ces ressources de gauche à droite depuis l'énergie en passant par le matériau jusqu'au pétrole. 
+
+Pour continuer marchez sur le prochain carreau.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 12  ======= 
+message = [[Pour conclure il y a les catégories "avail", "capacity", "plus" et "usage".
+
+"Avail" est la quantié de ressources que vous avez à votre disposition.
+
+"Capacity" est la capacité d'entreposage maximale des différents bâtiments, des réseaux ou de tous les bâtiments en général. 
+
+"Plus" est l'entrée des ressources et "usage" est la consommation des ressources.
+
+Si vous voulez vous pouvez regardez "ressource network info" encore. Sinon, on continue avec le carreau prochain.
+
+]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 13  ======= 
+message = [[Bon, il est temps pour une nouvelle partie. Nous avons besoin des ressources et les bâtiments pourront seulement produire des ressources si nous terminons cette partie.
+
+Si vous voulez regardez "ressource network info" encore une fois, particulièrement les informations sur "avail". Il y a des zéros partout présentement ce qui veut dire que vous n'avez pas d'énergie, de matériau ou de pétrole à votre disposition. Mais cela va changer dans la prochaine partie.
+
+Appuyez sur "end turn" alors.]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 19  ======= 
+message = [[Regardons d'abord la droite de la rivière. Qu'est-ce qui s'est passé? 
+
+La centrale solaire a fourni de l'énergie avec laquelle la mine (exploitation du matériau) et le derrick ont été fournis. Le réseau a été alimenté en matériau et en pétrole ainsi extraits.
+
+Alors, vous pouvez vous servir du matériau et du pétrole extraits par tous les quatre bâtiments sur le côté droit.
+
+Et sur le côté gauche? La centrale solaire y fournit de l'énergie, mais il n'y a pas de consommateurs. La mine et le derrick à gauche ne peuvent pas être fournis.
+
+Terminez cette partie alors.]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== 35  ======= 
+message = [["Avail" se calcule de "plus", mais "usage" est déduit avant et "capacity" limite le maximum permis. 
+
+La centrale solaire fournit un "plus" d'énergie.
+
+La mine et le derrick fourniront un "plus" d'énergie si ils sont approvisionnés en énergie, mais ils auront aussi un "usage" d'énergie.
+
+Le dépôt a une haute "capacity" pour stocker du matériau ou du pétrole exploités plus longtemps.
+
+Terminez cette partie alors.]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== 49  ======= 
+message = [[Pour des raisons de démonstration le dépôt à gauche est maintenant relié avec la centrale solaire.  Les deux bâtiments sont maintenant raccordés au même réseau.
+
+L'énergie de la centrale solaire est à votre disposition au dépôt maintenant. Vous pouvez le voir dans "ressource network info" sous "network". Si vous voulez vérifier si un bâtiment est raccordé au réseau d'énergie vous devrez toujours contrôler la colonne "network".
+
+Terminez cette partie alors.]]
+asc.setLocalizedEventMessage( map, 49, message )
+
+--- ===== 115  ======= 
+message = [[Le dépôt est maintenant raccordé à la mine. La mine peut maintenant être approvisionnée en énergie pour qu'elle puisse produire du matériau. La centrale solaire, le dépôt et la mine forment le réseau maintenant. Les dépôts de matériel de ce réseau peuvent se remplir à partir de la prochaine partie.
+
+Terminez cette partie alors.]]
+asc.setLocalizedEventMessage( map, 115, message )
+
+--- ===== 135  ======= 
+message = [[Le derrick est maintenant aussi raccordé au réseau et il reçoit l'énergie nécessaire pour extraire du pétrole.
+
+Le dépôt a maintenant beaucoup de ressources à sa disposition. Il pourrait faire des réparations avec de l'énergie et du matériau ou il pouvait remplir des véhicules de carburant. 
+
+Faisons encore une partie.]]
+asc.setLocalizedEventMessage( map, 135, message )
+
+--- ===== 159  ======= 
+message = [[Les zones à gauche et à droite de la rivière sont aussi reliées maintenant. Il y a seulement un seul grand réseau maintenant.
+
+Si vous comparez les informations de "network" et "global" elles seront identiques. Votre réseau est devenu global maintenant. Tous les bâtiments que vous possédez sont raccordés à ce réseau global.
+
+Comparez "network" et "global" et vous pourrez découvrir très vite s'il y a des bâtiments ou des autres réseaux qui ne sont pas raccordés au réseau principal.
+
+Alors, répétons encore.
+
+"Local" sera identique à "network" si le bâtiment est seul, et "network" sera identique à "global" si tous les bâtiments que vous possédez sont raccordés au même réseau.
+
+Encore une dernière partie. ]]
+asc.setLocalizedEventMessage( map, 159, message )
+
+--- ===== 185  ======= 
+message = [[Pour des raisons de démonstration vous recevez deux camions-citerne ici.  Le véhicule en haut à droite a une livraison de pétrole. Le véhicule en bas à gauche doit aller chercher du pétrole.
+
+Conduisez le véhicule en haut à droite à la centrale solaire. Vous pouvez y alimenter le réseau en pétrole par la fonction du véhicule "refuel". Puis, le véhicule peut aller à la mine en bas à gauche pour y aller chercher le pétrole.
+
+Alors, il est possible d'alimenter le réseau en pétrole ou de prendre du pétrole du réseau n'importe où. Vous pouvez faire la même chose avec du matériau ou de l'énergie, mais il n'y a pas de camionettes pour l'énergie. Mais vous pourriez par exemple alimenter le réseau en énergie avec un véhicule de production énergétique n'importe où.
+
+Félicitations, vous avez surmonté ces exercices et vous recevrez le titre: "informaticien qualifié en "ressource network""
+
+Si vous voulez vous pouvez encore faire des expériences. Sinon, choisissez un des champs verts pour quitter ces exercices.]]
+asc.setLocalizedEventMessage( map, 185, message )
+

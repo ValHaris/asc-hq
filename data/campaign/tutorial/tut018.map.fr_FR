@@ -1,0 +1,134 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[réparation et approvisionnement
+
+C'est le mieux de revoir les exemples pour apprendre tous les détails et toutes les possibilités de ce sujet. Suivez le sentier de la gauche en haut et allez sur les carreaux avec les véhicules.
+
+Pour quitter ces exercices marchez sur le champ vert.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 12  ======= 
+message = [[Répétez les fonctions normales des bâtiments.
+
+Ce weasel manque la munition, les réservoirs de carburant sont presque vides et il est aussi légèrement endommagé.
+
+Conduisez le weasel à la station radar à proximité. Ne vous faites pas de soucis, le weasel est tellement petit qu'il va y convenir. La station radar a une connexion au réseau de ressources et vous pouvez au moins y fournir le weasel en carburant par le menu de chargement de la station radar.
+
+Menu de chargement "refuel" ou "refuel dialog"]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 16  ======= 
+message = [[Répétez les fonctions normales des bâtiments.
+
+Ce shocktrooper a besoin de nouvelles mines. Normalement, il devrait aller au bâtiment où de la munition peut être produite.  Mais 10 mines ont éte déposées exprès pour lui à la station radar proche au sud. Il peut y aussi remettre du matériau et du carburant pour continuer à se régénérer soi-même. Il pourrait y aussi laisser un peu de sa munition de fusil d'assaut, avec laquelle par exemple le weasel pourrait s'armer.
+
+Menu de chargement "refuel" ou "refuel dialog"]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 17  ======= 
+message = [[réparation dans un bâtiment
+
+Ce tank est pas mal esquinté et il a l'air d'un tas de ferraille. En outre, il manque la munition et le carburant.
+
+Heureusement, il a presque atteint le dépôt. Le dépôt a la capacité de réparer des unités. Pour cela, le tank doit aller au bâtiment.
+
+Choisissez "repair" dans le bâtiment pour réparer le tank, puis "refuel" ou "refuel dialog" pour lui faire le plein et pour le fournir en munition.
+
+Le dépôt a besoin d'énergie et de matériau pour la réparation.
+
+
+Tuyau: Ne pas seulement le dépôt, mais aussi tous les bâtiments qui produisent - ce sont la petite et la grande usine de véhicules, le port, l'aéroport et le spatiodrome - peuvent réparer des unités.]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== 18  ======= 
+message = [[remplir de munition et faire le plein de l'extérieur
+
+Ce tank est intact, mais il manque le carburant et la munition.
+
+Il devrait choisir le ravitaillement plus vite par le dépôt. Pour cela, il ne doit pas entrer dans le dépôt, mais il doit se placer directement près du dépôt.
+
+Puis, le dépôt peut le ravitailler aussi par "refuel dialog" de l'extérieur. Ainsi, le tank reçoit du carburant et de la munition et il peut tout de suite retourner au combat. S'il entre dans le dépôt il devra y rester pendant une partie.
+
+Le dépôt ne peut pas faire les réparations à l'extérieur du terrain.]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== 25  ======= 
+message = [[Ravitaillement en munition au dépôt
+
+Cette camionnette de munition n'a plus de munition de tanks, alors, elle devrait aller chercher de la nouvelle munition au dépôt.
+
+Le dépôt peut la fournir à l'extérieur ou la camionnette entre dans le bâtiment pour le ravitaillement. Comme la camionnette dispose de la fonction "refuel" et "refuel dialog" elle-même, l'action "refuel" peut aussi être commencée à la camionnette.]]
+asc.setLocalizedEventMessage( map, 25, message )
+
+--- ===== 26  ======= 
+message = [[recyclage des véhicules
+
+Cette camionnette a été endommagée. En outre, elle a consommé tout son arsenal de munition. Elle devrait mieux aller au dépôt pour pouvoir être réparée. En outre, il sera très cher de la remplir de munition, alors, "refuel dialog" serait la meilleure solution. Peut-être il est aussi plus sensé de recycler cette camionnette? Vous pouvez recycler dans chaque bâtiment et vous serez remboursé la moitié des coûts de production de ce véhicule.]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== 27  ======= 
+message = [[Ravitaillement en matériau au dépôt
+
+Cette camionnette est pleine de matériau. Allez au dépôt et remettez-y le matériau.
+
+La camionnette a la capacité "refuel" ou "refuel dialog". Alors, vous avez le choix: ou vous allez au dépôt ou vous vous laissez fournir du dépôt à l'extérieur ou vous fournissez le dépôt avec la camionnette. Dans toutes les trois situations vous avez le choix entre "refuel" et "refuel dialog".]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== 28  ======= 
+message = [[approvisionnement en énergie par le véhicule de génératrice
+
+Le véhicule de génératrice produit de l'énergie. Garez le véhicule près du dépôt et activez sa production d'énergie.]]
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== 29  ======= 
+message = [[Ravitaillement en carburant au dépôt
+
+Cette camionnette est pleine de carburant. Conduisez-la au dépôt et remettez-y le carburant.
+
+La camionnette aussi, elle a la capacité "refuel", à tel point que vouz avez plusieurs possibilités.]]
+asc.setLocalizedEventMessage( map, 29, message )
+
+--- ===== 30  ======= 
+message = [[ravitaillement des plus petits bâtiments
+
+Tous ces trois véhicules ont la capacité "refuel". Ainsi, ils sont capables de ravitailler cette station radar. Alors, ils peuvent fournir le bâtiment en carburant et en matériau ainsi qu'avec de la munition.]]
+asc.setLocalizedEventMessage( map, 30, message )
+
+--- ===== 31  ======= 
+message = [[réparation des véhicules dans le champ
+
+Les deux tanks sont gravement endommagés. Réparez les tanks avec la fonction de réparation de ce véhicule sur place.
+
+Contrairement à la réparation au dépôt cette réparation coûte du matériau et du carburant.]]
+asc.setLocalizedEventMessage( map, 31, message )
+
+--- ===== 32  ======= 
+message = [[Ravitaillement en munition dans le champ
+
+Les deux tanks manquent la munition. Ravitaillez les tanks sur place.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== 33  ======= 
+message = [[remplir des véhicules de carburant dans le champ
+
+Les deux tanks manquent le carburant. Ravitaillez les tanks sur place.
+
+Tuyau: Si votre camion-citerne remplit des autres véhicules de carburant vous ne devriez jamais quitter le niveau de remplissage de la camion-citerne des yeux.  Il y avaient déjà des conducteurs de camions-citerne qui avaient rempli tout un bataillon de tanks de carburant et qui n'avaient plus assez de carburant pour eux-mêmes pour atteindre le prochain dépôt.]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== 34  ======= 
+message = [[charger du matériau dans le champ
+
+Aussi la camionnette de matériaux peut fournir des autres véhicules dans le champ. Mais cela marchera seulement si les véhicules à fournir doivent eux-mêmes charger du matériau.
+
+Chargez le matériau sur le hovercraft et transportez-le à la camionnette sur l'autre côté de la rivière. La camionnette peut décharger le matériau du hovercraft.
+asc.setLocalizedEventMessage( map, 34, message )
+
+--- ===== 35  ======= 
+message = [[recycler de la ferraille
+
+Pour être complet, la fonction de l'Anduin de pouvoir collectionner de la ferraille est mentionnée ici. Tirez sur les leurres pour transformer la ferraille en matériau après.
+
+remove objects]]
+asc.setLocalizedEventMessage( map, 35, message )
+

@@ -1,0 +1,18 @@
+map = asc.getLoadingMap() 
+--- ===== 89  ======= 
+message = [[+++ rapport de Tide (navire de patrouille) +++ #crt##crt# Commandant, #crt##crt# Nous arriverons de l'ouest sous peu. Un deuxième navire de transport nous escorte, parce qu'on a intercepté des messages radio qu'une plus grande flotte est planifiée ou déjà appareillée pour repousser notre débarquement. #crt#
+]]
+asc.setLocalizedEventMessage( map, 89, message )
+
+--- ===== 70  ======= 
+message = [[Très bien, commandant, #crt##crt# l'ennemi fuit et il s'est retiré à l'est en traversant une rivière. #crt##crt# Réparez vos unités et préparez-vous pour un autre combat. #crt##crt#
+
+]]
+asc.setLocalizedEventMessage( map, 70, message )
+
+--- ===== 1  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# nous sommes en train d'amener nos forces armées au continent. Malheureusement, deux camionnettes et un cuirassé ont été encerclés par des mines et ils sont neutralisés présentement. Il y a seulement un navire de transport qui pouvait se débrouiller et être déchargé. #crt##crt# Nous avons trouvé un port à gauche et un pont à droite. Malheureusement, les unités avec lesquelles nous pouvons conquérir des bâtiments sont prises dans le champ de mines. Le pont est mobile à cause des marées qui sont souvent hautes et à cause de la nécessité de laisser entrer aussi des grands bateaux dans le canal. Veillez bien à ce que l'ennemi ne vous arnaque pas avec le pont. #crt##crt# Nous essayons de dégoter des démineurs et de vous les envoyer. Défendez les camionnettes le plus longtemps possible, parce que ces unités sont très importantes et la perte d'elles signifierait un grave revers. Les unités qui sont déjà arrivées seraient livrées à l'ennemi. #crt##crt# Nous supposons qu'un ou plusieurs sites de production se trouvent ici, parce que les installations portuaires sont vastes et elles sont faites pour transborder vite des masses. Soyez prudent et essayez de trouver et de conquérir les sites de production. #crt##crt##crt# Votre mission: #crt# Prenez les deux sites de production et le quartier général qui se trouvent à l'est du canal. #crt#
+
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+

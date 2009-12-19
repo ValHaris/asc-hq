@@ -1,0 +1,22 @@
+map = asc.getLoadingMap() 
+--- ===== 9  ======= 
+message = [[+++ rapport général du quartier général +++ #crt##crt# Commandant, #crt##crt# comme nos scientifiques nous informent, ce sont des nouvelles îles des roches volcaniques qui sont très riches en matières premières. #crt##crt# L'ennemi prépare l'exploitation des îles ce qui montre la disponibilité des pipelines entre les îles. Nous ne savons pas jusqu'à quel point il a déjà progressé. Celui qui sait exploiter les îles a un grand avantage de son côté. Essayez de préserver de l'infrastructure le plus possible et ne donnez pas la possibilité à l'ennemi de faire des rapports, parce que nous croyons qu'il ne sait pas encore que ses gens ont été démasqués dans notre détachement de reconnaissance...  #crt##crt# Votre mission: #crt# Conquérez tous les bâtiments, prenez le centre de distribution et détruisez toutes les unités ennemies. #crt#
+]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== 10  ======= 
+message = [[Commandant, #crt##crt# ce sont plusieurs îles. #crt##crt# Il est très important de les prendre et de proscrire à l'ennemi l'accès aux matières premières. #crt##crt# Une flotte plus grande arrivera sous peu pour vous soutenir dans cette mission. #crt# 
+]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== 6  ======= 
+message = [[+++ rapport scientifique du quartier général +++ #crt##crt# Commandant, #crt##crt# il me semble que l'ennemi est déjà devenu actif. Le secret de ces bâtiments pourrait être intéressant. Conquérez la baraque. #crt#
+
+]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== 5  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# nous regrettons de vous rappeler de votre retraite bien méritée, mais nous avons un problème. Il y a deux jours, nous avons constaté que notre détachement de reconnaissance a retenu et supprimé des données.  On a isolé les personnes en question et elles seront interrogées. #crt##crt# Pour autant que nous sachions un nouveau chapelet d'îles a été né par l'activité volcanique dans l'océan. Nous ne pouvons pas identifier l'endroit précis, mais nous supposons qu'un traître a fait passer ces données à l'ennemi. Nous ne savions rien des activités ennemies éventuelles. Mais nous supposons que l'ennemi aussi, il n'a pas beaucoup d'unités dans ce domaine. #crt##crt# Nous avons regroupé une petite flotte de reconnaissance qui avance vers le chapelet d'îles du sud-est. Il est votre ordre d'explorer ce chapelet d'îles et de préserver nos intérêts. 
+]]
+asc.setLocalizedEventMessage( map, 5, message )
+

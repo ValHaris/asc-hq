@@ -1,0 +1,138 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Vous apprenez comment utiliser le bulldozer à l'école de bulldozers. Le bulldozer a des talents multiples.
+
+La partie supérieure de la carte traite les options de construction du bulldozer. De gauche à droite ce sont:
+
+des chemins de terre, des pistes, des rails, des pipelines à la surface, des pipelines souterrains, des tranchées et des barrages antichar.
+
+Puis, plus bas, il y a la construction des ponts pour des routes et des rails, ainsi que la possibilité de continuer un pipeline souterrain aussi sous l'eau, mais il y a une différence entre le grand et le petit pont. En outre, vous apprendrez jusqu'à quelle profondeur le l'eau vous pouvez construire. Un véhicule de construction des chemins de fer et un bateau de la marine vous assistera ici, et ils ont les mêmes capacités de construction.
+
+Enfin, il y a encore des autres possibilités du bulldozer pour la démolition et aussi pour l'extraction de matériau en bas au coin droit.
+
+Le contrôle du bulldozer est le même pour tous les exemples. Choisissez le bulldozer et puis sa fonction "construct/remove objects". Puis, choisissez le champ où vous voulez construire, démonter ou exploiter. Il est important pour le bulldozer que vous maintenez le champ cible plus longtemps pour choisir l'ordre de construction précis après. Quand vous choisissez l'ordre vous recevrez une information sur des coûts de construction ou bien le bénéfice du matériau.
+
+Choisissez un bulldozer et conduisez sur un carreau pour recevoir des informations plus précises sur des sections.
+
+Pour quitter ces exercices marchez sur le champ vert.
+
+
+Tuyau: Si votre bulldozer ne peut pas réaliser la construction souhaitée il pourra y avoir des raisons différentes. Le bulldozer n'a plus assez de points de déplacement, il manque le matériau de construction, le champ est bloqué par des autres objets ou des véhicules ou le champ n'est pas constructible.]] 
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 12  ======= 
+message = [[aménager des sentiers
+
+Ce sentier est une possibilité avantageuse et rapide pour agrandir le champ d'action des autres véhicules. L'ordre de construction est "build path".]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== 13  ======= 
+message = [[construction des routes
+
+La route est une solution plus élégante pour agrandir le champ d'action des autres véhicules. Par contre, les coûts et la durée de construction sont plus élevés que ceux du sentier. L'ordre de construction est "build road".]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 14  ======= 
+message = [[construction des pistes
+
+La piste est utilisée comme piste d'envol et d'atterrissage pour des avions et aussi pour permettre aux avions de se déplacer par terre , par exemple au hangar. 
+
+Pour construire une piste d'envol et d'atterrissage vous avez besoin de 4 pistes liées. En outre, le hangar peut seulement être construit sur un champ de piste.
+
+Les coûts et la durée de construction d'une piste sont très élevés. L'ordre de construction est "build runway".]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== 15  ======= 
+message = [[construction des rails
+
+Il sera nécessaire de construire des rails si vous voulez agrandir le champ d'action de vos véhicules sur rails. Alors que des véhicules normales peuvent aussi se déplacer sans sentiers ou routes, le train n'est pas capable de se déplacer sans rails. L'ordre pour construire des rails est "build railroad".]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== 16  ======= 
+message = [[construction des pipelines (à la surface)
+
+La construction des pipelines à la surface est avantageuse et vite. Mais sa construction est aussi vite faite que sa démolition. Si l'ennemi tire sur lui il peut être coupé. L'ordre de construction pour ce pipeline est "build pipeline".]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 17  ======= 
+message = [[construction des pipelines (souterrains)
+
+Il est plus cher et il prend plus de temps pour poser un pipeline souterrain que de le poser à la surface, mais il y a des avantages. L'ennemi ne peut pas couper ce pipeline en tirant sur lui. Mais il est encore possible qu'un autre véhicule de construction pourrait le déterrer pour le couper. L'ordre de construction est "build buried pipeline".]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== 18  ======= 
+message = [[des tranchées
+
+Le bulldozer peut aussi construire des tranchées. Des tranchées sont une défense avantageuse qui peut retenir l'ennemi et qui peut aussi donner un bonus de défense aux propres troupes. Mais l'ennemi aussi recevra ce bonus de défense s'il entre dans la tranchée. L'ordre de construction est "build ditch".]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== 19  ======= 
+message = [[des barrages antichar
+
+La construction des barrages antichar est une autre capacité du bulldozer. Une barrage antichar bloque le terrain pour tous les véhicules, peu importe que l'on soit ami ou ennemi. L'ordre de construction est "build tankblocker".]]
+asc.setLocalizedEventMessage( map, 19, message )
+
+--- ===== 20  ======= 
+message = [[pont de routes
+
+Le bulldozer peut aussi construire des ponts. Pour traverser des rivières on a besoin du grand pont. Les coûts de construction pour un tel pont sont très élevés. L'ordre de construction pour ce pont est "build big bridge".]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== 21  ======= 
+message = [[pont de routes
+
+Un pont normal suffit pour des eaux peu profondes. Vous pouvez construire ce pont normal dans les deux premières eaux. Mais vous avez besoin d'un grand pont pour les troisièmes eaux. Il n'est pas possible de construire un pont pour les deux dernières eaux. Les coûts de construction du pont normal sont avantageux. L'ordre de construction est "build bridge" pour le pont normal et "build big bridge" pour le grand pont.
+
+Faites attention à vos réserves de matériau en construisant un pont.]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== 22  ======= 
+message = [[pont de chemin de fer
+
+Il vous faut un grand pont de chemin de fer pour traverser des rivières. Cette construction est très chère. L'ordre de construction pour le grand pont de chemin de fer est "build big railroad bridge".]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== 23  ======= 
+message = [[pont de chemin de fer
+
+Un pont de chemin de fer normal suffit pour des eaux peu profondes. Vous pouvez le construire dans les deux premières eaux. Vous avez besoin du grand pont de chemin de fer pour les troisièmes eaux. Il n'est pas possible de construire des ponts pour les deux dernières eaux. L'ordre de construction est "build railroad bridge" pour le pont de chemin de fer normal et "build big railroad bridge" pour le grand pont de chemin de fer.
+
+Le bulldozer ne peut pas emprunter les ponts de chemin de fer, à tel point que vous devez construire un pont de routes directement près du pont de chemin de fer ou vous faites appel au véhicule de construction des chemins de fer ou de la marine.  ]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== 24  ======= 
+message = [[pipeline d'eau
+
+Vous utiliserez aussi le pipeline souterrain normal si vous voulez continuer la construction de pipelines sous l'eau. L'ordre de construction est "build buried pipeline".]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== 25  ======= 
+message = [[pipeline d'eau
+
+Le pipeline souterrain normal suffit pour les deux premières eaux. Mais vous avez besoin d'un pipeline plus fort que le bulldozer ne peut pas construire pour les troisièmes eaux. Ici, vous avez besoin des capacités de la marine. On ne peut plus construire de pipelines dans les deux dernières eaux. L'ordre de construction sont "build buried pipeline" et "build strong pipeline".]]
+asc.setLocalizedEventMessage( map, 25, message )
+
+--- ===== 26  ======= 
+message = [[démontage
+
+Le bulldozer peut démonter tout ce qu'il a construit. En outre, il peut raser du barbelé et des soubassements des pièces d'artillerie. Choisissez l'ordre "remove" pour le démontage.
+
+Faites attention à votre niveau de matériau pendant le démontage. Si votre bulldozer est trop plein il pourra encore démonter des autres objets, mais le matériau démonté sera perdu.]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== 27  ======= 
+message = [[exploitation des pierres
+
+Le bulldozer peut aussi exploiter des pierres pour affiner du matériau. Choisissez l'ordre "remove" pour cela.
+
+Vous devriez aussi faire attention au niveau de matériau pour ne pas détruire du matériau précieux.]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== 28  ======= 
+message = [[recycler de la ferraille
+
+Il n'est pas un problème pour le bulldozer de recycler la ferraille des véhicules ennemis ou des propres véhicules. Envoyez les leurres à la ferraille en les tirant et ramassez la ferraille avec l'ordre "remove" après.
+
+Faites attention à votre niveau de matériau et au bénéfice de matériau pendant le recyclage de la ferraille. Pendant que les deux fantassins ne donnent que peu de matériau, le gros tank est d'un bon rendement de matériau. Alors, le recyclage de ferraille peut être une bonne affaire.
+asc.setLocalizedEventMessage( map, 28, message )
+

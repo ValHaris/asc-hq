@@ -1,0 +1,40 @@
+map = asc.getLoadingMap() 
+--- ===== 16  ======= 
+message = [[+++ message du quartier général +++ #crt##crt# Commandant, #crt##crt# le renforcement annoncé est arrivé. #crt#
+]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== 149  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# c'est bien que vous avez arrêté l'expérimentation. #crt##crt# Nous enverrons une flotte de ravitaillement pour les bateaux associés. #crt##crt# Le renfort de votre armée est aussi en route et il arrivera sous peu. #crt#
+]]
+asc.setLocalizedEventMessage( map, 149, message )
+
+--- ===== 13  ======= 
+message = [[+++ rapport du groupe de recherches +++ #crt##crt# Commandant, #crt##crt# merci que vous nous avez sauvés. Mais il n'y a pas le temps pour pleurer. #crt##crt# Le quartier général m'a donné l'ordre de vous aider avec votre invasion. Nous commencerons tout de suite, dès que nous sommes surs qu'il n'y pas d'autres dégâts ou d'actes de sabotage dans notre flotte. #crt#
+]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== 10  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# félicitations! #crt##crt# Vous n'avez pas seulement conquiers l'usine, mais vous pouviez aussi arrêter l'expérimentation. #crt##crt# Les données ont montré que toutes les unités du groupe de recherches seraient été détruites, si l'expérimentation était faite jusqu'à la fin. #crt#
+]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== 8  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# nos services secrets ont pris connaissance d'une usine de trains qui est importante et en même temps facile à atteindre. #crt##crt# Un ordre d'avance a pris une petite usine située devant et il a fait une petite fortification pour protéger le largage des unités qui restent. #crt##crt# Conquérez l'usine au sud. #crt##crt# Votre mission: #crt# Conquérez l'usine de trains au sud #crt#
+]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== 7  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# nous avons abordé à la côte.  Il semble que l'ennemi a roulé nos services secrets et il nous a attirés dans un piège. Conquérez et défendez l'usine jusqu'à ce que nous puissions amener des unités plus fortes. #crt##crt# Votre mission: #crt# Conquérez est défendez en plus l'usine à proximité #crt#
+]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== 5  ======= 
+message = [[+++ rapport +++ #crt##crt# Retournez tout de suite. Il n'y a pas de deuxième avertissement! #crt#]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== 1  ======= 
+message = [[+++ message du quartier général +++ #crt##crt# Commandant, #crt##crt# nous avons un problème. #crt##crt# Nous avons chopé un saboteur et il a avoué d'avoir saboté une expérimentation importante de nos recherches. #crt##crt# Le groupe de recherches est selon le calendrier tout près de faire l'expérimentation. D'après les nouvelles connaissances il sera une faute fatale avec des nombreuses conséquences pour les unités qui y participent. Il faut que nous arrêtions l'expérimentation en 15 heures. #crt##crt# L'expérimentation a à voir avec des champs camouflés; alors, faites attention, les unités pourraient apparaître soudainement près de vous. #crt##crt# Le groupe a eu l'ordre de travailler sous grand silence et de faire un rapport seulement après avoir fini l'expérimentation. Cela veut dire que nous ne les atteignons pas. En plus, je sais qu'il y a une faille dans le service de renseignements. Cela veut dire que chaque unité qui s'approche sera très probablement considérée comme ennemi et qu'elle sera détruite de façon imprévue.#crt##crt# Vous et votre troupe de combat sont les seuls à être en mesure d'essayer une prise de contact. L'expérimentation a lieu sur un atoll à l'ouest. Trouvez le groupe, arrêtez l'expérimentation en détruisant le bateau d'expérimentation. #crt##crt# Mission supplémentaire: Trouvez l'atoll, arrêtez l'expérimentation ou détruisez le bateau d'expérimentation dans les prochains 15 parties. #crt# 
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+

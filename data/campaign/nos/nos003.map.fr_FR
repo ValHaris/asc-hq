@@ -1,0 +1,16 @@
+map = asc.getLoadingMap() 
+--- ===== 598  ======= 
+message = [[Félicitations, #crt##crt# Vous avez sauvé les dernières unités pour notre offensive terrestre. Donnez maintenant l'ordre de retraite à vos autres unités, nous pouvons maintenant laisser les îles à l'ennemi, mais de toute façon vous disparaîtrez sous peu.
+]]
+asc.setLocalizedEventMessage( map, 598, message )
+
+--- ===== 584  ======= 
+message = [[+++ rapport du quartier général +++ #crt##crt# Commandant, #crt##crt# le chapelet d'îles devient de plus en plus instable. La plupart des petites îles a été avalée, ou les volcans sont entrés en éruption de nouveau. #crt# la situation sur l'île principale s'est aussi aggravée de façon dramatique. La lave ne veut pas s'arrêter de couler et il y a le risque que l'île disparaisse bientôt de même. Préparez-vous de quitter l'île encore complètement. Nous transporterons toutes les unités construites jusqu'à présent et nous observerons si l'île se calmera. #crt##crt# Nous avons espéré plus de ce chapelet d'îles, mais ce n'était pas le cas. Ce n'était pas en vain et nous pouvions en retirer des ressources considérables. #crt##crt# À cause des instabilités géologiques de ce chapelet d'îles, nous avons pris la décision de construire une station de chargement pour la dernière livraison plus loin dans l'océan. #crt##crt# Présentement, on ne peut pas voir l'ennemi, bien que le service de renseignements nous ait dit que l'ennemi essaie encore de reconquérir les îles. Des fragments des rapports saisis concernent des unités de la marine ultraperfectionnées, qui sont bien plus difficiles à découvrir que jusqu'à présent. Alors, il faut que vous escortez les camionnettes. #crt##crt# C'est votre mission maintenant de conduire les véhicules qui restent de l'usine aux camionnettes qui attendent. #crt##crt# Votre mission: Conduisez les tanks et les véhicules qui attendent sur le terrain industriel aux navires de transport au sud-est. Ne perdez pas ni les véhicules ni aucun des navires de transport à l'est. #crt# 
+]]
+asc.setLocalizedEventMessage( map, 584, message )
+
+--- ===== 580  ======= 
+message = [[+++ rapport de la reconnaissance +++ #crt##crt# Commandant, #crt##crt# nous avons remarqué des flux de données à et d'une position au nord-est.  Beaucoup porte à croire qu'il y a le navire de commandement de cette opération. #crt##crt#
+]]
+asc.setLocalizedEventMessage( map, 580, message )
+

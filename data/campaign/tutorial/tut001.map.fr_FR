@@ -1,0 +1,82 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[exercices ASC pour débutants "déplacement et vue"
+
+ASC est un jeu qui s'appuie sur des parties, alors vous avez assez de temps pour planifier vos actions.
+
+Il y a le bouton "end turn" (quitter la partie) en bas à droite. Fermez cette fenêtre d'information avec OK et appuyez sur "end turn".
+
+Tuyau: Vous pouvez déplacer cette fenêtre sur l'écran comme vous voulez. Retenez la barre de titre de cette fenêtre avec la souris et déplacez-la.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 4  ======= 
+message = [[On va venir à la direction des unités maintenant. Vous recevrez un shock trooper, une unité de l'infanterie simple. Déplacez votre trooper 4 champs vers le sud-est, le champ cible est coloré.
+
+Pour déplacer votre unité choisissez-la. Puis, appuyez sur le bouton "move unit" (déplacer l'unité) en bas à droite.
+
+Au mode de déplacement marquez son champ cible et le trooper va y aller.
+
+
+Tuyau: Vous pouvez toujours relire vos messages récus. Choisissez "message" et puis "view received messages" du menu game (barre supérieure). Tous les messages y sont archivés et ils sont triés par ordre de temps.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== 11  ======= 
+message = [[Très bien. Déplacez-vous plus loin vers le sud-est. Le cible est encore coloré.
+
+Mais appuyez d'abord sur "end turn" pour que votre trooper dispose de nouveau de tous ces points de déplacement dans la prochaine partie.
+
+Tuyau: Maintenez la souris sur votre trooper.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== 35  ======= 
+message = [[C'est bien. Un sentier commence au sud-est. Suivez ce sentier. Faites attention à votre zone visible.
+
+Tuyau: Si vous cliquez vite sur votre trooper une deuxième fois une sélection rapide intelligente sera prise. S'il dispose encore des points de déplacement le bouton de déplacement sera activé. Si votre trooper ne dispose plus de points de déplacement le bouton d'information sera activé.]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== 45  ======= 
+message = [[Votre trooper se déplace maintenant en territoire inexplorét en l'explorant de plus en plus.
+
+Continuez à suivre ce sentier et faites attention à comment par exemple les palmiers peuvent restreindre la vue de votre trooper.]]
+asc.setLocalizedEventMessage( map, 45, message )
+
+--- ===== 56  ======= 
+message = [[En plus des territoires inexplorés il y a encore le "brouillard de la guerre". Est-ce que vous voyez les territoires qui sont un peu sombre?
+
+Vous avez déjà exploré ces territoires, mais présentement, vous n'avez pas de vue sur ces territoires. Des troupes ennemies pourraient s'y trouver sans problème.
+
+Continuez à suivre ce sentier.]]
+asc.setLocalizedEventMessage( map, 56, message )
+
+--- ===== 68  ======= 
+message = [[Une petite oasis, comme elle est belle.
+
+Continuez à suivre le sentier et faites attention aux champs d'eau en vous déplaçant.  Votre trooper ne peut pas marcher sur ces champs.]]
+asc.setLocalizedEventMessage( map, 68, message )
+
+--- ===== 69  ======= 
+message = [[Une chaîne de montagnes. Les montagnes aussi perturbent la vue de votre trooper.
+
+Continuez à suivre le sentier.]]
+asc.setLocalizedEventMessage( map, 69, message )
+
+--- ===== 71  ======= 
+message = [[Si vous ne vous êtes pas encore aperçu... votre trooper est une unité qui peut aussi escalader des montagnes. 
+
+Mais continuez à suivre le sentier, parce que votre trooper y peut mieux progresser.]]
+asc.setLocalizedEventMessage( map, 71, message )
+
+--- ===== 131  ======= 
+message = [[Le temps presse, recrue. Est-ce que vous êtes prêt pour la prochaine leçon?
+
+Vous êtes venu à bout de ces exercices avec succès.]]
+asc.setLocalizedEventMessage( map, 131, message )
+
+--- ===== 201  ======= 
+message = [[Vous avez atteint le sentier. Vérifiez les points de déplacement de votre trooper encore une fois. Est-ce qu'il peut se déplacer encore?
+
+Si oui, c'est parce qu'il peut aller plus loin qu'il peut voir. Il peut se déplacer de 4 champs, mais il peut voir seulement 3 champs.
+
+Tuyau: Veillez à ce que votre trooper ait employé tous ses points de déplacement avant la fin de la partie.]]
+asc.setLocalizedEventMessage( map, 201, message )
+

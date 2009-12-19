@@ -1,0 +1,62 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[exercices ASC pour débutants "poser et désamorcer des mines"
+
+Bon, soldat, il est temps que vous apprenez comment poser et désamorcer des mines. Rendez-vous chez votre instructeur dans le champs. Il vous donnera des autres instructions. Rompez!]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 1128  ======= 
+message = [[Soldat, qui veut poser des mines devrait apprendre d'abord comment les distinguer et désamorcer. Entrez dans le terrain de manoeuvres.  Esquivez ou désamorcez toutes les mines que vous voyez. Ne vous faites pas de soucis, soldat, ce sont seulement des mines d'entraînement.
+
+Pour désamorcer une mine votre soldat doit se trouver sur un champs voisin. Puis, choisissez le bouton "put/remove mines" et choisissez la mine sur la carte.]]
+asc.setLocalizedEventMessage( map, 1128, message )
+
+--- ===== 1133  ======= 
+message = [[Soldat, ne perdez pas votre temps en désamorçant des mines antichar. Des unités de fantassins sont trop légères pour déclencher ces mines. Faites confiance en moi, vous pouvez marcher dessus.
+
+Allez au bunker dans le champs.]]
+asc.setLocalizedEventMessage( map, 1133, message )
+
+--- ===== 1146  ======= 
+message = [[Prenez deux mines du bunker et déplacez-vous au terrain de manoeuvres 2 qui est maintenant ouvert. Le champs est coloré.
+
+Tuyau: Il y a le bouton "refuel unit" ou le bouton "refuel dialog". "Refuel unit" remplit le maximum. Avec "refuel dialog" vous pouvez décider ce que vous voulez remplir.]]
+asc.setLocalizedEventMessage( map, 1146, message )
+
+--- ===== 1222  ======= 
+message = [[CONTACT AVEC L'ENNEMI: un weasel ennemi. Posez une mine antichar pour arrêter le véhicule ennemi.
+
+Pour poser des mines choisissez le bouton "put/remove mines", puis, chosissez le champs où vous voulez poser la mine.]]
+asc.setLocalizedEventMessage( map, 1222, message )
+
+--- ===== 1236  ======= 
+message = [[Très bien, soldat. Mais des mines ne sont pas aptes au combat direct. Elles doivent plutôt bloquer des certains territoires sur le plan stratégique. Mais pour une situation d'urgence, il faut savoir comment se battre avec des mines.]]
+asc.setLocalizedEventMessage( map, 1236, message )
+
+--- ===== 1323  ======= 
+message = [[Soldat, vous avez une mission. Vous avez l'ordre de détruire le weasel. Si nécessaire, chopez-vous des nouvelles mines et terminez votre mission.]]
+asc.setLocalizedEventMessage( map, 1323, message )
+
+--- ===== 1376  ======= 
+message = [[Deux autres ennemis se trouvent encore derrière des clôtures. C'est votre mission d'éliminer ces deux unités de fantassins avec des mines antipersonnel. Garantissez que vous avez deux mines avec vous.
+
+Dès que vous arrivez au champs cible les soldat ennemis seront lâchés. Vous devriez en tout cas faire une pause avant d'arriver au champ cible.]]
+asc.setLocalizedEventMessage( map, 1376, message )
+
+--- ===== 1419  ======= 
+message = [[Soldat, faites attention, vous avez besoin des mines antipersonnel.
+
+Alors, maintenez absolument le bouton de la souris si vous marquez le champs cible pour la mine. Sinon, une mine va être posée pour vous par la sélection rapide.]]
+asc.setLocalizedEventMessage( map, 1419, message )
+
+--- ===== 1420  ======= 
+message = [[Bravo, soldat, vous êtes un vrai shock trooper maintenant, parce que sa plus grande force est sa connaissance des mines.
+
+Vous êtes venu à bout de ces exercices avec succès.
+]]
+asc.setLocalizedEventMessage( map, 1420, message )
+
+--- ===== 1445  ======= 
+message = [[Attention! Plusieurs mines sont posées ici. Et cette fois-ci, ce ne sont pas de mines d'entraînement.]]
+asc.setLocalizedEventMessage( map, 1445, message )
+

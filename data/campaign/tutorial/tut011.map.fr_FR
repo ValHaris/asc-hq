@@ -1,0 +1,25 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Recherche scientifique
+
+Vous recevrez un aperçu du domaine de la recherche scientifique ici. L'arbre de recherche scientifique PBP est utilisé pour la démonstration ici.
+
+Appuyez sur "end turn" pour pouvoir choisir la recherche scientifique au début de la prochaine partie.
+
+Si vous avez encore des questions au sujet des bâtiments utilisés ici, marchez sur le carreau.
+
+Marchez sur le champ vert pour quitter la recherche scientifique.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== 10  ======= 
+message = [[Vous pouvez régler combien de ressources vous voulez investir dans la recherche scientifique.
+
+Le centre de recherches peut rapporter entre 0 et 100 points de recherche scientifique, mais les paramètres à partir de 40 points demandent de plus en plus de ressources.
+
+Mais pendant ces exercices vous pouvez bien régler la puissance au maximum.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== 11  ======= 
+message = [[Dans cet exemple 10 villes seront actives. Premièrement, elles fournissent le laboratoire de recherches en ressources (du matériau, du carburant, de l'énergie). Deuxièmement, elles ont en tout 100 points de recherche scientifique elles-même.]]
+asc.setLocalizedEventMessage( map, 11, message )
+

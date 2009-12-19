@@ -1,0 +1,17 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Production 1 "connaissances de base"
+
+Vous avez besoin des bâtiments appropriés pour produire des unités. Vous avez une petite usine d'armes dans cet exemple.
+
+Pour cela, nous avons installé la vaste gamme de l'infanterie avant.
+
+Chosissez "produce unit" dans le menu de chargement pour la construction. Vous avez deux possibilités: le grand bouton à droite en bas ou le petit bouton approprié en maintenant n'importe quel champ de chargement.
+
+Choisissez l'unité que vous voulez produire dans la fenêtre qui suit et validez avec "produce".
+
+Marchez sur le champ vert pour quitter ces exercices.
+
+Vous pouvez aussi aller directement aux exercices "production 2". (champ rouge)]]
+asc.setLocalizedEventMessage( map, 1, message )
+
