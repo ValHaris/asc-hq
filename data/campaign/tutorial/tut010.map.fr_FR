@@ -100,7 +100,7 @@ message = [[Le dépôt a la fonction principale du stockage. Du matériau et du pét
 asc.setLocalizedEventMessage( map, 34, message )
 
 --- ===== 35  ======= 
-message = [[Des unités peuvent être entraînées dans le centre d'entraînement. Le centre d'entraînement a besoin d'énergie pour son fonctionnement. On a besoin de la munition pour entraîner des unités. Mais le centre d'entraînement peut produire cette munition soi-même et il peut aussi en remplir des unités.
+message = [[Des unités peuvent être entraînées dans le centre d'entraînement. Le centre d'entraînement a besoin d'énergie pour son fonctionnement. On a besoin de la munition pour entraîner des unités. Mais le centre d'entraînement peut produire cette munition soi-même et il peut aussi en remplir des unités.]]
 asc.setLocalizedEventMessage( map, 35, message )
 
 --- ===== 36  ======= 

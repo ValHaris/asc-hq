@@ -36,7 +36,7 @@ message = [[Il a commencé à pleuvoir.  Le ciel couvert réduit la puissance de la
 
 En outre, le vent est devenu plus fort. Cela augmente la puissance de l'éolienne.
 
-Appuyez sur "end turn" pour des autres changements de temps.
+Appuyez sur "end turn" pour des autres changements de temps.]]
 asc.setLocalizedEventMessage( map, 16, message )
 
 --- ===== 30  ======= 

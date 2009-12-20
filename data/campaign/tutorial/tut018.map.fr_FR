@@ -121,7 +121,7 @@ message = [[charger du matériau dans le champ
 
 Aussi la camionnette de matériaux peut fournir des autres véhicules dans le champ. Mais cela marchera seulement si les véhicules à fournir doivent eux-mêmes charger du matériau.
 
-Chargez le matériau sur le hovercraft et transportez-le à la camionnette sur l'autre côté de la rivière. La camionnette peut décharger le matériau du hovercraft.
+Chargez le matériau sur le hovercraft et transportez-le à la camionnette sur l'autre côté de la rivière. La camionnette peut décharger le matériau du hovercraft.]]
 asc.setLocalizedEventMessage( map, 34, message )
 
 --- ===== 35  ======= 

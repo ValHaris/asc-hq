@@ -16,7 +16,7 @@ message = [[En plus du fusil d'assaut le shock trooper a aussi la faculté de tro
 
 En outre, il est l'unité d'infanterie la plus vite et la plus avantageuse.
 
-Pour recevoir des autres informations sur le shock trooper regardez l'information d'unité en choisissant le trooper.
+Pour recevoir des autres informations sur le shock trooper regardez l'information d'unité en choisissant le trooper.]]
 asc.setLocalizedEventMessage( map, 2, message )
 
 --- ===== 3  ======= 

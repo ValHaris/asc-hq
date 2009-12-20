@@ -17,6 +17,6 @@ D'abord, vous devez désactiver la coche de contrôle "fill with ammo" pour pouvoi
 Puis, vous pouvez la remplir de munition manuellement dans le menu de chargement normal par le bouton "refuel dialog".
 
 
-Marchez sur le champ vert pour quitter ces exercices.
+Marchez sur le champ vert pour quitter ces exercices.]]
 asc.setLocalizedEventMessage( map, 1, message )
 

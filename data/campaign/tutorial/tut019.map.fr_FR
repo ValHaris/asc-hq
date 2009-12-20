@@ -133,6 +133,6 @@ message = [[recycler de la ferraille
 
 Il n'est pas un problème pour le bulldozer de recycler la ferraille des véhicules ennemis ou des propres véhicules. Envoyez les leurres à la ferraille en les tirant et ramassez la ferraille avec l'ordre "remove" après.
 
-Faites attention à votre niveau de matériau et au bénéfice de matériau pendant le recyclage de la ferraille. Pendant que les deux fantassins ne donnent que peu de matériau, le gros tank est d'un bon rendement de matériau. Alors, le recyclage de ferraille peut être une bonne affaire.
+Faites attention à votre niveau de matériau et au bénéfice de matériau pendant le recyclage de la ferraille. Pendant que les deux fantassins ne donnent que peu de matériau, le gros tank est d'un bon rendement de matériau. Alors, le recyclage de ferraille peut être une bonne affaire.]]
 asc.setLocalizedEventMessage( map, 28, message )
 

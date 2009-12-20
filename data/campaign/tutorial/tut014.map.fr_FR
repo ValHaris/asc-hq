@@ -8,6 +8,6 @@ Vous pouvez installer deux nouveaux secteurs de production de manière exemplaire
 
 Ouvrez le menu de chargement et le menu de production après. Vous pouvez installer des nouveaux secteurs de production avec le bouton + ici, à condition que vous en ayez. Vous payez avec des ressources une fois pour installer un secteur de production. Après, vous pouvez produire vos unités aux conditions normales dans ce secteur. Vous pouvez arrêter un secteur par le bouton -. Mais cette action coûte aussi des ressources une fois et elle est seulement faite en cas d'exception.
 
-Marchez sur le champ vert pour quitter ces exercices.
+Marchez sur le champ vert pour quitter ces exercices.]]
 asc.setLocalizedEventMessage( map, 1, message )
 

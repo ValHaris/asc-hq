@@ -47,11 +47,11 @@ asc.setLocalizedEventMessage( map, 1039, message )
 --- ===== 1052  ======= 
 message = [[Votre soldat peut aussi échanger de la munition et des ressources avec le véhicule de transport. Pour cela, votre soldat doit se trouver dans le weasel. Puis, ouvrez le menu de chargement et choisissez le bouton "refuel dialog" pour votre soldat.
 
-Vous pouvez seulement échanger de la munition et des ressources qui sont permises pour les deux partenaires de l'échange.
+Vous pouvez seulement échanger de la munition et des ressources qui sont permises pour les deux partenaires de l'échange.]]
 asc.setLocalizedEventMessage( map, 1052, message )
 
 --- ===== 1067  ======= 
-message = [[Soldat, nous avons atteint notre but. Prenez contact avec l'instructeur d'ici dans le bâtiment. Des véhicules ne sont pas permis là où vous vous rendez maintenant.
+message = [[Soldat, nous avons atteint notre but. Prenez contact avec l'instructeur d'ici dans le bâtiment. Des véhicules ne sont pas permis là où vous vous rendez maintenant.]]
 asc.setLocalizedEventMessage( map, 1067, message )
 
 --- ===== 1076  ======= 

@@ -24,7 +24,7 @@ message = [[Le mouilleur de mines peut rendre des territoires entiers impraticab
 asc.setLocalizedEventMessage( map, 12, message )
 
 --- ===== 13  ======= 
-message = [[Le chasseur de chars pour réduire l'infanterie est un chasseur de chars spécial avec la portée pour combattre de l'infanterie ennemi. Ainsi, il peut combattre l'infanterie avec sa mitrailleuse de loin sans que l'ennemi puisse se défendre.  Il est idéal pour chasser une seule infanterie ou pour faire l'infanterie ennemi quitter leurs tranchées.
+message = [[Le chasseur de chars pour réduire l'infanterie est un chasseur de chars spécial avec la portée pour combattre de l'infanterie ennemi. Ainsi, il peut combattre l'infanterie avec sa mitrailleuse de loin sans que l'ennemi puisse se défendre.  Il est idéal pour chasser une seule infanterie ou pour faire l'infanterie ennemi quitter leurs tranchées.]]
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== 14  ======= 
@@ -84,7 +84,7 @@ message = [[La plus petite des grandes unités d'artillerie. Une grande portée et
 asc.setLocalizedEventMessage( map, 27, message )
 
 --- ===== 28  ======= 
-message = [[La Coma améliorée Par cela, cette artillerie reçoit encore plus de puissance militaire et de portée. La Coma II doit aussi d'abord être postée pour le combat après une phase de déplacement.
+message = [[La Coma améliorée Par cela, cette artillerie reçoit encore plus de puissance militaire et de portée. La Coma II doit aussi d'abord être postée pour le combat après une phase de déplacement.]]
 asc.setLocalizedEventMessage( map, 28, message )
 
 --- ===== 29  ======= 

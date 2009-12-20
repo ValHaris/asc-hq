@@ -65,7 +65,7 @@ message = [[Vous acquerrez des connaissances de base sur la production ici.]]
 asc.setLocalizedEventMessage( map, 165, message )
 
 --- ===== 184  ======= 
-message = [[Vous pouvez approfondir vos connaissances de base sur la production ici.]] Ici, le sujet est la production économique.]]
+message = [[Vous pouvez approfondir vos connaissances de base sur la production ici. Ici, le sujet est la production économique.]]
 asc.setLocalizedEventMessage( map, 184, message )
 
 --- ===== 205  ======= 
