@@ -26,14 +26,17 @@
 
 class OpaqueLocaleData {
    public: 
-      wxLocale locale;
-   
+      ASCString canonicalName;  
 };
 
 Locale::Locale()
 {
    data = new OpaqueLocaleData();
-   data->locale.Init(wxLANGUAGE_DEFAULT, 0);
+   const wxLanguageInfo* lanInfo = wxLocale::GetLanguageInfo( wxLocale::GetSystemLanguage() );
+   if ( lanInfo ) {
+      data->canonicalName = ASCString( lanInfo->CanonicalName.mb_str() );
+   }
+   
 }
 
 
@@ -42,9 +45,7 @@ ASCString Locale::getLang()
    if ( CGameOptions::Instance()->languageOverride.length() >= 2 )
       return CGameOptions::Instance()->languageOverride;
    else {
-      wxString s = data->locale.GetCanonicalName();
-      ASCString stlstring = ASCString(s.mb_str());
-      return stlstring;
+      return data->canonicalName;
    }
 }
       
@@ -52,7 +53,7 @@ ASCString Locale::getLocalizedFile( const ASCString& filename, const ASCString& 
 {
    ASCString lang = getLang();
    
-   if ( lang != nativeMessageLanguage ) {
+   if ( lang != nativeMessageLanguage && !lang.empty()) {
       ASCString newfilename = filename + "." + lang;
       if ( exist( newfilename )) 
          return newfilename; 
