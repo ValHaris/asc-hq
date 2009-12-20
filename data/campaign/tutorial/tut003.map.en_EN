@@ -2,7 +2,7 @@ map = asc.getLoadingMap()
 --- ===== Event 1  ======= 
 message = [[ASC - Beginners Tutorial "Defense and Damage"
 
-Soldier, we'll now simulate an emergency. Here you'll have a new magazine for your assault rifle. Additionally, you'll get 300 units of material and fuel. Troopers are able to regenerate themselfes in the field, but they need resources for that.
+Soldier, we'll now simulate an emergency. Here you'll have a new magazine for your assault rifle. Additionally, you'll get 300 units of material and fuel. Troopers are able to regenerate themselves in the field, but they need resources for that.
 
 Follow the road to the south. Be alert for enemy troops. Use your reaction fire, you won't stand a chance otherwise.]]
 asc.setLocalizedEventMessage( map, 1, message )

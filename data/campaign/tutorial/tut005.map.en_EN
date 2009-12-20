@@ -7,7 +7,7 @@ Dismissed.']]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 1128  ======= 
-message = [['Solder, before you start placing mines yourself, you have first to learn how to detect and defuse them. Enter the training area. Avoid or defuse all mines that you see. No worries, these are only training mines that cause little harm.'
+message = [['Soldier, before you start placing mines yourself, you have first to learn how to detect and defuse them. Enter the training area. Avoid or defuse all mines that you see. No worries, these are only training mines that cause little harm.'
 
 To defuse a mine, the unit must be standing on an adjacent field. Then press the "put/remove mines" button and select the field with the mine.]]
 asc.setLocalizedEventMessage( map, 1128, message )
@@ -20,21 +20,21 @@ asc.setLocalizedEventMessage( map, 1133, message )
 --- ===== Event 1146  ======= 
 message = [[Take two mines from the depot and go to area 2, which has just opened. The destination has been marked.
 
-Tip: In the cargo dialog there are two buttons "refuel unit" and "refuel dialog". The first one fills everything to the max, while the second one opens a dialogs and lets you select individual amounts manually.]]
+Tip: In the cargo dialog there are two buttons "refuel unit" and "refuel dialog". The first one fills everything to the max, while the second one opens a dialog and lets you select individual amounts manually.]]
 asc.setLocalizedEventMessage( map, 1146, message )
 
 --- ===== Event 1222  ======= 
-message = [[Hostile unit sighted! An enemy Weasel! Place an anti-tank mine, to stop it!
+message = [[Hostile unit sighted! An enemy Weasel! Place an anti-tank mine to stop it!
 
 To place a mine, use the "put/remove mines" button again and select the field where you want to place the mine.]]
 asc.setLocalizedEventMessage( map, 1222, message )
 
 --- ===== Event 1236  ======= 
-message = [['Very well, soldier. Mines are not intended to be used in direct combat. They should rather block the enemy from entering areas of strategic significanse. But in an emergency you should know how to fight with mines.']]
+message = [['Very well, soldier. Mines are not intended to be used in direct combat. They should rather block the enemy from entering areas of strategic significance. But in an emergency you should know how to fight with mines.']]
 asc.setLocalizedEventMessage( map, 1236, message )
 
 --- ===== Event 1323  ======= 
-message = [['Solder, have your orders! Destroy the weasel! If necessary, get further mines in the depot and fulfill your task!]]
+message = [['Soldier, have your orders! Destroy the weasel! If necessary, get further mines in the depot and fulfill your task!]]
 asc.setLocalizedEventMessage( map, 1323, message )
 
 --- ===== Event 1376  ======= 
@@ -44,9 +44,9 @@ As soon as you enter the destination field, the enemy soldiers will be released.
 asc.setLocalizedEventMessage( map, 1376, message )
 
 --- ===== Event 1419  ======= 
-message = [[Soldier, please remember that you need anti-personell mines, not anti-tank mines!
+message = [[Soldier, please remember that you need anti-personnel mines, not anti-tank mines!
 
-To place an anti-personnel mine, keep your left mouse button pressed when selecting the target field. In the menu that appears you can chose the type of mine. If you release the mouse button to early, the default type of mine will be placed - and that's an anti-tank mine.]]
+To place an anti-personnel mine, keep your left mouse button pressed when selecting the target field. In the menu that appears you can choose the type of mine. If you release the mouse button too early, the default type of mine will be placed - and that's an anti-tank mine.]]
 asc.setLocalizedEventMessage( map, 1419, message )
 
 --- ===== Event 1420  ======= 

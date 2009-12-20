@@ -34,7 +34,7 @@ asc.setLocalizedEventMessage( map, 1038, message )
 --- ===== Event 1039  ======= 
 message = [[Inside this building there is another Weasel. Practice transferring the trooper into the transport inside the building.
 
-This is done most easily by using dragging the trooper with the RIGHT mouse button onto the transport. Alternatively, you can select the trooper, press the "move unit into neighboring transport" function and select the weasel as destination.
+This is done most easily by dragging the trooper with the RIGHT mouse button onto the transport. Alternatively, you can select the trooper, press the "move unit into neighboring transport" function and select the weasel as destination.
 
 Then continue south
 
@@ -46,7 +46,7 @@ message = [[You can also transfer ammo and resources between the cargo and the t
 asc.setLocalizedEventMessage( map, 1052, message )
 
 --- ===== Event 1067  ======= 
-message = [['Soldat, we have arrived. Report to your new trainer inside the building. Where you'll go now, no vehicles are allowed for security reasons.']]
+message = [['Soldier, we have arrived. Report to your new trainer inside the building. Where you'll go now, no vehicles are allowed for security reasons.']]
 asc.setLocalizedEventMessage( map, 1067, message )
 
 --- ===== Event 1076  ======= 

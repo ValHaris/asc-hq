@@ -9,13 +9,13 @@ asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 545  ======= 
 message = [[To attack there is a button called, you won't guess it, "Attack".
-Pressed it and then select your target. It will take several rounds to destroy the dummy.
+Press it and then select your target. It will take several rounds to destroy the dummy.
 
 Tip: After your unit has shot, it can't move any more for the remainder of the turn.]]
 asc.setLocalizedEventMessage( map, 545, message )
 
 --- ===== Event 625  ======= 
-message = [[Very well. You have destroyed this dummy. Now go and search the next one.]]
+message = [[Very well. You have destroyed this dummy. Now go and search for the next one.]]
 asc.setLocalizedEventMessage( map, 625, message )
 
 --- ===== Event 656  ======= 

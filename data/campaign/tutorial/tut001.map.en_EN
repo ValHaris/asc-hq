@@ -35,7 +35,7 @@ asc.setLocalizedEventMessage( map, 35, message )
 --- ===== Event 201  ======= 
 message = [[You have reached the beginning of the track. Now check the remaining movement of your trooper. Can he still go on?
 
-If yes then this is caused by the trooper having more movement than view. Hw can move 4 fields on level terrain, but only see 3 fields into the distance. 
+If yes then this is caused by the trooper having more movement than view. He can move 4 fields on level terrain, but only see 3 fields into the distance. 
 
 Tip: Before ending your turn, check that you don't waste any remaining movement points of your units.]]
 asc.setLocalizedEventMessage( map, 201, message )
@@ -43,11 +43,11 @@ asc.setLocalizedEventMessage( map, 201, message )
 --- ===== Event 45  ======= 
 message = [[Your trooper now moves in unexplored territory and explores it while going.
 
-Continue on this track and pay attention how certain objects (like palms) can obstruct the view.]]
+Continue on this track and pay attention to how certain objects (like palms) can obstruct the view.]]
 asc.setLocalizedEventMessage( map, 45, message )
 
 --- ===== Event 56  ======= 
-message = [[Apart from unexplored territory there is the "fog of war". Do you see the areas that have been darked?
+message = [[Apart from unexplored territory there is the "fog of war". Do you see the areas that have been darkened?
 
 You have explored these areas, but don't have any view coverage on them. You would not see enemy troops there.
 
