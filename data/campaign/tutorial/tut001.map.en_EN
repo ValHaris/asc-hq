@@ -2,7 +2,7 @@ map = asc.getLoadingMap()
 --- ===== Event 1  ======= 
 message = [[ASC - Beginners Tutorial "Movement and View"
 
-ASC ist a turn based games, so you have all the time you want to plan your actions.
+ASC is a turn based game, so you have all the time you want to plan your actions.
 
 There is a button called "end turn" in the lower right. Close this message window by pressing OK and press the "end turn" button.
 
@@ -41,7 +41,7 @@ Tip: Before ending your turn, check that you don't waste any remaining movement 
 asc.setLocalizedEventMessage( map, 201, message )
 
 --- ===== Event 45  ======= 
-message = [[Your trooper now moves in unexplored territory and explores it while going.
+message = [[Your trooper now moves into unexplored territory and explores it while going.
 
 Continue on this track and pay attention to how certain objects (like palms) can obstruct the view.]]
 asc.setLocalizedEventMessage( map, 45, message )
