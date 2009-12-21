@@ -29,7 +29,7 @@ In the depot that is connected are enough resources to operate the nuclear power
 asc.setLocalizedEventMessage( map, 5, message )
 
 --- ===== Event 6  ======= 
-message = [[If you are short on energy, you can use emergy power generators to create energy. They have to placed adjacent to a building and need to be switched on. To operate, they need fuel - and quite a lot of it.]]
+message = [[If you are short on energy, you can use energy power generators to create energy. They have to be placed adjacent to a building and need to be switched on. To operate, they need fuel - and quite a lot of it.]]
 asc.setLocalizedEventMessage( map, 6, message )
 
 --- ===== Event 16  ======= 
@@ -48,15 +48,15 @@ But the heavy rain reduces the solar output even more.
 asc.setLocalizedEventMessage( map, 30, message )
 
 --- ===== Event 33  ======= 
-message = [[The storm has subided, affecting the output of the wind turbine. 
+message = [[The storm has subsided, affecting the output of the wind turbine. 
 
 But it got colder, while it's snowing a bit, the cloud cover is not as thick as before, so the solar plant generates more electricity than the turn before.]]
 asc.setLocalizedEventMessage( map, 33, message )
 
 --- ===== Event 51  ======= 
-message = [[Even more snow and clouds, but less wind. Both reneable power plants are operating and very little power.
+message = [[Even more snow and clouds, but less wind. Both renewable power plants are operating and very little power.
 
-Please note that in ASC the wind is controlled independently from rain and snow. So it's just the map creators deliberation to change them both at the same time here.]]
+Please note that in ASC the wind is controlled independently from rain and snow. So it's just the map creator's deliberation to change them both at the same time here.]]
 asc.setLocalizedEventMessage( map, 51, message )
 
 --- ===== Event 90  ======= 

@@ -10,11 +10,11 @@ message = [[Look at the scale of this rock. It's size is so phenomenal, I just l
 asc.setLocalizedEventMessage( map, 2, message )
 
 --- ===== Event 3  ======= 
-message = [[Aren't they beutiful? It looks almost as if the big stone hovers over the small ones. My own stonehenge. Please don't touch!]]
+message = [[Aren't they beautiful? It looks almost as if the big stone hovers over the small ones. My own stonehenge. Please don't touch!]]
 asc.setLocalizedEventMessage( map, 3, message )
 
 --- ===== Event 4  ======= 
-message = [[Look at this woman, ehm, I mean stone. These curves! If stones would have a sex, then this one would definitly be female.]]
+message = [[Look at this woman, ehm, I mean stone. These curves! If stones would have a sex, then this one would definitely be female.]]
 asc.setLocalizedEventMessage( map, 4, message )
 
 --- ===== Event 5  ======= 

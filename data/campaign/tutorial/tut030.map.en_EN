@@ -12,21 +12,21 @@ Try to load the Bunker into the Vesuvius or MBV. Both vehicles will be first cho
 Thats not working, too?
 
 Perhaps you ask yourself, why should there be a production line for Sam Bunker in a factory but you can't transport them?
-There is an easy answer: Not allways the options make sense.]]
+There is an easy answer: Not always the options make sense.]]
 asc.setLocalizedEventMessage( map, 3, message )
 
 --- ===== Event 13  ======= 
 message = [[Surprise! How did we get the bomber into the towny?
 
-It doesn't work? Well, but we got a bomber into a heli train and the heli train could enter the town. To do that, we just need a super carrier, on which the bomber can land. Then a harbour, where the bomber can be loaded onto the heli train, which could then enter the town.
+It doesn't work? Well, but we got a bomber into a heli train and the heli train could enter the town. To do that, we just need a super carrier, on which the bomber can land. Then a harbor, where the bomber can be loaded onto the heli train, which could then enter the town.
 
-What, this isn't amazing? The heli train can just transport the bomber? Then I ask you, why can't the helitrain transport is imple weasel too? :-)]]
+What, this isn't amazing? The heli train can just transport the bomber? Then I ask you, why can't the helitrain transport is simple weasel too? :-)]]
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== Event 18  ======= 
 message = [[Let's continue in our world of wonder! Try to get the shock trooper onto a super carrier! What, this isn't possible, because you can't climb up?
 
-Then try to transfer with a trooper from one carrier to another. This isn't possible. Because... well... because the carrier are to far apart and there is water between them. Infantry can only enter and leave in a harbour.
+Then try to transfer with a trooper from one carrier to another. This isn't possible. Because... well... because the carrier are to far apart and there is water between them. Infantry can only enter and leave in a harbor.
 
 But what is the point of having infantry on a carrier, if it can't even transfer to other ships?
 

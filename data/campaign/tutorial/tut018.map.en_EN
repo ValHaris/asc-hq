@@ -2,7 +2,7 @@ map = asc.getLoadingMap()
 --- ===== Event 1  ======= 
 message = [[Repairs and Service.
 
-To see and experience all aspects of repairing and servicing units we recommend to go through all examples along the path, beginning at the upper left. Drive onto the floor plates with the units.
+To see and experience all aspects of repairing and servicing units we recommend going through all examples along the path, beginning at the upper left. Drive onto the floor plates with the units.
 
 The green field will return you to the base camp.]]
 asc.setLocalizedEventMessage( map, 1, message )
@@ -32,7 +32,7 @@ This tank is badly damaged and looks like a driving piece of junk. It also lacks
 
 Luckily, it has almost reached the depot. Depots have the ability to repair units that have been driven into it. 
 
-After you have driven the tank there, use the 'repair' function to repair the tank and 'refuel' or 'refuel dialog' for refuelling.
+After you have driven the tank there, use the 'repair' function to repair the tank and 'refuel' or 'refuel dialog' for refueling.
 
 To repair a unit the depot needs energy and material. But repairing is significantly cheaper than producing a new unit.
 
@@ -43,19 +43,19 @@ asc.setLocalizedEventMessage( map, 17, message )
 --- ===== Event 18  ======= 
 message = [[External Refuelling
 
-This tank doesn't have even a scratch, it's just lacking ammo and fuel. 
+This tank doesn't have even a scratch; it's just lacking ammo and fuel. 
 
 It should go straight to the depot, but it doesn't need to enter the depot, it's sufficient to be on a field next to the entrance.
 
-The depot has the functions 'refuel' and 'refuel dialog' also from the outside. So the tank can be refuelled and rearmed and head straight back to battle. If the tank would drive into the depot, a whole turn would be lost.
+The depot has the functions 'refuel' and 'refuel dialog' also from the outside. So the tank can be refueled and rearmed and head straight back to battle. If the tank would drive into the depot, a whole turn would be lost.
 
-Repairs can not be done externally, since it's much more effort to repair a unit it has to enter the building and spend the remaining turn there.]]
+Repairs can not be done externally, since it is much more effort to repair a unit it has to enter the building and spend the remaining turn there.]]
 asc.setLocalizedEventMessage( map, 18, message )
 
 --- ===== Event 25  ======= 
 message = [[Ammo supply at the depot
 
-This ammuntion transport doesn't have any cannon shells left and should pick up new ones at the depot. 
+This ammunition transport doesn't have any cannon shells left and should pick up new ones at the depot. 
 
 This can be done internally (entering the depot) or externally (standing next to the entrance). Since the ammo transport also has the function to refuel, it can also initiate the ammo transfer itself. So it doesn't matter if you select the depot and chose to refuel the transport, or vice versa. Try it out.]]
 asc.setLocalizedEventMessage( map, 25, message )
@@ -63,9 +63,9 @@ asc.setLocalizedEventMessage( map, 25, message )
 --- ===== Event 26  ======= 
 message = [[Recycle units
 
-This transport is damaged. Additionally, it is depleted of all ammo. Repairing the unit and completely refuelling it would be quite expensive. And we also have another ammo transport, so we don't need this one any more. So we may chose to recycle the unit to gain some resources from it. 
+This transport is damaged. Additionally, it is depleted of all ammo. Repairing the unit and completely refueling it would be quite expensive. And we also have another ammo transport, so we don't need this one any more. So we may chose to recycle the unit to gain some resources from it. 
 
-There are two function that do similar things: some buildings can salvage a unit, which will only return a small part of the production cost. Other buildings (and among them the depot) can recycle the unit and gain 90% of the material that was spend for producing it (damaged units less).]]
+There are two functions that do similar things: some buildings can salvage a unit, which will only return a small part of the production cost. Other buildings (and among them the depot) can recycle the unit and gain 90% of the material that was spend for producing it (damaged units less).]]
 asc.setLocalizedEventMessage( map, 26, message )
 
 --- ===== Event 27  ======= 
@@ -73,13 +73,13 @@ message = [[Supplying material at the depot
 
 This transport is loaded to the brink with material. Go to the depot and unload all material.
 
-Since the transport also has refuelling capabilities, you have the choise if you refuel the depot from the transport, or use the refuel dialog of the depot to suck the material out of the transport. Additionally you can enter the depot and do it there.]]
+Since the transport also has refueling capabilities, you have the choice if you refuel the depot from the transport, or use the refuel dialog of the depot to suck the material out of the transport. Additionally you can enter the depot and do it there.]]
 asc.setLocalizedEventMessage( map, 27, message )
 
 --- ===== Event 28  ======= 
 message = [[Energy generation by the generator vehicle. 
 
-The generator vehicle can produce energy. Place the unit next to the depot. Look into the depot and memorize the amound of available energy. Then activate the generator and look at the energy again. ]]
+The generator vehicle can produce energy. Place the unit next to the depot. Look into the depot and memorize the amount of available energy. Then activate the generator and look at the energy again. ]]
 asc.setLocalizedEventMessage( map, 28, message )
 
 --- ===== Event 29  ======= 
@@ -91,14 +91,14 @@ asc.setLocalizedEventMessage( map, 29, message )
 --- ===== Event 30  ======= 
 message = [[Supplying small buildings
 
-All three units have the abilitiy to refuel (ammo, fuel and material respectively). So they can supply the radar station, although they can neither enter the radar station nor has the radar station any external refuelling capabilities. ]]
+All three units have the ability to refuel (ammo, fuel and material respectively). So they can supply the radar station, although they can neither enter the radar station nor has the radar station any external refueling capabilities. ]]
 
 asc.setLocalizedEventMessage( map, 30, message )
 
 --- ===== Event 31  ======= 
 message = [[Repairing units in the field
 
-Both tanks are damaged. You can repair them with the COSINUS unit direcly on the battle field. Unlike in buildings where repairs cost energy and material, repairs in the field cost fuel and material. And field repairs are more expensive than those in buildings. So you have to decide what's more import: cheap repair or fast repair. In this case, we want the fast repair. ]]
+Both tanks are damaged. You can repair them with the COSINUS unit directly on the battle field. Unlike in buildings where repairs cost energy and material, repairs in the field cost fuel and material. And field repairs are more expensive than those in buildings. So you have to decide what's more important: cheap repair or fast repair. In this case, we want the fast repair. ]]
 asc.setLocalizedEventMessage( map, 31, message )
 
 --- ===== Event 32  ======= 
@@ -112,7 +112,7 @@ message = [[Refuelling units with fuel
 
 Both tanks have run out of fuel. Refuel them with the ALGOL.
 
-Tip: If you refuel units, keep an eye on the remaining fuel of the tank. It has been reported of some tanker drivers that they refuelled a whole platoon of tanks and then didn't have enough fuel left to drive back to the depot.]]
+Tip: If you refuel units, keep an eye on the remaining fuel of the tank. It has been reported of some tanker drivers that they refueled a whole platoon of tanks and then didn't have enough fuel left to drive back to the depot.]]
 asc.setLocalizedEventMessage( map, 33, message )
 
 --- ===== Event 34  ======= 
@@ -126,6 +126,6 @@ asc.setLocalizedEventMessage( map, 34, message )
 --- ===== Event 35  ======= 
 message = [[Reclaim wreckage
 
-The Atuin can also reclaim wreckage. Destroy the dummy unit by attacking them and then reclaim their wreckage by using the runction "remove objects"]]
+The Atuin can also reclaim wreckage. Destroy the dummy unit by attacking them and then reclaim their wreckage by using the function "remove objects"]]
 asc.setLocalizedEventMessage( map, 35, message )
 

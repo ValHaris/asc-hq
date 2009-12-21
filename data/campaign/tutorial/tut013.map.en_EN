@@ -2,11 +2,11 @@ map = asc.getLoadingMap()
 --- ===== Event 1  ======= 
 message = [[Production Level 2 "Economy"
 
-Unless you specify otherwise, newly produced units will automatically be filled with ammo, fueld and (if possible) material. 
+Unless you specify otherwise, newly produced units will automatically be filled with ammo, fuel and (if possible) material. 
 
 This is not always what you really want. If you build a transport for example to fetch material from somewhere, then this transport should not leave the factory loaded to the brink with precious material.
 
-Another example would be an ammo transport: if you don't have any units on the battle field that need cruise missile, then you don't need to build these rather costly pieces of weaponry. Or you only need cannon shalls at the front and there is a high risk that the ammo transport will be shot down. Then you want to make the trip with only the least possible value on board.
+Another example would be an ammo transport: if you don't have any units on the battle field that need cruise missile, then you don't need to build these rather costly pieces of weaponry. Or you only need cannon shells at the front and there is a high risk that the ammo transport will be shot down. Then you want to make the trip with only the least possible value on board.
 
 To manage that, you have two checkboxes "Fill with Resources" and "Fill with Ammo" in the production window.
 

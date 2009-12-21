@@ -50,7 +50,7 @@ More information and technical data is available in the unit information window 
 asc.setLocalizedEventMessage( map, 6, message )
 
 --- ===== Event 7  ======= 
-message = [[The sniper's speciality is his high-precision rifle and his ability to shoot targets from a distance of up to 3 fields. Even without any training, he is a deadly threat to all enemy infantry units. 
+message = [[The sniper's specialty is his high-precision rifle and his ability to shoot targets from a distance of up to 3 fields. Even without any training, he is a deadly threat to all enemy infantry units. 
 
 He is also faster than most other troopers, only to be surpassed by the Shock Trooper.
 

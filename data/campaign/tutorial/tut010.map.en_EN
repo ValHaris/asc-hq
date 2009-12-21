@@ -8,11 +8,11 @@ Information about a specific building is presented when stepping onto the grey f
 
 Entering the green fields will lead you back to the base camp.
 
-All buildings can accomodate units, with the maximum number, size and type of unit varying with the different kinds of buildings. All buildings have the cargo dialog, available with the "view loaded units" button, to access the units parked inside. The cargo dialog also gives access to non-cargo related functions and information, like resource production. Inside any building units can be refuelled and equipped with ammo, if these supplies are available or can be produced by the buildings. You can also disband units in any building.]]
+All buildings can accommodate units, with the maximum number, size and type of unit varying with the different kinds of buildings. All buildings have the cargo dialog, available with the "view loaded units" button, to access the units parked inside. The cargo dialog also gives access to non-cargo related functions and information, like resource production. Inside any building units can be refueled and equipped with ammo, if these supplies are available or can be produced by the buildings. You can also disband units in any building.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 3  ======= 
-message = [[The nuclear power plant generates energy. A lot of enrgy. It requires material and fuel to run, but not that much, as these resources are used for normal operation and maintenance, but not for the energy generation itself. The power can be adjusted.]]
+message = [[The nuclear power plant generates energy. A lot of energy. It requires material and fuel to run, but not that much, as these resources are used for normal operation and maintenance, but not for the energy generation itself. The power can be adjusted.]]
 asc.setLocalizedEventMessage( map, 3, message )
 
 --- ===== Event 4  ======= 
@@ -24,7 +24,7 @@ message = [[The solar power plant generates energy from sunshine. Cloudy weather
 asc.setLocalizedEventMessage( map, 5, message )
 
 --- ===== Event 6  ======= 
-message = [[The farm will output oild from harvesting nearby rape or fungus fields.]]
+message = [[The farm will output oil from harvesting nearby rape or fungus fields.]]
 asc.setLocalizedEventMessage( map, 6, message )
 
 --- ===== Event 7  ======= 
@@ -38,11 +38,11 @@ asc.setLocalizedEventMessage( map, 8, message )
 --- ===== Event 9  ======= 
 message = [[The Headquarter can generate both fuel, material and energy. The actual amount is dependent on the map. 
 
-The objectives of many maps involve Headquarters to be conquered or to be defended..]]
+The objectives of many maps involve Headquarters to be conquered or to be defended.]]
 asc.setLocalizedEventMessage( map, 9, message )
 
 --- ===== Event 10  ======= 
-message = [[A town creates a little bit of energy, material and fuel, the actual amount being map specific. Owning several towns can provide a steady base supply of resources. Additionaly, town do a little research.]]
+message = [[A town creates a little bit of energy, material and fuel, the actual amount being map specific. Owning several towns can provide a steady base supply of resources. Additionally, towns do a little research.]]
 asc.setLocalizedEventMessage( map, 10, message )
 
 --- ===== Event 11  ======= 
@@ -96,7 +96,7 @@ message = [[The Depot can store significant amounts of material, fuel and ammo. 
 asc.setLocalizedEventMessage( map, 34, message )
 
 --- ===== Event 35  ======= 
-message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requirese ammo, the training center has its own production facilities for that and can therefor also rearm units who that don't need any training.]]
+message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requires ammo, the training center has its own production facilities for that and can therefore also rearm units who that don't need any training.]]
 asc.setLocalizedEventMessage( map, 35, message )
 
 --- ===== Event 36  ======= 

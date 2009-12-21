@@ -32,7 +32,7 @@ message = [[Hardened Jamming Unit]]
 asc.setLocalizedEventMessage( map, 15, message )
 
 --- ===== Event 16  ======= 
-message = [[Anit-tank obstacle]]
+message = [[Anti-tank obstacle]]
 asc.setLocalizedEventMessage( map, 16, message )
 
 --- ===== Event 17  ======= 
@@ -40,7 +40,7 @@ message = [[Barbed wire. blocks infantry]]
 asc.setLocalizedEventMessage( map, 17, message )
 
 --- ===== Event 18  ======= 
-message = [[High turret foundating, give offensive bonus]]
+message = [[High turret foundation, give offensive bonus]]
 asc.setLocalizedEventMessage( map, 18, message )
 
 --- ===== Event 19  ======= 

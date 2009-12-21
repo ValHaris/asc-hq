@@ -4,7 +4,7 @@ message = [[Production Level 3 "Production Lines"
 
 Here you'll learn how to build and remove production lines.
 
-The factory on this map doesn't have any production lines at the moment, but you have been equipped with the technologies to setup a production line for big tanks and one for battle trains. The fact that we'll use a big vehicle plant in this example doesn't make a difference, as all factory like shiphard, airport, small vehicle plant etc. work the same. 
+The factory on this map doesn't have any production lines at the moment, but you have been equipped with the technologies to setup a production line for big tanks and one for battle trains. The fact that we'll use a big vehicle plant in this example doesn't make a difference, as all factories like shipyard, airport, small vehicle plant etc. work the same. 
 
 Open the cargo dialog and then the production window - which doesn't list any units. But there are two button labeled "+" and "-" to manage the production lines. 
 Adding a production line with the "+" button costs some resources. After you have setup the production line, you can start producing units at their normal cost.

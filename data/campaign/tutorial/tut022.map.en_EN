@@ -2,9 +2,9 @@ map = asc.getLoadingMap()
 --- ===== Event 1  ======= 
 message = [[Storage and Resource Distribution
 
-If you open the cargo menu (button "view loaded units") of any building, you can find a tab called "Ressource Network Info" #image=cargo-resourceinfo.png#. 
+If you open the cargo menu (button "view loaded units") of any building, you can find a tab called "Resource Network Info" #image=cargo-resourceinfo.png#. 
 
-Memorize this icon, since this whole level centers around the information page behind that icon. Please go onto the next floor plate with the Weasel.
+Memorize this icon, since this whole level centers on the information page behind that icon. Please go onto the next floor plate with the Weasel.
 
 To exit to base camp, drive onto one of the green fields.
 ]]
@@ -13,7 +13,7 @@ asc.setLocalizedEventMessage( map, 1, message )
 --- ===== Event 4  ======= 
 message = [["Resource Network Info" has three sections called Local, Network and Global.
 
-Local is always just the building that you are curently looking at.
+Local is always just the building that you are currently looking at.
 
 Global is the total of all buildings and you own
 
@@ -48,14 +48,14 @@ message = [[Finally you have the four values Avail, Capacity, Plus and Usage.
 
 Avail is the amount of resources that you have available right now.
 
-Capacity is the total storage capacity that you have, of which a part is used to house the Availble resources
+Capacity is the total storage capacity that you have, of which a part is used to house the Available resources
 
 Plus is the income that you have every turn
 
 And Usage is the amount of resources that are consumed by automatic processes, like power plants. The resources that you use for constructing units or buildings are not recorded here.
 
 
-Take a look at the differnt buildings again - or head straight to the next floor plate.
+Take a look at the different buildings again - or head straight to the next floor plate.
 ]]
 asc.setLocalizedEventMessage( map, 12, message )
 
@@ -67,7 +67,7 @@ So you can take a look at the resources currently available (it's 0), then end y
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== Event 19  ======= 
-message = [[Lets first take at look at the right side of the channel. What has happend there? At first, you probably won't see much difference.
+message = [[Lets first take at look at the right side of the channel. What has happened there? At first, you probably won't see much difference.
 
 But the solar power plant has produced energy. A part of this energy was used to power the mine (which outputs material) and the oil tower (outputting fuel).
 So you now have all three resources available in the network, and consume it in any of the 4 buildings connected to the network.
@@ -80,7 +80,7 @@ asc.setLocalizedEventMessage( map, 19, message )
 --- ===== Event 35  ======= 
 message = [[You can see the Avail value increasing every turn by the difference between plus and consumption.
 
-The solar plant generates energy. The mining station outputs material and the oil well outputs energy, provided they have energy. 
+The solar plant generates energy. The mining station outputs material and the oil well outputs fuel, provided they have energy. 
 
 The Depot increases the maximum storage capacity of both material and fuel.
 
@@ -90,7 +90,7 @@ asc.setLocalizedEventMessage( map, 35, message )
 --- ===== Event 49  ======= 
 message = [[For demonstration purposes a pipeline between the depot and the solar power plant has been build on the left side. So both buildings now belong to the same network.
 
-You can see that the depot now has energy available, which you can see both in the top of the cargo dialog and in the resource network infomration.
+You can see that the depot now has energy available, which you can see both in the top of the cargo dialog and in the resource network information.
 
 Please end your turn again.]]
 asc.setLocalizedEventMessage( map, 49, message )
@@ -114,7 +114,7 @@ message = [[Now the two networks on the left and right side of the channel have 
 
 If you now compare the 'global' and 'network' columns of the resource info screen, you will see that they are identical. All resources are available in every building.
 
-By comparing 'network' and global, you can quickly find out if you have any builings that are not connected to your network.
+By comparing 'network' and global, you can quickly find out if you have any buildings that are not connected to your network.
 
 In this map you can see the pipelines quite clearly. This will not always be the case, since vegetation, roads and other stuff may obstruct the view to the pipelines. To still analyze your network, you can highlight all pipelines by selecting "View -> show pipeline net" from the menu or just press the key '9'
 
@@ -131,7 +131,7 @@ So you can use the resource network to transfer resources from one part of the m
 
 Congratulation, you have survived this quite text-heavy tutorial and can from now on use the title "Senior Resource Network Analyst".
 
-You can still experiment around in this map. Once you are done, enter onter of the green fields to go back to base camp.]]
+You can still experiment around in this map. Once you are done, enter one of the green fields to go back to base camp.]]
 asc.setLocalizedEventMessage( map, 185, message )
 
 --- ===== Building -1114114  ======= 

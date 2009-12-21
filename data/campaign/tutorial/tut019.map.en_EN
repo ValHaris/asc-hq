@@ -1,16 +1,16 @@
 map = asc.getLoadingMap() 
 --- ===== Event 1  ======= 
-message = [[In the bulldozer driving school you'll learn how to use bolldozer, which are very versatile units.
+message = [[In the bulldozer driving school you'll learn how to use bulldozer, which are very versatile units.
 
 The upper part of the map focuses on the different construction options of the bulldozer, which are from left to right:
 tracks, roads, runways, railroad, above ground pipelines, subsurface pipelines, ditches and anti-tank obstacles.
 
 Below that we are looking at bridges for roads and railroads as well as the possibility to continue subsurface pipelines underwater. The differences between small and large bridges will be pointed out, together between the effect that differing water depth has on your construction. Here you will be assisted by a construction train and a service ship, which also has construction capabilities.
 
-Finally, in the lower right corner, you can practice the usage of the bulldozer's dismantling abilities, that can provide noticable amounts of material.
+Finally, in the lower right corner, you can practice the usage of the bulldozer's dismantling abilities, which can provide noticeable amounts of material.
 
-The control of the bulldozer is the same, regardless what you want to build or remove. You select the bulldozer, then chose the function "construct/remove objects". 
-The fields that the bulldozer can alter will be highlighted. Click on one of them and keep your left mouse button pressed! This is very important as the appearing menu will allow you to chose the exact object that you want to build or remove. During this selection phase you will also be able to see the required resources in the status line at the bottom of the screen. 
+The control of the bulldozer is the same, regardless what you want to build or remove. You select the bulldozer, then choose the function "construct/remove objects". 
+The fields that the bulldozer can alter will be highlighted. Click on one of them and keep your left mouse button pressed! This is very important as the appearing menu will allow you to choose the exact object that you want to build or remove. During this selection phase you will also be able to see the required resources in the status line at the bottom of the screen. 
 
 Select a bulldozer and drive onto the adjacent concrete plate to get more information about the respective object.
 
@@ -22,13 +22,13 @@ asc.setLocalizedEventMessage( map, 1, message )
 --- ===== Event 12  ======= 
 message = [[Tracks
 
-Tracks (also called pathes= are a cheap way to increase the speed of your units, but degrade during bad weather. The command is "build path".]]
+Tracks (also called paths) are a cheap way to increase the speed of your units, but degrade during bad weather. The command is "build path".]]
 asc.setLocalizedEventMessage( map, 12, message )
 
 --- ===== Event 13  ======= 
 message = [[Roads
 
-Roads are the more elegant way to increase the range of your units. Especially during heavy rain or snow they prove to be very valuable. But they are more expensive to be build. The command is "build road".]]
+Roads are the more elegant way to increase the range of your units. Especially during heavy rain or snow they prove to be very valuable. But they are more expensive to be built. The command is "build road".]]
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== Event 14  ======= 
@@ -38,7 +38,7 @@ Runways are needed to allow airplanes to take off and land, as well as to allow 
 
 A full-size runway needs 4 fields of runway in a straight line. Be aware that you can never have a straight horizontal line due to the hexagonal nature of the fields. Even if the image of the runway may entrap you - horizontal runways don't work.
 
-Hangars can only be build on fields that already have a runway.
+Hangars can only be built on fields that already have a runway.
 
 The production cost and movement consumption for a runway are quite high - which is the most common reason for not being able to build a runway: not enough material or not enough movement points.]]
 asc.setLocalizedEventMessage( map, 14, message )
@@ -52,7 +52,7 @@ asc.setLocalizedEventMessage( map, 15, message )
 --- ===== Event 16  ======= 
 message = [[Pipeline (above ground)
 
-The above ground pipelines is a quick and cheap way to connect your buildings. But just as quick as you can build it, the enemy can destroy it, particularly with airplanes. And an interrupted pipeline can cripple your economy quite badly.
+The above ground pipeline is a quick and cheap way to connect your buildings. But just as quick as you can build it, the enemy can destroy it, particularly with airplanes. And an interrupted pipeline can cripple your economy quite badly.
 
 Additionally, this type of pipelines slows units that want to cross it.
 ]]
@@ -86,7 +86,7 @@ asc.setLocalizedEventMessage( map, 19, message )
 --- ===== Event 20  ======= 
 message = [[Road bridge
 
-The bulldozer can build bridges. There are two kinds of bridges, normal bridges for shallow water and big bridges for deeoper water. The big bridge is quite expensive, but allows major ships to pass below it. This river here requires the construction of a big bridge.]]
+The bulldozer can build bridges. There are two kinds of bridges, normal bridges for shallow water and big bridges for deeper water. The big bridge is quite expensive, but allows major ships to pass below it. This river here requires the construction of a big bridge.]]
 asc.setLocalizedEventMessage( map, 20, message )
 
 --- ===== Event 21  ======= 
