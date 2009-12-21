@@ -220,6 +220,7 @@ Function registerASC
       CreateShortCut "$SMPROGRAMS\Advanced Strategic Command\Map Editor.lnk" "$INSTDIR\mapeditor2.exe" 
       WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\ASC Website.url" "InternetShortcut" "URL" "http://www.asc-hq.org/"
       WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\ASC Forum.url" "InternetShortcut" "URL" "http://battle-planet.de/pbp/board/index.php"
+      WriteINIStr    "$SMPROGRAMS\Advanced Strategic Command\More Maps.url" "InternetShortcut" "URL" "http://battle-planet.de/pbp/board/viewforum.php?f=23"
       
       
       ; add file association
