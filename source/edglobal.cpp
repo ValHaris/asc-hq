@@ -176,7 +176,10 @@
         "Crash mapeditor",
         "Test Debug Function",
         "Unit Guide Dialog",
-        "Run Lua Script"
+        "Run Lua Script",
+	"Run Translation Script",
+	"Dump all Terrain",
+	"Dump all Objects"
 	 };
 
 
@@ -959,6 +962,26 @@ void execaction_pg(int code)
                                              BuildingType* bld = buildingTypeRepository.getObject_byPos( i );
                                              tn_file_buf_stream stream ( "Building" + ASCString::toString( i ) + ".dump", tnstream::writing );
                                              PropertyWritingContainer pc ( "BuildingDump", stream );
+                                             bld->runTextIO( pc );
+                                          }
+                                        };
+       break;
+    case act_dumpAllTerrain: {
+                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all terrain" );
+                                          for ( int i = 0; i < terrainTypeRepository.getNum(); ++i ) {
+                                             TerrainType* bld = terrainTypeRepository.getObject_byPos( i );
+                                             tn_file_buf_stream stream ( "terrain" + ASCString::toString( i ) + ".dump", tnstream::writing );
+                                             PropertyWritingContainer pc ( "terrainDump", stream );
+                                             bld->runTextIO( pc );
+                                          }
+                                        };
+       break;
+    case act_dumpAllObjects: {
+                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all objects" );
+                                          for ( int i = 0; i < objectTypeRepository.getNum(); ++i ) {
+                                             ObjectType* bld = objectTypeRepository.getObject_byPos( i );
+                                             tn_file_buf_stream stream ( "object" + ASCString::toString( i ) + ".dump", tnstream::writing );
+                                             PropertyWritingContainer pc ( "objectDump", stream );
                                              bld->runTextIO( pc );
                                           }
                                         };

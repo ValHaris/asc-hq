@@ -720,7 +720,7 @@ int IntegerProperty::operation_eq ( const TextPropertyGroup::Entry& entry ) cons
    if ( *p != 0 && *p != ';' ) {
       ASCString s = name + ": value "+ entry.value +" is no numerical value \n" ;
       // propertyContainer->error ( s );
-      fprintf(stderr, s.c_str()  );
+      fprintf(stderr, "%s", s.c_str()  );
    }
    
    return res;
@@ -1227,7 +1227,8 @@ ASCString ASCImageArrayProperty::toString() const
 
    int cnt = 0;
    for ( PropertyType::iterator i = property.begin(); i != property.end(); i++ ) {
-      megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All> ( *i, s, SPoint( (cnt % 10) * 100, (cnt / 10) * 100), nullParam, nullParam, nullParam, nullParam);
+      if ( i->valid() )
+         megaBlitter<ColorTransform_None, ColorMerger_AlphaOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All> ( *i, s, SPoint( (cnt % 10) * 100, (cnt / 10) * 100), nullParam, nullParam, nullParam, nullParam);
       cnt++;
    }
 

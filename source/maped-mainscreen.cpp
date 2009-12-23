@@ -190,6 +190,8 @@ void Menu::setup()
     addbutton ( "Dump ~V~ehicle",          act_dumpVehicle );
     addbutton ( "Dump all Vehicles",       act_dumpAllVehicleDefinitions );
     addbutton ( "Dump ~O~bject",          act_dumpObject );
+    addbutton ( "Dump all Objects",       act_dumpAllObjects );
+    addbutton ( "Dump all Terrain",       act_dumpAllTerrain );
     addbutton ( "Locate Item by ~I~D",    act_locateItemByID );
    currentMenu->addSeparator();
     addbutton ( "Exchange ~G~raphics",          act_exchangeGraphics );
