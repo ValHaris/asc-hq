@@ -28,7 +28,7 @@
 
 class AvailableUnitWindow : public ItemSelectorWindow {
    private:
-      const Vehicletype* selectedVehicleType;
+      const VehicleType* selectedVehicleType;
       
       virtual void itemSelected( const SelectionWidget* sw) {
          const VehicleTypeBaseWidget* vtcw = dynamic_cast<const VehicleTypeBaseWidget*>(sw);
@@ -39,13 +39,13 @@ class AvailableUnitWindow : public ItemSelectorWindow {
       };
    public:
       AvailableUnitWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) : ItemSelectorWindow( parent, r, title, itemFactory ), selectedVehicleType(NULL) {};
-      const Vehicletype* getSelected() { return selectedVehicleType; };
+      const VehicleType* getSelected() { return selectedVehicleType; };
 };      
 
 
 
 
-int evaluateProduction( const ContainerBaseType* potentialFactory, const Vehicletype* vt, GameMap* gamemap )
+int evaluateProduction( const ContainerBaseType* potentialFactory, const VehicleType* vt, GameMap* gamemap )
 {
    if ( potentialFactory->vehicleFit( vt ) && potentialFactory->hasFunction( ContainerBaseType::InternalVehicleProduction)) 
       return 1;
@@ -53,7 +53,7 @@ int evaluateProduction( const ContainerBaseType* potentialFactory, const Vehicle
       return 0;
 }
 
-int evaluateProduction( const Vehicletype* potentialFactory, const Vehicletype* vt, GameMap* gamemap )
+int evaluateProduction( const VehicleType* potentialFactory, const VehicleType* vt, GameMap* gamemap )
 {
    const ContainerBaseType* cbt = potentialFactory;
    int res = evaluateProduction( cbt, vt, gamemap ); 
@@ -66,7 +66,7 @@ int evaluateProduction( const Vehicletype* potentialFactory, const Vehicletype* 
 }
 
 
-ASCString getProductionString( const ContainerBaseType* potentialFactory, const Vehicletype* vt, GameMap* gamemap )
+ASCString getProductionString( const ContainerBaseType* potentialFactory, const VehicleType* vt, GameMap* gamemap )
 {
    ASCString s;
    int res = evaluateProduction( potentialFactory, vt, gamemap);
@@ -83,7 +83,7 @@ ASCString getProductionString( const ContainerBaseType* potentialFactory, const 
 
 
 
-ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicletype* unitsToProduce, GameMap* gamemap, bool lineAvail )
+ASCString getInstances( const ContainerBaseType* evaluatedFactory, const VehicleType* unitsToProduce, GameMap* gamemap, bool lineAvail )
 {
    ASCString instances;
    if ( lineAvail ) {
@@ -136,7 +136,7 @@ ASCString getInstances( const ContainerBaseType* evaluatedFactory, const Vehicle
 }
 
 template<typename T>
-void checkType( T* t, const Vehicletype* evaluatedUnitType, ASCString& instances, ASCString& lineAddable, ASCString& types, GameMap* gamemap, bool checkResearch )
+void checkType( T* t, const VehicleType* evaluatedUnitType, ASCString& instances, ASCString& lineAddable, ASCString& types, GameMap* gamemap, bool checkResearch )
 {
    if ( evaluateProduction( t, evaluatedUnitType, gamemap)) {
       instances += getInstances( t, evaluatedUnitType, gamemap, true );               
@@ -146,7 +146,7 @@ void checkType( T* t, const Vehicletype* evaluatedUnitType, ASCString& instances
    }
 }
 
-bool vehicleOwned( const Vehicletype* vt, GameMap* gamemap )
+bool vehicleOwned( const VehicleType* vt, GameMap* gamemap )
 {
    for ( Player::VehicleList::const_iterator j = gamemap->getCurrentPlayer().vehicleList.begin(); j != gamemap->getCurrentPlayer().vehicleList.end(); ++j )
       if ( (*j)->typ == vt )
@@ -160,7 +160,7 @@ void unitProductionAnalysis( GameMap* gamemap, bool checkResearch )
    VehicleTypeSelectionItemFactory::Container c;
 
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
-      Vehicletype* p = vehicleTypeRepository.getObject_byPos(i);
+      VehicleType* p = vehicleTypeRepository.getObject_byPos(i);
       if ( p ) {
          if ( vehicleOwned( p, gamemap ) || !checkResearch || p->techDependency.available( gamemap->getCurrentPlayer().research )  )
             c.push_back(p);

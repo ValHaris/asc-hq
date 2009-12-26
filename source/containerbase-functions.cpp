@@ -101,7 +101,7 @@ bool AutoHarvestObjects::finished()
 
 void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectType* obj )
 {
-   tfield* currentField = base->getMap()->getField(pos);
+   MapField* currentField = base->getMap()->getField(pos);
    if ( !currentField )
       return;
 
@@ -117,7 +117,7 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
     for ( int i = 0; i < 6; ++i ) {
       MapCoordinate nextField = getNeighbouringFieldCoordinate( pos, i );
       if ( !harvestOnPosition(nextField)) {
-         tfield* fld = base->getMap()->getField( nextField);
+         MapField* fld = base->getMap()->getField( nextField);
          if ( fld ) {
             if ( fld->checkForObject(obj))
                ++regrowFields ;
@@ -171,7 +171,7 @@ void AutoHarvestObjects::harvestObject( const MapCoordinate& pos, const ObjectTy
 
 void AutoHarvestObjects::processField( const MapCoordinate& pos )
 {
-   tfield* currentField = base->getMap()->getField(pos);
+   MapField* currentField = base->getMap()->getField(pos);
    if ( !currentField )
       return;
    
@@ -280,7 +280,7 @@ GetMiningInfo :: GetMiningInfo ( const ContainerBase* container ) : SearchFields
 
 void GetMiningInfo :: testfield ( const MapCoordinate& mc )
 {
-   tfield* fld = gamemap->getField ( mc );
+   MapField* fld = gamemap->getField ( mc );
    if ( miningInfo.efficiency[ dist ] == 0 )
       miningInfo.efficiency[ dist ] = int(getminingstationeficency ( dist ) * 1024);
 
@@ -575,7 +575,7 @@ Resources SolarPowerplant :: getPlus()
    int num = 0;
    vector<MapCoordinate> fields = bld->getCoveredFields();
    for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i ) {
-      tfield* fld = bld->getMap()->getField ( *i );
+      MapField* fld = bld->getMap()->getField ( *i );
       int weather = 0;
       while ( fld->typ != fld->typ->terraintype->weather[weather] )
          weather++;
@@ -686,7 +686,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
          cancelSearch = false;
 
    if ( cancelSearch == false ) {
-      tfield* fld = gamemap->getField ( mc );
+      MapField* fld = gamemap->getField ( mc );
       float distEfficiency = getminingstationeficency ( dist );
 
       for ( int r = 1; r < 3; r++ ) {
@@ -750,7 +750,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
 
             if ( !justQuery ) {
                if ( !fld->resourceview )
-                  fld->resourceview = new tfield::Resourceview;
+                  fld->resourceview = new MapField::Resourceview;
                fld->resourceview->visible |= 1 << bld->getOwner();
                fld->resourceview->fuelvisible[bld->getOwner()] = fld->fuel;
                fld->resourceview->materialvisible[bld->getOwner()] = fld->material;

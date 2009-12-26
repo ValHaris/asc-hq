@@ -110,12 +110,12 @@ int LZWDecode ( FILE *infile, FILE *outfile )
         DecodeBufferSize = 1000;
         DecodeBuffer = malloc ( DecodeBufferSize );
         if ( DecodeBuffer == NULL )
-            throw toutofmem ( DecodeBufferSize );
+            throw OutOfMemoryError ( DecodeBufferSize );
     }
     rdictionary = malloc( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
 
     if ( rdictionary == NULL )
-        throw toutofmem ( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
+        throw OutOfMemoryError ( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
 
 
 

@@ -34,7 +34,7 @@ class BuildProductionLineCommand : public ContainerCommand {
    public:
       static bool avail ( const ContainerBase* factory );
       
-      static Resources resourcesNeeded( const Vehicletype* veh );
+      static Resources resourcesNeeded( const VehicleType* veh );
 
    private:
       BuildProductionLineCommand( GameMap* map ) : ContainerCommand( map ), vehicleTypeId( -1 ) {};
@@ -54,9 +54,9 @@ class BuildProductionLineCommand : public ContainerCommand {
    public:
       BuildProductionLineCommand ( ContainerBase* item );
       
-      vector<const Vehicletype*> productionLinesBuyable();
+      vector<const VehicleType*> productionLinesBuyable();
             
-      void setProduction( const Vehicletype* vehicleType );
+      void setProduction( const VehicleType* vehicleType );
       
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;

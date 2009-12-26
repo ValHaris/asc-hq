@@ -45,7 +45,7 @@ class PutObjectCommand : public UnitCommand {
       map<MapCoordinate,vector<int> > objectsCreatable;
       map<MapCoordinate,vector<int> > objectsRemovable;
       
-      bool checkObject( tfield* fld, ObjectType* objtype, Mode mode );
+      bool checkObject( MapField* fld, ObjectType* objtype, Mode mode );
       
       
       PutObjectCommand( GameMap* map ) : UnitCommand( map ) {};

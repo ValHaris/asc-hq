@@ -53,7 +53,7 @@ class SingleUnitSet {
 
          SingleUnitSet ( void ) : active ( 1 ), ID(0), filterBuildings ( true ) {};
          bool isMember ( int id, Type type );
-         void read ( pnstream stream );
+         void read ( tnstream* stream );
          std::vector<IntRange> parseIDs ( const char* s );
 
      };
@@ -64,12 +64,12 @@ extern UnitSets unitSets;
 extern void loadUnitSets ( void );
 
 
-class Vehicletype;
+class VehicleType;
 class BuildingType;
-extern int getUnitSetID( const Vehicletype* veh );
+extern int getUnitSetID( const VehicleType* veh );
 extern int getUnitSetID( const BuildingType* bld );
 
-extern bool vehicleComp( const Vehicletype* v1, const Vehicletype* v2 );
+extern bool vehicleComp( const VehicleType* v1, const VehicleType* v2 );
 
 
 #endif

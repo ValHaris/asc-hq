@@ -151,8 +151,8 @@ class AdminGameWindow : public ASC_PG_Dialog {
       {
          for ( int y = 0; y < gamemap->ysize; ++y )
             for ( int x = 0; x < gamemap->xsize; ++x ) {
-               tfield* fld = gamemap->getField(x,y);
-               for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); )
+               MapField* fld = gamemap->getField(x,y);
+               for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); )
                   if ( i->player == player )
                      i = fld->mines.erase( i );
                   else

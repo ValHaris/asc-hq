@@ -177,7 +177,7 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
          pf.registerOperationLimiter( &hcl );
          pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
       } else {
-         const Vehicletype::HeightChangeMethod* hcm = veh->getHeightChange( getVerticalDirection() );
+         const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( getVerticalDirection() );
          if ( !hcm )
             fatalError ( "Inconsistent call to changeheight ");
    

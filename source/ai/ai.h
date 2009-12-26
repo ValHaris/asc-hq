@@ -352,12 +352,12 @@
             */
             int changeVehicleHeight ( Vehicle* veh, int preferredDirection = -1 );
 
-            void  calculateThreat ( const Vehicletype* vt);
+            void  calculateThreat ( const VehicleType* vt);
             void  calculateThreat ( Vehicle* eht );
             void  calculateThreat ( Building* bld );
             void  calculateThreat ( Building* bld, int player );
 
-            static AiParameter::JobList chooseJob ( const Vehicletype* typ );
+            static AiParameter::JobList chooseJob ( const VehicleType* typ );
             friend class CalculateThreat_Vehicle;
 
             /** This structure helps identifying units which don't reach any
@@ -387,11 +387,11 @@
             };
             UnitDistribution originalUnitDistribution;
             UnitDistribution::Group getUnitDistributionGroup ( Vehicle* veh );
-            UnitDistribution::Group getUnitDistributionGroup ( Vehicletype* veh );
+            UnitDistribution::Group getUnitDistributionGroup ( VehicleType* veh );
 
             UnitDistribution calcUnitDistribution();
             struct ProductionRating {
-               const Vehicletype* vt;
+               const VehicleType* vt;
                Building*    bld;
                float        rating;
                bool operator< ( const ProductionRating& pr ) { return rating < pr.rating; };

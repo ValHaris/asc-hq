@@ -31,19 +31,19 @@
 #include "actions/context.h"
 #include "actions/removeobject.h"
 
-tfield :: tfield ( GameMap* gamemap_ )
+MapField :: MapField ( GameMap* gamemap_ )
 {
   init();
   setMap( gamemap_ );
 }
 
-tfield :: tfield (  )
+MapField :: MapField (  )
 {
   init();
 }
 
 
-void tfield::init ()
+void MapField::init ()
 {
    bdt.set ( 0 );
    typ = NULL;
@@ -63,17 +63,17 @@ void tfield::init ()
    viewbonus = 0;
 }
 
-int tfield::getMineralMaterial() const
+int MapField::getMineralMaterial() const
 {
    return material;
 }
 
-int tfield::getMineralFuel() const
+int MapField::getMineralFuel() const
 {
    return fuel;
 }
    
-void tfield::setMineralMaterial( int material )
+void MapField::setMineralMaterial( int material )
 {
    if ( material < 0 )
       this->material = 0;
@@ -83,7 +83,7 @@ void tfield::setMineralMaterial( int material )
       else
          this->material = material;
 }
-void tfield::setMineralFuel( int fuel )
+void MapField::setMineralFuel( int fuel )
 {
    if ( fuel < 0 )
       this->fuel = 0;
@@ -94,20 +94,20 @@ void tfield::setMineralFuel( int fuel )
       this->fuel = fuel;
 }
 
-void tfield::Resourceview::setview( int player, int material, int fuel )
+void MapField::Resourceview::setview( int player, int material, int fuel )
 {
    visible |= 1 << player;
    materialvisible[player] = material;
    fuelvisible[player] = fuel;
 }
 
-void tfield::Resourceview::resetview( int player )
+void MapField::Resourceview::resetview( int player )
 {
    visible &= ~(1<<player);
 }
 
 
-void tfield::endRound( int turn )
+void MapField::endRound( int turn )
 {
    bool recalc = false;
    for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); ) {
@@ -133,7 +133,7 @@ void tfield::endRound( int turn )
 }
 
 
-void tfield::operator= ( const tfield& f )
+void MapField::operator= ( const MapField& f )
 {
    typ = f.typ;
    fuel = f.fuel;
@@ -159,7 +159,7 @@ void tfield::operator= ( const tfield& f )
 
 
 
-int tfield :: mineattacks ( const Vehicle* veh )
+int MapField :: mineattacks ( const Vehicle* veh )
 {
    int i = 1;
    for ( MineContainer::iterator m = mines.begin(); m != mines.end(); m++, i++ )
@@ -169,7 +169,7 @@ int tfield :: mineattacks ( const Vehicle* veh )
    return 0;
 }
 
-Mine& tfield::getMine ( int n )
+Mine& MapField::getMine ( int n )
 {
   int c = 0;
   MineContainer::iterator i;
@@ -177,7 +177,7 @@ Mine& tfield::getMine ( int n )
   return *i;
 }
 
-bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, tfield::ObjectRemovalStrategy* objectRemovalStrategy )
+bool  MapField :: addobject( const ObjectType* obj, int dir, bool force, MapField::ObjectRemovalStrategy* objectRemovalStrategy )
 {
    if ( !obj )
       return false;
@@ -221,7 +221,7 @@ bool  tfield :: addobject( const ObjectType* obj, int dir, bool force, tfield::O
 }
 
 
-bool tfield :: removeObject( const ObjectType* obj, bool force)
+bool MapField :: removeObject( const ObjectType* obj, bool force)
 {
    if ( !force && building )
       return false;
@@ -256,7 +256,7 @@ bool tfield :: removeObject( const ObjectType* obj, bool force)
    return removed;
 }
 
-void tfield :: deleteeverything ( void )
+void MapField :: deleteeverything ( void )
 {
    if ( vehicle ) {
       delete vehicle;
@@ -272,7 +272,7 @@ void tfield :: deleteeverything ( void )
 }
 
 
-bool tfield :: unitHere ( const Vehicle* veh )
+bool MapField :: unitHere ( const Vehicle* veh )
 {
    if ( vehicle == veh )
       return true;
@@ -282,7 +282,7 @@ bool tfield :: unitHere ( const Vehicle* veh )
    return false;
 }
 
-Building* tfield::getBuildingEntrance()
+Building* MapField::getBuildingEntrance()
 {
    if ( building &&  (bdt & getTerrainBitType(cbbuildingentry)).any() )
       return building;
@@ -292,7 +292,7 @@ Building* tfield::getBuildingEntrance()
 
 
 
-ContainerBase* tfield :: getContainer()
+ContainerBase* MapField :: getContainer()
 {
    if ( vehicle )
       return vehicle;
@@ -300,7 +300,7 @@ ContainerBase* tfield :: getContainer()
       return building;
 }
 
-const ContainerBase* tfield :: getContainer() const
+const ContainerBase* MapField :: getContainer() const
 {
    if ( vehicle )
       return vehicle;
@@ -309,7 +309,7 @@ const ContainerBase* tfield :: getContainer() const
 }
 
 
-int tfield :: getWeather ( void )
+int MapField :: getWeather ( void )
 {
    if ( !typ )
       return 0;
@@ -319,7 +319,7 @@ int tfield :: getWeather ( void )
    return -1;
 }
 
-void tfield :: setWeather ( int weather )
+void MapField :: setWeather ( int weather )
 {
    if ( weather < 0 || weather >= cwettertypennum )
       return;
@@ -343,7 +343,7 @@ void tfield :: setWeather ( int weather )
      }
 }
 
-void tfield::setVisibility ( VisibilityStates valtoset, int actplayer ) 
+void MapField::setVisibility ( VisibilityStates valtoset, int actplayer ) 
 {
       int newval = (valtoset ^ 3) << ( 2 * actplayer );
       int oneval = 3 << ( 2 * actplayer );
@@ -352,7 +352,7 @@ void tfield::setVisibility ( VisibilityStates valtoset, int actplayer )
       visible ^= newval;
 };
 
-void tfield::resetView( GameMap* gamemap, int playersToReset )
+void MapField::resetView( GameMap* gamemap, int playersToReset )
 {
    int mask = 0;
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
@@ -362,7 +362,7 @@ void tfield::resetView( GameMap* gamemap, int playersToReset )
    int l = 0;
    for ( int y = 0; y < gamemap->ysize; ++y )
       for ( int x = 0; x < gamemap->xsize; ++x ) {
-         tfield& fld = gamemap->field[l++];
+         MapField& fld = gamemap->field[l++];
          fld.visible &= mask;
       }
         
@@ -375,12 +375,12 @@ bool compareObjectHeight ( const Object& o1, const Object& o2 )
    return o1.typ->imageHeight < o2.typ->imageHeight;
 }
 
-void tfield :: sortobjects ( void )
+void MapField :: sortobjects ( void )
 {
    sort ( objects.begin(), objects.end(), compareObjectHeight );
 }
 
-bool  tfield :: putmine( int owner, MineTypes typ, int strength )
+bool  MapField :: putmine( int owner, MineTypes typ, int strength )
 {
    if ( mineowner() >= 0  && mineowner() != owner )
       return false;
@@ -393,7 +393,7 @@ bool  tfield :: putmine( int owner, MineTypes typ, int strength )
    return true;
 }
 
-int tfield :: mineowner( void )
+int MapField :: mineowner( void )
 {
    if ( mines.empty() )
       return -1;
@@ -402,7 +402,7 @@ int tfield :: mineowner( void )
 }
 
 
-void tfield :: removemine( int num )
+void MapField :: removemine( int num )
 { 
    if ( num == -1 )
       num = mines.size() - 1;
@@ -416,20 +416,20 @@ void tfield :: removemine( int num )
 }
 
 
-int tfield :: getx( void )
+int MapField :: getx( void )
 {
    int n = this - gamemap->field;
    return n % gamemap->xsize;
 }
 
-int tfield :: gety( void )
+int MapField :: gety( void )
 {
    int n = this - gamemap->field;
    return n / gamemap->xsize;
 }
 
 
-int tfield :: getattackbonus ( void )
+int MapField :: getattackbonus ( void )
 {
    int a = typ->attackbonus;
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
@@ -445,7 +445,7 @@ int tfield :: getattackbonus ( void )
       return -7;
 }
 
-int tfield :: getdefensebonus ( void )
+int MapField :: getdefensebonus ( void )
 {
    int a = typ->defensebonus;
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
@@ -461,7 +461,7 @@ int tfield :: getdefensebonus ( void )
       return -7;
 }
 
-ASCString tfield :: getName()
+ASCString MapField :: getName()
 {
    ASCString a = typ->terraintype->name;
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
@@ -476,7 +476,7 @@ ASCString tfield :: getName()
 }
 
 
-int tfield :: getjamming ( void )
+int MapField :: getjamming ( void )
 {
    int a = typ->basicjamming;
    for ( ObjectContainer::iterator o = objects.begin(); o != objects.end(); o++ ) {
@@ -491,7 +491,7 @@ int tfield :: getjamming ( void )
       return 0;
 }
 
-int tfield :: getmovemalus ( const Vehicle* veh )
+int MapField :: getmovemalus ( const Vehicle* veh )
 {
    int mnum = mines.size();
    if ( mnum ) {
@@ -512,22 +512,22 @@ int tfield :: getmovemalus ( const Vehicle* veh )
    }
 }
 
-int tfield :: getmovemalus ( int type )
+int MapField :: getmovemalus ( int type )
 {
   return __movemalus.at(type);
 }
 
-MapCoordinate tfield :: getPosition()
+MapCoordinate MapField :: getPosition()
 {
    return MapCoordinate( getx(), gety() );  
 }
 
 
-class SimpleObjectRemoval : public tfield::ObjectRemovalStrategy {
+class SimpleObjectRemoval : public MapField::ObjectRemovalStrategy {
    public:
-      virtual void removeObject( tfield* fld, const ObjectType* obj )
+      virtual void removeObject( MapField* fld, const ObjectType* obj )
       {
-         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
+         for ( MapField::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
             if ( o->typ == obj )
                o = fld->objects.erase( o );
             else
@@ -538,13 +538,13 @@ class SimpleObjectRemoval : public tfield::ObjectRemovalStrategy {
 
 
 
-void tfield :: setparams (  )
+void MapField :: setparams (  )
 {
    SimpleObjectRemoval sor;
    setparams( &sor );     
 }
 
-void tfield :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
+void MapField :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
 {
    int i;
    bdt = typ->art;
@@ -587,7 +587,7 @@ void tfield :: setparams ( ObjectRemovalStrategy* objectRemovalStrategy )
    
 }
 
-Object* tfield :: checkForObject ( const ObjectType*  o )
+Object* MapField :: checkForObject ( const ObjectType*  o )
 {
    for ( ObjectContainer::iterator i = objects.begin(); i != objects.end(); i++ )
       if ( i->typ == o )
@@ -597,7 +597,7 @@ Object* tfield :: checkForObject ( const ObjectType*  o )
 }
 
 
-tfield::Resourceview :: Resourceview ( void )
+MapField::Resourceview :: Resourceview ( void )
 {
    visible = 0;
    memset ( &fuelvisible, 0, sizeof ( fuelvisible ));
@@ -605,14 +605,14 @@ tfield::Resourceview :: Resourceview ( void )
 }
 
 
-int tfield :: getMemoryFootprint() const
+int MapField :: getMemoryFootprint() const
 {
    int size = sizeof(*this);
    return size;
 }
 
 
-tfield :: ~tfield()
+MapField :: ~MapField()
 {
    if ( resourceview ) {
       delete resourceview;

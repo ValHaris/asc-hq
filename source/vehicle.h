@@ -38,7 +38,7 @@ class UnitHooveringLogic {
           \returns time in turns or -1 if the unit can't crash because of missing fuel in its current height
       */
       static int getEndurance ( const Vehicle* veh );
-      static int getEndurance ( const Vehicletype* veh, int height = -1, int resourceModel = 0 );
+      static int getEndurance ( const VehicleType* veh, int height = -1, int resourceModel = 0 );
 
 };
 
@@ -69,20 +69,20 @@ class UnitHooveringLogic {
 
     bool movementLeft() const;
 
-    Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID  );
+    Vehicle ( const VehicleType* t, GameMap* actmap, int player, int networkID  );
 
 
    public:
 
-    Vehicle ( const Vehicletype* t, GameMap* actmap, int player );
+    Vehicle ( const VehicleType* t, GameMap* actmap, int player );
 
     int repairableDamage() const { return damage; };
 
     bool isBuilding() const { return false; };
 
-    const Vehicletype* typ;
+    const VehicleType* typ;
     
-    const Vehicletype* getType() const { return typ; };
+    const VehicleType* getType() const { return typ; };
     
     int          ammo[16];
     int          weapstrength[16];
@@ -273,9 +273,9 @@ class UnitHooveringLogic {
     //! @name Construction related functions
     //@{
     //! checks whether the unit can construct a vehicle of the given type at the given position.
-    bool vehicleconstructable ( const Vehicletype* tnk, int x, int y );
+    bool vehicleconstructable ( const VehicleType* tnk, int x, int y );
     
-    Resources getExternalVehicleConstructionCost( const Vehicletype* tnk ) const;
+    Resources getExternalVehicleConstructionCost( const VehicleType* tnk ) const;
 
     /** checks whether the unit can construct a building of the given type.
     This method does not check if there is enough space around the unit to place
@@ -372,13 +372,13 @@ class UnitHooveringLogic {
 
 
     //! to be used with EXTREME caution, and only in the mapeditor !!
-    void transform ( const Vehicletype* type );
+    void transform ( const VehicleType* type );
 
     /** returns the method for changing the height in the specified direction, or none if there is none.
         \param dir  +1 is up;  -1 is down
         \param height if != 0:  assume this level of height instead of the actual one
     */
-    const Vehicletype::HeightChangeMethod* getHeightChange( int dir, int height = 0 ) const;
+    const VehicleType::HeightChangeMethod* getHeightChange( int dir, int height = 0 ) const;
 
     //! Is the unit able to shoot ?
     bool weapexist() const;

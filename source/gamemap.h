@@ -185,7 +185,7 @@ class GameMap {
       int height() const { return ysize; };
 
       //! the array of fields
-      tfield*       field;
+      MapField*       field;
 
       //! the codeword for accessing a map in a campaign
       ASCString    codeWord;
@@ -437,9 +437,9 @@ class GameMap {
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      tfield* getField ( int x, int y );
-      const tfield* getField ( int x, int y ) const;
-      tfield* getField ( const MapCoordinate& pos );
+      MapField* getField ( int x, int y );
+      const MapField* getField ( int x, int y ) const;
+      MapField* getField ( const MapCoordinate& pos );
       
       
       /** @name Turn Management
@@ -507,15 +507,15 @@ class GameMap {
       pterraintype getterraintype_byid ( int id );
       ObjectType* getobjecttype_byid ( int id );
       const ObjectType* getobjecttype_byid ( int id ) const;
-      Vehicletype* getvehicletype_byid ( int id );
-      const Vehicletype* getvehicletype_byid ( int id ) const;
+      VehicleType* getvehicletype_byid ( int id );
+      const VehicleType* getvehicletype_byid ( int id ) const;
       BuildingType* getbuildingtype_byid ( int id );
       const BuildingType* getbuildingtype_byid ( int id ) const;
       const Technology* gettechnology_byid ( int id );
 
       pterraintype getterraintype_bypos ( int pos );
       ObjectType* getobjecttype_bypos ( int pos );
-      Vehicletype* getvehicletype_bypos ( int pos );
+      VehicleType* getvehicletype_bypos ( int pos );
       BuildingType* getbuildingtype_bypos ( int pos );
       const Technology* gettechnology_bypos ( int pos );
 

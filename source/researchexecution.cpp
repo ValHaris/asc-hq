@@ -89,14 +89,14 @@ static bool anyTechAvailable( const Player& player )
 
 //! checks, which vehicle and building types are newly available. 
 class NewGadgetDetection  {
-      std::list<const Vehicletype*>  units;
+      std::list<const VehicleType*>  units;
       std::list<const BuildingType*>  buildings;
       Player& p;
    public:
       NewGadgetDetection( Player& player ) : p(player )
       {
          for ( int i=0; i < vehicleTypeRepository.getNum() ; i++ ) {
-            const Vehicletype* v = vehicleTypeRepository.getObject_byPos ( i );
+            const VehicleType* v = vehicleTypeRepository.getObject_byPos ( i );
             if ( !v->techDependency.available( p.research ))
                units.push_back( v );
          }
@@ -113,7 +113,7 @@ class NewGadgetDetection  {
       void evaluate( TechnologyPresenter::Gadgets& storage )
       {
          for ( int i=0; i < vehicleTypeRepository.getNum() ; i++ ) {
-            const Vehicletype* v = vehicleTypeRepository.getObject_byPos ( i );
+            const VehicleType* v = vehicleTypeRepository.getObject_byPos ( i );
             if ( !v->techDependency.available( p.research ))
                units.remove( v );
          }

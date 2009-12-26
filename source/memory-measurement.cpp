@@ -62,7 +62,7 @@ void MemoryMeasurement::measure( GameMap* gamemap )
 
    for ( int y = 0; y < gamemap->ysize; ++y )
       for ( int x = 0; x < gamemap->xsize; ++x ) {
-         tfield* fld = gamemap->getField(x,y);
+         MapField* fld = gamemap->getField(x,y);
          fields->usage += fld->getMemoryFootprint();
          objects->usage += sizeof( Object ) * fld->objects.size();
       }

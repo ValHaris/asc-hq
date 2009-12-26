@@ -61,7 +61,7 @@ static const char* paneName[paneNum]  = { "information", "movement", "weapons", 
 
 class UnitInfoDialog : public Panel {
         const Vehicle* veh;
-        const Vehicletype* vt;
+        const VehicleType* vt;
         PG_Widget* weaponGraph;
         int currentWeapon;
         typedef vector< pair<int,int> > EntranceHeights;
@@ -310,7 +310,7 @@ class UnitInfoDialog : public Panel {
      public:
         
         
-        UnitInfoDialog (PG_Widget *parent, const Vehicle* vehicle, const Vehicletype* vehicleType ) 
+        UnitInfoDialog (PG_Widget *parent, const Vehicle* vehicle, const VehicleType* vehicleType ) 
            : Panel( parent, PG_Rect::null, "UnitInfoDialog", false ), veh(vehicle), vt( vehicleType ), weaponGraph(NULL), currentWeapon(-1) {
                sigClose.connect( SigC::slot( *this, &UnitInfoDialog::QuitModal ));
 
@@ -527,14 +527,14 @@ class UnitInfoDialog : public Panel {
         
 };
 
-void unitInfoDialog( const Vehicletype* vt )
+void unitInfoDialog( const VehicleType* vt )
 {
    if ( vt ) {
       UnitInfoDialog uid ( NULL, NULL, vt );
       uid.Show();
       uid.RunModal();
    } else {
-      tfield* fld = actmap->getField( actmap->getCursor() );
+      MapField* fld = actmap->getField( actmap->getCursor() );
       if ( fld && fld->vehicle ) {
          UnitInfoDialog uid ( NULL, fld->vehicle, NULL );
          uid.Show();

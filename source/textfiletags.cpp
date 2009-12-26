@@ -79,7 +79,7 @@ const char*  terrainProperties[terrainPropertyNum]
         "high_level_flight",
         "orbit" };
         
- const char* vehicleAbilities[Vehicletype::legacyVehicleFunctionNum]
+ const char* vehicleAbilities[VehicleType::legacyVehicleFunctionNum]
      = {           "sonar",
                    "paratrooper",
                    "mine_layer",

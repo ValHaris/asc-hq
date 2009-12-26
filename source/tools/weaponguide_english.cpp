@@ -108,7 +108,7 @@ int main(int argc, char *argv[] )
                 "<BODY bgcolor=\"#447744\" text=\"#eabc1a\" link=\"#EABC1A\" vlink=\"#EABC1A\" alink=\"#EABC1A\" background=\"../ug-hin.gif\" leftmargin=\"5\" topmargin=\"0\">\n" );
 
       for ( int unit = 0; unit < vehicletypenum; unit++ ) {
-         Vehicletype*  ft = getvehicletype_forpos ( unit );
+         VehicleType*  ft = getvehicletype_forpos ( unit );
          ASCString fn = extractFileName_withoutSuffix( ft->filename );
          if ( patimat ( wildcard, ft->filename.c_str() )) {
             ASCString cn = fn;
@@ -546,7 +546,7 @@ int main(int argc, char *argv[] )
             for ( unsigned int i = 0; i < ft->vehiclesBuildable.size(); i++ ) {
 //               fprintf( detailed4, "<tr><td colspan=\"2\">baubar ID %d bis %d </td></tr>\n", ft->vehiclesBuildable[i].from, ft->vehiclesBuildable[i].to );
                for ( int b = 0; b < vehicletypenum; b++ ) {
-                  Vehicletype* veh = getvehicletype_forpos ( b );
+                  VehicleType* veh = getvehicletype_forpos ( b );
                   if (     veh->id >= ft->vehiclesBuildable[i].from
                         && veh->id <= ft->vehiclesBuildable[i].to ) {
                      fprintf ( detailed4, "<tr><td>ID %d </td><td align=\"center\"> %s </td></tr>\n", veh->id, veh->getName().c_str() );

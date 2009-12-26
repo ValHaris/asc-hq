@@ -39,7 +39,7 @@
       dacpalette256 pal;
 
 
-char     richtung[2][11]  = {"0 ø", "45 ø"}; 
+char     richtung[2][11]  = {"0 ï¿½", "45 ï¿½"}; 
 char     mode50 = 1;
 #define  la   80
 
@@ -100,7 +100,7 @@ void readtextfile ( char* name, pchar &buf, int allocated )
 main (int argc, char *argv[] )
 { 
 
-   Vehicletype*   ft;
+   VehicleType*   ft;
    tfile          datfile;
    char           pict = YES;       // Bilder einlesen
    char           dif = 1;          // Anzahl der Bilder
@@ -109,7 +109,7 @@ main (int argc, char *argv[] )
    char           maxmovement = 0;
    long           erwartungen;
  
-   ft = (Vehicletype*) calloc (sizeof (tvehicletype), 1) ;
+   ft = (VehicleType*) calloc (sizeof (tvehicletype), 1) ;
    for (int i = 0; i <= 1; i++) ft->picture[i] = NULL;
    strcpy (datfile.name, "");
 
@@ -192,7 +192,7 @@ main (int argc, char *argv[] )
            printf ("\n    Welche Bilder sollen neu eingelesen werden ?\n");
            bitselect (pics, bildnr, 8);
 
-           printf ("\n    Welche Bilder sollen gel”scht werden ?\n");
+           printf ("\n    Welche Bilder sollen gelï¿½scht werden ?\n");
            int kill = 0;
            bitselect (kill, bildnr, 8);
            for ( int n = 0; n < 8; n++ )
@@ -279,14 +279,14 @@ main (int argc, char *argv[] )
       printf ("\n    fielder auf die die vehicle fahren kann : \n");
       bitselect (ft->terrain, cbodenarten, cbodenartennum);
 
-      printf ("\n    Bits, die ALLE n”tig sind, damit die vehicle aufs field fahren kann : \n");
+      printf ("\n    Bits, die ALLE nï¿½tig sind, damit die vehicle aufs field fahren kann : \n");
       bitselect (ft->terrainreq, cbodenarten, cbodenartennum);
 
-      printf ("\n    Bits, von denen min. eins n”tig ist, damit die vehicle aufs field fahren kann : \n");
+      printf ("\n    Bits, von denen min. eins nï¿½tig ist, damit die vehicle aufs field fahren kann : \n");
       bitselect (ft->terrainreq1, cbodenarten, cbodenartennum);
 
 
-      printf ("\n    Bits, die nicht gesetzt sein drfen, damit die vehicle drauf kann: \n");
+      printf ("\n    Bits, die nicht gesetzt sein dï¿½rfen, damit die vehicle drauf kann: \n");
       bitselect (ft->terrainnot, cbodenarten, cbodenartennum);
 
       printf ("\n    fielder auf denen die vehicle stirbt : \n");

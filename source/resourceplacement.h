@@ -20,7 +20,7 @@
 */
 
 struct Rect {
-  tfield *a, *b, *c, *d;
+  MapField *a, *b, *c, *d;
 
 };
 
@@ -47,14 +47,14 @@ private:
   unsigned short createRandomValue(int limit);
   short createAlgebraicSign();
   
-  void setFieldValueFuel(tfield* f);
-  void setFieldValueMaterial(tfield* f);
-  int calculateCornerValueFuel(tfield* a, tfield* b, tfield* c);
-  int calculateDiamondValueFuel(tfield* a, tfield* b, tfield* c, tfield* d);
-  int calculateCornerValueMaterial(tfield* a, tfield* b, tfield* c);
-  int calculateDiamondValueMaterial(tfield* a, tfield* b, tfield* c, tfield* d);
-  tfield* calculateCornerPoint(tfield* a, tfield* b, tfield* c);
-  tfield* calculateDiamondPoint(tfield* a, tfield* b, tfield* c, tfield* d);
+  void setFieldValueFuel(MapField* f);
+  void setFieldValueMaterial(MapField* f);
+  int calculateCornerValueFuel(MapField* a, MapField* b, MapField* c);
+  int calculateDiamondValueFuel(MapField* a, MapField* b, MapField* c, MapField* d);
+  int calculateCornerValueMaterial(MapField* a, MapField* b, MapField* c);
+  int calculateDiamondValueMaterial(MapField* a, MapField* b, MapField* c, MapField* d);
+  MapField* calculateCornerPoint(MapField* a, MapField* b, MapField* c);
+  MapField* calculateDiamondPoint(MapField* a, MapField* b, MapField* c, MapField* d);
   int calculateCurrentOffset(int offset);
   void step(Rect r);
   void runDS();

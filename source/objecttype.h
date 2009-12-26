@@ -160,7 +160,7 @@
      const Surface& getPicture ( int i = 0, int weather = 0 ) const;
 
      //! can the object be build on the field fld
-     bool buildable ( tfield* fld ) const;
+     bool buildable ( MapField* fld ) const;
 
      //! reads the objecttype from a stream
      void read ( tnstream& stream );

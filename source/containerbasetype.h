@@ -185,7 +185,7 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      void runTextIO ( PropertyContainer& pc );
 
      //! can units of the given type be moved into this buildtype? This is a prerequisite - but not the only requirement - for a real unit to move into a real building
-     bool vehicleFit ( const Vehicletype* type ) const ;
+     bool vehicleFit ( const VehicleType* type ) const ;
 
      void read ( tnstream& stream ) ;
      void write ( tnstream& stream ) const ;

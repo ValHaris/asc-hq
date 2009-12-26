@@ -33,7 +33,7 @@ class DiscoverResources : public UnitAction {
       class ResourceViewState {
          public:
             ResourceViewState() {};
-            ResourceViewState( const tfield* fld, int player ) { initFromField( fld, player ); };
+            ResourceViewState( const MapField* fld, int player ) { initFromField( fld, player ); };
             MapCoordinate pos;
             int fuel;
             int material;
@@ -41,8 +41,8 @@ class DiscoverResources : public UnitAction {
             int player;
             void read ( tnstream& stream ) ;
             void write ( tnstream& stream ) const;
-            void initFromField( const tfield* fld, int player );
-            void writeToField( tfield* fld );
+            void initFromField( const MapField* fld, int player );
+            void writeToField( MapField* fld );
       };
       typedef vector<ResourceViewState> ViewState;
       DiscoverResources( Vehicle* unit );

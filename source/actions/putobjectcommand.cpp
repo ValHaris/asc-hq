@@ -94,7 +94,7 @@ ActionResult PutObjectCommand::searchFields()
       return ActionResult(21504);
 }
 
-bool PutObjectCommand::checkObject( tfield* fld, ObjectType* objtype, Mode mode )
+bool PutObjectCommand::checkObject( MapField* fld, ObjectType* objtype, Mode mode )
 {
     if ( !objtype || !fld )
        return false;
@@ -128,7 +128,7 @@ bool PutObjectCommand::checkObject( tfield* fld, ObjectType* objtype, Mode mode 
 
 void PutObjectCommand :: fieldChecker( const MapCoordinate& pos )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return;
    
@@ -182,7 +182,7 @@ void PutObjectCommand :: setTarget( const MapCoordinate& target, int objectID )
    this->target = target;
    this->object = objectID;
 
-   tfield* fld = getMap()->getField(target);
+   MapField* fld = getMap()->getField(target);
    
    if( !fld )
       throw ActionResult(21002);

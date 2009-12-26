@@ -102,7 +102,7 @@ ASCString getVisibilityStatistics( GameMap* actmap )
          int viewDominance = 0;
          for ( int x = 0; x < actmap->xsize; x++ )
             for ( int y = 0; y < actmap->ysize; y++ ) {
-               tfield* fld = actmap->getField ( x, y );
+               MapField* fld = actmap->getField ( x, y );
                VisibilityStates vs = fieldVisibility  ( fld, i );
                switch ( vs ) {
                   case visible_not:

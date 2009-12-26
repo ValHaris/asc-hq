@@ -82,10 +82,10 @@ void PackageManager::storeData( const GameMap* game )
    
    for ( int y = 0; y < game->ysize; ++y )
       for ( int x = 0; x < game->xsize; ++x ) {
-          const tfield* fld = game->getField( x,y );
+          const MapField* fld = game->getField( x,y );
           archives.insert( fld->typ->terraintype->archive );
           
-          for ( tfield::ObjectContainer::const_iterator o = fld->objects.begin(); o != fld->objects.end(); ++o ) 
+          for ( MapField::ObjectContainer::const_iterator o = fld->objects.begin(); o != fld->objects.end(); ++o ) 
              archives.insert( o->typ->archive );
       }
    for ( int p = 0; p <= 8; ++p ) {

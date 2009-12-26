@@ -462,7 +462,7 @@ void processFiles( const char* files, const char* orgWorkingDir )
                   fatalError( "could not change directory (1)");
 
                if ( verbose )
-                  printf( direntp->d_name );
+                  printf( "%s", direntp->d_name );
                if ( compress )
                   testcompress ( direntp->d_name,  filesize(direntp->d_name) );
                else {

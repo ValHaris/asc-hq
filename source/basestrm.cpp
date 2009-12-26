@@ -133,7 +133,7 @@ CharBuf :: ~CharBuf()
 
 
 
-toutofmem::toutofmem ( int m )
+OutOfMemoryError::OutOfMemoryError ( int m )
 {
   required = m; 
 }
@@ -143,16 +143,6 @@ tfileerror::tfileerror ( const ASCString& fileName )
    _filename = fileName ;
 }
 
-
-/*
-tfileerror::~tfileerror()
-{
-   if ( filename ) {
-      delete filename;
-      filename = NULL;
-   }
-}
-*/
 
 tinvalidmode :: tinvalidmode ( const ASCString& _fileName, tnstream::IOMode org_mode, tnstream::IOMode requested_mode )
               : tfileerror ( _fileName )
@@ -573,7 +563,7 @@ void         tnstream::writepchar(const char* pc)
 
 
 
-MemoryStreamCopy :: MemoryStreamCopy ( pnstream stream )
+MemoryStreamCopy :: MemoryStreamCopy ( tnstream* stream )
 {
   buf = NULL;
   int bufused = 0;
@@ -604,7 +594,7 @@ MemoryStreamCopy :: MemoryStreamCopy ( pnstream stream )
 
 ASCString MemoryStreamCopy::getLocation()
 {
-  return devicename + " (memory bufferd)";
+  return devicename + " (memory buffered)";
 }
 
 MemoryStreamCopy :: ~MemoryStreamCopy ( )
@@ -688,7 +678,7 @@ static int stream_close(SDL_RWops *context)
 }
 
 
-SDL_RWops *SDL_RWFromStream( pnstream stream )
+SDL_RWops *SDL_RWFromStream( tnstream* stream )
 {
    MemoryStreamCopy* msb = new MemoryStreamCopy ( stream );
 
@@ -1163,6 +1153,20 @@ ContainerCollector :: ~ContainerCollector()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+CompressionStreamAdapter::CompressionStreamAdapter( tnstream* compressedStream )
+   : stream ( compressedStream )
+{
+}
+void CompressionStreamAdapter::writecmpdata ( const void* buf, int size )
+{
+   stream->writedata( buf, size );
+}
+
+int CompressionStreamAdapter::readcmpdata ( void* buf, int size, bool excpt  )
+{
+   stream->readdata( buf, size, excpt );
+}
+
 
 class PrivateCompressionData {
    public:  
@@ -1181,7 +1185,7 @@ class PrivateCompressionData {
       }
 };
 
-libbzip_compression :: libbzip_compression ( p_compressor_stream_interface strm  )
+libbzip_compression :: libbzip_compression ( CompressionStreamInterface* strm  )
 {
    data = new PrivateCompressionData();
    BZ2_bzCompressInit ( &data->bzs, 5, 0, 0 );
@@ -1208,12 +1212,13 @@ void libbzip_compression :: writedata ( const void* buf, int size )
 
      int res = BZ2_bzCompress ( &data->bzs, BZ_RUN );
      if ( res < 0 )
-        throw tcompressionerror ( "MBZLB2 compression :: writedata", res );
+        throw StreamCompressionError ( "MBZLB2 compression :: writedata", res );
 
      for ( int i = 0; i < data->bzs.total_out_lo32; i++ )
         data->outputbuf[i] ^= bzip_xor_byte;
 
-     stream->writecmpdata ( data->outputbuf, data->bzs.total_out_lo32 );
+     if ( data->bzs.total_out_lo32 > 0 )
+        stream->writecmpdata ( data->outputbuf, data->bzs.total_out_lo32 );
    }
 }
 
@@ -1232,7 +1237,7 @@ void libbzip_compression :: close_compression ( void )
 
      res = BZ2_bzCompress ( &data->bzs, BZ_FINISH );
      if ( res < 0 )
-        throw tcompressionerror ( "MBZLB2 compression :: closecompression", res );
+        throw StreamCompressionError ( "MBZLB2 compression :: closecompression", res );
 
      for ( int i = 0; i < data->bzs.total_out_lo32; i++ )
         data->outputbuf[i] ^= bzip_xor_byte;
@@ -1275,7 +1280,7 @@ class PrivateDecompressionData {
       
 };
       
-libbzip_decompression :: libbzip_decompression ( p_compressor_stream_interface strm  )
+libbzip_decompression :: libbzip_decompression ( CompressionStreamInterface* strm  )
 {
    data = new PrivateDecompressionData();
    BZ2_bzDecompressInit ( &data->bzs, 0, 0 );
@@ -1300,7 +1305,7 @@ int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
         data->inputbufused = stream->readcmpdata ( data->inputbuf, data->inputbufsize, 0 );
 
         if ( !data->inputbufused && excpt )
-           throw tcompressionerror ( "Decompressor :: out of data", 0 );
+           throw StreamCompressionError ( "Decompressor :: out of data", 0 );
 
 
         for ( int i = 0; i < data->inputbufused; i++ )
@@ -1331,9 +1336,9 @@ int libbzip_decompression :: readdata ( void* buf, int size, bool excpt )
            if ( res != BZ_OK ) {
               if ( excpt ) {
                  if ( res == BZ_MEM_ERROR )
-                    throw toutofmem ( -1 );
+                    throw OutOfMemoryError ( -1 );
                  else
-                    throw tcompressionerror ( "MBZLB2 decompression :: readdata", res );
+                    throw StreamCompressionError ( "MBZLB2 decompression :: readdata", res );
               }
               abrt = 1;
            }
@@ -1719,8 +1724,169 @@ tn_c_lzw_filestream :: ~tn_c_lzw_filestream()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+static const char asciiCodingTable[64] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                                'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                                'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                                'w', 'x', 'y', 'z', '0', '1', '2', '3',
+                                '4', '5', '6', '7', '8', '9', '+', '/' };
 
 
+ASCIIEncodingStream::ASCIIEncodingStream() : shift(0), buf(0) {};
+
+void ASCIIEncodingStream::writedata ( const void* buf, int size ) {
+   const char* c = (const char*)buf;
+   for ( int i = 0; i < size; ++i )
+      put ( c[i] );
+}
+int ASCIIEncodingStream::readdata  ( void* buf, int size, bool excpt  ) {
+   throw  tinvalidmode ( "Base64SerializingStream", reading, writing );
+}
+
+void ASCIIEncodingStream::put( char c )
+ {
+    if ( shift == 0 ) {
+       buf = c >> 6;
+       shift = 2;
+       result += asciiCodingTable[c & 63];
+    } else if ( shift == 2 ) {
+       buf |= ( c << 2) & 63;
+       result += asciiCodingTable[buf];
+       buf = c >> 4;
+       shift = 4;
+    } else if ( shift==4 ) {
+       buf |= (c << 4) & 63;
+       result += asciiCodingTable[buf];
+       shift = 0;
+       result += asciiCodingTable[(c>>2) & 63];
+    }
+ }
+ void ASCIIEncodingStream::flush() {
+    if ( shift )
+       result += asciiCodingTable[buf & 63];
+    result += "#";
+ }
+
+ ASCString ASCIIEncodingStream::getResult()
+ {
+    flush();
+    return result;
+ }
+
+void ASCIIDecodingStream :: generateTable()
+{
+   for ( int i = 0; i< 256; ++i )
+      reverse[i] = -1;
+   for ( int i = 0; i < sizeof(asciiCodingTable); ++i )
+      reverse[ asciiCodingTable[i]] = i;
+}
+
+int ASCIIDecodingStream :: get()
+{
+   if ( length < data.length() ) {
+      char c = data.at(length);
+      if ( c == '#' )
+         throw treadafterend("ASCIIDecodingStream");
+      ++length;
+
+      if ( reverse[c] == -1 )
+         throw ASCmsgException("Invalid ASCII data to decode");
+
+      return reverse[c];
+   } else
+      throw treadafterend("ASCIIDecodingStream");
+}
+
+ASCIIDecodingStream :: ASCIIDecodingStream( const ASCString& data) : shift(0), buf(0), length(0)
+{
+   this->data = data;
+   generateTable();
+}
+
+void ASCIIDecodingStream  :: writedata ( const void* buf, int size )
+{
+   throw  tinvalidmode ( "ASCIIDecodingStream", writing, reading );
+}
+
+int ASCIIDecodingStream :: readdata  ( void* buffer, int size, bool excpt  )
+{
+   int i = 0;
+   try {
+      char* cbuf = (char*) buffer;
+      for ( i = 0; i < size; ++i ) {
+         if ( shift == 0 ) {
+            char c = get();
+            char c2 = get();
+            cbuf[i] = c | ((c2 << 6) & 0xff);
+            shift = 2;
+            buf = c2 >> 2;
+         } else if ( shift == 2 ) {
+            char c = get();
+            cbuf[i] = buf | ((c << 4) &  0xff );
+            buf = c >> 4;
+            shift = 4;
+         } else if ( shift == 4 ) {
+            char c = get();
+            cbuf[i] = buf | (c << 2 );
+            shift = 0;
+         }
+      }
+   }
+   catch ( treadafterend trae ) {
+      if ( excpt )
+         throw trae;
+   }
+   return i;
+}
+
+
+StreamCompressionFilter :: StreamCompressionFilter( tnstream* outputstream )
+   : adapter( outputstream), compressor( &adapter ), closed(false) {
+
+}
+
+void StreamCompressionFilter :: writedata ( const void* buf, int size )
+{
+   compressor.writedata(buf,size);
+}
+
+int StreamCompressionFilter :: readdata  ( void* buf, int size, bool excpt )
+{
+   throw  tinvalidmode ( "StreamCompressionFilter", reading, writing );
+}
+
+void StreamCompressionFilter :: close()
+{
+   if ( closed )
+      return;
+
+   compressor.close_compression();
+   closed = true;
+}
+
+StreamCompressionFilter ::~StreamCompressionFilter()
+{
+   close();
+}
+
+
+StreamDecompressionFilter  :: StreamDecompressionFilter( tnstream* inputstream ) : adapter( inputstream), decompressor( &adapter ) {
+
+}
+
+void StreamDecompressionFilter  :: writedata ( const void* buf, int size )
+{
+   throw  tinvalidmode ( "StreamCompressionFilter", writing, reading );
+}
+
+int StreamDecompressionFilter :: readdata  ( void* buf, int size, bool excpt )
+{
+   decompressor.readdata(buf,size,excpt);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 int    compressrle ( const void* p, void* q)
 {
    trleheader* sourcehead = (trleheader*) p;
@@ -2070,8 +2236,6 @@ bool tfindfile :: getnextname ( FileInfo& fi )
 
 
 
-// tncontainerstream* containerstream = NULL;
-
 
 
 int checkforvaliddirectory ( char* dir )
@@ -2122,7 +2286,7 @@ int checkforvaliddirectory ( char* dir )
      }
   }
 
-  void tmemorystreambuf :: writetostream ( pnstream stream )
+  void tmemorystreambuf :: writetostream ( tnstream* stream )
   {
      if ( stream ) {
         stream->writeInt ( 0 );
@@ -2135,7 +2299,7 @@ int checkforvaliddirectory ( char* dir )
      }
   }
 
-  void tmemorystreambuf :: readfromstream ( pnstream stream )
+  void tmemorystreambuf :: readfromstream ( tnstream* stream )
   {
      if ( stream ) {
         stream->readInt();

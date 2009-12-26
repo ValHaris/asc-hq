@@ -33,7 +33,7 @@
 
 void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisibility )
 {
-   tfield* fld = gamemap->getField( pos );
+   MapField* fld = gamemap->getField( pos );
 
    if ( !fld )
       return;
@@ -97,7 +97,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    int mines[4] = { 0, 0, 0, 0 };
    int mineDissolve[4] = { maxint, maxint, maxint, maxint };
 
-   for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); ++m )
+   for ( MapField::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); ++m )
       if ( m->player == gamemap->actplayer || fullVisibility ) {
          mines[m->type-1]++;
          int lifetime = gamemap->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m->type-1 ));
@@ -124,7 +124,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    if  ( fld->vehicle ) {
       text += "#aeinzug0##eeinzug0#\n#fontsize=14#Vehicle Information:#fontsize=12##aeinzug30##eeinzug20#\n" ;
 
-      const Vehicletype* typ = fld->vehicle->typ;
+      const VehicleType* typ = fld->vehicle->typ;
 
       text += "Unit name: ";
       if ( !typ->name.empty() )
@@ -146,7 +146,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
    if ( !fld->objects.empty() )
       text += "#aeinzug0##eeinzug0#\n#fontsize=14#Object Information:#fontsize=12##aeinzug30##eeinzug20#\n" ;
 
-   for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) 
+   for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) 
       text += i->typ->location + "\n";
 
 
@@ -159,7 +159,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
 
    if ( !fld->objects.empty() ) {
       text += "#aeinzug0##eeinzug0#\n#fontsize=14#Object Details:#aeinzug30##eeinzug20#";
-      for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) {
+      for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ ) {
          const TerrainAccess* ta = &i->typ->getFieldModification( fld->getWeather() ).terrainaccess;
          text += "#aeinzug30##eeinzug20##fontsize=12#\n";
          text += i->typ->name + "#aeinzug50##eeinzug40##fontsize=10#\n";

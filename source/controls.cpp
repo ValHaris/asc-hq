@@ -99,7 +99,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
       // changing height
       if ( (start.getNumericalHeight() != dest.getNumericalHeight()) && !container2container ) {
-          const Vehicletype::HeightChangeMethod* hcm = vehicle->getHeightChange( start.getNumericalHeight() < dest.getNumericalHeight() ? 1 : -1, start.getBitmappedHeight());
+          const VehicleType::HeightChangeMethod* hcm = vehicle->getHeightChange( start.getNumericalHeight() < dest.getNumericalHeight() ? 1 : -1, start.getBitmappedHeight());
           if ( !hcm || hcm->dist != beeline ( start, dest )/maxmalq )
              fatalError("Calcmovemalus called with invalid height change distance");
           dist = hcm->dist;
@@ -120,7 +120,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                checkWind = false;
             } else {
                // not flying
-               tfield* fld = vehicle->getMap()->getField( dest.x, dest.y );
+               MapField* fld = vehicle->getMap()->getField( dest.x, dest.y );
                if ( fld->building )
                   movecost = maxmalq;
                else
@@ -167,7 +167,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
          int x = dest.x;
          int y = dest.y;
          getnextfield( x,  y, c );
-         tfield* fld = vehicle->getMap()->getField ( x, y );
+         MapField* fld = vehicle->getMap()->getField ( x, y );
          if ( fld ) {
            int d = (c - direc);
 
@@ -177,7 +177,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            if (d < 0)
               d += sidenum;
 
-           tfield* fld = vehicle->getMap()->getField(x,y);
+           MapField* fld = vehicle->getMap()->getField(x,y);
            if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
               if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isHostile( fld->vehicle->getOwner() ) )
                  if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))

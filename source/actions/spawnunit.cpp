@@ -56,7 +56,7 @@ ContainerBase* SpawnUnit::getCarrier( bool dontThrow )
       
 ASCString SpawnUnit::getDescription() const
 {
-   const Vehicletype* veh = getMap()->getvehicletype_byid( vehicleTypeID );
+   const VehicleType* veh = getMap()->getvehicletype_byid( vehicleTypeID );
    ASCString res ;
    if ( veh )
       res = "Spawn Unit of type " + veh->getName();
@@ -110,11 +110,11 @@ GameActionID SpawnUnit::getID() const
 
 ActionResult SpawnUnit::runAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
-   const Vehicletype* vehicleType = getMap()->getvehicletype_byid( vehicleTypeID );
+   const VehicleType* vehicleType = getMap()->getvehicletype_byid( vehicleTypeID );
    if ( !vehicleType )
       return ActionResult( 21801, "Vehicle id is " + ASCString::toString(vehicleTypeID));
    
@@ -159,7 +159,7 @@ Vehicle* SpawnUnit::getUnit()
 
 ActionResult SpawnUnit::undoAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
@@ -168,7 +168,7 @@ ActionResult SpawnUnit::undoAction( const Context& context )
    
    getMap()->idManager.unitnetworkid = mapNetworkIdCounterBefore;
    
-   const Vehicletype* vehicleType = getMap()->getvehicletype_byid( vehicleTypeID );
+   const VehicleType* vehicleType = getMap()->getvehicletype_byid( vehicleTypeID );
    if ( !vehicleType )
       return ActionResult( 21801, "Vehicle id is " + ASCString::toString(vehicleTypeID));
    

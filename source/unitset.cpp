@@ -115,7 +115,7 @@ void SingleUnitSet::TranslationTable::parseString ( const char* s )
 }
 
 
-void SingleUnitSet::read ( pnstream stream )
+void SingleUnitSet::read ( tnstream* stream )
 {
    if ( !stream )
       return;
@@ -213,7 +213,7 @@ UnitSets unitSets;
 
 
 
-int getUnitSetID( const Vehicletype* veh )
+int getUnitSetID( const VehicleType* veh )
 {
    for ( UnitSets::iterator i = unitSets.begin(); i != unitSets.end(); ++i)
       if ( (*i)->isMember( veh->id, SingleUnitSet::unit) )
@@ -231,7 +231,7 @@ int getUnitSetID( const BuildingType* bld )
    return -1;
 }
 
-bool vehicleComp( const Vehicletype* v1, const Vehicletype* v2 )
+bool vehicleComp( const VehicleType* v1, const VehicleType* v2 )
 {
    int id1 = getUnitSetID(v1);
    int id2 = getUnitSetID(v2);

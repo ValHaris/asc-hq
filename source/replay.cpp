@@ -940,7 +940,7 @@ void trunreplay :: execnextreplaymove ( void )
                            else {
                               if ( CGameOptions::Instance()->replayMovieMode ) {
 
-                                 tfield* fld = eht->getMap()->getField(x1,y1);
+                                 MapField* fld = eht->getMap()->getField(x1,y1);
                                  if ( fld->vehicle == eht ) {
                                     fld->vehicle = NULL;
                                  } else {
@@ -956,7 +956,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( height >= 0 )
                                     eht->height = 1 << height;
 
-                                 tfield* fld2 = eht->getMap()->getField(x2,y2);
+                                 MapField* fld2 = eht->getMap()->getField(x2,y2);
                                  if ( !fld2->getContainer() ) {
                                     fld2->vehicle = eht;
                                     eht->addview();
@@ -997,8 +997,8 @@ void trunreplay :: execnextreplaymove ( void )
                            int wpnum = stream->readInt();
                            readnextaction();
 
-                           tfield* fld = getfield ( x1, y1 );
-                           tfield* targ = getfield ( x2, y2 );
+                           MapField* fld = getfield ( x1, y1 );
+                           MapField* targ = getfield ( x2, y2 );
                            int attackvisible = fieldvisiblenow ( fld, actmap->getPlayerView() ) || fieldvisiblenow ( targ, actmap->getPlayerView() );
                            if ( fld && targ && fld->vehicle ) {
                               if ( fieldvisiblenow ( targ, fld->vehicle->getOwner() )) {
@@ -1136,7 +1136,7 @@ void trunreplay :: execnextreplaymove ( void )
                            } else {
                               readnextaction();
 
-                              tfield* fld = getfield ( x, y );
+                              MapField* fld = getfield ( x, y );
                               if ( fld ) {
                                  displayActionCursor ( x, y );
                                  if ( fld->vehicle )
@@ -1170,7 +1170,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            ObjectType* obj = objectTypeRepository.getObject_byID ( id );
 
-                           tfield* fld = getfield ( x, y );
+                           MapField* fld = getfield ( x, y );
                            if ( obj && fld ) {
                               displayActionCursor ( x, y );
 
@@ -1248,9 +1248,9 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           tfield* fld = getfield ( x, y );
+                           MapField* fld = getfield ( x, y );
 
-                           Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
+                           VehicleType* tnk = vehicleTypeRepository.getObject_byID ( id );
 
                            if ( fld && tnk && !fld->vehicle ) {
                               displayActionCursor ( x, y );
@@ -1262,7 +1262,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  v->height = height;
 
                               if ( constx >= 0 && consty >= 0 ) {
-                                 tfield* constructorField = getfield(constx, consty );
+                                 MapField* constructorField = getfield(constx, consty );
                                  if ( constructorField->vehicle ) {
                                     Resources r ( 0, tnk->productionCost.material, tnk->productionCost.energy ); //  = constructorField->vehicle->getProductionCost(tnk );
                                     Resources rr = constructorField->getContainer()->getResource( r, 0 );
@@ -1297,7 +1297,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                                readnextaction();
 
-                               tfield* fld = getfield ( x, y );
+                               MapField* fld = getfield ( x, y );
 
                                BuildingType* bld = buildingTypeRepository.getObject_byID ( id );
 
@@ -1332,7 +1332,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           tfield* fld = getfield ( x, y );
+                           MapField* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> putmine ( col, MineTypes(typ), strength );
@@ -1364,7 +1364,7 @@ void trunreplay :: execnextreplaymove ( void )
                            int y = stream->readInt();
                            readnextaction();
 
-                           tfield* fld = getfield ( x, y );
+                           MapField* fld = getfield ( x, y );
                            if ( fld ) {
                               displayActionCursor ( x, y );
                               fld -> removemine ( -1 );
@@ -1398,7 +1398,7 @@ void trunreplay :: execnextreplaymove ( void )
 
                            readnextaction();
 
-                           tfield* fld = getfield ( x, y );
+                           MapField* fld = getfield ( x, y );
                            if ( fld && fld->building ) {
                               displayActionCursor ( x, y );
                               if ( nwid >= 0 ) {
@@ -1432,9 +1432,9 @@ void trunreplay :: execnextreplaymove ( void )
                                  int nwid = stream->readInt();
                                  readnextaction();
 
-                                 tfield* fld = getfield ( x, y );
+                                 MapField* fld = getfield ( x, y );
 
-                                 Vehicletype* tnk = vehicleTypeRepository.getObject_byID ( id );
+                                 VehicleType* tnk = vehicleTypeRepository.getObject_byID ( id );
                                  if ( tnk && fld) {
                                  
                                     #if 0
@@ -1473,7 +1473,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int y = stream->readInt();
                                  int nwid = stream->readInt();
                                  readnextaction();
-                                 tfield* fld = getfield(x,y);
+                                 MapField* fld = getfield(x,y);
                                  if ( (!fld->vehicle || fld->vehicle->networkid != nwid) && fld->building ) {
                                     auto_ptr<RecycleUnitCommand> ruc ( new RecycleUnitCommand( fld->building ));
                                     ruc->setUnit( actmap->getUnit( nwid ) );
@@ -1761,7 +1761,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int vehicleid = stream->readInt();
                                  readnextaction();
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
-                                 Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
+                                 VehicleType* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
                                     if ( veh->techDependency.available( actmap->player[ bld->getOwner()].research )) {
                                        auto_ptr<BuildProductionLineCommand> bplc ( new BuildProductionLineCommand( bld ));
@@ -1785,7 +1785,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  int vehicleid = stream->readInt();
                                  readnextaction();
                                  Building* bld = dynamic_cast<Building*>( actmap->getContainer(building));
-                                 Vehicletype* veh = actmap->getvehicletype_byid ( vehicleid );
+                                 VehicleType* veh = actmap->getvehicletype_byid ( vehicleid );
                                  if ( bld && veh ) {
                                     auto_ptr<RemoveProductionLineCommand> rplc ( new RemoveProductionLineCommand( bld ));
                                     rplc->setRemoval( veh );

@@ -110,7 +110,7 @@ main(int argc, char *argv[], char *envp[])
             suffix++;
 
          if (strcmpi(suffix,".TNK") == 0) {
-            Vehicletype* tnk = loadvehicletypetype(fileinfo.name);
+            VehicleType* tnk = loadvehicletypetype(fileinfo.name);
             if (loaderror == 0) { 
                setgraph();
 
@@ -171,7 +171,7 @@ main(int argc, char *argv[], char *envp[])
 
                int pos = 0;
                activefontsettings.length = 130;
-               showtext2 ( "ART fÅr Wetter 0:", 490, 190 );
+               showtext2 ( "ART fÔøΩr Wetter 0:", 490, 190 );
                for ( i = 0; i < cbodenartennum;i++ )   
                   if ( bdt->weather[0]->art & ( 1 << i )) {
                      showtext2 ( cbodenarten[i], 500, 220 + pos * 30 );

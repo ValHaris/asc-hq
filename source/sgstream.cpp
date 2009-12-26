@@ -498,7 +498,7 @@ void initFileIO ( const ASCString& configFileName, int skipChecks )
       fatalError ( "a fatal IO error occured while mounting the container file %s\n"
                    "It is probably damaged, try getting a new one.\n", err.getFileName().c_str() );
    }
-   catch ( tcompressionerror err ) {
+   catch ( StreamCompressionError err ) {
       fatalError ( "a fatal error occured while decompressing a container file.\n"
                    "If you have several *.ascdat files in your ASC directory, try removing all but main.ascdat.\n"
                    "If the error still occurs then, get a new data package from www.asc-hq.org\n" );

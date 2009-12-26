@@ -95,7 +95,7 @@ GameActionID ChangeObjectProperty::getID() const
 
 Object* ChangeObjectProperty::getObject()
 {
-   tfield* fld = getMap()->getField( position );
+   MapField* fld = getMap()->getField( position );
    if ( !fld )
       throw ActionResult(21002);
    

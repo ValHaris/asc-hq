@@ -29,13 +29,13 @@
 #include "windowing.h"
 
 class ContainerBase;
-class Vehicletype;
+class VehicleType;
 class Vehicle;
 class Building;
 class SingleWeapon;
 class MapDisplay;
 class GameMap;
-class tfield;
+class MapField;
 
 class DashboardPanel : public LayoutablePanel {
    private:
@@ -57,7 +57,7 @@ class DashboardPanel : public LayoutablePanel {
 
    public:
       void eval();
-      void showUnitData( Vehicle* veh, Building* bld, tfield* fld, bool redraw = false );
+      void showUnitData( Vehicle* veh, Building* bld, MapField* fld, bool redraw = false );
 
 };
 
@@ -73,7 +73,7 @@ class WindInfoPanel : public DashboardPanel {
 class UnitInfoPanel : public DashboardPanel {
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
-        void showUnitInfo( const Vehicletype* vt );
+        void showUnitInfo( const VehicleType* vt );
      public:
         UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
 };

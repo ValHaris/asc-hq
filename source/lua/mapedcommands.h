@@ -7,7 +7,7 @@
 class GameMap;
 class ObjectType;
 class BuildingType;
-class Vehicletype;
+class VehicleType;
 class TerrainType;
 class Building;
 class Vehicle;
@@ -18,7 +18,7 @@ class ContainerBase;
 extern void clearField( GameMap* map, const MapCoordinate& pos );
 
 extern Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner );
-extern Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner );
+extern Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const VehicleType* veh, int owner );
 extern Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force = false );
 extern bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 extern int selectPlayer( GameMap* map );

@@ -121,7 +121,7 @@ ConstructBuildingCommand::Producables ConstructBuildingCommand :: getProduceable
 
 void ConstructBuildingCommand :: fieldChecker( const MapCoordinate& pos )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return;
 
@@ -132,7 +132,7 @@ void ConstructBuildingCommand :: fieldChecker( const MapCoordinate& pos )
 bool ConstructBuildingCommand::buildingFits( const MapCoordinate& entry )
 {
 
-   tfield* entryfield =  getMap()->getField(entry);
+   MapField* entryfield =  getMap()->getField(entry);
    if ( !entryfield )
       return false;
 
@@ -143,7 +143,7 @@ bool ConstructBuildingCommand::buildingFits( const MapCoordinate& entry )
       for ( int y1 = 0; y1 <= 5; y1++)
          for ( int x1 = 0; x1 <= 3; x1++)
             if ( bld->fieldExists ( BuildingType::LocalCoordinate(x1, y1)) ) {
-               tfield* fld = getMap()->getField ( bld->getFieldCoordinate( entry, BuildingType::LocalCoordinate(x1,y1) ));
+               MapField* fld = getMap()->getField ( bld->getFieldCoordinate( entry, BuildingType::LocalCoordinate(x1,y1) ));
                if ( fld ) {
                   if ( fld->vehicle != NULL ) // && fld->vehicle->height <= chfahrend )
                      b = false;
@@ -198,7 +198,7 @@ bool ConstructBuildingCommand :: isFieldUsable( const MapCoordinate& pos )
 void ConstructBuildingCommand :: setTargetPosition( const MapCoordinate& pos )
 {
    this->target = pos;
-   tfield* fld = getMap()->getField(target);
+   MapField* fld = getMap()->getField(target);
 
    if ( !fld )
       throw ActionResult(21002);

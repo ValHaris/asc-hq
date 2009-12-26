@@ -401,7 +401,7 @@ void AI :: showFieldInformation ( int x, int y )
                                 threat.threat[4], threat.threat[3], threat.threat[2],
                                 threat.threat[1], threat.threat[0], getFieldInformation(x,y).control );
 
-   tfield* fld = getMap()->getField (x, y );
+   MapField* fld = getMap()->getField (x, y );
    if ( fld->vehicle && fieldvisiblenow ( fld ) && fld->vehicle->aiparam[getPlayerNum()] ) {
       char text2[1000];
       sprintf(text2, "\nunit nwid: %d ; typeid: %d", fld->vehicle->networkid, fld->vehicle->typ->id );

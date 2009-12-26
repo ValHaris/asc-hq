@@ -50,6 +50,10 @@ void ClipBoardBase::clear()
 }
 
 
+
+
+static int clipboardVersion = 1;
+
 void ClipBoardBase::setProperties( const ContainerBase* unit )
 {
    properties["strength"] = ASCString::toString( StatisticsCalculator::strength( unit, true ) );
@@ -60,6 +64,20 @@ void ClipBoardBase::setProperties( const ContainerBase* unit )
    properties["player"] = unit->getMap()->getPlayer( unit ).getName();
    properties["turn"] = ASCString::toString( unit->getMap()->time.turn() );
    properties["map"] = unit->getMap()->maptitle;
+
+
+   ASCIIEncodingStream outerStream;
+   {
+      StreamCompressionFilter stream( &outerStream );
+
+	   stream.writeInt( clipboardVersion );
+	   if ( unit->isBuilding() )
+	      stream.writeInt( ClipBuilding );
+	   else
+          stream.writeInt( ClipVehicle );
+	   unit->write( stream );
+   }
+   properties["data"] = outerStream.getResult();
 }
 
 void ClipBoardBase::addUnit ( const Vehicle* unit )
@@ -115,7 +133,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
   tmemorystream stream ( &buf, tnstream::reading );
   Type type = Type(stream.readInt());
   if ( type == ClipVehicle ) {
-     tfield* fld = actmap->getField ( pos );
+     MapField* fld = actmap->getField ( pos );
      Vehicle* veh = pasteUnit ( stream );
 
      if ( !fieldAccessible ( fld, veh, -2, NULL, true ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
@@ -134,7 +152,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
      for ( int x = 0; x < 4; x++ )
         for ( int y = 0; y < 6; y++ )
            if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate( x , y ) )) {
-              tfield* field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
+              MapField* field = actmap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
               if ( !field ) {
                  delete bld;
                  displaymessage("building does not fit here", 1 );
@@ -165,7 +183,6 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
   }
 }
 
-static int clipboardVersion = 1;
 
 void ClipBoardBase::write( tnstream& stream )
 {

@@ -112,7 +112,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
       bool apply()
       { 
-         tfield* fld = actmap->getField( actmap->getCursor() );
+         MapField* fld = actmap->getField( actmap->getCursor() );
          if ( fld ) {
             try {
                if ( selectedType->GetSelectedItemIndex() == 0 ) {
@@ -144,7 +144,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
       bool restore()
       {
-         tfield* fld = actmap->getField( actmap->getCursor() );
+         MapField* fld = actmap->getField( actmap->getCursor() );
          if ( fld ) {
             if ( selectedType->GetSelectedItemIndex() == 0 ) {
                if ( fld->typ->bi_pict >= 0 ) {
@@ -214,7 +214,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
       bool snow()
       {
-         tfield* fld = actmap->getField( actmap->getCursor() );
+         MapField* fld = actmap->getField( actmap->getCursor() );
          if ( fld ) {
             if ( selectedType->GetSelectedItemIndex() == 0 ) {
                if ( fld->typ->bi_pict < 0 )
@@ -245,7 +245,7 @@ class ExchangeGraphics: public ASC_PG_Dialog
 
       void newCursorPos()
       {
-         tfield* fld = actmap->getField( actmap->getCursor() );
+         MapField* fld = actmap->getField( actmap->getCursor() );
          if ( !fld )
             return;
 

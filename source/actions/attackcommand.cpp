@@ -133,7 +133,7 @@ void AttackCommand :: fieldChecker( const MapCoordinate& pos )
          } 
          delete atw;
       } else {
-          tfield* fld = getMap()->getField(pos);
+          MapField* fld = getMap()->getField(pos);
           if (fieldvisiblenow( fld )) {
              Vehicle* eht = fld->vehicle;
              if (eht != NULL) 
@@ -155,7 +155,7 @@ void AttackCommand :: setTarget( const MapCoordinate& target, int weapon )
  //  if ( getState() == Evaluated ) {
       this->weapon = weapon;
       this->target  = target;
-      tfield* fld = getMap()->getField( target );
+      MapField* fld = getMap()->getField( target );
       if ( fld->vehicle )
          targetUnitID = fld->vehicle->networkid;
       else

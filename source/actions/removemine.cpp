@@ -82,12 +82,12 @@ GameActionID RemoveMine::getID() const
 ActionResult RemoveMine::runAction( const Context& context )
 {
    layer = 0;
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
    if ( mineID > 0 ) {
-      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) {
+      for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) {
          if ( i->identifier == mineID ) {
             mineBuffer = new tmemorystreambuf();
             tmemorystream memstream( mineBuffer, tnstream::writing );
@@ -102,7 +102,7 @@ ActionResult RemoveMine::runAction( const Context& context )
       layer = fld->mines.size();
       mineBuffer = new tmemorystreambuf();
       tmemorystream memstream( mineBuffer, tnstream::writing );
-      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) 
+      for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) 
          i->write( memstream );
       fld->mines.clear();
       return ActionResult(0);
@@ -114,7 +114,7 @@ ActionResult RemoveMine::runAction( const Context& context )
 
 ActionResult RemoveMine::undoAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
@@ -122,7 +122,7 @@ ActionResult RemoveMine::undoAction( const Context& context )
       throw ActionResult( 21401 );
    
    if ( mineID > 0 ) {
-      tfield::MineContainer::iterator i = fld->mines.begin();
+      MapField::MineContainer::iterator i = fld->mines.begin();
       
       int l = layer;
       while ( l-- )

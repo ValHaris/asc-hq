@@ -73,7 +73,7 @@ extern void  calculateobject( const MapCoordinate& pos,
    \retval 1 unit can pass over the field
    \retval 2 unit can stop its movement there
 */
-extern int fieldAccessible( const tfield*        field,
+extern int fieldAccessible( const MapField*        field,
                             const Vehicle*     vehicle,
                             int  uheight = -2,
                             const bool* attacked = NULL,
@@ -104,7 +104,7 @@ extern int          getwindheightforunit   ( const Vehicle* eht, int uheight = -
              1=unit can move across this field but cannot keep standing there
              2=unit can move and stand there
 */
-extern int          terrainaccessible (  const tfield* field, const Vehicle* vehicle, int uheight = -1 );
+extern int          terrainaccessible (  const MapField* field, const Vehicle* vehicle, int uheight = -1 );
 
 /** Checks if the unit can drive on the field
     \param field the field that the unit is checked again
@@ -118,7 +118,7 @@ extern int          terrainaccessible (  const tfield* field, const Vehicle* veh
                   -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-extern int          terrainaccessible2 ( const tfield*        field, const Vehicle* vehicle, int uheight = -1 );
+extern int          terrainaccessible2 ( const MapField*        field, const Vehicle* vehicle, int uheight = -1 );
 
 
 /** Checks if the field can be accessed
@@ -130,7 +130,7 @@ extern int          terrainaccessible2 ( const tfield*        field, const Vehic
                   -2   deep water required to submerge
                   -3   unit cannot drive onto terrain
 */
-int          terrainaccessible2 ( const tfield*        field, const TerrainAccess& terrainAccess, int uheight );
+int          terrainaccessible2 ( const MapField*        field, const TerrainAccess& terrainAccess, int uheight );
 
 
 /*!
@@ -150,10 +150,10 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
     \param player the player who is 'looking'
   */
 //! {@ 
-  extern bool fieldvisiblenow( const tfield* pe, Vehicle* veh, int player   );
-  inline bool fieldvisiblenow( const tfield* pe, int player ) { return fieldvisiblenow( pe, NULL, player); };
-  inline bool fieldvisiblenow( const tfield* pe, Vehicle* veh  ) { return fieldvisiblenow( pe, veh, pe->getMap()->actplayer); };
-  inline bool fieldvisiblenow( const tfield* pe ) { return fieldvisiblenow( pe, pe->getMap()->actplayer);};
+  extern bool fieldvisiblenow( const MapField* pe, Vehicle* veh, int player   );
+  inline bool fieldvisiblenow( const MapField* pe, int player ) { return fieldvisiblenow( pe, NULL, player); };
+  inline bool fieldvisiblenow( const MapField* pe, Vehicle* veh  ) { return fieldvisiblenow( pe, veh, pe->getMap()->actplayer); };
+  inline bool fieldvisiblenow( const MapField* pe ) { return fieldvisiblenow( pe, pe->getMap()->actplayer);};
 //! }@
 
   /*!
@@ -162,8 +162,8 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
     \param player the player who is 'looking'; without player the active player will be used
    */
 //! {@ 
-  extern VisibilityStates fieldVisibility  ( const tfield* pe );
-  extern VisibilityStates fieldVisibility  ( const tfield* pe, int player );
+  extern VisibilityStates fieldVisibility  ( const MapField* pe );
+  extern VisibilityStates fieldVisibility  ( const MapField* pe, int player );
 //! }@
 
 
@@ -176,7 +176,7 @@ extern SigC::Signal0<void> cursorMoved;
 extern SigC::Signal0<void> viewChanged;
 extern SigC::Signal1<void,GameMap*> mapChanged;
 extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
-extern SigC::Signal1<void,Vehicletype*> showVehicleTypeInfo;
+extern SigC::Signal1<void,VehicleType*> showVehicleTypeInfo;
 extern SigC::Signal0<bool> idleEvent;
 extern SigC::Signal1<void, const Context&> fieldCrossed;
 

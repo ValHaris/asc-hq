@@ -29,15 +29,15 @@
 class Player;
 
 class VehicleTypeBaseWidget: public SelectionWidget  {
-      const Vehicletype* vt;
+      const VehicleType* vt;
       static Surface clippingSurface;
       Surface& getClippingSurface() { return clippingSurface; };
       const Player& actplayer;
       bool info();
    public:
-      VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player );
+      VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player );
       ASCString getName() const;
-      const Vehicletype* getVehicletype() const { return vt; };
+      const VehicleType* getVehicletype() const { return vt; };
    protected:
       void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst );
       static int buttonXPos( int width, int num );  
@@ -45,22 +45,22 @@ class VehicleTypeBaseWidget: public SelectionWidget  {
 
 class VehicleTypeResourceWidget: public VehicleTypeBaseWidget  {
    public:
-      VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources, const Resources& cost, const Player& player );
+      VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, int lackingResources, const Resources& cost, const Player& player );
 };
 
 
 class VehicleTypeCountWidget: public VehicleTypeBaseWidget  {
    public:
-      VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player, int number );
+      VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player, int number );
 };
 
 class VehicleTypeCountLocateWidget: public VehicleTypeCountWidget  {
    private:
       bool locate();
    public:
-      VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player, int number );
+      VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player, int number );
       
-      SigC::Signal1<void,const Vehicletype*> locateVehicles;
+      SigC::Signal1<void,const VehicleType*> locateVehicles;
 };
 
 
@@ -69,15 +69,15 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       const Player& actplayer;
       bool showResourcesForUnit;
    public:
-      typedef vector<const Vehicletype*> Container;
+      typedef vector<const VehicleType*> Container;
 
-      static SigC::Signal1<void,const Vehicletype*> showVehicleInfo;
+      static SigC::Signal1<void,const VehicleType*> showVehicleInfo;
       
    protected:
       Container::iterator it;
       Container items;
 
-      virtual void vehicleTypeSelected( const Vehicletype* type, bool mouse ) {};
+      virtual void vehicleTypeSelected( const VehicleType* type, bool mouse ) {};
 
    private:
       const Container& original_items;
@@ -92,7 +92,7 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
    
       void setAvailableResource( const Resources& plantResources ) { this->plantResources = plantResources; };
       
-      virtual Resources getCost( const Vehicletype* type ) {return Resources(); };
+      virtual Resources getCost( const VehicleType* type ) {return Resources(); };
       
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
       

@@ -57,7 +57,7 @@ class WeaponInfoPanel : public Panel {
 	     bool eventMouseMotion(const SDL_MouseMotionEvent* motion);
 
      public:
-        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) ;
+        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const VehicleType* vt ) ;
         void showWeapon( const SingleWeapon* weap = NULL );
 
         // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
@@ -303,7 +303,7 @@ void DashboardPanel::eval()
 
 
    MapCoordinate mc = actmap->player[actmap->actplayer].cursorPos;
-   tfield* fld = actmap->getField(mc);
+   MapField* fld = actmap->getField(mc);
 
    Vehicle* veh = fld? fld->vehicle : NULL;
 
@@ -367,7 +367,7 @@ void DashboardPanel::eval()
    // PG_Application::SetBulkMode(false);
    // Redraw(true);
 }
-void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bool redraw )
+void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  bool redraw )
 {
    int weaponsDisplayed = 0;
    this->veh = veh;
@@ -453,7 +453,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, tfield* fld,  bo
          setLabelText( "unitname", "" );
          bool objectFound = false;
          if ( fld && fld->objects.size() && fieldvisiblenow( fld )) {
-            for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+            for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
                if ( i->typ->armor > 0 ) {
                   setBargraphValue( "unitdamage", float(100-i->damage) / 100  );
                   objectFound = true;
@@ -519,7 +519,7 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
    VehicleTypeSelectionItemFactory::showVehicleInfo.connect( SigC::slot( *this, &UnitInfoPanel::showUnitInfo ));
 }
 
-void UnitInfoPanel::showUnitInfo( const Vehicletype* vt )
+void UnitInfoPanel::showUnitInfo( const VehicleType* vt )
 {
    // showUnitData( vt, NULL, true );
 }
@@ -535,9 +535,9 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
       if ( event->button == SDL_BUTTON_RIGHT ) {
          if ( event->type == SDL_MOUSEBUTTONDOWN  ) {
 
-            tfield* fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
+            MapField* fld = actmap->getField( actmap->player[actmap->actplayer].cursorPos );
             const Vehicle* vehicle = veh;
-            const Vehicletype* vt = veh ? veh->typ : NULL;
+            const VehicleType* vt = veh ? veh->typ : NULL;
             if ( !veh && fld && fld->vehicle ) {
                vt = fld->vehicle->typ;
                vehicle = fld->vehicle;
@@ -575,11 +575,11 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
 
 class WeaponInfoLine: public PG_Image {
       const SingleWeapon* weapon;
-      const Vehicletype* veh;
+      const VehicleType* veh;
       WeaponInfoPanel* wip;
       static WeaponInfoLine* displayed;
    public:
-      WeaponInfoLine( WeaponInfoPanel* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap, const Vehicletype* vehicle )
+      WeaponInfoLine( WeaponInfoPanel* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap, const VehicleType* vehicle )
            : PG_Image( parent, p, image, false ), weapon(weap), veh ( vehicle ), wip(parent)
       {
       };
@@ -643,7 +643,7 @@ WeaponInfoLine* WeaponInfoLine::displayed = NULL;
 
 
 
-WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const Vehicletype* vt ) : Panel( parent, PG_Rect::null, "WeaponInfo" ), weaponCount(0)
+WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const VehicleType* vt ) : Panel( parent, PG_Rect::null, "WeaponInfo" ), weaponCount(0)
 {
    SetName(name);
 

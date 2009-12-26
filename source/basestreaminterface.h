@@ -29,9 +29,7 @@
 
  #include "ascstring.h"
 
- typedef class tnstream* pnstream;
-
- /** The interface for all kinds of IO stream. Because ASC was originally 
+  /** The interface for all kinds of IO stream. Because ASC was originally
      written in Pascal, the streams don't have any relation to the C++ streams */
  class tnstream {
         public:

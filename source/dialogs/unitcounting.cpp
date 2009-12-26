@@ -29,12 +29,12 @@
 
 class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
    public:
-      typedef vector<const Vehicletype*> Container;
+      typedef vector<const VehicleType*> Container;
    protected:
       Container::iterator it;
       Container items;
       
-      typedef map<const Vehicletype*,int> Counter;
+      typedef map<const VehicleType*,int> Counter;
       Counter counter;
       GameMap* gamemap;
 
@@ -64,7 +64,7 @@ VehicleCounterFactory :: VehicleCounterFactory( GameMap* actmap ) : gamemap ( ac
 {
    for ( int y = 0; y < actmap->ysize; ++y )
       for ( int x = 0; x < actmap->xsize; ++x ) {
-         tfield* fld = actmap->getField(x,y);
+         MapField* fld = actmap->getField(x,y);
          if ( fld ) {
             if ( fld->vehicle ) {
                calcCargoSummary( fld->vehicle, counter );
@@ -105,7 +105,7 @@ void VehicleCounterFactory::restart()
 SelectionWidget* VehicleCounterFactory::spawnNextItem( PG_Widget* parent, const PG_Point& pos )
 {
    if ( it != items.end() ) {
-      const Vehicletype* v = *(it++);
+      const VehicleType* v = *(it++);
       return new VehicleTypeCountWidget( parent, pos, parent->Width() - 15, v, gamemap->getCurrentPlayer(), counter[v] );
    } else
       return NULL;
@@ -115,7 +115,7 @@ ASCString VehicleCounterFactory::toString()
 {
    ASCString t;
    for ( Counter::const_iterator i = counter.begin(); i != counter.end(); ++i ) {
-      const Vehicletype* v = i->first;
+      const VehicleType* v = i->first;
       t += v->getName() + "\t" + ASCString::toString(i->second) + "\n";
    }
    return t;
@@ -135,7 +135,7 @@ void VehicleCounterFactory::itemSelected( const SelectionWidget* widget, bool mo
 
 #include "fieldmarker.h"
 
-void showAllUnitPositions( const Vehicletype* vt, GameMap* gamemap ) 
+void showAllUnitPositions( const VehicleType* vt, GameMap* gamemap ) 
 {
    Player& player = gamemap->getPlayer( gamemap->actplayer );
    

@@ -97,7 +97,7 @@ extern const int currentServiceOrderVersion;
        virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
        {
           DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
-          tfield* f = ai->getMap()->getField ( dest );
+          MapField* f = ai->getMap()->getField ( dest );
           if ( f->mineattacks(vehicle) )
              cost += 1;
           return cost;

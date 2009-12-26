@@ -1336,7 +1336,7 @@ void choosezoomlevel ( void )
 
 void showbdtbits( void )
 {
-   tfield* fld = actmap->getField(actmap->getCursor());
+   MapField* fld = actmap->getField(actmap->getCursor());
    char m[200];
    m[0] = 0;
    for (int i = 0; i < terrainPropertyNum ; i++) {
@@ -1369,12 +1369,12 @@ void appendTerrainBits ( char* text, const TerrainBits* bdt )
 void viewUnitSetinfo ( void )
 {
    ASCString s;
-   tfield* fld = actmap->getField( actmap->getCursor() );
+   MapField* fld = actmap->getField( actmap->getCursor() );
    if ( fld && fieldvisiblenow  ( fld ) && fld->vehicle ) {
 
          s += "#fontsize=18#Unit Information:#fontsize=14##aeinzug20##eeinzug20##crtp20#" ;
 
-         const Vehicletype* typ = fld->vehicle->typ;
+         const VehicleType* typ = fld->vehicle->typ;
 /*
          s += "\nreactionfire.Status: ";
          s += strrr( getactfield()->vehicle->reactionfire.status );

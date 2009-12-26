@@ -81,7 +81,7 @@ GameActionID SpawnBuilding::getID() const
 
 ActionResult SpawnBuilding::runAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
@@ -92,7 +92,7 @@ ActionResult SpawnBuilding::runAction( const Context& context )
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++ ) 
          if ( buildingType->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
-            tfield* field = getMap()->getField( buildingType->getFieldCoordinate( pos, BuildingType::LocalCoordinate(a,b) ));
+            MapField* field = getMap()->getField( buildingType->getFieldCoordinate( pos, BuildingType::LocalCoordinate(a,b) ));
             if (field == NULL)
                return ActionResult(22501);
          }
@@ -101,11 +101,11 @@ ActionResult SpawnBuilding::runAction( const Context& context )
       for ( int b = 0; b < 6; b++ ) 
          if ( buildingType->fieldExists ( BuildingType::LocalCoordinate( a, b ) ) ) {
             MapCoordinate fpos = buildingType->getFieldCoordinate( pos, BuildingType::LocalCoordinate(a,b) );
-            tfield* field = getMap()->getField( fpos );
+            MapField* field = getMap()->getField( fpos );
 
             vector<int> objectsToDelete;
             
-            tfield::ObjectContainer::iterator i = field->objects.begin();
+            MapField::ObjectContainer::iterator i = field->objects.begin();
             while ( i != field->objects.end()) {
                if ( !i->typ->canExistBeneathBuildings )
                   objectsToDelete.push_back( i->typ->id );
@@ -157,7 +157,7 @@ Building* SpawnBuilding::getBuilding()
 
 ActionResult SpawnBuilding::undoAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    

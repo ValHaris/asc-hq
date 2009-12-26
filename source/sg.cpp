@@ -191,7 +191,7 @@
 # include <stdio.h>
 #endif
 
-tfield*        getSelectedField(void)
+MapField*        getSelectedField(void)
 {
    return actmap->getField( actmap->getCursor() ); 
 } 
@@ -926,7 +926,7 @@ void selectAndRunLuaScript()
 
 void showUnitAiProperties() 
 {
-   tfield* fld = getSelectedField();
+   MapField* fld = getSelectedField();
    if ( fld->vehicle && fieldvisiblenow(fld ) ) {
       Vehicle* v = fld->vehicle;
       ASCString s;

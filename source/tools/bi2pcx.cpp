@@ -207,7 +207,7 @@ int main(int argc, char *argv[] )
             printf("\nLoading vehicles:\n");
             for ( int ve = 0; ve < vehicletypenum; ve++ ) {
 
-               Vehicletype* tnk = getvehicletype_forpos( ve );
+               VehicleType* tnk = getvehicletype_forpos( ve );
                fprintf(fp, "\n%s ; id %d ; pictures ", tnk->filename.c_str(), tnk->id );
 
                if ( tnk->bipicture > 0 ) {

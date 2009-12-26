@@ -35,8 +35,6 @@
 
 #include "guidegenerator.h"
 
-#define VehicleType Vehicletype
-
 #define HTML ".html"
 #define GROUPS ".groups"
 #define CSSPATH "asc.css"

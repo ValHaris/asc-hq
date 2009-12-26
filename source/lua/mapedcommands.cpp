@@ -20,7 +20,7 @@
          
 void clearField( GameMap* map, const MapCoordinate& pos )
 {
-   tfield* fld = map->getField(pos);
+   MapField* fld = map->getField(pos);
    if ( fld ) {
       if ( fld->building )
          delete fld->building;
@@ -36,7 +36,7 @@ void clearField( GameMap* map, const MapCoordinate& pos )
          
 Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force )
 {
-   tfield* fld = map->getField( pos );
+   MapField* fld = map->getField( pos );
    if ( fld ) {
       if ( !fld->addobject( obj, -1, force ))
          return NULL;
@@ -49,7 +49,7 @@ Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* o
 Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner )
 {
    if ( map && bld && owner >= 0 && owner < 8 ) {
-      tfield* fld = map->getField(pos);
+      MapField* fld = map->getField(pos);
       if ( fld ) {
          putbuilding( map, pos, owner*8, bld, bld->construction_steps );
          if ( fld->building->typ == bld )
@@ -60,10 +60,10 @@ Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingT
 }
 
 
-Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner )
+Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const VehicleType* veh, int owner )
 {
    if ( map && veh && owner >= 0 && owner < 8 ) {
-      tfield* fld = map->getField(pos);
+      MapField* fld = map->getField(pos);
       if ( fld ) {
          int r = VehicleItem::place( map, pos, veh, owner );
          if ( r < 0 )
@@ -79,15 +79,15 @@ Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* v
 bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather )
 {
    if ( map && terrain ) {
-      tfield* fld = map->getField(pos);
+      MapField* fld = map->getField(pos);
       fld->typ = terrain->weather[0]; 
       fld->setWeather( weather );
       fld->setparams( );
       for ( int d = 0; d < 6; ++d ) {
          MapCoordinate pos2 = getNeighbouringFieldCoordinate( pos, d );
-         tfield* fld = map->getField( pos2 );
+         MapField* fld = map->getField( pos2 );
          if ( fld ) 
-            for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+            for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
                calculateobject( pos2, false, i->typ, map );
       }
       return true;

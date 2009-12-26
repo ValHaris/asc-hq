@@ -94,7 +94,7 @@ extern void 	     playerchange(void);
 extern void         editpolygon (Poly_gon& poly);
 // extern int        getpolygon(ppolygon *poly); //return Fehlerstatus
 
-extern tfield* getactfield();
+extern MapField* getactfield();
 
 
 extern void selectunitsetfilter ( void );

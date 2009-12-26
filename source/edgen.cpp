@@ -63,7 +63,7 @@
                pmemoryblock mblocks[ layercount ];
                pterraintype btyp[numofbdts];
                int overwritecolor[maxoverwrite];
-               tfield* pf;
+               MapField* pf;
                };
 
 const char* clayer[layercount]  = {"Land", "Forest", "Desert","Material","Fuel"};
@@ -388,7 +388,7 @@ char tmapgenerator::checkland(int x, int y)
 
 void tmapgenerator::addcoast(void)
 {
-   tfield* pf;
+   MapField* pf;
    const int id[2]={42,83};
  
    for (int i=0;i<2;i++ ) {

@@ -156,7 +156,7 @@ void BuildingPositionTrigger::setup()
 
 EventTrigger::State BuildingConquered::getState( int player )
 {
-   tfield* fld = gamemap->getField ( pos );
+   MapField* fld = gamemap->getField ( pos );
    if( !fld ) {
       displaymessage ("invalid event - map field not found!", 1);
       return finally_failed;
@@ -237,7 +237,7 @@ EventTrigger::State BuildingDestroyed::getState( int player )
       return finally_fulfilled;
    }
 
-   tfield* fld = gamemap->getField ( pos );
+   MapField* fld = gamemap->getField ( pos );
    if ( !fld->building )
       return finally_fulfilled;
    else
@@ -260,7 +260,7 @@ EventTrigger::State BuildingSeen::getState( int player )
    for ( int x = 0; x < 4; x++ )
       for ( int y = 0; y < 6; y++ ) {
          if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) ) {
-            tfield* fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
+            MapField* fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
             if ( fld ) {
                int vis = (fld-> visible >> (player*2) ) & 3;
                if ( bld->typ->height >= chschwimmend && bld->typ->height <= chhochfliegend ) {
@@ -639,7 +639,7 @@ EventTrigger::State SpecificUnitEntersPolygon::getState( int player )
 
 void SpecificUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
-   tfield* fld = gamemap->getField ( mc );
+   MapField* fld = gamemap->getField ( mc );
    if ( !arming ) {
       if ( fld && fld->getVehicle() )
          if ( fld->getVehicle()->networkid == unitID || unitID == -1 )
@@ -722,7 +722,7 @@ EventTrigger::State AnyUnitEntersPolygon::getState( int player )
 
 void AnyUnitEntersPolygon::fieldOperator( const MapCoordinate& mc )
 {
-   tfield* fld = gamemap->getField ( mc );
+   MapField* fld = gamemap->getField ( mc );
    if ( !arming ) {
       if ( fld && fld->getVehicle() )
          if ( (1 << fld->getVehicle()->getOwner()) & player )
@@ -1122,7 +1122,7 @@ void WeatherChange :: writeData ( tnstream& stream )
 
 void WeatherChange :: fieldOperator( const MapCoordinate& mc )
 {
-   tfield* field = gamemap->getField ( mc );
+   MapField* field = gamemap->getField ( mc );
    if ( field ) 
       field->setWeather( weather );
 }
@@ -1155,7 +1155,7 @@ void MapChange :: fieldOperator( const MapCoordinate& mc )
    if ( !typ )
       return;
 
-   tfield* field = gamemap->getField ( mc );
+   MapField* field = gamemap->getField ( mc );
    if ( field ) {
       int w = field->getWeather();
       if (typ->weather[w] == NULL)
@@ -1196,7 +1196,7 @@ void AddObject :: fieldOperator( const MapCoordinate& mc )
    if ( !obj )
       return;
 
-   tfield* field = gamemap->getField ( mc );
+   MapField* field = gamemap->getField ( mc );
    if ( field ) {
       field->addobject ( obj, -1, true );
       field->setparams();
@@ -1228,7 +1228,7 @@ void RemoveAllObjects :: writeData ( tnstream& stream )
 
 void RemoveAllObjects :: fieldOperator( const MapCoordinate& mc )
 {
-   tfield* field = gamemap->getField ( mc );
+   MapField* field = gamemap->getField ( mc );
    if ( field ) {
       field->objects.clear();
       field->setparams();
@@ -1276,7 +1276,7 @@ void ChangeBuildingDamage::writeData ( tnstream& stream )
 
 void ChangeBuildingDamage::execute( MapDisplayInterface* md )
 {
-   tfield* fld = gamemap->getField ( position );
+   MapField* fld = gamemap->getField ( position );
    if ( fld && fld->building ) {
       if ( damage >= 100 ) {
          delete fld->building;
@@ -1467,7 +1467,7 @@ void ChangeBuildingOwner :: setup ()
 
 void ChangeBuildingOwner :: execute( MapDisplayInterface* md )
 {
-   tfield* fld = gamemap->getField ( pos );
+   MapField* fld = gamemap->getField ( pos );
    if ( fld && fld->building ) {
       fld->building->convert ( newOwner );
       #ifdef sgmain
@@ -1570,7 +1570,7 @@ void AddProductionCapability :: setup ()
 
 void AddProductionCapability :: execute( MapDisplayInterface* md )
 {
-   tfield* fld = gamemap->getField ( pos );
+   MapField* fld = gamemap->getField ( pos );
    if ( fld && fld->building && vehicleTypeID >= 0 )
       fld->building->addProductionLine( gamemap->getvehicletype_byid(vehicleTypeID) );
    
@@ -1767,7 +1767,7 @@ void AddResources :: setup ()
 
 void AddResources :: execute( MapDisplayInterface* md )
 {
-   tfield* fld = gamemap->getField ( pos );
+   MapField* fld = gamemap->getField ( pos );
    if ( fld && fld->building )
       fld->building->putResource( res, 0 );
 }
@@ -1827,7 +1827,7 @@ class FindUnitPlacementPos : public SearchFields {
 
       void testfield ( const MapCoordinate& pos )
       {
-         tfield* fld = gamemap->getField( pos );
+         MapField* fld = gamemap->getField( pos );
          if ( fld && !fld->vehicle ) {
             if ( fieldAccessible( fld, vehicle, -2, NULL, true ) == 2 ) {
                fld->vehicle = vehicle;
@@ -1864,7 +1864,7 @@ void Reinforcements :: execute( MapDisplayInterface* md )
         for ( int x = 0; x < 4; x++ )
            for ( int y = 0; y < 6; y++ )
               if ( bld->typ->getpicture ( BuildingType::LocalCoordinate( x , y ) )) {
-                 tfield* field = gamemap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
+                 MapField* field = gamemap->getField( bld->typ->getFieldCoordinate( pos, BuildingType::LocalCoordinate( x, y) ));
                  if ( !field ) {
                     delete bld;
                     // displaymessage("building does not fit here", 1 );

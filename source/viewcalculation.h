@@ -72,7 +72,7 @@
       \param add    a bitmapped variable containing the players that share their view with player
       \param initial the initial visibility of the map when starting the game.
   */
-  extern int evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial );
+  extern int evaluatevisibilityfield ( GameMap* gamemap, MapField* fld, int player, int add, int initial );
 
   /** evaluates the view on the whole map.
       Radar and jamming values must have already been applied to the field! 
@@ -105,7 +105,7 @@
       \param initial the initial visibility of the map when starting the game.
       \param additionalEnemyJamming if > 0 run an WhatIf analysis and don't save the result
    */
-  extern VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial, int additionalEnemyJamming );
+  extern VisibilityStates calcvisibilityfield ( GameMap* gamemap, MapField* fld, int player, int add, int initial, int additionalEnemyJamming );
 
   
   // extern VisibilityStates fieldVisibility  ( tfield* pe, int player, GameMap* gamemap, int additionalEnemyJamming );

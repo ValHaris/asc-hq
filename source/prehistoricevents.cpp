@@ -305,10 +305,10 @@ const char* ceventtrigger[ceventtriggernum]  = {"*NONE*", "turn/move >=", "build
                                                  "energy tribute <", "material tribute <", "fuel tribute <",
                                                  "any unit enters polygon", "specific unit enters polygon", "building is seen", "irrelevant (used internally)"};
 
-Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+Event*   readOldEvent( tnstream* stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 
 
-void  readOldEventLists ( pnstream stream, bool passedEvents, GameMap* spfld )
+void  readOldEventLists ( tnstream* stream, bool passedEvents, GameMap* spfld )
 {
    #if SDL_BYTEORDER == SDL_LIL_ENDIAN
 
@@ -474,7 +474,7 @@ PrehistoricEventStructure :: ~PrehistoricEventStructure ()
 
 
 
-Event*   readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents )
+Event*   readOldEvent( tnstream* stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents )
 {
 
 /////////////////////////////////////////////////////

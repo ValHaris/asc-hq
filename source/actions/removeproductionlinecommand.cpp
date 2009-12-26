@@ -44,7 +44,7 @@ bool RemoveProductionLineCommand :: avail ( const ContainerBase* factory )
 }
 
 
-Resources RemoveProductionLineCommand :: resourcesNeeded( const Vehicletype* veh )
+Resources RemoveProductionLineCommand :: resourcesNeeded( const VehicleType* veh )
 {
    return veh->productionCost * productionLineRemovalCostFactor;
 }
@@ -59,7 +59,7 @@ RemoveProductionLineCommand :: RemoveProductionLineCommand ( ContainerBase* cont
 
 
 
-void RemoveProductionLineCommand::setRemoval( const Vehicletype* vehicleType )
+void RemoveProductionLineCommand::setRemoval( const VehicleType* vehicleType )
 {
    if ( vehicleType ) {
       vehicleTypeId = vehicleType->id;
@@ -76,7 +76,7 @@ ActionResult RemoveProductionLineCommand::go ( const Context& context )
    if ( !avail( getContainer() ))
       return ActionResult(22800);
    
-   const Vehicletype* vt = NULL;
+   const VehicleType* vt = NULL;
    const ContainerBase::Production production = getContainer()->getProduction();
    for ( ContainerBase::Production::const_iterator i = production.begin(); i != production.end(); ++i )
       if ( (*i)->id == vehicleTypeId )
@@ -108,7 +108,7 @@ ActionResult RemoveProductionLineCommand::go ( const Context& context )
 
 ActionResult RemoveProductionLineCommand::undoAction( const Context& context )
 {
-   Vehicletype* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
+   VehicleType* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
    if ( !vt )
       return ActionResult(22902);
          
@@ -154,7 +154,7 @@ ASCString RemoveProductionLineCommand::getDescription() const
 {
    ASCString s = "Remove production line of type ";
    
-   Vehicletype* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
+   VehicleType* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
    if ( !vt )
       s += ASCString::toString(vehicleTypeId);
    else

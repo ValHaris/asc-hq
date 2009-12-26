@@ -58,7 +58,7 @@ Vehicle :: Vehicle ( const Vehicle& v )
 }
 
 
-Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
+Vehicle :: Vehicle ( const VehicleType* t, GameMap* actmap, int player )
           : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
@@ -74,7 +74,7 @@ Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player )
    gamemap->idManager.registerUnitNetworkID( this );
 }
 
-Vehicle :: Vehicle ( const Vehicletype* t, GameMap* actmap, int player, int networkID )
+Vehicle :: Vehicle ( const VehicleType* t, GameMap* actmap, int player, int networkID )
           : ContainerBase ( t, actmap, player ), repairEfficiency ( repairEfficiencyVehicle ), typ ( t ), reactionfire ( this )
 {
    viewOnMap = false;
@@ -121,7 +121,7 @@ Vehicle :: ~Vehicle (  )
       gamemap->idManager.unregisterUnitNetworkID(this);
    }
 
-   tfield* fld = gamemap->getField( xpos, ypos);
+   MapField* fld = gamemap->getField( xpos, ypos);
    if ( fld && fld->vehicle  == this )
        fld->vehicle = NULL;
    
@@ -302,7 +302,7 @@ int Vehicle::size ( void )
    return typ->weight;
 }
 
-void Vehicle::transform ( const Vehicletype* type )
+void Vehicle::transform ( const VehicleType* type )
 {
    if ( !type )
       return;
@@ -499,7 +499,7 @@ bool Vehicle :: canMove ( void ) const
    //   return false;
 
    if ( movementLeft() && reactionfire.canMove() ) {
-      tfield* fld = gamemap->getField ( getPosition() );
+      MapField* fld = gamemap->getField ( getPosition() );
       if ( fld->unitHere ( this ) ) {
          if ( terrainaccessible ( fld, this ) || getMap()->getgameparameter(cgp_movefrominvalidfields))
             return true;
@@ -525,8 +525,8 @@ bool Vehicle::spawnMoveObjects( const MapCoordinate& start, const MapCoordinate&
    if ( typ->objectLayedByMovement.size() && (height == chfahrend || height == chschwimmend))  {
       int dir = getdirection( start, dest );
 
-      tfield* startField = gamemap->getField(start);
-      tfield* destField = gamemap->getField(dest);
+      MapField* startField = gamemap->getField(start);
+      MapField* destField = gamemap->getField(dest);
 
       for ( int i = 0; i < typ->objectLayedByMovement.size(); i++ ) 
          for ( int id = typ->objectLayedByMovement[i].from; id <= typ->objectLayedByMovement[i].to; ++id ) {
@@ -671,7 +671,7 @@ bool Vehicle::ReactionFire:: canPerformAttack( Vehicle* target )
 
 
 
-const Vehicletype::HeightChangeMethod* Vehicle::getHeightChange( int dir, int height ) const
+const VehicleType::HeightChangeMethod* Vehicle::getHeightChange( int dir, int height ) const
 {
    if ( !reactionfire.canMove() )
       return NULL;
@@ -758,7 +758,7 @@ void Vehicle::registerForNewOwner( int player )
 }
 
 
-bool  Vehicle :: vehicleconstructable ( const Vehicletype* tnk, int x, int y )
+bool  Vehicle :: vehicleconstructable ( const VehicleType* tnk, int x, int y )
 {
    if ( gamemap->getgameparameter(cgp_produceOnlyResearchedStuffExternally) && 
        !tnk->techDependency.available ( gamemap->player[getOwner()].research))
@@ -781,7 +781,7 @@ bool  Vehicle :: vehicleconstructable ( const Vehicletype* tnk, int x, int y )
 }
 
 
-Resources Vehicle::getExternalVehicleConstructionCost( const Vehicletype* tnk ) const
+Resources Vehicle::getExternalVehicleConstructionCost( const VehicleType* tnk ) const
 {
    Resources r;
    r.material = tnk->productionCost.material;
@@ -854,7 +854,7 @@ int Vehicle :: searchstackforfreeweight ( Vehicle* searchedInnerVehicle )
 
 int Vehicle :: freeWeight ()
 {
-   tfield* fld = gamemap->getField ( xpos, ypos );
+   MapField* fld = gamemap->getField ( xpos, ypos );
    if ( fld->vehicle )
       return fld->vehicle->searchstackforfreeweight ( this );
    else
@@ -1590,7 +1590,7 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
       id = stream.readInt();
    }
 
-   Vehicletype* fzt = gamemap->getvehicletype_byid ( id );
+   VehicleType* fzt = gamemap->getvehicletype_byid ( id );
    if ( !fzt )
       throw InvalidID ( "vehicle", id );
 
@@ -1647,7 +1647,7 @@ int UnitHooveringLogic::calcFuelUsage( const Vehicle* veh )
 }
 
 
-int UnitHooveringLogic::getEndurance ( const Vehicletype* veh, int height, int resourceModel )
+int UnitHooveringLogic::getEndurance ( const VehicleType* veh, int height, int resourceModel )
 {
    assert( height < 8 );
    

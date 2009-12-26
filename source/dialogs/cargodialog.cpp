@@ -59,7 +59,7 @@
 #include "../sg.h"
 #include "../spfst.h"
 
-const Vehicletype* selectVehicletype( ContainerBase* plant, const vector<Vehicletype*>& items );
+const VehicleType* selectVehicletype( ContainerBase* plant, const vector<VehicleType*>& items );
 
 
 class CargoDialog;
@@ -2136,7 +2136,7 @@ void UnitProduction::execute( const MapCoordinate& pos, ContainerBase* subject, 
    auto_ptr<ConstructUnitCommand> production ( new ConstructUnitCommand( parent.getContainer() ));
    constructUnitCommand = production.get();
 
-   const Vehicletype* v;
+   const VehicleType* v;
    {
       production->setMode( ConstructUnitCommand::internal );
       producables = production->getProduceableVehicles();

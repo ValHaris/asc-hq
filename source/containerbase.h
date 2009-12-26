@@ -84,13 +84,13 @@ class ContainerBase {
                 to be painted on the map, as map-painting is done on a per-field basis */		  
       virtual Surface getImage() const = 0;
 
-      typedef vector<const Vehicletype*> Production;
+      typedef vector<const VehicleType*> Production;
 
       const Production& getProduction() const;
-      Resources getProductionCost( const Vehicletype* unit ) const;
-      void deleteProductionLine( const Vehicletype* type );
+      Resources getProductionCost( const VehicleType* unit ) const;
+      void deleteProductionLine( const VehicleType* type );
       void deleteAllProductionLines();
-      void addProductionLine( const Vehicletype* type  );
+      void addProductionLine( const VehicleType* type  );
       void setProductionLines( const Production& production  );
    private:
       mutable Production productionCache;
@@ -162,10 +162,10 @@ class ContainerBase {
           \param carrierHeight assume the carrier ( = this) was on this height (numerical: 0 - 7). If -1, use current height
           \return the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
       */
-      int  vehicleUnloadable ( const Vehicletype* vehicleType, int carrierHeight = -1 ) const;
+      int  vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight = -1 ) const;
 
       //! returns the unloading system
-      const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const Vehicletype* vehicle, int height );
+      const ContainerBaseType::TransportationIO* vehicleUnloadSystem ( const VehicleType* vehicle, int height );
 
       //! returns the levels of height on which this unit can be transfered by docking; or 0 if no unloading is possible
       int  vehicleDocking ( const Vehicle* vehicle, bool out  ) const;

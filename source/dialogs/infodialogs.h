@@ -10,13 +10,13 @@
 #ifndef infoDialogsH
 #define infoDialogsH
 
-class tfield;
+class MapField;
 
 extern void showSearchPath();
 
 extern void showSDLInfo();
 
-extern void showCargoSummary( tfield* fld );
+extern void showCargoSummary( MapField* fld );
 
 extern void viewFont();
 

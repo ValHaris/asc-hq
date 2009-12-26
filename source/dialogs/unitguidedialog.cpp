@@ -30,7 +30,7 @@ class DataTab : public PG_Widget
 		DataTab( PG_Widget* parent, const PG_Rect& pos, bool showDescription );
 		~DataTab();
 		void setPage( Page page );
-		void setUnit( Vehicletype* type );
+		void setUnit( VehicleType* type );
 		void setTab0( DataTab* tab0 );
 		void setCompare( bool compare );
 		void setData();
@@ -39,7 +39,7 @@ class DataTab : public PG_Widget
 		
 	private:
 		Page currentPage;
-		Vehicletype* currentUnit;
+		VehicleType* currentUnit;
 		
 		PG_Rect parentPos;
 		DataTab* tabCompare;
@@ -264,7 +264,7 @@ void DataTab::setPage( Page page )
 	}
 }
 
-void DataTab::setUnit( Vehicletype* type )
+void DataTab::setUnit( VehicleType* type )
 {
 	currentUnit = type;
 	setData();
@@ -277,7 +277,7 @@ void DataTab::setData()
 	if( currentUnit == NULL && ! showDescriptionOnly )
 		return;
 	
-	Vehicletype* compareType = NULL;
+	VehicleType* compareType = NULL;
 	if( compareData && tabCompare != NULL )
 	{
 		compareType = tabCompare->currentUnit;
@@ -764,7 +764,7 @@ class UnitGuideWidget : public PG_Widget
 		bool displayUnit();
 		bool showDifferenceTrigger( bool pressed );
 		//---------------------------
-		typedef std::vector< Vehicletype* > TVehicleTypes;
+		typedef std::vector< VehicleType* > TVehicleTypes;
 		TVehicleTypes selectedUnits;
 		
 		typedef std::vector< DataTab* > TDataTabs;
@@ -974,7 +974,7 @@ void UnitGuideWidget::selectUnits()
 	
 	for( int i=0; i<allUnits; i++ )
 	{
-		Vehicletype *type = actmap->getvehicletype_bypos( i );
+		VehicleType *type = actmap->getvehicletype_bypos( i );
 		
 		if( selectedUnitSet != NULL )
 		{

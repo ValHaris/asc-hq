@@ -54,7 +54,7 @@ class MapRenderer {
                Surface& surface;
                VisibilityStates visibility;
                int playerView;
-               tfield* fld;
+               MapField* fld;
                MapCoordinate pos;
                GameMap* gamemap;
       };

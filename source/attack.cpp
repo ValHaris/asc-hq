@@ -55,7 +55,7 @@ bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
    int x = d_eht->xpos;
    int y = d_eht->ypos; 
    getnextfield(x, y, direc);
-   tfield* fld = d_eht->getMap()->getField(x,y);
+   MapField* fld = d_eht->getMap()->getField(x,y);
 
    if ( fld )
       s_eht = fld->vehicle;
@@ -291,7 +291,7 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   tfield* field = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
+   MapField* field = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       // if ( dist <= maxmalq )
@@ -506,7 +506,7 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
    av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
    av.height = attackingunit->height;
 
-   tfield* field = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
+   MapField* field = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field->getdefensebonus();
@@ -592,7 +592,7 @@ void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Veh
 {
    this->position = position;
    
-   tfield* mineposition = attackedunit->getMap()->getField( position );
+   MapField* mineposition = attackedunit->getMap()->getField( position );
    
    if ( mineposition->mines.empty() )
       errorMessage(" tmineattacksunit :: setup \n no mine to attack !\n" );
@@ -612,7 +612,7 @@ void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Veh
    if ( minenum == -1 ) {
       int cnt = 1;
       av.strength = 0;
-      for ( tfield::MineContainer::iterator m = mineposition->mines.begin(); m != mineposition->mines.end(); m++ )
+      for ( MapField::MineContainer::iterator m = mineposition->mines.begin(); m != mineposition->mines.end(); m++ )
          if ( m->attacksunit ( attackedunit )) {
             int strength = m->strength;
             if ( m->type == cmantipersonnelmine   &&  (attackedunit->typ->movemalustyp ==  cmm_trooper ) )
@@ -664,7 +664,7 @@ void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Veh
 void tmineattacksunit :: setresult ( void )
 {
    if ( _minenum == -1 ) {
-      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); )
+      for ( MapField::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); )
          if ( m->attacksunit ( _attackedunit ))
             m = _mineposition->mines.erase ( m );
          else
@@ -684,12 +684,12 @@ void tmineattacksunit :: setresult( const Context& context )
 {
    vector<GameAction*> actions;
    if ( _minenum == -1 ) {
-      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m)
+      for ( MapField::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m)
          if ( m->attacksunit ( _attackedunit ))
             actions.push_back ( new RemoveMine(_attackedunit->getMap(), position, m->identifier));
    } else {
       int counter = 0;
-      for ( tfield::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m, ++counter)
+      for ( MapField::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); ++m, ++counter)
          if ( counter == _minenum )
             actions.push_back ( new RemoveMine(_attackedunit->getMap(), position, m->identifier));
    }
@@ -731,7 +731,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    dist = beeline ( attackingunit->xpos, attackingunit->ypos, obj_x, obj_y );
 
-   for ( tfield::ObjectContainer::reverse_iterator o = targetField->objects.rbegin(); o != targetField->objects.rend(); o++ )
+   for ( MapField::ObjectContainer::reverse_iterator o = targetField->objects.rbegin(); o != targetField->objects.rend(); o++ )
       if ( o->typ->armor > 0 ) {
          _obji = &(*o);
          break;
@@ -771,7 +771,7 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    av.height = attackingunit->height;
    av.weapontype = attackingunit->typ->weapons.weapon[ _weapon ].getScalarWeaponType();
 
-   tfield* field2 = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
+   MapField* field2 = attackingunit->getMap()->getField ( attackingunit->xpos, attackingunit->ypos );
 
    if ( attackingunit->height <= chfahrend ) {
       av.defensebonus = field2->getdefensebonus();
@@ -867,7 +867,7 @@ AttackWeap*  attackpossible( const Vehicle*     attacker, int x, int y)
    if (attacker->typ->weapons.count == 0)
       return atw;
 
-   tfield* efield = attacker->getMap()->getField(x,y);
+   MapField* efield = attacker->getMap()->getField(x,y);
 
    if ( efield->getVehicle() ) {
       if (fieldvisiblenow(efield, attacker->color/8))
@@ -901,14 +901,14 @@ AttackWeap*  attackpossible( const Vehicle*     attacker, int x, int y)
                      }
    } else if ( efield->objects.size() ) {
       int n = 0;
-      for ( tfield::ObjectContainer::iterator j = efield->objects.begin(); j != efield->objects.end(); j++ )
+      for ( MapField::ObjectContainer::iterator j = efield->objects.begin(); j != efield->objects.end(); j++ )
          if ( j->typ->armor > 0 )
             n++;
 
       if ( n > 0 )
          if ((efield->vehicle == NULL) && ( efield->building == NULL)) {
             bool found = false;
-            for ( tfield::ObjectContainer::reverse_iterator j = efield->objects.rbegin(); j != efield->objects.rend(); ++j ) {
+            for ( MapField::ObjectContainer::reverse_iterator j = efield->objects.rbegin(); j != efield->objects.rend(); ++j ) {
                for ( int i = 0; i <= attacker->typ->weapons.count - 1; i++)
                   if (attacker->typ->weapons.weapon[i].shootable() )
                      if ( attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
@@ -1081,7 +1081,7 @@ bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWea
 }
 
 bool vehicleplattfahrbar( const Vehicle*     vehicle,
-                           const tfield*        field)
+                           const MapField*        field)
 {
    return false;
 /*

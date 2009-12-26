@@ -164,7 +164,7 @@ class Player : public SigC::Object {
 
       class Dissection {
          public:
-            Vehicletype*  fzt;
+            VehicleType*  fzt;
             const Technology*   tech;
             int           orgpoints;
             int           points;

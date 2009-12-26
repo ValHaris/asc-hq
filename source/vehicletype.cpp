@@ -91,7 +91,7 @@ const bool  weaponAmmo[weaponTypeNum] = {
    true, true, true, true, true, true, true, true, false, false, false, false, false
 };
 
-Vehicletype :: Vehicletype ( void )
+VehicleType :: VehicleType ( void )
 {
    recommendedAIJob = AiParameter::job_undefined;
 
@@ -130,7 +130,7 @@ Vehicletype :: Vehicletype ( void )
 }
 
 
-int Vehicletype::maxsize ( void ) const
+int VehicleType::maxsize ( void ) const
 {
    return weight;
 }
@@ -140,7 +140,7 @@ const int vehicle_version = 31;
 
 
 
-void Vehicletype::setupRemovableObjectsFromOldFileLayout ( )
+void VehicleType::setupRemovableObjectsFromOldFileLayout ( )
 {
    for ( vector<IntRange>::iterator i = objectsBuildable.begin(); i != objectsBuildable.end();  )
       if ( i->to < 0 && i->from < 0 ) {
@@ -154,7 +154,7 @@ void Vehicletype::setupRemovableObjectsFromOldFileLayout ( )
       }
 }
 
-void Vehicletype :: read ( tnstream& stream )
+void VehicleType :: read ( tnstream& stream )
 {
    int version = stream.readInt();
    if ( version > vehicle_version || version < 1)
@@ -575,7 +575,7 @@ void Vehicletype :: read ( tnstream& stream )
 
 
 
-void Vehicletype:: write ( tnstream& stream ) const
+void VehicleType:: write ( tnstream& stream ) const
 {
    int i,j;
 
@@ -751,7 +751,7 @@ void Vehicletype:: write ( tnstream& stream ) const
 }
 
 
-ASCString Vehicletype::getName( ) const
+ASCString VehicleType::getName( ) const
 {
    if ( !name.empty() )
       return name;
@@ -759,7 +759,7 @@ ASCString Vehicletype::getName( ) const
       return description;
 }
 
-int Vehicletype :: maxSpeed ( ) const
+int VehicleType :: maxSpeed ( ) const
 {
    int maxUnitMovement = 0;
    for ( int i = 0; i < 8; i++ )
@@ -767,13 +767,13 @@ int Vehicletype :: maxSpeed ( ) const
    return maxUnitMovement;
 }
 
-int Vehicletype::getMemoryFootprint() const
+int VehicleType::getMemoryFootprint() const
 {
    return sizeof(*this) + image.getMemoryFootprint();
 }
 
 
-Vehicletype :: ~Vehicletype ( )
+VehicleType :: ~VehicleType ( )
 {
    for ( int i = 0; i < 8; i++ )
       if ( aiparam[i] ) {
@@ -937,7 +937,7 @@ UnitWeapon :: UnitWeapon ( void )
 
 
 
-void Vehicletype::runTextIO ( PropertyContainer& pc )
+void VehicleType::runTextIO ( PropertyContainer& pc )
 {
    ContainerBaseType::runTextIO ( pc );
 
@@ -1133,7 +1133,7 @@ void Vehicletype::runTextIO ( PropertyContainer& pc )
 
 }
 
-BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& location )
+BitSet VehicleType::convertOldFunctions( int abilities, const ASCString& location )
 {
    BitSet features;
    if ( abilities & 1 )
@@ -1199,12 +1199,12 @@ BitSet Vehicletype::convertOldFunctions( int abilities, const ASCString& locatio
    return features;
 }
 
-void  Vehicletype::paint ( Surface& s, SPoint pos, const PlayerColor& player, int direction ) const
+void  VehicleType::paint ( Surface& s, SPoint pos, const PlayerColor& player, int direction ) const
 {
    megaBlitter<ColorTransform_PlayerCol,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_All>( getImage(), s, pos, player, nullParam, nullParam, nullParam );
 }
 
-void  Vehicletype::paint ( Surface& s, SPoint pos ) const
+void  VehicleType::paint ( Surface& s, SPoint pos ) const
 {
    megaBlitter<ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Plain,TargetPixelSelector_All>( getImage(), s, pos, nullParam, nullParam, nullParam, nullParam );
 }
@@ -1268,7 +1268,7 @@ void SingleWeapon::runTextIO ( PropertyContainer& pc )
 }
 
 
-void Vehicletype :: HeightChangeMethod :: runTextIO ( PropertyContainer& pc )
+void VehicleType :: HeightChangeMethod :: runTextIO ( PropertyContainer& pc )
 {
    pc.addTagInteger( "StartHeight", startHeight, choehenstufennum, heightTags );
    pc.addInteger("HeightDelta", heightDelta );
@@ -1282,7 +1282,7 @@ void Vehicletype :: HeightChangeMethod :: runTextIO ( PropertyContainer& pc )
 const int vehicleHeightChangeMethodVersion = 1;
 
 
-void Vehicletype :: HeightChangeMethod :: read ( tnstream& stream )
+void VehicleType :: HeightChangeMethod :: read ( tnstream& stream )
 {
    int version = stream.readInt();
    if ( version > vehicleHeightChangeMethodVersion || version < 1 ) {
@@ -1297,7 +1297,7 @@ void Vehicletype :: HeightChangeMethod :: read ( tnstream& stream )
    dist = stream.readInt();
 }
 
-void Vehicletype :: HeightChangeMethod :: write ( tnstream& stream ) const
+void VehicleType :: HeightChangeMethod :: write ( tnstream& stream ) const
 {
    stream.writeInt ( vehicleHeightChangeMethodVersion );
    stream.writeInt ( startHeight );
@@ -1339,7 +1339,7 @@ Part VII -malus
 
 
 
-Resources Vehicletype :: calcProductionsCost()
+Resources VehicleType :: calcProductionsCost()
 {
    Resources res;
    // Anfang -> Abschluss

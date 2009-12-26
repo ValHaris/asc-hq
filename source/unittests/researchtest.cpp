@@ -80,12 +80,12 @@ void testresearch1()
    Building* bld = game->getField( MapCoordinate( 7,8 ))->building;
    assertOrThrow( bld != NULL );
    
-   Vehicletype* jam = vehicleTypeRepository.getObject_byID( 1000000051 );
+   VehicleType* jam = vehicleTypeRepository.getObject_byID( 1000000051 );
    assertOrThrow( jam != NULL );
    
    BuildProductionLineCommand* bplc = new BuildProductionLineCommand( bld );
    
-   vector<const Vehicletype*> prods = bplc->productionLinesBuyable();
+   vector<const VehicleType*> prods = bplc->productionLinesBuyable();
    assertOrThrow( find( prods.begin(), prods.end(), jam ) == prods.end() );
    
    drc = new DirectResearchCommand( p0 );
@@ -179,12 +179,12 @@ void testresearch2()
    Building* bld = game->getField( MapCoordinate( 7,8 ))->building;
    assertOrThrow( bld != NULL );
    
-   Vehicletype* jam = vehicleTypeRepository.getObject_byID( 1000000051 );
+   VehicleType* jam = vehicleTypeRepository.getObject_byID( 1000000051 );
    assertOrThrow( jam != NULL );
    
    BuildProductionLineCommand  bplc ( bld );
    
-   vector<const Vehicletype*> prods = bplc.productionLinesBuyable();
+   vector<const VehicleType*> prods = bplc.productionLinesBuyable();
    assertOrThrow( find( prods.begin(), prods.end(), jam ) != prods.end() );
    
 }

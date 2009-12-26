@@ -174,7 +174,7 @@ extern const char*  cvehiclefunctions[];
  class Player;
 
  //! The class describing properties that are common to all vehicles of a certain kind. \sa Vehicle
- class Vehicletype : public ContainerBaseType {
+ class VehicleType : public ContainerBaseType {
         //! the image of the unit.
         Surface  image;
         
@@ -293,11 +293,11 @@ extern const char*  cvehiclefunctions[];
 
         int maxSpeed ( ) const;
 
-        Vehicletype ( void );
+        VehicleType ( void );
         void read ( tnstream& stream ) ;
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
-        ~Vehicletype ( );
+        ~VehicleType ( );
         Resources calcProductionsCost();
 
         int getMoveMalusType() const {

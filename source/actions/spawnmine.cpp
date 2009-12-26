@@ -73,7 +73,7 @@ GameActionID SpawnMine::getID() const
 
 ActionResult SpawnMine::runAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
@@ -89,7 +89,7 @@ ActionResult SpawnMine::runAction( const Context& context )
 
 ActionResult SpawnMine::undoAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    

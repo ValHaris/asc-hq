@@ -44,7 +44,7 @@ bool ConstructUnitCommand :: externalConstructionAvail ( const ContainerBase* eh
    if ( !eht )
       return false;
    
-   tfield* fld = vehicle->getMap()->getField ( vehicle->getPosition() );
+   MapField* fld = vehicle->getMap()->getField ( vehicle->getPosition() );
    if ( fld && fld->vehicle == vehicle )
       if (vehicle->getOwner() == vehicle->getMap()->actplayer )
          if ( vehicle->typ->vehiclesBuildable.size() )
@@ -76,7 +76,7 @@ ConstructUnitCommand :: ConstructUnitCommand ( ContainerBase* container )
 
 
 
-ConstructUnitCommand::Lack ConstructUnitCommand::unitProductionPrerequisites( const Vehicletype* type ) const
+ConstructUnitCommand::Lack ConstructUnitCommand::unitProductionPrerequisites( const VehicleType* type ) const
 {
    int l = 0;
    
@@ -126,7 +126,7 @@ ConstructUnitCommand::Producables ConstructUnitCommand :: getProduceableVehicles
             for ( int i = 0; i < veh->typ->vehiclesBuildable.size(); i++ )
                for ( int j = veh->typ->vehiclesBuildable[i].from; j <= veh->typ->vehiclesBuildable[i].to; j++ )
                   if ( veh->getMap()->getgameparameter(cgp_forbid_unitunit_construction) == 0 || veh->getMap()->unitProduction.check(j) ) {
-                     Vehicletype* v = veh->getMap()->getvehicletype_byid ( j );
+                     VehicleType* v = veh->getMap()->getvehicletype_byid ( j );
                      if ( v ) 
                         entries.push_back ( ProductionEntry ( v, veh->getExternalVehicleConstructionCost( v ), unitProductionPrerequisites( v ) ));
                   }
@@ -137,14 +137,14 @@ ConstructUnitCommand::Producables ConstructUnitCommand :: getProduceableVehicles
 
 void ConstructUnitCommand :: fieldChecker( const MapCoordinate& pos )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return;
    
    if ( fld->vehicle || fld->building )
       return;
    
-   Vehicletype* vt = getContainer()->getMap()->getvehicletype_byid( vehicleTypeID );
+   VehicleType* vt = getContainer()->getMap()->getvehicletype_byid( vehicleTypeID );
    
    if ( fieldvisiblenow( getMap()->getField(pos)) && vt ) {
       Vehicle* veh = dynamic_cast<Vehicle*>(getContainer() );
@@ -177,7 +177,7 @@ bool ConstructUnitCommand :: isFieldUsable( const MapCoordinate& pos )
 void ConstructUnitCommand :: setTargetPosition( const MapCoordinate& pos )
 {
    this->target = pos;
-   tfield* fld = getMap()->getField(target);
+   MapField* fld = getMap()->getField(target);
    
    if( !fld )
       throw ActionResult(21002);
@@ -197,7 +197,7 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
    
    Producables prods = getProduceableVehicles();
    
-   const Vehicletype* vehicleType = NULL;
+   const VehicleType* vehicleType = NULL;
    Resources cost;
    for ( Producables::const_iterator i = prods.begin(); i != prods.end(); ++i ) {
       if ( i->type->id == vehicleTypeID ) {
@@ -336,11 +336,11 @@ void ConstructUnitCommand :: writeData ( tnstream& stream ) const
    stream.writeInt( newUnitID );
 }
 
-void ConstructUnitCommand :: setVehicleType( const Vehicletype* type )
+void ConstructUnitCommand :: setVehicleType( const VehicleType* type )
 {
    vehicleTypeID = type->id;
    
-   Vehicletype* vt = getMap()->getvehicletype_byid( vehicleTypeID );
+   VehicleType* vt = getMap()->getvehicletype_byid( vehicleTypeID );
    if( !vt )
       throw ActionResult(21701);
    
@@ -366,7 +366,7 @@ ASCString ConstructUnitCommand::getDescription() const
 {
    ASCString s = "Construct ";
    
-   const Vehicletype* vt = getMap()->getvehicletype_byid( vehicleTypeID );
+   const VehicleType* vt = getMap()->getvehicletype_byid( vehicleTypeID );
    if ( vt )
       s += vt->name;
    else

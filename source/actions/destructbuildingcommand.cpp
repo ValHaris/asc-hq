@@ -74,7 +74,7 @@ vector<MapCoordinate> DestructBuildingCommand::getFields()
    Vehicle* veh = getUnit();
    for ( int d = 0; d < 6; ++d ) {
       MapCoordinate pos = getNeighbouringFieldCoordinate( veh->getPosition(), d );
-      tfield* fld = getMap()->getField(pos);
+      MapField* fld = getMap()->getField(pos);
       if ( fld )
          if ( fld->building && getheightdelta( log2(veh->height), log2(fld->building->typ->height)) == 0 && !fld->building->typ->buildingNotRemovable ) 
             fields.push_back( pos );
@@ -93,7 +93,7 @@ bool DestructBuildingCommand :: isFieldUsable( const MapCoordinate& pos )
 void DestructBuildingCommand :: setTargetPosition( const MapCoordinate& pos )
 {
    this->target = pos;
-   tfield* fld = getMap()->getField(target);
+   MapField* fld = getMap()->getField(target);
 
    if ( !fld )
       throw ActionResult(21002);

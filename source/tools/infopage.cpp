@@ -1301,7 +1301,7 @@ void UnitConstructionPage::buildContent() {
     names = "";
     for ( unsigned int i = 0; i < vt.vehiclesBuildable.size(); i++ ) {
       for ( int b = 0; b < vehicleTypeRepository.getNum(); b++ ) {
-        Vehicletype* veh = vehicleTypeRepository.getObject_byPos ( b );
+        VehicleType* veh = vehicleTypeRepository.getObject_byPos ( b );
         if (     veh->id >= vt.vehiclesBuildable[i].from
                  && veh->id <= vt.vehiclesBuildable[i].to ) {
           names = addTREntryln(names, constructLink(veh->name.c_str() + ASCString("(") + strrr(veh->id )+ ")", "./" + UnitGuideGen::constructFileName(*veh) + MAINLINKSUFFIX + HTML));

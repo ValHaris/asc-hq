@@ -505,11 +505,11 @@ class tgiveunitawaydlg : public tdialogbox {
              int markedplayer;
              int status;
              void paintplayer ( int i );
-             tfield* fld ;
+             MapField* fld ;
              int xs;
              TransferControlCommand::Receivers receivers;
            public:
-             void init ( tfield* fld );
+             void init ( MapField* fld );
              void run ( const Context& context );
              void buttonpressed ( int id );
        };
@@ -536,7 +536,7 @@ void tgiveunitawaydlg :: paintplayer ( int i )
       showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
 }
 
-void         tgiveunitawaydlg :: init( tfield* fld )
+void         tgiveunitawaydlg :: init( MapField* fld )
 { 
    this->fld = fld;
 
@@ -636,7 +636,7 @@ void tgiveunitawaydlg :: run ( const Context& context )
    }
 }
 
-void giveunitaway ( tfield* fld, const Context& context )
+void giveunitaway ( MapField* fld, const Context& context )
 {
    ContainerBase* c = fld->getContainer();
    if ( !c ) {

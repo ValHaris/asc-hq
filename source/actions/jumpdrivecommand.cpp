@@ -40,7 +40,7 @@ bool JumpDriveCommand :: avail ( const Vehicle* unit )
 {
    if ( unit )
       if ( !unit->hasMoved() )
-         if ( (unit->reactionfire.getStatus() == Vehicle::ReactionFire::off) || unit->typ->hasFunction(Vehicletype::MoveWithReactionFire ) )
+         if ( (unit->reactionfire.getStatus() == Vehicle::ReactionFire::off) || unit->typ->hasFunction(VehicleType::MoveWithReactionFire ) )
             if ( unit->height & unit->typ->jumpDrive.height )
                if ( unit->getResource( unit->typ->jumpDrive.consumption ) == unit->typ->jumpDrive.consumption ) 
                   return true;
@@ -58,7 +58,7 @@ JumpDriveCommand :: JumpDriveCommand ( Vehicle* unit)
 
 bool JumpDriveCommand::fieldReachable( const MapCoordinate& dest )
 {
-   tfield* fld = getMap()->getField( dest );
+   MapField* fld = getMap()->getField( dest );
    if ( beeline( dest, getUnit()->getPosition()) <= getUnit()->typ->jumpDrive.maxDistance )
       if ( !fld->vehicle && !fld->building ) 
          if ( fieldvisiblenow( fld, getUnit()->getOwner() ))

@@ -28,7 +28,7 @@
  #include "buildingtype.h"
  #include "mapalgorithms.h"
 
-class tfield;
+class MapField;
 
 /** An actual building on the map, which references a #BuildingType
     Buildings have an owner,
@@ -121,13 +121,13 @@ class  Building : public ContainerBase {
     int  getArmor() const;
 
     //! returns the field the buildings entry is standing on
-    tfield* getEntryField() const;
+    MapField* getEntryField() const;
 
     //! returns the position of the buildings entry
     MapCoordinate3D getEntry ( ) const;
 
     //! returns the pointer to the field which the given part of the building is standing on
-    tfield* getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
+    MapField* getField( const BuildingType::LocalCoordinate& localCoordinates ) const;
     
     //! returns the absolute map coordinate of the given part of the building
     MapCoordinate getFieldCoordinates( const BuildingType::LocalCoordinate& localCoordinates ) const;

@@ -47,7 +47,7 @@ const VehicleProduction_SelectionItemFactory::Container& VehicleProduction_Selec
 }
 
 
-void VehicleProduction_SelectionItemFactory::vehicleTypeSelected( const Vehicletype* type, bool mouse )
+void VehicleProduction_SelectionItemFactory::vehicleTypeSelected( const VehicleType* type, bool mouse )
 {
    sigVehicleTypeSelected( type, mouse );
 }
@@ -96,7 +96,7 @@ void VehicleProduction_SelectionItemFactory::updateProducables()
 }
 
 
-Resources VehicleProduction_SelectionItemFactory::getCost( const Vehicletype* type )
+Resources VehicleProduction_SelectionItemFactory::getCost( const VehicleType* type )
 {
    for ( ConstructUnitCommand::Producables::const_iterator i = produceables.begin(); i != produceables.end(); ++i ) {
       if ( i->type == type ) {
@@ -122,7 +122,7 @@ AddProductionLine_SelectionItemFactory::AddProductionLine_SelectionItemFactory( 
 
 };
 
-void AddProductionLine_SelectionItemFactory::vehicleTypeSelected( const Vehicletype* type, bool mouse )
+void AddProductionLine_SelectionItemFactory::vehicleTypeSelected( const VehicleType* type, bool mouse )
 {
    auto_ptr<BuildProductionLineCommand> bplc ( new BuildProductionLineCommand(plant ));
    bplc->setProduction( type );
@@ -133,18 +133,18 @@ void AddProductionLine_SelectionItemFactory::vehicleTypeSelected( const Vehiclet
       displayActionError( res );
 }
 
-Resources AddProductionLine_SelectionItemFactory::getCost( const Vehicletype* type )
+Resources AddProductionLine_SelectionItemFactory::getCost( const VehicleType* type )
 {
    return BuildProductionLineCommand::resourcesNeeded( type );
 };
 
 
-void VehicleProduction_SelectionWindow::vtMarked( const Vehicletype* vt )
+void VehicleProduction_SelectionWindow::vtMarked( const VehicleType* vt )
 {
    vtSelected( vt, true );
 }
 
-void VehicleProduction_SelectionWindow::vtSelected( const Vehicletype* vt, bool mouse )
+void VehicleProduction_SelectionWindow::vtSelected( const VehicleType* vt, bool mouse )
 {
    selected = vt;
 

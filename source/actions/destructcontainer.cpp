@@ -107,7 +107,7 @@ ActionResult DestructContainer::runAction( const Context& context )
    
    Vehicle* veh = dynamic_cast<Vehicle*>(container);
    if ( veh ) {
-      tfield* fld = getMap()->getField(veh->getPosition());
+      MapField* fld = getMap()->getField(veh->getPosition());
 
       if ( fld->vehicle == veh )
          fieldRegistration = FIRST;
@@ -141,7 +141,7 @@ ActionResult DestructContainer::runAction( const Context& context )
       for (int i = 0; i < BuildingType::xdimension; i++)
          for (int j = 0; j < BuildingType::ydimension; j++)
             if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {
-               tfield* fld = bld->getField( BuildingType::LocalCoordinate(i,j) );
+               MapField* fld = bld->getField( BuildingType::LocalCoordinate(i,j) );
                if ( fld && fld->building == bld ) {
                   typedef BuildingType::DestructionObjects::const_iterator J;
                   pair<J,J> b = bld->typ->destructionObjects.equal_range(BuildingType::LocalCoordinate(i,j));

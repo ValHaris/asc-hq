@@ -109,7 +109,7 @@ bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool
    
 // � Checkobject
 
-char checkobject(tfield* pf)
+char checkobject(MapField* pf)
 {
    return !pf->objects.empty();
 }
@@ -134,7 +134,7 @@ void tputresources :: testfield ( const MapCoordinate& mc )
    int dist = beeline ( mc, centerPos ) / 10;
    int m = maxresource - dist * ( maxresource - minresource ) / maxdst;
 
-   tfield* fld = gamemap->getField ( mc );
+   MapField* fld = gamemap->getField ( mc );
    if ( resourcetype == 1 )
       fld->material = min( 255, fld->material + m);
    else
@@ -446,8 +446,8 @@ void         tplayerchange::buttonpressed(int         id)
                  (*i)->convert( sel1 );
 
               for (int i =0;i < actmap->xsize * actmap->ysize ;i++ ) {
-                 tfield* fld = &actmap->field[i];
-                 for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
+                 MapField* fld = &actmap->field[i];
+                 for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
                     if ( i->player == sel2 && sel1 != 8)
                        i->player = sel1;
 
@@ -814,7 +814,7 @@ void tfillpolygonunit::initevent ( void )
 class  ShowPolygonUsingTemps : public PolygonPainterSquareCoordinate {
    protected:
       virtual void setpointabs ( int x,  int y  ) {
-         tfield* ffield = getfield ( x , y );
+         MapField* ffield = getfield ( x , y );
          if (ffield)
             ffield->a.temp2 = 1;
       };
@@ -822,7 +822,7 @@ class  ShowPolygonUsingTemps : public PolygonPainterSquareCoordinate {
       bool paintPolygon   (  const Poly_gon& poly ) {
          bool res = PolygonPainterSquareCoordinate::paintPolygon ( poly );
          for ( int i = 0; i < poly.vertex.size(); ++i ) {
-            tfield* ffield = actmap->getField ( poly.vertex[i] );
+            MapField* ffield = actmap->getField ( poly.vertex[i] );
             if (ffield)
                ffield->a.temp = 1;
          }
@@ -1574,7 +1574,7 @@ void         UnitPropertyEditor::init(  )
 
    int unitheights = 0;
    heightxs = 520;
-   tfield* fld = getfield ( unit->xpos, unit->ypos);
+   MapField* fld = getfield ( unit->xpos, unit->ypos);
    if ( fld && fld->vehicle == unit ) {
       npush ( unit->height );
       for ( int i=0;i<=7 ;i++) {
@@ -1788,7 +1788,7 @@ void         changeunitvalues(Vehicle* ae)
 //* � Resource
 
      class tres: public tdialogbox {
-        tfield* pf2;
+        MapField* pf2;
             public :
                 int action;
                 int fuel,material;
@@ -1866,7 +1866,7 @@ void         changeresource(void)
 //* � MineStrength
 
      class tminestrength: public tdialogbox {
-               tfield* pf2;
+               MapField* pf2;
             public :
                 int action;
                 int strength;
@@ -2548,7 +2548,7 @@ const char* tbuildingproduction :: getinfotext ( int pos )
    return NULL;
 }
 
-bool isNull(const Vehicletype* v ) { return !v; };
+bool isNull(const VehicleType* v ) { return !v; };
 #endif
 
 
@@ -2557,7 +2557,7 @@ void movebuilding ( void )
    warningMessage("sorry, not implemented yet in ASC2!");
 #if 0
    mapsaved = false;
-   tfield* fld = getactfield();
+   MapField* fld = getactfield();
    if ( fld->vehicle ) {
       Vehicle* v = fld->vehicle;
       fld->vehicle = NULL;
@@ -2760,7 +2760,7 @@ class UnitTypeTransformation {
                 int unitstransformed;
                 int unitsnottransformed;
 
-                Vehicletype* transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum );
+                VehicleType* transformvehicletype ( const VehicleType* type, int unitsetnum, int translationnum );
                 void transformvehicle ( Vehicle* veh, int unitsetnum, int translationnum );
                 set<int> vehicleTypesNotTransformed;
              public:
@@ -2844,11 +2844,11 @@ void         UnitTypeTransformation :: TranslationTableSelection::run(void)
       redline = -1;
 } 
 
-Vehicletype* UnitTypeTransformation :: transformvehicletype ( const Vehicletype* type, int unitsetnum, int translationnum )
+VehicleType* UnitTypeTransformation :: transformvehicletype ( const VehicleType* type, int unitsetnum, int translationnum )
 {
    for ( int i = 0; i < unitSets[unitsetnum]->transtab[translationnum]->translation.size(); i++ )
       if ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].from == type->id ) {
-         Vehicletype* tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
+         VehicleType* tp = vehicleTypeRepository.getObject_byID ( unitSets[unitsetnum]->transtab[translationnum]->translation[i].to );
          if ( tp ) 
             return tp;
       }
@@ -2864,7 +2864,7 @@ void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, 
       if ( *i )
          transformvehicle ( *i, unitsetnum, translationnum );
 
-   Vehicletype* nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
+   VehicleType* nvt = transformvehicletype ( veh->typ, unitsetnum, translationnum );
    if ( !nvt ) {
       unitsnottransformed++;
       return;
@@ -2902,7 +2902,7 @@ void UnitTypeTransformation :: run ( void )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-         tfield* fld = getfield ( x, y );
+         MapField* fld = getfield ( x, y );
          if ( fld->vehicle )
             transformvehicle ( fld->vehicle, unitsetnum, translationsetnum );
          if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry) ).any() ) {
@@ -2927,7 +2927,7 @@ void UnitTypeTransformation :: run ( void )
           s += "\n ID ";
           s += ASCString::toString( *i );
           s += " : ";
-          Vehicletype* vt = vehicleTypeRepository.getObject_byID ( *i );
+          VehicleType* vt = vehicleTypeRepository.getObject_byID ( *i );
           if ( !vt-> name.empty() )
              s += vt->name;
           else
@@ -3028,7 +3028,7 @@ MapSwitcher::Action MapSwitcher :: getDefaultAction ( )
 MapSwitcher mapSwitcher;
 
 
-Vehicletype* transform( int id, const vector<int>& translation )
+VehicleType* transform( int id, const vector<int>& translation )
 {
    for ( int i = 0; i < translation.size()/2; i++ )
       if ( id == translation[i*2] ) 
@@ -3104,7 +3104,7 @@ void transformMap ( )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) {
-          tfield* fld = actmap->getField ( x, y );
+          MapField* fld = actmap->getField ( x, y );
           for ( int i = 0; i < terraintranslation.size()/2; i++ )
              if ( fld->typ->terraintype->id == terraintranslation[i*2] ) {
                 TerrainType* tt = terrainTypeRepository.getObject_byID ( terraintranslation[i*2+1] );
@@ -3645,7 +3645,7 @@ void editTechAdapter()
 
 
 
-tfield*        getactfield(void)
+MapField*        getactfield(void)
 {
    return actmap->getField( actmap->getCursor() );; 
 } 
@@ -3679,7 +3679,7 @@ class ItemLocator : public ASC_PG_Dialog {
          if ( id != 0 ) {
             for ( int y = 0; y < actmap->ysize; ++y )
                for ( int x = 0; x < actmap->xsize; ++x ) {
-                  tfield* fld = actmap->getField(x,y);
+                  MapField* fld = actmap->getField(x,y);
                   if ( fld ) {
                      bool found = false;
                      switch ( typeSelector->GetSelectedItemIndex () ) {
@@ -3823,7 +3823,7 @@ void locateItemByID()
       
    }
    
-   void copyFieldStep1( tfield* sourceField, tfield* targetField, bool mirrorTerrain, bool mirrorResources, bool mirrorWeather )
+   void copyFieldStep1( MapField* sourceField, MapField* targetField, bool mirrorTerrain, bool mirrorResources, bool mirrorWeather )
    {
       targetField->deleteeverything();
       while( targetField->objects.size() > 0 )
@@ -3843,7 +3843,7 @@ void locateItemByID()
       if( mirrorWeather ) targetField->setWeather( sourceField->getWeather() ); 
    }
    
-   void copyFieldStep2( tfield* sourceField, tfield* targetField, GameMap* targetMap, int *directionTranslation, int *playerTranslation, bool mirrorObjects, bool mirrorBuildings, bool mirrorUnits, bool mirrorMines )
+   void copyFieldStep2( MapField* sourceField, MapField* targetField, GameMap* targetMap, int *directionTranslation, int *playerTranslation, bool mirrorObjects, bool mirrorBuildings, bool mirrorUnits, bool mirrorMines )
    {
       if( mirrorObjects )
       {
@@ -4055,8 +4055,8 @@ void locateItemByID()
             if( y%2 == 0 ) targetX++;
             if( targetX >= actmap->xsize || targetX == x ) continue;
             
-            tfield *targetField = actmap->getField( targetX, y );
-            tfield *sourceField = actmap->getField( x, y );
+            MapField *targetField = actmap->getField( targetX, y );
+            MapField *sourceField = actmap->getField( x, y );
             
             copyFieldStep1( sourceField, targetField, true, mirrorResources, mirrorWeather );
          }
@@ -4071,8 +4071,8 @@ void locateItemByID()
             if( y%2 == 0 ) targetX++;
             if( targetX >= actmap->xsize || targetX == x ) continue;
             
-            tfield *targetField = actmap->getField( targetX, y );
-            tfield *sourceField = actmap->getField( x, y );
+            MapField *targetField = actmap->getField( targetX, y );
+            MapField *sourceField = actmap->getField( x, y );
             
             copyFieldStep2( sourceField, targetField, actmap, directionTranslation, playerTranslation, mirrorObjects, mirrorBuildings, mirrorUnits, mirrorMines );
          }
@@ -4093,8 +4093,8 @@ void locateItemByID()
          {
             int targetY = actmap->ysize - y - yOffset;
             
-            tfield *targetField = actmap->getField( x, targetY );
-            tfield *sourceField = actmap->getField( x, y );
+            MapField *targetField = actmap->getField( x, targetY );
+            MapField *sourceField = actmap->getField( x, y );
             
             copyFieldStep1( sourceField, targetField, true, mirrorResources, mirrorWeather );
          }
@@ -4107,8 +4107,8 @@ void locateItemByID()
          {
             int targetY = actmap->ysize - y - yOffset;
             
-            tfield *targetField = actmap->getField( x, targetY );
-            tfield *sourceField = actmap->getField( x, y );
+            MapField *targetField = actmap->getField( x, targetY );
+            MapField *sourceField = actmap->getField( x, y );
             
             copyFieldStep2( sourceField, targetField, actmap, directionTranslation, playerTranslation, mirrorObjects, mirrorBuildings, mirrorUnits, mirrorMines );
          }
@@ -4420,7 +4420,7 @@ bool CopyMap::paste()
    Hide();
    if( map == NULL ) return false;
    
-   tfield *field = getactfield();
+   MapField *field = getactfield();
    if( field == NULL ) return false;
    
    int pasteStartX = field->getx();
@@ -4521,8 +4521,8 @@ bool CopyMap::paste()
             if( fieldX >= actmap->xsize ) continue;
             if( fieldY >= actmap->ysize ) continue;
             
-            tfield* target = actmap->getField( fieldX, fieldY );
-            tfield* source = map->getField( x, y );
+            MapField* target = actmap->getField( fieldX, fieldY );
+            MapField* source = map->getField( x, y );
             
             copyFieldStep1( source, target, mirrorTerrain->GetPressed(), mirrorResources->GetPressed(), mirrorWeather->GetPressed() );
          }
@@ -4557,8 +4557,8 @@ bool CopyMap::paste()
             if( fieldX >= actmap->xsize ) continue;
             if( fieldY >= actmap->ysize ) continue;
             
-            tfield* target = actmap->getField( fieldX, fieldY );
-            tfield* source = map->getField( x, y );
+            MapField* target = actmap->getField( fieldX, fieldY );
+            MapField* source = map->getField( x, y );
             
             copyFieldStep2( source, target, actmap, directionTranslation, playerTranslation, mirrorObjects->GetPressed(), mirrorBuildings->GetPressed(), mirrorUnits->GetPressed(), mirrorMines->GetPressed() );
          }
@@ -4597,8 +4597,8 @@ void CopyMap::fieldOperator( const MapCoordinate& point )
    {
       fieldCopied[ mapX + mapY * sizeX ] = true;
 
-      tfield* source = actmap->getField( point );
-      tfield* target = map->getField( mapX, mapY );
+      MapField* source = actmap->getField( point );
+      MapField* target = map->getField( mapX, mapY );
       
       
       
@@ -4606,8 +4606,8 @@ void CopyMap::fieldOperator( const MapCoordinate& point )
 
    }else if( copyStep == 2 )
    {
-      tfield* source = actmap->getField( point );
-      tfield* target = map->getField( mapX, mapY );
+      MapField* source = actmap->getField( point );
+      MapField* target = map->getField( mapX, mapY );
       
       copyFieldStep2( source, target, map, directionTranslation, playerTranslation, true, true, true, true );
 
@@ -4666,7 +4666,7 @@ void testDebugFunction()
    actmap->cleartemps(7);
    for ( int x = 0; x < actmap->xsize; ++x )
       for ( int y = 0; y < actmap->ysize; ++y ) {
-         tfield* fld = actmap->getField(x,y);
+         MapField* fld = actmap->getField(x,y);
          if ( fld->getVisibility(5) >= visible_now )
             fld->a.temp = 1;
          else

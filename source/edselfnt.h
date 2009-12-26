@@ -41,7 +41,7 @@
 extern void selcargo( PG_Window* parentWindow, ContainerBase* container );
 extern void selbuildingproduction( Building* eht );
 
-extern void sortItems( vector<Vehicletype*>& vec );
+extern void sortItems( vector<VehicleType*>& vec );
 extern void sortItems( vector<BuildingType*>& vec );
 extern void sortItems( vector<ObjectType*>& vec );
 extern void sortItems( vector<TerrainType*>& vec );

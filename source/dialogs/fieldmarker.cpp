@@ -91,7 +91,7 @@ void SelectFromMap::showFieldMarking( const CoordinateList& coordinateList )
 {
    actmap->cleartemps( 7 );
    for ( CoordinateList::const_iterator i = coordinateList.begin(); i != coordinateList.end(); ++i ) {
-      tfield* fld = actmap->getField( *i );
+      MapField* fld = actmap->getField( *i );
       if ( fld )
          fld->a.temp = 1;
    }

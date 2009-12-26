@@ -129,7 +129,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
         rdictionary = new Rdictionary [DICTIONARY_SIZE];
     
         if ( rdictionary == NULL )
-            throw toutofmem ( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
+            throw OutOfMemoryError ( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
      } else {
         lzw = 2;
         if ( tempreadbuf[0] )
@@ -181,7 +181,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
       wdictionary = new Wdictionary [ DICTIONARY_SIZE ];
                   
       if ( ! wdictionary )
-          throw toutofmem ( DICTIONARY_SIZE * sizeof( struct Wdictionary ) );
+          throw OutOfMemoryError ( DICTIONARY_SIZE * sizeof( struct Wdictionary ) );
   
       for ( i = 0; i < DICTIONARY_SIZE; i++ )
           wdictionary[ i ].code = UNUSED_CODE;
@@ -296,7 +296,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
             DecodeBuffer = (unsigned char *) realloc ( DecodeBuffer, DecodeBufferSize + 1000 );
 
             if ( ! DecodeBuffer )
-                throw toutofmem ( DecodeBufferSize + 1000 );
+                throw OutOfMemoryError ( DecodeBufferSize + 1000 );
             else      
                 DecodeBufferSize += 1000;
         }
@@ -374,7 +374,7 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
               DecodeBufferSize = 1000;
               DecodeBuffer =  (unsigned char * ) new char [ DecodeBufferSize ];
               if ( DecodeBuffer == NULL )
-                  throw toutofmem ( DecodeBufferSize );
+                  throw OutOfMemoryError ( DecodeBufferSize );
           }
       
       

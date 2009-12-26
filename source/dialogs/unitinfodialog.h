@@ -27,7 +27,7 @@
 
 class Panel;
 
-extern void unitInfoDialog( const Vehicletype* vt = NULL );
+extern void unitInfoDialog( const VehicleType* vt = NULL );
 extern void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon );
 
 #endif

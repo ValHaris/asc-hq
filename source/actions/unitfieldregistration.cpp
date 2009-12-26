@@ -109,7 +109,7 @@ ActionResult UnitFieldRegistration::runAction( const Context& context )
 {
    Vehicle* veh = getUnit();
    
-   tfield* fld = getMap()->getField( position );
+   MapField* fld = getMap()->getField( position );
    
    switch ( operation ) {
       case RegisterOnField: 
@@ -191,7 +191,7 @@ ActionResult UnitFieldRegistration::undoAction( const Context& context )
 {
    Vehicle* veh = getUnit();
    
-   tfield* fld = getMap()->getField( position );
+   MapField* fld = getMap()->getField( position );
    
    switch ( operation ) {
       case UnregisterOnField: 

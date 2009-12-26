@@ -99,7 +99,7 @@ main (int argc, char *argv[] )
    t_carefor_containerstream cfcst;
    try {
 
-      Vehicletype*   ft;
+      VehicleType*   ft;
       tfile          datfile;
       char           pict = YES;       // Bilder einlesen
       char           dif = 1;          // Anzahl der Bilder
@@ -110,7 +110,7 @@ main (int argc, char *argv[] )
       loadpalette();
       loadbi3graphics();
    
-      ft = new Vehicletype;
+      ft = new VehicleType;
 
       strcpy (datfile.name, "");
    
@@ -643,7 +643,7 @@ main (int argc, char *argv[] )
       if ( ft->functions & cfvehicleconstruction ) {  
          loadguipictures();
 
-         dynamic_array<Vehicletype*> tnk;
+         dynamic_array<VehicleType*> tnk;
          dynamic_array<pchar> name;
    
          int vehiclenum = 0; 
@@ -741,7 +741,7 @@ main (int argc, char *argv[] )
              printf("\n\nNote: you may enter single ids ( '25' ) or ranges ('1 - 999');\n");
    
    
-             Vehicletype::tbuildrange* ids = new Vehicletype::tbuildrange[1000];
+             VehicleType::tbuildrange* ids = new VehicleType::tbuildrange[1000];
              for ( int i = 0; i < ft->buildingsbuildablenum; i++ )
                 ids[i] = ft->buildingsbuildable[i];
              int num = 0;

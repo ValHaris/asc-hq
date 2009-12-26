@@ -97,7 +97,7 @@ main(int argc, char *argv[] )
     
       while( !cn.empty() ) { 
    
-         Vehicletype*   ft;
+         VehicleType*   ft;
          ft = loadvehicletype( cn.c_str() );
    
          sprintf ( buf, " %12.12s %5d %6d %6d %3d %7d ",

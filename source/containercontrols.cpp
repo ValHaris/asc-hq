@@ -59,7 +59,7 @@ bool ContainerConstControls::unitProductionAvailable() const
    return false;
 }
 
-int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* type, bool internally ) const
+int  ContainerConstControls::unitProductionPrerequisites( const VehicleType* type, bool internally ) const
 {
    int l = 0;
    Resources cost = container->getProductionCost( type );
@@ -83,7 +83,7 @@ int  ContainerConstControls::unitProductionPrerequisites( const Vehicletype* typ
 
 
 
-Vehicle* ContainerControls::produceUnitHypothetically( const Vehicletype* type )
+Vehicle* ContainerControls::produceUnitHypothetically( const VehicleType* type )
 {
    if ( !unitProductionAvailable() )
       return NULL;

@@ -37,7 +37,6 @@
 #include "groupfile.h"
 
 
-#define VehicleType Vehicletype
 #define RELATIVEIMGPATH "./"
 #define RELATIVEBUILDINGSPATH "./"
 

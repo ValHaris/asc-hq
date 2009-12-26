@@ -57,7 +57,7 @@ const BuildingType* getBuildingType( int id )
    return buildingTypeRepository.getObject_byID( id );   
 }
 
-const Vehicletype* getUnitType( int id )
+const VehicleType* getUnitType( int id )
 {
    return vehicleTypeRepository.getObject_byID( id );   
 }
@@ -171,7 +171,7 @@ void setLocalizedContainerName( GameMap* map, const MapCoordinate& pos, const st
    if ( !map )
       return;
    
-   tfield* fld = map->getField( pos );
+   MapField* fld = map->getField( pos );
    if ( !fld )
       return;
    

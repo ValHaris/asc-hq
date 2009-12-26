@@ -79,7 +79,7 @@ GameActionID RemoveObject::getID() const
 
 ActionResult RemoveObject::runAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
@@ -104,7 +104,7 @@ ActionResult RemoveObject::runAction( const Context& context )
 
 ActionResult RemoveObject::undoAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    

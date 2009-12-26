@@ -78,7 +78,7 @@ TechWidget :: TechWidget( PG_Widget* parent, const PG_Point& pos, int width, con
 
 bool TechWidget::info()
 {
-   const Vehicletype* vt = vehicleTypeRepository.getObject_byID( tech->relatedUnitID );
+   const VehicleType* vt = vehicleTypeRepository.getObject_byID( tech->relatedUnitID );
    if ( vt )
       unitInfoDialog( vt );
    return true;
@@ -93,7 +93,7 @@ ASCString TechWidget::getName() const
 
 void TechWidget::display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
 {
-   Vehicletype* vt = NULL;
+   VehicleType* vt = NULL;
    if ( tech->relatedUnitID > 0 )
       if ( (vt = vehicleTypeRepository.getObject_byID( tech->relatedUnitID ))) {
          if ( !getClippingSurface().valid() )

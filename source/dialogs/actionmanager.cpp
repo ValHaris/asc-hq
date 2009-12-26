@@ -63,7 +63,7 @@ class ActionSelectionWidget: public SelectionWidget
          
          const UnitCommand* uc = dynamic_cast<const UnitCommand*>(&action);
          if ( uc != NULL && uc->getUnitTypeID() > 0 ) {
-            Vehicletype* vt = vehicleTypeRepository.getObject_byID( uc->getUnitTypeID() );
+            VehicleType* vt = vehicleTypeRepository.getObject_byID( uc->getUnitTypeID() );
             if ( vt ) {
                PG_Widget* w = new VehicleTypeImage( this, PG_Point( 25, 0), vt, map->getCurrentPlayer() );
                offset += w->Width() + 5;

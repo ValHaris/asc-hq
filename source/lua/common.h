@@ -29,14 +29,14 @@
 class GameMap;
 class ObjectType;
 class BuildingType;
-class Vehicletype;
+class VehicleType;
 class TerrainType;
 
 extern GameMap* getActiveMap();
 
 extern const ObjectType* getObjectType( int id );
 extern const BuildingType* getBuildingType( int id );
-extern const Vehicletype* getUnitType( int id );
+extern const VehicleType* getUnitType( int id );
 extern const TerrainType* getTerrainType( int id );
 
 class StringArray {

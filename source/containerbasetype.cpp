@@ -144,8 +144,8 @@ void ContainerBaseType :: TransportationIO :: runTextIO ( PropertyContainer& pc 
    pc.addInteger( "DockingHeightRel", dockingHeight_rel, -100 );
    if ( pc.find( "RequireUnitFunction" )) {
       int r = 0;
-      pc.addTagInteger( "RequireUnitFunction", r, Vehicletype::legacyVehicleFunctionNum, vehicleAbilities, 0 );
-      requiresUnitFeature = Vehicletype::convertOldFunctions(r, pc.getFileName() );
+      pc.addTagInteger( "RequireUnitFunction", r, VehicleType::legacyVehicleFunctionNum, vehicleAbilities, 0 );
+      requiresUnitFeature = VehicleType::convertOldFunctions(r, pc.getFileName() );
    } else
       if ( pc.find( "RequiresUnitFeature" ) || !pc.isReading() )
          pc.addTagArray( "RequiresUnitFeature", requiresUnitFeature, ContainerBaseType::functionNum, containerFunctionTags );
@@ -245,7 +245,7 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
 }
 
 
-bool ContainerBaseType :: vehicleFit ( const Vehicletype* fzt ) const
+bool ContainerBaseType :: vehicleFit ( const VehicleType* fzt ) const
 {
    if ( maxLoadableUnits > 0 )
       if ( maxLoadableWeight > 0 )
@@ -346,7 +346,7 @@ void ContainerBaseType :: TransportationIO :: read ( tnstream& stream )
    dockingHeight_rel = stream.readInt();
    if ( version <= 2 ) {
       int r = stream.readInt();
-      requiresUnitFeature = Vehicletype::convertOldFunctions(r, stream.getLocation());
+      requiresUnitFeature = VehicleType::convertOldFunctions(r, stream.getLocation());
    } else
       stream.readBitset( requiresUnitFeature );
       

@@ -98,7 +98,7 @@ bool OverviewMapHolder::updateField( const MapCoordinate& pos )
 {
    SPoint imgpos = OverviewMapImage::map2surface( pos );
 
-   tfield* fld = map.getField( pos );
+   MapField* fld = map.getField( pos );
    VisibilityStates visi = fieldVisibility( fld, map.getPlayerView() );
    if ( visi == visible_not ) {
       OverviewMapImage::fill ( overviewMapImage, imgpos, 0xff545454 );
@@ -109,7 +109,7 @@ bool OverviewMapHolder::updateField( const MapCoordinate& pos )
 
          int w = fld->getWeather();
          fld->typ->getQuickView()->blit( overviewMapImage, imgpos );
-         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+         for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
             if ( visi > visible_ago || i->typ->visibleago )
                i->getOverviewMapImage( w )->blit( overviewMapImage, imgpos );
 
@@ -975,7 +975,7 @@ void GameMap :: cleartemps( int b, int value )
 
 void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
 {
-   field = new tfield[x*y];
+   field = new MapField[x*y];
    for ( int i = 0; i < x*y; i++ ) {
       if ( terrain ) {
          field[i].typ = terrain;
@@ -994,7 +994,7 @@ void GameMap :: calculateAllObjects ( void )
    calculateallobjects( this );
 }
 
-tfield*  GameMap :: getField(int x, int y)
+MapField*  GameMap :: getField(int x, int y)
 {
    if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
       return NULL;
@@ -1002,7 +1002,7 @@ tfield*  GameMap :: getField(int x, int y)
       return (   &field[y * xsize + x] );
 }
 
-const tfield*  GameMap :: getField(int x, int y) const
+const MapField*  GameMap :: getField(int x, int y) const
 {
    if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
       return NULL;
@@ -1011,7 +1011,7 @@ const tfield*  GameMap :: getField(int x, int y) const
 }
 
 
-tfield*  GameMap :: getField(const MapCoordinate& pos )
+MapField*  GameMap :: getField(const MapCoordinate& pos )
 {
    return getField ( pos.x, pos.y );
 }
@@ -1226,7 +1226,7 @@ const Vehicle* GameMap :: getUnit ( int nwid, bool consistencyCheck ) const
 
 Vehicle* GameMap :: getUnit ( int x, int y, int nwid )
 {
-   tfield* fld  = getField ( x, y );
+   MapField* fld  = getField ( x, y );
    if ( !fld )
       return NULL;
 
@@ -1247,7 +1247,7 @@ ContainerBase* GameMap::getContainer ( int nwid )
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      tfield* fld = getField(x,y);
+      MapField* fld = getField(x,y);
       if ( !fld )
          return NULL;
 
@@ -1262,7 +1262,7 @@ const ContainerBase* GameMap::getContainer ( int nwid ) const
    else {
       int x = (-nwid) & 0xffff;
       int y = (-nwid) >> 16;
-      const tfield* fld = getField(x,y);
+      const MapField* fld = getField(x,y);
       if ( !fld )
          return NULL;
 
@@ -1418,7 +1418,7 @@ void GameMap::endRound()
     for ( int i = 0; i < getPlayerCount(); ++i )
        if ( !getPlayer(i).exist() )
           playerMask |= 1 << i;
-    tfield::resetView(this,playerMask);
+    MapField::resetView(this,playerMask);
 
     if ( getgameparameter( cgp_objectGrowthMultiplier) > 0 )
        objectGrowth();
@@ -1434,17 +1434,17 @@ int GameMap::random( int max )
 
 void GameMap::objectGrowth()
 {
-   typedef vector< pair<tfield*,int> > NewObjects;
-   map<tfield*,int> remainingGrowthTime;
+   typedef vector< pair<MapField*,int> > NewObjects;
+   map<MapField*,int> remainingGrowthTime;
 
    NewObjects newObjects;
    for ( int y = 0; y < ysize; ++y )
       for ( int x = 0; x < xsize; ++x ) {
-          tfield* fld = getField( x, y );
-          for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i)
+          MapField* fld = getField( x, y );
+          for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i)
              if ( i->typ->growthRate > 0 )
                 for ( int d = 0; d < 6; ++d ) {
-                   tfield* fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
+                   MapField* fld2 = getField ( getNeighbouringFieldCoordinate( MapCoordinate(x,y), d ));
                    if ( fld2 ) 
                       if ( i->typ->growOnUnits || ((!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ))
                         if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) 
@@ -1677,19 +1677,19 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
   int newx = xsize + left + right;
   int newy = ysize + top + bottom;
 
-  tfield* newfield = new tfield [ newx * newy ];
+  MapField* newfield = new MapField [ newx * newy ];
   for ( int i = 0; i < newx * newy; i++ )
      newfield[i].setMap ( this );
 
   int x;
   for ( x = ox1; x < ox2; x++ )
      for ( int y = oy1; y < oy2; y++ ) {
-        tfield* org = getField ( x, y );
-        tfield* dst = &newfield[ (x + left) + ( y + top ) * newx];
+        MapField* org = getField ( x, y );
+        MapField* dst = &newfield[ (x + left) + ( y + top ) * newx];
         *dst = *org;
      }
 
-  tfield defaultfield;
+  MapField defaultfield;
   defaultfield.setMap ( this );
   defaultfield.typ = getterraintype_byid ( 30 )->weather[0];
 
@@ -1765,12 +1765,12 @@ const ObjectType* GameMap :: getobjecttype_byid ( int id ) const
 }
 
 
-Vehicletype* GameMap :: getvehicletype_byid ( int id )
+VehicleType* GameMap :: getvehicletype_byid ( int id )
 {
    return vehicleTypeRepository.getObject_byID ( id );
 }
 
-const Vehicletype* GameMap :: getvehicletype_byid ( int id ) const
+const VehicleType* GameMap :: getvehicletype_byid ( int id ) const
 {
    return vehicleTypeRepository.getObject_byID ( id );
 }
@@ -1802,7 +1802,7 @@ ObjectType* GameMap :: getobjecttype_bypos ( int pos )
    return objectTypeRepository.getObject_byPos ( pos );
 }
 
-Vehicletype* GameMap :: getvehicletype_bypos ( int pos )
+VehicleType* GameMap :: getvehicletype_bypos ( int pos )
 {
    return vehicleTypeRepository.getObject_byPos ( pos );
 }

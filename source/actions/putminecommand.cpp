@@ -113,7 +113,7 @@ ActionResult PutMineCommand::searchFields()
 
 void PutMineCommand :: fieldChecker( const MapCoordinate& pos )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return;
    
@@ -149,7 +149,7 @@ void PutMineCommand :: fieldChecker( const MapCoordinate& pos )
 
 void PutMineCommand :: setCreationTarget( const MapCoordinate& target, MineTypes mineType )
 {
-   tfield* fld = getMap()->getField(target);
+   MapField* fld = getMap()->getField(target);
    
    if( !fld )
       throw ActionResult(21002);
@@ -165,7 +165,7 @@ void PutMineCommand :: setCreationTarget( const MapCoordinate& target, MineTypes
 
 void PutMineCommand :: setRemovalTarget( const MapCoordinate& target )
 {
-   tfield* fld = getMap()->getField(target);
+   MapField* fld = getMap()->getField(target);
    
    if( !fld )
       throw ActionResult(21002);

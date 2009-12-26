@@ -459,7 +459,7 @@ void   tspfldloaders::writefields ( void )
 
    do {
       cnt2 = 0; 
-      tfield* fld = &spfld->field[l];
+      MapField* fld = &spfld->field[l];
       /*
 
       RLE encoding not supported any more, since tfield is becomming too complex
@@ -565,7 +565,7 @@ void   tspfldloaders::writefields ( void )
          stream->writeInt ( objectstreamversion );
 
          stream->writeInt ( fld->mines.size() );
-         for ( tfield::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); m++  ) {
+         for ( MapField::MineContainer::iterator m = fld->mines.begin(); m != fld->mines.end(); m++  ) {
             stream->writeInt ( m->type );
             stream->writeInt ( m->strength );
             stream->writeInt ( m->lifetimer );
@@ -575,7 +575,7 @@ void   tspfldloaders::writefields ( void )
 
          stream->writeInt ( fld->objects.size() );
 
-         for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++  ) {
+         for ( MapField::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++  ) {
             stream->writeInt ( 1 ); // was: pointer to type
             stream->writeInt ( o->damage );
             stream->writeInt ( o->dir );
@@ -621,10 +621,10 @@ void tspfldloaders::readfields ( void )
       displaymessage ( "Could not allocate memory for map ",2);
 
    int l = 0;
-   tfield* lfld = NULL;
+   MapField* lfld = NULL;
 
    do {
-      tfield* fld2;
+      MapField* fld2;
 
       if (cnt2 == 0) { 
 
@@ -802,7 +802,7 @@ void tspfldloaders::readfields ( void )
          }
 
          if (b4 & csm_resources ) {
-            fld2->resourceview = new tfield::Resourceview;
+            fld2->resourceview = new MapField::Resourceview;
             fld2->resourceview->visible = stream->readChar();
             for ( int i = 0; i < 8; i++ )
                fld2->resourceview->fuelvisible[i] = stream->readChar();
@@ -845,7 +845,7 @@ void   tspfldloaders::chainitems ( GameMap* actmap )
    int i = 0;
    for (int y = 0; y < actmap->ysize; y++)
       for (int x = 0; x < actmap->xsize; x++) {
-          tfield* fld = &actmap->field[i];
+          MapField* fld = &actmap->field[i];
           fld->setparams();
           i++;
       }
@@ -1060,7 +1060,7 @@ GameMap* tmaploaders::loadmap ( const ASCString& name )
 
 
 
-void   tsavegameloaders::savegame( pnstream strm, GameMap* gamemap, bool writeReplays )
+void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeReplays )
 {
    PackageManager::storeData( gamemap );
    
@@ -1108,7 +1108,7 @@ GameMap* tsavegameloaders::loadGameFromFile( const ASCString& filename )
    return gl.loadgame( &filestream );
 }
 
-GameMap*          tsavegameloaders::loadgame( pnstream strm )
+GameMap*          tsavegameloaders::loadgame( tnstream* strm )
 {
    stream = strm;
 
@@ -1190,7 +1190,7 @@ GameMap*          tsavegameloaders::loadgame( pnstream strm )
 
 
 
-int          tnetworkloaders::savenwgame( pnstream strm, const GameMap* gamemap )
+int          tnetworkloaders::savenwgame( tnstream* strm, const GameMap* gamemap )
 { 
    
    PackageManager::storeData( gamemap );
@@ -1231,7 +1231,7 @@ int          tnetworkloaders::savenwgame( pnstream strm, const GameMap* gamemap 
 
 
 
-GameMap*  tnetworkloaders::loadnwgame( pnstream strm )
+GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
 { 
    const char* name = "network game";
 
@@ -1511,7 +1511,7 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
       displaymessage( err.getMessage().c_str(), 1 );
       return NULL;
    } /* endcatch */
-   catch ( tcompressionerror err ) {
+   catch ( StreamCompressionError err ) {
       displaymessage( "The file %s is corrupted.\nPlease obtain a new copy of that file", 1, filename.c_str() );
       return NULL;
    }

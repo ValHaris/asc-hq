@@ -45,7 +45,7 @@
 
 
 
-extern SDL_RWops *SDL_RWFromStream( pnstream stream );
+extern SDL_RWops *SDL_RWFromStream( tnstream* stream );
 
 class RWOPS_Handler {
       SDL_RWops *rwo;
@@ -81,19 +81,19 @@ class CharBuf {
 
 
 
-class tcompressionerror : public ASCmsgException {
+class StreamCompressionError : public ASCmsgException {
    public:
-     tcompressionerror ( const ASCString& msg, int returncode ) : ASCmsgException ( msg )
+     StreamCompressionError ( const ASCString& msg, int returncode ) : ASCmsgException ( msg )
      {
         message += "\n the returncode is ";
         message += strrr ( returncode );
      };
 };
 
-class toutofmem : public ASCexception {
+class OutOfMemoryError : public ASCexception {
   public:
    int required;
-   toutofmem ( int m ) ;
+   OutOfMemoryError ( int m ) ;
 };
 
 class tbufferoverflow : public ASCexception {
@@ -148,7 +148,7 @@ class MemoryStreamCopy : public tnstream {
 
 
              public:
-               MemoryStreamCopy ( pnstream stream );
+               MemoryStreamCopy ( tnstream* stream );
                ~MemoryStreamCopy ( );
                void writedata ( const void* buf, int size );
                int  readdata  ( void* buf, int size, bool excpt = true );
@@ -172,8 +172,8 @@ class tmemorystreambuf {
            char* buf;
         public:
            tmemorystreambuf ( void );
-           void writetostream ( pnstream stream );
-           void readfromstream ( pnstream stram );
+           void writetostream ( tnstream* stream );
+           void readfromstream ( tnstream* stream );
            void clear() { used= 0; };
            int getMemoryFootprint() const { return allocated; };
            
@@ -296,37 +296,32 @@ class tlzwstreamcompression {
 };
 
 
-class t_compressor_stream_interface {
+class CompressionStreamInterface {
            public:
              virtual void writecmpdata ( const void* buf, int size ) = 0;
              virtual int readcmpdata ( void* buf, int size, bool excpt = true ) = 0;
-             virtual ~t_compressor_stream_interface() {};
+             virtual ~CompressionStreamInterface() {};
       };
-/*
-class t_compressor_2ndbuf_filter : public t_compressor_stream_interface {
-             t_compressor_stream_interface *stream;
-             typedef deque<char> CDQ;
-             queue<char, CDQ> _queue;
-           public:
-             t_compressor_2ndbuf_filter ( t_compressor_stream_interface* strm );
-             virtual void writecmpdata ( const void* buf, int size );
-             virtual int readcmpdata ( void* buf, int size, bool excpt = true );
-             void insert_data_into_queue ( const void* buf, int size );
-             virtual ~t_compressor_2ndbuf_filter() {};
-};
-*/
 
-typedef t_compressor_stream_interface *p_compressor_stream_interface;
+
+class CompressionStreamAdapter : public CompressionStreamInterface {
+   private:
+      tnstream* stream;
+   public:
+      CompressionStreamAdapter( tnstream* compressedStream );
+      virtual void writecmpdata ( const void* buf, int size );
+      virtual int readcmpdata ( void* buf, int size, bool excpt = true );
+};
 
 class PrivateCompressionData;
 
 class libbzip_compression {
-            p_compressor_stream_interface stream;
+            CompressionStreamInterface* stream;
             PrivateCompressionData* data;
          public:
              void close_compression ( void );
              void writedata ( const void* buf, int size );
-             libbzip_compression ( p_compressor_stream_interface strm );
+             libbzip_compression ( CompressionStreamInterface* strm );
              virtual ~libbzip_compression ( );
 
 };
@@ -334,11 +329,11 @@ class libbzip_compression {
 class PrivateDecompressionData;
 
 class libbzip_decompression {
-            p_compressor_stream_interface stream;
+            CompressionStreamInterface* stream;
             PrivateDecompressionData* data;
          public:
              int  readdata  ( void* buf, int size, bool excpt = true  );
-             libbzip_decompression ( p_compressor_stream_interface strm );
+             libbzip_decompression ( CompressionStreamInterface* strm );
              virtual ~libbzip_decompression ( );
 
 };
@@ -348,7 +343,7 @@ class libbzip_decompression {
 
 
 
-class tanycompression : public t_compressor_stream_interface, public tlzwstreamcompression {
+class tanycompression : public CompressionStreamInterface, public tlzwstreamcompression {
 
                             typedef deque<char> CDQ;
                             queue<char, CDQ> _queue;
@@ -372,18 +367,6 @@ class tanycompression : public t_compressor_stream_interface, public tlzwstreamc
                              ~tanycompression ( );
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*
-class tn_lzw_bufstream : public tnbufstream, protected tlzwstreamcompression {
-                            public:
-                              void writedata ( const void* buf, int size );
-                              int  readdata  ( void* buf, int size, bool excpt = true  );
-                              int readlzwdata ( void* buf, int size, bool excpt = true );
-                              void writelzwdata ( const void* buf, int size );
-                              ~tn_lzw_bufstream();
-                        };
-*/
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -551,6 +534,80 @@ class tfindfile {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/** Data written to this stream will be encoded similar to base64 and can be retrieved as a string
+ *  \see ASCIIDecodingStream
+ */
+class ASCIIEncodingStream : public tnstream {
+   private:
+      int shift;
+      unsigned char buf;
+
+      ASCString result;
+   public:
+      ASCIIEncodingStream();
+
+      virtual void writedata ( const void* buf, int size );
+      virtual int  readdata  ( void* buf, int size, bool excpt = true );
+
+       void put( char c );
+       void flush();
+       ASCString getResult();
+};
+
+/** Reading data from an ASCII encoded String
+ *  \see  ASCIIEncodingStream
+ */
+class ASCIIDecodingStream : public tnstream {
+   private:
+      int shift;
+      unsigned char buf;
+
+      int length;
+      ASCString data;
+
+      int reverse[256];
+
+      void generateTable();
+
+      int get();
+   public:
+      ASCIIDecodingStream( const ASCString& data);
+      virtual void writedata ( const void* buf, int size );
+      virtual int  readdata  ( void* buffer, int size, bool excpt = true );
+};
+
+/**
+ * Compresses data transparently into another stream (using bzip2 compression)
+ * \see StreamDecompressionFilter
+ */
+class StreamCompressionFilter : public tnstream {
+      CompressionStreamAdapter adapter;
+      libbzip_compression compressor;
+      bool closed;
+   public:
+      StreamCompressionFilter( tnstream* outputstream );
+      virtual void writedata ( const void* buf, int size );
+      virtual int  readdata  ( void* buf, int size, bool excpt = true );
+      void close();
+      ~StreamCompressionFilter();
+};
+
+/**
+ * Deompresses data from a compressed stream (using bzip2 compression)
+ * \see StreamCompressionFilter
+ */
+class StreamDecompressionFilter : public tnstream {
+      CompressionStreamAdapter adapter;
+      libbzip_decompression decompressor;
+
+   public:
+      StreamDecompressionFilter( tnstream* inputstream );
+      virtual void writedata ( const void* buf, int size ) ;
+      virtual int  readdata  ( void* buf, int size, bool excpt = true );
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "basetemp.h"
 

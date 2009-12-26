@@ -148,7 +148,7 @@ void ammoCounter( const ContainerBase* c, map<int,int>& amount )
 }
 
 
-void showCargoSummary( tfield* fld )
+void showCargoSummary( MapField* fld )
 {
    if ( !fld->vehicle ) {
       infoMessage( "Please select a unit");
@@ -230,9 +230,9 @@ void resourceAnalysis()
 void showUnitEndurance()
 {
    
-   vector<Vehicletype*> units;
+   vector<VehicleType*> units;
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
-      Vehicletype* vt = vehicleTypeRepository.getObject_byPos(i);
+      VehicleType* vt = vehicleTypeRepository.getObject_byPos(i);
       if ( vt && (vt->movemalustyp == MoveMalusType::medium_aircraft || 
            vt->movemalustyp == MoveMalusType::light_aircraft  ||
            vt->movemalustyp == MoveMalusType::heavy_aircraft  ||
@@ -242,7 +242,7 @@ void showUnitEndurance()
    sort( units.begin(), units.end(), vehicleComp );
    
    ASCString s;
-   for ( vector<Vehicletype*>::iterator i = units.begin(); i != units.end(); ++i )
+   for ( vector<VehicleType*>::iterator i = units.begin(); i != units.end(); ++i )
    {
       ASCString u;
       ASCString range;
@@ -316,7 +316,7 @@ void createUnitCostList()
 {
    cout << "name;id;unitset id;new cost E;new cost M;old cost E;old cost M\n";
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
-      Vehicletype* v = vehicleTypeRepository.getObject_byPos(i);
+      VehicleType* v = vehicleTypeRepository.getObject_byPos(i);
       Resources oldc = v->calcProductionsCost();
       Resources newc = v->calcProductionsCost();
       

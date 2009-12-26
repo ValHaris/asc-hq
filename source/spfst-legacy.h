@@ -39,7 +39,7 @@
   extern GameMap* actmap; 
 
 //! returns the field at the given coordinates
-extern tfield* getfield(int x, int y);
+extern MapField* getfield(int x, int y);
 
 
 

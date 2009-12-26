@@ -71,7 +71,7 @@ int ReplayMapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const 
    bool view1 = fieldvisiblenow ( getfield ( start.x, start.y ), actmap->getPlayerView() );
    
    int view2;
-   tfield* fld2 = actmap->getField ( dest );
+   MapField* fld2 = actmap->getField ( dest );
    
    if ( actmap->player[actmap->getPlayerView()].diplomacy.sharesView( vehicle->getOwner() )) 
       view2 = fieldVisibility ( fld2, actmap->getPlayerView() );

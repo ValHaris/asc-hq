@@ -222,7 +222,7 @@ void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,
                pipeline->display( fieldInfo.surface, pos, o->dir, 0 );
             else {
                bool objfound = false;
-               for ( tfield::ObjectContainer::iterator i = fieldInfo.fld->objects.begin(); i != fieldInfo.fld->objects.end(); ++i )
+               for ( MapField::ObjectContainer::iterator i = fieldInfo.fld->objects.begin(); i != fieldInfo.fld->objects.end(); ++i )
                   if ( i->typ->fieldModification[0].terrain_or.test( cbpipeline ) ) {
                      pipeline->display( fieldInfo.surface, pos, i->dir, 0 );
                      objfound = true;
@@ -358,7 +358,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
       if ( !(layer & 1 ))
          binaryUnitHeight = 1 << (( layer-2)/2);
    
-   tfield* fld = fieldInfo.fld;
+   MapField* fld = fieldInfo.fld;
 
    if ( layer == 0 && fieldInfo.visibility >= visible_ago )
       fld->typ->paint ( fieldInfo.surface, pos );
@@ -381,7 +381,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
 
    // display objects
    if ( layer & 1 )
-      for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
+      for ( MapField::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ ) {
          int h = o->typ->imageHeight;
          if ( fieldInfo.visibility > visible_ago || (o->typ->visibleago && fieldInfo.visibility >= visible_ago ))
             if (  h >= ((layer-1)/2)*30 && h < (layer-1)/2*30+30 )
@@ -396,7 +396,7 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
       
       if ( fieldInfo.visibility == visible_all )
          if ( !fld->mines.empty() && layer == 7 ) {
-            for ( tfield::MineContainer::const_iterator i = fld->mines.begin(); i != fld->mines.end(); ++i )
+            for ( MapField::MineContainer::const_iterator i = fld->mines.begin(); i != fld->mines.end(); ++i )
                i->paint( fieldInfo.surface, pos );
          }
      

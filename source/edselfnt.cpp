@@ -72,7 +72,7 @@ bool mineComp( const MineType* v1, const MineType* v2 )
 }
 
 
-void sortItems( vector<Vehicletype*>& vec )
+void sortItems( vector<VehicleType*>& vec )
 {
    sort( vec.begin(), vec.end(), vehicleComp );
 }
@@ -131,13 +131,13 @@ void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const 
 
 
 
-int VehicleItem::place( GameMap* gamemap, const MapCoordinate& mc, const Vehicletype* v, int owner )
+int VehicleItem::place( GameMap* gamemap, const MapCoordinate& mc, const VehicleType* v, int owner )
 {
-   tfield* fld = gamemap->getField(mc);
+   MapField* fld = gamemap->getField(mc);
    if ( !fld )
       return -1;
 
-   const Vehicletype* veh = v;
+   const VehicleType* veh = v;
    
    if ( !veh )
       return -2;
@@ -257,15 +257,15 @@ bool ObjectItem::remove ( const MapCoordinate& mc ) const
 template<typename T> Surface BasicItem<T>::clippingSurface;
 int TerrainItem::place( const MapCoordinate& mc ) const
 {
-   tfield* fld = actmap->getField(mc);
+   MapField* fld = actmap->getField(mc);
    fld->typ = item->weather[0]; 
    fld->setWeather( selection.getWeather() );
    fld->setparams();
    for ( int d = 0; d < 6; ++d ) {
       MapCoordinate pos = getNeighbouringFieldCoordinate( mc, d );
-      tfield* fld = actmap->getField( pos );
+      MapField* fld = actmap->getField( pos );
       if ( fld ) 
-         for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
+         for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
             calculateobject( pos, false, i->typ, actmap );
    }
    return 0;
@@ -298,9 +298,9 @@ int MineItem::place( const MapCoordinate& mc ) const
 
 
 
-class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > {
-      typedef MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > Parent;
-      typedef MapItemTypeWidget< Vehicletype > WidgetType;
+class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< VehicleType > > {
+      typedef MapItemTypeWidgetFactory<MapItemTypeWidget< VehicleType > > Parent;
+      typedef MapItemTypeWidget< VehicleType > WidgetType;
        ContainerBase* container;
    protected:
       bool isFiltered( const ItemType& item ) {
@@ -366,11 +366,11 @@ void addCargo( ContainerBase* container )
 
 
 
-class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > {
-      typedef MapItemTypeWidgetFactory<MapItemTypeWidget< Vehicletype > > Parent;
-      typedef MapItemTypeWidget< Vehicletype > WidgetType;
+class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< VehicleType > > {
+      typedef MapItemTypeWidgetFactory<MapItemTypeWidget< VehicleType > > Parent;
+      typedef MapItemTypeWidget< VehicleType > WidgetType;
       ContainerBase* container;
-      const Vehicletype* selectedItem;
+      const VehicleType* selectedItem;
    protected:
       bool isFiltered( const ItemType& item ) {
          if ( Parent::isFiltered( item ))
@@ -396,7 +396,7 @@ class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< 
             
          const WidgetType* mapItemWidget = dynamic_cast<const WidgetType*>(widget);
          assert( mapItemWidget );
-         const Vehicletype* type = mapItemWidget->getItem();
+         const VehicleType* type = mapItemWidget->getItem();
          if ( type ) {
             selectedItem = type;
          }
@@ -407,7 +407,7 @@ class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< 
          itemMarked( widget );
       }
       
-      const Vehicletype* getSelectedVehicleType()
+      const VehicleType* getSelectedVehicleType()
       {
          return selectedItem;
       }
@@ -418,7 +418,7 @@ class ProductionItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< 
 class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::Object  {
    private:
       const ContainerBase* container;
-      const Vehicletype* selectedItem;
+      const VehicleType* selectedItem;
    protected:
       ContainerBase::Production::const_iterator it;
       ContainerBase::Production& production;
@@ -437,7 +437,7 @@ class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
       {
          if ( it != production.end() ) {
-            const Vehicletype* v = *(it++);
+            const VehicleType* v = *(it++);
             return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actmap->getCurrentPlayer() );
          } else
             return NULL;
@@ -450,7 +450,7 @@ class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::
             
          const VehicleTypeBaseWidget* mapItemWidget = dynamic_cast<const VehicleTypeBaseWidget*>(widget);
          assert( mapItemWidget );
-         const Vehicletype* type = mapItemWidget->getVehicletype();
+         const VehicleType* type = mapItemWidget->getVehicletype();
          if ( type ) {
             selectedItem = type;
          }
@@ -462,7 +462,7 @@ class AvailableProductionItemFactory: public SelectionItemFactory, public SigC::
          itemMarked( widget );
       }
 
-      const Vehicletype* getSelectedVehicleType()
+      const VehicleType* getSelectedVehicleType()
       {
          return selectedItem;
       }
@@ -494,7 +494,7 @@ class ProductionEditorWindow : public ASC_PG_Dialog {
 
       bool addOne()
       {
-         const Vehicletype* v = allTypesFactory->getSelectedVehicleType();
+         const VehicleType* v = allTypesFactory->getSelectedVehicleType();
          if ( !v )
             return false;
          
@@ -508,7 +508,7 @@ class ProductionEditorWindow : public ASC_PG_Dialog {
       
       bool removeOne()
       {
-         const Vehicletype* v = productionFactory->getSelectedVehicleType();
+         const VehicleType* v = productionFactory->getSelectedVehicleType();
          if ( !v )
             return false;
 

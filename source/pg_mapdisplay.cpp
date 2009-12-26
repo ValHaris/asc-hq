@@ -102,10 +102,10 @@ int  PG_MapDisplay :: displayMovingUnit ( const MapCoordinate3D& start, const Ma
          newstart.setNumericalHeight( newdest.getNumericalHeight() );
    }
    
-   tfield* fld1 = actmap->getField ( start );
+   MapField* fld1 = actmap->getField ( start );
    int view1 = fieldVisibility ( fld1, actmap->getPlayerView() );
 
-   tfield* fld2 = actmap->getField ( dest );
+   MapField* fld2 = actmap->getField ( dest );
    int view2 = fieldVisibility ( fld2, actmap->getPlayerView() );
 
    bool shareView;

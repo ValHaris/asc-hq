@@ -27,7 +27,7 @@ void testObjectConstruction()
    assertOrThrow( road != NULL );
    
    MapCoordinate pos ( 4,8);
-   tfield* fld = game->getField( pos );
+   MapField* fld = game->getField( pos );
    assertOrThrow( fld != NULL );
    
    assertOrThrow( fld->checkForObject( crystals ) != NULL );

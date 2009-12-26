@@ -120,7 +120,7 @@ ActionResult MoveUnit::runAction( const Context& context )
       wind.reset( new WindMovement ( vehicle ) );
    } 
    
-   tfield* oldfield = getMap()->getField( vehicle->getPosition() );
+   MapField* oldfield = getMap()->getField( vehicle->getPosition() );
 
    AStar3D::Path::iterator pos = pathToMove.begin();
    AStar3D::Path::iterator stop = pathToMove.end()-1;
@@ -192,7 +192,7 @@ ActionResult MoveUnit::runAction( const Context& context )
             to = getNeighbouringFieldCoordinate ( to, getdirection ( to, *next ));
          to.setnum ( to.x, to.y, next->getRealHeight() );
 
-         tfield* dest = getMap()->getField ( to );
+         MapField* dest = getMap()->getField ( to );
 
 
          if ( vehicle ) {
@@ -344,7 +344,7 @@ ActionResult MoveUnit::runAction( const Context& context )
       pos = next;
    }
 
-   tfield* fld = getMap()->getField ( pos->x, pos->y );
+   MapField* fld = getMap()->getField ( pos->x, pos->y );
 
    if ( vehicle ) {
 

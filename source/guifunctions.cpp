@@ -609,7 +609,7 @@ class PowerSwitch : public GuiFunction
       
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          if (!commandPending() )  {
-            tfield* fld = actmap->getField ( pos );
+            MapField* fld = actmap->getField ( pos );
             if ( fld->vehicle )
                return PowerGenerationSwitchCommand::avail( fld->vehicle, newState );
 
@@ -690,7 +690,7 @@ class UnitInfo : public GuiFunction
 
 bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   tfield* fld = actmap->getField(pos);
+   MapField* fld = actmap->getField(pos);
    if ( fld && fld->vehicle )
       if ( !commandPending() )
          if ( fld->vehicle != NULL)
@@ -732,7 +732,7 @@ bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subje
    if ( cancel )
       return true;
 
-   tfield* fld = actmap->getField(pos);
+   MapField* fld = actmap->getField(pos);
    if (!commandPending()) {
       if ( fld->vehicle )
          return DestructBuildingCommand::avail( fld->vehicle );
@@ -788,7 +788,7 @@ class OpenContainer : public GuiFunction
       static int containeractive;
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if ( fieldvisiblenow ( fld ) && fld->getContainer() ) {
             if ( !containeractive && !commandPending() ) {
                Player& player = fld->getContainer()->getMap()->player[fld->getContainer()->getOwner()];
@@ -805,7 +805,7 @@ class OpenContainer : public GuiFunction
       };
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
 
          cargoDialog( fld->getContainer() );
 
@@ -985,7 +985,7 @@ class RepairUnit : public GuiFunction
 {
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if (!commandPending()) {
             if ( fld && fld->vehicle )
                if (fld->vehicle->getOwner() == actmap->actplayer )
@@ -1026,7 +1026,7 @@ class RepairUnit : public GuiFunction
             if ( NewGuiHost::pendingCommand ) {
                RepairUnitCommand* service = dynamic_cast<RepairUnitCommand*>(NewGuiHost::pendingCommand);
                if ( service ) {
-                  tfield* fld = actmap->getField(pos);
+                  MapField* fld = actmap->getField(pos);
                   if ( fld->vehicle ) {
                      service->setTarget( fld->vehicle );
                      ActionResult res = service->execute( createContext ( actmap ));
@@ -1050,7 +1050,7 @@ class RepairUnit : public GuiFunction
       };
 
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if ( fld && fld->vehicle && NewGuiHost::pendingCommand  ) {
             RepairUnitCommand* service = dynamic_cast<RepairUnitCommand*>(NewGuiHost::pendingCommand);
             if ( service ) {
@@ -1070,7 +1070,7 @@ class RefuelUnitCommand : public GuiFunction
 {
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if (!commandPending()) {
             if ( fld && fld->getContainer() )
                if (fld->getContainer()->getOwner() == actmap->actplayer )
@@ -1103,7 +1103,7 @@ class RefuelUnitCommand : public GuiFunction
             for ( ServiceTargetSearcher::Targets::const_iterator i = destinations.begin(); i != destinations.end(); ++i ) {
                MapCoordinate targetPos = (*i)->getPosition();
                if ( targetPos != srcPos ) {
-                  tfield* fld = subject->getMap()->getField ( targetPos );
+                  MapField* fld = subject->getMap()->getField ( targetPos );
                   fieldCount++;
                   fld->a.temp = 1;
                }
@@ -1152,7 +1152,7 @@ class RefuelUnitDialogCommand : public GuiFunction
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          if ( NewGuiHost::pendingCommand ) {
             ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);
-            tfield* fld = actmap->getField(pos);
+            MapField* fld = actmap->getField(pos);
             if ( service && fld->getContainer() ) {
                const ServiceTargetSearcher::Targets& destinations = service->getDestinations();
                return find( destinations.begin(), destinations.end(), fld->getContainer() ) != destinations.end();
@@ -1166,7 +1166,7 @@ class RefuelUnitDialogCommand : public GuiFunction
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          ServiceCommand* service = dynamic_cast<ServiceCommand*>(NewGuiHost::pendingCommand);
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          service->setDestination( fld->getContainer() );
          ammoTransferWindow( service->getRefueller(), actmap->getField(pos)->getContainer(), service );
 
@@ -1194,7 +1194,7 @@ class PutMine : public GuiFunction
 {
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if ( !commandPending())
             if ( fld->vehicle )
                return PutMineCommand::avail(fld->vehicle);
@@ -1206,7 +1206,7 @@ class PutMine : public GuiFunction
       };
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if ( fld->vehicle ) {
             auto_ptr<PutMineCommand> poc ( new PutMineCommand( actmap->getField(pos)->vehicle ));
             ActionResult res = poc->searchFields();
@@ -1593,7 +1593,7 @@ class BuildObject : public GuiFunction
 
 bool BuildObject::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   tfield* fld = actmap->getField(pos);
+   MapField* fld = actmap->getField(pos);
    if (!commandPending())
       if ( fld && fld->vehicle )
          return PutObjectCommand::avail(fld->vehicle );
@@ -1602,7 +1602,7 @@ bool BuildObject::available( const MapCoordinate& pos, ContainerBase* subject, i
 
 void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   tfield* fld = actmap->getField(pos);
+   MapField* fld = actmap->getField(pos);
    if ( fld->vehicle ) {
       auto_ptr<PutObjectCommand> poc ( new PutObjectCommand( actmap->getField(pos)->vehicle ));
       ActionResult res =poc->searchFields();
@@ -1642,7 +1642,7 @@ class BuildVehicleCommand : public GuiFunction
 
 bool BuildVehicleCommand::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   tfield* fld = actmap->getField(pos);
+   MapField* fld = actmap->getField(pos);
    if (!commandPending())
       if ( fld && fld->vehicle )
          if (fld->vehicle->getOwner() == actmap->actplayer )
@@ -1670,7 +1670,7 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
       VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), subject, buildables, false );
       fsw.Show();
       fsw.RunModal();
-      const Vehicletype* v = fsw.getVehicletype();
+      const VehicleType* v = fsw.getVehicletype();
       if ( v ) {
 
          for ( ConstructUnitCommand::Producables::const_iterator i = buildables.begin(); i != buildables.end(); ++i )
@@ -1806,7 +1806,7 @@ class ConstructBuilding : public GuiFunction
 
 bool ConstructBuilding::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-   tfield* fld = actmap->getField(pos);
+   MapField* fld = actmap->getField(pos);
    if (!commandPending()) {
       if ( fld->vehicle )
          if ( ConstructBuildingCommand::avail( fld->vehicle ))
@@ -1843,7 +1843,7 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subje
    ConstructBuildingCommand* build = dynamic_cast<ConstructBuildingCommand*>(NewGuiHost::pendingCommand );
 
    if ( !build  ) {
-      tfield* fld = actmap->getField(pos);
+      MapField* fld = actmap->getField(pos);
 
 
       auto_ptr<ConstructBuildingCommand> cbc ( new ConstructBuildingCommand( fld->vehicle ));
@@ -1950,7 +1950,7 @@ class SelfDestructIcon : public GuiFunction
       static int containeractive;
    public:
       bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          ContainerBase* c = fld->getContainer();
          if ( fieldvisiblenow ( fld ) && c && !commandPending() && actmap->getPlayer(c).diplomacy.isAllied(actmap->actplayer))
             return DestructUnitCommand::avail( c );
@@ -1959,7 +1959,7 @@ class SelfDestructIcon : public GuiFunction
       };
 
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-         tfield* fld = actmap->getField(pos);
+         MapField* fld = actmap->getField(pos);
          if (choice_dlg("do you really want to destruct this unit?","~y~es","~n~o") == 1) {
             auto_ptr<DestructUnitCommand> destructor ( new  DestructUnitCommand( fld->getContainer() ));
             ActionResult res = destructor->execute( createContext( actmap ) );

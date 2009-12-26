@@ -36,7 +36,7 @@ const int ccbt_training = 150;
                          protected:
                               AI*               ai;
 
-                              const Vehicletype*      fzt;
+                              const VehicleType*      fzt;
                               int               weapthreat[8];
                               int               value;
 
@@ -45,7 +45,7 @@ const int ccbt_training = 150;
                               virtual int       getammunition( int i )  { return 1;   };
                               virtual int       getheight ( void )      { return 255; };
                           public:
-                              void              calc_threat_vehicletype ( const Vehicletype* _fzt );
+                              void              calc_threat_vehicletype ( const VehicleType* _fzt );
                               CalculateThreat_VehicleType ( AI* _ai ) { ai = _ai; };
                               virtual ~CalculateThreat_VehicleType() {};
                        };
@@ -63,7 +63,7 @@ const int ccbt_training = 150;
                        };
 
 
-void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( const Vehicletype* _fzt )
+void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( const VehicleType* _fzt )
 {
    fzt = _fzt;
 
@@ -190,7 +190,7 @@ void         CalculateThreat_Vehicle :: calc_threat_vehicle ( Vehicle* _eht )
 */
 }
 
-AiParameter::JobList AI::chooseJob ( const Vehicletype* typ )
+AiParameter::JobList AI::chooseJob ( const VehicleType* typ )
 {
    AiParameter::JobList jobList;
 
@@ -242,7 +242,7 @@ AiParameter::JobList AI::chooseJob ( const Vehicletype* typ )
 
 
 
-void  AI :: calculateThreat ( const Vehicletype* vt)
+void  AI :: calculateThreat ( const VehicleType* vt)
 {
    CalculateThreat_VehicleType ctvt ( this );
    ctvt.calc_threat_vehicletype( vt );
@@ -353,7 +353,7 @@ void AI :: calculateFieldInformation ( void )
    for ( int y = 0; y < activemap->ysize; y++ ) {
       checkKeys();
       for ( int x = 0; x < activemap->xsize; x++ ) {
-         tfield* fld = activemap->getField ( x, y );
+         MapField* fld = activemap->getField ( x, y );
          if ( config.wholeMapVisible || fieldvisiblenow ( fld, getPlayerNum() ) )
             if ( fld->vehicle && getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() )) {
                WeaponThreatRange wr ( this );
@@ -394,7 +394,7 @@ void AI :: calculateFieldInformation ( void )
 
          FieldInformation& fi = fieldInformation[y*getMap()->xsize+x];
          for ( int i = 0; i< sidenum; i++ ) {
-            tfield* f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
+            MapField* f = getMap()->getField ( getNeighbouringFieldCoordinate ( MapCoordinate(x,y), i ));
             if ( f && f->vehicle && f->vehicle->weapexist() && f->vehicle->color < 8*8 )
                fi.units[f->vehicle->color/8] += 1;
          }
@@ -418,7 +418,7 @@ void     AI :: calculateAllThreats( void )
    // Calculates the basethreats for all vehicle types
    if ( !baseThreatsCalculated ) {
       for ( int w = 0; w < vehicleTypeRepository.getNum(); w++) {
-         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos(w);
+         VehicleType* fzt = vehicleTypeRepository.getObject_byPos(w);
          if ( fzt )
             calculateThreat( fzt );
 
@@ -429,7 +429,7 @@ void     AI :: calculateAllThreats( void )
    // Some further calculations that only need to be done once.
    if ( maxTrooperMove == 0) {
       for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
+         VehicleType* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             if ( fzt->hasFunction( ContainerBaseType::ConquerBuildings  ) )
                if ( fzt->movement[log2(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
@@ -438,7 +438,7 @@ void     AI :: calculateAllThreats( void )
    }
    if ( maxTransportMove == 0 ) {
       for (int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
+         VehicleType* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             for ( int w = 0; w <= 7; w++) // cycle through all levels of height
                if (fzt->movement[w] > maxTransportMove)
@@ -452,7 +452,7 @@ void     AI :: calculateAllThreats( void )
          maxWeapDist[height] = 0; // It may be possible that there is no weapon to shoot to a specific height
 
          for ( int v = 0; v < vehicleTypeRepository.getNum(); v++) {
-            Vehicletype* fzt = vehicleTypeRepository.getObject_byPos( v );
+            VehicleType* fzt = vehicleTypeRepository.getObject_byPos( v );
             if ( fzt )
                for ( int w = 0; w < fzt->weapons.count ; w++)
                   if ( fzt->weapons.weapon[w].maxdistance > maxWeapDist[height] )
@@ -541,7 +541,7 @@ void AI :: Section :: init ( int _x, int _y, int xsize, int ysize, int _xp, int 
    for ( int y = y1; y <= y2; y++ )
       for ( int x = x1; x <= x2; x++ ) {
          absFieldThreat += ai->getFieldThreat ( x, y );
-         tfield* fld = ai->activemap->getField ( x, y );
+         MapField* fld = ai->activemap->getField ( x, y );
          if ( fld->vehicle && ai->getPlayer().diplomacy.isHostile( fld->vehicle->getOwner() ) ) {
             if ( !fld->vehicle->aiparam[ ai->getPlayerNum() ] )
                ai->calculateThreat ( fld->vehicle );
@@ -639,7 +639,7 @@ MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, m
    int potential = destinationCounter->operator[](pos);
    for ( int d = 0; d< 6; ++d ) {
       MapCoordinate m = getNeighbouringFieldCoordinate( pos, d );
-      tfield* fld = ai->getMap()->getField(m );
+      MapField* fld = ai->getMap()->getField(m );
       if ( fld && (fld->a.temp & height) ) {
          if ( destinationCounter->find( m ) == destinationCounter->end() )
             return m;
@@ -743,7 +743,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
 
                    for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                       for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
-                         tfield* fld = ai->getMap()->getField(xp, yp );
+                         MapField* fld = ai->getMap()->getField(xp, yp );
                          if ( fld->a.temp & h ) {
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {

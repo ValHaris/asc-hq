@@ -41,7 +41,7 @@ class ContainerConstControls {
           Bit 10: not researched yet
           Bit 11: can not be unloaded
       */
-      int unitProductionPrerequisites( const Vehicletype* type, bool internally ) const;
+      int unitProductionPrerequisites( const VehicleType* type, bool internally ) const;
 
 };
 
@@ -56,7 +56,7 @@ class ContainerControls : public ContainerConstControls {
       ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
 
       //! only to be used by the AI, this doesn't consume any resources, so the unit must be discarded
-      Vehicle* produceUnitHypothetically( const Vehicletype* type );
+      Vehicle* produceUnitHypothetically( const VehicleType* type );
 
 };
 

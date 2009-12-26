@@ -109,7 +109,7 @@ class FieldAddressing: protected PolygonPainterSquareCoordinate  {
       void setpointabs ( int x,  int y  );
 
       void setup();
-      friend Event* readOldEvent( pnstream stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
+      friend Event* readOldEvent( tnstream* stream, GameMap* gamemap, map<int,int>& eventTranslation, map<EventTriggered*,int>& eventTriggerEvents );
 };
 
 

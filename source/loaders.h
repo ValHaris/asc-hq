@@ -66,7 +66,7 @@ extern void  savereplay( GameMap* gamemap, int num );
 
 class  tspfldloaders {
        public:
-           pnstream        stream;
+           tnstream*        stream;
            GameMap*     spfld;
 
            static SigC::Signal1<void,GameMap*> mapLoaded; 
@@ -122,16 +122,16 @@ class  tgameloaders : public tspfldloaders {
 
 class tnetworkloaders : public tgameloaders {
         public:
-           GameMap*           loadnwgame ( pnstream strm );
-           int             savenwgame ( pnstream strm, const GameMap* gamemap );
+           GameMap*           loadnwgame ( tnstream* strm );
+           int             savenwgame ( tnstream* strm, const GameMap* gamemap );
 };
 
 class tsavegameloaders : public tgameloaders {
         public:
-           GameMap*        loadgame ( pnstream strm );
+           GameMap*        loadgame ( tnstream* strm );
            static GameMap*  loadGameFromFile ( const ASCString& name );
 
-           void            savegame ( pnstream strm, GameMap* gamemap, bool writeReplays = true );
+           void            savegame ( tnstream* strm, GameMap* gamemap, bool writeReplays = true );
 
            void            savegame ( GameMap* gamemap, const ASCString& name );
 };

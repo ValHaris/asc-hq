@@ -132,7 +132,7 @@ extern MineTypeRepository mineTypeRepository;
 extern SigC::Signal0<void> dataLoaderTicker;
 
 
-extern ItemRepositoryLoader<Vehicletype>  vehicleTypeRepository;
+extern ItemRepositoryLoader<VehicleType>  vehicleTypeRepository;
 extern ItemRepositoryLoader<TerrainType>  terrainTypeRepository;
 extern ItemRepositoryLoader<ObjectType>   objectTypeRepository;
 extern ItemRepositoryLoader<BuildingType> buildingTypeRepository;
@@ -183,7 +183,7 @@ class ItemFiltrationSystem {
 
 
          static bool isFiltered ( Category cat, int id );
-         static bool isFiltered( const Vehicletype* item );
+         static bool isFiltered( const VehicleType* item );
          static bool isFiltered( const BuildingType* item );
          static bool isFiltered( const ObjectType* item );
          static bool isFiltered( const TerrainType* item );

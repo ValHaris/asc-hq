@@ -24,7 +24,7 @@ void testTransferControl()
    assertOrThrow( veh != NULL );
    assertOrThrow( veh->getOwner() == 0 );
    
-   tfield* fld = game->getField(4,0);
+   MapField* fld = game->getField(4,0);
    assertOrThrow(  fieldvisiblenow(fld,0) );
    assertOrThrow( !fieldvisiblenow(fld,3) );
    

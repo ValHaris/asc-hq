@@ -95,7 +95,7 @@ GameActionID SpawnObject::getID() const
    return ActionRegistry::SpawnObject;
 }
 
-class ActionObjectRemovalStrategy : public tfield::ObjectRemovalStrategy {
+class ActionObjectRemovalStrategy : public MapField::ObjectRemovalStrategy {
       const Context& context;
       const ObjectType* originalObject;
       bool immediateRemoval;
@@ -104,11 +104,11 @@ class ActionObjectRemovalStrategy : public tfield::ObjectRemovalStrategy {
    : context( actionContext ), originalObject( object ), immediateRemoval(false)
       {}
       
-      virtual void removeObject( tfield* fld, const ObjectType* objectType ) {
+      virtual void removeObject( MapField* fld, const ObjectType* objectType ) {
          if ( objectType != originalObject )
             (new RemoveObject( fld->getMap(), fld->getPosition(), objectType->id ))->execute( context );
          else {
-            for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
+            for ( MapField::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
                if ( o->typ == objectType ) {
                   o = fld->objects.erase( o );
                } else
@@ -127,7 +127,7 @@ class ActionObjectRemovalStrategy : public tfield::ObjectRemovalStrategy {
 
 ActionResult SpawnObject::runAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    
@@ -154,7 +154,7 @@ ActionResult SpawnObject::runAction( const Context& context )
 
 ActionResult SpawnObject::undoAction( const Context& context )
 {
-   tfield* fld = getMap()->getField(pos);
+   MapField* fld = getMap()->getField(pos);
    if ( !fld )
       return ActionResult( 21002, pos );
    

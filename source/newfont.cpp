@@ -104,7 +104,7 @@ void toldfont::read ( tnstream& stream )
    groundline = stream.readChar();
 }
 
-pfont        loadfont( pnstream stream )
+pfont        loadfont( tnstream* stream )
 {
    toldfont     *font1;
    char *p;

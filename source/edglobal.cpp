@@ -220,7 +220,7 @@ const Placeable* SelectionHolder::getSelection()
    return currentItem;
 }
 
-void SelectionHolder::pickup ( tfield* fld )
+void SelectionHolder::pickup ( MapField* fld )
 {
    if ( fld->vehicle ) {
       VehicleItem v ( fld->vehicle->typ );
@@ -478,7 +478,7 @@ void execaction( int code)
              }
        break;
     case act_changeunitdir : {
-                      tfield* pf2 = getactfield();
+                      MapField* pf2 = getactfield();
                       if ( pf2 && pf2->vehicle  ) {
                          pf2->vehicle->direction++;
                          if (pf2->vehicle->direction >= sidenum )
@@ -519,7 +519,7 @@ void execaction( int code)
                                       selection.pickup( getactfield() ); 
        break;
     case act_deletething : {
-                         tfield* pf2 = getactfield();
+                         MapField* pf2 = getactfield();
                          mapsaved = false;
                          if (pf2 != NULL) {
                             if ( !removeCurrentItem() ) {
@@ -542,7 +542,7 @@ void execaction( int code)
                       }
         break;
     case act_deleteunit : {
-                         tfield* pf2 = getactfield();
+                         MapField* pf2 = getactfield();
                          if (pf2 != NULL)
                             if (pf2->vehicle != NULL) {
                                delete pf2->vehicle;
@@ -552,7 +552,7 @@ void execaction( int code)
                          }
         break;
      case act_deletebuilding : {
-                         tfield* pf2 = getactfield();
+                         MapField* pf2 = getactfield();
                          if (pf2 != NULL)
                             if (pf2->building != NULL) {
                                delete pf2->building;
@@ -563,7 +563,7 @@ void execaction( int code)
         break;
      case act_deleteobject :
      case act_deletetopmostobject : {
-                         tfield* pf2 = getactfield();
+                         MapField* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->removeObject( NULL );
@@ -572,7 +572,7 @@ void execaction( int code)
                       }
         break;
      case act_deleteallobjects : {
-                         tfield* pf2 = getactfield();
+                         MapField* pf2 = getactfield();
                          if ( pf2 ) {
                             mapsaved = false;
                             pf2->objects.clear( );
@@ -582,7 +582,7 @@ void execaction( int code)
                       }
         break;
      case act_deletemine : {
-                         tfield* pf2 = getactfield();
+                         MapField* pf2 = getactfield();
                          if (pf2 != NULL) {
                             mapsaved = false;
                             pf2->removemine( -1 );
@@ -593,7 +593,7 @@ void execaction( int code)
     case act_changeminestrength : changeminestrength();
        break;
     case act_changeunitvals :   {
-                 tfield* pf2 = getactfield();
+                 MapField* pf2 = getactfield();
                  if ( pf2  ) {
                     if ( pf2->vehicle ) {
                        changeunitvalues(pf2->vehicle);
@@ -949,7 +949,7 @@ void execaction_pg(int code)
     case act_dumpAllVehicleDefinitions: {
                                           StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all units" );
                                           for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
-                                             Vehicletype* veh = vehicleTypeRepository.getObject_byPos( i );
+                                             VehicleType* veh = vehicleTypeRepository.getObject_byPos( i );
                                              tn_file_buf_stream stream ( "Vehicle" + ASCString::toString( i ) + ".dump", tnstream::writing );
                                              PropertyWritingContainer pc ( "VehicleDump", stream );
                                              veh->runTextIO( pc );

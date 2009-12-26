@@ -211,7 +211,7 @@ class tunitattacksbuilding : public UnitAttacksSomething
 
 class tmineattacksunit : public tfight
 {
-      tfield* _mineposition;
+      MapField* _mineposition;
       Vehicle* _attackedunit;
       int _minenum;
       Vehicle** _pattackedunit;
@@ -254,7 +254,7 @@ class tmineattacksunit : public tfight
 
 class tunitattacksobject : public UnitAttacksSomething
 {
-      tfield*       targetField;
+      MapField*       targetField;
       Object*      _obji;
       int _x, _y;
 
@@ -349,7 +349,7 @@ extern bool attackpossible28( const Vehicle* attacker, const Vehicle* target, At
 extern bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWeap* attackweap = NULL );
 
 //! Can the vehicle drive across the field and destroy any unit there by moving over them?
-extern bool vehicleplattfahrbar( const Vehicle* vehicle, const tfield* field );
+extern bool vehicleplattfahrbar( const Vehicle* vehicle, const MapField* field );
 
 
 //! Some very old system to calculate the weapon efficiency over a given distance.

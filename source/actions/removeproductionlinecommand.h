@@ -33,7 +33,7 @@ class RemoveProductionLineCommand : public ContainerCommand {
    public:
       static bool avail ( const ContainerBase* factory );
       
-      static Resources resourcesNeeded( const Vehicletype* veh );
+      static Resources resourcesNeeded( const VehicleType* veh );
 
    private:
       RemoveProductionLineCommand( GameMap* map ) : ContainerCommand( map ), vehicleTypeId( -1 ) {};
@@ -53,9 +53,9 @@ class RemoveProductionLineCommand : public ContainerCommand {
    public:
       RemoveProductionLineCommand ( ContainerBase* item );
       
-      vector<const Vehicletype*> productionLinesBuyable();
+      vector<const VehicleType*> productionLinesBuyable();
             
-      void setRemoval( const Vehicletype* vehicleType );
+      void setRemoval( const VehicleType* vehicleType );
       
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;

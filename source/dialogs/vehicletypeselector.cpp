@@ -24,7 +24,7 @@
 #include "../spfst.h"
 #include "../unitset.h"
 
-VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype ), actplayer(player)
+VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), vt( vehicletype ), actplayer(player)
 {
    int col1 = 50;
    int lineheight  = 20;
@@ -81,7 +81,7 @@ Surface VehicleTypeBaseWidget::clippingSurface;
 
 
 
-VehicleTypeResourceWidget::VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, int lackingResources, const Resources& cost, const Player& player )
+VehicleTypeResourceWidget::VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, int lackingResources, const Resources& cost, const Player& player )
    : VehicleTypeBaseWidget( parent,pos, width, vehicletype, player )
 {
    int col1 = 50;
@@ -102,7 +102,7 @@ VehicleTypeResourceWidget::VehicleTypeResourceWidget( PG_Widget* parent, const P
 }
       
 
-VehicleTypeCountWidget::VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player, int number )
+VehicleTypeCountWidget::VehicleTypeCountWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player, int number )
    : VehicleTypeBaseWidget( parent,pos, width, vehicletype, player )
 {
    int col1 = 50;
@@ -115,7 +115,7 @@ VehicleTypeCountWidget::VehicleTypeCountWidget( PG_Widget* parent, const PG_Poin
    lbl->SetFontSize( lbl->GetFontSize() + 5 );
 }
 
-VehicleTypeCountLocateWidget::VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicletype* vehicletype, const Player& player, int number )
+VehicleTypeCountLocateWidget::VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player, int number )
    : VehicleTypeCountWidget( parent, pos, width, vehicletype, player, number )
 {
    int lineheight  = 20;
@@ -159,7 +159,7 @@ void VehicleTypeSelectionItemFactory::restart()
 SelectionWidget* VehicleTypeSelectionItemFactory::spawnNextItem( PG_Widget* parent, const PG_Point& pos )
 {
    if ( it != items.end() ) {
-      const Vehicletype* v = *(it++);
+      const VehicleType* v = *(it++);
       if ( showResourcesForUnit ) {
          Resources cost  = getCost(v);
 
@@ -174,7 +174,7 @@ SelectionWidget* VehicleTypeSelectionItemFactory::spawnNextItem( PG_Widget* pare
       return NULL;
 };
 
-SigC::Signal1<void,const Vehicletype*> VehicleTypeSelectionItemFactory::showVehicleInfo;
+SigC::Signal1<void,const VehicleType*> VehicleTypeSelectionItemFactory::showVehicleInfo;
 
 
 void VehicleTypeSelectionItemFactory::itemSelected( const SelectionWidget* widget, bool mouse )

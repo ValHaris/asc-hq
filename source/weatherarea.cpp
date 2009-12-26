@@ -396,7 +396,7 @@ void WeatherField::move(const Vector2D& vector) {
     posInArea.move(vector.getXComponent(), vector.getYComponent());
 }
 
-void WeatherField::setMapField(tfield* field) {
+void WeatherField::setMapField(MapField* field) {
     mapField = field;
 }
 

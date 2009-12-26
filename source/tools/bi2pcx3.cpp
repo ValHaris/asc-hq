@@ -216,7 +216,7 @@ int main(int argc, char *argv[] )
                   printf(".");
                fflush ( stdout );
       
-               Vehicletype* tnk = loadvehicletype ( c );
+               VehicleType* tnk = loadvehicletype ( c );
       
                if ( tnk->bipicture > 0 ) {
                   int n = tnk->bipicture;

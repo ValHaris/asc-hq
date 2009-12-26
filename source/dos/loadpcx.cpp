@@ -179,7 +179,7 @@ char loadpcxxy(char *name, char setpal, word x, word y)
 
 
 
-char loadpcxxy( pnstream stream, int x, int y, int setpalette )
+char loadpcxxy( tnstream* stream, int x, int y, int setpalette )
 {
    int read = 0;
 

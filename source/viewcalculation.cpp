@@ -60,7 +60,7 @@ void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, 
 void         tcomputeview::testfield( const MapCoordinate& mc )
 {
    int f = beeline(startPos, mc);
-   tfield* efield = gamemap->getField(mc);
+   MapField* efield = gamemap->getField(mc);
 
    if ( viewdist && ( f <= 15 ) && (gamemap->getgameparameter( cgp_disableDirectView) == 0  || f < 10 ) )
       efield->view[player].direct += mode;
@@ -211,7 +211,7 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
    for ( int a = 0; a < 4; a++)
       for (int b = 0; b < 6; b++)
          if ( building->typ->fieldExists ( BuildingType::LocalCoordinate( a, b ) )) {
-            tfield* efield = building->getField ( BuildingType::LocalCoordinate( a, b ) );
+            MapField* efield = building->getField ( BuildingType::LocalCoordinate( a, b ) );
             if ( minenview )
                efield->view[player].mine += _mode;
             efield->view[player].direct += _mode;
@@ -234,7 +234,7 @@ void         clearvisibility( GameMap* gamemap, int  reset )
    int l = 0;
    for ( int x = 0; x < gamemap->xsize ; x++)
          for ( int y = 0; y < gamemap->ysize ; y++) {
-            tfield* fld = &gamemap->field[l];
+            MapField* fld = &gamemap->field[l];
             memset ( fld->view, 0, sizeof ( fld->view ));
             l++;
          }
@@ -243,7 +243,7 @@ void         clearvisibility( GameMap* gamemap, int  reset )
 }
 
 
-VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial, int additionalEnemyJamming )
+VisibilityStates calcvisibilityfield ( GameMap* gamemap, MapField* fld, int player, int add, int initial, int additionalEnemyJamming )
 {
    if ( player == -1 )
       return visible_all;
@@ -302,7 +302,7 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, tfield* fld, int player
       return view;
 }
 
-int  evaluatevisibilityfield ( GameMap* gamemap, tfield* fld, int player, int add, int initial )
+int  evaluatevisibilityfield ( GameMap* gamemap, MapField* fld, int player, int add, int initial )
 {
    if ( player < 0 )
       return 0;
@@ -340,7 +340,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
       
          for ( int y = 0; y < gamemap->ysize; ++y )
             for ( int x = 0; x < gamemap->xsize; ++x ) {
-               tfield* fld = gamemap->getField(x,y);
+               MapField* fld = gamemap->getField(x,y);
                
                if ( firstLoop )
                   // first player in loop, so we save the current state as the 'original' state
@@ -359,7 +359,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
       ChangeView::ViewState viewState;
       for ( int y = 0; y < gamemap->ysize; ++y )
          for ( int x = 0; x < gamemap->xsize; ++x ) {
-            tfield* fld = gamemap->getField(x,y);
+            MapField* fld = gamemap->getField(x,y);
             if ( fld->visible != fld->temp3 ) {
                // we are running under action control, the change shall be done by the action and not here,
                // so we are undoing our change for the moment
@@ -416,7 +416,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
 
    for ( int yy = y1; yy <= y2; yy++ )
       for ( int xx = x1; xx <= x2; xx++ ) {
-         tfield* fld = gamemap->getField ( xx, yy );
+         MapField* fld = gamemap->getField ( xx, yy );
          int oldview = fld->visible;
          for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
             if ( gamemap->player[player].exist() ) {
@@ -483,7 +483,7 @@ int getPlayersWithSharedViewMask( int player, GameMap* gamemap )
 }
       
 #if 0
-VisibilityStates fieldVisibility( tfield* pe, int player, GameMap* gamemap, int additionalEnemyJamming )
+VisibilityStates fieldVisibility( MapField* pe, int player, GameMap* gamemap, int additionalEnemyJamming )
 {
    evaluatevisibilityfield( gamemap, pe, player, getPlayersWithSharedViewMask(player,gamemap), gamemap->getgameparameter ( cgp_initialMapVisibility ), additionalEnemyJamming );
 #ifdef karteneditor
@@ -528,7 +528,7 @@ void RecalculateAreaView::addView()
 
 void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
 {
-   tfield* fld = gamemap->getField(pos);
+   MapField* fld = gamemap->getField(pos);
    if ( !fld )
       return;
    
@@ -542,7 +542,7 @@ void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
 
 void RecalculateAreaView::addFieldView( const MapCoordinate& pos )
 {
-   tfield* fld = gamemap->getField(pos);
+   MapField* fld = gamemap->getField(pos);
    if ( !fld )
       return;
    

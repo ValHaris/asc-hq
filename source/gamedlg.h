@@ -35,10 +35,10 @@ extern void researchinfo ( void );
 extern void choosetechlevel ( void );
 
 
-class tfield;
+class MapField;
 class Context;
 
-extern void giveunitaway ( tfield* fld, const Context& context );
+extern void giveunitaway ( MapField* fld, const Context& context );
 
 extern void showGameParameters ( void );
 

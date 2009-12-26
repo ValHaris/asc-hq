@@ -44,10 +44,10 @@ bool BuildProductionLineCommand :: avail ( const ContainerBase* factory )
 }
 
 
-vector<const Vehicletype*> BuildProductionLineCommand :: productionLinesBuyable()
+vector<const VehicleType*> BuildProductionLineCommand :: productionLinesBuyable()
 {
 
-   vector<const Vehicletype*>  list;
+   vector<const VehicleType*>  list;
    
    ContainerBase* container = getContainer();
    
@@ -57,7 +57,7 @@ vector<const Vehicletype*> BuildProductionLineCommand :: productionLinesBuyable(
    Resources r = container->getResource( Resources(maxint, maxint, maxint), 1 );
    
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
-      Vehicletype* veh = getMap()->getvehicletype_bypos ( i );
+      VehicleType* veh = getMap()->getvehicletype_bypos ( i );
       if ( veh ) {
          bool found = find( container->getProduction().begin(), container->getProduction().end(), veh ) != container->getProduction().end();
          if ( container->baseType->vehicleFit ( veh ) && !found )
@@ -70,7 +70,7 @@ vector<const Vehicletype*> BuildProductionLineCommand :: productionLinesBuyable(
    return list;
 }
 
-Resources BuildProductionLineCommand :: resourcesNeeded( const Vehicletype* veh )
+Resources BuildProductionLineCommand :: resourcesNeeded( const VehicleType* veh )
 {
    return veh->productionCost * productionLineConstructionCostFactor;
 }
@@ -85,7 +85,7 @@ BuildProductionLineCommand :: BuildProductionLineCommand ( ContainerBase* contai
 
 
 
-void BuildProductionLineCommand::setProduction( const Vehicletype* vehicleType )
+void BuildProductionLineCommand::setProduction( const VehicleType* vehicleType )
 {
    if ( vehicleType ) {
       vehicleTypeId = vehicleType->id;
@@ -102,9 +102,9 @@ ActionResult BuildProductionLineCommand::go ( const Context& context )
    if ( !avail( getContainer() ))
       return ActionResult(22800);
    
-   const Vehicletype* vt = NULL;
-   vector<const Vehicletype*> types = productionLinesBuyable();
-   for ( vector<const Vehicletype*>::iterator i = types.begin(); i != types.end(); ++i )
+   const VehicleType* vt = NULL;
+   vector<const VehicleType*> types = productionLinesBuyable();
+   for ( vector<const VehicleType*>::iterator i = types.begin(); i != types.end(); ++i )
       if ( (*i)->id == vehicleTypeId )
          vt = *i;
    
@@ -135,7 +135,7 @@ ActionResult BuildProductionLineCommand::go ( const Context& context )
 
 ActionResult BuildProductionLineCommand::undoAction( const Context& context )
 {
-   Vehicletype* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
+   VehicleType* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
    if ( !vt )
       return ActionResult(22902);
          
@@ -181,7 +181,7 @@ ASCString BuildProductionLineCommand::getDescription() const
 {
    ASCString s = "Add production line for type ";
    
-   Vehicletype* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
+   VehicleType* vt = vehicleTypeRepository.getObject_byID( vehicleTypeId );
    if ( !vt )
       s += ASCString::toString(vehicleTypeId);
    else

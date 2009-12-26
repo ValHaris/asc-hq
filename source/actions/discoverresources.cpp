@@ -61,7 +61,7 @@ void DiscoverResources::ResourceViewState::write ( tnstream& stream ) const
    stream.writeInt( player );
 }
 
-void DiscoverResources::ResourceViewState::initFromField( const tfield* fld, int player )
+void DiscoverResources::ResourceViewState::initFromField( const MapField* fld, int player )
 {
    this->player = player;
    if ( fld->resourceview ) {
@@ -75,10 +75,10 @@ void DiscoverResources::ResourceViewState::initFromField( const tfield* fld, int
    }
 }
 
-void DiscoverResources::ResourceViewState::writeToField( tfield* fld )
+void DiscoverResources::ResourceViewState::writeToField( MapField* fld )
 {
    if ( !fld->resourceview ) 
-      fld->resourceview= new tfield::Resourceview;
+      fld->resourceview= new MapField::Resourceview;
    fld->resourceview->fuelvisible[player] = fuel;
    fld->resourceview->materialvisible[player] = material; 
    if ( visible )
@@ -116,11 +116,11 @@ GameActionID DiscoverResources::getID() const
 
 void  DiscoverResources::testField( const MapCoordinate& mc )
 {
-    tfield* fld = getMap()->getField ( mc );
+    MapField* fld = getMap()->getField ( mc );
     if ( !fld->building  ||  fld->building->color == getMap()->actplayer*8  ||  fld->building->color == 8*8)
        if ( !fld->vehicle  ||  fld->vehicle->color == getMap()->actplayer*8 ||  fld->vehicle->color == 8*8) {
           if ( !fld->resourceview )
-             fld->resourceview = new tfield::Resourceview;
+             fld->resourceview = new MapField::Resourceview;
 
           for ( int c = 0; c < 8; c++ )
              if ( shareview & (1 << c) ) {
@@ -160,7 +160,7 @@ ActionResult DiscoverResources::runAction( const Context& context )
 ActionResult DiscoverResources::undoAction( const Context& context )
 {
    for ( ViewState::iterator i = oldState.begin(); i != oldState.end(); ++i  ) {
-      tfield* fld = getMap()->getField( i->pos );
+      MapField* fld = getMap()->getField( i->pos );
       /*
       if ( fld->visible != newState[i->first] ) {
          ASCString msg;

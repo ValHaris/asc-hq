@@ -176,7 +176,7 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
       int dist = int(i->gval );
       if ( i->h.getNumericalHeight() == -1 ) {
-          tfield* fld = ai.getMap()->getField( i->h.x, i->h.y );
+          MapField* fld = ai.getMap()->getField( i->h.x, i->h.y );
           if ( fld->building && fld->building->color == veh->color )
              reachableBuildings[ dist ] = fld->building;
       }
@@ -518,7 +518,7 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
          int x = path[i].x;
          int y = path[i].y;
 
-         tfield* fld = getfield ( x, y );
+         MapField* fld = getfield ( x, y );
          if ( !fld)
             break;
 
@@ -594,7 +594,7 @@ int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, 
 
    AStar3D::Path::const_iterator lastmatch = pi;
    while ( pi != path.end() ) {
-      tfield* fld = getMap()->getField ( pi->x, pi->y );
+      MapField* fld = getMap()->getField ( pi->x, pi->y );
       bool ok = true;
       if ( fld->getContainer() ) {
          if ( pi+1 !=path.end() )
@@ -690,7 +690,7 @@ void AI :: calcReconPositions()
    for ( int y = 0; y < getMap()->ysize; y++ )
       for ( int x = 0; x < getMap()->xsize; x++ ) {
          FieldInformation& fi = getFieldInformation ( x, y );
-         tfield* fld = getMap()->getField(x,y);
+         MapField* fld = getMap()->getField(x,y);
          if ( fi.control == getPlayerNum() && !fld->building && ( !fld->vehicle || fld->vehicle->aiparam[getPlayerNum()]->getJob() == AiParameter::job_recon )) {
             CheckFieldRecon cfr ( this );
             int qual = cfr.run(x,y);
@@ -725,7 +725,7 @@ void AI ::  runReconUnits ( )
                int mindist = maxint;
                MapCoordinate mc;
                for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
-                  tfield* fld = getMap()->getField( i->first );
+                  MapField* fld = getMap()->getField( i->first );
                   if ( !fld->vehicle && !fld->building ) {
                      AStar ast ( getMap(), veh );
                      ast.findAllAccessibleFields( maxUnitMovement );
@@ -749,7 +749,7 @@ void AI ::  runReconUnits ( )
    }
 }
 
-AI::UnitDistribution::Group AI::getUnitDistributionGroup ( Vehicletype* vt )
+AI::UnitDistribution::Group AI::getUnitDistributionGroup ( VehicleType* vt )
 {
    switch ( chooseJob ( vt ).front() ) {
       case AiParameter::job_supply : return UnitDistribution::service;
@@ -885,7 +885,7 @@ void AI::production()
       Building* bld = *bli;
       for ( int i = 0; i < bld->getProduction().size(); i++ )
          if ( bld->getProduction()[i] && bld->vehicleUnloadable ( bld->getProduction()[i] )) {
-            const Vehicletype* typ = bld->getProduction()[i];
+            const VehicleType* typ = bld->getProduction()[i];
             float rating = 0;
             for ( int j = 0; j < aiValueTypeNum; j++ )
                rating += enemyValue[j] * typ->aiparam[getPlayerNum()]->threat.threat[j];

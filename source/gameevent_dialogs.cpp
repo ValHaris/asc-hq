@@ -345,7 +345,7 @@ void selectFields( FieldAddressing::Fields& fields )
 
 class UnitListFactory: public SelectionItemFactory, public SigC::Object  {
    public:
-      typedef list<const Vehicletype*> UnitList;
+      typedef list<const VehicleType*> UnitList;
    private:
       const UnitList& unitList;
    protected:
@@ -367,7 +367,7 @@ class UnitListFactory: public SelectionItemFactory, public SigC::Object  {
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos )
       {
          if ( it != unitList.end() ) {
-            const Vehicletype* v = *(it++);
+            const VehicleType* v = *(it++);
             return new VehicleTypeBaseWidget( parent, pos, parent->Width() - 15, v, actmap->getCurrentPlayer() );
          } else
             return NULL;
@@ -413,7 +413,7 @@ void ShowNewTechnology::showTechnology( const Technology* tech, const Technology
       if ( newGadgetsAvailable.units.size() ) {
          text += "\n#fontsize=15#\nNew units available for production:#fontsize=12#\n";
          
-         for ( std::list<const Vehicletype*>::const_iterator i = newGadgetsAvailable.units.begin(); i != newGadgetsAvailable.units.end(); ++i )
+         for ( std::list<const VehicleType*>::const_iterator i = newGadgetsAvailable.units.begin(); i != newGadgetsAvailable.units.end(); ++i )
             text += "#vehicletype=" + ASCString::toString((*i)->id) + "#\n";
       }
       
@@ -440,7 +440,7 @@ int selectunit ( int unitnetworkid )
   if ( list.empty() )
      return 0;
   
-  tfield* fld = actmap->getField( *list.begin() );
+  MapField* fld = actmap->getField( *list.begin() );
   if ( fld && fld->vehicle )
      return fld->vehicle->networkid;
   else
@@ -582,7 +582,7 @@ bool ReinforcementSelector::mark()
 
 void ReinforcementSelector::cut( const MapCoordinate& pos )
 {
-   tfield* fld = actmap->getField( pos );
+   MapField* fld = actmap->getField( pos );
    if (!fld )
       return;
 

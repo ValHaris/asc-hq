@@ -1,6 +1,13 @@
-//     $Id: loadjpg.h,v 1.2 2009-04-18 13:48:38 mbickel Exp $
+//     $Id: loadjpg.h,v 1.3 2009-12-26 18:45:02 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.2  2009-04-18 13:48:38  mbickel
+//      Major refactoring:
+//        Added many more unittests
+//        Changed AI to use commands
+//        Removed and separated lots of legacy code
+//       TransferUnitControl is now undo capable
+//
 //     Revision 1.1  2000/08/05 20:18:04  mbickel
 //      Restructured Fullscreen Image loading
 //
@@ -39,7 +46,7 @@
 
 #include "../basestrm.h"
 
-extern int read_JPEG_file ( pnstream strm );
+extern int read_JPEG_file ( tnstream* strm );
 
 #endif
 

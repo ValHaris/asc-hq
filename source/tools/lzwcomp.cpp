@@ -133,7 +133,7 @@ template<class T> void tnlzwstream<T> :: initreading ( void )
         rdictionary = new Rdictionary [DICTIONARY_SIZE];
     
         if ( rdictionary == NULL )
-            throw toutofmem ( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
+            throw OutOfMemoryError ( DICTIONARY_SIZE * sizeof( struct Rdictionary ) );
      } else {
         lzw = 2;
         if ( tempreadbuf[0] )
@@ -185,7 +185,7 @@ template<class T> void tnlzwstream<T> :: initwriting ( void )
       wdictionary = new Wdictionary [ DICTIONARY_SIZE ];
                   
       if ( ! wdictionary )
-          throw toutofmem ( DICTIONARY_SIZE * sizeof( struct Wdictionary ) );
+          throw OutOfMemoryError ( DICTIONARY_SIZE * sizeof( struct Wdictionary ) );
   
       for ( i = 0; i < DICTIONARY_SIZE; i++ )
           wdictionary[ i ].code = UNUSED_CODE;
@@ -320,7 +320,7 @@ template<class T> unsigned tnlzwstream<T> :: LZWLoadBuffer ( unsigned count, Cod
             DecodeBuffer = (unsigned char *) realloc ( DecodeBuffer, DecodeBufferSize + 1000 );
 
             if ( ! DecodeBuffer )
-                throw toutofmem ( DecodeBufferSize + 1000 );
+                throw OutOfMemoryError ( DecodeBufferSize + 1000 );
             else      
                 DecodeBufferSize += 1000;
         }
@@ -387,7 +387,7 @@ template<class T> void tnlzwstream<T> :: readdata ( void* buf, int size )
               DecodeBufferSize = 1000;
               DecodeBuffer = (unsigned char *) malloc ( DecodeBufferSize );
               if ( DecodeBuffer == NULL )
-                  throw toutofmem ( DecodeBufferSize );
+                  throw OutOfMemoryError ( DecodeBufferSize );
           }
       
       

@@ -81,7 +81,7 @@ ActionResult VehicleAttackAction::runAction( const Context& context )
 {
    auto_ptr<tfight> battle;
       
-   tfield* fld = getMap()->getField( target );
+   MapField* fld = getMap()->getField( target );
    
    Vehicle* attacker = getUnit();
    Vehicle* attackee = fld->vehicle;

@@ -79,7 +79,7 @@ int main(int argc, char *argv[] )
       for ( int i = cl.next_param(); i < argc; i++ ) {
          for ( int j = 0; j < vehicletypenum; j++ )
             if ( patimat ( argv[i], getvehicletype_forpos ( j )->filename.c_str() )) {
-               Vehicletype* vt = getvehicletype_forpos ( j );
+               VehicleType* vt = getvehicletype_forpos ( j );
 
                tn_file_buf_stream stream ( extractFileName_withoutSuffix ( vt->filename ) + "_generated.asctxt", tnstream::writing );
                PropertyWritingContainer pc ( "VehicleType", stream );

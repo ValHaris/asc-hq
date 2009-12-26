@@ -76,11 +76,11 @@ class ConstructUnitCommand : public ContainerCommand {
       
       class ProductionEntry {
          public:
-            const Vehicletype* type;
+            const VehicleType* type;
             Resources cost;
             ConstructUnitCommand::Lack prerequisites;
             ProductionEntry() : type(NULL) {};
-            ProductionEntry(const Vehicletype* type, const Resources& cost, ConstructUnitCommand::Lack prerequisites ) {
+            ProductionEntry(const VehicleType* type, const Resources& cost, ConstructUnitCommand::Lack prerequisites ) {
                this->type = type;
                this->cost = cost;
                this->prerequisites = prerequisites;
@@ -89,9 +89,9 @@ class ConstructUnitCommand : public ContainerCommand {
       
       typedef vector<ConstructUnitCommand::ProductionEntry> Producables;
       
-      Lack unitProductionPrerequisites( const Vehicletype* type ) const;
+      Lack unitProductionPrerequisites( const VehicleType* type ) const;
       
-      void setVehicleType( const Vehicletype* type );
+      void setVehicleType( const VehicleType* type );
       
       /**
          \param internally: true for internal production (inside cargo bay), false for outside production(neighbouring field)

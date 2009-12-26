@@ -1,6 +1,13 @@
-//     $Id: newfont.h,v 1.17 2009-04-18 13:48:38 mbickel Exp $
+//     $Id: newfont.h,v 1.18 2009-12-26 18:44:59 mbickel Exp $
 //
 //     $Log: not supported by cvs2svn $
+//     Revision 1.17  2009-04-18 13:48:38  mbickel
+//      Major refactoring:
+//        Added many more unittests
+//        Changed AI to use commands
+//        Removed and separated lots of legacy code
+//       TransferUnitControl is now undo capable
+//
 //     Revision 1.16  2007/04/13 16:15:53  mbickel
 //      Merged ASC2 branch
 //
@@ -184,8 +191,7 @@ extern void showtext2c( const ASCString& TextToOutput, int x1, int x2 );
 
 extern tfontsettings activefontsettings;
 
-// extern pfont loadfont(char* filename);
-extern pfont loadfont( pnstream stream );
+extern pfont loadfont( tnstream* stream );
 
 extern void showtext4 ( const char* TextToOutput, int x1, int y1, ... );
 extern void showtext4c ( const char* TextToOutput, int x1, int y1, ... );

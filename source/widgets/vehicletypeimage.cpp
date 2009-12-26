@@ -17,7 +17,7 @@
 
 #include <pgapplication.h>
 
-VehicleTypeImage::VehicleTypeImage( PG_Widget* parent, const PG_Point& pos, const Vehicletype* vehicletype, const Player& owningPlayer )
+VehicleTypeImage::VehicleTypeImage( PG_Widget* parent, const PG_Point& pos, const VehicleType* vehicletype, const Player& owningPlayer )
    : PG_Widget( parent, PG_Rect( pos.x, pos.y, fieldsizex, fieldsizey )),
                 vt( vehicletype ), player( owningPlayer )
 {

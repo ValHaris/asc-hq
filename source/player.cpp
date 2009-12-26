@@ -387,14 +387,14 @@ void Player::swap ( Player& secondPlayer )
       (*i)->convert( secondPlayer.player, false );
 
    for (int i =0; i < parentMap->xsize * parentMap->ysize ;i++ ) {
-      tfield* fld = &parentMap->field[i];
+      MapField* fld = &parentMap->field[i];
 
       VisibilityStates temp = fld->getVisibility( player );
       fld->setVisibility( fld->getVisibility( secondPlayer.player), player);
       fld->setVisibility( temp, secondPlayer.player);
 
 
-      for ( tfield::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
+      for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
          if ( i->player == player )
             i->player = secondPlayer.player;
          else
@@ -487,7 +487,7 @@ void Player::resetView()
 {
    for ( int x = 0; x < getParentMap()->xsize; x++ )
       for ( int y = 0; y < getParentMap()->ysize; y++ ) {
-         tfield* fld = getParentMap()->getField(x,y);
+         MapField* fld = getParentMap()->getField(x,y);
          fld->setVisibility( visible_not, player );
          if ( fld->resourceview )
             fld->resourceview->visible &= ~(1<<player);

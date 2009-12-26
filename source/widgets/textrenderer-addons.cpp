@@ -44,7 +44,7 @@ class VehicleTypeRenderer: public TextRenderer::TagRenderer
          if( boost::regex_match( tag, what, vehicletypetag)) {
             ASCString s ( what[1] );
             int id = atoi ( s.c_str() );
-            Vehicletype* vt = vehicleTypeRepository.getObject_byID( id );
+            VehicleType* vt = vehicleTypeRepository.getObject_byID( id );
             if ( vt ) {
                Surface& surf = vt->getImage();
                widgets.push_back( new PG_Image( parent, PG_Point(0,0), surf.getBaseSurface(), false ));

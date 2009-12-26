@@ -89,15 +89,15 @@ template<class Item> class BasicItem : public MapComponent {
 
 template<class C> class ItemTypeSelector {};
 
-class VehicleItem : public BasicItem<Vehicletype> {
+class VehicleItem : public BasicItem<VehicleType> {
     public:
-       VehicleItem( const Vehicletype* vehicle ) : BasicItem<Vehicletype>( vehicle ) {};
+       VehicleItem( const VehicleType* vehicle ) : BasicItem<VehicleType>( vehicle ) {};
        virtual int place( const MapCoordinate& mc ) const ;
-       static int place( GameMap* gamemap, const MapCoordinate& mc, const Vehicletype* v, int owner );
+       static int place( GameMap* gamemap, const MapCoordinate& mc, const VehicleType* v, int owner );
        virtual void display( Surface& s, const SPoint& pos ) const;
        virtual MapComponent* clone() const { return new VehicleItem( item ); };
 };
-template<> class ItemTypeSelector<Vehicletype> {
+template<> class ItemTypeSelector<VehicleType> {
    public:
       typedef VehicleItem type;
 };

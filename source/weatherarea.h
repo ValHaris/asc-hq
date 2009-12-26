@@ -111,12 +111,12 @@ struct WeatherRect {
 };
 
 typedef map<int, WindData> WindChanges;
-typedef multiset<tfield*> FieldSet;
+typedef multiset<MapField*> FieldSet;
 class WeatherSystem;
 class WeatherField;
 
 
-typedef list<tfield*> MapFields;
+typedef list<MapField*> MapFields;
 typedef vector<WeatherField*> WeatherFields;
 typedef vector<int> Percentages;
 
@@ -213,12 +213,12 @@ RANDOMMODE
 
 class WeatherField{
 private:
-tfield* mapField;
+MapField* mapField;
 GameMap* map;
 int counter;
 int value;
 
-void setMapField(tfield* mapField);
+void setMapField(MapField* mapField);
 
 public:
 WeatherField(GameMap* map);

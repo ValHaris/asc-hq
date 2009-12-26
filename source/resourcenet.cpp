@@ -35,7 +35,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 {
   int s;
 
-   tfield* fld = actmap->getField ( x, y );
+   MapField* fld = actmap->getField ( x, y );
    if ( !fld )
       return;
 
@@ -103,7 +103,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 void MapNetwork :: searchvehicle ( int x, int y )
 {
    if ( pass == 2 ) {
-      tfield* newfield = actmap->getField ( x, y );
+      MapField* newfield = actmap->getField ( x, y );
       if ( newfield )
          if ( !newfield->a.temp2 )
            if ( newfield->vehicle ) {
@@ -120,7 +120,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
    if ( !bld )
       return;
 
-   tfield* entry = bld->getEntryField();
+   MapField* entry = bld->getEntryField();
    if ( entry->a.temp )
       return;
 
@@ -133,13 +133,13 @@ void MapNetwork :: searchbuilding ( int x, int y )
       for( int i = 0; i < 4; i++ )
          for ( int j = 0; j < 6; j++ ) {
             MapCoordinate mc = bld->getFieldCoordinates ( BuildingType::LocalCoordinate(i, j) );
-            tfield* fld2 = actmap->getField ( mc );
+            MapField* fld2 = actmap->getField ( mc );
             if ( fld2 && fld2->building == bld )
                for ( int d = 0; d < sidenum; d++ ) {
                   int xp2 = mc.x;
                   int yp2 = mc.y;
                   getnextfield ( xp2, yp2, d );
-                  tfield* newfield = actmap->getField ( xp2, yp2 );
+                  MapField* newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
                      searchfield ( xp2, yp2, d );
 
@@ -179,11 +179,11 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
    for ( Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
       MapCoordinate3D mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
-         tfield* fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
+         MapField* fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
          if ( fld ) {
             Building* bld = fld->building;
             if ( bld && bld->color == (*j)->color ) {
-               tfield* fld2 = actmap->getField( (*j)->getPosition());
+               MapField* fld2 = actmap->getField( (*j)->getPosition());
                if ( !fld2->a.temp2 ) {
                   fld2->a.temp2 = 1;
                   checkvehicle ( *j );
@@ -225,7 +225,7 @@ void MapNetwork :: start ( int x, int y )
          }
       } else  
          if ( globalsearch() == 0 ) {
-            tfield* fld = actmap->getField ( x, y );
+            MapField* fld = actmap->getField ( x, y );
             if ( fld ) {
                if ( fld->building ) {
                   if ( pass == 1 )
@@ -243,7 +243,7 @@ void MapNetwork :: start ( int x, int y )
 
 int ResourceNet :: fieldavail ( int x, int y )
 {
-    tfield* fld = actmap->getField ( x, y );
+    MapField* fld = actmap->getField ( x, y );
 /*    Object* o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
@@ -262,7 +262,7 @@ int ResourceNet :: fieldavail ( int x, int y )
              int xp = x;
              int yp = y;
              getnextfield ( xp, yp , i );
-             tfield* fld2 = actmap->getField ( xp, yp );
+             MapField* fld2 = actmap->getField ( xp, yp );
              if ( fld2 )
                 if ( (fld2->bdt & tb).any() ||  fld2->building )
                    d |= ( 1 << i );

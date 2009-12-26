@@ -67,7 +67,7 @@ void tsearchreactionfireingunits :: initLimits()
          maxshootdist[i] = 0;
 
       for (int i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
-         Vehicletype* fzt = vehicleTypeRepository.getObject_byPos ( i );
+         VehicleType* fzt = vehicleTypeRepository.getObject_byPos ( i );
          if ( fzt )
             for (int j = 0; j < fzt->weapons.count; j++ )
                if ( fzt->weapons.weapon[j].shootable() )
@@ -201,7 +201,7 @@ void tsearchreactionfireingunits :: removeunit ( Vehicle* vehicle )
 
 int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, const Context& context )
 {
-   tfield* fld = target->getMap()->getField( target->getPosition() );
+   MapField* fld = target->getMap()->getField( target->getPosition() );
    
    
    int result = 0;
@@ -280,7 +280,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
    int attacks = 0;
    int result = 0;
 
-   tfield* fld = gamemap->getField( pos.x, pos.y );
+   MapField* fld = gamemap->getField( pos.x, pos.y );
 
    for ( int i = 0; i < 8; i++ ) {
       if ( fieldvisiblenow ( fld, i )) {

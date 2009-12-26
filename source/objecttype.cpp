@@ -74,7 +74,7 @@ const ObjectType::FieldModification&  ObjectType::getFieldModification ( int wea
    return fieldModification[getWeather(weather)];
 }
 
-bool  ObjectType :: buildable ( tfield* fld ) const
+bool  ObjectType :: buildable ( MapField* fld ) const
 {
    #ifndef converter
    if ( fld->building && !growOnUnits )
@@ -402,7 +402,7 @@ class Smoothing {
          GameMap* actmap;
        public:
          Smoothing ( GameMap* gamemap ) : actmap ( gamemap ) {};
-         tfield* getfield ( int x, int y )
+         MapField* getfield ( int x, int y )
          {
             return actmap->getField ( x, y );
          }
@@ -446,7 +446,7 @@ class Smoothing {
                int x1 = x;
                int y1 = y;
                getnextfield ( x1, y1, d );
-               tfield* fld = getfield ( x1, y1 );
+               MapField* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   Object* obj = fld->checkForObject ( o );
@@ -471,7 +471,7 @@ class Smoothing {
                int x1 = x;
                int y1 = y;
                getnextfield ( x1, y1, d );
-               tfield* fld = getfield ( x1, y1 );
+               MapField* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   if ( IsInSetOfWord ( fld->typ->bi_pict, Arr ))
@@ -550,7 +550,7 @@ class Smoothing {
                           Res = 1;
                     }
                  } else {
-                    tfield* fld = getfield ( X, Y );
+                    MapField* fld = getfield ( X, Y );
                     TerrainType::Weather* old = fld->typ;
                     // int odir = fld->direction;
 
@@ -761,9 +761,9 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
 {
    for ( int y = 0; y < actmap->ysize ; y++)
      for ( int x = 0; x < actmap->xsize ; x++) {
-        tfield* fld = actmap->getField(x,y);
+        MapField* fld = actmap->getField(x,y);
 
-        for ( tfield::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
+        for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
            if ( i->typ == woodObj )
               i->dir = 0;
      }
@@ -778,16 +778,16 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
       changed = 0;
       for ( int y = 0; y < actmap->ysize ; y++)
          for ( int x = 0; x < actmap->xsize ; x++) { 
-            tfield* fld = actmap->getField(x,y);
+            MapField* fld = actmap->getField(x,y);
    
-            for ( tfield::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
+            for ( MapField::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end(); o++ )
                if ( o->typ == woodObj ) {
                   int c = 0;
                   for ( int i = 0; i < sidenum; i++) {
                      int a = x;
                      int b = y;
                      getnextfield( a, b, i );
-                     tfield* fld2 = actmap->getField(a,b);
+                     MapField* fld2 = actmap->getField(a,b);
 
                      if ( fld2 ) {
                         Object* oi = fld2->checkForObject ( o->typ );

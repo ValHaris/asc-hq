@@ -24,14 +24,14 @@
 class Vehicle;
 class Player;
 
-class Vehicletype;
+class VehicleType;
 class BuildingType;
 
 class TechnologyPresenter {
    public:
       class Gadgets {
          public:
-            std::list<const Vehicletype*> units;
+            std::list<const VehicleType*> units;
             std::list<const BuildingType*> buildings;
       };
       

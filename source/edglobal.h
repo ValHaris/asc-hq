@@ -168,7 +168,7 @@ class SelectionHolder : public SigC::Object {
      int brushSize;
      const Placeable* getSelection();
      void setSelection( const Placeable& component ) ;
-     void pickup ( tfield* fld );
+     void pickup ( MapField* fld );
      
      SigC::Signal1<void,const Placeable*> selectionChanged;
      void clear(); 

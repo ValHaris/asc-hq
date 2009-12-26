@@ -185,7 +185,7 @@ void Building :: registerForNewOwner( int player )
 const Surface& Building :: getPicture ( const BuildingType::LocalCoordinate& localCoordinate ) const
 {
    static Surface emptySurface;
-   tfield* fld = getField ( localCoordinate );
+   MapField* fld = getField ( localCoordinate );
    if ( fld ) {
       return typ->getPicture(localCoordinate, fld->getWeather(), _completion);
    } else
@@ -270,7 +270,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
          if ( typ->fieldExists ( BuildingType::LocalCoordinate( a, b) )) {
-            tfield* f = getField( BuildingType::LocalCoordinate( a, b) );
+            MapField* f = getField( BuildingType::LocalCoordinate( a, b) );
             if ( !f || f->building ) {
                entryPosition = oldpos;
                return 1;
@@ -280,10 +280,10 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
    for ( int a = 0; a < 4; a++)
       for ( int b = 0; b < 6; b++)
          if ( typ->fieldExists ( BuildingType::LocalCoordinate( a , b ) )) {
-            tfield* field = getField( BuildingType::LocalCoordinate( a, b) );
+            MapField* field = getField( BuildingType::LocalCoordinate( a, b) );
 
             if ( visible ) {
-               tfield::ObjectContainer::iterator i = field->objects.begin();
+               MapField::ObjectContainer::iterator i = field->objects.begin();
                while ( i != field->objects.end()) {
                   if ( !i->typ->canExistBeneathBuildings )
                      i = field->objects.erase ( i );
@@ -304,7 +304,7 @@ int  Building :: chainbuildingtofield ( const MapCoordinate& entryPos, bool setu
       if ( *i ) 
          (*i)->setnewposition ( entryPos.x, entryPos.y );
 
-   tfield* field = getField( typ->entry );
+   MapField* field = getField( typ->entry );
    if ( field )
       field->bdt |= getTerrainBitType(cbbuildingentry) ;
 
@@ -332,7 +332,7 @@ int  Building :: unchainbuildingfromfield ( void )
    for (int i = 0; i <= 3; i++)
       for (int j = 0; j <= 5; j++)
          if ( typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {
-            tfield* fld = getField( BuildingType::LocalCoordinate(i,j) );
+            MapField* fld = getField( BuildingType::LocalCoordinate(i,j) );
             if ( fld && fld->building == this ) {
                set = 1;
                fld->building = NULL;
@@ -377,13 +377,13 @@ int Building :: getArmor ( ) const
 }
 
 
-tfield*        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
+MapField*        Building :: getField( const BuildingType::LocalCoordinate& lc ) const
 {
   return gamemap->getField ( getFieldCoordinates ( lc ));
 }
 
 
-tfield*        Building :: getEntryField( ) const
+MapField*        Building :: getEntryField( ) const
 {
   return getField ( typ->entry );
 }

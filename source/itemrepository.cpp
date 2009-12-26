@@ -148,7 +148,7 @@ MineTypeRepository::MineTypeRepository() : ItemRepository<MineType>("Mines")
 }
 
 
-ItemRepositoryLoader<Vehicletype>  vehicleTypeRepository( "vehicletype" );
+ItemRepositoryLoader<VehicleType>  vehicleTypeRepository( "vehicletype" );
 ItemRepositoryLoader<TerrainType>  terrainTypeRepository( "terraintype" );
 ItemRepositoryLoader<ObjectType>   objectTypeRepository ( "objecttype" );
 ItemRepositoryLoader<BuildingType> buildingTypeRepository ("buildingtype");
@@ -513,7 +513,7 @@ bool ItemFiltrationSystem::isFiltered ( ItemFiltrationSystem::Category cat, int 
 }
 
 
-bool ItemFiltrationSystem::isFiltered( const Vehicletype* item )
+bool ItemFiltrationSystem::isFiltered( const VehicleType* item )
 {
    return isFiltered( Vehicle, item->id );
 }

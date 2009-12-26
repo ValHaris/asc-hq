@@ -23,15 +23,15 @@
 class Context;
 
 //! a single field of the map
-class  tfield {
+class  MapField {
     GameMap* gamemap;
     void init();
   protected:
-    tfield (  );
+    MapField (  );
     friend class GameMap;
   public:
-    tfield ( GameMap* gamemap_ );
-    void operator= ( const tfield& f );
+    MapField ( GameMap* gamemap_ );
+    void operator= ( const MapField& f );
 
     void setMap ( GameMap* gamemap_ ) { gamemap = gamemap_; };
     GameMap* getMap() const { return gamemap; };
@@ -110,7 +110,7 @@ class  tfield {
     //! Interface for removing objects from a field when it turns out that they can no longer exist
     class ObjectRemovalStrategy {
        public:
-          virtual void removeObject( tfield* fld, const ObjectType* obj ) = 0;
+          virtual void removeObject( MapField* fld, const ObjectType* obj ) = 0;
           virtual ~ObjectRemovalStrategy() {};
     };
     
@@ -223,7 +223,7 @@ class  tfield {
 
     int getMemoryFootprint() const;
 
-    ~tfield();
+    ~MapField();
   private:
     TerrainType::MoveMalus __movemalus;
 };

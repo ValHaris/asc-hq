@@ -44,7 +44,7 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
    repairedThisTurn = 0;
   
    for ( int i = 0; i < map->getVehicleTypeNum(); ++i ) {
-      const Vehicletype* vt = map->getvehicletype_bypos(i);
+      const VehicleType* vt = map->getvehicletype_bypos(i);
       if ( vt ) 
          for ( int j = 0; j < bt->vehiclesInternallyProduceable.size(); ++j ) 
             if ( vt->id >= bt->vehiclesInternallyProduceable[j].from  && vt->id <= bt->vehiclesInternallyProduceable[j].to )
@@ -469,7 +469,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
    return false;
 }
 
-int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType, int carrierHeight ) const
+int  ContainerBase :: vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight ) const
 {
    int height = 0;
 
@@ -499,7 +499,7 @@ int  ContainerBase :: vehicleUnloadable ( const Vehicletype* vehicleType, int ca
    return height & vehicleType->height;
 }
 
-const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( const Vehicletype* vehicleType, int height )
+const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( const VehicleType* vehicleType, int height )
 {
    if ( baseType->vehicleFit ( vehicleType ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
@@ -559,13 +559,13 @@ const ContainerBase::Production& ContainerBase::getProduction() const
    return productionCache;
 }
 
-Resources ContainerBase::getProductionCost( const Vehicletype* unit ) const
+Resources ContainerBase::getProductionCost( const VehicleType* unit ) const
 {
    return baseType->productionEfficiency * unit->productionCost;
 }
 
 
-void ContainerBase ::deleteProductionLine( const Vehicletype* type )
+void ContainerBase ::deleteProductionLine( const VehicleType* type )
 {
    internalUnitProduction.erase( remove( internalUnitProduction.begin(), internalUnitProduction.end(), type ), internalUnitProduction.end());
    productionCache.clear();
@@ -577,7 +577,7 @@ void ContainerBase ::deleteAllProductionLines()
    productionCache.clear();
 }
 
-void ContainerBase :: addProductionLine( const Vehicletype* type )
+void ContainerBase :: addProductionLine( const VehicleType* type )
 {
    if ( find ( internalUnitProduction.begin(), internalUnitProduction.end(), type ) == internalUnitProduction.end() )
       internalUnitProduction.push_back( type );

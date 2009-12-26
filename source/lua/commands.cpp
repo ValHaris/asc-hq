@@ -271,7 +271,7 @@ ActionResult constructUnit( GameMap* actmap, int containerID, const MapCoordinat
    if ( !c )
       return ActionResult(23410);
      
-   Vehicletype* v = vehicleTypeRepository.getObject_byID( unitID );
+   VehicleType* v = vehicleTypeRepository.getObject_byID( unitID );
    if ( !v )
       return ActionResult( 21701 );
    
@@ -499,7 +499,7 @@ ActionResult buildProductionLine( GameMap* actmap, int containerID, int vehicleT
    if ( !c )
       return ActionResult(23410);
      
-   Vehicletype* v = vehicleTypeRepository.getObject_byID( vehicleTypeID );
+   VehicleType* v = vehicleTypeRepository.getObject_byID( vehicleTypeID );
    if ( !v )
       return ActionResult( 21701 );
    
@@ -525,7 +525,7 @@ ActionResult removeProductionLine( GameMap* actmap, int containerID, int vehicle
    if ( !c )
       return ActionResult(23410);
      
-   Vehicletype* v = vehicleTypeRepository.getObject_byID( vehicleTypeID );
+   VehicleType* v = vehicleTypeRepository.getObject_byID( vehicleTypeID );
    if ( !v )
       return ActionResult( 21701 );
    
@@ -721,7 +721,7 @@ void endTurn()
 
 Vehicle* getSelectedUnit( GameMap* map )
 {
-   tfield* fld = map->getField( map->getCursor() );
+   MapField* fld = map->getField( map->getCursor() );
    if ( !fld )
       return NULL;
     

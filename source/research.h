@@ -39,7 +39,7 @@ class Research;
 class Technology;
 class Building;
 class Vehicle;
-class Vehicletype;
+class VehicleType;
 class GameMap;
 
 enum ResearchAvailabilityStatus { Researched, Available, UnavailableNow, NeverAvailable };

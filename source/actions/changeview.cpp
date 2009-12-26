@@ -86,7 +86,7 @@ GameActionID ChangeView::getID() const
 ActionResult ChangeView::runAction( const Context& context )
 {
    for ( ViewState::iterator i = newState.begin(); i != newState.end(); ++i  ) {
-      tfield* fld = getMap()->getField( i->first );
+      MapField* fld = getMap()->getField( i->first );
       oldState[i->first] = fld->visible;
       fld->visible = newState[i->first];
    }
@@ -97,7 +97,7 @@ ActionResult ChangeView::runAction( const Context& context )
 ActionResult ChangeView::undoAction( const Context& context )
 {
    for ( ViewState::iterator i = newState.begin(); i != newState.end(); ++i  ) {
-      tfield* fld = getMap()->getField( i->first );
+      MapField* fld = getMap()->getField( i->first );
       if ( fld->visible != newState[i->first] ) {
          ASCString msg;
          msg.format( "; expected: %x ; found %x" , newState[i->first], fld->visible );

@@ -29,7 +29,7 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
       static const Container& convertArrays( const ConstructUnitCommand::Producables& from, Container& items );
       
    protected:
-      void vehicleTypeSelected( const Vehicletype* type, bool mouse );
+      void vehicleTypeSelected( const VehicleType* type, bool mouse );
       void itemMarked( const SelectionWidget* widget, bool mouse );
 
    public:
@@ -43,10 +43,10 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
       bool setResourceFilling( bool value );
 
-      Resources getCost( const Vehicletype* type );
+      Resources getCost( const VehicleType* type );
 
-      SigC::Signal2<void,const Vehicletype*, bool > sigVehicleTypeSelected;
-      SigC::Signal1<void,const Vehicletype* > sigVehicleTypeMarked;
+      SigC::Signal2<void,const VehicleType*, bool > sigVehicleTypeSelected;
+      SigC::Signal1<void,const VehicleType* > sigVehicleTypeMarked;
       
       void updateProducables();
       
@@ -64,25 +64,25 @@ class AddProductionLine_SelectionItemFactory: public VehicleTypeSelectionItemFac
    public:
       AddProductionLine_SelectionItemFactory( ContainerBase* my_plant, const Container& types );
 
-      void vehicleTypeSelected( const Vehicletype* type, bool mouse );
+      void vehicleTypeSelected( const VehicleType* type, bool mouse );
 
-      Resources getCost( const Vehicletype* type );
+      Resources getCost( const VehicleType* type );
 };
 
 
 class VehicleProduction_SelectionWindow : public ASC_PG_Dialog
 {
-      const Vehicletype* selected;
-      const Vehicletype* finallySelected;
+      const VehicleType* selected;
+      const VehicleType* finallySelected;
       ItemSelectorWidget* isw;
       VehicleProduction_SelectionItemFactory* factory;
       ContainerBase* my_plant;
       
       const ConstructUnitCommand::Producables& produceables;
    protected:
-      void vtMarked( const Vehicletype* vt );
+      void vtMarked( const VehicleType* vt );
 
-      void vtSelected( const Vehicletype* vt, bool mouse );
+      void vtSelected( const VehicleType* vt, bool mouse );
 
       bool produce();
 
@@ -109,7 +109,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog
 
       bool fillWithResources();
 
-      const Vehicletype* getVehicletype() { return finallySelected; };
+      const VehicleType* getVehicletype() { return finallySelected; };
 };
 
 
