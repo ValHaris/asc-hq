@@ -1448,7 +1448,7 @@ void GameMap::objectGrowth()
                    if ( fld2 ) 
                       if ( i->typ->growOnUnits || ((!fld2->vehicle || fld2->vehicle->height >= chtieffliegend) && !fld2->building ))
                         if ( fld2->objects.empty() || getgameparameter( cgp_objectGrowOnOtherObjects ) > 0 ) 
-                           if ( i->remainingGrowthTime != 0 ) {
+                           if ( i->remainingGrowthTime > 0 ) {
                               double d = i->typ->growthRate * getgameparameter( cgp_objectGrowthMultiplier) / 100;
                               if ( d > 0 ) {
                                  if ( d > 0.9 )

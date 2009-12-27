@@ -60,7 +60,7 @@ bool TrainUnitCommand :: avail ( const ContainerBase* carrier, const Vehicle* un
    int num = 0;
    int numsh = 0;
    for (int i = 0; i < unit->typ->weapons.count; i++ )
-      if ( unit->typ->weapons.weapon[i].shootable() ) {
+      if ( unit->typ->weapons.weapon[i].shootable()  && (unit->typ->weapons.weapon[i].count > 0 )) {
          if ( unit->ammo[i] )
             numsh++;
          else
